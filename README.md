@@ -1,2 +1,3 @@
-# opentelemetry-php
-Odigos distribution of OpenTelemetry for PHP
+# @odigos/opentelemetry-php
+
+Odigos distribution of OpenTelemetry for PHP.

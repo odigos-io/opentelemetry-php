@@ -1,0 +1,16 @@
+{
+  "name": "odigos/opentelemetry-php-8.3",
+  "description": "Odigos distribution of OpenTelemetry for PHP 8.3.x",
+  "type": "library",
+  "require": {
+    "php": ">=8.3 <8.4",
+    "ext-opentelemetry": "*"
+  },
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://asset-packagist.org"
+    }
+  ],
+  "config": {}
+}
