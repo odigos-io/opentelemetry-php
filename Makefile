@@ -7,7 +7,11 @@ switch-php/%:
 	@for v in $(PHP_VERSIONS); do \
 		brew unlink php@$$v || true; \
 	done
-	@brew install php@$* || true
+	@if [ "$*" = "8.0" ]; then \
+		brew install shivammathur/php/php@8.0; \
+	else \
+		brew install php@$* || true; \
+	fi
 	@brew link --overwrite --force php@$*
 
 install-ext:
