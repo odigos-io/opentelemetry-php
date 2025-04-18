@@ -22,7 +22,8 @@ RUN cp opentelemetry.so "$(php-config --extension-dir)/opentelemetry.so" \
   && docker-php-ext-enable opentelemetry
 # Install composer libraries
 COPY ./${PHP_VERSION}/composer.json .
-RUN composer install --no-dev --optimize-autoloader --ignore-platform-reqs
+RUN composer config --no-plugins allow-plugins.yiisoft/yii2-composer true \
+  && composer install --no-dev --optimize-autoloader --ignore-platform-reqs
 
 FROM scratch AS output
 ARG PHP_VERSION
