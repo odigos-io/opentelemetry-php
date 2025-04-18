@@ -23,7 +23,7 @@ RUN cp opentelemetry.so "$(php-config --extension-dir)/opentelemetry.so" \
 # Install composer libraries
 COPY ./${PHP_VERSION}/composer.json .
 RUN composer config --no-plugins allow-plugins.yiisoft/yii2-composer true \
-  && composer install --no-dev --optimize-autoloader --ignore-platform-reqs
+  && composer install --no-dev --optimize-autoloader --ignore-platform-req=ext-amqp --ignore-platform-req=ext-rdkafka --ignore-platform-req=ext-mongodb --ignore-platform-req=ext-mysqli --ignore-platform-req=ext-intl
 
 FROM scratch AS output
 ARG PHP_VERSION
