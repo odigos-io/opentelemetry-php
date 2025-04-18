@@ -53,6 +53,6 @@ binaries/%:
 	$(MAKE) unmount-container/$*
 
 # bake:
-# 	@docker buildx bake --file docker-bake.json \
+# 	@docker buildx bake --file docker-bake.hcl \
 # 		--set *.args.PHP_OTEL_VERSION=$(PHP_OTEL_VERSION) \
 # 		--set php-base.args.PHP_VERSION=$(PHP_VERSION)bake
