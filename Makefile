@@ -18,7 +18,9 @@ switch-php/%:
 # Main method to build the binaries
 .PHONY: all
 all:
-	@$(MAKE) -j $(nproc) binaries
+	@for v in $(PHP_VERSIONS); do \
+		$(MAKE) -j $(nproc) binaries/$$v; \
+	done
 
 delete-files/%:
 	@rm -rf ./$*/vendor
@@ -43,12 +45,14 @@ mount-container/%:
 unmount-container/%:
 	@docker rm ${DOCKER_MOUNT_NAME}-$*
 
-.PHONY: binaries
-binaries:
-	@for v in $(PHP_VERSIONS); do \
-		$(MAKE) delete-files/$$v; \
-		$(MAKE) build-image/$$v; \
-		$(MAKE) mount-container/$$v; \
-		$(MAKE) copy-files-from-container/$$v; \
-		$(MAKE) unmount-container/$$v; \
-	done
+binaries/%:
+	$(MAKE) delete-files/$*
+	$(MAKE) build-image/$*
+	$(MAKE) mount-container/$*
+	$(MAKE) copy-files-from-container/$*
+	$(MAKE) unmount-container/$*
+
+# bake:
+# 	@docker buildx bake --file docker-bake.json \
+# 		--set *.args.PHP_OTEL_VERSION=$(PHP_OTEL_VERSION) \
+# 		--set php-base.args.PHP_VERSION=$(PHP_VERSION)bake
