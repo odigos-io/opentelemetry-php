@@ -31,5 +31,10 @@
       "url": "https://asset-packagist.org"
     }
   ],
-  "config": {}
+  "config": {
+    "allow-plugins": {
+      "php-http/discovery": true,
+      "tbachert/spi": true
+    }
+  }
 }
