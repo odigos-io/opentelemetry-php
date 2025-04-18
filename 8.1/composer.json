@@ -24,7 +24,6 @@
     "open-telemetry/opentelemetry-auto-symfony": "^1.0.0",
     "open-telemetry/opentelemetry-auto-wordpress": "^0.0.17",
     "open-telemetry/opentelemetry-auto-yii": "^0.0.6",
-    "monolog/monolog": "^3.9",
     "php-http/guzzle7-adapter": "^1.1.0"
   },
   "repositories": [
