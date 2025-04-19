@@ -18,8 +18,12 @@ switch-php/%:
 # Main method to build the binaries
 .PHONY: all
 all:
+	@$(MAKE) -j $(nproc) bake-images
 	@for v in $(PHP_VERSIONS); do \
-		$(MAKE) -j $(nproc) binaries/$$v; \
+		$(MAKE) -j $(nproc) delete-files/$$v; \
+		$(MAKE) -j $(nproc) mount-container/$$v; \
+		$(MAKE) -j $(nproc) copy-files/$$v; \
+		$(MAKE) -j $(nproc) unmount-container/$$v; \
 	done
 
 delete-files/%:
@@ -28,31 +32,18 @@ delete-files/%:
 	@rm -rf ./$*/opentelemetry.so
 	@rm -rf ./$*/opentelemetry.ini
 
-copy-files-from-container/%:
+copy-files/%:
 	@docker cp ${DOCKER_MOUNT_NAME}-$*:/$*/vendor ./$*/vendor
 	@docker cp ${DOCKER_MOUNT_NAME}-$*:/$*/composer.lock ./$*/composer.lock
 	@docker cp ${DOCKER_MOUNT_NAME}-$*:/$*/opentelemetry.so ./$*/opentelemetry.so
 	@docker cp ${DOCKER_MOUNT_NAME}-$*:/$*/opentelemetry.ini ./$*/opentelemetry.ini
 
-build-image/%:
-	@docker build --target output -t ${DOCKER_MOUNT_NAME}:$* -f Dockerfile \
-		--build-arg PHP_OTEL_VERSION=$(PHP_OTEL_VERSION) \
-		--build-arg PHP_VERSION=$* .
+bake-images:
+	@docker buildx bake --file docker-bake.hcl \
+		--set *.args.PHP_OTEL_VERSION=$(PHP_OTEL_VERSION)
 
 mount-container/%:
 	@docker create --name ${DOCKER_MOUNT_NAME}-$* ${DOCKER_MOUNT_NAME}:$*
 
 unmount-container/%:
 	@docker rm ${DOCKER_MOUNT_NAME}-$*
-
-binaries/%:
-	$(MAKE) delete-files/$*
-	$(MAKE) build-image/$*
-	$(MAKE) mount-container/$*
-	$(MAKE) copy-files-from-container/$*
-	$(MAKE) unmount-container/$*
-
-# bake:
-# 	@docker buildx bake --file docker-bake.hcl \
-# 		--set *.args.PHP_OTEL_VERSION=$(PHP_OTEL_VERSION) \
-# 		--set php-base.args.PHP_VERSION=$(PHP_VERSION)bake
