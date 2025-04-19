@@ -42,13 +42,6 @@ function getTraceProvider(): TracerProvider | NoopTracerProvider
     ->setSampler($sSampler)
     ->build();
 
-  // TODO: remove or adjust this span
-  $tProvider
-    ->getTracer('')
-    ->spanBuilder('')
-    ->startSpan()
-    ->end();
-
   return $tProvider;
 }
 
