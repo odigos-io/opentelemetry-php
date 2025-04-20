@@ -10,6 +10,44 @@ To auto-instrument PHP with OpenTelemetry, we need a few things:
 
 **WARNING: It is important to note that the `opentelemetry.so` binaries are compiled per PHP version, which is why every PHP version has it's own agent!**
 
+# Deploying an agent
+
+To deploy an agent:
+
+1. We need to copy the agent folder into our cluster under a pre-defined path (such as `/var/odigos/php/${PHP_VERSION}/vendor/autoload.php`), these paths are defined and must be changed accordingly in each `index.php` script.
+
+2. We need to tell the instrumented app to load the OTel files, to do that we need to give the container an env called `OTEL_PHP_AUTOLOAD_ENABLED`, it should equal `true`.
+
+3. We need to tell the instrumented app where to find our script and binaries, to do that we need to give the container an env called `PHP_INI_SCAN_DIR`, it should point at the dir that contains the agent files (e.g `/var/odigos/php/8.1:`).
+
+NOTE: for step 3 we used a colon at the end of the appointed dir, that is required by the env itself, here's why:
+
+> How to use `PHP_INI_SCAN_DIR` env with colon (:) separator...<br />
+> Assuming `/etc/php.d/\*.ini` is the default configuration file;
+
+> No env;<br />
+> RUN `php`
+>
+> - will load all files in `/etc/php.d/\*.ini` (default)
+
+> No colon;<br />
+> RUN `PHP_INI_SCAN_DIR=/usr/local/etc/php.d php`
+>
+> - will load all files in `/usr/local/etc/php.d/*.ini` (custom)
+> - and ignore `/etc/php.d/\_.ini` (default)
+
+> Colon at start;<br />
+> RUN `PHP_INI_SCAN_DIR=:/usr/local/etc/php.d php`
+>
+> - will 1st load all files in `/etc/php.d/*.ini` (default)
+> - then load `/usr/local/etc/php.d/\_.ini` (custom)
+
+> Colon at end;<br />
+> RUN `PHP_INI_SCAN_DIR=/usr/local/etc/php.d: php`
+>
+> - will 1st load all files in `/usr/local/etc/php.d/*.ini` (custom)
+> - then load `/etc/php.d/\_.ini` (default)
+
 # Library limitations
 
 PHP 8.2 divides the required/supported libraries across PHP versions:
