@@ -63,31 +63,34 @@ PHP 8.2 divides the required/supported libraries across PHP versions:
   "ext-opentelemetry": "*",
   "open-telemetry/sdk": "^1.2.4",
   "open-telemetry/exporter-otlp": "^1.2.1",
-  // Libraries
-  "open-telemetry/opentelemetry-auto-slim": "^1.1.0",
-  "open-telemetry/opentelemetry-auto-guzzle": "^1.1.0",
+  // Libs base
   "open-telemetry/opentelemetry-auto-http-async": "^1.1.0",
+  "open-telemetry/opentelemetry-auto-guzzle": "^1.1.0",
   "open-telemetry/opentelemetry-auto-psr3": "^0.0.9",
   "open-telemetry/opentelemetry-auto-psr6": "^0.0.4",
   "open-telemetry/opentelemetry-auto-psr14": "^0.0.4",
   "open-telemetry/opentelemetry-auto-psr15": "^1.1.0",
   "open-telemetry/opentelemetry-auto-psr16": "^0.0.4",
   "open-telemetry/opentelemetry-auto-psr18": "^1.1.0",
+  // Libs extra base
   "open-telemetry/opentelemetry-auto-io": "^0.0.13",
   "open-telemetry/opentelemetry-auto-curl": "^0.0.4",
   "open-telemetry/opentelemetry-auto-pdo": "^0.0.19",
   "open-telemetry/opentelemetry-auto-doctrine": "^0.1.0",
+  // Libs extra comms
   "open-telemetry/opentelemetry-auto-ext-amqp": "^0.0.5",
   "open-telemetry/opentelemetry-auto-ext-rdkafka": "^0.0.2",
   "open-telemetry/opentelemetry-auto-mysqli": "^0.0.2",
   "open-telemetry/opentelemetry-auto-mongodb": "^0.0.8",
   "open-telemetry/opentelemetry-auto-openai-php": "^0.0.3",
+  // Libs extra frameworks
+  "open-telemetry/opentelemetry-auto-slim": "^1.1.0",
   "open-telemetry/opentelemetry-auto-codeigniter": "^0.0.9",
   "open-telemetry/opentelemetry-auto-symfony": "^1.0.0",
-  "open-telemetry/opentelemetry-auto-cakephp": "^0.0.4",
   "open-telemetry/opentelemetry-auto-laravel": "^1.1.1",
-  "open-telemetry/opentelemetry-auto-wordpress": "^0.0.17",
-  "open-telemetry/opentelemetry-auto-yii": "^0.0.6"
+  "open-telemetry/opentelemetry-auto-cakephp": "^0.0.4",
+  "open-telemetry/opentelemetry-auto-yii": "^0.0.6",
+  "open-telemetry/opentelemetry-auto-wordpress": "^0.0.17"
 }
 ```
 
@@ -106,7 +109,30 @@ open-telemetry/opentelemetry-auto-mysqli
 open-telemetry/opentelemetry-auto-openai-php
 ```
 
-NOTE: The rest of the libraries have reached END OF LIFE support for version 8.0, and are listed with "maxed out" versions in the `composer.json` for 8.0 (including the OpenTelemetry SDK and Exporter)
+NOTE: The rest of the libraries have reached END OF LIFE support for version 8.0, and are listed with "maxed out" versions below:
+
+```json
+{
+  "open-telemetry/sdk": "<=1.0.8",
+  "open-telemetry/exporter-otlp": "<=1.0.4",
+  "open-telemetry/opentelemetry-auto-http-async": "<=1.0.1",
+  "open-telemetry/opentelemetry-auto-guzzle": "<=1.0.1",
+  "open-telemetry/opentelemetry-auto-psr3": "<=0.0.8",
+  "open-telemetry/opentelemetry-auto-psr6": "<=0.0.3",
+  "open-telemetry/opentelemetry-auto-psr14": "<=0.0.3",
+  "open-telemetry/opentelemetry-auto-psr15": "<=1.0.6",
+  "open-telemetry/opentelemetry-auto-psr16": "<=0.0.3",
+  "open-telemetry/opentelemetry-auto-psr18": "<=1.0.4",
+  "open-telemetry/opentelemetry-auto-mongodb": "<=0.0.7",
+  "open-telemetry/opentelemetry-auto-slim": "<=1.0.7",
+  "open-telemetry/opentelemetry-auto-codeigniter": "<=0.0.8",
+  "open-telemetry/opentelemetry-auto-symfony": "<=1.0.0beta30",
+  "open-telemetry/opentelemetry-auto-laravel": "<=1.0.1",
+  "open-telemetry/opentelemetry-auto-cakephp": "<=0.0.3",
+  "open-telemetry/opentelemetry-auto-yii": "<=0.0.5",
+  "open-telemetry/opentelemetry-auto-wordpress": "<=0.0.16"
+}
+```
 
 ### 8.1 limitations
 
@@ -123,3 +149,7 @@ open-telemetry/opentelemetry-auto-mysqli
 ```
 
 NOTE: 8.1 allows `openai-php` unlike 8.0
+
+### Toxic conflicts
+
+- CodeIgniter apps will crash with `auto-laravel`
