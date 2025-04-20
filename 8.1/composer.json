@@ -24,9 +24,8 @@
   ],
   "config": {
     "allow-plugins": {
-      "php-http/discovery": true,
-      "tbachert/spi": true,
-      "yiisoft/yii2-composer": true
+      "php-http/discovery": false,
+      "tbachert/spi": false
     }
   }
 }

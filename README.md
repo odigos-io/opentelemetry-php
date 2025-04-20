@@ -22,31 +22,24 @@ To deploy an agent:
 
 NOTE: for step 3 we used a colon at the end of the appointed dir, that is required by the env itself, here's why:
 
-> How to use `PHP_INI_SCAN_DIR` env with colon (:) separator...<br />
-> Assuming `/etc/php.d/\*.ini` is the default configuration file;
+> How to use `PHP_INI_SCAN_DIR` env with colon (:) separator:<br />
+> Assuming `/php.d/\*.ini` is the dir for DEFAULT configuration files.<br />
+> Assuming `/foo/bar/\*.ini` is the dir for CUSTOM configuration files.
 
-> No env;<br />
-> RUN `php`
+> No colon; `PHP_INI_SCAN_DIR=/foo/bar`
 >
-> - will load all files in `/etc/php.d/\*.ini` (default)
+> - will load all CUSTOM files
+> - will ignore all DEFAULT files
 
-> No colon;<br />
-> RUN `PHP_INI_SCAN_DIR=/usr/local/etc/php.d php`
+> Colon at start; `PHP_INI_SCAN_DIR=:/foo/bar`
 >
-> - will load all files in `/usr/local/etc/php.d/*.ini` (custom)
-> - and ignore `/etc/php.d/\_.ini` (default)
+> - will 1st load all DEFAULT files
+> - will 2nd load all CUSTOM files
 
-> Colon at start;<br />
-> RUN `PHP_INI_SCAN_DIR=:/usr/local/etc/php.d php`
+> Colon at end; `PHP_INI_SCAN_DIR=/foo/bar:`
 >
-> - will 1st load all files in `/etc/php.d/*.ini` (default)
-> - then load `/usr/local/etc/php.d/\_.ini` (custom)
-
-> Colon at end;<br />
-> RUN `PHP_INI_SCAN_DIR=/usr/local/etc/php.d: php`
->
-> - will 1st load all files in `/usr/local/etc/php.d/*.ini` (custom)
-> - then load `/etc/php.d/\_.ini` (default)
+> - will 1st load all CUSTOM files
+> - will 2nd load all DEFAULT files
 
 # Library limitations
 
@@ -72,18 +65,18 @@ PHP 8.2 divides the required/supported libraries across PHP versions:
   "open-telemetry/opentelemetry-auto-psr15": "^1.1.0",
   "open-telemetry/opentelemetry-auto-psr16": "^0.0.4",
   "open-telemetry/opentelemetry-auto-psr18": "^1.1.0",
-  // Libs extra base
-  "open-telemetry/opentelemetry-auto-io": "^0.0.13",
+  // Libs base (supported only for 8.2+)
   "open-telemetry/opentelemetry-auto-curl": "^0.0.4",
+  "open-telemetry/opentelemetry-auto-io": "^0.0.13",
+  // Libs extra (communications)
   "open-telemetry/opentelemetry-auto-pdo": "^0.0.19",
   "open-telemetry/opentelemetry-auto-doctrine": "^0.1.0",
-  // Libs extra comms
-  "open-telemetry/opentelemetry-auto-ext-amqp": "^0.0.5",
-  "open-telemetry/opentelemetry-auto-ext-rdkafka": "^0.0.2",
   "open-telemetry/opentelemetry-auto-mysqli": "^0.0.2",
   "open-telemetry/opentelemetry-auto-mongodb": "^0.0.8",
   "open-telemetry/opentelemetry-auto-openai-php": "^0.0.3",
-  // Libs extra frameworks
+  "open-telemetry/opentelemetry-auto-ext-amqp": "^0.0.5",
+  "open-telemetry/opentelemetry-auto-ext-rdkafka": "^0.0.2",
+  // Libs extra (frameworks)
   "open-telemetry/opentelemetry-auto-slim": "^1.1.0",
   "open-telemetry/opentelemetry-auto-codeigniter": "^0.0.9",
   "open-telemetry/opentelemetry-auto-symfony": "^1.0.0",
@@ -94,22 +87,24 @@ PHP 8.2 divides the required/supported libraries across PHP versions:
 }
 ```
 
-### 8.0 limitations
+### PHP 8.0 & 8.1 limitations
 
-The following libraries are incompatible and cannot be used with version 8.0 at all:
+The following libraries are incompatible and cannot be used with versions 8.0 and 8.1:
 
 ```
-open-telemetry/opentelemetry-auto-io
 open-telemetry/opentelemetry-auto-curl
+open-telemetry/opentelemetry-auto-io
 open-telemetry/opentelemetry-auto-pdo
 open-telemetry/opentelemetry-auto-doctrine
+open-telemetry/opentelemetry-auto-mysqli
+open-telemetry/opentelemetry-auto-openai-php <--- is OK for 8.1
 open-telemetry/opentelemetry-auto-ext-amqp
 open-telemetry/opentelemetry-auto-ext-rdkafka
-open-telemetry/opentelemetry-auto-mysqli
-open-telemetry/opentelemetry-auto-openai-php
 ```
 
-NOTE: The rest of the libraries have reached END OF LIFE support for version 8.0, and are listed with "maxed out" versions below:
+NOTE: 8.1 allows `openai-php` unlike 8.0
+
+The rest of the libraries have reached END OF LIFE support for version 8.0 (only), and are listed here with "maxed out" versions:
 
 ```json
 {
@@ -134,22 +129,8 @@ NOTE: The rest of the libraries have reached END OF LIFE support for version 8.0
 }
 ```
 
-### 8.1 limitations
-
-The following libraries are incompatible and cannot be used with version 8.1 at all:<br />
-
-```
-open-telemetry/opentelemetry-auto-io
-open-telemetry/opentelemetry-auto-curl
-open-telemetry/opentelemetry-auto-pdo
-open-telemetry/opentelemetry-auto-doctrine
-open-telemetry/opentelemetry-auto-ext-amqp
-open-telemetry/opentelemetry-auto-ext-rdkafka
-open-telemetry/opentelemetry-auto-mysqli
-```
-
-NOTE: 8.1 allows `openai-php` unlike 8.0
-
 ### Toxic conflicts
 
-- CodeIgniter apps will crash with `auto-laravel`
+These conflicts are considered "toxic" because they will crash the instrumented pods!
+
+- CodeIgniter apps toxic with: `open-telemetry/opentelemetry-auto-laravel`
