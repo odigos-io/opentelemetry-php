@@ -10,6 +10,7 @@ return array(
     '8e92226780215d0ec758aa7b73e0ede9' => $vendorDir . '/open-telemetry/context/fiber/initialize_fiber_handler.php',
     'c7b4a5d8b94d270f0f9a84f81e1dd63d' => $vendorDir . '/open-telemetry/api/Trace/functions.php',
     '7b11c4dc42b3b3023073cb14e519683c' => $vendorDir . '/ralouphie/getallheaders/src/getallheaders.php',
+    '253c157292f75eb38082b5acb06f3f01' => $vendorDir . '/nikic/fast-route/src/functions.php',
     'e39a8b23c42d4e1452234d762b03835a' => $vendorDir . '/ramsey/uuid/src/functions.php',
     '6e3fae29631ef280660b3cdad06f25a8' => $vendorDir . '/symfony/deprecation-contracts/function.php',
     '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => $vendorDir . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -30,4 +31,5 @@ return array(
     'd55f4a7f0a7b914fde9cb74762ff184c' => $vendorDir . '/open-telemetry/opentelemetry-auto-psr15/_register.php',
     '73b58d136437a3a14c73d7e23aae90ce' => $vendorDir . '/open-telemetry/opentelemetry-auto-psr16/_register.php',
     '58ecdc6bc6b585138831611aa769a744' => $vendorDir . '/open-telemetry/opentelemetry-auto-psr18/_register.php',
+    'dfdb213a5229dd55e621055ca8fd74e1' => $vendorDir . '/open-telemetry/opentelemetry-auto-slim/_register.php',
 );

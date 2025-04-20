@@ -64,6 +64,15 @@
             'aliases' => array(),
             'dev_requirement' => false,
         ),
+        'nikic/fast-route' => array(
+            'pretty_version' => 'v1.3.0',
+            'version' => '1.3.0.0',
+            'reference' => '181d480e08d9476e61381e04a71b34dc0432e812',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../nikic/fast-route',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
         'nyholm/psr7-server' => array(
             'pretty_version' => '1.1.0',
             'version' => '1.1.0.0',
@@ -208,6 +217,15 @@
             'aliases' => array(),
             'dev_requirement' => false,
         ),
+        'open-telemetry/opentelemetry-auto-slim' => array(
+            'pretty_version' => '1.1.0',
+            'version' => '1.1.0.0',
+            'reference' => 'a4ff214c8fd6c040fb17275ae07e910af94905c2',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../open-telemetry/opentelemetry-auto-slim',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
         'open-telemetry/sdk' => array(
             'pretty_version' => '1.2.4',
             'version' => '1.2.4.0',
@@ -271,6 +289,15 @@
             'reference' => 'aa5030cfa5405eccfdcb1083ce040c2cb8d253bf',
             'type' => 'library',
             'install_path' => __DIR__ . '/../psr/cache',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'psr/container' => array(
+            'pretty_version' => '2.0.2',
+            'version' => '2.0.2.0',
+            'reference' => 'c71ecc56dfe541dbd90c5360474fbc405f8d5963',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../psr/container',
             'aliases' => array(),
             'dev_requirement' => false,
         ),
@@ -399,6 +426,15 @@
             'replaced' => array(
                 0 => '4.7.6',
             ),
+        ),
+        'slim/slim' => array(
+            'pretty_version' => '4.14.0',
+            'version' => '4.14.0.0',
+            'reference' => '5943393b88716eb9e82c4161caa956af63423913',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../slim/slim',
+            'aliases' => array(),
+            'dev_requirement' => false,
         ),
         'symfony/deprecation-contracts' => array(
             'pretty_version' => 'v3.5.1',
