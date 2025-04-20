@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit20ff9cf64c3a67bcc8612b5acffbc2e5
+class ComposerStaticInitabc6df0e250a860cfaff492d79789735
 {
     public static $files = array (
         '5897ea0ac4cccf14d323035e65887801' => __DIR__ . '/..' . '/symfony/polyfill-php82/bootstrap.php',
@@ -23,8 +23,10 @@ class ComposerStaticInit20ff9cf64c3a67bcc8612b5acffbc2e5
         '062120a429d7568eacd495a8c34fcf09' => __DIR__ . '/..' . '/open-telemetry/sdk/Common/Dev/Compatibility/_load.php',
         '88e3b63cfb48eb8ea316a8a85a5f5c5f' => __DIR__ . '/..' . '/open-telemetry/sdk/_autoload.php',
         '157bbd0180425c7142fbaf1b1646bec3' => __DIR__ . '/..' . '/open-telemetry/exporter-otlp/_register.php',
+        '8df3d690cb934a8c454d71480d2147b8' => __DIR__ . '/..' . '/open-telemetry/opentelemetry-auto-curl/_register.php',
         '59735ab2af2d186e2fc4ce08816a60f8' => __DIR__ . '/..' . '/open-telemetry/opentelemetry-auto-guzzle/_register.php',
         '0f94d5087fd11d29b084d7f9345b9302' => __DIR__ . '/..' . '/open-telemetry/opentelemetry-auto-http-async/_register.php',
+        'f99e631f091e088f0fda113096c8cb8f' => __DIR__ . '/..' . '/open-telemetry/opentelemetry-auto-io/_register.php',
         'bb0ef3bf0f9ae360fac97988792c82e2' => __DIR__ . '/..' . '/open-telemetry/opentelemetry-auto-psr3/_register.php',
         '4908610bcdc555bd878a407a9f43d9a3' => __DIR__ . '/..' . '/open-telemetry/opentelemetry-auto-psr6/_register.php',
         '49808716404558a9860b591258c28352' => __DIR__ . '/..' . '/open-telemetry/opentelemetry-auto-psr14/_register.php',
@@ -66,8 +68,10 @@ class ComposerStaticInit20ff9cf64c3a67bcc8612b5acffbc2e5
             'OpenTelemetry\\Contrib\\Instrumentation\\Psr16\\' => 44,
             'OpenTelemetry\\Contrib\\Instrumentation\\Psr15\\' => 44,
             'OpenTelemetry\\Contrib\\Instrumentation\\Psr14\\' => 44,
+            'OpenTelemetry\\Contrib\\Instrumentation\\IO\\' => 41,
             'OpenTelemetry\\Contrib\\Instrumentation\\HttpAsyncClient\\' => 54,
             'OpenTelemetry\\Contrib\\Instrumentation\\Guzzle\\' => 45,
+            'OpenTelemetry\\Contrib\\Instrumentation\\Curl\\' => 43,
             'OpenTelemetry\\Context\\' => 22,
             'OpenTelemetry\\API\\' => 18,
         ),
@@ -188,6 +192,10 @@ class ComposerStaticInit20ff9cf64c3a67bcc8612b5acffbc2e5
         array (
             0 => __DIR__ . '/..' . '/open-telemetry/opentelemetry-auto-psr14/src',
         ),
+        'OpenTelemetry\\Contrib\\Instrumentation\\IO\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/open-telemetry/opentelemetry-auto-io/src',
+        ),
         'OpenTelemetry\\Contrib\\Instrumentation\\HttpAsyncClient\\' => 
         array (
             0 => __DIR__ . '/..' . '/open-telemetry/opentelemetry-auto-http-async/src',
@@ -195,6 +203,10 @@ class ComposerStaticInit20ff9cf64c3a67bcc8612b5acffbc2e5
         'OpenTelemetry\\Contrib\\Instrumentation\\Guzzle\\' => 
         array (
             0 => __DIR__ . '/..' . '/open-telemetry/opentelemetry-auto-guzzle/src',
+        ),
+        'OpenTelemetry\\Contrib\\Instrumentation\\Curl\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/open-telemetry/opentelemetry-auto-curl/src',
         ),
         'OpenTelemetry\\Context\\' => 
         array (
@@ -552,7 +564,6 @@ class ComposerStaticInit20ff9cf64c3a67bcc8612b5acffbc2e5
         'Http\\Promise\\Promise' => __DIR__ . '/..' . '/php-http/promise/src/Promise.php',
         'Http\\Promise\\RejectedPromise' => __DIR__ . '/..' . '/php-http/promise/src/RejectedPromise.php',
         'Nevay\\SPI\\Composer\\Plugin' => __DIR__ . '/..' . '/tbachert/spi/src/Composer/Plugin.php',
-        'Nevay\\SPI\\GeneratedServiceProviderData' => __DIR__ . '/..' . '/composer/GeneratedServiceProviderData.php',
         'Nevay\\SPI\\ServiceConfigurationError' => __DIR__ . '/..' . '/tbachert/spi/src/ServiceConfigurationError.php',
         'Nevay\\SPI\\ServiceLoader' => __DIR__ . '/..' . '/tbachert/spi/src/ServiceLoader.php',
         'Nevay\\SPI\\ServiceLoaderIterator' => __DIR__ . '/..' . '/tbachert/spi/src/ServiceLoaderIterator.php',
@@ -698,10 +709,14 @@ class ComposerStaticInit20ff9cf64c3a67bcc8612b5acffbc2e5
         'OpenTelemetry\\Context\\Propagation\\TextMapPropagatorInterface' => __DIR__ . '/..' . '/open-telemetry/context/Propagation/TextMapPropagatorInterface.php',
         'OpenTelemetry\\Context\\ScopeInterface' => __DIR__ . '/..' . '/open-telemetry/context/ScopeInterface.php',
         'OpenTelemetry\\Context\\ZendObserverFiber' => __DIR__ . '/..' . '/open-telemetry/context/ZendObserverFiber.php',
+        'OpenTelemetry\\Contrib\\Instrumentation\\Curl\\CurlHandleMetadata' => __DIR__ . '/..' . '/open-telemetry/opentelemetry-auto-curl/src/CurlHandleMetadata.php',
+        'OpenTelemetry\\Contrib\\Instrumentation\\Curl\\CurlInstrumentation' => __DIR__ . '/..' . '/open-telemetry/opentelemetry-auto-curl/src/CurlInstrumentation.php',
+        'OpenTelemetry\\Contrib\\Instrumentation\\Curl\\HeadersPropagator' => __DIR__ . '/..' . '/open-telemetry/opentelemetry-auto-curl/src/HeadersPropagator.php',
         'OpenTelemetry\\Contrib\\Instrumentation\\Guzzle\\GuzzleInstrumentation' => __DIR__ . '/..' . '/open-telemetry/opentelemetry-auto-guzzle/src/GuzzleInstrumentation.php',
         'OpenTelemetry\\Contrib\\Instrumentation\\Guzzle\\HeadersPropagator' => __DIR__ . '/..' . '/open-telemetry/opentelemetry-auto-guzzle/src/HeadersPropagator.php',
         'OpenTelemetry\\Contrib\\Instrumentation\\HttpAsyncClient\\HeadersPropagator' => __DIR__ . '/..' . '/open-telemetry/opentelemetry-auto-http-async/src/HeadersPropagator.php',
         'OpenTelemetry\\Contrib\\Instrumentation\\HttpAsyncClient\\HttpAsyncClientInstrumentation' => __DIR__ . '/..' . '/open-telemetry/opentelemetry-auto-http-async/src/HttpAsyncClientInstrumentation.php',
+        'OpenTelemetry\\Contrib\\Instrumentation\\IO\\IOInstrumentation' => __DIR__ . '/..' . '/open-telemetry/opentelemetry-auto-io/src/IOInstrumentation.php',
         'OpenTelemetry\\Contrib\\Instrumentation\\Psr14\\Psr14Instrumentation' => __DIR__ . '/..' . '/open-telemetry/opentelemetry-auto-psr14/src/Psr14Instrumentation.php',
         'OpenTelemetry\\Contrib\\Instrumentation\\Psr15\\Psr15Instrumentation' => __DIR__ . '/..' . '/open-telemetry/opentelemetry-auto-psr15/src/Psr15Instrumentation.php',
         'OpenTelemetry\\Contrib\\Instrumentation\\Psr16\\Psr16Instrumentation' => __DIR__ . '/..' . '/open-telemetry/opentelemetry-auto-psr16/src/Psr16Instrumentation.php',
@@ -1330,9 +1345,9 @@ class ComposerStaticInit20ff9cf64c3a67bcc8612b5acffbc2e5
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit20ff9cf64c3a67bcc8612b5acffbc2e5::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit20ff9cf64c3a67bcc8612b5acffbc2e5::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit20ff9cf64c3a67bcc8612b5acffbc2e5::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitabc6df0e250a860cfaff492d79789735::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitabc6df0e250a860cfaff492d79789735::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitabc6df0e250a860cfaff492d79789735::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -299,7 +299,6 @@ return array(
     'Http\\Promise\\Promise' => $vendorDir . '/php-http/promise/src/Promise.php',
     'Http\\Promise\\RejectedPromise' => $vendorDir . '/php-http/promise/src/RejectedPromise.php',
     'Nevay\\SPI\\Composer\\Plugin' => $vendorDir . '/tbachert/spi/src/Composer/Plugin.php',
-    'Nevay\\SPI\\GeneratedServiceProviderData' => $vendorDir . '/composer/GeneratedServiceProviderData.php',
     'Nevay\\SPI\\ServiceConfigurationError' => $vendorDir . '/tbachert/spi/src/ServiceConfigurationError.php',
     'Nevay\\SPI\\ServiceLoader' => $vendorDir . '/tbachert/spi/src/ServiceLoader.php',
     'Nevay\\SPI\\ServiceLoaderIterator' => $vendorDir . '/tbachert/spi/src/ServiceLoaderIterator.php',

@@ -552,7 +552,6 @@ class ComposerStaticInit43cf35b636afcce244ccb015e4dba5c4
         'Http\\Promise\\Promise' => __DIR__ . '/..' . '/php-http/promise/src/Promise.php',
         'Http\\Promise\\RejectedPromise' => __DIR__ . '/..' . '/php-http/promise/src/RejectedPromise.php',
         'Nevay\\SPI\\Composer\\Plugin' => __DIR__ . '/..' . '/tbachert/spi/src/Composer/Plugin.php',
-        'Nevay\\SPI\\GeneratedServiceProviderData' => __DIR__ . '/..' . '/composer/GeneratedServiceProviderData.php',
         'Nevay\\SPI\\ServiceConfigurationError' => __DIR__ . '/..' . '/tbachert/spi/src/ServiceConfigurationError.php',
         'Nevay\\SPI\\ServiceLoader' => __DIR__ . '/..' . '/tbachert/spi/src/ServiceLoader.php',
         'Nevay\\SPI\\ServiceLoaderIterator' => __DIR__ . '/..' . '/tbachert/spi/src/ServiceLoaderIterator.php',
