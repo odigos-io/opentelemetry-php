@@ -1,7 +1,7 @@
 {
   "name": "odigos/opentelemetry-php-8.2",
   "description": "Odigos distribution of OpenTelemetry for PHP 8.2.x",
-  "type": "library",
+  "type": "project",
   "require": {
     "php": ">=8.2 <8.3",
     "ext-opentelemetry": "*",
