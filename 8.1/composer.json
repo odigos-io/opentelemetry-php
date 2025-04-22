@@ -1,6 +1,6 @@
 {
-  "name": "odigos/opentelemetry-php",
-  "description": "Odigos distribution of OpenTelemetry for PHP",
+  "name": "odigos/opentelemetry-php-8.1",
+  "description": "Odigos distribution of OpenTelemetry for PHP 8.1.x",
   "type": "project",
   "require": {
     "php": ">=8.1 <8.2",
@@ -15,7 +15,13 @@
     "open-telemetry/opentelemetry-auto-psr15": "^1.1.0",
     "open-telemetry/opentelemetry-auto-psr16": "^0.0.4",
     "open-telemetry/opentelemetry-auto-psr18": "^1.1.0",
-    "open-telemetry/opentelemetry-auto-slim": "^1.1.0"
+    "open-telemetry/opentelemetry-auto-slim": "^1.1.0",
+    "open-telemetry/opentelemetry-auto-symfony": "^1.0.0",
+    "open-telemetry/opentelemetry-auto-cakephp": "^0.0.4",
+    "open-telemetry/opentelemetry-auto-yii": "^0.0.6",
+    "open-telemetry/opentelemetry-auto-wordpress": "^0.0.17",
+    "open-telemetry/opentelemetry-auto-mongodb": "^0.0.8",
+    "open-telemetry/opentelemetry-auto-openai-php": "^0.0.3"
   },
   "repositories": [
     {

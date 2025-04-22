@@ -15,7 +15,12 @@
     "open-telemetry/opentelemetry-auto-psr15": "<=1.0.6",
     "open-telemetry/opentelemetry-auto-psr16": "<=0.0.3",
     "open-telemetry/opentelemetry-auto-psr18": "<=1.0.4",
-    "open-telemetry/opentelemetry-auto-slim": "<=1.0.7"
+    "open-telemetry/opentelemetry-auto-slim": "<=1.0.7",
+    "open-telemetry/opentelemetry-auto-symfony": "<=1.0.0beta30",
+    "open-telemetry/opentelemetry-auto-cakephp": "<=0.0.3",
+    "open-telemetry/opentelemetry-auto-yii": "<=0.0.5",
+    "open-telemetry/opentelemetry-auto-wordpress": "<=0.0.16",
+    "open-telemetry/opentelemetry-auto-mongodb": "<=0.0.7"
   },
   "repositories": [
     {
