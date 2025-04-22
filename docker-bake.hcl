@@ -10,6 +10,13 @@ target "php-base" {
   context    = "."
   dockerfile = "Dockerfile"
   target     = "output"
+  platforms = [
+    "linux/amd64",
+    "linux/arm64"
+  ]
+  build_args = {
+    PHP_VERSION = "${PHP_VERSION}"
+  }
   args = {
     PHP_OTEL_VERSION = "${PHP_OTEL_VERSION}"
   }
