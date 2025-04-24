@@ -9,7 +9,7 @@ Switch PHP version during development:
 make switch-php/{PHP_VERSION}
 ```
 
-Generate agent files for all PHP versions:
+Generate agent binary files for all PHP versions:
 
 ```bash
 make all

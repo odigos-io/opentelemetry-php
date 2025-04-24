@@ -17,13 +17,9 @@ RUN pecl install opentelemetry-${PHP_OTEL_VERSION} \
 RUN cp "$(php-config --extension-dir)/opentelemetry.so" opentelemetry.so
 RUN echo "extension=/var/odigos/php/${PHP_VERSION}/opentelemetry.so\nauto_prepend_file=/var/odigos/php/${PHP_VERSION}/index.php" > opentelemetry.ini
 
-# Enable extensions (for 'composer install' below)
-RUN cp opentelemetry.so "$(php-config --extension-dir)/opentelemetry.so" \
-  && docker-php-ext-enable opentelemetry
 # Install composer libraries
-COPY ./${PHP_VERSION}/composer.json .
-RUN composer config --no-plugins allow-plugins.yiisoft/yii2-composer true \
-  && composer install --no-dev --optimize-autoloader --ignore-platform-req=ext-amqp --ignore-platform-req=ext-rdkafka --ignore-platform-req=ext-mongodb --ignore-platform-req=ext-mysqli --ignore-platform-req=ext-intl
+# COPY ./${PHP_VERSION}/composer.json .
+# RUN composer install --optimize-autoloader --no-dev --no-plugins --ignore-platform-req=ext-amqp --ignore-platform-req=ext-rdkafka --ignore-platform-req=ext-mongodb --ignore-platform-req=ext-mysqli --ignore-platform-req=ext-intl
 
 FROM scratch AS output
 ARG PHP_VERSION
