@@ -24,7 +24,6 @@ all:
 		$(MAKE) install-libs/$$vers; \
 		for arch in $(ARCHES); do \
 			($(MAKE) unmount-container/$$vers-$$arch || true); \
-			$(MAKE) delete-files/$$vers-$$arch; \
 			$(MAKE) mount-container/$$vers-$$arch; \
 			$(MAKE) copy-files/$$vers-$$arch; \
 			($(MAKE) unmount-container/$$vers-$$arch || true); \
@@ -40,12 +39,26 @@ install-libs/%:
 			--optimize-autoloader \
 			--no-dev \
 			--no-plugins \
+			--ignore-platform-req=ext-opentelemetry \
 			--ignore-platform-req=ext-amqp \
 			--ignore-platform-req=ext-rdkafka \
 			--ignore-platform-req=ext-mongodb \
 			--ignore-platform-req=ext-mysqli \
-			--ignore-platform-req=ext-intl \
-			--ignore-platform-req=ext-opentelemetry
+			--ignore-platform-req=ext-intl
+
+update-libs/%:
+	@$(MAKE) switch-php/$*
+	@cd ./$*/ \
+		&& composer update \
+			--optimize-autoloader \
+			--no-dev \
+			--no-plugins \
+			--ignore-platform-req=ext-opentelemetry \
+			--ignore-platform-req=ext-amqp \
+			--ignore-platform-req=ext-rdkafka \
+			--ignore-platform-req=ext-mongodb \
+			--ignore-platform-req=ext-mysqli \
+			--ignore-platform-req=ext-intl
 
 bake-images:
 	@docker buildx bake --file docker-bake.hcl \
@@ -60,11 +73,7 @@ unmount-container/%:
 copy-files/%:
 	VERS=$$(echo "$*" | cut -d '-' -f 1); \
 	ARCH=$$(echo "$*" | cut -d '-' -f 2); \
-	mkdir -p ./$$VERS/$$ARCH; \
-	docker cp ${DOCKER_MOUNT_NAME}-$*:/$${VERS}/opentelemetry.ini ./$${VERS}/opentelemetry.ini; \
-	docker cp ${DOCKER_MOUNT_NAME}-$*:/$${VERS}/opentelemetry.so ./$${VERS}/$${ARCH}/opentelemetry.so
-
-delete-files/%:
-	VERS=$$(echo "$*" | cut -d '-' -f 1); \
-	ARCH=$$(echo "$*" | cut -d '-' -f 2); \
-	rm -rf ./$${VERS}/$${ARCH}
+	rm -rf ./$${VERS}/bin/$${ARCH}; \
+	mkdir -p ./$${VERS}/bin/$${ARCH}; \
+	docker cp ${DOCKER_MOUNT_NAME}-$*:/$${VERS}/opentelemetry.so ./$${VERS}/bin/$${ARCH}/opentelemetry.so; \
+	docker cp ${DOCKER_MOUNT_NAME}-$*:/$${VERS}/opentelemetry.ini ./$${VERS}/opentelemetry.ini
