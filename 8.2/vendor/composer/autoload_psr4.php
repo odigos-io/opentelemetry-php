@@ -50,7 +50,6 @@ return array(
     'OpenTelemetry\\Contrib\\Instrumentation\\OpenAIPHP\\' => array($vendorDir . '/open-telemetry/opentelemetry-auto-openai-php/src'),
     'OpenTelemetry\\Contrib\\Instrumentation\\MySqli\\' => array($vendorDir . '/open-telemetry/opentelemetry-auto-mysqli/src'),
     'OpenTelemetry\\Contrib\\Instrumentation\\MongoDB\\' => array($vendorDir . '/open-telemetry/opentelemetry-auto-mongodb/src'),
-    'OpenTelemetry\\Contrib\\Instrumentation\\IO\\' => array($vendorDir . '/open-telemetry/opentelemetry-auto-io/src'),
     'OpenTelemetry\\Contrib\\Instrumentation\\HttpAsyncClient\\' => array($vendorDir . '/open-telemetry/opentelemetry-auto-http-async/src'),
     'OpenTelemetry\\Contrib\\Instrumentation\\Guzzle\\' => array($vendorDir . '/open-telemetry/opentelemetry-auto-guzzle/src'),
     'OpenTelemetry\\Contrib\\Instrumentation\\ExtRdKafka\\' => array($vendorDir . '/open-telemetry/opentelemetry-auto-ext-rdkafka/src'),

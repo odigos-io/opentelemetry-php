@@ -3,7 +3,7 @@
         'name' => 'odigos/opentelemetry-php-8.3',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '90d6bcd67299f997d00744e425957bd93a9929b5',
+        'reference' => '8f381e7e3e0ce02891698420d174f1cc84fb59ae',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -58,13 +58,13 @@
         'cakephp/cache' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '5.2.2',
+                0 => '5.2.3',
             ),
         ),
         'cakephp/cakephp' => array(
-            'pretty_version' => '5.2.2',
-            'version' => '5.2.2.0',
-            'reference' => '64789870f0b2b7b92de9ca85871c2da7193345b6',
+            'pretty_version' => '5.2.3',
+            'version' => '5.2.3.0',
+            'reference' => 'e8fbbd7f668b30e98293813db600258fadead5a6',
             'type' => 'library',
             'install_path' => __DIR__ . '/../cakephp/cakephp',
             'aliases' => array(),
@@ -82,79 +82,79 @@
         'cakephp/collection' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '5.2.2',
+                0 => '5.2.3',
             ),
         ),
         'cakephp/console' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '5.2.2',
+                0 => '5.2.3',
             ),
         ),
         'cakephp/core' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '5.2.2',
+                0 => '5.2.3',
             ),
         ),
         'cakephp/database' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '5.2.2',
+                0 => '5.2.3',
             ),
         ),
         'cakephp/datasource' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '5.2.2',
+                0 => '5.2.3',
             ),
         ),
         'cakephp/event' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '5.2.2',
+                0 => '5.2.3',
             ),
         ),
         'cakephp/form' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '5.2.2',
+                0 => '5.2.3',
             ),
         ),
         'cakephp/http' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '5.2.2',
+                0 => '5.2.3',
             ),
         ),
         'cakephp/i18n' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '5.2.2',
+                0 => '5.2.3',
             ),
         ),
         'cakephp/log' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '5.2.2',
+                0 => '5.2.3',
             ),
         ),
         'cakephp/orm' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '5.2.2',
+                0 => '5.2.3',
             ),
         ),
         'cakephp/utility' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '5.2.2',
+                0 => '5.2.3',
             ),
         ),
         'cakephp/validation' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '5.2.2',
+                0 => '5.2.3',
             ),
         ),
         'cebe/markdown' => array(
@@ -319,7 +319,7 @@
         'odigos/opentelemetry-php-8.3' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '90d6bcd67299f997d00744e425957bd93a9929b5',
+            'reference' => '8f381e7e3e0ce02891698420d174f1cc84fb59ae',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -421,15 +421,6 @@
             'reference' => '3b15fa9c2ff5b7ca6d1c162bae45a0281a20638c',
             'type' => 'library',
             'install_path' => __DIR__ . '/../open-telemetry/opentelemetry-auto-http-async',
-            'aliases' => array(),
-            'dev_requirement' => false,
-        ),
-        'open-telemetry/opentelemetry-auto-io' => array(
-            'pretty_version' => '0.0.13',
-            'version' => '0.0.13.0',
-            'reference' => '0f7166cc762c7796eaea7189cafc68cd4542ddde',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../open-telemetry/opentelemetry-auto-io',
             'aliases' => array(),
             'dev_requirement' => false,
         ),

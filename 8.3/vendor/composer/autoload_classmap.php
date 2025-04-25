@@ -2564,7 +2564,6 @@ return array(
     'OpenTelemetry\\Contrib\\Instrumentation\\Guzzle\\HeadersPropagator' => $vendorDir . '/open-telemetry/opentelemetry-auto-guzzle/src/HeadersPropagator.php',
     'OpenTelemetry\\Contrib\\Instrumentation\\HttpAsyncClient\\HeadersPropagator' => $vendorDir . '/open-telemetry/opentelemetry-auto-http-async/src/HeadersPropagator.php',
     'OpenTelemetry\\Contrib\\Instrumentation\\HttpAsyncClient\\HttpAsyncClientInstrumentation' => $vendorDir . '/open-telemetry/opentelemetry-auto-http-async/src/HttpAsyncClientInstrumentation.php',
-    'OpenTelemetry\\Contrib\\Instrumentation\\IO\\IOInstrumentation' => $vendorDir . '/open-telemetry/opentelemetry-auto-io/src/IOInstrumentation.php',
     'OpenTelemetry\\Contrib\\Instrumentation\\MongoDB\\MongoDBCollectionExtractor' => $vendorDir . '/open-telemetry/opentelemetry-auto-mongodb/src/MongoDBCollectionExtractor.php',
     'OpenTelemetry\\Contrib\\Instrumentation\\MongoDB\\MongoDBInstrumentation' => $vendorDir . '/open-telemetry/opentelemetry-auto-mongodb/src/MongoDBInstrumentation.php',
     'OpenTelemetry\\Contrib\\Instrumentation\\MongoDB\\MongoDBInstrumentationSubscriber' => $vendorDir . '/open-telemetry/opentelemetry-auto-mongodb/src/MongoDBInstrumentationSubscriber.php',

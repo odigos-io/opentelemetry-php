@@ -50,7 +50,6 @@ return array(
     '196b0ff730cbe2632e240365e691cadb' => $vendorDir . '/open-telemetry/opentelemetry-auto-ext-rdkafka/_register.php',
     '59735ab2af2d186e2fc4ce08816a60f8' => $vendorDir . '/open-telemetry/opentelemetry-auto-guzzle/_register.php',
     '0f94d5087fd11d29b084d7f9345b9302' => $vendorDir . '/open-telemetry/opentelemetry-auto-http-async/_register.php',
-    'f99e631f091e088f0fda113096c8cb8f' => $vendorDir . '/open-telemetry/opentelemetry-auto-io/_register.php',
     'fcabbcc910be557d7602ff9c292a1c0f' => $vendorDir . '/open-telemetry/opentelemetry-auto-mongodb/_register.php',
     '6ba0bf237030982c6cd9fa3b2422a4b0' => $vendorDir . '/open-telemetry/opentelemetry-auto-mysqli/_register.php',
     '867a29683fd1738113483ff24918636b' => $vendorDir . '/open-telemetry/opentelemetry-auto-openai-php/_register.php',

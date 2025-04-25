@@ -10,7 +10,6 @@
     "open-telemetry/opentelemetry-auto-http-async": "^1.1.0",
     "open-telemetry/opentelemetry-auto-guzzle": "^1.1.0",
     "open-telemetry/opentelemetry-auto-curl": "^0.0.4",
-    "open-telemetry/opentelemetry-auto-io": "^0.0.13",
     "open-telemetry/opentelemetry-auto-psr3": "^0.0.9",
     "open-telemetry/opentelemetry-auto-psr6": "^0.0.4",
     "open-telemetry/opentelemetry-auto-psr14": "^0.0.4",

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ea07f0008ae1f9473471dce3f319a9ef",
+    "content-hash": "126f70a359cf453a0a60dc27ca4b226e",
     "packages": [
         {
             "name": "bower-asset/inputmask",
@@ -143,16 +143,16 @@
         },
         {
             "name": "cakephp/cakephp",
-            "version": "5.2.2",
+            "version": "5.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/cakephp.git",
-                "reference": "64789870f0b2b7b92de9ca85871c2da7193345b6"
+                "reference": "e8fbbd7f668b30e98293813db600258fadead5a6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cakephp/cakephp/zipball/64789870f0b2b7b92de9ca85871c2da7193345b6",
-                "reference": "64789870f0b2b7b92de9ca85871c2da7193345b6",
+                "url": "https://api.github.com/repos/cakephp/cakephp/zipball/e8fbbd7f668b30e98293813db600258fadead5a6",
+                "reference": "e8fbbd7f668b30e98293813db600258fadead5a6",
                 "shasum": ""
             },
             "require": {
@@ -260,7 +260,7 @@
                 "issues": "https://github.com/cakephp/cakephp/issues",
                 "source": "https://github.com/cakephp/cakephp"
             },
-            "time": "2025-04-18T03:47:27+00:00"
+            "time": "2025-04-24T02:28:07+00:00"
         },
         {
             "name": "cakephp/chronos",
@@ -2328,65 +2328,6 @@
             ],
             "support": {
                 "source": "https://github.com/opentelemetry-php/contrib-auto-http-async/tree/1.1.0"
-            },
-            "time": "2025-02-25T01:30:01+00:00"
-        },
-        {
-            "name": "open-telemetry/opentelemetry-auto-io",
-            "version": "0.0.13",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/opentelemetry-php/contrib-auto-io.git",
-                "reference": "0f7166cc762c7796eaea7189cafc68cd4542ddde"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/opentelemetry-php/contrib-auto-io/zipball/0f7166cc762c7796eaea7189cafc68cd4542ddde",
-                "reference": "0f7166cc762c7796eaea7189cafc68cd4542ddde",
-                "shasum": ""
-            },
-            "require": {
-                "ext-opentelemetry": "*",
-                "open-telemetry/api": "^1.0",
-                "open-telemetry/sem-conv": "^1.30",
-                "php": "^8.2"
-            },
-            "require-dev": {
-                "friendsofphp/php-cs-fixer": "^3",
-                "open-telemetry/sdk": "^1.0",
-                "phan/phan": "^5.0",
-                "php-http/mock-client": "*",
-                "phpstan/phpstan": "^1.1",
-                "phpstan/phpstan-phpunit": "^1.0",
-                "phpunit/phpunit": "^9.5",
-                "psalm/plugin-phpunit": "^0.19.2",
-                "vimeo/psalm": "6.4.0"
-            },
-            "type": "library",
-            "autoload": {
-                "files": [
-                    "_register.php"
-                ],
-                "psr-4": {
-                    "OpenTelemetry\\Contrib\\Instrumentation\\IO\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "Apache-2.0"
-            ],
-            "description": "OpenTelemetry auto-instrumentation for IO",
-            "homepage": "https://opentelemetry.io/docs/php",
-            "keywords": [
-                "instrumentation",
-                "io",
-                "open-telemetry",
-                "opentelemetry",
-                "otel",
-                "tracing"
-            ],
-            "support": {
-                "source": "https://github.com/opentelemetry-php/contrib-auto-io/tree/0.0.13"
             },
             "time": "2025-02-25T01:30:01+00:00"
         },
