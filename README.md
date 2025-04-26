@@ -9,11 +9,13 @@ Switch PHP version during development:
 make switch-php/{PHP_VERSION}
 ```
 
-Generate agent binary files for all PHP versions:
+Generate binary files (opentelemetry.so) for all PHP versions:
 
 ```bash
 make all
 ```
+
+Note: Docker build for AMD can be a bit flaky, just re-run the make command until success.
 
 # Deploying an agent
 
