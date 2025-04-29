@@ -12,7 +12,15 @@ make switch-php/{PHP_VERSION}
 Generate binary files (opentelemetry.so) for all PHP versions:
 
 ```bash
-make all
+make binaries
+```
+
+Install/Update dependecny files per PHP version:
+
+```bash
+# PHP_VERSION is one-of: 8.0, 8.1, 8.2, 8.3, 8.4
+make install-libs/{PHP_VERSION}
+make update-libs/{PHP_VERSION}
 ```
 
 Note: Docker build for AMD can be a bit flaky, just re-run the make command until success.

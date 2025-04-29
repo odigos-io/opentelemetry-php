@@ -7,8 +7,8 @@ DOCKER_MOUNT_NAME=otel-php
 # Main method to build the binaries
 ##################################################
 
-.PHONY: all
-all:
+.PHONY: binaries
+binaries:
 	@$(MAKE) prepare-multiarch
 	@$(MAKE) bake-images
 	@for vers in $(PHP_VERSIONS); do \
