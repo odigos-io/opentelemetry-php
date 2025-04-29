@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e0a0f9a859e430d4073aa8c19629c3bf",
+    "content-hash": "651a95dbbbd4a3e4c979ee310c532455",
     "packages": [
         {
             "name": "bower-asset/inputmask",
@@ -83,16 +83,16 @@
         },
         {
             "name": "cakephp/cakephp",
-            "version": "4.6.0",
+            "version": "4.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/cakephp.git",
-                "reference": "b8585672346c0654311c77500ce613cdf37687cc"
+                "reference": "d3c196c92fde430dc395b14b058dd240c3de42be"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cakephp/cakephp/zipball/b8585672346c0654311c77500ce613cdf37687cc",
-                "reference": "b8585672346c0654311c77500ce613cdf37687cc",
+                "url": "https://api.github.com/repos/cakephp/cakephp/zipball/d3c196c92fde430dc395b14b058dd240c3de42be",
+                "reference": "d3c196c92fde430dc395b14b058dd240c3de42be",
                 "shasum": ""
             },
             "require": {
@@ -192,7 +192,7 @@
                 "issues": "https://github.com/cakephp/cakephp/issues",
                 "source": "https://github.com/cakephp/cakephp"
             },
-            "time": "2025-03-23T02:36:48+00:00"
+            "time": "2025-04-26T22:40:45+00:00"
         },
         {
             "name": "cakephp/chronos",
@@ -315,6 +315,81 @@
                 "source": "https://github.com/cebe/markdown"
             },
             "time": "2018-03-26T11:24:36+00:00"
+        },
+        {
+            "name": "codeigniter4/framework",
+            "version": "v4.4.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/codeigniter4/framework.git",
+                "reference": "84ff35989270d17bcdb463626eec50b4c25b3766"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/codeigniter4/framework/zipball/84ff35989270d17bcdb463626eec50b4c25b3766",
+                "reference": "84ff35989270d17bcdb463626eec50b4c25b3766",
+                "shasum": ""
+            },
+            "require": {
+                "ext-intl": "*",
+                "ext-json": "*",
+                "ext-mbstring": "*",
+                "laminas/laminas-escaper": "^2.9",
+                "php": "^7.4 || ^8.0",
+                "psr/log": "^1.1"
+            },
+            "require-dev": {
+                "codeigniter/coding-standard": "^1.7",
+                "fakerphp/faker": "^1.9",
+                "friendsofphp/php-cs-fixer": "^3.47.1",
+                "kint-php/kint": "^5.0.4",
+                "mikey179/vfsstream": "^1.6",
+                "nexusphp/cs-config": "^3.6",
+                "phpunit/phpunit": "^9.1",
+                "predis/predis": "^1.1 || ^2.0"
+            },
+            "suggest": {
+                "ext-curl": "If you use CURLRequest class",
+                "ext-dom": "If you use TestResponse",
+                "ext-exif": "If you run Image class tests",
+                "ext-fileinfo": "Improves mime type detection for files",
+                "ext-gd": "If you use Image class GDHandler",
+                "ext-imagick": "If you use Image class ImageMagickHandler",
+                "ext-libxml": "If you use TestResponse",
+                "ext-memcache": "If you use Cache class MemcachedHandler with Memcache",
+                "ext-memcached": "If you use Cache class MemcachedHandler with Memcached",
+                "ext-mysqli": "If you use MySQL",
+                "ext-oci8": "If you use Oracle Database",
+                "ext-pgsql": "If you use PostgreSQL",
+                "ext-readline": "Improves CLI::input() usability",
+                "ext-redis": "If you use Cache class RedisHandler",
+                "ext-simplexml": "If you format XML",
+                "ext-sodium": "If you use Encryption SodiumHandler",
+                "ext-sqlite3": "If you use SQLite3",
+                "ext-sqlsrv": "If you use SQL Server",
+                "ext-xdebug": "If you use CIUnitTestCase::assertHeaderEmitted()"
+            },
+            "type": "project",
+            "autoload": {
+                "psr-4": {
+                    "CodeIgniter\\": "system/"
+                },
+                "exclude-from-classmap": [
+                    "**/Database/Migrations/**"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "The CodeIgniter framework v4",
+            "homepage": "https://codeigniter.com",
+            "support": {
+                "forum": "https://forum.codeigniter.com/",
+                "slack": "https://codeigniterchat.slack.com",
+                "source": "https://github.com/codeigniter4/CodeIgniter4"
+            },
+            "time": "2024-04-07T02:46:05+00:00"
         },
         {
             "name": "composer/ca-bundle",
@@ -918,6 +993,68 @@
                 }
             ],
             "time": "2023-10-29T16:17:44+00:00"
+        },
+        {
+            "name": "laminas/laminas-escaper",
+            "version": "2.12.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laminas/laminas-escaper.git",
+                "reference": "ee7a4c37bf3d0e8c03635d5bddb5bb3184ead490"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laminas/laminas-escaper/zipball/ee7a4c37bf3d0e8c03635d5bddb5bb3184ead490",
+                "reference": "ee7a4c37bf3d0e8c03635d5bddb5bb3184ead490",
+                "shasum": ""
+            },
+            "require": {
+                "ext-ctype": "*",
+                "ext-mbstring": "*",
+                "php": "^7.4 || ~8.0.0 || ~8.1.0 || ~8.2.0"
+            },
+            "conflict": {
+                "zendframework/zend-escaper": "*"
+            },
+            "require-dev": {
+                "infection/infection": "^0.26.6",
+                "laminas/laminas-coding-standard": "~2.4.0",
+                "maglnet/composer-require-checker": "^3.8.0",
+                "phpunit/phpunit": "^9.5.18",
+                "psalm/plugin-phpunit": "^0.17.0",
+                "vimeo/psalm": "^4.22.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Laminas\\Escaper\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Securely and safely escape HTML, HTML attributes, JavaScript, CSS, and URLs",
+            "homepage": "https://laminas.dev",
+            "keywords": [
+                "escaper",
+                "laminas"
+            ],
+            "support": {
+                "chat": "https://laminas.dev/chat",
+                "docs": "https://docs.laminas.dev/laminas-escaper/",
+                "forum": "https://discourse.laminas.dev",
+                "issues": "https://github.com/laminas/laminas-escaper/issues",
+                "rss": "https://github.com/laminas/laminas-escaper/releases.atom",
+                "source": "https://github.com/laminas/laminas-escaper"
+            },
+            "funding": [
+                {
+                    "url": "https://funding.communitybridge.org/projects/laminas-project",
+                    "type": "community_bridge"
+                }
+            ],
+            "time": "2022-10-10T10:11:09+00:00"
         },
         {
             "name": "laminas/laminas-httphandlerrunner",
@@ -1663,6 +1800,66 @@
                 "source": "https://github.com/opentelemetry-php/contrib-auto-cakephp/tree/0.0.3"
             },
             "time": "2024-08-28T23:19:36+00:00"
+        },
+        {
+            "name": "open-telemetry/opentelemetry-auto-codeigniter",
+            "version": "0.0.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/opentelemetry-php/contrib-auto-codeigniter.git",
+                "reference": "3fb0f0bd470d57409836cdc75ffeec66f57bb369"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/opentelemetry-php/contrib-auto-codeigniter/zipball/3fb0f0bd470d57409836cdc75ffeec66f57bb369",
+                "reference": "3fb0f0bd470d57409836cdc75ffeec66f57bb369",
+                "shasum": ""
+            },
+            "require": {
+                "codeigniter4/framework": "^4.3",
+                "ext-opentelemetry": "*",
+                "open-telemetry/api": "^1.0",
+                "open-telemetry/sem-conv": "^1.24",
+                "php": "^8.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.50",
+                "open-telemetry/sdk": "^1.0",
+                "phan/phan": "^5.0",
+                "php-http/mock-client": "*",
+                "phpstan/phpstan": "^1.1",
+                "phpstan/phpstan-phpunit": "^1.0",
+                "phpunit/phpunit": "^9.5",
+                "psalm/plugin-phpunit": "^0.18.4",
+                "vimeo/psalm": "^5.0"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "_register.php"
+                ],
+                "psr-4": {
+                    "OpenTelemetry\\Contrib\\Instrumentation\\CodeIgniter\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "description": "OpenTelemetry auto-instrumentation for CodeIgniter",
+            "homepage": "https://opentelemetry.io/docs/php",
+            "keywords": [
+                "codeigniter",
+                "instrumentation",
+                "open-telemetry",
+                "opentelemetry",
+                "otel",
+                "tracing"
+            ],
+            "support": {
+                "source": "https://github.com/opentelemetry-php/contrib-auto-codeigniter/tree/0.0.8"
+            },
+            "time": "2024-06-25T01:39:13+00:00"
         },
         {
             "name": "open-telemetry/opentelemetry-auto-guzzle",
@@ -3235,30 +3432,30 @@
         },
         {
             "name": "psr/log",
-            "version": "2.0.0",
+            "version": "1.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/log.git",
-                "reference": "ef29f6d262798707a9edd554e2b82517ef3a9376"
+                "reference": "d49695b909c3b7628b6289db5479a1c204601f11"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/log/zipball/ef29f6d262798707a9edd554e2b82517ef3a9376",
-                "reference": "ef29f6d262798707a9edd554e2b82517ef3a9376",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/d49695b909c3b7628b6289db5479a1c204601f11",
+                "reference": "d49695b909c3b7628b6289db5479a1c204601f11",
                 "shasum": ""
             },
             "require": {
-                "php": ">=8.0.0"
+                "php": ">=5.3.0"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.0.x-dev"
+                    "dev-master": "1.1.x-dev"
                 }
             },
             "autoload": {
                 "psr-4": {
-                    "Psr\\Log\\": "src"
+                    "Psr\\Log\\": "Psr/Log/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -3279,9 +3476,9 @@
                 "psr-3"
             ],
             "support": {
-                "source": "https://github.com/php-fig/log/tree/2.0.0"
+                "source": "https://github.com/php-fig/log/tree/1.1.4"
             },
-            "time": "2021-07-14T16:41:46+00:00"
+            "time": "2021-05-03T11:20:27+00:00"
         },
         {
             "name": "psr/simple-cache",
@@ -4742,7 +4939,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=8.0 <8.1",
+        "php": "8.0.*",
         "ext-opentelemetry": "*"
     },
     "platform-dev": {},

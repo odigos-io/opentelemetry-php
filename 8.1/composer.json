@@ -3,7 +3,7 @@
   "description": "Odigos distribution of OpenTelemetry for PHP 8.1.x",
   "type": "project",
   "require": {
-    "php": ">=8.1 <8.2",
+    "php": "8.1.*",
     "ext-opentelemetry": "*",
     "open-telemetry/sdk": "^1.2.4",
     "open-telemetry/exporter-otlp": "^1.2.1",
@@ -20,6 +20,7 @@
     "open-telemetry/opentelemetry-auto-cakephp": "^0.0.4",
     "open-telemetry/opentelemetry-auto-yii": "^0.0.6",
     "open-telemetry/opentelemetry-auto-wordpress": "^0.0.17",
+    "open-telemetry/opentelemetry-auto-codeigniter": "^0.0.9",
     "open-telemetry/opentelemetry-auto-mongodb": "^0.0.8",
     "open-telemetry/opentelemetry-auto-openai-php": "^0.0.3"
   },
@@ -29,10 +30,5 @@
       "url": "https://asset-packagist.org"
     }
   ],
-  "config": {
-    "allow-plugins": {
-      "php-http/discovery": false,
-      "tbachert/spi": false
-    }
-  }
+  "config": {}
 }

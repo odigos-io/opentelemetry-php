@@ -3,7 +3,7 @@
         'name' => 'odigos/opentelemetry-php-8.0',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => 'e2a876cd341a53044163d0ef4781b9fa48e93106',
+        'reference' => '72dd9974361726a64f0b7b45f80519f3e5461ee1',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -49,13 +49,13 @@
         'cakephp/cache' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '4.6.0',
+                0 => '4.6.1',
             ),
         ),
         'cakephp/cakephp' => array(
-            'pretty_version' => '4.6.0',
-            'version' => '4.6.0.0',
-            'reference' => 'b8585672346c0654311c77500ce613cdf37687cc',
+            'pretty_version' => '4.6.1',
+            'version' => '4.6.1.0',
+            'reference' => 'd3c196c92fde430dc395b14b058dd240c3de42be',
             'type' => 'library',
             'install_path' => __DIR__ . '/../cakephp/cakephp',
             'aliases' => array(),
@@ -73,85 +73,85 @@
         'cakephp/collection' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '4.6.0',
+                0 => '4.6.1',
             ),
         ),
         'cakephp/console' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '4.6.0',
+                0 => '4.6.1',
             ),
         ),
         'cakephp/core' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '4.6.0',
+                0 => '4.6.1',
             ),
         ),
         'cakephp/database' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '4.6.0',
+                0 => '4.6.1',
             ),
         ),
         'cakephp/datasource' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '4.6.0',
+                0 => '4.6.1',
             ),
         ),
         'cakephp/event' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '4.6.0',
+                0 => '4.6.1',
             ),
         ),
         'cakephp/filesystem' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '4.6.0',
+                0 => '4.6.1',
             ),
         ),
         'cakephp/form' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '4.6.0',
+                0 => '4.6.1',
             ),
         ),
         'cakephp/http' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '4.6.0',
+                0 => '4.6.1',
             ),
         ),
         'cakephp/i18n' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '4.6.0',
+                0 => '4.6.1',
             ),
         ),
         'cakephp/log' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '4.6.0',
+                0 => '4.6.1',
             ),
         ),
         'cakephp/orm' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '4.6.0',
+                0 => '4.6.1',
             ),
         ),
         'cakephp/utility' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '4.6.0',
+                0 => '4.6.1',
             ),
         ),
         'cakephp/validation' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '4.6.0',
+                0 => '4.6.1',
             ),
         ),
         'cebe/markdown' => array(
@@ -160,6 +160,15 @@
             'reference' => '9bac5e971dd391e2802dca5400bbeacbaea9eb86',
             'type' => 'library',
             'install_path' => __DIR__ . '/../cebe/markdown',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'codeigniter4/framework' => array(
+            'pretty_version' => 'v4.4.8',
+            'version' => '4.4.8.0',
+            'reference' => '84ff35989270d17bcdb463626eec50b4c25b3766',
+            'type' => 'project',
+            'install_path' => __DIR__ . '/../codeigniter4/framework',
             'aliases' => array(),
             'dev_requirement' => false,
         ),
@@ -226,6 +235,15 @@
             'aliases' => array(),
             'dev_requirement' => false,
         ),
+        'laminas/laminas-escaper' => array(
+            'pretty_version' => '2.12.0',
+            'version' => '2.12.0.0',
+            'reference' => 'ee7a4c37bf3d0e8c03635d5bddb5bb3184ead490',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../laminas/laminas-escaper',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
         'laminas/laminas-httphandlerrunner' => array(
             'pretty_version' => '2.5.0',
             'version' => '2.5.0.0',
@@ -283,7 +301,7 @@
         'odigos/opentelemetry-php-8.0' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => 'e2a876cd341a53044163d0ef4781b9fa48e93106',
+            'reference' => '72dd9974361726a64f0b7b45f80519f3e5461ee1',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -331,6 +349,15 @@
             'reference' => 'ac33378573bec9935e0fc362542fa59fc11fcf61',
             'type' => 'library',
             'install_path' => __DIR__ . '/../open-telemetry/opentelemetry-auto-cakephp',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'open-telemetry/opentelemetry-auto-codeigniter' => array(
+            'pretty_version' => '0.0.8',
+            'version' => '0.0.8.0',
+            'reference' => '3fb0f0bd470d57409836cdc75ffeec66f57bb369',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../open-telemetry/opentelemetry-auto-codeigniter',
             'aliases' => array(),
             'dev_requirement' => false,
         ),
@@ -640,9 +667,9 @@
             ),
         ),
         'psr/log' => array(
-            'pretty_version' => '2.0.0',
-            'version' => '2.0.0.0',
-            'reference' => 'ef29f6d262798707a9edd554e2b82517ef3a9376',
+            'pretty_version' => '1.1.4',
+            'version' => '1.1.4.0',
+            'reference' => 'd49695b909c3b7628b6289db5479a1c204601f11',
             'type' => 'library',
             'install_path' => __DIR__ . '/../psr/log',
             'aliases' => array(),

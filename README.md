@@ -84,12 +84,12 @@ PHP 8.2 divides the required/supported libraries across PHP versions:
   "open-telemetry/opentelemetry-auto-io": "^0.0.13",
   // Libs extra (frameworks)
   "open-telemetry/opentelemetry-auto-slim": "^1.1.0",
-  "open-telemetry/opentelemetry-auto-codeigniter": "^0.0.9",
   "open-telemetry/opentelemetry-auto-symfony": "^1.0.0",
-  "open-telemetry/opentelemetry-auto-laravel": "^1.1.1",
   "open-telemetry/opentelemetry-auto-cakephp": "^0.0.4",
+  "open-telemetry/opentelemetry-auto-laravel": "^1.1.1",
   "open-telemetry/opentelemetry-auto-yii": "^0.0.6",
   "open-telemetry/opentelemetry-auto-wordpress": "^0.0.17",
+  "open-telemetry/opentelemetry-auto-codeigniter": "^0.0.9",
   // Libs extra (communications)
   "open-telemetry/opentelemetry-auto-pdo": "^0.0.19",
   "open-telemetry/opentelemetry-auto-doctrine": "^0.1.0",
@@ -133,12 +133,12 @@ The rest of the libraries have reached END OF LIFE support for version 8.0 (only
   "open-telemetry/opentelemetry-auto-psr16": "<=0.0.3",
   "open-telemetry/opentelemetry-auto-psr18": "<=1.0.4",
   "open-telemetry/opentelemetry-auto-slim": "<=1.0.7",
-  "open-telemetry/opentelemetry-auto-codeigniter": "<=0.0.8",
   "open-telemetry/opentelemetry-auto-symfony": "<=1.0.0beta30",
-  "open-telemetry/opentelemetry-auto-laravel": "<=1.0.1",
   "open-telemetry/opentelemetry-auto-cakephp": "<=0.0.3",
+  "open-telemetry/opentelemetry-auto-laravel": "<=1.0.1",
   "open-telemetry/opentelemetry-auto-yii": "<=0.0.5",
   "open-telemetry/opentelemetry-auto-wordpress": "<=0.0.16",
+  "open-telemetry/opentelemetry-auto-codeigniter": "<=0.0.8",
   "open-telemetry/opentelemetry-auto-mongodb": "<=0.0.7"
 }
 ```
