@@ -17,7 +17,24 @@ declare(strict_types=1);
 // phpcs:disable PSR1.Files.SideEffects
 namespace Cake\Routing;
 
-use Psr\Http\Message\UriInterface;
+/**
+ * Convenience wrapper for Router::url().
+ *
+ * @param \Psr\Http\Message\UriInterface|array|string|null $url An array specifying any of the following:
+ *   'controller', 'action', 'plugin' additionally, you can provide routed
+ *   elements or query string parameters. If string it can be name any valid url
+ *   string or it can be an UriInterface instance.
+ * @param bool $full If true, the full base URL will be prepended to the result.
+ *   Default is false.
+ * @return string Full translated URL with base path.
+ * @throws \Cake\Core\Exception\CakeException When the route name is not found
+ * @see \Cake\Routing\Router::url()
+ * @since 4.5.0
+ */
+function url($url = null, bool $full = false): string
+{
+    return Router::url($url, $full);
+}
 
 /**
  * Returns an array URL from a route path string.
@@ -40,20 +57,8 @@ function urlArray(string $path, array $params = []): array
 }
 
 /**
- * Convenience wrapper for Router::url().
- *
- * @param \Psr\Http\Message\UriInterface|array|string|null $url An array specifying any of the following:
- *   'controller', 'action', 'plugin' additionally, you can provide routed
- *   elements or query string parameters. If string it can be name any valid url
- *   string or it can be an UriInterface instance.
- * @param bool $full If true, the full base URL will be prepended to the result.
- *   Default is false.
- * @return string Full translated URL with base path.
- * @throws \Cake\Core\Exception\CakeException When the route name is not found
- * @see \Cake\Routing\Router::url()
- * @since 4.5.0
+ * Include global functions.
  */
-function url(UriInterface|array|string|null $url = null, bool $full = false): string
-{
-    return Router::url($url, $full);
+if (!getenv('CAKE_DISABLE_GLOBAL_FUNCS')) {
+    include 'functions_global.php';
 }

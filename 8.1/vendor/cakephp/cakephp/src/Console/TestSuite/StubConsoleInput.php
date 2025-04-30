@@ -31,14 +31,14 @@ class StubConsoleInput extends ConsoleInput
      *
      * @var array<string>
      */
-    protected array $replies = [];
+    protected $replies = [];
 
     /**
      * Current message index
      *
      * @var int
      */
-    protected int $currentIndex = -1;
+    protected $currentIndex = -1;
 
     /**
      * Constructor
@@ -49,7 +49,6 @@ class StubConsoleInput extends ConsoleInput
     {
         parent::__construct();
 
-        unset($this->_input);
         $this->replies = $replies;
     }
 
@@ -82,7 +81,7 @@ class StubConsoleInput extends ConsoleInput
      * @param int $timeout An optional time to wait for data
      * @return bool True for data available, false otherwise
      */
-    public function dataAvailable(int $timeout = 0): bool
+    public function dataAvailable($timeout = 0): bool
     {
         return true;
     }

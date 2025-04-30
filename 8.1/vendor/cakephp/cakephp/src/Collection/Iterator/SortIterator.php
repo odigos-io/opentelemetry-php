@@ -16,13 +16,9 @@ declare(strict_types=1);
  */
 namespace Cake\Collection\Iterator;
 
-use Cake\Chronos\ChronosDate;
-use Cake\Chronos\ChronosTime;
 use Cake\Collection\Collection;
 use DateTimeInterface;
-use Iterator;
-use const SORT_DESC;
-use const SORT_NUMERIC;
+use Traversable;
 
 /**
  * An iterator that will return the passed items in order. The order is given by
@@ -63,12 +59,8 @@ class SortIterator extends Collection
      * @param int $type the type of comparison to perform, either SORT_STRING
      * SORT_NUMERIC or SORT_NATURAL
      */
-    public function __construct(
-        iterable $items,
-        callable|string $callback,
-        int $dir = SORT_DESC,
-        int $type = SORT_NUMERIC,
-    ) {
+    public function __construct(iterable $items, $callback, int $dir = \SORT_DESC, int $type = \SORT_NUMERIC)
+    {
         if (!is_array($items)) {
             $items = iterator_to_array((new Collection($items))->unwrap(), false);
         }
@@ -77,11 +69,7 @@ class SortIterator extends Collection
         $results = [];
         foreach ($items as $key => $val) {
             $val = $callback($val);
-            $isDateTime =
-                $val instanceof ChronosDate ||
-                $val instanceof ChronosTime ||
-                $val instanceof DateTimeInterface;
-            if ($isDateTime && $type === SORT_NUMERIC) {
+            if ($val instanceof DateTimeInterface && $type === \SORT_NUMERIC) {
                 $val = $val->format('U');
             }
             $results[$key] = $val;
@@ -98,11 +86,10 @@ class SortIterator extends Collection
     /**
      * {@inheritDoc}
      *
-     * @return \Iterator
+     * @return \Traversable
      */
-    public function unwrap(): Iterator
+    public function unwrap(): Traversable
     {
-        /** @var \Iterator */
         return $this->getInnerIterator();
     }
 }

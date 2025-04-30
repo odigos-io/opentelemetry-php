@@ -23,6 +23,7 @@ use Cake\Event\EventManager;
 use Cake\Utility\Hash;
 use Cake\Validation\ValidatorAwareInterface;
 use Cake\Validation\ValidatorAwareTrait;
+use function Cake\Core\deprecationWarning;
 
 /**
  * Form abstraction used to create forms not tied to ORM backed models,
@@ -37,14 +38,9 @@ use Cake\Validation\ValidatorAwareTrait;
  * fields, validation and primary action respectively.
  *
  * Forms are conventionally placed in the `App\Form` namespace.
- *
- * @implements \Cake\Event\EventDispatcherInterface<\Cake\Form\Form>
  */
 class Form implements EventListenerInterface, EventDispatcherInterface, ValidatorAwareInterface
 {
-    /**
-     * @use \Cake\Event\EventDispatcherTrait<\Cake\Form\Form>
-     */
     use EventDispatcherTrait;
     use ValidatorAwareTrait;
 
@@ -73,30 +69,30 @@ class Form implements EventListenerInterface, EventDispatcherInterface, Validato
      * Schema class.
      *
      * @var string
-     * @phpstan-var class-string<\Cake\Form\Schema>
+     * @psalm-var class-string<\Cake\Form\Schema>
      */
-    protected string $_schemaClass = Schema::class;
+    protected $_schemaClass = Schema::class;
 
     /**
      * The schema used by this form.
      *
      * @var \Cake\Form\Schema|null
      */
-    protected ?Schema $_schema = null;
+    protected $_schema;
 
     /**
      * The errors if any
      *
      * @var array
      */
-    protected array $_errors = [];
+    protected $_errors = [];
 
     /**
      * Form's data.
      *
      * @var array
      */
-    protected array $_data = [];
+    protected $_data = [];
 
     /**
      * Constructor
@@ -111,6 +107,14 @@ class Form implements EventListenerInterface, EventDispatcherInterface, Validato
         }
 
         $this->getEventManager()->on($this);
+
+        if (method_exists($this, '_buildValidator')) {
+            deprecationWarning(
+                static::class . ' implements `_buildValidator` which is no longer used. ' .
+                'You should implement `buildValidator(Validator $validator, string $name): void` ' .
+                'or `validationDefault(Validator $validator): Validator` instead.'
+            );
+        }
     }
 
     /**
@@ -159,9 +163,32 @@ class Form implements EventListenerInterface, EventDispatcherInterface, Validato
      */
     public function getSchema(): Schema
     {
-        $this->_schema ??= $this->_buildSchema(new $this->_schemaClass());
+        if ($this->_schema === null) {
+            $this->_schema = $this->_buildSchema(new $this->_schemaClass());
+        }
 
         return $this->_schema;
+    }
+
+    /**
+     * Get/Set the schema for this form.
+     *
+     * This method will call `_buildSchema()` when the schema
+     * is first built. This hook method lets you configure the
+     * schema or load a pre-defined one.
+     *
+     * @deprecated 4.1.0 Use {@link setSchema()}/{@link getSchema()} instead.
+     * @param \Cake\Form\Schema|null $schema The schema to set, or null.
+     * @return \Cake\Form\Schema the schema instance.
+     */
+    public function schema(?Schema $schema = null): Schema
+    {
+        deprecationWarning('Form::schema() is deprecated. Use setSchema() and getSchema() instead.');
+        if ($schema !== null) {
+            $this->setSchema($schema);
+        }
+
+        return $this->getSchema();
     }
 
     /**
@@ -192,7 +219,7 @@ class Form implements EventListenerInterface, EventDispatcherInterface, Validato
         $this->_errors = $this->getValidator($validator ?: static::DEFAULT_VALIDATOR)
             ->validate($data);
 
-        return $this->_errors === [];
+        return count($this->_errors) === 0;
     }
 
     /**
@@ -270,7 +297,7 @@ class Form implements EventListenerInterface, EventDispatcherInterface, Validato
 
         $validator = $options['validate'] === true ? static::DEFAULT_VALIDATOR : $options['validate'];
 
-        return $this->validate($data, $validator) && $this->_execute($data);
+        return $this->validate($data, $validator) ? $this->_execute($data) : false;
     }
 
     /**
@@ -293,7 +320,7 @@ class Form implements EventListenerInterface, EventDispatcherInterface, Validato
      *   all fields.
      * @return mixed
      */
-    public function getData(?string $field = null): mixed
+    public function getData(?string $field = null)
     {
         if ($field === null) {
             return $this->_data;
@@ -310,14 +337,14 @@ class Form implements EventListenerInterface, EventDispatcherInterface, Validato
      * @param mixed $value Value to set for var
      * @return $this
      */
-    public function set(array|string $name, mixed $value = null)
+    public function set($name, $value = null)
     {
         $write = $name;
         if (!is_array($name)) {
             $write = [$name => $value];
         }
 
-        /** @var array<string, mixed> $write */
+        /** @psalm-suppress PossiblyInvalidIterator */
         foreach ($write as $key => $val) {
             $this->_data = Hash::insert($this->_data, $key, $val);
         }

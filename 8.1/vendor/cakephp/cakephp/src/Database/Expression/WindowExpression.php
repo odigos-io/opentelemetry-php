@@ -19,7 +19,6 @@ namespace Cake\Database\Expression;
 use Cake\Database\ExpressionInterface;
 use Cake\Database\ValueBinder;
 use Closure;
-use function Cake\Core\deprecationWarning;
 
 /**
  * This represents a SQL window expression used by aggregate and window functions.
@@ -29,27 +28,27 @@ class WindowExpression implements ExpressionInterface, WindowInterface
     /**
      * @var \Cake\Database\Expression\IdentifierExpression
      */
-    protected IdentifierExpression $name;
+    protected $name;
 
     /**
      * @var array<\Cake\Database\ExpressionInterface>
      */
-    protected array $partitions = [];
+    protected $partitions = [];
 
     /**
      * @var \Cake\Database\Expression\OrderByExpression|null
      */
-    protected ?OrderByExpression $order = null;
+    protected $order;
 
     /**
      * @var array|null
      */
-    protected ?array $frame = null;
+    protected $frame;
 
     /**
      * @var string|null
      */
-    protected ?string $exclusion = null;
+    protected $exclusion;
 
     /**
      * @param string $name Window name
@@ -88,7 +87,7 @@ class WindowExpression implements ExpressionInterface, WindowInterface
     /**
      * @inheritDoc
      */
-    public function partition(ExpressionInterface|Closure|array|string $partitions)
+    public function partition($partitions)
     {
         if (!$partitions) {
             return $this;
@@ -116,26 +115,15 @@ class WindowExpression implements ExpressionInterface, WindowInterface
     /**
      * @inheritDoc
      */
-    public function order(ExpressionInterface|Closure|array|string $fields)
-    {
-        deprecationWarning(
-            '5.0.0',
-            'WindowExpression::order() is deprecated. Use WindowExpression::orderBy() instead.',
-        );
-
-        return $this->orderBy($fields);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function orderBy(ExpressionInterface|Closure|array|string $fields)
+    public function order($fields)
     {
         if (!$fields) {
             return $this;
         }
 
-        $this->order ??= new OrderByExpression();
+        if ($this->order === null) {
+            $this->order = new OrderByExpression();
+        }
 
         if ($fields instanceof Closure) {
             $fields = $fields(new QueryExpression([], [], ''));
@@ -149,7 +137,7 @@ class WindowExpression implements ExpressionInterface, WindowInterface
     /**
      * @inheritDoc
      */
-    public function range(ExpressionInterface|string|int|null $start, ExpressionInterface|string|int|null $end = 0)
+    public function range($start, $end = 0)
     {
         return $this->frame(self::RANGE, $start, self::PRECEDING, $end, self::FOLLOWING);
     }
@@ -175,10 +163,10 @@ class WindowExpression implements ExpressionInterface, WindowInterface
      */
     public function frame(
         string $type,
-        ExpressionInterface|string|int|null $startOffset,
+        $startOffset,
         string $startDirection,
-        ExpressionInterface|string|int|null $endOffset,
-        string $endDirection,
+        $endOffset,
+        string $endDirection
     ) {
         $this->frame = [
             'type' => $type,
@@ -252,12 +240,12 @@ class WindowExpression implements ExpressionInterface, WindowInterface
             $start = $this->buildOffsetSql(
                 $binder,
                 $this->frame['start']['offset'],
-                $this->frame['start']['direction'],
+                $this->frame['start']['direction']
             );
             $end = $this->buildOffsetSql(
                 $binder,
                 $this->frame['end']['offset'],
-                $this->frame['end']['direction'],
+                $this->frame['end']['direction']
             );
 
             $frameSql = sprintf('%s BETWEEN %s AND %s', $this->frame['type'], $start, $end);
@@ -312,11 +300,8 @@ class WindowExpression implements ExpressionInterface, WindowInterface
      * @param string $direction Frame offset direction
      * @return string
      */
-    protected function buildOffsetSql(
-        ValueBinder $binder,
-        ExpressionInterface|string|int|null $offset,
-        string $direction,
-    ): string {
+    protected function buildOffsetSql(ValueBinder $binder, $offset, string $direction): string
+    {
         if ($offset === 0) {
             return 'CURRENT ROW';
         }
@@ -328,7 +313,7 @@ class WindowExpression implements ExpressionInterface, WindowInterface
         return sprintf(
             '%s %s',
             $offset ?? 'UNBOUNDED',
-            $direction,
+            $direction
         );
     }
 

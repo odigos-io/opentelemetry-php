@@ -31,17 +31,17 @@ class MailSubjectContains extends MailConstraintBase
      * @param mixed $other Constraint check
      * @return bool
      */
-    public function matches(mixed $other): bool
+    public function matches($other): bool
     {
         if (!is_string($other)) {
             throw new InvalidArgumentException(
-                'Invalid data type, must be a string.',
+                'Invalid data type, must be a string.'
             );
         }
         $messages = $this->getMessages();
         foreach ($messages as $message) {
             $subject = $message->getOriginalSubject();
-            if (str_contains($subject, $other)) {
+            if (strpos($subject, $other) !== false) {
                 return true;
             }
         }

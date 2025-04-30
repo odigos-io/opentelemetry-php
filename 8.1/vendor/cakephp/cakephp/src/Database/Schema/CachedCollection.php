@@ -28,21 +28,21 @@ class CachedCollection implements CollectionInterface
      *
      * @var \Psr\SimpleCache\CacheInterface
      */
-    protected CacheInterface $cacher;
+    protected $cacher;
 
     /**
      * The decorated schema collection
      *
      * @var \Cake\Database\Schema\CollectionInterface
      */
-    protected CollectionInterface $collection;
+    protected $collection;
 
     /**
      * The cache key prefix
      *
      * @var string
      */
-    protected string $prefix;
+    protected $prefix;
 
     /**
      * Constructor.
@@ -75,22 +75,7 @@ class CachedCollection implements CollectionInterface
     }
 
     /**
-     * Get the column metadata for a table.
-     *
-     * The name can include a database schema name in the form 'schema.table'.
-     *
-     * Caching will be applied if `cacheMetadata` key is present in the Connection
-     * configuration options. Defaults to _cake_model_ when true.
-     *
-     * ### Options
-     *
-     * - `forceRefresh` - Set to true to force rebuilding the cached metadata.
-     *   Defaults to false.
-     *
-     * @param string $name The name of the table to describe.
-     * @param array<string, mixed> $options The options to use, see above.
-     * @return \Cake\Database\Schema\TableSchemaInterface Object with column metadata.
-     * @throws \Cake\Database\Exception\DatabaseException when table cannot be described.
+     * @inheritDoc
      */
     public function describe(string $name, array $options = []): TableSchemaInterface
     {

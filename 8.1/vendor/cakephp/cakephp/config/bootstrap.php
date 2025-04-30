@@ -15,7 +15,12 @@
 
 use Cake\Routing\Router;
 
+/**
+ * @var float
+ */
 define('TIME_START', microtime(true));
+
+require CAKE . 'basics.php';
 
 // Sets the initial router state so future reloads work.
 Router::reload();

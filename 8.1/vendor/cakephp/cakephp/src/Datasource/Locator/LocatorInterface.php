@@ -32,7 +32,7 @@ interface LocatorInterface
      * @throws \RuntimeException When trying to get alias for which instance
      *   has already been created with different options.
      */
-    public function get(string $alias, array $options = []): RepositoryInterface;
+    public function get(string $alias, array $options = []);
 
     /**
      * Set a repository instance.
@@ -41,7 +41,7 @@ interface LocatorInterface
      * @param \Cake\Datasource\RepositoryInterface $repository The repository to set.
      * @return \Cake\Datasource\RepositoryInterface
      */
-    public function set(string $alias, RepositoryInterface $repository): RepositoryInterface;
+    public function set(string $alias, RepositoryInterface $repository);
 
     /**
      * Check to see if an instance exists in the registry.

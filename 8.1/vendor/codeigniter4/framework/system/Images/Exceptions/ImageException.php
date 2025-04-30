@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of CodeIgniter 4 framework.
  *
@@ -13,9 +11,10 @@ declare(strict_types=1);
 
 namespace CodeIgniter\Images\Exceptions;
 
+use CodeIgniter\Exceptions\ExceptionInterface;
 use CodeIgniter\Exceptions\FrameworkException;
 
-class ImageException extends FrameworkException
+class ImageException extends FrameworkException implements ExceptionInterface
 {
     /**
      * Thrown when the image is not found.

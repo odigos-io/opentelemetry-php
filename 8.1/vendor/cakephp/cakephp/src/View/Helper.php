@@ -40,6 +40,7 @@ use Cake\Event\EventListenerInterface;
  * - `afterRenderFile(EventInterface $event, $viewFile, $content)` - Called after any view fragment is rendered.
  *   If a listener returns a non-null value, the output of the rendered file will be set to that.
  */
+#[\AllowDynamicProperties]
 class Helper implements EventListenerInterface
 {
     use InstanceConfigTrait;
@@ -49,28 +50,28 @@ class Helper implements EventListenerInterface
      *
      * @var array
      */
-    protected array $helpers = [];
+    protected $helpers = [];
 
     /**
      * Default config for this helper.
      *
      * @var array<string, mixed>
      */
-    protected array $_defaultConfig = [];
+    protected $_defaultConfig = [];
 
     /**
-     * Loaded helper instances.
+     * A helper lookup table used to lazy load helper objects.
      *
-     * @var array<string, \Cake\View\Helper>
+     * @var array<string, array>
      */
-    protected array $helperInstances = [];
+    protected $_helperMap = [];
 
     /**
      * The View instance this helper is attached to
      *
      * @var \Cake\View\View
      */
-    protected View $_View;
+    protected $_View;
 
     /**
      * Default Constructor
@@ -83,32 +84,39 @@ class Helper implements EventListenerInterface
         $this->_View = $view;
         $this->setConfig($config);
 
-        if ($this->helpers) {
-            $this->helpers = $view->helpers()->normalizeArray($this->helpers);
+        if (!empty($this->helpers)) {
+            $this->_helperMap = $view->helpers()->normalizeArray($this->helpers);
         }
 
         $this->initialize($config);
     }
 
     /**
+     * Provide non fatal errors on missing method calls.
+     *
+     * @param string $method Method to invoke
+     * @param array $params Array of params for the method.
+     * @return mixed|void
+     */
+    public function __call(string $method, array $params)
+    {
+        trigger_error(sprintf('Method %1$s::%2$s does not exist', static::class, $method), E_USER_WARNING);
+    }
+
+    /**
      * Lazy loads helpers.
      *
      * @param string $name Name of the property being accessed.
-     * @return \Cake\View\Helper|null Helper instance if helper with provided name exists
+     * @return \Cake\View\Helper|null|void Helper instance if helper with provided name exists
      */
-    public function __get(string $name): ?Helper
+    public function __get(string $name)
     {
-        if (isset($this->helperInstances[$name])) {
-            return $this->helperInstances[$name];
+        if (isset($this->_helperMap[$name]) && !isset($this->{$name})) {
+            $config = ['enabled' => false] + (array)$this->_helperMap[$name]['config'];
+            $this->{$name} = $this->_View->loadHelper($this->_helperMap[$name]['class'], $config);
+
+            return $this->{$name};
         }
-
-        if (isset($this->helpers[$name])) {
-            $config = ['enabled' => false] + $this->helpers[$name];
-
-            return $this->helperInstances[$name] = $this->_View->loadHelper($name, $config);
-        }
-
-        return null;
     }
 
     /**

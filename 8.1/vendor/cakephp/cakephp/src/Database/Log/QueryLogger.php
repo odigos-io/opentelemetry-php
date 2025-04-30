@@ -18,7 +18,6 @@ namespace Cake\Database\Log;
 
 use Cake\Log\Engine\BaseLog;
 use Cake\Log\Log;
-use Stringable;
 
 /**
  * This class is a bridge used to write LoggedQuery objects into a real log.
@@ -35,7 +34,7 @@ class QueryLogger extends BaseLog
      */
     public function __construct(array $config = [])
     {
-        $this->_defaultConfig['scopes'] = ['queriesLog', 'cake.database.queries'];
+        $this->_defaultConfig['scopes'] = ['queriesLog'];
         $this->_defaultConfig['connection'] = '';
 
         parent::__construct($config);
@@ -44,13 +43,10 @@ class QueryLogger extends BaseLog
     /**
      * @inheritDoc
      */
-    public function log($level, string|Stringable $message, array $context = []): void
+    public function log($level, $message, array $context = [])
     {
-        $context += [
-            'scope' => $this->scopes() ?: ['queriesLog', 'cake.database.queries'],
-            'connection' => $this->getConfig('connection'),
-            'query' => null,
-        ];
+        $context['scope'] = $this->scopes() ?: ['queriesLog'];
+        $context['connection'] = $this->getConfig('connection');
 
         if ($context['query'] instanceof LoggedQuery) {
             $context = $context['query']->getContext() + $context;

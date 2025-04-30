@@ -29,7 +29,7 @@ class TypeMap
      *
      * @var array<int|string, string>
      */
-    protected array $_defaults = [];
+    protected $_defaults = [];
 
     /**
      * Array with the fields and the related types that override defaults this query might contain
@@ -39,7 +39,7 @@ class TypeMap
      *
      * @var array<int|string, string>
      */
-    protected array $_types = [];
+    protected $_types = [];
 
     /**
      * Creates an instance with the given defaults
@@ -143,7 +143,7 @@ class TypeMap
      * @param string|int $column The type for a given column
      * @return string|null
      */
-    public function type(string|int $column): ?string
+    public function type($column): ?string
     {
         return $this->_types[$column] ?? $this->_defaults[$column] ?? null;
     }

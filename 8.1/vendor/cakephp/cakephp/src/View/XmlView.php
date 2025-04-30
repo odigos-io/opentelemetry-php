@@ -19,7 +19,6 @@ namespace Cake\View;
 use Cake\Core\Configure;
 use Cake\Utility\Hash;
 use Cake\Utility\Xml;
-use Cake\View\Exception\SerializationFailureException;
 
 /**
  * A view class that is used for creating XML responses.
@@ -49,7 +48,7 @@ use Cake\View\Exception\SerializationFailureException;
  * $this->viewBuilder()->setOption('serialize', true);
  * ```
  *
- * The above would generate an XML object that looks like:
+ * The above would generate a XML object that looks like:
  *
  * `<response><posts>...</posts><users>...</users></response>`
  *
@@ -66,14 +65,14 @@ class XmlView extends SerializedView
      *
      * @var string
      */
-    protected string $layoutPath = 'xml';
+    protected $layoutPath = 'xml';
 
     /**
      * XML views are located in the 'xml' subdirectory for controllers' views.
      *
      * @var string
      */
-    protected string $subDir = 'xml';
+    protected $subDir = 'xml';
 
     /**
      * Default config options.
@@ -90,7 +89,7 @@ class XmlView extends SerializedView
      *
      * @var array<string, mixed>
      */
-    protected array $_defaultConfig = [
+    protected $_defaultConfig = [
         'serialize' => null,
         'xmlOptions' => null,
         'rootNode' => null,
@@ -109,13 +108,12 @@ class XmlView extends SerializedView
     /**
      * @inheritDoc
      */
-    protected function _serialize(array|string $serialize): string
+    protected function _serialize($serialize): string
     {
-        /** @var string $rootNode */
         $rootNode = $this->getConfig('rootNode', 'response');
 
         if (is_array($serialize)) {
-            if (!$serialize) {
+            if (empty($serialize)) {
                 $serialize = '';
             } elseif (count($serialize) === 1) {
                 $serialize = current($serialize);
@@ -133,10 +131,9 @@ class XmlView extends SerializedView
                 }
             }
         } else {
-            /** @var array<mixed>|string|int|bool|null $data */
             $data = $this->viewVars[$serialize] ?? [];
             if (
-                $data !== null &&
+                $data &&
                 (!is_array($data) || Hash::numeric(array_keys($data)))
             ) {
                 $data = [$rootNode => [$serialize => $data]];
@@ -148,17 +145,6 @@ class XmlView extends SerializedView
             $options['pretty'] = true;
         }
 
-        /**
-         * @var array<mixed> $data
-         * @var string|false $result
-         */
-        $result = Xml::fromArray($data, $options)->saveXML();
-        if ($result === false) {
-            throw new SerializationFailureException(
-                'XML serialization of View data failed.',
-            );
-        }
-
-        return $result;
+        return Xml::fromArray($data, $options)->saveXML();
     }
 }

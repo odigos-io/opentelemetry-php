@@ -15,11 +15,11 @@ declare(strict_types=1);
  */
 namespace Cake\Http\Client;
 
-use Cake\Core\Exception\CakeException;
 use Cake\Http\Cookie\CookieCollection;
 use Laminas\Diactoros\MessageTrait;
 use Laminas\Diactoros\Stream;
 use Psr\Http\Message\ResponseInterface;
+use RuntimeException;
 use SimpleXMLElement;
 
 /**
@@ -89,40 +89,40 @@ class Response extends Message implements ResponseInterface
      *
      * @var int
      */
-    protected int $code = 0;
+    protected $code;
 
     /**
      * Cookie Collection instance
      *
-     * @var \Cake\Http\Cookie\CookieCollection|null
+     * @var \Cake\Http\Cookie\CookieCollection
      */
-    protected ?CookieCollection $cookies = null;
+    protected $cookies;
 
     /**
      * The reason phrase for the status code
      *
      * @var string
      */
-    protected string $reasonPhrase;
+    protected $reasonPhrase;
 
     /**
      * Cached decoded XML data.
      *
-     * @var \SimpleXMLElement|null
+     * @var \SimpleXMLElement
      */
-    protected ?SimpleXMLElement $_xml = null;
+    protected $_xml;
 
     /**
      * Cached decoded JSON data.
      *
      * @var mixed
      */
-    protected mixed $_json = null;
+    protected $_json;
 
     /**
      * Constructor
      *
-     * @param array<string> $headers Unparsed headers.
+     * @param array $headers Unparsed headers.
      * @param string $body The response body.
      */
     public function __construct(array $headers = [], string $body = '')
@@ -145,54 +145,51 @@ class Response extends Message implements ResponseInterface
      *
      * @param string $body Gzip encoded body.
      * @return string
-     * @throws \Cake\Core\Exception\CakeException When attempting to decode gzip content without gzinflate.
+     * @throws \RuntimeException When attempting to decode gzip content without gzinflate.
      */
     protected function _decodeGzipBody(string $body): string
     {
         if (!function_exists('gzinflate')) {
-            throw new CakeException('Cannot decompress gzip response body without gzinflate()');
+            throw new RuntimeException('Cannot decompress gzip response body without gzinflate()');
         }
         $offset = 0;
         // Look for gzip 'signature'
-        if (str_starts_with($body, "\x1f\x8b")) {
+        if (substr($body, 0, 2) === "\x1f\x8b") {
             $offset = 2;
         }
         // Check the format byte
         if (substr($body, $offset, 1) === "\x08") {
-            return (string)gzinflate(substr($body, $offset + 8));
+            return gzinflate(substr($body, $offset + 8));
         }
 
-        throw new CakeException('Invalid gzip response');
+        throw new RuntimeException('Invalid gzip response');
     }
 
     /**
      * Parses headers if necessary.
      *
-     * - Decodes the status code and reason phrase.
+     * - Decodes the status code and reasonphrase.
      * - Parses and normalizes header names + values.
      *
-     * @param array<string> $headers Headers to parse.
+     * @param array $headers Headers to parse.
      * @return void
      */
     protected function _parseHeaders(array $headers): void
     {
         foreach ($headers as $value) {
-            if (str_starts_with($value, 'HTTP/')) {
+            if (substr($value, 0, 5) === 'HTTP/') {
                 preg_match('/HTTP\/([\d.]+) ([0-9]+)(.*)/i', $value, $matches);
-                /** @phpstan-ignore-next-line */
                 $this->protocol = $matches[1];
-                /** @phpstan-ignore-next-line */
                 $this->code = (int)$matches[2];
-                /** @phpstan-ignore-next-line */
                 $this->reasonPhrase = trim($matches[3]);
                 continue;
             }
-            if (!str_contains($value, ':')) {
+            if (strpos($value, ':') === false) {
                 continue;
             }
             [$name, $value] = explode(':', $value, 2);
             $value = trim($value);
-            /** @var non-empty-string $name */
+            /** @phpstan-var non-empty-string $name */
             $name = trim($name);
 
             $normalized = strtolower($name);
@@ -262,7 +259,7 @@ class Response extends Message implements ResponseInterface
      * @param string $reasonPhrase The status reason phrase.
      * @return static A copy of the current object with an updated status code.
      */
-    public function withStatus(int $code, string $reasonPhrase = ''): static
+    public function withStatus($code, $reasonPhrase = '')
     {
         $new = clone $this;
         $new->code = $code;
@@ -320,7 +317,9 @@ class Response extends Message implements ResponseInterface
      */
     public function getCookieCollection(): CookieCollection
     {
-        return $this->buildCookieCollection();
+        $this->buildCookieCollection();
+
+        return $this->cookies;
     }
 
     /**
@@ -329,15 +328,15 @@ class Response extends Message implements ResponseInterface
      * @param string $name The name of the cookie value.
      * @return array|string|null Either the cookie's value or null when the cookie is undefined.
      */
-    public function getCookie(string $name): array|string|null
+    public function getCookie(string $name)
     {
-        $cookies = $this->buildCookieCollection();
+        $this->buildCookieCollection();
 
-        if (!$cookies->has($name)) {
+        if (!$this->cookies->has($name)) {
             return null;
         }
 
-        return $cookies->get($name)->getValue();
+        return $this->cookies->get($name)->getValue();
     }
 
     /**
@@ -348,25 +347,26 @@ class Response extends Message implements ResponseInterface
      */
     public function getCookieData(string $name): ?array
     {
-        $cookies = $this->buildCookieCollection();
+        $this->buildCookieCollection();
 
-        if (!$cookies->has($name)) {
+        if (!$this->cookies->has($name)) {
             return null;
         }
 
-        return $cookies->get($name)->toArray();
+        return $this->cookies->get($name)->toArray();
     }
 
     /**
      * Lazily build the CookieCollection and cookie objects from the response header
      *
-     * @return \Cake\Http\Cookie\CookieCollection
+     * @return void
      */
-    protected function buildCookieCollection(): CookieCollection
+    protected function buildCookieCollection(): void
     {
-        $this->cookies ??= CookieCollection::createFromHeader($this->getHeader('Set-Cookie'));
-
-        return $this->cookies;
+        if ($this->cookies !== null) {
+            return;
+        }
+        $this->cookies = CookieCollection::createFromHeader($this->getHeader('Set-Cookie'));
     }
 
     /**
@@ -376,8 +376,12 @@ class Response extends Message implements ResponseInterface
      */
     protected function _getCookies(): array
     {
+        $this->buildCookieCollection();
+
         $out = [];
-        foreach ($this->buildCookieCollection() as $cookie) {
+        /** @var array<\Cake\Http\Cookie\Cookie> $cookies */
+        $cookies = $this->cookies;
+        foreach ($cookies as $cookie) {
             $out[$cookie->getName()] = $cookie->toArray();
         }
 
@@ -399,7 +403,7 @@ class Response extends Message implements ResponseInterface
      *
      * @return mixed
      */
-    public function getJson(): mixed
+    public function getJson()
     {
         return $this->_getJson();
     }
@@ -409,7 +413,7 @@ class Response extends Message implements ResponseInterface
      *
      * @return mixed
      */
-    protected function _getJson(): mixed
+    protected function _getJson()
     {
         if ($this->_json) {
             return $this->_json;
@@ -440,13 +444,13 @@ class Response extends Message implements ResponseInterface
         }
         libxml_use_internal_errors();
         $data = simplexml_load_string($this->_getBody());
-        if (!$data) {
-            return null;
+        if ($data) {
+            $this->_xml = $data;
+
+            return $this->_xml;
         }
 
-        $this->_xml = $data;
-
-        return $this->_xml;
+        return null;
     }
 
     /**

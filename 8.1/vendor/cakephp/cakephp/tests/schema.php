@@ -487,26 +487,6 @@ return [
             ],
         ],
     ],
-    'article_prios' => [
-        'columns' => [
-            'id' => [
-                'type' => 'integer',
-            ],
-            'priority' => [
-                'type' => 'integer',
-                'length' => 2,
-                'default' => 2, // Medium
-            ],
-        ],
-        'constraints' => [
-            'primary' => [
-                'type' => 'primary',
-                'columns' => [
-                    'id',
-                ],
-            ],
-        ],
-    ],
     'articles_translations' => [
         'columns' => [
             'id' => [

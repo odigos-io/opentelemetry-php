@@ -25,7 +25,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 /**
  * Handles common security headers in a convenient way
  *
- * @link https://book.cakephp.org/5/en/controllers/middleware.html#security-header-middleware
+ * @link https://book.cakephp.org/4/en/controllers/middleware.html#security-header-middleware
  */
 class SecurityHeadersMiddleware implements MiddlewareInterface
 {
@@ -100,7 +100,7 @@ class SecurityHeadersMiddleware implements MiddlewareInterface
      *
      * @var array<string, mixed>
      */
-    protected array $headers = [];
+    protected $headers = [];
 
     /**
      * X-Content-Type-Options
@@ -172,7 +172,7 @@ class SecurityHeadersMiddleware implements MiddlewareInterface
         $this->checkValues($option, [self::DENY, self::SAMEORIGIN, self::ALLOW_FROM]);
 
         if ($option === self::ALLOW_FROM) {
-            if (!$url) {
+            if (empty($url)) {
                 throw new InvalidArgumentException('The 2nd arg $url can not be empty when `allow-from` is used');
             }
             $option .= ' ' . $url;
@@ -184,11 +184,9 @@ class SecurityHeadersMiddleware implements MiddlewareInterface
     }
 
     /**
-     * X-XSS-Protection. It's a non standard feature and outdated. For modern browsers
-     * use a strong Content-Security-Policy that disables the use of inline JavaScript
-     * via 'unsafe-inline' option.
+     * X-XSS-Protection
      *
-     * @link https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-XSS-Protection
+     * @link https://blogs.msdn.microsoft.com/ieinternals/2011/01/31/controlling-the-xss-filter
      * @param string $mode Mode value. Available Values: '1', '0', 'block'
      * @return $this
      */
@@ -207,7 +205,7 @@ class SecurityHeadersMiddleware implements MiddlewareInterface
     /**
      * X-Permitted-Cross-Domain-Policies
      *
-     * @link https://web.archive.org/web/20170607190356/https://www.adobe.com/devnet/adobe-media-server/articles/cross-domain-xml-for-streaming.html
+     * @link https://www.adobe.com/devnet/adobe-media-server/articles/cross-domain-xml-for-streaming.html
      * @param string $policy Policy value. Available Values: 'all', 'none', 'master-only', 'by-content-type',
      *     'by-ftp-filename'
      * @return $this
@@ -227,22 +225,6 @@ class SecurityHeadersMiddleware implements MiddlewareInterface
     }
 
     /**
-     * Permissions Policy
-     *
-     * @link https://developer.mozilla.org/en-US/docs/Web/HTTP/Permissions_Policy
-     * @link https://www.w3.org/TR/permissions-policy/
-     * @param string $policy Policy value.
-     * @return $this
-     * @since 5.1.0
-     */
-    public function setPermissionsPolicy(string $policy)
-    {
-        $this->headers['permissions-policy'] = $policy;
-
-        return $this;
-    }
-
-    /**
      * Convenience method to check if a value is in the list of allowed args
      *
      * @throws \InvalidArgumentException Thrown when a value is invalid.
@@ -253,11 +235,10 @@ class SecurityHeadersMiddleware implements MiddlewareInterface
     protected function checkValues(string $value, array $allowed): void
     {
         if (!in_array($value, $allowed, true)) {
-            array_walk($allowed, fn(&$x) => $x = "`{$x}`");
             throw new InvalidArgumentException(sprintf(
-                'Invalid arg `%s`, use one of these: %s.',
+                'Invalid arg `%s`, use one of these: %s',
                 $value,
-                implode(', ', $allowed),
+                implode(', ', $allowed)
             ));
         }
     }

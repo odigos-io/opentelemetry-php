@@ -15,13 +15,9 @@ declare(strict_types=1);
 namespace Cake\Controller\Exception;
 
 use Cake\Http\Exception\BadRequestException;
-use Throwable;
-use function Cake\Core\deprecationWarning;
 
 /**
  * Security exception - used when SecurityComponent detects any issue with the current request
- *
- * @deprecated 5.2.0 This exception is no longer used in the CakePHP core.
  */
 class SecurityException extends BadRequestException
 {
@@ -30,31 +26,14 @@ class SecurityException extends BadRequestException
      *
      * @var string
      */
-    protected string $_type = 'secure';
+    protected $_type = 'secure';
 
     /**
      * Reason for request blackhole
      *
      * @var string|null
      */
-    protected ?string $_reason = null;
-
-    /**
-     * Constructor
-     *
-     * @param string|null $message If no message is given 'Bad Request' will be the message
-     * @param int|null $code Status code, defaults to 400
-     * @param \Throwable|null $previous The previous exception.
-     */
-    public function __construct(?string $message = null, ?int $code = null, ?Throwable $previous = null)
-    {
-        deprecationWarning(
-            '5.2.0',
-            static::class . ' is deprecated. Use BadRequestException or a custom exception instead.',
-        );
-
-        parent::__construct($message, $code, $previous);
-    }
+    protected $_reason;
 
     /**
      * Getter for type

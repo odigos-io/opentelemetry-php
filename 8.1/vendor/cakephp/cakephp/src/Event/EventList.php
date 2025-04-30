@@ -29,9 +29,9 @@ class EventList implements ArrayAccess, Countable
     /**
      * Events list
      *
-     * @var array<\Cake\Event\EventInterface<object>>
+     * @var array<\Cake\Event\EventInterface>
      */
-    protected array $_events = [];
+    protected $_events = [];
 
     /**
      * Empties the list of dispatched events.
@@ -46,7 +46,7 @@ class EventList implements ArrayAccess, Countable
     /**
      * Adds an event to the list when event listing is enabled.
      *
-     * @param \Cake\Event\EventInterface<object> $event An event to the list of dispatched events.
+     * @param \Cake\Event\EventInterface $event An event to the list of dispatched events.
      * @return void
      */
     public function add(EventInterface $event): void
@@ -61,7 +61,7 @@ class EventList implements ArrayAccess, Countable
      * @param mixed $offset An offset to check for.
      * @return bool True on success or false on failure.
      */
-    public function offsetExists(mixed $offset): bool
+    public function offsetExists($offset): bool
     {
         return isset($this->_events[$offset]);
     }
@@ -71,15 +71,16 @@ class EventList implements ArrayAccess, Countable
      *
      * @link https://secure.php.net/manual/en/arrayaccess.offsetget.php
      * @param mixed $offset The offset to retrieve.
-     * @return \Cake\Event\EventInterface<object>|null
+     * @return \Cake\Event\EventInterface|null
      */
-    public function offsetGet(mixed $offset): ?EventInterface
+    #[\ReturnTypeWillChange]
+    public function offsetGet($offset)
     {
-        if (!$this->offsetExists($offset)) {
-            return null;
+        if ($this->offsetExists($offset)) {
+            return $this->_events[$offset];
         }
 
-        return $this->_events[$offset];
+        return null;
     }
 
     /**
@@ -90,7 +91,7 @@ class EventList implements ArrayAccess, Countable
      * @param mixed $value The value to set.
      * @return void
      */
-    public function offsetSet(mixed $offset, mixed $value): void
+    public function offsetSet($offset, $value): void
     {
         $this->_events[$offset] = $value;
     }
@@ -102,7 +103,7 @@ class EventList implements ArrayAccess, Countable
      * @param mixed $offset The offset to unset.
      * @return void
      */
-    public function offsetUnset(mixed $offset): void
+    public function offsetUnset($offset): void
     {
         unset($this->_events[$offset]);
     }

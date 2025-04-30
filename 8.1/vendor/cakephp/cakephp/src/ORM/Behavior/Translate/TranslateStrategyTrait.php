@@ -32,7 +32,7 @@ trait TranslateStrategyTrait
      *
      * @var \Cake\ORM\Table
      */
-    protected Table $table;
+    protected $table;
 
     /**
      * The locale name that will be used to override fields in the bound table
@@ -40,14 +40,14 @@ trait TranslateStrategyTrait
      *
      * @var string|null
      */
-    protected ?string $locale = null;
+    protected $locale;
 
     /**
      * Instance of Table responsible for translating
      *
      * @var \Cake\ORM\Table
      */
-    protected Table $translationTable;
+    protected $translationTable;
 
     /**
      * Return translation table instance.
@@ -71,7 +71,7 @@ trait TranslateStrategyTrait
      *
      * @param string|null $locale The locale to use for fetching and saving
      *   records. Pass `null` in order to unset the current locale, and to make
-     *   the behavior falls back to using the globally configured locale.
+     *   the behavior fall back to using the globally configured locale.
      * @return $this
      */
     public function setLocale(?string $locale)
@@ -104,14 +104,10 @@ trait TranslateStrategyTrait
      * @param \Cake\Datasource\EntityInterface $entity The entity to check for empty translations fields inside.
      * @return void
      */
-    protected function unsetEmptyFields(EntityInterface $entity): void
+    protected function unsetEmptyFields($entity)
     {
-        if (!$entity->has('_translations')) {
-            return;
-        }
-
-        /** @var array<\Cake\Datasource\EntityInterface> $translations */
-        $translations = $entity->get('_translations');
+        /** @var array<\Cake\ORM\Entity> $translations */
+        $translations = (array)$entity->get('_translations');
         foreach ($translations as $locale => $translation) {
             $fields = $translation->extract($this->_config['fields'], false);
             foreach ($fields as $field => $value) {
@@ -124,29 +120,28 @@ trait TranslateStrategyTrait
 
             // If now, the current locale property is empty,
             // unset it completely.
-            if (array_filter($translation) === []) {
-                unset($translations[$locale]);
+            if (empty(array_filter($translation))) {
+                unset($entity->get('_translations')[$locale]);
             }
         }
 
-        // If now, the whole $translations is empty, unset _translations property completely
-        if ($translations === []) {
+        // If now, the whole _translations property is empty,
+        // unset it completely and return
+        if (empty($entity->get('_translations'))) {
             $entity->unset('_translations');
-        } else {
-            $entity->set('_translations', $translations);
         }
     }
 
     /**
-     * Build a set of properties that should be included in the marshaling process.
+     * Build a set of properties that should be included in the marshalling process.
 
-     * Add in `_translations` marshaling handlers. You can disable marshaling
+     * Add in `_translations` marshalling handlers. You can disable marshalling
      * of translations by setting `'translations' => false` in the options
      * provided to `Table::newEntity()` or `Table::patchEntity()`.
      *
-     * @param \Cake\ORM\Marshaller $marshaller The marshaler of the table the behavior is attached to.
+     * @param \Cake\ORM\Marshaller $marshaller The marhshaller of the table the behavior is attached to.
      * @param array $map The property map being built.
-     * @param array<string, mixed> $options The options array used in the marshaling call.
+     * @param array<string, mixed> $options The options array used in the marshalling call.
      * @return array A map of `[property => callable]` of additional properties to marshal.
      */
     public function buildMarshalMap(Marshaller $marshaller, array $map, array $options): array
@@ -156,13 +151,16 @@ trait TranslateStrategyTrait
         }
 
         return [
-            '_translations' => function ($value, EntityInterface $entity) use ($marshaller, $options) {
+            '_translations' => function ($value, $entity) use ($marshaller, $options) {
                 if (!is_array($value)) {
                     return null;
                 }
 
-                /** @var array<string, \Cake\Datasource\EntityInterface> $translations */
-                $translations = $entity->has('_translations') ? $entity->get('_translations') : [];
+                /** @var array<string, \Cake\Datasource\EntityInterface>|null $translations */
+                $translations = $entity->get('_translations');
+                if ($translations === null) {
+                    $translations = [];
+                }
 
                 $options['validate'] = $this->_config['validator'];
                 $errors = [];
@@ -191,11 +189,11 @@ trait TranslateStrategyTrait
     /**
      * Unsets the temporary `_i18n` property after the entity has been saved
      *
-     * @param \Cake\Event\EventInterface<\Cake\ORM\Table> $event The beforeSave event that was fired
+     * @param \Cake\Event\EventInterface $event The beforeSave event that was fired
      * @param \Cake\Datasource\EntityInterface $entity The entity that is going to be saved
      * @return void
      */
-    public function afterSave(EventInterface $event, EntityInterface $entity): void
+    public function afterSave(EventInterface $event, EntityInterface $entity)
     {
         $entity->unset('_i18n');
     }

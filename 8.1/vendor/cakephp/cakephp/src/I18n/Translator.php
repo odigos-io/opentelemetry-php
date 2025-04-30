@@ -33,28 +33,28 @@ class Translator
      *
      * @var \Cake\I18n\Translator|null
      */
-    protected ?Translator $fallback = null;
+    protected $fallback;
 
     /**
      * The formatter to use when translating messages.
      *
      * @var \Cake\I18n\FormatterInterface
      */
-    protected FormatterInterface $formatter;
+    protected $formatter;
 
     /**
      * The locale being used for translations.
      *
      * @var string
      */
-    protected string $locale;
+    protected $locale;
 
     /**
      * The Package containing keys and translations.
      *
      * @var \Cake\I18n\Package
      */
-    protected Package $package;
+    protected $package;
 
     /**
      * Constructor
@@ -68,7 +68,7 @@ class Translator
         string $locale,
         Package $package,
         FormatterInterface $formatter,
-        ?Translator $fallback = null,
+        ?Translator $fallback = null
     ) {
         $this->locale = $locale;
         $this->package = $package;
@@ -82,7 +82,7 @@ class Translator
      * @param string $key The message key.
      * @return mixed The message translation string, or false if not found.
      */
-    protected function getMessage(string $key): mixed
+    protected function getMessage(string $key)
     {
         $message = $this->package->getMessage($key);
         if ($message) {
@@ -134,7 +134,7 @@ class Translator
             unset($tokensValues['_context']);
         }
 
-        if (!$tokensValues) {
+        if (empty($tokensValues)) {
             // Fallback for plurals that were using the singular key
             if (is_array($message)) {
                 return array_values($message + [''])[0];
@@ -177,7 +177,7 @@ class Translator
      * @param array $vars The variables containing the `_context` key.
      * @return array|string
      */
-    protected function resolveContext(string $key, array $message, array $vars): array|string
+    protected function resolveContext(string $key, array $message, array $vars)
     {
         $context = $vars['_context'] ?? null;
 

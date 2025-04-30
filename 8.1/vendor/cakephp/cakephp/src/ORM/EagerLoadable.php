@@ -16,8 +16,6 @@ declare(strict_types=1);
  */
 namespace Cake\ORM;
 
-use Cake\Database\Exception\DatabaseException;
-
 /**
  * Represents a single level in the associations tree to be eagerly loaded
  * for a specific query. This contains all the information required to
@@ -33,21 +31,21 @@ class EagerLoadable
      *
      * @var string
      */
-    protected string $_name;
+    protected $_name;
 
     /**
      * A list of other associations to load from this level.
      *
      * @var array<\Cake\ORM\EagerLoadable>
      */
-    protected array $_associations = [];
+    protected $_associations = [];
 
     /**
      * The Association class instance to use for loading the records.
      *
      * @var \Cake\ORM\Association|null
      */
-    protected ?Association $_instance = null;
+    protected $_instance;
 
     /**
      * A list of options to pass to the association object for loading
@@ -55,7 +53,7 @@ class EagerLoadable
      *
      * @var array<string, mixed>
      */
-    protected array $_config = [];
+    protected $_config = [];
 
     /**
      * A dotted separated string representing the path of associations
@@ -63,7 +61,7 @@ class EagerLoadable
      *
      * @var string
      */
-    protected string $_aliasPath;
+    protected $_aliasPath;
 
     /**
      * A dotted separated string representing the path of entity properties
@@ -79,14 +77,14 @@ class EagerLoadable
      *
      * @var string|null
      */
-    protected ?string $_propertyPath = null;
+    protected $_propertyPath;
 
     /**
      * Whether this level can be fetched using a join.
      *
      * @var bool
      */
-    protected bool $_canBeJoined = false;
+    protected $_canBeJoined = false;
 
     /**
      * Whether this level was meant for a "matching" fetch
@@ -94,7 +92,7 @@ class EagerLoadable
      *
      * @var bool|null
      */
-    protected ?bool $_forMatching = null;
+    protected $_forMatching;
 
     /**
      * The property name where the association result should be nested
@@ -110,7 +108,7 @@ class EagerLoadable
      *
      * @var string|null
      */
-    protected ?string $_targetProperty = null;
+    protected $_targetProperty;
 
     /**
      * Constructor. The $config parameter accepts the following array
@@ -170,12 +168,12 @@ class EagerLoadable
      * Gets the Association class instance to use for loading the records.
      *
      * @return \Cake\ORM\Association
-     * @throws \Cake\Database\Exception\DatabaseException
+     * @throws \RuntimeException
      */
     public function instance(): Association
     {
         if ($this->_instance === null) {
-            throw new DatabaseException('No instance set.');
+            throw new \RuntimeException('No instance set.');
         }
 
         return $this->_instance;

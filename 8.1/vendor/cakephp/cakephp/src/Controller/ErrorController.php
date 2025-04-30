@@ -17,7 +17,6 @@ declare(strict_types=1);
 namespace Cake\Controller;
 
 use Cake\Event\EventInterface;
-use Cake\View\JsonView;
 
 /**
  * Error Handling Controller
@@ -27,22 +26,20 @@ use Cake\View\JsonView;
 class ErrorController extends Controller
 {
     /**
-     * Get alternate view classes that can be used in
-     * content-type negotiation.
+     * Initialization hook method.
      *
-     * @return array<string>
+     * @return void
      */
-    public function viewClasses(): array
+    public function initialize(): void
     {
-        return [JsonView::class];
+        $this->loadComponent('RequestHandler');
     }
 
     /**
      * beforeRender callback.
      *
-     * @param \Cake\Event\EventInterface<\Cake\Controller\Controller> $event Event.
+     * @param \Cake\Event\EventInterface $event Event.
      * @return \Cake\Http\Response|null|void
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint
      */
     public function beforeRender(EventInterface $event)
     {

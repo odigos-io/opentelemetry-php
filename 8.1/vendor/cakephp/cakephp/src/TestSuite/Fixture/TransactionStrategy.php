@@ -17,7 +17,7 @@ declare(strict_types=1);
 namespace Cake\TestSuite\Fixture;
 
 use Cake\Database\Connection;
-use Cake\Database\Exception\DatabaseException;
+use RuntimeException;
 
 /**
  * Fixture strategy that wraps fixtures in a transaction that is rolled back
@@ -30,12 +30,12 @@ class TransactionStrategy implements FixtureStrategyInterface
     /**
      * @var \Cake\TestSuite\Fixture\FixtureHelper
      */
-    protected FixtureHelper $helper;
+    protected $helper;
 
     /**
      * @var array<\Cake\Datasource\FixtureInterface>
      */
-    protected array $fixtures = [];
+    protected $fixtures = [];
 
     /**
      * Initialize strategy.
@@ -50,25 +50,25 @@ class TransactionStrategy implements FixtureStrategyInterface
      */
     public function setupTest(array $fixtureNames): void
     {
-        if (!$fixtureNames) {
+        if (empty($fixtureNames)) {
             return;
         }
 
         $this->fixtures = $this->helper->loadFixtures($fixtureNames);
 
-        $this->helper->runPerConnection(function ($connection): void {
+        $this->helper->runPerConnection(function ($connection) {
             if ($connection instanceof Connection) {
                 assert(
                     $connection->inTransaction() === false,
                     'Cannot start transaction strategy inside a transaction. ' .
-                    'Ensure you have closed all open transactions.',
+                    'Ensure you have closed all open transactions.'
                 );
                 $connection->enableSavePoints();
                 if (!$connection->isSavePointsEnabled()) {
-                    throw new DatabaseException(
+                    throw new RuntimeException(
                         "Could not enable save points for the `{$connection->configName()}` connection. " .
                             'Your database needs to support savepoints in order to use ' .
-                            'TransactionStrategy.',
+                            'TransactionStrategy.'
                     );
                 }
 
@@ -85,7 +85,7 @@ class TransactionStrategy implements FixtureStrategyInterface
      */
     public function teardownTest(): void
     {
-        $this->helper->runPerConnection(function (Connection $connection): void {
+        $this->helper->runPerConnection(function ($connection) {
             if ($connection->inTransaction()) {
                 $connection->rollback(true);
             }

@@ -26,19 +26,11 @@ use Cake\Core\Configure;
 class VersionCommand extends Command
 {
     /**
-     * @inheritDoc
-     */
-    public static function getDescription(): string
-    {
-        return 'Show the CakePHP version.';
-    }
-
-    /**
      * Print out the version of CakePHP in use.
      *
      * @param \Cake\Console\Arguments $args The command arguments.
      * @param \Cake\Console\ConsoleIo $io The console io
-     * @return int|null
+     * @return int
      */
     public function execute(Arguments $args, ConsoleIo $io): ?int
     {

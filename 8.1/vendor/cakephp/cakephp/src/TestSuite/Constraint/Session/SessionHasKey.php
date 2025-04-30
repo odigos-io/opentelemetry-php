@@ -28,7 +28,7 @@ class SessionHasKey extends Constraint
     /**
      * @var string
      */
-    protected string $path;
+    protected $path;
 
     /**
      * Constructor
@@ -46,12 +46,13 @@ class SessionHasKey extends Constraint
      * @param mixed $other Value to compare with
      * @return bool
      */
-    public function matches(mixed $other): bool
+    public function matches($other): bool
     {
         // Server::run calls Session::close at the end of the request.
         // Which means, that we cannot use Session object here to access the session data.
         // Call to Session::read will start new session (and will erase the data).
-        return Hash::check($_SESSION, $this->path);
+        /** @psalm-suppress InvalidScalarArgument */
+        return Hash::check($_SESSION, $this->path) === true;
     }
 
     /**

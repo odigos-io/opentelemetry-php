@@ -33,14 +33,12 @@ class PostgresCompiler extends QueryCompiler
      *
      * @var bool
      */
-    protected bool $_quotedSelectAliases = true;
+    protected $_quotedSelectAliases = true;
 
     /**
-     * {@inheritDoc}
-     *
-     * @var array<string, string>
+     * @inheritDoc
      */
-    protected array $_templates = [
+    protected $_templates = [
         'delete' => 'DELETE',
         'where' => ' WHERE %s',
         'group' => ' GROUP BY %s',
@@ -48,7 +46,6 @@ class PostgresCompiler extends QueryCompiler
         'limit' => ' LIMIT %s',
         'offset' => ' OFFSET %s',
         'epilog' => ' %s',
-        'comment' => '/* %s */ ',
     ];
 
     /**
@@ -61,7 +58,7 @@ class PostgresCompiler extends QueryCompiler
      * @param \Cake\Database\ValueBinder $binder Value binder used to generate parameter placeholder
      * @return string
      */
-    protected function _buildHavingPart(array $parts, Query $query, ValueBinder $binder): string
+    protected function _buildHavingPart($parts, $query, $binder)
     {
         $selectParts = $query->clause('select');
 
@@ -76,7 +73,7 @@ class PostgresCompiler extends QueryCompiler
                 preg_match_all(
                     '/\b' . trim($selectKey, '"') . '\b/i',
                     $p,
-                    $matches,
+                    $matches
                 );
 
                 if (empty($matches[0])) {
@@ -86,7 +83,7 @@ class PostgresCompiler extends QueryCompiler
                 $parts[$k] = preg_replace(
                     ['/"/', '/\b' . trim($selectKey, '"') . '\b/i'],
                     ['', $selectPart->sql($binder)],
-                    $p,
+                    $p
                 );
             }
         }

@@ -27,7 +27,6 @@ class HeaderNotContains extends HeaderContains
      *
      * @param mixed $other Expected content
      * @return bool
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
      */
     public function matches($other): bool
     {
@@ -44,7 +43,7 @@ class HeaderNotContains extends HeaderContains
         return sprintf(
             "is not in header '%s' (`%s`)",
             $this->headerName,
-            $this->response->getHeaderLine($this->headerName),
+            $this->response->getHeaderLine($this->headerName)
         );
     }
 }

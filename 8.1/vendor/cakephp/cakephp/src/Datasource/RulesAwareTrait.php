@@ -34,9 +34,9 @@ trait RulesAwareTrait
     /**
      * The domain rules to be applied to entities saved by this table
      *
-     * @var \Cake\Datasource\RulesChecker|null
+     * @var \Cake\Datasource\RulesChecker
      */
-    protected ?RulesChecker $_rulesChecker = null;
+    protected $_rulesChecker;
 
     /**
      * Returns whether the passed entity complies with all the rules stored in
@@ -44,14 +44,11 @@ trait RulesAwareTrait
      *
      * @param \Cake\Datasource\EntityInterface $entity The entity to check for validity.
      * @param string $operation The operation being run. Either 'create', 'update' or 'delete'.
-     * @param \ArrayObject<string, mixed>|array|null $options The options To be passed to the rules.
+     * @param \ArrayObject|array|null $options The options To be passed to the rules.
      * @return bool
      */
-    public function checkRules(
-        EntityInterface $entity,
-        string $operation = RulesChecker::CREATE,
-        ArrayObject|array|null $options = null,
-    ): bool {
+    public function checkRules(EntityInterface $entity, string $operation = RulesChecker::CREATE, $options = null): bool
+    {
         $rules = $this->rulesChecker();
         $options = $options ?: new ArrayObject();
         $options = is_array($options) ? new ArrayObject($options) : $options;
@@ -60,7 +57,7 @@ trait RulesAwareTrait
         if ($hasEvents) {
             $event = $this->dispatchEvent(
                 'Model.beforeRules',
-                compact('entity', 'options', 'operation'),
+                compact('entity', 'options', 'operation')
             );
             if ($event->isStopped()) {
                 return $event->getResult();
@@ -72,7 +69,7 @@ trait RulesAwareTrait
         if ($hasEvents) {
             $event = $this->dispatchEvent(
                 'Model.afterRules',
-                compact('entity', 'options', 'result', 'operation'),
+                compact('entity', 'options', 'result', 'operation')
             );
 
             if ($event->isStopped()) {
@@ -98,11 +95,9 @@ trait RulesAwareTrait
         if ($this->_rulesChecker !== null) {
             return $this->_rulesChecker;
         }
-        /** @var class-string<\Cake\Datasource\RulesChecker> $class */
+        /** @psalm-var class-string<\Cake\Datasource\RulesChecker> $class */
         $class = defined('static::RULES_CLASS') ? static::RULES_CLASS : RulesChecker::class;
-        /**
-         * @phpstan-ignore-next-line
-         */
+        /** @psalm-suppress ArgumentTypeCoercion */
         $this->_rulesChecker = $this->buildRules(new $class(['repository' => $this]));
         $this->dispatchEvent('Model.buildRules', ['rules' => $this->_rulesChecker]);
 

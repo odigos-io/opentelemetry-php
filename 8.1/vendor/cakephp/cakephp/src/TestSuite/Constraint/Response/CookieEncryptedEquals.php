@@ -17,7 +17,6 @@ namespace Cake\TestSuite\Constraint\Response;
 
 use Cake\Http\Response;
 use Cake\Utility\CookieCryptTrait;
-use Psr\Http\Message\ResponseInterface;
 
 /**
  * CookieEncryptedEquals
@@ -31,17 +30,17 @@ class CookieEncryptedEquals extends CookieEquals
     /**
      * @var \Cake\Http\Response
      */
-    protected ResponseInterface $response;
+    protected $response;
 
     /**
      * @var string
      */
-    protected string $key;
+    protected $key;
 
     /**
      * @var string
      */
-    protected string $mode;
+    protected $mode;
 
     /**
      * Constructor.
@@ -64,7 +63,6 @@ class CookieEncryptedEquals extends CookieEquals
      *
      * @param mixed $other Expected content
      * @return bool
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
      */
     public function matches($other): bool
     {
@@ -80,7 +78,7 @@ class CookieEncryptedEquals extends CookieEquals
      */
     public function toString(): string
     {
-        return sprintf("is encrypted in cookie '%s'", $this->cookieName);
+        return sprintf('is encrypted in cookie \'%s\'', $this->cookieName);
     }
 
     /**

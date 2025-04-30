@@ -22,6 +22,8 @@ use Cake\Console\ConsoleOptionParser;
 
 /**
  * Command for removing plugin assets from app's webroot.
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
 class PluginAssetsRemoveCommand extends Command
 {
@@ -33,14 +35,6 @@ class PluginAssetsRemoveCommand extends Command
     public static function defaultName(): string
     {
         return 'plugin assets remove';
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public static function getDescription(): string
-    {
-        return "Remove plugin assets from app's webroot.";
     }
 
     /**
@@ -82,9 +76,9 @@ class PluginAssetsRemoveCommand extends Command
      */
     public function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
     {
-        $parser->setDescription(
-            static::getDescription(),
-        )->addArgument('name', [
+        $parser->setDescription([
+            'Remove plugin assets from app\'s webroot.',
+        ])->addArgument('name', [
             'help' => 'A specific plugin you want to remove.',
             'required' => false,
         ]);

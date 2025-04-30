@@ -17,13 +17,13 @@ declare(strict_types=1);
 
 namespace Cake\Http\Middleware;
 
-use Cake\Core\Exception\CakeException;
 use Cake\Core\InstanceConfigTrait;
 use ParagonIE\CSPBuilder\CSPBuilder;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use RuntimeException;
 
 /**
  * Content Security Policy Middleware
@@ -42,14 +42,14 @@ class CspMiddleware implements MiddlewareInterface
      *
      * @var \ParagonIE\CSPBuilder\CSPBuilder $csp CSP Builder or config array
      */
-    protected CSPBuilder $csp;
+    protected $csp;
 
     /**
      * Configuration options.
      *
      * @var array<string, mixed>
      */
-    protected array $_defaultConfig = [
+    protected $_defaultConfig = [
         'scriptNonce' => false,
         'styleNonce' => false,
     ];
@@ -59,11 +59,12 @@ class CspMiddleware implements MiddlewareInterface
      *
      * @param \ParagonIE\CSPBuilder\CSPBuilder|array $csp CSP object or config array
      * @param array<string, mixed> $config Configuration options.
+     * @throws \RuntimeException
      */
-    public function __construct(CSPBuilder|array $csp, array $config = [])
+    public function __construct($csp, array $config = [])
     {
         if (!class_exists(CSPBuilder::class)) {
-            throw new CakeException('You must install paragonie/csp-builder to use CspMiddleware');
+            throw new RuntimeException('You must install paragonie/csp-builder to use CspMiddleware');
         }
         $this->setConfig($config);
 

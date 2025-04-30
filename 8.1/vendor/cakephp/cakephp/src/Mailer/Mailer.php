@@ -15,7 +15,9 @@ declare(strict_types=1);
 namespace Cake\Mailer;
 
 use BadMethodCallException;
+use Cake\Core\Exception\CakeException;
 use Cake\Core\StaticConfigTrait;
+use Cake\Datasource\ModelAwareTrait;
 use Cake\Event\EventListenerInterface;
 use Cake\Log\Log;
 use Cake\Mailer\Exception\MissingActionException;
@@ -118,7 +120,7 @@ use function Cake\Core\deprecationWarning;
  * @method $this setHeaders(array $headers) Sets headers for the message. {@see \Cake\Mailer\Message::setHeaders()}
  * @method $this addHeaders(array $headers) Add header for the message. {@see \Cake\Mailer\Message::addHeaders()}
  * @method $this getHeaders(array $include = []) Get list of headers. {@see \Cake\Mailer\Message::getHeaders()}
- * @method $this setEmailFormat($format) Sets email format. {@see \Cake\Mailer\Message::setEmailFormat()}
+ * @method $this setEmailFormat($format) Sets email format. {@see \Cake\Mailer\Message::getHeaders()}
  * @method string getEmailFormat() Gets email format. {@see \Cake\Mailer\Message::getEmailFormat()}
  * @method $this setMessageId($message) Sets message ID. {@see \Cake\Mailer\Message::setMessageId()}
  * @method string|bool getMessageId() Gets message ID. {@see \Cake\Mailer\Message::getMessageId()}
@@ -130,8 +132,10 @@ use function Cake\Core\deprecationWarning;
  * @method array|string getBody(?string $type = null) Get generated message body as array.
  *   {@see \Cake\Mailer\Message::getBody()}
  */
+#[\AllowDynamicProperties]
 class Mailer implements EventListenerInterface
 {
+    use ModelAwareTrait;
     use LocatorAwareTrait;
     use StaticConfigTrait;
 
@@ -140,36 +144,36 @@ class Mailer implements EventListenerInterface
      *
      * @var string
      */
-    public static string $name;
+    public static $name;
 
     /**
      * The transport instance to use for sending mail.
      *
      * @var \Cake\Mailer\AbstractTransport|null
      */
-    protected ?AbstractTransport $transport = null;
+    protected $transport;
 
     /**
      * Message class name.
      *
      * @var string
-     * @phpstan-var class-string<\Cake\Mailer\Message>
+     * @psalm-var class-string<\Cake\Mailer\Message>
      */
-    protected string $messageClass = Message::class;
+    protected $messageClass = Message::class;
 
     /**
      * Message instance.
      *
      * @var \Cake\Mailer\Message
      */
-    protected Message $message;
+    protected $message;
 
     /**
      * Email Renderer
      *
      * @var \Cake\Mailer\Renderer|null
      */
-    protected ?Renderer $renderer = null;
+    protected $renderer;
 
     /**
      * Hold message, renderer and transport instance for restoring after running
@@ -177,7 +181,7 @@ class Mailer implements EventListenerInterface
      *
      * @var array<string, mixed>
      */
-    protected array $clonedInstances = [
+    protected $clonedInstances = [
         'message' => null,
         'renderer' => null,
         'transport' => null,
@@ -187,25 +191,31 @@ class Mailer implements EventListenerInterface
      * Mailer driver class map.
      *
      * @var array<string, string>
-     * @phpstan-var array<string, class-string>
+     * @psalm-var array<string, class-string>
      */
-    protected static array $_dsnClassMap = [];
+    protected static $_dsnClassMap = [];
 
     /**
      * @var array|null
      */
-    protected ?array $logConfig = null;
+    protected $logConfig = null;
 
     /**
      * Constructor
      *
      * @param array<string, mixed>|string|null $config Array of configs, or string to load configs from app.php
      */
-    public function __construct(array|string|null $config = null)
+    public function __construct($config = null)
     {
         $this->message = new $this->messageClass();
 
-        $config ??= static::getConfig('default');
+        if ($this->defaultTable !== null) {
+            $this->modelClass = $this->defaultTable;
+        }
+
+        if ($config === null) {
+            $config = static::getConfig('default');
+        }
 
         if ($config) {
             $this->setProfile($config);
@@ -229,7 +239,11 @@ class Mailer implements EventListenerInterface
      */
     public function getRenderer(): Renderer
     {
-        return $this->renderer ??= new Renderer();
+        if ($this->renderer === null) {
+            $this->renderer = new Renderer();
+        }
+
+        return $this->renderer;
     }
 
     /**
@@ -260,14 +274,9 @@ class Mailer implements EventListenerInterface
      *
      * @param \Cake\Mailer\Message $message Message instance.
      * @return $this
-     * @deprecated 5.1.0 Configure the mailer according to the documentation instead of manually setting the Message instance.
      */
     public function setMessage(Message $message)
     {
-        deprecationWarning(
-            '5.1.0',
-            'Setting the message instance is deprecated. Configure the mailer according to the documentation instead.',
-        );
         $this->message = $message;
 
         return $this;
@@ -283,7 +292,7 @@ class Mailer implements EventListenerInterface
     public function __call(string $method, array $args)
     {
         $result = $this->message->$method(...$args);
-        if (str_starts_with($method, 'get')) {
+        if (strpos($method, 'get') === 0) {
             return $result;
         }
 
@@ -296,8 +305,23 @@ class Mailer implements EventListenerInterface
      * @param array|string $key Variable name or hash of view variables.
      * @param mixed $value View variable value.
      * @return $this
+     * @deprecated 4.0.0 Use {@link Mailer::setViewVars()} instead.
      */
-    public function setViewVars(array|string $key, mixed $value = null)
+    public function set($key, $value = null)
+    {
+        deprecationWarning('Mailer::set() is deprecated. Use setViewVars() instead.');
+
+        return $this->setViewVars($key, $value);
+    }
+
+    /**
+     * Sets email view vars.
+     *
+     * @param array|string $key Variable name or hash of view variables.
+     * @param mixed $value View variable value.
+     * @return $this
+     */
+    public function setViewVars($key, $value = null)
     {
         $this->getRenderer()->set($key, $value);
 
@@ -307,9 +331,6 @@ class Mailer implements EventListenerInterface
     /**
      * Sends email.
      *
-     * If an `$action` is specified the internal state of the mailer will be
-     * backed up and restored after the action is run.
-     *
      * @param string|null $action The name of the mailer action to trigger.
      *   If no action is specified then all other method arguments will be ignored.
      * @param array $args Arguments to pass to the triggered mailer action.
@@ -317,7 +338,7 @@ class Mailer implements EventListenerInterface
      * @return array
      * @throws \Cake\Mailer\Exception\MissingActionException
      * @throws \BadMethodCallException
-     * @phpstan-return array{headers: string, message: string}
+     * @psalm-return array{headers: string, message: string}
      */
     public function send(?string $action = null, array $args = [], array $headers = []): array
     {
@@ -332,7 +353,11 @@ class Mailer implements EventListenerInterface
             ]);
         }
 
-        $this->backup();
+        $this->clonedInstances['message'] = clone $this->message;
+        $this->clonedInstances['renderer'] = clone $this->getRenderer();
+        if ($this->transport !== null) {
+            $this->clonedInstances['transport'] = clone $this->transport;
+        }
 
         $this->getMessage()->setHeaders($headers);
         if (!$this->viewBuilder()->getTemplate()) {
@@ -360,7 +385,7 @@ class Mailer implements EventListenerInterface
     {
         $content = $this->getRenderer()->render(
             $content,
-            $this->message->getBodyTypes(),
+            $this->message->getBodyTypes()
         );
 
         $this->message->setBody($content);
@@ -373,9 +398,9 @@ class Mailer implements EventListenerInterface
      *
      * @param string $content Content.
      * @return array
-     * @phpstan-return array{headers: string, message: string}
+     * @psalm-return array{headers: string, message: string}
      */
-    public function deliver(string $content = ''): array
+    public function deliver(string $content = '')
     {
         $this->render($content);
 
@@ -392,13 +417,13 @@ class Mailer implements EventListenerInterface
      *    an array with config.
      * @return $this
      */
-    public function setProfile(array|string $config)
+    public function setProfile($config)
     {
         if (is_string($config)) {
             $name = $config;
             $config = static::getConfig($name);
-            if (!$config) {
-                throw new InvalidArgumentException(sprintf('Unknown email configuration `%s`.', $name));
+            if (empty($config)) {
+                throw new InvalidArgumentException(sprintf('Unknown email configuration "%s".', $name));
             }
             unset($name);
         }
@@ -424,7 +449,7 @@ class Mailer implements EventListenerInterface
         }
 
         if (array_key_exists('helpers', $config)) {
-            $this->viewBuilder()->setHelpers($config['helpers']);
+            $this->viewBuilder()->setHelpers($config['helpers'], false);
             unset($config['helpers']);
         }
         if (array_key_exists('viewRenderer', $config)) {
@@ -461,14 +486,25 @@ class Mailer implements EventListenerInterface
      *   transport, or a transport instance.
      * @return $this
      * @throws \LogicException When the chosen transport lacks a send method.
+     * @throws \InvalidArgumentException When $name is neither a string nor an object.
      */
-    public function setTransport(AbstractTransport|string $name)
+    public function setTransport($name)
     {
         if (is_string($name)) {
-            $this->transport = TransportFactory::get($name);
+            $transport = TransportFactory::get($name);
+        } elseif (is_object($name)) {
+            $transport = $name;
+            if (!$transport instanceof AbstractTransport) {
+                throw new CakeException('Transport class must extend Cake\Mailer\AbstractTransport');
+            }
         } else {
-            $this->transport = $name;
+            throw new InvalidArgumentException(sprintf(
+                'The value passed for the "$name" argument must be either a string, or an object, %s given.',
+                gettype($name)
+            ));
         }
+
+        $this->transport = $transport;
 
         return $this;
     }
@@ -483,27 +519,11 @@ class Mailer implements EventListenerInterface
         if ($this->transport === null) {
             throw new BadMethodCallException(
                 'Transport was not defined. '
-                . 'You must set on using setTransport() or set `transport` option in your mailer profile.',
+                . 'You must set on using setTransport() or set `transport` option in your mailer profile.'
             );
         }
 
         return $this->transport;
-    }
-
-    /**
-     * Backup message, renderer, transport instances before an action is run.
-     *
-     * @return void
-     */
-    protected function backup(): void
-    {
-        $this->clonedInstances['message'] = clone $this->message;
-        if ($this->renderer !== null) {
-            $this->clonedInstances['renderer'] = clone $this->renderer;
-        }
-        if ($this->transport !== null) {
-            $this->clonedInstances['transport'] = clone $this->transport;
-        }
     }
 
     /**
@@ -515,11 +535,7 @@ class Mailer implements EventListenerInterface
     {
         foreach (array_keys($this->clonedInstances) as $key) {
             if ($this->clonedInstances[$key] === null) {
-                if ($key === 'message') {
-                    $this->message->reset();
-                } else {
-                    $this->{$key} = null;
-                }
+                $this->{$key} = null;
             } else {
                 $this->{$key} = clone $this->clonedInstances[$key];
                 $this->clonedInstances[$key] = null;
@@ -553,18 +569,18 @@ class Mailer implements EventListenerInterface
      *
      * @param array $contents The content with 'headers' and 'message' keys.
      * @return void
-     * @phpstan-param array{headers: string, message: string} $contents
+     * @psalm-param array{headers: string, message: string} $contents
      */
     protected function logDelivery(array $contents): void
     {
-        if (!$this->logConfig) {
+        if (empty($this->logConfig)) {
             return;
         }
 
         Log::write(
             $this->logConfig['level'],
             PHP_EOL . $this->flatten($contents['headers']) . PHP_EOL . PHP_EOL . $this->flatten($contents['message']),
-            $this->logConfig['scope'],
+            $this->logConfig['scope']
         );
     }
 
@@ -574,11 +590,11 @@ class Mailer implements EventListenerInterface
      * @param array<string, mixed>|string|true $log Log config.
      * @return void
      */
-    protected function setLogConfig(array|string|bool $log): void
+    protected function setLogConfig($log)
     {
         $config = [
             'level' => 'debug',
-            'scope' => ['cake.mailer', 'email'],
+            'scope' => 'email',
         ];
         if ($log !== true) {
             if (!is_array($log)) {
@@ -596,7 +612,7 @@ class Mailer implements EventListenerInterface
      * @param array<string>|string $value The value to convert
      * @return string
      */
-    protected function flatten(array|string $value): string
+    protected function flatten($value): string
     {
         return is_array($value) ? implode(';', $value) : $value;
     }

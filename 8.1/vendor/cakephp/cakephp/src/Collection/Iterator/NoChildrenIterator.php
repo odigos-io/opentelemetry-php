@@ -41,7 +41,7 @@ class NoChildrenIterator extends Collection implements RecursiveIterator
     /**
      * Returns a self instance without any elements.
      *
-     * @return \RecursiveIterator<mixed, mixed>
+     * @return \RecursiveIterator
      */
     public function getChildren(): RecursiveIterator
     {

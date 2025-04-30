@@ -28,7 +28,7 @@ class ContentsContain extends ContentsBase
      * @param mixed $other Expected
      * @return bool
      */
-    public function matches(mixed $other): bool
+    public function matches($other): bool
     {
         return mb_strpos($this->contents, $other) !== false;
     }
@@ -40,15 +40,7 @@ class ContentsContain extends ContentsBase
      */
     public function toString(): string
     {
-        return sprintf('is in %s.', $this->output);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    protected function additionalFailureDescription(mixed $other): string
-    {
-        return sprintf("actual result:\n%s", $this->contents);
+        return sprintf('is in %s,' . PHP_EOL . 'actual result:' . PHP_EOL, $this->output) . $this->contents;
     }
 }
 

@@ -18,7 +18,7 @@ namespace Cake\Log\Engine;
 
 use Cake\Log\Formatter\DefaultFormatter;
 use Cake\Utility\Text;
-use Stringable;
+use function Cake\Core\deprecationWarning;
 
 /**
  * File Storage stream for Logging. Writes logs to different files
@@ -42,10 +42,11 @@ class FileLog extends BaseLog
      * - `mask` A mask is applied when log files are created. Left empty no chmod
      *   is made.
      * - `dirMask` The mask used for created folders.
+     * - `dateFormat` PHP date() format.
      *
      * @var array<string, mixed>
      */
-    protected array $_defaultConfig = [
+    protected $_defaultConfig = [
         'path' => null,
         'file' => null,
         'types' => null,
@@ -65,21 +66,21 @@ class FileLog extends BaseLog
      *
      * @var string
      */
-    protected string $_path;
+    protected $_path;
 
     /**
      * The name of the file to save logs into.
      *
      * @var string|null
      */
-    protected ?string $_file = null;
+    protected $_file;
 
     /**
      * Max file size, used for log file rotation.
      *
      * @var int|null
      */
-    protected ?int $_size = null;
+    protected $_size;
 
     /**
      * Sets protected properties based on config provided
@@ -97,7 +98,7 @@ class FileLog extends BaseLog
 
         if (!empty($this->_config['file'])) {
             $this->_file = $this->_config['file'];
-            if (!str_ends_with($this->_file, '.log')) {
+            if (substr($this->_file, -4) !== '.log') {
                 $this->_file .= '.log';
             }
         }
@@ -109,21 +110,25 @@ class FileLog extends BaseLog
                 $this->_size = Text::parseFileSize($this->_config['size']);
             }
         }
+
+        if (isset($this->_config['dateFormat'])) {
+            deprecationWarning('`dateFormat` option should now be set in the formatter options.', 0);
+            $this->formatter->setConfig('dateFormat', $this->_config['dateFormat']);
+        }
     }
 
     /**
      * Implements writing to log files.
      *
      * @param mixed $level The severity level of the message being written.
-     * @param \Stringable|string $message The message you want to log.
+     * @param string $message The message you want to log.
      * @param array $context Additional information about the logged message
      * @return void
      * @see \Cake\Log\Log::$_levels
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
      */
-    public function log($level, Stringable|string $message, array $context = []): void
+    public function log($level, $message, array $context = []): void
     {
-        $message = $this->interpolate($message, $context);
+        $message = $this->_format($message, $context);
         $message = $this->formatter->format($level, $message, $context);
 
         $filename = $this->_getFilename($level);
@@ -146,8 +151,8 @@ class FileLog extends BaseLog
         if (!$selfError && !$exists && !chmod($pathname, (int)$mask)) {
             $selfError = true;
             trigger_error(vsprintf(
-                'Could not apply permission mask `%s` on log file `%s`',
-                [$mask, $pathname],
+                'Could not apply permission mask "%s" on log file "%s"',
+                [$mask, $pathname]
             ), E_USER_WARNING);
             $selfError = false;
         }
@@ -207,7 +212,7 @@ class FileLog extends BaseLog
         if ($files) {
             $filesToDelete = count($files) - $rotate;
             while ($filesToDelete > 0) {
-                unlink((string)array_shift($files));
+                unlink(array_shift($files));
                 $filesToDelete--;
             }
         }

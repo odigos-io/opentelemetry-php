@@ -17,7 +17,7 @@ declare(strict_types=1);
 namespace Cake\Database\Type;
 
 use Cake\Core\Exception\CakeException;
-use Cake\Database\Driver;
+use Cake\Database\DriverInterface;
 use Cake\Utility\Text;
 use PDO;
 
@@ -35,10 +35,10 @@ class BinaryUuidType extends BaseType
      * As PDO will handle reading file handles.
      *
      * @param mixed $value The value to convert.
-     * @param \Cake\Database\Driver $driver The driver instance to convert with.
-     * @return mixed
+     * @param \Cake\Database\DriverInterface $driver The driver instance to convert with.
+     * @return resource|string|null
      */
-    public function toDatabase(mixed $value, Driver $driver): mixed
+    public function toDatabase($value, DriverInterface $driver)
     {
         if (!is_string($value)) {
             return $value;
@@ -66,11 +66,11 @@ class BinaryUuidType extends BaseType
      * Convert binary uuid into resource handles
      *
      * @param mixed $value The value to convert.
-     * @param \Cake\Database\Driver $driver The driver instance to convert with.
+     * @param \Cake\Database\DriverInterface $driver The driver instance to convert with.
      * @return resource|string|null
      * @throws \Cake\Core\Exception\CakeException
      */
-    public function toPHP(mixed $value, Driver $driver): mixed
+    public function toPHP($value, DriverInterface $driver)
     {
         if ($value === null) {
             return null;
@@ -86,9 +86,13 @@ class BinaryUuidType extends BaseType
     }
 
     /**
-     * @inheritDoc
+     * Get the correct PDO binding type for Binary data.
+     *
+     * @param mixed $value The value being bound.
+     * @param \Cake\Database\DriverInterface $driver The driver.
+     * @return int
      */
-    public function toStatement(mixed $value, Driver $driver): int
+    public function toStatement($value, DriverInterface $driver): int
     {
         return PDO::PARAM_LOB;
     }
@@ -102,7 +106,7 @@ class BinaryUuidType extends BaseType
      * @param mixed $value The value to convert.
      * @return mixed Converted value.
      */
-    public function marshal(mixed $value): mixed
+    public function marshal($value)
     {
         return $value;
     }
@@ -113,16 +117,14 @@ class BinaryUuidType extends BaseType
      * @param mixed $binary The value to convert.
      * @return string Converted value.
      */
-    protected function convertBinaryUuidToString(mixed $binary): string
+    protected function convertBinaryUuidToString($binary): string
     {
         $string = unpack('H*', $binary);
-        assert($string !== false, 'Could not unpack uuid');
 
-        /** @var array<int, string> $string */
         $string = preg_replace(
             '/([0-9a-f]{8})([0-9a-f]{4})([0-9a-f]{4})([0-9a-f]{4})([0-9a-f]{12})/',
             '$1-$2-$3-$4-$5',
-            $string,
+            $string
         );
 
         return $string[1];
@@ -134,7 +136,7 @@ class BinaryUuidType extends BaseType
      * @param string $string The value to convert.
      * @return string Converted value.
      */
-    protected function convertStringToBinaryUuid(string $string): string
+    protected function convertStringToBinaryUuid($string): string
     {
         $string = str_replace('-', '', $string);
 

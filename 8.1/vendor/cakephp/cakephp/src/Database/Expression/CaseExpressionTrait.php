@@ -17,16 +17,18 @@ declare(strict_types=1);
 namespace Cake\Database\Expression;
 
 use Cake\Chronos\ChronosDate;
+use Cake\Chronos\MutableDate;
 use Cake\Database\ExpressionInterface;
 use Cake\Database\Query;
 use Cake\Database\TypedResultInterface;
 use Cake\Database\ValueBinder;
 use DateTimeInterface;
-use Stringable;
 
 /**
  * Trait that holds shared functionality for case related expressions.
  *
+ * @property \Cake\Database\TypeMap $_typeMap The type map to use when using an array of conditions for the `WHEN`
+ *  value.
  * @internal
  */
 trait CaseExpressionTrait
@@ -37,7 +39,7 @@ trait CaseExpressionTrait
      * @param mixed $value The value for which to infer the type.
      * @return string|null The abstract type, or `null` if it could not be inferred.
      */
-    protected function inferType(mixed $value): ?string
+    protected function inferType($value): ?string
     {
         $type = null;
 
@@ -49,12 +51,16 @@ trait CaseExpressionTrait
             $type = 'float';
         } elseif (is_bool($value)) {
             $type = 'boolean';
-        } elseif ($value instanceof ChronosDate) {
+        } elseif (
+            $value instanceof ChronosDate ||
+            $value instanceof MutableDate
+        ) {
             $type = 'date';
         } elseif ($value instanceof DateTimeInterface) {
             $type = 'datetime';
         } elseif (
-            $value instanceof Stringable
+            is_object($value) &&
+            method_exists($value, '__toString')
         ) {
             $type = 'string';
         } elseif (
@@ -77,7 +83,7 @@ trait CaseExpressionTrait
      * @param string|null $type The value type.
      * @return string
      */
-    protected function compileNullableValue(ValueBinder $binder, mixed $value, ?string $type = null): string
+    protected function compileNullableValue(ValueBinder $binder, $value, ?string $type = null): string
     {
         if (
             $type !== null &&

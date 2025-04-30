@@ -21,6 +21,7 @@ use Cake\Core\InstanceConfigTrait;
 use Cake\Event\EventListenerInterface;
 use ReflectionClass;
 use ReflectionMethod;
+use function Cake\Core\deprecationWarning;
 
 /**
  * Base class for behaviors.
@@ -50,11 +51,11 @@ use ReflectionMethod;
  * CakePHP provides a number of lifecycle events your behaviors can
  * listen to:
  *
- * - `beforeFind(EventInterface $event, SelectQuery $query, ArrayObject $options, boolean $primary)`
+ * - `beforeFind(EventInterface $event, Query $query, ArrayObject $options, boolean $primary)`
  *   Fired before each find operation. By stopping the event and supplying a
  *   return value you can bypass the find operation entirely. Any changes done
  *   to the $query instance will be retained for the rest of the find. The
- *   $primary parameter indicates whether this is the root query
+ *   $primary parameter indicates whether this is the root query,
  *   or an associated query.
  *
  * - `buildValidator(EventInterface $event, Validator $validator, string $name)`
@@ -91,7 +92,7 @@ use ReflectionMethod;
  * event fired from your Table classes including custom application
  * specific ones.
  *
- * You can set the priority of behaviors' callbacks by using the
+ * You can set the priority of a behaviors callbacks by using the
  * `priority` setting when attaching a behavior. This will set the
  * priority for all the callbacks a behavior provides.
  *
@@ -106,7 +107,7 @@ use ReflectionMethod;
  * methods should expect the following arguments:
  *
  * ```
- * findSlugged(SelectQuery $query, array $options)
+ * findSlugged(Query $query, array $options)
  * ```
  *
  * @see \Cake\ORM\Table::addBehavior()
@@ -121,7 +122,7 @@ class Behavior implements EventListenerInterface
      *
      * @var \Cake\ORM\Table
      */
-    protected Table $_table;
+    protected $_table;
 
     /**
      * Reflection method cache for behaviors.
@@ -131,7 +132,7 @@ class Behavior implements EventListenerInterface
      *
      * @var array<string, array>
      */
-    protected static array $_reflectionCache = [];
+    protected static $_reflectionCache = [];
 
     /**
      * Default configuration
@@ -140,7 +141,7 @@ class Behavior implements EventListenerInterface
      *
      * @var array<string, mixed>
      */
-    protected array $_defaultConfig = [];
+    protected $_defaultConfig = [];
 
     /**
      * Constructor
@@ -155,12 +156,12 @@ class Behavior implements EventListenerInterface
         $config = $this->_resolveMethodAliases(
             'implementedFinders',
             $this->_defaultConfig,
-            $config,
+            $config
         );
         $config = $this->_resolveMethodAliases(
             'implementedMethods',
             $this->_defaultConfig,
-            $config,
+            $config
         );
         $this->_table = $table;
         $this->setConfig($config);
@@ -178,6 +179,19 @@ class Behavior implements EventListenerInterface
      */
     public function initialize(array $config): void
     {
+    }
+
+    /**
+     * Get the table instance this behavior is bound to.
+     *
+     * @return \Cake\ORM\Table The bound table instance.
+     * @deprecated 4.2.0 Use table() instead.
+     */
+    public function getTable(): Table
+    {
+        deprecationWarning('Behavior::getTable() is deprecated. Use table() instead.');
+
+        return $this->table();
     }
 
     /**
@@ -203,7 +217,7 @@ class Behavior implements EventListenerInterface
         if (!isset($defaults[$key], $config[$key])) {
             return $config;
         }
-        if ($config[$key] === []) {
+        if (isset($config[$key]) && $config[$key] === []) {
             $this->setConfig($key, [], false);
             unset($config[$key]);
 
@@ -242,9 +256,9 @@ class Behavior implements EventListenerInterface
             foreach ($this->_config[$key] as $method) {
                 if (!is_callable([$this, $method])) {
                     throw new CakeException(sprintf(
-                        'The method `%s` is not callable on class `%s`.',
+                        'The method %s is not callable on class %s',
                         $method,
-                        static::class,
+                        static::class
                     ));
                 }
             }
@@ -325,7 +339,7 @@ class Behavior implements EventListenerInterface
     public function implementedFinders(): array
     {
         $methods = $this->getConfig('implementedFinders');
-        if ($methods !== null) {
+        if (isset($methods)) {
             return $methods;
         }
 
@@ -357,7 +371,7 @@ class Behavior implements EventListenerInterface
     public function implementedMethods(): array
     {
         $methods = $this->getConfig('implementedMethods');
-        if ($methods !== null) {
+        if (isset($methods)) {
             return $methods;
         }
 
@@ -385,8 +399,8 @@ class Behavior implements EventListenerInterface
         $eventMethods = [];
         foreach ($events as $binding) {
             if (is_array($binding) && isset($binding['callable'])) {
+                /** @var string $callable */
                 $callable = $binding['callable'];
-                assert(is_string($callable));
                 $binding = $callable;
             }
             $eventMethods[$binding] = true;
@@ -416,7 +430,7 @@ class Behavior implements EventListenerInterface
                 continue;
             }
 
-            if (str_starts_with($methodName, 'find')) {
+            if (substr($methodName, 0, 4) === 'find') {
                 $return['finders'][lcfirst(substr($methodName, 4))] = $methodName;
             } else {
                 $return['methods'][$methodName] = $methodName;

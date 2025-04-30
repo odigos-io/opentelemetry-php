@@ -16,8 +16,7 @@ declare(strict_types=1);
 namespace Cake\TestSuite;
 
 use Cake\Database\Connection;
-use Cake\Database\DriverFeatureEnum;
-use Cake\Database\Log\QueryLogger;
+use Cake\Database\DriverInterface;
 use Cake\Datasource\ConnectionManager;
 use Closure;
 
@@ -39,7 +38,7 @@ class ConnectionHelper
      *
      * @return void
      */
-    public static function addTestAliases(): void
+    public function addTestAliases(): void
     {
         ConnectionManager::alias('test', 'default');
         foreach (ConnectionManager::configured() as $connection) {
@@ -47,7 +46,7 @@ class ConnectionHelper
                 continue;
             }
 
-            if (str_starts_with($connection, 'test_')) {
+            if (strpos($connection, 'test_') === 0) {
                 $original = substr($connection, 5);
                 ConnectionManager::alias($connection, $original);
             } else {
@@ -63,18 +62,13 @@ class ConnectionHelper
      * @param array<int, string>|null $connections Connection names or null for all.
      * @return void
      */
-    public static function enableQueryLogging(?array $connections = null): void
+    public function enableQueryLogging(?array $connections = null): void
     {
-        $connections ??= ConnectionManager::configured();
+        $connections = $connections ?? ConnectionManager::configured();
         foreach ($connections as $connection) {
             $connection = ConnectionManager::get($connection);
-            $message = '--Starting test run ' . date('Y-m-d H:i:s');
-            if (
-                $connection instanceof Connection &&
-                $connection->getDriver()->log($message) === false
-            ) {
-                $connection->getDriver()->setLogger(new QueryLogger());
-                $connection->getDriver()->log($message);
+            if ($connection instanceof Connection) {
+                $connection->enableQueryLogging();
             }
         }
     }
@@ -86,31 +80,34 @@ class ConnectionHelper
      * @param array<string>|null $tables List of tables names or null for all.
      * @return void
      */
-    public static function dropTables(string $connectionName, ?array $tables = null): void
+    public function dropTables(string $connectionName, ?array $tables = null): void
     {
+        /** @var \Cake\Database\Connection $connection */
         $connection = ConnectionManager::get($connectionName);
-        assert($connection instanceof Connection);
         $collection = $connection->getSchemaCollection();
-        $allTables = $collection->listTablesWithoutViews();
 
-        // Skip special tables.
-        // spatial_ref_sys - postgis and it is undroppable.
-        $skip = ['spatial_ref_sys'];
-        $allTables = array_diff($allTables, $skip);
+        if (method_exists($collection, 'listTablesWithoutViews')) {
+            $allTables = $collection->listTablesWithoutViews();
+        } else {
+            $allTables = $collection->listTables();
+        }
 
         $tables = $tables !== null ? array_intersect($tables, $allTables) : $allTables;
-        /** @var array<\Cake\Database\Schema\TableSchema> $schemas Specify type for psalm */
-        $schemas = array_map(fn($table) => $collection->describe($table), $tables);
+        $schemas = array_map(function ($table) use ($collection) {
+            return $collection->describe($table);
+        }, $tables);
 
         $dialect = $connection->getDriver()->schemaDialect();
+        /** @var \Cake\Database\Schema\TableSchema $schema */
         foreach ($schemas as $schema) {
             foreach ($dialect->dropConstraintSql($schema) as $statement) {
-                $connection->execute($statement);
+                $connection->execute($statement)->closeCursor();
             }
         }
+        /** @var \Cake\Database\Schema\TableSchema $schema */
         foreach ($schemas as $schema) {
             foreach ($dialect->dropTableSql($schema) as $statement) {
-                $connection->execute($statement);
+                $connection->execute($statement)->closeCursor();
             }
         }
     }
@@ -122,22 +119,24 @@ class ConnectionHelper
      * @param array<string>|null $tables List of tables names or null for all.
      * @return void
      */
-    public static function truncateTables(string $connectionName, ?array $tables = null): void
+    public function truncateTables(string $connectionName, ?array $tables = null): void
     {
+        /** @var \Cake\Database\Connection $connection */
         $connection = ConnectionManager::get($connectionName);
-        assert($connection instanceof Connection);
         $collection = $connection->getSchemaCollection();
 
         $allTables = $collection->listTablesWithoutViews();
         $tables = $tables !== null ? array_intersect($tables, $allTables) : $allTables;
-        /** @var array<\Cake\Database\Schema\TableSchema> $schemas Specify type for psalm */
-        $schemas = array_map(fn($table) => $collection->describe($table), $tables);
+        $schemas = array_map(function ($table) use ($collection) {
+            return $collection->describe($table);
+        }, $tables);
 
-        self::runWithoutConstraints($connection, function (Connection $connection) use ($schemas): void {
+        $this->runWithoutConstraints($connection, function (Connection $connection) use ($schemas): void {
             $dialect = $connection->getDriver()->schemaDialect();
+            /** @var \Cake\Database\Schema\TableSchema $schema */
             foreach ($schemas as $schema) {
                 foreach ($dialect->truncateTableSql($schema) as $statement) {
-                    $connection->execute($statement);
+                    $connection->execute($statement)->closeCursor();
                 }
             }
         });
@@ -150,13 +149,17 @@ class ConnectionHelper
      * @param \Closure $callback callback
      * @return void
      */
-    public static function runWithoutConstraints(Connection $connection, Closure $callback): void
+    public function runWithoutConstraints(Connection $connection, Closure $callback): void
     {
-        if ($connection->getDriver()->supports(DriverFeatureEnum::DISABLE_CONSTRAINT_WITHOUT_TRANSACTION)) {
-            $connection->disableConstraints(fn(Connection $connection) => $callback($connection));
+        if ($connection->getDriver()->supports(DriverInterface::FEATURE_DISABLE_CONSTRAINT_WITHOUT_TRANSACTION)) {
+            $connection->disableConstraints(function (Connection $connection) use ($callback): void {
+                $callback($connection);
+            });
         } else {
             $connection->transactional(function (Connection $connection) use ($callback): void {
-                $connection->disableConstraints(fn(Connection $connection) => $callback($connection));
+                $connection->disableConstraints(function (Connection $connection) use ($callback): void {
+                    $callback($connection);
+                });
             });
         }
     }

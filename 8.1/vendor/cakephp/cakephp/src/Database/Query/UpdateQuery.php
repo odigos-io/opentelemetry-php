@@ -16,134 +16,167 @@ declare(strict_types=1);
  */
 namespace Cake\Database\Query;
 
-use Cake\Database\Expression\ComparisonExpression;
-use Cake\Database\Expression\QueryExpression;
-use Cake\Database\ExpressionInterface;
 use Cake\Database\Query;
-use Closure;
 
 /**
- * This class is used to generate UPDATE queries for the relational database.
+ * Update Query forward compatibility shim.
  */
 class UpdateQuery extends Query
 {
     /**
-     * Type of this query.
+     * Type of this query (select, insert, update, delete).
      *
      * @var string
      */
-    protected string $_type = self::TYPE_UPDATE;
+    protected $_type = 'update';
 
     /**
-     * List of SQL parts that will be used to build this query.
-     *
-     * @var array<string, mixed>
+     * @inheritDoc
      */
-    protected array $_parts = [
-        'comment' => null,
-        'with' => [],
-        'update' => [],
-        'modifier' => [],
-        'join' => [],
-        'set' => [],
-        'where' => null,
-        'order' => null,
-        'limit' => null,
-        'epilog' => null,
-    ];
-
-    /**
-     * Create an update query.
-     *
-     * Can be combined with set() and where() methods to create update queries.
-     *
-     * @param \Cake\Database\ExpressionInterface|string $table The table you want to update.
-     * @return $this
-     */
-    public function update(ExpressionInterface|string $table)
+    public function delete(?string $table = null)
     {
-        $this->_dirty();
-        $this->_parts['update'][0] = $table;
+        $this->_deprecatedMethod('delete()', 'Create your query with deleteQuery() instead.');
 
-        return $this;
+        return parent::delete($table);
     }
 
     /**
-     * Set one or many fields to update.
-     *
-     * ### Examples
-     *
-     * Passing a string:
-     *
-     * ```
-     * $query->update('articles')->set('title', 'The Title');
-     * ```
-     *
-     * Passing an array:
-     *
-     * ```
-     * $query->update('articles')->set(['title' => 'The Title'], ['title' => 'string']);
-     * ```
-     *
-     * Passing a callback:
-     *
-     * ```
-     * $query->update('articles')->set(function (ExpressionInterface $exp) {
-     *   return $exp->eq('title', 'The title', 'string');
-     * });
-     * ```
-     *
-     * @param \Cake\Database\Expression\QueryExpression|\Closure|array|string $key The column name or array of keys
-     *    + values to set. This can also be a QueryExpression containing a SQL fragment.
-     *    It can also be a Closure, that is required to return an expression object.
-     * @param mixed $value The value to update $key to. Can be null if $key is an
-     *    array or QueryExpression. When $key is an array, this parameter will be
-     *    used as $types instead.
-     * @param array<string, string>|string $types The column types to treat data as.
-     * @return $this
+     * @inheritDoc
      */
-    public function set(QueryExpression|Closure|array|string $key, mixed $value = null, array|string $types = [])
+    public function select($fields = [], bool $overwrite = false)
     {
-        if (empty($this->_parts['set'])) {
-            $this->_parts['set'] = $this->newExpr()->setConjunction(',');
-        }
+        $this->_deprecatedMethod('select()', 'Create your query with selectQuery() instead.');
 
-        if ($key instanceof Closure) {
-            $exp = $this->newExpr()->setConjunction(',');
-            /** @var \Cake\Database\Expression\QueryExpression $setExpr */
-            $setExpr = $this->_parts['set'];
-            $setExpr->add($key($exp));
+        return parent::select($fields, $overwrite);
+    }
 
-            return $this;
-        }
+    /**
+     * @inheritDoc
+     */
+    public function distinct($on = [], $overwrite = false)
+    {
+        $this->_deprecatedMethod('distinct()');
 
-        if (is_array($key) && !isset($key[0])) {
-            $typeMap = $this->getTypeMap()->setTypes($value ?? []);
-            /** @var \Cake\Database\Expression\QueryExpression $setExpr */
-            $setExpr = $this->_parts['set'];
-            foreach ($key as $k => $v) {
-                $setExpr->add(new ComparisonExpression($k, $v, $typeMap->type($k)));
-            }
+        return parent::distinct($on, $overwrite);
+    }
 
-            return $this;
-        }
+    /**
+     * @inheritDoc
+     */
+    public function modifier($modifiers, $overwrite = false)
+    {
+        $this->_deprecatedMethod('modifier()');
 
-        if (is_array($key) || $key instanceof ExpressionInterface) {
-            $types = (array)$value;
-            /** @var \Cake\Database\Expression\QueryExpression $setExpr */
-            $setExpr = $this->_parts['set'];
-            $setExpr->add($key, $types);
+        return parent::modifier($modifiers, $overwrite);
+    }
 
-            return $this;
-        }
+    /**
+     * @inheritDoc
+     */
+    public function group($fields, $overwrite = false)
+    {
+        $this->_deprecatedMethod('group()');
 
-        if (!is_string($types)) {
-            $types = null;
-        }
-        /** @var \Cake\Database\Expression\QueryExpression $setExpr */
-        $setExpr = $this->_parts['set'];
-        $setExpr->eq($key, $value, $types);
+        return parent::group($fields, $overwrite);
+    }
 
-        return $this;
+    /**
+     * @inheritDoc
+     */
+    public function having($conditions = null, $types = [], $overwrite = false)
+    {
+        $this->_deprecatedMethod('having()');
+
+        return parent::having($conditions, $types, $overwrite);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function andHaving($conditions, $types = [])
+    {
+        $this->_deprecatedMethod('andHaving()');
+
+        return parent::andHaving($conditions, $types);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function page(int $num, ?int $limit = null)
+    {
+        $this->_deprecatedMethod('page()');
+
+        return parent::page($num, $limit);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function offset($offset)
+    {
+        $this->_deprecatedMethod('offset()');
+
+        return parent::offset($offset);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function union($query, $overwrite = false)
+    {
+        $this->_deprecatedMethod('union()');
+
+        return parent::union($query, $overwrite);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function unionAll($query, $overwrite = false)
+    {
+        $this->_deprecatedMethod('union()');
+
+        return parent::unionAll($query, $overwrite);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function insert(array $columns, array $types = [])
+    {
+        $this->_deprecatedMethod('insert()', 'Create your query with insertQuery() instead.');
+
+        return parent::insert($columns, $types);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function into(string $table)
+    {
+        $this->_deprecatedMethod('into()', 'Use update() instead.');
+
+        return parent::into($table);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function values($data)
+    {
+        $this->_deprecatedMethod('values()');
+
+        return parent::values($data);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function from($tables = [], $overwrite = false)
+    {
+        $this->_deprecatedMethod('from()', 'Use update() instead.');
+
+        return parent::from($tables, $overwrite);
     }
 }

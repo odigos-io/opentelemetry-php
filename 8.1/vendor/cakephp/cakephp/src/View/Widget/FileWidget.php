@@ -16,6 +16,7 @@ declare(strict_types=1);
  */
 namespace Cake\View\Widget;
 
+use Cake\Core\Configure;
 use Cake\View\Form\ContextInterface;
 
 /**
@@ -31,7 +32,7 @@ class FileWidget extends BasicWidget
      *
      * @var array<string, mixed>
      */
-    protected array $defaults = [
+    protected $defaults = [
         'name' => '',
         'escape' => true,
         'templateVars' => [],
@@ -64,8 +65,27 @@ class FileWidget extends BasicWidget
             'templateVars' => $data['templateVars'],
             'attrs' => $this->_templates->formatAttributes(
                 $data,
-                ['name'],
+                ['name']
             ),
         ]);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function secureFields(array $data): array
+    {
+        // PSR7 UploadedFileInterface objects are used.
+        if (Configure::read('App.uploadedFilesAsObjects', true)) {
+            return [$data['name']];
+        }
+
+        // Backwards compatibility for array files.
+        $fields = [];
+        foreach (['name', 'type', 'tmp_name', 'error', 'size'] as $suffix) {
+            $fields[] = $data['name'] . '[' . $suffix . ']';
+        }
+
+        return $fields;
     }
 }

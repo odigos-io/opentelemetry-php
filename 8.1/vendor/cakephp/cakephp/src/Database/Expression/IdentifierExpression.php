@@ -35,12 +35,12 @@ class IdentifierExpression implements ExpressionInterface
      *
      * @var string
      */
-    protected string $_identifier;
+    protected $_identifier;
 
     /**
      * @var string|null
      */
-    protected ?string $collation = null;
+    protected $collation;
 
     /**
      * Constructor

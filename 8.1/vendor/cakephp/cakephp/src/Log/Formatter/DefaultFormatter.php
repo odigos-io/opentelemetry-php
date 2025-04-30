@@ -25,11 +25,19 @@ class DefaultFormatter extends AbstractFormatter
      *
      * @var array<string, mixed>
      */
-    protected array $_defaultConfig = [
+    protected $_defaultConfig = [
         'dateFormat' => 'Y-m-d H:i:s',
         'includeTags' => false,
         'includeDate' => true,
     ];
+
+    /**
+     * @param array<string, mixed> $config Formatter config
+     */
+    public function __construct(array $config = [])
+    {
+        $this->setConfig($config);
+    }
 
     /**
      * @inheritDoc
@@ -42,7 +50,7 @@ class DefaultFormatter extends AbstractFormatter
             $message = sprintf('%s: %s', $level, $message);
         }
         if ($this->_config['includeTags']) {
-            return sprintf('<%s>%s</%s>', $level, $message, $level);
+            $message = sprintf('<%s>%s</%s>', $level, $message, $level);
         }
 
         return $message;

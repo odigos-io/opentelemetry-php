@@ -17,16 +17,19 @@ declare(strict_types=1);
 namespace Cake\Database\Type;
 
 use Cake\Chronos\ChronosDate;
-use Cake\Database\Driver;
-use Cake\Database\Exception\DatabaseException;
-use Cake\I18n\DateTime;
-use DateTime as NativeDateTime;
+use Cake\Database\DriverInterface;
+use Cake\I18n\FrozenTime;
+use Cake\I18n\I18nDateTimeInterface;
+use Cake\I18n\Time;
+use DateTime;
 use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
 use Exception;
 use InvalidArgumentException;
 use PDO;
+use RuntimeException;
+use function Cake\Core\deprecationWarning;
 
 /**
  * Datetime type converter.
@@ -36,26 +39,33 @@ use PDO;
 class DateTimeType extends BaseType implements BatchCastingInterface
 {
     /**
+     * Whether we want to override the time of the converted Time objects
+     * so it points to the start of the day.
+     *
+     * This is primarily to avoid subclasses needing to re-implement the same functionality.
+     *
+     * @var bool
+     */
+    protected $setToDateStart = false;
+
+    /**
      * The DateTime format used when converting to string.
      *
      * @var string
      */
-    protected string $_format = 'Y-m-d H:i:s';
+    protected $_format = 'Y-m-d H:i:s';
 
     /**
      * The DateTime formats allowed by `marshal()`.
      *
      * @var array<string>
      */
-    protected array $_marshalFormats = [
+    protected $_marshalFormats = [
         'Y-m-d H:i',
         'Y-m-d H:i:s',
-        'Y-m-d H:i:s.u',
         'Y-m-d\TH:i',
         'Y-m-d\TH:i:s',
         'Y-m-d\TH:i:sP',
-        'Y-m-d\TH:i:s.u',
-        'Y-m-d\TH:i:s.uP',
     ];
 
     /**
@@ -63,51 +73,52 @@ class DateTimeType extends BaseType implements BatchCastingInterface
      *
      * @var bool
      */
-    protected bool $_useLocaleMarshal = false;
+    protected $_useLocaleMarshal = false;
 
     /**
      * The locale-aware format `marshal()` uses when `_useLocaleParser` is true.
      *
      * See `Cake\I18n\Time::parseDateTime()` for accepted formats.
      *
-     * @var array|string|int|null
+     * @var array|string|int
      */
-    protected array|string|int|null $_localeMarshalFormat = null;
+    protected $_localeMarshalFormat;
 
     /**
      * The classname to use when creating objects.
      *
-     * @var class-string<\Cake\I18n\DateTime>|class-string<\DateTimeImmutable>
+     * @var string
+     * @psalm-var class-string<\DateTime>|class-string<\DateTimeImmutable>
      */
-    protected string $_className;
+    protected $_className;
 
     /**
      * Database time zone.
      *
      * @var \DateTimeZone|null
      */
-    protected ?DateTimeZone $dbTimezone = null;
+    protected $dbTimezone;
 
     /**
      * User time zone.
      *
      * @var \DateTimeZone|null
      */
-    protected ?DateTimeZone $userTimezone = null;
+    protected $userTimezone;
 
     /**
      * Default time zone.
      *
      * @var \DateTimeZone
      */
-    protected DateTimeZone $defaultTimezone;
+    protected $defaultTimezone;
 
     /**
      * Whether database time zone is kept when converting
      *
      * @var bool
      */
-    protected bool $keepDatabaseTimezone = false;
+    protected $keepDatabaseTimezone = false;
 
     /**
      * {@inheritDoc}
@@ -119,32 +130,24 @@ class DateTimeType extends BaseType implements BatchCastingInterface
         parent::__construct($name);
 
         $this->defaultTimezone = new DateTimeZone(date_default_timezone_get());
-        $this->_className = class_exists(DateTime::class) ? DateTime::class : DateTimeImmutable::class;
+        $this->_setClassName(FrozenTime::class, DateTimeImmutable::class);
     }
 
     /**
      * Convert DateTime instance into strings.
      *
      * @param mixed $value The value to convert.
-     * @param \Cake\Database\Driver $driver The driver instance to convert with.
+     * @param \Cake\Database\DriverInterface $driver The driver instance to convert with.
      * @return string|null
      */
-    public function toDatabase(mixed $value, Driver $driver): ?string
+    public function toDatabase($value, DriverInterface $driver): ?string
     {
         if ($value === null || is_string($value)) {
             return $value;
         }
-        if (is_int($value) || is_float($value)) {
+        if (is_int($value)) {
             $class = $this->_className;
             $value = new $class('@' . $value);
-        }
-
-        if ($value instanceof ChronosDate) {
-            return $value->format($this->_format);
-        }
-
-        if (!$value instanceof DateTimeInterface) {
-            return null;
         }
 
         if (
@@ -161,6 +164,20 @@ class DateTimeType extends BaseType implements BatchCastingInterface
     }
 
     /**
+     * Alias for `setDatabaseTimezone()`.
+     *
+     * @param \DateTimeZone|string|null $timezone Database timezone.
+     * @return $this
+     * @deprecated 4.1.0 Use {@link setDatabaseTimezone()} instead.
+     */
+    public function setTimezone($timezone)
+    {
+        deprecationWarning('DateTimeType::setTimezone() is deprecated. Use setDatabaseTimezone() instead.');
+
+        return $this->setDatabaseTimezone($timezone);
+    }
+
+    /**
      * Set database timezone.
      *
      * This is the time zone used when converting database strings to DateTime
@@ -170,7 +187,7 @@ class DateTimeType extends BaseType implements BatchCastingInterface
      * @param \DateTimeZone|string|null $timezone Database timezone.
      * @return $this
      */
-    public function setDatabaseTimezone(DateTimeZone|string|null $timezone)
+    public function setDatabaseTimezone($timezone)
     {
         if (is_string($timezone)) {
             $timezone = new DateTimeZone($timezone);
@@ -183,12 +200,12 @@ class DateTimeType extends BaseType implements BatchCastingInterface
     /**
      * Set user timezone.
      *
-     * This is the time zone used when marshaling strings to DateTime instances.
+     * This is the time zone used when marshalling strings to DateTime instances.
      *
      * @param \DateTimeZone|string|null $timezone User timezone.
      * @return $this
      */
-    public function setUserTimezone(DateTimeZone|string|null $timezone)
+    public function setUserTimezone($timezone)
     {
         if (is_string($timezone)) {
             $timezone = new DateTimeZone($timezone);
@@ -202,30 +219,33 @@ class DateTimeType extends BaseType implements BatchCastingInterface
      * {@inheritDoc}
      *
      * @param mixed $value Value to be converted to PHP equivalent
-     * @param \Cake\Database\Driver $driver Object from which database preferences and configuration will be extracted
-     * @return \Cake\I18n\DateTime|\DateTimeImmutable|null
+     * @param \Cake\Database\DriverInterface $driver Object from which database preferences and configuration will be extracted
+     * @return \DateTimeInterface|null
      */
-    public function toPHP(mixed $value, Driver $driver): DateTime|DateTimeImmutable|null
+    public function toPHP($value, DriverInterface $driver)
     {
         if ($value === null) {
             return null;
         }
 
         $class = $this->_className;
-        if (is_numeric($value)) {
+        if (is_int($value)) {
             $instance = new $class('@' . $value);
-        } elseif (str_starts_with($value, '0000-00-00')) {
+        } elseif (strpos($value, '0000-00-00') === 0) {
             return null;
         } else {
             $instance = new $class($value, $this->dbTimezone);
         }
 
         if (
-            !$this->keepDatabaseTimezone
-            && $instance->getTimezone()
-            && $instance->getTimezone()->getName() !== $this->defaultTimezone->getName()
+            !$this->keepDatabaseTimezone &&
+            $instance->getTimezone()->getName() !== $this->defaultTimezone->getName()
         ) {
-            return $instance->setTimezone($this->defaultTimezone);
+            $instance = $instance->setTimezone($this->defaultTimezone);
+        }
+
+        if ($this->setToDateStart) {
+            $instance = $instance->setTime(0, 0, 0);
         }
 
         return $instance;
@@ -255,7 +275,7 @@ class DateTimeType extends BaseType implements BatchCastingInterface
     /**
      * @inheritDoc
      */
-    public function manyToPHP(array $values, array $fields, Driver $driver): array
+    public function manyToPHP(array $values, array $fields, DriverInterface $driver): array
     {
         foreach ($fields as $field) {
             if (!isset($values[$field])) {
@@ -267,7 +287,7 @@ class DateTimeType extends BaseType implements BatchCastingInterface
             $class = $this->_className;
             if (is_int($value)) {
                 $instance = new $class('@' . $value);
-            } elseif (str_starts_with($value, '0000-00-00')) {
+            } elseif (strpos($value, '0000-00-00') === 0) {
                 $values[$field] = null;
                 continue;
             } else {
@@ -275,11 +295,14 @@ class DateTimeType extends BaseType implements BatchCastingInterface
             }
 
             if (
-                !$this->keepDatabaseTimezone
-                && $instance->getTimezone()
-                && $instance->getTimezone()->getName() !== $this->defaultTimezone->getName()
+                !$this->keepDatabaseTimezone &&
+                $instance->getTimezone()->getName() !== $this->defaultTimezone->getName()
             ) {
                 $instance = $instance->setTimezone($this->defaultTimezone);
+            }
+
+            if ($this->setToDateStart) {
+                $instance = $instance->setTime(0, 0, 0);
             }
 
             $values[$field] = $instance;
@@ -294,23 +317,30 @@ class DateTimeType extends BaseType implements BatchCastingInterface
      * @param mixed $value Request data
      * @return \DateTimeInterface|null
      */
-    public function marshal(mixed $value): ?DateTimeInterface
+    public function marshal($value): ?DateTimeInterface
     {
         if ($value instanceof DateTimeInterface) {
-            if ($value instanceof NativeDateTime) {
+            if ($value instanceof DateTime) {
                 $value = clone $value;
+            }
+
+            if ($value instanceof ChronosDate) {
+                return $value;
             }
 
             /** @var \Datetime|\DateTimeImmutable $value */
             return $value->setTimezone($this->defaultTimezone);
         }
-        if ($value instanceof ChronosDate) {
-            return $value->toNative();
-        }
 
+        /** @var class-string<\DateTimeInterface> $class */
         $class = $this->_className;
         try {
+            if ($value === '' || $value === null || is_bool($value)) {
+                return null;
+            }
+
             if (is_int($value) || (is_string($value) && ctype_digit($value))) {
+                /** @var \DateTime|\DateTimeImmutable $dateTime */
                 $dateTime = new $class('@' . $value);
 
                 return $dateTime->setTimezone($this->defaultTimezone);
@@ -323,30 +353,32 @@ class DateTimeType extends BaseType implements BatchCastingInterface
                     $dateTime = $this->_parseValue($value);
                 }
 
-                if ($dateTime) {
-                    return $dateTime->setTimezone($this->defaultTimezone);
+                /** @var \DateTime|\DateTimeImmutable $dateTime */
+                if ($dateTime !== null) {
+                    $dateTime = $dateTime->setTimezone($this->defaultTimezone);
                 }
 
                 return $dateTime;
             }
-        } catch (Exception) {
+        } catch (Exception $e) {
             return null;
         }
 
-        if (!is_array($value)) {
+        if (is_array($value) && implode('', $value) === '') {
             return null;
         }
+        $value += ['hour' => 0, 'minute' => 0, 'second' => 0, 'microsecond' => 0];
 
-        $value += [
-            'year' => null, 'month' => null, 'day' => null,
-            'hour' => 0, 'minute' => 0, 'second' => 0, 'microsecond' => 0,
-        ];
+        $format = '';
         if (
-            !is_numeric($value['year']) || !is_numeric($value['month']) || !is_numeric($value['day']) ||
-            !is_numeric($value['hour']) || !is_numeric($value['minute']) || !is_numeric($value['second']) ||
-            !is_numeric($value['microsecond'])
+            isset($value['year'], $value['month'], $value['day']) &&
+            (
+                is_numeric($value['year']) &&
+                is_numeric($value['month']) &&
+                is_numeric($value['day'])
+            )
         ) {
-            return null;
+            $format .= sprintf('%d-%02d-%02d', $value['year'], $value['month'], $value['day']);
         }
 
         if (isset($value['meridian']) && (int)$value['hour'] === 12) {
@@ -355,17 +387,16 @@ class DateTimeType extends BaseType implements BatchCastingInterface
         if (isset($value['meridian'])) {
             $value['hour'] = strtolower($value['meridian']) === 'am' ? $value['hour'] : $value['hour'] + 12;
         }
-        $format = sprintf(
-            '%d-%02d-%02d %02d:%02d:%02d.%06d',
-            $value['year'],
-            $value['month'],
-            $value['day'],
+        $format .= sprintf(
+            '%s%02d:%02d:%02d.%06d',
+            empty($format) ? '' : ' ',
             $value['hour'],
             $value['minute'],
             $value['second'],
-            $value['microsecond'],
+            $value['microsecond']
         );
 
+        /** @var \DateTime|\DateTimeImmutable $dateTime */
         $dateTime = new $class($format, $value['timezone'] ?? $this->userTimezone);
 
         return $dateTime->setTimezone($this->defaultTimezone);
@@ -385,13 +416,13 @@ class DateTimeType extends BaseType implements BatchCastingInterface
 
             return $this;
         }
-        if (is_a($this->_className, DateTime::class, true)) {
+        if (is_subclass_of($this->_className, I18nDateTimeInterface::class)) {
             $this->_useLocaleMarshal = $enable;
 
             return $this;
         }
-        throw new DatabaseException(
-            sprintf('Cannot use locale parsing with the %s class', $this->_className),
+        throw new RuntimeException(
+            sprintf('Cannot use locale parsing with the %s class', $this->_className)
         );
     }
 
@@ -404,7 +435,7 @@ class DateTimeType extends BaseType implements BatchCastingInterface
      * @see \Cake\I18n\Time::parseDateTime()
      * @return $this
      */
-    public function setLocaleFormat(array|string $format)
+    public function setLocaleFormat($format)
     {
         $this->_localeMarshalFormat = $format;
 
@@ -412,9 +443,45 @@ class DateTimeType extends BaseType implements BatchCastingInterface
     }
 
     /**
+     * Change the preferred class name to the FrozenTime implementation.
+     *
+     * @return $this
+     * @deprecated 4.3.0 This method is no longer needed as using immutable datetime class is the default behavior.
+     */
+    public function useImmutable()
+    {
+        deprecationWarning(
+            'Configuring immutable or mutable classes is deprecated and immutable'
+            . ' classes will be the permanent configuration in 5.0. Calling `useImmutable()` is unnecessary.'
+        );
+
+        $this->_setClassName(FrozenTime::class, DateTimeImmutable::class);
+
+        return $this;
+    }
+
+    /**
+     * Set the classname to use when building objects.
+     *
+     * @param string $class The classname to use.
+     * @param string $fallback The classname to use when the preferred class does not exist.
+     * @return void
+     * @psalm-param class-string<\DateTime>|class-string<\DateTimeImmutable> $class
+     * @psalm-param class-string<\DateTime>|class-string<\DateTimeImmutable> $fallback
+     */
+    protected function _setClassName(string $class, string $fallback): void
+    {
+        if (!class_exists($class)) {
+            $class = $fallback;
+        }
+        $this->_className = $class;
+    }
+
+    /**
      * Get the classname used for building objects.
      *
-     * @return class-string<\Cake\I18n\DateTime>|class-string<\DateTimeImmutable>
+     * @return string
+     * @psalm-return class-string<\DateTime>|class-string<\DateTimeImmutable>
      */
     public function getDateTimeClassName(): string
     {
@@ -422,15 +489,33 @@ class DateTimeType extends BaseType implements BatchCastingInterface
     }
 
     /**
+     * Change the preferred class name to the mutable Time implementation.
+     *
+     * @return $this
+     * @deprecated 4.3.0 Using mutable datetime objects is deprecated.
+     */
+    public function useMutable()
+    {
+        deprecationWarning(
+            'Configuring immutable or mutable classes is deprecated and immutable'
+            . ' classes will be the permanent configuration in 5.0. Calling `useImmutable()` is unnecessary.'
+        );
+
+        $this->_setClassName(Time::class, DateTime::class);
+
+        return $this;
+    }
+
+    /**
      * Converts a string into a DateTime object after parsing it using the locale
      * aware parser with the format set by `setLocaleFormat()`.
      *
      * @param string $value The value to parse and convert to an object.
-     * @return \Cake\I18n\DateTime|null
+     * @return \Cake\I18n\I18nDateTimeInterface|null
      */
-    protected function _parseLocaleValue(string $value): ?DateTime
+    protected function _parseLocaleValue(string $value): ?I18nDateTimeInterface
     {
-        /** @var class-string<\Cake\I18n\DateTime> $class */
+        /** @psalm-var class-string<\Cake\I18n\I18nDateTimeInterface> $class */
         $class = $this->_className;
 
         return $class::parseDateTime($value, $this->_localeMarshalFormat, $this->userTimezone);
@@ -441,21 +526,21 @@ class DateTimeType extends BaseType implements BatchCastingInterface
      * formats in `_marshalFormats`.
      *
      * @param string $value The value to parse and convert to an object.
-     * @return \Cake\I18n\DateTime|\DateTimeImmutable|null
+     * @return \DateTimeInterface|null
      */
-    protected function _parseValue(string $value): DateTime|DateTimeImmutable|null
+    protected function _parseValue(string $value): ?DateTimeInterface
     {
         $class = $this->_className;
 
         foreach ($this->_marshalFormats as $format) {
             try {
                 $dateTime = $class::createFromFormat($format, $value, $this->userTimezone);
-                // Check for false in case DateTimeImmutable is used
+                // Check for false in case DateTime is used directly
                 if ($dateTime !== false) {
                     return $dateTime;
                 }
-            } catch (InvalidArgumentException) {
-                // Chronos wraps DateTimeImmutable::createFromFormat and throws
+            } catch (InvalidArgumentException $e) {
+                // Chronos wraps DateTime::createFromFormat and throws
                 // exception if parse fails.
                 continue;
             }
@@ -465,9 +550,13 @@ class DateTimeType extends BaseType implements BatchCastingInterface
     }
 
     /**
-     * @inheritDoc
+     * Casts given value to Statement equivalent
+     *
+     * @param mixed $value value to be converted to PDO statement
+     * @param \Cake\Database\DriverInterface $driver object from which database preferences and configuration will be extracted
+     * @return mixed
      */
-    public function toStatement(mixed $value, Driver $driver): int
+    public function toStatement($value, DriverInterface $driver)
     {
         return PDO::PARAM_STR;
     }

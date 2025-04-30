@@ -31,32 +31,33 @@ use Traversable;
 class MapReduce implements IteratorAggregate
 {
     /**
-     * Holds the shuffled results emitted from the map phase
+     * Holds the shuffled results that were emitted from the map
+     * phase
      *
      * @var array
      */
-    protected array $_intermediate = [];
+    protected $_intermediate = [];
 
     /**
      * Holds the results as emitted during the reduce phase
      *
      * @var array
      */
-    protected array $_result = [];
+    protected $_result = [];
 
     /**
      * Whether the Map-Reduce routine has been executed already on the data
      *
      * @var bool
      */
-    protected bool $_executed = false;
+    protected $_executed = false;
 
     /**
      * Holds the original data that needs to be processed
      *
-     * @var iterable
+     * @var \Traversable
      */
-    protected iterable $_data;
+    protected $_data;
 
     /**
      * A callable that will be executed for each record in the original data
@@ -78,7 +79,7 @@ class MapReduce implements IteratorAggregate
      *
      * @var int
      */
-    protected int $_counter = 0;
+    protected $_counter = 0;
 
     /**
      * Constructor
@@ -106,7 +107,7 @@ class MapReduce implements IteratorAggregate
      *  ['odd' => [1, 3, 5], 'even' => [2, 4]]
      * ```
      *
-     * @param iterable $data The original data to be processed.
+     * @param \Traversable $data the original data to be processed
      * @param callable $mapper the mapper callback. This function will receive 3 arguments.
      * The first one is the current value, second the current results key and third is
      * this class instance so you can call the result emitters.
@@ -115,7 +116,7 @@ class MapReduce implements IteratorAggregate
      * of the bucket that was created during the mapping phase and third one is an
      * instance of this class.
      */
-    public function __construct(iterable $data, callable $mapper, ?callable $reducer = null)
+    public function __construct(Traversable $data, callable $mapper, ?callable $reducer = null)
     {
         $this->_data = $data;
         $this->_mapper = $mapper;
@@ -138,23 +139,16 @@ class MapReduce implements IteratorAggregate
     }
 
     /**
-     * Appends a new record to the bucket labeled with $key, usually as a result
+     * Appends a new record to the bucket labelled with $key, usually as a result
      * of mapping a single record from the original data.
      *
      * @param mixed $val The record itself to store in the bucket
      * @param mixed $bucket the name of the bucket where to put the record
-     * @param mixed $key An optional key to assign to the value
      * @return void
      */
-    public function emitIntermediate(mixed $val, mixed $bucket, mixed $key = null): void
+    public function emitIntermediate($val, $bucket): void
     {
-        if ($key === null) {
-            $this->_intermediate[$bucket][] = $val;
-
-            return;
-        }
-
-        $this->_intermediate[$bucket][$key] = $val;
+        $this->_intermediate[$bucket][] = $val;
     }
 
     /**
@@ -165,7 +159,7 @@ class MapReduce implements IteratorAggregate
      * @param mixed $key and optional key to assign to the value
      * @return void
      */
-    public function emit(mixed $val, mixed $key = null): void
+    public function emit($val, $key = null): void
     {
         $this->_result[$key ?? $this->_counter] = $val;
         $this->_counter++;
@@ -187,15 +181,14 @@ class MapReduce implements IteratorAggregate
             $mapper($val, $key, $this);
         }
 
-        if ($this->_intermediate && $this->_reducer === null) {
+        if (!empty($this->_intermediate) && empty($this->_reducer)) {
             throw new LogicException('No reducer function was provided');
         }
 
+        /** @var callable $reducer */
         $reducer = $this->_reducer;
-        if ($reducer !== null) {
-            foreach ($this->_intermediate as $key => $list) {
-                $reducer($list, $key, $this);
-            }
+        foreach ($this->_intermediate as $key => $list) {
+            $reducer($list, $key, $this);
         }
         $this->_intermediate = [];
         $this->_executed = true;

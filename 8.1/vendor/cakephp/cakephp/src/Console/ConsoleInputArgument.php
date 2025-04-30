@@ -32,42 +32,35 @@ class ConsoleInputArgument
      *
      * @var string
      */
-    protected string $_name;
+    protected $_name;
 
     /**
      * Help string
      *
      * @var string
      */
-    protected string $_help;
+    protected $_help;
 
     /**
      * Is this option required?
      *
      * @var bool
      */
-    protected bool $_required;
+    protected $_required;
 
     /**
      * An array of valid choices for this argument.
      *
      * @var array<string>
      */
-    protected array $_choices;
+    protected $_choices;
 
     /**
-     * Default value for this argument.
+     * Default value for the argument.
      *
      * @var string|null
      */
-    protected ?string $_default = null;
-
-    /**
-     * The multiple separator.
-     *
-     * @var string|null
-     */
-    protected ?string $_separator = null;
+    protected $_default;
 
     /**
      * Make a new Input Argument
@@ -78,35 +71,19 @@ class ConsoleInputArgument
      * @param array<string> $choices Valid choices for this option.
      * @param string|null $default The default value for this argument.
      */
-    public function __construct(
-        array|string $name,
-        string $help = '',
-        bool $required = false,
-        array $choices = [],
-        ?string $default = null,
-        ?string $separator = null,
-    ) {
+    public function __construct($name, $help = '', $required = false, $choices = [], $default = null)
+    {
         if (is_array($name) && isset($name['name'])) {
             foreach ($name as $key => $value) {
                 $this->{'_' . $key} = $value;
             }
         } else {
-            /** @var string $name */
+            /** @psalm-suppress PossiblyInvalidPropertyAssignmentValue */
             $this->_name = $name;
             $this->_help = $help;
             $this->_required = $required;
             $this->_choices = $choices;
             $this->_default = $default;
-            $this->_separator = $separator;
-        }
-
-        if ($this->_separator !== null && str_contains($this->_separator, ' ')) {
-            throw new ConsoleException(
-                sprintf(
-                    'The argument separator must not contain spaces for `%s`.',
-                    $this->_name,
-                ),
-            );
         }
     }
 
@@ -154,9 +131,6 @@ class ConsoleInputArgument
         if ($this->_default !== null) {
             $optional .= sprintf(' <comment>default: "%s"</comment>', $this->_default);
         }
-        if ($this->_separator) {
-            $optional .= sprintf(' <comment>(separator: "%s")</comment>', $this->_separator);
-        }
 
         return sprintf('%s%s%s', $name, $this->_help, $optional);
     }
@@ -174,7 +148,7 @@ class ConsoleInputArgument
         }
         $name = '<' . $name . '>';
         if (!$this->isRequired()) {
-            return '[' . $name . ']';
+            $name = '[' . $name . ']';
         }
 
         return $name;
@@ -185,7 +159,7 @@ class ConsoleInputArgument
      *
      * @return string|null
      */
-    public function defaultValue(): ?string
+    public function defaultValue()
     {
         return $this->_default;
     }
@@ -201,16 +175,6 @@ class ConsoleInputArgument
     }
 
     /**
-     * Get the value of the separator.
-     *
-     * @return string|null Value of this->_separator.
-     */
-    public function separator(): ?string
-    {
-        return $this->_separator;
-    }
-
-    /**
      * Check that $value is a valid choice for this argument.
      *
      * @param string $value The choice to validate.
@@ -219,24 +183,17 @@ class ConsoleInputArgument
      */
     public function validChoice(string $value): bool
     {
-        if ($this->_choices === []) {
+        if (empty($this->_choices)) {
             return true;
         }
-        if ($value && $this->_separator) {
-            $values = explode($this->_separator, $value);
-        } else {
-            $values = [$value];
-        }
-
-        $unwanted = array_filter($values, fn($value) => !in_array($value, $this->_choices, true));
-        if ($unwanted) {
+        if (!in_array($value, $this->_choices, true)) {
             throw new ConsoleException(
                 sprintf(
-                    '`%s` is not a valid value for `%s`. Please use one of `%s`',
+                    '"%s" is not a valid value for %s. Please use one of "%s"',
                     $value,
                     $this->_name,
-                    implode('|', $this->_choices),
-                ),
+                    implode(', ', $this->_choices)
+                )
             );
         }
 
@@ -255,9 +212,6 @@ class ConsoleInputArgument
         $option->addAttribute('name', $this->_name);
         $option->addAttribute('help', $this->_help);
         $option->addAttribute('required', (string)(int)$this->isRequired());
-        if ($this->separator() !== null) {
-            $option->addAttribute('separator', $this->separator());
-        }
         $choices = $option->addChild('choices');
         foreach ($this->_choices as $valid) {
             $choices->addChild('choice', $valid);

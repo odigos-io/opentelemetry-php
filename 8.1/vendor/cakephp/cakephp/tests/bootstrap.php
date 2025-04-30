@@ -17,11 +17,8 @@ use Cake\Cache\Cache;
 use Cake\Chronos\Chronos;
 use Cake\Core\Configure;
 use Cake\Datasource\ConnectionManager;
-use Cake\Datasource\FactoryLocator;
 use Cake\Error\Debug\TextFormatter;
-use Cake\Log\Engine\FileLog;
 use Cake\Log\Log;
-use Cake\ORM\Locator\TableLocator;
 use Cake\TestSuite\Fixture\SchemaLoader;
 use Cake\Utility\Security;
 use function Cake\Core\env;
@@ -63,7 +60,6 @@ define('CONFIG', TEST_APP . 'config' . DS);
 @mkdir(CACHE . 'models');
 // phpcs:enable
 
-require_once 'check.php';
 require_once CORE_PATH . 'config/bootstrap.php';
 
 date_default_timezone_set('UTC');
@@ -90,7 +86,7 @@ Configure::write('App', [
 ]);
 
 Cache::setConfig([
-    '_cake_translations_' => [
+    '_cake_core_' => [
         'engine' => 'File',
         'prefix' => 'cake_core_',
         'serialize' => true,
@@ -120,13 +116,13 @@ Configure::write('Debugger.exportFormatter', TextFormatter::class);
 
 Log::setConfig([
     'debug' => [
-        'engine' => FileLog::class,
+        'engine' => 'Cake\Log\Engine\FileLog',
         'levels' => ['notice', 'info', 'debug'],
         'file' => 'debug',
         'path' => LOGS,
     ],
     'error' => [
-        'engine' => FileLog::class,
+        'engine' => 'Cake\Log\Engine\FileLog',
         'levels' => ['warning', 'error', 'critical', 'alert', 'emergency'],
         'file' => 'error',
         'path' => LOGS,
@@ -138,7 +134,6 @@ Security::setSalt('a-long-but-not-random-value');
 
 ini_set('intl.default_locale', 'en_US');
 ini_set('session.gc_divisor', '1');
-ini_set('assert.exception', '1');
 
 // Fixate sessionid early on, as php7.2+
 // does not allow the sessionid to be set after stdout
@@ -150,5 +145,3 @@ if (env('FIXTURE_SCHEMA_METADATA')) {
     $loader = new SchemaLoader();
     $loader->loadInternalFile(env('FIXTURE_SCHEMA_METADATA'));
 }
-
-FactoryLocator::add('Table', new TableLocator());

@@ -19,7 +19,6 @@ declare(strict_types=1);
 namespace Cake\Http\Session;
 
 use Cake\ORM\Locator\LocatorAwareTrait;
-use Cake\ORM\Table;
 use SessionHandlerInterface;
 
 /**
@@ -34,14 +33,14 @@ class DatabaseSession implements SessionHandlerInterface
      *
      * @var \Cake\ORM\Table
      */
-    protected Table $_table;
+    protected $_table;
 
     /**
      * Number of seconds to mark the session as expired
      *
      * @var int
      */
-    protected int $_timeout;
+    protected $_timeout;
 
     /**
      * Constructor. Looks at Session configuration information and
@@ -89,7 +88,7 @@ class DatabaseSession implements SessionHandlerInterface
      * @param string $name The session name.
      * @return bool Success
      */
-    public function open(string $path, string $name): bool
+    public function open($path, $name): bool
     {
         return true;
     }
@@ -110,10 +109,11 @@ class DatabaseSession implements SessionHandlerInterface
      * @param string $id ID that uniquely identifies session in database.
      * @return string|false Session data or false if it does not exist.
      */
-    public function read(string $id): string|false
+    #[\ReturnTypeWillChange]
+    public function read($id)
     {
+        /** @var string $pkField */
         $pkField = $this->_table->getPrimaryKey();
-        assert(is_string($pkField));
         $result = $this->_table
             ->find('all')
             ->select(['data'])
@@ -121,7 +121,7 @@ class DatabaseSession implements SessionHandlerInterface
             ->disableHydration()
             ->first();
 
-        if (!$result) {
+        if (empty($result)) {
             return '';
         }
 
@@ -145,7 +145,7 @@ class DatabaseSession implements SessionHandlerInterface
      * @param string $data The data to be saved.
      * @return bool True for successful write, false otherwise.
      */
-    public function write(string $id, string $data): bool
+    public function write($id, $data): bool
     {
         if (!$id) {
             return false;
@@ -168,7 +168,7 @@ class DatabaseSession implements SessionHandlerInterface
      * @param string $id ID that uniquely identifies session in database.
      * @return bool True for successful delete, false otherwise.
      */
-    public function destroy(string $id): bool
+    public function destroy($id): bool
     {
         /** @var string $pkField */
         $pkField = $this->_table->getPrimaryKey();
@@ -180,10 +180,11 @@ class DatabaseSession implements SessionHandlerInterface
     /**
      * Helper function called on gc for database sessions.
      *
-     * @param int $max_lifetime Sessions that have not updated for the last maxlifetime seconds will be removed.
+     * @param int $maxlifetime Sessions that have not updated for the last maxlifetime seconds will be removed.
      * @return int|false The number of deleted sessions on success, or false on failure.
      */
-    public function gc(int $max_lifetime): int|false
+    #[\ReturnTypeWillChange]
+    public function gc($maxlifetime)
     {
         return $this->_table->deleteAll(['expires <' => time()]);
     }

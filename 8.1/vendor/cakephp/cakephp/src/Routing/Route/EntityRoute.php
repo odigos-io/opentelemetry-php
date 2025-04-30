@@ -17,7 +17,8 @@ declare(strict_types=1);
 namespace Cake\Routing\Route;
 
 use ArrayAccess;
-use Cake\Core\Exception\CakeException;
+use RuntimeException;
+use function Cake\Core\getTypeName;
 
 /**
  * Matches entities to routes
@@ -43,7 +44,7 @@ class EntityRoute extends Route
      */
     public function match(array $url, array $context = []): ?string
     {
-        if (!$this->_compiledRoute) {
+        if (empty($this->_compiledRoute)) {
             $this->compile();
         }
 
@@ -65,17 +66,17 @@ class EntityRoute extends Route
      * Checks that we really deal with an entity object
      *
      * @throws \RuntimeException
-     * @param mixed $entity Entity value from the URL options
+     * @param \ArrayAccess|array $entity Entity value from the URL options
      * @return void
      */
-    protected function _checkEntity(mixed $entity): void
+    protected function _checkEntity($entity): void
     {
         if (!$entity instanceof ArrayAccess && !is_array($entity)) {
-            throw new CakeException(sprintf(
+            throw new RuntimeException(sprintf(
                 'Route `%s` expects the URL option `_entity` to be an array or object implementing \ArrayAccess, '
                 . 'but `%s` passed.',
                 $this->template,
-                get_debug_type($entity),
+                getTypeName($entity)
             ));
         }
     }

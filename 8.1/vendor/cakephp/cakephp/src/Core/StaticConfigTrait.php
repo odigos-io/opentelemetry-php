@@ -32,9 +32,9 @@ trait StaticConfigTrait
     /**
      * Configuration sets.
      *
-     * @var array<string|int, array<string, mixed>>
+     * @var array<string, mixed>
      */
-    protected static array $_config = [];
+    protected static $_config = [];
 
     /**
      * This method can be used to define configuration adapters for an application.
@@ -73,24 +73,22 @@ trait StaticConfigTrait
      * @throws \LogicException When trying to store an invalid structured config array.
      * @return void
      */
-    public static function setConfig(array|string $key, mixed $config = null): void
+    public static function setConfig($key, $config = null): void
     {
         if ($config === null) {
             if (!is_array($key)) {
                 throw new LogicException('If config is null, key must be an array.');
             }
             foreach ($key as $name => $settings) {
-                static::setConfig((string)$name, $settings);
+                static::setConfig($name, $settings);
             }
 
             return;
         }
-        if (!is_string($key)) {
-            throw new LogicException('If config is not null, key must be a string.');
-        }
 
         if (isset(static::$_config[$key])) {
-            throw new BadMethodCallException(sprintf('Cannot reconfigure existing key `%s`.', $key));
+            /** @psalm-suppress PossiblyInvalidArgument */
+            throw new BadMethodCallException(sprintf('Cannot reconfigure existing key "%s"', $key));
         }
 
         if (is_object($config)) {
@@ -107,7 +105,7 @@ trait StaticConfigTrait
             $config['className'] = $config['engine'];
             unset($config['engine']);
         }
-
+        /** @psalm-suppress InvalidPropertyAssignmentValue */
         static::$_config[$key] = $config;
     }
 
@@ -117,7 +115,7 @@ trait StaticConfigTrait
      * @param string $key The name of the configuration.
      * @return mixed|null Configuration data at the named key or null if the key does not exist.
      */
-    public static function getConfig(string $key): mixed
+    public static function getConfig(string $key)
     {
         return static::$_config[$key] ?? null;
     }
@@ -131,7 +129,7 @@ trait StaticConfigTrait
      * @return mixed Configuration data at the named key.
      * @throws \InvalidArgumentException If value does not exist.
      */
-    public static function getConfigOrFail(string $key): mixed
+    public static function getConfigOrFail(string $key)
     {
         if (!isset(static::$_config[$key])) {
             throw new InvalidArgumentException(sprintf('Expected configuration `%s` not found.', $key));
@@ -157,7 +155,7 @@ trait StaticConfigTrait
         if (!isset(static::$_config[$config])) {
             return false;
         }
-        /** @phpstan-ignore-next-line */
+        /** @psalm-suppress RedundantPropertyInitializationCheck */
         if (isset(static::$_registry)) {
             static::$_registry->unload($config);
         }
@@ -199,7 +197,7 @@ trait StaticConfigTrait
      * $dsn = 'file:///?className=\My\Cache\Engine\FileEngine';
      * $config = Cache::parseDsn($dsn);
      *
-     * $dsn = 'File://?prefix=myapp_cake_translations_&serialize=true&duration=+2 minutes&path=/tmp/persistent/';
+     * $dsn = 'File://?prefix=myapp_cake_core_&serialize=true&duration=+2 minutes&path=/tmp/persistent/';
      * $config = Cache::parseDsn($dsn);
      * ```
      *
@@ -209,12 +207,12 @@ trait StaticConfigTrait
      * Note that querystring arguments are also parsed and set as values in the returned configuration.
      *
      * @param string $dsn The DSN string to convert to a configuration array
-     * @return array<int|string, array|bool|string|null> The configuration array to be stored after parsing the DSN
+     * @return array<string, mixed> The configuration array to be stored after parsing the DSN
      * @throws \InvalidArgumentException If not passed a string, or passed an invalid string
      */
     public static function parseDsn(string $dsn): array
     {
-        if (!$dsn) {
+        if (empty($dsn)) {
             return [];
         }
 
@@ -232,7 +230,7 @@ trait StaticConfigTrait
         @
     )?
     (?P<_host>
-        (?P<host>\[[^]]+]|[^?#/:@]+)
+        (?P<host>[^?#/:@]+)
         (?P<_port>
             :(?P<port>\d+)
         )?
@@ -253,17 +251,14 @@ REGEXP;
         preg_match($pattern, $dsn, $parsed);
 
         if (!$parsed) {
-            throw new InvalidArgumentException(sprintf('The DSN string `%s` could not be parsed.', $dsn));
+            throw new InvalidArgumentException("The DSN string '{$dsn}' could not be parsed.");
         }
 
         $exists = [];
-        /**
-         * @var string|int $k
-         */
         foreach ($parsed as $k => $v) {
             if (is_int($k)) {
                 unset($parsed[$k]);
-            } elseif (str_starts_with($k, '_')) {
+            } elseif (strpos($k, '_') === 0) {
                 $exists[substr($k, 1)] = ($v !== '');
                 unset($parsed[$k]);
             } elseif ($v === '' && !$exists[$k]) {
@@ -280,9 +275,6 @@ REGEXP;
 
         parse_str($query, $queryArgs);
 
-        /**
-         * @var string $key
-         */
         foreach ($queryArgs as $key => $value) {
             if ($value === 'true') {
                 $queryArgs[$key] = true;
@@ -298,11 +290,10 @@ REGEXP;
         if (empty($parsed['className'])) {
             $classMap = static::getDsnClassMap();
 
-            /** @var string $scheme */
-            $scheme = $parsed['scheme'];
-            $parsed['className'] = $scheme;
-            if (isset($classMap[$scheme])) {
-                $parsed['className'] = $classMap[$scheme];
+            $parsed['className'] = $parsed['scheme'];
+            if (isset($classMap[$parsed['scheme']])) {
+                /** @psalm-suppress PossiblyNullArrayOffset */
+                $parsed['className'] = $classMap[$parsed['scheme']];
             }
         }
 
@@ -314,7 +305,7 @@ REGEXP;
      *
      * @param array<string, string> $map Additions/edits to the class map to apply.
      * @return void
-     * @phpstan-param array<string, class-string> $map
+     * @psalm-param array<string, class-string> $map
      */
     public static function setDsnClassMap(array $map): void
     {
@@ -324,7 +315,8 @@ REGEXP;
     /**
      * Returns the DSN class map for this class.
      *
-     * @return array<string, class-string>
+     * @return array<string, string>
+     * @psalm-return array<string, class-string>
      */
     public static function getDsnClassMap(): array
     {

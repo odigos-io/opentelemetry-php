@@ -19,9 +19,8 @@ namespace Cake\Console;
 use Cake\Core\App;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
-use Cake\Utility\Filesystem;
+use Cake\Filesystem\Filesystem;
 use Cake\Utility\Inflector;
-use ReflectionClass;
 
 /**
  * Used by CommandCollection and CommandTask to scan the filesystem
@@ -38,12 +37,20 @@ class CommandScanner
      */
     public function scanCore(): array
     {
-        return $this->scanDir(
+        $coreShells = $this->scanDir(
+            dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Shell' . DIRECTORY_SEPARATOR,
+            'Cake\Shell\\',
+            '',
+            ['command_list']
+        );
+        $coreCommands = $this->scanDir(
             dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Command' . DIRECTORY_SEPARATOR,
             'Cake\Command\\',
             '',
-            ['command_list'],
+            ['command_list']
         );
+
+        return array_merge($coreShells, $coreCommands);
     }
 
     /**
@@ -54,13 +61,20 @@ class CommandScanner
     public function scanApp(): array
     {
         $appNamespace = Configure::read('App.namespace');
-
-        return $this->scanDir(
+        $appShells = $this->scanDir(
+            App::classPath('Shell')[0],
+            $appNamespace . '\Shell\\',
+            '',
+            []
+        );
+        $appCommands = $this->scanDir(
             App::classPath('Command')[0],
             $appNamespace . '\Command\\',
             '',
-            [],
+            []
         );
+
+        return array_merge($appShells, $appCommands);
     }
 
     /**
@@ -78,7 +92,10 @@ class CommandScanner
         $namespace = str_replace('/', '\\', $plugin);
         $prefix = Inflector::underscore($plugin) . '.';
 
-        return $this->scanDir($path . 'Command', $namespace . '\Command\\', $prefix, []);
+        $commands = $this->scanDir($path . 'Command', $namespace . '\Command\\', $prefix, []);
+        $shells = $this->scanDir($path . 'Shell', $namespace . '\Shell\\', $prefix, []);
+
+        return array_merge($shells, $commands);
     }
 
     /**
@@ -100,32 +117,32 @@ class CommandScanner
         // This ensures `Command` class is not added to the list.
         $hide[] = '';
 
-        $classPattern = '/Command\.php$/';
+        $classPattern = '/(Shell|Command)\.php$/';
         $fs = new Filesystem();
-        /** @var \Iterator<\SplFileInfo> $files */
+        /** @var array<\SplFileInfo> $files */
         $files = $fs->find($path, $classPattern);
 
-        $commands = [];
+        $shells = [];
         foreach ($files as $fileInfo) {
             $file = $fileInfo->getFilename();
 
-            $name = Inflector::underscore((string)preg_replace($classPattern, '', $file));
+            $name = Inflector::underscore(preg_replace($classPattern, '', $file));
             if (in_array($name, $hide, true)) {
                 continue;
             }
 
             $class = $namespace . $fileInfo->getBasename('.php');
-            if (!is_subclass_of($class, CommandInterface::class)) {
-                continue;
-            }
-            $reflection = new ReflectionClass($class);
-            if ($reflection->isAbstract()) {
+            /** @psalm-suppress DeprecatedClass */
+            if (
+                !is_subclass_of($class, Shell::class)
+                && !is_subclass_of($class, CommandInterface::class)
+            ) {
                 continue;
             }
             if (is_subclass_of($class, BaseCommand::class)) {
                 $name = $class::defaultName();
             }
-            $commands[$path . $file] = [
+            $shells[$path . $file] = [
                 'file' => $path . $file,
                 'fullName' => $prefix . $name,
                 'name' => $name,
@@ -133,8 +150,8 @@ class CommandScanner
             ];
         }
 
-        ksort($commands);
+        ksort($shells);
 
-        return array_values($commands);
+        return array_values($shells);
     }
 }

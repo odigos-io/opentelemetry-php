@@ -29,17 +29,17 @@ class MailContainsAttachment extends MailContains
      * @param mixed $other Constraint check
      * @return bool
      */
-    public function matches(mixed $other): bool
+    public function matches($other): bool
     {
         [$expectedFilename, $expectedFileInfo] = $other;
 
         $messages = $this->getMessages();
         foreach ($messages as $message) {
             foreach ($message->getAttachments() as $filename => $fileInfo) {
-                if ($filename === $expectedFilename && !$expectedFileInfo) {
+                if ($filename === $expectedFilename && empty($expectedFileInfo)) {
                     return true;
                 }
-                if ($expectedFileInfo && array_intersect($expectedFileInfo, $fileInfo) === $expectedFileInfo) {
+                if (!empty($expectedFileInfo) && array_intersect($expectedFileInfo, $fileInfo) === $expectedFileInfo) {
                     return true;
                 }
             }
@@ -68,10 +68,10 @@ class MailContainsAttachment extends MailContains
      * @param mixed $other Value
      * @return string
      */
-    protected function failureDescription(mixed $other): string
+    protected function failureDescription($other): string
     {
         [$expectedFilename] = $other;
 
-        return "'" . $expectedFilename . "' " . $this->toString();
+        return '\'' . $expectedFilename . '\' ' . $this->toString();
     }
 }

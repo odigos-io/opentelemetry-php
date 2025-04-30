@@ -30,14 +30,14 @@ trait LocatorAwareTrait
      *
      * @var string|null
      */
-    protected ?string $defaultTable = null;
+    protected $defaultTable = null;
 
     /**
      * Table locator instance
      *
      * @var \Cake\ORM\Locator\LocatorInterface|null
      */
-    protected ?LocatorInterface $_tableLocator = null;
+    protected $_tableLocator;
 
     /**
      * Sets the table locator.
@@ -59,17 +59,13 @@ trait LocatorAwareTrait
      */
     public function getTableLocator(): LocatorInterface
     {
-        if ($this->_tableLocator !== null) {
-            return $this->_tableLocator;
+        if ($this->_tableLocator === null) {
+            /** @psalm-suppress InvalidPropertyAssignmentValue */
+            $this->_tableLocator = FactoryLocator::get('Table');
         }
 
-        $locator = FactoryLocator::get('Table');
-        assert(
-            $locator instanceof LocatorInterface,
-            '`FactoryLocator` must return an instance of Cake\ORM\LocatorInterface for type `Table`.',
-        );
-
-        return $this->_tableLocator = $locator;
+        /** @var \Cake\ORM\Locator\LocatorInterface */
+        return $this->_tableLocator;
     }
 
     /**
@@ -86,10 +82,10 @@ trait LocatorAwareTrait
      */
     public function fetchTable(?string $alias = null, array $options = []): Table
     {
-        $alias ??= $this->defaultTable;
-        if (!$alias) {
+        $alias = $alias ?? $this->defaultTable;
+        if (empty($alias)) {
             throw new UnexpectedValueException(
-                'You must provide an `$alias` or set the `$defaultTable` property to a non empty string.',
+                'You must provide an `$alias` or set the `$defaultTable` property to a non empty string.'
             );
         }
 

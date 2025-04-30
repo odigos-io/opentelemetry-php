@@ -19,7 +19,6 @@ use Cake\Http\Client;
 use Cake\Http\Client\Request;
 use Cake\Http\HeaderUtility;
 use Cake\Utility\Hash;
-use InvalidArgumentException;
 
 /**
  * Digest authentication adapter for Cake\Http\Client
@@ -61,28 +60,28 @@ class Digest
      *
      * @var \Cake\Http\Client
      */
-    protected Client $_client;
+    protected $_client;
 
     /**
      * Algorithm
      *
      * @var string
      */
-    protected string $algorithm;
+    protected $algorithm;
 
     /**
      * Hash type
      *
      * @var string
      */
-    protected string $hashType;
+    protected $hashType;
 
     /**
      * Is Sess algorithm
      *
      * @var bool
      */
-    protected bool $isSessAlgorithm = false;
+    protected $isSessAlgorithm;
 
     /**
      * Constructor
@@ -105,11 +104,11 @@ class Digest
     {
         $algorithm = $credentials['algorithm'] ?? self::ALGO_MD5;
         if (!isset(self::HASH_ALGORITHMS[$algorithm])) {
-            throw new InvalidArgumentException('Invalid Algorithm. Valid ones are: ' .
+            throw new \InvalidArgumentException('Invalid Algorithm. Valid ones are: ' .
                 implode(',', array_keys(self::HASH_ALGORITHMS)));
         }
         $this->algorithm = $algorithm;
-        $this->isSessAlgorithm = str_contains($this->algorithm, '-sess');
+        $this->isSessAlgorithm = strpos($this->algorithm, '-sess') !== false;
         $this->hashType = Hash::get(self::HASH_ALGORITHMS, $this->algorithm);
     }
 
@@ -155,7 +154,7 @@ class Digest
         $response = $this->_client->get(
             (string)$request->getUri(),
             [],
-            ['auth' => ['type' => null]],
+            ['auth' => ['type' => null]]
         );
 
         $header = $response->getHeader('WWW-Authenticate');
@@ -208,7 +207,7 @@ class Digest
             $response = hash($this->hashType, $ha1 . ':' . $credentials['nonce'] . ':' . $ha2);
         } else {
             if (!in_array($credentials['qop'], [self::QOP_AUTH, self::QOP_AUTH_INT])) {
-                throw new InvalidArgumentException('Invalid QOP parameter. Valid types are: ' .
+                throw new \InvalidArgumentException('Invalid QOP parameter. Valid types are: ' .
                     implode(',', [self::QOP_AUTH, self::QOP_AUTH_INT]));
             }
             if ($credentials['qop'] === self::QOP_AUTH_INT) {
@@ -221,7 +220,7 @@ class Digest
             $response = hash(
                 $this->hashType,
                 $ha1 . ':' . $credentials['nonce'] . ':' . $nc . ':' .
-                $credentials['cnonce'] . ':' . $credentials['qop'] . ':' . $ha2,
+                $credentials['cnonce'] . ':' . $credentials['qop'] . ':' . $ha2
             );
         }
 

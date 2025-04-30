@@ -50,7 +50,8 @@ class UploadedFile implements UploadedFileInterface
 
     private bool $moved = false;
 
-    private ?StreamInterface $stream = null;
+    /** @var null|StreamInterface */
+    private $stream;
 
     /**
      * @param string|resource|StreamInterface $streamOrFile
@@ -58,7 +59,7 @@ class UploadedFile implements UploadedFileInterface
      */
     public function __construct(
         $streamOrFile,
-        private ?int $size,
+        private int $size,
         int $errorStatus,
         private ?string $clientFilename = null,
         private ?string $clientMediaType = null
@@ -71,7 +72,7 @@ class UploadedFile implements UploadedFileInterface
                 $this->stream = new Stream($streamOrFile);
             }
 
-            if ($this->file === null && $this->stream === null) {
+            if (! $this->file && ! $this->stream) {
                 if (! $streamOrFile instanceof StreamInterface) {
                     throw new Exception\InvalidArgumentException('Invalid stream or file provided for UploadedFile');
                 }
@@ -124,7 +125,7 @@ class UploadedFile implements UploadedFileInterface
      * @throws Exception\UploadedFileErrorException On any error during the
      *     move operation, or on the second or subsequent call to the method.
      */
-    public function moveTo(string $targetPath): void
+    public function moveTo($targetPath): void
     {
         if ($this->moved) {
             throw new Exception\UploadedFileAlreadyMovedException('Cannot move file; already moved!');
@@ -136,7 +137,7 @@ class UploadedFile implements UploadedFileInterface
             );
         }
 
-        if (empty($targetPath)) {
+        if (! is_string($targetPath) || empty($targetPath)) {
             throw new Exception\InvalidArgumentException(
                 'Invalid path provided for move operation; must be a non-empty string'
             );
@@ -149,10 +150,7 @@ class UploadedFile implements UploadedFileInterface
 
         $sapi = PHP_SAPI;
         switch (true) {
-            case empty($sapi)
-                || str_starts_with($sapi, 'cli')
-                || str_starts_with($sapi, 'phpdbg')
-                || $this->file === null:
+            case empty($sapi) || str_starts_with($sapi, 'cli') || str_starts_with($sapi, 'phpdbg') || ! $this->file:
                 // Non-SAPI environment, or no filename present
                 $this->writeFile($targetPath);
 

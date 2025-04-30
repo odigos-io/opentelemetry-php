@@ -19,10 +19,9 @@ namespace Cake\Routing;
 use Cake\Routing\Exception\DuplicateNamedRouteException;
 use Cake\Routing\Exception\MissingRouteException;
 use Cake\Routing\Route\Route;
-use Closure;
-use InvalidArgumentException;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Server\MiddlewareInterface;
+use RuntimeException;
+use function Cake\Core\deprecationWarning;
 
 /**
  * Contains a collection of routes.
@@ -39,49 +38,49 @@ class RouteCollection
      *
      * @var array<string, array<\Cake\Routing\Route\Route>>
      */
-    protected array $_routeTable = [];
+    protected $_routeTable = [];
 
     /**
      * The hash map of named routes that are in this collection.
      *
      * @var array<\Cake\Routing\Route\Route>
      */
-    protected array $_named = [];
+    protected $_named = [];
 
     /**
      * Routes indexed by static path.
      *
      * @var array<string, array<\Cake\Routing\Route\Route>>
      */
-    protected array $staticPaths = [];
+    protected $staticPaths = [];
 
     /**
      * Routes indexed by path prefix.
      *
      * @var array<string, array<\Cake\Routing\Route\Route>>
      */
-    protected array $_paths = [];
+    protected $_paths = [];
 
     /**
      * A map of middleware names and the related objects.
      *
      * @var array
      */
-    protected array $_middleware = [];
+    protected $_middleware = [];
 
     /**
      * A map of middleware group names and the related middleware names.
      *
      * @var array
      */
-    protected array $_middlewareGroups = [];
+    protected $_middlewareGroups = [];
 
     /**
      * Route extensions
      *
      * @var array<string>
      */
-    protected array $_extensions = [];
+    protected $_extensions = [];
 
     /**
      * Add a route to the collection.
@@ -108,14 +107,14 @@ class RouteCollection
 
         // Generated names.
         $name = $route->getName();
-        $this->_routeTable[$name] ??= [];
+        $this->_routeTable[$name] = $this->_routeTable[$name] ?? [];
         $this->_routeTable[$name][] = $route;
 
         // Index path prefixes (for parsing)
         $path = $route->staticPath();
 
         $extensions = $route->getExtensions();
-        if ($extensions !== []) {
+        if (count($extensions) > 0) {
             $this->setExtensions($extensions);
         }
 
@@ -124,6 +123,75 @@ class RouteCollection
         }
 
         $this->_paths[$path][] = $route;
+    }
+
+    /**
+     * Takes the URL string and iterates the routes until one is able to parse the route.
+     *
+     * @param string $url URL to parse.
+     * @param string $method The HTTP method to use.
+     * @return array An array of request parameters parsed from the URL.
+     * @throws \Cake\Routing\Exception\MissingRouteException When a URL has no matching route.
+     * @deprecated 4.5.0 Use parseRequest() instead.
+     */
+    public function parse(string $url, string $method = ''): array
+    {
+        deprecationWarning('4.5.0 - Use parseRequest() instead.');
+        $queryParameters = [];
+        if (strpos($url, '?') !== false) {
+            [$url, $qs] = explode('?', $url, 2);
+            parse_str($qs, $queryParameters);
+        }
+
+        $decoded = urldecode($url);
+        if ($decoded !== '/') {
+            $decoded = rtrim($decoded, '/');
+        }
+
+        if (isset($this->staticPaths[$decoded])) {
+            foreach ($this->staticPaths[$decoded] as $route) {
+                $r = $route->parse($url, $method);
+                if ($r === null) {
+                    continue;
+                }
+
+                if ($queryParameters) {
+                    $r['?'] = $queryParameters;
+                }
+
+                return $r;
+            }
+        }
+
+        // Sort path segments matching longest paths first.
+        krsort($this->_paths);
+
+        foreach ($this->_paths as $path => $routes) {
+            if (strpos($decoded, $path) !== 0) {
+                continue;
+            }
+
+            foreach ($routes as $route) {
+                $r = $route->parse($url, $method);
+                if ($r === null) {
+                    continue;
+                }
+                if ($queryParameters) {
+                    $r['?'] = $queryParameters;
+                }
+
+                return $r;
+            }
+        }
+
+        $exceptionProperties = ['url' => $url];
+        if ($method !== '') {
+            // Ensure that if the method is included, it is the first element of
+            // the array, to match the order that the strings are printed in the
+            // MissingRouteException error message, $_messageTemplateWithMethod.
+            $exceptionProperties = array_merge(['method' => $method], $exceptionProperties);
+        }
+        throw new MissingRouteException($exceptionProperties);
     }
 
     /**
@@ -141,8 +209,8 @@ class RouteCollection
             // decode urlencoded segments, but don't decode %2f aka /
             $parts = explode('/', $urlPath);
             $parts = array_map(
-                fn(string $part) => str_replace('/', '%2f', urldecode($part)),
-                $parts,
+                fn (string $part) => str_replace('/', '%2f', urldecode($part)),
+                $parts
             );
             $urlPath = implode('/', $parts);
         }
@@ -168,7 +236,7 @@ class RouteCollection
         krsort($this->_paths);
 
         foreach ($this->_paths as $path => $routes) {
-            if (!str_starts_with($urlPath, $path)) {
+            if (strpos($urlPath, $path) !== 0) {
                 continue;
             }
 
@@ -331,7 +399,7 @@ class RouteCollection
         return array_reduce(
             $this->_paths,
             'array_merge',
-            [],
+            []
         );
     }
 
@@ -368,7 +436,7 @@ class RouteCollection
         if ($merge) {
             $extensions = array_unique(array_merge(
                 $this->_extensions,
-                $extensions,
+                $extensions
             ));
         }
         $this->_extensions = $extensions;
@@ -385,8 +453,9 @@ class RouteCollection
      * @param string $name The name of the middleware. Used when applying middleware to a scope.
      * @param \Psr\Http\Server\MiddlewareInterface|\Closure|string $middleware The middleware to register.
      * @return $this
+     * @throws \RuntimeException
      */
-    public function registerMiddleware(string $name, MiddlewareInterface|Closure|string $middleware)
+    public function registerMiddleware(string $name, $middleware)
     {
         $this->_middleware[$name] = $middleware;
 
@@ -399,19 +468,19 @@ class RouteCollection
      * @param string $name Name of the middleware group
      * @param array<string> $middlewareNames Names of the middleware
      * @return $this
-     * @throws \InvalidArgumentException
+     * @throws \RuntimeException
      */
     public function middlewareGroup(string $name, array $middlewareNames)
     {
         if ($this->hasMiddleware($name)) {
-            $message = "Cannot add middleware group '{$name}'. A middleware by this name has already been registered.";
-            throw new InvalidArgumentException($message);
+            $message = "Cannot add middleware group '$name'. A middleware by this name has already been registered.";
+            throw new RuntimeException($message);
         }
 
         foreach ($middlewareNames as $middlewareName) {
             if (!$this->hasMiddleware($middlewareName)) {
-                $message = "Cannot add '{$middlewareName}' middleware to group '{$name}'. It has not been registered.";
-                throw new InvalidArgumentException($message);
+                $message = "Cannot add '$middlewareName' middleware to group '$name'. It has not been registered.";
+                throw new RuntimeException($message);
             }
         }
 
@@ -459,7 +528,7 @@ class RouteCollection
      * @param array<string> $names The names of the middleware or groups to fetch
      * @return array An array of middleware. If any of the passed names are groups,
      *   the groups middleware will be flattened into the returned list.
-     * @throws \InvalidArgumentException when a requested middleware does not exist.
+     * @throws \RuntimeException when a requested middleware does not exist.
      */
     public function getMiddleware(array $names): array
     {
@@ -470,9 +539,9 @@ class RouteCollection
                 continue;
             }
             if (!$this->hasMiddleware($name)) {
-                throw new InvalidArgumentException(sprintf(
-                    'The middleware named `%s` has not been registered. Use registerMiddleware() to define it.',
-                    $name,
+                throw new RuntimeException(sprintf(
+                    "The middleware named '%s' has not been registered. Use registerMiddleware() to define it.",
+                    $name
                 ));
             }
             $out[] = $this->_middleware[$name];

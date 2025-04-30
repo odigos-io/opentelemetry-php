@@ -38,24 +38,16 @@ class CacheClearGroupCommand extends Command
     }
 
     /**
-     * @inheritDoc
-     */
-    public static function getDescription(): string
-    {
-        return 'Clear all data in a single cache group.';
-    }
-
-    /**
      * Hook method for defining this command's option parser.
      *
-     * @see https://book.cakephp.org/5/en/console-commands/option-parsers.html
+     * @see https://book.cakephp.org/4/en/console-commands/option-parsers.html
      * @param \Cake\Console\ConsoleOptionParser $parser The parser to be defined
      * @return \Cake\Console\ConsoleOptionParser The built parser.
      */
     public function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
     {
         $parser = parent::buildOptionParser($parser);
-        $parser->setDescription(static::getDescription());
+        $parser->setDescription('Clear all data in a single cache group.');
         $parser->addArgument('group', [
             'help' => 'The cache group to clear. For example, `cake cache clear_group mygroup` will clear ' .
                 'all cache items belonging to group "mygroup".',
@@ -80,7 +72,7 @@ class CacheClearGroupCommand extends Command
         $group = (string)$args->getArgument('group');
         try {
             $groupConfigs = Cache::groupConfigs($group);
-        } catch (InvalidArgumentException) {
+        } catch (InvalidArgumentException $e) {
             $io->error(sprintf('Cache group "%s" not found', $group));
 
             return static::CODE_ERROR;
@@ -102,7 +94,7 @@ class CacheClearGroupCommand extends Command
                 $io->error(sprintf(
                     'Error encountered clearing group "%s". Was unable to clear entries for "%s".',
                     $group,
-                    $groupConfig,
+                    $groupConfig
                 ));
                 $this->abort();
             } else {

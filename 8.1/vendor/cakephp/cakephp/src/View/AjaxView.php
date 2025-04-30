@@ -26,7 +26,7 @@ class AjaxView extends View
     /**
      * @inheritDoc
      */
-    protected string $layout = 'ajax';
+    protected $layout = 'ajax';
 
     /**
      * Get content type for this view.

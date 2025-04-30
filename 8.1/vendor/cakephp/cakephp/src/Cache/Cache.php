@@ -20,9 +20,8 @@ use Cake\Cache\Engine\NullEngine;
 use Cake\Cache\Exception\CacheWriteException;
 use Cake\Cache\Exception\InvalidArgumentException;
 use Cake\Core\StaticConfigTrait;
-use Closure;
-use Psr\SimpleCache\CacheInterface;
 use RuntimeException;
+use function Cake\Core\deprecationWarning;
 
 /**
  * Cache provides a consistent interface to Caching in your application. It allows you
@@ -59,6 +58,8 @@ use RuntimeException;
  * - `MemcacheEngine` - Uses the PECL::Memcache extension and Memcached for storage.
  *    Fast reads/writes, and benefits from memcache being distributed.
  * - `RedisEngine` - Uses redis and php-redis extension to store cache data.
+ * - `WincacheEngine` - Uses Windows Cache Extension for PHP. Supports wincache 1.1.0 and higher.
+ *    This engine is recommended to people deploying on windows with IIS.
  * - `XcacheEngine` - Uses the Xcache extension, an alternative to APCu.
  *
  * See Cache engine documentation for expected configuration keys.
@@ -74,15 +75,16 @@ class Cache
      * class names.
      *
      * @var array<string, string>
-     * @phpstan-var array<string, class-string>
+     * @psalm-var array<string, class-string>
      */
-    protected static array $_dsnClassMap = [
+    protected static $_dsnClassMap = [
         'array' => Engine\ArrayEngine::class,
         'apcu' => Engine\ApcuEngine::class,
         'file' => Engine\FileEngine::class,
         'memcached' => Engine\MemcachedEngine::class,
         'null' => Engine\NullEngine::class,
         'redis' => Engine\RedisEngine::class,
+        'wincache' => Engine\WincacheEngine::class,
     ];
 
     /**
@@ -90,21 +92,21 @@ class Cache
      *
      * @var bool
      */
-    protected static bool $_enabled = true;
+    protected static $_enabled = true;
 
     /**
      * Group to Config mapping
      *
      * @var array<string, array>
      */
-    protected static array $_groups = [];
+    protected static $_groups = [];
 
     /**
      * Cache Registry used for creating and using cache adapters.
      *
-     * @var \Cake\Cache\CacheRegistry
+     * @var \Cake\Cache\CacheRegistry|null
      */
-    protected static CacheRegistry $_registry;
+    protected static $_registry;
 
     /**
      * Returns the Cache Registry instance used for creating and using cache adapters.
@@ -113,7 +115,11 @@ class Cache
      */
     public static function getRegistry(): CacheRegistry
     {
-        return static::$_registry ??= new CacheRegistry();
+        if (static::$_registry === null) {
+            static::$_registry = new CacheRegistry();
+        }
+
+        return static::$_registry;
     }
 
     /**
@@ -143,10 +149,11 @@ class Cache
 
         if (empty(static::$_config[$name]['className'])) {
             throw new InvalidArgumentException(
-                sprintf('The `%s` cache configuration does not exist.', $name),
+                sprintf('The "%s" cache configuration does not exist.', $name)
             );
         }
 
+        /** @var array $config */
         $config = static::$_config[$name];
 
         try {
@@ -165,14 +172,13 @@ class Cache
 
             if ($config['fallback'] === $name) {
                 throw new InvalidArgumentException(sprintf(
-                    '`%s` cache configuration cannot fallback to itself.',
-                    $name,
+                    '"%s" cache configuration cannot fallback to itself.',
+                    $name
                 ), 0, $e);
             }
 
+            /** @var \Cake\Cache\CacheEngine $fallbackEngine */
             $fallbackEngine = clone static::pool($config['fallback']);
-            assert($fallbackEngine instanceof CacheEngine);
-
             $newConfig = $config + ['groups' => [], 'prefix' => null];
             $fallbackEngine->setConfig('groups', $newConfig['groups'], false);
             if ($newConfig['prefix']) {
@@ -186,7 +192,6 @@ class Cache
         }
 
         if (!empty($config['groups'])) {
-            /** @var string $group */
             foreach ($config['groups'] as $group) {
                 static::$_groups[$group][] = $name;
                 static::$_groups[$group] = array_unique(static::$_groups[$group]);
@@ -196,12 +201,26 @@ class Cache
     }
 
     /**
+     * Get a cache engine object for the named cache config.
+     *
+     * @param string $config The name of the configured cache backend.
+     * @return \Psr\SimpleCache\CacheInterface&\Cake\Cache\CacheEngineInterface
+     * @deprecated 3.7.0 Use {@link pool()} instead. This method will be removed in 5.0.
+     */
+    public static function engine(string $config)
+    {
+        deprecationWarning('Cache::engine() is deprecated. Use Cache::pool() instead.');
+
+        return static::pool($config);
+    }
+
+    /**
      * Get a SimpleCacheEngine object for the named cache pool.
      *
      * @param string $config The name of the configured cache backend.
      * @return \Psr\SimpleCache\CacheInterface&\Cake\Cache\CacheEngineInterface
      */
-    public static function pool(string $config): CacheInterface&CacheEngineInterface
+    public static function pool(string $config)
     {
         if (!static::$_enabled) {
             return new NullEngine();
@@ -240,7 +259,7 @@ class Cache
      * @param string $config Optional string configuration name to write to. Defaults to 'default'
      * @return bool True if the data was successfully cached, false on failure
      */
-    public static function write(string $key, mixed $value, string $config = 'default'): bool
+    public static function write(string $key, $value, string $config = 'default'): bool
     {
         if (is_resource($value)) {
             return false;
@@ -253,7 +272,7 @@ class Cache
                 "%s cache was unable to write '%s' to %s cache",
                 $config,
                 $key,
-                $backend::class,
+                get_class($backend)
             ));
         }
 
@@ -309,7 +328,7 @@ class Cache
      * @return mixed The cached data, or null if the data doesn't exist, has expired,
      *  or if there was an error fetching it.
      */
-    public static function read(string $key, string $config = 'default'): mixed
+    public static function read(string $key, string $config = 'default')
     {
         return static::pool($config)->get($key);
     }
@@ -352,10 +371,10 @@ class Cache
      *    or if there was an error fetching it.
      * @throws \Cake\Cache\Exception\InvalidArgumentException When offset < 0
      */
-    public static function increment(string $key, int $offset = 1, string $config = 'default'): int|false
+    public static function increment(string $key, int $offset = 1, string $config = 'default')
     {
         if ($offset < 0) {
-            throw new InvalidArgumentException('Offset cannot be less than `0`.');
+            throw new InvalidArgumentException('Offset cannot be less than 0.');
         }
 
         return static::pool($config)->increment($key, $offset);
@@ -371,10 +390,10 @@ class Cache
      *   or if there was an error fetching it
      * @throws \Cake\Cache\Exception\InvalidArgumentException when offset < 0
      */
-    public static function decrement(string $key, int $offset = 1, string $config = 'default'): int|false
+    public static function decrement(string $key, int $offset = 1, string $config = 'default')
     {
         if ($offset < 0) {
-            throw new InvalidArgumentException('Offset cannot be less than `0`.');
+            throw new InvalidArgumentException('Offset cannot be less than 0.');
         }
 
         return static::pool($config)->decrement($key, $offset);
@@ -501,7 +520,7 @@ class Cache
             return [$group => self::$_groups[$group]];
         }
 
-        throw new InvalidArgumentException(sprintf('Invalid cache group `%s`.', $group));
+        throw new InvalidArgumentException(sprintf('Invalid cache group %s', $group));
     }
 
     /**
@@ -541,8 +560,8 @@ class Cache
     /**
      * Provides the ability to easily do read-through caching.
      *
-     * If the key is not set, the default callback is run to get the default value.
-     * The results will then be stored into the cache config
+     * When called if the $key is not set in $config, the $callable function
+     * will be invoked. The results will then be stored into the cache config
      * at key.
      *
      * Examples:
@@ -556,20 +575,20 @@ class Cache
      * ```
      *
      * @param string $key The cache key to read/store data at.
-     * @param \Closure $default The callback that provides data in the case when
-     *   the cache key is empty.
+     * @param callable $callable The callable that provides data in the case when
+     *   the cache key is empty. Can be any callable type supported by your PHP.
      * @param string $config The cache configuration to use for this operation.
      *   Defaults to default.
      * @return mixed If the key is found: the cached data.
-     *   If the key is not found the value returned by the the default callback.
+     *   If the key is not found the value returned by the callable.
      */
-    public static function remember(string $key, Closure $default, string $config = 'default'): mixed
+    public static function remember(string $key, callable $callable, string $config = 'default')
     {
         $existing = self::read($key, $config);
         if ($existing !== null) {
             return $existing;
         }
-        $results = $default();
+        $results = $callable();
         self::write($key, $results, $config);
 
         return $results;
@@ -598,7 +617,7 @@ class Cache
      * @return bool True if the data was successfully cached, false on failure.
      *   Or if the key existed already.
      */
-    public static function add(string $key, mixed $value, string $config = 'default'): bool
+    public static function add(string $key, $value, string $config = 'default'): bool
     {
         if (is_resource($value)) {
             return false;

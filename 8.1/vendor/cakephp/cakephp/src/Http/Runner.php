@@ -33,14 +33,14 @@ class Runner implements RequestHandlerInterface
      *
      * @var \Cake\Http\MiddlewareQueue
      */
-    protected MiddlewareQueue $queue;
+    protected $queue;
 
     /**
      * Fallback handler to use if middleware queue does not generate response.
      *
      * @var \Psr\Http\Server\RequestHandlerInterface|null
      */
-    protected ?RequestHandlerInterface $fallbackHandler = null;
+    protected $fallbackHandler;
 
     /**
      * @param \Cake\Http\MiddlewareQueue $queue The middleware queue
@@ -51,11 +51,18 @@ class Runner implements RequestHandlerInterface
     public function run(
         MiddlewareQueue $queue,
         ServerRequestInterface $request,
-        ?RequestHandlerInterface $fallbackHandler = null,
+        ?RequestHandlerInterface $fallbackHandler = null
     ): ResponseInterface {
         $this->queue = $queue;
         $this->queue->rewind();
         $this->fallbackHandler = $fallbackHandler;
+
+        if (
+            $fallbackHandler instanceof RoutingApplicationInterface &&
+            $request instanceof ServerRequest
+        ) {
+            Router::setRequest($request);
+        }
 
         return $this->handle($request);
     }
@@ -68,13 +75,6 @@ class Runner implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        if (
-            $this->fallbackHandler instanceof RoutingApplicationInterface &&
-            $request instanceof ServerRequest
-        ) {
-            Router::setRequest($request);
-        }
-
         if ($this->queue->valid()) {
             $middleware = $this->queue->current();
             $this->queue->next();

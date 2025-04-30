@@ -24,7 +24,7 @@ class ForbiddenException extends HttpException
     /**
      * @inheritDoc
      */
-    protected int $_defaultCode = 403;
+    protected $_defaultCode = 403;
 
     /**
      * Constructor
@@ -35,7 +35,7 @@ class ForbiddenException extends HttpException
      */
     public function __construct(?string $message = null, ?int $code = null, ?Throwable $previous = null)
     {
-        if (!$message) {
+        if (empty($message)) {
             $message = 'Forbidden';
         }
         parent::__construct($message, $code, $previous);

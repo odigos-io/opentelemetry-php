@@ -30,7 +30,7 @@ class InternalErrorException extends HttpException
      */
     public function __construct(?string $message = null, ?int $code = null, ?Throwable $previous = null)
     {
-        if (!$message) {
+        if (empty($message)) {
             $message = 'Internal Server Error';
         }
         parent::__construct($message, $code, $previous);

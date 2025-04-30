@@ -38,20 +38,7 @@ class StubConsoleOutput extends ConsoleOutput
      *
      * @var array<string>
      */
-    protected array $_out = [];
-
-    /**
-     * Constructor
-     *
-     * Closes and unsets the file handle created in the parent constructor to
-     * prevent 'too many open files' errors.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-        fclose($this->_output);
-        unset($this->_output);
-    }
+    protected $_out = [];
 
     /**
      * Write output to the buffer.
@@ -60,7 +47,7 @@ class StubConsoleOutput extends ConsoleOutput
      * @param int $newlines Number of newlines to append
      * @return int
      */
-    public function write(array|string $message, int $newlines = 1): int
+    public function write($message, int $newlines = 1): int
     {
         foreach ((array)$message as $line) {
             $this->_out[] = $line;
@@ -83,16 +70,6 @@ class StubConsoleOutput extends ConsoleOutput
     public function messages(): array
     {
         return $this->_out;
-    }
-
-    /**
-     * Clear buffered output
-     *
-     * @return void
-     */
-    public function clear(): void
-    {
-        $this->_out = [];
     }
 
     /**

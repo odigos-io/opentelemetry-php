@@ -34,7 +34,7 @@ class RedirectRoute extends Route
      *
      * @var array
      */
-    public array $redirect;
+    public $redirect;
 
     /**
      * Constructor

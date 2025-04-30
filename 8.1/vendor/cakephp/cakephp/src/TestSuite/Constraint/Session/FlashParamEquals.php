@@ -30,22 +30,22 @@ class FlashParamEquals extends Constraint
     /**
      * @var \Cake\Http\Session
      */
-    protected Session $session;
+    protected $session;
 
     /**
      * @var string
      */
-    protected string $key;
+    protected $key;
 
     /**
      * @var string
      */
-    protected string $param;
+    protected $param;
 
     /**
      * @var int|null
      */
-    protected ?int $at = null;
+    protected $at;
 
     /**
      * Constructor
@@ -75,13 +75,15 @@ class FlashParamEquals extends Constraint
      * @param mixed $other Value to compare with
      * @return bool
      */
-    public function matches(mixed $other): bool
+    public function matches($other): bool
     {
         // Server::run calls Session::close at the end of the request.
         // Which means, that we cannot use Session object here to access the session data.
         // Call to Session::read will start new session (and will erase the data).
+        /** @psalm-suppress InvalidScalarArgument */
         $messages = (array)Hash::get($_SESSION, 'Flash.' . $this->key);
         if ($this->at) {
+            /** @psalm-suppress InvalidScalarArgument */
             $messages = [Hash::get($_SESSION, 'Flash.' . $this->key . '.' . $this->at)];
         }
 
@@ -105,9 +107,9 @@ class FlashParamEquals extends Constraint
     public function toString(): string
     {
         if ($this->at !== null) {
-            return sprintf("is in '%s' %s #%d", $this->key, $this->param, $this->at);
+            return sprintf('is in \'%s\' %s #%d', $this->key, $this->param, $this->at);
         }
 
-        return sprintf("is in '%s' %s", $this->key, $this->param);
+        return sprintf('is in \'%s\' %s', $this->key, $this->param);
     }
 }

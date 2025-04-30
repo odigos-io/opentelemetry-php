@@ -20,75 +20,118 @@ use Cake\Database\Type\BatchCastingInterface;
 use Cake\Database\Type\OptionalConvertInterface;
 
 /**
- * An invokable class to be used for processing each of the rows in a statement
+ * A callable class to be used for processing each of the rows in a statement
  * result, so that the values are converted to the right PHP types.
- *
- * @internal
  */
 class FieldTypeConverter
 {
     /**
-     * @var \Cake\Database\Driver
+     * An array containing the name of the fields and the Type objects
+     * each should use when converting them.
+     *
+     * @var array<\Cake\Database\TypeInterface>
      */
-    protected Driver $driver;
+    protected $_typeMap;
 
     /**
-     * Maps type names to conversion settings.
+     * An array containing the name of the fields and the Type objects
+     * each should use when converting them using batching.
      *
-     * @var array
+     * @var array<string, array>
      */
-    protected array $conversions = [];
+    protected $batchingTypeMap;
+
+    /**
+     * An array containing all the types registered in the Type system
+     * at the moment this object is created. Used so that the types list
+     * is not fetched on each single row of the results.
+     *
+     * @var array<\Cake\Database\TypeInterface|\Cake\Database\Type\BatchCastingInterface>
+     */
+    protected $types;
+
+    /**
+     * The driver object to be used in the type conversion
+     *
+     * @var \Cake\Database\DriverInterface
+     */
+    protected $_driver;
 
     /**
      * Builds the type map
      *
      * @param \Cake\Database\TypeMap $typeMap Contains the types to use for converting results
-     * @param \Cake\Database\Driver $driver The driver to use for the type conversion
+     * @param \Cake\Database\DriverInterface $driver The driver to use for the type conversion
      */
-    public function __construct(TypeMap $typeMap, Driver $driver)
+    public function __construct(TypeMap $typeMap, DriverInterface $driver)
     {
-        $this->driver = $driver;
-
+        $this->_driver = $driver;
+        $map = $typeMap->toArray();
         $types = TypeFactory::buildAll();
-        foreach ($typeMap->toArray() as $field => $typeName) {
-            $type = $types[$typeName] ?? null;
-            if (!$type || ($type instanceof OptionalConvertInterface && !$type->requiresToPhpCast())) {
+
+        $simpleMap = $batchingMap = [];
+        $simpleResult = $batchingResult = [];
+
+        foreach ($types as $k => $type) {
+            if ($type instanceof OptionalConvertInterface && !$type->requiresToPhpCast()) {
                 continue;
             }
 
-            $this->conversions[$typeName] ??= [
-                'type' => $type,
-                'hasBatch' => $type instanceof BatchCastingInterface,
-                'fields' => [],
-            ];
-            $this->conversions[$typeName]['fields'][] = $field;
+            if ($type instanceof BatchCastingInterface) {
+                $batchingMap[$k] = $type;
+                continue;
+            }
+
+            $simpleMap[$k] = $type;
         }
+
+        foreach ($map as $field => $type) {
+            if (isset($simpleMap[$type])) {
+                $simpleResult[$field] = $simpleMap[$type];
+                continue;
+            }
+            if (isset($batchingMap[$type])) {
+                $batchingResult[$type][] = $field;
+            }
+        }
+
+        // Using batching when there is only a couple for the type is actually slower,
+        // so, let's check for that case here.
+        foreach ($batchingResult as $type => $fields) {
+            if (count($fields) > 2) {
+                continue;
+            }
+
+            foreach ($fields as $f) {
+                $simpleResult[$f] = $batchingMap[$type];
+            }
+            unset($batchingResult[$type]);
+        }
+
+        $this->types = $types;
+        $this->_typeMap = $simpleResult;
+        $this->batchingTypeMap = $batchingResult;
     }
 
     /**
      * Converts each of the fields in the array that are present in the type map
      * using the corresponding Type class.
      *
-     * @param mixed $row The array with the fields to be casted
-     * @return mixed
+     * @param array $row The array with the fields to be casted
+     * @return array<string, mixed>
      */
-    public function __invoke(mixed $row): mixed
+    public function __invoke(array $row): array
     {
-        if (!is_array($row)) {
-            return $row;
+        if (!empty($this->_typeMap)) {
+            foreach ($this->_typeMap as $field => $type) {
+                $row[$field] = $type->toPHP($row[$field], $this->_driver);
+            }
         }
 
-        foreach ($this->conversions as $conversion) {
-            /** @var \Cake\Database\TypeInterface $type */
-            $type = $conversion['type'];
-            if ($conversion['hasBatch']) {
-                /** @var \Cake\Database\Type\BatchCastingInterface $type */
-                $row = $type->manyToPHP($row, $conversion['fields'], $this->driver);
-                continue;
-            }
-
-            foreach ($conversion['fields'] as $field) {
-                $row[$field] = $type->toPHP($row[$field], $this->driver);
+        if (!empty($this->batchingTypeMap)) {
+            foreach ($this->batchingTypeMap as $t => $fields) {
+                /** @psalm-suppress PossiblyUndefinedMethod */
+                $row = $this->types[$t]->manyToPHP($row, $fields, $this->_driver);
             }
         }
 

@@ -15,19 +15,20 @@ declare(strict_types=1);
 namespace Cake\Console;
 
 use Cake\Core\ContainerInterface;
+use InvalidArgumentException;
 
 /**
- * This is a factory for creating Command instances.
+ * This is a factory for creating Command and Shell instances.
  *
  * This factory can be replaced or extended if you need to customize building
- * your command objects.
+ * your command and shell objects.
  */
 class CommandFactory implements CommandFactoryInterface
 {
     /**
      * @var \Cake\Core\ContainerInterface|null
      */
-    protected ?ContainerInterface $container = null;
+    protected $container;
 
     /**
      * Constructor
@@ -42,13 +43,21 @@ class CommandFactory implements CommandFactoryInterface
     /**
      * @inheritDoc
      */
-    public function create(string $className): CommandInterface
+    public function create(string $className)
     {
-        if ($this->container?->has($className)) {
-            return $this->container->get($className);
+        if ($this->container && $this->container->has($className)) {
+            $command = $this->container->get($className);
+        } else {
+            $command = new $className();
         }
 
-        /** @var \Cake\Console\CommandInterface */
-        return new $className($this);
+        if (!($command instanceof CommandInterface) && !($command instanceof Shell)) {
+            /** @psalm-suppress DeprecatedClass */
+            $valid = implode('` or `', [Shell::class, CommandInterface::class]);
+            $message = sprintf('Class `%s` must be an instance of `%s`.', $className, $valid);
+            throw new InvalidArgumentException($message);
+        }
+
+        return $command;
     }
 }

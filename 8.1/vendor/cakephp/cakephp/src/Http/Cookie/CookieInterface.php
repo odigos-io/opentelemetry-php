@@ -15,8 +15,6 @@ declare(strict_types=1);
  */
 namespace Cake\Http\Cookie;
 
-use DateTimeInterface;
-
 /**
  * Cookie Interface
  */
@@ -67,7 +65,7 @@ interface CookieInterface
      * @param string $name Name of the cookie
      * @return static
      */
-    public function withName(string $name): static;
+    public function withName(string $name);
 
     /**
      * Gets the cookie name
@@ -81,24 +79,24 @@ interface CookieInterface
      *
      * @return array|string
      */
-    public function getValue(): array|string;
+    public function getValue();
 
     /**
      * Gets the cookie value as scalar.
      *
      * This will collapse any complex data in the cookie with json_encode()
      *
-     * @return string
+     * @return mixed
      */
-    public function getScalarValue(): string;
+    public function getScalarValue();
 
     /**
      * Create a cookie with an updated value.
      *
-     * @param array|string|float|int|bool $value Value of the cookie to set
+     * @param array|string $value Value of the cookie to set
      * @return static
      */
-    public function withValue(array|string|float|int|bool $value): static;
+    public function withValue($value);
 
     /**
      * Get the id for a cookie
@@ -122,7 +120,7 @@ interface CookieInterface
      * @param string $path Sets the path
      * @return static
      */
-    public function withPath(string $path): static;
+    public function withPath(string $path);
 
     /**
      * Get the domain attribute.
@@ -137,14 +135,14 @@ interface CookieInterface
      * @param string $domain Domain to set
      * @return static
      */
-    public function withDomain(string $domain): static;
+    public function withDomain(string $domain);
 
     /**
      * Get the current expiry time
      *
-     * @return \DateTimeInterface|null Timestamp of expiry or null
+     * @return \DateTime|\DateTimeImmutable|null Timestamp of expiry or null
      */
-    public function getExpiry(): ?DateTimeInterface;
+    public function getExpiry();
 
     /**
      * Get the timestamp from the expiration time
@@ -163,17 +161,17 @@ interface CookieInterface
     /**
      * Create a cookie with an updated expiration date
      *
-     * @param \DateTimeInterface $dateTime Date time object
+     * @param \DateTime|\DateTimeImmutable $dateTime Date time object
      * @return static
      */
-    public function withExpiry(DateTimeInterface $dateTime): static;
+    public function withExpiry($dateTime);
 
     /**
      * Create a new cookie that will virtually never expire.
      *
      * @return static
      */
-    public function withNeverExpire(): static;
+    public function withNeverExpire();
 
     /**
      * Create a new cookie that will expire/delete the cookie from the browser.
@@ -182,17 +180,17 @@ interface CookieInterface
      *
      * @return static
      */
-    public function withExpired(): static;
+    public function withExpired();
 
     /**
      * Check if a cookie is expired when compared to $time
      *
      * Cookies without an expiration date always return false.
      *
-     * @param \DateTimeInterface|null $time The time to test against. Defaults to 'now' in UTC.
+     * @param \DateTime|\DateTimeImmutable $time The time to test against. Defaults to 'now' in UTC.
      * @return bool
      */
-    public function isExpired(?DateTimeInterface $time = null): bool;
+    public function isExpired($time = null): bool;
 
     /**
      * Check if the cookie is HTTP only
@@ -207,7 +205,7 @@ interface CookieInterface
      * @param bool $httpOnly HTTP Only
      * @return static
      */
-    public function withHttpOnly(bool $httpOnly): static;
+    public function withHttpOnly(bool $httpOnly);
 
     /**
      * Check if the cookie is secure
@@ -222,22 +220,23 @@ interface CookieInterface
      * @param bool $secure Secure attribute value
      * @return static
      */
-    public function withSecure(bool $secure): static;
+    public function withSecure(bool $secure);
 
     /**
      * Get the SameSite attribute.
      *
-     * @return \Cake\Http\Cookie\SameSiteEnum|null
+     * @return string|null
      */
-    public function getSameSite(): ?SameSiteEnum;
+    public function getSameSite(): ?string;
 
     /**
      * Create a cookie with an updated SameSite option.
      *
-     * @param \Cake\Http\Cookie\SameSiteEnum|string|null $sameSite Value for to set for Samesite option.
+     * @param string|null $sameSite Value for to set for Samesite option.
+     *   One of CookieInterface::SAMESITE_* constants.
      * @return static
      */
-    public function withSameSite(SameSiteEnum|string|null $sameSite): static;
+    public function withSameSite(?string $sameSite);
 
     /**
      * Get cookie options

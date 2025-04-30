@@ -35,5 +35,5 @@ interface NodeInterface
      *
      * @return mixed
      */
-    public function getValue(): mixed;
+    public function getValue();
 }

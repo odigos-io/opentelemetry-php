@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of CodeIgniter 4 framework.
  *
@@ -14,8 +12,6 @@ declare(strict_types=1);
 namespace CodeIgniter\I18n;
 
 use DateTime;
-use Exception;
-use ReturnTypeWillChange;
 
 /**
  * Legacy Time class.
@@ -41,29 +37,10 @@ use ReturnTypeWillChange;
  * @property string $weekOfYear  read-only
  * @property string $year        read-only
  *
- * @phpstan-consistent-constructor
- *
  * @deprecated Use Time instead.
  * @see \CodeIgniter\I18n\TimeLegacyTest
  */
 class TimeLegacy extends DateTime
 {
     use TimeTrait;
-
-    /**
-     * Returns a new instance with the date set to the new timestamp.
-     *
-     * @param int $timestamp
-     *
-     * @return static
-     *
-     * @throws Exception
-     */
-    #[ReturnTypeWillChange]
-    public function setTimestamp($timestamp)
-    {
-        $time = date('Y-m-d H:i:s', $timestamp);
-
-        return static::parse($time, $this->timezone, $this->locale);
-    }
 }

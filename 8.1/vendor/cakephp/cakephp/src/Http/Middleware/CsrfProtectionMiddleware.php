@@ -17,7 +17,6 @@ declare(strict_types=1);
 namespace Cake\Http\Middleware;
 
 use ArrayAccess;
-use Cake\Core\Exception\CakeException;
 use Cake\Http\Cookie\Cookie;
 use Cake\Http\Cookie\CookieInterface;
 use Cake\Http\Exception\InvalidCsrfTokenException;
@@ -29,6 +28,8 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use RuntimeException;
+use function Cake\Core\deprecationWarning;
 use function Cake\I18n\__d;
 
 /**
@@ -65,7 +66,7 @@ class CsrfProtectionMiddleware implements MiddlewareInterface
      *
      * @var array<string, mixed>
      */
-    protected array $_config = [
+    protected $_config = [
         'cookieName' => 'csrfToken',
         'expiry' => 0,
         'secure' => false,
@@ -108,6 +109,11 @@ class CsrfProtectionMiddleware implements MiddlewareInterface
      */
     public function __construct(array $config = [])
     {
+        if (array_key_exists('httpOnly', $config)) {
+            $config['httponly'] = $config['httpOnly'];
+            deprecationWarning('Option `httpOnly` is deprecated. Use lowercased `httponly` instead.');
+        }
+
         $this->_config = $config + $this->_config;
     }
 
@@ -134,11 +140,11 @@ class CsrfProtectionMiddleware implements MiddlewareInterface
             return $handler->handle($request);
         }
         if ($request->getAttribute('csrfToken')) {
-            throw new CakeException(
+            throw new RuntimeException(
                 'A CSRF token is already set in the request.' .
                 "\n" .
                 'Ensure you do not have the CSRF middleware applied more than once. ' .
-                'Check both your `Application::middleware()` method and `config/routes.php`.',
+                'Check both your `Application::middleware()` method and `config/routes.php`.'
             );
         }
 
@@ -148,7 +154,7 @@ class CsrfProtectionMiddleware implements MiddlewareInterface
         if (is_string($cookieData) && $cookieData !== '') {
             try {
                 $request = $request->withAttribute('csrfToken', $this->saltToken($cookieData));
-            } catch (InvalidArgumentException) {
+            } catch (InvalidArgumentException $e) {
                 $cookieData = null;
             }
         }
@@ -156,6 +162,7 @@ class CsrfProtectionMiddleware implements MiddlewareInterface
         if ($method === 'GET' && $cookieData === null) {
             $token = $this->createToken();
             $request = $request->withAttribute('csrfToken', $this->saltToken($token));
+            /** @var mixed $response */
             $response = $handler->handle($request);
 
             return $this->_addTokenCookie($token, $request, $response);
@@ -167,6 +174,24 @@ class CsrfProtectionMiddleware implements MiddlewareInterface
         }
 
         return $handler->handle($request);
+    }
+
+    /**
+     * Set callback for allowing to skip token check for particular request.
+     *
+     * The callback will receive request instance as argument and must return
+     * `true` if you want to skip token check for the current request.
+     *
+     * @deprecated 4.1.0 Use skipCheckCallback instead.
+     * @param callable $callback A callable.
+     * @return $this
+     */
+    public function whitelistCallback(callable $callback)
+    {
+        deprecationWarning('`whitelistCallback()` is deprecated. Use `skipCheckCallback()` instead.');
+        $this->skipCheckCallback = $callback;
+
+        return $this;
     }
 
     /**
@@ -200,6 +225,19 @@ class CsrfProtectionMiddleware implements MiddlewareInterface
         }
 
         return $request;
+    }
+
+    /**
+     * Create a new token to be used for CSRF protection
+     *
+     * @return string
+     * @deprecated 4.0.6 Use {@link createToken()} instead.
+     */
+    protected function _createToken(): string
+    {
+        deprecationWarning('_createToken() is deprecated. Use createToken() instead.');
+
+        return $this->createToken();
     }
 
     /**
@@ -329,7 +367,7 @@ class CsrfProtectionMiddleware implements MiddlewareInterface
     protected function _addTokenCookie(
         string $token,
         ServerRequestInterface $request,
-        ResponseInterface $response,
+        ResponseInterface $response
     ): ResponseInterface {
         $cookie = $this->_createCookie($token, $request);
         if ($response instanceof Response) {
@@ -380,7 +418,7 @@ class CsrfProtectionMiddleware implements MiddlewareInterface
 
         throw new InvalidCsrfTokenException(__d(
             'cake',
-            'CSRF token from either the request body or request headers did not match or is missing.',
+            'CSRF token from either the request body or request headers did not match or is missing.'
         ));
     }
 
@@ -402,7 +440,7 @@ class CsrfProtectionMiddleware implements MiddlewareInterface
                 'secure' => $this->_config['secure'],
                 'httponly' => $this->_config['httponly'],
                 'samesite' => $this->_config['samesite'],
-            ],
+            ]
         );
     }
 }

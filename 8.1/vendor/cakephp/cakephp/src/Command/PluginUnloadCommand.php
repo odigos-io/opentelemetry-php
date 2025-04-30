@@ -16,11 +16,9 @@ declare(strict_types=1);
  */
 namespace Cake\Command;
 
-use Brick\VarExporter\VarExporter;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
-use Cake\Utility\Hash;
 
 /**
  * Command for unloading plugins.
@@ -28,26 +26,11 @@ use Cake\Utility\Hash;
 class PluginUnloadCommand extends Command
 {
     /**
-     * Config file
-     *
-     * @var string
-     */
-    protected string $configFile = CONFIG . 'plugins.php';
-
-    /**
      * @inheritDoc
      */
     public static function defaultName(): string
     {
         return 'plugin unload';
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public static function getDescription(): string
-    {
-        return 'Command for unloading plugins.';
     }
 
     /**
@@ -59,53 +42,55 @@ class PluginUnloadCommand extends Command
      */
     public function execute(Arguments $args, ConsoleIo $io): ?int
     {
-        $plugin = (string)$args->getArgument('plugin');
+        $plugin = $args->getArgument('plugin');
+        if (!$plugin) {
+            $io->err('You must provide a plugin name in CamelCase format.');
+            $io->err('To unload an "Example" plugin, run `cake plugin unload Example`.');
 
-        $result = $this->modifyConfigFile($plugin);
-        if ($result === null) {
-            $io->success('Plugin removed from `CONFIG/plugins.php`');
+            return static::CODE_ERROR;
+        }
+
+        $app = APP . 'Application.php';
+        if (file_exists($app) && $this->modifyApplication($app, $plugin)) {
+            $io->out('');
+            $io->out(sprintf('%s modified', $app));
 
             return static::CODE_SUCCESS;
         }
-
-        $io->err($result);
 
         return static::CODE_ERROR;
     }
 
     /**
-     * Modify the plugins config file.
+     * Modify the application class.
      *
-     * @param string $plugin Plugin name.
-     * @return string|null
+     * @param string $app Path to the application to update.
+     * @param string $plugin Name of plugin.
+     * @return bool If modify passed.
      */
-    protected function modifyConfigFile(string $plugin): ?string
+    protected function modifyApplication(string $app, string $plugin): bool
     {
-        // phpcs:ignore
-        $config = @include $this->configFile;
-        if (!is_array($config)) {
-            return '`CONFIG/plugins.php` not found or does not return an array';
+        $plugin = preg_quote($plugin, '/');
+        $finder = "/
+            # whitespace and addPlugin call
+            \s*\\\$this\-\>addPlugin\(
+            # plugin name in quotes of any kind
+            \s*['\"]{$plugin}['\"]
+            # method arguments assuming a literal array with multiline args
+            (\s*,[\s\\n]*\[(\\n.*|.*){0,5}\][\\n\s]*)?
+            # closing paren of method
+            \);/mx";
+
+        $content = file_get_contents($app);
+        $newContent = preg_replace($finder, '', $content);
+
+        if ($newContent === $content) {
+            return false;
         }
 
-        $config = Hash::normalize($config);
-        if (!array_key_exists($plugin, $config)) {
-            return sprintf('Plugin `%s` could not be found', $plugin);
-        }
+        file_put_contents($app, $newContent);
 
-        unset($config[$plugin]);
-
-        if (class_exists(VarExporter::class)) {
-            $array = VarExporter::export($config);
-        } else {
-            $array = var_export($config, true);
-        }
-        $contents = '<?php' . "\n" . 'return ' . $array . ';';
-
-        if (file_put_contents($this->configFile, $contents)) {
-            return null;
-        }
-
-        return 'Failed to update `CONFIG/plugins.php`';
+        return true;
     }
 
     /**
@@ -116,12 +101,11 @@ class PluginUnloadCommand extends Command
      */
     public function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
     {
-        $parser->setDescription(
-            static::getDescription(),
-        )
+        $parser->setDescription([
+            'Command for unloading plugins.',
+        ])
         ->addArgument('plugin', [
             'help' => 'Name of the plugin to unload.',
-            'required' => true,
         ]);
 
         return $parser;

@@ -26,14 +26,14 @@ class Schema
      *
      * @var array<string, array<string, mixed>>
      */
-    protected array $_fields = [];
+    protected $_fields = [];
 
     /**
      * The default values for fields.
      *
      * @var array<string, mixed>
      */
-    protected array $_fieldDefaults = [
+    protected $_fieldDefaults = [
         'type' => null,
         'length' => null,
         'precision' => null,
@@ -63,7 +63,7 @@ class Schema
      *   as a string.
      * @return $this
      */
-    public function addField(string $name, array|string $attrs)
+    public function addField(string $name, $attrs)
     {
         if (is_string($attrs)) {
             $attrs = ['type' => $attrs];

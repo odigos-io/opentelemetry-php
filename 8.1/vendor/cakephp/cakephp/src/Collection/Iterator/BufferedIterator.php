@@ -17,41 +17,43 @@ declare(strict_types=1);
 namespace Cake\Collection\Iterator;
 
 use Cake\Collection\Collection;
+use Countable;
+use Serializable;
 use SplDoublyLinkedList;
 
 /**
  * Creates an iterator from another iterator that will keep the results of the inner
  * iterator in memory, so that results don't have to be re-calculated.
  */
-class BufferedIterator extends Collection
+class BufferedIterator extends Collection implements Countable, Serializable
 {
     /**
      * The in-memory cache containing results from previous iterators
      *
-     * @var \SplDoublyLinkedList<mixed>
+     * @var \SplDoublyLinkedList
      */
-    protected SplDoublyLinkedList $_buffer;
+    protected $_buffer;
 
     /**
      * Points to the next record number that should be fetched
      *
      * @var int
      */
-    protected int $_index = 0;
+    protected $_index = 0;
 
     /**
      * Last record fetched from the inner iterator
      *
      * @var mixed
      */
-    protected mixed $_current;
+    protected $_current;
 
     /**
      * Last key obtained from the inner iterator
      *
      * @var mixed
      */
-    protected mixed $_key;
+    protected $_key;
 
     /**
      * Whether the internal iterator's rewind method was already
@@ -59,14 +61,14 @@ class BufferedIterator extends Collection
      *
      * @var bool
      */
-    protected bool $_started = false;
+    protected $_started = false;
 
     /**
      * Whether the internal iterator has reached its end.
      *
      * @var bool
      */
-    protected bool $_finished = false;
+    protected $_finished = false;
 
     /**
      * Maintains an in-memory cache of the results yielded by the internal
@@ -85,7 +87,8 @@ class BufferedIterator extends Collection
      *
      * @return mixed
      */
-    public function key(): mixed
+    #[\ReturnTypeWillChange]
+    public function key()
     {
         return $this->_key;
     }
@@ -95,7 +98,8 @@ class BufferedIterator extends Collection
      *
      * @return mixed
      */
-    public function current(): mixed
+    #[\ReturnTypeWillChange]
+    public function current()
     {
         return $this->_current;
     }
@@ -185,6 +189,21 @@ class BufferedIterator extends Collection
     }
 
     /**
+     * Returns a string representation of this object that can be used
+     * to reconstruct it
+     *
+     * @return string
+     */
+    public function serialize(): string
+    {
+        if (!$this->_finished) {
+            $this->count();
+        }
+
+        return serialize($this->_buffer);
+    }
+
+    /**
      * Magic method used for serializing the iterator instance.
      *
      * @return array
@@ -196,6 +215,20 @@ class BufferedIterator extends Collection
         }
 
         return iterator_to_array($this->_buffer);
+    }
+
+    /**
+     * Unserializes the passed string and rebuilds the BufferedIterator instance
+     *
+     * @param string $collection The serialized buffer iterator
+     * @return void
+     */
+    public function unserialize($collection): void
+    {
+        $this->__construct([]);
+        $this->_buffer = unserialize($collection);
+        $this->_started = true;
+        $this->_finished = true;
     }
 
     /**

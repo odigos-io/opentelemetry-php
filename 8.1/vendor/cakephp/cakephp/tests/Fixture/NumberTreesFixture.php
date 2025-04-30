@@ -24,6 +24,21 @@ use Cake\TestSuite\Fixture\TestFixture;
 class NumberTreesFixture extends TestFixture
 {
     /**
+     * fields property
+     *
+     * @var array
+     */
+    public $fields = [
+        'id' => ['type' => 'integer'],
+        'name' => ['type' => 'string', 'null' => false],
+        'parent_id' => 'integer',
+        'lft' => ['type' => 'integer'],
+        'rght' => ['type' => 'integer'],
+        'depth' => ['type' => 'integer'],
+        '_constraints' => ['primary' => ['type' => 'primary', 'columns' => ['id']]],
+    ];
+
+    /**
      * Records
      *
      *  - electronics:1
@@ -40,7 +55,7 @@ class NumberTreesFixture extends TestFixture
      *
      * @var array
      */
-    public array $records = [
+    public $records = [
         [
             'name' => 'electronics',
             'parent_id' => null,

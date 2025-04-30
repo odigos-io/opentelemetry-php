@@ -36,7 +36,7 @@ class MultiCheckboxWidget extends BasicWidget
      *
      * @var array<string, mixed>
      */
-    protected array $defaults = [
+    protected $defaults = [
         'name' => '',
         'escape' => true,
         'options' => [],
@@ -52,7 +52,7 @@ class MultiCheckboxWidget extends BasicWidget
      *
      * @var \Cake\View\Widget\LabelWidget
      */
-    protected LabelWidget $_label;
+    protected $_label;
 
     /**
      * Render multi-checkbox widget.
@@ -72,8 +72,7 @@ class MultiCheckboxWidget extends BasicWidget
      */
     public function __construct(StringTemplate $templates, LabelWidget $label)
     {
-        parent::__construct($templates);
-
+        $this->_templates = $templates;
         $this->_label = $label;
     }
 
@@ -175,7 +174,7 @@ class MultiCheckboxWidget extends BasicWidget
                 if (isset($data['id'])) {
                     $checkbox['id'] = $data['id'] . '-' . trim(
                         $this->_idSuffix((string)$checkbox['value']),
-                        '-',
+                        '-'
                     );
                 } else {
                     $checkbox['id'] = $this->_id($checkbox['name'], (string)$checkbox['value']);
@@ -202,11 +201,11 @@ class MultiCheckboxWidget extends BasicWidget
             'templateVars' => $checkbox['templateVars'],
             'attrs' => $this->_templates->formatAttributes(
                 $checkbox,
-                ['name', 'value', 'text', 'options', 'label', 'val', 'type'],
+                ['name', 'value', 'text', 'options', 'label', 'val', 'type']
             ),
         ]);
 
-        if ($checkbox['label'] === false && !str_contains($this->_templates->get('checkboxWrapper'), '{{input}}')) {
+        if ($checkbox['label'] === false && strpos($this->_templates->get('checkboxWrapper'), '{{input}}') === false) {
             $label = $input;
         } else {
             $labelAttrs = is_array($checkbox['label']) ? $checkbox['label'] : [];
@@ -240,7 +239,7 @@ class MultiCheckboxWidget extends BasicWidget
      * @param array<string>|string|int|false|null $selected The selected values.
      * @return bool
      */
-    protected function _isSelected(string $key, array|string|int|false|null $selected): bool
+    protected function _isSelected(string $key, $selected): bool
     {
         if ($selected === null) {
             return false;
@@ -260,7 +259,7 @@ class MultiCheckboxWidget extends BasicWidget
      * @param mixed $disabled The disabled values.
      * @return bool
      */
-    protected function _isDisabled(string $key, mixed $disabled): bool
+    protected function _isDisabled(string $key, $disabled): bool
     {
         if ($disabled === null || $disabled === false) {
             return false;

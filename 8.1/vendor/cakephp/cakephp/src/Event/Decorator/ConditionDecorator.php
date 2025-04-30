@@ -17,7 +17,7 @@ declare(strict_types=1);
 namespace Cake\Event\Decorator;
 
 use Cake\Event\EventInterface;
-use InvalidArgumentException;
+use RuntimeException;
 
 /**
  * Event Condition Decorator
@@ -30,10 +30,11 @@ class ConditionDecorator extends AbstractDecorator
     /**
      * @inheritDoc
      */
-    public function __invoke(mixed ...$args): mixed
+    public function __invoke()
     {
+        $args = func_get_args();
         if (!$this->canTrigger($args[0])) {
-            return null;
+            return;
         }
 
         return $this->_call($args);
@@ -42,8 +43,7 @@ class ConditionDecorator extends AbstractDecorator
     /**
      * Checks if the event is triggered for this listener.
      *
-     * @template TSubject of object
-     * @param \Cake\Event\EventInterface<TSubject> $event Event object.
+     * @param \Cake\Event\EventInterface $event Event object.
      * @return bool
      */
     public function canTrigger(EventInterface $event): bool
@@ -57,9 +57,8 @@ class ConditionDecorator extends AbstractDecorator
     /**
      * Evaluates the filter conditions
      *
-     * @template TSubject of object
      * @param string $condition Condition type
-     * @param \Cake\Event\EventInterface<TSubject> $event Event object
+     * @param \Cake\Event\EventInterface $event Event object
      * @return bool
      */
     protected function _evaluateCondition(string $condition, EventInterface $event): bool
@@ -68,7 +67,7 @@ class ConditionDecorator extends AbstractDecorator
             return $condition !== 'unless';
         }
         if (!is_callable($this->_options[$condition])) {
-            throw new InvalidArgumentException(self::class . ' the `' . $condition . '` condition is not a callable!');
+            throw new RuntimeException(self::class . ' the `' . $condition . '` condition is not a callable!');
         }
 
         return (bool)$this->_options[$condition]($event);

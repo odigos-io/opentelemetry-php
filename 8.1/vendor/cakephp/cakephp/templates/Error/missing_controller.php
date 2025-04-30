@@ -20,11 +20,9 @@ use function Cake\Core\h;
 
 $pluginDot = empty($plugin) ? null : $plugin . '.';
 $namespace = Configure::read('App.namespace');
-$prefixNs = '';
-$prefixPath = '';
+$prefixNs = $prefixPath = '';
 
-$controller = (string)$controller;
-$incompleteInflection = (str_contains($controller, '_') || str_contains($controller, '-'));
+$incompleteInflection = (strpos($controller, '_') !== false || strpos($controller, '-'));
 $originalClass = $controller;
 
 $class = Inflector::camelize($controller);

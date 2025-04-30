@@ -22,7 +22,7 @@ $this->layout = 'dev_error';
 $this->assign('title', 'Missing Template');
 $this->assign('templateName', 'missing_template.php');
 
-$isEmail = str_starts_with($file, 'Email/');
+$isEmail = strpos($file, 'Email/') === 0;
 
 $this->start('subheading');
 ?>
@@ -47,7 +47,7 @@ $this->start('subheading');
 <ul>
 <?php
     foreach ($paths as $path):
-        if (str_contains($path, CORE_PATH)) {
+        if (strpos($path, CORE_PATH) !== false) {
             continue;
         }
         echo sprintf('<li>%s%s</li>', h($path), h($file));

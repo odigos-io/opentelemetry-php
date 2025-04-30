@@ -20,8 +20,7 @@ use Cake\Database\Expression\IdentifierExpression;
 use Cake\Database\Expression\QueryExpression;
 use Cake\Database\Expression\TupleComparison;
 use Cake\Database\Query;
-use Cake\Database\Query\SelectQuery;
-use InvalidArgumentException;
+use RuntimeException;
 
 /**
  * Provides a translator method for tuple comparisons
@@ -59,19 +58,18 @@ trait TupleComparisonTranslatorTrait
 
         $operator = strtoupper($expression->getOperator());
         if (!in_array($operator, ['IN', '='])) {
-            throw new InvalidArgumentException(
+            throw new RuntimeException(
                 sprintf(
                     'Tuple comparison transform only supports the `IN` and `=` operators, `%s` given.',
-                    $operator,
-                ),
+                    $operator
+                )
             );
         }
 
         $value = $expression->getValue();
         $true = new QueryExpression('1');
 
-        if ($value instanceof SelectQuery) {
-            /** @var array<string> $selected */
+        if ($value instanceof Query) {
             $selected = array_values($value->clause('select'));
             foreach ($fields as $i => $field) {
                 $value->andWhere([$field => new IdentifierExpression($selected[$i])]);
@@ -92,8 +90,7 @@ trait TupleComparisonTranslatorTrait
         }
 
         $surrogate = $query->getConnection()
-            ->selectQuery()
-            ->select($true);
+            ->selectQuery($true);
 
         if (!is_array(current($value))) {
             $value = [$value];

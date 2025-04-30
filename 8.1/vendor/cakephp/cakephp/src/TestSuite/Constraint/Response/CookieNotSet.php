@@ -27,7 +27,6 @@ class CookieNotSet extends CookieSet
      *
      * @param mixed $other Expected content
      * @return bool
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
      */
     public function matches($other): bool
     {

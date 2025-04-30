@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of CodeIgniter 4 framework.
  *
@@ -14,17 +12,18 @@ declare(strict_types=1);
 namespace CodeIgniter\HTTP\Exceptions;
 
 use CodeIgniter\Exceptions\HTTPExceptionInterface;
-use CodeIgniter\Exceptions\InvalidArgumentException;
-use CodeIgniter\Exceptions\LogicException;
-use CodeIgniter\Exceptions\RuntimeException;
 use CodeIgniter\HTTP\ResponsableInterface;
 use CodeIgniter\HTTP\ResponseInterface;
+use Config\Services;
+use Exception;
+use InvalidArgumentException;
+use LogicException;
 use Throwable;
 
 /**
  * RedirectException
  */
-class RedirectException extends RuntimeException implements ExceptionInterface, ResponsableInterface, HTTPExceptionInterface
+class RedirectException extends Exception implements ResponsableInterface, HTTPExceptionInterface
 {
     /**
      * HTTP status code for redirects
@@ -45,7 +44,7 @@ class RedirectException extends RuntimeException implements ExceptionInterface, 
             throw new InvalidArgumentException(
                 'RedirectException::__construct() first argument must be a string or ResponseInterface',
                 0,
-                $this,
+                $this
             );
         }
 
@@ -55,7 +54,7 @@ class RedirectException extends RuntimeException implements ExceptionInterface, 
 
             if ($this->response->getHeaderLine('Location') === '' && $this->response->getHeaderLine('Refresh') === '') {
                 throw new LogicException(
-                    'The Response object passed to RedirectException does not contain a redirect address.',
+                    'The Response object passed to RedirectException does not contain a redirect address.'
                 );
             }
 
@@ -69,14 +68,14 @@ class RedirectException extends RuntimeException implements ExceptionInterface, 
 
     public function getResponse(): ResponseInterface
     {
-        if (! $this->response instanceof ResponseInterface) {
-            $this->response = service('response')
+        if (null === $this->response) {
+            $this->response = Services::response()
                 ->redirect(base_url($this->getMessage()), 'auto', $this->getCode());
         }
 
-        service('logger')->info(
+        Services::logger()->info(
             'REDIRECTED ROUTE at '
-             . ($this->response->getHeaderLine('Location') ?: substr($this->response->getHeaderLine('Refresh'), 6)),
+            . ($this->response->getHeaderLine('Location') ?: substr($this->response->getHeaderLine('Refresh'), 6))
         );
 
         return $this->response;

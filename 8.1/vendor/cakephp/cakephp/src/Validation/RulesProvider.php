@@ -17,15 +17,12 @@ declare(strict_types=1);
 namespace Cake\Validation;
 
 use ReflectionClass;
-use function Cake\Core\deprecationWarning;
 
 /**
  * A Proxy class used to remove any extra arguments when the user intended to call
  * a method in another class that is not aware of validation providers signature
  *
  * @method bool extension(mixed $check, array $extensions, array $context = [])
- * @deprecated 5.2.0 This class is no longer used. Cake\Validation\Validation
- *  is now directly used as a provider in Cake\Validation\Validator.
  */
 class RulesProvider
 {
@@ -34,33 +31,24 @@ class RulesProvider
      *
      * @var object|string
      */
-    protected object|string $_class;
+    protected $_class;
 
     /**
      * The proxied class' reflection
      *
-     * @var \ReflectionClass<object>
+     * @var \ReflectionClass
      */
-    protected ReflectionClass $_reflection;
+    protected $_reflection;
 
     /**
      * Constructor, sets the default class to use for calling methods
      *
      * @param object|string $class the default class to proxy
      * @throws \ReflectionException
-     * @phpstan-param object|class-string $class
+     * @psalm-param object|class-string $class
      */
-    public function __construct(object|string $class = Validation::class)
+    public function __construct($class = Validation::class)
     {
-        deprecationWarning(
-            '5.2.0',
-            sprintf(
-                'The class Cake\Validation\RulesProvider is deprecated. '
-                . 'Directly set %s as a validation provider.',
-                (is_string($class) ? $class : get_class($class)),
-            ),
-        );
-
         $this->_class = $class;
         $this->_reflection = new ReflectionClass($class);
     }
@@ -77,13 +65,11 @@ class RulesProvider
      * @param array $arguments the list of arguments to pass to the method
      * @return bool Whether the validation rule passed
      */
-    public function __call(string $method, array $arguments): bool
+    public function __call(string $method, array $arguments)
     {
         $method = $this->_reflection->getMethod($method);
         $argumentList = $method->getParameters();
-        /** @var \ReflectionParameter $argument */
-        $argument = array_pop($argumentList);
-        if ($argument->getName() !== 'context') {
+        if (array_pop($argumentList)->getName() !== 'context') {
             $arguments = array_slice($arguments, 0, -1);
         }
         $object = is_string($this->_class) ? null : $this->_class;

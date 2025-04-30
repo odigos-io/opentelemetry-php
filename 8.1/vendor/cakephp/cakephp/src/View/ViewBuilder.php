@@ -23,10 +23,11 @@ use Cake\Http\ServerRequest;
 use Cake\View\Exception\MissingViewException;
 use Closure;
 use Exception;
-use InvalidArgumentException;
 use JsonSerializable;
 use PDO;
-use function Cake\Core\pluginSplit;
+use RuntimeException;
+use Serializable;
+use function Cake\Core\deprecationWarning;
 
 /**
  * Provides an API for iteratively building a view up.
@@ -34,63 +35,63 @@ use function Cake\Core\pluginSplit;
  * Once you have configured the view and established all the context
  * you can create a view instance with `build()`.
  */
-class ViewBuilder implements JsonSerializable
+class ViewBuilder implements JsonSerializable, Serializable
 {
     /**
      * The subdirectory to the template.
      *
      * @var string|null
      */
-    protected ?string $_templatePath = null;
+    protected $_templatePath;
 
     /**
      * The template file to render.
      *
      * @var string|null
      */
-    protected ?string $_template = null;
+    protected $_template;
 
     /**
      * The plugin name to use.
      *
      * @var string|null
      */
-    protected ?string $_plugin = null;
+    protected $_plugin;
 
     /**
      * The theme name to use.
      *
      * @var string|null
      */
-    protected ?string $_theme = null;
+    protected $_theme;
 
     /**
      * The layout name to render.
      *
      * @var string|null
      */
-    protected ?string $_layout = null;
+    protected $_layout;
 
     /**
      * Whether autoLayout should be enabled.
      *
      * @var bool
      */
-    protected bool $_autoLayout = true;
+    protected $_autoLayout = true;
 
     /**
      * The layout path to build the view with.
      *
      * @var string|null
      */
-    protected ?string $_layoutPath = null;
+    protected $_layoutPath;
 
     /**
      * The view variables to use
      *
      * @var string|null
      */
-    protected ?string $_name = null;
+    protected $_name;
 
     /**
      * The view class name to use.
@@ -98,9 +99,9 @@ class ViewBuilder implements JsonSerializable
      * or a fully namespaced classname.
      *
      * @var string|null
-     * @phpstan-var class-string<\Cake\View\View>|string|null
+     * @psalm-var class-string<\Cake\View\View>|string|null
      */
-    protected ?string $_className = null;
+    protected $_className;
 
     /**
      * Additional options used when constructing the view.
@@ -110,21 +111,21 @@ class ViewBuilder implements JsonSerializable
      *
      * @var array<string, mixed>
      */
-    protected array $_options = [];
+    protected $_options = [];
 
     /**
      * The helpers to use
      *
      * @var array
      */
-    protected array $_helpers = [];
+    protected $_helpers = [];
 
     /**
      * View vars
      *
      * @var array<string, mixed>
      */
-    protected array $_vars = [];
+    protected $_vars = [];
 
     /**
      * Saves a variable for use inside a template.
@@ -133,7 +134,7 @@ class ViewBuilder implements JsonSerializable
      * @param mixed $value Value.
      * @return $this
      */
-    public function setVar(string $name, mixed $value = null)
+    public function setVar(string $name, $value = null)
     {
         $this->_vars[$name] = $value;
 
@@ -175,7 +176,7 @@ class ViewBuilder implements JsonSerializable
      * @param string $name Var name
      * @return mixed The var value or null if unset.
      */
-    public function getVar(string $name): mixed
+    public function getVar(string $name)
     {
         return $this->_vars[$name] ?? null;
     }
@@ -302,7 +303,7 @@ class ViewBuilder implements JsonSerializable
     }
 
     /**
-     * Adds a helper to use, overwriting any existing one with that name.
+     * Adds a helper to use.
      *
      * @param string $helper Helper to use.
      * @param array<string, mixed> $options Options.
@@ -311,18 +312,19 @@ class ViewBuilder implements JsonSerializable
      */
     public function addHelper(string $helper, array $options = [])
     {
-        [$plugin, $name] = pluginSplit($helper);
-        if ($plugin) {
-            $options['className'] = $helper;
+        if ($options) {
+            $array = [$helper => $options];
+        } else {
+            $array = [$helper];
         }
 
-        $this->_helpers[$name] = $options;
+        $this->_helpers = array_merge($this->_helpers, $array);
 
         return $this;
     }
 
     /**
-     * Adds helpers to use, overwriting any existing one with that name.
+     * Adds helpers to use by merging with existing ones.
      *
      * @param array $helpers Helpers to use.
      * @return $this
@@ -342,22 +344,19 @@ class ViewBuilder implements JsonSerializable
     }
 
     /**
-     * Sets the helpers to use, resetting the helpers config.
+     * Sets the helpers to use.
      *
      * @param array $helpers Helpers to use.
+     * @param bool $merge Whether to merge existing data with the new data.
      * @return $this
      */
-    public function setHelpers(array $helpers)
+    public function setHelpers(array $helpers, bool $merge = true)
     {
-        $this->_helpers = [];
-
-        foreach ($helpers as $helper => $config) {
-            if (is_int($helper)) {
-                $helper = $config;
-                $config = [];
-            }
-            $this->addHelper($helper, $config);
+        if ($merge) {
+            deprecationWarning('The $merge param is deprecated, use addHelper()/addHelpers() instead.');
+            $helpers = array_merge($this->_helpers, $helpers);
         }
+        $this->_helpers = $helpers;
 
         return $this;
     }
@@ -437,7 +436,7 @@ class ViewBuilder implements JsonSerializable
     }
 
     /**
-     * Gets the name of the layout file to render the view inside.
+     * Gets the name of the layout file to render the view inside of.
      *
      * @return string|null
      */
@@ -452,7 +451,7 @@ class ViewBuilder implements JsonSerializable
      * @param string $name The name of the option.
      * @return mixed
      */
-    public function getOption(string $name): mixed
+    public function getOption(string $name)
     {
         return $this->_options[$name] ?? null;
     }
@@ -464,7 +463,7 @@ class ViewBuilder implements JsonSerializable
      * @param mixed $value Value to set.
      * @return $this
      */
-    public function setOption(string $name, mixed $value)
+    public function setOption(string $name, $value)
     {
         $this->_options[$name] = $value;
 
@@ -483,7 +482,7 @@ class ViewBuilder implements JsonSerializable
     public function setOptions(array $options, bool $merge = true)
     {
         if ($merge) {
-            $options += $this->_options;
+            $options = array_merge($this->_options, $options);
         }
         $this->_options = $options;
 
@@ -556,6 +555,7 @@ class ViewBuilder implements JsonSerializable
      * If className() is null, App\View\AppView will be used.
      * If that class does not exist, then {@link \Cake\View\View} will be used.
      *
+     * @param array<string, mixed> $vars The view variables/context to use.
      * @param \Cake\Http\ServerRequest|null $request The request to use.
      * @param \Cake\Http\Response|null $response The response to use.
      * @param \Cake\Event\EventManagerInterface|null $events The event manager to use.
@@ -563,18 +563,27 @@ class ViewBuilder implements JsonSerializable
      * @throws \Cake\View\Exception\MissingViewException
      */
     public function build(
+        array $vars = [],
         ?ServerRequest $request = null,
         ?Response $response = null,
-        ?EventManagerInterface $events = null,
+        ?EventManagerInterface $events = null
     ): View {
-        $className = $this->_className ?? App::className('App', 'View', 'View') ?? View::class;
-        if ($className === 'View') {
+        $className = $this->_className;
+        if ($className === null) {
+            $className = App::className('App', 'View', 'View') ?? View::class;
+        } elseif ($className === 'View') {
             $className = App::className($className, 'View');
         } else {
             $className = App::className($className, 'View', 'View');
         }
         if ($className === null) {
             throw new MissingViewException(['class' => $this->_className]);
+        }
+
+        if (!empty($vars)) {
+            deprecationWarning(
+                'The $vars argument is deprecated. Use the setVar()/setVars() methods instead.'
+            );
         }
 
         $data = [
@@ -587,7 +596,7 @@ class ViewBuilder implements JsonSerializable
             'autoLayout' => $this->_autoLayout,
             'layoutPath' => $this->_layoutPath,
             'helpers' => $this->_helpers,
-            'viewVars' => $this->_vars,
+            'viewVars' => $vars + $this->_vars,
         ];
         $data += $this->_options;
 
@@ -601,7 +610,7 @@ class ViewBuilder implements JsonSerializable
      *
      * There are  limitations for viewVars that are good to know:
      *
-     * - ORM\Query executed and stored as result set
+     * - ORM\Query executed and stored as resultset
      * - SimpleXMLElements stored as associative array
      * - Exceptions stored as strings
      * - Resources, \Closure and \PDO are not supported.
@@ -621,8 +630,7 @@ class ViewBuilder implements JsonSerializable
             $array[$property] = $this->{$property};
         }
 
-        /** @phpstan-ignore-next-line argument.type */
-        array_walk_recursive($array['_vars'], $this->_checkViewVars(...));
+        array_walk_recursive($array['_vars'], [$this, '_checkViewVars']);
 
         return array_filter($array, function ($i) {
             return !is_array($i) && strlen((string)$i) || !empty($i);
@@ -635,9 +643,9 @@ class ViewBuilder implements JsonSerializable
      * @param mixed $item Reference to the view var value.
      * @param string $key View var key.
      * @return void
-     * @throws \InvalidArgumentException
+     * @throws \RuntimeException
      */
-    protected function _checkViewVars(mixed &$item, string $key): void
+    protected function _checkViewVars(&$item, string $key): void
     {
         if ($item instanceof Exception) {
             $item = (string)$item;
@@ -648,11 +656,11 @@ class ViewBuilder implements JsonSerializable
             $item instanceof Closure ||
             $item instanceof PDO
         ) {
-            throw new InvalidArgumentException(sprintf(
+            throw new RuntimeException(sprintf(
                 'Failed serializing the `%s` %s in the `%s` view var',
-                is_resource($item) ? get_resource_type($item) : $item::class,
+                is_resource($item) ? get_resource_type($item) : get_class($item),
                 is_resource($item) ? 'resource' : 'object',
-                $key,
+                $key
             ));
         }
     }
@@ -673,6 +681,18 @@ class ViewBuilder implements JsonSerializable
     }
 
     /**
+     * Serializes the view builder object.
+     *
+     * @return string
+     */
+    public function serialize(): string
+    {
+        $array = $this->jsonSerialize();
+
+        return serialize($array);
+    }
+
+    /**
      * Magic method used for serializing the view builder object.
      *
      * @return array
@@ -680,6 +700,17 @@ class ViewBuilder implements JsonSerializable
     public function __serialize(): array
     {
         return $this->jsonSerialize();
+    }
+
+    /**
+     * Unserializes the view builder object.
+     *
+     * @param string $data Serialized string.
+     * @return void
+     */
+    public function unserialize($data): void
+    {
+        $this->createFromArray(unserialize($data));
     }
 
     /**

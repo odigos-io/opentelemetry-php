@@ -29,12 +29,12 @@ class PersistenceFailedException extends CakeException
      *
      * @var \Cake\Datasource\EntityInterface
      */
-    protected EntityInterface $_entity;
+    protected $_entity;
 
     /**
      * @inheritDoc
      */
-    protected string $_messageTemplate = 'Entity %s failure.';
+    protected $_messageTemplate = 'Entity %s failure.';
 
     /**
      * Constructor.
@@ -45,12 +45,8 @@ class PersistenceFailedException extends CakeException
      * @param int|null $code The code of the error, is also the HTTP status code for the error.
      * @param \Throwable|null $previous the previous exception.
      */
-    public function __construct(
-        EntityInterface $entity,
-        array|string $message,
-        ?int $code = null,
-        ?Throwable $previous = null,
-    ) {
+    public function __construct(EntityInterface $entity, $message, ?int $code = null, ?Throwable $previous = null)
+    {
         $this->_entity = $entity;
         if (is_array($message)) {
             $errors = [];

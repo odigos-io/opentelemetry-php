@@ -19,10 +19,22 @@ use Cake\TestSuite\Fixture\TestFixture;
 class CompositeIncrementsFixture extends TestFixture
 {
     /**
+     * fields property
+     *
+     * @var array
+     */
+    public $fields = [
+        'id' => ['type' => 'integer', 'null' => false, 'autoIncrement' => true],
+        'account_id' => ['type' => 'integer', 'null' => false],
+        'name' => ['type' => 'string', 'default' => null],
+        '_constraints' => ['primary' => ['type' => 'primary', 'columns' => ['id', 'account_id']]],
+    ];
+
+    /**
      * records property
      *
      * @var array
      */
-    public array $records = [
+    public $records = [
     ];
 }

@@ -15,20 +15,21 @@ declare(strict_types=1);
 namespace Cake\Datasource\Paging\Exception;
 
 use Cake\Core\Exception\CakeException;
-use Cake\Core\Exception\HttpErrorCodeInterface;
 
 /**
  * Exception raised when requested page number does not exist.
  */
-class PageOutOfBoundsException extends CakeException implements HttpErrorCodeInterface
+class PageOutOfBoundsException extends CakeException
 {
     /**
      * @inheritDoc
      */
-    protected int $_defaultCode = 404;
-
-    /**
-     * @inheritDoc
-     */
-    protected string $_messageTemplate = 'Page number `%s` could not be found.';
+    protected $_messageTemplate = 'Page number %s could not be found.';
 }
+
+// phpcs:disable
+class_alias(
+    'Cake\Datasource\Paging\Exception\PageOutOfBoundsException',
+    'Cake\Datasource\Exception\PageOutOfBoundsException'
+);
+// phpcs:enable

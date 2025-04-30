@@ -32,7 +32,7 @@ class ServiceConfig
      * @param mixed $default The default value to use if $path does not exist.
      * @return mixed The configuration data or $default value.
      */
-    public function get(string $path, mixed $default = null): mixed
+    public function get(string $path, $default = null)
     {
         return Configure::read($path, $default);
     }

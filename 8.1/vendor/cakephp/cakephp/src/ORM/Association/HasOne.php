@@ -40,35 +40,23 @@ class HasOne extends Association
      *
      * @var array<string>
      */
-    protected array $_validStrategies = [
+    protected $_validStrategies = [
         self::STRATEGY_JOIN,
         self::STRATEGY_SELECT,
     ];
 
     /**
-     * @inheritDoc
+     * Gets the name of the field representing the foreign key to the target table.
+     *
+     * @return array<string>|string
      */
-    public function getForeignKey(): array|string|false
+    public function getForeignKey()
     {
-        if (!isset($this->_foreignKey)) {
+        if ($this->_foreignKey === null) {
             $this->_foreignKey = $this->_modelKey($this->getSource()->getAlias());
         }
 
         return $this->_foreignKey;
-    }
-
-    /**
-     * Sets the name of the field representing the foreign key to the target table.
-     *
-     * @param array<string>|string|false $key the key or keys to be used to link both tables together, if set to `false`
-     *  no join conditions will be generated automatically.
-     * @return $this
-     */
-    public function setForeignKey(array|string|false $key)
-    {
-        $this->_foreignKey = $key;
-
-        return $this;
     }
 
     /**
@@ -118,24 +106,18 @@ class HasOne extends Association
      * the saved entity
      * @see \Cake\ORM\Table::save()
      */
-    public function saveAssociated(EntityInterface $entity, array $options = []): EntityInterface|false
+    public function saveAssociated(EntityInterface $entity, array $options = [])
     {
         $targetEntity = $entity->get($this->getProperty());
-        if (!$targetEntity instanceof EntityInterface) {
+        if (empty($targetEntity) || !($targetEntity instanceof EntityInterface)) {
             return $entity;
         }
 
-        /** @var array<string> $foreignKeys */
-        $foreignKeys = (array)$this->getForeignKey();
         $properties = array_combine(
-            $foreignKeys,
-            $entity->extract((array)$this->getBindingKey()),
+            (array)$this->getForeignKey(),
+            $entity->extract((array)$this->getBindingKey())
         );
-        if (method_exists($targetEntity, 'patch')) {
-            $targetEntity = $targetEntity->patch($properties, ['guard' => false]);
-        } else {
-            $targetEntity->set($properties, ['guard' => false]);
-        }
+        $targetEntity->set($properties, ['guard' => false]);
 
         if (!$this->getTarget()->save($targetEntity, $options)) {
             $targetEntity->unset(array_keys($properties));
@@ -159,7 +141,7 @@ class HasOne extends Association
             'bindingKey' => $this->getBindingKey(),
             'strategy' => $this->getStrategy(),
             'associationType' => $this->type(),
-            'finder' => $this->find(...),
+            'finder' => [$this, 'find'],
         ]);
 
         return $loader->buildEagerLoader($options);

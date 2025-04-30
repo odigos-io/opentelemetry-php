@@ -33,14 +33,14 @@ class LabelWidget implements WidgetInterface
      *
      * @var \Cake\View\StringTemplate
      */
-    protected StringTemplate $_templates;
+    protected $_templates;
 
     /**
      * The template to use.
      *
      * @var string
      */
-    protected string $_labelTemplate = 'label';
+    protected $_labelTemplate = 'label';
 
     /**
      * Constructor.

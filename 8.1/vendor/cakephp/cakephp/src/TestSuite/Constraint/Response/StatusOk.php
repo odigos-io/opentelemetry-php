@@ -25,7 +25,7 @@ class StatusOk extends StatusCodeBase
     /**
      * @var array<int, int>|int
      */
-    protected array|int $code = [200, 204];
+    protected $code = [200, 204];
 
     /**
      * Assertion message

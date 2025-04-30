@@ -29,15 +29,15 @@ class IsUnique
      *
      * @var array<string>
      */
-    protected array $_fields;
+    protected $_fields;
 
     /**
      * The unique check options
      *
      * @var array<string, mixed>
      */
-    protected array $_options = [
-        'allowMultipleNulls' => true,
+    protected $_options = [
+        'allowMultipleNulls' => false,
     ];
 
     /**
@@ -45,7 +45,7 @@ class IsUnique
      *
      * ### Options
      *
-     * - `allowMultipleNulls` Allows any field to have multiple null values. Defaults to true.
+     * - `allowMultipleNulls` Allows any field to have multiple null values. Defaults to false.
      *
      * @param array<string> $fields The list of fields to check uniqueness for
      * @param array<string, mixed> $options The options for unique checks.
@@ -75,20 +75,17 @@ class IsUnique
             return true;
         }
 
-        /** @var \Cake\ORM\Table $repository */
-        $repository = $options['repository'];
-
-        $alias = $repository->getAlias();
+        $alias = $options['repository']->getAlias();
         $conditions = $this->_alias($alias, $fields);
         if ($entity->isNew() === false) {
-            $keys = (array)$repository->getPrimaryKey();
+            $keys = (array)$options['repository']->getPrimaryKey();
             $keys = $this->_alias($alias, $entity->extract($keys));
             if (Hash::filter($keys)) {
                 $conditions['NOT'] = $keys;
             }
         }
 
-        return !$repository->exists($conditions);
+        return !$options['repository']->exists($conditions);
     }
 
     /**
@@ -102,7 +99,7 @@ class IsUnique
     {
         $aliased = [];
         foreach ($conditions as $key => $value) {
-            $aliased["{$alias}.{$key} IS"] = $value;
+            $aliased["$alias.$key IS"] = $value;
         }
 
         return $aliased;

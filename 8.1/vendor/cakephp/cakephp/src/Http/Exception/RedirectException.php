@@ -16,6 +16,8 @@ declare(strict_types=1);
  */
 namespace Cake\Http\Exception;
 
+use function Cake\Core\deprecationWarning;
+
 /**
  * An exception subclass used by routing and application code to
  * trigger a redirect.
@@ -27,7 +29,7 @@ namespace Cake\Http\Exception;
  * ```
  *
  * Additional headers can also be provided in the constructor, or
- * using the setHeaders() method.
+ * using the addHeaders() method.
  */
 class RedirectException extends HttpException
 {
@@ -45,5 +47,40 @@ class RedirectException extends HttpException
         foreach ($headers as $key => $value) {
             $this->setHeader($key, (array)$value);
         }
+    }
+
+    /**
+     * Add headers to be included in the response generated from this exception
+     *
+     * @param array $headers An array of `header => value` to append to the exception.
+     *  If a header already exists, the new values will be appended to the existing ones.
+     * @return $this
+     * @deprecated 4.2.0 Use `setHeaders()` instead.
+     */
+    public function addHeaders(array $headers)
+    {
+        deprecationWarning('RedirectException::addHeaders() is deprecated, use setHeaders() instead.');
+
+        foreach ($headers as $key => $value) {
+            $this->headers[$key][] = $value;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Remove a header from the exception.
+     *
+     * @param string $key The header to remove.
+     * @return $this
+     * @deprecated 4.2.0 Use `setHeaders()` instead.
+     */
+    public function removeHeader(string $key)
+    {
+        deprecationWarning('RedirectException::removeHeader() is deprecated, use setHeaders() instead.');
+
+        unset($this->headers[$key]);
+
+        return $this;
     }
 }

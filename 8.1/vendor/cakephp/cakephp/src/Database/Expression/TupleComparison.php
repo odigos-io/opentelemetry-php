@@ -31,8 +31,9 @@ class TupleComparison extends ComparisonExpression
      * The type to be used for casting the value to a database representation
      *
      * @var array<string|null>
+     * @psalm-suppress NonInvariantDocblockPropertyType
      */
-    protected array $types;
+    protected $_type;
 
     /**
      * Constructor
@@ -43,13 +44,9 @@ class TupleComparison extends ComparisonExpression
      * one type per position in the value array in needed
      * @param string $conjunction the operator used for comparing field and value
      */
-    public function __construct(
-        ExpressionInterface|array|string $fields,
-        ExpressionInterface|array $values,
-        array $types = [],
-        string $conjunction = '=',
-    ) {
-        $this->types = $types;
+    public function __construct($fields, $values, array $types = [], string $conjunction = '=')
+    {
+        $this->_type = $types;
         $this->setField($fields);
         $this->_operator = $conjunction;
         $this->setValue($values);
@@ -62,7 +59,7 @@ class TupleComparison extends ComparisonExpression
      */
     public function getType(): array
     {
-        return $this->types;
+        return $this->_type;
     }
 
     /**
@@ -71,18 +68,20 @@ class TupleComparison extends ComparisonExpression
      * @param mixed $value The value to compare
      * @return void
      */
-    public function setValue(mixed $value): void
+    public function setValue($value): void
     {
         if ($this->isMulti()) {
             if (is_array($value) && !is_array(current($value))) {
                 throw new InvalidArgumentException(
-                    'Multi-tuple comparisons require a multi-tuple value, single-tuple given.',
+                    'Multi-tuple comparisons require a multi-tuple value, single-tuple given.'
                 );
             }
-        } elseif (is_array($value) && is_array(current($value))) {
-            throw new InvalidArgumentException(
-                'Single-tuple comparisons require a single-tuple value, multi-tuple given.',
-            );
+        } else {
+            if (is_array($value) && is_array(current($value))) {
+                throw new InvalidArgumentException(
+                    'Single-tuple comparisons require a single-tuple value, multi-tuple given.'
+                );
+            }
         }
 
         $this->_value = $value;
@@ -134,17 +133,17 @@ class TupleComparison extends ComparisonExpression
                 continue;
             }
 
-            $type = $this->types;
+            $type = $this->_type;
             $isMultiOperation = $this->isMulti();
-            if (!$type) {
+            if (empty($type)) {
                 $type = null;
             }
 
             if ($isMultiOperation) {
                 $bound = [];
                 foreach ($value as $k => $val) {
+                    /** @var string $valType */
                     $valType = $type && isset($type[$k]) ? $type[$k] : $type;
-                    assert($valType === null || is_scalar($valType));
                     $bound[] = $this->_bindValue($val, $binder, $valType);
                 }
 
@@ -152,8 +151,8 @@ class TupleComparison extends ComparisonExpression
                 continue;
             }
 
+            /** @var string $valType */
             $valType = $type && isset($type[$i]) ? $type[$i] : $type;
-            assert($valType === null || is_scalar($valType));
             $values[] = $this->_bindValue($value, $binder, $valType);
         }
 
@@ -163,7 +162,7 @@ class TupleComparison extends ComparisonExpression
     /**
      * @inheritDoc
      */
-    protected function _bindValue(mixed $value, ValueBinder $binder, ?string $type = null): string
+    protected function _bindValue($value, ValueBinder $binder, ?string $type = null): string
     {
         $placeholder = $binder->placeholder('tuple');
         $binder->bind($placeholder, $value, $type);
@@ -176,7 +175,8 @@ class TupleComparison extends ComparisonExpression
      */
     public function traverse(Closure $callback)
     {
-        $fields = (array)$this->getField();
+        /** @var array<string> $fields */
+        $fields = $this->getField();
         foreach ($fields as $field) {
             $this->_traverseValue($field, $callback);
         }
@@ -207,10 +207,10 @@ class TupleComparison extends ComparisonExpression
      * it is an ExpressionInterface
      *
      * @param mixed $value The value to traverse
-     * @param \Closure $callback The callback to use when traversing
+     * @param \Closure $callback The callable to use when traversing
      * @return void
      */
-    protected function _traverseValue(mixed $value, Closure $callback): void
+    protected function _traverseValue($value, Closure $callback): void
     {
         if ($value instanceof ExpressionInterface) {
             $callback($value);

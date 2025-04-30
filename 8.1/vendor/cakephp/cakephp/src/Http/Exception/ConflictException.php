@@ -24,7 +24,7 @@ class ConflictException extends HttpException
     /**
      * @inheritDoc
      */
-    protected int $_defaultCode = 409;
+    protected $_defaultCode = 409;
 
     /**
      * Constructor
@@ -35,7 +35,7 @@ class ConflictException extends HttpException
      */
     public function __construct(?string $message = null, ?int $code = null, ?Throwable $previous = null)
     {
-        if (!$message) {
+        if (empty($message)) {
             $message = 'Conflict';
         }
         parent::__construct($message, $code, $previous);

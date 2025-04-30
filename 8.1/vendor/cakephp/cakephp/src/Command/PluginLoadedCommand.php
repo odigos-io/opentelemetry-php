@@ -35,14 +35,6 @@ class PluginLoadedCommand extends Command
     }
 
     /**
-     * @inheritDoc
-     */
-    public static function getDescription(): string
-    {
-        return 'Displays all currently loaded plugins.';
-    }
-
-    /**
      * Displays all currently loaded plugins.
      *
      * @param \Cake\Console\Arguments $args The command arguments.
@@ -65,7 +57,7 @@ class PluginLoadedCommand extends Command
      */
     public function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
     {
-        $parser->setDescription(static::getDescription());
+        $parser->setDescription('Displays all currently loaded plugins.');
 
         return $parser;
     }

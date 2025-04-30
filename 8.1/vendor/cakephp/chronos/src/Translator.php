@@ -15,8 +15,6 @@ namespace Cake\Chronos;
 
 /**
  * Basic english only 'translator' for diffForHumans()
- *
- * @internal
  */
 class Translator
 {
@@ -25,7 +23,7 @@ class Translator
      *
      * @var array
      */
-    public static array $strings = [
+    public static $strings = [
         'year' => '1 year',
         'year_plural' => '{count} years',
         'month' => '1 month',
@@ -50,7 +48,7 @@ class Translator
      * Check if a translation key exists.
      *
      * @param string $key The key to check.
-     * @return bool Whether the key exists.
+     * @return bool Whether or not the key exists.
      */
     public function exists(string $key): bool
     {

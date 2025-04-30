@@ -26,5 +26,5 @@ class MissingViewException extends CakeException
     /**
      * @inheritDoc
      */
-    protected string $_messageTemplate = 'View class `%s` is missing.';
+    protected $_messageTemplate = 'View class "%s" is missing.';
 }

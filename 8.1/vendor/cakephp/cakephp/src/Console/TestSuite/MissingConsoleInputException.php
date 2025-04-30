@@ -28,7 +28,7 @@ class MissingConsoleInputException extends RuntimeException
      * @param string $question The question text.
      * @return void
      */
-    public function setQuestion(string $question): void
+    public function setQuestion($question)
     {
         $this->message .= "\nThe question asked was: " . $question;
     }

@@ -15,31 +15,25 @@ declare(strict_types=1);
 namespace Cake\Routing\Exception;
 
 use Cake\Core\Exception\CakeException;
-use Cake\Core\Exception\HttpErrorCodeInterface;
 use Throwable;
 
 /**
  * Exception raised when a URL cannot be reverse routed
  * or when a URL cannot be parsed.
  */
-class MissingRouteException extends CakeException implements HttpErrorCodeInterface
+class MissingRouteException extends CakeException
 {
     /**
      * @inheritDoc
      */
-    protected int $_defaultCode = 404;
-
-    /**
-     * @inheritDoc
-     */
-    protected string $_messageTemplate = 'A route matching `%s` could not be found.';
+    protected $_messageTemplate = 'A route matching "%s" could not be found.';
 
     /**
      * Message template to use when the requested method is included.
      *
      * @var string
      */
-    protected string $_messageTemplateWithMethod = 'A `%s` route matching `%s` could not be found.';
+    protected $_messageTemplateWithMethod = 'A "%s" route matching "%s" could not be found.';
 
     /**
      * Constructor.
@@ -49,7 +43,7 @@ class MissingRouteException extends CakeException implements HttpErrorCodeInterf
      * @param int|null $code The code of the error, is also the HTTP status code for the error. Defaults to 404.
      * @param \Throwable|null $previous the previous exception.
      */
-    public function __construct(array|string $message, ?int $code = 404, ?Throwable $previous = null)
+    public function __construct($message, ?int $code = 404, ?Throwable $previous = null)
     {
         if (is_array($message)) {
             if (isset($message['message'])) {

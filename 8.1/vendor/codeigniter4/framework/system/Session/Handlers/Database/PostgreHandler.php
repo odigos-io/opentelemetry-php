@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of CodeIgniter 4 framework.
  *
@@ -75,7 +73,7 @@ class PostgreHandler extends DatabaseHandler
     protected function lockSession(string $sessionID): bool
     {
         $arg = "hashtext('{$sessionID}')" . ($this->matchIP ? ", hashtext('{$this->ipAddress}')" : '');
-        if ($this->db->simpleQuery("SELECT pg_advisory_lock({$arg})") !== false) {
+        if ($this->db->simpleQuery("SELECT pg_advisory_lock({$arg})")) {
             $this->lock = $arg;
 
             return true;
@@ -93,7 +91,7 @@ class PostgreHandler extends DatabaseHandler
             return true;
         }
 
-        if ($this->db->simpleQuery("SELECT pg_advisory_unlock({$this->lock})") !== false) {
+        if ($this->db->simpleQuery("SELECT pg_advisory_unlock({$this->lock})")) {
             $this->lock = false;
 
             return true;

@@ -15,9 +15,6 @@ declare(strict_types=1);
  */
 namespace Cake\TestSuite\Constraint\Response;
 
-use Cake\Http\MimeType;
-use Psr\Http\Message\ResponseInterface;
-
 /**
  * ContentType
  *
@@ -28,20 +25,19 @@ class ContentType extends ResponseBase
     /**
      * @var \Cake\Http\Response
      */
-    protected ResponseInterface $response;
+    protected $response;
 
     /**
      * Checks assertion
      *
      * @param mixed $other Expected type
      * @return bool
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
      */
     public function matches($other): bool
     {
-        $mimeType = MimeType::getMimeType($other);
-        if ($mimeType !== null) {
-            $other = $mimeType;
+        $alias = $this->response->getMimeType($other);
+        if ($alias !== false) {
+            $other = $alias;
         }
 
         return $other === $this->response->getType();

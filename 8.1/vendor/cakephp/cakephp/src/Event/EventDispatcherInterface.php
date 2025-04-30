@@ -24,8 +24,6 @@ namespace Cake\Event;
  *
  * The {@link \Cake\Event\EventDispatcherTrait} lets you easily implement
  * this interface.
- *
- * @template TSubject of object
  */
 interface EventDispatcherInterface
 {
@@ -35,13 +33,13 @@ interface EventDispatcherInterface
      * Returns a dispatched event.
      *
      * @param string $name Name of the event.
-     * @param array $data Any value you wish to be transported with this event to
+     * @param array|null $data Any value you wish to be transported with this event to
      * it can be read by listeners.
-     * @param TSubject|null $subject The object that this event applies to
+     * @param object|null $subject The object that this event applies to
      * ($this by default).
-     * @return \Cake\Event\EventInterface<TSubject>
+     * @return \Cake\Event\EventInterface
      */
-    public function dispatchEvent(string $name, array $data = [], ?object $subject = null): EventInterface;
+    public function dispatchEvent(string $name, ?array $data = null, ?object $subject = null): EventInterface;
 
     /**
      * Sets the Cake\Event\EventManager manager instance for this object.

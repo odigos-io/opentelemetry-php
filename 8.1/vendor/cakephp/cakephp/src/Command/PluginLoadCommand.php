@@ -16,27 +16,19 @@ declare(strict_types=1);
  */
 namespace Cake\Command;
 
-use Brick\VarExporter\VarExporter;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Core\Exception\MissingPluginException;
 use Cake\Core\Plugin;
-use Cake\Core\PluginInterface;
-use Cake\Utility\Hash;
 
 /**
  * Command for loading plugins.
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
 class PluginLoadCommand extends Command
 {
-    /**
-     * Config file
-     *
-     * @var string
-     */
-    protected string $configFile = CONFIG . 'plugins.php';
-
     /**
      * @inheritDoc
      */
@@ -46,12 +38,18 @@ class PluginLoadCommand extends Command
     }
 
     /**
-     * @inheritDoc
+     * Arguments
+     *
+     * @var \Cake\Console\Arguments
      */
-    public static function getDescription(): string
-    {
-        return 'Command for loading plugins.';
-    }
+    protected $args;
+
+    /**
+     * Console IO
+     *
+     * @var \Cake\Console\ConsoleIo
+     */
+    protected $io;
 
     /**
      * Execute the command
@@ -62,76 +60,73 @@ class PluginLoadCommand extends Command
      */
     public function execute(Arguments $args, ConsoleIo $io): ?int
     {
-        $plugin = (string)$args->getArgument('plugin');
-        $options = [];
-        if ($args->getOption('only-debug')) {
-            $options['onlyDebug'] = true;
-        }
-        if ($args->getOption('only-cli')) {
-            $options['onlyCli'] = true;
-        }
-        if ($args->getOption('optional')) {
-            $options['optional'] = true;
-        }
+        $this->io = $io;
+        $this->args = $args;
 
-        foreach (PluginInterface::VALID_HOOKS as $hook) {
-            if ($args->getOption('no-' . $hook)) {
-                $options[$hook] = false;
-            }
-        }
-
+        $plugin = $args->getArgument('plugin') ?? '';
         try {
             Plugin::getCollection()->findPath($plugin);
         } catch (MissingPluginException $e) {
-            if (empty($options['optional'])) {
-                $io->err($e->getMessage());
-                $io->err('Ensure you have the correct spelling and casing.');
+            $this->io->err($e->getMessage());
+            $this->io->err('Ensure you have the correct spelling and casing.');
 
-                return static::CODE_ERROR;
-            }
+            return static::CODE_ERROR;
         }
 
-        $result = $this->modifyConfigFile($plugin, $options);
-        if ($result === static::CODE_ERROR) {
-            $io->err('Failed to update `CONFIG/plugins.php`');
-        }
+        $app = APP . 'Application.php';
+        if (file_exists($app)) {
+            $this->modifyApplication($app, $plugin);
 
-        $io->success('Plugin added successfully to `CONFIG/plugins.php`');
-
-        return $result;
-    }
-
-    /**
-     * Modify the plugins config file.
-     *
-     * @param string $plugin Plugin name.
-     * @param array<string, mixed> $options Plugin options.
-     * @return int
-     */
-    protected function modifyConfigFile(string $plugin, array $options): int
-    {
-        // phpcs:ignore
-        $config = @include $this->configFile;
-        if (!is_array($config)) {
-            $config = [];
-        } else {
-            $config = Hash::normalize($config);
-        }
-
-        $config[$plugin] = $options;
-
-        if (class_exists(VarExporter::class)) {
-            $array = VarExporter::export($config, VarExporter::TRAILING_COMMA_IN_ARRAY);
-        } else {
-            $array = var_export($config, true);
-        }
-        $contents = '<?php' . "\n\n" . 'return ' . $array . ';' . "\n";
-
-        if (file_put_contents($this->configFile, $contents)) {
             return static::CODE_SUCCESS;
         }
 
         return static::CODE_ERROR;
+    }
+
+    /**
+     * Modify the application class
+     *
+     * @param string $app The Application file to modify.
+     * @param string $plugin The plugin name to add.
+     * @return void
+     */
+    protected function modifyApplication(string $app, string $plugin): void
+    {
+        $contents = file_get_contents($app);
+
+        // Find start of bootstrap
+        if (!preg_match('/^(\s+)public function bootstrap(?:\s*)\(\)/mu', $contents, $matches, PREG_OFFSET_CAPTURE)) {
+            $this->io->err('Your Application class does not have a bootstrap() method. Please add one.');
+            $this->abort();
+        }
+
+        $offset = $matches[0][1];
+        $indent = $matches[1][0];
+
+        // Find closing function bracket
+        if (!preg_match("/^$indent\}\n$/mu", $contents, $matches, PREG_OFFSET_CAPTURE, $offset)) {
+            $this->io->err('Your Application class does not have a bootstrap() method. Please add one.');
+            $this->abort();
+        }
+
+        // Check if plugin is already loaded
+        $regex = '#->addPlugin\(\'' . $plugin . '\'#mu';
+        if (preg_match($regex, $contents, $otherMatches, PREG_OFFSET_CAPTURE)) {
+            $this->io->info('The specified plugin is already loaded!');
+
+            return;
+        }
+
+        $append = "$indent    \$this->addPlugin('%s');\n";
+        $insert = str_replace(', []', '', sprintf($append, $plugin));
+
+        $offset = $matches[0][1];
+        $contents = substr_replace($contents, $insert, $offset, 0);
+
+        file_put_contents($app, $contents);
+
+        $this->io->out('');
+        $this->io->out(sprintf('%s modified', $app));
     }
 
     /**
@@ -142,43 +137,14 @@ class PluginLoadCommand extends Command
      */
     public function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
     {
-        return $parser
-            ->setDescription(static::getDescription())
-            ->addArgument('plugin', [
-                'help' => 'Name of the plugin to load. Must be in CamelCase format. Example: cake plugin load Example',
-                'required' => true,
-            ])
-            ->addOption('only-debug', [
-                'boolean' => true,
-                'help' => 'Load the plugin only when `debug` is enabled.',
-            ])
-            ->addOption('only-cli', [
-                'boolean' => true,
-                'help' => 'Load the plugin only for CLI.',
-            ])
-            ->addOption('optional', [
-                'boolean' => true,
-                'help' => 'Do not throw an error if the plugin is not available.',
-            ])
-            ->addOption('no-bootstrap', [
-                'boolean' => true,
-                'help' => 'Do not run the `bootstrap()` hook.',
-            ])
-            ->addOption('no-console', [
-                'boolean' => true,
-                'help' => 'Do not run the `console()` hook.',
-            ])
-            ->addOption('no-middleware', [
-                'boolean' => true,
-                'help' => 'Do not run the `middleware()` hook..',
-            ])
-            ->addOption('no-routes', [
-                'boolean' => true,
-                'help' => 'Do not run the `routes()` hook.',
-            ])
-            ->addOption('no-services', [
-                'boolean' => true,
-                'help' => 'Do not run the `services()` hook.',
-            ]);
+        $parser->setDescription([
+            'Command for loading plugins.',
+        ])
+        ->addArgument('plugin', [
+            'help' => 'Name of the plugin to load. Must be in CamelCase format. Example: cake plugin load Example',
+            'required' => true,
+        ]);
+
+        return $parser;
     }
 }

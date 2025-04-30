@@ -19,11 +19,22 @@ use Cake\TestSuite\Fixture\TestFixture;
 class ThingsFixture extends TestFixture
 {
     /**
+     * fields property
+     *
+     * @var array
+     */
+    public $fields = [
+        'id' => ['type' => 'integer'],
+        'title' => ['type' => 'string', 'length' => 20],
+        'body' => ['type' => 'string', 'length' => 50],
+    ];
+
+    /**
      * records property
      *
      * @var array
      */
-    public array $records = [
+    public $records = [
         ['id' => 1, 'title' => 'a title', 'body' => 'a body'],
         ['id' => 2, 'title' => 'another title', 'body' => 'another body'],
     ];

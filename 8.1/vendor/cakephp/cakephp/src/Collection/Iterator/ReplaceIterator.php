@@ -19,7 +19,6 @@ namespace Cake\Collection\Iterator;
 use ArrayIterator;
 use Cake\Collection\Collection;
 use Cake\Collection\CollectionInterface;
-use Iterator;
 use Traversable;
 
 /**
@@ -40,7 +39,7 @@ class ReplaceIterator extends Collection
      *
      * @var \Traversable
      */
-    protected Traversable $_innerIterator;
+    protected $_innerIterator;
 
     /**
      * Creates an iterator from another iterator that will modify each of the values
@@ -66,15 +65,18 @@ class ReplaceIterator extends Collection
      *
      * @return mixed
      */
-    public function current(): mixed
+    #[\ReturnTypeWillChange]
+    public function current()
     {
-        return ($this->_callback)(parent::current(), $this->key(), $this->_innerIterator);
+        $callback = $this->_callback;
+
+        return $callback(parent::current(), $this->key(), $this->_innerIterator);
     }
 
     /**
      * @inheritDoc
      */
-    public function unwrap(): Iterator
+    public function unwrap(): Traversable
     {
         $iterator = $this->_innerIterator;
 
@@ -82,7 +84,7 @@ class ReplaceIterator extends Collection
             $iterator = $iterator->unwrap();
         }
 
-        if ($iterator::class !== ArrayIterator::class) {
+        if (get_class($iterator) !== ArrayIterator::class) {
             return $this;
         }
 

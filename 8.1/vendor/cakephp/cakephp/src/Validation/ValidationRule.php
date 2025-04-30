@@ -20,9 +20,7 @@ declare(strict_types=1);
  */
 namespace Cake\Validation;
 
-use Cake\ORM\Table;
-use Closure;
-use ReflectionFunction;
+use InvalidArgumentException;
 
 /**
  * ValidationRule object. Represents a validation method, error message and
@@ -40,7 +38,7 @@ class ValidationRule
     /**
      * The 'on' key
      *
-     * @var callable|string|null
+     * @var callable|string
      */
     protected $_on;
 
@@ -49,14 +47,14 @@ class ValidationRule
      *
      * @var bool
      */
-    protected bool $_last = false;
+    protected $_last = false;
 
     /**
      * The 'message' key
      *
-     * @var string|null
+     * @var string
      */
-    protected ?string $_message = null;
+    protected $_message;
 
     /**
      * Key under which the object or class where the method to be used for
@@ -64,21 +62,21 @@ class ValidationRule
      *
      * @var string
      */
-    protected string $_provider = 'default';
+    protected $_provider = 'default';
 
     /**
      * Extra arguments to be passed to the validation method
      *
      * @var array
      */
-    protected array $_pass = [];
+    protected $_pass = [];
 
     /**
      * Constructor
      *
-     * @param array<string, mixed> $validator The validator properties
+     * @param array<string, mixed> $validator [optional] The validator properties
      */
-    public function __construct(array $validator)
+    public function __construct(array $validator = [])
     {
         $this->_addValidatorProps($validator);
     }
@@ -112,7 +110,7 @@ class ValidationRule
      * @throws \InvalidArgumentException when the supplied rule is not a valid
      * callable for the configured scope
      */
-    public function process(mixed $value, array $providers, array $context = []): array|string|bool
+    public function process($value, array $providers, array $context = [])
     {
         $context += ['data' => [], 'newRecord' => true, 'providers' => $providers];
 
@@ -120,44 +118,32 @@ class ValidationRule
             return true;
         }
 
-        if (is_string($this->_rule)) {
-            $provider = $providers[$this->_provider];
-            if (
-                class_exists(Table::class)
-                && $provider instanceof Table
-                && !method_exists($provider, $this->_rule)
-                && $provider->behaviors()->hasMethod($this->_rule)
-            ) {
-                foreach ($provider->behaviors() as $behavior) {
-                    if (in_array($this->_rule, $behavior->implementedMethods(), true)) {
-                        $provider = $behavior;
-                        break;
-                    }
-                }
-            }
-
-            /** @phpstan-ignore-next-line */
-            $callable = [$provider, $this->_rule](...);
-        } else {
+        if (!is_string($this->_rule) && is_callable($this->_rule)) {
             $callable = $this->_rule;
-            if (!$callable instanceof Closure) {
-                $callable = $callable(...);
-            }
+            $isCallable = true;
+        } else {
+            $provider = $providers[$this->_provider];
+            $callable = [$provider, $this->_rule];
+            $isCallable = is_callable($callable);
         }
 
-        $args = [$value];
+        if (!$isCallable) {
+            /** @psalm-suppress PossiblyInvalidArgument */
+            $message = sprintf(
+                'Unable to call method "%s" in "%s" provider for field "%s"',
+                $this->_rule,
+                $this->_provider,
+                $context['field']
+            );
+            throw new InvalidArgumentException($message);
+        }
 
         if ($this->_pass) {
-            $args = array_merge([$value], array_values($this->_pass));
+            $args = array_values(array_merge([$value], $this->_pass, [$context]));
+            $result = $callable(...$args);
+        } else {
+            $result = $callable($value, $context);
         }
-
-        $params = (new ReflectionFunction($callable))->getParameters();
-        $lastParam = array_pop($params);
-        if ($lastParam && $lastParam->getName() === 'context') {
-            $args['context'] = $context;
-        }
-
-        $result = $callable(...$args);
 
         if ($result === false) {
             return $this->_message ?: false;
@@ -180,17 +166,16 @@ class ValidationRule
      */
     protected function _skip(array $context): bool
     {
-        if (is_string($this->_on)) {
-            $newRecord = $context['newRecord'];
-
-            return ($this->_on === Validator::WHEN_CREATE && !$newRecord)
-                || ($this->_on === Validator::WHEN_UPDATE && $newRecord);
-        }
-
-        if ($this->_on !== null) {
+        if (!is_string($this->_on) && is_callable($this->_on)) {
             $function = $this->_on;
 
             return !$function($context);
+        }
+
+        $newRecord = $context['newRecord'];
+        if (!empty($this->_on)) {
+            return ($this->_on === Validator::WHEN_CREATE && !$newRecord)
+                || ($this->_on === Validator::WHEN_UPDATE && $newRecord);
         }
 
         return false;
@@ -205,7 +190,7 @@ class ValidationRule
     protected function _addValidatorProps(array $validator = []): void
     {
         foreach ($validator as $key => $value) {
-            if (!$value) {
+            if (empty($value)) {
                 continue;
             }
             if ($key === 'rule' && is_array($value) && !is_callable($value)) {
@@ -213,7 +198,7 @@ class ValidationRule
                 $value = array_shift($value);
             }
             if (in_array($key, ['rule', 'on', 'message', 'last', 'provider', 'pass'], true)) {
-                $this->{"_{$key}"} = $value;
+                $this->{"_$key"} = $value;
             }
         }
     }
@@ -224,7 +209,7 @@ class ValidationRule
      * @param string $property The name of the property to retrieve.
      * @return mixed
      */
-    public function get(string $property): mixed
+    public function get(string $property)
     {
         $property = '_' . $property;
 

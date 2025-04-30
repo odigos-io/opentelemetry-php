@@ -19,6 +19,7 @@ namespace Cake\Mailer;
 use BadMethodCallException;
 use Cake\Core\App;
 use Cake\Core\ObjectRegistry;
+use RuntimeException;
 
 /**
  * An object registry for mailer transports.
@@ -28,16 +29,16 @@ use Cake\Core\ObjectRegistry;
 class TransportRegistry extends ObjectRegistry
 {
     /**
-     * Resolve a mailer transport classname.
+     * Resolve a mailer tranport classname.
      *
      * Part of the template method for Cake\Core\ObjectRegistry::load()
      *
      * @param string $class Partial classname to resolve or transport instance.
-     * @return class-string<\Cake\Mailer\AbstractTransport>|null Either the correct classname or null.
+     * @return string|null Either the correct classname or null.
+     * @psalm-return class-string|null
      */
     protected function _resolveClassName(string $class): ?string
     {
-        /** @var class-string<\Cake\Mailer\AbstractTransport>|null */
         return App::className($class, 'Mailer/Transport', 'Transport');
     }
 
@@ -53,7 +54,7 @@ class TransportRegistry extends ObjectRegistry
      */
     protected function _throwMissingClassError(string $class, ?string $plugin): void
     {
-        throw new BadMethodCallException(sprintf('Mailer transport `%s` is not available.', $class));
+        throw new BadMethodCallException(sprintf('Mailer transport %s is not available.', $class));
     }
 
     /**
@@ -61,18 +62,27 @@ class TransportRegistry extends ObjectRegistry
      *
      * Part of the template method for Cake\Core\ObjectRegistry::load()
      *
-     * @param \Cake\Mailer\AbstractTransport|class-string<\Cake\Mailer\AbstractTransport> $class The classname or object to make.
+     * @param \Cake\Mailer\AbstractTransport|string $class The classname or object to make.
      * @param string $alias The alias of the object.
      * @param array<string, mixed> $config An array of settings to use for the cache engine.
      * @return \Cake\Mailer\AbstractTransport The constructed transport class.
+     * @throws \RuntimeException when an object doesn't implement the correct interface.
      */
-    protected function _create(object|string $class, string $alias, array $config): AbstractTransport
+    protected function _create($class, string $alias, array $config): AbstractTransport
     {
         if (is_object($class)) {
-            return $class;
+            $instance = $class;
+        } else {
+            $instance = new $class($config);
         }
 
-        return new $class($config);
+        if ($instance instanceof AbstractTransport) {
+            return $instance;
+        }
+
+        throw new RuntimeException(
+            'Mailer transports must use Cake\Mailer\AbstractTransport as a base class.'
+        );
     }
 
     /**

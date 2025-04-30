@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of CodeIgniter 4 framework.
  *
@@ -64,16 +62,6 @@ class RedisHandler extends BaseHandler
     protected $sessionExpiration = 7200;
 
     /**
-     * Time (microseconds) to wait if lock cannot be acquired.
-     */
-    private int $lockRetryInterval = 100_000;
-
-    /**
-     * Maximum number of lock acquisition attempts.
-     */
-    private int $lockMaxRetries = 300;
-
-    /**
      * @param string $ipAddress User's IP address
      *
      * @throws SessionException
@@ -86,7 +74,6 @@ class RedisHandler extends BaseHandler
         $this->sessionExpiration = ($config->expiration === 0)
             ? (int) ini_get('session.gc_maxlifetime')
             : $config->expiration;
-
         // Add sessionCookieName for multiple session cookies.
         $this->keyPrefix .= $config->cookieName . ':';
 
@@ -95,9 +82,6 @@ class RedisHandler extends BaseHandler
         if ($this->matchIP === true) {
             $this->keyPrefix .= $this->ipAddress . ':';
         }
-
-        $this->lockRetryInterval = $config->lockWait ?? $this->lockRetryInterval;
-        $this->lockMaxRetries    = $config->lockAttempts ?? $this->lockMaxRetries;
     }
 
     protected function setSavePath(): void
@@ -106,57 +90,23 @@ class RedisHandler extends BaseHandler
             throw SessionException::forEmptySavepath();
         }
 
-        $url   = parse_url($this->savePath);
-        $query = [];
-
-        if ($url === false) {
-            // Unix domain socket like `unix:///var/run/redis/redis.sock?persistent=1`.
-            if (preg_match('#unix://(/[^:?]+)(\?.+)?#', $this->savePath, $matches)) {
-                $host = $matches[1];
-                $port = 0;
-
-                if (isset($matches[2])) {
-                    parse_str(ltrim($matches[2], '?'), $query);
-                }
-            } else {
-                throw SessionException::forInvalidSavePathFormat($this->savePath);
+        if (preg_match('#(?:(tcp|tls)://)?([^:?]+)(?:\:(\d+))?(\?.+)?#', $this->savePath, $matches)) {
+            if (! isset($matches[4])) {
+                $matches[4] = ''; // Just to avoid undefined index notices below
             }
+
+            $this->savePath = [
+                'protocol' => ! empty($matches[1]) ? $matches[1] : self::DEFAULT_PROTOCOL,
+                'host'     => $matches[2],
+                'port'     => empty($matches[3]) ? self::DEFAULT_PORT : $matches[3],
+                'password' => preg_match('#auth=([^\s&]+)#', $matches[4], $match) ? $match[1] : null,
+                'database' => preg_match('#database=(\d+)#', $matches[4], $match) ? (int) $match[1] : 0,
+                'timeout'  => preg_match('#timeout=(\d+\.\d+|\d+)#', $matches[4], $match) ? (float) $match[1] : 0.0,
+            ];
+
+            preg_match('#prefix=([^\s&]+)#', $matches[4], $match) && $this->keyPrefix = $match[1];
         } else {
-            // Also accepts `/var/run/redis.sock` for backward compatibility.
-            if (isset($url['path']) && $url['path'][0] === '/') {
-                $host = $url['path'];
-                $port = 0;
-            } else {
-                // TCP connection.
-                if (! isset($url['host'])) {
-                    throw SessionException::forInvalidSavePathFormat($this->savePath);
-                }
-
-                $protocol = $url['scheme'] ?? self::DEFAULT_PROTOCOL;
-                $host     = $protocol . '://' . $url['host'];
-                $port     = $url['port'] ?? self::DEFAULT_PORT;
-            }
-
-            if (isset($url['query'])) {
-                parse_str($url['query'], $query);
-            }
-        }
-
-        $password = $query['auth'] ?? null;
-        $database = isset($query['database']) ? (int) $query['database'] : 0;
-        $timeout  = isset($query['timeout']) ? (float) $query['timeout'] : 0.0;
-        $prefix   = $query['prefix'] ?? null;
-
-        $this->savePath = [
-            'host'     => $host,
-            'port'     => $port,
-            'password' => $password,
-            'database' => $database,
-            'timeout'  => $timeout,
-        ];
-
-        if ($prefix !== null) {
-            $this->keyPrefix = $prefix;
+            throw SessionException::forInvalidSavePathFormat($this->savePath);
         }
     }
 
@@ -178,9 +128,9 @@ class RedisHandler extends BaseHandler
 
         if (
             ! $redis->connect(
-                $this->savePath['host'],
-                $this->savePath['port'],
-                $this->savePath['timeout'],
+                $this->savePath['protocol'] . '://' . $this->savePath['host'],
+                ($this->savePath['host'][0] === '/' ? 0 : $this->savePath['port']),
+                $this->savePath['timeout']
             )
         ) {
             $this->logger->error('Session: Unable to connect to Redis with the configured settings.');
@@ -188,7 +138,7 @@ class RedisHandler extends BaseHandler
             $this->logger->error('Session: Unable to authenticate to Redis instance.');
         } elseif (isset($this->savePath['database']) && ! $redis->select($this->savePath['database'])) {
             $this->logger->error(
-                'Session: Unable to select Redis database with index ' . $this->savePath['database'],
+                'Session: Unable to select Redis database with index ' . $this->savePath['database']
             );
         } else {
             $this->redis = $redis;
@@ -318,7 +268,7 @@ class RedisHandler extends BaseHandler
         if (isset($this->redis, $this->lockKey)) {
             if (($result = $this->redis->del($this->keyPrefix . $id)) !== 1) {
                 $this->logger->debug(
-                    'Session: Redis::del() expected to return 1, got ' . var_export($result, true) . ' instead.',
+                    'Session: Redis::del() expected to return 1, got ' . var_export($result, true) . ' instead.'
                 );
             }
 
@@ -369,23 +319,23 @@ class RedisHandler extends BaseHandler
                 (string) Time::now()->getTimestamp(),
                 // NX -- Only set the key if it does not already exist.
                 // EX seconds -- Set the specified expire time, in seconds.
-                ['nx', 'ex' => 300],
+                ['nx', 'ex' => 300]
             );
 
             if (! $result) {
-                usleep($this->lockRetryInterval);
+                usleep(100000);
 
                 continue;
             }
 
             $this->lockKey = $lockKey;
             break;
-        } while (++$attempt < $this->lockMaxRetries);
+        } while (++$attempt < 300);
 
         if ($attempt === 300) {
             $this->logger->error(
                 'Session: Unable to obtain lock for ' . $this->keyPrefix . $sessionID
-                . ' after 300 attempts, aborting.',
+                . ' after 300 attempts, aborting.'
             );
 
             return false;

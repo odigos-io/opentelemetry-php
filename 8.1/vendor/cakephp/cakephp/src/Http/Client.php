@@ -18,13 +18,10 @@ namespace Cake\Http;
 use Cake\Core\App;
 use Cake\Core\Exception\CakeException;
 use Cake\Core\InstanceConfigTrait;
-use Cake\Event\EventDispatcherInterface;
-use Cake\Event\EventDispatcherTrait;
 use Cake\Http\Client\Adapter\Curl;
 use Cake\Http\Client\Adapter\Mock as MockAdapter;
 use Cake\Http\Client\Adapter\Stream;
 use Cake\Http\Client\AdapterInterface;
-use Cake\Http\Client\ClientEvent;
 use Cake\Http\Client\Request;
 use Cake\Http\Client\Response;
 use Cake\Http\Cookie\CookieCollection;
@@ -103,15 +100,9 @@ use Psr\Http\Message\ResponseInterface;
  * a proxy if you need to use one. The type sub option can be used to
  * specify which authentication strategy you want to use.
  * CakePHP comes with built-in support for basic authentication.
- *
- * @implements \Cake\Event\EventDispatcherInterface<\Cake\Http\Client>
  */
-class Client implements EventDispatcherInterface, ClientInterface
+class Client implements ClientInterface
 {
-    /**
-     * @use \Cake\Event\EventDispatcherTrait<\Cake\Http\Client>
-     */
-    use EventDispatcherTrait;
     use InstanceConfigTrait;
 
     /**
@@ -119,7 +110,7 @@ class Client implements EventDispatcherInterface, ClientInterface
      *
      * @var array<string, mixed>
      */
-    protected array $_defaultConfig = [
+    protected $_defaultConfig = [
         'auth' => null,
         'adapter' => null,
         'host' => null,
@@ -143,21 +134,21 @@ class Client implements EventDispatcherInterface, ClientInterface
      *
      * @var \Cake\Http\Cookie\CookieCollection
      */
-    protected CookieCollection $_cookies;
+    protected $_cookies;
 
     /**
      * Mock adapter for stubbing requests in tests.
      *
      * @var \Cake\Http\Client\Adapter\Mock|null
      */
-    protected static ?MockAdapter $_mockAdapter = null;
+    protected static $_mockAdapter;
 
     /**
      * Adapter for sending requests.
      *
      * @var \Cake\Http\Client\AdapterInterface
      */
-    protected AdapterInterface $_adapter;
+    protected $_adapter;
 
     /**
      * Create a new HTTP Client.
@@ -190,10 +181,10 @@ class Client implements EventDispatcherInterface, ClientInterface
      *   to use. Short class names are resolved to the `Http\Client\Auth` namespace.
      *
      * @param array<string, mixed> $config Config options for scoped clients.
+     * @throws \InvalidArgumentException
      */
     public function __construct(array $config = [])
     {
-        $this->_eventClass = ClientEvent::class;
         $this->setConfig($config);
 
         $adapter = $this->_config['adapter'];
@@ -211,6 +202,9 @@ class Client implements EventDispatcherInterface, ClientInterface
             $adapter = new $adapter();
         }
 
+        if (!$adapter instanceof AdapterInterface) {
+            throw new InvalidArgumentException('Adapter must be an instance of Cake\Http\Client\AdapterInterface');
+        }
         $this->_adapter = $adapter;
 
         if (!empty($this->_config['cookieJar'])) {
@@ -231,15 +225,12 @@ class Client implements EventDispatcherInterface, ClientInterface
      * @return static
      * @throws \InvalidArgumentException
      */
-    public static function createFromUrl(string $url): static
+    public static function createFromUrl(string $url)
     {
         $parts = parse_url($url);
 
         if ($parts === false) {
-            throw new InvalidArgumentException(sprintf(
-                'String `%s` did not parse.',
-                $url,
-            ));
+            throw new InvalidArgumentException('String ' . $url . ' did not parse');
         }
 
         $config = array_intersect_key($parts, ['scheme' => '', 'port' => '', 'host' => '', 'path' => '']);
@@ -296,7 +287,7 @@ class Client implements EventDispatcherInterface, ClientInterface
      * @param array<string, mixed> $options Additional options for the request.
      * @return \Cake\Http\Client\Response
      */
-    public function get(string $url, array|string $data = [], array $options = []): Response
+    public function get(string $url, $data = [], array $options = []): Response
     {
         $options = $this->_mergeOptions($options);
         $body = null;
@@ -310,7 +301,7 @@ class Client implements EventDispatcherInterface, ClientInterface
             Request::METHOD_GET,
             $url,
             $body,
-            $options,
+            $options
         );
     }
 
@@ -322,7 +313,7 @@ class Client implements EventDispatcherInterface, ClientInterface
      * @param array<string, mixed> $options Additional options for the request.
      * @return \Cake\Http\Client\Response
      */
-    public function post(string $url, mixed $data = [], array $options = []): Response
+    public function post(string $url, $data = [], array $options = []): Response
     {
         $options = $this->_mergeOptions($options);
         $url = $this->buildUrl($url, [], $options);
@@ -338,7 +329,7 @@ class Client implements EventDispatcherInterface, ClientInterface
      * @param array<string, mixed> $options Additional options for the request.
      * @return \Cake\Http\Client\Response
      */
-    public function put(string $url, mixed $data = [], array $options = []): Response
+    public function put(string $url, $data = [], array $options = []): Response
     {
         $options = $this->_mergeOptions($options);
         $url = $this->buildUrl($url, [], $options);
@@ -354,7 +345,7 @@ class Client implements EventDispatcherInterface, ClientInterface
      * @param array<string, mixed> $options Additional options for the request.
      * @return \Cake\Http\Client\Response
      */
-    public function patch(string $url, mixed $data = [], array $options = []): Response
+    public function patch(string $url, $data = [], array $options = []): Response
     {
         $options = $this->_mergeOptions($options);
         $url = $this->buildUrl($url, [], $options);
@@ -370,7 +361,7 @@ class Client implements EventDispatcherInterface, ClientInterface
      * @param array<string, mixed> $options Additional options for the request.
      * @return \Cake\Http\Client\Response
      */
-    public function options(string $url, mixed $data = [], array $options = []): Response
+    public function options(string $url, $data = [], array $options = []): Response
     {
         $options = $this->_mergeOptions($options);
         $url = $this->buildUrl($url, [], $options);
@@ -386,7 +377,7 @@ class Client implements EventDispatcherInterface, ClientInterface
      * @param array<string, mixed> $options Additional options for the request.
      * @return \Cake\Http\Client\Response
      */
-    public function trace(string $url, mixed $data = [], array $options = []): Response
+    public function trace(string $url, $data = [], array $options = []): Response
     {
         $options = $this->_mergeOptions($options);
         $url = $this->buildUrl($url, [], $options);
@@ -402,7 +393,7 @@ class Client implements EventDispatcherInterface, ClientInterface
      * @param array<string, mixed> $options Additional options for the request.
      * @return \Cake\Http\Client\Response
      */
-    public function delete(string $url, mixed $data = [], array $options = []): Response
+    public function delete(string $url, $data = [], array $options = []): Response
     {
         $options = $this->_mergeOptions($options);
         $url = $this->buildUrl($url, [], $options);
@@ -435,13 +426,13 @@ class Client implements EventDispatcherInterface, ClientInterface
      * @param array<string, mixed> $options The options to use. Contains auth, proxy, etc.
      * @return \Cake\Http\Client\Response
      */
-    protected function _doRequest(string $method, string $url, mixed $data, array $options): Response
+    protected function _doRequest(string $method, string $url, $data, $options): Response
     {
         $request = $this->_createRequest(
             $method,
             $url,
             $data,
-            $options,
+            $options
         );
 
         return $this->send($request, $options);
@@ -489,33 +480,7 @@ class Client implements EventDispatcherInterface, ClientInterface
         }
 
         do {
-            /** @var \Cake\Http\Client\ClientEvent $event */
-            $event = $this->dispatchEvent(
-                'HttpClient.beforeSend',
-                ['request' => $request, 'adapterOptions' => $options, 'redirects' => $redirects],
-            );
-
-            $request = $event->getRequest();
-            $response = $event->getResult();
-            $requestSent = false;
-            if ($response === null) {
-                $requestSent = true;
-                $response = $this->_sendRequest($request, $event->getAdapterOptions());
-            }
-
-            /** @var \Cake\Http\Client\ClientEvent $event */
-            $event = $this->dispatchEvent(
-                'HttpClient.afterSend',
-                [
-                    'request' => $request,
-                    'adapterOptions' => $options,
-                    'redirects' => $redirects,
-                    'requestSent' => $requestSent,
-                    'response' => $response,
-                ],
-            );
-            $response = $event->getResult();
-            assert($response instanceof Response);
+            $response = $this->_sendRequest($request, $options);
 
             $handleRedirect = $response->isRedirect() && $redirects-- > 0;
             if ($handleRedirect) {
@@ -584,18 +549,16 @@ class Client implements EventDispatcherInterface, ClientInterface
      */
     protected function _sendRequest(RequestInterface $request, array $options): Response
     {
-        $responses = [];
         if (static::$_mockAdapter) {
             $responses = static::$_mockAdapter->send($request, $options);
         }
-        if (!$responses) {
+        if (empty($responses)) {
             $responses = $this->_adapter->send($request, $options);
         }
         foreach ($responses as $response) {
             $this->_cookies = $this->_cookies->addFromResponse($response, $request);
         }
 
-        /** @var \Cake\Http\Client\Response */
         return array_pop($responses);
     }
 
@@ -607,9 +570,9 @@ class Client implements EventDispatcherInterface, ClientInterface
      * @param array<string, mixed> $options The config options stored with Client::config()
      * @return string A complete url with scheme, port, host, and path.
      */
-    public function buildUrl(string $url, array|string $query = [], array $options = []): string
+    public function buildUrl(string $url, $query = [], array $options = []): string
     {
-        if (!$options && !$query) {
+        if (empty($options) && empty($query)) {
             return $url;
         }
         $defaults = [
@@ -622,12 +585,12 @@ class Client implements EventDispatcherInterface, ClientInterface
         $options += $defaults;
 
         if ($query) {
-            $q = str_contains($url, '?') ? '&' : '?';
+            $q = strpos($url, '?') === false ? '?' : '&';
             $url .= $q;
             $url .= is_string($query) ? $query : http_build_query($query, '', '&', PHP_QUERY_RFC3986);
         }
 
-        if ($options['protocolRelative'] && str_starts_with($url, '//')) {
+        if ($options['protocolRelative'] && preg_match('#^//#', $url)) {
             $url = $options['scheme'] . ':' . $url;
         }
         if (preg_match('#^https?://#', $url)) {
@@ -659,7 +622,7 @@ class Client implements EventDispatcherInterface, ClientInterface
      * @param array<string, mixed> $options The options to use. Contains auth, proxy, etc.
      * @return \Cake\Http\Client\Request
      */
-    protected function _createRequest(string $method, string $url, mixed $data, array $options): Request
+    protected function _createRequest(string $method, string $url, $data, $options): Request
     {
         /** @var array<non-empty-string, non-empty-string> $headers */
         $headers = (array)($options['headers'] ?? []);
@@ -679,7 +642,7 @@ class Client implements EventDispatcherInterface, ClientInterface
             $request = $this->_addAuthentication($request, $options);
         }
         if (isset($options['proxy'])) {
-            return $this->_addProxy($request, $options);
+            $request = $this->_addProxy($request, $options);
         }
 
         return $request;
@@ -693,11 +656,11 @@ class Client implements EventDispatcherInterface, ClientInterface
      * @param string $type short type alias or full mimetype.
      * @return array<string, string> Headers to set on the request.
      * @throws \Cake\Core\Exception\CakeException When an unknown type alias is used.
-     * @phpstan-return array<non-empty-string, non-empty-string>
+     * @psalm-return array<non-empty-string, non-empty-string>
      */
     protected function _typeHeaders(string $type): array
     {
-        if (str_contains($type, '/')) {
+        if (strpos($type, '/') !== false) {
             return [
                 'Accept' => $type,
                 'Content-Type' => $type,
@@ -708,10 +671,7 @@ class Client implements EventDispatcherInterface, ClientInterface
             'xml' => 'application/xml',
         ];
         if (!isset($typeMap[$type])) {
-            throw new CakeException(sprintf(
-                'Unknown type alias `%s`.',
-                $type,
-            ));
+            throw new CakeException("Unknown type alias '$type'.");
         }
 
         return [
@@ -769,7 +729,7 @@ class Client implements EventDispatcherInterface, ClientInterface
      * @return object Authentication strategy instance.
      * @throws \Cake\Core\Exception\CakeException when an invalid strategy is chosen.
      */
-    protected function _createAuth(array $auth, array $options): object
+    protected function _createAuth(array $auth, array $options)
     {
         if (empty($auth['type'])) {
             $auth['type'] = 'basic';
@@ -778,7 +738,7 @@ class Client implements EventDispatcherInterface, ClientInterface
         $class = App::className($name, 'Http/Client/Auth');
         if (!$class) {
             throw new CakeException(
-                sprintf('Invalid authentication type `%s`.', $name),
+                sprintf('Invalid authentication type %s', $name)
             );
         }
 

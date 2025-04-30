@@ -36,14 +36,6 @@ class RoutesGenerateCommand extends Command
     }
 
     /**
-     * @inheritDoc
-     */
-    public static function getDescription(): string
-    {
-        return 'Check a routing array against the routes.';
-    }
-
-    /**
      * Display all routes in an application
      *
      * @param \Cake\Console\Arguments $args The command arguments.
@@ -55,9 +47,9 @@ class RoutesGenerateCommand extends Command
         try {
             $args = $this->_splitArgs($args->getArguments());
             $url = Router::url($args);
-            $io->out("> {$url}");
+            $io->out("> $url");
             $io->out();
-        } catch (MissingRouteException) {
+        } catch (MissingRouteException $e) {
             $io->err('<warning>The provided parameters do not match any routes.</warning>');
             $io->out();
 
@@ -77,7 +69,7 @@ class RoutesGenerateCommand extends Command
     {
         $out = [];
         foreach ($args as $arg) {
-            if (str_contains($arg, ':')) {
+            if (strpos($arg, ':') !== false) {
                 [$key, $value] = explode(':', $arg);
                 if (in_array($value, ['true', 'false'], true)) {
                     $value = $value === 'true';
@@ -99,13 +91,13 @@ class RoutesGenerateCommand extends Command
      */
     public function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
     {
-        $parser->setDescription([
-            static::getDescription(),
+        $parser->setDescription(
+            'Check a routing array against the routes. ' .
             'Will output the URL if there is a match.' .
             "\n\n" .
             'Routing parameters should be supplied in a key:value format. ' .
-            'For example `controller:Articles action:view 2`',
-        ]);
+            'For example `controller:Articles action:view 2`'
+        );
 
         return $parser;
     }

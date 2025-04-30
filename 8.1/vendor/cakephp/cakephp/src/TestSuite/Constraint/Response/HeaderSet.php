@@ -27,7 +27,7 @@ class HeaderSet extends ResponseBase
     /**
      * @var string
      */
-    protected string $headerName;
+    protected $headerName;
 
     /**
      * Constructor.
@@ -47,7 +47,6 @@ class HeaderSet extends ResponseBase
      *
      * @param mixed $other Expected content
      * @return bool
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
      */
     public function matches($other): bool
     {
@@ -61,7 +60,7 @@ class HeaderSet extends ResponseBase
      */
     public function toString(): string
     {
-        return sprintf("response has header '%s'", $this->headerName);
+        return sprintf('response has header \'%s\'', $this->headerName);
     }
 
     /**
@@ -70,7 +69,7 @@ class HeaderSet extends ResponseBase
      * @param mixed $other Value
      * @return string
      */
-    protected function failureDescription(mixed $other): string
+    protected function failureDescription($other): string
     {
         return $this->toString();
     }

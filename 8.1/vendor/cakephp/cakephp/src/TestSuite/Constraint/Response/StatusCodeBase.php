@@ -25,14 +25,14 @@ abstract class StatusCodeBase extends ResponseBase
     /**
      * @var array<int, int>|int
      */
-    protected array|int $code;
+    protected $code;
 
     /**
      * Check assertion
      *
      * @param array<int, int>|int $other Array of min/max status codes, or a single code
      * @return bool
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
+     * @psalm-suppress MoreSpecificImplementedParamType
      */
     public function matches($other): bool
     {
@@ -65,8 +65,9 @@ abstract class StatusCodeBase extends ResponseBase
      * @param mixed $other Value
      * @return string
      */
-    protected function failureDescription(mixed $other): string
+    protected function failureDescription($other): string
     {
+        /** @psalm-suppress InternalMethod */
         return $this->toString();
     }
 }

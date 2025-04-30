@@ -34,14 +34,14 @@ abstract class Helper
      *
      * @var array<string, mixed>
      */
-    protected array $_defaultConfig = [];
+    protected $_defaultConfig = [];
 
     /**
      * ConsoleIo instance.
      *
      * @var \Cake\Console\ConsoleIo
      */
-    protected ConsoleIo $_io;
+    protected $_io;
 
     /**
      * Constructor.

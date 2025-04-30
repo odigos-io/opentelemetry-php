@@ -16,9 +16,7 @@ declare(strict_types=1);
  */
 namespace Cake\Routing\Middleware;
 
-use Cake\Core\Exception\CakeException;
 use Cake\Core\Plugin;
-use Cake\Http\MimeType;
 use Cake\Http\Response;
 use Cake\Utility\Inflector;
 use Laminas\Diactoros\Stream;
@@ -42,7 +40,7 @@ class AssetMiddleware implements MiddlewareInterface
      *
      * @var string
      */
-    protected string $cacheTime = '+1 day';
+    protected $cacheTime = '+1 day';
 
     /**
      * Constructor.
@@ -66,11 +64,11 @@ class AssetMiddleware implements MiddlewareInterface
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $url = $request->getUri()->getPath();
-        if (str_contains($url, '..') || !str_contains($url, '.')) {
+        if (strpos($url, '..') !== false || strpos($url, '.') === false) {
             return $handler->handle($request);
         }
 
-        if (str_contains($url, '/.')) {
+        if (strpos($url, '/.') !== false) {
             return $handler->handle($request);
         }
 
@@ -87,7 +85,7 @@ class AssetMiddleware implements MiddlewareInterface
                 ->withStatus(304)
                 ->withHeader(
                     'Last-Modified',
-                    date(DATE_RFC850, $modifiedTime),
+                    date(DATE_RFC850, $modifiedTime)
                 );
         }
 
@@ -119,7 +117,7 @@ class AssetMiddleware implements MiddlewareInterface
      */
     protected function _getAssetFile(string $url): ?string
     {
-        $parts = explode('/', ltrim($url, '/'), 3);
+        $parts = explode('/', ltrim($url, '/'));
         $pluginPart = [];
         for ($i = 0; $i < 2; $i++) {
             if (!isset($parts[$i])) {
@@ -148,24 +146,17 @@ class AssetMiddleware implements MiddlewareInterface
      */
     protected function deliverAsset(ServerRequestInterface $request, SplFileInfo $file): Response
     {
-        $resource = fopen($file->getPathname(), 'rb');
-        if ($resource === false) {
-            throw new CakeException(sprintf('Cannot open resource `%s`', $file->getPathname()));
-        }
-        $stream = new Stream($resource);
+        $stream = new Stream(fopen($file->getPathname(), 'rb'));
 
         $response = new Response(['stream' => $stream]);
 
-        $contentType = MimeType::getMimeTypeForFile($file->getRealPath());
+        $contentType = (array)($response->getMimeType($file->getExtension()) ?: 'application/octet-stream');
         $modified = $file->getMTime();
         $expire = strtotime($this->cacheTime);
-        if ($expire === false) {
-            throw new CakeException(sprintf('Invalid cache time value `%s`', $this->cacheTime));
-        }
         $maxAge = $expire - time();
 
         return $response
-            ->withHeader('Content-Type', $contentType)
+            ->withHeader('Content-Type', $contentType[0])
             ->withHeader('Cache-Control', 'public,max-age=' . $maxAge)
             ->withHeader('Date', gmdate(DATE_RFC7231, time()))
             ->withHeader('Last-Modified', gmdate(DATE_RFC7231, $modified))

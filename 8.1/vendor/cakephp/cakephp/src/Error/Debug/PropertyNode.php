@@ -24,17 +24,17 @@ class PropertyNode implements NodeInterface
     /**
      * @var string
      */
-    private string $name;
+    private $name;
 
     /**
      * @var string|null
      */
-    private ?string $visibility = null;
+    private $visibility;
 
     /**
      * @var \Cake\Error\Debug\NodeInterface
      */
-    private NodeInterface $value;
+    private $value;
 
     /**
      * Constructor
@@ -63,7 +63,7 @@ class PropertyNode implements NodeInterface
     /**
      * Get the property visibility
      *
-     * @return string|null
+     * @return string
      */
     public function getVisibility(): ?string
     {

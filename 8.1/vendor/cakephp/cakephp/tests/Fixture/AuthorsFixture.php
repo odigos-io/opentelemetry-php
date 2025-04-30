@@ -22,11 +22,22 @@ use Cake\TestSuite\Fixture\TestFixture;
 class AuthorsFixture extends TestFixture
 {
     /**
+     * fields property
+     *
+     * @var array
+     */
+    public $fields = [
+        'id' => ['type' => 'integer'],
+        'name' => ['type' => 'string', 'default' => null],
+        '_constraints' => ['primary' => ['type' => 'primary', 'columns' => ['id']]],
+    ];
+
+    /**
      * records property
      *
      * @var array
      */
-    public array $records = [
+    public $records = [
         ['name' => 'mariano'],
         ['name' => 'nate'],
         ['name' => 'larry'],

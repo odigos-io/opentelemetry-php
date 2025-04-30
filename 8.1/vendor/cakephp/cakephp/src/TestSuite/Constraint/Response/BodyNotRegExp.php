@@ -27,7 +27,6 @@ class BodyNotRegExp extends BodyRegExp
      *
      * @param mixed $other Expected pattern
      * @return bool
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
      */
     public function matches($other): bool
     {

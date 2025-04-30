@@ -21,7 +21,16 @@ use Cake\TestSuite\Fixture\TestFixture;
  */
 class CounterCachePostsFixture extends TestFixture
 {
-    public array $records = [
+    public $fields = [
+        'id' => ['type' => 'integer'],
+        'title' => ['type' => 'string', 'length' => 255],
+        'user_id' => ['type' => 'integer', 'null' => true],
+        'category_id' => ['type' => 'integer', 'null' => true],
+        'published' => ['type' => 'boolean', 'null' => false, 'default' => false],
+        '_constraints' => ['primary' => ['type' => 'primary', 'columns' => ['id']]],
+    ];
+
+    public $records = [
         ['title' => 'Rock and Roll', 'user_id' => 1, 'category_id' => 1, 'published' => 0],
         ['title' => 'Music', 'user_id' => 1, 'category_id' => 2, 'published' => 1],
         ['title' => 'Food', 'user_id' => 2, 'category_id' => 2, 'published' => 1],

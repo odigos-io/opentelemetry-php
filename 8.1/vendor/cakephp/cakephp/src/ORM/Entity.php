@@ -57,7 +57,7 @@ class Entity implements EntityInterface, InvalidPropertyInterface
             'source' => null,
         ];
 
-        if ($options['source'] !== null) {
+        if (!empty($options['source'])) {
             $this->setSource($options['source']);
         }
 
@@ -65,18 +65,14 @@ class Entity implements EntityInterface, InvalidPropertyInterface
             $this->setNew($options['markNew']);
         }
 
-        if ($properties) {
-            //Remember the original field names here.
-            $this->setOriginalField(array_keys($properties));
+        if (!empty($properties) && $options['markClean'] && !$options['useSetters']) {
+            $this->_fields = $properties;
 
-            if ($options['markClean'] && !$options['useSetters']) {
-                $this->_fields = $properties;
+            return;
+        }
 
-                return;
-            }
-
-            $this->patch($properties, [
-                'asOriginal' => true,
+        if (!empty($properties)) {
+            $this->set($properties, [
                 'setter' => $options['useSetters'],
                 'guard' => $options['guard'],
             ]);

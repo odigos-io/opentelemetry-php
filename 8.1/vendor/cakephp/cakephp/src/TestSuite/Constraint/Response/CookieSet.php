@@ -15,8 +15,6 @@ declare(strict_types=1);
  */
 namespace Cake\TestSuite\Constraint\Response;
 
-use Psr\Http\Message\ResponseInterface;
-
 /**
  * CookieSet
  *
@@ -27,14 +25,13 @@ class CookieSet extends ResponseBase
     /**
      * @var \Cake\Http\Response
      */
-    protected ResponseInterface $response;
+    protected $response;
 
     /**
      * Checks assertion
      *
      * @param mixed $other Expected content
      * @return bool
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
      */
     public function matches($other): bool
     {

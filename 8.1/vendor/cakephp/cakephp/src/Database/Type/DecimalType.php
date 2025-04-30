@@ -16,12 +16,12 @@ declare(strict_types=1);
  */
 namespace Cake\Database\Type;
 
-use Cake\Database\Driver;
-use Cake\Database\Exception\DatabaseException;
+use Cake\Database\DriverInterface;
 use Cake\I18n\Number;
 use InvalidArgumentException;
 use PDO;
-use Stringable;
+use RuntimeException;
+use function Cake\Core\getTypeName;
 
 /**
  * Decimal type converter.
@@ -33,27 +33,27 @@ class DecimalType extends BaseType implements BatchCastingInterface
     /**
      * The class to use for representing number objects
      *
-     * @var class-string<\Cake\I18n\Number>|string
+     * @var string
      */
-    public static string $numberClass = Number::class;
+    public static $numberClass = Number::class;
 
     /**
      * Whether numbers should be parsed using a locale aware parser
-     * when marshaling string inputs.
+     * when marshalling string inputs.
      *
      * @var bool
      */
-    protected bool $_useLocaleParser = false;
+    protected $_useLocaleParser = false;
 
     /**
      * Convert decimal strings into the database format.
      *
      * @param mixed $value The value to convert.
-     * @param \Cake\Database\Driver $driver The driver instance to convert with.
+     * @param \Cake\Database\DriverInterface $driver The driver instance to convert with.
      * @return string|float|int|null
      * @throws \InvalidArgumentException
      */
-    public function toDatabase(mixed $value, Driver $driver): string|float|int|null
+    public function toDatabase($value, DriverInterface $driver)
     {
         if ($value === null || $value === '') {
             return null;
@@ -63,18 +63,17 @@ class DecimalType extends BaseType implements BatchCastingInterface
             return $value;
         }
 
-        if ($value instanceof Stringable) {
-            $str = (string)$value;
-
-            if (is_numeric($str)) {
-                return $str;
-            }
+        if (
+            is_object($value)
+            && method_exists($value, '__toString')
+            && is_numeric(strval($value))
+        ) {
+            return strval($value);
         }
 
         throw new InvalidArgumentException(sprintf(
-            'Cannot convert value `%s` of type `%s` to a decimal',
-            print_r($value, true),
-            get_debug_type($value),
+            'Cannot convert value of type `%s` to a decimal',
+            getTypeName($value)
         ));
     }
 
@@ -82,10 +81,10 @@ class DecimalType extends BaseType implements BatchCastingInterface
      * {@inheritDoc}
      *
      * @param mixed $value The value to convert.
-     * @param \Cake\Database\Driver $driver The driver instance to convert with.
+     * @param \Cake\Database\DriverInterface $driver The driver instance to convert with.
      * @return string|null
      */
-    public function toPHP(mixed $value, Driver $driver): ?string
+    public function toPHP($value, DriverInterface $driver): ?string
     {
         if ($value === null) {
             return null;
@@ -97,7 +96,7 @@ class DecimalType extends BaseType implements BatchCastingInterface
     /**
      * @inheritDoc
      */
-    public function manyToPHP(array $values, array $fields, Driver $driver): array
+    public function manyToPHP(array $values, array $fields, DriverInterface $driver): array
     {
         foreach ($fields as $field) {
             if (!isset($values[$field])) {
@@ -111,9 +110,13 @@ class DecimalType extends BaseType implements BatchCastingInterface
     }
 
     /**
-     * @inheritDoc
+     * Get the correct PDO binding type for decimal data.
+     *
+     * @param mixed $value The value being bound.
+     * @param \Cake\Database\DriverInterface $driver The driver.
+     * @return int
      */
-    public function toStatement(mixed $value, Driver $driver): int
+    public function toStatement($value, DriverInterface $driver): int
     {
         return PDO::PARAM_STR;
     }
@@ -124,7 +127,7 @@ class DecimalType extends BaseType implements BatchCastingInterface
      * @param mixed $value The value to convert.
      * @return string|null Converted value.
      */
-    public function marshal(mixed $value): ?string
+    public function marshal($value): ?string
     {
         if ($value === null || $value === '') {
             return null;
@@ -148,7 +151,7 @@ class DecimalType extends BaseType implements BatchCastingInterface
      *
      * @param bool $enable Whether to enable
      * @return $this
-     * @throws \Cake\Database\Exception\DatabaseException
+     * @throws \RuntimeException
      */
     public function useLocaleParser(bool $enable = true)
     {
@@ -165,8 +168,8 @@ class DecimalType extends BaseType implements BatchCastingInterface
 
             return $this;
         }
-        throw new DatabaseException(
-            sprintf('Cannot use locale parsing with the %s class', static::$numberClass),
+        throw new RuntimeException(
+            sprintf('Cannot use locale parsing with the %s class', static::$numberClass)
         );
     }
 
@@ -179,6 +182,7 @@ class DecimalType extends BaseType implements BatchCastingInterface
      */
     protected function _parseValue(string $value): string
     {
+        /** @var \Cake\I18n\Number $class */
         $class = static::$numberClass;
 
         return (string)$class::parseFloat($value);

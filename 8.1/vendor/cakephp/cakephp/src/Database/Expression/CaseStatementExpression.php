@@ -24,6 +24,7 @@ use Cake\Database\ValueBinder;
 use Closure;
 use InvalidArgumentException;
 use LogicException;
+use function Cake\Core\getTypeName;
 
 /**
  * Represents a SQL case statement with a fluid API
@@ -40,7 +41,7 @@ class CaseStatementExpression implements ExpressionInterface, TypedResultInterfa
      *
      * @var array<string>
      */
-    protected array $validClauseNames = [
+    protected $validClauseNames = [
         'value',
         'when',
         'else',
@@ -51,56 +52,56 @@ class CaseStatementExpression implements ExpressionInterface, TypedResultInterfa
      *
      * @var bool
      */
-    protected bool $isSimpleVariant = false;
+    protected $isSimpleVariant = false;
 
     /**
      * The case value.
      *
      * @var \Cake\Database\ExpressionInterface|object|scalar|null
      */
-    protected mixed $value = null;
+    protected $value = null;
 
     /**
      * The case value type.
      *
      * @var string|null
      */
-    protected ?string $valueType = null;
+    protected $valueType = null;
 
     /**
      * The `WHEN ... THEN ...` expressions.
      *
      * @var array<\Cake\Database\Expression\WhenThenExpression>
      */
-    protected array $when = [];
+    protected $when = [];
 
     /**
      * Buffer that holds values and types for use with `then()`.
      *
      * @var array|null
      */
-    protected ?array $whenBuffer = null;
+    protected $whenBuffer = null;
 
     /**
      * The else part result value.
      *
      * @var \Cake\Database\ExpressionInterface|object|scalar|null
      */
-    protected mixed $else = null;
+    protected $else = null;
 
     /**
      * The else part result type.
      *
      * @var string|null
      */
-    protected ?string $elseType = null;
+    protected $elseType = null;
 
     /**
      * The return type.
      *
      * @var string|null
      */
-    protected ?string $returnType = null;
+    protected $returnType = null;
 
     /**
      * Constructor.
@@ -122,7 +123,7 @@ class CaseStatementExpression implements ExpressionInterface, TypedResultInterfa
      * @param string|null $type The case value type. If no type is provided, the type will be tried to be inferred
      *  from the value.
      */
-    public function __construct(mixed $value = null, ?string $type = null)
+    public function __construct($value = null, ?string $type = null)
     {
         if (func_num_args() > 0) {
             if (
@@ -134,7 +135,7 @@ class CaseStatementExpression implements ExpressionInterface, TypedResultInterfa
                     'The `$value` argument must be either `null`, a scalar value, an object, ' .
                     'or an instance of `\%s`, `%s` given.',
                     ExpressionInterface::class,
-                    get_debug_type($value),
+                    getTypeName($value)
                 ));
             }
 
@@ -291,7 +292,7 @@ class CaseStatementExpression implements ExpressionInterface, TypedResultInterfa
      * @throws \LogicException In case the callable doesn't return an instance of
      *  `\Cake\Database\Expression\WhenThenExpression`.
      */
-    public function when(mixed $when, array|string|null $type = null)
+    public function when($when, $type = null)
     {
         if ($this->whenBuffer !== null) {
             throw new LogicException('Cannot call `when()` between `when()` and `then()`.');
@@ -303,7 +304,7 @@ class CaseStatementExpression implements ExpressionInterface, TypedResultInterfa
                 throw new LogicException(sprintf(
                     '`when()` callables must return an instance of `\%s`, `%s` given.',
                     WhenThenExpression::class,
-                    get_debug_type($when),
+                    getTypeName($when)
                 ));
             }
         }
@@ -373,7 +374,7 @@ class CaseStatementExpression implements ExpressionInterface, TypedResultInterfa
      * @throws \LogicException In case `when()` wasn't previously called with a value other than a closure or an
      *  instance of `\Cake\Database\Expression\WhenThenExpression`.
      */
-    public function then(mixed $result, ?string $type = null)
+    public function then($result, ?string $type = null)
     {
         if ($this->whenBuffer === null) {
             throw new LogicException('Cannot call `then()` before `when()`.');
@@ -401,7 +402,7 @@ class CaseStatementExpression implements ExpressionInterface, TypedResultInterfa
      * @throws \InvalidArgumentException In case the `$result` argument is neither a scalar value, nor an object, an
      *  instance of `\Cake\Database\ExpressionInterface`, or `null`.
      */
-    public function else(mixed $result, ?string $type = null)
+    public function else($result, ?string $type = null)
     {
         if ($this->whenBuffer !== null) {
             throw new LogicException('Cannot call `else()` between `when()` and `then()`.');
@@ -416,11 +417,13 @@ class CaseStatementExpression implements ExpressionInterface, TypedResultInterfa
                 'The `$result` argument must be either `null`, a scalar value, an object, ' .
                 'or an instance of `\%s`, `%s` given.',
                 ExpressionInterface::class,
-                get_debug_type($result),
+                getTypeName($result)
             ));
         }
 
-        $type ??= $this->inferType($result);
+        if ($type === null) {
+            $type = $this->inferType($result);
+        }
 
         $this->else = $result;
         $this->elseType = $type;
@@ -497,15 +500,15 @@ class CaseStatementExpression implements ExpressionInterface, TypedResultInterfa
      * @return \Cake\Database\ExpressionInterface|object|array<\Cake\Database\Expression\WhenThenExpression>|scalar|null
      * @throws \InvalidArgumentException In case the given clause name is invalid.
      */
-    public function clause(string $clause): mixed
+    public function clause(string $clause)
     {
         if (!in_array($clause, $this->validClauseNames, true)) {
             throw new InvalidArgumentException(
                 sprintf(
                     'The `$clause` argument must be one of `%s`, the given value `%s` is invalid.',
                     implode('`, `', $this->validClauseNames),
-                    $clause,
-                ),
+                    $clause
+                )
             );
         }
 
@@ -521,7 +524,7 @@ class CaseStatementExpression implements ExpressionInterface, TypedResultInterfa
             throw new LogicException('Case expression has incomplete when clause. Missing `then()` after `when()`.');
         }
 
-        if (!$this->when) {
+        if (empty($this->when)) {
             throw new LogicException('Case expression must have at least one when statement.');
         }
 
@@ -538,7 +541,7 @@ class CaseStatementExpression implements ExpressionInterface, TypedResultInterfa
 
         $else = $this->compileNullableValue($binder, $this->else, $this->elseType);
 
-        return "CASE {$value}{$whenThen} ELSE {$else} END";
+        return "CASE {$value}{$whenThen} ELSE $else END";
     }
 
     /**

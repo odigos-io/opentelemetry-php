@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of CodeIgniter 4 framework.
  *
@@ -13,12 +11,11 @@ declare(strict_types=1);
 
 namespace CodeIgniter\Cache;
 
-use CodeIgniter\Exceptions\RuntimeException;
 use CodeIgniter\HTTP\CLIRequest;
-use CodeIgniter\HTTP\Header;
 use CodeIgniter\HTTP\IncomingRequest;
 use CodeIgniter\HTTP\ResponseInterface;
 use Config\Cache as CacheConfig;
+use Exception;
 
 /**
  * Web Page Caching
@@ -49,9 +46,12 @@ final class ResponseCache
      */
     private int $ttl = 0;
 
-    public function __construct(CacheConfig $config, private readonly CacheInterface $cache)
+    private CacheInterface $cache;
+
+    public function __construct(CacheConfig $config, CacheInterface $cache)
     {
         $this->cacheQueryString = $config->cacheQueryString;
+        $this->cache            = $cache;
     }
 
     /**
@@ -83,7 +83,7 @@ final class ResponseCache
             ? $uri->getQuery(is_array($this->cacheQueryString) ? ['only' => $this->cacheQueryString] : [])
             : '';
 
-        return md5($request->getMethod() . ':' . $uri->setFragment('')->setQuery($query));
+        return md5($uri->setFragment('')->setQuery($query));
     }
 
     /**
@@ -99,20 +99,14 @@ final class ResponseCache
 
         $headers = [];
 
-        foreach ($response->headers() as $name => $value) {
-            if ($value instanceof Header) {
-                $headers[$name] = $value->getValueLine();
-            } else {
-                foreach ($value as $header) {
-                    $headers[$name][] = $header->getValueLine();
-                }
-            }
+        foreach ($response->headers() as $header) {
+            $headers[$header->getName()] = $header->getValueLine();
         }
 
         return $this->cache->save(
             $this->generateCacheKey($request),
             serialize(['headers' => $headers, 'output' => $response->getBody()]),
-            $this->ttl,
+            $this->ttl
         );
     }
 
@@ -131,7 +125,7 @@ final class ResponseCache
                 || ! isset($cachedResponse['output'])
                 || ! isset($cachedResponse['headers'])
             ) {
-                throw new RuntimeException('Error unserializing page cache');
+                throw new Exception('Error unserializing page cache');
             }
 
             $headers = $cachedResponse['headers'];

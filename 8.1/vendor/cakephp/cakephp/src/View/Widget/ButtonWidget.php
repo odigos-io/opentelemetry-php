@@ -34,7 +34,7 @@ class ButtonWidget implements WidgetInterface
      *
      * @var \Cake\View\StringTemplate
      */
-    protected StringTemplate $_templates;
+    protected $_templates;
 
     /**
      * Constructor.

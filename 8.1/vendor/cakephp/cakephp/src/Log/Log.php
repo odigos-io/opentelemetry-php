@@ -17,10 +17,8 @@ namespace Cake\Log;
 
 use Cake\Core\StaticConfigTrait;
 use Cake\Log\Engine\BaseLog;
-use Closure;
 use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
-use Stringable;
 
 /**
  * Logs messages to configured Log adapters. One or more adapters
@@ -116,9 +114,9 @@ class Log
      * An array mapping url schemes to fully qualified Log engine class names
      *
      * @var array<string, string>
-     * @phpstan-var array<string, class-string>
+     * @psalm-var array<string, class-string>
      */
-    protected static array $_dsnClassMap = [
+    protected static $_dsnClassMap = [
         'console' => Engine\ConsoleLog::class,
         'file' => Engine\FileLog::class,
         'syslog' => Engine\SyslogLog::class,
@@ -129,21 +127,21 @@ class Log
      *
      * @var bool
      */
-    protected static bool $_dirtyConfig = false;
+    protected static $_dirtyConfig = false;
 
     /**
      * LogEngineRegistry class
      *
      * @var \Cake\Log\LogEngineRegistry
      */
-    protected static LogEngineRegistry $_registry;
+    protected static $_registry;
 
     /**
      * Handled log levels
      *
      * @var array<string>
      */
-    protected static array $_levels = [
+    protected static $_levels = [
         'emergency',
         'alert',
         'critical',
@@ -160,7 +158,7 @@ class Log
      *
      * @var array<string, int>
      */
-    protected static array $_levelMap = [
+    protected static $_levelMap = [
         'emergency' => LOG_EMERG,
         'alert' => LOG_ALERT,
         'critical' => LOG_CRIT,
@@ -172,28 +170,38 @@ class Log
     ];
 
     /**
-     * Creates registry if doesn't exist and creates all defined logging
-     * adapters if config isn't loaded.
+     * Initializes registry and configurations
      *
-     * @return \Cake\Log\LogEngineRegistry
+     * @return void
      */
-    protected static function getRegistry(): LogEngineRegistry
+    protected static function _init(): void
     {
-        static::$_registry ??= new LogEngineRegistry();
-
+        /** @psalm-suppress RedundantPropertyInitializationCheck */
+        if (!isset(static::$_registry)) {
+            static::$_registry = new LogEngineRegistry();
+        }
         if (static::$_dirtyConfig) {
-            foreach (static::$_config as $name => $properties) {
-                if (isset($properties['engine'])) {
-                    $properties['className'] = $properties['engine'];
-                }
-                if (!static::$_registry->has((string)$name)) {
-                    static::$_registry->load((string)$name, $properties);
-                }
-            }
+            static::_loadConfig();
         }
         static::$_dirtyConfig = false;
+    }
 
-        return static::$_registry;
+    /**
+     * Load the defined configuration and create all the defined logging
+     * adapters.
+     *
+     * @return void
+     */
+    protected static function _loadConfig(): void
+    {
+        foreach (static::$_config as $name => $properties) {
+            if (isset($properties['engine'])) {
+                $properties['className'] = $properties['engine'];
+            }
+            if (!static::$_registry->has((string)$name)) {
+                static::$_registry->load((string)$name, $properties);
+            }
+        }
     }
 
     /**
@@ -208,6 +216,7 @@ class Log
      */
     public static function reset(): void
     {
+        /** @psalm-suppress RedundantPropertyInitializationCheck */
         if (isset(static::$_registry)) {
             static::$_registry->reset();
         }
@@ -264,11 +273,11 @@ class Log
      * ```
      *
      * @param array<string, mixed>|string $key The name of the logger config, or an array of multiple configs.
-     * @param \Psr\Log\LoggerInterface|\Closure|array<string, mixed>|null $config An array of name => config data for adapter.
+     * @param array<string, mixed>|\Closure|null $config An array of name => config data for adapter.
      * @return void
      * @throws \BadMethodCallException When trying to modify an existing config.
      */
-    public static function setConfig(array|string $key, LoggerInterface|Closure|array|null $config = null): void
+    public static function setConfig($key, $config = null): void
     {
         static::_setConfig($key, $config);
         static::$_dirtyConfig = true;
@@ -282,12 +291,12 @@ class Log
      */
     public static function engine(string $name): ?LoggerInterface
     {
-        $registry = static::getRegistry();
-        if (!$registry->{$name}) {
-            return null;
+        static::_init();
+        if (static::$_registry->{$name}) {
+            return static::$_registry->{$name};
         }
 
-        return $registry->{$name};
+        return null;
     }
 
     /**
@@ -335,7 +344,7 @@ class Log
      *
      * @param string|int $level The severity level of the message being written.
      *    The value must be an integer or string matching a known level.
-     * @param \Stringable|string $message Message content to log
+     * @param string $message Message content to log
      * @param array|string $context Additional data to be used for logging the message.
      *  The special `scope` key can be passed to be used for further filtering of the
      *  log engines to be used. If a string or a numerically index array is passed, it
@@ -344,13 +353,15 @@ class Log
      * @return bool Success
      * @throws \InvalidArgumentException If invalid level is passed.
      */
-    public static function write(string|int $level, Stringable|string $message, array|string $context = []): bool
+    public static function write($level, string $message, $context = []): bool
     {
+        static::_init();
         if (is_int($level) && in_array($level, static::$_levelMap, true)) {
             $level = array_search($level, static::$_levelMap, true);
         }
 
         if (!in_array($level, static::$_levels, true)) {
+            /** @psalm-suppress PossiblyFalseArgument */
             throw new InvalidArgumentException(sprintf('Invalid log level `%s`', $level));
         }
 
@@ -361,20 +372,20 @@ class Log
         }
         $context += ['scope' => []];
 
-        $registry = static::getRegistry();
-        foreach ($registry->loaded() as $streamName) {
-            /** @var \Psr\Log\LoggerInterface $logger */
-            $logger = $registry->{$streamName};
-            $levels = null;
-            $scopes = null;
+        foreach (static::$_registry->loaded() as $streamName) {
+            $logger = static::$_registry->{$streamName};
+            $levels = $scopes = null;
 
             if ($logger instanceof BaseLog) {
                 $levels = $logger->levels();
                 $scopes = $logger->scopes();
             }
+            if ($scopes === null) {
+                $scopes = [];
+            }
 
             $correctLevel = empty($levels) || in_array($level, $levels, true);
-            $inScope = $scopes === null && empty($context['scope']) || $scopes === [] ||
+            $inScope = $scopes === false && empty($context['scope']) || $scopes === [] ||
                 is_array($scopes) && array_intersect((array)$context['scope'], $scopes);
 
             if ($correctLevel && $inScope) {
@@ -389,7 +400,7 @@ class Log
     /**
      * Convenience method to log emergency messages
      *
-     * @param \Stringable|string $message log message
+     * @param string $message log message
      * @param array|string $context Additional data to be used for logging the message.
      *  The special `scope` key can be passed to be used for further filtering of the
      *  log engines to be used. If a string or a numerically index array is passed, it
@@ -397,7 +408,7 @@ class Log
      *  See {@link \Cake\Log\Log::setConfig()} for more information on logging scopes.
      * @return bool Success
      */
-    public static function emergency(Stringable|string $message, array|string $context = []): bool
+    public static function emergency(string $message, $context = []): bool
     {
         return static::write(__FUNCTION__, $message, $context);
     }
@@ -405,7 +416,7 @@ class Log
     /**
      * Convenience method to log alert messages
      *
-     * @param \Stringable|string $message log message
+     * @param string $message log message
      * @param array|string $context Additional data to be used for logging the message.
      *  The special `scope` key can be passed to be used for further filtering of the
      *  log engines to be used. If a string or a numerically index array is passed, it
@@ -413,7 +424,7 @@ class Log
      *  See {@link \Cake\Log\Log::setConfig()} for more information on logging scopes.
      * @return bool Success
      */
-    public static function alert(Stringable|string $message, array|string $context = []): bool
+    public static function alert(string $message, $context = []): bool
     {
         return static::write(__FUNCTION__, $message, $context);
     }
@@ -421,7 +432,7 @@ class Log
     /**
      * Convenience method to log critical messages
      *
-     * @param \Stringable|string $message log message
+     * @param string $message log message
      * @param array|string $context Additional data to be used for logging the message.
      *  The special `scope` key can be passed to be used for further filtering of the
      *  log engines to be used. If a string or a numerically index array is passed, it
@@ -429,7 +440,7 @@ class Log
      *  See {@link \Cake\Log\Log::setConfig()} for more information on logging scopes.
      * @return bool Success
      */
-    public static function critical(Stringable|string $message, array|string $context = []): bool
+    public static function critical(string $message, $context = []): bool
     {
         return static::write(__FUNCTION__, $message, $context);
     }
@@ -437,7 +448,7 @@ class Log
     /**
      * Convenience method to log error messages
      *
-     * @param \Stringable|string $message log message
+     * @param string $message log message
      * @param array|string $context Additional data to be used for logging the message.
      *  The special `scope` key can be passed to be used for further filtering of the
      *  log engines to be used. If a string or a numerically index array is passed, it
@@ -445,7 +456,7 @@ class Log
      *  See {@link \Cake\Log\Log::setConfig()} for more information on logging scopes.
      * @return bool Success
      */
-    public static function error(Stringable|string $message, array|string $context = []): bool
+    public static function error(string $message, $context = []): bool
     {
         return static::write(__FUNCTION__, $message, $context);
     }
@@ -453,7 +464,7 @@ class Log
     /**
      * Convenience method to log warning messages
      *
-     * @param \Stringable|string $message log message
+     * @param string $message log message
      * @param array|string $context Additional data to be used for logging the message.
      *  The special `scope` key can be passed to be used for further filtering of the
      *  log engines to be used. If a string or a numerically index array is passed, it
@@ -461,7 +472,7 @@ class Log
      *  See {@link \Cake\Log\Log::setConfig()} for more information on logging scopes.
      * @return bool Success
      */
-    public static function warning(Stringable|string $message, array|string $context = []): bool
+    public static function warning(string $message, $context = []): bool
     {
         return static::write(__FUNCTION__, $message, $context);
     }
@@ -469,7 +480,7 @@ class Log
     /**
      * Convenience method to log notice messages
      *
-     * @param \Stringable|string $message log message
+     * @param string $message log message
      * @param array|string $context Additional data to be used for logging the message.
      *  The special `scope` key can be passed to be used for further filtering of the
      *  log engines to be used. If a string or a numerically index array is passed, it
@@ -477,7 +488,7 @@ class Log
      *  See {@link \Cake\Log\Log::setConfig()} for more information on logging scopes.
      * @return bool Success
      */
-    public static function notice(Stringable|string $message, array|string $context = []): bool
+    public static function notice(string $message, $context = []): bool
     {
         return static::write(__FUNCTION__, $message, $context);
     }
@@ -485,7 +496,7 @@ class Log
     /**
      * Convenience method to log debug messages
      *
-     * @param \Stringable|string $message log message
+     * @param string $message log message
      * @param array|string $context Additional data to be used for logging the message.
      *  The special `scope` key can be passed to be used for further filtering of the
      *  log engines to be used. If a string or a numerically index array is passed, it
@@ -493,7 +504,7 @@ class Log
      *  See {@link \Cake\Log\Log::setConfig()} for more information on logging scopes.
      * @return bool Success
      */
-    public static function debug(Stringable|string $message, array|string $context = []): bool
+    public static function debug(string $message, $context = []): bool
     {
         return static::write(__FUNCTION__, $message, $context);
     }
@@ -501,7 +512,7 @@ class Log
     /**
      * Convenience method to log info messages
      *
-     * @param \Stringable|string $message log message
+     * @param string $message log message
      * @param array|string $context Additional data to be used for logging the message.
      *  The special `scope` key can be passed to be used for further filtering of the
      *  log engines to be used. If a string or a numerically indexed array is passed, it
@@ -509,7 +520,7 @@ class Log
      *  See {@link \Cake\Log\Log::setConfig()} for more information on logging scopes.
      * @return bool Success
      */
-    public static function info(Stringable|string $message, array|string $context = []): bool
+    public static function info(string $message, $context = []): bool
     {
         return static::write(__FUNCTION__, $message, $context);
     }

@@ -26,7 +26,7 @@ class MailSentTo extends MailSentWith
     /**
      * @var string
      */
-    protected string $method = 'to';
+    protected $method = 'to';
 
     /**
      * Assertion message string

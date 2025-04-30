@@ -22,5 +22,5 @@ class MissingLayoutException extends MissingTemplateException
     /**
      * @var string
      */
-    protected string $type = 'Layout';
+    protected $type = 'Layout';
 }

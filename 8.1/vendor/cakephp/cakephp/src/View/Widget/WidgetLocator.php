@@ -20,8 +20,9 @@ use Cake\Core\App;
 use Cake\Core\Configure\Engine\PhpConfig;
 use Cake\View\StringTemplate;
 use Cake\View\View;
-use InvalidArgumentException;
 use ReflectionClass;
+use RuntimeException;
+use function Cake\Core\getTypeName;
 
 /**
  * A registry/factory for input widgets.
@@ -45,21 +46,21 @@ class WidgetLocator
      *
      * @var array
      */
-    protected array $_widgets = [];
+    protected $_widgets = [];
 
     /**
      * Templates to use.
      *
      * @var \Cake\View\StringTemplate
      */
-    protected StringTemplate $_templates;
+    protected $_templates;
 
     /**
      * View instance.
      *
      * @var \Cake\View\View
      */
-    protected View $_view;
+    protected $_view;
 
     /**
      * Constructor
@@ -111,6 +112,7 @@ class WidgetLocator
      *
      * @param array $widgets Array of widgets to use.
      * @return void
+     * @throws \RuntimeException When class does not implement WidgetInterface.
      */
     public function add(array $widgets): void
     {
@@ -122,15 +124,12 @@ class WidgetLocator
                 continue;
             }
 
-            if (is_object($widget)) {
-                assert(
-                    $widget instanceof WidgetInterface,
-                    sprintf(
-                        'Widget objects must implement `%s`. Got `%s` instance instead.',
-                        WidgetInterface::class,
-                        get_debug_type($widget),
-                    ),
-                );
+            if (is_object($widget) && !($widget instanceof WidgetInterface)) {
+                throw new RuntimeException(sprintf(
+                    'Widget objects must implement `%s`. Got `%s` instance instead.',
+                    WidgetInterface::class,
+                    getTypeName($widget)
+                ));
             }
 
             $this->_widgets[$key] = $widget;
@@ -151,13 +150,13 @@ class WidgetLocator
      *
      * @param string $name The widget name to get.
      * @return \Cake\View\Widget\WidgetInterface WidgetInterface instance.
-     * @throws \InvalidArgumentException when widget is undefined.
+     * @throws \RuntimeException when widget is undefined.
      */
     public function get(string $name): WidgetInterface
     {
         if (!isset($this->_widgets[$name])) {
             if (empty($this->_widgets['_default'])) {
-                throw new InvalidArgumentException(sprintf('Unknown widget `%s`', $name));
+                throw new RuntimeException(sprintf('Unknown widget `%s`', $name));
             }
 
             $name = '_default';
@@ -183,22 +182,26 @@ class WidgetLocator
     /**
      * Resolves a widget spec into an instance.
      *
-     * @param array|string $config The widget config.
+     * @param mixed $config The widget config.
      * @return \Cake\View\Widget\WidgetInterface Widget instance.
-     * @throws \InvalidArgumentException
+     * @throws \ReflectionException
      */
-    protected function _resolveWidget(array|string $config): WidgetInterface
+    protected function _resolveWidget($config): WidgetInterface
     {
         if (is_string($config)) {
             $config = [$config];
         }
 
+        if (!is_array($config)) {
+            throw new RuntimeException('Widget config must be a string or array.');
+        }
+
         $class = array_shift($config);
         $className = App::className($class, 'View/Widget', 'Widget');
         if ($className === null) {
-            throw new InvalidArgumentException(sprintf('Unable to locate widget class `%s`.', $class));
+            throw new RuntimeException(sprintf('Unable to locate widget class "%s"', $class));
         }
-        if ($config !== []) {
+        if (count($config)) {
             $reflection = new ReflectionClass($className);
             $arguments = [$this->_templates];
             foreach ($config as $requirement) {
@@ -208,12 +211,13 @@ class WidgetLocator
                     $arguments[] = $this->get($requirement);
                 }
             }
-
-            /** @var \Cake\View\Widget\WidgetInterface */
-            return $reflection->newInstanceArgs($arguments);
+            /** @var \Cake\View\Widget\WidgetInterface $instance */
+            $instance = $reflection->newInstanceArgs($arguments);
+        } else {
+            /** @var \Cake\View\Widget\WidgetInterface $instance */
+            $instance = new $className($this->_templates);
         }
 
-        /** @var \Cake\View\Widget\WidgetInterface */
-        return new $className($this->_templates);
+        return $instance;
     }
 }

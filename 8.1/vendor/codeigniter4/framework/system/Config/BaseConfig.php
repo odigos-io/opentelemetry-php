@@ -11,12 +11,12 @@
 
 namespace CodeIgniter\Config;
 
-use CodeIgniter\Exceptions\ConfigException;
-use CodeIgniter\Exceptions\RuntimeException;
 use Config\Encryption;
 use Config\Modules;
+use Config\Services;
 use ReflectionClass;
 use ReflectionException;
+use RuntimeException;
 
 /**
  * Class BaseConfig
@@ -46,21 +46,11 @@ class BaseConfig
     public static bool $override = true;
 
     /**
-     * Has module discovery completed?
+     * Has module discovery happened yet?
      *
      * @var bool
      */
     protected static $didDiscovery = false;
-
-    /**
-     * Is module discovery running or not?
-     */
-    protected static bool $discovering = false;
-
-    /**
-     * The processing Registrar file for error message.
-     */
-    protected static string $registrarFile = '';
 
     /**
      * The modules configuration.
@@ -130,10 +120,10 @@ class BaseConfig
             $this->initEnvValue($this->{$property}, $property, $prefix, $shortPrefix);
 
             if ($this instanceof Encryption && $property === 'key') {
-                if (str_starts_with($this->{$property}, 'hex2bin:')) {
+                if (strpos($this->{$property}, 'hex2bin:') === 0) {
                     // Handle hex2bin prefix
                     $this->{$property} = hex2bin(substr($this->{$property}, 8));
-                } elseif (str_starts_with($this->{$property}, 'base64:')) {
+                } elseif (strpos($this->{$property}, 'base64:') === 0) {
                     // Handle base64 prefix
                     $this->{$property} = base64_decode(substr($this->{$property}, 7), true);
                 }
@@ -174,9 +164,6 @@ class BaseConfig
                 $value = (float) $value;
             }
 
-            // If the default value of the property is `null` and the type is not
-            // `string`, TypeError will happen.
-            // So cannot set `declare(strict_types=1)` in this file.
             $property = $value;
         }
     }
@@ -241,35 +228,15 @@ class BaseConfig
         }
 
         if (! static::$didDiscovery) {
-            // Discovery must be completed before the first instantiation of any Config class.
-            if (static::$discovering) {
-                throw new ConfigException(
-                    'During Auto-Discovery of Registrars,'
-                    . ' "' . static::class . '" executes Auto-Discovery again.'
-                    . ' "' . clean_path(static::$registrarFile) . '" seems to have bad code.',
-                );
-            }
-
-            static::$discovering = true;
-
-            $locator         = service('locator');
+            $locator         = Services::locator();
             $registrarsFiles = $locator->search('Config/Registrar.php');
 
             foreach ($registrarsFiles as $file) {
-                // Saves the file for error message.
-                static::$registrarFile = $file;
-
-                $className = $locator->findQualifiedNameFromPath($file);
-
-                if ($className === false) {
-                    continue;
-                }
-
+                $className            = $locator->getClassname($file);
                 static::$registrars[] = new $className();
             }
 
             static::$didDiscovery = true;
-            static::$discovering  = false;
         }
 
         $shortName = (new ReflectionClass($this))->getShortName();

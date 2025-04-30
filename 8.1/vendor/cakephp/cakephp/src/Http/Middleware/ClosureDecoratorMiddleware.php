@@ -43,7 +43,7 @@ class ClosureDecoratorMiddleware implements MiddlewareInterface
      *
      * @var \Closure
      */
-    protected Closure $callable;
+    protected $callable;
 
     /**
      * Constructor
@@ -66,15 +66,15 @@ class ClosureDecoratorMiddleware implements MiddlewareInterface
     {
         return ($this->callable)(
             $request,
-            $handler,
+            $handler
         );
     }
 
     /**
      * @internal
-     * @return \Closure
+     * @return callable
      */
-    public function getCallable(): Closure
+    public function getCallable(): callable
     {
         return $this->callable;
     }

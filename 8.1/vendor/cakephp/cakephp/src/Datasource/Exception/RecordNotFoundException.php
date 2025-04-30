@@ -17,15 +17,10 @@ declare(strict_types=1);
 namespace Cake\Datasource\Exception;
 
 use Cake\Core\Exception\CakeException;
-use Cake\Core\Exception\HttpErrorCodeInterface;
 
 /**
  * Exception raised when a particular record was not found
  */
-class RecordNotFoundException extends CakeException implements HttpErrorCodeInterface
+class RecordNotFoundException extends CakeException
 {
-    /**
-     * @inheritDoc
-     */
-    protected int $_defaultCode = 404;
 }

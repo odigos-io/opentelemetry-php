@@ -16,11 +16,8 @@ declare(strict_types=1);
  */
 namespace Cake\Database\Log;
 
-use Cake\Database\Driver;
 use Cake\Database\Driver\Sqlserver;
-use Exception;
 use JsonSerializable;
-use Stringable;
 
 /**
  * Contains a query string, the params used to executed it, time taken to do it
@@ -28,49 +25,49 @@ use Stringable;
  *
  * @internal
  */
-class LoggedQuery implements JsonSerializable, Stringable
+class LoggedQuery implements JsonSerializable
 {
     /**
      * Driver executing the query
      *
-     * @var \Cake\Database\Driver|null
+     * @var \Cake\Database\DriverInterface|null
      */
-    protected ?Driver $driver = null;
+    public $driver = null;
 
     /**
      * Query string that was executed
      *
      * @var string
      */
-    protected string $query = '';
+    public $query = '';
 
     /**
      * Number of milliseconds this query took to complete
      *
      * @var float
      */
-    protected float $took = 0;
+    public $took = 0;
 
     /**
      * Associative array with the params bound to the query string
      *
      * @var array
      */
-    protected array $params = [];
+    public $params = [];
 
     /**
      * Number of rows affected or returned by the query execution
      *
      * @var int
      */
-    protected int $numRows = 0;
+    public $numRows = 0;
 
     /**
      * The exception that was thrown by the execution of this query
      *
      * @var \Exception|null
      */
-    protected ?Exception $error = null;
+    public $error;
 
     /**
      * Helper function used to replace query placeholders by the real
@@ -108,7 +105,7 @@ class LoggedQuery implements JsonSerializable, Stringable
 
                 $p = strtr($p, $replacements);
 
-                return "'{$p}'";
+                return "'$p'";
             }
 
             return $p;
@@ -117,10 +114,10 @@ class LoggedQuery implements JsonSerializable, Stringable
         $keys = [];
         $limit = is_int(key($params)) ? 1 : -1;
         foreach ($params as $key => $param) {
-            $keys[] = is_string($key) ? "/:{$key}\b/" : '/[?]/';
+            $keys[] = is_string($key) ? "/:$key\b/" : '/[?]/';
         }
 
-        return (string)preg_replace($keys, $params, $this->query, $limit);
+        return preg_replace($keys, $params, $this->query, $limit);
     }
 
     /**
@@ -131,24 +128,10 @@ class LoggedQuery implements JsonSerializable, Stringable
     public function getContext(): array
     {
         return [
-            'query' => $this->query,
             'numRows' => $this->numRows,
             'took' => $this->took,
             'role' => $this->driver ? $this->driver->getRole() : '',
         ];
-    }
-
-    /**
-     * Set logging context for this query.
-     *
-     * @param array $context Context data.
-     * @return void
-     */
-    public function setContext(array $context): void
-    {
-        foreach ($context as $key => $val) {
-            $this->{$key} = $val;
-        }
     }
 
     /**
@@ -161,7 +144,7 @@ class LoggedQuery implements JsonSerializable, Stringable
         $error = $this->error;
         if ($error !== null) {
             $error = [
-                'class' => $error::class,
+                'class' => get_class($error),
                 'message' => $error->getMessage(),
                 'code' => $error->getCode(),
             ];
@@ -183,10 +166,11 @@ class LoggedQuery implements JsonSerializable, Stringable
      */
     public function __toString(): string
     {
-        if ($this->params) {
-            return $this->interpolate();
+        $sql = $this->query;
+        if (!empty($this->params)) {
+            $sql = $this->interpolate();
         }
 
-        return $this->query;
+        return $sql;
     }
 }

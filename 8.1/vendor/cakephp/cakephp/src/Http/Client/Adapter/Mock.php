@@ -21,6 +21,7 @@ use Cake\Http\Client\Response;
 use Closure;
 use InvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
+use function Cake\Core\getTypeName;
 
 /**
  * Implements sending requests to an array of stubbed responses
@@ -37,7 +38,7 @@ class Mock implements AdapterInterface
      *
      * @var array
      */
-    protected array $responses = [];
+    protected $responses = [];
 
     /**
      * Add a mocked response.
@@ -54,11 +55,8 @@ class Mock implements AdapterInterface
     public function addResponse(RequestInterface $request, Response $response, array $options): void
     {
         if (isset($options['match']) && !($options['match'] instanceof Closure)) {
-            $type = get_debug_type($options['match']);
-            throw new InvalidArgumentException(sprintf(
-                'The `match` option must be a `Closure`. Got `%s`.',
-                $type,
-            ));
+            $type = getTypeName($options['match']);
+            throw new InvalidArgumentException("The `match` option must be a `Closure`. Got `{$type}`.");
         }
         $this->responses[] = [
             'request' => $request,
@@ -72,7 +70,7 @@ class Mock implements AdapterInterface
      *
      * @param \Psr\Http\Message\RequestInterface $request The request to match
      * @param array<string, mixed> $options Unused.
-     * @return array<\Cake\Http\Client\Response> The matched response or an empty array for no matches.
+     * @return \Cake\Http\Client\Response[] The matched response or an empty array for no matches.
      */
     public function send(RequestInterface $request, array $options): array
     {
@@ -81,16 +79,14 @@ class Mock implements AdapterInterface
         $requestUri = (string)$request->getUri();
 
         foreach ($this->responses as $index => $mock) {
-            /** @var \Psr\Http\Message\RequestInterface $request */
-            $request = $mock['request'];
-            if ($method !== $request->getMethod()) {
+            if ($method !== $mock['request']->getMethod()) {
                 continue;
             }
             if (!$this->urlMatches($requestUri, $mock['request'])) {
                 continue;
             }
             if (isset($mock['options']['match'])) {
-                $match = $mock['options']['match']($request, $options);
+                $match = $mock['options']['match']($request);
                 if (!is_bool($match)) {
                     throw new InvalidArgumentException('Match callback must return a boolean value.');
                 }
@@ -131,7 +127,7 @@ class Mock implements AdapterInterface
         if ($starPosition === strlen($mockUri) - 4) {
             $mockUri = substr($mockUri, 0, $starPosition);
 
-            return str_starts_with($requestUri, $mockUri);
+            return strpos($requestUri, $mockUri) === 0;
         }
 
         return false;

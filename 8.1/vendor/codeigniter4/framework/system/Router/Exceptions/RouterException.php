@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of CodeIgniter 4 framework.
  *
@@ -18,7 +16,7 @@ use CodeIgniter\Exceptions\FrameworkException;
 /**
  * RouterException
  */
-class RouterException extends FrameworkException implements ExceptionInterface
+class RouterException extends FrameworkException
 {
     /**
      * Thrown when the actual parameter type does not match

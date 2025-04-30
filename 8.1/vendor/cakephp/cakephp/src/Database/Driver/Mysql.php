@@ -17,19 +17,21 @@ declare(strict_types=1);
 namespace Cake\Database\Driver;
 
 use Cake\Database\Driver;
-use Cake\Database\DriverFeatureEnum;
 use Cake\Database\Query;
-use Cake\Database\Query\SelectQuery;
 use Cake\Database\Schema\MysqlSchemaDialect;
 use Cake\Database\Schema\SchemaDialect;
+use Cake\Database\Statement\MysqlStatement;
 use Cake\Database\StatementInterface;
 use PDO;
+use function Cake\Core\deprecationWarning;
 
 /**
  * MySQL Driver
  */
 class Mysql extends Driver
 {
+    use SqlDialectTrait;
+
     /**
      * @inheritDoc
      */
@@ -54,7 +56,7 @@ class Mysql extends Driver
      *
      * @var array<string, mixed>
      */
-    protected array $_baseConfig = [
+    protected $_baseConfig = [
         'persistent' => true,
         'host' => 'localhost',
         'username' => 'root',
@@ -68,18 +70,25 @@ class Mysql extends Driver
     ];
 
     /**
+     * The schema dialect for this driver
+     *
+     * @var \Cake\Database\Schema\MysqlSchemaDialect|null
+     */
+    protected $_schemaDialect;
+
+    /**
      * String used to start a database identifier quoting to make it safe
      *
      * @var string
      */
-    protected string $_startQuote = '`';
+    protected $_startQuote = '`';
 
     /**
      * String used to end a database identifier quoting to make it safe
      *
      * @var string
      */
-    protected string $_endQuote = '`';
+    protected $_endQuote = '`';
 
     /**
      * Server type.
@@ -89,37 +98,35 @@ class Mysql extends Driver
      *
      * @var string
      */
-    protected string $serverType = self::SERVER_TYPE_MYSQL;
+    protected $serverType = self::SERVER_TYPE_MYSQL;
 
     /**
      * Mapping of feature to db server version for feature availability checks.
      *
      * @var array<string, array<string, string>>
      */
-    protected array $featureVersions = [
+    protected $featureVersions = [
         'mysql' => [
             'json' => '5.7.0',
             'cte' => '8.0.0',
             'window' => '8.0.0',
-            'intersect' => '8.0.31',
-            'intersect-all' => '8.0.31',
         ],
         'mariadb' => [
             'json' => '10.2.7',
             'cte' => '10.2.1',
             'window' => '10.2.0',
-            'intersect' => '10.3.0',
-            'intersect-all' => '10.5.0',
         ],
     ];
 
     /**
-     * @inheritDoc
+     * Establishes a connection to the database server
+     *
+     * @return bool true on success
      */
-    public function connect(): void
+    public function connect(): bool
     {
-        if ($this->pdo !== null) {
-            return;
+        if ($this->_connection) {
+            return true;
         }
         $config = $this->_config;
 
@@ -155,35 +162,16 @@ class Mysql extends Driver
             $dsn .= ";charset={$config['encoding']}";
         }
 
-        $this->pdo = $this->createPdo($dsn, $config);
+        $this->_connect($dsn, $config);
 
         if (!empty($config['init'])) {
+            $connection = $this->getConnection();
             foreach ((array)$config['init'] as $command) {
-                $this->pdo->exec($command);
+                $connection->exec($command);
             }
         }
-    }
 
-    /**
-     * @inheritDoc
-     */
-    public function run(Query $query): StatementInterface
-    {
-        $statement = $this->prepare($query);
-        $query->getValueBinder()->attachTo($statement);
-
-        if ($query instanceof SelectQuery) {
-            try {
-                $this->getPdo()->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, $query->isBufferedResultsEnabled());
-                $this->executeStatement($statement);
-            } finally {
-                $this->getPdo()->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
-            }
-        } else {
-            $this->executeStatement($statement);
-        }
-
-        return $statement;
+        return true;
     }
 
     /**
@@ -197,11 +185,39 @@ class Mysql extends Driver
     }
 
     /**
+     * Prepares a sql statement to be executed
+     *
+     * @param \Cake\Database\Query|string $query The query to prepare.
+     * @return \Cake\Database\StatementInterface
+     */
+    public function prepare($query): StatementInterface
+    {
+        $this->connect();
+        $isObject = $query instanceof Query;
+        /**
+         * @psalm-suppress PossiblyInvalidMethodCall
+         * @psalm-suppress PossiblyInvalidArgument
+         */
+        $statement = $this->_connection->prepare($isObject ? $query->sql() : $query);
+        $result = new MysqlStatement($statement, $this);
+        /** @psalm-suppress PossiblyInvalidMethodCall */
+        if ($isObject && $query->isBufferedResultsEnabled() === false) {
+            $result->bufferResults(false);
+        }
+
+        return $result;
+    }
+
+    /**
      * @inheritDoc
      */
     public function schemaDialect(): SchemaDialect
     {
-        return $this->_schemaDialect ?? ($this->_schemaDialect = new MysqlSchemaDialect($this));
+        if ($this->_schemaDialect === null) {
+            $this->_schemaDialect = new MysqlSchemaDialect($this);
+        }
+
+        return $this->_schemaDialect;
     }
 
     /**
@@ -213,9 +229,7 @@ class Mysql extends Driver
     }
 
     /**
-     * Get the SQL for disabling foreign keys.
-     *
-     * @return string
+     * @inheritDoc
      */
     public function disableForeignKeySQL(): string
     {
@@ -233,29 +247,28 @@ class Mysql extends Driver
     /**
      * @inheritDoc
      */
-    public function supports(DriverFeatureEnum $feature): bool
+    public function supports(string $feature): bool
     {
-        $versionCompare = function () use ($feature) {
-            return version_compare(
-                $this->version(),
-                $this->featureVersions[$this->serverType][$feature->value],
-                '>=',
-            );
-        };
+        switch ($feature) {
+            case static::FEATURE_CTE:
+            case static::FEATURE_JSON:
+            case static::FEATURE_WINDOW:
+                return version_compare(
+                    $this->version(),
+                    $this->featureVersions[$this->serverType][$feature],
+                    '>='
+                );
+        }
 
-        return match ($feature) {
-            DriverFeatureEnum::DISABLE_CONSTRAINT_WITHOUT_TRANSACTION,
-            DriverFeatureEnum::SAVEPOINT => true,
+        return parent::supports($feature);
+    }
 
-            DriverFeatureEnum::TRUNCATE_WITH_CONSTRAINTS => false,
-
-            DriverFeatureEnum::CTE,
-            DriverFeatureEnum::JSON,
-            DriverFeatureEnum::WINDOW => $versionCompare(),
-            DriverFeatureEnum::INTERSECT => $versionCompare(),
-            DriverFeatureEnum::INTERSECT_ALL => $versionCompare(),
-            DriverFeatureEnum::SET_OPERATIONS_ORDER_BY => true,
-        };
+    /**
+     * @inheritDoc
+     */
+    public function supportsDynamicConstraints(): bool
+    {
+        return true;
     }
 
     /**
@@ -278,16 +291,55 @@ class Mysql extends Driver
     public function version(): string
     {
         if ($this->_version === null) {
-            $this->_version = (string)$this->getPdo()->getAttribute(PDO::ATTR_SERVER_VERSION);
+            $this->connect();
+            $this->_version = (string)$this->_connection->getAttribute(PDO::ATTR_SERVER_VERSION);
 
-            if (str_contains($this->_version, 'MariaDB')) {
+            if (strpos($this->_version, 'MariaDB') !== false) {
                 $this->serverType = static::SERVER_TYPE_MARIADB;
                 preg_match('/^(?:5\.5\.5-)?(\d+\.\d+\.\d+.*-MariaDB[^:]*)/', $this->_version, $matches);
-                /** @phpstan-ignore-next-line */
                 $this->_version = $matches[1];
             }
         }
 
         return $this->_version;
+    }
+
+    /**
+     * Returns true if the server supports common table expressions.
+     *
+     * @return bool
+     * @deprecated 4.3.0 Use `supports(DriverInterface::FEATURE_CTE)` instead
+     */
+    public function supportsCTEs(): bool
+    {
+        deprecationWarning('Feature support checks are now implemented by `supports()` with FEATURE_* constants.');
+
+        return $this->supports(static::FEATURE_CTE);
+    }
+
+    /**
+     * Returns true if the server supports native JSON columns
+     *
+     * @return bool
+     * @deprecated 4.3.0 Use `supports(DriverInterface::FEATURE_JSON)` instead
+     */
+    public function supportsNativeJson(): bool
+    {
+        deprecationWarning('Feature support checks are now implemented by `supports()` with FEATURE_* constants.');
+
+        return $this->supports(static::FEATURE_JSON);
+    }
+
+    /**
+     * Returns true if the connected server supports window functions.
+     *
+     * @return bool
+     * @deprecated 4.3.0 Use `supports(DriverInterface::FEATURE_WINDOW)` instead
+     */
+    public function supportsWindowFunctions(): bool
+    {
+        deprecationWarning('Feature support checks are now implemented by `supports()` with FEATURE_* constants.');
+
+        return $this->supports(static::FEATURE_WINDOW);
     }
 }

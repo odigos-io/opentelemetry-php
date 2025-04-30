@@ -35,7 +35,7 @@ $this->start('file');
 <ul>
 <?php
     foreach ($paths as $path) :
-        if (str_contains($path, CORE_PATH)) {
+        if (strpos($path, CORE_PATH) !== false) {
             continue;
         }
         echo sprintf('<li>%sCell/%s/%s</li>', h($path), h($name), h($file));

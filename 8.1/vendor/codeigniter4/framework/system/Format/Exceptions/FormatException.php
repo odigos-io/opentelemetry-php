@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of CodeIgniter 4 framework.
  *
@@ -14,12 +12,13 @@ declare(strict_types=1);
 namespace CodeIgniter\Format\Exceptions;
 
 use CodeIgniter\Exceptions\DebugTraceableTrait;
-use CodeIgniter\Exceptions\RuntimeException;
+use CodeIgniter\Exceptions\ExceptionInterface;
+use RuntimeException;
 
 /**
  * FormatException
  */
-class FormatException extends RuntimeException
+class FormatException extends RuntimeException implements ExceptionInterface
 {
     use DebugTraceableTrait;
 

@@ -24,12 +24,12 @@ class MissingCellTemplateException extends MissingTemplateException
     /**
      * @var string
      */
-    protected string $name;
+    protected $name;
 
     /**
      * @var string
      */
-    protected string $type = 'Cell template';
+    protected $type = 'Cell template';
 
     /**
      * Constructor
@@ -45,7 +45,7 @@ class MissingCellTemplateException extends MissingTemplateException
         string $file,
         array $paths = [],
         ?int $code = null,
-        ?Throwable $previous = null,
+        ?Throwable $previous = null
     ) {
         $this->name = $name;
 
@@ -55,8 +55,8 @@ class MissingCellTemplateException extends MissingTemplateException
     /**
      * Get the passed in attributes
      *
-     * @return array<string, mixed>
-     * @phpstan-return array{name: string, file: string, paths: array<string>}
+     * @return array
+     * @psalm-return array{name: string, file: string, paths: array<string>}
      */
     public function getAttributes(): array
     {

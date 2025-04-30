@@ -34,7 +34,7 @@ class QueryCompiler
      *
      * @var array<string, string>
      */
-    protected array $_templates = [
+    protected $_templates = [
         'delete' => 'DELETE',
         'where' => ' WHERE %s',
         'group' => ' GROUP BY %s ',
@@ -43,7 +43,6 @@ class QueryCompiler
         'limit' => ' LIMIT %s',
         'offset' => ' OFFSET %s',
         'epilog' => ' %s',
-        'comment' => '/* %s */ ',
     ];
 
     /**
@@ -51,9 +50,9 @@ class QueryCompiler
      *
      * @var array<string>
      */
-    protected array $_selectParts = [
-        'comment', 'with', 'select', 'from', 'join', 'where', 'group', 'having', 'window', 'order',
-        'limit', 'offset', 'union', 'epilog', 'intersect',
+    protected $_selectParts = [
+        'with', 'select', 'from', 'join', 'where', 'group', 'having', 'window', 'order',
+        'limit', 'offset', 'union', 'epilog',
     ];
 
     /**
@@ -61,28 +60,37 @@ class QueryCompiler
      *
      * @var array<string>
      */
-    protected array $_updateParts = ['comment', 'with', 'update', 'set', 'where', 'epilog'];
+    protected $_updateParts = ['with', 'update', 'set', 'where', 'epilog'];
 
     /**
      * The list of query clauses to traverse for generating a DELETE statement
      *
      * @var array<string>
      */
-    protected array $_deleteParts = ['comment', 'with', 'delete', 'modifier', 'from', 'where', 'epilog'];
+    protected $_deleteParts = ['with', 'delete', 'modifier', 'from', 'where', 'epilog'];
 
     /**
      * The list of query clauses to traverse for generating an INSERT statement
      *
      * @var array<string>
      */
-    protected array $_insertParts = ['comment', 'with', 'insert', 'values', 'epilog'];
+    protected $_insertParts = ['with', 'insert', 'values', 'epilog'];
+
+    /**
+     * Indicate whether this query dialect supports ordered unions.
+     *
+     * Overridden in subclasses.
+     *
+     * @var bool
+     */
+    protected $_orderedUnion = true;
 
     /**
      * Indicate whether aliases in SELECT clause need to be always quoted.
      *
      * @var bool
      */
-    protected bool $_quotedSelectAliases = false;
+    protected $_quotedSelectAliases = false;
 
     /**
      * Returns the SQL representation of the provided query after generating
@@ -98,7 +106,7 @@ class QueryCompiler
         $type = $query->type();
         $query->traverseParts(
             $this->_sqlCompiler($sql, $query, $binder),
-            $this->{"_{$type}Parts"},
+            $this->{"_{$type}Parts"}
         );
 
         // Propagate bound parameters from sub-queries if the
@@ -116,7 +124,7 @@ class QueryCompiler
     }
 
     /**
-     * Returns a closure that can be used to compile a SQL string representation
+     * Returns a callable object that can be used to compile a SQL string representation
      * of this query.
      *
      * @param string $sql initial sql string to append to
@@ -126,10 +134,10 @@ class QueryCompiler
      */
     protected function _sqlCompiler(string &$sql, Query $query, ValueBinder $binder): Closure
     {
-        return function ($part, $partName) use (&$sql, $query, $binder): void {
+        return function ($part, $partName) use (&$sql, $query, $binder) {
             if (
                 $part === null ||
-                ($part === []) ||
+                (is_array($part) && empty($part)) ||
                 ($part instanceof Countable && count($part) === 0)
             ) {
                 return;
@@ -144,6 +152,7 @@ class QueryCompiler
 
                 return;
             }
+
             $sql .= $this->{'_build' . $partName . 'Part'}($part, $query, $binder);
         };
     }
@@ -153,7 +162,7 @@ class QueryCompiler
      * it constructs the CTE definitions list and generates the `RECURSIVE`
      * keyword when required.
      *
-     * @param array<\Cake\Database\Expression\CommonTableExpression> $parts List of CTEs to be transformed to string
+     * @param array $parts List of CTEs to be transformed to string
      * @param \Cake\Database\Query $query The query that is being compiled
      * @param \Cake\Database\ValueBinder $binder Value binder used to generate parameter placeholder
      * @return string
@@ -185,23 +194,20 @@ class QueryCompiler
      */
     protected function _buildSelectPart(array $parts, Query $query, ValueBinder $binder): string
     {
-        $driver = $query->getConnection()->getDriver($query->getConnectionRole());
         $select = 'SELECT%s %s%s';
-        if (
-            ($query->clause('union') || $query->clause('intersect')) &&
-            $driver->supports(DriverFeatureEnum::SET_OPERATIONS_ORDER_BY)
-        ) {
+        if ($this->_orderedUnion && $query->clause('union')) {
             $select = '(SELECT%s %s%s';
         }
         $distinct = $query->clause('distinct');
         $modifiers = $this->_buildModifierPart($query->clause('modifier'), $query, $binder);
 
+        $driver = $query->getConnection()->getDriver($query->getConnectionRole());
         $quoteIdentifiers = $driver->isAutoQuotingEnabled() || $this->_quotedSelectAliases;
         $normalized = [];
         $parts = $this->_stringifyExpressions($parts, $binder);
         foreach ($parts as $k => $p) {
             if (!is_numeric($k)) {
-                $p .= ' AS ';
+                $p = $p . ' AS ';
                 if ($quoteIdentifiers) {
                     $p .= $driver->quoteIdentifier($k);
                 } else {
@@ -267,7 +273,7 @@ class QueryCompiler
                 throw new DatabaseException(sprintf(
                     'Could not compile join clause for alias `%s`. No table was specified. ' .
                     'Use the `table` key to define a table.',
-                    $join['alias'],
+                    $join['alias']
                 ));
             }
             if ($join['table'] instanceof ExpressionInterface) {
@@ -302,11 +308,7 @@ class QueryCompiler
     {
         $windows = [];
         foreach ($parts as $window) {
-            /** @var \Cake\Database\Expression\IdentifierExpression $expr */
-            $expr = $window['name'];
-            /** @var \Cake\Database\Expression\IdentifierExpression $windowExpr */
-            $windowExpr = $window['window'];
-            $windows[] = $expr->sql($binder) . ' AS (' . $windowExpr->sql($binder) . ')';
+            $windows[] = $window['name']->sql($binder) . ' AS (' . $window['window']->sql($binder) . ')';
         }
 
         return ' WINDOW ' . implode(', ', $windows);
@@ -327,70 +329,13 @@ class QueryCompiler
             if ($part instanceof ExpressionInterface) {
                 $part = $part->sql($binder);
             }
-            if (str_starts_with($part, '(')) {
+            if ($part[0] === '(') {
                 $part = substr($part, 1, -1);
             }
             $set[] = $part;
         }
 
         return ' SET ' . implode('', $set);
-    }
-
-    /**
-     * Builds the SQL string for all the `operation` clauses in this query, when dealing
-     * with query objects it will also transform them using their configured SQL
-     * dialect.
-     *
-     * @param string $operation
-     * @param array $parts
-     * @param \Cake\Database\Query $query
-     * @param \Cake\Database\ValueBinder $binder
-     * @return string
-     */
-    protected function _buildSetOperationPart(
-        string $operation,
-        array $parts,
-        Query $query,
-        ValueBinder $binder,
-    ): string {
-        $setOperationsOrderBy = $query
-            ->getConnection()
-            ->getDriver($query->getConnectionRole())
-            ->supports(DriverFeatureEnum::SET_OPERATIONS_ORDER_BY);
-
-        $parts = array_map(function ($p) use ($binder, $setOperationsOrderBy) {
-            /** @var \Cake\Database\Expression\IdentifierExpression $expr */
-            $expr = $p['query'];
-            $p['query'] = $expr->sql($binder);
-            $p['query'] = str_starts_with($p['query'], '(') ? trim($p['query'], '()') : $p['query'];
-            $prefix = $p['all'] ? 'ALL ' : '';
-            if ($setOperationsOrderBy) {
-                return "{$prefix}({$p['query']})";
-            }
-
-            return $prefix . $p['query'];
-        }, $parts);
-
-        if ($setOperationsOrderBy) {
-            return sprintf(")\n$operation %s", implode("\n$operation ", $parts));
-        }
-
-        return sprintf("\n$operation %s", implode("\n$operation ", $parts));
-    }
-
-    /**
-     * Builds the SQL string for all the INTERSECT clauses in this query, when dealing
-     * with query objects it will also transform them using their configured SQL
-     * dialect.
-     *
-     * @param array $parts list of queries to be operated with INTERSECT
-     * @param \Cake\Database\Query $query The query that is being compiled
-     * @param \Cake\Database\ValueBinder $binder Value binder used to generate parameter placeholder
-     * @return string
-     */
-    protected function _buildIntersectPart(array $parts, Query $query, ValueBinder $binder): string
-    {
-        return $this->_buildSetOperationPart('INTERSECT', $parts, $query, $binder);
     }
 
     /**
@@ -405,7 +350,22 @@ class QueryCompiler
      */
     protected function _buildUnionPart(array $parts, Query $query, ValueBinder $binder): string
     {
-        return $this->_buildSetOperationPart('UNION', $parts, $query, $binder);
+        $parts = array_map(function ($p) use ($binder) {
+            $p['query'] = $p['query']->sql($binder);
+            $p['query'] = $p['query'][0] === '(' ? trim($p['query'], '()') : $p['query'];
+            $prefix = $p['all'] ? 'ALL ' : '';
+            if ($this->_orderedUnion) {
+                return "{$prefix}({$p['query']})";
+            }
+
+            return $prefix . $p['query'];
+        }, $parts);
+
+        if ($this->_orderedUnion) {
+            return sprintf(")\nUNION %s", implode("\nUNION ", $parts));
+        }
+
+        return sprintf("\nUNION %s", implode("\nUNION ", $parts));
     }
 
     /**
@@ -421,7 +381,7 @@ class QueryCompiler
         if (!isset($parts[0])) {
             throw new DatabaseException(
                 'Could not compile insert query. No table was specified. ' .
-                'Use `into()` to define a table.',
+                'Use `into()` to define a table.'
             );
         }
         $table = $parts[0];

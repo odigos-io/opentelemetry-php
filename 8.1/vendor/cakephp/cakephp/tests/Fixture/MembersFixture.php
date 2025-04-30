@@ -22,11 +22,22 @@ use Cake\TestSuite\Fixture\TestFixture;
 class MembersFixture extends TestFixture
 {
     /**
+     * fields property
+     *
+     * @var array
+     */
+    public $fields = [
+        'id' => ['type' => 'integer'],
+        'section_count' => ['type' => 'integer'],
+        '_constraints' => ['primary' => ['type' => 'primary', 'columns' => ['id']]],
+    ];
+
+    /**
      * records property
      *
      * @var array
      */
-    public array $records = [
+    public $records = [
         ['section_count' => 2],
     ];
 }

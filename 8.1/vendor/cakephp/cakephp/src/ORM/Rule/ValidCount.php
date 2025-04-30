@@ -30,7 +30,7 @@ class ValidCount
      *
      * @var string
      */
-    protected string $_field;
+    protected $_field;
 
     /**
      * Constructor.

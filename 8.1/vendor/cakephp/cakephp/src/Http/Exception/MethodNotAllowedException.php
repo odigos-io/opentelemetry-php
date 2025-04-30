@@ -24,7 +24,7 @@ class MethodNotAllowedException extends HttpException
     /**
      * @inheritDoc
      */
-    protected int $_defaultCode = 405;
+    protected $_defaultCode = 405;
 
     /**
      * Constructor
@@ -35,7 +35,7 @@ class MethodNotAllowedException extends HttpException
      */
     public function __construct(?string $message = null, ?int $code = null, ?Throwable $previous = null)
     {
-        if (!$message) {
+        if (empty($message)) {
             $message = 'Method Not Allowed';
         }
         parent::__construct($message, $code, $previous);

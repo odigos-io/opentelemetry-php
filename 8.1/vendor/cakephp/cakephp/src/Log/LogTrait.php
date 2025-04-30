@@ -16,7 +16,6 @@ declare(strict_types=1);
 namespace Cake\Log;
 
 use Psr\Log\LogLevel;
-use Stringable;
 
 /**
  * A trait providing an object short-cut method
@@ -28,16 +27,13 @@ trait LogTrait
      * Convenience method to write a message to Log. See Log::write()
      * for more information on writing to logs.
      *
-     * @param \Stringable|string $message Log message.
+     * @param string $message Log message.
      * @param string|int $level Error level.
      * @param array|string $context Additional log data relevant to this message.
      * @return bool Success of log write.
      */
-    public function log(
-        Stringable|string $message,
-        string|int $level = LogLevel::ERROR,
-        array|string $context = [],
-    ): bool {
+    public function log(string $message, $level = LogLevel::ERROR, $context = []): bool
+    {
         return Log::write($level, $message, $context);
     }
 }

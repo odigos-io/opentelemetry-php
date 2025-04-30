@@ -18,8 +18,6 @@ namespace Cake\Event;
 
 /**
  * Implements Cake\Event\EventDispatcherInterface.
- *
- * @template TSubject of object
  */
 trait EventDispatcherTrait
 {
@@ -29,14 +27,14 @@ trait EventDispatcherTrait
      *
      * @var \Cake\Event\EventManagerInterface|null
      */
-    protected ?EventManagerInterface $_eventManager = null;
+    protected $_eventManager;
 
     /**
      * Default class name for new event objects.
      *
      * @var string
      */
-    protected string $_eventClass = Event::class;
+    protected $_eventClass = Event::class;
 
     /**
      * Returns the Cake\Event\EventManager manager instance for this object.
@@ -48,7 +46,11 @@ trait EventDispatcherTrait
      */
     public function getEventManager(): EventManagerInterface
     {
-        return $this->_eventManager ??= new EventManager();
+        if ($this->_eventManager === null) {
+            $this->_eventManager = new EventManager();
+        }
+
+        return $this->_eventManager;
     }
 
     /**
@@ -73,17 +75,19 @@ trait EventDispatcherTrait
      * Returns a dispatched event.
      *
      * @param string $name Name of the event.
-     * @param array $data Any value you wish to be transported with this event to
+     * @param array|null $data Any value you wish to be transported with this event to
      * it can be read by listeners.
-     * @param TSubject|null $subject The object that this event applies to
+     * @param object|null $subject The object that this event applies to
      * ($this by default).
-     * @return \Cake\Event\EventInterface<TSubject>
+     * @return \Cake\Event\EventInterface
      */
-    public function dispatchEvent(string $name, array $data = [], ?object $subject = null): EventInterface
+    public function dispatchEvent(string $name, ?array $data = null, ?object $subject = null): EventInterface
     {
-        $subject ??= $this;
+        if ($subject === null) {
+            $subject = $this;
+        }
 
-        /** @var \Cake\Event\EventInterface<TSubject> $event Coerce for psalm/phpstan */
+        /** @var \Cake\Event\EventInterface $event */
         $event = new $this->_eventClass($name, $subject, $data);
         $this->getEventManager()->dispatch($event);
 

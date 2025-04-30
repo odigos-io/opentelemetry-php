@@ -17,19 +17,19 @@ declare(strict_types=1);
 namespace Cake\ORM;
 
 /**
- * Behaviors implementing this interface can participate in entity marshaling.
+ * Behaviors implementing this interface can participate in entity marshalling.
  *
  * This enables behaviors to define behavior for how the properties they provide/manage
- * should be marshaled.
+ * should be marshalled.
  */
 interface PropertyMarshalInterface
 {
     /**
-     * Build a set of properties that should be included in the marshaling process.
+     * Build a set of properties that should be included in the marshalling process.
      *
-     * @param \Cake\ORM\Marshaller $marshaller The marshaler of the table the behavior is attached to.
+     * @param \Cake\ORM\Marshaller $marshaller The marhshaller of the table the behavior is attached to.
      * @param array $map The property map being built.
-     * @param array<string, mixed> $options The options array used in the marshaling call.
+     * @param array<string, mixed> $options The options array used in the marshalling call.
      * @return array A map of `[property => callable]` of additional properties to marshal.
      */
     public function buildMarshalMap(Marshaller $marshaller, array $map, array $options): array;

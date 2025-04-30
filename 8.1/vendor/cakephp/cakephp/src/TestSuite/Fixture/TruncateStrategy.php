@@ -24,12 +24,12 @@ class TruncateStrategy implements FixtureStrategyInterface
     /**
      * @var \Cake\TestSuite\Fixture\FixtureHelper
      */
-    protected FixtureHelper $helper;
+    protected $helper;
 
     /**
      * @var array<\Cake\Datasource\FixtureInterface>
      */
-    protected array $fixtures = [];
+    protected $fixtures = [];
 
     /**
      * Initialize strategy.
@@ -44,7 +44,7 @@ class TruncateStrategy implements FixtureStrategyInterface
      */
     public function setupTest(array $fixtureNames): void
     {
-        if (!$fixtureNames) {
+        if (empty($fixtureNames)) {
             return;
         }
 

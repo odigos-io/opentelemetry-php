@@ -17,7 +17,6 @@ declare(strict_types=1);
 namespace Cake\Cache\Engine;
 
 use Cake\Cache\CacheEngine;
-use DateInterval;
 
 /**
  * Null cache engine, all operations appear to work, but do nothing.
@@ -37,7 +36,7 @@ class NullEngine extends CacheEngine
     /**
      * @inheritDoc
      */
-    public function set(string $key, mixed $value, DateInterval|int|null $ttl = null): bool
+    public function set($key, $value, $ttl = null): bool
     {
         return true;
     }
@@ -45,7 +44,7 @@ class NullEngine extends CacheEngine
     /**
      * @inheritDoc
      */
-    public function setMultiple(iterable $values, DateInterval|int|null $ttl = null): bool
+    public function setMultiple($values, $ttl = null): bool
     {
         return true;
     }
@@ -53,7 +52,7 @@ class NullEngine extends CacheEngine
     /**
      * @inheritDoc
      */
-    public function get(string $key, mixed $default = null): mixed
+    public function get($key, $default = null)
     {
         return $default;
     }
@@ -61,7 +60,7 @@ class NullEngine extends CacheEngine
     /**
      * @inheritDoc
      */
-    public function getMultiple(iterable $keys, mixed $default = null): iterable
+    public function getMultiple($keys, $default = null): iterable
     {
         $result = [];
 
@@ -75,7 +74,7 @@ class NullEngine extends CacheEngine
     /**
      * @inheritDoc
      */
-    public function increment(string $key, int $offset = 1): int|false
+    public function increment(string $key, int $offset = 1)
     {
         return 1;
     }
@@ -83,7 +82,7 @@ class NullEngine extends CacheEngine
     /**
      * @inheritDoc
      */
-    public function decrement(string $key, int $offset = 1): int|false
+    public function decrement(string $key, int $offset = 1)
     {
         return 0;
     }
@@ -91,7 +90,7 @@ class NullEngine extends CacheEngine
     /**
      * @inheritDoc
      */
-    public function delete(string $key): bool
+    public function delete($key): bool
     {
         return true;
     }
@@ -99,7 +98,7 @@ class NullEngine extends CacheEngine
     /**
      * @inheritDoc
      */
-    public function deleteMultiple(iterable $keys): bool
+    public function deleteMultiple($keys): bool
     {
         return true;
     }

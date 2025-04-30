@@ -16,7 +16,7 @@ declare(strict_types=1);
  */
 namespace Cake\Database\Type;
 
-use Cake\Database\Driver;
+use Cake\Database\DriverInterface;
 use Cake\Database\TypeInterface;
 use PDO;
 
@@ -30,7 +30,7 @@ abstract class BaseType implements TypeInterface
      *
      * @var string|null
      */
-    protected ?string $_name = null;
+    protected $_name;
 
     /**
      * Constructor
@@ -61,7 +61,7 @@ abstract class BaseType implements TypeInterface
     /**
      * @inheritDoc
      */
-    public function toStatement(mixed $value, Driver $driver): int
+    public function toStatement($value, DriverInterface $driver)
     {
         if ($value === null) {
             return PDO::PARAM_NULL;
@@ -73,7 +73,7 @@ abstract class BaseType implements TypeInterface
     /**
      * @inheritDoc
      */
-    public function newId(): mixed
+    public function newId()
     {
         return null;
     }

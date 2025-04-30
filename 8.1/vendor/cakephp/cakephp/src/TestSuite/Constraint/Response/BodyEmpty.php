@@ -27,7 +27,6 @@ class BodyEmpty extends ResponseBase
      *
      * @param mixed $other Expected type
      * @return bool
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
      */
     public function matches($other): bool
     {
@@ -50,7 +49,7 @@ class BodyEmpty extends ResponseBase
      * @param mixed $other Value
      * @return string
      */
-    protected function failureDescription(mixed $other): string
+    protected function failureDescription($other): string
     {
         return $this->toString();
     }

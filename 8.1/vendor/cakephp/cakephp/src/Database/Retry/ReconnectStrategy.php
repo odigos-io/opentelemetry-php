@@ -35,7 +35,7 @@ class ReconnectStrategy implements RetryStrategyInterface
      *
      * @var array<string>
      */
-    protected static array $causes = [
+    protected static $causes = [
         'gone away',
         'Lost connection',
         'Transaction() on null',
@@ -57,7 +57,7 @@ class ReconnectStrategy implements RetryStrategyInterface
      *
      * @var \Cake\Database\Connection
      */
-    protected Connection $connection;
+    protected $connection;
 
     /**
      * Creates the ReconnectStrategy object by storing a reference to the
@@ -82,7 +82,7 @@ class ReconnectStrategy implements RetryStrategyInterface
         $message = $exception->getMessage();
 
         foreach (static::$causes as $cause) {
-            if (str_contains($message, $cause)) {
+            if (strstr($message, $cause) !== false) {
                 return $this->reconnect();
             }
         }
@@ -105,18 +105,17 @@ class ReconnectStrategy implements RetryStrategyInterface
         try {
             // Make sure we free any resources associated with the old connection
             $this->connection->getDriver()->disconnect();
-        } catch (Exception) {
+        } catch (Exception $e) {
         }
 
         try {
             $this->connection->getDriver()->connect();
-            $this->connection->getDriver()->log(
-                'connection={connection} [RECONNECT]',
-                ['connection' => $this->connection->configName()],
-            );
+            if ($this->connection->isQueryLoggingEnabled()) {
+                $this->connection->log('[RECONNECT]');
+            }
 
             return true;
-        } catch (Exception) {
+        } catch (Exception $e) {
             // If there was an error connecting again, don't report it back,
             // let the retry handler do it.
             return false;

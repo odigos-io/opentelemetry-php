@@ -16,7 +16,6 @@ declare(strict_types=1);
  */
 namespace Cake\Core\Retry;
 
-use Closure;
 use Exception;
 
 /**
@@ -32,17 +31,17 @@ class CommandRetry
      *
      * @var \Cake\Core\Retry\RetryStrategyInterface
      */
-    protected RetryStrategyInterface $strategy;
+    protected $strategy;
 
     /**
      * @var int
      */
-    protected int $maxRetries;
+    protected $maxRetries;
 
     /**
      * @var int
      */
-    protected int $numRetries;
+    protected $numRetries;
 
     /**
      * Creates the CommandRetry object with the given strategy and retry count
@@ -59,11 +58,11 @@ class CommandRetry
     /**
      * The number of retries to perform in case of failure
      *
-     * @param \Closure $action Callback to run for each attempt
+     * @param callable $action The callable action to execute with a retry strategy
      * @return mixed The return value of the passed action callable
-     * @throws \Exception Throws exception from last failure
+     * @throws \Exception
      */
-    public function run(Closure $action): mixed
+    public function run(callable $action)
     {
         $this->numRetries = 0;
         while (true) {
@@ -84,7 +83,7 @@ class CommandRetry
     }
 
     /**
-     * Returns the last number of retry attempts.
+     * Returns the last number of retry attemps.
      *
      * @return int
      */

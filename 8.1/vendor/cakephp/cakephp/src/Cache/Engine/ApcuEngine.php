@@ -18,8 +18,7 @@ namespace Cake\Cache\Engine;
 
 use APCUIterator;
 use Cake\Cache\CacheEngine;
-use Cake\Core\Exception\CakeException;
-use DateInterval;
+use RuntimeException;
 
 /**
  * APCu storage engine for cache
@@ -32,7 +31,7 @@ class ApcuEngine extends CacheEngine
      *
      * @var array<string>
      */
-    protected array $_compiledGroupNames = [];
+    protected $_compiledGroupNames = [];
 
     /**
      * Initialize the Cache Engine
@@ -45,7 +44,7 @@ class ApcuEngine extends CacheEngine
     public function init(array $config = []): bool
     {
         if (!extension_loaded('apcu')) {
-            throw new CakeException('The `apcu` extension must be enabled to use ApcuEngine.');
+            throw new RuntimeException('The `apcu` extension must be enabled to use ApcuEngine.');
         }
 
         return parent::init($config);
@@ -62,7 +61,7 @@ class ApcuEngine extends CacheEngine
      * @return bool True on success and false on failure.
      * @link https://secure.php.net/manual/en/function.apcu-store.php
      */
-    public function set(string $key, mixed $value, DateInterval|int|null $ttl = null): bool
+    public function set($key, $value, $ttl = null): bool
     {
         $key = $this->_key($key);
         $duration = $this->duration($ttl);
@@ -79,7 +78,7 @@ class ApcuEngine extends CacheEngine
      *   has expired, or if there was an error fetching it
      * @link https://secure.php.net/manual/en/function.apcu-fetch.php
      */
-    public function get(string $key, mixed $default = null): mixed
+    public function get($key, $default = null)
     {
         $value = apcu_fetch($this->_key($key), $success);
         if ($success === false) {
@@ -97,7 +96,7 @@ class ApcuEngine extends CacheEngine
      * @return int|false New incremented value, false otherwise
      * @link https://secure.php.net/manual/en/function.apcu-inc.php
      */
-    public function increment(string $key, int $offset = 1): int|false
+    public function increment(string $key, int $offset = 1)
     {
         $key = $this->_key($key);
 
@@ -112,7 +111,7 @@ class ApcuEngine extends CacheEngine
      * @return int|false New decremented value, false otherwise
      * @link https://secure.php.net/manual/en/function.apcu-dec.php
      */
-    public function decrement(string $key, int $offset = 1): int|false
+    public function decrement(string $key, int $offset = 1)
     {
         $key = $this->_key($key);
 
@@ -126,7 +125,7 @@ class ApcuEngine extends CacheEngine
      * @return bool True if the value was successfully deleted, false if it didn't exist or couldn't be removed
      * @link https://secure.php.net/manual/en/function.apcu-delete.php
      */
-    public function delete(string $key): bool
+    public function delete($key): bool
     {
         $key = $this->_key($key);
 
@@ -145,7 +144,7 @@ class ApcuEngine extends CacheEngine
         if (class_exists(APCUIterator::class, false)) {
             $iterator = new APCUIterator(
                 '/^' . preg_quote($this->_config['prefix'], '/') . '/',
-                APC_ITER_NONE,
+                APC_ITER_NONE
             );
             apcu_delete($iterator);
 
@@ -154,7 +153,7 @@ class ApcuEngine extends CacheEngine
 
         $cache = apcu_cache_info(); // Raises warning by itself already
         foreach ($cache['cache_list'] as $key) {
-            if (str_starts_with($key['info'], $this->_config['prefix'])) {
+            if (strpos($key['info'], $this->_config['prefix']) === 0) {
                 apcu_delete($key['info']);
             }
         }
@@ -171,7 +170,7 @@ class ApcuEngine extends CacheEngine
      * @return bool True if the data was successfully cached, false on failure.
      * @link https://secure.php.net/manual/en/function.apcu-add.php
      */
-    public function add(string $key, mixed $value): bool
+    public function add(string $key, $value): bool
     {
         $key = $this->_key($key);
         $duration = $this->_config['duration'];
@@ -190,7 +189,7 @@ class ApcuEngine extends CacheEngine
      */
     public function groups(): array
     {
-        if (!$this->_compiledGroupNames) {
+        if (empty($this->_compiledGroupNames)) {
             foreach ($this->_config['groups'] as $group) {
                 $this->_compiledGroupNames[] = $this->_config['prefix'] . $group;
             }
@@ -204,7 +203,7 @@ class ApcuEngine extends CacheEngine
                     $value = 1;
                     if (apcu_store($group, $value) === false) {
                         $this->warning(
-                            sprintf('Failed to store key `%s` with value `%s` into APCu cache.', $group, $value),
+                            sprintf('Failed to store key "%s" with value "%s" into APCu cache.', $group, $value)
                         );
                     }
                     $groups[$group] = $value;

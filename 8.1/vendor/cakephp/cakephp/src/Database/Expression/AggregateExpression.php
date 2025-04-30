@@ -16,10 +16,8 @@ declare(strict_types=1);
  */
 namespace Cake\Database\Expression;
 
-use Cake\Database\ExpressionInterface;
 use Cake\Database\ValueBinder;
 use Closure;
-use function Cake\Core\deprecationWarning;
 
 /**
  * This represents an SQL aggregate function expression in an SQL statement.
@@ -30,14 +28,14 @@ use function Cake\Core\deprecationWarning;
 class AggregateExpression extends FunctionExpression implements WindowInterface
 {
     /**
-     * @var \Cake\Database\Expression\QueryExpression|null
+     * @var \Cake\Database\Expression\QueryExpression
      */
-    protected ?QueryExpression $filter = null;
+    protected $filter;
 
     /**
-     * @var \Cake\Database\Expression\WindowExpression|null
+     * @var \Cake\Database\Expression\WindowExpression
      */
-    protected ?WindowExpression $window = null;
+    protected $window;
 
     /**
      * Adds conditions to the FILTER clause. The conditions are the same format as
@@ -48,9 +46,11 @@ class AggregateExpression extends FunctionExpression implements WindowInterface
      * @return $this
      * @see \Cake\Database\Query::where()
      */
-    public function filter(ExpressionInterface|Closure|array|string $conditions, array $types = [])
+    public function filter($conditions, array $types = [])
     {
-        $this->filter ??= new QueryExpression();
+        if ($this->filter === null) {
+            $this->filter = new QueryExpression();
+        }
 
         if ($conditions instanceof Closure) {
             $conditions = $conditions(new QueryExpression());
@@ -62,17 +62,19 @@ class AggregateExpression extends FunctionExpression implements WindowInterface
     }
 
     /**
-     * Adds an empty `OVER()` window expression or a named window expression.
+     * Adds an empty `OVER()` window expression or a named window epression.
      *
      * @param string|null $name Window name
      * @return $this
      */
     public function over(?string $name = null)
     {
-        $window = $this->getWindow();
+        if ($this->window === null) {
+            $this->window = new WindowExpression();
+        }
         if ($name) {
             // Set name manually in case this was chained from FunctionsBuilder wrapper
-            $window->name($name);
+            $this->window->name($name);
         }
 
         return $this;
@@ -81,9 +83,10 @@ class AggregateExpression extends FunctionExpression implements WindowInterface
     /**
      * @inheritDoc
      */
-    public function partition(ExpressionInterface|Closure|array|string $partitions)
+    public function partition($partitions)
     {
-        $this->getWindow()->partition($partitions);
+        $this->over();
+        $this->window->partition($partitions);
 
         return $this;
     }
@@ -91,22 +94,10 @@ class AggregateExpression extends FunctionExpression implements WindowInterface
     /**
      * @inheritDoc
      */
-    public function order(ExpressionInterface|Closure|array|string $fields)
+    public function order($fields)
     {
-        deprecationWarning(
-            '5.0.0',
-            'AggregateExpression::order() is deprecated. Use AggregateExpression::orderBy() instead.',
-        );
-
-        return $this->orderBy($fields);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function orderBy(ExpressionInterface|Closure|array|string $fields)
-    {
-        $this->getWindow()->orderBy($fields);
+        $this->over();
+        $this->window->order($fields);
 
         return $this;
     }
@@ -114,9 +105,10 @@ class AggregateExpression extends FunctionExpression implements WindowInterface
     /**
      * @inheritDoc
      */
-    public function range(ExpressionInterface|string|int|null $start, ExpressionInterface|string|int|null $end = 0)
+    public function range($start, $end = 0)
     {
-        $this->getWindow()->range($start, $end);
+        $this->over();
+        $this->window->range($start, $end);
 
         return $this;
     }
@@ -126,7 +118,8 @@ class AggregateExpression extends FunctionExpression implements WindowInterface
      */
     public function rows(?int $start, ?int $end = 0)
     {
-        $this->getWindow()->rows($start, $end);
+        $this->over();
+        $this->window->rows($start, $end);
 
         return $this;
     }
@@ -136,7 +129,8 @@ class AggregateExpression extends FunctionExpression implements WindowInterface
      */
     public function groups(?int $start, ?int $end = 0)
     {
-        $this->getWindow()->groups($start, $end);
+        $this->over();
+        $this->window->groups($start, $end);
 
         return $this;
     }
@@ -146,12 +140,13 @@ class AggregateExpression extends FunctionExpression implements WindowInterface
      */
     public function frame(
         string $type,
-        ExpressionInterface|string|int|null $startOffset,
+        $startOffset,
         string $startDirection,
-        ExpressionInterface|string|int|null $endOffset,
-        string $endDirection,
+        $endOffset,
+        string $endDirection
     ) {
-        $this->getWindow()->frame($type, $startOffset, $startDirection, $endOffset, $endDirection);
+        $this->over();
+        $this->window->frame($type, $startOffset, $startDirection, $endOffset, $endDirection);
 
         return $this;
     }
@@ -161,7 +156,8 @@ class AggregateExpression extends FunctionExpression implements WindowInterface
      */
     public function excludeCurrent()
     {
-        $this->getWindow()->excludeCurrent();
+        $this->over();
+        $this->window->excludeCurrent();
 
         return $this;
     }
@@ -171,7 +167,8 @@ class AggregateExpression extends FunctionExpression implements WindowInterface
      */
     public function excludeGroup()
     {
-        $this->getWindow()->excludeGroup();
+        $this->over();
+        $this->window->excludeGroup();
 
         return $this;
     }
@@ -181,19 +178,10 @@ class AggregateExpression extends FunctionExpression implements WindowInterface
      */
     public function excludeTies()
     {
-        $this->getWindow()->excludeTies();
+        $this->over();
+        $this->window->excludeTies();
 
         return $this;
-    }
-
-    /**
-     * Returns or creates WindowExpression for function.
-     *
-     * @return \Cake\Database\Expression\WindowExpression
-     */
-    protected function getWindow(): WindowExpression
-    {
-        return $this->window ??= new WindowExpression();
     }
 
     /**
@@ -241,7 +229,7 @@ class AggregateExpression extends FunctionExpression implements WindowInterface
     {
         $count = parent::count();
         if ($this->window !== null) {
-            $count += 1;
+            $count = $count + 1;
         }
 
         return $count;

@@ -27,34 +27,21 @@ use Cake\Routing\Router;
 class RoutesCommand extends Command
 {
     /**
-     * @inheritDoc
-     */
-    public static function getDescription(): string
-    {
-        return 'Get the list of routes connected in this application.';
-    }
-
-    /**
      * Display all routes in an application
      *
      * @param \Cake\Console\Arguments $args The command arguments.
      * @param \Cake\Console\ConsoleIo $io The console io
      * @return int|null The exit code or null for success
-     * @throws \JsonException
      */
     public function execute(Arguments $args, ConsoleIo $io): ?int
     {
         $header = ['Route name', 'URI template', 'Plugin', 'Prefix', 'Controller', 'Action', 'Method(s)'];
-        if ($args->getOption('with-middlewares') || $args->getOption('verbose')) {
-            $header[] = 'Middlewares';
-        }
         if ($args->getOption('verbose')) {
             $header[] = 'Defaults';
         }
 
         $availableRoutes = Router::routes();
-        $output = [];
-        $duplicateRoutesCounter = [];
+        $output = $duplicateRoutesCounter = [];
 
         foreach ($availableRoutes as $route) {
             $methods = isset($route->defaults['_method']) ? (array)$route->defaults['_method'] : [''];
@@ -69,12 +56,9 @@ class RoutesCommand extends Command
                 implode(', ', $methods),
             ];
 
-            if ($args->getOption('with-middlewares') || $args->getOption('verbose')) {
-                $item[] = implode(', ', $route->getMiddleware());
-            }
             if ($args->getOption('verbose')) {
                 ksort($route->defaults);
-                $item[] = json_encode($route->defaults, JSON_THROW_ON_ERROR);
+                $item[] = json_encode($route->defaults);
             }
 
             $output[] = $item;
@@ -144,15 +128,10 @@ class RoutesCommand extends Command
     public function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
     {
         $parser
-            ->setDescription(static::getDescription())
+            ->setDescription('Get the list of routes connected in this application.')
             ->addOption('sort', [
                 'help' => 'Sorts alphabetically by route name A-Z',
                 'short' => 's',
-                'boolean' => true,
-            ])
-            ->addOption('with-middlewares', [
-                'help' => 'Show route specific middlewares',
-                'short' => 'm',
                 'boolean' => true,
             ]);
 

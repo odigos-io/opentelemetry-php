@@ -31,17 +31,17 @@ class DebugContext
     /**
      * @var int
      */
-    private int $maxDepth = 0;
+    private $maxDepth;
 
     /**
      * @var int
      */
-    private int $depth = 0;
+    private $depth = 0;
 
     /**
-     * @var \SplObjectStorage<object, int>
+     * @var \SplObjectStorage
      */
-    private SplObjectStorage $refs;
+    private $refs;
 
     /**
      * Constructor
@@ -59,7 +59,7 @@ class DebugContext
      *
      * @return static
      */
-    public function withAddedDepth(): static
+    public function withAddedDepth()
     {
         $new = clone $this;
         $new->depth += 1;

@@ -31,7 +31,7 @@ class EventFired extends Constraint
      *
      * @var \Cake\Event\EventManager
      */
-    protected EventManager $_eventManager;
+    protected $_eventManager;
 
     /**
      * Constructor
@@ -44,7 +44,7 @@ class EventFired extends Constraint
 
         if ($this->_eventManager->getEventList() === null) {
             throw new AssertionFailedError(
-                'The event manager you are asserting against is not configured to track events.',
+                'The event manager you are asserting against is not configured to track events.'
             );
         }
     }
@@ -55,7 +55,7 @@ class EventFired extends Constraint
      * @param mixed $other Constraint check
      * @return bool
      */
-    public function matches(mixed $other): bool
+    public function matches($other): bool
     {
         $list = $this->_eventManager->getEventList();
 

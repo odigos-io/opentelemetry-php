@@ -17,7 +17,7 @@ declare(strict_types=1);
 namespace Cake\Database\Type;
 
 use Cake\Core\Exception\CakeException;
-use Cake\Database\Driver;
+use Cake\Database\DriverInterface;
 use PDO;
 
 /**
@@ -34,10 +34,10 @@ class BinaryType extends BaseType
      * As PDO will handle reading file handles.
      *
      * @param mixed $value The value to convert.
-     * @param \Cake\Database\Driver $driver The driver instance to convert with.
+     * @param \Cake\Database\DriverInterface $driver The driver instance to convert with.
      * @return resource|string
      */
-    public function toDatabase(mixed $value, Driver $driver): mixed
+    public function toDatabase($value, DriverInterface $driver)
     {
         return $value;
     }
@@ -46,28 +46,32 @@ class BinaryType extends BaseType
      * Convert binary into resource handles
      *
      * @param mixed $value The value to convert.
-     * @param \Cake\Database\Driver $driver The driver instance to convert with.
+     * @param \Cake\Database\DriverInterface $driver The driver instance to convert with.
      * @return resource|null
      * @throws \Cake\Core\Exception\CakeException
      */
-    public function toPHP(mixed $value, Driver $driver): mixed
+    public function toPHP($value, DriverInterface $driver)
     {
         if ($value === null) {
             return null;
         }
         if (is_string($value)) {
-            return fopen('data:text/plain;base64,' . base64_encode($value), 'rb') ?: null;
+            return fopen('data:text/plain;base64,' . base64_encode($value), 'rb');
         }
         if (is_resource($value)) {
             return $value;
         }
-        throw new CakeException(sprintf('Unable to convert `%s` into binary.', gettype($value)));
+        throw new CakeException(sprintf('Unable to convert %s into binary.', gettype($value)));
     }
 
     /**
-     * @inheritDoc
+     * Get the correct PDO binding type for Binary data.
+     *
+     * @param mixed $value The value being bound.
+     * @param \Cake\Database\DriverInterface $driver The driver.
+     * @return int
      */
-    public function toStatement(mixed $value, Driver $driver): int
+    public function toStatement($value, DriverInterface $driver): int
     {
         return PDO::PARAM_LOB;
     }
@@ -81,7 +85,7 @@ class BinaryType extends BaseType
      * @param mixed $value The value to convert.
      * @return mixed Converted value.
      */
-    public function marshal(mixed $value): mixed
+    public function marshal($value)
     {
         return $value;
     }

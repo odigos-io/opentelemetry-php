@@ -28,12 +28,12 @@ class StringExpression implements ExpressionInterface
     /**
      * @var string
      */
-    protected string $string;
+    protected $string;
 
     /**
      * @var string
      */
-    protected string $collation;
+    protected $collation;
 
     /**
      * @param string $string String value

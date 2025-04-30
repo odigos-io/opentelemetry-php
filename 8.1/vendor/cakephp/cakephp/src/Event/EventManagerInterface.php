@@ -57,11 +57,7 @@ interface EventManagerInterface
      * @throws \InvalidArgumentException When event key is missing or callable is not an
      *   instance of Cake\Event\EventListenerInterface.
      */
-    public function on(
-        EventListenerInterface|string $eventKey,
-        callable|array $options = [],
-        ?callable $callable = null,
-    );
+    public function on($eventKey, $options = [], ?callable $callable = null);
 
     /**
      * Remove a listener from the active listeners.
@@ -95,20 +91,16 @@ interface EventManagerInterface
      * @param \Cake\Event\EventListenerInterface|callable|null $callable The callback you want to detach.
      * @return $this
      */
-    public function off(
-        EventListenerInterface|callable|string $eventKey,
-        EventListenerInterface|callable|null $callable = null,
-    );
+    public function off($eventKey, $callable = null);
 
     /**
      * Dispatches a new event to all configured listeners
      *
-     * @template TSubject of object
-     * @param \Cake\Event\EventInterface<TSubject>|string $event The event key name or instance of EventInterface.
-     * @return \Cake\Event\EventInterface<TSubject>
+     * @param \Cake\Event\EventInterface|string $event The event key name or instance of EventInterface.
+     * @return \Cake\Event\EventInterface
      * @triggers $event
      */
-    public function dispatch(EventInterface|string $event): EventInterface;
+    public function dispatch($event): EventInterface;
 
     /**
      * Returns a list of all listeners for an eventKey in the order they should be called

@@ -20,7 +20,6 @@ use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Core\App;
-use Cake\Core\Exception\CakeException;
 use Cake\Core\Plugin;
 use Cake\Utility\Inflector;
 use DirectoryIterator;
@@ -36,14 +35,6 @@ class I18nInitCommand extends Command
     public static function defaultName(): string
     {
         return 'i18n init';
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public static function getDescription(): string
-    {
-        return 'Initialize a language PO file from the POT file.';
     }
 
     /**
@@ -80,19 +71,15 @@ class I18nInitCommand extends Command
 
         $count = 0;
         $iterator = new DirectoryIterator($sourceFolder);
-        foreach ($iterator as $fileInfo) {
-            if (!$fileInfo->isFile()) {
+        foreach ($iterator as $fileinfo) {
+            if (!$fileinfo->isFile()) {
                 continue;
             }
-            $filename = $fileInfo->getFilename();
-            $newFilename = $fileInfo->getBasename('.pot');
+            $filename = $fileinfo->getFilename();
+            $newFilename = $fileinfo->getBasename('.pot');
             $newFilename .= '.po';
 
-            $content = file_get_contents($sourceFolder . $filename);
-            if ($content === false) {
-                throw new CakeException(sprintf('Cannot read file content of `%s`', $sourceFolder . $filename));
-            }
-            $io->createFile($targetFolder . $newFilename, $content);
+            $io->createFile($targetFolder . $newFilename, file_get_contents($sourceFolder . $filename));
             $count++;
         }
 
@@ -109,7 +96,7 @@ class I18nInitCommand extends Command
      */
     public function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
     {
-        $parser->setDescription(static::getDescription())
+        $parser->setDescription('Initialize a language PO file from the POT file')
            ->addOption('plugin', [
                'help' => 'The plugin to create a PO file in.',
                'short' => 'p',

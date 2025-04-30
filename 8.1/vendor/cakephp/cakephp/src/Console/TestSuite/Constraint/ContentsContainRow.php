@@ -15,8 +15,6 @@ declare(strict_types=1);
  */
 namespace Cake\Console\TestSuite\Constraint;
 
-use SebastianBergmann\Exporter\Exporter;
-
 /**
  * ContentsContainRow
  *
@@ -27,14 +25,15 @@ class ContentsContainRow extends ContentsRegExp
     /**
      * Checks if contents contain expected
      *
-     * @param mixed $other Row
+     * @param array $other Row
      * @return bool
+     * @psalm-suppress MoreSpecificImplementedParamType
      */
-    public function matches(mixed $other): bool
+    public function matches($other): bool
     {
         $row = array_map(function ($cell) {
             return preg_quote($cell, '/');
-        }, (array)$other);
+        }, $other);
         $cells = implode('\s+\|\s+', $row);
         $pattern = '/' . $cells . '/';
 
@@ -55,9 +54,9 @@ class ContentsContainRow extends ContentsRegExp
      * @param mixed $other Expected content
      * @return string
      */
-    public function failureDescription(mixed $other): string
+    public function failureDescription($other): string
     {
-        return '`' . (new Exporter())->shortenedExport($other) . '` ' . $this->toString();
+        return '`' . $this->exporter()->shortenedExport($other) . '` ' . $this->toString();
     }
 }
 

@@ -17,6 +17,7 @@ declare(strict_types=1);
 namespace Cake\View;
 
 use Cake\Core\Configure;
+use RuntimeException;
 use function Cake\Core\h;
 
 /**
@@ -63,14 +64,14 @@ class JsonView extends SerializedView
      *
      * @var string
      */
-    protected string $layoutPath = 'json';
+    protected $layoutPath = 'json';
 
     /**
      * JSON views are located in the 'json' subdirectory for controllers' views.
      *
      * @var string
      */
-    protected string $subDir = 'json';
+    protected $subDir = 'json';
 
     /**
      * Default config options.
@@ -89,7 +90,7 @@ class JsonView extends SerializedView
      *
      * @var array<string, mixed>
      */
-    protected array $_defaultConfig = [
+    protected $_defaultConfig = [
         'serialize' => null,
         'jsonOptions' => null,
         'jsonp' => null,
@@ -112,7 +113,7 @@ class JsonView extends SerializedView
      * @param string|false|null $layout The layout being rendered.
      * @return string The rendered view.
      */
-    public function render(?string $template = null, string|false|null $layout = null): string
+    public function render(?string $template = null, $layout = null): string
     {
         $return = parent::render($template, $layout);
 
@@ -133,22 +134,31 @@ class JsonView extends SerializedView
     /**
      * @inheritDoc
      */
-    protected function _serialize(array|string $serialize): string
+    protected function _serialize($serialize): string
     {
         $data = $this->_dataToSerialize($serialize);
 
-        $jsonOptions = $this->getConfig('jsonOptions')
-            ?? JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT | JSON_PARTIAL_OUTPUT_ON_ERROR;
-        if ($jsonOptions === false) {
+        $jsonOptions = $this->getConfig('jsonOptions');
+        if ($jsonOptions === null) {
+            $jsonOptions = JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT | JSON_PARTIAL_OUTPUT_ON_ERROR;
+        } elseif ($jsonOptions === false) {
             $jsonOptions = 0;
         }
-        $jsonOptions |= JSON_THROW_ON_ERROR;
 
         if (Configure::read('debug')) {
             $jsonOptions |= JSON_PRETTY_PRINT;
         }
 
-        return (string)json_encode($data, $jsonOptions);
+        if (defined('JSON_THROW_ON_ERROR')) {
+            $jsonOptions |= JSON_THROW_ON_ERROR;
+        }
+
+        $return = json_encode($data, $jsonOptions);
+        if ($return === false) {
+            throw new RuntimeException(json_last_error_msg(), json_last_error());
+        }
+
+        return $return;
     }
 
     /**
@@ -157,7 +167,7 @@ class JsonView extends SerializedView
      * @param array|string $serialize The name(s) of the view variable(s) that need(s) to be serialized.
      * @return mixed The data to serialize.
      */
-    protected function _dataToSerialize(array|string $serialize): mixed
+    protected function _dataToSerialize($serialize)
     {
         if (is_array($serialize)) {
             $data = [];
@@ -170,7 +180,7 @@ class JsonView extends SerializedView
                 }
             }
 
-            return $data ?: null;
+            return !empty($data) ? $data : null;
         }
 
         return $this->viewVars[$serialize] ?? null;

@@ -38,7 +38,7 @@ class HelpCommand extends BaseCommand implements CommandCollectionAwareInterface
      *
      * @var \Cake\Console\CommandCollection
      */
-    protected CommandCollection $commands;
+    protected $commands;
 
     /**
      * @inheritDoc
@@ -53,7 +53,7 @@ class HelpCommand extends BaseCommand implements CommandCollectionAwareInterface
      *
      * @param \Cake\Console\Arguments $args The command arguments.
      * @param \Cake\Console\ConsoleIo $io The console io
-     * @return int|null
+     * @return int
      */
     public function execute(Arguments $args, ConsoleIo $io): ?int
     {
@@ -77,7 +77,7 @@ class HelpCommand extends BaseCommand implements CommandCollectionAwareInterface
      * Output text.
      *
      * @param \Cake\Console\ConsoleIo $io The console io
-     * @param iterable<string, string|object> $commands The command collection to output.
+     * @param iterable $commands The command collection to output.
      * @return void
      */
     protected function asText(ConsoleIo $io, iterable $commands): void
@@ -85,7 +85,7 @@ class HelpCommand extends BaseCommand implements CommandCollectionAwareInterface
         $invert = [];
         foreach ($commands as $name => $class) {
             if (is_object($class)) {
-                $class = $class::class;
+                $class = get_class($class);
             }
             if (!isset($invert[$class])) {
                 $invert[$class] = [];
@@ -95,9 +95,9 @@ class HelpCommand extends BaseCommand implements CommandCollectionAwareInterface
         $grouped = [];
         $plugins = Plugin::loaded();
         foreach ($invert as $class => $names) {
-            preg_match('/^(.+)\\\\Command\\\\/', $class, $matches);
+            preg_match('/^(.+)\\\\(Command|Shell)\\\\/', $class, $matches);
             // Probably not a useful class
-            if (!$matches) {
+            if (empty($matches)) {
                 continue;
             }
             $namespace = str_replace('\\', '/', $matches[1]);
@@ -108,7 +108,7 @@ class HelpCommand extends BaseCommand implements CommandCollectionAwareInterface
                 $prefix = $namespace;
             }
             $shortestName = $this->getShortestName($names);
-            if (str_contains($shortestName, '.')) {
+            if (strpos($shortestName, '.') !== false) {
                 [, $shortestName] = explode('.', $shortestName, 2);
             }
 
@@ -118,16 +118,6 @@ class HelpCommand extends BaseCommand implements CommandCollectionAwareInterface
             ];
         }
         ksort($grouped);
-
-        if (isset($grouped['CakePHP'])) {
-            $cakephp = $grouped['CakePHP'];
-            $grouped = ['CakePHP' => $cakephp] + $grouped;
-        }
-
-        if (isset($grouped['App'])) {
-            $app = $grouped['App'];
-            $grouped = ['App' => $app] + $grouped;
-        }
 
         $this->outputPaths($io);
         $io->out('<info>Available Commands:</info>', 2);
@@ -169,7 +159,7 @@ class HelpCommand extends BaseCommand implements CommandCollectionAwareInterface
         if (defined('CORE_PATH')) {
             $paths['core'] = rtrim(CORE_PATH, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
         }
-        if ($paths === []) {
+        if (!count($paths)) {
             return;
         }
         $io->out('<info>Current Paths:</info>', 2);
@@ -182,10 +172,13 @@ class HelpCommand extends BaseCommand implements CommandCollectionAwareInterface
     /**
      * @param array<string> $names Names
      * @return string
-     * @phpstan-param non-empty-array<string> $names
      */
     protected function getShortestName(array $names): string
     {
+        if (count($names) <= 1) {
+            return array_shift($names);
+        }
+
         usort($names, function ($a, $b) {
             return strlen($a) - strlen($b);
         });
@@ -197,7 +190,7 @@ class HelpCommand extends BaseCommand implements CommandCollectionAwareInterface
      * Output as XML
      *
      * @param \Cake\Console\ConsoleIo $io The console io
-     * @param iterable<string, string|object> $commands The command collection to output
+     * @param iterable $commands The command collection to output
      * @return void
      */
     protected function asXml(ConsoleIo $io, iterable $commands): void
@@ -205,7 +198,7 @@ class HelpCommand extends BaseCommand implements CommandCollectionAwareInterface
         $shells = new SimpleXMLElement('<shells></shells>');
         foreach ($commands as $name => $class) {
             if (is_object($class)) {
-                $class = $class::class;
+                $class = get_class($class);
             }
             $shell = $shells->addChild('shell');
             $shell->addAttribute('name', $name);
@@ -214,7 +207,7 @@ class HelpCommand extends BaseCommand implements CommandCollectionAwareInterface
             $shell->addAttribute('help', $name . ' -h');
         }
         $io->setOutputAs(ConsoleOutput::RAW);
-        $io->out((string)$shells->saveXML());
+        $io->out($shells->saveXML());
     }
 
     /**
@@ -226,7 +219,7 @@ class HelpCommand extends BaseCommand implements CommandCollectionAwareInterface
     protected function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
     {
         $parser->setDescription(
-            'Get the list of available commands for this application.',
+            'Get the list of available commands for this application.'
         )->addOption('xml', [
             'help' => 'Get the listing as XML.',
             'boolean' => true,

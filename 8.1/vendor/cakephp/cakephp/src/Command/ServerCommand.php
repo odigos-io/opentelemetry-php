@@ -47,36 +47,28 @@ class ServerCommand extends Command
      *
      * @var string
      */
-    protected string $_host = self::DEFAULT_HOST;
+    protected $_host = self::DEFAULT_HOST;
 
     /**
      * listen port
      *
      * @var int
      */
-    protected int $_port = self::DEFAULT_PORT;
+    protected $_port = self::DEFAULT_PORT;
 
     /**
      * document root
      *
      * @var string
      */
-    protected string $_documentRoot = WWW_ROOT;
+    protected $_documentRoot = WWW_ROOT;
 
     /**
      * ini path
      *
      * @var string
      */
-    protected string $_iniPath = '';
-
-    /**
-     * @inheritDoc
-     */
-    public static function getDescription(): string
-    {
-        return 'PHP Built-in Server for CakePHP';
-    }
+    protected $_iniPath = '';
 
     /**
      * Starts up the Command and displays the welcome message.
@@ -85,7 +77,7 @@ class ServerCommand extends Command
      * @param \Cake\Console\Arguments $args The command arguments.
      * @param \Cake\Console\ConsoleIo $io The console io
      * @return void
-     * @link https://book.cakephp.org/5/en/console-and-shells.html#hook-methods
+     * @link https://book.cakephp.org/4/en/console-and-shells.html#hook-methods
      */
     protected function startup(Arguments $args, ConsoleIo $io): void
     {
@@ -141,10 +133,10 @@ class ServerCommand extends Command
             $phpBinary,
             $this->_host,
             $this->_port,
-            escapeshellarg($this->_documentRoot),
+            escapeshellarg($this->_documentRoot)
         );
 
-        if ($this->_iniPath) {
+        if (!empty($this->_iniPath)) {
             $command = sprintf('%s -c %s', $command, $this->_iniPath);
         }
 
@@ -167,8 +159,8 @@ class ServerCommand extends Command
     public function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
     {
         $parser->setDescription([
-            static::getDescription(),
-            "<warning>[WARN] Don't use this in a production environment</warning>",
+            'PHP Built-in Server for CakePHP',
+            '<warning>[WARN] Don\'t use this in a production environment</warning>',
         ])->addOption('host', [
             'short' => 'H',
             'help' => 'ServerHost',

@@ -31,14 +31,14 @@ class InsertIterator extends Collection
      *
      * @var \Cake\Collection\Collection
      */
-    protected Collection $_values;
+    protected $_values;
 
     /**
      * Holds whether the values collection is still valid. (has more records)
      *
      * @var bool
      */
-    protected bool $_validValues = true;
+    protected $_validValues = true;
 
     /**
      * An array containing each of the properties to be traversed to reach the
@@ -46,14 +46,14 @@ class InsertIterator extends Collection
      *
      * @var array<string>
      */
-    protected array $_path;
+    protected $_path;
 
     /**
      * The property name to which values will be assigned
      *
      * @var string
      */
-    protected string $_target;
+    protected $_target;
 
     /**
      * Constructs a new collection that will dynamically add properties to it out of
@@ -101,7 +101,8 @@ class InsertIterator extends Collection
      *
      * @return mixed
      */
-    public function current(): mixed
+    #[\ReturnTypeWillChange]
+    public function current()
     {
         $row = parent::current();
 

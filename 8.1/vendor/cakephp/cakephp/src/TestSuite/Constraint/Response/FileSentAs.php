@@ -15,8 +15,6 @@ declare(strict_types=1);
  */
 namespace Cake\TestSuite\Constraint\Response;
 
-use Psr\Http\Message\ResponseInterface;
-
 /**
  * FileSentAs
  *
@@ -27,14 +25,13 @@ class FileSentAs extends ResponseBase
     /**
      * @var \Cake\Http\Response
      */
-    protected ResponseInterface $response;
+    protected $response;
 
     /**
      * Checks assertion
      *
      * @param mixed $other Expected type
      * @return bool
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
      */
     public function matches($other): bool
     {

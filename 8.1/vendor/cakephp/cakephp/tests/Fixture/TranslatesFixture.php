@@ -26,14 +26,29 @@ class TranslatesFixture extends TestFixture
      *
      * @var string
      */
-    public string $table = 'i18n';
+    public $table = 'i18n';
+
+    /**
+     * fields property
+     *
+     * @var array
+     */
+    public $fields = [
+        'id' => ['type' => 'integer'],
+        'locale' => ['type' => 'string', 'length' => 6, 'null' => false],
+        'model' => ['type' => 'string', 'null' => false],
+        'foreign_key' => ['type' => 'integer', 'null' => false],
+        'field' => ['type' => 'string', 'null' => false],
+        'content' => ['type' => 'text'],
+        '_constraints' => ['primary' => ['type' => 'primary', 'columns' => ['id']]],
+    ];
 
     /**
      * records property
      *
      * @var array
      */
-    public array $records = [
+    public $records = [
         ['locale' => 'eng', 'model' => 'Articles', 'foreign_key' => 1, 'field' => 'title', 'content' => 'Title #1'],
         ['locale' => 'eng', 'model' => 'Articles', 'foreign_key' => 1, 'field' => 'body', 'content' => 'Content #1'],
         ['locale' => 'eng', 'model' => 'Articles', 'foreign_key' => 1, 'field' => 'description', 'content' => 'Description #1'],

@@ -16,7 +16,7 @@ declare(strict_types=1);
  */
 namespace Cake\Error\Debug;
 
-use InvalidArgumentException;
+use RuntimeException;
 
 /**
  * A Debugger formatter for generating unstyled plain text output.
@@ -71,12 +71,16 @@ TEXT;
     protected function export(NodeInterface $var, int $indent): string
     {
         if ($var instanceof ScalarNode) {
-            return match ($var->getType()) {
-                'bool' => $var->getValue() ? 'true' : 'false',
-                'null' => 'null',
-                'string' => "'" . $var->getValue() . "'",
-                default => "({$var->getType()}) {$var->getValue()}",
-            };
+            switch ($var->getType()) {
+                case 'bool':
+                    return $var->getValue() ? 'true' : 'false';
+                case 'null':
+                    return 'null';
+                case 'string':
+                    return "'" . (string)$var->getValue() . "'";
+                default:
+                    return "({$var->getType()}) {$var->getValue()}";
+            }
         }
         if ($var instanceof ArrayNode) {
             return $this->exportArray($var, $indent + 1);
@@ -87,7 +91,7 @@ TEXT;
         if ($var instanceof SpecialNode) {
             return $var->getValue();
         }
-        throw new InvalidArgumentException('Unknown node received ' . $var::class);
+        throw new RuntimeException('Unknown node received ' . get_class($var));
     }
 
     /**
@@ -108,7 +112,7 @@ TEXT;
             $val = $item->getValue();
             $vars[] = $break . $this->export($item->getKey(), $indent) . ' => ' . $this->export($val, $indent);
         }
-        if ($vars !== []) {
+        if (count($vars)) {
             return $out . implode(',', $vars) . $end . ']';
         }
 
@@ -123,7 +127,7 @@ TEXT;
      * @return string
      * @see \Cake\Error\Debugger::exportVar()
      */
-    protected function exportObject(ClassNode|ReferenceNode $var, int $indent): string
+    protected function exportObject($var, int $indent): string
     {
         $out = '';
         $props = [];
@@ -145,7 +149,7 @@ TEXT;
                 $props[] = "{$name} => " . $this->export($property->getValue(), $indent);
             }
         }
-        if ($props !== []) {
+        if (count($props)) {
             return $out . $break . implode($break, $props) . $end;
         }
 
