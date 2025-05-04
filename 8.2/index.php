@@ -21,6 +21,11 @@ use OpenTelemetry\SDK\Metrics\MeterProvider;
 use OpenTelemetry\SDK\Metrics\MetricReader\ExportingReader;
 use OpenTelemetry\API\Trace\Propagation\TraceContextPropagator;
 
+if (!extension_loaded('opentelemetry')) {
+  echo 'OpenTelemetry extension not loaded' . PHP_EOL;
+  return;
+}
+
 function getTraceProvider(): TracerProvider | NoopTracerProvider
 {
   if (getenv('OTEL_TRACES_EXPORTER') == 'none') {

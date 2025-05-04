@@ -20,6 +20,11 @@ use OpenTelemetry\SDK\Metrics\NoopMeterProvider;
 use OpenTelemetry\SDK\Metrics\MeterProvider;
 use OpenTelemetry\SDK\Metrics\MetricReader\ExportingReader;
 
+if (!extension_loaded('opentelemetry')) {
+  echo 'OpenTelemetry extension not loaded' . PHP_EOL;
+  return;
+}
+
 function getTraceProvider(): TracerProvider | NoopTracerProvider
 {
   if (getenv('OTEL_TRACES_EXPORTER') == 'none') {
