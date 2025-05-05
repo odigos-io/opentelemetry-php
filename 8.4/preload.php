@@ -2,7 +2,7 @@
 
 $paths = [
   [
-    'include' => '/var/odigos/php/8.4/index.php',
+    'include' => '/var/odigos/php/8.4/',
     'exclude' => [],
   ],
 ];
