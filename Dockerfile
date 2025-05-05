@@ -17,10 +17,11 @@ RUN cd opentelemetry-php-instrumentation-${PHP_OTEL_VERSION}/ext \
 
 # Isolate the binary & create a pointer
 RUN mv opentelemetry-php-instrumentation-${PHP_OTEL_VERSION}/ext/modules/opentelemetry.so opentelemetry.so
-RUN echo "extension=/var/odigos/php/${PHP_VERSION}/opentelemetry.so\n" \
-  "auto_prepend_file=/var/odigos/php/${PHP_VERSION}/index.php\n" \
-  "opcache.preload=/var/odigos/php/${PHP_VERSION}/preload.php\n" \
-  > opentelemetry.ini
+RUN cat <<EOF > opentelemetry.ini
+extension=/var/odigos/php/${PHP_VERSION}/opentelemetry.so
+auto_prepend_file=/var/odigos/php/${PHP_VERSION}/index.php
+opcache.preload=/var/odigos/php/${PHP_VERSION}/preload.php
+EOF
 
 # Cleanup
 RUN rm -rf opentelemetry-php-instrumentation-${PHP_OTEL_VERSION}
