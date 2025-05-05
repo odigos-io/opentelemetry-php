@@ -17,7 +17,6 @@ use CodeIgniter\CodeIgniter;
 use CodeIgniter\Database\BaseConnection;
 use CodeIgniter\Database\BaseResult;
 use CodeIgniter\Database\Query;
-use CodeIgniter\Database\TableName;
 
 /**
  * @extends BaseConnection<object|resource, object|resource>
@@ -203,10 +202,8 @@ class MockConnection extends BaseConnection
 
     /**
      * Generates a platform-specific query string so that the column names can be fetched.
-     *
-     * @param string|TableName $table
      */
-    protected function _listColumns($table = ''): string
+    protected function _listColumns(string $table = ''): string
     {
         return '';
     }

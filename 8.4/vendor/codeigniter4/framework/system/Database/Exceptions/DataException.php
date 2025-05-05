@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace CodeIgniter\Database\Exceptions;
 
 use CodeIgniter\Exceptions\DebugTraceableTrait;
-use CodeIgniter\Exceptions\RuntimeException;
+use RuntimeException;
 
 class DataException extends RuntimeException implements ExceptionInterface
 {

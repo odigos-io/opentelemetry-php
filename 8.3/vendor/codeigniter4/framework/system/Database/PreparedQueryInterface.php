@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace CodeIgniter\Database;
 
-use CodeIgniter\Exceptions\BadMethodCallException;
+use BadMethodCallException;
 
 /**
  * @template TConnection

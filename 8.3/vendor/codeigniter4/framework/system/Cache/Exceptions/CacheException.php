@@ -14,12 +14,13 @@ declare(strict_types=1);
 namespace CodeIgniter\Cache\Exceptions;
 
 use CodeIgniter\Exceptions\DebugTraceableTrait;
-use CodeIgniter\Exceptions\RuntimeException;
+use CodeIgniter\Exceptions\ExceptionInterface;
+use RuntimeException;
 
 /**
  * CacheException
  */
-class CacheException extends RuntimeException
+class CacheException extends RuntimeException implements ExceptionInterface
 {
     use DebugTraceableTrait;
 
