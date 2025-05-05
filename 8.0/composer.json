@@ -5,7 +5,6 @@
   "require": {
     "php": "8.0.*",
     "ext-opentelemetry": "*",
-    "open-telemetry/api": "<=1.0.3",
     "open-telemetry/sdk": "<=1.0.8",
     "open-telemetry/exporter-otlp": "<=1.0.4",
     "open-telemetry/opentelemetry-auto-http-async": "<=1.0.1",
