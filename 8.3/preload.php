@@ -9,6 +9,8 @@ $paths = [
       'composer',
       'Tests',
       'tests',
+      'Test',
+      'test',
     ],
   ],
 ];
