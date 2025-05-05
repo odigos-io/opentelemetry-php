@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of CodeIgniter 4 framework.
  *
@@ -13,7 +11,7 @@ declare(strict_types=1);
 
 namespace CodeIgniter\Publisher;
 
-use CodeIgniter\Autoloader\FileLocatorInterface;
+use CodeIgniter\Autoloader\FileLocator;
 use CodeIgniter\Files\FileCollection;
 use CodeIgniter\HTTP\URI;
 use CodeIgniter\Publisher\Exceptions\PublisherException;
@@ -72,9 +70,9 @@ class Publisher extends FileCollection
      *
      * @var array<string,string>
      */
-    private readonly array $restrictions;
+    private array $restrictions;
 
-    private readonly ContentReplacer $replacer;
+    private ContentReplacer $replacer;
 
     /**
      * Base path to use for the source.
@@ -107,7 +105,7 @@ class Publisher extends FileCollection
 
         self::$discovered[$directory] = [];
 
-        /** @var FileLocatorInterface $locator */
+        /** @var FileLocator $locator */
         $locator = service('locator');
 
         if ([] === $files = $locator->listFiles($directory)) {
@@ -116,9 +114,9 @@ class Publisher extends FileCollection
 
         // Loop over each file checking to see if it is a Publisher
         foreach (array_unique($files) as $file) {
-            $className = $locator->findQualifiedNameFromPath($file);
+            $className = $locator->getClassname($file);
 
-            if ($className !== false && class_exists($className) && is_a($className, self::class, true)) {
+            if ($className !== '' && class_exists($className) && is_a($className, self::class, true)) {
                 self::$discovered[$directory][] = new $className();
             }
         }
@@ -169,7 +167,7 @@ class Publisher extends FileCollection
 
         // Make sure the destination is allowed
         foreach (array_keys($this->restrictions) as $directory) {
-            if (str_starts_with($this->destination, $directory)) {
+            if (strpos($this->destination, $directory) === 0) {
                 return;
             }
         }
@@ -472,7 +470,7 @@ class Publisher extends FileCollection
     {
         // Verify this is an allowed file for its destination
         foreach ($this->restrictions as $directory => $pattern) {
-            if (str_starts_with($to, $directory) && self::matchFiles([$to], $pattern) === []) {
+            if (strpos($to, $directory) === 0 && self::matchFiles([$to], $pattern) === []) {
                 throw PublisherException::forFileNotAllowed($from, $directory, $pattern);
             }
         }

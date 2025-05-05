@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of CodeIgniter 4 framework.
  *
@@ -85,7 +83,7 @@ class FileCollection implements Countable, IteratorAggregate
     {
         $directory = self::resolveDirectory($directory);
 
-        return array_filter($files, static fn (string $value): bool => str_starts_with($value, $directory));
+        return array_filter($files, static fn (string $value): bool => strpos($value, $directory) === 0);
     }
 
     /**
@@ -103,12 +101,12 @@ class FileCollection implements Countable, IteratorAggregate
             $pattern = str_replace(
                 ['#', '.', '*', '?'],
                 ['\#', '\.', '.*', '.'],
-                $pattern,
+                $pattern
             );
-            $pattern = "#\\A{$pattern}\\z#";
+            $pattern = "#{$pattern}#";
         }
 
-        return array_filter($files, static fn ($value): bool => (bool) preg_match($pattern, basename($value)));
+        return array_filter($files, static fn ($value) => (bool) preg_match($pattern, basename($value)));
     }
 
     // --------------------------------------------------------------------
@@ -182,7 +180,7 @@ class FileCollection implements Countable, IteratorAggregate
             try {
                 // Test for a directory
                 self::resolveDirectory($path);
-            } catch (FileException) {
+            } catch (FileException $e) {
                 $this->addFile($path);
 
                 continue;

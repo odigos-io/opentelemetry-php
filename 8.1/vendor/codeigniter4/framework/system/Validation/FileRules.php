@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of CodeIgniter 4 framework.
  *
@@ -17,6 +15,7 @@ use CodeIgniter\HTTP\CLIRequest;
 use CodeIgniter\HTTP\IncomingRequest;
 use CodeIgniter\HTTP\RequestInterface;
 use Config\Mimes;
+use Config\Services;
 use InvalidArgumentException;
 
 /**
@@ -38,8 +37,8 @@ class FileRules
      */
     public function __construct(?RequestInterface $request = null)
     {
-        if (! $request instanceof RequestInterface) {
-            $request = service('request');
+        if ($request === null) {
+            $request = Services::request();
         }
 
         assert($request instanceof IncomingRequest || $request instanceof CLIRequest);
@@ -52,9 +51,7 @@ class FileRules
      */
     public function uploaded(?string $blank, string $name): bool
     {
-        $files = $this->request->getFileMultiple($name);
-
-        if ($files === [] || $files === null) {
+        if (! ($files = $this->request->getFileMultiple($name))) {
             $files = [$this->request->getFile($name)];
         }
 
@@ -88,15 +85,12 @@ class FileRules
         // Grab the file name off the top of the $params
         // after we split it.
         $paramArray = explode(',', $params);
-
         if (count($paramArray) !== 2) {
             throw new InvalidArgumentException('Invalid max_size parameter: "' . $params . '"');
         }
+        $name = array_shift($paramArray);
 
-        $name  = array_shift($paramArray);
-        $files = $this->request->getFileMultiple($name);
-
-        if ($files === [] || $files === null) {
+        if (! ($files = $this->request->getFileMultiple($name))) {
             $files = [$this->request->getFile($name)];
         }
 
@@ -131,9 +125,8 @@ class FileRules
         // after we split it.
         $params = explode(',', $params);
         $name   = array_shift($params);
-        $files  = $this->request->getFileMultiple($name);
 
-        if ($files === [] || $files === null) {
+        if (! ($files = $this->request->getFileMultiple($name))) {
             $files = [$this->request->getFile($name)];
         }
 
@@ -167,9 +160,8 @@ class FileRules
         // after we split it.
         $params = explode(',', $params);
         $name   = array_shift($params);
-        $files  = $this->request->getFileMultiple($name);
 
-        if ($files === [] || $files === null) {
+        if (! ($files = $this->request->getFileMultiple($name))) {
             $files = [$this->request->getFile($name)];
         }
 
@@ -199,9 +191,8 @@ class FileRules
         // after we split it.
         $params = explode(',', $params);
         $name   = array_shift($params);
-        $files  = $this->request->getFileMultiple($name);
 
-        if ($files === [] || $files === null) {
+        if (! ($files = $this->request->getFileMultiple($name))) {
             $files = [$this->request->getFile($name)];
         }
 
@@ -232,9 +223,8 @@ class FileRules
         // after we split it.
         $params = explode(',', $params);
         $name   = array_shift($params);
-        $files  = $this->request->getFileMultiple($name);
 
-        if ($files === [] || $files === null) {
+        if (! ($files = $this->request->getFileMultiple($name))) {
             $files = [$this->request->getFile($name)];
         }
 

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of CodeIgniter 4 framework.
  *
@@ -92,7 +90,7 @@ class InvalidChars implements FilterInterface
     protected function checkEncoding($value)
     {
         if (is_array($value)) {
-            array_map($this->checkEncoding(...), $value);
+            array_map([$this, 'checkEncoding'], $value);
 
             return $value;
         }
@@ -114,7 +112,7 @@ class InvalidChars implements FilterInterface
     protected function checkControl($value)
     {
         if (is_array($value)) {
-            array_map($this->checkControl(...), $value);
+            array_map([$this, 'checkControl'], $value);
 
             return $value;
         }

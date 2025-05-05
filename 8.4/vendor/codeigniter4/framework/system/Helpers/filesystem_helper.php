@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of CodeIgniter 4 framework.
  *
@@ -55,7 +53,7 @@ if (! function_exists('directory_map')) {
             closedir($fp);
 
             return $fileData;
-        } catch (Throwable) {
+        } catch (Throwable $e) {
             return [];
         }
     }
@@ -87,7 +85,7 @@ if (! function_exists('directory_mirror')) {
          */
         foreach (new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator($originDir, FilesystemIterator::SKIP_DOTS),
-            RecursiveIteratorIterator::SELF_FIRST,
+            RecursiveIteratorIterator::SELF_FIRST
         ) as $file) {
             $origin = $file->getPathname();
             $target = $targetDir . substr($origin, $dirLen);
@@ -96,7 +94,7 @@ if (! function_exists('directory_mirror')) {
                 if (! is_dir($target)) {
                     mkdir($target, 0755);
                 }
-            } elseif ($overwrite || ! is_file($target)) {
+            } elseif (! is_file($target) || ($overwrite && is_file($target))) {
                 copy($origin, $target);
             }
         }
@@ -131,7 +129,7 @@ if (! function_exists('write_file')) {
             fclose($fp);
 
             return is_int($result);
-        } catch (Throwable) {
+        } catch (Throwable $e) {
             return false;
         }
     }
@@ -159,14 +157,14 @@ if (! function_exists('delete_files')) {
         try {
             foreach (new RecursiveIteratorIterator(
                 new RecursiveDirectoryIterator($path, RecursiveDirectoryIterator::SKIP_DOTS),
-                RecursiveIteratorIterator::CHILD_FIRST,
+                RecursiveIteratorIterator::CHILD_FIRST
             ) as $object) {
                 $filename = $object->getFilename();
                 if (! $hidden && $filename[0] === '.') {
                     continue;
                 }
 
-                if (! $htdocs || preg_match('/^(\.htaccess|index\.(html|htm|php)|web\.config)$/i', $filename) !== 1) {
+                if (! $htdocs || ! preg_match('/^(\.htaccess|index\.(html|htm|php)|web\.config)$/i', $filename)) {
                     $isDir = $object->isDir();
                     if ($isDir && $delDir) {
                         rmdir($object->getPathname());
@@ -180,7 +178,7 @@ if (! function_exists('delete_files')) {
             }
 
             return true;
-        } catch (Throwable) {
+        } catch (Throwable $e) {
             return false;
         }
     }
@@ -202,7 +200,7 @@ if (! function_exists('get_filenames')) {
         string $sourceDir,
         ?bool $includePath = false,
         bool $hidden = false,
-        bool $includeDir = true,
+        bool $includeDir = true
     ): array {
         $files = [];
 
@@ -212,7 +210,7 @@ if (! function_exists('get_filenames')) {
         try {
             foreach (new RecursiveIteratorIterator(
                 new RecursiveDirectoryIterator($sourceDir, RecursiveDirectoryIterator::SKIP_DOTS | FilesystemIterator::FOLLOW_SYMLINKS),
-                RecursiveIteratorIterator::SELF_FIRST,
+                RecursiveIteratorIterator::SELF_FIRST
             ) as $name => $object) {
                 $basename = pathinfo($name, PATHINFO_BASENAME);
                 if (! $hidden && $basename[0] === '.') {
@@ -229,7 +227,7 @@ if (! function_exists('get_filenames')) {
                     }
                 }
             }
-        } catch (Throwable) {
+        } catch (Throwable $e) {
             return [];
         }
 
@@ -260,13 +258,13 @@ if (! function_exists('get_dir_file_info')) {
         try {
             $fp = opendir($sourceDir);
 
-            // reset the array and make sure $sourceDir has a trailing slash on the initial call
+            // reset the array and make sure $source_dir has a trailing slash on the initial call
             if ($recursion === false) {
                 $fileData  = [];
                 $sourceDir = rtrim(realpath($sourceDir), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
             }
 
-            // Used to be foreach (scandir($sourceDir, 1) as $file), but scandir() is simply not as fast
+            // Used to be foreach (scandir($source_dir, 1) as $file), but scandir() is simply not as fast
             while (false !== ($file = readdir($fp))) {
                 if (is_dir($sourceDir . $file) && $file[0] !== '.' && $topLevelOnly === false) {
                     get_dir_file_info($sourceDir . $file . DIRECTORY_SEPARATOR, $topLevelOnly, true);
@@ -279,7 +277,7 @@ if (! function_exists('get_dir_file_info')) {
             closedir($fp);
 
             return $fileData;
-        } catch (Throwable) {
+        } catch (Throwable $fe) {
             return [];
         }
     }

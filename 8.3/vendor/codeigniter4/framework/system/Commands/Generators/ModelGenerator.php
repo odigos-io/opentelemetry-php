@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of CodeIgniter 4 framework.
  *
@@ -85,7 +83,7 @@ class ModelGenerator extends BaseCommand
         $this->template  = 'model.tpl.php';
 
         $this->classNameLang = 'CLI.generator.className.model';
-        $this->generateClass($params);
+        $this->execute($params);
     }
 
     /**

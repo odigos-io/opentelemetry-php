@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of CodeIgniter 4 framework.
  *
@@ -182,7 +180,7 @@ class Cookie implements ArrayAccess, CloneableCookieInterface
         unset($part);
 
         foreach ($parts as $part) {
-            if (str_contains($part, '=')) {
+            if (strpos($part, '=') !== false) {
                 [$attr, $val] = explode('=', $part);
             } else {
                 $attr = $part;
@@ -283,7 +281,7 @@ class Cookie implements ArrayAccess, CloneableCookieInterface
             $name .= $this->getName();
         } else {
             $search  = str_split(self::$reservedCharsList);
-            $replace = array_map(rawurlencode(...), $search);
+            $replace = array_map('rawurlencode', $search);
 
             $name .= str_replace($search, $replace, $this->getName());
         }
@@ -482,7 +480,7 @@ class Cookie implements ArrayAccess, CloneableCookieInterface
      */
     public function withPath(?string $path)
     {
-        $path = $path !== null && $path !== '' && $path !== '0' ? $path : self::$defaults['path'];
+        $path = $path ?: self::$defaults['path'];
         $this->validatePrefix($this->prefix, $this->secure, $path, $this->domain);
 
         $cookie = clone $this;
@@ -635,7 +633,7 @@ class Cookie implements ArrayAccess, CloneableCookieInterface
     /**
      * {@inheritDoc}
      */
-    public function __toString(): string
+    public function __toString()
     {
         $cookieHeader = [];
 
@@ -752,11 +750,11 @@ class Cookie implements ArrayAccess, CloneableCookieInterface
      */
     protected function validatePrefix(string $prefix, bool $secure, string $path, string $domain): void
     {
-        if (str_starts_with($prefix, '__Secure-') && ! $secure) {
+        if (strpos($prefix, '__Secure-') === 0 && ! $secure) {
             throw CookieException::forInvalidSecurePrefix();
         }
 
-        if (str_starts_with($prefix, '__Host-') && (! $secure || $domain !== '' || $path !== '/')) {
+        if (strpos($prefix, '__Host-') === 0 && (! $secure || $domain !== '' || $path !== '/')) {
             throw CookieException::forInvalidHostPrefix();
         }
     }

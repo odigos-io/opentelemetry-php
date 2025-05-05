@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of CodeIgniter 4 framework.
  *
@@ -16,6 +14,7 @@ namespace CodeIgniter\Session;
 use CodeIgniter\Cookie\Cookie;
 use CodeIgniter\I18n\Time;
 use Config\Cookie as CookieConfig;
+use Config\Services;
 use Config\Session as SessionConfig;
 use Psr\Log\LoggerAwareTrait;
 use SessionHandlerInterface;
@@ -234,7 +233,7 @@ class Session implements SessionInterface
 
         // Sanitize the cookie, because apparently PHP doesn't do that for userspace handlers
         if (isset($_COOKIE[$this->config->cookieName])
-            && (! is_string($_COOKIE[$this->config->cookieName]) || preg_match('#\A' . $this->sidRegexp . '\z#', $_COOKIE[$this->config->cookieName]) !== 1)
+            && (! is_string($_COOKIE[$this->config->cookieName]) || ! preg_match('#\A' . $this->sidRegexp . '\z#', $_COOKIE[$this->config->cookieName]))
         ) {
             unset($_COOKIE[$this->config->cookieName]);
         }
@@ -248,7 +247,7 @@ class Session implements SessionInterface
             if (! isset($_SESSION['__ci_last_regenerate'])) {
                 $_SESSION['__ci_last_regenerate'] = Time::now()->getTimestamp();
             } elseif ($_SESSION['__ci_last_regenerate'] < (Time::now()->getTimestamp() - $regenerateTime)) {
-                $this->regenerate($this->config->regenerateDestroy);
+                $this->regenerate((bool) $this->config->regenerateDestroy);
             }
         }
         // Another work-around ... PHP doesn't seem to send the session cookie
@@ -258,7 +257,7 @@ class Session implements SessionInterface
         }
 
         $this->initVars();
-        $this->logger->debug("Session: Class initialized using '" . $this->config->driver . "' driver.");
+        $this->logger->info("Session: Class initialized using '" . $this->config->driver . "' driver.");
 
         return $this;
     }
@@ -405,7 +404,7 @@ class Session implements SessionInterface
 
     private function removeOldSessionCookie(): void
     {
-        $response              = service('response');
+        $response              = Services::response();
         $cookieStoreInResponse = $response->getCookieStore();
 
         if (! $cookieStoreInResponse->has($this->config->cookieName)) {
@@ -930,7 +929,7 @@ class Session implements SessionInterface
         $expiration   = $this->config->expiration === 0 ? 0 : Time::now()->getTimestamp() + $this->config->expiration;
         $this->cookie = $this->cookie->withValue(session_id())->withExpires($expiration);
 
-        $response = service('response');
+        $response = Services::response();
         $response->setCookie($this->cookie);
     }
 }

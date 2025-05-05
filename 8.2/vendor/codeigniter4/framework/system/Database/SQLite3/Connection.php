@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of CodeIgniter 4 framework.
  *
@@ -15,6 +13,7 @@ namespace CodeIgniter\Database\SQLite3;
 
 use CodeIgniter\Database\BaseConnection;
 use CodeIgniter\Database\Exceptions\DatabaseException;
+use ErrorException;
 use Exception;
 use SQLite3;
 use SQLite3Result;
@@ -55,9 +54,6 @@ class Connection extends BaseConnection
      */
     protected $busyTimeout;
 
-    /**
-     * @return void
-     */
     public function initialize()
     {
         parent::initialize();
@@ -85,17 +81,13 @@ class Connection extends BaseConnection
         }
 
         try {
-            if ($this->database !== ':memory:' && ! str_contains($this->database, DIRECTORY_SEPARATOR)) {
+            if ($this->database !== ':memory:' && strpos($this->database, DIRECTORY_SEPARATOR) === false) {
                 $this->database = WRITEPATH . $this->database;
             }
 
-            $sqlite = (! isset($this->password) || $this->password !== '')
+            return (! $this->password)
                 ? new SQLite3($this->database)
                 : new SQLite3($this->database, SQLITE3_OPEN_READWRITE | SQLITE3_OPEN_CREATE, $this->password);
-
-            $sqlite->enableExceptions(true);
-
-            return $sqlite;
         } catch (Exception $e) {
             throw new DatabaseException('SQLite3 error: ' . $e->getMessage());
         }
@@ -104,8 +96,6 @@ class Connection extends BaseConnection
     /**
      * Keep or establish the connection if no queries have been sent for
      * a length of time exceeding the server's idle timeout.
-     *
-     * @return void
      */
     public function reconnect()
     {
@@ -115,8 +105,6 @@ class Connection extends BaseConnection
 
     /**
      * Close the database connection.
-     *
-     * @return void
      */
     protected function _close()
     {
@@ -156,7 +144,7 @@ class Connection extends BaseConnection
             return $this->isWriteType($sql)
                 ? $this->connID->exec($sql)
                 : $this->connID->query($sql);
-        } catch (Exception $e) {
+        } catch (ErrorException $e) {
             log_message('error', (string) $e);
 
             if ($this->DBDebug) {
@@ -194,7 +182,7 @@ class Connection extends BaseConnection
      */
     protected function _listTables(bool $prefixLimit = false, ?string $tableName = null): string
     {
-        if ((string) $tableName !== '') {
+        if ($tableName !== null) {
             return 'SELECT "NAME" FROM "SQLITE_MASTER" WHERE "TYPE" = \'table\''
                    . ' AND "NAME" NOT LIKE \'sqlite!_%\' ESCAPE \'!\''
                    . ' AND "NAME" LIKE ' . $this->escape($tableName);
@@ -202,7 +190,7 @@ class Connection extends BaseConnection
 
         return 'SELECT "NAME" FROM "SQLITE_MASTER" WHERE "TYPE" = \'table\''
                . ' AND "NAME" NOT LIKE \'sqlite!_%\' ESCAPE \'!\''
-               . (($prefixLimit && $this->DBPrefix !== '')
+               . (($prefixLimit !== false && $this->DBPrefix !== '')
                     ? ' AND "NAME" LIKE \'' . $this->escapeLikeString($this->DBPrefix) . '%\' ' . sprintf($this->likeEscapeStr, $this->likeEscapeChar)
                     : '');
     }
@@ -216,7 +204,7 @@ class Connection extends BaseConnection
     }
 
     /**
-     * @return false|list<string>
+     * @return array|false
      *
      * @throws DatabaseException
      */
@@ -359,7 +347,7 @@ class Connection extends BaseConnection
      */
     protected function _foreignKeyData(string $table): array
     {
-        if (! $this->supportsForeignKeys()) {
+        if ($this->supportsForeignKeys() !== true) {
             return [];
         }
 

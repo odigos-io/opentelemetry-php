@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * @var CodeIgniter\Debug\Toolbar $this
  * @var int                       $totalTime

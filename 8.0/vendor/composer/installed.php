@@ -3,7 +3,7 @@
         'name' => 'odigos/opentelemetry-php-8.0',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '205cbdfb531e7de4c90d207858fffdc87de48e86',
+        'reference' => '5b9676bdf9e445616000e6f625c87af4a24de937',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -85,7 +85,7 @@
         'odigos/opentelemetry-php-8.0' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '205cbdfb531e7de4c90d207858fffdc87de48e86',
+            'reference' => '5b9676bdf9e445616000e6f625c87af4a24de937',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

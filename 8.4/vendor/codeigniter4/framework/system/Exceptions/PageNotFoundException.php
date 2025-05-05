@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of CodeIgniter 4 framework.
  *
@@ -13,6 +11,7 @@ declare(strict_types=1);
 
 namespace CodeIgniter\Exceptions;
 
+use Config\Services;
 use OutOfBoundsException;
 
 class PageNotFoundException extends OutOfBoundsException implements ExceptionInterface, HTTPExceptionInterface
@@ -77,7 +76,7 @@ class PageNotFoundException extends OutOfBoundsException implements ExceptionInt
      */
     private static function lang(string $line, array $args = []): string
     {
-        $lang = service('language', null, false);
+        $lang = Services::language(null, false);
 
         return $lang->getLine($line, $args);
     }

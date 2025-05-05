@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of CodeIgniter 4 framework.
  *
@@ -178,24 +176,6 @@ class DOMParser
     }
 
     /**
-     * Checks to see if the XPath can be found.
-     */
-    public function seeXPath(string $path): bool
-    {
-        $xpath = new DOMXPath($this->dom);
-
-        return (bool) $xpath->query($path)->length;
-    }
-
-    /**
-     * Checks to see if the XPath can't be found.
-     */
-    public function dontSeeXPath(string $path): bool
-    {
-        return ! $this->seeXPath($path);
-    }
-
-    /**
      * Search the DOM using an XPath expression.
      *
      * @return DOMNodeList|false
@@ -260,11 +240,11 @@ class DOMParser
         $attr  = null;
 
         // ID?
-        if (str_contains($selector, '#')) {
+        if (strpos($selector, '#') !== false) {
             [$tag, $id] = explode('#', $selector);
         }
         // Attribute
-        elseif (str_contains($selector, '[') && str_contains($selector, ']')) {
+        elseif (strpos($selector, '[') !== false && strpos($selector, ']') !== false) {
             $open  = strpos($selector, '[');
             $close = strpos($selector, ']');
 
@@ -282,7 +262,7 @@ class DOMParser
             $attr  = [$name => trim($value, '] ')];
         }
         // Class?
-        elseif (str_contains($selector, '.')) {
+        elseif (strpos($selector, '.') !== false) {
             [$tag, $class] = explode('.', $selector);
         }
         // Otherwise, assume the entire string is our tag

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of CodeIgniter 4 framework.
  *
@@ -19,7 +17,6 @@ use CodeIgniter\Test\Constraints\SeeInDatabase;
 use Config\Database;
 use Config\Migrations;
 use Config\Services;
-use PHPUnit\Framework\Attributes\AfterClass;
 
 /**
  * DatabaseTestTrait
@@ -229,12 +226,14 @@ trait DatabaseTestTrait
     // --------------------------------------------------------------------
     // Utility
     // --------------------------------------------------------------------
+
     /**
      * Reset $doneMigration and $doneSeed
      *
+     * @afterClass
+     *
      * @return void
      */
-    #[AfterClass]
     public static function resetMigrationSeedCount()
     {
         self::$doneMigration = false;
@@ -262,7 +261,7 @@ trait DatabaseTestTrait
      */
     public function loadBuilder(string $tableName)
     {
-        $builderClass = str_replace('Connection', 'Builder', $this->db::class);
+        $builderClass = str_replace('Connection', 'Builder', get_class($this->db));
 
         return new $builderClass($tableName, $this->db);
     }

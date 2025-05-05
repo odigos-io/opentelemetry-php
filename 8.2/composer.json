@@ -19,7 +19,7 @@
     "open-telemetry/opentelemetry-auto-slim": "^1.1.0",
     "open-telemetry/opentelemetry-auto-symfony": "^1.0.0",
     "open-telemetry/opentelemetry-auto-codeigniter": "^0.0.9",
-    "codeigniter4/framework": ">=4.3 <4.6",
+    "codeigniter4/framework": ">=4.3 <4.5",
     "open-telemetry/opentelemetry-auto-pdo": "^0.0.19",
     "open-telemetry/opentelemetry-auto-doctrine": "^0.1.0",
     "open-telemetry/opentelemetry-auto-mysqli": "^0.0.2",

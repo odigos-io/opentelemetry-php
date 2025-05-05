@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of CodeIgniter 4 framework.
  *
@@ -31,7 +29,7 @@ class MockCache extends BaseHandler implements CacheInterface
     /**
      * Expiration times.
      *
-     * @var array<string, int|null>
+     * @var ?list<int>
      */
     protected $expirations = [];
 
@@ -92,10 +90,11 @@ class MockCache extends BaseHandler implements CacheInterface
      * @param string $key   Cache item name
      * @param mixed  $value the data to save
      * @param int    $ttl   Time To Live, in seconds (default 60)
+     * @param bool   $raw   Whether to store the raw value.
      *
      * @return bool
      */
-    public function save(string $key, $value, int $ttl = 60)
+    public function save(string $key, $value, int $ttl = 60, bool $raw = false)
     {
         if ($this->bypass) {
             return false;

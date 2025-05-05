@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of CodeIgniter 4 framework.
  *
@@ -13,6 +11,7 @@ declare(strict_types=1);
 
 namespace CodeIgniter\Language;
 
+use Config\Services;
 use IntlException;
 use MessageFormatter;
 
@@ -94,7 +93,7 @@ class Language
     public function getLine(string $line, array $args = [])
     {
         // if no file is given, just parse the line
-        if (! str_contains($line, '.')) {
+        if (strpos($line, '.') === false) {
             return $this->formatMessage($line, $args);
         }
 
@@ -206,11 +205,11 @@ class Language
 
             $argsString = implode(
                 ', ',
-                array_map(static fn ($element): string => '"' . $element . '"', $args),
+                array_map(static fn ($element) => '"' . $element . '"', $args)
             );
             $argsUrlEncoded = implode(
                 ', ',
-                array_map(static fn ($element): string => '"' . rawurlencode($element) . '"', $args),
+                array_map(static fn ($element) => '"' . rawurlencode($element) . '"', $args)
             );
 
             log_message(
@@ -218,7 +217,7 @@ class Language
                 'Language.invalidMessageFormat: $message: "' . $message
                 . '", $args: ' . $argsString
                 . ' (urlencoded: ' . $argsUrlEncoded . '),'
-                . ' MessageFormatter Error: ' . $fmtError,
+                . ' MessageFormatter Error: ' . $fmtError
             );
 
             return $message . "\n【Warning】Also, invalid string(s) was passed to the Language class. See log file for details.";
@@ -273,7 +272,7 @@ class Language
      */
     protected function requireFile(string $path): array
     {
-        $files   = service('locator')->search($path, 'php', false);
+        $files   = Services::locator()->search($path, 'php', false);
         $strings = [];
 
         foreach ($files as $file) {

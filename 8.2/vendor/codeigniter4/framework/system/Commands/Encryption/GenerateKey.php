@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of CodeIgniter 4 framework.
  *
@@ -124,8 +122,6 @@ class GenerateKey extends BaseCommand
 
     /**
      * Sets the new encryption key in your .env file.
-     *
-     * @param array<int|string, string|null> $params
      */
     protected function setNewEncryptionKey(string $key, array $params): bool
     {
@@ -141,8 +137,6 @@ class GenerateKey extends BaseCommand
 
     /**
      * Checks whether to overwrite existing encryption key.
-     *
-     * @param array<int|string, string|null> $params
      */
     protected function confirmOverwrite(array $params): bool
     {
@@ -172,7 +166,7 @@ class GenerateKey extends BaseCommand
         $oldFileContents = (string) file_get_contents($envFile);
         $replacementKey  = "\nencryption.key = {$newKey}";
 
-        if (! str_contains($oldFileContents, 'encryption.key')) {
+        if (strpos($oldFileContents, 'encryption.key') === false) {
             return file_put_contents($envFile, $replacementKey, FILE_APPEND) !== false;
         }
 
@@ -182,7 +176,7 @@ class GenerateKey extends BaseCommand
             $newFileContents = preg_replace(
                 '/^[#\s]*encryption.key[=\s]*(?:hex2bin\:[a-f0-9]{64}|base64\:(?:[A-Za-z0-9+\/]{4})*(?:[A-Za-z0-9+\/]{2}==|[A-Za-z0-9+\/]{3}=)?)$/m',
                 $replacementKey,
-                $oldFileContents,
+                $oldFileContents
             );
         }
 

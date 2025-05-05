@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of CodeIgniter 4 framework.
  *
@@ -105,7 +103,7 @@ class Seeder
      */
     public static function faker(): ?Generator
     {
-        if (! self::$faker instanceof Generator && class_exists(Factory::class)) {
+        if (self::$faker === null && class_exists(Factory::class)) {
             self::$faker = Factory::create();
         }
 
@@ -125,7 +123,7 @@ class Seeder
             throw new InvalidArgumentException('No seeder was specified.');
         }
 
-        if (! str_contains($class, '\\')) {
+        if (strpos($class, '\\') === false) {
             $path = $this->seedPath . str_replace('.php', '', $class) . '.php';
 
             if (! is_file($path)) {

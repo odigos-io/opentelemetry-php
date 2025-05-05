@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of CodeIgniter 4 framework.
  *
@@ -283,14 +281,14 @@ class FileHandler extends BaseHandler
 
         $pattern = sprintf(
             '#\A%s' . $pattern . $this->sessionIDRegex . '\z#',
-            preg_quote($this->cookieName, '#'),
+            preg_quote($this->cookieName, '#')
         );
 
         $collected = 0;
 
         while (($file = readdir($directory)) !== false) {
             // If the filename doesn't match this pattern, it's either not a session file or is not ours
-            if (preg_match($pattern, $file) !== 1
+            if (! preg_match($pattern, $file)
                 || ! is_file($this->savePath . DIRECTORY_SEPARATOR . $file)
                 || ($mtime = filemtime($this->savePath . DIRECTORY_SEPARATOR . $file)) === false
                 || $mtime > $ts

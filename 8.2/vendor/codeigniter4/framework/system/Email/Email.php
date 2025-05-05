@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of CodeIgniter 4 framework.
  *
@@ -151,7 +149,7 @@ class Email
      *
      * @var string
      */
-    public $charset = 'UTF-8';
+    public $charset = 'utf-8';
 
     /**
      * Alternative message (for HTML messages only)
@@ -182,7 +180,7 @@ class Email
      *
      * @var string "\r\n" or "\n"
      */
-    public $newline = "\r\n";
+    public $newline = "\n";
 
     /**
      * CRLF character sequence
@@ -197,7 +195,7 @@ class Email
      *
      * @var string
      */
-    public $CRLF = "\r\n";
+    public $CRLF = "\n";
 
     /**
      * Whether to use Delivery Status Notification.
@@ -485,7 +483,7 @@ class Email
         if ($this->validate) {
             $this->validateEmail($this->stringToArray($from));
 
-            if ($returnPath !== null) {
+            if ($returnPath) {
                 $this->validateEmail($this->stringToArray($returnPath));
             }
         }
@@ -495,7 +493,7 @@ class Email
 
         if ($name !== '') {
             // only use Q encoding if there are characters that would require it
-            if (preg_match('/[\200-\377]/', $name) !== 1) {
+            if (! preg_match('/[\200-\377]/', $name)) {
                 $name = '"' . addcslashes($name, "\0..\37\177'\"\\") . '"';
             } else {
                 $name = $this->prepQEncoding($name);
@@ -532,7 +530,7 @@ class Email
             $this->tmpArchive['replyName'] = $name;
 
             // only use Q encoding if there are characters that would require it
-            if (preg_match('/[\200-\377]/', $name) !== 1) {
+            if (! preg_match('/[\200-\377]/', $name)) {
                 $name = '"' . addcslashes($name, "\0..\37\177'\"\\") . '"';
             } else {
                 $name = $this->prepQEncoding($name);
@@ -660,7 +658,7 @@ class Email
     public function attach($file, $disposition = '', $newname = null, $mime = '')
     {
         if ($mime === '') {
-            if (! str_contains($file, '://') && ! is_file($file)) {
+            if (strpos($file, '://') === false && ! is_file($file)) {
                 $this->setErrorMessage(lang('Email.attachmentMissing', [$file]));
 
                 return false;
@@ -750,7 +748,7 @@ class Email
     protected function stringToArray($email)
     {
         if (! is_array($email)) {
-            return (str_contains($email, ',')) ? preg_split('/[\s,]/', $email, -1, PREG_SPLIT_NO_EMPTY) : (array) trim($email);
+            return (strpos($email, ',') !== false) ? preg_split('/[\s,]/', $email, -1, PREG_SPLIT_NO_EMPTY) : (array) trim($email);
         }
 
         return $email;
@@ -874,7 +872,7 @@ class Email
         }
 
         foreach ($this->baseCharsets as $charset) {
-            if (str_starts_with($this->charset, $charset)) {
+            if (strpos($this->charset, $charset) === 0) {
                 $this->encoding = '7bit';
 
                 break;
@@ -909,7 +907,7 @@ class Email
     {
         $timezone = date('Z');
         $operator = ($timezone[0] === '-') ? '-' : '+';
-        $timezone = abs((int) $timezone);
+        $timezone = abs($timezone);
         $timezone = floor($timezone / 3600) * 100 + ($timezone % 3600) / 60;
 
         return sprintf('%s %s%04d', date('D, j M Y H:i:s'), $operator, $timezone);
@@ -1023,7 +1021,7 @@ class Email
             $charlim = empty($this->wrapChars) ? 76 : $this->wrapChars;
         }
 
-        if (str_contains($str, "\r")) {
+        if (strpos($str, "\r") !== false) {
             $str = str_replace(["\r\n", "\r"], "\n", $str);
         }
 
@@ -1031,7 +1029,7 @@ class Email
 
         $unwrap = [];
 
-        if (preg_match_all('|\{unwrap\}(.+?)\{/unwrap\}|s', $str, $matches) >= 1) {
+        if (preg_match_all('|\{unwrap\}(.+?)\{/unwrap\}|s', $str, $matches)) {
             for ($i = 0, $c = count($matches[0]); $i < $c; $i++) {
                 $unwrap[] = $matches[1][$i];
                 $str      = str_replace($matches[0][$i], '{{unwrapped' . $i . '}}', $str);
@@ -1233,9 +1231,7 @@ class Email
                     $this->headerStr .= $hdr;
                 }
 
-                if (static::strlen($body) > 0) {
-                    $body .= $this->newline . $this->newline;
-                }
+                static::strlen($body) && $body .= $this->newline . $this->newline;
 
                 $body .= $this->getMimeMessage() . $this->newline . $this->newline
                     . '--' . $lastBoundary . $this->newline
@@ -1423,7 +1419,7 @@ class Email
         $str = preg_replace(['| +|', '/\x00+/'], [' ', ''], $str);
 
         // Standardize newlines
-        if (str_contains($str, "\r")) {
+        if (strpos($str, "\r") !== false) {
             $str = str_replace(["\r\n", "\r"], "\n", $str);
         }
 
@@ -1658,8 +1654,11 @@ class Email
     {
         $this->finalBody = preg_replace_callback(
             '/\{unwrap\}(.*?)\{\/unwrap\}/si',
-            $this->removeNLCallback(...),
-            $this->finalBody,
+            [
+                $this,
+                'removeNLCallback',
+            ],
+            $this->finalBody
         );
     }
 
@@ -1674,7 +1673,7 @@ class Email
      */
     protected function removeNLCallback($matches)
     {
-        if (str_contains($matches[1], "\r") || str_contains($matches[1], "\n")) {
+        if (strpos($matches[1], "\r") !== false || strpos($matches[1], "\n") !== false) {
             $matches[1] = str_replace(["\r\n", "\r", "\n"], '', $matches[1]);
         }
 
@@ -1855,7 +1854,7 @@ class Email
         $this->setErrorMessage($reply);
         $this->SMTPEnd();
 
-        if (! str_starts_with($reply, '250')) {
+        if (strpos($reply, '250') !== 0) {
             $this->setErrorMessage(lang('Email.SMTPError', [$reply]));
 
             return false;
@@ -1900,7 +1899,7 @@ class Email
             $this->SMTPPort,
             $errno,
             $errstr,
-            $this->SMTPTimeout,
+            $this->SMTPTimeout
         );
 
         if (! is_resource($this->SMTPConnect)) {
@@ -1921,7 +1920,7 @@ class Email
                 STREAM_CRYPTO_METHOD_TLSv1_0_CLIENT
                 | STREAM_CRYPTO_METHOD_TLSv1_1_CLIENT
                 | STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT
-                | STREAM_CRYPTO_METHOD_TLSv1_3_CLIENT,
+                | STREAM_CRYPTO_METHOD_TLSv1_3_CLIENT
             );
 
             if ($crypto !== true) {
@@ -2027,11 +2026,11 @@ class Email
         $this->sendData('AUTH LOGIN');
         $reply = $this->getSMTPData();
 
-        if (str_starts_with($reply, '503')) {    // Already authenticated
+        if (strpos($reply, '503') === 0) {    // Already authenticated
             return true;
         }
 
-        if (! str_starts_with($reply, '334')) {
+        if (strpos($reply, '334') !== 0) {
             $this->setErrorMessage(lang('Email.failedSMTPLogin', [$reply]));
 
             return false;
@@ -2040,7 +2039,7 @@ class Email
         $this->sendData(base64_encode($this->SMTPUser));
         $reply = $this->getSMTPData();
 
-        if (! str_starts_with($reply, '334')) {
+        if (strpos($reply, '334') !== 0) {
             $this->setErrorMessage(lang('Email.SMTPAuthUsername', [$reply]));
 
             return false;
@@ -2049,7 +2048,7 @@ class Email
         $this->sendData(base64_encode($this->SMTPPass));
         $reply = $this->getSMTPData();
 
-        if (! str_starts_with($reply, '235')) {
+        if (strpos($reply, '235') !== 0) {
             $this->setErrorMessage(lang('Email.SMTPAuthPassword', [$reply]));
 
             return false;

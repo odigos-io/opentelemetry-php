@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of CodeIgniter 4 framework.
  *
@@ -66,19 +64,15 @@ class PreparedQuery extends BasePreparedQuery
             throw new BadMethodCallException('You must call prepare before trying to execute a prepared statement.');
         }
 
-        // First off - bind the parameters
-        $bindTypes  = '';
-        $binaryData = [];
+        // First off -bind the parameters
+        $bindTypes = '';
 
         // Determine the type string
-        foreach ($data as $key => $item) {
+        foreach ($data as $item) {
             if (is_int($item)) {
                 $bindTypes .= 'i';
             } elseif (is_numeric($item)) {
                 $bindTypes .= 'd';
-            } elseif (is_string($item) && $this->isBinary($item)) {
-                $bindTypes .= 'b';
-                $binaryData[$key] = $item;
             } else {
                 $bindTypes .= 's';
             }
@@ -86,11 +80,6 @@ class PreparedQuery extends BasePreparedQuery
 
         // Bind it
         $this->statement->bind_param($bindTypes, ...$data);
-
-        // Stream binary data
-        foreach ($binaryData as $key => $value) {
-            $this->statement->send_long_data($key, $value);
-        }
 
         try {
             return $this->statement->execute();
