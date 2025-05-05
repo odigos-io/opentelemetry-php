@@ -7,13 +7,14 @@ require '/var/odigos/php/8.2/vendor/autoload.php';
 // If you need to use this in your own code, you can use the following line instead:
 // require 'vendor/autoload.php';
 
+use OpenTelemetry\API\Common\Time\Clock;
 use OpenTelemetry\Contrib\Otlp\OtlpHttpTransportFactory;
 use OpenTelemetry\Contrib\Otlp\SpanExporter;
 use OpenTelemetry\Contrib\Otlp\MetricExporter;
 use OpenTelemetry\SDK\Sdk;
 use OpenTelemetry\SDK\Trace\NoopTracerProvider;
 use OpenTelemetry\SDK\Trace\TracerProvider;
-use OpenTelemetry\SDK\Trace\SpanProcessor\SimpleSpanProcessor;
+use OpenTelemetry\SDK\Trace\SpanProcessor\BatchSpanProcessor;
 use OpenTelemetry\SDK\Trace\Sampler\AlwaysOnSampler;
 use OpenTelemetry\SDK\Trace\Sampler\ParentBased;
 use OpenTelemetry\SDK\Metrics\NoopMeterProvider;
@@ -36,15 +37,12 @@ function getTraceProvider(): TracerProvider | NoopTracerProvider
     ->create(rtrim(getenv('OTEL_EXPORTER_OTLP_ENDPOINT'), '/') . '/v1/traces', 'application/x-protobuf');
 
   $tExporter = new SpanExporter($tTransporter);
-  // TODO: replace simple with batch
-  $tProcesser = new SimpleSpanProcessor($tExporter);
-  // $tProcesser = new BatchSpanProcessor($tExporter, Clock::getDefault());
-  // $tProcesser = (new BatchSpanProcessorBuilder($tExporter))->build();
-  $sSampler = new ParentBased(new AlwaysOnSampler());
+  $tProcesser = new BatchSpanProcessor($tExporter, Clock::getDefault());
+  $tSampler = new ParentBased(new AlwaysOnSampler());
 
   $tProvider = TracerProvider::builder()
     ->addSpanProcessor($tProcesser)
-    ->setSampler($sSampler)
+    ->setSampler($tSampler)
     ->build();
 
   return $tProvider;
@@ -71,5 +69,5 @@ Sdk::builder()
   ->setTracerProvider(getTraceProvider())
   ->setMeterProvider(getMetricProvider())
   ->setPropagator(TraceContextPropagator::getInstance())
-  ->setAutoShutdown(false)
+  ->setAutoShutdown(true)
   ->buildAndRegisterGlobal();

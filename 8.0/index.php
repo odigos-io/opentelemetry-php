@@ -7,18 +7,20 @@ require '/var/odigos/php/8.0/vendor/autoload.php';
 // If you need to use this in your own code, you can use the following line instead:
 // require 'vendor/autoload.php';
 
+use OpenTelemetry\SDK\Common\Time\ClockFactory;
 use OpenTelemetry\Contrib\Otlp\OtlpHttpTransportFactory;
 use OpenTelemetry\Contrib\Otlp\SpanExporter;
 use OpenTelemetry\Contrib\Otlp\MetricExporter;
 use OpenTelemetry\SDK\Sdk;
 use OpenTelemetry\SDK\Trace\NoopTracerProvider;
 use OpenTelemetry\SDK\Trace\TracerProvider;
-use OpenTelemetry\SDK\Trace\SpanProcessor\SimpleSpanProcessor;
+use OpenTelemetry\SDK\Trace\SpanProcessor\BatchSpanProcessor;
 use OpenTelemetry\SDK\Trace\Sampler\AlwaysOnSampler;
 use OpenTelemetry\SDK\Trace\Sampler\ParentBased;
 use OpenTelemetry\SDK\Metrics\NoopMeterProvider;
 use OpenTelemetry\SDK\Metrics\MeterProvider;
 use OpenTelemetry\SDK\Metrics\MetricReader\ExportingReader;
+use OpenTelemetry\API\Trace\Propagation\TraceContextPropagator;
 
 if (!extension_loaded('opentelemetry')) {
   echo 'OpenTelemetry extension not loaded' . PHP_EOL;
@@ -35,15 +37,12 @@ function getTraceProvider(): TracerProvider | NoopTracerProvider
     ->create(rtrim(getenv('OTEL_EXPORTER_OTLP_ENDPOINT'), '/') . '/v1/traces', 'application/x-protobuf');
 
   $tExporter = new SpanExporter($tTransporter);
-  // TODO: replace simple with batch
-  $tProcesser = new SimpleSpanProcessor($tExporter);
-  // $tProcesser = new BatchSpanProcessor($tExporter, Clock::getDefault());
-  // $tProcesser = (new BatchSpanProcessorBuilder($tExporter))->build();
-  $sSampler = new ParentBased(new AlwaysOnSampler());
+  $tProcesser = new BatchSpanProcessor($tExporter, ClockFactory::getDefault());
+  $tSampler = new ParentBased(new AlwaysOnSampler());
 
   $tProvider = TracerProvider::builder()
     ->addSpanProcessor($tProcesser)
-    ->setSampler($sSampler)
+    ->setSampler($tSampler)
     ->build();
 
   return $tProvider;
@@ -69,5 +68,6 @@ function getMetricProvider(): MeterProvider | NoopMeterProvider
 Sdk::builder()
   ->setTracerProvider(getTraceProvider())
   ->setMeterProvider(getMetricProvider())
-  ->setAutoShutdown(false)
+  ->setPropagator(TraceContextPropagator::getInstance())
+  ->setAutoShutdown(true)
   ->buildAndRegisterGlobal();
