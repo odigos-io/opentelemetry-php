@@ -3,7 +3,12 @@
 $paths = [
   [
     'include' => '/var/odigos/php/8.2/',
-    'exclude' => [],
+    'exclude' => [
+      '.php-cs-fixer',
+      'vendor/php-http/discovery/src/Composer',
+      'vendor/composer',
+      'Tests',
+    ],
   ],
 ];
 
@@ -23,11 +28,6 @@ foreach ($paths as $path) {
 
   foreach ($phpFiles as $key => $file) {
     $filename = $file[0];
-
-    // Skip dev or tool-specific configs
-    if (str_contains($filename, '.php-cs-fixer')) {
-      continue;
-    }
 
     foreach ($path['exclude'] as $exclude) {
       if (str_contains($filename, $exclude)) {
