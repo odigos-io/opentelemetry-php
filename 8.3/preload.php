@@ -5,9 +5,10 @@ $paths = [
     'include' => '/var/odigos/php/8.3/',
     'exclude' => [
       '.php-cs-fixer',
-      'vendor/php-http/discovery/src/Composer',
-      'vendor/composer',
+      'Composer',
+      'composer',
       'Tests',
+      'tests',
     ],
   ],
 ];
