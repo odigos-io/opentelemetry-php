@@ -2,8 +2,13 @@
 
 $paths = [
   [
-    'include' => '/var/odigos/php/8.3/vendor/open-telemetry/',
+    'dir' => '/var/odigos/php/8.3/',
+    'include' => [
+      'opentelemetry-auto-codeigniter',
+      'codeigniter4',
+    ],
     'exclude' => [
+      '.phan',
       '.php-cs-fixer',
       'Composer',
       'composer',
@@ -21,7 +26,7 @@ if (!extension_loaded('opentelemetry')) {
 }
 
 foreach ($paths as $path) {
-  $directory = new RecursiveDirectoryIterator($path['include']);
+  $directory = new RecursiveDirectoryIterator($path['dir']);
   $fullTree  = new RecursiveIteratorIterator($directory);
   $phpFiles  = new RegexIterator(
     $fullTree,
@@ -34,6 +39,12 @@ foreach ($paths as $path) {
 
     foreach ($path['exclude'] as $exclude) {
       if (str_contains($filename, $exclude)) {
+        continue 2;
+      }
+    }
+
+    foreach ($path['include'] as $include) {
+      if (!str_contains($filename, $include)) {
         continue 2;
       }
     }
