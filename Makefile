@@ -102,6 +102,13 @@ install-libs/%:
 			--ignore-platform-req=ext-mysqli \
 			--ignore-platform-req=ext-intl
 
+.PHONY: install-libs
+install-libs:
+	@for vers in $(PHP_VERSIONS); do \
+		$(MAKE) install-libs/$$vers; \
+	done
+	@echo "\n✅ All libraries have been installed."
+
 .PHONY: update-libs/%
 update-libs/%:
 	@$(MAKE) switch-php/$*
@@ -116,3 +123,10 @@ update-libs/%:
 			--ignore-platform-req=ext-mongodb \
 			--ignore-platform-req=ext-mysqli \
 			--ignore-platform-req=ext-intl
+
+.PHONY: update-libs
+update-libs:
+	@for vers in $(PHP_VERSIONS); do \
+		$(MAKE) update-libs/$$vers; \
+	done
+	@echo "\n✅ All libraries have been updated."
