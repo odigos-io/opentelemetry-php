@@ -22,12 +22,19 @@ foreach ($paths as $path) {
   );
 
   foreach ($phpFiles as $key => $file) {
+    $filename = $file[0];
+
+    // Skip dev or tool-specific configs
+    if (str_contains($filename, '.php-cs-fixer')) {
+      continue;
+    }
+
     foreach ($path['exclude'] as $exclude) {
-      if (str_contains($file[0], $exclude)) {
+      if (str_contains($filename, $exclude)) {
         continue 2;
       }
     }
 
-    require_once $file[0];
+    require_once $filename;
   }
 }
