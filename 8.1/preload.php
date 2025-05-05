@@ -2,7 +2,7 @@
 
 $paths = [
   [
-    'include' => '/var/odigos/php/8.1/',
+    'include' => '/var/odigos/php/8.1/vendor/open-telemetry/',
     'exclude' => [
       '.php-cs-fixer',
       'Composer',
