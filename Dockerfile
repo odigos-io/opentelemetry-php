@@ -11,8 +11,8 @@ RUN curl -sSL https://github.com/open-telemetry/opentelemetry-php-instrumentatio
   && rm -rf tmp.tar.gz
 RUN cd opentelemetry-php-instrumentation-${PHP_OTEL_VERSION}/ext \
   && phpize \
-  && ./configure --enable-opentelemetry \
-  && make -j"$(nproc)" \
+  && ./configure \
+  && make \
   && make install
 
 # Isolate the binary & create a pointer
@@ -21,6 +21,7 @@ RUN cat <<EOF > opentelemetry.ini
 extension=/var/odigos/php/${PHP_VERSION}/opentelemetry.so
 auto_prepend_file=/var/odigos/php/${PHP_VERSION}/index.php
 opcache.preload=/var/odigos/php/${PHP_VERSION}/preload.php
+opcache.preload_user=www-data
 EOF
 
 # Cleanup
