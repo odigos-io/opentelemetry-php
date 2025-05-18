@@ -19,7 +19,7 @@ RUN cd opentelemetry-php-instrumentation-${PHP_OTEL_VERSION}/ext \
 RUN mv opentelemetry-php-instrumentation-${PHP_OTEL_VERSION}/ext/modules/opentelemetry.so opentelemetry.so
 RUN cat <<EOF > opentelemetry.ini
 extension=/var/odigos/php/${PHP_VERSION}/opentelemetry.so
-auto_prepend_file=/var/odigos/php/${PHP_VERSION}/index.php
+auto_prepend_file=/var/odigos/php/${PHP_VERSION}/vendor/autoload.php
 opcache.preload=/var/odigos/php/${PHP_VERSION}/preload.php
 opcache.preload_user=www-data
 EOF
