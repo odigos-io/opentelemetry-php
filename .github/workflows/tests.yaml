@@ -70,7 +70,7 @@ jobs:
             if docker ps | grep -q otel-collector; then
               echo "Container is running, checking health..."
               COLLECTOR_LOGS=$(docker logs otel-collector)
-              if echo "$COLLECTOR_LOGS" | grep -q "Everything is ready" || \
+              if echo "$COLLECTOR_LOGS" | grep -i "Everything is ready" || \
                 (echo "$COLLECTOR_LOGS" | grep -q "Starting GRPC server" && echo "$COLLECTOR_LOGS" | grep -q "Starting HTTP server"); then
                   echo "Collector is ready!"
                 break
@@ -100,7 +100,7 @@ jobs:
           echo "Collector logs:"
           echo "$COLLECTOR_LOGS"
 
-          if echo "$COLLECTOR_LOGS" | grep -q "Everything is ready"; then
+          if echo "$COLLECTOR_LOGS" | grep -i "Everything is ready"; then
             echo "✅ Found 'Everything is ready' in logs"
           else
             echo "❌ 'Everything is ready' not found in logs"
