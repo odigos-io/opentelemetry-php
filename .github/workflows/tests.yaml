@@ -196,14 +196,14 @@ jobs:
         run: |
           cd ${{ env.SERVICE_NAME }}
 
-          export OTEL_PHP_AUTOLOAD_ENABLED=true
-          export PHP_INI_SCAN_DIR=$(pwd)/var/odigos/php/${{ matrix.php-version }}:
-          export OTEL_SERVICE_NAME=${{ env.SERVICE_NAME }}
-          export OTEL_TRACES_EXPORTER=console,otlp
-          export OTEL_METRICS_EXPORTER=none
-          export OTEL_LOGS_EXPORTER=none
-          export OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:$OTEL_COLLECTOR_HTTP_PORT
-          export OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
+          echo "PHP_INI_SCAN_DIR=$(pwd)/var/odigos/php/${{ matrix.php-version }}" >> $GITHUB_ENV
+          echo "OTEL_PHP_AUTOLOAD_ENABLED=true" >> $GITHUB_ENV
+          echo "OTEL_SERVICE_NAME=${{ env.SERVICE_NAME }}" >> $GITHUB_ENV
+          echo "OTEL_TRACES_EXPORTER=console,otlp" >> $GITHUB_ENV
+          echo "OTEL_METRICS_EXPORTER=none" >> $GITHUB_ENV
+          echo "OTEL_LOGS_EXPORTER=none" >> $GITHUB_ENV
+          echo "OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:${{ env.OTEL_COLLECTOR_HTTP_PORT }}" >> $GITHUB_ENV
+          echo "OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf" >> $GITHUB_ENV
 
           php -S localhost:8000 -t public/ &
           SYMFONY_PID=$!
