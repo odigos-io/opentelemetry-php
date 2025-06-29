@@ -271,6 +271,7 @@ jobs:
             echo "❌ No traces found in collector logs"
             echo "Collector logs:"
             echo "$COLLECTOR_LOGS"
+            exit 1
           fi
 
       - name: Cleanup Application
