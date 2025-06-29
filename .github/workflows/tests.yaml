@@ -69,7 +69,7 @@ jobs:
           for i in {1..30}; do
             if docker ps | grep -q otel-collector; then
               echo "Container is running, checking health..."
-              if curl -f http://localhost:$OTEL_COLLECTOR_HTTP_PORT/ > /dev/null 2>&1; then
+              if docker logs otel-collector | grep -q "Everything is ready"; then
                 echo "Collector is ready!"
                 break
               fi
@@ -91,15 +91,23 @@ jobs:
             exit 1
           fi
 
-          # Check if HTTP endpoint is responding
-          if ! curl -f http://localhost:$OTEL_COLLECTOR_HTTP_PORT/ > /dev/null 2>&1; then
-            echo "❌ Collector HTTP endpoint is not responding"
+          # Check if container is healthy by looking for "Everything is ready" in logs
+          if ! docker logs otel-collector | grep -q "Everything is ready"; then
+            echo "❌ Collector is not ready yet"
             echo "Container logs:"
             docker logs otel-collector --tail 20
             exit 1
           fi
 
-          echo "✅ Collector is running and responding"
+          # Check if ports are listening
+          if ! netstat -tlnp 2>/dev/null | grep -q ":4317\|:4318"; then
+            echo "❌ Collector ports are not listening"
+            echo "Container logs:"
+            docker logs otel-collector --tail 20
+            exit 1
+          fi
+
+          echo "✅ Collector is running and ready"
           docker ps | grep otel-collector
 
   test-symfony-apps:
