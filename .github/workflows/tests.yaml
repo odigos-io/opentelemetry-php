@@ -99,43 +99,43 @@ jobs:
         include:
           - php-version: 8.0
             architecture: amd64
-            symfony-version: '6.4.*'
+            symfony-version: '6.3.99'
             runner: ubuntu-latest
           - php-version: 8.0
             architecture: arm64
-            symfony-version: '6.4.*'
+            symfony-version: '6.3.99'
             runner: ubuntu-latest
           - php-version: 8.1
             architecture: amd64
-            symfony-version: '6.4.*'
+            symfony-version: '6.4.99'
             runner: ubuntu-latest
           - php-version: 8.1
             architecture: arm64
-            symfony-version: '6.4.*'
+            symfony-version: '6.4.99'
             runner: ubuntu-latest
           - php-version: 8.2
             architecture: amd64
-            symfony-version: '7.0.*'
+            symfony-version: '7.0.99'
             runner: ubuntu-latest
           - php-version: 8.2
             architecture: arm64
-            symfony-version: '7.0.*'
+            symfony-version: '7.0.99'
             runner: ubuntu-latest
           - php-version: 8.3
             architecture: amd64
-            symfony-version: '7.0.*'
+            symfony-version: '7.0.99'
             runner: ubuntu-latest
           - php-version: 8.3
             architecture: arm64
-            symfony-version: '7.0.*'
+            symfony-version: '7.0.99'
             runner: ubuntu-latest
           - php-version: 8.4
             architecture: amd64
-            symfony-version: '7.0.*'
+            symfony-version: '7.0.99'
             runner: ubuntu-latest
           - php-version: 8.4
             architecture: arm64
-            symfony-version: '7.0.*'
+            symfony-version: '7.0.99'
             runner: ubuntu-latest
 
     steps:
