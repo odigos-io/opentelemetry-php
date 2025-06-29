@@ -174,15 +174,6 @@ jobs:
           sed -i "s|/var/odigos/php/${{ matrix.php-version }}|$(pwd)/${{ matrix.php-version }}|g" ${{ matrix.php-version }}/opentelemetry.ini
           sed -i "s|/var/odigos/php/${{ matrix.php-version }}|$(pwd)/${{ matrix.php-version }}|g" ${{ matrix.php-version }}/preload.php
 
-          echo "PHP_INI_SCAN_DIR=$(pwd)/${{ matrix.php-version }}" >> $GITHUB_ENV
-          echo "OTEL_PHP_AUTOLOAD_ENABLED=true" >> $GITHUB_ENV
-          echo "OTEL_SERVICE_NAME=${{ env.SERVICE_NAME }}" >> $GITHUB_ENV
-          echo "OTEL_TRACES_EXPORTER=otlp" >> $GITHUB_ENV
-          echo "OTEL_METRICS_EXPORTER=none" >> $GITHUB_ENV
-          echo "OTEL_LOGS_EXPORTER=none" >> $GITHUB_ENV
-          echo "OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:${{ env.OTEL_COLLECTOR_HTTP_PORT }}" >> $GITHUB_ENV
-          echo "OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf" >> $GITHUB_ENV
-
       - name: Preflight Checks
         run: |
           echo "\n\n=== Environment Variables ==="
@@ -211,10 +202,6 @@ jobs:
 
       - name: Create Application
         run: |
-          # Temporarily disable OpenTelemetry autoloading for Composer operations
-          export OTEL_PHP_AUTOLOAD_ENABLED=false
-          unset PHP_INI_SCAN_DIR
-
           # Create new Symfony app
           composer create-project symfony/skeleton:"${{ matrix.symfony-version }}" ${{ env.SERVICE_NAME }}
           cd ${{ env.SERVICE_NAME }}
@@ -246,13 +233,18 @@ jobs:
           # Install dependencies
           composer install --no-dev --optimize-autoloader
 
-          # Re-enable OpenTelemetry autoloading for application testing
-          export OTEL_PHP_AUTOLOAD_ENABLED=true
-          export PHP_INI_SCAN_DIR=$(pwd)/../${{ matrix.php-version }}
-
       - name: Start Application
         run: |
           cd ${{ env.SERVICE_NAME }}
+
+          echo "PHP_INI_SCAN_DIR=$(pwd)/${{ matrix.php-version }}" >> $GITHUB_ENV
+          echo "OTEL_PHP_AUTOLOAD_ENABLED=true" >> $GITHUB_ENV
+          echo "OTEL_SERVICE_NAME=${{ env.SERVICE_NAME }}" >> $GITHUB_ENV
+          echo "OTEL_TRACES_EXPORTER=otlp" >> $GITHUB_ENV
+          echo "OTEL_METRICS_EXPORTER=none" >> $GITHUB_ENV
+          echo "OTEL_LOGS_EXPORTER=none" >> $GITHUB_ENV
+          echo "OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:${{ env.OTEL_COLLECTOR_HTTP_PORT }}" >> $GITHUB_ENV
+          echo "OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf" >> $GITHUB_ENV
 
           php -S localhost:8000 -t public/ &
           SYMFONY_PID=$!
