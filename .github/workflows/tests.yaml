@@ -148,10 +148,19 @@ jobs:
           rm -rf ${{ matrix.php-version }}/bin
 
           # Update paths
-          sed -i "s|/var/odigos/php/${{ matrix.php-version }}|$(pwd)/${{ matrix.php-version }}|g" /var/odigos/php/${{ matrix.php-version }}/opentelemetry.ini
-          sed -i "s|/var/odigos/php/${{ matrix.php-version }}|$(pwd)/${{ matrix.php-version }}|g" /var/odigos/php/${{ matrix.php-version }}/preload.php
+          sed -i "s|/var/odigos/php/${{ matrix.php-version }}|$(pwd)/${{ matrix.php-version }}|g" ${{ matrix.php-version }}/opentelemetry.ini
+          sed -i "s|/var/odigos/php/${{ matrix.php-version }}|$(pwd)/${{ matrix.php-version }}|g" ${{ matrix.php-version }}/preload.php
 
-      - name: Create Application
+          echo "PHP_INI_SCAN_DIR=$(pwd)/${{ matrix.php-version }}" >> $GITHUB_ENV
+          echo "OTEL_PHP_AUTOLOAD_ENABLED=true" >> $GITHUB_ENV
+          echo "OTEL_SERVICE_NAME=${{ env.SERVICE_NAME }}" >> $GITHUB_ENV
+          echo "OTEL_TRACES_EXPORTER=console,otlp" >> $GITHUB_ENV
+          echo "OTEL_METRICS_EXPORTER=none" >> $GITHUB_ENV
+          echo "OTEL_LOGS_EXPORTER=none" >> $GITHUB_ENV
+          echo "OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:${{ env.OTEL_COLLECTOR_HTTP_PORT }}" >> $GITHUB_ENV
+          echo "OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf" >> $GITHUB_ENV
+
+      - name: Create & Start Application
         run: |
           # Create new Symfony app
           composer create-project symfony/skeleton:"${{ matrix.symfony-version }}" ${{ env.SERVICE_NAME }}
@@ -186,19 +195,8 @@ jobs:
           # Install dependencies
           composer install --no-dev --optimize-autoloader
 
-      - name: Start Application
-        run: |
+          # Start the application
           cd ${{ env.SERVICE_NAME }}
-
-          echo "PHP_INI_SCAN_DIR=$(pwd)/${{ matrix.php-version }}" >> $GITHUB_ENV
-          echo "OTEL_PHP_AUTOLOAD_ENABLED=true" >> $GITHUB_ENV
-          echo "OTEL_SERVICE_NAME=${{ env.SERVICE_NAME }}" >> $GITHUB_ENV
-          echo "OTEL_TRACES_EXPORTER=console,otlp" >> $GITHUB_ENV
-          echo "OTEL_METRICS_EXPORTER=none" >> $GITHUB_ENV
-          echo "OTEL_LOGS_EXPORTER=none" >> $GITHUB_ENV
-          echo "OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:${{ env.OTEL_COLLECTOR_HTTP_PORT }}" >> $GITHUB_ENV
-          echo "OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf" >> $GITHUB_ENV
-
           php -S localhost:8000 -t public/ &
           SYMFONY_PID=$!
           echo $SYMFONY_PID > symfony.pid
