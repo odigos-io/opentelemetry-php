@@ -177,7 +177,7 @@ jobs:
           echo "PHP_INI_SCAN_DIR=$(pwd)/${{ matrix.php-version }}" >> $GITHUB_ENV
           echo "OTEL_PHP_AUTOLOAD_ENABLED=true" >> $GITHUB_ENV
           echo "OTEL_SERVICE_NAME=${{ env.SERVICE_NAME }}" >> $GITHUB_ENV
-          echo "OTEL_TRACES_EXPORTER=console,otlp" >> $GITHUB_ENV
+          echo "OTEL_TRACES_EXPORTER=otlp" >> $GITHUB_ENV
           echo "OTEL_METRICS_EXPORTER=none" >> $GITHUB_ENV
           echo "OTEL_LOGS_EXPORTER=none" >> $GITHUB_ENV
           echo "OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:${{ env.OTEL_COLLECTOR_HTTP_PORT }}" >> $GITHUB_ENV
@@ -185,17 +185,36 @@ jobs:
 
       - name: Preflight Checks
         run: |
-          echo "=== Environment Variables ==="
+          echo "\n\n=== Environment Variables ==="
           echo "OTEL_SERVICE_NAME: $OTEL_SERVICE_NAME"
           echo "PHP_INI_SCAN_DIR: $PHP_INI_SCAN_DIR"
 
           cd $PHP_INI_SCAN_DIR
-          echo "=== Agent Files ==="
+          echo "\n\n=== Agent Files ==="
           ls -la
           cat opentelemetry.ini
 
+          echo "\n\n=== PHP Version ==="
+          php --version
+
+          echo "\n\n=== PHP Extensions ==="
+          php -m
+
+          echo "\n\n=== PHP Configuration ==="
+          php --ini
+
+          echo "\n\n=== Testing phar extension ==="
+          php -r "echo 'phar extension: ' . (extension_loaded('phar') ? 'LOADED' : 'NOT LOADED') . PHP_EOL;"
+
+          echo "\n\n=== Testing composer ==="
+          composer --version
+
       - name: Create Application
         run: |
+          # Temporarily disable OpenTelemetry autoloading for Composer operations
+          export OTEL_PHP_AUTOLOAD_ENABLED=false
+          unset PHP_INI_SCAN_DIR
+
           # Create new Symfony app
           composer create-project symfony/skeleton:"${{ matrix.symfony-version }}" ${{ env.SERVICE_NAME }}
           cd ${{ env.SERVICE_NAME }}
@@ -226,6 +245,10 @@ jobs:
 
           # Install dependencies
           composer install --no-dev --optimize-autoloader
+
+          # Re-enable OpenTelemetry autoloading for application testing
+          export OTEL_PHP_AUTOLOAD_ENABLED=true
+          export PHP_INI_SCAN_DIR=$(pwd)/../${{ matrix.php-version }}
 
       - name: Start Application
         run: |
