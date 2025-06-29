@@ -162,7 +162,6 @@ jobs:
 
       - name: Preflight Checks
         run: |
-          cd ${{ env.SERVICE_NAME }}
           echo "=== Environment Variables ==="
           echo "OTEL_SERVICE_NAME: $OTEL_SERVICE_NAME"
           echo "PHP_INI_SCAN_DIR: $PHP_INI_SCAN_DIR"
