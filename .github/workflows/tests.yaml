@@ -91,14 +91,21 @@ jobs:
           # Set output
           echo "collector-endpoint=http://localhost:$OTEL_COLLECTOR_HTTP_PORT" >> $GITHUB_OUTPUT
 
+      - name: Debug Collector Failure
+        if: failure()
+        run: |
+          echo "Collector container status:"
+          docker ps -a | grep otel-collector || echo "Container not found"
+          echo "Full collector logs:"
+          docker logs otel-collector || echo "Could not fetch logs"
+
       - name: Verify Collector is running
         run: |
           # Check if container is running
           if ! docker ps | grep -q otel-collector; then
             echo "❌ Collector container is not running"
             echo "Container logs:"
-            COLLECTOR_LOGS=$(docker logs otel-collector 2>/dev/null || echo "")
-            echo "$COLLECTOR_LOGS" || echo "No logs available"
+            docker logs otel-collector || echo "No logs available"
             exit 1
           fi
 
