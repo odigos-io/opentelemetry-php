@@ -44,8 +44,7 @@ jobs:
             batch:
 
           exporters:
-            logging:
-              loglevel: debug
+            debug:
               verbosity: detailed
 
           service:
@@ -53,7 +52,7 @@ jobs:
               traces:
                 receivers: [otlp]
                 processors: [batch]
-                exporters: [logging]
+                exporters: [debug]
           EOF
 
           # Start collector in background
