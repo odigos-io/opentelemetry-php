@@ -1,0 +1,285 @@
+name: OpenTelemetry PHP Agent Tests
+
+on:
+  pull_request:
+    branches: [main]
+
+env:
+  OTEL_COLLECTOR_PORT: 4317
+  OTEL_COLLECTOR_HTTP_PORT: 4318
+
+jobs:
+  setup-otel-environment:
+    runs-on: ubuntu-latest
+    outputs:
+      collector-endpoint: ${{ steps.setup.outputs.collector-endpoint }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup OpenTelemetry Collector
+        id: setup
+        run: |
+          # Create collector config
+          cat > collector-config.yaml << 'EOF'
+          receivers:
+            otlp:
+              protocols:
+                grpc:
+                  endpoint: 0.0.0.0:4317
+                http:
+                  endpoint: 0.0.0.0:4318
+
+          processors:
+            batch:
+
+          exporters:
+            logging:
+              loglevel: debug
+              verbosity: detailed
+
+          service:
+            pipelines:
+              traces:
+                receivers: [otlp]
+                processors: [batch]
+                exporters: [logging]
+          EOF
+
+          # Start collector in background
+          docker run -d \
+            --name otel-collector \
+            -p 4317:4317 \
+            -p 4318:4318 \
+            -v $(pwd)/collector-config.yaml:/etc/otelcol/config.yaml \
+            otel/opentelemetry-collector:latest \
+            --config /etc/otelcol/config.yaml
+
+          # Wait for collector to be ready
+          sleep 10
+
+          # Set output
+          echo "collector-endpoint=http://localhost:$OTEL_COLLECTOR_HTTP_PORT" >> $GITHUB_OUTPUT
+
+      - name: Verify Collector is running
+        run: |
+          docker ps | grep otel-collector
+          curl -f http://localhost:$OTEL_COLLECTOR_HTTP_PORT/ || echo "Collector HTTP endpoint not ready yet"
+
+  test-symfony-apps:
+    needs: setup-otel-environment
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      matrix:
+        include:
+          - php-version: 8.0
+            symfony-version: '6.4.*'
+            architecture: amd64
+            runner: ubuntu-latest
+          - php-version: 8.0
+            symfony-version: '6.4.*'
+            architecture: arm64
+            runner: ubuntu-latest
+          - php-version: 8.1
+            symfony-version: '7.0.*'
+            architecture: amd64
+            runner: ubuntu-latest
+          - php-version: 8.1
+            symfony-version: '7.0.*'
+            architecture: arm64
+            runner: ubuntu-latest
+          - php-version: 8.2
+            symfony-version: '7.0.*'
+            architecture: amd64
+            runner: ubuntu-latest
+          - php-version: 8.2
+            symfony-version: '7.0.*'
+            architecture: arm64
+            runner: ubuntu-latest
+          - php-version: 8.3
+            symfony-version: '7.0.*'
+            architecture: amd64
+            runner: ubuntu-latest
+          - php-version: 8.3
+            symfony-version: '7.0.*'
+            architecture: arm64
+            runner: ubuntu-latest
+          - php-version: 8.4
+            symfony-version: '7.0.*'
+            architecture: amd64
+            runner: ubuntu-latest
+          - php-version: 8.4
+            symfony-version: '7.0.*'
+            architecture: arm64
+            runner: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP ${{ matrix.php-version }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          extensions: mbstring, xml, ctype, iconv, intl, pdo_sqlite, curl, json
+          tools: composer:v2
+
+      - name: Create Symfony App
+        run: |
+          # Create new Symfony app
+          composer create-project symfony/skeleton:"${{ matrix.symfony-version }}" symfony-app-${{ matrix.php-version }}-${{ matrix.architecture }}
+          cd symfony-app-${{ matrix.php-version }}-${{ matrix.architecture }}
+
+          # Add a simple controller for testing
+          mkdir -p src/Controller
+          cat > src/Controller/TestController.php << 'EOF'
+          <?php
+
+          namespace App\Controller;
+
+          use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+          use Symfony\Component\HttpFoundation\JsonResponse;
+          use Symfony\Component\Routing\Annotation\Route;
+
+          class TestController extends AbstractController
+          {
+              #[Route('/test', name: 'app_test')]
+              public function test(): JsonResponse
+              {
+                  return new JsonResponse([
+                      'message' => 'Hello from Symfony!',
+                      'php_version' => PHP_VERSION,
+                      'architecture' => '${{ matrix.architecture }}',
+                      'timestamp' => time()
+                  ]);
+              }
+          }
+          EOF
+
+          # Install dependencies
+          composer install --no-dev --optimize-autoloader
+
+      - name: Setup OpenTelemetry Agent
+        run: |
+          cd symfony-app-${{ matrix.php-version }}-${{ matrix.architecture }}
+
+          # Copy agent files to the app
+          mkdir -p var/odigos/php/${{ matrix.php-version }}
+          cp -r ../../${{ matrix.php-version }}/* var/odigos/php/${{ matrix.php-version }}/
+
+          # Move the correct architecture binary to the root of the agent directory
+          mv var/odigos/php/${{ matrix.php-version }}/bin/${{ matrix.architecture }}/* var/odigos/php/${{ matrix.php-version }}/
+          rm -rf var/odigos/php/${{ matrix.php-version }}/bin
+
+          # Update paths in opentelemetry.ini
+          sed -i "s|/var/odigos/php/${{ matrix.php-version }}|$(pwd)/var/odigos/php/${{ matrix.php-version }}|g" var/odigos/php/${{ matrix.php-version }}/opentelemetry.ini
+
+          # Update paths in preload.php
+          sed -i "s|/var/odigos/php/${{ matrix.php-version }}|$(pwd)/var/odigos/php/${{ matrix.php-version }}|g" var/odigos/php/${{ matrix.php-version }}/preload.php
+
+      - name: Configure Environment Variables
+        run: |
+          cd symfony-app-${{ matrix.php-version }}-${{ matrix.architecture }}
+
+          # Create .env.local with OpenTelemetry configuration
+          cat > .env.local << EOF
+          # OpenTelemetry Configuration
+          OTEL_PHP_AUTOLOAD_ENABLED=true
+          PHP_INI_SCAN_DIR=$(pwd)/var/odigos/php/${{ matrix.php-version }}:
+
+          # OpenTelemetry SDK Configuration
+          OTEL_SERVICE_NAME=symfony-app-${{ matrix.php-version }}-${{ matrix.architecture }}
+          OTEL_TRACES_EXPORTER=otlp,console
+          OTEL_METRICS_EXPORTER=none
+          OTEL_LOGS_EXPORTER=none
+
+          # OTLP Exporter Configuration
+          OTEL_EXPORTER_OTLP_ENDPOINT=${{ needs.setup-otel-environment.outputs.collector-endpoint }}
+          OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
+          EOF
+
+      - name: Start Symfony Server
+        run: |
+          cd symfony-app-${{ matrix.php-version }}-${{ matrix.architecture }}
+
+          # Start Symfony server in background
+          php -S localhost:8000 -t public/ &
+          SYMFONY_PID=$!
+          echo $SYMFONY_PID > symfony.pid
+
+          # Wait for server to be ready
+          sleep 5
+
+      - name: Test Application Instrumentation
+        run: |
+          cd symfony-app-${{ matrix.php-version }}-${{ matrix.architecture }}
+
+          # Test that the app starts without crashing
+          echo "Testing application startup..."
+          curl -f http://localhost:8000/test || echo "Server not ready yet"
+
+          # Verify OpenTelemetry extension is loaded
+          echo "Verifying OpenTelemetry extension..."
+          php -m | grep opentelemetry || echo "OpenTelemetry extension not loaded"
+
+          # Check if traces are being generated
+          echo "Checking for trace generation..."
+          sleep 2
+
+          # Make a request to generate a trace
+          curl -s http://localhost:8000/test > /dev/null
+
+          # Wait a bit for trace processing
+          sleep 3
+
+          # Check collector logs for traces
+          docker logs otel-collector --tail 20 | grep -i "trace\|span" || echo "No traces found in collector logs"
+
+      - name: Verify Trace Generation
+        run: |
+          # Check if traces are being received by the collector
+          echo "Verifying trace generation..."
+
+          # Make another request
+          curl -s http://localhost:8000/test > /dev/null
+
+          # Wait for trace processing
+          sleep 5
+
+          # Check collector logs for trace data
+          COLLECTOR_LOGS=$(docker logs otel-collector --tail 50)
+
+          if echo "$COLLECTOR_LOGS" | grep -q "trace\|span\|TraceID\|SpanID"; then
+            echo "✅ Traces detected in collector logs"
+            echo "$COLLECTOR_LOGS" | grep -i "trace\|span" | head -10
+          else
+            echo "❌ No traces found in collector logs"
+            echo "Collector logs:"
+            echo "$COLLECTOR_LOGS"
+            exit 1
+          fi
+
+      - name: Cleanup
+        if: always()
+        run: |
+          cd symfony-app-${{ matrix.php-version }}-${{ matrix.architecture }}
+
+          # Stop Symfony server
+          if [ -f symfony.pid ]; then
+            kill $(cat symfony.pid) || true
+            rm symfony.pid
+          fi
+
+          # Clean up
+          cd ..
+          rm -rf symfony-app-${{ matrix.php-version }}-${{ matrix.architecture }}
+
+  cleanup-environment:
+    needs: [setup-otel-environment, test-symfony-apps]
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Cleanup OpenTelemetry Collector
+        run: |
+          docker stop otel-collector || true
+          docker rm otel-collector || true
