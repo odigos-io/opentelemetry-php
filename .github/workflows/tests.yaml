@@ -160,8 +160,6 @@ jobs:
 
       - name: Configure Environment Variables
         run: |
-          cd ${{ env.SERVICE_NAME }}
-
           # Create .env.local with OpenTelemetry configuration
           cat > .env.local << EOF
           # OpenTelemetry Configuration
@@ -210,6 +208,9 @@ jobs:
               }
           }
           EOF
+
+          # Move env file to the app
+          mv .env.local .env
 
           # Install dependencies
           composer install --no-dev --optimize-autoloader
