@@ -253,7 +253,7 @@ jobs:
         run: |
           echo "Verifying trace generation..."
           COLLECTOR_LOGS=$(docker logs otel-collector 2>&1 || (echo "⚠️ Docker logs failed" && exit 1))
-          SPAN_ATTRIBUTE="\"service.name\": \"${{ env.SERVICE_NAME }}\""
+          SPAN_ATTRIBUTE="-> service.name: Str(${{ env.SERVICE_NAME }})"
 
           if echo "$COLLECTOR_LOGS" | grep -q "$SPAN_ATTRIBUTE"; then
             echo "✅ Traces detected in collector logs"
