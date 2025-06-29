@@ -23,10 +23,6 @@ jobs:
           sudo systemctl start docker || true
           sudo systemctl status docker || echo "Docker status check failed, but continuing..."
 
-          # Clean up any existing containers
-          docker stop otel-collector || true
-          docker rm otel-collector || true
-
       - name: Setup OpenTelemetry Collector
         id: setup
         run: |
@@ -85,14 +81,6 @@ jobs:
           # Set output
           echo "collector-endpoint=http://localhost:$OTEL_COLLECTOR_HTTP_PORT" >> $GITHUB_OUTPUT
 
-      - name: Debug Collector Failure
-        if: failure()
-        run: |
-          echo "Collector container status:"
-          docker ps -a | grep otel-collector || echo "Container not found"
-          echo "Full collector logs:"
-          docker logs otel-collector || echo "Could not fetch logs"
-
       - name: Verify Collector is running
         run: |
           # Check if container is running
@@ -110,19 +98,12 @@ jobs:
           echo "Collector logs:"
           echo "$COLLECTOR_LOGS"
 
-          if echo "$COLLECTOR_LOGS" | grep -i "Everything is ready"; then
-            echo "✅ Found 'Everything is ready' in logs"
+          if echo "$COLLECTOR_LOGS" | grep -q "Starting GRPC server" && echo "$COLLECTOR_LOGS" | grep -q "Starting HTTP server"; then
+            echo "✅ Found GRPC and HTTP servers started"
           else
-            echo "❌ 'Everything is ready' not found in logs"
-            echo "Checking for alternative readiness indicators..."
-
-            # Check for other indicators of readiness
-            if echo "$COLLECTOR_LOGS" | grep -q "Starting GRPC server" && echo "$COLLECTOR_LOGS" | grep -q "Starting HTTP server"; then
-              echo "✅ Found GRPC and HTTP servers started"
-            else
-              echo "❌ Collector is not ready yet"
-              exit 1
-            fi
+            echo "❌ Collector readiness logs not found"
+            echo "$COLLECTOR_LOGS"
+            exit 1
           fi
 
           # Check if ports are listening
@@ -135,6 +116,14 @@ jobs:
 
           echo "✅ Collector is running and ready"
           docker ps | grep otel-collector
+
+      - name: Debug Collector Failure
+        if: failure()
+        run: |
+          echo "Collector container status:"
+          docker ps -a | grep otel-collector || echo "Container not found"
+          echo "Full collector logs:"
+          docker logs otel-collector || echo "Could not fetch logs"
 
   test-symfony-apps:
     needs: setup-otel-environment
