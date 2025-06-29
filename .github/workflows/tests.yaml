@@ -56,7 +56,7 @@ jobs:
           # Set output
           echo "collector-endpoint=http://localhost:$OTEL_COLLECTOR_HTTP_PORT" >> $GITHUB_OUTPUT
 
-      - name: Verify Collector is running & ready
+      - name: Verify OpenTelemetry Collector is running & ready
         run: |
           echo "Checking if collector is running..."
           for i in {1..30}; do
@@ -149,7 +149,7 @@ jobs:
           extensions: mbstring, xml, ctype, iconv, intl, pdo_sqlite, curl, json
           tools: composer:v2
 
-      - name: Create Symfony App
+      - name: Create Application
         run: |
           # Create new Symfony app
           composer create-project symfony/skeleton:"${{ matrix.symfony-version }}" symfony-app-${{ matrix.php-version }}-${{ matrix.architecture }}
@@ -184,13 +184,13 @@ jobs:
           # Install dependencies
           composer install --no-dev --optimize-autoloader
 
-      - name: Setup OpenTelemetry Agent
+      - name: Configure OpenTelemetry Agent
         run: |
           cd symfony-app-${{ matrix.php-version }}-${{ matrix.architecture }}
 
           # Copy agent files to the app
           mkdir -p var/odigos/php/${{ matrix.php-version }}
-          cp -r ../../${{ matrix.php-version }}/* var/odigos/php/${{ matrix.php-version }}/
+          cp -r ${{ matrix.php-version }}/* var/odigos/php/${{ matrix.php-version }}/
 
           # Move the correct architecture binary to the root of the agent directory
           mv var/odigos/php/${{ matrix.php-version }}/bin/${{ matrix.architecture }}/* var/odigos/php/${{ matrix.php-version }}/
@@ -223,7 +223,7 @@ jobs:
           OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
           EOF
 
-      - name: Start Symfony Server
+      - name: Start Application
         run: |
           cd symfony-app-${{ matrix.php-version }}-${{ matrix.architecture }}
 
@@ -273,7 +273,7 @@ jobs:
             echo "$COLLECTOR_LOGS"
           fi
 
-      - name: Cleanup Symfony App
+      - name: Cleanup Application
         if: always()
         run: |
           cd symfony-app-${{ matrix.php-version }}-${{ matrix.architecture }}
