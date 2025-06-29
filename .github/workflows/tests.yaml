@@ -79,7 +79,7 @@ jobs:
     env:
       ARCHITECTURE: 'amd64' # having trouble getting a runner with arm64, so no matrix for 'arch' at the moment
       SERVICE_NAME: 'symfony-app-${{ matrix.php-version }}'
-      SERVICE_TEST_ROUTE: '/test'
+      SERVICE_TEST_ROUTE: 'test'
 
     steps:
       - name: Checkout code
@@ -183,7 +183,7 @@ jobs:
 
           class TestController extends AbstractController
           {
-              #[Route('${{ env.SERVICE_TEST_ROUTE }}', name: 'app_test')]
+              #[Route('/${{ env.SERVICE_TEST_ROUTE }}', name: 'app_test')]
               public function test(): JsonResponse
               {
                   return new JsonResponse([
@@ -234,7 +234,7 @@ jobs:
 
           echo "Generating traffic..."
           for i in {1..30}; do
-            if curl -f http://localhost:8000${{ env.SERVICE_TEST_ROUTE }} > /dev/null 2>&1; then
+            if curl -f http://localhost:8000/${{ env.SERVICE_TEST_ROUTE }} > /dev/null 2>&1; then
               echo "✅ Server is ready, traffic generated"
               break
             fi
