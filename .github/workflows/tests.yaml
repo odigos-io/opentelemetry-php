@@ -1,0 +1,266 @@
+name: OpenTelemetry PHP Agent Tests
+
+on: pull_request
+
+env:
+  OTEL_COLLECTOR_GRPC_PORT: 4317
+  OTEL_COLLECTOR_HTTP_PORT: 4318
+
+jobs:
+  binary-checks:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - php-version: '8.0'
+            architecture: amd64
+          - php-version: '8.0'
+            architecture: arm64
+          - php-version: '8.1'
+            architecture: amd64
+          - php-version: '8.1'
+            architecture: arm64
+          - php-version: '8.2'
+            architecture: amd64
+          - php-version: '8.2'
+            architecture: arm64
+          - php-version: '8.3'
+            architecture: amd64
+          - php-version: '8.3'
+            architecture: arm64
+          - php-version: '8.4'
+            architecture: amd64
+          - php-version: '8.4'
+            architecture: arm64
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Checking binary output
+        run: |
+          BINARY_OUTPUT=$(file ${{ matrix.php-version }}/bin/${{ matrix.architecture }}/opentelemetry.so)
+          echo "Binary output: $BINARY_OUTPUT"
+
+          # Verify architecture matches expected
+          if [[ "${{ matrix.architecture }}" == "amd64" ]]; then
+            if ! echo "$BINARY_OUTPUT" | grep -q "x86-64"; then
+              echo "❌ Expected x86-64 architecture for amd64, but got: $BINARY_OUTPUT"
+              exit 1
+            fi
+          elif [[ "${{ matrix.architecture }}" == "arm64" ]]; then
+            if ! echo "$BINARY_OUTPUT" | grep -q "ARM aarch64"; then
+              echo "❌ Expected ARM aarch64 architecture for arm64, but got: $BINARY_OUTPUT"
+              exit 1
+            fi
+          fi
+
+          echo "✅ Architecture verification passed for PHP ${{ matrix.php-version }} on ${{ matrix.architecture }}"
+
+  e2e-tests:
+    needs: binary-checks
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - php-version: '8.0'
+            php-app: 'symfony/skeleton:"6.0.*"'
+          - php-version: '8.1'
+            php-app: 'symfony/skeleton:"6.4.*"'
+          - php-version: '8.2'
+            php-app: 'symfony/skeleton:"7.3.*"'
+          - php-version: '8.3'
+            php-app: 'symfony/skeleton:"7.3.*"'
+          - php-version: '8.4'
+            php-app: 'symfony/skeleton:"7.3.*"'
+
+    env:
+      ARCHITECTURE: 'amd64' # having trouble getting a runner with arm64, so no matrix for 'arch' at the moment
+      SERVICE_NAME: 'symfony-app-${{ matrix.php-version }}'
+      SERVICE_TEST_ROUTE: '/test'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP ${{ matrix.php-version }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '${{ matrix.php-version }}'
+          tools: composer:v2
+
+      - name: Setup Docker
+        run: |
+          sudo systemctl start docker
+          sudo systemctl status docker || (echo "⚠️ Docker is not running" && exit 1)
+
+      - name: Setup OpenTelemetry Collector
+        run: |
+          cat > collector-config.yaml << 'EOF'
+          receivers:
+            otlp:
+              protocols:
+                grpc:
+                  endpoint: 0.0.0.0:4317
+                http:
+                  endpoint: 0.0.0.0:4318
+          processors:
+            batch:
+          exporters:
+            debug:
+              verbosity: detailed
+          service:
+            pipelines:
+              traces:
+                receivers: [otlp]
+                processors: [batch]
+                exporters: [debug]
+          EOF
+
+      - name: Start OpenTelemetry Collector
+        run: |
+          docker run -d \
+            --name otel-collector \
+            -p 4317:4317 \
+            -p 4318:4318 \
+            -v $(pwd)/collector-config.yaml:/etc/otelcol/config.yaml \
+            otel/opentelemetry-collector:latest \
+            --config /etc/otelcol/config.yaml
+
+      - name: Verify OpenTelemetry Collector is running
+        run: |
+          echo "Checking if collector is running..."
+          for i in {1..30}; do
+            if docker ps | grep -q otel-collector && netstat -tlnp 2>/dev/null | grep -q ":4317\|:4318"; then
+              echo "✅ Collector is running"
+              break
+            fi
+            if [ "$i" = 30 ]; then
+              echo "❌ Collector is not running after 30 attempts"
+              exit 1
+            fi
+            echo "Attempt $i/30: Waiting for collector..."
+            sleep 2
+          done
+
+      - name: Verify OpenTelemetry Collector is ready
+        run: |
+          echo "Checking collector logs for readiness..."
+          for i in {1..30}; do
+            COLLECTOR_LOGS=$(docker logs otel-collector 2>&1 || (echo "⚠️ Docker logs failed" && exit 1))
+            if echo "$COLLECTOR_LOGS" | grep -q "Starting GRPC server" && \
+                echo "$COLLECTOR_LOGS" | grep -q "Starting HTTP server" && \
+                echo "$COLLECTOR_LOGS" | grep -q "Everything is ready"; then
+              echo "✅ Collector is ready"
+              break
+            fi
+            if [ "$i" = 30 ]; then
+              echo "❌ Collector is not ready after 30 attempts"
+              exit 1
+            fi
+            echo "Attempt $i/30: Waiting for readiness..."
+            sleep 2
+          done
+
+      - name: Create Application
+        run: |
+          # Create new Symfony app
+          composer create-project ${{ matrix.php-app }} ${{ env.SERVICE_NAME }}
+          cd ${{ env.SERVICE_NAME }}
+
+          # Add a simple controller for testing
+          mkdir -p src/Controller
+          cat > src/Controller/TestController.php << 'EOF'
+          <?php
+
+          namespace App\Controller;
+
+          use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+          use Symfony\Component\HttpFoundation\JsonResponse;
+          use Symfony\Component\Routing\Annotation\Route;
+
+          class TestController extends AbstractController
+          {
+              #[Route('${{ env.SERVICE_TEST_ROUTE }}', name: 'app_test')]
+              public function test(): JsonResponse
+              {
+                  return new JsonResponse([
+                      'message' => 'Hello from PHP ${{ matrix.php-version }}!',
+                      'timestamp' => time()
+                  ]);
+              }
+          }
+          EOF
+
+          # Install dependencies
+          composer install --no-dev --optimize-autoloader
+
+      - name: Configure Agent
+        run: |
+          # Move architecture files
+          mv ${{ matrix.php-version }}/bin/${{ env.ARCHITECTURE }}/* ${{ matrix.php-version }}/
+          rm -rf ${{ matrix.php-version }}/bin
+
+          # Update paths
+          sed -i "s|/var/odigos/php/${{ matrix.php-version }}|$(pwd)/${{ matrix.php-version }}|g" ${{ matrix.php-version }}/opentelemetry.ini
+          sed -i "s|/var/odigos/php/${{ matrix.php-version }}|$(pwd)/${{ matrix.php-version }}|g" ${{ matrix.php-version }}/preload.php
+
+          # Set environment variables
+          echo "PHP_INI_SCAN_DIR=$(pwd)/${{ matrix.php-version }}" >> $GITHUB_ENV
+          echo "OTEL_PHP_AUTOLOAD_ENABLED=true" >> $GITHUB_ENV
+          echo "OTEL_SERVICE_NAME=${{ env.SERVICE_NAME }}" >> $GITHUB_ENV
+          echo "OTEL_TRACES_EXPORTER=otlp" >> $GITHUB_ENV
+          echo "OTEL_METRICS_EXPORTER=none" >> $GITHUB_ENV
+          echo "OTEL_LOGS_EXPORTER=none" >> $GITHUB_ENV
+          echo "OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:${{ env.OTEL_COLLECTOR_HTTP_PORT }}" >> $GITHUB_ENV
+          echo "OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf" >> $GITHUB_ENV
+
+      - name: Start Application
+        run: |
+          cd ${{ env.SERVICE_NAME }}
+
+          php -S localhost:8000 -t public/ &
+          SYMFONY_PID=$!
+          echo $SYMFONY_PID > symfony.pid
+
+      - name: Generate Traffic
+        run: |
+          cd ${{ env.SERVICE_NAME }}
+
+          echo "Verifying OpenTelemetry extension..."
+          php -m | grep opentelemetry || (echo "⚠️ OpenTelemetry extension not loaded" && exit 1)
+
+          echo "Generating traffic..."
+          for i in {1..30}; do
+            if curl -f http://localhost:8000${{ env.SERVICE_TEST_ROUTE }} > /dev/null 2>&1; then
+              echo "✅ Server is ready, traffic generated"
+              break
+            fi
+            if [ "$i" = 30 ]; then
+              echo "❌ Server is not ready after 30 attempts"
+              exit 1
+            fi
+            echo "Attempt $i/30: Server not ready yet..."
+            sleep 2
+          done
+
+          # Wait a bit for trace processing
+          sleep 5
+
+      - name: Verify Trace Generation
+        run: |
+          echo "Verifying trace generation..."
+          COLLECTOR_LOGS=$(docker logs otel-collector 2>&1 || (echo "⚠️ Docker logs failed" && exit 1))
+          SPAN_ATTRIBUTE="service.name: Str(${{ env.SERVICE_NAME }})"
+
+          if echo "$COLLECTOR_LOGS" | grep -q "$SPAN_ATTRIBUTE"; then
+            echo "✅ Traces detected in collector logs"
+            echo "$COLLECTOR_LOGS" | grep -i "$SPAN_ATTRIBUTE"
+          else
+            echo "❌ No traces found in collector logs"
+            echo "Collector logs:"
+            echo "$COLLECTOR_LOGS"
+            exit 1
+          fi
