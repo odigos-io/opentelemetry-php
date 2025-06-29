@@ -164,16 +164,6 @@ jobs:
             sleep 2
           done
 
-      - name: Configure OpenTelemetry PHP Agent
-        run: |
-          # Move architecture files
-          mv ${{ matrix.php-version }}/bin/${{ env.ARCHITECTURE }}/* ${{ matrix.php-version }}/
-          rm -rf ${{ matrix.php-version }}/bin
-
-          # Update paths
-          sed -i "s|/var/odigos/php/${{ matrix.php-version }}|$(pwd)/${{ matrix.php-version }}|g" ${{ matrix.php-version }}/opentelemetry.ini
-          sed -i "s|/var/odigos/php/${{ matrix.php-version }}|$(pwd)/${{ matrix.php-version }}|g" ${{ matrix.php-version }}/preload.php
-
       - name: Create Application
         run: |
           # Create new Symfony app
@@ -207,10 +197,17 @@ jobs:
           # Install dependencies
           composer install --no-dev --optimize-autoloader
 
-      - name: Start Application
+      - name: Configure PHP Agent
         run: |
-          cd ${{ env.SERVICE_NAME }}
+          # Move architecture files
+          mv ${{ matrix.php-version }}/bin/${{ env.ARCHITECTURE }}/* ${{ matrix.php-version }}/
+          rm -rf ${{ matrix.php-version }}/bin
 
+          # Update paths
+          sed -i "s|/var/odigos/php/${{ matrix.php-version }}|$(pwd)/${{ matrix.php-version }}|g" ${{ matrix.php-version }}/opentelemetry.ini
+          sed -i "s|/var/odigos/php/${{ matrix.php-version }}|$(pwd)/${{ matrix.php-version }}|g" ${{ matrix.php-version }}/preload.php
+
+          # Set environment variables
           echo "PHP_INI_SCAN_DIR=$(pwd)/${{ matrix.php-version }}" >> $GITHUB_ENV
           echo "OTEL_PHP_AUTOLOAD_ENABLED=true" >> $GITHUB_ENV
           echo "OTEL_SERVICE_NAME=${{ env.SERVICE_NAME }}" >> $GITHUB_ENV
@@ -219,6 +216,10 @@ jobs:
           echo "OTEL_LOGS_EXPORTER=none" >> $GITHUB_ENV
           echo "OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:${{ env.OTEL_COLLECTOR_HTTP_PORT }}" >> $GITHUB_ENV
           echo "OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf" >> $GITHUB_ENV
+
+      - name: Start Application
+        run: |
+          cd ${{ env.SERVICE_NAME }}
 
           php -S localhost:8000 -t public/ &
           SYMFONY_PID=$!
