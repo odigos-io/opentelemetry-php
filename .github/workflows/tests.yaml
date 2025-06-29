@@ -142,6 +142,45 @@ jobs:
             sleep 2
           done
 
+      - name: Configure OpenTelemetry PHP Agent
+        run: |
+          cd ${{ env.SERVICE_NAME }}
+
+          # Copy agent files to the app
+          mkdir -p var/odigos/php/${{ matrix.php-version }}
+          cp -r ../${{ matrix.php-version }}/* var/odigos/php/${{ matrix.php-version }}/
+
+          # Move the correct architecture binary to the root of the agent directory
+          mv var/odigos/php/${{ matrix.php-version }}/bin/${{ matrix.architecture }}/* var/odigos/php/${{ matrix.php-version }}/
+          rm -rf var/odigos/php/${{ matrix.php-version }}/bin
+
+          # Update paths in opentelemetry.ini
+          sed -i "s|/var/odigos/php/${{ matrix.php-version }}|$(pwd)/var/odigos/php/${{ matrix.php-version }}|g" var/odigos/php/${{ matrix.php-version }}/opentelemetry.ini
+
+          # Update paths in preload.php
+          sed -i "s|/var/odigos/php/${{ matrix.php-version }}|$(pwd)/var/odigos/php/${{ matrix.php-version }}|g" var/odigos/php/${{ matrix.php-version }}/preload.php
+
+      - name: Configure Environment Variables
+        run: |
+          cd ${{ env.SERVICE_NAME }}
+
+          # Create .env.local with OpenTelemetry configuration
+          cat > .env.local << EOF
+          # OpenTelemetry Configuration
+          OTEL_PHP_AUTOLOAD_ENABLED=true
+          PHP_INI_SCAN_DIR=$(pwd)/var/odigos/php/${{ matrix.php-version }}:
+
+          # OpenTelemetry SDK Configuration
+          OTEL_SERVICE_NAME=${{ env.SERVICE_NAME }}
+          OTEL_TRACES_EXPORTER=console
+          OTEL_METRICS_EXPORTER=none
+          OTEL_LOGS_EXPORTER=none
+
+          # OTLP Exporter Configuration
+          OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:$OTEL_COLLECTOR_HTTP_PORT
+          OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
+          EOF
+
       - name: Create Application
         run: |
           # Create new Symfony app
@@ -177,45 +216,6 @@ jobs:
           # Install dependencies
           composer install --no-dev --optimize-autoloader
 
-      - name: Configure OpenTelemetry Agent
-        run: |
-          cd ${{ env.SERVICE_NAME }}
-
-          # Copy agent files to the app
-          mkdir -p var/odigos/php/${{ matrix.php-version }}
-          cp -r ../${{ matrix.php-version }}/* var/odigos/php/${{ matrix.php-version }}/
-
-          # Move the correct architecture binary to the root of the agent directory
-          mv var/odigos/php/${{ matrix.php-version }}/bin/${{ matrix.architecture }}/* var/odigos/php/${{ matrix.php-version }}/
-          rm -rf var/odigos/php/${{ matrix.php-version }}/bin
-
-          # Update paths in opentelemetry.ini
-          sed -i "s|/var/odigos/php/${{ matrix.php-version }}|$(pwd)/var/odigos/php/${{ matrix.php-version }}|g" var/odigos/php/${{ matrix.php-version }}/opentelemetry.ini
-
-          # Update paths in preload.php
-          sed -i "s|/var/odigos/php/${{ matrix.php-version }}|$(pwd)/var/odigos/php/${{ matrix.php-version }}|g" var/odigos/php/${{ matrix.php-version }}/preload.php
-
-      - name: Configure Environment Variables
-        run: |
-          cd ${{ env.SERVICE_NAME }}
-
-          # Create .env.local with OpenTelemetry configuration
-          cat > .env.local << EOF
-          # OpenTelemetry Configuration
-          OTEL_PHP_AUTOLOAD_ENABLED=true
-          PHP_INI_SCAN_DIR=$(pwd)/var/odigos/php/${{ matrix.php-version }}:
-
-          # OpenTelemetry SDK Configuration
-          OTEL_SERVICE_NAME=${{ env.SERVICE_NAME }}
-          OTEL_TRACES_EXPORTER=otlp,console
-          OTEL_METRICS_EXPORTER=none
-          OTEL_LOGS_EXPORTER=none
-
-          # OTLP Exporter Configuration
-          OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:$OTEL_COLLECTOR_HTTP_PORT
-          OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
-          EOF
-
       - name: Start Application
         run: |
           cd ${{ env.SERVICE_NAME }}
@@ -238,7 +238,7 @@ jobs:
           echo "Generating traffic..."
           for i in {1..30}; do
             if curl -f http://localhost:8000/test > /dev/null 2>&1; then
-              echo "✅ Server is ready and responding"
+              echo "✅ Server is ready, traffic generated"
               break
             fi
             if [ "$i" = 30 ]; then
