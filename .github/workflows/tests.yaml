@@ -66,15 +66,15 @@ jobs:
       matrix:
         include:
           - php-version: '8.0'
-            symfony-version: '6.0.*'
+            php-app: 'symfony/skeleton:"6.0.*"'
           - php-version: '8.1'
-            symfony-version: '6.4.*'
+            php-app: 'symfony/skeleton:"6.4.*"'
           - php-version: '8.2'
-            symfony-version: '7.3.*'
+            php-app: 'symfony/skeleton:"7.3.*"'
           - php-version: '8.3'
-            symfony-version: '7.3.*'
+            php-app: 'symfony/skeleton:"7.3.*"'
           - php-version: '8.4'
-            symfony-version: '7.3.*'
+            php-app: 'symfony/skeleton:"7.3.*"'
 
     env:
       ARCHITECTURE: 'amd64' # having trouble getting a runner with arm64, so no matrix for 'arch' at the moment
@@ -167,7 +167,7 @@ jobs:
       - name: Create Application
         run: |
           # Create new Symfony app
-          composer create-project symfony/skeleton:"${{ matrix.symfony-version }}" ${{ env.SERVICE_NAME }}
+          composer create-project ${{ matrix.php-app }} ${{ env.SERVICE_NAME }}
           cd ${{ env.SERVICE_NAME }}
 
           # Add a simple controller for testing
@@ -253,7 +253,7 @@ jobs:
         run: |
           echo "Verifying trace generation..."
           COLLECTOR_LOGS=$(docker logs otel-collector 2>&1 || (echo "⚠️ Docker logs failed" && exit 1))
-          SPAN_ATTRIBUTE="-> service.name: Str(${{ env.SERVICE_NAME }})"
+          SPAN_ATTRIBUTE="service.name: Str(${{ env.SERVICE_NAME }})"
 
           if echo "$COLLECTOR_LOGS" | grep -q "$SPAN_ATTRIBUTE"; then
             echo "✅ Traces detected in collector logs"
