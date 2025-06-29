@@ -168,7 +168,7 @@ jobs:
 
           # OpenTelemetry SDK Configuration
           OTEL_SERVICE_NAME=${{ env.SERVICE_NAME }}
-          OTEL_TRACES_EXPORTER=console
+          OTEL_TRACES_EXPORTER=otlp,console
           OTEL_METRICS_EXPORTER=none
           OTEL_LOGS_EXPORTER=none
 
@@ -251,19 +251,70 @@ jobs:
           # Wait a bit for trace processing
           sleep 5
 
+      - name: Check PHP Console Output
+        run: |
+          cd ${{ env.SERVICE_NAME }}
+
+          echo "=== Checking PHP Console Output ==="
+          # Check if there are any console output files or logs
+          if [ -f var/log/dev.log ]; then
+            echo "Symfony dev log:"
+            cat var/log/dev.log || echo "No dev log found"
+          fi
+
+          # Check if there are any PHP error logs
+          if [ -f var/log/prod.log ]; then
+            echo "Symfony prod log:"
+            cat var/log/prod.log || echo "No prod log found"
+          fi
+
+          # Check if the OpenTelemetry extension is loaded
+          echo "=== OpenTelemetry Extension Status ==="
+          php -m | grep opentelemetry || echo "OpenTelemetry extension not loaded"
+
+          # Check environment variables
+          echo "=== Environment Variables ==="
+          echo "OTEL_SERVICE_NAME: $OTEL_SERVICE_NAME"
+          echo "OTEL_TRACES_EXPORTER: $OTEL_TRACES_EXPORTER"
+          echo "OTEL_EXPORTER_OTLP_ENDPOINT: $OTEL_EXPORTER_OTLP_ENDPOINT"
+          echo "PHP_INI_SCAN_DIR: $PHP_INI_SCAN_DIR"
+
       - name: Verify Trace Generation
         run: |
           echo "Verifying trace generation..."
+
           COLLECTOR_LOGS=$(docker logs otel-collector 2>&1 || echo "⚠️ Docker logs failed")
           SPAN_ATTRIBUTE="\"service.name\": \"${{ env.SERVICE_NAME }}\""
+
+          echo "=== Collector Logs ==="
+          echo "$COLLECTOR_LOGS"
+          echo "======================"
 
           if echo "$COLLECTOR_LOGS" | grep -q "$SPAN_ATTRIBUTE"; then
             echo "✅ Traces detected in collector logs"
             echo "$COLLECTOR_LOGS" | grep -i "$SPAN_ATTRIBUTE"
           else
             echo "❌ No traces found in collector logs"
-            echo "Collector logs:"
-            echo "$COLLECTOR_LOGS"
+
+            if echo "$COLLECTOR_LOGS" | grep -i "trace\|span\|otel" > /dev/null; then
+              echo "⚠️ Found some trace-related logs but not the expected service name:"
+              echo "$COLLECTOR_LOGS" | grep -i "trace\|span\|otel"
+            fi
+
+            if echo "$COLLECTOR_LOGS" | grep -i "received\|exported\|processed" > /dev/null; then
+              echo "⚠️ Collector shows some data processing:"
+              echo "$COLLECTOR_LOGS" | grep -i "received\|exported\|processed"
+            fi
+
+            echo "=== Debugging Information ==="
+            echo "Service name being looked for: ${{ env.SERVICE_NAME }}"
+
+            if curl -f http://localhost:8000/test > /dev/null 2>&1; then
+              echo "✅ Application is still responding"
+            else
+              echo "❌ Application is not responding"
+            fi
+
             exit 1
           fi
 
