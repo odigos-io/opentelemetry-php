@@ -67,62 +67,34 @@ jobs:
         run: |
           echo "Checking if collector is running..."
           for i in {1..30}; do
-            isOk=true
-
-            if ! docker ps | grep -q otel-collector; then
-              echo "❌ Collector container is not running"
-              isOk=false
-            fi
-            if ! netstat -tlnp 2>/dev/null | grep -q ":4317\|:4318"; then
-              echo "❌ Collector ports are not listening"
-              isOk=false
-            fi
-
-            if [ "$isOk" = true ]; then
+            if docker ps | grep -q otel-collector && netstat -tlnp 2>/dev/null | grep -q ":4317\|:4318"; then
               echo "✅ Collector is running"
               break
-            else
-              if [ "$i" = 30 ]; then
-                echo "❌ Collector is not running after 30 attempts"
-                exit 1
-              fi
             fi
-
+            if [ "$i" = 30 ]; then
+              echo "❌ Collector is not running after 30 attempts"
+              exit 1
+            fi
             echo "Attempt $i/30: Waiting for collector..."
             sleep 2
           done
 
           echo "Checking collector logs for readiness..."
-
           for i in {1..30}; do
-            isOk=true
-
-            COLLECTOR_LOGS=$(docker logs otel-collector || echo "⚠️ Docker logs failed")
-            echo "Collector logs:"
-            echo "$COLLECTOR_LOGS"
-
+            COLLECTOR_LOGS=$(docker logs otel-collector 2>&1 || echo "⚠️ Docker logs failed")
             if echo "$COLLECTOR_LOGS" | grep -q "Starting GRPC server" && \
-              echo "$COLLECTOR_LOGS" | grep -q "Starting HTTP server" && \
-              echo "$COLLECTOR_LOGS" | grep -q "Everything is ready"; then
-              echo "✅ Collector readiness logs found"
-              docker ps | grep otel-collector
-              isOk=true
-            else
-              echo "❌ Collector readiness logs not found"
-              echo "$COLLECTOR_LOGS"
-              isOk=false
-            fi
-
-            if [ "$isOk" = true ]; then
+                echo "$COLLECTOR_LOGS" | grep -q "Starting HTTP server" && \
+                echo "$COLLECTOR_LOGS" | grep -q "Everything is ready"; then
+              echo "✅ Collector is ready"
               break
-            else
-              if [ "$i" = 30 ]; then
-                echo "❌ Collector is not ready after 30 attempts"
-                exit 1
-              fi
             fi
-
-            echo "Attempt $i/30: Waiting for logs..."
+            if [ "$i" = 30 ]; then
+              echo "❌ Collector is not ready after 30 attempts"
+              echo "Final logs:"
+              echo "$COLLECTOR_LOGS"
+              exit 1
+            fi
+            echo "Attempt $i/30: Waiting for readiness..."
             sleep 2
           done
 
