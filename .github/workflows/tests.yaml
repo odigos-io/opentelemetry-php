@@ -160,7 +160,7 @@ jobs:
           echo "OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:${{ env.OTEL_COLLECTOR_HTTP_PORT }}" >> $GITHUB_ENV
           echo "OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf" >> $GITHUB_ENV
 
-      - name: Create & Start Application
+      - name: Create Application
         run: |
           # Create new Symfony app
           composer create-project symfony/skeleton:"${{ matrix.symfony-version }}" ${{ env.SERVICE_NAME }}
@@ -195,12 +195,6 @@ jobs:
           # Install dependencies
           composer install --no-dev --optimize-autoloader
 
-          # Start the application
-          cd ${{ env.SERVICE_NAME }}
-          php -S localhost:8000 -t public/ &
-          SYMFONY_PID=$!
-          echo $SYMFONY_PID > symfony.pid
-
       - name: PHP Preflight Checks
         run: |
           cd ${{ env.SERVICE_NAME }}
@@ -212,6 +206,14 @@ jobs:
           echo "=== Agent Files ==="
           ls -la
           cat opentelemetry.ini
+
+      - name: Start Application
+        run: |
+          cd ${{ env.SERVICE_NAME }}
+
+          php -S localhost:8000 -t public/ &
+          SYMFONY_PID=$!
+          echo $SYMFONY_PID > symfony.pid
 
       - name: Generate Traffic
         run: |
