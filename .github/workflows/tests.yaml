@@ -98,44 +98,44 @@ jobs:
       matrix:
         include:
           - php-version: 8.0
-            symfony-version: '6.4.*'
             architecture: amd64
+            symfony-version: '6.4.*'
             runner: ubuntu-latest
           - php-version: 8.0
-            symfony-version: '6.4.*'
             architecture: arm64
+            symfony-version: '6.4.*'
             runner: ubuntu-latest
           - php-version: 8.1
-            symfony-version: '6.4.*'
             architecture: amd64
+            symfony-version: '6.4.*'
             runner: ubuntu-latest
           - php-version: 8.1
+            architecture: arm64
             symfony-version: '6.4.*'
-            architecture: arm64
             runner: ubuntu-latest
           - php-version: 8.2
-            symfony-version: '7.0.*'
             architecture: amd64
+            symfony-version: '7.0.*'
             runner: ubuntu-latest
           - php-version: 8.2
-            symfony-version: '7.0.*'
             architecture: arm64
+            symfony-version: '7.0.*'
             runner: ubuntu-latest
           - php-version: 8.3
-            symfony-version: '7.0.*'
             architecture: amd64
+            symfony-version: '7.0.*'
             runner: ubuntu-latest
           - php-version: 8.3
-            symfony-version: '7.0.*'
             architecture: arm64
+            symfony-version: '7.0.*'
             runner: ubuntu-latest
           - php-version: 8.4
-            symfony-version: '7.0.*'
             architecture: amd64
+            symfony-version: '7.0.*'
             runner: ubuntu-latest
           - php-version: 8.4
-            symfony-version: '7.0.*'
             architecture: arm64
+            symfony-version: '7.0.*'
             runner: ubuntu-latest
 
     steps:
@@ -148,6 +148,13 @@ jobs:
           php-version: ${{ matrix.php-version }}
           extensions: mbstring, xml, ctype, iconv, intl, pdo_sqlite, curl, json
           tools: composer:v2
+
+      - name: Debug agent source path
+        run: |
+          echo "Contents of current dir:"
+          pwd && ls -alh
+          echo "Contents of ../../${{ matrix.php-version }}:"
+          ls -alh ../../${{ matrix.php-version }} || echo "❌ Directory not found"
 
       - name: Create Application
         run: |
@@ -183,13 +190,6 @@ jobs:
 
           # Install dependencies
           composer install --no-dev --optimize-autoloader
-
-      - name: Debug agent source path
-        run: |
-          echo "Contents of current dir:"
-          pwd && ls -alh
-          echo "Contents of ../../${{ matrix.php-version }}:"
-          ls -alh ../../${{ matrix.php-version }} || echo "❌ Directory not found"
 
       - name: Configure OpenTelemetry Agent
         run: |
