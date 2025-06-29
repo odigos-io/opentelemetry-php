@@ -71,11 +71,10 @@ jobs:
       - name: Setup Docker
         run: |
           sudo systemctl start docker
-          sudo systemctl status docker || exit 1
+          sudo systemctl status docker || echo "⚠️ Docker is not running" && exit 1
 
       - name: Setup OpenTelemetry Collector
         run: |
-          # Create collector config
           cat > collector-config.yaml << 'EOF'
           receivers:
             otlp:
@@ -127,7 +126,7 @@ jobs:
         run: |
           echo "Checking collector logs for readiness..."
           for i in {1..30}; do
-            COLLECTOR_LOGS=$(docker logs otel-collector 2>&1 || echo "⚠️ Docker logs failed")
+            COLLECTOR_LOGS=$(docker logs otel-collector 2>&1 || echo "⚠️ Docker logs failed" && exit 1)
             if echo "$COLLECTOR_LOGS" | grep -q "Starting GRPC server" && \
                 echo "$COLLECTOR_LOGS" | grep -q "Starting HTTP server" && \
                 echo "$COLLECTOR_LOGS" | grep -q "Everything is ready"; then
@@ -215,7 +214,7 @@ jobs:
           cd ${{ env.SERVICE_NAME }}
 
           echo "Verifying OpenTelemetry extension..."
-          php -m | grep opentelemetry || echo "OpenTelemetry extension not loaded"
+          php -m | grep opentelemetry || echo "⚠️ OpenTelemetry extension not loaded" && exit 1
 
           echo "Generating traffic..."
           for i in {1..30}; do
@@ -237,7 +236,7 @@ jobs:
       - name: Verify Trace Generation
         run: |
           echo "Verifying trace generation..."
-          COLLECTOR_LOGS=$(docker logs otel-collector 2>&1 || echo "⚠️ Docker logs failed")
+          COLLECTOR_LOGS=$(docker logs otel-collector 2>&1 || echo "⚠️ Docker logs failed" && exit 1)
           SPAN_ATTRIBUTE="\"service.name\": \"${{ env.SERVICE_NAME }}\""
 
           if echo "$COLLECTOR_LOGS" | grep -q "$SPAN_ATTRIBUTE"; then
@@ -264,7 +263,6 @@ jobs:
 
           # Cleanup app
           cd .. && rm -rf ${{ env.SERVICE_NAME }}
-
 
           echo "Cleaning up OpenTelemetry Collector..."
 
