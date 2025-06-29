@@ -14,28 +14,24 @@ jobs:
       matrix:
         include:
           - php-version: '8.0'
-            architecture: amd64
             symfony-version: '6.0.*'
             runner: ubuntu-latest
           - php-version: '8.1'
-            architecture: amd64
             symfony-version: '6.4.*'
             runner: ubuntu-latest
           - php-version: '8.2'
-            architecture: amd64
             symfony-version: '7.3.*'
             runner: ubuntu-latest
           - php-version: '8.3'
-            architecture: amd64
             symfony-version: '7.3.*'
             runner: ubuntu-latest
           - php-version: '8.4'
-            architecture: amd64
             symfony-version: '7.3.*'
             runner: ubuntu-latest
 
     env:
-      SERVICE_NAME: 'symfony-app-${{ matrix.php-version }}-${{ matrix.architecture }}'
+      ARCHITECTURE: 'amd64' # having trouble getting a runner with arm64, so no matrix for arch at the moment
+      SERVICE_NAME: 'symfony-app-${{ matrix.php-version }}'
 
     steps:
       - name: Checkout code
@@ -124,7 +120,7 @@ jobs:
       - name: Configure OpenTelemetry PHP Agent
         run: |
           # Move architecture files
-          mv ${{ matrix.php-version }}/bin/${{ matrix.architecture }}/* ${{ matrix.php-version }}/
+          mv ${{ matrix.php-version }}/bin/${{ env.ARCHITECTURE }}/* ${{ matrix.php-version }}/
           rm -rf ${{ matrix.php-version }}/bin
 
           # Update paths
@@ -174,9 +170,7 @@ jobs:
               public function test(): JsonResponse
               {
                   return new JsonResponse([
-                      'message' => 'Hello from Symfony!',
-                      'php_version' => PHP_VERSION,
-                      'architecture' => '${{ matrix.architecture }}',
+                      'message' => 'Hello from PHP ${{ matrix.php-version }}!',
                       'timestamp' => time()
                   ]);
               }
