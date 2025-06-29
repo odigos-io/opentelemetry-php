@@ -53,6 +53,9 @@ jobs:
             symfony-version: '7.3.*'
             runner: ubuntu-latest
 
+    env:
+      SERVICE_NAME: 'symfony-app-${{ matrix.php-version }}-${{ matrix.architecture }}'
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -141,8 +144,8 @@ jobs:
       - name: Create Application
         run: |
           # Create new Symfony app
-          composer create-project symfony/skeleton:"${{ matrix.symfony-version }}" symfony-app-${{ matrix.php-version }}-${{ matrix.architecture }}
-          cd symfony-app-${{ matrix.php-version }}-${{ matrix.architecture }}
+          composer create-project symfony/skeleton:"${{ matrix.symfony-version }}" ${{ env.SERVICE_NAME }}
+          cd ${{ env.SERVICE_NAME }}
 
           # Add a simple controller for testing
           mkdir -p src/Controller
@@ -175,7 +178,7 @@ jobs:
 
       - name: Configure OpenTelemetry Agent
         run: |
-          cd symfony-app-${{ matrix.php-version }}-${{ matrix.architecture }}
+          cd ${{ env.SERVICE_NAME }}
 
           # Copy agent files to the app
           mkdir -p var/odigos/php/${{ matrix.php-version }}
@@ -193,7 +196,7 @@ jobs:
 
       - name: Configure Environment Variables
         run: |
-          cd symfony-app-${{ matrix.php-version }}-${{ matrix.architecture }}
+          cd ${{ env.SERVICE_NAME }}
 
           # Create .env.local with OpenTelemetry configuration
           cat > .env.local << EOF
@@ -202,7 +205,7 @@ jobs:
           PHP_INI_SCAN_DIR=$(pwd)/var/odigos/php/${{ matrix.php-version }}:
 
           # OpenTelemetry SDK Configuration
-          OTEL_SERVICE_NAME=symfony-app-${{ matrix.php-version }}-${{ matrix.architecture }}
+          OTEL_SERVICE_NAME=${{ env.SERVICE_NAME }}
           OTEL_TRACES_EXPORTER=otlp,console
           OTEL_METRICS_EXPORTER=none
           OTEL_LOGS_EXPORTER=none
@@ -214,7 +217,7 @@ jobs:
 
       - name: Start Application
         run: |
-          cd symfony-app-${{ matrix.php-version }}-${{ matrix.architecture }}
+          cd ${{ env.SERVICE_NAME }}
 
           # Start Symfony server in background
           php -S localhost:8000 -t public/ &
@@ -226,7 +229,7 @@ jobs:
 
       - name: Generate Traffic
         run: |
-          cd symfony-app-${{ matrix.php-version }}-${{ matrix.architecture }}
+          cd ${{ env.SERVICE_NAME }}
 
           echo "Verifying OpenTelemetry extension..."
           php -m | grep opentelemetry || echo "OpenTelemetry extension not loaded"
@@ -252,10 +255,11 @@ jobs:
         run: |
           echo "Verifying trace generation..."
           COLLECTOR_LOGS=$(docker logs otel-collector 2>&1 || echo "⚠️ Docker logs failed")
+          SPAN_ATTRIBUTE="\"service.name\": \"${{ env.SERVICE_NAME }}\""
 
-          if echo "$COLLECTOR_LOGS" | grep -q "trace\|span\|TraceID\|SpanID"; then
+          if echo "$COLLECTOR_LOGS" | grep -q "$SPAN_ATTRIBUTE"; then
             echo "✅ Traces detected in collector logs"
-            echo "$COLLECTOR_LOGS" | grep -i "trace\|span\|TraceID\|SpanID"
+            echo "$COLLECTOR_LOGS" | grep -i "$SPAN_ATTRIBUTE"
           else
             echo "❌ No traces found in collector logs"
             echo "Collector logs:"
@@ -267,7 +271,7 @@ jobs:
         if: always()
         run: |
           echo "Cleaning up Application..."
-          cd symfony-app-${{ matrix.php-version }}-${{ matrix.architecture }}
+          cd ${{ env.SERVICE_NAME }}
 
           # Stop app
           if [ -f symfony.pid ]; then
@@ -276,7 +280,7 @@ jobs:
           fi
 
           # Cleanup app
-          cd .. && rm -rf symfony-app-${{ matrix.php-version }}-${{ matrix.architecture }}
+          cd .. && rm -rf ${{ env.SERVICE_NAME }}
 
 
           echo "Cleaning up OpenTelemetry Collector..."
