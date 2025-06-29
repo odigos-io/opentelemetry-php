@@ -255,7 +255,7 @@ jobs:
 
           if echo "$COLLECTOR_LOGS" | grep -q "trace\|span\|TraceID\|SpanID"; then
             echo "✅ Traces detected in collector logs"
-            echo "$COLLECTOR_LOGS" | grep -i "trace\|span" | head -10
+            echo "$COLLECTOR_LOGS" | grep -i "trace\|span\|TraceID\|SpanID"
           else
             echo "❌ No traces found in collector logs"
             echo "Collector logs:"
