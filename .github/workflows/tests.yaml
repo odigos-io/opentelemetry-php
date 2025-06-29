@@ -210,7 +210,7 @@ jobs:
           EOF
 
           # Move env file to the app
-          mv .env.local .env
+          mv ../.env.local .env
 
           # Install dependencies
           composer install --no-dev --optimize-autoloader
