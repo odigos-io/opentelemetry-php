@@ -144,8 +144,8 @@ jobs:
       - name: Configure OpenTelemetry PHP Agent
         run: |
           # Move architecture files
-          mv /var/odigos/php/${{ matrix.php-version }}/bin/${{ matrix.architecture }}/* /var/odigos/php/${{ matrix.php-version }}/
-          rm -rf /var/odigos/php/${{ matrix.php-version }}/bin
+          mv ${{ matrix.php-version }}/bin/${{ matrix.architecture }}/* ${{ matrix.php-version }}/
+          rm -rf ${{ matrix.php-version }}/bin
 
           # Update paths
           sed -i "s|/var/odigos/php/${{ matrix.php-version }}|$(pwd)/${{ matrix.php-version }}|g" /var/odigos/php/${{ matrix.php-version }}/opentelemetry.ini
