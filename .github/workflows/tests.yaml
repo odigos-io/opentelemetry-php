@@ -79,6 +79,7 @@ jobs:
     env:
       ARCHITECTURE: 'amd64' # having trouble getting a runner with arm64, so no matrix for 'arch' at the moment
       SERVICE_NAME: 'symfony-app-${{ matrix.php-version }}'
+      SERVICE_TEST_ROUTE: '/test'
 
     steps:
       - name: Checkout code
@@ -183,7 +184,7 @@ jobs:
 
           class TestController extends AbstractController
           {
-              #[Route('/test', name: 'app_test')]
+              #[Route('${{ env.SERVICE_TEST_ROUTE }}', name: 'app_test')]
               public function test(): JsonResponse
               {
                   return new JsonResponse([
@@ -197,7 +198,7 @@ jobs:
           # Install dependencies
           composer install --no-dev --optimize-autoloader
 
-      - name: Configure PHP Agent
+      - name: Configure Agent
         run: |
           # Move architecture files
           mv ${{ matrix.php-version }}/bin/${{ env.ARCHITECTURE }}/* ${{ matrix.php-version }}/
@@ -234,7 +235,7 @@ jobs:
 
           echo "Generating traffic..."
           for i in {1..30}; do
-            if curl -f http://localhost:8000/test > /dev/null 2>&1; then
+            if curl -f http://localhost:8000${{ env.SERVICE_TEST_ROUTE }} > /dev/null 2>&1; then
               echo "✅ Server is ready, traffic generated"
               break
             fi
@@ -264,30 +265,3 @@ jobs:
             echo "$COLLECTOR_LOGS"
             exit 1
           fi
-
-      - name: Cleanup
-        if: always()
-        run: |
-          echo "Cleaning up Application..."
-          cd ${{ env.SERVICE_NAME }}
-
-          # Stop app
-          if [ -f symfony.pid ]; then
-            kill $(cat symfony.pid) || true
-            rm symfony.pid
-          fi
-
-          # Cleanup app
-          cd .. && rm -rf ${{ env.SERVICE_NAME }}
-
-          echo "Cleaning up OpenTelemetry Collector..."
-
-          # Stop and remove the container
-          docker stop otel-collector || echo "Container was not running or already stopped"
-          docker rm otel-collector || echo "Container was not found or already removed"
-
-          # Clean up any dangling containers or images
-          docker container prune -f || echo "No containers to prune"
-          docker image prune -f || echo "No images to prune"
-
-          echo "✅ Cleanup completed"
