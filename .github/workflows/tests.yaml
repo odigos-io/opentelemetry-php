@@ -1,10 +1,6 @@
 name: OpenTelemetry PHP Agent Tests
 
-on:
-  pull_request:
-    branches: ['**']
-  push:
-    branches: ['main']
+on: pull_request
 
 env:
   OTEL_COLLECTOR_GRPC_PORT: 4317
