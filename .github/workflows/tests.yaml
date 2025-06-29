@@ -58,9 +58,6 @@ jobs:
           # Create logs directory
           mkdir -p files
 
-          # Create initial log file
-          touch files/otel.log
-
           # Start collector in background with log file mounting
           docker run -d \
             --name otel-collector \
@@ -79,15 +76,7 @@ jobs:
             if docker ps | grep -q otel-collector; then
               echo "Container is running, checking health..."
 
-              # Try to get logs from file first, fallback to docker logs if needed
-              if [ -f files/otel.log ] && [ -s files/otel.log ]; then
-                COLLECTOR_LOGS=$(cat files/otel.log)
-              else
-                # Fallback to docker logs if file is empty or doesn't exist
-                COLLECTOR_LOGS=$(docker logs otel-collector 2>/dev/null || echo "")
-                # Write to our log file for consistency
-                echo "$COLLECTOR_LOGS" > files/otel.log
-              fi
+              COLLECTOR_LOGS=$(docker logs otel-collector 2>/dev/null || echo "")
 
               if echo "$COLLECTOR_LOGS" | grep -i "Everything is ready" || \
                 (echo "$COLLECTOR_LOGS" | grep -q "Starting GRPC server" && echo "$COLLECTOR_LOGS" | grep -q "Starting HTTP server"); then
@@ -108,26 +97,14 @@ jobs:
           if ! docker ps | grep -q otel-collector; then
             echo "❌ Collector container is not running"
             echo "Container logs:"
-            if [ -f files/otel.log ] && [ -s files/otel.log ]; then
-              cat files/otel.log || echo "No logs available"
-            else
-              # Fallback to docker logs
-              docker logs otel-collector 2>/dev/null || echo "No logs available"
-            fi
+            COLLECTOR_LOGS=$(docker logs otel-collector 2>/dev/null || echo "")
+            echo "$COLLECTOR_LOGS" || echo "No logs available"
             exit 1
           fi
 
           echo "Container is running, checking logs for readiness..."
 
-          # Check if container is healthy by looking for "Everything is ready" in logs
-          if [ -f files/otel.log ] && [ -s files/otel.log ]; then
-            COLLECTOR_LOGS=$(cat files/otel.log)
-          else
-            # Fallback to docker logs
-            COLLECTOR_LOGS=$(docker logs otel-collector 2>/dev/null || echo "")
-            # Write to our log file for consistency
-            echo "$COLLECTOR_LOGS" > files/otel.log
-          fi
+          COLLECTOR_LOGS=$(docker logs otel-collector 2>/dev/null || echo "")
 
           echo "Collector logs:"
           echo "$COLLECTOR_LOGS"
@@ -151,25 +128,12 @@ jobs:
           if ! netstat -tlnp 2>/dev/null | grep -q ":4317\|:4318"; then
             echo "❌ Collector ports are not listening"
             echo "Container logs:"
-            if [ -f files/otel.log ] && [ -s files/otel.log ]; then
-              tail -20 files/otel.log
-            else
-              # Fallback to docker logs
-              docker logs otel-collector --tail 20 2>/dev/null || echo "No log file available"
-            fi
+            docker logs otel-collector --tail 20 2>/dev/null || echo "No log file available"
             exit 1
           fi
 
           echo "✅ Collector is running and ready"
           docker ps | grep otel-collector
-
-      - name: Upload Collector Logs
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: files-${{ github.run_id }}
-          path: files/
-          retention-days: 1
 
   test-symfony-apps:
     needs: setup-otel-environment
@@ -338,12 +302,8 @@ jobs:
           sleep 3
 
           # Check collector logs for traces (with error handling)
-          if [ -f ../../files/otel.log ] && [ -s ../../files/otel.log ]; then
-            tail -20 ../../files/otel.log | grep -i "trace\|span" || echo "No traces found in collector logs"
-          else
-            # Fallback to docker logs
-            docker logs otel-collector --tail 20 2>/dev/null | grep -i "trace\|span" || echo "No traces found in collector logs"
-          fi
+          COLLECTOR_LOGS=$(docker logs otel-collector --tail 50 2>/dev/null || echo "")
+          echo "$COLLECTOR_LOGS" | grep -i "trace\|span" || echo "No traces found in collector logs"
 
       - name: Verify Trace Generation
         run: |
@@ -357,12 +317,7 @@ jobs:
           sleep 5
 
           # Check collector logs for trace data (with error handling)
-          if [ -f ../../files/otel.log ] && [ -s ../../files/otel.log ]; then
-            COLLECTOR_LOGS=$(tail -50 ../../files/otel.log)
-          else
-            # Fallback to docker logs
-            COLLECTOR_LOGS=$(docker logs otel-collector --tail 50 2>/dev/null || echo "")
-          fi
+          COLLECTOR_LOGS=$(docker logs otel-collector --tail 50 2>/dev/null || echo "")
 
           if echo "$COLLECTOR_LOGS" | grep -q "trace\|span\|TraceID\|SpanID"; then
             echo "✅ Traces detected in collector logs"
@@ -401,9 +356,6 @@ jobs:
           # Stop and remove the container
           docker stop otel-collector || echo "Container was not running or already stopped"
           docker rm otel-collector || echo "Container was not found or already removed"
-
-          # Clean up log files
-          rm -rf files || echo "No log files to clean up"
 
           # Clean up any dangling containers or images
           docker container prune -f || echo "No containers to prune"
