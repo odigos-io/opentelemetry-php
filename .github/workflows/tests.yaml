@@ -1,4 +1,4 @@
-name: OpenTelemetry PHP Agent E2E Tests
+name: OpenTelemetry PHP Agent Tests
 
 on: pull_request
 
@@ -7,30 +7,76 @@ env:
   OTEL_COLLECTOR_HTTP_PORT: 4318
 
 jobs:
+  binary-checks:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - php-version: '8.0'
+            architecture: amd64
+          - php-version: '8.0'
+            architecture: arm64
+          - php-version: '8.1'
+            architecture: amd64
+          - php-version: '8.1'
+            architecture: arm64
+          - php-version: '8.2'
+            architecture: amd64
+          - php-version: '8.2'
+            architecture: arm64
+          - php-version: '8.3'
+            architecture: amd64
+          - php-version: '8.3'
+            architecture: arm64
+          - php-version: '8.4'
+            architecture: amd64
+          - php-version: '8.4'
+            architecture: arm64
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Checking binary output
+        run: |
+          BINARY_OUTPUT=$(file ${{ matrix.php-version }}/bin/${{ matrix.architecture }}/opentelemetry.so)
+          echo "Binary output: $BINARY_OUTPUT"
+
+          # Verify architecture matches expected
+          if [[ "${{ matrix.architecture }}" == "amd64" ]]; then
+            if ! echo "$BINARY_OUTPUT" | grep -q "x86-64"; then
+              echo "❌ Expected x86-64 architecture for amd64, but got: $BINARY_OUTPUT"
+              exit 1
+            fi
+          elif [[ "${{ matrix.architecture }}" == "arm64" ]]; then
+            if ! echo "$BINARY_OUTPUT" | grep -q "ARM aarch64"; then
+              echo "❌ Expected ARM aarch64 architecture for arm64, but got: $BINARY_OUTPUT"
+              exit 1
+            fi
+          fi
+
+          echo "✅ Architecture verification passed for PHP ${{ matrix.php-version }} on ${{ matrix.architecture }}"
+
   e2e-tests:
-    runs-on: ${{ matrix.runner }}
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         include:
           - php-version: '8.0'
             symfony-version: '6.0.*'
-            runner: ubuntu-latest
           - php-version: '8.1'
             symfony-version: '6.4.*'
-            runner: ubuntu-latest
           - php-version: '8.2'
             symfony-version: '7.3.*'
-            runner: ubuntu-latest
           - php-version: '8.3'
             symfony-version: '7.3.*'
-            runner: ubuntu-latest
           - php-version: '8.4'
             symfony-version: '7.3.*'
-            runner: ubuntu-latest
 
     env:
-      ARCHITECTURE: 'amd64' # having trouble getting a runner with arm64, so no matrix for arch at the moment
+      ARCHITECTURE: 'amd64' # having trouble getting a runner with arm64, so no matrix for 'arch' at the moment
       SERVICE_NAME: 'symfony-app-${{ matrix.php-version }}'
 
     steps:
