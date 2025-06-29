@@ -1,98 +1,13 @@
-name: OpenTelemetry PHP Agent Tests
+name: OpenTelemetry PHP Agent E2E Tests
 
-on:
-  pull_request:
-    branches: [main]
+on: pull_request
 
 env:
   OTEL_COLLECTOR_GRPC_PORT: 4317
   OTEL_COLLECTOR_HTTP_PORT: 4318
 
 jobs:
-  setup-otel-environment:
-    runs-on: ubuntu-latest
-    outputs:
-      collector-endpoint: ${{ steps.setup.outputs.collector-endpoint }}
-    steps:
-      - name: Setup Docker
-        run: |
-          sudo systemctl start docker
-          sudo systemctl status docker || exit 1
-
-      - name: Setup OpenTelemetry Collector
-        id: setup
-        run: |
-          # Create collector config
-          cat > collector-config.yaml << 'EOF'
-          receivers:
-            otlp:
-              protocols:
-                grpc:
-                  endpoint: 0.0.0.0:4317
-                http:
-                  endpoint: 0.0.0.0:4318
-          processors:
-            batch:
-          exporters:
-            debug:
-              verbosity: detailed
-          service:
-            pipelines:
-              traces:
-                receivers: [otlp]
-                processors: [batch]
-                exporters: [debug]
-          EOF
-
-          # Start collector in background with log file mounting
-          docker run -d \
-            --name otel-collector \
-            -p 4317:4317 \
-            -p 4318:4318 \
-            -v $(pwd)/collector-config.yaml:/etc/otelcol/config.yaml \
-            otel/opentelemetry-collector:latest \
-            --config /etc/otelcol/config.yaml
-
-          # Set output
-          echo "collector-endpoint=http://localhost:$OTEL_COLLECTOR_HTTP_PORT" >> $GITHUB_OUTPUT
-
-      - name: Verify OpenTelemetry Collector is running & ready
-        run: |
-          echo "Checking if collector is running..."
-          for i in {1..30}; do
-            if docker ps | grep -q otel-collector && netstat -tlnp 2>/dev/null | grep -q ":4317\|:4318"; then
-              echo "✅ Collector is running"
-              break
-            fi
-            if [ "$i" = 30 ]; then
-              echo "❌ Collector is not running after 30 attempts"
-              exit 1
-            fi
-            echo "Attempt $i/30: Waiting for collector..."
-            sleep 2
-          done
-
-          echo "Checking collector logs for readiness..."
-          for i in {1..30}; do
-            COLLECTOR_LOGS=$(docker logs otel-collector 2>&1 || echo "⚠️ Docker logs failed")
-            if echo "$COLLECTOR_LOGS" | grep -q "Starting GRPC server" && \
-                echo "$COLLECTOR_LOGS" | grep -q "Starting HTTP server" && \
-                echo "$COLLECTOR_LOGS" | grep -q "Everything is ready"; then
-              echo "✅ Collector is ready"
-              break
-            fi
-            if [ "$i" = 30 ]; then
-              echo "❌ Collector is not ready after 30 attempts"
-              echo "Final logs:"
-              echo "$COLLECTOR_LOGS"
-              exit 1
-            fi
-            echo "Attempt $i/30: Waiting for readiness..."
-            sleep 2
-          done
-
-  test-symfony-apps:
-    needs: setup-otel-environment
+  e2e-tests:
     runs-on: ${{ matrix.runner }}
     strategy:
       matrix:
@@ -148,6 +63,80 @@ jobs:
           php-version: '${{ matrix.php-version }}'
           extensions: mbstring, xml, ctype, iconv, intl, pdo_sqlite, curl, json
           tools: composer:v2
+
+      - name: Setup Docker
+        run: |
+          sudo systemctl start docker
+          sudo systemctl status docker || exit 1
+
+      - name: Setup OpenTelemetry Collector
+        run: |
+          # Create collector config
+          cat > collector-config.yaml << 'EOF'
+          receivers:
+            otlp:
+              protocols:
+                grpc:
+                  endpoint: 0.0.0.0:4317
+                http:
+                  endpoint: 0.0.0.0:4318
+          processors:
+            batch:
+          exporters:
+            debug:
+              verbosity: detailed
+          service:
+            pipelines:
+              traces:
+                receivers: [otlp]
+                processors: [batch]
+                exporters: [debug]
+          EOF
+
+      - name: Start OpenTelemetry Collector
+        run: |
+          docker run -d \
+            --name otel-collector \
+            -p 4317:4317 \
+            -p 4318:4318 \
+            -v $(pwd)/collector-config.yaml:/etc/otelcol/config.yaml \
+            otel/opentelemetry-collector:latest \
+            --config /etc/otelcol/config.yaml
+
+      - name: Verify OpenTelemetry Collector is running
+        run: |
+          echo "Checking if collector is running..."
+          for i in {1..30}; do
+            if docker ps | grep -q otel-collector && netstat -tlnp 2>/dev/null | grep -q ":4317\|:4318"; then
+              echo "✅ Collector is running"
+              break
+            fi
+            if [ "$i" = 30 ]; then
+              echo "❌ Collector is not running after 30 attempts"
+              exit 1
+            fi
+            echo "Attempt $i/30: Waiting for collector..."
+            sleep 2
+          done
+
+      - name: Verify OpenTelemetry Collector is ready
+        run: |
+          echo "Checking collector logs for readiness..."
+          for i in {1..30}; do
+            COLLECTOR_LOGS=$(docker logs otel-collector 2>&1 || echo "⚠️ Docker logs failed")
+            if echo "$COLLECTOR_LOGS" | grep -q "Starting GRPC server" && \
+                echo "$COLLECTOR_LOGS" | grep -q "Starting HTTP server" && \
+                echo "$COLLECTOR_LOGS" | grep -q "Everything is ready"; then
+              echo "✅ Collector is ready"
+              break
+            fi
+            if [ "$i" = 30 ]; then
+              echo "❌ Collector is not ready after 30 attempts"
+              exit 1
+            fi
+            echo "Attempt $i/30: Waiting for readiness..."
+            sleep 2
+          done
 
       - name: Create Application
         run: |
@@ -219,7 +208,7 @@ jobs:
           OTEL_LOGS_EXPORTER=none
 
           # OTLP Exporter Configuration
-          OTEL_EXPORTER_OTLP_ENDPOINT=${{ needs.setup-otel-environment.outputs.collector-endpoint }}
+          OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:$OTEL_COLLECTOR_HTTP_PORT
           OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
           EOF
 
@@ -274,28 +263,22 @@ jobs:
             exit 1
           fi
 
-      - name: Cleanup Application
+      - name: Cleanup
         if: always()
         run: |
+          echo "Cleaning up Application..."
           cd symfony-app-${{ matrix.php-version }}-${{ matrix.architecture }}
 
-          # Stop Symfony server
+          # Stop app
           if [ -f symfony.pid ]; then
             kill $(cat symfony.pid) || true
             rm symfony.pid
           fi
 
-          # Clean up
-          cd ..
-          rm -rf symfony-app-${{ matrix.php-version }}-${{ matrix.architecture }}
+          # Cleanup app
+          cd .. && rm -rf symfony-app-${{ matrix.php-version }}-${{ matrix.architecture }}
 
-  cleanup-environment:
-    needs: [setup-otel-environment, test-symfony-apps]
-    runs-on: ubuntu-latest
-    if: always()
-    steps:
-      - name: Cleanup OpenTelemetry Collector
-        run: |
+
           echo "Cleaning up OpenTelemetry Collector..."
 
           # Stop and remove the container
@@ -306,4 +289,4 @@ jobs:
           docker container prune -f || echo "No containers to prune"
           docker image prune -f || echo "No images to prune"
 
-          echo "Cleanup completed"
+          echo "✅ Cleanup completed"
