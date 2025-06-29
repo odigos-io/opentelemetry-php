@@ -14,14 +14,10 @@ jobs:
     outputs:
       collector-endpoint: ${{ steps.setup.outputs.collector-endpoint }}
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
       - name: Setup Docker
         run: |
-          # Ensure Docker is running
-          sudo systemctl start docker || true
-          sudo systemctl status docker || echo "Docker status check failed, but continuing..."
+          sudo systemctl start docker
+          sudo systemctl status docker || exit 1
 
       - name: Setup OpenTelemetry Collector
         id: setup
@@ -35,14 +31,11 @@ jobs:
                   endpoint: 0.0.0.0:4317
                 http:
                   endpoint: 0.0.0.0:4318
-
           processors:
             batch:
-
           exporters:
             debug:
               verbosity: detailed
-
           service:
             pipelines:
               traces:
@@ -242,45 +235,34 @@ jobs:
           # Wait for server to be ready
           sleep 5
 
-      - name: Test Application Instrumentation
+      - name: Generate Traffic
         run: |
           cd symfony-app-${{ matrix.php-version }}-${{ matrix.architecture }}
 
-          # Test that the app starts without crashing
-          echo "Testing application startup..."
-          curl -f http://localhost:8000/test || echo "Server not ready yet"
-
-          # Verify OpenTelemetry extension is loaded
           echo "Verifying OpenTelemetry extension..."
           php -m | grep opentelemetry || echo "OpenTelemetry extension not loaded"
 
-          # Check if traces are being generated
-          echo "Checking for trace generation..."
-          sleep 2
-
-          # Make a request to generate a trace
-          curl -s http://localhost:8000/test > /dev/null
+          echo "Generating traffic..."
+          for i in {1..30}; do
+            if curl -f http://localhost:8000/test > /dev/null 2>&1; then
+              echo "✅ Server is ready and responding"
+              break
+            fi
+            if [ "$i" = 30 ]; then
+              echo "❌ Server is not ready after 30 attempts"
+              exit 1
+            fi
+            echo "Attempt $i/30: Server not ready yet..."
+            sleep 2
+          done
 
           # Wait a bit for trace processing
-          sleep 3
-
-          # Check collector logs for traces (with error handling)
-          COLLECTOR_LOGS=$(docker logs otel-collector --tail 50 2>/dev/null || echo "")
-          echo "$COLLECTOR_LOGS" | grep -i "trace\|span" || echo "No traces found in collector logs"
+          sleep 5
 
       - name: Verify Trace Generation
         run: |
-          # Check if traces are being received by the collector
           echo "Verifying trace generation..."
-
-          # Make another request
-          curl -s http://localhost:8000/test > /dev/null
-
-          # Wait for trace processing
-          sleep 5
-
-          # Check collector logs for trace data (with error handling)
-          COLLECTOR_LOGS=$(docker logs otel-collector --tail 50 2>/dev/null || echo "")
+          COLLECTOR_LOGS=$(docker logs otel-collector 2>&1 || echo "⚠️ Docker logs failed")
 
           if echo "$COLLECTOR_LOGS" | grep -q "trace\|span\|TraceID\|SpanID"; then
             echo "✅ Traces detected in collector logs"
@@ -289,10 +271,9 @@ jobs:
             echo "❌ No traces found in collector logs"
             echo "Collector logs:"
             echo "$COLLECTOR_LOGS"
-            echo "Note: This might be expected if the collector is not accessible from this runner"
           fi
 
-      - name: Cleanup
+      - name: Cleanup Symfony App
         if: always()
         run: |
           cd symfony-app-${{ matrix.php-version }}-${{ matrix.architecture }}
