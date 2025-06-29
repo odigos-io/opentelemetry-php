@@ -69,8 +69,10 @@ jobs:
           for i in {1..30}; do
             if docker ps | grep -q otel-collector; then
               echo "Container is running, checking health..."
-              if docker logs otel-collector | grep -q "Everything is ready"; then
-                echo "Collector is ready!"
+              COLLECTOR_LOGS=$(docker logs otel-collector)
+              if echo "$COLLECTOR_LOGS" | grep -q "Everything is ready" || \
+                (echo "$COLLECTOR_LOGS" | grep -q "Starting GRPC server" && echo "$COLLECTOR_LOGS" | grep -q "Starting HTTP server"); then
+                  echo "Collector is ready!"
                 break
               fi
             fi
@@ -91,12 +93,26 @@ jobs:
             exit 1
           fi
 
+          echo "Container is running, checking logs for readiness..."
+
           # Check if container is healthy by looking for "Everything is ready" in logs
-          if ! docker logs otel-collector | grep -q "Everything is ready"; then
-            echo "❌ Collector is not ready yet"
-            echo "Container logs:"
-            docker logs otel-collector --tail 20
-            exit 1
+          COLLECTOR_LOGS=$(docker logs otel-collector)
+          echo "Collector logs:"
+          echo "$COLLECTOR_LOGS"
+
+          if echo "$COLLECTOR_LOGS" | grep -q "Everything is ready"; then
+            echo "✅ Found 'Everything is ready' in logs"
+          else
+            echo "❌ 'Everything is ready' not found in logs"
+            echo "Checking for alternative readiness indicators..."
+
+            # Check for other indicators of readiness
+            if echo "$COLLECTOR_LOGS" | grep -q "Starting GRPC server" && echo "$COLLECTOR_LOGS" | grep -q "Starting HTTP server"; then
+              echo "✅ Found GRPC and HTTP servers started"
+            else
+              echo "❌ Collector is not ready yet"
+              exit 1
+            fi
           fi
 
           # Check if ports are listening
