@@ -184,13 +184,20 @@ jobs:
           # Install dependencies
           composer install --no-dev --optimize-autoloader
 
+      - name: Debug agent source path
+        run: |
+          echo "Contents of current dir:"
+          pwd && ls -alh
+          echo "Contents of ../../${{ matrix.php-version }}:"
+          ls -alh ../../${{ matrix.php-version }} || echo "❌ Directory not found"
+
       - name: Configure OpenTelemetry Agent
         run: |
           cd symfony-app-${{ matrix.php-version }}-${{ matrix.architecture }}
 
           # Copy agent files to the app
           mkdir -p var/odigos/php/${{ matrix.php-version }}
-          cp -r ${{ matrix.php-version }}/* var/odigos/php/${{ matrix.php-version }}/
+          cp -r ../../${{ matrix.php-version }}/* var/odigos/php/${{ matrix.php-version }}/
 
           # Move the correct architecture binary to the root of the agent directory
           mv var/odigos/php/${{ matrix.php-version }}/bin/${{ matrix.architecture }}/* var/odigos/php/${{ matrix.php-version }}/
