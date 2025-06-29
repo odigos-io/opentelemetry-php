@@ -59,6 +59,7 @@ jobs:
           echo "✅ Architecture verification passed for PHP ${{ matrix.php-version }} on ${{ matrix.architecture }}"
 
   e2e-tests:
+    needs: binary-checks
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
