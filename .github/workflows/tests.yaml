@@ -86,44 +86,29 @@ jobs:
           # Check if container is running
           if ! docker ps | grep -q otel-collector; then
             echo "❌ Collector container is not running"
-            echo "Container logs:"
-            docker logs otel-collector || echo "No logs available"
             exit 1
           fi
+          # Check if ports are listening
+          if ! netstat -tlnp 2>/dev/null | grep -q ":4317\|:4318"; then
+            echo "❌ Collector ports are not listening"
+            exit 1
+          fi
+          echo "✅ Container is running, checking logs for readiness..."
 
-          echo "Container is running, checking logs for readiness..."
-
-          COLLECTOR_LOGS=$(docker logs otel-collector 2>/dev/null || echo "")
-
+          COLLECTOR_LOGS=$(docker logs otel-collector || echo "⚠️ Docker logs failed")
           echo "Collector logs:"
           echo "$COLLECTOR_LOGS"
 
-          if echo "$COLLECTOR_LOGS" | grep -q "Starting GRPC server" && echo "$COLLECTOR_LOGS" | grep -q "Starting HTTP server"; then
-            echo "✅ Found GRPC and HTTP servers started"
+          if echo "$COLLECTOR_LOGS" | grep -q "Starting GRPC server" && \
+            echo "$COLLECTOR_LOGS" | grep -q "Starting HTTP server" && \
+            echo "$COLLECTOR_LOGS" | grep -q "Everything is ready"; then
+            echo "✅ Collector is ready"
+            docker ps | grep otel-collector
           else
             echo "❌ Collector readiness logs not found"
             echo "$COLLECTOR_LOGS"
             exit 1
           fi
-
-          # Check if ports are listening
-          if ! netstat -tlnp 2>/dev/null | grep -q ":4317\|:4318"; then
-            echo "❌ Collector ports are not listening"
-            echo "Container logs:"
-            docker logs otel-collector --tail 20 2>/dev/null || echo "No log file available"
-            exit 1
-          fi
-
-          echo "✅ Collector is running and ready"
-          docker ps | grep otel-collector
-
-      - name: Debug Collector Failure
-        if: failure()
-        run: |
-          echo "Collector container status:"
-          docker ps -a | grep otel-collector || echo "Container not found"
-          echo "Full collector logs:"
-          docker logs otel-collector || echo "Could not fetch logs"
 
   test-symfony-apps:
     needs: setup-otel-environment
