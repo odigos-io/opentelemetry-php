@@ -204,6 +204,34 @@ jobs:
           # Install dependencies
           composer install --no-dev --optimize-autoloader
 
+      - name: Check PHP Console Output
+        run: |
+          cd ${{ env.SERVICE_NAME }}
+
+          echo "=== Checking PHP Console Output ==="
+          # Check if there are any console output files or logs
+          if [ -f var/log/dev.log ]; then
+            echo "Symfony dev log:"
+            cat var/log/dev.log || echo "No dev log found"
+          fi
+
+          # Check if there are any PHP error logs
+          if [ -f var/log/prod.log ]; then
+            echo "Symfony prod log:"
+            cat var/log/prod.log || echo "No prod log found"
+          fi
+
+          # Check if the OpenTelemetry extension is loaded
+          echo "=== OpenTelemetry Extension Status ==="
+          php -m | grep opentelemetry || echo "OpenTelemetry extension not loaded"
+
+          # Check environment variables
+          echo "=== Environment Variables ==="
+          echo "OTEL_SERVICE_NAME: $OTEL_SERVICE_NAME"
+          echo "OTEL_TRACES_EXPORTER: $OTEL_TRACES_EXPORTER"
+          echo "OTEL_EXPORTER_OTLP_ENDPOINT: $OTEL_EXPORTER_OTLP_ENDPOINT"
+          echo "PHP_INI_SCAN_DIR: $PHP_INI_SCAN_DIR"
+
       - name: Start Application
         run: |
           cd ${{ env.SERVICE_NAME }}
