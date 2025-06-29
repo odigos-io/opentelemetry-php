@@ -55,20 +55,14 @@ jobs:
                 exporters: [debug]
           EOF
 
-          # Create logs directory
-          mkdir -p files
-
           # Start collector in background with log file mounting
           docker run -d \
             --name otel-collector \
             -p 4317:4317 \
             -p 4318:4318 \
             -v $(pwd)/collector-config.yaml:/etc/otelcol/config.yaml \
-            -v $(pwd)/files:/var/log/otel \
             otel/opentelemetry-collector:latest \
-            --config /etc/otelcol/config.yaml \
-            --log-level debug \
-            --log-format json
+            --config /etc/otelcol/config.yaml
 
           # Wait for collector to be ready with better health check
           echo "Waiting for collector to start..."
