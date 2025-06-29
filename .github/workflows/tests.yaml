@@ -145,17 +145,17 @@ jobs:
         run: |
           # Copy agent files to the app
           mkdir -p var/odigos/php/${{ matrix.php-version }}
-          cp -r ${{ matrix.php-version }}/* var/odigos/php/${{ matrix.php-version }}/
+          cp -r ${{ matrix.php-version }}/* /var/odigos/php/${{ matrix.php-version }}/
 
           # Move the correct architecture binary to the root of the agent directory
-          mv var/odigos/php/${{ matrix.php-version }}/bin/${{ matrix.architecture }}/* var/odigos/php/${{ matrix.php-version }}/
-          rm -rf var/odigos/php/${{ matrix.php-version }}/bin
+          mv /var/odigos/php/${{ matrix.php-version }}/bin/${{ matrix.architecture }}/* /var/odigos/php/${{ matrix.php-version }}/
+          rm -rf /var/odigos/php/${{ matrix.php-version }}/bin
 
           # Update paths in opentelemetry.ini
-          sed -i "s|/var/odigos/php/${{ matrix.php-version }}|$(pwd)/var/odigos/php/${{ matrix.php-version }}|g" var/odigos/php/${{ matrix.php-version }}/opentelemetry.ini
+          # sed -i "s|/var/odigos/php/${{ matrix.php-version }}|$(pwd)/var/odigos/php/${{ matrix.php-version }}|g" /var/odigos/php/${{ matrix.php-version }}/opentelemetry.ini
 
           # Update paths in preload.php
-          sed -i "s|/var/odigos/php/${{ matrix.php-version }}|$(pwd)/var/odigos/php/${{ matrix.php-version }}|g" var/odigos/php/${{ matrix.php-version }}/preload.php
+          # sed -i "s|/var/odigos/php/${{ matrix.php-version }}|$(pwd)/var/odigos/php/${{ matrix.php-version }}|g" /var/odigos/php/${{ matrix.php-version }}/preload.php
 
       - name: Create Application
         run: |
