@@ -113,11 +113,11 @@ jobs:
             architecture: arm64
             runner: ubuntu-latest
           - php-version: 8.1
-            symfony-version: '7.0.*'
+            symfony-version: '6.4.*'
             architecture: amd64
             runner: ubuntu-latest
           - php-version: 8.1
-            symfony-version: '7.0.*'
+            symfony-version: '6.4.*'
             architecture: arm64
             runner: ubuntu-latest
           - php-version: 8.2
