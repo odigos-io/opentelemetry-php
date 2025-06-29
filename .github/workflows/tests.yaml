@@ -174,32 +174,6 @@ jobs:
           sed -i "s|/var/odigos/php/${{ matrix.php-version }}|$(pwd)/${{ matrix.php-version }}|g" ${{ matrix.php-version }}/opentelemetry.ini
           sed -i "s|/var/odigos/php/${{ matrix.php-version }}|$(pwd)/${{ matrix.php-version }}|g" ${{ matrix.php-version }}/preload.php
 
-      - name: Preflight Checks
-        run: |
-          echo "\n\n=== Environment Variables ==="
-          echo "OTEL_SERVICE_NAME: $OTEL_SERVICE_NAME"
-          echo "PHP_INI_SCAN_DIR: $PHP_INI_SCAN_DIR"
-
-          cd $PHP_INI_SCAN_DIR
-          echo "\n\n=== Agent Files ==="
-          ls -la
-          cat opentelemetry.ini
-
-          echo "\n\n=== PHP Version ==="
-          php --version
-
-          echo "\n\n=== PHP Extensions ==="
-          php -m
-
-          echo "\n\n=== PHP Configuration ==="
-          php --ini
-
-          echo "\n\n=== Testing phar extension ==="
-          php -r "echo 'phar extension: ' . (extension_loaded('phar') ? 'LOADED' : 'NOT LOADED') . PHP_EOL;"
-
-          echo "\n\n=== Testing composer ==="
-          composer --version
-
       - name: Create Application
         run: |
           # Create new Symfony app
