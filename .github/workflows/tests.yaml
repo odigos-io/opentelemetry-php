@@ -13,10 +13,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - php-version: '8.0'
-            architecture: amd64
-          - php-version: '8.0'
-            architecture: arm64
           - php-version: '8.1'
             architecture: amd64
           - php-version: '8.1'
@@ -65,8 +61,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - php-version: '8.0'
-            php-app: 'symfony/skeleton:"6.0.*"'
           - php-version: '8.1'
             php-app: 'symfony/skeleton:"6.4.*"'
           - php-version: '8.2'
