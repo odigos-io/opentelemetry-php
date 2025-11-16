@@ -1,5 +1,7 @@
 <?php
 
+// TODO: we removed CodeIgniter support, so maybe we can remove this file if no other frameworks need preloading... Wait for PoC feedback.
+
 $paths = [
   [
     'dir' => '/var/odigos/php/8.3/',
