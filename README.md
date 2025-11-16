@@ -5,7 +5,7 @@ Odigos distribution of OpenTelemetry for PHP.<br />
 Switch PHP version during development:
 
 ```bash
-# PHP_VERSION is one-of: 8.0, 8.1, 8.2, 8.3, 8.4
+# PHP_VERSION is one-of: 8.1, 8.2, 8.3, 8.4
 make switch-php/{PHP_VERSION}
 ```
 
@@ -18,7 +18,7 @@ make binaries
 Install/Update dependency files per PHP version:
 
 ```bash
-# PHP_VERSION is one-of: 8.0, 8.1, 8.2, 8.3, 8.4
+# PHP_VERSION is one-of: 8.1, 8.2, 8.3, 8.4
 make install-libs/{PHP_VERSION}
 make update-libs/{PHP_VERSION}
 ```
@@ -109,7 +109,7 @@ PHP 8.2 divides the required/supported libraries across PHP versions:
 }
 ```
 
-### PHP 8.0 & 8.1 limitations
+### PHP  8.1 limitations
 
 The following libraries are incompatible and cannot be used with versions 8.0 and 8.1:
 
