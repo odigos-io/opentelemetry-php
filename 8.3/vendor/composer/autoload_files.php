@@ -28,7 +28,6 @@ return array(
     '88e3b63cfb48eb8ea316a8a85a5f5c5f' => $vendorDir . '/open-telemetry/sdk/_autoload.php',
     '61ba3e92ef91a7a0f1cc260ebd9290e4' => $vendorDir . '/openai-php/client/src/OpenAI.php',
     '157bbd0180425c7142fbaf1b1646bec3' => $vendorDir . '/open-telemetry/exporter-otlp/_register.php',
-    '940cc18c4beff0e19282a53720380bbb' => $vendorDir . '/open-telemetry/opentelemetry-auto-codeigniter/_register.php',
     '8df3d690cb934a8c454d71480d2147b8' => $vendorDir . '/open-telemetry/opentelemetry-auto-curl/_register.php',
     'd8bdafeb96cb6241940faf0c0c7c165a' => $vendorDir . '/open-telemetry/opentelemetry-auto-doctrine/_register.php',
     '34afeb965f1e27febaed9d076f631a0f' => $vendorDir . '/open-telemetry/opentelemetry-auto-ext-amqp/_register.php',
