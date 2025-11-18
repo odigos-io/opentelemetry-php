@@ -17,8 +17,6 @@
     "open-telemetry/opentelemetry-auto-psr18": "<=1.0.4",
     "open-telemetry/opentelemetry-auto-slim": "<=1.0.7",
     "open-telemetry/opentelemetry-auto-symfony": "<=1.0.0beta30",
-    "open-telemetry/opentelemetry-auto-codeigniter": "<=0.0.8",
-    "codeigniter4/framework": ">=4.3 <4.5",
     "open-telemetry/opentelemetry-auto-mongodb": "<=0.0.7"
   },
   "repositories": [
