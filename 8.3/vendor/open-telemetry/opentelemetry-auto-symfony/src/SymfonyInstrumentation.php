@@ -13,6 +13,7 @@ use OpenTelemetry\API\Trace\StatusCode;
 use OpenTelemetry\Context\Context;
 use function OpenTelemetry\Instrumentation\hook;
 use OpenTelemetry\SemConv\TraceAttributes;
+use OpenTelemetry\SemConv\Version;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\HttpKernel;
@@ -28,7 +29,7 @@ final class SymfonyInstrumentation
         $instrumentation = new CachedInstrumentation(
             'io.opentelemetry.contrib.php.symfony',
             null,
-            'https://opentelemetry.io/schemas/1.30.0',
+            Version::VERSION_1_32_0->url(),
         );
 
         /** @psalm-suppress UnusedFunctionCall */
@@ -46,17 +47,22 @@ final class SymfonyInstrumentation
                 $request = ($params[0] instanceof Request) ? $params[0] : null;
                 $type = $params[1] ?? HttpKernelInterface::MAIN_REQUEST;
                 $method = $request?->getMethod() ?? 'unknown';
+                $controller = $request?->attributes?->get('_controller');
+
+                if (!is_callable($controller, true, $controllerName)) {
+                    $controllerName = 'sub-request';
+                }
+
                 $name = ($type === HttpKernelInterface::SUB_REQUEST)
-                    ? sprintf('%s %s', $method, $request?->attributes?->get('_controller') ?? 'sub-request')
+                    ? sprintf('%s %s', $method, $controllerName)
                     : $method;
                 /** @psalm-suppress ArgumentTypeCoercion */
                 $builder = $instrumentation
                     ->tracer()
                     ->spanBuilder($name)
                     ->setSpanKind(($type === HttpKernelInterface::SUB_REQUEST) ? SpanKind::KIND_INTERNAL : SpanKind::KIND_SERVER)
-                    ->setAttribute(TraceAttributes::CODE_FUNCTION_NAME, $function)
-                    ->setAttribute(TraceAttributes::CODE_NAMESPACE, $class)
-                    ->setAttribute(TraceAttributes::CODE_FILEPATH, $filename)
+                    ->setAttribute(TraceAttributes::CODE_FUNCTION_NAME, sprintf('%s::%s', $class, $function))
+                    ->setAttribute(TraceAttributes::CODE_FILE_PATH, $filename)
                     ->setAttribute(TraceAttributes::CODE_LINE_NUMBER, $lineno);
 
                 $parent = Context::getCurrent();
@@ -132,17 +138,8 @@ final class SymfonyInstrumentation
 
                 $span->setAttribute(TraceAttributes::HTTP_RESPONSE_BODY_SIZE, $contentLength);
 
-                // Propagate server-timing header to response, if ServerTimingPropagator is present
-                if (class_exists('OpenTelemetry\Contrib\Propagation\ServerTiming\ServerTimingPropagator')) {
-                    $prop = new \OpenTelemetry\Contrib\Propagation\ServerTiming\ServerTimingPropagator();
-                    $prop->inject($response, ResponsePropagationSetter::instance(), $scope->context());
-                }
-
-                // Propagate traceresponse header to response, if TraceResponsePropagator is present
-                if (class_exists('OpenTelemetry\Contrib\Propagation\TraceResponse\TraceResponsePropagator')) {
-                    $prop = new \OpenTelemetry\Contrib\Propagation\TraceResponse\TraceResponsePropagator();
-                    $prop->inject($response, ResponsePropagationSetter::instance(), $scope->context());
-                }
+                $prop = Globals::responsePropagator();
+                $prop->inject($response, ResponsePropagationSetter::instance(), $scope->context());
 
                 $span->end();
             }
