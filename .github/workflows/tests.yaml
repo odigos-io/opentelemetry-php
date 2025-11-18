@@ -13,25 +13,21 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - php-version: '8.0'
+          - php-version: "8.1"
             architecture: amd64
-          - php-version: '8.0'
+          - php-version: "8.1"
             architecture: arm64
-          - php-version: '8.1'
+          - php-version: "8.2"
             architecture: amd64
-          - php-version: '8.1'
+          - php-version: "8.2"
             architecture: arm64
-          - php-version: '8.2'
+          - php-version: "8.3"
             architecture: amd64
-          - php-version: '8.2'
+          - php-version: "8.3"
             architecture: arm64
-          - php-version: '8.3'
+          - php-version: "8.4"
             architecture: amd64
-          - php-version: '8.3'
-            architecture: arm64
-          - php-version: '8.4'
-            architecture: amd64
-          - php-version: '8.4'
+          - php-version: "8.4"
             architecture: arm64
 
     steps:
@@ -65,21 +61,19 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - php-version: '8.0'
-            php-app: 'symfony/skeleton:"6.0.*"'
-          - php-version: '8.1'
+          - php-version: "8.1"
             php-app: 'symfony/skeleton:"6.4.*"'
-          - php-version: '8.2'
+          - php-version: "8.2"
             php-app: 'symfony/skeleton:"7.3.*"'
-          - php-version: '8.3'
+          - php-version: "8.3"
             php-app: 'symfony/skeleton:"7.3.*"'
-          - php-version: '8.4'
+          - php-version: "8.4"
             php-app: 'symfony/skeleton:"7.3.*"'
 
     env:
-      ARCHITECTURE: 'amd64' # having trouble getting a runner with arm64, so no matrix for 'arch' at the moment
-      SERVICE_NAME: 'symfony-app-${{ matrix.php-version }}'
-      SERVICE_TEST_ROUTE: 'test'
+      ARCHITECTURE: "amd64" # having trouble getting a runner with arm64, so no matrix for 'arch' at the moment
+      SERVICE_NAME: "symfony-app-${{ matrix.php-version }}"
+      SERVICE_TEST_ROUTE: "test"
 
     steps:
       - name: Checkout code
@@ -88,7 +82,7 @@ jobs:
       - name: Setup PHP ${{ matrix.php-version }}
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '${{ matrix.php-version }}'
+          php-version: "${{ matrix.php-version }}"
           tools: composer:v2
 
       - name: Setup Docker
