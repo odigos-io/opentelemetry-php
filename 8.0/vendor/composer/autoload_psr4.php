@@ -42,11 +42,9 @@ return array(
     'OpenTelemetry\\Contrib\\Instrumentation\\MongoDB\\' => array($vendorDir . '/open-telemetry/opentelemetry-auto-mongodb/src'),
     'OpenTelemetry\\Contrib\\Instrumentation\\HttpAsyncClient\\' => array($vendorDir . '/open-telemetry/opentelemetry-auto-http-async/src'),
     'OpenTelemetry\\Contrib\\Instrumentation\\Guzzle\\' => array($vendorDir . '/open-telemetry/opentelemetry-auto-guzzle/src'),
-    'OpenTelemetry\\Contrib\\Instrumentation\\CodeIgniter\\' => array($vendorDir . '/open-telemetry/opentelemetry-auto-codeigniter/src'),
     'OpenTelemetry\\Context\\' => array($vendorDir . '/open-telemetry/context'),
     'OpenTelemetry\\API\\' => array($vendorDir . '/open-telemetry/api'),
     'MongoDB\\' => array($vendorDir . '/mongodb/mongodb/src'),
-    'Laminas\\Escaper\\' => array($vendorDir . '/laminas/laminas-escaper/src'),
     'Http\\Promise\\' => array($vendorDir . '/php-http/promise/src'),
     'Http\\Discovery\\' => array($vendorDir . '/php-http/discovery/src'),
     'Http\\Client\\' => array($vendorDir . '/php-http/httplug/src'),
@@ -57,5 +55,4 @@ return array(
     'GPBMetadata\\Opentelemetry\\' => array($vendorDir . '/open-telemetry/gen-otlp-protobuf/GPBMetadata/Opentelemetry'),
     'GPBMetadata\\Google\\Protobuf\\' => array($vendorDir . '/google/protobuf/src/GPBMetadata/Google/Protobuf'),
     'FastRoute\\' => array($vendorDir . '/nikic/fast-route/src'),
-    'CodeIgniter\\' => array($vendorDir . '/codeigniter4/framework/system'),
 );

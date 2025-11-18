@@ -29,7 +29,6 @@ class ComposerStaticInitd1eeaaf58f42cec389bb4efac46fd1a5
         '88e3b63cfb48eb8ea316a8a85a5f5c5f' => __DIR__ . '/..' . '/open-telemetry/sdk/_autoload.php',
         '61ba3e92ef91a7a0f1cc260ebd9290e4' => __DIR__ . '/..' . '/openai-php/client/src/OpenAI.php',
         '157bbd0180425c7142fbaf1b1646bec3' => __DIR__ . '/..' . '/open-telemetry/exporter-otlp/_register.php',
-        '940cc18c4beff0e19282a53720380bbb' => __DIR__ . '/..' . '/open-telemetry/opentelemetry-auto-codeigniter/_register.php',
         '8df3d690cb934a8c454d71480d2147b8' => __DIR__ . '/..' . '/open-telemetry/opentelemetry-auto-curl/_register.php',
         'd8bdafeb96cb6241940faf0c0c7c165a' => __DIR__ . '/..' . '/open-telemetry/opentelemetry-auto-doctrine/_register.php',
         '34afeb965f1e27febaed9d076f631a0f' => __DIR__ . '/..' . '/open-telemetry/opentelemetry-auto-ext-amqp/_register.php',
@@ -51,7 +50,7 @@ class ComposerStaticInitd1eeaaf58f42cec389bb4efac46fd1a5
     );
 
     public static $prefixLengthsPsr4 = array (
-        'S' => 
+        'S' =>
         array (
             'Symfony\\Polyfill\\Php83\\' => 23,
             'Symfony\\Polyfill\\Php82\\' => 23,
@@ -66,12 +65,12 @@ class ComposerStaticInitd1eeaaf58f42cec389bb4efac46fd1a5
             'Symfony\\Component\\ErrorHandler\\' => 31,
             'Slim\\' => 5,
         ),
-        'R' => 
+        'R' =>
         array (
             'Ramsey\\Uuid\\' => 12,
             'Ramsey\\Collection\\' => 18,
         ),
-        'P' => 
+        'P' =>
         array (
             'Psr\\SimpleCache\\' => 16,
             'Psr\\Log\\' => 8,
@@ -82,7 +81,7 @@ class ComposerStaticInitd1eeaaf58f42cec389bb4efac46fd1a5
             'Psr\\Container\\' => 14,
             'Psr\\Cache\\' => 10,
         ),
-        'O' => 
+        'O' =>
         array (
             'Opentelemetry\\Proto\\' => 20,
             'OpenTelemetry\\SemConv\\' => 22,
@@ -106,32 +105,27 @@ class ComposerStaticInitd1eeaaf58f42cec389bb4efac46fd1a5
             'OpenTelemetry\\Contrib\\Instrumentation\\ExtAmqp\\' => 46,
             'OpenTelemetry\\Contrib\\Instrumentation\\Doctrine\\' => 47,
             'OpenTelemetry\\Contrib\\Instrumentation\\Curl\\' => 43,
-            'OpenTelemetry\\Contrib\\Instrumentation\\CodeIgniter\\' => 50,
             'OpenTelemetry\\Context\\' => 22,
             'OpenTelemetry\\API\\' => 18,
             'OpenAI\\' => 7,
         ),
-        'N' => 
+        'N' =>
         array (
             'Nyholm\\Psr7Server\\' => 18,
             'Nevay\\SPI\\' => 10,
         ),
-        'M' => 
+        'M' =>
         array (
             'MongoDB\\' => 8,
         ),
-        'L' => 
-        array (
-            'Laminas\\Escaper\\' => 16,
-        ),
-        'H' => 
+        'H' =>
         array (
             'Http\\Promise\\' => 13,
             'Http\\Message\\MultipartStream\\' => 29,
             'Http\\Discovery\\' => 15,
             'Http\\Client\\' => 12,
         ),
-        'G' => 
+        'G' =>
         array (
             'GuzzleHttp\\Psr7\\' => 16,
             'GuzzleHttp\\Promise\\' => 19,
@@ -140,298 +134,285 @@ class ComposerStaticInitd1eeaaf58f42cec389bb4efac46fd1a5
             'GPBMetadata\\Opentelemetry\\' => 26,
             'GPBMetadata\\Google\\Protobuf\\' => 28,
         ),
-        'F' => 
+        'F' =>
         array (
             'FastRoute\\' => 10,
         ),
-        'D' => 
+        'D' =>
         array (
             'Doctrine\\Deprecations\\' => 22,
             'Doctrine\\DBAL\\' => 14,
         ),
-        'C' => 
+        'C' =>
         array (
             'Composer\\Semver\\' => 16,
-            'CodeIgniter\\' => 12,
         ),
-        'B' => 
+        'B' =>
         array (
             'Brick\\Math\\' => 11,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'Symfony\\Polyfill\\Php83\\' => 
+        'Symfony\\Polyfill\\Php83\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-php83',
         ),
-        'Symfony\\Polyfill\\Php82\\' => 
+        'Symfony\\Polyfill\\Php82\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-php82',
         ),
-        'Symfony\\Polyfill\\Mbstring\\' => 
+        'Symfony\\Polyfill\\Mbstring\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-mbstring',
         ),
-        'Symfony\\Polyfill\\Ctype\\' => 
+        'Symfony\\Polyfill\\Ctype\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-ctype',
         ),
-        'Symfony\\Contracts\\HttpClient\\' => 
+        'Symfony\\Contracts\\HttpClient\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/http-client-contracts',
         ),
-        'Symfony\\Contracts\\EventDispatcher\\' => 
+        'Symfony\\Contracts\\EventDispatcher\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/event-dispatcher-contracts',
         ),
-        'Symfony\\Component\\VarDumper\\' => 
+        'Symfony\\Component\\VarDumper\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/var-dumper',
         ),
-        'Symfony\\Component\\HttpKernel\\' => 
+        'Symfony\\Component\\HttpKernel\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/http-kernel',
         ),
-        'Symfony\\Component\\HttpFoundation\\' => 
+        'Symfony\\Component\\HttpFoundation\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/http-foundation',
         ),
-        'Symfony\\Component\\EventDispatcher\\' => 
+        'Symfony\\Component\\EventDispatcher\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/event-dispatcher',
         ),
-        'Symfony\\Component\\ErrorHandler\\' => 
+        'Symfony\\Component\\ErrorHandler\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/error-handler',
         ),
-        'Slim\\' => 
+        'Slim\\' =>
         array (
             0 => __DIR__ . '/..' . '/slim/slim/Slim',
         ),
-        'Ramsey\\Uuid\\' => 
+        'Ramsey\\Uuid\\' =>
         array (
             0 => __DIR__ . '/..' . '/ramsey/uuid/src',
         ),
-        'Ramsey\\Collection\\' => 
+        'Ramsey\\Collection\\' =>
         array (
             0 => __DIR__ . '/..' . '/ramsey/collection/src',
         ),
-        'Psr\\SimpleCache\\' => 
+        'Psr\\SimpleCache\\' =>
         array (
             0 => __DIR__ . '/..' . '/psr/simple-cache/src',
         ),
-        'Psr\\Log\\' => 
+        'Psr\\Log\\' =>
         array (
             0 => __DIR__ . '/..' . '/psr/log/Psr/Log',
         ),
-        'Psr\\Http\\Server\\' => 
+        'Psr\\Http\\Server\\' =>
         array (
             0 => __DIR__ . '/..' . '/psr/http-server-middleware/src',
             1 => __DIR__ . '/..' . '/psr/http-server-handler/src',
         ),
-        'Psr\\Http\\Message\\' => 
+        'Psr\\Http\\Message\\' =>
         array (
             0 => __DIR__ . '/..' . '/psr/http-factory/src',
             1 => __DIR__ . '/..' . '/psr/http-message/src',
         ),
-        'Psr\\Http\\Client\\' => 
+        'Psr\\Http\\Client\\' =>
         array (
             0 => __DIR__ . '/..' . '/psr/http-client/src',
         ),
-        'Psr\\EventDispatcher\\' => 
+        'Psr\\EventDispatcher\\' =>
         array (
             0 => __DIR__ . '/..' . '/psr/event-dispatcher/src',
         ),
-        'Psr\\Container\\' => 
+        'Psr\\Container\\' =>
         array (
             0 => __DIR__ . '/..' . '/psr/container/src',
         ),
-        'Psr\\Cache\\' => 
+        'Psr\\Cache\\' =>
         array (
             0 => __DIR__ . '/..' . '/psr/cache/src',
         ),
-        'Opentelemetry\\Proto\\' => 
+        'Opentelemetry\\Proto\\' =>
         array (
             0 => __DIR__ . '/..' . '/open-telemetry/gen-otlp-protobuf/Opentelemetry/Proto',
         ),
-        'OpenTelemetry\\SemConv\\' => 
+        'OpenTelemetry\\SemConv\\' =>
         array (
             0 => __DIR__ . '/..' . '/open-telemetry/sem-conv',
         ),
-        'OpenTelemetry\\SDK\\' => 
+        'OpenTelemetry\\SDK\\' =>
         array (
             0 => __DIR__ . '/..' . '/open-telemetry/sdk',
         ),
-        'OpenTelemetry\\Contrib\\Otlp\\' => 
+        'OpenTelemetry\\Contrib\\Otlp\\' =>
         array (
             0 => __DIR__ . '/..' . '/open-telemetry/exporter-otlp',
         ),
-        'OpenTelemetry\\Contrib\\Instrumentation\\Symfony\\' => 
+        'OpenTelemetry\\Contrib\\Instrumentation\\Symfony\\' =>
         array (
             0 => __DIR__ . '/..' . '/open-telemetry/opentelemetry-auto-symfony/src',
         ),
-        'OpenTelemetry\\Contrib\\Instrumentation\\Slim\\' => 
+        'OpenTelemetry\\Contrib\\Instrumentation\\Slim\\' =>
         array (
             0 => __DIR__ . '/..' . '/open-telemetry/opentelemetry-auto-slim/src',
         ),
-        'OpenTelemetry\\Contrib\\Instrumentation\\Psr6\\' => 
+        'OpenTelemetry\\Contrib\\Instrumentation\\Psr6\\' =>
         array (
             0 => __DIR__ . '/..' . '/open-telemetry/opentelemetry-auto-psr6/src',
         ),
-        'OpenTelemetry\\Contrib\\Instrumentation\\Psr3\\' => 
+        'OpenTelemetry\\Contrib\\Instrumentation\\Psr3\\' =>
         array (
             0 => __DIR__ . '/..' . '/open-telemetry/opentelemetry-auto-psr3/src',
         ),
-        'OpenTelemetry\\Contrib\\Instrumentation\\Psr18\\' => 
+        'OpenTelemetry\\Contrib\\Instrumentation\\Psr18\\' =>
         array (
             0 => __DIR__ . '/..' . '/open-telemetry/opentelemetry-auto-psr18/src',
         ),
-        'OpenTelemetry\\Contrib\\Instrumentation\\Psr16\\' => 
+        'OpenTelemetry\\Contrib\\Instrumentation\\Psr16\\' =>
         array (
             0 => __DIR__ . '/..' . '/open-telemetry/opentelemetry-auto-psr16/src',
         ),
-        'OpenTelemetry\\Contrib\\Instrumentation\\Psr15\\' => 
+        'OpenTelemetry\\Contrib\\Instrumentation\\Psr15\\' =>
         array (
             0 => __DIR__ . '/..' . '/open-telemetry/opentelemetry-auto-psr15/src',
         ),
-        'OpenTelemetry\\Contrib\\Instrumentation\\Psr14\\' => 
+        'OpenTelemetry\\Contrib\\Instrumentation\\Psr14\\' =>
         array (
             0 => __DIR__ . '/..' . '/open-telemetry/opentelemetry-auto-psr14/src',
         ),
-        'OpenTelemetry\\Contrib\\Instrumentation\\PDO\\' => 
+        'OpenTelemetry\\Contrib\\Instrumentation\\PDO\\' =>
         array (
             0 => __DIR__ . '/..' . '/open-telemetry/opentelemetry-auto-pdo/src',
         ),
-        'OpenTelemetry\\Contrib\\Instrumentation\\OpenAIPHP\\' => 
+        'OpenTelemetry\\Contrib\\Instrumentation\\OpenAIPHP\\' =>
         array (
             0 => __DIR__ . '/..' . '/open-telemetry/opentelemetry-auto-openai-php/src',
         ),
-        'OpenTelemetry\\Contrib\\Instrumentation\\MySqli\\' => 
+        'OpenTelemetry\\Contrib\\Instrumentation\\MySqli\\' =>
         array (
             0 => __DIR__ . '/..' . '/open-telemetry/opentelemetry-auto-mysqli/src',
         ),
-        'OpenTelemetry\\Contrib\\Instrumentation\\MongoDB\\' => 
+        'OpenTelemetry\\Contrib\\Instrumentation\\MongoDB\\' =>
         array (
             0 => __DIR__ . '/..' . '/open-telemetry/opentelemetry-auto-mongodb/src',
         ),
-        'OpenTelemetry\\Contrib\\Instrumentation\\HttpAsyncClient\\' => 
+        'OpenTelemetry\\Contrib\\Instrumentation\\HttpAsyncClient\\' =>
         array (
             0 => __DIR__ . '/..' . '/open-telemetry/opentelemetry-auto-http-async/src',
         ),
-        'OpenTelemetry\\Contrib\\Instrumentation\\Guzzle\\' => 
+        'OpenTelemetry\\Contrib\\Instrumentation\\Guzzle\\' =>
         array (
             0 => __DIR__ . '/..' . '/open-telemetry/opentelemetry-auto-guzzle/src',
         ),
-        'OpenTelemetry\\Contrib\\Instrumentation\\ExtRdKafka\\' => 
+        'OpenTelemetry\\Contrib\\Instrumentation\\ExtRdKafka\\' =>
         array (
             0 => __DIR__ . '/..' . '/open-telemetry/opentelemetry-auto-ext-rdkafka/src',
         ),
-        'OpenTelemetry\\Contrib\\Instrumentation\\ExtAmqp\\' => 
+        'OpenTelemetry\\Contrib\\Instrumentation\\ExtAmqp\\' =>
         array (
             0 => __DIR__ . '/..' . '/open-telemetry/opentelemetry-auto-ext-amqp/src',
         ),
-        'OpenTelemetry\\Contrib\\Instrumentation\\Doctrine\\' => 
+        'OpenTelemetry\\Contrib\\Instrumentation\\Doctrine\\' =>
         array (
             0 => __DIR__ . '/..' . '/open-telemetry/opentelemetry-auto-doctrine/src',
         ),
-        'OpenTelemetry\\Contrib\\Instrumentation\\Curl\\' => 
+        'OpenTelemetry\\Contrib\\Instrumentation\\Curl\\' =>
         array (
             0 => __DIR__ . '/..' . '/open-telemetry/opentelemetry-auto-curl/src',
         ),
-        'OpenTelemetry\\Contrib\\Instrumentation\\CodeIgniter\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/open-telemetry/opentelemetry-auto-codeigniter/src',
-        ),
-        'OpenTelemetry\\Context\\' => 
+        'OpenTelemetry\\Context\\' =>
         array (
             0 => __DIR__ . '/..' . '/open-telemetry/context',
         ),
-        'OpenTelemetry\\API\\' => 
+        'OpenTelemetry\\API\\' =>
         array (
             0 => __DIR__ . '/..' . '/open-telemetry/api',
         ),
-        'OpenAI\\' => 
+        'OpenAI\\' =>
         array (
             0 => __DIR__ . '/..' . '/openai-php/client/src',
         ),
-        'Nyholm\\Psr7Server\\' => 
+        'Nyholm\\Psr7Server\\' =>
         array (
             0 => __DIR__ . '/..' . '/nyholm/psr7-server/src',
         ),
-        'Nevay\\SPI\\' => 
+        'Nevay\\SPI\\' =>
         array (
             0 => __DIR__ . '/..' . '/tbachert/spi/src',
         ),
-        'MongoDB\\' => 
+        'MongoDB\\' =>
         array (
             0 => __DIR__ . '/..' . '/mongodb/mongodb/src',
         ),
-        'Laminas\\Escaper\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/laminas/laminas-escaper/src',
-        ),
-        'Http\\Promise\\' => 
+        'Http\\Promise\\' =>
         array (
             0 => __DIR__ . '/..' . '/php-http/promise/src',
         ),
-        'Http\\Message\\MultipartStream\\' => 
+        'Http\\Message\\MultipartStream\\' =>
         array (
             0 => __DIR__ . '/..' . '/php-http/multipart-stream-builder/src',
         ),
-        'Http\\Discovery\\' => 
+        'Http\\Discovery\\' =>
         array (
             0 => __DIR__ . '/..' . '/php-http/discovery/src',
         ),
-        'Http\\Client\\' => 
+        'Http\\Client\\' =>
         array (
             0 => __DIR__ . '/..' . '/php-http/httplug/src',
         ),
-        'GuzzleHttp\\Psr7\\' => 
+        'GuzzleHttp\\Psr7\\' =>
         array (
             0 => __DIR__ . '/..' . '/guzzlehttp/psr7/src',
         ),
-        'GuzzleHttp\\Promise\\' => 
+        'GuzzleHttp\\Promise\\' =>
         array (
             0 => __DIR__ . '/..' . '/guzzlehttp/promises/src',
         ),
-        'GuzzleHttp\\' => 
+        'GuzzleHttp\\' =>
         array (
             0 => __DIR__ . '/..' . '/guzzlehttp/guzzle/src',
         ),
-        'Google\\Protobuf\\' => 
+        'Google\\Protobuf\\' =>
         array (
             0 => __DIR__ . '/..' . '/google/protobuf/src/Google/Protobuf',
         ),
-        'GPBMetadata\\Opentelemetry\\' => 
+        'GPBMetadata\\Opentelemetry\\' =>
         array (
             0 => __DIR__ . '/..' . '/open-telemetry/gen-otlp-protobuf/GPBMetadata/Opentelemetry',
         ),
-        'GPBMetadata\\Google\\Protobuf\\' => 
+        'GPBMetadata\\Google\\Protobuf\\' =>
         array (
             0 => __DIR__ . '/..' . '/google/protobuf/src/GPBMetadata/Google/Protobuf',
         ),
-        'FastRoute\\' => 
+        'FastRoute\\' =>
         array (
             0 => __DIR__ . '/..' . '/nikic/fast-route/src',
         ),
-        'Doctrine\\Deprecations\\' => 
+        'Doctrine\\Deprecations\\' =>
         array (
             0 => __DIR__ . '/..' . '/doctrine/deprecations/src',
         ),
-        'Doctrine\\DBAL\\' => 
+        'Doctrine\\DBAL\\' =>
         array (
             0 => __DIR__ . '/..' . '/doctrine/dbal/src',
         ),
-        'Composer\\Semver\\' => 
+        'Composer\\Semver\\' =>
         array (
             0 => __DIR__ . '/..' . '/composer/semver/src',
         ),
-        'CodeIgniter\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/codeigniter4/framework/system',
-        ),
-        'Brick\\Math\\' => 
+        'Brick\\Math\\' =>
         array (
             0 => __DIR__ . '/..' . '/brick/math/src',
         ),
@@ -454,382 +435,6 @@ class ComposerStaticInitd1eeaaf58f42cec389bb4efac46fd1a5
         'Brick\\Math\\Internal\\Calculator\\GmpCalculator' => __DIR__ . '/..' . '/brick/math/src/Internal/Calculator/GmpCalculator.php',
         'Brick\\Math\\Internal\\Calculator\\NativeCalculator' => __DIR__ . '/..' . '/brick/math/src/Internal/Calculator/NativeCalculator.php',
         'Brick\\Math\\RoundingMode' => __DIR__ . '/..' . '/brick/math/src/RoundingMode.php',
-        'CodeIgniter\\API\\ResponseTrait' => __DIR__ . '/..' . '/codeigniter4/framework/system/API/ResponseTrait.php',
-        'CodeIgniter\\Autoloader\\Autoloader' => __DIR__ . '/..' . '/codeigniter4/framework/system/Autoloader/Autoloader.php',
-        'CodeIgniter\\Autoloader\\FileLocator' => __DIR__ . '/..' . '/codeigniter4/framework/system/Autoloader/FileLocator.php',
-        'CodeIgniter\\BaseModel' => __DIR__ . '/..' . '/codeigniter4/framework/system/BaseModel.php',
-        'CodeIgniter\\CLI\\BaseCommand' => __DIR__ . '/..' . '/codeigniter4/framework/system/CLI/BaseCommand.php',
-        'CodeIgniter\\CLI\\CLI' => __DIR__ . '/..' . '/codeigniter4/framework/system/CLI/CLI.php',
-        'CodeIgniter\\CLI\\Commands' => __DIR__ . '/..' . '/codeigniter4/framework/system/CLI/Commands.php',
-        'CodeIgniter\\CLI\\Console' => __DIR__ . '/..' . '/codeigniter4/framework/system/CLI/Console.php',
-        'CodeIgniter\\CLI\\Exceptions\\CLIException' => __DIR__ . '/..' . '/codeigniter4/framework/system/CLI/Exceptions/CLIException.php',
-        'CodeIgniter\\CLI\\GeneratorTrait' => __DIR__ . '/..' . '/codeigniter4/framework/system/CLI/GeneratorTrait.php',
-        'CodeIgniter\\Cache\\CacheFactory' => __DIR__ . '/..' . '/codeigniter4/framework/system/Cache/CacheFactory.php',
-        'CodeIgniter\\Cache\\CacheInterface' => __DIR__ . '/..' . '/codeigniter4/framework/system/Cache/CacheInterface.php',
-        'CodeIgniter\\Cache\\Exceptions\\CacheException' => __DIR__ . '/..' . '/codeigniter4/framework/system/Cache/Exceptions/CacheException.php',
-        'CodeIgniter\\Cache\\Exceptions\\ExceptionInterface' => __DIR__ . '/..' . '/codeigniter4/framework/system/Cache/Exceptions/ExceptionInterface.php',
-        'CodeIgniter\\Cache\\FactoriesCache' => __DIR__ . '/..' . '/codeigniter4/framework/system/Cache/FactoriesCache.php',
-        'CodeIgniter\\Cache\\FactoriesCache\\FileVarExportHandler' => __DIR__ . '/..' . '/codeigniter4/framework/system/Cache/FactoriesCache/FileVarExportHandler.php',
-        'CodeIgniter\\Cache\\Handlers\\BaseHandler' => __DIR__ . '/..' . '/codeigniter4/framework/system/Cache/Handlers/BaseHandler.php',
-        'CodeIgniter\\Cache\\Handlers\\DummyHandler' => __DIR__ . '/..' . '/codeigniter4/framework/system/Cache/Handlers/DummyHandler.php',
-        'CodeIgniter\\Cache\\Handlers\\FileHandler' => __DIR__ . '/..' . '/codeigniter4/framework/system/Cache/Handlers/FileHandler.php',
-        'CodeIgniter\\Cache\\Handlers\\MemcachedHandler' => __DIR__ . '/..' . '/codeigniter4/framework/system/Cache/Handlers/MemcachedHandler.php',
-        'CodeIgniter\\Cache\\Handlers\\PredisHandler' => __DIR__ . '/..' . '/codeigniter4/framework/system/Cache/Handlers/PredisHandler.php',
-        'CodeIgniter\\Cache\\Handlers\\RedisHandler' => __DIR__ . '/..' . '/codeigniter4/framework/system/Cache/Handlers/RedisHandler.php',
-        'CodeIgniter\\Cache\\Handlers\\WincacheHandler' => __DIR__ . '/..' . '/codeigniter4/framework/system/Cache/Handlers/WincacheHandler.php',
-        'CodeIgniter\\Cache\\ResponseCache' => __DIR__ . '/..' . '/codeigniter4/framework/system/Cache/ResponseCache.php',
-        'CodeIgniter\\CodeIgniter' => __DIR__ . '/..' . '/codeigniter4/framework/system/CodeIgniter.php',
-        'CodeIgniter\\Commands\\Cache\\ClearCache' => __DIR__ . '/..' . '/codeigniter4/framework/system/Commands/Cache/ClearCache.php',
-        'CodeIgniter\\Commands\\Cache\\InfoCache' => __DIR__ . '/..' . '/codeigniter4/framework/system/Commands/Cache/InfoCache.php',
-        'CodeIgniter\\Commands\\Database\\CreateDatabase' => __DIR__ . '/..' . '/codeigniter4/framework/system/Commands/Database/CreateDatabase.php',
-        'CodeIgniter\\Commands\\Database\\Migrate' => __DIR__ . '/..' . '/codeigniter4/framework/system/Commands/Database/Migrate.php',
-        'CodeIgniter\\Commands\\Database\\MigrateRefresh' => __DIR__ . '/..' . '/codeigniter4/framework/system/Commands/Database/MigrateRefresh.php',
-        'CodeIgniter\\Commands\\Database\\MigrateRollback' => __DIR__ . '/..' . '/codeigniter4/framework/system/Commands/Database/MigrateRollback.php',
-        'CodeIgniter\\Commands\\Database\\MigrateStatus' => __DIR__ . '/..' . '/codeigniter4/framework/system/Commands/Database/MigrateStatus.php',
-        'CodeIgniter\\Commands\\Database\\Seed' => __DIR__ . '/..' . '/codeigniter4/framework/system/Commands/Database/Seed.php',
-        'CodeIgniter\\Commands\\Database\\ShowTableInfo' => __DIR__ . '/..' . '/codeigniter4/framework/system/Commands/Database/ShowTableInfo.php',
-        'CodeIgniter\\Commands\\Encryption\\GenerateKey' => __DIR__ . '/..' . '/codeigniter4/framework/system/Commands/Encryption/GenerateKey.php',
-        'CodeIgniter\\Commands\\Generators\\CellGenerator' => __DIR__ . '/..' . '/codeigniter4/framework/system/Commands/Generators/CellGenerator.php',
-        'CodeIgniter\\Commands\\Generators\\CommandGenerator' => __DIR__ . '/..' . '/codeigniter4/framework/system/Commands/Generators/CommandGenerator.php',
-        'CodeIgniter\\Commands\\Generators\\ConfigGenerator' => __DIR__ . '/..' . '/codeigniter4/framework/system/Commands/Generators/ConfigGenerator.php',
-        'CodeIgniter\\Commands\\Generators\\ControllerGenerator' => __DIR__ . '/..' . '/codeigniter4/framework/system/Commands/Generators/ControllerGenerator.php',
-        'CodeIgniter\\Commands\\Generators\\EntityGenerator' => __DIR__ . '/..' . '/codeigniter4/framework/system/Commands/Generators/EntityGenerator.php',
-        'CodeIgniter\\Commands\\Generators\\FilterGenerator' => __DIR__ . '/..' . '/codeigniter4/framework/system/Commands/Generators/FilterGenerator.php',
-        'CodeIgniter\\Commands\\Generators\\MigrateCreate' => __DIR__ . '/..' . '/codeigniter4/framework/system/Commands/Generators/MigrateCreate.php',
-        'CodeIgniter\\Commands\\Generators\\MigrationGenerator' => __DIR__ . '/..' . '/codeigniter4/framework/system/Commands/Generators/MigrationGenerator.php',
-        'CodeIgniter\\Commands\\Generators\\ModelGenerator' => __DIR__ . '/..' . '/codeigniter4/framework/system/Commands/Generators/ModelGenerator.php',
-        'CodeIgniter\\Commands\\Generators\\ScaffoldGenerator' => __DIR__ . '/..' . '/codeigniter4/framework/system/Commands/Generators/ScaffoldGenerator.php',
-        'CodeIgniter\\Commands\\Generators\\SeederGenerator' => __DIR__ . '/..' . '/codeigniter4/framework/system/Commands/Generators/SeederGenerator.php',
-        'CodeIgniter\\Commands\\Generators\\SessionMigrationGenerator' => __DIR__ . '/..' . '/codeigniter4/framework/system/Commands/Generators/SessionMigrationGenerator.php',
-        'CodeIgniter\\Commands\\Generators\\ValidationGenerator' => __DIR__ . '/..' . '/codeigniter4/framework/system/Commands/Generators/ValidationGenerator.php',
-        'CodeIgniter\\Commands\\Help' => __DIR__ . '/..' . '/codeigniter4/framework/system/Commands/Help.php',
-        'CodeIgniter\\Commands\\Housekeeping\\ClearDebugbar' => __DIR__ . '/..' . '/codeigniter4/framework/system/Commands/Housekeeping/ClearDebugbar.php',
-        'CodeIgniter\\Commands\\Housekeeping\\ClearLogs' => __DIR__ . '/..' . '/codeigniter4/framework/system/Commands/Housekeeping/ClearLogs.php',
-        'CodeIgniter\\Commands\\ListCommands' => __DIR__ . '/..' . '/codeigniter4/framework/system/Commands/ListCommands.php',
-        'CodeIgniter\\Commands\\Server\\Serve' => __DIR__ . '/..' . '/codeigniter4/framework/system/Commands/Server/Serve.php',
-        'CodeIgniter\\Commands\\Utilities\\Environment' => __DIR__ . '/..' . '/codeigniter4/framework/system/Commands/Utilities/Environment.php',
-        'CodeIgniter\\Commands\\Utilities\\FilterCheck' => __DIR__ . '/..' . '/codeigniter4/framework/system/Commands/Utilities/FilterCheck.php',
-        'CodeIgniter\\Commands\\Utilities\\Namespaces' => __DIR__ . '/..' . '/codeigniter4/framework/system/Commands/Utilities/Namespaces.php',
-        'CodeIgniter\\Commands\\Utilities\\Publish' => __DIR__ . '/..' . '/codeigniter4/framework/system/Commands/Utilities/Publish.php',
-        'CodeIgniter\\Commands\\Utilities\\Routes' => __DIR__ . '/..' . '/codeigniter4/framework/system/Commands/Utilities/Routes.php',
-        'CodeIgniter\\Commands\\Utilities\\Routes\\AutoRouteCollector' => __DIR__ . '/..' . '/codeigniter4/framework/system/Commands/Utilities/Routes/AutoRouteCollector.php',
-        'CodeIgniter\\Commands\\Utilities\\Routes\\AutoRouterImproved\\AutoRouteCollector' => __DIR__ . '/..' . '/codeigniter4/framework/system/Commands/Utilities/Routes/AutoRouterImproved/AutoRouteCollector.php',
-        'CodeIgniter\\Commands\\Utilities\\Routes\\AutoRouterImproved\\ControllerMethodReader' => __DIR__ . '/..' . '/codeigniter4/framework/system/Commands/Utilities/Routes/AutoRouterImproved/ControllerMethodReader.php',
-        'CodeIgniter\\Commands\\Utilities\\Routes\\ControllerFinder' => __DIR__ . '/..' . '/codeigniter4/framework/system/Commands/Utilities/Routes/ControllerFinder.php',
-        'CodeIgniter\\Commands\\Utilities\\Routes\\ControllerMethodReader' => __DIR__ . '/..' . '/codeigniter4/framework/system/Commands/Utilities/Routes/ControllerMethodReader.php',
-        'CodeIgniter\\Commands\\Utilities\\Routes\\FilterCollector' => __DIR__ . '/..' . '/codeigniter4/framework/system/Commands/Utilities/Routes/FilterCollector.php',
-        'CodeIgniter\\Commands\\Utilities\\Routes\\FilterFinder' => __DIR__ . '/..' . '/codeigniter4/framework/system/Commands/Utilities/Routes/FilterFinder.php',
-        'CodeIgniter\\Commands\\Utilities\\Routes\\SampleURIGenerator' => __DIR__ . '/..' . '/codeigniter4/framework/system/Commands/Utilities/Routes/SampleURIGenerator.php',
-        'CodeIgniter\\ComposerScripts' => __DIR__ . '/..' . '/codeigniter4/framework/system/ComposerScripts.php',
-        'CodeIgniter\\Config\\AutoloadConfig' => __DIR__ . '/..' . '/codeigniter4/framework/system/Config/AutoloadConfig.php',
-        'CodeIgniter\\Config\\BaseConfig' => __DIR__ . '/..' . '/codeigniter4/framework/system/Config/BaseConfig.php',
-        'CodeIgniter\\Config\\BaseService' => __DIR__ . '/..' . '/codeigniter4/framework/system/Config/BaseService.php',
-        'CodeIgniter\\Config\\Config' => __DIR__ . '/..' . '/codeigniter4/framework/system/Config/Config.php',
-        'CodeIgniter\\Config\\DotEnv' => __DIR__ . '/..' . '/codeigniter4/framework/system/Config/DotEnv.php',
-        'CodeIgniter\\Config\\Factories' => __DIR__ . '/..' . '/codeigniter4/framework/system/Config/Factories.php',
-        'CodeIgniter\\Config\\Factory' => __DIR__ . '/..' . '/codeigniter4/framework/system/Config/Factory.php',
-        'CodeIgniter\\Config\\ForeignCharacters' => __DIR__ . '/..' . '/codeigniter4/framework/system/Config/ForeignCharacters.php',
-        'CodeIgniter\\Config\\Publisher' => __DIR__ . '/..' . '/codeigniter4/framework/system/Config/Publisher.php',
-        'CodeIgniter\\Config\\Routing' => __DIR__ . '/..' . '/codeigniter4/framework/system/Config/Routing.php',
-        'CodeIgniter\\Config\\Services' => __DIR__ . '/..' . '/codeigniter4/framework/system/Config/Services.php',
-        'CodeIgniter\\Config\\View' => __DIR__ . '/..' . '/codeigniter4/framework/system/Config/View.php',
-        'CodeIgniter\\Controller' => __DIR__ . '/..' . '/codeigniter4/framework/system/Controller.php',
-        'CodeIgniter\\Cookie\\CloneableCookieInterface' => __DIR__ . '/..' . '/codeigniter4/framework/system/Cookie/CloneableCookieInterface.php',
-        'CodeIgniter\\Cookie\\Cookie' => __DIR__ . '/..' . '/codeigniter4/framework/system/Cookie/Cookie.php',
-        'CodeIgniter\\Cookie\\CookieInterface' => __DIR__ . '/..' . '/codeigniter4/framework/system/Cookie/CookieInterface.php',
-        'CodeIgniter\\Cookie\\CookieStore' => __DIR__ . '/..' . '/codeigniter4/framework/system/Cookie/CookieStore.php',
-        'CodeIgniter\\Cookie\\Exceptions\\CookieException' => __DIR__ . '/..' . '/codeigniter4/framework/system/Cookie/Exceptions/CookieException.php',
-        'CodeIgniter\\Database\\BaseBuilder' => __DIR__ . '/..' . '/codeigniter4/framework/system/Database/BaseBuilder.php',
-        'CodeIgniter\\Database\\BaseConnection' => __DIR__ . '/..' . '/codeigniter4/framework/system/Database/BaseConnection.php',
-        'CodeIgniter\\Database\\BasePreparedQuery' => __DIR__ . '/..' . '/codeigniter4/framework/system/Database/BasePreparedQuery.php',
-        'CodeIgniter\\Database\\BaseResult' => __DIR__ . '/..' . '/codeigniter4/framework/system/Database/BaseResult.php',
-        'CodeIgniter\\Database\\BaseUtils' => __DIR__ . '/..' . '/codeigniter4/framework/system/Database/BaseUtils.php',
-        'CodeIgniter\\Database\\Config' => __DIR__ . '/..' . '/codeigniter4/framework/system/Database/Config.php',
-        'CodeIgniter\\Database\\ConnectionInterface' => __DIR__ . '/..' . '/codeigniter4/framework/system/Database/ConnectionInterface.php',
-        'CodeIgniter\\Database\\Database' => __DIR__ . '/..' . '/codeigniter4/framework/system/Database/Database.php',
-        'CodeIgniter\\Database\\Exceptions\\DataException' => __DIR__ . '/..' . '/codeigniter4/framework/system/Database/Exceptions/DataException.php',
-        'CodeIgniter\\Database\\Exceptions\\DatabaseException' => __DIR__ . '/..' . '/codeigniter4/framework/system/Database/Exceptions/DatabaseException.php',
-        'CodeIgniter\\Database\\Exceptions\\ExceptionInterface' => __DIR__ . '/..' . '/codeigniter4/framework/system/Database/Exceptions/ExceptionInterface.php',
-        'CodeIgniter\\Database\\Forge' => __DIR__ . '/..' . '/codeigniter4/framework/system/Database/Forge.php',
-        'CodeIgniter\\Database\\Migration' => __DIR__ . '/..' . '/codeigniter4/framework/system/Database/Migration.php',
-        'CodeIgniter\\Database\\MigrationRunner' => __DIR__ . '/..' . '/codeigniter4/framework/system/Database/MigrationRunner.php',
-        'CodeIgniter\\Database\\ModelFactory' => __DIR__ . '/..' . '/codeigniter4/framework/system/Database/ModelFactory.php',
-        'CodeIgniter\\Database\\MySQLi\\Builder' => __DIR__ . '/..' . '/codeigniter4/framework/system/Database/MySQLi/Builder.php',
-        'CodeIgniter\\Database\\MySQLi\\Connection' => __DIR__ . '/..' . '/codeigniter4/framework/system/Database/MySQLi/Connection.php',
-        'CodeIgniter\\Database\\MySQLi\\Forge' => __DIR__ . '/..' . '/codeigniter4/framework/system/Database/MySQLi/Forge.php',
-        'CodeIgniter\\Database\\MySQLi\\PreparedQuery' => __DIR__ . '/..' . '/codeigniter4/framework/system/Database/MySQLi/PreparedQuery.php',
-        'CodeIgniter\\Database\\MySQLi\\Result' => __DIR__ . '/..' . '/codeigniter4/framework/system/Database/MySQLi/Result.php',
-        'CodeIgniter\\Database\\MySQLi\\Utils' => __DIR__ . '/..' . '/codeigniter4/framework/system/Database/MySQLi/Utils.php',
-        'CodeIgniter\\Database\\OCI8\\Builder' => __DIR__ . '/..' . '/codeigniter4/framework/system/Database/OCI8/Builder.php',
-        'CodeIgniter\\Database\\OCI8\\Connection' => __DIR__ . '/..' . '/codeigniter4/framework/system/Database/OCI8/Connection.php',
-        'CodeIgniter\\Database\\OCI8\\Forge' => __DIR__ . '/..' . '/codeigniter4/framework/system/Database/OCI8/Forge.php',
-        'CodeIgniter\\Database\\OCI8\\PreparedQuery' => __DIR__ . '/..' . '/codeigniter4/framework/system/Database/OCI8/PreparedQuery.php',
-        'CodeIgniter\\Database\\OCI8\\Result' => __DIR__ . '/..' . '/codeigniter4/framework/system/Database/OCI8/Result.php',
-        'CodeIgniter\\Database\\OCI8\\Utils' => __DIR__ . '/..' . '/codeigniter4/framework/system/Database/OCI8/Utils.php',
-        'CodeIgniter\\Database\\Postgre\\Builder' => __DIR__ . '/..' . '/codeigniter4/framework/system/Database/Postgre/Builder.php',
-        'CodeIgniter\\Database\\Postgre\\Connection' => __DIR__ . '/..' . '/codeigniter4/framework/system/Database/Postgre/Connection.php',
-        'CodeIgniter\\Database\\Postgre\\Forge' => __DIR__ . '/..' . '/codeigniter4/framework/system/Database/Postgre/Forge.php',
-        'CodeIgniter\\Database\\Postgre\\PreparedQuery' => __DIR__ . '/..' . '/codeigniter4/framework/system/Database/Postgre/PreparedQuery.php',
-        'CodeIgniter\\Database\\Postgre\\Result' => __DIR__ . '/..' . '/codeigniter4/framework/system/Database/Postgre/Result.php',
-        'CodeIgniter\\Database\\Postgre\\Utils' => __DIR__ . '/..' . '/codeigniter4/framework/system/Database/Postgre/Utils.php',
-        'CodeIgniter\\Database\\PreparedQueryInterface' => __DIR__ . '/..' . '/codeigniter4/framework/system/Database/PreparedQueryInterface.php',
-        'CodeIgniter\\Database\\Query' => __DIR__ . '/..' . '/codeigniter4/framework/system/Database/Query.php',
-        'CodeIgniter\\Database\\QueryInterface' => __DIR__ . '/..' . '/codeigniter4/framework/system/Database/QueryInterface.php',
-        'CodeIgniter\\Database\\RawSql' => __DIR__ . '/..' . '/codeigniter4/framework/system/Database/RawSql.php',
-        'CodeIgniter\\Database\\ResultInterface' => __DIR__ . '/..' . '/codeigniter4/framework/system/Database/ResultInterface.php',
-        'CodeIgniter\\Database\\SQLSRV\\Builder' => __DIR__ . '/..' . '/codeigniter4/framework/system/Database/SQLSRV/Builder.php',
-        'CodeIgniter\\Database\\SQLSRV\\Connection' => __DIR__ . '/..' . '/codeigniter4/framework/system/Database/SQLSRV/Connection.php',
-        'CodeIgniter\\Database\\SQLSRV\\Forge' => __DIR__ . '/..' . '/codeigniter4/framework/system/Database/SQLSRV/Forge.php',
-        'CodeIgniter\\Database\\SQLSRV\\PreparedQuery' => __DIR__ . '/..' . '/codeigniter4/framework/system/Database/SQLSRV/PreparedQuery.php',
-        'CodeIgniter\\Database\\SQLSRV\\Result' => __DIR__ . '/..' . '/codeigniter4/framework/system/Database/SQLSRV/Result.php',
-        'CodeIgniter\\Database\\SQLSRV\\Utils' => __DIR__ . '/..' . '/codeigniter4/framework/system/Database/SQLSRV/Utils.php',
-        'CodeIgniter\\Database\\SQLite3\\Builder' => __DIR__ . '/..' . '/codeigniter4/framework/system/Database/SQLite3/Builder.php',
-        'CodeIgniter\\Database\\SQLite3\\Connection' => __DIR__ . '/..' . '/codeigniter4/framework/system/Database/SQLite3/Connection.php',
-        'CodeIgniter\\Database\\SQLite3\\Forge' => __DIR__ . '/..' . '/codeigniter4/framework/system/Database/SQLite3/Forge.php',
-        'CodeIgniter\\Database\\SQLite3\\PreparedQuery' => __DIR__ . '/..' . '/codeigniter4/framework/system/Database/SQLite3/PreparedQuery.php',
-        'CodeIgniter\\Database\\SQLite3\\Result' => __DIR__ . '/..' . '/codeigniter4/framework/system/Database/SQLite3/Result.php',
-        'CodeIgniter\\Database\\SQLite3\\Table' => __DIR__ . '/..' . '/codeigniter4/framework/system/Database/SQLite3/Table.php',
-        'CodeIgniter\\Database\\SQLite3\\Utils' => __DIR__ . '/..' . '/codeigniter4/framework/system/Database/SQLite3/Utils.php',
-        'CodeIgniter\\Database\\Seeder' => __DIR__ . '/..' . '/codeigniter4/framework/system/Database/Seeder.php',
-        'CodeIgniter\\Debug\\BaseExceptionHandler' => __DIR__ . '/..' . '/codeigniter4/framework/system/Debug/BaseExceptionHandler.php',
-        'CodeIgniter\\Debug\\ExceptionHandler' => __DIR__ . '/..' . '/codeigniter4/framework/system/Debug/ExceptionHandler.php',
-        'CodeIgniter\\Debug\\ExceptionHandlerInterface' => __DIR__ . '/..' . '/codeigniter4/framework/system/Debug/ExceptionHandlerInterface.php',
-        'CodeIgniter\\Debug\\Exceptions' => __DIR__ . '/..' . '/codeigniter4/framework/system/Debug/Exceptions.php',
-        'CodeIgniter\\Debug\\Iterator' => __DIR__ . '/..' . '/codeigniter4/framework/system/Debug/Iterator.php',
-        'CodeIgniter\\Debug\\Timer' => __DIR__ . '/..' . '/codeigniter4/framework/system/Debug/Timer.php',
-        'CodeIgniter\\Debug\\Toolbar' => __DIR__ . '/..' . '/codeigniter4/framework/system/Debug/Toolbar.php',
-        'CodeIgniter\\Debug\\Toolbar\\Collectors\\BaseCollector' => __DIR__ . '/..' . '/codeigniter4/framework/system/Debug/Toolbar/Collectors/BaseCollector.php',
-        'CodeIgniter\\Debug\\Toolbar\\Collectors\\Config' => __DIR__ . '/..' . '/codeigniter4/framework/system/Debug/Toolbar/Collectors/Config.php',
-        'CodeIgniter\\Debug\\Toolbar\\Collectors\\Database' => __DIR__ . '/..' . '/codeigniter4/framework/system/Debug/Toolbar/Collectors/Database.php',
-        'CodeIgniter\\Debug\\Toolbar\\Collectors\\Events' => __DIR__ . '/..' . '/codeigniter4/framework/system/Debug/Toolbar/Collectors/Events.php',
-        'CodeIgniter\\Debug\\Toolbar\\Collectors\\Files' => __DIR__ . '/..' . '/codeigniter4/framework/system/Debug/Toolbar/Collectors/Files.php',
-        'CodeIgniter\\Debug\\Toolbar\\Collectors\\History' => __DIR__ . '/..' . '/codeigniter4/framework/system/Debug/Toolbar/Collectors/History.php',
-        'CodeIgniter\\Debug\\Toolbar\\Collectors\\Logs' => __DIR__ . '/..' . '/codeigniter4/framework/system/Debug/Toolbar/Collectors/Logs.php',
-        'CodeIgniter\\Debug\\Toolbar\\Collectors\\Routes' => __DIR__ . '/..' . '/codeigniter4/framework/system/Debug/Toolbar/Collectors/Routes.php',
-        'CodeIgniter\\Debug\\Toolbar\\Collectors\\Timers' => __DIR__ . '/..' . '/codeigniter4/framework/system/Debug/Toolbar/Collectors/Timers.php',
-        'CodeIgniter\\Debug\\Toolbar\\Collectors\\Views' => __DIR__ . '/..' . '/codeigniter4/framework/system/Debug/Toolbar/Collectors/Views.php',
-        'CodeIgniter\\Email\\Email' => __DIR__ . '/..' . '/codeigniter4/framework/system/Email/Email.php',
-        'CodeIgniter\\Encryption\\EncrypterInterface' => __DIR__ . '/..' . '/codeigniter4/framework/system/Encryption/EncrypterInterface.php',
-        'CodeIgniter\\Encryption\\Encryption' => __DIR__ . '/..' . '/codeigniter4/framework/system/Encryption/Encryption.php',
-        'CodeIgniter\\Encryption\\Exceptions\\EncryptionException' => __DIR__ . '/..' . '/codeigniter4/framework/system/Encryption/Exceptions/EncryptionException.php',
-        'CodeIgniter\\Encryption\\Handlers\\BaseHandler' => __DIR__ . '/..' . '/codeigniter4/framework/system/Encryption/Handlers/BaseHandler.php',
-        'CodeIgniter\\Encryption\\Handlers\\OpenSSLHandler' => __DIR__ . '/..' . '/codeigniter4/framework/system/Encryption/Handlers/OpenSSLHandler.php',
-        'CodeIgniter\\Encryption\\Handlers\\SodiumHandler' => __DIR__ . '/..' . '/codeigniter4/framework/system/Encryption/Handlers/SodiumHandler.php',
-        'CodeIgniter\\Entity' => __DIR__ . '/..' . '/codeigniter4/framework/system/Entity.php',
-        'CodeIgniter\\Entity\\Cast\\ArrayCast' => __DIR__ . '/..' . '/codeigniter4/framework/system/Entity/Cast/ArrayCast.php',
-        'CodeIgniter\\Entity\\Cast\\BaseCast' => __DIR__ . '/..' . '/codeigniter4/framework/system/Entity/Cast/BaseCast.php',
-        'CodeIgniter\\Entity\\Cast\\BooleanCast' => __DIR__ . '/..' . '/codeigniter4/framework/system/Entity/Cast/BooleanCast.php',
-        'CodeIgniter\\Entity\\Cast\\CSVCast' => __DIR__ . '/..' . '/codeigniter4/framework/system/Entity/Cast/CSVCast.php',
-        'CodeIgniter\\Entity\\Cast\\CastInterface' => __DIR__ . '/..' . '/codeigniter4/framework/system/Entity/Cast/CastInterface.php',
-        'CodeIgniter\\Entity\\Cast\\DatetimeCast' => __DIR__ . '/..' . '/codeigniter4/framework/system/Entity/Cast/DatetimeCast.php',
-        'CodeIgniter\\Entity\\Cast\\FloatCast' => __DIR__ . '/..' . '/codeigniter4/framework/system/Entity/Cast/FloatCast.php',
-        'CodeIgniter\\Entity\\Cast\\IntBoolCast' => __DIR__ . '/..' . '/codeigniter4/framework/system/Entity/Cast/IntBoolCast.php',
-        'CodeIgniter\\Entity\\Cast\\IntegerCast' => __DIR__ . '/..' . '/codeigniter4/framework/system/Entity/Cast/IntegerCast.php',
-        'CodeIgniter\\Entity\\Cast\\JsonCast' => __DIR__ . '/..' . '/codeigniter4/framework/system/Entity/Cast/JsonCast.php',
-        'CodeIgniter\\Entity\\Cast\\ObjectCast' => __DIR__ . '/..' . '/codeigniter4/framework/system/Entity/Cast/ObjectCast.php',
-        'CodeIgniter\\Entity\\Cast\\StringCast' => __DIR__ . '/..' . '/codeigniter4/framework/system/Entity/Cast/StringCast.php',
-        'CodeIgniter\\Entity\\Cast\\TimestampCast' => __DIR__ . '/..' . '/codeigniter4/framework/system/Entity/Cast/TimestampCast.php',
-        'CodeIgniter\\Entity\\Cast\\URICast' => __DIR__ . '/..' . '/codeigniter4/framework/system/Entity/Cast/URICast.php',
-        'CodeIgniter\\Entity\\Entity' => __DIR__ . '/..' . '/codeigniter4/framework/system/Entity/Entity.php',
-        'CodeIgniter\\Entity\\Exceptions\\CastException' => __DIR__ . '/..' . '/codeigniter4/framework/system/Entity/Exceptions/CastException.php',
-        'CodeIgniter\\Events\\Events' => __DIR__ . '/..' . '/codeigniter4/framework/system/Events/Events.php',
-        'CodeIgniter\\Exceptions\\AlertError' => __DIR__ . '/..' . '/codeigniter4/framework/system/Exceptions/AlertError.php',
-        'CodeIgniter\\Exceptions\\CastException' => __DIR__ . '/..' . '/codeigniter4/framework/system/Exceptions/CastException.php',
-        'CodeIgniter\\Exceptions\\ConfigException' => __DIR__ . '/..' . '/codeigniter4/framework/system/Exceptions/ConfigException.php',
-        'CodeIgniter\\Exceptions\\CriticalError' => __DIR__ . '/..' . '/codeigniter4/framework/system/Exceptions/CriticalError.php',
-        'CodeIgniter\\Exceptions\\DebugTraceableTrait' => __DIR__ . '/..' . '/codeigniter4/framework/system/Exceptions/DebugTraceableTrait.php',
-        'CodeIgniter\\Exceptions\\DownloadException' => __DIR__ . '/..' . '/codeigniter4/framework/system/Exceptions/DownloadException.php',
-        'CodeIgniter\\Exceptions\\EmergencyError' => __DIR__ . '/..' . '/codeigniter4/framework/system/Exceptions/EmergencyError.php',
-        'CodeIgniter\\Exceptions\\ExceptionInterface' => __DIR__ . '/..' . '/codeigniter4/framework/system/Exceptions/ExceptionInterface.php',
-        'CodeIgniter\\Exceptions\\FrameworkException' => __DIR__ . '/..' . '/codeigniter4/framework/system/Exceptions/FrameworkException.php',
-        'CodeIgniter\\Exceptions\\HTTPExceptionInterface' => __DIR__ . '/..' . '/codeigniter4/framework/system/Exceptions/HTTPExceptionInterface.php',
-        'CodeIgniter\\Exceptions\\HasExitCodeInterface' => __DIR__ . '/..' . '/codeigniter4/framework/system/Exceptions/HasExitCodeInterface.php',
-        'CodeIgniter\\Exceptions\\ModelException' => __DIR__ . '/..' . '/codeigniter4/framework/system/Exceptions/ModelException.php',
-        'CodeIgniter\\Exceptions\\PageNotFoundException' => __DIR__ . '/..' . '/codeigniter4/framework/system/Exceptions/PageNotFoundException.php',
-        'CodeIgniter\\Exceptions\\TestException' => __DIR__ . '/..' . '/codeigniter4/framework/system/Exceptions/TestException.php',
-        'CodeIgniter\\Files\\Exceptions\\FileException' => __DIR__ . '/..' . '/codeigniter4/framework/system/Files/Exceptions/FileException.php',
-        'CodeIgniter\\Files\\Exceptions\\FileNotFoundException' => __DIR__ . '/..' . '/codeigniter4/framework/system/Files/Exceptions/FileNotFoundException.php',
-        'CodeIgniter\\Files\\File' => __DIR__ . '/..' . '/codeigniter4/framework/system/Files/File.php',
-        'CodeIgniter\\Files\\FileCollection' => __DIR__ . '/..' . '/codeigniter4/framework/system/Files/FileCollection.php',
-        'CodeIgniter\\Filters\\CSRF' => __DIR__ . '/..' . '/codeigniter4/framework/system/Filters/CSRF.php',
-        'CodeIgniter\\Filters\\DebugToolbar' => __DIR__ . '/..' . '/codeigniter4/framework/system/Filters/DebugToolbar.php',
-        'CodeIgniter\\Filters\\Exceptions\\FilterException' => __DIR__ . '/..' . '/codeigniter4/framework/system/Filters/Exceptions/FilterException.php',
-        'CodeIgniter\\Filters\\FilterInterface' => __DIR__ . '/..' . '/codeigniter4/framework/system/Filters/FilterInterface.php',
-        'CodeIgniter\\Filters\\Filters' => __DIR__ . '/..' . '/codeigniter4/framework/system/Filters/Filters.php',
-        'CodeIgniter\\Filters\\Honeypot' => __DIR__ . '/..' . '/codeigniter4/framework/system/Filters/Honeypot.php',
-        'CodeIgniter\\Filters\\InvalidChars' => __DIR__ . '/..' . '/codeigniter4/framework/system/Filters/InvalidChars.php',
-        'CodeIgniter\\Filters\\SecureHeaders' => __DIR__ . '/..' . '/codeigniter4/framework/system/Filters/SecureHeaders.php',
-        'CodeIgniter\\Format\\Exceptions\\FormatException' => __DIR__ . '/..' . '/codeigniter4/framework/system/Format/Exceptions/FormatException.php',
-        'CodeIgniter\\Format\\Format' => __DIR__ . '/..' . '/codeigniter4/framework/system/Format/Format.php',
-        'CodeIgniter\\Format\\FormatterInterface' => __DIR__ . '/..' . '/codeigniter4/framework/system/Format/FormatterInterface.php',
-        'CodeIgniter\\Format\\JSONFormatter' => __DIR__ . '/..' . '/codeigniter4/framework/system/Format/JSONFormatter.php',
-        'CodeIgniter\\Format\\XMLFormatter' => __DIR__ . '/..' . '/codeigniter4/framework/system/Format/XMLFormatter.php',
-        'CodeIgniter\\HTTP\\CLIRequest' => __DIR__ . '/..' . '/codeigniter4/framework/system/HTTP/CLIRequest.php',
-        'CodeIgniter\\HTTP\\CURLRequest' => __DIR__ . '/..' . '/codeigniter4/framework/system/HTTP/CURLRequest.php',
-        'CodeIgniter\\HTTP\\ContentSecurityPolicy' => __DIR__ . '/..' . '/codeigniter4/framework/system/HTTP/ContentSecurityPolicy.php',
-        'CodeIgniter\\HTTP\\DownloadResponse' => __DIR__ . '/..' . '/codeigniter4/framework/system/HTTP/DownloadResponse.php',
-        'CodeIgniter\\HTTP\\Exceptions\\BadRequestException' => __DIR__ . '/..' . '/codeigniter4/framework/system/HTTP/Exceptions/BadRequestException.php',
-        'CodeIgniter\\HTTP\\Exceptions\\HTTPException' => __DIR__ . '/..' . '/codeigniter4/framework/system/HTTP/Exceptions/HTTPException.php',
-        'CodeIgniter\\HTTP\\Exceptions\\RedirectException' => __DIR__ . '/..' . '/codeigniter4/framework/system/HTTP/Exceptions/RedirectException.php',
-        'CodeIgniter\\HTTP\\Files\\FileCollection' => __DIR__ . '/..' . '/codeigniter4/framework/system/HTTP/Files/FileCollection.php',
-        'CodeIgniter\\HTTP\\Files\\UploadedFile' => __DIR__ . '/..' . '/codeigniter4/framework/system/HTTP/Files/UploadedFile.php',
-        'CodeIgniter\\HTTP\\Files\\UploadedFileInterface' => __DIR__ . '/..' . '/codeigniter4/framework/system/HTTP/Files/UploadedFileInterface.php',
-        'CodeIgniter\\HTTP\\Header' => __DIR__ . '/..' . '/codeigniter4/framework/system/HTTP/Header.php',
-        'CodeIgniter\\HTTP\\IncomingRequest' => __DIR__ . '/..' . '/codeigniter4/framework/system/HTTP/IncomingRequest.php',
-        'CodeIgniter\\HTTP\\Message' => __DIR__ . '/..' . '/codeigniter4/framework/system/HTTP/Message.php',
-        'CodeIgniter\\HTTP\\MessageInterface' => __DIR__ . '/..' . '/codeigniter4/framework/system/HTTP/MessageInterface.php',
-        'CodeIgniter\\HTTP\\MessageTrait' => __DIR__ . '/..' . '/codeigniter4/framework/system/HTTP/MessageTrait.php',
-        'CodeIgniter\\HTTP\\Negotiate' => __DIR__ . '/..' . '/codeigniter4/framework/system/HTTP/Negotiate.php',
-        'CodeIgniter\\HTTP\\OutgoingRequest' => __DIR__ . '/..' . '/codeigniter4/framework/system/HTTP/OutgoingRequest.php',
-        'CodeIgniter\\HTTP\\OutgoingRequestInterface' => __DIR__ . '/..' . '/codeigniter4/framework/system/HTTP/OutgoingRequestInterface.php',
-        'CodeIgniter\\HTTP\\RedirectResponse' => __DIR__ . '/..' . '/codeigniter4/framework/system/HTTP/RedirectResponse.php',
-        'CodeIgniter\\HTTP\\Request' => __DIR__ . '/..' . '/codeigniter4/framework/system/HTTP/Request.php',
-        'CodeIgniter\\HTTP\\RequestInterface' => __DIR__ . '/..' . '/codeigniter4/framework/system/HTTP/RequestInterface.php',
-        'CodeIgniter\\HTTP\\RequestTrait' => __DIR__ . '/..' . '/codeigniter4/framework/system/HTTP/RequestTrait.php',
-        'CodeIgniter\\HTTP\\ResponsableInterface' => __DIR__ . '/..' . '/codeigniter4/framework/system/HTTP/ResponsableInterface.php',
-        'CodeIgniter\\HTTP\\Response' => __DIR__ . '/..' . '/codeigniter4/framework/system/HTTP/Response.php',
-        'CodeIgniter\\HTTP\\ResponseInterface' => __DIR__ . '/..' . '/codeigniter4/framework/system/HTTP/ResponseInterface.php',
-        'CodeIgniter\\HTTP\\ResponseTrait' => __DIR__ . '/..' . '/codeigniter4/framework/system/HTTP/ResponseTrait.php',
-        'CodeIgniter\\HTTP\\SiteURI' => __DIR__ . '/..' . '/codeigniter4/framework/system/HTTP/SiteURI.php',
-        'CodeIgniter\\HTTP\\SiteURIFactory' => __DIR__ . '/..' . '/codeigniter4/framework/system/HTTP/SiteURIFactory.php',
-        'CodeIgniter\\HTTP\\URI' => __DIR__ . '/..' . '/codeigniter4/framework/system/HTTP/URI.php',
-        'CodeIgniter\\HTTP\\UserAgent' => __DIR__ . '/..' . '/codeigniter4/framework/system/HTTP/UserAgent.php',
-        'CodeIgniter\\Honeypot\\Exceptions\\HoneypotException' => __DIR__ . '/..' . '/codeigniter4/framework/system/Honeypot/Exceptions/HoneypotException.php',
-        'CodeIgniter\\Honeypot\\Honeypot' => __DIR__ . '/..' . '/codeigniter4/framework/system/Honeypot/Honeypot.php',
-        'CodeIgniter\\HotReloader\\DirectoryHasher' => __DIR__ . '/..' . '/codeigniter4/framework/system/HotReloader/DirectoryHasher.php',
-        'CodeIgniter\\HotReloader\\HotReloader' => __DIR__ . '/..' . '/codeigniter4/framework/system/HotReloader/HotReloader.php',
-        'CodeIgniter\\HotReloader\\IteratorFilter' => __DIR__ . '/..' . '/codeigniter4/framework/system/HotReloader/IteratorFilter.php',
-        'CodeIgniter\\I18n\\Exceptions\\I18nException' => __DIR__ . '/..' . '/codeigniter4/framework/system/I18n/Exceptions/I18nException.php',
-        'CodeIgniter\\I18n\\Time' => __DIR__ . '/..' . '/codeigniter4/framework/system/I18n/Time.php',
-        'CodeIgniter\\I18n\\TimeDifference' => __DIR__ . '/..' . '/codeigniter4/framework/system/I18n/TimeDifference.php',
-        'CodeIgniter\\I18n\\TimeLegacy' => __DIR__ . '/..' . '/codeigniter4/framework/system/I18n/TimeLegacy.php',
-        'CodeIgniter\\I18n\\TimeTrait' => __DIR__ . '/..' . '/codeigniter4/framework/system/I18n/TimeTrait.php',
-        'CodeIgniter\\Images\\Exceptions\\ImageException' => __DIR__ . '/..' . '/codeigniter4/framework/system/Images/Exceptions/ImageException.php',
-        'CodeIgniter\\Images\\Handlers\\BaseHandler' => __DIR__ . '/..' . '/codeigniter4/framework/system/Images/Handlers/BaseHandler.php',
-        'CodeIgniter\\Images\\Handlers\\GDHandler' => __DIR__ . '/..' . '/codeigniter4/framework/system/Images/Handlers/GDHandler.php',
-        'CodeIgniter\\Images\\Handlers\\ImageMagickHandler' => __DIR__ . '/..' . '/codeigniter4/framework/system/Images/Handlers/ImageMagickHandler.php',
-        'CodeIgniter\\Images\\Image' => __DIR__ . '/..' . '/codeigniter4/framework/system/Images/Image.php',
-        'CodeIgniter\\Images\\ImageHandlerInterface' => __DIR__ . '/..' . '/codeigniter4/framework/system/Images/ImageHandlerInterface.php',
-        'CodeIgniter\\Language\\Language' => __DIR__ . '/..' . '/codeigniter4/framework/system/Language/Language.php',
-        'CodeIgniter\\Log\\Exceptions\\LogException' => __DIR__ . '/..' . '/codeigniter4/framework/system/Log/Exceptions/LogException.php',
-        'CodeIgniter\\Log\\Handlers\\BaseHandler' => __DIR__ . '/..' . '/codeigniter4/framework/system/Log/Handlers/BaseHandler.php',
-        'CodeIgniter\\Log\\Handlers\\ChromeLoggerHandler' => __DIR__ . '/..' . '/codeigniter4/framework/system/Log/Handlers/ChromeLoggerHandler.php',
-        'CodeIgniter\\Log\\Handlers\\ErrorlogHandler' => __DIR__ . '/..' . '/codeigniter4/framework/system/Log/Handlers/ErrorlogHandler.php',
-        'CodeIgniter\\Log\\Handlers\\FileHandler' => __DIR__ . '/..' . '/codeigniter4/framework/system/Log/Handlers/FileHandler.php',
-        'CodeIgniter\\Log\\Handlers\\HandlerInterface' => __DIR__ . '/..' . '/codeigniter4/framework/system/Log/Handlers/HandlerInterface.php',
-        'CodeIgniter\\Log\\Logger' => __DIR__ . '/..' . '/codeigniter4/framework/system/Log/Logger.php',
-        'CodeIgniter\\Model' => __DIR__ . '/..' . '/codeigniter4/framework/system/Model.php',
-        'CodeIgniter\\Modules\\Modules' => __DIR__ . '/..' . '/codeigniter4/framework/system/Modules/Modules.php',
-        'CodeIgniter\\Pager\\Exceptions\\PagerException' => __DIR__ . '/..' . '/codeigniter4/framework/system/Pager/Exceptions/PagerException.php',
-        'CodeIgniter\\Pager\\Pager' => __DIR__ . '/..' . '/codeigniter4/framework/system/Pager/Pager.php',
-        'CodeIgniter\\Pager\\PagerInterface' => __DIR__ . '/..' . '/codeigniter4/framework/system/Pager/PagerInterface.php',
-        'CodeIgniter\\Pager\\PagerRenderer' => __DIR__ . '/..' . '/codeigniter4/framework/system/Pager/PagerRenderer.php',
-        'CodeIgniter\\Publisher\\ContentReplacer' => __DIR__ . '/..' . '/codeigniter4/framework/system/Publisher/ContentReplacer.php',
-        'CodeIgniter\\Publisher\\Exceptions\\PublisherException' => __DIR__ . '/..' . '/codeigniter4/framework/system/Publisher/Exceptions/PublisherException.php',
-        'CodeIgniter\\Publisher\\Publisher' => __DIR__ . '/..' . '/codeigniter4/framework/system/Publisher/Publisher.php',
-        'CodeIgniter\\RESTful\\BaseResource' => __DIR__ . '/..' . '/codeigniter4/framework/system/RESTful/BaseResource.php',
-        'CodeIgniter\\RESTful\\ResourceController' => __DIR__ . '/..' . '/codeigniter4/framework/system/RESTful/ResourceController.php',
-        'CodeIgniter\\RESTful\\ResourcePresenter' => __DIR__ . '/..' . '/codeigniter4/framework/system/RESTful/ResourcePresenter.php',
-        'CodeIgniter\\Router\\AutoRouter' => __DIR__ . '/..' . '/codeigniter4/framework/system/Router/AutoRouter.php',
-        'CodeIgniter\\Router\\AutoRouterImproved' => __DIR__ . '/..' . '/codeigniter4/framework/system/Router/AutoRouterImproved.php',
-        'CodeIgniter\\Router\\AutoRouterInterface' => __DIR__ . '/..' . '/codeigniter4/framework/system/Router/AutoRouterInterface.php',
-        'CodeIgniter\\Router\\DefinedRouteCollector' => __DIR__ . '/..' . '/codeigniter4/framework/system/Router/DefinedRouteCollector.php',
-        'CodeIgniter\\Router\\Exceptions\\MethodNotFoundException' => __DIR__ . '/..' . '/codeigniter4/framework/system/Router/Exceptions/MethodNotFoundException.php',
-        'CodeIgniter\\Router\\Exceptions\\RedirectException' => __DIR__ . '/..' . '/codeigniter4/framework/system/Router/Exceptions/RedirectException.php',
-        'CodeIgniter\\Router\\Exceptions\\RouterException' => __DIR__ . '/..' . '/codeigniter4/framework/system/Router/Exceptions/RouterException.php',
-        'CodeIgniter\\Router\\RouteCollection' => __DIR__ . '/..' . '/codeigniter4/framework/system/Router/RouteCollection.php',
-        'CodeIgniter\\Router\\RouteCollectionInterface' => __DIR__ . '/..' . '/codeigniter4/framework/system/Router/RouteCollectionInterface.php',
-        'CodeIgniter\\Router\\Router' => __DIR__ . '/..' . '/codeigniter4/framework/system/Router/Router.php',
-        'CodeIgniter\\Router\\RouterInterface' => __DIR__ . '/..' . '/codeigniter4/framework/system/Router/RouterInterface.php',
-        'CodeIgniter\\Security\\Exceptions\\SecurityException' => __DIR__ . '/..' . '/codeigniter4/framework/system/Security/Exceptions/SecurityException.php',
-        'CodeIgniter\\Security\\Security' => __DIR__ . '/..' . '/codeigniter4/framework/system/Security/Security.php',
-        'CodeIgniter\\Security\\SecurityInterface' => __DIR__ . '/..' . '/codeigniter4/framework/system/Security/SecurityInterface.php',
-        'CodeIgniter\\Session\\Exceptions\\SessionException' => __DIR__ . '/..' . '/codeigniter4/framework/system/Session/Exceptions/SessionException.php',
-        'CodeIgniter\\Session\\Handlers\\ArrayHandler' => __DIR__ . '/..' . '/codeigniter4/framework/system/Session/Handlers/ArrayHandler.php',
-        'CodeIgniter\\Session\\Handlers\\BaseHandler' => __DIR__ . '/..' . '/codeigniter4/framework/system/Session/Handlers/BaseHandler.php',
-        'CodeIgniter\\Session\\Handlers\\DatabaseHandler' => __DIR__ . '/..' . '/codeigniter4/framework/system/Session/Handlers/DatabaseHandler.php',
-        'CodeIgniter\\Session\\Handlers\\Database\\MySQLiHandler' => __DIR__ . '/..' . '/codeigniter4/framework/system/Session/Handlers/Database/MySQLiHandler.php',
-        'CodeIgniter\\Session\\Handlers\\Database\\PostgreHandler' => __DIR__ . '/..' . '/codeigniter4/framework/system/Session/Handlers/Database/PostgreHandler.php',
-        'CodeIgniter\\Session\\Handlers\\FileHandler' => __DIR__ . '/..' . '/codeigniter4/framework/system/Session/Handlers/FileHandler.php',
-        'CodeIgniter\\Session\\Handlers\\MemcachedHandler' => __DIR__ . '/..' . '/codeigniter4/framework/system/Session/Handlers/MemcachedHandler.php',
-        'CodeIgniter\\Session\\Handlers\\RedisHandler' => __DIR__ . '/..' . '/codeigniter4/framework/system/Session/Handlers/RedisHandler.php',
-        'CodeIgniter\\Session\\Session' => __DIR__ . '/..' . '/codeigniter4/framework/system/Session/Session.php',
-        'CodeIgniter\\Session\\SessionInterface' => __DIR__ . '/..' . '/codeigniter4/framework/system/Session/SessionInterface.php',
-        'CodeIgniter\\Superglobals' => __DIR__ . '/..' . '/codeigniter4/framework/system/Superglobals.php',
-        'CodeIgniter\\Test\\CIDatabaseTestCase' => __DIR__ . '/..' . '/codeigniter4/framework/system/Test/CIDatabaseTestCase.php',
-        'CodeIgniter\\Test\\CIUnitTestCase' => __DIR__ . '/..' . '/codeigniter4/framework/system/Test/CIUnitTestCase.php',
-        'CodeIgniter\\Test\\ConfigFromArrayTrait' => __DIR__ . '/..' . '/codeigniter4/framework/system/Test/ConfigFromArrayTrait.php',
-        'CodeIgniter\\Test\\Constraints\\SeeInDatabase' => __DIR__ . '/..' . '/codeigniter4/framework/system/Test/Constraints/SeeInDatabase.php',
-        'CodeIgniter\\Test\\ControllerResponse' => __DIR__ . '/..' . '/codeigniter4/framework/system/Test/ControllerResponse.php',
-        'CodeIgniter\\Test\\ControllerTestTrait' => __DIR__ . '/..' . '/codeigniter4/framework/system/Test/ControllerTestTrait.php',
-        'CodeIgniter\\Test\\ControllerTester' => __DIR__ . '/..' . '/codeigniter4/framework/system/Test/ControllerTester.php',
-        'CodeIgniter\\Test\\DOMParser' => __DIR__ . '/..' . '/codeigniter4/framework/system/Test/DOMParser.php',
-        'CodeIgniter\\Test\\DatabaseTestTrait' => __DIR__ . '/..' . '/codeigniter4/framework/system/Test/DatabaseTestTrait.php',
-        'CodeIgniter\\Test\\Fabricator' => __DIR__ . '/..' . '/codeigniter4/framework/system/Test/Fabricator.php',
-        'CodeIgniter\\Test\\FeatureResponse' => __DIR__ . '/..' . '/codeigniter4/framework/system/Test/FeatureResponse.php',
-        'CodeIgniter\\Test\\FeatureTestCase' => __DIR__ . '/..' . '/codeigniter4/framework/system/Test/FeatureTestCase.php',
-        'CodeIgniter\\Test\\FeatureTestTrait' => __DIR__ . '/..' . '/codeigniter4/framework/system/Test/FeatureTestTrait.php',
-        'CodeIgniter\\Test\\FilterTestTrait' => __DIR__ . '/..' . '/codeigniter4/framework/system/Test/FilterTestTrait.php',
-        'CodeIgniter\\Test\\Filters\\CITestStreamFilter' => __DIR__ . '/..' . '/codeigniter4/framework/system/Test/Filters/CITestStreamFilter.php',
-        'CodeIgniter\\Test\\IniTestTrait' => __DIR__ . '/..' . '/codeigniter4/framework/system/Test/IniTestTrait.php',
-        'CodeIgniter\\Test\\Interfaces\\FabricatorModel' => __DIR__ . '/..' . '/codeigniter4/framework/system/Test/Interfaces/FabricatorModel.php',
-        'CodeIgniter\\Test\\Mock\\MockAppConfig' => __DIR__ . '/..' . '/codeigniter4/framework/system/Test/Mock/MockAppConfig.php',
-        'CodeIgniter\\Test\\Mock\\MockAutoload' => __DIR__ . '/..' . '/codeigniter4/framework/system/Test/Mock/MockAutoload.php',
-        'CodeIgniter\\Test\\Mock\\MockBuilder' => __DIR__ . '/..' . '/codeigniter4/framework/system/Test/Mock/MockBuilder.php',
-        'CodeIgniter\\Test\\Mock\\MockCLIConfig' => __DIR__ . '/..' . '/codeigniter4/framework/system/Test/Mock/MockCLIConfig.php',
-        'CodeIgniter\\Test\\Mock\\MockCURLRequest' => __DIR__ . '/..' . '/codeigniter4/framework/system/Test/Mock/MockCURLRequest.php',
-        'CodeIgniter\\Test\\Mock\\MockCache' => __DIR__ . '/..' . '/codeigniter4/framework/system/Test/Mock/MockCache.php',
-        'CodeIgniter\\Test\\Mock\\MockCodeIgniter' => __DIR__ . '/..' . '/codeigniter4/framework/system/Test/Mock/MockCodeIgniter.php',
-        'CodeIgniter\\Test\\Mock\\MockConnection' => __DIR__ . '/..' . '/codeigniter4/framework/system/Test/Mock/MockConnection.php',
-        'CodeIgniter\\Test\\Mock\\MockEmail' => __DIR__ . '/..' . '/codeigniter4/framework/system/Test/Mock/MockEmail.php',
-        'CodeIgniter\\Test\\Mock\\MockEvents' => __DIR__ . '/..' . '/codeigniter4/framework/system/Test/Mock/MockEvents.php',
-        'CodeIgniter\\Test\\Mock\\MockFileLogger' => __DIR__ . '/..' . '/codeigniter4/framework/system/Test/Mock/MockFileLogger.php',
-        'CodeIgniter\\Test\\Mock\\MockIncomingRequest' => __DIR__ . '/..' . '/codeigniter4/framework/system/Test/Mock/MockIncomingRequest.php',
-        'CodeIgniter\\Test\\Mock\\MockLanguage' => __DIR__ . '/..' . '/codeigniter4/framework/system/Test/Mock/MockLanguage.php',
-        'CodeIgniter\\Test\\Mock\\MockLogger' => __DIR__ . '/..' . '/codeigniter4/framework/system/Test/Mock/MockLogger.php',
-        'CodeIgniter\\Test\\Mock\\MockQuery' => __DIR__ . '/..' . '/codeigniter4/framework/system/Test/Mock/MockQuery.php',
-        'CodeIgniter\\Test\\Mock\\MockResourceController' => __DIR__ . '/..' . '/codeigniter4/framework/system/Test/Mock/MockResourceController.php',
-        'CodeIgniter\\Test\\Mock\\MockResourcePresenter' => __DIR__ . '/..' . '/codeigniter4/framework/system/Test/Mock/MockResourcePresenter.php',
-        'CodeIgniter\\Test\\Mock\\MockResponse' => __DIR__ . '/..' . '/codeigniter4/framework/system/Test/Mock/MockResponse.php',
-        'CodeIgniter\\Test\\Mock\\MockResult' => __DIR__ . '/..' . '/codeigniter4/framework/system/Test/Mock/MockResult.php',
-        'CodeIgniter\\Test\\Mock\\MockSecurity' => __DIR__ . '/..' . '/codeigniter4/framework/system/Test/Mock/MockSecurity.php',
-        'CodeIgniter\\Test\\Mock\\MockSecurityConfig' => __DIR__ . '/..' . '/codeigniter4/framework/system/Test/Mock/MockSecurityConfig.php',
-        'CodeIgniter\\Test\\Mock\\MockServices' => __DIR__ . '/..' . '/codeigniter4/framework/system/Test/Mock/MockServices.php',
-        'CodeIgniter\\Test\\Mock\\MockSession' => __DIR__ . '/..' . '/codeigniter4/framework/system/Test/Mock/MockSession.php',
-        'CodeIgniter\\Test\\Mock\\MockTable' => __DIR__ . '/..' . '/codeigniter4/framework/system/Test/Mock/MockTable.php',
-        'CodeIgniter\\Test\\PhpStreamWrapper' => __DIR__ . '/..' . '/codeigniter4/framework/system/Test/PhpStreamWrapper.php',
-        'CodeIgniter\\Test\\ReflectionHelper' => __DIR__ . '/..' . '/codeigniter4/framework/system/Test/ReflectionHelper.php',
-        'CodeIgniter\\Test\\StreamFilterTrait' => __DIR__ . '/..' . '/codeigniter4/framework/system/Test/StreamFilterTrait.php',
-        'CodeIgniter\\Test\\TestLogger' => __DIR__ . '/..' . '/codeigniter4/framework/system/Test/TestLogger.php',
-        'CodeIgniter\\Test\\TestResponse' => __DIR__ . '/..' . '/codeigniter4/framework/system/Test/TestResponse.php',
-        'CodeIgniter\\Throttle\\Throttler' => __DIR__ . '/..' . '/codeigniter4/framework/system/Throttle/Throttler.php',
-        'CodeIgniter\\Throttle\\ThrottlerInterface' => __DIR__ . '/..' . '/codeigniter4/framework/system/Throttle/ThrottlerInterface.php',
-        'CodeIgniter\\Traits\\ConditionalTrait' => __DIR__ . '/..' . '/codeigniter4/framework/system/Traits/ConditionalTrait.php',
-        'CodeIgniter\\Traits\\PropertiesTrait' => __DIR__ . '/..' . '/codeigniter4/framework/system/Traits/PropertiesTrait.php',
-        'CodeIgniter\\Typography\\Typography' => __DIR__ . '/..' . '/codeigniter4/framework/system/Typography/Typography.php',
-        'CodeIgniter\\Validation\\CreditCardRules' => __DIR__ . '/..' . '/codeigniter4/framework/system/Validation/CreditCardRules.php',
-        'CodeIgniter\\Validation\\DotArrayFilter' => __DIR__ . '/..' . '/codeigniter4/framework/system/Validation/DotArrayFilter.php',
-        'CodeIgniter\\Validation\\Exceptions\\ValidationException' => __DIR__ . '/..' . '/codeigniter4/framework/system/Validation/Exceptions/ValidationException.php',
-        'CodeIgniter\\Validation\\FileRules' => __DIR__ . '/..' . '/codeigniter4/framework/system/Validation/FileRules.php',
-        'CodeIgniter\\Validation\\FormatRules' => __DIR__ . '/..' . '/codeigniter4/framework/system/Validation/FormatRules.php',
-        'CodeIgniter\\Validation\\Rules' => __DIR__ . '/..' . '/codeigniter4/framework/system/Validation/Rules.php',
-        'CodeIgniter\\Validation\\StrictRules\\CreditCardRules' => __DIR__ . '/..' . '/codeigniter4/framework/system/Validation/StrictRules/CreditCardRules.php',
-        'CodeIgniter\\Validation\\StrictRules\\FileRules' => __DIR__ . '/..' . '/codeigniter4/framework/system/Validation/StrictRules/FileRules.php',
-        'CodeIgniter\\Validation\\StrictRules\\FormatRules' => __DIR__ . '/..' . '/codeigniter4/framework/system/Validation/StrictRules/FormatRules.php',
-        'CodeIgniter\\Validation\\StrictRules\\Rules' => __DIR__ . '/..' . '/codeigniter4/framework/system/Validation/StrictRules/Rules.php',
-        'CodeIgniter\\Validation\\Validation' => __DIR__ . '/..' . '/codeigniter4/framework/system/Validation/Validation.php',
-        'CodeIgniter\\Validation\\ValidationInterface' => __DIR__ . '/..' . '/codeigniter4/framework/system/Validation/ValidationInterface.php',
-        'CodeIgniter\\View\\Cell' => __DIR__ . '/..' . '/codeigniter4/framework/system/View/Cell.php',
-        'CodeIgniter\\View\\Cells\\Cell' => __DIR__ . '/..' . '/codeigniter4/framework/system/View/Cells/Cell.php',
-        'CodeIgniter\\View\\Exceptions\\ViewException' => __DIR__ . '/..' . '/codeigniter4/framework/system/View/Exceptions/ViewException.php',
-        'CodeIgniter\\View\\Filters' => __DIR__ . '/..' . '/codeigniter4/framework/system/View/Filters.php',
-        'CodeIgniter\\View\\Parser' => __DIR__ . '/..' . '/codeigniter4/framework/system/View/Parser.php',
-        'CodeIgniter\\View\\Plugins' => __DIR__ . '/..' . '/codeigniter4/framework/system/View/Plugins.php',
-        'CodeIgniter\\View\\RendererInterface' => __DIR__ . '/..' . '/codeigniter4/framework/system/View/RendererInterface.php',
-        'CodeIgniter\\View\\Table' => __DIR__ . '/..' . '/codeigniter4/framework/system/View/Table.php',
-        'CodeIgniter\\View\\View' => __DIR__ . '/..' . '/codeigniter4/framework/system/View/View.php',
-        'CodeIgniter\\View\\ViewDecoratorInterface' => __DIR__ . '/..' . '/codeigniter4/framework/system/View/ViewDecoratorInterface.php',
-        'CodeIgniter\\View\\ViewDecoratorTrait' => __DIR__ . '/..' . '/codeigniter4/framework/system/View/ViewDecoratorTrait.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'Composer\\Semver\\Comparator' => __DIR__ . '/..' . '/composer/semver/src/Comparator.php',
         'Composer\\Semver\\CompilingMatcher' => __DIR__ . '/..' . '/composer/semver/src/CompilingMatcher.php',
@@ -1472,10 +1077,6 @@ class ComposerStaticInitd1eeaaf58f42cec389bb4efac46fd1a5
         'Http\\Promise\\FulfilledPromise' => __DIR__ . '/..' . '/php-http/promise/src/FulfilledPromise.php',
         'Http\\Promise\\Promise' => __DIR__ . '/..' . '/php-http/promise/src/Promise.php',
         'Http\\Promise\\RejectedPromise' => __DIR__ . '/..' . '/php-http/promise/src/RejectedPromise.php',
-        'Laminas\\Escaper\\Escaper' => __DIR__ . '/..' . '/laminas/laminas-escaper/src/Escaper.php',
-        'Laminas\\Escaper\\Exception\\ExceptionInterface' => __DIR__ . '/..' . '/laminas/laminas-escaper/src/Exception/ExceptionInterface.php',
-        'Laminas\\Escaper\\Exception\\InvalidArgumentException' => __DIR__ . '/..' . '/laminas/laminas-escaper/src/Exception/InvalidArgumentException.php',
-        'Laminas\\Escaper\\Exception\\RuntimeException' => __DIR__ . '/..' . '/laminas/laminas-escaper/src/Exception/RuntimeException.php',
         'MongoDB\\Builder\\Accumulator' => __DIR__ . '/..' . '/mongodb/mongodb/src/Builder/Accumulator.php',
         'MongoDB\\Builder\\Accumulator\\AccumulatorAccumulator' => __DIR__ . '/..' . '/mongodb/mongodb/src/Builder/Accumulator/AccumulatorAccumulator.php',
         'MongoDB\\Builder\\Accumulator\\AddToSetAccumulator' => __DIR__ . '/..' . '/mongodb/mongodb/src/Builder/Accumulator/AddToSetAccumulator.php',
@@ -2394,9 +1995,6 @@ class ComposerStaticInitd1eeaaf58f42cec389bb4efac46fd1a5
         'OpenTelemetry\\Context\\Propagation\\TextMapPropagatorInterface' => __DIR__ . '/..' . '/open-telemetry/context/Propagation/TextMapPropagatorInterface.php',
         'OpenTelemetry\\Context\\ScopeInterface' => __DIR__ . '/..' . '/open-telemetry/context/ScopeInterface.php',
         'OpenTelemetry\\Context\\ZendObserverFiber' => __DIR__ . '/..' . '/open-telemetry/context/ZendObserverFiber.php',
-        'OpenTelemetry\\Contrib\\Instrumentation\\CodeIgniter\\CodeIgniterInstrumentation' => __DIR__ . '/..' . '/open-telemetry/opentelemetry-auto-codeigniter/src/CodeIgniterInstrumentation.php',
-        'OpenTelemetry\\Contrib\\Instrumentation\\CodeIgniter\\RequestPropagationGetter' => __DIR__ . '/..' . '/open-telemetry/opentelemetry-auto-codeigniter/src/RequestPropagationGetter.php',
-        'OpenTelemetry\\Contrib\\Instrumentation\\CodeIgniter\\ResponsePropagationSetter' => __DIR__ . '/..' . '/open-telemetry/opentelemetry-auto-codeigniter/src/ResponsePropagationSetter.php',
         'OpenTelemetry\\Contrib\\Instrumentation\\Curl\\CurlHandleMetadata' => __DIR__ . '/..' . '/open-telemetry/opentelemetry-auto-curl/src/CurlHandleMetadata.php',
         'OpenTelemetry\\Contrib\\Instrumentation\\Curl\\CurlInstrumentation' => __DIR__ . '/..' . '/open-telemetry/opentelemetry-auto-curl/src/CurlInstrumentation.php',
         'OpenTelemetry\\Contrib\\Instrumentation\\Curl\\HeadersPropagator' => __DIR__ . '/..' . '/open-telemetry/opentelemetry-auto-curl/src/HeadersPropagator.php',
