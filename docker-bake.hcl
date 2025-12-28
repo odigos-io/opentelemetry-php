@@ -12,6 +12,14 @@ variable "PHP_OTEL_VERSION" {
   default = "0.0.0"
 }
 
+variable "ECR_REPO" {
+  default = "public.ecr.aws/odigos/agents/php-community"
+}
+
+variable "AGENT_VERSION" {
+  default = "latest"
+}
+
 target "php-base" {
   context    = "."
   dockerfile = "Dockerfile"
@@ -116,5 +124,16 @@ target "php84-amd64" {
   output = ["type=oci,dest=tmp/otel-php-8.4-amd64.tar"]
   args = {
     PHP_VERSION = "8.4"
+  }
+}
+
+target "release" {
+  context    = "."
+  dockerfile = "release.Dockerfile"
+  platforms  = ["linux/amd64", "linux/arm64"]
+  tags       = ["${ECR_REPO}:${AGENT_VERSION}", "${ECR_REPO}:latest"]
+  push       = true
+  build_args = {
+    AGENT_VERSION = "${AGENT_VERSION}"
   }
 }

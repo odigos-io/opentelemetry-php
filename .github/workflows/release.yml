@@ -36,11 +36,6 @@ jobs:
           aws ecr-public get-login-password --region us-east-1 \
           | docker login --username AWS --password-stdin public.ecr.aws
 
-      - name: Build and push images
-        run: |
-          docker buildx bake --file docker-bake.hcl \
-          --set *.args.PHP_OTEL_VERSION=${{ github.ref_name }}
-
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
