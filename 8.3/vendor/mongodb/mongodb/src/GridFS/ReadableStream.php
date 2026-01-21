@@ -17,7 +17,6 @@
 
 namespace MongoDB\GridFS;
 
-use Iterator;
 use MongoDB\BSON\Binary;
 use MongoDB\Driver\CursorInterface;
 use MongoDB\Exception\InvalidArgumentException;
@@ -38,7 +37,7 @@ use function substr;
  *
  * @internal
  */
-class ReadableStream
+final class ReadableStream
 {
     private ?string $buffer = null;
 
@@ -48,8 +47,7 @@ class ReadableStream
 
     private int $chunkOffset = 0;
 
-    /** @var (CursorInterface&Iterator)|null */
-    private ?Iterator $chunksIterator = null;
+    private ?CursorInterface $chunksIterator = null;
 
     private int $expectedLastChunkSize = 0;
 
@@ -82,7 +80,7 @@ class ReadableStream
         $this->length = $file->length;
 
         if ($this->length > 0) {
-            $this->numChunks = (integer) ceil($this->length / $this->chunkSize);
+            $this->numChunks = (int) ceil($this->length / $this->chunkSize);
             $this->expectedLastChunkSize = $this->length - (($this->numChunks - 1) * $this->chunkSize);
         }
     }
@@ -184,7 +182,7 @@ class ReadableStream
          * changed, we'll also need to reset the buffer.
          */
         $lastChunkOffset = $this->chunkOffset;
-        $this->chunkOffset = (integer) floor($offset / $this->chunkSize);
+        $this->chunkOffset = (int) floor($offset / $this->chunkSize);
         $this->bufferOffset = $offset % $this->chunkSize;
 
         if ($lastChunkOffset === $this->chunkOffset) {

@@ -61,19 +61,29 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - php-version: "8.1"
-            php-app: 'symfony/skeleton:"6.4.*"'
-          - php-version: "8.2"
-            php-app: 'symfony/skeleton:"7.3.*"'
-          - php-version: "8.3"
-            php-app: 'symfony/skeleton:"7.3.*"'
-          - php-version: "8.4"
-            php-app: 'symfony/skeleton:"7.3.*"'
+          # Symfony: v2.4.0 (PHP 8.1+), v2.9.0 (PHP 8.2+), v3.0.0 (PHP 8.4+)
+          - { php-version: "8.1", framework: symfony, framework-version: "v2.4.0" }
+          - { php-version: "8.2", framework: symfony, framework-version: "v2.9.0" }
+          - { php-version: "8.3", framework: symfony, framework-version: "v2.9.0" }
+          - { php-version: "8.4", framework: symfony, framework-version: "v3.0.0" }
+          # Laravel: requires PHP 8.2+
+          - { php-version: "8.2", framework: laravel, framework-version: "" }
+          - { php-version: "8.3", framework: laravel, framework-version: "" }
+          - { php-version: "8.4", framework: laravel, framework-version: "" }
+          # CakePHP: 5.0 supports PHP 8.1+
+          - { php-version: "8.1", framework: cakephp, framework-version: "~5.0" }
+          - { php-version: "8.2", framework: cakephp, framework-version: "~5.0" }
+          - { php-version: "8.3", framework: cakephp, framework-version: "~5.0" }
+          - { php-version: "8.4", framework: cakephp, framework-version: "~5.0" }
+          # Yii: 2.x supports PHP 7.4+
+          - { php-version: "8.1", framework: yii, framework-version: "" }
+          - { php-version: "8.2", framework: yii, framework-version: "" }
+          - { php-version: "8.3", framework: yii, framework-version: "" }
+          - { php-version: "8.4", framework: yii, framework-version: "" }
 
     env:
-      ARCHITECTURE: "amd64" # having trouble getting a runner with arm64, so no matrix for 'arch' at the moment
-      SERVICE_NAME: "symfony-app-${{ matrix.php-version }}"
-      SERVICE_TEST_ROUTE: "test"
+      ARCHITECTURE: "amd64"
+      SERVICE_NAME: "${{ matrix.framework }}-${{ matrix.php-version }}"
 
     steps:
       - name: Checkout code
@@ -83,6 +93,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: "${{ matrix.php-version }}"
+          extensions: intl, iconv, pdo_sqlite, mbstring, xml, curl, ctype, tokenizer, dom, fileinfo, simplexml
           tools: composer:v2
 
       - name: Setup Docker
@@ -102,6 +113,7 @@ jobs:
                   endpoint: 0.0.0.0:4318
           processors:
             batch:
+              timeout: 1s
           exporters:
             debug:
               verbosity: detailed
@@ -158,103 +170,184 @@ jobs:
             sleep 2
           done
 
-      - name: Create Application
-        run: |
-          # Create new Symfony app
-          composer create-project ${{ matrix.php-app }} ${{ env.SERVICE_NAME }}
-          cd ${{ env.SERVICE_NAME }}
-
-          # Add a simple controller for testing
-          mkdir -p src/Controller
-          cat > src/Controller/TestController.php << 'EOF'
-          <?php
-
-          namespace App\Controller;
-
-          use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-          use Symfony\Component\HttpFoundation\JsonResponse;
-          use Symfony\Component\Routing\Annotation\Route;
-
-          class TestController extends AbstractController
-          {
-              #[Route('/${{ env.SERVICE_TEST_ROUTE }}', name: 'app_test')]
-              public function test(): JsonResponse
-              {
-                  return new JsonResponse([
-                      'message' => 'Hello from PHP ${{ matrix.php-version }}!',
-                      'timestamp' => time()
-                  ]);
-              }
-          }
-          EOF
-
-          # Install dependencies
-          composer install --no-dev --optimize-autoloader
-
       - name: Configure Agent
         run: |
           # Move architecture files
           mv ${{ matrix.php-version }}/bin/${{ env.ARCHITECTURE }}/* ${{ matrix.php-version }}/
           rm -rf ${{ matrix.php-version }}/bin
 
-          # Update paths
+          # Update paths in configuration files
           sed -i "s|/var/odigos/php/${{ matrix.php-version }}|$(pwd)/${{ matrix.php-version }}|g" ${{ matrix.php-version }}/opentelemetry.ini
           sed -i "s|/var/odigos/php/${{ matrix.php-version }}|$(pwd)/${{ matrix.php-version }}|g" ${{ matrix.php-version }}/preload.php
 
-          # Set environment variables
-          echo "PHP_INI_SCAN_DIR=$(pwd)/${{ matrix.php-version }}" >> $GITHUB_ENV
-          echo "OTEL_PHP_AUTOLOAD_ENABLED=true" >> $GITHUB_ENV
-          echo "OTEL_SERVICE_NAME=${{ env.SERVICE_NAME }}" >> $GITHUB_ENV
-          echo "OTEL_TRACES_EXPORTER=otlp" >> $GITHUB_ENV
-          echo "OTEL_METRICS_EXPORTER=none" >> $GITHUB_ENV
-          echo "OTEL_LOGS_EXPORTER=none" >> $GITHUB_ENV
-          echo "OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:${{ env.OTEL_COLLECTOR_HTTP_PORT }}" >> $GITHUB_ENV
-          echo "OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf" >> $GITHUB_ENV
+          # Fix preload user for GitHub Actions (runs as 'runner', not 'www-data')
+          sed -i "s|opcache.preload_user=www-data|opcache.preload_user=runner|g" ${{ matrix.php-version }}/opentelemetry.ini
+
+          # Remove preload settings (not needed for CLI/built-in server testing)
+          sed -i '/opcache.preload/d' ${{ matrix.php-version }}/opentelemetry.ini
+
+          # Show the final configuration
+          echo "=== OpenTelemetry INI Configuration ==="
+          cat ${{ matrix.php-version }}/opentelemetry.ini
+
+          # Verify the extension is loadable
+          # Note: trailing colon means "load custom config FIRST, then default config"
+          # This ensures phar and other default extensions remain available
+          echo ""
+          echo "=== Verifying OpenTelemetry extension ==="
+          PHP_INI_SCAN_DIR=$(pwd)/${{ matrix.php-version }}: php -m | grep opentelemetry || (echo "⚠️ OpenTelemetry extension not loaded" && exit 1)
+          echo "✅ OpenTelemetry extension loaded"
+
+          # Save the INI scan dir for later use (with trailing colon to preserve defaults)
+          echo "PHP_INI_SCAN_DIR=$(pwd)/${{ matrix.php-version }}:" >> $GITHUB_ENV
+
+      - name: Setup Symfony Application
+        if: matrix.framework == 'symfony'
+        env:
+          APP_ENV: prod
+        run: |
+          git clone --depth 1 --branch ${{ matrix.framework-version }} https://github.com/symfony/demo.git app
+          cd app
+
+          # Install dependencies (no dev deps needed - demo ships with pre-seeded database)
+          composer install --no-dev --optimize-autoloader --no-scripts
+
+          # Copy .env.local.demo to .env.local if it exists (v2.9.0+ moved APP_SECRET there)
+          # This must happen BEFORE composer dump-env to include the secret
+          if [ -f .env.local.demo ]; then
+            cp .env.local.demo .env.local
+          fi
+
+          # Generate production environment file
+          composer dump-env prod
+
+          # Run post-install scripts (cache:clear, assets:install)
+          composer run-script --no-dev post-install-cmd || true
+
+          # v3.0.0+ needs importmap and sass build (ignore errors for older versions)
+          php bin/console importmap:install --env=prod 2>/dev/null || true
+          php bin/console sass:build --env=prod 2>/dev/null || true
+
+          # Warmup cache for production
+          php bin/console cache:warmup --env=prod --no-debug
+
+          # Note: No database setup needed - Symfony Demo ships with pre-seeded data/database.sqlite
+
+      - name: Setup Laravel Application
+        if: matrix.framework == 'laravel'
+        run: |
+          composer create-project --prefer-dist laravel/laravel app
+          cd app
+
+          touch database/database.sqlite
+          sed -i 's/DB_CONNECTION=.*/DB_CONNECTION=sqlite/' .env
+          sed -i 's|DB_DATABASE=.*|DB_DATABASE='$(pwd)'/database/database.sqlite|' .env
+
+          php artisan config:clear
+          php artisan cache:clear
+
+      - name: Setup CakePHP Application
+        if: matrix.framework == 'cakephp'
+        run: |
+          composer create-project --prefer-dist cakephp/app:"${{ matrix.framework-version }}" app
+
+      - name: Setup Yii Application
+        if: matrix.framework == 'yii'
+        run: |
+          composer create-project --prefer-dist yiisoft/yii2-app-basic app
 
       - name: Start Application
         run: |
-          cd ${{ env.SERVICE_NAME }}
+          # Determine the public directory and test route based on framework
+          case "${{ matrix.framework }}" in
+            symfony)
+              PUBLIC_DIR="app/public"
+              TEST_ROUTE="/en/blog/"
+              ;;
+            laravel)
+              PUBLIC_DIR="app/public"
+              TEST_ROUTE="/"
+              ;;
+            cakephp)
+              PUBLIC_DIR="app/webroot"
+              TEST_ROUTE="/"
+              ;;
+            yii)
+              PUBLIC_DIR="app/web"
+              TEST_ROUTE="/"
+              ;;
+          esac
 
-          php -S localhost:8000 -t public/ &
-          SYMFONY_PID=$!
-          echo $SYMFONY_PID > symfony.pid
+          # Export for use in later steps
+          echo "PUBLIC_DIR=$PUBLIC_DIR" >> $GITHUB_ENV
+          echo "TEST_ROUTE=$TEST_ROUTE" >> $GITHUB_ENV
+
+          # Verify extension is still loadable before starting server
+          echo "Pre-flight check: verifying OpenTelemetry extension..."
+          php -m | grep opentelemetry || (echo "⚠️ Extension not loaded!" && php --ini && exit 1)
+
+          # Start PHP built-in server with OTel environment variables
+          OTEL_PHP_AUTOLOAD_ENABLED=true \
+          OTEL_SERVICE_NAME=${{ env.SERVICE_NAME }} \
+          OTEL_TRACES_EXPORTER=otlp \
+          OTEL_METRICS_EXPORTER=none \
+          OTEL_LOGS_EXPORTER=none \
+          OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:${{ env.OTEL_COLLECTOR_HTTP_PORT }} \
+          OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf \
+          php -S localhost:8000 -t $PUBLIC_DIR &
+
+          echo $! > php.pid
+          echo "Started PHP server with PID $(cat php.pid) serving $PUBLIC_DIR"
 
       - name: Generate Traffic
         run: |
-          cd ${{ env.SERVICE_NAME }}
-
-          echo "Verifying OpenTelemetry extension..."
-          php -m | grep opentelemetry || (echo "⚠️ OpenTelemetry extension not loaded" && exit 1)
-
-          echo "Generating traffic..."
+          echo "Waiting for server to start..."
           for i in {1..30}; do
-            if curl -f http://localhost:8000/${{ env.SERVICE_TEST_ROUTE }} > /dev/null 2>&1; then
-              echo "✅ Server is ready, traffic generated"
+            if curl -sfL http://localhost:8000${{ env.TEST_ROUTE }} > /dev/null 2>&1; then
+              echo "✅ Server is ready"
               break
             fi
             if [ "$i" = 30 ]; then
               echo "❌ Server is not ready after 30 attempts"
+              echo "PHP error log (if exists):"
+              cat /var/log/php*.log 2>/dev/null || true
+              curl -v http://localhost:8000${{ env.TEST_ROUTE }} 2>&1 || true
               exit 1
             fi
             echo "Attempt $i/30: Server not ready yet..."
             sleep 2
           done
 
-          # Wait a bit for trace processing
-          sleep 5
+          # Generate additional traffic to ensure traces are captured
+          echo "Generating additional traffic..."
+          for i in {1..5}; do
+            curl -sfL http://localhost:8000${{ env.TEST_ROUTE }} > /dev/null 2>&1 || true
+            sleep 1
+          done
+
+          # Wait for traces to be exported
+          echo "Waiting for trace export..."
+          sleep 10
 
       - name: Verify Trace Generation
         run: |
-          echo "Verifying trace generation..."
+          echo "Verifying trace generation for ${{ matrix.framework }} on PHP ${{ matrix.php-version }}..."
           COLLECTOR_LOGS=$(docker logs otel-collector 2>&1 || (echo "⚠️ Docker logs failed" && exit 1))
           SPAN_ATTRIBUTE="service.name: Str(${{ env.SERVICE_NAME }})"
 
           if echo "$COLLECTOR_LOGS" | grep -q "$SPAN_ATTRIBUTE"; then
             echo "✅ Traces detected in collector logs"
-            echo "$COLLECTOR_LOGS" | grep -i "$SPAN_ATTRIBUTE"
+            echo "$COLLECTOR_LOGS" | grep -A5 -B5 "$SPAN_ATTRIBUTE" | head -30
           else
             echo "❌ No traces found in collector logs"
-            echo "Collector logs:"
+            echo ""
+            echo "=== Collector logs ==="
             echo "$COLLECTOR_LOGS"
+            echo ""
+            echo "=== PHP Configuration ==="
+            php --ini
+            echo ""
+            echo "=== Loaded Extensions ==="
+            php -m | grep -i otel || echo "No otel extensions found"
             exit 1
           fi

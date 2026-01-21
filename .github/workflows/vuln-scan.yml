@@ -18,7 +18,7 @@ jobs:
 
       - name: Create image tag
         run: echo "IMAGE_TAG=otel-php:${{ github.sha }}" >> $GITHUB_ENV
-        
+
       - name: build local container
         uses: docker/build-push-action@v4
         with:
