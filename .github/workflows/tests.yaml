@@ -246,19 +246,8 @@ jobs:
           cd app
 
           # Configure SQLite database (similar to Laravel setup)
-          # Create config/app_local.php with SQLite configuration
-          cat > config/app_local.php << 'EOF'
-          <?php
-          return [
-              'Datasources' => [
-                  'default' => [
-                      'className' => \Cake\Database\Connection::class,
-                      'driver' => \Cake\Database\Driver\Sqlite::class,
-                      'database' => ROOT . DS . 'tmp' . DS . 'database.sqlite',
-                  ],
-              ],
-          ];
-          EOF
+          # Create config/app_local.php with SQLite configuration (base64 encoded to avoid escaping issues)
+          echo "PD9waHAKcmV0dXJuIFsKICAgICdEYXRhc291cmNlcycgPT4gWwogICAgICAgICdkZWZhdWx0JyA9PiBbCiAgICAgICAgICAgICdjbGFzc05hbWUnID0+IFxDYWtlXERhdGFiYXNlXENvbm5lY3Rpb246OmNsYXNzLAogICAgICAgICAgICAnZHJpdmVyJyA9PiBcQ2FrZVxEYXRhYmFzZVxEcml2ZXJcU3FsaXRlOjpjbGFzcywKICAgICAgICAgICAgJ2RhdGFiYXNlJyA9PiBST09UIC4gRFMgLiAndG1wJyAuIERTIC4gJ2RhdGFiYXNlLnNxbGl0ZScsCiAgICAgICAgXSwKICAgIF0sCl07Cg==" | base64 -d > config/app_local.php
 
           # Create the SQLite database file
           touch tmp/database.sqlite
