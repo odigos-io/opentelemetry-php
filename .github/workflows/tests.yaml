@@ -93,7 +93,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: "${{ matrix.php-version }}"
-          extensions: intl, pdo_sqlite, mbstring, xml, curl
+          extensions: intl, iconv, pdo_sqlite, mbstring, xml, curl, ctype, tokenizer, dom, fileinfo, simplexml
           tools: composer:v2
 
       - name: Setup Docker
@@ -176,14 +176,28 @@ jobs:
           mv ${{ matrix.php-version }}/bin/${{ env.ARCHITECTURE }}/* ${{ matrix.php-version }}/
           rm -rf ${{ matrix.php-version }}/bin
 
-          # Update paths
+          # Update paths in configuration files
           sed -i "s|/var/odigos/php/${{ matrix.php-version }}|$(pwd)/${{ matrix.php-version }}|g" ${{ matrix.php-version }}/opentelemetry.ini
           sed -i "s|/var/odigos/php/${{ matrix.php-version }}|$(pwd)/${{ matrix.php-version }}|g" ${{ matrix.php-version }}/preload.php
 
+          # Fix preload user for GitHub Actions (runs as 'runner', not 'www-data')
+          sed -i "s|opcache.preload_user=www-data|opcache.preload_user=runner|g" ${{ matrix.php-version }}/opentelemetry.ini
+
+          # Remove preload settings (not needed for CLI/built-in server testing)
+          sed -i '/opcache.preload/d' ${{ matrix.php-version }}/opentelemetry.ini
+
+          # Show the final configuration
+          echo "=== OpenTelemetry INI Configuration ==="
+          cat ${{ matrix.php-version }}/opentelemetry.ini
+
           # Verify the extension is loadable
-          echo "Verifying OpenTelemetry extension..."
+          echo ""
+          echo "=== Verifying OpenTelemetry extension ==="
           PHP_INI_SCAN_DIR=$(pwd)/${{ matrix.php-version }} php -m | grep opentelemetry || (echo "⚠️ OpenTelemetry extension not loaded" && exit 1)
           echo "✅ OpenTelemetry extension loaded"
+
+          # Save the INI scan dir for later use
+          echo "PHP_INI_SCAN_DIR=$(pwd)/${{ matrix.php-version }}" >> $GITHUB_ENV
 
       - name: Setup Symfony Application
         if: matrix.framework == 'symfony'
@@ -248,8 +262,11 @@ jobs:
           echo "PUBLIC_DIR=$PUBLIC_DIR" >> $GITHUB_ENV
           echo "TEST_ROUTE=$TEST_ROUTE" >> $GITHUB_ENV
 
+          # Verify extension is still loadable before starting server
+          echo "Pre-flight check: verifying OpenTelemetry extension..."
+          php -m | grep opentelemetry || (echo "⚠️ Extension not loaded!" && php --ini && exit 1)
+
           # Start PHP built-in server with OTel environment variables
-          PHP_INI_SCAN_DIR=$(pwd)/${{ matrix.php-version }} \
           OTEL_PHP_AUTOLOAD_ENABLED=true \
           OTEL_SERVICE_NAME=${{ env.SERVICE_NAME }} \
           OTEL_TRACES_EXPORTER=otlp \
@@ -308,9 +325,9 @@ jobs:
             echo "$COLLECTOR_LOGS"
             echo ""
             echo "=== PHP Configuration ==="
-            PHP_INI_SCAN_DIR=$(pwd)/${{ matrix.php-version }} php --ini
+            php --ini
             echo ""
             echo "=== Loaded Extensions ==="
-            PHP_INI_SCAN_DIR=$(pwd)/${{ matrix.php-version }} php -m | grep -i otel || echo "No otel extensions found"
+            php -m | grep -i otel || echo "No otel extensions found"
             exit 1
           fi
