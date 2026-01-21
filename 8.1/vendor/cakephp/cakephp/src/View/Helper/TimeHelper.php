@@ -23,7 +23,6 @@ use Cake\View\StringTemplateTrait;
 use DateTimeInterface;
 use DateTimeZone;
 use Exception;
-use function Cake\Core\deprecationWarning;
 
 /**
  * Time Helper class for easy use of time data.
@@ -215,37 +214,21 @@ class TimeHelper extends Helper
     /**
      * Returns the quarter
      *
-     * Deprecated 5.3.0 Argument $range. Use toQuarterRange() to get quarter date ranges instead of passing $range = true
-     *
      * @param \Cake\Chronos\ChronosDate|\DateTimeInterface|string|int $dateString UNIX timestamp, strtotime() valid string or DateTime object
-     * @param bool $range if true returns a range in Y-m-d format. Deprecated, use toQuarterRange() instead.
+     * @param bool $range if true returns a range in Y-m-d format
      * @return array<string>|int 1, 2, 3, or 4 quarter of year or array if $range true
-     * @see \Cake\I18n\DateTime::toQuarter()
+     * @see \Cake\I18n\Time::toQuarter()
      */
     public function toQuarter(
         ChronosDate|DateTimeInterface|string|int $dateString,
         bool $range = false,
     ): array|int {
-        if ($range) {
-            deprecationWarning('5.3.0', 'Use TimeHelper::toQuarterRange() instead of passing $range = true.');
-
-            return $this->toQuarterRange($dateString);
+        $dt = new DateTime($dateString);
+        if ($range && method_exists($dt, 'toQuarterRange')) {
+            return $dt->toQuarterRange();
         }
 
-        return (new DateTime($dateString))->toQuarter();
-    }
-
-    /**
-     * Returns the date range for the quarter the given date falls in.
-     *
-     * @param \Cake\Chronos\ChronosDate|\DateTimeInterface|string|int $dateString UNIX timestamp, strtotime() valid string or DateTime object
-     * @return array{0: string, 1: string} Array with start and end dates in 'Y-m-d' format
-     * @see \Cake\I18n\DateTime::toQuarterRange()
-     */
-    public function toQuarterRange(
-        ChronosDate|DateTimeInterface|string|int $dateString,
-    ): array {
-        return (new DateTime($dateString))->toQuarterRange();
+        return $dt->toQuarter($range);
     }
 
     /**

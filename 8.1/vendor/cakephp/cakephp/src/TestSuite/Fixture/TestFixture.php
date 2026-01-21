@@ -43,28 +43,11 @@ class TestFixture implements FixtureInterface
     public string $connection = 'test';
 
     /**
-     * The physical database table name to use.
-     *
-     * If set, tableAlias must initially be empty.
-     * $tableAlias will then be inflected as Inflector::camelize($table).
+     * Full Table Name
      *
      * @var string
      */
     public string $table = '';
-
-    /**
-     * The ORM table alias to use.
-     *
-     * If set, table must initially be empty.
-     * $table will be read from the ORM table loaded via the alias.
-     *
-     * If both table and tableAlias are empty, the alias will be inflected
-     * from the class name using tableize() then camelize() to respect
-     * custom Inflector rules.
-     *
-     * @var string
-     */
-    public string $tableAlias = '';
 
     /**
      * Fixture records to be inserted.
@@ -131,31 +114,25 @@ class TestFixture implements FixtureInterface
      */
     public function init(): void
     {
-        assert(!$this->table || !$this->tableAlias, 'Cannot configure both database table and Cake table alias.');
-        if ($this->table) {
-            $this->tableAlias = Inflector::camelize($this->table);
-        } elseif (!$this->tableAlias) {
-            $this->tableAlias = $this->_aliasFromClass();
+        if (!$this->table) {
+            $this->table = $this->_tableFromClass();
         }
 
         $this->_schemaFromReflection();
     }
 
     /**
-     * Returns the ORM table alias using the fixture class.
-     *
-     * Uses tableize() then camelize() to respect custom Inflector rules
-     * like uninflected words.
+     * Returns the table name using the fixture class
      *
      * @return string
      */
-    protected function _aliasFromClass(): string
+    protected function _tableFromClass(): string
     {
         [, $class] = namespaceSplit(static::class);
         preg_match('/^(.*)Fixture$/', $class, $matches);
-        $name = $matches[1] ?? $class;
+        $table = $matches[1] ?? $class;
 
-        return Inflector::camelize(Inflector::tableize($name));
+        return Inflector::tableize($table);
     }
 
     /**
@@ -169,15 +146,12 @@ class TestFixture implements FixtureInterface
         $db = ConnectionManager::get($this->connection());
         assert($db instanceof Connection);
         try {
-            $ormTable = $this->fetchTable($this->tableAlias, ['connection' => $db]);
+            $name = Inflector::camelize($this->table);
+            $ormTable = $this->fetchTable($name, ['connection' => $db]);
 
             // Remove the fetched table from the locator to avoid conflicts
             // with test cases that need to (re)configure the alias.
-            $this->getTableLocator()->remove($this->tableAlias);
-
-            if (!$this->table) {
-                $this->table = $ormTable->getTable();
-            }
+            $this->getTableLocator()->remove($name);
 
             $schema = $ormTable->getSchema();
             assert($schema instanceof TableSchema);
@@ -229,10 +203,7 @@ class TestFixture implements FixtureInterface
         foreach ($this->records as $index => $record) {
             $recordFields = array_keys($record);
             if ($this->strictFields) {
-                $invalidFields = array_values(array_filter(
-                    $recordFields,
-                    fn(int|string $f) => !in_array($f, $columns, true),
-                ));
+                $invalidFields = array_values(array_filter($recordFields, fn($f) => !in_array($f, $columns, true)));
                 if ($invalidFields !== []) {
                     throw new CakeException(
                         "Record #{$index} in fixture has additional fields that do not exist in the schema. " .

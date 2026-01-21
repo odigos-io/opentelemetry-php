@@ -55,7 +55,8 @@ class MissingCellTemplateException extends MissingTemplateException
     /**
      * Get the passed in attributes
      *
-     * @return array{name: string, file: string, paths: array<string>}
+     * @return array<string, mixed>
+     * @phpstan-return array{name: string, file: string, paths: array<string>}
      */
     public function getAttributes(): array
     {

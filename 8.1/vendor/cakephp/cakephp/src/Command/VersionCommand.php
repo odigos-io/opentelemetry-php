@@ -42,35 +42,8 @@ class VersionCommand extends Command
      */
     public function execute(Arguments $args, ConsoleIo $io): ?int
     {
-        $version = Configure::version();
-        $io->out($version);
-
-        if ($args->getOption('verbose')) {
-            $this->outputVerbose($io, $version);
-        }
+        $io->out(Configure::version());
 
         return static::CODE_SUCCESS;
-    }
-
-    /**
-     * Output verbose version information.
-     *
-     * @param \Cake\Console\ConsoleIo $io The console io
-     * @param string $version The CakePHP version
-     * @return void
-     */
-    protected function outputVerbose(ConsoleIo $io, string $version): void
-    {
-        $io->out();
-
-        // Show release link for stable and RC versions, but not dev
-        if (!str_contains($version, '-dev')) {
-            $io->out(sprintf(
-                '<info>Release:</info> https://github.com/cakephp/cakephp/releases/tag/%s',
-                $version,
-            ));
-        }
-
-        $io->out(sprintf('<info>PHP:</info> %s (%s)', PHP_VERSION, PHP_SAPI));
     }
 }

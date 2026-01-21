@@ -172,7 +172,7 @@ class FormProtector
             return Hash::filter(explode('.', $name));
         }
         $parts = explode('[', $name);
-        $parts = array_map(function (string $el) {
+        $parts = array_map(function ($el) {
             return trim($el, ']');
         }, $parts);
 

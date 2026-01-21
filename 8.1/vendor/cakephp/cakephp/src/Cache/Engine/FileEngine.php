@@ -17,14 +17,6 @@ declare(strict_types=1);
 namespace Cake\Cache\Engine;
 
 use Cake\Cache\CacheEngine;
-use Cake\Cache\Event\CacheAfterDeleteEvent;
-use Cake\Cache\Event\CacheAfterGetEvent;
-use Cake\Cache\Event\CacheAfterSetEvent;
-use Cake\Cache\Event\CacheBeforeDeleteEvent;
-use Cake\Cache\Event\CacheBeforeGetEvent;
-use Cake\Cache\Event\CacheBeforeSetEvent;
-use Cake\Cache\Event\CacheClearedEvent;
-use Cake\Cache\Event\CacheGroupClearEvent;
 use CallbackFilterIterator;
 use DateInterval;
 use Exception;
@@ -72,7 +64,7 @@ class FileEngine extends CacheEngine
         'groups' => [],
         'lock' => true,
         'mask' => 0664,
-        'dirMask' => 0777,
+        'dirMask' => 0770,
         'path' => null,
         'prefix' => 'cake_',
         'serialize' => true,
@@ -124,26 +116,17 @@ class FileEngine extends CacheEngine
             return false;
         }
 
-        $duration = $this->duration($ttl);
         $key = $this->_key($key);
-        $this->_eventClass = CacheBeforeSetEvent::class;
-        $this->dispatchEvent(CacheBeforeSetEvent::NAME, ['key' => $key, 'value' => $value, 'ttl' => $duration]);
 
-        $this->_eventClass = CacheAfterSetEvent::class;
         if ($this->_setKey($key, true) === false) {
-            $this->dispatchEvent(CacheAfterSetEvent::NAME, [
-                'key' => $key, 'value' => $value, 'success' => false, 'ttl' => $duration,
-            ]);
-
             return false;
         }
 
-        $origValue = $value;
         if (!empty($this->_config['serialize'])) {
             $value = serialize($value);
         }
 
-        $expires = time() + $duration;
+        $expires = time() + $this->duration($ttl);
         $contents = implode('', [$expires, PHP_EOL, $value, PHP_EOL]);
 
         if ($this->_config['lock']) {
@@ -160,10 +143,6 @@ class FileEngine extends CacheEngine
         }
         unset($this->_File);
 
-        $this->dispatchEvent(CacheAfterSetEvent::NAME, [
-            'key' => $key, 'value' => $origValue, 'success' => $success, 'ttl' => $duration,
-        ]);
-
         return $success;
     }
 
@@ -178,13 +157,8 @@ class FileEngine extends CacheEngine
     public function get(string $key, mixed $default = null): mixed
     {
         $key = $this->_key($key);
-        $this->_eventClass = CacheBeforeGetEvent::class;
-        $this->dispatchEvent(CacheBeforeGetEvent::NAME, ['key' => $key, 'default' => $default]);
 
-        $this->_eventClass = CacheAfterGetEvent::class;
         if (!$this->_init || $this->_setKey($key) === false) {
-            $this->dispatchEvent(CacheAfterGetEvent::NAME, ['key' => $key, 'value' => null, 'success' => false]);
-
             return $default;
         }
 
@@ -200,7 +174,6 @@ class FileEngine extends CacheEngine
             if ($this->_config['lock']) {
                 $this->_File->flock(LOCK_UN);
             }
-            $this->dispatchEvent(CacheAfterGetEvent::NAME, ['key' => $key, 'value' => null, 'success' => false]);
 
             return $default;
         }
@@ -219,13 +192,8 @@ class FileEngine extends CacheEngine
         $data = trim($data);
 
         if ($data !== '' && !empty($this->_config['serialize'])) {
-            $data = unserialize($data);
-            $this->dispatchEvent(CacheAfterGetEvent::NAME, ['key' => $key, 'value' => $data, 'success' => true]);
-
-            return $data;
+            return unserialize($data);
         }
-
-        $this->dispatchEvent(CacheAfterGetEvent::NAME, ['key' => $key, 'value' => $data, 'success' => true]);
 
         return $data;
     }
@@ -240,13 +208,8 @@ class FileEngine extends CacheEngine
     public function delete(string $key): bool
     {
         $key = $this->_key($key);
-        $this->_eventClass = CacheBeforeDeleteEvent::class;
-        $this->dispatchEvent(CacheBeforeDeleteEvent::NAME, ['key' => $key]);
 
-        $this->_eventClass = CacheAfterDeleteEvent::class;
         if ($this->_setKey($key) === false || !$this->_init) {
-            $this->dispatchEvent(CacheAfterDeleteEvent::NAME, ['key' => $key, 'success' => false]);
-
             return false;
         }
 
@@ -254,12 +217,8 @@ class FileEngine extends CacheEngine
         unset($this->_File);
 
         if ($path === false) {
-            $this->dispatchEvent(CacheAfterDeleteEvent::NAME, ['key' => $key, 'success' => false]);
-
             return false;
         }
-
-        $this->dispatchEvent(CacheAfterDeleteEvent::NAME, ['key' => $key, 'success' => true]);
 
         // phpcs:disable
         return @unlink($path);
@@ -315,8 +274,6 @@ class FileEngine extends CacheEngine
         // unsetting iterators helps releasing possible locks in certain environments,
         // which could otherwise make `rmdir()` fail
         unset($directory, $iterator);
-        $this->_eventClass = CacheClearedEvent::class;
-        $this->dispatchEvent(CacheClearedEvent::NAME);
 
         return true;
     }
@@ -407,7 +364,7 @@ class FileEngine extends CacheEngine
         $dir = $this->_config['path'] . $groups;
 
         if (!is_dir($dir)) {
-            mkdir($dir, $this->_config['dirMask'] ^ umask(), true);
+            mkdir($dir, $this->_config['dirMask'], true);
         }
 
         $path = new SplFileInfo($dir . $key);
@@ -454,7 +411,7 @@ class FileEngine extends CacheEngine
         $success = true;
         if (!is_dir($path)) {
             // phpcs:disable
-            $success = @mkdir($path, $this->_config['dirMask'] ^ umask(), true);
+            $success = @mkdir($path, $this->_config['dirMask'], true);
             // phpcs:enable
         }
 
@@ -526,8 +483,6 @@ class FileEngine extends CacheEngine
         // unsetting iterators helps releasing possible locks in certain environments,
         // which could otherwise make `rmdir()` fail
         unset($directoryIterator, $contents, $filtered);
-        $this->_eventClass = CacheGroupClearEvent::class;
-        $this->dispatchEvent(CacheGroupClearEvent::NAME, ['group' => $group]);
 
         return true;
     }

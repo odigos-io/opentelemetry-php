@@ -87,7 +87,6 @@ class SelectWithPivotLoader extends SelectLoader
         $queryBuilder = false;
 
         if (!empty($options['queryBuilder'])) {
-            assert(is_callable($options['queryBuilder']));
             $queryBuilder = $options['queryBuilder'];
             unset($options['queryBuilder']);
         }
@@ -160,7 +159,7 @@ class SelectWithPivotLoader extends SelectLoader
         }
 
         if (count($links) === 1) {
-            return array_pop($links);
+            return $links[0];
         }
 
         return $links;

@@ -20,8 +20,6 @@ use Cake\Console\Exception\ConsoleException;
 use Cake\Console\Exception\StopException;
 use Cake\Event\EventDispatcherInterface;
 use Cake\Event\EventDispatcherTrait;
-use Cake\Event\EventInterface;
-use Cake\Event\EventListenerInterface;
 use Cake\Utility\Inflector;
 
 /**
@@ -33,25 +31,12 @@ use Cake\Utility\Inflector;
  * - `buildOptionParser` Build/Configure the option parser for your command.
  * - `execute` Execute your command with parsed Arguments and ConsoleIo
  *
- * ### Life cycle callbacks
- *
- * CakePHP fires a number of life cycle callbacks during each command execution.
- * By implementing a method you can receive the related events. The available
- * callbacks are:
- *
- * - `beforeExecute(EventInterface $event)`
- *   Called immediately prior to the command's run method. This is a good place to do
- *   general logic that applies to command setup.
- * - `afterExecute(EventInterface $event)`
- *   Called immediately after the command's run method, unless an exception occurs.
- *
- * @template TSubject of \Cake\Command\Command
- * @implements \Cake\Event\EventDispatcherInterface<TSubject>
+ * @implements \Cake\Event\EventDispatcherInterface<\Cake\Command\Command>
  */
-abstract class BaseCommand implements CommandInterface, EventDispatcherInterface, EventListenerInterface
+abstract class BaseCommand implements CommandInterface, EventDispatcherInterface
 {
     /**
-     * @use \Cake\Event\EventDispatcherTrait<TSubject>
+     * @use \Cake\Event\EventDispatcherTrait<\Cake\Command\Command>
      */
     use EventDispatcherTrait;
 
@@ -72,7 +57,6 @@ abstract class BaseCommand implements CommandInterface, EventDispatcherInterface
     public function __construct(?CommandFactoryInterface $factory = null)
     {
         $this->factory = $factory;
-        $this->getEventManager()->on($this);
     }
 
     /**
@@ -181,49 +165,6 @@ abstract class BaseCommand implements CommandInterface, EventDispatcherInterface
     }
 
     /**
-     * Returns a list of all events that will fire in the command during its lifecycle.
-     * You can override this function to add your own listener callbacks
-     *
-     * @return array<string, mixed>
-     */
-    public function implementedEvents(): array
-    {
-        return [
-            'Command.beforeExecute' => 'beforeExecute',
-            'Command.afterExecute' => 'afterExecute',
-        ];
-    }
-
-    /**
-     * Called immediately prior to the command's run method. You can use this method to configure and customize the
-     * command or perform logic that needs to happen before the command runs.
-     *
-     * @param \Cake\Event\EventInterface<\Cake\Console\BaseCommand> $event An Event instance
-     * @param \Cake\Console\Arguments $args
-     * @param \Cake\Console\ConsoleIo $io
-     * @return void
-     * @link https://book.cakephp.org/5/en/console-commands/commands.html#lifecycle-callbacks
-     */
-    public function beforeExecute(EventInterface $event, Arguments $args, ConsoleIo $io): void
-    {
-    }
-
-    /**
-     * Called immediately after the command's run method, unless an exception occurs. You can use this method to
-     * perform logic that needs to happen after the command runs.
-     *
-     * @param \Cake\Event\EventInterface<\Cake\Console\BaseCommand> $event An Event instance
-     * @param \Cake\Console\Arguments $args
-     * @param \Cake\Console\ConsoleIo $io
-     * @param int|null $result
-     * @return void
-     * @link https://book.cakephp.org/5/en/console-commands/commands.html#lifecycle-callbacks
-     */
-    public function afterExecute(EventInterface $event, Arguments $args, ConsoleIo $io, ?int $result): void
-    {
-    }
-
-    /**
      * @inheritDoc
      */
     public function run(array $argv, ConsoleIo $io): ?int
@@ -239,7 +180,7 @@ abstract class BaseCommand implements CommandInterface, EventDispatcherInterface
                 $parser->argumentNames(),
             );
         } catch (ConsoleException $e) {
-            $io->error('Error: ' . $e->getMessage());
+            $io->err('Error: ' . $e->getMessage());
 
             return static::CODE_ERROR;
         }
@@ -255,9 +196,10 @@ abstract class BaseCommand implements CommandInterface, EventDispatcherInterface
             $io->setInteractive(false);
         }
 
-        $this->dispatchEvent('Command.beforeExecute', ['args' => $args, 'io' => $io]);
+        $this->dispatchEvent('Command.beforeExecute', ['args' => $args]);
+        /** @var int|null $result */
         $result = $this->execute($args, $io);
-        $this->dispatchEvent('Command.afterExecute', ['args' => $args, 'io' => $io, 'result' => $result]);
+        $this->dispatchEvent('Command.afterExecute', ['args' => $args, 'result' => $result]);
 
         return $result;
     }

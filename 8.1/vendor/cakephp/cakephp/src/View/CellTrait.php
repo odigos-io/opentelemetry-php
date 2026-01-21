@@ -89,10 +89,6 @@ trait CellTrait
      */
     protected function _createCell(string $className, string $action, ?string $plugin, array $options): Cell
     {
-        if ($plugin) {
-            $options['plugin'] = $plugin;
-        }
-
         /** @var \Cake\View\Cell $instance */
         $instance = new $className($this->request, $this->response, $this->getEventManager(), $options);
 

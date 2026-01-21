@@ -220,6 +220,7 @@ abstract class Association
             'foreignKey',
             'joinType',
             'tableLocator',
+            'propertyName',
             'sourceTable',
             'targetTable',
         ];
@@ -227,10 +228,6 @@ abstract class Association
             if (isset($options[$property])) {
                 $this->{'_' . $property} = $options[$property];
             }
-        }
-
-        if (isset($options['propertyName'])) {
-            $this->setProperty($options['propertyName']);
         }
 
         $this->_className ??= $alias;
@@ -557,19 +554,6 @@ abstract class Association
     {
         $this->_propertyName = $name;
 
-        try {
-            if (in_array($this->_propertyName, $this->_sourceTable->getSchema()->columns(), true)) {
-                $msg = 'Association property name `%s` clashes with field of same name of table `%s`.' .
-                    ' You should specify an alterate name using the `propertyName` option or `setProperty()` method.';
-                trigger_error(
-                    sprintf($msg, $this->_propertyName, $this->_sourceTable->getTable()),
-                    E_USER_WARNING,
-                );
-            }
-        } catch (DatabaseException) {
-            // Schema is not yet loaded, can't check for clashes
-        }
-
         return $this;
     }
 
@@ -582,7 +566,15 @@ abstract class Association
     public function getProperty(): string
     {
         if (!isset($this->_propertyName)) {
-            $this->setProperty($this->_propertyName());
+            $this->_propertyName = $this->_propertyName();
+            if (in_array($this->_propertyName, $this->_sourceTable->getSchema()->columns(), true)) {
+                $msg = 'Association property name `%s` clashes with field of same name of table `%s`.' .
+                    ' You should explicitly specify the `propertyName` option.';
+                trigger_error(
+                    sprintf($msg, $this->_propertyName, $this->_sourceTable->getTable()),
+                    E_USER_WARNING,
+                );
+            }
         }
 
         return $this->_propertyName;
@@ -733,7 +725,6 @@ abstract class Association
             ->eagerLoaded(true);
 
         if (!empty($options['queryBuilder'])) {
-            assert(is_callable($options['queryBuilder']));
             $dummy = $options['queryBuilder']($dummy);
             if (!($dummy instanceof SelectQuery)) {
                 throw new DatabaseException(sprintf(
@@ -963,34 +954,6 @@ abstract class Association
             $surrogate->isAutoFieldsEnabled()
         ) {
             $fields = array_merge($fields, $this->getTarget()->getSchema()->columns());
-        } elseif ($fields !== []) {
-            // Ensure primary key fields are always included when specific fields are selected
-            // This prevents issues with entity hydration when only nullable columns are selected
-            $primaryKey = $this->getTarget()->getPrimaryKey();
-            $primaryKeyFields = is_array($primaryKey) ? $primaryKey : [$primaryKey];
-
-            $fieldsToAdd = [];
-            foreach ($primaryKeyFields as $pkField) {
-                $found = false;
-                foreach ($fields as $field) {
-                    if (
-                        is_string($field) && (
-                        $field === $pkField ||
-                        str_ends_with($field, '.' . $pkField)
-                        )
-                    ) {
-                        $found = true;
-                        break;
-                    }
-                }
-                if (!$found) {
-                    $fieldsToAdd[] = $pkField;
-                }
-            }
-
-            if ($fieldsToAdd) {
-                $fields = array_merge($fields, $fieldsToAdd);
-            }
         }
 
         $query->select($query->aliasFields($fields, $this->_name));
@@ -1116,10 +1079,12 @@ abstract class Association
         $foreignKey = (array)$options['foreignKey'];
         $bindingKey = (array)$this->getBindingKey();
 
-        $targetOwns = $this->isOwningSide($this->getTarget());
         if (count($foreignKey) !== count($bindingKey)) {
             if (!$bindingKey) {
-                $table = $targetOwns ? $this->getTarget()->getTable() : $this->getSource()->getTable();
+                $table = $this->getTarget()->getTable();
+                if ($this->isOwningSide($this->getSource())) {
+                    $table = $this->getSource()->getTable();
+                }
                 $msg = 'The `%s` table does not define a primary key, and cannot have join conditions generated.';
                 throw new DatabaseException(sprintf($msg, $table));
             }
@@ -1134,12 +1099,8 @@ abstract class Association
         }
 
         foreach ($foreignKey as $k => $f) {
-            // Set foreign and binding aliases based on which side has the foreign key
-            $fAlias = $targetOwns ? $sAlias : $tAlias;
-            $bAlias = $targetOwns ? $tAlias : $sAlias;
-
-            $field = sprintf('%s.%s', $bAlias, $bindingKey[$k]);
-            $value = new IdentifierExpression(sprintf('%s.%s', $fAlias, $f));
+            $field = sprintf('%s.%s', $sAlias, $bindingKey[$k]);
+            $value = new IdentifierExpression(sprintf('%s.%s', $tAlias, $f));
             $conditions[$field] = $value;
         }
 
@@ -1191,11 +1152,11 @@ abstract class Association
      * target table has another association with the passed name
      *
      * @param string $property the property name
-     * @return bool true if the association exists
+     * @return bool true if the property exists
      */
     public function __isset(string $property): bool
     {
-        return $this->getTarget()->hasAssociation($property);
+        return isset($this->getTarget()->{$property});
     }
 
     /**

@@ -101,7 +101,6 @@ class PluginCollection implements Iterator, Countable
         $notDebug = !Configure::read('debug');
         $notCli = PHP_SAPI !== 'cli';
 
-        /** @var array{onlyDebug?: bool, onlyCli?: bool, optional?: bool} $options */
         foreach (Hash::normalize($config, default: []) as $name => $options) {
             $onlyDebug = $options['onlyDebug'] ?? false;
             $onlyCli = $options['onlyCli'] ?? false;
@@ -145,7 +144,6 @@ class PluginCollection implements Iterator, Countable
         // wipes out all configuration including plugin paths config.
         PluginConfig::loadInstallerConfig();
 
-        /** @var string|null $path */
         $path = Configure::read('plugins.' . $name);
         if ($path) {
             return $path;
@@ -252,13 +250,13 @@ class PluginCollection implements Iterator, Countable
      * @param array<string, mixed> $config Configuration options for the plugin.
      * @return \Cake\Core\PluginInterface
      * @throws \Cake\Core\Exception\MissingPluginException When plugin instance could not be created.
-     * @throws \InvalidArgumentException When class name cannot be found or an empty name is provided.
+     * @throws \InvalidArgumentException When class name cannot be found.
      * @phpstan-param class-string<\Cake\Core\PluginInterface>|string $name
      */
     public function create(string $name, array $config = []): PluginInterface
     {
         if ($name === '') {
-            throw new InvalidArgumentException('Plugin name cannot be empty.');
+            throw new CakeException('Cannot create a plugin with empty name');
         }
 
         if (str_contains($name, '\\')) {
@@ -273,33 +271,22 @@ class PluginCollection implements Iterator, Countable
         $config += ['name' => $name];
         $namespace = str_replace('/', '\\', $name);
 
-        $pos = strpos($name, '/');
-        $namePart = $pos === false ? $name : substr($name, $pos + 1);
-
-        // Check for [Vendor/]Foo/FooPlugin class
-        $className = $namespace . '\\' . $namePart . 'Plugin';
-
+        $className = $namespace . '\\' . 'Plugin';
+        // Check for [Vendor/]Foo/Plugin class
         if (!class_exists($className)) {
-            // Check for [Vendor/]Foo/Plugin class
-            $className = $namespace . '\\' . 'Plugin';
-
-            if (class_exists($className)) {
-                deprecationWarning(
-                    '5.3.0',
-                    'Loading plugins with a plugin class named `Plugin` is deprecated.'
-                    . " Rename the class to `{$namePart}Plugin` instead.",
-                );
+            $pos = strpos($name, '/');
+            if ($pos === false) {
+                $className = $namespace . '\\' . $name . 'Plugin';
             } else {
+                $className = $namespace . '\\' . substr($name, $pos + 1) . 'Plugin';
+            }
+
+            // Check for [Vendor/]Foo/FooPlugin
+            if (!class_exists($className)) {
                 $className = BasePlugin::class;
                 if (empty($config['path'])) {
                     $config['path'] = $this->findPath($name);
                 }
-
-                deprecationWarning(
-                    '5.3.0',
-                    'Loading plugins without a plugin class is deprecated.'
-                    . " You can create the missing class using `bin/cake bake plugin {$name} --class-only`.",
-                );
             }
         }
 

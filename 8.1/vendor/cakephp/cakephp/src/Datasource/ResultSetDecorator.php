@@ -25,8 +25,7 @@ use Cake\Core\Configure;
  *
  * @template TKey
  * @template TValue
- * @extends \Cake\Collection\Collection<TKey, TValue>
- * @implements \Cake\Datasource\ResultSetInterface<TKey, TValue>
+ * @template-extends \Cake\Collection\Collection<TKey, TValue>
  */
 class ResultSetDecorator extends Collection implements ResultSetInterface
 {

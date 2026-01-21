@@ -14,18 +14,18 @@ class InflectorAggregate implements InflectorAggregateInterface
     /**
      * @var Inflector[]
      */
-    protected array $inflectors = [];
+    protected $inflectors = [];
 
     public function add(string $type, ?callable $callback = null): Inflector
     {
-        $inflector = new Inflector($type, callback: $callback);
+        $inflector = new Inflector($type, $callback);
         $this->inflectors[] = $inflector;
         return $inflector;
     }
 
-    public function inflect(mixed $object): mixed
+    public function inflect($object)
     {
-        foreach ($this as $inflector) {
+        foreach ($this->getIterator() as $inflector) {
             $type = $inflector->getType();
 
             if ($object instanceof $type) {

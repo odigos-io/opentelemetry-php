@@ -24,6 +24,7 @@ use Cake\Database\ValueBinder;
 use Cake\ORM\Association;
 use Cake\ORM\Query\SelectQuery;
 use Closure;
+use InvalidArgumentException;
 
 /**
  * Implements the logic for loading an association using a SELECT query
@@ -173,15 +174,11 @@ class SelectLoader
         /** @var \Cake\ORM\Query\SelectQuery $selectQuery */
         $selectQuery = $options['query'];
 
-        // Disable hydration for external queries when parent has DTO projection
-        // The DTO's setFromArray() expects arrays, not entities
-        $shouldHydrate = $selectQuery->isHydrationEnabled() && !$selectQuery->isDtoProjectionEnabled();
-
         $fetchQuery = $query
             ->select($options['fields'])
             ->where($options['conditions'])
             ->eagerLoaded(true)
-            ->enableHydration($shouldHydrate)
+            ->enableHydration($selectQuery->isHydrationEnabled())
             ->setConnectionRole($selectQuery->getConnectionRole());
         if ($selectQuery->isResultsCastingEnabled()) {
             $fetchQuery->enableResultsCasting();
@@ -205,8 +202,6 @@ class SelectLoader
         }
 
         if (!empty($options['queryBuilder'])) {
-            assert(is_callable($options['queryBuilder']));
-            /** @var \Cake\ORM\Query\SelectQuery $fetchQuery */
             $fetchQuery = $options['queryBuilder']($fetchQuery);
         }
 
@@ -245,8 +240,7 @@ class SelectLoader
     /**
      * Checks that the fetching query either has auto fields on or
      * has the foreignKey fields selected.
-     * If the required fields are missing, automatically adds them to ensure
-     * entities can be properly identified and loaded.
+     * If the required fields are missing, throws an exception.
      *
      * @param \Cake\ORM\Query\SelectQuery $fetchQuery The association fetching query
      * @param array<string> $key The foreign key fields to check
@@ -263,21 +257,30 @@ class SelectLoader
         if (!$select) {
             return;
         }
-
-        $missingFields = [];
-        foreach ($key as $keyField) {
-            if (!in_array($keyField, $select, true)) {
-                $driver = $fetchQuery->getDriver();
-                $quoted = $driver->quoteIdentifier($keyField);
-                if (!in_array($quoted, $select, true)) {
-                    $missingFields[] = $keyField;
+        $missingKey = function ($fieldList, $key): bool {
+            foreach ($key as $keyField) {
+                if (!in_array($keyField, $fieldList, true)) {
+                    return true;
                 }
             }
+
+            return false;
+        };
+
+        $missingFields = $missingKey($select, $key);
+        if ($missingFields) {
+            $driver = $fetchQuery->getConnection()->getDriver();
+            $quoted = array_map($driver->quoteIdentifier(...), $key);
+            $missingFields = $missingKey($select, $quoted);
         }
 
-        // Automatically add missing primary key fields to the query
         if ($missingFields) {
-            $fetchQuery->select($missingFields);
+            throw new InvalidArgumentException(
+                sprintf(
+                    'You are required to select the "%s" field(s)',
+                    implode(', ', $key),
+                ),
+            );
         }
     }
 
@@ -309,7 +312,7 @@ class SelectLoader
             $conditions = $this->_createTupleCondition($query, $key, $filter, '=');
         } else {
             $filter = current($filter);
-            $conditions = $query->expr([$key => $filter]);
+            $conditions = $query->newExpr([$key => $filter]);
         }
 
         return $query->innerJoin(

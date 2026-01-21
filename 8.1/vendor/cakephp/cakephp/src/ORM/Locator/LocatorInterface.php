@@ -22,8 +22,6 @@ use Cake\ORM\Table;
 
 /**
  * Registries for Table objects should implement this interface.
- *
- * @extends \Cake\Datasource\Locator\LocatorInterface<\Cake\ORM\Table>
  */
 interface LocatorInterface extends BaseLocatorInterface
 {

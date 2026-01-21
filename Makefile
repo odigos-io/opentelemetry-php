@@ -7,16 +7,19 @@ DOCKER_MOUNT_NAME=otel-php
 # Composer commands (no local PHP needed)
 ##################################################
 
+# Note: We use --ignore-platform-req=ext-* to skip extension checks (ext-opentelemetry, ext-mongodb)
+# but we do NOT use --ignore-platform-reqs which would also skip PHP version checks.
+# This ensures packages are installed for the correct PHP version.
+
 .PHONY: install-libs
 install-libs:
 	@for vers in $(PHP_VERSIONS); do \
 		echo "🚀 Installing libraries for PHP $$vers using Docker"; \
 		docker run --rm -v $(PWD)/$$vers:/app -w /app \
-			composer:latest install \
-				--optimize-autoloader \
-				--no-dev \
-				--no-plugins \
-				--ignore-platform-reqs; \
+			php:$$vers-cli sh -c "\
+				apt-get update -qq && apt-get install -y -qq unzip > /dev/null 2>&1 && \
+				curl -sS https://getcomposer.org/installer | php -- --quiet && \
+				php composer.phar install --optimize-autoloader --no-dev --no-plugins --ignore-platform-req=ext-*"; \
 	done
 	@echo "✅ All libraries have been installed."
 
@@ -25,11 +28,10 @@ update-libs:
 	@for vers in $(PHP_VERSIONS); do \
 		echo "🚀 Updating libraries for PHP $$vers using Docker"; \
 		docker run --rm -v $(PWD)/$$vers:/app -w /app \
-			composer:latest update \
-				--optimize-autoloader \
-				--no-dev \
-				--no-plugins \
-				--ignore-platform-reqs; \
+			php:$$vers-cli sh -c "\
+				apt-get update -qq && apt-get install -y -qq unzip > /dev/null 2>&1 && \
+				curl -sS https://getcomposer.org/installer | php -- --quiet && \
+				php composer.phar update --optimize-autoloader --no-dev --no-plugins --ignore-platform-req=ext-*"; \
 	done
 	@echo "✅ All libraries have been updated."
 

@@ -393,7 +393,9 @@ class TreeBehavior extends Behavior
     {
         $config = $this->getConfig();
         [$left, $right] = array_map(
-            $this->_table->aliasField(...),
+            function ($field) {
+                return $this->_table->aliasField($field);
+            },
             [$config['left'], $config['right']],
         );
 
@@ -447,7 +449,9 @@ class TreeBehavior extends Behavior
     {
         $config = $this->getConfig();
         [$parent, $left, $right] = array_map(
-            $this->_table->aliasField(...),
+            function ($field) {
+                return $this->_table->aliasField($field);
+            },
             [$config['parent'], $config['left'], $config['right']],
         );
 
@@ -563,7 +567,7 @@ class TreeBehavior extends Behavior
         $right = $node->get($config['right']);
         $parent = $node->get($config['parent']);
 
-        $node->set($config['parent']);
+        $node->set($config['parent'], null);
 
         if ($right - $left === 1) {
             return $this->_table->save($node);
@@ -601,7 +605,7 @@ class TreeBehavior extends Behavior
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When node was not found
      * @return \Cake\Datasource\EntityInterface|false $node The node after being moved or false if `$number` is < 1
      */
-    public function moveUp(EntityInterface $node, int|true $number = 1): EntityInterface|false
+    public function moveUp(EntityInterface $node, int|bool $number = 1): EntityInterface|false
     {
         if ($number < 1) {
             return false;
@@ -622,7 +626,7 @@ class TreeBehavior extends Behavior
      * @return \Cake\Datasource\EntityInterface $node The node after being moved
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When node was not found
      */
-    protected function _moveUp(EntityInterface $node, int|true $number): EntityInterface
+    protected function _moveUp(EntityInterface $node, int|bool $number): EntityInterface
     {
         $config = $this->getConfig();
         [$parent, $left, $right] = [$config['parent'], $config['left'], $config['right']];
@@ -689,7 +693,7 @@ class TreeBehavior extends Behavior
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When node was not found
      * @return \Cake\Datasource\EntityInterface|false the entity after being moved or false if `$number` is < 1
      */
-    public function moveDown(EntityInterface $node, int|true $number = 1): EntityInterface|false
+    public function moveDown(EntityInterface $node, int|bool $number = 1): EntityInterface|false
     {
         if ($number < 1) {
             return false;
@@ -710,7 +714,7 @@ class TreeBehavior extends Behavior
      * @return \Cake\Datasource\EntityInterface $node The node after being moved
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When node was not found
      */
-    protected function _moveDown(EntityInterface $node, int|true $number): EntityInterface
+    protected function _moveDown(EntityInterface $node, int|bool $number): EntityInterface
     {
         $config = $this->getConfig();
         [$parent, $left, $right] = [$config['parent'], $config['left'], $config['right']];
@@ -887,7 +891,7 @@ class TreeBehavior extends Behavior
         /** @var \Cake\Database\Expression\IdentifierExpression $field */
         foreach ([$config['leftField'], $config['rightField']] as $field) {
             $query = $this->_scope($this->_table->updateQuery());
-            $exp = $query->expr();
+            $exp = $query->newExpr();
 
             $movement = clone $exp;
             $movement->add($field)->add((string)$shift)->setConjunction($dir);
@@ -911,9 +915,11 @@ class TreeBehavior extends Behavior
      * Alters the passed query so that it only returns scoped records as defined
      * in the tree configuration.
      *
-     * @template TQuery of \Cake\ORM\Query\SelectQuery|\Cake\ORM\Query\UpdateQuery|\Cake\ORM\Query\DeleteQuery
-     * @param TQuery $query the Query to modify
-     * @return TQuery
+     * @param \Cake\ORM\Query\SelectQuery|\Cake\ORM\Query\UpdateQuery|\Cake\ORM\Query\DeleteQuery $query the Query to modify
+     * @return \Cake\ORM\Query\SelectQuery|\Cake\ORM\Query\UpdateQuery|\Cake\ORM\Query\DeleteQuery
+     * @template T of \Cake\ORM\Query\SelectQuery|\Cake\ORM\Query\UpdateQuery|\Cake\ORM\Query\DeleteQuery
+     * @phpstan-param T $query
+     * @phpstan-return T
      */
     protected function _scope(SelectQuery|UpdateQuery|DeleteQuery $query): SelectQuery|UpdateQuery|DeleteQuery
     {
@@ -943,7 +949,6 @@ class TreeBehavior extends Behavior
         }
 
         $fresh = $this->_table->get($entity->get($this->_getPrimaryKey()));
-        // @phpstan-ignore function.alreadyNarrowedType (patch method available on EntityInterface)
         if (method_exists($entity, 'patch')) {
             $entity->patch($fresh->extract($fields), ['guard' => false]);
         } else {

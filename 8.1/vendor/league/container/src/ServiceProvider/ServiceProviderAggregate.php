@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace League\Container\ServiceProvider;
 
 use Generator;
-use League\Container\ContainerAwareTrait;
 use League\Container\Exception\ContainerException;
+use League\Container\{ContainerAwareInterface, ContainerAwareTrait};
 
 class ServiceProviderAggregate implements ServiceProviderAggregateInterface
 {
@@ -15,8 +15,12 @@ class ServiceProviderAggregate implements ServiceProviderAggregateInterface
     /**
      * @var ServiceProviderInterface[]
      */
-    protected array $providers = [];
-    protected array $registered = [];
+    protected $providers = [];
+
+    /**
+     * @var array
+     */
+    protected $registered = [];
 
     public function add(ServiceProviderInterface $provider): ServiceProviderAggregateInterface
     {
@@ -34,10 +38,10 @@ class ServiceProviderAggregate implements ServiceProviderAggregateInterface
         return $this;
     }
 
-    public function provides(string $id): bool
+    public function provides(string $service): bool
     {
-        foreach ($this as $provider) {
-            if ($provider->provides($id)) {
+        foreach ($this->getIterator() as $provider) {
+            if ($provider->provides($service)) {
                 return true;
             }
         }
@@ -58,7 +62,7 @@ class ServiceProviderAggregate implements ServiceProviderAggregateInterface
             );
         }
 
-        foreach ($this as $provider) {
+        foreach ($this->getIterator() as $provider) {
             if (in_array($provider->getIdentifier(), $this->registered, true)) {
                 continue;
             }

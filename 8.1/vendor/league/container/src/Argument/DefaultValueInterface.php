@@ -6,5 +6,8 @@ namespace League\Container\Argument;
 
 interface DefaultValueInterface extends ArgumentInterface
 {
-    public function getDefaultValue(): mixed;
+    /**
+     * @return mixed
+     */
+    public function getDefaultValue();
 }

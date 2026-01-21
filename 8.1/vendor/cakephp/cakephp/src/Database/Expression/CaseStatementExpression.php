@@ -270,9 +270,9 @@ class CaseStatementExpression implements ExpressionInterface, TypedResultInterfa
      * ```
      * $query
      *      ->select([
-     *          'val' => $query->expr()
+     *          'val' => $query->newExpr()
      *              ->case()
-     *              ->when($query->expr(':userData'))
+     *              ->when($query->newExpr(':userData'))
      *              ->then(123)
      *      ])
      *      ->bind(':userData', $userData, 'integer')
@@ -570,6 +570,8 @@ class CaseStatementExpression implements ExpressionInterface, TypedResultInterfa
 
     /**
      * Clones the inner expression objects.
+     *
+     * @return void
      */
     public function __clone()
     {

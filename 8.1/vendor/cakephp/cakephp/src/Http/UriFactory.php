@@ -90,7 +90,7 @@ class UriFactory implements UriFactoryInterface
         if ($path === '/index.php' && $uri->getQuery()) {
             $path = $uri->getQuery();
         }
-        if (in_array($path, ['', '//', '/index.php'], true)) {
+        if ($path === '' || $path === '//' || $path === '/index.php') {
             $path = '/';
         }
 

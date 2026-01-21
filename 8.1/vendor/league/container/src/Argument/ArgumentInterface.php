@@ -6,5 +6,8 @@ namespace League\Container\Argument;
 
 interface ArgumentInterface
 {
-    public function getValue(): mixed;
+    /**
+     * @return mixed
+     */
+    public function getValue();
 }

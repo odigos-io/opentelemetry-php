@@ -15,8 +15,6 @@ declare(strict_types=1);
  */
 namespace Cake\Http\Client;
 
-use function Cake\Core\deprecationWarning;
-
 /**
  * Base class for other HTTP requests/responses
  *
@@ -155,7 +153,6 @@ class Message
      * The array of cookies in the response.
      *
      * @var array
-     * @deprecated 5.3.0 Use getCookies() instead.
      */
     protected array $_cookies = [];
 
@@ -163,12 +160,9 @@ class Message
      * Get all cookies
      *
      * @return array
-     * @deprecated 5.3.0 Use getCookies() instead.
      */
     public function cookies(): array
     {
-        deprecationWarning('5.3.0', 'Use `getCookies()` instead.');
-
         return $this->_cookies;
     }
 }

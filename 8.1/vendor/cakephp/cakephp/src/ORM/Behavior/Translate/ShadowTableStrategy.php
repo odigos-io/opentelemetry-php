@@ -155,7 +155,7 @@ class ShadowTableStrategy implements TranslateStrategyInterface
 
         $query->formatResults(
             fn(CollectionInterface $results) => $this->rowMapper($results, $locale),
-            SelectQuery::PREPEND,
+            $query::PREPEND,
         );
     }
 
@@ -223,7 +223,9 @@ class ShadowTableStrategy implements TranslateStrategyInterface
             return true;
         }
 
-        $select = array_filter($query->clause('select'), is_string(...));
+        $select = array_filter($query->clause('select'), function ($field) {
+            return is_string($field);
+        });
 
         if (!$select) {
             return true;
@@ -367,7 +369,7 @@ class ShadowTableStrategy implements TranslateStrategyInterface
 
         $this->bundleTranslatedFields($entity);
         $bundled = $entity->has('_i18n') ? (array)$entity->get('_i18n') : [];
-        $noBundled = $bundled === [];
+        $noBundled = count($bundled) === 0;
 
         // No additional translation records need to be saved,
         // as the entity is in the default locale.
@@ -489,7 +491,6 @@ class ShadowTableStrategy implements TranslateStrategyInterface
         $allowEmpty = $this->_config['allowEmptyTranslations'];
 
         return $results->map(function ($row) use ($allowEmpty, $locale) {
-            /** @var \Cake\Datasource\EntityInterface|array|null $row */
             if ($row === null) {
                 return $row;
             }
@@ -534,6 +535,7 @@ class ShadowTableStrategy implements TranslateStrategyInterface
                 }
             }
 
+            /** @var array $row */
             unset($row['translation']);
 
             if ($hydrated) {

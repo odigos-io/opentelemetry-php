@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace League\Container\Inflector;
 
-use League\Container\Argument\{ArgumentResolverInterface, ArgumentResolverTrait};
+use League\Container\Argument\ArgumentResolverInterface;
+use League\Container\Argument\ArgumentResolverTrait;
 use League\Container\ContainerAwareTrait;
-use Psr\Container\{ContainerExceptionInterface, NotFoundExceptionInterface};
-use ReflectionException;
 
 class Inflector implements ArgumentResolverInterface, InflectorInterface
 {
@@ -15,26 +14,29 @@ class Inflector implements ArgumentResolverInterface, InflectorInterface
     use ContainerAwareTrait;
 
     /**
+     * @var string
+     */
+    protected $type;
+
+    /**
      * @var callable|null
      */
     protected $callback;
 
-    protected array $inflected = [];
+    /**
+     * @var array
+     */
+    protected $methods = [];
 
-    public function __construct(
-        protected string $type,
-        ?callable $callback = null,
-        protected bool $oncePerMatch = false,
-        protected array $methods = [],
-        protected array $properties = [],
-    ) {
-        $this->callback = $callback;
-    }
+    /**
+     * @var array
+     */
+    protected $properties = [];
 
-    public function oncePerMatch(): InflectorInterface
+    public function __construct(string $type, ?callable $callback = null)
     {
-        $this->oncePerMatch = true;
-        return $this;
+        $this->type = $type;
+        $this->callback = $callback;
     }
 
     public function getType(): string
@@ -57,22 +59,12 @@ class Inflector implements ArgumentResolverInterface, InflectorInterface
         return $this;
     }
 
-    /**
-     * @throws ContainerExceptionInterface
-     * @throws ReflectionException
-     * @throws NotFoundExceptionInterface
-     */
-    public function setProperty(string $property, mixed $value): InflectorInterface
+    public function setProperty(string $property, $value): InflectorInterface
     {
         $this->properties[$property] = $this->resolveArguments([$value])[0];
         return $this;
     }
 
-    /**
-     * @throws ReflectionException
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
-     */
     public function setProperties(array $properties): InflectorInterface
     {
         foreach ($properties as $property => $value) {
@@ -82,17 +74,8 @@ class Inflector implements ArgumentResolverInterface, InflectorInterface
         return $this;
     }
 
-    /**
-     * @throws NotFoundExceptionInterface
-     * @throws ContainerExceptionInterface
-     * @throws ReflectionException
-     */
     public function inflect(object $object): void
     {
-        if (true === $this->oncePerMatch && in_array($object, $this->inflected, true)) {
-            return;
-        }
-
         $properties = $this->resolveArguments(array_values($this->properties));
         $properties = array_combine(array_keys($this->properties), $properties);
 
@@ -109,10 +92,6 @@ class Inflector implements ArgumentResolverInterface, InflectorInterface
 
         if ($this->callback !== null) {
             call_user_func($this->callback, $object);
-        }
-
-        if (true === $this->oncePerMatch) {
-            $this->inflected[] = $object;
         }
     }
 }

@@ -12,19 +12,20 @@ class DefinitionAggregate implements DefinitionAggregateInterface
 {
     use ContainerAwareTrait;
 
-    public function __construct(protected array $definitions = [])
+    /**
+     * @var DefinitionInterface[]
+     */
+    protected $definitions = [];
+
+    public function __construct(array $definitions = [])
     {
-        $this->definitions = array_filter($this->definitions, static function ($definition) {
+        $this->definitions = array_filter($definitions, static function ($definition) {
             return ($definition instanceof DefinitionInterface);
         });
     }
 
-    public function add(string $id, mixed $definition, bool $overwrite = false): DefinitionInterface
+    public function add(string $id, $definition): DefinitionInterface
     {
-        if (true === $overwrite) {
-            $this->remove($id);
-        }
-
         if (false === ($definition instanceof DefinitionInterface)) {
             $definition = new Definition($id, $definition);
         }
@@ -34,9 +35,9 @@ class DefinitionAggregate implements DefinitionAggregateInterface
         return $definition;
     }
 
-    public function addShared(string $id, mixed $definition, bool $overwrite = false): DefinitionInterface
+    public function addShared(string $id, $definition): DefinitionInterface
     {
-        $definition = $this->add($id, $definition, $overwrite);
+        $definition = $this->add($id, $definition);
         return $definition->setShared(true);
     }
 
@@ -44,7 +45,7 @@ class DefinitionAggregate implements DefinitionAggregateInterface
     {
         $id = Definition::normaliseAlias($id);
 
-        foreach ($this as $definition) {
+        foreach ($this->getIterator() as $definition) {
             if ($id === $definition->getAlias()) {
                 return true;
             }
@@ -55,7 +56,7 @@ class DefinitionAggregate implements DefinitionAggregateInterface
 
     public function hasTag(string $tag): bool
     {
-        foreach ($this as $definition) {
+        foreach ($this->getIterator() as $definition) {
             if ($definition->hasTag($tag)) {
                 return true;
             }
@@ -68,7 +69,7 @@ class DefinitionAggregate implements DefinitionAggregateInterface
     {
         $id = Definition::normaliseAlias($id);
 
-        foreach ($this as $definition) {
+        foreach ($this->getIterator() as $definition) {
             if ($id === $definition->getAlias()) {
                 return $definition->setContainer($this->getContainer());
             }
@@ -77,12 +78,12 @@ class DefinitionAggregate implements DefinitionAggregateInterface
         throw new NotFoundException(sprintf('Alias (%s) is not being handled as a definition.', $id));
     }
 
-    public function resolve(string $id): mixed
+    public function resolve(string $id)
     {
         return $this->getDefinition($id)->resolve();
     }
 
-    public function resolveNew(string $id): mixed
+    public function resolveNew(string $id)
     {
         return $this->getDefinition($id)->resolveNew();
     }
@@ -91,7 +92,7 @@ class DefinitionAggregate implements DefinitionAggregateInterface
     {
         $arrayOf = [];
 
-        foreach ($this as $definition) {
+        foreach ($this->getIterator() as $definition) {
             if ($definition->hasTag($tag)) {
                 $arrayOf[] = $definition->setContainer($this->getContainer())->resolve();
             }
@@ -104,24 +105,13 @@ class DefinitionAggregate implements DefinitionAggregateInterface
     {
         $arrayOf = [];
 
-        foreach ($this as $definition) {
+        foreach ($this->getIterator() as $definition) {
             if ($definition->hasTag($tag)) {
                 $arrayOf[] = $definition->setContainer($this->getContainer())->resolveNew();
             }
         }
 
         return $arrayOf;
-    }
-
-    public function remove(string $id): void
-    {
-        $id = Definition::normaliseAlias($id);
-
-        foreach ($this as $key => $definition) {
-            if ($id === $definition->getAlias()) {
-                unset($this->definitions[$key]);
-            }
-        }
     }
 
     public function getIterator(): Generator

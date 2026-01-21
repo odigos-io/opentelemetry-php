@@ -2,8 +2,6 @@
 
 namespace Illuminate\Translation;
 
-use Illuminate\Support\Collection;
-
 class MessageSelector
 {
     /**
@@ -58,7 +56,7 @@ class MessageSelector
      */
     private function extractFromString($part, $number)
     {
-        preg_match('/^[\{\[]([\d,\.*]*)[\}\]](.*)/s', $part, $matches);
+        preg_match('/^[\{\[]([^\[\]\{\}]*)[\}\]](.*)/s', $part, $matches);
 
         if (count($matches) !== 3) {
             return null;
@@ -91,8 +89,8 @@ class MessageSelector
      */
     private function stripConditions($segments)
     {
-        return (new Collection($segments))
-            ->map(fn ($part) => preg_replace('/^[\{\[][\d,\.*]*[\}\]]/', '', $part))
+        return collect($segments)
+            ->map(fn ($part) => preg_replace('/^[\{\[]([^\[\]\{\}]*)[\}\]]/', '', $part))
             ->all();
     }
 

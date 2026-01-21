@@ -2,31 +2,10 @@
 
 All Notable changes to `League\Container` will be documented in this file
 
-## 5.1.0
-
-### Added
-- Attribute based resolution for dependencies using `#[Inject]` and `#[Resolve]` attributes.
-  - Docs: [https://container.thephpleague.com/5.x/attribute-resolution/](https://container.thephpleague.com/5.x/attribute-resolution/)
-- Support for PHPUnit 12 (@ADmad)
-- Explicit non-support for auto-wiring union types.
-
-### Changed
-- Small internal changes for stricter static analysis and type safety. (@ADmad)
-
-### 5.0.1
+## 4.2.5
 
 ### Fixed
-- Fixed a small unreachable code bug
-
-## 5.0.0
-
-### Added
-- Ability to overwrite a definition within the container, disabled by default
-
-### Changed
-- PHP requirement now `>=8.1`
-- General language modernisation
-- General prep for future updates and container compilation
+- Restored ability to perform recursive definition search. (@spider-mane)
 
 ## 4.2.4
 

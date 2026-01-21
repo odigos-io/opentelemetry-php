@@ -51,12 +51,11 @@ abstract class AbstractDecorator
      * Invoke
      *
      * @link https://secure.php.net/manual/en/language.oop5.magic.php#object.invoke
-     * @param mixed ...$args Arguments for the callable.
      * @return mixed
      */
-    public function __invoke(mixed ...$args): mixed
+    public function __invoke(): mixed
     {
-        return $this->_call($args);
+        return $this->_call(func_get_args());
     }
 
     /**

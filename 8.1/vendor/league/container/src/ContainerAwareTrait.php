@@ -12,7 +12,7 @@ trait ContainerAwareTrait
     /**
      * @var ?DefinitionContainerInterface
      */
-    protected ?DefinitionContainerInterface $container = null;
+    protected $container;
 
     public function setContainer(DefinitionContainerInterface $container): ContainerAwareInterface
     {

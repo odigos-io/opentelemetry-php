@@ -190,6 +190,8 @@ class ComparisonExpression implements ExpressionInterface, FieldInterface
      * Create a deep clone.
      *
      * Clones the field and value if they are expression objects.
+     *
+     * @return void
      */
     public function __clone()
     {

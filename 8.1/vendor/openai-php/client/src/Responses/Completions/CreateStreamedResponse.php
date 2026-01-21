@@ -28,7 +28,6 @@ final class CreateStreamedResponse implements ResponseContract
         public readonly string $object,
         public readonly int $created,
         public readonly string $model,
-        public readonly ?CreateResponseUsage $usage,
         public readonly array $choices,
     ) {}
 
@@ -48,7 +47,6 @@ final class CreateStreamedResponse implements ResponseContract
             $attributes['object'],
             $attributes['created'],
             $attributes['model'],
-            isset($attributes['usage']) ? CreateResponseUsage::from($attributes['usage']) : null,
             $choices,
         );
     }
@@ -67,7 +65,6 @@ final class CreateStreamedResponse implements ResponseContract
                 static fn (CreateResponseChoice $result): array => $result->toArray(),
                 $this->choices,
             ),
-            'usage' => $this->usage?->toArray(),
         ];
     }
 }

@@ -20,8 +20,6 @@ use Cake\Datasource\RepositoryInterface;
 
 /**
  * Registries for repository objects should implement this interface.
- *
- * @template TRepo of \Cake\Datasource\RepositoryInterface
  */
 interface LocatorInterface
 {
@@ -30,7 +28,7 @@ interface LocatorInterface
      *
      * @param string $alias The alias name you want to get.
      * @param array<string, mixed> $options The options you want to build the table with.
-     * @return TRepo
+     * @return \Cake\Datasource\RepositoryInterface
      * @throws \RuntimeException When trying to get alias for which instance
      *   has already been created with different options.
      */
@@ -40,8 +38,8 @@ interface LocatorInterface
      * Set a repository instance.
      *
      * @param string $alias The alias to set.
-     * @param TRepo $repository The repository to set.
-     * @return TRepo
+     * @param \Cake\Datasource\RepositoryInterface $repository The repository to set.
+     * @return \Cake\Datasource\RepositoryInterface
      */
     public function set(string $alias, RepositoryInterface $repository): RepositoryInterface;
 

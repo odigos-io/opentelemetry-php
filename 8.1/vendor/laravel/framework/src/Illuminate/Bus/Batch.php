@@ -4,9 +4,6 @@ namespace Illuminate\Bus;
 
 use Carbon\CarbonImmutable;
 use Closure;
-use Illuminate\Bus\Events\BatchFinished;
-use Illuminate\Container\Container;
-use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Queue\Factory as QueueFactory;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Queue\CallQueuedClosure;
@@ -116,21 +113,21 @@ class Batch implements Arrayable, JsonSerializable
      * @param  \Carbon\CarbonImmutable  $createdAt
      * @param  \Carbon\CarbonImmutable|null  $cancelledAt
      * @param  \Carbon\CarbonImmutable|null  $finishedAt
+     * @return void
      */
-    public function __construct(
-        QueueFactory $queue,
-        BatchRepository $repository,
-        string $id,
-        string $name,
-        int $totalJobs,
-        int $pendingJobs,
-        int $failedJobs,
-        array $failedJobIds,
-        array $options,
-        CarbonImmutable $createdAt,
-        ?CarbonImmutable $cancelledAt = null,
-        ?CarbonImmutable $finishedAt = null,
-    ) {
+    public function __construct(QueueFactory $queue,
+                                BatchRepository $repository,
+                                string $id,
+                                string $name,
+                                int $totalJobs,
+                                int $pendingJobs,
+                                int $failedJobs,
+                                array $failedJobIds,
+                                array $options,
+                                CarbonImmutable $createdAt,
+                                ?CarbonImmutable $cancelledAt = null,
+                                ?CarbonImmutable $finishedAt = null)
+    {
         $this->queue = $queue;
         $this->repository = $repository;
         $this->id = $id;
@@ -171,12 +168,12 @@ class Batch implements Arrayable, JsonSerializable
             if (is_array($job)) {
                 $count += count($job);
 
-                $chain = $this->prepareBatchedChain($job);
-
-                return $chain->first()
-                    ->allOnQueue($this->options['queue'] ?? null)
-                    ->allOnConnection($this->options['connection'] ?? null)
-                    ->chain($chain->slice(1)->values()->all());
+                return with($this->prepareBatchedChain($job), function ($chain) {
+                    return $chain->first()
+                            ->allOnQueue($this->options['queue'] ?? null)
+                            ->allOnConnection($this->options['connection'] ?? null)
+                            ->chain($chain->slice(1)->values()->all());
+                });
             } else {
                 $job->withBatchId($this->id);
 
@@ -207,7 +204,7 @@ class Batch implements Arrayable, JsonSerializable
      */
     protected function prepareBatchedChain(array $chain)
     {
-        return (new Collection($chain))->map(function ($job) {
+        return collect($chain)->map(function ($job) {
             $job = $job instanceof Closure ? CallQueuedClosure::create($job) : $job;
 
             return $job->withBatchId($this->id);
@@ -245,25 +242,31 @@ class Batch implements Arrayable, JsonSerializable
         $counts = $this->decrementPendingJobs($jobId);
 
         if ($this->hasProgressCallbacks()) {
-            $this->invokeCallbacks('progress');
+            $batch = $this->fresh();
+
+            collect($this->options['progress'])->each(function ($handler) use ($batch) {
+                $this->invokeHandlerCallback($handler, $batch);
+            });
         }
 
         if ($counts->pendingJobs === 0) {
             $this->repository->markAsFinished($this->id);
-
-            $container = Container::getInstance();
-
-            if ($container->bound(Dispatcher::class)) {
-                $container->make(Dispatcher::class)->dispatch(new BatchFinished($this));
-            }
         }
 
         if ($counts->pendingJobs === 0 && $this->hasThenCallbacks()) {
-            $this->invokeCallbacks('then');
+            $batch = $this->fresh();
+
+            collect($this->options['then'])->each(function ($handler) use ($batch) {
+                $this->invokeHandlerCallback($handler, $batch);
+            });
         }
 
         if ($counts->allJobsHaveRanExactlyOnce() && $this->hasFinallyCallbacks()) {
-            $this->invokeCallbacks('finally');
+            $batch = $this->fresh();
+
+            collect($this->options['finally'])->each(function ($handler) use ($batch) {
+                $this->invokeHandlerCallback($handler, $batch);
+            });
         }
     }
 
@@ -276,18 +279,6 @@ class Batch implements Arrayable, JsonSerializable
     public function decrementPendingJobs(string $jobId)
     {
         return $this->repository->decrementPendingJobs($this->id, $jobId);
-    }
-
-    /**
-     * Invoke the callbacks of the given type.
-     */
-    protected function invokeCallbacks(string $type, ?Throwable $e = null): void
-    {
-        $batch = $this->fresh();
-
-        foreach ($this->options[$type] ?? [] as $handler) {
-            $this->invokeHandlerCallback($handler, $batch, $e);
-        }
     }
 
     /**
@@ -355,22 +346,28 @@ class Batch implements Arrayable, JsonSerializable
             $this->cancel();
         }
 
-        if ($this->allowsFailures()) {
-            if ($this->hasProgressCallbacks()) {
-                $this->invokeCallbacks('progress', $e);
-            }
+        if ($this->hasProgressCallbacks() && $this->allowsFailures()) {
+            $batch = $this->fresh();
 
-            if ($this->hasFailureCallbacks()) {
-                $this->invokeCallbacks('failure', $e);
-            }
+            collect($this->options['progress'])->each(function ($handler) use ($batch, $e) {
+                $this->invokeHandlerCallback($handler, $batch, $e);
+            });
         }
 
         if ($counts->failedJobs === 1 && $this->hasCatchCallbacks()) {
-            $this->invokeCallbacks('catch', $e);
+            $batch = $this->fresh();
+
+            collect($this->options['catch'])->each(function ($handler) use ($batch, $e) {
+                $this->invokeHandlerCallback($handler, $batch, $e);
+            });
         }
 
         if ($counts->allJobsHaveRanExactlyOnce() && $this->hasFinallyCallbacks()) {
-            $this->invokeCallbacks('finally');
+            $batch = $this->fresh();
+
+            collect($this->options['finally'])->each(function ($handler) use ($batch, $e) {
+                $this->invokeHandlerCallback($handler, $batch, $e);
+            });
         }
     }
 
@@ -393,14 +390,6 @@ class Batch implements Arrayable, JsonSerializable
     public function hasCatchCallbacks()
     {
         return isset($this->options['catch']) && ! empty($this->options['catch']);
-    }
-
-    /**
-     * Determine if the batch has "failure" callbacks.
-     */
-    public function hasFailureCallbacks(): bool
-    {
-        return isset($this->options['failure']) && ! empty($this->options['failure']);
     }
 
     /**
@@ -464,7 +453,7 @@ class Batch implements Arrayable, JsonSerializable
     protected function invokeHandlerCallback($handler, Batch $batch, ?Throwable $e = null)
     {
         try {
-            $handler($batch, $e);
+            return $handler($batch, $e);
         } catch (Throwable $e) {
             if (function_exists('report')) {
                 report($e);

@@ -774,6 +774,8 @@ class QueryExpression implements ExpressionInterface, Countable
 
     /**
      * Clone this object and its subtree of expressions.
+     *
+     * @return void
      */
     public function __clone()
     {

@@ -39,7 +39,6 @@ class DeleteQuery extends Query
         'comment' => null,
         'with' => [],
         'delete' => true,
-        'optimizerHint' => [],
         'modifier' => [],
         'from' => [],
         'join' => [],

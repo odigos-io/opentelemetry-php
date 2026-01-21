@@ -107,7 +107,6 @@ abstract class Query implements ExpressionInterface, Stringable
         'insert' => [],
         'values' => [],
         'with' => [],
-        'optimizerHint' => [],
         'select' => [],
         'distinct' => false,
         'modifier' => [],
@@ -200,19 +199,6 @@ abstract class Query implements ExpressionInterface, Stringable
     }
 
     /**
-     * Returns driver for current connection role by default.
-     *
-     * See `Query::getConnectionRole()` for role options.
-     *
-     * @param string|null $role Connection role
-     * @return \Cake\Database\Driver
-     */
-    public function getDriver(?string $role = null): Driver
-    {
-        return $this->_connection->getDriver($role ?? $this->connectionRole);
-    }
-
-    /**
      * Compiles the SQL representation of this query and executes it using the
      * configured connection object. Returns the resulting statement object.
      *
@@ -297,7 +283,7 @@ abstract class Query implements ExpressionInterface, Stringable
             $binder->resetCount();
         }
 
-        return $this->getDriver()->compileQuery($this, $binder);
+        return $this->getConnection()->getDriver()->compileQuery($this, $binder);
     }
 
     /**
@@ -401,45 +387,27 @@ abstract class Query implements ExpressionInterface, Stringable
      * });
      * ```
      *
-     * @param \Cake\Database\Expression\CommonTableExpression|\Closure|array<\Cake\Database\Expression\CommonTableExpression|\Closure> $cte The CTE to add.
+     * @param \Cake\Database\Expression\CommonTableExpression|\Closure $cte The CTE to add.
      * @param bool $overwrite Whether to reset the list of CTEs.
      * @return $this
      */
-    public function with(CommonTableExpression|Closure|array $cte, bool $overwrite = false)
+    public function with(CommonTableExpression|Closure $cte, bool $overwrite = false)
     {
-        $this->_dirty();
         if ($overwrite) {
             $this->_parts['with'] = [];
         }
 
-        $ctes = is_array($cte) ? $cte : [$cte];
-        foreach ($ctes as $cte) {
-            if ($cte instanceof Closure) {
-                $query = $this->getConnection()->selectQuery();
-                $cte = $cte(new CommonTableExpression(), $query);
-                if (!($cte instanceof CommonTableExpression)) {
-                    throw new CakeException(
-                        'You must return a `CommonTableExpression` from a Closure passed to `with()`.',
-                    );
-                }
+        if ($cte instanceof Closure) {
+            $query = $this->getConnection()->selectQuery();
+            $cte = $cte(new CommonTableExpression(), $query);
+            if (!($cte instanceof CommonTableExpression)) {
+                throw new CakeException(
+                    'You must return a `CommonTableExpression` from a Closure passed to `with()`.',
+                );
             }
-            $this->_parts['with'][] = $cte;
         }
 
-        return $this;
-    }
-
-    /**
-     * Add engine-specific optimizer hint.
-     *
-     * @param array<string>|string $hint Optimizer hint
-     * @param bool $overwrite Whether to replace existing hints
-     * @return $this
-     */
-    public function optimizerHint(array|string $hint, bool $overwrite = false)
-    {
-        $hints = array_values((array)$hint);
-        $this->_parts['optimizerHint'] = $overwrite ? $hints : array_merge($this->_parts['optimizerHint'], $hints);
+        $this->_parts['with'][] = $cte;
         $this->_dirty();
 
         return $this;
@@ -621,15 +589,15 @@ abstract class Query implements ExpressionInterface, Stringable
         $i = count($this->_parts['join']);
         foreach ($tables as $alias => $t) {
             if (!is_array($t)) {
-                $t = ['table' => $t, 'conditions' => $this->expr()];
+                $t = ['table' => $t, 'conditions' => $this->newExpr()];
             }
 
             if ($t['conditions'] instanceof Closure) {
-                $t['conditions'] = $t['conditions']($this->expr(), $this);
+                $t['conditions'] = $t['conditions']($this->newExpr(), $this);
             }
 
             if (!($t['conditions'] instanceof ExpressionInterface)) {
-                $t['conditions'] = $this->expr()->add($t['conditions'], $types);
+                $t['conditions'] = $this->newExpr()->add($t['conditions'], $types);
             }
             $alias = is_string($alias) ? $alias : null;
             $joins[$alias ?: $i++] = $t + ['type' => static::JOIN_TYPE_INNER, 'alias' => $alias];
@@ -855,7 +823,7 @@ abstract class Query implements ExpressionInterface, Stringable
      * ### Using expressions objects:
      *
      * ```
-     * $exp = $query->expr()->add(['id !=' => 100, 'author_id' != 1])->tieWith('OR');
+     * $exp = $query->newExpr()->add(['id !=' => 100, 'author_id' != 1])->tieWith('OR');
      * $query->where(['published' => true], ['published' => 'boolean'])->where($exp);
      * ```
      *
@@ -930,7 +898,7 @@ abstract class Query implements ExpressionInterface, Stringable
         bool $overwrite = false,
     ) {
         if ($overwrite) {
-            $this->_parts['where'] = $this->expr();
+            $this->_parts['where'] = $this->newExpr();
         }
         $this->_conjugate('where', $conditions, 'AND', $types);
 
@@ -950,7 +918,7 @@ abstract class Query implements ExpressionInterface, Stringable
             $fields = [$fields];
         }
 
-        $exp = $this->expr();
+        $exp = $this->newExpr();
 
         foreach ($fields as $field) {
             $exp->isNotNull($field);
@@ -972,7 +940,7 @@ abstract class Query implements ExpressionInterface, Stringable
             $fields = [$fields];
         }
 
-        $exp = $this->expr();
+        $exp = $this->newExpr();
 
         foreach ($fields as $field) {
             $exp->isNull($field);
@@ -1161,7 +1129,7 @@ abstract class Query implements ExpressionInterface, Stringable
      *
      * ```
      * $query
-     *     ->orderBy(['title' => $query->expr('DESC NULLS FIRST')])
+     *     ->orderBy(['title' => $query->newExpr('DESC NULLS FIRST')])
      *     ->orderBy('author_id');
      * ```
      *
@@ -1170,7 +1138,7 @@ abstract class Query implements ExpressionInterface, Stringable
      * `ORDER BY title DESC NULLS FIRST, author_id`
      *
      * ```
-     * $expression = $query->expr()->add(['id % 2 = 0']);
+     * $expression = $query->newExpr()->add(['id % 2 = 0']);
      * $query->orderBy($expression)->orderBy(['title' => 'ASC']);
      * ```
      *
@@ -1230,7 +1198,7 @@ abstract class Query implements ExpressionInterface, Stringable
      *
      * ```
      * $query
-     *     ->orderBy(['title' => $query->expr('DESC NULLS FIRST')])
+     *     ->orderBy(['title' => $query->newExpr('DESC NULLS FIRST')])
      *     ->orderBy('author_id');
      * ```
      *
@@ -1239,7 +1207,7 @@ abstract class Query implements ExpressionInterface, Stringable
      * `ORDER BY title DESC NULLS FIRST, author_id`
      *
      * ```
-     * $expression = $query->expr()->add(['id % 2 = 0']);
+     * $expression = $query->newExpr()->add(['id % 2 = 0']);
      * $query->orderBy($expression)->orderBy(['title' => 'ASC']);
      * ```
      *
@@ -1326,7 +1294,7 @@ abstract class Query implements ExpressionInterface, Stringable
         }
 
         if ($field instanceof Closure) {
-            $field = $field($this->expr(), $this);
+            $field = $field($this->newExpr(), $this);
         }
 
         $this->_parts['order'] ??= new OrderByExpression();
@@ -1382,7 +1350,7 @@ abstract class Query implements ExpressionInterface, Stringable
         }
 
         if ($field instanceof Closure) {
-            $field = $field($this->expr(), $this);
+            $field = $field($this->newExpr(), $this);
         }
 
         $this->_parts['order'] ??= new OrderByExpression();
@@ -1421,7 +1389,7 @@ abstract class Query implements ExpressionInterface, Stringable
      *
      * ```
      * $query->limit(10) // generates LIMIT 10
-     * $query->limit($query->expr()->add(['1 + 1'])); // LIMIT (1 + 1)
+     * $query->limit($query->newExpr()->add(['1 + 1'])); // LIMIT (1 + 1)
      * ```
      *
      * @param \Cake\Database\ExpressionInterface|int|null $limit number of records to be returned
@@ -1447,7 +1415,7 @@ abstract class Query implements ExpressionInterface, Stringable
      *
      * ```
      * $query->offset(10) // generates OFFSET 10
-     * $query->offset($query->expr()->add(['1 + 1'])); // OFFSET (1 + 1)
+     * $query->offset($query->newExpr()->add(['1 + 1'])); // OFFSET (1 + 1)
      * ```
      *
      * @param \Cake\Database\ExpressionInterface|int|null $offset number of records to be skipped
@@ -1471,7 +1439,7 @@ abstract class Query implements ExpressionInterface, Stringable
      * ### Example
      *
      * ```
-     * $query->expr()->lte('count', $query->identifier('total'));
+     * $query->newExpr()->lte('count', $query->identifier('total'));
      * ```
      *
      * @param string $identifier The identifier for an expression
@@ -1554,12 +1522,9 @@ abstract class Query implements ExpressionInterface, Stringable
      *
      * @param \Cake\Database\ExpressionInterface|array|string|null $rawExpression A string, array or anything you want wrapped in an expression object
      * @return \Cake\Database\Expression\QueryExpression
-     * @deprecated 5.3.0 Use `expr()` instead of `newExpr()`.
      */
     public function newExpr(ExpressionInterface|array|string|null $rawExpression = null): QueryExpression
     {
-        deprecationWarning('5.3.0', 'Use `expr()` instead of `newExpr()`.');
-
         return $this->expr($rawExpression);
     }
 
@@ -1646,7 +1611,7 @@ abstract class Query implements ExpressionInterface, Stringable
     {
         if (!array_key_exists($name, $this->_parts)) {
             $clauses = array_keys($this->_parts);
-            array_walk($clauses, fn(string &$x) => $x = "`{$x}`");
+            array_walk($clauses, fn(&$x) => $x = "`{$x}`");
             $clauses = implode(', ', $clauses);
             throw new InvalidArgumentException(sprintf(
                 'The `%s` clause is not defined. Valid clauses are: %s.',
@@ -1777,7 +1742,7 @@ abstract class Query implements ExpressionInterface, Stringable
         array $types,
     ): void {
         /** @var \Cake\Database\Expression\QueryExpression $expression */
-        $expression = $this->_parts[$part] ?: $this->expr();
+        $expression = $this->_parts[$part] ?: $this->newExpr();
         if (!$append) {
             $this->_parts[$part] = $expression;
 
@@ -1785,13 +1750,13 @@ abstract class Query implements ExpressionInterface, Stringable
         }
 
         if ($append instanceof Closure) {
-            $append = $append($this->expr(), $this);
+            $append = $append($this->newExpr(), $this);
         }
 
         if ($expression->getConjunction() === $conjunction) {
             $expression->add($append, $types);
         } else {
-            $expression = $this->expr()
+            $expression = $this->newExpr()
                 ->setConjunction($conjunction)
                 ->add([$expression, $append], $types);
         }
@@ -1817,6 +1782,8 @@ abstract class Query implements ExpressionInterface, Stringable
 
     /**
      * Handles clearing iterator and cloning all expressions and value binders.
+     *
+     * @return void
      */
     public function __clone()
     {

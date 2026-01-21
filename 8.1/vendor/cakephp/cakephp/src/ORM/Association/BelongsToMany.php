@@ -520,8 +520,6 @@ class BelongsToMany extends Association
             ->where($options['conditions']);
 
         if (!empty($options['queryBuilder'])) {
-            assert(is_callable($options['queryBuilder']));
-            /** @var \Cake\ORM\Query\SelectQuery $subquery */
             $subquery = $options['queryBuilder']($subquery);
         }
 
@@ -533,7 +531,7 @@ class BelongsToMany extends Association
                 foreach (array_keys($conds) as $field) {
                     $identifiers[] = new IdentifierExpression($field);
                 }
-                $identifiers = $subquery->expr()->add($identifiers)->setConjunction(',');
+                $identifiers = $subquery->newExpr()->add($identifiers)->setConjunction(',');
                 $nullExp = clone $exp;
 
                 return $exp
@@ -1445,12 +1443,11 @@ class BelongsToMany extends Association
         $hasMany = $source->getAssociation($junction->getAlias());
         /** @var array<string> $foreignKey */
         $foreignKey = (array)$this->getForeignKey();
-        $foreignKey = array_map(function (string $key) {
+        $foreignKey = array_map(function ($key) {
             return $key . ' IS';
         }, $foreignKey);
-        /** @var array<string> $assocForeignKey */
         $assocForeignKey = (array)$belongsTo->getForeignKey();
-        $assocForeignKey = array_map(function (string $key) {
+        $assocForeignKey = array_map(function ($key) {
             return $key . ' IS';
         }, $assocForeignKey);
         $sourceKey = $sourceEntity->extract((array)$source->getPrimaryKey());

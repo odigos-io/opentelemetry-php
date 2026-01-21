@@ -98,7 +98,7 @@ abstract class SerializedView extends View
         $serialize = $this->getConfig('serialize', false);
 
         if ($serialize === true) {
-            return array_keys($this->viewVars);
+            $serialize = array_keys($this->viewVars);
         }
 
         return $serialize;

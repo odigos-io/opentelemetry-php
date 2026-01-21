@@ -122,22 +122,9 @@ trait CollectionTrait
     }
 
     /**
-     * Returns true if any the callback returns true for any element in the collection.
-     *
-     * The callback accepts the value and key of the element being tested.
-     *
-     * ### Example:
-     *
-     * ```
-     * $hasYoungPeople = (new Collection([24, 45, 15]))->any(function ($value, $key) {
-     *  return $value < 21;
-     * });
-     * ```
-     *
-     * @param callable $callback a callback function
-     * @return bool
+     * @inheritDoc
      */
-    public function any(callable $callback): bool
+    public function some(callable $callback): bool
     {
         foreach ($this->optimizeUnwrap() as $key => $value) {
             if ($callback($value, $key) === true) {
@@ -146,14 +133,6 @@ trait CollectionTrait
         }
 
         return false;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function some(callable $callback): bool
-    {
-        return $this->any($callback);
     }
 
     /**
@@ -875,15 +854,9 @@ trait CollectionTrait
         }
 
         assert(
-            in_array(
-                $order,
-                [
-                    RecursiveIteratorIterator::LEAVES_ONLY,
-                    RecursiveIteratorIterator::SELF_FIRST,
-                    RecursiveIteratorIterator::CHILD_FIRST,
-                ],
-                true,
-            ),
+            $order === RecursiveIteratorIterator::LEAVES_ONLY ||
+            $order === RecursiveIteratorIterator::SELF_FIRST ||
+            $order === RecursiveIteratorIterator::CHILD_FIRST,
         );
 
         return new TreeIterator(
@@ -1018,18 +991,7 @@ trait CollectionTrait
     public function unwrap(): Iterator
     {
         $iterator = $this;
-        // Unwrap Collection class and simple user subclasses.
-        // Internal CakePHP iterators/result sets have their own unwrap() implementations.
-        // We unwrap if the class is Collection itself, or a non-Cake subclass,
-        // or an anonymous class extending Collection.
-        while (
-            $iterator instanceof Collection &&
-            (
-                $iterator::class === Collection::class ||
-                !str_starts_with($iterator::class, 'Cake\\') ||
-                str_contains($iterator::class, '@anonymous')
-            )
-        ) {
+        while ($iterator::class === Collection::class) {
             $iterator = $iterator->getInnerIterator();
         }
 
@@ -1061,9 +1023,7 @@ trait CollectionTrait
         $collectionArraysCounts = [];
 
         foreach ($this->toList() as $value) {
-            /** @phpstan-ignore argument.type (cartesianProduct requires array values) */
             $valueCount = count($value);
-            /** @phpstan-ignore argument.type */
             if ($valueCount !== count($value, COUNT_RECURSIVE)) {
                 throw new LogicException('Cannot find the cartesian product of a multidimensional array');
             }
@@ -1081,7 +1041,7 @@ trait CollectionTrait
         $changeIndex = $lastIndex;
 
         while (!($changeIndex === 0 && $currentIndexes[0] === $collectionArraysCounts[0])) {
-            $currentCombination = array_map(function ($value, array $keys, $index) {
+            $currentCombination = array_map(function ($value, $keys, $index) {
                 return $value[$keys[$index]];
             }, $collectionArrays, $collectionArraysKeys, $currentIndexes);
 
@@ -1113,7 +1073,6 @@ trait CollectionTrait
     public function transpose(): CollectionInterface
     {
         $arrayValue = $this->toList();
-        /** @phpstan-ignore argument.type (transpose requires array values) */
         $length = count(current($arrayValue));
         $result = [];
         foreach ($arrayValue as $row) {

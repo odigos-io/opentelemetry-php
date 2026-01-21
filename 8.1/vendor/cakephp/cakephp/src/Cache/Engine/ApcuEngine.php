@@ -18,20 +18,6 @@ namespace Cake\Cache\Engine;
 
 use APCUIterator;
 use Cake\Cache\CacheEngine;
-use Cake\Cache\Event\CacheAfterAddEvent;
-use Cake\Cache\Event\CacheAfterDecrementEvent;
-use Cake\Cache\Event\CacheAfterDeleteEvent;
-use Cake\Cache\Event\CacheAfterGetEvent;
-use Cake\Cache\Event\CacheAfterIncrementEvent;
-use Cake\Cache\Event\CacheAfterSetEvent;
-use Cake\Cache\Event\CacheBeforeAddEvent;
-use Cake\Cache\Event\CacheBeforeDecrementEvent;
-use Cake\Cache\Event\CacheBeforeDeleteEvent;
-use Cake\Cache\Event\CacheBeforeGetEvent;
-use Cake\Cache\Event\CacheBeforeIncrementEvent;
-use Cake\Cache\Event\CacheBeforeSetEvent;
-use Cake\Cache\Event\CacheClearedEvent;
-use Cake\Cache\Event\CacheGroupClearEvent;
 use Cake\Core\Exception\CakeException;
 use DateInterval;
 
@@ -81,17 +67,7 @@ class ApcuEngine extends CacheEngine
         $key = $this->_key($key);
         $duration = $this->duration($ttl);
 
-        $this->_eventClass = CacheBeforeSetEvent::class;
-        $this->dispatchEvent(CacheBeforeSetEvent::NAME, ['key' => $key, 'value' => $value, 'ttl' => $duration]);
-
-        $success = apcu_store($key, $value, $duration);
-
-        $this->_eventClass = CacheAfterSetEvent::class;
-        $this->dispatchEvent(CacheAfterSetEvent::NAME, [
-            'key' => $key, 'value' => $value, 'success' => $success, 'ttl' => $duration,
-        ]);
-
-        return $success;
+        return apcu_store($key, $value, $duration);
     }
 
     /**
@@ -105,14 +81,7 @@ class ApcuEngine extends CacheEngine
      */
     public function get(string $key, mixed $default = null): mixed
     {
-        $key = $this->_key($key);
-        $this->_eventClass = CacheBeforeGetEvent::class;
-        $this->dispatchEvent(CacheBeforeGetEvent::NAME, ['key' => $key, 'default' => $default]);
-
-        $value = apcu_fetch($key, $success);
-
-        $this->_eventClass = CacheAfterGetEvent::class;
-        $this->dispatchEvent(CacheAfterGetEvent::NAME, ['key' => $key, 'value' => $value, 'success' => $success]);
+        $value = apcu_fetch($this->_key($key), $success);
         if ($success === false) {
             return $default;
         }
@@ -131,17 +100,8 @@ class ApcuEngine extends CacheEngine
     public function increment(string $key, int $offset = 1): int|false
     {
         $key = $this->_key($key);
-        $this->_eventClass = CacheBeforeIncrementEvent::class;
-        $this->dispatchEvent(CacheBeforeIncrementEvent::NAME, ['key' => $key, 'offset' => $offset]);
 
-        $value = apcu_inc($key, $offset);
-
-        $this->_eventClass = CacheAfterIncrementEvent::class;
-        $this->dispatchEvent(CacheAfterIncrementEvent::NAME, [
-            'key' => $key, 'offset' => $offset, 'success' => $value !== false, 'value' => $value,
-        ]);
-
-        return $value;
+        return apcu_inc($key, $offset);
     }
 
     /**
@@ -155,17 +115,8 @@ class ApcuEngine extends CacheEngine
     public function decrement(string $key, int $offset = 1): int|false
     {
         $key = $this->_key($key);
-        $this->_eventClass = CacheBeforeDecrementEvent::class;
-        $this->dispatchEvent(CacheBeforeDecrementEvent::NAME, ['key' => $key, 'offset' => $offset]);
 
-        $result = apcu_dec($key, $offset);
-
-        $this->_eventClass = CacheAfterDecrementEvent::class;
-        $this->dispatchEvent(CacheAfterDecrementEvent::NAME, [
-            'key' => $key, 'offset' => $offset, 'success' => $result !== false, 'value' => $result,
-        ]);
-
-        return $result;
+        return apcu_dec($key, $offset);
     }
 
     /**
@@ -178,15 +129,8 @@ class ApcuEngine extends CacheEngine
     public function delete(string $key): bool
     {
         $key = $this->_key($key);
-        $this->_eventClass = CacheBeforeDeleteEvent::class;
-        $this->dispatchEvent(CacheBeforeDeleteEvent::NAME, ['key' => $key]);
 
-        $result = apcu_delete($key);
-
-        $this->_eventClass = CacheAfterDeleteEvent::class;
-        $this->dispatchEvent(CacheAfterDeleteEvent::NAME, ['key' => $key, 'success' => $result]);
-
-        return $result;
+        return apcu_delete($key);
     }
 
     /**
@@ -204,8 +148,6 @@ class ApcuEngine extends CacheEngine
                 APC_ITER_NONE,
             );
             apcu_delete($iterator);
-            $this->_eventClass = CacheClearedEvent::class;
-            $this->dispatchEvent(CacheClearedEvent::NAME);
 
             return true;
         }
@@ -216,9 +158,6 @@ class ApcuEngine extends CacheEngine
                 apcu_delete($key['info']);
             }
         }
-
-        $this->_eventClass = CacheClearedEvent::class;
-        $this->dispatchEvent(CacheClearedEvent::NAME);
 
         return true;
     }
@@ -236,19 +175,8 @@ class ApcuEngine extends CacheEngine
     {
         $key = $this->_key($key);
         $duration = $this->_config['duration'];
-        $this->_eventClass = CacheBeforeAddEvent::class;
-        $this->dispatchEvent(CacheBeforeAddEvent::NAME, [
-            'key' => $key, 'value' => $value, 'ttl' => $duration,
-        ]);
 
-        $result = apcu_add($key, $value, $duration);
-
-        $this->_eventClass = CacheAfterAddEvent::class;
-        $this->dispatchEvent(CacheAfterAddEvent::NAME, [
-            'key' => $key, 'value' => $value, 'success' => $result, 'ttl' => $duration,
-        ]);
-
-        return $result;
+        return apcu_add($key, $value, $duration);
     }
 
     /**
@@ -306,8 +234,6 @@ class ApcuEngine extends CacheEngine
     {
         $success = false;
         apcu_inc($this->_config['prefix'] . $group, 1, $success);
-        $this->_eventClass = CacheGroupClearEvent::class;
-        $this->dispatchEvent(CacheGroupClearEvent::NAME, ['group' => $group]);
 
         return $success;
     }

@@ -16,6 +16,8 @@ declare(strict_types=1);
  */
 namespace Cake\Database;
 
+use InvalidArgumentException;
+
 /**
  * Factory for building database type classes.
  */
@@ -30,37 +32,32 @@ class TypeFactory
      * @phpstan-var array<string, class-string<\Cake\Database\TypeInterface>>
      */
     protected static array $_types = [
+        'tinyinteger' => Type\IntegerType::class,
+        'smallinteger' => Type\IntegerType::class,
+        'integer' => Type\IntegerType::class,
         'biginteger' => Type\IntegerType::class,
         'binary' => Type\BinaryType::class,
         'binaryuuid' => Type\BinaryUuidType::class,
         'boolean' => Type\BoolType::class,
-        'char' => Type\StringType::class,
-        'cidr' => Type\StringType::class,
-        'citext' => Type\StringType::class,
         'date' => Type\DateType::class,
         'datetime' => Type\DateTimeType::class,
         'datetimefractional' => Type\DateTimeFractionalType::class,
         'decimal' => Type\DecimalType::class,
         'float' => Type\FloatType::class,
-        'geometry' => Type\StringType::class,
-        'integer' => Type\IntegerType::class,
-        'inet' => Type\StringType::class,
         'json' => Type\JsonType::class,
-        'linestring' => Type\StringType::class,
-        'macaddr' => Type\StringType::class,
-        'nativeuuid' => Type\UuidType::class,
-        'point' => Type\StringType::class,
-        'polygon' => Type\StringType::class,
-        'smallinteger' => Type\IntegerType::class,
         'string' => Type\StringType::class,
+        'char' => Type\StringType::class,
         'text' => Type\StringType::class,
         'time' => Type\TimeType::class,
         'timestamp' => Type\DateTimeType::class,
         'timestampfractional' => Type\DateTimeFractionalType::class,
         'timestamptimezone' => Type\DateTimeTimezoneType::class,
-        'tinyinteger' => Type\IntegerType::class,
         'uuid' => Type\UuidType::class,
-        'year' => Type\IntegerType::class,
+        'nativeuuid' => Type\UuidType::class,
+        'linestring' => Type\StringType::class,
+        'geometry' => Type\StringType::class,
+        'point' => Type\StringType::class,
+        'polygon' => Type\StringType::class,
     ];
 
     /**
@@ -74,6 +71,7 @@ class TypeFactory
      * Returns a Type object capable of converting a type identified by name.
      *
      * @param string $name type identifier
+     * @throws \InvalidArgumentException If type identifier is unknown
      * @return \Cake\Database\TypeInterface
      */
     public static function build(string $name): TypeInterface
@@ -82,7 +80,7 @@ class TypeFactory
             return static::$_builtTypes[$name];
         }
         if (!isset(static::$_types[$name])) {
-            return static::$_builtTypes[$name] = new static::$_types['string']($name);
+            throw new InvalidArgumentException(sprintf('Unknown type `%s`', $name));
         }
 
         return static::$_builtTypes[$name] = new static::$_types[$name]($name);
@@ -142,10 +140,7 @@ class TypeFactory
     }
 
     /**
-     * Get the type mapping array.
-     *
-     * Deprecated 5.3.0: Argument $type has been deprecated.
-     * Use getMap() without arguments to get the full map, or getMapped($type) to get a specific type mapping.
+     * Get mapped class name for given type or map array.
      *
      * @param string|null $type Type name to get mapped class for or null to get map array.
      * @return array<string, class-string<\Cake\Database\TypeInterface>>|string|null Configured class name for given $type or map array.
@@ -156,23 +151,6 @@ class TypeFactory
             return static::$_types;
         }
 
-        trigger_error(
-            'Calling getMap() with a type argument is deprecated. Use getMapped() instead.',
-            E_USER_DEPRECATED,
-        );
-
-        return static::$_types[$type] ?? null;
-    }
-
-    /**
-     * Get mapped class name for a specific type.
-     *
-     * @param string $type Type name to get mapped class for.
-     * @return string|null Configured class name for given $type or null if not found.
-     * @phpstan-return class-string<\Cake\Database\TypeInterface>|null
-     */
-    public static function getMapped(string $type): ?string
-    {
         return static::$_types[$type] ?? null;
     }
 

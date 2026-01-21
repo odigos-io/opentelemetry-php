@@ -6,12 +6,18 @@ namespace League\Container\Argument;
 
 class DefaultValueArgument extends ResolvableArgument implements DefaultValueInterface
 {
-    public function __construct(string $value, protected mixed $defaultValue = null)
+    protected $defaultValue;
+
+    public function __construct(string $value, $defaultValue = null)
     {
+        $this->defaultValue = $defaultValue;
         parent::__construct($value);
     }
 
-    public function getDefaultValue(): mixed
+    /**
+     * @return mixed|null
+     */
+    public function getDefaultValue()
     {
         return $this->defaultValue;
     }

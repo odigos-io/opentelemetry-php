@@ -527,10 +527,10 @@ if (!function_exists('Cake\Core\toBool')) {
      */
     function toBool(mixed $value): ?bool
     {
-        if (in_array($value, ['1', 1, 1.0, true], true)) {
+        if ($value === '1' || $value === 1 || $value === 1.0 || $value === true) {
             return true;
         }
-        if (in_array($value, ['0', 0, 0.0, false], true)) {
+        if ($value === '0' || $value === 0 || $value === 0.0 || $value === false) {
             return false;
         }
 

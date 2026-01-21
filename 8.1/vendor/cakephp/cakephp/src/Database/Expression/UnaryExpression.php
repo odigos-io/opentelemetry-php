@@ -106,6 +106,8 @@ class UnaryExpression implements ExpressionInterface
 
     /**
      * Perform a deep clone of the inner expression.
+     *
+     * @return void
      */
     public function __clone()
     {

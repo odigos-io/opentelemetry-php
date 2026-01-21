@@ -104,7 +104,6 @@ class Mysql extends Driver
             'window' => '8.0.0',
             'intersect' => '8.0.31',
             'intersect-all' => '8.0.31',
-            'check-constraints' => '8.0.16',
         ],
         'mariadb' => [
             'json' => '10.2.7',
@@ -112,7 +111,6 @@ class Mysql extends Driver
             'window' => '10.2.0',
             'intersect' => '10.3.0',
             'intersect-all' => '10.5.0',
-            'check-constraints' => '10.2.1',
         ],
     ];
 
@@ -136,16 +134,16 @@ class Mysql extends Driver
 
         $config['flags'] += [
             PDO::ATTR_PERSISTENT => $config['persistent'],
-            $this->attrUseBufferedQueryId() => true,
+            self::attrUseBufferedQueryId() => true,
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
         ];
 
         if (!empty($config['ssl_key']) && !empty($config['ssl_cert'])) {
-            $config['flags'][$this->attrSslKeyId()] = $config['ssl_key'];
-            $config['flags'][$this->attrSslCertId()] = $config['ssl_cert'];
+            $config['flags'][self::attrSslKeyId()] = $config['ssl_key'];
+            $config['flags'][self::attrSslCertId()] = $config['ssl_cert'];
         }
         if (!empty($config['ssl_ca'])) {
-            $config['flags'][$this->attrSslCaId()] = $config['ssl_ca'];
+            $config['flags'][self::attrSslCaId()] = $config['ssl_ca'];
         }
 
         if (empty($config['unix_socket'])) {
@@ -177,10 +175,10 @@ class Mysql extends Driver
 
         if ($query instanceof SelectQuery) {
             try {
-                $this->getPdo()->setAttribute($this->attrUseBufferedQueryId(), $query->isBufferedResultsEnabled());
+                $this->getPdo()->setAttribute(self::attrUseBufferedQueryId(), $query->isBufferedResultsEnabled());
                 $this->executeStatement($statement);
             } finally {
-                $this->getPdo()->setAttribute($this->attrUseBufferedQueryId(), true);
+                $this->getPdo()->setAttribute(self::attrUseBufferedQueryId(), true);
             }
         } else {
             $this->executeStatement($statement);
@@ -257,9 +255,7 @@ class Mysql extends Driver
             DriverFeatureEnum::WINDOW => $versionCompare(),
             DriverFeatureEnum::INTERSECT => $versionCompare(),
             DriverFeatureEnum::INTERSECT_ALL => $versionCompare(),
-            DriverFeatureEnum::CHECK_CONSTRAINTS => $versionCompare(),
             DriverFeatureEnum::SET_OPERATIONS_ORDER_BY => true,
-            DriverFeatureEnum::OPTIMIZER_HINT_COMMENT => true,
         };
     }
 
@@ -300,7 +296,7 @@ class Mysql extends Driver
      *
      * @return int
      */
-    private function attrSslKeyId(): int
+    private static function attrSslKeyId(): int
     {
         return PHP_VERSION_ID < 80400 ? PDO::MYSQL_ATTR_SSL_KEY : PdoMysql::ATTR_SSL_KEY;
     }
@@ -310,7 +306,7 @@ class Mysql extends Driver
      *
      * @return int
      */
-    private function attrSslCertId(): int
+    private static function attrSslCertId(): int
     {
         return PHP_VERSION_ID < 80400 ? PDO::MYSQL_ATTR_SSL_CERT : PdoMysql::ATTR_SSL_CERT;
     }
@@ -320,7 +316,7 @@ class Mysql extends Driver
      *
      * @return int
      */
-    private function attrSslCaId(): int
+    private static function attrSslCaId(): int
     {
         return PHP_VERSION_ID < 80400 ? PDO::MYSQL_ATTR_SSL_CA : PdoMysql::ATTR_SSL_CA;
     }
@@ -330,7 +326,7 @@ class Mysql extends Driver
      *
      * @return int
      */
-    private function attrUseBufferedQueryId(): int
+    private static function attrUseBufferedQueryId(): int
     {
         return PHP_VERSION_ID < 80400 ? PDO::MYSQL_ATTR_USE_BUFFERED_QUERY : PdoMysql::ATTR_USE_BUFFERED_QUERY;
     }

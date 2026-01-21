@@ -225,7 +225,7 @@ class EavStrategy implements TranslateStrategyInterface
         $query->contain($contain);
         $query->formatResults(
             fn(CollectionInterface $results) => $this->rowMapper($results, $locale),
-            SelectQuery::PREPEND,
+            $query::PREPEND,
         );
     }
 
@@ -479,7 +479,6 @@ class EavStrategy implements TranslateStrategyInterface
             $key = $entity->get((string)current($primaryKey));
         }
         $find = [];
-        /** @var array<\Cake\Datasource\EntityInterface> $contents */
         $contents = [];
         $entityClass = $this->translationTable->getEntityClass();
 

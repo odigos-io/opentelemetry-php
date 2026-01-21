@@ -18,7 +18,6 @@ namespace Cake\I18n;
 
 use Cake\Cache\CacheEngineInterface;
 use Psr\SimpleCache\CacheInterface;
-use function Cake\Core\deprecationWarning;
 
 /**
  * Constructs and stores instances of translators that can be
@@ -235,12 +234,6 @@ class TranslatorRegistry
 
         // Support __invoke() wrapper classes
         if (!$package instanceof Package && is_callable($package)) {
-            deprecationWarning(
-                '5.3.0',
-                'Using a callable as a package loader is deprecated. ' .
-                'Please return an instance of \Cake\I18n\Package instead.',
-            );
-
             $package = $package();
         }
 

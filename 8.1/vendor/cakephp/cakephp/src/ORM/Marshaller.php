@@ -77,7 +77,7 @@ class Marshaller
             $prop = (string)$prop;
             $columnType = $schema->getColumnType($prop);
             if ($columnType) {
-                $map[$prop] = TypeFactory::build($columnType)->marshal(...);
+                $map[$prop] = fn($value) => TypeFactory::build($columnType)->marshal($value);
             }
         }
 
@@ -129,7 +129,7 @@ class Marshaller
                     );
                 };
             } else {
-                $callback = function ($value) use ($assoc, $nested): array|EntityInterface|null {
+                $callback = function ($value, $entity) use ($assoc, $nested): array|EntityInterface|null {
                     $options = $nested + ['associated' => []];
 
                     return $this->_marshalAssociation($assoc, $value, $options);
@@ -210,13 +210,7 @@ class Marshaller
                 $entity->setAccess($key, $value);
             }
         }
-
-        $fieldsToValidate = $options['strictFields'] ? (array)$options['fields'] : [];
-        $context = [
-            'entity' => $entity,
-            'fields' => $fieldsToValidate,
-        ];
-        $errors = $this->_validate($data, $options['validate'], true, $context);
+        $errors = $this->_validate($data, $options['validate'], true);
 
         $options['isMerge'] = false;
         $propertyMap = $this->_buildPropertyMap($data, $options);
@@ -249,11 +243,12 @@ class Marshaller
                     $entity->set($field, $properties[$field], ['asOriginal' => true]);
                 }
             }
-        // @phpstan-ignore function.alreadyNarrowedType (patch method available on EntityInterface)
-        } elseif (method_exists($entity, 'patch')) {
-            $entity->patch($properties, ['asOriginal' => true]);
         } else {
-            $entity->set($properties, ['asOriginal' => true]);
+            if (method_exists($entity, 'patch')) {
+                $entity->patch($properties, ['asOriginal' => true]);
+            } else {
+                $entity->set($properties, ['asOriginal' => true]);
+            }
         }
 
         // Don't flag clean association entities as
@@ -276,11 +271,10 @@ class Marshaller
      * @param array $data The data to validate.
      * @param string|bool $validator Validator name or `true` for default validator.
      * @param bool $isNew Whether it is a new entity or one to be updated.
-     * @param array<string, mixed> $context Additional validation context.
      * @return array The list of validation errors.
      * @throws \RuntimeException If no validator can be created.
      */
-    protected function _validate(array $data, string|bool $validator, bool $isNew, array $context = []): array
+    protected function _validate(array $data, string|bool $validator, bool $isNew): array
     {
         if (!$validator) {
             return [];
@@ -290,7 +284,7 @@ class Marshaller
             $validator = null;
         }
 
-        return $this->_table->getValidator($validator)->validate($data, $isNew, $context);
+        return $this->_table->getValidator($validator)->validate($data, $isNew);
     }
 
     /**
@@ -302,7 +296,7 @@ class Marshaller
      */
     protected function _prepareDataAndOptions(array $data, array $options): array
     {
-        $options += ['validate' => true, 'fields' => null, 'strictFields' => false];
+        $options += ['validate' => true];
 
         $tableName = $this->_table->getAlias();
         if (isset($data[$tableName]) && is_array($data[$tableName])) {
@@ -443,7 +437,7 @@ class Marshaller
             }
         }
 
-        if ($conditions !== []) {
+        if ($conditions) {
             /** @var \Traversable<\Cake\Datasource\EntityInterface> $results */
             $results = $target->find()
                 ->andWhere(fn(QueryExpression $exp) => $exp->or($conditions))
@@ -592,12 +586,7 @@ class Marshaller
             }
         }
 
-        $fieldsToValidate = $options['strictFields'] ? (array)$options['fields'] : [];
-        $context = [
-            'entity' => $entity,
-            'fields' => $fieldsToValidate,
-        ];
-        $errors = $this->_validate($data + $keys, $options['validate'], $isNew, $context);
+        $errors = $this->_validate($data + $keys, $options['validate'], $isNew);
         $options['isMerge'] = true;
         $propertyMap = $this->_buildPropertyMap($data, $options);
         $properties = [];
@@ -620,7 +609,6 @@ class Marshaller
 
         $entity->setErrors($errors);
         if (!isset($options['fields'])) {
-            // @phpstan-ignore function.alreadyNarrowedType (patch method available on EntityInterface)
             if (method_exists($entity, 'patch')) {
                 $entity->patch($properties);
             } else {
@@ -734,10 +722,7 @@ class Marshaller
         $maybeExistentQuery = $this->_table->find()->where($conditions);
 
         if ($indexed && count($maybeExistentQuery->clause('where'))) {
-            /**
-             * phpcs:ignore SlevomatCodingStandard.Namespaces.FullyQualifiedClassNameInAnnotation.NonFullyQualifiedClassName
-             * @var \Traversable<TEntity> $existent
-             */
+            /** @var \Traversable<\Cake\Datasource\EntityInterface> $existent */
             $existent = $maybeExistentQuery->all();
             foreach ($existent as $entity) {
                 $key = implode(';', $entity->extract($primary));
@@ -752,12 +737,7 @@ class Marshaller
             if (!is_array($value)) {
                 continue;
             }
-            /**
-             * phpcs:ignore SlevomatCodingStandard.Namespaces.FullyQualifiedClassNameInAnnotation.NonFullyQualifiedClassName
-             * @var TEntity $entity
-             */
-            $entity = $this->one($value, $options);
-            $output[] = $entity;
+            $output[] = $this->one($value, $options);
         }
 
         return $output;

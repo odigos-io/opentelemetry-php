@@ -32,7 +32,7 @@ class EagerLoader
      * Nested array describing the association to be fetched
      * and the options to apply for each of them, if any
      *
-     * @var array<string, array>
+     * @var array<string, mixed>
      */
     protected array $_containments = [];
 
@@ -40,9 +40,9 @@ class EagerLoader
      * Contains a nested array with the compiled containments tree
      * This is a normalized version of the user provided containments array.
      *
-     * @var array<string, \Cake\ORM\EagerLoadable>|null
+     * @var \Cake\ORM\EagerLoadable|array<\Cake\ORM\EagerLoadable>|null
      */
-    protected ?array $_normalized = null;
+    protected EagerLoadable|array|null $_normalized = null;
 
     /**
      * List of options accepted by associations in contain()
@@ -68,14 +68,14 @@ class EagerLoader
     /**
      * A list of associations that should be loaded with a separate query.
      *
-     * @var array<int, \Cake\ORM\EagerLoadable>
+     * @var array<\Cake\ORM\EagerLoadable>
      */
     protected array $_loadExternal = [];
 
     /**
      * Contains a list of the association names that are to be eagerly loaded.
      *
-     * @var array<string, array<string, array<int, \Cake\ORM\EagerLoadable>>>
+     * @var array
      */
     protected array $_aliasList = [];
 
@@ -287,16 +287,20 @@ class EagerLoader
      *
      * @param \Cake\ORM\Table $repository The table containing the association that
      * will be normalized.
-     * @return array<string, \Cake\ORM\EagerLoadable>
+     * @return array
      */
     public function normalized(Table $repository): array
     {
-        if ($this->_normalized !== null) {
-            return $this->_normalized;
+        if ($this->_normalized !== null || $this->_containments === []) {
+            return (array)$this->_normalized;
         }
 
         $contain = [];
         foreach ($this->_containments as $alias => $options) {
+            if (!empty($options['instance'])) {
+                $contain = $this->_containments;
+                break;
+            }
             $contain[$alias] = $this->_normalizeContain(
                 $repository,
                 $alias,
@@ -316,7 +320,7 @@ class EagerLoader
      * @param array $associations User provided containments array.
      * @param array $original The original containments array to merge
      * with the new one.
-     * @return array<string, array>
+     * @return array
      */
     protected function _reformatContain(array $associations, array $original): array
     {
@@ -352,7 +356,7 @@ class EagerLoader
             if (is_array($options)) {
                 // When options come from asContainArray(), they have 'config' and 'associations' keys
                 // We need to keep them separate to avoid config options being treated as associations
-                if (isset($options['config'], $options['associations'])) {
+                if (isset($options['config']) && isset($options['associations'])) {
                     // Process associations recursively, but keep config separate
                     $associations = $this->_reformatContain(
                         $options['associations'],
@@ -375,9 +379,7 @@ class EagerLoader
             $pointer += [$table => []];
 
             if (isset($options['queryBuilder'], $pointer[$table]['queryBuilder'])) {
-                assert(is_callable($pointer[$table]['queryBuilder']));
                 $first = $pointer[$table]['queryBuilder'];
-                assert(is_callable($options['queryBuilder']));
                 $second = $options['queryBuilder'];
                 $options['queryBuilder'] = fn($query) => $second($first($query));
             }
@@ -436,7 +438,7 @@ class EagerLoader
      *
      * @param \Cake\ORM\Table $repository The table containing the associations to be
      * attached.
-     * @return array<string, \Cake\ORM\EagerLoadable>
+     * @return array<\Cake\ORM\EagerLoadable>
      */
     public function attachableAssociations(Table $repository): array
     {
@@ -545,6 +547,7 @@ class EagerLoader
                     continue;
                 }
                 foreach ($configs as $loadable) {
+                    assert($loadable instanceof EagerLoadable);
                     if (str_contains($loadable->aliasPath(), '.')) {
                         $this->_correctStrategy($loadable);
                     }
@@ -578,22 +581,22 @@ class EagerLoader
      * Helper function used to compile a list of all associations that can be
      * joined in the query.
      *
-     * @param array<string, \Cake\ORM\EagerLoadable> $associations List of associations from which to obtain joins.
-     * @param array<string, \Cake\ORM\EagerLoadable> $matching List of associations that should be forcibly joined.
-     * @return array<string, \Cake\ORM\EagerLoadable>
+     * @param array<\Cake\ORM\EagerLoadable> $associations List of associations from which to obtain joins.
+     * @param array<\Cake\ORM\EagerLoadable> $matching List of associations that should be forcibly joined.
+     * @return array<\Cake\ORM\EagerLoadable>
      */
     protected function _resolveJoins(array $associations, array $matching = []): array
     {
         $result = [];
         foreach ($matching as $table => $loadable) {
             $result[$table] = $loadable;
-            $result = $this->mergeJoins($result, $this->_resolveJoins($loadable->associations(), []));
+            $result += $this->_resolveJoins($loadable->associations(), []);
         }
         foreach ($associations as $table => $loadable) {
             $inMatching = isset($matching[$table]);
             if (!$inMatching && $loadable->canBeJoined()) {
                 $result[$table] = $loadable;
-                $result = $this->mergeJoins($result, $this->_resolveJoins($loadable->associations(), []));
+                $result += $this->_resolveJoins($loadable->associations(), []);
                 continue;
             }
 
@@ -606,29 +609,6 @@ class EagerLoader
         }
 
         return $result;
-    }
-
-    /**
-     * Merges association joins and throws an exception if there are conflicts.
-     *
-     * @param array<string, \Cake\ORM\EagerLoadable> $a
-     * @param array<string, \Cake\ORM\EagerLoadable> $b
-     * @return array<string, \Cake\ORM\EagerLoadable>
-     */
-    private function mergeJoins(array $a, array $b): array
-    {
-        foreach ($b as $alias => $loadable) {
-            if (isset($a[$alias])) {
-                assert(false, sprintf(
-                    'You cannot join with `%s` because it conflicts with the existing `%s` join.'
-                        . ' The existing join will be lost.',
-                    $loadable->aliasPath(),
-                    $a[$alias]->aliasPath(),
-                ));
-            }
-        }
-
-        return $a + $b;
     }
 
     /**
@@ -877,6 +857,8 @@ class EagerLoader
 
     /**
      * Handles cloning eager loaders and eager loadables.
+     *
+     * @return void
      */
     public function __clone()
     {

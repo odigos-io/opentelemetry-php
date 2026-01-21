@@ -17,20 +17,6 @@ declare(strict_types=1);
 namespace Cake\Cache\Engine;
 
 use Cake\Cache\CacheEngine;
-use Cake\Cache\Event\CacheAfterAddEvent;
-use Cake\Cache\Event\CacheAfterDecrementEvent;
-use Cake\Cache\Event\CacheAfterDeleteEvent;
-use Cake\Cache\Event\CacheAfterGetEvent;
-use Cake\Cache\Event\CacheAfterIncrementEvent;
-use Cake\Cache\Event\CacheAfterSetEvent;
-use Cake\Cache\Event\CacheBeforeAddEvent;
-use Cake\Cache\Event\CacheBeforeDecrementEvent;
-use Cake\Cache\Event\CacheBeforeDeleteEvent;
-use Cake\Cache\Event\CacheBeforeGetEvent;
-use Cake\Cache\Event\CacheBeforeIncrementEvent;
-use Cake\Cache\Event\CacheBeforeSetEvent;
-use Cake\Cache\Event\CacheClearedEvent;
-use Cake\Cache\Event\CacheGroupClearEvent;
 use Cake\Cache\Exception\InvalidArgumentException;
 use Cake\Core\Exception\CakeException;
 use DateInterval;
@@ -199,7 +185,6 @@ class MemcachedEngine extends CacheEngine
         }
 
         if ($this->_config['username'] !== null && $this->_config['password'] !== null) {
-            // @phpstan-ignore function.alreadyNarrowedType (check kept for SASL support detection)
             if (!method_exists($this->_Memcached, 'setSaslAuthData')) {
                 throw new InvalidArgumentException(
                     'Memcached extension is not built with SASL support',
@@ -320,19 +305,9 @@ class MemcachedEngine extends CacheEngine
      */
     public function set(string $key, mixed $value, DateInterval|int|null $ttl = null): bool
     {
-        $key = $this->_key($key);
         $duration = $this->duration($ttl);
-        $this->_eventClass = CacheBeforeSetEvent::class;
-        $this->dispatchEvent(CacheBeforeSetEvent::NAME, ['key' => $key, 'value' => $value, 'ttl' => $duration]);
 
-        $success = $this->_Memcached->set($key, $value, $duration);
-
-        $this->_eventClass = CacheAfterSetEvent::class;
-        $this->dispatchEvent(CacheAfterSetEvent::NAME, [
-            'key' => $key, 'value' => $value, 'success' => $success, 'ttl' => $duration,
-        ]);
-
-        return $success;
+        return $this->_Memcached->set($this->_key($key), $value, $duration);
     }
 
     /**
@@ -366,19 +341,10 @@ class MemcachedEngine extends CacheEngine
     public function get(string $key, mixed $default = null): mixed
     {
         $key = $this->_key($key);
-        $this->_eventClass = CacheBeforeGetEvent::class;
-        $this->dispatchEvent(CacheBeforeGetEvent::NAME, ['key' => $key, 'default' => $default]);
-
         $value = $this->_Memcached->get($key);
-
-        $this->_eventClass = CacheAfterGetEvent::class;
         if ($this->_Memcached->getResultCode() == Memcached::RES_NOTFOUND) {
-            $this->dispatchEvent(CacheAfterGetEvent::NAME, ['key' => $key, 'value' => null, 'success' => false]);
-
             return $default;
         }
-
-        $this->dispatchEvent(CacheAfterGetEvent::NAME, ['key' => $key, 'value' => $value, 'success' => true]);
 
         return $value;
     }
@@ -420,18 +386,7 @@ class MemcachedEngine extends CacheEngine
      */
     public function increment(string $key, int $offset = 1): int|false
     {
-        $key = $this->_key($key);
-        $this->_eventClass = CacheBeforeIncrementEvent::class;
-        $this->dispatchEvent(CacheBeforeIncrementEvent::NAME, ['key' => $key, 'offset' => $offset]);
-
-        $value = $this->_Memcached->increment($key, $offset);
-
-        $this->_eventClass = CacheAfterIncrementEvent::class;
-        $this->dispatchEvent(CacheAfterIncrementEvent::NAME, [
-            'key' => $key, 'offset' => $offset, 'success' => $value !== false, 'value' => $value,
-        ]);
-
-        return $value;
+        return $this->_Memcached->increment($this->_key($key), $offset);
     }
 
     /**
@@ -443,18 +398,7 @@ class MemcachedEngine extends CacheEngine
      */
     public function decrement(string $key, int $offset = 1): int|false
     {
-        $key = $this->_key($key);
-        $this->_eventClass = CacheBeforeDecrementEvent::class;
-        $this->dispatchEvent(CacheBeforeDecrementEvent::NAME, ['key' => $key, 'offset' => $offset]);
-
-        $value = $this->_Memcached->decrement($key, $offset);
-
-        $this->_eventClass = CacheAfterDecrementEvent::class;
-        $this->dispatchEvent(CacheAfterDecrementEvent::NAME, [
-            'key' => $key, 'offset' => $offset, 'success' => $value !== false, 'value' => $value,
-        ]);
-
-        return $value;
+        return $this->_Memcached->decrement($this->_key($key), $offset);
     }
 
     /**
@@ -466,16 +410,7 @@ class MemcachedEngine extends CacheEngine
      */
     public function delete(string $key): bool
     {
-        $key = $this->_key($key);
-        $this->_eventClass = CacheBeforeDeleteEvent::class;
-        $this->dispatchEvent(CacheBeforeDeleteEvent::NAME, ['key' => $key]);
-
-        $success = $this->_Memcached->delete($key);
-
-        $this->_eventClass = CacheAfterDeleteEvent::class;
-        $this->dispatchEvent(CacheAfterDeleteEvent::NAME, ['key' => $key, 'success' => $success]);
-
-        return $success;
+        return $this->_Memcached->delete($this->_key($key));
     }
 
     /**
@@ -488,18 +423,11 @@ class MemcachedEngine extends CacheEngine
     public function deleteMultiple(iterable $keys): bool
     {
         $cacheKeys = [];
-        $this->_eventClass = CacheBeforeDeleteEvent::class;
         foreach ($keys as $key) {
             $cacheKeys[] = $this->_key($key);
-            $this->dispatchEvent(CacheBeforeDeleteEvent::NAME, ['key' => $key]);
-        }
-        $success = (bool)$this->_Memcached->deleteMulti($cacheKeys);
-        $this->_eventClass = CacheAfterDeleteEvent::class;
-        foreach ($cacheKeys as $key) {
-            $this->dispatchEvent(CacheAfterDeleteEvent::NAME, ['key' => $key, 'success' => $success]);
         }
 
-        return $success;
+        return (bool)$this->_Memcached->deleteMulti($cacheKeys);
     }
 
     /**
@@ -519,8 +447,6 @@ class MemcachedEngine extends CacheEngine
                 $this->_Memcached->delete($key);
             }
         }
-        $this->_eventClass = CacheClearedEvent::class;
-        $this->dispatchEvent(CacheClearedEvent::NAME);
 
         return true;
     }
@@ -537,17 +463,7 @@ class MemcachedEngine extends CacheEngine
         $duration = $this->_config['duration'];
         $key = $this->_key($key);
 
-        $this->_eventClass = CacheBeforeAddEvent::class;
-        $this->dispatchEvent(CacheBeforeAddEvent::NAME, ['key' => $key, 'value' => $value, 'ttl' => $duration]);
-
-        $success = $this->_Memcached->add($key, $value, $duration);
-
-        $this->_eventClass = CacheAfterAddEvent::class;
-        $this->dispatchEvent(CacheAfterAddEvent::NAME, [
-            'key' => $key, 'value' => $value, 'success' => $success, 'ttl' => $duration,
-        ]);
-
-        return $success;
+        return $this->_Memcached->add($key, $value, $duration);
     }
 
     /**
@@ -594,10 +510,6 @@ class MemcachedEngine extends CacheEngine
      */
     public function clearGroup(string $group): bool
     {
-        $result = (bool)$this->_Memcached->increment($this->_config['prefix'] . $group);
-        $this->_eventClass = CacheGroupClearEvent::class;
-        $this->dispatchEvent(CacheGroupClearEvent::NAME, ['group' => $group]);
-
-        return $result;
+        return (bool)$this->_Memcached->increment($this->_config['prefix'] . $group);
     }
 }

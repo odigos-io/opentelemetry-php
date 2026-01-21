@@ -120,19 +120,13 @@ class MysqlSchemaDialect extends SchemaDialect
     public function describeColumns(string $tableName): array
     {
         $sql = $this->describeColumnQuery($tableName);
+        $columns = [];
         try {
-            $rows = $this->_driver->execute($sql)->fetchAll('assoc');
+            $statement = $this->_driver->execute($sql);
         } catch (PDOException $e) {
             throw new DatabaseException("Could not describe columns on `{$tableName}`", null, $e);
         }
-
-        $geometryColumns = [];
-        if (array_intersect(array_column($rows, 'Type'), TableSchemaInterface::GEOSPATIAL_TYPES)) {
-            $geometryColumns = $this->describeGeometryColumns($tableName);
-        }
-
-        $columns = [];
-        foreach ($rows as $row) {
+        foreach ($statement->fetchAll('assoc') as $row) {
             $field = $this->_convertColumn($row['Type']);
             $default = $this->parseDefault($field['type'], $row);
 
@@ -152,44 +146,10 @@ class MysqlSchemaDialect extends SchemaDialect
             } elseif ($row['Extra'] === 'on update current_timestamp()') {
                 $field['onUpdate'] = 'CURRENT_TIMESTAMP';
             }
-
-            $srid = $geometryColumns[$field['name']]['srid'] ?? null;
-            if ($srid !== null) {
-                $field['srid'] = $srid;
-            }
-
             $columns[] = $field;
         }
 
         return $columns;
-    }
-
-    /**
-     * Describes geoemetry-specific column information.
-     *
-     * @return array<string, array{name: string, srid: int}> The column information.
-     */
-    private function describeGeometryColumns(string $table): array
-    {
-        /** @var \Cake\Database\Driver\Mysql $driver */
-        $driver = $this->_driver;
-
-        if (!$driver->isMariaDb() && version_compare($driver->version(), '8.0.1', '>=')) {
-            $sql = <<<SQL
-                SELECT
-                    COLUMN_NAME AS name,
-                    SRS_ID AS srid
-                FROM information_schema.ST_GEOMETRY_COLUMNS
-                WHERE TABLE_NAME = ? AND TABLE_SCHEMA = ?
-                SQL;
-        } else {
-            return [];
-        }
-
-        $schema = $driver->config()['database'];
-        $columns = $this->_driver->execute($sql, [$table, $schema])->fetchAll('assoc');
-
-        return array_combine(array_column($columns, 'name'), $columns);
     }
 
     /**
@@ -366,7 +326,7 @@ class MysqlSchemaDialect extends SchemaDialect
             return $type;
         }
 
-        if (in_array($col, ['date', 'time', 'year'])) {
+        if (in_array($col, ['date', 'time'])) {
             return ['type' => $col, 'length' => null];
         }
         if (in_array($col, ['datetime', 'timestamp'])) {
@@ -611,41 +571,6 @@ class MysqlSchemaDialect extends SchemaDialect
     /**
      * @inheritDoc
      */
-    public function describeCheckConstraints(string $tableName): array
-    {
-        if (!$this->_driver->supports(DriverFeatureEnum::CHECK_CONSTRAINTS)) {
-            return [];
-        }
-
-        [$schema, $name] = $this->splitTablename($tableName);
-        $sql = <<<SQL
-        SELECT
-        cc.CONSTRAINT_NAME AS name,
-        cc.CHECK_CLAUSE AS expression
-        FROM INFORMATION_SCHEMA.CHECK_CONSTRAINTS AS cc
-        INNER JOIN INFORMATION_SCHEMA.TABLE_CONSTRAINTS AS tc ON (
-            tc.CONSTRAINT_SCHEMA = cc.CONSTRAINT_SCHEMA
-            AND tc.CONSTRAINT_NAME = cc.CONSTRAINT_NAME
-        )
-        WHERE tc.CONSTRAINT_SCHEMA = ? AND tc.TABLE_NAME = ? AND tc.CONSTRAINT_TYPE = 'CHECK'
-SQL;
-
-        $constraints = [];
-        $statement = $this->_driver->execute($sql, [$schema, $name]);
-        foreach ($statement->fetchAll('assoc') as $row) {
-            $constraints[] = [
-                'name' => $row['name'],
-                'type' => TableSchema::CONSTRAINT_CHECK,
-                'expression' => $row['expression'],
-            ];
-        }
-
-        return $constraints;
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function truncateTableSql(TableSchema $schema): array
     {
         return [sprintf('TRUNCATE TABLE `%s`', $schema->name())];
@@ -749,7 +674,6 @@ SQL;
                     if ($isKnownLength) {
                         $length = array_search($column['length'], TableSchema::$columnLengths);
                         assert(is_string($length));
-                        unset($column['length']);
                         $out .= ' ' . strtoupper($length) . 'BLOB';
                         break;
                     }
@@ -760,9 +684,9 @@ SQL;
                     }
 
                     if ($column['length'] > 2) {
-                        $out .= ' VARBINARY';
+                        $out .= ' VARBINARY(' . $column['length'] . ')';
                     } else {
-                        $out .= ' BINARY';
+                        $out .= ' BINARY(' . $column['length'] . ')';
                     }
                     break;
             }
@@ -773,12 +697,7 @@ SQL;
             TableSchemaInterface::TYPE_SMALLINTEGER,
             TableSchemaInterface::TYPE_TINYINTEGER,
             TableSchemaInterface::TYPE_STRING,
-            TableSchemaInterface::TYPE_BINARY,
         ];
-        if (!isset($typeMap[$column['type']]) && !isset($specialMap[$column['type']])) {
-            $out .= ' ' . strtoupper($column['type']);
-            $hasLength[] = $column['type'];
-        }
         if (in_array($column['type'], $hasLength, true) && isset($column['length'])) {
             $out .= '(' . $column['length'] . ')';
         }
@@ -946,10 +865,9 @@ SQL;
         $out = '';
         if ($data['type'] === TableSchema::CONSTRAINT_UNIQUE) {
             $out = 'UNIQUE KEY ';
-        } elseif ($data['type'] === TableSchema::CONSTRAINT_FOREIGN) {
+        }
+        if ($data['type'] === TableSchema::CONSTRAINT_FOREIGN) {
             $out = 'CONSTRAINT ';
-        } elseif ($data['type'] === TableSchema::CONSTRAINT_CHECK) {
-            return 'CONSTRAINT ' . $this->_driver->quoteIdentifier($name) . ' CHECK (' . $data['expression'] . ')';
         }
         $out .= $this->_driver->quoteIdentifier($name);
 

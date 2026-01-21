@@ -27,8 +27,9 @@ class HeaderNotSet extends HeaderSet
      *
      * @param mixed $other Expected content
      * @return bool
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
      */
-    public function matches(mixed $other): bool
+    public function matches($other): bool
     {
         return parent::matches($other) === false;
     }

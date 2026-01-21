@@ -7,8 +7,6 @@ namespace League\Container;
 use League\Container\Definition\{DefinitionAggregate, DefinitionInterface, DefinitionAggregateInterface};
 use League\Container\Exception\{NotFoundException, ContainerException};
 use League\Container\Inflector\{InflectorAggregate, InflectorInterface, InflectorAggregateInterface};
-use Psr\Container\ContainerExceptionInterface;
-use Psr\Container\NotFoundExceptionInterface;
 use League\Container\ServiceProvider\{ServiceProviderAggregate,
     ServiceProviderAggregateInterface,
     ServiceProviderInterface};
@@ -17,50 +15,72 @@ use Psr\Container\ContainerInterface;
 class Container implements DefinitionContainerInterface
 {
     /**
+     * @var boolean
+     */
+    protected $defaultToShared = false;
+
+    /**
+     * @var DefinitionAggregateInterface
+     */
+    protected $definitions;
+
+    /**
+     * @var ServiceProviderAggregateInterface
+     */
+    protected $providers;
+
+    /**
+     * @var InflectorAggregateInterface
+     */
+    protected $inflectors;
+
+    /**
      * @var ContainerInterface[]
      */
-    protected array $delegates = [];
+    protected $delegates = [];
 
     public function __construct(
-        protected DefinitionAggregateInterface $definitions = new DefinitionAggregate(),
-        protected ServiceProviderAggregateInterface $providers = new ServiceProviderAggregate(),
-        protected InflectorAggregateInterface $inflectors = new InflectorAggregate(),
-        protected bool $defaultToShared = false,
-        protected bool $defaultToOverwrite = false,
+        ?DefinitionAggregateInterface $definitions = null,
+        ?ServiceProviderAggregateInterface $providers = null,
+        ?InflectorAggregateInterface $inflectors = null
     ) {
-        $this->definitions->setContainer($this);
-        $this->providers->setContainer($this);
-        $this->inflectors->setContainer($this);
+        $this->definitions = $definitions ?? new DefinitionAggregate();
+        $this->providers   = $providers   ?? new ServiceProviderAggregate();
+        $this->inflectors  = $inflectors  ?? new InflectorAggregate();
+
+        if ($this->definitions instanceof ContainerAwareInterface) {
+            $this->definitions->setContainer($this);
+        }
+
+        if ($this->providers instanceof ContainerAwareInterface) {
+            $this->providers->setContainer($this);
+        }
+
+        if ($this->inflectors instanceof ContainerAwareInterface) {
+            $this->inflectors->setContainer($this);
+        }
     }
 
-    public function add(string $id, mixed $concrete = null, bool $overwrite = false): DefinitionInterface
+    public function add(string $id, $concrete = null): DefinitionInterface
     {
-        $toOverwrite = $this->defaultToOverwrite || $overwrite;
         $concrete = $concrete ?? $id;
 
         if (true === $this->defaultToShared) {
-            return $this->addShared($id, $concrete, $toOverwrite);
+            return $this->addShared($id, $concrete);
         }
 
-        return $this->definitions->add($id, $concrete, $toOverwrite);
+        return $this->definitions->add($id, $concrete);
     }
 
-    public function addShared(string $id, mixed $concrete = null, bool $overwrite = false): DefinitionInterface
+    public function addShared(string $id, $concrete = null): DefinitionInterface
     {
-        $toOverwrite = $this->defaultToOverwrite || $overwrite;
         $concrete = $concrete ?? $id;
-        return $this->definitions->addShared($id, $concrete, $toOverwrite);
+        return $this->definitions->addShared($id, $concrete);
     }
 
     public function defaultToShared(bool $shared = true): ContainerInterface
     {
         $this->defaultToShared = $shared;
-        return $this;
-    }
-
-    public function defaultToOverwrite(bool $overwrite = true): ContainerInterface
-    {
-        $this->defaultToOverwrite = $overwrite;
         return $this;
     }
 
@@ -86,21 +106,31 @@ class Container implements DefinitionContainerInterface
         return $this;
     }
 
-    public function get(string $id)
+    /**
+     * @template RequestedType
+     *
+     * @param class-string<RequestedType>|string $id
+     *
+     * @return RequestedType|mixed
+     */
+    public function get($id)
     {
         return $this->resolve($id);
     }
 
     /**
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
+     * @template RequestedType
+     *
+     * @param class-string<RequestedType>|string $id
+     *
+     * @return RequestedType|mixed
      */
-    public function getNew(string $id): mixed
+    public function getNew($id)
     {
         return $this->resolve($id, true);
     }
 
-    public function has(string $id): bool
+    public function has($id): bool
     {
         if ($this->definitions->has($id)) {
             return true;
@@ -139,11 +169,7 @@ class Container implements DefinitionContainerInterface
         return $this;
     }
 
-    /**
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
-     */
-    protected function resolve(string $id, bool $new = false): mixed
+    protected function resolve($id, bool $new = false)
     {
         if ($this->definitions->has($id)) {
             $resolved = (true === $new) ? $this->definitions->resolveNew($id) : $this->definitions->resolve($id);
@@ -165,11 +191,11 @@ class Container implements DefinitionContainerInterface
         if ($this->providers->provides($id)) {
             $this->providers->register($id);
 
-            if (false === $this->definitions->has($id) && false === $this->definitions->hasTag($id)) { // @phpstan-ignore-line
+            if (!$this->definitions->has($id) && !$this->definitions->hasTag($id)) {
                 throw new ContainerException(sprintf('Service provider lied about providing (%s) service', $id));
             }
 
-            return $this->resolve($id, $new); // @phpstan-ignore-line
+            return $this->resolve($id, $new);
         }
 
         foreach ($this->delegates as $delegate) {

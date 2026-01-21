@@ -244,7 +244,7 @@ class Connection implements ConnectionInterface
     }
 
     /**
-     * Gets the role-specific driver instance.
+     * Gets the driver instance.
      *
      * @param string $role Connection role ('read' or 'write')
      * @return \Cake\Database\Driver
@@ -253,27 +253,7 @@ class Connection implements ConnectionInterface
     {
         assert($role === self::ROLE_READ || $role === self::ROLE_WRITE);
 
-        return $role === self::ROLE_READ ? $this->getReadDriver() : $this->getWriteDriver();
-    }
-
-    /**
-     * Gets the read-role driver instance.
-     *
-     * @return \Cake\Database\Driver
-     */
-    public function getReadDriver(): Driver
-    {
-        return $this->readDriver;
-    }
-
-    /**
-     * Gets the write-role driver instance.
-     *
-     * @return \Cake\Database\Driver
-     */
-    public function getWriteDriver(): Driver
-    {
-        return $this->writeDriver;
+        return $role === self::ROLE_READ ? $this->readDriver : $this->writeDriver;
     }
 
     /**
@@ -287,7 +267,7 @@ class Connection implements ConnectionInterface
      */
     public function execute(string $sql, array $params = [], array $types = []): StatementInterface
     {
-        return $this->getDisconnectRetry()->run(fn() => $this->getWriteDriver()->execute($sql, $params, $types));
+        return $this->getDisconnectRetry()->run(fn() => $this->getDriver()->execute($sql, $params, $types));
     }
 
     /**
@@ -456,7 +436,7 @@ class Connection implements ConnectionInterface
     {
         if (!$this->_transactionStarted) {
             $this->getDisconnectRetry()->run(function (): void {
-                $this->getWriteDriver()->beginTransaction();
+                $this->getDriver()->beginTransaction();
             });
 
             $this->_transactionLevel = 0;
@@ -495,7 +475,7 @@ class Connection implements ConnectionInterface
             $this->_transactionStarted = false;
             $this->nestedTransactionRollbackException = null;
 
-            return $this->getWriteDriver()->commitTransaction();
+            return $this->getDriver()->commitTransaction();
         }
         if ($this->isSavePointsEnabled()) {
             $this->releaseSavePoint((string)$this->_transactionLevel);
@@ -525,7 +505,7 @@ class Connection implements ConnectionInterface
             $this->_transactionLevel = 0;
             $this->_transactionStarted = false;
             $this->nestedTransactionRollbackException = null;
-            $this->getWriteDriver()->rollbackTransaction();
+            $this->getDriver()->rollbackTransaction();
 
             return true;
         }
@@ -554,7 +534,7 @@ class Connection implements ConnectionInterface
         if ($enable === false) {
             $this->_useSavePoints = false;
         } else {
-            $this->_useSavePoints = $this->getWriteDriver()->supports(DriverFeatureEnum::SAVEPOINT);
+            $this->_useSavePoints = $this->getDriver()->supports(DriverFeatureEnum::SAVEPOINT);
         }
 
         return $this;
@@ -590,7 +570,7 @@ class Connection implements ConnectionInterface
      */
     public function createSavePoint(string|int $name): void
     {
-        $this->execute($this->getWriteDriver()->savePointSQL($name));
+        $this->execute($this->getDriver()->savePointSQL($name));
     }
 
     /**
@@ -601,7 +581,7 @@ class Connection implements ConnectionInterface
      */
     public function releaseSavePoint(string|int $name): void
     {
-        $sql = $this->getWriteDriver()->releaseSavePointSQL($name);
+        $sql = $this->getDriver()->releaseSavePointSQL($name);
         if ($sql) {
             $this->execute($sql);
         }
@@ -615,7 +595,7 @@ class Connection implements ConnectionInterface
      */
     public function rollbackSavepoint(string|int $name): void
     {
-        $this->execute($this->getWriteDriver()->rollbackSavePointSQL($name));
+        $this->execute($this->getDriver()->rollbackSavePointSQL($name));
     }
 
     /**
@@ -626,7 +606,7 @@ class Connection implements ConnectionInterface
     public function disableForeignKeys(): void
     {
         $this->getDisconnectRetry()->run(function (): void {
-            $this->execute($this->getWriteDriver()->disableForeignKeySQL());
+            $this->execute($this->getDriver()->disableForeignKeySQL());
         });
     }
 
@@ -638,7 +618,7 @@ class Connection implements ConnectionInterface
     public function enableForeignKeys(): void
     {
         $this->getDisconnectRetry()->run(function (): void {
-            $this->execute($this->getWriteDriver()->enableForeignKeySQL());
+            $this->execute($this->getDriver()->enableForeignKeySQL());
         });
     }
 

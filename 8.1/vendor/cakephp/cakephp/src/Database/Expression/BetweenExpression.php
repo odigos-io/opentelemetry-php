@@ -130,6 +130,8 @@ class BetweenExpression implements ExpressionInterface, FieldInterface
 
     /**
      * Do a deep clone of this expression.
+     *
+     * @return void
      */
     public function __clone()
     {

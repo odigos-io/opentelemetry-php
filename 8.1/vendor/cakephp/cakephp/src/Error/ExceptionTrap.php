@@ -294,7 +294,7 @@ class ExceptionTrap
     public function increaseMemoryLimit(int $additionalKb): void
     {
         $limit = ini_get('memory_limit');
-        if (in_array($limit, [false, '', '-1'], true)) {
+        if ($limit === false || $limit === '' || $limit === '-1') {
             return;
         }
         $limit = trim($limit);

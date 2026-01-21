@@ -329,7 +329,9 @@ class Table implements RepositoryInterface, EventListenerInterface, EventDispatc
 
         $this->initialize($config);
 
-        $this->getEventManager()->on($this);
+        assert($this->_eventManager !== null, 'EventManager not available');
+
+        $this->_eventManager->on($this);
         $this->dispatchEvent('Model.initialize');
     }
 
@@ -550,7 +552,7 @@ class Table implements RepositoryInterface, EventListenerInterface, EventDispatc
                 unset($schema['_constraints']);
             }
 
-            $schema = $this->getConnection()->getWriteDriver()->newTableSchema($this->getTable(), $schema);
+            $schema = $this->getConnection()->getDriver()->newTableSchema($this->getTable(), $schema);
 
             foreach ($constraints as $name => $value) {
                 $schema->addConstraint($name, $value);
@@ -581,7 +583,7 @@ class Table implements RepositoryInterface, EventListenerInterface, EventDispatc
             ));
         }
 
-        $maxLength = $this->getConnection()->getWriteDriver()->getMaxAliasLength();
+        $maxLength = $this->getConnection()->getDriver()->getMaxAliasLength();
         if ($maxLength === null) {
             return;
         }
@@ -984,7 +986,7 @@ class Table implements RepositoryInterface, EventListenerInterface, EventDispatc
      * are the aliases, and the values are association config data. If numeric
      * keys are used the values will be treated as association aliases.
      *
-     * @param array<string, array<string|array>> $params Set of associations to bind (indexed by association type)
+     * @param array $params Set of associations to bind (indexed by association type)
      * @return $this
      * @see \Cake\ORM\Table::belongsTo()
      * @see \Cake\ORM\Table::hasOne()
@@ -995,7 +997,7 @@ class Table implements RepositoryInterface, EventListenerInterface, EventDispatc
     {
         foreach ($params as $assocType => $tables) {
             foreach ($tables as $associated => $options) {
-                if (is_int($associated)) {
+                if (is_numeric($associated)) {
                     $associated = $options;
                     $options = [];
                 }
@@ -1370,9 +1372,9 @@ class Table implements RepositoryInterface, EventListenerInterface, EventDispatc
 
         if (
             !$query->clause('select') &&
-            !$keyField instanceof Closure &&
-            !$valueField instanceof Closure &&
-            !$groupField instanceof Closure
+            !is_object($keyField) &&
+            !is_object($valueField) &&
+            !is_object($groupField)
         ) {
             $fields = array_merge(
                 (array)$keyField,
@@ -1582,7 +1584,7 @@ class Table implements RepositoryInterface, EventListenerInterface, EventDispatc
     protected function _executeTransaction(callable $worker, bool $atomic = true): mixed
     {
         if ($atomic) {
-            return $this->getConnection()->transactional($worker(...));
+            return $this->getConnection()->transactional(fn() => $worker());
         }
 
         return $worker();
@@ -2181,7 +2183,6 @@ class Table implements RepositoryInterface, EventListenerInterface, EventDispatc
         if ($statement->rowCount() !== 0) {
             $success = $entity;
 
-            // @phpstan-ignore function.alreadyNarrowedType (patch method available on EntityInterface)
             if (method_exists($entity, 'patch')) {
                 $entity = $entity->patch($filteredKeys, ['guard' => false]);
             } else {
@@ -2189,7 +2190,7 @@ class Table implements RepositoryInterface, EventListenerInterface, EventDispatc
             }
 
             $schema = $this->getSchema();
-            $driver = $this->getConnection()->getWriteDriver();
+            $driver = $this->getConnection()->getDriver();
             foreach ($primary as $key => $v) {
                 if (!isset($data[$key])) {
                     $id = $statement->lastInsertId($this->getTable(), $key);
@@ -2729,19 +2730,9 @@ class Table implements RepositoryInterface, EventListenerInterface, EventDispatc
         }
 
         if ($args) {
-            $unNamedArgs = [];
-            $namedArgs = [];
-            foreach ($args as $key => $value) {
-                if (is_int($key)) {
-                    $unNamedArgs[$key] = $value;
-                } else {
-                    $namedArgs[$key] = $value;
-                }
-            }
-
-            $query->applyOptions($namedArgs);
+            $query->applyOptions($args);
             // Fetch custom args without the query options.
-            $args = $unNamedArgs + array_intersect_key($args, $query->getOptions());
+            $args = array_intersect_key($args, $query->getOptions());
 
             unset($params[0]);
             $lastParam = end($params);

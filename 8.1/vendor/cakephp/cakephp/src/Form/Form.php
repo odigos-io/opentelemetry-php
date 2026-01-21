@@ -23,8 +23,6 @@ use Cake\Event\EventManager;
 use Cake\Utility\Hash;
 use Cake\Validation\ValidatorAwareInterface;
 use Cake\Validation\ValidatorAwareTrait;
-use ReflectionMethod;
-use function Cake\Core\deprecationWarning;
 
 /**
  * Form abstraction used to create forms not tied to ORM backed models,
@@ -35,7 +33,7 @@ use function Cake\Core\deprecationWarning;
  *
  * This class is most useful when subclassed. In a subclass you
  * should define the `_buildSchema`, `validationDefault` and optionally,
- * the `process` methods. These allow you to declare your form's
+ * the `_execute` methods. These allow you to declare your form's
  * fields, validation and primary action respectively.
  *
  * Forms are conventionally placed in the `App\Form` namespace.
@@ -255,7 +253,7 @@ class Form implements EventListenerInterface, EventDispatcherInterface, Validato
     /**
      * Execute the form if it is valid.
      *
-     * First validates the form, then calls the `process()` hook method.
+     * First validates the form, then calls the `_execute()` hook method.
      * This hook method can be implemented in subclasses to perform
      * the action of the form. This may be sending email, interacting
      * with a remote API, or anything else you may need.
@@ -268,45 +266,21 @@ class Form implements EventListenerInterface, EventDispatcherInterface, Validato
      * @param array $data Form data.
      * @param array<string, mixed> $options List of options.
      * @return bool False on validation failure, otherwise returns the
-     *   result of the `process()` method.
+     *   result of the `_execute()` method.
      */
     public function execute(array $data, array $options = []): bool
     {
-        // check for deprecated _execute() method - https://github.com/cakephp/cakephp/pull/18725
-        $childClass = static::class;
-        $parentClass = self::class;
-        $method = new ReflectionMethod($childClass, '_execute');
-        $hasOverwrittenExecute = $method->getDeclaringClass()->getName() !== $parentClass;
-
         $this->_data = $data;
+
         $options += ['validate' => true];
 
         if ($options['validate'] === false) {
-            if ($hasOverwrittenExecute) {
-                deprecationWarning(
-                    '5.3.0',
-                    'The _execute() method is deprecated. Override the process() method instead.',
-                );
-
-                return $this->_execute($data);
-            }
-
-            return $this->process($data);
+            return $this->_execute($data);
         }
 
         $validator = $options['validate'] === true ? static::DEFAULT_VALIDATOR : $options['validate'];
-        $validateResult = $this->validate($data, $validator);
 
-        if ($hasOverwrittenExecute) {
-            deprecationWarning(
-                '5.3.0',
-                'The _execute() method is deprecated. Override the process() method instead.',
-            );
-
-            return $validateResult && $this->_execute($data);
-        }
-
-        return $validateResult && $this->process($data);
+        return $this->validate($data, $validator) && $this->_execute($data);
     }
 
     /**
@@ -316,22 +290,8 @@ class Form implements EventListenerInterface, EventDispatcherInterface, Validato
      *
      * @param array $data Form data.
      * @return bool
-     * @deprecated 5.3.0 Override process() instead.
      */
     protected function _execute(array $data): bool
-    {
-        return $this->process($data);
-    }
-
-    /**
-     * Hook method to be implemented in subclasses.
-     *
-     * Used by `execute()` to execute the form's action.
-     *
-     * @param array $data Form data.
-     * @return bool
-     */
-    protected function process(array $data): bool
     {
         return true;
     }
