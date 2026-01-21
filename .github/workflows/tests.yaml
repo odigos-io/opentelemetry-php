@@ -61,101 +61,25 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # Symfony tests - all PHP versions
-          # v2.4.0 supports PHP 8.1+, v2.9.0 supports PHP 8.2+, v3.0.0 supports PHP 8.4+
-          - php-version: "8.1"
-            framework: symfony
-            app-ref: "v2.4.0"
-            app-repo: "symfony/demo"
-            app-route: "/en/blog/"
-            php-extensions: "intl, pdo_sqlite"
-          - php-version: "8.2"
-            framework: symfony
-            app-ref: "v2.9.0"
-            app-repo: "symfony/demo"
-            app-route: "/en/blog/"
-            php-extensions: "intl, pdo_sqlite"
-          - php-version: "8.3"
-            framework: symfony
-            app-ref: "v2.9.0"
-            app-repo: "symfony/demo"
-            app-route: "/en/blog/"
-            php-extensions: "intl, pdo_sqlite"
-          - php-version: "8.4"
-            framework: symfony
-            app-ref: "v3.0.0"
-            app-repo: "symfony/demo"
-            app-route: "/en/blog/"
-            php-extensions: "intl, pdo_sqlite"
-          # Laravel tests - PHP 8.2+ only (Laravel 11+ requires PHP 8.2)
-          - php-version: "8.2"
-            framework: laravel
-            app-ref: ""
-            app-repo: ""
-            app-route: "/"
-            php-extensions: "intl, pdo_sqlite, mbstring, xml, curl"
-          - php-version: "8.3"
-            framework: laravel
-            app-ref: ""
-            app-repo: ""
-            app-route: "/"
-            php-extensions: "intl, pdo_sqlite, mbstring, xml, curl"
-          - php-version: "8.4"
-            framework: laravel
-            app-ref: ""
-            app-repo: ""
-            app-route: "/"
-            php-extensions: "intl, pdo_sqlite, mbstring, xml, curl"
-          # CakePHP tests - PHP 8.1+ (CakePHP 5.0)
-          - php-version: "8.1"
-            framework: cakephp
-            app-ref: ""
-            app-repo: ""
-            app-route: "/"
-            php-extensions: "intl, pdo_sqlite, mbstring"
-          - php-version: "8.2"
-            framework: cakephp
-            app-ref: ""
-            app-repo: ""
-            app-route: "/"
-            php-extensions: "intl, pdo_sqlite, mbstring"
-          - php-version: "8.3"
-            framework: cakephp
-            app-ref: ""
-            app-repo: ""
-            app-route: "/"
-            php-extensions: "intl, pdo_sqlite, mbstring"
-          - php-version: "8.4"
-            framework: cakephp
-            app-ref: ""
-            app-repo: ""
-            app-route: "/"
-            php-extensions: "intl, pdo_sqlite, mbstring"
-          # Yii tests - all PHP versions (Yii 2 supports PHP 7.4+)
-          - php-version: "8.1"
-            framework: yii
-            app-ref: ""
-            app-repo: ""
-            app-route: "/"
-            php-extensions: "intl, pdo_sqlite, mbstring"
-          - php-version: "8.2"
-            framework: yii
-            app-ref: ""
-            app-repo: ""
-            app-route: "/"
-            php-extensions: "intl, pdo_sqlite, mbstring"
-          - php-version: "8.3"
-            framework: yii
-            app-ref: ""
-            app-repo: ""
-            app-route: "/"
-            php-extensions: "intl, pdo_sqlite, mbstring"
-          - php-version: "8.4"
-            framework: yii
-            app-ref: ""
-            app-repo: ""
-            app-route: "/"
-            php-extensions: "intl, pdo_sqlite, mbstring"
+          # Symfony: v2.4.0 (PHP 8.1+), v2.9.0 (PHP 8.2+), v3.0.0 (PHP 8.4+)
+          - { php-version: "8.1", framework: symfony, framework-version: "v2.4.0" }
+          - { php-version: "8.2", framework: symfony, framework-version: "v2.9.0" }
+          - { php-version: "8.3", framework: symfony, framework-version: "v2.9.0" }
+          - { php-version: "8.4", framework: symfony, framework-version: "v3.0.0" }
+          # Laravel: requires PHP 8.2+
+          - { php-version: "8.2", framework: laravel, framework-version: "" }
+          - { php-version: "8.3", framework: laravel, framework-version: "" }
+          - { php-version: "8.4", framework: laravel, framework-version: "" }
+          # CakePHP: 5.0 supports PHP 8.1+
+          - { php-version: "8.1", framework: cakephp, framework-version: "~5.0" }
+          - { php-version: "8.2", framework: cakephp, framework-version: "~5.0" }
+          - { php-version: "8.3", framework: cakephp, framework-version: "~5.0" }
+          - { php-version: "8.4", framework: cakephp, framework-version: "~5.0" }
+          # Yii: 2.x supports PHP 7.4+
+          - { php-version: "8.1", framework: yii, framework-version: "" }
+          - { php-version: "8.2", framework: yii, framework-version: "" }
+          - { php-version: "8.3", framework: yii, framework-version: "" }
+          - { php-version: "8.4", framework: yii, framework-version: "" }
 
     env:
       ARCHITECTURE: "amd64"
@@ -169,7 +93,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: "${{ matrix.php-version }}"
-          extensions: ${{ matrix.php-extensions }}
+          extensions: intl, pdo_sqlite, mbstring, xml, curl
           tools: composer:v2
 
       - name: Setup Docker
@@ -266,14 +190,12 @@ jobs:
         env:
           APP_ENV: prod
         run: |
-          git clone --depth 1 --branch ${{ matrix.app-ref }} https://github.com/${{ matrix.app-repo }}.git app
+          git clone --depth 1 --branch ${{ matrix.framework-version }} https://github.com/symfony/demo.git app
           cd app
 
-          # Install dependencies
           composer install --no-dev --optimize-autoloader --no-scripts
           composer run-script --no-dev post-install-cmd || true
 
-          # Setup the SQLite database
           php bin/console doctrine:database:create --env=prod --no-interaction || true
           php bin/console doctrine:migrations:migrate --env=prod --no-interaction || true
 
@@ -283,44 +205,48 @@ jobs:
           composer create-project --prefer-dist laravel/laravel app
           cd app
 
-          # Configure SQLite database
           touch database/database.sqlite
           sed -i 's/DB_CONNECTION=.*/DB_CONNECTION=sqlite/' .env
           sed -i 's|DB_DATABASE=.*|DB_DATABASE='$(pwd)'/database/database.sqlite|' .env
 
-          # Clear and cache config
           php artisan config:clear
           php artisan cache:clear
 
       - name: Setup CakePHP Application
         if: matrix.framework == 'cakephp'
         run: |
-          composer create-project --prefer-dist cakephp/app:"~5.0" app
-          cd app
-
-          # Configure for minimal setup (no database needed for basic route test)
-          # CakePHP works out of the box with the default welcome page
+          composer create-project --prefer-dist cakephp/app:"${{ matrix.framework-version }}" app
 
       - name: Setup Yii Application
         if: matrix.framework == 'yii'
         run: |
           composer create-project --prefer-dist yiisoft/yii2-app-basic app
-          cd app
-
-          # Yii basic app works out of the box with default routing
 
       - name: Start Application
         run: |
-          # Determine the public directory based on framework
-          if [[ "${{ matrix.framework }}" == "symfony" ]]; then
-            PUBLIC_DIR="app/public"
-          elif [[ "${{ matrix.framework }}" == "laravel" ]]; then
-            PUBLIC_DIR="app/public"
-          elif [[ "${{ matrix.framework }}" == "cakephp" ]]; then
-            PUBLIC_DIR="app/webroot"
-          elif [[ "${{ matrix.framework }}" == "yii" ]]; then
-            PUBLIC_DIR="app/web"
-          fi
+          # Determine the public directory and test route based on framework
+          case "${{ matrix.framework }}" in
+            symfony)
+              PUBLIC_DIR="app/public"
+              TEST_ROUTE="/en/blog/"
+              ;;
+            laravel)
+              PUBLIC_DIR="app/public"
+              TEST_ROUTE="/"
+              ;;
+            cakephp)
+              PUBLIC_DIR="app/webroot"
+              TEST_ROUTE="/"
+              ;;
+            yii)
+              PUBLIC_DIR="app/web"
+              TEST_ROUTE="/"
+              ;;
+          esac
+
+          # Export for use in later steps
+          echo "PUBLIC_DIR=$PUBLIC_DIR" >> $GITHUB_ENV
+          echo "TEST_ROUTE=$TEST_ROUTE" >> $GITHUB_ENV
 
           # Start PHP built-in server with OTel environment variables
           PHP_INI_SCAN_DIR=$(pwd)/${{ matrix.php-version }} \
@@ -340,17 +266,15 @@ jobs:
         run: |
           echo "Waiting for server to start..."
           for i in {1..30}; do
-            if curl -sfL http://localhost:8000${{ matrix.app-route }} > /dev/null 2>&1; then
+            if curl -sfL http://localhost:8000${{ env.TEST_ROUTE }} > /dev/null 2>&1; then
               echo "✅ Server is ready"
               break
             fi
             if [ "$i" = 30 ]; then
               echo "❌ Server is not ready after 30 attempts"
-              # Show server logs for debugging
               echo "PHP error log (if exists):"
               cat /var/log/php*.log 2>/dev/null || true
-              # Try to get error output
-              curl -v http://localhost:8000${{ matrix.app-route }} 2>&1 || true
+              curl -v http://localhost:8000${{ env.TEST_ROUTE }} 2>&1 || true
               exit 1
             fi
             echo "Attempt $i/30: Server not ready yet..."
@@ -360,7 +284,7 @@ jobs:
           # Generate additional traffic to ensure traces are captured
           echo "Generating additional traffic..."
           for i in {1..5}; do
-            curl -sfL http://localhost:8000${{ matrix.app-route }} > /dev/null 2>&1 || true
+            curl -sfL http://localhost:8000${{ env.TEST_ROUTE }} > /dev/null 2>&1 || true
             sleep 1
           done
 
