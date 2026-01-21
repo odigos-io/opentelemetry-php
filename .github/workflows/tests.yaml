@@ -60,20 +60,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - php-version: "8.1"
-            php-app: 'symfony/skeleton:"6.4.*"'
-          - php-version: "8.2"
-            php-app: 'symfony/skeleton:"7.3.*"'
-          - php-version: "8.3"
-            php-app: 'symfony/skeleton:"7.3.*"'
-          - php-version: "8.4"
-            php-app: 'symfony/skeleton:"7.3.*"'
+        php-version: ["8.1", "8.2", "8.3", "8.4"]
 
     env:
       ARCHITECTURE: "amd64" # having trouble getting a runner with arm64, so no matrix for 'arch' at the moment
-      SERVICE_NAME: "symfony-app-${{ matrix.php-version }}"
-      SERVICE_TEST_ROUTE: "test"
+      SERVICE_NAME: "test-app-${{ matrix.php-version }}"
 
     steps:
       - name: Checkout code
@@ -160,36 +151,51 @@ jobs:
 
       - name: Create Application
         run: |
-          # Create new Symfony app
-          composer create-project ${{ matrix.php-app }} ${{ env.SERVICE_NAME }}
-          cd ${{ env.SERVICE_NAME }}
+          # Create a simple test application that uses Symfony HttpKernel
+          # The agent's vendor directory includes symfony/http-kernel and symfony/http-foundation
+          # which allows us to trigger the opentelemetry-auto-symfony auto-instrumentation
+          mkdir -p ${{ env.SERVICE_NAME }}/public
 
-          # Add a simple controller for testing
-          mkdir -p src/Controller
-          cat > src/Controller/TestController.php << 'EOF'
+          # Create a test endpoint that uses Symfony HttpKernel
+          # This triggers auto-instrumentation without needing the full Symfony framework
+          cat > ${{ env.SERVICE_NAME }}/public/index.php << 'EOFPHP'
           <?php
 
-          namespace App\Controller;
+          use Symfony\Component\HttpFoundation\Request;
+          use Symfony\Component\HttpFoundation\Response;
+          use Symfony\Component\HttpKernel\HttpKernel;
+          use Symfony\Component\HttpKernel\Controller\ControllerResolver;
+          use Symfony\Component\HttpKernel\Controller\ArgumentResolver;
+          use Symfony\Component\EventDispatcher\EventDispatcher;
+          use Symfony\Component\HttpKernel\Event\RequestEvent;
+          use Symfony\Component\HttpKernel\KernelEvents;
 
-          use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-          use Symfony\Component\HttpFoundation\JsonResponse;
-          use Symfony\Component\Routing\Annotation\Route;
+          // Create the request from globals
+          $request = Request::createFromGlobals();
 
-          class TestController extends AbstractController
-          {
-              #[Route('/${{ env.SERVICE_TEST_ROUTE }}', name: 'app_test')]
-              public function test(): JsonResponse
-              {
-                  return new JsonResponse([
-                      'message' => 'Hello from PHP ${{ matrix.php-version }}!',
-                      'timestamp' => time()
-                  ]);
-              }
-          }
-          EOF
+          // Create event dispatcher and add a listener to set the controller
+          $dispatcher = new EventDispatcher();
+          $dispatcher->addListener(KernelEvents::REQUEST, function(RequestEvent $event) {
+              // Set the controller as a request attribute
+              $event->getRequest()->attributes->set('_controller', function(Request $request) {
+                  return new Response(json_encode([
+                      'message' => 'Hello from Symfony HttpKernel!',
+                      'timestamp' => time(),
+                      'php_version' => PHP_VERSION,
+                  ]), 200, ['Content-Type' => 'application/json']);
+              });
+          });
 
-          # Install dependencies
-          composer install --no-dev --optimize-autoloader
+          // Create HttpKernel with standard resolvers
+          $controllerResolver = new ControllerResolver();
+          $argumentResolver = new ArgumentResolver();
+          $kernel = new HttpKernel($dispatcher, $controllerResolver, null, $argumentResolver);
+
+          // Handle the request - this triggers the auto-instrumentation
+          $response = $kernel->handle($request);
+          $response->send();
+          $kernel->terminate($request, $response);
+          EOFPHP
 
       - name: Configure Agent
         run: |
@@ -213,23 +219,23 @@ jobs:
 
       - name: Start Application
         run: |
-          cd ${{ env.SERVICE_NAME }}
-
-          php -S localhost:8000 -t public/ &
-          SYMFONY_PID=$!
-          echo $SYMFONY_PID > symfony.pid
+          # Start PHP built-in server
+          php -S localhost:8000 -t ${{ env.SERVICE_NAME }}/public/ &
+          echo $! > php.pid
+          echo "Started PHP server with PID $(cat php.pid)"
 
       - name: Generate Traffic
         run: |
-          cd ${{ env.SERVICE_NAME }}
-
           echo "Verifying OpenTelemetry extension..."
           php -m | grep opentelemetry || (echo "⚠️ OpenTelemetry extension not loaded" && exit 1)
 
-          echo "Generating traffic..."
+          echo "Checking PHP configuration..."
+          php --ini
+
+          echo "Waiting for server to start..."
           for i in {1..30}; do
-            if curl -f http://localhost:8000/${{ env.SERVICE_TEST_ROUTE }} > /dev/null 2>&1; then
-              echo "✅ Server is ready, traffic generated"
+            if curl -sf http://localhost:8000/ > /dev/null 2>&1; then
+              echo "✅ Server is ready"
               break
             fi
             if [ "$i" = 30 ]; then
@@ -240,8 +246,16 @@ jobs:
             sleep 2
           done
 
-          # Wait a bit for trace processing
-          sleep 5
+          echo "Generating traffic..."
+          for i in {1..5}; do
+            echo "Request $i:"
+            curl -sf http://localhost:8000/ || echo "Request failed"
+            sleep 1
+          done
+
+          # Wait for traces to be exported
+          echo "Waiting for trace export..."
+          sleep 10
 
       - name: Verify Trace Generation
         run: |
