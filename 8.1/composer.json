@@ -18,7 +18,8 @@
     "open-telemetry/opentelemetry-auto-slim": "^1.1.0",
     "open-telemetry/opentelemetry-auto-symfony": "^1.0.0",
     "open-telemetry/opentelemetry-auto-mongodb": "^0.0.8",
-    "open-telemetry/opentelemetry-auto-openai-php": "^0.0.3"
+    "open-telemetry/opentelemetry-auto-openai-php": "^0.0.3",
+    "symfony/http-foundation": "^6.4.29"
   },
   "repositories": [
     {

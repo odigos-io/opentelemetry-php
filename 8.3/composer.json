@@ -24,7 +24,8 @@
     "open-telemetry/opentelemetry-auto-mongodb": "^0.0.8",
     "open-telemetry/opentelemetry-auto-openai-php": "^0.0.3",
     "open-telemetry/opentelemetry-auto-ext-amqp": "^0.0.5",
-    "open-telemetry/opentelemetry-auto-ext-rdkafka": "^0.0.2"
+    "open-telemetry/opentelemetry-auto-ext-rdkafka": "^0.0.2",
+    "symfony/http-foundation": "^7.3.7"
   },
   "repositories": [
     {

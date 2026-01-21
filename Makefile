@@ -139,3 +139,24 @@ update-libs:
 		$(MAKE) update-libs/$$vers; \
 	done
 	@echo "\n✅ All libraries have been updated."
+
+##################################################
+# Docker-based composer update (no local PHP needed)
+##################################################
+
+.PHONY: docker-update-libs/%
+docker-update-libs/%:
+	@echo "\n🚀 Updating libraries for PHP $* using Docker"
+	@docker run --rm -v $(PWD)/$*:/app -w /app \
+		composer:latest update \
+			--optimize-autoloader \
+			--no-dev \
+			--no-plugins \
+			--ignore-platform-reqs
+
+.PHONY: docker-update-libs
+docker-update-libs:
+	@for vers in $(PHP_VERSIONS); do \
+		$(MAKE) docker-update-libs/$$vers; \
+	done
+	@echo "\n✅ All libraries have been updated."
