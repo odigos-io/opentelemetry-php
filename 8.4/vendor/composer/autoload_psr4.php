@@ -7,6 +7,7 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Symfony\\Polyfill\\Php85\\' => array($vendorDir . '/symfony/polyfill-php85'),
+    'Symfony\\Polyfill\\Php83\\' => array($vendorDir . '/symfony/polyfill-php83'),
     'Symfony\\Polyfill\\Php82\\' => array($vendorDir . '/symfony/polyfill-php82'),
     'Symfony\\Polyfill\\Mbstring\\' => array($vendorDir . '/symfony/polyfill-mbstring'),
     'Symfony\\Polyfill\\Ctype\\' => array($vendorDir . '/symfony/polyfill-ctype'),

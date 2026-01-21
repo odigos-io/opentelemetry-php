@@ -13,6 +13,7 @@ class ComposerStaticInit7242b33651f1f814565e7a940216a5ab
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
         '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
+        '662a729f963d39afe703c9d9b7ab4a8c' => __DIR__ . '/..' . '/symfony/polyfill-php83/bootstrap.php',
         '606a39d89246991a373564698c2d8383' => __DIR__ . '/..' . '/symfony/polyfill-php85/bootstrap.php',
         '667aeda72477189d0494fecd327c3641' => __DIR__ . '/..' . '/symfony/var-dumper/Resources/functions/dump.php',
         '253c157292f75eb38082b5acb06f3f01' => __DIR__ . '/..' . '/nikic/fast-route/src/functions.php',
@@ -53,6 +54,7 @@ class ComposerStaticInit7242b33651f1f814565e7a940216a5ab
         'S' =>
         array (
             'Symfony\\Polyfill\\Php85\\' => 23,
+            'Symfony\\Polyfill\\Php83\\' => 23,
             'Symfony\\Polyfill\\Php82\\' => 23,
             'Symfony\\Polyfill\\Mbstring\\' => 26,
             'Symfony\\Polyfill\\Ctype\\' => 23,
@@ -157,6 +159,10 @@ class ComposerStaticInit7242b33651f1f814565e7a940216a5ab
         'Symfony\\Polyfill\\Php85\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-php85',
+        ),
+        'Symfony\\Polyfill\\Php83\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-php83',
         ),
         'Symfony\\Polyfill\\Php82\\' =>
         array (
@@ -449,6 +455,15 @@ class ComposerStaticInit7242b33651f1f814565e7a940216a5ab
         'Composer\\Semver\\Intervals' => __DIR__ . '/..' . '/composer/semver/src/Intervals.php',
         'Composer\\Semver\\Semver' => __DIR__ . '/..' . '/composer/semver/src/Semver.php',
         'Composer\\Semver\\VersionParser' => __DIR__ . '/..' . '/composer/semver/src/VersionParser.php',
+        'DateError' => __DIR__ . '/..' . '/symfony/polyfill-php83/Resources/stubs/DateError.php',
+        'DateException' => __DIR__ . '/..' . '/symfony/polyfill-php83/Resources/stubs/DateException.php',
+        'DateInvalidOperationException' => __DIR__ . '/..' . '/symfony/polyfill-php83/Resources/stubs/DateInvalidOperationException.php',
+        'DateInvalidTimeZoneException' => __DIR__ . '/..' . '/symfony/polyfill-php83/Resources/stubs/DateInvalidTimeZoneException.php',
+        'DateMalformedIntervalStringException' => __DIR__ . '/..' . '/symfony/polyfill-php83/Resources/stubs/DateMalformedIntervalStringException.php',
+        'DateMalformedPeriodStringException' => __DIR__ . '/..' . '/symfony/polyfill-php83/Resources/stubs/DateMalformedPeriodStringException.php',
+        'DateMalformedStringException' => __DIR__ . '/..' . '/symfony/polyfill-php83/Resources/stubs/DateMalformedStringException.php',
+        'DateObjectError' => __DIR__ . '/..' . '/symfony/polyfill-php83/Resources/stubs/DateObjectError.php',
+        'DateRangeError' => __DIR__ . '/..' . '/symfony/polyfill-php83/Resources/stubs/DateRangeError.php',
         'Doctrine\\DBAL\\ArrayParameterType' => __DIR__ . '/..' . '/doctrine/dbal/src/ArrayParameterType.php',
         'Doctrine\\DBAL\\ArrayParameters\\Exception' => __DIR__ . '/..' . '/doctrine/dbal/src/ArrayParameters/Exception.php',
         'Doctrine\\DBAL\\ArrayParameters\\Exception\\MissingNamedParameter' => __DIR__ . '/..' . '/doctrine/dbal/src/ArrayParameters/Exception/MissingNamedParameter.php',
@@ -2825,6 +2840,7 @@ class ComposerStaticInit7242b33651f1f814565e7a940216a5ab
         'Opentelemetry\\Proto\\Trace\\V1\\TraceConfig' => __DIR__ . '/..' . '/open-telemetry/gen-otlp-protobuf/Opentelemetry/Proto/Trace/V1/TraceConfig.php',
         'Opentelemetry\\Proto\\Trace\\V1\\TraceIdRatioBased' => __DIR__ . '/..' . '/open-telemetry/gen-otlp-protobuf/Opentelemetry/Proto/Trace/V1/TraceIdRatioBased.php',
         'Opentelemetry\\Proto\\Trace\\V1\\TracesData' => __DIR__ . '/..' . '/open-telemetry/gen-otlp-protobuf/Opentelemetry/Proto/Trace/V1/TracesData.php',
+        'Override' => __DIR__ . '/..' . '/symfony/polyfill-php83/Resources/stubs/Override.php',
         'Psr\\Cache\\CacheException' => __DIR__ . '/..' . '/psr/cache/src/CacheException.php',
         'Psr\\Cache\\CacheItemInterface' => __DIR__ . '/..' . '/psr/cache/src/CacheItemInterface.php',
         'Psr\\Cache\\CacheItemPoolInterface' => __DIR__ . '/..' . '/psr/cache/src/CacheItemPoolInterface.php',
@@ -3013,6 +3029,7 @@ class ComposerStaticInit7242b33651f1f814565e7a940216a5ab
         'Random\\Engine\\Secure' => __DIR__ . '/..' . '/symfony/polyfill-php82/Resources/stubs/Random/Engine/Secure.php',
         'Random\\RandomError' => __DIR__ . '/..' . '/symfony/polyfill-php82/Resources/stubs/Random/RandomError.php',
         'Random\\RandomException' => __DIR__ . '/..' . '/symfony/polyfill-php82/Resources/stubs/Random/RandomException.php',
+        'SQLite3Exception' => __DIR__ . '/..' . '/symfony/polyfill-php83/Resources/stubs/SQLite3Exception.php',
         'SensitiveParameter' => __DIR__ . '/..' . '/symfony/polyfill-php82/Resources/stubs/SensitiveParameter.php',
         'SensitiveParameterValue' => __DIR__ . '/..' . '/symfony/polyfill-php82/Resources/stubs/SensitiveParameterValue.php',
         'Slim\\App' => __DIR__ . '/..' . '/slim/slim/Slim/App.php',
@@ -3238,7 +3255,6 @@ class ComposerStaticInit7242b33651f1f814565e7a940216a5ab
         'Symfony\\Component\\HttpKernel\\Attribute\\AsController' => __DIR__ . '/..' . '/symfony/http-kernel/Attribute/AsController.php',
         'Symfony\\Component\\HttpKernel\\Attribute\\AsTargetedValueResolver' => __DIR__ . '/..' . '/symfony/http-kernel/Attribute/AsTargetedValueResolver.php',
         'Symfony\\Component\\HttpKernel\\Attribute\\Cache' => __DIR__ . '/..' . '/symfony/http-kernel/Attribute/Cache.php',
-        'Symfony\\Component\\HttpKernel\\Attribute\\IsSignatureValid' => __DIR__ . '/..' . '/symfony/http-kernel/Attribute/IsSignatureValid.php',
         'Symfony\\Component\\HttpKernel\\Attribute\\MapDateTime' => __DIR__ . '/..' . '/symfony/http-kernel/Attribute/MapDateTime.php',
         'Symfony\\Component\\HttpKernel\\Attribute\\MapQueryParameter' => __DIR__ . '/..' . '/symfony/http-kernel/Attribute/MapQueryParameter.php',
         'Symfony\\Component\\HttpKernel\\Attribute\\MapQueryString' => __DIR__ . '/..' . '/symfony/http-kernel/Attribute/MapQueryString.php',
@@ -3301,6 +3317,7 @@ class ComposerStaticInit7242b33651f1f814565e7a940216a5ab
         'Symfony\\Component\\HttpKernel\\Debug\\ErrorHandlerConfigurator' => __DIR__ . '/..' . '/symfony/http-kernel/Debug/ErrorHandlerConfigurator.php',
         'Symfony\\Component\\HttpKernel\\Debug\\TraceableEventDispatcher' => __DIR__ . '/..' . '/symfony/http-kernel/Debug/TraceableEventDispatcher.php',
         'Symfony\\Component\\HttpKernel\\Debug\\VirtualRequestStack' => __DIR__ . '/..' . '/symfony/http-kernel/Debug/VirtualRequestStack.php',
+        'Symfony\\Component\\HttpKernel\\DependencyInjection\\AddAnnotatedClassesToCachePass' => __DIR__ . '/..' . '/symfony/http-kernel/DependencyInjection/AddAnnotatedClassesToCachePass.php',
         'Symfony\\Component\\HttpKernel\\DependencyInjection\\ConfigurableExtension' => __DIR__ . '/..' . '/symfony/http-kernel/DependencyInjection/ConfigurableExtension.php',
         'Symfony\\Component\\HttpKernel\\DependencyInjection\\ControllerArgumentValueResolverPass' => __DIR__ . '/..' . '/symfony/http-kernel/DependencyInjection/ControllerArgumentValueResolverPass.php',
         'Symfony\\Component\\HttpKernel\\DependencyInjection\\Extension' => __DIR__ . '/..' . '/symfony/http-kernel/DependencyInjection/Extension.php',
@@ -3322,7 +3339,6 @@ class ComposerStaticInit7242b33651f1f814565e7a940216a5ab
         'Symfony\\Component\\HttpKernel\\EventListener\\DumpListener' => __DIR__ . '/..' . '/symfony/http-kernel/EventListener/DumpListener.php',
         'Symfony\\Component\\HttpKernel\\EventListener\\ErrorListener' => __DIR__ . '/..' . '/symfony/http-kernel/EventListener/ErrorListener.php',
         'Symfony\\Component\\HttpKernel\\EventListener\\FragmentListener' => __DIR__ . '/..' . '/symfony/http-kernel/EventListener/FragmentListener.php',
-        'Symfony\\Component\\HttpKernel\\EventListener\\IsSignatureValidAttributeListener' => __DIR__ . '/..' . '/symfony/http-kernel/EventListener/IsSignatureValidAttributeListener.php',
         'Symfony\\Component\\HttpKernel\\EventListener\\LocaleAwareListener' => __DIR__ . '/..' . '/symfony/http-kernel/EventListener/LocaleAwareListener.php',
         'Symfony\\Component\\HttpKernel\\EventListener\\LocaleListener' => __DIR__ . '/..' . '/symfony/http-kernel/EventListener/LocaleListener.php',
         'Symfony\\Component\\HttpKernel\\EventListener\\ProfilerListener' => __DIR__ . '/..' . '/symfony/http-kernel/EventListener/ProfilerListener.php',
@@ -3494,6 +3510,7 @@ class ComposerStaticInit7242b33651f1f814565e7a940216a5ab
         'Symfony\\Polyfill\\Php82\\Php82' => __DIR__ . '/..' . '/symfony/polyfill-php82/Php82.php',
         'Symfony\\Polyfill\\Php82\\Random\\Engine\\Secure' => __DIR__ . '/..' . '/symfony/polyfill-php82/Random/Engine/Secure.php',
         'Symfony\\Polyfill\\Php82\\SensitiveParameterValue' => __DIR__ . '/..' . '/symfony/polyfill-php82/SensitiveParameterValue.php',
+        'Symfony\\Polyfill\\Php83\\Php83' => __DIR__ . '/..' . '/symfony/polyfill-php83/Php83.php',
         'Symfony\\Polyfill\\Php85\\Php85' => __DIR__ . '/..' . '/symfony/polyfill-php85/Php85.php',
     );
 

@@ -62,7 +62,6 @@ class Request
     public const METHOD_OPTIONS = 'OPTIONS';
     public const METHOD_TRACE = 'TRACE';
     public const METHOD_CONNECT = 'CONNECT';
-    public const METHOD_QUERY = 'QUERY';
 
     /**
      * @var string[]
@@ -82,13 +81,6 @@ class Request
     protected static bool $httpMethodParameterOverride = false;
 
     /**
-     * The HTTP methods that can be overridden.
-     *
-     * @var uppercase-string[]|null
-     */
-    protected static ?array $allowedHttpMethodOverride = null;
-
-    /**
      * Custom parameters.
      */
     public ParameterBag $attributes;
@@ -102,8 +94,6 @@ class Request
 
     /**
      * Query string parameters ($_GET).
-     *
-     * @var InputBag<string>
      */
     public InputBag $query;
 
@@ -119,8 +109,6 @@ class Request
 
     /**
      * Cookies ($_COOKIE).
-     *
-     * @var InputBag<string>
      */
     public InputBag $cookies;
 
@@ -206,28 +194,6 @@ class Request
         self::HEADER_X_FORWARDED_PREFIX => 'X_FORWARDED_PREFIX',
     ];
 
-    /**
-     * This mapping is used when no exact MIME match is found in $formats.
-     *
-     * It enables mappings like application/soap+xml -> xml.
-     *
-     * @see https://datatracker.ietf.org/doc/html/rfc6839
-     * @see https://datatracker.ietf.org/doc/html/rfc7303
-     * @see https://www.iana.org/assignments/media-types/media-types.xhtml
-     */
-    private const STRUCTURED_SUFFIX_FORMATS = [
-        'json' => 'json',
-        'xml' => 'xml',
-        'xhtml' => 'html',
-        'cbor' => 'cbor',
-        'zip' => 'zip',
-        'ber' => 'asn1',
-        'der' => 'asn1',
-        'tlv' => 'tlv',
-        'wbxml' => 'xml',
-        'yaml' => 'yaml',
-    ];
-
     private bool $isIisRewrite = false;
 
     /**
@@ -285,30 +251,16 @@ class Request
      */
     public static function createFromGlobals(): static
     {
-        if (!\in_array($_SERVER['REQUEST_METHOD'] ?? null, ['PUT', 'DELETE', 'PATCH', 'QUERY'], true)) {
-            return self::createRequestFromFactory($_GET, $_POST, [], $_COOKIE, $_FILES, $_SERVER);
+        $request = self::createRequestFromFactory($_GET, $_POST, [], $_COOKIE, $_FILES, $_SERVER);
+
+        if (str_starts_with($request->headers->get('CONTENT_TYPE', ''), 'application/x-www-form-urlencoded')
+            && \in_array(strtoupper($request->server->get('REQUEST_METHOD', 'GET')), ['PUT', 'DELETE', 'PATCH'], true)
+        ) {
+            parse_str($request->getContent(), $data);
+            $request->request = new InputBag($data);
         }
 
-        if (\PHP_VERSION_ID < 80400) {
-            if (!isset($_SERVER['CONTENT_TYPE']) || str_starts_with($_SERVER['CONTENT_TYPE'], 'application/x-www-form-urlencoded')) {
-                $content = file_get_contents('php://input');
-                parse_str($content, $post);
-            } else {
-                $content = null;
-                $post = $_POST;
-            }
-
-            return self::createRequestFromFactory($_GET, $post, [], $_COOKIE, $_FILES, $_SERVER, $content);
-        }
-
-        try {
-            [$post, $files] = request_parse_body();
-        } catch (\RequestParseBodyException) {
-            $post = $_POST;
-            $files = $_FILES;
-        }
-
-        return self::createRequestFromFactory($_GET, $post, [], $_COOKIE, $files, $_SERVER);
+        return $request;
     }
 
     /**
@@ -409,7 +361,6 @@ class Request
             case 'POST':
             case 'PUT':
             case 'DELETE':
-            case 'QUERY':
                 if (!isset($server['CONTENT_TYPE'])) {
                     $server['CONTENT_TYPE'] = 'application/x-www-form-urlencoded';
                 }
@@ -500,8 +451,8 @@ class Request
         $dup->method = null;
         $dup->format = null;
 
-        if (!$dup->attributes->has('_format') && $this->attributes->has('_format')) {
-            $dup->attributes->set('_format', $this->attributes->get('_format'));
+        if (!$dup->get('_format') && $this->get('_format')) {
+            $dup->attributes->set('_format', $this->get('_format'));
         }
 
         if (!$dup->getRequestFormat(null)) {
@@ -703,34 +654,6 @@ class Request
     }
 
     /**
-     * Sets the list of HTTP methods that can be overridden.
-     *
-     * Set to null to allow all methods to be overridden (default). Set to an
-     * empty array to disallow overrides entirely. Otherwise, provide the list
-     * of uppercased method names that are allowed.
-     *
-     * @param uppercase-string[]|null $methods
-     */
-    public static function setAllowedHttpMethodOverride(?array $methods): void
-    {
-        if (array_intersect($methods ?? [], ['GET', 'HEAD', 'CONNECT', 'TRACE'])) {
-            throw new \InvalidArgumentException('The HTTP methods "GET", "HEAD", "CONNECT", and "TRACE" cannot be overridden.');
-        }
-
-        self::$allowedHttpMethodOverride = $methods;
-    }
-
-    /**
-     * Gets the list of HTTP methods that can be overridden.
-     *
-     * @return uppercase-string[]|null
-     */
-    public static function getAllowedHttpMethodOverride(): ?array
-    {
-        return self::$allowedHttpMethodOverride;
-    }
-
-    /**
      * Gets a "parameter" value from any bag.
      *
      * This method is mainly useful for libraries that want to provide some flexibility. If you don't need the
@@ -739,12 +662,10 @@ class Request
      *
      * Order of precedence: PATH (routing placeholders or custom attributes), GET, POST
      *
-     * @deprecated since Symfony 7.4, use properties `->attributes`, `query` or `request` directly instead
+     * @internal use explicit input sources instead
      */
     public function get(string $key, mixed $default = null): mixed
     {
-        trigger_deprecation('symfony/http-foundation', '7.4', 'Request::get() is deprecated, use properties ->attributes, query or request directly instead.');
-
         if ($this !== $result = $this->attributes->get($key, $this)) {
             return $result;
         }
@@ -1154,7 +1075,7 @@ class Request
 
         $https = $this->server->get('HTTPS');
 
-        return $https && (!\is_string($https) || 'off' !== strtolower($https));
+        return $https && 'off' !== strtolower($https);
     }
 
     /**
@@ -1171,8 +1092,10 @@ class Request
     {
         if ($this->isFromTrustedProxy() && $host = $this->getTrustedValues(self::HEADER_X_FORWARDED_HOST)) {
             $host = $host[0];
-        } else {
-            $host = $this->headers->get('HOST') ?: $this->server->get('SERVER_NAME') ?: $this->server->get('SERVER_ADDR', '');
+        } elseif (!$host = $this->headers->get('HOST')) {
+            if (!$host = $this->server->get('SERVER_NAME')) {
+                $host = $this->server->get('SERVER_ADDR', '');
+            }
         }
 
         // trim and remove port number from host
@@ -1245,7 +1168,7 @@ class Request
 
         $this->method = strtoupper($this->server->get('REQUEST_METHOD', 'GET'));
 
-        if ('POST' !== $this->method || !(self::$allowedHttpMethodOverride ?? true)) {
+        if ('POST' !== $this->method) {
             return $this->method;
         }
 
@@ -1261,15 +1184,11 @@ class Request
 
         $method = strtoupper($method);
 
-        if (\in_array($method, ['GET', 'HEAD', 'CONNECT', 'TRACE'], true)) {
-            trigger_deprecation('symfony/http-foundation', '7.4', 'HTTP method override is deprecated for methods GET, HEAD, CONNECT and TRACE; it will be ignored in Symfony 8.0.', $method);
+        if (\in_array($method, ['GET', 'HEAD', 'POST', 'PUT', 'DELETE', 'CONNECT', 'OPTIONS', 'PATCH', 'PURGE', 'TRACE'], true)) {
+            return $this->method = $method;
         }
 
-        if (self::$allowedHttpMethodOverride && !\in_array($method, self::$allowedHttpMethodOverride, true)) {
-            return $this->method;
-        }
-
-        if (\strlen($method) !== strspn($method, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ')) {
+        if (!preg_match('/^[A-Z]++$/D', $method)) {
             throw new SuspiciousOperationException('Invalid HTTP method override.');
         }
 
@@ -1314,22 +1233,9 @@ class Request
 
     /**
      * Gets the format associated with the mime type.
-     *
-     *  Resolution order:
-     *   1) Exact match on the full MIME type (e.g. "application/json").
-     *   2) Match on the canonical MIME type (i.e. before the first ";" parameter).
-     *   3) If the type is "application/*+suffix", use the structured syntax suffix
-     *      mapping (e.g. "application/foo+json" → "json"), when available.
-     *   4) If $subtypeFallback is true and no match was found:
-     *      - return the MIME subtype (without "x-" prefix), provided it does not
-     *        contain a "+" (e.g. "application/x-yaml" → "yaml", "text/csv" → "csv").
-     *
-     * @param string|null $mimeType        The mime type to check
-     * @param bool        $subtypeFallback Whether to fall back to the subtype if no exact match is found
      */
-    public function getFormat(?string $mimeType/* , bool $subtypeFallback = false */): ?string
+    public function getFormat(?string $mimeType): ?string
     {
-        $subtypeFallback = 2 <= \func_num_args() ? func_get_arg(1) : false;
         $canonicalMimeType = null;
         if ($mimeType && false !== $pos = strpos($mimeType, ';')) {
             $canonicalMimeType = trim(substr($mimeType, 0, $pos));
@@ -1355,48 +1261,21 @@ class Request
             return $format;
         }
 
-        if (!$canonicalMimeType ??= $mimeType) {
-            return null;
-        }
-
-        if (str_starts_with($canonicalMimeType, 'application/') && str_contains($canonicalMimeType, '+')) {
-            $suffix = substr(strrchr($canonicalMimeType, '+'), 1);
-            if (isset(self::STRUCTURED_SUFFIX_FORMATS[$suffix])) {
-                return self::STRUCTURED_SUFFIX_FORMATS[$suffix];
-            }
-        }
-
-        if ($subtypeFallback && str_contains($canonicalMimeType, '/')) {
-            [, $subtype] = explode('/', $canonicalMimeType, 2);
-            if (str_starts_with($subtype, 'x-')) {
-                $subtype = substr($subtype, 2);
-            }
-            if (!str_contains($subtype, '+')) {
-                return $subtype;
-            }
-        }
-
         return null;
     }
 
     /**
      * Associates a format with mime types.
      *
-     * @param string          $format    The format to set
      * @param string|string[] $mimeTypes The associated mime types (the preferred one must be the first as it will be used as the content type)
      */
     public function setFormat(?string $format, string|array $mimeTypes): void
     {
-        if (null === $format) {
-            trigger_deprecation('symfony/http-foundation', '7.4', 'Passing "null" as the first argument of "%s()" is deprecated. The argument will be non-nullable in Symfony 8.0.', __METHOD__);
-            $format = '';
-        }
-
         if (null === static::$formats) {
             static::initializeFormats();
         }
 
-        static::$formats[$format] = (array) $mimeTypes;
+        static::$formats[$format ?? ''] = (array) $mimeTypes;
     }
 
     /**
@@ -1488,7 +1367,7 @@ class Request
      */
     public function isMethodSafe(): bool
     {
-        return \in_array($this->getMethod(), ['GET', 'HEAD', 'OPTIONS', 'TRACE', 'QUERY'], true);
+        return \in_array($this->getMethod(), ['GET', 'HEAD', 'OPTIONS', 'TRACE']);
     }
 
     /**
@@ -1496,7 +1375,7 @@ class Request
      */
     public function isMethodIdempotent(): bool
     {
-        return \in_array($this->getMethod(), ['HEAD', 'GET', 'PUT', 'DELETE', 'TRACE', 'OPTIONS', 'PURGE', 'QUERY'], true);
+        return \in_array($this->getMethod(), ['HEAD', 'GET', 'PUT', 'DELETE', 'TRACE', 'OPTIONS', 'PURGE']);
     }
 
     /**
@@ -1506,7 +1385,7 @@ class Request
      */
     public function isMethodCacheable(): bool
     {
-        return \in_array($this->getMethod(), ['GET', 'HEAD', 'QUERY'], true);
+        return \in_array($this->getMethod(), ['GET', 'HEAD']);
     }
 
     /**
@@ -1542,8 +1421,10 @@ class Request
      */
     public function getContent(bool $asResource = false)
     {
-        if ($asResource) {
-            if (\is_resource($this->content)) {
+        $currentContentIsResource = \is_resource($this->content);
+
+        if (true === $asResource) {
+            if ($currentContentIsResource) {
                 rewind($this->content);
 
                 return $this->content;
@@ -1563,7 +1444,7 @@ class Request
             return fopen('php://input', 'r');
         }
 
-        if (\is_resource($this->content)) {
+        if ($currentContentIsResource) {
             rewind($this->content);
 
             return stream_get_contents($this->content);
@@ -2051,14 +1932,6 @@ class Request
             'atom' => ['application/atom+xml'],
             'rss' => ['application/rss+xml'],
             'form' => ['application/x-www-form-urlencoded', 'multipart/form-data'],
-            'soap' => ['application/soap+xml'],
-            'problem' => ['application/problem+json'],
-            'hal' => ['application/hal+json', 'application/hal+xml'],
-            'jsonapi' => ['application/vnd.api+json'],
-            'yaml' => ['text/yaml', 'application/x-yaml'],
-            'wbxml' => ['application/vnd.wap.wbxml'],
-            'pdf' => ['application/pdf'],
-            'csv' => ['text/csv'],
         ];
     }
 
