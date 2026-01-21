@@ -153,7 +153,26 @@ jobs:
             sleep 2
           done
 
+      - name: Setup Application
+        env:
+          APP_ENV: prod
+        run: |
+          # Clone the official Symfony demo application
+          # This is a complete, working Symfony app with routes already configured
+          # Use appropriate version for PHP compatibility (v2.4.x for PHP 8.1, main for 8.2+)
+          git clone --depth 1 --branch ${{ env.SYMFONY_DEMO_REF }} https://github.com/symfony/demo.git ${{ env.SERVICE_NAME }}
+          cd ${{ env.SERVICE_NAME }}
+
+          # Install dependencies (--no-scripts to avoid DebugBundle issues in prod)
+          composer install --no-dev --optimize-autoloader --no-scripts
+          composer run-script --no-dev post-install-cmd || true
+
+          # Setup the SQLite database (required by the demo app)
+          php bin/console doctrine:database:create --env=prod --no-interaction || true
+          php bin/console doctrine:migrations:migrate --env=prod --no-interaction || true
+
       - name: Configure Agent
+        # it's important to configure this after the application is setup, otherwise `PHP_INI_SCAN_DIR` will be overridden by the application
         run: |
           # Move architecture files
           mv ${{ matrix.php-version }}/bin/${{ env.ARCHITECTURE }}/* ${{ matrix.php-version }}/
@@ -172,24 +191,6 @@ jobs:
           echo "OTEL_LOGS_EXPORTER=none" >> $GITHUB_ENV
           echo "OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:${{ env.OTEL_COLLECTOR_HTTP_PORT }}" >> $GITHUB_ENV
           echo "OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf" >> $GITHUB_ENV
-
-      - name: Setup Application
-        env:
-          APP_ENV: prod
-        run: |
-          # Clone the official Symfony demo application
-          # This is a complete, working Symfony app with routes already configured
-          # Use appropriate version for PHP compatibility (v2.4.x for PHP 8.1, main for 8.2+)
-          git clone --depth 1 --branch ${{ env.SYMFONY_DEMO_REF }} https://github.com/symfony/demo.git ${{ env.SERVICE_NAME }}
-          cd ${{ env.SERVICE_NAME }}
-
-          # Install dependencies (--no-scripts to avoid DebugBundle issues in prod)
-          composer install --no-dev --optimize-autoloader --no-scripts
-          composer run-script --no-dev post-install-cmd || true
-
-          # Setup the SQLite database (required by the demo app)
-          php bin/console doctrine:database:create --env=prod --no-interaction || true
-          php bin/console doctrine:migrations:migrate --env=prod --no-interaction || true
 
 
       - name: Start Application
