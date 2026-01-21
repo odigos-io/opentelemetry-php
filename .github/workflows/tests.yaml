@@ -209,9 +209,20 @@ jobs:
           git clone --depth 1 --branch ${{ matrix.framework-version }} https://github.com/symfony/demo.git app
           cd app
 
+          # Install dependencies without dev packages
           composer install --no-dev --optimize-autoloader --no-scripts
+
+          # Generate production environment file to prevent DebugBundle from being loaded
+          composer dump-env prod
+
+          # Run post-install scripts
           composer run-script --no-dev post-install-cmd || true
 
+          # Clear and warmup cache for production
+          php bin/console cache:clear --env=prod --no-debug
+          php bin/console cache:warmup --env=prod --no-debug
+
+          # Setup the SQLite database
           php bin/console doctrine:database:create --env=prod --no-interaction || true
           php bin/console doctrine:migrations:migrate --env=prod --no-interaction || true
 
@@ -232,6 +243,26 @@ jobs:
         if: matrix.framework == 'cakephp'
         run: |
           composer create-project --prefer-dist cakephp/app:"${{ matrix.framework-version }}" app
+          cd app
+
+          # Configure SQLite database (similar to Laravel setup)
+          # Create config/app_local.php with SQLite configuration
+          cat > config/app_local.php << 'EOF'
+          <?php
+          return [
+              'Datasources' => [
+                  'default' => [
+                      'className' => \Cake\Database\Connection::class,
+                      'driver' => \Cake\Database\Driver\Sqlite::class,
+                      'database' => ROOT . DS . 'tmp' . DS . 'database.sqlite',
+                  ],
+              ],
+          ];
+          EOF
+
+          # Create the SQLite database file
+          touch tmp/database.sqlite
+          chmod 777 tmp/database.sqlite
 
       - name: Setup Yii Application
         if: matrix.framework == 'yii'
