@@ -4,6 +4,36 @@ ARCHES=arm64 amd64
 DOCKER_MOUNT_NAME=otel-php
 
 ##################################################
+# Composer commands (no local PHP needed)
+##################################################
+
+.PHONY: install-libs
+install-libs:
+	@for vers in $(PHP_VERSIONS); do \
+		echo "🚀 Installing libraries for PHP $$vers using Docker"; \
+		docker run --rm -v $(PWD)/$$vers:/app -w /app \
+			composer:latest install \
+				--optimize-autoloader \
+				--no-dev \
+				--no-plugins \
+				--ignore-platform-reqs; \
+	done
+	@echo "✅ All libraries have been installed."
+
+.PHONY: update-libs
+update-libs:
+	@for vers in $(PHP_VERSIONS); do \
+		echo "🚀 Updating libraries for PHP $$vers using Docker"; \
+		docker run --rm -v $(PWD)/$$vers:/app -w /app \
+			composer:latest update \
+				--optimize-autoloader \
+				--no-dev \
+				--no-plugins \
+				--ignore-platform-reqs; \
+	done
+	@echo "✅ All libraries have been updated."
+
+##################################################
 # Main method to build the binaries
 ##################################################
 
@@ -13,7 +43,7 @@ binaries:
 	@$(MAKE) bake-images
 	@for vers in $(PHP_VERSIONS); do \
 		for arch in $(ARCHES); do \
-			echo "\n🚀 Handling binaries for PHP $$vers on $$arch"; \
+			echo "🚀 Handling binaries for PHP $$vers on $$arch"; \
 			($(MAKE) unmount-container/$$vers-$$arch || true); \
 			$(MAKE) mount-container/$$vers-$$arch; \
 			$(MAKE) copy-files/$$vers-$$arch; \
@@ -21,7 +51,7 @@ binaries:
 		done; \
 	done
 	@$(MAKE) cleanup
-	@echo "\n✅ All binaries have been built and copied to the respective directories."
+	@echo "✅ All binaries have been built and copied to the respective directories."
 	@for vers in $(PHP_VERSIONS); do \
 		for arch in $(ARCHES); do \
 			echo "👀 Checking output for $$vers $$arch"; \
@@ -30,12 +60,12 @@ binaries:
 	done
 
 prepare-multiarch:
-	@echo "\n🚀 Bootstraping buildx with QEMU support"
+	@echo "🚀 Bootstraping buildx with QEMU support"
 	@docker buildx create --name multiarch --driver docker-container --use || true
 	@docker buildx inspect --bootstrap
 
 bake-images:
-	@echo "\n🚀 Building images"
+	@echo "🚀 Building images"
 	@mkdir -p tmp
 	@docker buildx bake --file docker-bake.hcl \
 		--set *.args.PHP_OTEL_VERSION=$(PHP_OTEL_VERSION)
@@ -65,98 +95,7 @@ copy-files/%:
 	}
 
 cleanup:
-	@echo "\n🚀 Cleaning up leftovers"
+	@echo "🚀 Cleaning up leftovers"
 	@rm -rf tmp
 	@docker buildx use default || docker context use default
 	@docker buildx rm multiarch
-
-##################################################
-# Helper methods during development
-##################################################
-
-.PHONY: switch-php/%
-switch-php/%:
-	@echo "\n🚀 Switching to PHP $*"
-	@for v in $(PHP_VERSIONS); do \
-		brew unlink php@$$v || true; \
-	done
-	@if [ "$*" = "8.0" ]; then \
-		brew install shivammathur/php/php@$*; \
-	else \
-		brew install php@$* || true; \
-	fi
-	@brew link --overwrite --force php@$*
-
-.PHONY: install-composer
-install-composer:
-	@echo "\n🚀 Installing Composer"
-	@php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-	@php -r "if (hash_file('sha384', 'composer-setup.php') === 'dac665fdc30fdd8ec78b38b9800061b4150413ff2e3b6f88543c636f7cd84f6db9189d43a81e5503cda447da73c7e5b6') { echo 'Installer verified'.PHP_EOL; } else { echo 'Installer corrupt'.PHP_EOL; unlink('composer-setup.php'); exit(1); }"
-	@sudo php composer-setup.php --install-dir=/usr/local/bin --filename=composer
-	@php -r "unlink('composer-setup.php');"
-	@composer --version
-
-.PHONY: install-libs/%
-install-libs/%:
-	@$(MAKE) switch-php/$*
-	@cd ./$*/ \
-		&& composer install \
-			--optimize-autoloader \
-			--no-dev \
-			--no-plugins \
-			--ignore-platform-req=ext-opentelemetry \
-			--ignore-platform-req=ext-amqp \
-			--ignore-platform-req=ext-rdkafka \
-			--ignore-platform-req=ext-mongodb \
-			--ignore-platform-req=ext-mysqli \
-			--ignore-platform-req=ext-intl
-
-.PHONY: install-libs
-install-libs:
-	@for vers in $(PHP_VERSIONS); do \
-		$(MAKE) install-libs/$$vers; \
-	done
-	@echo "\n✅ All libraries have been installed."
-
-.PHONY: update-libs/%
-update-libs/%:
-	@$(MAKE) switch-php/$*
-	@cd ./$*/ \
-		&& composer update \
-			--optimize-autoloader \
-			--no-dev \
-			--no-plugins \
-			--ignore-platform-req=ext-opentelemetry \
-			--ignore-platform-req=ext-amqp \
-			--ignore-platform-req=ext-rdkafka \
-			--ignore-platform-req=ext-mongodb \
-			--ignore-platform-req=ext-mysqli \
-			--ignore-platform-req=ext-intl
-
-.PHONY: update-libs
-update-libs:
-	@for vers in $(PHP_VERSIONS); do \
-		$(MAKE) update-libs/$$vers; \
-	done
-	@echo "\n✅ All libraries have been updated."
-
-##################################################
-# Docker-based composer update (no local PHP needed)
-##################################################
-
-.PHONY: docker-update-libs/%
-docker-update-libs/%:
-	@echo "\n🚀 Updating libraries for PHP $* using Docker"
-	@docker run --rm -v $(PWD)/$*:/app -w /app \
-		composer:latest update \
-			--optimize-autoloader \
-			--no-dev \
-			--no-plugins \
-			--ignore-platform-reqs
-
-.PHONY: docker-update-libs
-docker-update-libs:
-	@for vers in $(PHP_VERSIONS); do \
-		$(MAKE) docker-update-libs/$$vers; \
-	done
-	@echo "\n✅ All libraries have been updated."

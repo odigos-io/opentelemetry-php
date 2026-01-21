@@ -12,24 +12,73 @@ use OpenTelemetry\API\Trace\StatusCode;
 use OpenTelemetry\Context\Context;
 use function OpenTelemetry\Instrumentation\hook;
 use OpenTelemetry\SDK\Common\Configuration\Configuration;
-use OpenTelemetry\SemConv\TraceAttributes;
+use OpenTelemetry\SemConv\Attributes\CodeAttributes;
+use OpenTelemetry\SemConv\Attributes\DbAttributes;
 use OpenTelemetry\SemConv\Version;
 use PDO;
 use PDOStatement;
 use Throwable;
 
+/** @phan-file-suppress PhanUndeclaredClassMethod */
 class PDOInstrumentation
 {
     public const NAME = 'pdo';
+    private const UNDEFINED = 'undefined';
 
     public static function register(): void
     {
         $instrumentation = new CachedInstrumentation(
             'io.opentelemetry.contrib.php.pdo',
             null,
-            Version::VERSION_1_30_0->url(),
+            Version::VERSION_1_36_0->url(),
         );
         $pdoTracker = new PDOTracker();
+
+        // Hook for the new PDO::connect static method
+        if (method_exists(PDO::class, 'connect')) {
+            hook(
+                PDO::class,
+                'connect',
+                pre: static function (
+                    $object,
+                    array $params,
+                    string $class,
+                    string $function,
+                    ?string $filename,
+                    ?int $lineno,
+                ) use ($instrumentation) {
+                    /** @psalm-suppress ArgumentTypeCoercion */
+                    $builder = self::makeBuilder($instrumentation, 'PDO::connect', $function, $class, $filename, $lineno)
+                        ->setSpanKind(SpanKind::KIND_CLIENT);
+
+                    $parent = Context::getCurrent();
+                    $span = $builder->startSpan();
+                    Context::storage()->attach($span->storeInContext($parent));
+                },
+                post: static function (
+                    $object,
+                    array $params,
+                    $result,
+                    ?Throwable $exception,
+                ) use ($pdoTracker) {
+                    $scope = Context::storage()->scope();
+                    if (!$scope) {
+                        return;
+                    }
+                    $span = Span::fromContext($scope->context());
+
+                    $dsn = $params[0] ?? '';
+
+                    // guard against PDO::connect returning a string
+                    if ($result instanceof PDO) {
+                        $attributes = $pdoTracker->trackPdoAttributes($result, $dsn);
+                        $span->setAttributes($attributes);
+                    }
+
+                    self::end($exception);
+                }
+            );
+        }
 
         hook(
             PDO::class,
@@ -38,12 +87,6 @@ class PDOInstrumentation
                 /** @psalm-suppress ArgumentTypeCoercion */
                 $builder = self::makeBuilder($instrumentation, 'PDO::__construct', $function, $class, $filename, $lineno)
                     ->setSpanKind(SpanKind::KIND_CLIENT);
-                if ($class === PDO::class) {
-                    //@todo split params[0] into host + port, replace deprecated trace attribute
-                    $builder
-                        ->setAttribute(TraceAttributes::SERVER_ADDRESS, $params[0] ?? 'unknown')
-                        ->setAttribute(TraceAttributes::SERVER_PORT, $params[0] ?? null);
-                }
                 $parent = Context::getCurrent();
                 $span = $builder->startSpan();
                 Context::storage()->attach($span->storeInContext($parent));
@@ -71,8 +114,12 @@ class PDOInstrumentation
                 /** @psalm-suppress ArgumentTypeCoercion */
                 $builder = self::makeBuilder($instrumentation, 'PDO::query', $function, $class, $filename, $lineno)
                     ->setSpanKind(SpanKind::KIND_CLIENT);
+                $query = mb_convert_encoding($params[0] ?? self::UNDEFINED, 'UTF-8');
+                if (!is_string($query)) {
+                    $query = self::UNDEFINED;
+                }
                 if ($class === PDO::class) {
-                    $builder->setAttribute(TraceAttributes::DB_QUERY_TEXT, mb_convert_encoding($params[0] ?? 'undefined', 'UTF-8'));
+                    $builder->setAttribute(DbAttributes::DB_QUERY_TEXT, $query);
                 }
                 $parent = Context::getCurrent();
                 $span = $builder->startSpan();
@@ -81,6 +128,35 @@ class PDOInstrumentation
                 $span->setAttributes($attributes);
 
                 Context::storage()->attach($span->storeInContext($parent));
+
+                if (class_exists('OpenTelemetry\Contrib\SqlCommenter\SqlCommenter') && $query !== self::UNDEFINED) {
+                    if (array_key_exists(DbAttributes::DB_SYSTEM_NAME, $attributes)) {
+                        /** @psalm-suppress PossiblyInvalidCast */
+                        switch ((string) $attributes[DbAttributes::DB_SYSTEM_NAME]) {
+                            case 'postgresql':
+                            case 'mysql':
+                                /**
+                                 * @psalm-suppress UndefinedClass
+                                 */
+                                $commenter = \OpenTelemetry\Contrib\SqlCommenter\SqlCommenter::getInstance();
+                                $query = $commenter->inject($query);
+                                if ($commenter->isAttributeEnabled()) {
+                                    $span->setAttributes([
+                                        DbAttributes::DB_QUERY_TEXT => (string) $query,
+                                    ]);
+                                }
+
+                                return [
+                                    0 => $query,
+                                ];
+                            default:
+                                // Do nothing, not a database we want to propagate
+                                break;
+                        }
+                    }
+                }
+
+                return [];
             },
             post: static function (PDO $pdo, array $params, mixed $statement, ?Throwable $exception) {
                 self::end($exception);
@@ -94,8 +170,12 @@ class PDOInstrumentation
                 /** @psalm-suppress ArgumentTypeCoercion */
                 $builder = self::makeBuilder($instrumentation, 'PDO::exec', $function, $class, $filename, $lineno)
                     ->setSpanKind(SpanKind::KIND_CLIENT);
+                $query = mb_convert_encoding($params[0] ?? self::UNDEFINED, 'UTF-8');
+                if (!is_string($query)) {
+                    $query = self::UNDEFINED;
+                }
                 if ($class === PDO::class) {
-                    $builder->setAttribute(TraceAttributes::DB_QUERY_TEXT, mb_convert_encoding($params[0] ?? 'undefined', 'UTF-8'));
+                    $builder->setAttribute(DbAttributes::DB_QUERY_TEXT, $query);
                 }
                 $parent = Context::getCurrent();
                 $span = $builder->startSpan();
@@ -104,6 +184,35 @@ class PDOInstrumentation
                 $span->setAttributes($attributes);
 
                 Context::storage()->attach($span->storeInContext($parent));
+
+                if (class_exists('OpenTelemetry\Contrib\SqlCommenter\SqlCommenter') && $query !== self::UNDEFINED) {
+                    if (array_key_exists(DbAttributes::DB_SYSTEM_NAME, $attributes)) {
+                        /** @psalm-suppress PossiblyInvalidCast */
+                        switch ((string) $attributes[DbAttributes::DB_SYSTEM_NAME]) {
+                            case 'postgresql':
+                            case 'mysql':
+                                /**
+                                 * @psalm-suppress UndefinedClass
+                                 */
+                                $commenter = \OpenTelemetry\Contrib\SqlCommenter\SqlCommenter::getInstance();
+                                $query = $commenter->inject($query);
+                                if ($commenter->isAttributeEnabled()) {
+                                    $span->setAttributes([
+                                        DbAttributes::DB_QUERY_TEXT => (string) $query,
+                                    ]);
+                                }
+
+                                return [
+                                    0 => $query,
+                                ];
+                            default:
+                                // Do nothing, not a database we want to propagate
+                                break;
+                        }
+                    }
+                }
+
+                return [];
             },
             post: static function (PDO $pdo, array $params, mixed $statement, ?Throwable $exception) {
                 self::end($exception);
@@ -118,7 +227,7 @@ class PDOInstrumentation
                 $builder = self::makeBuilder($instrumentation, 'PDO::prepare', $function, $class, $filename, $lineno)
                     ->setSpanKind(SpanKind::KIND_CLIENT);
                 if ($class === PDO::class) {
-                    $builder->setAttribute(TraceAttributes::DB_QUERY_TEXT, mb_convert_encoding($params[0] ?? 'undefined', 'UTF-8'));
+                    $builder->setAttribute(DbAttributes::DB_QUERY_TEXT, mb_convert_encoding($params[0] ?? 'undefined', 'UTF-8'));
                 }
                 $parent = Context::getCurrent();
                 $span = $builder->startSpan();
@@ -204,7 +313,7 @@ class PDOInstrumentation
                 $attributes = $pdoTracker->trackedAttributesForStatement($statement);
                 if (self::isDistributeStatementToLinkedSpansEnabled()) {
                     /** @psalm-suppress InvalidArrayAssignment */
-                    $attributes[TraceAttributes::DB_QUERY_TEXT] = $statement->queryString;
+                    $attributes[DbAttributes::DB_QUERY_TEXT] = $statement->queryString;
                 }
                 /** @psalm-suppress ArgumentTypeCoercion */
                 $builder = self::makeBuilder($instrumentation, 'PDOStatement::fetchAll', $function, $class, $filename, $lineno)
@@ -213,9 +322,10 @@ class PDOInstrumentation
                 if ($spanContext = $pdoTracker->getSpanForPreparedStatement($statement)) {
                     $builder->addLink($spanContext);
                 }
+                $parent = Context::getCurrent();
                 $span = $builder->startSpan();
 
-                Context::storage()->attach($span->storeInContext(Context::getCurrent()));
+                Context::storage()->attach($span->storeInContext($parent));
             },
             post: static function (PDOStatement $statement, array $params, mixed $retval, ?Throwable $exception) {
                 self::end($exception);
@@ -230,7 +340,7 @@ class PDOInstrumentation
 
                 if (self::isDistributeStatementToLinkedSpansEnabled()) {
                     /** @psalm-suppress InvalidArrayAssignment */
-                    $attributes[TraceAttributes::DB_QUERY_TEXT] = $statement->queryString;
+                    $attributes[DbAttributes::DB_QUERY_TEXT] = $statement->queryString;
                 }
 
                 /** @psalm-suppress ArgumentTypeCoercion */
@@ -240,9 +350,9 @@ class PDOInstrumentation
                 if ($spanContext = $pdoTracker->getSpanForPreparedStatement($statement)) {
                     $builder->addLink($spanContext);
                 }
+                $parent = Context::getCurrent();
                 $span = $builder->startSpan();
-
-                Context::storage()->attach($span->storeInContext(Context::getCurrent()));
+                Context::storage()->attach($span->storeInContext($parent));
             },
             post: static function (PDOStatement $statement, array $params, mixed $retval, ?Throwable $exception) {
                 self::end($exception);
@@ -260,10 +370,9 @@ class PDOInstrumentation
         /** @psalm-suppress ArgumentTypeCoercion */
         return $instrumentation->tracer()
                     ->spanBuilder($name)
-                    ->setAttribute(TraceAttributes::CODE_FUNCTION_NAME, $function)
-                    ->setAttribute(TraceAttributes::CODE_NAMESPACE, $class)
-                    ->setAttribute(TraceAttributes::CODE_FILEPATH, $filename)
-                    ->setAttribute(TraceAttributes::CODE_LINE_NUMBER, $lineno);
+                    ->setAttribute(CodeAttributes::CODE_FUNCTION_NAME, sprintf('%s::%s', $class, $function))
+                    ->setAttribute(CodeAttributes::CODE_FILE_PATH, $filename)
+                    ->setAttribute(CodeAttributes::CODE_LINE_NUMBER, $lineno);
     }
     private static function end(?Throwable $exception): void
     {

@@ -211,7 +211,7 @@ jobs:
           echo "Waiting for server to start..."
           for i in {1..30}; do
             if curl -sfL http://localhost:8000/en/blog/ > /dev/null 2>&1; then
-              echo "✅ Server is ready"
+              echo "✅ Server is ready, traffic already generated"
               break
             fi
             if [ "$i" = 30 ]; then
@@ -220,13 +220,6 @@ jobs:
             fi
             echo "Attempt $i/30: Server not ready yet..."
             sleep 2
-          done
-
-          echo "Generating traffic..."
-          for i in {1..5}; do
-            echo "Request $i to /en/blog/:"
-            curl -sfL http://localhost:8000/en/blog/ > /dev/null && echo "OK" || echo "Failed"
-            sleep 1
           done
 
           # Wait for traces to be exported
