@@ -212,6 +212,12 @@ jobs:
           # Install dependencies (no dev deps needed - demo ships with pre-seeded database)
           composer install --no-dev --optimize-autoloader --no-scripts
 
+          # Copy .env.local.demo to .env.local if it exists (v2.9.0+ moved APP_SECRET there)
+          # This must happen BEFORE composer dump-env to include the secret
+          if [ -f .env.local.demo ]; then
+            cp .env.local.demo .env.local
+          fi
+
           # Generate production environment file
           composer dump-env prod
 
