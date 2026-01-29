@@ -28,11 +28,6 @@ jobs:
           push: false
           load: true
 
-      - name: Scan image (Grype)
-        uses: anchore/scan-action@v6
+      - uses: odigos-io/ci-core/vulnerabilities-scanner@main
         with:
           image: ${{ env.IMAGE_TAG }}
-          output-format: table
-          fail-build: true
-          severity-cutoff: medium
-          only-fixed: false
