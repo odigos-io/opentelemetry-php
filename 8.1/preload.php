@@ -3,10 +3,7 @@
 $paths = [
   [
     'dir' => '/var/odigos/php/8.1/',
-    'include' => [
-      'opentelemetry-auto-codeigniter',
-      'codeigniter4',
-    ],
+    'include' => [],
     'exclude' => [
       '.phan',
       '.php-cs-fixer',
