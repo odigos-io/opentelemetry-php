@@ -178,13 +178,6 @@ jobs:
 
           # Update paths in configuration files
           sed -i "s|/var/odigos/php/${{ matrix.php-version }}|$(pwd)/${{ matrix.php-version }}|g" ${{ matrix.php-version }}/opentelemetry.ini
-          sed -i "s|/var/odigos/php/${{ matrix.php-version }}|$(pwd)/${{ matrix.php-version }}|g" ${{ matrix.php-version }}/preload.php
-
-          # Fix preload user for GitHub Actions (runs as 'runner', not 'www-data')
-          sed -i "s|opcache.preload_user=www-data|opcache.preload_user=runner|g" ${{ matrix.php-version }}/opentelemetry.ini
-
-          # Remove preload settings (not needed for CLI/built-in server testing)
-          sed -i '/opcache.preload/d' ${{ matrix.php-version }}/opentelemetry.ini
 
           # Show the final configuration
           echo "=== OpenTelemetry INI Configuration ==="
