@@ -36,6 +36,42 @@ update-libs:
 	@echo "✅ All libraries have been updated."
 
 ##################################################
+# PHP-Scoper: isolate vendor namespaces
+##################################################
+
+PHP_SCOPER_PHAR=tmp/php-scoper.phar
+
+$(PHP_SCOPER_PHAR):
+	@mkdir -p tmp
+	@echo "⬇️ Downloading PHP-Scoper"
+	@curl -sSL https://github.com/humbug/php-scoper/releases/latest/download/php-scoper.phar \
+		-o $(PHP_SCOPER_PHAR)
+
+.PHONY: scope-libs
+scope-libs: $(PHP_SCOPER_PHAR)
+	@for vers in $(PHP_VERSIONS); do \
+		echo "🔒 Scoping vendor namespaces for PHP $$vers"; \
+		docker run --rm \
+			-v $(PWD)/$$vers:/app \
+			-v $(PWD)/scoper.inc.php:/config/scoper.inc.php:ro \
+			-v $(PWD)/$(PHP_SCOPER_PHAR):/usr/local/bin/php-scoper.phar:ro \
+			-w /app \
+			php:$$vers-cli sh -c "\
+				php -d memory_limit=1G /usr/local/bin/php-scoper.phar add-prefix \
+					--config=/config/scoper.inc.php \
+					--output-dir=build \
+					--force \
+					--quiet && \
+				cp vendor/composer/installed.json build/composer/installed.json && \
+				cp vendor/composer/installed.php build/composer/installed.php && \
+				cp vendor/composer/InstalledVersions.php build/composer/InstalledVersions.php && \
+				rm -rf vendor && \
+				mv build vendor && \
+				rm -rf build"; \
+	done
+	@echo "✅ All vendor libraries have been scoped."
+
+##################################################
 # Main method to build the binaries
 ##################################################
 
