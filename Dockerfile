@@ -22,6 +22,7 @@ extension=/var/odigos/php/${PHP_VERSION}/opentelemetry.so
 auto_prepend_file=/var/odigos/php/${PHP_VERSION}/vendor/autoload.php
 opcache.preload=/var/odigos/php/${PHP_VERSION}/preload.php
 opcache.preload_user=www-data
+opentelemetry.conflicts=opencensus
 EOF
 
 # Cleanup
