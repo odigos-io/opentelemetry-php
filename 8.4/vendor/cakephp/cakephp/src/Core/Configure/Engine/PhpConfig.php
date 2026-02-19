@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -19,7 +19,6 @@ namespace Cake\Core\Configure\Engine;
 use Cake\Core\Configure\ConfigEngineInterface;
 use Cake\Core\Configure\FileConfigTrait;
 use Cake\Core\Exception\CakeException;
-
 /**
  * PHP engine allows Configure to load configuration values from
  * files containing simple PHP arrays.
@@ -47,14 +46,12 @@ use Cake\Core\Exception\CakeException;
 class PhpConfig implements ConfigEngineInterface
 {
     use FileConfigTrait;
-
     /**
      * File extension.
      *
      * @var string
      */
     protected string $_extension = '.php';
-
     /**
      * Constructor for PHP Config file reading.
      *
@@ -64,7 +61,6 @@ class PhpConfig implements ConfigEngineInterface
     {
         $this->_path = $path ?? CONFIG;
     }
-
     /**
      * Read a config file and return its contents.
      *
@@ -79,16 +75,13 @@ class PhpConfig implements ConfigEngineInterface
      */
     public function read(string $key): array
     {
-        $file = $this->_getFilePath($key, true);
-
+        $file = $this->_getFilePath($key, \true);
         $return = include $file;
         if (is_array($return)) {
             return $return;
         }
-
         throw new CakeException(sprintf('Config file `%s` did not return an array', $key . '.php.'));
     }
-
     /**
      * Converts the provided $data into a string of PHP code that can
      * be used saved into a file and loaded later.
@@ -100,10 +93,8 @@ class PhpConfig implements ConfigEngineInterface
      */
     public function dump(string $key, array $data): bool
     {
-        $contents = '<?php' . "\n" . 'return ' . var_export($data, true) . ';';
-
+        $contents = '<?php' . "\n" . 'return ' . var_export($data, \true) . ';';
         $filename = $this->_getFilePath($key);
-
         return file_put_contents($filename, $contents) > 0;
     }
 }

@@ -1,5 +1,6 @@
-<?php declare(strict_types=1);
+<?php
 
+declare (strict_types=1);
 /*
  * This file is part of the Monolog package.
  *
@@ -8,13 +9,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Odigos\Monolog\Handler;
 
-namespace Monolog\Handler;
-
-use Monolog\Level;
-use Swift;
-use Swift_Message;
-
+use Odigos\Monolog\Level;
+use Odigos\Swift;
+use Odigos\Swift_Message;
 /**
  * MandrillHandler uses cURL to send the emails to the Mandrill API
  *
@@ -24,7 +23,6 @@ class MandrillHandler extends MailHandler
 {
     protected Swift_Message $message;
     protected string $apiKey;
-
     /**
      * @phpstan-param (Swift_Message|callable(): Swift_Message) $message
      *
@@ -33,10 +31,9 @@ class MandrillHandler extends MailHandler
      *
      * @throws \InvalidArgumentException if not a Swift Message is set
      */
-    public function __construct(string $apiKey, callable|Swift_Message $message, int|string|Level $level = Level::Error, bool $bubble = true)
+    public function __construct(string $apiKey, callable|Swift_Message $message, int|string|Level $level = Level::Error, bool $bubble = \true)
     {
         parent::__construct($level, $bubble);
-
         if (!$message instanceof Swift_Message) {
             $message = $message();
         }
@@ -46,7 +43,6 @@ class MandrillHandler extends MailHandler
         $this->message = $message;
         $this->apiKey = $apiKey;
     }
-
     /**
      * @inheritDoc
      */
@@ -56,7 +52,6 @@ class MandrillHandler extends MailHandler
         if ($this->isHtmlBody($content)) {
             $mime = 'text/html';
         }
-
         $message = clone $this->message;
         $message->setBody($content, $mime);
         /** @phpstan-ignore-next-line */
@@ -66,18 +61,11 @@ class MandrillHandler extends MailHandler
             /** @phpstan-ignore-next-line */
             $message->setDate(time());
         }
-
         $ch = curl_init();
-
-        curl_setopt($ch, CURLOPT_URL, 'https://mandrillapp.com/api/1.0/messages/send-raw.json');
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query([
-            'key' => $this->apiKey,
-            'raw_message' => (string) $message,
-            'async' => false,
-        ]));
-
+        curl_setopt($ch, \CURLOPT_URL, 'https://mandrillapp.com/api/1.0/messages/send-raw.json');
+        curl_setopt($ch, \CURLOPT_POST, \true);
+        curl_setopt($ch, \CURLOPT_RETURNTRANSFER, \true);
+        curl_setopt($ch, \CURLOPT_POSTFIELDS, http_build_query(['key' => $this->apiKey, 'raw_message' => (string) $message, 'async' => \false]));
         Curl\Util::execute($ch);
     }
 }

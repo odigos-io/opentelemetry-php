@@ -1,10 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\SDK\Metrics;
 
 interface MetricSourceRegistryInterface
 {
-    public function add(MetricSourceProviderInterface $provider, MetricMetadataInterface $metadata, StalenessHandlerInterface $stalenessHandler): void;
+    public function add(\OpenTelemetry\SDK\Metrics\MetricSourceProviderInterface $provider, \OpenTelemetry\SDK\Metrics\MetricMetadataInterface $metadata, \OpenTelemetry\SDK\Metrics\StalenessHandlerInterface $stalenessHandler): void;
 }

@@ -1,16 +1,15 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\grid;
 
 use Closure;
 use yii\base\InvalidConfigException;
 use yii\helpers\Html;
-
 /**
  * RadioButtonColumn displays a column of radio buttons in a grid view.
  *
@@ -34,7 +33,7 @@ use yii\helpers\Html;
  * @author Kirk Hansen <hanski07@luther.edu>
  * @since 2.0.11
  */
-class RadioButtonColumn extends Column
+class RadioButtonColumn extends \yii\grid\Column
 {
     /**
      * @var string the name of the input radio button input fields.
@@ -61,8 +60,6 @@ class RadioButtonColumn extends Column
      * @see \yii\helpers\Html::renderTagAttributes() for details on how attributes are being rendered.
      */
     public $radioOptions = [];
-
-
     /**
      * {@inheritdoc}
      * @throws \yii\base\InvalidConfigException if [[name]] is not set.
@@ -74,7 +71,6 @@ class RadioButtonColumn extends Column
             throw new InvalidConfigException('The "name" property must be set.');
         }
     }
-
     /**
      * {@inheritdoc}
      */
@@ -83,16 +79,15 @@ class RadioButtonColumn extends Column
         if ($this->content !== null) {
             return parent::renderDataCellContent($model, $key, $index);
         }
-
         if ($this->radioOptions instanceof Closure) {
             $options = call_user_func($this->radioOptions, $model, $key, $index, $this);
         } else {
             $options = $this->radioOptions;
             if (!isset($options['value'])) {
-                $options['value'] = is_array($key) ? json_encode($key, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) : $key;
+                $options['value'] = is_array($key) ? json_encode($key, \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE) : $key;
             }
         }
-        $checked = isset($options['checked']) ? $options['checked'] : false;
+        $checked = isset($options['checked']) ? $options['checked'] : \false;
         return Html::radio($this->name, $checked, $options);
     }
 }

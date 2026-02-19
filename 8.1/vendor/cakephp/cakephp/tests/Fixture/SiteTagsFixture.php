@@ -1,4 +1,5 @@
 <?php
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -15,7 +16,6 @@
 namespace Cake\Test\Fixture;
 
 use Cake\TestSuite\Fixture\TestFixture;
-
 class SiteTagsFixture extends TestFixture
 {
     /**
@@ -23,10 +23,5 @@ class SiteTagsFixture extends TestFixture
      *
      * @var array
      */
-    public array $records = [
-        ['id' => 1, 'site_id' => 1, 'name' => 'tag1'],
-        ['id' => 2, 'site_id' => 2, 'name' => 'tag2'],
-        ['id' => 3, 'site_id' => 1, 'name' => 'tag3'],
-        ['id' => 4, 'site_id' => 2, 'name' => 'tag4'],
-    ];
+    public array $records = [['id' => 1, 'site_id' => 1, 'name' => 'tag1'], ['id' => 2, 'site_id' => 2, 'name' => 'tag2'], ['id' => 3, 'site_id' => 1, 'name' => 'tag3'], ['id' => 4, 'site_id' => 2, 'name' => 'tag4']];
 }

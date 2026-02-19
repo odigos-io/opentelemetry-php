@@ -6,7 +6,6 @@ use Illuminate\Contracts\Broadcasting\Broadcaster as BroadcasterContract;
 use Illuminate\Contracts\Broadcasting\Factory as BroadcastingFactory;
 use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Support\ServiceProvider;
-
 class BroadcastServiceProvider extends ServiceProvider implements DeferrableProvider
 {
     /**
@@ -16,17 +15,12 @@ class BroadcastServiceProvider extends ServiceProvider implements DeferrableProv
      */
     public function register()
     {
-        $this->app->singleton(BroadcastManager::class, fn ($app) => new BroadcastManager($app));
-
+        $this->app->singleton(\Illuminate\Broadcasting\BroadcastManager::class, fn($app) => new \Illuminate\Broadcasting\BroadcastManager($app));
         $this->app->singleton(BroadcasterContract::class, function ($app) {
-            return $app->make(BroadcastManager::class)->connection();
+            return $app->make(\Illuminate\Broadcasting\BroadcastManager::class)->connection();
         });
-
-        $this->app->alias(
-            BroadcastManager::class, BroadcastingFactory::class
-        );
+        $this->app->alias(\Illuminate\Broadcasting\BroadcastManager::class, BroadcastingFactory::class);
     }
-
     /**
      * Get the services provided by the provider.
      *
@@ -34,10 +28,6 @@ class BroadcastServiceProvider extends ServiceProvider implements DeferrableProv
      */
     public function provides()
     {
-        return [
-            BroadcastManager::class,
-            BroadcastingFactory::class,
-            BroadcasterContract::class,
-        ];
+        return [\Illuminate\Broadcasting\BroadcastManager::class, BroadcastingFactory::class, BroadcasterContract::class];
     }
 }

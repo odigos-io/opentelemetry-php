@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright 2015-present MongoDB, Inc.
  *
@@ -14,7 +15,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 namespace MongoDB\Operation;
 
 use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
@@ -22,20 +22,17 @@ use MongoDB\Driver\Server;
 use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\Exception\UnsupportedException;
 use MongoDB\UpdateResult;
-
 use function MongoDB\is_first_key_operator;
 use function MongoDB\is_pipeline;
-
 /**
  * Operation for updating multiple documents with the update command.
  *
  * @see \MongoDB\Collection::updateMany()
  * @see https://mongodb.com/docs/manual/reference/command/update/
  */
-final class UpdateMany implements Explainable
+final class UpdateMany implements \MongoDB\Operation\Explainable
 {
-    private Update $update;
-
+    private \MongoDB\Operation\Update $update;
     /**
      * Constructs an update command.
      *
@@ -81,19 +78,11 @@ final class UpdateMany implements Explainable
      */
     public function __construct(string $databaseName, string $collectionName, array|object $filter, array|object $update, array $options = [])
     {
-        if (! is_first_key_operator($update) && ! is_pipeline($update)) {
+        if (!is_first_key_operator($update) && !is_pipeline($update)) {
             throw new InvalidArgumentException('Expected update operator(s) or non-empty pipeline for $update');
         }
-
-        $this->update = new Update(
-            $databaseName,
-            $collectionName,
-            $filter,
-            $update,
-            ['multi' => true] + $options,
-        );
+        $this->update = new \MongoDB\Operation\Update($databaseName, $collectionName, $filter, $update, ['multi' => \true] + $options);
     }
-
     /**
      * Execute the operation.
      *
@@ -104,7 +93,6 @@ final class UpdateMany implements Explainable
     {
         return $this->update->execute($server);
     }
-
     /**
      * Returns the command document for this operation.
      *

@@ -1,14 +1,13 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\filters\auth;
 
 use yii\base\Component;
-
 /**
  * HttpHeaderAuth is an action filter that supports HTTP authentication through HTTP Headers.
  *
@@ -36,7 +35,7 @@ use yii\base\Component;
  * @template T of Component
  * @extends AuthMethod<T>
  */
-class HttpHeaderAuth extends AuthMethod
+class HttpHeaderAuth extends \yii\filters\auth\AuthMethod
 {
     /**
      * @var string the HTTP header name
@@ -46,15 +45,12 @@ class HttpHeaderAuth extends AuthMethod
      * @var string a pattern to use to extract the HTTP authentication value
      */
     public $pattern;
-
-
     /**
      * {@inheritdoc}
      */
     public function authenticate($user, $request, $response)
     {
         $authHeader = $request->getHeaders()->get($this->header);
-
         if ($authHeader !== null) {
             if ($this->pattern !== null) {
                 if (preg_match($this->pattern, $authHeader, $matches)) {
@@ -63,16 +59,13 @@ class HttpHeaderAuth extends AuthMethod
                     return null;
                 }
             }
-
             $identity = $user->loginByAccessToken($authHeader, get_class($this));
             if ($identity === null) {
                 $this->challenge($response);
                 $this->handleFailure($response);
             }
-
             return $identity;
         }
-
         return null;
     }
 }

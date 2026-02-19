@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\Console\Input;
 
 /**
@@ -22,5 +21,5 @@ interface InputAwareInterface
     /**
      * Sets the Console Input.
      */
-    public function setInput(InputInterface $input): void;
+    public function setInput(\Symfony\Component\Console\Input\InputInterface $input): void;
 }

@@ -10,39 +10,33 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Laravel\SerializableClosure\SerializableClosure;
 use ReflectionFunction;
-
 class CallQueuedClosure implements ShouldQueue
 {
-    use Batchable, Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-
+    use Batchable, Dispatchable, \Illuminate\Queue\InteractsWithQueue, Queueable, \Illuminate\Queue\SerializesModels;
     /**
      * The serializable Closure instance.
      *
      * @var \Laravel\SerializableClosure\SerializableClosure
      */
     public $closure;
-
     /**
      * The name assigned to the job.
      *
      * @var string|null
      */
     public $name = null;
-
     /**
      * The callbacks that should be executed on failure.
      *
      * @var array
      */
     public $failureCallbacks = [];
-
     /**
      * Indicate if the job should be deleted when models are missing.
      *
      * @var bool
      */
-    public $deleteWhenMissingModels = true;
-
+    public $deleteWhenMissingModels = \true;
     /**
      * Create a new job instance.
      *
@@ -52,7 +46,6 @@ class CallQueuedClosure implements ShouldQueue
     {
         $this->closure = $closure;
     }
-
     /**
      * Create a new job instance.
      *
@@ -63,7 +56,6 @@ class CallQueuedClosure implements ShouldQueue
     {
         return new self(new SerializableClosure($job));
     }
-
     /**
      * Execute the job.
      *
@@ -74,7 +66,6 @@ class CallQueuedClosure implements ShouldQueue
     {
         $container->call($this->closure->getClosure(), ['job' => $this]);
     }
-
     /**
      * Add a callback to be executed if the job fails.
      *
@@ -83,13 +74,9 @@ class CallQueuedClosure implements ShouldQueue
      */
     public function onFailure($callback)
     {
-        $this->failureCallbacks[] = $callback instanceof Closure
-            ? new SerializableClosure($callback)
-            : $callback;
-
+        $this->failureCallbacks[] = $callback instanceof Closure ? new SerializableClosure($callback) : $callback;
         return $this;
     }
-
     /**
      * Handle a job failure.
      *
@@ -102,7 +89,6 @@ class CallQueuedClosure implements ShouldQueue
             $callback($e);
         }
     }
-
     /**
      * Get the display name for the queued job.
      *
@@ -110,17 +96,11 @@ class CallQueuedClosure implements ShouldQueue
      */
     public function displayName()
     {
-        $closure = $this->closure instanceof SerializableClosure
-                    ? $this->closure->getClosure()
-                    : $this->closure;
-
+        $closure = $this->closure instanceof SerializableClosure ? $this->closure->getClosure() : $this->closure;
         $reflection = new ReflectionFunction($closure);
-
         $prefix = is_null($this->name) ? '' : "{$this->name} - ";
-
-        return $prefix.'Closure ('.basename($reflection->getFileName()).':'.$reflection->getStartLine().')';
+        return $prefix . 'Closure (' . basename($reflection->getFileName()) . ':' . $reflection->getStartLine() . ')';
     }
-
     /**
      * Assign a name to the job.
      *
@@ -130,7 +110,6 @@ class CallQueuedClosure implements ShouldQueue
     public function name($name)
     {
         $this->name = $name;
-
         return $this;
     }
 }

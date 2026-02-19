@@ -1,16 +1,13 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Laminas\HttpHandlerRunner\Emitter;
 
 use Psr\Http\Message\ResponseInterface;
-
 /** @final */
-class SapiEmitter implements EmitterInterface
+class SapiEmitter implements \Laminas\HttpHandlerRunner\Emitter\EmitterInterface
 {
-    use SapiEmitterTrait;
-
+    use \Laminas\HttpHandlerRunner\Emitter\SapiEmitterTrait;
     /**
      * Emits a response for a PHP SAPI environment.
      *
@@ -20,14 +17,11 @@ class SapiEmitter implements EmitterInterface
     public function emit(ResponseInterface $response): bool
     {
         $this->assertNoPreviousOutput();
-
         $this->emitHeaders($response);
         $this->emitStatusLine($response);
         $this->emitBody($response);
-
-        return true;
+        return \true;
     }
-
     /**
      * Emit the message body.
      */

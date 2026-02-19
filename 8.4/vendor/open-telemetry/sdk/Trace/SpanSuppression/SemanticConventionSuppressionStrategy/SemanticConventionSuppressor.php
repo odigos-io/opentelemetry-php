@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\SDK\Trace\SpanSuppression\SemanticConventionSuppressionStrategy;
 
 use function array_key_exists;
@@ -9,7 +8,6 @@ use OpenTelemetry\API\Trace\SpanKind;
 use OpenTelemetry\SDK\Trace\SpanSuppression\NoopSuppressionStrategy\NoopSuppression;
 use OpenTelemetry\SDK\Trace\SpanSuppression\SpanSuppression;
 use OpenTelemetry\SDK\Trace\SpanSuppression\SpanSuppressor;
-
 /**
  * @internal
  */
@@ -19,12 +17,9 @@ final class SemanticConventionSuppressor implements SpanSuppressor
      * @param array<int, list<string>> $semanticConventions
      * @param array<int, list<CompiledSemanticConventionAttribute>> $attributeMap
      */
-    public function __construct(
-        private readonly array $semanticConventions,
-        private readonly array $attributeMap,
-    ) {
+    public function __construct(private readonly array $semanticConventions, private readonly array $attributeMap)
+    {
     }
-
     #[\Override]
     public function resolveSuppression(int $spanKind, array $attributes): SpanSuppression
     {
@@ -38,33 +33,25 @@ final class SemanticConventionSuppressor implements SpanSuppressor
                 $candidates &= $attribute->notSamplingRelevantIn;
             }
         }
-
         if (!$candidates && $spanKind === SpanKind::KIND_INTERNAL) {
             static $suppression = new NoopSuppression();
-
             return $suppression;
         }
-
         if ($candidates & $filter) {
             $candidates &= $filter;
         }
-
         $semanticConventions = [];
         foreach ($this->semanticConventions[$spanKind] ?? [] as $i => $semanticConvention) {
             if ($candidates >> $i & 1) {
                 $semanticConventions[] = $semanticConvention;
             }
         }
-
-        return new SemanticConventionSuppression(
-            contextKey: match ($spanKind) {
-                SpanKind::KIND_INTERNAL => SemanticConventionSuppressionContextKey::Internal,
-                SpanKind::KIND_CLIENT => SemanticConventionSuppressionContextKey::Client,
-                SpanKind::KIND_SERVER => SemanticConventionSuppressionContextKey::Server,
-                SpanKind::KIND_PRODUCER => SemanticConventionSuppressionContextKey::Producer,
-                SpanKind::KIND_CONSUMER => SemanticConventionSuppressionContextKey::Consumer,
-            },
-            semanticConventions: $semanticConventions,
-        );
+        return new \OpenTelemetry\SDK\Trace\SpanSuppression\SemanticConventionSuppressionStrategy\SemanticConventionSuppression(contextKey: match ($spanKind) {
+            SpanKind::KIND_INTERNAL => \OpenTelemetry\SDK\Trace\SpanSuppression\SemanticConventionSuppressionStrategy\SemanticConventionSuppressionContextKey::Internal,
+            SpanKind::KIND_CLIENT => \OpenTelemetry\SDK\Trace\SpanSuppression\SemanticConventionSuppressionStrategy\SemanticConventionSuppressionContextKey::Client,
+            SpanKind::KIND_SERVER => \OpenTelemetry\SDK\Trace\SpanSuppression\SemanticConventionSuppressionStrategy\SemanticConventionSuppressionContextKey::Server,
+            SpanKind::KIND_PRODUCER => \OpenTelemetry\SDK\Trace\SpanSuppression\SemanticConventionSuppressionStrategy\SemanticConventionSuppressionContextKey::Producer,
+            SpanKind::KIND_CONSUMER => \OpenTelemetry\SDK\Trace\SpanSuppression\SemanticConventionSuppressionStrategy\SemanticConventionSuppressionContextKey::Consumer,
+        }, semanticConventions: $semanticConventions);
     }
 }

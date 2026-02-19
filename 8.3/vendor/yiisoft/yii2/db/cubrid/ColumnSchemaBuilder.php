@@ -1,14 +1,13 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\db\cubrid;
 
 use yii\db\ColumnSchemaBuilder as AbstractColumnSchemaBuilder;
-
 /**
  * ColumnSchemaBuilder is the schema builder for Cubrid databases.
  *
@@ -24,17 +23,13 @@ class ColumnSchemaBuilder extends AbstractColumnSchemaBuilder
     {
         return $this->isUnsigned ? ' UNSIGNED' : '';
     }
-
     /**
      * {@inheritdoc}
      */
     protected function buildAfterString()
     {
-        return $this->after !== null ?
-            ' AFTER ' . $this->db->quoteColumnName($this->after) :
-            '';
+        return $this->after !== null ? ' AFTER ' . $this->db->quoteColumnName($this->after) : '';
     }
-
     /**
      * {@inheritdoc}
      */
@@ -42,7 +37,6 @@ class ColumnSchemaBuilder extends AbstractColumnSchemaBuilder
     {
         return $this->isFirst ? ' FIRST' : '';
     }
-
     /**
      * {@inheritdoc}
      */
@@ -50,7 +44,6 @@ class ColumnSchemaBuilder extends AbstractColumnSchemaBuilder
     {
         return $this->comment !== null ? ' COMMENT ' . $this->db->quoteValue($this->comment) : '';
     }
-
     /**
      * {@inheritdoc}
      */
@@ -66,7 +59,6 @@ class ColumnSchemaBuilder extends AbstractColumnSchemaBuilder
             default:
                 $format = '{type}{length}{notnull}{unique}{default}{check}{comment}{append}{pos}';
         }
-
         return $this->buildCompleteString($format);
     }
 }

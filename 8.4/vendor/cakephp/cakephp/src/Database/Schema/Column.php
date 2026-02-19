@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -20,7 +20,6 @@ namespace Cake\Database\Schema;
 
 use Cake\Database\TypeFactory;
 use RuntimeException;
-
 /**
  * Schema metadata for a single column
  *
@@ -48,26 +47,9 @@ class Column
      * @param int|null $srid SRID for geometry fields
      * @param string|null $baseType The basic schema type if the column type is a complex/custom type.
      */
-    public function __construct(
-        protected string $name,
-        protected string $type,
-        protected ?bool $null = null,
-        protected mixed $default = null,
-        protected ?int $length = null,
-        protected bool $identity = false,
-        protected ?string $generated = null,
-        protected ?int $precision = null,
-        protected ?int $increment = null,
-        protected ?string $after = null,
-        protected ?string $onUpdate = null,
-        protected ?string $comment = null,
-        protected ?bool $unsigned = null,
-        protected ?string $collate = null,
-        protected ?int $srid = null,
-        protected ?string $baseType = null,
-    ) {
+    public function __construct(protected string $name, protected string $type, protected ?bool $null = null, protected mixed $default = null, protected ?int $length = null, protected bool $identity = \false, protected ?string $generated = null, protected ?int $precision = null, protected ?int $increment = null, protected ?string $after = null, protected ?string $onUpdate = null, protected ?string $comment = null, protected ?bool $unsigned = null, protected ?string $collate = null, protected ?int $srid = null, protected ?string $baseType = null)
+    {
     }
-
     /**
      * Sets the column name.
      *
@@ -77,10 +59,8 @@ class Column
     public function setName(string $name)
     {
         $this->name = $name;
-
         return $this;
     }
-
     /**
      * Gets the column name.
      *
@@ -90,7 +70,6 @@ class Column
     {
         return $this->name;
     }
-
     /**
      * Get the base type if defined. Will fallback to `type` if not set.
      *
@@ -107,10 +86,8 @@ class Column
         if (TypeFactory::getMapped($type)) {
             $type = TypeFactory::build($type)->getBaseType();
         }
-
         return $this->baseType = $type;
     }
-
     /**
      * Sets the base type of the column.
      *
@@ -122,10 +99,8 @@ class Column
     public function setBaseType(?string $baseType)
     {
         $this->baseType = $baseType;
-
         return $this;
     }
-
     /**
      * Sets the column type.
      *
@@ -140,10 +115,8 @@ class Column
     public function setType(string $type)
     {
         $this->type = $type;
-
         return $this;
     }
-
     /**
      * Gets the column type.
      *
@@ -153,7 +126,6 @@ class Column
     {
         return $this->type;
     }
-
     /**
      * Sets the column length.
      *
@@ -163,10 +135,8 @@ class Column
     public function setLength(?int $length)
     {
         $this->length = $length;
-
         return $this;
     }
-
     /**
      * Gets the column length.
      *
@@ -176,7 +146,6 @@ class Column
     {
         return $this->length;
     }
-
     /**
      * Sets whether the column allows nulls.
      *
@@ -186,10 +155,8 @@ class Column
     public function setNull(bool $null)
     {
         $this->null = $null;
-
         return $this;
     }
-
     /**
      * Gets whether the column allows nulls.
      *
@@ -199,7 +166,6 @@ class Column
     {
         return $this->null;
     }
-
     /**
      * Does the column allow nulls?
      *
@@ -207,9 +173,8 @@ class Column
      */
     public function isNull(): bool
     {
-        return $this->getNull() === true;
+        return $this->getNull() === \true;
     }
-
     /**
      * Sets the default column value.
      *
@@ -219,10 +184,8 @@ class Column
     public function setDefault(mixed $default)
     {
         $this->default = $default;
-
         return $this;
     }
-
     /**
      * Gets the default column value.
      *
@@ -232,7 +195,6 @@ class Column
     {
         return $this->default;
     }
-
     /**
      * Sets generated option for identity columns. Ignored otherwise.
      *
@@ -242,10 +204,8 @@ class Column
     public function setGenerated(?string $generated)
     {
         $this->generated = $generated;
-
         return $this;
     }
-
     /**
      * Gets generated option for identity columns. Null otherwise
      *
@@ -255,7 +215,6 @@ class Column
     {
         return $this->generated;
     }
-
     /**
      * Sets whether the column is an identity column.
      *
@@ -265,10 +224,8 @@ class Column
     public function setIdentity(bool $identity)
     {
         $this->identity = $identity;
-
         return $this;
     }
-
     /**
      * Gets whether the column is an identity column.
      *
@@ -278,7 +235,6 @@ class Column
     {
         return $this->identity;
     }
-
     /**
      * Is the column an identity column?
      *
@@ -288,7 +244,6 @@ class Column
     {
         return $this->getIdentity();
     }
-
     /**
      * Sets the name of the column to add this column after.
      *
@@ -298,10 +253,8 @@ class Column
     public function setAfter(string $after)
     {
         $this->after = $after;
-
         return $this;
     }
-
     /**
      * Returns the name of the column to add this column after.
      *
@@ -313,7 +266,6 @@ class Column
     {
         return $this->after;
     }
-
     /**
      * Sets the 'ON UPDATE' mysql column function.
      *
@@ -325,10 +277,8 @@ class Column
     public function setOnUpdate(string $update)
     {
         $this->onUpdate = $update;
-
         return $this;
     }
-
     /**
      * Returns the value of the ON UPDATE column function.
      *
@@ -338,7 +288,6 @@ class Column
     {
         return $this->onUpdate;
     }
-
     /**
      * Sets the number precision for decimal or float column.
      *
@@ -351,10 +300,8 @@ class Column
     public function setPrecision(?int $precision)
     {
         $this->precision = $precision;
-
         return $this;
     }
-
     /**
      * Gets the number precision for decimal or float column.
      *
@@ -367,7 +314,6 @@ class Column
     {
         return $this->precision;
     }
-
     /**
      * Sets the column identity increment.
      *
@@ -377,10 +323,8 @@ class Column
     public function setIncrement(int $increment)
     {
         $this->increment = $increment;
-
         return $this;
     }
-
     /**
      * Gets the column identity increment.
      *
@@ -390,7 +334,6 @@ class Column
     {
         return $this->increment;
     }
-
     /**
      * Sets the column comment.
      *
@@ -400,10 +343,8 @@ class Column
     public function setComment(?string $comment)
     {
         $this->comment = $comment;
-
         return $this;
     }
-
     /**
      * Gets the column comment.
      *
@@ -413,7 +354,6 @@ class Column
     {
         return $this->comment;
     }
-
     /**
      * Sets whether field should be unsigned.
      *
@@ -423,10 +363,8 @@ class Column
     public function setUnsigned(bool $unsigned)
     {
         $this->unsigned = $unsigned;
-
         return $this;
     }
-
     /**
      * Gets whether field should be unsigned.
      *
@@ -436,7 +374,6 @@ class Column
     {
         return $this->unsigned;
     }
-
     /**
      * Should the column be signed?
      *
@@ -446,7 +383,6 @@ class Column
     {
         return !$this->getUnsigned();
     }
-
     /**
      * Should the column be unsigned?
      *
@@ -454,9 +390,8 @@ class Column
      */
     public function isUnsigned(): bool
     {
-        return $this->getUnsigned() === true;
+        return $this->getUnsigned() === \true;
     }
-
     /**
      * Sets the column collation.
      *
@@ -466,10 +401,8 @@ class Column
     public function setCollate(string $collation)
     {
         $this->collate = $collation;
-
         return $this;
     }
-
     /**
      * Gets the column collation.
      *
@@ -479,7 +412,6 @@ class Column
     {
         return $this->collate;
     }
-
     /**
      * Sets the column SRID for geometry fields.
      *
@@ -489,10 +421,8 @@ class Column
     public function setSrid(int $srid)
     {
         $this->srid = $srid;
-
         return $this;
     }
-
     /**
      * Gets the column SRID from geometry fields.
      *
@@ -502,7 +432,6 @@ class Column
     {
         return $this->srid;
     }
-
     /**
      * Gets all allowed options. Each option must have a corresponding `setFoo` method.
      *
@@ -510,26 +439,8 @@ class Column
      */
     protected function getValidOptions(): array
     {
-        return [
-            'name',
-            'length',
-            'precision',
-            'default',
-            'null',
-            'identity',
-            'after',
-            'onUpdate',
-            'comment',
-            'unsigned',
-            'type',
-            'properties',
-            'collate',
-            'srid',
-            'increment',
-            'generated',
-        ];
+        return ['name', 'length', 'precision', 'default', 'null', 'identity', 'after', 'onUpdate', 'comment', 'unsigned', 'type', 'properties', 'collate', 'srid', 'increment', 'generated'];
     }
-
     /**
      * Utility method that maps an array of column attributes to this object's methods.
      *
@@ -541,21 +452,17 @@ class Column
     {
         $validOptions = $this->getValidOptions();
         if (isset($attributes['identity']) && $attributes['identity'] && !isset($attributes['null'])) {
-            $attributes['null'] = false;
+            $attributes['null'] = \false;
         }
-
         foreach ($attributes as $attribute => $value) {
-            if (!in_array($attribute, $validOptions, true)) {
+            if (!in_array($attribute, $validOptions, \true)) {
                 throw new RuntimeException(sprintf('"%s" is not a valid column option.', $attribute));
             }
-
             $method = 'set' . ucfirst($attribute);
-            $this->$method($value);
+            $this->{$method}($value);
         }
-
         return $this;
     }
-
     /**
      * Convert an index into an array that is compatible with the Column constructor.
      *
@@ -567,29 +474,12 @@ class Column
         $length = $this->getLength();
         $precision = $this->getPrecision();
         if ($precision !== null && $precision > 0) {
-            if ($type === TableSchemaInterface::TYPE_TIMESTAMP) {
+            if ($type === \Cake\Database\Schema\TableSchemaInterface::TYPE_TIMESTAMP) {
                 $type = 'timestampfractional';
-            } elseif ($type === TableSchemaInterface::TYPE_DATETIME) {
+            } elseif ($type === \Cake\Database\Schema\TableSchemaInterface::TYPE_DATETIME) {
                 $type = 'datetimefractional';
             }
         }
-
-        return [
-            'name' => $this->getName(),
-            'baseType' => $this->getBaseType(),
-            'type' => $type,
-            'length' => $length,
-            'null' => $this->getNull(),
-            'default' => $this->getDefault(),
-            'generated' => $this->getGenerated(),
-            'unsigned' => $this->getUnsigned(),
-            'onUpdate' => $this->getOnUpdate(),
-            'collate' => $this->getCollate(),
-            'precision' => $precision,
-            'srid' => $this->getSrid(),
-            'comment' => $this->getComment(),
-            'autoIncrement' => $this->getIdentity(),
-            'identity' => $this->getIdentity(),
-        ];
+        return ['name' => $this->getName(), 'baseType' => $this->getBaseType(), 'type' => $type, 'length' => $length, 'null' => $this->getNull(), 'default' => $this->getDefault(), 'generated' => $this->getGenerated(), 'unsigned' => $this->getUnsigned(), 'onUpdate' => $this->getOnUpdate(), 'collate' => $this->getCollate(), 'precision' => $precision, 'srid' => $this->getSrid(), 'comment' => $this->getComment(), 'autoIncrement' => $this->getIdentity(), 'identity' => $this->getIdentity()];
     }
 }

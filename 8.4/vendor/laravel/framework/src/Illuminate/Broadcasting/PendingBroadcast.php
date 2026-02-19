@@ -3,9 +3,7 @@
 namespace Illuminate\Broadcasting;
 
 use Illuminate\Contracts\Events\Dispatcher;
-
 use function Illuminate\Support\enum_value;
-
 class PendingBroadcast
 {
     /**
@@ -14,14 +12,12 @@ class PendingBroadcast
      * @var \Illuminate\Contracts\Events\Dispatcher
      */
     protected $events;
-
     /**
      * The event instance.
      *
      * @var mixed
      */
     protected $event;
-
     /**
      * Create a new pending broadcast instance.
      *
@@ -33,7 +29,6 @@ class PendingBroadcast
         $this->event = $event;
         $this->events = $events;
     }
-
     /**
      * Broadcast the event using a specific broadcaster.
      *
@@ -45,10 +40,8 @@ class PendingBroadcast
         if (method_exists($this->event, 'broadcastVia')) {
             $this->event->broadcastVia(enum_value($connection));
         }
-
         return $this;
     }
-
     /**
      * Broadcast the event to everyone except the current user.
      *
@@ -59,10 +52,8 @@ class PendingBroadcast
         if (method_exists($this->event, 'dontBroadcastToCurrentUser')) {
             $this->event->dontBroadcastToCurrentUser();
         }
-
         return $this;
     }
-
     /**
      * Handle the object's destruction.
      *

@@ -9,17 +9,13 @@
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
  */
+declare (strict_types=1);
+namespace Odigos\Ramsey\Uuid\Generator;
 
-declare(strict_types=1);
-
-namespace Ramsey\Uuid\Generator;
-
-use Ramsey\Uuid\Exception\NameException;
-use Ramsey\Uuid\UuidInterface;
+use Odigos\Ramsey\Uuid\Exception\NameException;
+use Odigos\Ramsey\Uuid\UuidInterface;
 use ValueError;
-
 use function hash;
-
 /**
  * DefaultNameGenerator generates strings of binary data based on a namespace, name, and hashing algorithm
  */
@@ -31,12 +27,9 @@ class DefaultNameGenerator implements NameGeneratorInterface
     public function generate(UuidInterface $ns, string $name, string $hashAlgorithm): string
     {
         try {
-            return hash($hashAlgorithm, $ns->getBytes() . $name, true);
+            return hash($hashAlgorithm, $ns->getBytes() . $name, \true);
         } catch (ValueError $e) {
-            throw new NameException(
-                message: sprintf('Unable to hash namespace and name with algorithm \'%s\'', $hashAlgorithm),
-                previous: $e,
-            );
+            throw new NameException(message: sprintf('Unable to hash namespace and name with algorithm \'%s\'', $hashAlgorithm), previous: $e);
         }
     }
 }

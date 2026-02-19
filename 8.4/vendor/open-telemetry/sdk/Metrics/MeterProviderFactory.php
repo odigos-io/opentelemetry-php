@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\SDK\Metrics;
 
 use InvalidArgumentException;
@@ -19,20 +18,18 @@ use OpenTelemetry\SDK\Registry;
 use OpenTelemetry\SDK\Resource\ResourceInfo;
 use OpenTelemetry\SDK\Resource\ResourceInfoFactory;
 use OpenTelemetry\SDK\Sdk;
-
 class MeterProviderFactory
 {
     use LogsMessagesTrait;
-
     /**
      * @todo https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/metrics/sdk_exporters/otlp.md#general
      *       - "The exporter MUST configure the default aggregation on the basis of instrument kind using the
      *         OTEL_EXPORTER_OTLP_METRICS_DEFAULT_HISTOGRAM_AGGREGATION variable as described below if it is implemented."
      */
-    public function create(?ResourceInfo $resource = null): MeterProviderInterface
+    public function create(?ResourceInfo $resource = null): \OpenTelemetry\SDK\Metrics\MeterProviderInterface
     {
         if (Sdk::isDisabled()) {
-            return new NoopMeterProvider();
+            return new \OpenTelemetry\SDK\Metrics\NoopMeterProvider();
         }
         $exporters = Configuration::getList(Variables::OTEL_METRICS_EXPORTER);
         //TODO "The SDK MAY accept a comma-separated list to enable setting multiple exporters"
@@ -40,7 +37,6 @@ class MeterProviderFactory
             throw new InvalidArgumentException(sprintf('Configuration %s requires exactly 1 exporter', Variables::OTEL_METRICS_EXPORTER));
         }
         $exporterName = $exporters[0];
-
         try {
             $factory = Registry::metricExporterFactory($exporterName);
             $exporter = $factory->create();
@@ -48,19 +44,12 @@ class MeterProviderFactory
             self::logWarning(sprintf('Unable to create %s meter provider: %s', $exporterName, $t->getMessage()));
             $exporter = new NoopMetricExporter();
         }
-
         // @todo "The exporter MUST be paired with a periodic exporting MetricReader"
         $reader = new ExportingReader($exporter);
         $resource ??= ResourceInfoFactory::defaultResource();
         $exemplarFilter = $this->createExemplarFilter(Configuration::getEnum(Variables::OTEL_METRICS_EXEMPLAR_FILTER));
-
-        return MeterProvider::builder()
-            ->setResource($resource)
-            ->addReader($reader)
-            ->setExemplarFilter($exemplarFilter)
-            ->build();
+        return \OpenTelemetry\SDK\Metrics\MeterProvider::builder()->setResource($resource)->addReader($reader)->setExemplarFilter($exemplarFilter)->build();
     }
-
     private function createExemplarFilter(string $name): ExemplarFilterInterface
     {
         switch ($name) {
@@ -72,7 +61,6 @@ class MeterProviderFactory
                 return new NoneExemplarFilter();
             default:
                 self::logWarning('Unknown exemplar filter: ' . $name);
-
                 return new NoneExemplarFilter();
         }
     }

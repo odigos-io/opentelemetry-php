@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright 2023-present MongoDB, Inc.
  *
@@ -14,7 +15,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 namespace MongoDB\Operation;
 
 use MongoDB\Driver\Command;
@@ -23,13 +23,11 @@ use MongoDB\Driver\Server;
 use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\Exception\UnsupportedException;
 use MongoDB\Model\SearchIndexInput;
-
 use function array_column;
 use function array_is_list;
 use function current;
 use function is_array;
 use function sprintf;
-
 /**
  * Operation for the createIndexes command.
  *
@@ -40,7 +38,6 @@ use function sprintf;
 final class CreateSearchIndexes
 {
     private array $indexes = [];
-
     /**
      * Constructs a createSearchIndexes command.
      *
@@ -52,19 +49,16 @@ final class CreateSearchIndexes
      */
     public function __construct(private string $databaseName, private string $collectionName, array $indexes, private array $options)
     {
-        if (! array_is_list($indexes)) {
+        if (!array_is_list($indexes)) {
             throw new InvalidArgumentException('$indexes is not a list');
         }
-
         foreach ($indexes as $i => $index) {
-            if (! is_array($index)) {
+            if (!is_array($index)) {
                 throw InvalidArgumentException::invalidType(sprintf('$indexes[%d]', $i), $index, 'array');
             }
-
             $this->indexes[] = new SearchIndexInput($index);
         }
     }
-
     /**
      * Execute the operation.
      *
@@ -74,20 +68,13 @@ final class CreateSearchIndexes
      */
     public function execute(Server $server): array
     {
-        $cmd = [
-            'createSearchIndexes' => $this->collectionName,
-            'indexes' => $this->indexes,
-        ];
-
+        $cmd = ['createSearchIndexes' => $this->collectionName, 'indexes' => $this->indexes];
         if (isset($this->options['comment'])) {
             $cmd['comment'] = $this->options['comment'];
         }
-
         $cursor = $server->executeCommand($this->databaseName, new Command($cmd));
-
         /** @var object{indexesCreated: list<object{name: string}>} $result */
         $result = current($cursor->toArray());
-
         return array_column($result->indexesCreated, 'name');
     }
 }

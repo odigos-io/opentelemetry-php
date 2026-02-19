@@ -8,10 +8,8 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-declare(strict_types=1);
-
-namespace League\Uri\IPv4;
+declare (strict_types=1);
+namespace Odigos\League\Uri\IPv4;
 
 interface Calculator
 {
@@ -24,7 +22,6 @@ interface Calculator
      * @return mixed the addition result
      */
     public function add(mixed $value1, mixed $value2);
-
     /**
      * Subtract one number from another.
      *
@@ -34,7 +31,6 @@ interface Calculator
      * @return mixed the subtraction result
      */
     public function sub(mixed $value1, mixed $value2);
-
     /**
      * Multiply numbers.
      *
@@ -44,7 +40,6 @@ interface Calculator
      * @return mixed the multiplication result
      */
     public function multiply(mixed $value1, mixed $value2);
-
     /**
      * Divide numbers.
      *
@@ -54,7 +49,6 @@ interface Calculator
      * @return mixed the result of the division
      */
     public function div(mixed $value, mixed $base);
-
     /**
      * Raise an number to the power of exponent.
      *
@@ -63,7 +57,6 @@ interface Calculator
      * @return mixed the value raised to the power of exp.
      */
     public function pow(mixed $value, int $exponent);
-
     /**
      * Returns the int point remainder (modulo) of the division of the arguments.
      *
@@ -73,7 +66,6 @@ interface Calculator
      * @return mixed the remainder
      */
     public function mod(mixed $value, mixed $base);
-
     /**
      * Number comparison.
      *
@@ -83,7 +75,6 @@ interface Calculator
      * @return int Returns < 0 if value1 is less than value2; > 0 if value1 is greater than value2, and 0 if they are equal.
      */
     public function compare(mixed $value1, mixed $value2): int;
-
     /**
      * Get the decimal integer value of a variable.
      *

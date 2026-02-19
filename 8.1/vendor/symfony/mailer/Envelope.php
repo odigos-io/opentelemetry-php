@@ -8,14 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\Mailer;
 
 use Symfony\Component\Mailer\Exception\InvalidArgumentException;
 use Symfony\Component\Mailer\Exception\LogicException;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\RawMessage;
-
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  */
@@ -23,7 +21,6 @@ class Envelope
 {
     private Address $sender;
     private array $recipients = [];
-
     /**
      * @param Address[] $recipients
      */
@@ -32,16 +29,13 @@ class Envelope
         $this->setSender($sender);
         $this->setRecipients($recipients);
     }
-
     public static function create(RawMessage $message): self
     {
         if (RawMessage::class === $message::class) {
             throw new LogicException('Cannot send a RawMessage instance without an explicit Envelope.');
         }
-
-        return new DelayedEnvelope($message);
+        return new \Symfony\Component\Mailer\DelayedEnvelope($message);
     }
-
     public function setSender(Address $sender): void
     {
         // to ensure deliverability of bounce emails independent of UTF-8 capabilities of SMTP servers
@@ -50,7 +44,6 @@ class Envelope
         }
         $this->sender = $sender;
     }
-
     /**
      * @return Address Returns a "mailbox" as specified by RFC 2822
      *                 Must be converted to an "addr-spec" when used as a "MAIL FROM" value in SMTP (use getAddress())
@@ -59,7 +52,6 @@ class Envelope
     {
         return $this->sender;
     }
-
     /**
      * @param Address[] $recipients
      */
@@ -68,7 +60,6 @@ class Envelope
         if (!$recipients) {
             throw new InvalidArgumentException('An envelope must have at least one recipient.');
         }
-
         $this->recipients = [];
         foreach ($recipients as $recipient) {
             if (!$recipient instanceof Address) {
@@ -77,7 +68,6 @@ class Envelope
             $this->recipients[] = new Address($recipient->getAddress());
         }
     }
-
     /**
      * @return Address[]
      */

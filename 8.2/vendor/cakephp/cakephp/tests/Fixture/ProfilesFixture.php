@@ -1,4 +1,5 @@
 <?php
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -15,7 +16,6 @@
 namespace Cake\Test\Fixture;
 
 use Cake\TestSuite\Fixture\TestFixture;
-
 /**
  * ProfileFixture
  */
@@ -26,10 +26,5 @@ class ProfilesFixture extends TestFixture
      *
      * @var array
      */
-    public array $records = [
-        ['user_id' => 1, 'first_name' => 'mariano', 'last_name' => 'iglesias', 'is_active' => false],
-        ['user_id' => 2, 'first_name' => 'nate', 'last_name' => 'abele', 'is_active' => false],
-        ['user_id' => 3, 'first_name' => 'larry', 'last_name' => 'masters', 'is_active' => true],
-        ['user_id' => 4, 'first_name' => 'garrett', 'last_name' => 'woodworth', 'is_active' => false],
-    ];
+    public array $records = [['user_id' => 1, 'first_name' => 'mariano', 'last_name' => 'iglesias', 'is_active' => \false], ['user_id' => 2, 'first_name' => 'nate', 'last_name' => 'abele', 'is_active' => \false], ['user_id' => 3, 'first_name' => 'larry', 'last_name' => 'masters', 'is_active' => \true], ['user_id' => 4, 'first_name' => 'garrett', 'last_name' => 'woodworth', 'is_active' => \false]];
 }

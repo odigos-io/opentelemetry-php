@@ -2,7 +2,7 @@
 
 namespace Illuminate\Cache;
 
-class RedisTaggedCache extends TaggedCache
+class RedisTaggedCache extends \Illuminate\Cache\TaggedCache
 {
     /**
      * Store an item in the cache if the key does not exist.
@@ -15,21 +15,14 @@ class RedisTaggedCache extends TaggedCache
     public function add($key, $value, $ttl = null)
     {
         $seconds = null;
-
         if ($ttl !== null) {
             $seconds = $this->getSeconds($ttl);
-
             if ($seconds > 0) {
-                $this->tags->addEntry(
-                    $this->itemKey($key),
-                    $seconds
-                );
+                $this->tags->addEntry($this->itemKey($key), $seconds);
             }
         }
-
         return parent::add($key, $value, $ttl);
     }
-
     /**
      * Store an item in the cache.
      *
@@ -43,19 +36,12 @@ class RedisTaggedCache extends TaggedCache
         if (is_null($ttl)) {
             return $this->forever($key, $value);
         }
-
         $seconds = $this->getSeconds($ttl);
-
         if ($seconds > 0) {
-            $this->tags->addEntry(
-                $this->itemKey($key),
-                $seconds
-            );
+            $this->tags->addEntry($this->itemKey($key), $seconds);
         }
-
         return parent::put($key, $value, $ttl);
     }
-
     /**
      * Increment the value of an item in the cache.
      *
@@ -66,10 +52,8 @@ class RedisTaggedCache extends TaggedCache
     public function increment($key, $value = 1)
     {
         $this->tags->addEntry($this->itemKey($key), updateWhen: 'NX');
-
         return parent::increment($key, $value);
     }
-
     /**
      * Decrement the value of an item in the cache.
      *
@@ -80,10 +64,8 @@ class RedisTaggedCache extends TaggedCache
     public function decrement($key, $value = 1)
     {
         $this->tags->addEntry($this->itemKey($key), updateWhen: 'NX');
-
         return parent::decrement($key, $value);
     }
-
     /**
      * Store an item in the cache indefinitely.
      *
@@ -94,10 +76,8 @@ class RedisTaggedCache extends TaggedCache
     public function forever($key, $value)
     {
         $this->tags->addEntry($this->itemKey($key));
-
         return parent::forever($key, $value);
     }
-
     /**
      * Remove all items from the cache.
      *
@@ -107,10 +87,8 @@ class RedisTaggedCache extends TaggedCache
     {
         $this->flushValues();
         $this->tags->flush();
-
-        return true;
+        return \true;
     }
-
     /**
      * Flush the individual cache entries for the tags.
      *
@@ -118,15 +96,11 @@ class RedisTaggedCache extends TaggedCache
      */
     protected function flushValues()
     {
-        $entries = $this->tags->entries()
-            ->map(fn (string $key) => $this->store->getPrefix().$key)
-            ->chunk(1000);
-
+        $entries = $this->tags->entries()->map(fn(string $key) => $this->store->getPrefix() . $key)->chunk(1000);
         foreach ($entries as $cacheKeys) {
             $this->store->connection()->del(...$cacheKeys);
         }
     }
-
     /**
      * Remove all stale reference entries from the tag set.
      *
@@ -135,7 +109,6 @@ class RedisTaggedCache extends TaggedCache
     public function flushStale()
     {
         $this->tags->flushStaleEntries();
-
-        return true;
+        return \true;
     }
 }

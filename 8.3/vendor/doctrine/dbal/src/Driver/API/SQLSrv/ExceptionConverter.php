@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\DBAL\Driver\API\SQLSrv;
 
 use Doctrine\DBAL\Driver\API\ExceptionConverter as ExceptionConverterInterface;
@@ -18,7 +17,6 @@ use Doctrine\DBAL\Exception\TableExistsException;
 use Doctrine\DBAL\Exception\TableNotFoundException;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\DBAL\Query;
-
 /**
  * @internal
  *
@@ -34,15 +32,11 @@ final class ExceptionConverter implements ExceptionConverterInterface
             208 => new TableNotFoundException($exception, $query),
             209 => new NonUniqueFieldNameException($exception, $query),
             515 => new NotNullConstraintViolationException($exception, $query),
-            547,
-            4712 => new ForeignKeyConstraintViolationException($exception, $query),
-            2601,
-            2627 => new UniqueConstraintViolationException($exception, $query),
+            547, 4712 => new ForeignKeyConstraintViolationException($exception, $query),
+            2601, 2627 => new UniqueConstraintViolationException($exception, $query),
             2714 => new TableExistsException($exception, $query),
-            3701,
-            15151 => new DatabaseObjectNotFoundException($exception, $query),
-            11001,
-            18456 => new ConnectionException($exception, $query),
+            3701, 15151 => new DatabaseObjectNotFoundException($exception, $query),
+            11001, 18456 => new ConnectionException($exception, $query),
             default => new DriverException($exception, $query),
         };
     }

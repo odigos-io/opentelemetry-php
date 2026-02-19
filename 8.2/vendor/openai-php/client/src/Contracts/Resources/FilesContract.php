@@ -6,7 +6,6 @@ use OpenAI\Responses\Files\CreateResponse;
 use OpenAI\Responses\Files\DeleteResponse;
 use OpenAI\Responses\Files\ListResponse;
 use OpenAI\Responses\Files\RetrieveResponse;
-
 interface FilesContract
 {
     /**
@@ -17,21 +16,18 @@ interface FilesContract
      * @param  array<string, mixed>  $parameters
      */
     public function list(array $parameters = []): ListResponse;
-
     /**
      * Returns information about a specific file.
      *
      * @see https://platform.openai.com/docs/api-reference/files/retrieve
      */
     public function retrieve(string $file): RetrieveResponse;
-
     /**
      * Returns the contents of the specified file.
      *
      * @see https://platform.openai.com/docs/api-reference/files/retrieve-content
      */
     public function download(string $file): string;
-
     /**
      * Upload a file that contains document(s) to be used across various endpoints/features.
      *
@@ -40,7 +36,6 @@ interface FilesContract
      * @param  array<string, mixed>  $parameters
      */
     public function upload(array $parameters): CreateResponse;
-
     /**
      * Delete a file.
      *

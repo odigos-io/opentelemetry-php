@@ -1,10 +1,10 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\web;
 
 /**
@@ -63,7 +63,6 @@ interface IdentityInterface
      * or the identity is not in an active state (disabled, deleted, etc.)
      */
     public static function findIdentity($id);
-
     /**
      * Finds an identity by the given token.
      * @param mixed $token the token to be looked for
@@ -74,13 +73,11 @@ interface IdentityInterface
      * or the identity is not in an active state (disabled, deleted, etc.)
      */
     public static function findIdentityByAccessToken($token, $type = null);
-
     /**
      * Returns an ID that can uniquely identify a user identity.
      * @return string|int an ID that uniquely identifies a user identity.
      */
     public function getId();
-
     /**
      * Returns a key that can be used to check the validity of a given identity ID.
      *
@@ -98,7 +95,6 @@ interface IdentityInterface
      * @see validateAuthKey()
      */
     public function getAuthKey();
-
     /**
      * Validates the given auth key.
      *

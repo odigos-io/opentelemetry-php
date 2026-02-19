@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -15,7 +15,6 @@ declare(strict_types=1);
 namespace Cake\Datasource\Exception;
 
 use Cake\Core\Exception\CakeException;
-
 /**
  * Exception class to be thrown when a datasource configuration is not found
  */

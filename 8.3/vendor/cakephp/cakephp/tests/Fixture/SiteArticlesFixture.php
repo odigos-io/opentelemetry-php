@@ -1,4 +1,5 @@
 <?php
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -15,7 +16,6 @@
 namespace Cake\Test\Fixture;
 
 use Cake\TestSuite\Fixture\TestFixture;
-
 class SiteArticlesFixture extends TestFixture
 {
     /**
@@ -23,34 +23,5 @@ class SiteArticlesFixture extends TestFixture
      *
      * @var array
      */
-    public array $records = [
-        [
-            'id' => 1,
-            'author_id' => 1,
-            'site_id' => 1,
-            'title' => 'First Article',
-            'body' => 'First Article Body',
-        ],
-        [
-            'id' => 2,
-            'author_id' => 3,
-            'site_id' => 2,
-            'title' => 'Second Article',
-            'body' => 'Second Article Body',
-        ],
-        [
-            'id' => 3,
-            'author_id' => 1,
-            'site_id' => 2,
-            'title' => 'Third Article',
-            'body' => 'Third Article Body',
-        ],
-        [
-            'id' => 4,
-            'author_id' => 3,
-            'site_id' => 1,
-            'title' => 'Fourth Article',
-            'body' => 'Fourth Article Body',
-        ],
-    ];
+    public array $records = [['id' => 1, 'author_id' => 1, 'site_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body'], ['id' => 2, 'author_id' => 3, 'site_id' => 2, 'title' => 'Second Article', 'body' => 'Second Article Body'], ['id' => 3, 'author_id' => 1, 'site_id' => 2, 'title' => 'Third Article', 'body' => 'Third Article Body'], ['id' => 4, 'author_id' => 3, 'site_id' => 1, 'title' => 'Fourth Article', 'body' => 'Fourth Article Body']];
 }

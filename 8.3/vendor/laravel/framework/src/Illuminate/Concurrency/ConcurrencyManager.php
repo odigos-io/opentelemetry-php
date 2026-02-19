@@ -5,8 +5,7 @@ namespace Illuminate\Concurrency;
 use Illuminate\Process\Factory as ProcessFactory;
 use Illuminate\Support\MultipleInstanceManager;
 use RuntimeException;
-use Spatie\Fork\Fork;
-
+use Odigos\Spatie\Fork\Fork;
 /**
  * @mixin \Illuminate\Contracts\Concurrency\Driver
  */
@@ -22,7 +21,6 @@ class ConcurrencyManager extends MultipleInstanceManager
     {
         return $this->instance($name);
     }
-
     /**
      * Create an instance of the process concurrency driver.
      *
@@ -31,9 +29,8 @@ class ConcurrencyManager extends MultipleInstanceManager
      */
     public function createProcessDriver(array $config)
     {
-        return new ProcessDriver($this->app->make(ProcessFactory::class));
+        return new \Illuminate\Concurrency\ProcessDriver($this->app->make(ProcessFactory::class));
     }
-
     /**
      * Create an instance of the fork concurrency driver.
      *
@@ -44,17 +41,14 @@ class ConcurrencyManager extends MultipleInstanceManager
      */
     public function createForkDriver(array $config)
     {
-        if (! $this->app->runningInConsole()) {
+        if (!$this->app->runningInConsole()) {
             throw new RuntimeException('Due to PHP limitations, the fork driver may not be used within web requests.');
         }
-
-        if (! class_exists(Fork::class)) {
+        if (!class_exists(Fork::class)) {
             throw new RuntimeException('Please install the "spatie/fork" Composer package in order to utilize the "fork" driver.');
         }
-
-        return new ForkDriver;
+        return new \Illuminate\Concurrency\ForkDriver();
     }
-
     /**
      * Create an instance of the sync concurrency driver.
      *
@@ -63,9 +57,8 @@ class ConcurrencyManager extends MultipleInstanceManager
      */
     public function createSyncDriver(array $config)
     {
-        return new SyncDriver;
+        return new \Illuminate\Concurrency\SyncDriver();
     }
-
     /**
      * Get the default instance name.
      *
@@ -73,11 +66,8 @@ class ConcurrencyManager extends MultipleInstanceManager
      */
     public function getDefaultInstance()
     {
-        return $this->app['config']['concurrency.default']
-            ?? $this->app['config']['concurrency.driver']
-            ?? 'process';
+        return $this->app['config']['concurrency.default'] ?? $this->app['config']['concurrency.driver'] ?? 'process';
     }
-
     /**
      * Set the default instance name.
      *
@@ -89,7 +79,6 @@ class ConcurrencyManager extends MultipleInstanceManager
         $this->app['config']['concurrency.default'] = $name;
         $this->app['config']['concurrency.driver'] = $name;
     }
-
     /**
      * Get the instance specific configuration.
      *
@@ -98,8 +87,6 @@ class ConcurrencyManager extends MultipleInstanceManager
      */
     public function getInstanceConfig($name)
     {
-        return $this->app['config']->get(
-            'concurrency.driver.'.$name, ['driver' => $name],
-        );
+        return $this->app['config']->get('concurrency.driver.' . $name, ['driver' => $name]);
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Illuminate\Database\Events;
 
-class MigrationEnded extends MigrationEvent
+class MigrationEnded extends \Illuminate\Database\Events\MigrationEvent
 {
     //
 }

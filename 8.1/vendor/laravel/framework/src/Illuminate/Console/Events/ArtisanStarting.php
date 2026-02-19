@@ -10,7 +10,6 @@ class ArtisanStarting
      * @var \Illuminate\Console\Application
      */
     public $artisan;
-
     /**
      * Create a new event instance.
      *

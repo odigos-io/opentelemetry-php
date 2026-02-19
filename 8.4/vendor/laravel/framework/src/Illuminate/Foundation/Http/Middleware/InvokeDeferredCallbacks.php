@@ -7,7 +7,6 @@ use Illuminate\Container\Container;
 use Illuminate\Http\Request;
 use Illuminate\Support\Defer\DeferredCallbackCollection;
 use Symfony\Component\HttpFoundation\Response;
-
 class InvokeDeferredCallbacks
 {
     /**
@@ -21,7 +20,6 @@ class InvokeDeferredCallbacks
     {
         return $next($request);
     }
-
     /**
      * Invoke the deferred callbacks.
      *
@@ -31,8 +29,6 @@ class InvokeDeferredCallbacks
      */
     public function terminate(Request $request, Response $response)
     {
-        Container::getInstance()
-            ->make(DeferredCallbackCollection::class)
-            ->invokeWhen(fn ($callback) => $response->getStatusCode() < 400 || $callback->always);
+        Container::getInstance()->make(DeferredCallbackCollection::class)->invokeWhen(fn($callback) => $response->getStatusCode() < 400 || $callback->always);
     }
 }

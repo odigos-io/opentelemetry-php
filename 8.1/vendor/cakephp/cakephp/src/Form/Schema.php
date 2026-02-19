@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -27,19 +27,12 @@ class Schema
      * @var array<string, array<string, mixed>>
      */
     protected array $_fields = [];
-
     /**
      * The default values for fields.
      *
      * @var array<string, mixed>
      */
-    protected array $_fieldDefaults = [
-        'type' => null,
-        'length' => null,
-        'precision' => null,
-        'default' => null,
-    ];
-
+    protected array $_fieldDefaults = ['type' => null, 'length' => null, 'precision' => null, 'default' => null];
     /**
      * Add multiple fields to the schema.
      *
@@ -51,10 +44,8 @@ class Schema
         foreach ($fields as $name => $attrs) {
             $this->addField($name, $attrs);
         }
-
         return $this;
     }
-
     /**
      * Adds a field to the schema.
      *
@@ -70,10 +61,8 @@ class Schema
         }
         $attrs = array_intersect_key($attrs, $this->_fieldDefaults);
         $this->_fields[$name] = $attrs + $this->_fieldDefaults;
-
         return $this;
     }
-
     /**
      * Removes a field to the schema.
      *
@@ -83,10 +72,8 @@ class Schema
     public function removeField(string $name)
     {
         unset($this->_fields[$name]);
-
         return $this;
     }
-
     /**
      * Get the list of fields in the schema.
      *
@@ -96,7 +83,6 @@ class Schema
     {
         return array_keys($this->_fields);
     }
-
     /**
      * Get the attributes for a given field.
      *
@@ -107,7 +93,6 @@ class Schema
     {
         return $this->_fields[$name] ?? null;
     }
-
     /**
      * Get the type of the named field.
      *
@@ -121,10 +106,8 @@ class Schema
         if (!$field) {
             return null;
         }
-
         return $field['type'];
     }
-
     /**
      * Get the printable version of this object
      *
@@ -132,8 +115,6 @@ class Schema
      */
     public function __debugInfo(): array
     {
-        return [
-            '_fields' => $this->_fields,
-        ];
+        return ['_fields' => $this->_fields];
     }
 }

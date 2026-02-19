@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -18,7 +18,6 @@ namespace Cake\Database\Exception;
 
 use Cake\Database\Log\LoggedQuery;
 use PDOException;
-
 class QueryException extends PDOException
 {
     /**
@@ -30,10 +29,8 @@ class QueryException extends PDOException
     public function __construct(protected LoggedQuery|string $query, PDOException $previous)
     {
         $message = $previous->getMessage() . "\nQuery: " . $this->getQueryString();
-
-        parent::__construct($message, (int)$previous->getCode(), $previous);
+        parent::__construct($message, (int) $previous->getCode(), $previous);
     }
-
     /**
      * Get the query string that caused this exception.
      *
@@ -42,9 +39,8 @@ class QueryException extends PDOException
     public function getQueryString(): string
     {
         if ($this->query instanceof LoggedQuery) {
-            return (string)$this->query;
+            return (string) $this->query;
         }
-
         return $this->query;
     }
 }

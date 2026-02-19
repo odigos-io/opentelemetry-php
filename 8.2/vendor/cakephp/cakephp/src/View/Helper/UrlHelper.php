@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -22,7 +22,6 @@ use Cake\Routing\Asset;
 use Cake\Routing\Router;
 use Cake\View\Helper;
 use function Cake\Core\h;
-
 /**
  * UrlHelper class for generating URLs.
  */
@@ -33,17 +32,13 @@ class UrlHelper extends Helper
      *
      * @var array<string, mixed>
      */
-    protected array $_defaultConfig = [
-        'assetUrlClassName' => Asset::class,
-    ];
-
+    protected array $_defaultConfig = ['assetUrlClassName' => Asset::class];
     /**
      * Asset URL engine class name
      *
      * @var class-string<\Cake\Routing\Asset>
      */
     protected string $_assetUrlClassName;
-
     /**
      * Check proper configuration
      *
@@ -54,16 +49,13 @@ class UrlHelper extends Helper
     {
         parent::initialize($config);
         $engineClassConfig = $this->getConfig('assetUrlClassName');
-
         /** @var class-string<\Cake\Routing\Asset>|null $engineClass */
         $engineClass = App::className($engineClassConfig, 'Routing');
         if ($engineClass === null) {
             throw new CakeException(sprintf('Class for `%s` could not be found.', $engineClassConfig));
         }
-
         $this->_assetUrlClassName = $engineClass;
     }
-
     /**
      * Returns a URL based on provided parameters.
      *
@@ -81,20 +73,14 @@ class UrlHelper extends Helper
      */
     public function build(array|string|null $url = null, array $options = []): string
     {
-        $defaults = [
-            'fullBase' => false,
-            'escape' => true,
-        ];
+        $defaults = ['fullBase' => \false, 'escape' => \true];
         $options += $defaults;
-
         $url = Router::url($url, $options['fullBase']);
         if ($options['escape']) {
-            return (string)h($url);
+            return (string) h($url);
         }
-
         return $url;
     }
-
     /**
      * Returns a URL from a route path string.
      *
@@ -115,7 +101,6 @@ class UrlHelper extends Helper
     {
         return $this->build(['_path' => $path] + $params, $options);
     }
-
     /**
      * Generates URL for given image file.
      *
@@ -136,10 +121,8 @@ class UrlHelper extends Helper
     public function image(string $path, array $options = []): string
     {
         $options += ['theme' => $this->_View->getTheme()];
-
         return h($this->_assetUrlClassName::imageUrl($path, $options));
     }
-
     /**
      * Generates URL for given CSS file.
      *
@@ -161,10 +144,8 @@ class UrlHelper extends Helper
     public function css(string $path, array $options = []): string
     {
         $options += ['theme' => $this->_View->getTheme()];
-
         return h($this->_assetUrlClassName::cssUrl($path, $options));
     }
-
     /**
      * Generates URL for given javascript file.
      *
@@ -186,10 +167,8 @@ class UrlHelper extends Helper
     public function script(string $path, array $options = []): string
     {
         $options += ['theme' => $this->_View->getTheme()];
-
         return h($this->_assetUrlClassName::scriptUrl($path, $options));
     }
-
     /**
      * Generates URL for given asset file.
      *
@@ -215,10 +194,8 @@ class UrlHelper extends Helper
     public function assetUrl(string $path, array $options = []): string
     {
         $options += ['theme' => $this->_View->getTheme()];
-
         return h($this->_assetUrlClassName::url($path, $options));
     }
-
     /**
      * Adds a timestamp to a file based resource based on the value of `Asset.timestamp` in
      * Configure. If Asset.timestamp is true and debug is true, or Asset.timestamp === 'force'
@@ -232,7 +209,6 @@ class UrlHelper extends Helper
     {
         return h($this->_assetUrlClassName::assetTimestamp($path, $timestamp));
     }
-
     /**
      * Checks if a file exists when theme is used, if no file is found default location is returned
      *
@@ -242,10 +218,8 @@ class UrlHelper extends Helper
     public function webroot(string $file): string
     {
         $options = ['theme' => $this->_View->getTheme()];
-
         return h($this->_assetUrlClassName::webroot($file, $options));
     }
-
     /**
      * Event listeners.
      *

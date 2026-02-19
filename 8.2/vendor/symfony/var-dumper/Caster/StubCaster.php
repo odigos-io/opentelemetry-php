@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\VarDumper\Caster;
 
 use Symfony\Component\VarDumper\Cloner\Stub;
-
 /**
  * Casts a caster's Stub.
  *
@@ -33,35 +31,27 @@ class StubCaster
             $stub->handle = $c->handle;
             $stub->cut = $c->cut;
             $stub->attr = $c->attr;
-
             if (Stub::TYPE_REF === $c->type && !$c->class && \is_string($c->value) && !preg_match('//u', $c->value)) {
                 $stub->type = Stub::TYPE_STRING;
                 $stub->class = Stub::STRING_BINARY;
             }
-
             $a = [];
         }
-
         return $a;
     }
-
-    public static function castCutArray(CutArrayStub $c, array $a, Stub $stub, bool $isNested): array
+    public static function castCutArray(\Symfony\Component\VarDumper\Caster\CutArrayStub $c, array $a, Stub $stub, bool $isNested): array
     {
         return $isNested ? $c->preservedSubset : $a;
     }
-
     public static function cutInternals($obj, array $a, Stub $stub, bool $isNested): array
     {
         if ($isNested) {
             $stub->cut += \count($a);
-
             return [];
         }
-
         return $a;
     }
-
-    public static function castEnum(EnumStub $c, array $a, Stub $stub, bool $isNested): array
+    public static function castEnum(\Symfony\Component\VarDumper\Caster\EnumStub $c, array $a, Stub $stub, bool $isNested): array
     {
         if ($isNested) {
             $stub->class = $c->dumpKeys ? '' : null;
@@ -69,26 +59,21 @@ class StubCaster
             $stub->value = null;
             $stub->cut = $c->cut;
             $stub->attr = $c->attr;
-
             $a = [];
-
             if ($c->value) {
                 foreach (array_keys($c->value) as $k) {
-                    $keys[] = !isset($k[0]) || "\0" !== $k[0] ? Caster::PREFIX_VIRTUAL.$k : $k;
+                    $keys[] = !isset($k[0]) || "\x00" !== $k[0] ? \Symfony\Component\VarDumper\Caster\Caster::PREFIX_VIRTUAL . $k : $k;
                 }
                 // Preserve references with array_combine()
                 $a = array_combine($keys, $c->value);
             }
         }
-
         return $a;
     }
-
-    public static function castScalar(ScalarStub $scalarStub, array $a, Stub $stub): array
+    public static function castScalar(\Symfony\Component\VarDumper\Caster\ScalarStub $scalarStub, array $a, Stub $stub): array
     {
         $stub->type = Stub::TYPE_SCALAR;
         $stub->attr['value'] = $scalarStub->value;
-
         return $a;
     }
 }

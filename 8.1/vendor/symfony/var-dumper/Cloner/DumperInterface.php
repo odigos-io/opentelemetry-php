@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\VarDumper\Cloner;
 
 /**
@@ -23,8 +22,7 @@ interface DumperInterface
      *
      * @return void
      */
-    public function dumpScalar(Cursor $cursor, string $type, string|int|float|bool|null $value);
-
+    public function dumpScalar(\Symfony\Component\VarDumper\Cloner\Cursor $cursor, string $type, string|int|float|bool|null $value);
     /**
      * Dumps a string.
      *
@@ -34,8 +32,7 @@ interface DumperInterface
      *
      * @return void
      */
-    public function dumpString(Cursor $cursor, string $str, bool $bin, int $cut);
-
+    public function dumpString(\Symfony\Component\VarDumper\Cloner\Cursor $cursor, string $str, bool $bin, int $cut);
     /**
      * Dumps while entering an hash.
      *
@@ -45,8 +42,7 @@ interface DumperInterface
      *
      * @return void
      */
-    public function enterHash(Cursor $cursor, int $type, string|int|null $class, bool $hasChild);
-
+    public function enterHash(\Symfony\Component\VarDumper\Cloner\Cursor $cursor, int $type, string|int|null $class, bool $hasChild);
     /**
      * Dumps while leaving an hash.
      *
@@ -57,5 +53,5 @@ interface DumperInterface
      *
      * @return void
      */
-    public function leaveHash(Cursor $cursor, int $type, string|int|null $class, bool $hasChild, int $cut);
+    public function leaveHash(\Symfony\Component\VarDumper\Cloner\Cursor $cursor, int $type, string|int|null $class, bool $hasChild, int $cut);
 }

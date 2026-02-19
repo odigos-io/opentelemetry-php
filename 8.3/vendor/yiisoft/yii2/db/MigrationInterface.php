@@ -1,10 +1,10 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\db;
 
 /**
@@ -24,7 +24,6 @@ interface MigrationInterface
      * and should not proceed further. All other return values mean the migration succeeds.
      */
     public function up();
-
     /**
      * This method contains the logic to be executed when removing this migration.
      * The default implementation throws an exception indicating the migration cannot be removed.

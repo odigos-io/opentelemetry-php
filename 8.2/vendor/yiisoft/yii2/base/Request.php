@@ -1,14 +1,13 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\base;
 
-use Yii;
-
+use Odigos\Yii;
 /**
  * Request represents a request that is handled by an [[Application]].
  *
@@ -20,27 +19,23 @@ use Yii;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-abstract class Request extends Component
+abstract class Request extends \yii\base\Component
 {
     private $_scriptFile;
     private $_isConsoleRequest;
-
-
     /**
      * Resolves the current request into a route and the associated parameters.
      * @return array the first element is the route, and the second is the associated parameters.
      */
     abstract public function resolve();
-
     /**
      * Returns a value indicating whether the current request is made via command line.
      * @return bool the value indicating whether the current request is made via console
      */
     public function getIsConsoleRequest()
     {
-        return $this->_isConsoleRequest !== null ? $this->_isConsoleRequest : PHP_SAPI === 'cli';
+        return $this->_isConsoleRequest !== null ? $this->_isConsoleRequest : \PHP_SAPI === 'cli';
     }
-
     /**
      * Sets the value indicating whether the current request is made via command line.
      * @param bool $value the value indicating whether the current request is made via command line
@@ -49,7 +44,6 @@ abstract class Request extends Component
     {
         $this->_isConsoleRequest = $value;
     }
-
     /**
      * Returns entry script file path.
      * @return string entry script file path (processed w/ realpath())
@@ -61,13 +55,11 @@ abstract class Request extends Component
             if (isset($_SERVER['SCRIPT_FILENAME'])) {
                 $this->setScriptFile($_SERVER['SCRIPT_FILENAME']);
             } else {
-                throw new InvalidConfigException('Unable to determine the entry script file path.');
+                throw new \yii\base\InvalidConfigException('Unable to determine the entry script file path.');
             }
         }
-
         return $this->_scriptFile;
     }
-
     /**
      * Sets the entry script file path.
      * The entry script file path can normally be determined based on the `SCRIPT_FILENAME` SERVER variable.
@@ -79,10 +71,10 @@ abstract class Request extends Component
     public function setScriptFile($value)
     {
         $scriptFile = realpath(Yii::getAlias($value));
-        if ($scriptFile !== false && is_file($scriptFile)) {
+        if ($scriptFile !== \false && is_file($scriptFile)) {
             $this->_scriptFile = $scriptFile;
         } else {
-            throw new InvalidConfigException('Unable to determine the entry script file path.');
+            throw new \yii\base\InvalidConfigException('Unable to determine the entry script file path.');
         }
     }
 }

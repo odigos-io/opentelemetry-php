@@ -4,7 +4,6 @@ namespace Illuminate\Queue\Middleware;
 
 use Closure;
 use Throwable;
-
 class FailOnException
 {
     /**
@@ -13,7 +12,6 @@ class FailOnException
      * @var \Closure(\Throwable, mixed): bool
      */
     protected Closure $callback;
-
     /**
      * Create a middleware instance.
      *
@@ -24,10 +22,8 @@ class FailOnException
         if (is_array($callback)) {
             $callback = $this->failForExceptions($callback);
         }
-
         $this->callback = $callback;
     }
-
     /**
      * Indicate that the job should fail if it encounters the given exceptions.
      *
@@ -39,14 +35,12 @@ class FailOnException
         return static function (Throwable $throwable) use ($exceptions) {
             foreach ($exceptions as $exception) {
                 if ($throwable instanceof $exception) {
-                    return true;
+                    return \true;
                 }
             }
-
-            return false;
+            return \false;
         };
     }
-
     /**
      * Mark the job as failed if an exception is thrown that passes a truth-test callback.
      *
@@ -61,10 +55,9 @@ class FailOnException
         try {
             return $next($job);
         } catch (Throwable $e) {
-            if (call_user_func($this->callback, $e, $job) === true) {
+            if (call_user_func($this->callback, $e, $job) === \true) {
                 $job->fail($e);
             }
-
             throw $e;
         }
     }

@@ -9,7 +9,6 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Support\ServiceProvider;
-
 class AuthServiceProvider extends ServiceProvider
 {
     /**
@@ -26,7 +25,6 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerRequestRebindHandler();
         $this->registerEventRebindHandler();
     }
-
     /**
      * Register the authenticator services.
      *
@@ -34,11 +32,9 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected function registerAuthenticator()
     {
-        $this->app->singleton('auth', fn ($app) => new AuthManager($app));
-
-        $this->app->singleton('auth.driver', fn ($app) => $app['auth']->guard());
+        $this->app->singleton('auth', fn($app) => new \Illuminate\Auth\AuthManager($app));
+        $this->app->singleton('auth.driver', fn($app) => $app['auth']->guard());
     }
-
     /**
      * Register a resolver for the authenticated user.
      *
@@ -46,9 +42,8 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected function registerUserResolver()
     {
-        $this->app->bind(AuthenticatableContract::class, fn ($app) => call_user_func($app['auth']->userResolver()));
+        $this->app->bind(AuthenticatableContract::class, fn($app) => call_user_func($app['auth']->userResolver()));
     }
-
     /**
      * Register the access gate service.
      *
@@ -57,10 +52,9 @@ class AuthServiceProvider extends ServiceProvider
     protected function registerAccessGate()
     {
         $this->app->singleton(GateContract::class, function ($app) {
-            return new Gate($app, fn () => call_user_func($app['auth']->userResolver()));
+            return new Gate($app, fn() => call_user_func($app['auth']->userResolver()));
         });
     }
-
     /**
      * Register a resolver for the authenticated user.
      *
@@ -69,14 +63,9 @@ class AuthServiceProvider extends ServiceProvider
     protected function registerRequirePassword()
     {
         $this->app->bind(RequirePassword::class, function ($app) {
-            return new RequirePassword(
-                $app[ResponseFactory::class],
-                $app[UrlGenerator::class],
-                $app['config']->get('auth.password_timeout')
-            );
+            return new RequirePassword($app[ResponseFactory::class], $app[UrlGenerator::class], $app['config']->get('auth.password_timeout'));
         });
     }
-
     /**
      * Handle the re-binding of the request binding.
      *
@@ -90,7 +79,6 @@ class AuthServiceProvider extends ServiceProvider
             });
         });
     }
-
     /**
      * Handle the re-binding of the event dispatcher binding.
      *
@@ -99,11 +87,9 @@ class AuthServiceProvider extends ServiceProvider
     protected function registerEventRebindHandler()
     {
         $this->app->rebinding('events', function ($app, $dispatcher) {
-            if (! $app->resolved('auth') ||
-                $app['auth']->hasResolvedGuards() === false) {
+            if (!$app->resolved('auth') || $app['auth']->hasResolvedGuards() === \false) {
                 return;
             }
-
             if (method_exists($guard = $app['auth']->guard(), 'setDispatcher')) {
                 $guard->setDispatcher($dispatcher);
             }

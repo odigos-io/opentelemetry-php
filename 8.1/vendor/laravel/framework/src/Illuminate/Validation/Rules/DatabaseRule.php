@@ -6,7 +6,6 @@ use BackedEnum;
 use Closure;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Model;
-
 trait DatabaseRule
 {
     /**
@@ -15,28 +14,24 @@ trait DatabaseRule
      * @var string
      */
     protected $table;
-
     /**
      * The column to check on.
      *
      * @var string
      */
     protected $column;
-
     /**
      * The extra where clauses for the query.
      *
      * @var array
      */
     protected $wheres = [];
-
     /**
      * The array of custom query callbacks.
      *
      * @var array
      */
     protected $using = [];
-
     /**
      * Create a new rule instance.
      *
@@ -47,10 +42,8 @@ trait DatabaseRule
     public function __construct($table, $column = 'NULL')
     {
         $this->column = $column;
-
         $this->table = $this->resolveTableName($table);
     }
-
     /**
      * Resolves the name of the table from the given string.
      *
@@ -59,25 +52,20 @@ trait DatabaseRule
      */
     public function resolveTableName($table)
     {
-        if (! str_contains($table, '\\') || ! class_exists($table)) {
+        if (!str_contains($table, '\\') || !class_exists($table)) {
             return $table;
         }
-
         if (is_subclass_of($table, Model::class)) {
-            $model = new $table;
-
+            $model = new $table();
             if (str_contains($model->getTable(), '.')) {
                 return $table;
             }
-
             return implode('.', array_map(function (string $part) {
                 return trim($part, '.');
             }, array_filter([$model->getConnectionName(), $model->getTable()])));
         }
-
         return $table;
     }
-
     /**
      * Set a "where" constraint on the query.
      *
@@ -90,24 +78,18 @@ trait DatabaseRule
         if ($value instanceof Arrayable || is_array($value)) {
             return $this->whereIn($column, $value);
         }
-
         if ($column instanceof Closure) {
             return $this->using($column);
         }
-
         if (is_null($value)) {
             return $this->whereNull($column);
         }
-
         if ($value instanceof BackedEnum) {
             $value = $value->value;
         }
-
         $this->wheres[] = compact('column', 'value');
-
         return $this;
     }
-
     /**
      * Set a "where not" constraint on the query.
      *
@@ -120,14 +102,11 @@ trait DatabaseRule
         if ($value instanceof Arrayable || is_array($value)) {
             return $this->whereNotIn($column, $value);
         }
-
         if ($value instanceof BackedEnum) {
             $value = $value->value;
         }
-
-        return $this->where($column, '!'.$value);
+        return $this->where($column, '!' . $value);
     }
-
     /**
      * Set a "where null" constraint on the query.
      *
@@ -138,7 +117,6 @@ trait DatabaseRule
     {
         return $this->where($column, 'NULL');
     }
-
     /**
      * Set a "where not null" constraint on the query.
      *
@@ -149,7 +127,6 @@ trait DatabaseRule
     {
         return $this->where($column, 'NOT_NULL');
     }
-
     /**
      * Set a "where in" constraint on the query.
      *
@@ -163,7 +140,6 @@ trait DatabaseRule
             $query->whereIn($column, $values);
         });
     }
-
     /**
      * Set a "where not in" constraint on the query.
      *
@@ -177,7 +153,6 @@ trait DatabaseRule
             $query->whereNotIn($column, $values);
         });
     }
-
     /**
      * Ignore soft deleted models during the existence check.
      *
@@ -187,10 +162,8 @@ trait DatabaseRule
     public function withoutTrashed($deletedAtColumn = 'deleted_at')
     {
         $this->whereNull($deletedAtColumn);
-
         return $this;
     }
-
     /**
      * Only include soft deleted models during the existence check.
      *
@@ -200,10 +173,8 @@ trait DatabaseRule
     public function onlyTrashed($deletedAtColumn = 'deleted_at')
     {
         $this->whereNotNull($deletedAtColumn);
-
         return $this;
     }
-
     /**
      * Register a custom query callback.
      *
@@ -213,10 +184,8 @@ trait DatabaseRule
     public function using(Closure $callback)
     {
         $this->using[] = $callback;
-
         return $this;
     }
-
     /**
      * Get the custom query callbacks for the rule.
      *
@@ -226,7 +195,6 @@ trait DatabaseRule
     {
         return $this->using;
     }
-
     /**
      * Format the where clauses.
      *
@@ -235,7 +203,7 @@ trait DatabaseRule
     protected function formatWheres()
     {
         return collect($this->wheres)->map(function ($where) {
-            return $where['column'].','.'"'.str_replace('"', '""', $where['value']).'"';
+            return $where['column'] . ',' . '"' . str_replace('"', '""', $where['value']) . '"';
         })->implode(',');
     }
 }

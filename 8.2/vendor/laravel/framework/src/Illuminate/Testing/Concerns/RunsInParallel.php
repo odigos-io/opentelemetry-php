@@ -7,11 +7,10 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\ParallelTesting;
 use Illuminate\Testing\ParallelConsoleOutput;
-use PHPUnit\TextUI\Configuration\PhpHandler;
+use Odigos\PHPUnit\TextUI\Configuration\PhpHandler;
 use RuntimeException;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\OutputInterface;
-
 trait RunsInParallel
 {
     /**
@@ -20,35 +19,30 @@ trait RunsInParallel
      * @var \Closure|null
      */
     protected static $applicationResolver;
-
     /**
      * The runner resolver callback.
      *
      * @var \Closure|null
      */
     protected static $runnerResolver;
-
     /**
      * The original test runner options.
      *
      * @var \ParaTest\Runners\PHPUnit\Options|\ParaTest\Options
      */
     protected $options;
-
     /**
      * The output instance.
      *
      * @var \Symfony\Component\Console\Output\OutputInterface
      */
     protected $output;
-
     /**
      * The original test runner.
      *
      * @var \ParaTest\Runners\PHPUnit\RunnerInterface|\ParaTest\RunnerInterface
      */
     protected $runner;
-
     /**
      * Creates a new test runner instance.
      *
@@ -58,22 +52,15 @@ trait RunsInParallel
     public function __construct($options, OutputInterface $output)
     {
         $this->options = $options;
-
         if ($output instanceof ConsoleOutput) {
             $output = new ParallelConsoleOutput($output);
         }
-
         $runnerResolver = static::$runnerResolver ?: function ($options, OutputInterface $output) {
-            $wrapperRunnerClass = class_exists(\ParaTest\WrapperRunner\WrapperRunner::class)
-                ? \ParaTest\WrapperRunner\WrapperRunner::class
-                : \ParaTest\Runners\PHPUnit\WrapperRunner::class;
-
+            $wrapperRunnerClass = class_exists(\Odigos\ParaTest\WrapperRunner\WrapperRunner::class) ? \Odigos\ParaTest\WrapperRunner\WrapperRunner::class : \Odigos\ParaTest\Runners\PHPUnit\WrapperRunner::class;
             return new $wrapperRunnerClass($options, $output);
         };
-
         $this->runner = $runnerResolver($options, $output);
     }
-
     /**
      * Set the application resolver callback.
      *
@@ -84,7 +71,6 @@ trait RunsInParallel
     {
         static::$applicationResolver = $resolver;
     }
-
     /**
      * Set the runner resolver callback.
      *
@@ -95,7 +81,6 @@ trait RunsInParallel
     {
         static::$runnerResolver = $resolver;
     }
-
     /**
      * Runs the test suite.
      *
@@ -103,16 +88,11 @@ trait RunsInParallel
      */
     public function execute(): int
     {
-        $configuration = $this->options instanceof \ParaTest\Options
-            ? $this->options->configuration
-            : $this->options->configuration();
-
+        $configuration = $this->options instanceof \Odigos\ParaTest\Options ? $this->options->configuration : $this->options->configuration();
         (new PhpHandler())->handle($configuration->php());
-
         $this->forEachProcess(function () {
             ParallelTesting::callSetUpProcessCallbacks();
         });
-
         try {
             $potentialExitCode = $this->runner->run();
         } finally {
@@ -120,10 +100,8 @@ trait RunsInParallel
                 ParallelTesting::callTearDownProcessCallbacks();
             });
         }
-
         return $potentialExitCode ?? $this->getExitCode();
     }
-
     /**
      * Returns the highest exit code encountered throughout the course of test execution.
      *
@@ -133,7 +111,6 @@ trait RunsInParallel
     {
         return $this->runner->getExitCode();
     }
-
     /**
      * Apply the given callback for each process.
      *
@@ -142,19 +119,14 @@ trait RunsInParallel
      */
     protected function forEachProcess($callback)
     {
-        $processes = $this->options instanceof \ParaTest\Options
-            ? $this->options->processes
-            : $this->options->processes();
-
+        $processes = $this->options instanceof \Odigos\ParaTest\Options ? $this->options->processes : $this->options->processes();
         Collection::range(1, $processes)->each(function ($token) use ($callback) {
             tap($this->createApplication(), function ($app) use ($callback, $token) {
-                ParallelTesting::resolveTokenUsing(fn () => $token);
-
+                ParallelTesting::resolveTokenUsing(fn() => $token);
                 $callback($app);
             })->flush();
         });
     }
-
     /**
      * Creates the application.
      *
@@ -165,24 +137,19 @@ trait RunsInParallel
     protected function createApplication()
     {
         $applicationResolver = static::$applicationResolver ?: function () {
-            if (trait_exists(\Tests\CreatesApplication::class)) {
+            if (trait_exists(\Odigos\Tests\CreatesApplication::class)) {
                 $applicationCreator = new class
                 {
-                    use \Tests\CreatesApplication;
+                    use \Odigos\Tests\CreatesApplication;
                 };
-
                 return $applicationCreator->createApplication();
-            } elseif (file_exists($path = (Application::inferBasePath().'/bootstrap/app.php'))) {
+            } elseif (file_exists($path = Application::inferBasePath() . '/bootstrap/app.php')) {
                 $app = require $path;
-
                 $app->make(Kernel::class)->bootstrap();
-
                 return $app;
             }
-
             throw new RuntimeException('Parallel Runner unable to resolve application.');
         };
-
         return $applicationResolver();
     }
 }

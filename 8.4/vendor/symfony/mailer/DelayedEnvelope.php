@@ -8,52 +8,41 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\Mailer;
 
 use Symfony\Component\Mailer\Exception\LogicException;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Header\Headers;
 use Symfony\Component\Mime\Message;
-
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  *
  * @internal
  */
-final class DelayedEnvelope extends Envelope
+final class DelayedEnvelope extends \Symfony\Component\Mailer\Envelope
 {
-    private bool $senderSet = false;
-    private bool $recipientsSet = false;
-
-    public function __construct(
-        private Message $message,
-    ) {
+    private bool $senderSet = \false;
+    private bool $recipientsSet = \false;
+    public function __construct(private Message $message)
+    {
     }
-
     public function setSender(Address $sender): void
     {
         parent::setSender($sender);
-
-        $this->senderSet = true;
+        $this->senderSet = \true;
     }
-
     public function getSender(): Address
     {
         if (!$this->senderSet) {
             parent::setSender(self::getSenderFromHeaders($this->message->getHeaders()));
         }
-
         return parent::getSender();
     }
-
     public function setRecipients(array $recipients): void
     {
         parent::setRecipients($recipients);
-
         $this->recipientsSet = (bool) parent::getRecipients();
     }
-
     /**
      * @return Address[]
      */
@@ -62,10 +51,8 @@ final class DelayedEnvelope extends Envelope
         if ($this->recipientsSet) {
             return parent::getRecipients();
         }
-
         return self::getRecipientsFromHeaders($this->message->getHeaders());
     }
-
     private static function getRecipientsFromHeaders(Headers $headers): array
     {
         $recipients = [];
@@ -76,10 +63,8 @@ final class DelayedEnvelope extends Envelope
                 }
             }
         }
-
         return $recipients;
     }
-
     private static function getSenderFromHeaders(Headers $headers): Address
     {
         if ($sender = $headers->get('Sender')) {
@@ -91,7 +76,6 @@ final class DelayedEnvelope extends Envelope
         if ($from = $headers->get('From')) {
             return $from->getAddresses()[0];
         }
-
         throw new LogicException('Unable to determine the sender of the message.');
     }
 }

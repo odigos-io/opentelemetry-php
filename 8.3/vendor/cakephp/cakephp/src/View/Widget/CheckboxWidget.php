@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -17,28 +17,20 @@ declare(strict_types=1);
 namespace Cake\View\Widget;
 
 use Cake\View\Form\ContextInterface;
-
 /**
  * Input widget for creating checkbox widgets.
  *
  * This class is usually used internally by `Cake\View\Helper\FormHelper`,
  * it but can be used to generate standalone checkboxes.
  */
-class CheckboxWidget extends BasicWidget
+class CheckboxWidget extends \Cake\View\Widget\BasicWidget
 {
     /**
      * Data defaults.
      *
      * @var array<string, mixed>
      */
-    protected array $defaults = [
-        'name' => '',
-        'value' => 1,
-        'val' => null,
-        'disabled' => false,
-        'templateVars' => [],
-    ];
-
+    protected array $defaults = ['name' => '', 'value' => 1, 'val' => null, 'disabled' => \false, 'templateVars' => []];
     /**
      * Render a checkbox element.
      *
@@ -59,25 +51,13 @@ class CheckboxWidget extends BasicWidget
     public function render(array $data, ContextInterface $context): string
     {
         $data += $this->mergeDefaults($data, $context);
-
         if ($this->_isChecked($data)) {
-            $data['checked'] = true;
+            $data['checked'] = \true;
         }
         unset($data['val']);
-
-        $attrs = $this->_templates->formatAttributes(
-            $data,
-            ['name', 'value'],
-        );
-
-        return $this->_templates->format('checkbox', [
-            'name' => $data['name'],
-            'value' => $data['value'],
-            'templateVars' => $data['templateVars'],
-            'attrs' => $attrs,
-        ]);
+        $attrs = $this->_templates->formatAttributes($data, ['name', 'value']);
+        return $this->_templates->format('checkbox', ['name' => $data['name'], 'value' => $data['value'], 'templateVars' => $data['templateVars'], 'attrs' => $attrs]);
     }
-
     /**
      * Checks whether the checkbox should be checked.
      *
@@ -87,9 +67,8 @@ class CheckboxWidget extends BasicWidget
     protected function _isChecked(array $data): bool
     {
         if (array_key_exists('checked', $data)) {
-            return (bool)$data['checked'];
+            return (bool) $data['checked'];
         }
-
-        return (string)$data['val'] === (string)$data['value'];
+        return (string) $data['val'] === (string) $data['value'];
     }
 }

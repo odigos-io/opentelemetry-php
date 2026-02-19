@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /**
  * This file is part of the Carbon package.
  *
@@ -10,12 +9,10 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Odigos\Carbon\Traits;
 
-namespace Carbon\Traits;
-
-use Carbon\CarbonInterface;
-use Carbon\CarbonInterval;
-
+use Odigos\Carbon\CarbonInterface;
+use Odigos\Carbon\CarbonInterval;
 trait DeprecatedPeriodProperties
 {
     /**
@@ -26,7 +23,6 @@ trait DeprecatedPeriodProperties
      * @deprecated PHP 8.2 this property is no longer in sync with the actual period start.
      */
     public $start;
-
     /**
      * Period end in PHP < 8.2.
      *
@@ -35,7 +31,6 @@ trait DeprecatedPeriodProperties
      * @deprecated PHP 8.2 this property is no longer in sync with the actual period end.
      */
     public $end;
-
     /**
      * Period current iterated date in PHP < 8.2.
      *
@@ -44,7 +39,6 @@ trait DeprecatedPeriodProperties
      * @deprecated PHP 8.2 this property is no longer in sync with the actual period current iterated date.
      */
     public $current;
-
     /**
      * Period interval in PHP < 8.2.
      *
@@ -53,7 +47,6 @@ trait DeprecatedPeriodProperties
      * @deprecated PHP 8.2 this property is no longer in sync with the actual period interval.
      */
     public $interval;
-
     /**
      * Period recurrences in PHP < 8.2.
      *
@@ -62,7 +55,6 @@ trait DeprecatedPeriodProperties
      * @deprecated PHP 8.2 this property is no longer in sync with the actual period recurrences.
      */
     public $recurrences;
-
     /**
      * Period start included option in PHP < 8.2.
      *
@@ -71,7 +63,6 @@ trait DeprecatedPeriodProperties
      * @deprecated PHP 8.2 this property is no longer in sync with the actual period start included option.
      */
     public $include_start_date;
-
     /**
      * Period end included option in PHP < 8.2.
      *

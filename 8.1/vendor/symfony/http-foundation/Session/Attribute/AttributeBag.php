@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\HttpFoundation\Session\Attribute;
 
 /**
@@ -16,13 +15,11 @@ namespace Symfony\Component\HttpFoundation\Session\Attribute;
  *
  * @implements \IteratorAggregate<string, mixed>
  */
-class AttributeBag implements AttributeBagInterface, \IteratorAggregate, \Countable
+class AttributeBag implements \Symfony\Component\HttpFoundation\Session\Attribute\AttributeBagInterface, \IteratorAggregate, \Countable
 {
     private string $name = 'attributes';
     private string $storageKey;
-
     protected $attributes = [];
-
     /**
      * @param string $storageKey The key used to store attributes in the session
      */
@@ -30,12 +27,10 @@ class AttributeBag implements AttributeBagInterface, \IteratorAggregate, \Counta
     {
         $this->storageKey = $storageKey;
     }
-
     public function getName(): string
     {
         return $this->name;
     }
-
     /**
      * @return void
      */
@@ -43,30 +38,25 @@ class AttributeBag implements AttributeBagInterface, \IteratorAggregate, \Counta
     {
         $this->name = $name;
     }
-
     /**
      * @return void
      */
     public function initialize(array &$attributes)
     {
-        $this->attributes = &$attributes;
+        $this->attributes =& $attributes;
     }
-
     public function getStorageKey(): string
     {
         return $this->storageKey;
     }
-
     public function has(string $name): bool
     {
         return \array_key_exists($name, $this->attributes);
     }
-
     public function get(string $name, mixed $default = null): mixed
     {
         return \array_key_exists($name, $this->attributes) ? $this->attributes[$name] : $default;
     }
-
     /**
      * @return void
      */
@@ -74,12 +64,10 @@ class AttributeBag implements AttributeBagInterface, \IteratorAggregate, \Counta
     {
         $this->attributes[$name] = $value;
     }
-
     public function all(): array
     {
         return $this->attributes;
     }
-
     /**
      * @return void
      */
@@ -90,7 +78,6 @@ class AttributeBag implements AttributeBagInterface, \IteratorAggregate, \Counta
             $this->set($key, $value);
         }
     }
-
     public function remove(string $name): mixed
     {
         $retval = null;
@@ -98,18 +85,14 @@ class AttributeBag implements AttributeBagInterface, \IteratorAggregate, \Counta
             $retval = $this->attributes[$name];
             unset($this->attributes[$name]);
         }
-
         return $retval;
     }
-
     public function clear(): mixed
     {
         $return = $this->attributes;
         $this->attributes = [];
-
         return $return;
     }
-
     /**
      * Returns an iterator for attributes.
      *
@@ -119,7 +102,6 @@ class AttributeBag implements AttributeBagInterface, \IteratorAggregate, \Counta
     {
         return new \ArrayIterator($this->attributes);
     }
-
     /**
      * Returns the number of attributes.
      */

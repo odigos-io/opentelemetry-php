@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -20,7 +20,6 @@ use IteratorAggregate;
 use JsonSerializable;
 use Traversable;
 use function Cake\Core\deprecationWarning;
-
 /**
  * Paginated result set.
  *
@@ -29,7 +28,7 @@ use function Cake\Core\deprecationWarning;
  * @implements \IteratorAggregate<TKey, TValue>
  * @implements \Cake\Datasource\Paging\PaginatedInterface<TKey, TValue>
  */
-class PaginatedResultSet implements IteratorAggregate, JsonSerializable, PaginatedInterface
+class PaginatedResultSet implements IteratorAggregate, JsonSerializable, \Cake\Datasource\Paging\PaginatedInterface
 {
     /**
      * Resultset instance.
@@ -37,14 +36,12 @@ class PaginatedResultSet implements IteratorAggregate, JsonSerializable, Paginat
      * @var \Traversable<TKey, TValue>
      */
     protected Traversable $results;
-
     /**
      * Paging params.
      *
      * @var array
      */
     protected array $params = [];
-
     /**
      * Constructor
      *
@@ -56,7 +53,6 @@ class PaginatedResultSet implements IteratorAggregate, JsonSerializable, Paginat
         $this->results = $results;
         $this->params = $params;
     }
-
     /**
      * @inheritDoc
      */
@@ -64,7 +60,6 @@ class PaginatedResultSet implements IteratorAggregate, JsonSerializable, Paginat
     {
         return $this->params['count'];
     }
-
     /**
      * Get the paginated items as an array.
      *
@@ -76,7 +71,6 @@ class PaginatedResultSet implements IteratorAggregate, JsonSerializable, Paginat
     {
         return $this->jsonSerialize();
     }
-
     /**
      * Get paginated items.
      *
@@ -86,7 +80,6 @@ class PaginatedResultSet implements IteratorAggregate, JsonSerializable, Paginat
     {
         return $this->results;
     }
-
     /**
      * Provide data which should be serialized to JSON.
      *
@@ -96,7 +89,6 @@ class PaginatedResultSet implements IteratorAggregate, JsonSerializable, Paginat
     {
         return iterator_to_array($this->items());
     }
-
     /**
      * @inheritDoc
      */
@@ -104,7 +96,6 @@ class PaginatedResultSet implements IteratorAggregate, JsonSerializable, Paginat
     {
         return $this->params['totalCount'];
     }
-
     /**
      * @inheritDoc
      */
@@ -112,7 +103,6 @@ class PaginatedResultSet implements IteratorAggregate, JsonSerializable, Paginat
     {
         return $this->params['perPage'];
     }
-
     /**
      * @inheritDoc
      */
@@ -120,7 +110,6 @@ class PaginatedResultSet implements IteratorAggregate, JsonSerializable, Paginat
     {
         return $this->params['pageCount'];
     }
-
     /**
      * @inheritDoc
      */
@@ -128,7 +117,6 @@ class PaginatedResultSet implements IteratorAggregate, JsonSerializable, Paginat
     {
         return $this->params['currentPage'];
     }
-
     /**
      * @inheritDoc
      */
@@ -136,7 +124,6 @@ class PaginatedResultSet implements IteratorAggregate, JsonSerializable, Paginat
     {
         return $this->params['hasPrevPage'];
     }
-
     /**
      * @inheritDoc
      */
@@ -144,7 +131,6 @@ class PaginatedResultSet implements IteratorAggregate, JsonSerializable, Paginat
     {
         return $this->params['hasNextPage'];
     }
-
     /**
      * @inheritDoc
      */
@@ -152,7 +138,6 @@ class PaginatedResultSet implements IteratorAggregate, JsonSerializable, Paginat
     {
         return $this->params[$name] ?? null;
     }
-
     /**
      * @inheritDoc
      */
@@ -160,7 +145,6 @@ class PaginatedResultSet implements IteratorAggregate, JsonSerializable, Paginat
     {
         return $this->params;
     }
-
     /**
      * @inheritDoc
      */
@@ -168,7 +152,6 @@ class PaginatedResultSet implements IteratorAggregate, JsonSerializable, Paginat
     {
         return $this->results;
     }
-
     /**
      * Proxies method calls to internal result set instance.
      *
@@ -178,17 +161,7 @@ class PaginatedResultSet implements IteratorAggregate, JsonSerializable, Paginat
      */
     public function __call(string $name, array $arguments): mixed
     {
-        deprecationWarning(
-            '5.1.0',
-            sprintf(
-                'Calling `%s` methods, such as `%s()`, on PaginatedResultSet is deprecated. ' .
-                'You must call `items()` first (for example, `items()->%s()`).',
-                $this->results::class,
-                $name,
-                $name,
-            ),
-        );
-
-        return $this->results->$name(...$arguments);
+        deprecationWarning('5.1.0', sprintf('Calling `%s` methods, such as `%s()`, on PaginatedResultSet is deprecated. ' . 'You must call `items()` first (for example, `items()->%s()`).', $this->results::class, $name, $name));
+        return $this->results->{$name}(...$arguments);
     }
 }

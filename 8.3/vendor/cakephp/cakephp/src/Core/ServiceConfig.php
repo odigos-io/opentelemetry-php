@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -34,9 +34,8 @@ class ServiceConfig
      */
     public function get(string $path, mixed $default = null): mixed
     {
-        return Configure::read($path, $default);
+        return \Cake\Core\Configure::read($path, $default);
     }
-
     /**
      * Check if $path exists and has a non-null value.
      *
@@ -45,6 +44,6 @@ class ServiceConfig
      */
     public function has(string $path): bool
     {
-        return Configure::check($path);
+        return \Cake\Core\Configure::check($path);
     }
 }

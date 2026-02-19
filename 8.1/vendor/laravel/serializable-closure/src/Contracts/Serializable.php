@@ -10,7 +10,6 @@ interface Serializable
      * @return mixed
      */
     public function __invoke();
-
     /**
      * Gets the closure that got serialized/unserialized.
      *

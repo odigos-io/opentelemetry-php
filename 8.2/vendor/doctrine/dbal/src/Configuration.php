@@ -1,14 +1,12 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\DBAL;
 
 use Doctrine\DBAL\Driver\Middleware;
 use Doctrine\DBAL\Exception\InvalidArgumentException;
 use Doctrine\DBAL\Schema\SchemaManagerFactory;
 use Psr\Cache\CacheItemPoolInterface;
-
 /**
  * Configuration container for the Doctrine DBAL.
  */
@@ -16,33 +14,27 @@ class Configuration
 {
     /** @var Middleware[] */
     private array $middlewares = [];
-
     /**
      * The cache driver implementation that is used for query result caching.
      */
     private ?CacheItemPoolInterface $resultCache = null;
-
     /**
      * The callable to use to filter schema assets.
      *
      * @var callable
      */
     protected $schemaAssetsFilter;
-
     /**
      * The default auto-commit mode for connections.
      */
-    protected bool $autoCommit = true;
-
+    protected bool $autoCommit = \true;
     private ?SchemaManagerFactory $schemaManagerFactory = null;
-
     public function __construct()
     {
         $this->schemaAssetsFilter = static function (): bool {
-            return true;
+            return \true;
         };
     }
-
     /**
      * Gets the cache driver implementation that is used for query result caching.
      */
@@ -50,7 +42,6 @@ class Configuration
     {
         return $this->resultCache;
     }
-
     /**
      * Sets the cache driver implementation that is used for query result caching.
      */
@@ -58,7 +49,6 @@ class Configuration
     {
         $this->resultCache = $cache;
     }
-
     /**
      * Sets the callable to use to filter schema assets.
      */
@@ -66,7 +56,6 @@ class Configuration
     {
         $this->schemaAssetsFilter = $schemaAssetsFilter;
     }
-
     /**
      * Returns the callable to use to filter schema assets.
      */
@@ -74,7 +63,6 @@ class Configuration
     {
         return $this->schemaAssetsFilter;
     }
-
     /**
      * Sets the default auto-commit mode for connections.
      *
@@ -90,7 +78,6 @@ class Configuration
     {
         $this->autoCommit = $autoCommit;
     }
-
     /**
      * Returns the default auto-commit mode for connections.
      *
@@ -102,7 +89,6 @@ class Configuration
     {
         return $this->autoCommit;
     }
-
     /**
      * @param Middleware[] $middlewares
      *
@@ -111,41 +97,33 @@ class Configuration
     public function setMiddlewares(array $middlewares): self
     {
         $this->middlewares = $middlewares;
-
         return $this;
     }
-
     /** @return Middleware[] */
     public function getMiddlewares(): array
     {
         return $this->middlewares;
     }
-
     public function getSchemaManagerFactory(): ?SchemaManagerFactory
     {
         return $this->schemaManagerFactory;
     }
-
     /** @return $this */
     public function setSchemaManagerFactory(SchemaManagerFactory $schemaManagerFactory): self
     {
         $this->schemaManagerFactory = $schemaManagerFactory;
-
         return $this;
     }
-
     public function getDisableTypeComments(): bool
     {
-        return true;
+        return \true;
     }
-
     /** @return $this */
     public function setDisableTypeComments(bool $disableTypeComments): self
     {
-        if (! $disableTypeComments) {
+        if (!$disableTypeComments) {
             throw new InvalidArgumentException('Column comments cannot be enabled anymore.');
         }
-
         return $this;
     }
 }

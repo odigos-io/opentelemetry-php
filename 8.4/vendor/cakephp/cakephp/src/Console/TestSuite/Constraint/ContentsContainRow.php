@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -15,14 +15,13 @@ declare(strict_types=1);
  */
 namespace Cake\Console\TestSuite\Constraint;
 
-use SebastianBergmann\Exporter\Exporter;
-
+use Odigos\SebastianBergmann\Exporter\Exporter;
 /**
  * ContentsContainRow
  *
  * @internal
  */
-class ContentsContainRow extends ContentsRegExp
+class ContentsContainRow extends \Cake\Console\TestSuite\Constraint\ContentsRegExp
 {
     /**
      * Checks if contents contain expected
@@ -34,13 +33,11 @@ class ContentsContainRow extends ContentsRegExp
     {
         $row = array_map(function ($cell) {
             return preg_quote($cell, '/');
-        }, (array)$other);
+        }, (array) $other);
         $cells = implode('\s+\|\s+', $row);
         $pattern = '/' . $cells . '/';
-
         return preg_match($pattern, $this->contents) > 0;
     }
-
     /**
      * Assertion message
      *
@@ -50,7 +47,6 @@ class ContentsContainRow extends ContentsRegExp
     {
         return sprintf('row was in %s', $this->output);
     }
-
     /**
      * @param mixed $other Expected content
      * @return string
@@ -60,10 +56,6 @@ class ContentsContainRow extends ContentsRegExp
         return '`' . (new Exporter())->shortenedExport($other) . '` ' . $this->toString();
     }
 }
-
 // phpcs:disable
-class_alias(
-    'Cake\Console\TestSuite\Constraint\ContentsContainRow',
-    'Cake\TestSuite\Constraint\Console\ContentsContainRow'
-);
+class_alias('Cake\Console\TestSuite\Constraint\ContentsContainRow', 'Cake\TestSuite\Constraint\Console\ContentsContainRow');
 // phpcs:enable

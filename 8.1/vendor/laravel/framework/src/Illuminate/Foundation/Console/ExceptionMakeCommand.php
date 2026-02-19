@@ -5,7 +5,6 @@ namespace Illuminate\Foundation\Console;
 use Illuminate\Console\GeneratorCommand;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputOption;
-
 #[AsCommand(name: 'make:exception')]
 class ExceptionMakeCommand extends GeneratorCommand
 {
@@ -15,21 +14,18 @@ class ExceptionMakeCommand extends GeneratorCommand
      * @var string
      */
     protected $name = 'make:exception';
-
     /**
      * The console command description.
      *
      * @var string
      */
     protected $description = 'Create a new custom exception class';
-
     /**
      * The type of class being generated.
      *
      * @var string
      */
     protected $type = 'Exception';
-
     /**
      * Get the stub file for the generator.
      *
@@ -38,16 +34,10 @@ class ExceptionMakeCommand extends GeneratorCommand
     protected function getStub()
     {
         if ($this->option('render')) {
-            return $this->option('report')
-                ? __DIR__.'/stubs/exception-render-report.stub'
-                : __DIR__.'/stubs/exception-render.stub';
+            return $this->option('report') ? __DIR__ . '/stubs/exception-render-report.stub' : __DIR__ . '/stubs/exception-render.stub';
         }
-
-        return $this->option('report')
-            ? __DIR__.'/stubs/exception-report.stub'
-            : __DIR__.'/stubs/exception.stub';
+        return $this->option('report') ? __DIR__ . '/stubs/exception-report.stub' : __DIR__ . '/stubs/exception.stub';
     }
-
     /**
      * Determine if the class already exists.
      *
@@ -56,9 +46,8 @@ class ExceptionMakeCommand extends GeneratorCommand
      */
     protected function alreadyExists($rawName)
     {
-        return class_exists($this->rootNamespace().'Exceptions\\'.$rawName);
+        return class_exists($this->rootNamespace() . 'Exceptions\\' . $rawName);
     }
-
     /**
      * Get the default namespace for the class.
      *
@@ -67,9 +56,8 @@ class ExceptionMakeCommand extends GeneratorCommand
      */
     protected function getDefaultNamespace($rootNamespace)
     {
-        return $rootNamespace.'\Exceptions';
+        return $rootNamespace . '\Exceptions';
     }
-
     /**
      * Get the console command options.
      *
@@ -77,10 +65,6 @@ class ExceptionMakeCommand extends GeneratorCommand
      */
     protected function getOptions()
     {
-        return [
-            ['force', 'f', InputOption::VALUE_NONE, 'Create the class even if the exception already exists'],
-            ['render', null, InputOption::VALUE_NONE, 'Create the exception with an empty render method'],
-            ['report', null, InputOption::VALUE_NONE, 'Create the exception with an empty report method'],
-        ];
+        return [['force', 'f', InputOption::VALUE_NONE, 'Create the class even if the exception already exists'], ['render', null, InputOption::VALUE_NONE, 'Create the exception with an empty render method'], ['report', null, InputOption::VALUE_NONE, 'Create the exception with an empty report method']];
     }
 }

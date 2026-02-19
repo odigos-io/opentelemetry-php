@@ -1,13 +1,11 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenAI\Responses\Threads\Messages;
 
 use OpenAI\Contracts\ResponseContract;
 use OpenAI\Responses\Concerns\ArrayAccessible;
 use OpenAI\Testing\Responses\Concerns\Fakeable;
-
 /**
  * @implements ResponseContract<array{file_id: string, quote?: string}>
  */
@@ -17,14 +15,10 @@ final class ThreadMessageResponseContentTextAnnotationFileCitation implements Re
      * @use ArrayAccessible<array{file_id: string, quote?: string}>
      */
     use ArrayAccessible;
-
     use Fakeable;
-
-    private function __construct(
-        public string $fileId,
-        public ?string $quote,
-    ) {}
-
+    private function __construct(public string $fileId, public ?string $quote)
+    {
+    }
     /**
      * Acts as static factory, and returns a new Response instance.
      *
@@ -32,20 +26,13 @@ final class ThreadMessageResponseContentTextAnnotationFileCitation implements Re
      */
     public static function from(array $attributes): self
     {
-        return new self(
-            $attributes['file_id'],
-            $attributes['quote'] ?? null,
-        );
+        return new self($attributes['file_id'], $attributes['quote'] ?? null);
     }
-
     /**
      * {@inheritDoc}
      */
     public function toArray(): array
     {
-        return array_filter([
-            'file_id' => $this->fileId,
-            'quote' => $this->quote,
-        ], fn (?string $value): bool => $value !== null);
+        return array_filter(['file_id' => $this->fileId, 'quote' => $this->quote], fn(?string $value): bool => $value !== null);
     }
 }

@@ -1,19 +1,16 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\SDK\Common\Future;
 
 use Closure;
-
-final class NullCancellation implements CancellationInterface
+final class NullCancellation implements \OpenTelemetry\SDK\Common\Future\CancellationInterface
 {
     #[\Override]
     public function subscribe(Closure $callback): string
     {
         return self::class;
     }
-
     #[\Override]
     public function unsubscribe(string $id): void
     {

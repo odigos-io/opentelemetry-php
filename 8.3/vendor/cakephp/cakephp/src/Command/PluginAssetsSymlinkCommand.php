@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -19,14 +19,12 @@ namespace Cake\Command;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
-
 /**
  * Command for symlinking / copying plugin assets to app's webroot.
  */
-class PluginAssetsSymlinkCommand extends Command
+class PluginAssetsSymlinkCommand extends \Cake\Command\Command
 {
-    use PluginAssetsTrait;
-
+    use \Cake\Command\PluginAssetsTrait;
     /**
      * @inheritDoc
      */
@@ -34,7 +32,6 @@ class PluginAssetsSymlinkCommand extends Command
     {
         return 'plugin assets symlink';
     }
-
     /**
      * @inheritDoc
      */
@@ -42,7 +39,6 @@ class PluginAssetsSymlinkCommand extends Command
     {
         return "Symlink (copy as fallback) plugin assets to app's webroot.";
     }
-
     /**
      * Execute the command
      *
@@ -58,15 +54,12 @@ class PluginAssetsSymlinkCommand extends Command
     {
         $this->io = $io;
         $this->args = $args;
-
         $name = $args->getArgument('name');
-        $overwrite = (bool)$args->getOption('overwrite');
-        $relative = (bool)$args->getOption('relative');
-        $this->_process($this->_list($name), false, $overwrite, $relative);
-
+        $overwrite = (bool) $args->getOption('overwrite');
+        $relative = (bool) $args->getOption('relative');
+        $this->_process($this->_list($name), \false, $overwrite, $relative);
         return static::CODE_SUCCESS;
     }
-
     /**
      * Get the option parser.
      *
@@ -75,21 +68,7 @@ class PluginAssetsSymlinkCommand extends Command
      */
     public function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
     {
-        $parser->setDescription(
-            static::getDescription(),
-        )->addArgument('name', [
-            'help' => 'A specific plugin you want to symlink assets for.',
-            'required' => false,
-        ])->addOption('overwrite', [
-            'help' => 'Overwrite existing symlink / folder / files.',
-            'default' => false,
-            'boolean' => true,
-        ])->addOption('relative', [
-            'help' => 'If symlink should be relative.',
-            'default' => false,
-            'boolean' => true,
-        ]);
-
+        $parser->setDescription(static::getDescription())->addArgument('name', ['help' => 'A specific plugin you want to symlink assets for.', 'required' => \false])->addOption('overwrite', ['help' => 'Overwrite existing symlink / folder / files.', 'default' => \false, 'boolean' => \true])->addOption('relative', ['help' => 'If symlink should be relative.', 'default' => \false, 'boolean' => \true]);
         return $parser;
     }
 }

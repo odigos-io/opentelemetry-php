@@ -6,21 +6,18 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file or at
 // https://developers.google.com/open-source/licenses/bsd
-
 /**
  * RepeatedField and RepeatedFieldIter are used by generated protocol message
  * classes to manipulate repeated fields.
  */
+namespace Odigos\Google\Protobuf;
 
-namespace Google\Protobuf;
-
-use Google\Protobuf\Internal\DescriptorPool;
-use Google\Protobuf\Internal\GPBType;
-use Google\Protobuf\Internal\GPBUtil;
-use Google\Protobuf\Internal\Message;
-use Google\Protobuf\Internal\RepeatedFieldIter;
+use Odigos\Google\Protobuf\Internal\DescriptorPool;
+use Odigos\Google\Protobuf\Internal\GPBType;
+use Odigos\Google\Protobuf\Internal\GPBUtil;
+use Odigos\Google\Protobuf\Internal\Message;
+use Odigos\Google\Protobuf\Internal\RepeatedFieldIter;
 use Traversable;
-
 /**
  * RepeatedField is used by generated protocol message classes to manipulate
  * repeated fields. It can be used like native PHP array.
@@ -31,7 +28,6 @@ use Traversable;
  */
 class RepeatedField implements \ArrayAccess, \IteratorAggregate, \Countable
 {
-
     /**
      * @ignore
      */
@@ -45,7 +41,6 @@ class RepeatedField implements \ArrayAccess, \IteratorAggregate, \Countable
      * @var string|class-string<T>
      */
     private $klass;
-
     /**
      * Constructs an instance of RepeatedField.
      *
@@ -61,13 +56,13 @@ class RepeatedField implements \ArrayAccess, \IteratorAggregate, \Countable
             $pool = DescriptorPool::getGeneratedPool();
             $desc = $pool->getDescriptorByClassName($klass);
             if ($desc == NULL) {
-                new $klass;  // No msg class instance has been created before.
+                new $klass();
+                // No msg class instance has been created before.
                 $desc = $pool->getDescriptorByClassName($klass);
             }
             $this->klass = $desc->getClass();
         }
     }
-
     /**
      * @ignore
      */
@@ -75,7 +70,6 @@ class RepeatedField implements \ArrayAccess, \IteratorAggregate, \Countable
     {
         return $this->type;
     }
-
     /**
      * @ignore
      * @return string|class-string<T>
@@ -84,14 +78,13 @@ class RepeatedField implements \ArrayAccess, \IteratorAggregate, \Countable
     {
         return $this->klass;
     }
-
     /**
      * Return the element at the given index.
      *
      * This will also be called for: $ele = $arr[0]
      *
      * @param integer $offset The index of the element to be fetched.
-	 * @return T The stored element at given index.
+     * @return T The stored element at given index.
      * @throws \ErrorException Invalid type for index.
      * @throws \ErrorException Non-existing index.
      * @todo need to add return type mixed (require update php version to 8.0)
@@ -101,7 +94,6 @@ class RepeatedField implements \ArrayAccess, \IteratorAggregate, \Countable
     {
         return $this->container[$offset];
     }
-
     /**
      * Assign the element at the given index.
      *
@@ -148,10 +140,10 @@ class RepeatedField implements \ArrayAccess, \IteratorAggregate, \Countable
                 GPBUtil::checkBool($value);
                 break;
             case GPBType::BYTES:
-                GPBUtil::checkString($value, false);
+                GPBUtil::checkString($value, \false);
                 break;
             case GPBType::STRING:
-                GPBUtil::checkString($value, true);
+                GPBUtil::checkString($value, \true);
                 break;
             case GPBType::MESSAGE:
                 if (is_null($value)) {
@@ -167,15 +159,12 @@ class RepeatedField implements \ArrayAccess, \IteratorAggregate, \Countable
         } else {
             $count = count($this->container);
             if (!is_numeric($offset) || $offset < 0 || $offset >= $count) {
-                trigger_error(
-                    "Cannot modify element at the given index",
-                    E_USER_ERROR);
+                trigger_error("Cannot modify element at the given index", \E_USER_ERROR);
                 return;
             }
             $this->container[$offset] = $value;
         }
     }
-
     /**
      * Remove the element at the given index.
      *
@@ -193,14 +182,11 @@ class RepeatedField implements \ArrayAccess, \IteratorAggregate, \Countable
     {
         $count = count($this->container);
         if (!is_numeric($offset) || $count === 0 || $offset < 0 || $offset >= $count) {
-            trigger_error(
-                "Cannot remove element at the given index",
-                E_USER_ERROR);
+            trigger_error("Cannot remove element at the given index", \E_USER_ERROR);
             return;
         }
         array_splice($this->container, $offset, 1);
     }
-
     /**
      * Check the existence of the element at the given index.
      *
@@ -214,7 +200,6 @@ class RepeatedField implements \ArrayAccess, \IteratorAggregate, \Countable
     {
         return isset($this->container[$offset]);
     }
-
     /**
      * @ignore
      */
@@ -222,7 +207,6 @@ class RepeatedField implements \ArrayAccess, \IteratorAggregate, \Countable
     {
         return new RepeatedFieldIter($this->container);
     }
-
     /**
      * Return the number of stored elements.
      *
@@ -234,19 +218,14 @@ class RepeatedField implements \ArrayAccess, \IteratorAggregate, \Countable
     {
         return count($this->container);
     }
-
     public function __debugInfo()
     {
-        return array_map(
-            function ($item) {
-                if ($item instanceof Message || $item instanceof RepeatedField) {
-                    return $item->__debugInfo();
-                }
-                return $item;
-            },
-            iterator_to_array($this)
-        );
+        return array_map(function ($item) {
+            if ($item instanceof Message || $item instanceof RepeatedField) {
+                return $item->__debugInfo();
+            }
+            return $item;
+        }, iterator_to_array($this));
     }
 }
-
 class_alias(RepeatedField::class, Internal\RepeatedField::class);

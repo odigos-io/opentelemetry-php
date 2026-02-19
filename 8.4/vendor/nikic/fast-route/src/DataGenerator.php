@@ -1,6 +1,6 @@
 <?php
 
-namespace FastRoute;
+namespace Odigos\FastRoute;
 
 interface DataGenerator
 {
@@ -17,7 +17,6 @@ interface DataGenerator
      * @param mixed $handler
      */
     public function addRoute($httpMethod, $routeData, $handler);
-
     /**
      * Returns dispatcher data in some unspecified format, which
      * depends on the used method of dispatch.

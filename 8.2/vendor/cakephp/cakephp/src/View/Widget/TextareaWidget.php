@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -18,28 +18,20 @@ namespace Cake\View\Widget;
 
 use Cake\View\Form\ContextInterface;
 use function Cake\Core\h;
-
 /**
  * Input widget class for generating a textarea control.
  *
  * This class is usually used internally by `Cake\View\Helper\FormHelper`,
  * it but can be used to generate standalone text areas.
  */
-class TextareaWidget extends BasicWidget
+class TextareaWidget extends \Cake\View\Widget\BasicWidget
 {
     /**
      * Data defaults.
      *
      * @var array<string, mixed>
      */
-    protected array $defaults = [
-        'val' => '',
-        'name' => '',
-        'escape' => true,
-        'rows' => 5,
-        'templateVars' => [],
-    ];
-
+    protected array $defaults = ['val' => '', 'name' => '', 'escape' => \true, 'rows' => 5, 'templateVars' => []];
     /**
      * Render a text area form widget.
      *
@@ -58,22 +50,9 @@ class TextareaWidget extends BasicWidget
     public function render(array $data, ContextInterface $context): string
     {
         $data += $this->mergeDefaults($data, $context);
-
-        if (
-            !array_key_exists('maxlength', $data)
-            && isset($data['fieldName'])
-        ) {
+        if (!array_key_exists('maxlength', $data) && isset($data['fieldName'])) {
             $data = $this->setMaxLength($data, $context, $data['fieldName']);
         }
-
-        return $this->_templates->format('textarea', [
-            'name' => $data['name'],
-            'value' => $data['escape'] ? h($data['val']) : $data['val'],
-            'templateVars' => $data['templateVars'],
-            'attrs' => $this->_templates->formatAttributes(
-                $data,
-                ['name', 'val'],
-            ),
-        ]);
+        return $this->_templates->format('textarea', ['name' => $data['name'], 'value' => $data['escape'] ? h($data['val']) : $data['val'], 'templateVars' => $data['templateVars'], 'attrs' => $this->_templates->formatAttributes($data, ['name', 'val'])]);
     }
 }

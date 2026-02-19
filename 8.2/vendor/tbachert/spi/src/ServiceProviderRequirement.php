@@ -1,13 +1,15 @@
-<?php declare(strict_types=1);
-namespace Nevay\SPI;
+<?php
+
+declare (strict_types=1);
+namespace Odigos\Nevay\SPI;
 
 /**
  * Specifies requirements for a service provider.
  *
  * Service providers will only be registered if all {@link ServiceProviderRequirement}s are satisfied.
  */
-interface ServiceProviderRequirement {
-
+interface ServiceProviderRequirement
+{
     /**
      * Returns whether this requirement is satisfied.
      *

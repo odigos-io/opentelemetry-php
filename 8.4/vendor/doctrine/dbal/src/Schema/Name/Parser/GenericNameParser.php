@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\DBAL\Schema\Name\Parser;
 
 use Doctrine\DBAL\Schema\Name\GenericName;
@@ -10,13 +9,11 @@ use Doctrine\DBAL\Schema\Name\Parser;
 use Doctrine\DBAL\Schema\Name\Parser\Exception\ExpectedDot;
 use Doctrine\DBAL\Schema\Name\Parser\Exception\ExpectedNextIdentifier;
 use Doctrine\DBAL\Schema\Name\Parser\Exception\UnableToParseIdentifier;
-
 use function assert;
 use function count;
 use function preg_match;
 use function str_replace;
 use function strlen;
-
 /**
  * Parses a generic qualified or unqualified SQL-like name.
  *
@@ -40,31 +37,27 @@ use function strlen;
 final class GenericNameParser implements Parser
 {
     private const IDENTIFIER_PATTERN = <<<'PATTERN'
-        /\G
-        (?:
-            "(?<ansi>[^"]*(?:""[^"]*)*)"         # ANSI SQL double-quoted
-          | `(?<mysql>[^`]*(?:``[^`]*)*)`        # MySQL-style backtick-quoted
-          | \[(?<sqlserver>[^]]*(?:]][^]]*)*)]   # SQL Server-style square-bracket-quoted
-          | (?<unquoted>[^\s."`\[\]]+)           # Unquoted
-        )
-        /x
-    PATTERN;
-
+    /\G
+    (?:
+        "(?<ansi>[^"]*(?:""[^"]*)*)"         # ANSI SQL double-quoted
+      | `(?<mysql>[^`]*(?:``[^`]*)*)`        # MySQL-style backtick-quoted
+      | \[(?<sqlserver>[^]]*(?:]][^]]*)*)]   # SQL Server-style square-bracket-quoted
+      | (?<unquoted>[^\s."`\[\]]+)           # Unquoted
+    )
+    /x
+PATTERN;
     public function parse(string $input): GenericName
     {
-        $offset      = 0;
+        $offset = 0;
         $identifiers = [];
-        $length      = strlen($input);
-
-        while (true) {
+        $length = strlen($input);
+        while (\true) {
             if ($offset >= $length) {
                 throw ExpectedNextIdentifier::new();
             }
-
             if (preg_match(self::IDENTIFIER_PATTERN, $input, $matches, 0, $offset) === 0) {
                 throw UnableToParseIdentifier::new($offset);
             }
-
             if (isset($matches['ansi']) && strlen($matches['ansi']) > 0) {
                 $identifier = Identifier::quoted(str_replace('""', '"', $matches['ansi']));
             } elseif (isset($matches['mysql']) && strlen($matches['mysql']) > 0) {
@@ -75,26 +68,18 @@ final class GenericNameParser implements Parser
                 assert(isset($matches['unquoted']) && strlen($matches['unquoted']) > 0);
                 $identifier = Identifier::unquoted($matches['unquoted']);
             }
-
             $identifiers[] = $identifier;
-
             $offset += strlen($matches[0]);
-
             if ($offset >= $length) {
                 break;
             }
-
             $character = $input[$offset];
-
             if ($character !== '.') {
                 throw ExpectedDot::new($offset, $character);
             }
-
             $offset++;
         }
-
         assert(count($identifiers) > 0);
-
         return new GenericName(...$identifiers);
     }
 }

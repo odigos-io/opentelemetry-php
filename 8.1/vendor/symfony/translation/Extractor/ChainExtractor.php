@@ -8,17 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\Translation\Extractor;
 
 use Symfony\Component\Translation\MessageCatalogue;
-
 /**
  * ChainExtractor extracts translation messages from template files.
  *
  * @author Michel Salib <michelsalib@hotmail.com>
  */
-class ChainExtractor implements ExtractorInterface
+class ChainExtractor implements \Symfony\Component\Translation\Extractor\ExtractorInterface
 {
     /**
      * The extractors.
@@ -26,17 +24,15 @@ class ChainExtractor implements ExtractorInterface
      * @var ExtractorInterface[]
      */
     private array $extractors = [];
-
     /**
      * Adds a loader to the translation extractor.
      *
      * @return void
      */
-    public function addExtractor(string $format, ExtractorInterface $extractor)
+    public function addExtractor(string $format, \Symfony\Component\Translation\Extractor\ExtractorInterface $extractor)
     {
         $this->extractors[$format] = $extractor;
     }
-
     /**
      * @return void
      */
@@ -46,7 +42,6 @@ class ChainExtractor implements ExtractorInterface
             $extractor->setPrefix($prefix);
         }
     }
-
     /**
      * @return void
      */

@@ -11,7 +11,6 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Date;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Response;
-
 class StartSession
 {
     /**
@@ -20,14 +19,12 @@ class StartSession
      * @var \Illuminate\Session\SessionManager
      */
     protected $manager;
-
     /**
      * The callback that can resolve an instance of the cache factory.
      *
      * @var callable|null
      */
     protected $cacheFactoryResolver;
-
     /**
      * Create a new session middleware.
      *
@@ -40,7 +37,6 @@ class StartSession
         $this->manager = $manager;
         $this->cacheFactoryResolver = $cacheFactoryResolver;
     }
-
     /**
      * Handle an incoming request.
      *
@@ -50,20 +46,15 @@ class StartSession
      */
     public function handle($request, Closure $next)
     {
-        if (! $this->sessionConfigured()) {
+        if (!$this->sessionConfigured()) {
             return $next($request);
         }
-
         $session = $this->getSession($request);
-
-        if ($this->manager->shouldBlock() ||
-            ($request->route() instanceof Route && $request->route()->locksFor())) {
+        if ($this->manager->shouldBlock() || $request->route() instanceof Route && $request->route()->locksFor()) {
             return $this->handleRequestWhileBlocking($request, $session, $next);
         }
-
         return $this->handleStatefulRequest($request, $session, $next);
     }
-
     /**
      * Handle the given request within session state.
      *
@@ -74,31 +65,18 @@ class StartSession
      */
     protected function handleRequestWhileBlocking(Request $request, $session, Closure $next)
     {
-        if (! $request->route() instanceof Route) {
+        if (!$request->route() instanceof Route) {
             return;
         }
-
-        $lockFor = $request->route() && $request->route()->locksFor()
-                        ? $request->route()->locksFor()
-                        : $this->manager->defaultRouteBlockLockSeconds();
-
-        $lock = $this->cache($this->manager->blockDriver())
-                    ->lock('session:'.$session->getId(), $lockFor)
-                    ->betweenBlockedAttemptsSleepFor(50);
-
+        $lockFor = $request->route() && $request->route()->locksFor() ? $request->route()->locksFor() : $this->manager->defaultRouteBlockLockSeconds();
+        $lock = $this->cache($this->manager->blockDriver())->lock('session:' . $session->getId(), $lockFor)->betweenBlockedAttemptsSleepFor(50);
         try {
-            $lock->block(
-                ! is_null($request->route()->waitsFor())
-                        ? $request->route()->waitsFor()
-                        : $this->manager->defaultRouteBlockWaitSeconds()
-            );
-
+            $lock->block(!is_null($request->route()->waitsFor()) ? $request->route()->waitsFor() : $this->manager->defaultRouteBlockWaitSeconds());
             return $this->handleStatefulRequest($request, $session, $next);
         } finally {
             $lock?->release();
         }
     }
-
     /**
      * Handle the given request within session state.
      *
@@ -112,26 +90,17 @@ class StartSession
         // If a session driver has been configured, we will need to start the session here
         // so that the data is ready for an application. Note that the Laravel sessions
         // do not make use of PHP "native" sessions in any way since they are crappy.
-        $request->setLaravelSession(
-            $this->startSession($request, $session)
-        );
-
+        $request->setLaravelSession($this->startSession($request, $session));
         $this->collectGarbage($session);
-
         $response = $next($request);
-
         $this->storeCurrentUrl($request, $session);
-
         $this->addCookieToResponse($response, $session);
-
         // Again, if the session has been configured we will need to close out the session
         // so that the attributes may be persisted to some storage medium. We will also
         // add the session identifier cookie to the application response headers now.
         $this->saveSession($request);
-
         return $response;
     }
-
     /**
      * Start the session for the given request.
      *
@@ -143,11 +112,9 @@ class StartSession
     {
         return tap($session, function ($session) use ($request) {
             $session->setRequestOnHandler($request);
-
             $session->start();
         });
     }
-
     /**
      * Get the session implementation from the manager.
      *
@@ -160,7 +127,6 @@ class StartSession
             $session->setId($request->cookies->get($session->getName()));
         });
     }
-
     /**
      * Remove the garbage from the session if necessary.
      *
@@ -170,7 +136,6 @@ class StartSession
     protected function collectGarbage(Session $session)
     {
         $config = $this->manager->getSessionConfig();
-
         // Here we will see if this request hits the garbage collection lottery by hitting
         // the odds needed to perform garbage collection on any given request. If we do
         // hit it, we'll call this handler to let it delete all the expired sessions.
@@ -178,7 +143,6 @@ class StartSession
             $session->getHandler()->gc($this->getSessionLifetimeInSeconds());
         }
     }
-
     /**
      * Determine if the configuration odds hit the lottery.
      *
@@ -189,7 +153,6 @@ class StartSession
     {
         return random_int(1, $config['lottery'][1]) <= $config['lottery'][0];
     }
-
     /**
      * Store the current URL for the request if necessary.
      *
@@ -199,15 +162,10 @@ class StartSession
      */
     protected function storeCurrentUrl(Request $request, $session)
     {
-        if ($request->isMethod('GET') &&
-            $request->route() instanceof Route &&
-            ! $request->ajax() &&
-            ! $request->prefetch() &&
-            ! $request->isPrecognitive()) {
+        if ($request->isMethod('GET') && $request->route() instanceof Route && !$request->ajax() && !$request->prefetch() && !$request->isPrecognitive()) {
             $session->setPreviousUrl($request->fullUrl());
         }
     }
-
     /**
      * Add the session cookie to the application response.
      *
@@ -218,21 +176,9 @@ class StartSession
     protected function addCookieToResponse(Response $response, Session $session)
     {
         if ($this->sessionIsPersistent($config = $this->manager->getSessionConfig())) {
-            $response->headers->setCookie(new Cookie(
-                $session->getName(),
-                $session->getId(),
-                $this->getCookieExpirationDate(),
-                $config['path'],
-                $config['domain'],
-                $config['secure'] ?? false,
-                $config['http_only'] ?? true,
-                false,
-                $config['same_site'] ?? null,
-                $config['partitioned'] ?? false
-            ));
+            $response->headers->setCookie(new Cookie($session->getName(), $session->getId(), $this->getCookieExpirationDate(), $config['path'], $config['domain'], $config['secure'] ?? \false, $config['http_only'] ?? \true, \false, $config['same_site'] ?? null, $config['partitioned'] ?? \false));
         }
     }
-
     /**
      * Save the session data to storage.
      *
@@ -241,11 +187,10 @@ class StartSession
      */
     protected function saveSession($request)
     {
-        if (! $request->isPrecognitive()) {
+        if (!$request->isPrecognitive()) {
             $this->manager->driver()->save();
         }
     }
-
     /**
      * Get the session lifetime in seconds.
      *
@@ -255,7 +200,6 @@ class StartSession
     {
         return ($this->manager->getSessionConfig()['lifetime'] ?? null) * 60;
     }
-
     /**
      * Get the cookie lifetime in seconds.
      *
@@ -264,12 +208,8 @@ class StartSession
     protected function getCookieExpirationDate()
     {
         $config = $this->manager->getSessionConfig();
-
-        return $config['expire_on_close'] ? 0 : Date::instance(
-            Carbon::now()->addRealMinutes($config['lifetime'])
-        );
+        return $config['expire_on_close'] ? 0 : Date::instance(Carbon::now()->addRealMinutes($config['lifetime']));
     }
-
     /**
      * Determine if a session driver has been configured.
      *
@@ -277,9 +217,8 @@ class StartSession
      */
     protected function sessionConfigured()
     {
-        return ! is_null($this->manager->getSessionConfig()['driver'] ?? null);
+        return !is_null($this->manager->getSessionConfig()['driver'] ?? null);
     }
-
     /**
      * Determine if the configured session driver is persistent.
      *
@@ -289,10 +228,8 @@ class StartSession
     protected function sessionIsPersistent(?array $config = null)
     {
         $config = $config ?: $this->manager->getSessionConfig();
-
-        return ! is_null($config['driver'] ?? null);
+        return !is_null($config['driver'] ?? null);
     }
-
     /**
      * Resolve the given cache driver.
      *

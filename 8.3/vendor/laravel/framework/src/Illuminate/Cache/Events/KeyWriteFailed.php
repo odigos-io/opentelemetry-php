@@ -2,7 +2,7 @@
 
 namespace Illuminate\Cache\Events;
 
-class KeyWriteFailed extends CacheEvent
+class KeyWriteFailed extends \Illuminate\Cache\Events\CacheEvent
 {
     /**
      * The value that would have been written.
@@ -10,14 +10,12 @@ class KeyWriteFailed extends CacheEvent
      * @var mixed
      */
     public $value;
-
     /**
      * The number of seconds the key should have been valid.
      *
      * @var int|null
      */
     public $seconds;
-
     /**
      * Create a new event instance.
      *
@@ -30,7 +28,6 @@ class KeyWriteFailed extends CacheEvent
     public function __construct($storeName, $key, $value, $seconds = null, $tags = [])
     {
         parent::__construct($storeName, $key, $tags);
-
         $this->value = $value;
         $this->seconds = $seconds;
     }

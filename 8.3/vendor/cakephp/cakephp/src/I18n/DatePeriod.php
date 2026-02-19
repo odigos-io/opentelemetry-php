@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -17,7 +17,6 @@ declare(strict_types=1);
 namespace Cake\I18n;
 
 use Cake\Chronos\ChronosDatePeriod;
-
 /**
  * DatePeriod wrapper that returns DateTime instances.
  *
@@ -30,8 +29,8 @@ class DatePeriod extends ChronosDatePeriod
     /**
      * @return \Cake\I18n\Date
      */
-    public function current(): Date
+    public function current(): \Cake\I18n\Date
     {
-        return new Date($this->iterator->current());
+        return new \Cake\I18n\Date($this->iterator->current());
     }
 }

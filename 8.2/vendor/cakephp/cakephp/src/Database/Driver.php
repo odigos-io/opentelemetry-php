@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -43,7 +43,6 @@ use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\LoggerInterface;
 use Stringable;
-
 /**
  * Represents a database driver containing all specificities for
  * a database engine including its SQL dialect.
@@ -51,36 +50,30 @@ use Stringable;
 abstract class Driver implements LoggerAwareInterface
 {
     use LoggerAwareTrait;
-
     /**
      * @var int|null Maximum alias length or null if no limit
      */
     protected const MAX_ALIAS_LENGTH = null;
-
     /**
      * @var array<int>  DB-specific error codes that allow connect retry
      */
     protected const RETRY_ERROR_CODES = [];
-
     /**
      * @var class-string<\Cake\Database\Statement\Statement>
      */
     protected const STATEMENT_CLASS = Statement::class;
-
     /**
      * Instance of PDO.
      *
      * @var \PDO|null
      */
     protected ?PDO $pdo = null;
-
     /**
      * Configuration data.
      *
      * @var array<string, mixed>
      */
     protected array $_config = [];
-
     /**
      * Base configuration that is merged into the user
      * supplied configuration data.
@@ -88,64 +81,55 @@ abstract class Driver implements LoggerAwareInterface
      * @var array<string, mixed>
      */
     protected array $_baseConfig = [];
-
     /**
      * Indicates whether the driver is doing automatic identifier quoting
      * for all queries
      *
      * @var bool
      */
-    protected bool $_autoQuoting = false;
-
+    protected bool $_autoQuoting = \false;
     /**
      * String used to start a database identifier quoting to make it safe
      *
      * @var string
      */
     protected string $_startQuote = '';
-
     /**
      * String used to end a database identifier quoting to make it safe
      *
      * @var string
      */
     protected string $_endQuote = '';
-
     /**
      * Identifier quoter
      *
      * @var \Cake\Database\IdentifierQuoter|null
      */
-    protected ?IdentifierQuoter $quoter = null;
-
+    protected ?\Cake\Database\IdentifierQuoter $quoter = null;
     /**
      * The server version
      *
      * @var string|null
      */
     protected ?string $_version = null;
-
     /**
      * Whether to log queries generated during this connection.
      *
      * @var bool
      */
-    protected bool $logQueries = false;
-
+    protected bool $logQueries = \false;
     /**
      * The last number of connection retry attempts.
      *
      * @var int
      */
     protected int $connectRetries = 0;
-
     /**
      * The schema dialect for this driver
      *
      * @var \Cake\Database\Schema\SchemaDialect
      */
     protected SchemaDialect $_schemaDialect;
-
     /**
      * Constructor
      *
@@ -155,21 +139,18 @@ abstract class Driver implements LoggerAwareInterface
     public function __construct(array $config = [])
     {
         if (empty($config['username']) && !empty($config['login'])) {
-            throw new InvalidArgumentException(
-                'Please pass "username" instead of "login" for connecting to the database',
-            );
+            throw new InvalidArgumentException('Please pass "username" instead of "login" for connecting to the database');
         }
-        $config += $this->_baseConfig + ['log' => false];
+        $config += $this->_baseConfig + ['log' => \false];
         $this->_config = $config;
         if (!empty($config['quoteIdentifiers'])) {
             $this->enableAutoQuoting();
         }
-        if ($config['log'] !== false) {
-            $this->logQueries = true;
-            $this->logger = $this->createLogger($config['log'] === true ? null : $config['log']);
+        if ($config['log'] !== \false) {
+            $this->logQueries = \true;
+            $this->logger = $this->createLogger($config['log'] === \true ? null : $config['log']);
         }
     }
-
     /**
      * Get the configuration data used to create the driver.
      *
@@ -179,7 +160,6 @@ abstract class Driver implements LoggerAwareInterface
     {
         return $this->_config;
     }
-
     /**
      * Establishes a connection to the database server
      *
@@ -189,30 +169,16 @@ abstract class Driver implements LoggerAwareInterface
      */
     protected function createPdo(string $dsn, array $config): PDO
     {
-        $action = fn(): PDO => new PDO(
-            $dsn,
-            $config['username'] ?: null,
-            $config['password'] ?: null,
-            $config['flags'],
-        );
-
+        $action = fn(): PDO => new PDO($dsn, $config['username'] ?: null, $config['password'] ?: null, $config['flags']);
         $retry = new CommandRetry(new ErrorCodeWaitStrategy(static::RETRY_ERROR_CODES, 5), 4);
         try {
             return $retry->run($action);
         } catch (PDOException $e) {
-            throw new MissingConnectionException(
-                [
-                    'driver' => App::shortName(static::class, 'Database/Driver'),
-                    'reason' => $e->getMessage(),
-                ],
-                null,
-                $e,
-            );
+            throw new MissingConnectionException(['driver' => App::shortName(static::class, 'Database/Driver'), 'reason' => $e->getMessage()], null, $e);
         } finally {
             $this->connectRetries = $retry->getRetries();
         }
     }
-
     /**
      * Establishes a connection to the database server.
      *
@@ -220,7 +186,6 @@ abstract class Driver implements LoggerAwareInterface
      * @return void
      */
     abstract public function connect(): void;
-
     /**
      * Disconnects from database server.
      *
@@ -231,7 +196,6 @@ abstract class Driver implements LoggerAwareInterface
         $this->pdo = null;
         $this->_version = null;
     }
-
     /**
      * Returns connected server version.
      *
@@ -239,9 +203,8 @@ abstract class Driver implements LoggerAwareInterface
      */
     public function version(): string
     {
-        return $this->_version ??= (string)$this->getPdo()->getAttribute(PDO::ATTR_SERVER_VERSION);
+        return $this->_version ??= (string) $this->getPdo()->getAttribute(PDO::ATTR_SERVER_VERSION);
     }
-
     /**
      * Get the PDO connection instance.
      *
@@ -253,10 +216,8 @@ abstract class Driver implements LoggerAwareInterface
             $this->connect();
         }
         assert($this->pdo !== null);
-
         return $this->pdo;
     }
-
     /**
      * Execute the SQL query using the internal PDO instance.
      *
@@ -272,14 +233,12 @@ abstract class Driver implements LoggerAwareInterface
             throw new QueryException($sql, $e);
         }
     }
-
     /**
      * Returns whether php is able to use this driver for connecting to database.
      *
      * @return bool True if it is valid to use this driver.
      */
     abstract public function enabled(): bool;
-
     /**
      * Executes a query using $params for interpolating values and $types as a hint for each
      * those params.
@@ -289,17 +248,15 @@ abstract class Driver implements LoggerAwareInterface
      * @param array $types List or associative array of types to be used for casting values in query.
      * @return \Cake\Database\StatementInterface Executed statement
      */
-    public function execute(string $sql, array $params = [], array $types = []): StatementInterface
+    public function execute(string $sql, array $params = [], array $types = []): \Cake\Database\StatementInterface
     {
         $statement = $this->prepare($sql);
         if ($params) {
             $statement->bind($params, $types);
         }
         $this->executeStatement($statement);
-
         return $statement;
     }
-
     /**
      * Executes the provided query after compiling it for the specific driver
      * dialect and returns the executed Statement object.
@@ -307,15 +264,13 @@ abstract class Driver implements LoggerAwareInterface
      * @param \Cake\Database\Query $query The query to be executed.
      * @return \Cake\Database\StatementInterface Executed statement
      */
-    public function run(Query $query): StatementInterface
+    public function run(\Cake\Database\Query $query): \Cake\Database\StatementInterface
     {
         $statement = $this->prepare($query);
         $query->getValueBinder()->attachTo($statement);
         $this->executeStatement($statement);
-
         return $statement;
     }
-
     /**
      * Execute the statement and log the query string.
      *
@@ -323,7 +278,7 @@ abstract class Driver implements LoggerAwareInterface
      * @param array|null $params List of values to be bound to query.
      * @return void
      */
-    protected function executeStatement(StatementInterface $statement, ?array $params = null): void
+    protected function executeStatement(\Cake\Database\StatementInterface $statement, ?array $params = null): void
     {
         if ($this->logger === null) {
             try {
@@ -331,37 +286,27 @@ abstract class Driver implements LoggerAwareInterface
             } catch (PDOException $e) {
                 throw $this->createQueryException($e, $statement, $params);
             }
-
             return;
         }
-
         $exception = null;
         $took = 0.0;
-
         try {
-            $start = microtime(true);
+            $start = microtime(\true);
             $statement->execute($params);
-            $took = (float)number_format((microtime(true) - $start) * 1000, 1);
+            $took = (float) number_format((microtime(\true) - $start) * 1000, 1);
         } catch (PDOException $e) {
             $exception = $e;
         }
-
-        $logContext = [
-            'driver' => $this,
-            'error' => $exception,
-            'params' => $params ?? $statement->getBoundParams(),
-        ];
+        $logContext = ['driver' => $this, 'error' => $exception, 'params' => $params ?? $statement->getBoundParams()];
         if (!$exception) {
             $logContext['numRows'] = $statement->rowCount();
             $logContext['took'] = $took;
         }
         $this->log($statement->queryString(), $logContext);
-
         if ($exception) {
             throw $this->createQueryException($exception, $statement, $params);
         }
     }
-
     /**
      * Create a QueryException from a PDOException
      *
@@ -370,63 +315,46 @@ abstract class Driver implements LoggerAwareInterface
      * @param array|null $params
      * @return \Cake\Database\Exception\QueryException
      */
-    protected function createQueryException(
-        PDOException $exception,
-        StatementInterface $statement,
-        ?array $params = null,
-    ): QueryException {
+    protected function createQueryException(PDOException $exception, \Cake\Database\StatementInterface $statement, ?array $params = null): QueryException
+    {
         $loggedQuery = new LoggedQuery();
-        $loggedQuery->setContext([
-            'query' => $statement->queryString(),
-            'driver' => $this,
-            'params' => $params ?? $statement->getBoundParams(),
-        ]);
-
+        $loggedQuery->setContext(['query' => $statement->queryString(), 'driver' => $this, 'params' => $params ?? $statement->getBoundParams()]);
         return new QueryException($loggedQuery, $exception);
     }
-
     /**
      * Prepares a sql statement to be executed.
      *
      * @param \Cake\Database\Query|string $query The query to turn into a prepared statement.
      * @return \Cake\Database\StatementInterface
      */
-    public function prepare(Query|string $query): StatementInterface
+    public function prepare(\Cake\Database\Query|string $query): \Cake\Database\StatementInterface
     {
         try {
-            $statement = $this->getPdo()->prepare($query instanceof Query ? $query->sql() : $query);
+            $statement = $this->getPdo()->prepare($query instanceof \Cake\Database\Query ? $query->sql() : $query);
         } catch (PDOException $e) {
-            throw new QueryException(
-                $query instanceof Query ? $query->sql() : $query,
-                $e,
-            );
+            throw new QueryException($query instanceof \Cake\Database\Query ? $query->sql() : $query, $e);
         }
-
         /** @var \Cake\Database\StatementInterface */
         return new (static::STATEMENT_CLASS)($statement, $this, $this->getResultSetDecorators($query));
     }
-
     /**
      * Returns the decorators to be applied to the result set incase of a SelectQuery.
      *
      * @param \Cake\Database\Query|string $query The query to be decorated.
      * @return array<\Closure>
      */
-    protected function getResultSetDecorators(Query|string $query): array
+    protected function getResultSetDecorators(\Cake\Database\Query|string $query): array
     {
         if ($query instanceof SelectQuery) {
             $decorators = $query->getResultDecorators();
             if ($query->isResultsCastingEnabled()) {
-                $typeConverter = new FieldTypeConverter($query->getSelectTypeMap(), $this);
+                $typeConverter = new \Cake\Database\FieldTypeConverter($query->getSelectTypeMap(), $this);
                 array_unshift($decorators, $typeConverter(...));
             }
-
             return $decorators;
         }
-
         return [];
     }
-
     /**
      * Starts a transaction.
      *
@@ -435,14 +363,11 @@ abstract class Driver implements LoggerAwareInterface
     public function beginTransaction(): bool
     {
         if ($this->getPdo()->inTransaction()) {
-            return true;
+            return \true;
         }
-
         $this->log('BEGIN');
-
         return $this->getPdo()->beginTransaction();
     }
-
     /**
      * Commits a transaction.
      *
@@ -451,14 +376,11 @@ abstract class Driver implements LoggerAwareInterface
     public function commitTransaction(): bool
     {
         if (!$this->getPdo()->inTransaction()) {
-            return false;
+            return \false;
         }
-
         $this->log('COMMIT');
-
         return $this->getPdo()->commit();
     }
-
     /**
      * Rollbacks a transaction.
      *
@@ -467,14 +389,11 @@ abstract class Driver implements LoggerAwareInterface
     public function rollbackTransaction(): bool
     {
         if (!$this->getPdo()->inTransaction()) {
-            return false;
+            return \false;
         }
-
         $this->log('ROLLBACK');
-
         return $this->getPdo()->rollBack();
     }
-
     /**
      * Returns whether a transaction is active for connection.
      *
@@ -484,7 +403,6 @@ abstract class Driver implements LoggerAwareInterface
     {
         return $this->getPdo()->inTransaction();
     }
-
     /**
      * Returns a SQL snippet for creating a new transaction savepoint
      *
@@ -495,7 +413,6 @@ abstract class Driver implements LoggerAwareInterface
     {
         return 'SAVEPOINT LEVEL' . $name;
     }
-
     /**
      * Returns a SQL snippet for releasing a previously created save point
      *
@@ -506,7 +423,6 @@ abstract class Driver implements LoggerAwareInterface
     {
         return 'RELEASE SAVEPOINT LEVEL' . $name;
     }
-
     /**
      * Returns a SQL snippet for rollbacking a previously created save point
      *
@@ -517,21 +433,18 @@ abstract class Driver implements LoggerAwareInterface
     {
         return 'ROLLBACK TO SAVEPOINT LEVEL' . $name;
     }
-
     /**
      * Get the SQL for disabling foreign keys.
      *
      * @return string
      */
     abstract public function disableForeignKeySQL(): string;
-
     /**
      * Get the SQL for enabling foreign keys.
      *
      * @return string
      */
     abstract public function enableForeignKeySQL(): string;
-
     /**
      * Transform the query to accommodate any specificities of the SQL dialect in use.
      *
@@ -540,28 +453,22 @@ abstract class Driver implements LoggerAwareInterface
      * @param \Cake\Database\Query $query Query to transform.
      * @return \Cake\Database\Query
      */
-    protected function transformQuery(Query $query): Query
+    protected function transformQuery(\Cake\Database\Query $query): \Cake\Database\Query
     {
         if ($this->isAutoQuotingEnabled()) {
             $query = $this->quoter()->quote($query);
         }
-
-        $query = match (true) {
+        $query = match (\true) {
             $query instanceof SelectQuery => $this->_selectQueryTranslator($query),
             $query instanceof InsertQuery => $this->_insertQueryTranslator($query),
             $query instanceof UpdateQuery => $this->_updateQueryTranslator($query),
             $query instanceof DeleteQuery => $this->_deleteQueryTranslator($query),
-            default => throw new InvalidArgumentException(sprintf(
-                'Instance of SelectQuery, UpdateQuery, InsertQuery, DeleteQuery expected. Found `%s` instead.',
-                get_debug_type($query),
-            )),
+            default => throw new InvalidArgumentException(sprintf('Instance of SelectQuery, UpdateQuery, InsertQuery, DeleteQuery expected. Found `%s` instead.', get_debug_type($query))),
         };
-
         $translators = $this->_expressionTranslators();
         if (!$translators) {
             return $query;
         }
-
         $query->traverseExpressions(function ($expression) use ($translators, $query): void {
             foreach ($translators as $class => $method) {
                 if ($expression instanceof $class) {
@@ -569,10 +476,8 @@ abstract class Driver implements LoggerAwareInterface
                 }
             }
         });
-
         return $query;
     }
-
     /**
      * Returns an associative array of methods that will transform Expression
      * objects to conform with the specific SQL dialect. Keys are class names
@@ -584,7 +489,6 @@ abstract class Driver implements LoggerAwareInterface
     {
         return [];
     }
-
     /**
      * Apply translation steps to select queries.
      *
@@ -595,7 +499,6 @@ abstract class Driver implements LoggerAwareInterface
     {
         return $this->_transformDistinct($query);
     }
-
     /**
      * Returns the passed query after rewriting the DISTINCT clause, so that drivers
      * that do not support the "ON" part can provide the actual way it should be done
@@ -606,13 +509,11 @@ abstract class Driver implements LoggerAwareInterface
     protected function _transformDistinct(SelectQuery $query): SelectQuery
     {
         if (is_array($query->clause('distinct'))) {
-            $query->groupBy($query->clause('distinct'), true);
-            $query->distinct(false);
+            $query->groupBy($query->clause('distinct'), \true);
+            $query->distinct(\false);
         }
-
         return $query;
     }
-
     /**
      * Apply translation steps to delete queries.
      *
@@ -627,25 +528,22 @@ abstract class Driver implements LoggerAwareInterface
      */
     protected function _deleteQueryTranslator(DeleteQuery $query): DeleteQuery
     {
-        $hadAlias = false;
+        $hadAlias = \false;
         $tables = [];
         foreach ($query->clause('from') as $alias => $table) {
             if (is_string($alias)) {
-                $hadAlias = true;
+                $hadAlias = \true;
             }
             $tables[] = $table;
         }
         if ($hadAlias) {
-            $query->from($tables, true);
+            $query->from($tables, \true);
         }
-
         if (!$hadAlias) {
             return $query;
         }
-
         return $this->_removeAliasesFromConditions($query);
     }
-
     /**
      * Apply translation steps to update queries.
      *
@@ -661,7 +559,6 @@ abstract class Driver implements LoggerAwareInterface
     {
         return $this->_removeAliasesFromConditions($query);
     }
-
     /**
      * Removes aliases from the `WHERE` clause of a query.
      *
@@ -676,46 +573,33 @@ abstract class Driver implements LoggerAwareInterface
     protected function _removeAliasesFromConditions(UpdateQuery|DeleteQuery $query): UpdateQuery|DeleteQuery
     {
         if ($query->clause('join')) {
-            throw new DatabaseException(
-                'Aliases are being removed from conditions for UPDATE/DELETE queries, ' .
-                'this can break references to joined tables.',
-            );
+            throw new DatabaseException('Aliases are being removed from conditions for UPDATE/DELETE queries, ' . 'this can break references to joined tables.');
         }
-
         $conditions = $query->clause('where');
-        assert($conditions === null || $conditions instanceof ExpressionInterface);
+        assert($conditions === null || $conditions instanceof \Cake\Database\ExpressionInterface);
         if ($conditions) {
             $conditions->traverse(function ($expression) {
                 if ($expression instanceof ComparisonExpression) {
                     $field = $expression->getField();
-                    if (
-                        is_string($field) &&
-                        str_contains($field, '.')
-                    ) {
+                    if (is_string($field) && str_contains($field, '.')) {
                         [, $unaliasedField] = explode('.', $field, 2);
                         $expression->setField($unaliasedField);
                     }
-
                     return $expression;
                 }
-
                 if ($expression instanceof IdentifierExpression) {
                     $identifier = $expression->getIdentifier();
                     if (str_contains($identifier, '.')) {
                         [, $unaliasedIdentifier] = explode('.', $identifier, 2);
                         $expression->setIdentifier($unaliasedIdentifier);
                     }
-
                     return $expression;
                 }
-
                 return $expression;
             });
         }
-
         return $query;
     }
-
     /**
      * Apply translation steps to insert queries.
      *
@@ -726,7 +610,6 @@ abstract class Driver implements LoggerAwareInterface
     {
         return $query;
     }
-
     /**
      * Get the schema dialect.
      *
@@ -739,7 +622,6 @@ abstract class Driver implements LoggerAwareInterface
      * @return \Cake\Database\Schema\SchemaDialect
      */
     abstract public function schemaDialect(): SchemaDialect;
-
     /**
      * Quotes a database identifier (a column name, table name, etc..) to
      * be used safely in queries without the risk of using reserved words
@@ -751,7 +633,6 @@ abstract class Driver implements LoggerAwareInterface
     {
         return $this->quoter()->quoteIdentifier($identifier);
     }
-
     /**
      * Quotes a database value.
      *
@@ -770,17 +651,15 @@ abstract class Driver implements LoggerAwareInterface
     {
         return $this->getPdo()->quote($value);
     }
-
     /**
      * Get identifier quoter instance.
      *
      * @return \Cake\Database\IdentifierQuoter
      */
-    public function quoter(): IdentifierQuoter
+    public function quoter(): \Cake\Database\IdentifierQuoter
     {
-        return $this->quoter ??= new IdentifierQuoter($this->_startQuote, $this->_endQuote);
+        return $this->quoter ??= new \Cake\Database\IdentifierQuoter($this->_startQuote, $this->_endQuote);
     }
-
     /**
      * Escapes values for use in schema definitions.
      *
@@ -792,36 +671,23 @@ abstract class Driver implements LoggerAwareInterface
         if ($value === null) {
             return 'NULL';
         }
-        if ($value === false) {
+        if ($value === \false) {
             return 'FALSE';
         }
-        if ($value === true) {
+        if ($value === \true) {
             return 'TRUE';
         }
         if (is_float($value)) {
-            return str_replace(',', '.', (string)$value);
+            return str_replace(',', '.', (string) $value);
         }
-        if (
-            (
-                is_int($value) ||
-                $value === '0'
-            ) ||
-            (
-                is_numeric($value) &&
-                !str_contains($value, ',') &&
-                !str_starts_with($value, '0') &&
-                !str_contains($value, 'e')
-            )
-        ) {
-            return (string)$value;
+        if (is_int($value) || $value === '0' || is_numeric($value) && !str_contains($value, ',') && !str_starts_with($value, '0') && !str_contains($value, 'e')) {
+            return (string) $value;
         }
         if ($value instanceof QueryExpression) {
-            return $value->sql(new ValueBinder());
+            return $value->sql(new \Cake\Database\ValueBinder());
         }
-
-        return $this->getPdo()->quote((string)$value, PDO::PARAM_STR);
+        return $this->getPdo()->quote((string) $value, PDO::PARAM_STR);
     }
-
     /**
      * Returns the schema name that's being used.
      *
@@ -831,7 +697,6 @@ abstract class Driver implements LoggerAwareInterface
     {
         return $this->_config['schema'];
     }
-
     /**
      * Returns last id generated for a table or sequence in database.
      *
@@ -840,9 +705,8 @@ abstract class Driver implements LoggerAwareInterface
      */
     public function lastInsertId(?string $table = null): string
     {
-        return (string)$this->getPdo()->lastInsertId($table);
+        return (string) $this->getPdo()->lastInsertId($table);
     }
-
     /**
      * Checks whether the driver is connected.
      *
@@ -851,16 +715,14 @@ abstract class Driver implements LoggerAwareInterface
     public function isConnected(): bool
     {
         if ($this->pdo === null) {
-            return false;
+            return \false;
         }
-
         try {
-            return (bool)$this->pdo->query('SELECT 1');
+            return (bool) $this->pdo->query('SELECT 1');
         } catch (PDOException) {
-            return false;
+            return \false;
         }
     }
-
     /**
      * Sets whether this driver should automatically quote identifiers
      * in queries.
@@ -868,13 +730,11 @@ abstract class Driver implements LoggerAwareInterface
      * @param bool $enable Whether to enable auto quoting
      * @return $this
      */
-    public function enableAutoQuoting(bool $enable = true)
+    public function enableAutoQuoting(bool $enable = \true)
     {
         $this->_autoQuoting = $enable;
-
         return $this;
     }
-
     /**
      * Disable auto quoting of identifiers in queries.
      *
@@ -882,11 +742,9 @@ abstract class Driver implements LoggerAwareInterface
      */
     public function disableAutoQuoting()
     {
-        $this->_autoQuoting = false;
-
+        $this->_autoQuoting = \false;
         return $this;
     }
-
     /**
      * Returns whether this driver should automatically quote identifiers
      * in queries.
@@ -897,7 +755,6 @@ abstract class Driver implements LoggerAwareInterface
     {
         return $this->_autoQuoting;
     }
-
     /**
      * Returns whether the driver supports the feature.
      *
@@ -906,8 +763,7 @@ abstract class Driver implements LoggerAwareInterface
      * @param \Cake\Database\DriverFeatureEnum $feature Driver feature
      * @return bool
      */
-    abstract public function supports(DriverFeatureEnum $feature): bool;
-
+    abstract public function supports(\Cake\Database\DriverFeatureEnum $feature): bool;
     /**
      * Transforms the passed query to this Driver's dialect and returns an instance
      * of the transformed query and the full compiled SQL string.
@@ -916,22 +772,19 @@ abstract class Driver implements LoggerAwareInterface
      * @param \Cake\Database\ValueBinder $binder The value binder to use.
      * @return string The compiled SQL.
      */
-    public function compileQuery(Query $query, ValueBinder $binder): string
+    public function compileQuery(\Cake\Database\Query $query, \Cake\Database\ValueBinder $binder): string
     {
         $processor = $this->newCompiler();
         $query = $this->transformQuery($query);
-
         return $processor->compile($query, $binder);
     }
-
     /**
      * @return \Cake\Database\QueryCompiler
      */
-    public function newCompiler(): QueryCompiler
+    public function newCompiler(): \Cake\Database\QueryCompiler
     {
-        return new QueryCompiler();
+        return new \Cake\Database\QueryCompiler();
     }
-
     /**
      * Constructs new TableSchema.
      *
@@ -943,10 +796,8 @@ abstract class Driver implements LoggerAwareInterface
     {
         /** @var class-string<\Cake\Database\Schema\TableSchemaInterface> $className */
         $className = $this->_config['tableSchema'] ?? TableSchema::class;
-
         return new $className($table, $columns);
     }
-
     /**
      * Returns the maximum alias length allowed.
      *
@@ -958,7 +809,6 @@ abstract class Driver implements LoggerAwareInterface
     {
         return static::MAX_ALIAS_LENGTH;
     }
-
     /**
      * Get the logger instance.
      *
@@ -968,7 +818,6 @@ abstract class Driver implements LoggerAwareInterface
     {
         return $this->logger;
     }
-
     /**
      * Create logger instance.
      *
@@ -978,19 +827,13 @@ abstract class Driver implements LoggerAwareInterface
     protected function createLogger(?string $className): LoggerInterface
     {
         $className ??= QueryLogger::class;
-
         /** @var class-string<\Psr\Log\LoggerInterface>|null $className */
         $className = App::className($className, 'Cake/Log', 'Log');
         if ($className === null) {
-            throw new CakeException(
-                'For logging you must either set the `log` config to a FQCN which implements Psr\Log\LoggerInterface' .
-                ' or require the cakephp/log package in your composer config.',
-            );
+            throw new CakeException('For logging you must either set the `log` config to a FQCN which implements Psr\Log\LoggerInterface' . ' or require the cakephp/log package in your composer config.');
         }
-
         return new $className();
     }
-
     /**
      * Logs a message or query using the configured logger object.
      *
@@ -1001,18 +844,14 @@ abstract class Driver implements LoggerAwareInterface
     public function log(Stringable|string $message, array $context = []): bool
     {
         if ($this->logger === null || !$this->logQueries) {
-            return false;
+            return \false;
         }
-
         $context['query'] = $message;
         $loggedQuery = new LoggedQuery();
         $loggedQuery->setContext($context);
-
-        $this->logger->debug((string)$loggedQuery, ['query' => $loggedQuery]);
-
-        return true;
+        $this->logger->debug((string) $loggedQuery, ['query' => $loggedQuery]);
+        return \true;
     }
-
     /**
      * Returns the connection role this driver performs.
      *
@@ -1020,9 +859,8 @@ abstract class Driver implements LoggerAwareInterface
      */
     public function getRole(): string
     {
-        return $this->_config['_role'] ?? Connection::ROLE_WRITE;
+        return $this->_config['_role'] ?? \Cake\Database\Connection::ROLE_WRITE;
     }
-
     /**
      * Enable query logging.
      *
@@ -1030,11 +868,9 @@ abstract class Driver implements LoggerAwareInterface
      */
     public function enableQueryLogging()
     {
-        $this->logQueries = true;
-
+        $this->logQueries = \true;
         return $this;
     }
-
     /**
      * Disable query logging.
      *
@@ -1042,11 +878,9 @@ abstract class Driver implements LoggerAwareInterface
      */
     public function disableQueryLogging()
     {
-        $this->logQueries = false;
-
+        $this->logQueries = \false;
         return $this;
     }
-
     /**
      * @inheritDoc
      */
@@ -1055,7 +889,6 @@ abstract class Driver implements LoggerAwareInterface
         $this->logger = $logger;
         $this->enableQueryLogging();
     }
-
     /**
      * Destructor
      */
@@ -1063,7 +896,6 @@ abstract class Driver implements LoggerAwareInterface
     {
         $this->pdo = null;
     }
-
     /**
      * Returns an array that can be used to describe the internal state of this
      * object.
@@ -1072,9 +904,6 @@ abstract class Driver implements LoggerAwareInterface
      */
     public function __debugInfo(): array
     {
-        return [
-            'connected' => $this->pdo !== null,
-            'role' => $this->getRole(),
-        ];
+        return ['connected' => $this->pdo !== null, 'role' => $this->getRole()];
     }
 }

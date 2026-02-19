@@ -7,13 +7,10 @@ use Laravel\Prompts\Output\BufferedConsoleOutput;
 use Symfony\Component\Console\Helper\Table as SymfonyTable;
 use Symfony\Component\Console\Helper\TableSeparator;
 use Symfony\Component\Console\Helper\TableStyle;
-
-class GridRenderer extends Renderer
+class GridRenderer extends \Laravel\Prompts\Themes\Default\Renderer
 {
-    use Concerns\InteractsWithStrings;
-
+    use \Laravel\Prompts\Themes\Default\Concerns\InteractsWithStrings;
     protected int $minWidth = 60;
-
     /**
      * Render the grid.
      */
@@ -22,34 +19,19 @@ class GridRenderer extends Renderer
         if (empty($grid->items)) {
             return $this;
         }
-
         $maxWidth = $grid->maxWidth - 2;
-        $cellWidth = max(array_map(fn ($item) => mb_strwidth($this->stripEscapeSequences($item)), $grid->items)) + 4;
+        $cellWidth = max(array_map(fn($item) => mb_strwidth($this->stripEscapeSequences($item)), $grid->items)) + 4;
         $maxColumns = max(1, (int) floor(($maxWidth - 1) / ($cellWidth + 1)));
         $columnCount = max(1, $this->balancedColumnCount(count($grid->items), $maxColumns));
-
         $rows = $this->buildRowsWithSeparators($grid->items, $columnCount);
-
-        $tableStyle = (new TableStyle)
-            ->setHorizontalBorderChars('─')
-            ->setVerticalBorderChars('│', '│')
-            ->setCellRowFormat('<fg=default>%s</>')
-            ->setCrossingChars('┼', '', '', '', '┤', '┘', '┴', '└', '├', '┌', '┬', '┐');
-
-        $buffered = new BufferedConsoleOutput;
-
-        (new SymfonyTable($buffered))
-            ->setRows($rows)
-            ->setStyle($tableStyle)
-            ->render();
-
-        foreach (explode(PHP_EOL, trim($buffered->content(), PHP_EOL)) as $line) {
-            $this->line(' '.$line);
+        $tableStyle = (new TableStyle())->setHorizontalBorderChars('─')->setVerticalBorderChars('│', '│')->setCellRowFormat('<fg=default>%s</>')->setCrossingChars('┼', '', '', '', '┤', '┘', '┴', '└', '├', '┌', '┬', '┐');
+        $buffered = new BufferedConsoleOutput();
+        (new SymfonyTable($buffered))->setRows($rows)->setStyle($tableStyle)->render();
+        foreach (explode(\PHP_EOL, trim($buffered->content(), \PHP_EOL)) as $line) {
+            $this->line(' ' . $line);
         }
-
         return $this;
     }
-
     /**
      * Calculate a balanced column count for even row distribution.
      */
@@ -58,18 +40,14 @@ class GridRenderer extends Renderer
         if ($itemCount <= $maxColumns) {
             return $itemCount;
         }
-
         for ($cols = $maxColumns; $cols >= 1; $cols--) {
             $remainder = $itemCount % $cols;
-
             if ($remainder === 0 || $remainder >= (int) ceil($cols / 2)) {
                 return $cols;
             }
         }
-
         return $maxColumns;
     }
-
     /**
      * Build rows with separators between them.
      *
@@ -81,15 +59,12 @@ class GridRenderer extends Renderer
     {
         $chunks = array_chunk($items, $columnCount);
         $rows = [];
-
         foreach ($chunks as $index => $chunk) {
             if ($index > 0) {
-                $rows[] = new TableSeparator;
+                $rows[] = new TableSeparator();
             }
-
             $rows[] = array_pad($chunk, $columnCount, '');
         }
-
         return $rows;
     }
 }

@@ -1,5 +1,6 @@
-<?php declare(strict_types=1);
+<?php
 
+declare (strict_types=1);
 /*
  * This file is part of the Monolog package.
  *
@@ -8,13 +9,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Monolog\Handler;
+namespace Odigos\Monolog\Handler;
 
 use Closure;
-use Monolog\Formatter\FormatterInterface;
-use Monolog\LogRecord;
-
+use Odigos\Monolog\Formatter\FormatterInterface;
+use Odigos\Monolog\LogRecord;
 /**
  * Sampling handler
  *
@@ -32,16 +31,13 @@ use Monolog\LogRecord;
 class SamplingHandler extends AbstractHandler implements ProcessableHandlerInterface, FormattableHandlerInterface
 {
     use ProcessableHandlerTrait;
-
     /**
      * Handler or factory Closure($record, $this)
      *
      * @phpstan-var (Closure(LogRecord|null, HandlerInterface): HandlerInterface)|HandlerInterface
      */
     protected Closure|HandlerInterface $handler;
-
     protected int $factor;
-
     /**
      * @phpstan-param (Closure(LogRecord|null, HandlerInterface): HandlerInterface)|HandlerInterface $handler
      *
@@ -54,25 +50,20 @@ class SamplingHandler extends AbstractHandler implements ProcessableHandlerInter
         $this->handler = $handler;
         $this->factor = $factor;
     }
-
     public function isHandling(LogRecord $record): bool
     {
         return $this->getHandler($record)->isHandling($record);
     }
-
     public function handle(LogRecord $record): bool
     {
         if ($this->isHandling($record) && mt_rand(1, $this->factor) === 1) {
             if (\count($this->processors) > 0) {
                 $record = $this->processRecord($record);
             }
-
             $this->getHandler($record)->handle($record);
         }
-
-        return false === $this->bubble;
+        return \false === $this->bubble;
     }
-
     /**
      * Return the nested handler
      *
@@ -87,10 +78,8 @@ class SamplingHandler extends AbstractHandler implements ProcessableHandlerInter
             }
             $this->handler = $handler;
         }
-
         return $this->handler;
     }
-
     /**
      * @inheritDoc
      */
@@ -99,13 +88,10 @@ class SamplingHandler extends AbstractHandler implements ProcessableHandlerInter
         $handler = $this->getHandler();
         if ($handler instanceof FormattableHandlerInterface) {
             $handler->setFormatter($formatter);
-
             return $this;
         }
-
-        throw new \UnexpectedValueException('The nested handler of type '.\get_class($handler).' does not support formatters.');
+        throw new \UnexpectedValueException('The nested handler of type ' . \get_class($handler) . ' does not support formatters.');
     }
-
     /**
      * @inheritDoc
      */
@@ -115,7 +101,6 @@ class SamplingHandler extends AbstractHandler implements ProcessableHandlerInter
         if ($handler instanceof FormattableHandlerInterface) {
             return $handler->getFormatter();
         }
-
-        throw new \UnexpectedValueException('The nested handler of type '.\get_class($handler).' does not support formatters.');
+        throw new \UnexpectedValueException('The nested handler of type ' . \get_class($handler) . ' does not support formatters.');
     }
 }

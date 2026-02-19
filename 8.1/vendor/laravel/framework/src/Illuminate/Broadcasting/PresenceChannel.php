@@ -2,7 +2,7 @@
 
 namespace Illuminate\Broadcasting;
 
-class PresenceChannel extends Channel
+class PresenceChannel extends \Illuminate\Broadcasting\Channel
 {
     /**
      * Create a new channel instance.
@@ -12,6 +12,6 @@ class PresenceChannel extends Channel
      */
     public function __construct($name)
     {
-        parent::__construct('presence-'.$name);
+        parent::__construct('presence-' . $name);
     }
 }

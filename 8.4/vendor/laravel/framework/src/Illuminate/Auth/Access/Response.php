@@ -4,7 +4,6 @@ namespace Illuminate\Auth\Access;
 
 use Illuminate\Contracts\Support\Arrayable;
 use Stringable;
-
 class Response implements Arrayable, Stringable
 {
     /**
@@ -13,28 +12,24 @@ class Response implements Arrayable, Stringable
      * @var bool
      */
     protected $allowed;
-
     /**
      * The response message.
      *
      * @var string|null
      */
     protected $message;
-
     /**
      * The response code.
      *
      * @var mixed
      */
     protected $code;
-
     /**
      * The HTTP response status code.
      *
      * @var int|null
      */
     protected $status;
-
     /**
      * Create a new response.
      *
@@ -48,7 +43,6 @@ class Response implements Arrayable, Stringable
         $this->allowed = $allowed;
         $this->message = $message;
     }
-
     /**
      * Create a new "allow" Response.
      *
@@ -58,9 +52,8 @@ class Response implements Arrayable, Stringable
      */
     public static function allow($message = null, $code = null)
     {
-        return new static(true, $message, $code);
+        return new static(\true, $message, $code);
     }
-
     /**
      * Create a new "deny" Response.
      *
@@ -70,9 +63,8 @@ class Response implements Arrayable, Stringable
      */
     public static function deny($message = null, $code = null)
     {
-        return new static(false, $message, $code);
+        return new static(\false, $message, $code);
     }
-
     /**
      * Create a new "deny" Response with a HTTP status code.
      *
@@ -85,7 +77,6 @@ class Response implements Arrayable, Stringable
     {
         return static::deny($message, $code)->withStatus($status);
     }
-
     /**
      * Create a new "deny" Response with a 404 HTTP status code.
      *
@@ -97,7 +88,6 @@ class Response implements Arrayable, Stringable
     {
         return static::denyWithStatus(404, $message, $code);
     }
-
     /**
      * Determine if the response was allowed.
      *
@@ -107,7 +97,6 @@ class Response implements Arrayable, Stringable
     {
         return $this->allowed;
     }
-
     /**
      * Determine if the response was denied.
      *
@@ -115,9 +104,8 @@ class Response implements Arrayable, Stringable
      */
     public function denied()
     {
-        return ! $this->allowed();
+        return !$this->allowed();
     }
-
     /**
      * Get the response message.
      *
@@ -127,7 +115,6 @@ class Response implements Arrayable, Stringable
     {
         return $this->message;
     }
-
     /**
      * Get the response code / reason.
      *
@@ -137,7 +124,6 @@ class Response implements Arrayable, Stringable
     {
         return $this->code;
     }
-
     /**
      * Throw authorization exception if response was denied.
      *
@@ -148,14 +134,10 @@ class Response implements Arrayable, Stringable
     public function authorize()
     {
         if ($this->denied()) {
-            throw (new AuthorizationException($this->message(), $this->code()))
-                ->setResponse($this)
-                ->withStatus($this->status);
+            throw (new \Illuminate\Auth\Access\AuthorizationException($this->message(), $this->code()))->setResponse($this)->withStatus($this->status);
         }
-
         return $this;
     }
-
     /**
      * Set the HTTP response status code.
      *
@@ -165,10 +147,8 @@ class Response implements Arrayable, Stringable
     public function withStatus($status)
     {
         $this->status = $status;
-
         return $this;
     }
-
     /**
      * Set the HTTP response status code to 404.
      *
@@ -178,7 +158,6 @@ class Response implements Arrayable, Stringable
     {
         return $this->withStatus(404);
     }
-
     /**
      * Get the HTTP status code.
      *
@@ -188,7 +167,6 @@ class Response implements Arrayable, Stringable
     {
         return $this->status;
     }
-
     /**
      * Convert the response to an array.
      *
@@ -196,13 +174,8 @@ class Response implements Arrayable, Stringable
      */
     public function toArray()
     {
-        return [
-            'allowed' => $this->allowed(),
-            'message' => $this->message(),
-            'code' => $this->code(),
-        ];
+        return ['allowed' => $this->allowed(), 'message' => $this->message(), 'code' => $this->code()];
     }
-
     /**
      * Get the string representation of the message.
      *

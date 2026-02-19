@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\API\Instrumentation;
 
 use OpenTelemetry\API\Metrics\MeterInterface;
@@ -18,7 +17,6 @@ use OpenTelemetry\Context\Propagation\TextMapPropagatorInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use RuntimeException;
-
 /**
  This trait in conjunction with the InstrumentationInterface is meant as a base for instrumentations for the
  OpenTelemetry API.
@@ -62,7 +60,6 @@ $instrumentation->activate()
 
 to activate and use the instrumentation with the API/SDK.
  **/
-
 trait InstrumentationTrait
 {
     private TextMapPropagatorInterface $propagator;
@@ -71,19 +68,16 @@ trait InstrumentationTrait
     private MeterInterface $meter;
     private LoggerInterface $logger;
     private ResponsePropagatorInterface $responsePropagator;
-
     public function __construct()
     {
         $this->initDefaults();
     }
-
     /**
      * The name of the instrumenting/instrumented library/package/project.
      * @see https://github.com/open-telemetry/opentelemetry-specification/blob/v1.12.0/specification/glossary.md#instrumentation-scope
      * @see https://github.com/open-telemetry/opentelemetry-specification/blob/v1.12.0/specification/glossary.md#instrumentation-library
      */
     abstract public function getName(): string;
-
     /**
      * The version of the instrumenting/instrumented library/package/project.
      * If unknown or a lookup is too expensive simply return NULL.
@@ -91,7 +85,6 @@ trait InstrumentationTrait
      * @see https://github.com/open-telemetry/opentelemetry-specification/blob/v1.12.0/specification/glossary.md#instrumentation-library
      */
     abstract public function getVersion(): ?string;
-
     /**
      * The version of the instrumenting/instrumented library/package/project.
      * If unknown simply return NULL.
@@ -99,14 +92,12 @@ trait InstrumentationTrait
      * @see https://github.com/open-telemetry/opentelemetry-specification/blob/v1.12.0/specification/glossary.md#instrumentation-library
      */
     abstract public function getSchemaUrl(): ?string;
-
     /**
      * This method will be called from the API when the instrumentation has been activated (via activate()).
      * Here you can put any bootstrapping code needed by the instrumentation.
      * If not needed simply implement a method which returns TRUE.
      */
     abstract public function init(): bool;
-
     /**
      * This method registers and activates the instrumentation with the OpenTelemetry API/SDK and thus
      * the instrumentation will be used to generate telemetry data.
@@ -114,87 +105,62 @@ trait InstrumentationTrait
     public function activate(): bool
     {
         $this->validateImplementation();
-
         // activate instrumentation with the API. not implemented yet.
-        return true;
+        return \true;
     }
-
     public function setPropagator(TextMapPropagatorInterface $propagator): void
     {
         $this->propagator = $propagator;
     }
-
     public function getPropagator(): TextMapPropagatorInterface
     {
         return $this->propagator;
     }
-
     public function setTracerProvider(TracerProviderInterface $tracerProvider): void
     {
         $this->tracerProvider = $tracerProvider;
         // @see https://github.com/open-telemetry/opentelemetry-specification/blob/v1.12.0/specification/trace/api.md#get-a-tracer
-        $this->tracer = $tracerProvider->getTracer(
-            $this->getName(),
-            $this->getVersion(),
-            $this->getSchemaUrl(),
-        );
+        $this->tracer = $tracerProvider->getTracer($this->getName(), $this->getVersion(), $this->getSchemaUrl());
     }
-
     public function getTracerProvider(): TracerProviderInterface
     {
         return $this->tracerProvider;
     }
-
     public function getTracer(): TracerInterface
     {
         return $this->tracer;
     }
-
     public function setMeterProvider(MeterProviderInterface $meterProvider): void
     {
         // @see https://github.com/open-telemetry/opentelemetry-specification/blob/v1.12.0/specification/metrics/api.md#get-a-meter
-        $this->meter = $meterProvider->getMeter(
-            $this->getName(),
-            $this->getVersion(),
-        );
+        $this->meter = $meterProvider->getMeter($this->getName(), $this->getVersion());
     }
-
     public function getMeter(): MeterInterface
     {
         return $this->meter;
     }
-
     public function setLogger(LoggerInterface $logger): void
     {
         $this->logger = $logger;
     }
-
     public function getLogger(): LoggerInterface
     {
         return $this->logger;
     }
-
     public function setResponsePropagator(ResponsePropagatorInterface $responsePropagator): void
     {
         $this->responsePropagator = $responsePropagator;
     }
-
     public function getResponsePropagator(): ResponsePropagatorInterface
     {
         return $this->responsePropagator;
     }
-
     private function validateImplementation(): void
     {
-        if (!$this instanceof InstrumentationInterface) {
-            throw new RuntimeException(sprintf(
-                '"%s" is meant to implement "%s"',
-                InstrumentationTrait::class,
-                InstrumentationInterface::class
-            ));
+        if (!$this instanceof \OpenTelemetry\API\Instrumentation\InstrumentationInterface) {
+            throw new RuntimeException(sprintf('"%s" is meant to implement "%s"', \OpenTelemetry\API\Instrumentation\InstrumentationTrait::class, \OpenTelemetry\API\Instrumentation\InstrumentationInterface::class));
         }
     }
-
     private function initDefaults(): void
     {
         $this->propagator = new NoopTextMapPropagator();

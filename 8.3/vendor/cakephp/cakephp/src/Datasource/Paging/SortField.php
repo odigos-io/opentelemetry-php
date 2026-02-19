@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -27,14 +27,12 @@ class SortField
      * @var string
      */
     public const ASC = 'asc';
-
     /**
      * Descending sort direction
      *
      * @var string
      */
     public const DESC = 'desc';
-
     /**
      * Constructor.
      *
@@ -42,13 +40,9 @@ class SortField
      * @param string|null $defaultDirection The default sort direction
      * @param bool $locked Whether the sort direction is locked
      */
-    public function __construct(
-        protected string $field,
-        protected ?string $defaultDirection = null,
-        protected bool $locked = false,
-    ) {
+    public function __construct(protected string $field, protected ?string $defaultDirection = null, protected bool $locked = \false)
+    {
     }
-
     /**
      * Create a sort field with ascending default direction.
      *
@@ -56,11 +50,10 @@ class SortField
      * @param bool $locked Whether the sort direction is locked
      * @return self
      */
-    public static function asc(string $field, bool $locked = false): self
+    public static function asc(string $field, bool $locked = \false): self
     {
         return new self($field, self::ASC, $locked);
     }
-
     /**
      * Create a sort field with descending default direction.
      *
@@ -68,11 +61,10 @@ class SortField
      * @param bool $locked Whether the sort direction is locked
      * @return self
      */
-    public static function desc(string $field, bool $locked = false): self
+    public static function desc(string $field, bool $locked = \false): self
     {
         return new self($field, self::DESC, $locked);
     }
-
     /**
      * Get the field name.
      *
@@ -82,7 +74,6 @@ class SortField
     {
         return $this->field;
     }
-
     /**
      * Get the sort direction to use.
      *
@@ -95,18 +86,14 @@ class SortField
         if ($this->locked) {
             return $this->defaultDirection ?? self::ASC;
         }
-
         if (!$directionSpecified && $this->defaultDirection) {
             return $this->defaultDirection;
         }
-
         if ($this->defaultDirection === static::DESC) {
             return $requestedDirection === static::DESC ? static::ASC : static::DESC;
         }
-
         return $requestedDirection;
     }
-
     /**
      * Check if the sort direction is locked.
      *

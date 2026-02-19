@@ -5,9 +5,7 @@
  *
  * @license https://github.com/slimphp/Slim/blob/4.x/LICENSE.md (MIT License)
  */
-
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Slim\Routing;
 
 use Psr\Container\ContainerInterface;
@@ -25,14 +23,12 @@ use Slim\Interfaces\RequestHandlerInvocationStrategyInterface;
 use Slim\Interfaces\RouteGroupInterface;
 use Slim\Interfaces\RouteInterface;
 use Slim\MiddlewareDispatcher;
-
 use function array_key_exists;
 use function array_replace;
 use function array_reverse;
 use function class_implements;
 use function in_array;
 use function is_array;
-
 /**
  * @api
  * @template TContainerInterface of (ContainerInterface|null)
@@ -45,67 +41,53 @@ class Route implements RouteInterface, RequestHandlerInterface
      * @var string[]
      */
     protected array $methods = [];
-
     /**
      * Route identifier
      */
     protected string $identifier;
-
     /**
      * Route name
      */
     protected ?string $name = null;
-
     /**
      * Parent route groups
      *
      * @var RouteGroupInterface[]
      */
     protected array $groups;
-
     protected InvocationStrategyInterface $invocationStrategy;
-
     /**
      * Route parameters
      *
      * @var array<string, string>
      */
     protected array $arguments = [];
-
     /**
      * Route arguments parameters
      *
      * @var array<string, string>
      */
     protected array $savedArguments = [];
-
     /**
      * Container
      * @var TContainerInterface $container
      */
     protected ?ContainerInterface $container = null;
-
     /** @var MiddlewareDispatcher<TContainerInterface> $middlewareDispatcher */
     protected MiddlewareDispatcher $middlewareDispatcher;
-
     /**
      * Route callable
      *
      * @var callable|array{class-string, string}|string
      */
     protected $callable;
-
     protected CallableResolverInterface $callableResolver;
-
     protected ResponseFactoryInterface $responseFactory;
-
     /**
      * Route pattern
      */
     protected string $pattern;
-
-    protected bool $groupMiddlewareAppended = false;
-
+    protected bool $groupMiddlewareAppended = \false;
     /**
      * @param string[] $methods The route HTTP methods
      * @param string $pattern The route pattern
@@ -117,17 +99,8 @@ class Route implements RouteInterface, RequestHandlerInterface
      * @param RouteGroupInterface[] $groups The parent route groups
      * @param int $identifier The route identifier
      */
-    public function __construct(
-        array $methods,
-        string $pattern,
-        $callable,
-        ResponseFactoryInterface $responseFactory,
-        CallableResolverInterface $callableResolver,
-        ?ContainerInterface $container = null,
-        ?InvocationStrategyInterface $invocationStrategy = null,
-        array $groups = [],
-        int $identifier = 0
-    ) {
+    public function __construct(array $methods, string $pattern, $callable, ResponseFactoryInterface $responseFactory, CallableResolverInterface $callableResolver, ?ContainerInterface $container = null, ?InvocationStrategyInterface $invocationStrategy = null, array $groups = [], int $identifier = 0)
+    {
         $this->methods = $methods;
         $this->pattern = $pattern;
         $this->callable = $callable;
@@ -139,12 +112,10 @@ class Route implements RouteInterface, RequestHandlerInterface
         $this->identifier = 'route' . $identifier;
         $this->middlewareDispatcher = new MiddlewareDispatcher($this, $callableResolver, $container);
     }
-
     public function getCallableResolver(): CallableResolverInterface
     {
         return $this->callableResolver;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -152,7 +123,6 @@ class Route implements RouteInterface, RequestHandlerInterface
     {
         return $this->invocationStrategy;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -161,7 +131,6 @@ class Route implements RouteInterface, RequestHandlerInterface
         $this->invocationStrategy = $invocationStrategy;
         return $this;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -169,7 +138,6 @@ class Route implements RouteInterface, RequestHandlerInterface
     {
         return $this->methods;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -177,7 +145,6 @@ class Route implements RouteInterface, RequestHandlerInterface
     {
         return $this->pattern;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -186,7 +153,6 @@ class Route implements RouteInterface, RequestHandlerInterface
         $this->pattern = $pattern;
         return $this;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -194,7 +160,6 @@ class Route implements RouteInterface, RequestHandlerInterface
     {
         return $this->callable;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -203,7 +168,6 @@ class Route implements RouteInterface, RequestHandlerInterface
         $this->callable = $callable;
         return $this;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -211,7 +175,6 @@ class Route implements RouteInterface, RequestHandlerInterface
     {
         return $this->name;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -220,7 +183,6 @@ class Route implements RouteInterface, RequestHandlerInterface
         $this->name = $name;
         return $this;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -228,7 +190,6 @@ class Route implements RouteInterface, RequestHandlerInterface
     {
         return $this->identifier;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -239,7 +200,6 @@ class Route implements RouteInterface, RequestHandlerInterface
         }
         return $default;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -247,20 +207,17 @@ class Route implements RouteInterface, RequestHandlerInterface
     {
         return $this->arguments;
     }
-
     /**
      * {@inheritdoc}
      */
-    public function setArguments(array $arguments, bool $includeInSavedArguments = true): RouteInterface
+    public function setArguments(array $arguments, bool $includeInSavedArguments = \true): RouteInterface
     {
         if ($includeInSavedArguments) {
             $this->savedArguments = $arguments;
         }
-
         $this->arguments = $arguments;
         return $this;
     }
-
     /**
      * @return RouteGroupInterface[]
      */
@@ -268,7 +225,6 @@ class Route implements RouteInterface, RequestHandlerInterface
     {
         return $this->groups;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -277,7 +233,6 @@ class Route implements RouteInterface, RequestHandlerInterface
         $this->middlewareDispatcher->add($middleware);
         return $this;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -286,7 +241,6 @@ class Route implements RouteInterface, RequestHandlerInterface
         $this->middlewareDispatcher->addMiddleware($middleware);
         return $this;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -295,20 +249,17 @@ class Route implements RouteInterface, RequestHandlerInterface
         $this->arguments = array_replace($this->savedArguments, $arguments);
         return $this;
     }
-
     /**
      * {@inheritdoc}
      */
-    public function setArgument(string $name, string $value, bool $includeInSavedArguments = true): RouteInterface
+    public function setArgument(string $name, string $value, bool $includeInSavedArguments = \true): RouteInterface
     {
         if ($includeInSavedArguments) {
             $this->savedArguments[$name] = $value;
         }
-
         $this->arguments[$name] = $value;
         return $this;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -317,10 +268,8 @@ class Route implements RouteInterface, RequestHandlerInterface
         if (!$this->groupMiddlewareAppended) {
             $this->appendGroupMiddlewareToRoute();
         }
-
         return $this->middlewareDispatcher->handle($request);
     }
-
     /**
      * @return void
      */
@@ -328,14 +277,11 @@ class Route implements RouteInterface, RequestHandlerInterface
     {
         $inner = $this->middlewareDispatcher;
         $this->middlewareDispatcher = new MiddlewareDispatcher($inner, $this->callableResolver, $this->container);
-
         foreach (array_reverse($this->groups) as $group) {
             $group->appendMiddlewareToDispatcher($this->middlewareDispatcher);
         }
-
-        $this->groupMiddlewareAppended = true;
+        $this->groupMiddlewareAppended = \true;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -347,17 +293,10 @@ class Route implements RouteInterface, RequestHandlerInterface
             $callable = $this->callableResolver->resolve($this->callable);
         }
         $strategy = $this->invocationStrategy;
-
         $strategyImplements = class_implements($strategy);
-
-        if (
-            is_array($callable)
-            && $callable[0] instanceof RequestHandlerInterface
-            && !in_array(RequestHandlerInvocationStrategyInterface::class, $strategyImplements)
-        ) {
+        if (is_array($callable) && $callable[0] instanceof RequestHandlerInterface && !in_array(RequestHandlerInvocationStrategyInterface::class, $strategyImplements)) {
             $strategy = new RequestHandler();
         }
-
         $response = $this->responseFactory->createResponse();
         return $strategy($callable, $request, $response, $this->arguments);
     }

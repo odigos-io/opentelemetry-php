@@ -4,7 +4,6 @@ namespace Illuminate\Notifications\Channels;
 
 use Illuminate\Notifications\Notification;
 use RuntimeException;
-
 class DatabaseChannel
 {
     /**
@@ -16,11 +15,8 @@ class DatabaseChannel
      */
     public function send($notifiable, Notification $notification)
     {
-        return $notifiable->routeNotificationFor('database', $notification)->create(
-            $this->buildPayload($notifiable, $notification)
-        );
+        return $notifiable->routeNotificationFor('database', $notification)->create($this->buildPayload($notifiable, $notification));
     }
-
     /**
      * Build an array payload for the DatabaseNotification Model.
      *
@@ -30,16 +26,8 @@ class DatabaseChannel
      */
     protected function buildPayload($notifiable, Notification $notification)
     {
-        return [
-            'id' => $notification->id,
-            'type' => method_exists($notification, 'databaseType')
-                        ? $notification->databaseType($notifiable)
-                        : get_class($notification),
-            'data' => $this->getData($notifiable, $notification),
-            'read_at' => null,
-        ];
+        return ['id' => $notification->id, 'type' => method_exists($notification, 'databaseType') ? $notification->databaseType($notifiable) : get_class($notification), 'data' => $this->getData($notifiable, $notification), 'read_at' => null];
     }
-
     /**
      * Get the data for the notification.
      *
@@ -52,14 +40,11 @@ class DatabaseChannel
     protected function getData($notifiable, Notification $notification)
     {
         if (method_exists($notification, 'toDatabase')) {
-            return is_array($data = $notification->toDatabase($notifiable))
-                                ? $data : $data->data;
+            return is_array($data = $notification->toDatabase($notifiable)) ? $data : $data->data;
         }
-
         if (method_exists($notification, 'toArray')) {
             return $notification->toArray($notifiable);
         }
-
         throw new RuntimeException('Notification is missing toDatabase / toArray method.');
     }
 }

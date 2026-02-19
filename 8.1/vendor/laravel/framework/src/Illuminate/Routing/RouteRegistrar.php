@@ -7,7 +7,6 @@ use Closure;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Reflector;
 use InvalidArgumentException;
-
 /**
  * @method \Illuminate\Routing\Route any(string $uri, \Closure|array|string|null $action = null)
  * @method \Illuminate\Routing\Route delete(string $uri, \Closure|array|string|null $action = null)
@@ -31,72 +30,47 @@ use InvalidArgumentException;
  */
 class RouteRegistrar
 {
-    use CreatesRegularExpressionRouteConstraints;
-
+    use \Illuminate\Routing\CreatesRegularExpressionRouteConstraints;
     /**
      * The router instance.
      *
      * @var \Illuminate\Routing\Router
      */
     protected $router;
-
     /**
      * The attributes to pass on to the router.
      *
      * @var array
      */
     protected $attributes = [];
-
     /**
      * The methods to dynamically pass through to the router.
      *
      * @var string[]
      */
-    protected $passthru = [
-        'get', 'post', 'put', 'patch', 'delete', 'options', 'any',
-    ];
-
+    protected $passthru = ['get', 'post', 'put', 'patch', 'delete', 'options', 'any'];
     /**
      * The attributes that can be set through this class.
      *
      * @var string[]
      */
-    protected $allowedAttributes = [
-        'as',
-        'controller',
-        'domain',
-        'middleware',
-        'missing',
-        'name',
-        'namespace',
-        'prefix',
-        'scopeBindings',
-        'where',
-        'withoutMiddleware',
-    ];
-
+    protected $allowedAttributes = ['as', 'controller', 'domain', 'middleware', 'missing', 'name', 'namespace', 'prefix', 'scopeBindings', 'where', 'withoutMiddleware'];
     /**
      * The attributes that are aliased.
      *
      * @var array
      */
-    protected $aliases = [
-        'name' => 'as',
-        'scopeBindings' => 'scope_bindings',
-        'withoutMiddleware' => 'excluded_middleware',
-    ];
-
+    protected $aliases = ['name' => 'as', 'scopeBindings' => 'scope_bindings', 'withoutMiddleware' => 'excluded_middleware'];
     /**
      * Create a new route registrar instance.
      *
      * @param  \Illuminate\Routing\Router  $router
      * @return void
      */
-    public function __construct(Router $router)
+    public function __construct(\Illuminate\Routing\Router $router)
     {
         $this->router = $router;
     }
-
     /**
      * Set the value for a given attribute.
      *
@@ -108,29 +82,21 @@ class RouteRegistrar
      */
     public function attribute($key, $value)
     {
-        if (! in_array($key, $this->allowedAttributes)) {
+        if (!in_array($key, $this->allowedAttributes)) {
             throw new InvalidArgumentException("Attribute [{$key}] does not exist.");
         }
-
         if ($key === 'middleware') {
             foreach ($value as $index => $middleware) {
                 $value[$index] = (string) $middleware;
             }
         }
-
         $attributeKey = Arr::get($this->aliases, $key, $key);
-
         if ($key === 'withoutMiddleware') {
-            $value = array_merge(
-                (array) ($this->attributes[$attributeKey] ?? []), Arr::wrap($value)
-            );
+            $value = array_merge((array) ($this->attributes[$attributeKey] ?? []), Arr::wrap($value));
         }
-
         $this->attributes[$attributeKey] = $value;
-
         return $this;
     }
-
     /**
      * Route a resource to a controller.
      *
@@ -143,7 +109,6 @@ class RouteRegistrar
     {
         return $this->router->resource($name, $controller, $this->attributes + $options);
     }
-
     /**
      * Route an API resource to a controller.
      *
@@ -156,7 +121,6 @@ class RouteRegistrar
     {
         return $this->router->apiResource($name, $controller, $this->attributes + $options);
     }
-
     /**
      * Route a singleton resource to a controller.
      *
@@ -169,7 +133,6 @@ class RouteRegistrar
     {
         return $this->router->singleton($name, $controller, $this->attributes + $options);
     }
-
     /**
      * Route an API singleton resource to a controller.
      *
@@ -182,7 +145,6 @@ class RouteRegistrar
     {
         return $this->router->apiSingleton($name, $controller, $this->attributes + $options);
     }
-
     /**
      * Create a route group with shared attributes.
      *
@@ -192,10 +154,8 @@ class RouteRegistrar
     public function group($callback)
     {
         $this->router->group($this->attributes, $callback);
-
         return $this;
     }
-
     /**
      * Register a new route with the given verbs.
      *
@@ -208,7 +168,6 @@ class RouteRegistrar
     {
         return $this->router->match($methods, $uri, $this->compileAction($action));
     }
-
     /**
      * Register a new route with the router.
      *
@@ -219,13 +178,11 @@ class RouteRegistrar
      */
     protected function registerRoute($method, $uri, $action = null)
     {
-        if (! is_array($action)) {
+        if (!is_array($action)) {
             $action = array_merge($this->attributes, $action ? ['uses' => $action] : []);
         }
-
         return $this->router->{$method}($uri, $this->compileAction($action));
     }
-
     /**
      * Compile the action into an array including the attributes.
      *
@@ -237,26 +194,17 @@ class RouteRegistrar
         if (is_null($action)) {
             return $this->attributes;
         }
-
         if (is_string($action) || $action instanceof Closure) {
             $action = ['uses' => $action];
         }
-
-        if (is_array($action) &&
-            array_is_list($action) &&
-            Reflector::isCallable($action)) {
+        if (is_array($action) && array_is_list($action) && Reflector::isCallable($action)) {
             if (strncmp($action[0], '\\', 1)) {
-                $action[0] = '\\'.$action[0];
+                $action[0] = '\\' . $action[0];
             }
-            $action = [
-                'uses' => $action[0].'@'.$action[1],
-                'controller' => $action[0].'@'.$action[1],
-            ];
+            $action = ['uses' => $action[0] . '@' . $action[1], 'controller' => $action[0] . '@' . $action[1]];
         }
-
         return array_merge($this->attributes, $action);
     }
-
     /**
      * Dynamically handle calls into the route registrar.
      *
@@ -271,17 +219,12 @@ class RouteRegistrar
         if (in_array($method, $this->passthru)) {
             return $this->registerRoute($method, ...$parameters);
         }
-
         if (in_array($method, $this->allowedAttributes)) {
             if ($method === 'middleware') {
                 return $this->attribute($method, is_array($parameters[0]) ? $parameters[0] : $parameters);
             }
-
-            return $this->attribute($method, array_key_exists(0, $parameters) ? $parameters[0] : true);
+            return $this->attribute($method, array_key_exists(0, $parameters) ? $parameters[0] : \true);
         }
-
-        throw new BadMethodCallException(sprintf(
-            'Method %s::%s does not exist.', static::class, $method
-        ));
+        throw new BadMethodCallException(sprintf('Method %s::%s does not exist.', static::class, $method));
     }
 }

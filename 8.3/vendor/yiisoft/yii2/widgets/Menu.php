@@ -1,19 +1,18 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\widgets;
 
 use Closure;
-use Yii;
+use Odigos\Yii;
 use yii\base\Widget;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\helpers\Url;
-
 /**
  * Menu displays a multi-level menu using nested HTML lists.
  *
@@ -110,7 +109,7 @@ class Menu extends Widget
     /**
      * @var bool whether the labels for menu items should be HTML-encoded.
      */
-    public $encodeLabels = true;
+    public $encodeLabels = \true;
     /**
      * @var string the CSS class to be appended to the active menu item.
      */
@@ -120,17 +119,17 @@ class Menu extends Widget
      * matches the currently requested route.
      * @see isItemActive()
      */
-    public $activateItems = true;
+    public $activateItems = \true;
     /**
      * @var bool whether to activate parent menu items when one of the corresponding child menu items is active.
      * The activated parent menu items will also have its CSS classes appended with [[activeCssClass]].
      */
-    public $activateParents = false;
+    public $activateParents = \false;
     /**
      * @var bool whether to hide empty menu items. An empty menu item is one whose `url` option is not
      * set and which has no visible child menu items.
      */
-    public $hideEmptyItems = true;
+    public $hideEmptyItems = \true;
     /**
      * @var array the HTML attributes for the menu's container tag. The following special options are recognized:
      *
@@ -164,8 +163,6 @@ class Menu extends Widget
      * @see isItemActive()
      */
     public $params;
-
-
     /**
      * Renders the menu.
      */
@@ -181,11 +178,9 @@ class Menu extends Widget
         if (!empty($items)) {
             $options = $this->options;
             $tag = ArrayHelper::remove($options, 'tag', 'ul');
-
             echo Html::tag($tag, $this->renderItems($items), $options);
         }
     }
-
     /**
      * Recursively renders the menu items (without the container tag).
      * @param array $items the menu items to be rendered recursively
@@ -209,20 +204,15 @@ class Menu extends Widget
                 $class[] = $this->lastItemCssClass;
             }
             Html::addCssClass($options, $class);
-
             $menu = $this->renderItem($item);
             if (!empty($item['items'])) {
                 $submenuTemplate = ArrayHelper::getValue($item, 'submenuTemplate', $this->submenuTemplate);
-                $menu .= strtr($submenuTemplate, [
-                    '{items}' => $this->renderItems($item['items']),
-                ]);
+                $menu .= strtr($submenuTemplate, ['{items}' => $this->renderItems($item['items'])]);
             }
             $lines[] = Html::tag($tag, $menu, $options);
         }
-
         return implode("\n", $lines);
     }
-
     /**
      * Renders the content of a menu item.
      * Note that the container and the sub-menus are not rendered here.
@@ -233,20 +223,11 @@ class Menu extends Widget
     {
         if (isset($item['url'])) {
             $template = ArrayHelper::getValue($item, 'template', $this->linkTemplate);
-
-            return strtr($template, [
-                '{url}' => Html::encode(Url::to($item['url'])),
-                '{label}' => $item['label'],
-            ]);
+            return strtr($template, ['{url}' => Html::encode(Url::to($item['url'])), '{label}' => $item['label']]);
         }
-
         $template = ArrayHelper::getValue($item, 'template', $this->labelTemplate);
-
-        return strtr($template, [
-            '{label}' => $item['label'],
-        ]);
+        return strtr($template, ['{label}' => $item['label']]);
     }
-
     /**
      * Normalizes the [[items]] property to remove invisible items and activate certain items.
      * @param array $items the items to be normalized.
@@ -265,7 +246,7 @@ class Menu extends Widget
             }
             $encodeLabel = isset($item['encode']) ? $item['encode'] : $this->encodeLabels;
             $items[$i]['label'] = $encodeLabel ? Html::encode($item['label']) : $item['label'];
-            $hasActiveChild = false;
+            $hasActiveChild = \false;
             if (isset($item['items'])) {
                 $items[$i]['items'] = $this->normalizeItems($item['items'], $hasActiveChild);
                 if (empty($items[$i]['items']) && $this->hideEmptyItems) {
@@ -278,24 +259,22 @@ class Menu extends Widget
             }
             if (!isset($item['active'])) {
                 if ($this->activateParents && $hasActiveChild || $this->activateItems && $this->isItemActive($item)) {
-                    $active = $items[$i]['active'] = true;
+                    $active = $items[$i]['active'] = \true;
                 } else {
-                    $items[$i]['active'] = false;
+                    $items[$i]['active'] = \false;
                 }
             } elseif ($item['active'] instanceof Closure) {
                 if (call_user_func($item['active'], $item, $hasActiveChild, $this->isItemActive($item), $this)) {
-                    $active = $items[$i]['active'] = true;
+                    $active = $items[$i]['active'] = \true;
                 } else {
-                    $items[$i]['active'] = false;
+                    $items[$i]['active'] = \false;
                 }
             } elseif ($item['active']) {
-                $active = true;
+                $active = \true;
             }
         }
-
         return array_values($items);
     }
-
     /**
      * Checks whether a menu item is active.
      * This is done by checking if [[route]] and [[params]] match that specified in the `url` option of the menu item.
@@ -314,7 +293,7 @@ class Menu extends Widget
                 $route = Yii::$app->controller->module->getUniqueId() . '/' . $route;
             }
             if (ltrim($route, '/') !== $this->route) {
-                return false;
+                return \false;
             }
             unset($item['url']['#']);
             if (count($item['url']) > 1) {
@@ -322,14 +301,12 @@ class Menu extends Widget
                 unset($params[0]);
                 foreach ($params as $name => $value) {
                     if ($value !== null && (!isset($this->params[$name]) || $this->params[$name] != $value)) {
-                        return false;
+                        return \false;
                     }
                 }
             }
-
-            return true;
+            return \true;
         }
-
-        return false;
+        return \false;
     }
 }

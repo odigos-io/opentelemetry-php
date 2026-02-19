@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright 2015-present MongoDB, Inc.
  *
@@ -14,7 +15,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 namespace MongoDB\Operation;
 
 use MongoDB\Codec\DocumentCodec;
@@ -22,26 +22,22 @@ use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
 use MongoDB\Driver\Server;
 use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\Exception\UnsupportedException;
-
 use function array_key_exists;
 use function is_integer;
 use function MongoDB\is_document;
 use function MongoDB\is_first_key_operator;
 use function MongoDB\is_pipeline;
-
 /**
  * Operation for replacing a document with the findAndModify command.
  *
  * @see \MongoDB\Collection::findOneAndReplace()
  * @see https://mongodb.com/docs/manual/reference/command/findAndModify/
  */
-final class FindOneAndReplace implements Explainable
+final class FindOneAndReplace implements \MongoDB\Operation\Explainable
 {
     public const RETURN_DOCUMENT_BEFORE = 1;
     public const RETURN_DOCUMENT_AFTER = 2;
-
-    private FindAndModify $findAndModify;
-
+    private \MongoDB\Operation\FindAndModify $findAndModify;
     /**
      * Constructs a findAndModify command for replacing a document.
      *
@@ -104,49 +100,31 @@ final class FindOneAndReplace implements Explainable
      */
     public function __construct(string $databaseName, string $collectionName, array|object $filter, array|object $replacement, array $options = [])
     {
-        if (! is_document($filter)) {
+        if (!is_document($filter)) {
             throw InvalidArgumentException::expectedDocumentType('$filter', $filter);
         }
-
-        if (isset($options['codec']) && ! $options['codec'] instanceof DocumentCodec) {
+        if (isset($options['codec']) && !$options['codec'] instanceof DocumentCodec) {
             throw InvalidArgumentException::invalidType('"codec" option', $options['codec'], DocumentCodec::class);
         }
-
-        if (isset($options['projection']) && ! is_document($options['projection'])) {
+        if (isset($options['projection']) && !is_document($options['projection'])) {
             throw InvalidArgumentException::expectedDocumentType('"projection" option', $options['projection']);
         }
-
-        if (array_key_exists('returnDocument', $options) && ! is_integer($options['returnDocument'])) {
+        if (array_key_exists('returnDocument', $options) && !is_integer($options['returnDocument'])) {
             throw InvalidArgumentException::invalidType('"returnDocument" option', $options['returnDocument'], 'integer');
         }
-
-        if (
-            isset($options['returnDocument']) &&
-            $options['returnDocument'] !== self::RETURN_DOCUMENT_AFTER &&
-            $options['returnDocument'] !== self::RETURN_DOCUMENT_BEFORE
-        ) {
+        if (isset($options['returnDocument']) && $options['returnDocument'] !== self::RETURN_DOCUMENT_AFTER && $options['returnDocument'] !== self::RETURN_DOCUMENT_BEFORE) {
             throw new InvalidArgumentException('Invalid value for "returnDocument" option: ' . $options['returnDocument']);
         }
-
         if (isset($options['projection'])) {
             $options['fields'] = $options['projection'];
         }
-
         if (isset($options['returnDocument'])) {
             $options['new'] = $options['returnDocument'] === self::RETURN_DOCUMENT_AFTER;
         }
-
         unset($options['projection'], $options['returnDocument']);
-
         $replacement = $this->validateReplacement($replacement, $options['codec'] ?? null);
-
-        $this->findAndModify = new FindAndModify(
-            $databaseName,
-            $collectionName,
-            ['query' => $filter, 'update' => $replacement] + $options,
-        );
+        $this->findAndModify = new \MongoDB\Operation\FindAndModify($databaseName, $collectionName, ['query' => $filter, 'update' => $replacement] + $options);
     }
-
     /**
      * Execute the operation.
      *
@@ -157,7 +135,6 @@ final class FindOneAndReplace implements Explainable
     {
         return $this->findAndModify->execute($server);
     }
-
     /**
      * Returns the command document for this operation.
      *
@@ -167,30 +144,24 @@ final class FindOneAndReplace implements Explainable
     {
         return $this->findAndModify->getCommandDocument();
     }
-
     private function validateReplacement(array|object $replacement, ?DocumentCodec $codec): array|object
     {
         if (isset($codec)) {
             $replacement = $codec->encode($replacement);
         }
-
-        if (! is_document($replacement)) {
+        if (!is_document($replacement)) {
             throw InvalidArgumentException::expectedDocumentType('$replacement', $replacement);
         }
-
         // Treat empty arrays as replacement documents for BC
         if ($replacement === []) {
             $replacement = (object) $replacement;
         }
-
         if (is_first_key_operator($replacement)) {
             throw new InvalidArgumentException('First key in $replacement is an update operator');
         }
-
-        if (is_pipeline($replacement, true /* allowEmpty */)) {
+        if (is_pipeline($replacement, \true)) {
             throw new InvalidArgumentException('$replacement is an update pipeline');
         }
-
         return $replacement;
     }
 }

@@ -1,13 +1,11 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Laminas\Diactoros;
+declare (strict_types=1);
+namespace Odigos\Laminas\Diactoros;
 
 use Override;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UploadedFileInterface;
-
 use function assert;
 use function dirname;
 use function fclose;
@@ -21,7 +19,6 @@ use function is_writable;
 use function move_uploaded_file;
 use function str_starts_with;
 use function unlink;
-
 use const PHP_SAPI;
 use const UPLOAD_ERR_CANT_WRITE;
 use const UPLOAD_ERR_EXTENSION;
@@ -31,40 +28,19 @@ use const UPLOAD_ERR_NO_FILE;
 use const UPLOAD_ERR_NO_TMP_DIR;
 use const UPLOAD_ERR_OK;
 use const UPLOAD_ERR_PARTIAL;
-
 class UploadedFile implements UploadedFileInterface
 {
-    public const ERROR_MESSAGES = [
-        UPLOAD_ERR_OK         => 'There is no error, the file uploaded with success',
-        UPLOAD_ERR_INI_SIZE   => 'The uploaded file exceeds the upload_max_filesize directive in php.ini',
-        UPLOAD_ERR_FORM_SIZE  => 'The uploaded file exceeds the MAX_FILE_SIZE directive that was '
-            . 'specified in the HTML form',
-        UPLOAD_ERR_PARTIAL    => 'The uploaded file was only partially uploaded',
-        UPLOAD_ERR_NO_FILE    => 'No file was uploaded',
-        UPLOAD_ERR_NO_TMP_DIR => 'Missing a temporary folder',
-        UPLOAD_ERR_CANT_WRITE => 'Failed to write file to disk',
-        UPLOAD_ERR_EXTENSION  => 'A PHP extension stopped the file upload.',
-    ];
-
+    public const ERROR_MESSAGES = [UPLOAD_ERR_OK => 'There is no error, the file uploaded with success', UPLOAD_ERR_INI_SIZE => 'The uploaded file exceeds the upload_max_filesize directive in php.ini', UPLOAD_ERR_FORM_SIZE => 'The uploaded file exceeds the MAX_FILE_SIZE directive that was ' . 'specified in the HTML form', UPLOAD_ERR_PARTIAL => 'The uploaded file was only partially uploaded', UPLOAD_ERR_NO_FILE => 'No file was uploaded', UPLOAD_ERR_NO_TMP_DIR => 'Missing a temporary folder', UPLOAD_ERR_CANT_WRITE => 'Failed to write file to disk', UPLOAD_ERR_EXTENSION => 'A PHP extension stopped the file upload.'];
     private readonly int $error;
-
     private ?string $file = null;
-
-    private bool $moved = false;
-
+    private bool $moved = \false;
     private ?StreamInterface $stream = null;
-
     /**
      * @param string|resource|StreamInterface $streamOrFile
      * @throws Exception\InvalidArgumentException
      */
-    public function __construct(
-        $streamOrFile,
-        private readonly ?int $size,
-        int $errorStatus,
-        private readonly ?string $clientFilename = null,
-        private readonly ?string $clientMediaType = null
-    ) {
+    public function __construct($streamOrFile, private readonly ?int $size, int $errorStatus, private readonly ?string $clientFilename = null, private readonly ?string $clientMediaType = null)
+    {
         if ($errorStatus === UPLOAD_ERR_OK) {
             if (is_string($streamOrFile)) {
                 $this->file = $streamOrFile;
@@ -72,23 +48,18 @@ class UploadedFile implements UploadedFileInterface
             if (is_resource($streamOrFile)) {
                 $this->stream = new Stream($streamOrFile);
             }
-
             if ($this->file === null && $this->stream === null) {
-                if (! $streamOrFile instanceof StreamInterface) {
+                if (!$streamOrFile instanceof StreamInterface) {
                     throw new Exception\InvalidArgumentException('Invalid stream or file provided for UploadedFile');
                 }
                 $this->stream = $streamOrFile;
             }
         }
-
         if (0 > $errorStatus || 8 < $errorStatus) {
-            throw new Exception\InvalidArgumentException(
-                'Invalid error status for UploadedFile; must be an UPLOAD_ERR_* constant'
-            );
+            throw new Exception\InvalidArgumentException('Invalid error status for UploadedFile; must be an UPLOAD_ERR_* constant');
         }
         $this->error = $errorStatus;
     }
-
     /**
      * {@inheritdoc}
      *
@@ -98,24 +69,18 @@ class UploadedFile implements UploadedFileInterface
     public function getStream(): StreamInterface
     {
         if ($this->error !== UPLOAD_ERR_OK) {
-            throw Exception\UploadedFileErrorException::dueToStreamUploadError(
-                self::ERROR_MESSAGES[$this->error]
-            );
+            throw Exception\UploadedFileErrorException::dueToStreamUploadError(self::ERROR_MESSAGES[$this->error]);
         }
-
         if ($this->moved) {
             throw new Exception\UploadedFileAlreadyMovedException();
         }
-
         if ($this->stream instanceof StreamInterface) {
             return $this->stream;
         }
-
         assert($this->file !== null, 'Always true condition for psalm type safety');
         $this->stream = new Stream($this->file);
         return $this->stream;
     }
-
     /**
      * {@inheritdoc}
      *
@@ -134,33 +99,21 @@ class UploadedFile implements UploadedFileInterface
         if ($this->moved) {
             throw new Exception\UploadedFileAlreadyMovedException('Cannot move file; already moved!');
         }
-
         if ($this->error !== UPLOAD_ERR_OK) {
-            throw Exception\UploadedFileErrorException::dueToStreamUploadError(
-                self::ERROR_MESSAGES[$this->error]
-            );
+            throw Exception\UploadedFileErrorException::dueToStreamUploadError(self::ERROR_MESSAGES[$this->error]);
         }
-
         if (empty($targetPath)) {
-            throw new Exception\InvalidArgumentException(
-                'Invalid path provided for move operation; must be a non-empty string'
-            );
+            throw new Exception\InvalidArgumentException('Invalid path provided for move operation; must be a non-empty string');
         }
-
         $targetDirectory = dirname($targetPath);
-        if (! is_dir($targetDirectory) || ! is_writable($targetDirectory)) {
+        if (!is_dir($targetDirectory) || !is_writable($targetDirectory)) {
             throw Exception\UploadedFileErrorException::dueToUnwritableTarget($targetDirectory);
         }
-
         $sapi = PHP_SAPI;
-        switch (true) {
-            case empty($sapi)
-                || str_starts_with($sapi, 'cli')
-                || str_starts_with($sapi, 'phpdbg')
-                || $this->file === null:
+        switch (\true) {
+            case empty($sapi) || str_starts_with($sapi, 'cli') || str_starts_with($sapi, 'phpdbg') || $this->file === null:
                 // Non-SAPI environment, or no filename present
                 $this->writeFile($targetPath);
-
                 if ($this->stream instanceof StreamInterface) {
                     $this->stream->close();
                 }
@@ -170,15 +123,13 @@ class UploadedFile implements UploadedFileInterface
                 break;
             default:
                 // SAPI environment, with file present
-                if (false === move_uploaded_file($this->file, $targetPath)) {
+                if (\false === move_uploaded_file($this->file, $targetPath)) {
                     throw Exception\UploadedFileErrorException::forUnmovableFile();
                 }
                 break;
         }
-
-        $this->moved = true;
+        $this->moved = \true;
     }
-
     /**
      * {@inheritdoc}
      *
@@ -189,7 +140,6 @@ class UploadedFile implements UploadedFileInterface
     {
         return $this->size;
     }
-
     /**
      * {@inheritdoc}
      *
@@ -202,7 +152,6 @@ class UploadedFile implements UploadedFileInterface
     {
         return $this->error;
     }
-
     /**
      * {@inheritdoc}
      *
@@ -214,7 +163,6 @@ class UploadedFile implements UploadedFileInterface
     {
         return $this->clientFilename;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -223,23 +171,20 @@ class UploadedFile implements UploadedFileInterface
     {
         return $this->clientMediaType;
     }
-
     /**
      * Write internal stream to given path
      */
     private function writeFile(string $path): void
     {
         $handle = fopen($path, 'wb+');
-        if (false === $handle) {
+        if (\false === $handle) {
             throw Exception\UploadedFileErrorException::dueToUnwritablePath();
         }
-
         $stream = $this->getStream();
         $stream->rewind();
-        while (! $stream->eof()) {
+        while (!$stream->eof()) {
             fwrite($handle, $stream->read(4096));
         }
-
         fclose($handle);
     }
 }

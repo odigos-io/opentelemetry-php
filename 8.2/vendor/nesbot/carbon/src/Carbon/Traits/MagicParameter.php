@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /**
  * This file is part of the Carbon package.
  *
@@ -10,8 +9,7 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Carbon\Traits;
+namespace Odigos\Carbon\Traits;
 
 /**
  * Trait MagicParameter.
@@ -25,11 +23,9 @@ trait MagicParameter
         if (\array_key_exists($index, $parameters)) {
             return $parameters[$index];
         }
-
         if (\array_key_exists($key, $parameters)) {
             return $parameters[$key];
         }
-
         return $default;
     }
 }

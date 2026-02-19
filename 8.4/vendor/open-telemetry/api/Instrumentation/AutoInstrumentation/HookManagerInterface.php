@@ -1,12 +1,10 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\API\Instrumentation\AutoInstrumentation;
 
 use Closure;
 use Throwable;
-
 interface HookManagerInterface
 {
     /**

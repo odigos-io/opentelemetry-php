@@ -3,7 +3,6 @@
 namespace Illuminate\Console\Events;
 
 use Illuminate\Console\Scheduling\Event;
-
 class ScheduledTaskStarting
 {
     /**
@@ -11,8 +10,7 @@ class ScheduledTaskStarting
      *
      * @param  \Illuminate\Console\Scheduling\Event  $task  The scheduled event being run.
      */
-    public function __construct(
-        public Event $task,
-    ) {
+    public function __construct(public Event $task)
+    {
     }
 }

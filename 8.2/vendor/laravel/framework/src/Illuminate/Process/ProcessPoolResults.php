@@ -4,7 +4,6 @@ namespace Illuminate\Process;
 
 use ArrayAccess;
 use Illuminate\Support\Collection;
-
 class ProcessPoolResults implements ArrayAccess
 {
     /**
@@ -13,7 +12,6 @@ class ProcessPoolResults implements ArrayAccess
      * @var array
      */
     protected $results = [];
-
     /**
      * Create a new process pool result set.
      *
@@ -23,7 +21,6 @@ class ProcessPoolResults implements ArrayAccess
     {
         $this->results = $results;
     }
-
     /**
      * Determine if all of the processes in the pool were successful.
      *
@@ -31,9 +28,8 @@ class ProcessPoolResults implements ArrayAccess
      */
     public function successful()
     {
-        return $this->collect()->every(fn ($p) => $p->successful());
+        return $this->collect()->every(fn($p) => $p->successful());
     }
-
     /**
      * Determine if any of the processes in the pool failed.
      *
@@ -41,9 +37,8 @@ class ProcessPoolResults implements ArrayAccess
      */
     public function failed()
     {
-        return ! $this->successful();
+        return !$this->successful();
     }
-
     /**
      * Get the results as a collection.
      *
@@ -53,7 +48,6 @@ class ProcessPoolResults implements ArrayAccess
     {
         return new Collection($this->results);
     }
-
     /**
      * Determine if the given array offset exists.
      *
@@ -64,7 +58,6 @@ class ProcessPoolResults implements ArrayAccess
     {
         return isset($this->results[$offset]);
     }
-
     /**
      * Get the result at the given offset.
      *
@@ -75,7 +68,6 @@ class ProcessPoolResults implements ArrayAccess
     {
         return $this->results[$offset];
     }
-
     /**
      * Set the result at the given offset.
      *
@@ -87,7 +79,6 @@ class ProcessPoolResults implements ArrayAccess
     {
         $this->results[$offset] = $value;
     }
-
     /**
      * Unset the result at the given offset.
      *

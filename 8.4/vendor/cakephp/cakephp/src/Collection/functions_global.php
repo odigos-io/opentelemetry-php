@@ -1,5 +1,7 @@
 <?php
-declare(strict_types=1);
+
+declare (strict_types=1);
+namespace Odigos;
 
 // phpcs:disable PSR1.Files.SideEffects
 /**
@@ -15,11 +17,9 @@ declare(strict_types=1);
  * @since         2.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-
 use Cake\Collection\CollectionInterface;
 use function Cake\Collection\collection as cakeCollection;
-
-if (!function_exists('collection')) {
+if (!\function_exists('Odigos\collection')) {
     /**
      * Returns a new {@link \Cake\Collection\Collection} object wrapping the passed argument.
      *

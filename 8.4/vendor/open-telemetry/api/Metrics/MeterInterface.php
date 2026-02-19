@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\API\Metrics;
 
 interface MeterInterface
@@ -34,12 +33,7 @@ interface MeterInterface
      *
      * @see https://opentelemetry.io/docs/specs/otel/metrics/api/#multiple-instrument-callbacks
      */
-    public function batchObserve(
-        callable $callback,
-        AsynchronousInstrument $instrument,
-        AsynchronousInstrument ...$instruments,
-    ): ObservableCallbackInterface;
-
+    public function batchObserve(callable $callback, \OpenTelemetry\API\Metrics\AsynchronousInstrument $instrument, \OpenTelemetry\API\Metrics\AsynchronousInstrument ...$instruments): \OpenTelemetry\API\Metrics\ObservableCallbackInterface;
     /**
      * Creates a `Counter`.
      *
@@ -51,13 +45,7 @@ interface MeterInterface
      *
      * @see https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/metrics/api.md#counter-creation
      */
-    public function createCounter(
-        string $name,
-        ?string $unit = null,
-        ?string $description = null,
-        array $advisory = [],
-    ): CounterInterface;
-
+    public function createCounter(string $name, ?string $unit = null, ?string $description = null, array $advisory = []): \OpenTelemetry\API\Metrics\CounterInterface;
     /**
      * Creates an `ObservableCounter`.
      *
@@ -71,14 +59,7 @@ interface MeterInterface
      *
      * @see https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/metrics/api.md#asynchronous-counter-creation
      */
-    public function createObservableCounter(
-        string $name,
-        ?string $unit = null,
-        ?string $description = null,
-        array|callable $advisory = [],
-        callable ...$callbacks,
-    ): ObservableCounterInterface;
-
+    public function createObservableCounter(string $name, ?string $unit = null, ?string $description = null, array|callable $advisory = [], callable ...$callbacks): \OpenTelemetry\API\Metrics\ObservableCounterInterface;
     /**
      * Creates a `Histogram`.
      *
@@ -91,13 +72,7 @@ interface MeterInterface
      *
      * @see https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/metrics/api.md#histogram-creation
      */
-    public function createHistogram(
-        string $name,
-        ?string $unit = null,
-        ?string $description = null,
-        array $advisory = [],
-    ): HistogramInterface;
-
+    public function createHistogram(string $name, ?string $unit = null, ?string $description = null, array $advisory = []): \OpenTelemetry\API\Metrics\HistogramInterface;
     /**
      * Creates a `Gauge`.
      *
@@ -111,13 +86,7 @@ interface MeterInterface
      *
      * @experimental
      */
-    public function createGauge(
-        string $name,
-        ?string $unit = null,
-        ?string $description = null,
-        array $advisory = [],
-    ): GaugeInterface;
-
+    public function createGauge(string $name, ?string $unit = null, ?string $description = null, array $advisory = []): \OpenTelemetry\API\Metrics\GaugeInterface;
     /**
      * Creates an `ObservableGauge`.
      *
@@ -131,14 +100,7 @@ interface MeterInterface
      *
      * @see https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/metrics/api.md#asynchronous-gauge-creation
      */
-    public function createObservableGauge(
-        string $name,
-        ?string $unit = null,
-        ?string $description = null,
-        array|callable $advisory = [],
-        callable ...$callbacks,
-    ): ObservableGaugeInterface;
-
+    public function createObservableGauge(string $name, ?string $unit = null, ?string $description = null, array|callable $advisory = [], callable ...$callbacks): \OpenTelemetry\API\Metrics\ObservableGaugeInterface;
     /**
      * Creates an `UpDownCounter`.
      *
@@ -150,13 +112,7 @@ interface MeterInterface
      *
      * @see https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/metrics/api.md#updowncounter-creation
      */
-    public function createUpDownCounter(
-        string $name,
-        ?string $unit = null,
-        ?string $description = null,
-        array $advisory = [],
-    ): UpDownCounterInterface;
-
+    public function createUpDownCounter(string $name, ?string $unit = null, ?string $description = null, array $advisory = []): \OpenTelemetry\API\Metrics\UpDownCounterInterface;
     /**
      * Creates an `ObservableUpDownCounter`.
      *
@@ -170,11 +126,5 @@ interface MeterInterface
      *
      * @see https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/metrics/api.md#asynchronous-updowncounter-creation
      */
-    public function createObservableUpDownCounter(
-        string $name,
-        ?string $unit = null,
-        ?string $description = null,
-        array|callable $advisory = [],
-        callable ...$callbacks,
-    ): ObservableUpDownCounterInterface;
+    public function createObservableUpDownCounter(string $name, ?string $unit = null, ?string $description = null, array|callable $advisory = [], callable ...$callbacks): \OpenTelemetry\API\Metrics\ObservableUpDownCounterInterface;
 }

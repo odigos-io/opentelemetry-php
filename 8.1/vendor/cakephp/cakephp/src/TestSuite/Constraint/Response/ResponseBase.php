@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -16,10 +16,9 @@ declare(strict_types=1);
 namespace Cake\TestSuite\Constraint\Response;
 
 use Cake\Http\Cookie\CookieCollection;
-use PHPUnit\Framework\AssertionFailedError;
-use PHPUnit\Framework\Constraint\Constraint;
+use Odigos\PHPUnit\Framework\AssertionFailedError;
+use Odigos\PHPUnit\Framework\Constraint\Constraint;
 use Psr\Http\Message\ResponseInterface;
-
 /**
  * Base constraint for response constraints
  *
@@ -31,7 +30,6 @@ abstract class ResponseBase extends Constraint
      * @var \Psr\Http\Message\ResponseInterface
      */
     protected ResponseInterface $response;
-
     /**
      * Constructor
      *
@@ -42,10 +40,8 @@ abstract class ResponseBase extends Constraint
         if (!$response) {
             throw new AssertionFailedError('No response set, cannot assert content.');
         }
-
         $this->response = $response;
     }
-
     /**
      * Get the response body as string
      *
@@ -53,9 +49,8 @@ abstract class ResponseBase extends Constraint
      */
     protected function _getBodyAsString(): string
     {
-        return (string)$this->response->getBody();
+        return (string) $this->response->getBody();
     }
-
     /**
      * Read a cookie from either the response cookie collection,
      * or headers
@@ -72,7 +67,6 @@ abstract class ResponseBase extends Constraint
         if (!$cookies->has($name)) {
             return null;
         }
-
         return $cookies->get($name)->toArray();
     }
 }

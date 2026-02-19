@@ -2,7 +2,7 @@
 
 namespace Illuminate\Console\View;
 
-enum TaskResult: int
+enum TaskResult : int
 {
     case Success = 1;
     case Failure = 2;

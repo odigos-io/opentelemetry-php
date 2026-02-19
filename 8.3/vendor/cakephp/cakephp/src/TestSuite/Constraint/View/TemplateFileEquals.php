@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -15,8 +15,7 @@ declare(strict_types=1);
  */
 namespace Cake\TestSuite\Constraint\View;
 
-use PHPUnit\Framework\Constraint\Constraint;
-
+use Odigos\PHPUnit\Framework\Constraint\Constraint;
 /**
  * TemplateFileEquals
  *
@@ -28,7 +27,6 @@ class TemplateFileEquals extends Constraint
      * @var string
      */
     protected string $filename;
-
     /**
      * Constructor
      *
@@ -38,7 +36,6 @@ class TemplateFileEquals extends Constraint
     {
         $this->filename = $filename;
     }
-
     /**
      * Checks assertion
      *
@@ -49,7 +46,6 @@ class TemplateFileEquals extends Constraint
     {
         return str_contains($this->filename, $other);
     }
-
     /**
      * Assertion message
      *

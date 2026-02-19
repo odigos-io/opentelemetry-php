@@ -1,4 +1,7 @@
 <?php
+
+namespace Odigos;
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -14,28 +17,34 @@
  */
 use Cake\Database\Exception\QueryException;
 use function Cake\Core\h;
-
 $this->setLayout('dev_error');
-
 $this->assign('title', 'Database Error');
 $this->assign('templateName', 'pdo_error.php');
-
 $this->start('subheading');
 ?>
     <strong>Error</strong>
-    <?= h($message); ?>
-<?php $this->end() ?>
+    <?php 
+echo h($message);
+$this->end();
+?>
 
-<?php $this->start('file') ?>
+<?php 
+$this->start('file');
+?>
 <p class="notice">
     If you are using SQL keywords as table column names, you can enable identifier
     quoting for your database connection in config/app.php.
 </p>
-<?php if ($error instanceof QueryException) : ?>
+<?php 
+if ($error instanceof QueryException) {
+    ?>
     <p class="notice">
         <strong>SQL Query: </strong>
     </p>
-    <pre><?= h($error->getQueryString()); ?></pre>
-<?php endif; ?>
-<?= $this->element('auto_table_warning'); ?>
-<?php $this->end() ?>
+    <pre><?php 
+    echo h($error->getQueryString());
+    ?></pre>
+<?php 
+}
+echo $this->element('auto_table_warning');
+$this->end();

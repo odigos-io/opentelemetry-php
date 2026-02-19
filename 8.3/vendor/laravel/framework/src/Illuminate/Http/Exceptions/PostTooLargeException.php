@@ -4,7 +4,6 @@ namespace Illuminate\Http\Exceptions;
 
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Throwable;
-
 class PostTooLargeException extends HttpException
 {
     /**

@@ -1,17 +1,14 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Odigos\Laminas\Diactoros\Request;
 
-namespace Laminas\Diactoros\Request;
-
-use Laminas\Diactoros\Exception;
-use Laminas\Diactoros\Request;
-use Laminas\Diactoros\Stream;
+use Odigos\Laminas\Diactoros\Exception;
+use Odigos\Laminas\Diactoros\Request;
+use Odigos\Laminas\Diactoros\Stream;
 use Psr\Http\Message\RequestInterface;
 use Throwable;
-
 use function sprintf;
-
 /**
  * Serialize or deserialize request messages to/from arrays.
  *
@@ -35,16 +32,8 @@ final class ArraySerializer
      */
     public static function toArray(RequestInterface $request): array
     {
-        return [
-            'method'           => $request->getMethod(),
-            'request_target'   => $request->getRequestTarget(),
-            'uri'              => (string) $request->getUri(),
-            'protocol_version' => $request->getProtocolVersion(),
-            'headers'          => $request->getHeaders(),
-            'body'             => (string) $request->getBody(),
-        ];
+        return ['method' => $request->getMethod(), 'request_target' => $request->getRequestTarget(), 'uri' => (string) $request->getUri(), 'protocol_version' => $request->getProtocolVersion(), 'headers' => $request->getHeaders(), 'body' => (string) $request->getBody()];
     }
-
     /**
      * Deserialize a request array to a request instance.
      *
@@ -53,22 +42,18 @@ final class ArraySerializer
     public static function fromArray(array $serializedRequest): Request
     {
         try {
-            $uri    = self::getValueFromKey($serializedRequest, 'uri');
+            $uri = self::getValueFromKey($serializedRequest, 'uri');
             $method = self::getValueFromKey($serializedRequest, 'method');
-            $body   = new Stream('php://memory', 'wb+');
+            $body = new Stream('php://memory', 'wb+');
             $body->write(self::getValueFromKey($serializedRequest, 'body'));
-            $headers         = self::getValueFromKey($serializedRequest, 'headers');
-            $requestTarget   = self::getValueFromKey($serializedRequest, 'request_target');
+            $headers = self::getValueFromKey($serializedRequest, 'headers');
+            $requestTarget = self::getValueFromKey($serializedRequest, 'request_target');
             $protocolVersion = self::getValueFromKey($serializedRequest, 'protocol_version');
-
-            return (new Request($uri, $method, $body, $headers))
-                ->withRequestTarget($requestTarget)
-                ->withProtocolVersion($protocolVersion);
+            return (new Request($uri, $method, $body, $headers))->withRequestTarget($requestTarget)->withProtocolVersion($protocolVersion);
         } catch (Throwable $exception) {
             throw Exception\DeserializationException::forRequestFromArray($exception);
         }
     }
-
     /**
      * @return mixed
      * @throws Exception\DeserializationException

@@ -10,14 +10,12 @@ class IndexHint
      * @var string
      */
     public $type;
-
     /**
      * The name of the index.
      *
      * @var string
      */
     public $index;
-
     /**
      * Create a new index hint instance.
      *

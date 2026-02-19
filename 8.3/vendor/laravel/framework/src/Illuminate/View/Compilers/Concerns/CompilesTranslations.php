@@ -17,10 +17,8 @@ trait CompilesTranslations
         } elseif ($expression[1] === '[') {
             return "<?php \$__env->startTranslation{$expression}; ?>";
         }
-
         return "<?php echo app('translator')->get{$expression}; ?>";
     }
-
     /**
      * Compile the end-lang statements into valid PHP.
      *
@@ -30,7 +28,6 @@ trait CompilesTranslations
     {
         return '<?php echo $__env->renderTranslation(); ?>';
     }
-
     /**
      * Compile the choice statements into valid PHP.
      *

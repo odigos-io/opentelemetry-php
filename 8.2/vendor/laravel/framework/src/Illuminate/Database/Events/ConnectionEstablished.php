@@ -2,7 +2,7 @@
 
 namespace Illuminate\Database\Events;
 
-class ConnectionEstablished extends ConnectionEvent
+class ConnectionEstablished extends \Illuminate\Database\Events\ConnectionEvent
 {
     //
 }

@@ -1,8 +1,7 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Dotenv\Repository\Adapter;
+declare (strict_types=1);
+namespace Odigos\Dotenv\Repository\Adapter;
 
 interface WriterInterface
 {
@@ -15,7 +14,6 @@ interface WriterInterface
      * @return bool
      */
     public function write(string $name, string $value);
-
     /**
      * Delete an environment variable, if possible.
      *

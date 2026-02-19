@@ -8,22 +8,17 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+declare (strict_types=1);
+namespace Odigos\League\CommonMark\Event;
 
-declare(strict_types=1);
-
-namespace League\CommonMark\Event;
-
-use League\CommonMark\Output\RenderedContentInterface;
-
+use Odigos\League\CommonMark\Output\RenderedContentInterface;
 final class DocumentRenderedEvent extends AbstractEvent
 {
     private RenderedContentInterface $output;
-
     public function __construct(RenderedContentInterface $output)
     {
         $this->output = $output;
     }
-
     /**
      * @psalm-mutation-free
      */
@@ -31,7 +26,6 @@ final class DocumentRenderedEvent extends AbstractEvent
     {
         return $this->output;
     }
-
     /**
      * @psalm-external-mutation-free
      */

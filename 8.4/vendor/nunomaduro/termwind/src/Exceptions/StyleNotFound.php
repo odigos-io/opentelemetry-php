@@ -1,11 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Termwind\Exceptions;
+declare (strict_types=1);
+namespace Odigos\Termwind\Exceptions;
 
 use InvalidArgumentException;
-
 /**
  * @internal
  */
@@ -18,7 +16,6 @@ final class StyleNotFound extends InvalidArgumentException
     {
         parent::__construct($message, 0, $this->getPrevious());
     }
-
     /**
      * Creates a new style not found instance from the given style.
      */

@@ -1,15 +1,14 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\db\conditions;
 
 use yii\base\InvalidParamException;
 use yii\db\ExpressionInterface;
-
 /**
  * Interface ConditionInterface should be implemented by classes that represent a condition
  * in DBAL of framework.

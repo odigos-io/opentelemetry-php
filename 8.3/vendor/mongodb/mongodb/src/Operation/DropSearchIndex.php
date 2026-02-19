@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright 2023-present MongoDB, Inc.
  *
@@ -14,7 +15,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 namespace MongoDB\Operation;
 
 use MongoDB\Driver\Command;
@@ -23,7 +23,6 @@ use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
 use MongoDB\Driver\Server;
 use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\Exception\UnsupportedException;
-
 /**
  * Operation for the dropSearchIndexes command.
  *
@@ -33,7 +32,6 @@ use MongoDB\Exception\UnsupportedException;
 final class DropSearchIndex
 {
     private const ERROR_CODE_NAMESPACE_NOT_FOUND = 26;
-
     /**
      * Constructs a dropSearchIndex command.
      *
@@ -49,7 +47,6 @@ final class DropSearchIndex
             throw new InvalidArgumentException('Index name cannot be empty');
         }
     }
-
     /**
      * Execute the operation.
      *
@@ -58,15 +55,10 @@ final class DropSearchIndex
      */
     public function execute(Server $server): void
     {
-        $cmd = [
-            'dropSearchIndex' => $this->collectionName,
-            'name' => $this->name,
-        ];
-
+        $cmd = ['dropSearchIndex' => $this->collectionName, 'name' => $this->name];
         if (isset($this->options['comment'])) {
             $cmd['comment'] = $this->options['comment'];
         }
-
         try {
             $server->executeCommand($this->databaseName, new Command($cmd));
         } catch (CommandException $e) {

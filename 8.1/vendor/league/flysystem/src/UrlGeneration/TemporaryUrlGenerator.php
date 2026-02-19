@@ -1,12 +1,11 @@
 <?php
-declare(strict_types=1);
 
-namespace League\Flysystem\UrlGeneration;
+declare (strict_types=1);
+namespace Odigos\League\Flysystem\UrlGeneration;
 
 use DateTimeInterface;
-use League\Flysystem\Config;
-use League\Flysystem\UnableToGenerateTemporaryUrl;
-
+use Odigos\League\Flysystem\Config;
+use Odigos\League\Flysystem\UnableToGenerateTemporaryUrl;
 interface TemporaryUrlGenerator
 {
     /**

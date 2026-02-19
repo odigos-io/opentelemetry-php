@@ -1,14 +1,13 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\helpers;
 
 use yii\base\NotSupportedException;
-
 /**
  * Class BaseIpHelper provides concrete implementation for [[IpHelper]]
  *
@@ -37,9 +36,8 @@ class BaseIpHelper
      */
     public static function getIpVersion($ip)
     {
-        return strpos($ip, ':') === false ? self::IPV4 : self::IPV6;
+        return strpos($ip, ':') === \false ? self::IPV4 : self::IPV6;
     }
-
     /**
      * Checks whether IP address or subnet $subnet is contained by $subnet.
      *
@@ -68,22 +66,18 @@ class BaseIpHelper
     {
         list($ip, $mask) = array_pad(explode('/', $subnet), 2, null);
         list($net, $netMask) = array_pad(explode('/', $range), 2, null);
-
         $ipVersion = static::getIpVersion($ip);
         $netVersion = static::getIpVersion($net);
         if ($ipVersion !== $netVersion) {
-            return false;
+            return \false;
         }
-
         $maxMask = $ipVersion === self::IPV4 ? self::IPV4_ADDRESS_LENGTH : self::IPV6_ADDRESS_LENGTH;
         $mask = isset($mask) ? $mask : $maxMask;
         $netMask = isset($netMask) ? $netMask : $maxMask;
-
         $binIp = static::ip2bin($ip);
         $binNet = static::ip2bin($net);
         return substr($binIp, 0, $netMask) === substr($binNet, 0, $netMask) && $mask >= $netMask;
     }
-
     /**
      * Expands an IPv6 address to it's full notation.
      *
@@ -97,7 +91,6 @@ class BaseIpHelper
         $hex = unpack('H*hex', inet_pton($ip));
         return substr(preg_replace('/([a-f0-9]{4})/i', '$1:', $hex['hex']), 0, -1);
     }
-
     /**
      * Converts IP address to bits representation.
      *
@@ -110,15 +103,14 @@ class BaseIpHelper
         $ipBinary = null;
         if (static::getIpVersion($ip) === self::IPV4) {
             $ipBinary = pack('N', ip2long($ip));
-        } elseif (@inet_pton('::1') === false) {
+        } elseif (@inet_pton('::1') === \false) {
             throw new NotSupportedException('IPv6 is not supported by inet_pton()!');
         } else {
             $ipBinary = inet_pton($ip);
         }
-
         $result = '';
         for ($i = 0, $iMax = strlen($ipBinary); $i < $iMax; $i += 4) {
-            $result .= str_pad(decbin(unpack('N', substr($ipBinary, $i, 4))[1]), 32, '0', STR_PAD_LEFT);
+            $result .= str_pad(decbin(unpack('N', substr($ipBinary, $i, 4))[1]), 32, '0', \STR_PAD_LEFT);
         }
         return $result;
     }

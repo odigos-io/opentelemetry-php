@@ -1,13 +1,11 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Termwind\ValueObjects;
+declare (strict_types=1);
+namespace Odigos\Termwind\ValueObjects;
 
 use Closure;
-use Termwind\Actions\StyleToMethod;
-use Termwind\Exceptions\InvalidColor;
-
+use Odigos\Termwind\Actions\StyleToMethod;
+use Odigos\Termwind\Exceptions\InvalidColor;
 /**
  * @internal
  */
@@ -22,24 +20,17 @@ final class Style
     {
         // ..
     }
-
     /**
      * Apply the given set of styles to the styles.
      */
     public function apply(string $styles): void
     {
         $callback = clone $this->callback;
-
-        $this->callback = static function (
-            Styles $formatter,
-            string|int ...$arguments
-        ) use ($callback, $styles): Styles {
+        $this->callback = static function (Styles $formatter, string|int ...$arguments) use ($callback, $styles): Styles {
             $formatter = $callback($formatter, ...$arguments);
-
             return StyleToMethod::multiple($formatter, $styles);
         };
     }
-
     /**
      * Sets the color to the style.
      */
@@ -48,10 +39,8 @@ final class Style
         if (preg_match('/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/', $color) < 1) {
             throw new InvalidColor(sprintf('The color %s is invalid.', $color));
         }
-
         $this->color = $color;
     }
-
     /**
      * Gets the color.
      */
@@ -59,7 +48,6 @@ final class Style
     {
         return $this->color;
     }
-
     /**
      * Styles the given formatter with this style.
      */

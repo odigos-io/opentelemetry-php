@@ -3,9 +3,7 @@
 namespace Illuminate\Broadcasting;
 
 use Illuminate\Support\Arr;
-
 use function Illuminate\Support\enum_value;
-
 trait InteractsWithBroadcasting
 {
     /**
@@ -14,7 +12,6 @@ trait InteractsWithBroadcasting
      * @var array
      */
     protected $broadcastConnection = [null];
-
     /**
      * Broadcast the event using a specific broadcaster.
      *
@@ -24,14 +21,9 @@ trait InteractsWithBroadcasting
     public function broadcastVia($connection = null)
     {
         $connection = enum_value($connection);
-
-        $this->broadcastConnection = is_null($connection)
-            ? [null]
-            : Arr::wrap($connection);
-
+        $this->broadcastConnection = is_null($connection) ? [null] : Arr::wrap($connection);
         return $this;
     }
-
     /**
      * Get the broadcaster connections the event should be broadcast on.
      *

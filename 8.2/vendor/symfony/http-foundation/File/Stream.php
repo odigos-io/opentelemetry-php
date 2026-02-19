@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\HttpFoundation\File;
 
 /**
@@ -16,10 +15,10 @@ namespace Symfony\Component\HttpFoundation\File;
  *
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class Stream extends File
+class Stream extends \Symfony\Component\HttpFoundation\File\File
 {
     public function getSize(): int|false
     {
-        return false;
+        return \false;
     }
 }

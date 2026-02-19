@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -17,9 +17,8 @@ namespace Cake\TestSuite\Constraint\Session;
 
 use Cake\Http\Session;
 use Cake\Utility\Hash;
-use PHPUnit\Framework\AssertionFailedError;
-use PHPUnit\Framework\Constraint\Constraint;
-
+use Odigos\PHPUnit\Framework\AssertionFailedError;
+use Odigos\PHPUnit\Framework\Constraint\Constraint;
 /**
  * FlashParamContains
  *
@@ -31,27 +30,22 @@ class FlashParamContains extends Constraint
      * @var \Cake\Http\Session
      */
     protected Session $session;
-
     /**
      * @var string
      */
     protected string $key;
-
     /**
      * @var string
      */
     protected string $param;
-
     /**
      * @var int|null
      */
     protected ?int $at = null;
-
     /**
      * @var bool
      */
     protected bool $ignoreCase;
-
     /**
      * Constructor
      *
@@ -61,26 +55,19 @@ class FlashParamContains extends Constraint
      * @param int|null $at Expected index
      * @param bool $ignoreCase Ignore case
      */
-    public function __construct(
-        ?Session $session,
-        string $key,
-        string $param,
-        ?int $at = null,
-        bool $ignoreCase = false,
-    ) {
+    public function __construct(?Session $session, string $key, string $param, ?int $at = null, bool $ignoreCase = \false)
+    {
         if (!$session) {
             $message = 'There is no stored session data. Perhaps you need to run a request?';
             $message .= ' Additionally, ensure `$this->enableRetainFlashMessages()` has been enabled for the test.';
             throw new AssertionFailedError($message);
         }
-
         $this->session = $session;
         $this->key = $key;
         $this->param = $param;
         $this->at = $at;
         $this->ignoreCase = $ignoreCase;
     }
-
     /**
      * Compare to flash message(s) using contains logic
      *
@@ -92,28 +79,24 @@ class FlashParamContains extends Constraint
         // Server::run calls Session::close at the end of the request.
         // Which means, that we cannot use Session object here to access the session data.
         // Call to Session::read will start new session (and will erase the data).
-        $messages = (array)Hash::get($_SESSION, 'Flash.' . $this->key);
+        $messages = (array) Hash::get($_SESSION, 'Flash.' . $this->key);
         if ($this->at !== null) {
             $messages = [Hash::get($_SESSION, 'Flash.' . $this->key . '.' . $this->at)];
         }
-
         $method = 'mb_strpos';
         if ($this->ignoreCase) {
             $method = 'mb_stripos';
         }
-
         foreach ($messages as $message) {
             if (!isset($message[$this->param])) {
                 continue;
             }
-            if ($method($message[$this->param], $other) !== false) {
-                return true;
+            if ($method($message[$this->param], $other) !== \false) {
+                return \true;
             }
         }
-
-        return false;
+        return \false;
     }
-
     /**
      * Assertion message string
      *
@@ -124,7 +107,6 @@ class FlashParamContains extends Constraint
         if ($this->at !== null) {
             return sprintf("contains in '%s' %s #%d", $this->key, $this->param, $this->at);
         }
-
         return sprintf("contains in '%s' %s", $this->key, $this->param);
     }
 }

@@ -3,7 +3,6 @@
 namespace Illuminate\Http\Client;
 
 use GuzzleHttp\Utils;
-
 /**
  * @mixin \Illuminate\Http\Client\Factory
  */
@@ -15,32 +14,28 @@ class Pool
      * @var \Illuminate\Http\Client\Factory
      */
     protected $factory;
-
     /**
      * The handler function for the Guzzle client.
      *
      * @var callable
      */
     protected $handler;
-
     /**
      * The pool of requests.
      *
      * @var array<array-key, \Illuminate\Http\Client\PendingRequest>
      */
     protected $pool = [];
-
     /**
      * Create a new requests pool.
      *
      * @param  \Illuminate\Http\Client\Factory|null  $factory
      */
-    public function __construct(?Factory $factory = null)
+    public function __construct(?\Illuminate\Http\Client\Factory $factory = null)
     {
-        $this->factory = $factory ?: new Factory();
+        $this->factory = $factory ?: new \Illuminate\Http\Client\Factory();
         $this->handler = Utils::chooseHandler();
     }
-
     /**
      * Add a request to the pool with a numeric index.
      *
@@ -50,7 +45,6 @@ class Pool
     {
         return $this->pool[] = $this->asyncRequest();
     }
-
     /**
      * Add a request to the pool with a key.
      *
@@ -61,7 +55,6 @@ class Pool
     {
         return $this->pool[$key] = $this->asyncRequest();
     }
-
     /**
      * Retrieve a new async pending request.
      *
@@ -71,7 +64,6 @@ class Pool
     {
         return $this->factory->setHandler($this->handler)->async();
     }
-
     /**
      * Retrieve the requests in the pool.
      *
@@ -81,7 +73,6 @@ class Pool
     {
         return $this->pool;
     }
-
     /**
      * Add a request to the pool with a numeric index and forward the method call to the request.
      *

@@ -3,7 +3,6 @@
 namespace Illuminate\Routing\Exceptions;
 
 use RuntimeException;
-
 class BackedEnumCaseNotFoundException extends RuntimeException
 {
     /**

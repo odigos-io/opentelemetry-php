@@ -1,5 +1,6 @@
-<?php declare(strict_types=1);
+<?php
 
+declare (strict_types=1);
 /*
  * This file is part of the Monolog package.
  *
@@ -8,15 +9,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Odigos\Monolog\Handler;
 
-namespace Monolog\Handler;
-
-use Monolog\Level;
-use Monolog\Logger;
-use Monolog\ResettableInterface;
+use Odigos\Monolog\Level;
+use Odigos\Monolog\Logger;
+use Odigos\Monolog\ResettableInterface;
 use Psr\Log\LogLevel;
-use Monolog\LogRecord;
-
+use Odigos\Monolog\LogRecord;
 /**
  * Base Handler class providing basic level/bubble support
  *
@@ -25,20 +24,18 @@ use Monolog\LogRecord;
 abstract class AbstractHandler extends Handler implements ResettableInterface
 {
     protected Level $level = Level::Debug;
-    protected bool $bubble = true;
-
+    protected bool $bubble = \true;
     /**
      * @param int|string|Level|LogLevel::* $level  The minimum logging level at which this handler will be triggered
      * @param bool                         $bubble Whether the messages that are handled can bubble up the stack or not
      *
      * @phpstan-param value-of<Level::VALUES>|value-of<Level::NAMES>|Level|LogLevel::* $level
      */
-    public function __construct(int|string|Level $level = Level::Debug, bool $bubble = true)
+    public function __construct(int|string|Level $level = Level::Debug, bool $bubble = \true)
     {
         $this->setLevel($level);
         $this->bubble = $bubble;
     }
-
     /**
      * @inheritDoc
      */
@@ -46,7 +43,6 @@ abstract class AbstractHandler extends Handler implements ResettableInterface
     {
         return $record->level->value >= $this->level->value;
     }
-
     /**
      * Sets minimum logging level at which this handler will be triggered.
      *
@@ -58,10 +54,8 @@ abstract class AbstractHandler extends Handler implements ResettableInterface
     public function setLevel(int|string|Level $level): self
     {
         $this->level = Logger::toMonologLevel($level);
-
         return $this;
     }
-
     /**
      * Gets minimum logging level at which this handler will be triggered.
      */
@@ -69,7 +63,6 @@ abstract class AbstractHandler extends Handler implements ResettableInterface
     {
         return $this->level;
     }
-
     /**
      * Sets the bubbling behavior.
      *
@@ -80,10 +73,8 @@ abstract class AbstractHandler extends Handler implements ResettableInterface
     public function setBubble(bool $bubble): self
     {
         $this->bubble = $bubble;
-
         return $this;
     }
-
     /**
      * Gets the bubbling behavior.
      *
@@ -94,7 +85,6 @@ abstract class AbstractHandler extends Handler implements ResettableInterface
     {
         return $this->bubble;
     }
-
     /**
      * @inheritDoc
      */

@@ -1,11 +1,12 @@
 <?php
 
+namespace Odigos;
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 return [
     // string, required, root directory of all source files
     'sourcePath' => __DIR__ . '/..',
@@ -13,12 +14,7 @@ return [
     'messagePath' => __DIR__,
     // array, required, list of language codes that the extracted messages
     // should be translated to. For example, ['zh-CN', 'de'].
-    'languages' => [
-        'af', 'ar', 'az', 'be', 'bg', 'bs', 'ca', 'cs', 'da', 'de', 'el', 'es', 'et', 'fa', 'fi', 'fr', 'ga', 'he',
-        'hi', 'pt-BR', 'ro', 'hr', 'hu', 'hy', 'id', 'it', 'ja', 'ka', 'kk', 'ko', 'kz', 'lt', 'lv', 'ms', 'mt',
-        'nb-NO', 'nl', 'pl', 'pt', 'ru', 'sk', 'sl', 'sr', 'sr-Latn', 'sv', 'tg', 'th', 'tr', 'uk', 'uz', 'uz-Cy', 'vi',
-        'zh', 'zh-TW'
-    ],
+    'languages' => ['af', 'ar', 'az', 'be', 'bg', 'bs', 'ca', 'cs', 'da', 'de', 'el', 'es', 'et', 'fa', 'fi', 'fr', 'ga', 'he', 'hi', 'pt-BR', 'ro', 'hr', 'hu', 'hy', 'id', 'it', 'ja', 'ka', 'kk', 'ko', 'kz', 'lt', 'lv', 'ms', 'mt', 'nb-NO', 'nl', 'pl', 'pt', 'ru', 'sk', 'sl', 'sr', 'sr-Latn', 'sv', 'tg', 'th', 'tr', 'uk', 'uz', 'uz-Cy', 'vi', 'zh', 'zh-TW'],
     // string, the name of the function for translating messages.
     // Defaults to 'Yii::t'. This is used as a mark to find the messages to be
     // translated. You may use a string for single function name or an array for
@@ -27,15 +23,15 @@ return [
     // boolean, whether to sort messages by keys when merging new messages
     // with the existing ones. Defaults to false, which means the new (untranslated)
     // messages will be separated from the old (translated) ones.
-    'sort' => true,
+    'sort' => \true,
     // boolean, whether the message file should be overwritten with the merged messages
-    'overwrite' => true,
+    'overwrite' => \true,
     // boolean, whether to remove messages that no longer appear in the source code.
     // Defaults to false, which means each of these messages will be enclosed with a pair of '@@' marks.
-    'removeUnused' => true,
+    'removeUnused' => \true,
     // boolean, whether to mark messages that no longer appear in the source code.
     // Defaults to true, which means each of these messages will be enclosed with a pair of '@@' marks.
-    'markUnused' => true,
+    'markUnused' => \true,
     // array, list of patterns that specify which files/directories should NOT be processed.
     // If empty or not set, all files/directories will be processed.
     // A path matches a pattern if it contains the pattern string at its end. For example,
@@ -44,15 +40,7 @@ return [
     // and the '.svn' will match all files and directories named exactly '.svn'.
     // Note, the '/' characters in a pattern matches both '/' and '\'.
     // See helpers/FileHelper::findFiles() description for more details on pattern matching rules.
-    'except' => [
-        '.*',
-        '/.*',
-        '/messages',
-        '/tests',
-        '/runtime',
-        '/vendor',
-        '/BaseYii.php',
-    ],
+    'except' => ['.*', '/.*', '/messages', '/tests', '/runtime', '/vendor', '/BaseYii.php'],
     // array, list of patterns that specify which files (not directories) should be processed.
     // If empty or not set, all files will be processed.
     // Please refer to "except" for details about the patterns.
@@ -67,6 +55,4 @@ return [
 ',
     // Generated file format. Can be "php", "db" or "po".
     'format' => 'php',
-    // Connection component ID for "db" format.
-    //'db' => 'db',
 ];

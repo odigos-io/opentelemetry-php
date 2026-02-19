@@ -6,7 +6,6 @@ use OpenAI\Responses\VectorStores\Search\VectorStoreSearchResponse;
 use OpenAI\Responses\VectorStores\VectorStoreDeleteResponse;
 use OpenAI\Responses\VectorStores\VectorStoreListResponse;
 use OpenAI\Responses\VectorStores\VectorStoreResponse;
-
 interface VectorStoresContract
 {
     /**
@@ -17,7 +16,6 @@ interface VectorStoresContract
      * @param  array<string, mixed>  $parameters
      */
     public function create(array $parameters): VectorStoreResponse;
-
     /**
      * Returns a list of vector stores.
      *
@@ -26,14 +24,12 @@ interface VectorStoresContract
      * @param  array<string, mixed>  $parameters
      */
     public function list(array $parameters = []): VectorStoreListResponse;
-
     /**
      * Retrieves a vector store.
      *
      * @see https://platform.openai.com/docs/api-reference/vector-stores/retrieve
      */
     public function retrieve(string $vectorStoreId): VectorStoreResponse;
-
     /**
      * Modify a vector store
      *
@@ -42,28 +38,24 @@ interface VectorStoresContract
      * @param  array<string, mixed>  $parameters
      */
     public function modify(string $vectorStoreId, array $parameters): VectorStoreResponse;
-
     /**
      * Delete a vector store.
      *
      * https://platform.openai.com/docs/api-reference/vector-stores/delete
      */
     public function delete(string $vectorStoreId): VectorStoreDeleteResponse;
-
     /**
      * Manage the files related to the vector store
      *
      * @see https://platform.openai.com/docs/api-reference/vector-stores-files
      */
-    public function files(): VectorStoresFilesContract;
-
+    public function files(): \OpenAI\Contracts\Resources\VectorStoresFilesContract;
     /**
      * Manage the file batches related to the vector store
      *
      * @see https://platform.openai.com/docs/api-reference/vector-stores-file-batches
      */
-    public function batches(): VectorStoresFileBatchesContract;
-
+    public function batches(): \OpenAI\Contracts\Resources\VectorStoresFileBatchesContract;
     /**
      * Search a vector store for relevant chunks based on a query and file attributes filter.
      *

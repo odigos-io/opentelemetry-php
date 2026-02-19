@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\Console\Exception;
 
 /**
@@ -16,6 +15,6 @@ namespace Symfony\Component\Console\Exception;
  *
  * @author Jérôme Tamarelle <jerome@tamarelle.net>
  */
-class InvalidOptionException extends \InvalidArgumentException implements ExceptionInterface
+class InvalidOptionException extends \InvalidArgumentException implements \Symfony\Component\Console\Exception\ExceptionInterface
 {
 }

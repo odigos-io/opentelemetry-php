@@ -1,18 +1,15 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\DBAL\Types;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
-
 use function is_float;
 use function is_int;
-
 /**
  * Type that maps an SQL DECIMAL to a PHP string.
  */
-class DecimalType extends Type
+class DecimalType extends \Doctrine\DBAL\Types\Type
 {
     /**
      * {@inheritDoc}
@@ -21,7 +18,6 @@ class DecimalType extends Type
     {
         return $platform->getDecimalTypeDeclarationSQL($column);
     }
-
     public function convertToPHPValue(mixed $value, AbstractPlatform $platform): ?string
     {
         // Some drivers can represent decimals as float/int
@@ -29,7 +25,6 @@ class DecimalType extends Type
         if (is_float($value) || is_int($value)) {
             return (string) $value;
         }
-
         return $value;
     }
 }

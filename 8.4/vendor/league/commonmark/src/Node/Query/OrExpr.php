@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the league/commonmark package.
  *
@@ -10,11 +9,9 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Odigos\League\CommonMark\Node\Query;
 
-namespace League\CommonMark\Node\Query;
-
-use League\CommonMark\Node\Node;
-
+use Odigos\League\CommonMark\Node\Node;
 /**
  * @internal
  */
@@ -25,7 +22,6 @@ final class OrExpr implements ExpressionInterface
      * @psalm-var list<callable(Node): bool>
      */
     private array $conditions;
-
     /**
      * @psalm-param callable(Node): bool $expressions
      */
@@ -33,7 +29,6 @@ final class OrExpr implements ExpressionInterface
     {
         $this->conditions = \array_values($expressions);
     }
-
     /**
      * @param callable(Node): bool $expression
      */
@@ -41,15 +36,13 @@ final class OrExpr implements ExpressionInterface
     {
         $this->conditions[] = $expression;
     }
-
     public function __invoke(Node $node): bool
     {
         foreach ($this->conditions as $condition) {
             if ($condition($node)) {
-                return true;
+                return \true;
             }
         }
-
-        return false;
+        return \false;
     }
 }

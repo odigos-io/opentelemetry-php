@@ -1,15 +1,14 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\db\sqlite;
 
 use yii\db\SqlToken;
 use yii\helpers\StringHelper;
-
 /**
  * Command represents an SQLite's SQL statement to be executed against a database.
  *
@@ -28,10 +27,9 @@ class Command extends \yii\db\Command
         $sql = $this->getSql();
         $params = $this->params;
         $statements = $this->splitStatements($sql, $params);
-        if ($statements === false) {
+        if ($statements === \false) {
             return parent::execute();
         }
-
         $result = null;
         foreach ($statements as $statement) {
             list($statementSql, $statementParams) = $statement;
@@ -41,7 +39,6 @@ class Command extends \yii\db\Command
         $this->setSql($sql)->bindValues($params);
         return $result;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -50,10 +47,9 @@ class Command extends \yii\db\Command
         $sql = $this->getSql();
         $params = $this->params;
         $statements = $this->splitStatements($sql, $params);
-        if ($statements === false) {
+        if ($statements === \false) {
             return parent::queryInternal($method, $fetchMode);
         }
-
         list($lastStatementSql, $lastStatementParams) = array_pop($statements);
         foreach ($statements as $statement) {
             list($statementSql, $statementParams) = $statement;
@@ -65,7 +61,6 @@ class Command extends \yii\db\Command
         $this->setSql($sql)->bindValues($params);
         return $result;
     }
-
     /**
      * Splits the specified SQL code into individual SQL statements and returns them
      * or `false` if there's a single statement.
@@ -78,23 +73,20 @@ class Command extends \yii\db\Command
     private function splitStatements($sql, $params)
     {
         $semicolonIndex = strpos($sql, ';');
-        if ($semicolonIndex === false || $semicolonIndex === StringHelper::byteLength($sql) - 1) {
-            return false;
+        if ($semicolonIndex === \false || $semicolonIndex === StringHelper::byteLength($sql) - 1) {
+            return \false;
         }
-
-        $tokenizer = new SqlTokenizer($sql);
+        $tokenizer = new \yii\db\sqlite\SqlTokenizer($sql);
         $codeToken = $tokenizer->tokenize();
         if (count($codeToken->getChildren()) === 1) {
-            return false;
+            return \false;
         }
-
         $statements = [];
         foreach ($codeToken->getChildren() as $statement) {
             $statements[] = [$statement->getSql(), $this->extractUsedParams($statement, $params)];
         }
         return $statements;
     }
-
     /**
      * Returns named bindings used in the specified statement token.
      * @param SqlToken $statement
@@ -103,7 +95,7 @@ class Command extends \yii\db\Command
      */
     private function extractUsedParams(SqlToken $statement, $params)
     {
-        preg_match_all('/(?P<placeholder>:\w+)/', $statement->getSql(), $matches, PREG_SET_ORDER);
+        preg_match_all('/(?P<placeholder>:\w+)/', $statement->getSql(), $matches, \PREG_SET_ORDER);
         $result = [];
         foreach ($matches as $match) {
             $phName = ltrim($match['placeholder'], ':');

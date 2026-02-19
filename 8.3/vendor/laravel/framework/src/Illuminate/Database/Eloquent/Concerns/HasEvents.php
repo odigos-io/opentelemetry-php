@@ -10,7 +10,6 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use InvalidArgumentException;
 use ReflectionClass;
-
 trait HasEvents
 {
     /**
@@ -21,7 +20,6 @@ trait HasEvents
      * @var array<string, class-string>
      */
     protected $dispatchesEvents = [];
-
     /**
      * User exposed observable events.
      *
@@ -30,7 +28,6 @@ trait HasEvents
      * @var string[]
      */
     protected $observables = [];
-
     /**
      * Boot the has event trait for a model.
      *
@@ -38,9 +35,8 @@ trait HasEvents
      */
     public static function bootHasEvents()
     {
-        static::whenBooted(fn () => static::observe(static::resolveObserveAttributes()));
+        static::whenBooted(fn() => static::observe(static::resolveObserveAttributes()));
     }
-
     /**
      * Resolve the observe class names from the attributes.
      *
@@ -49,20 +45,11 @@ trait HasEvents
     public static function resolveObserveAttributes()
     {
         $reflectionClass = new ReflectionClass(static::class);
-
-        $isEloquentGrandchild = is_subclass_of(static::class, Model::class)
-            && get_parent_class(static::class) !== Model::class;
-
-        return (new Collection($reflectionClass->getAttributes(ObservedBy::class)))
-            ->map(fn ($attribute) => $attribute->getArguments())
-            ->flatten()
-            ->when($isEloquentGrandchild, function (Collection $attributes) {
-                return (new Collection(get_parent_class(static::class)::resolveObserveAttributes()))
-                    ->merge($attributes);
-            })
-            ->all();
+        $isEloquentGrandchild = is_subclass_of(static::class, Model::class) && get_parent_class(static::class) !== Model::class;
+        return (new Collection($reflectionClass->getAttributes(ObservedBy::class)))->map(fn($attribute) => $attribute->getArguments())->flatten()->when($isEloquentGrandchild, function (Collection $attributes) {
+            return (new Collection(get_parent_class(static::class)::resolveObserveAttributes()))->merge($attributes);
+        })->all();
     }
-
     /**
      * Register observers with the model.
      *
@@ -73,13 +60,11 @@ trait HasEvents
      */
     public static function observe($classes)
     {
-        $instance = new static;
-
+        $instance = new static();
         foreach (Arr::wrap($classes) as $class) {
             $instance->registerObserver($class);
         }
     }
-
     /**
      * Register a single observer with the model.
      *
@@ -91,17 +76,15 @@ trait HasEvents
     protected function registerObserver($class)
     {
         $className = $this->resolveObserverClassName($class);
-
         // When registering a model observer, we will spin through the possible events
         // and determine if this observer has that method. If it does, we will hook
         // it into the model's event system, making it convenient to watch these.
         foreach ($this->getObservableEvents() as $event) {
             if (method_exists($class, $event)) {
-                static::registerModelEvent($event, $className.'@'.$event);
+                static::registerModelEvent($event, $className . '@' . $event);
             }
         }
     }
-
     /**
      * Resolve the observer's class name from an object or string.
      *
@@ -115,14 +98,11 @@ trait HasEvents
         if (is_object($class)) {
             return get_class($class);
         }
-
         if (class_exists($class)) {
             return $class;
         }
-
-        throw new InvalidArgumentException('Unable to find observer: '.$class);
+        throw new InvalidArgumentException('Unable to find observer: ' . $class);
     }
-
     /**
      * Get the observable event names.
      *
@@ -130,16 +110,8 @@ trait HasEvents
      */
     public function getObservableEvents()
     {
-        return array_merge(
-            [
-                'retrieved', 'creating', 'created', 'updating', 'updated',
-                'saving', 'saved', 'restoring', 'restored', 'replicating',
-                'trashed', 'deleting', 'deleted', 'forceDeleting', 'forceDeleted',
-            ],
-            $this->observables
-        );
+        return array_merge(['retrieved', 'creating', 'created', 'updating', 'updated', 'saving', 'saved', 'restoring', 'restored', 'replicating', 'trashed', 'deleting', 'deleted', 'forceDeleting', 'forceDeleted'], $this->observables);
     }
-
     /**
      * Set the observable event names.
      *
@@ -149,10 +121,8 @@ trait HasEvents
     public function setObservableEvents(array $observables)
     {
         $this->observables = $observables;
-
         return $this;
     }
-
     /**
      * Add an observable event name.
      *
@@ -161,11 +131,8 @@ trait HasEvents
      */
     public function addObservableEvents($observables)
     {
-        $this->observables = array_unique(array_merge(
-            $this->observables, is_array($observables) ? $observables : func_get_args()
-        ));
+        $this->observables = array_unique(array_merge($this->observables, is_array($observables) ? $observables : func_get_args()));
     }
-
     /**
      * Remove an observable event name.
      *
@@ -174,11 +141,8 @@ trait HasEvents
      */
     public function removeObservableEvents($observables)
     {
-        $this->observables = array_diff(
-            $this->observables, is_array($observables) ? $observables : func_get_args()
-        );
+        $this->observables = array_diff($this->observables, is_array($observables) ? $observables : func_get_args());
     }
-
     /**
      * Register a model event with the dispatcher.
      *
@@ -190,11 +154,9 @@ trait HasEvents
     {
         if (isset(static::$dispatcher)) {
             $name = static::class;
-
             static::$dispatcher->listen("eloquent.{$event}: {$name}", $callback);
         }
     }
-
     /**
      * Fire the given event for the model.
      *
@@ -202,30 +164,21 @@ trait HasEvents
      * @param  bool  $halt
      * @return mixed
      */
-    protected function fireModelEvent($event, $halt = true)
+    protected function fireModelEvent($event, $halt = \true)
     {
-        if (! isset(static::$dispatcher)) {
-            return true;
+        if (!isset(static::$dispatcher)) {
+            return \true;
         }
-
         // First, we will get the proper method to call on the event dispatcher, and then we
         // will attempt to fire a custom, object based event for the given event. If that
         // returns a result we can return that result, or we'll call the string events.
         $method = $halt ? 'until' : 'dispatch';
-
-        $result = $this->filterModelEventResults(
-            $this->fireCustomModelEvent($event, $method)
-        );
-
-        if ($result === false) {
-            return false;
+        $result = $this->filterModelEventResults($this->fireCustomModelEvent($event, $method));
+        if ($result === \false) {
+            return \false;
         }
-
-        return ! empty($result) ? $result : static::$dispatcher->{$method}(
-            "eloquent.{$event}: ".static::class, $this
-        );
+        return !empty($result) ? $result : static::$dispatcher->{$method}("eloquent.{$event}: " . static::class, $this);
     }
-
     /**
      * Fire a custom model event for the given event.
      *
@@ -235,17 +188,14 @@ trait HasEvents
      */
     protected function fireCustomModelEvent($event, $method)
     {
-        if (! isset($this->dispatchesEvents[$event])) {
+        if (!isset($this->dispatchesEvents[$event])) {
             return;
         }
-
-        $result = static::$dispatcher->$method(new $this->dispatchesEvents[$event]($this));
-
-        if (! is_null($result)) {
+        $result = static::$dispatcher->{$method}(new $this->dispatchesEvents[$event]($this));
+        if (!is_null($result)) {
             return $result;
         }
     }
-
     /**
      * Filter the model event results.
      *
@@ -256,13 +206,11 @@ trait HasEvents
     {
         if (is_array($result)) {
             $result = array_filter($result, function ($response) {
-                return ! is_null($response);
+                return !is_null($response);
             });
         }
-
         return $result;
     }
-
     /**
      * Register a retrieved model event with the dispatcher.
      *
@@ -273,7 +221,6 @@ trait HasEvents
     {
         static::registerModelEvent('retrieved', $callback);
     }
-
     /**
      * Register a saving model event with the dispatcher.
      *
@@ -284,7 +231,6 @@ trait HasEvents
     {
         static::registerModelEvent('saving', $callback);
     }
-
     /**
      * Register a saved model event with the dispatcher.
      *
@@ -295,7 +241,6 @@ trait HasEvents
     {
         static::registerModelEvent('saved', $callback);
     }
-
     /**
      * Register an updating model event with the dispatcher.
      *
@@ -306,7 +251,6 @@ trait HasEvents
     {
         static::registerModelEvent('updating', $callback);
     }
-
     /**
      * Register an updated model event with the dispatcher.
      *
@@ -317,7 +261,6 @@ trait HasEvents
     {
         static::registerModelEvent('updated', $callback);
     }
-
     /**
      * Register a creating model event with the dispatcher.
      *
@@ -328,7 +271,6 @@ trait HasEvents
     {
         static::registerModelEvent('creating', $callback);
     }
-
     /**
      * Register a created model event with the dispatcher.
      *
@@ -339,7 +281,6 @@ trait HasEvents
     {
         static::registerModelEvent('created', $callback);
     }
-
     /**
      * Register a replicating model event with the dispatcher.
      *
@@ -350,7 +291,6 @@ trait HasEvents
     {
         static::registerModelEvent('replicating', $callback);
     }
-
     /**
      * Register a deleting model event with the dispatcher.
      *
@@ -361,7 +301,6 @@ trait HasEvents
     {
         static::registerModelEvent('deleting', $callback);
     }
-
     /**
      * Register a deleted model event with the dispatcher.
      *
@@ -372,7 +311,6 @@ trait HasEvents
     {
         static::registerModelEvent('deleted', $callback);
     }
-
     /**
      * Remove all the event listeners for the model.
      *
@@ -380,21 +318,17 @@ trait HasEvents
      */
     public static function flushEventListeners()
     {
-        if (! isset(static::$dispatcher)) {
+        if (!isset(static::$dispatcher)) {
             return;
         }
-
-        $instance = new static;
-
+        $instance = new static();
         foreach ($instance->getObservableEvents() as $event) {
-            static::$dispatcher->forget("eloquent.{$event}: ".static::class);
+            static::$dispatcher->forget("eloquent.{$event}: " . static::class);
         }
-
         foreach ($instance->dispatchesEvents as $event) {
             static::$dispatcher->forget($event);
         }
     }
-
     /**
      * Get the event map for the model.
      *
@@ -404,7 +338,6 @@ trait HasEvents
     {
         return $this->dispatchesEvents;
     }
-
     /**
      * Get the event dispatcher instance.
      *
@@ -414,7 +347,6 @@ trait HasEvents
     {
         return static::$dispatcher;
     }
-
     /**
      * Set the event dispatcher instance.
      *
@@ -425,7 +357,6 @@ trait HasEvents
     {
         static::$dispatcher = $dispatcher;
     }
-
     /**
      * Unset the event dispatcher for models.
      *
@@ -435,7 +366,6 @@ trait HasEvents
     {
         static::$dispatcher = null;
     }
-
     /**
      * Execute a callback without firing any model events for any model type.
      *
@@ -445,11 +375,9 @@ trait HasEvents
     public static function withoutEvents(callable $callback)
     {
         $dispatcher = static::getEventDispatcher();
-
         if ($dispatcher) {
             static::setEventDispatcher(new NullDispatcher($dispatcher));
         }
-
         try {
             return $callback();
         } finally {

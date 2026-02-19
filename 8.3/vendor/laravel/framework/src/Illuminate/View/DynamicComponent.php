@@ -7,10 +7,8 @@ use Illuminate\Container\Container;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Illuminate\View\Compilers\ComponentTagCompiler;
-
 use function Illuminate\Support\enum_value;
-
-class DynamicComponent extends Component
+class DynamicComponent extends \Illuminate\View\Component
 {
     /**
      * The name of the component.
@@ -18,21 +16,18 @@ class DynamicComponent extends Component
      * @var string
      */
     public $component;
-
     /**
      * The component tag compiler instance.
      *
      * @var \Illuminate\View\Compilers\BladeTagCompiler
      */
     protected static $compiler;
-
     /**
      * The cached component classes.
      *
      * @var array
      */
     protected static $componentClasses = [];
-
     /**
      * Create a new component instance.
      *
@@ -42,7 +37,6 @@ class DynamicComponent extends Component
     {
         $this->component = (string) enum_value($component);
     }
-
     /**
      * Get the view / contents that represent the component.
      *
@@ -51,39 +45,25 @@ class DynamicComponent extends Component
     public function render()
     {
         $template = <<<'EOF'
-<?php extract((new \Illuminate\Support\Collection($attributes->getAttributes()))->mapWithKeys(function ($value, $key) { return [Illuminate\Support\Str::camel(str_replace([':', '.'], ' ', $key)) => $value]; })->all(), EXTR_SKIP); ?>
+<?php
+
+namespace Odigos;
+
+\extract((new \Illuminate\Support\Collection($attributes->getAttributes()))->mapWithKeys(function ($value, $key) {
+    return [\Illuminate\Support\Str::camel(\str_replace([':', '.'], ' ', $key)) => $value];
+})->all(), \EXTR_SKIP);
+?>
 {{ props }}
 <x-{{ component }} {{ bindings }} {{ attributes }}>
 {{ slots }}
 {{ defaultSlot }}
-</x-{{ component }}>
+</x-{{ component }}><?php 
 EOF;
-
         return function ($data) use ($template) {
             $bindings = $this->bindings($class = $this->classForComponent());
-
-            return str_replace(
-                [
-                    '{{ component }}',
-                    '{{ props }}',
-                    '{{ bindings }}',
-                    '{{ attributes }}',
-                    '{{ slots }}',
-                    '{{ defaultSlot }}',
-                ],
-                [
-                    $this->component,
-                    $this->compileProps($bindings),
-                    $this->compileBindings($bindings),
-                    class_exists($class) ? '{{ $attributes }}' : '',
-                    $this->compileSlots($data['__laravel_slots']),
-                    '{{ $slot ?? "" }}',
-                ],
-                $template
-            );
+            return str_replace(['{{ component }}', '{{ props }}', '{{ bindings }}', '{{ attributes }}', '{{ slots }}', '{{ defaultSlot }}'], [$this->component, $this->compileProps($bindings), $this->compileBindings($bindings), class_exists($class) ? '{{ $attributes }}' : '', $this->compileSlots($data['__laravel_slots']), '{{ $slot ?? "" }}'], $template);
         };
     }
-
     /**
      * Compile the @props directive for the component.
      *
@@ -95,12 +75,10 @@ EOF;
         if (empty($bindings)) {
             return '';
         }
-
-        return '@props('.'[\''.implode('\',\'', (new Collection($bindings))->map(function ($dataKey) {
+        return '@props(' . '[\'' . implode('\',\'', (new Collection($bindings))->map(function ($dataKey) {
             return Str::camel($dataKey);
-        })->all()).'\']'.')';
+        })->all()) . '\']' . ')';
     }
-
     /**
      * Compile the bindings for the component.
      *
@@ -109,11 +87,8 @@ EOF;
      */
     protected function compileBindings(array $bindings)
     {
-        return (new Collection($bindings))
-            ->map(fn ($key) => ':'.$key.'="$'.Str::camel(str_replace([':', '.'], ' ', $key)).'"')
-            ->implode(' ');
+        return (new Collection($bindings))->map(fn($key) => ':' . $key . '="$' . Str::camel(str_replace([':', '.'], ' ', $key)) . '"')->implode(' ');
     }
-
     /**
      * Compile the slots for the component.
      *
@@ -122,12 +97,8 @@ EOF;
      */
     protected function compileSlots(array $slots)
     {
-        return (new Collection($slots))
-            ->map(fn ($slot, $name) => $name === '__default' ? null : '<x-slot name="'.$name.'" '.((string) $slot->attributes).'>{{ $'.$name.' }}</x-slot>')
-            ->filter()
-            ->implode(PHP_EOL);
+        return (new Collection($slots))->map(fn($slot, $name) => $name === '__default' ? null : '<x-slot name="' . $name . '" ' . (string) $slot->attributes . '>{{ $' . $name . ' }}</x-slot>')->filter()->implode(\PHP_EOL);
     }
-
     /**
      * Get the class for the current component.
      *
@@ -138,11 +109,8 @@ EOF;
         if (isset(static::$componentClasses[$this->component])) {
             return static::$componentClasses[$this->component];
         }
-
-        return static::$componentClasses[$this->component] =
-                    $this->compiler()->componentClass($this->component);
+        return static::$componentClasses[$this->component] = $this->compiler()->componentClass($this->component);
     }
-
     /**
      * Get the names of the variables that should be bound to the component.
      *
@@ -152,10 +120,8 @@ EOF;
     protected function bindings(string $class)
     {
         [$data] = $this->compiler()->partitionDataAndAttributes($class, $this->attributes->getAttributes());
-
         return array_keys($data->all());
     }
-
     /**
      * Get an instance of the Blade tag compiler.
      *
@@ -163,14 +129,9 @@ EOF;
      */
     protected function compiler()
     {
-        if (! static::$compiler) {
-            static::$compiler = new ComponentTagCompiler(
-                Container::getInstance()->make('blade.compiler')->getClassComponentAliases(),
-                Container::getInstance()->make('blade.compiler')->getClassComponentNamespaces(),
-                Container::getInstance()->make('blade.compiler')
-            );
+        if (!static::$compiler) {
+            static::$compiler = new ComponentTagCompiler(Container::getInstance()->make('blade.compiler')->getClassComponentAliases(), Container::getInstance()->make('blade.compiler')->getClassComponentNamespaces(), Container::getInstance()->make('blade.compiler'));
         }
-
         return static::$compiler;
     }
 }

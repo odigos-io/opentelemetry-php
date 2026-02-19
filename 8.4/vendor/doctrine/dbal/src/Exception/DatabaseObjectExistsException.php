@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\DBAL\Exception;
 
 /**
@@ -11,6 +10,6 @@ namespace Doctrine\DBAL\Exception;
  * such as schemas, tables, views, sequences, triggers,  constraints, indexes,
  * functions, stored procedures etc.
  */
-class DatabaseObjectExistsException extends ServerException
+class DatabaseObjectExistsException extends \Doctrine\DBAL\Exception\ServerException
 {
 }

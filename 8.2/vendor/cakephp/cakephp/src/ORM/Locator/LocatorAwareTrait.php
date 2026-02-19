@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -19,7 +19,6 @@ namespace Cake\ORM\Locator;
 use Cake\Datasource\FactoryLocator;
 use Cake\ORM\Table;
 use UnexpectedValueException;
-
 /**
  * Contains method for setting and accessing LocatorInterface instance
  */
@@ -31,47 +30,37 @@ trait LocatorAwareTrait
      * @var string|null
      */
     protected ?string $defaultTable = null;
-
     /**
      * Table locator instance
      *
      * @var \Cake\ORM\Locator\LocatorInterface|null
      */
-    protected ?LocatorInterface $_tableLocator = null;
-
+    protected ?\Cake\ORM\Locator\LocatorInterface $_tableLocator = null;
     /**
      * Sets the table locator.
      *
      * @param \Cake\ORM\Locator\LocatorInterface $tableLocator LocatorInterface instance.
      * @return $this
      */
-    public function setTableLocator(LocatorInterface $tableLocator)
+    public function setTableLocator(\Cake\ORM\Locator\LocatorInterface $tableLocator)
     {
         $this->_tableLocator = $tableLocator;
-
         return $this;
     }
-
     /**
      * Gets the table locator.
      *
      * @return \Cake\ORM\Locator\LocatorInterface
      */
-    public function getTableLocator(): LocatorInterface
+    public function getTableLocator(): \Cake\ORM\Locator\LocatorInterface
     {
         if ($this->_tableLocator !== null) {
             return $this->_tableLocator;
         }
-
         $locator = FactoryLocator::get('Table');
-        assert(
-            $locator instanceof LocatorInterface,
-            '`FactoryLocator` must return an instance of Cake\ORM\LocatorInterface for type `Table`.',
-        );
-
+        assert($locator instanceof \Cake\ORM\Locator\LocatorInterface, '`FactoryLocator` must return an instance of Cake\ORM\LocatorInterface for type `Table`.');
         return $this->_tableLocator = $locator;
     }
-
     /**
      * Convenience method to get a table instance.
      *
@@ -89,11 +78,8 @@ trait LocatorAwareTrait
     {
         $alias ??= $this->defaultTable;
         if (!$alias) {
-            throw new UnexpectedValueException(
-                'You must provide an `$alias` or set the `$defaultTable` property to a non empty string.',
-            );
+            throw new UnexpectedValueException('You must provide an `$alias` or set the `$defaultTable` property to a non empty string.');
         }
-
         // phpcs:ignore
         /** @var T */
         return $this->getTableLocator()->get($alias, $options);

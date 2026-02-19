@@ -8,12 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\EventDispatcher\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-
 /**
  * This pass allows bundles to extend the list of event aliases.
  *
@@ -22,19 +20,13 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 class AddEventAliasesPass implements CompilerPassInterface
 {
     private array $eventAliases;
-
     public function __construct(array $eventAliases)
     {
         $this->eventAliases = $eventAliases;
     }
-
     public function process(ContainerBuilder $container): void
     {
         $eventAliases = $container->hasParameter('event_dispatcher.event_aliases') ? $container->getParameter('event_dispatcher.event_aliases') : [];
-
-        $container->setParameter(
-            'event_dispatcher.event_aliases',
-            array_merge($eventAliases, $this->eventAliases)
-        );
+        $container->setParameter('event_dispatcher.event_aliases', array_merge($eventAliases, $this->eventAliases));
     }
 }

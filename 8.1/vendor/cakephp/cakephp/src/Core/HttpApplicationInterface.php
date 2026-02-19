@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright 2005-2011, Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -17,7 +17,6 @@ namespace Cake\Core;
 
 use Cake\Http\MiddlewareQueue;
 use Psr\Http\Server\RequestHandlerInterface;
-
 /**
  * An interface defining the methods that the
  * http server depend on.
@@ -32,7 +31,6 @@ interface HttpApplicationInterface extends RequestHandlerInterface
      * @return void
      */
     public function bootstrap(): void;
-
     /**
      * Define the HTTP middleware layers for an application.
      *

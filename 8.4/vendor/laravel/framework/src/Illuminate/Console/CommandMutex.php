@@ -11,7 +11,6 @@ interface CommandMutex
      * @return bool
      */
     public function create($command);
-
     /**
      * Determine if a command mutex exists for the given command.
      *
@@ -19,7 +18,6 @@ interface CommandMutex
      * @return bool
      */
     public function exists($command);
-
     /**
      * Release the mutex for the given command.
      *

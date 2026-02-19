@@ -5,7 +5,6 @@ namespace Illuminate\Cache;
 use BadMethodCallException;
 use Illuminate\Contracts\Cache\LockProvider;
 use Illuminate\Contracts\Cache\Store;
-
 class MemoizedStore implements LockProvider, Store
 {
     /**
@@ -14,20 +13,16 @@ class MemoizedStore implements LockProvider, Store
      * @var array<string, mixed>
      */
     protected $cache = [];
-
     /**
      * Create a new memoized cache instance.
      *
      * @param  string  $name
      * @param  \Illuminate\Cache\Repository  $repository
      */
-    public function __construct(
-        protected $name,
-        protected $repository,
-    ) {
+    public function __construct(protected $name, protected $repository)
+    {
         //
     }
-
     /**
      * Retrieve an item from the cache by key.
      *
@@ -37,14 +32,11 @@ class MemoizedStore implements LockProvider, Store
     public function get($key)
     {
         $prefixedKey = $this->prefix($key);
-
         if (array_key_exists($prefixedKey, $this->cache)) {
             return $this->cache[$prefixedKey];
         }
-
         return $this->cache[$prefixedKey] = $this->repository->get($key);
     }
-
     /**
      * Retrieve multiple items from the cache by key.
      *
@@ -55,17 +47,14 @@ class MemoizedStore implements LockProvider, Store
     public function many(array $keys)
     {
         [$memoized, $retrieved, $missing] = [[], [], []];
-
         foreach ($keys as $key) {
             $prefixedKey = $this->prefix($key);
-
             if (array_key_exists($prefixedKey, $this->cache)) {
                 $memoized[$key] = $this->cache[$prefixedKey];
             } else {
                 $missing[] = $key;
             }
         }
-
         if (count($missing) > 0) {
             $retrieved = tap($this->repository->many($missing), function ($values) {
                 foreach ($values as $key => $value) {
@@ -73,9 +62,7 @@ class MemoizedStore implements LockProvider, Store
                 }
             });
         }
-
         $result = [];
-
         foreach ($keys as $key) {
             if (array_key_exists($key, $memoized)) {
                 $result[$key] = $memoized[$key];
@@ -83,10 +70,8 @@ class MemoizedStore implements LockProvider, Store
                 $result[$key] = $retrieved[$key];
             }
         }
-
         return $result;
     }
-
     /**
      * Store an item in the cache for a given number of seconds.
      *
@@ -98,10 +83,8 @@ class MemoizedStore implements LockProvider, Store
     public function put($key, $value, $seconds)
     {
         unset($this->cache[$this->prefix($key)]);
-
         return $this->repository->put($key, $value, $seconds);
     }
-
     /**
      * Store multiple items in the cache for a given number of seconds.
      *
@@ -114,10 +97,8 @@ class MemoizedStore implements LockProvider, Store
         foreach ($values as $key => $value) {
             unset($this->cache[$this->prefix($key)]);
         }
-
         return $this->repository->putMany($values, $seconds);
     }
-
     /**
      * Increment the value of an item in the cache.
      *
@@ -128,10 +109,8 @@ class MemoizedStore implements LockProvider, Store
     public function increment($key, $value = 1)
     {
         unset($this->cache[$this->prefix($key)]);
-
         return $this->repository->increment($key, $value);
     }
-
     /**
      * Decrement the value of an item in the cache.
      *
@@ -142,10 +121,8 @@ class MemoizedStore implements LockProvider, Store
     public function decrement($key, $value = 1)
     {
         unset($this->cache[$this->prefix($key)]);
-
         return $this->repository->decrement($key, $value);
     }
-
     /**
      * Store an item in the cache indefinitely.
      *
@@ -156,10 +133,8 @@ class MemoizedStore implements LockProvider, Store
     public function forever($key, $value)
     {
         unset($this->cache[$this->prefix($key)]);
-
         return $this->repository->forever($key, $value);
     }
-
     /**
      * Get a lock instance.
      *
@@ -170,13 +145,11 @@ class MemoizedStore implements LockProvider, Store
      */
     public function lock($name, $seconds = 0, $owner = null)
     {
-        if (! $this->repository->getStore() instanceof LockProvider) {
+        if (!$this->repository->getStore() instanceof LockProvider) {
             throw new BadMethodCallException('This cache store does not support locks.');
         }
-
         return $this->repository->getStore()->lock(...func_get_args());
     }
-
     /**
      * Restore a lock instance using the owner identifier.
      *
@@ -186,13 +159,11 @@ class MemoizedStore implements LockProvider, Store
      */
     public function restoreLock($name, $owner)
     {
-        if (! $this->repository->getStore() instanceof LockProvider) {
+        if (!$this->repository->getStore() instanceof LockProvider) {
             throw new BadMethodCallException('This cache store does not support locks.');
         }
-
         return $this->repository->getStore()->restoreLock(...func_get_args());
     }
-
     /**
      * Remove an item from the cache.
      *
@@ -202,10 +173,8 @@ class MemoizedStore implements LockProvider, Store
     public function forget($key)
     {
         unset($this->cache[$this->prefix($key)]);
-
         return $this->repository->forget($key);
     }
-
     /**
      * Remove all items from the cache.
      *
@@ -214,10 +183,8 @@ class MemoizedStore implements LockProvider, Store
     public function flush()
     {
         $this->cache = [];
-
         return $this->repository->flush();
     }
-
     /**
      * Get the cache key prefix.
      *
@@ -227,7 +194,6 @@ class MemoizedStore implements LockProvider, Store
     {
         return $this->repository->getPrefix();
     }
-
     /**
      * Prefix the given key.
      *
@@ -236,6 +202,6 @@ class MemoizedStore implements LockProvider, Store
      */
     protected function prefix($key)
     {
-        return $this->getPrefix().$key;
+        return $this->getPrefix() . $key;
     }
 }

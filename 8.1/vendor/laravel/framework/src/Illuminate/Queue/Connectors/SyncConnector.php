@@ -3,8 +3,7 @@
 namespace Illuminate\Queue\Connectors;
 
 use Illuminate\Queue\SyncQueue;
-
-class SyncConnector implements ConnectorInterface
+class SyncConnector implements \Illuminate\Queue\Connectors\ConnectorInterface
 {
     /**
      * Establish a queue connection.
@@ -14,6 +13,6 @@ class SyncConnector implements ConnectorInterface
      */
     public function connect(array $config)
     {
-        return new SyncQueue;
+        return new SyncQueue();
     }
 }

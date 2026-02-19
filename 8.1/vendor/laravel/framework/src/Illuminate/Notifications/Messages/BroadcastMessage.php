@@ -3,18 +3,15 @@
 namespace Illuminate\Notifications\Messages;
 
 use Illuminate\Bus\Queueable;
-
 class BroadcastMessage
 {
     use Queueable;
-
     /**
      * The data for the notification.
      *
      * @var array
      */
     public $data;
-
     /**
      * Create a new message instance.
      *
@@ -25,7 +22,6 @@ class BroadcastMessage
     {
         $this->data = $data;
     }
-
     /**
      * Set the message data.
      *
@@ -35,7 +31,6 @@ class BroadcastMessage
     public function data($data)
     {
         $this->data = $data;
-
         return $this;
     }
 }

@@ -3,8 +3,7 @@
 namespace Illuminate\Support\Facades;
 
 use Illuminate\Foundation\MaintenanceModeManager;
-
-class MaintenanceMode extends Facade
+class MaintenanceMode extends \Illuminate\Support\Facades\Facade
 {
     /**
      * Get the registered name of the component.

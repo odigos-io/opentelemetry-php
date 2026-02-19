@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -17,7 +17,6 @@ namespace Cake\Routing\Exception;
 use Cake\Core\Exception\CakeException;
 use Cake\Core\Exception\HttpErrorCodeInterface;
 use Throwable;
-
 /**
  * Exception raised when a URL cannot be reverse routed
  * or when a URL cannot be parsed.
@@ -28,19 +27,16 @@ class MissingRouteException extends CakeException implements HttpErrorCodeInterf
      * @inheritDoc
      */
     protected int $_defaultCode = 404;
-
     /**
      * @inheritDoc
      */
     protected string $_messageTemplate = 'A route matching `%s` could not be found.';
-
     /**
      * Message template to use when the requested method is included.
      *
      * @var string
      */
     protected string $_messageTemplateWithMethod = 'A `%s` route matching `%s` could not be found.';
-
     /**
      * Constructor.
      *

@@ -1,22 +1,19 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\SDK\Logs;
 
 use OpenTelemetry\SDK\Sdk;
-
 /**
  * @deprecated
  */
 class EventLoggerProviderFactory
 {
-    public function create(LoggerProviderInterface $loggerProvider): EventLoggerProviderInterface
+    public function create(\OpenTelemetry\SDK\Logs\LoggerProviderInterface $loggerProvider): \OpenTelemetry\SDK\Logs\EventLoggerProviderInterface
     {
         if (Sdk::isDisabled()) {
-            return NoopEventLoggerProvider::getInstance();
+            return \OpenTelemetry\SDK\Logs\NoopEventLoggerProvider::getInstance();
         }
-
-        return new EventLoggerProvider($loggerProvider);
+        return new \OpenTelemetry\SDK\Logs\EventLoggerProvider($loggerProvider);
     }
 }

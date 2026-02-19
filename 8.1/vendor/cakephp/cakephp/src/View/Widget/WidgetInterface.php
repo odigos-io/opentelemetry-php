@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -17,7 +17,6 @@ declare(strict_types=1);
 namespace Cake\View\Widget;
 
 use Cake\View\Form\ContextInterface;
-
 /**
  * Interface for input widgets.
  */
@@ -31,7 +30,6 @@ interface WidgetInterface
      * @return string Generated HTML for the widget element.
      */
     public function render(array $data, ContextInterface $context): string;
-
     /**
      * Returns a list of fields that need to be secured for this widget.
      *

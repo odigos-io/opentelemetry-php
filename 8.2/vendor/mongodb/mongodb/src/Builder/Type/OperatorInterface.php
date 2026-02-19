@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace MongoDB\Builder\Type;
 
 /**
@@ -10,11 +9,9 @@ namespace MongoDB\Builder\Type;
 interface OperatorInterface
 {
     /** @var Encode */
-    public const ENCODE = Encode::Undefined;
-
+    public const ENCODE = \MongoDB\Builder\Type\Encode::Undefined;
     /** @var array<string, string|null> */
     public const PROPERTIES = [];
-
     /** @var string|null */
     public const NAME = null;
 }

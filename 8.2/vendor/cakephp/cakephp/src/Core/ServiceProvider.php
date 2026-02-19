@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -16,11 +16,10 @@ declare(strict_types=1);
  */
 namespace Cake\Core;
 
-use League\Container\DefinitionContainerInterface;
-use League\Container\ServiceProvider\AbstractServiceProvider;
-use League\Container\ServiceProvider\BootableServiceProviderInterface;
+use Odigos\League\Container\DefinitionContainerInterface;
+use Odigos\League\Container\ServiceProvider\AbstractServiceProvider;
+use Odigos\League\Container\ServiceProvider\BootableServiceProviderInterface;
 use LogicException;
-
 /**
  * Container ServiceProvider
  *
@@ -38,7 +37,6 @@ abstract class ServiceProvider extends AbstractServiceProvider implements Bootab
      * @see ServiceProvider::provides()
      */
     protected array $provides = [];
-
     /**
      * Get the container.
      *
@@ -47,19 +45,9 @@ abstract class ServiceProvider extends AbstractServiceProvider implements Bootab
     public function getContainer(): DefinitionContainerInterface
     {
         $container = parent::getContainer();
-
-        assert(
-            $container instanceof ContainerInterface,
-            sprintf(
-                'Unexpected container type. Expected `%s` got `%s` instead.',
-                ContainerInterface::class,
-                get_debug_type($container),
-            ),
-        );
-
+        assert($container instanceof \Cake\Core\ContainerInterface, sprintf('Unexpected container type. Expected `%s` got `%s` instead.', \Cake\Core\ContainerInterface::class, get_debug_type($container)));
         return $container;
     }
-
     /**
      * Delegate to the bootstrap() method
      *
@@ -72,7 +60,6 @@ abstract class ServiceProvider extends AbstractServiceProvider implements Bootab
     {
         $this->bootstrap($this->getContainer());
     }
-
     /**
      * Bootstrap hook for ServiceProviders
      *
@@ -84,10 +71,9 @@ abstract class ServiceProvider extends AbstractServiceProvider implements Bootab
      * @param \Cake\Core\ContainerInterface $container The container to add services to.
      * @return void
      */
-    public function bootstrap(ContainerInterface $container): void
+    public function bootstrap(\Cake\Core\ContainerInterface $container): void
     {
     }
-
     /**
      * Call the abstract services() method.
      *
@@ -100,7 +86,6 @@ abstract class ServiceProvider extends AbstractServiceProvider implements Bootab
     {
         $this->services($this->getContainer());
     }
-
     /**
      * The provides method is a way to let the container know that a service
      * is provided by this service provider.
@@ -114,14 +99,10 @@ abstract class ServiceProvider extends AbstractServiceProvider implements Bootab
     public function provides(string $id): bool
     {
         if (!$this->provides) {
-            throw new LogicException(
-                'The property `$provides` should contain a list with service ids for this service provider',
-            );
+            throw new LogicException('The property `$provides` should contain a list with service ids for this service provider');
         }
-
-        return in_array($id, $this->provides, true);
+        return in_array($id, $this->provides, \true);
     }
-
     /**
      * Register the services in a provider.
      *
@@ -131,5 +112,5 @@ abstract class ServiceProvider extends AbstractServiceProvider implements Bootab
      * @param \Cake\Core\ContainerInterface $container The container to add services to.
      * @return void
      */
-    abstract public function services(ContainerInterface $container): void;
+    abstract public function services(\Cake\Core\ContainerInterface $container): void;
 }

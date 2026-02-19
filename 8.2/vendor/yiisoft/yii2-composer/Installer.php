@@ -1,10 +1,10 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\composer;
 
 use Composer\Package\PackageInterface;
@@ -13,8 +13,7 @@ use Composer\Repository\InstalledRepositoryInterface;
 use Composer\Script\CommandEvent;
 use Composer\Script\Event;
 use Composer\Util\Filesystem;
-use React\Promise\PromiseInterface;
-
+use Odigos\React\Promise\PromiseInterface;
 /**
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
@@ -23,8 +22,6 @@ class Installer extends LibraryInstaller
 {
     const EXTRA_BOOTSTRAP = 'bootstrap';
     const EXTENSION_FILE = 'yiisoft/extensions.php';
-
-
     /**
      * @inheritdoc
      */
@@ -32,7 +29,6 @@ class Installer extends LibraryInstaller
     {
         return $packageType === 'yii2-extension';
     }
-
     /**
      * @inheritdoc
      */
@@ -46,19 +42,15 @@ class Installer extends LibraryInstaller
                 $this->linkBaseYiiFiles();
             }
         };
-
         // install the package the normal composer way
         $promise = parent::install($repo, $package);
-
         // Composer v2 might return a promise here
         if ($promise instanceof PromiseInterface) {
             return $promise->then($afterInstall);
         }
-
         // If not, execute the code right away as parent::install executed synchronously (composer v1, or v2 without async)
         $afterInstall();
     }
-
     /**
      * @inheritdoc
      */
@@ -72,19 +64,15 @@ class Installer extends LibraryInstaller
                 $this->linkBaseYiiFiles();
             }
         };
-
         // update the package the normal composer way
         $promise = parent::update($repo, $initial, $target);
-
         // Composer v2 might return a promise here
         if ($promise instanceof PromiseInterface) {
             return $promise->then($afterUpdate);
         }
-
         // If not, execute the code right away as parent::update executed synchronously (composer v1, or v2 without async)
         $afterUpdate();
     }
-
     /**
      * @inheritdoc
      */
@@ -98,26 +86,18 @@ class Installer extends LibraryInstaller
                 $this->removeBaseYiiFiles();
             }
         };
-
         // uninstall the package the normal composer way
         $promise = parent::uninstall($repo, $package);
-
         // Composer v2 might return a promise here
         if ($promise instanceof PromiseInterface) {
             return $promise->then($afterUninstall);
         }
-
         // If not, execute the code right away as parent::uninstall executed synchronously (composer v1, or v2 without async)
         $afterUninstall();
     }
-
     protected function addPackage(PackageInterface $package)
     {
-        $extension = [
-            'name' => $package->getName(),
-            'version' => $package->getVersion(),
-        ];
-
+        $extension = ['name' => $package->getName(), 'version' => $package->getVersion()];
         $alias = $this->generateDefaultAlias($package);
         if (!empty($alias)) {
             $extension['alias'] = $alias;
@@ -126,20 +106,16 @@ class Installer extends LibraryInstaller
         if (isset($extra[self::EXTRA_BOOTSTRAP])) {
             $extension['bootstrap'] = $extra[self::EXTRA_BOOTSTRAP];
         }
-
         $extensions = $this->loadExtensions();
         $extensions[$package->getName()] = $extension;
         $this->saveExtensions($extensions);
     }
-
     protected function generateDefaultAlias(PackageInterface $package)
     {
-        $fs = new Filesystem;
+        $fs = new Filesystem();
         $vendorDir = $fs->normalizePath($this->vendorDir);
         $autoload = $package->getAutoload();
-
         $aliases = [];
-
         if (!empty($autoload['psr-0'])) {
             foreach ($autoload['psr-0'] as $name => $path) {
                 $name = str_replace('\\', '/', trim($name, '\\'));
@@ -148,13 +124,12 @@ class Installer extends LibraryInstaller
                 }
                 $path = $fs->normalizePath($path);
                 if (strpos($path . '/', $vendorDir . '/') === 0) {
-                    $aliases["@$name"] = '<vendor-dir>' . substr($path, strlen($vendorDir)) . '/' . $name;
+                    $aliases["@{$name}"] = '<vendor-dir>' . substr($path, strlen($vendorDir)) . '/' . $name;
                 } else {
-                    $aliases["@$name"] = $path . '/' . $name;
+                    $aliases["@{$name}"] = $path . '/' . $name;
                 }
             }
         }
-
         if (!empty($autoload['psr-4'])) {
             foreach ($autoload['psr-4'] as $name => $path) {
                 if (is_array($path)) {
@@ -168,23 +143,20 @@ class Installer extends LibraryInstaller
                 }
                 $path = $fs->normalizePath($path);
                 if (strpos($path . '/', $vendorDir . '/') === 0) {
-                    $aliases["@$name"] = '<vendor-dir>' . substr($path, strlen($vendorDir));
+                    $aliases["@{$name}"] = '<vendor-dir>' . substr($path, strlen($vendorDir));
                 } else {
-                    $aliases["@$name"] = $path;
+                    $aliases["@{$name}"] = $path;
                 }
             }
         }
-
         return $aliases;
     }
-
     protected function removePackage(PackageInterface $package)
     {
         $packages = $this->loadExtensions();
         unset($packages[$package->getName()]);
         $this->saveExtensions($packages);
     }
-
     protected function loadExtensions()
     {
         $file = $this->vendorDir . '/' . static::EXTENSION_FILE;
@@ -193,13 +165,11 @@ class Installer extends LibraryInstaller
         }
         // invalidate opcache of extensions.php if exists
         if (function_exists('opcache_invalidate')) {
-            @opcache_invalidate($file, true);
+            @opcache_invalidate($file, \true);
         }
-        $extensions = require($file);
-
+        $extensions = require $file;
         $vendorDir = str_replace('\\', '/', $this->vendorDir);
         $n = strlen($vendorDir);
-
         foreach ($extensions as &$extension) {
             if (isset($extension['alias'])) {
                 foreach ($extension['alias'] as $alias => $path) {
@@ -210,29 +180,26 @@ class Installer extends LibraryInstaller
                 }
             }
         }
-
         return $extensions;
     }
-
     protected function saveExtensions(array $extensions)
     {
         $file = $this->vendorDir . '/' . static::EXTENSION_FILE;
         if (!file_exists(dirname($file))) {
-            mkdir(dirname($file), 0777, true);
+            mkdir(dirname($file), 0777, \true);
         }
-        $array = str_replace("'<vendor-dir>", '$vendorDir . \'', var_export($extensions, true));
-        file_put_contents($file, "<?php\n\n\$vendorDir = dirname(__DIR__);\n\nreturn $array;\n");
+        $array = str_replace("'<vendor-dir>", '$vendorDir . \'', var_export($extensions, \true));
+        file_put_contents($file, "<?php\n\n\$vendorDir = dirname(__DIR__);\n\nreturn {$array};\n");
         // invalidate opcache of extensions.php if exists
         if (function_exists('opcache_invalidate')) {
-            @opcache_invalidate($file, true);
+            @opcache_invalidate($file, \true);
         }
     }
-
     protected function linkBaseYiiFiles()
     {
         $yiiDir = $this->vendorDir . '/yiisoft/yii2';
         if (!file_exists($yiiDir)) {
-            mkdir($yiiDir, 0777, true);
+            mkdir($yiiDir, 0777, \true);
         }
         foreach (['Yii.php', 'BaseYii.php', 'classes.php'] as $file) {
             file_put_contents($yiiDir . '/' . $file, <<<EOF
@@ -245,13 +212,12 @@ class Installer extends LibraryInstaller
  * @license https://www.yiiframework.com/license/
  */
 
-return require(__DIR__ . '/../yii2-dev/framework/$file');
+return require(__DIR__ . '/../yii2-dev/framework/{$file}');
 
 EOF
-            );
+);
         }
     }
-
     protected function removeBaseYiiFiles()
     {
         $yiiDir = $this->vendorDir . '/yiisoft/yii2';
@@ -264,7 +230,6 @@ EOF
             rmdir($yiiDir);
         }
     }
-
     /**
      * Special method to run tasks defined in `[extra][yii\composer\Installer::postCreateProject]` key in `composer.json`
      *
@@ -274,7 +239,6 @@ EOF
     {
         static::runCommands($event, __METHOD__);
     }
-
     /**
      * Special method to run tasks defined in `[extra][yii\composer\Installer::postInstall]` key in `composer.json`
      *
@@ -285,7 +249,6 @@ EOF
     {
         static::runCommands($event, __METHOD__);
     }
-
     /**
      * Special method to run tasks defined in `[extra][$extraKey]` key in `composer.json`
      *
@@ -302,7 +265,6 @@ EOF
             }
         }
     }
-
     /**
      * Sets the correct permission for the files and directories listed in the extra section.
      * @param array $paths the paths (keys) and the corresponding permission octal strings (values)
@@ -310,12 +272,12 @@ EOF
     public static function setPermission(array $paths)
     {
         foreach ($paths as $path => $permission) {
-            echo "chmod('$path', $permission)...";
+            echo "chmod('{$path}', {$permission})...";
             if (is_dir($path) || is_file($path)) {
                 try {
                     if (chmod($path, octdec($permission))) {
                         echo "done.\n";
-                    };
+                    }
                 } catch (\Exception $e) {
                     echo $e->getMessage() . "\n";
                 }
@@ -324,7 +286,6 @@ EOF
             }
         }
     }
-
     /**
      * Generates a cookie validation key for every app config listed in "config" in extra section.
      * You can provide one or multiple parameters as the configuration files which need to have validation key inserted.
@@ -335,34 +296,29 @@ EOF
         $key = self::generateRandomString();
         foreach ($configs as $config) {
             if (is_file($config)) {
-                $content = preg_replace('/(("|\')cookieValidationKey("|\')\s*=>\s*)(""|\'\')/', "\\1'$key'", file_get_contents($config), -1, $count);
+                $content = preg_replace('/(("|\')cookieValidationKey("|\')\s*=>\s*)(""|\'\')/', "\\1'{$key}'", file_get_contents($config), -1, $count);
                 if ($count > 0) {
                     file_put_contents($config, $content);
                 }
             }
         }
     }
-
     protected static function generateRandomString()
     {
         $length = 32;
         $bytes = self::generateRandomBytes($length);
         return strtr(substr(base64_encode($bytes), 0, $length), '+/=', '_-.');
     }
-
     protected static function generateRandomBytes($length)
     {
         if (function_exists('random_bytes')) {
             return random_bytes($length);
         }
-
         if (extension_loaded('openssl')) {
             return openssl_random_pseudo_bytes($length);
         }
-
         throw new \Exception('PHP >= 7.0 or the OpenSSL PHP extension is required by Yii2.');
     }
-
     /**
      * Copy files to specified locations.
      * @param array $paths The source files paths (keys) and the corresponding target locations
@@ -376,23 +332,20 @@ EOF
         foreach ($paths as $source => $target) {
             // handle file target as array [path, overwrite]
             $target = (array) $target;
-            echo "Copying file $source to $target[0] - ";
-
+            echo "Copying file {$source} to {$target[0]} - ";
             if (!is_file($source)) {
                 echo "source file not found.\n";
                 continue;
             }
-
             if (is_file($target[0]) && empty($target[1])) {
                 echo "target file exists - skip.\n";
                 continue;
             } elseif (is_file($target[0]) && !empty($target[1])) {
                 echo "target file exists - overwrite - ";
             }
-
             try {
                 if (!is_dir(dirname($target[0]))) {
-                    mkdir(dirname($target[0]), 0777, true);
+                    mkdir(dirname($target[0]), 0777, \true);
                 }
                 if (copy($source, $target[0])) {
                     echo "done.\n";

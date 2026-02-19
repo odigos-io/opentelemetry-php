@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\HttpKernel\Profiler;
 
 use Psr\Log\LoggerInterface;
@@ -18,7 +17,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\DataCollector\DataCollectorInterface;
 use Symfony\Component\HttpKernel\DataCollector\LateDataCollectorInterface;
 use Symfony\Contracts\Service\ResetInterface;
-
 /**
  * Profiler.
  *
@@ -26,24 +24,20 @@ use Symfony\Contracts\Service\ResetInterface;
  */
 class Profiler implements ResetInterface
 {
-    private ProfilerStorageInterface $storage;
-
+    private \Symfony\Component\HttpKernel\Profiler\ProfilerStorageInterface $storage;
     /**
      * @var DataCollectorInterface[]
      */
     private array $collectors = [];
-
     private ?LoggerInterface $logger;
-    private bool $initiallyEnabled = true;
-    private bool $enabled = true;
-
-    public function __construct(ProfilerStorageInterface $storage, ?LoggerInterface $logger = null, bool $enable = true)
+    private bool $initiallyEnabled = \true;
+    private bool $enabled = \true;
+    public function __construct(\Symfony\Component\HttpKernel\Profiler\ProfilerStorageInterface $storage, ?LoggerInterface $logger = null, bool $enable = \true)
     {
         $this->storage = $storage;
         $this->logger = $logger;
         $this->initiallyEnabled = $this->enabled = $enable;
     }
-
     /**
      * Disables the profiler.
      *
@@ -51,9 +45,8 @@ class Profiler implements ResetInterface
      */
     public function disable()
     {
-        $this->enabled = false;
+        $this->enabled = \false;
     }
-
     /**
      * Enables the profiler.
      *
@@ -61,38 +54,33 @@ class Profiler implements ResetInterface
      */
     public function enable()
     {
-        $this->enabled = true;
+        $this->enabled = \true;
     }
-
     public function isEnabled(): bool
     {
         return $this->enabled;
     }
-
     /**
      * Loads the Profile for the given Response.
      */
-    public function loadProfileFromResponse(Response $response): ?Profile
+    public function loadProfileFromResponse(Response $response): ?\Symfony\Component\HttpKernel\Profiler\Profile
     {
         if (!$token = $response->headers->get('X-Debug-Token')) {
             return null;
         }
-
         return $this->loadProfile($token);
     }
-
     /**
      * Loads the Profile for the given token.
      */
-    public function loadProfile(string $token): ?Profile
+    public function loadProfile(string $token): ?\Symfony\Component\HttpKernel\Profiler\Profile
     {
         return $this->storage->read($token);
     }
-
     /**
      * Saves a Profile.
      */
-    public function saveProfile(Profile $profile): bool
+    public function saveProfile(\Symfony\Component\HttpKernel\Profiler\Profile $profile): bool
     {
         // late collect
         foreach ($profile->getCollectors() as $collector) {
@@ -100,14 +88,11 @@ class Profiler implements ResetInterface
                 $collector->lateCollect();
             }
         }
-
         if (!($ret = $this->storage->write($profile)) && null !== $this->logger) {
             $this->logger->warning('Unable to store the profiler information.', ['configured_storage' => $this->storage::class]);
         }
-
         return $ret;
     }
-
     /**
      * Purges all data from the storage.
      *
@@ -117,7 +102,6 @@ class Profiler implements ResetInterface
     {
         $this->storage->purge();
     }
-
     /**
      * Finds profiler tokens for the given criteria.
      *
@@ -128,23 +112,20 @@ class Profiler implements ResetInterface
      *
      * @see https://php.net/datetime.formats for the supported date/time formats
      */
-    public function find(?string $ip, ?string $url, ?int $limit, ?string $method, ?string $start, ?string $end, ?string $statusCode = null/* , \Closure $filter = null */): array
+    public function find(?string $ip, ?string $url, ?int $limit, ?string $method, ?string $start, ?string $end, ?string $statusCode = null): array
     {
         $filter = 7 < \func_num_args() ? func_get_arg(7) : null;
-
         return $this->storage->find($ip, $url, $limit, $method, $this->getTimestamp($start), $this->getTimestamp($end), $statusCode, $filter);
     }
-
     /**
      * Collects data for the given Response.
      */
-    public function collect(Request $request, Response $response, ?\Throwable $exception = null): ?Profile
+    public function collect(Request $request, Response $response, ?\Throwable $exception = null): ?\Symfony\Component\HttpKernel\Profiler\Profile
     {
-        if (false === $this->enabled) {
+        if (\false === $this->enabled) {
             return null;
         }
-
-        $profile = new Profile(substr(hash('sha256', uniqid(mt_rand(), true)), 0, 6));
+        $profile = new \Symfony\Component\HttpKernel\Profiler\Profile(substr(hash('sha256', uniqid(mt_rand(), \true)), 0, 6));
         $profile->setTime(time());
         $profile->setUrl($request->getUri());
         $profile->setMethod($request->getMethod());
@@ -154,27 +135,20 @@ class Profiler implements ResetInterface
         } catch (ConflictingHeadersException) {
             $profile->setIp('Unknown');
         }
-
         if ($request->attributes->has('_virtual_type')) {
             $profile->setVirtualType($request->attributes->get('_virtual_type'));
         }
-
         if ($prevToken = $response->headers->get('X-Debug-Token')) {
             $response->headers->set('X-Previous-Debug-Token', $prevToken);
         }
-
         $response->headers->set('X-Debug-Token', $profile->getToken());
-
         foreach ($this->collectors as $collector) {
             $collector->collect($request, $response, $exception);
-
             // we need to clone for sub-requests
             $profile->addCollector(clone $collector);
         }
-
         return $profile;
     }
-
     /**
      * @return void
      */
@@ -185,7 +159,6 @@ class Profiler implements ResetInterface
         }
         $this->enabled = $this->initiallyEnabled;
     }
-
     /**
      * Gets the Collectors associated with this profiler.
      */
@@ -193,7 +166,6 @@ class Profiler implements ResetInterface
     {
         return $this->collectors;
     }
-
     /**
      * Sets the Collectors associated with this profiler.
      *
@@ -208,7 +180,6 @@ class Profiler implements ResetInterface
             $this->add($collector);
         }
     }
-
     /**
      * Adds a Collector.
      *
@@ -218,7 +189,6 @@ class Profiler implements ResetInterface
     {
         $this->collectors[$collector->getName()] = $collector;
     }
-
     /**
      * Returns true if a Collector for the given name exists.
      *
@@ -228,7 +198,6 @@ class Profiler implements ResetInterface
     {
         return isset($this->collectors[$name]);
     }
-
     /**
      * Gets a Collector by name.
      *
@@ -241,22 +210,18 @@ class Profiler implements ResetInterface
         if (!isset($this->collectors[$name])) {
             throw new \InvalidArgumentException(\sprintf('Collector "%s" does not exist.', $name));
         }
-
         return $this->collectors[$name];
     }
-
     private function getTimestamp(?string $value): ?int
     {
         if (null === $value || '' === $value) {
             return null;
         }
-
         try {
-            $value = new \DateTimeImmutable(is_numeric($value) ? '@'.$value : $value);
+            $value = new \DateTimeImmutable(is_numeric($value) ? '@' . $value : $value);
         } catch (\Exception) {
             return null;
         }
-
         return $value->getTimestamp();
     }
 }

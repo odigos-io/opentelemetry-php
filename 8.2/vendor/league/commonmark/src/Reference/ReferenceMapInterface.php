@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the league/commonmark package.
  *
@@ -13,8 +12,7 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace League\CommonMark\Reference;
+namespace Odigos\League\CommonMark\Reference;
 
 /**
  * A collection of references
@@ -24,8 +22,6 @@ namespace League\CommonMark\Reference;
 interface ReferenceMapInterface extends \IteratorAggregate, \Countable
 {
     public function add(ReferenceInterface $reference): void;
-
     public function contains(string $label): bool;
-
     public function get(string $label): ?ReferenceInterface;
 }

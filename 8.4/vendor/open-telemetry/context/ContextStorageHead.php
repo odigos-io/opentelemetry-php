@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\Context;
 
 /**
@@ -9,9 +8,8 @@ namespace OpenTelemetry\Context;
  */
 final class ContextStorageHead
 {
-    public ?ContextStorageNode $node = null;
-
-    public function __construct(public ContextStorageHeadAware $storage)
+    public ?\OpenTelemetry\Context\ContextStorageNode $node = null;
+    public function __construct(public \OpenTelemetry\Context\ContextStorageHeadAware $storage)
     {
     }
 }

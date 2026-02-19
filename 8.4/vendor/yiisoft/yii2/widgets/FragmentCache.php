@@ -1,20 +1,19 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\widgets;
 
-use Yii;
+use Odigos\Yii;
 use yii\base\DynamicContentAwareInterface;
 use yii\base\DynamicContentAwareTrait;
 use yii\base\Widget;
 use yii\caching\CacheInterface;
 use yii\caching\Dependency;
 use yii\di\Instance;
-
 /**
  * FragmentCache is used by [[\yii\base\View]] to provide caching of page fragments.
  *
@@ -27,7 +26,6 @@ use yii\di\Instance;
 class FragmentCache extends Widget implements DynamicContentAwareInterface
 {
     use DynamicContentAwareTrait;
-
     /**
      * @var CacheInterface|array|string the cache object or the application component ID of the cache object.
      * After the FragmentCache object is created, if you want to change this property,
@@ -73,25 +71,20 @@ class FragmentCache extends Widget implements DynamicContentAwareInterface
      * @var bool whether to enable the fragment cache. You may use this property to turn on and off
      * the fragment cache according to specific setting (e.g. enable fragment cache only for GET requests).
      */
-    public $enabled = true;
-
-
+    public $enabled = \true;
     /**
      * Initializes the FragmentCache object.
      */
     public function init()
     {
         parent::init();
-
         $this->cache = $this->enabled ? Instance::ensure($this->cache, 'yii\caching\CacheInterface') : null;
-
-        if ($this->cache instanceof CacheInterface && $this->getCachedContent() === false) {
+        if ($this->cache instanceof CacheInterface && $this->getCachedContent() === \false) {
             $this->getView()->pushDynamicContent($this);
             ob_start();
-            ob_implicit_flush(false);
+            ob_implicit_flush(\false);
         }
     }
-
     /**
      * Marks the end of content to be cached.
      * Content displayed before this method call and after [[init()]]
@@ -100,13 +93,12 @@ class FragmentCache extends Widget implements DynamicContentAwareInterface
      */
     public function run()
     {
-        if (($content = $this->getCachedContent()) !== false) {
+        if (($content = $this->getCachedContent()) !== \false) {
             echo $content;
         } elseif ($this->cache instanceof CacheInterface) {
             $this->getView()->popDynamicContent();
-
             $content = ob_get_clean();
-            if ($content === false || $content === '') {
+            if ($content === \false || $content === '') {
                 return;
             }
             if (is_array($this->dependency)) {
@@ -117,12 +109,10 @@ class FragmentCache extends Widget implements DynamicContentAwareInterface
             echo $this->updateDynamicContent($content, $this->getDynamicPlaceholders());
         }
     }
-
     /**
      * @var string|bool the cached content. False if the content is not cached.
      */
     private $_content;
-
     /**
      * Returns the cached content if available.
      * @return string|false the cached content. False is returned if valid content is not found in the cache.
@@ -132,28 +122,22 @@ class FragmentCache extends Widget implements DynamicContentAwareInterface
         if ($this->_content !== null) {
             return $this->_content;
         }
-
-        $this->_content = false;
-
-        if (!($this->cache instanceof CacheInterface)) {
+        $this->_content = \false;
+        if (!$this->cache instanceof CacheInterface) {
             return $this->_content;
         }
-
         $key = $this->calculateKey();
         $data = $this->cache->get($key);
         if (!is_array($data) || count($data) !== 2) {
             return $this->_content;
         }
-
         list($this->_content, $placeholders) = $data;
         if (!is_array($placeholders) || count($placeholders) === 0) {
             return $this->_content;
         }
-
-        $this->_content = $this->updateDynamicContent($this->_content, $placeholders, true);
+        $this->_content = $this->updateDynamicContent($this->_content, $placeholders, \true);
         return $this->_content;
     }
-
     /**
      * Generates a unique key used for storing the content in cache.
      * The key generated depends on both [[id]] and [[variations]].
@@ -161,6 +145,6 @@ class FragmentCache extends Widget implements DynamicContentAwareInterface
      */
     protected function calculateKey()
     {
-        return array_merge([__CLASS__, $this->getId()], (array)$this->variations);
+        return array_merge([__CLASS__, $this->getId()], (array) $this->variations);
     }
 }

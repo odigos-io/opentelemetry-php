@@ -1,6 +1,6 @@
 <?php
 
-namespace FastRoute;
+namespace Odigos\FastRoute;
 
 interface RouteParser
 {

@@ -2,7 +2,7 @@
 
 namespace Illuminate\Queue;
 
-class TimeoutExceededException extends MaxAttemptsExceededException
+class TimeoutExceededException extends \Illuminate\Queue\MaxAttemptsExceededException
 {
     /**
      * Create a new instance for the job.
@@ -12,7 +12,7 @@ class TimeoutExceededException extends MaxAttemptsExceededException
      */
     public static function forJob($job)
     {
-        return tap(new static($job->resolveName().' has timed out.'), function ($e) use ($job) {
+        return tap(new static($job->resolveName() . ' has timed out.'), function ($e) use ($job) {
             $e->job = $job;
         });
     }

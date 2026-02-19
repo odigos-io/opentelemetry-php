@@ -3,8 +3,7 @@
 namespace Illuminate\Routing;
 
 use Illuminate\Contracts\Routing\ResponseFactory;
-
-class ViewController extends Controller
+class ViewController extends \Illuminate\Routing\Controller
 {
     /**
      * The response factory implementation.
@@ -12,7 +11,6 @@ class ViewController extends Controller
      * @var \Illuminate\Contracts\Routing\ResponseFactory
      */
     protected $response;
-
     /**
      * Create a new controller instance.
      *
@@ -23,7 +21,6 @@ class ViewController extends Controller
     {
         $this->response = $response;
     }
-
     /**
      * Invoke the controller method.
      *
@@ -33,19 +30,11 @@ class ViewController extends Controller
     public function __invoke(...$args)
     {
         $routeParameters = array_filter($args, function ($key) {
-            return ! in_array($key, ['view', 'data', 'status', 'headers']);
-        }, ARRAY_FILTER_USE_KEY);
-
+            return !in_array($key, ['view', 'data', 'status', 'headers']);
+        }, \ARRAY_FILTER_USE_KEY);
         $args['data'] = array_merge($args['data'], $routeParameters);
-
-        return $this->response->view(
-            $args['view'],
-            $args['data'],
-            $args['status'],
-            $args['headers']
-        );
+        return $this->response->view($args['view'], $args['data'], $args['status'], $args['headers']);
     }
-
     /**
      * Execute an action on the controller.
      *

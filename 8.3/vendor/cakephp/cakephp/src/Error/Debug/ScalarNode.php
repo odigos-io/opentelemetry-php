@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -19,18 +19,16 @@ namespace Cake\Error\Debug;
 /**
  * Dump node for scalar values.
  */
-class ScalarNode implements NodeInterface
+class ScalarNode implements \Cake\Error\Debug\NodeInterface
 {
     /**
      * @var string
      */
     private string $type;
-
     /**
      * @var resource|string|float|int|bool|null
      */
     private $value;
-
     /**
      * Constructor
      *
@@ -42,7 +40,6 @@ class ScalarNode implements NodeInterface
         $this->type = $type;
         $this->value = $value;
     }
-
     /**
      * Get the type of value
      *
@@ -52,7 +49,6 @@ class ScalarNode implements NodeInterface
     {
         return $this->type;
     }
-
     /**
      * Get the value
      *
@@ -62,7 +58,6 @@ class ScalarNode implements NodeInterface
     {
         return $this->value;
     }
-
     /**
      * @inheritDoc
      */

@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -21,7 +21,6 @@ use Cake\Http\Client\Response;
 use Closure;
 use InvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
-
 /**
  * Implements sending requests to an array of stubbed responses
  *
@@ -38,7 +37,6 @@ class Mock implements AdapterInterface
      * @var array
      */
     protected array $responses = [];
-
     /**
      * Add a mocked response.
      *
@@ -53,20 +51,12 @@ class Mock implements AdapterInterface
      */
     public function addResponse(RequestInterface $request, Response $response, array $options): void
     {
-        if (isset($options['match']) && !($options['match'] instanceof Closure)) {
+        if (isset($options['match']) && !$options['match'] instanceof Closure) {
             $type = get_debug_type($options['match']);
-            throw new InvalidArgumentException(sprintf(
-                'The `match` option must be a `Closure`. Got `%s`.',
-                $type,
-            ));
+            throw new InvalidArgumentException(sprintf('The `match` option must be a `Closure`. Got `%s`.', $type));
         }
-        $this->responses[] = [
-            'request' => $request,
-            'response' => $response,
-            'options' => $options,
-        ];
+        $this->responses[] = ['request' => $request, 'response' => $response, 'options' => $options];
     }
-
     /**
      * Find a response if one exists.
      *
@@ -78,8 +68,7 @@ class Mock implements AdapterInterface
     {
         $found = null;
         $method = $request->getMethod();
-        $requestUri = (string)$request->getUri();
-
+        $requestUri = (string) $request->getUri();
         foreach ($this->responses as $index => $mock) {
             /** @var \Psr\Http\Message\RequestInterface $request */
             $request = $mock['request'];
@@ -107,13 +96,10 @@ class Mock implements AdapterInterface
             $mock = $this->responses[$found];
             unset($this->responses[$found]);
             $this->responses[] = $mock;
-
             return [$mock['response']];
         }
-
         throw new MissingResponseException(['method' => $method, 'url' => $requestUri]);
     }
-
     /**
      * Check if the request URI matches the mock URI.
      *
@@ -123,17 +109,15 @@ class Mock implements AdapterInterface
      */
     protected function urlMatches(string $requestUri, RequestInterface $mock): bool
     {
-        $mockUri = (string)$mock->getUri();
+        $mockUri = (string) $mock->getUri();
         if ($requestUri === $mockUri) {
-            return true;
+            return \true;
         }
         $starPosition = strrpos($mockUri, '/%2A');
         if ($starPosition === strlen($mockUri) - 4) {
             $mockUri = substr($mockUri, 0, $starPosition);
-
             return str_starts_with($requestUri, $mockUri);
         }
-
-        return false;
+        return \false;
     }
 }

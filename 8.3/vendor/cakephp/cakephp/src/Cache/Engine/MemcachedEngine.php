@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -35,7 +35,6 @@ use Cake\Cache\Exception\InvalidArgumentException;
 use Cake\Core\Exception\CakeException;
 use DateInterval;
 use Memcached;
-
 /**
  * Memcached storage engine for cache. Memcached has some limitations in the amount of
  * control you have over expire times far in the future. See MemcachedEngine::write() for
@@ -53,7 +52,6 @@ class MemcachedEngine extends CacheEngine
      * @var \Memcached
      */
     protected Memcached $_Memcached;
-
     /**
      * The default config used unless overridden by runtime configuration
      *
@@ -77,21 +75,7 @@ class MemcachedEngine extends CacheEngine
      *
      * @var array<string, mixed>
      */
-    protected array $_defaultConfig = [
-        'compress' => false,
-        'duration' => 3600,
-        'groups' => [],
-        'host' => null,
-        'username' => null,
-        'password' => null,
-        'persistent' => null,
-        'port' => null,
-        'prefix' => 'cake_',
-        'serialize' => 'php',
-        'servers' => ['127.0.0.1'],
-        'options' => [],
-    ];
-
+    protected array $_defaultConfig = ['compress' => \false, 'duration' => 3600, 'groups' => [], 'host' => null, 'username' => null, 'password' => null, 'persistent' => null, 'port' => null, 'prefix' => 'cake_', 'serialize' => 'php', 'servers' => ['127.0.0.1'], 'options' => []];
     /**
      * List of available serializer engines
      *
@@ -100,12 +84,10 @@ class MemcachedEngine extends CacheEngine
      * @var array<string, int>
      */
     protected array $_serializers = [];
-
     /**
      * @var array<string>
      */
     protected array $_compiledGroupNames = [];
-
     /**
      * Initialize the Cache Engine
      *
@@ -121,18 +103,11 @@ class MemcachedEngine extends CacheEngine
         if (!extension_loaded('memcached')) {
             throw new CakeException('The `memcached` extension must be enabled to use MemcachedEngine.');
         }
-
-        $this->_serializers = [
-            'igbinary' => Memcached::SERIALIZER_IGBINARY,
-            'json' => Memcached::SERIALIZER_JSON,
-            'php' => Memcached::SERIALIZER_PHP,
-        ];
+        $this->_serializers = ['igbinary' => Memcached::SERIALIZER_IGBINARY, 'json' => Memcached::SERIALIZER_JSON, 'php' => Memcached::SERIALIZER_PHP];
         if (defined('Memcached::HAVE_MSGPACK')) {
             $this->_serializers['msgpack'] = Memcached::SERIALIZER_MSGPACK;
         }
-
         parent::init($config);
-
         if (!empty($config['host'])) {
             if (empty($config['port'])) {
                 $config['servers'] = [$config['host']];
@@ -140,81 +115,57 @@ class MemcachedEngine extends CacheEngine
                 $config['servers'] = [sprintf('%s:%d', $config['host'], $config['port'])];
             }
         }
-
         if (isset($config['servers'])) {
-            $this->setConfig('servers', $config['servers'], false);
+            $this->setConfig('servers', $config['servers'], \false);
         }
-
         if (!is_array($this->_config['servers'])) {
             $this->_config['servers'] = [$this->_config['servers']];
         }
-
         if (isset($this->_Memcached)) {
-            return true;
+            return \true;
         }
-
         if ($this->_config['persistent']) {
             $this->_Memcached = new Memcached($this->_config['persistent']);
         } else {
             $this->_Memcached = new Memcached();
         }
         $this->_setOptions();
-
         $serverList = $this->_Memcached->getServerList();
         if ($serverList) {
             if ($this->_Memcached->isPersistent()) {
                 foreach ($serverList as $server) {
-                    if (!in_array($server['host'] . ':' . $server['port'], $this->_config['servers'], true)) {
-                        throw new InvalidArgumentException(
-                            'Invalid cache configuration. Multiple persistent cache configurations are detected' .
-                            ' with different `servers` values. `servers` values for persistent cache configurations' .
-                            ' must be the same when using the same persistence id.',
-                        );
+                    if (!in_array($server['host'] . ':' . $server['port'], $this->_config['servers'], \true)) {
+                        throw new InvalidArgumentException('Invalid cache configuration. Multiple persistent cache configurations are detected' . ' with different `servers` values. `servers` values for persistent cache configurations' . ' must be the same when using the same persistence id.');
                     }
                 }
             }
-
-            return true;
+            return \true;
         }
-
         $servers = [];
         foreach ($this->_config['servers'] as $server) {
             $servers[] = $this->parseServerString($server);
         }
-
         if (!$this->_Memcached->addServers($servers)) {
-            return false;
+            return \false;
         }
-
         if (is_array($this->_config['options'])) {
             foreach ($this->_config['options'] as $opt => $value) {
                 $this->_Memcached->setOption($opt, $value);
             }
         }
-
         if (empty($this->_config['username']) && !empty($this->_config['login'])) {
-            throw new InvalidArgumentException(
-                'Please pass "username" instead of "login" for connecting to Memcached',
-            );
+            throw new InvalidArgumentException('Please pass "username" instead of "login" for connecting to Memcached');
         }
-
         if ($this->_config['username'] !== null && $this->_config['password'] !== null) {
             // @phpstan-ignore function.alreadyNarrowedType (check kept for SASL support detection)
             if (!method_exists($this->_Memcached, 'setSaslAuthData')) {
-                throw new InvalidArgumentException(
-                    'Memcached extension is not built with SASL support',
-                );
+                throw new InvalidArgumentException('Memcached extension is not built with SASL support');
             }
-            $this->_Memcached->setOption(Memcached::OPT_BINARY_PROTOCOL, true);
-            $this->_Memcached->setSaslAuthData(
-                $this->_config['username'],
-                $this->_config['password'],
-            );
+            $this->_Memcached->setOption(Memcached::OPT_BINARY_PROTOCOL, \true);
+            $this->_Memcached->setSaslAuthData($this->_config['username'], $this->_config['password']);
         }
-
-        return true;
+        return \true;
     }
-
     /**
      * Settings the memcached instance
      *
@@ -224,43 +175,21 @@ class MemcachedEngine extends CacheEngine
      */
     protected function _setOptions(): void
     {
-        $this->_Memcached->setOption(Memcached::OPT_LIBKETAMA_COMPATIBLE, true);
-
+        $this->_Memcached->setOption(Memcached::OPT_LIBKETAMA_COMPATIBLE, \true);
         $serializer = strtolower($this->_config['serialize']);
         if (!isset($this->_serializers[$serializer])) {
-            throw new InvalidArgumentException(
-                sprintf('`%s` is not a valid serializer engine for Memcached.', $serializer),
-            );
+            throw new InvalidArgumentException(sprintf('`%s` is not a valid serializer engine for Memcached.', $serializer));
         }
-
-        if (
-            $serializer !== 'php' &&
-            !constant('Memcached::HAVE_' . strtoupper($serializer))
-        ) {
-            throw new InvalidArgumentException(
-                sprintf('Memcached extension is not compiled with `%s` support.', $serializer),
-            );
+        if ($serializer !== 'php' && !constant('Memcached::HAVE_' . strtoupper($serializer))) {
+            throw new InvalidArgumentException(sprintf('Memcached extension is not compiled with `%s` support.', $serializer));
         }
-
-        $this->_Memcached->setOption(
-            Memcached::OPT_SERIALIZER,
-            $this->_serializers[$serializer],
-        );
-
+        $this->_Memcached->setOption(Memcached::OPT_SERIALIZER, $this->_serializers[$serializer]);
         // Check for Amazon ElastiCache instance
-        if (
-            defined('Memcached::OPT_CLIENT_MODE') &&
-            defined('Memcached::DYNAMIC_CLIENT_MODE')
-        ) {
+        if (defined('Memcached::OPT_CLIENT_MODE') && defined('Memcached::DYNAMIC_CLIENT_MODE')) {
             $this->_Memcached->setOption(Memcached::OPT_CLIENT_MODE, Memcached::DYNAMIC_CLIENT_MODE);
         }
-
-        $this->_Memcached->setOption(
-            Memcached::OPT_COMPRESSION,
-            (bool)$this->_config['compress'],
-        );
+        $this->_Memcached->setOption(Memcached::OPT_COMPRESSION, (bool) $this->_config['compress']);
     }
-
     /**
      * Parses the server address into the host/port. Handles both IPv6 and IPv4
      * addresses and Unix sockets
@@ -276,7 +205,7 @@ class MemcachedEngine extends CacheEngine
         }
         if (str_starts_with($server, '[')) {
             $position = strpos($server, ']:');
-            if ($position !== false) {
+            if ($position !== \false) {
                 $position++;
             }
         } else {
@@ -284,14 +213,12 @@ class MemcachedEngine extends CacheEngine
         }
         $port = 11211;
         $host = $server;
-        if ($position !== false) {
+        if ($position !== \false) {
             $host = substr($server, 0, $position);
             $port = substr($server, $position + 1);
         }
-
-        return [$host, (int)$port];
+        return [$host, (int) $port];
     }
-
     /**
      * Read an option value from the memcached connection.
      *
@@ -303,7 +230,6 @@ class MemcachedEngine extends CacheEngine
     {
         return $this->_Memcached->getOption($name);
     }
-
     /**
      * Write data for key into cache. When using memcached as your cache engine
      * remember that the Memcached pecl extension does not support cache expiry
@@ -324,17 +250,11 @@ class MemcachedEngine extends CacheEngine
         $duration = $this->duration($ttl);
         $this->_eventClass = CacheBeforeSetEvent::class;
         $this->dispatchEvent(CacheBeforeSetEvent::NAME, ['key' => $key, 'value' => $value, 'ttl' => $duration]);
-
         $success = $this->_Memcached->set($key, $value, $duration);
-
         $this->_eventClass = CacheAfterSetEvent::class;
-        $this->dispatchEvent(CacheAfterSetEvent::NAME, [
-            'key' => $key, 'value' => $value, 'success' => $success, 'ttl' => $duration,
-        ]);
-
+        $this->dispatchEvent(CacheAfterSetEvent::NAME, ['key' => $key, 'value' => $value, 'success' => $success, 'ttl' => $duration]);
         return $success;
     }
-
     /**
      * Write many cache entries to the cache at once
      *
@@ -351,10 +271,8 @@ class MemcachedEngine extends CacheEngine
             $cacheData[$this->_key($key)] = $value;
         }
         $duration = $this->duration($ttl);
-
         return $this->_Memcached->setMulti($cacheData, $duration);
     }
-
     /**
      * Read a key from the cache
      *
@@ -368,21 +286,15 @@ class MemcachedEngine extends CacheEngine
         $key = $this->_key($key);
         $this->_eventClass = CacheBeforeGetEvent::class;
         $this->dispatchEvent(CacheBeforeGetEvent::NAME, ['key' => $key, 'default' => $default]);
-
         $value = $this->_Memcached->get($key);
-
         $this->_eventClass = CacheAfterGetEvent::class;
         if ($this->_Memcached->getResultCode() == Memcached::RES_NOTFOUND) {
-            $this->dispatchEvent(CacheAfterGetEvent::NAME, ['key' => $key, 'value' => null, 'success' => false]);
-
+            $this->dispatchEvent(CacheAfterGetEvent::NAME, ['key' => $key, 'value' => null, 'success' => \false]);
             return $default;
         }
-
-        $this->dispatchEvent(CacheAfterGetEvent::NAME, ['key' => $key, 'value' => $value, 'success' => true]);
-
+        $this->dispatchEvent(CacheAfterGetEvent::NAME, ['key' => $key, 'value' => $value, 'success' => \true]);
         return $value;
     }
-
     /**
      * Read many keys from the cache at once
      *
@@ -397,20 +309,16 @@ class MemcachedEngine extends CacheEngine
         foreach ($keys as $key) {
             $cacheKeys[$key] = $this->_key($key);
         }
-
         $values = $this->_Memcached->getMulti($cacheKeys);
-        if ($values === false) {
+        if ($values === \false) {
             return array_fill_keys(array_keys($cacheKeys), $default);
         }
-
         $return = [];
         foreach ($cacheKeys as $original => $prefixed) {
             $return[$original] = array_key_exists($prefixed, $values) ? $values[$prefixed] : $default;
         }
-
         return $return;
     }
-
     /**
      * Increments the value of an integer cached key
      *
@@ -423,17 +331,11 @@ class MemcachedEngine extends CacheEngine
         $key = $this->_key($key);
         $this->_eventClass = CacheBeforeIncrementEvent::class;
         $this->dispatchEvent(CacheBeforeIncrementEvent::NAME, ['key' => $key, 'offset' => $offset]);
-
         $value = $this->_Memcached->increment($key, $offset);
-
         $this->_eventClass = CacheAfterIncrementEvent::class;
-        $this->dispatchEvent(CacheAfterIncrementEvent::NAME, [
-            'key' => $key, 'offset' => $offset, 'success' => $value !== false, 'value' => $value,
-        ]);
-
+        $this->dispatchEvent(CacheAfterIncrementEvent::NAME, ['key' => $key, 'offset' => $offset, 'success' => $value !== \false, 'value' => $value]);
         return $value;
     }
-
     /**
      * Decrements the value of an integer cached key
      *
@@ -446,17 +348,11 @@ class MemcachedEngine extends CacheEngine
         $key = $this->_key($key);
         $this->_eventClass = CacheBeforeDecrementEvent::class;
         $this->dispatchEvent(CacheBeforeDecrementEvent::NAME, ['key' => $key, 'offset' => $offset]);
-
         $value = $this->_Memcached->decrement($key, $offset);
-
         $this->_eventClass = CacheAfterDecrementEvent::class;
-        $this->dispatchEvent(CacheAfterDecrementEvent::NAME, [
-            'key' => $key, 'offset' => $offset, 'success' => $value !== false, 'value' => $value,
-        ]);
-
+        $this->dispatchEvent(CacheAfterDecrementEvent::NAME, ['key' => $key, 'offset' => $offset, 'success' => $value !== \false, 'value' => $value]);
         return $value;
     }
-
     /**
      * Delete a key from the cache
      *
@@ -469,15 +365,11 @@ class MemcachedEngine extends CacheEngine
         $key = $this->_key($key);
         $this->_eventClass = CacheBeforeDeleteEvent::class;
         $this->dispatchEvent(CacheBeforeDeleteEvent::NAME, ['key' => $key]);
-
         $success = $this->_Memcached->delete($key);
-
         $this->_eventClass = CacheAfterDeleteEvent::class;
         $this->dispatchEvent(CacheAfterDeleteEvent::NAME, ['key' => $key, 'success' => $success]);
-
         return $success;
     }
-
     /**
      * Delete many keys from the cache at once
      *
@@ -493,15 +385,13 @@ class MemcachedEngine extends CacheEngine
             $cacheKeys[] = $this->_key($key);
             $this->dispatchEvent(CacheBeforeDeleteEvent::NAME, ['key' => $key]);
         }
-        $success = (bool)$this->_Memcached->deleteMulti($cacheKeys);
+        $success = (bool) $this->_Memcached->deleteMulti($cacheKeys);
         $this->_eventClass = CacheAfterDeleteEvent::class;
         foreach ($cacheKeys as $key) {
             $this->dispatchEvent(CacheAfterDeleteEvent::NAME, ['key' => $key, 'success' => $success]);
         }
-
         return $success;
     }
-
     /**
      * Delete all keys from the cache
      *
@@ -510,10 +400,9 @@ class MemcachedEngine extends CacheEngine
     public function clear(): bool
     {
         $keys = $this->_Memcached->getAllKeys();
-        if ($keys === false) {
-            return false;
+        if ($keys === \false) {
+            return \false;
         }
-
         foreach ($keys as $key) {
             if (str_starts_with($key, $this->_config['prefix'])) {
                 $this->_Memcached->delete($key);
@@ -521,10 +410,8 @@ class MemcachedEngine extends CacheEngine
         }
         $this->_eventClass = CacheClearedEvent::class;
         $this->dispatchEvent(CacheClearedEvent::NAME);
-
-        return true;
+        return \true;
     }
-
     /**
      * Add a key to the cache if it does not already exist.
      *
@@ -536,20 +423,13 @@ class MemcachedEngine extends CacheEngine
     {
         $duration = $this->_config['duration'];
         $key = $this->_key($key);
-
         $this->_eventClass = CacheBeforeAddEvent::class;
         $this->dispatchEvent(CacheBeforeAddEvent::NAME, ['key' => $key, 'value' => $value, 'ttl' => $duration]);
-
         $success = $this->_Memcached->add($key, $value, $duration);
-
         $this->_eventClass = CacheAfterAddEvent::class;
-        $this->dispatchEvent(CacheAfterAddEvent::NAME, [
-            'key' => $key, 'value' => $value, 'success' => $success, 'ttl' => $duration,
-        ]);
-
+        $this->dispatchEvent(CacheAfterAddEvent::NAME, ['key' => $key, 'value' => $value, 'success' => $success, 'ttl' => $duration]);
         return $success;
     }
-
     /**
      * Returns the `group value` for each of the configured groups
      * If the group initial value was not found, then it initializes
@@ -564,7 +444,6 @@ class MemcachedEngine extends CacheEngine
                 $this->_compiledGroupNames[] = $this->_config['prefix'] . $group;
             }
         }
-
         $groups = $this->_Memcached->getMulti($this->_compiledGroupNames) ?: [];
         if (count($groups) !== count($this->_config['groups'])) {
             foreach ($this->_compiledGroupNames as $group) {
@@ -575,16 +454,13 @@ class MemcachedEngine extends CacheEngine
             }
             ksort($groups);
         }
-
         $result = [];
         $groups = array_values($groups);
         foreach ($this->_config['groups'] as $i => $group) {
             $result[] = $group . $groups[$i];
         }
-
         return $result;
     }
-
     /**
      * Increments the group value to simulate deletion of all keys under a group
      * old values will remain in storage until they expire.
@@ -594,10 +470,9 @@ class MemcachedEngine extends CacheEngine
      */
     public function clearGroup(string $group): bool
     {
-        $result = (bool)$this->_Memcached->increment($this->_config['prefix'] . $group);
+        $result = (bool) $this->_Memcached->increment($this->_config['prefix'] . $group);
         $this->_eventClass = CacheGroupClearEvent::class;
         $this->dispatchEvent(CacheGroupClearEvent::NAME, ['group' => $group]);
-
         return $result;
     }
 }

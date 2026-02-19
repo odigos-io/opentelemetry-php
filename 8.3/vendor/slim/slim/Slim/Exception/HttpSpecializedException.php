@@ -5,15 +5,12 @@
  *
  * @license https://github.com/slimphp/Slim/blob/4.x/LICENSE.md (MIT License)
  */
-
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Slim\Exception;
 
 use Psr\Http\Message\ServerRequestInterface;
 use Throwable;
-
-abstract class HttpSpecializedException extends HttpException
+abstract class HttpSpecializedException extends \Slim\Exception\HttpException
 {
     /**
      * @param ServerRequestInterface $request
@@ -25,7 +22,6 @@ abstract class HttpSpecializedException extends HttpException
         if ($message !== null) {
             $this->message = $message;
         }
-
         // @phpstan-ignore-next-line
         parent::__construct($request, $this->message, $this->code, $previous);
     }

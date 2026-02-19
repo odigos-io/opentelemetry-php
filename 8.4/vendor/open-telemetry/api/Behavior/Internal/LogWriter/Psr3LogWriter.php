@@ -1,17 +1,14 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\API\Behavior\Internal\LogWriter;
 
 use Psr\Log\LoggerInterface;
-
-class Psr3LogWriter implements LogWriterInterface
+class Psr3LogWriter implements \OpenTelemetry\API\Behavior\Internal\LogWriter\LogWriterInterface
 {
     public function __construct(private readonly LoggerInterface $logger)
     {
     }
-
     #[\Override]
     public function write($level, string $message, array $context): void
     {

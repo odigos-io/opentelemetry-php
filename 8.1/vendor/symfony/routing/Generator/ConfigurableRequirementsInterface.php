@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\Routing\Generator;
 
 /**
@@ -44,7 +43,6 @@ interface ConfigurableRequirementsInterface
      * @return void
      */
     public function setStrictRequirements(?bool $enabled);
-
     /**
      * Returns whether to throw an exception on incorrect parameters.
      * Null means the requirements check is deactivated completely.

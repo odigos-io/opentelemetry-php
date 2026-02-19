@@ -5,12 +5,10 @@
  *
  * @license https://github.com/slimphp/Slim/blob/4.x/LICENSE.md (MIT License)
  */
-
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Slim\Interfaces;
 
-interface AdvancedCallableResolverInterface extends CallableResolverInterface
+interface AdvancedCallableResolverInterface extends \Slim\Interfaces\CallableResolverInterface
 {
     /**
      * Resolve $toResolve into a callable
@@ -18,7 +16,6 @@ interface AdvancedCallableResolverInterface extends CallableResolverInterface
      * @param callable|array{class-string, string}|string $toResolve
      */
     public function resolveRoute($toResolve): callable;
-
     /**
      * Resolve $toResolve into a callable
      *

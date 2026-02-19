@@ -1,10 +1,10 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\db\cubrid;
 
 use yii\base\InvalidArgumentException;
@@ -12,7 +12,6 @@ use yii\base\NotSupportedException;
 use yii\db\ColumnSchema;
 use yii\db\Exception;
 use yii\db\Expression;
-
 /**
  * QueryBuilder is the query builder for CUBRID databases (version 9.3.x and higher).
  *
@@ -24,41 +23,14 @@ class QueryBuilder extends \yii\db\QueryBuilder
     /**
      * @var array mapping from abstract column types (keys) to physical column types (values).
      */
-    public $typeMap = [
-        Schema::TYPE_PK => 'int NOT NULL AUTO_INCREMENT PRIMARY KEY',
-        Schema::TYPE_UPK => 'int UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY',
-        Schema::TYPE_BIGPK => 'bigint NOT NULL AUTO_INCREMENT PRIMARY KEY',
-        Schema::TYPE_UBIGPK => 'bigint UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY',
-        Schema::TYPE_CHAR => 'char(1)',
-        Schema::TYPE_STRING => 'varchar(255)',
-        Schema::TYPE_TEXT => 'varchar',
-        Schema::TYPE_TINYINT => 'smallint',
-        Schema::TYPE_SMALLINT => 'smallint',
-        Schema::TYPE_INTEGER => 'int',
-        Schema::TYPE_BIGINT => 'bigint',
-        Schema::TYPE_FLOAT => 'float(7)',
-        Schema::TYPE_DOUBLE => 'double(15)',
-        Schema::TYPE_DECIMAL => 'decimal(10,0)',
-        Schema::TYPE_DATETIME => 'datetime',
-        Schema::TYPE_TIMESTAMP => 'timestamp',
-        Schema::TYPE_TIME => 'time',
-        Schema::TYPE_DATE => 'date',
-        Schema::TYPE_BINARY => 'blob',
-        Schema::TYPE_BOOLEAN => 'smallint',
-        Schema::TYPE_MONEY => 'decimal(19,4)',
-    ];
-
-
+    public $typeMap = [\yii\db\cubrid\Schema::TYPE_PK => 'int NOT NULL AUTO_INCREMENT PRIMARY KEY', \yii\db\cubrid\Schema::TYPE_UPK => 'int UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY', \yii\db\cubrid\Schema::TYPE_BIGPK => 'bigint NOT NULL AUTO_INCREMENT PRIMARY KEY', \yii\db\cubrid\Schema::TYPE_UBIGPK => 'bigint UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY', \yii\db\cubrid\Schema::TYPE_CHAR => 'char(1)', \yii\db\cubrid\Schema::TYPE_STRING => 'varchar(255)', \yii\db\cubrid\Schema::TYPE_TEXT => 'varchar', \yii\db\cubrid\Schema::TYPE_TINYINT => 'smallint', \yii\db\cubrid\Schema::TYPE_SMALLINT => 'smallint', \yii\db\cubrid\Schema::TYPE_INTEGER => 'int', \yii\db\cubrid\Schema::TYPE_BIGINT => 'bigint', \yii\db\cubrid\Schema::TYPE_FLOAT => 'float(7)', \yii\db\cubrid\Schema::TYPE_DOUBLE => 'double(15)', \yii\db\cubrid\Schema::TYPE_DECIMAL => 'decimal(10,0)', \yii\db\cubrid\Schema::TYPE_DATETIME => 'datetime', \yii\db\cubrid\Schema::TYPE_TIMESTAMP => 'timestamp', \yii\db\cubrid\Schema::TYPE_TIME => 'time', \yii\db\cubrid\Schema::TYPE_DATE => 'date', \yii\db\cubrid\Schema::TYPE_BINARY => 'blob', \yii\db\cubrid\Schema::TYPE_BOOLEAN => 'smallint', \yii\db\cubrid\Schema::TYPE_MONEY => 'decimal(19,4)'];
     /**
      * {@inheritdoc}
      */
     protected function defaultExpressionBuilders()
     {
-        return array_merge(parent::defaultExpressionBuilders(), [
-            'yii\db\conditions\LikeCondition' => 'yii\db\cubrid\conditions\LikeConditionBuilder',
-        ]);
+        return array_merge(parent::defaultExpressionBuilders(), ['yii\db\conditions\LikeCondition' => 'yii\db\cubrid\conditions\LikeConditionBuilder']);
     }
-
     /**
      * {@inheritdoc}
      * @see https://www.cubrid.org/manual/en/9.3.0/sql/query/merge.html
@@ -71,43 +43,38 @@ class QueryBuilder extends \yii\db\QueryBuilder
         }
         if ($updateNames === []) {
             // there are no columns to update
-            $updateColumns = false;
+            $updateColumns = \false;
         }
-
         $onCondition = ['or'];
         $quotedTableName = $this->db->quoteTableName($table);
         foreach ($constraints as $constraint) {
             $constraintCondition = ['and'];
             foreach ($constraint->columnNames as $name) {
                 $quotedName = $this->db->quoteColumnName($name);
-                $constraintCondition[] = "$quotedTableName.$quotedName=\"EXCLUDED\".$quotedName";
+                $constraintCondition[] = "{$quotedTableName}.{$quotedName}=\"EXCLUDED\".{$quotedName}";
             }
             $onCondition[] = $constraintCondition;
         }
         $on = $this->buildCondition($onCondition, $params);
         list(, $placeholders, $values, $params) = $this->prepareInsertValues($table, $insertColumns, $params);
-        $mergeSql = 'MERGE INTO ' . $this->db->quoteTableName($table) . ' '
-            . 'USING (' . (!empty($placeholders) ? 'VALUES (' . implode(', ', $placeholders) . ')' : ltrim($values, ' ')) . ') AS "EXCLUDED" (' . implode(', ', $insertNames) . ') '
-            . "ON ($on)";
+        $mergeSql = 'MERGE INTO ' . $this->db->quoteTableName($table) . ' ' . 'USING (' . (!empty($placeholders) ? 'VALUES (' . implode(', ', $placeholders) . ')' : ltrim($values, ' ')) . ') AS "EXCLUDED" (' . implode(', ', $insertNames) . ') ' . "ON ({$on})";
         $insertValues = [];
         foreach ($insertNames as $name) {
             $quotedName = $this->db->quoteColumnName($name);
-            if (strrpos($quotedName, '.') === false) {
+            if (strrpos($quotedName, '.') === \false) {
                 $quotedName = '"EXCLUDED".' . $quotedName;
             }
             $insertValues[] = $quotedName;
         }
-        $insertSql = 'INSERT (' . implode(', ', $insertNames) . ')'
-            . ' VALUES (' . implode(', ', $insertValues) . ')';
-        if ($updateColumns === false) {
-            return "$mergeSql WHEN NOT MATCHED THEN $insertSql";
+        $insertSql = 'INSERT (' . implode(', ', $insertNames) . ')' . ' VALUES (' . implode(', ', $insertValues) . ')';
+        if ($updateColumns === \false) {
+            return "{$mergeSql} WHEN NOT MATCHED THEN {$insertSql}";
         }
-
-        if ($updateColumns === true) {
+        if ($updateColumns === \true) {
             $updateColumns = [];
             foreach ($updateNames as $name) {
                 $quotedName = $this->db->quoteColumnName($name);
-                if (strrpos($quotedName, '.') === false) {
+                if (strrpos($quotedName, '.') === \false) {
                     $quotedName = '"EXCLUDED".' . $quotedName;
                 }
                 $updateColumns[$name] = new Expression($quotedName);
@@ -115,9 +82,8 @@ class QueryBuilder extends \yii\db\QueryBuilder
         }
         list($updates, $params) = $this->prepareUpdateSets($table, $updateColumns, $params);
         $updateSql = 'UPDATE SET ' . implode(', ', $updates);
-        return "$mergeSql WHEN MATCHED THEN $updateSql WHEN NOT MATCHED THEN $insertSql";
+        return "{$mergeSql} WHEN MATCHED THEN {$updateSql} WHEN NOT MATCHED THEN {$insertSql}";
     }
-
     /**
      * Creates a SQL statement for resetting the sequence value of a table's primary key.
      * The sequence will be reset such that the primary key of the next new row inserted
@@ -135,19 +101,16 @@ class QueryBuilder extends \yii\db\QueryBuilder
             $tableName = $this->db->quoteTableName($tableName);
             if ($value === null) {
                 $key = reset($table->primaryKey);
-                $value = (int) $this->db->createCommand("SELECT MAX(`$key`) FROM " . $this->db->schema->quoteTableName($tableName))->queryScalar() + 1;
+                $value = (int) $this->db->createCommand("SELECT MAX(`{$key}`) FROM " . $this->db->schema->quoteTableName($tableName))->queryScalar() + 1;
             } else {
                 $value = (int) $value;
             }
-
-            return 'ALTER TABLE ' . $this->db->schema->quoteTableName($tableName) . " AUTO_INCREMENT=$value;";
+            return 'ALTER TABLE ' . $this->db->schema->quoteTableName($tableName) . " AUTO_INCREMENT={$value};";
         } elseif ($table === null) {
-            throw new InvalidArgumentException("Table not found: $tableName");
+            throw new InvalidArgumentException("Table not found: {$tableName}");
         }
-
-        throw new InvalidArgumentException("There is not sequence associated with table '$tableName'.");
+        throw new InvalidArgumentException("There is not sequence associated with table '{$tableName}'.");
     }
-
     /**
      * {@inheritdoc}
      */
@@ -163,12 +126,11 @@ class QueryBuilder extends \yii\db\QueryBuilder
                 $sql .= ' OFFSET ' . $offset;
             }
         } elseif ($this->hasOffset($offset)) {
-            $sql = "LIMIT 9223372036854775807 OFFSET $offset"; // 2^63-1
+            $sql = "LIMIT 9223372036854775807 OFFSET {$offset}";
+            // 2^63-1
         }
-
         return $sql;
     }
-
     /**
      * {@inheritdoc}
      * @since 2.0.8
@@ -177,7 +139,6 @@ class QueryBuilder extends \yii\db\QueryBuilder
     {
         return 'SELECT CASE WHEN EXISTS(' . $rawSql . ') THEN 1 ELSE 0 END';
     }
-
     /**
      * {@inheritdoc}
      * @see https://www.cubrid.org/manual/en/9.3.0/sql/schema/table.html#drop-index-clause
@@ -194,10 +155,8 @@ class QueryBuilder extends \yii\db\QueryBuilder
                 return $this->dropUnique($name, $table);
             }
         }
-
         return 'DROP INDEX ' . $this->db->quoteTableName($name) . ' ON ' . $this->db->quoteTableName($table);
     }
-
     /**
      * {@inheritdoc}
      * @throws NotSupportedException this is not supported by CUBRID.
@@ -206,7 +165,6 @@ class QueryBuilder extends \yii\db\QueryBuilder
     {
         throw new NotSupportedException(__METHOD__ . ' is not supported by CUBRID.');
     }
-
     /**
      * {@inheritdoc}
      * @throws NotSupportedException this is not supported by CUBRID.
@@ -215,7 +173,6 @@ class QueryBuilder extends \yii\db\QueryBuilder
     {
         throw new NotSupportedException(__METHOD__ . ' is not supported by CUBRID.');
     }
-
     /**
      * {@inheritdoc}
      * @since 2.0.8
@@ -224,14 +181,8 @@ class QueryBuilder extends \yii\db\QueryBuilder
     {
         $definition = $this->getColumnDefinition($table, $column);
         $definition = trim(preg_replace("/COMMENT '(.*?)'/i", '', $definition));
-
-        return 'ALTER TABLE ' . $this->db->quoteTableName($table)
-        . ' CHANGE ' . $this->db->quoteColumnName($column)
-        . ' ' . $this->db->quoteColumnName($column)
-        . (empty($definition) ? '' : ' ' . $definition)
-        . ' COMMENT ' . $this->db->quoteValue($comment);
+        return 'ALTER TABLE ' . $this->db->quoteTableName($table) . ' CHANGE ' . $this->db->quoteColumnName($column) . ' ' . $this->db->quoteColumnName($column) . (empty($definition) ? '' : ' ' . $definition) . ' COMMENT ' . $this->db->quoteValue($comment);
     }
-
     /**
      * {@inheritdoc}
      * @since 2.0.8
@@ -240,7 +191,6 @@ class QueryBuilder extends \yii\db\QueryBuilder
     {
         return 'ALTER TABLE ' . $this->db->quoteTableName($table) . ' COMMENT ' . $this->db->quoteValue($comment);
     }
-
     /**
      * {@inheritdoc}
      * @since 2.0.8
@@ -249,7 +199,6 @@ class QueryBuilder extends \yii\db\QueryBuilder
     {
         return $this->addCommentOnColumn($table, $column, '');
     }
-
     /**
      * {@inheritdoc}
      * @since 2.0.8
@@ -258,8 +207,6 @@ class QueryBuilder extends \yii\db\QueryBuilder
     {
         return $this->addCommentOnTable($table, '');
     }
-
-
     /**
      * Gets column definition.
      *
@@ -272,8 +219,8 @@ class QueryBuilder extends \yii\db\QueryBuilder
     private function getColumnDefinition($table, $column)
     {
         $row = $this->db->createCommand('SHOW CREATE TABLE ' . $this->db->quoteTableName($table))->queryOne();
-        if ($row === false) {
-            throw new Exception("Unable to find column '$column' in table '$table'.");
+        if ($row === \false) {
+            throw new Exception("Unable to find column '{$column}' in table '{$table}'.");
         }
         if (isset($row['Create Table'])) {
             $sql = $row['Create Table'];
@@ -290,7 +237,6 @@ class QueryBuilder extends \yii\db\QueryBuilder
                 }
             }
         }
-
         return null;
     }
 }

@@ -13,10 +13,8 @@ trait Debugging
     public function dump(?string $prop = null): self
     {
         dump($this->prop($prop));
-
         return $this;
     }
-
     /**
      * Dumps the given props and exits.
      *
@@ -27,7 +25,6 @@ trait Debugging
     {
         dd($this->prop($prop));
     }
-
     /**
      * Retrieve a prop within the current scope using "dot" notation.
      *

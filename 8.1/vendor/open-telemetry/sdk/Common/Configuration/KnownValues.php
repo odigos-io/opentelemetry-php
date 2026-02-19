@@ -1,11 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\SDK\Common\Configuration;
 
 use Psr\Log\LogLevel;
-
 /**
  * "Known values" for OpenTelemetry configurataion variables.
  * @see https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/configuration/sdk-environment-variables.md
@@ -63,78 +61,48 @@ interface KnownValues
     public const VALUE_TEMPORALITY_LOW_MEMORY = 'lowmemory';
     public const VALUE_HISTOGRAM_AGGREGATION_EXPLICIT = 'explicit_bucket_histogram';
     public const VALUE_HISTOGRAM_AGGREGATION_BASE2_EXPONENTIAL = 'base2_exponential_bucket_histogram';
-
-    public const VALUES_BOOLEAN = [
-        self::VALUE_TRUE,
-        self::VALUE_FALSE,
-    ];
-
-    public const VALUES_COMPRESSION= [
-        self::VALUE_GZIP,
-        self::VALUE_NONE,
-    ];
-
-    public const VALUES_OTLP_PROTOCOL = [
-        self::VALUE_GRPC,
-        self::VALUE_HTTP_PROTOBUF,
-        self::VALUE_HTTP_JSON,
-    ];
-
-    public const VALUES_TEMPORALITY_PREFERENCE = [
-        self::VALUE_TEMPORALITY_CUMULATIVE,
-        self::VALUE_TEMPORALITY_DELTA,
-        self::VALUE_TEMPORALITY_LOW_MEMORY,
-    ];
-
-    public const VALUES_HISTOGRAM_AGGREGATION = [
-        self::VALUE_HISTOGRAM_AGGREGATION_EXPLICIT,
-        self::VALUE_HISTOGRAM_AGGREGATION_BASE2_EXPONENTIAL,
-    ];
-
+    public const VALUES_BOOLEAN = [self::VALUE_TRUE, self::VALUE_FALSE];
+    public const VALUES_COMPRESSION = [self::VALUE_GZIP, self::VALUE_NONE];
+    public const VALUES_OTLP_PROTOCOL = [self::VALUE_GRPC, self::VALUE_HTTP_PROTOBUF, self::VALUE_HTTP_JSON];
+    public const VALUES_TEMPORALITY_PREFERENCE = [self::VALUE_TEMPORALITY_CUMULATIVE, self::VALUE_TEMPORALITY_DELTA, self::VALUE_TEMPORALITY_LOW_MEMORY];
+    public const VALUES_HISTOGRAM_AGGREGATION = [self::VALUE_HISTOGRAM_AGGREGATION_EXPLICIT, self::VALUE_HISTOGRAM_AGGREGATION_BASE2_EXPONENTIAL];
     /**
      * General SDK Configuration
      * @see https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/configuration/sdk-environment-variables.md#general-sdk-configuration
      */
-    public const OTEL_LOG_LEVEL = [
-        self::VALUE_LOG_EMERGENCY,
-        self::VALUE_LOG_ALERT,
-        self::VALUE_LOG_CRITICAL,
-        self::VALUE_LOG_ERROR,
-        self::VALUE_LOG_WARNING,
-        self::VALUE_LOG_NOTICE,
-        self::VALUE_LOG_INFO,
-        self::VALUE_LOG_DEBUG,
-    ];
+    public const OTEL_LOG_LEVEL = [self::VALUE_LOG_EMERGENCY, self::VALUE_LOG_ALERT, self::VALUE_LOG_CRITICAL, self::VALUE_LOG_ERROR, self::VALUE_LOG_WARNING, self::VALUE_LOG_NOTICE, self::VALUE_LOG_INFO, self::VALUE_LOG_DEBUG];
     public const OTEL_PROPAGATORS = [
-        self::VALUE_TRACECONTEXT, // W3C Trace Context
-        self::VALUE_BAGGAGE, // W3C Baggage
-        self::VALUE_B3, // B3 Single
-        self::VALUE_B3_MULTI, // B3 Multi
-        self::VALUE_CLOUD_TRACE, // GCP XCloudTraceContext
-        self::VALUE_CLOUD_TRACE_ONEWAY, // GCP XCloudTraceContext OneWay (Extract)
-        self::VALUE_JAEGER, // Jaeger Propagator
-        self::VALUE_JAEGER_BAGGAGE, // Jaeger Baggage Propagator
-        self::VALUE_XRAY, // AWS X-Ray (third party)
-        self::VALUE_OTTRACE, // OT Trace (third party)
-        self::VALUE_NONE, // No automatically configured propagator.
-    ];
-    public const OTEL_TRACES_SAMPLER = [
-        self::VALUE_ALWAYS_ON,
-        self::VALUE_ALWAYS_OFF,
-        self::VALUE_TRACE_ID_RATIO,
-        self::VALUE_PARENT_BASED_ALWAYS_ON,
-        self::VALUE_PARENT_BASED_ALWAYS_OFF,
-        self::VALUE_PARENT_BASED_TRACE_ID_RATIO,
+        self::VALUE_TRACECONTEXT,
+        // W3C Trace Context
+        self::VALUE_BAGGAGE,
+        // W3C Baggage
+        self::VALUE_B3,
+        // B3 Single
+        self::VALUE_B3_MULTI,
+        // B3 Multi
+        self::VALUE_CLOUD_TRACE,
+        // GCP XCloudTraceContext
+        self::VALUE_CLOUD_TRACE_ONEWAY,
+        // GCP XCloudTraceContext OneWay (Extract)
+        self::VALUE_JAEGER,
+        // Jaeger Propagator
+        self::VALUE_JAEGER_BAGGAGE,
+        // Jaeger Baggage Propagator
         self::VALUE_XRAY,
+        // AWS X-Ray (third party)
+        self::VALUE_OTTRACE,
+        // OT Trace (third party)
+        self::VALUE_NONE,
     ];
+    public const OTEL_TRACES_SAMPLER = [self::VALUE_ALWAYS_ON, self::VALUE_ALWAYS_OFF, self::VALUE_TRACE_ID_RATIO, self::VALUE_PARENT_BASED_ALWAYS_ON, self::VALUE_PARENT_BASED_ALWAYS_OFF, self::VALUE_PARENT_BASED_TRACE_ID_RATIO, self::VALUE_XRAY];
     /**
      * OTLP Exporter
      * @see https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/protocol/exporter.md#configuration-options
      */
     // Insecure
-    public const OTEL_EXPORTER_OTLP_INSECURE  = self::VALUES_BOOLEAN;
+    public const OTEL_EXPORTER_OTLP_INSECURE = self::VALUES_BOOLEAN;
     public const OTEL_EXPORTER_OTLP_TRACES_INSECURE = self::VALUES_BOOLEAN;
-    public const OTEL_EXPORTER_OTLP_METRICS_INSECURE  = self::VALUES_BOOLEAN;
+    public const OTEL_EXPORTER_OTLP_METRICS_INSECURE = self::VALUES_BOOLEAN;
     // Compression
     public const OTEL_EXPORTER_OTLP_COMPRESSION = self::VALUES_COMPRESSION;
     public const OTEL_EXPORTER_OTLP_TRACES_COMPRESSION = self::VALUES_COMPRESSION;
@@ -147,42 +115,19 @@ interface KnownValues
      * Exporter Selection
      * @see https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/configuration/sdk-environment-variables.md#exporter-selection
      */
-    public const OTEL_TRACES_EXPORTER = [
-        self::VALUE_OTLP,
-        self::VALUE_OTLP_STDOUT,
-        self::VALUE_ZIPKIN,
-        self::VALUE_NONE,
-    ];
-    public const OTEL_METRICS_EXPORTER = [
-        self::VALUE_OTLP,
-        self::VALUE_OTLP_STDOUT,
-        self::VALUE_PROMETHEUS,
-        self::VALUE_NONE,
-    ];
-    public const OTEL_LOGS_EXPORTER = [
-        self::VALUE_OTLP,
-        self::VALUE_OTLP_STDOUT,
-        self::VALUE_NONE,
-    ];
+    public const OTEL_TRACES_EXPORTER = [self::VALUE_OTLP, self::VALUE_OTLP_STDOUT, self::VALUE_ZIPKIN, self::VALUE_NONE];
+    public const OTEL_METRICS_EXPORTER = [self::VALUE_OTLP, self::VALUE_OTLP_STDOUT, self::VALUE_PROMETHEUS, self::VALUE_NONE];
+    public const OTEL_LOGS_EXPORTER = [self::VALUE_OTLP, self::VALUE_OTLP_STDOUT, self::VALUE_NONE];
     /**
      * Metrics SDK Configuration
      * @see https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/configuration/sdk-environment-variables.md#metrics-sdk-configuration
      */
-    public const OTEL_METRICS_EXEMPLAR_FILTER = [
-        self::VALUE_WITH_SAMPLED_TRACE,
-        self::VALUE_ALL,
-        self::VALUE_NONE,
-    ];
+    public const OTEL_METRICS_EXEMPLAR_FILTER = [self::VALUE_WITH_SAMPLED_TRACE, self::VALUE_ALL, self::VALUE_NONE];
     /**
      * Language Specific Environment Variables
      * @see https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/configuration/sdk-environment-variables.md#language-specific-environment-variables
      */
-    public const OTEL_PHP_TRACES_PROCESSOR = [
-        self::VALUE_BATCH,
-        self::VALUE_SIMPLE,
-        self::VALUE_NOOP,
-        self::VALUE_NONE,
-    ];
+    public const OTEL_PHP_TRACES_PROCESSOR = [self::VALUE_BATCH, self::VALUE_SIMPLE, self::VALUE_NOOP, self::VALUE_NONE];
     public const OTEL_PHP_AUTOLOAD_ENABLED = self::VALUES_BOOLEAN;
     public const VALUE_ERROR_LOG = 'error_log';
     public const VALUE_STDERR = 'stderr';
@@ -199,28 +144,7 @@ interface KnownValues
     public const VALUE_DETECTORS_SERVICE = 'service';
     public const VALUE_DETECTORS_SERVICE_INSTANCE = 'service_instance';
     public const VALUE_DETECTORS_COMPOSER = 'composer';
-    public const OTEL_PHP_DETECTORS = [
-        self::VALUE_ALL,
-        self::VALUE_DETECTORS_ENVIRONMENT,
-        self::VALUE_DETECTORS_HOST,
-        self::VALUE_DETECTORS_OS,
-        self::VALUE_DETECTORS_PROCESS,
-        self::VALUE_DETECTORS_PROCESS_RUNTIME,
-        self::VALUE_DETECTORS_SDK,
-        self::VALUE_DETECTORS_SDK_PROVIDED,
-        self::VALUE_DETECTORS_COMPOSER,
-        self::VALUE_NONE,
-    ];
-    public const OTEL_PHP_LOG_DESTINATION = [
-        self::VALUE_ERROR_LOG,
-        self::VALUE_STDERR,
-        self::VALUE_STDOUT,
-        self::VALUE_PSR3,
-        self::VALUE_EMPTY,
-        self::VALUE_NONE,
-    ];
-
-    public const OTEL_EXPERIMENTAL_RESPONSE_PROPAGATORS = [
-        self::VALUE_NONE, // No automatically configured propagator.
-    ];
+    public const OTEL_PHP_DETECTORS = [self::VALUE_ALL, self::VALUE_DETECTORS_ENVIRONMENT, self::VALUE_DETECTORS_HOST, self::VALUE_DETECTORS_OS, self::VALUE_DETECTORS_PROCESS, self::VALUE_DETECTORS_PROCESS_RUNTIME, self::VALUE_DETECTORS_SDK, self::VALUE_DETECTORS_SDK_PROVIDED, self::VALUE_DETECTORS_COMPOSER, self::VALUE_NONE];
+    public const OTEL_PHP_LOG_DESTINATION = [self::VALUE_ERROR_LOG, self::VALUE_STDERR, self::VALUE_STDOUT, self::VALUE_PSR3, self::VALUE_EMPTY, self::VALUE_NONE];
+    public const OTEL_EXPERIMENTAL_RESPONSE_PROPAGATORS = [self::VALUE_NONE];
 }

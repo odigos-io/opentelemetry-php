@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\Console\Helper;
 
 /**
@@ -16,7 +15,7 @@ namespace Symfony\Component\Console\Helper;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class TableSeparator extends TableCell
+class TableSeparator extends \Symfony\Component\Console\Helper\TableCell
 {
     public function __construct(array $options = [])
     {

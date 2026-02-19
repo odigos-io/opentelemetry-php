@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -31,35 +31,30 @@ interface EventInterface
      * @return string
      */
     public function getName(): string;
-
     /**
      * Returns the subject of this event.
      *
      * @return TSubject
      */
     public function getSubject(): object;
-
     /**
      * Stops the event from being used anymore.
      *
      * @return void
      */
     public function stopPropagation(): void;
-
     /**
      * Checks if the event is stopped.
      *
      * @return bool True if the event is stopped
      */
     public function isStopped(): bool;
-
     /**
      * The result value of the event listeners.
      *
      * @return mixed
      */
     public function getResult(): mixed;
-
     /**
      * Listeners can attach a result value to the event.
      *
@@ -67,7 +62,6 @@ interface EventInterface
      * @return $this
      */
     public function setResult(mixed $value = null);
-
     /**
      * Accesses the event data/payload.
      *
@@ -76,7 +70,6 @@ interface EventInterface
      *   If the $key does not exist a null value is returned.
      */
     public function getData(?string $key = null): mixed;
-
     /**
      * Assigns a value to the data/payload of this event.
      *

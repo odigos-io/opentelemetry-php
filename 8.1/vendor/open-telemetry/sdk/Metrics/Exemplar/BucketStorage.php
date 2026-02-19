@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\SDK\Metrics\Exemplar;
 
 use function array_fill;
@@ -12,7 +11,6 @@ use OpenTelemetry\Context\ContextInterface;
 use OpenTelemetry\SDK\Common\Attribute\Attributes;
 use OpenTelemetry\SDK\Common\Attribute\AttributesInterface;
 use OpenTelemetry\SDK\Metrics\Data\Exemplar;
-
 /**
  * @internal
  */
@@ -20,22 +18,18 @@ final class BucketStorage
 {
     /** @var array<int, BucketEntry|null> */
     private array $buckets;
-
     public function __construct(int $size = 0)
     {
         $this->buckets = array_fill(0, $size, null);
     }
-
     public function store(int $bucket, int|string $index, float|int $value, AttributesInterface $attributes, ContextInterface $context, int $timestamp): void
     {
         assert($bucket <= count($this->buckets));
-
-        $exemplar = $this->buckets[$bucket] ??= new BucketEntry();
+        $exemplar = $this->buckets[$bucket] ??= new \OpenTelemetry\SDK\Metrics\Exemplar\BucketEntry();
         $exemplar->index = $index;
         $exemplar->value = $value;
         $exemplar->timestamp = $timestamp;
         $exemplar->attributes = $attributes;
-
         if (($spanContext = Span::fromContext($context)->getContext())->isValid()) {
             $exemplar->traceId = $spanContext->getTraceId();
             $exemplar->spanId = $spanContext->getSpanId();
@@ -44,7 +38,6 @@ final class BucketStorage
             $exemplar->spanId = null;
         }
     }
-
     /**
      * @param array<AttributesInterface> $dataPointAttributes
      * @return array<Exemplar>
@@ -56,24 +49,11 @@ final class BucketStorage
             if (!$exemplar) {
                 continue;
             }
-
-            $exemplars[$index] = new Exemplar(
-                $exemplar->index,
-                $exemplar->value,
-                $exemplar->timestamp,
-                $this->filterExemplarAttributes(
-                    $dataPointAttributes[$exemplar->index],
-                    $exemplar->attributes,
-                ),
-                $exemplar->traceId,
-                $exemplar->spanId,
-            );
+            $exemplars[$index] = new Exemplar($exemplar->index, $exemplar->value, $exemplar->timestamp, $this->filterExemplarAttributes($dataPointAttributes[$exemplar->index], $exemplar->attributes), $exemplar->traceId, $exemplar->spanId);
             $exemplar = null;
         }
-
         return $exemplars;
     }
-
     private function filterExemplarAttributes(AttributesInterface $dataPointAttributes, AttributesInterface $exemplarAttributes): AttributesInterface
     {
         $attributes = [];
@@ -82,7 +62,6 @@ final class BucketStorage
                 $attributes[$key] = $value;
             }
         }
-
         return new Attributes($attributes, $exemplarAttributes->getDroppedAttributesCount());
     }
 }

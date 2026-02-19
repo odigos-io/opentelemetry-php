@@ -1,13 +1,11 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\DBAL\Types;
 
 use Doctrine\DBAL\ParameterType;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
-
-final class AsciiStringType extends StringType
+final class AsciiStringType extends \Doctrine\DBAL\Types\StringType
 {
     /**
      * {@inheritDoc}
@@ -16,7 +14,6 @@ final class AsciiStringType extends StringType
     {
         return $platform->getAsciiStringTypeDeclarationSQL($column);
     }
-
     public function getBindingType(): ParameterType
     {
         return ParameterType::ASCII;

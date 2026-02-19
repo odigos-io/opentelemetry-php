@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -16,19 +16,17 @@ declare(strict_types=1);
 namespace Cake\TestSuite\Constraint\Response;
 
 use Psr\Http\Message\ResponseInterface;
-
 /**
  * HeaderEquals
  *
  * @internal
  */
-class HeaderEquals extends ResponseBase
+class HeaderEquals extends \Cake\TestSuite\Constraint\Response\ResponseBase
 {
     /**
      * @var string
      */
     protected string $headerName;
-
     /**
      * Constructor.
      *
@@ -38,10 +36,8 @@ class HeaderEquals extends ResponseBase
     public function __construct(ResponseInterface $response, string $headerName)
     {
         parent::__construct($response);
-
         $this->headerName = $headerName;
     }
-
     /**
      * Checks assertion
      *
@@ -52,7 +48,6 @@ class HeaderEquals extends ResponseBase
     {
         return $this->response->getHeaderLine($this->headerName) === $other;
     }
-
     /**
      * Assertion message
      *
@@ -61,7 +56,6 @@ class HeaderEquals extends ResponseBase
     public function toString(): string
     {
         $responseHeader = $this->response->getHeaderLine($this->headerName);
-
         return sprintf("equals content in header '%s' (`%s`)", $this->headerName, $responseHeader);
     }
 }

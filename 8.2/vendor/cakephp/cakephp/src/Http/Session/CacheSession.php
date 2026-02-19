@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * Cache Session save handler. Allows saving session information into Cache.
  *
@@ -21,7 +21,6 @@ namespace Cake\Http\Session;
 use Cake\Cache\Cache;
 use InvalidArgumentException;
 use SessionHandlerInterface;
-
 /**
  * CacheSession provides method for saving sessions into a Cache engine. Used with Session
  *
@@ -35,7 +34,6 @@ class CacheSession implements SessionHandlerInterface
      * @var array<string, mixed>
      */
     protected array $_options = [];
-
     /**
      * Constructor.
      *
@@ -51,7 +49,6 @@ class CacheSession implements SessionHandlerInterface
         }
         $this->_options = $config;
     }
-
     /**
      * Method called on open of a database session.
      *
@@ -61,9 +58,8 @@ class CacheSession implements SessionHandlerInterface
      */
     public function open(string $path, string $name): bool
     {
-        return true;
+        return \true;
     }
-
     /**
      * Method called on close of a database session.
      *
@@ -71,9 +67,8 @@ class CacheSession implements SessionHandlerInterface
      */
     public function close(): bool
     {
-        return true;
+        return \true;
     }
-
     /**
      * Method used to read from a cache session.
      *
@@ -84,7 +79,6 @@ class CacheSession implements SessionHandlerInterface
     {
         return Cache::read($id, $this->_options['config']) ?? '';
     }
-
     /**
      * Helper function called on write for cache sessions.
      *
@@ -95,12 +89,10 @@ class CacheSession implements SessionHandlerInterface
     public function write(string $id, string $data): bool
     {
         if (!$id) {
-            return false;
+            return \false;
         }
-
         return Cache::write($id, $data, $this->_options['config']);
     }
-
     /**
      * Method called on the destruction of a cache session.
      *
@@ -110,10 +102,8 @@ class CacheSession implements SessionHandlerInterface
     public function destroy(string $id): bool
     {
         Cache::delete($id, $this->_options['config']);
-
-        return true;
+        return \true;
     }
-
     /**
      * No-op method. Always returns 0 since cache engine don't have garbage collection.
      *

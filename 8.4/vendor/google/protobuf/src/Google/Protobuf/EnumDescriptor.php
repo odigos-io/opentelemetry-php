@@ -6,13 +6,11 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file or at
 // https://developers.google.com/open-source/licenses/bsd
-
-namespace Google\Protobuf;
+namespace Odigos\Google\Protobuf;
 
 class EnumDescriptor
 {
     private $internal_desc;
-
     /**
      * @internal
      */
@@ -20,7 +18,6 @@ class EnumDescriptor
     {
         $this->internal_desc = $internal_desc;
     }
-
     /**
      * @return string Full protobuf message name
      */
@@ -28,7 +25,6 @@ class EnumDescriptor
     {
         return $this->internal_desc->getFullName();
     }
-
     /**
      * @return string PHP class name
      */
@@ -36,7 +32,6 @@ class EnumDescriptor
     {
         return $this->internal_desc->getClass();
     }
-
     /**
      * @param int $index Must be >= 0 and < getValueCount()
      * @return EnumValueDescriptor
@@ -45,7 +40,6 @@ class EnumDescriptor
     {
         return $this->internal_desc->getValueDescriptorByIndex($index);
     }
-
     /**
      * @return int Number of values in enum
      */

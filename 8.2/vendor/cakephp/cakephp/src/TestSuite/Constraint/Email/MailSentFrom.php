@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -21,13 +21,12 @@ namespace Cake\TestSuite\Constraint\Email;
  *
  * @internal
  */
-class MailSentFrom extends MailSentWith
+class MailSentFrom extends \Cake\TestSuite\Constraint\Email\MailSentWith
 {
     /**
      * @var string
      */
     protected string $method = 'from';
-
     /**
      * Assertion message string
      *
@@ -38,7 +37,6 @@ class MailSentFrom extends MailSentWith
         if ($this->at) {
             return sprintf('sent email #%d', $this->at);
         }
-
         return 'sent an email';
     }
 }

@@ -1,17 +1,16 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\rest;
 
 use yii\base\InvalidConfigException;
 use yii\base\Model;
 use yii\base\Module;
 use yii\web\ForbiddenHttpException;
-
 /**
  * ActiveController implements a common set of actions for supporting RESTful access to ActiveRecord.
  *
@@ -41,7 +40,7 @@ use yii\web\ForbiddenHttpException;
  * @template T of Module
  * @extends Controller<T>
  */
-class ActiveController extends Controller
+class ActiveController extends \yii\rest\Controller
 {
     /**
      * @var string the model class name. This property must be set.
@@ -57,8 +56,6 @@ class ActiveController extends Controller
      * @see \yii\base\Model::scenarios()
      */
     public $createScenario = Model::SCENARIO_DEFAULT;
-
-
     /**
      * {@inheritdoc}
      */
@@ -69,60 +66,20 @@ class ActiveController extends Controller
             throw new InvalidConfigException('The "modelClass" property must be set.');
         }
     }
-
     /**
      * {@inheritdoc}
      */
     public function actions()
     {
-        return [
-            'index' => [
-                'class' => 'yii\rest\IndexAction',
-                'modelClass' => $this->modelClass,
-                'checkAccess' => [$this, 'checkAccess'],
-            ],
-            'view' => [
-                'class' => 'yii\rest\ViewAction',
-                'modelClass' => $this->modelClass,
-                'checkAccess' => [$this, 'checkAccess'],
-            ],
-            'create' => [
-                'class' => 'yii\rest\CreateAction',
-                'modelClass' => $this->modelClass,
-                'checkAccess' => [$this, 'checkAccess'],
-                'scenario' => $this->createScenario,
-            ],
-            'update' => [
-                'class' => 'yii\rest\UpdateAction',
-                'modelClass' => $this->modelClass,
-                'checkAccess' => [$this, 'checkAccess'],
-                'scenario' => $this->updateScenario,
-            ],
-            'delete' => [
-                'class' => 'yii\rest\DeleteAction',
-                'modelClass' => $this->modelClass,
-                'checkAccess' => [$this, 'checkAccess'],
-            ],
-            'options' => [
-                'class' => 'yii\rest\OptionsAction',
-            ],
-        ];
+        return ['index' => ['class' => 'yii\rest\IndexAction', 'modelClass' => $this->modelClass, 'checkAccess' => [$this, 'checkAccess']], 'view' => ['class' => 'yii\rest\ViewAction', 'modelClass' => $this->modelClass, 'checkAccess' => [$this, 'checkAccess']], 'create' => ['class' => 'yii\rest\CreateAction', 'modelClass' => $this->modelClass, 'checkAccess' => [$this, 'checkAccess'], 'scenario' => $this->createScenario], 'update' => ['class' => 'yii\rest\UpdateAction', 'modelClass' => $this->modelClass, 'checkAccess' => [$this, 'checkAccess'], 'scenario' => $this->updateScenario], 'delete' => ['class' => 'yii\rest\DeleteAction', 'modelClass' => $this->modelClass, 'checkAccess' => [$this, 'checkAccess']], 'options' => ['class' => 'yii\rest\OptionsAction']];
     }
-
     /**
      * {@inheritdoc}
      */
     protected function verbs()
     {
-        return [
-            'index' => ['GET', 'HEAD'],
-            'view' => ['GET', 'HEAD'],
-            'create' => ['POST'],
-            'update' => ['PUT', 'PATCH'],
-            'delete' => ['DELETE'],
-        ];
+        return ['index' => ['GET', 'HEAD'], 'view' => ['GET', 'HEAD'], 'create' => ['POST'], 'update' => ['PUT', 'PATCH'], 'delete' => ['DELETE']];
     }
-
     /**
      * Checks the privilege of the current user.
      *

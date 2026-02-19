@@ -1,9 +1,7 @@
 <?php
 
 // DO NOT EDIT, this is an Auto-generated file from script/semantic-conventions
-
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\SemConv\Incubating\Attributes;
 
 /**
@@ -27,38 +25,32 @@ interface DeploymentIncubatingAttributes
      * @experimental
      */
     public const DEPLOYMENT_ENVIRONMENT_NAME = 'deployment.environment.name';
-
     /**
      * The id of the deployment.
      *
      * @experimental
      */
     public const DEPLOYMENT_ID = 'deployment.id';
-
     /**
      * The name of the deployment.
      *
      * @experimental
      */
     public const DEPLOYMENT_NAME = 'deployment.name';
-
     /**
      * The status of the deployment.
      *
      * @experimental
      */
     public const DEPLOYMENT_STATUS = 'deployment.status';
-
     /**
      * failed
      * @experimental
      */
     public const DEPLOYMENT_STATUS_VALUE_FAILED = 'failed';
-
     /**
      * succeeded
      * @experimental
      */
     public const DEPLOYMENT_STATUS_VALUE_SUCCEEDED = 'succeeded';
-
 }

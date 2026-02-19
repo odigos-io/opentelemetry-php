@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
  *
@@ -15,7 +15,6 @@ declare(strict_types=1);
 namespace Cake\Chronos;
 
 use DateTime;
-
 /**
  * Provides string formatting methods for datetime instances.
  *
@@ -34,7 +33,6 @@ trait FormattingTrait
     {
         static::setToStringFormat(static::DEFAULT_TO_STRING_FORMAT);
     }
-
     /**
      * Sets the __toString() format.
      *
@@ -45,7 +43,6 @@ trait FormattingTrait
     {
         static::$toStringFormat = $format;
     }
-
     /**
      * Returns a formatted string specified by ``setToStringFormat()``
      * or the default ``DEFAULT_TO_STRING_FORMAT`` format.
@@ -56,7 +53,6 @@ trait FormattingTrait
     {
         return $this->format(static::$toStringFormat);
     }
-
     /**
      * Format the instance as date
      *
@@ -66,7 +62,6 @@ trait FormattingTrait
     {
         return $this->format('Y-m-d');
     }
-
     /**
      * Format the instance as a readable date
      *
@@ -76,7 +71,6 @@ trait FormattingTrait
     {
         return $this->format('M j, Y');
     }
-
     /**
      * Format the instance as time
      *
@@ -86,7 +80,6 @@ trait FormattingTrait
     {
         return $this->format('H:i:s');
     }
-
     /**
      * Format the instance as date and time
      *
@@ -96,7 +89,6 @@ trait FormattingTrait
     {
         return $this->format('Y-m-d H:i:s');
     }
-
     /**
      * Format the instance with day, date and time
      *
@@ -106,7 +98,6 @@ trait FormattingTrait
     {
         return $this->format('D, M j, Y g:i A');
     }
-
     /**
      * Format the instance as ATOM
      *
@@ -116,7 +107,6 @@ trait FormattingTrait
     {
         return $this->format(DateTime::ATOM);
     }
-
     /**
      * Format the instance as COOKIE
      *
@@ -126,7 +116,6 @@ trait FormattingTrait
     {
         return $this->format(DateTime::COOKIE);
     }
-
     /**
      * Format the instance as ISO8601
      *
@@ -136,7 +125,6 @@ trait FormattingTrait
     {
         return $this->format(DateTime::ATOM);
     }
-
     /**
      * Format the instance as RFC822
      *
@@ -147,7 +135,6 @@ trait FormattingTrait
     {
         return $this->format(DateTime::RFC822);
     }
-
     /**
      * Format the instance as RFC850
      *
@@ -158,7 +145,6 @@ trait FormattingTrait
     {
         return $this->format(DateTime::RFC850);
     }
-
     /**
      * Format the instance as RFC1036
      *
@@ -169,7 +155,6 @@ trait FormattingTrait
     {
         return $this->format(DateTime::RFC1036);
     }
-
     /**
      * Format the instance as RFC1123
      *
@@ -180,7 +165,6 @@ trait FormattingTrait
     {
         return $this->format(DateTime::RFC1123);
     }
-
     /**
      * Format the instance as RFC2822
      *
@@ -191,7 +175,6 @@ trait FormattingTrait
     {
         return $this->format(DateTime::RFC2822);
     }
-
     /**
      * Format the instance as RFC3339
      *
@@ -202,7 +185,6 @@ trait FormattingTrait
     {
         return $this->format(DateTime::RFC3339);
     }
-
     /**
      * Format the instance as RSS
      *
@@ -212,7 +194,6 @@ trait FormattingTrait
     {
         return $this->format(DateTime::RSS);
     }
-
     /**
      * Format the instance as W3C
      *
@@ -222,7 +203,6 @@ trait FormattingTrait
     {
         return $this->format(DateTime::W3C);
     }
-
     /**
      * Returns a UNIX timestamp.
      *
@@ -232,7 +212,6 @@ trait FormattingTrait
     {
         return $this->format('U');
     }
-
     /**
      * Returns the quarter
      *
@@ -241,21 +220,15 @@ trait FormattingTrait
      * @param bool $range Range.
      * @return array|int 1, 2, 3, or 4 quarter of year or array if $range true
      */
-    public function toQuarter(bool $range = false): int|array
+    public function toQuarter(bool $range = \false): int|array
     {
-        $quarter = (int)ceil((int)$this->format('m') / 3);
-        if ($range === false) {
+        $quarter = (int) ceil((int) $this->format('m') / 3);
+        if ($range === \false) {
             return $quarter;
         }
-
-        trigger_error(
-            'Using toQuarter() with `$range=true` is deprecated. Use `toQuarterRange()` instead.',
-            E_USER_DEPRECATED,
-        );
-
+        trigger_error('Using toQuarter() with `$range=true` is deprecated. Use `toQuarterRange()` instead.', \E_USER_DEPRECATED);
         return $this->toQuarterRange();
     }
-
     /**
      * Returns the quarter range
      *
@@ -264,9 +237,8 @@ trait FormattingTrait
     public function toQuarterRange(): array
     {
         /** @var int<1, 4> $quarter */
-        $quarter = (int)ceil((int)$this->format('m') / 3);
+        $quarter = (int) ceil((int) $this->format('m') / 3);
         $year = $this->format('Y');
-
         return match ($quarter) {
             1 => [$year . '-01-01', $year . '-03-31'],
             2 => [$year . '-04-01', $year . '-06-30'],
@@ -274,7 +246,6 @@ trait FormattingTrait
             4 => [$year . '-10-01', $year . '-12-31'],
         };
     }
-
     /**
      * Returns ISO 8601 week number of year, weeks starting on Monday
      *
@@ -282,6 +253,6 @@ trait FormattingTrait
      */
     public function toWeek(): int
     {
-        return (int)$this->format('W');
+        return (int) $this->format('W');
     }
 }

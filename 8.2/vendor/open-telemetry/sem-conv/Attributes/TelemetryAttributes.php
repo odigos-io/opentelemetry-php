@@ -1,9 +1,7 @@
 <?php
 
 // DO NOT EDIT, this is an Auto-generated file from script/semantic-conventions
-
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\SemConv\Attributes;
 
 /**
@@ -18,67 +16,54 @@ interface TelemetryAttributes
      * @stable
      */
     public const TELEMETRY_SDK_LANGUAGE = 'telemetry.sdk.language';
-
     /**
      * @stable
      */
     public const TELEMETRY_SDK_LANGUAGE_VALUE_CPP = 'cpp';
-
     /**
      * @stable
      */
     public const TELEMETRY_SDK_LANGUAGE_VALUE_DOTNET = 'dotnet';
-
     /**
      * @stable
      */
     public const TELEMETRY_SDK_LANGUAGE_VALUE_ERLANG = 'erlang';
-
     /**
      * @stable
      */
     public const TELEMETRY_SDK_LANGUAGE_VALUE_GO = 'go';
-
     /**
      * @stable
      */
     public const TELEMETRY_SDK_LANGUAGE_VALUE_JAVA = 'java';
-
     /**
      * @stable
      */
     public const TELEMETRY_SDK_LANGUAGE_VALUE_NODEJS = 'nodejs';
-
     /**
      * @stable
      */
     public const TELEMETRY_SDK_LANGUAGE_VALUE_PHP = 'php';
-
     /**
      * @stable
      */
     public const TELEMETRY_SDK_LANGUAGE_VALUE_PYTHON = 'python';
-
     /**
      * @stable
      */
     public const TELEMETRY_SDK_LANGUAGE_VALUE_RUBY = 'ruby';
-
     /**
      * @stable
      */
     public const TELEMETRY_SDK_LANGUAGE_VALUE_RUST = 'rust';
-
     /**
      * @stable
      */
     public const TELEMETRY_SDK_LANGUAGE_VALUE_SWIFT = 'swift';
-
     /**
      * @stable
      */
     public const TELEMETRY_SDK_LANGUAGE_VALUE_WEBJS = 'webjs';
-
     /**
      * The name of the telemetry SDK as defined above.
      *
@@ -92,12 +77,10 @@ interface TelemetryAttributes
      * @stable
      */
     public const TELEMETRY_SDK_NAME = 'telemetry.sdk.name';
-
     /**
      * The version string of the telemetry SDK.
      *
      * @stable
      */
     public const TELEMETRY_SDK_VERSION = 'telemetry.sdk.version';
-
 }

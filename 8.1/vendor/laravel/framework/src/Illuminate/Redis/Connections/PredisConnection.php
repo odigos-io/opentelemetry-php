@@ -4,12 +4,11 @@ namespace Illuminate\Redis\Connections;
 
 use Closure;
 use Illuminate\Contracts\Redis\Connection as ConnectionContract;
-use Predis\Command\Argument\ArrayableArgument;
-
+use Odigos\Predis\Command\Argument\ArrayableArgument;
 /**
  * @mixin \Predis\Client
  */
-class PredisConnection extends Connection implements ConnectionContract
+class PredisConnection extends \Illuminate\Redis\Connections\Connection implements ConnectionContract
 {
     /**
      * The Predis client.
@@ -17,7 +16,6 @@ class PredisConnection extends Connection implements ConnectionContract
      * @var \Predis\Client
      */
     protected $client;
-
     /**
      * Create a new Predis connection.
      *
@@ -28,7 +26,6 @@ class PredisConnection extends Connection implements ConnectionContract
     {
         $this->client = $client;
     }
-
     /**
      * Subscribe to a set of given channels for messages.
      *
@@ -40,18 +37,14 @@ class PredisConnection extends Connection implements ConnectionContract
     public function createSubscription($channels, Closure $callback, $method = 'subscribe')
     {
         $loop = $this->pubSubLoop();
-
         $loop->{$method}(...array_values((array) $channels));
-
         foreach ($loop as $message) {
             if ($message->kind === 'message' || $message->kind === 'pmessage') {
                 $callback($message->payload, $message->channel);
             }
         }
-
         unset($loop);
     }
-
     /**
      * Parse the command's parameters for event dispatching.
      *
@@ -60,11 +53,8 @@ class PredisConnection extends Connection implements ConnectionContract
      */
     protected function parseParametersForEvent(array $parameters)
     {
-        return collect($parameters)
-            ->transform(function ($parameter) {
-                return $parameter instanceof ArrayableArgument
-                    ? $parameter->toArray()
-                    : $parameter;
-            })->all();
+        return collect($parameters)->transform(function ($parameter) {
+            return $parameter instanceof ArrayableArgument ? $parameter->toArray() : $parameter;
+        })->all();
     }
 }

@@ -4,7 +4,6 @@ namespace Illuminate\Http\Exceptions;
 
 use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 use Throwable;
-
 class ThrottleRequestsException extends TooManyRequestsHttpException
 {
     /**

@@ -1,11 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Laminas\Diactoros;
+declare (strict_types=1);
+namespace Odigos\Laminas\Diactoros;
 
 use Psr\Http\Message\StreamInterface;
-
 use function array_pop;
 use function assert;
 use function implode;
@@ -15,7 +13,6 @@ use function sprintf;
 use function str_replace;
 use function trim;
 use function ucwords;
-
 /**
  * Provides base functionality for request and response de/serialization
  * strategies, including functionality for retrieving a line at a time from
@@ -23,10 +20,9 @@ use function ucwords;
  */
 abstract class AbstractSerializer
 {
-    public const CR  = "\r";
+    public const CR = "\r";
     public const EOL = "\r\n";
-    public const LF  = "\n";
-
+    public const LF = "\n";
     /**
      * Retrieve a single line from the stream.
      *
@@ -38,44 +34,36 @@ abstract class AbstractSerializer
      */
     protected static function getLine(StreamInterface $stream): string
     {
-        $line    = '';
-        $crFound = false;
-        while (! $stream->eof()) {
+        $line = '';
+        $crFound = \false;
+        while (!$stream->eof()) {
             $char = $stream->read(1);
-
             if ($crFound && $char === self::LF) {
-                $crFound = false;
+                $crFound = \false;
                 break;
             }
-
             // CR NOT followed by LF
             if ($crFound && $char !== self::LF) {
                 throw Exception\DeserializationException::forUnexpectedCarriageReturn();
             }
-
             // LF in isolation
-            if (! $crFound && $char === self::LF) {
+            if (!$crFound && $char === self::LF) {
                 throw Exception\DeserializationException::forUnexpectedLineFeed();
             }
-
             // CR found; do not append
             if ($char === self::CR) {
-                $crFound = true;
+                $crFound = \true;
                 continue;
             }
-
             // Any other character: append
             $line .= $char;
         }
-
         // CR found at end of stream
         if ($crFound) {
             throw Exception\DeserializationException::forUnexpectedEndOfHeaders();
         }
-
         return $line;
     }
-
     /**
      * Split the stream into headers and body content.
      *
@@ -88,37 +76,31 @@ abstract class AbstractSerializer
      */
     protected static function splitStream(StreamInterface $stream): array
     {
-        $headers       = [];
-        $currentHeader = false;
-
+        $headers = [];
+        $currentHeader = \false;
         while ($line = self::getLine($stream)) {
             if (preg_match(';^(?P<name>[!#$%&\'*+.^_`\|~0-9a-zA-Z-]+):(?P<value>.*)$;', $line, $matches)) {
                 $currentHeader = $matches['name'];
-                if (! isset($headers[$currentHeader])) {
+                if (!isset($headers[$currentHeader])) {
                     $headers[$currentHeader] = [];
                 }
                 $headers[$currentHeader][] = trim($matches['value'], "\t ");
                 continue;
             }
-
-            if ($currentHeader === false) {
+            if ($currentHeader === \false) {
                 throw Exception\DeserializationException::forInvalidHeader();
             }
-
-            if (! preg_match('#^[ \t]#', $line)) {
+            if (!preg_match('#^[ \t]#', $line)) {
                 throw Exception\DeserializationException::forInvalidHeaderContinuation();
             }
-
             // Append continuation to last header value found
             $value = array_pop($headers[$currentHeader]);
             assert(is_string($value));
             $headers[$currentHeader][] = $value . ' ' . trim($line, "\t ");
         }
-
         // use RelativeStream to avoid copying initial stream into memory
         return [$headers, new RelativeStream($stream, $stream->tell())];
     }
-
     /**
      * Serialize headers to string values.
      *
@@ -133,10 +115,8 @@ abstract class AbstractSerializer
                 $lines[] = sprintf('%s: %s', $normalized, $value);
             }
         }
-
         return implode("\r\n", $lines);
     }
-
     /**
      * Filter a header name to wordcase
      *

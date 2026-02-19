@@ -3,10 +3,8 @@
 namespace Illuminate\Foundation\Exceptions\Whoops;
 
 use Illuminate\Contracts\Foundation\ExceptionRenderer;
-use Whoops\Run as Whoops;
-
-use function tap;
-
+use Odigos\Whoops\Run as Whoops;
+use function Odigos\tap;
 class WhoopsExceptionRenderer implements ExceptionRenderer
 {
     /**
@@ -17,15 +15,12 @@ class WhoopsExceptionRenderer implements ExceptionRenderer
      */
     public function render($throwable)
     {
-        return tap(new Whoops, function ($whoops) {
+        return tap(new Whoops(), function ($whoops) {
             $whoops->appendHandler($this->whoopsHandler());
-
-            $whoops->writeToOutput(false);
-
-            $whoops->allowQuit(false);
+            $whoops->writeToOutput(\false);
+            $whoops->allowQuit(\false);
         })->handleException($throwable);
     }
-
     /**
      * Get the Whoops handler for the application.
      *
@@ -33,6 +28,6 @@ class WhoopsExceptionRenderer implements ExceptionRenderer
      */
     protected function whoopsHandler()
     {
-        return (new WhoopsHandler)->forDebug();
+        return (new \Illuminate\Foundation\Exceptions\Whoops\WhoopsHandler())->forDebug();
     }
 }

@@ -4,8 +4,7 @@ namespace Illuminate\Hashing;
 
 use Illuminate\Contracts\Hashing\Hasher as HasherContract;
 use RuntimeException;
-
-class BcryptHasher extends AbstractHasher implements HasherContract
+class BcryptHasher extends \Illuminate\Hashing\AbstractHasher implements HasherContract
 {
     /**
      * The default cost factor.
@@ -13,14 +12,12 @@ class BcryptHasher extends AbstractHasher implements HasherContract
      * @var int
      */
     protected $rounds = 12;
-
     /**
      * Indicates whether to perform an algorithm check.
      *
      * @var bool
      */
-    protected $verifyAlgorithm = false;
-
+    protected $verifyAlgorithm = \false;
     /**
      * Create a new hasher instance.
      *
@@ -32,7 +29,6 @@ class BcryptHasher extends AbstractHasher implements HasherContract
         $this->rounds = $options['rounds'] ?? $this->rounds;
         $this->verifyAlgorithm = $options['verify'] ?? $this->verifyAlgorithm;
     }
-
     /**
      * Hash the given value.
      *
@@ -44,17 +40,12 @@ class BcryptHasher extends AbstractHasher implements HasherContract
      */
     public function make($value, array $options = [])
     {
-        $hash = password_hash($value, PASSWORD_BCRYPT, [
-            'cost' => $this->cost($options),
-        ]);
-
-        if ($hash === false) {
+        $hash = password_hash($value, \PASSWORD_BCRYPT, ['cost' => $this->cost($options)]);
+        if ($hash === \false) {
             throw new RuntimeException('Bcrypt hashing not supported.');
         }
-
         return $hash;
     }
-
     /**
      * Check the given plain value against a hash.
      *
@@ -67,13 +58,11 @@ class BcryptHasher extends AbstractHasher implements HasherContract
      */
     public function check($value, $hashedValue, array $options = [])
     {
-        if ($this->verifyAlgorithm && ! $this->isUsingCorrectAlgorithm($hashedValue)) {
+        if ($this->verifyAlgorithm && !$this->isUsingCorrectAlgorithm($hashedValue)) {
             throw new RuntimeException('This password does not use the Bcrypt algorithm.');
         }
-
         return parent::check($value, $hashedValue, $options);
     }
-
     /**
      * Check if the given hash has been hashed using the given options.
      *
@@ -83,11 +72,8 @@ class BcryptHasher extends AbstractHasher implements HasherContract
      */
     public function needsRehash($hashedValue, array $options = [])
     {
-        return password_needs_rehash($hashedValue, PASSWORD_BCRYPT, [
-            'cost' => $this->cost($options),
-        ]);
+        return password_needs_rehash($hashedValue, \PASSWORD_BCRYPT, ['cost' => $this->cost($options)]);
     }
-
     /**
      * Verifies that the configuration is less than or equal to what is configured.
      *
@@ -97,7 +83,6 @@ class BcryptHasher extends AbstractHasher implements HasherContract
     {
         return $this->isUsingCorrectAlgorithm($value) && $this->isUsingValidOptions($value);
     }
-
     /**
      * Verify the hashed value's algorithm.
      *
@@ -108,7 +93,6 @@ class BcryptHasher extends AbstractHasher implements HasherContract
     {
         return $this->info($hashedValue)['algoName'] === 'bcrypt';
     }
-
     /**
      * Verify the hashed value's options.
      *
@@ -118,18 +102,14 @@ class BcryptHasher extends AbstractHasher implements HasherContract
     protected function isUsingValidOptions($hashedValue)
     {
         ['options' => $options] = $this->info($hashedValue);
-
-        if (! is_int($options['cost'] ?? null)) {
-            return false;
+        if (!is_int($options['cost'] ?? null)) {
+            return \false;
         }
-
         if ($options['cost'] > $this->rounds) {
-            return false;
+            return \false;
         }
-
-        return true;
+        return \true;
     }
-
     /**
      * Set the default password work factor.
      *
@@ -139,10 +119,8 @@ class BcryptHasher extends AbstractHasher implements HasherContract
     public function setRounds($rounds)
     {
         $this->rounds = (int) $rounds;
-
         return $this;
     }
-
     /**
      * Extract the cost value from the options array.
      *

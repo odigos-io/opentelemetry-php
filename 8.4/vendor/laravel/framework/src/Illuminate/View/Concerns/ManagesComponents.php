@@ -6,7 +6,6 @@ use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Arr;
 use Illuminate\View\ComponentSlot;
-
 trait ManagesComponents
 {
     /**
@@ -15,35 +14,30 @@ trait ManagesComponents
      * @var array
      */
     protected $componentStack = [];
-
     /**
      * The original data passed to the component.
      *
      * @var array
      */
     protected $componentData = [];
-
     /**
      * The component data for the component that is currently being rendered.
      *
      * @var array
      */
     protected $currentComponentData = [];
-
     /**
      * The slot contents for the component.
      *
      * @var array
      */
     protected $slots = [];
-
     /**
      * The names of the slots being rendered.
      *
      * @var array
      */
     protected $slotStack = [];
-
     /**
      * Start a component rendering process.
      *
@@ -55,13 +49,10 @@ trait ManagesComponents
     {
         if (ob_start()) {
             $this->componentStack[] = $view;
-
             $this->componentData[$this->currentComponent()] = $data;
-
             $this->slots[$this->currentComponent()] = [];
         }
     }
-
     /**
      * Get the first view that actually exists from the given list, and start a component.
      *
@@ -74,10 +65,8 @@ trait ManagesComponents
         $name = Arr::first($names, function ($item) {
             return $this->exists($item);
         });
-
         $this->startComponent($name, $data);
     }
-
     /**
      * Render the current component.
      *
@@ -86,15 +75,9 @@ trait ManagesComponents
     public function renderComponent()
     {
         $view = array_pop($this->componentStack);
-
-        $this->currentComponentData = array_merge(
-            $previousComponentData = $this->currentComponentData,
-            $data = $this->componentData()
-        );
-
+        $this->currentComponentData = array_merge($previousComponentData = $this->currentComponentData, $data = $this->componentData());
         try {
             $view = value($view, $data);
-
             if ($view instanceof View) {
                 return $view->with($data)->render();
             } elseif ($view instanceof Htmlable) {
@@ -106,7 +89,6 @@ trait ManagesComponents
             $this->currentComponentData = $previousComponentData;
         }
     }
-
     /**
      * Get the data for the given component.
      *
@@ -115,19 +97,9 @@ trait ManagesComponents
     protected function componentData()
     {
         $defaultSlot = new ComponentSlot(trim(ob_get_clean()));
-
-        $slots = array_merge([
-            '__default' => $defaultSlot,
-        ], $this->slots[count($this->componentStack)]);
-
-        return array_merge(
-            $this->componentData[count($this->componentStack)],
-            ['slot' => $defaultSlot],
-            $this->slots[count($this->componentStack)],
-            ['__laravel_slots' => $slots]
-        );
+        $slots = array_merge(['__default' => $defaultSlot], $this->slots[count($this->componentStack)]);
+        return array_merge($this->componentData[count($this->componentStack)], ['slot' => $defaultSlot], $this->slots[count($this->componentStack)], ['__laravel_slots' => $slots]);
     }
-
     /**
      * Get an item from the component data that exists above the current component.
      *
@@ -140,24 +112,18 @@ trait ManagesComponents
         if (array_key_exists($key, $this->currentComponentData)) {
             return $this->currentComponentData[$key];
         }
-
         $currentComponent = count($this->componentStack);
-
         if ($currentComponent === 0) {
             return value($default);
         }
-
         for ($i = $currentComponent - 1; $i >= 0; $i--) {
             $data = $this->componentData[$i] ?? [];
-
             if (array_key_exists($key, $data)) {
                 return $data[$key];
             }
         }
-
         return value($default);
     }
-
     /**
      * Start the slot rendering process.
      *
@@ -172,11 +138,9 @@ trait ManagesComponents
             $this->slots[$this->currentComponent()][$name] = $content;
         } elseif (ob_start()) {
             $this->slots[$this->currentComponent()][$name] = '';
-
             $this->slotStack[$this->currentComponent()][] = [$name, $attributes];
         }
     }
-
     /**
      * Save the slot content for rendering.
      *
@@ -185,18 +149,10 @@ trait ManagesComponents
     public function endSlot()
     {
         last($this->componentStack);
-
-        $currentSlot = array_pop(
-            $this->slotStack[$this->currentComponent()]
-        );
-
+        $currentSlot = array_pop($this->slotStack[$this->currentComponent()]);
         [$currentName, $currentAttributes] = $currentSlot;
-
-        $this->slots[$this->currentComponent()][$currentName] = new ComponentSlot(
-            trim(ob_get_clean()), $currentAttributes
-        );
+        $this->slots[$this->currentComponent()][$currentName] = new ComponentSlot(trim(ob_get_clean()), $currentAttributes);
     }
-
     /**
      * Get the index for the current component.
      *
@@ -206,7 +162,6 @@ trait ManagesComponents
     {
         return count($this->componentStack) - 1;
     }
-
     /**
      * Flush all of the component state.
      *

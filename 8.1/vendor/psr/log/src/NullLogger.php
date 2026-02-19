@@ -10,7 +10,7 @@ namespace Psr\Log;
  * is a good way to avoid littering your code with `if ($this->logger) { }`
  * blocks.
  */
-class NullLogger extends AbstractLogger
+class NullLogger extends \Psr\Log\AbstractLogger
 {
     /**
      * Logs with an arbitrary level.

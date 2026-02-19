@@ -1,16 +1,15 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\widgets;
 
 use Closure;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
-
 /**
  * The ListView widget is used to display data from data
  * provider. Each data model is rendered using the view
@@ -21,7 +20,7 @@ use yii\helpers\Html;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class ListView extends BaseListView
+class ListView extends \yii\widgets\BaseListView
 {
     /**
      * @var array|Closure the HTML attributes for the container of the rendering result of each data model.
@@ -104,8 +103,6 @@ class ListView extends BaseListView
      * @since 2.0.11
      */
     public $afterItem;
-
-
     /**
      * Renders all data models.
      * @return string the rendering result
@@ -120,17 +117,13 @@ class ListView extends BaseListView
             if (($before = $this->renderBeforeItem($model, $key, $index)) !== null) {
                 $rows[] = $before;
             }
-
             $rows[] = $this->renderItem($model, $key, $index);
-
             if (($after = $this->renderAfterItem($model, $key, $index)) !== null) {
                 $rows[] = $after;
             }
         }
-
         return implode($this->separator, $rows);
     }
-
     /**
      * Calls [[beforeItem]] closure, returns execution result.
      * If [[beforeItem]] is not a closure, `null` will be returned.
@@ -147,10 +140,8 @@ class ListView extends BaseListView
         if ($this->beforeItem instanceof Closure) {
             return call_user_func($this->beforeItem, $model, $key, $index, $this);
         }
-
         return null;
     }
-
     /**
      * Calls [[afterItem]] closure, returns execution result.
      * If [[afterItem]] is not a closure, `null` will be returned.
@@ -167,10 +158,8 @@ class ListView extends BaseListView
         if ($this->afterItem instanceof Closure) {
             return call_user_func($this->afterItem, $model, $key, $index, $this);
         }
-
         return null;
     }
-
     /**
      * Renders a single data model.
      * @param mixed $model the data model to be rendered
@@ -183,12 +172,7 @@ class ListView extends BaseListView
         if ($this->itemView === null) {
             $content = $key;
         } elseif (is_string($this->itemView)) {
-            $content = $this->getView()->render($this->itemView, array_merge([
-                'model' => $model,
-                'key' => $key,
-                'index' => $index,
-                'widget' => $this,
-            ], $this->viewParams));
+            $content = $this->getView()->render($this->itemView, array_merge(['model' => $model, 'key' => $key, 'index' => $index, 'widget' => $this], $this->viewParams));
         } else {
             $content = call_user_func($this->itemView, $model, $key, $index, $this);
         }
@@ -198,8 +182,7 @@ class ListView extends BaseListView
             $options = $this->itemOptions;
         }
         $tag = ArrayHelper::remove($options, 'tag', 'div');
-        $options['data-key'] = is_array($key) ? json_encode($key, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) : (string) $key;
-
+        $options['data-key'] = is_array($key) ? json_encode($key, \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE) : (string) $key;
         return Html::tag($tag, $content, $options);
     }
 }

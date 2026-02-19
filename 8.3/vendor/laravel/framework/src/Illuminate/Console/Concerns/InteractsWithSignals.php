@@ -4,7 +4,6 @@ namespace Illuminate\Console\Concerns;
 
 use Illuminate\Console\Signals;
 use Illuminate\Support\Collection;
-
 trait InteractsWithSignals
 {
     /**
@@ -13,7 +12,6 @@ trait InteractsWithSignals
      * @var \Illuminate\Console\Signals|null
      */
     protected $signals;
-
     /**
      * Define a callback to be run when the given signal(s) occurs.
      *
@@ -26,15 +24,10 @@ trait InteractsWithSignals
     public function trap($signals, $callback)
     {
         Signals::whenAvailable(function () use ($signals, $callback) {
-            $this->signals ??= new Signals(
-                $this->getApplication()->getSignalRegistry(),
-            );
-
-            Collection::wrap(value($signals))
-                ->each(fn ($signal) => $this->signals->register($signal, $callback));
+            $this->signals ??= new Signals($this->getApplication()->getSignalRegistry());
+            Collection::wrap(value($signals))->each(fn($signal) => $this->signals->register($signal, $callback));
         });
     }
-
     /**
      * Untrap signal handlers set within the command's handler.
      *
@@ -44,9 +37,8 @@ trait InteractsWithSignals
      */
     public function untrap()
     {
-        if (! is_null($this->signals)) {
+        if (!is_null($this->signals)) {
             $this->signals->unregister();
-
             $this->signals = null;
         }
     }

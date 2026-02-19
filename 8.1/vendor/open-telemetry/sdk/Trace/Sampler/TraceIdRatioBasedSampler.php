@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\SDK\Trace\Sampler;
 
 use function assert;
@@ -18,7 +17,6 @@ use function sprintf;
 use function substr;
 use function substr_compare;
 use function unpack;
-
 /**
  * This implementation of the SamplerInterface records with given probability.
  * Example:
@@ -31,7 +29,6 @@ class TraceIdRatioBasedSampler implements SamplerInterface
 {
     private readonly float $probability;
     private readonly string $tv;
-
     /**
      * @param float $probability Probability float value between 0.0 and 1.0.
      * @param int<1, 14> $precision threshold precision in hexadecimal digits
@@ -41,29 +38,16 @@ class TraceIdRatioBasedSampler implements SamplerInterface
         if (!($probability >= 0 && $probability <= 1)) {
             throw new InvalidArgumentException('probability should be be between 0.0 and 1.0.');
         }
-
         $this->probability = $probability;
         $this->tv = rtrim(bin2hex(substr(pack('J', self::computeTValue($probability, $precision, 4)), 1)), '0') ?: '0';
     }
-
     #[\Override]
-    public function shouldSample(
-        ContextInterface $parentContext,
-        string $traceId,
-        string $spanName,
-        int $spanKind,
-        AttributesInterface $attributes,
-        array $links,
-    ): SamplingResult {
+    public function shouldSample(ContextInterface $parentContext, string $traceId, string $spanName, int $spanKind, AttributesInterface $attributes, array $links): SamplingResult
+    {
         $traceState = Span::fromContext($parentContext)->getContext()->getTraceState();
-
-        $decision = $this->probability >= 2 ** -56 && substr_compare($traceId, $this->tv, -14) >= 0
-            ? SamplingResult::RECORD_AND_SAMPLE
-            : SamplingResult::DROP;
-
+        $decision = $this->probability >= 2 ** -56 && substr_compare($traceId, $this->tv, -14) >= 0 ? SamplingResult::RECORD_AND_SAMPLE : SamplingResult::DROP;
         return new SamplingResult($decision, [], $traceState);
     }
-
     /**
      * Computes the 56-bit rejection threshold (T-value) for a given probability.
      *
@@ -98,20 +82,16 @@ class TraceIdRatioBasedSampler implements SamplerInterface
         assert($probability >= 0 && $probability <= 1);
         assert($precision >= 1);
         assert($wordSize >= 1 && ($wordSize & $wordSize - 1) === 0);
-
         /** @psalm-suppress PossiblyInvalidArrayAccess */
         $b = unpack('J', pack('E', $probability))[1];
         $e = $b >> 52 & (1 << 11) - 1;
         $f = $b & (1 << 52) - 1 | ($e ? 1 << 52 : 0);
-
         // 56+1bit for rounding
         $s = $e - 1023 - 52 + 57;
         $t = (1 << 57) - ($s < 0 ? $f >> -$s : $f << $s);
         $m = -1 << 56 >> (-($e - 1023 + 1) + $precision * $wordSize & -$wordSize);
-
         return $t - $m >> 1 & $m;
     }
-
     #[\Override]
     public function getDescription(): string
     {

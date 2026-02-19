@@ -4,7 +4,6 @@ namespace Illuminate\Concurrency;
 
 use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Support\ServiceProvider;
-
 class ConcurrencyServiceProvider extends ServiceProvider implements DeferrableProvider
 {
     /**
@@ -14,11 +13,10 @@ class ConcurrencyServiceProvider extends ServiceProvider implements DeferrablePr
      */
     public function register()
     {
-        $this->app->singleton(ConcurrencyManager::class, function ($app) {
-            return new ConcurrencyManager($app);
+        $this->app->singleton(\Illuminate\Concurrency\ConcurrencyManager::class, function ($app) {
+            return new \Illuminate\Concurrency\ConcurrencyManager($app);
         });
     }
-
     /**
      * Get the services provided by the provider.
      *
@@ -26,8 +24,6 @@ class ConcurrencyServiceProvider extends ServiceProvider implements DeferrablePr
      */
     public function provides()
     {
-        return [
-            ConcurrencyManager::class,
-        ];
+        return [\Illuminate\Concurrency\ConcurrencyManager::class];
     }
 }

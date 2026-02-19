@@ -1,5 +1,6 @@
-<?php declare(strict_types=1);
+<?php
 
+declare (strict_types=1);
 /*
  * This file is part of the Monolog package.
  *
@@ -8,14 +9,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Odigos\Monolog\Handler\FingersCrossed;
 
-namespace Monolog\Handler\FingersCrossed;
-
-use Monolog\Level;
-use Monolog\LogRecord;
-use Monolog\Logger;
+use Odigos\Monolog\Level;
+use Odigos\Monolog\LogRecord;
+use Odigos\Monolog\Logger;
 use Psr\Log\LogLevel;
-
 /**
  * Error level based activation strategy.
  *
@@ -24,7 +23,6 @@ use Psr\Log\LogLevel;
 class ErrorLevelActivationStrategy implements ActivationStrategyInterface
 {
     private Level $actionLevel;
-
     /**
      * @param int|string|Level $actionLevel Level or name or value
      *
@@ -34,7 +32,6 @@ class ErrorLevelActivationStrategy implements ActivationStrategyInterface
     {
         $this->actionLevel = Logger::toMonologLevel($actionLevel);
     }
-
     public function isHandlerActivated(LogRecord $record): bool
     {
         return $record->level->value >= $this->actionLevel->value;

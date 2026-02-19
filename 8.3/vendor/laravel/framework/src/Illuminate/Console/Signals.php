@@ -13,21 +13,18 @@ class Signals
      * @var \Symfony\Component\Console\SignalRegistry\SignalRegistry
      */
     protected $registry;
-
     /**
      * The signal registry's previous list of handlers.
      *
      * @var array<int, array<int, callable>>|null
      */
     protected $previousHandlers;
-
     /**
      * The current availability resolver, if any.
      *
      * @var (callable(): bool)|null
      */
     protected static $availabilityResolver;
-
     /**
      * Create a new signal registrar instance.
      *
@@ -36,10 +33,8 @@ class Signals
     public function __construct($registry)
     {
         $this->registry = $registry;
-
         $this->previousHandlers = $this->getHandlers();
     }
-
     /**
      * Register a new signal handler.
      *
@@ -50,24 +45,15 @@ class Signals
     public function register($signal, $callback)
     {
         $this->previousHandlers[$signal] ??= $this->initializeSignal($signal);
-
         $handlers = $this->getHandlers();
-
         $handlers[$signal] ??= $this->initializeSignal($signal);
-
         $this->setHandlers($handlers);
-
         $this->registry->register($signal, $callback);
-
         $handlers = $this->getHandlers();
-
         $lastHandlerInserted = array_pop($handlers[$signal]);
-
         array_unshift($handlers[$signal], $lastHandlerInserted);
-
         $this->setHandlers($handlers);
     }
-
     /**
      * Gets the signal's existing handler in array format.
      *
@@ -75,11 +61,8 @@ class Signals
      */
     protected function initializeSignal($signal)
     {
-        return is_callable($existingHandler = pcntl_signal_get_handler($signal))
-            ? [$existingHandler]
-            : null;
+        return is_callable($existingHandler = pcntl_signal_get_handler($signal)) ? [$existingHandler] : null;
     }
-
     /**
      * Unregister the current signal handlers.
      *
@@ -88,18 +71,14 @@ class Signals
     public function unregister()
     {
         $previousHandlers = $this->previousHandlers;
-
         foreach ($previousHandlers as $signal => $handler) {
             if (is_null($handler)) {
-                pcntl_signal($signal, SIG_DFL);
-
+                pcntl_signal($signal, \SIG_DFL);
                 unset($previousHandlers[$signal]);
             }
         }
-
         $this->setHandlers($previousHandlers);
     }
-
     /**
      * Execute the given callback if "signals" should be used and are available.
      *
@@ -109,12 +88,10 @@ class Signals
     public static function whenAvailable($callback)
     {
         $resolver = static::$availabilityResolver;
-
         if ($resolver()) {
             $callback();
         }
     }
-
     /**
      * Get the registry's handlers.
      *
@@ -122,10 +99,8 @@ class Signals
      */
     protected function getHandlers()
     {
-        return (fn () => $this->signalHandlers)
-            ->call($this->registry);
+        return (fn() => $this->signalHandlers)->call($this->registry);
     }
-
     /**
      * Set the registry's handlers.
      *
@@ -134,10 +109,8 @@ class Signals
      */
     protected function setHandlers($handlers)
     {
-        (fn () => $this->signalHandlers = $handlers)
-            ->call($this->registry);
+        (fn() => $this->signalHandlers = $handlers)->call($this->registry);
     }
-
     /**
      * Set the availability resolver.
      *

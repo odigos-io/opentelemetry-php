@@ -8,12 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\CssSelector\Parser\Handler;
 
 use Symfony\Component\CssSelector\Parser\Reader;
 use Symfony\Component\CssSelector\Parser\TokenStream;
-
 /**
  * CSS selector comment handler.
  *
@@ -24,22 +22,19 @@ use Symfony\Component\CssSelector\Parser\TokenStream;
  *
  * @internal
  */
-class CommentHandler implements HandlerInterface
+class CommentHandler implements \Symfony\Component\CssSelector\Parser\Handler\HandlerInterface
 {
     public function handle(Reader $reader, TokenStream $stream): bool
     {
         if ('/*' !== $reader->getSubstring(2)) {
-            return false;
+            return \false;
         }
-
         $offset = $reader->getOffset('*/');
-
-        if (false === $offset) {
+        if (\false === $offset) {
             $reader->moveToEnd();
         } else {
             $reader->moveForward($offset + 2);
         }
-
-        return true;
+        return \true;
     }
 }

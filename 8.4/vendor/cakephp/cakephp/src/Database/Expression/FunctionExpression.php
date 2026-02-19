@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -22,25 +22,22 @@ use Cake\Database\Type\ExpressionTypeCasterTrait;
 use Cake\Database\TypedResultInterface;
 use Cake\Database\TypedResultTrait;
 use Cake\Database\ValueBinder;
-
 /**
  * This class represents a function call string in a SQL statement. Calls can be
  * constructed by passing the name of the function and a list of params.
  * For security reasons, all params passed are quoted by default unless
  * explicitly told otherwise.
  */
-class FunctionExpression extends QueryExpression implements TypedResultInterface
+class FunctionExpression extends \Cake\Database\Expression\QueryExpression implements TypedResultInterface
 {
     use ExpressionTypeCasterTrait;
     use TypedResultTrait;
-
     /**
      * The name of the function to be constructed when generating the SQL string
      *
      * @var string
      */
     protected string $_name;
-
     /**
      * Constructor. Takes a name for the function to be invoked and a list of params
      * to be passed into the function. Optionally you can pass a list of types to
@@ -72,7 +69,6 @@ class FunctionExpression extends QueryExpression implements TypedResultInterface
         $this->_returnType = $returnType;
         parent::__construct($params, $types, ',');
     }
-
     /**
      * Sets the name of the SQL function to be invoke in this expression.
      *
@@ -82,10 +78,8 @@ class FunctionExpression extends QueryExpression implements TypedResultInterface
     public function setName(string $name)
     {
         $this->_name = $name;
-
         return $this;
     }
-
     /**
      * Gets the name of the SQL function to be invoke in this expression.
      *
@@ -95,7 +89,6 @@ class FunctionExpression extends QueryExpression implements TypedResultInterface
     {
         return $this->_name;
     }
-
     /**
      * Adds one or more arguments for the function call.
      *
@@ -107,7 +100,7 @@ class FunctionExpression extends QueryExpression implements TypedResultInterface
      * @see \Cake\Database\Expression\FunctionExpression::__construct() for more details.
      * @return $this
      */
-    public function add(ExpressionInterface|array|string $conditions, array $types = [], bool $prepend = false)
+    public function add(ExpressionInterface|array|string $conditions, array $types = [], bool $prepend = \false)
     {
         $put = $prepend ? 'array_unshift' : 'array_push';
         $typeMap = $this->getTypeMap()->setTypes($types);
@@ -117,29 +110,22 @@ class FunctionExpression extends QueryExpression implements TypedResultInterface
                 $put($this->_conditions, $k);
                 continue;
             }
-
             if ($p === 'identifier') {
-                $put($this->_conditions, new IdentifierExpression($k));
+                $put($this->_conditions, new \Cake\Database\Expression\IdentifierExpression($k));
                 continue;
             }
-
             $type = $typeMap->type($k);
-
             if ($type !== null && !$p instanceof ExpressionInterface) {
                 $p = $this->_castToExpression($p, $type);
             }
-
             if ($p instanceof ExpressionInterface) {
                 $put($this->_conditions, $p);
                 continue;
             }
-
             $put($this->_conditions, ['value' => $p, 'type' => $type]);
         }
-
         return $this;
     }
-
     /**
      * @inheritDoc
      */
@@ -158,13 +144,8 @@ class FunctionExpression extends QueryExpression implements TypedResultInterface
             }
             $parts[] = $condition;
         }
-
-        return $this->_name . sprintf('(%s)', implode(
-            $this->_conjunction . ' ',
-            $parts,
-        ));
+        return $this->_name . sprintf('(%s)', implode($this->_conjunction . ' ', $parts));
     }
-
     /**
      * The name of the function is in itself an expression to generate, thus
      * always adding 1 to the amount of expressions stored in this object.

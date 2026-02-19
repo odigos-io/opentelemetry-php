@@ -12,7 +12,6 @@ interface BindingRegistrar
      * @return void
      */
     public function bind($key, $binder);
-
     /**
      * Get the binding callback for a given binding.
      *

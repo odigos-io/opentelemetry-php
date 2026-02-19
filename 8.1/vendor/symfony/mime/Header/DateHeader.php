@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\Mime\Header;
 
 /**
@@ -16,17 +15,14 @@ namespace Symfony\Component\Mime\Header;
  *
  * @author Chris Corbyn
  */
-final class DateHeader extends AbstractHeader
+final class DateHeader extends \Symfony\Component\Mime\Header\AbstractHeader
 {
     private \DateTimeImmutable $dateTime;
-
     public function __construct(string $name, \DateTimeInterface $date)
     {
         parent::__construct($name);
-
         $this->setDateTime($date);
     }
-
     /**
      * @param \DateTimeInterface $body
      */
@@ -34,17 +30,14 @@ final class DateHeader extends AbstractHeader
     {
         $this->setDateTime($body);
     }
-
     public function getBody(): \DateTimeImmutable
     {
         return $this->getDateTime();
     }
-
     public function getDateTime(): \DateTimeImmutable
     {
         return $this->dateTime;
     }
-
     /**
      * Set the date-time of the Date in this Header.
      *
@@ -54,7 +47,6 @@ final class DateHeader extends AbstractHeader
     {
         $this->dateTime = \DateTimeImmutable::createFromInterface($dateTime);
     }
-
     public function getBodyAsString(): string
     {
         return $this->dateTime->format(\DateTimeInterface::RFC2822);

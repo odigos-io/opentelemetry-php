@@ -5,7 +5,6 @@ namespace Illuminate\Foundation\Bus;
 use Closure;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Support\Fluent;
-
 trait Dispatchable
 {
     /**
@@ -16,9 +15,8 @@ trait Dispatchable
      */
     public static function dispatch(...$arguments)
     {
-        return new PendingDispatch(new static(...$arguments));
+        return new \Illuminate\Foundation\Bus\PendingDispatch(new static(...$arguments));
     }
-
     /**
      * Dispatch the job with the given arguments if the given truth test passes.
      *
@@ -30,17 +28,10 @@ trait Dispatchable
     {
         if ($boolean instanceof Closure) {
             $dispatchable = new static(...$arguments);
-
-            return value($boolean, $dispatchable)
-                ? new PendingDispatch($dispatchable)
-                : new Fluent;
+            return value($boolean, $dispatchable) ? new \Illuminate\Foundation\Bus\PendingDispatch($dispatchable) : new Fluent();
         }
-
-        return value($boolean)
-            ? new PendingDispatch(new static(...$arguments))
-            : new Fluent;
+        return value($boolean) ? new \Illuminate\Foundation\Bus\PendingDispatch(new static(...$arguments)) : new Fluent();
     }
-
     /**
      * Dispatch the job with the given arguments unless the given truth test passes.
      *
@@ -52,17 +43,10 @@ trait Dispatchable
     {
         if ($boolean instanceof Closure) {
             $dispatchable = new static(...$arguments);
-
-            return ! value($boolean, $dispatchable)
-                ? new PendingDispatch($dispatchable)
-                : new Fluent;
+            return !value($boolean, $dispatchable) ? new \Illuminate\Foundation\Bus\PendingDispatch($dispatchable) : new Fluent();
         }
-
-        return ! value($boolean)
-            ? new PendingDispatch(new static(...$arguments))
-            : new Fluent;
+        return !value($boolean) ? new \Illuminate\Foundation\Bus\PendingDispatch(new static(...$arguments)) : new Fluent();
     }
-
     /**
      * Dispatch a command to its appropriate handler in the current process.
      *
@@ -75,7 +59,6 @@ trait Dispatchable
     {
         return app(Dispatcher::class)->dispatchSync(new static(...$arguments));
     }
-
     /**
      * Dispatch a command to its appropriate handler after the current process.
      *
@@ -86,7 +69,6 @@ trait Dispatchable
     {
         return self::dispatch(...$arguments)->afterResponse();
     }
-
     /**
      * Set the jobs that should run if this job is successful.
      *
@@ -95,6 +77,6 @@ trait Dispatchable
      */
     public static function withChain($chain)
     {
-        return new PendingChain(static::class, $chain);
+        return new \Illuminate\Foundation\Bus\PendingChain(static::class, $chain);
     }
 }

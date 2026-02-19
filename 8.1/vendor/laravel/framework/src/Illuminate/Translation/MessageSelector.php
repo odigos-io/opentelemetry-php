@@ -15,22 +15,16 @@ class MessageSelector
     public function choose($line, $number, $locale)
     {
         $segments = explode('|', $line);
-
         if (($value = $this->extract($segments, $number)) !== null) {
             return trim($value);
         }
-
         $segments = $this->stripConditions($segments);
-
         $pluralIndex = $this->getPluralIndex($locale, $number);
-
-        if (count($segments) === 1 || ! isset($segments[$pluralIndex])) {
+        if (count($segments) === 1 || !isset($segments[$pluralIndex])) {
             return $segments[0];
         }
-
         return $segments[$pluralIndex];
     }
-
     /**
      * Extract a translation string using inline conditions.
      *
@@ -41,12 +35,11 @@ class MessageSelector
     private function extract($segments, $number)
     {
         foreach ($segments as $part) {
-            if (! is_null($line = $this->extractFromString($part, $number))) {
+            if (!is_null($line = $this->extractFromString($part, $number))) {
                 return $line;
             }
         }
     }
-
     /**
      * Get the translation string if the condition matches.
      *
@@ -57,18 +50,13 @@ class MessageSelector
     private function extractFromString($part, $number)
     {
         preg_match('/^[\{\[]([^\[\]\{\}]*)[\}\]](.*)/s', $part, $matches);
-
         if (count($matches) !== 3) {
             return null;
         }
-
         $condition = $matches[1];
-
         $value = $matches[2];
-
         if (str_contains($condition, ',')) {
             [$from, $to] = explode(',', $condition, 2);
-
             if ($to === '*' && $number >= $from) {
                 return $value;
             } elseif ($from === '*' && $number <= $to) {
@@ -77,10 +65,8 @@ class MessageSelector
                 return $value;
             }
         }
-
         return $condition == $number ? $value : null;
     }
-
     /**
      * Strip the inline conditions from each segment, just leaving the text.
      *
@@ -89,11 +75,8 @@ class MessageSelector
      */
     private function stripConditions($segments)
     {
-        return collect($segments)
-            ->map(fn ($part) => preg_replace('/^[\{\[]([^\[\]\{\}]*)[\}\]]/', '', $part))
-            ->all();
+        return collect($segments)->map(fn($part) => preg_replace('/^[\{\[]([^\[\]\{\}]*)[\}\]]/', '', $part))->all();
     }
-
     /**
      * Get the index to use for pluralization.
      *
@@ -305,7 +288,7 @@ class MessageSelector
             case 'ur_PK':
             case 'zu':
             case 'zu_ZA':
-                return ($number == 1) ? 0 : 1;
+                return $number == 1 ? 0 : 1;
             case 'am':
             case 'am_ET':
             case 'bh':
@@ -334,7 +317,7 @@ class MessageSelector
             case 'wa':
             case 'wa_BE':
             case 'xbr':
-                return (($number == 0) || ($number == 1)) ? 0 : 1;
+                return $number == 0 || $number == 1 ? 0 : 1;
             case 'be':
             case 'be_BY':
             case 'bs':
@@ -349,39 +332,39 @@ class MessageSelector
             case 'sr_RS':
             case 'uk':
             case 'uk_UA':
-                return (($number % 10 == 1) && ($number % 100 != 11)) ? 0 : ((($number % 10 >= 2) && ($number % 10 <= 4) && (($number % 100 < 10) || ($number % 100 >= 20))) ? 1 : 2);
+                return $number % 10 == 1 && $number % 100 != 11 ? 0 : ($number % 10 >= 2 && $number % 10 <= 4 && ($number % 100 < 10 || $number % 100 >= 20) ? 1 : 2);
             case 'cs':
             case 'cs_CZ':
             case 'sk':
             case 'sk_SK':
-                return ($number == 1) ? 0 : ((($number >= 2) && ($number <= 4)) ? 1 : 2);
+                return $number == 1 ? 0 : ($number >= 2 && $number <= 4 ? 1 : 2);
             case 'ga':
             case 'ga_IE':
-                return ($number == 1) ? 0 : (($number == 2) ? 1 : 2);
+                return $number == 1 ? 0 : ($number == 2 ? 1 : 2);
             case 'lt':
             case 'lt_LT':
-                return (($number % 10 == 1) && ($number % 100 != 11)) ? 0 : ((($number % 10 >= 2) && (($number % 100 < 10) || ($number % 100 >= 20))) ? 1 : 2);
+                return $number % 10 == 1 && $number % 100 != 11 ? 0 : ($number % 10 >= 2 && ($number % 100 < 10 || $number % 100 >= 20) ? 1 : 2);
             case 'sl':
             case 'sl_SI':
-                return ($number % 100 == 1) ? 0 : (($number % 100 == 2) ? 1 : ((($number % 100 == 3) || ($number % 100 == 4)) ? 2 : 3));
+                return $number % 100 == 1 ? 0 : ($number % 100 == 2 ? 1 : ($number % 100 == 3 || $number % 100 == 4 ? 2 : 3));
             case 'mk':
             case 'mk_MK':
-                return ($number % 10 == 1) ? 0 : 1;
+                return $number % 10 == 1 ? 0 : 1;
             case 'mt':
             case 'mt_MT':
-                return ($number == 1) ? 0 : ((($number == 0) || (($number % 100 > 1) && ($number % 100 < 11))) ? 1 : ((($number % 100 > 10) && ($number % 100 < 20)) ? 2 : 3));
+                return $number == 1 ? 0 : ($number == 0 || $number % 100 > 1 && $number % 100 < 11 ? 1 : ($number % 100 > 10 && $number % 100 < 20 ? 2 : 3));
             case 'lv':
             case 'lv_LV':
-                return ($number == 0) ? 0 : ((($number % 10 == 1) && ($number % 100 != 11)) ? 1 : 2);
+                return $number == 0 ? 0 : ($number % 10 == 1 && $number % 100 != 11 ? 1 : 2);
             case 'pl':
             case 'pl_PL':
-                return ($number == 1) ? 0 : ((($number % 10 >= 2) && ($number % 10 <= 4) && (($number % 100 < 12) || ($number % 100 > 14))) ? 1 : 2);
+                return $number == 1 ? 0 : ($number % 10 >= 2 && $number % 10 <= 4 && ($number % 100 < 12 || $number % 100 > 14) ? 1 : 2);
             case 'cy':
             case 'cy_GB':
-                return ($number == 1) ? 0 : (($number == 2) ? 1 : ((($number == 8) || ($number == 11)) ? 2 : 3));
+                return $number == 1 ? 0 : ($number == 2 ? 1 : ($number == 8 || $number == 11 ? 2 : 3));
             case 'ro':
             case 'ro_RO':
-                return ($number == 1) ? 0 : ((($number == 0) || (($number % 100 > 0) && ($number % 100 < 20))) ? 1 : 2);
+                return $number == 1 ? 0 : ($number == 0 || $number % 100 > 0 && $number % 100 < 20 ? 1 : 2);
             case 'ar':
             case 'ar_AE':
             case 'ar_BH':
@@ -402,7 +385,7 @@ class MessageSelector
             case 'ar_SY':
             case 'ar_TN':
             case 'ar_YE':
-                return ($number == 0) ? 0 : (($number == 1) ? 1 : (($number == 2) ? 2 : ((($number % 100 >= 3) && ($number % 100 <= 10)) ? 3 : ((($number % 100 >= 11) && ($number % 100 <= 99)) ? 4 : 5))));
+                return $number == 0 ? 0 : ($number == 1 ? 1 : ($number == 2 ? 2 : ($number % 100 >= 3 && $number % 100 <= 10 ? 3 : ($number % 100 >= 11 && $number % 100 <= 99 ? 4 : 5))));
             default:
                 return 0;
         }

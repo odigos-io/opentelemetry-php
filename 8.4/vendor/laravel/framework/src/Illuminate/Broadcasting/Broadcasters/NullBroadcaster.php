@@ -2,7 +2,7 @@
 
 namespace Illuminate\Broadcasting\Broadcasters;
 
-class NullBroadcaster extends Broadcaster
+class NullBroadcaster extends \Illuminate\Broadcasting\Broadcasters\Broadcaster
 {
     /**
      * {@inheritdoc}
@@ -11,7 +11,6 @@ class NullBroadcaster extends Broadcaster
     {
         //
     }
-
     /**
      * {@inheritdoc}
      */
@@ -19,7 +18,6 @@ class NullBroadcaster extends Broadcaster
     {
         //
     }
-
     /**
      * {@inheritdoc}
      */

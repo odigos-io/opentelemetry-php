@@ -1,17 +1,16 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\widgets;
 
 use yii\base\InvalidConfigException;
 use yii\helpers\Json;
 use yii\web\JsExpression;
 use yii\web\View;
-
 /**
  * MaskedInput generates a masked text input.
  *
@@ -43,7 +42,7 @@ use yii\web\View;
  * @author Kartik Visweswaran <kartikv2@gmail.com>
  * @since 2.0
  */
-class MaskedInput extends InputWidget
+class MaskedInput extends \yii\widgets\InputWidget
 {
     /**
      * The name of the jQuery plugin to use for this widget.
@@ -96,7 +95,6 @@ class MaskedInput extends InputWidget
      * @since 2.0.6
      */
     public $type = 'text';
-
     /**
      * @var string|null the hashed variable to store the pluginOptions
      */
@@ -119,10 +117,8 @@ class MaskedInput extends InputWidget
         'preValidation',
         'postValidation',
         // @deprecated removed in 4.0:
-        'canClearPosition'
+        'canClearPosition',
     ];
-
-
     /**
      * Initializes the widget.
      *
@@ -135,7 +131,6 @@ class MaskedInput extends InputWidget
             throw new InvalidConfigException("Either the 'mask' property, 'clientOptions[\"regex\"]' or the 'clientOptions[\"alias\"]' property must be set.");
         }
     }
-
     /**
      * {@inheritdoc}
      */
@@ -144,7 +139,6 @@ class MaskedInput extends InputWidget
         $this->registerClientScript();
         echo $this->renderInputHtml($this->type);
     }
-
     /**
      * Generates a hashed variable to store the plugin `clientOptions`.
      *
@@ -164,7 +158,6 @@ class MaskedInput extends InputWidget
         $this->options['data-plugin-' . self::PLUGIN_NAME] = $this->_hashVar;
         $view->registerJs("var {$this->_hashVar} = {$encOptions};", View::POS_HEAD);
     }
-
     /**
      * Initializes client options.
      */
@@ -172,17 +165,12 @@ class MaskedInput extends InputWidget
     {
         $options = $this->clientOptions;
         foreach ($options as $key => $value) {
-            if (
-                !empty($value)
-                && !$value instanceof JsExpression
-                && in_array($key, $this->_jsCallbacks, true)
-            ) {
+            if (!empty($value) && !$value instanceof JsExpression && in_array($key, $this->_jsCallbacks, \true)) {
                 $options[$key] = new JsExpression($value);
             }
         }
         $this->clientOptions = $options;
     }
-
     /**
      * Registers the needed client script and options.
      */
@@ -203,7 +191,7 @@ class MaskedInput extends InputWidget
         }
         $id = $this->options['id'];
         $js .= 'jQuery("#' . $id . '").' . self::PLUGIN_NAME . '(' . $this->_hashVar . ');';
-        MaskedInputAsset::register($view);
+        \yii\widgets\MaskedInputAsset::register($view);
         $view->registerJs($js);
     }
 }

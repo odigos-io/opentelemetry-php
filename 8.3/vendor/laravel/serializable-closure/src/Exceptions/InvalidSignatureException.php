@@ -3,7 +3,6 @@
 namespace Laravel\SerializableClosure\Exceptions;
 
 use Exception;
-
 class InvalidSignatureException extends Exception
 {
     /**

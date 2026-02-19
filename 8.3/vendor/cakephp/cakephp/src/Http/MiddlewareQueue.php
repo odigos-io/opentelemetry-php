@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -26,7 +26,6 @@ use LogicException;
 use OutOfBoundsException;
 use Psr\Http\Server\MiddlewareInterface;
 use SeekableIterator;
-
 /**
  * Provides methods for creating and manipulating a "queue" of middlewares.
  * This queue is used to process a request and generate response via \Cake\Http\Runner.
@@ -41,19 +40,16 @@ class MiddlewareQueue implements Countable, SeekableIterator
      * @var int
      */
     protected int $position = 0;
-
     /**
      * The queue of middlewares.
      *
      * @var array<int, mixed>
      */
     protected array $queue = [];
-
     /**
      * @var \Cake\Core\ContainerInterface|null
      */
     protected ?ContainerInterface $container;
-
     /**
      * Constructor
      *
@@ -65,7 +61,6 @@ class MiddlewareQueue implements Countable, SeekableIterator
         $this->container = $container;
         $this->queue = $middleware;
     }
-
     /**
      * Resolve middleware name to a PSR 15 compliant middleware instance.
      *
@@ -82,22 +77,16 @@ class MiddlewareQueue implements Countable, SeekableIterator
                 /** @var class-string<\Psr\Http\Server\MiddlewareInterface>|null $className */
                 $className = App::className($middleware, 'Middleware', 'Middleware');
                 if ($className === null) {
-                    throw new InvalidArgumentException(sprintf(
-                        'Middleware `%s` was not found.',
-                        $middleware,
-                    ));
+                    throw new InvalidArgumentException(sprintf('Middleware `%s` was not found.', $middleware));
                 }
                 $middleware = new $className();
             }
         }
-
         if ($middleware instanceof MiddlewareInterface) {
             return $middleware;
         }
-
         return new ClosureDecoratorMiddleware($middleware);
     }
-
     /**
      * Append a middleware to the end of the queue.
      *
@@ -108,14 +97,11 @@ class MiddlewareQueue implements Countable, SeekableIterator
     {
         if (is_array($middleware)) {
             $this->queue = array_merge($this->queue, $middleware);
-
             return $this;
         }
         $this->queue[] = $middleware;
-
         return $this;
     }
-
     /**
      * Alias for MiddlewareQueue::add().
      *
@@ -127,7 +113,6 @@ class MiddlewareQueue implements Countable, SeekableIterator
     {
         return $this->add($middleware);
     }
-
     /**
      * Prepend a middleware to the start of the queue.
      *
@@ -138,14 +123,11 @@ class MiddlewareQueue implements Countable, SeekableIterator
     {
         if (is_array($middleware)) {
             $this->queue = array_merge($middleware, $this->queue);
-
             return $this;
         }
         array_unshift($this->queue, $middleware);
-
         return $this;
     }
-
     /**
      * Insert a middleware at a specific index.
      *
@@ -159,10 +141,8 @@ class MiddlewareQueue implements Countable, SeekableIterator
     public function insertAt(int $index, MiddlewareInterface|Closure|string $middleware)
     {
         array_splice($this->queue, $index, 0, [$middleware]);
-
         return $this;
     }
-
     /**
      * Insert a middleware before the first matching class.
      *
@@ -176,17 +156,11 @@ class MiddlewareQueue implements Countable, SeekableIterator
      */
     public function insertBefore(string $class, MiddlewareInterface|Closure|string $middleware)
     {
-        $found = false;
+        $found = \false;
         $i = 0;
         foreach ($this->queue as $i => $object) {
-            if (
-                (
-                    is_string($object)
-                    && $object === $class
-                )
-                || is_a($object, $class)
-            ) {
-                $found = true;
+            if (is_string($object) && $object === $class || is_a($object, $class)) {
+                $found = \true;
                 break;
             }
         }
@@ -195,7 +169,6 @@ class MiddlewareQueue implements Countable, SeekableIterator
         }
         throw new LogicException(sprintf('No middleware matching `%s` could be found.', $class));
     }
-
     /**
      * Insert a middleware object after the first matching class.
      *
@@ -209,27 +182,19 @@ class MiddlewareQueue implements Countable, SeekableIterator
      */
     public function insertAfter(string $class, MiddlewareInterface|Closure|string $middleware)
     {
-        $found = false;
+        $found = \false;
         $i = 0;
         foreach ($this->queue as $i => $object) {
-            if (
-                (
-                    is_string($object)
-                    && $object === $class
-                )
-                || is_a($object, $class)
-            ) {
-                $found = true;
+            if (is_string($object) && $object === $class || is_a($object, $class)) {
+                $found = \true;
                 break;
             }
         }
         if ($found) {
             return $this->insertAt($i + 1, $middleware);
         }
-
         return $this->add($middleware);
     }
-
     /**
      * Get the number of connected middleware layers.
      *
@@ -241,7 +206,6 @@ class MiddlewareQueue implements Countable, SeekableIterator
     {
         return count($this->queue);
     }
-
     /**
      * Seeks to a given position in the queue.
      *
@@ -254,10 +218,8 @@ class MiddlewareQueue implements Countable, SeekableIterator
         if (!isset($this->queue[$position])) {
             throw new OutOfBoundsException(sprintf('Invalid seek position (%s).', $position));
         }
-
         $this->position = $position;
     }
-
     /**
      * Rewinds back to the first element of the queue.
      *
@@ -268,7 +230,6 @@ class MiddlewareQueue implements Countable, SeekableIterator
     {
         $this->position = 0;
     }
-
     /**
      *  Returns the current middleware.
      *
@@ -280,14 +241,11 @@ class MiddlewareQueue implements Countable, SeekableIterator
         if (!isset($this->queue[$this->position])) {
             throw new OutOfBoundsException(sprintf('Invalid current position (%s).', $this->position));
         }
-
         if ($this->queue[$this->position] instanceof MiddlewareInterface) {
             return $this->queue[$this->position];
         }
-
         return $this->queue[$this->position] = $this->resolve($this->queue[$this->position]);
     }
-
     /**
      * Return the key of the middleware.
      *
@@ -298,7 +256,6 @@ class MiddlewareQueue implements Countable, SeekableIterator
     {
         return $this->position;
     }
-
     /**
      * Moves the current position to the next middleware.
      *
@@ -309,7 +266,6 @@ class MiddlewareQueue implements Countable, SeekableIterator
     {
         ++$this->position;
     }
-
     /**
      * Checks if current position is valid.
      *

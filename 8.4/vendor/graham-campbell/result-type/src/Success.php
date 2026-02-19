@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of Result Type.
  *
@@ -10,12 +9,10 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Odigos\GrahamCampbell\ResultType;
 
-namespace GrahamCampbell\ResultType;
-
-use PhpOption\None;
-use PhpOption\Some;
-
+use Odigos\PhpOption\None;
+use Odigos\PhpOption\Some;
 /**
  * @template T
  * @template E
@@ -28,7 +25,6 @@ final class Success extends Result
      * @var T
      */
     private $value;
-
     /**
      * Internal constructor for a success value.
      *
@@ -40,7 +36,6 @@ final class Success extends Result
     {
         $this->value = $value;
     }
-
     /**
      * Create a new error value.
      *
@@ -54,7 +49,6 @@ final class Success extends Result
     {
         return new self($value);
     }
-
     /**
      * Get the success option value.
      *
@@ -64,7 +58,6 @@ final class Success extends Result
     {
         return Some::create($this->value);
     }
-
     /**
      * Map over the success value.
      *
@@ -78,7 +71,6 @@ final class Success extends Result
     {
         return self::create($f($this->value));
     }
-
     /**
      * Flat map over the success value.
      *
@@ -93,7 +85,6 @@ final class Success extends Result
     {
         return $f($this->value);
     }
-
     /**
      * Get the error option value.
      *
@@ -103,7 +94,6 @@ final class Success extends Result
     {
         return None::create();
     }
-
     /**
      * Map over the error value.
      *

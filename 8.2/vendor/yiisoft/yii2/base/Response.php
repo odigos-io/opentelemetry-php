@@ -1,10 +1,10 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\base;
 
 /**
@@ -15,22 +15,19 @@ namespace yii\base;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class Response extends Component
+class Response extends \yii\base\Component
 {
     /**
      * @var int the exit status. Exit statuses should be in the range 0 to 254.
      * The status 0 means the program terminates successfully.
      */
     public $exitStatus = 0;
-
-
     /**
      * Sends the response to client.
      */
     public function send()
     {
     }
-
     /**
      * Removes all existing output buffers.
      */

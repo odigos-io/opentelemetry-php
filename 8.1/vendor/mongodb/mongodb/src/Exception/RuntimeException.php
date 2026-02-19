@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright 2015-present MongoDB, Inc.
  *
@@ -14,11 +15,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 namespace MongoDB\Exception;
 
 use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
-
-class RuntimeException extends DriverRuntimeException implements Exception
+class RuntimeException extends DriverRuntimeException implements \MongoDB\Exception\Exception
 {
 }

@@ -3,7 +3,6 @@
 namespace Illuminate\Cache;
 
 use Illuminate\Contracts\Cache\Store;
-
 abstract class TaggableStore implements Store
 {
     /**
@@ -14,6 +13,6 @@ abstract class TaggableStore implements Store
      */
     public function tags($names)
     {
-        return new TaggedCache($this, new TagSet($this, is_array($names) ? $names : func_get_args()));
+        return new \Illuminate\Cache\TaggedCache($this, new \Illuminate\Cache\TagSet($this, is_array($names) ? $names : func_get_args()));
     }
 }

@@ -5,39 +5,33 @@ namespace Illuminate\Validation;
 use Illuminate\Contracts\Validation\Rule as RuleContract;
 use Illuminate\Contracts\Validation\ValidatorAwareRule;
 use Illuminate\Translation\CreatesPotentiallyTranslatedStrings;
-
 class ClosureValidationRule implements RuleContract, ValidatorAwareRule
 {
     use CreatesPotentiallyTranslatedStrings;
-
     /**
      * The callback that validates the attribute.
      *
      * @var \Closure
      */
     public $callback;
-
     /**
      * Indicates if the validation callback failed.
      *
      * @var bool
      */
-    public $failed = false;
-
+    public $failed = \false;
     /**
      * The validation error messages.
      *
      * @var array
      */
     public $messages = [];
-
     /**
      * The current validator.
      *
      * @var \Illuminate\Validation\Validator
      */
     protected $validator;
-
     /**
      * Create a new Closure based validation rule.
      *
@@ -48,7 +42,6 @@ class ClosureValidationRule implements RuleContract, ValidatorAwareRule
     {
         $this->callback = $callback;
     }
-
     /**
      * Determine if the validation rule passes.
      *
@@ -58,17 +51,13 @@ class ClosureValidationRule implements RuleContract, ValidatorAwareRule
      */
     public function passes($attribute, $value)
     {
-        $this->failed = false;
-
+        $this->failed = \false;
         $this->callback->__invoke($attribute, $value, function ($attribute, $message = null) {
-            $this->failed = true;
-
+            $this->failed = \true;
             return $this->pendingPotentiallyTranslatedString($attribute, $message);
         }, $this->validator);
-
-        return ! $this->failed;
+        return !$this->failed;
     }
-
     /**
      * Get the validation error messages.
      *
@@ -78,7 +67,6 @@ class ClosureValidationRule implements RuleContract, ValidatorAwareRule
     {
         return $this->messages;
     }
-
     /**
      * Set the current validator.
      *
@@ -88,7 +76,6 @@ class ClosureValidationRule implements RuleContract, ValidatorAwareRule
     public function setValidator($validator)
     {
         $this->validator = $validator;
-
         return $this;
     }
 }

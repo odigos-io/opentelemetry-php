@@ -2,12 +2,11 @@
 
 namespace Illuminate\Support\Testing\Fakes;
 
-use Carbon\CarbonImmutable;
+use Odigos\Carbon\CarbonImmutable;
 use Illuminate\Bus\Batch;
 use Illuminate\Bus\UpdatedBatchJobCounts;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
-
 class BatchFake extends Batch
 {
     /**
@@ -16,14 +15,12 @@ class BatchFake extends Batch
      * @var array
      */
     public $added = [];
-
     /**
      * Indicates if the batch has been deleted.
      *
      * @var bool
      */
-    public $deleted = false;
-
+    public $deleted = \false;
     /**
      * Create a new batch instance.
      *
@@ -38,18 +35,8 @@ class BatchFake extends Batch
      * @param  \Carbon\CarbonImmutable|null  $cancelledAt
      * @param  \Carbon\CarbonImmutable|null  $finishedAt
      */
-    public function __construct(
-        string $id,
-        string $name,
-        int $totalJobs,
-        int $pendingJobs,
-        int $failedJobs,
-        array $failedJobIds,
-        array $options,
-        CarbonImmutable $createdAt,
-        ?CarbonImmutable $cancelledAt = null,
-        ?CarbonImmutable $finishedAt = null,
-    ) {
+    public function __construct(string $id, string $name, int $totalJobs, int $pendingJobs, int $failedJobs, array $failedJobIds, array $options, CarbonImmutable $createdAt, ?CarbonImmutable $cancelledAt = null, ?CarbonImmutable $finishedAt = null)
+    {
         $this->id = $id;
         $this->name = $name;
         $this->totalJobs = $totalJobs;
@@ -61,7 +48,6 @@ class BatchFake extends Batch
         $this->cancelledAt = $cancelledAt;
         $this->finishedAt = $finishedAt;
     }
-
     /**
      * Get a fresh instance of the batch represented by this ID.
      *
@@ -71,7 +57,6 @@ class BatchFake extends Batch
     {
         return $this;
     }
-
     /**
      * Add additional jobs to the batch.
      *
@@ -81,16 +66,12 @@ class BatchFake extends Batch
     public function add($jobs)
     {
         $jobs = Collection::wrap($jobs);
-
         foreach ($jobs as $job) {
             $this->added[] = $job;
         }
-
         $this->totalJobs += $jobs->count();
-
         return $this;
     }
-
     /**
      * Record that a job within the batch finished successfully, executing any callbacks if necessary.
      *
@@ -101,7 +82,6 @@ class BatchFake extends Batch
     {
         //
     }
-
     /**
      * Decrement the pending jobs for the batch.
      *
@@ -112,7 +92,6 @@ class BatchFake extends Batch
     {
         //
     }
-
     /**
      * Record that a job within the batch failed to finish successfully, executing any callbacks if necessary.
      *
@@ -124,7 +103,6 @@ class BatchFake extends Batch
     {
         //
     }
-
     /**
      * Increment the failed jobs for the batch.
      *
@@ -133,9 +111,8 @@ class BatchFake extends Batch
      */
     public function incrementFailedJobs(string $jobId)
     {
-        return new UpdatedBatchJobCounts;
+        return new UpdatedBatchJobCounts();
     }
-
     /**
      * Cancel the batch.
      *
@@ -145,7 +122,6 @@ class BatchFake extends Batch
     {
         $this->cancelledAt = Carbon::now();
     }
-
     /**
      * Delete the batch from storage.
      *
@@ -153,9 +129,8 @@ class BatchFake extends Batch
      */
     public function delete()
     {
-        $this->deleted = true;
+        $this->deleted = \true;
     }
-
     /**
      * Determine if the batch has been deleted.
      *

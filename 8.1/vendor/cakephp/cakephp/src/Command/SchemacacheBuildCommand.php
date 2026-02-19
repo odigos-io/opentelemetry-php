@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -23,11 +23,10 @@ use Cake\Database\Connection;
 use Cake\Database\SchemaCache;
 use Cake\Datasource\ConnectionManager;
 use RuntimeException;
-
 /**
  * Provides CLI tool for updating schema cache.
  */
-class SchemacacheBuildCommand extends Command
+class SchemacacheBuildCommand extends \Cake\Command\Command
 {
     /**
      * Get the command name.
@@ -38,7 +37,6 @@ class SchemacacheBuildCommand extends Command
     {
         return 'schema_cache build';
     }
-
     /**
      * @inheritDoc
      */
@@ -46,7 +44,6 @@ class SchemacacheBuildCommand extends Command
     {
         return 'Build all metadata caches for the connection.';
     }
-
     /**
      * Display all routes in an application
      *
@@ -57,26 +54,20 @@ class SchemacacheBuildCommand extends Command
     public function execute(Arguments $args, ConsoleIo $io): ?int
     {
         try {
-            $connection = ConnectionManager::get((string)$args->getOption('connection'));
+            $connection = ConnectionManager::get((string) $args->getOption('connection'));
             assert($connection instanceof Connection);
-
             $cache = new SchemaCache($connection);
         } catch (RuntimeException $e) {
             $io->error($e->getMessage());
-
             return static::CODE_ERROR;
         }
         $tables = $cache->build($args->getArgument('name'));
-
         foreach ($tables as $table) {
             $io->verbose(sprintf('Cached `%s`', $table));
         }
-
         $io->out('<success>Cache build complete</success>');
-
         return static::CODE_SUCCESS;
     }
-
     /**
      * Get the option parser.
      *
@@ -85,18 +76,7 @@ class SchemacacheBuildCommand extends Command
      */
     public function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
     {
-        $parser->setDescription([
-            static::getDescription(),
-            ' If a table name is provided, only that table will be cached.',
-        ])->addOption('connection', [
-            'help' => 'The connection to build/clear metadata cache data for.',
-            'short' => 'c',
-            'default' => 'default',
-        ])->addArgument('name', [
-            'help' => 'A specific table you want to refresh cached data for.',
-            'required' => false,
-        ]);
-
+        $parser->setDescription([static::getDescription(), ' If a table name is provided, only that table will be cached.'])->addOption('connection', ['help' => 'The connection to build/clear metadata cache data for.', 'short' => 'c', 'default' => 'default'])->addArgument('name', ['help' => 'A specific table you want to refresh cached data for.', 'required' => \false]);
         return $parser;
     }
 }

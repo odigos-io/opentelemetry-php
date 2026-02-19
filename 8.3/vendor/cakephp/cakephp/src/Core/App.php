@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -17,7 +17,6 @@ declare(strict_types=1);
 namespace Cake\Core;
 
 use Cake\Core\Exception\CakeException;
-
 /**
  * App is responsible for resource location, and path management.
  *
@@ -58,28 +57,22 @@ class App
         if (str_contains($class, '\\')) {
             return class_exists($class) ? $class : null;
         }
-
         [$plugin, $name] = pluginSplit($class);
         $fullname = '\\' . str_replace('/', '\\', $type . '\\' . $name) . $suffix;
-
-        $base = $plugin ?: Configure::read('App.namespace');
+        $base = $plugin ?: \Cake\Core\Configure::read('App.namespace');
         if ($base !== null) {
             $base = str_replace('/', '\\', rtrim($base, '\\'));
-
             if (static::_classExistsInBase($fullname, $base)) {
                 /** @var class-string */
                 return $base . $fullname;
             }
         }
-
         if ($plugin || !static::_classExistsInBase($fullname, 'Cake')) {
             return null;
         }
-
         /** @var class-string */
         return 'Cake' . $fullname;
     }
-
     /**
      * Returns the plugin split name of a class
      *
@@ -124,30 +117,21 @@ class App
     {
         $class = str_replace('\\', '/', $class);
         $type = '/' . $type . '/';
-
         $pos = strrpos($class, $type);
-        if ($pos === false) {
+        if ($pos === \false) {
             return $class;
         }
-
         $pluginName = substr($class, 0, $pos);
         $name = substr($class, $pos + strlen($type));
-
         if ($suffix) {
             $name = substr($name, 0, -strlen($suffix));
         }
-
-        $nonPluginNamespaces = [
-            'Cake',
-            str_replace('\\', '/', (string)Configure::read('App.namespace')),
-        ];
-        if (in_array($pluginName, $nonPluginNamespaces, true)) {
+        $nonPluginNamespaces = ['Cake', str_replace('\\', '/', (string) \Cake\Core\Configure::read('App.namespace'))];
+        if (in_array($pluginName, $nonPluginNamespaces, \true)) {
             return $name;
         }
-
         return $pluginName . '.' . $name;
     }
-
     /**
      * _classExistsInBase
      *
@@ -161,7 +145,6 @@ class App
     {
         return class_exists($namespace . $name);
     }
-
     /**
      * Used to read information of stored path.
      *
@@ -190,19 +173,14 @@ class App
     public static function path(string $type, ?string $plugin = null): array
     {
         if ($plugin === null) {
-            return (array)Configure::read('App.paths.' . $type);
+            return (array) \Cake\Core\Configure::read('App.paths.' . $type);
         }
-
         return match ($type) {
-            'templates' => [Plugin::templatePath($plugin)],
-            'locales' => [Plugin::path($plugin) . 'resources' . DIRECTORY_SEPARATOR . 'locales' . DIRECTORY_SEPARATOR],
-            default => throw new CakeException(sprintf(
-                'Invalid type `%s`. Only path types `templates` and `locales` are supported for plugins.',
-                $type,
-            ))
+            'templates' => [\Cake\Core\Plugin::templatePath($plugin)],
+            'locales' => [\Cake\Core\Plugin::path($plugin) . 'resources' . \DIRECTORY_SEPARATOR . 'locales' . \DIRECTORY_SEPARATOR],
+            default => throw new CakeException(sprintf('Invalid type `%s`. Only path types `templates` and `locales` are supported for plugins.', $type)),
         };
     }
-
     /**
      * Gets the path to a class type in the application or a plugin.
      *
@@ -227,14 +205,10 @@ class App
     public static function classPath(string $type, ?string $plugin = null): array
     {
         if ($plugin !== null) {
-            return [
-                Plugin::classPath($plugin) . $type . DIRECTORY_SEPARATOR,
-            ];
+            return [\Cake\Core\Plugin::classPath($plugin) . $type . \DIRECTORY_SEPARATOR];
         }
-
-        return [APP . $type . DIRECTORY_SEPARATOR];
+        return [APP . $type . \DIRECTORY_SEPARATOR];
     }
-
     /**
      * Returns the full path to a package inside the CakePHP core
      *
@@ -252,9 +226,8 @@ class App
     public static function core(string $type): array
     {
         if ($type === 'templates') {
-            return [CORE_PATH . 'templates' . DIRECTORY_SEPARATOR];
+            return [CORE_PATH . 'templates' . \DIRECTORY_SEPARATOR];
         }
-
-        return [CAKE . str_replace('/', DIRECTORY_SEPARATOR, $type) . DIRECTORY_SEPARATOR];
+        return [CAKE . str_replace('/', \DIRECTORY_SEPARATOR, $type) . \DIRECTORY_SEPARATOR];
     }
 }

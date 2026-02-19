@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -19,7 +19,6 @@ namespace Cake\Mailer;
 use BadMethodCallException;
 use Cake\Core\App;
 use Cake\Core\ObjectRegistry;
-
 /**
  * An object registry for mailer transports.
  *
@@ -40,7 +39,6 @@ class TransportRegistry extends ObjectRegistry
         /** @var class-string<\Cake\Mailer\AbstractTransport>|null */
         return App::className($class, 'Mailer/Transport', 'Transport');
     }
-
     /**
      * Throws an exception when a cache engine is missing.
      *
@@ -55,7 +53,6 @@ class TransportRegistry extends ObjectRegistry
     {
         throw new BadMethodCallException(sprintf('Mailer transport `%s` is not available.', $class));
     }
-
     /**
      * Create the mailer transport instance.
      *
@@ -66,15 +63,13 @@ class TransportRegistry extends ObjectRegistry
      * @param array<string, mixed> $config An array of settings to use for the cache engine.
      * @return \Cake\Mailer\AbstractTransport The constructed transport class.
      */
-    protected function _create(object|string $class, string $alias, array $config): AbstractTransport
+    protected function _create(object|string $class, string $alias, array $config): \Cake\Mailer\AbstractTransport
     {
         if (is_object($class)) {
             return $class;
         }
-
         return new $class($config);
     }
-
     /**
      * Remove a single adapter from the registry.
      *
@@ -84,7 +79,6 @@ class TransportRegistry extends ObjectRegistry
     public function unload(string $name)
     {
         unset($this->_loaded[$name]);
-
         return $this;
     }
 }

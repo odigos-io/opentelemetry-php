@@ -3,7 +3,6 @@
 namespace Illuminate\Database\Query\Processors;
 
 use Illuminate\Database\Query\Builder;
-
 class Processor
 {
     /**
@@ -17,7 +16,6 @@ class Processor
     {
         return $results;
     }
-
     /**
      * Process an  "insert get ID" query.
      *
@@ -30,12 +28,9 @@ class Processor
     public function processInsertGetId(Builder $query, $sql, $values, $sequence = null)
     {
         $query->getConnection()->insert($sql, $values);
-
         $id = $query->getConnection()->getPdo()->lastInsertId($sequence);
-
         return is_numeric($id) ? (int) $id : $id;
     }
-
     /**
      * Process the results of a schemas query.
      *
@@ -46,15 +41,14 @@ class Processor
     {
         return array_map(function ($result) {
             $result = (object) $result;
-
             return [
                 'name' => $result->name,
-                'path' => $result->path ?? null, // SQLite Only...
+                'path' => $result->path ?? null,
+                // SQLite Only...
                 'default' => (bool) $result->default,
             ];
         }, $results);
     }
-
     /**
      * Process the results of a tables query.
      *
@@ -65,19 +59,19 @@ class Processor
     {
         return array_map(function ($result) {
             $result = (object) $result;
-
             return [
                 'name' => $result->name,
                 'schema' => $result->schema ?? null,
-                'schema_qualified_name' => isset($result->schema) ? $result->schema.'.'.$result->name : $result->name,
+                'schema_qualified_name' => isset($result->schema) ? $result->schema . '.' . $result->name : $result->name,
                 'size' => isset($result->size) ? (int) $result->size : null,
-                'comment' => $result->comment ?? null, // MySQL and PostgreSQL
-                'collation' => $result->collation ?? null, // MySQL only
-                'engine' => $result->engine ?? null, // MySQL only
+                'comment' => $result->comment ?? null,
+                // MySQL and PostgreSQL
+                'collation' => $result->collation ?? null,
+                // MySQL only
+                'engine' => $result->engine ?? null,
             ];
         }, $results);
     }
-
     /**
      * Process the results of a views query.
      *
@@ -88,16 +82,9 @@ class Processor
     {
         return array_map(function ($result) {
             $result = (object) $result;
-
-            return [
-                'name' => $result->name,
-                'schema' => $result->schema ?? null,
-                'schema_qualified_name' => isset($result->schema) ? $result->schema.'.'.$result->name : $result->name,
-                'definition' => $result->definition,
-            ];
+            return ['name' => $result->name, 'schema' => $result->schema ?? null, 'schema_qualified_name' => isset($result->schema) ? $result->schema . '.' . $result->name : $result->name, 'definition' => $result->definition];
         }, $results);
     }
-
     /**
      * Process the results of a types query.
      *
@@ -108,7 +95,6 @@ class Processor
     {
         return $results;
     }
-
     /**
      * Process the results of a columns query.
      *
@@ -119,7 +105,6 @@ class Processor
     {
         return $results;
     }
-
     /**
      * Process the results of an indexes query.
      *
@@ -130,7 +115,6 @@ class Processor
     {
         return $results;
     }
-
     /**
      * Process the results of a foreign keys query.
      *

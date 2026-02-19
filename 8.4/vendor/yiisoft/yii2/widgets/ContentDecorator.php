@@ -1,15 +1,14 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\widgets;
 
 use yii\base\InvalidConfigException;
 use yii\base\Widget;
-
 /**
  * ContentDecorator records all output between [[begin()]] and [[end()]] calls, passes it to the given view file
  * as `$content` and then echoes rendering result.
@@ -51,22 +50,18 @@ class ContentDecorator extends Widget
      * @var array the parameters (name => value) to be extracted and made available in the decorative view.
      */
     public $params = [];
-
-
     /**
      * Starts recording a clip.
      */
     public function init()
     {
         parent::init();
-
         if ($this->viewFile === null) {
             throw new InvalidConfigException('ContentDecorator::viewFile must be set.');
         }
         ob_start();
-        ob_implicit_flush(false);
+        ob_implicit_flush(\false);
     }
-
     /**
      * Ends recording a clip.
      * This method stops output buffering and saves the rendering result as a named clip in the controller.

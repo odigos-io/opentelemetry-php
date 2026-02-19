@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -16,7 +16,6 @@ declare(strict_types=1);
 namespace Cake\Http\Cookie;
 
 use DateTimeInterface;
-
 /**
  * Cookie Interface
  */
@@ -28,39 +27,30 @@ interface CookieInterface
      * @var string
      */
     public const EXPIRES_FORMAT = 'D, d-M-Y H:i:s T';
-
     /**
      * SameSite attribute value: Lax
      *
      * @var string
      */
     public const SAMESITE_LAX = 'Lax';
-
     /**
      * SameSite attribute value: Strict
      *
      * @var string
      */
     public const SAMESITE_STRICT = 'Strict';
-
     /**
      * SameSite attribute value: None
      *
      * @var string
      */
     public const SAMESITE_NONE = 'None';
-
     /**
      * Valid values for "SameSite" attribute.
      *
      * @var array<string>
      */
-    public const SAMESITE_VALUES = [
-        self::SAMESITE_LAX,
-        self::SAMESITE_STRICT,
-        self::SAMESITE_NONE,
-    ];
-
+    public const SAMESITE_VALUES = [self::SAMESITE_LAX, self::SAMESITE_STRICT, self::SAMESITE_NONE];
     /**
      * Sets the cookie name
      *
@@ -68,21 +58,18 @@ interface CookieInterface
      * @return static
      */
     public function withName(string $name): static;
-
     /**
      * Gets the cookie name
      *
      * @return string
      */
     public function getName(): string;
-
     /**
      * Gets the cookie value
      *
      * @return array|string
      */
     public function getValue(): array|string;
-
     /**
      * Gets the cookie value as scalar.
      *
@@ -91,7 +78,6 @@ interface CookieInterface
      * @return string
      */
     public function getScalarValue(): string;
-
     /**
      * Create a cookie with an updated value.
      *
@@ -99,7 +85,6 @@ interface CookieInterface
      * @return static
      */
     public function withValue(array|string|float|int|bool $value): static;
-
     /**
      * Get the id for a cookie
      *
@@ -108,14 +93,12 @@ interface CookieInterface
      * @return string
      */
     public function getId(): string;
-
     /**
      * Get the path attribute.
      *
      * @return string
      */
     public function getPath(): string;
-
     /**
      * Create a new cookie with an updated path
      *
@@ -123,14 +106,12 @@ interface CookieInterface
      * @return static
      */
     public function withPath(string $path): static;
-
     /**
      * Get the domain attribute.
      *
      * @return string
      */
     public function getDomain(): string;
-
     /**
      * Create a cookie with an updated domain
      *
@@ -138,28 +119,24 @@ interface CookieInterface
      * @return static
      */
     public function withDomain(string $domain): static;
-
     /**
      * Get the current expiry time
      *
      * @return \DateTimeInterface|null Timestamp of expiry or null
      */
     public function getExpiry(): ?DateTimeInterface;
-
     /**
      * Get the timestamp from the expiration time
      *
      * @return int|null The expiry time as an integer.
      */
     public function getExpiresTimestamp(): ?int;
-
     /**
      * Builds the expiration value part of the header string
      *
      * @return string
      */
     public function getFormattedExpires(): string;
-
     /**
      * Create a cookie with an updated expiration date
      *
@@ -167,14 +144,12 @@ interface CookieInterface
      * @return static
      */
     public function withExpiry(DateTimeInterface $dateTime): static;
-
     /**
      * Create a new cookie that will virtually never expire.
      *
      * @return static
      */
     public function withNeverExpire(): static;
-
     /**
      * Create a new cookie that will expire/delete the cookie from the browser.
      *
@@ -183,7 +158,6 @@ interface CookieInterface
      * @return static
      */
     public function withExpired(): static;
-
     /**
      * Check if a cookie is expired when compared to $time
      *
@@ -193,14 +167,12 @@ interface CookieInterface
      * @return bool
      */
     public function isExpired(?DateTimeInterface $time = null): bool;
-
     /**
      * Check if the cookie is HTTP only
      *
      * @return bool
      */
     public function isHttpOnly(): bool;
-
     /**
      * Create a cookie with HTTP Only updated
      *
@@ -208,14 +180,12 @@ interface CookieInterface
      * @return static
      */
     public function withHttpOnly(bool $httpOnly): static;
-
     /**
      * Check if the cookie is secure
      *
      * @return bool
      */
     public function isSecure(): bool;
-
     /**
      * Create a cookie with Secure updated
      *
@@ -223,36 +193,31 @@ interface CookieInterface
      * @return static
      */
     public function withSecure(bool $secure): static;
-
     /**
      * Get the SameSite attribute.
      *
      * @return \Cake\Http\Cookie\SameSiteEnum|null
      */
-    public function getSameSite(): ?SameSiteEnum;
-
+    public function getSameSite(): ?\Cake\Http\Cookie\SameSiteEnum;
     /**
      * Create a cookie with an updated SameSite option.
      *
      * @param \Cake\Http\Cookie\SameSiteEnum|string|null $sameSite Value for to set for Samesite option.
      * @return static
      */
-    public function withSameSite(SameSiteEnum|string|null $sameSite): static;
-
+    public function withSameSite(\Cake\Http\Cookie\SameSiteEnum|string|null $sameSite): static;
     /**
      * Get cookie options
      *
      * @return array<string, mixed>
      */
     public function getOptions(): array;
-
     /**
      * Get cookie data as array.
      *
      * @return array<string, mixed> With keys `name`, `value`, `expires` etc. options.
      */
     public function toArray(): array;
-
     /**
      * Returns the cookie as header value
      *

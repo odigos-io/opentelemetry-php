@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /**
  * This file is part of the Carbon package.
  *
@@ -10,12 +9,10 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Odigos\Carbon\Traits;
 
-namespace Carbon\Traits;
-
-use Carbon\Carbon;
-use Carbon\CarbonImmutable;
-
+use Odigos\Carbon\Carbon;
+use Odigos\Carbon\CarbonImmutable;
 /**
  * Trait Mutability.
  *
@@ -24,15 +21,13 @@ use Carbon\CarbonImmutable;
 trait Mutability
 {
     use Cast;
-
     /**
      * Returns true if the current class/instance is mutable.
      */
     public static function isMutable(): bool
     {
-        return false;
+        return \false;
     }
-
     /**
      * Returns true if the current class/instance is immutable.
      */
@@ -40,7 +35,6 @@ trait Mutability
     {
         return !static::isMutable();
     }
-
     /**
      * Return a mutable copy of the instance.
      *
@@ -50,10 +44,8 @@ trait Mutability
     {
         /** @var Carbon $date */
         $date = $this->cast(Carbon::class);
-
         return $date;
     }
-
     /**
      * Return a immutable copy of the instance.
      *
@@ -63,7 +55,6 @@ trait Mutability
     {
         /** @var CarbonImmutable $date */
         $date = $this->cast(CarbonImmutable::class);
-
         return $date;
     }
 }

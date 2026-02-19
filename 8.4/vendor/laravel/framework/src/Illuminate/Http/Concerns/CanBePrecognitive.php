@@ -3,7 +3,6 @@
 namespace Illuminate\Http\Concerns;
 
 use Illuminate\Support\Collection;
-
 trait CanBePrecognitive
 {
     /**
@@ -14,17 +13,12 @@ trait CanBePrecognitive
      */
     public function filterPrecognitiveRules($rules)
     {
-        if (! $this->headers->has('Precognition-Validate-Only')) {
+        if (!$this->headers->has('Precognition-Validate-Only')) {
             return $rules;
         }
-
         $validateOnly = explode(',', $this->header('Precognition-Validate-Only'));
-
-        return (new Collection($rules))
-            ->filter(fn ($rule, $attribute) => $this->shouldValidatePrecognitiveAttribute($attribute, $validateOnly))
-            ->all();
+        return (new Collection($rules))->filter(fn($rule, $attribute) => $this->shouldValidatePrecognitiveAttribute($attribute, $validateOnly))->all();
     }
-
     /**
      * Determine if the given attribute should be validated.
      *
@@ -35,16 +29,13 @@ trait CanBePrecognitive
     protected function shouldValidatePrecognitiveAttribute($attribute, $validateOnly)
     {
         foreach ($validateOnly as $pattern) {
-            $regex = '/^'.str_replace('\*', '[^.]+', preg_quote($pattern, '/')).'$/';
-
+            $regex = '/^' . str_replace('\*', '[^.]+', preg_quote($pattern, '/')) . '$/';
             if (preg_match($regex, $attribute)) {
-                return true;
+                return \true;
             }
         }
-
-        return false;
+        return \false;
     }
-
     /**
      * Determine if the request is attempting to be precognitive.
      *
@@ -54,7 +45,6 @@ trait CanBePrecognitive
     {
         return $this->header('Precognition') === 'true';
     }
-
     /**
      * Determine if the request is precognitive.
      *
@@ -62,6 +52,6 @@ trait CanBePrecognitive
      */
     public function isPrecognitive()
     {
-        return $this->attributes->get('precognitive', false);
+        return $this->attributes->get('precognitive', \false);
     }
 }

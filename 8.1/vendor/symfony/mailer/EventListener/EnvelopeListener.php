@@ -8,14 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\Mailer\EventListener;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Mailer\Event\MessageEvent;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Message;
-
 /**
  * Manipulates the Envelope of a Message.
  *
@@ -24,12 +22,10 @@ use Symfony\Component\Mime\Message;
 class EnvelopeListener implements EventSubscriberInterface
 {
     private ?Address $sender = null;
-
     /**
      * @var Address[]|null
      */
     private ?array $recipients = null;
-
     /**
      * @param array<Address|string> $recipients
      */
@@ -42,12 +38,10 @@ class EnvelopeListener implements EventSubscriberInterface
             $this->recipients = Address::createArray($recipients);
         }
     }
-
     public function onMessage(MessageEvent $event): void
     {
         if ($this->sender) {
             $event->getEnvelope()->setSender($this->sender);
-
             $message = $event->getMessage();
             if ($message instanceof Message) {
                 if (!$message->getHeaders()->has('Sender') && !$message->getHeaders()->has('From')) {
@@ -55,12 +49,10 @@ class EnvelopeListener implements EventSubscriberInterface
                 }
             }
         }
-
         if ($this->recipients) {
             $event->getEnvelope()->setRecipients($this->recipients);
         }
     }
-
     public static function getSubscribedEvents(): array
     {
         return [

@@ -10,53 +10,44 @@ use Illuminate\Database\Eloquent\Relations\Concerns\CanBeOneOfMany;
 use Illuminate\Database\Eloquent\Relations\Concerns\ComparesRelatedModels;
 use Illuminate\Database\Eloquent\Relations\Concerns\SupportsDefaultModels;
 use Illuminate\Database\Query\JoinClause;
-
 /**
  * @template TRelatedModel of \Illuminate\Database\Eloquent\Model
  * @template TDeclaringModel of \Illuminate\Database\Eloquent\Model
  *
  * @extends \Illuminate\Database\Eloquent\Relations\HasOneOrMany<TRelatedModel, TDeclaringModel, ?TRelatedModel>
  */
-class HasOne extends HasOneOrMany implements SupportsPartialRelations
+class HasOne extends \Illuminate\Database\Eloquent\Relations\HasOneOrMany implements SupportsPartialRelations
 {
     use ComparesRelatedModels, CanBeOneOfMany, SupportsDefaultModels;
-
     /** @inheritDoc */
     public function getResults()
     {
         if (is_null($this->getParentKey())) {
             return $this->getDefaultFor($this->parent);
         }
-
         return $this->query->first() ?: $this->getDefaultFor($this->parent);
     }
-
     /** @inheritDoc */
     public function initRelation(array $models, $relation)
     {
         foreach ($models as $model) {
             $model->setRelation($relation, $this->getDefaultFor($model));
         }
-
         return $models;
     }
-
     /** @inheritDoc */
     public function match(array $models, EloquentCollection $results, $relation)
     {
         return $this->matchOne($models, $results, $relation);
     }
-
     /** @inheritDoc */
     public function getRelationExistenceQuery(Builder $query, Builder $parentQuery, $columns = ['*'])
     {
         if ($this->isOneOfMany()) {
             $this->mergeOneOfManyJoinsTo($query);
         }
-
         return parent::getRelationExistenceQuery($query, $parentQuery, $columns);
     }
-
     /**
      * Add constraints for inner join subselect for one of many relationships.
      *
@@ -69,7 +60,6 @@ class HasOne extends HasOneOrMany implements SupportsPartialRelations
     {
         $query->addSelect($this->foreignKey);
     }
-
     /**
      * Get the columns that should be selected by the one of many subquery.
      *
@@ -79,7 +69,6 @@ class HasOne extends HasOneOrMany implements SupportsPartialRelations
     {
         return $this->foreignKey;
     }
-
     /**
      * Add join query constraints for one of many relationships.
      *
@@ -90,7 +79,6 @@ class HasOne extends HasOneOrMany implements SupportsPartialRelations
     {
         $join->on($this->qualifySubSelectColumn($this->foreignKey), '=', $this->qualifyRelatedColumn($this->foreignKey));
     }
-
     /**
      * Make a new related instance for the given model.
      *
@@ -104,7 +92,6 @@ class HasOne extends HasOneOrMany implements SupportsPartialRelations
             $this->applyInverseRelationToModel($instance, $parent);
         });
     }
-
     /**
      * Get the value of the model's foreign key.
      *

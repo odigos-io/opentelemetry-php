@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -22,7 +22,6 @@ use Cake\Database\Expression\TupleComparison;
 use Cake\Database\Query;
 use Cake\Database\Query\SelectQuery;
 use InvalidArgumentException;
-
 /**
  * Provides a translator method for tuple comparisons
  *
@@ -52,37 +51,26 @@ trait TupleComparisonTranslatorTrait
     protected function _transformTupleComparison(TupleComparison $expression, Query $query): void
     {
         $fields = $expression->getField();
-
         if (!is_array($fields)) {
             return;
         }
-
         $operator = strtoupper($expression->getOperator());
         if (!in_array($operator, ['IN', '='])) {
-            throw new InvalidArgumentException(
-                sprintf(
-                    'Tuple comparison transform only supports the `IN` and `=` operators, `%s` given.',
-                    $operator,
-                ),
-            );
+            throw new InvalidArgumentException(sprintf('Tuple comparison transform only supports the `IN` and `=` operators, `%s` given.', $operator));
         }
-
         $value = $expression->getValue();
         $true = new QueryExpression('1');
-
         if ($value instanceof SelectQuery) {
             /** @var array<string> $selected */
             $selected = array_values($value->clause('select'));
             foreach ($fields as $i => $field) {
                 $value->andWhere([$field => new IdentifierExpression($selected[$i])]);
             }
-            $value->select($true, true);
+            $value->select($true, \true);
             $expression->setField($true);
             $expression->setOperator('=');
-
             return;
         }
-
         $type = $expression->getType();
         if ($type) {
             /** @var array<string, string> $typeMap */
@@ -90,15 +78,10 @@ trait TupleComparisonTranslatorTrait
         } else {
             $typeMap = [];
         }
-
-        $surrogate = $query->getConnection()
-            ->selectQuery()
-            ->select($true);
-
+        $surrogate = $query->getConnection()->selectQuery()->select($true);
         if (!is_array(current($value))) {
             $value = [$value];
         }
-
         $conditions = ['OR' => []];
         foreach ($value as $tuple) {
             $item = [];
@@ -108,7 +91,6 @@ trait TupleComparisonTranslatorTrait
             $conditions['OR'][] = $item;
         }
         $surrogate->where($conditions, $typeMap);
-
         $expression->setField($true);
         $expression->setValue($surrogate);
         $expression->setOperator('=');

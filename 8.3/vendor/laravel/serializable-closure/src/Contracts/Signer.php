@@ -11,7 +11,6 @@ interface Signer
      * @return array
      */
     public function sign($serializable);
-
     /**
      * Verify the given signature.
      *

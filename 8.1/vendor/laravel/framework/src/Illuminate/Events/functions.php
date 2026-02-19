@@ -3,8 +3,7 @@
 namespace Illuminate\Events;
 
 use Closure;
-
-if (! function_exists('Illuminate\Events\queueable')) {
+if (!function_exists('Illuminate\Events\queueable')) {
     /**
      * Create a new queued Closure event listener.
      *
@@ -13,6 +12,6 @@ if (! function_exists('Illuminate\Events\queueable')) {
      */
     function queueable(Closure $closure)
     {
-        return new QueuedClosure($closure);
+        return new \Illuminate\Events\QueuedClosure($closure);
     }
 }

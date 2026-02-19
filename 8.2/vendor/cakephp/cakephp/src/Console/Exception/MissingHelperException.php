@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -17,7 +17,7 @@ namespace Cake\Console\Exception;
 /**
  * Used when a Helper cannot be found.
  */
-class MissingHelperException extends ConsoleException
+class MissingHelperException extends \Cake\Console\Exception\ConsoleException
 {
     /**
      * @var string

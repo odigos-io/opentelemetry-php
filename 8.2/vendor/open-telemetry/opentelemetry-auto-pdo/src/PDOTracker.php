@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\Contrib\Instrumentation\PDO;
 
 use OpenTelemetry\API\Trace\SpanContextInterface;
@@ -10,7 +9,6 @@ use PDO;
 use PDOStatement;
 use WeakMap;
 use WeakReference;
-
 /**
  * @phan-file-suppress PhanNonClassMethodCall,PhanTypeArraySuspicious
  */
@@ -25,7 +23,6 @@ final class PDOTracker
      */
     private WeakMap $statementMapToPdoMap;
     private WeakMap $preparedStatementToSpanMap;
-
     public function __construct()
     {
         /** @psalm-suppress PropertyTypeCoercion */
@@ -34,7 +31,6 @@ final class PDOTracker
         $this->statementMapToPdoMap = new WeakMap();
         $this->preparedStatementToSpanMap = new WeakMap();
     }
-
     /**
      * Maps a prepared statement to the PDO instance and the span context it was created in
      */
@@ -43,7 +39,6 @@ final class PDOTracker
         $this->statementMapToPdoMap[$statement] = WeakReference::create($pdo);
         $this->preparedStatementToSpanMap[$statement] = WeakReference::create($spanContext);
     }
-
     /**
      * Maps a statement back to the connection attributes.
      *
@@ -56,11 +51,9 @@ final class PDOTracker
         if ($pdo === null) {
             return [];
         }
-
         /** @psalm-var array<non-empty-string, bool|int|float|string|array|null> */
         return $this->pdoToAttributesMap[$pdo] ?? [];
     }
-
     /**
      * @param PDO $pdo
      * @param string $dsn
@@ -69,7 +62,6 @@ final class PDOTracker
     public function trackPdoAttributes(PDO $pdo, string $dsn): array
     {
         $attributes = self::extractAttributesFromDSN($dsn);
-
         try {
             /** @var string $dbSystem */
             $dbSystem = $pdo->getAttribute(PDO::ATTR_DRIVER_NAME);
@@ -80,12 +72,9 @@ final class PDOTracker
             /** @psalm-suppress PossiblyInvalidArrayAssignment */
             $attributes[TraceAttributes::DB_SYSTEM_NAME] = 'other_sql';
         }
-
         $this->pdoToAttributesMap[$pdo] = $attributes;
-
         return $attributes;
     }
-
     /**
      * @param PDO $pdo
      * @return array<non-empty-string, bool|int|float|string|array|null>
@@ -95,16 +84,13 @@ final class PDOTracker
         /** @psalm-var array<non-empty-string, bool|int|float|string|array|null> */
         return $this->pdoToAttributesMap[$pdo] ?? [];
     }
-
     public function getSpanForPreparedStatement(PDOStatement $statement): ?SpanContextInterface
     {
         if (!$this->preparedStatementToSpanMap->offsetExists($statement)) {
             return null;
         }
-
         return ($this->preparedStatementToSpanMap[$statement] ?? null)?->get();
     }
-
     /**
      * Mapping to known values
      *
@@ -124,7 +110,6 @@ final class PDOTracker
             default => 'other_sql',
         };
     }
-
     /**
      * Extracts attributes from a DSN string
      *
@@ -137,20 +122,16 @@ final class PDOTracker
         if (str_starts_with($dsn, 'sqlite::memory:')) {
             $attributes[TraceAttributes::DB_SYSTEM_NAME] = 'sqlite';
             $attributes[TraceAttributes::DB_NAMESPACE] = 'memory';
-
             return $attributes;
         } elseif (str_starts_with($dsn, 'sqlite:')) {
             $attributes[TraceAttributes::DB_SYSTEM_NAME] = 'sqlite';
             $attributes[TraceAttributes::DB_NAMESPACE] = substr($dsn, 7);
-
             return $attributes;
         } elseif (str_starts_with($dsn, 'sqlite')) {
             $attributes[TraceAttributes::DB_SYSTEM_NAME] = 'sqlite';
             $attributes[TraceAttributes::DB_NAMESPACE] = $dsn;
-
             return $attributes;
         }
-
         // SQL Server format handling
         if (str_starts_with($dsn, 'sqlsrv:')) {
             if (preg_match('/Server=([^,;]+)(?:,([0-9]+))?/', $dsn, $serverMatches)) {
@@ -158,30 +139,25 @@ final class PDOTracker
                 if ($server !== '') {
                     $attributes[TraceAttributes::SERVER_ADDRESS] = $server;
                 }
-
                 if (isset($serverMatches[2]) && $serverMatches[2] !== '') {
                     $attributes[TraceAttributes::SERVER_PORT] = (int) $serverMatches[2];
                 }
             }
-
             if (preg_match('/Database=([^;]*)/', $dsn, $dbMatches)) {
                 $dbname = $dbMatches[1];
                 if ($dbname !== '') {
                     $attributes[TraceAttributes::DB_NAMESPACE] = $dbname;
                 }
             }
-
             return $attributes;
         }
-
         //deprecated, no replacement at this time
         /*if (preg_match('/user=([^;]*)/', $dsn, $matches)) {
-            $user = $matches[1];
-            if ($user !== '') {
-                $attributes[TraceAttributes::DB_USER] = $user;
-            }
-        }*/
-
+              $user = $matches[1];
+              if ($user !== '') {
+                  $attributes[TraceAttributes::DB_USER] = $user;
+              }
+          }*/
         // Extract host information
         if (preg_match('/host=([^;]*)/', $dsn, $matches)) {
             $host = $matches[1];
@@ -194,7 +170,6 @@ final class PDOTracker
                 $attributes[TraceAttributes::SERVER_ADDRESS] = $host;
             }
         }
-
         // Extract port information
         if (preg_match('/port=([0-9]+)/', $dsn, $portMatches)) {
             $port = (int) $portMatches[1];
@@ -207,7 +182,6 @@ final class PDOTracker
             $port = (int) $portMatches[1];
             $attributes[TraceAttributes::SERVER_PORT] = $port;
         }
-
         // Extract database name
         if (preg_match('/dbname=([^;]*)/', $dsn, $matches)) {
             $dbname = $matches[1];
@@ -215,7 +189,6 @@ final class PDOTracker
                 $attributes[TraceAttributes::DB_NAMESPACE] = $dbname;
             }
         }
-
         return $attributes;
     }
 }

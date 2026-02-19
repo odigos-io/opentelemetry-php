@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -20,7 +20,6 @@ use Cake\Cache\CacheEngine;
 use Cake\Cache\Exception\InvalidArgumentException;
 use Cake\Event\Event;
 use DateInterval;
-
 /**
  * Class Cache AfterSet Event
  *
@@ -29,13 +28,9 @@ use DateInterval;
 class CacheAfterSetEvent extends Event
 {
     public const NAME = 'Cache.afterSet';
-
     protected string $key;
-
     protected mixed $value = null;
-
     protected DateInterval|int|null $ttl = null;
-
     /**
      * Constructor
      *
@@ -61,10 +56,8 @@ class CacheAfterSetEvent extends Event
             $this->ttl = $data['ttl'];
             unset($data['ttl']);
         }
-
         parent::__construct($name, $subject, $data);
     }
-
     /**
      * The result value of the event listeners
      *
@@ -74,7 +67,6 @@ class CacheAfterSetEvent extends Event
     {
         return $this->result;
     }
-
     /**
      * Listeners can attach a result value to the event.
      *
@@ -84,14 +76,10 @@ class CacheAfterSetEvent extends Event
     public function setResult(mixed $value = null)
     {
         if ($value !== null && !is_bool($value)) {
-            throw new InvalidArgumentException(
-                'The result for CacheEngine events must be a `bool`.',
-            );
+            throw new InvalidArgumentException('The result for CacheEngine events must be a `bool`.');
         }
-
         return parent::setResult($value);
     }
-
     /**
      * @return string
      */
@@ -99,7 +87,6 @@ class CacheAfterSetEvent extends Event
     {
         return $this->key;
     }
-
     /**
      * @return mixed
      */
@@ -107,7 +94,6 @@ class CacheAfterSetEvent extends Event
     {
         return $this->value;
     }
-
     /**
      * @return \DateInterval|int|null
      */

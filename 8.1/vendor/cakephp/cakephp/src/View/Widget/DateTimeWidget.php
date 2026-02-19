@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -27,14 +27,13 @@ use DateTimeInterface;
 use DateTimeZone;
 use Exception;
 use InvalidArgumentException;
-
 /**
  * Input widget class for generating a date time input widget.
  *
  * This class is usually used internally by `Cake\View\Helper\FormHelper`,
  * it but can be used to generate standalone date time inputs.
  */
-class DateTimeWidget extends BasicWidget
+class DateTimeWidget extends \Cake\View\Widget\BasicWidget
 {
     /**
      * Template instance.
@@ -42,34 +41,18 @@ class DateTimeWidget extends BasicWidget
      * @var \Cake\View\StringTemplate
      */
     protected StringTemplate $_templates;
-
     /**
      * Data defaults.
      *
      * @var array<string, mixed>
      */
-    protected array $defaults = [
-        'name' => '',
-        'val' => null,
-        'type' => 'datetime-local',
-        'escape' => true,
-        'timezone' => null,
-        'templateVars' => [],
-    ];
-
+    protected array $defaults = ['name' => '', 'val' => null, 'type' => 'datetime-local', 'escape' => \true, 'timezone' => null, 'templateVars' => []];
     /**
      * Formats for various input types.
      *
      * @var array<string, string>
      */
-    protected array $formatMap = [
-        'datetime-local' => 'Y-m-d\TH:i:s',
-        'date' => 'Y-m-d',
-        'time' => 'H:i:s',
-        'month' => 'Y-m',
-        'week' => 'Y-\WW',
-    ];
-
+    protected array $formatMap = ['datetime-local' => 'Y-m-d\TH:i:s', 'date' => 'Y-m-d', 'time' => 'H:i:s', 'month' => 'Y-m', 'week' => 'Y-\WW'];
     /**
      * Step size for various input types.
      *
@@ -77,14 +60,7 @@ class DateTimeWidget extends BasicWidget
      *
      * @var array<string, mixed>
      */
-    protected array $defaultStep = [
-        'datetime-local' => '1',
-        'date' => null,
-        'time' => '1',
-        'month' => null,
-        'week' => null,
-    ];
-
+    protected array $defaultStep = ['datetime-local' => '1', 'date' => null, 'time' => '1', 'month' => null, 'week' => null];
     /**
      * Render a date / time form widget.
      *
@@ -112,30 +88,14 @@ class DateTimeWidget extends BasicWidget
     public function render(array $data, ContextInterface $context): string
     {
         $data += $this->mergeDefaults($data, $context);
-
         if (!isset($this->formatMap[$data['type']])) {
-            throw new InvalidArgumentException(sprintf(
-                'Invalid type `%s` for input tag, expected datetime-local, date, time, month or week',
-                $data['type'],
-            ));
+            throw new InvalidArgumentException(sprintf('Invalid type `%s` for input tag, expected datetime-local, date, time, month or week', $data['type']));
         }
-
         $data = $this->setStep($data, $context, $data['fieldName'] ?? '');
-
-        $data['value'] = $this->formatDateTime($data['val'] === true ? new DateTimeImmutable() : $data['val'], $data);
+        $data['value'] = $this->formatDateTime($data['val'] === \true ? new DateTimeImmutable() : $data['val'], $data);
         unset($data['val'], $data['timezone'], $data['format']);
-
-        return $this->_templates->format('input', [
-            'name' => $data['name'],
-            'type' => $data['type'],
-            'templateVars' => $data['templateVars'],
-            'attrs' => $this->_templates->formatAttributes(
-                $data,
-                ['name', 'type'],
-            ),
-        ]);
+        return $this->_templates->format('input', ['name' => $data['name'], 'type' => $data['type'], 'templateVars' => $data['templateVars'], 'attrs' => $this->_templates->formatAttributes($data, ['name', 'type'])]);
     }
-
     /**
      * Set value for "step" attribute if applicable.
      *
@@ -149,31 +109,21 @@ class DateTimeWidget extends BasicWidget
         if (array_key_exists('step', $data)) {
             return $data;
         }
-
         if (isset($data['format'])) {
             $data['step'] = null;
         } else {
             $data['step'] = $this->defaultStep[$data['type']];
         }
-
         if (empty($data['fieldName'])) {
             return $data;
         }
-
         $dbType = $context->type($fieldName);
-        $fractionalTypes = [
-            TableSchemaInterface::TYPE_DATETIME_FRACTIONAL,
-            TableSchemaInterface::TYPE_TIMESTAMP_FRACTIONAL,
-            TableSchemaInterface::TYPE_TIMESTAMP_TIMEZONE,
-        ];
-
-        if (in_array($dbType, $fractionalTypes, true)) {
+        $fractionalTypes = [TableSchemaInterface::TYPE_DATETIME_FRACTIONAL, TableSchemaInterface::TYPE_TIMESTAMP_FRACTIONAL, TableSchemaInterface::TYPE_TIMESTAMP_TIMEZONE];
+        if (in_array($dbType, $fractionalTypes, \true)) {
             $data['step'] = '0.001';
         }
-
         return $data;
     }
-
     /**
      * Formats the passed date/time value into required string format.
      *
@@ -182,14 +132,11 @@ class DateTimeWidget extends BasicWidget
      * @return string
      * @throws \InvalidArgumentException If invalid input type is passed.
      */
-    protected function formatDateTime(
-        ChronosDate|ChronosTime|DateTimeInterface|string|int|null $value,
-        array $options,
-    ): string {
+    protected function formatDateTime(ChronosDate|ChronosTime|DateTimeInterface|string|int|null $value, array $options): string
+    {
         if ($value === '' || $value === null) {
             return '';
         }
-
         try {
             if ($value instanceof DateTimeInterface || $value instanceof ChronosDate || $value instanceof ChronosTime) {
                 /** @var \Cake\Chronos\ChronosDate|\DateTime|\DateTimeImmutable $dateTime Expand type for phpstan */
@@ -202,33 +149,23 @@ class DateTimeWidget extends BasicWidget
         } catch (Exception) {
             $dateTime = new DateTime();
         }
-
         if (isset($options['timezone'])) {
             $timezone = $options['timezone'];
             if (!$timezone instanceof DateTimeZone) {
                 $timezone = new DateTimeZone($timezone);
             }
-
             $dateTime = $dateTime->setTimezone($timezone);
         }
-
         if (isset($options['format'])) {
             $format = $options['format'];
         } else {
             $format = $this->formatMap[$options['type']];
-
-            if (
-                $options['type'] === 'datetime-local'
-                && is_numeric($options['step'])
-                && $options['step'] < 1
-            ) {
+            if ($options['type'] === 'datetime-local' && is_numeric($options['step']) && $options['step'] < 1) {
                 $format = 'Y-m-d\TH:i:s.v';
             }
         }
-
         return $dateTime->format($format);
     }
-
     /**
      * @inheritDoc
      */
@@ -237,7 +174,6 @@ class DateTimeWidget extends BasicWidget
         if (!isset($data['name']) || $data['name'] === '') {
             return [];
         }
-
         return [$data['name']];
     }
 }

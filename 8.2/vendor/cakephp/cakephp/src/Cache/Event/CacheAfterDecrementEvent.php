@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -19,7 +19,6 @@ namespace Cake\Cache\Event;
 use Cake\Cache\CacheEngine;
 use Cake\Cache\Exception\InvalidArgumentException;
 use Cake\Event\Event;
-
 /**
  * Class Cache AfterDecrement Event
  *
@@ -28,13 +27,9 @@ use Cake\Event\Event;
 class CacheAfterDecrementEvent extends Event
 {
     public const NAME = 'Cache.afterDecrement';
-
     protected string $key;
-
     protected int $offset;
-
     protected mixed $value;
-
     /**
      * Constructor
      *
@@ -60,10 +55,8 @@ class CacheAfterDecrementEvent extends Event
             $this->result = $data['success'];
             unset($data['success']);
         }
-
         parent::__construct($name, $subject, $data);
     }
-
     /**
      * The result value of the event listeners
      *
@@ -73,7 +66,6 @@ class CacheAfterDecrementEvent extends Event
     {
         return $this->result;
     }
-
     /**
      * Listeners can attach a result value to the event.
      *
@@ -83,14 +75,10 @@ class CacheAfterDecrementEvent extends Event
     public function setResult(mixed $value = null)
     {
         if ($value !== null && !is_bool($value)) {
-            throw new InvalidArgumentException(
-                'The result for CacheEngine events must be a `bool`.',
-            );
+            throw new InvalidArgumentException('The result for CacheEngine events must be a `bool`.');
         }
-
         return parent::setResult($value);
     }
-
     /**
      * Get the cache key.
      *
@@ -100,7 +88,6 @@ class CacheAfterDecrementEvent extends Event
     {
         return $this->key;
     }
-
     /**
      * Get the decrement offset.
      *
@@ -110,7 +97,6 @@ class CacheAfterDecrementEvent extends Event
     {
         return $this->offset;
     }
-
     /**
      * Get the new value after decrement.
      *

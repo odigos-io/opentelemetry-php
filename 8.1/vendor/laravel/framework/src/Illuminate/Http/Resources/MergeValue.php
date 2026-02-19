@@ -4,7 +4,6 @@ namespace Illuminate\Http\Resources;
 
 use Illuminate\Support\Collection;
 use JsonSerializable;
-
 class MergeValue
 {
     /**
@@ -13,7 +12,6 @@ class MergeValue
      * @var array
      */
     public $data;
-
     /**
      * Create a new merge value instance.
      *

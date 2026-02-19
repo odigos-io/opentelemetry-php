@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\SDK\Metrics;
 
 /**
@@ -9,5 +8,5 @@ namespace OpenTelemetry\SDK\Metrics;
  */
 interface InstrumentHandle
 {
-    public function getHandle(): Instrument;
+    public function getHandle(): \OpenTelemetry\SDK\Metrics\Instrument;
 }

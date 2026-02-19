@@ -1,11 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\DBAL\Schema\Metadata;
 
 use Doctrine\DBAL\Exception;
-
 /**
  * Provides low-level metadata that describes the underlying database schema.
  *
@@ -26,7 +24,6 @@ interface MetadataProvider
      * @throws Exception
      */
     public function getAllDatabaseNames(): iterable;
-
     /**
      * Returns names of all schemas available within the current database.
      *
@@ -37,7 +34,6 @@ interface MetadataProvider
      * @throws Exception
      */
     public function getAllSchemaNames(): iterable;
-
     /**
      * Returns names of all tables within the current database.
      *
@@ -48,7 +44,6 @@ interface MetadataProvider
      * @throws Exception
      */
     public function getAllTableNames(): iterable;
-
     /**
      * Returns the columns of all tables within the current database.
      *
@@ -60,7 +55,6 @@ interface MetadataProvider
      * @throws Exception
      */
     public function getTableColumnsForAllTables(): iterable;
-
     /**
      * Returns the columns of the given table.
      *
@@ -78,7 +72,6 @@ interface MetadataProvider
      * @throws Exception
      */
     public function getTableColumnsForTable(?string $schemaName, string $tableName): iterable;
-
     /**
      * Returns the index columns of all tables within the current database.
      *
@@ -90,7 +83,6 @@ interface MetadataProvider
      * @throws Exception
      */
     public function getIndexColumnsForAllTables(): iterable;
-
     /**
      * Returns the index columns of the given table.
      *
@@ -108,7 +100,6 @@ interface MetadataProvider
      * @throws Exception
      */
     public function getIndexColumnsForTable(?string $schemaName, string $tableName): iterable;
-
     /**
      * Returns the primary key constraint columns of all tables within the current database.
      *
@@ -121,7 +112,6 @@ interface MetadataProvider
      * @throws Exception
      */
     public function getPrimaryKeyConstraintColumnsForAllTables(): iterable;
-
     /**
      * Returns the primary key constraint columns of the given table.
      *
@@ -139,7 +129,6 @@ interface MetadataProvider
      * @throws Exception
      */
     public function getPrimaryKeyConstraintColumnsForTable(?string $schemaName, string $tableName): iterable;
-
     /**
      * Returns the foreign key constraint columns of all tables within the current database.
      *
@@ -153,7 +142,6 @@ interface MetadataProvider
      * @throws Exception
      */
     public function getForeignKeyConstraintColumnsForAllTables(): iterable;
-
     /**
      * Returns the foreign key constraint columns of the given table.
      *
@@ -172,11 +160,7 @@ interface MetadataProvider
      *
      * @throws Exception
      */
-    public function getForeignKeyConstraintColumnsForTable(
-        ?string $schemaName,
-        string $tableName,
-    ): iterable;
-
+    public function getForeignKeyConstraintColumnsForTable(?string $schemaName, string $tableName): iterable;
     /**
      * Returns the options of all tables within the current database.
      *
@@ -191,7 +175,6 @@ interface MetadataProvider
      * @throws Exception
      */
     public function getTableOptionsForAllTables(): iterable;
-
     /**
      * Returns the options of the given table.
      *
@@ -210,7 +193,6 @@ interface MetadataProvider
      * @throws Exception
      */
     public function getTableOptionsForTable(?string $schemaName, string $tableName): iterable;
-
     /**
      * Returns the definitions of all views within the current database.
      *
@@ -224,7 +206,6 @@ interface MetadataProvider
      * @throws Exception
      */
     public function getAllViews(): iterable;
-
     /**
      * Returns the definitions of all sequences within the current database.
      *

@@ -53,3 +53,4 @@
         <x-laravel-exceptions-renderer::frame-code :code="$snippet" :highlightedLine="$frame->line()" x-show="expanded" />
     @endif
 </div>
+

@@ -8,12 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\Console\Output;
 
 use Symfony\Component\Console\Formatter\NullOutputFormatter;
 use Symfony\Component\Console\Formatter\OutputFormatterInterface;
-
 /**
  * NullOutput suppresses all output.
  *
@@ -22,10 +20,9 @@ use Symfony\Component\Console\Formatter\OutputFormatterInterface;
  * @author Fabien Potencier <fabien@symfony.com>
  * @author Tobias Schultze <http://tobion.de>
  */
-class NullOutput implements OutputInterface
+class NullOutput implements \Symfony\Component\Console\Output\OutputInterface
 {
     private NullOutputFormatter $formatter;
-
     /**
      * @return void
      */
@@ -33,13 +30,11 @@ class NullOutput implements OutputInterface
     {
         // do nothing
     }
-
     public function getFormatter(): OutputFormatterInterface
     {
         // to comply with the interface we must return a OutputFormatterInterface
         return $this->formatter ??= new NullOutputFormatter();
     }
-
     /**
      * @return void
      */
@@ -47,12 +42,10 @@ class NullOutput implements OutputInterface
     {
         // do nothing
     }
-
     public function isDecorated(): bool
     {
-        return false;
+        return \false;
     }
-
     /**
      * @return void
      */
@@ -60,32 +53,26 @@ class NullOutput implements OutputInterface
     {
         // do nothing
     }
-
     public function getVerbosity(): int
     {
         return self::VERBOSITY_QUIET;
     }
-
     public function isQuiet(): bool
     {
-        return true;
+        return \true;
     }
-
     public function isVerbose(): bool
     {
-        return false;
+        return \false;
     }
-
     public function isVeryVerbose(): bool
     {
-        return false;
+        return \false;
     }
-
     public function isDebug(): bool
     {
-        return false;
+        return \false;
     }
-
     /**
      * @return void
      */
@@ -93,11 +80,10 @@ class NullOutput implements OutputInterface
     {
         // do nothing
     }
-
     /**
      * @return void
      */
-    public function write(string|iterable $messages, bool $newline = false, int $options = self::OUTPUT_NORMAL)
+    public function write(string|iterable $messages, bool $newline = \false, int $options = self::OUTPUT_NORMAL)
     {
         // do nothing
     }

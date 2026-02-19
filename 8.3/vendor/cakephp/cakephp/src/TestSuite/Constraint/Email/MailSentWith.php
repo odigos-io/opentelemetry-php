@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -21,13 +21,12 @@ namespace Cake\TestSuite\Constraint\Email;
  *
  * @internal
  */
-class MailSentWith extends MailConstraintBase
+class MailSentWith extends \Cake\TestSuite\Constraint\Email\MailConstraintBase
 {
     /**
      * @var string
      */
     protected string $method;
-
     /**
      * Constructor
      *
@@ -39,10 +38,8 @@ class MailSentWith extends MailConstraintBase
         if ($method !== null) {
             $this->method = $method;
         }
-
         parent::__construct($at);
     }
-
     /**
      * Checks constraint
      *
@@ -55,20 +52,14 @@ class MailSentWith extends MailConstraintBase
         foreach ($emails as $email) {
             $value = $email->{'get' . ucfirst($this->method)}();
             if ($value === $other) {
-                return true;
+                return \true;
             }
-            if (
-                !is_array($other)
-                && in_array($this->method, ['to', 'cc', 'bcc', 'from', 'replyTo', 'sender'])
-                && array_key_exists($other, $value)
-            ) {
-                return true;
+            if (!is_array($other) && in_array($this->method, ['to', 'cc', 'bcc', 'from', 'replyTo', 'sender']) && array_key_exists($other, $value)) {
+                return \true;
             }
         }
-
-        return false;
+        return \false;
     }
-
     /**
      * Assertion message string
      *
@@ -79,7 +70,6 @@ class MailSentWith extends MailConstraintBase
         if ($this->at) {
             return sprintf('is in email #%d `%s`', $this->at, $this->method);
         }
-
         return sprintf('is in an email `%s`', $this->method);
     }
 }

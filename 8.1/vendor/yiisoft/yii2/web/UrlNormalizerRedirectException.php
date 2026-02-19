@@ -1,10 +1,10 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\web;
 
 /**
@@ -30,8 +30,6 @@ class UrlNormalizerRedirectException extends \yii\base\Exception
      * @var int the HTTP status code
      */
     public $statusCode;
-
-
     /**
      * @param array|string $url the parameter to be used to generate a valid URL for redirection.
      * This will be used as first parameter for [[\yii\helpers\Url::to()]]
@@ -42,11 +40,11 @@ class UrlNormalizerRedirectException extends \yii\base\Exception
      * @param int $code the error code
      * @param \Throwable|null $previous the previous exception used for the exception chaining
      */
-    public function __construct($url, $statusCode = 302, $scheme = false, $message = null, $code = 0, $previous = null)
+    public function __construct($url, $statusCode = 302, $scheme = \false, $message = null, $code = 0, $previous = null)
     {
         $this->url = $url;
         $this->scheme = $scheme;
         $this->statusCode = $statusCode;
-        parent::__construct((string)$message, $code, $previous);
+        parent::__construct((string) $message, $code, $previous);
     }
 }

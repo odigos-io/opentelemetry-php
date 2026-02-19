@@ -12,10 +12,9 @@ class EnsurePunctuation
      */
     public function __invoke($string)
     {
-        if (! str($string)->endsWith(['.', '?', '!', ':'])) {
-            return "$string.";
+        if (!str($string)->endsWith(['.', '?', '!', ':'])) {
+            return "{$string}.";
         }
-
         return $string;
     }
 }

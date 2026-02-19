@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -17,11 +17,10 @@ declare(strict_types=1);
 namespace Cake\Database\Schema;
 
 use Psr\SimpleCache\CacheInterface;
-
 /**
  * Decorates a schema collection and adds caching
  */
-class CachedCollection implements CollectionInterface
+class CachedCollection implements \Cake\Database\Schema\CollectionInterface
 {
     /**
      * Cacher instance.
@@ -29,21 +28,18 @@ class CachedCollection implements CollectionInterface
      * @var \Psr\SimpleCache\CacheInterface
      */
     protected CacheInterface $cacher;
-
     /**
      * The decorated schema collection
      *
      * @var \Cake\Database\Schema\CollectionInterface
      */
-    protected CollectionInterface $collection;
-
+    protected \Cake\Database\Schema\CollectionInterface $collection;
     /**
      * The cache key prefix
      *
      * @var string
      */
     protected string $prefix;
-
     /**
      * Constructor.
      *
@@ -51,13 +47,12 @@ class CachedCollection implements CollectionInterface
      * @param string $prefix The cache key prefix to use. Typically the connection name.
      * @param \Psr\SimpleCache\CacheInterface $cacher Cacher instance.
      */
-    public function __construct(CollectionInterface $collection, string $prefix, CacheInterface $cacher)
+    public function __construct(\Cake\Database\Schema\CollectionInterface $collection, string $prefix, CacheInterface $cacher)
     {
         $this->collection = $collection;
         $this->prefix = $prefix;
         $this->cacher = $cacher;
     }
-
     /**
      * @inheritDoc
      */
@@ -65,7 +60,6 @@ class CachedCollection implements CollectionInterface
     {
         return $this->collection->listTablesWithoutViews();
     }
-
     /**
      * @inheritDoc
      */
@@ -73,7 +67,6 @@ class CachedCollection implements CollectionInterface
     {
         return $this->collection->listTables();
     }
-
     /**
      * Get the column metadata for a table.
      *
@@ -92,24 +85,20 @@ class CachedCollection implements CollectionInterface
      * @return \Cake\Database\Schema\TableSchemaInterface Object with column metadata.
      * @throws \Cake\Database\Exception\DatabaseException when table cannot be described.
      */
-    public function describe(string $name, array $options = []): TableSchemaInterface
+    public function describe(string $name, array $options = []): \Cake\Database\Schema\TableSchemaInterface
     {
-        $options += ['forceRefresh' => false];
+        $options += ['forceRefresh' => \false];
         $cacheKey = $this->cacheKey($name);
-
         if (!$options['forceRefresh']) {
             $cached = $this->cacher->get($cacheKey);
             if ($cached !== null) {
                 return $cached;
             }
         }
-
         $table = $this->collection->describe($name, $options);
         $this->cacher->set($cacheKey, $table);
-
         return $table;
     }
-
     /**
      * Get the cache key for a given name.
      *
@@ -120,7 +109,6 @@ class CachedCollection implements CollectionInterface
     {
         return $this->prefix . '_' . $name;
     }
-
     /**
      * Set a cacher.
      *
@@ -130,10 +118,8 @@ class CachedCollection implements CollectionInterface
     public function setCacher(CacheInterface $cacher)
     {
         $this->cacher = $cacher;
-
         return $this;
     }
-
     /**
      * Get a cacher.
      *

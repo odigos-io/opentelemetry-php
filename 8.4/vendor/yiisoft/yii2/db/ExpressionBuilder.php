@@ -1,10 +1,10 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\db;
 
 /**
@@ -13,16 +13,14 @@ namespace yii\db;
  * @author Dmitry Naumenko <d.naumenko.a@gmail.com>
  * @since 2.0.14
  */
-class ExpressionBuilder implements ExpressionBuilderInterface
+class ExpressionBuilder implements \yii\db\ExpressionBuilderInterface
 {
-    use ExpressionBuilderTrait;
-
-
+    use \yii\db\ExpressionBuilderTrait;
     /**
      * {@inheritdoc}
      * @param Expression|ExpressionInterface $expression the expression to be built
      */
-    public function build(ExpressionInterface $expression, array &$params = [])
+    public function build(\yii\db\ExpressionInterface $expression, array &$params = [])
     {
         $params = array_merge($params, $expression->params);
         return $expression->__toString();

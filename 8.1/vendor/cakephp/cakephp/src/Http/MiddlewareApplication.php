@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -19,7 +19,6 @@ namespace Cake\Http;
 use Cake\Core\HttpApplicationInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-
 /**
  * Base class for standalone HTTP applications
  *
@@ -36,21 +35,18 @@ abstract class MiddlewareApplication implements HttpApplicationInterface
      * @inheritDoc
      */
     abstract public function bootstrap(): void;
-
     /**
      * @inheritDoc
      */
-    abstract public function middleware(MiddlewareQueue $middlewareQueue): MiddlewareQueue;
-
+    abstract public function middleware(\Cake\Http\MiddlewareQueue $middlewareQueue): \Cake\Http\MiddlewareQueue;
     /**
      * Generate a 404 response as no middleware handled the request.
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request The request
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function handle(
-        ServerRequestInterface $request,
-    ): ResponseInterface {
-        return new Response(['body' => 'Not found', 'status' => 404]);
+    public function handle(ServerRequestInterface $request): ResponseInterface
+    {
+        return new \Cake\Http\Response(['body' => 'Not found', 'status' => 404]);
     }
 }

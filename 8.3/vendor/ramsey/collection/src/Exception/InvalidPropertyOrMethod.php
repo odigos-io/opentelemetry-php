@@ -9,13 +9,10 @@
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
  */
-
-declare(strict_types=1);
-
-namespace Ramsey\Collection\Exception;
+declare (strict_types=1);
+namespace Odigos\Ramsey\Collection\Exception;
 
 use RuntimeException;
-
 /**
  * Thrown when attempting to evaluate a property, method, or array key
  * that doesn't exist on an element or cannot otherwise be evaluated in the

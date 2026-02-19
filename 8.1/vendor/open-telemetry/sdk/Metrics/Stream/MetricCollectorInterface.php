@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\SDK\Metrics\Stream;
 
 /**
@@ -9,5 +8,5 @@ namespace OpenTelemetry\SDK\Metrics\Stream;
  */
 interface MetricCollectorInterface
 {
-    public function collect(int $timestamp): Metric;
+    public function collect(int $timestamp): \OpenTelemetry\SDK\Metrics\Stream\Metric;
 }

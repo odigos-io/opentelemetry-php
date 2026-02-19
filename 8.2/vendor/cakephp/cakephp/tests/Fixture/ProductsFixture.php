@@ -1,4 +1,5 @@
 <?php
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -15,7 +16,6 @@
 namespace Cake\Test\Fixture;
 
 use Cake\TestSuite\Fixture\TestFixture;
-
 /**
  * ProductsFixture
  */
@@ -25,15 +25,10 @@ class ProductsFixture extends TestFixture
      * @inheritDoc
      */
     public string $table = 'products';
-
     /**
      * records property
      *
      * @var array
      */
-    public array $records = [
-        ['id' => 1, 'category' => 1, 'name' => 'First product', 'price' => 10],
-        ['id' => 2, 'category' => 2, 'name' => 'Second product', 'price' => 20],
-        ['id' => 3, 'category' => 3, 'name' => 'Third product', 'price' => 30],
-    ];
+    public array $records = [['id' => 1, 'category' => 1, 'name' => 'First product', 'price' => 10], ['id' => 2, 'category' => 2, 'name' => 'Second product', 'price' => 20], ['id' => 3, 'category' => 3, 'name' => 'Third product', 'price' => 30]];
 }

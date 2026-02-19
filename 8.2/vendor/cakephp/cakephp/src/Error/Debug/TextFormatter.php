@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -17,7 +17,6 @@ declare(strict_types=1);
 namespace Cake\Error\Debug;
 
 use InvalidArgumentException;
-
 /**
  * A Debugger formatter for generating unstyled plain text output.
  *
@@ -26,7 +25,7 @@ use InvalidArgumentException;
  *
  * @internal
  */
-class TextFormatter implements FormatterInterface
+class TextFormatter implements \Cake\Error\Debug\FormatterInterface
 {
     /**
      * @inheritDoc
@@ -44,23 +43,19 @@ TEXT;
         if (isset($location['file'], $location['file'])) {
             $lineInfo = sprintf('%s (line %s)', $location['file'], $location['line']);
         }
-
         return sprintf($template, $lineInfo, $contents);
     }
-
     /**
      * Convert a tree of NodeInterface objects into a plain text string.
      *
      * @param \Cake\Error\Debug\NodeInterface $node The node tree to dump.
      * @return string
      */
-    public function dump(NodeInterface $node): string
+    public function dump(\Cake\Error\Debug\NodeInterface $node): string
     {
         $indent = 0;
-
         return $this->export($node, $indent);
     }
-
     /**
      * Convert a tree of NodeInterface objects into a plain text string.
      *
@@ -68,9 +63,9 @@ TEXT;
      * @param int $indent The current indentation level.
      * @return string
      */
-    protected function export(NodeInterface $var, int $indent): string
+    protected function export(\Cake\Error\Debug\NodeInterface $var, int $indent): string
     {
-        if ($var instanceof ScalarNode) {
+        if ($var instanceof \Cake\Error\Debug\ScalarNode) {
             return match ($var->getType()) {
                 'bool' => $var->getValue() ? 'true' : 'false',
                 'null' => 'null',
@@ -78,18 +73,17 @@ TEXT;
                 default => "({$var->getType()}) {$var->getValue()}",
             };
         }
-        if ($var instanceof ArrayNode) {
+        if ($var instanceof \Cake\Error\Debug\ArrayNode) {
             return $this->exportArray($var, $indent + 1);
         }
-        if ($var instanceof ClassNode || $var instanceof ReferenceNode) {
+        if ($var instanceof \Cake\Error\Debug\ClassNode || $var instanceof \Cake\Error\Debug\ReferenceNode) {
             return $this->exportObject($var, $indent + 1);
         }
-        if ($var instanceof SpecialNode) {
+        if ($var instanceof \Cake\Error\Debug\SpecialNode) {
             return $var->getValue();
         }
         throw new InvalidArgumentException('Unknown node received ' . $var::class);
     }
-
     /**
      * Export an array type object
      *
@@ -97,13 +91,12 @@ TEXT;
      * @param int $indent The current indentation level.
      * @return string Exported array.
      */
-    protected function exportArray(ArrayNode $var, int $indent): string
+    protected function exportArray(\Cake\Error\Debug\ArrayNode $var, int $indent): string
     {
         $out = '[';
         $break = "\n" . str_repeat('  ', $indent);
         $end = "\n" . str_repeat('  ', $indent - 1);
         $vars = [];
-
         foreach ($var->getChildren() as $item) {
             $val = $item->getValue();
             $vars[] = $break . $this->export($item->getKey(), $indent) . ' => ' . $this->export($val, $indent);
@@ -111,10 +104,8 @@ TEXT;
         if ($vars !== []) {
             return $out . implode(',', $vars) . $end . ']';
         }
-
         return $out . ']';
     }
-
     /**
      * Handles object to string conversion.
      *
@@ -123,19 +114,16 @@ TEXT;
      * @return string
      * @see \Cake\Error\Debugger::exportVar()
      */
-    protected function exportObject(ClassNode|ReferenceNode $var, int $indent): string
+    protected function exportObject(\Cake\Error\Debug\ClassNode|\Cake\Error\Debug\ReferenceNode $var, int $indent): string
     {
         $out = '';
         $props = [];
-
-        if ($var instanceof ReferenceNode) {
+        if ($var instanceof \Cake\Error\Debug\ReferenceNode) {
             return "object({$var->getValue()}) id:{$var->getId()} {}";
         }
-
         $out .= "object({$var->getValue()}) id:{$var->getId()} {";
         $break = "\n" . str_repeat('  ', $indent);
         $end = "\n" . str_repeat('  ', $indent - 1) . '}';
-
         foreach ($var->getChildren() as $property) {
             $visibility = $property->getVisibility();
             $name = $property->getName();
@@ -148,7 +136,6 @@ TEXT;
         if ($props !== []) {
             return $out . $break . implode($break, $props) . $end;
         }
-
         return $out . '}';
     }
 }

@@ -1,11 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\DBAL\Schema;
 
 use Doctrine\DBAL\Schema\Exception\InvalidState;
-
 /**
  * An abstract {@see OptionallyNamedObject}.
  *
@@ -13,7 +11,7 @@ use Doctrine\DBAL\Schema\Exception\InvalidState;
  * @extends AbstractAsset<N>
  * @implements OptionallyNamedObject<N>
  */
-abstract class AbstractOptionallyNamedObject extends AbstractAsset implements OptionallyNamedObject
+abstract class AbstractOptionallyNamedObject extends \Doctrine\DBAL\Schema\AbstractAsset implements \Doctrine\DBAL\Schema\OptionallyNamedObject
 {
     /**
      * The name of the database object.
@@ -23,23 +21,19 @@ abstract class AbstractOptionallyNamedObject extends AbstractAsset implements Op
      *
      * @var ?N
      */
-    protected ?Name $name;
-
+    protected ?\Doctrine\DBAL\Schema\Name $name;
     public function __construct(?string $name)
     {
         parent::__construct($name ?? '');
     }
-
-    public function getObjectName(): ?Name
+    public function getObjectName(): ?\Doctrine\DBAL\Schema\Name
     {
-        if (! $this->isNameInitialized) {
+        if (!$this->isNameInitialized) {
             throw InvalidState::objectNameNotInitialized();
         }
-
         return $this->name;
     }
-
-    protected function setName(?Name $name): void
+    protected function setName(?\Doctrine\DBAL\Schema\Name $name): void
     {
         $this->name = $name;
     }

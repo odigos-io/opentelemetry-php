@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -21,7 +21,6 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-
 /**
  * Sets the runtime default locale for the request based on the
  * Accept-Language header. The default will only be set if it
@@ -35,7 +34,6 @@ class LocaleSelectorMiddleware implements MiddlewareInterface
      * @var array
      */
     protected array $locales = [];
-
     /**
      * Constructor.
      *
@@ -46,7 +44,6 @@ class LocaleSelectorMiddleware implements MiddlewareInterface
     {
         $this->locales = $locales;
     }
-
     /**
      * Set locale based on request headers.
      *
@@ -61,12 +58,11 @@ class LocaleSelectorMiddleware implements MiddlewareInterface
             return $handler->handle($request);
         }
         if ($this->locales !== ['*']) {
-            $locale = Locale::lookup($this->locales, $locale, true);
+            $locale = Locale::lookup($this->locales, $locale, \true);
         }
         if ($locale) {
             I18n::setLocale($locale);
         }
-
         return $handler->handle($request);
     }
 }

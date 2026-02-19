@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -21,7 +21,6 @@ use Cake\Core\Exception\CakeException;
 use Cake\Datasource\EntityInterface;
 use Cake\Form\Form;
 use Cake\Http\ServerRequest;
-
 /**
  * Factory for getting form context instance based on provided data.
  */
@@ -33,7 +32,6 @@ class ContextFactory
      * @var array<string, array>
      */
     protected array $providers = [];
-
     /**
      * Constructor.
      *
@@ -46,7 +44,6 @@ class ContextFactory
             $this->addProvider($provider['type'], $provider['callable']);
         }
     }
-
     /**
      * Create factory instance with providers "array", "form" and "orm".
      *
@@ -56,55 +53,35 @@ class ContextFactory
      */
     public static function createWithDefaults(array $providers = []): static
     {
-        $providers = [
-            [
-                'type' => 'orm',
-                'callable' => function ($request, $data) {
-                    if ($data['entity'] instanceof EntityInterface) {
-                        return new EntityContext($data);
-                    }
-                    if (isset($data['table'])) {
-                        return new EntityContext($data);
-                    }
-                    if (is_iterable($data['entity'])) {
-                        $pass = (new Collection($data['entity']))->first() !== null;
-                        if ($pass) {
-                            return new EntityContext($data);
-                        }
-
-                        return new NullContext($data);
-                    }
-                },
-            ],
-            [
-                'type' => 'form',
-                'callable' => function ($request, $data) {
-                    if ($data['entity'] instanceof Form) {
-                        return new FormContext($data);
-                    }
-                },
-            ],
-            [
-                'type' => 'array',
-                'callable' => function ($request, $data) {
-                    if (is_array($data['entity']) && isset($data['entity']['schema'])) {
-                        return new ArrayContext($data['entity']);
-                    }
-                },
-            ],
-            [
-                'type' => 'null',
-                'callable' => function ($request, $data) {
-                    if ($data['entity'] === null) {
-                        return new NullContext($data);
-                    }
-                },
-            ],
-        ] + $providers;
-
+        $providers = [['type' => 'orm', 'callable' => function ($request, $data) {
+            if ($data['entity'] instanceof EntityInterface) {
+                return new \Cake\View\Form\EntityContext($data);
+            }
+            if (isset($data['table'])) {
+                return new \Cake\View\Form\EntityContext($data);
+            }
+            if (is_iterable($data['entity'])) {
+                $pass = (new Collection($data['entity']))->first() !== null;
+                if ($pass) {
+                    return new \Cake\View\Form\EntityContext($data);
+                }
+                return new \Cake\View\Form\NullContext($data);
+            }
+        }], ['type' => 'form', 'callable' => function ($request, $data) {
+            if ($data['entity'] instanceof Form) {
+                return new \Cake\View\Form\FormContext($data);
+            }
+        }], ['type' => 'array', 'callable' => function ($request, $data) {
+            if (is_array($data['entity']) && isset($data['entity']['schema'])) {
+                return new \Cake\View\Form\ArrayContext($data['entity']);
+            }
+        }], ['type' => 'null', 'callable' => function ($request, $data) {
+            if ($data['entity'] === null) {
+                return new \Cake\View\Form\NullContext($data);
+            }
+        }]] + $providers;
         return new static($providers);
     }
-
     /**
      * Add a new context type.
      *
@@ -122,12 +99,9 @@ class ContextFactory
      */
     public function addProvider(string $type, callable $check)
     {
-        $this->providers = [$type => ['type' => $type, 'callable' => $check]]
-            + $this->providers;
-
+        $this->providers = [$type => ['type' => $type, 'callable' => $check]] + $this->providers;
         return $this;
     }
-
     /**
      * Find the matching context for the data.
      *
@@ -138,10 +112,9 @@ class ContextFactory
      * @return \Cake\View\Form\ContextInterface Context provider.
      * @throws \Cake\Core\Exception\CakeException When a context instance cannot be generated for given entity.
      */
-    public function get(ServerRequest $request, array $data = []): ContextInterface
+    public function get(ServerRequest $request, array $data = []): \Cake\View\Form\ContextInterface
     {
         $data += ['entity' => null];
-
         $context = null;
         foreach ($this->providers as $provider) {
             $check = $provider['callable'];
@@ -150,15 +123,9 @@ class ContextFactory
                 break;
             }
         }
-
         if ($context === null) {
-            throw new CakeException(sprintf(
-                'No context provider found for value of type `%s`.'
-                . ' Use `null` as 1st argument of FormHelper::create() to create a context-less form.',
-                get_debug_type($data['entity']),
-            ));
+            throw new CakeException(sprintf('No context provider found for value of type `%s`.' . ' Use `null` as 1st argument of FormHelper::create() to create a context-less form.', get_debug_type($data['entity'])));
         }
-
         return $context;
     }
 }

@@ -1,16 +1,15 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\db\conditions;
 
 use yii\db\ExpressionBuilderInterface;
 use yii\db\ExpressionBuilderTrait;
 use yii\db\ExpressionInterface;
-
 /**
  * Class NotConditionBuilder builds objects of [[SimpleCondition]]
  *
@@ -20,8 +19,6 @@ use yii\db\ExpressionInterface;
 class SimpleConditionBuilder implements ExpressionBuilderInterface
 {
     use ExpressionBuilderTrait;
-
-
     /**
      * Method builds the raw SQL from the $expression that will not be additionally
      * escaped or quoted.
@@ -35,21 +32,18 @@ class SimpleConditionBuilder implements ExpressionBuilderInterface
         $operator = $expression->getOperator();
         $column = $expression->getColumn();
         $value = $expression->getValue();
-
         if ($column instanceof ExpressionInterface) {
             $column = $this->queryBuilder->buildExpression($column, $params);
-        } elseif (is_string($column) && strpos($column, '(') === false) {
+        } elseif (is_string($column) && strpos($column, '(') === \false) {
             $column = $this->queryBuilder->db->quoteColumnName($column);
         }
-
         if ($value === null) {
-            return "$column $operator NULL";
+            return "{$column} {$operator} NULL";
         }
         if ($value instanceof ExpressionInterface) {
-            return "$column $operator {$this->queryBuilder->buildExpression($value, $params)}";
+            return "{$column} {$operator} {$this->queryBuilder->buildExpression($value, $params)}";
         }
-
         $phName = $this->queryBuilder->bindParam($value, $params);
-        return "$column $operator $phName";
+        return "{$column} {$operator} {$phName}";
     }
 }

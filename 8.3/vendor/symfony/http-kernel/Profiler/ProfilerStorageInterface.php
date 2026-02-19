@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\HttpKernel\Profiler;
 
 /**
@@ -36,19 +35,16 @@ interface ProfilerStorageInterface
      * @param \Closure|null $filter     A filter to apply on the list of tokens
      */
     public function find(?string $ip, ?string $url, ?int $limit, ?string $method, ?int $start = null, ?int $end = null, ?string $statusCode = null, ?\Closure $filter = null): array;
-
     /**
      * Reads data associated with the given token.
      *
      * The method returns false if the token does not exist in the storage.
      */
-    public function read(string $token): ?Profile;
-
+    public function read(string $token): ?\Symfony\Component\HttpKernel\Profiler\Profile;
     /**
      * Saves a Profile.
      */
-    public function write(Profile $profile): bool;
-
+    public function write(\Symfony\Component\HttpKernel\Profiler\Profile $profile): bool;
     /**
      * Purges all data from the database.
      */

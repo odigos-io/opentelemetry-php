@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\HttpKernel\Log;
 
 use Symfony\Component\HttpFoundation\Request;
-
 /**
  * DebugLoggerInterface.
  *
@@ -34,12 +32,10 @@ interface DebugLoggerInterface
      * }>
      */
     public function getLogs(?Request $request = null): array;
-
     /**
      * Returns the number of errors.
      */
     public function countErrors(?Request $request = null): int;
-
     /**
      * Removes all log records.
      */

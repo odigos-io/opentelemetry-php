@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\SDK\Common\InstrumentationScope;
 
 use Closure;
@@ -10,7 +9,6 @@ use OpenTelemetry\SDK\Logs\LoggerConfig;
 use OpenTelemetry\SDK\Metrics\MeterConfig;
 use OpenTelemetry\SDK\Trace\TracerConfig;
 use WeakMap;
-
 /**
  * @template T
  */
@@ -22,7 +20,6 @@ final class Configurator
     private WeakMap $configs;
     /** @var list<ConfiguratorClosure> */
     private array $configurators = [];
-
     /**
      * @param Closure(InstrumentationScopeInterface): T $factory
      * @psalm-suppress PropertyTypeCoercion
@@ -32,74 +29,62 @@ final class Configurator
         $this->configs = new WeakMap();
         $this->factory = $factory;
     }
-
     /**
      * @param Closure(T, InstrumentationScopeInterface): void $closure
      */
     public function with(Closure $closure, ?string $name, ?string $version = null, ?string $schemaUrl = null): self
     {
-        $this->configurators[] = $configurator = new ConfiguratorClosure($closure, self::namePattern($name), $version, $schemaUrl);
-
+        $this->configurators[] = $configurator = new \OpenTelemetry\SDK\Common\InstrumentationScope\ConfiguratorClosure($closure, self::namePattern($name), $version, $schemaUrl);
         foreach ($this->configs as $instrumentationScope => $config) {
             if ($configurator->matches($instrumentationScope)) {
                 ($configurator->closure)($config, $instrumentationScope);
             }
         }
-
         return $this;
     }
-
     /**
      * @return T
      * @psalm-suppress PossiblyNullArgument
      */
-    public function resolve(InstrumentationScopeInterface $instrumentationScope): Config
+    public function resolve(InstrumentationScopeInterface $instrumentationScope): \OpenTelemetry\SDK\Common\InstrumentationScope\Config
     {
         if ($config = $this->configs[$instrumentationScope] ?? null) {
             return $config;
         }
-
         $config = ($this->factory)($instrumentationScope);
         foreach ($this->configurators as $configurator) {
             if ($configurator->matches($instrumentationScope)) {
                 ($configurator->closure)($config, $instrumentationScope);
             }
         }
-
         return $this->configs[$instrumentationScope] ??= $config;
     }
-
     /**
      * Create a default Configurator for a LoggerConfig
      * @return Configurator<LoggerConfig>
      */
     public static function logger(): self
     {
-        return (new Configurator(static fn () => new LoggerConfig()));
+        return new \OpenTelemetry\SDK\Common\InstrumentationScope\Configurator(static fn() => new LoggerConfig());
     }
-
     /**
      * Create a default Configurator for a MeterConfig
      * @return Configurator<MeterConfig>
      */
     public static function meter(): self
     {
-        return (new Configurator(static fn () => new MeterConfig()));
+        return new \OpenTelemetry\SDK\Common\InstrumentationScope\Configurator(static fn() => new MeterConfig());
     }
-
     /**
      * Create a default Configurator for a TracerConfig
      * @return Configurator<TracerConfig>
      */
     public static function tracer(): self
     {
-        return (new Configurator(static fn () => new TracerConfig()));
+        return new \OpenTelemetry\SDK\Common\InstrumentationScope\Configurator(static fn() => new TracerConfig());
     }
-
     private static function namePattern(?string $name): ?string
     {
-        return $name !== null
-            ? sprintf('/^%s$/', strtr(preg_quote($name, '/'), ['\\?' => '.', '\\*' => '.*']))
-            : null;
+        return $name !== null ? sprintf('/^%s$/', strtr(preg_quote($name, '/'), ['\?' => '.', '\*' => '.*'])) : null;
     }
 }

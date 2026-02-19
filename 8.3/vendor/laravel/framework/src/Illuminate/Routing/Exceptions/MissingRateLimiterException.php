@@ -3,7 +3,6 @@
 namespace Illuminate\Routing\Exceptions;
 
 use Exception;
-
 class MissingRateLimiterException extends Exception
 {
     /**
@@ -16,7 +15,6 @@ class MissingRateLimiterException extends Exception
     {
         return new static("Rate limiter [{$limiter}] is not defined.");
     }
-
     /**
      * Create a new exception for an invalid rate limiter based on a model property.
      *

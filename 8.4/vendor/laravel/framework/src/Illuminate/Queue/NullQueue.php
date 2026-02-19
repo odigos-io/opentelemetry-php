@@ -3,8 +3,7 @@
 namespace Illuminate\Queue;
 
 use Illuminate\Contracts\Queue\Queue as QueueContract;
-
-class NullQueue extends Queue implements QueueContract
+class NullQueue extends \Illuminate\Queue\Queue implements QueueContract
 {
     /**
      * Get the size of the queue.
@@ -16,7 +15,6 @@ class NullQueue extends Queue implements QueueContract
     {
         return 0;
     }
-
     /**
      * Get the number of pending jobs.
      *
@@ -27,7 +25,6 @@ class NullQueue extends Queue implements QueueContract
     {
         return 0;
     }
-
     /**
      * Get the number of delayed jobs.
      *
@@ -38,7 +35,6 @@ class NullQueue extends Queue implements QueueContract
     {
         return 0;
     }
-
     /**
      * Get the number of reserved jobs.
      *
@@ -49,7 +45,6 @@ class NullQueue extends Queue implements QueueContract
     {
         return 0;
     }
-
     /**
      * Get the creation timestamp of the oldest pending job, excluding delayed jobs.
      *
@@ -60,7 +55,6 @@ class NullQueue extends Queue implements QueueContract
     {
         return null;
     }
-
     /**
      * Push a new job onto the queue.
      *
@@ -73,7 +67,6 @@ class NullQueue extends Queue implements QueueContract
     {
         //
     }
-
     /**
      * Push a raw payload onto the queue.
      *
@@ -86,7 +79,6 @@ class NullQueue extends Queue implements QueueContract
     {
         //
     }
-
     /**
      * Push a new job onto the queue after (n) seconds.
      *
@@ -100,7 +92,6 @@ class NullQueue extends Queue implements QueueContract
     {
         //
     }
-
     /**
      * Pop the next job off of the queue.
      *

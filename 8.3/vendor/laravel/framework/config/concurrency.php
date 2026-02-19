@@ -1,7 +1,8 @@
 <?php
 
-return [
+namespace Odigos;
 
+return [
     /*
     |--------------------------------------------------------------------------
     | Default Concurrency Driver
@@ -14,7 +15,5 @@ return [
     | Supported: "process", "fork", "sync"
     |
     */
-
     'default' => env('CONCURRENCY_DRIVER', 'process'),
-
 ];

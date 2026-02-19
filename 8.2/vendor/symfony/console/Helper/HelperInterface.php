@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\Console\Helper;
 
 /**
@@ -21,13 +20,11 @@ interface HelperInterface
     /**
      * Sets the helper set associated with this helper.
      */
-    public function setHelperSet(?HelperSet $helperSet): void;
-
+    public function setHelperSet(?\Symfony\Component\Console\Helper\HelperSet $helperSet): void;
     /**
      * Gets the helper set associated with this helper.
      */
-    public function getHelperSet(): ?HelperSet;
-
+    public function getHelperSet(): ?\Symfony\Component\Console\Helper\HelperSet;
     /**
      * Returns the canonical name of this helper.
      */

@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenAI\Resources;
 
 use OpenAI\Contracts\Resources\ContainerFileContract;
@@ -12,7 +11,6 @@ use OpenAI\Responses\Containers\ListContainers;
 use OpenAI\Responses\Containers\RetrieveContainer;
 use OpenAI\ValueObjects\Transporter\Payload;
 use OpenAI\ValueObjects\Transporter\Response;
-
 /**
  * @phpstan-import-type CreateContainerType from CreateContainer
  * @phpstan-import-type RetrieveContainerType from RetrieveContainer
@@ -21,8 +19,7 @@ use OpenAI\ValueObjects\Transporter\Response;
  */
 final class Containers implements ContainersContract
 {
-    use Concerns\Transportable;
-
+    use \OpenAI\Resources\Concerns\Transportable;
     /**
      * Creates a container for use with the Code Interpreter tool.
      *
@@ -33,13 +30,10 @@ final class Containers implements ContainersContract
     public function create(array $parameters): CreateContainer
     {
         $payload = Payload::create('containers', $parameters);
-
         /** @var Response<CreateContainerType> $response */
         $response = $this->transporter->requestObject($payload);
-
         return CreateContainer::from($response->data(), $response->meta());
     }
-
     /**
      * Retrieves a container with the given ID.
      *
@@ -48,13 +42,10 @@ final class Containers implements ContainersContract
     public function retrieve(string $id): RetrieveContainer
     {
         $payload = Payload::retrieve('containers', $id);
-
         /** @var Response<RetrieveContainerType> $response */
         $response = $this->transporter->requestObject($payload);
-
         return RetrieveContainer::from($response->data(), $response->meta());
     }
-
     /**
      * Delete a container with the given ID.
      *
@@ -63,13 +54,10 @@ final class Containers implements ContainersContract
     public function delete(string $id): DeleteContainer
     {
         $payload = Payload::delete('containers', $id);
-
         /** @var Response<DeleteContainerType> $response */
         $response = $this->transporter->requestObject($payload);
-
         return DeleteContainer::from($response->data(), $response->meta());
     }
-
     /**
      * List containers
      *
@@ -80,13 +68,10 @@ final class Containers implements ContainersContract
     public function list(array $parameters = []): ListContainers
     {
         $payload = Payload::list('containers', $parameters);
-
         /** @var Response<ListContainersType> $response */
         $response = $this->transporter->requestObject($payload);
-
         return ListContainers::from($response->data(), $response->meta());
     }
-
     /**
      * Manage the files related to the container.
      *
@@ -94,6 +79,6 @@ final class Containers implements ContainersContract
      */
     public function files(): ContainerFileContract
     {
-        return new ContainerFile($this->transporter);
+        return new \OpenAI\Resources\ContainerFile($this->transporter);
     }
 }

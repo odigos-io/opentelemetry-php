@@ -1,5 +1,7 @@
 <?php
 
+namespace Odigos;
+
 /**
  * Pre-transform that changes deprecated border attribute to CSS.
  */
@@ -22,5 +24,8 @@ class HTMLPurifier_AttrTransform_Border extends HTMLPurifier_AttrTransform
         return $attr;
     }
 }
-
+/**
+ * Pre-transform that changes deprecated border attribute to CSS.
+ */
+\class_alias('Odigos\HTMLPurifier_AttrTransform_Border', 'HTMLPurifier_AttrTransform_Border', \false);
 // vim: et sw=4 sts=4

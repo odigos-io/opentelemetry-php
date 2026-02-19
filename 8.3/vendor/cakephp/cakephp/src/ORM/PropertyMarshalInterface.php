@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -32,5 +32,5 @@ interface PropertyMarshalInterface
      * @param array<string, mixed> $options The options array used in the marshaling call.
      * @return array<string, callable> A map of `[property => callable]` of additional properties to marshal.
      */
-    public function buildMarshalMap(Marshaller $marshaller, array $map, array $options): array;
+    public function buildMarshalMap(\Cake\ORM\Marshaller $marshaller, array $map, array $options): array;
 }

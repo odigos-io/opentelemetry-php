@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\Mime;
 
 /**
@@ -16,5 +15,5 @@ namespace Symfony\Component\Mime;
  */
 interface BodyRendererInterface
 {
-    public function render(Message $message): void;
+    public function render(\Symfony\Component\Mime\Message $message): void;
 }

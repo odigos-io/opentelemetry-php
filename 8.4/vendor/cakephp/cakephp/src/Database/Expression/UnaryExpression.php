@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -19,7 +19,6 @@ namespace Cake\Database\Expression;
 use Cake\Database\ExpressionInterface;
 use Cake\Database\ValueBinder;
 use Closure;
-
 /**
  * An expression object that represents an expression with only a single operand.
  */
@@ -31,35 +30,30 @@ class UnaryExpression implements ExpressionInterface
      * @var int
      */
     public const PREFIX = 0;
-
     /**
      * Indicates that the operation is in post-order
      *
      * @var int
      */
     public const POSTFIX = 1;
-
     /**
      * The operator this unary expression represents
      *
      * @var string
      */
     protected string $_operator;
-
     /**
      * Holds the value which the unary expression operates
      *
      * @var mixed
      */
     protected mixed $_value;
-
     /**
      * Where to place the operator
      *
      * @var int
      */
     protected int $position;
-
     /**
      * Constructor
      *
@@ -73,7 +67,6 @@ class UnaryExpression implements ExpressionInterface
         $this->_value = $value;
         $this->position = $position;
     }
-
     /**
      * @inheritDoc
      */
@@ -83,14 +76,11 @@ class UnaryExpression implements ExpressionInterface
         if ($operand instanceof ExpressionInterface) {
             $operand = $operand->sql($binder);
         }
-
         if ($this->position === self::POSTFIX) {
             return '(' . $operand . ') ' . $this->_operator;
         }
-
         return $this->_operator . ' (' . $operand . ')';
     }
-
     /**
      * @inheritDoc
      */
@@ -100,10 +90,8 @@ class UnaryExpression implements ExpressionInterface
             $callback($this->_value);
             $this->_value->traverse($callback);
         }
-
         return $this;
     }
-
     /**
      * Perform a deep clone of the inner expression.
      */

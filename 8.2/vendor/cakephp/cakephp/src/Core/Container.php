@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -16,13 +16,12 @@ declare(strict_types=1);
  */
 namespace Cake\Core;
 
-use League\Container\Container as LeagueContainer;
-
+use Odigos\League\Container\Container as LeagueContainer;
 /**
  * Dependency Injection container
  *
  * Based on the container out of League\Container
  */
-class Container extends LeagueContainer implements ContainerInterface
+class Container extends LeagueContainer implements \Cake\Core\ContainerInterface
 {
 }

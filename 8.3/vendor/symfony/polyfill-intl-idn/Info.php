@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Polyfill\Intl\Idn;
 
 /**
@@ -16,8 +15,8 @@ namespace Symfony\Polyfill\Intl\Idn;
  */
 class Info
 {
-    public $bidiDomain = false;
+    public $bidiDomain = \false;
     public $errors = 0;
-    public $validBidiDomain = true;
-    public $transitionalDifferent = false;
+    public $validBidiDomain = \true;
+    public $transitionalDifferent = \false;
 }

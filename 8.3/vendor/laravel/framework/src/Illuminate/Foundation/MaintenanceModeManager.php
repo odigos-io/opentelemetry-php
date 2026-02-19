@@ -3,7 +3,6 @@
 namespace Illuminate\Foundation;
 
 use Illuminate\Support\Manager;
-
 class MaintenanceModeManager extends Manager
 {
     /**
@@ -11,11 +10,10 @@ class MaintenanceModeManager extends Manager
      *
      * @return \Illuminate\Foundation\FileBasedMaintenanceMode
      */
-    protected function createFileDriver(): FileBasedMaintenanceMode
+    protected function createFileDriver(): \Illuminate\Foundation\FileBasedMaintenanceMode
     {
-        return new FileBasedMaintenanceMode();
+        return new \Illuminate\Foundation\FileBasedMaintenanceMode();
     }
-
     /**
      * Create an instance of the cache based maintenance driver.
      *
@@ -23,15 +21,10 @@ class MaintenanceModeManager extends Manager
      *
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
-    protected function createCacheDriver(): CacheBasedMaintenanceMode
+    protected function createCacheDriver(): \Illuminate\Foundation\CacheBasedMaintenanceMode
     {
-        return new CacheBasedMaintenanceMode(
-            $this->container->make('cache'),
-            $this->config->get('app.maintenance.store') ?: $this->config->get('cache.default'),
-            'illuminate:foundation:down'
-        );
+        return new \Illuminate\Foundation\CacheBasedMaintenanceMode($this->container->make('cache'), $this->config->get('app.maintenance.store') ?: $this->config->get('cache.default'), 'illuminate:foundation:down');
     }
-
     /**
      * Get the default driver name.
      *

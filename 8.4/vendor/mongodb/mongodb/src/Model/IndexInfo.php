@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright 2015-present MongoDB, Inc.
  *
@@ -14,15 +15,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 namespace MongoDB\Model;
 
 use ArrayAccess;
 use MongoDB\Exception\BadMethodCallException;
-
 use function array_key_exists;
 use function array_search;
-
 /**
  * Index information model class.
  *
@@ -44,7 +42,6 @@ class IndexInfo implements ArrayAccess
     public function __construct(private array $info)
     {
     }
-
     /**
      * Return the collection info as an array.
      *
@@ -54,7 +51,6 @@ class IndexInfo implements ArrayAccess
     {
         return $this->info;
     }
-
     /**
      * Return the index name to allow casting IndexInfo to string.
      */
@@ -62,7 +58,6 @@ class IndexInfo implements ArrayAccess
     {
         return $this->getName();
     }
-
     /**
      * Return the index key.
      */
@@ -70,7 +65,6 @@ class IndexInfo implements ArrayAccess
     {
         return (array) $this->info['key'];
     }
-
     /**
      * Return the index name.
      */
@@ -78,7 +72,6 @@ class IndexInfo implements ArrayAccess
     {
         return (string) $this->info['name'];
     }
-
     /**
      * Return the index version.
      */
@@ -86,15 +79,13 @@ class IndexInfo implements ArrayAccess
     {
         return (int) $this->info['v'];
     }
-
     /**
      * Return whether or not this index is of type 2dsphere.
      */
     public function is2dSphere(): bool
     {
-        return array_search('2dsphere', $this->getKey(), true) !== false;
+        return array_search('2dsphere', $this->getKey(), \true) !== \false;
     }
-
     /**
      * Return whether this is a sparse index.
      *
@@ -102,17 +93,15 @@ class IndexInfo implements ArrayAccess
      */
     public function isSparse(): bool
     {
-        return ! empty($this->info['sparse']);
+        return !empty($this->info['sparse']);
     }
-
     /**
      * Return whether or not this index is of type text.
      */
     public function isText(): bool
     {
-        return array_search('text', $this->getKey(), true) !== false;
+        return array_search('text', $this->getKey(), \true) !== \false;
     }
-
     /**
      * Return whether this is a TTL index.
      *
@@ -122,7 +111,6 @@ class IndexInfo implements ArrayAccess
     {
         return array_key_exists('expireAfterSeconds', $this->info);
     }
-
     /**
      * Return whether this is a unique index.
      *
@@ -130,9 +118,8 @@ class IndexInfo implements ArrayAccess
      */
     public function isUnique(): bool
     {
-        return ! empty($this->info['unique']);
+        return !empty($this->info['unique']);
     }
-
     /**
      * Check whether a field exists in the index information.
      *
@@ -143,7 +130,6 @@ class IndexInfo implements ArrayAccess
     {
         return array_key_exists($offset, $this->info);
     }
-
     /**
      * Return the field's value from the index information.
      *
@@ -159,7 +145,6 @@ class IndexInfo implements ArrayAccess
     {
         return $this->info[$offset];
     }
-
     /**
      * Not supported.
      *
@@ -170,7 +155,6 @@ class IndexInfo implements ArrayAccess
     {
         throw BadMethodCallException::classIsImmutable(self::class);
     }
-
     /**
      * Not supported.
      *

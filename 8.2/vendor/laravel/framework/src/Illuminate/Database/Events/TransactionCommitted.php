@@ -2,7 +2,7 @@
 
 namespace Illuminate\Database\Events;
 
-class TransactionCommitted extends ConnectionEvent
+class TransactionCommitted extends \Illuminate\Database\Events\ConnectionEvent
 {
     //
 }

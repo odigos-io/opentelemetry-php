@@ -1,5 +1,6 @@
-<?php declare(strict_types=1);
+<?php
 
+declare (strict_types=1);
 /*
  * This file is part of the Monolog package.
  *
@@ -8,15 +9,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Odigos\Monolog\Handler;
 
-namespace Monolog\Handler;
-
-use Monolog\Level;
-use Monolog\Utils;
-use Monolog\Formatter\FlowdockFormatter;
-use Monolog\Formatter\FormatterInterface;
-use Monolog\LogRecord;
-
+use Odigos\Monolog\Level;
+use Odigos\Monolog\Utils;
+use Odigos\Monolog\Formatter\FlowdockFormatter;
+use Odigos\Monolog\Formatter\FormatterInterface;
+use Odigos\Monolog\LogRecord;
 /**
  * Sends notifications through the Flowdock push API
  *
@@ -32,37 +31,17 @@ use Monolog\LogRecord;
 class FlowdockHandler extends SocketHandler
 {
     protected string $apiToken;
-
     /**
      * @throws MissingExtensionException if OpenSSL is missing
      */
-    public function __construct(
-        string $apiToken,
-        $level = Level::Debug,
-        bool $bubble = true,
-        bool $persistent = false,
-        float $timeout = 0.0,
-        float $writingTimeout = 10.0,
-        ?float $connectionTimeout = null,
-        ?int $chunkSize = null
-    ) {
+    public function __construct(string $apiToken, $level = Level::Debug, bool $bubble = \true, bool $persistent = \false, float $timeout = 0.0, float $writingTimeout = 10.0, ?float $connectionTimeout = null, ?int $chunkSize = null)
+    {
         if (!\extension_loaded('openssl')) {
             throw new MissingExtensionException('The OpenSSL PHP extension is required to use the FlowdockHandler');
         }
-
-        parent::__construct(
-            'ssl://api.flowdock.com:443',
-            $level,
-            $bubble,
-            $persistent,
-            $timeout,
-            $writingTimeout,
-            $connectionTimeout,
-            $chunkSize
-        );
+        parent::__construct('ssl://api.flowdock.com:443', $level, $bubble, $persistent, $timeout, $writingTimeout, $connectionTimeout, $chunkSize);
         $this->apiToken = $apiToken;
     }
-
     /**
      * @inheritDoc
      */
@@ -71,10 +50,8 @@ class FlowdockHandler extends SocketHandler
         if (!$formatter instanceof FlowdockFormatter) {
             throw new \InvalidArgumentException('The FlowdockHandler requires an instance of Monolog\Formatter\FlowdockFormatter to function correctly');
         }
-
         return parent::setFormatter($formatter);
     }
-
     /**
      * Gets the default formatter.
      */
@@ -82,27 +59,22 @@ class FlowdockHandler extends SocketHandler
     {
         throw new \InvalidArgumentException('The FlowdockHandler must be configured (via setFormatter) with an instance of Monolog\Formatter\FlowdockFormatter to function correctly');
     }
-
     /**
      * @inheritDoc
      */
     protected function write(LogRecord $record): void
     {
         parent::write($record);
-
         $this->closeSocket();
     }
-
     /**
      * @inheritDoc
      */
     protected function generateDataStream(LogRecord $record): string
     {
         $content = $this->buildContent($record);
-
         return $this->buildHeader($content) . $content;
     }
-
     /**
      * Builds the body of API call
      */
@@ -110,7 +82,6 @@ class FlowdockHandler extends SocketHandler
     {
         return Utils::jsonEncode($record->formatted);
     }
-
     /**
      * Builds the header of the API Call
      */
@@ -121,7 +92,6 @@ class FlowdockHandler extends SocketHandler
         $header .= "Content-Type: application/json\r\n";
         $header .= "Content-Length: " . \strlen($content) . "\r\n";
         $header .= "\r\n";
-
         return $header;
     }
 }

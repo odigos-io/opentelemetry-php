@@ -1,5 +1,6 @@
-<?php declare(strict_types=1);
+<?php
 
+declare (strict_types=1);
 /*
  * This file is part of the Monolog package.
  *
@@ -8,11 +9,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Odigos\Monolog\Handler;
 
-namespace Monolog\Handler;
-
-use Monolog\LogRecord;
-
+use Odigos\Monolog\LogRecord;
 /**
  * Base Handler class providing the Handler structure, including processors and formatters
  *
@@ -25,36 +24,28 @@ abstract class AbstractProcessingHandler extends AbstractHandler implements Proc
 {
     use ProcessableHandlerTrait;
     use FormattableHandlerTrait;
-
     /**
      * @inheritDoc
      */
     public function handle(LogRecord $record): bool
     {
         if (!$this->isHandling($record)) {
-            return false;
+            return \false;
         }
-
         if (\count($this->processors) > 0) {
             $record = $this->processRecord($record);
         }
-
         $record->formatted = $this->getFormatter()->format($record);
-
         $this->write($record);
-
-        return false === $this->bubble;
+        return \false === $this->bubble;
     }
-
     /**
      * Writes the (already formatted) record down to the log of the implementing handler
      */
     abstract protected function write(LogRecord $record): void;
-
     public function reset(): void
     {
         parent::reset();
-
         $this->resetProcessors();
     }
 }

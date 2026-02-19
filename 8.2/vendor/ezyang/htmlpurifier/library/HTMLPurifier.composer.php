@@ -1,4 +1,7 @@
 <?php
-if (!defined('HTMLPURIFIER_PREFIX')) {
-    define('HTMLPURIFIER_PREFIX', dirname(__FILE__));
+
+namespace Odigos;
+
+if (!\defined('HTMLPURIFIER_PREFIX')) {
+    \define('HTMLPURIFIER_PREFIX', \dirname(__FILE__));
 }

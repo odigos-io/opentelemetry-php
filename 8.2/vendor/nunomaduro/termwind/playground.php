@@ -1,9 +1,9 @@
 <?php
 
-require_once __DIR__.'/vendor/autoload.php';
+namespace Odigos;
 
-use function Termwind\render;
-
+require_once __DIR__ . '/vendor/autoload.php';
+use function Odigos\Termwind\render;
 render(<<<'HTML'
     <div class="ml-2">
         <pre>
@@ -19,4 +19,5 @@ render(<<<'HTML'
             Create portable PHP CLI applications w/ PHP Micro
         </em>
     </div>
-HTML);
+HTML
+);

@@ -10,14 +10,12 @@ class VendorTagPublished
      * @var string
      */
     public $tag;
-
     /**
      * The publishable paths registered by the tag.
      *
      * @var array
      */
     public $paths;
-
     /**
      * Create a new event instance.
      *

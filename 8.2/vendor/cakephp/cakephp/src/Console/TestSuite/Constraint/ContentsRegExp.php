@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -20,7 +20,7 @@ namespace Cake\Console\TestSuite\Constraint;
  *
  * @internal
  */
-class ContentsRegExp extends ContentsBase
+class ContentsRegExp extends \Cake\Console\TestSuite\Constraint\ContentsBase
 {
     /**
      * Checks if contents contain expected
@@ -32,7 +32,6 @@ class ContentsRegExp extends ContentsBase
     {
         return preg_match($other, $this->contents) > 0;
     }
-
     /**
      * Assertion message
      *
@@ -42,7 +41,6 @@ class ContentsRegExp extends ContentsBase
     {
         return sprintf('PCRE pattern found in %s', $this->output);
     }
-
     /**
      * @param mixed $other Expected
      * @return string
@@ -51,7 +49,6 @@ class ContentsRegExp extends ContentsBase
     {
         return '`' . $other . '` ' . $this->toString();
     }
-
     /**
      * @inheritDoc
      */
@@ -60,10 +57,6 @@ class ContentsRegExp extends ContentsBase
         return sprintf("actual result:\n%s", $this->contents);
     }
 }
-
 // phpcs:disable
-class_alias(
-    'Cake\Console\TestSuite\Constraint\ContentsRegExp',
-    'Cake\TestSuite\Constraint\Console\ContentsRegExp'
-);
+class_alias('Cake\Console\TestSuite\Constraint\ContentsRegExp', 'Cake\TestSuite\Constraint\Console\ContentsRegExp');
 // phpcs:enable

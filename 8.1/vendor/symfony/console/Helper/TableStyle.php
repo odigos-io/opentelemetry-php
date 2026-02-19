@@ -8,12 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\Console\Helper;
 
 use Symfony\Component\Console\Exception\InvalidArgumentException;
 use Symfony\Component\Console\Exception\LogicException;
-
 /**
  * Defines the styles for a Table.
  *
@@ -47,7 +45,6 @@ class TableStyle
     private string $cellRowContentFormat = ' %s ';
     private string $borderFormat = '%s';
     private int $padType = \STR_PAD_RIGHT;
-
     /**
      * Sets padding character, used for cell padding.
      *
@@ -58,12 +55,9 @@ class TableStyle
         if (!$paddingChar) {
             throw new LogicException('The padding char must not be empty.');
         }
-
         $this->paddingChar = $paddingChar;
-
         return $this;
     }
-
     /**
      * Gets padding character, used for cell padding.
      */
@@ -71,7 +65,6 @@ class TableStyle
     {
         return $this->paddingChar;
     }
-
     /**
      * Sets horizontal border characters.
      *
@@ -93,10 +86,8 @@ class TableStyle
     {
         $this->horizontalOutsideBorderChar = $outside;
         $this->horizontalInsideBorderChar = $inside ?? $outside;
-
         return $this;
     }
-
     /**
      * Sets vertical border characters.
      *
@@ -117,10 +108,8 @@ class TableStyle
     {
         $this->verticalOutsideBorderChar = $outside;
         $this->verticalInsideBorderChar = $inside ?? $outside;
-
         return $this;
     }
-
     /**
      * Gets border characters.
      *
@@ -128,14 +117,8 @@ class TableStyle
      */
     public function getBorderChars(): array
     {
-        return [
-            $this->horizontalOutsideBorderChar,
-            $this->verticalOutsideBorderChar,
-            $this->horizontalInsideBorderChar,
-            $this->verticalInsideBorderChar,
-        ];
+        return [$this->horizontalOutsideBorderChar, $this->verticalOutsideBorderChar, $this->horizontalInsideBorderChar, $this->verticalInsideBorderChar];
     }
-
     /**
      * Sets crossing characters.
      *
@@ -181,10 +164,8 @@ class TableStyle
         $this->crossingTopLeftBottomChar = $topLeftBottom ?? $midLeft;
         $this->crossingTopMidBottomChar = $topMidBottom ?? $cross;
         $this->crossingTopRightBottomChar = $topRightBottom ?? $midRight;
-
         return $this;
     }
-
     /**
      * Sets default crossing character used for each cross.
      *
@@ -194,7 +175,6 @@ class TableStyle
     {
         return $this->setCrossingChars($char, $char, $char, $char, $char, $char, $char, $char, $char);
     }
-
     /**
      * Gets crossing character.
      */
@@ -202,7 +182,6 @@ class TableStyle
     {
         return $this->crossingChar;
     }
-
     /**
      * Gets crossing characters.
      *
@@ -210,22 +189,8 @@ class TableStyle
      */
     public function getCrossingChars(): array
     {
-        return [
-            $this->crossingChar,
-            $this->crossingTopLeftChar,
-            $this->crossingTopMidChar,
-            $this->crossingTopRightChar,
-            $this->crossingMidRightChar,
-            $this->crossingBottomRightChar,
-            $this->crossingBottomMidChar,
-            $this->crossingBottomLeftChar,
-            $this->crossingMidLeftChar,
-            $this->crossingTopLeftBottomChar,
-            $this->crossingTopMidBottomChar,
-            $this->crossingTopRightBottomChar,
-        ];
+        return [$this->crossingChar, $this->crossingTopLeftChar, $this->crossingTopMidChar, $this->crossingTopRightChar, $this->crossingMidRightChar, $this->crossingBottomRightChar, $this->crossingBottomMidChar, $this->crossingBottomLeftChar, $this->crossingMidLeftChar, $this->crossingTopLeftBottomChar, $this->crossingTopMidBottomChar, $this->crossingTopRightBottomChar];
     }
-
     /**
      * Sets header cell format.
      *
@@ -234,10 +199,8 @@ class TableStyle
     public function setCellHeaderFormat(string $cellHeaderFormat): static
     {
         $this->cellHeaderFormat = $cellHeaderFormat;
-
         return $this;
     }
-
     /**
      * Gets header cell format.
      */
@@ -245,7 +208,6 @@ class TableStyle
     {
         return $this->cellHeaderFormat;
     }
-
     /**
      * Sets row cell format.
      *
@@ -254,10 +216,8 @@ class TableStyle
     public function setCellRowFormat(string $cellRowFormat): static
     {
         $this->cellRowFormat = $cellRowFormat;
-
         return $this;
     }
-
     /**
      * Gets row cell format.
      */
@@ -265,7 +225,6 @@ class TableStyle
     {
         return $this->cellRowFormat;
     }
-
     /**
      * Sets row cell content format.
      *
@@ -274,10 +233,8 @@ class TableStyle
     public function setCellRowContentFormat(string $cellRowContentFormat): static
     {
         $this->cellRowContentFormat = $cellRowContentFormat;
-
         return $this;
     }
-
     /**
      * Gets row cell content format.
      */
@@ -285,7 +242,6 @@ class TableStyle
     {
         return $this->cellRowContentFormat;
     }
-
     /**
      * Sets table border format.
      *
@@ -294,10 +250,8 @@ class TableStyle
     public function setBorderFormat(string $borderFormat): static
     {
         $this->borderFormat = $borderFormat;
-
         return $this;
     }
-
     /**
      * Gets table border format.
      */
@@ -305,7 +259,6 @@ class TableStyle
     {
         return $this->borderFormat;
     }
-
     /**
      * Sets cell padding type.
      *
@@ -313,15 +266,12 @@ class TableStyle
      */
     public function setPadType(int $padType): static
     {
-        if (!\in_array($padType, [\STR_PAD_LEFT, \STR_PAD_RIGHT, \STR_PAD_BOTH], true)) {
+        if (!\in_array($padType, [\STR_PAD_LEFT, \STR_PAD_RIGHT, \STR_PAD_BOTH], \true)) {
             throw new InvalidArgumentException('Invalid padding type. Expected one of (STR_PAD_LEFT, STR_PAD_RIGHT, STR_PAD_BOTH).');
         }
-
         $this->padType = $padType;
-
         return $this;
     }
-
     /**
      * Gets cell padding type.
      */
@@ -329,34 +279,28 @@ class TableStyle
     {
         return $this->padType;
     }
-
     public function getHeaderTitleFormat(): string
     {
         return $this->headerTitleFormat;
     }
-
     /**
      * @return $this
      */
     public function setHeaderTitleFormat(string $format): static
     {
         $this->headerTitleFormat = $format;
-
         return $this;
     }
-
     public function getFooterTitleFormat(): string
     {
         return $this->footerTitleFormat;
     }
-
     /**
      * @return $this
      */
     public function setFooterTitleFormat(string $format): static
     {
         $this->footerTitleFormat = $format;
-
         return $this;
     }
 }

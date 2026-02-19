@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -17,7 +17,6 @@ declare(strict_types=1);
 namespace Cake\Collection\Iterator;
 
 use Cake\Collection\Collection;
-
 /**
  * Creates a filtered iterator from another iterator. The filtering is done by
  * passing a callback function to each of the elements and taking them out if
@@ -45,12 +44,11 @@ class UniqueIterator extends Collection
         $uniqueValues = [];
         foreach ($items as $k => $v) {
             $compareValue = $callback($v, $k);
-            if (!in_array($compareValue, $uniqueValues, true)) {
+            if (!in_array($compareValue, $uniqueValues, \true)) {
                 $unique[$k] = $v;
                 $uniqueValues[] = $compareValue;
             }
         }
-
         parent::__construct($unique);
     }
 }

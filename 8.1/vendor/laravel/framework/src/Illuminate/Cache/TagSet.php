@@ -3,7 +3,6 @@
 namespace Illuminate\Cache;
 
 use Illuminate\Contracts\Cache\Store;
-
 class TagSet
 {
     /**
@@ -12,14 +11,12 @@ class TagSet
      * @var \Illuminate\Contracts\Cache\Store
      */
     protected $store;
-
     /**
      * The tag names.
      *
      * @var array
      */
     protected $names = [];
-
     /**
      * Create a new TagSet instance.
      *
@@ -32,7 +29,6 @@ class TagSet
         $this->store = $store;
         $this->names = $names;
     }
-
     /**
      * Reset all tags in the set.
      *
@@ -42,7 +38,6 @@ class TagSet
     {
         array_walk($this->names, [$this, 'resetTag']);
     }
-
     /**
      * Reset the tag and return the new tag identifier.
      *
@@ -51,11 +46,9 @@ class TagSet
      */
     public function resetTag($name)
     {
-        $this->store->forever($this->tagKey($name), $id = str_replace('.', '', uniqid('', true)));
-
+        $this->store->forever($this->tagKey($name), $id = str_replace('.', '', uniqid('', \true)));
         return $id;
     }
-
     /**
      * Flush all the tags in the set.
      *
@@ -65,7 +58,6 @@ class TagSet
     {
         array_walk($this->names, [$this, 'flushTag']);
     }
-
     /**
      * Flush the tag from the cache.
      *
@@ -75,7 +67,6 @@ class TagSet
     {
         $this->store->forget($this->tagKey($name));
     }
-
     /**
      * Get a unique namespace that changes when any of the tags are flushed.
      *
@@ -85,7 +76,6 @@ class TagSet
     {
         return implode('|', $this->tagIds());
     }
-
     /**
      * Get an array of tag identifiers for all of the tags in the set.
      *
@@ -95,7 +85,6 @@ class TagSet
     {
         return array_map([$this, 'tagId'], $this->names);
     }
-
     /**
      * Get the unique tag identifier for a given tag.
      *
@@ -106,7 +95,6 @@ class TagSet
     {
         return $this->store->get($this->tagKey($name)) ?: $this->resetTag($name);
     }
-
     /**
      * Get the tag identifier key for a given tag.
      *
@@ -115,9 +103,8 @@ class TagSet
      */
     public function tagKey($name)
     {
-        return 'tag:'.$name.':key';
+        return 'tag:' . $name . ':key';
     }
-
     /**
      * Get all of the tag names in the set.
      *

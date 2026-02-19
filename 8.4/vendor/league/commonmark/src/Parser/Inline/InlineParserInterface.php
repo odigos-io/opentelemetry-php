@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the league/commonmark package.
  *
@@ -10,14 +9,11 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Odigos\League\CommonMark\Parser\Inline;
 
-namespace League\CommonMark\Parser\Inline;
-
-use League\CommonMark\Parser\InlineParserContext;
-
+use Odigos\League\CommonMark\Parser\InlineParserContext;
 interface InlineParserInterface
 {
     public function getMatchDefinition(): InlineParserMatch;
-
     public function parse(InlineParserContext $inlineContext): bool;
 }

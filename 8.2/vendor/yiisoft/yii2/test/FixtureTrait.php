@@ -1,15 +1,14 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\test;
 
-use Yii;
+use Odigos\Yii;
 use yii\base\InvalidConfigException;
-
 /**
  * FixtureTrait provides functionalities for loading, unloading and accessing fixtures for a test case.
  *
@@ -33,8 +32,6 @@ trait FixtureTrait
      * if B depends on A.
      */
     private $_fixtures;
-
-
     /**
      * Declares the fixtures that are needed by the current test case.
      *
@@ -63,7 +60,6 @@ trait FixtureTrait
     {
         return [];
     }
-
     /**
      * Declares the fixtures shared required by different test cases.
      * The return value should be similar to that of [[fixtures()]].
@@ -75,7 +71,6 @@ trait FixtureTrait
     {
         return [];
     }
-
     /**
      * Loads the specified fixtures.
      * This method will call [[Fixture::load()]] for every fixture object.
@@ -87,7 +82,6 @@ trait FixtureTrait
         if ($fixtures === null) {
             $fixtures = $this->getFixtures();
         }
-
         foreach ($fixtures as $fixture) {
             $fixture->beforeLoad();
         }
@@ -98,7 +92,6 @@ trait FixtureTrait
             $fixture->afterLoad();
         }
     }
-
     /**
      * Unloads the specified fixtures.
      * This method will call [[Fixture::unload()]] for every fixture object.
@@ -110,7 +103,6 @@ trait FixtureTrait
         if ($fixtures === null) {
             $fixtures = $this->getFixtures();
         }
-
         foreach ($fixtures as $fixture) {
             $fixture->beforeUnload();
         }
@@ -122,7 +114,6 @@ trait FixtureTrait
             $fixture->afterUnload();
         }
     }
-
     /**
      * Initialize the fixtures.
      * @since 2.0.12
@@ -132,7 +123,6 @@ trait FixtureTrait
         $this->unloadFixtures();
         $this->loadFixtures();
     }
-
     /**
      * Returns the fixture objects as specified in [[globalFixtures()]] and [[fixtures()]].
      * @return Fixture[] the loaded fixtures for the current test case
@@ -142,10 +132,8 @@ trait FixtureTrait
         if ($this->_fixtures === null) {
             $this->_fixtures = $this->createFixtures(array_merge($this->globalFixtures(), $this->fixtures()));
         }
-
         return $this->_fixtures;
     }
-
     /**
      * Returns the named fixture.
      * @param string $name the fixture name. This can be either the fixture alias name, or the class name if the alias is not used.
@@ -157,10 +145,8 @@ trait FixtureTrait
             $this->_fixtures = $this->createFixtures(array_merge($this->globalFixtures(), $this->fixtures()));
         }
         $name = ltrim($name, '\\');
-
         return isset($this->_fixtures[$name]) ? $this->_fixtures[$name] : null;
     }
-
     /**
      * Creates the specified fixture instances.
      * All dependent fixtures will also be created. Duplicate fixtures and circular dependencies will only be created once.
@@ -172,8 +158,10 @@ trait FixtureTrait
     protected function createFixtures(array $fixtures)
     {
         // normalize fixture configurations
-        $config = [];  // configuration provided in test case
-        $aliases = [];  // class name => alias or class name
+        $config = [];
+        // configuration provided in test case
+        $aliases = [];
+        // class name => alias or class name
         foreach ($fixtures as $name => $fixture) {
             if (!is_array($fixture)) {
                 $class = ltrim($fixture, '\\');
@@ -184,24 +172,24 @@ trait FixtureTrait
                 $config[$class] = $fixture;
                 $aliases[$class] = $name;
             } else {
-                throw new InvalidConfigException("You must specify 'class' for the fixture '$name'.");
+                throw new InvalidConfigException("You must specify 'class' for the fixture '{$name}'.");
             }
         }
-
         // create fixture instances
         $instances = [];
         $stack = array_reverse($fixtures);
         while (($fixture = array_pop($stack)) !== null) {
-            if ($fixture instanceof Fixture) {
+            if ($fixture instanceof \yii\test\Fixture) {
                 $class = get_class($fixture);
                 $name = isset($aliases[$class]) ? $aliases[$class] : $class;
-                unset($instances[$name]);  // unset so that the fixture is added to the last in the next line
+                unset($instances[$name]);
+                // unset so that the fixture is added to the last in the next line
                 $instances[$name] = $fixture;
             } else {
                 $class = ltrim($fixture['class'], '\\');
                 $name = isset($aliases[$class]) ? $aliases[$class] : $class;
                 if (!isset($instances[$name])) {
-                    $instances[$name] = false;
+                    $instances[$name] = \false;
                     $stack[] = $fixture = Yii::createObject($fixture);
                     foreach ($fixture->depends as $dep) {
                         // need to use the configuration provided in test case
@@ -211,7 +199,6 @@ trait FixtureTrait
                 // if the fixture is already loaded (ie. a circular dependency or if two fixtures depend on the same fixture) just skip it.
             }
         }
-
         return $instances;
     }
 }

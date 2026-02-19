@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright 2018-present MongoDB, Inc.
  *
@@ -14,7 +15,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 namespace MongoDB\Operation;
 
 use MongoDB\Driver\Command;
@@ -24,11 +24,9 @@ use MongoDB\Driver\Server;
 use MongoDB\Driver\Session;
 use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\Exception\UnsupportedException;
-
 use function current;
 use function is_array;
 use function is_string;
-
 /**
  * Operation for the explain command.
  *
@@ -40,7 +38,6 @@ final class Explain
     public const VERBOSITY_ALL_PLANS = 'allPlansExecution';
     public const VERBOSITY_EXEC_STATS = 'executionStats';
     public const VERBOSITY_QUERY = 'queryPlanner';
-
     /**
      * Constructs an explain command for explainable operations.
      *
@@ -64,25 +61,21 @@ final class Explain
      * @param array       $options      Command options
      * @throws InvalidArgumentException for parameter/option parsing errors
      */
-    public function __construct(private string $databaseName, private Explainable $explainable, private array $options = [])
+    public function __construct(private string $databaseName, private \MongoDB\Operation\Explainable $explainable, private array $options = [])
     {
-        if (isset($this->options['readPreference']) && ! $this->options['readPreference'] instanceof ReadPreference) {
+        if (isset($this->options['readPreference']) && !$this->options['readPreference'] instanceof ReadPreference) {
             throw InvalidArgumentException::invalidType('"readPreference" option', $this->options['readPreference'], ReadPreference::class);
         }
-
-        if (isset($this->options['session']) && ! $this->options['session'] instanceof Session) {
+        if (isset($this->options['session']) && !$this->options['session'] instanceof Session) {
             throw InvalidArgumentException::invalidType('"session" option', $this->options['session'], Session::class);
         }
-
-        if (isset($this->options['typeMap']) && ! is_array($this->options['typeMap'])) {
+        if (isset($this->options['typeMap']) && !is_array($this->options['typeMap'])) {
             throw InvalidArgumentException::invalidType('"typeMap" option', $this->options['typeMap'], 'array');
         }
-
-        if (isset($this->options['verbosity']) && ! is_string($this->options['verbosity'])) {
+        if (isset($this->options['verbosity']) && !is_string($this->options['verbosity'])) {
             throw InvalidArgumentException::invalidType('"verbosity" option', $this->options['verbosity'], 'string');
         }
     }
-
     /**
      * Execute the operation.
      *
@@ -92,30 +85,24 @@ final class Explain
     public function execute(Server $server): array|object
     {
         $cursor = $server->executeCommand($this->databaseName, $this->createCommand(), $this->createOptions());
-
         if (isset($this->options['typeMap'])) {
             $cursor->setTypeMap($this->options['typeMap']);
         }
-
         return current($cursor->toArray());
     }
-
     /**
      * Create the explain command.
      */
     private function createCommand(): Command
     {
         $cmd = ['explain' => $this->explainable->getCommandDocument()];
-
         foreach (['comment', 'verbosity'] as $option) {
             if (isset($this->options[$option])) {
                 $cmd[$option] = $this->options[$option];
             }
         }
-
         return new Command($cmd);
     }
-
     /**
      * Create options for executing the command.
      *
@@ -124,15 +111,12 @@ final class Explain
     private function createOptions(): array
     {
         $options = [];
-
         if (isset($this->options['readPreference'])) {
             $options['readPreference'] = $this->options['readPreference'];
         }
-
         if (isset($this->options['session'])) {
             $options['session'] = $this->options['session'];
         }
-
         return $options;
     }
 }

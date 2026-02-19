@@ -4,7 +4,6 @@ namespace Illuminate\Process;
 
 use Illuminate\Support\Collection;
 use InvalidArgumentException;
-
 /**
  * @mixin \Illuminate\Process\Factory
  * @mixin \Illuminate\Process\PendingProcess
@@ -17,33 +16,29 @@ class Pipe
      * @var \Illuminate\Process\Factory
      */
     protected $factory;
-
     /**
      * The callback that resolves the pending processes.
      *
      * @var callable
      */
     protected $callback;
-
     /**
      * The array of pending processes.
      *
      * @var array
      */
     protected $pendingProcesses = [];
-
     /**
      * Create a new series of piped processes.
      *
      * @param  \Illuminate\Process\Factory  $factory
      * @param  callable  $callback
      */
-    public function __construct(Factory $factory, callable $callback)
+    public function __construct(\Illuminate\Process\Factory $factory, callable $callback)
     {
         $this->factory = $factory;
         $this->callback = $callback;
     }
-
     /**
      * Add a process to the pipe with a key.
      *
@@ -56,7 +51,6 @@ class Pipe
             $this->pendingProcesses[$key] = $pendingProcess;
         });
     }
-
     /**
      * Runs the processes in the pipe.
      *
@@ -66,26 +60,18 @@ class Pipe
     public function run(?callable $output = null)
     {
         call_user_func($this->callback, $this);
-
-        return (new Collection($this->pendingProcesses))
-            ->reduce(function ($previousProcessResult, $pendingProcess, $key) use ($output) {
-                if (! $pendingProcess instanceof PendingProcess) {
-                    throw new InvalidArgumentException('Process pipe must only contain pending processes.');
-                }
-
-                if ($previousProcessResult && $previousProcessResult->failed()) {
-                    return $previousProcessResult;
-                }
-
-                return $pendingProcess->when(
-                    $previousProcessResult,
-                    fn () => $pendingProcess->input($previousProcessResult->output())
-                )->run(output: $output ? function ($type, $buffer) use ($key, $output) {
-                    $output($type, $buffer, $key);
-                } : null);
-            });
+        return (new Collection($this->pendingProcesses))->reduce(function ($previousProcessResult, $pendingProcess, $key) use ($output) {
+            if (!$pendingProcess instanceof \Illuminate\Process\PendingProcess) {
+                throw new InvalidArgumentException('Process pipe must only contain pending processes.');
+            }
+            if ($previousProcessResult && $previousProcessResult->failed()) {
+                return $previousProcessResult;
+            }
+            return $pendingProcess->when($previousProcessResult, fn() => $pendingProcess->input($previousProcessResult->output()))->run(output: $output ? function ($type, $buffer) use ($key, $output) {
+                $output($type, $buffer, $key);
+            } : null);
+        });
     }
-
     /**
      * Dynamically proxy methods calls to a new pending process.
      *

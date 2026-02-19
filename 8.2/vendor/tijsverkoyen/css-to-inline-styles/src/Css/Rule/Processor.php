@@ -1,10 +1,9 @@
 <?php
 
-namespace TijsVerkoyen\CssToInlineStyles\Css\Rule;
+namespace Odigos\TijsVerkoyen\CssToInlineStyles\Css\Rule;
 
 use Symfony\Component\CssSelector\Node\Specificity;
-use \TijsVerkoyen\CssToInlineStyles\Css\Property\Processor as PropertyProcessor;
-
+use Odigos\TijsVerkoyen\CssToInlineStyles\Css\Property\Processor as PropertyProcessor;
 class Processor
 {
     /**
@@ -17,10 +16,8 @@ class Processor
     public function splitIntoSeparateRules($rulesString)
     {
         $rulesString = $this->cleanup($rulesString);
-
         return (array) explode('}', $rulesString);
     }
-
     /**
      * @param string $string
      *
@@ -33,13 +30,10 @@ class Processor
         $string = str_replace('"', '\'', $string);
         $string = preg_replace('|/\*.*?\*/|', '', $string) ?? $string;
         $string = preg_replace('/\s\s+/', ' ', $string) ?? $string;
-
         $string = trim($string);
         $string = rtrim($string, '}');
-
         return $string;
     }
-
     /**
      * Converts a rule-string into an object
      *
@@ -51,7 +45,6 @@ class Processor
     public function convertToObjects($rule, $originalOrder)
     {
         $rule = $this->cleanup($rule);
-
         $chunks = explode('{', $rule);
         if (!isset($chunks[1])) {
             return array();
@@ -60,22 +53,13 @@ class Processor
         $rules = array();
         $selectors = (array) explode(',', trim($chunks[0]));
         $properties = $propertiesProcessor->splitIntoSeparateProperties($chunks[1]);
-
         foreach ($selectors as $selector) {
             $selector = trim($selector);
             $specificity = $this->calculateSpecificityBasedOnASelector($selector);
-
-            $rules[] = new Rule(
-                $selector,
-                $propertiesProcessor->convertArrayToObjects($properties, $specificity),
-                $specificity,
-                $originalOrder
-            );
+            $rules[] = new Rule($selector, $propertiesProcessor->convertArrayToObjects($properties, $specificity), $specificity, $originalOrder);
         }
-
         return $rules;
     }
-
     /**
      * Calculates the specificity based on a CSS Selector string,
      * Based on the patterns from premailer/css_parser by Alex Dunae
@@ -88,46 +72,16 @@ class Processor
      */
     public function calculateSpecificityBasedOnASelector($selector)
     {
-        $idSelectorCount = preg_match_all("/  \#/ix", $selector, $matches);
-        $classAttributesPseudoClassesSelectorsPattern = "  (\.[\w]+)                     # classes
-                        |
-                        \[(\w+)                       # attributes
-                        |
-                        (\:(                          # pseudo classes
-                          link|visited|active
-                          |hover|focus
-                          |lang
-                          |target
-                          |enabled|disabled|checked|indeterminate
-                          |root
-                          |nth-child|nth-last-child|nth-of-type|nth-last-of-type
-                          |first-child|last-child|first-of-type|last-of-type
-                          |only-child|only-of-type
-                          |empty|contains
-                        ))";
+        $idSelectorCount = preg_match_all("/  \\#/ix", $selector, $matches);
+        $classAttributesPseudoClassesSelectorsPattern = "  (\\.[\\w]+)                     # classes\n                        |\n                        \\[(\\w+)                       # attributes\n                        |\n                        (\\:(                          # pseudo classes\n                          link|visited|active\n                          |hover|focus\n                          |lang\n                          |target\n                          |enabled|disabled|checked|indeterminate\n                          |root\n                          |nth-child|nth-last-child|nth-of-type|nth-last-of-type\n                          |first-child|last-child|first-of-type|last-of-type\n                          |only-child|only-of-type\n                          |empty|contains\n                        ))";
         $classAttributesPseudoClassesSelectorCount = preg_match_all("/{$classAttributesPseudoClassesSelectorsPattern}/ix", $selector, $matches);
-
-        $typePseudoElementsSelectorPattern = "  ((^|[\s\+\>\~]+)[\w]+       # elements
-                        |
-                        \:{1,2}(                    # pseudo-elements
-                          after|before
-                          |first-letter|first-line
-                          |selection
-                        )
-                      )";
+        $typePseudoElementsSelectorPattern = "  ((^|[\\s\\+\\>\\~]+)[\\w]+       # elements\n                        |\n                        \\:{1,2}(                    # pseudo-elements\n                          after|before\n                          |first-letter|first-line\n                          |selection\n                        )\n                      )";
         $typePseudoElementsSelectorCount = preg_match_all("/{$typePseudoElementsSelectorPattern}/ix", $selector, $matches);
-
-        if ($idSelectorCount === false || $classAttributesPseudoClassesSelectorCount === false || $typePseudoElementsSelectorCount === false) {
+        if ($idSelectorCount === \false || $classAttributesPseudoClassesSelectorCount === \false || $typePseudoElementsSelectorCount === \false) {
             throw new \RuntimeException('Failed to calculate specificity based on selector.');
         }
-
-        return new Specificity(
-            $idSelectorCount,
-            $classAttributesPseudoClassesSelectorCount,
-            $typePseudoElementsSelectorCount
-        );
+        return new Specificity($idSelectorCount, $classAttributesPseudoClassesSelectorCount, $typePseudoElementsSelectorCount);
     }
-
     /**
      * @param string[] $rules
      * @param Rule[]   $objects
@@ -141,10 +95,8 @@ class Processor
             $objects = array_merge($objects, $this->convertToObjects($rule, $order));
             $order++;
         }
-
         return $objects;
     }
-
     /**
      * Sorts an array on the specificity element in an ascending way
      * Lower specificity will be sorted to the beginning of the array
@@ -158,12 +110,10 @@ class Processor
     {
         $e1Specificity = $e1->getSpecificity();
         $value = $e1Specificity->compareTo($e2->getSpecificity());
-
         // if the specificity is the same, use the order in which the element appeared
         if ($value === 0) {
             $value = $e1->getOrder() - $e2->getOrder();
         }
-
         return $value;
     }
 }

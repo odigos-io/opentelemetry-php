@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -20,7 +20,7 @@ namespace Cake\Console\TestSuite\Constraint;
  *
  * @internal
  */
-class ContentsNotContain extends ContentsBase
+class ContentsNotContain extends \Cake\Console\TestSuite\Constraint\ContentsBase
 {
     /**
      * Checks if contents contain expected
@@ -30,9 +30,8 @@ class ContentsNotContain extends ContentsBase
      */
     public function matches(mixed $other): bool
     {
-        return mb_strpos($this->contents, $other) === false;
+        return mb_strpos($this->contents, $other) === \false;
     }
-
     /**
      * Assertion message
      *
@@ -42,7 +41,6 @@ class ContentsNotContain extends ContentsBase
     {
         return sprintf('is not in %s.', $this->output);
     }
-
     /**
      * @inheritDoc
      */
@@ -51,10 +49,6 @@ class ContentsNotContain extends ContentsBase
         return sprintf("actual result:\n%s", $this->contents);
     }
 }
-
 // phpcs:disable
-class_alias(
-    'Cake\Console\TestSuite\Constraint\ContentsNotContain',
-    'Cake\TestSuite\Constraint\Console\ContentsNotContain'
-);
+class_alias('Cake\Console\TestSuite\Constraint\ContentsNotContain', 'Cake\TestSuite\Constraint\Console\ContentsNotContain');
 // phpcs:enable

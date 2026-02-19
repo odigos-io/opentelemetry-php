@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\DBAL\Platforms\SQLite\SQLiteMetadataProvider;
 
 /**
@@ -13,24 +12,18 @@ namespace Doctrine\DBAL\Platforms\SQLite\SQLiteMetadataProvider;
 final readonly class ForeignKeyConstraintDetails
 {
     /** @param ?non-empty-string $name */
-    public function __construct(
-        private ?string $name,
-        private bool $isDeferrable,
-        private bool $isDeferred,
-    ) {
+    public function __construct(private ?string $name, private bool $isDeferrable, private bool $isDeferred)
+    {
     }
-
     /** @return ?non-empty-string */
     public function getName(): ?string
     {
         return $this->name;
     }
-
     public function isDeferrable(): bool
     {
         return $this->isDeferrable;
     }
-
     public function isDeferred(): bool
     {
         return $this->isDeferred;

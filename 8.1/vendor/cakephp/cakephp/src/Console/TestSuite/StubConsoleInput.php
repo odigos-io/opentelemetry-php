@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP :  Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -17,7 +17,6 @@ namespace Cake\Console\TestSuite;
 
 use Cake\Console\ConsoleInput;
 use NumberFormatter;
-
 /**
  * Stub class used by the console integration harness.
  *
@@ -32,14 +31,12 @@ class StubConsoleInput extends ConsoleInput
      * @var array<string>
      */
     protected array $replies = [];
-
     /**
      * Current message index
      *
      * @var int
      */
     protected int $currentIndex = -1;
-
     /**
      * Constructor
      *
@@ -50,9 +47,8 @@ class StubConsoleInput extends ConsoleInput
         // Don't call parent on purpose as it opens php://stdin which doesn't
         // always exist in RunInSeparateProcess tests.
         $this->replies = $replies;
-        $this->_canReadline = false;
+        $this->_canReadline = \false;
     }
-
     /**
      * Read a reply
      *
@@ -61,21 +57,16 @@ class StubConsoleInput extends ConsoleInput
     public function read(): string
     {
         $this->currentIndex += 1;
-
         if (!isset($this->replies[$this->currentIndex])) {
             $total = count($this->replies);
             $formatter = new NumberFormatter('en', NumberFormatter::ORDINAL);
             $nth = $formatter->format($this->currentIndex + 1);
-
             $replies = implode(', ', $this->replies);
-            $message = "There are no more input replies available. This is the {$nth} read operation, " .
-                "only {$total} replies were set.\nThe provided replies are: {$replies}";
-            throw new MissingConsoleInputException($message);
+            $message = "There are no more input replies available. This is the {$nth} read operation, " . "only {$total} replies were set.\nThe provided replies are: {$replies}";
+            throw new \Cake\Console\TestSuite\MissingConsoleInputException($message);
         }
-
         return $this->replies[$this->currentIndex];
     }
-
     /**
      * Check if data is available on stdin
      *
@@ -84,13 +75,9 @@ class StubConsoleInput extends ConsoleInput
      */
     public function dataAvailable(int $timeout = 0): bool
     {
-        return true;
+        return \true;
     }
 }
-
 // phpcs:disable
-class_alias(
-    'Cake\Console\TestSuite\StubConsoleInput',
-    'Cake\TestSuite\Stub\ConsoleInput'
-);
+class_alias('Cake\Console\TestSuite\StubConsoleInput', 'Cake\TestSuite\Stub\ConsoleInput');
 // phpcs:enable

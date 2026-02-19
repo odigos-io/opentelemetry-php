@@ -1,14 +1,13 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\db;
 
 use yii\base\Component;
-
 /**
  * BatchQueryResult represents a batch query from which you can retrieve data in batches.
  *
@@ -66,8 +65,7 @@ class BatchQueryResult extends Component implements \Iterator
      * @var bool whether to return a single row during each iteration.
      * If false, a whole batch of rows will be returned in each iteration.
      */
-    public $each = false;
-
+    public $each = \false;
     /**
      * @var DataReader|null the data reader associated with this batch query.
      */
@@ -84,8 +82,6 @@ class BatchQueryResult extends Component implements \Iterator
      * @var string|int|null the key for the current iteration
      */
     private $_key;
-
-
     /**
      * Destructor.
      */
@@ -94,7 +90,6 @@ class BatchQueryResult extends Component implements \Iterator
         // make sure cursor is closed
         $this->reset();
     }
-
     /**
      * Resets the batch query.
      * This method will clean up the existing batch query so that a new batch query can be performed.
@@ -110,7 +105,6 @@ class BatchQueryResult extends Component implements \Iterator
         $this->_key = null;
         $this->trigger(self::EVENT_RESET);
     }
-
     /**
      * Resets the iterator to the initial state.
      * This method is required by the interface [[\Iterator]].
@@ -121,7 +115,6 @@ class BatchQueryResult extends Component implements \Iterator
         $this->reset();
         $this->next();
     }
-
     /**
      * Moves the internal pointer to the next dataset.
      * This method is required by the interface [[\Iterator]].
@@ -129,11 +122,10 @@ class BatchQueryResult extends Component implements \Iterator
     #[\ReturnTypeWillChange]
     public function next()
     {
-        if ($this->_batch === null || !$this->each || $this->each && next($this->_batch) === false) {
+        if ($this->_batch === null || !$this->each || $this->each && next($this->_batch) === \false) {
             $this->_batch = $this->fetchData();
             reset($this->_batch);
         }
-
         if ($this->each) {
             $this->_value = current($this->_batch);
             if ($this->query->indexBy !== null) {
@@ -148,7 +140,6 @@ class BatchQueryResult extends Component implements \Iterator
             $this->_key = $this->_key === null ? 0 : $this->_key + 1;
         }
     }
-
     /**
      * Fetches the next batch of data.
      * @return array the data fetched
@@ -159,12 +150,9 @@ class BatchQueryResult extends Component implements \Iterator
         if ($this->_dataReader === null) {
             $this->_dataReader = $this->query->createCommand($this->db)->query();
         }
-
         $rows = $this->getRows();
-
         return $this->query->populate($rows);
     }
-
     /**
      * Reads and collects rows for batch
      * @return array
@@ -174,7 +162,6 @@ class BatchQueryResult extends Component implements \Iterator
     {
         $rows = [];
         $count = 0;
-
         try {
             while ($count++ < $this->batchSize) {
                 if ($row = $this->_dataReader->read()) {
@@ -191,10 +178,8 @@ class BatchQueryResult extends Component implements \Iterator
                 throw $e;
             }
         }
-
         return $rows;
     }
-
     /**
      * Returns the index of the current dataset.
      * This method is required by the interface [[\Iterator]].
@@ -205,7 +190,6 @@ class BatchQueryResult extends Component implements \Iterator
     {
         return $this->_key;
     }
-
     /**
      * Returns the current dataset.
      * This method is required by the interface [[\Iterator]].
@@ -216,7 +200,6 @@ class BatchQueryResult extends Component implements \Iterator
     {
         return $this->_value;
     }
-
     /**
      * Returns whether there is a valid dataset at the current position.
      * This method is required by the interface [[\Iterator]].
@@ -227,7 +210,6 @@ class BatchQueryResult extends Component implements \Iterator
     {
         return !empty($this->_batch);
     }
-
     /**
      * Gets db driver name from the db connection that is passed to the `batch()`, if it is not passed it uses
      * connection from the active record model
@@ -238,17 +220,14 @@ class BatchQueryResult extends Component implements \Iterator
         if (isset($this->db->driverName)) {
             return $this->db->driverName;
         }
-
         if (!empty($this->_batch)) {
             $key = array_keys($this->_batch)[0];
             if (isset($this->_batch[$key]->db->driverName)) {
                 return $this->_batch[$key]->db->driverName;
             }
         }
-
         return null;
     }
-
     /**
      * Unserialization is disabled to prevent remote code execution in case application
      * calls unserialize() on user input containing specially crafted string.

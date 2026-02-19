@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -20,30 +20,20 @@ use ArrayAccess;
 use Cake\View\Form\ContextInterface;
 use Traversable;
 use function Cake\Core\h;
-
 /**
  * Input widget class for generating a selectbox.
  *
  * This class is usually used internally by `Cake\View\Helper\FormHelper`,
  * it but can be used to generate standalone select boxes.
  */
-class SelectBoxWidget extends BasicWidget
+class SelectBoxWidget extends \Cake\View\Widget\BasicWidget
 {
     /**
      * Data defaults.
      *
      * @var array<string, mixed>
      */
-    protected array $defaults = [
-        'name' => '',
-        'empty' => false,
-        'escape' => true,
-        'options' => [],
-        'disabled' => null,
-        'val' => null,
-        'templateVars' => [],
-    ];
-
+    protected array $defaults = ['name' => '', 'empty' => \false, 'escape' => \true, 'options' => [], 'disabled' => null, 'val' => null, 'templateVars' => []];
     /**
      * Render a select box form input.
      *
@@ -122,29 +112,20 @@ class SelectBoxWidget extends BasicWidget
     public function render(array $data, ContextInterface $context): string
     {
         $data += $this->mergeDefaults($data, $context);
-
         $options = $this->_renderContent($data);
         $name = $data['name'];
         unset($data['name'], $data['options'], $data['empty'], $data['val'], $data['escape']);
         if (isset($data['disabled']) && is_array($data['disabled'])) {
             unset($data['disabled']);
         }
-
         $template = 'select';
         if (!empty($data['multiple'])) {
             $template = 'selectMultiple';
             unset($data['multiple']);
         }
         $attrs = $this->_templates->formatAttributes($data);
-
-        return $this->_templates->format($template, [
-            'name' => $name,
-            'templateVars' => $data['templateVars'],
-            'attrs' => $attrs,
-            'content' => implode('', $options),
-        ]);
+        return $this->_templates->format($template, ['name' => $name, 'templateVars' => $data['templateVars'], 'attrs' => $attrs, 'content' => implode('', $options)]);
     }
-
     /**
      * Render the contents of the select element.
      *
@@ -154,28 +135,23 @@ class SelectBoxWidget extends BasicWidget
     protected function _renderContent(array $data): array
     {
         $options = $data['options'];
-
         if ($options instanceof Traversable) {
             $options = iterator_to_array($options);
         }
-
         if (!empty($data['empty'])) {
-            $options = $this->_emptyValue($data['empty']) + (array)$options;
+            $options = $this->_emptyValue($data['empty']) + (array) $options;
         }
         if (!$options) {
             return [];
         }
-
         $selected = $data['val'] ?? null;
         $disabled = null;
         if (isset($data['disabled']) && is_array($data['disabled'])) {
             $disabled = $data['disabled'];
         }
         $templateVars = $data['templateVars'];
-
         return $this->_renderOptions($options, $disabled, $selected, $templateVars, $data['escape']);
     }
-
     /**
      * Generate the empty value based on the input.
      *
@@ -184,16 +160,14 @@ class SelectBoxWidget extends BasicWidget
      */
     protected function _emptyValue(array|string|bool $value): array
     {
-        if ($value === true) {
+        if ($value === \true) {
             return ['' => ''];
         }
         if (is_array($value)) {
             return $value;
         }
-
         return ['' => $value];
     }
-
     /**
      * Render the contents of an optgroup element.
      *
@@ -205,31 +179,18 @@ class SelectBoxWidget extends BasicWidget
      * @param bool $escape Toggle HTML escaping
      * @return string Formatted template string
      */
-    protected function _renderOptgroup(
-        string $label,
-        ArrayAccess|array $optgroup,
-        ?array $disabled,
-        mixed $selected,
-        array $templateVars,
-        bool $escape,
-    ): string {
+    protected function _renderOptgroup(string $label, ArrayAccess|array $optgroup, ?array $disabled, mixed $selected, array $templateVars, bool $escape): string
+    {
         $opts = $optgroup;
         $attrs = [];
         if (isset($optgroup['options'], $optgroup['text'])) {
             $opts = $optgroup['options'];
             $label = $optgroup['text'];
-            $attrs = (array)$optgroup;
+            $attrs = (array) $optgroup;
         }
         $groupOptions = $this->_renderOptions($opts, $disabled, $selected, $templateVars, $escape);
-
-        return $this->_templates->format('optgroup', [
-            'label' => $escape ? h($label) : $label,
-            'content' => implode('', $groupOptions),
-            'templateVars' => $templateVars,
-            'attrs' => $this->_templates->formatAttributes($attrs, ['text', 'options']),
-        ]);
+        return $this->_templates->format('optgroup', ['label' => $escape ? h($label) : $label, 'content' => implode('', $groupOptions), 'templateVars' => $templateVars, 'attrs' => $this->_templates->formatAttributes($attrs, ['text', 'options'])]);
     }
-
     /**
      * Render a set of options.
      *
@@ -242,71 +203,40 @@ class SelectBoxWidget extends BasicWidget
      * @param bool $escape Toggle HTML escaping.
      * @return array<string> Option elements.
      */
-    protected function _renderOptions(
-        iterable $options,
-        ?array $disabled,
-        mixed $selected,
-        array $templateVars,
-        bool $escape,
-    ): array {
+    protected function _renderOptions(iterable $options, ?array $disabled, mixed $selected, array $templateVars, bool $escape): array
+    {
         $out = [];
         foreach ($options as $key => $val) {
             // Option groups
             $isIterable = is_iterable($val);
             /** @var \ArrayAccess|array $val */
-            if (
-                (
-                    !is_int($key) &&
-                    $isIterable
-                ) ||
-                (
-                    is_int($key) &&
-                    $isIterable &&
-                    (
-                        isset($val['options']) ||
-                        !isset($val['value'])
-                    )
-                )
-            ) {
+            if (!is_int($key) && $isIterable || is_int($key) && $isIterable && (isset($val['options']) || !isset($val['value']))) {
                 /** @var \ArrayAccess<string, mixed>|array<string, mixed> $val */
-                $out[] = $this->_renderOptgroup((string)$key, $val, $disabled, $selected, $templateVars, $escape);
+                $out[] = $this->_renderOptgroup((string) $key, $val, $disabled, $selected, $templateVars, $escape);
                 continue;
             }
-
             // Basic options
-            $optAttrs = [
-                'value' => $key,
-                'text' => $val,
-                'templateVars' => [],
-            ];
+            $optAttrs = ['value' => $key, 'text' => $val, 'templateVars' => []];
             if (is_array($val) && isset($val['text'], $val['value'])) {
                 /** @var array<string, mixed> $optAttrs */
                 $optAttrs = $val;
                 $key = $optAttrs['value'];
             }
             $optAttrs['templateVars'] ??= [];
-            if ($this->_isSelected((string)$key, $selected)) {
-                $optAttrs['selected'] = true;
+            if ($this->_isSelected((string) $key, $selected)) {
+                $optAttrs['selected'] = \true;
             }
-            if ($this->_isDisabled((string)$key, $disabled)) {
-                $optAttrs['disabled'] = true;
+            if ($this->_isDisabled((string) $key, $disabled)) {
+                $optAttrs['disabled'] = \true;
             }
             if ($templateVars) {
                 $optAttrs['templateVars'] = array_merge($templateVars, $optAttrs['templateVars']);
             }
             $optAttrs['escape'] = $escape;
-
-            $out[] = $this->_templates->format('option', [
-                'value' => $escape ? h($optAttrs['value']) : $optAttrs['value'],
-                'text' => $escape ? h($optAttrs['text']) : $optAttrs['text'],
-                'templateVars' => $optAttrs['templateVars'],
-                'attrs' => $this->_templates->formatAttributes($optAttrs, ['text', 'value']),
-            ]);
+            $out[] = $this->_templates->format('option', ['value' => $escape ? h($optAttrs['value']) : $optAttrs['value'], 'text' => $escape ? h($optAttrs['text']) : $optAttrs['text'], 'templateVars' => $optAttrs['templateVars'], 'attrs' => $this->_templates->formatAttributes($optAttrs, ['text', 'value'])]);
         }
-
         return $out;
     }
-
     /**
      * Helper method for deciding what options are selected.
      *
@@ -317,18 +247,15 @@ class SelectBoxWidget extends BasicWidget
     protected function _isSelected(string $key, mixed $selected): bool
     {
         if ($selected === null) {
-            return false;
+            return \false;
         }
         if (!is_array($selected)) {
-            $selected = $selected === false ? '0' : $selected;
-
-            return $key === (string)$selected;
+            $selected = $selected === \false ? '0' : $selected;
+            return $key === (string) $selected;
         }
         $strict = !is_numeric($key);
-
         return in_array($key, $selected, $strict);
     }
-
     /**
      * Helper method for deciding what options are disabled.
      *
@@ -339,10 +266,9 @@ class SelectBoxWidget extends BasicWidget
     protected function _isDisabled(string $key, ?array $disabled): bool
     {
         if ($disabled === null) {
-            return false;
+            return \false;
         }
         $strict = !is_numeric($key);
-
         return in_array($key, $disabled, $strict);
     }
 }

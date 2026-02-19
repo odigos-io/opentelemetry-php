@@ -1,5 +1,6 @@
-<?php declare(strict_types=1);
+<?php
 
+declare (strict_types=1);
 /*
  * This file is part of the Monolog package.
  *
@@ -8,8 +9,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Monolog\Attribute;
+namespace Odigos\Monolog\Attribute;
 
 /**
  * A reusable attribute to help configure a class as expecting a given logger channel.
@@ -22,8 +22,7 @@ namespace Monolog\Attribute;
 #[\Attribute(\Attribute::TARGET_CLASS)]
 final class WithMonologChannel
 {
-    public function __construct(
-        public readonly string $channel
-    ) {
+    public function __construct(public readonly string $channel)
+    {
     }
 }

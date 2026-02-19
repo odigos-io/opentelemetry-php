@@ -1,84 +1,72 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\API\Trace;
 
 use Throwable;
-
 /**
  * @see https://github.com/open-telemetry/opentelemetry-specification/blob/v1.6.1/specification/trace/api.md#wrapping-a-spancontext-in-a-span
  *
  * @psalm-internal OpenTelemetry
  */
-final class NonRecordingSpan extends Span
+final class NonRecordingSpan extends \OpenTelemetry\API\Trace\Span
 {
-    public function __construct(private readonly SpanContextInterface $context)
+    public function __construct(private readonly \OpenTelemetry\API\Trace\SpanContextInterface $context)
     {
     }
-
     /** @inheritDoc */
     #[\Override]
-    public function getContext(): SpanContextInterface
+    public function getContext(): \OpenTelemetry\API\Trace\SpanContextInterface
     {
         return $this->context;
     }
-
     /** @inheritDoc */
     #[\Override]
     public function isRecording(): bool
     {
-        return false;
+        return \false;
     }
-
     /** @inheritDoc */
     #[\Override]
-    public function setAttribute(string $key, $value): SpanInterface
+    public function setAttribute(string $key, $value): \OpenTelemetry\API\Trace\SpanInterface
     {
         return $this;
     }
-
     /** @inheritDoc */
     #[\Override]
-    public function setAttributes(iterable $attributes): SpanInterface
+    public function setAttributes(iterable $attributes): \OpenTelemetry\API\Trace\SpanInterface
     {
         return $this;
     }
-
     #[\Override]
-    public function addLink(SpanContextInterface $context, iterable $attributes = []): SpanInterface
+    public function addLink(\OpenTelemetry\API\Trace\SpanContextInterface $context, iterable $attributes = []): \OpenTelemetry\API\Trace\SpanInterface
     {
         return $this;
     }
-
     /** @inheritDoc */
     #[\Override]
-    public function addEvent(string $name, iterable $attributes = [], ?int $timestamp = null): SpanInterface
+    public function addEvent(string $name, iterable $attributes = [], ?int $timestamp = null): \OpenTelemetry\API\Trace\SpanInterface
     {
         return $this;
     }
-
     /** @inheritDoc */
     #[\Override]
-    public function recordException(Throwable $exception, iterable $attributes = []): SpanInterface
+    public function recordException(Throwable $exception, iterable $attributes = []): \OpenTelemetry\API\Trace\SpanInterface
     {
         return $this;
     }
-
     /** @inheritDoc */
     #[\Override]
-    public function updateName(string $name): SpanInterface
+    public function updateName(string $name): \OpenTelemetry\API\Trace\SpanInterface
     {
         return $this;
     }
-
     /** @inheritDoc */
     #[\Override]
-    public function setStatus(string $code, ?string $description = null): SpanInterface
+    public function setStatus(string $code, ?string $description = null): \OpenTelemetry\API\Trace\SpanInterface
     {
         return $this;
     }
-
     /** @inheritDoc */
     #[\Override]
     public function end(?int $endEpochNanos = null): void

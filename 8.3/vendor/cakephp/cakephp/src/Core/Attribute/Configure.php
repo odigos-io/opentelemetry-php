@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -18,8 +18,7 @@ namespace Cake\Core\Attribute;
 
 use Attribute;
 use Cake\Core\Configure as CakeConfigure;
-use League\Container\Attribute\AttributeInterface;
-
+use Odigos\League\Container\Attribute\AttributeInterface;
 /**
  * Configure attribute for dependency injection container delegate.
  *
@@ -50,7 +49,6 @@ class Configure implements AttributeInterface
     public function __construct(private string $name)
     {
     }
-
     /**
      * @return mixed
      */

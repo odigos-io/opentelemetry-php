@@ -3,7 +3,6 @@
 namespace Illuminate\Console;
 
 use function Laravel\Prompts\confirm;
-
 trait ConfirmableTrait
 {
     /**
@@ -18,28 +17,20 @@ trait ConfirmableTrait
     public function confirmToProceed($warning = 'Application In Production', $callback = null)
     {
         $callback = is_null($callback) ? $this->getDefaultConfirmCallback() : $callback;
-
         $shouldConfirm = value($callback);
-
         if ($shouldConfirm) {
             if ($this->hasOption('force') && $this->option('force')) {
-                return true;
+                return \true;
             }
-
             $this->components->alert($warning);
-
-            $confirmed = confirm('Are you sure you want to run this command?', default: false);
-
-            if (! $confirmed) {
+            $confirmed = confirm('Are you sure you want to run this command?', default: \false);
+            if (!$confirmed) {
                 $this->components->warn('Command cancelled.');
-
-                return false;
+                return \false;
             }
         }
-
-        return true;
+        return \true;
     }
-
     /**
      * Get the default confirmation callback.
      *

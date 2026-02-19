@@ -1,10 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\Inflector;
 
-class NoopWordInflector implements WordInflector
+class NoopWordInflector implements \Doctrine\Inflector\WordInflector
 {
     public function inflect(string $word): string
     {

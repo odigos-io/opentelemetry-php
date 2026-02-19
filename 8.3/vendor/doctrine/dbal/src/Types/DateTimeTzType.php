@@ -1,14 +1,12 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\DBAL\Types;
 
 use DateTime;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Exception\InvalidFormat;
 use Doctrine\DBAL\Types\Exception\InvalidType;
-
 /**
  * DateTime type accepting additional information about timezone offsets.
  *
@@ -26,7 +24,7 @@ use Doctrine\DBAL\Types\Exception\InvalidType;
  * the offset and re-created from persistence with only the offset, not the original timezone
  * attached.
  */
-class DateTimeTzType extends Type implements PhpDateTimeMappingType
+class DateTimeTzType extends \Doctrine\DBAL\Types\Type implements \Doctrine\DBAL\Types\PhpDateTimeMappingType
 {
     /**
      * {@inheritDoc}
@@ -35,7 +33,6 @@ class DateTimeTzType extends Type implements PhpDateTimeMappingType
     {
         return $platform->getDateTimeTzTypeDeclarationSQL($column);
     }
-
     /**
      * @param T $value
      *
@@ -48,18 +45,11 @@ class DateTimeTzType extends Type implements PhpDateTimeMappingType
         if ($value === null) {
             return $value;
         }
-
         if ($value instanceof DateTime) {
             return $value->format($platform->getDateTimeTzFormatString());
         }
-
-        throw InvalidType::new(
-            $value,
-            static::class,
-            ['null', DateTime::class],
-        );
+        throw InvalidType::new($value, static::class, ['null', DateTime::class]);
     }
-
     /**
      * @param T $value
      *
@@ -72,16 +62,10 @@ class DateTimeTzType extends Type implements PhpDateTimeMappingType
         if ($value === null || $value instanceof DateTime) {
             return $value;
         }
-
         $dateTime = DateTime::createFromFormat($platform->getDateTimeTzFormatString(), $value);
-        if ($dateTime !== false) {
+        if ($dateTime !== \false) {
             return $dateTime;
         }
-
-        throw InvalidFormat::new(
-            $value,
-            static::class,
-            $platform->getDateTimeTzFormatString(),
-        );
+        throw InvalidFormat::new($value, static::class, $platform->getDateTimeTzFormatString());
     }
 }

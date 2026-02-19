@@ -4,7 +4,6 @@ namespace Illuminate\Http\Client\Events;
 
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\Request;
-
 class ConnectionFailed
 {
     /**
@@ -13,14 +12,12 @@ class ConnectionFailed
      * @var \Illuminate\Http\Client\Request
      */
     public $request;
-
     /**
      * The exception instance.
      *
      * @var \Illuminate\Http\Client\ConnectionException
      */
     public $exception;
-
     /**
      * Create a new event instance.
      *

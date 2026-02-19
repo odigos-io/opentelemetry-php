@@ -2,8 +2,7 @@
 
 namespace Illuminate\Support\Facades;
 
-use Mockery;
-
+use Odigos\Mockery;
 /**
  * @method static \Illuminate\Contracts\Cache\Repository store(string|null $name = null)
  * @method static \Illuminate\Contracts\Cache\Repository driver(string|null $driver = null)
@@ -63,7 +62,7 @@ use Mockery;
  * @see \Illuminate\Cache\CacheManager
  * @see \Illuminate\Cache\Repository
  */
-class Cache extends Facade
+class Cache extends \Illuminate\Support\Facades\Facade
 {
     /**
      * Get the registered name of the component.
@@ -74,7 +73,6 @@ class Cache extends Facade
     {
         return 'cache';
     }
-
     /**
      * Convert the facade into a Mockery spy.
      *
@@ -82,16 +80,14 @@ class Cache extends Facade
      */
     public static function spy()
     {
-        if (! static::isMock()) {
+        if (!static::isMock()) {
             $class = static::getMockableClass();
             $instance = static::getFacadeRoot();
-
             if ($class && $instance) {
                 return tap(Mockery::spy($instance)->makePartial(), function ($spy) {
                     static::swap($spy);
                 });
             }
-
             return tap($class ? Mockery::spy($class) : Mockery::spy(), function ($spy) {
                 static::swap($spy);
             });

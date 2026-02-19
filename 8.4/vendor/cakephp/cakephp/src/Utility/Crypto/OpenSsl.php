@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -17,7 +17,6 @@ declare(strict_types=1);
 namespace Cake\Utility\Crypto;
 
 use Cake\Core\Exception\CakeException;
-
 /**
  * OpenSSL implementation of crypto features for Cake\Utility\Security
  *
@@ -32,7 +31,6 @@ class OpenSsl
      * @var string
      */
     protected const METHOD_AES_256_CBC = 'aes-256-cbc';
-
     /**
      * Encrypt a value using AES-256.
      *
@@ -49,15 +47,12 @@ class OpenSsl
     {
         $method = static::METHOD_AES_256_CBC;
         $ivSize = openssl_cipher_iv_length($method);
-        if ($ivSize === false) {
+        if ($ivSize === \false) {
             throw new CakeException(sprintf('Cannot get the cipher iv length for `%s`', $method));
         }
-
         $iv = openssl_random_pseudo_bytes($ivSize);
-
-        return $iv . openssl_encrypt($plain, $method, $key, OPENSSL_RAW_DATA, $iv);
+        return $iv . openssl_encrypt($plain, $method, $key, \OPENSSL_RAW_DATA, $iv);
     }
-
     /**
      * Decrypt a value using AES-256.
      *
@@ -70,18 +65,15 @@ class OpenSsl
     {
         $method = static::METHOD_AES_256_CBC;
         $ivSize = openssl_cipher_iv_length($method);
-        if ($ivSize === false) {
+        if ($ivSize === \false) {
             throw new CakeException(sprintf('Cannot get the cipher iv length for `%s`', $method));
         }
-
         $iv = mb_substr($cipher, 0, $ivSize, '8bit');
         $cipher = mb_substr($cipher, $ivSize, null, '8bit');
-
-        $value = openssl_decrypt($cipher, $method, $key, OPENSSL_RAW_DATA, $iv);
-        if ($value === false) {
+        $value = openssl_decrypt($cipher, $method, $key, \OPENSSL_RAW_DATA, $iv);
+        if ($value === \false) {
             return null;
         }
-
         return $value;
     }
 }

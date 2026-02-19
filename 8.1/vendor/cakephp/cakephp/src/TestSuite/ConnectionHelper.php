@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -20,7 +20,6 @@ use Cake\Database\DriverFeatureEnum;
 use Cake\Database\Log\QueryLogger;
 use Cake\Datasource\ConnectionManager;
 use Closure;
-
 /**
  * Helper for managing test connections
  */
@@ -44,7 +43,6 @@ class ConnectionHelper
             if ($connection === 'test' || $connection === 'default') {
                 continue;
             }
-
             if (str_starts_with($connection, 'test_')) {
                 $original = substr($connection, 5);
                 ConnectionManager::alias($connection, $original);
@@ -54,7 +52,6 @@ class ConnectionHelper
             }
         }
     }
-
     /**
      * Enables query logging for all database connections.
      *
@@ -67,16 +64,12 @@ class ConnectionHelper
         foreach ($connections as $connection) {
             $connection = ConnectionManager::get($connection);
             $message = '--Starting test run ' . date('Y-m-d H:i:s');
-            if (
-                $connection instanceof Connection &&
-                $connection->getDriver()->log($message) === false
-            ) {
+            if ($connection instanceof Connection && $connection->getDriver()->log($message) === \false) {
                 $connection->getDriver()->setLogger(new QueryLogger());
                 $connection->getDriver()->log($message);
             }
         }
     }
-
     /**
      * Drops all tables.
      *
@@ -90,16 +83,13 @@ class ConnectionHelper
         assert($connection instanceof Connection);
         $collection = $connection->getSchemaCollection();
         $allTables = $collection->listTablesWithoutViews();
-
         // Skip special tables.
         // spatial_ref_sys - postgis and it is undroppable.
         $skip = ['spatial_ref_sys'];
         $allTables = array_diff($allTables, $skip);
-
         $tables = $tables !== null ? array_intersect($tables, $allTables) : $allTables;
         /** @var array<\Cake\Database\Schema\TableSchema> $schemas Specify type for psalm */
         $schemas = array_map(fn($table) => $collection->describe($table), $tables);
-
         $dialect = $connection->getDriver()->schemaDialect();
         foreach ($schemas as $schema) {
             foreach ($dialect->dropConstraintSql($schema) as $statement) {
@@ -112,7 +102,6 @@ class ConnectionHelper
             }
         }
     }
-
     /**
      * Truncates all tables.
      *
@@ -125,12 +114,10 @@ class ConnectionHelper
         $connection = ConnectionManager::get($connectionName);
         assert($connection instanceof Connection);
         $collection = $connection->getSchemaCollection();
-
         $allTables = $collection->listTablesWithoutViews();
         $tables = $tables !== null ? array_intersect($tables, $allTables) : $allTables;
         /** @var array<\Cake\Database\Schema\TableSchema> $schemas Specify type for psalm */
         $schemas = array_map(fn($table) => $collection->describe($table), $tables);
-
         self::runWithoutConstraints($connection, function (Connection $connection) use ($schemas): void {
             $dialect = $connection->getDriver()->schemaDialect();
             foreach ($schemas as $schema) {
@@ -140,7 +127,6 @@ class ConnectionHelper
             }
         });
     }
-
     /**
      * Runs callback with constraints disabled correctly per-database
      *

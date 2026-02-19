@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -23,7 +23,6 @@ use Cake\Database\TypedResultInterface;
 use Cake\Database\ValueBinder;
 use DateTimeInterface;
 use Stringable;
-
 /**
  * Trait that holds shared functionality for case related expressions.
  *
@@ -40,7 +39,6 @@ trait CaseExpressionTrait
     protected function inferType(mixed $value): ?string
     {
         $type = null;
-
         if (is_string($value)) {
             $type = 'string';
         } elseif (is_int($value)) {
@@ -53,22 +51,15 @@ trait CaseExpressionTrait
             $type = 'date';
         } elseif ($value instanceof DateTimeInterface) {
             $type = 'datetime';
-        } elseif (
-            $value instanceof Stringable
-        ) {
+        } elseif ($value instanceof Stringable) {
             $type = 'string';
-        } elseif (
-            $this->_typeMap !== null &&
-            $value instanceof IdentifierExpression
-        ) {
+        } elseif ($this->_typeMap !== null && $value instanceof \Cake\Database\Expression\IdentifierExpression) {
             $type = $this->_typeMap->type($value->getIdentifier());
         } elseif ($value instanceof TypedResultInterface) {
             $type = $value->getReturnType();
         }
-
         return $type;
     }
-
     /**
      * Compiles a nullable value to SQL.
      *
@@ -79,13 +70,9 @@ trait CaseExpressionTrait
      */
     protected function compileNullableValue(ValueBinder $binder, mixed $value, ?string $type = null): string
     {
-        if (
-            $type !== null &&
-            !($value instanceof ExpressionInterface)
-        ) {
+        if ($type !== null && !$value instanceof ExpressionInterface) {
             $value = $this->_castToExpression($value, $type);
         }
-
         if ($value === null) {
             $value = 'NULL';
         } elseif ($value instanceof Query) {
@@ -97,7 +84,6 @@ trait CaseExpressionTrait
             $binder->bind($placeholder, $value, $type);
             $value = $placeholder;
         }
-
         return $value;
     }
 }

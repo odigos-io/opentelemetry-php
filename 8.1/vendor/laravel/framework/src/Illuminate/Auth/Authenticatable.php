@@ -10,7 +10,6 @@ trait Authenticatable
      * @var string
      */
     protected $rememberTokenName = 'remember_token';
-
     /**
      * Get the name of the unique identifier for the user.
      *
@@ -20,7 +19,6 @@ trait Authenticatable
     {
         return $this->getKeyName();
     }
-
     /**
      * Get the unique identifier for the user.
      *
@@ -30,7 +28,6 @@ trait Authenticatable
     {
         return $this->{$this->getAuthIdentifierName()};
     }
-
     /**
      * Get the unique broadcast identifier for the user.
      *
@@ -40,7 +37,6 @@ trait Authenticatable
     {
         return $this->getAuthIdentifier();
     }
-
     /**
      * Get the password for the user.
      *
@@ -50,7 +46,6 @@ trait Authenticatable
     {
         return $this->password;
     }
-
     /**
      * Get the token value for the "remember me" session.
      *
@@ -58,11 +53,10 @@ trait Authenticatable
      */
     public function getRememberToken()
     {
-        if (! empty($this->getRememberTokenName())) {
+        if (!empty($this->getRememberTokenName())) {
             return (string) $this->{$this->getRememberTokenName()};
         }
     }
-
     /**
      * Set the token value for the "remember me" session.
      *
@@ -71,11 +65,10 @@ trait Authenticatable
      */
     public function setRememberToken($value)
     {
-        if (! empty($this->getRememberTokenName())) {
+        if (!empty($this->getRememberTokenName())) {
             $this->{$this->getRememberTokenName()} = $value;
         }
     }
-
     /**
      * Get the column name for the "remember me" token.
      *

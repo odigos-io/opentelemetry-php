@@ -12,7 +12,6 @@ use Illuminate\Support\Traits\Macroable;
 use IteratorAggregate;
 use JsonSerializable;
 use Traversable;
-
 /**
  * @template TKey of array-key
  * @template TValue
@@ -25,14 +24,12 @@ class Fluent implements Arrayable, ArrayAccess, IteratorAggregate, Jsonable, Jso
     use Conditionable, InteractsWithData, Macroable {
         __call as macroCall;
     }
-
     /**
      * All of the attributes set on the fluent instance.
      *
      * @var array<TKey, TValue>
      */
     protected $attributes = [];
-
     /**
      * Create a new fluent instance.
      *
@@ -42,7 +39,6 @@ class Fluent implements Arrayable, ArrayAccess, IteratorAggregate, Jsonable, Jso
     {
         $this->fill($attributes);
     }
-
     /**
      * Create a new fluent instance.
      *
@@ -53,7 +49,6 @@ class Fluent implements Arrayable, ArrayAccess, IteratorAggregate, Jsonable, Jso
     {
         return new static($attributes);
     }
-
     /**
      * Get an attribute from the fluent instance using "dot" notation.
      *
@@ -67,7 +62,6 @@ class Fluent implements Arrayable, ArrayAccess, IteratorAggregate, Jsonable, Jso
     {
         return data_get($this->attributes, $key, $default);
     }
-
     /**
      * Set an attribute on the fluent instance using "dot" notation.
      *
@@ -78,10 +72,8 @@ class Fluent implements Arrayable, ArrayAccess, IteratorAggregate, Jsonable, Jso
     public function set($key, $value)
     {
         data_set($this->attributes, $key, $value);
-
         return $this;
     }
-
     /**
      * Fill the fluent instance with an array of attributes.
      *
@@ -93,10 +85,8 @@ class Fluent implements Arrayable, ArrayAccess, IteratorAggregate, Jsonable, Jso
         foreach ($attributes as $key => $value) {
             $this->attributes[$key] = $value;
         }
-
         return $this;
     }
-
     /**
      * Get an attribute from the fluent instance.
      *
@@ -109,10 +99,8 @@ class Fluent implements Arrayable, ArrayAccess, IteratorAggregate, Jsonable, Jso
         if (array_key_exists($key, $this->attributes)) {
             return $this->attributes[$key];
         }
-
         return value($default);
     }
-
     /**
      * Get the value of the given key as a new Fluent instance.
      *
@@ -122,11 +110,8 @@ class Fluent implements Arrayable, ArrayAccess, IteratorAggregate, Jsonable, Jso
      */
     public function scope($key, $default = null)
     {
-        return new static(
-            (array) $this->get($key, $default)
-        );
+        return new static((array) $this->get($key, $default));
     }
-
     /**
      * Get all of the attributes from the fluent instance.
      *
@@ -136,20 +121,15 @@ class Fluent implements Arrayable, ArrayAccess, IteratorAggregate, Jsonable, Jso
     public function all($keys = null)
     {
         $data = $this->data();
-
-        if (! $keys) {
+        if (!$keys) {
             return $data;
         }
-
         $results = [];
-
         foreach (is_array($keys) ? $keys : func_get_args() as $key) {
-            Arr::set($results, $key, Arr::get($data, $key));
+            \Illuminate\Support\Arr::set($results, $key, \Illuminate\Support\Arr::get($data, $key));
         }
-
         return $results;
     }
-
     /**
      * Get data from the fluent instance.
      *
@@ -161,7 +141,6 @@ class Fluent implements Arrayable, ArrayAccess, IteratorAggregate, Jsonable, Jso
     {
         return $this->get($key, $default);
     }
-
     /**
      * Get the attributes from the fluent instance.
      *
@@ -171,7 +150,6 @@ class Fluent implements Arrayable, ArrayAccess, IteratorAggregate, Jsonable, Jso
     {
         return $this->attributes;
     }
-
     /**
      * Convert the fluent instance to an array.
      *
@@ -181,7 +159,6 @@ class Fluent implements Arrayable, ArrayAccess, IteratorAggregate, Jsonable, Jso
     {
         return $this->attributes;
     }
-
     /**
      * Convert the object into something JSON serializable.
      *
@@ -191,7 +168,6 @@ class Fluent implements Arrayable, ArrayAccess, IteratorAggregate, Jsonable, Jso
     {
         return $this->toArray();
     }
-
     /**
      * Convert the fluent instance to JSON.
      *
@@ -202,7 +178,6 @@ class Fluent implements Arrayable, ArrayAccess, IteratorAggregate, Jsonable, Jso
     {
         return json_encode($this->jsonSerialize(), $options);
     }
-
     /**
      * Convert the fluent instance to pretty print formatted JSON.
      *
@@ -212,9 +187,8 @@ class Fluent implements Arrayable, ArrayAccess, IteratorAggregate, Jsonable, Jso
      */
     public function toPrettyJson(int $options = 0)
     {
-        return $this->toJson(JSON_PRETTY_PRINT | $options);
+        return $this->toJson(\JSON_PRETTY_PRINT | $options);
     }
-
     /**
      * Determine if the fluent instance is empty.
      *
@@ -224,7 +198,6 @@ class Fluent implements Arrayable, ArrayAccess, IteratorAggregate, Jsonable, Jso
     {
         return empty($this->attributes);
     }
-
     /**
      * Determine if the fluent instance is not empty.
      *
@@ -232,9 +205,8 @@ class Fluent implements Arrayable, ArrayAccess, IteratorAggregate, Jsonable, Jso
      */
     public function isNotEmpty(): bool
     {
-        return ! $this->isEmpty();
+        return !$this->isEmpty();
     }
-
     /**
      * Determine if the given offset exists.
      *
@@ -245,7 +217,6 @@ class Fluent implements Arrayable, ArrayAccess, IteratorAggregate, Jsonable, Jso
     {
         return isset($this->attributes[$offset]);
     }
-
     /**
      * Get the value for a given offset.
      *
@@ -256,7 +227,6 @@ class Fluent implements Arrayable, ArrayAccess, IteratorAggregate, Jsonable, Jso
     {
         return $this->value($offset);
     }
-
     /**
      * Set the value at the given offset.
      *
@@ -268,7 +238,6 @@ class Fluent implements Arrayable, ArrayAccess, IteratorAggregate, Jsonable, Jso
     {
         $this->attributes[$offset] = $value;
     }
-
     /**
      * Unset the value at the given offset.
      *
@@ -279,7 +248,6 @@ class Fluent implements Arrayable, ArrayAccess, IteratorAggregate, Jsonable, Jso
     {
         unset($this->attributes[$offset]);
     }
-
     /**
      * Get an iterator for the attributes.
      *
@@ -289,7 +257,6 @@ class Fluent implements Arrayable, ArrayAccess, IteratorAggregate, Jsonable, Jso
     {
         return new ArrayIterator($this->attributes);
     }
-
     /**
      * Handle dynamic calls to the fluent instance to set attributes.
      *
@@ -302,12 +269,9 @@ class Fluent implements Arrayable, ArrayAccess, IteratorAggregate, Jsonable, Jso
         if (static::hasMacro($method)) {
             return $this->macroCall($method, $parameters);
         }
-
-        $this->attributes[$method] = count($parameters) > 0 ? array_first($parameters) : true;
-
+        $this->attributes[$method] = count($parameters) > 0 ? array_first($parameters) : \true;
         return $this;
     }
-
     /**
      * Dynamically retrieve the value of an attribute.
      *
@@ -318,7 +282,6 @@ class Fluent implements Arrayable, ArrayAccess, IteratorAggregate, Jsonable, Jso
     {
         return $this->value($key);
     }
-
     /**
      * Dynamically set the value of an attribute.
      *
@@ -330,7 +293,6 @@ class Fluent implements Arrayable, ArrayAccess, IteratorAggregate, Jsonable, Jso
     {
         $this->offsetSet($key, $value);
     }
-
     /**
      * Dynamically check if an attribute is set.
      *
@@ -341,7 +303,6 @@ class Fluent implements Arrayable, ArrayAccess, IteratorAggregate, Jsonable, Jso
     {
         return $this->offsetExists($key);
     }
-
     /**
      * Dynamically unset an attribute.
      *

@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\DBAL;
 
 use Closure;
@@ -37,7 +36,6 @@ use InvalidArgumentException;
 use SensitiveParameter;
 use Throwable;
 use Traversable;
-
 use function array_key_exists;
 use function array_merge;
 use function count;
@@ -47,7 +45,6 @@ use function is_int;
 use function is_string;
 use function key;
 use function sprintf;
-
 /**
  * A database abstraction-level connection that implements features like transaction isolation levels,
  * configuration, emulated transaction nesting, lazy connecting and more.
@@ -60,30 +57,25 @@ use function sprintf;
  *  >
  * @phpstan-consistent-constructor
  */
-class Connection implements ServerVersionProvider
+class Connection implements \Doctrine\DBAL\ServerVersionProvider
 {
     /**
      * The wrapped driver connection.
      */
     protected ?DriverConnection $_conn = null;
-
-    protected Configuration $_config;
-
+    protected \Doctrine\DBAL\Configuration $_config;
     /**
      * The current auto-commit mode of this connection.
      */
-    private bool $autoCommit = true;
-
+    private bool $autoCommit = \true;
     /**
      * The transaction nesting level.
      */
     private int $transactionNestingLevel = 0;
-
     /**
      * The currently active transaction isolation level or NULL before it has been determined.
      */
-    private ?TransactionIsolationLevel $transactionIsolationLevel = null;
-
+    private ?\Doctrine\DBAL\TransactionIsolationLevel $transactionIsolationLevel = null;
     /**
      * The parameters used during creation of the Connection instance.
      *
@@ -91,22 +83,17 @@ class Connection implements ServerVersionProvider
      * @phpstan-var Params
      */
     private array $params;
-
     /**
      * The database platform object used by the connection or NULL before it's initialized.
      */
     private ?AbstractPlatform $platform = null;
-
     private ?ExceptionConverter $exceptionConverter = null;
-    private ?Parser $parser                         = null;
-
+    private ?Parser $parser = null;
     /**
      * Flag that indicates whether the current transaction is marked for rollback only.
      */
-    private bool $isRollbackOnly = false;
-
+    private bool $isRollbackOnly = \false;
     private SchemaManagerFactory $schemaManagerFactory;
-
     /**
      * Initializes a new instance of the Connection class.
      *
@@ -117,20 +104,13 @@ class Connection implements ServerVersionProvider
      * @param Configuration|null   $config The configuration, optional.
      * @phpstan-param Params $params
      */
-    public function __construct(
-        #[SensitiveParameter]
-        array $params,
-        protected Driver $driver,
-        ?Configuration $config = null,
-    ) {
-        $this->_config    = $config ?? new Configuration();
-        $this->params     = $params;
+    public function __construct(#[SensitiveParameter] array $params, protected \Doctrine\DBAL\Driver $driver, ?\Doctrine\DBAL\Configuration $config = null)
+    {
+        $this->_config = $config ?? new \Doctrine\DBAL\Configuration();
+        $this->params = $params;
         $this->autoCommit = $this->_config->getAutoCommit();
-
-        $this->schemaManagerFactory = $this->_config->getSchemaManagerFactory()
-            ?? new DefaultSchemaManagerFactory();
+        $this->schemaManagerFactory = $this->_config->getSchemaManagerFactory() ?? new DefaultSchemaManagerFactory();
     }
-
     /**
      * Gets the parameters used during instantiation.
      *
@@ -143,7 +123,6 @@ class Connection implements ServerVersionProvider
     {
         return $this->params;
     }
-
     /**
      * Gets the name of the currently selected database.
      *
@@ -156,27 +135,23 @@ class Connection implements ServerVersionProvider
     public function getDatabase(): ?string
     {
         $platform = $this->getDatabasePlatform();
-        $query    = $platform->getDummySelectSQL($platform->getCurrentDatabaseExpression());
-
+        $query = $platform->getDummySelectSQL($platform->getCurrentDatabaseExpression());
         return $this->fetchOne($query);
     }
-
     /**
      * Gets the DBAL driver instance.
      */
-    public function getDriver(): Driver
+    public function getDriver(): \Doctrine\DBAL\Driver
     {
         return $this->driver;
     }
-
     /**
      * Gets the Configuration used by the Connection.
      */
-    public function getConfiguration(): Configuration
+    public function getConfiguration(): \Doctrine\DBAL\Configuration
     {
         return $this->_config;
     }
-
     /**
      * Gets the DatabasePlatform for the connection.
      *
@@ -186,19 +161,15 @@ class Connection implements ServerVersionProvider
     {
         if ($this->platform === null) {
             $versionProvider = $this;
-
             if (isset($this->params['serverVersion'])) {
                 $versionProvider = new StaticServerVersionProvider($this->params['serverVersion']);
             } elseif (isset($this->params['primary']['serverVersion'])) {
                 $versionProvider = new StaticServerVersionProvider($this->params['primary']['serverVersion']);
             }
-
             $this->platform = $this->driver->getDatabasePlatform($versionProvider);
         }
-
         return $this->platform;
     }
-
     /**
      * Creates an expression builder for the connection.
      */
@@ -206,7 +177,6 @@ class Connection implements ServerVersionProvider
     {
         return new ExpressionBuilder($this);
     }
-
     /**
      * Establishes the connection with the database and returns the underlying connection.
      *
@@ -217,20 +187,16 @@ class Connection implements ServerVersionProvider
         if ($this->_conn !== null) {
             return $this->_conn;
         }
-
         try {
             $connection = $this->_conn = $this->driver->connect($this->params);
-        } catch (Driver\Exception $e) {
+        } catch (\Doctrine\DBAL\Driver\Exception $e) {
             throw $this->convertException($e);
         }
-
-        if ($this->autoCommit === false) {
+        if ($this->autoCommit === \false) {
             $this->beginTransaction();
         }
-
         return $connection;
     }
-
     /**
      * {@inheritDoc}
      *
@@ -240,7 +206,6 @@ class Connection implements ServerVersionProvider
     {
         return $this->connect()->getServerVersion();
     }
-
     /**
      * Returns the current auto-commit mode for this connection.
      *
@@ -252,7 +217,6 @@ class Connection implements ServerVersionProvider
     {
         return $this->autoCommit;
     }
-
     /**
      * Sets auto-commit mode for this connection.
      *
@@ -273,17 +237,13 @@ class Connection implements ServerVersionProvider
         if ($autoCommit === $this->autoCommit) {
             return;
         }
-
         $this->autoCommit = $autoCommit;
-
         // Commit all currently active transactions if any when switching auto-commit mode.
         if ($this->_conn === null || $this->transactionNestingLevel === 0) {
             return;
         }
-
         $this->commitAll();
     }
-
     /**
      * Prepares and executes an SQL query and returns the first row of the result
      * as an associative array.
@@ -299,7 +259,6 @@ class Connection implements ServerVersionProvider
     {
         return $this->executeQuery($query, $params, $types)->fetchAssociative();
     }
-
     /**
      * Prepares and executes an SQL query and returns the first row of the result
      * as a numerically indexed array.
@@ -315,7 +274,6 @@ class Connection implements ServerVersionProvider
     {
         return $this->executeQuery($query, $params, $types)->fetchNumeric();
     }
-
     /**
      * Prepares and executes an SQL query and returns the value of a single column
      * of the first row of the result.
@@ -331,7 +289,6 @@ class Connection implements ServerVersionProvider
     {
         return $this->executeQuery($query, $params, $types)->fetchOne();
     }
-
     /**
      * Whether an actual connection to the database is established.
      *
@@ -341,7 +298,6 @@ class Connection implements ServerVersionProvider
     {
         return $this->_conn !== null;
     }
-
     /**
      * Checks whether a transaction is currently active.
      *
@@ -351,7 +307,6 @@ class Connection implements ServerVersionProvider
     {
         return $this->transactionNestingLevel > 0;
     }
-
     /**
      * Adds condition based on the criteria to the query components
      *
@@ -362,21 +317,17 @@ class Connection implements ServerVersionProvider
     private function getCriteriaCondition(array $criteria): array
     {
         $columns = $values = $conditions = [];
-
         foreach ($criteria as $columnName => $value) {
             if ($value === null) {
                 $conditions[] = $columnName . ' IS NULL';
                 continue;
             }
-
-            $columns[]    = $columnName;
-            $values[]     = $value;
+            $columns[] = $columnName;
+            $values[] = $value;
             $conditions[] = $columnName . ' = ?';
         }
-
         return [$columns, $values, $conditions];
     }
-
     /**
      * Executes an SQL DELETE statement on a table.
      *
@@ -392,29 +343,20 @@ class Connection implements ServerVersionProvider
     public function delete(string $table, array $criteria = [], array $types = []): int|string
     {
         [$columns, $values, $conditions] = $this->getCriteriaCondition($criteria);
-
         $sql = 'DELETE FROM ' . $table;
-
         if ($conditions !== []) {
             $sql .= ' WHERE ' . implode(' AND ', $conditions);
         }
-
-        return $this->executeStatement(
-            $sql,
-            $values,
-            is_string(key($types)) ? $this->extractTypeValues($columns, $types) : $types,
-        );
+        return $this->executeStatement($sql, $values, is_string(key($types)) ? $this->extractTypeValues($columns, $types) : $types);
     }
-
     /**
      * Closes the connection.
      */
     public function close(): void
     {
-        $this->_conn                   = null;
+        $this->_conn = null;
         $this->transactionNestingLevel = 0;
     }
-
     /**
      * Sets the transaction isolation level.
      *
@@ -422,13 +364,11 @@ class Connection implements ServerVersionProvider
      *
      * @throws Exception
      */
-    public function setTransactionIsolation(TransactionIsolationLevel $level): void
+    public function setTransactionIsolation(\Doctrine\DBAL\TransactionIsolationLevel $level): void
     {
         $this->transactionIsolationLevel = $level;
-
         $this->executeStatement($this->getDatabasePlatform()->getSetTransactionIsolationSQL($level));
     }
-
     /**
      * Gets the currently active transaction isolation level.
      *
@@ -436,11 +376,10 @@ class Connection implements ServerVersionProvider
      *
      * @throws Exception
      */
-    public function getTransactionIsolation(): TransactionIsolationLevel
+    public function getTransactionIsolation(): \Doctrine\DBAL\TransactionIsolationLevel
     {
         return $this->transactionIsolationLevel ??= $this->getDatabasePlatform()->getDefaultTransactionIsolationLevel();
     }
-
     /**
      * Executes an SQL UPDATE statement on a table.
      *
@@ -457,32 +396,24 @@ class Connection implements ServerVersionProvider
     public function update(string $table, array $data, array $criteria = [], array $types = []): int|string
     {
         $columns = $values = $conditions = $set = [];
-
         foreach ($data as $columnName => $value) {
             $columns[] = $columnName;
-            $values[]  = $value;
-            $set[]     = $columnName . ' = ?';
+            $values[] = $value;
+            $set[] = $columnName . ' = ?';
         }
-
         [$criteriaColumns, $criteriaValues, $criteriaConditions] = $this->getCriteriaCondition($criteria);
-
-        $columns    = array_merge($columns, $criteriaColumns);
-        $values     = array_merge($values, $criteriaValues);
+        $columns = array_merge($columns, $criteriaColumns);
+        $values = array_merge($values, $criteriaValues);
         $conditions = array_merge($conditions, $criteriaConditions);
-
         if (is_string(key($types))) {
             $types = $this->extractTypeValues($columns, $types);
         }
-
         $sql = 'UPDATE ' . $table . ' SET ' . implode(', ', $set);
-
         if ($conditions !== []) {
             $sql .= ' WHERE ' . implode(' AND ', $conditions);
         }
-
         return $this->executeStatement($sql, $values, $types);
     }
-
     /**
      * Inserts a table row with specified data.
      *
@@ -500,25 +431,16 @@ class Connection implements ServerVersionProvider
         if (count($data) === 0) {
             return $this->executeStatement('INSERT INTO ' . $table . ' () VALUES ()');
         }
-
         $columns = [];
-        $values  = [];
-        $set     = [];
-
+        $values = [];
+        $set = [];
         foreach ($data as $columnName => $value) {
             $columns[] = $columnName;
-            $values[]  = $value;
-            $set[]     = '?';
+            $values[] = $value;
+            $set[] = '?';
         }
-
-        return $this->executeStatement(
-            'INSERT INTO ' . $table . ' (' . implode(', ', $columns) . ')' .
-            ' VALUES (' . implode(', ', $set) . ')',
-            $values,
-            is_string(key($types)) ? $this->extractTypeValues($columns, $types) : $types,
-        );
+        return $this->executeStatement('INSERT INTO ' . $table . ' (' . implode(', ', $columns) . ')' . ' VALUES (' . implode(', ', $set) . ')', $values, is_string(key($types)) ? $this->extractTypeValues($columns, $types) : $types);
     }
-
     /**
      * Extract ordered type list from an ordered column list and type map.
      *
@@ -530,14 +452,11 @@ class Connection implements ServerVersionProvider
     private function extractTypeValues(array $columns, array $types): array
     {
         $typeValues = [];
-
         foreach ($columns as $columnName) {
-            $typeValues[] = $types[$columnName] ?? ParameterType::STRING;
+            $typeValues[] = $types[$columnName] ?? \Doctrine\DBAL\ParameterType::STRING;
         }
-
         return $typeValues;
     }
-
     /**
      * Quotes a string so it can be safely used as a table or column name, even if
      * it is a reserved name.
@@ -558,19 +477,13 @@ class Connection implements ServerVersionProvider
      */
     public function quoteIdentifier(string $identifier): string
     {
-        Deprecation::trigger(
-            'doctrine/dbal',
-            'https://github.com/doctrine/dbal/pull/6590',
-            <<<'DEPRECATION'
-            Method %s is deprecated and will be removed in 5.0.
-            Use quoteSingleIdentifier() individually for each part of a qualified name instead.
-            DEPRECATION,
-            __METHOD__,
-        );
-
+        Deprecation::trigger('doctrine/dbal', 'https://github.com/doctrine/dbal/pull/6590', <<<'DEPRECATION'
+Method %s is deprecated and will be removed in 5.0.
+Use quoteSingleIdentifier() individually for each part of a qualified name instead.
+DEPRECATION
+, __METHOD__);
         return $this->getDatabasePlatform()->quoteIdentifier($identifier);
     }
-
     /**
      * Quotes a string so that it can be safely used as an identifier in SQL.
      *
@@ -580,7 +493,6 @@ class Connection implements ServerVersionProvider
     {
         return $this->getDatabasePlatform()->quoteSingleIdentifier($identifier);
     }
-
     /**
      * The usage of this method is discouraged. Use prepared statements
      * or {@see AbstractPlatform::quoteStringLiteral()} instead.
@@ -591,7 +503,6 @@ class Connection implements ServerVersionProvider
     {
         return $this->connect()->quote($value);
     }
-
     /**
      * Prepares and executes an SQL query and returns the result as an array of numeric arrays.
      *
@@ -606,7 +517,6 @@ class Connection implements ServerVersionProvider
     {
         return $this->executeQuery($query, $params, $types)->fetchAllNumeric();
     }
-
     /**
      * Prepares and executes an SQL query and returns the result as an array of associative arrays.
      *
@@ -621,7 +531,6 @@ class Connection implements ServerVersionProvider
     {
         return $this->executeQuery($query, $params, $types)->fetchAllAssociative();
     }
-
     /**
      * Prepares and executes an SQL query and returns the result as an associative array with the keys
      * mapped to the first column and the values mapped to the second column.
@@ -637,7 +546,6 @@ class Connection implements ServerVersionProvider
     {
         return $this->executeQuery($query, $params, $types)->fetchAllKeyValue();
     }
-
     /**
      * Prepares and executes an SQL query and returns the result as an associative array with the keys mapped
      * to the first column and the values being an associative array representing the rest of the columns
@@ -654,7 +562,6 @@ class Connection implements ServerVersionProvider
     {
         return $this->executeQuery($query, $params, $types)->fetchAllAssociativeIndexed();
     }
-
     /**
      * Prepares and executes an SQL query and returns the result as an array of the first column values.
      *
@@ -669,7 +576,6 @@ class Connection implements ServerVersionProvider
     {
         return $this->executeQuery($query, $params, $types)->fetchFirstColumn();
     }
-
     /**
      * Prepares and executes an SQL query and returns the result as an iterator over rows represented as numeric arrays.
      *
@@ -684,7 +590,6 @@ class Connection implements ServerVersionProvider
     {
         return $this->executeQuery($query, $params, $types)->iterateNumeric();
     }
-
     /**
      * Prepares and executes an SQL query and returns the result as an iterator over rows represented
      * as associative arrays.
@@ -700,7 +605,6 @@ class Connection implements ServerVersionProvider
     {
         return $this->executeQuery($query, $params, $types)->iterateAssociative();
     }
-
     /**
      * Prepares and executes an SQL query and returns the result as an iterator with the keys
      * mapped to the first column and the values mapped to the second column.
@@ -716,7 +620,6 @@ class Connection implements ServerVersionProvider
     {
         return $this->executeQuery($query, $params, $types)->iterateKeyValue();
     }
-
     /**
      * Prepares and executes an SQL query and returns the result as an iterator with the keys mapped
      * to the first column and the values being an associative array representing the rest of the columns
@@ -733,7 +636,6 @@ class Connection implements ServerVersionProvider
     {
         return $this->executeQuery($query, $params, $types)->iterateAssociativeIndexed();
     }
-
     /**
      * Prepares and executes an SQL query and returns the result as an iterator over the first column values.
      *
@@ -748,7 +650,6 @@ class Connection implements ServerVersionProvider
     {
         return $this->executeQuery($query, $params, $types)->iterateColumn();
     }
-
     /**
      * Prepares an SQL statement.
      *
@@ -756,19 +657,16 @@ class Connection implements ServerVersionProvider
      *
      * @throws Exception
      */
-    public function prepare(string $sql): Statement
+    public function prepare(string $sql): \Doctrine\DBAL\Statement
     {
         $connection = $this->connect();
-
         try {
             $statement = $connection->prepare($sql);
-        } catch (Driver\Exception $e) {
+        } catch (\Doctrine\DBAL\Driver\Exception $e) {
             throw $this->convertExceptionDuringQuery($e, $sql);
         }
-
-        return new Statement($this, $statement, $sql);
+        return new \Doctrine\DBAL\Statement($this, $statement, $sql);
     }
-
     /**
      * Executes an, optionally parameterized, SQL query.
      *
@@ -779,37 +677,26 @@ class Connection implements ServerVersionProvider
      *
      * @throws Exception
      */
-    public function executeQuery(
-        string $sql,
-        array $params = [],
-        array $types = [],
-        ?QueryCacheProfile $qcp = null,
-    ): Result {
+    public function executeQuery(string $sql, array $params = [], array $types = [], ?QueryCacheProfile $qcp = null): \Doctrine\DBAL\Result
+    {
         if ($qcp !== null) {
             return $this->executeCacheQuery($sql, $params, $types, $qcp);
         }
-
         $connection = $this->connect();
-
         try {
             if (count($params) > 0) {
                 [$sql, $params, $types] = $this->expandArrayParameters($sql, $params, $types);
-
                 $stmt = $connection->prepare($sql);
-
                 $this->bindParameters($stmt, $params, $types);
-
                 $result = $stmt->execute();
             } else {
                 $result = $connection->query($sql);
             }
-
-            return new Result($result, $this);
-        } catch (Driver\Exception $e) {
+            return new \Doctrine\DBAL\Result($result, $this);
+        } catch (\Doctrine\DBAL\Driver\Exception $e) {
             throw $this->convertExceptionDuringQuery($e, $sql, $params, $types);
         }
     }
-
     /**
      * Executes a caching query.
      *
@@ -819,58 +706,43 @@ class Connection implements ServerVersionProvider
      * @throws CacheException
      * @throws Exception
      */
-    public function executeCacheQuery(string $sql, array $params, array $types, QueryCacheProfile $qcp): Result
+    public function executeCacheQuery(string $sql, array $params, array $types, QueryCacheProfile $qcp): \Doctrine\DBAL\Result
     {
         $resultCache = $qcp->getResultCache() ?? $this->_config->getResultCache();
-
         if ($resultCache === null) {
             throw NoResultDriverConfigured::new();
         }
-
         $connectionParams = $this->params;
         unset($connectionParams['password']);
-
         [$cacheKey, $realKey] = $qcp->generateCacheKeys($sql, $params, $types, $connectionParams);
-
         // @phpstan-ignore missingType.checkedException
         $item = $resultCache->getItem($cacheKey);
-
         if ($item->isHit()) {
             $value = $item->get();
-            if (! is_array($value)) {
+            if (!is_array($value)) {
                 $value = [];
             }
-
             if (isset($value[$realKey]) && $value[$realKey] instanceof ArrayResult) {
-                return new Result(clone $value[$realKey], $this);
+                return new \Doctrine\DBAL\Result(clone $value[$realKey], $this);
             }
         } else {
             $value = [];
         }
-
         $result = $this->executeQuery($sql, $params, $types);
-
         $columnNames = [];
         for ($i = 0; $i < $result->columnCount(); $i++) {
             $columnNames[] = $result->getColumnName($i);
         }
-
         $rows = $result->fetchAllNumeric();
-
         $value[$realKey] = new ArrayResult($columnNames, $rows);
-
         $item->set($value);
-
         $lifetime = $qcp->getLifetime();
         if ($lifetime > 0) {
             $item->expiresAfter($lifetime);
         }
-
         $resultCache->save($item);
-
-        return new Result(clone $value[$realKey], $this);
+        return new \Doctrine\DBAL\Result(clone $value[$realKey], $this);
     }
-
     /**
      * Executes an SQL statement with the given parameters and returns the number of affected rows.
      *
@@ -893,25 +765,18 @@ class Connection implements ServerVersionProvider
     public function executeStatement(string $sql, array $params = [], array $types = []): int|string
     {
         $connection = $this->connect();
-
         try {
             if (count($params) > 0) {
                 [$sql, $params, $types] = $this->expandArrayParameters($sql, $params, $types);
-
                 $stmt = $connection->prepare($sql);
-
                 $this->bindParameters($stmt, $params, $types);
-
-                return $stmt->execute()
-                    ->rowCount();
+                return $stmt->execute()->rowCount();
             }
-
             return $connection->exec($sql);
-        } catch (Driver\Exception $e) {
+        } catch (\Doctrine\DBAL\Driver\Exception $e) {
             throw $this->convertExceptionDuringQuery($e, $sql, $params, $types);
         }
     }
-
     /**
      * Returns the current transaction nesting level.
      *
@@ -921,7 +786,6 @@ class Connection implements ServerVersionProvider
     {
         return $this->transactionNestingLevel;
     }
-
     /**
      * Returns the ID of the last inserted row.
      *
@@ -933,11 +797,10 @@ class Connection implements ServerVersionProvider
     {
         try {
             return $this->connect()->lastInsertId();
-        } catch (Driver\Exception $e) {
+        } catch (\Doctrine\DBAL\Driver\Exception $e) {
             throw $this->convertException($e);
         }
     }
-
     /**
      * Executes a function in a transaction.
      *
@@ -957,46 +820,32 @@ class Connection implements ServerVersionProvider
     public function transactional(Closure $func): mixed
     {
         $this->beginTransaction();
-
-        $successful = false;
-
+        $successful = \false;
         try {
             $res = $func($this);
-
-            $successful = true;
+            $successful = \true;
         } catch (ConnectionLost $connectionLost) {
             // Catching here only to be able to prevent a rollback attempt
             throw $connectionLost;
         } finally {
-            if (! isset($connectionLost) && ! $successful) {
+            if (!isset($connectionLost) && !$successful) {
                 $this->rollBack();
             }
         }
-
-        $shouldRollback = true;
+        $shouldRollback = \true;
         try {
             $this->commit();
-
-            $shouldRollback = false;
+            $shouldRollback = \false;
         } catch (TheDriverException $t) {
-            $shouldRollback = ! (
-                $t instanceof TransactionRolledBack
-                || $t instanceof UniqueConstraintViolationException
-                || $t instanceof ForeignKeyConstraintViolationException
-                || $t instanceof DeadlockException
-                || $t instanceof ConnectionLost
-            );
-
+            $shouldRollback = !($t instanceof TransactionRolledBack || $t instanceof UniqueConstraintViolationException || $t instanceof ForeignKeyConstraintViolationException || $t instanceof DeadlockException || $t instanceof ConnectionLost);
             throw $t;
         } finally {
             if ($shouldRollback) {
                 $this->rollBack();
             }
         }
-
         return $res;
     }
-
     /**
      * Sets if nested transactions should use savepoints.
      *
@@ -1006,21 +855,11 @@ class Connection implements ServerVersionProvider
      */
     public function setNestTransactionsWithSavepoints(bool $nestTransactionsWithSavepoints): void
     {
-        if (! $nestTransactionsWithSavepoints) {
-            throw new InvalidArgumentException(sprintf(
-                'Calling %s with false to enable nesting transactions without savepoints is no longer supported.',
-                __METHOD__,
-            ));
+        if (!$nestTransactionsWithSavepoints) {
+            throw new InvalidArgumentException(sprintf('Calling %s with false to enable nesting transactions without savepoints is no longer supported.', __METHOD__));
         }
-
-        Deprecation::trigger(
-            'doctrine/dbal',
-            'https://github.com/doctrine/dbal/pull/5383',
-            '%s is deprecated and will be removed in 5.0',
-            __METHOD__,
-        );
+        Deprecation::trigger('doctrine/dbal', 'https://github.com/doctrine/dbal/pull/5383', '%s is deprecated and will be removed in 5.0', __METHOD__);
     }
-
     /**
      * Gets if nested transactions should use savepoints.
      *
@@ -1028,16 +867,9 @@ class Connection implements ServerVersionProvider
      */
     public function getNestTransactionsWithSavepoints(): bool
     {
-        Deprecation::trigger(
-            'doctrine/dbal',
-            'https://github.com/doctrine/dbal/pull/5383',
-            '%s is deprecated and will be removed in 5.0',
-            __METHOD__,
-        );
-
-        return true;
+        Deprecation::trigger('doctrine/dbal', 'https://github.com/doctrine/dbal/pull/5383', '%s is deprecated and will be removed in 5.0', __METHOD__);
+        return \true;
     }
-
     /**
      * Returns the savepoint name to use for nested transactions.
      */
@@ -1045,43 +877,36 @@ class Connection implements ServerVersionProvider
     {
         return 'DOCTRINE_' . $this->transactionNestingLevel;
     }
-
     /** @throws Exception */
     public function beginTransaction(): void
     {
         $connection = $this->connect();
-
         ++$this->transactionNestingLevel;
-
         if ($this->transactionNestingLevel === 1) {
             try {
                 $connection->beginTransaction();
-            } catch (Driver\Exception $e) {
+            } catch (\Doctrine\DBAL\Driver\Exception $e) {
                 throw $this->convertException($e);
             }
         } else {
             $this->createSavepoint($this->_getNestedTransactionSavePointName());
         }
     }
-
     /** @throws Exception */
     public function commit(): void
     {
         if ($this->transactionNestingLevel === 0) {
             throw NoActiveTransaction::new();
         }
-
         if ($this->isRollbackOnly) {
             throw CommitFailedRollbackOnly::new();
         }
-
         $connection = $this->connect();
-
         try {
             if ($this->transactionNestingLevel === 1) {
                 try {
                     $connection->commit();
-                } catch (Driver\Exception $e) {
+                } catch (\Doctrine\DBAL\Driver\Exception $e) {
                     throw $this->convertException($e);
                 }
             } else {
@@ -1091,21 +916,17 @@ class Connection implements ServerVersionProvider
             $this->updateTransactionStateAfterCommit();
         }
     }
-
     /** @throws Exception */
     private function updateTransactionStateAfterCommit(): void
     {
         if ($this->transactionNestingLevel !== 0) {
             --$this->transactionNestingLevel;
         }
-
-        if ($this->autoCommit !== false || $this->transactionNestingLevel !== 0) {
+        if ($this->autoCommit !== \false || $this->transactionNestingLevel !== 0) {
             return;
         }
-
         $this->beginTransaction();
     }
-
     /**
      * Commits all current nesting transactions.
      *
@@ -1114,38 +935,31 @@ class Connection implements ServerVersionProvider
     private function commitAll(): void
     {
         while ($this->transactionNestingLevel !== 0) {
-            if ($this->autoCommit === false && $this->transactionNestingLevel === 1) {
+            if ($this->autoCommit === \false && $this->transactionNestingLevel === 1) {
                 // When in no auto-commit mode, the last nesting commit immediately starts a new transaction.
                 // Therefore we need to do the final commit here and then leave to avoid an infinite loop.
                 $this->commit();
-
                 return;
             }
-
             $this->commit();
         }
     }
-
     /** @throws Exception */
     public function rollBack(): void
     {
         if ($this->transactionNestingLevel === 0) {
             throw NoActiveTransaction::new();
         }
-
         $connection = $this->connect();
-
         if ($this->transactionNestingLevel === 1) {
             $this->transactionNestingLevel = 0;
-
             try {
                 $connection->rollBack();
-            } catch (Driver\Exception $e) {
+            } catch (\Doctrine\DBAL\Driver\Exception $e) {
                 throw $this->convertException($e);
             } finally {
-                $this->isRollbackOnly = false;
-
-                if ($this->autoCommit === false) {
+                $this->isRollbackOnly = \false;
+                if ($this->autoCommit === \false) {
                     $this->beginTransaction();
                 }
             }
@@ -1154,7 +968,6 @@ class Connection implements ServerVersionProvider
             --$this->transactionNestingLevel;
         }
     }
-
     /**
      * Creates a new savepoint.
      *
@@ -1165,14 +978,11 @@ class Connection implements ServerVersionProvider
     public function createSavepoint(string $savepoint): void
     {
         $platform = $this->getDatabasePlatform();
-
-        if (! $platform->supportsSavepoints()) {
+        if (!$platform->supportsSavepoints()) {
             throw SavepointsNotSupported::new();
         }
-
         $this->executeStatement($platform->createSavePoint($savepoint));
     }
-
     /**
      * Releases the given savepoint.
      *
@@ -1183,18 +993,14 @@ class Connection implements ServerVersionProvider
     public function releaseSavepoint(string $savepoint): void
     {
         $platform = $this->getDatabasePlatform();
-
-        if (! $platform->supportsSavepoints()) {
+        if (!$platform->supportsSavepoints()) {
             throw SavepointsNotSupported::new();
         }
-
-        if (! $platform->supportsReleaseSavepoints()) {
+        if (!$platform->supportsReleaseSavepoints()) {
             return;
         }
-
         $this->executeStatement($platform->releaseSavePoint($savepoint));
     }
-
     /**
      * Rolls back to the given savepoint.
      *
@@ -1205,14 +1011,11 @@ class Connection implements ServerVersionProvider
     public function rollbackSavepoint(string $savepoint): void
     {
         $platform = $this->getDatabasePlatform();
-
-        if (! $platform->supportsSavepoints()) {
+        if (!$platform->supportsSavepoints()) {
             throw SavepointsNotSupported::new();
         }
-
         $this->executeStatement($platform->rollbackSavePoint($savepoint));
     }
-
     /**
      * Provides access to the native database connection.
      *
@@ -1224,7 +1027,6 @@ class Connection implements ServerVersionProvider
     {
         return $this->connect()->getNativeConnection();
     }
-
     /**
      * Creates a SchemaManager that can be used to inspect or change the
      * database schema through the connection.
@@ -1235,7 +1037,6 @@ class Connection implements ServerVersionProvider
     {
         return $this->schemaManagerFactory->createSchemaManager($this);
     }
-
     /**
      * Marks the current transaction so that the only possible
      * outcome for the transaction to be rolled back.
@@ -1247,10 +1048,8 @@ class Connection implements ServerVersionProvider
         if ($this->transactionNestingLevel === 0) {
             throw NoActiveTransaction::new();
         }
-
-        $this->isRollbackOnly = true;
+        $this->isRollbackOnly = \true;
     }
-
     /**
      * Checks whether the current transaction is marked for rollback only.
      *
@@ -1261,10 +1060,8 @@ class Connection implements ServerVersionProvider
         if ($this->transactionNestingLevel === 0) {
             throw NoActiveTransaction::new();
         }
-
         return $this->isRollbackOnly;
     }
-
     /**
      * Converts a given value to its database representation according to the conversion
      * rules of a specific DBAL mapping type.
@@ -1280,7 +1077,6 @@ class Connection implements ServerVersionProvider
     {
         return Type::getType($type)->convertToDatabaseValue($value, $this->getDatabasePlatform());
     }
-
     /**
      * Converts a given value to its PHP representation according to the conversion
      * rules of a specific DBAL mapping type.
@@ -1296,7 +1092,6 @@ class Connection implements ServerVersionProvider
     {
         return Type::getType($type)->convertToPHPValue($value, $this->getDatabasePlatform());
     }
-
     /**
      * Binds a set of parameters, some or all of which are typed with a PDO binding type
      * or DBAL mapping type, to a given statement.
@@ -1311,42 +1106,37 @@ class Connection implements ServerVersionProvider
         // Check whether parameters are positional or named. Mixing is not allowed.
         if (is_int(key($params))) {
             $bindIndex = 1;
-
             foreach ($params as $key => $value) {
                 if (array_key_exists($key, $types)) {
-                    $type                  = $types[$key];
+                    $type = $types[$key];
                     [$value, $bindingType] = $this->getBindingInfo($value, $type);
                 } else {
-                    $bindingType = ParameterType::STRING;
+                    $bindingType = \Doctrine\DBAL\ParameterType::STRING;
                 }
-
                 try {
                     $stmt->bindValue($bindIndex, $value, $bindingType);
-                } catch (Driver\Exception $e) {
+                } catch (\Doctrine\DBAL\Driver\Exception $e) {
                     throw $this->convertException($e);
                 }
-
                 ++$bindIndex;
             }
         } else {
             // Named parameters
             foreach ($params as $name => $value) {
                 if (array_key_exists($name, $types)) {
-                    $type                  = $types[$name];
+                    $type = $types[$name];
                     [$value, $bindingType] = $this->getBindingInfo($value, $type);
                 } else {
-                    $bindingType = ParameterType::STRING;
+                    $bindingType = \Doctrine\DBAL\ParameterType::STRING;
                 }
-
                 try {
                     $stmt->bindValue($name, $value, $bindingType);
-                } catch (Driver\Exception $e) {
+                } catch (\Doctrine\DBAL\Driver\Exception $e) {
                     throw $this->convertException($e);
                 }
             }
         }
     }
-
     /**
      * Gets the binding type of a given type.
      *
@@ -1357,51 +1147,41 @@ class Connection implements ServerVersionProvider
      *
      * @throws Exception
      */
-    private function getBindingInfo(mixed $value, string|ParameterType|Type $type): array
+    private function getBindingInfo(mixed $value, string|\Doctrine\DBAL\ParameterType|Type $type): array
     {
         if (is_string($type)) {
             $type = Type::getType($type);
         }
-
         if ($type instanceof Type) {
-            $value       = $type->convertToDatabaseValue($value, $this->getDatabasePlatform());
+            $value = $type->convertToDatabaseValue($value, $this->getDatabasePlatform());
             $bindingType = $type->getBindingType();
         } else {
             $bindingType = $type;
         }
-
         return [$value, $bindingType];
     }
-
     /**
      * Creates a new instance of a SQL query builder.
      */
     public function createQueryBuilder(): QueryBuilder
     {
-        return new Query\QueryBuilder($this);
+        return new \Doctrine\DBAL\Query\QueryBuilder($this);
     }
-
     /**
      * @internal
      *
      * @param list<mixed>|array<string,mixed> $params
      * @phpstan-param WrapperParameterTypeArray $types
      */
-    final public function convertExceptionDuringQuery(
-        Driver\Exception $e,
-        string $sql,
-        array $params = [],
-        array $types = [],
-    ): DriverException {
-        return $this->handleDriverException($e, new Query($sql, $params, $types));
+    final public function convertExceptionDuringQuery(\Doctrine\DBAL\Driver\Exception $e, string $sql, array $params = [], array $types = []): DriverException
+    {
+        return $this->handleDriverException($e, new \Doctrine\DBAL\Query($sql, $params, $types));
     }
-
     /** @internal */
-    final public function convertException(Driver\Exception $e): DriverException
+    final public function convertException(\Doctrine\DBAL\Driver\Exception $e): DriverException
     {
         return $this->handleDriverException($e, null);
     }
-
     /**
      * @param list<mixed>|array<string, mixed> $params
      * @phpstan-param WrapperParameterTypeArray $types
@@ -1416,53 +1196,38 @@ class Connection implements ServerVersionProvider
      */
     private function expandArrayParameters(string $sql, array $params, array $types): array
     {
-        $needsConversion = false;
-        $nonArrayTypes   = [];
-
+        $needsConversion = \false;
+        $nonArrayTypes = [];
         if (is_string(key($params))) {
-            $needsConversion = true;
+            $needsConversion = \true;
         } else {
             foreach ($types as $key => $type) {
-                if ($type instanceof ArrayParameterType) {
-                    $needsConversion = true;
+                if ($type instanceof \Doctrine\DBAL\ArrayParameterType) {
+                    $needsConversion = \true;
                     break;
                 }
-
                 $nonArrayTypes[$key] = $type;
             }
         }
-
-        if (! $needsConversion) {
+        if (!$needsConversion) {
             return [$sql, $params, $nonArrayTypes];
         }
-
         $this->parser ??= $this->getDatabasePlatform()->createSQLParser();
-        $visitor        = new ExpandArrayParameters($params, $types);
-
+        $visitor = new \Doctrine\DBAL\ExpandArrayParameters($params, $types);
         try {
             $this->parser->parse($sql, $visitor);
         } catch (Parser\Exception $e) {
             throw ParseError::fromParserException($e);
         }
-
-        return [
-            $visitor->getSQL(),
-            $visitor->getParameters(),
-            $visitor->getTypes(),
-        ];
+        return [$visitor->getSQL(), $visitor->getParameters(), $visitor->getTypes()];
     }
-
-    private function handleDriverException(
-        Driver\Exception $driverException,
-        ?Query $query,
-    ): DriverException {
+    private function handleDriverException(\Doctrine\DBAL\Driver\Exception $driverException, ?\Doctrine\DBAL\Query $query): DriverException
+    {
         $this->exceptionConverter ??= $this->driver->getExceptionConverter();
-        $exception                  = $this->exceptionConverter->convert($driverException, $query);
-
+        $exception = $this->exceptionConverter->convert($driverException, $query);
         if ($exception instanceof ConnectionLost) {
             $this->close();
         }
-
         return $exception;
     }
 }

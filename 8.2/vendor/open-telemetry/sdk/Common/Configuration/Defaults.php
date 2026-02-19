@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\SDK\Common\Configuration;
 
 /**
@@ -39,7 +38,7 @@ interface Defaults
      * @see https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/configuration/sdk-environment-variables.md#attribute-limits
      */
     public const OTEL_ATTRIBUTE_COUNT_LIMIT = 128;
-    public const OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT = PHP_INT_MAX;
+    public const OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT = \PHP_INT_MAX;
     /**
      * Span Limits
      * @see https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/configuration/sdk-environment-variables.md#span-limits
@@ -53,7 +52,7 @@ interface Defaults
      * LogRecord Limits
      * @see https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/configuration/sdk-environment-variables.md#logrecord-limits
      */
-    public const OTEL_LOGRECORD_ATTRIBUTE_VALUE_LENGTH_LIMIT = PHP_INT_MAX;
+    public const OTEL_LOGRECORD_ATTRIBUTE_VALUE_LENGTH_LIMIT = \PHP_INT_MAX;
     public const OTEL_LOGRECORD_ATTRIBUTE_COUNT_LIMIT = 128;
     /**
      * OTLP Exporter
@@ -70,7 +69,8 @@ interface Defaults
     public const OTEL_EXPORTER_OTLP_METRICS_INSECURE = 'false';
     public const OTEL_EXPORTER_OTLP_LOGS_INSECURE = 'false';
     // Timeout (seconds)
-    public const OTEL_EXPORTER_OTLP_TIMEOUT = 10000; //10s
+    public const OTEL_EXPORTER_OTLP_TIMEOUT = 10000;
+    //10s
     public const OTEL_EXPORTER_OTLP_TRACES_TIMEOUT = 10000;
     public const OTEL_EXPORTER_OTLP_METRICS_TIMEOUT = 10000;
     public const OTEL_EXPORTER_OTLP_LOGS_TIMEOUT = 10000;
@@ -85,7 +85,8 @@ interface Defaults
      */
     public const OTEL_EXPORTER_ZIPKIN_ENDPOINT = 'http://localhost:9411/api/v2/spans';
     // Timeout (seconds)
-    public const OTEL_EXPORTER_ZIPKIN_TIMEOUT = 10000; //10s
+    public const OTEL_EXPORTER_ZIPKIN_TIMEOUT = 10000;
+    //10s
     /**
      * Prometheus Exporter
      * @see https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/configuration/sdk-environment-variables.md#prometheus-exporter

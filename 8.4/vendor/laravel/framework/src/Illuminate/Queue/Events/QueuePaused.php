@@ -11,10 +11,7 @@ class QueuePaused
      * @param  string  $queue  The queue name.
      * @param  \DateTimeInterface|\DateInterval|int|null  $ttl
      */
-    public function __construct(
-        public $connection,
-        public $queue,
-        public $ttl = null,
-    ) {
+    public function __construct(public $connection, public $queue, public $ttl = null)
+    {
     }
 }

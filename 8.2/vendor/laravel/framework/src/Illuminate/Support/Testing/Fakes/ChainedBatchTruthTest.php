@@ -3,7 +3,6 @@
 namespace Illuminate\Support\Testing\Fakes;
 
 use Closure;
-
 class ChainedBatchTruthTest
 {
     /**
@@ -12,7 +11,6 @@ class ChainedBatchTruthTest
      * @var \Closure(\Illuminate\Bus\PendingBatch): bool
      */
     protected $callback;
-
     /**
      * Create a new truth test instance.
      *
@@ -22,7 +20,6 @@ class ChainedBatchTruthTest
     {
         $this->callback = $callback;
     }
-
     /**
      * Invoke the truth test with the given pending batch.
      *

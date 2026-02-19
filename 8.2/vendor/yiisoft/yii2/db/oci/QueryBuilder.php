@@ -1,10 +1,10 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\db\oci;
 
 use yii\base\InvalidArgumentException;
@@ -14,7 +14,6 @@ use yii\db\Expression;
 use yii\db\Query;
 use yii\helpers\StringHelper;
 use yii\db\ExpressionInterface;
-
 /**
  * QueryBuilder is the query builder for Oracle databases.
  *
@@ -26,42 +25,14 @@ class QueryBuilder extends \yii\db\QueryBuilder
     /**
      * @var array mapping from abstract column types (keys) to physical column types (values).
      */
-    public $typeMap = [
-        Schema::TYPE_PK => 'NUMBER(10) NOT NULL PRIMARY KEY',
-        Schema::TYPE_UPK => 'NUMBER(10) UNSIGNED NOT NULL PRIMARY KEY',
-        Schema::TYPE_BIGPK => 'NUMBER(20) NOT NULL PRIMARY KEY',
-        Schema::TYPE_UBIGPK => 'NUMBER(20) UNSIGNED NOT NULL PRIMARY KEY',
-        Schema::TYPE_CHAR => 'CHAR(1)',
-        Schema::TYPE_STRING => 'VARCHAR2(255)',
-        Schema::TYPE_TEXT => 'CLOB',
-        Schema::TYPE_TINYINT => 'NUMBER(3)',
-        Schema::TYPE_SMALLINT => 'NUMBER(5)',
-        Schema::TYPE_INTEGER => 'NUMBER(10)',
-        Schema::TYPE_BIGINT => 'NUMBER(20)',
-        Schema::TYPE_FLOAT => 'NUMBER',
-        Schema::TYPE_DOUBLE => 'NUMBER',
-        Schema::TYPE_DECIMAL => 'NUMBER',
-        Schema::TYPE_DATETIME => 'TIMESTAMP',
-        Schema::TYPE_TIMESTAMP => 'TIMESTAMP',
-        Schema::TYPE_TIME => 'TIMESTAMP',
-        Schema::TYPE_DATE => 'DATE',
-        Schema::TYPE_BINARY => 'BLOB',
-        Schema::TYPE_BOOLEAN => 'NUMBER(1)',
-        Schema::TYPE_MONEY => 'NUMBER(19,4)',
-    ];
-
-
+    public $typeMap = [\yii\db\oci\Schema::TYPE_PK => 'NUMBER(10) NOT NULL PRIMARY KEY', \yii\db\oci\Schema::TYPE_UPK => 'NUMBER(10) UNSIGNED NOT NULL PRIMARY KEY', \yii\db\oci\Schema::TYPE_BIGPK => 'NUMBER(20) NOT NULL PRIMARY KEY', \yii\db\oci\Schema::TYPE_UBIGPK => 'NUMBER(20) UNSIGNED NOT NULL PRIMARY KEY', \yii\db\oci\Schema::TYPE_CHAR => 'CHAR(1)', \yii\db\oci\Schema::TYPE_STRING => 'VARCHAR2(255)', \yii\db\oci\Schema::TYPE_TEXT => 'CLOB', \yii\db\oci\Schema::TYPE_TINYINT => 'NUMBER(3)', \yii\db\oci\Schema::TYPE_SMALLINT => 'NUMBER(5)', \yii\db\oci\Schema::TYPE_INTEGER => 'NUMBER(10)', \yii\db\oci\Schema::TYPE_BIGINT => 'NUMBER(20)', \yii\db\oci\Schema::TYPE_FLOAT => 'NUMBER', \yii\db\oci\Schema::TYPE_DOUBLE => 'NUMBER', \yii\db\oci\Schema::TYPE_DECIMAL => 'NUMBER', \yii\db\oci\Schema::TYPE_DATETIME => 'TIMESTAMP', \yii\db\oci\Schema::TYPE_TIMESTAMP => 'TIMESTAMP', \yii\db\oci\Schema::TYPE_TIME => 'TIMESTAMP', \yii\db\oci\Schema::TYPE_DATE => 'DATE', \yii\db\oci\Schema::TYPE_BINARY => 'BLOB', \yii\db\oci\Schema::TYPE_BOOLEAN => 'NUMBER(1)', \yii\db\oci\Schema::TYPE_MONEY => 'NUMBER(19,4)'];
     /**
      * {@inheritdoc}
      */
     protected function defaultExpressionBuilders()
     {
-        return array_merge(parent::defaultExpressionBuilders(), [
-            'yii\db\conditions\InCondition' => 'yii\db\oci\conditions\InConditionBuilder',
-            'yii\db\conditions\LikeCondition' => 'yii\db\oci\conditions\LikeConditionBuilder',
-        ]);
+        return array_merge(parent::defaultExpressionBuilders(), ['yii\db\conditions\InCondition' => 'yii\db\oci\conditions\InConditionBuilder', 'yii\db\conditions\LikeCondition' => 'yii\db\oci\conditions\LikeConditionBuilder']);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -71,7 +42,6 @@ class QueryBuilder extends \yii\db\QueryBuilder
         if ($orderBy !== '') {
             $sql .= $this->separator . $orderBy;
         }
-
         $filters = [];
         if ($this->hasOffset($offset)) {
             $filters[] = 'rowNumId > ' . $offset;
@@ -82,17 +52,15 @@ class QueryBuilder extends \yii\db\QueryBuilder
         if (empty($filters)) {
             return $sql;
         }
-
         $filter = implode(' AND ', $filters);
         return <<<EOD
-WITH USER_SQL AS ($sql),
+WITH USER_SQL AS ({$sql}),
     PAGINATION AS (SELECT USER_SQL.*, rownum as rowNumId FROM USER_SQL)
 SELECT *
 FROM PAGINATION
-WHERE $filter
+WHERE {$filter}
 EOD;
     }
-
     /**
      * Builds a SQL statement for renaming a DB table.
      *
@@ -104,7 +72,6 @@ EOD;
     {
         return 'ALTER TABLE ' . $this->db->quoteTableName($table) . ' RENAME TO ' . $this->db->quoteTableName($newName);
     }
-
     /**
      * Builds a SQL statement for changing the definition of a column.
      *
@@ -118,10 +85,8 @@ EOD;
     public function alterColumn($table, $column, $type)
     {
         $type = $this->getColumnType($type);
-
         return 'ALTER TABLE ' . $this->db->quoteTableName($table) . ' MODIFY ' . $this->db->quoteColumnName($column) . ' ' . $this->getColumnType($type);
     }
-
     /**
      * Builds a SQL statement for dropping an index.
      *
@@ -133,7 +98,6 @@ EOD;
     {
         return 'DROP INDEX ' . $this->db->quoteTableName($name);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -141,52 +105,40 @@ EOD;
     {
         $tableSchema = $this->db->getTableSchema($table);
         if ($tableSchema === null) {
-            throw new InvalidArgumentException("Unknown table: $table");
+            throw new InvalidArgumentException("Unknown table: {$table}");
         }
         if ($tableSchema->sequenceName === null) {
-            throw new InvalidArgumentException("There is no sequence associated with table: $table");
+            throw new InvalidArgumentException("There is no sequence associated with table: {$table}");
         }
-
         if ($value !== null) {
             $value = (int) $value;
         } else {
             if (count($tableSchema->primaryKey) > 1) {
-                throw new InvalidArgumentException("Can't reset sequence for composite primary key in table: $table");
+                throw new InvalidArgumentException("Can't reset sequence for composite primary key in table: {$table}");
             }
             // use master connection to get the biggest PK value
             $value = $this->db->useMaster(function (Connection $db) use ($tableSchema) {
-                return $db->createCommand(
-                    'SELECT MAX("' . $tableSchema->primaryKey[0] . '") FROM "' . $tableSchema->name . '"'
-                )->queryScalar();
+                return $db->createCommand('SELECT MAX("' . $tableSchema->primaryKey[0] . '") FROM "' . $tableSchema->name . '"')->queryScalar();
             }) + 1;
         }
-
         //Oracle needs at least two queries to reset sequence (see adding transactions and/or use alter method to avoid grants' issue?)
         $this->db->createCommand('DROP SEQUENCE "' . $tableSchema->sequenceName . '"')->execute();
-        $this->db->createCommand('CREATE SEQUENCE "' . $tableSchema->sequenceName . '" START WITH ' . $value
-            . ' INCREMENT BY 1 NOMAXVALUE NOCACHE')->execute();
+        $this->db->createCommand('CREATE SEQUENCE "' . $tableSchema->sequenceName . '" START WITH ' . $value . ' INCREMENT BY 1 NOMAXVALUE NOCACHE')->execute();
     }
-
     /**
      * {@inheritdoc}
      */
     public function addForeignKey($name, $table, $columns, $refTable, $refColumns, $delete = null, $update = null)
     {
-        $sql = 'ALTER TABLE ' . $this->db->quoteTableName($table)
-            . ' ADD CONSTRAINT ' . $this->db->quoteColumnName($name)
-            . ' FOREIGN KEY (' . $this->buildColumns($columns) . ')'
-            . ' REFERENCES ' . $this->db->quoteTableName($refTable)
-            . ' (' . $this->buildColumns($refColumns) . ')';
+        $sql = 'ALTER TABLE ' . $this->db->quoteTableName($table) . ' ADD CONSTRAINT ' . $this->db->quoteColumnName($name) . ' FOREIGN KEY (' . $this->buildColumns($columns) . ')' . ' REFERENCES ' . $this->db->quoteTableName($refTable) . ' (' . $this->buildColumns($refColumns) . ')';
         if ($delete !== null) {
             $sql .= ' ON DELETE ' . $delete;
         }
         if ($update !== null) {
             throw new Exception('Oracle does not support ON UPDATE clause.');
         }
-
         return $sql;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -205,7 +157,6 @@ EOD;
         }
         return [$names, $placeholders, $values, $params];
     }
-
     /**
      * {@inheritdoc}
      * @see https://docs.oracle.com/cd/B28359_01/server.111/b28286/statements_9016.htm#SQLRF01606
@@ -218,16 +169,15 @@ EOD;
         }
         if ($updateNames === []) {
             // there are no columns to update
-            $updateColumns = false;
+            $updateColumns = \false;
         }
-
         $onCondition = ['or'];
         $quotedTableName = $this->db->quoteTableName($table);
         foreach ($constraints as $constraint) {
             $constraintCondition = ['and'];
             foreach ($constraint->columnNames as $name) {
                 $quotedName = $this->db->quoteColumnName($name);
-                $constraintCondition[] = "$quotedTableName.$quotedName=\"EXCLUDED\".$quotedName";
+                $constraintCondition[] = "{$quotedTableName}.{$quotedName}=\"EXCLUDED\".{$quotedName}";
             }
             $onCondition[] = $constraintCondition;
         }
@@ -238,33 +188,27 @@ EOD;
             foreach ($insertNames as $index => $name) {
                 $usingSelectValues[$name] = new Expression($placeholders[$index]);
             }
-            $usingSubQuery = (new Query())
-                ->select($usingSelectValues)
-                ->from('DUAL');
+            $usingSubQuery = (new Query())->select($usingSelectValues)->from('DUAL');
             list($usingValues, $params) = $this->build($usingSubQuery, $params);
         }
-        $mergeSql = 'MERGE INTO ' . $this->db->quoteTableName($table) . ' '
-            . 'USING (' . (isset($usingValues) ? $usingValues : ltrim($values, ' ')) . ') "EXCLUDED" '
-            . "ON ($on)";
+        $mergeSql = 'MERGE INTO ' . $this->db->quoteTableName($table) . ' ' . 'USING (' . (isset($usingValues) ? $usingValues : ltrim($values, ' ')) . ') "EXCLUDED" ' . "ON ({$on})";
         $insertValues = [];
         foreach ($insertNames as $name) {
             $quotedName = $this->db->quoteColumnName($name);
-            if (strrpos($quotedName, '.') === false) {
+            if (strrpos($quotedName, '.') === \false) {
                 $quotedName = '"EXCLUDED".' . $quotedName;
             }
             $insertValues[] = $quotedName;
         }
-        $insertSql = 'INSERT (' . implode(', ', $insertNames) . ')'
-            . ' VALUES (' . implode(', ', $insertValues) . ')';
-        if ($updateColumns === false) {
-            return "$mergeSql WHEN NOT MATCHED THEN $insertSql";
+        $insertSql = 'INSERT (' . implode(', ', $insertNames) . ')' . ' VALUES (' . implode(', ', $insertValues) . ')';
+        if ($updateColumns === \false) {
+            return "{$mergeSql} WHEN NOT MATCHED THEN {$insertSql}";
         }
-
-        if ($updateColumns === true) {
+        if ($updateColumns === \true) {
             $updateColumns = [];
             foreach ($updateNames as $name) {
                 $quotedName = $this->db->quoteColumnName($name);
-                if (strrpos($quotedName, '.') === false) {
+                if (strrpos($quotedName, '.') === \false) {
                     $quotedName = '"EXCLUDED".' . $quotedName;
                 }
                 $updateColumns[$name] = new Expression($quotedName);
@@ -272,9 +216,8 @@ EOD;
         }
         list($updates, $params) = $this->prepareUpdateSets($table, $updateColumns, $params);
         $updateSql = 'UPDATE SET ' . implode(', ', $updates);
-        return "$mergeSql WHEN MATCHED THEN $updateSql WHEN NOT MATCHED THEN $insertSql";
+        return "{$mergeSql} WHEN MATCHED THEN {$updateSql} WHEN NOT MATCHED THEN {$insertSql}";
     }
-
     /**
      * Generates a batch INSERT SQL statement.
      *
@@ -300,14 +243,12 @@ EOD;
         if (empty($rows)) {
             return '';
         }
-
         $schema = $this->db->getSchema();
         if (($tableSchema = $schema->getTableSchema($table)) !== null) {
             $columnSchemas = $tableSchema->columns;
         } else {
             $columnSchemas = [];
         }
-
         $values = [];
         foreach ($rows as $row) {
             $vs = [];
@@ -320,7 +261,7 @@ EOD;
                 } elseif (is_float($value)) {
                     // ensure type cast always has . as decimal separator in all locales
                     $value = StringHelper::floatToString($value);
-                } elseif ($value === false) {
+                } elseif ($value === \false) {
                     $value = 0;
                 } elseif ($value === null) {
                     $value = 'NULL';
@@ -334,17 +275,12 @@ EOD;
         if (empty($values)) {
             return '';
         }
-
         foreach ($columns as $i => $name) {
             $columns[$i] = $schema->quoteColumnName($name);
         }
-
-        $tableAndColumns = ' INTO ' . $schema->quoteTableName($table)
-        . ' (' . implode(', ', $columns) . ') VALUES ';
-
+        $tableAndColumns = ' INTO ' . $schema->quoteTableName($table) . ' (' . implode(', ', $columns) . ') VALUES ';
         return 'INSERT ALL ' . $tableAndColumns . implode($tableAndColumns, $values) . ' SELECT 1 FROM SYS.DUAL';
     }
-
     /**
      * {@inheritdoc}
      * @since 2.0.8
@@ -353,7 +289,6 @@ EOD;
     {
         return 'SELECT CASE WHEN EXISTS(' . $rawSql . ') THEN 1 ELSE 0 END FROM DUAL';
     }
-
     /**
      * {@inheritdoc}
      * @since 2.0.8
@@ -362,7 +297,6 @@ EOD;
     {
         return 'COMMENT ON COLUMN ' . $this->db->quoteTableName($table) . '.' . $this->db->quoteColumnName($column) . " IS ''";
     }
-
     /**
      * {@inheritdoc}
      * @since 2.0.8

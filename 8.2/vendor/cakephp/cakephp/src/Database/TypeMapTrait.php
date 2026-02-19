@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -27,31 +27,27 @@ trait TypeMapTrait
     /**
      * @var \Cake\Database\TypeMap|null
      */
-    protected ?TypeMap $_typeMap = null;
-
+    protected ?\Cake\Database\TypeMap $_typeMap = null;
     /**
      * Creates a new TypeMap if $typeMap is an array, otherwise exchanges it for the given one.
      *
      * @param \Cake\Database\TypeMap|array<int|string, string> $typeMap Creates a TypeMap if array, otherwise sets the given TypeMap
      * @return $this
      */
-    public function setTypeMap(TypeMap|array $typeMap)
+    public function setTypeMap(\Cake\Database\TypeMap|array $typeMap)
     {
-        $this->_typeMap = is_array($typeMap) ? new TypeMap($typeMap) : $typeMap;
-
+        $this->_typeMap = is_array($typeMap) ? new \Cake\Database\TypeMap($typeMap) : $typeMap;
         return $this;
     }
-
     /**
      * Returns the existing type map.
      *
      * @return \Cake\Database\TypeMap
      */
-    public function getTypeMap(): TypeMap
+    public function getTypeMap(): \Cake\Database\TypeMap
     {
-        return $this->_typeMap ??= new TypeMap();
+        return $this->_typeMap ??= new \Cake\Database\TypeMap();
     }
-
     /**
      * Overwrite the default type mappings for fields
      * in the implementing object.
@@ -69,10 +65,8 @@ trait TypeMapTrait
     public function setDefaultTypes(array $types)
     {
         $this->getTypeMap()->setDefaults($types);
-
         return $this;
     }
-
     /**
      * Gets default types of current type map.
      *

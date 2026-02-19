@@ -4,11 +4,9 @@ namespace Illuminate\Foundation\Testing;
 
 use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Foundation\Testing\Traits\CanConfigureMigrationCommands;
-
 trait RefreshDatabase
 {
     use CanConfigureMigrationCommands;
-
     /**
      * Define hooks to migrate the database before and after each test.
      *
@@ -17,16 +15,12 @@ trait RefreshDatabase
     public function refreshDatabase()
     {
         $this->beforeRefreshingDatabase();
-
         if ($this->usingInMemoryDatabases()) {
             $this->restoreInMemoryDatabase();
         }
-
         $this->refreshTestDatabase();
-
         $this->afterRefreshingDatabase();
     }
-
     /**
      * Determine if any of the connections transacting is using in-memory databases.
      *
@@ -36,13 +30,11 @@ trait RefreshDatabase
     {
         foreach ($this->connectionsToTransact() as $name) {
             if ($this->usingInMemoryDatabase($name)) {
-                return true;
+                return \true;
             }
         }
-
-        return false;
+        return \false;
     }
-
     /**
      * Determine if a given database connection is an in-memory database.
      *
@@ -53,10 +45,8 @@ trait RefreshDatabase
         if (is_null($name)) {
             $name = config('database.default');
         }
-
         return config("database.connections.{$name}.database") === ':memory:';
     }
-
     /**
      * Restore the in-memory database between tests.
      *
@@ -65,14 +55,12 @@ trait RefreshDatabase
     protected function restoreInMemoryDatabase()
     {
         $database = $this->app->make('db');
-
         foreach ($this->connectionsToTransact() as $name) {
-            if (isset(RefreshDatabaseState::$inMemoryConnections[$name])) {
-                $database->connection($name)->setPdo(RefreshDatabaseState::$inMemoryConnections[$name]);
+            if (isset(\Illuminate\Foundation\Testing\RefreshDatabaseState::$inMemoryConnections[$name])) {
+                $database->connection($name)->setPdo(\Illuminate\Foundation\Testing\RefreshDatabaseState::$inMemoryConnections[$name]);
             }
         }
     }
-
     /**
      * Refresh a conventional test database.
      *
@@ -80,19 +68,14 @@ trait RefreshDatabase
      */
     protected function refreshTestDatabase()
     {
-        if (! RefreshDatabaseState::$migrated) {
+        if (!\Illuminate\Foundation\Testing\RefreshDatabaseState::$migrated) {
             $this->migrateDatabases();
-
             $this->app[Kernel::class]->setArtisan(null);
-
             $this->updateLocalCacheOfInMemoryDatabases();
-
-            RefreshDatabaseState::$migrated = true;
+            \Illuminate\Foundation\Testing\RefreshDatabaseState::$migrated = \true;
         }
-
         $this->beginDatabaseTransaction();
     }
-
     /**
      * Update locally cached in-memory PDO connections after migration.
      *
@@ -101,14 +84,12 @@ trait RefreshDatabase
     protected function updateLocalCacheOfInMemoryDatabases()
     {
         $database = $this->app->make('db');
-
         foreach ($this->connectionsToTransact() as $name) {
             if ($this->usingInMemoryDatabase($name)) {
-                RefreshDatabaseState::$inMemoryConnections[$name] = $database->connection($name)->getPdo();
+                \Illuminate\Foundation\Testing\RefreshDatabaseState::$inMemoryConnections[$name] = $database->connection($name)->getPdo();
             }
         }
     }
-
     /**
      * Migrate the database.
      *
@@ -118,7 +99,6 @@ trait RefreshDatabase
     {
         $this->artisan('migrate:fresh', $this->migrateFreshUsing());
     }
-
     /**
      * Begin a database transaction on the testing database.
      *
@@ -127,45 +107,33 @@ trait RefreshDatabase
     public function beginDatabaseTransaction()
     {
         $database = $this->app->make('db');
-
         $connections = $this->connectionsToTransact();
-
-        $this->app->instance('db.transactions', $transactionsManager = new DatabaseTransactionsManager($connections));
-
+        $this->app->instance('db.transactions', $transactionsManager = new \Illuminate\Foundation\Testing\DatabaseTransactionsManager($connections));
         foreach ($connections as $name) {
             $connection = $database->connection($name);
-
             $connection->setTransactionManager($transactionsManager);
-
             if ($this->usingInMemoryDatabase($name)) {
-                RefreshDatabaseState::$inMemoryConnections[$name] ??= $connection->getPdo();
+                \Illuminate\Foundation\Testing\RefreshDatabaseState::$inMemoryConnections[$name] ??= $connection->getPdo();
             }
-
             $dispatcher = $connection->getEventDispatcher();
-
             $connection->unsetEventDispatcher();
             $connection->beginTransaction();
             $connection->setEventDispatcher($dispatcher);
         }
-
         $this->beforeApplicationDestroyed(function () use ($database) {
             foreach ($this->connectionsToTransact() as $name) {
                 $connection = $database->connection($name);
                 $dispatcher = $connection->getEventDispatcher();
-
                 $connection->unsetEventDispatcher();
-
-                if ($connection->getPdo() && ! $connection->getPdo()->inTransaction()) {
-                    RefreshDatabaseState::$migrated = false;
+                if ($connection->getPdo() && !$connection->getPdo()->inTransaction()) {
+                    \Illuminate\Foundation\Testing\RefreshDatabaseState::$migrated = \false;
                 }
-
                 $connection->rollBack();
                 $connection->setEventDispatcher($dispatcher);
                 $connection->disconnect();
             }
         });
     }
-
     /**
      * The database connections that should have transactions.
      *
@@ -173,11 +141,8 @@ trait RefreshDatabase
      */
     protected function connectionsToTransact()
     {
-        return property_exists($this, 'connectionsToTransact')
-            ? $this->connectionsToTransact
-            : [config('database.default')];
+        return property_exists($this, 'connectionsToTransact') ? $this->connectionsToTransact : [config('database.default')];
     }
-
     /**
      * Perform any work that should take place before the database has started refreshing.
      *
@@ -187,7 +152,6 @@ trait RefreshDatabase
     {
         // ...
     }
-
     /**
      * Perform any work that should take place once the database has finished refreshing.
      *

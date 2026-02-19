@@ -4,7 +4,6 @@ namespace Illuminate\Support\Facades;
 
 use Closure;
 use Illuminate\Process\Factory;
-
 /**
  * @method static \Illuminate\Process\PendingProcess command(array|string $command)
  * @method static \Illuminate\Process\PendingProcess path(string $path)
@@ -48,7 +47,7 @@ use Illuminate\Process\Factory;
  * @see \Illuminate\Process\PendingProcess
  * @see \Illuminate\Process\Factory
  */
-class Process extends Facade
+class Process extends \Illuminate\Support\Facades\Facade
 {
     /**
      * Get the registered name of the component.
@@ -59,7 +58,6 @@ class Process extends Facade
     {
         return Factory::class;
     }
-
     /**
      * Indicate that the process factory should fake processes.
      *

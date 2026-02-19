@@ -1,13 +1,11 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\API\Trace;
 
 use OpenTelemetry\Context\ContextInterface;
 use OpenTelemetry\Context\ImplicitContextKeyedInterface;
 use Throwable;
-
 /**
  * @see https://github.com/open-telemetry/opentelemetry-specification/blob/v1.6.1/specification/trace/api.md#span-operations
  */
@@ -17,37 +15,31 @@ interface SpanInterface extends ImplicitContextKeyedInterface
      * Returns the {@see SpanInterface} from the provided *$context*,
      * falling back on {@see SpanInterface::getInvalid()} if there is no span in the provided context.
      */
-    public static function fromContext(ContextInterface $context): SpanInterface;
-
+    public static function fromContext(ContextInterface $context): \OpenTelemetry\API\Trace\SpanInterface;
     /**
      * Returns the current {@see SpanInterface} from the current {@see ContextInterface},
      * falling back on {@see SpanInterface::getEmpty()} if there is no span in the current context.
      */
-    public static function getCurrent(): SpanInterface;
-
+    public static function getCurrent(): \OpenTelemetry\API\Trace\SpanInterface;
     /**
      * Returns an invalid {@see SpanInterface} that is used when tracing is disabled, such s when there is no available SDK.
      */
-    public static function getInvalid(): SpanInterface;
-
+    public static function getInvalid(): \OpenTelemetry\API\Trace\SpanInterface;
     /**
      * Returns a non-recording {@see SpanInterface} that hold the provided *$spanContext* but has no functionality.
      * It will not be exported and al tracing operations are no-op, but can be used to propagate a valid {@see SpanContext} downstream.
      *
      * @see https://github.com/open-telemetry/opentelemetry-specification/blob/v1.6.1/specification/trace/api.md#wrapping-a-spancontext-in-a-span
      */
-    public static function wrap(SpanContextInterface $spanContext): SpanInterface;
-
+    public static function wrap(\OpenTelemetry\API\Trace\SpanContextInterface $spanContext): \OpenTelemetry\API\Trace\SpanInterface;
     /**
      * @see https://github.com/open-telemetry/opentelemetry-specification/blob/v1.6.1/specification/trace/api.md#get-context
      */
-    public function getContext(): SpanContextInterface;
-
+    public function getContext(): \OpenTelemetry\API\Trace\SpanContextInterface;
     /**
      * @see https://github.com/open-telemetry/opentelemetry-specification/blob/v1.6.1/specification/trace/api.md#isrecording
      */
     public function isRecording(): bool;
-
     /**
      * @see https://github.com/open-telemetry/opentelemetry-specification/blob/v1.6.1/specification/trace/api.md#set-attributes
      * Adding attributes at span creation is preferred to calling setAttribute later, as samplers can only consider information
@@ -55,16 +47,14 @@ interface SpanInterface extends ImplicitContextKeyedInterface
      * @param non-empty-string $key
      * @param bool|int|float|string|array|null $value Note: arrays MUST be homogeneous, i.e. it MUST NOT contain values of different types.
      */
-    public function setAttribute(string $key, bool|int|float|string|array|null $value): SpanInterface;
-
+    public function setAttribute(string $key, bool|int|float|string|array|null $value): \OpenTelemetry\API\Trace\SpanInterface;
     /**
      * @see https://github.com/open-telemetry/opentelemetry-specification/blob/v1.6.1/specification/trace/api.md#set-attributes
      * An attribute with a null key will be dropped, and an attribute with a null value will be dropped but also remove any existing
      * attribute with the same key.
      * @param iterable<non-empty-string, bool|int|float|string|array|null> $attributes
      */
-    public function setAttributes(iterable $attributes): SpanInterface;
-
+    public function setAttributes(iterable $attributes): \OpenTelemetry\API\Trace\SpanInterface;
     /**
      * Records a link to another `SpanContext`.
      *
@@ -78,32 +68,27 @@ interface SpanInterface extends ImplicitContextKeyedInterface
      *
      * @see https://opentelemetry.io/docs/specs/otel/trace/api/#add-link
      */
-    public function addLink(SpanContextInterface $context, iterable $attributes = []): SpanInterface;
-
+    public function addLink(\OpenTelemetry\API\Trace\SpanContextInterface $context, iterable $attributes = []): \OpenTelemetry\API\Trace\SpanInterface;
     /**
      * @see https://github.com/open-telemetry/opentelemetry-specification/blob/v1.6.1/specification/trace/api.md#add-events
      */
-    public function addEvent(string $name, iterable $attributes = [], ?int $timestamp = null): SpanInterface;
-
+    public function addEvent(string $name, iterable $attributes = [], ?int $timestamp = null): \OpenTelemetry\API\Trace\SpanInterface;
     /**
      * @see https://github.com/open-telemetry/opentelemetry-specification/blob/v1.6.1/specification/trace/api.md#record-exception
      */
-    public function recordException(Throwable $exception, iterable $attributes = []): SpanInterface;
-
+    public function recordException(Throwable $exception, iterable $attributes = []): \OpenTelemetry\API\Trace\SpanInterface;
     /**
      * @see https://github.com/open-telemetry/opentelemetry-specification/blob/v1.6.1/specification/trace/api.md#updatename
      *
      * @param non-empty-string $name
      */
-    public function updateName(string $name): SpanInterface;
-
+    public function updateName(string $name): \OpenTelemetry\API\Trace\SpanInterface;
     /**
      * @see https://github.com/open-telemetry/opentelemetry-specification/blob/v1.6.1/specification/trace/api.md#set-status
      *
      * @psalm-param StatusCode::STATUS_* $code
      */
-    public function setStatus(string $code, ?string $description = null): SpanInterface;
-
+    public function setStatus(string $code, ?string $description = null): \OpenTelemetry\API\Trace\SpanInterface;
     /**
      * @see https://github.com/open-telemetry/opentelemetry-specification/blob/v1.6.1/specification/trace/api.md#end
      */

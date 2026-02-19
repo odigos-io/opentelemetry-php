@@ -5,35 +5,28 @@
  *
  * @license https://github.com/slimphp/Slim/blob/4.x/LICENSE.md (MIT License)
  */
-
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Slim\Routing;
 
-use FastRoute\RouteParser\Std;
+use Odigos\FastRoute\RouteParser\Std;
 use InvalidArgumentException;
 use Psr\Http\Message\UriInterface;
 use Slim\Interfaces\RouteCollectorInterface;
 use Slim\Interfaces\RouteParserInterface;
-
 use function array_key_exists;
 use function array_reverse;
 use function http_build_query;
 use function implode;
 use function is_string;
-
 class RouteParser implements RouteParserInterface
 {
     private RouteCollectorInterface $routeCollector;
-
     private Std $routeParser;
-
     public function __construct(RouteCollectorInterface $routeCollector)
     {
         $this->routeCollector = $routeCollector;
         $this->routeParser = new Std();
     }
-
     /**
      * {@inheritdoc}
      */
@@ -41,10 +34,8 @@ class RouteParser implements RouteParserInterface
     {
         $route = $this->routeCollector->getNamedRoute($routeName);
         $pattern = $route->getPattern();
-
         $segments = [];
         $segmentName = '';
-
         /*
          * $routes is an associative array of expressions representing a route as multiple segments
          * There is an expression for each optional parameter plus one without the optional parameters
@@ -61,7 +52,6 @@ class RouteParser implements RouteParserInterface
                     $segments[] = $segment;
                     continue;
                 }
-
                 /** @var string[] $segment */
                 /*
                  * If we don't have a data element for this segment in the provided $data
@@ -72,10 +62,8 @@ class RouteParser implements RouteParserInterface
                     $segmentName = $segment[0];
                     break;
                 }
-
                 $segments[] = $data[$segment[0]];
             }
-
             /*
              * If we get to this logic block we have found all the parameters
              * for the provided $data which means we don't need to continue testing
@@ -85,19 +73,15 @@ class RouteParser implements RouteParserInterface
                 break;
             }
         }
-
         if (empty($segments)) {
             throw new InvalidArgumentException('Missing data for URL segment: ' . $segmentName);
         }
-
         $url = implode('', $segments);
         if ($queryParams) {
             $url .= '?' . http_build_query($queryParams);
         }
-
         return $url;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -105,14 +89,11 @@ class RouteParser implements RouteParserInterface
     {
         $basePath = $this->routeCollector->getBasePath();
         $url = $this->relativeUrlFor($routeName, $data, $queryParams);
-
         if ($basePath) {
             $url = $basePath . $url;
         }
-
         return $url;
     }
-
     /**
      * {@inheritdoc}
      */

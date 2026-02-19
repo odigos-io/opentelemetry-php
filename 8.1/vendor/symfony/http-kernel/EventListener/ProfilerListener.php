@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\HttpKernel\EventListener;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -22,7 +21,6 @@ use Symfony\Component\HttpKernel\Event\TerminateEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\HttpKernel\Profiler\Profile;
 use Symfony\Component\HttpKernel\Profiler\Profiler;
-
 /**
  * ProfilerListener collects data for the current request by listening to the kernel events.
  *
@@ -43,12 +41,11 @@ class ProfilerListener implements EventSubscriberInterface
     private ?string $collectParameter;
     /** @var \SplObjectStorage<Request, Request|null> */
     private \SplObjectStorage $parents;
-
     /**
      * @param bool $onlyException    True if the profiler only collects data when an exception occurs, false otherwise
      * @param bool $onlyMainRequests True if the profiler only collects data when the request is the main request, false otherwise
      */
-    public function __construct(Profiler $profiler, RequestStack $requestStack, ?RequestMatcherInterface $matcher = null, bool $onlyException = false, bool $onlyMainRequests = false, ?string $collectParameter = null)
+    public function __construct(Profiler $profiler, RequestStack $requestStack, ?RequestMatcherInterface $matcher = null, bool $onlyException = \false, bool $onlyMainRequests = \false, ?string $collectParameter = null)
     {
         $this->profiler = $profiler;
         $this->matcher = $matcher;
@@ -59,7 +56,6 @@ class ProfilerListener implements EventSubscriberInterface
         $this->requestStack = $requestStack;
         $this->collectParameter = $collectParameter;
     }
-
     /**
      * Handles the onKernelException event.
      */
@@ -68,10 +64,8 @@ class ProfilerListener implements EventSubscriberInterface
         if ($this->onlyMainRequests && !$event->isMainRequest()) {
             return;
         }
-
         $this->exception = $event->getThrowable();
     }
-
     /**
      * Handles the onKernelResponse event.
      */
@@ -80,30 +74,23 @@ class ProfilerListener implements EventSubscriberInterface
         if ($this->onlyMainRequests && !$event->isMainRequest()) {
             return;
         }
-
         if ($this->onlyException && null === $this->exception) {
             return;
         }
-
         $request = $event->getRequest();
         if (null !== $this->collectParameter && null !== $collectParameterValue = $request->get($this->collectParameter)) {
-            true === $collectParameterValue || filter_var($collectParameterValue, \FILTER_VALIDATE_BOOL) ? $this->profiler->enable() : $this->profiler->disable();
+            \true === $collectParameterValue || filter_var($collectParameterValue, \FILTER_VALIDATE_BOOL) ? $this->profiler->enable() : $this->profiler->disable();
         }
-
         $exception = $this->exception;
         $this->exception = null;
-
         if (null !== $this->matcher && !$this->matcher->matches($request)) {
             return;
         }
-
         $session = !$request->attributes->getBoolean('_stateless') && $request->hasPreviousSession() ? $request->getSession() : null;
-
         if ($session instanceof Session) {
-            $usageIndexValue = $usageIndexReference = &$session->getUsageIndex();
+            $usageIndexValue = $usageIndexReference =& $session->getUsageIndex();
             $usageIndexReference = \PHP_INT_MIN;
         }
-
         try {
             if (!$profile = $this->profiler->collect($request, $event->getResponse(), $exception)) {
                 return;
@@ -113,12 +100,9 @@ class ProfilerListener implements EventSubscriberInterface
                 $usageIndexReference = $usageIndexValue;
             }
         }
-
         $this->profiles[$request] = $profile;
-
         $this->parents[$request] = $this->requestStack->getParentRequest();
     }
-
     public function onKernelTerminate(TerminateEvent $event): void
     {
         // attach children to parents
@@ -129,22 +113,15 @@ class ProfilerListener implements EventSubscriberInterface
                 }
             }
         }
-
         // save profiles
         foreach ($this->profiles as $request) {
             $this->profiler->saveProfile($this->profiles[$request]);
         }
-
         $this->profiles = new \SplObjectStorage();
         $this->parents = new \SplObjectStorage();
     }
-
     public static function getSubscribedEvents(): array
     {
-        return [
-            KernelEvents::RESPONSE => ['onKernelResponse', -100],
-            KernelEvents::EXCEPTION => ['onKernelException', 0],
-            KernelEvents::TERMINATE => ['onKernelTerminate', -1024],
-        ];
+        return [KernelEvents::RESPONSE => ['onKernelResponse', -100], KernelEvents::EXCEPTION => ['onKernelException', 0], KernelEvents::TERMINATE => ['onKernelTerminate', -1024]];
     }
 }

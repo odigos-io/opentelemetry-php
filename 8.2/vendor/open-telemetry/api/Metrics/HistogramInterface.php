@@ -1,12 +1,10 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\API\Metrics;
 
 use OpenTelemetry\Context\ContextInterface;
-
-interface HistogramInterface extends SynchronousInstrument
+interface HistogramInterface extends \OpenTelemetry\API\Metrics\SynchronousInstrument
 {
     /**
      * @param float|int $amount non-negative amount to record

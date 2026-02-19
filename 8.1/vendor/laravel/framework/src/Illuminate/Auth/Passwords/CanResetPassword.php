@@ -3,7 +3,6 @@
 namespace Illuminate\Auth\Passwords;
 
 use Illuminate\Auth\Notifications\ResetPassword as ResetPasswordNotification;
-
 trait CanResetPassword
 {
     /**
@@ -15,7 +14,6 @@ trait CanResetPassword
     {
         return $this->email;
     }
-
     /**
      * Send the password reset notification.
      *

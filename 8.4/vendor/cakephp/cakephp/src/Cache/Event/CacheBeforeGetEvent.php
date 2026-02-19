@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -18,7 +18,6 @@ namespace Cake\Cache\Event;
 
 use Cake\Cache\CacheEngine;
 use Cake\Event\Event;
-
 /**
  * Class Cache BeforeGet Event
  *
@@ -27,11 +26,8 @@ use Cake\Event\Event;
 class CacheBeforeGetEvent extends Event
 {
     public const NAME = 'Cache.beforeGet';
-
     protected string $key;
-
     protected mixed $default = null;
-
     /**
      * Constructor
      *
@@ -49,10 +45,8 @@ class CacheBeforeGetEvent extends Event
             $this->default = $data['default'];
             unset($data['default']);
         }
-
         parent::__construct($name, $subject, $data);
     }
-
     /**
      * @return string
      */
@@ -60,7 +54,6 @@ class CacheBeforeGetEvent extends Event
     {
         return $this->key;
     }
-
     /**
      * @return mixed
      */

@@ -1,19 +1,16 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Carbon\Doctrine;
 
-use Carbon\Carbon;
+use Odigos\Carbon\Carbon;
 use DateTime;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\VarDateTimeType;
-
-class DateTimeType extends VarDateTimeType implements CarbonDoctrineType
+class DateTimeType extends VarDateTimeType implements \Carbon\Doctrine\CarbonDoctrineType
 {
     /** @use CarbonTypeConverter<Carbon> */
-    use CarbonTypeConverter;
-
+    use \Carbon\Doctrine\CarbonTypeConverter;
     /**
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */

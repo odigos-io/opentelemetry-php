@@ -1,15 +1,14 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\db;
 
 use yii\base\BaseObject;
 use yii\helpers\StringHelper;
-
 /**
  * ColumnSchema class describes the metadata of a column in a database table.
  *
@@ -68,7 +67,7 @@ class ColumnSchema extends BaseObject
     /**
      * @var bool whether this column is auto-incremental
      */
-    public $autoIncrement = false;
+    public $autoIncrement = \false;
     /**
      * @var bool whether this column is unsigned. This is only meaningful
      * when [[type]] is `smallint`, `integer` or `bigint`.
@@ -78,8 +77,6 @@ class ColumnSchema extends BaseObject
      * @var string comment of this column. Not all DBMS support this.
      */
     public $comment;
-
-
     /**
      * Converts the input value according to [[phpType]] after retrieval from the database.
      * If the value is null or an [[Expression]], it will not be converted.
@@ -90,7 +87,6 @@ class ColumnSchema extends BaseObject
     {
         return $this->typecast($value);
     }
-
     /**
      * Converts the input value according to [[type]] and [[dbType]] for use in a db query.
      * If the value is null or an [[Expression]], it will not be converted.
@@ -104,7 +100,6 @@ class ColumnSchema extends BaseObject
         // to override this with annotation of explicit PDO type.
         return $this->typecast($value);
     }
-
     /**
      * Converts the input value according to [[phpType]] after retrieval from the database.
      * If the value is null or an [[Expression]], it will not be converted.
@@ -114,40 +109,15 @@ class ColumnSchema extends BaseObject
      */
     protected function typecast($value)
     {
-        if (
-            $value === ''
-            && !in_array(
-                $this->type,
-                [
-                    Schema::TYPE_TEXT,
-                    Schema::TYPE_STRING,
-                    Schema::TYPE_BINARY,
-                    Schema::TYPE_CHAR
-                ],
-                true
-            )
-        ) {
+        if ($value === '' && !in_array($this->type, [\yii\db\Schema::TYPE_TEXT, \yii\db\Schema::TYPE_STRING, \yii\db\Schema::TYPE_BINARY, \yii\db\Schema::TYPE_CHAR], \true)) {
             return null;
         }
-
-        if (
-            $value === null
-            || gettype($value) === $this->phpType
-            || $value instanceof ExpressionInterface
-            || $value instanceof Query
-        ) {
+        if ($value === null || gettype($value) === $this->phpType || $value instanceof \yii\db\ExpressionInterface || $value instanceof \yii\db\Query) {
             return $value;
         }
-
-        if (
-            is_array($value)
-            && count($value) === 2
-            && isset($value[1])
-            && in_array($value[1], $this->getPdoParamTypes(), true)
-        ) {
-            return new PdoValue($value[0], $value[1]);
+        if (is_array($value) && count($value) === 2 && isset($value[1]) && in_array($value[1], $this->getPdoParamTypes(), \true)) {
+            return new \yii\db\PdoValue($value[0], $value[1]);
         }
-
         switch ($this->phpType) {
             case 'resource':
             case 'string':
@@ -158,35 +128,28 @@ class ColumnSchema extends BaseObject
                     // ensure type cast always has . as decimal separator in all locales
                     return StringHelper::floatToString($value);
                 }
-                if (
-                    is_numeric($value)
-                    && ColumnSchemaBuilder::CATEGORY_NUMERIC === ColumnSchemaBuilder::$typeCategoryMap[$this->type]
-                ) {
+                if (is_numeric($value) && \yii\db\ColumnSchemaBuilder::CATEGORY_NUMERIC === \yii\db\ColumnSchemaBuilder::$typeCategoryMap[$this->type]) {
                     // https://github.com/yiisoft/yii2/issues/14663
                     return $value;
                 }
-
-                if (PHP_VERSION_ID >= 80100 && is_object($value) && $value instanceof \BackedEnum) {
+                if (\PHP_VERSION_ID >= 80100 && is_object($value) && $value instanceof \BackedEnum) {
                     return (string) $value->value;
                 }
-
                 return (string) $value;
             case 'integer':
-                if (PHP_VERSION_ID >= 80100 && is_object($value) && $value instanceof \BackedEnum) {
+                if (\PHP_VERSION_ID >= 80100 && is_object($value) && $value instanceof \BackedEnum) {
                     return (int) $value->value;
                 }
                 return (int) $value;
             case 'boolean':
                 // treating a 0 bit value as false too
                 // https://github.com/yiisoft/yii2/issues/9006
-                return (bool) $value && $value !== "\0" && strtolower($value) !== 'false';
+                return (bool) $value && $value !== "\x00" && strtolower($value) !== 'false';
             case 'double':
                 return (float) $value;
         }
-
         return $value;
     }
-
     /**
      * @return int[] array of numbers that represent possible PDO parameter types
      */

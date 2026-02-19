@@ -1,13 +1,11 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Odigos\Dotenv\Repository\Adapter;
 
-namespace Dotenv\Repository\Adapter;
-
-use PhpOption\None;
-use PhpOption\Option;
-use PhpOption\Some;
-
+use Odigos\PhpOption\None;
+use Odigos\PhpOption\Option;
+use Odigos\PhpOption\Some;
 final class PutenvAdapter implements AdapterInterface
 {
     /**
@@ -19,7 +17,6 @@ final class PutenvAdapter implements AdapterInterface
     {
         //
     }
-
     /**
      * Create a new instance of the adapter, if it is available.
      *
@@ -31,10 +28,8 @@ final class PutenvAdapter implements AdapterInterface
             /** @var \PhpOption\Option<AdapterInterface> */
             return Some::create(new self());
         }
-
         return None::create();
     }
-
     /**
      * Determines if the adapter is supported.
      *
@@ -44,7 +39,6 @@ final class PutenvAdapter implements AdapterInterface
     {
         return \function_exists('getenv') && \function_exists('putenv');
     }
-
     /**
      * Read an environment variable, if it exists.
      *
@@ -55,11 +49,10 @@ final class PutenvAdapter implements AdapterInterface
     public function read(string $name)
     {
         /** @var \PhpOption\Option<string> */
-        return Option::fromValue(\getenv($name), false)->filter(static function ($value) {
+        return Option::fromValue(\getenv($name), \false)->filter(static function ($value) {
             return \is_string($value);
         });
     }
-
     /**
      * Write to an environment variable, if possible.
      *
@@ -70,11 +63,9 @@ final class PutenvAdapter implements AdapterInterface
      */
     public function write(string $name, string $value)
     {
-        \putenv("$name=$value");
-
-        return true;
+        \putenv("{$name}={$value}");
+        return \true;
     }
-
     /**
      * Delete an environment variable, if possible.
      *
@@ -85,7 +76,6 @@ final class PutenvAdapter implements AdapterInterface
     public function delete(string $name)
     {
         \putenv($name);
-
-        return true;
+        return \true;
     }
 }

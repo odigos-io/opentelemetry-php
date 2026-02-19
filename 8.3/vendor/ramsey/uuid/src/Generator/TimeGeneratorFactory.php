@@ -9,27 +9,20 @@
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
  */
+declare (strict_types=1);
+namespace Odigos\Ramsey\Uuid\Generator;
 
-declare(strict_types=1);
-
-namespace Ramsey\Uuid\Generator;
-
-use Ramsey\Uuid\Converter\TimeConverterInterface;
-use Ramsey\Uuid\Provider\NodeProviderInterface;
-use Ramsey\Uuid\Provider\TimeProviderInterface;
-
+use Odigos\Ramsey\Uuid\Converter\TimeConverterInterface;
+use Odigos\Ramsey\Uuid\Provider\NodeProviderInterface;
+use Odigos\Ramsey\Uuid\Provider\TimeProviderInterface;
 /**
  * TimeGeneratorFactory retrieves a default time generator, based on the environment
  */
 class TimeGeneratorFactory
 {
-    public function __construct(
-        private NodeProviderInterface $nodeProvider,
-        private TimeConverterInterface $timeConverter,
-        private TimeProviderInterface $timeProvider,
-    ) {
+    public function __construct(private NodeProviderInterface $nodeProvider, private TimeConverterInterface $timeConverter, private TimeProviderInterface $timeProvider)
+    {
     }
-
     /**
      * Returns a default time generator, based on the current environment
      */

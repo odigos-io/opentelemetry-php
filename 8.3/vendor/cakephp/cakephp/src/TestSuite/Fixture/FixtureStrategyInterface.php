@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -28,7 +28,6 @@ interface FixtureStrategyInterface
      * @return void
      */
     public function setupTest(array $fixtureNames): void;
-
     /**
      * Called after each test run in each TestCase.
      *

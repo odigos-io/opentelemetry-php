@@ -1,10 +1,10 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\caching;
 
 /**
@@ -26,14 +26,12 @@ namespace yii\caching;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class TagDependency extends Dependency
+class TagDependency extends \yii\caching\Dependency
 {
     /**
      * @var string|array a list of tag names for this dependency. For a single tag, you may specify it as a string.
      */
     public $tags = [];
-
-
     /**
      * Generates the data needed to determine if dependency has been changed.
      * This method does nothing in this class.
@@ -43,20 +41,17 @@ class TagDependency extends Dependency
     protected function generateDependencyData($cache)
     {
         $timestamps = $this->getTimestamps($cache, (array) $this->tags);
-
         $newKeys = [];
         foreach ($timestamps as $key => $timestamp) {
-            if ($timestamp === false) {
+            if ($timestamp === \false) {
                 $newKeys[] = $key;
             }
         }
         if (!empty($newKeys)) {
             $timestamps = array_merge($timestamps, static::touchKeys($cache, $newKeys));
         }
-
         return $timestamps;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -65,7 +60,6 @@ class TagDependency extends Dependency
         $timestamps = $this->getTimestamps($cache, (array) $this->tags);
         return $timestamps !== $this->data;
     }
-
     /**
      * Invalidates all of the cached data items that are associated with any of the specified [[tags]].
      * @param CacheInterface $cache the cache component that caches the data items
@@ -79,7 +73,6 @@ class TagDependency extends Dependency
         }
         static::touchKeys($cache, $keys);
     }
-
     /**
      * Generates the timestamp for the specified cache keys.
      * @param CacheInterface $cache
@@ -96,7 +89,6 @@ class TagDependency extends Dependency
         $cache->multiSet($items);
         return $items;
     }
-
     /**
      * Returns the timestamps for the specified tags.
      * @param CacheInterface $cache
@@ -108,12 +100,10 @@ class TagDependency extends Dependency
         if (empty($tags)) {
             return [];
         }
-
         $keys = [];
         foreach ($tags as $tag) {
             $keys[] = $cache->buildKey([__CLASS__, $tag]);
         }
-
         return $cache->multiGet($keys);
     }
 }

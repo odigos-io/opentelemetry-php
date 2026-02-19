@@ -1,10 +1,10 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\base;
 
 /**
@@ -13,7 +13,7 @@ namespace yii\base;
  * @author Alexander Makarov
  * @since 2.0.10
  */
-class ViewNotFoundException extends InvalidArgumentException
+class ViewNotFoundException extends \yii\base\InvalidArgumentException
 {
     /**
      * @return string the user-friendly name of this exception

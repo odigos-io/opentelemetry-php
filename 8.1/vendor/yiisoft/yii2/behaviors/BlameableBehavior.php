@@ -1,15 +1,14 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\behaviors;
 
-use Yii;
+use Odigos\Yii;
 use yii\db\BaseActiveRecord;
-
 /**
  * BlameableBehavior automatically fills the specified attributes with the current user ID.
  *
@@ -57,7 +56,7 @@ use yii\db\BaseActiveRecord;
  * @template T of BaseActiveRecord
  * @extends AttributeBehavior<T>
  */
-class BlameableBehavior extends AttributeBehavior
+class BlameableBehavior extends \yii\behaviors\AttributeBehavior
 {
     /**
      * @var string the attribute that will receive current user ID value
@@ -80,23 +79,16 @@ class BlameableBehavior extends AttributeBehavior
      * @since 2.0.14
      */
     public $defaultValue;
-
-
     /**
      * {@inheritdoc}
      */
     public function init()
     {
         parent::init();
-
         if (empty($this->attributes)) {
-            $this->attributes = [
-                BaseActiveRecord::EVENT_BEFORE_INSERT => [$this->createdByAttribute, $this->updatedByAttribute],
-                BaseActiveRecord::EVENT_BEFORE_UPDATE => $this->updatedByAttribute,
-            ];
+            $this->attributes = [BaseActiveRecord::EVENT_BEFORE_INSERT => [$this->createdByAttribute, $this->updatedByAttribute], BaseActiveRecord::EVENT_BEFORE_UPDATE => $this->updatedByAttribute];
         }
     }
-
     /**
      * {@inheritdoc}
      *
@@ -109,15 +101,12 @@ class BlameableBehavior extends AttributeBehavior
             if ($userId === null) {
                 return $this->getDefaultValue($event);
             }
-
             return $userId;
         } elseif ($this->value === null) {
             return $this->getDefaultValue($event);
         }
-
         return parent::getValue($event);
     }
-
     /**
      * Get default value
      * @param \yii\base\Event $event
@@ -126,10 +115,9 @@ class BlameableBehavior extends AttributeBehavior
      */
     protected function getDefaultValue($event)
     {
-        if ($this->defaultValue instanceof \Closure || (is_array($this->defaultValue) && is_callable($this->defaultValue))) {
+        if ($this->defaultValue instanceof \Closure || is_array($this->defaultValue) && is_callable($this->defaultValue)) {
             return call_user_func($this->defaultValue, $event);
         }
-
         return $this->defaultValue;
     }
 }

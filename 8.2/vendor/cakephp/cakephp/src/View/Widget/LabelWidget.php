@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -19,14 +19,13 @@ namespace Cake\View\Widget;
 use Cake\View\Form\ContextInterface;
 use Cake\View\StringTemplate;
 use function Cake\Core\h;
-
 /**
  * Form 'widget' for creating labels.
  *
  * Generally this element is used by other widgets,
  * and FormHelper itself.
  */
-class LabelWidget implements WidgetInterface
+class LabelWidget implements \Cake\View\Widget\WidgetInterface
 {
     /**
      * Templates
@@ -34,14 +33,12 @@ class LabelWidget implements WidgetInterface
      * @var \Cake\View\StringTemplate
      */
     protected StringTemplate $_templates;
-
     /**
      * The template to use.
      *
      * @var string
      */
     protected string $_labelTemplate = 'label';
-
     /**
      * Constructor.
      *
@@ -56,7 +53,6 @@ class LabelWidget implements WidgetInterface
     {
         $this->_templates = $templates;
     }
-
     /**
      * Render a label widget.
      *
@@ -74,23 +70,9 @@ class LabelWidget implements WidgetInterface
      */
     public function render(array $data, ContextInterface $context): string
     {
-        $data += [
-            'text' => '',
-            'input' => '',
-            'hidden' => '',
-            'escape' => true,
-            'templateVars' => [],
-        ];
-
-        return $this->_templates->format($this->_labelTemplate, [
-            'text' => $data['escape'] ? h($data['text']) : $data['text'],
-            'input' => $data['input'],
-            'hidden' => $data['hidden'],
-            'templateVars' => $data['templateVars'],
-            'attrs' => $this->_templates->formatAttributes($data, ['text', 'input', 'hidden']),
-        ]);
+        $data += ['text' => '', 'input' => '', 'hidden' => '', 'escape' => \true, 'templateVars' => []];
+        return $this->_templates->format($this->_labelTemplate, ['text' => $data['escape'] ? h($data['text']) : $data['text'], 'input' => $data['input'], 'hidden' => $data['hidden'], 'templateVars' => $data['templateVars'], 'attrs' => $this->_templates->formatAttributes($data, ['text', 'input', 'hidden'])]);
     }
-
     /**
      * @inheritDoc
      */

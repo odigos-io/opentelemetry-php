@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright 2015-present MongoDB, Inc.
  *
@@ -14,7 +15,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 namespace MongoDB\Operation;
 
 use MongoDB\Driver\Command;
@@ -23,7 +23,6 @@ use MongoDB\Driver\Server;
 use MongoDB\Driver\Session;
 use MongoDB\Driver\WriteConcern;
 use MongoDB\Exception\InvalidArgumentException;
-
 /**
  * Operation for the dropDatabase command.
  *
@@ -52,19 +51,16 @@ final class DropDatabase
      */
     public function __construct(private string $databaseName, private array $options = [])
     {
-        if (isset($this->options['session']) && ! $this->options['session'] instanceof Session) {
+        if (isset($this->options['session']) && !$this->options['session'] instanceof Session) {
             throw InvalidArgumentException::invalidType('"session" option', $this->options['session'], Session::class);
         }
-
-        if (isset($this->options['writeConcern']) && ! $this->options['writeConcern'] instanceof WriteConcern) {
+        if (isset($this->options['writeConcern']) && !$this->options['writeConcern'] instanceof WriteConcern) {
             throw InvalidArgumentException::invalidType('"writeConcern" option', $this->options['writeConcern'], WriteConcern::class);
         }
-
         if (isset($this->options['writeConcern']) && $this->options['writeConcern']->isDefault()) {
             unset($this->options['writeConcern']);
         }
     }
-
     /**
      * Execute the operation.
      *
@@ -74,21 +70,17 @@ final class DropDatabase
     {
         $server->executeWriteCommand($this->databaseName, $this->createCommand(), $this->createOptions());
     }
-
     /**
      * Create the dropDatabase command.
      */
     private function createCommand(): Command
     {
         $cmd = ['dropDatabase' => 1];
-
         if (isset($this->options['comment'])) {
             $cmd['comment'] = $this->options['comment'];
         }
-
         return new Command($cmd);
     }
-
     /**
      * Create options for executing the command.
      *
@@ -97,15 +89,12 @@ final class DropDatabase
     private function createOptions(): array
     {
         $options = [];
-
         if (isset($this->options['session'])) {
             $options['session'] = $this->options['session'];
         }
-
         if (isset($this->options['writeConcern'])) {
             $options['writeConcern'] = $this->options['writeConcern'];
         }
-
         return $options;
     }
 }

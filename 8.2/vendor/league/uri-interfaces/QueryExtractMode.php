@@ -8,10 +8,8 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-declare(strict_types=1);
-
-namespace League\Uri;
+declare (strict_types=1);
+namespace Odigos\League\Uri;
 
 enum QueryExtractMode
 {
@@ -19,7 +17,6 @@ enum QueryExtractMode
      * Parses the query string using parse_str algorithm.
      */
     case Native;
-
     /**
      * Parses the query string like parse_str without mangling result keys.
      *
@@ -40,7 +37,6 @@ enum QueryExtractMode
      * @see https://wiki.php.net/rfc/on_demand_name_mangling
      */
     case Unmangled;
-
     /**
      * Same as QueryParsingMode::Unmangled and additionally
      * preserves null values instead of converting them

@@ -2,7 +2,7 @@
 
 namespace Illuminate\Support;
 
-if (! function_exists('Illuminate\Support\enum_value')) {
+if (!function_exists('Illuminate\Support\enum_value')) {
     /**
      * Return a scalar value for the given value that might be an enum.
      *
@@ -17,10 +17,9 @@ if (! function_exists('Illuminate\Support\enum_value')) {
      */
     function enum_value($value, $default = null)
     {
-        return match (true) {
+        return match (\true) {
             $value instanceof \BackedEnum => $value->value,
             $value instanceof \UnitEnum => $value->name,
-
             default => $value ?? value($default),
         };
     }

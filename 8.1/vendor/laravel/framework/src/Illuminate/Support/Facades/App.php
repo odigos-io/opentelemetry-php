@@ -132,7 +132,7 @@ namespace Illuminate\Support\Facades;
  *
  * @see \Illuminate\Foundation\Application
  */
-class App extends Facade
+class App extends \Illuminate\Support\Facades\Facade
 {
     /**
      * Get the registered name of the component.

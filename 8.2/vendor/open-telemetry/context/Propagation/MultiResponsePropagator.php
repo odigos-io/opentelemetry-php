@@ -1,28 +1,24 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\Context\Propagation;
 
 use OpenTelemetry\Context\ContextInterface;
-
 /**
  * @experimental
  */
-final class MultiResponsePropagator implements ResponsePropagatorInterface
+final class MultiResponsePropagator implements \OpenTelemetry\Context\Propagation\ResponsePropagatorInterface
 {
     /**
      * @no-named-arguments
      *
      * @param list<ResponsePropagatorInterface> $responsePropagators
      */
-    public function __construct(
-        private readonly array $responsePropagators,
-    ) {
+    public function __construct(private readonly array $responsePropagators)
+    {
     }
-
     #[\Override]
-    public function inject(&$carrier, ?PropagationSetterInterface $setter = null, ?ContextInterface $context = null): void
+    public function inject(&$carrier, ?\OpenTelemetry\Context\Propagation\PropagationSetterInterface $setter = null, ?ContextInterface $context = null): void
     {
         foreach ($this->responsePropagators as $responsePropagator) {
             $responsePropagator->inject($carrier, $setter, $context);

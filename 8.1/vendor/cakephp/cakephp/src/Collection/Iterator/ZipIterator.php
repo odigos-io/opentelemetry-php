@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -20,7 +20,6 @@ use Cake\Collection\Collection;
 use Cake\Collection\CollectionInterface;
 use Cake\Collection\CollectionTrait;
 use MultipleIterator;
-
 /**
  * Creates an iterator that returns elements grouped in pairs
  *
@@ -46,26 +45,22 @@ use MultipleIterator;
 class ZipIterator implements CollectionInterface
 {
     use CollectionTrait;
-
     /**
      * @var \MultipleIterator
      */
     protected MultipleIterator $multipleIterator;
-
     /**
      * The function to use for zipping items together
      *
      * @var callable|null
      */
     protected $_callback;
-
     /**
      * Contains the original iterator objects that were attached
      *
      * @var array
      */
     protected array $_iterators = [];
-
     /**
      * Creates the iterator to merge together the values by for all the passed
      * iterators by their corresponding index.
@@ -75,19 +70,14 @@ class ZipIterator implements CollectionInterface
      */
     public function __construct(array $sets, ?callable $callable = null)
     {
-        $this->multipleIterator = new MultipleIterator(
-            MultipleIterator::MIT_NEED_ALL | MultipleIterator::MIT_KEYS_NUMERIC,
-        );
-
+        $this->multipleIterator = new MultipleIterator(MultipleIterator::MIT_NEED_ALL | MultipleIterator::MIT_KEYS_NUMERIC);
         $this->_callback = $callable;
-
         foreach ($sets as $set) {
             $iterator = (new Collection($set))->unwrap();
             $this->_iterators[] = $iterator;
             $this->multipleIterator->attachIterator($iterator);
         }
     }
-
     /**
      * Returns the value resulting out of zipping all the elements for all the
      * iterators with the same positional index.
@@ -100,10 +90,8 @@ class ZipIterator implements CollectionInterface
         if ($this->_callback) {
             return call_user_func_array($this->_callback, $current);
         }
-
         return $current;
     }
-
     /**
      * Implements Iterator::key().
      *
@@ -113,7 +101,6 @@ class ZipIterator implements CollectionInterface
     {
         return $this->multipleIterator->key();
     }
-
     /**
      * Implements Iterator::next().
      *
@@ -123,7 +110,6 @@ class ZipIterator implements CollectionInterface
     {
         $this->multipleIterator->next();
     }
-
     /**
      * Implements Iterator::rewind().
      *
@@ -133,7 +119,6 @@ class ZipIterator implements CollectionInterface
     {
         $this->multipleIterator->rewind();
     }
-
     /**
      * Implements Iterator::valid().
      *
@@ -143,7 +128,6 @@ class ZipIterator implements CollectionInterface
     {
         return $this->multipleIterator->valid();
     }
-
     /**
      * Magic method used for serializing the iterator instance.
      *
@@ -153,7 +137,6 @@ class ZipIterator implements CollectionInterface
     {
         return $this->_iterators;
     }
-
     /**
      * Magic method used to rebuild the iterator instance.
      *
@@ -162,10 +145,7 @@ class ZipIterator implements CollectionInterface
      */
     public function __unserialize(array $data): void
     {
-        $this->multipleIterator = new MultipleIterator(
-            MultipleIterator::MIT_NEED_ALL | MultipleIterator::MIT_KEYS_NUMERIC,
-        );
-
+        $this->multipleIterator = new MultipleIterator(MultipleIterator::MIT_NEED_ALL | MultipleIterator::MIT_KEYS_NUMERIC);
         $this->_iterators = $data;
         foreach ($this->_iterators as $it) {
             $this->multipleIterator->attachIterator($it);

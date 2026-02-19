@@ -5,13 +5,11 @@ namespace Illuminate\Http\Resources;
 use Exception;
 use Illuminate\Support\Traits\ForwardsCalls;
 use Illuminate\Support\Traits\Macroable;
-
 trait DelegatesToResource
 {
     use ForwardsCalls, Macroable {
         __call as macroCall;
     }
-
     /**
      * Get the value of the resource's route key.
      *
@@ -21,7 +19,6 @@ trait DelegatesToResource
     {
         return $this->resource->getRouteKey();
     }
-
     /**
      * Get the route key for the resource.
      *
@@ -31,7 +28,6 @@ trait DelegatesToResource
     {
         return $this->resource->getRouteKeyName();
     }
-
     /**
      * Retrieve the model for a bound value.
      *
@@ -45,7 +41,6 @@ trait DelegatesToResource
     {
         throw new Exception('Resources may not be implicitly resolved from route bindings.');
     }
-
     /**
      * Retrieve the model for a bound value.
      *
@@ -60,7 +55,6 @@ trait DelegatesToResource
     {
         throw new Exception('Resources may not be implicitly resolved from route bindings.');
     }
-
     /**
      * Determine if the given attribute exists.
      *
@@ -71,7 +65,6 @@ trait DelegatesToResource
     {
         return isset($this->resource[$offset]);
     }
-
     /**
      * Get the value for a given offset.
      *
@@ -82,7 +75,6 @@ trait DelegatesToResource
     {
         return $this->resource[$offset];
     }
-
     /**
      * Set the value for a given offset.
      *
@@ -94,7 +86,6 @@ trait DelegatesToResource
     {
         $this->resource[$offset] = $value;
     }
-
     /**
      * Unset the value for a given offset.
      *
@@ -105,7 +96,6 @@ trait DelegatesToResource
     {
         unset($this->resource[$offset]);
     }
-
     /**
      * Determine if an attribute exists on the resource.
      *
@@ -116,7 +106,6 @@ trait DelegatesToResource
     {
         return isset($this->resource->{$key});
     }
-
     /**
      * Unset an attribute on the resource.
      *
@@ -127,7 +116,6 @@ trait DelegatesToResource
     {
         unset($this->resource->{$key});
     }
-
     /**
      * Dynamically get properties from the underlying resource.
      *
@@ -138,7 +126,6 @@ trait DelegatesToResource
     {
         return $this->resource->{$key};
     }
-
     /**
      * Dynamically pass method calls to the underlying resource.
      *
@@ -151,7 +138,6 @@ trait DelegatesToResource
         if (static::hasMacro($method)) {
             return $this->macroCall($method, $parameters);
         }
-
         return $this->forwardCallTo($this->resource, $method, $parameters);
     }
 }

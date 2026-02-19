@@ -1,13 +1,11 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenAI\Responses\Threads\Messages;
 
 use OpenAI\Contracts\ResponseContract;
 use OpenAI\Responses\Concerns\ArrayAccessible;
 use OpenAI\Testing\Responses\Concerns\Fakeable;
-
 /**
  * @implements ResponseContract<array{type: 'code_interpreter'}>
  */
@@ -17,16 +15,13 @@ final class ThreadMessageResponseAttachmentCodeInterpreterTool implements Respon
      * @use ArrayAccessible<array{type: 'code_interpreter'}>
      */
     use ArrayAccessible;
-
     use Fakeable;
-
     /**
      * @param  'code_interpreter'  $type
      */
-    private function __construct(
-        public string $type,
-    ) {}
-
+    private function __construct(public string $type)
+    {
+    }
     /**
      * Acts as static factory, and returns a new Response instance.
      *
@@ -34,18 +29,13 @@ final class ThreadMessageResponseAttachmentCodeInterpreterTool implements Respon
      */
     public static function from(array $attributes): self
     {
-        return new self(
-            $attributes['type'],
-        );
+        return new self($attributes['type']);
     }
-
     /**
      * {@inheritDoc}
      */
     public function toArray(): array
     {
-        return [
-            'type' => $this->type,
-        ];
+        return ['type' => $this->type];
     }
 }

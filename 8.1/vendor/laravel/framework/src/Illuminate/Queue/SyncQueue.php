@@ -9,8 +9,7 @@ use Illuminate\Queue\Events\JobProcessed;
 use Illuminate\Queue\Events\JobProcessing;
 use Illuminate\Queue\Jobs\SyncJob;
 use Throwable;
-
-class SyncQueue extends Queue implements QueueContract
+class SyncQueue extends \Illuminate\Queue\Queue implements QueueContract
 {
     /**
      * Get the size of the queue.
@@ -22,7 +21,6 @@ class SyncQueue extends Queue implements QueueContract
     {
         return 0;
     }
-
     /**
      * Push a new job onto the queue.
      *
@@ -36,20 +34,15 @@ class SyncQueue extends Queue implements QueueContract
     public function push($job, $data = '', $queue = null)
     {
         $queueJob = $this->resolveJob($this->createPayload($job, $queue, $data), $queue);
-
         try {
             $this->raiseBeforeJobEvent($queueJob);
-
             $queueJob->fire();
-
             $this->raiseAfterJobEvent($queueJob);
         } catch (Throwable $e) {
             $this->handleException($queueJob, $e);
         }
-
         return 0;
     }
-
     /**
      * Resolve a Sync job instance.
      *
@@ -61,7 +54,6 @@ class SyncQueue extends Queue implements QueueContract
     {
         return new SyncJob($this->container, $payload, $this->connectionName, $queue);
     }
-
     /**
      * Raise the before queue job event.
      *
@@ -74,7 +66,6 @@ class SyncQueue extends Queue implements QueueContract
             $this->container['events']->dispatch(new JobProcessing($this->connectionName, $job));
         }
     }
-
     /**
      * Raise the after queue job event.
      *
@@ -87,7 +78,6 @@ class SyncQueue extends Queue implements QueueContract
             $this->container['events']->dispatch(new JobProcessed($this->connectionName, $job));
         }
     }
-
     /**
      * Raise the exception occurred queue job event.
      *
@@ -101,7 +91,6 @@ class SyncQueue extends Queue implements QueueContract
             $this->container['events']->dispatch(new JobExceptionOccurred($this->connectionName, $job, $e));
         }
     }
-
     /**
      * Handle an exception that occurred while processing a job.
      *
@@ -114,12 +103,9 @@ class SyncQueue extends Queue implements QueueContract
     protected function handleException(Job $queueJob, Throwable $e)
     {
         $this->raiseExceptionOccurredJobEvent($queueJob, $e);
-
         $queueJob->fail($e);
-
         throw $e;
     }
-
     /**
      * Push a raw payload onto the queue.
      *
@@ -132,7 +118,6 @@ class SyncQueue extends Queue implements QueueContract
     {
         //
     }
-
     /**
      * Push a new job onto the queue after (n) seconds.
      *
@@ -146,7 +131,6 @@ class SyncQueue extends Queue implements QueueContract
     {
         return $this->push($job, $data, $queue);
     }
-
     /**
      * Pop the next job off of the queue.
      *

@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -21,7 +21,6 @@ use Cake\Core\Exception\CakeException;
 use Closure;
 use Psr\SimpleCache\CacheInterface;
 use Traversable;
-
 /**
  * Handles caching queries and loading results from the cache.
  *
@@ -38,14 +37,12 @@ class QueryCacher
      * @var \Closure|string
      */
     protected Closure|string $_key;
-
     /**
      * Config for cache engine.
      *
      * @var \Psr\SimpleCache\CacheInterface|string
      */
     protected CacheInterface|string $_config;
-
     /**
      * Constructor.
      *
@@ -57,7 +54,6 @@ class QueryCacher
         $this->_key = $key;
         $this->_config = $config;
     }
-
     /**
      * Load the cached results from the cache or run the query.
      *
@@ -72,10 +68,8 @@ class QueryCacher
         if (!$result) {
             return null;
         }
-
         return $result;
     }
-
     /**
      * Store the result set into the cache.
      *
@@ -87,10 +81,8 @@ class QueryCacher
     {
         $key = $this->_resolveKey($query);
         $storage = $this->_resolveCacher();
-
         return $storage->set($key, $results);
     }
-
     /**
      * Get/generate the cache key.
      *
@@ -106,13 +98,11 @@ class QueryCacher
         $func = $this->_key;
         $key = $func($query);
         if (!is_string($key)) {
-            $msg = sprintf('Cache key functions must return a string. Got %s.', var_export($key, true));
+            $msg = sprintf('Cache key functions must return a string. Got %s.', var_export($key, \true));
             throw new CakeException($msg);
         }
-
         return $key;
     }
-
     /**
      * Get the cache engine.
      *
@@ -123,7 +113,6 @@ class QueryCacher
         if (is_string($this->_config)) {
             return Cache::pool($this->_config);
         }
-
         return $this->_config;
     }
 }

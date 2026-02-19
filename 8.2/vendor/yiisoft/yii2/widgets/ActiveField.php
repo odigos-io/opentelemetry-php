@@ -1,20 +1,19 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\widgets;
 
-use Yii;
+use Odigos\Yii;
 use yii\base\Component;
 use yii\base\ErrorHandler;
 use yii\base\Model;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\web\JsExpression;
-
 /**
  * ActiveField represents a form input field within an [[ActiveForm]].
  *
@@ -151,8 +150,7 @@ class ActiveField extends Component
      * @var bool adds aria HTML attributes `aria-required` and `aria-invalid` for inputs
      * @since 2.0.11
      */
-    public $addAriaAttributes = true;
-
+    public $addAriaAttributes = \true;
     /**
      * @var string this property holds a custom input id if it was set using [[inputOptions]] or in one of the
      * `$options` parameters of the `input*` methods.
@@ -161,9 +159,7 @@ class ActiveField extends Component
     /**
      * @var bool if "for" field label attribute should be skipped.
      */
-    private $_skipLabelFor = false;
-
-
+    private $_skipLabelFor = \false;
     /**
      * PHP magic method that returns the string representation of this object.
      * @return string the string representation of this object.
@@ -175,16 +171,13 @@ class ActiveField extends Component
         try {
             return $this->render();
         } catch (\Throwable $e) {
-            if (PHP_VERSION_ID < 70400) {
-                trigger_error(ErrorHandler::convertExceptionToString($e), E_USER_ERROR);
-
+            if (\PHP_VERSION_ID < 70400) {
+                trigger_error(ErrorHandler::convertExceptionToString($e), \E_USER_ERROR);
                 return '';
             }
-
             throw $e;
         }
     }
-
     /**
      * Renders the whole field.
      * This method will generate the label, error tag, input tag and hint tag (if any), and
@@ -221,10 +214,8 @@ class ActiveField extends Component
         } elseif (!is_string($content)) {
             $content = call_user_func($content, $this);
         }
-
         return $this->begin() . "\n" . $content . "\n" . $this->end();
     }
-
     /**
      * Renders the opening tag of the field container.
      * @return string the rendering result.
@@ -237,24 +228,21 @@ class ActiveField extends Component
                 $this->form->attributes[] = $clientOptions;
             }
         }
-
         $inputID = $this->getInputId();
         $attribute = Html::getAttributeName($this->attribute);
         $options = $this->options;
         $class = isset($options['class']) ? (array) $options['class'] : [];
-        $class[] = "field-$inputID";
+        $class[] = "field-{$inputID}";
         if ($this->model->isAttributeRequired($attribute)) {
             $class[] = $this->form->requiredCssClass;
         }
         $options['class'] = implode(' ', $class);
-        if ($this->form->validationStateOn === ActiveForm::VALIDATION_STATE_ON_CONTAINER) {
+        if ($this->form->validationStateOn === \yii\widgets\ActiveForm::VALIDATION_STATE_ON_CONTAINER) {
             $this->addErrorClassIfNeeded($options);
         }
         $tag = ArrayHelper::remove($options, 'tag', 'div');
-
         return Html::beginTag($tag, $options);
     }
-
     /**
      * Renders the closing tag of the field container.
      * @return string the rendering result.
@@ -263,7 +251,6 @@ class ActiveField extends Component
     {
         return Html::endTag(ArrayHelper::keyExists('tag', $this->options) ? $this->options['tag'] : 'div');
     }
-
     /**
      * Generates a label tag for [[attribute]].
      * @param string|null|false $label the label to use. If `null`, the label will be generated via [[Model::getAttributeLabel()]].
@@ -276,25 +263,20 @@ class ActiveField extends Component
      */
     public function label($label = null, $options = [])
     {
-        if ($label === false) {
+        if ($label === \false) {
             $this->parts['{label}'] = '';
             return $this;
         }
-
         $options = array_merge($this->labelOptions, $options);
         if ($label !== null) {
             $options['label'] = $label;
         }
-
         if ($this->_skipLabelFor) {
             $options['for'] = null;
         }
-
         $this->parts['{label}'] = Html::activeLabel($this->model, $this->attribute, $options);
-
         return $this;
     }
-
     /**
      * Generates a tag that contains the first validation error of [[attribute]].
      * Note that even if there is no validation error, this method will still return an empty error tag.
@@ -313,16 +295,14 @@ class ActiveField extends Component
      */
     public function error($options = [])
     {
-        if ($options === false) {
+        if ($options === \false) {
             $this->parts['{error}'] = '';
             return $this;
         }
         $options = array_merge($this->errorOptions, $options);
         $this->parts['{error}'] = Html::error($this->model, $this->attribute, $options);
-
         return $this;
     }
-
     /**
      * Renders the hint tag.
      * @param string|bool|null $content the hint content.
@@ -341,20 +321,17 @@ class ActiveField extends Component
      */
     public function hint($content, $options = [])
     {
-        if ($content === false) {
+        if ($content === \false) {
             $this->parts['{hint}'] = '';
             return $this;
         }
-
         $options = array_merge($this->hintOptions, $options);
         if ($content !== null) {
             $options['hint'] = $content;
         }
         $this->parts['{hint}'] = Html::activeHint($this->model, $this->attribute, $options);
-
         return $this;
     }
-
     /**
      * Renders an input tag.
      * @param string $type the input type (e.g. `text`, `password`)
@@ -368,17 +345,14 @@ class ActiveField extends Component
     public function input($type, $options = [])
     {
         $options = array_merge($this->inputOptions, $options);
-        if ($this->form->validationStateOn === ActiveForm::VALIDATION_STATE_ON_INPUT) {
+        if ($this->form->validationStateOn === \yii\widgets\ActiveForm::VALIDATION_STATE_ON_INPUT) {
             $this->addErrorClassIfNeeded($options);
         }
-
         $this->addAriaAttributes($options);
         $this->adjustLabelFor($options);
         $this->parts['{input}'] = Html::activeInput($type, $this->model, $this->attribute, $options);
-
         return $this;
     }
-
     /**
      * Renders a text input.
      * This method will generate the `name` and `value` tag attributes automatically for the model attribute
@@ -399,18 +373,14 @@ class ActiveField extends Component
     public function textInput($options = [])
     {
         $options = array_merge($this->inputOptions, $options);
-
-        if ($this->form->validationStateOn === ActiveForm::VALIDATION_STATE_ON_INPUT) {
+        if ($this->form->validationStateOn === \yii\widgets\ActiveForm::VALIDATION_STATE_ON_INPUT) {
             $this->addErrorClassIfNeeded($options);
         }
-
         $this->addAriaAttributes($options);
         $this->adjustLabelFor($options);
         $this->parts['{input}'] = Html::activeTextInput($this->model, $this->attribute, $options);
-
         return $this;
     }
-
     /**
      * Renders a hidden input.
      *
@@ -432,10 +402,8 @@ class ActiveField extends Component
         $options = array_merge($this->inputOptions, $options);
         $this->adjustLabelFor($options);
         $this->parts['{input}'] = Html::activeHiddenInput($this->model, $this->attribute, $options);
-
         return $this;
     }
-
     /**
      * Renders a password input.
      * This method will generate the `name` and `value` tag attributes automatically for the model attribute
@@ -450,18 +418,14 @@ class ActiveField extends Component
     public function passwordInput($options = [])
     {
         $options = array_merge($this->inputOptions, $options);
-
-        if ($this->form->validationStateOn === ActiveForm::VALIDATION_STATE_ON_INPUT) {
+        if ($this->form->validationStateOn === \yii\widgets\ActiveForm::VALIDATION_STATE_ON_INPUT) {
             $this->addErrorClassIfNeeded($options);
         }
-
         $this->addAriaAttributes($options);
         $this->adjustLabelFor($options);
         $this->parts['{input}'] = Html::activePasswordInput($this->model, $this->attribute, $options);
-
         return $this;
     }
-
     /**
      * Renders a file input.
      * This method will generate the `name` and `value` tag attributes automatically for the model attribute
@@ -483,18 +447,14 @@ class ActiveField extends Component
         if (!isset($this->form->options['enctype'])) {
             $this->form->options['enctype'] = 'multipart/form-data';
         }
-
-        if ($this->form->validationStateOn === ActiveForm::VALIDATION_STATE_ON_INPUT) {
+        if ($this->form->validationStateOn === \yii\widgets\ActiveForm::VALIDATION_STATE_ON_INPUT) {
             $this->addErrorClassIfNeeded($options);
         }
-
         $this->addAriaAttributes($options);
         $this->adjustLabelFor($options);
         $this->parts['{input}'] = Html::activeFileInput($this->model, $this->attribute, $options);
-
         return $this;
     }
-
     /**
      * Renders a text area.
      * The model attribute value will be used as the content in the textarea.
@@ -508,18 +468,14 @@ class ActiveField extends Component
     public function textarea($options = [])
     {
         $options = array_merge($this->inputOptions, $options);
-
-        if ($this->form->validationStateOn === ActiveForm::VALIDATION_STATE_ON_INPUT) {
+        if ($this->form->validationStateOn === \yii\widgets\ActiveForm::VALIDATION_STATE_ON_INPUT) {
             $this->addErrorClassIfNeeded($options);
         }
-
         $this->addAriaAttributes($options);
         $this->adjustLabelFor($options);
         $this->parts['{input}'] = Html::activeTextarea($this->model, $this->attribute, $options);
-
         return $this;
     }
-
     /**
      * Renders a radio button.
      * This method will generate the `checked` tag attribute according to the model attribute value.
@@ -545,15 +501,13 @@ class ActiveField extends Component
      * except that the radio is enclosed by the label tag.
      * @return $this the field object itself.
      */
-    public function radio($options = [], $enclosedByLabel = true)
+    public function radio($options = [], $enclosedByLabel = \true)
     {
-        if ($this->form->validationStateOn === ActiveForm::VALIDATION_STATE_ON_INPUT) {
+        if ($this->form->validationStateOn === \yii\widgets\ActiveForm::VALIDATION_STATE_ON_INPUT) {
             $this->addErrorClassIfNeeded($options);
         }
-
         $this->addAriaAttributes($options);
         $this->adjustLabelFor($options);
-
         if ($enclosedByLabel) {
             $this->parts['{input}'] = Html::activeRadio($this->model, $this->attribute, $options);
             $this->parts['{label}'] = '';
@@ -568,10 +522,8 @@ class ActiveField extends Component
             $options['label'] = null;
             $this->parts['{input}'] = Html::activeRadio($this->model, $this->attribute, $options);
         }
-
         return $this;
     }
-
     /**
      * Renders a checkbox.
      * This method will generate the `checked` tag attribute according to the model attribute value.
@@ -597,15 +549,13 @@ class ActiveField extends Component
      * except that the checkbox is enclosed by the label tag.
      * @return $this the field object itself.
      */
-    public function checkbox($options = [], $enclosedByLabel = true)
+    public function checkbox($options = [], $enclosedByLabel = \true)
     {
-        if ($this->form->validationStateOn === ActiveForm::VALIDATION_STATE_ON_INPUT) {
+        if ($this->form->validationStateOn === \yii\widgets\ActiveForm::VALIDATION_STATE_ON_INPUT) {
             $this->addErrorClassIfNeeded($options);
         }
-
         $this->addAriaAttributes($options);
         $this->adjustLabelFor($options);
-
         if ($enclosedByLabel) {
             $this->parts['{input}'] = Html::activeCheckbox($this->model, $this->attribute, $options);
             $this->parts['{label}'] = '';
@@ -620,10 +570,8 @@ class ActiveField extends Component
             $options['label'] = null;
             $this->parts['{input}'] = Html::activeCheckbox($this->model, $this->attribute, $options);
         }
-
         return $this;
     }
-
     /**
      * Renders a drop-down list.
      * The selection of the drop-down list is taken from the value of the model attribute.
@@ -646,18 +594,14 @@ class ActiveField extends Component
     public function dropDownList($items, $options = [])
     {
         $options = array_merge($this->inputOptions, $options);
-
-        if ($this->form->validationStateOn === ActiveForm::VALIDATION_STATE_ON_INPUT) {
+        if ($this->form->validationStateOn === \yii\widgets\ActiveForm::VALIDATION_STATE_ON_INPUT) {
             $this->addErrorClassIfNeeded($options);
         }
-
         $this->addAriaAttributes($options);
         $this->adjustLabelFor($options);
         $this->parts['{input}'] = Html::activeDropDownList($this->model, $this->attribute, $items, $options);
-
         return $this;
     }
-
     /**
      * Renders a list box.
      * The selection of the list box is taken from the value of the model attribute.
@@ -680,18 +624,14 @@ class ActiveField extends Component
     public function listBox($items, $options = [])
     {
         $options = array_merge($this->inputOptions, $options);
-
-        if ($this->form->validationStateOn === ActiveForm::VALIDATION_STATE_ON_INPUT) {
+        if ($this->form->validationStateOn === \yii\widgets\ActiveForm::VALIDATION_STATE_ON_INPUT) {
             $this->addErrorClassIfNeeded($options);
         }
-
         $this->addAriaAttributes($options);
         $this->adjustLabelFor($options);
         $this->parts['{input}'] = Html::activeListBox($this->model, $this->attribute, $items, $options);
-
         return $this;
     }
-
     /**
      * Renders a list of checkboxes.
      * A checkbox list allows multiple selection, like [[listBox()]].
@@ -705,18 +645,15 @@ class ActiveField extends Component
      */
     public function checkboxList($items, $options = [])
     {
-        if ($this->form->validationStateOn === ActiveForm::VALIDATION_STATE_ON_INPUT) {
+        if ($this->form->validationStateOn === \yii\widgets\ActiveForm::VALIDATION_STATE_ON_INPUT) {
             $this->addErrorClassIfNeeded($options);
         }
-
         $this->addAriaAttributes($options);
         $this->adjustLabelFor($options);
-        $this->_skipLabelFor = true;
+        $this->_skipLabelFor = \true;
         $this->parts['{input}'] = Html::activeCheckboxList($this->model, $this->attribute, $items, $options);
-
         return $this;
     }
-
     /**
      * Renders a list of radio buttons.
      * A radio button list is like a checkbox list, except that it only allows single selection.
@@ -729,19 +666,16 @@ class ActiveField extends Component
      */
     public function radioList($items, $options = [])
     {
-        if ($this->form->validationStateOn === ActiveForm::VALIDATION_STATE_ON_INPUT) {
+        if ($this->form->validationStateOn === \yii\widgets\ActiveForm::VALIDATION_STATE_ON_INPUT) {
             $this->addErrorClassIfNeeded($options);
         }
-
         $this->addRoleAttributes($options, 'radiogroup');
         $this->addAriaAttributes($options);
         $this->adjustLabelFor($options);
-        $this->_skipLabelFor = true;
+        $this->_skipLabelFor = \true;
         $this->parts['{input}'] = Html::activeRadioList($this->model, $this->attribute, $items, $options);
-
         return $this;
     }
-
     /**
      * Renders a widget as the input of the field.
      *
@@ -786,19 +720,15 @@ class ActiveField extends Component
             if (!isset($config['options'])) {
                 $config['options'] = [];
             }
-            if ($this->form->validationStateOn === ActiveForm::VALIDATION_STATE_ON_INPUT) {
+            if ($this->form->validationStateOn === \yii\widgets\ActiveForm::VALIDATION_STATE_ON_INPUT) {
                 $this->addErrorClassIfNeeded($config['options']);
             }
-
             $this->addAriaAttributes($config['options']);
             $this->adjustLabelFor($config['options']);
         }
-
         $this->parts['{input}'] = $class::widget($config);
-
         return $this;
     }
-
     /**
      * Adjusts the `for` attribute for the label based on the input options.
      * @param array $options the input options.
@@ -813,7 +743,6 @@ class ActiveField extends Component
             $this->labelOptions['for'] = $options['id'];
         }
     }
-
     /**
      * Returns the JS options for the field.
      * @return array the JS options.
@@ -821,13 +750,11 @@ class ActiveField extends Component
     protected function getClientOptions()
     {
         $attribute = Html::getAttributeName($this->attribute);
-        if (!in_array($attribute, $this->model->activeAttributes(), true)) {
+        if (!in_array($attribute, $this->model->activeAttributes(), \true)) {
             return [];
         }
-
         $clientValidation = $this->isClientValidationEnabled();
         $ajaxValidation = $this->isAjaxValidationEnabled();
-
         if ($clientValidation) {
             $validators = [];
             foreach ($this->model->getActiveValidators($attribute) as $validator) {
@@ -835,61 +762,44 @@ class ActiveField extends Component
                 $js = $validator->clientValidateAttribute($this->model, $attribute, $this->form->getView());
                 if ($validator->enableClientValidation && $js != '') {
                     if ($validator->whenClient !== null) {
-                        $js = "if (({$validator->whenClient})(attribute, value)) { $js }";
+                        $js = "if (({$validator->whenClient})(attribute, value)) { {$js} }";
                     }
                     $validators[] = $js;
                 }
             }
         }
-
         if (!$ajaxValidation && (!$clientValidation || empty($validators))) {
             return [];
         }
-
         $options = [];
-
         $inputID = $this->getInputId();
         $options['id'] = $inputID ?: Html::getInputId($this->model, $this->attribute);
         $options['name'] = $this->attribute;
-
-        $options['container'] = isset($this->selectors['container']) ? $this->selectors['container'] : ".field-$inputID";
-        $options['input'] = isset($this->selectors['input']) ? $this->selectors['input'] : "#$inputID";
+        $options['container'] = isset($this->selectors['container']) ? $this->selectors['container'] : ".field-{$inputID}";
+        $options['input'] = isset($this->selectors['input']) ? $this->selectors['input'] : "#{$inputID}";
         if (isset($this->selectors['error'])) {
             $options['error'] = $this->selectors['error'];
         } elseif (isset($this->errorOptions['class'])) {
-            $options['error'] = '.' . implode('.', preg_split('/\s+/', $this->errorOptions['class'], -1, PREG_SPLIT_NO_EMPTY));
+            $options['error'] = '.' . implode('.', preg_split('/\s+/', $this->errorOptions['class'], -1, \PREG_SPLIT_NO_EMPTY));
         } else {
             $options['error'] = isset($this->errorOptions['tag']) ? $this->errorOptions['tag'] : 'span';
         }
-
         $options['encodeError'] = !isset($this->errorOptions['encode']) || $this->errorOptions['encode'];
         if ($ajaxValidation) {
-            $options['enableAjaxValidation'] = true;
+            $options['enableAjaxValidation'] = \true;
         }
         foreach (['validateOnChange', 'validateOnBlur', 'validateOnType', 'validationDelay'] as $name) {
-            $options[$name] = $this->$name === null ? $this->form->$name : $this->$name;
+            $options[$name] = $this->{$name} === null ? $this->form->{$name} : $this->{$name};
         }
-
         if (!empty($validators)) {
             $options['validate'] = new JsExpression('function (attribute, value, messages, deferred, $form) {' . implode('', $validators) . '}');
         }
-
-        if ($this->addAriaAttributes === false) {
-            $options['updateAriaInvalid'] = false;
+        if ($this->addAriaAttributes === \false) {
+            $options['updateAriaInvalid'] = \false;
         }
-
         // only get the options that are different from the default ones (set in yii.activeForm.js)
-        return array_diff_assoc($options, [
-            'validateOnChange' => true,
-            'validateOnBlur' => true,
-            'validateOnType' => false,
-            'validationDelay' => 500,
-            'encodeError' => true,
-            'error' => '.help-block',
-            'updateAriaInvalid' => true,
-        ]);
+        return array_diff_assoc($options, ['validateOnChange' => \true, 'validateOnBlur' => \true, 'validateOnType' => \false, 'validationDelay' => 500, 'encodeError' => \true, 'error' => '.help-block', 'updateAriaInvalid' => \true]);
     }
-
     /**
      * Checks if client validation enabled for the field.
      * @return bool
@@ -899,7 +809,6 @@ class ActiveField extends Component
     {
         return $this->enableClientValidation || $this->enableClientValidation === null && $this->form->enableClientValidation;
     }
-
     /**
      * Checks if ajax validation enabled for the field.
      * @return bool
@@ -909,7 +818,6 @@ class ActiveField extends Component
     {
         return $this->enableAjaxValidation || $this->enableAjaxValidation === null && $this->form->enableAjaxValidation;
     }
-
     /**
      * Returns the HTML `id` of the input element of this form field.
      * @return string the input id.
@@ -919,7 +827,6 @@ class ActiveField extends Component
     {
         return $this->_inputId ?: Html::getInputId($this->model, $this->attribute);
     }
-
     /**
      * Adds aria attributes to the input options.
      * @param $options array input options
@@ -929,7 +836,6 @@ class ActiveField extends Component
     {
         // Get proper attribute name when attribute name is tabular.
         $attributeName = Html::getAttributeName($this->attribute);
-
         if ($this->addAriaAttributes) {
             if (!isset($options['aria-required']) && $this->model->isAttributeRequired($attributeName)) {
                 $options['aria-required'] = 'true';
@@ -939,7 +845,6 @@ class ActiveField extends Component
             }
         }
     }
-
     /**
      * Add role attributes to the input options
      * @param $options array input options
@@ -952,7 +857,6 @@ class ActiveField extends Component
             $options['role'] = $role;
         }
     }
-
     /**
      * Adds validation class to the input options if needed.
      * @param $options array input options
@@ -962,7 +866,6 @@ class ActiveField extends Component
     {
         // Get proper attribute name when attribute name is tabular.
         $attributeName = Html::getAttributeName($this->attribute);
-
         if ($this->model->hasErrors($attributeName)) {
             Html::addCssClass($options, $this->form->errorCssClass);
         }

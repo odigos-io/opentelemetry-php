@@ -1,5 +1,7 @@
 <?php
-declare(strict_types=1);
+
+declare (strict_types=1);
+namespace Odigos;
 
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
@@ -16,8 +18,7 @@ declare(strict_types=1);
  */
 use Cake\Core\Configure;
 use Cake\Error\Debugger;
-
-if (!function_exists('debug')) {
+if (!\function_exists('Odigos\debug')) {
     /**
      * Prints out debug information about given variable and returns the
      * variable that was passed.
@@ -31,30 +32,23 @@ if (!function_exists('debug')) {
      * @link https://book.cakephp.org/5/en/development/debugging.html#basic-debugging
      * @link https://book.cakephp.org/5/en/core-libraries/global-constants-and-functions.html#debug
      */
-    function debug(mixed $var, ?bool $showHtml = null, bool $showFrom = true): mixed
+    function debug(mixed $var, ?bool $showHtml = null, bool $showFrom = \true): mixed
     {
         if (!Configure::read('debug')) {
             return $var;
         }
-
         $location = [];
         if ($showFrom) {
             $trace = Debugger::trace(['start' => 0, 'depth' => 1, 'format' => 'array']);
             if (isset($trace[0]['line']) && isset($trace[0]['file'])) {
-                $location = [
-                    'line' => $trace[0]['line'],
-                    'file' => $trace[0]['file'],
-                ];
+                $location = ['line' => $trace[0]['line'], 'file' => $trace[0]['file']];
             }
         }
-
         Debugger::printVar($var, $location, $showHtml);
-
         return $var;
     }
 }
-
-if (!function_exists('stackTrace')) {
+if (!\function_exists('Odigos\stackTrace')) {
     /**
      * Outputs a stack trace based on the supplied options.
      *
@@ -73,17 +67,14 @@ if (!function_exists('stackTrace')) {
         if (!Configure::read('debug')) {
             return;
         }
-
         $options += ['start' => 0];
         $options['start']++;
-
         /** @var string $trace */
         $trace = Debugger::trace($options);
         echo $trace;
     }
 }
-
-if (!function_exists('dd')) {
+if (!\function_exists('Odigos\dd')) {
     /**
      * Prints out debug information about given variable and dies.
      *
@@ -100,19 +91,13 @@ if (!function_exists('dd')) {
         if (!Configure::read('debug')) {
             return;
         }
-
         $trace = Debugger::trace(['start' => 0, 'depth' => 2, 'format' => 'array']);
-        $location = [
-            'line' => $trace[0]['line'],
-            'file' => $trace[0]['file'],
-        ];
-
+        $location = ['line' => $trace[0]['line'], 'file' => $trace[0]['file']];
         Debugger::printVar($var, $location, $showHtml);
         die(1);
     }
 }
-
-if (!function_exists('breakpoint')) {
+if (!\function_exists('Odigos\breakpoint')) {
     /**
      * Command to return the eval-able code to startup PsySH in interactive debugger
      * Works the same way as eval(\Psy\sh());
@@ -128,14 +113,10 @@ if (!function_exists('breakpoint')) {
     function breakpoint(): ?string
     {
         // phpcs:ignore SlevomatCodingStandard.Namespaces.ReferenceUsedNamesOnly
-        if ((PHP_SAPI === 'cli' || PHP_SAPI === 'phpdbg') && class_exists(\Psy\Shell::class)) {
+        if ((\PHP_SAPI === 'cli' || \PHP_SAPI === 'phpdbg') && \class_exists(\Odigos\Psy\Shell::class)) {
             return 'extract(\Psy\Shell::debug(get_defined_vars(), isset($this) ? $this : null));';
         }
-        trigger_error(
-            'psy/psysh must be installed and you must be in a CLI environment to use the breakpoint function',
-            E_USER_WARNING,
-        );
-
+        \trigger_error('psy/psysh must be installed and you must be in a CLI environment to use the breakpoint function', \E_USER_WARNING);
         return null;
     }
 }

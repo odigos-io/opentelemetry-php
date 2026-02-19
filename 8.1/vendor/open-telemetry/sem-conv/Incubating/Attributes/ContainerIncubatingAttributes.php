@@ -1,9 +1,7 @@
 <?php
 
 // DO NOT EDIT, this is an Auto-generated file from script/semantic-conventions
-
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\SemConv\Incubating\Attributes;
 
 /**
@@ -21,21 +19,18 @@ interface ContainerIncubatingAttributes
      * @experimental
      */
     public const CONTAINER_COMMAND = 'container.command';
-
     /**
      * All the command arguments (including the command/executable itself) run by the container.
      *
      * @experimental
      */
     public const CONTAINER_COMMAND_ARGS = 'container.command_args';
-
     /**
      * The full command run by the container as a single string representing the full command.
      *
      * @experimental
      */
     public const CONTAINER_COMMAND_LINE = 'container.command_line';
-
     /**
      * The name of the CSI ([Container Storage Interface](https://github.com/container-storage-interface/spec)) plugin used by the volume.
      *
@@ -44,7 +39,6 @@ interface ContainerIncubatingAttributes
      * @experimental
      */
     public const CONTAINER_CSI_PLUGIN_NAME = 'container.csi.plugin.name';
-
     /**
      * The unique volume ID returned by the CSI ([Container Storage Interface](https://github.com/container-storage-interface/spec)) plugin.
      *
@@ -53,14 +47,12 @@ interface ContainerIncubatingAttributes
      * @experimental
      */
     public const CONTAINER_CSI_VOLUME_ID = 'container.csi.volume.id';
-
     /**
      * Container ID. Usually a UUID, as for example used to [identify Docker containers](https://docs.docker.com/engine/containers/run/#container-identification). The UUID might be abbreviated.
      *
      * @experimental
      */
     public const CONTAINER_ID = 'container.id';
-
     /**
      * Runtime specific image identifier. Usually a hash algorithm followed by a UUID.
      *
@@ -71,14 +63,12 @@ interface ContainerIncubatingAttributes
      * @experimental
      */
     public const CONTAINER_IMAGE_ID = 'container.image.id';
-
     /**
      * Name of the image the container was built on.
      *
      * @experimental
      */
     public const CONTAINER_IMAGE_NAME = 'container.image.name';
-
     /**
      * Repo digests of the container image as provided by the container runtime.
      *
@@ -87,14 +77,12 @@ interface ContainerIncubatingAttributes
      * @experimental
      */
     public const CONTAINER_IMAGE_REPO_DIGESTS = 'container.image.repo_digests';
-
     /**
      * Container image tags. An example can be found in [Docker Image Inspect](https://docs.docker.com/reference/api/engine/version/v1.52/#tag/Image/operation/ImageInspect). Should be only the `<tag>` section of the full name for example from `registry.example.com/my-org/my-image:<tag>`.
      *
      * @experimental
      */
     public const CONTAINER_IMAGE_TAGS = 'container.image.tags';
-
     /**
      * Container labels, `<key>` being the label name, the value being the label value.
      *
@@ -103,33 +91,28 @@ interface ContainerIncubatingAttributes
      * @experimental
      */
     public const CONTAINER_LABEL = 'container.label';
-
     /**
      * Container name used by container runtime.
      *
      * @experimental
      */
     public const CONTAINER_NAME = 'container.name';
-
     /**
      * A description about the runtime which could include, for example details about the CRI/API version being used or other customisations.
      *
      * @experimental
      */
     public const CONTAINER_RUNTIME_DESCRIPTION = 'container.runtime.description';
-
     /**
      * The container runtime managing this container.
      *
      * @experimental
      */
     public const CONTAINER_RUNTIME_NAME = 'container.runtime.name';
-
     /**
      * The version of the runtime of this process, as returned by the runtime without modification.
      *
      * @experimental
      */
     public const CONTAINER_RUNTIME_VERSION = 'container.runtime.version';
-
 }

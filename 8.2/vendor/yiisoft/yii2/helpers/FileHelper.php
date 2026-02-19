@@ -1,10 +1,10 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\helpers;
 
 /**
@@ -14,6 +14,6 @@ namespace yii\helpers;
  * @author Alex Makarov <sam@rmcreative.ru>
  * @since 2.0
  */
-class FileHelper extends BaseFileHelper
+class FileHelper extends \yii\helpers\BaseFileHelper
 {
 }

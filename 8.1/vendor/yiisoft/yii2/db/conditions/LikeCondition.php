@@ -1,21 +1,20 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\db\conditions;
 
 use yii\base\InvalidArgumentException;
-
 /**
  * Class LikeCondition represents a `LIKE` condition.
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  * @since 2.0.14
  */
-class LikeCondition extends SimpleCondition
+class LikeCondition extends \yii\db\conditions\SimpleCondition
 {
     /**
      * @var array|null|false map of chars to their replacements, `false` if characters should not be escaped
@@ -23,8 +22,6 @@ class LikeCondition extends SimpleCondition
      * By default it's set to `null`.
      */
     protected $escapingReplacements;
-
-
     /**
      * @param string $column the column name.
      * @param string $operator the operator to use (e.g. `LIKE`, `NOT LIKE`, `OR LIKE` or `OR NOT LIKE`)
@@ -36,7 +33,6 @@ class LikeCondition extends SimpleCondition
     {
         parent::__construct($column, $operator, $value);
     }
-
     /**
      * This method allows to specify how to escape special characters in the value(s).
      *
@@ -50,7 +46,6 @@ class LikeCondition extends SimpleCondition
     {
         $this->escapingReplacements = $escapingReplacements;
     }
-
     /**
      * @return array|null|false
      */
@@ -58,7 +53,6 @@ class LikeCondition extends SimpleCondition
     {
         return $this->escapingReplacements;
     }
-
     /**
      * {@inheritdoc}
      * @throws InvalidArgumentException if wrong number of operands have been given.
@@ -66,14 +60,12 @@ class LikeCondition extends SimpleCondition
     public static function fromArrayDefinition($operator, $operands)
     {
         if (!isset($operands[0], $operands[1])) {
-            throw new InvalidArgumentException("Operator '$operator' requires two operands.");
+            throw new InvalidArgumentException("Operator '{$operator}' requires two operands.");
         }
-
         $condition = new static($operands[0], $operator, $operands[1]);
         if (isset($operands[2])) {
             $condition->escapingReplacements = $operands[2];
         }
-
         return $condition;
     }
 }

@@ -2,61 +2,53 @@
 
 namespace Illuminate\Cache;
 
-use Aws\DynamoDb\DynamoDbClient;
-use Aws\DynamoDb\Exception\DynamoDbException;
+use Odigos\Aws\DynamoDb\DynamoDbClient;
+use Odigos\Aws\DynamoDb\Exception\DynamoDbException;
 use Illuminate\Contracts\Cache\LockProvider;
 use Illuminate\Contracts\Cache\Store;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\InteractsWithTime;
 use Illuminate\Support\Str;
 use RuntimeException;
-
 class DynamoDbStore implements LockProvider, Store
 {
     use InteractsWithTime;
-
     /**
      * The DynamoDB client instance.
      *
      * @var \Aws\DynamoDb\DynamoDbClient
      */
     protected $dynamo;
-
     /**
      * The table name.
      *
      * @var string
      */
     protected $table;
-
     /**
      * The name of the attribute that should hold the key.
      *
      * @var string
      */
     protected $keyAttribute;
-
     /**
      * The name of the attribute that should hold the value.
      *
      * @var string
      */
     protected $valueAttribute;
-
     /**
      * The name of the attribute that should hold the expiration timestamp.
      *
      * @var string
      */
     protected $expirationAttribute;
-
     /**
      * A string that should be prepended to keys.
      *
      * @var string
      */
     protected $prefix;
-
     /**
      * Create a new store instance.
      *
@@ -68,22 +60,15 @@ class DynamoDbStore implements LockProvider, Store
      * @param  string  $prefix
      * @return void
      */
-    public function __construct(DynamoDbClient $dynamo,
-                                $table,
-                                $keyAttribute = 'key',
-                                $valueAttribute = 'value',
-                                $expirationAttribute = 'expires_at',
-                                $prefix = '')
+    public function __construct(DynamoDbClient $dynamo, $table, $keyAttribute = 'key', $valueAttribute = 'value', $expirationAttribute = 'expires_at', $prefix = '')
     {
         $this->table = $table;
         $this->dynamo = $dynamo;
         $this->keyAttribute = $keyAttribute;
         $this->valueAttribute = $valueAttribute;
         $this->expirationAttribute = $expirationAttribute;
-
         $this->setPrefix($prefix);
     }
-
     /**
      * Retrieve an item from the cache by key.
      *
@@ -92,33 +77,17 @@ class DynamoDbStore implements LockProvider, Store
      */
     public function get($key)
     {
-        $response = $this->dynamo->getItem([
-            'TableName' => $this->table,
-            'ConsistentRead' => false,
-            'Key' => [
-                $this->keyAttribute => [
-                    'S' => $this->prefix.$key,
-                ],
-            ],
-        ]);
-
-        if (! isset($response['Item'])) {
+        $response = $this->dynamo->getItem(['TableName' => $this->table, 'ConsistentRead' => \false, 'Key' => [$this->keyAttribute => ['S' => $this->prefix . $key]]]);
+        if (!isset($response['Item'])) {
             return;
         }
-
         if ($this->isExpired($response['Item'])) {
             return;
         }
-
         if (isset($response['Item'][$this->valueAttribute])) {
-            return $this->unserialize(
-                $response['Item'][$this->valueAttribute]['S'] ??
-                $response['Item'][$this->valueAttribute]['N'] ??
-                null
-            );
+            return $this->unserialize($response['Item'][$this->valueAttribute]['S'] ?? $response['Item'][$this->valueAttribute]['N'] ?? null);
         }
     }
-
     /**
      * Retrieve multiple items from the cache by key.
      *
@@ -132,45 +101,24 @@ class DynamoDbStore implements LockProvider, Store
         if (count($keys) === 0) {
             return [];
         }
-
         $prefixedKeys = array_map(function ($key) {
-            return $this->prefix.$key;
+            return $this->prefix . $key;
         }, $keys);
-
-        $response = $this->dynamo->batchGetItem([
-            'RequestItems' => [
-                $this->table => [
-                    'ConsistentRead' => false,
-                    'Keys' => collect($prefixedKeys)->map(function ($key) {
-                        return [
-                            $this->keyAttribute => [
-                                'S' => $key,
-                            ],
-                        ];
-                    })->all(),
-                ],
-            ],
-        ]);
-
+        $response = $this->dynamo->batchGetItem(['RequestItems' => [$this->table => ['ConsistentRead' => \false, 'Keys' => collect($prefixedKeys)->map(function ($key) {
+            return [$this->keyAttribute => ['S' => $key]];
+        })->all()]]]);
         $now = Carbon::now();
-
         return array_merge(collect(array_flip($keys))->map(function () {
             //
         })->all(), collect($response['Responses'][$this->table])->mapWithKeys(function ($response) use ($now) {
             if ($this->isExpired($response, $now)) {
                 $value = null;
             } else {
-                $value = $this->unserialize(
-                    $response[$this->valueAttribute]['S'] ??
-                    $response[$this->valueAttribute]['N'] ??
-                    null
-                );
+                $value = $this->unserialize($response[$this->valueAttribute]['S'] ?? $response[$this->valueAttribute]['N'] ?? null);
             }
-
             return [Str::replaceFirst($this->prefix, '', $response[$this->keyAttribute]['S']) => $value];
         })->all());
     }
-
     /**
      * Determine if the given item is expired.
      *
@@ -181,11 +129,8 @@ class DynamoDbStore implements LockProvider, Store
     protected function isExpired(array $item, $expiration = null)
     {
         $expiration = $expiration ?: Carbon::now();
-
-        return isset($item[$this->expirationAttribute]) &&
-               $expiration->getTimestamp() >= $item[$this->expirationAttribute]['N'];
+        return isset($item[$this->expirationAttribute]) && $expiration->getTimestamp() >= $item[$this->expirationAttribute]['N'];
     }
-
     /**
      * Store an item in the cache for a given number of seconds.
      *
@@ -196,24 +141,9 @@ class DynamoDbStore implements LockProvider, Store
      */
     public function put($key, $value, $seconds)
     {
-        $this->dynamo->putItem([
-            'TableName' => $this->table,
-            'Item' => [
-                $this->keyAttribute => [
-                    'S' => $this->prefix.$key,
-                ],
-                $this->valueAttribute => [
-                    $this->type($value) => $this->serialize($value),
-                ],
-                $this->expirationAttribute => [
-                    'N' => (string) $this->toTimestamp($seconds),
-                ],
-            ],
-        ]);
-
-        return true;
+        $this->dynamo->putItem(['TableName' => $this->table, 'Item' => [$this->keyAttribute => ['S' => $this->prefix . $key], $this->valueAttribute => [$this->type($value) => $this->serialize($value)], $this->expirationAttribute => ['N' => (string) $this->toTimestamp($seconds)]]]);
+        return \true;
     }
-
     /**
      * Store multiple items in the cache for a given number of seconds.
      *
@@ -224,36 +154,14 @@ class DynamoDbStore implements LockProvider, Store
     public function putMany(array $values, $seconds)
     {
         if (count($values) === 0) {
-            return true;
+            return \true;
         }
-
         $expiration = $this->toTimestamp($seconds);
-
-        $this->dynamo->batchWriteItem([
-            'RequestItems' => [
-                $this->table => collect($values)->map(function ($value, $key) use ($expiration) {
-                    return [
-                        'PutRequest' => [
-                            'Item' => [
-                                $this->keyAttribute => [
-                                    'S' => $this->prefix.$key,
-                                ],
-                                $this->valueAttribute => [
-                                    $this->type($value) => $this->serialize($value),
-                                ],
-                                $this->expirationAttribute => [
-                                    'N' => (string) $expiration,
-                                ],
-                            ],
-                        ],
-                    ];
-                })->values()->all(),
-            ],
-        ]);
-
-        return true;
+        $this->dynamo->batchWriteItem(['RequestItems' => [$this->table => collect($values)->map(function ($value, $key) use ($expiration) {
+            return ['PutRequest' => ['Item' => [$this->keyAttribute => ['S' => $this->prefix . $key], $this->valueAttribute => [$this->type($value) => $this->serialize($value)], $this->expirationAttribute => ['N' => (string) $expiration]]]];
+        })->values()->all()]]);
+        return \true;
     }
-
     /**
      * Store an item in the cache if the key doesn't exist.
      *
@@ -265,41 +173,15 @@ class DynamoDbStore implements LockProvider, Store
     public function add($key, $value, $seconds)
     {
         try {
-            $this->dynamo->putItem([
-                'TableName' => $this->table,
-                'Item' => [
-                    $this->keyAttribute => [
-                        'S' => $this->prefix.$key,
-                    ],
-                    $this->valueAttribute => [
-                        $this->type($value) => $this->serialize($value),
-                    ],
-                    $this->expirationAttribute => [
-                        'N' => (string) $this->toTimestamp($seconds),
-                    ],
-                ],
-                'ConditionExpression' => 'attribute_not_exists(#key) OR #expires_at < :now',
-                'ExpressionAttributeNames' => [
-                    '#key' => $this->keyAttribute,
-                    '#expires_at' => $this->expirationAttribute,
-                ],
-                'ExpressionAttributeValues' => [
-                    ':now' => [
-                        'N' => (string) $this->currentTime(),
-                    ],
-                ],
-            ]);
-
-            return true;
+            $this->dynamo->putItem(['TableName' => $this->table, 'Item' => [$this->keyAttribute => ['S' => $this->prefix . $key], $this->valueAttribute => [$this->type($value) => $this->serialize($value)], $this->expirationAttribute => ['N' => (string) $this->toTimestamp($seconds)]], 'ConditionExpression' => 'attribute_not_exists(#key) OR #expires_at < :now', 'ExpressionAttributeNames' => ['#key' => $this->keyAttribute, '#expires_at' => $this->expirationAttribute], 'ExpressionAttributeValues' => [':now' => ['N' => (string) $this->currentTime()]]]);
+            return \true;
         } catch (DynamoDbException $e) {
             if (str_contains($e->getMessage(), 'ConditionalCheckFailed')) {
-                return false;
+                return \false;
             }
-
             throw $e;
         }
     }
-
     /**
      * Increment the value of an item in the cache.
      *
@@ -310,41 +192,15 @@ class DynamoDbStore implements LockProvider, Store
     public function increment($key, $value = 1)
     {
         try {
-            $response = $this->dynamo->updateItem([
-                'TableName' => $this->table,
-                'Key' => [
-                    $this->keyAttribute => [
-                        'S' => $this->prefix.$key,
-                    ],
-                ],
-                'ConditionExpression' => 'attribute_exists(#key) AND #expires_at > :now',
-                'UpdateExpression' => 'SET #value = #value + :amount',
-                'ExpressionAttributeNames' => [
-                    '#key' => $this->keyAttribute,
-                    '#value' => $this->valueAttribute,
-                    '#expires_at' => $this->expirationAttribute,
-                ],
-                'ExpressionAttributeValues' => [
-                    ':now' => [
-                        'N' => (string) $this->currentTime(),
-                    ],
-                    ':amount' => [
-                        'N' => (string) $value,
-                    ],
-                ],
-                'ReturnValues' => 'UPDATED_NEW',
-            ]);
-
+            $response = $this->dynamo->updateItem(['TableName' => $this->table, 'Key' => [$this->keyAttribute => ['S' => $this->prefix . $key]], 'ConditionExpression' => 'attribute_exists(#key) AND #expires_at > :now', 'UpdateExpression' => 'SET #value = #value + :amount', 'ExpressionAttributeNames' => ['#key' => $this->keyAttribute, '#value' => $this->valueAttribute, '#expires_at' => $this->expirationAttribute], 'ExpressionAttributeValues' => [':now' => ['N' => (string) $this->currentTime()], ':amount' => ['N' => (string) $value]], 'ReturnValues' => 'UPDATED_NEW']);
             return (int) $response['Attributes'][$this->valueAttribute]['N'];
         } catch (DynamoDbException $e) {
             if (str_contains($e->getMessage(), 'ConditionalCheckFailed')) {
-                return false;
+                return \false;
             }
-
             throw $e;
         }
     }
-
     /**
      * Decrement the value of an item in the cache.
      *
@@ -355,41 +211,15 @@ class DynamoDbStore implements LockProvider, Store
     public function decrement($key, $value = 1)
     {
         try {
-            $response = $this->dynamo->updateItem([
-                'TableName' => $this->table,
-                'Key' => [
-                    $this->keyAttribute => [
-                        'S' => $this->prefix.$key,
-                    ],
-                ],
-                'ConditionExpression' => 'attribute_exists(#key) AND #expires_at > :now',
-                'UpdateExpression' => 'SET #value = #value - :amount',
-                'ExpressionAttributeNames' => [
-                    '#key' => $this->keyAttribute,
-                    '#value' => $this->valueAttribute,
-                    '#expires_at' => $this->expirationAttribute,
-                ],
-                'ExpressionAttributeValues' => [
-                    ':now' => [
-                        'N' => (string) $this->currentTime(),
-                    ],
-                    ':amount' => [
-                        'N' => (string) $value,
-                    ],
-                ],
-                'ReturnValues' => 'UPDATED_NEW',
-            ]);
-
+            $response = $this->dynamo->updateItem(['TableName' => $this->table, 'Key' => [$this->keyAttribute => ['S' => $this->prefix . $key]], 'ConditionExpression' => 'attribute_exists(#key) AND #expires_at > :now', 'UpdateExpression' => 'SET #value = #value - :amount', 'ExpressionAttributeNames' => ['#key' => $this->keyAttribute, '#value' => $this->valueAttribute, '#expires_at' => $this->expirationAttribute], 'ExpressionAttributeValues' => [':now' => ['N' => (string) $this->currentTime()], ':amount' => ['N' => (string) $value]], 'ReturnValues' => 'UPDATED_NEW']);
             return (int) $response['Attributes'][$this->valueAttribute]['N'];
         } catch (DynamoDbException $e) {
             if (str_contains($e->getMessage(), 'ConditionalCheckFailed')) {
-                return false;
+                return \false;
             }
-
             throw $e;
         }
     }
-
     /**
      * Store an item in the cache indefinitely.
      *
@@ -401,7 +231,6 @@ class DynamoDbStore implements LockProvider, Store
     {
         return $this->put($key, $value, Carbon::now()->addYears(5)->getTimestamp());
     }
-
     /**
      * Get a lock instance.
      *
@@ -412,9 +241,8 @@ class DynamoDbStore implements LockProvider, Store
      */
     public function lock($name, $seconds = 0, $owner = null)
     {
-        return new DynamoDbLock($this, $this->prefix.$name, $seconds, $owner);
+        return new \Illuminate\Cache\DynamoDbLock($this, $this->prefix . $name, $seconds, $owner);
     }
-
     /**
      * Restore a lock instance using the owner identifier.
      *
@@ -426,7 +254,6 @@ class DynamoDbStore implements LockProvider, Store
     {
         return $this->lock($name, 0, $owner);
     }
-
     /**
      * Remove an item from the cache.
      *
@@ -435,18 +262,9 @@ class DynamoDbStore implements LockProvider, Store
      */
     public function forget($key)
     {
-        $this->dynamo->deleteItem([
-            'TableName' => $this->table,
-            'Key' => [
-                $this->keyAttribute => [
-                    'S' => $this->prefix.$key,
-                ],
-            ],
-        ]);
-
-        return true;
+        $this->dynamo->deleteItem(['TableName' => $this->table, 'Key' => [$this->keyAttribute => ['S' => $this->prefix . $key]]]);
+        return \true;
     }
-
     /**
      * Remove all items from the cache.
      *
@@ -458,7 +276,6 @@ class DynamoDbStore implements LockProvider, Store
     {
         throw new RuntimeException('DynamoDb does not support flushing an entire table. Please create a new table.');
     }
-
     /**
      * Get the UNIX timestamp for the given number of seconds.
      *
@@ -467,11 +284,8 @@ class DynamoDbStore implements LockProvider, Store
      */
     protected function toTimestamp($seconds)
     {
-        return $seconds > 0
-                    ? $this->availableAt($seconds)
-                    : $this->currentTime();
+        return $seconds > 0 ? $this->availableAt($seconds) : $this->currentTime();
     }
-
     /**
      * Serialize the value.
      *
@@ -482,7 +296,6 @@ class DynamoDbStore implements LockProvider, Store
     {
         return is_numeric($value) ? (string) $value : serialize($value);
     }
-
     /**
      * Unserialize the value.
      *
@@ -491,17 +304,14 @@ class DynamoDbStore implements LockProvider, Store
      */
     protected function unserialize($value)
     {
-        if (filter_var($value, FILTER_VALIDATE_INT) !== false) {
+        if (filter_var($value, \FILTER_VALIDATE_INT) !== \false) {
             return (int) $value;
         }
-
         if (is_numeric($value)) {
             return (float) $value;
         }
-
         return unserialize($value);
     }
-
     /**
      * Get the DynamoDB type for the given value.
      *
@@ -512,7 +322,6 @@ class DynamoDbStore implements LockProvider, Store
     {
         return is_numeric($value) ? 'N' : 'S';
     }
-
     /**
      * Get the cache key prefix.
      *
@@ -522,7 +331,6 @@ class DynamoDbStore implements LockProvider, Store
     {
         return $this->prefix;
     }
-
     /**
      * Set the cache key prefix.
      *
@@ -531,9 +339,8 @@ class DynamoDbStore implements LockProvider, Store
      */
     public function setPrefix($prefix)
     {
-        $this->prefix = ! empty($prefix) ? $prefix.':' : '';
+        $this->prefix = !empty($prefix) ? $prefix . ':' : '';
     }
-
     /**
      * Get the DynamoDb Client instance.
      *

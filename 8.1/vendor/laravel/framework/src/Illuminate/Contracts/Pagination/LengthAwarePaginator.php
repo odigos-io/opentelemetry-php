@@ -2,7 +2,7 @@
 
 namespace Illuminate\Contracts\Pagination;
 
-interface LengthAwarePaginator extends Paginator
+interface LengthAwarePaginator extends \Illuminate\Contracts\Pagination\Paginator
 {
     /**
      * Create a range of pagination URLs.
@@ -12,14 +12,12 @@ interface LengthAwarePaginator extends Paginator
      * @return array
      */
     public function getUrlRange($start, $end);
-
     /**
      * Determine the total number of items in the data store.
      *
      * @return int
      */
     public function total();
-
     /**
      * Get the page number of the last available page.
      *

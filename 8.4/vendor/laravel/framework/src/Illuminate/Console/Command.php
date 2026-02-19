@@ -10,80 +10,63 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Throwable;
-
 class Command extends SymfonyCommand
 {
-    use Concerns\CallsCommands,
-        Concerns\ConfiguresPrompts,
-        Concerns\HasParameters,
-        Concerns\InteractsWithIO,
-        Concerns\InteractsWithSignals,
-        Concerns\PromptsForMissingInput,
-        Macroable;
-
+    use \Illuminate\Console\Concerns\CallsCommands, \Illuminate\Console\Concerns\ConfiguresPrompts, \Illuminate\Console\Concerns\HasParameters, \Illuminate\Console\Concerns\InteractsWithIO, \Illuminate\Console\Concerns\InteractsWithSignals, \Illuminate\Console\Concerns\PromptsForMissingInput, Macroable;
     /**
      * The Laravel application instance.
      *
      * @var \Illuminate\Contracts\Foundation\Application
      */
     protected $laravel;
-
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
     protected $signature;
-
     /**
      * The console command name.
      *
      * @var string
      */
     protected $name;
-
     /**
      * The console command description.
      *
      * @var string
      */
     protected $description = '';
-
     /**
      * The console command help text.
      *
      * @var string
      */
     protected $help = '';
-
     /**
      * Indicates whether the command should be shown in the Artisan command list.
      *
      * @var bool
      */
-    protected $hidden = false;
-
+    protected $hidden = \false;
     /**
      * Indicates whether only one instance of the command can run at any given time.
      *
      * @var bool
      */
-    protected $isolated = false;
-
+    protected $isolated = \false;
     /**
      * The default exit code for isolated commands.
      *
      * @var int
      */
     protected $isolatedExitCode = self::SUCCESS;
-
     /**
      * The console command name aliases.
      *
      * @var array
      */
     protected $aliases;
-
     /**
      * Create a new console command instance.
      */
@@ -97,33 +80,26 @@ class Command extends SymfonyCommand
         } else {
             parent::__construct($this->name);
         }
-
         // Once we have constructed the command, we'll set the description and other
         // related properties of the command. If a signature wasn't used to build
         // the command we'll set the arguments and the options on this command.
-        if (! empty($this->description)) {
+        if (!empty($this->description)) {
             $this->setDescription($this->description);
         }
-
-        if (! empty($this->help)) {
+        if (!empty($this->help)) {
             $this->setHelp($this->help);
         }
-
         $this->setHidden($this->isHidden());
-
         if (isset($this->aliases)) {
             $this->setAliases((array) $this->aliases);
         }
-
-        if (! isset($this->signature)) {
+        if (!isset($this->signature)) {
             $this->specifyParameters();
         }
-
         if ($this instanceof Isolatable) {
             $this->configureIsolation();
         }
     }
-
     /**
      * Configure the console command using a fluent definition.
      *
@@ -131,17 +107,14 @@ class Command extends SymfonyCommand
      */
     protected function configureUsingFluentDefinition()
     {
-        [$name, $arguments, $options] = Parser::parse($this->signature);
-
+        [$name, $arguments, $options] = \Illuminate\Console\Parser::parse($this->signature);
         parent::__construct($this->name = $name);
-
         // After parsing the signature we will spin through the arguments and options
         // and set them on this command. These will already be changed into proper
         // instances of these "InputArgument" and "InputOption" Symfony classes.
         $this->getDefinition()->addArguments($arguments);
         $this->getDefinition()->addOptions($options);
     }
-
     /**
      * Configure the console command for isolation.
      *
@@ -149,15 +122,8 @@ class Command extends SymfonyCommand
      */
     protected function configureIsolation()
     {
-        $this->getDefinition()->addOption(new InputOption(
-            'isolated',
-            null,
-            InputOption::VALUE_OPTIONAL,
-            'Do not run the command if another instance of the command is already running',
-            $this->isolated
-        ));
+        $this->getDefinition()->addOption(new InputOption('isolated', null, InputOption::VALUE_OPTIONAL, 'Do not run the command if another instance of the command is already running', $this->isolated));
     }
-
     /**
      * Run the console command.
      *
@@ -168,23 +134,15 @@ class Command extends SymfonyCommand
     #[\Override]
     public function run(InputInterface $input, OutputInterface $output): int
     {
-        $this->output = $output instanceof OutputStyle ? $output : $this->laravel->make(
-            OutputStyle::class, ['input' => $input, 'output' => $output]
-        );
-
+        $this->output = $output instanceof \Illuminate\Console\OutputStyle ? $output : $this->laravel->make(\Illuminate\Console\OutputStyle::class, ['input' => $input, 'output' => $output]);
         $this->components = $this->laravel->make(Factory::class, ['output' => $this->output]);
-
         $this->configurePrompts($input);
-
         try {
-            return parent::run(
-                $this->input = $input, $this->output
-            );
+            return parent::run($this->input = $input, $this->output);
         } finally {
             $this->untrap();
         }
     }
-
     /**
      * Execute the console command.
      *
@@ -194,32 +152,22 @@ class Command extends SymfonyCommand
     #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        if ($this instanceof Isolatable && $this->option('isolated') !== false &&
-            ! $this->commandIsolationMutex()->create($this)) {
-            $this->comment(sprintf(
-                'The [%s] command is already running.', $this->getName()
-            ));
-
-            return (int) (is_numeric($this->option('isolated'))
-                ? $this->option('isolated')
-                : $this->isolatedExitCode);
+        if ($this instanceof Isolatable && $this->option('isolated') !== \false && !$this->commandIsolationMutex()->create($this)) {
+            $this->comment(sprintf('The [%s] command is already running.', $this->getName()));
+            return (int) (is_numeric($this->option('isolated')) ? $this->option('isolated') : $this->isolatedExitCode);
         }
-
         $method = method_exists($this, 'handle') ? 'handle' : '__invoke';
-
         try {
             return (int) $this->laravel->call([$this, $method]);
-        } catch (ManuallyFailedException $e) {
+        } catch (\Illuminate\Console\ManuallyFailedException $e) {
             $this->components->error($e->getMessage());
-
             return static::FAILURE;
         } finally {
-            if ($this instanceof Isolatable && $this->option('isolated') !== false) {
+            if ($this instanceof Isolatable && $this->option('isolated') !== \false) {
                 $this->commandIsolationMutex()->forget($this);
             }
         }
     }
-
     /**
      * Get a command isolation mutex instance for the command.
      *
@@ -227,11 +175,8 @@ class Command extends SymfonyCommand
      */
     protected function commandIsolationMutex()
     {
-        return $this->laravel->bound(CommandMutex::class)
-            ? $this->laravel->make(CommandMutex::class)
-            : $this->laravel->make(CacheCommandMutex::class);
+        return $this->laravel->bound(\Illuminate\Console\CommandMutex::class) ? $this->laravel->make(\Illuminate\Console\CommandMutex::class) : $this->laravel->make(\Illuminate\Console\CacheCommandMutex::class);
     }
-
     /**
      * Resolve the console command instance for the given command.
      *
@@ -241,24 +186,19 @@ class Command extends SymfonyCommand
     protected function resolveCommand($command)
     {
         if (is_string($command)) {
-            if (! class_exists($command)) {
+            if (!class_exists($command)) {
                 return $this->getApplication()->find($command);
             }
-
             $command = $this->laravel->make($command);
         }
-
         if ($command instanceof SymfonyCommand) {
             $command->setApplication($this->getApplication());
         }
-
         if ($command instanceof self) {
             $command->setLaravel($this->getLaravel());
         }
-
         return $command;
     }
-
     /**
      * Fail the command manually.
      *
@@ -272,14 +212,11 @@ class Command extends SymfonyCommand
         if (is_null($exception)) {
             $exception = 'Command failed manually.';
         }
-
         if (is_string($exception)) {
-            $exception = new ManuallyFailedException($exception);
+            $exception = new \Illuminate\Console\ManuallyFailedException($exception);
         }
-
         throw $exception;
     }
-
     /**
      * {@inheritdoc}
      *
@@ -290,18 +227,15 @@ class Command extends SymfonyCommand
     {
         return $this->hidden;
     }
-
     /**
      * {@inheritdoc}
      */
     #[\Override]
-    public function setHidden(bool $hidden = true): static
+    public function setHidden(bool $hidden = \true): static
     {
         parent::setHidden($this->hidden = $hidden);
-
         return $this;
     }
-
     /**
      * Get the Laravel application instance.
      *
@@ -311,7 +245,6 @@ class Command extends SymfonyCommand
     {
         return $this->laravel;
     }
-
     /**
      * Set the Laravel application instance.
      *

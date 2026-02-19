@@ -1,26 +1,22 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Laminas\Diactoros\Response;
+declare (strict_types=1);
+namespace Odigos\Laminas\Diactoros\Response;
 
 use JsonException;
-use Laminas\Diactoros\Exception;
-use Laminas\Diactoros\Response;
-use Laminas\Diactoros\Stream;
-
+use Odigos\Laminas\Diactoros\Exception;
+use Odigos\Laminas\Diactoros\Response;
+use Odigos\Laminas\Diactoros\Stream;
 use function is_object;
 use function is_resource;
 use function json_encode;
 use function sprintf;
-
 use const JSON_HEX_AMP;
 use const JSON_HEX_APOS;
 use const JSON_HEX_QUOT;
 use const JSON_HEX_TAG;
 use const JSON_THROW_ON_ERROR;
 use const JSON_UNESCAPED_SLASHES;
-
 /**
  * JSON response.
  *
@@ -31,21 +27,14 @@ use const JSON_UNESCAPED_SLASHES;
 class JsonResponse extends Response
 {
     use InjectContentTypeTrait;
-
     /**
      * Default flags for json_encode
      *
      * @const int
      */
-    public const DEFAULT_JSON_FLAGS = JSON_HEX_TAG
-        | JSON_HEX_APOS
-        | JSON_HEX_AMP
-        | JSON_HEX_QUOT
-        | JSON_UNESCAPED_SLASHES;
-
+    public const DEFAULT_JSON_FLAGS = JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT | JSON_UNESCAPED_SLASHES;
     /** @var mixed */
     private $payload;
-
     /**
      * Create a JSON response with the given data.
      *
@@ -64,22 +53,14 @@ class JsonResponse extends Response
      * @param int $encodingOptions JSON encoding options to use.
      * @throws Exception\InvalidArgumentException If unable to encode the $data to JSON.
      */
-    public function __construct(
-        $data,
-        int $status = 200,
-        array $headers = [],
-        private int $encodingOptions = self::DEFAULT_JSON_FLAGS
-    ) {
+    public function __construct($data, int $status = 200, array $headers = [], private int $encodingOptions = self::DEFAULT_JSON_FLAGS)
+    {
         $this->setPayload($data);
-
         $json = $this->jsonEncode($data, $this->encodingOptions);
         $body = $this->createBodyFromJson($json);
-
         $headers = $this->injectContentType('application/json', $headers);
-
         parent::__construct($body, $status, $headers);
     }
-
     /**
      * @return mixed
      */
@@ -87,35 +68,29 @@ class JsonResponse extends Response
     {
         return $this->payload;
     }
-
     public function withPayload(mixed $data): JsonResponse
     {
         $new = clone $this;
         $new->setPayload($data);
         return $this->updateBodyFor($new);
     }
-
     public function getEncodingOptions(): int
     {
         return $this->encodingOptions;
     }
-
     public function withEncodingOptions(int $encodingOptions): JsonResponse
     {
-        $new                  = clone $this;
+        $new = clone $this;
         $new->encodingOptions = $encodingOptions;
         return $this->updateBodyFor($new);
     }
-
     private function createBodyFromJson(string $json): Stream
     {
         $body = new Stream('php://temp', 'wb+');
         $body->write($json);
         $body->rewind();
-
         return $body;
     }
-
     /**
      * Encode the provided data to JSON.
      *
@@ -126,27 +101,19 @@ class JsonResponse extends Response
         if (is_resource($data)) {
             throw new Exception\InvalidArgumentException('Cannot JSON encode resources');
         }
-
         try {
             return json_encode($data, $encodingOptions | JSON_THROW_ON_ERROR);
         } catch (JsonException $e) {
-            throw new Exception\InvalidArgumentException(sprintf(
-                'Unable to encode data to JSON in %s: %s',
-                self::class,
-                $e->getMessage()
-            ), 0, $e);
+            throw new Exception\InvalidArgumentException(sprintf('Unable to encode data to JSON in %s: %s', self::class, $e->getMessage()), 0, $e);
         }
     }
-
     private function setPayload(mixed $data): void
     {
         if (is_object($data)) {
             $data = clone $data;
         }
-
         $this->payload = $data;
     }
-
     /**
      * Update the response body for the given instance.
      *

@@ -1,14 +1,12 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\SDK\Common\Http\Psr\Client\Discovery;
 
-use Buzz\Client\FileGetContents;
+use Odigos\Buzz\Client\FileGetContents;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Psr\Http\Client\ClientInterface;
-
-class Buzz implements DiscoveryInterface
+class Buzz implements \OpenTelemetry\SDK\Common\Http\Psr\Client\Discovery\DiscoveryInterface
 {
     /**
      * @phan-suppress PhanUndeclaredClassReference
@@ -18,7 +16,6 @@ class Buzz implements DiscoveryInterface
     {
         return class_exists(FileGetContents::class);
     }
-
     /**
      * @phan-suppress PhanUndeclaredClassReference,PhanTypeMismatchReturn,PhanUndeclaredClassMethod
      */

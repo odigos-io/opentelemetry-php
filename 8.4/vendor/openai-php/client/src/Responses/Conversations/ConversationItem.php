@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenAI\Responses\Conversations;
 
 use OpenAI\Actions\Conversations\ItemObjects;
@@ -26,7 +25,6 @@ use OpenAI\Responses\Responses\Output\OutputMcpListTools;
 use OpenAI\Responses\Responses\Output\OutputReasoning;
 use OpenAI\Responses\Responses\Output\OutputWebSearchToolCall;
 use OpenAI\Testing\Responses\Concerns\Fakeable;
-
 /**
  * @phpstan-import-type ItemObjectTypes from ItemObjects
  *
@@ -40,13 +38,10 @@ final class ConversationItem implements ResponseContract
      * @use ArrayAccessible<ConversationItemType>
      */
     use ArrayAccessible;
-
     use Fakeable;
-
-    private function __construct(
-        public readonly Message|OutputFileSearchToolCall|OutputFunctionToolCall|FunctionToolCallOutput|LocalShellCallOutput|McpApprovalResponse|CustomToolCallOutput|OutputWebSearchToolCall|OutputComputerToolCall|ComputerToolCallOutput|OutputReasoning|OutputMcpListTools|OutputMcpApprovalRequest|OutputMcpCall|OutputImageGenerationToolCall|OutputCodeInterpreterToolCall|OutputLocalShellCall|OutputCustomToolCall $item
-    ) {}
-
+    private function __construct(public readonly Message|OutputFileSearchToolCall|OutputFunctionToolCall|FunctionToolCallOutput|LocalShellCallOutput|McpApprovalResponse|CustomToolCallOutput|OutputWebSearchToolCall|OutputComputerToolCall|ComputerToolCallOutput|OutputReasoning|OutputMcpListTools|OutputMcpApprovalRequest|OutputMcpCall|OutputImageGenerationToolCall|OutputCodeInterpreterToolCall|OutputLocalShellCall|OutputCustomToolCall $item)
+    {
+    }
     /**
      * @param  ConversationItemType  $attributes
      */
@@ -55,12 +50,8 @@ final class ConversationItem implements ResponseContract
         // Lets re-use our existing parser, so we don't have to duplicate the logic.
         // But we need to wrap the attributes in an array, since it expects an array of items.
         $item = ItemObjects::parse([$attributes])[0];
-
-        return new self(
-            item: $item,
-        );
+        return new self(item: $item);
     }
-
     /**
      * {@inheritDoc}
      */

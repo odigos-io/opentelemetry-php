@@ -6,7 +6,6 @@ use Closure;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Support\Facades\Date;
-
 class RequirePassword
 {
     /**
@@ -15,21 +14,18 @@ class RequirePassword
      * @var \Illuminate\Contracts\Routing\ResponseFactory
      */
     protected $responseFactory;
-
     /**
      * The URL generator instance.
      *
      * @var \Illuminate\Contracts\Routing\UrlGenerator
      */
     protected $urlGenerator;
-
     /**
      * The password timeout.
      *
      * @var int
      */
     protected $passwordTimeout;
-
     /**
      * Create a new middleware instance.
      *
@@ -43,7 +39,6 @@ class RequirePassword
         $this->urlGenerator = $urlGenerator;
         $this->passwordTimeout = $passwordTimeout ?: 10800;
     }
-
     /**
      * Specify the redirect route and timeout for the middleware.
      *
@@ -55,9 +50,8 @@ class RequirePassword
      */
     public static function using($redirectToRoute = null, $passwordTimeoutSeconds = null)
     {
-        return static::class.':'.implode(',', func_get_args());
+        return static::class . ':' . implode(',', func_get_args());
     }
-
     /**
      * Handle an incoming request.
      *
@@ -71,19 +65,12 @@ class RequirePassword
     {
         if ($this->shouldConfirmPassword($request, $passwordTimeoutSeconds)) {
             if ($request->expectsJson()) {
-                return $this->responseFactory->json([
-                    'message' => 'Password confirmation required.',
-                ], 423);
+                return $this->responseFactory->json(['message' => 'Password confirmation required.'], 423);
             }
-
-            return $this->responseFactory->redirectGuest(
-                $this->urlGenerator->route($redirectToRoute ?: 'password.confirm')
-            );
+            return $this->responseFactory->redirectGuest($this->urlGenerator->route($redirectToRoute ?: 'password.confirm'));
         }
-
         return $next($request);
     }
-
     /**
      * Determine if the confirmation timeout has expired.
      *
@@ -94,7 +81,6 @@ class RequirePassword
     protected function shouldConfirmPassword($request, $passwordTimeoutSeconds = null)
     {
         $confirmedAt = Date::now()->unix() - $request->session()->get('auth.password_confirmed_at', 0);
-
         return $confirmedAt > ($passwordTimeoutSeconds ?? $this->passwordTimeout);
     }
 }

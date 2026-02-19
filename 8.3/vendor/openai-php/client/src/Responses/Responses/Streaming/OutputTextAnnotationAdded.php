@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenAI\Responses\Responses\Streaming;
 
 use OpenAI\Contracts\ResponseContract;
@@ -14,7 +13,6 @@ use OpenAI\Responses\Responses\Output\OutputMessageContentOutputTextAnnotationsF
 use OpenAI\Responses\Responses\Output\OutputMessageContentOutputTextAnnotationsFilePath;
 use OpenAI\Responses\Responses\Output\OutputMessageContentOutputTextAnnotationsUrlCitation;
 use OpenAI\Testing\Responses\Concerns\Fakeable;
-
 /**
  * @phpstan-import-type ContainerFileType from OutputMessageContentOutputTextAnnotationsContainerFile
  * @phpstan-import-type FileCitationType from OutputMessageContentOutputTextAnnotationsFileCitation
@@ -31,19 +29,11 @@ final class OutputTextAnnotationAdded implements ResponseContract, ResponseHasMe
      * @use ArrayAccessible<OutputTextAnnotationAddedType>
      */
     use ArrayAccessible;
-
     use Fakeable;
     use HasMetaInformation;
-
-    private function __construct(
-        public readonly OutputMessageContentOutputTextAnnotationsContainerFile|OutputMessageContentOutputTextAnnotationsFileCitation|OutputMessageContentOutputTextAnnotationsFilePath|OutputMessageContentOutputTextAnnotationsUrlCitation $annotation,
-        public readonly int $annotationIndex,
-        public readonly int $contentIndex,
-        public readonly string $itemId,
-        public readonly int $outputIndex,
-        private readonly MetaInformation $meta,
-    ) {}
-
+    private function __construct(public readonly OutputMessageContentOutputTextAnnotationsContainerFile|OutputMessageContentOutputTextAnnotationsFileCitation|OutputMessageContentOutputTextAnnotationsFilePath|OutputMessageContentOutputTextAnnotationsUrlCitation $annotation, public readonly int $annotationIndex, public readonly int $contentIndex, public readonly string $itemId, public readonly int $outputIndex, private readonly MetaInformation $meta)
+    {
+    }
     /**
      * @param  OutputTextAnnotationAddedType  $attributes
      */
@@ -55,28 +45,13 @@ final class OutputTextAnnotationAdded implements ResponseContract, ResponseHasMe
             'url_citation' => OutputMessageContentOutputTextAnnotationsUrlCitation::from($attributes['annotation']),
             'container_file_citation' => OutputMessageContentOutputTextAnnotationsContainerFile::from($attributes['annotation']),
         };
-
-        return new self(
-            annotation: $annotation,
-            annotationIndex: $attributes['annotation_index'],
-            contentIndex: $attributes['content_index'],
-            itemId: $attributes['item_id'],
-            outputIndex: $attributes['output_index'],
-            meta: $meta,
-        );
+        return new self(annotation: $annotation, annotationIndex: $attributes['annotation_index'], contentIndex: $attributes['content_index'], itemId: $attributes['item_id'], outputIndex: $attributes['output_index'], meta: $meta);
     }
-
     /**
      * {@inheritDoc}
      */
     public function toArray(): array
     {
-        return [
-            'annotation' => $this->annotation->toArray(),
-            'annotation_index' => $this->annotationIndex,
-            'content_index' => $this->contentIndex,
-            'item_id' => $this->itemId,
-            'output_index' => $this->outputIndex,
-        ];
+        return ['annotation' => $this->annotation->toArray(), 'annotation_index' => $this->annotationIndex, 'content_index' => $this->contentIndex, 'item_id' => $this->itemId, 'output_index' => $this->outputIndex];
     }
 }

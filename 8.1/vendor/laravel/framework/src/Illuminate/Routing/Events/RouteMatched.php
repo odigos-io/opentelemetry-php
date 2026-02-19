@@ -10,14 +10,12 @@ class RouteMatched
      * @var \Illuminate\Routing\Route
      */
     public $route;
-
     /**
      * The request instance.
      *
      * @var \Illuminate\Http\Request
      */
     public $request;
-
     /**
      * Create a new event instance.
      *

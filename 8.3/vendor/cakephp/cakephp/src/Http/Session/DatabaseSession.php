@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * Database Session save handler. Allows saving session information into a model.
  *
@@ -21,28 +21,24 @@ namespace Cake\Http\Session;
 use Cake\ORM\Locator\LocatorAwareTrait;
 use Cake\ORM\Table;
 use SessionHandlerInterface;
-
 /**
  * DatabaseSession provides methods to be used with Session.
  */
 class DatabaseSession implements SessionHandlerInterface
 {
     use LocatorAwareTrait;
-
     /**
      * Reference to the table handling the session data
      *
      * @var \Cake\ORM\Table
      */
     protected Table $_table;
-
     /**
      * Number of seconds to mark the session as expired
      *
      * @var int
      */
     protected int $_timeout;
-
     /**
      * Constructor. Looks at Session configuration information and
      * sets up the session model.
@@ -56,17 +52,14 @@ class DatabaseSession implements SessionHandlerInterface
             $this->setTableLocator($config['tableLocator']);
         }
         $tableLocator = $this->getTableLocator();
-
         if (empty($config['model'])) {
-            $config = $tableLocator->exists('Sessions') ? [] : ['table' => 'sessions', 'allowFallbackClass' => true];
+            $config = $tableLocator->exists('Sessions') ? [] : ['table' => 'sessions', 'allowFallbackClass' => \true];
             $this->_table = $tableLocator->get('Sessions', $config);
         } else {
             $this->_table = $tableLocator->get($config['model']);
         }
-
-        $this->_timeout = (int)ini_get('session.gc_maxlifetime');
+        $this->_timeout = (int) ini_get('session.gc_maxlifetime');
     }
-
     /**
      * Set the timeout value for sessions.
      *
@@ -78,10 +71,8 @@ class DatabaseSession implements SessionHandlerInterface
     public function setTimeout(int $timeout)
     {
         $this->_timeout = $timeout;
-
         return $this;
     }
-
     /**
      * Method called on open of a database session.
      *
@@ -91,9 +82,8 @@ class DatabaseSession implements SessionHandlerInterface
      */
     public function open(string $path, string $name): bool
     {
-        return true;
+        return \true;
     }
-
     /**
      * Method called on close of a database session.
      *
@@ -101,9 +91,8 @@ class DatabaseSession implements SessionHandlerInterface
      */
     public function close(): bool
     {
-        return true;
+        return \true;
     }
-
     /**
      * Method used to read from a database session.
      *
@@ -114,30 +103,19 @@ class DatabaseSession implements SessionHandlerInterface
     {
         $pkField = $this->_table->getPrimaryKey();
         assert(is_string($pkField));
-        $result = $this->_table
-            ->find('all')
-            ->select(['data'])
-            ->where([$pkField => $id])
-            ->disableHydration()
-            ->first();
-
+        $result = $this->_table->find('all')->select(['data'])->where([$pkField => $id])->disableHydration()->first();
         if (!$result) {
             return '';
         }
-
         if (is_string($result['data'])) {
             return $result['data'];
         }
-
         $session = stream_get_contents($result['data']);
-
-        if ($session === false) {
+        if ($session === \false) {
             return '';
         }
-
         return $session;
     }
-
     /**
      * Helper function called on write for database sessions.
      *
@@ -148,20 +126,13 @@ class DatabaseSession implements SessionHandlerInterface
     public function write(string $id, string $data): bool
     {
         if (!$id) {
-            return false;
+            return \false;
         }
-
         /** @var string $pkField */
         $pkField = $this->_table->getPrimaryKey();
-        $session = $this->_table->newEntity([
-            $pkField => $id,
-            'data' => $data,
-            'expires' => time() + $this->_timeout,
-        ], ['accessibleFields' => [$pkField => true]]);
-
-        return (bool)$this->_table->save($session);
+        $session = $this->_table->newEntity([$pkField => $id, 'data' => $data, 'expires' => time() + $this->_timeout], ['accessibleFields' => [$pkField => \true]]);
+        return (bool) $this->_table->save($session);
     }
-
     /**
      * Method called on the destruction of a database session.
      *
@@ -173,10 +144,8 @@ class DatabaseSession implements SessionHandlerInterface
         /** @var string $pkField */
         $pkField = $this->_table->getPrimaryKey();
         $this->_table->deleteAll([$pkField => $id]);
-
-        return true;
+        return \true;
     }
-
     /**
      * Helper function called on gc for database sessions.
      *

@@ -1,18 +1,15 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Odigos\Laminas\Diactoros\Response;
 
-namespace Laminas\Diactoros\Response;
-
-use Laminas\Diactoros\Exception;
-use Laminas\Diactoros\Response;
-use Laminas\Diactoros\Stream;
+use Odigos\Laminas\Diactoros\Exception;
+use Odigos\Laminas\Diactoros\Response;
+use Odigos\Laminas\Diactoros\Stream;
 use Psr\Http\Message\StreamInterface;
-
 use function get_debug_type;
 use function is_string;
 use function sprintf;
-
 /**
  * XML response.
  *
@@ -22,7 +19,6 @@ use function sprintf;
 class XmlResponse extends Response
 {
     use InjectContentTypeTrait;
-
     /**
      * Create an XML response.
      *
@@ -34,18 +30,10 @@ class XmlResponse extends Response
      * @param array<non-empty-string, string|string[]> $headers Array of headers to use at initialization.
      * @throws Exception\InvalidArgumentException If $text is neither a string or stream.
      */
-    public function __construct(
-        $xml,
-        int $status = 200,
-        array $headers = []
-    ) {
-        parent::__construct(
-            $this->createBody($xml),
-            $status,
-            $this->injectContentType('application/xml; charset=utf-8', $headers)
-        );
+    public function __construct($xml, int $status = 200, array $headers = [])
+    {
+        parent::__construct($this->createBody($xml), $status, $this->injectContentType('application/xml; charset=utf-8', $headers));
     }
-
     /**
      * Create the message body.
      *
@@ -57,16 +45,10 @@ class XmlResponse extends Response
         if ($xml instanceof StreamInterface) {
             return $xml;
         }
-
         /** @psalm-suppress DocblockTypeContradiction */
-        if (! is_string($xml)) {
-            throw new Exception\InvalidArgumentException(sprintf(
-                'Invalid content (%s) provided to %s',
-                get_debug_type($xml),
-                self::class
-            ));
+        if (!is_string($xml)) {
+            throw new Exception\InvalidArgumentException(sprintf('Invalid content (%s) provided to %s', get_debug_type($xml), self::class));
         }
-
         $body = new Stream('php://temp', 'wb+');
         $body->write($xml);
         $body->rewind();

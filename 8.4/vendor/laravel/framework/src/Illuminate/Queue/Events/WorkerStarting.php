@@ -11,10 +11,7 @@ class WorkerStarting
      * @param  string  $queue
      * @param  \Illuminate\Queue\WorkerOptions  $options
      */
-    public function __construct(
-        public $connectionName,
-        public $queue,
-        public $workerOptions,
-    ) {
+    public function __construct(public $connectionName, public $queue, public $workerOptions)
+    {
     }
 }

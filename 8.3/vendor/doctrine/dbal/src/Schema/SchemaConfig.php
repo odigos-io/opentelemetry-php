@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\DBAL\Schema;
 
 /**
@@ -11,25 +10,20 @@ class SchemaConfig
 {
     /** @var positive-int */
     protected int $maxIdentifierLength = 63;
-
     /** @var ?non-empty-string */
     protected ?string $name = null;
-
     /** @var array<string, mixed> */
     protected array $defaultTableOptions = [];
-
     /** @param positive-int $length */
     public function setMaxIdentifierLength(int $length): void
     {
         $this->maxIdentifierLength = $length;
     }
-
     /** @return positive-int */
     public function getMaxIdentifierLength(): int
     {
         return $this->maxIdentifierLength;
     }
-
     /**
      * Gets the default namespace of schema objects.
      *
@@ -39,7 +33,6 @@ class SchemaConfig
     {
         return $this->name;
     }
-
     /**
      * Sets the default namespace name of schema objects.
      *
@@ -49,7 +42,6 @@ class SchemaConfig
     {
         $this->name = $name;
     }
-
     /**
      * Gets the default options that are passed to Table instances created with
      * Schema#createTable().
@@ -60,15 +52,13 @@ class SchemaConfig
     {
         return $this->defaultTableOptions;
     }
-
     /** @param array<string, mixed> $defaultTableOptions */
     public function setDefaultTableOptions(array $defaultTableOptions): void
     {
         $this->defaultTableOptions = $defaultTableOptions;
     }
-
-    public function toTableConfiguration(): TableConfiguration
+    public function toTableConfiguration(): \Doctrine\DBAL\Schema\TableConfiguration
     {
-        return new TableConfiguration($this->maxIdentifierLength);
+        return new \Doctrine\DBAL\Schema\TableConfiguration($this->maxIdentifierLength);
     }
 }

@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -20,11 +20,10 @@ use Cake\Cache\Cache;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
-
 /**
  * CacheClearall command.
  */
-class CacheClearallCommand extends Command
+class CacheClearallCommand extends \Cake\Command\Command
 {
     /**
      * Get the command name.
@@ -35,7 +34,6 @@ class CacheClearallCommand extends Command
     {
         return 'cache clear_all';
     }
-
     /**
      * @inheritDoc
      */
@@ -43,7 +41,6 @@ class CacheClearallCommand extends Command
     {
         return 'Clear all data in all configured cache engines.';
     }
-
     /**
      * Hook method for defining this command's option parser.
      *
@@ -55,10 +52,8 @@ class CacheClearallCommand extends Command
     {
         $parser = parent::buildOptionParser($parser);
         $parser->setDescription(static::getDescription());
-
         return $parser;
     }
-
     /**
      * Implement this method with your command's logic.
      *
@@ -69,9 +64,8 @@ class CacheClearallCommand extends Command
     public function execute(Arguments $args, ConsoleIo $io): ?int
     {
         foreach (Cache::configured() as $engine) {
-            $this->executeCommand(CacheClearCommand::class, [$engine], $io);
+            $this->executeCommand(\Cake\Command\CacheClearCommand::class, [$engine], $io);
         }
-
         return static::CODE_SUCCESS;
     }
 }

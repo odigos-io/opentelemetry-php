@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -18,34 +18,30 @@ namespace Cake\Error\Debug;
 
 use InvalidArgumentException;
 use function Cake\Core\h;
-
 /**
  * A Debugger formatter for generating interactive styled HTML output.
  *
  * @internal
  */
-class HtmlFormatter implements FormatterInterface
+class HtmlFormatter implements \Cake\Error\Debug\FormatterInterface
 {
     /**
      * @var bool
      */
-    protected static bool $outputHeader = false;
-
+    protected static bool $outputHeader = \false;
     /**
      * Random id so that HTML ids are not shared between dump outputs.
      *
      * @var string
      */
     protected string $id;
-
     /**
      * Constructor.
      */
     public function __construct()
     {
-        $this->id = uniqid('', true);
+        $this->id = uniqid('', \true);
     }
-
     /**
      * Check if the current environment is not a CLI context
      *
@@ -53,13 +49,11 @@ class HtmlFormatter implements FormatterInterface
      */
     public static function environmentMatches(): bool
     {
-        if (PHP_SAPI === 'cli' || PHP_SAPI === 'phpdbg') {
-            return false;
+        if (\PHP_SAPI === 'cli' || \PHP_SAPI === 'phpdbg') {
+            return \false;
         }
-
-        return true;
+        return \true;
     }
-
     /**
      * @inheritDoc
      */
@@ -67,22 +61,11 @@ class HtmlFormatter implements FormatterInterface
     {
         $lineInfo = '';
         if (isset($location['file'], $location['file'])) {
-            $lineInfo = sprintf(
-                '<span><strong>%s</strong> (line <strong>%s</strong>)</span>',
-                $location['file'],
-                $location['line'],
-            );
+            $lineInfo = sprintf('<span><strong>%s</strong> (line <strong>%s</strong>)</span>', $location['file'], $location['line']);
         }
-        $parts = [
-            '<div class="cake-debug-output cake-debug" style="direction:ltr">',
-            $lineInfo,
-            $contents,
-            '</div>',
-        ];
-
+        $parts = ['<div class="cake-debug-output cake-debug" style="direction:ltr">', $lineInfo, $contents, '</div>'];
         return implode("\n", $parts);
     }
-
     /**
      * Generate the CSS and Javascript for dumps
      *
@@ -93,29 +76,25 @@ class HtmlFormatter implements FormatterInterface
     protected function dumpHeader(): string
     {
         ob_start();
-        include __DIR__ . DIRECTORY_SEPARATOR . 'dumpHeader.html';
-
-        return (string)ob_get_clean();
+        include __DIR__ . \DIRECTORY_SEPARATOR . 'dumpHeader.html';
+        return (string) ob_get_clean();
     }
-
     /**
      * Convert a tree of NodeInterface objects into HTML
      *
      * @param \Cake\Error\Debug\NodeInterface $node The node tree to dump.
      * @return string
      */
-    public function dump(NodeInterface $node): string
+    public function dump(\Cake\Error\Debug\NodeInterface $node): string
     {
         $html = $this->export($node, 0);
         $head = '';
         if (!static::$outputHeader) {
-            static::$outputHeader = true;
+            static::$outputHeader = \true;
             $head = $this->dumpHeader();
         }
-
         return $head . '<div class="cake-debug">' . $html . '</div>';
     }
-
     /**
      * Convert a tree of NodeInterface objects into HTML
      *
@@ -123,30 +102,28 @@ class HtmlFormatter implements FormatterInterface
      * @param int $indent The current indentation level.
      * @return string
      */
-    protected function export(NodeInterface $var, int $indent): string
+    protected function export(\Cake\Error\Debug\NodeInterface $var, int $indent): string
     {
-        if ($var instanceof ScalarNode) {
+        if ($var instanceof \Cake\Error\Debug\ScalarNode) {
             return match ($var->getType()) {
                 'bool' => $this->style('const', $var->getValue() ? 'true' : 'false'),
                 'null' => $this->style('const', 'null'),
                 'string' => $this->style('string', "'" . $var->getValue() . "'"),
-                'int', 'float' => $this->style('visibility', "({$var->getType()})") .
-                        ' ' . $this->style('number', "{$var->getValue()}"),
+                'int', 'float' => $this->style('visibility', "({$var->getType()})") . ' ' . $this->style('number', "{$var->getValue()}"),
                 default => "({$var->getType()}) {$var->getValue()}",
             };
         }
-        if ($var instanceof ArrayNode) {
+        if ($var instanceof \Cake\Error\Debug\ArrayNode) {
             return $this->exportArray($var, $indent + 1);
         }
-        if ($var instanceof ClassNode || $var instanceof ReferenceNode) {
+        if ($var instanceof \Cake\Error\Debug\ClassNode || $var instanceof \Cake\Error\Debug\ReferenceNode) {
             return $this->exportObject($var, $indent + 1);
         }
-        if ($var instanceof SpecialNode) {
+        if ($var instanceof \Cake\Error\Debug\SpecialNode) {
             return $this->style('special', $var->getValue());
         }
         throw new InvalidArgumentException('Unknown node received ' . $var::class);
     }
-
     /**
      * Export an array type object
      *
@@ -154,32 +131,20 @@ class HtmlFormatter implements FormatterInterface
      * @param int $indent The current indentation level.
      * @return string Exported array.
      */
-    protected function exportArray(ArrayNode $var, int $indent): string
+    protected function exportArray(\Cake\Error\Debug\ArrayNode $var, int $indent): string
     {
-        $open = '<span class="cake-debug-array">' .
-            $this->style('punct', '[') .
-            '<samp class="cake-debug-array-items">';
+        $open = '<span class="cake-debug-array">' . $this->style('punct', '[') . '<samp class="cake-debug-array-items">';
         $vars = [];
         $break = "\n" . str_repeat('  ', $indent);
         $endBreak = "\n" . str_repeat('  ', $indent - 1);
-
         $arrow = $this->style('punct', ' => ');
         foreach ($var->getChildren() as $item) {
             $val = $item->getValue();
-            $vars[] = $break . '<span class="cake-debug-array-item">' .
-                $this->export($item->getKey(), $indent) . $arrow . $this->export($val, $indent) .
-                $this->style('punct', ',') .
-                '</span>';
+            $vars[] = $break . '<span class="cake-debug-array-item">' . $this->export($item->getKey(), $indent) . $arrow . $this->export($val, $indent) . $this->style('punct', ',') . '</span>';
         }
-
-        $close = '</samp>' .
-            $endBreak .
-            $this->style('punct', ']') .
-            '</span>';
-
+        $close = '</samp>' . $endBreak . $this->style('punct', ']') . '</span>';
         return $open . implode('', $vars) . $close;
     }
-
     /**
      * Handles object to string conversion.
      *
@@ -188,75 +153,34 @@ class HtmlFormatter implements FormatterInterface
      * @return string
      * @see \Cake\Error\Debugger::exportVar()
      */
-    protected function exportObject(ClassNode|ReferenceNode $var, int $indent): string
+    protected function exportObject(\Cake\Error\Debug\ClassNode|\Cake\Error\Debug\ReferenceNode $var, int $indent): string
     {
         $objectId = "cake-db-object-{$this->id}-{$var->getId()}";
-        $out = sprintf(
-            '<span class="cake-debug-object" id="%s">',
-            $objectId,
-        );
+        $out = sprintf('<span class="cake-debug-object" id="%s">', $objectId);
         $break = "\n" . str_repeat('  ', $indent);
         $endBreak = "\n" . str_repeat('  ', $indent - 1);
-
-        if ($var instanceof ReferenceNode) {
-            $link = sprintf(
-                '<a class="cake-debug-ref" href="#%s">id: %s</a>',
-                $objectId,
-                $var->getId(),
-            );
-
-            return '<span class="cake-debug-ref">' .
-                $this->style('punct', 'object(') .
-                $this->style('class', $var->getValue()) .
-                $this->style('punct', ') ') .
-                $link .
-                $this->style('punct', ' {}') .
-                '</span>';
+        if ($var instanceof \Cake\Error\Debug\ReferenceNode) {
+            $link = sprintf('<a class="cake-debug-ref" href="#%s">id: %s</a>', $objectId, $var->getId());
+            return '<span class="cake-debug-ref">' . $this->style('punct', 'object(') . $this->style('class', $var->getValue()) . $this->style('punct', ') ') . $link . $this->style('punct', ' {}') . '</span>';
         }
-
-        $out .= $this->style('punct', 'object(') .
-            $this->style('class', $var->getValue()) .
-            $this->style('punct', ') id:') .
-            $this->style('number', (string)$var->getId()) .
-            $this->style('punct', ' {') .
-            '<samp class="cake-debug-object-props">';
-
+        $out .= $this->style('punct', 'object(') . $this->style('class', $var->getValue()) . $this->style('punct', ') id:') . $this->style('number', (string) $var->getId()) . $this->style('punct', ' {') . '<samp class="cake-debug-object-props">';
         $props = [];
         foreach ($var->getChildren() as $property) {
             $arrow = $this->style('punct', ' => ');
             $visibility = $property->getVisibility();
             $name = $property->getName();
             if ($visibility && $visibility !== 'public') {
-                $props[] = $break .
-                    '<span class="cake-debug-prop">' .
-                    $this->style('visibility', $visibility) .
-                    ' ' .
-                    $this->style('property', $name) .
-                    $arrow .
-                    $this->export($property->getValue(), $indent) .
-                '</span>';
+                $props[] = $break . '<span class="cake-debug-prop">' . $this->style('visibility', $visibility) . ' ' . $this->style('property', $name) . $arrow . $this->export($property->getValue(), $indent) . '</span>';
             } else {
-                $props[] = $break .
-                    '<span class="cake-debug-prop">' .
-                    $this->style('property', $name) .
-                    $arrow .
-                    $this->export($property->getValue(), $indent) .
-                    '</span>';
+                $props[] = $break . '<span class="cake-debug-prop">' . $this->style('property', $name) . $arrow . $this->export($property->getValue(), $indent) . '</span>';
             }
         }
-
-        $end = '</samp>' .
-            $endBreak .
-            $this->style('punct', '}') .
-            '</span>';
-
+        $end = '</samp>' . $endBreak . $this->style('punct', '}') . '</span>';
         if ($props !== []) {
             return $out . implode('', $props) . $end;
         }
-
         return $out . $end;
     }
-
     /**
      * Style text with HTML class names
      *
@@ -266,10 +190,6 @@ class HtmlFormatter implements FormatterInterface
      */
     protected function style(string $style, string $text): string
     {
-        return sprintf(
-            '<span class="cake-debug-%s">%s</span>',
-            $style,
-            h($text),
-        );
+        return sprintf('<span class="cake-debug-%s">%s</span>', $style, h($text));
     }
 }

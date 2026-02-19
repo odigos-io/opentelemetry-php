@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -20,7 +20,6 @@ use Cake\Error\ExceptionRendererInterface;
 use LogicException;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
-
 /**
  * Test Exception Renderer.
  *
@@ -43,7 +42,6 @@ class TestExceptionRenderer implements ExceptionRendererInterface
     {
         throw $exception;
     }
-
     /**
      * @inheritDoc
      */
@@ -51,7 +49,6 @@ class TestExceptionRenderer implements ExceptionRendererInterface
     {
         throw new LogicException('You cannot use this class to render exceptions.');
     }
-
     /**
      * Part of upcoming interface requirements
      *

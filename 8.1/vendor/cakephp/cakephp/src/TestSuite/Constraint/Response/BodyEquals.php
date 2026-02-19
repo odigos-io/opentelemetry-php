@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -20,7 +20,7 @@ namespace Cake\TestSuite\Constraint\Response;
  *
  * @internal
  */
-class BodyEquals extends ResponseBase
+class BodyEquals extends \Cake\TestSuite\Constraint\Response\ResponseBase
 {
     /**
      * Checks assertion
@@ -33,7 +33,6 @@ class BodyEquals extends ResponseBase
     {
         return $this->_getBodyAsString() === $other;
     }
-
     /**
      * Assertion message
      *

@@ -1,9 +1,7 @@
 <?php
 
 // DO NOT EDIT, this is an Auto-generated file from script/semantic-conventions
-
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\SemConv\Incubating\Attributes;
 
 /**
@@ -19,26 +17,22 @@ interface HttpIncubatingAttributes
      * @experimental
      */
     public const HTTP_CONNECTION_STATE = 'http.connection.state';
-
     /**
      * active state.
      * @experimental
      */
     public const HTTP_CONNECTION_STATE_VALUE_ACTIVE = 'active';
-
     /**
      * idle state.
      * @experimental
      */
     public const HTTP_CONNECTION_STATE_VALUE_IDLE = 'idle';
-
     /**
      * The size of the request payload body in bytes. This is the number of bytes transferred excluding headers and is often, but not always, present as the [Content-Length](https://www.rfc-editor.org/rfc/rfc9110.html#field.content-length) header. For requests using transport encoding, this should be the compressed size.
      *
      * @experimental
      */
     public const HTTP_REQUEST_BODY_SIZE = 'http.request.body.size';
-
     /**
      * HTTP request headers, `<key>` being the normalized HTTP Header name (lowercase), the value being the header values.
      *
@@ -62,7 +56,6 @@ interface HttpIncubatingAttributes
      * @stable
      */
     public const HTTP_REQUEST_HEADER = 'http.request.header';
-
     /**
      * HTTP request method.
      * HTTP request method value SHOULD be "known" to the instrumentation.
@@ -84,80 +77,67 @@ interface HttpIncubatingAttributes
      * @stable
      */
     public const HTTP_REQUEST_METHOD = 'http.request.method';
-
     /**
      * CONNECT method.
      * @stable
      */
     public const HTTP_REQUEST_METHOD_VALUE_CONNECT = 'CONNECT';
-
     /**
      * DELETE method.
      * @stable
      */
     public const HTTP_REQUEST_METHOD_VALUE_DELETE = 'DELETE';
-
     /**
      * GET method.
      * @stable
      */
     public const HTTP_REQUEST_METHOD_VALUE_GET = 'GET';
-
     /**
      * HEAD method.
      * @stable
      */
     public const HTTP_REQUEST_METHOD_VALUE_HEAD = 'HEAD';
-
     /**
      * OPTIONS method.
      * @stable
      */
     public const HTTP_REQUEST_METHOD_VALUE_OPTIONS = 'OPTIONS';
-
     /**
      * PATCH method.
      * @stable
      */
     public const HTTP_REQUEST_METHOD_VALUE_PATCH = 'PATCH';
-
     /**
      * POST method.
      * @stable
      */
     public const HTTP_REQUEST_METHOD_VALUE_POST = 'POST';
-
     /**
      * PUT method.
      * @stable
      */
     public const HTTP_REQUEST_METHOD_VALUE_PUT = 'PUT';
-
     /**
      * TRACE method.
      * @stable
      */
     public const HTTP_REQUEST_METHOD_VALUE_TRACE = 'TRACE';
-
     /**
      * QUERY method.
      * @stable
      */
     public const HTTP_REQUEST_METHOD_VALUE_QUERY = 'QUERY';
-
     /**
      * Any HTTP method that the instrumentation has no prior knowledge of.
      * @stable
      */
     public const HTTP_REQUEST_METHOD_VALUE_OTHER = '_OTHER';
-
     /**
      * Original HTTP method sent by the client in the request line.
      *
      * @stable
      */
     public const HTTP_REQUEST_METHOD_ORIGINAL = 'http.request.method_original';
-
     /**
      * The ordinal number of request resending attempt (for any reason, including redirects).
      *
@@ -166,21 +146,18 @@ interface HttpIncubatingAttributes
      * @stable
      */
     public const HTTP_REQUEST_RESEND_COUNT = 'http.request.resend_count';
-
     /**
      * The total size of the request in bytes. This should be the total number of bytes sent over the wire, including the request line (HTTP/1.1), framing (HTTP/2 and HTTP/3), headers, and request body if any.
      *
      * @experimental
      */
     public const HTTP_REQUEST_SIZE = 'http.request.size';
-
     /**
      * The size of the response payload body in bytes. This is the number of bytes transferred excluding headers and is often, but not always, present as the [Content-Length](https://www.rfc-editor.org/rfc/rfc9110.html#field.content-length) header. For requests using transport encoding, this should be the compressed size.
      *
      * @experimental
      */
     public const HTTP_RESPONSE_BODY_SIZE = 'http.response.body.size';
-
     /**
      * HTTP response headers, `<key>` being the normalized HTTP Header name (lowercase), the value being the header values.
      *
@@ -203,21 +180,18 @@ interface HttpIncubatingAttributes
      * @stable
      */
     public const HTTP_RESPONSE_HEADER = 'http.response.header';
-
     /**
      * The total size of the response in bytes. This should be the total number of bytes sent over the wire, including the status line (HTTP/1.1), framing (HTTP/2 and HTTP/3), headers, and response body and trailers if any.
      *
      * @experimental
      */
     public const HTTP_RESPONSE_SIZE = 'http.response.size';
-
     /**
      * [HTTP response status code](https://tools.ietf.org/html/rfc7231#section-6).
      *
      * @stable
      */
     public const HTTP_RESPONSE_STATUS_CODE = 'http.response.status_code';
-
     /**
      * The matched route template for the request. This MUST be low-cardinality and include all static path segments, with dynamic path segments represented with placeholders.
      *
@@ -235,5 +209,4 @@ interface HttpIncubatingAttributes
      * @stable
      */
     public const HTTP_ROUTE = 'http.route';
-
 }

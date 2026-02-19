@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -20,21 +20,18 @@ use Cake\Database\ExpressionInterface;
 use Cake\Database\Query;
 use Cake\Database\ValueBinder;
 use Closure;
-
 /**
  * An expression object for complex ORDER BY clauses
  */
-class OrderClauseExpression implements ExpressionInterface, FieldInterface
+class OrderClauseExpression implements ExpressionInterface, \Cake\Database\Expression\FieldInterface
 {
-    use FieldTrait;
-
+    use \Cake\Database\Expression\FieldTrait;
     /**
      * The direction of sorting.
      *
      * @var string
      */
     protected string $_direction;
-
     /**
      * Constructor
      *
@@ -46,7 +43,6 @@ class OrderClauseExpression implements ExpressionInterface, FieldInterface
         $this->_field = $field;
         $this->_direction = strtolower($direction) === 'asc' ? 'ASC' : 'DESC';
     }
-
     /**
      * @inheritDoc
      */
@@ -59,10 +55,8 @@ class OrderClauseExpression implements ExpressionInterface, FieldInterface
             $field = $field->sql($binder);
         }
         assert(is_string($field));
-
         return sprintf('%s %s', $field, $this->_direction);
     }
-
     /**
      * @inheritDoc
      */
@@ -72,10 +66,8 @@ class OrderClauseExpression implements ExpressionInterface, FieldInterface
             $callback($this->_field);
             $this->_field->traverse($callback);
         }
-
         return $this;
     }
-
     /**
      * Create a deep clone of the order clause.
      */

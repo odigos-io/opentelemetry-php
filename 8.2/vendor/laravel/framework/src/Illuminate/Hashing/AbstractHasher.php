@@ -14,7 +14,6 @@ abstract class AbstractHasher
     {
         return password_get_info($hashedValue);
     }
-
     /**
      * Check the given plain value against a hash.
      *
@@ -26,9 +25,8 @@ abstract class AbstractHasher
     public function check(#[\SensitiveParameter] $value, $hashedValue, array $options = [])
     {
         if (is_null($hashedValue) || strlen($hashedValue) === 0) {
-            return false;
+            return \false;
         }
-
         return password_verify($value, $hashedValue);
     }
 }

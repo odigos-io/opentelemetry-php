@@ -8,48 +8,40 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\HttpKernel\Log;
 
-use Monolog\Logger;
-
+use Odigos\Monolog\Logger;
 /**
  * @author Nicolas Grekas <p@tchwork.com>
  */
 class DebugLoggerConfigurator
 {
     private ?object $processor = null;
-
     public function __construct(callable $processor, ?bool $enable = null)
     {
-        if ($enable ?? !\in_array(\PHP_SAPI, ['cli', 'phpdbg', 'embed'], true)) {
+        if ($enable ?? !\in_array(\PHP_SAPI, ['cli', 'phpdbg', 'embed'], \true)) {
             $this->processor = \is_object($processor) ? $processor : $processor(...);
         }
     }
-
     public function pushDebugLogger(Logger $logger): void
     {
         if ($this->processor) {
             $logger->pushProcessor($this->processor);
         }
     }
-
-    public static function getDebugLogger(mixed $logger): ?DebugLoggerInterface
+    public static function getDebugLogger(mixed $logger): ?\Symfony\Component\HttpKernel\Log\DebugLoggerInterface
     {
-        if ($logger instanceof DebugLoggerInterface) {
+        if ($logger instanceof \Symfony\Component\HttpKernel\Log\DebugLoggerInterface) {
             return $logger;
         }
-
         if (!$logger instanceof Logger) {
             return null;
         }
-
         foreach ($logger->getProcessors() as $processor) {
-            if ($processor instanceof DebugLoggerInterface) {
+            if ($processor instanceof \Symfony\Component\HttpKernel\Log\DebugLoggerInterface) {
                 return $processor;
             }
         }
-
         return null;
     }
 }

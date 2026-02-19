@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -19,11 +19,10 @@ namespace Cake\Command;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
-
 /**
  * Command for updating counter cache.
  */
-class CounterCacheCommand extends Command
+class CounterCacheCommand extends \Cake\Command\Command
 {
     /**
      * @inheritDoc
@@ -32,7 +31,6 @@ class CounterCacheCommand extends Command
     {
         return 'counter_cache';
     }
-
     /**
      * @inheritDoc
      */
@@ -40,7 +38,6 @@ class CounterCacheCommand extends Command
     {
         return 'Update counter cache for a model.';
     }
-
     /**
      * Execute the command.
      *
@@ -54,57 +51,31 @@ class CounterCacheCommand extends Command
     public function execute(Arguments $args, ConsoleIo $io): int
     {
         $table = $this->fetchTable($args->getArgument('model'));
-
         if (!$table->hasBehavior('CounterCache')) {
             $io->error('The specified model does not have the CounterCache behavior attached.');
-
             return static::CODE_ERROR;
         }
-
         $methodArgs = [];
         if ($args->hasOption('assoc')) {
             $methodArgs['assocName'] = $args->getOption('assoc');
         }
         if ($args->hasOption('limit')) {
-            $methodArgs['limit'] = (int)$args->getOption('limit');
+            $methodArgs['limit'] = (int) $args->getOption('limit');
         }
         if ($args->hasOption('page')) {
-            $methodArgs['page'] = (int)$args->getOption('page');
+            $methodArgs['page'] = (int) $args->getOption('page');
         }
-
         /** @var \Cake\ORM\Table<array{CounterCache: \Cake\ORM\Behavior\CounterCacheBehavior}> $table */
         $table->getBehavior('CounterCache')->updateCounterCache(...$methodArgs);
-
         $io->success('Counter cache updated successfully.');
-
         return static::CODE_SUCCESS;
     }
-
     /**
      * @inheritDoc
      */
     public function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
     {
-        $parser->setDescription(static::getDescription())
-            ->addArgument('model', [
-                'help' => 'The model to update the counter cache for.',
-                'required' => true,
-            ])->addOption('assoc', [
-                'help' => 'The association to update the counter cache for. By default all associations are updated.',
-                'short' => 'a',
-                'default' => null,
-            ])
-            ->addOption('limit', [
-                'help' => 'The number of records to update per page/iteration',
-                'short' => 'l',
-                'default' => null,
-            ])
-            ->addOption('page', [
-                'help' => 'The page/iteration number. By default all records will be updated one page at a time.',
-                'short' => 'p',
-                'default' => null,
-            ]);
-
+        $parser->setDescription(static::getDescription())->addArgument('model', ['help' => 'The model to update the counter cache for.', 'required' => \true])->addOption('assoc', ['help' => 'The association to update the counter cache for. By default all associations are updated.', 'short' => 'a', 'default' => null])->addOption('limit', ['help' => 'The number of records to update per page/iteration', 'short' => 'l', 'default' => null])->addOption('page', ['help' => 'The page/iteration number. By default all records will be updated one page at a time.', 'short' => 'p', 'default' => null]);
         return $parser;
     }
 }

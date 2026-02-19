@@ -1,46 +1,39 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Odigos\Dotenv\Store;
 
-namespace Dotenv\Store;
-
-use Dotenv\Store\File\Paths;
-
+use Odigos\Dotenv\Store\File\Paths;
 final class StoreBuilder
 {
     /**
      * The of default name.
      */
     private const DEFAULT_NAME = '.env';
-
     /**
      * The paths to search within.
      *
      * @var string[]
      */
     private $paths;
-
     /**
      * The file names to search for.
      *
      * @var string[]
      */
     private $names;
-
     /**
      * Should file loading short circuit?
      *
      * @var bool
      */
     private $shortCircuit;
-
     /**
      * The file encoding.
      *
      * @var string|null
      */
     private $fileEncoding;
-
     /**
      * Create a new store builder instance.
      *
@@ -51,14 +44,13 @@ final class StoreBuilder
      *
      * @return void
      */
-    private function __construct(array $paths = [], array $names = [], bool $shortCircuit = false, ?string $fileEncoding = null)
+    private function __construct(array $paths = [], array $names = [], bool $shortCircuit = \false, ?string $fileEncoding = null)
     {
         $this->paths = $paths;
         $this->names = $names;
         $this->shortCircuit = $shortCircuit;
         $this->fileEncoding = $fileEncoding;
     }
-
     /**
      * Create a new store builder instance with no names.
      *
@@ -68,7 +60,6 @@ final class StoreBuilder
     {
         return new self();
     }
-
     /**
      * Create a new store builder instance with the default name.
      *
@@ -78,7 +69,6 @@ final class StoreBuilder
     {
         return new self([], [self::DEFAULT_NAME]);
     }
-
     /**
      * Creates a store builder with the given path added.
      *
@@ -90,7 +80,6 @@ final class StoreBuilder
     {
         return new self(\array_merge($this->paths, [$path]), $this->names, $this->shortCircuit, $this->fileEncoding);
     }
-
     /**
      * Creates a store builder with the given name added.
      *
@@ -102,7 +91,6 @@ final class StoreBuilder
     {
         return new self($this->paths, \array_merge($this->names, [$name]), $this->shortCircuit, $this->fileEncoding);
     }
-
     /**
      * Creates a store builder with short circuit mode enabled.
      *
@@ -110,9 +98,8 @@ final class StoreBuilder
      */
     public function shortCircuit()
     {
-        return new self($this->paths, $this->names, true, $this->fileEncoding);
+        return new self($this->paths, $this->names, \true, $this->fileEncoding);
     }
-
     /**
      * Creates a store builder with the specified file encoding.
      *
@@ -124,7 +111,6 @@ final class StoreBuilder
     {
         return new self($this->paths, $this->names, $this->shortCircuit, $fileEncoding);
     }
-
     /**
      * Creates a new store instance.
      *
@@ -132,10 +118,6 @@ final class StoreBuilder
      */
     public function make()
     {
-        return new FileStore(
-            Paths::filePaths($this->paths, $this->names),
-            $this->shortCircuit,
-            $this->fileEncoding
-        );
+        return new FileStore(Paths::filePaths($this->paths, $this->names), $this->shortCircuit, $this->fileEncoding);
     }
 }

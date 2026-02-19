@@ -1,8 +1,7 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Dotenv\Repository\Adapter;
+declare (strict_types=1);
+namespace Odigos\Dotenv\Repository\Adapter;
 
 final class ImmutableWriter implements WriterInterface
 {
@@ -12,21 +11,18 @@ final class ImmutableWriter implements WriterInterface
      * @var \Dotenv\Repository\Adapter\WriterInterface
      */
     private $writer;
-
     /**
      * The inner reader to use.
      *
      * @var \Dotenv\Repository\Adapter\ReaderInterface
      */
     private $reader;
-
     /**
      * The record of loaded variables.
      *
      * @var array<string, string>
      */
     private $loaded;
-
     /**
      * Create a new immutable writer instance.
      *
@@ -41,7 +37,6 @@ final class ImmutableWriter implements WriterInterface
         $this->reader = $reader;
         $this->loaded = [];
     }
-
     /**
      * Write to an environment variable, if possible.
      *
@@ -55,20 +50,16 @@ final class ImmutableWriter implements WriterInterface
         // Don't overwrite existing environment variables
         // Ruby's dotenv does this with `ENV[key] ||= value`
         if ($this->isExternallyDefined($name)) {
-            return false;
+            return \false;
         }
-
         // Set the value on the inner writer
         if (!$this->writer->write($name, $value)) {
-            return false;
+            return \false;
         }
-
         // Record that we have loaded the variable
         $this->loaded[$name] = '';
-
-        return true;
+        return \true;
     }
-
     /**
      * Delete an environment variable, if possible.
      *
@@ -80,20 +71,16 @@ final class ImmutableWriter implements WriterInterface
     {
         // Don't clear existing environment variables
         if ($this->isExternallyDefined($name)) {
-            return false;
+            return \false;
         }
-
         // Clear the value on the inner writer
         if (!$this->writer->delete($name)) {
-            return false;
+            return \false;
         }
-
         // Leave the variable as fair game
         unset($this->loaded[$name]);
-
-        return true;
+        return \true;
     }
-
     /**
      * Determine if the given variable is externally defined.
      *

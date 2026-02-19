@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -17,13 +17,12 @@ declare(strict_types=1);
 namespace Cake\Database\Statement;
 
 use PDO;
-
 /**
  * Statement class meant to be used by an Sqlserver driver
  *
  * @internal
  */
-class SqlserverStatement extends Statement
+class SqlserverStatement extends \Cake\Database\Statement\Statement
 {
     /**
      * @inheritDoc

@@ -20,3 +20,4 @@
     </div>
     <x-laravel-exceptions-renderer::icons.laravel-ascii />
 </div>
+

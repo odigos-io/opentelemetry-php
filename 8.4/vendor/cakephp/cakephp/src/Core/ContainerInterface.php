@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -16,9 +16,8 @@ declare(strict_types=1);
  */
 namespace Cake\Core;
 
-use League\Container\DefinitionContainerInterface;
+use Odigos\League\Container\DefinitionContainerInterface;
 use Psr\Container\ContainerInterface as PsrContainerInterface;
-
 /**
  * Interface for the Dependency Injection Container in CakePHP applications
  *

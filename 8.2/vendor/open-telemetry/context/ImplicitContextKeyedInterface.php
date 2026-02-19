@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\Context;
 
 /**
@@ -23,10 +22,9 @@ interface ImplicitContextKeyedInterface
      *
      * @todo: Update this to suggest using the new helper method way to doing something in a specific context/span.
      */
-    public function activate(): ScopeInterface;
-
+    public function activate(): \OpenTelemetry\Context\ScopeInterface;
     /**
      * Returns a new {@see ContextInterface} created by setting `$this` into the provided [@see ContextInterface}.
      */
-    public function storeInContext(ContextInterface $context): ContextInterface;
+    public function storeInContext(\OpenTelemetry\Context\ContextInterface $context): \OpenTelemetry\Context\ContextInterface;
 }

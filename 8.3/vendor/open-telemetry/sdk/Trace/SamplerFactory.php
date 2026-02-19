@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\SDK\Trace;
 
 use InvalidArgumentException;
@@ -12,18 +11,14 @@ use OpenTelemetry\SDK\Trace\Sampler\AlwaysOffSampler;
 use OpenTelemetry\SDK\Trace\Sampler\AlwaysOnSampler;
 use OpenTelemetry\SDK\Trace\Sampler\ParentBased;
 use OpenTelemetry\SDK\Trace\Sampler\TraceIdRatioBasedSampler;
-
 class SamplerFactory
 {
     private const TRACEIDRATIO_PREFIX = 'traceidratio';
-
-    public function create(): SamplerInterface
+    public function create(): \OpenTelemetry\SDK\Trace\SamplerInterface
     {
         $name = Configuration::getString(Env::OTEL_TRACES_SAMPLER);
-
         if (str_contains($name, self::TRACEIDRATIO_PREFIX)) {
             $arg = Configuration::getRatio(Env::OTEL_TRACES_SAMPLER_ARG);
-
             switch ($name) {
                 case Values::VALUE_TRACE_ID_RATIO:
                     return new TraceIdRatioBasedSampler($arg);
@@ -31,7 +26,6 @@ class SamplerFactory
                     return new ParentBased(new TraceIdRatioBasedSampler($arg));
             }
         }
-
         return match ($name) {
             Values::VALUE_ALWAYS_ON => new AlwaysOnSampler(),
             Values::VALUE_ALWAYS_OFF => new AlwaysOffSampler(),

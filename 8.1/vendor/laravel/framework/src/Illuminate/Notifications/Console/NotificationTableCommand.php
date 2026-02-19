@@ -4,7 +4,6 @@ namespace Illuminate\Notifications\Console;
 
 use Illuminate\Console\MigrationGeneratorCommand;
 use Symfony\Component\Console\Attribute\AsCommand;
-
 #[AsCommand(name: 'notifications:table')]
 class NotificationTableCommand extends MigrationGeneratorCommand
 {
@@ -14,14 +13,12 @@ class NotificationTableCommand extends MigrationGeneratorCommand
      * @var string
      */
     protected $name = 'notifications:table';
-
     /**
      * The console command description.
      *
      * @var string
      */
     protected $description = 'Create a migration for the notifications table';
-
     /**
      * Get the migration table name.
      *
@@ -31,7 +28,6 @@ class NotificationTableCommand extends MigrationGeneratorCommand
     {
         return 'notifications';
     }
-
     /**
      * Get the path to the migration stub file.
      *
@@ -39,6 +35,6 @@ class NotificationTableCommand extends MigrationGeneratorCommand
      */
     protected function migrationStubFile()
     {
-        return __DIR__.'/stubs/notifications.stub';
+        return __DIR__ . '/stubs/notifications.stub';
     }
 }

@@ -1,18 +1,17 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\db;
 
-use Yii;
+use Odigos\Yii;
 use yii\base\Component;
 use yii\base\InvalidArgumentException;
 use yii\helpers\ArrayHelper;
 use yii\base\InvalidConfigException;
-
 /**
  * Query represents a SELECT SQL statement in a way that is independent of DBMS.
  *
@@ -48,10 +47,9 @@ use yii\base\InvalidConfigException;
  * @author Carsten Brandt <mail@cebe.cc>
  * @since 2.0
  */
-class Query extends Component implements QueryInterface, ExpressionInterface
+class Query extends Component implements \yii\db\QueryInterface, \yii\db\ExpressionInterface
 {
-    use QueryTrait;
-
+    use \yii\db\QueryTrait;
     /**
      * @var array|null the columns being selected. For example, `['id', 'name']`.
      * This is used to construct the SELECT clause in a SQL statement. If not set, it means selecting all columns.
@@ -67,7 +65,7 @@ class Query extends Component implements QueryInterface, ExpressionInterface
      * @var bool whether to select distinct rows of data only. If this is set true,
      * the SELECT clause would be changed to SELECT DISTINCT.
      */
-    public $distinct = false;
+    public $distinct = \false;
     /**
      * @var array|null the table(s) to be selected from. For example, `['user', 'post']`.
      * This is used to construct the FROM clause in a SQL statement.
@@ -141,8 +139,6 @@ class Query extends Component implements QueryInterface, ExpressionInterface
      * @since 2.0.14
      */
     public $queryCacheDependency;
-
-
     /**
      * Creates a DB command that can be used to execute this query.
      * @param Connection|null $db the database connection used to generate the SQL statement.
@@ -155,13 +151,10 @@ class Query extends Component implements QueryInterface, ExpressionInterface
             $db = Yii::$app->getDb();
         }
         list($sql, $params) = $db->getQueryBuilder()->build($this);
-
         $command = $db->createCommand($sql, $params);
         $this->setCommandCache($command);
-
         return $command;
     }
-
     /**
      * Prepares for building SQL.
      * This method is called by [[QueryBuilder]] when it starts to build SQL from a query object.
@@ -173,7 +166,6 @@ class Query extends Component implements QueryInterface, ExpressionInterface
     {
         return $this;
     }
-
     /**
      * Starts a batch query.
      *
@@ -197,15 +189,8 @@ class Query extends Component implements QueryInterface, ExpressionInterface
      */
     public function batch($batchSize = 100, $db = null)
     {
-        return Yii::createObject([
-            'class' => BatchQueryResult::className(),
-            'query' => $this,
-            'batchSize' => $batchSize,
-            'db' => $db,
-            'each' => false,
-        ]);
+        return Yii::createObject(['class' => \yii\db\BatchQueryResult::className(), 'query' => $this, 'batchSize' => $batchSize, 'db' => $db, 'each' => \false]);
     }
-
     /**
      * Starts a batch query and retrieves data row by row.
      *
@@ -225,15 +210,8 @@ class Query extends Component implements QueryInterface, ExpressionInterface
      */
     public function each($batchSize = 100, $db = null)
     {
-        return Yii::createObject([
-            'class' => BatchQueryResult::className(),
-            'query' => $this,
-            'batchSize' => $batchSize,
-            'db' => $db,
-            'each' => true,
-        ]);
+        return Yii::createObject(['class' => \yii\db\BatchQueryResult::className(), 'query' => $this, 'batchSize' => $batchSize, 'db' => $db, 'each' => \true]);
     }
-
     /**
      * Executes the query and returns all results as an array.
      * @param Connection|null $db the database connection used to generate the SQL statement.
@@ -245,12 +223,9 @@ class Query extends Component implements QueryInterface, ExpressionInterface
         if ($this->emulateExecution) {
             return [];
         }
-
         $rows = $this->createCommand($db)->queryAll();
-
         return $this->populate($rows);
     }
-
     /**
      * Converts the raw query results into the format as specified by this query.
      * This method is internally used to convert the data fetched from database
@@ -267,10 +242,8 @@ class Query extends Component implements QueryInterface, ExpressionInterface
         foreach ($rows as $row) {
             $result[ArrayHelper::getValue($row, $this->indexBy)] = $row;
         }
-
         return $result;
     }
-
     /**
      * Executes the query and returns a single row of result.
      * @param Connection|null $db the database connection used to generate the SQL statement.
@@ -281,12 +254,10 @@ class Query extends Component implements QueryInterface, ExpressionInterface
     public function one($db = null)
     {
         if ($this->emulateExecution) {
-            return false;
+            return \false;
         }
-
         return $this->createCommand($db)->queryOne();
     }
-
     /**
      * Returns the query result as a scalar value.
      * The value returned will be the first column in the first row of the query results.
@@ -300,10 +271,8 @@ class Query extends Component implements QueryInterface, ExpressionInterface
         if ($this->emulateExecution) {
             return null;
         }
-
         return $this->createCommand($db)->queryScalar();
     }
-
     /**
      * Executes the query and returns the first column of the result.
      * @param Connection|null $db the database connection used to generate the SQL statement.
@@ -315,13 +284,11 @@ class Query extends Component implements QueryInterface, ExpressionInterface
         if ($this->emulateExecution) {
             return [];
         }
-
         if ($this->indexBy === null) {
             return $this->createCommand($db)->queryColumn();
         }
-
         if (is_string($this->indexBy) && is_array($this->select) && count($this->select) === 1) {
-            if (strpos($this->indexBy, '.') === false && count($tables = $this->getTablesUsedInFrom()) > 0) {
+            if (strpos($this->indexBy, '.') === \false && count($tables = $this->getTablesUsedInFrom()) > 0) {
                 $this->select[] = key($tables) . '.' . $this->indexBy;
             } else {
                 $this->select[] = $this->indexBy;
@@ -331,7 +298,7 @@ class Query extends Component implements QueryInterface, ExpressionInterface
         $results = [];
         $column = null;
         if (is_string($this->indexBy)) {
-            if (($dotPos = strpos($this->indexBy, '.')) === false) {
+            if (($dotPos = strpos($this->indexBy, '.')) === \false) {
                 $column = $this->indexBy;
             } else {
                 $column = substr($this->indexBy, $dotPos + 1);
@@ -339,17 +306,14 @@ class Query extends Component implements QueryInterface, ExpressionInterface
         }
         foreach ($rows as $row) {
             $value = reset($row);
-
             if ($this->indexBy instanceof \Closure) {
                 $results[call_user_func($this->indexBy, $row)] = $value;
             } else {
                 $results[$row[$column]] = $value;
             }
         }
-
         return $results;
     }
-
     /**
      * Returns the number of records.
      * @param string $q the COUNT expression. Defaults to '*'.
@@ -364,10 +328,8 @@ class Query extends Component implements QueryInterface, ExpressionInterface
         if ($this->emulateExecution) {
             return 0;
         }
-
-        return $this->queryScalar("COUNT($q)", $db);
+        return $this->queryScalar("COUNT({$q})", $db);
     }
-
     /**
      * Returns the sum of the specified column values.
      * @param string $q the column name or expression.
@@ -381,10 +343,8 @@ class Query extends Component implements QueryInterface, ExpressionInterface
         if ($this->emulateExecution) {
             return 0;
         }
-
-        return $this->queryScalar("SUM($q)", $db);
+        return $this->queryScalar("SUM({$q})", $db);
     }
-
     /**
      * Returns the average of the specified column values.
      * @param string $q the column name or expression.
@@ -398,10 +358,8 @@ class Query extends Component implements QueryInterface, ExpressionInterface
         if ($this->emulateExecution) {
             return 0;
         }
-
-        return $this->queryScalar("AVG($q)", $db);
+        return $this->queryScalar("AVG({$q})", $db);
     }
-
     /**
      * Returns the minimum of the specified column values.
      * @param string $q the column name or expression.
@@ -412,9 +370,8 @@ class Query extends Component implements QueryInterface, ExpressionInterface
      */
     public function min($q, $db = null)
     {
-        return $this->queryScalar("MIN($q)", $db);
+        return $this->queryScalar("MIN({$q})", $db);
     }
-
     /**
      * Returns the maximum of the specified column values.
      * @param string $q the column name or expression.
@@ -425,9 +382,8 @@ class Query extends Component implements QueryInterface, ExpressionInterface
      */
     public function max($q, $db = null)
     {
-        return $this->queryScalar("MAX($q)", $db);
+        return $this->queryScalar("MAX({$q})", $db);
     }
-
     /**
      * Returns a value indicating whether the query result contains any row of data.
      * @param Connection|null $db the database connection used to generate the SQL statement.
@@ -437,7 +393,7 @@ class Query extends Component implements QueryInterface, ExpressionInterface
     public function exists($db = null)
     {
         if ($this->emulateExecution) {
-            return false;
+            return \false;
         }
         $command = $this->createCommand($db);
         $params = $command->params;
@@ -445,7 +401,6 @@ class Query extends Component implements QueryInterface, ExpressionInterface
         $command->bindValues($params);
         return (bool) $command->queryScalar();
     }
-
     /**
      * Queries a scalar value by setting [[select]] first.
      * Restores the value of select to make this query reusable.
@@ -459,23 +414,15 @@ class Query extends Component implements QueryInterface, ExpressionInterface
         if ($this->emulateExecution) {
             return null;
         }
-
-        if (
-            !$this->distinct
-            && empty($this->groupBy)
-            && empty($this->having)
-            && empty($this->union)
-        ) {
+        if (!$this->distinct && empty($this->groupBy) && empty($this->having) && empty($this->union)) {
             $select = $this->select;
             $order = $this->orderBy;
             $limit = $this->limit;
             $offset = $this->offset;
-
             $this->select = [$selectExpression];
             $this->orderBy = null;
             $this->limit = null;
             $this->offset = null;
-
             $e = null;
             try {
                 $command = $this->createCommand($db);
@@ -484,28 +431,19 @@ class Query extends Component implements QueryInterface, ExpressionInterface
             } catch (\Throwable $e) {
                 // throw it later
             }
-
             $this->select = $select;
             $this->orderBy = $order;
             $this->limit = $limit;
             $this->offset = $offset;
-
             if ($e !== null) {
                 throw $e;
             }
-
             return $command->queryScalar();
         }
-
-        $command = (new self())
-            ->select([$selectExpression])
-            ->from(['c' => $this])
-            ->createCommand($db);
+        $command = (new self())->select([$selectExpression])->from(['c' => $this])->createCommand($db);
         $this->setCommandCache($command);
-
         return $command->queryScalar();
     }
-
     /**
      * Returns table names used in [[from]] indexed by aliases.
      * Both aliases and names are enclosed into {{ and }}.
@@ -518,20 +456,17 @@ class Query extends Component implements QueryInterface, ExpressionInterface
         if (empty($this->from)) {
             return [];
         }
-
         if (is_array($this->from)) {
             $tableNames = $this->from;
         } elseif (is_string($this->from)) {
-            $tableNames = preg_split('/\s*,\s*/', trim($this->from), -1, PREG_SPLIT_NO_EMPTY);
-        } elseif ($this->from instanceof Expression) {
+            $tableNames = preg_split('/\s*,\s*/', trim($this->from), -1, \PREG_SPLIT_NO_EMPTY);
+        } elseif ($this->from instanceof \yii\db\Expression) {
             $tableNames = [$this->from];
         } else {
             throw new InvalidConfigException(gettype($this->from) . ' in $from is not supported.');
         }
-
         return $this->cleanUpTableNames($tableNames);
     }
-
     /**
      * Clean up table names and aliases
      * Both aliases and names are enclosed into {{ and }}.
@@ -547,32 +482,32 @@ class Query extends Component implements QueryInterface, ExpressionInterface
                 $pattern = <<<PATTERN
 ~
 ^
-\s*
+\\s*
 (
-(?:['"`\[]|{{)
+(?:['"`\\[]|{{)
 .*?
-(?:['"`\]]|}})
+(?:['"`\\]]|}})
 |
-\(.*?\)
+\\(.*?\\)
 |
 .*?
 )
 (?:
 (?:
-    \s+
+    \\s+
     (?:as)?
-    \s*
+    \\s*
 )
 (
-   (?:['"`\[]|{{)
+   (?:['"`\\[]|{{)
     .*?
-    (?:['"`\]]|}})
+    (?:['"`\\]]|}})
     |
     .*?
 )
 )?
-\s*
-$
+\\s*
+\$
 ~iux
 PATTERN;
                 if (preg_match($pattern, $tableName, $matches)) {
@@ -583,9 +518,7 @@ PATTERN;
                     }
                 }
             }
-
-
-            if ($tableName instanceof Expression) {
+            if ($tableName instanceof \yii\db\Expression) {
                 if (!is_string($alias)) {
                     throw new InvalidArgumentException('To use Expression in from() method, pass it in array format with alias.');
                 }
@@ -596,10 +529,8 @@ PATTERN;
                 $cleanedUpTableNames[$this->ensureNameQuoted($alias)] = $this->ensureNameQuoted($tableName);
             }
         }
-
         return $cleanedUpTableNames;
     }
-
     /**
      * Ensures name is wrapped with {{ and }}
      * @param string $name
@@ -611,10 +542,8 @@ PATTERN;
         if ($name && !preg_match('/^{{.*}}$/', $name)) {
             return '{{' . $name . '}}';
         }
-
         return $name;
     }
-
     /**
      * Sets the SELECT part of the query.
      * @param string|array|ExpressionInterface $columns the columns to be selected.
@@ -643,7 +572,6 @@ PATTERN;
         $this->selectOption = $option;
         return $this;
     }
-
     /**
      * Add more columns to the SELECT part of the query.
      *
@@ -668,10 +596,8 @@ PATTERN;
             $this->select = $this->normalizeSelect($this->select);
         }
         $this->select = array_merge($this->select, $this->normalizeSelect($columns));
-
         return $this;
     }
-
     /**
      * Normalizes the SELECT columns passed to [[select()]] or [[addSelect()]].
      *
@@ -681,10 +607,10 @@ PATTERN;
      */
     protected function normalizeSelect($columns)
     {
-        if ($columns instanceof ExpressionInterface) {
+        if ($columns instanceof \yii\db\ExpressionInterface) {
             $columns = [$columns];
         } elseif (!is_array($columns)) {
-            $columns = preg_split('/\s*,\s*/', trim((string)$columns), -1, PREG_SPLIT_NO_EMPTY);
+            $columns = preg_split('/\s*,\s*/', trim((string) $columns), -1, \PREG_SPLIT_NO_EMPTY);
         }
         $select = [];
         foreach ($columns as $columnAlias => $columnDefinition) {
@@ -694,16 +620,12 @@ PATTERN;
                 continue;
             }
             if (is_string($columnDefinition)) {
-                if (
-                    preg_match('/^(.*?)(?i:\s+as\s+|\s+)([\w\-_\.]+)$/', $columnDefinition, $matches) &&
-                    !preg_match('/^\d+$/', $matches[2]) &&
-                    strpos($matches[2], '.') === false
-                ) {
+                if (preg_match('/^(.*?)(?i:\s+as\s+|\s+)([\w\-_\.]+)$/', $columnDefinition, $matches) && !preg_match('/^\d+$/', $matches[2]) && strpos($matches[2], '.') === \false) {
                     // Using "columnName as alias" or "columnName alias" syntax
                     $select[$matches[2]] = $matches[1];
                     continue;
                 }
-                if (strpos($columnDefinition, '(') === false) {
+                if (strpos($columnDefinition, '(') === \false) {
                     // Normal column name, just alias it to itself to ensure it's not selected twice
                     $select[$columnDefinition] = $columnDefinition;
                     continue;
@@ -714,7 +636,6 @@ PATTERN;
         }
         return $select;
     }
-
     /**
      * Returns unique column names excluding duplicates.
      * Columns to be removed:
@@ -727,29 +648,26 @@ PATTERN;
     protected function getUniqueColumns($columns)
     {
         $unaliasedColumns = $this->getUnaliasedColumnsFromSelect();
-
         $result = [];
         foreach ($columns as $columnAlias => $columnDefinition) {
-            if (!$columnDefinition instanceof Query) {
+            if (!$columnDefinition instanceof \yii\db\Query) {
                 if (is_string($columnAlias)) {
                     $existsInSelect = isset($this->select[$columnAlias]) && $this->select[$columnAlias] === $columnDefinition;
                     if ($existsInSelect) {
                         continue;
                     }
                 } elseif (is_int($columnAlias)) {
-                    $existsInSelect = in_array($columnDefinition, $unaliasedColumns, true);
-                    $existsInResultSet = in_array($columnDefinition, $result, true);
+                    $existsInSelect = in_array($columnDefinition, $unaliasedColumns, \true);
+                    $existsInResultSet = in_array($columnDefinition, $result, \true);
                     if ($existsInSelect || $existsInResultSet) {
                         continue;
                     }
                 }
             }
-
             $result[$columnAlias] = $columnDefinition;
         }
         return $result;
     }
-
     /**
      * @return array List of columns without aliases from SELECT statement.
      * @since 2.0.14
@@ -767,18 +685,16 @@ PATTERN;
         }
         return array_unique($result);
     }
-
     /**
      * Sets the value indicating whether to SELECT DISTINCT or not.
      * @param bool $value whether to SELECT DISTINCT or not.
      * @return $this the query object itself
      */
-    public function distinct($value = true)
+    public function distinct($value = \true)
     {
         $this->distinct = $value;
         return $this;
     }
-
     /**
      * Sets the FROM part of the query.
      * @param string|array|ExpressionInterface $tables the table(s) to be selected from. This can be either a string (e.g. `'user'`)
@@ -815,16 +731,15 @@ PATTERN;
      */
     public function from($tables)
     {
-        if ($tables instanceof ExpressionInterface) {
+        if ($tables instanceof \yii\db\ExpressionInterface) {
             $tables = [$tables];
         }
         if (is_string($tables)) {
-            $tables = preg_split('/\s*,\s*/', trim($tables), -1, PREG_SPLIT_NO_EMPTY);
+            $tables = preg_split('/\s*,\s*/', trim($tables), -1, \PREG_SPLIT_NO_EMPTY);
         }
         $this->from = $tables;
         return $this;
     }
-
     /**
      * Sets the WHERE part of the query.
      *
@@ -848,7 +763,6 @@ PATTERN;
         $this->addParams($params);
         return $this;
     }
-
     /**
      * Adds an additional WHERE condition to the existing one.
      * The new condition and the existing one will be joined using the `AND` operator.
@@ -871,7 +785,6 @@ PATTERN;
         $this->addParams($params);
         return $this;
     }
-
     /**
      * Adds an additional WHERE condition to the existing one.
      * The new condition and the existing one will be joined using the `OR` operator.
@@ -892,7 +805,6 @@ PATTERN;
         $this->addParams($params);
         return $this;
     }
-
     /**
      * Adds a filtering condition for a specific column and allow the user to choose a filter operator.
      *
@@ -921,16 +833,14 @@ PATTERN;
      */
     public function andFilterCompare($name, $value, $defaultOperator = '=')
     {
-        if (preg_match('/^(<>|>=|>|<=|<|=)/', (string)$value, $matches)) {
+        if (preg_match('/^(<>|>=|>|<=|<|=)/', (string) $value, $matches)) {
             $operator = $matches[1];
             $value = substr($value, strlen($operator));
         } else {
             $operator = $defaultOperator;
         }
-
         return $this->andFilterWhere([$operator, $name, $value]);
     }
-
     /**
      * Appends a JOIN part to the query.
      * The first parameter specifies what type of join it is.
@@ -968,7 +878,6 @@ PATTERN;
         $this->join[] = [$type, $table, $on];
         return $this->addParams($params);
     }
-
     /**
      * Appends an INNER JOIN part to the query.
      * @param string|array $table the table or sub-query to be joined.
@@ -994,7 +903,6 @@ PATTERN;
         $this->join[] = ['INNER JOIN', $table, $on];
         return $this->addParams($params);
     }
-
     /**
      * Appends a LEFT OUTER JOIN part to the query.
      * @param string|array $table the table or sub-query to be joined.
@@ -1020,7 +928,6 @@ PATTERN;
         $this->join[] = ['LEFT JOIN', $table, $on];
         return $this->addParams($params);
     }
-
     /**
      * Appends a RIGHT OUTER JOIN part to the query.
      * @param string|array $table the table or sub-query to be joined.
@@ -1046,7 +953,6 @@ PATTERN;
         $this->join[] = ['RIGHT JOIN', $table, $on];
         return $this->addParams($params);
     }
-
     /**
      * Sets the GROUP BY part of the query.
      * @param string|array|ExpressionInterface|null $columns the columns to be grouped by.
@@ -1065,15 +971,14 @@ PATTERN;
      */
     public function groupBy($columns)
     {
-        if ($columns instanceof ExpressionInterface) {
+        if ($columns instanceof \yii\db\ExpressionInterface) {
             $columns = [$columns];
         } elseif (!is_array($columns) && !is_null($columns)) {
-            $columns = preg_split('/\s*,\s*/', trim($columns), -1, PREG_SPLIT_NO_EMPTY);
+            $columns = preg_split('/\s*,\s*/', trim($columns), -1, \PREG_SPLIT_NO_EMPTY);
         }
         $this->groupBy = $columns;
         return $this;
     }
-
     /**
      * Adds additional group-by columns to the existing ones.
      * @param string|array|ExpressionInterface $columns additional columns to be grouped by.
@@ -1092,20 +997,18 @@ PATTERN;
      */
     public function addGroupBy($columns)
     {
-        if ($columns instanceof ExpressionInterface) {
+        if ($columns instanceof \yii\db\ExpressionInterface) {
             $columns = [$columns];
         } elseif (!is_array($columns)) {
-            $columns = preg_split('/\s*,\s*/', trim($columns), -1, PREG_SPLIT_NO_EMPTY);
+            $columns = preg_split('/\s*,\s*/', trim($columns), -1, \PREG_SPLIT_NO_EMPTY);
         }
         if ($this->groupBy === null) {
             $this->groupBy = $columns;
         } else {
             $this->groupBy = array_merge($this->groupBy, $columns);
         }
-
         return $this;
     }
-
     /**
      * Sets the HAVING part of the query.
      * @param string|array|ExpressionInterface $condition the conditions to be put after HAVING.
@@ -1121,7 +1024,6 @@ PATTERN;
         $this->addParams($params);
         return $this;
     }
-
     /**
      * Adds an additional HAVING condition to the existing one.
      * The new condition and the existing one will be joined using the `AND` operator.
@@ -1142,7 +1044,6 @@ PATTERN;
         $this->addParams($params);
         return $this;
     }
-
     /**
      * Adds an additional HAVING condition to the existing one.
      * The new condition and the existing one will be joined using the `OR` operator.
@@ -1163,7 +1064,6 @@ PATTERN;
         $this->addParams($params);
         return $this;
     }
-
     /**
      * Sets the HAVING part of the query but ignores [[isEmpty()|empty operands]].
      *
@@ -1198,10 +1098,8 @@ PATTERN;
         if ($condition !== []) {
             $this->having($condition);
         }
-
         return $this;
     }
-
     /**
      * Adds an additional HAVING condition to the existing one but ignores [[isEmpty()|empty operands]].
      * The new condition and the existing one will be joined using the `AND` operator.
@@ -1223,10 +1121,8 @@ PATTERN;
         if ($condition !== []) {
             $this->andHaving($condition);
         }
-
         return $this;
     }
-
     /**
      * Adds an additional HAVING condition to the existing one but ignores [[isEmpty()|empty operands]].
      * The new condition and the existing one will be joined using the `OR` operator.
@@ -1248,22 +1144,19 @@ PATTERN;
         if ($condition !== []) {
             $this->orHaving($condition);
         }
-
         return $this;
     }
-
     /**
      * Appends a SQL statement using UNION operator.
      * @param string|Query $sql the SQL statement to be appended using UNION
      * @param bool $all TRUE if using UNION ALL and FALSE if using UNION
      * @return $this the query object itself
      */
-    public function union($sql, $all = false)
+    public function union($sql, $all = \false)
     {
         $this->union[] = ['query' => $sql, 'all' => $all];
         return $this;
     }
-
     /**
      * Prepends a SQL statement using WITH syntax.
      * @param string|Query $query the SQL statement to be prepended using WITH
@@ -1272,12 +1165,11 @@ PATTERN;
      * @return $this the query object itself
      * @since 2.0.35
      */
-    public function withQuery($query, $alias, $recursive = false)
+    public function withQuery($query, $alias, $recursive = \false)
     {
         $this->withQueries[] = ['query' => $query, 'alias' => $alias, 'recursive' => $recursive];
         return $this;
     }
-
     /**
      * Sets the parameters to be bound to the query.
      * @param array $params list of query parameter values indexed by parameter placeholders.
@@ -1290,7 +1182,6 @@ PATTERN;
         $this->params = $params;
         return $this;
     }
-
     /**
      * Adds additional parameters to be bound to the query.
      * @param array $params list of query parameter values indexed by parameter placeholders.
@@ -1313,10 +1204,8 @@ PATTERN;
                 }
             }
         }
-
         return $this;
     }
-
     /**
      * Enables query cache for this Query.
      * @param int|true $duration the number of seconds that query results can remain valid in cache.
@@ -1328,13 +1217,12 @@ PATTERN;
      * @return $this the Query object itself
      * @since 2.0.14
      */
-    public function cache($duration = true, $dependency = null)
+    public function cache($duration = \true, $dependency = null)
     {
         $this->queryCacheDuration = $duration;
         $this->queryCacheDependency = $dependency;
         return $this;
     }
-
     /**
      * Disables query cache for this Query.
      * @return $this the Query object itself
@@ -1345,7 +1233,6 @@ PATTERN;
         $this->queryCacheDuration = -1;
         return $this;
     }
-
     /**
      * Sets $command cache, if this query has enabled caching.
      *
@@ -1356,13 +1243,11 @@ PATTERN;
     protected function setCommandCache($command)
     {
         if ($this->queryCacheDuration !== null || $this->queryCacheDependency !== null) {
-            $duration = $this->queryCacheDuration === true ? null : $this->queryCacheDuration;
+            $duration = $this->queryCacheDuration === \true ? null : $this->queryCacheDuration;
             $command->cache($duration, $this->queryCacheDependency);
         }
-
         return $command;
     }
-
     /**
      * Creates a new Query object and copies its property values from an existing one.
      * The properties being copies are the ones to be used by query builders.
@@ -1371,25 +1256,8 @@ PATTERN;
      */
     public static function create($from)
     {
-        return new self([
-            'where' => $from->where,
-            'limit' => $from->limit,
-            'offset' => $from->offset,
-            'orderBy' => $from->orderBy,
-            'indexBy' => $from->indexBy,
-            'select' => $from->select,
-            'selectOption' => $from->selectOption,
-            'distinct' => $from->distinct,
-            'from' => $from->from,
-            'groupBy' => $from->groupBy,
-            'join' => $from->join,
-            'having' => $from->having,
-            'union' => $from->union,
-            'params' => $from->params,
-            'withQueries' => $from->withQueries,
-        ]);
+        return new self(['where' => $from->where, 'limit' => $from->limit, 'offset' => $from->offset, 'orderBy' => $from->orderBy, 'indexBy' => $from->indexBy, 'select' => $from->select, 'selectOption' => $from->selectOption, 'distinct' => $from->distinct, 'from' => $from->from, 'groupBy' => $from->groupBy, 'join' => $from->join, 'having' => $from->having, 'union' => $from->union, 'params' => $from->params, 'withQueries' => $from->withQueries]);
     }
-
     /**
      * Returns the SQL representation of Query
      * @return string

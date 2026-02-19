@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\HttpKernel\Attribute;
 
 /**
@@ -28,31 +27,26 @@ final class Cache
          * The expiration date as a valid date for the strtotime() function.
          */
         public ?string $expires = null,
-
         /**
          * The number of seconds that the response is considered fresh by a private
          * cache like a web browser.
          */
         public int|string|null $maxage = null,
-
         /**
          * The number of seconds that the response is considered fresh by a public
          * cache like a reverse proxy cache.
          */
         public int|string|null $smaxage = null,
-
         /**
          * If true, the contents will be stored in a public cache and served to all
          * the next requests.
          */
         public ?bool $public = null,
-
         /**
          * If true, the response is not served stale by a cache in any circumstance
          * without first revalidating with the origin.
          */
-        public bool $mustRevalidate = false,
-
+        public bool $mustRevalidate = \false,
         /**
          * Set "Vary" header.
          *
@@ -64,7 +58,6 @@ final class Cache
          * @var string[]
          */
         public array $vary = [],
-
         /**
          * An expression to compute the Last-Modified HTTP header.
          *
@@ -74,7 +67,6 @@ final class Cache
          * The result of the expression must be a DateTimeInterface.
          */
         public ?string $lastModified = null,
-
         /**
          * An expression to compute the ETag HTTP header.
          *
@@ -84,24 +76,22 @@ final class Cache
          * The result must be a string that will be hashed.
          */
         public ?string $etag = null,
-
         /**
          * max-stale Cache-Control header
          * It can be expressed in seconds or with a relative time format (1 day, 2 weeks, ...).
          */
         public int|string|null $maxStale = null,
-
         /**
          * stale-while-revalidate Cache-Control header
          * It can be expressed in seconds or with a relative time format (1 day, 2 weeks, ...).
          */
         public int|string|null $staleWhileRevalidate = null,
-
         /**
          * stale-if-error Cache-Control header
          * It can be expressed in seconds or with a relative time format (1 day, 2 weeks, ...).
          */
-        public int|string|null $staleIfError = null,
-    ) {
+        public int|string|null $staleIfError = null
+    )
+    {
     }
 }

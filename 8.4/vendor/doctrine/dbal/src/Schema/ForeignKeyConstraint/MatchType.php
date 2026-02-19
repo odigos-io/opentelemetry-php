@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\DBAL\Schema\ForeignKeyConstraint;
 
 /**
@@ -12,17 +11,15 @@ namespace Doctrine\DBAL\Schema\ForeignKeyConstraint;
  * @link https://www.postgresql.org/docs/current/sql-createtable.html#SQL-CREATETABLE-PARMS-REFERENCES
  * @link https://www.sqlite.org/foreignkeys.html
  */
-enum MatchType: string
+enum MatchType : string
 {
-    case FULL    = 'FULL';
+    case FULL = 'FULL';
     case PARTIAL = 'PARTIAL';
-
     /**
      * The <code>SIMPLE</code> match type is not part of the SQL-92 standard but is supported by and is the default
      * for MySQL, PostgreSQL and SQLite.
      */
     case SIMPLE = 'SIMPLE';
-
     /**
      * Returns the SQL representation of the match type.
      */

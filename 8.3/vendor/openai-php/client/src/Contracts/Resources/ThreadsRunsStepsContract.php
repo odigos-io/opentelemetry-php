@@ -4,7 +4,6 @@ namespace OpenAI\Contracts\Resources;
 
 use OpenAI\Responses\Threads\Runs\Steps\ThreadRunStepListResponse;
 use OpenAI\Responses\Threads\Runs\Steps\ThreadRunStepResponse;
-
 interface ThreadsRunsStepsContract
 {
     /**
@@ -13,7 +12,6 @@ interface ThreadsRunsStepsContract
      * @see https://platform.openai.com/docs/api-reference/runs/getRunStep
      */
     public function retrieve(string $threadId, string $runId, string $stepId): ThreadRunStepResponse;
-
     /**
      * Returns a list of run steps belonging to a run.
      *

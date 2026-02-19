@@ -5,25 +5,21 @@ namespace Illuminate\Validation\Rules;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Traits\Conditionable;
 use Stringable;
-
 class Unique implements Stringable
 {
-    use Conditionable, DatabaseRule;
-
+    use Conditionable, \Illuminate\Validation\Rules\DatabaseRule;
     /**
      * The ID that should be ignored.
      *
      * @var mixed
      */
     protected $ignore;
-
     /**
      * The name of the ID column.
      *
      * @var string
      */
     protected $idColumn = 'id';
-
     /**
      * Ignore the given ID during the unique check.
      *
@@ -36,13 +32,10 @@ class Unique implements Stringable
         if ($id instanceof Model) {
             return $this->ignoreModel($id, $idColumn);
         }
-
         $this->ignore = $id;
         $this->idColumn = $idColumn ?? 'id';
-
         return $this;
     }
-
     /**
      * Ignore the given model during the unique check.
      *
@@ -54,10 +47,8 @@ class Unique implements Stringable
     {
         $this->idColumn = $idColumn ?? $model->getKeyName();
         $this->ignore = $model->{$this->idColumn};
-
         return $this;
     }
-
     /**
      * Convert the rule to a validation string.
      *
@@ -65,12 +56,6 @@ class Unique implements Stringable
      */
     public function __toString()
     {
-        return rtrim(sprintf('unique:%s,%s,%s,%s,%s',
-            $this->table,
-            $this->column,
-            $this->ignore ? '"'.addslashes($this->ignore).'"' : 'NULL',
-            $this->idColumn,
-            $this->formatWheres()
-        ), ',');
+        return rtrim(sprintf('unique:%s,%s,%s,%s,%s', $this->table, $this->column, $this->ignore ? '"' . addslashes($this->ignore) . '"' : 'NULL', $this->idColumn, $this->formatWheres()), ',');
     }
 }

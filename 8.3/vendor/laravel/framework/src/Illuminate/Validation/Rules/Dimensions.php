@@ -4,18 +4,15 @@ namespace Illuminate\Validation\Rules;
 
 use Illuminate\Support\Traits\Conditionable;
 use Stringable;
-
 class Dimensions implements Stringable
 {
     use Conditionable;
-
     /**
      * The constraints for the dimensions rule.
      *
      * @var array
      */
     protected $constraints = [];
-
     /**
      * Create a new dimensions rule instance.
      *
@@ -25,7 +22,6 @@ class Dimensions implements Stringable
     {
         $this->constraints = $constraints;
     }
-
     /**
      * Set the "width" constraint.
      *
@@ -35,10 +31,8 @@ class Dimensions implements Stringable
     public function width($value)
     {
         $this->constraints['width'] = $value;
-
         return $this;
     }
-
     /**
      * Set the "height" constraint.
      *
@@ -48,10 +42,8 @@ class Dimensions implements Stringable
     public function height($value)
     {
         $this->constraints['height'] = $value;
-
         return $this;
     }
-
     /**
      * Set the "min width" constraint.
      *
@@ -61,10 +53,8 @@ class Dimensions implements Stringable
     public function minWidth($value)
     {
         $this->constraints['min_width'] = $value;
-
         return $this;
     }
-
     /**
      * Set the "min height" constraint.
      *
@@ -74,10 +64,8 @@ class Dimensions implements Stringable
     public function minHeight($value)
     {
         $this->constraints['min_height'] = $value;
-
         return $this;
     }
-
     /**
      * Set the "max width" constraint.
      *
@@ -87,10 +75,8 @@ class Dimensions implements Stringable
     public function maxWidth($value)
     {
         $this->constraints['max_width'] = $value;
-
         return $this;
     }
-
     /**
      * Set the "max height" constraint.
      *
@@ -100,10 +86,8 @@ class Dimensions implements Stringable
     public function maxHeight($value)
     {
         $this->constraints['max_height'] = $value;
-
         return $this;
     }
-
     /**
      * Set the "ratio" constraint.
      *
@@ -113,10 +97,8 @@ class Dimensions implements Stringable
     public function ratio($value)
     {
         $this->constraints['ratio'] = $value;
-
         return $this;
     }
-
     /**
      * Set the minimum aspect ratio.
      *
@@ -126,10 +108,8 @@ class Dimensions implements Stringable
     public function minRatio($value)
     {
         $this->constraints['min_ratio'] = $value;
-
         return $this;
     }
-
     /**
      * Set the maximum aspect ratio.
      *
@@ -139,10 +119,8 @@ class Dimensions implements Stringable
     public function maxRatio($value)
     {
         $this->constraints['max_ratio'] = $value;
-
         return $this;
     }
-
     /**
      * Set the aspect ratio range.
      *
@@ -154,10 +132,8 @@ class Dimensions implements Stringable
     {
         $this->constraints['min_ratio'] = $min;
         $this->constraints['max_ratio'] = $max;
-
         return $this;
     }
-
     /**
      * Convert the rule to a validation string.
      *
@@ -166,11 +142,9 @@ class Dimensions implements Stringable
     public function __toString()
     {
         $result = '';
-
         foreach ($this->constraints as $key => $value) {
-            $result .= "$key=$value,";
+            $result .= "{$key}={$value},";
         }
-
-        return 'dimensions:'.substr($result, 0, -1);
+        return 'dimensions:' . substr($result, 0, -1);
     }
 }

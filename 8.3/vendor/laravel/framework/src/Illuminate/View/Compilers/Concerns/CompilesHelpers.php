@@ -3,7 +3,6 @@
 namespace Illuminate\View\Compilers\Concerns;
 
 use Illuminate\Foundation\Vite;
-
 trait CompilesHelpers
 {
     /**
@@ -15,7 +14,6 @@ trait CompilesHelpers
     {
         return '<?php echo csrf_field(); ?>';
     }
-
     /**
      * Compile the "dd" statements into valid PHP.
      *
@@ -26,7 +24,6 @@ trait CompilesHelpers
     {
         return "<?php dd{$arguments}; ?>";
     }
-
     /**
      * Compile the "dump" statements into valid PHP.
      *
@@ -37,7 +34,6 @@ trait CompilesHelpers
     {
         return "<?php dump{$arguments}; ?>";
     }
-
     /**
      * Compile the method statements into valid PHP.
      *
@@ -48,7 +44,6 @@ trait CompilesHelpers
     {
         return "<?php echo method_field{$method}; ?>";
     }
-
     /**
      * Compile the "vite" statements into valid PHP.
      *
@@ -58,12 +53,9 @@ trait CompilesHelpers
     protected function compileVite($arguments)
     {
         $arguments ??= '()';
-
         $class = Vite::class;
-
-        return "<?php echo app('$class'){$arguments}; ?>";
+        return "<?php echo app('{$class}'){$arguments}; ?>";
     }
-
     /**
      * Compile the "viteReactRefresh" statements into valid PHP.
      *
@@ -72,7 +64,6 @@ trait CompilesHelpers
     protected function compileViteReactRefresh()
     {
         $class = Vite::class;
-
-        return "<?php echo app('$class')->reactRefresh(); ?>";
+        return "<?php echo app('{$class}')->reactRefresh(); ?>";
     }
 }

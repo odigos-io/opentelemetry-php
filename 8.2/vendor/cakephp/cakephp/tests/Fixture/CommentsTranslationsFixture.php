@@ -1,4 +1,5 @@
 <?php
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -15,7 +16,6 @@
 namespace Cake\Test\Fixture;
 
 use Cake\TestSuite\Fixture\TestFixture;
-
 /**
  * Class CommentsTranslationsFixture
  */
@@ -26,11 +26,5 @@ class CommentsTranslationsFixture extends TestFixture
      *
      * @var array
      */
-    public array $records = [
-        ['locale' => 'eng', 'id' => 1, 'comment' => 'Comment #1'],
-        ['locale' => 'eng', 'id' => 2, 'comment' => 'Comment #2'],
-        ['locale' => 'eng', 'id' => 3, 'comment' => 'Comment #3'],
-        ['locale' => 'eng', 'id' => 4, 'comment' => 'Comment #4'],
-        ['locale' => 'spa', 'id' => 4, 'comment' => 'Comentario #4'],
-    ];
+    public array $records = [['locale' => 'eng', 'id' => 1, 'comment' => 'Comment #1'], ['locale' => 'eng', 'id' => 2, 'comment' => 'Comment #2'], ['locale' => 'eng', 'id' => 3, 'comment' => 'Comment #3'], ['locale' => 'eng', 'id' => 4, 'comment' => 'Comment #4'], ['locale' => 'spa', 'id' => 4, 'comment' => 'Comentario #4']];
 }

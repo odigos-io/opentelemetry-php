@@ -8,7 +8,6 @@ use Illuminate\Filesystem\Filesystem;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
-
 #[AsCommand(name: 'cache:clear')]
 class ClearCommand extends Command
 {
@@ -18,28 +17,24 @@ class ClearCommand extends Command
      * @var string
      */
     protected $name = 'cache:clear';
-
     /**
      * The console command description.
      *
      * @var string
      */
     protected $description = 'Flush the application cache';
-
     /**
      * The cache manager instance.
      *
      * @var \Illuminate\Cache\CacheManager
      */
     protected $cache;
-
     /**
      * The filesystem instance.
      *
      * @var \Illuminate\Filesystem\Filesystem
      */
     protected $files;
-
     /**
      * Create a new cache clear command instance.
      *
@@ -49,11 +44,9 @@ class ClearCommand extends Command
     public function __construct(CacheManager $cache, Filesystem $files)
     {
         parent::__construct();
-
         $this->cache = $cache;
         $this->files = $files;
     }
-
     /**
      * Execute the console command.
      *
@@ -61,29 +54,17 @@ class ClearCommand extends Command
      */
     public function handle()
     {
-        $this->laravel['events']->dispatch(
-            'cache:clearing', [$this->argument('store'), $this->tags()]
-        );
-
+        $this->laravel['events']->dispatch('cache:clearing', [$this->argument('store'), $this->tags()]);
         $successful = $this->cache()->flush();
-
         $this->flushFacades();
-
-        if (! $successful) {
+        if (!$successful) {
             $this->components->error('Failed to clear cache. Make sure you have the appropriate permissions.');
-
             return self::FAILURE;
         }
-
-        $this->laravel['events']->dispatch(
-            'cache:cleared', [$this->argument('store'), $this->tags()]
-        );
-
+        $this->laravel['events']->dispatch('cache:cleared', [$this->argument('store'), $this->tags()]);
         $this->components->info('Application cache cleared successfully.');
-
         return self::SUCCESS;
     }
-
     /**
      * Flush the real-time facades stored in the cache directory.
      *
@@ -91,17 +72,15 @@ class ClearCommand extends Command
      */
     public function flushFacades()
     {
-        if (! $this->files->exists($storagePath = storage_path('framework/cache'))) {
+        if (!$this->files->exists($storagePath = storage_path('framework/cache'))) {
             return;
         }
-
         foreach ($this->files->files($storagePath) as $file) {
             if (preg_match('/facade-.*\.php$/', $file)) {
                 $this->files->delete($file);
             }
         }
     }
-
     /**
      * Get the cache instance for the command.
      *
@@ -110,10 +89,8 @@ class ClearCommand extends Command
     protected function cache()
     {
         $cache = $this->cache->store($this->argument('store'));
-
         return empty($this->tags()) ? $cache : $cache->tags($this->tags());
     }
-
     /**
      * Get the tags passed to the command.
      *
@@ -123,7 +100,6 @@ class ClearCommand extends Command
     {
         return array_filter(explode(',', $this->option('tags') ?? ''));
     }
-
     /**
      * Get the console command arguments.
      *
@@ -131,11 +107,8 @@ class ClearCommand extends Command
      */
     protected function getArguments()
     {
-        return [
-            ['store', InputArgument::OPTIONAL, 'The name of the store you would like to clear'],
-        ];
+        return [['store', InputArgument::OPTIONAL, 'The name of the store you would like to clear']];
     }
-
     /**
      * Get the console command options.
      *
@@ -143,8 +116,6 @@ class ClearCommand extends Command
      */
     protected function getOptions()
     {
-        return [
-            ['tags', null, InputOption::VALUE_OPTIONAL, 'The cache tags you would like to clear', null],
-        ];
+        return [['tags', null, InputOption::VALUE_OPTIONAL, 'The cache tags you would like to clear', null]];
     }
 }

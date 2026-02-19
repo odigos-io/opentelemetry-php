@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -57,12 +57,7 @@ interface EventManagerInterface
      * @throws \InvalidArgumentException When event key is missing or callable is not an
      *   instance of Cake\Event\EventListenerInterface.
      */
-    public function on(
-        EventListenerInterface|string $eventKey,
-        callable|array $options = [],
-        ?callable $callable = null,
-    );
-
+    public function on(\Cake\Event\EventListenerInterface|string $eventKey, callable|array $options = [], ?callable $callable = null);
     /**
      * Remove a listener from the active listeners.
      *
@@ -95,11 +90,7 @@ interface EventManagerInterface
      * @param \Cake\Event\EventListenerInterface|callable|null $callable The callback you want to detach.
      * @return $this
      */
-    public function off(
-        EventListenerInterface|callable|string $eventKey,
-        EventListenerInterface|callable|null $callable = null,
-    );
-
+    public function off(\Cake\Event\EventListenerInterface|callable|string $eventKey, \Cake\Event\EventListenerInterface|callable|null $callable = null);
     /**
      * Dispatches a new event to all configured listeners
      *
@@ -108,8 +99,7 @@ interface EventManagerInterface
      * @return \Cake\Event\EventInterface<TSubject>
      * @triggers $event
      */
-    public function dispatch(EventInterface|string $event): EventInterface;
-
+    public function dispatch(\Cake\Event\EventInterface|string $event): \Cake\Event\EventInterface;
     /**
      * Returns a list of all listeners for an eventKey in the order they should be called
      *

@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -17,7 +17,6 @@ declare(strict_types=1);
 namespace Cake\ORM\Query;
 
 use Cake\ORM\Table;
-
 /**
  * Factory class for generating instances of Select, Insert, Update, Delete queries.
  */
@@ -29,41 +28,38 @@ class QueryFactory
      * @param \Cake\ORM\Table $table The table this query is starting on.
      * @return \Cake\ORM\Query\SelectQuery
      */
-    public function select(Table $table): SelectQuery
+    public function select(Table $table): \Cake\ORM\Query\SelectQuery
     {
-        return new SelectQuery($table);
+        return new \Cake\ORM\Query\SelectQuery($table);
     }
-
     /**
      * Create a new InsertQuery instance.
      *
      * @param \Cake\ORM\Table $table The table this query is starting on.
      * @return \Cake\ORM\Query\InsertQuery
      */
-    public function insert(Table $table): InsertQuery
+    public function insert(Table $table): \Cake\ORM\Query\InsertQuery
     {
-        return new InsertQuery($table);
+        return new \Cake\ORM\Query\InsertQuery($table);
     }
-
     /**
      * Create a new UpdateQuery instance.
      *
      * @param \Cake\ORM\Table $table The table this query is starting on.
      * @return \Cake\ORM\Query\UpdateQuery
      */
-    public function update(Table $table): UpdateQuery
+    public function update(Table $table): \Cake\ORM\Query\UpdateQuery
     {
-        return new UpdateQuery($table);
+        return new \Cake\ORM\Query\UpdateQuery($table);
     }
-
     /**
      * Create a new DeleteQuery instance.
      *
      * @param \Cake\ORM\Table $table The table this query is starting on.
      * @return \Cake\ORM\Query\DeleteQuery
      */
-    public function delete(Table $table): DeleteQuery
+    public function delete(Table $table): \Cake\ORM\Query\DeleteQuery
     {
-        return new DeleteQuery($table);
+        return new \Cake\ORM\Query\DeleteQuery($table);
     }
 }

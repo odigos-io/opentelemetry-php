@@ -10,7 +10,6 @@ class DatabaseMessage
      * @var array
      */
     public $data = [];
-
     /**
      * Create a new database message.
      *

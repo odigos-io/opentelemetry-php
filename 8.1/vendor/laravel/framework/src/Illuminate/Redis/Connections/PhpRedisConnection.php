@@ -6,28 +6,24 @@ use Closure;
 use Illuminate\Contracts\Redis\Connection as ConnectionContract;
 use Redis;
 use RedisException;
-
 /**
  * @mixin \Redis
  */
-class PhpRedisConnection extends Connection implements ConnectionContract
+class PhpRedisConnection extends \Illuminate\Redis\Connections\Connection implements ConnectionContract
 {
-    use PacksPhpRedisValues;
-
+    use \Illuminate\Redis\Connections\PacksPhpRedisValues;
     /**
      * The connection creation callback.
      *
      * @var callable
      */
     protected $connector;
-
     /**
      * The connection configuration array.
      *
      * @var array
      */
     protected $config;
-
     /**
      * Create a new PhpRedis connection.
      *
@@ -42,7 +38,6 @@ class PhpRedisConnection extends Connection implements ConnectionContract
         $this->config = $config;
         $this->connector = $connector;
     }
-
     /**
      * Returns the value of the given key.
      *
@@ -52,10 +47,8 @@ class PhpRedisConnection extends Connection implements ConnectionContract
     public function get($key)
     {
         $result = $this->command('get', [$key]);
-
-        return $result !== false ? $result : null;
+        return $result !== \false ? $result : null;
     }
-
     /**
      * Get the values of all the given keys.
      *
@@ -65,10 +58,9 @@ class PhpRedisConnection extends Connection implements ConnectionContract
     public function mget(array $keys)
     {
         return array_map(function ($value) {
-            return $value !== false ? $value : null;
+            return $value !== \false ? $value : null;
         }, $this->command('mget', [$keys]));
     }
-
     /**
      * Set the string value in the argument as the value of the key.
      *
@@ -81,13 +73,8 @@ class PhpRedisConnection extends Connection implements ConnectionContract
      */
     public function set($key, $value, $expireResolution = null, $expireTTL = null, $flag = null)
     {
-        return $this->command('set', [
-            $key,
-            $value,
-            $expireResolution ? [$flag, $expireResolution => $expireTTL] : null,
-        ]);
+        return $this->command('set', [$key, $value, $expireResolution ? [$flag, $expireResolution => $expireTTL] : null]);
     }
-
     /**
      * Set the given key if it doesn't exist.
      *
@@ -99,7 +86,6 @@ class PhpRedisConnection extends Connection implements ConnectionContract
     {
         return (int) $this->command('setnx', [$key, $value]);
     }
-
     /**
      * Get the value of the given hash fields.
      *
@@ -112,10 +98,8 @@ class PhpRedisConnection extends Connection implements ConnectionContract
         if (count($dictionary) === 1) {
             $dictionary = $dictionary[0];
         }
-
         return array_values($this->command('hmget', [$key, $dictionary]));
     }
-
     /**
      * Set the given hash fields to their respective values.
      *
@@ -129,13 +113,10 @@ class PhpRedisConnection extends Connection implements ConnectionContract
             $dictionary = $dictionary[0];
         } else {
             $input = collect($dictionary);
-
             $dictionary = $input->nth(2)->combine($input->nth(2, 1))->toArray();
         }
-
         return $this->command('hmset', [$key, $dictionary]);
     }
-
     /**
      * Set the given hash field if it doesn't exist.
      *
@@ -148,7 +129,6 @@ class PhpRedisConnection extends Connection implements ConnectionContract
     {
         return (int) $this->command('hsetnx', [$hash, $key, $value]);
     }
-
     /**
      * Removes the first count occurrences of the value element from the list.
      *
@@ -161,7 +141,6 @@ class PhpRedisConnection extends Connection implements ConnectionContract
     {
         return $this->command('lrem', [$key, $value, $count]);
     }
-
     /**
      * Removes and returns the first element of the list stored at key.
      *
@@ -171,10 +150,8 @@ class PhpRedisConnection extends Connection implements ConnectionContract
     public function blpop(...$arguments)
     {
         $result = $this->command('blpop', $arguments);
-
         return empty($result) ? null : $result;
     }
-
     /**
      * Removes and returns the last element of the list stored at key.
      *
@@ -184,10 +161,8 @@ class PhpRedisConnection extends Connection implements ConnectionContract
     public function brpop(...$arguments)
     {
         $result = $this->command('brpop', $arguments);
-
         return empty($result) ? null : $result;
     }
-
     /**
      * Removes and returns a random element from the set value at key.
      *
@@ -199,7 +174,6 @@ class PhpRedisConnection extends Connection implements ConnectionContract
     {
         return $this->command('spop', func_get_args());
     }
-
     /**
      * Add one or more members to a sorted set or update its score if it already exists.
      *
@@ -215,20 +189,15 @@ class PhpRedisConnection extends Connection implements ConnectionContract
                 $dictionary[] = $member;
             }
         }
-
         $options = [];
-
         foreach (array_slice($dictionary, 0, 3) as $i => $value) {
-            if (in_array($value, ['nx', 'xx', 'ch', 'incr', 'gt', 'lt', 'NX', 'XX', 'CH', 'INCR', 'GT', 'LT'], true)) {
+            if (in_array($value, ['nx', 'xx', 'ch', 'incr', 'gt', 'lt', 'NX', 'XX', 'CH', 'INCR', 'GT', 'LT'], \true)) {
                 $options[] = $value;
-
                 unset($dictionary[$i]);
             }
         }
-
         return $this->command('zadd', array_merge([$key], [$options], array_values($dictionary)));
     }
-
     /**
      * Return elements with score between $min and $max.
      *
@@ -240,16 +209,11 @@ class PhpRedisConnection extends Connection implements ConnectionContract
      */
     public function zrangebyscore($key, $min, $max, $options = [])
     {
-        if (isset($options['limit']) && ! array_is_list($options['limit'])) {
-            $options['limit'] = [
-                $options['limit']['offset'],
-                $options['limit']['count'],
-            ];
+        if (isset($options['limit']) && !array_is_list($options['limit'])) {
+            $options['limit'] = [$options['limit']['offset'], $options['limit']['count']];
         }
-
         return $this->command('zRangeByScore', [$key, $min, $max, $options]);
     }
-
     /**
      * Return elements with score between $min and $max.
      *
@@ -261,16 +225,11 @@ class PhpRedisConnection extends Connection implements ConnectionContract
      */
     public function zrevrangebyscore($key, $min, $max, $options = [])
     {
-        if (isset($options['limit']) && ! array_is_list($options['limit'])) {
-            $options['limit'] = [
-                $options['limit']['offset'],
-                $options['limit']['count'],
-            ];
+        if (isset($options['limit']) && !array_is_list($options['limit'])) {
+            $options['limit'] = [$options['limit']['offset'], $options['limit']['count']];
         }
-
         return $this->command('zRevRangeByScore', [$key, $min, $max, $options]);
     }
-
     /**
      * Find the intersection between sets and store in a new set.
      *
@@ -281,12 +240,8 @@ class PhpRedisConnection extends Connection implements ConnectionContract
      */
     public function zinterstore($output, $keys, $options = [])
     {
-        return $this->command('zinterstore', [$output, $keys,
-            $options['weights'] ?? null,
-            $options['aggregate'] ?? 'sum',
-        ]);
+        return $this->command('zinterstore', [$output, $keys, $options['weights'] ?? null, $options['aggregate'] ?? 'sum']);
     }
-
     /**
      * Find the union between sets and store in a new set.
      *
@@ -297,12 +252,8 @@ class PhpRedisConnection extends Connection implements ConnectionContract
      */
     public function zunionstore($output, $keys, $options = [])
     {
-        return $this->command('zunionstore', [$output, $keys,
-            $options['weights'] ?? null,
-            $options['aggregate'] ?? 'sum',
-        ]);
+        return $this->command('zunionstore', [$output, $keys, $options['weights'] ?? null, $options['aggregate'] ?? 'sum']);
     }
-
     /**
      * Scans all keys based on options.
      *
@@ -312,18 +263,12 @@ class PhpRedisConnection extends Connection implements ConnectionContract
      */
     public function scan($cursor, $options = [])
     {
-        $result = $this->client->scan($cursor,
-            $options['match'] ?? '*',
-            $options['count'] ?? 10
-        );
-
-        if ($result === false) {
+        $result = $this->client->scan($cursor, $options['match'] ?? '*', $options['count'] ?? 10);
+        if ($result === \false) {
             $result = [];
         }
-
-        return $cursor === 0 && empty($result) ? false : [$cursor, $result];
+        return $cursor === 0 && empty($result) ? \false : [$cursor, $result];
     }
-
     /**
      * Scans the given set for all values based on options.
      *
@@ -334,18 +279,12 @@ class PhpRedisConnection extends Connection implements ConnectionContract
      */
     public function zscan($key, $cursor, $options = [])
     {
-        $result = $this->client->zscan($key, $cursor,
-            $options['match'] ?? '*',
-            $options['count'] ?? 10
-        );
-
-        if ($result === false) {
+        $result = $this->client->zscan($key, $cursor, $options['match'] ?? '*', $options['count'] ?? 10);
+        if ($result === \false) {
             $result = [];
         }
-
-        return $cursor === 0 && empty($result) ? false : [$cursor, $result];
+        return $cursor === 0 && empty($result) ? \false : [$cursor, $result];
     }
-
     /**
      * Scans the given hash for all values based on options.
      *
@@ -356,18 +295,12 @@ class PhpRedisConnection extends Connection implements ConnectionContract
      */
     public function hscan($key, $cursor, $options = [])
     {
-        $result = $this->client->hscan($key, $cursor,
-            $options['match'] ?? '*',
-            $options['count'] ?? 10
-        );
-
-        if ($result === false) {
+        $result = $this->client->hscan($key, $cursor, $options['match'] ?? '*', $options['count'] ?? 10);
+        if ($result === \false) {
             $result = [];
         }
-
-        return $cursor === 0 && empty($result) ? false : [$cursor, $result];
+        return $cursor === 0 && empty($result) ? \false : [$cursor, $result];
     }
-
     /**
      * Scans the given set for all values based on options.
      *
@@ -378,18 +311,12 @@ class PhpRedisConnection extends Connection implements ConnectionContract
      */
     public function sscan($key, $cursor, $options = [])
     {
-        $result = $this->client->sscan($key, $cursor,
-            $options['match'] ?? '*',
-            $options['count'] ?? 10
-        );
-
-        if ($result === false) {
+        $result = $this->client->sscan($key, $cursor, $options['match'] ?? '*', $options['count'] ?? 10);
+        if ($result === \false) {
             $result = [];
         }
-
-        return $cursor === 0 && empty($result) ? false : [$cursor, $result];
+        return $cursor === 0 && empty($result) ? \false : [$cursor, $result];
     }
-
     /**
      * Execute commands in a pipeline.
      *
@@ -399,12 +326,8 @@ class PhpRedisConnection extends Connection implements ConnectionContract
     public function pipeline(?callable $callback = null)
     {
         $pipeline = $this->client()->pipeline();
-
-        return is_null($callback)
-            ? $pipeline
-            : tap($pipeline, $callback)->exec();
+        return is_null($callback) ? $pipeline : tap($pipeline, $callback)->exec();
     }
-
     /**
      * Execute commands in a transaction.
      *
@@ -414,12 +337,8 @@ class PhpRedisConnection extends Connection implements ConnectionContract
     public function transaction(?callable $callback = null)
     {
         $transaction = $this->client()->multi();
-
-        return is_null($callback)
-            ? $transaction
-            : tap($transaction, $callback)->exec();
+        return is_null($callback) ? $transaction : tap($transaction, $callback)->exec();
     }
-
     /**
      * Evaluate a LUA script serverside, from the SHA1 hash of the script instead of the script itself.
      *
@@ -430,11 +349,8 @@ class PhpRedisConnection extends Connection implements ConnectionContract
      */
     public function evalsha($script, $numkeys, ...$arguments)
     {
-        return $this->command('evalsha', [
-            $this->script('load', $script), $arguments, $numkeys,
-        ]);
+        return $this->command('evalsha', [$this->script('load', $script), $arguments, $numkeys]);
     }
-
     /**
      * Evaluate a script and return its result.
      *
@@ -447,7 +363,6 @@ class PhpRedisConnection extends Connection implements ConnectionContract
     {
         return $this->command('eval', [$script, $arguments, $numberOfKeys]);
     }
-
     /**
      * Subscribe to a set of given channels for messages.
      *
@@ -461,7 +376,6 @@ class PhpRedisConnection extends Connection implements ConnectionContract
             $callback($message, $channel);
         });
     }
-
     /**
      * Subscribe to a set of given channels with wildcards.
      *
@@ -475,7 +389,6 @@ class PhpRedisConnection extends Connection implements ConnectionContract
             $callback($message, $channel);
         });
     }
-
     /**
      * Subscribe to a set of given channels for messages.
      *
@@ -488,7 +401,6 @@ class PhpRedisConnection extends Connection implements ConnectionContract
     {
         //
     }
-
     /**
      * Flush the selected Redis database.
      *
@@ -497,14 +409,11 @@ class PhpRedisConnection extends Connection implements ConnectionContract
     public function flushdb()
     {
         $arguments = func_get_args();
-
         if (strtoupper((string) ($arguments[0] ?? null)) === 'ASYNC') {
-            return $this->command('flushdb', [true]);
+            return $this->command('flushdb', [\true]);
         }
-
         return $this->command('flushdb');
     }
-
     /**
      * Execute a raw command.
      *
@@ -515,7 +424,6 @@ class PhpRedisConnection extends Connection implements ConnectionContract
     {
         return $this->command('rawCommand', $parameters);
     }
-
     /**
      * Run a command against the Redis database.
      *
@@ -533,15 +441,12 @@ class PhpRedisConnection extends Connection implements ConnectionContract
             foreach (['went away', 'socket', 'read error on connection', 'Connection lost'] as $errorMessage) {
                 if (str_contains($e->getMessage(), $errorMessage)) {
                     $this->client = $this->connector ? call_user_func($this->connector) : $this->client;
-
                     break;
                 }
             }
-
             throw $e;
         }
     }
-
     /**
      * Disconnects from the Redis instance.
      *
@@ -551,7 +456,6 @@ class PhpRedisConnection extends Connection implements ConnectionContract
     {
         $this->client->close();
     }
-
     /**
      * Pass other method calls down to the underlying client.
      *

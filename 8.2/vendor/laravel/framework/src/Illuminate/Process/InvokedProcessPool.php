@@ -4,7 +4,6 @@ namespace Illuminate\Process;
 
 use Countable;
 use Illuminate\Support\Collection;
-
 class InvokedProcessPool implements Countable
 {
     /**
@@ -13,7 +12,6 @@ class InvokedProcessPool implements Countable
      * @var array
      */
     protected $invokedProcesses;
-
     /**
      * Create a new invoked process pool.
      *
@@ -23,7 +21,6 @@ class InvokedProcessPool implements Countable
     {
         $this->invokedProcesses = $invokedProcesses;
     }
-
     /**
      * Send a signal to each running process in the pool, returning the processes that were signalled.
      *
@@ -34,7 +31,6 @@ class InvokedProcessPool implements Countable
     {
         return $this->running()->each->signal($signal);
     }
-
     /**
      * Stop all processes that are still running.
      *
@@ -46,7 +42,6 @@ class InvokedProcessPool implements Countable
     {
         return $this->running()->each->stop($timeout, $signal);
     }
-
     /**
      * Get the processes in the pool that are still currently running.
      *
@@ -56,7 +51,6 @@ class InvokedProcessPool implements Countable
     {
         return (new Collection($this->invokedProcesses))->filter->running()->values();
     }
-
     /**
      * Wait for the processes to finish.
      *
@@ -64,9 +58,8 @@ class InvokedProcessPool implements Countable
      */
     public function wait()
     {
-        return new ProcessPoolResults((new Collection($this->invokedProcesses))->map->wait()->all());
+        return new \Illuminate\Process\ProcessPoolResults((new Collection($this->invokedProcesses))->map->wait()->all());
     }
-
     /**
      * Get the total number of processes.
      *

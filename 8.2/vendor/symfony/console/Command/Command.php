@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\Console\Command;
 
 use Symfony\Component\Console\Application;
@@ -26,62 +25,53 @@ use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-
 /**
  * Base class for all commands.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class Command implements SignalableCommandInterface
+class Command implements \Symfony\Component\Console\Command\SignalableCommandInterface
 {
     // see https://tldp.org/LDP/abs/html/exitcodes.html
     public const SUCCESS = 0;
     public const FAILURE = 1;
     public const INVALID = 2;
-
     private ?Application $application = null;
     private ?string $name = null;
     private ?string $processTitle = null;
     private array $aliases = [];
     private InputDefinition $definition;
-    private bool $hidden = false;
+    private bool $hidden = \false;
     private string $help = '';
     private string $description = '';
     private ?InputDefinition $fullDefinition = null;
-    private bool $ignoreValidationErrors = false;
-    private ?InvokableCommand $code = null;
+    private bool $ignoreValidationErrors = \false;
+    private ?\Symfony\Component\Console\Command\InvokableCommand $code = null;
     private array $synopsis = [];
     private array $usages = [];
     private ?HelperSet $helperSet = null;
-
     /**
      * @deprecated since Symfony 7.3, use the #[AsCommand] attribute instead
      */
     public static function getDefaultName(): ?string
     {
         trigger_deprecation('symfony/console', '7.3', 'Method "%s()" is deprecated and will be removed in Symfony 8.0, use the #[AsCommand] attribute instead.', __METHOD__);
-
         if ($attribute = (new \ReflectionClass(static::class))->getAttributes(AsCommand::class)) {
             return $attribute[0]->newInstance()->name;
         }
-
         return null;
     }
-
     /**
      * @deprecated since Symfony 7.3, use the #[AsCommand] attribute instead
      */
     public static function getDefaultDescription(): ?string
     {
         trigger_deprecation('symfony/console', '7.3', 'Method "%s()" is deprecated and will be removed in Symfony 8.0, use the #[AsCommand] attribute instead.', __METHOD__);
-
         if ($attribute = (new \ReflectionClass(static::class))->getAttributes(AsCommand::class)) {
             return $attribute[0]->newInstance()->description;
         }
-
         return null;
     }
-
     /**
      * @param string|null $name The name of the command; passing null means it must be set in configure()
      *
@@ -94,72 +84,53 @@ class Command implements SignalableCommandInterface
                 throw new InvalidArgumentException(\sprintf('The command must be an instance of "%s" or an invokable object.', self::class));
             }
             /** @var AsCommand $attribute */
-            $attribute = ((new \ReflectionObject($code))->getAttributes(AsCommand::class)[0] ?? null)?->newInstance()
-                ?? throw new LogicException(\sprintf('The command must use the "%s" attribute.', AsCommand::class));
+            $attribute = ((new \ReflectionObject($code))->getAttributes(AsCommand::class)[0] ?? null)?->newInstance() ?? throw new LogicException(\sprintf('The command must use the "%s" attribute.', AsCommand::class));
             $this->setCode($code);
         } else {
             $attribute = ((new \ReflectionClass(static::class))->getAttributes(AsCommand::class)[0] ?? null)?->newInstance();
         }
-
         $this->definition = new InputDefinition();
         if (null === $name) {
             if (self::class !== (new \ReflectionMethod($this, 'getDefaultName'))->class) {
                 trigger_deprecation('symfony/console', '7.3', 'Overriding "Command::getDefaultName()" in "%s" is deprecated and will be removed in Symfony 8.0, use the #[AsCommand] attribute instead.', static::class);
-
                 $name = static::getDefaultName();
             } else {
                 $name = $attribute?->name;
             }
         }
-
         if (null !== $name) {
             $aliases = explode('|', $name);
-
             if ('' === $name = array_shift($aliases)) {
-                $this->setHidden(true);
+                $this->setHidden(\true);
                 $name = array_shift($aliases);
             }
-
             // we must not overwrite existing aliases, combine new ones with existing ones
-            $aliases = array_unique([
-                ...$this->aliases,
-                ...$aliases,
-            ]);
-
+            $aliases = array_unique([...$this->aliases, ...$aliases]);
             $this->setAliases($aliases);
         }
-
         if (null !== $name) {
             $this->setName($name);
         }
-
         if ('' === $this->description) {
             if (self::class !== (new \ReflectionMethod($this, 'getDefaultDescription'))->class) {
                 trigger_deprecation('symfony/console', '7.3', 'Overriding "Command::getDefaultDescription()" in "%s" is deprecated and will be removed in Symfony 8.0, use the #[AsCommand] attribute instead.', static::class);
-
                 $defaultDescription = static::getDefaultDescription();
             } else {
                 $defaultDescription = $attribute?->description;
             }
-
             $this->setDescription($defaultDescription ?? '');
         }
-
         if ('' === $this->help) {
             $this->setHelp($attribute?->help ?? '');
         }
-
         foreach ($attribute?->usages ?? [] as $usage) {
             $this->addUsage($usage);
         }
-
         if (!$code && \is_callable($this) && self::class === (new \ReflectionMethod($this, 'execute'))->getDeclaringClass()->name) {
-            $this->code = new InvokableCommand($this, $this(...));
+            $this->code = new \Symfony\Component\Console\Command\InvokableCommand($this, $this(...));
         }
-
         $this->configure();
     }
-
     /**
      * Ignores validation errors.
      *
@@ -167,9 +138,8 @@ class Command implements SignalableCommandInterface
      */
     public function ignoreValidationErrors(): void
     {
-        $this->ignoreValidationErrors = true;
+        $this->ignoreValidationErrors = \true;
     }
-
     public function setApplication(?Application $application): void
     {
         $this->application = $application;
@@ -178,15 +148,12 @@ class Command implements SignalableCommandInterface
         } else {
             $this->helperSet = null;
         }
-
         $this->fullDefinition = null;
     }
-
     public function setHelperSet(HelperSet $helperSet): void
     {
         $this->helperSet = $helperSet;
     }
-
     /**
      * Gets the helper set.
      */
@@ -194,7 +161,6 @@ class Command implements SignalableCommandInterface
     {
         return $this->helperSet;
     }
-
     /**
      * Gets the application instance for this command.
      */
@@ -202,7 +168,6 @@ class Command implements SignalableCommandInterface
     {
         return $this->application;
     }
-
     /**
      * Checks whether the command is enabled or not in the current environment.
      *
@@ -211,9 +176,8 @@ class Command implements SignalableCommandInterface
      */
     public function isEnabled(): bool
     {
-        return true;
+        return \true;
     }
-
     /**
      * Configures the current command.
      *
@@ -222,7 +186,6 @@ class Command implements SignalableCommandInterface
     protected function configure()
     {
     }
-
     /**
      * Executes the current command.
      *
@@ -241,7 +204,6 @@ class Command implements SignalableCommandInterface
     {
         throw new LogicException('You must override the execute() method in the concrete command class.');
     }
-
     /**
      * Interacts with the user.
      *
@@ -254,7 +216,6 @@ class Command implements SignalableCommandInterface
     protected function interact(InputInterface $input, OutputInterface $output)
     {
     }
-
     /**
      * Initializes the command after the input has been bound and before the input
      * is validated.
@@ -270,7 +231,6 @@ class Command implements SignalableCommandInterface
     protected function initialize(InputInterface $input, OutputInterface $output)
     {
     }
-
     /**
      * Runs the command.
      *
@@ -289,7 +249,6 @@ class Command implements SignalableCommandInterface
     {
         // add the application arguments and options
         $this->mergeApplicationDefinition();
-
         // bind the input against the command specific arguments/options
         try {
             $input->bind($this->getDefinition());
@@ -298,9 +257,7 @@ class Command implements SignalableCommandInterface
                 throw $e;
             }
         }
-
         $this->initialize($input, $output);
-
         if (null !== $this->processTitle) {
             if (\function_exists('cli_set_process_title')) {
                 if (!@cli_set_process_title($this->processTitle)) {
@@ -316,31 +273,24 @@ class Command implements SignalableCommandInterface
                 $output->writeln('<comment>Install the proctitle PECL to be able to change the process title.</comment>');
             }
         }
-
         if ($input->isInteractive()) {
             $this->interact($input, $output);
-
             if ($this->code?->isInteractive()) {
                 $this->code->interact($input, $output);
             }
         }
-
         // The command name argument is often omitted when a command is executed directly with its run() method.
         // It would fail the validation if we didn't make sure the command argument is present,
         // since it's required by the application.
         if ($input->hasArgument('command') && null === $input->getArgument('command')) {
             $input->setArgument('command', $this->getName());
         }
-
         $input->validate();
-
         if ($this->code) {
             return ($this->code)($input, $output);
         }
-
         return $this->execute($input, $output);
     }
-
     /**
      * Supplies suggestions when resolving possible completion options for input (e.g. option or argument).
      */
@@ -353,7 +303,6 @@ class Command implements SignalableCommandInterface
             $definition->getArgument($input->getCompletionName())->complete($input, $suggestions);
         }
     }
-
     /**
      * Gets the code that is executed by the command.
      *
@@ -363,7 +312,6 @@ class Command implements SignalableCommandInterface
     {
         return $this->code?->getCode();
     }
-
     /**
      * Sets the code to execute when running this command.
      *
@@ -380,11 +328,9 @@ class Command implements SignalableCommandInterface
      */
     public function setCode(callable $code): static
     {
-        $this->code = new InvokableCommand($this, $code);
-
+        $this->code = new \Symfony\Component\Console\Command\InvokableCommand($this, $code);
         return $this;
     }
-
     /**
      * Merges the application definition with the command definition.
      *
@@ -394,16 +340,14 @@ class Command implements SignalableCommandInterface
      *
      * @internal
      */
-    public function mergeApplicationDefinition(bool $mergeArgs = true): void
+    public function mergeApplicationDefinition(bool $mergeArgs = \true): void
     {
         if (null === $this->application) {
             return;
         }
-
         $this->fullDefinition = new InputDefinition();
         $this->fullDefinition->setOptions($this->definition->getOptions());
         $this->fullDefinition->addOptions($this->application->getDefinition()->getOptions());
-
         if ($mergeArgs) {
             $this->fullDefinition->setArguments($this->application->getDefinition()->getArguments());
             $this->fullDefinition->addArguments($this->definition->getArguments());
@@ -411,7 +355,6 @@ class Command implements SignalableCommandInterface
             $this->fullDefinition->setArguments($this->definition->getArguments());
         }
     }
-
     /**
      * Sets an array of argument and option instances.
      *
@@ -424,12 +367,9 @@ class Command implements SignalableCommandInterface
         } else {
             $this->definition->setDefinition($definition);
         }
-
         $this->fullDefinition = null;
-
         return $this;
     }
-
     /**
      * Gets the InputDefinition attached to this Command.
      */
@@ -437,7 +377,6 @@ class Command implements SignalableCommandInterface
     {
         return $this->fullDefinition ?? $this->getNativeDefinition();
     }
-
     /**
      * Gets the InputDefinition to be used to create representations of this Command.
      *
@@ -449,14 +388,11 @@ class Command implements SignalableCommandInterface
     public function getNativeDefinition(): InputDefinition
     {
         $definition = $this->definition ?? throw new LogicException(\sprintf('Command class "%s" is not correctly initialized. You probably forgot to call the parent constructor.', static::class));
-
         if ($this->code && !$definition->getArguments() && !$definition->getOptions()) {
             $this->code->configure($definition);
         }
-
         return $definition;
     }
-
     /**
      * Adds an argument.
      *
@@ -472,10 +408,8 @@ class Command implements SignalableCommandInterface
     {
         $this->definition->addArgument(new InputArgument($name, $mode, $description, $default, $suggestedValues));
         $this->fullDefinition?->addArgument(new InputArgument($name, $mode, $description, $default, $suggestedValues));
-
         return $this;
     }
-
     /**
      * Adds an option.
      *
@@ -492,10 +426,8 @@ class Command implements SignalableCommandInterface
     {
         $this->definition->addOption(new InputOption($name, $shortcut, $mode, $description, $default, $suggestedValues));
         $this->fullDefinition?->addOption(new InputOption($name, $shortcut, $mode, $description, $default, $suggestedValues));
-
         return $this;
     }
-
     /**
      * Sets the name of the command.
      *
@@ -511,12 +443,9 @@ class Command implements SignalableCommandInterface
     public function setName(string $name): static
     {
         $this->validateName($name);
-
         $this->name = $name;
-
         return $this;
     }
-
     /**
      * Sets the process title of the command.
      *
@@ -528,10 +457,8 @@ class Command implements SignalableCommandInterface
     public function setProcessTitle(string $title): static
     {
         $this->processTitle = $title;
-
         return $this;
     }
-
     /**
      * Returns the command name.
      */
@@ -539,19 +466,16 @@ class Command implements SignalableCommandInterface
     {
         return $this->name;
     }
-
     /**
      * @param bool $hidden Whether or not the command should be hidden from the list of commands
      *
      * @return $this
      */
-    public function setHidden(bool $hidden = true): static
+    public function setHidden(bool $hidden = \true): static
     {
         $this->hidden = $hidden;
-
         return $this;
     }
-
     /**
      * @return bool whether the command should be publicly shown or not
      */
@@ -559,7 +483,6 @@ class Command implements SignalableCommandInterface
     {
         return $this->hidden;
     }
-
     /**
      * Sets the description for the command.
      *
@@ -568,10 +491,8 @@ class Command implements SignalableCommandInterface
     public function setDescription(string $description): static
     {
         $this->description = $description;
-
         return $this;
     }
-
     /**
      * Returns the description for the command.
      */
@@ -579,7 +500,6 @@ class Command implements SignalableCommandInterface
     {
         return $this->description;
     }
-
     /**
      * Sets the help for the command.
      *
@@ -588,10 +508,8 @@ class Command implements SignalableCommandInterface
     public function setHelp(string $help): static
     {
         $this->help = $help;
-
         return $this;
     }
-
     /**
      * Returns the help for the command.
      */
@@ -599,7 +517,6 @@ class Command implements SignalableCommandInterface
     {
         return $this->help;
     }
-
     /**
      * Returns the processed help for the command replacing the %command.name% and
      * %command.full_name% patterns with the real values dynamically.
@@ -608,19 +525,10 @@ class Command implements SignalableCommandInterface
     {
         $name = $this->name;
         $isSingleCommand = $this->application?->isSingleCommand();
-
-        $placeholders = [
-            '%command.name%',
-            '%command.full_name%',
-        ];
-        $replacements = [
-            $name,
-            $isSingleCommand ? $_SERVER['PHP_SELF'] : $_SERVER['PHP_SELF'].' '.$name,
-        ];
-
+        $placeholders = ['%command.name%', '%command.full_name%'];
+        $replacements = [$name, $isSingleCommand ? $_SERVER['PHP_SELF'] : $_SERVER['PHP_SELF'] . ' ' . $name];
         return str_replace($placeholders, $replacements, $this->getHelp() ?: $this->getDescription());
     }
-
     /**
      * Sets the aliases for the command.
      *
@@ -633,17 +541,13 @@ class Command implements SignalableCommandInterface
     public function setAliases(iterable $aliases): static
     {
         $list = [];
-
         foreach ($aliases as $alias) {
             $this->validateName($alias);
             $list[] = $alias;
         }
-
         $this->aliases = \is_array($aliases) ? $aliases : $list;
-
         return $this;
     }
-
     /**
      * Returns the aliases for the command.
      */
@@ -651,23 +555,19 @@ class Command implements SignalableCommandInterface
     {
         return $this->aliases;
     }
-
     /**
      * Returns the synopsis for the command.
      *
      * @param bool $short Whether to show the short version of the synopsis (with options folded) or not
      */
-    public function getSynopsis(bool $short = false): string
+    public function getSynopsis(bool $short = \false): string
     {
         $key = $short ? 'short' : 'long';
-
         if (!isset($this->synopsis[$key])) {
             $this->synopsis[$key] = trim(\sprintf('%s %s', $this->name, $this->definition->getSynopsis($short)));
         }
-
         return $this->synopsis[$key];
     }
-
     /**
      * Add a command usage example, it'll be prefixed with the command name.
      *
@@ -678,12 +578,9 @@ class Command implements SignalableCommandInterface
         if (!str_starts_with($usage, $this->name)) {
             $usage = \sprintf('%s %s', $this->name, $usage);
         }
-
         $this->usages[] = $usage;
-
         return $this;
     }
-
     /**
      * Returns alternative usages of the command.
      */
@@ -691,7 +588,6 @@ class Command implements SignalableCommandInterface
     {
         return $this->usages;
     }
-
     /**
      * Gets a helper instance by name.
      *
@@ -703,20 +599,16 @@ class Command implements SignalableCommandInterface
         if (null === $this->helperSet) {
             throw new LogicException(\sprintf('Cannot retrieve helper "%s" because there is no HelperSet defined. Did you forget to add your command to the application or to set the application on the command using the setApplication() method? You can also set the HelperSet directly using the setHelperSet() method.', $name));
         }
-
         return $this->helperSet->get($name);
     }
-
     public function getSubscribedSignals(): array
     {
         return $this->code?->getSubscribedSignals() ?? [];
     }
-
     public function handleSignal(int $signal, int|false $previousExitCode = 0): int|false
     {
-        return $this->code?->handleSignal($signal, $previousExitCode) ?? false;
+        return $this->code?->handleSignal($signal, $previousExitCode) ?? \false;
     }
-
     /**
      * Validates a command name.
      *

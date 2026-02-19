@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -18,7 +18,6 @@ namespace Cake\Collection\Iterator;
 
 use Cake\Collection\Collection;
 use RecursiveIterator;
-
 /**
  * An iterator that can be used as an argument for other iterators that require
  * a RecursiveIterator but do not want children. This iterator will
@@ -35,9 +34,8 @@ class NoChildrenIterator extends Collection implements RecursiveIterator
      */
     public function hasChildren(): bool
     {
-        return false;
+        return \false;
     }
-
     /**
      * Returns a self instance without any elements.
      *

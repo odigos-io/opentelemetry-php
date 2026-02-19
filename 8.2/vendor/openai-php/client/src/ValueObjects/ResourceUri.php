@@ -1,11 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenAI\ValueObjects;
 
 use OpenAI\Contracts\StringableContract;
-
 /**
  * @internal
  */
@@ -18,7 +16,6 @@ final class ResourceUri implements StringableContract
     {
         // ..
     }
-
     /**
      * Creates a new ResourceUri value object that creates the given resource.
      */
@@ -26,7 +23,6 @@ final class ResourceUri implements StringableContract
     {
         return new self($resource);
     }
-
     /**
      * Creates a new ResourceUri value object that uploads to the given resource.
      */
@@ -34,7 +30,6 @@ final class ResourceUri implements StringableContract
     {
         return new self($resource);
     }
-
     /**
      * Creates a new ResourceUri value object that lists the given resource.
      */
@@ -42,7 +37,6 @@ final class ResourceUri implements StringableContract
     {
         return new self($resource);
     }
-
     /**
      * Creates a new ResourceUri value object that retrieves the given resource.
      */
@@ -50,7 +44,6 @@ final class ResourceUri implements StringableContract
     {
         return new self("{$resource}/{$id}{$suffix}");
     }
-
     /**
      * Creates a new ResourceUri value object that modifies the given resource.
      */
@@ -58,7 +51,6 @@ final class ResourceUri implements StringableContract
     {
         return new self("{$resource}/{$id}");
     }
-
     /**
      * Creates a new ResourceUri value object that retrieves the given resource content.
      */
@@ -66,7 +58,6 @@ final class ResourceUri implements StringableContract
     {
         return new self("{$resource}/{$id}/content");
     }
-
     /**
      * Creates a new ResourceUri value object that cancels the given resource.
      */
@@ -74,7 +65,6 @@ final class ResourceUri implements StringableContract
     {
         return new self("{$resource}/{$id}/cancel");
     }
-
     /**
      * Creates a new ResourceUri value object that deletes the given resource.
      */
@@ -82,7 +72,6 @@ final class ResourceUri implements StringableContract
     {
         return new self("{$resource}/{$id}");
     }
-
     /**
      * {@inheritDoc}
      */

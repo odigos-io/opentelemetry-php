@@ -3,7 +3,6 @@
 namespace Illuminate\Auth;
 
 use InvalidArgumentException;
-
 trait CreatesUserProviders
 {
     /**
@@ -12,7 +11,6 @@ trait CreatesUserProviders
      * @var array
      */
     protected $customProviderCreators = [];
-
     /**
      * Create the user provider implementation for the driver.
      *
@@ -26,22 +24,15 @@ trait CreatesUserProviders
         if (is_null($config = $this->getProviderConfiguration($provider))) {
             return;
         }
-
-        if (isset($this->customProviderCreators[$driver = ($config['driver'] ?? null)])) {
-            return call_user_func(
-                $this->customProviderCreators[$driver], $this->app, $config
-            );
+        if (isset($this->customProviderCreators[$driver = $config['driver'] ?? null])) {
+            return call_user_func($this->customProviderCreators[$driver], $this->app, $config);
         }
-
         return match ($driver) {
             'database' => $this->createDatabaseProvider($config),
             'eloquent' => $this->createEloquentProvider($config),
-            default => throw new InvalidArgumentException(
-                "Authentication user provider [{$driver}] is not defined."
-            ),
+            default => throw new InvalidArgumentException("Authentication user provider [{$driver}] is not defined."),
         };
     }
-
     /**
      * Get the user provider configuration.
      *
@@ -51,10 +42,9 @@ trait CreatesUserProviders
     protected function getProviderConfiguration($provider)
     {
         if ($provider = $provider ?: $this->getDefaultUserProvider()) {
-            return $this->app['config']['auth.providers.'.$provider];
+            return $this->app['config']['auth.providers.' . $provider];
         }
     }
-
     /**
      * Create an instance of the database user provider.
      *
@@ -63,13 +53,8 @@ trait CreatesUserProviders
      */
     protected function createDatabaseProvider($config)
     {
-        return new DatabaseUserProvider(
-            $this->app['db']->connection($config['connection'] ?? null),
-            $this->app['hash'],
-            $config['table'],
-        );
+        return new \Illuminate\Auth\DatabaseUserProvider($this->app['db']->connection($config['connection'] ?? null), $this->app['hash'], $config['table']);
     }
-
     /**
      * Create an instance of the Eloquent user provider.
      *
@@ -78,9 +63,8 @@ trait CreatesUserProviders
      */
     protected function createEloquentProvider($config)
     {
-        return new EloquentUserProvider($this->app['hash'], $config['model']);
+        return new \Illuminate\Auth\EloquentUserProvider($this->app['hash'], $config['model']);
     }
-
     /**
      * Get the default user provider name.
      *

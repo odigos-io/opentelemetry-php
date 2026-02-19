@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -23,16 +23,15 @@ use Cake\Core\Exception\CakeException;
 use Cake\Core\ObjectRegistry;
 use Cake\Event\EventDispatcherInterface;
 use Cake\Event\EventDispatcherTrait;
-use League\Container\Argument\ArgumentResolverTrait;
-use League\Container\Argument\LiteralArgument;
-use League\Container\Argument\ResolvableArgument;
-use League\Container\Exception\NotFoundException;
+use Odigos\League\Container\Argument\ArgumentResolverTrait;
+use Odigos\League\Container\Argument\LiteralArgument;
+use Odigos\League\Container\Argument\ResolvableArgument;
+use Odigos\League\Container\Exception\NotFoundException;
 use ReflectionClass;
 use ReflectionFunctionAbstract;
 use ReflectionMethod;
 use ReflectionNamedType;
 use RuntimeException;
-
 /**
  * ComponentRegistry is a registry for loaded components
  *
@@ -48,63 +47,54 @@ class ComponentRegistry extends ObjectRegistry implements EventDispatcherInterfa
      * @use \Cake\Event\EventDispatcherTrait<TSubject>
      */
     use EventDispatcherTrait;
-
     use ArgumentResolverTrait;
-
     /**
      * The controller that this collection is associated with.
      *
      * @var \Cake\Controller\Controller|null
      */
-    protected ?Controller $_Controller = null;
-
+    protected ?\Cake\Controller\Controller $_Controller = null;
     /**
      * @var \Cake\Core\ContainerInterface|null
      */
     protected ?ContainerInterface $container = null;
-
     /**
      * Constructor.
      *
      * @param \Cake\Controller\Controller|null $controller Controller instance.
      * @param \Cake\Core\ContainerInterface|null $container Container instance.
      */
-    public function __construct(?Controller $controller = null, ?ContainerInterface $container = null)
+    public function __construct(?\Cake\Controller\Controller $controller = null, ?ContainerInterface $container = null)
     {
         if ($controller !== null) {
             $this->setController($controller);
         }
         $this->container = $container;
     }
-
     /**
      * Set the controller associated with the collection.
      *
      * @param \Cake\Controller\Controller $controller Controller instance.
      * @return $this
      */
-    public function setController(Controller $controller)
+    public function setController(\Cake\Controller\Controller $controller)
     {
         $this->_Controller = $controller;
         $this->setEventManager($controller->getEventManager());
-
         return $this;
     }
-
     /**
      * Get the controller associated with the collection.
      *
      * @return \Cake\Controller\Controller Controller instance.
      */
-    public function getController(): Controller
+    public function getController(): \Cake\Controller\Controller
     {
         if ($this->_Controller === null) {
             throw new RuntimeException('Controller must be set first.');
         }
-
         return $this->_Controller;
     }
-
     /**
      * Resolve a component classname.
      *
@@ -118,7 +108,6 @@ class ComponentRegistry extends ObjectRegistry implements EventDispatcherInterfa
         /** @var class-string<\Cake\Controller\Component>|null */
         return App::className($class, 'Controller/Component', 'Component');
     }
-
     /**
      * Throws an exception when a component is missing.
      *
@@ -132,12 +121,8 @@ class ComponentRegistry extends ObjectRegistry implements EventDispatcherInterfa
      */
     protected function _throwMissingClassError(string $class, ?string $plugin): void
     {
-        throw new MissingComponentException([
-            'class' => $class . 'Component',
-            'plugin' => $plugin,
-        ]);
+        throw new MissingComponentException(['class' => $class . 'Component', 'plugin' => $plugin]);
     }
-
     /**
      * Create the component instance.
      *
@@ -165,21 +150,20 @@ class ComponentRegistry extends ObjectRegistry implements EventDispatcherInterfa
      * @param array<string, mixed> $config An array of config to use for the component.
      * @return \Cake\Controller\Component The constructed component class.
      */
-    protected function _create(object|string $class, string $alias, array $config): Component
+    protected function _create(object|string $class, string $alias, array $config): \Cake\Controller\Component
     {
         if (is_object($class)) {
             return $class;
         }
         if ($this->container?->has($class)) {
             // Check if definition already exists - if so, user has manually configured it
-            $hasDefinition = false;
+            $hasDefinition = \false;
             try {
                 $this->container->extend($class);
-                $hasDefinition = true;
+                $hasDefinition = \true;
             } catch (NotFoundException) {
                 // No definition exists yet
             }
-
             if (!$hasDefinition) {
                 // No user-defined configuration - add auto-wired arguments
                 $constructor = (new ReflectionClass($class))->getConstructor();
@@ -188,10 +172,8 @@ class ComponentRegistry extends ObjectRegistry implements EventDispatcherInterfa
                     $this->container->add($class)->addArguments($args);
                 }
             }
-
             /** @var \Cake\Controller\Component $instance */
             $instance = $this->container->get($class);
-
             // For manually configured components, merge runtime config
             if ($hasDefinition && $config) {
                 $instance->setConfig($config);
@@ -199,14 +181,11 @@ class ComponentRegistry extends ObjectRegistry implements EventDispatcherInterfa
         } else {
             $instance = new $class($this, $config);
         }
-
-        if ($config['enabled'] ?? true) {
+        if ($config['enabled'] ?? \true) {
             $this->getEventManager()->on($instance);
         }
-
         return $instance;
     }
-
     /**
      * Get container instance.
      *
@@ -217,10 +196,8 @@ class ComponentRegistry extends ObjectRegistry implements EventDispatcherInterfa
         if ($this->container === null) {
             throw new CakeException('Container not set.');
         }
-
         return $this->container;
     }
-
     /**
      * Reflect on constructor arguments and build argument list for container.
      *
@@ -235,16 +212,13 @@ class ComponentRegistry extends ObjectRegistry implements EventDispatcherInterfa
     {
         $arguments = [];
         $params = $method->getParameters();
-
         foreach ($params as $param) {
             $name = $param->getName();
-
             // If we have a literal value for this parameter, use it
             if (array_key_exists($name, $args)) {
                 $arguments[] = new LiteralArgument($args[$name]);
                 continue;
             }
-
             // Check if parameter has a type hint
             $type = $param->getType();
             if ($type instanceof ReflectionNamedType && !$type->isBuiltin()) {
@@ -252,27 +226,15 @@ class ComponentRegistry extends ObjectRegistry implements EventDispatcherInterfa
                 $arguments[] = new ResolvableArgument($type->getName());
                 continue;
             }
-
             // Check for default value
             if ($param->isDefaultValueAvailable()) {
                 $arguments[] = new LiteralArgument($param->getDefaultValue());
                 continue;
             }
-
             // No type hint, no default, no provided value - this will fail at runtime
-            $declaringClass = $method instanceof ReflectionMethod
-                ? $method->getDeclaringClass()->getName()
-                : 'unknown';
-
-            throw new CakeException(
-                sprintf(
-                    'Cannot auto-wire parameter $%s in %s - no type hint or default value',
-                    $name,
-                    $declaringClass,
-                ),
-            );
+            $declaringClass = $method instanceof ReflectionMethod ? $method->getDeclaringClass()->getName() : 'unknown';
+            throw new CakeException(sprintf('Cannot auto-wire parameter $%s in %s - no type hint or default value', $name, $declaringClass));
         }
-
         return $this->resolveArguments($arguments);
     }
 }

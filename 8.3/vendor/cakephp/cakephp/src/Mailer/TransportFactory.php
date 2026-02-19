@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -18,43 +18,34 @@ namespace Cake\Mailer;
 
 use Cake\Core\StaticConfigTrait;
 use InvalidArgumentException;
-
 /**
  * Factory class for generating email transport instances.
  */
 class TransportFactory
 {
     use StaticConfigTrait;
-
     /**
      * Transport Registry used for creating and using transport instances.
      *
      * @var \Cake\Mailer\TransportRegistry
      */
-    protected static TransportRegistry $_registry;
-
+    protected static \Cake\Mailer\TransportRegistry $_registry;
     /**
      * An array mapping url schemes to fully qualified Transport class names
      *
      * @var array<string, string>
      * @phpstan-var array<string, class-string>
      */
-    protected static array $_dsnClassMap = [
-        'debug' => Transport\DebugTransport::class,
-        'mail' => Transport\MailTransport::class,
-        'smtp' => Transport\SmtpTransport::class,
-    ];
-
+    protected static array $_dsnClassMap = ['debug' => \Cake\Mailer\Transport\DebugTransport::class, 'mail' => \Cake\Mailer\Transport\MailTransport::class, 'smtp' => \Cake\Mailer\Transport\SmtpTransport::class];
     /**
      * Returns the Transport Registry used for creating and using transport instances.
      *
      * @return \Cake\Mailer\TransportRegistry
      */
-    public static function getRegistry(): TransportRegistry
+    public static function getRegistry(): \Cake\Mailer\TransportRegistry
     {
-        return static::$_registry ??= new TransportRegistry();
+        return static::$_registry ??= new \Cake\Mailer\TransportRegistry();
     }
-
     /**
      * Sets the Transport Registry instance used for creating and using transport instances.
      *
@@ -63,11 +54,10 @@ class TransportFactory
      * @param \Cake\Mailer\TransportRegistry $registry Injectable registry object.
      * @return void
      */
-    public static function setRegistry(TransportRegistry $registry): void
+    public static function setRegistry(\Cake\Mailer\TransportRegistry $registry): void
     {
         static::$_registry = $registry;
     }
-
     /**
      * Finds and builds the instance of the required transport class.
      *
@@ -78,36 +68,26 @@ class TransportFactory
     protected static function _buildTransport(string $name): void
     {
         if (!isset(static::$_config[$name])) {
-            throw new InvalidArgumentException(
-                sprintf('The `%s` transport configuration does not exist', $name),
-            );
+            throw new InvalidArgumentException(sprintf('The `%s` transport configuration does not exist', $name));
         }
-
         if (is_array(static::$_config[$name]) && empty(static::$_config[$name]['className'])) {
-            throw new InvalidArgumentException(
-                sprintf('Transport config `%s` is invalid, the required `className` option is missing', $name),
-            );
+            throw new InvalidArgumentException(sprintf('Transport config `%s` is invalid, the required `className` option is missing', $name));
         }
-
         static::getRegistry()->load($name, static::$_config[$name]);
     }
-
     /**
      * Get transport instance.
      *
      * @param string $name Config name.
      * @return \Cake\Mailer\AbstractTransport
      */
-    public static function get(string $name): AbstractTransport
+    public static function get(string $name): \Cake\Mailer\AbstractTransport
     {
         $registry = static::getRegistry();
-
         if (isset($registry->{$name})) {
             return $registry->{$name};
         }
-
         static::_buildTransport($name);
-
         return $registry->{$name};
     }
 }

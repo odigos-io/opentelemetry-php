@@ -10,21 +10,18 @@ class MessageLogged
      * @var string
      */
     public $level;
-
     /**
      * The log message.
      *
      * @var string
      */
     public $message;
-
     /**
      * The log context.
      *
      * @var array
      */
     public $context;
-
     /**
      * Create a new event instance.
      *

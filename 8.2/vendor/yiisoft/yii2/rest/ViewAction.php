@@ -1,10 +1,10 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\rest;
 
 /**
@@ -18,7 +18,7 @@ namespace yii\rest;
  * @template T of Controller
  * @extends Action<T>
  */
-class ViewAction extends Action
+class ViewAction extends \yii\rest\Action
 {
     /**
      * Displays a model.
@@ -31,7 +31,6 @@ class ViewAction extends Action
         if ($this->checkAccess) {
             call_user_func($this->checkAccess, $this->id, $model);
         }
-
         return $model;
     }
 }

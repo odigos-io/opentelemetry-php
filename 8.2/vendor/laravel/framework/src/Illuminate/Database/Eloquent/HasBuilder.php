@@ -16,7 +16,6 @@ trait HasBuilder
     {
         return parent::query();
     }
-
     /**
      * Create a new Eloquent query builder for the model.
      *
@@ -27,7 +26,6 @@ trait HasBuilder
     {
         return parent::newEloquentBuilder($query);
     }
-
     /**
      * Get a new query builder for the model's table.
      *
@@ -37,7 +35,6 @@ trait HasBuilder
     {
         return parent::newQuery();
     }
-
     /**
      * Get a new query builder that doesn't have any global scopes or eager loading.
      *
@@ -47,7 +44,6 @@ trait HasBuilder
     {
         return parent::newModelQuery();
     }
-
     /**
      * Get a new query builder with no relationships loaded.
      *
@@ -57,7 +53,6 @@ trait HasBuilder
     {
         return parent::newQueryWithoutRelationships();
     }
-
     /**
      * Get a new query builder that doesn't have any global scopes.
      *
@@ -67,7 +62,6 @@ trait HasBuilder
     {
         return parent::newQueryWithoutScopes();
     }
-
     /**
      * Get a new query instance without a given scope.
      *
@@ -78,7 +72,6 @@ trait HasBuilder
     {
         return parent::newQueryWithoutScope($scope);
     }
-
     /**
      * Get a new query to restore one or more models by their queueable IDs.
      *
@@ -89,7 +82,6 @@ trait HasBuilder
     {
         return parent::newQueryForRestoration($ids);
     }
-
     /**
      * Begin querying the model on a given connection.
      *
@@ -100,7 +92,6 @@ trait HasBuilder
     {
         return parent::on($connection);
     }
-
     /**
      * Begin querying the model on the write connection.
      *
@@ -110,7 +101,6 @@ trait HasBuilder
     {
         return parent::onWriteConnection();
     }
-
     /**
      * Begin querying a model with eager loading.
      *

@@ -2,7 +2,7 @@
 
 namespace Illuminate\Cache\Events;
 
-class WritingKey extends CacheEvent
+class WritingKey extends \Illuminate\Cache\Events\CacheEvent
 {
     /**
      * The value that will be written.
@@ -10,14 +10,12 @@ class WritingKey extends CacheEvent
      * @var mixed
      */
     public $value;
-
     /**
      * The number of seconds the key should be valid.
      *
      * @var int|null
      */
     public $seconds;
-
     /**
      * Create a new event instance.
      *
@@ -30,7 +28,6 @@ class WritingKey extends CacheEvent
     public function __construct($storeName, $key, $value, $seconds = null, $tags = [])
     {
         parent::__construct($storeName, $key, $tags);
-
         $this->value = $value;
         $this->seconds = $seconds;
     }

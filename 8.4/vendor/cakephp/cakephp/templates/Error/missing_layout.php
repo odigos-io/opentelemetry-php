@@ -1,4 +1,7 @@
 <?php
+
+namespace Odigos;
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -15,30 +18,36 @@
  * @var array<string> $paths
  */
 use function Cake\Core\h;
-
 $this->layout = 'dev_error';
-
 $this->assign('title', 'Missing Layout');
 $this->assign('templateName', 'missing_layout.php');
-
 $this->start('subheading');
 ?>
     <strong>Error</strong>
-    The layout file <em><?= h($file) ?></em> can not be found or does not exist.
-<?php $this->end() ?>
+    The layout file <em><?php 
+echo h($file);
+?></em> can not be found or does not exist.
+<?php 
+$this->end();
+?>
 
-<?php $this->start('file') ?>
+<?php 
+$this->start('file');
+?>
 <p>
-    Confirm you have created the file: <?= h($file) ?> in one of the following paths:
+    Confirm you have created the file: <?php 
+echo h($file);
+?> in one of the following paths:
 </p>
 <ul>
-<?php
-    foreach ($paths as $path):
-        if (str_contains($path, CORE_PATH)) {
-            continue;
-        }
-        echo sprintf('<li>%s%s</li>', h($path), h($file));
-    endforeach;
+<?php 
+foreach ($paths as $path) {
+    if (\str_contains($path, \CORE_PATH)) {
+        continue;
+    }
+    echo \sprintf('<li>%s%s</li>', h($path), h($file));
+}
 ?>
 </ul>
-<?php $this->end() ?>
+<?php 
+$this->end();

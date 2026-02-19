@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -22,7 +22,7 @@ namespace Cake\View\Widget;
  * Generally this element is used by other widgets,
  * and FormHelper itself.
  */
-class NestingLabelWidget extends LabelWidget
+class NestingLabelWidget extends \Cake\View\Widget\LabelWidget
 {
     /**
      * The template to use.

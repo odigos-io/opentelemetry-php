@@ -1,16 +1,15 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\web;
 
-use Yii;
+use Odigos\Yii;
 use yii\base\BaseObject;
 use yii\base\InvalidConfigException;
-
 /**
  * UrlNormalizer normalizes URLs for [[UrlManager]] and [[UrlRule]].
  *
@@ -39,12 +38,12 @@ class UrlNormalizer extends BaseObject
      * @var bool whether slashes should be collapsed, for example `site///index` will be
      * converted into `site/index`
      */
-    public $collapseSlashes = true;
+    public $collapseSlashes = \true;
     /**
      * @var bool whether trailing slash should be normalized according to the suffix settings
      * of the rule
      */
-    public $normalizeTrailingSlash = true;
+    public $normalizeTrailingSlash = \true;
     /**
      * @var int|callable|null action to perform during route normalization.
      * Available options are:
@@ -66,8 +65,6 @@ class UrlNormalizer extends BaseObject
      *   ```
      */
     public $action = self::ACTION_REDIRECT_PERMANENT;
-
-
     /**
      * Performs normalization action for the specified $route.
      * @param array $route route for normalization
@@ -81,16 +78,14 @@ class UrlNormalizer extends BaseObject
         if ($this->action === null) {
             return $route;
         } elseif ($this->action === static::ACTION_REDIRECT_PERMANENT || $this->action === static::ACTION_REDIRECT_TEMPORARY) {
-            throw new UrlNormalizerRedirectException([$route[0]] + $route[1], $this->action);
+            throw new \yii\web\UrlNormalizerRedirectException([$route[0]] + $route[1], $this->action);
         } elseif ($this->action === static::ACTION_NOT_FOUND) {
-            throw new NotFoundHttpException(Yii::t('yii', 'Page not found.'));
+            throw new \yii\web\NotFoundHttpException(Yii::t('yii', 'Page not found.'));
         } elseif (is_callable($this->action)) {
             return call_user_func($this->action, $route, $this);
         }
-
         throw new InvalidConfigException('Invalid normalizer action.');
     }
-
     /**
      * Normalizes specified pathInfo.
      * @param string $pathInfo pathInfo for normalization
@@ -99,26 +94,21 @@ class UrlNormalizer extends BaseObject
      * was changed during normalization
      * @return string normalized pathInfo
      */
-    public function normalizePathInfo($pathInfo, $suffix, &$normalized = false)
+    public function normalizePathInfo($pathInfo, $suffix, &$normalized = \false)
     {
         if (empty($pathInfo)) {
             return $pathInfo;
         }
-
         $sourcePathInfo = $pathInfo;
         if ($this->collapseSlashes) {
             $pathInfo = $this->collapseSlashes($pathInfo);
         }
-
-        if ($this->normalizeTrailingSlash === true) {
+        if ($this->normalizeTrailingSlash === \true) {
             $pathInfo = $this->normalizeTrailingSlash($pathInfo, $suffix);
         }
-
         $normalized = $sourcePathInfo !== $pathInfo;
-
         return $pathInfo;
     }
-
     /**
      * Collapse consecutive slashes in $pathInfo, for example converts `site///index` into `site/index`.
      * @param string $pathInfo raw path info.
@@ -128,7 +118,6 @@ class UrlNormalizer extends BaseObject
     {
         return ltrim(preg_replace('#/{2,}#', '/', $pathInfo), '/');
     }
-
     /**
      * Adds or removes trailing slashes from $pathInfo depending on whether the $suffix has a
      * trailing slash or not.
@@ -143,7 +132,6 @@ class UrlNormalizer extends BaseObject
         } elseif (substr($suffix, -1) !== '/' && substr($pathInfo, -1) === '/') {
             $pathInfo = rtrim($pathInfo, '/');
         }
-
         return $pathInfo;
     }
 }

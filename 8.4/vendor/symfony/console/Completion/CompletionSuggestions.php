@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\Console\Completion;
 
 use Symfony\Component\Console\Input\InputOption;
-
 /**
  * Stores all completion suggestions for the current input.
  *
@@ -22,19 +20,16 @@ final class CompletionSuggestions
 {
     private array $valueSuggestions = [];
     private array $optionSuggestions = [];
-
     /**
      * Add a suggested value for an input option or argument.
      *
      * @return $this
      */
-    public function suggestValue(string|Suggestion $value): static
+    public function suggestValue(string|\Symfony\Component\Console\Completion\Suggestion $value): static
     {
-        $this->valueSuggestions[] = !$value instanceof Suggestion ? new Suggestion($value) : $value;
-
+        $this->valueSuggestions[] = !$value instanceof \Symfony\Component\Console\Completion\Suggestion ? new \Symfony\Component\Console\Completion\Suggestion($value) : $value;
         return $this;
     }
-
     /**
      * Add multiple suggested values at once for an input option or argument.
      *
@@ -47,10 +42,8 @@ final class CompletionSuggestions
         foreach ($values as $value) {
             $this->suggestValue($value);
         }
-
         return $this;
     }
-
     /**
      * Add a suggestion for an input option name.
      *
@@ -59,10 +52,8 @@ final class CompletionSuggestions
     public function suggestOption(InputOption $option): static
     {
         $this->optionSuggestions[] = $option;
-
         return $this;
     }
-
     /**
      * Add multiple suggestions for input option names at once.
      *
@@ -75,10 +66,8 @@ final class CompletionSuggestions
         foreach ($options as $option) {
             $this->suggestOption($option);
         }
-
         return $this;
     }
-
     /**
      * @return InputOption[]
      */
@@ -86,7 +75,6 @@ final class CompletionSuggestions
     {
         return $this->optionSuggestions;
     }
-
     /**
      * @return Suggestion[]
      */

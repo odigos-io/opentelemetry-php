@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -18,7 +18,6 @@ namespace Cake\Command\Helper;
 
 use Cake\Console\Helper;
 use InvalidArgumentException;
-
 /**
  * Banner command helper.
  *
@@ -31,12 +30,10 @@ class BannerHelper extends Helper
      * @var int The horizontal padding that is added to the longest line.
      */
     private int $padding = 2;
-
     /**
      * @var string The console output style to use on the banner.
      */
     private string $style = 'success.bg';
-
     /**
      * Modify the padding of the helper
      *
@@ -49,10 +46,8 @@ class BannerHelper extends Helper
             throw new InvalidArgumentException('padding must be greater than 0');
         }
         $this->padding = $padding;
-
         return $this;
     }
-
     /**
      * Modify the padding of the helper
      *
@@ -62,10 +57,8 @@ class BannerHelper extends Helper
     public function withStyle(string $style)
     {
         $this->style = $style;
-
         return $this;
     }
-
     /**
      * Output a banner
      *
@@ -77,31 +70,19 @@ class BannerHelper extends Helper
         if ($args === []) {
             throw new InvalidArgumentException('At least one argument is required');
         }
-
         $lengths = array_map(fn($i) => mb_strlen($i), $args);
         $maxLength = max($lengths);
         $bannerLength = $maxLength + $this->padding * 2;
         $start = "<{$this->style}>";
         $end = "</{$this->style}>";
-
-        $lines = [
-            '',
-            $start . str_repeat(' ', $bannerLength) . $end,
-        ];
+        $lines = ['', $start . str_repeat(' ', $bannerLength) . $end];
         foreach ($args as $line) {
             $lineLength = mb_strlen($line);
-            $linePadding = (int)max($this->padding, $bannerLength - $lineLength - $this->padding);
-
-            $lines[] = $start .
-                str_repeat(' ', $this->padding) .
-                $line .
-                str_repeat(' ', $linePadding) .
-                $end;
+            $linePadding = (int) max($this->padding, $bannerLength - $lineLength - $this->padding);
+            $lines[] = $start . str_repeat(' ', $this->padding) . $line . str_repeat(' ', $linePadding) . $end;
         }
-
         $lines[] = $start . str_repeat(' ', $bannerLength) . $end;
         $lines[] = '';
-
         $this->_io->out($lines);
     }
 }

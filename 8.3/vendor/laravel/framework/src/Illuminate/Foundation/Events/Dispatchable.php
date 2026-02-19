@@ -13,7 +13,6 @@ trait Dispatchable
     {
         return event(new static(...func_get_args()));
     }
-
     /**
      * Dispatch the event with the given arguments if the given truth test passes.
      *
@@ -27,7 +26,6 @@ trait Dispatchable
             return event(new static(...$arguments));
         }
     }
-
     /**
      * Dispatch the event with the given arguments unless the given truth test passes.
      *
@@ -37,11 +35,10 @@ trait Dispatchable
      */
     public static function dispatchUnless($boolean, ...$arguments)
     {
-        if (! $boolean) {
+        if (!$boolean) {
             return event(new static(...$arguments));
         }
     }
-
     /**
      * Broadcast the event with the given arguments.
      *

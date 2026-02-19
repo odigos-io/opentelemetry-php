@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -21,7 +21,6 @@ use Cake\Event\EventInterface;
 use Cake\I18n\I18n;
 use Cake\ORM\Marshaller;
 use Cake\ORM\Table;
-
 /**
  * Contains common code needed by TranslateBehavior strategy classes.
  */
@@ -33,7 +32,6 @@ trait TranslateStrategyTrait
      * @var \Cake\ORM\Table
      */
     protected Table $table;
-
     /**
      * The locale name that will be used to override fields in the bound table
      * from the translations table
@@ -41,14 +39,12 @@ trait TranslateStrategyTrait
      * @var string|null
      */
     protected ?string $locale = null;
-
     /**
      * Instance of Table responsible for translating
      *
      * @var \Cake\ORM\Table
      */
     protected Table $translationTable;
-
     /**
      * Return translation table instance.
      *
@@ -58,7 +54,6 @@ trait TranslateStrategyTrait
     {
         return $this->translationTable;
     }
-
     /**
      * Sets the locale to be used.
      *
@@ -77,10 +72,8 @@ trait TranslateStrategyTrait
     public function setLocale(?string $locale)
     {
         $this->locale = $locale;
-
         return $this;
     }
-
     /**
      * Returns the current locale.
      *
@@ -95,7 +88,6 @@ trait TranslateStrategyTrait
     {
         return $this->locale ?: explode('@', I18n::getLocale())[0];
     }
-
     /**
      * Unset empty translations to avoid persistence.
      *
@@ -109,26 +101,22 @@ trait TranslateStrategyTrait
         if (!$entity->has('_translations')) {
             return;
         }
-
         /** @var array<\Cake\Datasource\EntityInterface> $translations */
         $translations = $entity->get('_translations');
         foreach ($translations as $locale => $translation) {
-            $fields = $translation->extract($this->_config['fields'], false);
+            $fields = $translation->extract($this->_config['fields'], \false);
             foreach ($fields as $field => $value) {
                 if ($value === null || $value === '') {
                     $translation->unset($field);
                 }
             }
-
             $translation = $translation->extract($this->_config['fields']);
-
             // If now, the current locale property is empty,
             // unset it completely.
             if (array_filter($translation) === []) {
                 unset($translations[$locale]);
             }
         }
-
         // If now, the whole $translations is empty, unset _translations property completely
         if ($translations === []) {
             $entity->unset('_translations');
@@ -136,10 +124,8 @@ trait TranslateStrategyTrait
             $entity->set('_translations', $translations);
         }
     }
-
     /**
      * Build a set of properties that should be included in the marshaling process.
-
      * Add in `_translations` marshaling handlers. You can disable marshaling
      * of translations by setting `'translations' => false` in the options
      * provided to `Table::newEntity()` or `Table::patchEntity()`.
@@ -154,38 +140,29 @@ trait TranslateStrategyTrait
         if (isset($options['translations']) && !$options['translations']) {
             return [];
         }
-
-        return [
-            '_translations' => function ($value, EntityInterface $entity) use ($marshaller, $options) {
-                if (!is_array($value)) {
-                    return null;
+        return ['_translations' => function ($value, EntityInterface $entity) use ($marshaller, $options) {
+            if (!is_array($value)) {
+                return null;
+            }
+            /** @var array<string, \Cake\Datasource\EntityInterface> $translations */
+            $translations = $entity->has('_translations') ? (array) $entity->get('_translations') : [];
+            $options['validate'] = $this->_config['validator'];
+            $errors = [];
+            foreach ($value as $language => $fields) {
+                $translations[$language] ??= $this->table->newEmptyEntity();
+                $marshaller->merge($translations[$language], $fields, $options);
+                $translationErrors = $translations[$language]->getErrors();
+                if ($translationErrors) {
+                    $errors[$language] = $translationErrors;
                 }
-
-                /** @var array<string, \Cake\Datasource\EntityInterface> $translations */
-                $translations = $entity->has('_translations') ? (array)$entity->get('_translations') : [];
-
-                $options['validate'] = $this->_config['validator'];
-                $errors = [];
-                foreach ($value as $language => $fields) {
-                    $translations[$language] ??= $this->table->newEmptyEntity();
-                    $marshaller->merge($translations[$language], $fields, $options);
-
-                    $translationErrors = $translations[$language]->getErrors();
-                    if ($translationErrors) {
-                        $errors[$language] = $translationErrors;
-                    }
-                }
-
-                // Set errors into the root entity, so validation errors match the original form data position.
-                if ($errors) {
-                    $entity->setErrors(['_translations' => $errors]);
-                }
-
-                return $translations;
-            },
-        ];
+            }
+            // Set errors into the root entity, so validation errors match the original form data position.
+            if ($errors) {
+                $entity->setErrors(['_translations' => $errors]);
+            }
+            return $translations;
+        }];
     }
-
     /**
      * Unsets the temporary `_i18n` property after the entity has been saved
      *

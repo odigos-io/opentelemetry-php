@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -22,11 +22,10 @@ use Cake\Cache\Exception\InvalidArgumentException;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
-
 /**
  * CacheClear command.
  */
-class CacheClearCommand extends Command
+class CacheClearCommand extends \Cake\Command\Command
 {
     /**
      * @inheritDoc
@@ -35,7 +34,6 @@ class CacheClearCommand extends Command
     {
         return 'cache clear';
     }
-
     /**
      * @inheritDoc
      */
@@ -43,7 +41,6 @@ class CacheClearCommand extends Command
     {
         return 'Clear all data in a single cache engine.';
     }
-
     /**
      * Hook method for defining this command's option parser.
      *
@@ -54,18 +51,9 @@ class CacheClearCommand extends Command
     public function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
     {
         $parser = parent::buildOptionParser($parser);
-        $parser
-            ->setDescription(static::getDescription())
-            ->addArgument('engine', [
-                'help' => 'The cache engine to clear.' .
-                    'For example, `cake cache clear _cake_model_` will clear the model cache.' .
-                    ' Use `cake cache list` to list available engines.',
-                'required' => true,
-            ]);
-
+        $parser->setDescription(static::getDescription())->addArgument('engine', ['help' => 'The cache engine to clear.' . 'For example, `cake cache clear _cake_model_` will clear the model cache.' . ' Use `cake cache list` to list available engines.', 'required' => \true]);
         return $parser;
     }
-
     /**
      * Implement this method with your command's logic.
      *
@@ -75,15 +63,13 @@ class CacheClearCommand extends Command
      */
     public function execute(Arguments $args, ConsoleIo $io): ?int
     {
-        $name = (string)$args->getArgument('engine');
+        $name = (string) $args->getArgument('engine');
         try {
             $io->out("Clearing {$name}");
-
             $engine = Cache::pool($name);
             Cache::clear($name);
             if ($engine instanceof ApcuEngine) {
-                $io->warning("ApcuEngine detected: Cleared {$name} CLI cache successfully " .
-                    "but {$name} web cache must be cleared separately.");
+                $io->warning("ApcuEngine detected: Cleared {$name} CLI cache successfully " . "but {$name} web cache must be cleared separately.");
             } else {
                 $io->out("<success>Cleared {$name} cache</success>");
             }
@@ -91,7 +77,6 @@ class CacheClearCommand extends Command
             $io->error($e->getMessage());
             $this->abort();
         }
-
         return static::CODE_SUCCESS;
     }
 }

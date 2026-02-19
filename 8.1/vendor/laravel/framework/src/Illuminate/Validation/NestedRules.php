@@ -3,7 +3,6 @@
 namespace Illuminate\Validation;
 
 use Illuminate\Support\Arr;
-
 class NestedRules
 {
     /**
@@ -12,7 +11,6 @@ class NestedRules
      * @var callable
      */
     protected $callback;
-
     /**
      * Create a new nested rule instance.
      *
@@ -23,7 +21,6 @@ class NestedRules
     {
         $this->callback = $callback;
     }
-
     /**
      * Compile the callback into an array of rules.
      *
@@ -35,23 +32,16 @@ class NestedRules
     public function compile($attribute, $value, $data = null)
     {
         $rules = call_user_func($this->callback, $value, $attribute, $data);
-
-        $parser = new ValidationRuleParser(
-            Arr::undot(Arr::wrap($data))
-        );
-
-        if (is_array($rules) && ! array_is_list($rules)) {
+        $parser = new \Illuminate\Validation\ValidationRuleParser(Arr::undot(Arr::wrap($data)));
+        if (is_array($rules) && !array_is_list($rules)) {
             $nested = [];
-
             foreach ($rules as $key => $rule) {
-                $nested[$attribute.'.'.$key] = $rule;
+                $nested[$attribute . '.' . $key] = $rule;
             }
-
             $rules = $nested;
         } else {
             $rules = [$attribute => $rules];
         }
-
-        return $parser->explode(ValidationRuleParser::filterConditionalRules($rules, $data));
+        return $parser->explode(\Illuminate\Validation\ValidationRuleParser::filterConditionalRules($rules, $data));
     }
 }

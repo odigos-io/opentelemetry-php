@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -31,8 +31,7 @@ interface ErrorRendererInterface
      * @param bool $debug Whether the application is in debug mode.
      * @return string The output to be echoed.
      */
-    public function render(PhpError $error, bool $debug): string;
-
+    public function render(\Cake\Error\PhpError $error, bool $debug): string;
     /**
      * Write output to the renderer's output stream
      *

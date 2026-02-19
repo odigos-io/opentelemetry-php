@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -18,13 +18,12 @@ namespace Cake\Controller;
 
 use Cake\Event\EventInterface;
 use Cake\View\JsonView;
-
 /**
  * Error Handling Controller
  *
  * Controller used by ErrorHandler to render error views.
  */
-class ErrorController extends Controller
+class ErrorController extends \Cake\Controller\Controller
 {
     /**
      * Get alternate view classes that can be used in
@@ -36,7 +35,6 @@ class ErrorController extends Controller
     {
         return [JsonView::class];
     }
-
     /**
      * beforeRender callback.
      *
@@ -47,15 +45,10 @@ class ErrorController extends Controller
     {
         $builder = $this->viewBuilder();
         $templatePath = 'Error';
-
-        if (
-            $this->request->getParam('prefix') &&
-            in_array($builder->getTemplate(), ['error400', 'error500'], true)
-        ) {
-            $parts = explode(DIRECTORY_SEPARATOR, (string)$builder->getTemplatePath(), -1);
-            $templatePath = implode(DIRECTORY_SEPARATOR, $parts) . DIRECTORY_SEPARATOR . 'Error';
+        if ($this->request->getParam('prefix') && in_array($builder->getTemplate(), ['error400', 'error500'], \true)) {
+            $parts = explode(\DIRECTORY_SEPARATOR, (string) $builder->getTemplatePath(), -1);
+            $templatePath = implode(\DIRECTORY_SEPARATOR, $parts) . \DIRECTORY_SEPARATOR . 'Error';
         }
-
         $builder->setTemplatePath($templatePath);
     }
 }

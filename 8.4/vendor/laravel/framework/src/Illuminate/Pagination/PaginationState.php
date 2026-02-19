@@ -12,24 +12,18 @@ class PaginationState
      */
     public static function resolveUsing($app)
     {
-        Paginator::viewFactoryResolver(fn () => $app['view']);
-
-        Paginator::currentPathResolver(fn () => $app['request']->url());
-
-        Paginator::currentPageResolver(function ($pageName = 'page') use ($app) {
+        \Illuminate\Pagination\Paginator::viewFactoryResolver(fn() => $app['view']);
+        \Illuminate\Pagination\Paginator::currentPathResolver(fn() => $app['request']->url());
+        \Illuminate\Pagination\Paginator::currentPageResolver(function ($pageName = 'page') use ($app) {
             $page = $app['request']->input($pageName);
-
-            if (filter_var($page, FILTER_VALIDATE_INT) !== false && (int) $page >= 1) {
+            if (filter_var($page, \FILTER_VALIDATE_INT) !== \false && (int) $page >= 1) {
                 return (int) $page;
             }
-
             return 1;
         });
-
-        Paginator::queryStringResolver(fn () => $app['request']->query());
-
-        CursorPaginator::currentCursorResolver(function ($cursorName = 'cursor') use ($app) {
-            return Cursor::fromEncoded($app['request']->input($cursorName));
+        \Illuminate\Pagination\Paginator::queryStringResolver(fn() => $app['request']->query());
+        \Illuminate\Pagination\CursorPaginator::currentCursorResolver(function ($cursorName = 'cursor') use ($app) {
+            return \Illuminate\Pagination\Cursor::fromEncoded($app['request']->input($cursorName));
         });
     }
 }

@@ -1,21 +1,17 @@
 <?php
 
-namespace FastRoute;
+namespace Odigos\FastRoute;
 
 class Route
 {
     /** @var string */
     public $httpMethod;
-
     /** @var string */
     public $regex;
-
     /** @var array */
     public $variables;
-
     /** @var mixed */
     public $handler;
-
     /**
      * Constructs a route (value object).
      *
@@ -31,7 +27,6 @@ class Route
         $this->regex = $regex;
         $this->variables = $variables;
     }
-
     /**
      * Tests whether this route matches the given string.
      *

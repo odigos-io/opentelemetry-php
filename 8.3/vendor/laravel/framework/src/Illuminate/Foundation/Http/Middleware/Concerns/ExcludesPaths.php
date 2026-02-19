@@ -16,15 +16,12 @@ trait ExcludesPaths
             if ($except !== '/') {
                 $except = trim($except, '/');
             }
-
             if ($request->fullUrlIs($except) || $request->is($except)) {
-                return true;
+                return \true;
             }
         }
-
-        return false;
+        return \false;
     }
-
     /**
      * Get the URIs that should be excluded.
      *

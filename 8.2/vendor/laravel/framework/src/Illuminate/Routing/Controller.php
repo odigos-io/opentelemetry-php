@@ -3,7 +3,6 @@
 namespace Illuminate\Routing;
 
 use BadMethodCallException;
-
 abstract class Controller
 {
     /**
@@ -12,7 +11,6 @@ abstract class Controller
      * @var array
      */
     protected $middleware = [];
-
     /**
      * Register middleware on the controller.
      *
@@ -23,15 +21,10 @@ abstract class Controller
     public function middleware($middleware, array $options = [])
     {
         foreach ((array) $middleware as $m) {
-            $this->middleware[] = [
-                'middleware' => $m,
-                'options' => &$options,
-            ];
+            $this->middleware[] = ['middleware' => $m, 'options' => &$options];
         }
-
-        return new ControllerMiddlewareOptions($options);
+        return new \Illuminate\Routing\ControllerMiddlewareOptions($options);
     }
-
     /**
      * Get the middleware assigned to the controller.
      *
@@ -41,7 +34,6 @@ abstract class Controller
     {
         return $this->middleware;
     }
-
     /**
      * Execute an action on the controller.
      *
@@ -53,7 +45,6 @@ abstract class Controller
     {
         return $this->{$method}(...array_values($parameters));
     }
-
     /**
      * Handle calls to missing methods on the controller.
      *
@@ -65,8 +56,6 @@ abstract class Controller
      */
     public function __call($method, $parameters)
     {
-        throw new BadMethodCallException(sprintf(
-            'Method %s::%s does not exist.', static::class, $method
-        ));
+        throw new BadMethodCallException(sprintf('Method %s::%s does not exist.', static::class, $method));
     }
 }

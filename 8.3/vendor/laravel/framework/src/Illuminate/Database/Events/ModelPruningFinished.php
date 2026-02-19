@@ -9,8 +9,7 @@ class ModelPruningFinished
      *
      * @param  array<class-string>  $models  The class names of the models that were pruned.
      */
-    public function __construct(
-        public $models,
-    ) {
+    public function __construct(public $models)
+    {
     }
 }

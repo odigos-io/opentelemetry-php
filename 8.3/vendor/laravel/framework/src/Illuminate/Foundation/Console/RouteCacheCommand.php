@@ -7,7 +7,6 @@ use Illuminate\Contracts\Console\Kernel as ConsoleKernelContract;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Routing\RouteCollection;
 use Symfony\Component\Console\Attribute\AsCommand;
-
 #[AsCommand(name: 'route:cache')]
 class RouteCacheCommand extends Command
 {
@@ -17,21 +16,18 @@ class RouteCacheCommand extends Command
      * @var string
      */
     protected $name = 'route:cache';
-
     /**
      * The console command description.
      *
      * @var string
      */
     protected $description = 'Create a route cache file for faster route registration';
-
     /**
      * The filesystem instance.
      *
      * @var \Illuminate\Filesystem\Filesystem
      */
     protected $files;
-
     /**
      * Create a new route command instance.
      *
@@ -40,10 +36,8 @@ class RouteCacheCommand extends Command
     public function __construct(Filesystem $files)
     {
         parent::__construct();
-
         $this->files = $files;
     }
-
     /**
      * Execute the console command.
      *
@@ -52,24 +46,16 @@ class RouteCacheCommand extends Command
     public function handle()
     {
         $this->callSilent('route:clear');
-
         $routes = $this->getFreshApplicationRoutes();
-
         if (count($routes) === 0) {
             return $this->components->error("Your application doesn't have any routes.");
         }
-
         foreach ($routes as $route) {
             $route->prepareForSerialization();
         }
-
-        $this->files->put(
-            $this->laravel->getCachedRoutesPath(), $this->buildRouteCacheFile($routes)
-        );
-
+        $this->files->put($this->laravel->getCachedRoutesPath(), $this->buildRouteCacheFile($routes));
         $this->components->info('Routes cached successfully.');
     }
-
     /**
      * Boot a fresh copy of the application and get the routes.
      *
@@ -82,7 +68,6 @@ class RouteCacheCommand extends Command
             $routes->refreshActionLookups();
         });
     }
-
     /**
      * Get a fresh application instance.
      *
@@ -94,7 +79,6 @@ class RouteCacheCommand extends Command
             $app->make(ConsoleKernelContract::class)->bootstrap();
         });
     }
-
     /**
      * Build the route cache file.
      *
@@ -103,8 +87,7 @@ class RouteCacheCommand extends Command
      */
     protected function buildRouteCacheFile(RouteCollection $routes)
     {
-        $stub = $this->files->get(__DIR__.'/stubs/routes.stub');
-
-        return str_replace('{{routes}}', var_export($routes->compile(), true), $stub);
+        $stub = $this->files->get(__DIR__ . '/stubs/routes.stub');
+        return str_replace('{{routes}}', var_export($routes->compile(), \true), $stub);
     }
 }

@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -19,7 +19,6 @@ namespace Cake\Database\Retry;
 use Cake\Core\Retry\RetryStrategyInterface;
 use Exception;
 use PDOException;
-
 /**
  * Implements retry strategy based on db error codes and wait interval.
  *
@@ -31,12 +30,10 @@ class ErrorCodeWaitStrategy implements RetryStrategyInterface
      * @var array<int>
      */
     protected array $errorCodes;
-
     /**
      * @var int
      */
     protected int $retryInterval;
-
     /**
      * @param array<int> $errorCodes DB-specific error codes that allow retrying
      * @param int $retryInterval Seconds to wait before allowing next retry, 0 for no wait.
@@ -46,24 +43,17 @@ class ErrorCodeWaitStrategy implements RetryStrategyInterface
         $this->errorCodes = $errorCodes;
         $this->retryInterval = $retryInterval;
     }
-
     /**
      * @inheritDoc
      */
     public function shouldRetry(Exception $exception, int $retryCount): bool
     {
-        if (
-            $exception instanceof PDOException &&
-            $exception->errorInfo &&
-            in_array($exception->errorInfo[1], $this->errorCodes)
-        ) {
+        if ($exception instanceof PDOException && $exception->errorInfo && in_array($exception->errorInfo[1], $this->errorCodes)) {
             if ($this->retryInterval > 0) {
                 sleep($this->retryInterval);
             }
-
-            return true;
+            return \true;
         }
-
-        return false;
+        return \false;
     }
 }

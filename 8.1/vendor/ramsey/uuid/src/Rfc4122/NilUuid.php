@@ -9,13 +9,10 @@
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
  */
+declare (strict_types=1);
+namespace Odigos\Ramsey\Uuid\Rfc4122;
 
-declare(strict_types=1);
-
-namespace Ramsey\Uuid\Rfc4122;
-
-use Ramsey\Uuid\Uuid;
-
+use Odigos\Ramsey\Uuid\Uuid;
 /**
  * The nil UUID is a special form of UUID that has all 128 bits set to zero (`0`)
  *

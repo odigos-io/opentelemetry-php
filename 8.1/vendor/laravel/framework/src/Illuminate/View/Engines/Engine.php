@@ -10,7 +10,6 @@ abstract class Engine
      * @var string
      */
     protected $lastRendered;
-
     /**
      * Get the last view that was rendered.
      *

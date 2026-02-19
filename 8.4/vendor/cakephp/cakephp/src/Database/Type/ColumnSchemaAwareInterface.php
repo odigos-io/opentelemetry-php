@@ -1,11 +1,10 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 namespace Cake\Database\Type;
 
 use Cake\Database\Driver;
 use Cake\Database\Schema\TableSchemaInterface;
-
 interface ColumnSchemaAwareInterface
 {
     /**
@@ -17,7 +16,6 @@ interface ColumnSchemaAwareInterface
      * @return string|null An SQL fragment, or `null` in case the column isn't processed by this type.
      */
     public function getColumnSql(TableSchemaInterface $schema, string $column, Driver $driver): ?string;
-
     /**
      * Convert a SQL column definition to an abstract type definition.
      *

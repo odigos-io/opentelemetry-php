@@ -3,7 +3,6 @@
 namespace Illuminate\Broadcasting\Broadcasters;
 
 use Illuminate\Support\Str;
-
 trait UsePusherChannelConventions
 {
     /**
@@ -16,7 +15,6 @@ trait UsePusherChannelConventions
     {
         return Str::startsWith($channel, ['private-', 'presence-']);
     }
-
     /**
      * Remove prefix from channel name.
      *
@@ -30,7 +28,6 @@ trait UsePusherChannelConventions
                 return Str::replaceFirst($prefix, '', $channel);
             }
         }
-
         return $channel;
     }
 }

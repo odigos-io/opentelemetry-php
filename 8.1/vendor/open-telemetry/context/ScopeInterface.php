@@ -1,11 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\Context;
 
 use const PHP_INT_SIZE;
-
 interface ScopeInterface
 {
     /** The associated context was already detached. */
@@ -14,7 +12,6 @@ interface ScopeInterface
     public const INACTIVE = 1 << (PHP_INT_SIZE << 3) - 2;
     /** The associated context is not the active context. */
     public const MISMATCH = 1 << (PHP_INT_SIZE << 3) - 3;
-
     /**
      * Detaches the context associated with this scope and restores the
      * previously associated context.

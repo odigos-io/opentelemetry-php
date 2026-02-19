@@ -8,14 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\Mailer\EventListener;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Mailer\Event\MessageEvent;
 use Symfony\Component\Mime\Crypto\SMimeEncrypter;
 use Symfony\Component\Mime\Message;
-
 /**
  * Encrypts messages using S/MIME.
  *
@@ -23,12 +21,9 @@ use Symfony\Component\Mime\Message;
  */
 final class SmimeEncryptedMessageListener implements EventSubscriberInterface
 {
-    public function __construct(
-        private readonly SmimeCertificateRepositoryInterface $smimeRepository,
-        private readonly ?int $cipher = null,
-    ) {
+    public function __construct(private readonly \Symfony\Component\Mailer\EventListener\SmimeCertificateRepositoryInterface $smimeRepository, private readonly ?int $cipher = null)
+    {
     }
-
     public function onMessage(MessageEvent $event): void
     {
         $message = $event->getMessage();
@@ -51,14 +46,10 @@ final class SmimeEncryptedMessageListener implements EventSubscriberInterface
             return;
         }
         $encrypter = new SMimeEncrypter($certificatePaths, $this->cipher);
-
         $event->setMessage($encrypter->encrypt($message));
     }
-
     public static function getSubscribedEvents(): array
     {
-        return [
-            MessageEvent::class => ['onMessage', -128],
-        ];
+        return [MessageEvent::class => ['onMessage', -128]];
     }
 }

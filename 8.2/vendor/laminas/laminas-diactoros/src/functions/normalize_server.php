@@ -1,11 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Laminas\Diactoros;
+declare (strict_types=1);
+namespace Odigos\Laminas\Diactoros;
 
 use function is_callable;
-
 /**
  * Marshal the $_SERVER array
  *
@@ -23,26 +21,19 @@ function normalizeServer(array $server, ?callable $apacheRequestHeaderCallback =
     if (null === $apacheRequestHeaderCallback && is_callable('apache_request_headers')) {
         $apacheRequestHeaderCallback = 'apache_request_headers';
     }
-
     // If the HTTP_AUTHORIZATION value is already set, or the callback is not
     // callable, we return verbatim
-    if (
-        isset($server['HTTP_AUTHORIZATION'])
-        || ! is_callable($apacheRequestHeaderCallback)
-    ) {
+    if (isset($server['HTTP_AUTHORIZATION']) || !is_callable($apacheRequestHeaderCallback)) {
         return $server;
     }
-
     $apacheRequestHeaders = $apacheRequestHeaderCallback();
     if (isset($apacheRequestHeaders['Authorization'])) {
         $server['HTTP_AUTHORIZATION'] = $apacheRequestHeaders['Authorization'];
         return $server;
     }
-
     if (isset($apacheRequestHeaders['authorization'])) {
         $server['HTTP_AUTHORIZATION'] = $apacheRequestHeaders['authorization'];
         return $server;
     }
-
     return $server;
 }

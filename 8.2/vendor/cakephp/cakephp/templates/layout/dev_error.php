@@ -1,4 +1,7 @@
 <?php
+
+namespace Odigos;
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -19,12 +22,18 @@ use function Cake\Core\h;
 <!DOCTYPE html>
 <html>
 <head>
-    <?= $this->Html->charset() ?>
+    <?php 
+echo $this->Html->charset();
+?>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>
-        Error: <?= h($this->fetch('title')) ?>
+        Error: <?php 
+echo h($this->fetch('title'));
+?>
     </title>
-    <?= $this->Html->meta('icon') ?>
+    <?php 
+echo $this->Html->meta('icon');
+?>
     <style>
     * {
         box-sizing: border-box;
@@ -326,45 +335,77 @@ use function Cake\Core\h;
         margin-top: 10px;
     }
     </style>
-    <?php require CAKE . 'Error/Debug/dumpHeader.html'; ?>
+    <?php 
+require \CAKE . 'Error/Debug/dumpHeader.html';
+?>
 </head>
 <body>
     <header>
-        <?php
-        $title = explode("\n", trim($this->fetch('title')));
-        $errorTitle = array_shift($title);
-        $errorDescription = implode("\n", $title);
-        ?>
+        <?php 
+$title = \explode("\n", \trim($this->fetch('title')));
+$errorTitle = \array_shift($title);
+$errorDescription = \implode("\n", $title);
+?>
         <h1 class="header-title">
-            <span><?= Debugger::formatHtmlMessage($errorTitle) ?></span>
+            <span><?php 
+echo Debugger::formatHtmlMessage($errorTitle);
+?></span>
             <a>&#128203</a>
         </h1>
-        <?php if (strlen($errorDescription)) : ?>
-            <span class="header-description"><?= Debugger::formatHtmlMessage($errorDescription) ?></span>
-        <?php endif ?>
-        <span class="header-type"><?= $error::class ?></span>
+        <?php 
+if (\strlen($errorDescription)) {
+    ?>
+            <span class="header-description"><?php 
+    echo Debugger::formatHtmlMessage($errorDescription);
+    ?></span>
+        <?php 
+}
+?>
+        <span class="header-type"><?php 
+echo $error::class;
+?></span>
     </header>
     <div class="error-content">
-        <?php if ($this->fetch('subheading')): ?>
+        <?php 
+if ($this->fetch('subheading')) {
+    ?>
         <p class="error-subheading">
-            <?= $this->fetch('subheading') ?>
+            <?php 
+    echo $this->fetch('subheading');
+    ?>
         </p>
-        <?php endif; ?>
+        <?php 
+}
+?>
 
-        <?php if ($this->fetch('file')): ?>
+        <?php 
+if ($this->fetch('file')) {
+    ?>
         <div class="error-suggestion">
-            <?= $this->fetch('file') ?>
+            <?php 
+    echo $this->fetch('file');
+    ?>
         </div>
-        <?php endif; ?>
+        <?php 
+}
+?>
 
-        <?= $this->element('dev_error_stacktrace'); ?>
+        <?php 
+echo $this->element('dev_error_stacktrace');
+?>
 
-        <?php if ($this->fetch('templateName')): ?>
+        <?php 
+if ($this->fetch('templateName')) {
+    ?>
         <p class="customize">
             If you want to customize this error message, create
-            <em><?= 'templates' . DIRECTORY_SEPARATOR . 'Error' . DIRECTORY_SEPARATOR . $this->fetch('templateName') ?></em>
+            <em><?php 
+    echo 'templates' . \DIRECTORY_SEPARATOR . 'Error' . \DIRECTORY_SEPARATOR . $this->fetch('templateName');
+    ?></em>
         </p>
-        <?php endif; ?>
+        <?php 
+}
+?>
     </div>
 
     <script type="text/javascript">
@@ -444,3 +485,4 @@ use function Cake\Core\h;
     </script>
 </body>
 </html>
+<?php 

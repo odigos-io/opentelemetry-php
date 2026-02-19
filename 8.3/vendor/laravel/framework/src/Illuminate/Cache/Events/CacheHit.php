@@ -2,7 +2,7 @@
 
 namespace Illuminate\Cache\Events;
 
-class CacheHit extends CacheEvent
+class CacheHit extends \Illuminate\Cache\Events\CacheEvent
 {
     /**
      * The value that was retrieved.
@@ -10,7 +10,6 @@ class CacheHit extends CacheEvent
      * @var mixed
      */
     public $value;
-
     /**
      * Create a new event instance.
      *
@@ -22,7 +21,6 @@ class CacheHit extends CacheEvent
     public function __construct($storeName, $key, $value, array $tags = [])
     {
         parent::__construct($storeName, $key, $tags);
-
         $this->value = $value;
     }
 }

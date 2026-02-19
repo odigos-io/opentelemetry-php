@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -19,7 +19,7 @@ namespace Cake\Controller\Exception;
  *
  * @deprecated 5.2.0 This exception is no longer used in the CakePHP core.
  */
-class AuthSecurityException extends SecurityException
+class AuthSecurityException extends \Cake\Controller\Exception\SecurityException
 {
     /**
      * Security Exception type

@@ -1,13 +1,11 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Odigos\Dotenv\Repository\Adapter;
 
-namespace Dotenv\Repository\Adapter;
-
-use PhpOption\None;
-use PhpOption\Option;
-use PhpOption\Some;
-
+use Odigos\PhpOption\None;
+use Odigos\PhpOption\Option;
+use Odigos\PhpOption\Some;
 final class ApacheAdapter implements AdapterInterface
 {
     /**
@@ -19,7 +17,6 @@ final class ApacheAdapter implements AdapterInterface
     {
         //
     }
-
     /**
      * Create a new instance of the adapter, if it is available.
      *
@@ -31,10 +28,8 @@ final class ApacheAdapter implements AdapterInterface
             /** @var \PhpOption\Option<AdapterInterface> */
             return Some::create(new self());
         }
-
         return None::create();
     }
-
     /**
      * Determines if the adapter is supported.
      *
@@ -46,7 +41,6 @@ final class ApacheAdapter implements AdapterInterface
     {
         return \function_exists('apache_getenv') && \function_exists('apache_setenv');
     }
-
     /**
      * Read an environment variable, if it exists.
      *
@@ -61,7 +55,6 @@ final class ApacheAdapter implements AdapterInterface
             return \is_string($value) && $value !== '';
         });
     }
-
     /**
      * Write to an environment variable, if possible.
      *
@@ -74,7 +67,6 @@ final class ApacheAdapter implements AdapterInterface
     {
         return apache_setenv($name, $value);
     }
-
     /**
      * Delete an environment variable, if possible.
      *

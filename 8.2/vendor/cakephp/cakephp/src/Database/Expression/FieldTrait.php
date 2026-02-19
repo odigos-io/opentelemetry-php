@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -17,7 +17,6 @@ declare(strict_types=1);
 namespace Cake\Database\Expression;
 
 use Cake\Database\ExpressionInterface;
-
 /**
  * Contains the field property with a getter and a setter for it
  */
@@ -29,7 +28,6 @@ trait FieldTrait
      * @var \Cake\Database\ExpressionInterface|array|string
      */
     protected ExpressionInterface|array|string $_field;
-
     /**
      * Sets the field name
      *
@@ -40,7 +38,6 @@ trait FieldTrait
     {
         $this->_field = $field;
     }
-
     /**
      * Returns the field name
      *

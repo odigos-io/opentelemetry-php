@@ -16,11 +16,9 @@ use Illuminate\Validation\Rules\NotIn;
 use Illuminate\Validation\Rules\ProhibitedIf;
 use Illuminate\Validation\Rules\RequiredIf;
 use Illuminate\Validation\Rules\Unique;
-
 class Rule
 {
     use Macroable;
-
     /**
      * Get a can constraint builder instance.
      *
@@ -32,7 +30,6 @@ class Rule
     {
         return new Can($ability, $arguments);
     }
-
     /**
      * Apply the given rules if the given condition is truthy.
      *
@@ -43,9 +40,8 @@ class Rule
      */
     public static function when($condition, $rules, $defaultRules = [])
     {
-        return new ConditionalRules($condition, $rules, $defaultRules);
+        return new \Illuminate\Validation\ConditionalRules($condition, $rules, $defaultRules);
     }
-
     /**
      * Apply the given rules if the given condition is falsy.
      *
@@ -56,9 +52,8 @@ class Rule
      */
     public static function unless($condition, $rules, $defaultRules = [])
     {
-        return new ConditionalRules($condition, $defaultRules, $rules);
+        return new \Illuminate\Validation\ConditionalRules($condition, $defaultRules, $rules);
     }
-
     /**
      * Create a new nested rule set.
      *
@@ -67,9 +62,8 @@ class Rule
      */
     public static function forEach($callback)
     {
-        return new NestedRules($callback);
+        return new \Illuminate\Validation\NestedRules($callback);
     }
-
     /**
      * Get a unique constraint builder instance.
      *
@@ -81,7 +75,6 @@ class Rule
     {
         return new Unique($table, $column);
     }
-
     /**
      * Get an exists constraint builder instance.
      *
@@ -93,7 +86,6 @@ class Rule
     {
         return new Exists($table, $column);
     }
-
     /**
      * Get an in constraint builder instance.
      *
@@ -105,10 +97,8 @@ class Rule
         if ($values instanceof Arrayable) {
             $values = $values->toArray();
         }
-
         return new In(is_array($values) ? $values : func_get_args());
     }
-
     /**
      * Get a not_in constraint builder instance.
      *
@@ -120,10 +110,8 @@ class Rule
         if ($values instanceof Arrayable) {
             $values = $values->toArray();
         }
-
         return new NotIn(is_array($values) ? $values : func_get_args());
     }
-
     /**
      * Get a required_if constraint builder instance.
      *
@@ -134,7 +122,6 @@ class Rule
     {
         return new RequiredIf($callback);
     }
-
     /**
      * Get a exclude_if constraint builder instance.
      *
@@ -145,7 +132,6 @@ class Rule
     {
         return new ExcludeIf($callback);
     }
-
     /**
      * Get a prohibited_if constraint builder instance.
      *
@@ -156,7 +142,6 @@ class Rule
     {
         return new ProhibitedIf($callback);
     }
-
     /**
      * Get an enum constraint builder instance.
      *
@@ -167,7 +152,6 @@ class Rule
     {
         return new Enum($type);
     }
-
     /**
      * Get a file constraint builder instance.
      *
@@ -175,9 +159,8 @@ class Rule
      */
     public static function file()
     {
-        return new File;
+        return new File();
     }
-
     /**
      * Get an image file constraint builder instance.
      *
@@ -185,9 +168,8 @@ class Rule
      */
     public static function imageFile()
     {
-        return new ImageFile;
+        return new ImageFile();
     }
-
     /**
      * Get a dimensions constraint builder instance.
      *

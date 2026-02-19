@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -20,7 +20,7 @@ namespace Cake\TestSuite\Constraint\Response;
  *
  * @internal
  */
-class HeaderNotSet extends HeaderSet
+class HeaderNotSet extends \Cake\TestSuite\Constraint\Response\HeaderSet
 {
     /**
      * Checks assertion
@@ -31,9 +31,8 @@ class HeaderNotSet extends HeaderSet
      */
     public function matches($other): bool
     {
-        return parent::matches($other) === false;
+        return parent::matches($other) === \false;
     }
-
     /**
      * Assertion message
      *

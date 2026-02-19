@@ -3,9 +3,7 @@
 /**
  * THIS FILE IS AUTO-GENERATED. ANY CHANGES WILL BE LOST!
  */
-
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace MongoDB\Builder\Query;
 
 use DateTimeInterface;
@@ -14,7 +12,6 @@ use MongoDB\Builder\Type\Encode;
 use MongoDB\Builder\Type\FieldQueryInterface;
 use MongoDB\Builder\Type\OperatorInterface;
 use stdClass;
-
 /**
  * Matches values that are greater than or equal to a specified value.
  *
@@ -26,10 +23,8 @@ final class GteOperator implements FieldQueryInterface, OperatorInterface
     public const ENCODE = Encode::Single;
     public const NAME = '$gte';
     public const PROPERTIES = ['value' => 'value'];
-
     /** @var DateTimeInterface|Type|array|bool|float|int|null|stdClass|string $value */
     public readonly DateTimeInterface|Type|stdClass|array|bool|float|int|null|string $value;
-
     /**
      * @param DateTimeInterface|Type|array|bool|float|int|null|stdClass|string $value
      */

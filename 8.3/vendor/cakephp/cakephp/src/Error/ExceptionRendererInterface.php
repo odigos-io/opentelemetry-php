@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -17,7 +17,6 @@ declare(strict_types=1);
 namespace Cake\Error;
 
 use Psr\Http\Message\ResponseInterface;
-
 /**
  * Interface ExceptionRendererInterface
  */
@@ -29,7 +28,6 @@ interface ExceptionRendererInterface
      * @return \Psr\Http\Message\ResponseInterface|string The response to be sent.
      */
     public function render(): ResponseInterface|string;
-
     /**
      * Write the output to the output stream.
      *

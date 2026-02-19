@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\DBAL\Platforms;
 
 use Doctrine\DBAL\Platforms\Exception\NotSupported;
@@ -12,12 +11,11 @@ use Doctrine\DBAL\SQL\Builder\WithSQLBuilder;
 use Doctrine\DBAL\Types\BlobType;
 use Doctrine\DBAL\Types\TextType;
 use Doctrine\Deprecations\Deprecation;
-
 /**
  * Provides the behavior, features and SQL dialect of the Oracle MySQL database platform
  * of the oldest supported version.
  */
-class MySQLPlatform extends AbstractMySQLPlatform
+class MySQLPlatform extends \Doctrine\DBAL\Platforms\AbstractMySQLPlatform
 {
     /**
      * {@inheritDoc}
@@ -33,15 +31,12 @@ class MySQLPlatform extends AbstractMySQLPlatform
         if ($column['type'] instanceof TextType || $column['type'] instanceof BlobType) {
             unset($column['default']);
         }
-
         return parent::getDefaultValueDeclarationSQL($column);
     }
-
     public function createWithSQLBuilder(): WithSQLBuilder
     {
         throw NotSupported::new(__METHOD__);
     }
-
     /**
      * {@inheritDoc}
      */
@@ -49,17 +44,10 @@ class MySQLPlatform extends AbstractMySQLPlatform
     {
         return ['ALTER TABLE ' . $tableName . ' RENAME INDEX ' . $oldIndexName . ' TO ' . $index->getQuotedName($this)];
     }
-
     /** @deprecated */
     protected function createReservedKeywordsList(): KeywordList
     {
-        Deprecation::triggerIfCalledFromOutside(
-            'doctrine/dbal',
-            'https://github.com/doctrine/dbal/pull/6607',
-            '%s is deprecated.',
-            __METHOD__,
-        );
-
+        Deprecation::triggerIfCalledFromOutside('doctrine/dbal', 'https://github.com/doctrine/dbal/pull/6607', '%s is deprecated.', __METHOD__);
         return new MySQLKeywords();
     }
 }

@@ -1,14 +1,13 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\base;
 
 use yii\helpers\StringHelper;
-
 /**
  * ActionFilter is the base class for action filters.
  *
@@ -25,7 +24,7 @@ use yii\helpers\StringHelper;
  * @template T of Component
  * @extends Behavior<T>
  */
-class ActionFilter extends Behavior
+class ActionFilter extends \yii\base\Behavior
 {
     /**
      * @var array list of action IDs that this filter should apply to. If this property is not set,
@@ -45,29 +44,25 @@ class ActionFilter extends Behavior
      * @see only
      */
     public $except = [];
-
-
     /**
      * {@inheritdoc}
      */
     public function attach($owner)
     {
         $this->owner = $owner;
-        $owner->on(Controller::EVENT_BEFORE_ACTION, [$this, 'beforeFilter']);
+        $owner->on(\yii\base\Controller::EVENT_BEFORE_ACTION, [$this, 'beforeFilter']);
     }
-
     /**
      * {@inheritdoc}
      */
     public function detach()
     {
         if ($this->owner) {
-            $this->owner->off(Controller::EVENT_BEFORE_ACTION, [$this, 'beforeFilter']);
-            $this->owner->off(Controller::EVENT_AFTER_ACTION, [$this, 'afterFilter']);
+            $this->owner->off(\yii\base\Controller::EVENT_BEFORE_ACTION, [$this, 'beforeFilter']);
+            $this->owner->off(\yii\base\Controller::EVENT_AFTER_ACTION, [$this, 'afterFilter']);
             $this->owner = null;
         }
     }
-
     /**
      * @param ActionEvent $event
      *
@@ -79,17 +74,15 @@ class ActionFilter extends Behavior
         if (!$this->isActive($event->action)) {
             return;
         }
-
         $event->isValid = $this->beforeAction($event->action);
         if ($event->isValid) {
             // call afterFilter only if beforeFilter succeeds
             // beforeFilter and afterFilter should be properly nested
-            $this->owner->on(Controller::EVENT_AFTER_ACTION, [$this, 'afterFilter'], null, false);
+            $this->owner->on(\yii\base\Controller::EVENT_AFTER_ACTION, [$this, 'afterFilter'], null, \false);
         } else {
-            $event->handled = true;
+            $event->handled = \true;
         }
     }
-
     /**
      * @param ActionEvent $event
      *
@@ -99,9 +92,8 @@ class ActionFilter extends Behavior
     public function afterFilter($event)
     {
         $event->result = $this->afterAction($event->action, $event->result);
-        $this->owner->off(Controller::EVENT_AFTER_ACTION, [$this, 'afterFilter']);
+        $this->owner->off(\yii\base\Controller::EVENT_AFTER_ACTION, [$this, 'afterFilter']);
     }
-
     /**
      * This method is invoked right before an action is to be executed (after all possible filters.)
      * You may override this method to do last-minute preparation for the action.
@@ -113,9 +105,8 @@ class ActionFilter extends Behavior
      */
     public function beforeAction($action)
     {
-        return true;
+        return \true;
     }
-
     /**
      * This method is invoked right after an action is executed.
      * You may override this method to do some postprocessing for the action.
@@ -130,7 +121,6 @@ class ActionFilter extends Behavior
     {
         return $result;
     }
-
     /**
      * Returns an action ID by converting [[Action::$uniqueId]] into an ID relative to the module.
      * @param Action $action
@@ -142,7 +132,7 @@ class ActionFilter extends Behavior
      */
     protected function getActionId($action)
     {
-        if ($this->owner instanceof Module) {
+        if ($this->owner instanceof \yii\base\Module) {
             $mid = $this->owner->getUniqueId();
             $id = $action->getUniqueId();
             if ($mid !== '' && strpos($id, $mid) === 0) {
@@ -151,10 +141,8 @@ class ActionFilter extends Behavior
         } else {
             $id = $action->id;
         }
-
         return $id;
     }
-
     /**
      * Returns a value indicating whether the filter is active for the given action.
      * @param Action $action the action being filtered
@@ -166,27 +154,24 @@ class ActionFilter extends Behavior
     protected function isActive($action)
     {
         $id = $this->getActionId($action);
-
         if (empty($this->only)) {
-            $onlyMatch = true;
+            $onlyMatch = \true;
         } else {
-            $onlyMatch = false;
+            $onlyMatch = \false;
             foreach ($this->only as $pattern) {
                 if (StringHelper::matchWildcard($pattern, $id)) {
-                    $onlyMatch = true;
+                    $onlyMatch = \true;
                     break;
                 }
             }
         }
-
-        $exceptMatch = false;
+        $exceptMatch = \false;
         foreach ($this->except as $pattern) {
             if (StringHelper::matchWildcard($pattern, $id)) {
-                $exceptMatch = true;
+                $exceptMatch = \true;
                 break;
             }
         }
-
         return !$exceptMatch && $onlyMatch;
     }
 }

@@ -8,14 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-declare(strict_types=1);
-
-namespace League\Uri\Contracts;
+declare (strict_types=1);
+namespace Odigos\League\Uri\Contracts;
 
 use JsonSerializable;
 use Stringable;
-
 /**
  * @method static when(callable|bool $condition, callable $onSuccess, ?callable $onFail = null) conditionally return a new instance
  * @method bool equals(mixed $value) tells whether the submitted value is equal to the current instance value
@@ -32,7 +29,6 @@ interface UriComponentInterface extends JsonSerializable, Stringable
      * If the instance is not defined null is returned
      */
     public function value(): ?string;
-
     /**
      * Returns the instance string representation.
      *
@@ -43,7 +39,6 @@ interface UriComponentInterface extends JsonSerializable, Stringable
      * If the instance is not defined, an empty string is returned
      */
     public function toString(): string;
-
     /**
      * Returns the instance string representation.
      *
@@ -54,7 +49,6 @@ interface UriComponentInterface extends JsonSerializable, Stringable
      * If the instance is not defined, an empty string is returned
      */
     public function __toString(): string;
-
     /**
      * Returns the instance json representation.
      *
@@ -65,7 +59,6 @@ interface UriComponentInterface extends JsonSerializable, Stringable
      * If the instance is not defined, null is returned
      */
     public function jsonSerialize(): ?string;
-
     /**
      * Returns the instance string representation with its optional URI delimiters.
      *

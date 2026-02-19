@@ -1,8 +1,7 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Brick\Math\Exception;
+declare (strict_types=1);
+namespace Odigos\Brick\Math\Exception;
 
 /**
  * Exception thrown when a division by zero occurs.
@@ -16,7 +15,6 @@ final class DivisionByZeroException extends MathException
     {
         return new self('Division by zero.');
     }
-
     /**
      * @pure
      */
@@ -24,7 +22,6 @@ final class DivisionByZeroException extends MathException
     {
         return new self('The modulus must not be zero.');
     }
-
     /**
      * @pure
      */

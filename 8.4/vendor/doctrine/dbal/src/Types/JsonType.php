@@ -1,18 +1,15 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\DBAL\Types;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
-
 /**
  * Type generating json objects values
  */
-class JsonType extends Type
+class JsonType extends \Doctrine\DBAL\Types\Type
 {
-    use JsonTypeConvert;
-
+    use \Doctrine\DBAL\Types\JsonTypeConvert;
     /**
      * {@inheritDoc}
      */
@@ -20,9 +17,8 @@ class JsonType extends Type
     {
         return $platform->getJsonTypeDeclarationSQL($column);
     }
-
     protected function isAssociative(): bool
     {
-        return true;
+        return \true;
     }
 }

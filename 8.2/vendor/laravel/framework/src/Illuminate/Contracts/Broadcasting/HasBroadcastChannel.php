@@ -10,7 +10,6 @@ interface HasBroadcastChannel
      * @return string
      */
     public function broadcastChannelRoute();
-
     /**
      * Get the broadcast channel name that is associated with the given entity.
      *

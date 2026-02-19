@@ -1,13 +1,11 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Laminas\Diactoros;
+declare (strict_types=1);
+namespace Odigos\Laminas\Diactoros;
 
 use Override;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
-
 class ResponseFactory implements ResponseFactoryInterface
 {
     /**
@@ -16,7 +14,6 @@ class ResponseFactory implements ResponseFactoryInterface
     #[Override]
     public function createResponse(int $code = 200, string $reasonPhrase = ''): ResponseInterface
     {
-        return (new Response())
-            ->withStatus($code, $reasonPhrase);
+        return (new Response())->withStatus($code, $reasonPhrase);
     }
 }

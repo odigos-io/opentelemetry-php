@@ -1,17 +1,16 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\web;
 
-use Yii;
+use Odigos\Yii;
 use yii\base\Action;
 use yii\base\Exception;
 use yii\base\UserException;
-
 /**
  * ErrorAction displays application errors using a specified view.
  *
@@ -76,31 +75,25 @@ class ErrorAction extends Action
      * @since 2.0.14
      */
     public $layout;
-
     /**
      * @var \Throwable the exception object, normally is filled on [[init()]] method call.
      * @see findException() to know default way of obtaining exception.
      * @since 2.0.11
      */
     protected $exception;
-
-
     /**
      * {@inheritdoc}
      */
     public function init()
     {
         $this->exception = $this->findException();
-
         if ($this->defaultMessage === null) {
             $this->defaultMessage = Yii::t('yii', 'An internal server error occurred.');
         }
-
         if ($this->defaultName === null) {
             $this->defaultName = Yii::t('yii', 'Error');
         }
     }
-
     /**
      * Runs the action.
      *
@@ -111,16 +104,12 @@ class ErrorAction extends Action
         if ($this->layout !== null) {
             $this->controller->layout = $this->layout;
         }
-
         Yii::$app->getResponse()->setStatusCodeByException($this->exception);
-
         if (Yii::$app->getRequest()->getIsAjax()) {
             return $this->renderAjaxResponse();
         }
-
         return $this->renderHtmlResponse();
     }
-
     /**
      * Builds string that represents the exception.
      * Normally used to generate a response to AJAX request.
@@ -131,7 +120,6 @@ class ErrorAction extends Action
     {
         return $this->getExceptionName() . ': ' . $this->getExceptionMessage();
     }
-
     /**
      * Renders a view that represents the exception.
      * @return string
@@ -141,7 +129,6 @@ class ErrorAction extends Action
     {
         return $this->controller->render($this->view ?: $this->id, $this->getViewRenderParams());
     }
-
     /**
      * Builds array of parameters that will be passed to the view.
      * @return array
@@ -149,13 +136,8 @@ class ErrorAction extends Action
      */
     protected function getViewRenderParams()
     {
-        return [
-            'name' => $this->getExceptionName(),
-            'message' => $this->getExceptionMessage(),
-            'exception' => $this->exception,
-        ];
+        return ['name' => $this->getExceptionName(), 'message' => $this->getExceptionMessage(), 'exception' => $this->exception];
     }
-
     /**
      * Gets exception from the [[yii\web\ErrorHandler|ErrorHandler]] component.
      * In case there is no exception in the component, treat as the action has been invoked
@@ -166,12 +148,10 @@ class ErrorAction extends Action
     protected function findException()
     {
         if (($exception = Yii::$app->getErrorHandler()->exception) === null) {
-            $exception = new NotFoundHttpException(Yii::t('yii', 'Page not found.'));
+            $exception = new \yii\web\NotFoundHttpException(Yii::t('yii', 'Page not found.'));
         }
-
         return $exception;
     }
-
     /**
      * Gets the code from the [[exception]].
      * @return mixed
@@ -179,13 +159,11 @@ class ErrorAction extends Action
      */
     protected function getExceptionCode()
     {
-        if ($this->exception instanceof HttpException) {
+        if ($this->exception instanceof \yii\web\HttpException) {
             return $this->exception->statusCode;
         }
-
         return $this->exception->getCode();
     }
-
     /**
      * Returns the exception name, followed by the code (if present).
      *
@@ -199,14 +177,11 @@ class ErrorAction extends Action
         } else {
             $name = $this->defaultName;
         }
-
         if ($code = $this->getExceptionCode()) {
-            $name .= " (#$code)";
+            $name .= " (#{$code})";
         }
-
         return $name;
     }
-
     /**
      * Returns the [[exception]] message for [[yii\base\UserException]] only.
      * For other cases [[defaultMessage]] will be returned.
@@ -218,7 +193,6 @@ class ErrorAction extends Action
         if ($this->exception instanceof UserException) {
             return $this->exception->getMessage();
         }
-
         return $this->defaultMessage;
     }
 }

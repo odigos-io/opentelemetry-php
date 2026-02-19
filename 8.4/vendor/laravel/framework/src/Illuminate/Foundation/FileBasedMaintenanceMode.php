@@ -3,7 +3,6 @@
 namespace Illuminate\Foundation;
 
 use Illuminate\Contracts\Foundation\MaintenanceMode as MaintenanceModeContract;
-
 class FileBasedMaintenanceMode implements MaintenanceModeContract
 {
     /**
@@ -14,12 +13,8 @@ class FileBasedMaintenanceMode implements MaintenanceModeContract
      */
     public function activate(array $payload): void
     {
-        file_put_contents(
-            $this->path(),
-            json_encode($payload, JSON_PRETTY_PRINT)
-        );
+        file_put_contents($this->path(), json_encode($payload, \JSON_PRETTY_PRINT));
     }
-
     /**
      * Take the application out of maintenance.
      *
@@ -31,7 +26,6 @@ class FileBasedMaintenanceMode implements MaintenanceModeContract
             unlink($this->path());
         }
     }
-
     /**
      * Determine if the application is currently down for maintenance.
      *
@@ -41,7 +35,6 @@ class FileBasedMaintenanceMode implements MaintenanceModeContract
     {
         return file_exists($this->path());
     }
-
     /**
      * Get the data array which was provided when the application was placed into maintenance.
      *
@@ -49,9 +42,8 @@ class FileBasedMaintenanceMode implements MaintenanceModeContract
      */
     public function data(): array
     {
-        return json_decode(file_get_contents($this->path()), true);
+        return json_decode(file_get_contents($this->path()), \true);
     }
-
     /**
      * Get the path where the file is stored that signals that the application is down for maintenance.
      *

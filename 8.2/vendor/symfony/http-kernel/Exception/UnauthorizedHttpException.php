@@ -8,13 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\HttpKernel\Exception;
 
 /**
  * @author Ben Ramsey <ben@benramsey.com>
  */
-class UnauthorizedHttpException extends HttpException
+class UnauthorizedHttpException extends \Symfony\Component\HttpKernel\Exception\HttpException
 {
     /**
      * @param string $challenge WWW-Authenticate challenge string
@@ -22,7 +21,6 @@ class UnauthorizedHttpException extends HttpException
     public function __construct(string $challenge, string $message = '', ?\Throwable $previous = null, int $code = 0, array $headers = [])
     {
         $headers['WWW-Authenticate'] = $challenge;
-
         parent::__construct(401, $message, $previous, $headers, $code);
     }
 }

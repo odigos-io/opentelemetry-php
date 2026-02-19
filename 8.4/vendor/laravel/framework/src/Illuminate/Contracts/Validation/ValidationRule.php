@@ -3,7 +3,6 @@
 namespace Illuminate\Contracts\Validation;
 
 use Closure;
-
 interface ValidationRule
 {
     /**

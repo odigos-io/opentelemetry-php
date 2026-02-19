@@ -5,7 +5,6 @@ namespace Illuminate\Database\Eloquent\Casts;
 use Illuminate\Contracts\Database\Eloquent\Castable;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use Illuminate\Support\Stringable;
-
 class AsStringable implements Castable
 {
     /**
@@ -22,7 +21,6 @@ class AsStringable implements Castable
             {
                 return isset($value) ? new Stringable($value) : null;
             }
-
             public function set($model, $key, $value, $attributes)
             {
                 return isset($value) ? (string) $value : null;

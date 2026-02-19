@@ -1,5 +1,6 @@
-<?php declare(strict_types=1);
+<?php
 
+declare (strict_types=1);
 /*
  * This file is part of the Monolog package.
  *
@@ -8,14 +9,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Odigos\Monolog\Processor;
 
-namespace Monolog\Processor;
-
-use Monolog\Level;
-use Monolog\Logger;
+use Odigos\Monolog\Level;
+use Odigos\Monolog\Logger;
 use Psr\Log\LogLevel;
-use Monolog\LogRecord;
-
+use Odigos\Monolog\LogRecord;
 /**
  * Injects line/file:class/function where the log message came from
  *
@@ -30,21 +29,11 @@ use Monolog\LogRecord;
 class IntrospectionProcessor implements ProcessorInterface
 {
     protected Level $level;
-
     /** @var string[] */
     protected array $skipClassesPartials;
-
     protected int $skipStackFramesCount;
-
-    protected const SKIP_FUNCTIONS = [
-        'call_user_func',
-        'call_user_func_array',
-    ];
-
-    protected const SKIP_CLASSES = [
-        'Monolog\\',
-    ];
-
+    protected const SKIP_FUNCTIONS = ['call_user_func', 'call_user_func_array'];
+    protected const SKIP_CLASSES = ['Monolog\\'];
     /**
      * @param string|int|Level $level               The minimum logging level at which this Processor will be triggered
      * @param string[]         $skipClassesPartials
@@ -57,7 +46,6 @@ class IntrospectionProcessor implements ProcessorInterface
         $this->skipClassesPartials = array_merge(static::SKIP_CLASSES, $skipClassesPartials);
         $this->skipStackFramesCount = $skipStackFramesCount;
     }
-
     /**
      * @inheritDoc
      */
@@ -67,60 +55,39 @@ class IntrospectionProcessor implements ProcessorInterface
         if ($record->level->isLowerThan($this->level)) {
             return $record;
         }
-
-        $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
-
+        $trace = debug_backtrace(\DEBUG_BACKTRACE_IGNORE_ARGS);
         // skip first since it's always the current method
         array_shift($trace);
         // the call_user_func call is also skipped
         array_shift($trace);
-
         $i = 0;
-
         while ($this->isTraceClassOrSkippedFunction($trace, $i)) {
             if (isset($trace[$i]['class'])) {
                 foreach ($this->skipClassesPartials as $part) {
-                    if (strpos($trace[$i]['class'], $part) !== false) {
+                    if (strpos($trace[$i]['class'], $part) !== \false) {
                         $i++;
-
                         continue 2;
                     }
                 }
-            } elseif (\in_array($trace[$i]['function'], self::SKIP_FUNCTIONS, true)) {
+            } elseif (\in_array($trace[$i]['function'], self::SKIP_FUNCTIONS, \true)) {
                 $i++;
-
                 continue;
             }
-
             break;
         }
-
         $i += $this->skipStackFramesCount;
-
         // we should have the call source now
-        $record->extra = array_merge(
-            $record->extra,
-            [
-                'file'      => $trace[$i - 1]['file'] ?? null,
-                'line'      => $trace[$i - 1]['line'] ?? null,
-                'class'     => $trace[$i]['class'] ?? null,
-                'callType'  => $trace[$i]['type'] ?? null,
-                'function'  => $trace[$i]['function'] ?? null,
-            ]
-        );
-
+        $record->extra = array_merge($record->extra, ['file' => $trace[$i - 1]['file'] ?? null, 'line' => $trace[$i - 1]['line'] ?? null, 'class' => $trace[$i]['class'] ?? null, 'callType' => $trace[$i]['type'] ?? null, 'function' => $trace[$i]['function'] ?? null]);
         return $record;
     }
-
     /**
      * @param array<mixed> $trace
      */
     private function isTraceClassOrSkippedFunction(array $trace, int $index): bool
     {
         if (!isset($trace[$index])) {
-            return false;
+            return \false;
         }
-
-        return isset($trace[$index]['class']) || \in_array($trace[$index]['function'], self::SKIP_FUNCTIONS, true);
+        return isset($trace[$index]['class']) || \in_array($trace[$index]['function'], self::SKIP_FUNCTIONS, \true);
     }
 }

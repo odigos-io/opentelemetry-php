@@ -1,10 +1,10 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\db\conditions;
 
 use yii\db\ExpressionBuilderInterface;
@@ -12,7 +12,6 @@ use yii\db\ExpressionBuilderTrait;
 use yii\db\ExpressionInterface;
 use yii\db\Query;
 use yii\helpers\ArrayHelper;
-
 /**
  * Class HashConditionBuilder builds objects of [[HashCondition]]
  *
@@ -22,8 +21,6 @@ use yii\helpers\ArrayHelper;
 class HashConditionBuilder implements ExpressionBuilderInterface
 {
     use ExpressionBuilderTrait;
-
-
     /**
      * Method builds the raw SQL from the $expression that will not be additionally
      * escaped or quoted.
@@ -39,22 +36,21 @@ class HashConditionBuilder implements ExpressionBuilderInterface
         foreach ($hash as $column => $value) {
             if (ArrayHelper::isTraversable($value) || $value instanceof Query) {
                 // IN condition
-                $parts[] = $this->queryBuilder->buildCondition(new InCondition($column, 'IN', $value), $params);
+                $parts[] = $this->queryBuilder->buildCondition(new \yii\db\conditions\InCondition($column, 'IN', $value), $params);
             } else {
-                if (strpos($column, '(') === false) {
+                if (strpos($column, '(') === \false) {
                     $column = $this->queryBuilder->db->quoteColumnName($column);
                 }
                 if ($value === null) {
-                    $parts[] = "$column IS NULL";
+                    $parts[] = "{$column} IS NULL";
                 } elseif ($value instanceof ExpressionInterface) {
-                    $parts[] = "$column=" . $this->queryBuilder->buildExpression($value, $params);
+                    $parts[] = "{$column}=" . $this->queryBuilder->buildExpression($value, $params);
                 } else {
                     $phName = $this->queryBuilder->bindParam($value, $params);
-                    $parts[] = "$column=$phName";
+                    $parts[] = "{$column}={$phName}";
                 }
             }
         }
-
         return count($parts) === 1 ? $parts[0] : '(' . implode(') AND (', $parts) . ')';
     }
 }

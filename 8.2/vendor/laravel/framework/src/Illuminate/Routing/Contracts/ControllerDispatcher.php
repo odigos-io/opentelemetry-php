@@ -3,7 +3,6 @@
 namespace Illuminate\Routing\Contracts;
 
 use Illuminate\Routing\Route;
-
 interface ControllerDispatcher
 {
     /**
@@ -15,7 +14,6 @@ interface ControllerDispatcher
      * @return mixed
      */
     public function dispatch(Route $route, $controller, $method);
-
     /**
      * Get the middleware for the controller instance.
      *

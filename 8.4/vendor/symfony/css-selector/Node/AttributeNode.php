@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\CssSelector\Node;
 
 /**
@@ -21,53 +20,38 @@ namespace Symfony\Component\CssSelector\Node;
  *
  * @internal
  */
-class AttributeNode extends AbstractNode
+class AttributeNode extends \Symfony\Component\CssSelector\Node\AbstractNode
 {
-    public function __construct(
-        private NodeInterface $selector,
-        private ?string $namespace,
-        private string $attribute,
-        private string $operator,
-        private ?string $value,
-    ) {
+    public function __construct(private \Symfony\Component\CssSelector\Node\NodeInterface $selector, private ?string $namespace, private string $attribute, private string $operator, private ?string $value)
+    {
     }
-
-    public function getSelector(): NodeInterface
+    public function getSelector(): \Symfony\Component\CssSelector\Node\NodeInterface
     {
         return $this->selector;
     }
-
     public function getNamespace(): ?string
     {
         return $this->namespace;
     }
-
     public function getAttribute(): string
     {
         return $this->attribute;
     }
-
     public function getOperator(): string
     {
         return $this->operator;
     }
-
     public function getValue(): ?string
     {
         return $this->value;
     }
-
-    public function getSpecificity(): Specificity
+    public function getSpecificity(): \Symfony\Component\CssSelector\Node\Specificity
     {
-        return $this->selector->getSpecificity()->plus(new Specificity(0, 1, 0));
+        return $this->selector->getSpecificity()->plus(new \Symfony\Component\CssSelector\Node\Specificity(0, 1, 0));
     }
-
     public function __toString(): string
     {
-        $attribute = $this->namespace ? $this->namespace.'|'.$this->attribute : $this->attribute;
-
-        return 'exists' === $this->operator
-            ? \sprintf('%s[%s[%s]]', $this->getNodeName(), $this->selector, $attribute)
-            : \sprintf("%s[%s[%s %s '%s']]", $this->getNodeName(), $this->selector, $attribute, $this->operator, $this->value);
+        $attribute = $this->namespace ? $this->namespace . '|' . $this->attribute : $this->attribute;
+        return 'exists' === $this->operator ? \sprintf('%s[%s[%s]]', $this->getNodeName(), $this->selector, $attribute) : \sprintf("%s[%s[%s %s '%s']]", $this->getNodeName(), $this->selector, $attribute, $this->operator, $this->value);
     }
 }

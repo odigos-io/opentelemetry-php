@@ -1,15 +1,13 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\DBAL\Types;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
-
 /**
  * Type that maps an SQL VARCHAR to a PHP string.
  */
-class StringType extends Type
+class StringType extends \Doctrine\DBAL\Types\Type
 {
     /**
      * {@inheritDoc}

@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\DBAL;
 
 /**
@@ -13,7 +12,6 @@ enum ColumnCase
      * Convert column names to upper case.
      */
     case UPPER;
-
     /**
      * Convert column names to lower case.
      */

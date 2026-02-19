@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -21,7 +21,6 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-
 /**
  * Decorate closures as PSR-15 middleware.
  *
@@ -44,7 +43,6 @@ class ClosureDecoratorMiddleware implements MiddlewareInterface
      * @var \Closure
      */
     protected Closure $callable;
-
     /**
      * Constructor
      *
@@ -54,7 +52,6 @@ class ClosureDecoratorMiddleware implements MiddlewareInterface
     {
         $this->callable = $callable;
     }
-
     /**
      * Run the callable to process an incoming server request.
      *
@@ -64,12 +61,8 @@ class ClosureDecoratorMiddleware implements MiddlewareInterface
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        return ($this->callable)(
-            $request,
-            $handler,
-        );
+        return ($this->callable)($request, $handler);
     }
-
     /**
      * @internal
      * @return \Closure

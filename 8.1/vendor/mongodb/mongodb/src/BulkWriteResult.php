@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright 2015-present MongoDB, Inc.
  *
@@ -14,12 +15,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 namespace MongoDB;
 
 use MongoDB\Driver\Exception\LogicException;
 use MongoDB\Driver\WriteResult;
-
 /**
  * Result class for a bulk write operation.
  */
@@ -28,7 +27,6 @@ class BulkWriteResult
     public function __construct(private WriteResult $writeResult, private array $insertedIds)
     {
     }
-
     /**
      * Return the number of documents that were deleted.
      *
@@ -41,7 +39,6 @@ class BulkWriteResult
     {
         return $this->writeResult->getDeletedCount();
     }
-
     /**
      * Return the number of documents that were inserted.
      *
@@ -54,7 +51,6 @@ class BulkWriteResult
     {
         return $this->writeResult->getInsertedCount();
     }
-
     /**
      * Return a map of the inserted documents' IDs.
      *
@@ -68,7 +64,6 @@ class BulkWriteResult
     {
         return $this->insertedIds;
     }
-
     /**
      * Return the number of documents that were matched by the filter.
      *
@@ -81,7 +76,6 @@ class BulkWriteResult
     {
         return $this->writeResult->getMatchedCount();
     }
-
     /**
      * Return the number of documents that were modified.
      *
@@ -97,7 +91,6 @@ class BulkWriteResult
     {
         return $this->writeResult->getModifiedCount();
     }
-
     /**
      * Return the number of documents that were upserted.
      *
@@ -110,7 +103,6 @@ class BulkWriteResult
     {
         return $this->writeResult->getUpsertedCount();
     }
-
     /**
      * Return a map of the upserted documents' IDs.
      *
@@ -128,7 +120,6 @@ class BulkWriteResult
     {
         return $this->writeResult->getUpsertedIds();
     }
-
     /**
      * Return whether this update was acknowledged by the server.
      *

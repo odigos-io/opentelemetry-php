@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -15,22 +15,19 @@ declare(strict_types=1);
 namespace Cake\View\Exception;
 
 use Throwable;
-
 /**
  * Used when a template file for a cell cannot be found.
  */
-class MissingCellTemplateException extends MissingTemplateException
+class MissingCellTemplateException extends \Cake\View\Exception\MissingTemplateException
 {
     /**
      * @var string
      */
     protected string $name;
-
     /**
      * @var string
      */
     protected string $type = 'Cell template';
-
     /**
      * Constructor
      *
@@ -40,18 +37,11 @@ class MissingCellTemplateException extends MissingTemplateException
      * @param int|null $code The code of the error.
      * @param \Throwable|null $previous the previous exception.
      */
-    public function __construct(
-        string $name,
-        string $file,
-        array $paths = [],
-        ?int $code = null,
-        ?Throwable $previous = null,
-    ) {
+    public function __construct(string $name, string $file, array $paths = [], ?int $code = null, ?Throwable $previous = null)
+    {
         $this->name = $name;
-
         parent::__construct($file, $paths, $code, $previous);
     }
-
     /**
      * Get the passed in attributes
      *
@@ -59,10 +49,6 @@ class MissingCellTemplateException extends MissingTemplateException
      */
     public function getAttributes(): array
     {
-        return [
-            'name' => $this->name,
-            'file' => $this->file,
-            'paths' => $this->paths,
-        ];
+        return ['name' => $this->name, 'file' => $this->file, 'paths' => $this->paths];
     }
 }

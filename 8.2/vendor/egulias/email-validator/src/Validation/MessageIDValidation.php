@@ -1,26 +1,22 @@
 <?php
 
-namespace Egulias\EmailValidator\Validation;
+namespace Odigos\Egulias\EmailValidator\Validation;
 
-use Egulias\EmailValidator\EmailLexer;
-use Egulias\EmailValidator\MessageIDParser;
-use Egulias\EmailValidator\Result\InvalidEmail;
-use Egulias\EmailValidator\Result\Reason\ExceptionFound;
-use Egulias\EmailValidator\Warning\Warning;
-
+use Odigos\Egulias\EmailValidator\EmailLexer;
+use Odigos\Egulias\EmailValidator\MessageIDParser;
+use Odigos\Egulias\EmailValidator\Result\InvalidEmail;
+use Odigos\Egulias\EmailValidator\Result\Reason\ExceptionFound;
+use Odigos\Egulias\EmailValidator\Warning\Warning;
 class MessageIDValidation implements EmailValidation
 {
-
     /**
      * @var Warning[]
      */
     private $warnings = [];
-
     /**
      * @var ?InvalidEmail
      */
     private $error;
-
     public function isValid(string $email, EmailLexer $emailLexer): bool
     {
         $parser = new MessageIDParser($emailLexer);
@@ -30,16 +26,14 @@ class MessageIDValidation implements EmailValidation
             if ($result->isInvalid()) {
                 /** @psalm-suppress PropertyTypeCoercion */
                 $this->error = $result;
-                return false;
+                return \false;
             }
         } catch (\Exception $invalid) {
             $this->error = new InvalidEmail(new ExceptionFound($invalid), '');
-            return false;
+            return \false;
         }
-
-        return true;
+        return \true;
     }
-
     /**
      * @return Warning[]
      */
@@ -47,7 +41,6 @@ class MessageIDValidation implements EmailValidation
     {
         return $this->warnings;
     }
-
     public function getError(): ?InvalidEmail
     {
         return $this->error;

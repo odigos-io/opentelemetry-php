@@ -1,17 +1,16 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\grid;
 
 use Closure;
 use yii\base\InvalidConfigException;
 use yii\helpers\Html;
 use yii\helpers\Json;
-
 /**
  * CheckboxColumn displays a column of checkboxes in a grid view.
  *
@@ -40,7 +39,7 @@ use yii\helpers\Json;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class CheckboxColumn extends Column
+class CheckboxColumn extends \yii\grid\Column
 {
     /**
      * @var string the name of the input checkbox input fields. This will be appended with `[]` to ensure it is an array.
@@ -68,14 +67,12 @@ class CheckboxColumn extends Column
     /**
      * @var bool whether it is possible to select multiple rows. Defaults to `true`.
      */
-    public $multiple = true;
+    public $multiple = \true;
     /**
      * @var string the css class that will be used to find the checkboxes.
      * @since 2.0.9
      */
     public $cssClass;
-
-
     /**
      * {@inheritdoc}
      * @throws \yii\base\InvalidConfigException if [[name]] is not set.
@@ -89,10 +86,8 @@ class CheckboxColumn extends Column
         if (substr_compare($this->name, '[]', -2, 2)) {
             $this->name .= '[]';
         }
-
         $this->registerClientScript();
     }
-
     /**
      * Renders the header cell content.
      * The default implementation simply renders [[header]].
@@ -104,10 +99,8 @@ class CheckboxColumn extends Column
         if ($this->header !== null || !$this->multiple) {
             return parent::renderHeaderCellContent();
         }
-
-        return Html::checkbox($this->getHeaderCheckBoxName(), false, ['class' => 'select-on-check-all']);
+        return Html::checkbox($this->getHeaderCheckBoxName(), \false, ['class' => 'select-on-check-all']);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -116,24 +109,19 @@ class CheckboxColumn extends Column
         if ($this->content !== null) {
             return parent::renderDataCellContent($model, $key, $index);
         }
-
         if ($this->checkboxOptions instanceof Closure) {
             $options = call_user_func($this->checkboxOptions, $model, $key, $index, $this);
         } else {
             $options = $this->checkboxOptions;
         }
-
         if (!isset($options['value'])) {
             $options['value'] = is_array($key) ? Json::encode($key) : $key;
         }
-
         if ($this->cssClass !== null) {
             Html::addCssClass($options, $this->cssClass);
         }
-
         return Html::checkbox($this->name, !empty($options['checked']), $options);
     }
-
     /**
      * Returns header checkbox name.
      * @return string header checkbox name
@@ -150,10 +138,8 @@ class CheckboxColumn extends Column
         } else {
             $name .= '_all';
         }
-
         return $name;
     }
-
     /**
      * Registers the needed JavaScript.
      * @since 2.0.8
@@ -161,12 +147,7 @@ class CheckboxColumn extends Column
     public function registerClientScript()
     {
         $id = $this->grid->options['id'];
-        $options = Json::encode([
-            'name' => $this->name,
-            'class' => $this->cssClass,
-            'multiple' => $this->multiple,
-            'checkAll' => $this->grid->showHeader ? $this->getHeaderCheckBoxName() : null,
-        ]);
-        $this->grid->getView()->registerJs("jQuery('#$id').yiiGridView('setSelectionColumn', $options);");
+        $options = Json::encode(['name' => $this->name, 'class' => $this->cssClass, 'multiple' => $this->multiple, 'checkAll' => $this->grid->showHeader ? $this->getHeaderCheckBoxName() : null]);
+        $this->grid->getView()->registerJs("jQuery('#{$id}').yiiGridView('setSelectionColumn', {$options});");
     }
 }

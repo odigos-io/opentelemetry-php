@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright 2021-present MongoDB, Inc.
  *
@@ -14,7 +15,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 namespace MongoDB\Operation;
 
 use MongoDB\Driver\Command;
@@ -24,9 +24,7 @@ use MongoDB\Driver\Session;
 use MongoDB\Driver\WriteConcern;
 use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\Exception\UnsupportedException;
-
 use function is_bool;
-
 /**
  * Operation for the renameCollection command.
  *
@@ -37,9 +35,7 @@ use function is_bool;
 final class RenameCollection
 {
     private string $fromNamespace;
-
     private string $toNamespace;
-
     /**
      * Constructs a renameCollection command.
      *
@@ -65,26 +61,21 @@ final class RenameCollection
      */
     public function __construct(string $fromDatabaseName, string $fromCollectionName, string $toDatabaseName, string $toCollectionName, private array $options = [])
     {
-        if (isset($this->options['session']) && ! $this->options['session'] instanceof Session) {
+        if (isset($this->options['session']) && !$this->options['session'] instanceof Session) {
             throw InvalidArgumentException::invalidType('"session" option', $this->options['session'], Session::class);
         }
-
-        if (isset($this->options['writeConcern']) && ! $this->options['writeConcern'] instanceof WriteConcern) {
+        if (isset($this->options['writeConcern']) && !$this->options['writeConcern'] instanceof WriteConcern) {
             throw InvalidArgumentException::invalidType('"writeConcern" option', $this->options['writeConcern'], WriteConcern::class);
         }
-
         if (isset($this->options['writeConcern']) && $this->options['writeConcern']->isDefault()) {
             unset($this->options['writeConcern']);
         }
-
-        if (isset($this->options['dropTarget']) && ! is_bool($this->options['dropTarget'])) {
+        if (isset($this->options['dropTarget']) && !is_bool($this->options['dropTarget'])) {
             throw InvalidArgumentException::invalidType('"dropTarget" option', $this->options['dropTarget'], 'boolean');
         }
-
         $this->fromNamespace = $fromDatabaseName . '.' . $fromCollectionName;
         $this->toNamespace = $toDatabaseName . '.' . $toCollectionName;
     }
-
     /**
      * Execute the operation.
      *
@@ -97,29 +88,21 @@ final class RenameCollection
         if ($inTransaction && isset($this->options['writeConcern'])) {
             throw UnsupportedException::writeConcernNotSupportedInTransaction();
         }
-
         $server->executeWriteCommand('admin', $this->createCommand(), $this->createOptions());
     }
-
     /**
      * Create the renameCollection command.
      */
     private function createCommand(): Command
     {
-        $cmd = [
-            'renameCollection' => $this->fromNamespace,
-            'to' => $this->toNamespace,
-        ];
-
+        $cmd = ['renameCollection' => $this->fromNamespace, 'to' => $this->toNamespace];
         foreach (['comment', 'dropTarget'] as $option) {
             if (isset($this->options[$option])) {
                 $cmd[$option] = $this->options[$option];
             }
         }
-
         return new Command($cmd);
     }
-
     /**
      * Create options for executing the command.
      *
@@ -128,15 +111,12 @@ final class RenameCollection
     private function createOptions(): array
     {
         $options = [];
-
         if (isset($this->options['session'])) {
             $options['session'] = $this->options['session'];
         }
-
         if (isset($this->options['writeConcern'])) {
             $options['writeConcern'] = $this->options['writeConcern'];
         }
-
         return $options;
     }
 }

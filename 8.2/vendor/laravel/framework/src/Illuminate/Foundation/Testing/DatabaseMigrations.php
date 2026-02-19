@@ -4,11 +4,9 @@ namespace Illuminate\Foundation\Testing;
 
 use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Foundation\Testing\Traits\CanConfigureMigrationCommands;
-
 trait DatabaseMigrations
 {
     use CanConfigureMigrationCommands;
-
     /**
      * Define hooks to migrate the database before and after each test.
      *
@@ -19,14 +17,11 @@ trait DatabaseMigrations
         $this->beforeRefreshingDatabase();
         $this->refreshTestDatabase();
         $this->afterRefreshingDatabase();
-
         $this->beforeApplicationDestroyed(function () {
             $this->artisan('migrate:rollback');
-
-            RefreshDatabaseState::$migrated = false;
+            \Illuminate\Foundation\Testing\RefreshDatabaseState::$migrated = \false;
         });
     }
-
     /**
      * Refresh a conventional test database.
      *
@@ -35,10 +30,8 @@ trait DatabaseMigrations
     protected function refreshTestDatabase()
     {
         $this->artisan('migrate:fresh', $this->migrateFreshUsing());
-
         $this->app[Kernel::class]->setArtisan(null);
     }
-
     /**
      * Perform any work that should take place before the database has started refreshing.
      *
@@ -48,7 +41,6 @@ trait DatabaseMigrations
     {
         // ...
     }
-
     /**
      * Perform any work that should take place once the database has finished refreshing.
      *

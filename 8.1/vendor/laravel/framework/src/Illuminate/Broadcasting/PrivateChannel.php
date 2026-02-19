@@ -3,8 +3,7 @@
 namespace Illuminate\Broadcasting;
 
 use Illuminate\Contracts\Broadcasting\HasBroadcastChannel;
-
-class PrivateChannel extends Channel
+class PrivateChannel extends \Illuminate\Broadcasting\Channel
 {
     /**
      * Create a new channel instance.
@@ -15,7 +14,6 @@ class PrivateChannel extends Channel
     public function __construct($name)
     {
         $name = $name instanceof HasBroadcastChannel ? $name->broadcastChannel() : $name;
-
-        parent::__construct('private-'.$name);
+        parent::__construct('private-' . $name);
     }
 }

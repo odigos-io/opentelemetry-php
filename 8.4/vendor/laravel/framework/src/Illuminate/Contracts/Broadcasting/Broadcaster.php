@@ -11,7 +11,6 @@ interface Broadcaster
      * @return mixed
      */
     public function auth($request);
-
     /**
      * Return the valid authentication response.
      *
@@ -20,7 +19,6 @@ interface Broadcaster
      * @return mixed
      */
     public function validAuthenticationResponse($request, $result);
-
     /**
      * Broadcast the given event.
      *

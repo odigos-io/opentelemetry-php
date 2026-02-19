@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the league/config package.
  *
@@ -10,8 +9,7 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace League\Config;
+namespace Odigos\League\Config;
 
 /**
  * Provides read-only access to a given Configuration object
@@ -19,12 +17,10 @@ namespace League\Config;
 final class ReadOnlyConfiguration implements ConfigurationInterface
 {
     private Configuration $config;
-
     public function __construct(Configuration $config)
     {
         $this->config = $config;
     }
-
     /**
      * {@inheritDoc}
      */
@@ -32,7 +28,6 @@ final class ReadOnlyConfiguration implements ConfigurationInterface
     {
         return $this->config->get($key);
     }
-
     public function exists(string $key): bool
     {
         return $this->config->exists($key);

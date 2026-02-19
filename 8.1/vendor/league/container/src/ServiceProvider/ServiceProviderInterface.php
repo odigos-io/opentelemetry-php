@@ -1,11 +1,9 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Odigos\League\Container\ServiceProvider;
 
-namespace League\Container\ServiceProvider;
-
-use League\Container\ContainerAwareInterface;
-
+use Odigos\League\Container\ContainerAwareInterface;
 interface ServiceProviderInterface extends ContainerAwareInterface
 {
     public function getIdentifier(): string;

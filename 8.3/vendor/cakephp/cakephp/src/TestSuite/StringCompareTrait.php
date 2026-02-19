@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -17,7 +17,6 @@ declare(strict_types=1);
 namespace Cake\TestSuite;
 
 use function Cake\Core\env;
-
 /**
  * Compare a string to the contents of a file
  *
@@ -34,7 +33,6 @@ trait StringCompareTrait
      * @var string
      */
     protected string $_compareBasePath = '';
-
     /**
      * Update comparisons to match test changes
      *
@@ -43,7 +41,6 @@ trait StringCompareTrait
      * @var bool
      */
     protected bool $_updateComparisons;
-
     /**
      * Compare the result to the contents of the file
      *
@@ -61,13 +58,10 @@ trait StringCompareTrait
         if (!file_exists($path)) {
             $path = $this->_compareBasePath . $path;
         }
-
-        $this->_updateComparisons ??= (bool)env('UPDATE_TEST_COMPARISON_FILES');
-
+        $this->_updateComparisons ??= (bool) env('UPDATE_TEST_COMPARISON_FILES');
         if ($this->_updateComparisons) {
             file_put_contents($path, $result);
         }
-
         $expected = file_get_contents($path);
         $this->assertTextEquals($expected, $result, 'Content does not match file ' . $path);
     }

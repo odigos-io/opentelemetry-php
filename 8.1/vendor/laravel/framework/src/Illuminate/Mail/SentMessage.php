@@ -4,21 +4,18 @@ namespace Illuminate\Mail;
 
 use Illuminate\Support\Traits\ForwardsCalls;
 use Symfony\Component\Mailer\SentMessage as SymfonySentMessage;
-
 /**
  * @mixin \Symfony\Component\Mailer\SentMessage
  */
 class SentMessage
 {
     use ForwardsCalls;
-
     /**
      * The Symfony SentMessage instance.
      *
      * @var \Symfony\Component\Mailer\SentMessage
      */
     protected $sentMessage;
-
     /**
      * Create a new SentMessage instance.
      *
@@ -29,7 +26,6 @@ class SentMessage
     {
         $this->sentMessage = $sentMessage;
     }
-
     /**
      * Get the underlying Symfony Email instance.
      *
@@ -39,7 +35,6 @@ class SentMessage
     {
         return $this->sentMessage;
     }
-
     /**
      * Dynamically pass missing methods to the Symfony instance.
      *
@@ -51,7 +46,6 @@ class SentMessage
     {
         return $this->forwardCallTo($this->sentMessage, $method, $parameters);
     }
-
     /**
      * Get the serializable representation of the object.
      *
@@ -60,13 +54,8 @@ class SentMessage
     public function __serialize()
     {
         $hasAttachments = collect($this->sentMessage->getOriginalMessage()->getAttachments())->isNotEmpty();
-
-        return [
-            'hasAttachments' => $hasAttachments,
-            'sentMessage' => $hasAttachments ? base64_encode(serialize($this->sentMessage)) : $this->sentMessage,
-        ];
+        return ['hasAttachments' => $hasAttachments, 'sentMessage' => $hasAttachments ? base64_encode(serialize($this->sentMessage)) : $this->sentMessage];
     }
-
     /**
      * Marshal the object from its serialized data.
      *
@@ -75,8 +64,7 @@ class SentMessage
      */
     public function __unserialize(array $data)
     {
-        $hasAttachments = ($data['hasAttachments'] ?? false) === true;
-
+        $hasAttachments = ($data['hasAttachments'] ?? \false) === \true;
         $this->sentMessage = $hasAttachments ? unserialize(base64_decode($data['sentMessage'])) : $data['sentMessage'];
     }
 }

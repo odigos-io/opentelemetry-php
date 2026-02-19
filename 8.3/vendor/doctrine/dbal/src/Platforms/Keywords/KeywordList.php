@@ -1,15 +1,12 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\DBAL\Platforms\Keywords;
 
 use Doctrine\Deprecations\Deprecation;
-
 use function array_flip;
 use function array_map;
 use function strtoupper;
-
 /**
  * Abstract interface for a SQL reserved keyword dictionary.
  *
@@ -19,17 +16,10 @@ abstract class KeywordList
 {
     /** @var string[]|null */
     private ?array $keywords = null;
-
     public function __construct()
     {
-        Deprecation::triggerIfCalledFromOutside(
-            'doctrine/dbal',
-            'https://github.com/doctrine/dbal/pull/6607',
-            '%s is deprecated.',
-            static::class,
-        );
+        Deprecation::triggerIfCalledFromOutside('doctrine/dbal', 'https://github.com/doctrine/dbal/pull/6607', '%s is deprecated.', static::class);
     }
-
     /**
      * Checks if the given word is a keyword of this dialect/vendor platform.
      */
@@ -38,15 +28,12 @@ abstract class KeywordList
         if ($this->keywords === null) {
             $this->initializeKeywords();
         }
-
         return isset($this->keywords[strtoupper($word)]);
     }
-
     protected function initializeKeywords(): void
     {
         $this->keywords = array_flip(array_map('strtoupper', $this->getKeywords()));
     }
-
     /**
      * Returns the list of keywords.
      *

@@ -15,7 +15,6 @@ interface Rule
      * @return bool
      */
     public function passes($attribute, $value);
-
     /**
      * Get the validation error message.
      *

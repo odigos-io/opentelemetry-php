@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -28,7 +28,6 @@ class Package
      * @var array<array|string>
      */
     protected array $messages = [];
-
     /**
      * The name of a fallback package to use when a message key does not
      * exist.
@@ -36,14 +35,12 @@ class Package
      * @var string|null
      */
     protected ?string $fallback = null;
-
     /**
      * The name of the formatter to use when formatting translated messages.
      *
      * @var string
      */
     protected string $formatter;
-
     /**
      * Constructor.
      *
@@ -51,16 +48,12 @@ class Package
      * @param string|null $fallback The name of the fallback package to use.
      * @param array<array|string> $messages The messages in this package.
      */
-    public function __construct(
-        string $formatter = 'default',
-        ?string $fallback = null,
-        array $messages = [],
-    ) {
+    public function __construct(string $formatter = 'default', ?string $fallback = null, array $messages = [])
+    {
         $this->formatter = $formatter;
         $this->fallback = $fallback;
         $this->messages = $messages;
     }
-
     /**
      * Sets the messages for this package.
      *
@@ -71,7 +64,6 @@ class Package
     {
         $this->messages = $messages;
     }
-
     /**
      * Adds one message for this package.
      *
@@ -83,7 +75,6 @@ class Package
     {
         $this->messages[$key] = $message;
     }
-
     /**
      * Adds new messages for this package.
      *
@@ -94,7 +85,6 @@ class Package
     {
         $this->messages = array_merge($this->messages, $messages);
     }
-
     /**
      * Gets the messages for this package.
      *
@@ -104,7 +94,6 @@ class Package
     {
         return $this->messages;
     }
-
     /**
      * Gets the message of the given key for this package.
      *
@@ -113,9 +102,8 @@ class Package
      */
     public function getMessage(string $key): array|string|false
     {
-        return $this->messages[$key] ?? false;
+        return $this->messages[$key] ?? \false;
     }
-
     /**
      * Sets the formatter name for this package.
      *
@@ -126,7 +114,6 @@ class Package
     {
         $this->formatter = $formatter;
     }
-
     /**
      * Gets the formatter name for this package.
      *
@@ -136,7 +123,6 @@ class Package
     {
         return $this->formatter;
     }
-
     /**
      * Sets the fallback package name.
      *
@@ -147,7 +133,6 @@ class Package
     {
         $this->fallback = $fallback;
     }
-
     /**
      * Gets the fallback package name.
      *

@@ -1,6 +1,5 @@
 group "default" {
   targets = [
-    "php80-arm64", "php80-amd64",
     "php81-arm64", "php81-amd64",
     "php82-arm64", "php82-amd64",
     "php83-arm64", "php83-amd64",
@@ -14,32 +13,10 @@ variable "PHP_OTEL_VERSION" {
 
 target "php-base" {
   context    = "."
-  dockerfile = "Dockerfile"
+  dockerfile = "build.Dockerfile"
   target     = "output"
-  build_args = {
-    PHP_VERSION = "${PHP_VERSION}"
-  }
   args = {
     PHP_OTEL_VERSION = "${PHP_OTEL_VERSION}"
-  }
-}
-
-target "php80-arm64" {
-  inherits = ["php-base"]
-  platforms = ["linux/arm64"]
-  tags     = ["otel-php:8.0-arm64"]
-  output = ["type=oci,dest=tmp/otel-php-8.0-arm64.tar"]
-  args = {
-    PHP_VERSION = "8.0"
-  }
-}
-target "php80-amd64" {
-  inherits = ["php-base"]
-  platforms = ["linux/amd64"]
-  tags     = ["otel-php:8.0-amd64"]
-  output = ["type=oci,dest=tmp/otel-php-8.0-amd64.tar"]
-  args = {
-    PHP_VERSION = "8.0"
   }
 }
 

@@ -4,7 +4,6 @@ namespace Illuminate\Support\Testing\Fakes;
 
 use Illuminate\Bus\PendingBatch;
 use Illuminate\Support\Collection;
-
 class PendingBatchFake extends PendingBatch
 {
     /**
@@ -13,19 +12,17 @@ class PendingBatchFake extends PendingBatch
      * @var \Illuminate\Support\Testing\Fakes\BusFake
      */
     protected $bus;
-
     /**
      * Create a new pending batch instance.
      *
      * @param  \Illuminate\Support\Testing\Fakes\BusFake  $bus
      * @param  \Illuminate\Support\Collection  $jobs
      */
-    public function __construct(BusFake $bus, Collection $jobs)
+    public function __construct(\Illuminate\Support\Testing\Fakes\BusFake $bus, Collection $jobs)
     {
         $this->bus = $bus;
         $this->jobs = $jobs->filter()->values();
     }
-
     /**
      * Dispatch the batch.
      *
@@ -35,7 +32,6 @@ class PendingBatchFake extends PendingBatch
     {
         return $this->bus->recordPendingBatch($this);
     }
-
     /**
      * Dispatch the batch after the response is sent to the browser.
      *

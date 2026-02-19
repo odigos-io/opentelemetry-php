@@ -13,13 +13,11 @@ trait CompilesContexts
     protected function compileContext($expression)
     {
         $expression = $this->stripParentheses($expression);
-
-        return '<?php $__contextArgs = ['.$expression.'];
+        return '<?php $__contextArgs = [' . $expression . '];
 if (context()->has($__contextArgs[0])) :
 if (isset($value)) { $__contextPrevious[] = $value; }
 $value = context()->get($__contextArgs[0]); ?>';
     }
-
     /**
      * Compile the endcontext statements into valid PHP.
      *

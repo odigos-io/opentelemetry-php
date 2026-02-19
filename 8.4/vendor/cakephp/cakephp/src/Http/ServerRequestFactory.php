@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -20,9 +20,8 @@ use Cake\Core\Configure;
 use Cake\Utility\Hash;
 use Psr\Http\Message\ServerRequestFactoryInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use function Laminas\Diactoros\normalizeServer;
-use function Laminas\Diactoros\normalizeUploadedFiles;
-
+use function Odigos\Laminas\Diactoros\normalizeServer;
+use function Odigos\Laminas\Diactoros\normalizeUploadedFiles;
 /**
  * Factory for making ServerRequest instances.
  *
@@ -46,44 +45,22 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
      * @return \Cake\Http\ServerRequest
      * @throws \InvalidArgumentException for invalid file values
      */
-    public static function fromGlobals(
-        ?array $server = null,
-        ?array $query = null,
-        ?array $parsedBody = null,
-        ?array $cookies = null,
-        ?array $files = null,
-    ): ServerRequest {
+    public static function fromGlobals(?array $server = null, ?array $query = null, ?array $parsedBody = null, ?array $cookies = null, ?array $files = null): \Cake\Http\ServerRequest
+    {
         $server = normalizeServer($server ?? $_SERVER);
-        ['uri' => $uri, 'base' => $base, 'webroot' => $webroot] = UriFactory::marshalUriAndBaseFromSapi($server);
-
-        $sessionConfig = (array)Configure::read('Session') + [
-            'defaults' => 'php',
-            'cookiePath' => $webroot,
-        ];
-        $session = Session::create($sessionConfig);
-
-        $request = new ServerRequest([
-            'environment' => $server,
-            'uri' => $uri,
-            'cookies' => $cookies ?? $_COOKIE,
-            'query' => $query ?? $_GET,
-            'webroot' => $webroot,
-            'base' => $base,
-            'session' => $session,
-            'input' => $server['CAKEPHP_INPUT'] ?? null,
-        ]);
-
+        ['uri' => $uri, 'base' => $base, 'webroot' => $webroot] = \Cake\Http\UriFactory::marshalUriAndBaseFromSapi($server);
+        $sessionConfig = (array) Configure::read('Session') + ['defaults' => 'php', 'cookiePath' => $webroot];
+        $session = \Cake\Http\Session::create($sessionConfig);
+        $request = new \Cake\Http\ServerRequest(['environment' => $server, 'uri' => $uri, 'cookies' => $cookies ?? $_COOKIE, 'query' => $query ?? $_GET, 'webroot' => $webroot, 'base' => $base, 'session' => $session, 'input' => $server['CAKEPHP_INPUT'] ?? null]);
         $request = static::marshalBodyAndRequestMethod($parsedBody ?? $_POST, $request);
         // This is required as `ServerRequest::scheme()` ignores the value of
         // `HTTP_X_FORWARDED_PROTO` unless `trustProxy` is enabled, while the
         // `Uri` instance initially created always takes values of `HTTP_X_FORWARDED_PROTO`
         // into account.
         $uri = $request->getUri()->withScheme($request->scheme());
-        $request = $request->withUri($uri, true);
-
+        $request = $request->withUri($uri, \true);
         return static::marshalFiles($files ?? $_FILES, $request);
     }
-
     /**
      * Sets the REQUEST_METHOD environment variable based on the simulated _method
      * HTTP override value. The 'ORIGINAL_REQUEST_METHOD' is also preserved, if you
@@ -96,40 +73,29 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
      * @param \Cake\Http\ServerRequest $request Request instance.
      * @return \Cake\Http\ServerRequest
      */
-    protected static function marshalBodyAndRequestMethod(array $parsedBody, ServerRequest $request): ServerRequest
+    protected static function marshalBodyAndRequestMethod(array $parsedBody, \Cake\Http\ServerRequest $request): \Cake\Http\ServerRequest
     {
         $method = $request->getMethod();
-        $override = false;
-
-        if (
-            in_array($method, ['PUT', 'DELETE', 'PATCH'], true) &&
-            str_starts_with((string)$request->contentType(), 'application/x-www-form-urlencoded')
-        ) {
-            $data = (string)$request->getBody();
+        $override = \false;
+        if (in_array($method, ['PUT', 'DELETE', 'PATCH'], \true) && str_starts_with((string) $request->contentType(), 'application/x-www-form-urlencoded')) {
+            $data = (string) $request->getBody();
             parse_str($data, $parsedBody);
         }
         if ($request->hasHeader('X-Http-Method-Override')) {
             $parsedBody['_method'] = $request->getHeaderLine('X-Http-Method-Override');
-            $override = true;
+            $override = \true;
         }
-
         $request = $request->withEnv('ORIGINAL_REQUEST_METHOD', $method);
         if (isset($parsedBody['_method'])) {
             $request = $request->withEnv('REQUEST_METHOD', $parsedBody['_method']);
             unset($parsedBody['_method']);
-            $override = true;
+            $override = \true;
         }
-
-        if (
-            $override &&
-            !in_array($request->getMethod(), ['PUT', 'POST', 'DELETE', 'PATCH'], true)
-        ) {
+        if ($override && !in_array($request->getMethod(), ['PUT', 'POST', 'DELETE', 'PATCH'], \true)) {
             $parsedBody = [];
         }
-
         return $request->withParsedBody($parsedBody);
     }
-
     /**
      * Process uploaded files and move things onto the parsed body.
      *
@@ -137,21 +103,17 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
      * @param \Cake\Http\ServerRequest $request Request instance.
      * @return \Cake\Http\ServerRequest
      */
-    protected static function marshalFiles(array $files, ServerRequest $request): ServerRequest
+    protected static function marshalFiles(array $files, \Cake\Http\ServerRequest $request): \Cake\Http\ServerRequest
     {
         $files = normalizeUploadedFiles($files);
         $request = $request->withUploadedFiles($files);
-
         $parsedBody = $request->getParsedBody();
         if (!is_array($parsedBody)) {
             return $request;
         }
-
         $parsedBody = Hash::merge($parsedBody, $files);
-
         return $request->withParsedBody($parsedBody);
     }
-
     /**
      * Create a new server request.
      *
@@ -172,12 +134,10 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
     {
         $serverParams['REQUEST_METHOD'] = $method;
         $options = ['environment' => $serverParams];
-
         if (is_string($uri)) {
-            $uri = (new UriFactory())->createUri($uri);
+            $uri = (new \Cake\Http\UriFactory())->createUri($uri);
         }
         $options['uri'] = $uri;
-
-        return new ServerRequest($options);
+        return new \Cake\Http\ServerRequest($options);
     }
 }

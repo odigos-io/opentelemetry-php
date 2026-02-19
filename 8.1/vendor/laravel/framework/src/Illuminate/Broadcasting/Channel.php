@@ -3,7 +3,6 @@
 namespace Illuminate\Broadcasting;
 
 use Illuminate\Contracts\Broadcasting\HasBroadcastChannel;
-
 class Channel
 {
     /**
@@ -12,7 +11,6 @@ class Channel
      * @var string
      */
     public $name;
-
     /**
      * Create a new channel instance.
      *
@@ -23,7 +21,6 @@ class Channel
     {
         $this->name = $name instanceof HasBroadcastChannel ? $name->broadcastChannel() : $name;
     }
-
     /**
      * Convert the channel instance to a string.
      *

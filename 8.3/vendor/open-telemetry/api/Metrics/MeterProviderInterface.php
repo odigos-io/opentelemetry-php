@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\API\Metrics;
 
 interface MeterProviderInterface
@@ -18,10 +17,5 @@ interface MeterProviderInterface
      *
      * @see https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/metrics/api.md#get-a-meter
      */
-    public function getMeter(
-        string $name,
-        ?string $version = null,
-        ?string $schemaUrl = null,
-        iterable $attributes = [],
-    ): MeterInterface;
+    public function getMeter(string $name, ?string $version = null, ?string $schemaUrl = null, iterable $attributes = []): \OpenTelemetry\API\Metrics\MeterInterface;
 }

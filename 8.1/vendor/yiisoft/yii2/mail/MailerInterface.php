@@ -1,10 +1,10 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\mail;
 
 /**
@@ -44,14 +44,12 @@ interface MailerInterface
      * @return MessageInterface message instance.
      */
     public function compose($view = null, array $params = []);
-
     /**
      * Sends the given email message.
      * @param MessageInterface $message email message instance to be sent
      * @return bool whether the message has been sent successfully
      */
     public function send($message);
-
     /**
      * Sends multiple messages at once.
      *

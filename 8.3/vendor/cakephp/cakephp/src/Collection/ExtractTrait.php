@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -18,7 +18,6 @@ namespace Cake\Collection;
 
 use ArrayAccess;
 use Closure;
-
 /**
  * Provides utility protected methods for extracting a property or column
  * from an array or object.
@@ -39,22 +38,17 @@ trait ExtractTrait
         if (!is_string($path)) {
             return $path(...);
         }
-
         $parts = explode('.', $path);
-
         if (str_contains($path, '{*}')) {
             return fn($element) => $this->_extract($element, $parts);
         }
-
         return function ($element) use ($parts) {
             if (!is_array($element) && !$element instanceof ArrayAccess) {
                 return null;
             }
-
             return $this->_simpleExtract($element, $parts);
         };
     }
-
     /**
      * Returns a column from $data that can be extracted
      * by iterating over the column names contained in $path.
@@ -67,38 +61,27 @@ trait ExtractTrait
     protected function _extract(ArrayAccess|array $data, array $parts): mixed
     {
         $value = null;
-        $collectionTransform = false;
-
+        $collectionTransform = \false;
         foreach ($parts as $i => $column) {
             if ($column === '{*}') {
-                $collectionTransform = true;
+                $collectionTransform = \true;
                 continue;
             }
-
-            if (
-                $collectionTransform &&
-                !is_iterable($data)
-            ) {
+            if ($collectionTransform && !is_iterable($data)) {
                 return null;
             }
-
             if ($collectionTransform) {
                 $rest = implode('.', array_slice($parts, $i));
-
-                return (new Collection($data))->extract($rest);
+                return (new \Cake\Collection\Collection($data))->extract($rest);
             }
-
             if (!isset($data[$column])) {
                 return null;
             }
-
             $value = $data[$column];
             $data = $value;
         }
-
         return $value;
     }
-
     /**
      * Returns a column from $data that can be extracted
      * by iterating over the column names contained in $path
@@ -117,10 +100,8 @@ trait ExtractTrait
             $value = $data[$column];
             $data = $value;
         }
-
         return $value;
     }
-
     /**
      * Returns a callable that receives a value and will return whether
      * it matches certain condition.
@@ -139,15 +120,13 @@ trait ExtractTrait
                 return $extractor($v) == $value;
             };
         }
-
         return function ($value) use ($matchers) {
             foreach ($matchers as $match) {
                 if (!$match($value)) {
-                    return false;
+                    return \false;
                 }
             }
-
-            return true;
+            return \true;
         };
     }
 }

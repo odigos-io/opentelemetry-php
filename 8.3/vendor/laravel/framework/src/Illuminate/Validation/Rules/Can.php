@@ -5,7 +5,6 @@ namespace Illuminate\Validation\Rules;
 use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Contracts\Validation\ValidatorAwareRule;
 use Illuminate\Support\Facades\Gate;
-
 class Can implements Rule, ValidatorAwareRule
 {
     /**
@@ -14,21 +13,18 @@ class Can implements Rule, ValidatorAwareRule
      * @var string
      */
     protected $ability;
-
     /**
      * The arguments to pass to the authorization check.
      *
      * @var array
      */
     protected $arguments;
-
     /**
      * The current validator instance.
      *
      * @var \Illuminate\Validation\Validator
      */
     protected $validator;
-
     /**
      * Constructor.
      *
@@ -40,7 +36,6 @@ class Can implements Rule, ValidatorAwareRule
         $this->ability = $ability;
         $this->arguments = $arguments;
     }
-
     /**
      * Determine if the validation rule passes.
      *
@@ -51,12 +46,9 @@ class Can implements Rule, ValidatorAwareRule
     public function passes($attribute, $value)
     {
         $arguments = $this->arguments;
-
         $model = array_shift($arguments);
-
         return Gate::allows($this->ability, array_filter([$model, ...$arguments, $value]));
     }
-
     /**
      * Get the validation error message.
      *
@@ -65,12 +57,8 @@ class Can implements Rule, ValidatorAwareRule
     public function message()
     {
         $message = $this->validator->getTranslator()->get('validation.can');
-
-        return $message === 'validation.can'
-            ? ['The :attribute field contains an unauthorized value.']
-            : $message;
+        return $message === 'validation.can' ? ['The :attribute field contains an unauthorized value.'] : $message;
     }
-
     /**
      * Set the current validator.
      *
@@ -80,7 +68,6 @@ class Can implements Rule, ValidatorAwareRule
     public function setValidator($validator)
     {
         $this->validator = $validator;
-
         return $this;
     }
 }

@@ -1,8 +1,7 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Laminas\Diactoros;
+declare (strict_types=1);
+namespace Odigos\Laminas\Diactoros;
 
 /**
  * Retrieve the request method from the SAPI parameters.

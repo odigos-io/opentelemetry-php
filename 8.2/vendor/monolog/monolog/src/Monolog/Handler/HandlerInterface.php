@@ -1,5 +1,6 @@
-<?php declare(strict_types=1);
+<?php
 
+declare (strict_types=1);
 /*
  * This file is part of the Monolog package.
  *
@@ -8,11 +9,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Odigos\Monolog\Handler;
 
-namespace Monolog\Handler;
-
-use Monolog\LogRecord;
-
+use Odigos\Monolog\LogRecord;
 /**
  * Interface that all Monolog Handlers must implement
  *
@@ -32,7 +31,6 @@ interface HandlerInterface
      * @param LogRecord $record Partial log record having only a level initialized
      */
     public function isHandling(LogRecord $record): bool;
-
     /**
      * Handles a record.
      *
@@ -48,14 +46,12 @@ interface HandlerInterface
      *                   false means the record was either not processed or that this handler allows bubbling.
      */
     public function handle(LogRecord $record): bool;
-
     /**
      * Handles a set of records at once.
      *
      * @param array<LogRecord> $records The records to handle
      */
     public function handleBatch(array $records): void;
-
     /**
      * Closes the handler.
      *

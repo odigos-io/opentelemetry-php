@@ -1,30 +1,26 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\Contrib\Otlp;
 
-use Opentelemetry\Proto\Collector\Logs\V1\ExportLogsServiceRequest;
-use Opentelemetry\Proto\Common\V1\InstrumentationScope;
-use Opentelemetry\Proto\Common\V1\KeyValue;
-use Opentelemetry\Proto\Logs\V1\LogRecord;
-use Opentelemetry\Proto\Logs\V1\ResourceLogs;
-use Opentelemetry\Proto\Logs\V1\ScopeLogs;
-use Opentelemetry\Proto\Resource\V1\Resource as Resource_;
+use Odigos\Opentelemetry\Proto\Collector\Logs\V1\ExportLogsServiceRequest;
+use Odigos\Opentelemetry\Proto\Common\V1\InstrumentationScope;
+use Odigos\Opentelemetry\Proto\Common\V1\KeyValue;
+use Odigos\Opentelemetry\Proto\Logs\V1\LogRecord;
+use Odigos\Opentelemetry\Proto\Logs\V1\ResourceLogs;
+use Odigos\Opentelemetry\Proto\Logs\V1\ScopeLogs;
+use Odigos\Opentelemetry\Proto\Resource\V1\Resource as Resource_;
 use OpenTelemetry\SDK\Common\Attribute\AttributesInterface;
 use OpenTelemetry\SDK\Common\Instrumentation\InstrumentationScopeInterface;
 use OpenTelemetry\SDK\Logs\ReadableLogRecord;
 use OpenTelemetry\SDK\Resource\ResourceInfo;
-
 class LogsConverter
 {
-    private readonly ProtobufSerializer $serializer;
-
-    public function __construct(?ProtobufSerializer $serializer = null)
+    private readonly \OpenTelemetry\Contrib\Otlp\ProtobufSerializer $serializer;
+    public function __construct(?\OpenTelemetry\Contrib\Otlp\ProtobufSerializer $serializer = null)
     {
-        $this->serializer = $serializer ?? ProtobufSerializer::getDefault();
+        $this->serializer = $serializer ?? \OpenTelemetry\Contrib\Otlp\ProtobufSerializer::getDefault();
     }
-
     /**
      * @param iterable<ReadableLogRecord> $logs
      * @psalm-suppress InvalidArgument
@@ -36,49 +32,26 @@ class LogsConverter
         $resourceLogs = [];
         $resourceCache = [];
         $scopeCache = [];
-
         foreach ($logs as $log) {
             $resource = $log->getResource();
             $instrumentationScope = $log->getInstrumentationScope();
-
-            $resourceId = $resourceCache[spl_object_id($resource)] ??= serialize([
-                $resource->getSchemaUrl(),
-                $resource->getAttributes()->toArray(),
-                $resource->getAttributes()->getDroppedAttributesCount(),
-            ]);
-            $instrumentationScopeId = $scopeCache[spl_object_id($instrumentationScope)] ??= serialize([
-                $instrumentationScope->getName(),
-                $instrumentationScope->getVersion(),
-                $instrumentationScope->getSchemaUrl(),
-                $instrumentationScope->getAttributes()->toArray(),
-                $instrumentationScope->getAttributes()->getDroppedAttributesCount(),
-            ]);
-
+            $resourceId = $resourceCache[spl_object_id($resource)] ??= serialize([$resource->getSchemaUrl(), $resource->getAttributes()->toArray(), $resource->getAttributes()->getDroppedAttributesCount()]);
+            $instrumentationScopeId = $scopeCache[spl_object_id($instrumentationScope)] ??= serialize([$instrumentationScope->getName(), $instrumentationScope->getVersion(), $instrumentationScope->getSchemaUrl(), $instrumentationScope->getAttributes()->toArray(), $instrumentationScope->getAttributes()->getDroppedAttributesCount()]);
             if (($pResourceLogs = $resourceLogs[$resourceId] ?? null) === null) {
                 /** @psalm-suppress InvalidArgument */
-                $pExportLogsServiceRequest->getResourceLogs()[]
-                    = $resourceLogs[$resourceId]
-                    = $pResourceLogs
-                    = $this->convertResourceLogs($resource);
+                $pExportLogsServiceRequest->getResourceLogs()[] = $resourceLogs[$resourceId] = $pResourceLogs = $this->convertResourceLogs($resource);
             }
-
             if (($pScopeLogs = $scopeLogs[$resourceId][$instrumentationScopeId] ?? null) === null) {
-                $pResourceLogs->getScopeLogs()[]
-                    = $scopeLogs[$resourceId][$instrumentationScopeId]
-                    = $pScopeLogs
-                    = $this->convertInstrumentationScope($instrumentationScope);
+                $pResourceLogs->getScopeLogs()[] = $scopeLogs[$resourceId][$instrumentationScopeId] = $pScopeLogs = $this->convertInstrumentationScope($instrumentationScope);
             }
-
             $pScopeLogs->getLogRecords()[] = $this->convertLogRecord($log);
         }
-
         return $pExportLogsServiceRequest;
     }
-
     private function convertLogRecord(ReadableLogRecord $record): LogRecord
     {
         $pLogRecord = new LogRecord();
-        $pLogRecord->setBody(AttributesConverter::convertAnyValue($record->getBody()));
+        $pLogRecord->setBody(\OpenTelemetry\Contrib\Otlp\AttributesConverter::convertAnyValue($record->getBody()));
         $pLogRecord->setTimeUnixNano($record->getTimestamp() ?? 0);
         $pLogRecord->setObservedTimeUnixNano($record->getObservedTimestamp() ?? 0);
         $spanContext = $record->getSpanContext();
@@ -101,10 +74,8 @@ class LogsConverter
         }
         $this->setAttributes($pLogRecord, $record->getAttributes());
         $pLogRecord->setDroppedAttributesCount($record->getAttributes()->getDroppedAttributesCount());
-
         return $pLogRecord;
     }
-
     private function convertInstrumentationScope(InstrumentationScopeInterface $instrumentationScope): ScopeLogs
     {
         $pScopeLogs = new ScopeLogs();
@@ -115,10 +86,8 @@ class LogsConverter
         $pInstrumentationScope->setDroppedAttributesCount($instrumentationScope->getAttributes()->getDroppedAttributesCount());
         $pScopeLogs->setScope($pInstrumentationScope);
         $pScopeLogs->setSchemaUrl((string) $instrumentationScope->getSchemaUrl());
-
         return $pScopeLogs;
     }
-
     private function convertResourceLogs(ResourceInfo $resource): ResourceLogs
     {
         $pResourceLogs = new ResourceLogs();
@@ -126,10 +95,8 @@ class LogsConverter
         $this->setAttributes($pResource, $resource->getAttributes());
         $pResource->setDroppedAttributesCount($resource->getAttributes()->getDroppedAttributesCount());
         $pResourceLogs->setResource($pResource);
-
         return $pResourceLogs;
     }
-
     /**
      * @param Resource_|LogRecord|InstrumentationScope $pElement
      */
@@ -137,9 +104,7 @@ class LogsConverter
     {
         foreach ($attributes as $key => $value) {
             /** @psalm-suppress InvalidArgument */
-            $pElement->getAttributes()[] = (new KeyValue())
-                ->setKey($key)
-                ->setValue(AttributesConverter::convertAnyValue($value));
+            $pElement->getAttributes()[] = (new KeyValue())->setKey($key)->setValue(\OpenTelemetry\Contrib\Otlp\AttributesConverter::convertAnyValue($value));
         }
         $pElement->setDroppedAttributesCount($attributes->getDroppedAttributesCount());
     }

@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -24,7 +24,6 @@ use Cake\Http\ServerRequestFactory;
 use Cake\Routing\Router;
 use Cake\Routing\RoutingApplicationInterface;
 use Psr\Http\Message\ResponseInterface;
-
 /**
  * Dispatches a request capturing the response for integration
  * testing purposes into the Cake\Http stack.
@@ -39,7 +38,6 @@ class MiddlewareDispatcher
      * @var \Cake\Core\HttpApplicationInterface
      */
     protected HttpApplicationInterface $app;
-
     /**
      * Constructor
      *
@@ -49,7 +47,6 @@ class MiddlewareDispatcher
     {
         $this->app = $app;
     }
-
     /**
      * Resolve the provided URL into a string.
      *
@@ -63,10 +60,8 @@ class MiddlewareDispatcher
         if (is_array($url) && Router::getRouteCollection()->routes() === []) {
             return $this->resolveRoute($url);
         }
-
         return Router::url($url);
     }
-
     /**
      * Convert a URL array into a string URL via routing.
      *
@@ -83,20 +78,16 @@ class MiddlewareDispatcher
             $this->app->pluginBootstrap();
         }
         $builder = Router::createRouteBuilder('/');
-
         if ($this->app instanceof RoutingApplicationInterface) {
             $this->app->routes($builder);
         }
         if ($this->app instanceof PluginApplicationInterface) {
             $this->app->pluginRoutes($builder);
         }
-
         $out = Router::url($url);
         Router::resetRoutes();
-
         return $out;
     }
-
     /**
      * Create a PSR7 request from the request spec.
      *
@@ -109,26 +100,13 @@ class MiddlewareDispatcher
             $spec['post'] = [];
             $spec['environment']['CAKEPHP_INPUT'] = $spec['input'];
         }
-        $environment = array_merge(
-            array_merge($_SERVER, ['REQUEST_URI' => $spec['url']]),
-            $spec['environment'],
-        );
+        $environment = array_merge(array_merge($_SERVER, ['REQUEST_URI' => $spec['url']]), $spec['environment']);
         if (str_contains($environment['PHP_SELF'], 'phpunit')) {
             $environment['PHP_SELF'] = '/';
         }
-        $request = ServerRequestFactory::fromGlobals(
-            $environment,
-            $spec['query'],
-            $spec['post'],
-            $spec['cookies'],
-            $spec['files'],
-        );
-
-        return $request
-            ->withAttribute('session', $spec['session'])
-            ->withAttribute('flash', new FlashMessage($spec['session']));
+        $request = ServerRequestFactory::fromGlobals($environment, $spec['query'], $spec['post'], $spec['cookies'], $spec['files']);
+        return $request->withAttribute('session', $spec['session'])->withAttribute('flash', new FlashMessage($spec['session']));
     }
-
     /**
      * Run a request and get the response.
      *
@@ -139,7 +117,6 @@ class MiddlewareDispatcher
     public function execute(array $requestSpec): ResponseInterface
     {
         $server = new Server($this->app);
-
         return $server->run($this->_createRequest($requestSpec));
     }
 }

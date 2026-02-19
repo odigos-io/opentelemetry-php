@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\Console\Command;
 
 /**
@@ -26,7 +25,6 @@ interface SignalableCommandInterface
      * @see https://php.net/pcntl.constants for signals
      */
     public function getSubscribedSignals(): array;
-
     /**
      * The method will be called when the application is signaled.
      *

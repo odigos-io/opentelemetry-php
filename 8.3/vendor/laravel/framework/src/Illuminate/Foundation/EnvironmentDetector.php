@@ -3,7 +3,6 @@
 namespace Illuminate\Foundation;
 
 use Closure;
-
 class EnvironmentDetector
 {
     /**
@@ -18,10 +17,8 @@ class EnvironmentDetector
         if ($consoleArgs) {
             return $this->detectConsoleEnvironment($callback, $consoleArgs);
         }
-
         return $this->detectWebEnvironment($callback);
     }
-
     /**
      * Set the application environment for a web request.
      *
@@ -32,7 +29,6 @@ class EnvironmentDetector
     {
         return $callback();
     }
-
     /**
      * Set the application environment from command-line arguments.
      *
@@ -45,13 +41,11 @@ class EnvironmentDetector
         // First we will check if an environment argument was passed via console arguments
         // and if it was that automatically overrides as the environment. Otherwise, we
         // will check the environment as a "web" request like a typical HTTP request.
-        if (! is_null($value = $this->getEnvironmentArgument($args))) {
+        if (!is_null($value = $this->getEnvironmentArgument($args))) {
             return $value;
         }
-
         return $this->detectWebEnvironment($callback);
     }
-
     /**
      * Get the environment argument from the console.
      *
@@ -64,7 +58,6 @@ class EnvironmentDetector
             if ($value === '--env') {
                 return $args[$i + 1] ?? null;
             }
-
             if (str_starts_with($value, '--env=')) {
                 return head(array_slice(explode('=', $value), 1));
             }

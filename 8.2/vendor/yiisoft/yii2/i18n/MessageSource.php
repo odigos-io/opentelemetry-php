@@ -1,15 +1,14 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\i18n;
 
-use Yii;
+use Odigos\Yii;
 use yii\base\Component;
-
 /**
  * MessageSource is the base class for message translation repository classes.
  *
@@ -30,16 +29,13 @@ class MessageSource extends Component
      * @var bool whether to force message translation when the source and target languages are the same.
      * Defaults to false, meaning translation is only performed when source and target languages are different.
      */
-    public $forceTranslation = false;
+    public $forceTranslation = \false;
     /**
      * @var string|null the language that the original messages are in. If not set, it will use the value of
      * [[\yii\base\Application::sourceLanguage]].
      */
     public $sourceLanguage;
-
     private $_messages = [];
-
-
     /**
      * Initializes this component.
      */
@@ -50,7 +46,6 @@ class MessageSource extends Component
             $this->sourceLanguage = Yii::$app->sourceLanguage;
         }
     }
-
     /**
      * Loads the message translation for the specified language and category.
      * If translation for specific locale code such as `en-US` isn't found it
@@ -65,7 +60,6 @@ class MessageSource extends Component
     {
         return [];
     }
-
     /**
      * Translates a message to the specified language.
      *
@@ -85,10 +79,8 @@ class MessageSource extends Component
         if ($this->forceTranslation || $language !== $this->sourceLanguage) {
             return $this->translateMessage($category, $message, $language);
         }
-
-        return false;
+        return \false;
     }
-
     /**
      * Translates the specified message.
      * If the message is not found, a [[EVENT_MISSING_TRANSLATION|missingTranslation]] event will be triggered.
@@ -108,17 +100,12 @@ class MessageSource extends Component
         if (isset($this->_messages[$key][$message]) && $this->_messages[$key][$message] !== '') {
             return $this->_messages[$key][$message];
         } elseif ($this->hasEventHandlers(self::EVENT_MISSING_TRANSLATION)) {
-            $event = new MissingTranslationEvent([
-                'category' => $category,
-                'message' => $message,
-                'language' => $language,
-            ]);
+            $event = new \yii\i18n\MissingTranslationEvent(['category' => $category, 'message' => $message, 'language' => $language]);
             $this->trigger(self::EVENT_MISSING_TRANSLATION, $event);
             if ($event->translatedMessage !== null) {
                 return $this->_messages[$key][$message] = $event->translatedMessage;
             }
         }
-
-        return $this->_messages[$key][$message] = false;
+        return $this->_messages[$key][$message] = \false;
     }
 }

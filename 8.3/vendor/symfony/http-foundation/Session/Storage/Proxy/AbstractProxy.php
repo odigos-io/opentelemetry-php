@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\HttpFoundation\Session\Storage\Proxy;
 
 /**
@@ -16,10 +15,8 @@ namespace Symfony\Component\HttpFoundation\Session\Storage\Proxy;
  */
 abstract class AbstractProxy
 {
-    protected bool $wrapper = false;
-
+    protected bool $wrapper = \false;
     protected ?string $saveHandlerName = null;
-
     /**
      * Gets the session.save_handler name.
      */
@@ -27,7 +24,6 @@ abstract class AbstractProxy
     {
         return $this->saveHandlerName;
     }
-
     /**
      * Is this proxy handler and instance of \SessionHandlerInterface.
      */
@@ -35,7 +31,6 @@ abstract class AbstractProxy
     {
         return $this instanceof \SessionHandlerInterface;
     }
-
     /**
      * Returns true if this handler wraps an internal PHP session save handler using \SessionHandler.
      */
@@ -43,7 +38,6 @@ abstract class AbstractProxy
     {
         return $this->wrapper;
     }
-
     /**
      * Has a session started?
      */
@@ -51,7 +45,6 @@ abstract class AbstractProxy
     {
         return \PHP_SESSION_ACTIVE === session_status();
     }
-
     /**
      * Gets the session ID.
      */
@@ -59,7 +52,6 @@ abstract class AbstractProxy
     {
         return session_id();
     }
-
     /**
      * Sets the session ID.
      *
@@ -70,10 +62,8 @@ abstract class AbstractProxy
         if ($this->isActive()) {
             throw new \LogicException('Cannot change the ID of an active session.');
         }
-
         session_id($id);
     }
-
     /**
      * Gets the session name.
      */
@@ -81,7 +71,6 @@ abstract class AbstractProxy
     {
         return session_name();
     }
-
     /**
      * Sets the session name.
      *
@@ -92,7 +81,6 @@ abstract class AbstractProxy
         if ($this->isActive()) {
             throw new \LogicException('Cannot change the name of an active session.');
         }
-
         session_name($name);
     }
 }

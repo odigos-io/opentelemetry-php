@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Laminas\HttpHandlerRunner;
 
 use Laminas\HttpHandlerRunner\Emitter\EmitterInterface;
@@ -9,7 +8,6 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Throwable;
-
 /**
  * "Run" a request handler.
  *
@@ -21,7 +19,7 @@ use Throwable;
  * then the runner will use the composed error response generator to generate a
  * response, based on the exception or throwable raised.
  */
-final class RequestHandlerRunner implements RequestHandlerRunnerInterface
+final class RequestHandlerRunner implements \Laminas\HttpHandlerRunner\RequestHandlerRunnerInterface
 {
     /**
      * A factory capable of generating an error response in the scenario that
@@ -34,7 +32,6 @@ final class RequestHandlerRunner implements RequestHandlerRunnerInterface
      * @var callable(Throwable):ResponseInterface
      */
     private $serverRequestErrorResponseGenerator;
-
     /**
      * A factory capable of generating a Psr\Http\Message\ServerRequestInterface instance.
      * The factory will not receive any arguments.
@@ -42,7 +39,6 @@ final class RequestHandlerRunner implements RequestHandlerRunnerInterface
      * @var callable():ServerRequestInterface
      */
     private $serverRequestFactory;
-
     /**
      * @param callable():ServerRequestInterface     $serverRequestFactory
      * @param callable(Throwable):ResponseInterface $serverRequestErrorResponseGenerator
@@ -55,11 +51,11 @@ final class RequestHandlerRunner implements RequestHandlerRunnerInterface
         private readonly EmitterInterface $emitter,
         callable $serverRequestFactory,
         callable $serverRequestErrorResponseGenerator
-    ) {
-        $this->serverRequestFactory                = $serverRequestFactory;
+    )
+    {
+        $this->serverRequestFactory = $serverRequestFactory;
         $this->serverRequestErrorResponseGenerator = $serverRequestErrorResponseGenerator;
     }
-
     public function run(): void
     {
         try {
@@ -69,12 +65,9 @@ final class RequestHandlerRunner implements RequestHandlerRunnerInterface
             $this->emitMarshalServerRequestException($e);
             return;
         }
-
         $response = $this->handler->handle($request);
-
         $this->emitter->emit($response);
     }
-
     private function emitMarshalServerRequestException(Throwable $exception): void
     {
         $response = ($this->serverRequestErrorResponseGenerator)($exception);

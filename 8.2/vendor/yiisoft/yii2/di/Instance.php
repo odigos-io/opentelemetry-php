@@ -1,15 +1,14 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\di;
 
-use Yii;
+use Odigos\Yii;
 use yii\base\InvalidConfigException;
-
 /**
  * Instance represents a reference to a named object in a dependency injection (DI) container or a service locator.
  *
@@ -63,30 +62,26 @@ class Instance
      * @var bool if null should be returned instead of throwing an exception
      */
     public $optional;
-
-
     /**
      * Constructor.
      * @param string $id the component ID
      * @param bool $optional if null should be returned instead of throwing an exception
      */
-    protected function __construct($id, $optional = false)
+    protected function __construct($id, $optional = \false)
     {
         $this->id = $id;
         $this->optional = $optional;
     }
-
     /**
      * Creates a new Instance object.
      * @param string $id the component ID
      * @param bool $optional if null should be returned instead of throwing an exception
      * @return Instance the new Instance object.
      */
-    public static function of($id, $optional = false)
+    public static function of($id, $optional = \false)
     {
         return new static($id, $optional);
     }
-
     /**
      * Resolves the specified reference into the actual object and makes sure it is of the specified type.
      *
@@ -124,7 +119,7 @@ class Instance
     public static function ensure($reference, $type = null, $container = null)
     {
         if (is_array($reference)) {
-            if (!$container instanceof Container) {
+            if (!$container instanceof \yii\di\Container) {
                 $container = Yii::$container;
             }
             if (isset($reference['__class'])) {
@@ -140,18 +135,15 @@ class Instance
             if ($type === null || $component instanceof $type) {
                 return $component;
             }
-
             throw new InvalidConfigException('Invalid data type: ' . $class . '. ' . $type . ' is expected.');
         } elseif (empty($reference)) {
             throw new InvalidConfigException('The required component is not specified.');
         }
-
         if (is_string($reference)) {
             $reference = new static($reference);
         } elseif ($type === null || $reference instanceof $type) {
             return $reference;
         }
-
         if ($reference instanceof self) {
             try {
                 $component = $reference->get($container);
@@ -161,14 +153,11 @@ class Instance
             if ($type === null || $component instanceof $type) {
                 return $component;
             }
-
-            throw new InvalidConfigException('"' . $reference->id . '" refers to a ' . get_class($component) . " component. $type is expected.");
+            throw new InvalidConfigException('"' . $reference->id . '" refers to a ' . get_class($component) . " component. {$type} is expected.");
         }
-
         $valueType = is_object($reference) ? get_class($reference) : gettype($reference);
-        throw new InvalidConfigException("Invalid data type: $valueType. $type is expected.");
+        throw new InvalidConfigException("Invalid data type: {$valueType}. {$type} is expected.");
     }
-
     /**
      * Returns the actual object referenced by this Instance object.
      * @param ServiceLocator|Container|null $container the container used to locate the referenced object.
@@ -184,7 +173,6 @@ class Instance
             if (Yii::$app && Yii::$app->has($this->id)) {
                 return Yii::$app->get($this->id);
             }
-
             return Yii::$container->get($this->id);
         } catch (\Exception $e) {
             if ($this->optional) {
@@ -198,7 +186,6 @@ class Instance
             throw $e;
         }
     }
-
     /**
      * Restores class state after using `var_export()`.
      *
@@ -213,7 +200,6 @@ class Instance
         if (!isset($state['id'])) {
             throw new InvalidConfigException('Failed to instantiate class "Instance". Required parameter "id" is missing');
         }
-
         return new self($state['id']);
     }
 }

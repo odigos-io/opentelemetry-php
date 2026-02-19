@@ -12,7 +12,6 @@ interface Dispatcher
      * @return void
      */
     public function send($notifiables, $notification);
-
     /**
      * Send the given notification immediately.
      *

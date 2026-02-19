@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -25,7 +25,6 @@ use Cake\Validation\ValidatorAwareInterface;
 use Cake\Validation\ValidatorAwareTrait;
 use ReflectionMethod;
 use function Cake\Core\deprecationWarning;
-
 /**
  * Form abstraction used to create forms not tied to ORM backed models,
  * or to other permanent datastores. Ideal for implementing forms on top of
@@ -49,57 +48,49 @@ class Form implements EventListenerInterface, EventDispatcherInterface, Validato
      */
     use EventDispatcherTrait;
     use ValidatorAwareTrait;
-
     /**
      * Name of default validation set.
      *
      * @var string
      */
     public const DEFAULT_VALIDATOR = 'default';
-
     /**
      * The alias this object is assigned to validators as.
      *
      * @var string
      */
     public const VALIDATOR_PROVIDER_NAME = 'form';
-
     /**
      * The name of the event dispatched when a validator has been built.
      *
      * @var string
      */
     public const BUILD_VALIDATOR_EVENT = 'Form.buildValidator';
-
     /**
      * Schema class.
      *
      * @var string
      * @phpstan-var class-string<\Cake\Form\Schema>
      */
-    protected string $_schemaClass = Schema::class;
-
+    protected string $_schemaClass = \Cake\Form\Schema::class;
     /**
      * The schema used by this form.
      *
      * @var \Cake\Form\Schema|null
      */
-    protected ?Schema $_schema = null;
-
+    protected ?\Cake\Form\Schema $_schema = null;
     /**
      * The errors if any
      *
      * @var array
      */
     protected array $_errors = [];
-
     /**
      * Form's data.
      *
      * @var array
      */
     protected array $_data = [];
-
     /**
      * Constructor
      *
@@ -111,10 +102,8 @@ class Form implements EventListenerInterface, EventDispatcherInterface, Validato
         if ($eventManager !== null) {
             $this->setEventManager($eventManager);
         }
-
         $this->getEventManager()->on($this);
     }
-
     /**
      * Get the Form callbacks this form is interested in.
      *
@@ -127,14 +116,10 @@ class Form implements EventListenerInterface, EventDispatcherInterface, Validato
     public function implementedEvents(): array
     {
         if (method_exists($this, 'buildValidator')) {
-            return [
-                self::BUILD_VALIDATOR_EVENT => 'buildValidator',
-            ];
+            return [self::BUILD_VALIDATOR_EVENT => 'buildValidator'];
         }
-
         return [];
     }
-
     /**
      * Set the schema for this form.
      *
@@ -142,13 +127,11 @@ class Form implements EventListenerInterface, EventDispatcherInterface, Validato
      * @param \Cake\Form\Schema $schema The schema to set
      * @return $this
      */
-    public function setSchema(Schema $schema)
+    public function setSchema(\Cake\Form\Schema $schema)
     {
         $this->_schema = $schema;
-
         return $this;
     }
-
     /**
      * Get the schema for this form.
      *
@@ -159,13 +142,11 @@ class Form implements EventListenerInterface, EventDispatcherInterface, Validato
      * @since 4.1.0
      * @return \Cake\Form\Schema the schema instance.
      */
-    public function getSchema(): Schema
+    public function getSchema(): \Cake\Form\Schema
     {
         $this->_schema ??= $this->_buildSchema(new $this->_schemaClass());
-
         return $this->_schema;
     }
-
     /**
      * A hook method intended to be implemented by subclasses.
      *
@@ -176,11 +157,10 @@ class Form implements EventListenerInterface, EventDispatcherInterface, Validato
      * @param \Cake\Form\Schema $schema The schema to customize.
      * @return \Cake\Form\Schema The schema to use.
      */
-    protected function _buildSchema(Schema $schema): Schema
+    protected function _buildSchema(\Cake\Form\Schema $schema): \Cake\Form\Schema
     {
         return $schema;
     }
-
     /**
      * Used to check if $data passes this form's validation.
      *
@@ -191,12 +171,9 @@ class Form implements EventListenerInterface, EventDispatcherInterface, Validato
      */
     public function validate(array $data, ?string $validator = null): bool
     {
-        $this->_errors = $this->getValidator($validator ?: static::DEFAULT_VALIDATOR)
-            ->validate($data);
-
+        $this->_errors = $this->getValidator($validator ?: static::DEFAULT_VALIDATOR)->validate($data);
         return $this->_errors === [];
     }
-
     /**
      * Get the errors in the form
      *
@@ -209,7 +186,6 @@ class Form implements EventListenerInterface, EventDispatcherInterface, Validato
     {
         return $this->_errors;
     }
-
     /**
      * Returns validation errors for the given field
      *
@@ -225,12 +201,9 @@ class Form implements EventListenerInterface, EventDispatcherInterface, Validato
         if (isset($this->_errors[$field])) {
             return $this->_errors[$field];
         }
-
         $error = Hash::get($this->_errors, $field);
-
         return is_array($error) ? $error : [];
     }
-
     /**
      * Set the errors in the form.
      *
@@ -248,10 +221,8 @@ class Form implements EventListenerInterface, EventDispatcherInterface, Validato
     public function setErrors(array $errors)
     {
         $this->_errors = $errors;
-
         return $this;
     }
-
     /**
      * Execute the form if it is valid.
      *
@@ -277,38 +248,23 @@ class Form implements EventListenerInterface, EventDispatcherInterface, Validato
         $parentClass = self::class;
         $method = new ReflectionMethod($childClass, '_execute');
         $hasOverwrittenExecute = $method->getDeclaringClass()->getName() !== $parentClass;
-
         $this->_data = $data;
-        $options += ['validate' => true];
-
-        if ($options['validate'] === false) {
+        $options += ['validate' => \true];
+        if ($options['validate'] === \false) {
             if ($hasOverwrittenExecute) {
-                deprecationWarning(
-                    '5.3.0',
-                    'The _execute() method is deprecated. Override the process() method instead.',
-                );
-
+                deprecationWarning('5.3.0', 'The _execute() method is deprecated. Override the process() method instead.');
                 return $this->_execute($data);
             }
-
             return $this->process($data);
         }
-
-        $validator = $options['validate'] === true ? static::DEFAULT_VALIDATOR : $options['validate'];
+        $validator = $options['validate'] === \true ? static::DEFAULT_VALIDATOR : $options['validate'];
         $validateResult = $this->validate($data, $validator);
-
         if ($hasOverwrittenExecute) {
-            deprecationWarning(
-                '5.3.0',
-                'The _execute() method is deprecated. Override the process() method instead.',
-            );
-
+            deprecationWarning('5.3.0', 'The _execute() method is deprecated. Override the process() method instead.');
             return $validateResult && $this->_execute($data);
         }
-
         return $validateResult && $this->process($data);
     }
-
     /**
      * Hook method to be implemented in subclasses.
      *
@@ -322,7 +278,6 @@ class Form implements EventListenerInterface, EventDispatcherInterface, Validato
     {
         return $this->process($data);
     }
-
     /**
      * Hook method to be implemented in subclasses.
      *
@@ -333,9 +288,8 @@ class Form implements EventListenerInterface, EventDispatcherInterface, Validato
      */
     protected function process(array $data): bool
     {
-        return true;
+        return \true;
     }
-
     /**
      * Get field data.
      *
@@ -348,10 +302,8 @@ class Form implements EventListenerInterface, EventDispatcherInterface, Validato
         if ($field === null) {
             return $this->_data;
         }
-
         return Hash::get($this->_data, $field);
     }
-
     /**
      * Saves a variable or an associative array of variables for use inside form data.
      *
@@ -366,15 +318,12 @@ class Form implements EventListenerInterface, EventDispatcherInterface, Validato
         if (!is_array($name)) {
             $write = [$name => $value];
         }
-
         /** @var array<string, mixed> $write */
         foreach ($write as $key => $val) {
             $this->_data = Hash::insert($this->_data, $key, $val);
         }
-
         return $this;
     }
-
     /**
      * Set form data.
      *
@@ -384,10 +333,8 @@ class Form implements EventListenerInterface, EventDispatcherInterface, Validato
     public function setData(array $data)
     {
         $this->_data = $data;
-
         return $this;
     }
-
     /**
      * Get the printable version of a Form instance.
      *
@@ -395,12 +342,7 @@ class Form implements EventListenerInterface, EventDispatcherInterface, Validato
      */
     public function __debugInfo(): array
     {
-        $special = [
-            '_schema' => $this->getSchema()->__debugInfo(),
-            '_errors' => $this->getErrors(),
-            '_validator' => $this->getValidator()->__debugInfo(),
-        ];
-
+        $special = ['_schema' => $this->getSchema()->__debugInfo(), '_errors' => $this->getErrors(), '_validator' => $this->getValidator()->__debugInfo()];
         return $special + get_object_vars($this);
     }
 }

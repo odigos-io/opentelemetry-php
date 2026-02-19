@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -30,7 +30,6 @@ use Cake\Cache\Event\CacheBeforeSetEvent;
 use Cake\Cache\Event\CacheClearedEvent;
 use Cake\Cache\Event\CacheGroupClearEvent;
 use DateInterval;
-
 /**
  * Array storage engine for cache.
  *
@@ -51,7 +50,6 @@ class ArrayEngine extends CacheEngine
      * @var array<string, array>
      */
     protected array $data = [];
-
     /**
      * Write data for key into cache
      *
@@ -66,22 +64,13 @@ class ArrayEngine extends CacheEngine
     {
         $key = $this->_key($key);
         $expires = time() + $this->duration($ttl);
-
         $this->_eventClass = CacheBeforeSetEvent::class;
-        $this->dispatchEvent(CacheBeforeSetEvent::NAME, [
-            'key' => $key, 'value' => $value, 'ttl' => $this->duration($ttl),
-        ]);
-
+        $this->dispatchEvent(CacheBeforeSetEvent::NAME, ['key' => $key, 'value' => $value, 'ttl' => $this->duration($ttl)]);
         $this->data[$key] = ['exp' => $expires, 'val' => $value];
-
         $this->_eventClass = CacheAfterSetEvent::class;
-        $this->dispatchEvent(CacheAfterSetEvent::NAME, [
-            'key' => $key, 'value' => $value, 'success' => true, 'ttl' => $this->duration($ttl),
-        ]);
-
-        return true;
+        $this->dispatchEvent(CacheAfterSetEvent::NAME, ['key' => $key, 'value' => $value, 'success' => \true, 'ttl' => $this->duration($ttl)]);
+        return \true;
     }
-
     /**
      * Read a key from the cache
      *
@@ -95,29 +84,22 @@ class ArrayEngine extends CacheEngine
         $key = $this->_key($key);
         $this->_eventClass = CacheBeforeGetEvent::class;
         $this->dispatchEvent(CacheBeforeGetEvent::NAME, ['key' => $key, 'default' => $default]);
-
         $this->_eventClass = CacheAfterGetEvent::class;
         if (!isset($this->data[$key])) {
-            $this->dispatchEvent(CacheAfterGetEvent::NAME, ['key' => $key, 'value' => null, 'success' => false]);
-
+            $this->dispatchEvent(CacheAfterGetEvent::NAME, ['key' => $key, 'value' => null, 'success' => \false]);
             return $default;
         }
         $data = $this->data[$key];
-
         // Check expiration
         $now = time();
         if ($data['exp'] <= $now) {
             unset($this->data[$key]);
-            $this->dispatchEvent(CacheAfterGetEvent::NAME, ['key' => $key, 'value' => null, 'success' => false]);
-
+            $this->dispatchEvent(CacheAfterGetEvent::NAME, ['key' => $key, 'value' => null, 'success' => \false]);
             return $default;
         }
-
-        $this->dispatchEvent(CacheAfterGetEvent::NAME, ['key' => $key, 'value' => $data['val'], 'success' => true]);
-
+        $this->dispatchEvent(CacheAfterGetEvent::NAME, ['key' => $key, 'value' => $data['val'], 'success' => \true]);
         return $data['val'];
     }
-
     /**
      * Increments the value of an integer cached key
      *
@@ -133,18 +115,12 @@ class ArrayEngine extends CacheEngine
         $key = $this->_key($key);
         $this->_eventClass = CacheBeforeIncrementEvent::class;
         $this->dispatchEvent(CacheBeforeIncrementEvent::NAME, ['key' => $key, 'offset' => $offset]);
-
         $this->data[$key]['val'] += $offset;
         $val = $this->data[$key]['val'];
-
         $this->_eventClass = CacheAfterIncrementEvent::class;
-        $this->dispatchEvent('Cache.afterIncrement', [
-            'key' => $key, 'offset' => $offset, 'success' => true, 'value' => $val,
-        ]);
-
+        $this->dispatchEvent('Cache.afterIncrement', ['key' => $key, 'offset' => $offset, 'success' => \true, 'value' => $val]);
         return $val;
     }
-
     /**
      * Decrements the value of an integer cached key
      *
@@ -160,17 +136,11 @@ class ArrayEngine extends CacheEngine
         $key = $this->_key($key);
         $this->_eventClass = CacheBeforeDecrementEvent::class;
         $this->dispatchEvent(CacheBeforeDecrementEvent::NAME, ['key' => $key, 'offset' => $offset]);
-
         $this->data[$key]['val'] -= $offset;
-
         $this->_eventClass = CacheAfterDecrementEvent::class;
-        $this->dispatchEvent(CacheAfterDecrementEvent::NAME, [
-            'key' => $key, 'offset' => $offset, 'success' => true, 'value' => $this->data[$key]['val'],
-        ]);
-
+        $this->dispatchEvent(CacheAfterDecrementEvent::NAME, ['key' => $key, 'offset' => $offset, 'success' => \true, 'value' => $this->data[$key]['val']]);
         return $this->data[$key]['val'];
     }
-
     /**
      * Delete a key from the cache
      *
@@ -182,15 +152,11 @@ class ArrayEngine extends CacheEngine
         $key = $this->_key($key);
         $this->_eventClass = CacheBeforeDeleteEvent::class;
         $this->dispatchEvent(CacheBeforeDeleteEvent::NAME, ['key' => $key]);
-
         unset($this->data[$key]);
-
         $this->_eventClass = CacheAfterDeleteEvent::class;
-        $this->dispatchEvent(CacheAfterDeleteEvent::NAME, ['key' => $key, 'success' => true]);
-
-        return true;
+        $this->dispatchEvent(CacheAfterDeleteEvent::NAME, ['key' => $key, 'success' => \true]);
+        return \true;
     }
-
     /**
      * Delete all keys from the cache. This will clear every cache config using APC.
      *
@@ -201,10 +167,8 @@ class ArrayEngine extends CacheEngine
         $this->data = [];
         $this->_eventClass = CacheClearedEvent::class;
         $this->dispatchEvent(CacheClearedEvent::NAME);
-
-        return true;
+        return \true;
     }
-
     /**
      * Returns the `group value` for each of the configured groups
      * If the group initial value was not found, then it initializes
@@ -217,14 +181,12 @@ class ArrayEngine extends CacheEngine
         $result = [];
         foreach ($this->_config['groups'] as $group) {
             $key = $this->_config['prefix'] . $group;
-            $this->data[$key] ??= ['exp' => PHP_INT_MAX, 'val' => 1];
+            $this->data[$key] ??= ['exp' => \PHP_INT_MAX, 'val' => 1];
             $value = $this->data[$key]['val'];
             $result[] = $group . $value;
         }
-
         return $result;
     }
-
     /**
      * Increments the group value to simulate deletion of all keys under a group
      * old values will remain in storage until they expire.
@@ -240,7 +202,6 @@ class ArrayEngine extends CacheEngine
         }
         $this->_eventClass = CacheGroupClearEvent::class;
         $this->dispatchEvent(CacheGroupClearEvent::NAME, ['group' => $group]);
-
-        return true;
+        return \true;
     }
 }

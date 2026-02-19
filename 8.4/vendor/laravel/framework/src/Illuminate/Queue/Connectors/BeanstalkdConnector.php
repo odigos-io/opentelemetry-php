@@ -3,11 +3,10 @@
 namespace Illuminate\Queue\Connectors;
 
 use Illuminate\Queue\BeanstalkdQueue;
-use Pheanstalk\Contract\SocketFactoryInterface;
-use Pheanstalk\Pheanstalk;
-use Pheanstalk\Values\Timeout;
-
-class BeanstalkdConnector implements ConnectorInterface
+use Odigos\Pheanstalk\Contract\SocketFactoryInterface;
+use Odigos\Pheanstalk\Pheanstalk;
+use Odigos\Pheanstalk\Values\Timeout;
+class BeanstalkdConnector implements \Illuminate\Queue\Connectors\ConnectorInterface
 {
     /**
      * Establish a queue connection.
@@ -17,15 +16,8 @@ class BeanstalkdConnector implements ConnectorInterface
      */
     public function connect(array $config)
     {
-        return new BeanstalkdQueue(
-            $this->pheanstalk($config),
-            $config['queue'],
-            $config['retry_after'] ?? Pheanstalk::DEFAULT_TTR,
-            $config['block_for'] ?? 0,
-            $config['after_commit'] ?? null
-        );
+        return new BeanstalkdQueue($this->pheanstalk($config), $config['queue'], $config['retry_after'] ?? Pheanstalk::DEFAULT_TTR, $config['block_for'] ?? 0, $config['after_commit'] ?? null);
     }
-
     /**
      * Create a Pheanstalk instance.
      *
@@ -34,10 +26,6 @@ class BeanstalkdConnector implements ConnectorInterface
      */
     protected function pheanstalk(array $config)
     {
-        return Pheanstalk::create(
-            $config['host'],
-            $config['port'] ?? SocketFactoryInterface::DEFAULT_PORT,
-            isset($config['timeout']) ? new Timeout($config['timeout']) : null,
-        );
+        return Pheanstalk::create($config['host'], $config['port'] ?? SocketFactoryInterface::DEFAULT_PORT, isset($config['timeout']) ? new Timeout($config['timeout']) : null);
     }
 }

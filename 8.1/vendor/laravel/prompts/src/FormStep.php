@@ -3,22 +3,13 @@
 namespace Laravel\Prompts;
 
 use Closure;
-
 class FormStep
 {
     protected readonly Closure $condition;
-
-    public function __construct(
-        protected readonly Closure $step,
-        bool|Closure $condition,
-        public readonly ?string $name,
-        protected readonly bool $ignoreWhenReverting,
-    ) {
-        $this->condition = is_bool($condition)
-            ? fn () => $condition
-            : $condition;
+    public function __construct(protected readonly Closure $step, bool|Closure $condition, public readonly ?string $name, protected readonly bool $ignoreWhenReverting)
+    {
+        $this->condition = is_bool($condition) ? fn() => $condition : $condition;
     }
-
     /**
      * Execute this step.
      *
@@ -26,13 +17,11 @@ class FormStep
      */
     public function run(array $responses, mixed $previousResponse): mixed
     {
-        if (! $this->shouldRun($responses)) {
+        if (!$this->shouldRun($responses)) {
             return null;
         }
-
         return ($this->step)($responses, $previousResponse);
     }
-
     /**
      * Whether the step should run based on the given condition.
      *
@@ -42,7 +31,6 @@ class FormStep
     {
         return ($this->condition)($responses);
     }
-
     /**
      * Whether this step should be skipped over when a subsequent step is reverted.
      *
@@ -50,10 +38,9 @@ class FormStep
      */
     public function shouldIgnoreWhenReverting(array $responses): bool
     {
-        if (! $this->shouldRun($responses)) {
-            return true;
+        if (!$this->shouldRun($responses)) {
+            return \true;
         }
-
         return $this->ignoreWhenReverting;
     }
 }

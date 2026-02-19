@@ -5,95 +5,79 @@
  *
  * @license https://github.com/slimphp/Slim/blob/4.x/LICENSE.md (MIT License)
  */
-
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Slim\Interfaces;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
-
 /** @api */
 interface RouteInterface
 {
     /**
      * Get route invocation strategy
      */
-    public function getInvocationStrategy(): InvocationStrategyInterface;
-
+    public function getInvocationStrategy(): \Slim\Interfaces\InvocationStrategyInterface;
     /**
      * Set route invocation strategy
      */
-    public function setInvocationStrategy(InvocationStrategyInterface $invocationStrategy): RouteInterface;
-
+    public function setInvocationStrategy(\Slim\Interfaces\InvocationStrategyInterface $invocationStrategy): \Slim\Interfaces\RouteInterface;
     /**
      * Get route methods
      *
      * @return string[]
      */
     public function getMethods(): array;
-
     /**
      * Get route pattern
      */
     public function getPattern(): string;
-
     /**
      * Set route pattern
      */
-    public function setPattern(string $pattern): RouteInterface;
-
+    public function setPattern(string $pattern): \Slim\Interfaces\RouteInterface;
     /**
      * Get route callable
      *
      * @return callable|array{class-string, string}|string
      */
     public function getCallable();
-
     /**
      * Set route callable
      *
      * @param callable|array{class-string, string}|string $callable
      */
-    public function setCallable($callable): RouteInterface;
-
+    public function setCallable($callable): \Slim\Interfaces\RouteInterface;
     /**
      * Get route name
      */
     public function getName(): ?string;
-
     /**
      * Set route name
      *
      * @return static
      */
-    public function setName(string $name): RouteInterface;
-
+    public function setName(string $name): \Slim\Interfaces\RouteInterface;
     /**
      * Get the route's unique identifier
      */
     public function getIdentifier(): string;
-
     /**
      * Retrieve a specific route argument
      */
     public function getArgument(string $name, ?string $default = null): ?string;
-
     /**
      * Get route arguments
      *
      * @return array<string, string>
      */
     public function getArguments(): array;
-
     /**
      * Set a route argument
      *
      * @deprecated 4.14.1 Use a middleware for custom route arguments now.
      */
-    public function setArgument(string $name, string $value): RouteInterface;
-
+    public function setArgument(string $name, string $value): \Slim\Interfaces\RouteInterface;
     /**
      * Replace route arguments
      *
@@ -102,21 +86,17 @@ interface RouteInterface
      * @deprecated 4.14.1 Use a middleware for custom route arguments now.
      */
     public function setArguments(array $arguments): self;
-
     /**
      * @param MiddlewareInterface|string|callable $middleware
      */
     public function add($middleware): self;
-
     public function addMiddleware(MiddlewareInterface $middleware): self;
-
     /**
      * Prepare the route for use
      *
      * @param array<string, string> $arguments
      */
     public function prepare(array $arguments): self;
-
     /**
      * Run route
      *

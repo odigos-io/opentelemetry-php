@@ -10,7 +10,6 @@ class HigherOrderTapProxy
      * @var mixed
      */
     public $target;
-
     /**
      * Create a new tap proxy instance.
      *
@@ -20,7 +19,6 @@ class HigherOrderTapProxy
     {
         $this->target = $target;
     }
-
     /**
      * Dynamically pass method calls to the target.
      *
@@ -31,7 +29,6 @@ class HigherOrderTapProxy
     public function __call($method, $parameters)
     {
         $this->target->{$method}(...$parameters);
-
         return $this->target;
     }
 }

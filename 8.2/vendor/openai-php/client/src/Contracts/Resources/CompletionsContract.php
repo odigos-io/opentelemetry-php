@@ -5,7 +5,6 @@ namespace OpenAI\Contracts\Resources;
 use OpenAI\Responses\Completions\CreateResponse;
 use OpenAI\Responses\Completions\CreateStreamedResponse;
 use OpenAI\Responses\StreamResponse;
-
 interface CompletionsContract
 {
     /**
@@ -16,7 +15,6 @@ interface CompletionsContract
      * @param  array<string, mixed>  $parameters
      */
     public function create(array $parameters): CreateResponse;
-
     /**
      * Creates a streamed completion for the provided prompt and parameters
      *

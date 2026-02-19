@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -22,10 +22,9 @@ use Cake\Core\HttpApplicationInterface;
 use Cake\Event\EventInterface;
 use Cake\Routing\Router;
 use Closure;
-use League\Container\Exception\NotFoundException;
+use Odigos\League\Container\Exception\NotFoundException;
 use LogicException;
-use PHPUnit\Framework\Attributes\After;
-
+use Odigos\PHPUnit\Framework\Attributes\After;
 /**
  * A set of methods used for defining container services
  * in test cases.
@@ -43,21 +42,18 @@ trait ContainerStubTrait
      * @var string|null
      */
     protected ?string $_appClass = null;
-
     /**
      * The customized application constructor arguments.
      *
      * @var array|null
      */
     protected ?array $_appArgs = null;
-
     /**
      * The collection of container services.
      *
      * @var array<string, mixed>
      */
     private array $containerServices = [];
-
     /**
      * Configure the application class to use in integration tests.
      *
@@ -71,7 +67,6 @@ trait ContainerStubTrait
         $this->_appClass = $class;
         $this->_appArgs = $constructorArgs;
     }
-
     /**
      * Create an application instance.
      *
@@ -84,7 +79,6 @@ trait ContainerStubTrait
         if (class_exists(Router::class)) {
             Router::resetRoutes();
         }
-
         if ($this->_appClass) {
             $appClass = $this->_appClass;
         } else {
@@ -95,12 +89,10 @@ trait ContainerStubTrait
             throw new LogicException(sprintf('Cannot load `%s` for use in integration testing.', $appClass));
         }
         $appArgs = $this->_appArgs ?: [CONFIG];
-
         $app = new $appClass(...$appArgs);
         if ($this->containerServices && method_exists($app, 'getEventManager')) {
             $app->getEventManager()->on('Application.buildContainer', [$this, 'modifyContainer']);
         }
-
         foreach ($this->appPluginsToLoad as $pluginName => $config) {
             if (is_array($config)) {
                 $app->addPlugin($pluginName, $config);
@@ -108,10 +100,8 @@ trait ContainerStubTrait
                 $app->addPlugin($config);
             }
         }
-
         return $app;
     }
-
     /**
      * Add a mocked service to the container.
      *
@@ -126,10 +116,8 @@ trait ContainerStubTrait
     public function mockService(string $class, Closure $factory)
     {
         $this->containerServices[$class] = $factory;
-
         return $this;
     }
-
     /**
      * Remove a mocked service to the container.
      *
@@ -139,10 +127,8 @@ trait ContainerStubTrait
     public function removeMockService(string $class)
     {
         unset($this->containerServices[$class]);
-
         return $this;
     }
-
     /**
      * Wrap the application's container with one containing mocks.
      *
@@ -170,10 +156,8 @@ trait ContainerStubTrait
                 $container->add($key, $factory);
             }
         }
-
         $event->setResult($container);
     }
-
     /**
      * Clears any mocks that were defined and cleans
      * up application class configuration.
@@ -188,10 +172,6 @@ trait ContainerStubTrait
         $this->containerServices = [];
     }
 }
-
 // phpcs:disable
-class_alias(
-    'Cake\Core\TestSuite\ContainerStubTrait',
-    'Cake\TestSuite\ContainerStubTrait'
-);
+class_alias('Cake\Core\TestSuite\ContainerStubTrait', 'Cake\TestSuite\ContainerStubTrait');
 // phpcs:enable

@@ -5,7 +5,6 @@ namespace OpenAI\Contracts\Resources;
 use OpenAI\Responses\VectorStores\Files\VectorStoreFileDeleteResponse;
 use OpenAI\Responses\VectorStores\Files\VectorStoreFileListResponse;
 use OpenAI\Responses\VectorStores\Files\VectorStoreFileResponse;
-
 interface VectorStoresFilesContract
 {
     /**
@@ -16,7 +15,6 @@ interface VectorStoresFilesContract
      * @param  array<string, mixed>  $parameters
      */
     public function create(string $vectorStoreId, array $parameters): VectorStoreFileResponse;
-
     /**
      * Returns a list of files within a vector store.
      *
@@ -25,14 +23,12 @@ interface VectorStoresFilesContract
      * @param  array<string, mixed>  $parameters
      */
     public function list(string $vectorStoreId, array $parameters = []): VectorStoreFileListResponse;
-
     /**
      * Retrieves a file within a vector store.
      *
      * @see https://platform.openai.com/docs/api-reference/vector-stores-files/getFile
      */
     public function retrieve(string $vectorStoreId, string $fileId): VectorStoreFileResponse;
-
     /**
      * Delete a file within a vector store.
      *

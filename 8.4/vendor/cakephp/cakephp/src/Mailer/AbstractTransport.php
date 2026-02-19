@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -18,21 +18,18 @@ namespace Cake\Mailer;
 
 use Cake\Core\Exception\CakeException;
 use Cake\Core\InstanceConfigTrait;
-
 /**
  * Abstract transport for sending email
  */
 abstract class AbstractTransport
 {
     use InstanceConfigTrait;
-
     /**
      * Default config for this class
      *
      * @var array<string, mixed>
      */
     protected array $_defaultConfig = [];
-
     /**
      * Send mail
      *
@@ -40,8 +37,7 @@ abstract class AbstractTransport
      * @return array<string, mixed> Contains 'headers' and 'message' keys. Additional keys allowed.
      * @phpstan-return array{headers: string, message: string, ...}
      */
-    abstract public function send(Message $message): array;
-
+    abstract public function send(\Cake\Mailer\Message $message): array;
     /**
      * Constructor
      *
@@ -51,7 +47,6 @@ abstract class AbstractTransport
     {
         $this->setConfig($config);
     }
-
     /**
      * Check that at least one destination header is set.
      *
@@ -59,17 +54,10 @@ abstract class AbstractTransport
      * @return void
      * @throws \Cake\Core\Exception\CakeException If at least one of to, cc or bcc is not specified.
      */
-    protected function checkRecipient(Message $message): void
+    protected function checkRecipient(\Cake\Mailer\Message $message): void
     {
-        if (
-            $message->getTo() === []
-            && $message->getCc() === []
-            && $message->getBcc() === []
-        ) {
-            throw new CakeException(
-                'You must specify at least one recipient.'
-                . ' Use one of `setTo`, `setCc` or `setBcc` to define a recipient.',
-            );
+        if ($message->getTo() === [] && $message->getCc() === [] && $message->getBcc() === []) {
+            throw new CakeException('You must specify at least one recipient.' . ' Use one of `setTo`, `setCc` or `setBcc` to define a recipient.');
         }
     }
 }

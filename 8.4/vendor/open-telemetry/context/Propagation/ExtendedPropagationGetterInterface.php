@@ -1,14 +1,13 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\Context\Propagation;
 
 /**
  * Interface for getting values from a carrier.
  * This interface extends the base PropagationGetterInterface to avoid breaking changes.
  */
-interface ExtendedPropagationGetterInterface extends PropagationGetterInterface
+interface ExtendedPropagationGetterInterface extends \OpenTelemetry\Context\Propagation\PropagationGetterInterface
 {
     /**
      * Gets all values of a given key from a carrier.

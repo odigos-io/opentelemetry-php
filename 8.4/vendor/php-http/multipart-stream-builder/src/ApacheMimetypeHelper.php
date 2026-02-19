@@ -9,7 +9,7 @@ namespace Http\Message\MultipartStream;
  * @author Michael Dowling and contributors to guzzlehttp/psr7
  * @author Tobias Nyholm <tobias.nyholm@gmail.com>
  */
-class ApacheMimetypeHelper implements MimetypeHelper
+class ApacheMimetypeHelper implements \Http\Message\MultipartStream\MimetypeHelper
 {
     /**
      * {@inheritdoc}
@@ -18,9 +18,8 @@ class ApacheMimetypeHelper implements MimetypeHelper
      */
     public function getMimetypeFromFilename($filename)
     {
-        return $this->getMimetypeFromExtension(pathinfo($filename, PATHINFO_EXTENSION));
+        return $this->getMimetypeFromExtension(pathinfo($filename, \PATHINFO_EXTENSION));
     }
-
     /**
      * {@inheritdoc}
      *
@@ -128,16 +127,11 @@ class ApacheMimetypeHelper implements MimetypeHelper
             'yaml' => 'text/yaml',
             'yml' => 'text/yaml',
             'zip' => 'application/zip',
-
             // Non-Apache standard
             'pkpass' => 'application/vnd.apple.pkpass',
             'msg' => 'application/vnd.ms-outlook',
         ];
-
         $extension = strtolower($extension);
-
-        return isset($mimetypes[$extension])
-            ? $mimetypes[$extension]
-            : null;
+        return isset($mimetypes[$extension]) ? $mimetypes[$extension] : null;
     }
 }

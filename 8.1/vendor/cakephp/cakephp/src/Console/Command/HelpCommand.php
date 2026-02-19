@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -28,7 +28,6 @@ use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Utility\Inflector;
 use SimpleXMLElement;
-
 /**
  * Print out command list
  */
@@ -40,7 +39,6 @@ class HelpCommand extends BaseCommand implements CommandCollectionAwareInterface
      * @var \Cake\Console\CommandCollection
      */
     protected CommandCollection $commands;
-
     /**
      * @inheritDoc
      */
@@ -48,7 +46,6 @@ class HelpCommand extends BaseCommand implements CommandCollectionAwareInterface
     {
         $this->commands = $commands;
     }
-
     /**
      * Main function Prints out the list of commands.
      *
@@ -62,18 +59,13 @@ class HelpCommand extends BaseCommand implements CommandCollectionAwareInterface
         if ($commands instanceof ArrayIterator) {
             $commands->ksort();
         }
-
         if ($args->getOption('xml')) {
             $this->asXml($io, $commands);
-
             return static::CODE_SUCCESS;
         }
-
         $this->asText($io, $commands);
-
         return static::CODE_SUCCESS;
     }
-
     /**
      * Output text.
      *
@@ -103,51 +95,41 @@ class HelpCommand extends BaseCommand implements CommandCollectionAwareInterface
             $prefix = 'app';
             if ($namespace === 'Cake') {
                 $prefix = 'cakephp';
-            } elseif (in_array($namespace, $plugins, true)) {
+            } elseif (in_array($namespace, $plugins, \true)) {
                 $prefix = Inflector::underscore($namespace);
             }
             $shortestName = $this->getShortestName($names);
             if (str_contains($shortestName, '.')) {
                 [, $shortestName] = explode('.', $shortestName, 2);
             }
-
-            $grouped[$prefix][] = [
-                'name' => $shortestName,
-                'description' => is_subclass_of($class, BaseCommand::class) ? $class::getDescription() : '',
-            ];
+            $grouped[$prefix][] = ['name' => $shortestName, 'description' => is_subclass_of($class, BaseCommand::class) ? $class::getDescription() : ''];
         }
         ksort($grouped);
-
         if (isset($grouped['CakePHP'])) {
             $cakephp = $grouped['CakePHP'];
             $grouped = ['CakePHP' => $cakephp] + $grouped;
         }
-
         if (isset($grouped['App'])) {
             $app = $grouped['App'];
             $grouped = ['App' => $app] + $grouped;
         }
-
         $this->outputPaths($io);
         $io->out('<info>Available Commands:</info>', 2);
-
         foreach ($grouped as $prefix => $names) {
             $io->out("<info>{$prefix}</info>:");
             sort($names);
             foreach ($names as $data) {
                 $io->out(' - ' . $data['name']);
                 if ($data['description']) {
-                    $io->info(str_pad(" \u{2514}", 13, "\u{2500}") . ' ' . $data['description']);
+                    $io->info(str_pad(" └", 13, "─") . ' ' . $data['description']);
                 }
             }
             $io->out('');
         }
         $root = $this->getRootName();
-
         $io->out("To run a command, type <info>`{$root} command_name [args|options]`</info>");
         $io->out("To get help on a specific command, type <info>`{$root} command_name --help`</info>", 2);
     }
-
     /**
      * Output relevant paths if defined
      *
@@ -158,15 +140,15 @@ class HelpCommand extends BaseCommand implements CommandCollectionAwareInterface
     {
         $paths = [];
         if (Configure::check('App.dir')) {
-            $appPath = rtrim(Configure::read('App.dir'), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+            $appPath = rtrim(Configure::read('App.dir'), \DIRECTORY_SEPARATOR) . \DIRECTORY_SEPARATOR;
             // Extra space is to align output
             $paths['app'] = ' ' . $appPath;
         }
         if (defined('ROOT')) {
-            $paths['root'] = rtrim(ROOT, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+            $paths['root'] = rtrim(ROOT, \DIRECTORY_SEPARATOR) . \DIRECTORY_SEPARATOR;
         }
         if (defined('CORE_PATH')) {
-            $paths['core'] = rtrim(CORE_PATH, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+            $paths['core'] = rtrim(CORE_PATH, \DIRECTORY_SEPARATOR) . \DIRECTORY_SEPARATOR;
         }
         if ($paths === []) {
             return;
@@ -177,7 +159,6 @@ class HelpCommand extends BaseCommand implements CommandCollectionAwareInterface
         }
         $io->out('');
     }
-
     /**
      * @param array<string> $names Names
      * @return string
@@ -188,10 +169,8 @@ class HelpCommand extends BaseCommand implements CommandCollectionAwareInterface
         usort($names, function ($a, $b) {
             return strlen($a) - strlen($b);
         });
-
         return array_shift($names);
     }
-
     /**
      * Output as XML
      *
@@ -213,9 +192,8 @@ class HelpCommand extends BaseCommand implements CommandCollectionAwareInterface
             $shell->addAttribute('help', $name . ' -h');
         }
         $io->setOutputAs(ConsoleOutput::RAW);
-        $io->out((string)$shells->saveXML());
+        $io->out((string) $shells->saveXML());
     }
-
     /**
      * Gets the option parser instance and configures it.
      *
@@ -224,13 +202,7 @@ class HelpCommand extends BaseCommand implements CommandCollectionAwareInterface
      */
     protected function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
     {
-        $parser->setDescription(
-            'Get the list of available commands for this application.',
-        )->addOption('xml', [
-            'help' => 'Get the listing as XML.',
-            'boolean' => true,
-        ]);
-
+        $parser->setDescription('Get the list of available commands for this application.')->addOption('xml', ['help' => 'Get the listing as XML.', 'boolean' => \true]);
         return $parser;
     }
 }

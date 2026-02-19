@@ -8,17 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-declare(strict_types=1);
-
-namespace League\Uri\Contracts;
+declare (strict_types=1);
+namespace Odigos\League\Uri\Contracts;
 
 use Countable;
 use Iterator;
 use IteratorAggregate;
-use League\Uri\Exceptions\SyntaxError;
+use Odigos\League\Uri\Exceptions\SyntaxError;
 use Stringable;
-
 /**
  * @extends IteratorAggregate<string>
  */
@@ -28,36 +25,30 @@ interface SegmentedPathInterface extends Countable, IteratorAggregate, PathInter
      * Returns the total number of segments in the path.
      */
     public function count(): int;
-
     /**
      * Iterate over the path segment.
      *
      * @return Iterator<string>
      */
     public function getIterator(): Iterator;
-
     /**
      * Returns parent directory's path.
      */
     public function getDirname(): string;
-
     /**
      * Returns the path basename.
      */
     public function getBasename(): string;
-
     /**
      * Returns the basename extension.
      */
     public function getExtension(): string;
-
     /**
      * Retrieves a single path segment.
      *
      * If the segment offset has not been set, returns null.
      */
     public function get(int $offset): ?string;
-
     /**
      * Returns the associated key for a specific segment.
      *
@@ -67,12 +58,10 @@ interface SegmentedPathInterface extends Countable, IteratorAggregate, PathInter
      * @return array<int>
      */
     public function keys(Stringable|string|null $segment = null): array;
-
     /**
      * Appends a segment to the path.
      */
     public function append(Stringable|string $path): self;
-
     /**
      * Extracts a slice of $length elements starting at position $offset from the host.
      *
@@ -82,12 +71,10 @@ interface SegmentedPathInterface extends Countable, IteratorAggregate, PathInter
      * If $length is null it returns all elements from $offset to the end of the Path.
      */
     public function slice(int $offset, ?int $length = null): self;
-
     /**
      * Prepends a segment to the path.
      */
     public function prepend(Stringable|string $path): self;
-
     /**
      * Returns an instance with the modified segment.
      *
@@ -100,7 +87,6 @@ interface SegmentedPathInterface extends Countable, IteratorAggregate, PathInter
      * @throws SyntaxError If the key is invalid
      */
     public function withSegment(int $key, Stringable|string $segment): self;
-
     /**
      * Returns an instance without the specified segment.
      *
@@ -113,7 +99,6 @@ interface SegmentedPathInterface extends Countable, IteratorAggregate, PathInter
      * @throws SyntaxError If the key is invalid
      */
     public function withoutSegment(int ...$keys): self;
-
     /**
      * Returns an instance without duplicate delimiters.
      *
@@ -122,7 +107,6 @@ interface SegmentedPathInterface extends Countable, IteratorAggregate, PathInter
      * multiple consecutive empty segment
      */
     public function withoutEmptySegments(): self;
-
     /**
      * Returns an instance with the specified parent directory's path.
      *
@@ -130,7 +114,6 @@ interface SegmentedPathInterface extends Countable, IteratorAggregate, PathInter
      * an instance that contains the extension basename modified.
      */
     public function withDirname(Stringable|string $path): self;
-
     /**
      * Returns an instance with the specified basename.
      *
@@ -138,7 +121,6 @@ interface SegmentedPathInterface extends Countable, IteratorAggregate, PathInter
      * an instance that contains the extension basename modified.
      */
     public function withBasename(Stringable|string $basename): self;
-
     /**
      * Returns an instance with the specified basename extension.
      *

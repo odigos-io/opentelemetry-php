@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright 2016-present MongoDB, Inc.
  *
@@ -14,17 +15,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 namespace MongoDB\Model;
 
 use ArrayObject;
 use JsonSerializable;
 use MongoDB\BSON\Serializable;
 use MongoDB\BSON\Unserializable;
-
 use function array_values;
 use function MongoDB\recursive_copy;
-
 /**
  * Model class for a BSON array.
  *
@@ -44,7 +42,6 @@ class BSONArray extends ArrayObject implements JsonSerializable, Serializable, U
             $this[$key] = recursive_copy($value);
         }
     }
-
     /**
      * Factory method for var_export().
      *
@@ -55,10 +52,8 @@ class BSONArray extends ArrayObject implements JsonSerializable, Serializable, U
     {
         $array = new self();
         $array->exchangeArray($properties);
-
         return $array;
     }
-
     /**
      * Serialize the array to BSON.
      *
@@ -71,7 +66,6 @@ class BSONArray extends ArrayObject implements JsonSerializable, Serializable, U
     {
         return array_values($this->getArrayCopy());
     }
-
     /**
      * Unserialize the document to BSON.
      *
@@ -82,7 +76,6 @@ class BSONArray extends ArrayObject implements JsonSerializable, Serializable, U
     {
         parent::__construct($data);
     }
-
     /**
      * Serialize the array to JSON.
      *

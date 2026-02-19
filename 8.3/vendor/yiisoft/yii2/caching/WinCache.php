@@ -1,10 +1,10 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\caching;
 
 /**
@@ -20,7 +20,7 @@ namespace yii\caching;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class WinCache extends Cache
+class WinCache extends \yii\caching\Cache
 {
     /**
      * Checks whether a specified key exists in the cache.
@@ -35,10 +35,8 @@ class WinCache extends Cache
     public function exists($key)
     {
         $key = $this->buildKey($key);
-
         return wincache_ucache_exists($key);
     }
-
     /**
      * Retrieves a value from cache with a specified key.
      * This is the implementation of the method declared in the parent class.
@@ -49,7 +47,6 @@ class WinCache extends Cache
     {
         return wincache_ucache_get($key);
     }
-
     /**
      * Retrieves multiple values from cache with the specified keys.
      * @param array $keys a list of keys identifying the cached values
@@ -59,7 +56,6 @@ class WinCache extends Cache
     {
         return wincache_ucache_get($keys);
     }
-
     /**
      * Stores a value identified by a key in cache.
      * This is the implementation of the method declared in the parent class.
@@ -74,7 +70,6 @@ class WinCache extends Cache
     {
         return wincache_ucache_set($key, $value, $duration);
     }
-
     /**
      * Stores multiple key-value pairs in cache.
      * @param array $data array where key corresponds to cache key while value is the value stored
@@ -85,7 +80,6 @@ class WinCache extends Cache
     {
         return wincache_ucache_set($data, null, $duration);
     }
-
     /**
      * Stores a value identified by a key into cache if the cache does not contain this key.
      * This is the implementation of the method declared in the parent class.
@@ -100,7 +94,6 @@ class WinCache extends Cache
     {
         return wincache_ucache_add($key, $value, $duration);
     }
-
     /**
      * Adds multiple key-value pairs to cache.
      * The default implementation calls [[addValue()]] multiple times add values one by one. If the underlying cache
@@ -113,7 +106,6 @@ class WinCache extends Cache
     {
         return wincache_ucache_add($data, null, $duration);
     }
-
     /**
      * Deletes a value with the specified key from cache
      * This is the implementation of the method declared in the parent class.
@@ -124,7 +116,6 @@ class WinCache extends Cache
     {
         return wincache_ucache_delete($key);
     }
-
     /**
      * Deletes all values from cache.
      * This is the implementation of the method declared in the parent class.

@@ -9,16 +9,13 @@
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
  */
+declare (strict_types=1);
+namespace Odigos\Ramsey\Uuid\Guid;
 
-declare(strict_types=1);
-
-namespace Ramsey\Uuid\Guid;
-
-use Ramsey\Uuid\Codec\CodecInterface;
-use Ramsey\Uuid\Converter\NumberConverterInterface;
-use Ramsey\Uuid\Converter\TimeConverterInterface;
-use Ramsey\Uuid\Uuid;
-
+use Odigos\Ramsey\Uuid\Codec\CodecInterface;
+use Odigos\Ramsey\Uuid\Converter\NumberConverterInterface;
+use Odigos\Ramsey\Uuid\Converter\TimeConverterInterface;
+use Odigos\Ramsey\Uuid\Uuid;
 /**
  * Guid represents a UUID with "native" (little-endian) byte order
  *
@@ -46,12 +43,8 @@ use Ramsey\Uuid\Uuid;
  */
 final class Guid extends Uuid
 {
-    public function __construct(
-        Fields $fields,
-        NumberConverterInterface $numberConverter,
-        CodecInterface $codec,
-        TimeConverterInterface $timeConverter,
-    ) {
+    public function __construct(Fields $fields, NumberConverterInterface $numberConverter, CodecInterface $codec, TimeConverterInterface $timeConverter)
+    {
         parent::__construct($fields, $numberConverter, $codec, $timeConverter);
     }
 }

@@ -1,20 +1,17 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Odigos\Laminas\Diactoros\Request;
 
-namespace Laminas\Diactoros\Request;
-
-use Laminas\Diactoros\AbstractSerializer;
-use Laminas\Diactoros\Exception;
-use Laminas\Diactoros\Request;
-use Laminas\Diactoros\Stream;
-use Laminas\Diactoros\Uri;
+use Odigos\Laminas\Diactoros\AbstractSerializer;
+use Odigos\Laminas\Diactoros\Exception;
+use Odigos\Laminas\Diactoros\Request;
+use Odigos\Laminas\Diactoros\Stream;
+use Odigos\Laminas\Diactoros\Uri;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\StreamInterface;
-
 use function preg_match;
 use function sprintf;
-
 /**
  * Serialize (cast to string) or deserialize (cast string to Request) messages.
  *
@@ -37,7 +34,6 @@ final class Serializer extends AbstractSerializer
         $stream->write($message);
         return self::fromStream($stream);
     }
-
     /**
      * Deserialize a request stream to a request instance.
      *
@@ -46,49 +42,32 @@ final class Serializer extends AbstractSerializer
      */
     public static function fromStream(StreamInterface $stream): Request
     {
-        if (! $stream->isReadable() || ! $stream->isSeekable()) {
+        if (!$stream->isReadable() || !$stream->isSeekable()) {
             throw new Exception\InvalidArgumentException('Message stream must be both readable and seekable');
         }
-
         $stream->rewind();
-
         [$method, $requestTarget, $version] = self::getRequestLine($stream);
-        $uri                                = self::createUriFromRequestTarget($requestTarget);
-
+        $uri = self::createUriFromRequestTarget($requestTarget);
         [$headers, $body] = self::splitStream($stream);
-
-        return (new Request($uri, $method, $body, $headers))
-            ->withProtocolVersion($version)
-            ->withRequestTarget($requestTarget);
+        return (new Request($uri, $method, $body, $headers))->withProtocolVersion($version)->withRequestTarget($requestTarget);
     }
-
     /**
      * Serialize a request message to a string.
      */
     public static function toString(RequestInterface $request): string
     {
         $httpMethod = $request->getMethod();
-        $headers    = self::serializeHeaders($request->getHeaders());
-        $body       = (string) $request->getBody();
-        $format     = '%s %s HTTP/%s%s%s';
-
-        if (! empty($headers)) {
+        $headers = self::serializeHeaders($request->getHeaders());
+        $body = (string) $request->getBody();
+        $format = '%s %s HTTP/%s%s%s';
+        if (!empty($headers)) {
             $headers = "\r\n" . $headers;
         }
-        if (! empty($body)) {
+        if (!empty($body)) {
             $headers .= "\r\n\r\n";
         }
-
-        return sprintf(
-            $format,
-            $httpMethod,
-            $request->getRequestTarget(),
-            $request->getProtocolVersion(),
-            $headers,
-            $body
-        );
+        return sprintf($format, $httpMethod, $request->getRequestTarget(), $request->getProtocolVersion(), $headers, $body);
     }
-
     /**
      * Retrieve the components of the request line.
      *
@@ -101,20 +80,11 @@ final class Serializer extends AbstractSerializer
     private static function getRequestLine(StreamInterface $stream): array
     {
         $requestLine = self::getLine($stream);
-
-        if (
-            ! preg_match(
-                '#^(?P<method>[!\#$%&\'*+.^_`|~a-zA-Z0-9-]+) (?P<target>[^\s]+) HTTP/(?P<version>[1-9]\d*\.\d+)$#',
-                $requestLine,
-                $matches
-            )
-        ) {
+        if (!preg_match('#^(?P<method>[!\#$%&\'*+.^_`|~a-zA-Z0-9-]+) (?P<target>[^\s]+) HTTP/(?P<version>[1-9]\d*\.\d+)$#', $requestLine, $matches)) {
             throw Exception\SerializationException::forInvalidRequestLine();
         }
-
         return [$matches['method'], $matches['target'], $matches['version']];
     }
-
     /**
      * Create and return a Uri instance based on the provided request target.
      *
@@ -127,11 +97,9 @@ final class Serializer extends AbstractSerializer
         if (preg_match('#^https?://#', $requestTarget)) {
             return new Uri($requestTarget);
         }
-
         if (preg_match('#^(\*|[^/])#', $requestTarget)) {
             return new Uri();
         }
-
         return new Uri($requestTarget);
     }
 }

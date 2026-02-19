@@ -8,12 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\Console\Question;
 
 use Symfony\Component\Console\Exception\InvalidArgumentException;
 use Symfony\Component\Console\Exception\LogicException;
-
 /**
  * Represents a Question.
  *
@@ -22,8 +20,8 @@ use Symfony\Component\Console\Exception\LogicException;
 class Question
 {
     private ?int $attempts = null;
-    private bool $hidden = false;
-    private bool $hiddenFallback = true;
+    private bool $hidden = \false;
+    private bool $hiddenFallback = \true;
     /**
      * @var (\Closure(string):string[])|null
      */
@@ -36,20 +34,16 @@ class Question
      * @var (\Closure(mixed):mixed)|null
      */
     private ?\Closure $normalizer = null;
-    private bool $trimmable = true;
-    private bool $multiline = false;
+    private bool $trimmable = \true;
+    private bool $multiline = \false;
     private ?int $timeout = null;
-
     /**
      * @param string                     $question The question to ask to the user
      * @param string|bool|int|float|null $default  The default answer to return if the user enters nothing
      */
-    public function __construct(
-        private string $question,
-        private string|bool|int|float|null $default = null,
-    ) {
+    public function __construct(private string $question, private string|bool|int|float|null $default = null)
+    {
     }
-
     /**
      * Returns the question.
      */
@@ -57,7 +51,6 @@ class Question
     {
         return $this->question;
     }
-
     /**
      * Returns the default answer.
      */
@@ -65,7 +58,6 @@ class Question
     {
         return $this->default;
     }
-
     /**
      * Returns whether the user response accepts newline characters.
      */
@@ -73,7 +65,6 @@ class Question
     {
         return $this->multiline;
     }
-
     /**
      * Sets whether the user response should accept newline characters.
      *
@@ -82,10 +73,8 @@ class Question
     public function setMultiline(bool $multiline): static
     {
         $this->multiline = $multiline;
-
         return $this;
     }
-
     /**
      * Returns the timeout in seconds.
      */
@@ -93,7 +82,6 @@ class Question
     {
         return $this->timeout;
     }
-
     /**
      * Sets the maximum time the user has to answer the question.
      * If the user does not answer within this time, an exception will be thrown.
@@ -103,10 +91,8 @@ class Question
     public function setTimeout(?int $seconds): static
     {
         $this->timeout = $seconds;
-
         return $this;
     }
-
     /**
      * Returns whether the user response must be hidden.
      */
@@ -114,7 +100,6 @@ class Question
     {
         return $this->hidden;
     }
-
     /**
      * Sets whether the user response must be hidden or not.
      *
@@ -127,12 +112,9 @@ class Question
         if ($this->autocompleterCallback) {
             throw new LogicException('A hidden question cannot use the autocompleter.');
         }
-
         $this->hidden = $hidden;
-
         return $this;
     }
-
     /**
      * In case the response cannot be hidden, whether to fallback on non-hidden question or not.
      */
@@ -140,7 +122,6 @@ class Question
     {
         return $this->hiddenFallback;
     }
-
     /**
      * Sets whether to fallback on non-hidden question if the response cannot be hidden.
      *
@@ -149,20 +130,16 @@ class Question
     public function setHiddenFallback(bool $fallback): static
     {
         $this->hiddenFallback = $fallback;
-
         return $this;
     }
-
     /**
      * Gets values for the autocompleter.
      */
     public function getAutocompleterValues(): ?iterable
     {
         $callback = $this->getAutocompleterCallback();
-
         return $callback ? $callback('') : null;
     }
-
     /**
      * Sets values for the autocompleter.
      *
@@ -174,21 +151,17 @@ class Question
     {
         if (\is_array($values)) {
             $values = $this->isAssoc($values) ? array_merge(array_keys($values), array_values($values)) : array_values($values);
-
-            $callback = static fn () => $values;
+            $callback = static fn() => $values;
         } elseif ($values instanceof \Traversable) {
             $callback = static function () use ($values) {
                 static $valueCache;
-
-                return $valueCache ??= iterator_to_array($values, false);
+                return $valueCache ??= iterator_to_array($values, \false);
             };
         } else {
             $callback = null;
         }
-
         return $this->setAutocompleterCallback($callback);
     }
-
     /**
      * Gets the callback function used for the autocompleter.
      *
@@ -198,7 +171,6 @@ class Question
     {
         return $this->autocompleterCallback;
     }
-
     /**
      * Sets the callback function used for the autocompleter.
      *
@@ -213,12 +185,9 @@ class Question
         if ($this->hidden && null !== $callback) {
             throw new LogicException('A hidden question cannot use the autocompleter.');
         }
-
         $this->autocompleterCallback = null === $callback ? null : $callback(...);
-
         return $this;
     }
-
     /**
      * Sets a validator for the question.
      *
@@ -229,10 +198,8 @@ class Question
     public function setValidator(?callable $validator): static
     {
         $this->validator = null === $validator ? null : $validator(...);
-
         return $this;
     }
-
     /**
      * Gets the validator for the question.
      *
@@ -242,7 +209,6 @@ class Question
     {
         return $this->validator;
     }
-
     /**
      * Sets the maximum number of attempts.
      *
@@ -257,12 +223,9 @@ class Question
         if (null !== $attempts && $attempts < 1) {
             throw new InvalidArgumentException('Maximum number of attempts must be a positive value.');
         }
-
         $this->attempts = $attempts;
-
         return $this;
     }
-
     /**
      * Gets the maximum number of attempts.
      *
@@ -272,7 +235,6 @@ class Question
     {
         return $this->attempts;
     }
-
     /**
      * Sets a normalizer for the response.
      *
@@ -283,10 +245,8 @@ class Question
     public function setNormalizer(callable $normalizer): static
     {
         $this->normalizer = $normalizer(...);
-
         return $this;
     }
-
     /**
      * Gets the normalizer for the response.
      *
@@ -296,24 +256,20 @@ class Question
     {
         return $this->normalizer;
     }
-
     protected function isAssoc(array $array): bool
     {
         return (bool) \count(array_filter(array_keys($array), 'is_string'));
     }
-
     public function isTrimmable(): bool
     {
         return $this->trimmable;
     }
-
     /**
      * @return $this
      */
     public function setTrimmable(bool $trimmable): static
     {
         $this->trimmable = $trimmable;
-
         return $this;
     }
 }

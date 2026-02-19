@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -23,7 +23,6 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-
 /**
  * Middleware for encrypting & decrypting cookies.
  *
@@ -41,28 +40,24 @@ use Psr\Http\Server\RequestHandlerInterface;
 class EncryptedCookieMiddleware implements MiddlewareInterface
 {
     use CookieCryptTrait;
-
     /**
      * The list of cookies to encrypt/decrypt
      *
      * @var array<string>
      */
     protected array $cookieNames;
-
     /**
      * Encryption key to use.
      *
      * @var string
      */
     protected string $key;
-
     /**
      * Encryption type.
      *
      * @var string
      */
     protected string $cipherType;
-
     /**
      * Constructor
      *
@@ -76,7 +71,6 @@ class EncryptedCookieMiddleware implements MiddlewareInterface
         $this->key = $key;
         $this->cipherType = $cipherType;
     }
-
     /**
      * Apply cookie encryption/decryption.
      *
@@ -89,7 +83,6 @@ class EncryptedCookieMiddleware implements MiddlewareInterface
         if ($request->getCookieParams()) {
             $request = $this->decodeCookies($request);
         }
-
         $response = $handler->handle($request);
         if ($response->hasHeader('Set-Cookie')) {
             $response = $this->encodeSetCookieHeader($response);
@@ -97,10 +90,8 @@ class EncryptedCookieMiddleware implements MiddlewareInterface
         if ($response instanceof Response) {
             return $this->encodeCookies($response);
         }
-
         return $response;
     }
-
     /**
      * Fetch the cookie encryption key.
      *
@@ -112,7 +103,6 @@ class EncryptedCookieMiddleware implements MiddlewareInterface
     {
         return $this->key;
     }
-
     /**
      * Decode cookies from the request.
      *
@@ -127,10 +117,8 @@ class EncryptedCookieMiddleware implements MiddlewareInterface
                 $cookies[$name] = $this->_decrypt($cookies[$name], $this->cipherType, $this->key);
             }
         }
-
         return $request->withCookieParams($cookies);
     }
-
     /**
      * Encode cookies from a response's CookieCollection.
      *
@@ -140,15 +128,13 @@ class EncryptedCookieMiddleware implements MiddlewareInterface
     protected function encodeCookies(Response $response): Response
     {
         foreach ($response->getCookieCollection() as $cookie) {
-            if (in_array($cookie->getName(), $this->cookieNames, true)) {
+            if (in_array($cookie->getName(), $this->cookieNames, \true)) {
                 $value = $this->_encrypt($cookie->getValue(), $this->cipherType);
                 $response = $response->withCookie($cookie->withValue($value));
             }
         }
-
         return $response;
     }
-
     /**
      * Encode cookies from a response's Set-Cookie header
      *
@@ -160,13 +146,12 @@ class EncryptedCookieMiddleware implements MiddlewareInterface
         $cookies = CookieCollection::createFromHeader($response->getHeader('Set-Cookie'));
         $header = [];
         foreach ($cookies as $cookie) {
-            if (in_array($cookie->getName(), $this->cookieNames, true)) {
+            if (in_array($cookie->getName(), $this->cookieNames, \true)) {
                 $value = $this->_encrypt($cookie->getValue(), $this->cipherType);
                 $cookie = $cookie->withValue($value);
             }
             $header[] = $cookie->toHeaderValue();
         }
-
         return $response->withHeader('Set-Cookie', $header);
     }
 }

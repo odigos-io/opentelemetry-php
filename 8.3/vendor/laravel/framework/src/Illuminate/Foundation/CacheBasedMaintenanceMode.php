@@ -5,7 +5,6 @@ namespace Illuminate\Foundation;
 use Illuminate\Contracts\Cache\Factory;
 use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Contracts\Foundation\MaintenanceMode;
-
 class CacheBasedMaintenanceMode implements MaintenanceMode
 {
     /**
@@ -14,21 +13,18 @@ class CacheBasedMaintenanceMode implements MaintenanceMode
      * @var \Illuminate\Contracts\Cache\Factory
      */
     protected $cache;
-
     /**
      * The cache store that should be utilized.
      *
      * @var string
      */
     protected $store;
-
     /**
      * The cache key to use when storing maintenance mode information.
      *
      * @var string
      */
     protected $key;
-
     /**
      * Create a new cache based maintenance mode implementation.
      *
@@ -42,7 +38,6 @@ class CacheBasedMaintenanceMode implements MaintenanceMode
         $this->store = $store;
         $this->key = $key;
     }
-
     /**
      * Take the application down for maintenance.
      *
@@ -53,7 +48,6 @@ class CacheBasedMaintenanceMode implements MaintenanceMode
     {
         $this->getStore()->put($this->key, $payload);
     }
-
     /**
      * Take the application out of maintenance.
      *
@@ -63,7 +57,6 @@ class CacheBasedMaintenanceMode implements MaintenanceMode
     {
         $this->getStore()->forget($this->key);
     }
-
     /**
      * Determine if the application is currently down for maintenance.
      *
@@ -73,7 +66,6 @@ class CacheBasedMaintenanceMode implements MaintenanceMode
     {
         return $this->getStore()->has($this->key);
     }
-
     /**
      * Get the data array which was provided when the application was placed into maintenance.
      *
@@ -83,7 +75,6 @@ class CacheBasedMaintenanceMode implements MaintenanceMode
     {
         return $this->getStore()->get($this->key);
     }
-
     /**
      * Get the cache store to use.
      *

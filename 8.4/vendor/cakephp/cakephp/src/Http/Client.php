@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -31,11 +31,10 @@ use Cake\Http\Cookie\CookieCollection;
 use Cake\Http\Cookie\CookieInterface;
 use Cake\Utility\Hash;
 use InvalidArgumentException;
-use Laminas\Diactoros\Uri;
+use Odigos\Laminas\Diactoros\Uri;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-
 /**
  * The end user interface for doing HTTP requests.
  *
@@ -113,28 +112,12 @@ class Client implements EventDispatcherInterface, ClientInterface
      */
     use EventDispatcherTrait;
     use InstanceConfigTrait;
-
     /**
      * Default configuration for the client.
      *
      * @var array<string, mixed>
      */
-    protected array $_defaultConfig = [
-        'auth' => null,
-        'adapter' => null,
-        'host' => null,
-        'port' => null,
-        'scheme' => 'http',
-        'basePath' => '',
-        'timeout' => 30,
-        'ssl_verify_peer' => true,
-        'ssl_verify_peer_name' => true,
-        'ssl_verify_depth' => 5,
-        'ssl_verify_host' => true,
-        'redirect' => false,
-        'protocolVersion' => '1.1',
-    ];
-
+    protected array $_defaultConfig = ['auth' => null, 'adapter' => null, 'host' => null, 'port' => null, 'scheme' => 'http', 'basePath' => '', 'timeout' => 30, 'ssl_verify_peer' => \true, 'ssl_verify_peer_name' => \true, 'ssl_verify_depth' => 5, 'ssl_verify_host' => \true, 'redirect' => \false, 'protocolVersion' => '1.1'];
     /**
      * List of cookies from responses made with this client.
      *
@@ -144,21 +127,18 @@ class Client implements EventDispatcherInterface, ClientInterface
      * @var \Cake\Http\Cookie\CookieCollection
      */
     protected CookieCollection $_cookies;
-
     /**
      * Mock adapter for stubbing requests in tests.
      *
      * @var \Cake\Http\Client\Adapter\Mock|null
      */
     protected static ?MockAdapter $_mockAdapter = null;
-
     /**
      * Adapter for sending requests.
      *
      * @var \Cake\Http\Client\AdapterInterface
      */
     protected AdapterInterface $_adapter;
-
     /**
      * Create a new HTTP Client.
      *
@@ -195,24 +175,19 @@ class Client implements EventDispatcherInterface, ClientInterface
     {
         $this->_eventClass = ClientEvent::class;
         $this->setConfig($config);
-
         $adapter = $this->_config['adapter'];
         if ($adapter === null) {
             $adapter = Curl::class;
-
             if (!extension_loaded('curl')) {
                 $adapter = Stream::class;
             }
         } else {
             $this->deleteConfig('adapter');
         }
-
         if (is_string($adapter)) {
             $adapter = new $adapter();
         }
-
         $this->_adapter = $adapter;
-
         if (!empty($this->_config['cookieJar'])) {
             $this->_cookies = $this->_config['cookieJar'];
             $this->deleteConfig('cookieJar');
@@ -220,7 +195,6 @@ class Client implements EventDispatcherInterface, ClientInterface
             $this->_cookies = new CookieCollection();
         }
     }
-
     /**
      * Client instance returned is scoped to the domain, port, and scheme parsed from the passed URL string. The passed
      * string must have a scheme and a domain. Optionally, if a port is included in the string, the port will be scoped
@@ -234,28 +208,19 @@ class Client implements EventDispatcherInterface, ClientInterface
     public static function createFromUrl(string $url): static
     {
         $parts = parse_url($url);
-
-        if ($parts === false) {
-            throw new InvalidArgumentException(sprintf(
-                'String `%s` did not parse.',
-                $url,
-            ));
+        if ($parts === \false) {
+            throw new InvalidArgumentException(sprintf('String `%s` did not parse.', $url));
         }
-
         $config = array_intersect_key($parts, ['scheme' => '', 'port' => '', 'host' => '', 'path' => '']);
-
         if (empty($config['scheme']) || empty($config['host'])) {
             throw new InvalidArgumentException('The URL was parsed but did not contain a scheme or host');
         }
-
         if (isset($config['path'])) {
             $config['basePath'] = $config['path'];
             unset($config['path']);
         }
-
         return new static($config);
     }
-
     /**
      * Get the cookies stored in the Client.
      *
@@ -265,7 +230,6 @@ class Client implements EventDispatcherInterface, ClientInterface
     {
         return $this->_cookies;
     }
-
     /**
      * Adds a cookie to the Client collection.
      *
@@ -279,10 +243,8 @@ class Client implements EventDispatcherInterface, ClientInterface
             throw new InvalidArgumentException('Cookie must have a domain and a path set.');
         }
         $this->_cookies = $this->_cookies->add($cookie);
-
         return $this;
     }
-
     /**
      * Do a GET request.
      *
@@ -305,15 +267,8 @@ class Client implements EventDispatcherInterface, ClientInterface
             unset($data['_content']);
         }
         $url = $this->buildUrl($url, $data, $options);
-
-        return $this->_doRequest(
-            Request::METHOD_GET,
-            $url,
-            $body,
-            $options,
-        );
+        return $this->_doRequest(Request::METHOD_GET, $url, $body, $options);
     }
-
     /**
      * Do a POST request.
      *
@@ -326,10 +281,8 @@ class Client implements EventDispatcherInterface, ClientInterface
     {
         $options = $this->_mergeOptions($options);
         $url = $this->buildUrl($url, [], $options);
-
         return $this->_doRequest(Request::METHOD_POST, $url, $data, $options);
     }
-
     /**
      * Do a PUT request.
      *
@@ -342,10 +295,8 @@ class Client implements EventDispatcherInterface, ClientInterface
     {
         $options = $this->_mergeOptions($options);
         $url = $this->buildUrl($url, [], $options);
-
         return $this->_doRequest(Request::METHOD_PUT, $url, $data, $options);
     }
-
     /**
      * Do a PATCH request.
      *
@@ -358,10 +309,8 @@ class Client implements EventDispatcherInterface, ClientInterface
     {
         $options = $this->_mergeOptions($options);
         $url = $this->buildUrl($url, [], $options);
-
         return $this->_doRequest(Request::METHOD_PATCH, $url, $data, $options);
     }
-
     /**
      * Do an OPTIONS request.
      *
@@ -374,10 +323,8 @@ class Client implements EventDispatcherInterface, ClientInterface
     {
         $options = $this->_mergeOptions($options);
         $url = $this->buildUrl($url, [], $options);
-
         return $this->_doRequest(Request::METHOD_OPTIONS, $url, $data, $options);
     }
-
     /**
      * Do a TRACE request.
      *
@@ -390,10 +337,8 @@ class Client implements EventDispatcherInterface, ClientInterface
     {
         $options = $this->_mergeOptions($options);
         $url = $this->buildUrl($url, [], $options);
-
         return $this->_doRequest(Request::METHOD_TRACE, $url, $data, $options);
     }
-
     /**
      * Do a DELETE request.
      *
@@ -406,10 +351,8 @@ class Client implements EventDispatcherInterface, ClientInterface
     {
         $options = $this->_mergeOptions($options);
         $url = $this->buildUrl($url, [], $options);
-
         return $this->_doRequest(Request::METHOD_DELETE, $url, $data, $options);
     }
-
     /**
      * Do a HEAD request.
      *
@@ -422,10 +365,8 @@ class Client implements EventDispatcherInterface, ClientInterface
     {
         $options = $this->_mergeOptions($options);
         $url = $this->buildUrl($url, $data, $options);
-
         return $this->_doRequest(Request::METHOD_HEAD, $url, '', $options);
     }
-
     /**
      * Helper method for doing non-GET requests.
      *
@@ -437,16 +378,9 @@ class Client implements EventDispatcherInterface, ClientInterface
      */
     protected function _doRequest(string $method, string $url, mixed $data, array $options): Response
     {
-        $request = $this->_createRequest(
-            $method,
-            $url,
-            $data,
-            $options,
-        );
-
+        $request = $this->_createRequest($method, $url, $data, $options);
         return $this->send($request, $options);
     }
-
     /**
      * Does a recursive merge of the parameter with the scope config.
      *
@@ -457,7 +391,6 @@ class Client implements EventDispatcherInterface, ClientInterface
     {
         return Hash::merge($this->_config, $options);
     }
-
     /**
      * Sends a PSR-7 request and returns a PSR-7 response.
      *
@@ -469,7 +402,6 @@ class Client implements EventDispatcherInterface, ClientInterface
     {
         return $this->send($request, $this->_config);
     }
-
     /**
      * Send a request.
      *
@@ -484,58 +416,34 @@ class Client implements EventDispatcherInterface, ClientInterface
     {
         $redirects = 0;
         if (isset($options['redirect'])) {
-            $redirects = (int)$options['redirect'];
+            $redirects = (int) $options['redirect'];
             unset($options['redirect']);
         }
-
         do {
             /** @var \Cake\Http\Client\ClientEvent $event */
-            $event = $this->dispatchEvent(
-                'HttpClient.beforeSend',
-                ['request' => $request, 'adapterOptions' => $options, 'redirects' => $redirects],
-            );
-
+            $event = $this->dispatchEvent('HttpClient.beforeSend', ['request' => $request, 'adapterOptions' => $options, 'redirects' => $redirects]);
             $request = $event->getRequest();
             $response = $event->getResult();
-            $requestSent = false;
+            $requestSent = \false;
             if ($response === null) {
-                $requestSent = true;
+                $requestSent = \true;
                 $response = $this->_sendRequest($request, $event->getAdapterOptions());
             }
-
             /** @var \Cake\Http\Client\ClientEvent $event */
-            $event = $this->dispatchEvent(
-                'HttpClient.afterSend',
-                [
-                    'request' => $request,
-                    'adapterOptions' => $options,
-                    'redirects' => $redirects,
-                    'requestSent' => $requestSent,
-                    'response' => $response,
-                ],
-            );
+            $event = $this->dispatchEvent('HttpClient.afterSend', ['request' => $request, 'adapterOptions' => $options, 'redirects' => $redirects, 'requestSent' => $requestSent, 'response' => $response]);
             $response = $event->getResult();
             assert($response instanceof Response);
-
             $handleRedirect = $response->isRedirect() && $redirects-- > 0;
             if ($handleRedirect) {
                 $url = $request->getUri();
-
                 $location = $response->getHeaderLine('Location');
-                $locationUrl = $this->buildUrl($location, [], [
-                    'host' => $url->getHost(),
-                    'port' => $url->getPort(),
-                    'scheme' => $url->getScheme(),
-                    'protocolRelative' => true,
-                ]);
+                $locationUrl = $this->buildUrl($location, [], ['host' => $url->getHost(), 'port' => $url->getPort(), 'scheme' => $url->getScheme(), 'protocolRelative' => \true]);
                 $request = $request->withUri(new Uri($locationUrl));
                 $request = $this->_cookies->addToRequest($request, []);
             }
         } while ($handleRedirect);
-
         return $response;
     }
-
     /**
      * Clear all mocked responses
      *
@@ -545,7 +453,6 @@ class Client implements EventDispatcherInterface, ClientInterface
     {
         static::$_mockAdapter = null;
     }
-
     /**
      * Add a mocked response.
      *
@@ -574,7 +481,6 @@ class Client implements EventDispatcherInterface, ClientInterface
         $request = new Request($url, $method);
         static::$_mockAdapter->addResponse($request, $response, $options);
     }
-
     /**
      * Send a request without redirection.
      *
@@ -594,11 +500,9 @@ class Client implements EventDispatcherInterface, ClientInterface
         foreach ($responses as $response) {
             $this->_cookies = $this->_cookies->addFromResponse($response, $request);
         }
-
         /** @var \Cake\Http\Client\Response */
         return array_pop($responses);
     }
-
     /**
      * Generate a URL based on the scoped client options.
      *
@@ -612,44 +516,30 @@ class Client implements EventDispatcherInterface, ClientInterface
         if (!$options && !$query) {
             return $url;
         }
-        $defaults = [
-            'host' => null,
-            'port' => null,
-            'scheme' => 'http',
-            'basePath' => '',
-            'protocolRelative' => false,
-        ];
+        $defaults = ['host' => null, 'port' => null, 'scheme' => 'http', 'basePath' => '', 'protocolRelative' => \false];
         $options += $defaults;
-
         if ($query) {
             $q = str_contains($url, '?') ? '&' : '?';
             $url .= $q;
-            $url .= is_string($query) ? $query : http_build_query($query, '', '&', PHP_QUERY_RFC3986);
+            $url .= is_string($query) ? $query : http_build_query($query, '', '&', \PHP_QUERY_RFC3986);
         }
-
         if ($options['protocolRelative'] && str_starts_with($url, '//')) {
             $url = $options['scheme'] . ':' . $url;
         }
         if (preg_match('#^https?://#', $url)) {
             return $url;
         }
-
-        $defaultPorts = [
-            'http' => 80,
-            'https' => 443,
-        ];
+        $defaultPorts = ['http' => 80, 'https' => 443];
         $out = $options['scheme'] . '://' . $options['host'];
-        if ($options['port'] && (int)$options['port'] !== $defaultPorts[$options['scheme']]) {
+        if ($options['port'] && (int) $options['port'] !== $defaultPorts[$options['scheme']]) {
             $out .= ':' . $options['port'];
         }
         if (!empty($options['basePath'])) {
             $out .= '/' . trim($options['basePath'], '/');
         }
         $out .= '/' . ltrim($url, '/');
-
         return $out;
     }
-
     /**
      * Creates a new request object based on the parameters.
      *
@@ -662,14 +552,13 @@ class Client implements EventDispatcherInterface, ClientInterface
     protected function _createRequest(string $method, string $url, mixed $data, array $options): Request
     {
         /** @var array<non-empty-string, non-empty-string> $headers */
-        $headers = (array)($options['headers'] ?? []);
+        $headers = (array) ($options['headers'] ?? []);
         if (isset($options['type'])) {
             $headers = array_merge($headers, $this->_typeHeaders($options['type']));
         }
         if (is_string($data) && !isset($headers['Content-Type']) && !isset($headers['content-type'])) {
             $headers['Content-Type'] = 'application/x-www-form-urlencoded';
         }
-
         $request = new Request($url, $method, $headers, $data);
         $request = $request->withProtocolVersion($this->getConfig('protocolVersion'));
         $cookies = $options['cookies'] ?? [];
@@ -681,10 +570,8 @@ class Client implements EventDispatcherInterface, ClientInterface
         if (isset($options['proxy'])) {
             return $this->_addProxy($request, $options);
         }
-
         return $request;
     }
-
     /**
      * Returns headers for Accept/Content-Type based on a short type
      * or full mime-type.
@@ -698,28 +585,14 @@ class Client implements EventDispatcherInterface, ClientInterface
     protected function _typeHeaders(string $type): array
     {
         if (str_contains($type, '/')) {
-            return [
-                'Accept' => $type,
-                'Content-Type' => $type,
-            ];
+            return ['Accept' => $type, 'Content-Type' => $type];
         }
-        $typeMap = [
-            'json' => 'application/json',
-            'xml' => 'application/xml',
-        ];
+        $typeMap = ['json' => 'application/json', 'xml' => 'application/xml'];
         if (!isset($typeMap[$type])) {
-            throw new CakeException(sprintf(
-                'Unknown type alias `%s`.',
-                $type,
-            ));
+            throw new CakeException(sprintf('Unknown type alias `%s`.', $type));
         }
-
-        return [
-            'Accept' => $typeMap[$type],
-            'Content-Type' => $typeMap[$type],
-        ];
+        return ['Accept' => $typeMap[$type], 'Content-Type' => $typeMap[$type]];
     }
-
     /**
      * Add authentication headers to the request.
      *
@@ -735,10 +608,8 @@ class Client implements EventDispatcherInterface, ClientInterface
         $auth = $options['auth'];
         /** @var \Cake\Http\Client\Auth\Basic $adapter */
         $adapter = $this->_createAuth($auth, $options);
-
         return $adapter->authentication($request, $options['auth']);
     }
-
     /**
      * Add proxy authentication headers.
      *
@@ -754,10 +625,8 @@ class Client implements EventDispatcherInterface, ClientInterface
         $auth = $options['proxy'];
         /** @var \Cake\Http\Client\Auth\Basic $adapter */
         $adapter = $this->_createAuth($auth, $options);
-
         return $adapter->proxyAuthentication($request, $options['proxy']);
     }
-
     /**
      * Create the authentication strategy.
      *
@@ -777,11 +646,8 @@ class Client implements EventDispatcherInterface, ClientInterface
         $name = ucfirst($auth['type']);
         $class = App::className($name, 'Http/Client/Auth');
         if (!$class) {
-            throw new CakeException(
-                sprintf('Invalid authentication type `%s`.', $name),
-            );
+            throw new CakeException(sprintf('Invalid authentication type `%s`.', $name));
         }
-
         return new $class($this, $options);
     }
 }

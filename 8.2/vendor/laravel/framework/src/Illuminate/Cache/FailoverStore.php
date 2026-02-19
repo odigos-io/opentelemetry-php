@@ -7,8 +7,7 @@ use Illuminate\Contracts\Cache\LockProvider;
 use Illuminate\Contracts\Events\Dispatcher;
 use RuntimeException;
 use Throwable;
-
-class FailoverStore extends TaggableStore implements LockProvider
+class FailoverStore extends \Illuminate\Cache\TaggableStore implements LockProvider
 {
     /**
      * The caches which failed on the last action.
@@ -16,19 +15,14 @@ class FailoverStore extends TaggableStore implements LockProvider
      * @var list<string>
      */
     protected array $failingCaches = [];
-
     /**
      * Create a new failover store.
      *
      * @param  array<int, string>  $stores
      */
-    public function __construct(
-        protected CacheManager $cache,
-        protected Dispatcher $events,
-        protected array $stores
-    ) {
+    public function __construct(protected \Illuminate\Cache\CacheManager $cache, protected Dispatcher $events, protected array $stores)
+    {
     }
-
     /**
      * Retrieve an item from the cache by key.
      *
@@ -39,7 +33,6 @@ class FailoverStore extends TaggableStore implements LockProvider
     {
         return $this->attemptOnAllStores(__FUNCTION__, func_get_args());
     }
-
     /**
      * Retrieve multiple items from the cache by key.
      *
@@ -51,7 +44,6 @@ class FailoverStore extends TaggableStore implements LockProvider
     {
         return $this->attemptOnAllStores(__FUNCTION__, func_get_args());
     }
-
     /**
      * Store an item in the cache for a given number of seconds.
      *
@@ -64,7 +56,6 @@ class FailoverStore extends TaggableStore implements LockProvider
     {
         return $this->attemptOnAllStores(__FUNCTION__, func_get_args());
     }
-
     /**
      * Store multiple items in the cache for a given number of seconds.
      *
@@ -75,7 +66,6 @@ class FailoverStore extends TaggableStore implements LockProvider
     {
         return $this->attemptOnAllStores(__FUNCTION__, func_get_args());
     }
-
     /**
      * Store an item in the cache if the key doesn't exist.
      *
@@ -88,7 +78,6 @@ class FailoverStore extends TaggableStore implements LockProvider
     {
         return $this->attemptOnAllStores(__FUNCTION__, func_get_args());
     }
-
     /**
      * Increment the value of an item in the cache.
      *
@@ -100,7 +89,6 @@ class FailoverStore extends TaggableStore implements LockProvider
     {
         return $this->attemptOnAllStores(__FUNCTION__, func_get_args());
     }
-
     /**
      * Decrement the value of an item in the cache.
      *
@@ -112,7 +100,6 @@ class FailoverStore extends TaggableStore implements LockProvider
     {
         return $this->attemptOnAllStores(__FUNCTION__, func_get_args());
     }
-
     /**
      * Store an item in the cache indefinitely.
      *
@@ -124,7 +111,6 @@ class FailoverStore extends TaggableStore implements LockProvider
     {
         return $this->attemptOnAllStores(__FUNCTION__, func_get_args());
     }
-
     /**
      * Get a lock instance.
      *
@@ -137,7 +123,6 @@ class FailoverStore extends TaggableStore implements LockProvider
     {
         return $this->attemptOnAllStores(__FUNCTION__, func_get_args());
     }
-
     /**
      * Restore a lock instance using the owner identifier.
      *
@@ -149,7 +134,6 @@ class FailoverStore extends TaggableStore implements LockProvider
     {
         return $this->attemptOnAllStores(__FUNCTION__, func_get_args());
     }
-
     /**
      * Remove an item from the cache.
      *
@@ -160,7 +144,6 @@ class FailoverStore extends TaggableStore implements LockProvider
     {
         return $this->attemptOnAllStores(__FUNCTION__, func_get_args());
     }
-
     /**
      * Remove all items from the cache.
      *
@@ -170,7 +153,6 @@ class FailoverStore extends TaggableStore implements LockProvider
     {
         return $this->attemptOnAllStores(__FUNCTION__, func_get_args());
     }
-
     /**
      * Remove all expired tag set entries.
      *
@@ -179,14 +161,12 @@ class FailoverStore extends TaggableStore implements LockProvider
     public function flushStaleTags()
     {
         foreach ($this->stores as $store) {
-            if ($this->store($store)->getStore() instanceof RedisStore) {
+            if ($this->store($store)->getStore() instanceof \Illuminate\Cache\RedisStore) {
                 $this->store($store)->flushStaleTags();
-
                 break;
             }
         }
     }
-
     /**
      * Get the cache key prefix.
      *
@@ -196,7 +176,6 @@ class FailoverStore extends TaggableStore implements LockProvider
     {
         return $this->attemptOnAllStores(__FUNCTION__, func_get_args());
     }
-
     /**
      * Attempt the given method on all stores.
      *
@@ -207,17 +186,14 @@ class FailoverStore extends TaggableStore implements LockProvider
     protected function attemptOnAllStores(string $method, array $arguments)
     {
         [$lastException, $failedCaches] = [null, []];
-
         try {
             foreach ($this->stores as $store) {
                 try {
                     return $this->store($store)->{$method}(...$arguments);
                 } catch (Throwable $e) {
                     $lastException = $e;
-
                     $failedCaches[] = $store;
-
-                    if (! in_array($store, $this->failingCaches)) {
+                    if (!in_array($store, $this->failingCaches)) {
                         $this->events->dispatch(new CacheFailedOver($store, $e));
                     }
                 }
@@ -225,10 +201,8 @@ class FailoverStore extends TaggableStore implements LockProvider
         } finally {
             $this->failingCaches = $failedCaches;
         }
-
         throw $lastException ?? new RuntimeException('All failover cache stores failed.');
     }
-
     /**
      * Get the cache store for the given store name.
      *

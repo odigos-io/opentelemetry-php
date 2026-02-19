@@ -5,35 +5,30 @@ namespace Illuminate\Routing;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Session\Store as SessionStore;
 use Illuminate\Support\Traits\Macroable;
-
 class Redirector
 {
     use Macroable;
-
     /**
      * The URL generator instance.
      *
      * @var \Illuminate\Routing\UrlGenerator
      */
     protected $generator;
-
     /**
      * The session store instance.
      *
      * @var \Illuminate\Session\Store
      */
     protected $session;
-
     /**
      * Create a new Redirector instance.
      *
      * @param  \Illuminate\Routing\UrlGenerator  $generator
      */
-    public function __construct(UrlGenerator $generator)
+    public function __construct(\Illuminate\Routing\UrlGenerator $generator)
     {
         $this->generator = $generator;
     }
-
     /**
      * Create a new redirect response to the previous location.
      *
@@ -42,11 +37,10 @@ class Redirector
      * @param  mixed  $fallback
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function back($status = 302, $headers = [], $fallback = false)
+    public function back($status = 302, $headers = [], $fallback = \false)
     {
         return $this->createRedirect($this->generator->previous($fallback), $status, $headers);
     }
-
     /**
      * Create a new redirect response to the current URI.
      *
@@ -58,7 +52,6 @@ class Redirector
     {
         return $this->to($this->generator->getRequest()->path(), $status, $headers);
     }
-
     /**
      * Create a new redirect response, while putting the current URL in the session.
      *
@@ -71,18 +64,12 @@ class Redirector
     public function guest($path, $status = 302, $headers = [], $secure = null)
     {
         $request = $this->generator->getRequest();
-
-        $intended = $request->isMethod('GET') && $request->route() && ! $request->expectsJson()
-            ? $this->generator->full()
-            : $this->generator->previous();
-
+        $intended = $request->isMethod('GET') && $request->route() && !$request->expectsJson() ? $this->generator->full() : $this->generator->previous();
         if ($intended) {
             $this->setIntendedUrl($intended);
         }
-
         return $this->to($path, $status, $headers, $secure);
     }
-
     /**
      * Create a new redirect response to the previously intended location.
      *
@@ -95,10 +82,8 @@ class Redirector
     public function intended($default = '/', $status = 302, $headers = [], $secure = null)
     {
         $path = $this->session->pull('url.intended', $default);
-
         return $this->to($path, $status, $headers, $secure);
     }
-
     /**
      * Create a new redirect response to the given path.
      *
@@ -112,7 +97,6 @@ class Redirector
     {
         return $this->createRedirect($this->generator->to($path, [], $secure), $status, $headers);
     }
-
     /**
      * Create a new redirect response to an external URL (no validation).
      *
@@ -125,7 +109,6 @@ class Redirector
     {
         return $this->createRedirect($path, $status, $headers);
     }
-
     /**
      * Create a new redirect response to the given HTTPS path.
      *
@@ -136,9 +119,8 @@ class Redirector
      */
     public function secure($path, $status = 302, $headers = [])
     {
-        return $this->to($path, $status, $headers, true);
+        return $this->to($path, $status, $headers, \true);
     }
-
     /**
      * Create a new redirect response to a named route.
      *
@@ -152,7 +134,6 @@ class Redirector
     {
         return $this->to($this->generator->route($route, $parameters), $status, $headers);
     }
-
     /**
      * Create a new redirect response to a signed named route.
      *
@@ -167,7 +148,6 @@ class Redirector
     {
         return $this->to($this->generator->signedRoute($route, $parameters, $expiration), $status, $headers);
     }
-
     /**
      * Create a new redirect response to a signed named route.
      *
@@ -182,7 +162,6 @@ class Redirector
     {
         return $this->to($this->generator->temporarySignedRoute($route, $expiration, $parameters), $status, $headers);
     }
-
     /**
      * Create a new redirect response to a controller action.
      *
@@ -196,7 +175,6 @@ class Redirector
     {
         return $this->to($this->generator->action($action, $parameters), $status, $headers);
     }
-
     /**
      * Create a new redirect response.
      *
@@ -211,11 +189,9 @@ class Redirector
             if (isset($this->session)) {
                 $redirect->setSession($this->session);
             }
-
             $redirect->setRequest($this->generator->getRequest());
         });
     }
-
     /**
      * Get the URL generator instance.
      *
@@ -225,7 +201,6 @@ class Redirector
     {
         return $this->generator;
     }
-
     /**
      * Set the active session store.
      *
@@ -236,7 +211,6 @@ class Redirector
     {
         $this->session = $session;
     }
-
     /**
      * Get the "intended" URL from the session.
      *
@@ -246,7 +220,6 @@ class Redirector
     {
         return $this->session->get('url.intended');
     }
-
     /**
      * Set the "intended" URL in the session.
      *
@@ -256,7 +229,6 @@ class Redirector
     public function setIntendedUrl($url)
     {
         $this->session->put('url.intended', $url);
-
         return $this;
     }
 }

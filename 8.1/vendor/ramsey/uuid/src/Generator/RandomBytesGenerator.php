@@ -9,14 +9,11 @@
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
  */
+declare (strict_types=1);
+namespace Odigos\Ramsey\Uuid\Generator;
 
-declare(strict_types=1);
-
-namespace Ramsey\Uuid\Generator;
-
-use Ramsey\Uuid\Exception\RandomSourceException;
+use Odigos\Ramsey\Uuid\Exception\RandomSourceException;
 use Throwable;
-
 /**
  * RandomBytesGenerator generates strings of random binary data using the built-in `random_bytes()` PHP function
  *

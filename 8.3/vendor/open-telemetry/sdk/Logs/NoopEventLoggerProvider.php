@@ -1,27 +1,23 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\SDK\Logs;
 
 use OpenTelemetry\API\Logs as API;
-
 /**
  * @phan-suppress PhanDeprecatedInterface
  */
-class NoopEventLoggerProvider extends API\NoopEventLoggerProvider implements EventLoggerProviderInterface
+class NoopEventLoggerProvider extends API\NoopEventLoggerProvider implements \OpenTelemetry\SDK\Logs\EventLoggerProviderInterface
 {
     #[\Override]
     public static function getInstance(): self
     {
         static $instance;
-
         return $instance ??= new self();
     }
-
     #[\Override]
     public function forceFlush(): bool
     {
-        return true;
+        return \true;
     }
 }

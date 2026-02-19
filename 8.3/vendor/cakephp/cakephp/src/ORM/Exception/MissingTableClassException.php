@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * MissingTableClassException class
  *
@@ -17,7 +17,6 @@ declare(strict_types=1);
 namespace Cake\ORM\Exception;
 
 use Cake\Core\Exception\CakeException;
-
 /**
  * Exception raised when a Table could not be found.
  */

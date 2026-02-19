@@ -15,7 +15,6 @@ class EnsureNoPunctuation
         if (str($string)->endsWith(['.', '?', '!', ':'])) {
             return substr_replace($string, '', -1);
         }
-
         return $string;
     }
 }

@@ -1,27 +1,22 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\SDK\Common\Util;
 
 use function array_key_last;
 use Closure;
 use function register_shutdown_function;
 use WeakMap;
-
 final class ShutdownHandler
 {
     /** @var array<int, Closure>|null */
     private static ?array $handlers = null;
     /** @var WeakMap<object, self>|null  */
     private static ?WeakMap $weakMap = null;
-
     private array $ids = [];
-
     private function __construct()
     {
     }
-
     public function __destruct()
     {
         if (!self::$handlers) {
@@ -31,7 +26,6 @@ final class ShutdownHandler
             unset(self::$handlers[$id]);
         }
     }
-
     /**
      * Registers a function that will be executed on shutdown.
      *
@@ -52,16 +46,13 @@ final class ShutdownHandler
     {
         self::registerShutdownFunction();
         self::$handlers[] = weaken(closure($shutdownFunction), $target);
-
         if (!$object = $target) {
             return;
         }
-
         self::$weakMap ??= new WeakMap();
         $handler = self::$weakMap[$object] ??= new self();
         $handler->ids[] = array_key_last(self::$handlers);
     }
-
     private static function registerShutdownFunction(): void
     {
         if (self::$handlers === null) {
@@ -69,7 +60,6 @@ final class ShutdownHandler
                 $handlers = self::$handlers;
                 self::$handlers = null;
                 self::$weakMap = null;
-
                 // Push shutdown to end of queue
                 // @phan-suppress-next-line PhanTypeMismatchArgumentInternal
                 register_shutdown_function(static function (array $handlers): void {

@@ -9,15 +9,12 @@
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
  */
+declare (strict_types=1);
+namespace Odigos\Ramsey\Uuid\Math;
 
-declare(strict_types=1);
-
-namespace Ramsey\Uuid\Math;
-
-use Ramsey\Uuid\Type\Hexadecimal;
-use Ramsey\Uuid\Type\Integer as IntegerObject;
-use Ramsey\Uuid\Type\NumberInterface;
-
+use Odigos\Ramsey\Uuid\Type\Hexadecimal;
+use Odigos\Ramsey\Uuid\Type\Integer as IntegerObject;
+use Odigos\Ramsey\Uuid\Type\NumberInterface;
 /**
  * A calculator performs arithmetic operations on numbers
  *
@@ -36,7 +33,6 @@ interface CalculatorInterface
      * @pure
      */
     public function add(NumberInterface $augend, NumberInterface ...$addends): NumberInterface;
-
     /**
      * Returns the difference of all the provided parameters
      *
@@ -48,7 +44,6 @@ interface CalculatorInterface
      * @pure
      */
     public function subtract(NumberInterface $minuend, NumberInterface ...$subtrahends): NumberInterface;
-
     /**
      * Returns the product of all the provided parameters
      *
@@ -60,7 +55,6 @@ interface CalculatorInterface
      * @pure
      */
     public function multiply(NumberInterface $multiplicand, NumberInterface ...$multipliers): NumberInterface;
-
     /**
      * Returns the quotient of the provided parameters divided left-to-right
      *
@@ -74,13 +68,7 @@ interface CalculatorInterface
      *
      * @pure
      */
-    public function divide(
-        int $roundingMode,
-        int $scale,
-        NumberInterface $dividend,
-        NumberInterface ...$divisors,
-    ): NumberInterface;
-
+    public function divide(int $roundingMode, int $scale, NumberInterface $dividend, NumberInterface ...$divisors): NumberInterface;
     /**
      * Converts a value from an arbitrary base to a base-10 integer value
      *
@@ -92,7 +80,6 @@ interface CalculatorInterface
      * @pure
      */
     public function fromBase(string $value, int $base): IntegerObject;
-
     /**
      * Converts a base-10 integer value to an arbitrary base
      *
@@ -104,14 +91,12 @@ interface CalculatorInterface
      * @pure
      */
     public function toBase(IntegerObject $value, int $base): string;
-
     /**
      * Converts an Integer instance to a Hexadecimal instance
      *
      * @pure
      */
     public function toHexadecimal(IntegerObject $value): Hexadecimal;
-
     /**
      * Converts a Hexadecimal instance to an Integer instance
      *

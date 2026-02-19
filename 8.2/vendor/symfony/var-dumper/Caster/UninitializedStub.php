@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\VarDumper\Caster;
 
 /**
@@ -16,10 +15,10 @@ namespace Symfony\Component\VarDumper\Caster;
  *
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class UninitializedStub extends ConstStub
+class UninitializedStub extends \Symfony\Component\VarDumper\Caster\ConstStub
 {
     public function __construct(\ReflectionProperty $property)
     {
-        parent::__construct('?'.($property->hasType() ? ' '.$property->getType() : ''), 'Uninitialized property');
+        parent::__construct('?' . ($property->hasType() ? ' ' . $property->getType() : ''), 'Uninitialized property');
     }
 }

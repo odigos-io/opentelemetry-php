@@ -3,7 +3,6 @@
 namespace Illuminate\Notifications;
 
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
-
 /**
  * @template TKey of array-key
  * @template TModel of DatabaseNotification
@@ -21,7 +20,6 @@ class DatabaseNotificationCollection extends EloquentCollection
     {
         $this->each->markAsRead();
     }
-
     /**
      * Mark all notifications as unread.
      *

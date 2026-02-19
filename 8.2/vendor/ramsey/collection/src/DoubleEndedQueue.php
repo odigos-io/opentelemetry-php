@@ -9,18 +9,14 @@
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
  */
+declare (strict_types=1);
+namespace Odigos\Ramsey\Collection;
 
-declare(strict_types=1);
-
-namespace Ramsey\Collection;
-
-use Ramsey\Collection\Exception\InvalidArgumentException;
-use Ramsey\Collection\Exception\NoSuchElementException;
-
+use Odigos\Ramsey\Collection\Exception\InvalidArgumentException;
+use Odigos\Ramsey\Collection\Exception\NoSuchElementException;
 use function array_key_last;
 use function array_pop;
 use function array_unshift;
-
 /**
  * This class provides a basic implementation of `DoubleEndedQueueInterface`, to
  * minimize the effort required to implement this interface.
@@ -42,24 +38,17 @@ class DoubleEndedQueue extends Queue implements DoubleEndedQueueInterface
     {
         parent::__construct($this->queueType, $data);
     }
-
     /**
      * @throws InvalidArgumentException if $element is of the wrong type
      */
     public function addFirst(mixed $element): bool
     {
-        if ($this->checkType($this->getType(), $element) === false) {
-            throw new InvalidArgumentException(
-                'Value must be of type ' . $this->getType() . '; value is '
-                . $this->toolValueToString($element),
-            );
+        if ($this->checkType($this->getType(), $element) === \false) {
+            throw new InvalidArgumentException('Value must be of type ' . $this->getType() . '; value is ' . $this->toolValueToString($element));
         }
-
         array_unshift($this->data, $element);
-
-        return true;
+        return \true;
     }
-
     /**
      * @throws InvalidArgumentException if $element is of the wrong type
      */
@@ -67,21 +56,18 @@ class DoubleEndedQueue extends Queue implements DoubleEndedQueueInterface
     {
         return $this->add($element);
     }
-
     public function offerFirst(mixed $element): bool
     {
         try {
             return $this->addFirst($element);
         } catch (InvalidArgumentException) {
-            return false;
+            return \false;
         }
     }
-
     public function offerLast(mixed $element): bool
     {
         return $this->offer($element);
     }
-
     /**
      * @return T the first element in this queue.
      *
@@ -91,7 +77,6 @@ class DoubleEndedQueue extends Queue implements DoubleEndedQueueInterface
     {
         return $this->remove();
     }
-
     /**
      * @return T the last element in this queue.
      *
@@ -99,11 +84,8 @@ class DoubleEndedQueue extends Queue implements DoubleEndedQueueInterface
      */
     public function removeLast(): mixed
     {
-        return $this->pollLast() ?? throw new NoSuchElementException(
-            'Can\'t return element from Queue. Queue is empty.',
-        );
+        return $this->pollLast() ?? throw new NoSuchElementException('Can\'t return element from Queue. Queue is empty.');
     }
-
     /**
      * @return T | null the head of this queue, or `null` if this queue is empty.
      */
@@ -111,7 +93,6 @@ class DoubleEndedQueue extends Queue implements DoubleEndedQueueInterface
     {
         return $this->poll();
     }
-
     /**
      * @return T | null the tail of this queue, or `null` if this queue is empty.
      */
@@ -119,7 +100,6 @@ class DoubleEndedQueue extends Queue implements DoubleEndedQueueInterface
     {
         return array_pop($this->data);
     }
-
     /**
      * @return T the head of this queue.
      *
@@ -129,7 +109,6 @@ class DoubleEndedQueue extends Queue implements DoubleEndedQueueInterface
     {
         return $this->element();
     }
-
     /**
      * @return T the tail of this queue.
      *
@@ -137,11 +116,8 @@ class DoubleEndedQueue extends Queue implements DoubleEndedQueueInterface
      */
     public function lastElement(): mixed
     {
-        return $this->peekLast() ?? throw new NoSuchElementException(
-            'Can\'t return element from Queue. Queue is empty.',
-        );
+        return $this->peekLast() ?? throw new NoSuchElementException('Can\'t return element from Queue. Queue is empty.');
     }
-
     /**
      * @return T | null the head of this queue, or `null` if this queue is empty.
      */
@@ -149,18 +125,15 @@ class DoubleEndedQueue extends Queue implements DoubleEndedQueueInterface
     {
         return $this->peek();
     }
-
     /**
      * @return T | null the tail of this queue, or `null` if this queue is empty.
      */
     public function peekLast(): mixed
     {
         $lastIndex = array_key_last($this->data);
-
         if ($lastIndex === null) {
             return null;
         }
-
         return $this->data[$lastIndex];
     }
 }

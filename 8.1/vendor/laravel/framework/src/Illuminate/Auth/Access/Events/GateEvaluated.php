@@ -10,28 +10,24 @@ class GateEvaluated
      * @var \Illuminate\Contracts\Auth\Authenticatable|null
      */
     public $user;
-
     /**
      * The ability being evaluated.
      *
      * @var string
      */
     public $ability;
-
     /**
      * The result of the evaluation.
      *
      * @var bool|null
      */
     public $result;
-
     /**
      * The arguments given during evaluation.
      *
      * @var array
      */
     public $arguments;
-
     /**
      * Create a new event instance.
      *

@@ -1,5 +1,7 @@
 <?php
 
+namespace Odigos;
+
 /*
  * This file is part of the Symfony package.
  *
@@ -8,13 +10,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 if (\PHP_VERSION_ID < 80200) {
-    #[Attribute(Attribute::TARGET_PARAMETER)]
+    #[\Attribute(\Attribute::TARGET_PARAMETER)]
     final class SensitiveParameter
     {
         public function __construct()
         {
         }
     }
+    \class_alias('Odigos\SensitiveParameter', 'SensitiveParameter', \false);
 }

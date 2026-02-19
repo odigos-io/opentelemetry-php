@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the league/commonmark package.
  *
@@ -13,17 +12,15 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Odigos\League\CommonMark\Renderer\Block;
 
-namespace League\CommonMark\Renderer\Block;
-
-use League\CommonMark\Node\Block\Paragraph;
-use League\CommonMark\Node\Block\TightBlockInterface;
-use League\CommonMark\Node\Node;
-use League\CommonMark\Renderer\ChildNodeRendererInterface;
-use League\CommonMark\Renderer\NodeRendererInterface;
-use League\CommonMark\Util\HtmlElement;
-use League\CommonMark\Xml\XmlNodeRendererInterface;
-
+use Odigos\League\CommonMark\Node\Block\Paragraph;
+use Odigos\League\CommonMark\Node\Block\TightBlockInterface;
+use Odigos\League\CommonMark\Node\Node;
+use Odigos\League\CommonMark\Renderer\ChildNodeRendererInterface;
+use Odigos\League\CommonMark\Renderer\NodeRendererInterface;
+use Odigos\League\CommonMark\Util\HtmlElement;
+use Odigos\League\CommonMark\Xml\XmlNodeRendererInterface;
 final class ParagraphRenderer implements NodeRendererInterface, XmlNodeRendererInterface
 {
     /**
@@ -36,21 +33,16 @@ final class ParagraphRenderer implements NodeRendererInterface, XmlNodeRendererI
     public function render(Node $node, ChildNodeRendererInterface $childRenderer)
     {
         Paragraph::assertInstanceOf($node);
-
         if ($this->inTightList($node)) {
             return $childRenderer->renderNodes($node->children());
         }
-
         $attrs = $node->data->get('attributes');
-
         return new HtmlElement('p', $attrs, $childRenderer->renderNodes($node->children()));
     }
-
     public function getXmlTagName(Node $node): string
     {
         return 'paragraph';
     }
-
     /**
      * {@inheritDoc}
      */
@@ -58,7 +50,6 @@ final class ParagraphRenderer implements NodeRendererInterface, XmlNodeRendererI
     {
         return [];
     }
-
     private function inTightList(Paragraph $node): bool
     {
         // Only check up to two (2) levels above this for tightness
@@ -68,7 +59,6 @@ final class ParagraphRenderer implements NodeRendererInterface, XmlNodeRendererI
                 return $node->isTight();
             }
         }
-
-        return false;
+        return \false;
     }
 }

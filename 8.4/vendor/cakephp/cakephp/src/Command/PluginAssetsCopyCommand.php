@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -19,14 +19,12 @@ namespace Cake\Command;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
-
 /**
  * Command for copying plugin assets to app's webroot.
  */
-class PluginAssetsCopyCommand extends Command
+class PluginAssetsCopyCommand extends \Cake\Command\Command
 {
-    use PluginAssetsTrait;
-
+    use \Cake\Command\PluginAssetsTrait;
     /**
      * @inheritDoc
      */
@@ -34,7 +32,6 @@ class PluginAssetsCopyCommand extends Command
     {
         return 'plugin assets copy';
     }
-
     /**
      * @inheritDoc
      */
@@ -42,7 +39,6 @@ class PluginAssetsCopyCommand extends Command
     {
         return "Copy plugin assets to app's webroot.";
     }
-
     /**
      * Execute the command
      *
@@ -57,14 +53,11 @@ class PluginAssetsCopyCommand extends Command
     {
         $this->io = $io;
         $this->args = $args;
-
         $name = $args->getArgument('name');
-        $overwrite = (bool)$args->getOption('overwrite');
-        $this->_process($this->_list($name), true, $overwrite);
-
+        $overwrite = (bool) $args->getOption('overwrite');
+        $this->_process($this->_list($name), \true, $overwrite);
         return static::CODE_SUCCESS;
     }
-
     /**
      * Get the option parser.
      *
@@ -73,17 +66,7 @@ class PluginAssetsCopyCommand extends Command
      */
     public function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
     {
-        $parser->setDescription(
-            static::getDescription(),
-        )->addArgument('name', [
-            'help' => 'A specific plugin you want to copy assets for.',
-            'required' => false,
-        ])->addOption('overwrite', [
-            'help' => 'Overwrite existing symlink / folder / files.',
-            'default' => false,
-            'boolean' => true,
-        ]);
-
+        $parser->setDescription(static::getDescription())->addArgument('name', ['help' => 'A specific plugin you want to copy assets for.', 'required' => \false])->addOption('overwrite', ['help' => 'Overwrite existing symlink / folder / files.', 'default' => \false, 'boolean' => \true]);
         return $parser;
     }
 }

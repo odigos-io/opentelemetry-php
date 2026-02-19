@@ -1,11 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenAI\Contracts;
 
 use ArrayAccess;
-
 /**
  * @template TArray of array
  *
@@ -21,12 +19,10 @@ interface MetaInformationContract extends ArrayAccess
      * @return TArray
      */
     public function toArray(): array;
-
     /**
      * @param  key-of<TArray>  $offset
      */
     public function offsetExists(mixed $offset): bool;
-
     /**
      * @template TOffsetKey of key-of<TArray>
      *
@@ -34,7 +30,6 @@ interface MetaInformationContract extends ArrayAccess
      * @return TArray[TOffsetKey]
      */
     public function offsetGet(mixed $offset): mixed;
-
     /**
      * @template TOffsetKey of key-of<TArray>
      *
@@ -42,7 +37,6 @@ interface MetaInformationContract extends ArrayAccess
      * @param  TArray[TOffsetKey] $value
      */
     public function offsetSet(mixed $offset, mixed $value): never;
-
     /**
      * @template TOffsetKey of key-of<TArray>
      *

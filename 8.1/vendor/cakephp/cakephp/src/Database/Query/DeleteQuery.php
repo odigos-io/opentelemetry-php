@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -17,7 +17,6 @@ declare(strict_types=1);
 namespace Cake\Database\Query;
 
 use Cake\Database\Query;
-
 /**
  * This class is used to generate DELETE queries for the relational database.
  */
@@ -29,25 +28,12 @@ class DeleteQuery extends Query
      * @var string
      */
     protected string $_type = self::TYPE_DELETE;
-
     /**
      * List of SQL parts that will be used to build this query.
      *
      * @var array<string, mixed>
      */
-    protected array $_parts = [
-        'comment' => null,
-        'with' => [],
-        'delete' => true,
-        'modifier' => [],
-        'from' => [],
-        'join' => [],
-        'where' => null,
-        'order' => null,
-        'limit' => null,
-        'epilog' => null,
-    ];
-
+    protected array $_parts = ['comment' => null, 'with' => [], 'delete' => \true, 'modifier' => [], 'from' => [], 'join' => [], 'where' => null, 'order' => null, 'limit' => null, 'epilog' => null];
     /**
      * Create a delete query.
      *
@@ -63,7 +49,6 @@ class DeleteQuery extends Query
         if ($table !== null) {
             $this->from($table);
         }
-
         return $this;
     }
 }

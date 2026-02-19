@@ -4,7 +4,6 @@ namespace Illuminate\Console\Scheduling;
 
 use Illuminate\Console\Application;
 use Illuminate\Support\ProcessUtils;
-
 class CommandBuilder
 {
     /**
@@ -13,54 +12,40 @@ class CommandBuilder
      * @param  \Illuminate\Console\Scheduling\Event  $event
      * @return string
      */
-    public function buildCommand(Event $event)
+    public function buildCommand(\Illuminate\Console\Scheduling\Event $event)
     {
         if ($event->runInBackground) {
             return $this->buildBackgroundCommand($event);
         }
-
         return $this->buildForegroundCommand($event);
     }
-
     /**
      * Build the command for running the event in the foreground.
      *
      * @param  \Illuminate\Console\Scheduling\Event  $event
      * @return string
      */
-    protected function buildForegroundCommand(Event $event)
+    protected function buildForegroundCommand(\Illuminate\Console\Scheduling\Event $event)
     {
         $output = ProcessUtils::escapeArgument($event->output);
-
-        return laravel_cloud()
-            ? $this->ensureCorrectUser($event, $event->command.' 2>&1 | tee '.($event->shouldAppendOutput ? '-a ' : '').$output)
-            : $this->ensureCorrectUser($event, $event->command.($event->shouldAppendOutput ? ' >> ' : ' > ').$output.' 2>&1');
+        return laravel_cloud() ? $this->ensureCorrectUser($event, $event->command . ' 2>&1 | tee ' . ($event->shouldAppendOutput ? '-a ' : '') . $output) : $this->ensureCorrectUser($event, $event->command . ($event->shouldAppendOutput ? ' >> ' : ' > ') . $output . ' 2>&1');
     }
-
     /**
      * Build the command for running the event in the background.
      *
      * @param  \Illuminate\Console\Scheduling\Event  $event
      * @return string
      */
-    protected function buildBackgroundCommand(Event $event)
+    protected function buildBackgroundCommand(\Illuminate\Console\Scheduling\Event $event)
     {
         $output = ProcessUtils::escapeArgument($event->output);
-
         $redirect = $event->shouldAppendOutput ? ' >> ' : ' > ';
-
-        $finished = Application::formatCommandString('schedule:finish').' "'.$event->mutexName().'"';
-
+        $finished = Application::formatCommandString('schedule:finish') . ' "' . $event->mutexName() . '"';
         if (windows_os()) {
-            return 'start /b cmd /v:on /c "('.$event->command.' & '.$finished.' ^!ERRORLEVEL^!)'.$redirect.$output.' 2>&1"';
+            return 'start /b cmd /v:on /c "(' . $event->command . ' & ' . $finished . ' ^!ERRORLEVEL^!)' . $redirect . $output . ' 2>&1"';
         }
-
-        return $this->ensureCorrectUser($event,
-            '('.$event->command.$redirect.$output.' 2>&1 ; '.$finished.' "$?") > '
-            .ProcessUtils::escapeArgument($event->getDefaultOutput()).' 2>&1 &'
-        );
+        return $this->ensureCorrectUser($event, '(' . $event->command . $redirect . $output . ' 2>&1 ; ' . $finished . ' "$?") > ' . ProcessUtils::escapeArgument($event->getDefaultOutput()) . ' 2>&1 &');
     }
-
     /**
      * Finalize the event's command syntax with the correct user.
      *
@@ -68,8 +53,8 @@ class CommandBuilder
      * @param  string  $command
      * @return string
      */
-    protected function ensureCorrectUser(Event $event, $command)
+    protected function ensureCorrectUser(\Illuminate\Console\Scheduling\Event $event, $command)
     {
-        return $event->user && ! windows_os() ? 'sudo -u '.$event->user.' -- sh -c \''.$command.'\'' : $command;
+        return $event->user && !windows_os() ? 'sudo -u ' . $event->user . ' -- sh -c \'' . $command . '\'' : $command;
     }
 }

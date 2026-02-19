@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -19,11 +19,10 @@ namespace Cake\Command;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Core\Configure;
-
 /**
  * Print out the version of CakePHP in use.
  */
-class VersionCommand extends Command
+class VersionCommand extends \Cake\Command\Command
 {
     /**
      * @inheritDoc
@@ -32,7 +31,6 @@ class VersionCommand extends Command
     {
         return 'Show the CakePHP version.';
     }
-
     /**
      * Print out the version of CakePHP in use.
      *
@@ -43,7 +41,6 @@ class VersionCommand extends Command
     public function execute(Arguments $args, ConsoleIo $io): ?int
     {
         $io->out(Configure::version());
-
         return static::CODE_SUCCESS;
     }
 }

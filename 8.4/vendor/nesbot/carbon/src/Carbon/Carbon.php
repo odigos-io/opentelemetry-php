@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /**
  * This file is part of the Carbon package.
  *
@@ -10,13 +9,11 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Odigos\Carbon;
 
-namespace Carbon;
-
-use Carbon\Traits\Date;
+use Odigos\Carbon\Traits\Date;
 use DateTime;
 use DateTimeInterface;
-
 /**
  * A simple API extension for DateTime.
  *
@@ -836,12 +833,11 @@ use DateTimeInterface;
 class Carbon extends DateTime implements CarbonInterface
 {
     use Date;
-
     /**
      * Returns true if the current class/instance is mutable.
      */
     public static function isMutable(): bool
     {
-        return true;
+        return \true;
     }
 }

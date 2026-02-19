@@ -4,8 +4,7 @@ namespace Illuminate\Foundation\Exceptions\Whoops;
 
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Arr;
-use Whoops\Handler\PrettyPageHandler;
-
+use Odigos\Whoops\Handler\PrettyPageHandler;
 class WhoopsHandler
 {
     /**
@@ -15,15 +14,11 @@ class WhoopsHandler
      */
     public function forDebug()
     {
-        return tap(new PrettyPageHandler, function ($handler) {
-            $handler->handleUnconditionally(true);
-
-            $this->registerApplicationPaths($handler)
-                ->registerBlacklist($handler)
-                ->registerEditor($handler);
+        return tap(new PrettyPageHandler(), function ($handler) {
+            $handler->handleUnconditionally(\true);
+            $this->registerApplicationPaths($handler)->registerBlacklist($handler)->registerEditor($handler);
         });
     }
-
     /**
      * Register the application paths with the handler.
      *
@@ -32,13 +27,9 @@ class WhoopsHandler
      */
     protected function registerApplicationPaths($handler)
     {
-        $handler->setApplicationPaths(
-            array_flip($this->directoriesExceptVendor())
-        );
-
+        $handler->setApplicationPaths(array_flip($this->directoriesExceptVendor()));
         return $this;
     }
-
     /**
      * Get the application paths except for the "vendor" directory.
      *
@@ -46,12 +37,8 @@ class WhoopsHandler
      */
     protected function directoriesExceptVendor()
     {
-        return Arr::except(
-            array_flip((new Filesystem)->directories(base_path())),
-            [base_path('vendor')]
-        );
+        return Arr::except(array_flip((new Filesystem())->directories(base_path())), [base_path('vendor')]);
     }
-
     /**
      * Register the blacklist with the handler.
      *
@@ -65,10 +52,8 @@ class WhoopsHandler
                 $handler->blacklist($key, $secret);
             }
         }
-
         return $this;
     }
-
     /**
      * Register the editor with the handler.
      *
@@ -77,10 +62,9 @@ class WhoopsHandler
      */
     protected function registerEditor($handler)
     {
-        if (config('app.editor', false)) {
+        if (config('app.editor', \false)) {
             $handler->setEditor(config('app.editor'));
         }
-
         return $this;
     }
 }

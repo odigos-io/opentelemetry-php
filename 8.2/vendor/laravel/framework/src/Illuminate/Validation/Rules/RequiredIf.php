@@ -5,7 +5,6 @@ namespace Illuminate\Validation\Rules;
 use Closure;
 use InvalidArgumentException;
 use Stringable;
-
 class RequiredIf implements Stringable
 {
     /**
@@ -14,7 +13,6 @@ class RequiredIf implements Stringable
      * @var (\Closure(): bool)|bool
      */
     public $condition;
-
     /**
      * Create a new required validation rule based on a condition.
      *
@@ -23,16 +21,14 @@ class RequiredIf implements Stringable
     public function __construct($condition)
     {
         if (is_null($condition)) {
-            $condition = false;
+            $condition = \false;
         }
-
         if ($condition instanceof Closure || is_bool($condition)) {
             $this->condition = $condition;
         } else {
             throw new InvalidArgumentException('The provided condition must be a callable or boolean.');
         }
     }
-
     /**
      * Convert the rule to a validation string.
      *
@@ -43,7 +39,6 @@ class RequiredIf implements Stringable
         if (is_callable($this->condition)) {
             return call_user_func($this->condition) ? 'required' : '';
         }
-
         return $this->condition ? 'required' : '';
     }
 }

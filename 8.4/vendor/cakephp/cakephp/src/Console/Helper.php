@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -17,7 +17,6 @@ declare(strict_types=1);
 namespace Cake\Console;
 
 use Cake\Core\InstanceConfigTrait;
-
 /**
  * Base class for Helpers.
  *
@@ -28,33 +27,29 @@ use Cake\Core\InstanceConfigTrait;
 abstract class Helper
 {
     use InstanceConfigTrait;
-
     /**
      * Default config for this helper.
      *
      * @var array<string, mixed>
      */
     protected array $_defaultConfig = [];
-
     /**
      * ConsoleIo instance.
      *
      * @var \Cake\Console\ConsoleIo
      */
-    protected ConsoleIo $_io;
-
+    protected \Cake\Console\ConsoleIo $_io;
     /**
      * Constructor.
      *
      * @param \Cake\Console\ConsoleIo $io The ConsoleIo instance to use.
      * @param array<string, mixed> $config The settings for this helper.
      */
-    public function __construct(ConsoleIo $io, array $config = [])
+    public function __construct(\Cake\Console\ConsoleIo $io, array $config = [])
     {
         $this->_io = $io;
         $this->setConfig($config);
     }
-
     /**
      * This method should output content using `$this->_io`.
      *

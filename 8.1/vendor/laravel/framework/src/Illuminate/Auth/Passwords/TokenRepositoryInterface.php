@@ -3,7 +3,6 @@
 namespace Illuminate\Auth\Passwords;
 
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
-
 interface TokenRepositoryInterface
 {
     /**
@@ -13,7 +12,6 @@ interface TokenRepositoryInterface
      * @return string
      */
     public function create(CanResetPasswordContract $user);
-
     /**
      * Determine if a token record exists and is valid.
      *
@@ -22,7 +20,6 @@ interface TokenRepositoryInterface
      * @return bool
      */
     public function exists(CanResetPasswordContract $user, $token);
-
     /**
      * Determine if the given user recently created a password reset token.
      *
@@ -30,7 +27,6 @@ interface TokenRepositoryInterface
      * @return bool
      */
     public function recentlyCreatedToken(CanResetPasswordContract $user);
-
     /**
      * Delete a token record.
      *
@@ -38,7 +34,6 @@ interface TokenRepositoryInterface
      * @return void
      */
     public function delete(CanResetPasswordContract $user);
-
     /**
      * Delete expired tokens.
      *

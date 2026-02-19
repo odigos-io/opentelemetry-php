@@ -1,15 +1,14 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\db;
 
 use yii\base\BaseObject;
 use yii\base\InvalidArgumentException;
-
 /**
  * TableSchema represents the metadata of a database table.
  *
@@ -58,8 +57,6 @@ class TableSchema extends BaseObject
      * @var ColumnSchema[] column metadata of this table. Each array element is a [[ColumnSchema]] object, indexed by column names.
      */
     public $columns = [];
-
-
     /**
      * Gets the named column metadata.
      * This is a convenient method for retrieving a named column even if it does not exist.
@@ -70,7 +67,6 @@ class TableSchema extends BaseObject
     {
         return isset($this->columns[$name]) ? $this->columns[$name] : null;
     }
-
     /**
      * Returns the names of all columns in this table.
      * @return array list of column names
@@ -79,7 +75,6 @@ class TableSchema extends BaseObject
     {
         return array_keys($this->columns);
     }
-
     /**
      * Manually specifies the primary key for this table.
      * @param string|array $keys the primary key (can be composite)
@@ -90,13 +85,13 @@ class TableSchema extends BaseObject
         $keys = (array) $keys;
         $this->primaryKey = $keys;
         foreach ($this->columns as $column) {
-            $column->isPrimaryKey = false;
+            $column->isPrimaryKey = \false;
         }
         foreach ($keys as $key) {
             if (isset($this->columns[$key])) {
-                $this->columns[$key]->isPrimaryKey = true;
+                $this->columns[$key]->isPrimaryKey = \true;
             } else {
-                throw new InvalidArgumentException("Primary key '$key' cannot be found in table '{$this->name}'.");
+                throw new InvalidArgumentException("Primary key '{$key}' cannot be found in table '{$this->name}'.");
             }
         }
     }

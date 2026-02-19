@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -17,7 +17,6 @@ declare(strict_types=1);
 namespace Cake\Database\Schema;
 
 use Cake\Database\Connection;
-
 /**
  * An interface used by TableSchema objects.
  */
@@ -34,7 +33,6 @@ interface SqlGeneratorInterface
      *    required indexes.
      */
     public function createSql(Connection $connection): array;
-
     /**
      * Generate the SQL to drop a table.
      *
@@ -45,7 +43,6 @@ interface SqlGeneratorInterface
      * @return array SQL to drop a table.
      */
     public function dropSql(Connection $connection): array;
-
     /**
      * Generate the SQL statements to truncate a table
      *
@@ -53,7 +50,6 @@ interface SqlGeneratorInterface
      * @return array SQL to truncate a table.
      */
     public function truncateSql(Connection $connection): array;
-
     /**
      * Generate the SQL statements to add the constraints to the table
      *
@@ -61,7 +57,6 @@ interface SqlGeneratorInterface
      * @return array SQL to add the constraints.
      */
     public function addConstraintSql(Connection $connection): array;
-
     /**
      * Generate the SQL statements to drop the constraints to the table
      *

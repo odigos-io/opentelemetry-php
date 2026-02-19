@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\HttpKernel\Exception;
 
 /**
@@ -16,29 +15,24 @@ namespace Symfony\Component\HttpKernel\Exception;
  *
  * @author Kris Wallsmith <kris@symfony.com>
  */
-class HttpException extends \RuntimeException implements HttpExceptionInterface
+class HttpException extends \RuntimeException implements \Symfony\Component\HttpKernel\Exception\HttpExceptionInterface
 {
     private int $statusCode;
     private array $headers;
-
     public function __construct(int $statusCode, string $message = '', ?\Throwable $previous = null, array $headers = [], int $code = 0)
     {
         $this->statusCode = $statusCode;
         $this->headers = $headers;
-
         parent::__construct($message, $code, $previous);
     }
-
     public function getStatusCode(): int
     {
         return $this->statusCode;
     }
-
     public function getHeaders(): array
     {
         return $this->headers;
     }
-
     /**
      * @return void
      */

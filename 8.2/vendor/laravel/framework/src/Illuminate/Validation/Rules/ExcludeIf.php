@@ -5,7 +5,6 @@ namespace Illuminate\Validation\Rules;
 use Closure;
 use InvalidArgumentException;
 use Stringable;
-
 class ExcludeIf implements Stringable
 {
     /**
@@ -14,7 +13,6 @@ class ExcludeIf implements Stringable
      * @var (\Closure(): bool)|bool
      */
     public $condition;
-
     /**
      * Create a new exclude validation rule based on a condition.
      *
@@ -30,7 +28,6 @@ class ExcludeIf implements Stringable
             throw new InvalidArgumentException('The provided condition must be a callable or boolean.');
         }
     }
-
     /**
      * Convert the rule to a validation string.
      *
@@ -41,7 +38,6 @@ class ExcludeIf implements Stringable
         if (is_callable($this->condition)) {
             return call_user_func($this->condition) ? 'exclude' : '';
         }
-
         return $this->condition ? 'exclude' : '';
     }
 }

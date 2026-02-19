@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace MongoDB\Builder;
 
 /**
@@ -11,9 +10,8 @@ namespace MongoDB\Builder;
  */
 final class Expression
 {
-    use Expression\ExpressionFactoryTrait;
-    use Expression\FactoryTrait;
-
+    use \MongoDB\Builder\Expression\ExpressionFactoryTrait;
+    use \MongoDB\Builder\Expression\FactoryTrait;
     private function __construct()
     {
         // This class cannot be instantiated

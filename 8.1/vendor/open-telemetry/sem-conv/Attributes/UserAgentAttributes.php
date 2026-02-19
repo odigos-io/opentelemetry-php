@@ -1,9 +1,7 @@
 <?php
 
 // DO NOT EDIT, this is an Auto-generated file from script/semantic-conventions
-
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\SemConv\Attributes;
 
 /**
@@ -18,5 +16,4 @@ interface UserAgentAttributes
      * @stable
      */
     public const USER_AGENT_ORIGINAL = 'user_agent.original';
-
 }

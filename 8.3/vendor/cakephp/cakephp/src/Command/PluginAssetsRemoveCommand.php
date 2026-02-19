@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -19,14 +19,12 @@ namespace Cake\Command;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
-
 /**
  * Command for removing plugin assets from app's webroot.
  */
-class PluginAssetsRemoveCommand extends Command
+class PluginAssetsRemoveCommand extends \Cake\Command\Command
 {
-    use PluginAssetsTrait;
-
+    use \Cake\Command\PluginAssetsTrait;
     /**
      * @inheritDoc
      */
@@ -34,7 +32,6 @@ class PluginAssetsRemoveCommand extends Command
     {
         return 'plugin assets remove';
     }
-
     /**
      * @inheritDoc
      */
@@ -42,7 +39,6 @@ class PluginAssetsRemoveCommand extends Command
     {
         return "Remove plugin assets from app's webroot.";
     }
-
     /**
      * Execute the command
      *
@@ -56,24 +52,18 @@ class PluginAssetsRemoveCommand extends Command
     {
         $this->io = $io;
         $this->args = $args;
-
         $name = $args->getArgument('name');
         $plugins = $this->_list($name);
-
         foreach ($plugins as $plugin => $config) {
             $this->io->out();
             $this->io->out('For plugin: ' . $plugin);
             $this->io->hr();
-
             $this->_remove($config);
         }
-
         $this->io->out();
         $this->io->out('Done');
-
         return static::CODE_SUCCESS;
     }
-
     /**
      * Get the option parser.
      *
@@ -82,13 +72,7 @@ class PluginAssetsRemoveCommand extends Command
      */
     public function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
     {
-        $parser->setDescription(
-            static::getDescription(),
-        )->addArgument('name', [
-            'help' => 'A specific plugin you want to remove.',
-            'required' => false,
-        ]);
-
+        $parser->setDescription(static::getDescription())->addArgument('name', ['help' => 'A specific plugin you want to remove.', 'required' => \false]);
         return $parser;
     }
 }

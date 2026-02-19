@@ -1,11 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\SDK\Metrics\StalenessHandler;
 
 use OpenTelemetry\SDK\Metrics\ReferenceCounterInterface;
-
 /**
  * @internal
  */
@@ -17,15 +15,13 @@ final class MultiReferenceCounter implements ReferenceCounterInterface
     public function __construct(private readonly array $referenceCounters)
     {
     }
-
     #[\Override]
-    public function acquire(bool $persistent = false): void
+    public function acquire(bool $persistent = \false): void
     {
         foreach ($this->referenceCounters as $referenceCounter) {
             $referenceCounter->acquire($persistent);
         }
     }
-
     #[\Override]
     public function release(): void
     {

@@ -6,16 +6,13 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file or at
 // https://developers.google.com/open-source/licenses/bsd
-
 /**
  * MapField and MapFieldIter are used by generated protocol message classes to
  * manipulate map fields.
  */
-
-namespace Google\Protobuf\Internal;
+namespace Odigos\Google\Protobuf\Internal;
 
 use Traversable;
-
 /**
  * MapField is used by generated protocol message classes to manipulate map
  * fields. It can be used like native PHP array.
@@ -42,7 +39,6 @@ class MapField implements \ArrayAccess, \IteratorAggregate, \Countable
      * @ignore
      */
     private $legacy_klass;
-
     /**
      * Constructs an instance of MapField.
      *
@@ -58,19 +54,18 @@ class MapField implements \ArrayAccess, \IteratorAggregate, \Countable
         $this->key_type = $key_type;
         $this->value_type = $value_type;
         $this->klass = $klass;
-
         if ($this->value_type == GPBType::MESSAGE) {
             $pool = DescriptorPool::getGeneratedPool();
             $desc = $pool->getDescriptorByClassName($klass);
             if ($desc == NULL) {
-                new $klass;  // No msg class instance has been created before.
+                new $klass();
+                // No msg class instance has been created before.
                 $desc = $pool->getDescriptorByClassName($klass);
             }
             $this->klass = $desc->getClass();
             $this->legacy_klass = $desc->getLegacyClass();
         }
     }
-
     /**
      * @ignore
      */
@@ -78,7 +73,6 @@ class MapField implements \ArrayAccess, \IteratorAggregate, \Countable
     {
         return $this->key_type;
     }
-
     /**
      * @ignore
      */
@@ -86,7 +80,6 @@ class MapField implements \ArrayAccess, \IteratorAggregate, \Countable
     {
         return $this->value_type;
     }
-
     /**
      * @ignore
      */
@@ -94,7 +87,6 @@ class MapField implements \ArrayAccess, \IteratorAggregate, \Countable
     {
         return $this->klass;
     }
-
     /**
      * @ignore
      */
@@ -102,7 +94,6 @@ class MapField implements \ArrayAccess, \IteratorAggregate, \Countable
     {
         return $this->legacy_klass;
     }
-
     /**
      * Return the element at the given key.
      *
@@ -119,7 +110,6 @@ class MapField implements \ArrayAccess, \IteratorAggregate, \Countable
     {
         return $this->container[$key];
     }
-
     /**
      * Assign the element at the given key.
      *
@@ -137,7 +127,6 @@ class MapField implements \ArrayAccess, \IteratorAggregate, \Countable
     public function offsetSet($key, $value)
     {
         $this->checkKey($this->key_type, $key);
-
         switch ($this->value_type) {
             case GPBType::SFIXED32:
             case GPBType::SINT32:
@@ -168,21 +157,19 @@ class MapField implements \ArrayAccess, \IteratorAggregate, \Countable
                 GPBUtil::checkBool($value);
                 break;
             case GPBType::STRING:
-                GPBUtil::checkString($value, true);
+                GPBUtil::checkString($value, \true);
                 break;
             case GPBType::MESSAGE:
                 if (is_null($value)) {
-                  trigger_error("Map element cannot be null.", E_USER_ERROR);
+                    trigger_error("Map element cannot be null.", \E_USER_ERROR);
                 }
                 GPBUtil::checkMessage($value, $this->klass);
                 break;
             default:
                 break;
         }
-
         $this->container[$key] = $value;
     }
-
     /**
      * Remove the element at the given key.
      *
@@ -199,7 +186,6 @@ class MapField implements \ArrayAccess, \IteratorAggregate, \Countable
         $this->checkKey($this->key_type, $key);
         unset($this->container[$key]);
     }
-
     /**
      * Check the existence of the element at the given key.
      *
@@ -214,7 +200,6 @@ class MapField implements \ArrayAccess, \IteratorAggregate, \Countable
         $this->checkKey($this->key_type, $key);
         return isset($this->container[$key]);
     }
-
     /**
      * @ignore
      */
@@ -222,7 +207,6 @@ class MapField implements \ArrayAccess, \IteratorAggregate, \Countable
     {
         return new MapFieldIter($this->container, $this->key_type);
     }
-
     /**
      * Return the number of stored elements.
      *
@@ -234,7 +218,6 @@ class MapField implements \ArrayAccess, \IteratorAggregate, \Countable
     {
         return count($this->container);
     }
-
     /**
      * @ignore
      */
@@ -263,12 +246,10 @@ class MapField implements \ArrayAccess, \IteratorAggregate, \Countable
                 GPBUtil::checkBool($key);
                 break;
             case GPBType::STRING:
-                GPBUtil::checkString($key, true);
+                GPBUtil::checkString($key, \true);
                 break;
             default:
-                trigger_error(
-                    "Given type cannot be map key.",
-                    E_USER_ERROR);
+                trigger_error("Given type cannot be map key.", \E_USER_ERROR);
                 break;
         }
     }

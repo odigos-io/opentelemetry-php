@@ -3,7 +3,6 @@
 namespace Illuminate\Bus\Events;
 
 use Illuminate\Bus\Batch;
-
 class BatchDispatched
 {
     /**
@@ -12,7 +11,6 @@ class BatchDispatched
      * @var \Illuminate\Bus\Batch
      */
     public $batch;
-
     /**
      * Create a new event instance.
      *

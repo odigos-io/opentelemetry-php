@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -17,11 +17,10 @@ declare(strict_types=1);
 namespace Cake\Http\RateLimit;
 
 use Psr\SimpleCache\CacheInterface;
-
 /**
  * Sliding window rate limiter implementation
  */
-class SlidingWindowRateLimiter implements RateLimiterInterface
+class SlidingWindowRateLimiter implements \Cake\Http\RateLimit\RateLimiterInterface
 {
     /**
      * Cache instance
@@ -29,7 +28,6 @@ class SlidingWindowRateLimiter implements RateLimiterInterface
      * @var \Psr\SimpleCache\CacheInterface
      */
     protected CacheInterface $cache;
-
     /**
      * Constructor
      *
@@ -39,7 +37,6 @@ class SlidingWindowRateLimiter implements RateLimiterInterface
     {
         $this->cache = $cache;
     }
-
     /**
      * @inheritDoc
      */
@@ -47,40 +44,21 @@ class SlidingWindowRateLimiter implements RateLimiterInterface
     {
         $now = time();
         $key = $identifier;
-
-        $data = $this->cache->get($key, [
-            'count' => 0,
-            'reset' => $now + $window,
-            'window_start' => $now,
-        ]);
-
+        $data = $this->cache->get($key, ['count' => 0, 'reset' => $now + $window, 'window_start' => $now]);
         $elapsed = $now - $data['window_start'];
         if ($elapsed >= $window) {
-            $data = [
-                'count' => 0,
-                'reset' => $now + $window,
-                'window_start' => $now,
-            ];
+            $data = ['count' => 0, 'reset' => $now + $window, 'window_start' => $now];
         } else {
-            $weight = 1 - ($elapsed / $window);
-            $data['count'] = (int)($data['count'] * $weight);
+            $weight = 1 - $elapsed / $window;
+            $data['count'] = (int) ($data['count'] * $weight);
         }
-
         $allowed = $data['count'] + $cost <= $limit;
-
         if ($allowed) {
             $data['count'] += $cost;
             $this->cache->set($key, $data, $window);
         }
-
-        return [
-            'allowed' => $allowed,
-            'limit' => $limit,
-            'remaining' => max(0, $limit - (int)$data['count']),
-            'reset' => $data['reset'],
-        ];
+        return ['allowed' => $allowed, 'limit' => $limit, 'remaining' => max(0, $limit - (int) $data['count']), 'reset' => $data['reset']];
     }
-
     /**
      * @inheritDoc
      */

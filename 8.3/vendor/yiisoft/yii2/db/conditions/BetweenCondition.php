@@ -1,14 +1,13 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\db\conditions;
 
 use yii\base\InvalidArgumentException;
-
 /**
  * Class BetweenCondition represents a `BETWEEN` condition.
  *
@@ -16,7 +15,7 @@ use yii\base\InvalidArgumentException;
  * @since 2.0.14
  * @phpcs:disable Squiz.NamingConventions.ValidVariableName.PrivateNoUnderscore
  */
-class BetweenCondition implements ConditionInterface
+class BetweenCondition implements \yii\db\conditions\ConditionInterface
 {
     /**
      * @var string $operator the operator to use (e.g. `BETWEEN` or `NOT BETWEEN`)
@@ -34,8 +33,6 @@ class BetweenCondition implements ConditionInterface
      * @var mixed end of the interval
      */
     private $intervalEnd;
-
-
     /**
      * Creates a condition with the `BETWEEN` operator.
      *
@@ -51,7 +48,6 @@ class BetweenCondition implements ConditionInterface
         $this->intervalStart = $intervalStart;
         $this->intervalEnd = $intervalEnd;
     }
-
     /**
      * @return string
      */
@@ -59,7 +55,6 @@ class BetweenCondition implements ConditionInterface
     {
         return $this->operator;
     }
-
     /**
      * @return mixed
      */
@@ -67,7 +62,6 @@ class BetweenCondition implements ConditionInterface
     {
         return $this->column;
     }
-
     /**
      * @return mixed
      */
@@ -75,7 +69,6 @@ class BetweenCondition implements ConditionInterface
     {
         return $this->intervalStart;
     }
-
     /**
      * @return mixed
      */
@@ -83,7 +76,6 @@ class BetweenCondition implements ConditionInterface
     {
         return $this->intervalEnd;
     }
-
     /**
      * {@inheritdoc}
      * @throws InvalidArgumentException if wrong number of operands have been given.
@@ -91,9 +83,8 @@ class BetweenCondition implements ConditionInterface
     public static function fromArrayDefinition($operator, $operands)
     {
         if (!isset($operands[0], $operands[1], $operands[2])) {
-            throw new InvalidArgumentException("Operator '$operator' requires three operands.");
+            throw new InvalidArgumentException("Operator '{$operator}' requires three operands.");
         }
-
         return new static($operands[0], $operator, $operands[1], $operands[2]);
     }
 }

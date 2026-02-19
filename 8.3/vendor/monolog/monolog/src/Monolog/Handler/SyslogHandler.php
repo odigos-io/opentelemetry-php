@@ -1,5 +1,6 @@
-<?php declare(strict_types=1);
+<?php
 
+declare (strict_types=1);
 /*
  * This file is part of the Monolog package.
  *
@@ -8,12 +9,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Odigos\Monolog\Handler;
 
-namespace Monolog\Handler;
-
-use Monolog\Level;
-use Monolog\LogRecord;
-
+use Odigos\Monolog\Level;
+use Odigos\Monolog\LogRecord;
 /**
  * Logs to syslog service.
  *
@@ -31,19 +30,16 @@ class SyslogHandler extends AbstractSyslogHandler
 {
     protected string $ident;
     protected int $logopts;
-
     /**
      * @param string|int $facility Either one of the names of the keys in $this->facilities, or a LOG_* facility constant
      * @param int        $logopts  Option flags for the openlog() call, defaults to LOG_PID
      */
-    public function __construct(string $ident, string|int $facility = LOG_USER, int|string|Level $level = Level::Debug, bool $bubble = true, int $logopts = LOG_PID)
+    public function __construct(string $ident, string|int $facility = \LOG_USER, int|string|Level $level = Level::Debug, bool $bubble = \true, int $logopts = \LOG_PID)
     {
         parent::__construct($facility, $level, $bubble);
-
         $this->ident = $ident;
         $this->logopts = $logopts;
     }
-
     /**
      * @inheritDoc
      */
@@ -51,7 +47,6 @@ class SyslogHandler extends AbstractSyslogHandler
     {
         closelog();
     }
-
     /**
      * @inheritDoc
      */

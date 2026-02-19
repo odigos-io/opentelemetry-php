@@ -9,10 +9,8 @@
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
  */
-
-declare(strict_types=1);
-
-namespace Ramsey\Uuid\Converter\Number;
+declare (strict_types=1);
+namespace Odigos\Ramsey\Uuid\Converter\Number;
 
 /**
  * @deprecated DegradedNumberConverter is no longer necessary for converting numbers on 32-bit systems. Please

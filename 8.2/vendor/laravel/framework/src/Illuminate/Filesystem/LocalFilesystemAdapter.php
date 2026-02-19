@@ -5,32 +5,27 @@ namespace Illuminate\Filesystem;
 use Closure;
 use Illuminate\Support\Traits\Conditionable;
 use RuntimeException;
-
-class LocalFilesystemAdapter extends FilesystemAdapter
+class LocalFilesystemAdapter extends \Illuminate\Filesystem\FilesystemAdapter
 {
     use Conditionable;
-
     /**
      * The name of the filesystem disk.
      *
      * @var string
      */
     protected $disk;
-
     /**
      * Indicates if signed URLs should serve corresponding files.
      *
      * @var bool
      */
-    protected $shouldServeSignedUrls = false;
-
+    protected $shouldServeSignedUrls = \false;
     /**
      * The Closure that should be used to resolve the URL generator.
      *
      * @var \Closure
      */
     protected $urlGeneratorResolver;
-
     /**
      * Determine if temporary URLs can be generated.
      *
@@ -38,11 +33,8 @@ class LocalFilesystemAdapter extends FilesystemAdapter
      */
     public function providesTemporaryUrls()
     {
-        return $this->temporaryUrlCallback || (
-            $this->shouldServeSignedUrls && $this->urlGeneratorResolver instanceof Closure
-        );
+        return $this->temporaryUrlCallback || $this->shouldServeSignedUrls && $this->urlGeneratorResolver instanceof Closure;
     }
-
     /**
      * Get a temporary URL for the file at the given path.
      *
@@ -54,25 +46,14 @@ class LocalFilesystemAdapter extends FilesystemAdapter
     public function temporaryUrl($path, $expiration, array $options = [])
     {
         if ($this->temporaryUrlCallback) {
-            return $this->temporaryUrlCallback->bindTo($this, static::class)(
-                $path, $expiration, $options
-            );
+            return $this->temporaryUrlCallback->bindTo($this, static::class)($path, $expiration, $options);
         }
-
-        if (! $this->providesTemporaryUrls()) {
+        if (!$this->providesTemporaryUrls()) {
             throw new RuntimeException('This driver does not support creating temporary URLs.');
         }
-
         $url = call_user_func($this->urlGeneratorResolver);
-
-        return $url->to($url->temporarySignedRoute(
-            'storage.'.$this->disk,
-            $expiration,
-            ['path' => $path],
-            absolute: false
-        ));
+        return $url->to($url->temporarySignedRoute('storage.' . $this->disk, $expiration, ['path' => $path], absolute: \false));
     }
-
     /**
      * Specify the name of the disk the adapter is managing.
      *
@@ -82,10 +63,8 @@ class LocalFilesystemAdapter extends FilesystemAdapter
     public function diskName(string $disk)
     {
         $this->disk = $disk;
-
         return $this;
     }
-
     /**
      * Indicate that signed URLs should serve the corresponding files.
      *
@@ -93,11 +72,10 @@ class LocalFilesystemAdapter extends FilesystemAdapter
      * @param  \Closure|null  $urlGeneratorResolver
      * @return $this
      */
-    public function shouldServeSignedUrls(bool $serve = true, ?Closure $urlGeneratorResolver = null)
+    public function shouldServeSignedUrls(bool $serve = \true, ?Closure $urlGeneratorResolver = null)
     {
         $this->shouldServeSignedUrls = $serve;
         $this->urlGeneratorResolver = $urlGeneratorResolver;
-
         return $this;
     }
 }

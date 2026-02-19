@@ -9,10 +9,8 @@
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
  */
-
-declare(strict_types=1);
-
-namespace Ramsey\Uuid\Rfc4122;
+declare (strict_types=1);
+namespace Odigos\Ramsey\Uuid\Rfc4122;
 
 /**
  * Provides common functionality for max UUIDs
@@ -27,7 +25,6 @@ trait MaxTrait
      * @pure
      */
     abstract public function getBytes(): string;
-
     /**
      * Returns true if the byte string represents a max UUID
      *

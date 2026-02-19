@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\HttpFoundation\Session\Storage\Handler;
 
 /**
@@ -16,38 +15,32 @@ namespace Symfony\Component\HttpFoundation\Session\Storage\Handler;
  *
  * @author Drak <drak@zikula.org>
  */
-class NullSessionHandler extends AbstractSessionHandler
+class NullSessionHandler extends \Symfony\Component\HttpFoundation\Session\Storage\Handler\AbstractSessionHandler
 {
     public function close(): bool
     {
-        return true;
+        return \true;
     }
-
     public function validateId(#[\SensitiveParameter] string $sessionId): bool
     {
-        return true;
+        return \true;
     }
-
     protected function doRead(#[\SensitiveParameter] string $sessionId): string
     {
         return '';
     }
-
     public function updateTimestamp(#[\SensitiveParameter] string $sessionId, string $data): bool
     {
-        return true;
+        return \true;
     }
-
     protected function doWrite(#[\SensitiveParameter] string $sessionId, string $data): bool
     {
-        return true;
+        return \true;
     }
-
     protected function doDestroy(#[\SensitiveParameter] string $sessionId): bool
     {
-        return true;
+        return \true;
     }
-
     public function gc(int $maxlifetime): int|false
     {
         return 0;

@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\SDK\Metrics;
 
 final class ViewProjection
@@ -9,12 +8,7 @@ final class ViewProjection
     /**
      * @param list<string>|null $attributeKeys
      */
-    public function __construct(
-        public readonly string $name,
-        public readonly ?string $unit,
-        public readonly ?string $description,
-        public readonly ?array $attributeKeys,
-        public readonly ?AggregationInterface $aggregation,
-    ) {
+    public function __construct(public readonly string $name, public readonly ?string $unit, public readonly ?string $description, public readonly ?array $attributeKeys, public readonly ?\OpenTelemetry\SDK\Metrics\AggregationInterface $aggregation)
+    {
     }
 }

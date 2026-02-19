@@ -9,10 +9,8 @@
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
  */
-
-declare(strict_types=1);
-
-namespace Ramsey\Collection\Map;
+declare (strict_types=1);
+namespace Odigos\Ramsey\Collection\Map;
 
 /**
  * A `TypedMap` represents a map of elements where key and value are typed.
@@ -92,19 +90,14 @@ class TypedMap extends AbstractTypedMap
      * @param string $valueType The data type of the map's values.
      * @param array<K, T> $data The initial data to set for this map.
      */
-    public function __construct(
-        private readonly string $keyType,
-        private readonly string $valueType,
-        array $data = [],
-    ) {
+    public function __construct(private readonly string $keyType, private readonly string $valueType, array $data = [])
+    {
         parent::__construct($data);
     }
-
     public function getKeyType(): string
     {
         return $this->keyType;
     }
-
     public function getValueType(): string
     {
         return $this->valueType;

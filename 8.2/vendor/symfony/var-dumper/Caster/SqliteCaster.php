@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\VarDumper\Caster;
 
 use Symfony\Component\VarDumper\Cloner\Stub;
-
 /**
  * @author Alexandre Daubois <alex.daubois@gmail.com>
  *
@@ -24,9 +22,8 @@ final class SqliteCaster
     {
         $numColumns = $result->numColumns();
         for ($i = 0; $i < $numColumns; ++$i) {
-            $a[Caster::PREFIX_VIRTUAL.'columnNames'][$i] = $result->columnName($i);
+            $a[\Symfony\Component\VarDumper\Caster\Caster::PREFIX_VIRTUAL . 'columnNames'][$i] = $result->columnName($i);
         }
-
         return $a;
     }
 }

@@ -10,7 +10,6 @@ class JobPopping
      * @var string
      */
     public $connectionName;
-
     /**
      * Create a new event instance.
      *

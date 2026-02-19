@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\Routing\Attribute;
 
 /**
@@ -28,29 +27,13 @@ class Route
     private array $localizedPaths = [];
     private array $methods;
     private array $schemes;
-
     /**
      * @param array<string|\Stringable> $requirements
      * @param string[]|string           $methods
      * @param string[]|string           $schemes
      */
-    public function __construct(
-        string|array|null $path = null,
-        private ?string $name = null,
-        private array $requirements = [],
-        private array $options = [],
-        private array $defaults = [],
-        private ?string $host = null,
-        array|string $methods = [],
-        array|string $schemes = [],
-        private ?string $condition = null,
-        private ?int $priority = null,
-        ?string $locale = null,
-        ?string $format = null,
-        ?bool $utf8 = null,
-        ?bool $stateless = null,
-        private ?string $env = null,
-    ) {
+    public function __construct(string|array|null $path = null, private ?string $name = null, private array $requirements = [], private array $options = [], private array $defaults = [], private ?string $host = null, array|string $methods = [], array|string $schemes = [], private ?string $condition = null, private ?int $priority = null, ?string $locale = null, ?string $format = null, ?bool $utf8 = null, ?bool $stateless = null, private ?string $env = null)
+    {
         if (\is_array($path)) {
             $this->localizedPaths = $path;
         } else {
@@ -58,24 +41,19 @@ class Route
         }
         $this->setMethods($methods);
         $this->setSchemes($schemes);
-
         if (null !== $locale) {
             $this->defaults['_locale'] = $locale;
         }
-
         if (null !== $format) {
             $this->defaults['_format'] = $format;
         }
-
         if (null !== $utf8) {
             $this->options['utf8'] = $utf8;
         }
-
         if (null !== $stateless) {
             $this->defaults['_stateless'] = $stateless;
         }
     }
-
     /**
      * @return void
      */
@@ -83,7 +61,6 @@ class Route
     {
         $this->path = $path;
     }
-
     /**
      * @return string|null
      */
@@ -91,7 +68,6 @@ class Route
     {
         return $this->path;
     }
-
     /**
      * @return void
      */
@@ -99,12 +75,10 @@ class Route
     {
         $this->localizedPaths = $localizedPaths;
     }
-
     public function getLocalizedPaths(): array
     {
         return $this->localizedPaths;
     }
-
     /**
      * @return void
      */
@@ -112,7 +86,6 @@ class Route
     {
         $this->host = $pattern;
     }
-
     /**
      * @return string|null
      */
@@ -120,7 +93,6 @@ class Route
     {
         return $this->host;
     }
-
     /**
      * @return void
      */
@@ -128,7 +100,6 @@ class Route
     {
         $this->name = $name;
     }
-
     /**
      * @return string|null
      */
@@ -136,7 +107,6 @@ class Route
     {
         return $this->name;
     }
-
     /**
      * @return void
      */
@@ -144,7 +114,6 @@ class Route
     {
         $this->requirements = $requirements;
     }
-
     /**
      * @return array
      */
@@ -152,7 +121,6 @@ class Route
     {
         return $this->requirements;
     }
-
     /**
      * @return void
      */
@@ -160,7 +128,6 @@ class Route
     {
         $this->options = $options;
     }
-
     /**
      * @return array
      */
@@ -168,7 +135,6 @@ class Route
     {
         return $this->options;
     }
-
     /**
      * @return void
      */
@@ -176,7 +142,6 @@ class Route
     {
         $this->defaults = $defaults;
     }
-
     /**
      * @return array
      */
@@ -184,7 +149,6 @@ class Route
     {
         return $this->defaults;
     }
-
     /**
      * @return void
      */
@@ -192,7 +156,6 @@ class Route
     {
         $this->schemes = (array) $schemes;
     }
-
     /**
      * @return array
      */
@@ -200,7 +163,6 @@ class Route
     {
         return $this->schemes;
     }
-
     /**
      * @return void
      */
@@ -208,7 +170,6 @@ class Route
     {
         $this->methods = (array) $methods;
     }
-
     /**
      * @return array
      */
@@ -216,7 +177,6 @@ class Route
     {
         return $this->methods;
     }
-
     /**
      * @return void
      */
@@ -224,7 +184,6 @@ class Route
     {
         $this->condition = $condition;
     }
-
     /**
      * @return string|null
      */
@@ -232,28 +191,23 @@ class Route
     {
         return $this->condition;
     }
-
     public function setPriority(int $priority): void
     {
         $this->priority = $priority;
     }
-
     public function getPriority(): ?int
     {
         return $this->priority;
     }
-
     public function setEnv(?string $env): void
     {
         $this->env = $env;
     }
-
     public function getEnv(): ?string
     {
         return $this->env;
     }
 }
-
-if (!class_exists(\Symfony\Component\Routing\Annotation\Route::class, false)) {
-    class_alias(Route::class, \Symfony\Component\Routing\Annotation\Route::class);
+if (!class_exists(\Symfony\Component\Routing\Annotation\Route::class, \false)) {
+    class_alias(\Symfony\Component\Routing\Attribute\Route::class, \Symfony\Component\Routing\Annotation\Route::class);
 }

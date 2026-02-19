@@ -8,14 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\Mailer\EventListener;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Mailer\Event\MessageEvent;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Message;
-
 /**
  * Manipulates the Envelope of a Message.
  *
@@ -25,21 +23,16 @@ use Symfony\Component\Mime\Message;
 class EnvelopeListener implements EventSubscriberInterface
 {
     private ?Address $sender = null;
-
     /**
      * @var Address[]|null
      */
     private ?array $recipients = null;
-
     /**
      * @param array<Address|string> $recipients
      * @param string[]              $allowedRecipients An array of regex to match the allowed recipients
      */
-    public function __construct(
-        Address|string|null $sender = null,
-        ?array $recipients = null,
-        private array $allowedRecipients = [],
-    ) {
+    public function __construct(Address|string|null $sender = null, ?array $recipients = null, private array $allowedRecipients = [])
+    {
         if (null !== $sender) {
             $this->sender = Address::create($sender);
         }
@@ -47,12 +40,10 @@ class EnvelopeListener implements EventSubscriberInterface
             $this->recipients = Address::createArray($recipients);
         }
     }
-
     public function onMessage(MessageEvent $event): void
     {
         if ($this->sender) {
             $event->getEnvelope()->setSender($this->sender);
-
             $message = $event->getMessage();
             if ($message instanceof Message) {
                 if (!$message->getHeaders()->has('Sender') && !$message->getHeaders()->has('From')) {
@@ -60,13 +51,12 @@ class EnvelopeListener implements EventSubscriberInterface
                 }
             }
         }
-
         if ($this->recipients) {
             $recipients = $this->recipients;
             if ($this->allowedRecipients) {
                 foreach ($event->getEnvelope()->getRecipients() as $recipient) {
                     foreach ($this->allowedRecipients as $allowedRecipient) {
-                        if (!preg_match('{\A'.$allowedRecipient.'\z}', $recipient->getAddress())) {
+                        if (!preg_match('{\A' . $allowedRecipient . '\z}', $recipient->getAddress())) {
                             continue;
                         }
                         // dedup
@@ -75,17 +65,14 @@ class EnvelopeListener implements EventSubscriberInterface
                                 continue 2;
                             }
                         }
-
                         $recipients[] = $recipient;
                         continue 2;
                     }
                 }
             }
-
             $event->getEnvelope()->setRecipients($recipients);
         }
     }
-
     public static function getSubscribedEvents(): array
     {
         return [

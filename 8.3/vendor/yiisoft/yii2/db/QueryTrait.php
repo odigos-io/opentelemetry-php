@@ -1,14 +1,13 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\db;
 
 use yii\base\NotSupportedException;
-
 /**
  * The BaseQuery trait represents the minimum method set of a database Query.
  *
@@ -56,9 +55,7 @@ trait QueryTrait
      * @see emulateExecution()
      * @since 2.0.11
      */
-    public $emulateExecution = false;
-
-
+    public $emulateExecution = \false;
     /**
      * Sets the [[indexBy]] property.
      * @param string|callable $column the name of the column by which the query results should be indexed by.
@@ -79,7 +76,6 @@ trait QueryTrait
         $this->indexBy = $column;
         return $this;
     }
-
     /**
      * Sets the WHERE part of the query.
      *
@@ -95,7 +91,6 @@ trait QueryTrait
         $this->where = $condition;
         return $this;
     }
-
     /**
      * Adds an additional WHERE condition to the existing one.
      * The new condition and the existing one will be joined using the 'AND' operator.
@@ -112,10 +107,8 @@ trait QueryTrait
         } else {
             $this->where = ['and', $this->where, $condition];
         }
-
         return $this;
     }
-
     /**
      * Adds an additional WHERE condition to the existing one.
      * The new condition and the existing one will be joined using the 'OR' operator.
@@ -132,10 +125,8 @@ trait QueryTrait
         } else {
             $this->where = ['or', $this->where, $condition];
         }
-
         return $this;
     }
-
     /**
      * Sets the WHERE part of the query but ignores [[isEmpty()|empty operands]].
      *
@@ -169,10 +160,8 @@ trait QueryTrait
         if ($condition !== []) {
             $this->where($condition);
         }
-
         return $this;
     }
-
     /**
      * Adds an additional WHERE condition to the existing one but ignores [[isEmpty()|empty operands]].
      * The new condition and the existing one will be joined using the 'AND' operator.
@@ -193,10 +182,8 @@ trait QueryTrait
         if ($condition !== []) {
             $this->andWhere($condition);
         }
-
         return $this;
     }
-
     /**
      * Adds an additional WHERE condition to the existing one but ignores [[isEmpty()|empty operands]].
      * The new condition and the existing one will be joined using the 'OR' operator.
@@ -217,10 +204,8 @@ trait QueryTrait
         if ($condition !== []) {
             $this->orWhere($condition);
         }
-
         return $this;
     }
-
     /**
      * Removes [[isEmpty()|empty operands]] from the given query condition.
      *
@@ -233,7 +218,6 @@ trait QueryTrait
         if (!is_array($condition)) {
             return $condition;
         }
-
         if (!isset($condition[0])) {
             // hash format: 'column1' => 'value1', 'column2' => 'value2', ...
             foreach ($condition as $name => $value) {
@@ -241,14 +225,10 @@ trait QueryTrait
                     unset($condition[$name]);
                 }
             }
-
             return $condition;
         }
-
         // operator format: operator, operand 1, operand 2, ...
-
         $operator = array_shift($condition);
-
         switch (strtoupper($operator)) {
             case 'NOT':
             case 'AND':
@@ -261,7 +241,6 @@ trait QueryTrait
                         $condition[$i] = $subCondition;
                     }
                 }
-
                 if (empty($condition)) {
                     return [];
                 }
@@ -279,12 +258,9 @@ trait QueryTrait
                     return [];
                 }
         }
-
         array_unshift($condition, $operator);
-
         return $condition;
     }
-
     /**
      * Returns a value indicating whether the give value is "empty".
      *
@@ -302,7 +278,6 @@ trait QueryTrait
     {
         return $value === '' || $value === [] || $value === null || is_string($value) && trim($value) === '';
     }
-
     /**
      * Sets the ORDER BY part of the query.
      * @param string|array|ExpressionInterface|null $columns the columns (and the directions) to be ordered by.
@@ -325,7 +300,6 @@ trait QueryTrait
         $this->orderBy = $this->normalizeOrderBy($columns);
         return $this;
     }
-
     /**
      * Adds additional ORDER BY columns to the query.
      * @param string|array|ExpressionInterface $columns the columns (and the directions) to be ordered by.
@@ -351,10 +325,8 @@ trait QueryTrait
         } else {
             $this->orderBy = array_merge($this->orderBy, $columns);
         }
-
         return $this;
     }
-
     /**
      * Normalizes format of ORDER BY data.
      *
@@ -365,25 +337,22 @@ trait QueryTrait
     {
         if (empty($columns)) {
             return [];
-        } elseif ($columns instanceof ExpressionInterface) {
+        } elseif ($columns instanceof \yii\db\ExpressionInterface) {
             return [$columns];
         } elseif (is_array($columns)) {
             return $columns;
         }
-
-        $columns = preg_split('/\s*,\s*/', trim($columns), -1, PREG_SPLIT_NO_EMPTY);
+        $columns = preg_split('/\s*,\s*/', trim($columns), -1, \PREG_SPLIT_NO_EMPTY);
         $result = [];
         foreach ($columns as $column) {
             if (preg_match('/^(.*?)\s+(asc|desc)$/i', $column, $matches)) {
-                $result[$matches[1]] = strcasecmp($matches[2], 'desc') ? SORT_ASC : SORT_DESC;
+                $result[$matches[1]] = strcasecmp($matches[2], 'desc') ? \SORT_ASC : \SORT_DESC;
             } else {
-                $result[$column] = SORT_ASC;
+                $result[$column] = \SORT_ASC;
             }
         }
-
         return $result;
     }
-
     /**
      * Sets the LIMIT part of the query.
      * @param int|ExpressionInterface|null $limit the limit. Use null or negative value to disable limit.
@@ -394,7 +363,6 @@ trait QueryTrait
         $this->limit = $limit;
         return $this;
     }
-
     /**
      * Sets the OFFSET part of the query.
      * @param int|ExpressionInterface|null $offset the offset. Use null or negative value to disable offset.
@@ -405,7 +373,6 @@ trait QueryTrait
         $this->offset = $offset;
         return $this;
     }
-
     /**
      * Sets whether to emulate query execution, preventing any interaction with data storage.
      * After this mode is enabled, methods, returning query results like [[QueryInterface::one()]],
@@ -416,7 +383,7 @@ trait QueryTrait
      * @return $this the query object itself.
      * @since 2.0.11
      */
-    public function emulateExecution($value = true)
+    public function emulateExecution($value = \true)
     {
         $this->emulateExecution = $value;
         return $this;

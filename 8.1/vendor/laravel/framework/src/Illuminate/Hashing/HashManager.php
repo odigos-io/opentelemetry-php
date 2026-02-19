@@ -4,7 +4,6 @@ namespace Illuminate\Hashing;
 
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Support\Manager;
-
 /**
  * @mixin \Illuminate\Contracts\Hashing\Hasher
  */
@@ -17,9 +16,8 @@ class HashManager extends Manager implements Hasher
      */
     public function createBcryptDriver()
     {
-        return new BcryptHasher($this->config->get('hashing.bcrypt') ?? []);
+        return new \Illuminate\Hashing\BcryptHasher($this->config->get('hashing.bcrypt') ?? []);
     }
-
     /**
      * Create an instance of the Argon2i hash Driver.
      *
@@ -27,9 +25,8 @@ class HashManager extends Manager implements Hasher
      */
     public function createArgonDriver()
     {
-        return new ArgonHasher($this->config->get('hashing.argon') ?? []);
+        return new \Illuminate\Hashing\ArgonHasher($this->config->get('hashing.argon') ?? []);
     }
-
     /**
      * Create an instance of the Argon2id hash Driver.
      *
@@ -37,9 +34,8 @@ class HashManager extends Manager implements Hasher
      */
     public function createArgon2idDriver()
     {
-        return new Argon2IdHasher($this->config->get('hashing.argon') ?? []);
+        return new \Illuminate\Hashing\Argon2IdHasher($this->config->get('hashing.argon') ?? []);
     }
-
     /**
      * Get information about the given hashed value.
      *
@@ -50,7 +46,6 @@ class HashManager extends Manager implements Hasher
     {
         return $this->driver()->info($hashedValue);
     }
-
     /**
      * Hash the given value.
      *
@@ -62,7 +57,6 @@ class HashManager extends Manager implements Hasher
     {
         return $this->driver()->make($value, $options);
     }
-
     /**
      * Check the given plain value against a hash.
      *
@@ -75,7 +69,6 @@ class HashManager extends Manager implements Hasher
     {
         return $this->driver()->check($value, $hashedValue, $options);
     }
-
     /**
      * Check if the given hash has been hashed using the given options.
      *
@@ -87,7 +80,6 @@ class HashManager extends Manager implements Hasher
     {
         return $this->driver()->needsRehash($hashedValue, $options);
     }
-
     /**
      * Determine if a given string is already hashed.
      *
@@ -98,7 +90,6 @@ class HashManager extends Manager implements Hasher
     {
         return password_get_info($value)['algo'] !== null;
     }
-
     /**
      * Get the default driver name.
      *

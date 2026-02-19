@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\DBAL\SQL\Parser;
 
 /**
@@ -15,12 +14,10 @@ interface Visitor
      * Accepts an SQL fragment containing a positional parameter
      */
     public function acceptPositionalParameter(string $sql): void;
-
     /**
      * Accepts an SQL fragment containing a named parameter
      */
     public function acceptNamedParameter(string $sql): void;
-
     /**
      * Accepts other SQL fragments
      */

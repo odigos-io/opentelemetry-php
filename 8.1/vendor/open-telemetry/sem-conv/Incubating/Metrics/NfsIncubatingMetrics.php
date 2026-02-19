@@ -1,9 +1,7 @@
 <?php
 
 // DO NOT EDIT, this is an Auto-generated file from script/semantic-conventions
-
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\SemConv\Incubating\Metrics;
 
 /**
@@ -21,7 +19,6 @@ interface NfsIncubatingMetrics
      * @experimental
      */
     public const NFS_CLIENT_NET_COUNT = 'nfs.client.net.count';
-
     /**
      * Reports the count of kernel NFS client TCP connections accepted.
      * Linux: this metric is taken from the Linux kernel's svc_stat.nettcpconn
@@ -31,7 +28,6 @@ interface NfsIncubatingMetrics
      * @experimental
      */
     public const NFS_CLIENT_NET_TCP_CONNECTION_ACCEPTED = 'nfs.client.net.tcp.connection.accepted';
-
     /**
      * Reports the count of kernel NFSv4+ client operations.
      *
@@ -40,7 +36,6 @@ interface NfsIncubatingMetrics
      * @experimental
      */
     public const NFS_CLIENT_OPERATION_COUNT = 'nfs.client.operation.count';
-
     /**
      * Reports the count of kernel NFS client procedures.
      *
@@ -49,7 +44,6 @@ interface NfsIncubatingMetrics
      * @experimental
      */
     public const NFS_CLIENT_PROCEDURE_COUNT = 'nfs.client.procedure.count';
-
     /**
      * Reports the count of kernel NFS client RPC authentication refreshes.
      * Linux: this metric is taken from the Linux kernel's svc_stat.rpcauthrefresh
@@ -59,7 +53,6 @@ interface NfsIncubatingMetrics
      * @experimental
      */
     public const NFS_CLIENT_RPC_AUTHREFRESH_COUNT = 'nfs.client.rpc.authrefresh.count';
-
     /**
      * Reports the count of kernel NFS client RPCs sent, regardless of whether they're accepted/rejected by the server.
      * Linux: this metric is taken from the Linux kernel's svc_stat.rpccnt
@@ -69,7 +62,6 @@ interface NfsIncubatingMetrics
      * @experimental
      */
     public const NFS_CLIENT_RPC_COUNT = 'nfs.client.rpc.count';
-
     /**
      * Reports the count of kernel NFS client RPC retransmits.
      * Linux: this metric is taken from the Linux kernel's svc_stat.rpcretrans
@@ -79,7 +71,6 @@ interface NfsIncubatingMetrics
      * @experimental
      */
     public const NFS_CLIENT_RPC_RETRANSMIT_COUNT = 'nfs.client.rpc.retransmit.count';
-
     /**
      * Reports the count of kernel NFS server stale file handles.
      * Linux: this metric is taken from the Linux kernel NFSD_STATS_FH_STALE counter in the nfsd_net struct
@@ -89,7 +80,6 @@ interface NfsIncubatingMetrics
      * @experimental
      */
     public const NFS_SERVER_FH_STALE_COUNT = 'nfs.server.fh.stale.count';
-
     /**
      * Reports the count of kernel NFS server bytes returned to receive and transmit (read and write) requests.
      * Linux: this metric is taken from the Linux kernel NFSD_STATS_IO_READ and NFSD_STATS_IO_WRITE counters in the nfsd_net struct
@@ -99,7 +89,6 @@ interface NfsIncubatingMetrics
      * @experimental
      */
     public const NFS_SERVER_IO = 'nfs.server.io';
-
     /**
      * Reports the count of kernel NFS server TCP segments and UDP datagrams handled.
      * Linux: this metric is taken from the Linux kernel's svc_stat.nettcpcnt and svc_stat.netudpcnt
@@ -109,7 +98,6 @@ interface NfsIncubatingMetrics
      * @experimental
      */
     public const NFS_SERVER_NET_COUNT = 'nfs.server.net.count';
-
     /**
      * Reports the count of kernel NFS server TCP connections accepted.
      * Linux: this metric is taken from the Linux kernel's svc_stat.nettcpconn
@@ -119,7 +107,6 @@ interface NfsIncubatingMetrics
      * @experimental
      */
     public const NFS_SERVER_NET_TCP_CONNECTION_ACCEPTED = 'nfs.server.net.tcp.connection.accepted';
-
     /**
      * Reports the count of kernel NFSv4+ server operations.
      *
@@ -128,7 +115,6 @@ interface NfsIncubatingMetrics
      * @experimental
      */
     public const NFS_SERVER_OPERATION_COUNT = 'nfs.server.operation.count';
-
     /**
      * Reports the count of kernel NFS server procedures.
      *
@@ -137,7 +123,6 @@ interface NfsIncubatingMetrics
      * @experimental
      */
     public const NFS_SERVER_PROCEDURE_COUNT = 'nfs.server.procedure.count';
-
     /**
      * Reports the kernel NFS server reply cache request count by cache hit status.
      *
@@ -146,7 +131,6 @@ interface NfsIncubatingMetrics
      * @experimental
      */
     public const NFS_SERVER_REPCACHE_REQUESTS = 'nfs.server.repcache.requests';
-
     /**
      * Reports the count of kernel NFS server RPCs handled.
      * Linux: this metric is taken from the Linux kernel's svc_stat.rpccnt, the count of good RPCs. This metric can have
@@ -157,7 +141,6 @@ interface NfsIncubatingMetrics
      * @experimental
      */
     public const NFS_SERVER_RPC_COUNT = 'nfs.server.rpc.count';
-
     /**
      * Reports the count of kernel NFS server available threads.
      * Linux: this metric is taken from the Linux kernel nfsd_th_cnt variable
@@ -167,5 +150,4 @@ interface NfsIncubatingMetrics
      * @experimental
      */
     public const NFS_SERVER_THREAD_COUNT = 'nfs.server.thread.count';
-
 }

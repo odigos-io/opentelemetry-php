@@ -3,8 +3,7 @@
 namespace Illuminate\Cache;
 
 use Illuminate\Support\Carbon;
-
-class ArrayLock extends Lock
+class ArrayLock extends \Illuminate\Cache\Lock
 {
     /**
      * The parent array cache store.
@@ -12,7 +11,6 @@ class ArrayLock extends Lock
      * @var \Illuminate\Cache\ArrayStore
      */
     protected $store;
-
     /**
      * Create a new lock instance.
      *
@@ -25,10 +23,8 @@ class ArrayLock extends Lock
     public function __construct($store, $name, $seconds, $owner = null)
     {
         parent::__construct($name, $seconds, $owner);
-
         $this->store = $store;
     }
-
     /**
      * Attempt to acquire the lock.
      *
@@ -37,19 +33,12 @@ class ArrayLock extends Lock
     public function acquire()
     {
         $expiration = $this->store->locks[$this->name]['expiresAt'] ?? Carbon::now()->addSecond();
-
         if ($this->exists() && $expiration->isFuture()) {
-            return false;
+            return \false;
         }
-
-        $this->store->locks[$this->name] = [
-            'owner' => $this->owner,
-            'expiresAt' => $this->seconds === 0 ? null : Carbon::now()->addSeconds($this->seconds),
-        ];
-
-        return true;
+        $this->store->locks[$this->name] = ['owner' => $this->owner, 'expiresAt' => $this->seconds === 0 ? null : Carbon::now()->addSeconds($this->seconds)];
+        return \true;
     }
-
     /**
      * Determine if the current lock exists.
      *
@@ -59,7 +48,6 @@ class ArrayLock extends Lock
     {
         return isset($this->store->locks[$this->name]);
     }
-
     /**
      * Release the lock.
      *
@@ -67,19 +55,15 @@ class ArrayLock extends Lock
      */
     public function release()
     {
-        if (! $this->exists()) {
-            return false;
+        if (!$this->exists()) {
+            return \false;
         }
-
-        if (! $this->isOwnedByCurrentProcess()) {
-            return false;
+        if (!$this->isOwnedByCurrentProcess()) {
+            return \false;
         }
-
         $this->forceRelease();
-
-        return true;
+        return \true;
     }
-
     /**
      * Returns the owner value written into the driver for this lock.
      *
@@ -87,13 +71,11 @@ class ArrayLock extends Lock
      */
     protected function getCurrentOwner()
     {
-        if (! $this->exists()) {
+        if (!$this->exists()) {
             return null;
         }
-
         return $this->store->locks[$this->name]['owner'];
     }
-
     /**
      * Releases this lock in disregard of ownership.
      *

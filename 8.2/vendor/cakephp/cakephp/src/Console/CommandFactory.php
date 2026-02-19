@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -15,20 +15,18 @@ declare(strict_types=1);
 namespace Cake\Console;
 
 use Cake\Core\ContainerInterface;
-
 /**
  * This is a factory for creating Command instances.
  *
  * This factory can be replaced or extended if you need to customize building
  * your command objects.
  */
-class CommandFactory implements CommandFactoryInterface
+class CommandFactory implements \Cake\Console\CommandFactoryInterface
 {
     /**
      * @var \Cake\Core\ContainerInterface|null
      */
     protected ?ContainerInterface $container = null;
-
     /**
      * Constructor
      *
@@ -38,16 +36,14 @@ class CommandFactory implements CommandFactoryInterface
     {
         $this->container = $container;
     }
-
     /**
      * @inheritDoc
      */
-    public function create(string $className): CommandInterface
+    public function create(string $className): \Cake\Console\CommandInterface
     {
         if ($this->container?->has($className)) {
             return $this->container->get($className);
         }
-
         /** @var \Cake\Console\CommandInterface */
         return new $className($this);
     }

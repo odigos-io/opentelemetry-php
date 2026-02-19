@@ -1,16 +1,15 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\web;
 
-use Yii;
+use Odigos\Yii;
 use yii\base\Action;
 use yii\base\ViewNotFoundException;
-
 /**
  * ViewAction represents an action that displays a view according to a user-specified parameter.
  *
@@ -59,8 +58,6 @@ class ViewAction extends Action
      * If false, no layout will be applied.
      */
     public $layout;
-
-
     /**
      * Runs the action.
      * This method displays the view requested by the user.
@@ -70,16 +67,13 @@ class ViewAction extends Action
     {
         $viewName = $this->resolveViewName();
         $this->controller->actionParams[$this->viewParam] = Yii::$app->request->get($this->viewParam);
-
         $controllerLayout = null;
         if ($this->layout !== null) {
             $controllerLayout = $this->controller->layout;
             $this->controller->layout = $this->layout;
         }
-
         try {
             $output = $this->render($viewName);
-
             if ($controllerLayout) {
                 $this->controller->layout = $controllerLayout;
             }
@@ -87,19 +81,13 @@ class ViewAction extends Action
             if ($controllerLayout) {
                 $this->controller->layout = $controllerLayout;
             }
-
             if (YII_DEBUG) {
-                throw new NotFoundHttpException($e->getMessage());
+                throw new \yii\web\NotFoundHttpException($e->getMessage());
             }
-
-            throw new NotFoundHttpException(
-                Yii::t('yii', 'The requested view "{name}" was not found.', ['name' => $viewName])
-            );
+            throw new \yii\web\NotFoundHttpException(Yii::t('yii', 'The requested view "{name}" was not found.', ['name' => $viewName]));
         }
-
         return $output;
     }
-
     /**
      * Renders a view.
      *
@@ -110,7 +98,6 @@ class ViewAction extends Action
     {
         return $this->controller->render($viewName);
     }
-
     /**
      * Resolves the view name currently being requested.
      *
@@ -120,15 +107,12 @@ class ViewAction extends Action
     protected function resolveViewName()
     {
         $viewName = Yii::$app->request->get($this->viewParam, $this->defaultView);
-
         if (!is_string($viewName) || !preg_match('~^\w(?:(?!\/\.{0,2}\/)[\w\/\-\.])*$~', $viewName)) {
             if (YII_DEBUG) {
-                throw new NotFoundHttpException("The requested view \"$viewName\" must start with a word character, must not contain /../ or /./, can contain only word characters, forward slashes, dots and dashes.");
+                throw new \yii\web\NotFoundHttpException("The requested view \"{$viewName}\" must start with a word character, must not contain /../ or /./, can contain only word characters, forward slashes, dots and dashes.");
             }
-
-            throw new NotFoundHttpException(Yii::t('yii', 'The requested view "{name}" was not found.', ['name' => $viewName]));
+            throw new \yii\web\NotFoundHttpException(Yii::t('yii', 'The requested view "{name}" was not found.', ['name' => $viewName]));
         }
-
         return empty($this->viewPrefix) ? $viewName : $this->viewPrefix . '/' . $viewName;
     }
 }

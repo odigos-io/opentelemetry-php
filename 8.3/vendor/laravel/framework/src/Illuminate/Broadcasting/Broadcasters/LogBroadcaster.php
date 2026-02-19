@@ -3,8 +3,7 @@
 namespace Illuminate\Broadcasting\Broadcasters;
 
 use Psr\Log\LoggerInterface;
-
-class LogBroadcaster extends Broadcaster
+class LogBroadcaster extends \Illuminate\Broadcasting\Broadcasters\Broadcaster
 {
     /**
      * The logger implementation.
@@ -12,7 +11,6 @@ class LogBroadcaster extends Broadcaster
      * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
-
     /**
      * Create a new broadcaster instance.
      *
@@ -22,7 +20,6 @@ class LogBroadcaster extends Broadcaster
     {
         $this->logger = $logger;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -30,7 +27,6 @@ class LogBroadcaster extends Broadcaster
     {
         //
     }
-
     /**
      * {@inheritdoc}
      */
@@ -38,16 +34,13 @@ class LogBroadcaster extends Broadcaster
     {
         //
     }
-
     /**
      * {@inheritdoc}
      */
     public function broadcast(array $channels, $event, array $payload = [])
     {
         $channels = implode(', ', $this->formatChannels($channels));
-
-        $payload = json_encode($payload, JSON_PRETTY_PRINT);
-
-        $this->logger->info('Broadcasting ['.$event.'] on channels ['.$channels.'] with payload:'.PHP_EOL.$payload);
+        $payload = json_encode($payload, \JSON_PRETTY_PRINT);
+        $this->logger->info('Broadcasting [' . $event . '] on channels [' . $channels . '] with payload:' . \PHP_EOL . $payload);
     }
 }

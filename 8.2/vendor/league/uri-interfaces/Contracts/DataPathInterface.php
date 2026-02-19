@@ -8,14 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-declare(strict_types=1);
-
-namespace League\Uri\Contracts;
+declare (strict_types=1);
+namespace Odigos\League\Uri\Contracts;
 
 use SplFileObject;
 use Stringable;
-
 interface DataPathInterface extends PathInterface
 {
     /**
@@ -26,7 +23,6 @@ interface DataPathInterface extends PathInterface
      * @see http://tools.ietf.org/html/rfc2397#section-2
      */
     public function getMimeType(): string;
-
     /**
      * Retrieve the parameters associated with the Mime Type of the URI.
      *
@@ -35,7 +31,6 @@ interface DataPathInterface extends PathInterface
      * @see http://tools.ietf.org/html/rfc2397#section-2
      */
     public function getParameters(): string;
-
     /**
      * Retrieve the mediatype associated with the URI.
      *
@@ -46,7 +41,6 @@ interface DataPathInterface extends PathInterface
      * @return string The URI scheme.
      */
     public function getMediaType(): string;
-
     /**
      * Retrieves the data string.
      *
@@ -54,17 +48,14 @@ interface DataPathInterface extends PathInterface
      * an empty string
      */
     public function getData(): string;
-
     /**
      * Tells whether the data is binary safe encoded.
      */
     public function isBinaryData(): bool;
-
     /**
      * Save the data to a specific file.
      */
     public function save(string $path, string $mode = 'w'): SplFileObject;
-
     /**
      * Returns an instance where the data part is base64 encoded.
      *
@@ -72,7 +63,6 @@ interface DataPathInterface extends PathInterface
      * an instance where the data part is base64 encoded
      */
     public function toBinary(): self;
-
     /**
      * Returns an instance where the data part is url encoded following RFC3986 rules.
      *
@@ -80,7 +70,6 @@ interface DataPathInterface extends PathInterface
      * an instance where the data part is url encoded
      */
     public function toAscii(): self;
-
     /**
      * Return an instance with the specified mediatype parameters.
      *

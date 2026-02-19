@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -15,8 +15,7 @@ declare(strict_types=1);
  */
 namespace Cake\Console\TestSuite\Constraint;
 
-use PHPUnit\Framework\Constraint\Constraint;
-
+use Odigos\PHPUnit\Framework\Constraint\Constraint;
 /**
  * ExitCode constraint
  *
@@ -28,17 +27,14 @@ class ExitCode extends Constraint
      * @var int|null
      */
     private ?int $exitCode = null;
-
     /**
      * @var array
      */
     private array $out = [];
-
     /**
      * @var array
      */
     private array $err = [];
-
     /**
      * Constructor
      *
@@ -52,7 +48,6 @@ class ExitCode extends Constraint
         $this->out = $out;
         $this->err = $err;
     }
-
     /**
      * Checks if event is in fired array
      *
@@ -63,7 +58,6 @@ class ExitCode extends Constraint
     {
         return $other === $this->exitCode;
     }
-
     /**
      * Assertion message string
      *
@@ -73,7 +67,6 @@ class ExitCode extends Constraint
     {
         return sprintf('matches exit code `%s`', $this->exitCode ?? 'null');
     }
-
     /**
      * Returns the description of the failure.
      *
@@ -84,23 +77,14 @@ class ExitCode extends Constraint
     {
         return '`' . $other . '` ' . $this->toString();
     }
-
     /**
      * @inheritDoc
      */
     public function additionalFailureDescription(mixed $other): string
     {
-        return sprintf(
-            "STDOUT\n%s\n\nSTDERR\n%s\n",
-            implode("\n", $this->out),
-            implode("\n", $this->err),
-        );
+        return sprintf("STDOUT\n%s\n\nSTDERR\n%s\n", implode("\n", $this->out), implode("\n", $this->err));
     }
 }
-
 // phpcs:disable
-class_alias(
-    'Cake\Console\TestSuite\Constraint\ExitCode',
-    'Cake\TestSuite\Constraint\Console\ExitCode'
-);
+class_alias('Cake\Console\TestSuite\Constraint\ExitCode', 'Cake\TestSuite\Constraint\Console\ExitCode');
 // phpcs:enable

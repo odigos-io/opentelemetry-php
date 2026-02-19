@@ -4,7 +4,6 @@ namespace Illuminate\Http\Testing;
 
 use Illuminate\Support\Arr;
 use Symfony\Component\Mime\MimeTypes;
-
 class MimeType
 {
     /**
@@ -13,7 +12,6 @@ class MimeType
      * @var \Symfony\Component\Mime\MimeTypes|null
      */
     private static $mime;
-
     /**
      * Get the MIME types instance.
      *
@@ -22,12 +20,10 @@ class MimeType
     public static function getMimeTypes()
     {
         if (self::$mime === null) {
-            self::$mime = new MimeTypes;
+            self::$mime = new MimeTypes();
         }
-
         return self::$mime;
     }
-
     /**
      * Get the MIME type for a file based on the file's extension.
      *
@@ -36,11 +32,9 @@ class MimeType
      */
     public static function from($filename)
     {
-        $extension = pathinfo($filename, PATHINFO_EXTENSION);
-
+        $extension = pathinfo($filename, \PATHINFO_EXTENSION);
         return self::get($extension);
     }
-
     /**
      * Get the MIME type for a given extension or return all MIME types.
      *
@@ -51,7 +45,6 @@ class MimeType
     {
         return Arr::first(self::getMimeTypes()->getMimeTypes($extension)) ?? 'application/octet-stream';
     }
-
     /**
      * Search for the extension of a given MIME type.
      *

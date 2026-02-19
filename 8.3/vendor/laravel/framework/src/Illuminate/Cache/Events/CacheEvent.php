@@ -10,21 +10,18 @@ abstract class CacheEvent
      * @var string|null
      */
     public $storeName;
-
     /**
      * The key of the event.
      *
      * @var string
      */
     public $key;
-
     /**
      * The tags that were assigned to the key.
      *
      * @var array
      */
     public $tags;
-
     /**
      * Create a new event instance.
      *
@@ -38,7 +35,6 @@ abstract class CacheEvent
         $this->key = $key;
         $this->tags = $tags;
     }
-
     /**
      * Set the tags for the cache event.
      *
@@ -48,7 +44,6 @@ abstract class CacheEvent
     public function setTags($tags)
     {
         $this->tags = $tags;
-
         return $this;
     }
 }

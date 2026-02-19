@@ -2,7 +2,7 @@
 
 namespace Illuminate\Broadcasting;
 
-class FakePendingBroadcast extends PendingBroadcast
+class FakePendingBroadcast extends \Illuminate\Broadcasting\PendingBroadcast
 {
     /**
      * Create a new pending broadcast instance.
@@ -11,7 +11,6 @@ class FakePendingBroadcast extends PendingBroadcast
     {
         //
     }
-
     /**
      * Broadcast the event using a specific broadcaster.
      *
@@ -22,7 +21,6 @@ class FakePendingBroadcast extends PendingBroadcast
     {
         return $this;
     }
-
     /**
      * Broadcast the event to everyone except the current user.
      *
@@ -32,7 +30,6 @@ class FakePendingBroadcast extends PendingBroadcast
     {
         return $this;
     }
-
     /**
      * Handle the object's destruction.
      *

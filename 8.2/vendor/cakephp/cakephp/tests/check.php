@@ -1,5 +1,7 @@
 <?php
-declare(strict_types=1);
+
+declare (strict_types=1);
+namespace Odigos;
 
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
@@ -12,12 +14,10 @@ declare(strict_types=1);
  * @link          https://cakephp.org CakePHP(tm) Project
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-
-if (!defined('PHPUNIT_TESTSUITE') || !PHPUNIT_TESTSUITE) {
+if (!\defined('PHPUNIT_TESTSUITE') || !\PHPUNIT_TESTSUITE) {
     return;
 }
-
-$assertions = (int)ini_get('zend.assertions');
+$assertions = (int) \ini_get('zend.assertions');
 if ($assertions !== 1) {
-    throw new RuntimeException('Assertions are not activated, but needed for tests to run. Please set respective directives in your php.ini (`zend.assertions = 1`).');
+    throw new \RuntimeException('Assertions are not activated, but needed for tests to run. Please set respective directives in your php.ini (`zend.assertions = 1`).');
 }

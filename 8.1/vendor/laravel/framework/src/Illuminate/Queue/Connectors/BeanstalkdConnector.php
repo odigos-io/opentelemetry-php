@@ -3,10 +3,9 @@
 namespace Illuminate\Queue\Connectors;
 
 use Illuminate\Queue\BeanstalkdQueue;
-use Pheanstalk\Connection;
-use Pheanstalk\Pheanstalk;
-
-class BeanstalkdConnector implements ConnectorInterface
+use Odigos\Pheanstalk\Connection;
+use Odigos\Pheanstalk\Pheanstalk;
+class BeanstalkdConnector implements \Illuminate\Queue\Connectors\ConnectorInterface
 {
     /**
      * Establish a queue connection.
@@ -16,15 +15,8 @@ class BeanstalkdConnector implements ConnectorInterface
      */
     public function connect(array $config)
     {
-        return new BeanstalkdQueue(
-            $this->pheanstalk($config),
-            $config['queue'],
-            $config['retry_after'] ?? Pheanstalk::DEFAULT_TTR,
-            $config['block_for'] ?? 0,
-            $config['after_commit'] ?? null
-        );
+        return new BeanstalkdQueue($this->pheanstalk($config), $config['queue'], $config['retry_after'] ?? Pheanstalk::DEFAULT_TTR, $config['block_for'] ?? 0, $config['after_commit'] ?? null);
     }
-
     /**
      * Create a Pheanstalk instance.
      *
@@ -33,10 +25,6 @@ class BeanstalkdConnector implements ConnectorInterface
      */
     protected function pheanstalk(array $config)
     {
-        return Pheanstalk::create(
-            $config['host'],
-            $config['port'] ?? Pheanstalk::DEFAULT_PORT,
-            $config['timeout'] ?? Connection::DEFAULT_CONNECT_TIMEOUT
-        );
+        return Pheanstalk::create($config['host'], $config['port'] ?? Pheanstalk::DEFAULT_PORT, $config['timeout'] ?? Connection::DEFAULT_CONNECT_TIMEOUT);
     }
 }

@@ -9,15 +9,12 @@
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
  */
+declare (strict_types=1);
+namespace Odigos\Ramsey\Uuid\Provider\Node;
 
-declare(strict_types=1);
-
-namespace Ramsey\Uuid\Provider\Node;
-
-use Ramsey\Collection\AbstractCollection;
-use Ramsey\Uuid\Provider\NodeProviderInterface;
-use Ramsey\Uuid\Type\Hexadecimal;
-
+use Odigos\Ramsey\Collection\AbstractCollection;
+use Odigos\Ramsey\Uuid\Provider\NodeProviderInterface;
+use Odigos\Ramsey\Uuid\Type\Hexadecimal;
 /**
  * A collection of NodeProviderInterface objects
  *
@@ -34,7 +31,6 @@ class NodeProviderCollection extends AbstractCollection
     {
         return NodeProviderInterface::class;
     }
-
     /**
      * Re-constructs the object from its serialized form
      *
@@ -43,16 +39,8 @@ class NodeProviderCollection extends AbstractCollection
     public function unserialize($serialized): void
     {
         /** @var array<array-key, NodeProviderInterface> $data */
-        $data = unserialize($serialized, [
-            'allowed_classes' => [
-                Hexadecimal::class,
-                RandomNodeProvider::class,
-                StaticNodeProvider::class,
-                SystemNodeProvider::class,
-            ],
-        ]);
-
+        $data = unserialize($serialized, ['allowed_classes' => [Hexadecimal::class, RandomNodeProvider::class, StaticNodeProvider::class, SystemNodeProvider::class]]);
         /** @phpstan-ignore-next-line */
-        $this->data = array_filter($data, fn ($unserialized): bool => $unserialized instanceof NodeProviderInterface);
+        $this->data = array_filter($data, fn($unserialized): bool => $unserialized instanceof NodeProviderInterface);
     }
 }

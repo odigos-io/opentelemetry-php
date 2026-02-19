@@ -1,11 +1,9 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Odigos\Dotenv\Loader;
 
-namespace Dotenv\Loader;
-
-use Dotenv\Repository\RepositoryInterface;
-
+use Odigos\Dotenv\Repository\RepositoryInterface;
 interface LoaderInterface
 {
     /**

@@ -3,8 +3,7 @@
 namespace Illuminate\Testing\Fluent\Concerns;
 
 use Illuminate\Support\Str;
-use PHPUnit\Framework\Assert as PHPUnit;
-
+use Odigos\PHPUnit\Framework\Assert as PHPUnit;
 trait Interaction
 {
     /**
@@ -13,7 +12,6 @@ trait Interaction
      * @var array
      */
     protected $interacted = [];
-
     /**
      * Marks the property as interacted.
      *
@@ -23,12 +21,10 @@ trait Interaction
     protected function interactsWith(string $key): void
     {
         $prop = Str::before($key, '.');
-
-        if (! in_array($prop, $this->interacted, true)) {
+        if (!in_array($prop, $this->interacted, \true)) {
             $this->interacted[] = $prop;
         }
     }
-
     /**
      * Asserts that all properties have been interacted with.
      *
@@ -36,15 +32,8 @@ trait Interaction
      */
     public function interacted(): void
     {
-        PHPUnit::assertSame(
-            [],
-            array_diff(array_keys($this->prop()), $this->interacted),
-            $this->path
-                ? sprintf('Unexpected properties were found in scope [%s].', $this->path)
-                : 'Unexpected properties were found on the root level.'
-        );
+        PHPUnit::assertSame([], array_diff(array_keys($this->prop()), $this->interacted), $this->path ? sprintf('Unexpected properties were found in scope [%s].', $this->path) : 'Unexpected properties were found on the root level.');
     }
-
     /**
      * Disables the interaction check.
      *
@@ -53,10 +42,8 @@ trait Interaction
     public function etc(): self
     {
         $this->interacted = array_keys($this->prop());
-
         return $this;
     }
-
     /**
      * Retrieve a prop within the current scope using "dot" notation.
      *

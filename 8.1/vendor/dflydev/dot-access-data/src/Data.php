@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is a part of dflydev/dot-access-data.
  *
@@ -10,28 +9,24 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Dflydev\DotAccessData;
+namespace Odigos\Dflydev\DotAccessData;
 
 use ArrayAccess;
-use Dflydev\DotAccessData\Exception\DataException;
-use Dflydev\DotAccessData\Exception\InvalidPathException;
-use Dflydev\DotAccessData\Exception\MissingPathException;
-
+use Odigos\Dflydev\DotAccessData\Exception\DataException;
+use Odigos\Dflydev\DotAccessData\Exception\InvalidPathException;
+use Odigos\Dflydev\DotAccessData\Exception\MissingPathException;
 /**
  * @implements ArrayAccess<string, mixed>
  */
 class Data implements DataInterface, ArrayAccess
 {
     private const DELIMITERS = ['.', '/'];
-
     /**
      * Internal representation of data data
      *
      * @var array<string, mixed>
      */
     protected $data;
-
     /**
      * Constructor
      *
@@ -41,7 +36,6 @@ class Data implements DataInterface, ArrayAccess
     {
         $this->data = $data;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -49,28 +43,23 @@ class Data implements DataInterface, ArrayAccess
     {
         $currentValue =& $this->data;
         $keyPath = self::keyToPathArray($key);
-
         $endKey = array_pop($keyPath);
         foreach ($keyPath as $currentKey) {
-            if (! isset($currentValue[$currentKey])) {
+            if (!isset($currentValue[$currentKey])) {
                 $currentValue[$currentKey] = [];
             }
             $currentValue =& $currentValue[$currentKey];
         }
-
         if (!isset($currentValue[$endKey])) {
             $currentValue[$endKey] = [];
         }
-
         if (!is_array($currentValue[$endKey])) {
             // Promote this key to an array.
             // TODO: Is this really what we want to do?
             $currentValue[$endKey] = [$currentValue[$endKey]];
         }
-
         $currentValue[$endKey][] = $value;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -78,7 +67,6 @@ class Data implements DataInterface, ArrayAccess
     {
         $currentValue =& $this->data;
         $keyPath = self::keyToPathArray($key);
-
         $endKey = array_pop($keyPath);
         foreach ($keyPath as $currentKey) {
             if (!isset($currentValue[$currentKey])) {
@@ -91,7 +79,6 @@ class Data implements DataInterface, ArrayAccess
         }
         $currentValue[$endKey] = $value;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -99,7 +86,6 @@ class Data implements DataInterface, ArrayAccess
     {
         $currentValue =& $this->data;
         $keyPath = self::keyToPathArray($key);
-
         $endKey = array_pop($keyPath);
         foreach ($keyPath as $currentKey) {
             if (!isset($currentValue[$currentKey])) {
@@ -109,7 +95,6 @@ class Data implements DataInterface, ArrayAccess
         }
         unset($currentValue[$endKey]);
     }
-
     /**
      * {@inheritdoc}
      *
@@ -119,25 +104,19 @@ class Data implements DataInterface, ArrayAccess
     {
         /** @psalm-suppress ImpureFunctionCall */
         $hasDefault = \func_num_args() > 1;
-
         $currentValue = $this->data;
         $keyPath = self::keyToPathArray($key);
-
         foreach ($keyPath as $currentKey) {
             if (!is_array($currentValue) || !array_key_exists($currentKey, $currentValue)) {
                 if ($hasDefault) {
                     return $default;
                 }
-
                 throw new MissingPathException($key, sprintf('No data exists at the given path: "%s"', self::formatPath($keyPath)));
             }
-
             $currentValue = $currentValue[$currentKey];
         }
-
         return $currentValue === null ? $default : $currentValue;
     }
-
     /**
      * {@inheritdoc}
      *
@@ -146,20 +125,14 @@ class Data implements DataInterface, ArrayAccess
     public function has(string $key): bool
     {
         $currentValue = $this->data;
-
         foreach (self::keyToPathArray($key) as $currentKey) {
-            if (
-                !is_array($currentValue) ||
-                !array_key_exists($currentKey, $currentValue)
-            ) {
-                return false;
+            if (!is_array($currentValue) || !array_key_exists($currentKey, $currentValue)) {
+                return \false;
             }
             $currentValue = $currentValue[$currentKey];
         }
-
-        return true;
+        return \true;
     }
-
     /**
      * {@inheritdoc}
      *
@@ -171,10 +144,8 @@ class Data implements DataInterface, ArrayAccess
         if (is_array($value) && Util::isAssoc($value)) {
             return new Data($value);
         }
-
         throw new DataException(sprintf('Value at "%s" could not be represented as a DataInterface', self::formatPath($key)));
     }
-
     /**
      * {@inheritdoc}
      */
@@ -182,7 +153,6 @@ class Data implements DataInterface, ArrayAccess
     {
         $this->data = Util::mergeAssocArray($this->data, $data, $mode);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -190,7 +160,6 @@ class Data implements DataInterface, ArrayAccess
     {
         $this->import($data->export(), $mode);
     }
-
     /**
      * {@inheritdoc}
      *
@@ -200,7 +169,6 @@ class Data implements DataInterface, ArrayAccess
     {
         return $this->data;
     }
-
     /**
      * {@inheritdoc}
      *
@@ -211,7 +179,6 @@ class Data implements DataInterface, ArrayAccess
     {
         return $this->has($key);
     }
-
     /**
      * {@inheritdoc}
      *
@@ -222,7 +189,6 @@ class Data implements DataInterface, ArrayAccess
     {
         return $this->get($key, null);
     }
-
     /**
      * {@inheritdoc}
      *
@@ -236,7 +202,6 @@ class Data implements DataInterface, ArrayAccess
     {
         $this->set($key, $value);
     }
-
     /**
      * {@inheritdoc}
      *
@@ -247,7 +212,6 @@ class Data implements DataInterface, ArrayAccess
     {
         $this->remove($key);
     }
-
     /**
      * @param string $path
      *
@@ -262,12 +226,9 @@ class Data implements DataInterface, ArrayAccess
         if (\strlen($path) === 0) {
             throw new InvalidPathException('Path cannot be an empty string');
         }
-
         $path = \str_replace(self::DELIMITERS, '.', $path);
-
         return \explode('.', $path);
     }
-
     /**
      * @param string|string[] $path
      *
@@ -280,7 +241,6 @@ class Data implements DataInterface, ArrayAccess
         if (is_string($path)) {
             $path = self::keyToPathArray($path);
         }
-
         return implode(' » ', $path);
     }
 }

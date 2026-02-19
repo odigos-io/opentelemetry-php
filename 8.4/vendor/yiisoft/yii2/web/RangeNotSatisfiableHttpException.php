@@ -1,10 +1,10 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\web;
 
 /**
@@ -20,7 +20,7 @@ namespace yii\web;
  *
  * @since 2.0.11
  */
-class RangeNotSatisfiableHttpException extends HttpException
+class RangeNotSatisfiableHttpException extends \yii\web\HttpException
 {
     /**
      * Constructor.

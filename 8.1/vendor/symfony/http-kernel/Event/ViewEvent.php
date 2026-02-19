@@ -8,12 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\HttpKernel\Event;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
-
 /**
  * Allows to create a response for the return value of a controller.
  *
@@ -23,24 +21,20 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
  *
  * @author Bernhard Schussek <bschussek@gmail.com>
  */
-final class ViewEvent extends RequestEvent
+final class ViewEvent extends \Symfony\Component\HttpKernel\Event\RequestEvent
 {
-    public readonly ?ControllerArgumentsEvent $controllerArgumentsEvent;
+    public readonly ?\Symfony\Component\HttpKernel\Event\ControllerArgumentsEvent $controllerArgumentsEvent;
     private mixed $controllerResult;
-
-    public function __construct(HttpKernelInterface $kernel, Request $request, int $requestType, mixed $controllerResult, ?ControllerArgumentsEvent $controllerArgumentsEvent = null)
+    public function __construct(HttpKernelInterface $kernel, Request $request, int $requestType, mixed $controllerResult, ?\Symfony\Component\HttpKernel\Event\ControllerArgumentsEvent $controllerArgumentsEvent = null)
     {
         parent::__construct($kernel, $request, $requestType);
-
         $this->controllerResult = $controllerResult;
         $this->controllerArgumentsEvent = $controllerArgumentsEvent;
     }
-
     public function getControllerResult(): mixed
     {
         return $this->controllerResult;
     }
-
     public function setControllerResult(mixed $controllerResult): void
     {
         $this->controllerResult = $controllerResult;

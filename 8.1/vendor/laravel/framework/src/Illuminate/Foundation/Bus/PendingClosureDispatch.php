@@ -3,8 +3,7 @@
 namespace Illuminate\Foundation\Bus;
 
 use Closure;
-
-class PendingClosureDispatch extends PendingDispatch
+class PendingClosureDispatch extends \Illuminate\Foundation\Bus\PendingDispatch
 {
     /**
      * Add a callback to be executed if the job fails.
@@ -15,7 +14,6 @@ class PendingClosureDispatch extends PendingDispatch
     public function catch(Closure $callback)
     {
         $this->job->onFailure($callback);
-
         return $this;
     }
 }

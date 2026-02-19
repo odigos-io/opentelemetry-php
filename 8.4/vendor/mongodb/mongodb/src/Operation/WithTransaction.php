@@ -6,16 +6,13 @@ use Exception;
 use MongoDB\Driver\Exception\RuntimeException;
 use MongoDB\Driver\Session;
 use Throwable;
-
 use function call_user_func;
 use function time;
-
 /** @internal */
 final class WithTransaction
 {
     /** @var callable */
     private $callback;
-
     /**
      * @see Session::startTransaction for supported transaction options
      *
@@ -26,7 +23,6 @@ final class WithTransaction
     {
         $this->callback = $callback;
     }
-
     /**
      * Execute the operation in the given session
      *
@@ -52,66 +48,44 @@ final class WithTransaction
     public function execute(Session $session): void
     {
         $startTime = time();
-
-        while (true) {
+        while (\true) {
             $session->startTransaction($this->transactionOptions);
-
             try {
                 call_user_func($this->callback, $session);
             } catch (Throwable $e) {
                 if ($session->isInTransaction()) {
                     $session->abortTransaction();
                 }
-
-                if (
-                    $e instanceof RuntimeException &&
-                    $e->hasErrorLabel('TransientTransactionError') &&
-                    ! $this->isTransactionTimeLimitExceeded($startTime)
-                ) {
+                if ($e instanceof RuntimeException && $e->hasErrorLabel('TransientTransactionError') && !$this->isTransactionTimeLimitExceeded($startTime)) {
                     continue;
                 }
-
                 throw $e;
             }
-
-            if (! $session->isInTransaction()) {
+            if (!$session->isInTransaction()) {
                 // Assume callback intentionally ended the transaction
                 return;
             }
-
-            while (true) {
+            while (\true) {
                 try {
                     $session->commitTransaction();
                 } catch (RuntimeException $e) {
-                    if (
-                        $e->getCode() !== 50 /* MaxTimeMSExpired */ &&
-                        $e->hasErrorLabel('UnknownTransactionCommitResult') &&
-                        ! $this->isTransactionTimeLimitExceeded($startTime)
-                    ) {
+                    if ($e->getCode() !== 50 && $e->hasErrorLabel('UnknownTransactionCommitResult') && !$this->isTransactionTimeLimitExceeded($startTime)) {
                         // Retry committing the transaction
                         continue;
                     }
-
-                    if (
-                        $e->hasErrorLabel('TransientTransactionError') &&
-                        ! $this->isTransactionTimeLimitExceeded($startTime)
-                    ) {
+                    if ($e->hasErrorLabel('TransientTransactionError') && !$this->isTransactionTimeLimitExceeded($startTime)) {
                         // Restart the transaction, invoking the callback again
                         continue 2;
                     }
-
                     throw $e;
                 }
-
                 // Commit was successful
                 break;
             }
-
             // Transaction was successful
             break;
         }
     }
-
     /**
      * Returns whether the time limit for retrying transactions in the convenient transaction API has passed
      *

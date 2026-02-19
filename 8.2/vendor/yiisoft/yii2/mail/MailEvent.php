@@ -1,14 +1,13 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\mail;
 
 use yii\base\Event;
-
 /**
  * MailEvent represents the event parameter used for events triggered by [[BaseMailer]].
  *
@@ -32,5 +31,5 @@ class MailEvent extends Event
      * [[\yii\mail\BaseMailer::EVENT_BEFORE_SEND]] may set this property to decide whether
      * to continue send or not.
      */
-    public $isValid = true;
+    public $isValid = \true;
 }

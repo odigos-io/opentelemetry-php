@@ -1,22 +1,36 @@
 <?php
 
+namespace Odigos;
+
 /**
  * @var array $foreignKeys
  * @var string $table
  */
-
-?>
-<?php foreach ($foreignKeys as $column => $fkData): ?>
-        // drops foreign key for table `<?= $fkData['relatedTable'] ?>`
+foreach ($foreignKeys as $column => $fkData) {
+    ?>
+        // drops foreign key for table `<?php 
+    echo $fkData['relatedTable'];
+    ?>`
         $this->dropForeignKey(
-            '<?= $fkData['fk'] ?>',
-            '<?= $table ?>'
+            '<?php 
+    echo $fkData['fk'];
+    ?>',
+            '<?php 
+    echo $table;
+    ?>'
         );
 
-        // drops index for column `<?= $column ?>`
+        // drops index for column `<?php 
+    echo $column;
+    ?>`
         $this->dropIndex(
-            '<?= $fkData['idx'] ?>',
-            '<?= $table ?>'
+            '<?php 
+    echo $fkData['idx'];
+    ?>',
+            '<?php 
+    echo $table;
+    ?>'
         );
 
-<?php endforeach;
+<?php 
+}

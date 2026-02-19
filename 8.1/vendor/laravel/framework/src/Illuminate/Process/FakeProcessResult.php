@@ -4,7 +4,6 @@ namespace Illuminate\Process;
 
 use Illuminate\Contracts\Process\ProcessResult as ProcessResultContract;
 use Illuminate\Process\Exceptions\ProcessFailedException;
-
 class FakeProcessResult implements ProcessResultContract
 {
     /**
@@ -13,28 +12,24 @@ class FakeProcessResult implements ProcessResultContract
      * @var string
      */
     protected $command;
-
     /**
      * The process exit code.
      *
      * @var int
      */
     protected $exitCode;
-
     /**
      * The process output.
      *
      * @var string
      */
     protected $output = '';
-
     /**
      * The process error output.
      *
      * @var string
      */
     protected $errorOutput = '';
-
     /**
      * Create a new process result instance.
      *
@@ -51,7 +46,6 @@ class FakeProcessResult implements ProcessResultContract
         $this->output = $this->normalizeOutput($output);
         $this->errorOutput = $this->normalizeOutput($errorOutput);
     }
-
     /**
      * Normalize the given output into a string with newlines.
      *
@@ -63,17 +57,11 @@ class FakeProcessResult implements ProcessResultContract
         if (empty($output)) {
             return '';
         } elseif (is_string($output)) {
-            return rtrim($output, "\n")."\n";
+            return rtrim($output, "\n") . "\n";
         } elseif (is_array($output)) {
-            return rtrim(
-                collect($output)
-                    ->map(fn ($line) => rtrim($line, "\n")."\n")
-                    ->implode(''),
-                "\n"
-            );
+            return rtrim(collect($output)->map(fn($line) => rtrim($line, "\n") . "\n")->implode(''), "\n");
         }
     }
-
     /**
      * Get the original command executed by the process.
      *
@@ -83,7 +71,6 @@ class FakeProcessResult implements ProcessResultContract
     {
         return $this->command;
     }
-
     /**
      * Create a new fake process result with the given command.
      *
@@ -92,9 +79,8 @@ class FakeProcessResult implements ProcessResultContract
      */
     public function withCommand(string $command)
     {
-        return new FakeProcessResult($command, $this->exitCode, $this->output, $this->errorOutput);
+        return new \Illuminate\Process\FakeProcessResult($command, $this->exitCode, $this->output, $this->errorOutput);
     }
-
     /**
      * Determine if the process was successful.
      *
@@ -104,7 +90,6 @@ class FakeProcessResult implements ProcessResultContract
     {
         return $this->exitCode === 0;
     }
-
     /**
      * Determine if the process failed.
      *
@@ -112,9 +97,8 @@ class FakeProcessResult implements ProcessResultContract
      */
     public function failed()
     {
-        return ! $this->successful();
+        return !$this->successful();
     }
-
     /**
      * Get the exit code of the process.
      *
@@ -124,7 +108,6 @@ class FakeProcessResult implements ProcessResultContract
     {
         return $this->exitCode;
     }
-
     /**
      * Get the standard output of the process.
      *
@@ -134,7 +117,6 @@ class FakeProcessResult implements ProcessResultContract
     {
         return $this->output;
     }
-
     /**
      * Determine if the output contains the given string.
      *
@@ -145,7 +127,6 @@ class FakeProcessResult implements ProcessResultContract
     {
         return str_contains($this->output(), $output);
     }
-
     /**
      * Get the error output of the process.
      *
@@ -155,7 +136,6 @@ class FakeProcessResult implements ProcessResultContract
     {
         return $this->errorOutput;
     }
-
     /**
      * Determine if the error output contains the given string.
      *
@@ -166,7 +146,6 @@ class FakeProcessResult implements ProcessResultContract
     {
         return str_contains($this->errorOutput(), $output);
     }
-
     /**
      * Throw an exception if the process failed.
      *
@@ -180,16 +159,12 @@ class FakeProcessResult implements ProcessResultContract
         if ($this->successful()) {
             return $this;
         }
-
         $exception = new ProcessFailedException($this);
-
         if ($callback) {
             $callback($this, $exception);
         }
-
         throw $exception;
     }
-
     /**
      * Throw an exception if the process failed and the given condition is true.
      *
@@ -204,7 +179,6 @@ class FakeProcessResult implements ProcessResultContract
         if ($condition) {
             return $this->throw($callback);
         }
-
         return $this;
     }
 }

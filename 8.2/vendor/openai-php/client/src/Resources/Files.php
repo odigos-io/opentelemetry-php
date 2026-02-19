@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenAI\Resources;
 
 use OpenAI\Contracts\Resources\FilesContract;
@@ -11,11 +10,9 @@ use OpenAI\Responses\Files\ListResponse;
 use OpenAI\Responses\Files\RetrieveResponse;
 use OpenAI\ValueObjects\Transporter\Payload;
 use OpenAI\ValueObjects\Transporter\Response;
-
 final class Files implements FilesContract
 {
-    use Concerns\Transportable;
-
+    use \OpenAI\Resources\Concerns\Transportable;
     /**
      * Returns a list of files that belong to the user's organization.
      *
@@ -24,13 +21,10 @@ final class Files implements FilesContract
     public function list(array $parameters = []): ListResponse
     {
         $payload = Payload::list('files', $parameters);
-
         /** @var Response<array{object: string, data: array<int, array{id: string, object: string, created_at: int, bytes: ?int, filename: string, purpose: string, status: string, status_details: array<array-key, mixed>|string|null}>, first_id: ?string, last_id: ?string, has_more: ?bool}> $response */
         $response = $this->transporter->requestObject($payload);
-
         return ListResponse::from($response->data(), $response->meta());
     }
-
     /**
      * Returns information about a specific file.
      *
@@ -39,13 +33,10 @@ final class Files implements FilesContract
     public function retrieve(string $file): RetrieveResponse
     {
         $payload = Payload::retrieve('files', $file);
-
         /** @var Response<array{id: string, object: string, created_at: int, bytes: ?int, filename: string, purpose: string, status: string, status_details: array<array-key, mixed>|string|null}> $response */
         $response = $this->transporter->requestObject($payload);
-
         return RetrieveResponse::from($response->data(), $response->meta());
     }
-
     /**
      * Returns the contents of the specified file.
      *
@@ -54,10 +45,8 @@ final class Files implements FilesContract
     public function download(string $file): string
     {
         $payload = Payload::retrieveContent('files', $file);
-
         return $this->transporter->requestContent($payload);
     }
-
     /**
      * Upload a file that contains document(s) to be used across various endpoints/features.
      *
@@ -68,13 +57,10 @@ final class Files implements FilesContract
     public function upload(array $parameters): CreateResponse
     {
         $payload = Payload::upload('files', $parameters);
-
         /** @var Response<array{id: string, object: string, created_at: int, bytes: int, filename: string, purpose: string, status: string, status_details: array<array-key, mixed>|string|null}> $response */
         $response = $this->transporter->requestObject($payload);
-
         return CreateResponse::from($response->data(), $response->meta());
     }
-
     /**
      * Delete a file.
      *
@@ -83,10 +69,8 @@ final class Files implements FilesContract
     public function delete(string $file): DeleteResponse
     {
         $payload = Payload::delete('files', $file);
-
         /** @var Response<array{id: string, object: string, deleted: bool}> $response */
         $response = $this->transporter->requestObject($payload);
-
         return DeleteResponse::from($response->data(), $response->meta());
     }
 }

@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -25,59 +25,32 @@ class PhpError
      * @var int
      */
     private int $code;
-
     /**
      * @var string
      */
     private string $message;
-
     /**
      * @var string|null
      */
     private ?string $file;
-
     /**
      * @var int|null
      */
     private ?int $line;
-
     /**
      * Stack trace data. Each item should have a `reference`, `file` and `line` keys.
      *
      * @var array<array<string, int>>
      */
     private array $trace;
-
     /**
      * @var array<int, string>
      */
-    private array $levelMap = [
-        E_PARSE => 'error',
-        E_ERROR => 'error',
-        E_CORE_ERROR => 'error',
-        E_COMPILE_ERROR => 'error',
-        E_USER_ERROR => 'error',
-        E_WARNING => 'warning',
-        E_USER_WARNING => 'warning',
-        E_COMPILE_WARNING => 'warning',
-        E_RECOVERABLE_ERROR => 'warning',
-        E_NOTICE => 'notice',
-        E_USER_NOTICE => 'notice',
-        E_DEPRECATED => 'deprecated',
-        E_USER_DEPRECATED => 'deprecated',
-    ];
-
+    private array $levelMap = [\E_PARSE => 'error', \E_ERROR => 'error', \E_CORE_ERROR => 'error', \E_COMPILE_ERROR => 'error', \E_USER_ERROR => 'error', \E_WARNING => 'warning', \E_USER_WARNING => 'warning', \E_COMPILE_WARNING => 'warning', \E_RECOVERABLE_ERROR => 'warning', \E_NOTICE => 'notice', \E_USER_NOTICE => 'notice', \E_DEPRECATED => 'deprecated', \E_USER_DEPRECATED => 'deprecated'];
     /**
      * @var array<string, int>
      */
-    private array $logMap = [
-        'error' => LOG_ERR,
-        'warning' => LOG_WARNING,
-        'notice' => LOG_NOTICE,
-        'strict' => LOG_NOTICE,
-        'deprecated' => LOG_NOTICE,
-    ];
-
+    private array $logMap = ['error' => \LOG_ERR, 'warning' => \LOG_WARNING, 'notice' => \LOG_NOTICE, 'strict' => \LOG_NOTICE, 'deprecated' => \LOG_NOTICE];
     /**
      * Constructor
      *
@@ -87,24 +60,17 @@ class PhpError
      * @param int|null $line The line number for the error.
      * @param array $trace The backtrace for the error.
      */
-    public function __construct(
-        int $code,
-        string $message,
-        ?string $file = null,
-        ?int $line = null,
-        array $trace = [],
-    ) {
-        if (version_compare(PHP_VERSION, '8.4.0-dev', '<')) {
-            $this->levelMap[E_STRICT] = 'strict';
+    public function __construct(int $code, string $message, ?string $file = null, ?int $line = null, array $trace = [])
+    {
+        if (version_compare(\PHP_VERSION, '8.4.0-dev', '<')) {
+            $this->levelMap[\E_STRICT] = 'strict';
         }
-
         $this->code = $code;
         $this->message = $message;
         $this->file = $file;
         $this->line = $line;
         $this->trace = $trace;
     }
-
     /**
      * Get the PHP error constant.
      *
@@ -114,7 +80,6 @@ class PhpError
     {
         return $this->code;
     }
-
     /**
      * Get the mapped LOG_ constant.
      *
@@ -123,10 +88,8 @@ class PhpError
     public function getLogLevel(): int
     {
         $label = $this->getLabel();
-
-        return $this->logMap[$label] ?? LOG_ERR;
+        return $this->logMap[$label] ?? \LOG_ERR;
     }
-
     /**
      * Get the error code label
      *
@@ -136,7 +99,6 @@ class PhpError
     {
         return $this->levelMap[$this->code] ?? 'error';
     }
-
     /**
      * Get the error message.
      *
@@ -146,7 +108,6 @@ class PhpError
     {
         return $this->message;
     }
-
     /**
      * Get the error file
      *
@@ -156,7 +117,6 @@ class PhpError
     {
         return $this->file;
     }
-
     /**
      * Get the error line number.
      *
@@ -166,7 +126,6 @@ class PhpError
     {
         return $this->line;
     }
-
     /**
      * Get the stacktrace as an array.
      *
@@ -176,7 +135,6 @@ class PhpError
     {
         return $this->trace;
     }
-
     /**
      * Get the stacktrace as a string.
      *
@@ -192,7 +150,6 @@ class PhpError
                 $out[] = $frame['reference'];
             }
         }
-
         return implode("\n", $out);
     }
 }

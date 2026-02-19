@@ -1,10 +1,10 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\web;
 
 /**
@@ -27,7 +27,7 @@ namespace yii\web;
  * @author Paul Klimov <klimov.paul@gmail.com>
  * @since 2.0.6
  */
-abstract class MultiFieldSession extends Session
+abstract class MultiFieldSession extends \yii\web\Session
 {
     /**
      * @var callable a callback that will be called during session data reading.
@@ -75,8 +75,6 @@ abstract class MultiFieldSession extends Session
      * ```
      */
     public $writeCallback;
-
-
     /**
      * Returns a value indicating whether to use custom session storage.
      * This method overrides the parent implementation and always returns true.
@@ -84,9 +82,8 @@ abstract class MultiFieldSession extends Session
      */
     public function getUseCustomStorage()
     {
-        return true;
+        return \true;
     }
-
     /**
      * Composes storage field set for session writing.
      * @param string|null $id Optional session id
@@ -104,7 +101,6 @@ abstract class MultiFieldSession extends Session
         }
         return $fields;
     }
-
     /**
      * Extracts session data from storage field set.
      * @param array $fields storage fields.
@@ -122,10 +118,8 @@ abstract class MultiFieldSession extends Session
                 $_SESSION = array_merge((array) $_SESSION, (array) $extraData);
                 return session_encode();
             }
-
             return $fields['data'];
         }
-
         return isset($fields['data']) ? $fields['data'] : '';
     }
 }

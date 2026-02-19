@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -17,14 +17,13 @@ declare(strict_types=1);
 namespace Cake\Event;
 
 use Cake\Core\Exception\CakeException;
-
 /**
  * Class Event
  *
  * @template TSubject of object
  * @implements \Cake\Event\EventInterface<TSubject>
  */
-class Event implements EventInterface
+class Event implements \Cake\Event\EventInterface
 {
     /**
      * Name of the event
@@ -32,7 +31,6 @@ class Event implements EventInterface
      * @var string
      */
     protected string $_name;
-
     /**
      * The object this event applies to (usually the same object that generates the event)
      *
@@ -40,14 +38,12 @@ class Event implements EventInterface
      * @phpstan-var TSubject|null
      */
     protected ?object $_subject = null;
-
     /**
      * Custom data for the method that receives the event
      *
      * @var array
      */
     protected array $_data;
-
     /**
      * Property used to retain the result value of the event listeners
      *
@@ -56,14 +52,12 @@ class Event implements EventInterface
      * @var mixed
      */
     protected mixed $result = null;
-
     /**
      * Flags an event as stopped or not, default is false
      *
      * @var bool
      */
-    protected bool $_stopped = false;
-
+    protected bool $_stopped = \false;
     /**
      * Constructor
      *
@@ -87,7 +81,6 @@ class Event implements EventInterface
         $this->_subject = $subject;
         $this->_data = $data;
     }
-
     /**
      * Returns the name of this event. This is usually used as the event identifier
      *
@@ -97,7 +90,6 @@ class Event implements EventInterface
     {
         return $this->_name;
     }
-
     /**
      * Returns the subject of this event
      *
@@ -112,10 +104,8 @@ class Event implements EventInterface
         if ($this->_subject === null) {
             throw new CakeException('No subject set for this event');
         }
-
         return $this->_subject;
     }
-
     /**
      * Stops the event from being used anymore
      *
@@ -123,9 +113,8 @@ class Event implements EventInterface
      */
     public function stopPropagation(): void
     {
-        $this->_stopped = true;
+        $this->_stopped = \true;
     }
-
     /**
      * Check if the event is stopped
      *
@@ -135,7 +124,6 @@ class Event implements EventInterface
     {
         return $this->_stopped;
     }
-
     /**
      * The result value of the event listeners
      *
@@ -145,7 +133,6 @@ class Event implements EventInterface
     {
         return $this->result;
     }
-
     /**
      * Listeners can attach a result value to the event.
      *
@@ -157,10 +144,8 @@ class Event implements EventInterface
     public function setResult(mixed $value = null)
     {
         $this->result = $value;
-
         return $this;
     }
-
     /**
      * @inheritDoc
      */
@@ -169,10 +154,8 @@ class Event implements EventInterface
         if ($key !== null) {
             return $this->_data[$key] ?? null;
         }
-
         return $this->_data;
     }
-
     /**
      * @inheritDoc
      */
@@ -183,7 +166,6 @@ class Event implements EventInterface
         } else {
             $this->_data[$key] = $value;
         }
-
         return $this;
     }
 }

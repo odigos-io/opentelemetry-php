@@ -9,16 +9,13 @@
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
  */
+declare (strict_types=1);
+namespace Odigos\Ramsey\Uuid\Builder;
 
-declare(strict_types=1);
-
-namespace Ramsey\Uuid\Builder;
-
-use Ramsey\Uuid\Codec\CodecInterface;
-use Ramsey\Uuid\Exception\BuilderNotFoundException;
-use Ramsey\Uuid\Exception\UnableToBuildUuidException;
-use Ramsey\Uuid\UuidInterface;
-
+use Odigos\Ramsey\Uuid\Codec\CodecInterface;
+use Odigos\Ramsey\Uuid\Exception\BuilderNotFoundException;
+use Odigos\Ramsey\Uuid\Exception\UnableToBuildUuidException;
+use Odigos\Ramsey\Uuid\UuidInterface;
 /**
  * FallbackBuilder builds a UUID by stepping through a list of UUID builders until a UUID can be constructed without exceptions
  *
@@ -32,7 +29,6 @@ class FallbackBuilder implements UuidBuilderInterface
     public function __construct(private iterable $builders)
     {
     }
-
     /**
      * Builds and returns a UuidInterface instance using the first builder that succeeds
      *
@@ -46,21 +42,14 @@ class FallbackBuilder implements UuidBuilderInterface
     public function build(CodecInterface $codec, string $bytes): UuidInterface
     {
         $lastBuilderException = null;
-
         foreach ($this->builders as $builder) {
             try {
                 return $builder->build($codec, $bytes);
             } catch (UnableToBuildUuidException $exception) {
                 $lastBuilderException = $exception;
-
                 continue;
             }
         }
-
-        throw new BuilderNotFoundException(
-            'Could not find a suitable builder for the provided codec and fields',
-            0,
-            $lastBuilderException,
-        );
+        throw new BuilderNotFoundException('Could not find a suitable builder for the provided codec and fields', 0, $lastBuilderException);
     }
 }

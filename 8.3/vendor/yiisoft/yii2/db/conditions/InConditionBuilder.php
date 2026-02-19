@@ -1,10 +1,10 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\db\conditions;
 
 use yii\db\Expression;
@@ -12,7 +12,6 @@ use yii\db\ExpressionBuilderInterface;
 use yii\db\ExpressionBuilderTrait;
 use yii\db\ExpressionInterface;
 use yii\db\Query;
-
 /**
  * Class InConditionBuilder builds objects of [[InCondition]]
  *
@@ -22,8 +21,6 @@ use yii\db\Query;
 class InConditionBuilder implements ExpressionBuilderInterface
 {
     use ExpressionBuilderTrait;
-
-
     /**
      * Method builds the raw SQL from the $expression that will not be additionally
      * escaped or quoted.
@@ -37,28 +34,23 @@ class InConditionBuilder implements ExpressionBuilderInterface
         $operator = strtoupper($expression->getOperator());
         $column = $expression->getColumn();
         $values = $expression->getValues();
-
         if ($column === []) {
             // no columns to test against
             return $operator === 'IN' ? '0=1' : '';
         }
-
         if ($values instanceof Query) {
             return $this->buildSubqueryInCondition($operator, $column, $values, $params);
         }
-
         if (!is_array($values) && !$values instanceof \Traversable) {
             // ensure values is an array
             $values = (array) $values;
         }
-
         if (is_array($column)) {
             if (count($column) > 1) {
                 return $this->buildCompositeInCondition($operator, $column, $values, $params);
             }
             $column = reset($column);
         }
-
         if ($column instanceof \Traversable) {
             if (iterator_count($column) > 1) {
                 return $this->buildCompositeInCondition($operator, $column, $values, $params);
@@ -66,24 +58,20 @@ class InConditionBuilder implements ExpressionBuilderInterface
             $column->rewind();
             $column = $column->current();
         }
-
         if ($column instanceof Expression) {
             $column = $column->expression;
         }
-
         if (is_array($values)) {
             $rawValues = $values;
         } elseif ($values instanceof \Traversable) {
             $rawValues = $this->getRawValuesFromTraversableObject($values);
         }
-
         $nullCondition = null;
         $nullConditionOperator = null;
-        if (isset($rawValues) && in_array(null, $rawValues, true)) {
+        if (isset($rawValues) && in_array(null, $rawValues, \true)) {
             $nullCondition = $this->getNullCondition($operator, $column);
             $nullConditionOperator = $operator === 'IN' ? 'OR' : 'AND';
         }
-
         $sqlValues = $this->buildValues($expression, $values, $params);
         if (empty($sqlValues)) {
             if ($nullCondition === null) {
@@ -91,22 +79,17 @@ class InConditionBuilder implements ExpressionBuilderInterface
             }
             return $nullCondition;
         }
-
-        if (strpos($column, '(') === false) {
+        if (strpos($column, '(') === \false) {
             $column = $this->queryBuilder->db->quoteColumnName($column);
         }
         if (count($sqlValues) > 1) {
-            $sql = "$column $operator (" . implode(', ', $sqlValues) . ')';
+            $sql = "{$column} {$operator} (" . implode(', ', $sqlValues) . ')';
         } else {
             $operator = $operator === 'IN' ? '=' : '<>';
             $sql = $column . $operator . reset($sqlValues);
         }
-
-        return $nullCondition !== null && $nullConditionOperator !== null
-            ? sprintf('%s %s %s', $sql, $nullConditionOperator, $nullCondition)
-            : $sql;
+        return $nullCondition !== null && $nullConditionOperator !== null ? sprintf('%s %s %s', $sql, $nullConditionOperator, $nullCondition) : $sql;
     }
-
     /**
      * Builds $values to be used in [[InCondition]]
      *
@@ -115,24 +98,20 @@ class InConditionBuilder implements ExpressionBuilderInterface
      * @param array $params the binding parameters
      * @return array of prepared for SQL placeholders
      */
-    protected function buildValues(ConditionInterface $condition, $values, &$params)
+    protected function buildValues(\yii\db\conditions\ConditionInterface $condition, $values, &$params)
     {
         $sqlValues = [];
         $column = $condition->getColumn();
-
         if (is_array($column)) {
             $column = reset($column);
         }
-
         if ($column instanceof \Traversable) {
             $column->rewind();
             $column = $column->current();
         }
-
         if ($column instanceof Expression) {
             $column = $column->expression;
         }
-
         foreach ($values as $i => $value) {
             if (is_array($value) || $value instanceof \ArrayAccess) {
                 $value = isset($value[$column]) ? $value[$column] : null;
@@ -145,10 +124,8 @@ class InConditionBuilder implements ExpressionBuilderInterface
                 $sqlValues[$i] = $this->queryBuilder->bindParam($value, $params);
             }
         }
-
         return $sqlValues;
     }
-
     /**
      * Builds SQL for IN condition.
      *
@@ -161,30 +138,25 @@ class InConditionBuilder implements ExpressionBuilderInterface
     protected function buildSubqueryInCondition($operator, $columns, $values, &$params)
     {
         $sql = $this->queryBuilder->buildExpression($values, $params);
-
         if (is_array($columns)) {
             foreach ($columns as $i => $col) {
                 if ($col instanceof Expression) {
                     $col = $col->expression;
                 }
-                if (strpos($col, '(') === false) {
+                if (strpos($col, '(') === \false) {
                     $columns[$i] = $this->queryBuilder->db->quoteColumnName($col);
                 }
             }
-
-            return '(' . implode(', ', $columns) . ") $operator $sql";
+            return '(' . implode(', ', $columns) . ") {$operator} {$sql}";
         }
-
         if ($columns instanceof Expression) {
             $columns = $columns->expression;
         }
-        if (strpos($columns, '(') === false) {
+        if (strpos($columns, '(') === \false) {
             $columns = $this->queryBuilder->db->quoteColumnName($columns);
         }
-
-        return "$columns $operator $sql";
+        return "{$columns} {$operator} {$sql}";
     }
-
     /**
      * Builds SQL for IN condition.
      *
@@ -211,22 +183,18 @@ class InConditionBuilder implements ExpressionBuilderInterface
             }
             $vss[] = '(' . implode(', ', $vs) . ')';
         }
-
         if (empty($vss)) {
             return $operator === 'IN' ? '0=1' : '';
         }
-
         $sqlColumns = [];
         foreach ($columns as $i => $column) {
             if ($column instanceof Expression) {
                 $column = $column->expression;
             }
-            $sqlColumns[] = strpos($column, '(') === false ? $this->queryBuilder->db->quoteColumnName($column) : $column;
+            $sqlColumns[] = strpos($column, '(') === \false ? $this->queryBuilder->db->quoteColumnName($column) : $column;
         }
-
-        return '(' . implode(', ', $sqlColumns) . ") $operator (" . implode(', ', $vss) . ')';
+        return '(' . implode(', ', $sqlColumns) . ") {$operator} (" . implode(', ', $vss) . ')';
     }
-
     /**
      * Builds is null/is not null condition for column based on operator
      *
@@ -243,7 +211,6 @@ class InConditionBuilder implements ExpressionBuilderInterface
         }
         return sprintf('%s IS NOT NULL', $column);
     }
-
     /**
      * @param \Traversable $traversableObject
      * @return array raw values

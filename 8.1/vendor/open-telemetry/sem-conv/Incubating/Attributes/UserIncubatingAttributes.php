@@ -1,9 +1,7 @@
 <?php
 
 // DO NOT EDIT, this is an Auto-generated file from script/semantic-conventions
-
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\SemConv\Incubating\Attributes;
 
 /**
@@ -19,14 +17,12 @@ interface UserIncubatingAttributes
      * @experimental
      */
     public const USER_EMAIL = 'user.email';
-
     /**
      * User's full name
      *
      * @experimental
      */
     public const USER_FULL_NAME = 'user.full_name';
-
     /**
      * Unique user hash to correlate information for a user in anonymized form.
      *
@@ -35,26 +31,22 @@ interface UserIncubatingAttributes
      * @experimental
      */
     public const USER_HASH = 'user.hash';
-
     /**
      * Unique identifier of the user.
      *
      * @experimental
      */
     public const USER_ID = 'user.id';
-
     /**
      * Short name or login/username of the user.
      *
      * @experimental
      */
     public const USER_NAME = 'user.name';
-
     /**
      * Array of user roles at the time of the event.
      *
      * @experimental
      */
     public const USER_ROLES = 'user.roles';
-
 }

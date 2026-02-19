@@ -14,7 +14,6 @@ trait Dumpable
     {
         dd($this, ...$args);
     }
-
     /**
      * Dump the given arguments.
      *
@@ -24,7 +23,6 @@ trait Dumpable
     public function dump(...$args)
     {
         dump($this, ...$args);
-
         return $this;
     }
 }

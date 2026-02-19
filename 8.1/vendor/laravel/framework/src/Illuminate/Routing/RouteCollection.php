@@ -5,8 +5,7 @@ namespace Illuminate\Routing;
 use Illuminate\Container\Container;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
-
-class RouteCollection extends AbstractRouteCollection
+class RouteCollection extends \Illuminate\Routing\AbstractRouteCollection
 {
     /**
      * An array of the routes keyed by method.
@@ -14,43 +13,36 @@ class RouteCollection extends AbstractRouteCollection
      * @var array
      */
     protected $routes = [];
-
     /**
      * A flattened array of all of the routes.
      *
      * @var \Illuminate\Routing\Route[]
      */
     protected $allRoutes = [];
-
     /**
      * A look-up table of routes by their names.
      *
      * @var \Illuminate\Routing\Route[]
      */
     protected $nameList = [];
-
     /**
      * A look-up table of routes by controller action.
      *
      * @var \Illuminate\Routing\Route[]
      */
     protected $actionList = [];
-
     /**
      * Add a Route instance to the collection.
      *
      * @param  \Illuminate\Routing\Route  $route
      * @return \Illuminate\Routing\Route
      */
-    public function add(Route $route)
+    public function add(\Illuminate\Routing\Route $route)
     {
         $this->addToCollections($route);
-
         $this->addLookups($route);
-
         return $route;
     }
-
     /**
      * Add the given route to the arrays of routes.
      *
@@ -59,15 +51,12 @@ class RouteCollection extends AbstractRouteCollection
      */
     protected function addToCollections($route)
     {
-        $domainAndUri = $route->getDomain().$route->uri();
-
+        $domainAndUri = $route->getDomain() . $route->uri();
         foreach ($route->methods() as $method) {
             $this->routes[$method][$domainAndUri] = $route;
         }
-
-        $this->allRoutes[$method.$domainAndUri] = $route;
+        $this->allRoutes[$method . $domainAndUri] = $route;
     }
-
     /**
      * Add the route to any look-up tables if necessary.
      *
@@ -82,17 +71,14 @@ class RouteCollection extends AbstractRouteCollection
         if ($name = $route->getName()) {
             $this->nameList[$name] = $route;
         }
-
         // When the route is routing to a controller we will also store the action that
         // is used by the route. This will let us reverse route to controllers while
         // processing a request and easily generate URLs to the given controllers.
         $action = $route->getAction();
-
         if (isset($action['controller'])) {
             $this->addToActionList($action, $route);
         }
     }
-
     /**
      * Add a route to the controller action dictionary.
      *
@@ -104,7 +90,6 @@ class RouteCollection extends AbstractRouteCollection
     {
         $this->actionList[trim($action['controller'], '\\')] = $route;
     }
-
     /**
      * Refresh the name look-up table.
      *
@@ -115,14 +100,12 @@ class RouteCollection extends AbstractRouteCollection
     public function refreshNameLookups()
     {
         $this->nameList = [];
-
         foreach ($this->allRoutes as $route) {
             if ($route->getName()) {
                 $this->nameList[$route->getName()] = $route;
             }
         }
     }
-
     /**
      * Refresh the action look-up table.
      *
@@ -133,14 +116,12 @@ class RouteCollection extends AbstractRouteCollection
     public function refreshActionLookups()
     {
         $this->actionList = [];
-
         foreach ($this->allRoutes as $route) {
             if (isset($route->getAction()['controller'])) {
                 $this->addToActionList($route->getAction(), $route);
             }
         }
     }
-
     /**
      * Find the first route matching a given request.
      *
@@ -153,15 +134,12 @@ class RouteCollection extends AbstractRouteCollection
     public function match(Request $request)
     {
         $routes = $this->get($request->getMethod());
-
         // First, we will see if we can find a matching route for this current request
         // method. If we can, great, we can just return it so that it can be called
         // by the consumer. Otherwise we will check for routes with another verb.
         $route = $this->matchAgainstRoutes($routes, $request);
-
         return $this->handleMatchedRoute($request, $route);
     }
-
     /**
      * Get routes from the collection by method.
      *
@@ -172,7 +150,6 @@ class RouteCollection extends AbstractRouteCollection
     {
         return is_null($method) ? $this->getRoutes() : Arr::get($this->routes, $method, []);
     }
-
     /**
      * Determine if the route collection contains a given named route.
      *
@@ -181,9 +158,8 @@ class RouteCollection extends AbstractRouteCollection
      */
     public function hasNamedRoute($name)
     {
-        return ! is_null($this->getByName($name));
+        return !is_null($this->getByName($name));
     }
-
     /**
      * Get a route instance by its name.
      *
@@ -194,7 +170,6 @@ class RouteCollection extends AbstractRouteCollection
     {
         return $this->nameList[$name] ?? null;
     }
-
     /**
      * Get a route instance by its controller action.
      *
@@ -205,7 +180,6 @@ class RouteCollection extends AbstractRouteCollection
     {
         return $this->actionList[$action] ?? null;
     }
-
     /**
      * Get all of the routes in the collection.
      *
@@ -215,7 +189,6 @@ class RouteCollection extends AbstractRouteCollection
     {
         return array_values($this->allRoutes);
     }
-
     /**
      * Get all of the routes keyed by their HTTP verb / method.
      *
@@ -225,7 +198,6 @@ class RouteCollection extends AbstractRouteCollection
     {
         return $this->routes;
     }
-
     /**
      * Get all of the routes keyed by their name.
      *
@@ -235,7 +207,6 @@ class RouteCollection extends AbstractRouteCollection
     {
         return $this->nameList;
     }
-
     /**
      * Convert the collection to a Symfony RouteCollection instance.
      *
@@ -244,12 +215,9 @@ class RouteCollection extends AbstractRouteCollection
     public function toSymfonyRouteCollection()
     {
         $symfonyRoutes = parent::toSymfonyRouteCollection();
-
         $this->refreshNameLookups();
-
         return $symfonyRoutes;
     }
-
     /**
      * Convert the collection to a CompiledRouteCollection instance.
      *
@@ -257,12 +225,9 @@ class RouteCollection extends AbstractRouteCollection
      * @param  \Illuminate\Container\Container  $container
      * @return \Illuminate\Routing\CompiledRouteCollection
      */
-    public function toCompiledRouteCollection(Router $router, Container $container)
+    public function toCompiledRouteCollection(\Illuminate\Routing\Router $router, Container $container)
     {
         ['compiled' => $compiled, 'attributes' => $attributes] = $this->compile();
-
-        return (new CompiledRouteCollection($compiled, $attributes))
-            ->setRouter($router)
-            ->setContainer($container);
+        return (new \Illuminate\Routing\CompiledRouteCollection($compiled, $attributes))->setRouter($router)->setContainer($container);
     }
 }

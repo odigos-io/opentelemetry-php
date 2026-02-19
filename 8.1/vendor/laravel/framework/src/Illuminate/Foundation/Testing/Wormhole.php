@@ -3,7 +3,6 @@
 namespace Illuminate\Foundation\Testing;
 
 use Illuminate\Support\Carbon;
-
 class Wormhole
 {
     /**
@@ -12,7 +11,6 @@ class Wormhole
      * @var int
      */
     public $value;
-
     /**
      * Create a new wormhole instance.
      *
@@ -23,7 +21,6 @@ class Wormhole
     {
         $this->value = $value;
     }
-
     /**
      * Travel forward the given number of milliseconds.
      *
@@ -34,7 +31,6 @@ class Wormhole
     {
         return $this->milliseconds($callback);
     }
-
     /**
      * Travel forward the given number of milliseconds.
      *
@@ -44,10 +40,8 @@ class Wormhole
     public function milliseconds($callback = null)
     {
         Carbon::setTestNow(Carbon::now()->addMilliseconds($this->value));
-
         return $this->handleCallback($callback);
     }
-
     /**
      * Travel forward the given number of seconds.
      *
@@ -58,7 +52,6 @@ class Wormhole
     {
         return $this->seconds($callback);
     }
-
     /**
      * Travel forward the given number of seconds.
      *
@@ -68,10 +61,8 @@ class Wormhole
     public function seconds($callback = null)
     {
         Carbon::setTestNow(Carbon::now()->addSeconds($this->value));
-
         return $this->handleCallback($callback);
     }
-
     /**
      * Travel forward the given number of minutes.
      *
@@ -82,7 +73,6 @@ class Wormhole
     {
         return $this->minutes($callback);
     }
-
     /**
      * Travel forward the given number of minutes.
      *
@@ -92,10 +82,8 @@ class Wormhole
     public function minutes($callback = null)
     {
         Carbon::setTestNow(Carbon::now()->addMinutes($this->value));
-
         return $this->handleCallback($callback);
     }
-
     /**
      * Travel forward the given number of hours.
      *
@@ -106,7 +94,6 @@ class Wormhole
     {
         return $this->hours($callback);
     }
-
     /**
      * Travel forward the given number of hours.
      *
@@ -116,10 +103,8 @@ class Wormhole
     public function hours($callback = null)
     {
         Carbon::setTestNow(Carbon::now()->addHours($this->value));
-
         return $this->handleCallback($callback);
     }
-
     /**
      * Travel forward the given number of days.
      *
@@ -130,7 +115,6 @@ class Wormhole
     {
         return $this->days($callback);
     }
-
     /**
      * Travel forward the given number of days.
      *
@@ -140,10 +124,8 @@ class Wormhole
     public function days($callback = null)
     {
         Carbon::setTestNow(Carbon::now()->addDays($this->value));
-
         return $this->handleCallback($callback);
     }
-
     /**
      * Travel forward the given number of weeks.
      *
@@ -154,7 +136,6 @@ class Wormhole
     {
         return $this->weeks($callback);
     }
-
     /**
      * Travel forward the given number of weeks.
      *
@@ -164,10 +145,8 @@ class Wormhole
     public function weeks($callback = null)
     {
         Carbon::setTestNow(Carbon::now()->addWeeks($this->value));
-
         return $this->handleCallback($callback);
     }
-
     /**
      * Travel forward the given number of months.
      *
@@ -178,7 +157,6 @@ class Wormhole
     {
         return $this->months($callback);
     }
-
     /**
      * Travel forward the given number of months.
      *
@@ -188,10 +166,8 @@ class Wormhole
     public function months($callback = null)
     {
         Carbon::setTestNow(Carbon::now()->addMonths($this->value));
-
         return $this->handleCallback($callback);
     }
-
     /**
      * Travel forward the given number of years.
      *
@@ -202,7 +178,6 @@ class Wormhole
     {
         return $this->years($callback);
     }
-
     /**
      * Travel forward the given number of years.
      *
@@ -212,10 +187,8 @@ class Wormhole
     public function years($callback = null)
     {
         Carbon::setTestNow(Carbon::now()->addYears($this->value));
-
         return $this->handleCallback($callback);
     }
-
     /**
      * Travel back to the current time.
      *
@@ -224,10 +197,8 @@ class Wormhole
     public static function back()
     {
         Carbon::setTestNow();
-
         return Carbon::now();
     }
-
     /**
      * Handle the given optional execution callback.
      *

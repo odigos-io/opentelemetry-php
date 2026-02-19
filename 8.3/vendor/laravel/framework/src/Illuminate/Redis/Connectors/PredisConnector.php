@@ -7,8 +7,7 @@ use Illuminate\Redis\Connections\PredisClusterConnection;
 use Illuminate\Redis\Connections\PredisConnection;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
-use Predis\Client;
-
+use Odigos\Predis\Client;
 class PredisConnector implements Connector
 {
     /**
@@ -20,22 +19,16 @@ class PredisConnector implements Connector
      */
     public function connect(array $config, array $options)
     {
-        $formattedOptions = array_merge(
-            ['timeout' => 10.0], $options, Arr::pull($config, 'options', [])
-        );
-
+        $formattedOptions = array_merge(['timeout' => 10.0], $options, Arr::pull($config, 'options', []));
         if (isset($config['prefix'])) {
             $formattedOptions['prefix'] = $config['prefix'];
         }
-
         if (isset($config['host']) && str_starts_with($config['host'], 'tls://')) {
             $config['scheme'] = 'tls';
             $config['host'] = Str::after($config['host'], 'tls://');
         }
-
         return new PredisConnection(new Client($config, $formattedOptions));
     }
-
     /**
      * Create a new clustered Predis connection.
      *
@@ -47,13 +40,9 @@ class PredisConnector implements Connector
     public function connectToCluster(array $config, array $clusterOptions, array $options)
     {
         $clusterSpecificOptions = Arr::pull($config, 'options', []);
-
         if (isset($config['prefix'])) {
             $clusterSpecificOptions['prefix'] = $config['prefix'];
         }
-
-        return new PredisClusterConnection(new Client(array_values($config), array_merge(
-            $options, $clusterOptions, $clusterSpecificOptions
-        )));
+        return new PredisClusterConnection(new Client(array_values($config), array_merge($options, $clusterOptions, $clusterSpecificOptions)));
     }
 }

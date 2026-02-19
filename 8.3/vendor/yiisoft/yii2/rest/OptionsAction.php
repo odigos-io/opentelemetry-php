@@ -1,15 +1,14 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\rest;
 
 use yii\base\Action as BaseAction;
-use Yii;
-
+use Odigos\Yii;
 /**
  * OptionsAction responds to the OPTIONS request by sending back an `Allow` header.
  *
@@ -31,8 +30,6 @@ class OptionsAction extends BaseAction
      * @var array the HTTP verbs that are supported by the resource URL
      */
     public $resourceOptions = ['GET', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'];
-
-
     /**
      * Responds to the OPTIONS request.
      * @param string|null $id

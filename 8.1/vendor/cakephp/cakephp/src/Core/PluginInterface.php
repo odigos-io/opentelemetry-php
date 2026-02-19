@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright 2005-2011, Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -17,7 +17,6 @@ namespace Cake\Core;
 use Cake\Console\CommandCollection;
 use Cake\Http\MiddlewareQueue;
 use Cake\Routing\RouteBuilder;
-
 /**
  * Plugin Interface
  */
@@ -29,42 +28,36 @@ interface PluginInterface
      * @var array<string>
      */
     public const VALID_HOOKS = ['bootstrap', 'console', 'middleware', 'routes', 'services', 'events'];
-
     /**
      * Get the name of this plugin.
      *
      * @return string
      */
     public function getName(): string;
-
     /**
      * Get the filesystem path to this plugin
      *
      * @return string
      */
     public function getPath(): string;
-
     /**
      * Get the filesystem path to configuration for this plugin
      *
      * @return string
      */
     public function getConfigPath(): string;
-
     /**
      * Get the filesystem path to configuration for this plugin
      *
      * @return string
      */
     public function getClassPath(): string;
-
     /**
      * Get the filesystem path to templates for this plugin
      *
      * @return string
      */
     public function getTemplatePath(): string;
-
     /**
      * Load all the application configuration and bootstrap logic.
      *
@@ -77,8 +70,7 @@ interface PluginInterface
      * @param \Cake\Core\PluginApplicationInterface $app The host application
      * @return void
      */
-    public function bootstrap(PluginApplicationInterface $app): void;
-
+    public function bootstrap(\Cake\Core\PluginApplicationInterface $app): void;
     /**
      * Add console commands for the plugin.
      *
@@ -86,7 +78,6 @@ interface PluginInterface
      * @return \Cake\Console\CommandCollection
      */
     public function console(CommandCollection $commands): CommandCollection;
-
     /**
      * Add middleware for the plugin.
      *
@@ -94,7 +85,6 @@ interface PluginInterface
      * @return \Cake\Http\MiddlewareQueue
      */
     public function middleware(MiddlewareQueue $middlewareQueue): MiddlewareQueue;
-
     /**
      * Add routes for the plugin.
      *
@@ -105,15 +95,13 @@ interface PluginInterface
      * @return void
      */
     public function routes(RouteBuilder $routes): void;
-
     /**
      * Register plugin services to the application's container
      *
      * @param \Cake\Core\ContainerInterface $container Container instance.
      * @return void
      */
-    public function services(ContainerInterface $container): void;
-
+    public function services(\Cake\Core\ContainerInterface $container): void;
     /**
      * Disables the named hook
      *
@@ -121,7 +109,6 @@ interface PluginInterface
      * @return $this
      */
     public function disable(string $hook);
-
     /**
      * Enables the named hook
      *
@@ -129,7 +116,6 @@ interface PluginInterface
      * @return $this
      */
     public function enable(string $hook);
-
     /**
      * Check if the named hook is enabled
      *

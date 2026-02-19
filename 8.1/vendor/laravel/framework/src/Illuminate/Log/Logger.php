@@ -10,32 +10,27 @@ use Illuminate\Log\Events\MessageLogged;
 use Illuminate\Support\Traits\Conditionable;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
-
 class Logger implements LoggerInterface
 {
     use Conditionable;
-
     /**
      * The underlying logger implementation.
      *
      * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
-
     /**
      * The event dispatcher instance.
      *
      * @var \Illuminate\Contracts\Events\Dispatcher|null
      */
     protected $dispatcher;
-
     /**
      * Any context to be added to logs.
      *
      * @var array
      */
     protected $context = [];
-
     /**
      * Create a new log writer instance.
      *
@@ -48,7 +43,6 @@ class Logger implements LoggerInterface
         $this->logger = $logger;
         $this->dispatcher = $dispatcher;
     }
-
     /**
      * Log an emergency message to the logs.
      *
@@ -60,7 +54,6 @@ class Logger implements LoggerInterface
     {
         $this->writeLog(__FUNCTION__, $message, $context);
     }
-
     /**
      * Log an alert message to the logs.
      *
@@ -72,7 +65,6 @@ class Logger implements LoggerInterface
     {
         $this->writeLog(__FUNCTION__, $message, $context);
     }
-
     /**
      * Log a critical message to the logs.
      *
@@ -84,7 +76,6 @@ class Logger implements LoggerInterface
     {
         $this->writeLog(__FUNCTION__, $message, $context);
     }
-
     /**
      * Log an error message to the logs.
      *
@@ -96,7 +87,6 @@ class Logger implements LoggerInterface
     {
         $this->writeLog(__FUNCTION__, $message, $context);
     }
-
     /**
      * Log a warning message to the logs.
      *
@@ -108,7 +98,6 @@ class Logger implements LoggerInterface
     {
         $this->writeLog(__FUNCTION__, $message, $context);
     }
-
     /**
      * Log a notice to the logs.
      *
@@ -120,7 +109,6 @@ class Logger implements LoggerInterface
     {
         $this->writeLog(__FUNCTION__, $message, $context);
     }
-
     /**
      * Log an informational message to the logs.
      *
@@ -132,7 +120,6 @@ class Logger implements LoggerInterface
     {
         $this->writeLog(__FUNCTION__, $message, $context);
     }
-
     /**
      * Log a debug message to the logs.
      *
@@ -144,7 +131,6 @@ class Logger implements LoggerInterface
     {
         $this->writeLog(__FUNCTION__, $message, $context);
     }
-
     /**
      * Log a message to the logs.
      *
@@ -157,7 +143,6 @@ class Logger implements LoggerInterface
     {
         $this->writeLog($level, $message, $context);
     }
-
     /**
      * Dynamically pass log calls into the writer.
      *
@@ -170,7 +155,6 @@ class Logger implements LoggerInterface
     {
         $this->writeLog($level, $message, $context);
     }
-
     /**
      * Write a message to the log.
      *
@@ -181,14 +165,9 @@ class Logger implements LoggerInterface
      */
     protected function writeLog($level, $message, $context): void
     {
-        $this->logger->{$level}(
-            $message = $this->formatMessage($message),
-            $context = array_merge($this->context, $context)
-        );
-
+        $this->logger->{$level}($message = $this->formatMessage($message), $context = array_merge($this->context, $context));
         $this->fireLogEvent($level, $message, $context);
     }
-
     /**
      * Add context to all future logs.
      *
@@ -198,10 +177,8 @@ class Logger implements LoggerInterface
     public function withContext(array $context = [])
     {
         $this->context = array_merge($this->context, $context);
-
         return $this;
     }
-
     /**
      * Flush the existing context array.
      *
@@ -210,10 +187,8 @@ class Logger implements LoggerInterface
     public function withoutContext()
     {
         $this->context = [];
-
         return $this;
     }
-
     /**
      * Register a new callback handler for when a log event is triggered.
      *
@@ -224,13 +199,11 @@ class Logger implements LoggerInterface
      */
     public function listen(Closure $callback)
     {
-        if (! isset($this->dispatcher)) {
+        if (!isset($this->dispatcher)) {
             throw new RuntimeException('Events dispatcher has not been set.');
         }
-
         $this->dispatcher->listen(MessageLogged::class, $callback);
     }
-
     /**
      * Fires a log event.
      *
@@ -248,7 +221,6 @@ class Logger implements LoggerInterface
             $this->dispatcher->dispatch(new MessageLogged($level, $message, $context));
         }
     }
-
     /**
      * Format the parameters for the logger.
      *
@@ -258,16 +230,14 @@ class Logger implements LoggerInterface
     protected function formatMessage($message)
     {
         if (is_array($message)) {
-            return var_export($message, true);
+            return var_export($message, \true);
         } elseif ($message instanceof Jsonable) {
             return $message->toJson();
         } elseif ($message instanceof Arrayable) {
-            return var_export($message->toArray(), true);
+            return var_export($message->toArray(), \true);
         }
-
         return (string) $message;
     }
-
     /**
      * Get the underlying logger implementation.
      *
@@ -277,7 +247,6 @@ class Logger implements LoggerInterface
     {
         return $this->logger;
     }
-
     /**
      * Get the event dispatcher instance.
      *
@@ -287,7 +256,6 @@ class Logger implements LoggerInterface
     {
         return $this->dispatcher;
     }
-
     /**
      * Set the event dispatcher instance.
      *
@@ -298,7 +266,6 @@ class Logger implements LoggerInterface
     {
         $this->dispatcher = $dispatcher;
     }
-
     /**
      * Dynamically proxy method calls to the underlying logger.
      *

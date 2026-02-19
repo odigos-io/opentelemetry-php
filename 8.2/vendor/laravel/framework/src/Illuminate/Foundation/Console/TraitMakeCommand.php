@@ -5,7 +5,6 @@ namespace Illuminate\Foundation\Console;
 use Illuminate\Console\GeneratorCommand;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputOption;
-
 #[AsCommand(name: 'make:trait')]
 class TraitMakeCommand extends GeneratorCommand
 {
@@ -15,21 +14,18 @@ class TraitMakeCommand extends GeneratorCommand
      * @var string
      */
     protected $name = 'make:trait';
-
     /**
      * The console command description.
      *
      * @var string
      */
     protected $description = 'Create a new trait';
-
     /**
      * The type of class being generated.
      *
      * @var string
      */
     protected $type = 'Trait';
-
     /**
      * Get the stub file for the generator.
      *
@@ -39,7 +35,6 @@ class TraitMakeCommand extends GeneratorCommand
     {
         return $this->resolveStubPath('/stubs/trait.stub');
     }
-
     /**
      * Resolve the fully-qualified path to the stub.
      *
@@ -48,11 +43,8 @@ class TraitMakeCommand extends GeneratorCommand
      */
     protected function resolveStubPath($stub)
     {
-        return file_exists($customPath = $this->laravel->basePath(trim($stub, '/')))
-            ? $customPath
-            : __DIR__.$stub;
+        return file_exists($customPath = $this->laravel->basePath(trim($stub, '/'))) ? $customPath : __DIR__ . $stub;
     }
-
     /**
      * Get the default namespace for the class.
      *
@@ -61,13 +53,12 @@ class TraitMakeCommand extends GeneratorCommand
      */
     protected function getDefaultNamespace($rootNamespace)
     {
-        return match (true) {
-            is_dir(app_path('Concerns')) => $rootNamespace.'\\Concerns',
-            is_dir(app_path('Traits')) => $rootNamespace.'\\Traits',
+        return match (\true) {
+            is_dir(app_path('Concerns')) => $rootNamespace . '\Concerns',
+            is_dir(app_path('Traits')) => $rootNamespace . '\Traits',
             default => $rootNamespace,
         };
     }
-
     /**
      * Get the console command arguments.
      *
@@ -75,8 +66,6 @@ class TraitMakeCommand extends GeneratorCommand
      */
     protected function getOptions()
     {
-        return [
-            ['force', 'f', InputOption::VALUE_NONE, 'Create the trait even if the trait already exists'],
-        ];
+        return [['force', 'f', InputOption::VALUE_NONE, 'Create the trait even if the trait already exists']];
     }
 }

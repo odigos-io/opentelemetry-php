@@ -1,11 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Cron;
+declare (strict_types=1);
+namespace Odigos\Cron;
 
 use InvalidArgumentException;
-
 /**
  * CRON field factory implementing a flyweight factory.
  *
@@ -17,7 +15,6 @@ class FieldFactory implements FieldFactoryInterface
      * @var array<int, FieldInterface> Cache of instantiated fields
      */
     private $fields = [];
-
     /**
      * Get an instance of a field object for a cron expression position.
      *
@@ -29,7 +26,6 @@ class FieldFactory implements FieldFactoryInterface
     {
         return $this->fields[$position] ?? $this->fields[$position] = $this->instantiateField($position);
     }
-
     private function instantiateField(int $position): FieldInterface
     {
         switch ($position) {
@@ -44,9 +40,6 @@ class FieldFactory implements FieldFactoryInterface
             case CronExpression::WEEKDAY:
                 return new DayOfWeekField();
         }
-
-        throw new InvalidArgumentException(
-            ($position + 1) . ' is not a valid position'
-        );
+        throw new InvalidArgumentException($position + 1 . ' is not a valid position');
     }
 }

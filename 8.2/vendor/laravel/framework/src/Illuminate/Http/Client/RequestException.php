@@ -3,8 +3,7 @@
 namespace Illuminate\Http\Client;
 
 use GuzzleHttp\Psr7\Message;
-
-class RequestException extends HttpClientException
+class RequestException extends \Illuminate\Http\Client\HttpClientException
 {
     /**
      * The response instance.
@@ -12,43 +11,36 @@ class RequestException extends HttpClientException
      * @var \Illuminate\Http\Client\Response
      */
     public $response;
-
     /**
      * The current truncation length for the exception message.
      *
      * @var int|false|null
      */
     public $truncateExceptionsAt;
-
     /**
      * The global truncation length for the exception message.
      *
      * @var int|false
      */
     public static $truncateAt = 120;
-
     /**
      * Whether the response has been summarized in the message.
      *
      * @var bool
      */
-    public $hasBeenSummarized = false;
-
+    public $hasBeenSummarized = \false;
     /**
      * Create a new exception instance.
      *
      * @param  \Illuminate\Http\Client\Response  $response
      * @param  int|false|null  $truncateExceptionsAt
      */
-    public function __construct(Response $response, $truncateExceptionsAt = null)
+    public function __construct(\Illuminate\Http\Client\Response $response, $truncateExceptionsAt = null)
     {
         parent::__construct($this->prepareMessage($response), $response->status());
-
         $this->truncateExceptionsAt = $truncateExceptionsAt;
-
         $this->response = $response;
     }
-
     /**
      * Enable truncation of request exception messages.
      *
@@ -58,7 +50,6 @@ class RequestException extends HttpClientException
     {
         static::$truncateAt = 120;
     }
-
     /**
      * Set the truncation length for request exception messages.
      *
@@ -69,7 +60,6 @@ class RequestException extends HttpClientException
     {
         static::$truncateAt = $length;
     }
-
     /**
      * Disable truncation of request exception messages.
      *
@@ -77,9 +67,8 @@ class RequestException extends HttpClientException
      */
     public static function dontTruncate()
     {
-        static::$truncateAt = false;
+        static::$truncateAt = \false;
     }
-
     /**
      * Prepare the exception message.
      *
@@ -87,31 +76,23 @@ class RequestException extends HttpClientException
      */
     public function report()
     {
-        if (! $this->hasBeenSummarized) {
+        if (!$this->hasBeenSummarized) {
             $this->message = $this->prepareMessage($this->response);
-
-            $this->hasBeenSummarized = true;
+            $this->hasBeenSummarized = \true;
         }
-
-        return false;
+        return \false;
     }
-
     /**
      * Prepare the exception message.
      *
      * @param  \Illuminate\Http\Client\Response  $response
      * @return string
      */
-    protected function prepareMessage(Response $response)
+    protected function prepareMessage(\Illuminate\Http\Client\Response $response)
     {
         $message = "HTTP request returned status code {$response->status()}";
-
         $truncateExceptionsAt = $this->truncateExceptionsAt ?? static::$truncateAt;
-
-        $summary = is_int($truncateExceptionsAt)
-            ? Message::bodySummary($response->toPsrResponse(), $truncateExceptionsAt)
-            : Message::toString($response->toPsrResponse());
-
-        return is_null($summary) ? $message : $message.":\n{$summary}\n";
+        $summary = is_int($truncateExceptionsAt) ? Message::bodySummary($response->toPsrResponse(), $truncateExceptionsAt) : Message::toString($response->toPsrResponse());
+        return is_null($summary) ? $message : $message . ":\n{$summary}\n";
     }
 }

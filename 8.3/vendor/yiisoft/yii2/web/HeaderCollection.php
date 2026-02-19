@@ -1,14 +1,13 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\web;
 
 use yii\base\BaseObject;
-
 /**
  * HeaderCollection is used by [[Response]] to maintain the currently registered HTTP headers.
  *
@@ -38,8 +37,6 @@ class HeaderCollection extends BaseObject implements \IteratorAggregate, \ArrayA
      * @phpstan-var array<string, string>
      */
     private $_originalHeaderNames = [];
-
-
     /**
      * Returns an iterator for traversing the headers in the collection.
      * This method is required by the SPL interface [[\IteratorAggregate]].
@@ -54,7 +51,6 @@ class HeaderCollection extends BaseObject implements \IteratorAggregate, \ArrayA
     {
         return new \ArrayIterator($this->_headers);
     }
-
     /**
      * Returns the number of headers in the collection.
      * This method is required by the SPL `Countable` interface.
@@ -66,7 +62,6 @@ class HeaderCollection extends BaseObject implements \IteratorAggregate, \ArrayA
     {
         return $this->getCount();
     }
-
     /**
      * Returns the number of headers in the collection.
      * @return int the number of headers in the collection.
@@ -76,7 +71,6 @@ class HeaderCollection extends BaseObject implements \IteratorAggregate, \ArrayA
     {
         return count($this->_headers);
     }
-
     /**
      * Returns the named header(s).
      * @param string $name the name of the header to return
@@ -92,16 +86,14 @@ class HeaderCollection extends BaseObject implements \IteratorAggregate, \ArrayA
      * @phpstan-return ($first is true ? string|null : string[]|null)
      * @psalm-return ($first is true ? string|null : string[]|null)
      */
-    public function get($name, $default = null, $first = true)
+    public function get($name, $default = null, $first = \true)
     {
         $normalizedName = strtolower($name);
         if (isset($this->_headers[$normalizedName])) {
             return $first ? reset($this->_headers[$normalizedName]) : $this->_headers[$normalizedName];
         }
-
         return $default;
     }
-
     /**
      * Adds a new header.
      * If there is already a header with the same name, it will be replaced.
@@ -114,10 +106,8 @@ class HeaderCollection extends BaseObject implements \IteratorAggregate, \ArrayA
         $normalizedName = strtolower($name);
         $this->_headers[$normalizedName] = (array) $value;
         $this->_originalHeaderNames[$normalizedName] = $name;
-
         return $this;
     }
-
     /**
      * Adds a new header.
      * If there is already a header with the same name, the new one will
@@ -133,10 +123,8 @@ class HeaderCollection extends BaseObject implements \IteratorAggregate, \ArrayA
         if (!\array_key_exists($normalizedName, $this->_originalHeaderNames)) {
             $this->_originalHeaderNames[$normalizedName] = $name;
         }
-
         return $this;
     }
-
     /**
      * Sets a new header only if it does not exist yet.
      * If there is already a header with the same name, the new one will be ignored.
@@ -151,10 +139,8 @@ class HeaderCollection extends BaseObject implements \IteratorAggregate, \ArrayA
             $this->_headers[$normalizedName][] = $value;
             $this->_originalHeaderNames[$normalizedName] = $name;
         }
-
         return $this;
     }
-
     /**
      * Returns a value indicating whether the named header exists.
      * @param string $name the name of the header
@@ -164,7 +150,6 @@ class HeaderCollection extends BaseObject implements \IteratorAggregate, \ArrayA
     {
         return isset($this->_headers[strtolower($name)]);
     }
-
     /**
      * Removes a header.
      * @param string $name the name of the header to be removed.
@@ -178,10 +163,8 @@ class HeaderCollection extends BaseObject implements \IteratorAggregate, \ArrayA
             unset($this->_headers[$normalizedName], $this->_originalHeaderNames[$normalizedName]);
             return $value;
         }
-
         return null;
     }
-
     /**
      * Removes all headers.
      */
@@ -190,7 +173,6 @@ class HeaderCollection extends BaseObject implements \IteratorAggregate, \ArrayA
         $this->_headers = [];
         $this->_originalHeaderNames = [];
     }
-
     /**
      * Returns the collection as a PHP array.
      * @return array the array representation of the collection.
@@ -200,7 +182,6 @@ class HeaderCollection extends BaseObject implements \IteratorAggregate, \ArrayA
     {
         return $this->_headers;
     }
-
     /**
      * Returns the collection as a PHP array but instead of using normalized header names as keys (like [[toArray()]])
      * it uses original header names (case-sensitive).
@@ -213,7 +194,6 @@ class HeaderCollection extends BaseObject implements \IteratorAggregate, \ArrayA
             return $this->_headers[$normalizedName];
         }, \array_flip($this->_originalHeaderNames));
     }
-
     /**
      * Populates the header collection from an array.
      * @param array $array the headers to populate from
@@ -225,7 +205,6 @@ class HeaderCollection extends BaseObject implements \IteratorAggregate, \ArrayA
             $this->set($name, $value);
         }
     }
-
     /**
      * Returns whether there is a header with the specified name.
      * This method is required by the SPL interface [[\ArrayAccess]].
@@ -238,7 +217,6 @@ class HeaderCollection extends BaseObject implements \IteratorAggregate, \ArrayA
     {
         return $this->has($name);
     }
-
     /**
      * Returns the header with the specified name.
      * This method is required by the SPL interface [[\ArrayAccess]].
@@ -252,7 +230,6 @@ class HeaderCollection extends BaseObject implements \IteratorAggregate, \ArrayA
     {
         return $this->get($name);
     }
-
     /**
      * Adds the header to the collection.
      * This method is required by the SPL interface [[\ArrayAccess]].
@@ -266,7 +243,6 @@ class HeaderCollection extends BaseObject implements \IteratorAggregate, \ArrayA
     {
         $this->set($name, $value);
     }
-
     /**
      * Removes the named header.
      * This method is required by the SPL interface [[\ArrayAccess]].

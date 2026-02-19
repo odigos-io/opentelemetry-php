@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
  *
@@ -22,7 +22,6 @@ use DateTimeZone;
 use InvalidArgumentException;
 use RuntimeException;
 use Stringable;
-
 /**
  * An Immutable extension on the native DateTime object.
  *
@@ -61,95 +60,77 @@ use Stringable;
  */
 class Chronos extends DateTimeImmutable implements Stringable
 {
-    use FormattingTrait;
-
+    use \Cake\Chronos\FormattingTrait;
     /**
      * @var int
      */
     public const MONDAY = 1;
-
     /**
      * @var int
      */
     public const TUESDAY = 2;
-
     /**
      * @var int
      */
     public const WEDNESDAY = 3;
-
     /**
      * @var int
      */
     public const THURSDAY = 4;
-
     /**
      * @var int
      */
     public const FRIDAY = 5;
-
     /**
      * @var int
      */
     public const SATURDAY = 6;
-
     /**
      * @var int
      */
     public const SUNDAY = 7;
-
     /**
      * @var int
      */
     public const YEARS_PER_CENTURY = 100;
-
     /**
      * @var int
      */
     public const YEARS_PER_DECADE = 10;
-
     /**
      * @var int
      */
     public const MONTHS_PER_YEAR = 12;
-
     /**
      * @var int
      */
     public const MONTHS_PER_QUARTER = 3;
-
     /**
      * @var int
      */
     public const WEEKS_PER_YEAR = 52;
-
     /**
      * @var int
      */
     public const DAYS_PER_WEEK = 7;
-
     /**
      * @var int
      */
     public const HOURS_PER_DAY = 24;
-
     /**
      * @var int
      */
     public const MINUTES_PER_HOUR = 60;
-
     /**
      * @var int
      */
     public const SECONDS_PER_MINUTE = 60;
-
     /**
      * Default format to use for __toString method when type juggling occurs.
      *
      * @var string
      */
     public const DEFAULT_TO_STRING_FORMAT = 'Y-m-d H:i:s';
-
     /**
      * A test Chronos instance to be returned when now instances are created
      *
@@ -158,58 +139,43 @@ class Chronos extends DateTimeImmutable implements Stringable
      *
      * @var \Cake\Chronos\Chronos|null
      */
-    protected static ?Chronos $testNow = null;
-
+    protected static ?\Cake\Chronos\Chronos $testNow = null;
     /**
      * Format to use for __toString method when type juggling occurs.
      *
      * @var string
      */
     protected static string $toStringFormat = self::DEFAULT_TO_STRING_FORMAT;
-
     /**
      * Days of weekend
      *
      * @var array
      */
-    protected static array $weekendDays = [Chronos::SATURDAY, Chronos::SUNDAY];
-
+    protected static array $weekendDays = [\Cake\Chronos\Chronos::SATURDAY, \Cake\Chronos\Chronos::SUNDAY];
     /**
      * Names of days of the week.
      *
      * @var array
      */
-    protected static array $days = [
-        Chronos::MONDAY => 'Monday',
-        Chronos::TUESDAY => 'Tuesday',
-        Chronos::WEDNESDAY => 'Wednesday',
-        Chronos::THURSDAY => 'Thursday',
-        Chronos::FRIDAY => 'Friday',
-        Chronos::SATURDAY => 'Saturday',
-        Chronos::SUNDAY => 'Sunday',
-    ];
-
+    protected static array $days = [\Cake\Chronos\Chronos::MONDAY => 'Monday', \Cake\Chronos\Chronos::TUESDAY => 'Tuesday', \Cake\Chronos\Chronos::WEDNESDAY => 'Wednesday', \Cake\Chronos\Chronos::THURSDAY => 'Thursday', \Cake\Chronos\Chronos::FRIDAY => 'Friday', \Cake\Chronos\Chronos::SATURDAY => 'Saturday', \Cake\Chronos\Chronos::SUNDAY => 'Sunday'];
     /**
      * First day of week
      *
      * @var int
      */
-    protected static int $weekStartsAt = Chronos::MONDAY;
-
+    protected static int $weekStartsAt = \Cake\Chronos\Chronos::MONDAY;
     /**
      * Last day of week
      *
      * @var int
      */
-    protected static int $weekEndsAt = Chronos::SUNDAY;
-
+    protected static int $weekEndsAt = \Cake\Chronos\Chronos::SUNDAY;
     /**
      * Instance of the diff formatting object.
      *
      * @var \Cake\Chronos\DifferenceFormatterInterface|null
      */
-    protected static ?DifferenceFormatterInterface $diffFormatter = null;
-
+    protected static ?\Cake\Chronos\DifferenceFormatterInterface $diffFormatter = null;
     /**
      * Regex for relative period.
      *
@@ -217,14 +183,12 @@ class Chronos extends DateTimeImmutable implements Stringable
      */
     // phpcs:disable Generic.Files.LineLength.TooLong
     protected static string $relativePattern = '/this|next|last|tomorrow|yesterday|midnight|today|[+-]|first|last|ago/i';
-
     /**
      * Errors from last time createFromFormat() was called.
      *
      * @var array|false
      */
-    protected static array|false $lastErrors = false;
-
+    protected static array|false $lastErrors = \false;
     /**
      * Create a new Chronos instance.
      *
@@ -234,54 +198,41 @@ class Chronos extends DateTimeImmutable implements Stringable
      * @param \Cake\Chronos\ChronosDate|\Cake\Chronos\ChronosTime|\DateTimeInterface|string|int|null $time Fixed or relative time
      * @param \DateTimeZone|string|null $timezone The timezone for the instance
      */
-    public function __construct(
-        ChronosDate|ChronosTime|DateTimeInterface|string|int|null $time = 'now',
-        DateTimeZone|string|null $timezone = null,
-    ) {
-        if (is_int($time) || (is_string($time) && ctype_digit($time))) {
+    public function __construct(\Cake\Chronos\ChronosDate|\Cake\Chronos\ChronosTime|DateTimeInterface|string|int|null $time = 'now', DateTimeZone|string|null $timezone = null)
+    {
+        if (is_int($time) || is_string($time) && ctype_digit($time)) {
             parent::__construct("@{$time}");
-
             return;
         }
-
         if ($timezone !== null) {
             $timezone = $timezone instanceof DateTimeZone ? $timezone : new DateTimeZone($timezone);
         }
-
         if (is_object($time)) {
             if ($time instanceof DateTimeInterface) {
                 $timezone = $time->getTimezone();
             }
             $time = $time->format('Y-m-d H:i:s.u');
         }
-
         $testNow = static::getTestNow();
         if ($testNow === null) {
             parent::__construct($time ?? 'now', $timezone);
-
             return;
         }
-
         $relative = static::hasRelativeKeywords($time);
         if ($time && $time !== 'now' && !$relative) {
             parent::__construct($time, $timezone);
-
             return;
         }
-
         $testNow = clone $testNow;
         $relativeTime = self::isTimeExpression($time);
         if (!$relativeTime && $timezone !== $testNow->getTimezone()) {
             $testNow = $testNow->setTimezone($timezone ?? date_default_timezone_get());
         }
-
         if ($relative) {
             $testNow = $testNow->modify($time ?? 'now');
         }
-
         parent::__construct($testNow->format('Y-m-d H:i:s.u'), $timezone);
     }
-
     /**
      * Set a Chronos instance (real or mock) to be returned when a "now"
      * instance is created.  The provided instance will be returned
@@ -300,22 +251,20 @@ class Chronos extends DateTimeImmutable implements Stringable
      * @param \Cake\Chronos\Chronos|string|null $testNow The instance to use for all future instances.
      * @return void
      */
-    public static function setTestNow(Chronos|string|null $testNow = null): void
+    public static function setTestNow(\Cake\Chronos\Chronos|string|null $testNow = null): void
     {
         static::$testNow = is_string($testNow) ? static::parse($testNow) : $testNow;
     }
-
     /**
      * Get the Chronos instance (real or mock) to be returned when a "now"
      * instance is created.
      *
      * @return \Cake\Chronos\Chronos|null The current instance used for testing
      */
-    public static function getTestNow(): ?Chronos
+    public static function getTestNow(): ?\Cake\Chronos\Chronos
     {
         return static::$testNow;
     }
-
     /**
      * Determine if there is a valid test instance set. A valid test instance
      * is anything that is not null.
@@ -326,7 +275,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return static::$testNow !== null;
     }
-
     /**
      * Determine if there is just a time in the time string
      *
@@ -337,12 +285,10 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         // Just a time
         if (is_string($time) && preg_match('/^[0-2]?[0-9]:[0-5][0-9](?::[0-5][0-9](?:\.[0-9]{1,6})?)?$/', $time)) {
-            return true;
+            return \true;
         }
-
-        return false;
+        return \false;
     }
-
     /**
      * Determine if there is a relative keyword in the time string, this is to
      * create dates relative to now for test instances. e.g.: next tuesday
@@ -353,16 +299,14 @@ class Chronos extends DateTimeImmutable implements Stringable
     public static function hasRelativeKeywords(?string $time): bool
     {
         if (self::isTimeExpression($time)) {
-            return true;
+            return \true;
         }
         // skip common format with a '-' in it
         if ($time && preg_match('/[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}/', $time) !== 1) {
             return preg_match(static::$relativePattern, $time) > 0;
         }
-
-        return false;
+        return \false;
     }
-
     /**
      * Get weekend days
      *
@@ -372,7 +316,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return static::$weekendDays;
     }
-
     /**
      * Set weekend days
      *
@@ -383,7 +326,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         static::$weekendDays = $days;
     }
-
     /**
      * Get the first day of week
      *
@@ -393,7 +335,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return static::$weekStartsAt;
     }
-
     /**
      * Set the first day of week
      *
@@ -404,7 +345,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         static::$weekStartsAt = $day;
     }
-
     /**
      * Get the last day of week
      *
@@ -414,7 +354,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return static::$weekEndsAt;
     }
-
     /**
      * Set the last day of week
      *
@@ -425,26 +364,22 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         static::$weekEndsAt = $day;
     }
-
     /**
      * Get the difference formatter instance or overwrite the current one.
      *
      * @param \Cake\Chronos\DifferenceFormatterInterface|null $formatter The formatter instance when setting.
      * @return \Cake\Chronos\DifferenceFormatterInterface The formatter instance.
      */
-    public static function diffFormatter(?DifferenceFormatterInterface $formatter = null): DifferenceFormatterInterface
+    public static function diffFormatter(?\Cake\Chronos\DifferenceFormatterInterface $formatter = null): \Cake\Chronos\DifferenceFormatterInterface
     {
         if ($formatter === null) {
             if (static::$diffFormatter === null) {
-                static::$diffFormatter = new DifferenceFormatter();
+                static::$diffFormatter = new \Cake\Chronos\DifferenceFormatter();
             }
-
             return static::$diffFormatter;
         }
-
         return static::$diffFormatter = $formatter;
     }
-
     /**
      * Create an instance from a DateTimeInterface
      *
@@ -455,7 +390,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return new static($other);
     }
-
     /**
      * Create an instance from a string.  This is an alias for the
      * constructor that allows better fluent syntax as it allows you to do
@@ -466,13 +400,10 @@ class Chronos extends DateTimeImmutable implements Stringable
      * @param \DateTimeZone|string|null $timezone The DateTimeZone object or timezone name.
      * @return static
      */
-    public static function parse(
-        ChronosDate|ChronosTime|DateTimeInterface|string|int|null $time = 'now',
-        DateTimeZone|string|null $timezone = null,
-    ): static {
+    public static function parse(\Cake\Chronos\ChronosDate|\Cake\Chronos\ChronosTime|DateTimeInterface|string|int|null $time = 'now', DateTimeZone|string|null $timezone = null): static
+    {
         return new static($time, $timezone);
     }
-
     /**
      * Get an instance for the current date and time
      *
@@ -483,7 +414,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return new static('now', $timezone);
     }
-
     /**
      * Create an instance for today
      *
@@ -494,7 +424,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return new static('midnight', $timezone);
     }
-
     /**
      * Create an instance for tomorrow
      *
@@ -505,7 +434,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return new static('tomorrow, midnight', $timezone);
     }
-
     /**
      * Create an instance for yesterday
      *
@@ -516,7 +444,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return new static('yesterday, midnight', $timezone);
     }
-
     /**
      * Create an instance for the greatest supported date.
      *
@@ -524,9 +451,8 @@ class Chronos extends DateTimeImmutable implements Stringable
      */
     public static function maxValue(): static
     {
-        return static::createFromTimestamp(PHP_INT_MAX);
+        return static::createFromTimestamp(\PHP_INT_MAX);
     }
-
     /**
      * Create an instance for the lowest supported date.
      *
@@ -534,11 +460,9 @@ class Chronos extends DateTimeImmutable implements Stringable
      */
     public static function minValue(): static
     {
-        $max = PHP_INT_SIZE === 4 ? PHP_INT_MAX : PHP_INT_MAX / 10;
-
+        $max = \PHP_INT_SIZE === 4 ? \PHP_INT_MAX : \PHP_INT_MAX / 10;
         return static::createFromTimestamp(~$max);
     }
-
     /**
      * Create an instance from a specific date and time.
      *
@@ -560,21 +484,12 @@ class Chronos extends DateTimeImmutable implements Stringable
      * @param \DateTimeZone|string|null $timezone The DateTimeZone object or timezone name the new instance should use.
      * @return static
      */
-    public static function create(
-        ?int $year = null,
-        ?int $month = null,
-        ?int $day = null,
-        ?int $hour = null,
-        ?int $minute = null,
-        ?int $second = null,
-        ?int $microsecond = null,
-        DateTimeZone|string|null $timezone = null,
-    ): static {
+    public static function create(?int $year = null, ?int $month = null, ?int $day = null, ?int $hour = null, ?int $minute = null, ?int $second = null, ?int $microsecond = null, DateTimeZone|string|null $timezone = null): static
+    {
         $now = static::now();
-        $year = $year ?? (int)$now->format('Y');
+        $year = $year ?? (int) $now->format('Y');
         $month = $month ?? $now->format('m');
         $day = $day ?? $now->format('d');
-
         if ($hour === null) {
             $hour = $now->format('H');
             $minute = $minute ?? $now->format('i');
@@ -585,16 +500,9 @@ class Chronos extends DateTimeImmutable implements Stringable
             $second = $second ?? 0;
             $microsecond = $microsecond ?? 0;
         }
-
-        $instance = static::createFromFormat(
-            'Y-m-d H:i:s.u',
-            sprintf('%s-%s-%s %s:%02s:%02s.%06s', 0, $month, $day, $hour, $minute, $second, $microsecond),
-            $timezone,
-        );
-
+        $instance = static::createFromFormat('Y-m-d H:i:s.u', sprintf('%s-%s-%s %s:%02s:%02s.%06s', 0, $month, $day, $hour, $minute, $second, $microsecond), $timezone);
         return $instance->addYears($year);
     }
-
     /**
      * Create an instance from just a date. The time portion is set to now.
      *
@@ -604,15 +512,10 @@ class Chronos extends DateTimeImmutable implements Stringable
      * @param \DateTimeZone|string|null $timezone The DateTimeZone object or timezone name the new instance should use.
      * @return static
      */
-    public static function createFromDate(
-        ?int $year = null,
-        ?int $month = null,
-        ?int $day = null,
-        DateTimeZone|string|null $timezone = null,
-    ): static {
+    public static function createFromDate(?int $year = null, ?int $month = null, ?int $day = null, DateTimeZone|string|null $timezone = null): static
+    {
         return static::create($year, $month, $day, null, null, null, null, $timezone);
     }
-
     /**
      * Create an instance from just a time. The date portion is set to today.
      *
@@ -623,16 +526,10 @@ class Chronos extends DateTimeImmutable implements Stringable
      * @param \DateTimeZone|string|null $timezone The DateTimeZone object or timezone name the new instance should use.
      * @return static
      */
-    public static function createFromTime(
-        ?int $hour = null,
-        ?int $minute = null,
-        ?int $second = null,
-        ?int $microsecond = null,
-        DateTimeZone|string|null $timezone = null,
-    ): static {
+    public static function createFromTime(?int $hour = null, ?int $minute = null, ?int $second = null, ?int $microsecond = null, DateTimeZone|string|null $timezone = null): static
+    {
         return static::create(null, null, null, $hour, $minute, $second, $microsecond, $timezone);
     }
-
     /**
      * Create an instance from a specific format
      *
@@ -642,27 +539,20 @@ class Chronos extends DateTimeImmutable implements Stringable
      * @return static
      * @throws \InvalidArgumentException
      */
-    public static function createFromFormat(
-        string $format,
-        string $time,
-        DateTimeZone|string|null $timezone = null,
-    ): static {
+    public static function createFromFormat(string $format, string $time, DateTimeZone|string|null $timezone = null): static
+    {
         if ($timezone !== null) {
             $dateTime = parent::createFromFormat($format, $time, $timezone ? static::safeCreateDateTimeZone($timezone) : null);
         } else {
             $dateTime = parent::createFromFormat($format, $time);
         }
-
         static::$lastErrors = DateTimeImmutable::getLastErrors();
         if (!$dateTime) {
-            $message = static::$lastErrors ? implode(PHP_EOL, static::$lastErrors['errors']) : 'Unknown error';
-
+            $message = static::$lastErrors ? implode(\PHP_EOL, static::$lastErrors['errors']) : 'Unknown error';
             throw new InvalidArgumentException($message);
         }
-
         return $dateTime;
     }
-
     /**
      * Returns parse warnings and errors from the last ``createFromFormat()``
      * call.
@@ -675,7 +565,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return static::$lastErrors;
     }
-
     /**
      * Creates an instance from an array of date and time values.
      *
@@ -701,38 +590,20 @@ class Chronos extends DateTimeImmutable implements Stringable
     public static function createFromArray(array $values): static
     {
         $values += ['hour' => 0, 'minute' => 0, 'second' => 0, 'microsecond' => 0, 'timezone' => null];
-
         $formatted = '';
-        if (
-            isset($values['year'], $values['month'], $values['day']) &&
-            (
-                is_numeric($values['year']) &&
-                is_numeric($values['month']) &&
-                is_numeric($values['day'])
-            )
-        ) {
+        if (isset($values['year'], $values['month'], $values['day']) && (is_numeric($values['year']) && is_numeric($values['month']) && is_numeric($values['day']))) {
             $formatted .= sprintf('%04d-%02d-%02d ', $values['year'], $values['month'], $values['day']);
         }
-
-        if (isset($values['meridian']) && (int)$values['hour'] === 12) {
+        if (isset($values['meridian']) && (int) $values['hour'] === 12) {
             $values['hour'] = 0;
         }
         if (isset($values['meridian'])) {
-            $values['hour'] = strtolower((string)$values['meridian']) === 'am' ? (int)$values['hour'] : (int)$values['hour'] + 12;
+            $values['hour'] = strtolower((string) $values['meridian']) === 'am' ? (int) $values['hour'] : (int) $values['hour'] + 12;
         }
-        $formatted .= sprintf(
-            '%02d:%02d:%02d.%06d',
-            $values['hour'],
-            $values['minute'],
-            $values['second'],
-            $values['microsecond'],
-        );
-
+        $formatted .= sprintf('%02d:%02d:%02d.%06d', $values['hour'], $values['minute'], $values['second'], $values['microsecond']);
         assert(!is_int($values['timezone']), 'Timezone cannot be of type `int`');
-
         return static::parse($formatted, $values['timezone']);
     }
-
     /**
      * Create an instance from a timestamp
      *
@@ -742,11 +613,9 @@ class Chronos extends DateTimeImmutable implements Stringable
      */
     public static function createFromTimestamp(float|int $timestamp, DateTimeZone|string|null $timezone = null): static
     {
-        $instance = PHP_VERSION_ID >= 80400 ? parent::createFromTimestamp($timestamp) : new static('@' . $timestamp);
-
+        $instance = \PHP_VERSION_ID >= 80400 ? parent::createFromTimestamp($timestamp) : new static('@' . $timestamp);
         return $timezone ? $instance->setTimezone($timezone) : $instance;
     }
-
     /**
      * Creates a DateTimeZone from a string or a DateTimeZone
      *
@@ -758,14 +627,11 @@ class Chronos extends DateTimeImmutable implements Stringable
         if ($object === null) {
             return new DateTimeZone(date_default_timezone_get());
         }
-
         if ($object instanceof DateTimeZone) {
             return $object;
         }
-
         return new DateTimeZone($object);
     }
-
     /**
      * Create a new DateInterval instance from specified values.
      *
@@ -779,30 +645,17 @@ class Chronos extends DateTimeImmutable implements Stringable
      * @param int|null $microseconds The microseconds to use.
      * @return \DateInterval
      */
-    public static function createInterval(
-        ?int $years = null,
-        ?int $months = null,
-        ?int $weeks = null,
-        ?int $days = null,
-        ?int $hours = null,
-        ?int $minutes = null,
-        ?int $seconds = null,
-        ?int $microseconds = null,
-    ): DateInterval {
+    public static function createInterval(?int $years = null, ?int $months = null, ?int $weeks = null, ?int $days = null, ?int $hours = null, ?int $minutes = null, ?int $seconds = null, ?int $microseconds = null): DateInterval
+    {
         $spec = 'P';
-
-        $rollover = static::rolloverTime($microseconds, 1_000_000);
-        $seconds = $seconds === null ? $rollover : $seconds + (int)$rollover;
-
+        $rollover = static::rolloverTime($microseconds, 1000000);
+        $seconds = $seconds === null ? $rollover : $seconds + (int) $rollover;
         $rollover = static::rolloverTime($seconds, 60);
-        $minutes = $minutes === null ? $rollover : $minutes + (int)$rollover;
-
+        $minutes = $minutes === null ? $rollover : $minutes + (int) $rollover;
         $rollover = static::rolloverTime($minutes, 60);
-        $hours = $hours === null ? $rollover : $hours + (int)$rollover;
-
+        $hours = $hours === null ? $rollover : $hours + (int) $rollover;
         $rollover = static::rolloverTime($hours, 24);
-        $days = $days === null ? $rollover : $days + (int)$rollover;
-
+        $days = $days === null ? $rollover : $days + (int) $rollover;
         if ($years) {
             $spec .= $years . 'Y';
         }
@@ -815,10 +668,8 @@ class Chronos extends DateTimeImmutable implements Stringable
         if ($days) {
             $spec .= $days . 'D';
         }
-
         if ($hours || $minutes || $seconds) {
             $spec .= 'T';
-
             if ($hours) {
                 $spec .= $hours . 'H';
             }
@@ -829,20 +680,15 @@ class Chronos extends DateTimeImmutable implements Stringable
                 $spec .= $seconds . 'S';
             }
         }
-
         if ($microseconds && $spec === 'P') {
             $spec .= 'T0S';
         }
-
         $instance = new DateInterval($spec);
-
         if ($microseconds) {
             $instance->f = $microseconds / 1000000;
         }
-
         return $instance;
     }
-
     /**
      * Updates value to remaininger and returns rollover value for time
      * unit or null if no rollover.
@@ -856,13 +702,10 @@ class Chronos extends DateTimeImmutable implements Stringable
         if ($value === null || $value < $max) {
             return null;
         }
-
         $rollover = intdiv($value, $max);
         $value = $value % $max;
-
         return $rollover;
     }
-
     /**
      * Sets the date and time.
      *
@@ -874,17 +717,10 @@ class Chronos extends DateTimeImmutable implements Stringable
      * @param int $second The second to set.
      * @return static
      */
-    public function setDateTime(
-        int $year,
-        int $month,
-        int $day,
-        int $hour,
-        int $minute,
-        int $second = 0,
-    ): static {
+    public function setDateTime(int $year, int $month, int $day, int $hour, int $minute, int $second = 0): static
+    {
         return $this->setDate($year, $month, $day)->setTime($hour, $minute, $second);
     }
-
     /**
      * Sets the date.
      *
@@ -897,7 +733,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return parent::setDate($year, $month, $day);
     }
-
     /**
      * Sets the date according to the ISO 8601 standard
      *
@@ -910,7 +745,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return parent::setISODate($year, $week, $dayOfWeek);
     }
-
     /**
      * Sets the time.
      *
@@ -924,7 +758,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return parent::setTime($hours, $minutes, $seconds, $microseconds);
     }
-
     /**
      * Creates a new instance with date modified according to DateTimeImmutable::modifier().
      *
@@ -936,13 +769,11 @@ class Chronos extends DateTimeImmutable implements Stringable
     public function modify(string $modifier): static
     {
         $new = parent::modify($modifier);
-        if ($new === false) {
+        if ($new === \false) {
             throw new InvalidArgumentException(sprintf('Unable to modify date using `%s`', $modifier));
         }
-
         return $new;
     }
-
     /**
      * Returns the difference between this instance and target.
      *
@@ -950,11 +781,10 @@ class Chronos extends DateTimeImmutable implements Stringable
      * @param bool $absolute Whether the interval is forced to be positive
      * @return \DateInterval
      */
-    public function diff(DateTimeInterface $target, bool $absolute = false): DateInterval
+    public function diff(DateTimeInterface $target, bool $absolute = \false): DateInterval
     {
         return parent::diff($target, $absolute);
     }
-
     /**
      * Returns formatted date string according to DateTimeImmutable::format().
      *
@@ -965,7 +795,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return parent::format($format);
     }
-
     /**
      * Returns the timezone offset.
      *
@@ -975,7 +804,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return parent::getOffset();
     }
-
     /**
      * Sets the date and time based on a Unix timestamp.
      *
@@ -986,7 +814,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return parent::setTimestamp($timestamp);
     }
-
     /**
      * Gets the Unix timestamp for this instance.
      *
@@ -996,7 +823,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return parent::getTimestamp();
     }
-
     /**
      * Set the instance's timezone from a string or object
      *
@@ -1007,7 +833,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return parent::setTimezone(static::safeCreateDateTimeZone($value));
     }
-
     /**
      * Return time zone set for this instance.
      *
@@ -1016,13 +841,11 @@ class Chronos extends DateTimeImmutable implements Stringable
     public function getTimezone(): DateTimeZone
     {
         $tz = parent::getTimezone();
-        if ($tz === false) {
+        if ($tz === \false) {
             throw new RuntimeException('Time zone could not be retrieved.');
         }
-
         return $tz;
     }
-
     /**
      * Set the time by time string
      *
@@ -1035,10 +858,8 @@ class Chronos extends DateTimeImmutable implements Stringable
         $hour = $time[0];
         $minute = $time[1] ?? 0;
         $second = $time[2] ?? 0;
-
-        return $this->setTime((int)$hour, (int)$minute, (int)$second);
+        return $this->setTime((int) $hour, (int) $minute, (int) $second);
     }
-
     /**
      * Set the instance's timestamp
      *
@@ -1049,7 +870,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return $this->setTimestamp($value);
     }
-
     /**
      * Set the instance's year
      *
@@ -1060,7 +880,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return $this->setDate($value, $this->month, $this->day);
     }
-
     /**
      * Set the instance's month
      *
@@ -1071,7 +890,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return $this->setDate($this->year, $value, $this->day);
     }
-
     /**
      * Set the instance's day
      *
@@ -1082,7 +900,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return $this->setDate($this->year, $this->month, $value);
     }
-
     /**
      * Set the instance's hour
      *
@@ -1093,7 +910,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return $this->setTime($value, $this->minute, $this->second);
     }
-
     /**
      * Set the instance's minute
      *
@@ -1104,7 +920,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return $this->setTime($this->hour, $value, $this->second);
     }
-
     /**
      * Set the instance's second
      *
@@ -1115,7 +930,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return $this->setTime($this->hour, $this->minute, $value);
     }
-
     /**
      * Set the instance's microsecond
      *
@@ -1126,7 +940,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return $this->setTime($this->hour, $this->minute, $this->second, $value);
     }
-
     /**
      * Add years to the instance. Positive $value travel forward while
      * negative $value travel into the past.
@@ -1149,14 +962,11 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         $month = $this->month;
         $date = $this->modify($value . ' years');
-
         if ($date->month !== $month) {
             return $date->modify('last day of previous month');
         }
-
         return $date;
     }
-
     /**
      * Remove years from the instance.
      *
@@ -1169,7 +979,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return $this->addYears(-$value);
     }
-
     /**
      * Add years with overflowing to the instance. Positive $value
      * travels forward while negative $value travels into the past.
@@ -1189,7 +998,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return $this->modify($value . ' year');
     }
-
     /**
      * Remove years with overflow from the instance
      *
@@ -1202,7 +1010,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return $this->addYearsWithOverflow(-1 * $value);
     }
-
     /**
      * Add months to the instance. Positive $value travels forward while
      * negative $value travels into the past.
@@ -1226,14 +1033,11 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         $day = $this->day;
         $date = $this->modify($value . ' months');
-
         if ($date->day !== $day) {
             return $date->modify('last day of previous month');
         }
-
         return $date;
     }
-
     /**
      * Remove months from the instance
      *
@@ -1246,7 +1050,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return $this->addMonths(-$value);
     }
-
     /**
      * Add months with overflowing to the instance. Positive $value
      * travels forward while negative $value travels into the past.
@@ -1266,7 +1069,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return $this->modify($value . ' months');
     }
-
     /**
      * Add months with overflowing to the instance. Positive $value
      * travels forward while negative $value travels into the past.
@@ -1286,7 +1088,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return $this->addMonthsWithOverflow(-1 * $value);
     }
-
     /**
      * Add days to the instance. Positive $value travels forward while
      * negative $value travels into the past.
@@ -1296,9 +1097,8 @@ class Chronos extends DateTimeImmutable implements Stringable
      */
     public function addDays(int $value): static
     {
-        return $this->modify("$value days");
+        return $this->modify("{$value} days");
     }
-
     /**
      * Remove days from the instance
      *
@@ -1309,7 +1109,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return $this->addDays(-$value);
     }
-
     /**
      * Add weekdays to the instance. Positive $value travels forward while
      * negative $value travels into the past.
@@ -1321,7 +1120,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return $this->modify($value . ' weekdays, ' . $this->format('H:i:s'));
     }
-
     /**
      * Remove weekdays from the instance
      *
@@ -1332,7 +1130,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return $this->addWeekdays(-$value);
     }
-
     /**
      * Add weeks to the instance. Positive $value travels forward while
      * negative $value travels into the past.
@@ -1342,9 +1139,8 @@ class Chronos extends DateTimeImmutable implements Stringable
      */
     public function addWeeks(int $value): static
     {
-        return $this->modify("$value week");
+        return $this->modify("{$value} week");
     }
-
     /**
      * Remove weeks to the instance
      *
@@ -1355,7 +1151,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return $this->addWeeks(-$value);
     }
-
     /**
      * Add hours to the instance. Positive $value travels forward while
      * negative $value travels into the past.
@@ -1365,9 +1160,8 @@ class Chronos extends DateTimeImmutable implements Stringable
      */
     public function addHours(int $value): static
     {
-        return $this->modify("$value hour");
+        return $this->modify("{$value} hour");
     }
-
     /**
      * Remove hours from the instance
      *
@@ -1378,7 +1172,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return $this->addHours(-$value);
     }
-
     /**
      * Add minutes to the instance. Positive $value travels forward while
      * negative $value travels into the past.
@@ -1388,9 +1181,8 @@ class Chronos extends DateTimeImmutable implements Stringable
      */
     public function addMinutes(int $value): static
     {
-        return $this->modify("$value minute");
+        return $this->modify("{$value} minute");
     }
-
     /**
      * Remove minutes from the instance
      *
@@ -1401,7 +1193,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return $this->addMinutes(-$value);
     }
-
     /**
      * Add seconds to the instance. Positive $value travels forward while
      * negative $value travels into the past.
@@ -1411,9 +1202,8 @@ class Chronos extends DateTimeImmutable implements Stringable
      */
     public function addSeconds(int $value): static
     {
-        return $this->modify("$value second");
+        return $this->modify("{$value} second");
     }
-
     /**
      * Remove seconds from the instance
      *
@@ -1424,7 +1214,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return $this->addSeconds(-$value);
     }
-
     /**
      * Sets the time to 00:00:00
      *
@@ -1434,7 +1223,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return $this->modify('midnight');
     }
-
     /**
      * Sets the time to 23:59:59 or 23:59:59.999999
      * if `$microseconds` is true.
@@ -1442,15 +1230,13 @@ class Chronos extends DateTimeImmutable implements Stringable
      * @param bool $microseconds Whether to set microseconds
      * @return static
      */
-    public function endOfDay(bool $microseconds = false): static
+    public function endOfDay(bool $microseconds = \false): static
     {
         if ($microseconds) {
             return $this->modify('23:59:59.999999');
         }
-
         return $this->modify('23:59:59');
     }
-
     /**
      * Sets the date to the first day of the month and the time to 00:00:00
      *
@@ -1460,7 +1246,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return $this->modify('first day of this month midnight');
     }
-
     /**
      * Sets the date to end of the month and time to 23:59:59
      *
@@ -1470,7 +1255,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return $this->modify('last day of this month, 23:59:59');
     }
-
     /**
      * Sets the date to the first day of the year and the time to 00:00:00
      *
@@ -1480,7 +1264,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return $this->modify('first day of january midnight');
     }
-
     /**
      * Sets the date to end of the year and time to 23:59:59
      *
@@ -1490,7 +1273,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return $this->modify('last day of december, 23:59:59');
     }
-
     /**
      * Sets the date to the first day of the decade and the time to 00:00:00
      *
@@ -1498,11 +1280,9 @@ class Chronos extends DateTimeImmutable implements Stringable
      */
     public function startOfDecade(): static
     {
-        $year = $this->year - $this->year % Chronos::YEARS_PER_DECADE;
-
-        return $this->modify("first day of january $year, midnight");
+        $year = $this->year - $this->year % \Cake\Chronos\Chronos::YEARS_PER_DECADE;
+        return $this->modify("first day of january {$year}, midnight");
     }
-
     /**
      * Sets the date to end of the decade and time to 23:59:59
      *
@@ -1510,11 +1290,9 @@ class Chronos extends DateTimeImmutable implements Stringable
      */
     public function endOfDecade(): static
     {
-        $year = $this->year - $this->year % Chronos::YEARS_PER_DECADE + Chronos::YEARS_PER_DECADE - 1;
-
-        return $this->modify("last day of december $year, 23:59:59");
+        $year = $this->year - $this->year % \Cake\Chronos\Chronos::YEARS_PER_DECADE + \Cake\Chronos\Chronos::YEARS_PER_DECADE - 1;
+        return $this->modify("last day of december {$year}, 23:59:59");
     }
-
     /**
      * Sets the date to the first day of the century and the time to 00:00:00
      *
@@ -1522,13 +1300,9 @@ class Chronos extends DateTimeImmutable implements Stringable
      */
     public function startOfCentury(): static
     {
-        $year = $this->startOfYear()
-            ->year($this->year - 1 - ($this->year - 1) % Chronos::YEARS_PER_CENTURY + 1)
-            ->year;
-
-        return $this->modify("first day of january $year, midnight");
+        $year = $this->startOfYear()->year($this->year - 1 - ($this->year - 1) % \Cake\Chronos\Chronos::YEARS_PER_CENTURY + 1)->year;
+        return $this->modify("first day of january {$year}, midnight");
     }
-
     /**
      * Sets the date to end of the century and time to 23:59:59
      *
@@ -1536,18 +1310,10 @@ class Chronos extends DateTimeImmutable implements Stringable
      */
     public function endOfCentury(): static
     {
-        $y = $this->year - 1
-            - ($this->year - 1)
-            % Chronos::YEARS_PER_CENTURY
-            + Chronos::YEARS_PER_CENTURY;
-
-        $year = $this->endOfYear()
-            ->year($y)
-            ->year;
-
-        return $this->modify("last day of december $year, 23:59:59");
+        $y = $this->year - 1 - ($this->year - 1) % \Cake\Chronos\Chronos::YEARS_PER_CENTURY + \Cake\Chronos\Chronos::YEARS_PER_CENTURY;
+        $year = $this->endOfYear()->year($y)->year;
+        return $this->modify("last day of december {$year}, 23:59:59");
     }
-
     /**
      * Sets the date to the first day of week (defined in $weekStartsAt) and the time to 00:00:00
      *
@@ -1559,10 +1325,8 @@ class Chronos extends DateTimeImmutable implements Stringable
         if ($dateTime->dayOfWeek !== static::$weekStartsAt) {
             $dateTime = $dateTime->previous(static::$weekStartsAt);
         }
-
         return $dateTime->startOfDay();
     }
-
     /**
      * Sets the date to end of week (defined in $weekEndsAt) and time to 23:59:59
      *
@@ -1574,10 +1338,8 @@ class Chronos extends DateTimeImmutable implements Stringable
         if ($dateTime->dayOfWeek !== static::$weekEndsAt) {
             $dateTime = $dateTime->next(static::$weekEndsAt);
         }
-
         return $dateTime->endOfDay();
     }
-
     /**
      * Modify to the next occurrence of a given day of the week.
      * If no dayOfWeek is provided, modify to the next occurrence
@@ -1592,12 +1354,9 @@ class Chronos extends DateTimeImmutable implements Stringable
         if ($dayOfWeek === null) {
             $dayOfWeek = $this->dayOfWeek;
         }
-
         $day = static::$days[$dayOfWeek];
-
-        return $this->modify("next $day, midnight");
+        return $this->modify("next {$day}, midnight");
     }
-
     /**
      * Modify to the previous occurrence of a given day of the week.
      * If no dayOfWeek is provided, modify to the previous occurrence
@@ -1612,12 +1371,9 @@ class Chronos extends DateTimeImmutable implements Stringable
         if ($dayOfWeek === null) {
             $dayOfWeek = $this->dayOfWeek;
         }
-
         $day = static::$days[$dayOfWeek];
-
-        return $this->modify("last $day, midnight");
+        return $this->modify("last {$day}, midnight");
     }
-
     /**
      * Modify to the first occurrence of a given day of the week
      * in the current month. If no dayOfWeek is provided, modify to the
@@ -1630,10 +1386,8 @@ class Chronos extends DateTimeImmutable implements Stringable
     public function firstOfMonth(?int $dayOfWeek = null): static
     {
         $day = $dayOfWeek === null ? 'day' : static::$days[$dayOfWeek];
-
-        return $this->modify("first $day of this month, midnight");
+        return $this->modify("first {$day} of this month, midnight");
     }
-
     /**
      * Modify to the last occurrence of a given day of the week
      * in the current month. If no dayOfWeek is provided, modify to the
@@ -1646,10 +1400,8 @@ class Chronos extends DateTimeImmutable implements Stringable
     public function lastOfMonth(?int $dayOfWeek = null): static
     {
         $day = $dayOfWeek === null ? 'day' : static::$days[$dayOfWeek];
-
-        return $this->modify("last $day of this month, midnight");
+        return $this->modify("last {$day} of this month, midnight");
     }
-
     /**
      * Modify to the given occurrence of a given day of the week
      * in the current month. If the calculated occurrence is outside the scope
@@ -1664,11 +1416,9 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         $dateTime = $this->firstOfMonth();
         $check = $dateTime->format('Y-m');
-        $dateTime = $dateTime->modify("+$nth " . static::$days[$dayOfWeek]);
-
-        return $dateTime->format('Y-m') === $check ? $dateTime : false;
+        $dateTime = $dateTime->modify("+{$nth} " . static::$days[$dayOfWeek]);
+        return $dateTime->format('Y-m') === $check ? $dateTime : \false;
     }
-
     /**
      * Modify to the first occurrence of a given day of the week
      * in the current quarter. If no dayOfWeek is provided, modify to the
@@ -1680,12 +1430,8 @@ class Chronos extends DateTimeImmutable implements Stringable
      */
     public function firstOfQuarter(?int $dayOfWeek = null): static
     {
-        return $this
-            ->day(1)
-            ->month($this->quarter * Chronos::MONTHS_PER_QUARTER - 2)
-            ->firstOfMonth($dayOfWeek);
+        return $this->day(1)->month($this->quarter * \Cake\Chronos\Chronos::MONTHS_PER_QUARTER - 2)->firstOfMonth($dayOfWeek);
     }
-
     /**
      * Modify to the last occurrence of a given day of the week
      * in the current quarter. If no dayOfWeek is provided, modify to the
@@ -1697,12 +1443,8 @@ class Chronos extends DateTimeImmutable implements Stringable
      */
     public function lastOfQuarter(?int $dayOfWeek = null): static
     {
-        return $this
-            ->day(1)
-            ->month($this->quarter * Chronos::MONTHS_PER_QUARTER)
-            ->lastOfMonth($dayOfWeek);
+        return $this->day(1)->month($this->quarter * \Cake\Chronos\Chronos::MONTHS_PER_QUARTER)->lastOfMonth($dayOfWeek);
     }
-
     /**
      * Modify to the given occurrence of a given day of the week
      * in the current quarter. If the calculated occurrence is outside the scope
@@ -1715,14 +1457,12 @@ class Chronos extends DateTimeImmutable implements Stringable
      */
     public function nthOfQuarter(int $nth, int $dayOfWeek): static|false
     {
-        $dateTime = $this->day(1)->month($this->quarter * Chronos::MONTHS_PER_QUARTER);
+        $dateTime = $this->day(1)->month($this->quarter * \Cake\Chronos\Chronos::MONTHS_PER_QUARTER);
         $lastMonth = $dateTime->month;
         $year = $dateTime->year;
-        $dateTime = $dateTime->firstOfQuarter()->modify("+$nth" . static::$days[$dayOfWeek]);
-
-        return $lastMonth < $dateTime->month || $year !== $dateTime->year ? false : $dateTime;
+        $dateTime = $dateTime->firstOfQuarter()->modify("+{$nth}" . static::$days[$dayOfWeek]);
+        return $lastMonth < $dateTime->month || $year !== $dateTime->year ? \false : $dateTime;
     }
-
     /**
      * Modify to the first occurrence of a given day of the week
      * in the current year. If no dayOfWeek is provided, modify to the
@@ -1735,10 +1475,8 @@ class Chronos extends DateTimeImmutable implements Stringable
     public function firstOfYear(?int $dayOfWeek = null): static
     {
         $day = $dayOfWeek === null ? 'day' : static::$days[$dayOfWeek];
-
-        return $this->modify("first $day of january, midnight");
+        return $this->modify("first {$day} of january, midnight");
     }
-
     /**
      * Modify to the last occurrence of a given day of the week
      * in the current year. If no dayOfWeek is provided, modify to the
@@ -1751,10 +1489,8 @@ class Chronos extends DateTimeImmutable implements Stringable
     public function lastOfYear(?int $dayOfWeek = null): static
     {
         $day = $dayOfWeek === null ? 'day' : static::$days[$dayOfWeek];
-
-        return $this->modify("last $day of december, midnight");
+        return $this->modify("last {$day} of december, midnight");
     }
-
     /**
      * Modify to the given occurrence of a given day of the week
      * in the current year. If the calculated occurrence is outside the scope
@@ -1767,11 +1503,9 @@ class Chronos extends DateTimeImmutable implements Stringable
      */
     public function nthOfYear(int $nth, int $dayOfWeek): static|false
     {
-        $dateTime = $this->firstOfYear()->modify("+$nth " . static::$days[$dayOfWeek]);
-
-        return $this->year === $dateTime->year ? $dateTime : false;
+        $dateTime = $this->firstOfYear()->modify("+{$nth} " . static::$days[$dayOfWeek]);
+        return $this->year === $dateTime->year ? $dateTime : \false;
     }
-
     /**
      * Determines if the instance is equal to another
      *
@@ -1782,7 +1516,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return $this == $other;
     }
-
     /**
      * Determines if the instance is not equal to another
      *
@@ -1793,7 +1526,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return !$this->equals($other);
     }
-
     /**
      * Determines if the instance is greater (after) than another
      *
@@ -1804,7 +1536,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return $this > $other;
     }
-
     /**
      * Determines if the instance is greater (after) than or equal to another
      *
@@ -1815,7 +1546,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return $this >= $other;
     }
-
     /**
      * Determines if the instance is less (before) than another
      *
@@ -1826,7 +1556,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return $this < $other;
     }
-
     /**
      * Determines if the instance is less (before) or equal to another
      *
@@ -1837,7 +1566,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return $this <= $other;
     }
-
     /**
      * Determines if the instance is between two others
      *
@@ -1846,19 +1574,16 @@ class Chronos extends DateTimeImmutable implements Stringable
      * @param bool $equals Whether to include the beginning and end of range
      * @return bool
      */
-    public function between(DateTimeInterface $start, DateTimeInterface $end, bool $equals = true): bool
+    public function between(DateTimeInterface $start, DateTimeInterface $end, bool $equals = \true): bool
     {
         if ($start > $end) {
             [$start, $end] = [$end, $start];
         }
-
         if ($equals) {
             return $this->greaterThanOrEquals($start) && $this->lessThanOrEquals($end);
         }
-
         return $this->greaterThan($start) && $this->lessThan($end);
     }
-
     /**
      * Get the closest date from the instance.
      *
@@ -1878,14 +1603,11 @@ class Chronos extends DateTimeImmutable implements Stringable
                 $closestDiffInSeconds = $otherDiffInSeconds;
             }
         }
-
         if ($winner instanceof static) {
             return $winner;
         }
-
         return new static($winner);
     }
-
     /**
      * Get the farthest date from the instance.
      *
@@ -1905,14 +1627,11 @@ class Chronos extends DateTimeImmutable implements Stringable
                 $farthestDiffInSeconds = $otherDiffInSeconds;
             }
         }
-
         if ($winner instanceof static) {
             return $winner;
         }
-
         return new static($winner);
     }
-
     /**
      * Get the minimum instance between a given instance (default now) and the current instance.
      *
@@ -1926,10 +1645,8 @@ class Chronos extends DateTimeImmutable implements Stringable
         if ($winner instanceof static) {
             return $winner;
         }
-
         return new static($winner);
     }
-
     /**
      * Get the maximum instance between a given instance (default now) and the current instance.
      *
@@ -1943,10 +1660,8 @@ class Chronos extends DateTimeImmutable implements Stringable
         if ($winner instanceof static) {
             return $winner;
         }
-
         return new static($winner);
     }
-
     /**
      * Modify the current instance to the average of a given instance (default now) and the current instance.
      *
@@ -1956,10 +1671,8 @@ class Chronos extends DateTimeImmutable implements Stringable
     public function average(?DateTimeInterface $other = null): static
     {
         $other ??= static::now($this->tz);
-
-        return $this->addSeconds((int)($this->diffInSeconds($other, false) / 2));
+        return $this->addSeconds((int) ($this->diffInSeconds($other, \false) / 2));
     }
-
     /**
      * Determines if the instance is a weekday
      *
@@ -1969,7 +1682,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return !$this->isWeekend();
     }
-
     /**
      * Determines if the instance is a weekend day
      *
@@ -1977,9 +1689,8 @@ class Chronos extends DateTimeImmutable implements Stringable
      */
     public function isWeekend(): bool
     {
-        return in_array($this->dayOfWeek, Chronos::getWeekendDays(), true);
+        return in_array($this->dayOfWeek, \Cake\Chronos\Chronos::getWeekendDays(), \true);
     }
-
     /**
      * Determines if the instance is yesterday
      *
@@ -1989,7 +1700,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return $this->toDateString() === static::yesterday($this->tz)->toDateString();
     }
-
     /**
      * Determines if the instance is today
      *
@@ -1999,7 +1709,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return $this->toDateString() === static::now($this->tz)->toDateString();
     }
-
     /**
      * Determines if the instance is tomorrow
      *
@@ -2009,7 +1718,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return $this->toDateString() === static::tomorrow($this->tz)->toDateString();
     }
-
     /**
      * Determines if the instance is within the next week
      *
@@ -2019,7 +1727,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return $this->format('W o') === static::now($this->tz)->addWeeks(1)->format('W o');
     }
-
     /**
      * Determines if the instance is within the last week
      *
@@ -2029,7 +1736,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return $this->format('W o') === static::now($this->tz)->subWeeks(1)->format('W o');
     }
-
     /**
      * Determines if the instance is within the next month
      *
@@ -2039,7 +1745,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return $this->format('m Y') === static::now($this->tz)->addMonths(1)->format('m Y');
     }
-
     /**
      * Determines if the instance is within the last month
      *
@@ -2049,7 +1754,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return $this->format('m Y') === static::now($this->tz)->subMonths(1)->format('m Y');
     }
-
     /**
      * Determines if the instance is within the next year
      *
@@ -2059,7 +1763,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return $this->year === static::now($this->tz)->addYears(1)->year;
     }
-
     /**
      * Determines if the instance is within the last year
      *
@@ -2069,7 +1772,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return $this->year === static::now($this->tz)->subYears(1)->year;
     }
-
     /**
      * Determines if the instance is within the first half of year
      *
@@ -2079,7 +1781,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return $this->half === 1;
     }
-
     /**
      * Determines if the instance is within the second half of year
      *
@@ -2089,7 +1790,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return $this->half === 2;
     }
-
     /**
      * Determines if the instance is in the future, ie. greater (after) than now
      *
@@ -2099,7 +1799,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return $this->greaterThan(static::now($this->tz));
     }
-
     /**
      * Determines if the instance is in the past, ie. less (before) than now
      *
@@ -2109,7 +1808,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return $this->lessThan(static::now($this->tz));
     }
-
     /**
      * Determines if the instance is a leap year
      *
@@ -2119,7 +1817,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return $this->format('L') === '1';
     }
-
     /**
      * Checks if the passed in date is the same day as the instance current day.
      *
@@ -2131,10 +1828,8 @@ class Chronos extends DateTimeImmutable implements Stringable
         if (!$other instanceof static) {
             $other = new static($other);
         }
-
         return $this->toDateString() === $other->toDateString();
     }
-
     /**
      * Returns whether the passed in date is the same month and year.
      *
@@ -2145,7 +1840,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return $this->format('Y-m') === $other->format('Y-m');
     }
-
     /**
      * Returns whether passed in date is the same year.
      *
@@ -2156,7 +1850,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return $this->format('Y') === $other->format('Y');
     }
-
     /**
      * Checks if this day is a Sunday.
      *
@@ -2164,9 +1857,8 @@ class Chronos extends DateTimeImmutable implements Stringable
      */
     public function isSunday(): bool
     {
-        return $this->dayOfWeek === Chronos::SUNDAY;
+        return $this->dayOfWeek === \Cake\Chronos\Chronos::SUNDAY;
     }
-
     /**
      * Checks if this day is a Monday.
      *
@@ -2174,9 +1866,8 @@ class Chronos extends DateTimeImmutable implements Stringable
      */
     public function isMonday(): bool
     {
-        return $this->dayOfWeek === Chronos::MONDAY;
+        return $this->dayOfWeek === \Cake\Chronos\Chronos::MONDAY;
     }
-
     /**
      * Checks if this day is a Tuesday.
      *
@@ -2184,9 +1875,8 @@ class Chronos extends DateTimeImmutable implements Stringable
      */
     public function isTuesday(): bool
     {
-        return $this->dayOfWeek === Chronos::TUESDAY;
+        return $this->dayOfWeek === \Cake\Chronos\Chronos::TUESDAY;
     }
-
     /**
      * Checks if this day is a Wednesday.
      *
@@ -2194,9 +1884,8 @@ class Chronos extends DateTimeImmutable implements Stringable
      */
     public function isWednesday(): bool
     {
-        return $this->dayOfWeek === Chronos::WEDNESDAY;
+        return $this->dayOfWeek === \Cake\Chronos\Chronos::WEDNESDAY;
     }
-
     /**
      * Checks if this day is a Thursday.
      *
@@ -2204,9 +1893,8 @@ class Chronos extends DateTimeImmutable implements Stringable
      */
     public function isThursday(): bool
     {
-        return $this->dayOfWeek === Chronos::THURSDAY;
+        return $this->dayOfWeek === \Cake\Chronos\Chronos::THURSDAY;
     }
-
     /**
      * Checks if this day is a Friday.
      *
@@ -2214,9 +1902,8 @@ class Chronos extends DateTimeImmutable implements Stringable
      */
     public function isFriday(): bool
     {
-        return $this->dayOfWeek === Chronos::FRIDAY;
+        return $this->dayOfWeek === \Cake\Chronos\Chronos::FRIDAY;
     }
-
     /**
      * Checks if this day is a Saturday.
      *
@@ -2224,9 +1911,8 @@ class Chronos extends DateTimeImmutable implements Stringable
      */
     public function isSaturday(): bool
     {
-        return $this->dayOfWeek === Chronos::SATURDAY;
+        return $this->dayOfWeek === \Cake\Chronos\Chronos::SATURDAY;
     }
-
     /**
      * Returns true if this object represents a date within the current week
      *
@@ -2236,7 +1922,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return static::now($this->getTimezone())->format('W o') === $this->format('W o');
     }
-
     /**
      * Returns true if this object represents a date within the current month
      *
@@ -2246,7 +1931,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return static::now($this->getTimezone())->format('m Y') === $this->format('m Y');
     }
-
     /**
      * Returns true if this object represents a date within the current year
      *
@@ -2256,7 +1940,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return static::now($this->getTimezone())->format('Y') === $this->format('Y');
     }
-
     /**
      * Check if its the birthday. Compares the date/month values of the two dates.
      *
@@ -2266,10 +1949,8 @@ class Chronos extends DateTimeImmutable implements Stringable
     public function isBirthday(?DateTimeInterface $other = null): bool
     {
         $other ??= static::now($this->tz);
-
         return $this->format('md') === $other->format('md');
     }
-
     /**
      * Returns true this instance happened within the specified interval
      *
@@ -2282,10 +1963,8 @@ class Chronos extends DateTimeImmutable implements Stringable
         $now = new static();
         $interval = $now->modify('-' . $timeInterval);
         $thisTime = $this->format('U');
-
         return $thisTime >= $interval->format('U') && $thisTime <= $now->format('U');
     }
-
     /**
      * Returns true this instance will happen within the specified interval
      *
@@ -2298,10 +1977,8 @@ class Chronos extends DateTimeImmutable implements Stringable
         $now = new static();
         $interval = $now->modify('+' . $timeInterval);
         $thisTime = $this->format('U');
-
         return $thisTime <= $interval->format('U') && $thisTime >= $now->format('U');
     }
-
     /**
      * Get the difference by the given interval using a filter callable
      *
@@ -2312,33 +1989,23 @@ class Chronos extends DateTimeImmutable implements Stringable
      * @param int $options DatePeriod options, {@see https://www.php.net/manual/en/class.dateperiod.php}
      * @return int
      */
-    public function diffFiltered(
-        DateInterval $interval,
-        callable $callback,
-        ?DateTimeInterface $other = null,
-        bool $absolute = true,
-        int $options = 0,
-    ): int {
+    public function diffFiltered(DateInterval $interval, callable $callback, ?DateTimeInterface $other = null, bool $absolute = \true, int $options = 0): int
+    {
         $start = $this;
         $end = $other ?? static::now($this->tz);
-        $inverse = false;
-
+        $inverse = \false;
         if ($end < $start) {
             $start = $end;
             $end = $this;
-            $inverse = true;
+            $inverse = \true;
         }
-
         $period = new DatePeriod($start, $interval, $end, $options);
         $vals = array_filter(iterator_to_array($period), function (DateTimeInterface $date) use ($callback) {
             return $callback(static::instance($date));
         });
-
         $diff = count($vals);
-
         return $inverse && !$absolute ? -$diff : $diff;
     }
-
     /**
      * Get the difference in years
      *
@@ -2346,13 +2013,11 @@ class Chronos extends DateTimeImmutable implements Stringable
      * @param bool $absolute Get the absolute of the difference
      * @return int
      */
-    public function diffInYears(?DateTimeInterface $other = null, bool $absolute = true): int
+    public function diffInYears(?DateTimeInterface $other = null, bool $absolute = \true): int
     {
         $diff = $this->diff($other ?? static::now($this->tz), $absolute);
-
         return $diff->invert ? -$diff->y : $diff->y;
     }
-
     /**
      * Get the difference in months
      *
@@ -2360,14 +2025,12 @@ class Chronos extends DateTimeImmutable implements Stringable
      * @param bool $absolute Get the absolute of the difference
      * @return int
      */
-    public function diffInMonths(?DateTimeInterface $other = null, bool $absolute = true): int
+    public function diffInMonths(?DateTimeInterface $other = null, bool $absolute = \true): int
     {
         $diff = $this->diff($other ?? static::now($this->tz), $absolute);
-        $months = $diff->y * Chronos::MONTHS_PER_YEAR + $diff->m;
-
+        $months = $diff->y * \Cake\Chronos\Chronos::MONTHS_PER_YEAR + $diff->m;
         return $diff->invert ? -$months : $months;
     }
-
     /**
      * Get the difference in months ignoring the timezone. This means the months are calculated
      * in the specified timezone without converting to UTC first. This prevents the day from changing
@@ -2380,17 +2043,14 @@ class Chronos extends DateTimeImmutable implements Stringable
      * @param bool $absolute Get the absolute of the difference
      * @return int
      */
-    public function diffInMonthsIgnoreTimezone(?DateTimeInterface $other = null, bool $absolute = true): int
+    public function diffInMonthsIgnoreTimezone(?DateTimeInterface $other = null, bool $absolute = \true): int
     {
         $utcTz = new DateTimeZone('UTC');
         $source = new static($this->format('Y-m-d H:i:s.u'), $utcTz);
-
         $other ??= static::now($this->tz);
         $other = new static($other->format('Y-m-d H:i:s.u'), $utcTz);
-
         return $source->diffInMonths($other, $absolute);
     }
-
     /**
      * Get the difference in weeks
      *
@@ -2398,11 +2058,10 @@ class Chronos extends DateTimeImmutable implements Stringable
      * @param bool $absolute Get the absolute of the difference
      * @return int
      */
-    public function diffInWeeks(?DateTimeInterface $other = null, bool $absolute = true): int
+    public function diffInWeeks(?DateTimeInterface $other = null, bool $absolute = \true): int
     {
-        return (int)($this->diffInDays($other, $absolute) / Chronos::DAYS_PER_WEEK);
+        return (int) ($this->diffInDays($other, $absolute) / \Cake\Chronos\Chronos::DAYS_PER_WEEK);
     }
-
     /**
      * Get the difference in days
      *
@@ -2410,13 +2069,11 @@ class Chronos extends DateTimeImmutable implements Stringable
      * @param bool $absolute Get the absolute of the difference
      * @return int
      */
-    public function diffInDays(?DateTimeInterface $other = null, bool $absolute = true): int
+    public function diffInDays(?DateTimeInterface $other = null, bool $absolute = \true): int
     {
         $diff = $this->diff($other ?? static::now($this->tz), $absolute);
-
-        return $diff->invert ? -(int)$diff->days : (int)$diff->days;
+        return $diff->invert ? -(int) $diff->days : (int) $diff->days;
     }
-
     /**
      * Get the difference in days using a filter callable
      *
@@ -2426,15 +2083,10 @@ class Chronos extends DateTimeImmutable implements Stringable
      * @param int $options DatePeriod options, {@see https://www.php.net/manual/en/class.dateperiod.php}
      * @return int
      */
-    public function diffInDaysFiltered(
-        callable $callback,
-        ?DateTimeInterface $other = null,
-        bool $absolute = true,
-        int $options = 0,
-    ): int {
+    public function diffInDaysFiltered(callable $callback, ?DateTimeInterface $other = null, bool $absolute = \true, int $options = 0): int
+    {
         return $this->diffFiltered(new DateInterval('P1D'), $callback, $other, $absolute, $options);
     }
-
     /**
      * Get the difference in hours using a filter callable
      *
@@ -2444,15 +2096,10 @@ class Chronos extends DateTimeImmutable implements Stringable
      * @param int $options DatePeriod options, {@see https://www.php.net/manual/en/class.dateperiod.php}
      * @return int
      */
-    public function diffInHoursFiltered(
-        callable $callback,
-        ?DateTimeInterface $other = null,
-        bool $absolute = true,
-        int $options = 0,
-    ): int {
+    public function diffInHoursFiltered(callable $callback, ?DateTimeInterface $other = null, bool $absolute = \true, int $options = 0): int
+    {
         return $this->diffFiltered(new DateInterval('PT1H'), $callback, $other, $absolute, $options);
     }
-
     /**
      * Get the difference in weekdays
      *
@@ -2461,13 +2108,12 @@ class Chronos extends DateTimeImmutable implements Stringable
      * @param int $options DatePeriod options, {@see https://www.php.net/manual/en/class.dateperiod.php}
      * @return int
      */
-    public function diffInWeekdays(?DateTimeInterface $other = null, bool $absolute = true, int $options = 0): int
+    public function diffInWeekdays(?DateTimeInterface $other = null, bool $absolute = \true, int $options = 0): int
     {
-        return $this->diffInDaysFiltered(function (Chronos $date) {
+        return $this->diffInDaysFiltered(function (\Cake\Chronos\Chronos $date) {
             return $date->isWeekday();
         }, $other, $absolute, $options);
     }
-
     /**
      * Get the difference in weekend days using a filter
      *
@@ -2476,13 +2122,12 @@ class Chronos extends DateTimeImmutable implements Stringable
      * @param int $options DatePeriod options, {@see https://www.php.net/manual/en/class.dateperiod.php}
      * @return int
      */
-    public function diffInWeekendDays(?DateTimeInterface $other = null, bool $absolute = true, int $options = 0): int
+    public function diffInWeekendDays(?DateTimeInterface $other = null, bool $absolute = \true, int $options = 0): int
     {
-        return $this->diffInDaysFiltered(function (Chronos $date) {
+        return $this->diffInDaysFiltered(function (\Cake\Chronos\Chronos $date) {
             return $date->isWeekend();
         }, $other, $absolute, $options);
     }
-
     /**
      * Get the difference in hours
      *
@@ -2490,15 +2135,10 @@ class Chronos extends DateTimeImmutable implements Stringable
      * @param bool $absolute Get the absolute of the difference
      * @return int
      */
-    public function diffInHours(?DateTimeInterface $other = null, bool $absolute = true): int
+    public function diffInHours(?DateTimeInterface $other = null, bool $absolute = \true): int
     {
-        return (int)(
-            $this->diffInSeconds($other, $absolute)
-            / Chronos::SECONDS_PER_MINUTE
-            / Chronos::MINUTES_PER_HOUR
-        );
+        return (int) ($this->diffInSeconds($other, $absolute) / \Cake\Chronos\Chronos::SECONDS_PER_MINUTE / \Cake\Chronos\Chronos::MINUTES_PER_HOUR);
     }
-
     /**
      * Get the difference in minutes
      *
@@ -2506,11 +2146,10 @@ class Chronos extends DateTimeImmutable implements Stringable
      * @param bool $absolute Get the absolute of the difference
      * @return int
      */
-    public function diffInMinutes(?DateTimeInterface $other = null, bool $absolute = true): int
+    public function diffInMinutes(?DateTimeInterface $other = null, bool $absolute = \true): int
     {
-        return (int)($this->diffInSeconds($other, $absolute) / Chronos::SECONDS_PER_MINUTE);
+        return (int) ($this->diffInSeconds($other, $absolute) / \Cake\Chronos\Chronos::SECONDS_PER_MINUTE);
     }
-
     /**
      * Get the difference in seconds
      *
@@ -2518,14 +2157,12 @@ class Chronos extends DateTimeImmutable implements Stringable
      * @param bool $absolute Get the absolute of the difference
      * @return int
      */
-    public function diffInSeconds(?DateTimeInterface $other = null, bool $absolute = true): int
+    public function diffInSeconds(?DateTimeInterface $other = null, bool $absolute = \true): int
     {
         $other ??= static::now($this->tz);
         $value = $other->getTimestamp() - $this->getTimestamp();
-
         return $absolute ? abs($value) : $value;
     }
-
     /**
      * The number of seconds since midnight.
      *
@@ -2535,7 +2172,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return $this->diffInSeconds($this->startOfDay());
     }
-
     /**
      * The number of seconds until 23:59:59.
      *
@@ -2545,7 +2181,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return $this->diffInSeconds($this->endOfDay());
     }
-
     /**
      * Convenience method for getting the remaining time from a given time.
      *
@@ -2555,10 +2190,8 @@ class Chronos extends DateTimeImmutable implements Stringable
     public static function fromNow(DateTimeInterface $other): DateInterval|bool
     {
         $timeNow = new static();
-
         return $timeNow->diff($other);
     }
-
     /**
      * Get the difference in a human readable format.
      *
@@ -2582,11 +2215,10 @@ class Chronos extends DateTimeImmutable implements Stringable
      * @param bool $absolute removes time difference modifiers ago, after, etc
      * @return string
      */
-    public function diffForHumans(?DateTimeInterface $other = null, bool $absolute = false): string
+    public function diffForHumans(?DateTimeInterface $other = null, bool $absolute = \false): string
     {
         return static::diffFormatter()->diffForHumans($this, $other, $absolute);
     }
-
     /**
      * Converts the time zone to UTC and returns a string in RFC7231 format.
      * This replaced the deprecated and broken ``DATE_RFC7231`` formatting constant.
@@ -2597,7 +2229,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return $this->setTimezone('UTC')->format('D, d M Y H:i:s \G\M\T');
     }
-
     /**
      * Returns a DateTimeImmutable instance
      *
@@ -2609,7 +2240,6 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         return new DateTimeImmutable($this->format('Y-m-d H:i:s.u'), $this->getTimezone());
     }
-
     /**
      * Get a part of the object
      *
@@ -2619,68 +2249,38 @@ class Chronos extends DateTimeImmutable implements Stringable
      */
     public function __get(string $name): string|float|int|bool|DateTimeZone
     {
-        static $formats = [
-            'year' => 'Y',
-            'yearIso' => 'o',
-            'month' => 'n',
-            'day' => 'j',
-            'hour' => 'G',
-            'minute' => 'i',
-            'second' => 's',
-            'micro' => 'u',
-            'microsecond' => 'u',
-            'dayOfWeek' => 'N',
-            'dayOfYear' => 'z',
-            'weekOfYear' => 'W',
-            'daysInMonth' => 't',
-            'timestamp' => 'U',
-        ];
-
-        switch (true) {
+        static $formats = ['year' => 'Y', 'yearIso' => 'o', 'month' => 'n', 'day' => 'j', 'hour' => 'G', 'minute' => 'i', 'second' => 's', 'micro' => 'u', 'microsecond' => 'u', 'dayOfWeek' => 'N', 'dayOfYear' => 'z', 'weekOfYear' => 'W', 'daysInMonth' => 't', 'timestamp' => 'U'];
+        switch (\true) {
             case isset($formats[$name]):
-                return (int)$this->format($formats[$name]);
-
+                return (int) $this->format($formats[$name]);
             case $name === 'dayOfWeekName':
                 return $this->format('l');
-
             case $name === 'weekOfMonth':
-                return (int)ceil($this->day / Chronos::DAYS_PER_WEEK);
-
+                return (int) ceil($this->day / \Cake\Chronos\Chronos::DAYS_PER_WEEK);
             case $name === 'age':
                 return $this->diffInYears();
-
             case $name === 'quarter':
-                return (int)ceil($this->month / 3);
-
+                return (int) ceil($this->month / 3);
             case $name === 'half':
                 return $this->month <= 6 ? 1 : 2;
-
             case $name === 'offset':
                 return $this->getOffset();
-
             case $name === 'offsetHours':
-                return $this->getOffset() / Chronos::SECONDS_PER_MINUTE / Chronos::MINUTES_PER_HOUR;
-
+                return $this->getOffset() / \Cake\Chronos\Chronos::SECONDS_PER_MINUTE / \Cake\Chronos\Chronos::MINUTES_PER_HOUR;
             case $name === 'dst':
                 return $this->format('I') === '1';
-
             case $name === 'local':
                 return $this->offset === $this->setTimezone(date_default_timezone_get())->offset;
-
             case $name === 'utc':
                 return $this->offset === 0;
-
             case $name === 'timezone' || $name === 'tz':
                 return $this->getTimezone();
-
             case $name === 'timezoneName' || $name === 'tzName':
                 return $this->getTimezone()->getName();
-
             default:
                 throw new InvalidArgumentException(sprintf('Unknown getter `%s`', $name));
         }
     }
-
     /**
      * Check if an attribute exists on the object
      *
@@ -2692,12 +2292,10 @@ class Chronos extends DateTimeImmutable implements Stringable
         try {
             $this->__get($name);
         } catch (InvalidArgumentException $e) {
-            return false;
+            return \false;
         }
-
-        return true;
+        return \true;
     }
-
     /**
      * Return properties for debugging.
      *
@@ -2707,13 +2305,7 @@ class Chronos extends DateTimeImmutable implements Stringable
     {
         /** @var \DateTimeZone $timezone */
         $timezone = $this->getTimezone();
-
-        $properties = [
-            'hasFixedNow' => static::hasTestNow(),
-            'time' => $this->format('Y-m-d H:i:s.u'),
-            'timezone' => $timezone->getName(),
-        ];
-
+        $properties = ['hasFixedNow' => static::hasTestNow(), 'time' => $this->format('Y-m-d H:i:s.u'), 'timezone' => $timezone->getName()];
         return $properties;
     }
 }

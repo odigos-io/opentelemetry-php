@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -20,13 +20,12 @@ namespace Cake\TestSuite\Constraint\Response;
  *
  * @internal
  */
-abstract class StatusCodeBase extends ResponseBase
+abstract class StatusCodeBase extends \Cake\TestSuite\Constraint\Response\ResponseBase
 {
     /**
      * @var array<int, int>|int
      */
     protected array|int $code;
-
     /**
      * Check assertion
      *
@@ -38,14 +37,11 @@ abstract class StatusCodeBase extends ResponseBase
         if (!$other) {
             $other = $this->code;
         }
-
         if (is_array($other)) {
             return $this->statusCodeBetween($other[0], $other[1]);
         }
-
         return $this->response->getStatusCode() === $other;
     }
-
     /**
      * Helper for checking status codes
      *
@@ -57,7 +53,6 @@ abstract class StatusCodeBase extends ResponseBase
     {
         return $this->response->getStatusCode() >= $min && $this->response->getStatusCode() <= $max;
     }
-
     /**
      * Overwrites the descriptions so we can remove the automatic "expected" message
      *

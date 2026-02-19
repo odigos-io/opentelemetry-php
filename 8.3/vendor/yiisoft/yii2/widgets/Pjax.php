@@ -1,19 +1,18 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\widgets;
 
-use Yii;
+use Odigos\Yii;
 use yii\base\Widget;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\helpers\Json;
 use yii\web\Response;
-
 /**
  * Pjax is a widget integrating the [pjax](https://github.com/yiisoft/jquery-pjax) jQuery plugin.
  *
@@ -76,11 +75,11 @@ class Pjax extends Widget
     /**
      * @var bool whether to enable push state.
      */
-    public $enablePushState = true;
+    public $enablePushState = \true;
     /**
      * @var bool whether to enable replace state.
      */
-    public $enableReplaceState = false;
+    public $enableReplaceState = \false;
     /**
      * @var int pjax timeout setting (in milliseconds). This timeout is used when making AJAX requests.
      * Use a bigger number if your server is slow. If the server does not respond within the timeout,
@@ -91,7 +90,7 @@ class Pjax extends Widget
      * @var bool|int how to scroll the page when pjax response is received. If false, no page scroll will be made.
      * Use a number if you want to scroll to a particular place.
      */
-    public $scrollTo = false;
+    public $scrollTo = \false;
     /**
      * @var array additional options to be passed to the pjax JS plugin. Please refer to the
      * [pjax project page](https://github.com/yiisoft/jquery-pjax) for available options.
@@ -106,8 +105,6 @@ class Pjax extends Widget
      * {@inheritdoc}
      */
     public static $autoIdPrefix = 'p';
-
-
     /**
      * {@inheritdoc}
      */
@@ -117,10 +114,9 @@ class Pjax extends Widget
         if (!isset($this->options['id'])) {
             $this->options['id'] = $this->getId();
         }
-
         if ($this->requiresPjax()) {
             ob_start();
-            ob_implicit_flush(false);
+            ob_implicit_flush(\false);
             $view = $this->getView();
             $view->clear();
             $view->beginPage();
@@ -132,16 +128,9 @@ class Pjax extends Widget
         } else {
             $options = $this->options;
             $tag = ArrayHelper::remove($options, 'tag', 'div');
-            echo Html::beginTag($tag, array_merge([
-                'data-pjax-container' => '',
-                'data-pjax-push-state' => $this->enablePushState,
-                'data-pjax-replace-state' => $this->enableReplaceState,
-                'data-pjax-timeout' => $this->timeout,
-                'data-pjax-scrollto' => $this->scrollTo,
-            ], $options));
+            echo Html::beginTag($tag, array_merge(['data-pjax-container' => '', 'data-pjax-push-state' => $this->enablePushState, 'data-pjax-replace-state' => $this->enableReplaceState, 'data-pjax-timeout' => $this->timeout, 'data-pjax-scrollto' => $this->scrollTo], $options));
         }
     }
-
     /**
      * {@inheritdoc}
      */
@@ -150,17 +139,12 @@ class Pjax extends Widget
         if (!$this->requiresPjax()) {
             echo Html::endTag(ArrayHelper::remove($this->options, 'tag', 'div'));
             $this->registerClientScript();
-
             return;
         }
-
         $view = $this->getView();
         $view->endBody();
-
-        $view->endPage(true);
-
+        $view->endPage(\true);
         $content = ob_get_clean();
-
         // only need the content enclosed within this widget
         $response = Yii::$app->getResponse();
         $response->clearOutputBuffers();
@@ -168,20 +152,16 @@ class Pjax extends Widget
         $response->format = Response::FORMAT_HTML;
         $response->content = $content;
         $response->headers->setDefault('X-Pjax-Url', Yii::$app->request->url);
-
         Yii::$app->end();
     }
-
     /**
      * @return bool whether the current request requires pjax response from this widget
      */
     protected function requiresPjax()
     {
         $headers = Yii::$app->getRequest()->getHeaders();
-
         return $headers->get('X-Pjax') && explode(' ', $headers->get('X-Pjax-Container'))[0] === '#' . $this->options['id'];
     }
-
     /**
      * Registers the needed JavaScript.
      */
@@ -193,22 +173,21 @@ class Pjax extends Widget
         $this->clientOptions['timeout'] = $this->timeout;
         $this->clientOptions['scrollTo'] = $this->scrollTo;
         if (!isset($this->clientOptions['container'])) {
-            $this->clientOptions['container'] = "#$id";
+            $this->clientOptions['container'] = "#{$id}";
         }
         $options = Json::htmlEncode($this->clientOptions);
         $js = '';
-        if ($this->linkSelector !== false) {
+        if ($this->linkSelector !== \false) {
             $linkSelector = Json::htmlEncode($this->linkSelector !== null ? $this->linkSelector : '#' . $id . ' a');
-            $js .= "jQuery(document).pjax($linkSelector, $options);";
+            $js .= "jQuery(document).pjax({$linkSelector}, {$options});";
         }
-        if ($this->formSelector !== false) {
+        if ($this->formSelector !== \false) {
             $formSelector = Json::htmlEncode($this->formSelector !== null ? $this->formSelector : '#' . $id . ' form[data-pjax]');
             $submitEvent = Json::htmlEncode($this->submitEvent);
-            $js .= "\njQuery(document).off($submitEvent, $formSelector).on($submitEvent, $formSelector, function (event) {jQuery.pjax.submit(event, $options);});";
+            $js .= "\njQuery(document).off({$submitEvent}, {$formSelector}).on({$submitEvent}, {$formSelector}, function (event) {jQuery.pjax.submit(event, {$options});});";
         }
         $view = $this->getView();
-        PjaxAsset::register($view);
-
+        \yii\widgets\PjaxAsset::register($view);
         if ($js !== '') {
             $view->registerJs($js);
         }

@@ -17,18 +17,15 @@ use IteratorAggregate;
 use JsonSerializable;
 use Stringable;
 use Traversable;
-
 class ComponentAttributeBag implements Arrayable, ArrayAccess, IteratorAggregate, JsonSerializable, Htmlable, Stringable
 {
     use Conditionable, InteractsWithData, Macroable;
-
     /**
      * The raw array of attributes.
      *
      * @var array
      */
     protected $attributes = [];
-
     /**
      * Create a new component attribute bag instance.
      *
@@ -38,7 +35,6 @@ class ComponentAttributeBag implements Arrayable, ArrayAccess, IteratorAggregate
     {
         $this->setAttributes($attributes);
     }
-
     /**
      * Get all the attribute values.
      *
@@ -50,10 +46,8 @@ class ComponentAttributeBag implements Arrayable, ArrayAccess, IteratorAggregate
         if (is_null($keys)) {
             return $this->attributes;
         }
-
         return $this->only($keys)->toArray();
     }
-
     /**
      * Get the first attribute's value.
      *
@@ -64,7 +58,6 @@ class ComponentAttributeBag implements Arrayable, ArrayAccess, IteratorAggregate
     {
         return $this->getIterator()->current() ?? value($default);
     }
-
     /**
      * Get a given attribute from the attribute array.
      *
@@ -76,7 +69,6 @@ class ComponentAttributeBag implements Arrayable, ArrayAccess, IteratorAggregate
     {
         return $this->attributes[$key] ?? value($default);
     }
-
     /**
      * Retrieve data from the instance.
      *
@@ -89,10 +81,8 @@ class ComponentAttributeBag implements Arrayable, ArrayAccess, IteratorAggregate
         if (is_null($key)) {
             return $this->attributes;
         }
-
         return $this->get($key, $default);
     }
-
     /**
      * Only include the given attribute from the attribute array.
      *
@@ -105,13 +95,10 @@ class ComponentAttributeBag implements Arrayable, ArrayAccess, IteratorAggregate
             $values = $this->attributes;
         } else {
             $keys = Arr::wrap($keys);
-
             $values = Arr::only($this->attributes, $keys);
         }
-
         return new static($values);
     }
-
     /**
      * Exclude the given attribute from the attribute array.
      *
@@ -124,13 +111,10 @@ class ComponentAttributeBag implements Arrayable, ArrayAccess, IteratorAggregate
             $values = $this->attributes;
         } else {
             $keys = Arr::wrap($keys);
-
             $values = Arr::except($this->attributes, $keys);
         }
-
         return new static($values);
     }
-
     /**
      * Filter the attributes, returning a bag of attributes that pass the filter.
      *
@@ -141,7 +125,6 @@ class ComponentAttributeBag implements Arrayable, ArrayAccess, IteratorAggregate
     {
         return new static((new Collection($this->attributes))->filter($callback)->all());
     }
-
     /**
      * Return a bag of attributes that have keys starting with the given value / pattern.
      *
@@ -154,7 +137,6 @@ class ComponentAttributeBag implements Arrayable, ArrayAccess, IteratorAggregate
             return Str::startsWith($key, $needles);
         });
     }
-
     /**
      * Return a bag of attributes with keys that do not start with the given value / pattern.
      *
@@ -164,10 +146,9 @@ class ComponentAttributeBag implements Arrayable, ArrayAccess, IteratorAggregate
     public function whereDoesntStartWith($needles)
     {
         return $this->filter(function ($value, $key) use ($needles) {
-            return ! Str::startsWith($key, $needles);
+            return !Str::startsWith($key, $needles);
         });
     }
-
     /**
      * Return a bag of attributes that have keys starting with the given value / pattern.
      *
@@ -178,7 +159,6 @@ class ComponentAttributeBag implements Arrayable, ArrayAccess, IteratorAggregate
     {
         return $this->whereStartsWith($needles);
     }
-
     /**
      * Only include the given attribute from the attribute array.
      *
@@ -189,7 +169,6 @@ class ComponentAttributeBag implements Arrayable, ArrayAccess, IteratorAggregate
     {
         return $this->only(static::extractPropNames($keys));
     }
-
     /**
      * Exclude the given attribute from the attribute array.
      *
@@ -200,7 +179,6 @@ class ComponentAttributeBag implements Arrayable, ArrayAccess, IteratorAggregate
     {
         return $this->except(static::extractPropNames($keys));
     }
-
     /**
      * Conditionally merge classes into the attribute bag.
      *
@@ -210,10 +188,8 @@ class ComponentAttributeBag implements Arrayable, ArrayAccess, IteratorAggregate
     public function class($classList)
     {
         $classList = Arr::wrap($classList);
-
         return $this->merge(['class' => Arr::toCssClasses($classList)]);
     }
-
     /**
      * Conditionally merge styles into the attribute bag.
      *
@@ -223,10 +199,8 @@ class ComponentAttributeBag implements Arrayable, ArrayAccess, IteratorAggregate
     public function style($styleList)
     {
         $styleList = Arr::wrap($styleList);
-
         return $this->merge(['style' => Arr::toCssStyles($styleList)]);
     }
-
     /**
      * Merge additional attributes / values into the attribute bag.
      *
@@ -234,37 +208,23 @@ class ComponentAttributeBag implements Arrayable, ArrayAccess, IteratorAggregate
      * @param  bool  $escape
      * @return static
      */
-    public function merge(array $attributeDefaults = [], $escape = true)
+    public function merge(array $attributeDefaults = [], $escape = \true)
     {
         $attributeDefaults = array_map(function ($value) use ($escape) {
-            return $this->shouldEscapeAttributeValue($escape, $value)
-                ? e($value)
-                : $value;
+            return $this->shouldEscapeAttributeValue($escape, $value) ? e($value) : $value;
         }, $attributeDefaults);
-
-        [$appendableAttributes, $nonAppendableAttributes] = (new Collection($this->attributes))
-            ->partition(function ($value, $key) use ($attributeDefaults) {
-                return $key === 'class' || $key === 'style' || (
-                    isset($attributeDefaults[$key]) &&
-                    $attributeDefaults[$key] instanceof AppendableAttributeValue
-                );
-            });
-
+        [$appendableAttributes, $nonAppendableAttributes] = (new Collection($this->attributes))->partition(function ($value, $key) use ($attributeDefaults) {
+            return $key === 'class' || $key === 'style' || isset($attributeDefaults[$key]) && $attributeDefaults[$key] instanceof \Illuminate\View\AppendableAttributeValue;
+        });
         $attributes = $appendableAttributes->mapWithKeys(function ($value, $key) use ($attributeDefaults, $escape) {
-            $defaultsValue = isset($attributeDefaults[$key]) && $attributeDefaults[$key] instanceof AppendableAttributeValue
-                ? $this->resolveAppendableAttributeDefault($attributeDefaults, $key, $escape)
-                : ($attributeDefaults[$key] ?? '');
-
+            $defaultsValue = isset($attributeDefaults[$key]) && $attributeDefaults[$key] instanceof \Illuminate\View\AppendableAttributeValue ? $this->resolveAppendableAttributeDefault($attributeDefaults, $key, $escape) : $attributeDefaults[$key] ?? '';
             if ($key === 'style') {
                 $value = Str::finish($value, ';');
             }
-
             return [$key => implode(' ', array_unique(array_filter([$defaultsValue, $value])))];
         })->merge($nonAppendableAttributes)->all();
-
         return new static(array_merge($attributeDefaults, $attributes));
     }
-
     /**
      * Determine if the specific attribute value should be escaped.
      *
@@ -274,15 +234,11 @@ class ComponentAttributeBag implements Arrayable, ArrayAccess, IteratorAggregate
      */
     protected function shouldEscapeAttributeValue($escape, $value)
     {
-        if (! $escape) {
-            return false;
+        if (!$escape) {
+            return \false;
         }
-
-        return ! is_object($value) &&
-               ! is_null($value) &&
-               ! is_bool($value);
+        return !is_object($value) && !is_null($value) && !is_bool($value);
     }
-
     /**
      * Create a new appendable attribute value.
      *
@@ -291,9 +247,8 @@ class ComponentAttributeBag implements Arrayable, ArrayAccess, IteratorAggregate
      */
     public function prepends($value)
     {
-        return new AppendableAttributeValue($value);
+        return new \Illuminate\View\AppendableAttributeValue($value);
     }
-
     /**
      * Resolve an appendable attribute value default value.
      *
@@ -307,10 +262,8 @@ class ComponentAttributeBag implements Arrayable, ArrayAccess, IteratorAggregate
         if ($this->shouldEscapeAttributeValue($escape, $value = $attributeDefaults[$key]->value)) {
             $value = e($value);
         }
-
         return $value;
     }
-
     /**
      * Determine if the attribute bag is empty.
      *
@@ -320,7 +273,6 @@ class ComponentAttributeBag implements Arrayable, ArrayAccess, IteratorAggregate
     {
         return trim((string) $this) === '';
     }
-
     /**
      * Determine if the attribute bag is not empty.
      *
@@ -328,9 +280,8 @@ class ComponentAttributeBag implements Arrayable, ArrayAccess, IteratorAggregate
      */
     public function isNotEmpty()
     {
-        return ! $this->isEmpty();
+        return !$this->isEmpty();
     }
-
     /**
      * Get all of the raw attributes.
      *
@@ -340,7 +291,6 @@ class ComponentAttributeBag implements Arrayable, ArrayAccess, IteratorAggregate
     {
         return $this->attributes;
     }
-
     /**
      * Set the underlying attributes.
      *
@@ -349,18 +299,13 @@ class ComponentAttributeBag implements Arrayable, ArrayAccess, IteratorAggregate
      */
     public function setAttributes(array $attributes)
     {
-        if (isset($attributes['attributes']) &&
-            $attributes['attributes'] instanceof self) {
+        if (isset($attributes['attributes']) && $attributes['attributes'] instanceof self) {
             $parentBag = $attributes['attributes'];
-
             unset($attributes['attributes']);
-
-            $attributes = $parentBag->merge($attributes, $escape = false)->getAttributes();
+            $attributes = $parentBag->merge($attributes, $escape = \false)->getAttributes();
         }
-
         $this->attributes = $attributes;
     }
-
     /**
      * Extract "prop" names from given keys.
      *
@@ -370,17 +315,13 @@ class ComponentAttributeBag implements Arrayable, ArrayAccess, IteratorAggregate
     public static function extractPropNames(array $keys)
     {
         $props = [];
-
         foreach ($keys as $key => $default) {
             $key = is_numeric($key) ? $default : $key;
-
             $props[] = $key;
             $props[] = Str::kebab($key);
         }
-
         return $props;
     }
-
     /**
      * Get content as a string of HTML.
      *
@@ -390,7 +331,6 @@ class ComponentAttributeBag implements Arrayable, ArrayAccess, IteratorAggregate
     {
         return (string) $this;
     }
-
     /**
      * Merge additional attributes / values into the attribute bag.
      *
@@ -401,7 +341,6 @@ class ComponentAttributeBag implements Arrayable, ArrayAccess, IteratorAggregate
     {
         return new HtmlString((string) $this->merge($attributeDefaults));
     }
-
     /**
      * Determine if the given offset exists.
      *
@@ -412,7 +351,6 @@ class ComponentAttributeBag implements Arrayable, ArrayAccess, IteratorAggregate
     {
         return isset($this->attributes[$offset]);
     }
-
     /**
      * Get the value at the given offset.
      *
@@ -423,7 +361,6 @@ class ComponentAttributeBag implements Arrayable, ArrayAccess, IteratorAggregate
     {
         return $this->get($offset);
     }
-
     /**
      * Set the value at a given offset.
      *
@@ -435,7 +372,6 @@ class ComponentAttributeBag implements Arrayable, ArrayAccess, IteratorAggregate
     {
         $this->attributes[$offset] = $value;
     }
-
     /**
      * Remove the value at the given offset.
      *
@@ -446,7 +382,6 @@ class ComponentAttributeBag implements Arrayable, ArrayAccess, IteratorAggregate
     {
         unset($this->attributes[$offset]);
     }
-
     /**
      * Get an iterator for the items.
      *
@@ -456,7 +391,6 @@ class ComponentAttributeBag implements Arrayable, ArrayAccess, IteratorAggregate
     {
         return new ArrayIterator($this->attributes);
     }
-
     /**
      * Convert the object into a JSON serializable form.
      *
@@ -466,7 +400,6 @@ class ComponentAttributeBag implements Arrayable, ArrayAccess, IteratorAggregate
     {
         return $this->attributes;
     }
-
     /**
      * Get all the attribute values.
      *
@@ -476,7 +409,6 @@ class ComponentAttributeBag implements Arrayable, ArrayAccess, IteratorAggregate
     {
         return $this->all();
     }
-
     /**
      * Implode the attributes into a single HTML ready string.
      *
@@ -485,19 +417,15 @@ class ComponentAttributeBag implements Arrayable, ArrayAccess, IteratorAggregate
     public function __toString()
     {
         $string = '';
-
         foreach ($this->attributes as $key => $value) {
-            if ($value === false || is_null($value)) {
+            if ($value === \false || is_null($value)) {
                 continue;
             }
-
-            if ($value === true) {
+            if ($value === \true) {
                 $value = $key === 'x-data' || str_starts_with($key, 'wire:') ? '' : $key;
             }
-
-            $string .= ' '.$key.'="'.str_replace('"', '\\"', trim($value)).'"';
+            $string .= ' ' . $key . '="' . str_replace('"', '\"', trim($value)) . '"';
         }
-
         return trim($string);
     }
 }

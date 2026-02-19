@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -18,7 +18,6 @@ namespace Cake\View;
 
 use Cake\Core\Configure;
 use function Cake\Core\h;
-
 /**
  * A view class that is used for JSON responses.
  *
@@ -56,7 +55,7 @@ use function Cake\Core\h;
  * string to specify custom query string parameter name which will contain the
  * callback function name.
  */
-class JsonView extends SerializedView
+class JsonView extends \Cake\View\SerializedView
 {
     /**
      * JSON layouts are located in the JSON subdirectory of `Layouts/`
@@ -64,14 +63,12 @@ class JsonView extends SerializedView
      * @var string
      */
     protected string $layoutPath = 'json';
-
     /**
      * JSON views are located in the 'json' subdirectory for controllers' views.
      *
      * @var string
      */
     protected string $subDir = 'json';
-
     /**
      * Default config options.
      *
@@ -89,12 +86,7 @@ class JsonView extends SerializedView
      *
      * @var array<string, mixed>
      */
-    protected array $_defaultConfig = [
-        'serialize' => null,
-        'jsonOptions' => null,
-        'jsonp' => null,
-    ];
-
+    protected array $_defaultConfig = ['serialize' => null, 'jsonOptions' => null, 'jsonp' => null];
     /**
      * Mime-type this view class renders as.
      *
@@ -104,7 +96,6 @@ class JsonView extends SerializedView
     {
         return 'application/json';
     }
-
     /**
      * Render a JSON view.
      *
@@ -115,10 +106,9 @@ class JsonView extends SerializedView
     public function render(?string $template = null, string|false|null $layout = null): string
     {
         $return = parent::render($template, $layout);
-
         $jsonp = $this->getConfig('jsonp');
         if ($jsonp) {
-            if ($jsonp === true) {
+            if ($jsonp === \true) {
                 $jsonp = 'callback';
             }
             if ($this->request->getQuery($jsonp)) {
@@ -126,31 +116,24 @@ class JsonView extends SerializedView
                 $this->response = $this->response->withType('js');
             }
         }
-
         return $return;
     }
-
     /**
      * @inheritDoc
      */
     protected function _serialize(array|string $serialize): string
     {
         $data = $this->_dataToSerialize($serialize);
-
-        $jsonOptions = $this->getConfig('jsonOptions')
-            ?? JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT | JSON_PARTIAL_OUTPUT_ON_ERROR;
-        if ($jsonOptions === false) {
+        $jsonOptions = $this->getConfig('jsonOptions') ?? \JSON_HEX_TAG | \JSON_HEX_APOS | \JSON_HEX_AMP | \JSON_HEX_QUOT | \JSON_PARTIAL_OUTPUT_ON_ERROR;
+        if ($jsonOptions === \false) {
             $jsonOptions = 0;
         }
-        $jsonOptions |= JSON_THROW_ON_ERROR;
-
+        $jsonOptions |= \JSON_THROW_ON_ERROR;
         if (Configure::read('debug')) {
-            $jsonOptions |= JSON_PRETTY_PRINT;
+            $jsonOptions |= \JSON_PRETTY_PRINT;
         }
-
-        return (string)json_encode($data, $jsonOptions);
+        return (string) json_encode($data, $jsonOptions);
     }
-
     /**
      * Returns data to be serialized.
      *
@@ -169,10 +152,8 @@ class JsonView extends SerializedView
                     $data[$alias] = $this->viewVars[$key];
                 }
             }
-
             return $data ?: null;
         }
-
         return $this->viewVars[$serialize] ?? null;
     }
 }

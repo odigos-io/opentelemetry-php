@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright 2023-present MongoDB, Inc.
  *
@@ -14,7 +15,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 namespace MongoDB;
 
 use MongoDB\Driver\Monitoring\LogSubscriber;
@@ -22,11 +22,9 @@ use MongoDB\Exception\UnexpectedValueException;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use SplObjectStorage;
-
 use function MongoDB\Driver\Monitoring\addSubscriber;
 use function MongoDB\Driver\Monitoring\removeSubscriber;
 use function sprintf;
-
 /**
  * Integrates libmongoc/PHPC logging with one or more PSR-3 loggers.
  *
@@ -46,12 +44,9 @@ final class PsrLogAdapter implements LogSubscriber
     public const INFO = 6;
     public const DEBUG = 7;
     public const TRACE = 8;
-
     private static ?self $instance = null;
-
     /** @psalm-var SplObjectStorage<LoggerInterface, null> */
     private SplObjectStorage $loggers;
-
     private const SPEC_TO_PSR = [
         self::EMERGENCY => LogLevel::EMERGENCY,
         self::ALERT => LogLevel::ALERT,
@@ -64,7 +59,6 @@ final class PsrLogAdapter implements LogSubscriber
         // PSR does not define a "trace" level, so map it to "debug"
         self::TRACE => LogLevel::DEBUG,
     ];
-
     private const MONGOC_TO_PSR = [
         LogSubscriber::LEVEL_ERROR => LogLevel::ERROR,
         /* libmongoc considers "critical" less severe than "error" so map it to
@@ -75,16 +69,12 @@ final class PsrLogAdapter implements LogSubscriber
         LogSubscriber::LEVEL_INFO => LogLevel::INFO,
         LogSubscriber::LEVEL_DEBUG => LogLevel::DEBUG,
     ];
-
     public static function addLogger(LoggerInterface $logger): void
     {
         $instance = self::getInstance();
-
         $instance->loggers->attach($logger);
-
         addSubscriber($instance);
     }
-
     /**
      * Forwards a log message from libmongoc/PHPC to all registered PSR loggers.
      *
@@ -92,36 +82,24 @@ final class PsrLogAdapter implements LogSubscriber
      */
     public function log(int $level, string $domain, string $message): void
     {
-        if (! isset(self::MONGOC_TO_PSR[$level])) {
-            throw new UnexpectedValueException(sprintf(
-                'Expected level to be >= %d and <= %d, %d given for domain "%s" and message: %s',
-                LogSubscriber::LEVEL_ERROR,
-                LogSubscriber::LEVEL_DEBUG,
-                $level,
-                $domain,
-                $message,
-            ));
+        if (!isset(self::MONGOC_TO_PSR[$level])) {
+            throw new UnexpectedValueException(sprintf('Expected level to be >= %d and <= %d, %d given for domain "%s" and message: %s', LogSubscriber::LEVEL_ERROR, LogSubscriber::LEVEL_DEBUG, $level, $domain, $message));
         }
-
         $instance = self::getInstance();
         $psrLevel = self::MONGOC_TO_PSR[$level];
         $context = ['domain' => $domain];
-
         foreach ($instance->loggers as $logger) {
             $logger->log($psrLevel, $message, $context);
         }
     }
-
     public static function removeLogger(LoggerInterface $logger): void
     {
         $instance = self::getInstance();
         $instance->loggers->detach($logger);
-
         if ($instance->loggers->count() === 0) {
             removeSubscriber($instance);
         }
     }
-
     /**
      * Writes a log message to all registered PSR loggers.
      *
@@ -129,31 +107,20 @@ final class PsrLogAdapter implements LogSubscriber
      */
     public static function writeLog(int $specLevel, string $domain, string $message): void
     {
-        if (! isset(self::SPEC_TO_PSR[$specLevel])) {
-            throw new UnexpectedValueException(sprintf(
-                'Expected level to be >= %d and <= %d, %d given for domain "%s" and message: %s',
-                self::EMERGENCY,
-                self::TRACE,
-                $specLevel,
-                $domain,
-                $message,
-            ));
+        if (!isset(self::SPEC_TO_PSR[$specLevel])) {
+            throw new UnexpectedValueException(sprintf('Expected level to be >= %d and <= %d, %d given for domain "%s" and message: %s', self::EMERGENCY, self::TRACE, $specLevel, $domain, $message));
         }
-
         $instance = self::getInstance();
         $psrLevel = self::SPEC_TO_PSR[$specLevel];
         $context = ['domain' => $domain];
-
         foreach ($instance->loggers as $logger) {
             $logger->log($psrLevel, $message, $context);
         }
     }
-
     private function __construct()
     {
         $this->loggers = new SplObjectStorage();
     }
-
     private static function getInstance(): self
     {
         return self::$instance ??= new self();

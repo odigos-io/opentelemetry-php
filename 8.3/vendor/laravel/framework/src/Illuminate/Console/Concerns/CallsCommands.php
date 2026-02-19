@@ -6,7 +6,6 @@ use Illuminate\Support\Collection;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Output\OutputInterface;
-
 trait CallsCommands
 {
     /**
@@ -16,7 +15,6 @@ trait CallsCommands
      * @return \Symfony\Component\Console\Command\Command
      */
     abstract protected function resolveCommand($command);
-
     /**
      * Call another console command.
      *
@@ -28,7 +26,6 @@ trait CallsCommands
     {
         return $this->runCommand($command, $arguments, $this->output);
     }
-
     /**
      * Call another console command without output.
      *
@@ -38,9 +35,8 @@ trait CallsCommands
      */
     public function callSilent($command, array $arguments = [])
     {
-        return $this->runCommand($command, $arguments, new NullOutput);
+        return $this->runCommand($command, $arguments, new NullOutput());
     }
-
     /**
      * Call another console command without output.
      *
@@ -52,7 +48,6 @@ trait CallsCommands
     {
         return $this->callSilent($command, $arguments);
     }
-
     /**
      * Run the given console command.
      *
@@ -64,16 +59,10 @@ trait CallsCommands
     protected function runCommand($command, array $arguments, OutputInterface $output)
     {
         $arguments['command'] = $command;
-
-        $result = $this->resolveCommand($command)->run(
-            $this->createInputFromArguments($arguments), $output
-        );
-
+        $result = $this->resolveCommand($command)->run($this->createInputFromArguments($arguments), $output);
         $this->restorePrompts();
-
         return $result;
     }
-
     /**
      * Create an input instance from the given arguments.
      *
@@ -84,11 +73,10 @@ trait CallsCommands
     {
         return tap(new ArrayInput(array_merge($this->context(), $arguments)), function ($input) {
             if ($input->getParameterOption('--no-interaction')) {
-                $input->setInteractive(false);
+                $input->setInteractive(\false);
             }
         });
     }
-
     /**
      * Get all of the context passed to the command.
      *
@@ -96,16 +84,6 @@ trait CallsCommands
      */
     protected function context()
     {
-        return (new Collection($this->option()))
-            ->only([
-                'ansi',
-                'no-ansi',
-                'no-interaction',
-                'quiet',
-                'verbose',
-            ])
-            ->filter()
-            ->mapWithKeys(fn ($value, $key) => ["--{$key}" => $value])
-            ->all();
+        return (new Collection($this->option()))->only(['ansi', 'no-ansi', 'no-interaction', 'quiet', 'verbose'])->filter()->mapWithKeys(fn($value, $key) => ["--{$key}" => $value])->all();
     }
 }

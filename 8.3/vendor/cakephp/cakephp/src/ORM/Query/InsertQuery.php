@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -19,14 +19,12 @@ namespace Cake\ORM\Query;
 use Cake\Database\Query\InsertQuery as DbInsertQuery;
 use Cake\Database\ValueBinder;
 use Cake\ORM\Table;
-
 /**
  * @inheritDoc
  */
 class InsertQuery extends DbInsertQuery
 {
-    use CommonQueryTrait;
-
+    use \Cake\ORM\Query\CommonQueryTrait;
     /**
      * Constructor
      *
@@ -35,11 +33,9 @@ class InsertQuery extends DbInsertQuery
     public function __construct(Table $table)
     {
         parent::__construct($table->getConnection());
-
         $this->setRepository($table);
         $this->addDefaultTypes($table);
     }
-
     /**
      * @inheritDoc
      */
@@ -49,7 +45,6 @@ class InsertQuery extends DbInsertQuery
             $repository = $this->getRepository();
             $this->into($repository->getTable());
         }
-
         return parent::sql($binder);
     }
 }

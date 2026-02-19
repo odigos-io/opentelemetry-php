@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -19,50 +19,45 @@ namespace Cake\Error\Debug;
 /**
  * Dump node for Array Items.
  */
-class ArrayItemNode implements NodeInterface
+class ArrayItemNode implements \Cake\Error\Debug\NodeInterface
 {
     /**
      * @var \Cake\Error\Debug\NodeInterface
      */
-    private NodeInterface $key;
-
+    private \Cake\Error\Debug\NodeInterface $key;
     /**
      * @var \Cake\Error\Debug\NodeInterface
      */
-    private NodeInterface $value;
-
+    private \Cake\Error\Debug\NodeInterface $value;
     /**
      * Constructor
      *
      * @param \Cake\Error\Debug\NodeInterface $key The node for the item key
      * @param \Cake\Error\Debug\NodeInterface $value The node for the array value
      */
-    public function __construct(NodeInterface $key, NodeInterface $value)
+    public function __construct(\Cake\Error\Debug\NodeInterface $key, \Cake\Error\Debug\NodeInterface $value)
     {
         $this->key = $key;
         $this->value = $value;
     }
-
     /**
      * Get the value
      *
      * @return \Cake\Error\Debug\NodeInterface
      */
-    public function getValue(): NodeInterface
+    public function getValue(): \Cake\Error\Debug\NodeInterface
     {
         return $this->value;
     }
-
     /**
      * Get the key
      *
      * @return \Cake\Error\Debug\NodeInterface
      */
-    public function getKey(): NodeInterface
+    public function getKey(): \Cake\Error\Debug\NodeInterface
     {
         return $this->key;
     }
-
     /**
      * @inheritDoc
      */

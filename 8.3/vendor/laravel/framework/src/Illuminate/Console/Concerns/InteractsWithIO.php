@@ -12,7 +12,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Question\Question;
-
 trait InteractsWithIO
 {
     /**
@@ -21,41 +20,30 @@ trait InteractsWithIO
      * @var \Illuminate\Console\View\Components\Factory
      */
     protected $components;
-
     /**
      * The input interface implementation.
      *
      * @var \Symfony\Component\Console\Input\InputInterface
      */
     protected $input;
-
     /**
      * The output interface implementation.
      *
      * @var \Illuminate\Console\OutputStyle
      */
     protected $output;
-
     /**
      * The default verbosity of output commands.
      *
      * @var int
      */
     protected $verbosity = OutputInterface::VERBOSITY_NORMAL;
-
     /**
      * The mapping between human-readable verbosity levels and Symfony's OutputInterface.
      *
      * @var array
      */
-    protected $verbosityMap = [
-        'v' => OutputInterface::VERBOSITY_VERBOSE,
-        'vv' => OutputInterface::VERBOSITY_VERY_VERBOSE,
-        'vvv' => OutputInterface::VERBOSITY_DEBUG,
-        'quiet' => OutputInterface::VERBOSITY_QUIET,
-        'normal' => OutputInterface::VERBOSITY_NORMAL,
-    ];
-
+    protected $verbosityMap = ['v' => OutputInterface::VERBOSITY_VERBOSE, 'vv' => OutputInterface::VERBOSITY_VERY_VERBOSE, 'vvv' => OutputInterface::VERBOSITY_DEBUG, 'quiet' => OutputInterface::VERBOSITY_QUIET, 'normal' => OutputInterface::VERBOSITY_NORMAL];
     /**
      * Determine if the given argument is present.
      *
@@ -66,7 +54,6 @@ trait InteractsWithIO
     {
         return $this->input->hasArgument($name);
     }
-
     /**
      * Get the value of a command argument.
      *
@@ -78,10 +65,8 @@ trait InteractsWithIO
         if (is_null($key)) {
             return $this->input->getArguments();
         }
-
         return $this->input->getArgument($key);
     }
-
     /**
      * Get all of the arguments passed to the command.
      *
@@ -91,7 +76,6 @@ trait InteractsWithIO
     {
         return $this->argument();
     }
-
     /**
      * Determine whether the option is defined in the command signature.
      *
@@ -102,7 +86,6 @@ trait InteractsWithIO
     {
         return $this->input->hasOption($name);
     }
-
     /**
      * Get the value of a command option.
      *
@@ -114,10 +97,8 @@ trait InteractsWithIO
         if (is_null($key)) {
             return $this->input->getOptions();
         }
-
         return $this->input->getOption($key);
     }
-
     /**
      * Get all of the options passed to the command.
      *
@@ -127,7 +108,6 @@ trait InteractsWithIO
     {
         return $this->option();
     }
-
     /**
      * Confirm a question with the user.
      *
@@ -135,11 +115,10 @@ trait InteractsWithIO
      * @param  bool  $default
      * @return bool
      */
-    public function confirm($question, $default = false)
+    public function confirm($question, $default = \false)
     {
         return $this->output->confirm($question, $default);
     }
-
     /**
      * Prompt the user for input.
      *
@@ -151,7 +130,6 @@ trait InteractsWithIO
     {
         return $this->output->ask($question, $default);
     }
-
     /**
      * Prompt the user for input with auto completion.
      *
@@ -164,7 +142,6 @@ trait InteractsWithIO
     {
         return $this->askWithCompletion($question, $choices, $default);
     }
-
     /**
      * Prompt the user for input with auto completion.
      *
@@ -176,14 +153,9 @@ trait InteractsWithIO
     public function askWithCompletion($question, $choices, $default = null)
     {
         $question = new Question($question, $default);
-
-        is_callable($choices)
-            ? $question->setAutocompleterCallback($choices)
-            : $question->setAutocompleterValues($choices);
-
+        is_callable($choices) ? $question->setAutocompleterCallback($choices) : $question->setAutocompleterValues($choices);
         return $this->output->askQuestion($question);
     }
-
     /**
      * Prompt the user for input but hide the answer from the console.
      *
@@ -191,15 +163,12 @@ trait InteractsWithIO
      * @param  bool  $fallback
      * @return mixed
      */
-    public function secret($question, $fallback = true)
+    public function secret($question, $fallback = \true)
     {
         $question = new Question($question);
-
-        $question->setHidden(true)->setHiddenFallback($fallback);
-
+        $question->setHidden(\true)->setHiddenFallback($fallback);
         return $this->output->askQuestion($question);
     }
-
     /**
      * Give the user a single choice from an array of answers.
      *
@@ -210,15 +179,12 @@ trait InteractsWithIO
      * @param  bool  $multiple
      * @return string|array
      */
-    public function choice($question, array $choices, $default = null, $attempts = null, $multiple = false)
+    public function choice($question, array $choices, $default = null, $attempts = null, $multiple = \false)
     {
         $question = new ChoiceQuestion($question, $choices, $default);
-
         $question->setMaxAttempts($attempts)->setMultiselect($multiple);
-
         return $this->output->askQuestion($question);
     }
-
     /**
      * Format input to textual table.
      *
@@ -231,20 +197,15 @@ trait InteractsWithIO
     public function table($headers, $rows, $tableStyle = 'default', array $columnStyles = [])
     {
         $table = new Table($this->output);
-
         if ($rows instanceof Arrayable) {
             $rows = $rows->toArray();
         }
-
         $table->setHeaders((array) $headers)->setRows($rows)->setStyle($tableStyle);
-
         foreach ($columnStyles as $columnIndex => $columnStyle) {
             $table->setColumnStyle($columnIndex, $columnStyle);
         }
-
         $table->render();
     }
-
     /**
      * Execute a given callback while advancing a progress bar.
      *
@@ -254,29 +215,21 @@ trait InteractsWithIO
      */
     public function withProgressBar($totalSteps, Closure $callback)
     {
-        $bar = $this->output->createProgressBar(
-            is_iterable($totalSteps) ? count($totalSteps) : $totalSteps
-        );
-
+        $bar = $this->output->createProgressBar(is_iterable($totalSteps) ? count($totalSteps) : $totalSteps);
         $bar->start();
-
         if (is_iterable($totalSteps)) {
             foreach ($totalSteps as $key => $value) {
                 $callback($value, $bar, $key);
-
                 $bar->advance();
             }
         } else {
             $callback($bar);
         }
-
         $bar->finish();
-
         if (is_iterable($totalSteps)) {
             return $totalSteps;
         }
     }
-
     /**
      * Write a string as information output.
      *
@@ -288,7 +241,6 @@ trait InteractsWithIO
     {
         $this->line($string, 'info', $verbosity);
     }
-
     /**
      * Write a string as standard output.
      *
@@ -299,11 +251,9 @@ trait InteractsWithIO
      */
     public function line($string, $style = null, $verbosity = null)
     {
-        $styled = $style ? "<$style>$string</$style>" : $string;
-
+        $styled = $style ? "<{$style}>{$string}</{$style}>" : $string;
         $this->output->writeln($styled, $this->parseVerbosity($verbosity));
     }
-
     /**
      * Write a string as comment output.
      *
@@ -315,7 +265,6 @@ trait InteractsWithIO
     {
         $this->line($string, 'comment', $verbosity);
     }
-
     /**
      * Write a string as question output.
      *
@@ -327,7 +276,6 @@ trait InteractsWithIO
     {
         $this->line($string, 'question', $verbosity);
     }
-
     /**
      * Write a string as error output.
      *
@@ -339,7 +287,6 @@ trait InteractsWithIO
     {
         $this->line($string, 'error', $verbosity);
     }
-
     /**
      * Write a string as warning output.
      *
@@ -349,15 +296,12 @@ trait InteractsWithIO
      */
     public function warn($string, $verbosity = null)
     {
-        if (! $this->output->getFormatter()->hasStyle('warning')) {
+        if (!$this->output->getFormatter()->hasStyle('warning')) {
             $style = new OutputFormatterStyle('yellow');
-
             $this->output->getFormatter()->setStyle('warning', $style);
         }
-
         $this->line($string, 'warning', $verbosity);
     }
-
     /**
      * Write a string in an alert box.
      *
@@ -368,14 +312,11 @@ trait InteractsWithIO
     public function alert($string, $verbosity = null)
     {
         $length = Str::length(strip_tags($string)) + 12;
-
         $this->comment(str_repeat('*', $length), $verbosity);
-        $this->comment('*     '.$string.'     *', $verbosity);
+        $this->comment('*     ' . $string . '     *', $verbosity);
         $this->comment(str_repeat('*', $length), $verbosity);
-
         $this->comment('', $verbosity);
     }
-
     /**
      * Write a blank line.
      *
@@ -385,10 +326,8 @@ trait InteractsWithIO
     public function newLine($count = 1)
     {
         $this->output->newLine($count);
-
         return $this;
     }
-
     /**
      * Set the input interface implementation.
      *
@@ -399,7 +338,6 @@ trait InteractsWithIO
     {
         $this->input = $input;
     }
-
     /**
      * Set the output interface implementation.
      *
@@ -410,7 +348,6 @@ trait InteractsWithIO
     {
         $this->output = $output;
     }
-
     /**
      * Set the verbosity level.
      *
@@ -421,7 +358,6 @@ trait InteractsWithIO
     {
         $this->verbosity = $this->parseVerbosity($level);
     }
-
     /**
      * Get the verbosity level in terms of Symfony's OutputInterface level.
      *
@@ -431,16 +367,13 @@ trait InteractsWithIO
     protected function parseVerbosity($level = null)
     {
         $level ??= '';
-
         if (isset($this->verbosityMap[$level])) {
             $level = $this->verbosityMap[$level];
-        } elseif (! is_int($level)) {
+        } elseif (!is_int($level)) {
             $level = $this->verbosity;
         }
-
         return $level;
     }
-
     /**
      * Get the output implementation.
      *
@@ -450,7 +383,6 @@ trait InteractsWithIO
     {
         return $this->output;
     }
-
     /**
      * Get the output component factory implementation.
      *

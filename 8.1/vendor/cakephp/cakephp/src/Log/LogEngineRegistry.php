@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -20,7 +20,6 @@ use Cake\Core\App;
 use Cake\Core\Exception\CakeException;
 use Cake\Core\ObjectRegistry;
 use Psr\Log\LoggerInterface;
-
 /**
  * Registry of loaded log engines
  *
@@ -41,7 +40,6 @@ class LogEngineRegistry extends ObjectRegistry
         /** @var class-string<\Psr\Log\LoggerInterface>|null */
         return App::className($class, 'Log/Engine', 'Log');
     }
-
     /**
      * Throws an exception when a logger is missing.
      *
@@ -56,7 +54,6 @@ class LogEngineRegistry extends ObjectRegistry
     {
         throw new CakeException(sprintf('Could not load class `%s`.', $class));
     }
-
     /**
      * Create the logger instance.
      *
@@ -73,14 +70,11 @@ class LogEngineRegistry extends ObjectRegistry
             /** @var class-string<\Psr\Log\LoggerInterface> $class */
             return new $class($config);
         }
-
         if (is_callable($class)) {
             return $class($alias);
         }
-
         return $class;
     }
-
     /**
      * Remove a single logger from the registry.
      *
@@ -90,7 +84,6 @@ class LogEngineRegistry extends ObjectRegistry
     public function unload(string $name)
     {
         unset($this->_loaded[$name]);
-
         return $this;
     }
 }

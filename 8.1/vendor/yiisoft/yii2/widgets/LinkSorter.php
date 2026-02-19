@@ -1,17 +1,16 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\widgets;
 
 use yii\base\InvalidConfigException;
 use yii\base\Widget;
 use yii\data\Sort;
 use yii\helpers\Html;
-
 /**
  * LinkSorter renders a list of sort links for the given sort definition.
  *
@@ -45,20 +44,16 @@ class LinkSorter extends Widget
      * @since 2.0.6
      */
     public $linkOptions = [];
-
-
     /**
      * Initializes the sorter.
      */
     public function init()
     {
         parent::init();
-
         if ($this->sort === null) {
             throw new InvalidConfigException('The "sort" property must be set.');
         }
     }
-
     /**
      * Executes the widget.
      * This method renders the sort links.
@@ -67,7 +62,6 @@ class LinkSorter extends Widget
     {
         echo $this->renderSortLinks();
     }
-
     /**
      * Renders the sort links.
      * @return string the rendering result
@@ -79,7 +73,6 @@ class LinkSorter extends Widget
         foreach ($attributes as $name) {
             $links[] = $this->sort->link($name, $this->linkOptions);
         }
-
-        return Html::ul($links, array_merge($this->options, ['encode' => false]));
+        return Html::ul($links, array_merge($this->options, ['encode' => \false]));
     }
 }

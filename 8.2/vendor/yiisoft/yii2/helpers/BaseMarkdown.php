@@ -1,15 +1,14 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\helpers;
 
-use Yii;
+use Odigos\Yii;
 use yii\base\InvalidArgumentException;
-
 /**
  * BaseMarkdown provides concrete implementation for [[Markdown]].
  *
@@ -23,33 +22,13 @@ class BaseMarkdown
     /**
      * @var array a map of markdown flavor names to corresponding parser class configurations.
      */
-    public static $flavors = [
-        'original' => [
-            'class' => 'cebe\markdown\Markdown',
-            'html5' => true,
-        ],
-        'gfm' => [
-            'class' => 'cebe\markdown\GithubMarkdown',
-            'html5' => true,
-        ],
-        'gfm-comment' => [
-            'class' => 'cebe\markdown\GithubMarkdown',
-            'html5' => true,
-            'enableNewlines' => true,
-        ],
-        'extra' => [
-            'class' => 'cebe\markdown\MarkdownExtra',
-            'html5' => true,
-        ],
-    ];
+    public static $flavors = ['original' => ['class' => 'Odigos\cebe\markdown\Markdown', 'html5' => \true], 'gfm' => ['class' => 'Odigos\cebe\markdown\GithubMarkdown', 'html5' => \true], 'gfm-comment' => ['class' => 'Odigos\cebe\markdown\GithubMarkdown', 'html5' => \true, 'enableNewlines' => \true], 'extra' => ['class' => 'Odigos\cebe\markdown\MarkdownExtra', 'html5' => \true]];
     /**
      * @var string the markdown flavor to use when none is specified explicitly.
      * Defaults to `original`.
      * @see flavors
      */
     public static $defaultFlavor = 'original';
-
-
     /**
      * Converts markdown into HTML.
      *
@@ -62,10 +41,8 @@ class BaseMarkdown
     public static function process($markdown, $flavor = null)
     {
         $parser = static::getParser($flavor);
-
         return $parser->parse($markdown);
     }
-
     /**
      * Converts markdown into HTML but only parses inline elements.
      *
@@ -80,10 +57,8 @@ class BaseMarkdown
     public static function processParagraph($markdown, $flavor = null)
     {
         $parser = static::getParser($flavor);
-
         return $parser->parseParagraph($markdown);
     }
-
     /**
      * @param string|null $flavor the markdown flavor to use. See [[$flavors]] for available values.
      * Defaults to [[$defaultFlavor]], if not set.
@@ -96,11 +71,10 @@ class BaseMarkdown
             $flavor = static::$defaultFlavor;
         }
         if (!isset(static::$flavors[$flavor])) {
-            throw new InvalidArgumentException("Markdown flavor '$flavor' is not defined.'");
+            throw new InvalidArgumentException("Markdown flavor '{$flavor}' is not defined.'");
         } elseif (!is_object($config = static::$flavors[$flavor])) {
             static::$flavors[$flavor] = Yii::createObject($config);
         }
-
         return static::$flavors[$flavor];
     }
 }

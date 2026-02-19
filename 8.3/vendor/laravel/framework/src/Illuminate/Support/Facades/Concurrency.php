@@ -3,7 +3,6 @@
 namespace Illuminate\Support\Facades;
 
 use Illuminate\Concurrency\ConcurrencyManager;
-
 /**
  * @method static mixed driver(string|null $name = null)
  * @method static \Illuminate\Concurrency\ProcessDriver createProcessDriver(array $config)
@@ -22,7 +21,7 @@ use Illuminate\Concurrency\ConcurrencyManager;
  *
  * @see \Illuminate\Concurrency\ConcurrencyManager
  */
-class Concurrency extends Facade
+class Concurrency extends \Illuminate\Support\Facades\Facade
 {
     /**
      * Get the registered name of the component.

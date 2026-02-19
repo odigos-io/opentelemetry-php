@@ -1,14 +1,13 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\mutex;
 
 use Closure;
-
 /**
  * Trait RetryAcquireTrait.
  *
@@ -24,18 +23,15 @@ trait RetryAcquireTrait
      * @since 2.0.16
      */
     public $retryDelay = 50;
-
-
     private function retryAcquire($timeout, Closure $callback)
     {
-        $start = microtime(true);
+        $start = microtime(\true);
         do {
             if ($callback()) {
-                return true;
+                return \true;
             }
             usleep($this->retryDelay * 1000);
-        } while (microtime(true) - $start < $timeout);
-
-        return false;
+        } while (microtime(\true) - $start < $timeout);
+        return \false;
     }
 }

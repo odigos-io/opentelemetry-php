@@ -1,10 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\SemConv;
 
-enum Version: string
+enum Version : string
 {
     case VERSION_1_38_0 = '1.38.0';
     case VERSION_1_37_0 = '1.37.0';
@@ -20,7 +19,6 @@ enum Version: string
     case VERSION_1_23_0 = '1.23.0';
     case VERSION_1_22_0 = '1.22.0';
     case VERSION_1_21_0 = '1.21.0';
-
     public function url(): string
     {
         return 'https://opentelemetry.io/schemas/' . $this->value;

@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -27,14 +27,13 @@ use Cake\Http\Exception\RedirectException;
 use Cake\Http\Response;
 use Cake\Routing\Router;
 use Cake\Routing\RoutingApplicationInterface;
-use Laminas\Diactoros\Response\RedirectResponse;
+use Odigos\Laminas\Diactoros\Response\RedirectResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Throwable;
 use function Cake\Core\triggerWarning;
-
 /**
  * Error handling middleware.
  *
@@ -44,12 +43,10 @@ use function Cake\Core\triggerWarning;
 class ErrorHandlerMiddleware implements MiddlewareInterface
 {
     use InstanceConfigTrait;
-
     /**
      * @use \Cake\Event\EventDispatcherTrait<\Cake\Error\ExceptionTrap>
      */
     use EventDispatcherTrait;
-
     /**
      * Default configuration values.
      *
@@ -62,22 +59,17 @@ class ErrorHandlerMiddleware implements MiddlewareInterface
      * @var array<string, mixed>
      * @see \Cake\Error\ExceptionTrap
      */
-    protected array $_defaultConfig = [
-        'exceptionRenderer' => WebExceptionRenderer::class,
-    ];
-
+    protected array $_defaultConfig = ['exceptionRenderer' => WebExceptionRenderer::class];
     /**
      * ExceptionTrap instance
      *
      * @var \Cake\Error\ExceptionTrap|null
      */
     protected ?ExceptionTrap $exceptionTrap = null;
-
     /**
      * @var \Cake\Routing\RoutingApplicationInterface|null
      */
     protected ?RoutingApplicationInterface $app = null;
-
     /**
      * Constructor
      *
@@ -88,20 +80,15 @@ class ErrorHandlerMiddleware implements MiddlewareInterface
     public function __construct(ExceptionTrap|array $config = [], ?RoutingApplicationInterface $app = null)
     {
         $this->app = $app;
-
         if (Configure::read('debug')) {
             ini_set('zend.exception_ignore_args', '0');
         }
-
         if (is_array($config)) {
             $this->setConfig($config);
-
             return;
         }
-
         $this->exceptionTrap = $config;
     }
-
     /**
      * Wrap the remaining middleware with error handling.
      *
@@ -119,7 +106,6 @@ class ErrorHandlerMiddleware implements MiddlewareInterface
             return $this->handleException($exception, Router::getRequest() ?? $request);
         }
     }
-
     /**
      * Handle an exception and generate an error response
      *
@@ -130,35 +116,24 @@ class ErrorHandlerMiddleware implements MiddlewareInterface
     public function handleException(Throwable $exception, ServerRequestInterface $request): ResponseInterface
     {
         $this->loadRoutes();
-
         $trap = $this->getExceptionTrap();
         $trap->logException($exception, $request);
-
-        $event = $this->dispatchEvent(
-            'Exception.beforeRender',
-            ['exception' => $exception, 'request' => $request],
-            $trap,
-        );
-
+        $event = $this->dispatchEvent('Exception.beforeRender', ['exception' => $exception, 'request' => $request], $trap);
         $response = $event->getResult();
         if ($response === null) {
             $renderer = $trap->renderer($event->getData('exception'), $request);
         }
-
         try {
             $response ??= $renderer->render();
             if (is_string($response)) {
                 return new Response(['body' => $response, 'status' => 500]);
             }
-
             return $response;
         } catch (Throwable $internalException) {
             $trap->logException($internalException, $request);
-
             return $this->handleInternalError();
         }
     }
-
     /**
      * Convert a redirect exception into a response.
      *
@@ -167,13 +142,8 @@ class ErrorHandlerMiddleware implements MiddlewareInterface
      */
     public function handleRedirect(RedirectException $exception): ResponseInterface
     {
-        return new RedirectResponse(
-            $exception->getMessage(),
-            $exception->getCode(),
-            $exception->getHeaders(),
-        );
+        return new RedirectResponse($exception->getMessage(), $exception->getCode(), $exception->getHeaders());
     }
-
     /**
      * Handle internal errors.
      *
@@ -181,12 +151,8 @@ class ErrorHandlerMiddleware implements MiddlewareInterface
      */
     protected function handleInternalError(): ResponseInterface
     {
-        return new Response([
-            'body' => 'An Internal Server Error Occurred',
-            'status' => 500,
-        ]);
+        return new Response(['body' => 'An Internal Server Error Occurred', 'status' => 500]);
     }
-
     /**
      * Get a exception trap instance
      *
@@ -199,10 +165,8 @@ class ErrorHandlerMiddleware implements MiddlewareInterface
             $className = App::className('ExceptionTrap', 'Error');
             $this->exceptionTrap = new $className($this->getConfig());
         }
-
         return $this->exceptionTrap;
     }
-
     /**
      * Ensure that the application's routes are loaded.
      *
@@ -210,26 +174,17 @@ class ErrorHandlerMiddleware implements MiddlewareInterface
      */
     protected function loadRoutes(): void
     {
-        if (
-            !($this->app instanceof RoutingApplicationInterface)
-            || Router::routes()
-        ) {
+        if (!$this->app instanceof RoutingApplicationInterface || Router::routes()) {
             return;
         }
-
         try {
             $builder = Router::createRouteBuilder('/');
-
             $this->app->routes($builder);
             if ($this->app instanceof PluginApplicationInterface) {
                 $this->app->pluginRoutes($builder);
             }
         } catch (Throwable $e) {
-            triggerWarning(sprintf(
-                "Exception loading routes when rendering an error page: \n %s - %s",
-                $e::class,
-                $e->getMessage(),
-            ));
+            triggerWarning(sprintf("Exception loading routes when rendering an error page: \n %s - %s", $e::class, $e->getMessage()));
         }
     }
 }

@@ -8,12 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Carbon;
+namespace Odigos\Carbon;
 
 use DatePeriod;
-
-if (!class_exists(DatePeriodBase::class, false)) {
+if (!class_exists(DatePeriodBase::class, \false)) {
     class DatePeriodBase extends DatePeriod
     {
         /**
@@ -24,7 +22,6 @@ if (!class_exists(DatePeriodBase::class, false)) {
          * @deprecated PHP 8.2 this property is no longer in sync with the actual period start.
          */
         protected $start;
-
         /**
          * Period end in PHP < 8.2.
          *
@@ -33,7 +30,6 @@ if (!class_exists(DatePeriodBase::class, false)) {
          * @deprecated PHP 8.2 this property is no longer in sync with the actual period end.
          */
         protected $end;
-
         /**
          * Period current iterated date in PHP < 8.2.
          *
@@ -42,7 +38,6 @@ if (!class_exists(DatePeriodBase::class, false)) {
          * @deprecated PHP 8.2 this property is no longer in sync with the actual period current iterated date.
          */
         protected $current;
-
         /**
          * Period interval in PHP < 8.2.
          *
@@ -51,7 +46,6 @@ if (!class_exists(DatePeriodBase::class, false)) {
          * @deprecated PHP 8.2 this property is no longer in sync with the actual period interval.
          */
         protected $interval;
-
         /**
          * Period recurrences in PHP < 8.2.
          *
@@ -60,7 +54,6 @@ if (!class_exists(DatePeriodBase::class, false)) {
          * @deprecated PHP 8.2 this property is no longer in sync with the actual period recurrences.
          */
         protected $recurrences;
-
         /**
          * Period start included option in PHP < 8.2.
          *

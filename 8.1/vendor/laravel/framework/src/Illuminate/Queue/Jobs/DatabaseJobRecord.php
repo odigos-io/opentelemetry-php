@@ -3,18 +3,15 @@
 namespace Illuminate\Queue\Jobs;
 
 use Illuminate\Support\InteractsWithTime;
-
 class DatabaseJobRecord
 {
     use InteractsWithTime;
-
     /**
      * The underlying job record.
      *
      * @var \stdClass
      */
     protected $record;
-
     /**
      * Create a new job record instance.
      *
@@ -25,7 +22,6 @@ class DatabaseJobRecord
     {
         $this->record = $record;
     }
-
     /**
      * Increment the number of times the job has been attempted.
      *
@@ -34,10 +30,8 @@ class DatabaseJobRecord
     public function increment()
     {
         $this->record->attempts++;
-
         return $this->record->attempts;
     }
-
     /**
      * Update the "reserved at" timestamp of the job.
      *
@@ -46,10 +40,8 @@ class DatabaseJobRecord
     public function touch()
     {
         $this->record->reserved_at = $this->currentTime();
-
         return $this->record->reserved_at;
     }
-
     /**
      * Dynamically access the underlying job information.
      *

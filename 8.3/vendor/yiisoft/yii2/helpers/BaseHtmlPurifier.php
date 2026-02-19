@@ -1,10 +1,10 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\helpers;
 
 /**
@@ -44,20 +44,17 @@ class BaseHtmlPurifier
      */
     public static function process($content, $config = null)
     {
-        $configInstance = \HTMLPurifier_Config::create($config instanceof \Closure ? null : $config);
-        $configInstance->autoFinalize = false;
-        $purifier = \HTMLPurifier::instance($configInstance);
-        $purifier->config->set('Cache.SerializerPath', \Yii::$app->getRuntimePath());
+        $configInstance = \Odigos\HTMLPurifier_Config::create($config instanceof \Closure ? null : $config);
+        $configInstance->autoFinalize = \false;
+        $purifier = \Odigos\HTMLPurifier::instance($configInstance);
+        $purifier->config->set('Cache.SerializerPath', \Odigos\Yii::$app->getRuntimePath());
         $purifier->config->set('Cache.SerializerPermissions', 0775);
-
         static::configure($configInstance);
         if ($config instanceof \Closure) {
             call_user_func($config, $configInstance);
         }
-
         return $purifier->purify($content);
     }
-
     /**
      * Allow the extended HtmlPurifier class to set some default config options.
      * @param \HTMLPurifier_Config $config

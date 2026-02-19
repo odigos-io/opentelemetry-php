@@ -5,7 +5,6 @@ namespace Illuminate\Foundation\Console;
 use Illuminate\Console\GeneratorCommand;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputOption;
-
 #[AsCommand(name: 'make:scope')]
 class ScopeMakeCommand extends GeneratorCommand
 {
@@ -15,21 +14,18 @@ class ScopeMakeCommand extends GeneratorCommand
      * @var string
      */
     protected $name = 'make:scope';
-
     /**
      * The console command description.
      *
      * @var string
      */
     protected $description = 'Create a new scope class';
-
     /**
      * The type of class being generated.
      *
      * @var string
      */
     protected $type = 'Scope';
-
     /**
      * Get the stub file for the generator.
      *
@@ -39,7 +35,6 @@ class ScopeMakeCommand extends GeneratorCommand
     {
         return $this->resolveStubPath('/stubs/scope.stub');
     }
-
     /**
      * Resolve the fully-qualified path to the stub.
      *
@@ -48,11 +43,8 @@ class ScopeMakeCommand extends GeneratorCommand
      */
     protected function resolveStubPath($stub)
     {
-        return file_exists($customPath = $this->laravel->basePath(trim($stub, '/')))
-            ? $customPath
-            : __DIR__.$stub;
+        return file_exists($customPath = $this->laravel->basePath(trim($stub, '/'))) ? $customPath : __DIR__ . $stub;
     }
-
     /**
      * Get the default namespace for the class.
      *
@@ -61,9 +53,8 @@ class ScopeMakeCommand extends GeneratorCommand
      */
     protected function getDefaultNamespace($rootNamespace)
     {
-        return is_dir(app_path('Models')) ? $rootNamespace.'\\Models\\Scopes' : $rootNamespace.'\Scopes';
+        return is_dir(app_path('Models')) ? $rootNamespace . '\Models\Scopes' : $rootNamespace . '\Scopes';
     }
-
     /**
      * Get the console command arguments.
      *
@@ -71,8 +62,6 @@ class ScopeMakeCommand extends GeneratorCommand
      */
     protected function getOptions()
     {
-        return [
-            ['force', 'f', InputOption::VALUE_NONE, 'Create the class even if the scope already exists'],
-        ];
+        return [['force', 'f', InputOption::VALUE_NONE, 'Create the class even if the scope already exists']];
     }
 }

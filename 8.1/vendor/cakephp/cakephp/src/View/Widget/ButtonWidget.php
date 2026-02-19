@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -19,7 +19,6 @@ namespace Cake\View\Widget;
 use Cake\View\Form\ContextInterface;
 use Cake\View\StringTemplate;
 use function Cake\Core\h;
-
 /**
  * Button input class
  *
@@ -27,7 +26,7 @@ use function Cake\Core\h;
  * If you need to make basic submit inputs with type=submit,
  * use the Basic input widget.
  */
-class ButtonWidget implements WidgetInterface
+class ButtonWidget implements \Cake\View\Widget\WidgetInterface
 {
     /**
      * StringTemplate instance.
@@ -35,7 +34,6 @@ class ButtonWidget implements WidgetInterface
      * @var \Cake\View\StringTemplate
      */
     protected StringTemplate $_templates;
-
     /**
      * Constructor.
      *
@@ -45,7 +43,6 @@ class ButtonWidget implements WidgetInterface
     {
         $this->_templates = $templates;
     }
-
     /**
      * Render a button.
      *
@@ -65,21 +62,9 @@ class ButtonWidget implements WidgetInterface
      */
     public function render(array $data, ContextInterface $context): string
     {
-        $data += [
-            'text' => '',
-            'type' => 'submit',
-            'escapeTitle' => true,
-            'escape' => true,
-            'templateVars' => [],
-        ];
-
-        return $this->_templates->format('button', [
-            'text' => $data['escapeTitle'] ? h($data['text']) : $data['text'],
-            'templateVars' => $data['templateVars'],
-            'attrs' => $this->_templates->formatAttributes($data, ['text', 'escapeTitle']),
-        ]);
+        $data += ['text' => '', 'type' => 'submit', 'escapeTitle' => \true, 'escape' => \true, 'templateVars' => []];
+        return $this->_templates->format('button', ['text' => $data['escapeTitle'] ? h($data['text']) : $data['text'], 'templateVars' => $data['templateVars'], 'attrs' => $this->_templates->formatAttributes($data, ['text', 'escapeTitle'])]);
     }
-
     /**
      * @inheritDoc
      */
@@ -88,7 +73,6 @@ class ButtonWidget implements WidgetInterface
         if (!isset($data['name']) || $data['name'] === '') {
             return [];
         }
-
         return [$data['name']];
     }
 }

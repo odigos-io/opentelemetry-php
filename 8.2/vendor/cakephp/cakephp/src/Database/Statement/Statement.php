@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -24,43 +24,31 @@ use Generator;
 use InvalidArgumentException;
 use PDO;
 use PDOStatement;
-
 class Statement implements StatementInterface
 {
     /**
      * @var array<string, int>
      */
-    protected const MODE_NAME_MAP = [
-        self::FETCH_TYPE_ASSOC => PDO::FETCH_ASSOC,
-        self::FETCH_TYPE_NUM => PDO::FETCH_NUM,
-        self::FETCH_TYPE_OBJ => PDO::FETCH_OBJ,
-    ];
-
+    protected const MODE_NAME_MAP = [self::FETCH_TYPE_ASSOC => PDO::FETCH_ASSOC, self::FETCH_TYPE_NUM => PDO::FETCH_NUM, self::FETCH_TYPE_OBJ => PDO::FETCH_OBJ];
     /**
      * @var \Cake\Database\Driver
      */
     protected Driver $_driver;
-
     /**
      * Cached bound parameters used for logging
      *
      * @var array<mixed>
      */
     protected array $params = [];
-
     /**
      * @param \PDOStatement $statement PDO statement
      * @param \Cake\Database\Driver $driver Database driver
      * @param array<\Closure> $resultDecorators Results decorators
      */
-    public function __construct(
-        protected PDOStatement $statement,
-        Driver $driver,
-        protected array $resultDecorators = [],
-    ) {
+    public function __construct(protected PDOStatement $statement, Driver $driver, protected array $resultDecorators = [])
+    {
         $this->_driver = $driver;
     }
-
     /**
      * @inheritDoc
      */
@@ -69,7 +57,6 @@ class Statement implements StatementInterface
         if (!$params) {
             return;
         }
-
         $anonymousParams = is_int(key($params));
         $offset = 1;
         foreach ($params as $index => $value) {
@@ -80,7 +67,6 @@ class Statement implements StatementInterface
             $this->bindValue($index, $value, $type);
         }
     }
-
     /**
      * @inheritDoc
      */
@@ -90,11 +76,9 @@ class Statement implements StatementInterface
         if (!is_int($type)) {
             [$value, $type] = $this->cast($value, $type);
         }
-
         $this->params[$column] = $value;
         $this->performBind($column, $value, $type);
     }
-
     /**
      * Converts a give value to a suitable database value based on type and
      * return relevant internal statement type.
@@ -113,10 +97,8 @@ class Statement implements StatementInterface
             $value = $type->toDatabase($value, $this->_driver);
             $type = $type->toStatement($value, $this->_driver);
         }
-
         return [$value, $type];
     }
-
     /**
      * @inheritDoc
      */
@@ -124,7 +106,6 @@ class Statement implements StatementInterface
     {
         return $this->params;
     }
-
     /**
      * @param string|int $column
      * @param mixed $value
@@ -135,7 +116,6 @@ class Statement implements StatementInterface
     {
         $this->statement->bindValue($column, $value, $type);
     }
-
     /**
      * @inheritDoc
      */
@@ -143,7 +123,6 @@ class Statement implements StatementInterface
     {
         return $this->statement->execute($params);
     }
-
     /**
      * @inheritDoc
      */
@@ -151,17 +130,14 @@ class Statement implements StatementInterface
     {
         $mode = $this->convertMode($mode);
         $row = $this->statement->fetch($mode);
-        if ($row === false) {
-            return false;
+        if ($row === \false) {
+            return \false;
         }
-
         foreach ($this->resultDecorators as $decorator) {
             $row = $decorator($row);
         }
-
         return $row;
     }
-
     /**
      * @inheritDoc
      */
@@ -169,7 +145,6 @@ class Statement implements StatementInterface
     {
         return $this->fetch(PDO::FETCH_ASSOC) ?: [];
     }
-
     /**
      * @inheritDoc
      */
@@ -179,10 +154,8 @@ class Statement implements StatementInterface
         if ($row && isset($row[$position])) {
             return $row[$position];
         }
-
-        return false;
+        return \false;
     }
-
     /**
      * @inheritDoc
      */
@@ -190,14 +163,11 @@ class Statement implements StatementInterface
     {
         $mode = $this->convertMode($mode);
         $rows = $this->statement->fetchAll($mode);
-
         foreach ($this->resultDecorators as $decorator) {
             $rows = array_map($decorator, $rows);
         }
-
         return $rows;
     }
-
     /**
      * Converts mode name to PDO constant.
      *
@@ -211,12 +181,8 @@ class Statement implements StatementInterface
             // We don't try to validate the PDO constants
             return $mode;
         }
-
-        return static::MODE_NAME_MAP[$mode]
-            ??
-            throw new InvalidArgumentException("Invalid fetch mode requested. Expected 'assoc', 'num' or 'obj'.");
+        return static::MODE_NAME_MAP[$mode] ?? throw new InvalidArgumentException("Invalid fetch mode requested. Expected 'assoc', 'num' or 'obj'.");
     }
-
     /**
      * @inheritDoc
      */
@@ -224,7 +190,6 @@ class Statement implements StatementInterface
     {
         $this->statement->closeCursor();
     }
-
     /**
      * @inheritDoc
      */
@@ -232,7 +197,6 @@ class Statement implements StatementInterface
     {
         return $this->statement->rowCount();
     }
-
     /**
      * @inheritDoc
      */
@@ -240,7 +204,6 @@ class Statement implements StatementInterface
     {
         return $this->statement->columnCount();
     }
-
     /**
      * @inheritDoc
      */
@@ -248,7 +211,6 @@ class Statement implements StatementInterface
     {
         return $this->statement->errorCode() ?: '';
     }
-
     /**
      * @inheritDoc
      */
@@ -256,7 +218,6 @@ class Statement implements StatementInterface
     {
         return $this->statement->errorInfo();
     }
-
     /**
      * @inheritDoc
      */
@@ -264,15 +225,12 @@ class Statement implements StatementInterface
     {
         if ($column && $this->columnCount()) {
             $row = $this->fetch(static::FETCH_TYPE_ASSOC);
-
             if ($row && isset($row[$column])) {
                 return $row[$column];
             }
         }
-
         return $this->_driver->lastInsertId($table);
     }
-
     /**
      * Returns prepared query string stored in PDOStatement.
      *
@@ -282,7 +240,6 @@ class Statement implements StatementInterface
     {
         return $this->statement->queryString;
     }
-
     /**
      * Get the inner iterator
      *
@@ -291,15 +248,12 @@ class Statement implements StatementInterface
     public function getIterator(): Generator
     {
         $this->statement->setFetchMode(PDO::FETCH_ASSOC);
-
         foreach ($this->statement as $row) {
             foreach ($this->resultDecorators as $decorator) {
                 $row = $decorator($row);
             }
-
             yield $row;
         }
-
         $this->closeCursor();
     }
 }

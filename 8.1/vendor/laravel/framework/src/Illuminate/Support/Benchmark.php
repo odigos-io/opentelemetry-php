@@ -3,7 +3,6 @@
 namespace Illuminate\Support;
 
 use Closure;
-
 class Benchmark
 {
     /**
@@ -15,23 +14,15 @@ class Benchmark
      */
     public static function measure(Closure|array $benchmarkables, int $iterations = 1): array|float
     {
-        return collect(Arr::wrap($benchmarkables))->map(function ($callback) use ($iterations) {
+        return collect(\Illuminate\Support\Arr::wrap($benchmarkables))->map(function ($callback) use ($iterations) {
             return collect(range(1, $iterations))->map(function () use ($callback) {
                 gc_collect_cycles();
-
-                $start = hrtime(true);
-
+                $start = hrtime(\true);
                 $callback();
-
-                return (hrtime(true) - $start) / 1000000;
+                return (hrtime(\true) - $start) / 1000000;
             })->average();
-        })->when(
-            $benchmarkables instanceof Closure,
-            fn ($c) => $c->first(),
-            fn ($c) => $c->all(),
-        );
+        })->when($benchmarkables instanceof Closure, fn($c) => $c->first(), fn($c) => $c->all());
     }
-
     /**
      * Measure a callable once and return the duration and result.
      *
@@ -43,14 +34,10 @@ class Benchmark
     public static function value(callable $callback): array
     {
         gc_collect_cycles();
-
-        $start = hrtime(true);
-
+        $start = hrtime(\true);
         $result = $callback();
-
-        return [$result, (hrtime(true) - $start) / 1000000];
+        return [$result, (hrtime(\true) - $start) / 1000000];
     }
-
     /**
      * Measure a callable or array of callables over the given number of iterations, then dump and die.
      *
@@ -60,10 +47,7 @@ class Benchmark
      */
     public static function dd(Closure|array $benchmarkables, int $iterations = 1): void
     {
-        $result = collect(static::measure(Arr::wrap($benchmarkables), $iterations))
-            ->map(fn ($average) => number_format($average, 3).'ms')
-            ->when($benchmarkables instanceof Closure, fn ($c) => $c->first(), fn ($c) => $c->all());
-
+        $result = collect(static::measure(\Illuminate\Support\Arr::wrap($benchmarkables), $iterations))->map(fn($average) => number_format($average, 3) . 'ms')->when($benchmarkables instanceof Closure, fn($c) => $c->first(), fn($c) => $c->all());
         dd($result);
     }
 }

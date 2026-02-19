@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -18,7 +18,6 @@ namespace Cake\TestSuite;
 
 use Cake\Core\Configure;
 use RuntimeException;
-
 /**
  * Helper function to load plugin configuration for tests.
  *
@@ -39,24 +38,15 @@ use RuntimeException;
 function enablePluginLoadingForTests(?string $configPath = null): void
 {
     $configPath ??= CONFIG;
-    $pluginsFile = rtrim($configPath, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . 'plugins.php';
-
+    $pluginsFile = rtrim($configPath, \DIRECTORY_SEPARATOR) . \DIRECTORY_SEPARATOR . 'plugins.php';
     if (!file_exists($pluginsFile)) {
         throw new RuntimeException('Unable to load plugins list');
     }
-
     // phpcs:ignore
     $plugins = require $pluginsFile;
     if (!is_array($plugins)) {
-        throw new RuntimeException(
-            sprintf(
-                'The plugins configuration file `%s` must return an array. Got `%s` instead.',
-                $pluginsFile,
-                gettype($plugins),
-            ),
-        );
+        throw new RuntimeException(sprintf('The plugins configuration file `%s` must return an array. Got `%s` instead.', $pluginsFile, gettype($plugins)));
     }
-
     // Store the plugins configuration globally
     Configure::write('Test.plugins', $plugins);
 }

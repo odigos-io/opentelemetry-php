@@ -1,17 +1,15 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\SDK\Common\Future;
 
 use Closure;
 use Throwable;
-
 /**
  * @template T
  * @template-implements FutureInterface<T>
  */
-final class CompletedFuture implements FutureInterface
+final class CompletedFuture implements \OpenTelemetry\SDK\Common\Future\FutureInterface
 {
     /**
      * @param T $value
@@ -19,28 +17,24 @@ final class CompletedFuture implements FutureInterface
     public function __construct(private $value)
     {
     }
-
     #[\Override]
     public function await()
     {
         return $this->value;
     }
-
     #[\Override]
-    public function map(Closure $closure): FutureInterface
+    public function map(Closure $closure): \OpenTelemetry\SDK\Common\Future\FutureInterface
     {
         $c = $closure;
         unset($closure);
-
         try {
-            return new CompletedFuture($c($this->value));
+            return new \OpenTelemetry\SDK\Common\Future\CompletedFuture($c($this->value));
         } catch (Throwable $e) {
-            return new ErrorFuture($e);
+            return new \OpenTelemetry\SDK\Common\Future\ErrorFuture($e);
         }
     }
-
     #[\Override]
-    public function catch(Closure $closure): FutureInterface
+    public function catch(Closure $closure): \OpenTelemetry\SDK\Common\Future\FutureInterface
     {
         return $this;
     }

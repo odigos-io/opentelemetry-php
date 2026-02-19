@@ -10,21 +10,18 @@ class QueueBusy
      * @var string
      */
     public $connection;
-
     /**
      * The queue name.
      *
      * @var string
      */
     public $queue;
-
     /**
      * The size of the queue.
      *
      * @var int
      */
     public $size;
-
     /**
      * Create a new event instance.
      *

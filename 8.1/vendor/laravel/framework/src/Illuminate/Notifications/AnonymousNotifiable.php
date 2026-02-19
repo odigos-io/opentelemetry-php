@@ -4,7 +4,6 @@ namespace Illuminate\Notifications;
 
 use Illuminate\Contracts\Notifications\Dispatcher;
 use InvalidArgumentException;
-
 class AnonymousNotifiable
 {
     /**
@@ -13,7 +12,6 @@ class AnonymousNotifiable
      * @var array
      */
     public $routes = [];
-
     /**
      * Add routing information to the target.
      *
@@ -28,12 +26,9 @@ class AnonymousNotifiable
         if ($channel === 'database') {
             throw new InvalidArgumentException('The database channel does not support on-demand notifications.');
         }
-
         $this->routes[$channel] = $route;
-
         return $this;
     }
-
     /**
      * Send the given notification.
      *
@@ -44,7 +39,6 @@ class AnonymousNotifiable
     {
         app(Dispatcher::class)->send($this, $notification);
     }
-
     /**
      * Send the given notification immediately.
      *
@@ -55,7 +49,6 @@ class AnonymousNotifiable
     {
         app(Dispatcher::class)->sendNow($this, $notification);
     }
-
     /**
      * Get the notification routing information for the given driver.
      *
@@ -66,7 +59,6 @@ class AnonymousNotifiable
     {
         return $this->routes[$driver] ?? null;
     }
-
     /**
      * Get the value of the notifiable's primary key.
      *

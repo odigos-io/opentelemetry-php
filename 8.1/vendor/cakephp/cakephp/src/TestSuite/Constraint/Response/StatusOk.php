@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -20,13 +20,12 @@ namespace Cake\TestSuite\Constraint\Response;
  *
  * @internal
  */
-class StatusOk extends StatusCodeBase
+class StatusOk extends \Cake\TestSuite\Constraint\Response\StatusCodeBase
 {
     /**
      * @var array<int, int>|int
      */
     protected array|int $code = [200, 204];
-
     /**
      * Assertion message
      *

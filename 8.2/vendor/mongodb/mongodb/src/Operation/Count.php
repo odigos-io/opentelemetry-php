@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright 2015-present MongoDB, Inc.
  *
@@ -14,7 +15,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 namespace MongoDB\Operation;
 
 use MongoDB\Driver\Command;
@@ -26,7 +26,6 @@ use MongoDB\Driver\Session;
 use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\Exception\UnexpectedValueException;
 use MongoDB\Exception\UnsupportedException;
-
 use function current;
 use function is_array;
 use function is_float;
@@ -34,14 +33,13 @@ use function is_integer;
 use function is_object;
 use function is_string;
 use function MongoDB\is_document;
-
 /**
  * Operation for the count command.
  *
  * @see \MongoDB\Collection::count()
  * @see https://mongodb.com/docs/manual/reference/command/count/
  */
-final class Count implements Explainable
+final class Count implements \MongoDB\Operation\Explainable
 {
     /**
      * Constructs a count command.
@@ -80,47 +78,37 @@ final class Count implements Explainable
      */
     public function __construct(private string $databaseName, private string $collectionName, private array|object $filter = [], private array $options = [])
     {
-        if (! is_document($filter)) {
+        if (!is_document($filter)) {
             throw InvalidArgumentException::expectedDocumentType('$filter', $filter);
         }
-
-        if (isset($this->options['collation']) && ! is_document($this->options['collation'])) {
+        if (isset($this->options['collation']) && !is_document($this->options['collation'])) {
             throw InvalidArgumentException::expectedDocumentType('"collation" option', $this->options['collation']);
         }
-
-        if (isset($this->options['hint']) && ! is_string($this->options['hint']) && ! is_document($this->options['hint'])) {
+        if (isset($this->options['hint']) && !is_string($this->options['hint']) && !is_document($this->options['hint'])) {
             throw InvalidArgumentException::expectedDocumentOrStringType('"hint" option', $this->options['hint']);
         }
-
-        if (isset($this->options['limit']) && ! is_integer($this->options['limit'])) {
+        if (isset($this->options['limit']) && !is_integer($this->options['limit'])) {
             throw InvalidArgumentException::invalidType('"limit" option', $this->options['limit'], 'integer');
         }
-
-        if (isset($this->options['maxTimeMS']) && ! is_integer($this->options['maxTimeMS'])) {
+        if (isset($this->options['maxTimeMS']) && !is_integer($this->options['maxTimeMS'])) {
             throw InvalidArgumentException::invalidType('"maxTimeMS" option', $this->options['maxTimeMS'], 'integer');
         }
-
-        if (isset($this->options['readConcern']) && ! $this->options['readConcern'] instanceof ReadConcern) {
+        if (isset($this->options['readConcern']) && !$this->options['readConcern'] instanceof ReadConcern) {
             throw InvalidArgumentException::invalidType('"readConcern" option', $this->options['readConcern'], ReadConcern::class);
         }
-
-        if (isset($this->options['readPreference']) && ! $this->options['readPreference'] instanceof ReadPreference) {
+        if (isset($this->options['readPreference']) && !$this->options['readPreference'] instanceof ReadPreference) {
             throw InvalidArgumentException::invalidType('"readPreference" option', $this->options['readPreference'], ReadPreference::class);
         }
-
-        if (isset($this->options['session']) && ! $this->options['session'] instanceof Session) {
+        if (isset($this->options['session']) && !$this->options['session'] instanceof Session) {
             throw InvalidArgumentException::invalidType('"session" option', $this->options['session'], Session::class);
         }
-
-        if (isset($this->options['skip']) && ! is_integer($this->options['skip'])) {
+        if (isset($this->options['skip']) && !is_integer($this->options['skip'])) {
             throw InvalidArgumentException::invalidType('"skip" option', $this->options['skip'], 'integer');
         }
-
         if (isset($this->options['readConcern']) && $this->options['readConcern']->isDefault()) {
             unset($this->options['readConcern']);
         }
     }
-
     /**
      * Execute the operation.
      *
@@ -134,18 +122,14 @@ final class Count implements Explainable
         if ($inTransaction && isset($this->options['readConcern'])) {
             throw UnsupportedException::readConcernNotSupportedInTransaction();
         }
-
         $cursor = $server->executeReadCommand($this->databaseName, new Command($this->createCommandDocument()), $this->createOptions());
         $result = current($cursor->toArray());
-
         // Older server versions may return a float
-        if (! is_object($result) || ! isset($result->n) || ! (is_integer($result->n) || is_float($result->n))) {
+        if (!is_object($result) || !isset($result->n) || !(is_integer($result->n) || is_float($result->n))) {
             throw new UnexpectedValueException('count command did not return a numeric "n" value');
         }
-
         return (int) $result->n;
     }
-
     /**
      * Returns the command document for this operation.
      *
@@ -154,43 +138,34 @@ final class Count implements Explainable
     public function getCommandDocument(): array
     {
         $cmd = $this->createCommandDocument();
-
         // Read concern can change the query plan
         if (isset($this->options['readConcern'])) {
             $cmd['readConcern'] = $this->options['readConcern'];
         }
-
         return $cmd;
     }
-
     /**
      * Create the count command document.
      */
     private function createCommandDocument(): array
     {
         $cmd = ['count' => $this->collectionName];
-
         if ($this->filter !== []) {
             $cmd['query'] = (object) $this->filter;
         }
-
         if (isset($this->options['collation'])) {
             $cmd['collation'] = (object) $this->options['collation'];
         }
-
         if (isset($this->options['hint'])) {
             $cmd['hint'] = is_array($this->options['hint']) ? (object) $this->options['hint'] : $this->options['hint'];
         }
-
         foreach (['comment', 'limit', 'maxTimeMS', 'skip'] as $option) {
             if (isset($this->options[$option])) {
                 $cmd[$option] = $this->options[$option];
             }
         }
-
         return $cmd;
     }
-
     /**
      * Create options for executing the command.
      *
@@ -199,19 +174,15 @@ final class Count implements Explainable
     private function createOptions(): array
     {
         $options = [];
-
         if (isset($this->options['readConcern'])) {
             $options['readConcern'] = $this->options['readConcern'];
         }
-
         if (isset($this->options['readPreference'])) {
             $options['readPreference'] = $this->options['readPreference'];
         }
-
         if (isset($this->options['session'])) {
             $options['session'] = $this->options['session'];
         }
-
         return $options;
     }
 }

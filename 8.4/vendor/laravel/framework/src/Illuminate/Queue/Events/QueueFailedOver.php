@@ -3,7 +3,6 @@
 namespace Illuminate\Queue\Events;
 
 use Throwable;
-
 class QueueFailedOver
 {
     /**
@@ -13,10 +12,7 @@ class QueueFailedOver
      * @param  \Closure|string|object  $command  The job instance.
      * @param  Throwable  $exception  The exception that was thrown.
      */
-    public function __construct(
-        public ?string $connectionName,
-        public mixed $command,
-        public Throwable $exception,
-    ) {
+    public function __construct(public ?string $connectionName, public mixed $command, public Throwable $exception)
+    {
     }
 }

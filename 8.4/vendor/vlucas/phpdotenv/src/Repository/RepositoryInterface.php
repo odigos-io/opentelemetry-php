@@ -1,8 +1,7 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Dotenv\Repository;
+declare (strict_types=1);
+namespace Odigos\Dotenv\Repository;
 
 interface RepositoryInterface
 {
@@ -14,7 +13,6 @@ interface RepositoryInterface
      * @return bool
      */
     public function has(string $name);
-
     /**
      * Get an environment variable.
      *
@@ -25,7 +23,6 @@ interface RepositoryInterface
      * @return string|null
      */
     public function get(string $name);
-
     /**
      * Set an environment variable.
      *
@@ -37,7 +34,6 @@ interface RepositoryInterface
      * @return bool
      */
     public function set(string $name, string $value);
-
     /**
      * Clear an environment variable.
      *

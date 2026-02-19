@@ -1,4 +1,5 @@
 <?php
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -15,7 +16,6 @@
 namespace Cake\Test\Fixture;
 
 use Cake\TestSuite\Fixture\TestFixture;
-
 /**
  * A fixture for a join table containing additional data
  */
@@ -26,9 +26,5 @@ class SpecialTagsFixture extends TestFixture
      *
      * @var array
      */
-    public array $records = [
-        ['article_id' => 1, 'tag_id' => 3, 'highlighted' => false, 'highlighted_time' => null, 'extra_info' => 'Foo', 'author_id' => 1],
-        ['article_id' => 2, 'tag_id' => 1, 'highlighted' => true, 'highlighted_time' => '2014-06-01 10:10:00', 'extra_info' => 'Bar', 'author_id' => 2],
-        ['article_id' => 10, 'tag_id' => 10, 'highlighted' => true, 'highlighted_time' => '2014-06-01 10:10:00', 'extra_info' => 'Baz', 'author_id' => null],
-    ];
+    public array $records = [['article_id' => 1, 'tag_id' => 3, 'highlighted' => \false, 'highlighted_time' => null, 'extra_info' => 'Foo', 'author_id' => 1], ['article_id' => 2, 'tag_id' => 1, 'highlighted' => \true, 'highlighted_time' => '2014-06-01 10:10:00', 'extra_info' => 'Bar', 'author_id' => 2], ['article_id' => 10, 'tag_id' => 10, 'highlighted' => \true, 'highlighted_time' => '2014-06-01 10:10:00', 'extra_info' => 'Baz', 'author_id' => null]];
 }

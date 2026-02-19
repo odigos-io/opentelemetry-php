@@ -13,7 +13,6 @@ trait CompilesUseStatements
     protected function compileUse($expression)
     {
         $expression = trim(preg_replace('/[()]/', '', $expression), " '\"");
-
         // Isolate alias...
         if (str_contains($expression, '{')) {
             $pathWithOptionalModifier = $expression;
@@ -21,12 +20,8 @@ trait CompilesUseStatements
         } else {
             $segments = explode(',', $expression);
             $pathWithOptionalModifier = trim($segments[0], " '\"");
-
-            $aliasWithLeadingSpace = isset($segments[1])
-                ? ' as '.trim($segments[1], " '\"")
-                : '';
+            $aliasWithLeadingSpace = isset($segments[1]) ? ' as ' . trim($segments[1], " '\"") : '';
         }
-
         // Split modifier and path...
         if (str_starts_with($pathWithOptionalModifier, 'function ')) {
             $modifierWithTrailingSpace = 'function ';
@@ -38,9 +33,7 @@ trait CompilesUseStatements
             $modifierWithTrailingSpace = '';
             $path = $pathWithOptionalModifier;
         }
-
         $path = ltrim($path, '\\');
-
         return "<?php use {$modifierWithTrailingSpace}\\{$path}{$aliasWithLeadingSpace}; ?>";
     }
 }

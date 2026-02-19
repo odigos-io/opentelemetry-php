@@ -4,21 +4,18 @@ namespace Laravel\Prompts\Concerns;
 
 use Closure;
 use RuntimeException;
-
 trait Fallback
 {
     /**
      * Whether to fallback to a custom implementation
      */
-    protected static bool $shouldFallback = false;
-
+    protected static bool $shouldFallback = \false;
     /**
      * The fallback implementations.
      *
      * @var array<class-string, Closure($this): mixed>
      */
     protected static array $fallbacks = [];
-
     /**
      * Enable the fallback implementation.
      */
@@ -26,7 +23,6 @@ trait Fallback
     {
         static::$shouldFallback = $condition || static::$shouldFallback;
     }
-
     /**
      * Whether the prompt should fallback to a custom implementation.
      */
@@ -34,7 +30,6 @@ trait Fallback
     {
         return static::$shouldFallback && isset(static::$fallbacks[static::class]);
     }
-
     /**
      * Set the fallback implementation.
      *
@@ -44,18 +39,15 @@ trait Fallback
     {
         static::$fallbacks[static::class] = $fallback;
     }
-
     /**
      * Call the registered fallback implementation.
      */
     public function fallback(): mixed
     {
         $fallback = static::$fallbacks[static::class] ?? null;
-
         if ($fallback === null) {
-            throw new RuntimeException('No fallback implementation registered for ['.static::class.']');
+            throw new RuntimeException('No fallback implementation registered for [' . static::class . ']');
         }
-
         return $fallback($this);
     }
 }

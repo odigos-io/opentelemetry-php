@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the league/commonmark package.
  *
@@ -16,11 +15,9 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Odigos\League\CommonMark\Delimiter\Processor;
 
-namespace League\CommonMark\Delimiter\Processor;
-
-use League\CommonMark\Exception\InvalidArgumentException;
-
+use Odigos\League\CommonMark\Exception\InvalidArgumentException;
 final class DelimiterProcessorCollection implements DelimiterProcessorCollectionInterface
 {
     /**
@@ -29,12 +26,10 @@ final class DelimiterProcessorCollection implements DelimiterProcessorCollection
      * @psalm-readonly-allow-private-mutation
      */
     private array $processorsByChar = [];
-
     public function add(DelimiterProcessorInterface $processor): void
     {
         $opening = $processor->getOpeningCharacter();
         $closing = $processor->getClosingCharacter();
-
         if ($opening === $closing) {
             $old = $this->processorsByChar[$opening] ?? null;
             if ($old !== null && $old->getOpeningCharacter() === $old->getClosingCharacter()) {
@@ -47,12 +42,10 @@ final class DelimiterProcessorCollection implements DelimiterProcessorCollection
             $this->addDelimiterProcessorForChar($closing, $processor);
         }
     }
-
     public function getDelimiterProcessor(string $char): ?DelimiterProcessorInterface
     {
         return $this->processorsByChar[$char] ?? null;
     }
-
     /**
      * @return string[]
      */
@@ -60,16 +53,13 @@ final class DelimiterProcessorCollection implements DelimiterProcessorCollection
     {
         return \array_keys($this->processorsByChar);
     }
-
     private function addDelimiterProcessorForChar(string $delimiterChar, DelimiterProcessorInterface $processor): void
     {
         if (isset($this->processorsByChar[$delimiterChar])) {
             throw new InvalidArgumentException(\sprintf('Delim processor for character "%s" already exists', $processor->getOpeningCharacter()));
         }
-
         $this->processorsByChar[$delimiterChar] = $processor;
     }
-
     private function addStaggeredDelimiterProcessorForChar(string $opening, DelimiterProcessorInterface $old, DelimiterProcessorInterface $new): void
     {
         if ($old instanceof StaggeredDelimiterProcessor) {
@@ -77,11 +67,9 @@ final class DelimiterProcessorCollection implements DelimiterProcessorCollection
         } else {
             $s = new StaggeredDelimiterProcessor($opening, $old);
         }
-
         $s->add($new);
         $this->processorsByChar[$opening] = $s;
     }
-
     public function count(): int
     {
         return \count($this->processorsByChar);

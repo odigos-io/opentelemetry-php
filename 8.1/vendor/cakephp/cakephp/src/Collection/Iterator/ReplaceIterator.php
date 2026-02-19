@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -21,7 +21,6 @@ use Cake\Collection\Collection;
 use Cake\Collection\CollectionInterface;
 use Iterator;
 use Traversable;
-
 /**
  * Creates an iterator from another iterator that will modify each of the values
  * by converting them using a callback function.
@@ -34,14 +33,12 @@ class ReplaceIterator extends Collection
      * @var callable
      */
     protected $_callback;
-
     /**
      * A reference to the internal iterator this object is wrapping.
      *
      * @var \Traversable
      */
     protected Traversable $_innerIterator;
-
     /**
      * Creates an iterator from another iterator that will modify each of the values
      * by converting them using a callback function.
@@ -59,7 +56,6 @@ class ReplaceIterator extends Collection
         parent::__construct($items);
         $this->_innerIterator = $this->getInnerIterator();
     }
-
     /**
      * Returns the value returned by the callback after passing the current value in
      * the iteration
@@ -70,32 +66,25 @@ class ReplaceIterator extends Collection
     {
         return ($this->_callback)(parent::current(), $this->key(), $this->_innerIterator);
     }
-
     /**
      * @inheritDoc
      */
     public function unwrap(): Iterator
     {
         $iterator = $this->_innerIterator;
-
         if ($iterator instanceof CollectionInterface) {
             $iterator = $iterator->unwrap();
         }
-
         if ($iterator::class !== ArrayIterator::class) {
             return $this;
         }
-
         // ArrayIterator can be traversed strictly.
         // Let's do that for performance gains
-
         $callback = $this->_callback;
         $res = [];
-
         foreach ($iterator as $k => $v) {
             $res[$k] = $callback($v, $k, $iterator);
         }
-
         return new ArrayIterator($res);
     }
 }

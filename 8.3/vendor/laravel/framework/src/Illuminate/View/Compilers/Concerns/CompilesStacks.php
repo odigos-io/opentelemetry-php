@@ -3,7 +3,6 @@
 namespace Illuminate\View\Compilers\Concerns;
 
 use Illuminate\Support\Str;
-
 trait CompilesStacks
 {
     /**
@@ -16,7 +15,6 @@ trait CompilesStacks
     {
         return "<?php echo \$__env->yieldPushContent{$expression}; ?>";
     }
-
     /**
      * Compile the push statements into valid PHP.
      *
@@ -27,7 +25,6 @@ trait CompilesStacks
     {
         return "<?php \$__env->startPush{$expression}; ?>";
     }
-
     /**
      * Compile the push-once statements into valid PHP.
      *
@@ -37,15 +34,11 @@ trait CompilesStacks
     protected function compilePushOnce($expression)
     {
         $parts = explode(',', $this->stripParentheses($expression), 2);
-
         [$stack, $id] = [$parts[0], $parts[1] ?? ''];
-
-        $id = trim($id) ?: "'".(string) Str::uuid()."'";
-
-        return '<?php if (! $__env->hasRenderedOnce('.$id.')): $__env->markAsRenderedOnce('.$id.');
-$__env->startPush('.$stack.'); ?>';
+        $id = trim($id) ?: "'" . (string) Str::uuid() . "'";
+        return '<?php if (! $__env->hasRenderedOnce(' . $id . ')): $__env->markAsRenderedOnce(' . $id . ');
+$__env->startPush(' . $stack . '); ?>';
     }
-
     /**
      * Compile the end-push statements into valid PHP.
      *
@@ -55,7 +48,6 @@ $__env->startPush('.$stack.'); ?>';
     {
         return '<?php $__env->stopPush(); ?>';
     }
-
     /**
      * Compile the end-push-once statements into valid PHP.
      *
@@ -65,7 +57,6 @@ $__env->startPush('.$stack.'); ?>';
     {
         return '<?php $__env->stopPush(); endif; ?>';
     }
-
     /**
      * Compile the prepend statements into valid PHP.
      *
@@ -76,7 +67,6 @@ $__env->startPush('.$stack.'); ?>';
     {
         return "<?php \$__env->startPrepend{$expression}; ?>";
     }
-
     /**
      * Compile the prepend-once statements into valid PHP.
      *
@@ -86,15 +76,11 @@ $__env->startPush('.$stack.'); ?>';
     protected function compilePrependOnce($expression)
     {
         $parts = explode(',', $this->stripParentheses($expression), 2);
-
         [$stack, $id] = [$parts[0], $parts[1] ?? ''];
-
-        $id = trim($id) ?: "'".(string) Str::uuid()."'";
-
-        return '<?php if (! $__env->hasRenderedOnce('.$id.')): $__env->markAsRenderedOnce('.$id.');
-$__env->startPrepend('.$stack.'); ?>';
+        $id = trim($id) ?: "'" . (string) Str::uuid() . "'";
+        return '<?php if (! $__env->hasRenderedOnce(' . $id . ')): $__env->markAsRenderedOnce(' . $id . ');
+$__env->startPrepend(' . $stack . '); ?>';
     }
-
     /**
      * Compile the end-prepend statements into valid PHP.
      *
@@ -104,7 +90,6 @@ $__env->startPrepend('.$stack.'); ?>';
     {
         return '<?php $__env->stopPrepend(); ?>';
     }
-
     /**
      * Compile the end-prepend-once statements into valid PHP.
      *

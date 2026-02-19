@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
  *
@@ -11,7 +11,6 @@ declare(strict_types=1);
  * @link          https://cakephp.org CakePHP(tm) Project
  * @license       https://www.opensource.org/licenses/mit-license.php MIT License
  */
-
 namespace Cake\Chronos;
 
 use DateInterval;
@@ -21,7 +20,6 @@ use DateTimeInterface;
 use DateTimeZone;
 use InvalidArgumentException;
 use Stringable;
-
 /**
  * An immutable date object.
  *
@@ -46,56 +44,41 @@ use Stringable;
  */
 class ChronosDate implements Stringable
 {
-    use FormattingTrait;
-
+    use \Cake\Chronos\FormattingTrait;
     /**
      * Default format to use for __toString method when type juggling occurs.
      *
      * @var string
      */
     public const DEFAULT_TO_STRING_FORMAT = 'Y-m-d';
-
     /**
      * Format to use for __toString method when type juggling occurs.
      *
      * @var string
      */
     protected static string $toStringFormat = self::DEFAULT_TO_STRING_FORMAT;
-
     /**
      * Names of days of the week.
      *
      * @var array
      */
-    protected static array $days = [
-        Chronos::MONDAY => 'Monday',
-        Chronos::TUESDAY => 'Tuesday',
-        Chronos::WEDNESDAY => 'Wednesday',
-        Chronos::THURSDAY => 'Thursday',
-        Chronos::FRIDAY => 'Friday',
-        Chronos::SATURDAY => 'Saturday',
-        Chronos::SUNDAY => 'Sunday',
-    ];
-
+    protected static array $days = [\Cake\Chronos\Chronos::MONDAY => 'Monday', \Cake\Chronos\Chronos::TUESDAY => 'Tuesday', \Cake\Chronos\Chronos::WEDNESDAY => 'Wednesday', \Cake\Chronos\Chronos::THURSDAY => 'Thursday', \Cake\Chronos\Chronos::FRIDAY => 'Friday', \Cake\Chronos\Chronos::SATURDAY => 'Saturday', \Cake\Chronos\Chronos::SUNDAY => 'Sunday'];
     /**
      * Instance of the diff formatting object.
      *
      * @var \Cake\Chronos\DifferenceFormatterInterface|null
      */
-    protected static ?DifferenceFormatterInterface $diffFormatter = null;
-
+    protected static ?\Cake\Chronos\DifferenceFormatterInterface $diffFormatter = null;
     /**
      * Errors from last time createFromFormat() was called.
      *
      * @var array|false
      */
-    protected static array|false $lastErrors = false;
-
+    protected static array|false $lastErrors = \false;
     /**
      * @var \DateTimeImmutable
      */
     protected DateTimeImmutable $native;
-
     /**
      * Create a new Immutable Date instance.
      *
@@ -111,13 +94,10 @@ class ChronosDate implements Stringable
      * @param \Cake\Chronos\ChronosDate|\DateTimeInterface|string $time Fixed or relative time
      * @param \DateTimeZone|string|null $timezone The time zone used for 'now'
      */
-    public function __construct(
-        ChronosDate|DateTimeInterface|string $time = 'now',
-        DateTimeZone|string|null $timezone = null,
-    ) {
+    public function __construct(\Cake\Chronos\ChronosDate|DateTimeInterface|string $time = 'now', DateTimeZone|string|null $timezone = null)
+    {
         $this->native = $this->createNative($time, $timezone);
     }
-
     /**
      * Initializes the PHP DateTimeImmutable object.
      *
@@ -125,32 +105,24 @@ class ChronosDate implements Stringable
      * @param \DateTimeZone|string|null $timezone The time zone used for 'now'
      * @return \DateTimeImmutable
      */
-    protected function createNative(
-        ChronosDate|DateTimeInterface|string $time,
-        DateTimeZone|string|null $timezone,
-    ): DateTimeImmutable {
+    protected function createNative(\Cake\Chronos\ChronosDate|DateTimeInterface|string $time, DateTimeZone|string|null $timezone): DateTimeImmutable
+    {
         if (!is_string($time)) {
             return new DateTimeImmutable($time->format('Y-m-d 00:00:00'));
         }
-
         $timezone ??= date_default_timezone_get();
         $timezone = $timezone instanceof DateTimeZone ? $timezone : new DateTimeZone($timezone);
-
-        $testNow = Chronos::getTestNow();
+        $testNow = \Cake\Chronos\Chronos::getTestNow();
         if ($testNow === null) {
             $time = new DateTimeImmutable($time, $timezone);
-
             return new DateTimeImmutable($time->format('Y-m-d 00:00:00'));
         }
-
         $testNow = $testNow->setTimezone($timezone);
         if ($time !== 'now') {
             $testNow = $testNow->modify($time);
         }
-
         return new DateTimeImmutable($testNow->format('Y-m-d 00:00:00'));
     }
-
     /**
      * Get today's date.
      *
@@ -161,7 +133,6 @@ class ChronosDate implements Stringable
     {
         return new static('now', $timezone);
     }
-
     /**
      * Get today's date.
      *
@@ -172,7 +143,6 @@ class ChronosDate implements Stringable
     {
         return static::now($timezone);
     }
-
     /**
      * Get tomorrow's date.
      *
@@ -183,7 +153,6 @@ class ChronosDate implements Stringable
     {
         return new static('tomorrow', $timezone);
     }
-
     /**
      * Get yesterday's date.
      *
@@ -194,7 +163,6 @@ class ChronosDate implements Stringable
     {
         return new static('yesterday', $timezone);
     }
-
     /**
      * Create an instance from a string.  This is an alias for the
      * constructor that allows better fluent syntax as it allows you to do
@@ -204,11 +172,10 @@ class ChronosDate implements Stringable
      * @param \Cake\Chronos\ChronosDate|\DateTimeInterface|string $time The strtotime compatible string to parse
      * @return static
      */
-    public static function parse(ChronosDate|DateTimeInterface|string $time): static
+    public static function parse(\Cake\Chronos\ChronosDate|DateTimeInterface|string $time): static
     {
         return new static($time);
     }
-
     /**
      * Create an instance from a specific date.
      *
@@ -219,14 +186,9 @@ class ChronosDate implements Stringable
      */
     public static function create(int $year, int $month, int $day): static
     {
-        $instance = static::createFromFormat(
-            'Y-m-d',
-            sprintf('%s-%s-%s', 0, $month, $day),
-        );
-
+        $instance = static::createFromFormat('Y-m-d', sprintf('%s-%s-%s', 0, $month, $day));
         return $instance->addYears($year);
     }
-
     /**
      * Create an instance from a specific format
      *
@@ -235,22 +197,16 @@ class ChronosDate implements Stringable
      * @return static
      * @throws \InvalidArgumentException
      */
-    public static function createFromFormat(
-        string $format,
-        string $time,
-    ): static {
+    public static function createFromFormat(string $format, string $time): static
+    {
         $dateTime = DateTimeImmutable::createFromFormat($format, $time);
-
         static::$lastErrors = DateTimeImmutable::getLastErrors();
         if (!$dateTime) {
-            $message = static::$lastErrors ? implode(PHP_EOL, static::$lastErrors['errors']) : 'Unknown error';
-
+            $message = static::$lastErrors ? implode(\PHP_EOL, static::$lastErrors['errors']) : 'Unknown error';
             throw new InvalidArgumentException($message);
         }
-
         return new static($dateTime);
     }
-
     /**
      * Returns parse warnings and errors from the last ``createFromFormat()``
      * call.
@@ -263,7 +219,6 @@ class ChronosDate implements Stringable
     {
         return static::$lastErrors;
     }
-
     /**
      * Creates an instance from an array of date values.
      *
@@ -278,29 +233,24 @@ class ChronosDate implements Stringable
     public static function createFromArray(array $values): static
     {
         $formatted = sprintf('%04d-%02d-%02d ', $values['year'], $values['month'], $values['day']);
-
         return static::parse($formatted);
     }
-
     /**
      * Get the difference formatter instance or overwrite the current one.
      *
      * @param \Cake\Chronos\DifferenceFormatterInterface|null $formatter The formatter instance when setting.
      * @return \Cake\Chronos\DifferenceFormatterInterface The formatter instance.
      */
-    public static function diffFormatter(?DifferenceFormatterInterface $formatter = null): DifferenceFormatterInterface
+    public static function diffFormatter(?\Cake\Chronos\DifferenceFormatterInterface $formatter = null): \Cake\Chronos\DifferenceFormatterInterface
     {
         if ($formatter === null) {
             if (static::$diffFormatter === null) {
-                static::$diffFormatter = new DifferenceFormatter();
+                static::$diffFormatter = new \Cake\Chronos\DifferenceFormatter();
             }
-
             return static::$diffFormatter;
         }
-
         return static::$diffFormatter = $formatter;
     }
-
     /**
      * Add an Interval to a Date
      *
@@ -316,10 +266,8 @@ class ChronosDate implements Stringable
         }
         $new = clone $this;
         $new->native = $new->native->add($interval)->setTime(0, 0, 0);
-
         return $new;
     }
-
     /**
      * Subtract an Interval from a Date.
      *
@@ -335,10 +283,8 @@ class ChronosDate implements Stringable
         }
         $new = clone $this;
         $new->native = $new->native->sub($interval)->setTime(0, 0, 0);
-
         return $new;
     }
-
     /**
      * Creates a new instance with date modified according to DateTimeImmutable::modifier().
      *
@@ -352,21 +298,17 @@ class ChronosDate implements Stringable
         if (preg_match('/hour|minute|second/', $modifier)) {
             throw new InvalidArgumentException('Cannot modify date objects by time values');
         }
-
         $new = clone $this;
         $native = $new->native->modify($modifier);
-        if ($native === false) {
+        if ($native === \false) {
             throw new InvalidArgumentException(sprintf('Unable to modify date using `%s`', $modifier));
         }
         $new->native = $native;
-
         if ($new->format('H:i:s') !== '00:00:00') {
             $new->native = $new->native->setTime(0, 0, 0);
         }
-
         return $new;
     }
-
     /**
      * Sets the date.
      *
@@ -379,10 +321,8 @@ class ChronosDate implements Stringable
     {
         $new = clone $this;
         $new->native = $new->native->setDate($year, $month, $day);
-
         return $new;
     }
-
     /**
      * Sets the date according to the ISO 8601 standard
      *
@@ -395,10 +335,8 @@ class ChronosDate implements Stringable
     {
         $new = clone $this;
         $new->native = $new->native->setISODate($year, $week, $dayOfWeek);
-
         return $new;
     }
-
     /**
      * Returns the difference between this instance and target.
      *
@@ -406,11 +344,10 @@ class ChronosDate implements Stringable
      * @param bool $absolute Whether the interval is forced to be positive
      * @return \DateInterval
      */
-    public function diff(ChronosDate $target, bool $absolute = false): DateInterval
+    public function diff(\Cake\Chronos\ChronosDate $target, bool $absolute = \false): DateInterval
     {
         return $this->native->diff($target->native, $absolute);
     }
-
     /**
      * Returns formatted date string according to DateTimeImmutable::format().
      *
@@ -421,7 +358,6 @@ class ChronosDate implements Stringable
     {
         return $this->native->format($format);
     }
-
     /**
      * Set the instance's year
      *
@@ -432,7 +368,6 @@ class ChronosDate implements Stringable
     {
         return $this->setDate($value, $this->month, $this->day);
     }
-
     /**
      * Set the instance's month
      *
@@ -443,7 +378,6 @@ class ChronosDate implements Stringable
     {
         return $this->setDate($this->year, $value, $this->day);
     }
-
     /**
      * Set the instance's day
      *
@@ -454,7 +388,6 @@ class ChronosDate implements Stringable
     {
         return $this->setDate($this->year, $this->month, $value);
     }
-
     /**
      * Add years to the instance. Positive $value travel forward while
      * negative $value travel into the past.
@@ -477,14 +410,11 @@ class ChronosDate implements Stringable
     {
         $month = $this->month;
         $date = $this->modify($value . ' years');
-
         if ($date->month !== $month) {
             return $date->modify('last day of previous month');
         }
-
         return $date;
     }
-
     /**
      * Remove years from the instance.
      *
@@ -497,7 +427,6 @@ class ChronosDate implements Stringable
     {
         return $this->addYears(-$value);
     }
-
     /**
      * Add years with overflowing to the instance. Positive $value
      * travels forward while negative $value travels into the past.
@@ -517,7 +446,6 @@ class ChronosDate implements Stringable
     {
         return $this->modify($value . ' year');
     }
-
     /**
      * Remove years with overflow from the instance
      *
@@ -530,7 +458,6 @@ class ChronosDate implements Stringable
     {
         return $this->addYearsWithOverflow(-1 * $value);
     }
-
     /**
      * Add months to the instance. Positive $value travels forward while
      * negative $value travels into the past.
@@ -554,14 +481,11 @@ class ChronosDate implements Stringable
     {
         $day = $this->day;
         $date = $this->modify($value . ' months');
-
         if ($date->day !== $day) {
             return $date->modify('last day of previous month');
         }
-
         return $date;
     }
-
     /**
      * Remove months from the instance
      *
@@ -574,7 +498,6 @@ class ChronosDate implements Stringable
     {
         return $this->addMonths(-$value);
     }
-
     /**
      * Add months with overflowing to the instance. Positive $value
      * travels forward while negative $value travels into the past.
@@ -594,7 +517,6 @@ class ChronosDate implements Stringable
     {
         return $this->modify($value . ' months');
     }
-
     /**
      * Add months with overflowing to the instance. Positive $value
      * travels forward while negative $value travels into the past.
@@ -614,7 +536,6 @@ class ChronosDate implements Stringable
     {
         return $this->addMonthsWithOverflow(-1 * $value);
     }
-
     /**
      * Add days to the instance. Positive $value travels forward while
      * negative $value travels into the past.
@@ -624,9 +545,8 @@ class ChronosDate implements Stringable
      */
     public function addDays(int $value): static
     {
-        return $this->modify("$value days");
+        return $this->modify("{$value} days");
     }
-
     /**
      * Remove days from the instance
      *
@@ -637,7 +557,6 @@ class ChronosDate implements Stringable
     {
         return $this->addDays(-$value);
     }
-
     /**
      * Add weekdays to the instance. Positive $value travels forward while
      * negative $value travels into the past.
@@ -649,7 +568,6 @@ class ChronosDate implements Stringable
     {
         return $this->modify($value . ' weekdays, ' . $this->format('H:i:s'));
     }
-
     /**
      * Remove weekdays from the instance
      *
@@ -660,7 +578,6 @@ class ChronosDate implements Stringable
     {
         return $this->addWeekdays(-$value);
     }
-
     /**
      * Add weeks to the instance. Positive $value travels forward while
      * negative $value travels into the past.
@@ -670,9 +587,8 @@ class ChronosDate implements Stringable
      */
     public function addWeeks(int $value): static
     {
-        return $this->modify("$value week");
+        return $this->modify("{$value} week");
     }
-
     /**
      * Remove weeks to the instance
      *
@@ -683,7 +599,6 @@ class ChronosDate implements Stringable
     {
         return $this->addWeeks(-$value);
     }
-
     /**
      * Resets the date to the first day of the month
      *
@@ -693,7 +608,6 @@ class ChronosDate implements Stringable
     {
         return $this->modify('first day of this month');
     }
-
     /**
      * Resets the date to end of the month
      *
@@ -703,7 +617,6 @@ class ChronosDate implements Stringable
     {
         return $this->modify('last day of this month');
     }
-
     /**
      * Resets the date to the first day of the year
      *
@@ -713,7 +626,6 @@ class ChronosDate implements Stringable
     {
         return $this->modify('first day of january');
     }
-
     /**
      * Resets the date to end of the year
      *
@@ -723,7 +635,6 @@ class ChronosDate implements Stringable
     {
         return $this->modify('last day of december');
     }
-
     /**
      * Resets the date to the first day of the decade
      *
@@ -731,11 +642,9 @@ class ChronosDate implements Stringable
      */
     public function startOfDecade(): static
     {
-        $year = $this->year - $this->year % Chronos::YEARS_PER_DECADE;
-
-        return $this->modify("first day of january $year");
+        $year = $this->year - $this->year % \Cake\Chronos\Chronos::YEARS_PER_DECADE;
+        return $this->modify("first day of january {$year}");
     }
-
     /**
      * Resets the date to end of the decade
      *
@@ -743,11 +652,9 @@ class ChronosDate implements Stringable
      */
     public function endOfDecade(): static
     {
-        $year = $this->year - $this->year % Chronos::YEARS_PER_DECADE + Chronos::YEARS_PER_DECADE - 1;
-
-        return $this->modify("last day of december $year");
+        $year = $this->year - $this->year % \Cake\Chronos\Chronos::YEARS_PER_DECADE + \Cake\Chronos\Chronos::YEARS_PER_DECADE - 1;
+        return $this->modify("last day of december {$year}");
     }
-
     /**
      * Resets the date to the first day of the century
      *
@@ -755,13 +662,9 @@ class ChronosDate implements Stringable
      */
     public function startOfCentury(): static
     {
-        $year = $this->startOfYear()
-            ->year($this->year - 1 - ($this->year - 1) % Chronos::YEARS_PER_CENTURY + 1)
-            ->year;
-
-        return $this->modify("first day of january $year");
+        $year = $this->startOfYear()->year($this->year - 1 - ($this->year - 1) % \Cake\Chronos\Chronos::YEARS_PER_CENTURY + 1)->year;
+        return $this->modify("first day of january {$year}");
     }
-
     /**
      * Resets the date to end of the century and time to 23:59:59
      *
@@ -769,18 +672,10 @@ class ChronosDate implements Stringable
      */
     public function endOfCentury(): static
     {
-        $y = $this->year - 1
-            - ($this->year - 1)
-            % Chronos::YEARS_PER_CENTURY
-            + Chronos::YEARS_PER_CENTURY;
-
-        $year = $this->endOfYear()
-            ->year($y)
-            ->year;
-
-        return $this->modify("last day of december $year");
+        $y = $this->year - 1 - ($this->year - 1) % \Cake\Chronos\Chronos::YEARS_PER_CENTURY + \Cake\Chronos\Chronos::YEARS_PER_CENTURY;
+        $year = $this->endOfYear()->year($y)->year;
+        return $this->modify("last day of december {$year}");
     }
-
     /**
      * Resets the date to the first day of week (defined in $weekStartsAt)
      *
@@ -789,13 +684,11 @@ class ChronosDate implements Stringable
     public function startOfWeek(): static
     {
         $dateTime = $this;
-        if ($dateTime->dayOfWeek !== Chronos::getWeekStartsAt()) {
-            $dateTime = $dateTime->previous(Chronos::getWeekStartsAt());
+        if ($dateTime->dayOfWeek !== \Cake\Chronos\Chronos::getWeekStartsAt()) {
+            $dateTime = $dateTime->previous(\Cake\Chronos\Chronos::getWeekStartsAt());
         }
-
         return $dateTime;
     }
-
     /**
      * Resets the date to end of week (defined in $weekEndsAt) and time to 23:59:59
      *
@@ -804,13 +697,11 @@ class ChronosDate implements Stringable
     public function endOfWeek(): static
     {
         $dateTime = $this;
-        if ($dateTime->dayOfWeek !== Chronos::getWeekEndsAt()) {
-            $dateTime = $dateTime->next(Chronos::getWeekEndsAt());
+        if ($dateTime->dayOfWeek !== \Cake\Chronos\Chronos::getWeekEndsAt()) {
+            $dateTime = $dateTime->next(\Cake\Chronos\Chronos::getWeekEndsAt());
         }
-
         return $dateTime;
     }
-
     /**
      * Modify to the next occurrence of a given day of the week.
      * If no dayOfWeek is provided, modify to the next occurrence
@@ -825,12 +716,9 @@ class ChronosDate implements Stringable
         if ($dayOfWeek === null) {
             $dayOfWeek = $this->dayOfWeek;
         }
-
         $day = static::$days[$dayOfWeek];
-
-        return $this->modify("next $day");
+        return $this->modify("next {$day}");
     }
-
     /**
      * Modify to the previous occurrence of a given day of the week.
      * If no dayOfWeek is provided, modify to the previous occurrence
@@ -845,12 +733,9 @@ class ChronosDate implements Stringable
         if ($dayOfWeek === null) {
             $dayOfWeek = $this->dayOfWeek;
         }
-
         $day = static::$days[$dayOfWeek];
-
-        return $this->modify("last $day");
+        return $this->modify("last {$day}");
     }
-
     /**
      * Modify to the first occurrence of a given day of the week
      * in the current month. If no dayOfWeek is provided, modify to the
@@ -863,10 +748,8 @@ class ChronosDate implements Stringable
     public function firstOfMonth(?int $dayOfWeek = null): static
     {
         $day = $dayOfWeek === null ? 'day' : static::$days[$dayOfWeek];
-
-        return $this->modify("first $day of this month");
+        return $this->modify("first {$day} of this month");
     }
-
     /**
      * Modify to the last occurrence of a given day of the week
      * in the current month. If no dayOfWeek is provided, modify to the
@@ -879,10 +762,8 @@ class ChronosDate implements Stringable
     public function lastOfMonth(?int $dayOfWeek = null): static
     {
         $day = $dayOfWeek === null ? 'day' : static::$days[$dayOfWeek];
-
-        return $this->modify("last $day of this month");
+        return $this->modify("last {$day} of this month");
     }
-
     /**
      * Modify to the given occurrence of a given day of the week
      * in the current month. If the calculated occurrence is outside the scope
@@ -897,11 +778,9 @@ class ChronosDate implements Stringable
     {
         $dateTime = $this->firstOfMonth();
         $check = $dateTime->format('Y-m');
-        $dateTime = $dateTime->modify("+$nth " . static::$days[$dayOfWeek]);
-
-        return $dateTime->format('Y-m') === $check ? $dateTime : false;
+        $dateTime = $dateTime->modify("+{$nth} " . static::$days[$dayOfWeek]);
+        return $dateTime->format('Y-m') === $check ? $dateTime : \false;
     }
-
     /**
      * Modify to the first occurrence of a given day of the week
      * in the current quarter. If no dayOfWeek is provided, modify to the
@@ -913,12 +792,8 @@ class ChronosDate implements Stringable
      */
     public function firstOfQuarter(?int $dayOfWeek = null): static
     {
-        return $this
-            ->day(1)
-            ->month($this->quarter * Chronos::MONTHS_PER_QUARTER - 2)
-            ->firstOfMonth($dayOfWeek);
+        return $this->day(1)->month($this->quarter * \Cake\Chronos\Chronos::MONTHS_PER_QUARTER - 2)->firstOfMonth($dayOfWeek);
     }
-
     /**
      * Modify to the last occurrence of a given day of the week
      * in the current quarter. If no dayOfWeek is provided, modify to the
@@ -930,12 +805,8 @@ class ChronosDate implements Stringable
      */
     public function lastOfQuarter(?int $dayOfWeek = null): static
     {
-        return $this
-            ->day(1)
-            ->month($this->quarter * Chronos::MONTHS_PER_QUARTER)
-            ->lastOfMonth($dayOfWeek);
+        return $this->day(1)->month($this->quarter * \Cake\Chronos\Chronos::MONTHS_PER_QUARTER)->lastOfMonth($dayOfWeek);
     }
-
     /**
      * Modify to the given occurrence of a given day of the week
      * in the current quarter. If the calculated occurrence is outside the scope
@@ -948,14 +819,12 @@ class ChronosDate implements Stringable
      */
     public function nthOfQuarter(int $nth, int $dayOfWeek): static|false
     {
-        $dateTime = $this->day(1)->month($this->quarter * Chronos::MONTHS_PER_QUARTER);
+        $dateTime = $this->day(1)->month($this->quarter * \Cake\Chronos\Chronos::MONTHS_PER_QUARTER);
         $lastMonth = $dateTime->month;
         $year = $dateTime->year;
-        $dateTime = $dateTime->firstOfQuarter()->modify("+$nth" . static::$days[$dayOfWeek]);
-
-        return $lastMonth < $dateTime->month || $year !== $dateTime->year ? false : $dateTime;
+        $dateTime = $dateTime->firstOfQuarter()->modify("+{$nth}" . static::$days[$dayOfWeek]);
+        return $lastMonth < $dateTime->month || $year !== $dateTime->year ? \false : $dateTime;
     }
-
     /**
      * Modify to the first occurrence of a given day of the week
      * in the current year. If no dayOfWeek is provided, modify to the
@@ -968,10 +837,8 @@ class ChronosDate implements Stringable
     public function firstOfYear(?int $dayOfWeek = null): static
     {
         $day = $dayOfWeek === null ? 'day' : static::$days[$dayOfWeek];
-
-        return $this->modify("first $day of january");
+        return $this->modify("first {$day} of january");
     }
-
     /**
      * Modify to the last occurrence of a given day of the week
      * in the current year. If no dayOfWeek is provided, modify to the
@@ -984,10 +851,8 @@ class ChronosDate implements Stringable
     public function lastOfYear(?int $dayOfWeek = null): static
     {
         $day = $dayOfWeek === null ? 'day' : static::$days[$dayOfWeek];
-
-        return $this->modify("last $day of december");
+        return $this->modify("last {$day} of december");
     }
-
     /**
      * Modify to the given occurrence of a given day of the week
      * in the current year. If the calculated occurrence is outside the scope
@@ -1000,77 +865,69 @@ class ChronosDate implements Stringable
      */
     public function nthOfYear(int $nth, int $dayOfWeek): static|false
     {
-        $dateTime = $this->firstOfYear()->modify("+$nth " . static::$days[$dayOfWeek]);
-
-        return $this->year === $dateTime->year ? $dateTime : false;
+        $dateTime = $this->firstOfYear()->modify("+{$nth} " . static::$days[$dayOfWeek]);
+        return $this->year === $dateTime->year ? $dateTime : \false;
     }
-
     /**
      * Determines if the instance is equal to another
      *
      * @param \Cake\Chronos\ChronosDate $other The instance to compare with.
      * @return bool
      */
-    public function equals(ChronosDate $other): bool
+    public function equals(\Cake\Chronos\ChronosDate $other): bool
     {
         return $this->native == $other->native;
     }
-
     /**
      * Determines if the instance is not equal to another
      *
      * @param \Cake\Chronos\ChronosDate $other The instance to compare with.
      * @return bool
      */
-    public function notEquals(ChronosDate $other): bool
+    public function notEquals(\Cake\Chronos\ChronosDate $other): bool
     {
         return !$this->equals($other);
     }
-
     /**
      * Determines if the instance is greater (after) than another
      *
      * @param \Cake\Chronos\ChronosDate $other The instance to compare with.
      * @return bool
      */
-    public function greaterThan(ChronosDate $other): bool
+    public function greaterThan(\Cake\Chronos\ChronosDate $other): bool
     {
         return $this->native > $other->native;
     }
-
     /**
      * Determines if the instance is greater (after) than or equal to another
      *
      * @param \Cake\Chronos\ChronosDate $other The instance to compare with.
      * @return bool
      */
-    public function greaterThanOrEquals(ChronosDate $other): bool
+    public function greaterThanOrEquals(\Cake\Chronos\ChronosDate $other): bool
     {
         return $this->native >= $other->native;
     }
-
     /**
      * Determines if the instance is less (before) than another
      *
      * @param \Cake\Chronos\ChronosDate $other The instance to compare with.
      * @return bool
      */
-    public function lessThan(ChronosDate $other): bool
+    public function lessThan(\Cake\Chronos\ChronosDate $other): bool
     {
         return $this->native < $other->native;
     }
-
     /**
      * Determines if the instance is less (before) or equal to another
      *
      * @param \Cake\Chronos\ChronosDate $other The instance to compare with.
      * @return bool
      */
-    public function lessThanOrEquals(ChronosDate $other): bool
+    public function lessThanOrEquals(\Cake\Chronos\ChronosDate $other): bool
     {
         return $this->native <= $other->native;
     }
-
     /**
      * Determines if the instance is between two others
      *
@@ -1079,19 +936,16 @@ class ChronosDate implements Stringable
      * @param bool $equals Whether to include the beginning and end of range
      * @return bool
      */
-    public function between(ChronosDate $start, ChronosDate $end, bool $equals = true): bool
+    public function between(\Cake\Chronos\ChronosDate $start, \Cake\Chronos\ChronosDate $end, bool $equals = \true): bool
     {
         if ($start->greaterThan($end)) {
             [$start, $end] = [$end, $start];
         }
-
         if ($equals) {
             return $this->greaterThanOrEquals($start) && $this->lessThanOrEquals($end);
         }
-
         return $this->greaterThan($start) && $this->lessThan($end);
     }
-
     /**
      * Get the closest date from the instance.
      *
@@ -1100,7 +954,7 @@ class ChronosDate implements Stringable
      * @param \Cake\Chronos\ChronosDate ...$others Others instance to compare with.
      * @return self
      */
-    public function closest(ChronosDate $first, ChronosDate $second, ChronosDate ...$others): ChronosDate
+    public function closest(\Cake\Chronos\ChronosDate $first, \Cake\Chronos\ChronosDate $second, \Cake\Chronos\ChronosDate ...$others): \Cake\Chronos\ChronosDate
     {
         $closest = $first;
         $closestDiffInDays = $this->diffInDays($first);
@@ -1111,10 +965,8 @@ class ChronosDate implements Stringable
                 $closestDiffInDays = $otherDiffInDays;
             }
         }
-
         return $closest;
     }
-
     /**
      * Get the farthest date from the instance.
      *
@@ -1123,7 +975,7 @@ class ChronosDate implements Stringable
      * @param \Cake\Chronos\ChronosDate ...$others Others instance to compare with.
      * @return self
      */
-    public function farthest(ChronosDate $first, ChronosDate $second, ChronosDate ...$others): ChronosDate
+    public function farthest(\Cake\Chronos\ChronosDate $first, \Cake\Chronos\ChronosDate $second, \Cake\Chronos\ChronosDate ...$others): \Cake\Chronos\ChronosDate
     {
         $farthest = $first;
         $farthestDiffInDays = $this->diffInDays($first);
@@ -1134,10 +986,8 @@ class ChronosDate implements Stringable
                 $farthestDiffInDays = $otherDiffInDays;
             }
         }
-
         return $farthest;
     }
-
     /**
      * Determines if the instance is a weekday
      *
@@ -1147,7 +997,6 @@ class ChronosDate implements Stringable
     {
         return !$this->isWeekend();
     }
-
     /**
      * Determines if the instance is a weekend day
      *
@@ -1155,9 +1004,8 @@ class ChronosDate implements Stringable
      */
     public function isWeekend(): bool
     {
-        return in_array($this->dayOfWeek, Chronos::getWeekendDays(), true);
+        return in_array($this->dayOfWeek, \Cake\Chronos\Chronos::getWeekendDays(), \true);
     }
-
     /**
      * Determines if the instance is yesterday
      *
@@ -1168,7 +1016,6 @@ class ChronosDate implements Stringable
     {
         return $this->equals(static::yesterday($timezone));
     }
-
     /**
      * Determines if the instance is today
      *
@@ -1179,7 +1026,6 @@ class ChronosDate implements Stringable
     {
         return $this->equals(static::now($timezone));
     }
-
     /**
      * Determines if the instance is tomorrow
      *
@@ -1190,7 +1036,6 @@ class ChronosDate implements Stringable
     {
         return $this->equals(static::tomorrow($timezone));
     }
-
     /**
      * Determines if the instance is within the next week
      *
@@ -1201,7 +1046,6 @@ class ChronosDate implements Stringable
     {
         return $this->format('W o') === static::now($timezone)->addWeeks(1)->format('W o');
     }
-
     /**
      * Determines if the instance is within the last week
      *
@@ -1212,7 +1056,6 @@ class ChronosDate implements Stringable
     {
         return $this->format('W o') === static::now($timezone)->subWeeks(1)->format('W o');
     }
-
     /**
      * Determines if the instance is within the next month
      *
@@ -1223,7 +1066,6 @@ class ChronosDate implements Stringable
     {
         return $this->format('m Y') === static::now($timezone)->addMonths(1)->format('m Y');
     }
-
     /**
      * Determines if the instance is within the last month
      *
@@ -1234,7 +1076,6 @@ class ChronosDate implements Stringable
     {
         return $this->format('m Y') === static::now($timezone)->subMonths(1)->format('m Y');
     }
-
     /**
      * Determines if the instance is within the next year
      *
@@ -1245,7 +1086,6 @@ class ChronosDate implements Stringable
     {
         return $this->year === static::now($timezone)->addYears(1)->year;
     }
-
     /**
      * Determines if the instance is within the last year
      *
@@ -1256,7 +1096,6 @@ class ChronosDate implements Stringable
     {
         return $this->year === static::now($timezone)->subYears(1)->year;
     }
-
     /**
      * Determines if the instance is within the first half of year
      *
@@ -1266,7 +1105,6 @@ class ChronosDate implements Stringable
     {
         return $this->half === 1;
     }
-
     /**
      * Determines if the instance is within the second half of year
      *
@@ -1276,7 +1114,6 @@ class ChronosDate implements Stringable
     {
         return $this->half === 2;
     }
-
     /**
      * Determines if the instance is in the future, ie. greater (after) than now
      *
@@ -1287,7 +1124,6 @@ class ChronosDate implements Stringable
     {
         return $this->greaterThan(static::now($timezone));
     }
-
     /**
      * Determines if the instance is in the past, ie. less (before) than now
      *
@@ -1298,7 +1134,6 @@ class ChronosDate implements Stringable
     {
         return $this->lessThan(static::now($timezone));
     }
-
     /**
      * Determines if the instance is a leap year
      *
@@ -1308,7 +1143,6 @@ class ChronosDate implements Stringable
     {
         return $this->format('L') === '1';
     }
-
     /**
      * Checks if this day is a Sunday.
      *
@@ -1316,9 +1150,8 @@ class ChronosDate implements Stringable
      */
     public function isSunday(): bool
     {
-        return $this->dayOfWeek === Chronos::SUNDAY;
+        return $this->dayOfWeek === \Cake\Chronos\Chronos::SUNDAY;
     }
-
     /**
      * Checks if this day is a Monday.
      *
@@ -1326,9 +1159,8 @@ class ChronosDate implements Stringable
      */
     public function isMonday(): bool
     {
-        return $this->dayOfWeek === Chronos::MONDAY;
+        return $this->dayOfWeek === \Cake\Chronos\Chronos::MONDAY;
     }
-
     /**
      * Checks if this day is a Tuesday.
      *
@@ -1336,9 +1168,8 @@ class ChronosDate implements Stringable
      */
     public function isTuesday(): bool
     {
-        return $this->dayOfWeek === Chronos::TUESDAY;
+        return $this->dayOfWeek === \Cake\Chronos\Chronos::TUESDAY;
     }
-
     /**
      * Checks if this day is a Wednesday.
      *
@@ -1346,9 +1177,8 @@ class ChronosDate implements Stringable
      */
     public function isWednesday(): bool
     {
-        return $this->dayOfWeek === Chronos::WEDNESDAY;
+        return $this->dayOfWeek === \Cake\Chronos\Chronos::WEDNESDAY;
     }
-
     /**
      * Checks if this day is a Thursday.
      *
@@ -1356,9 +1186,8 @@ class ChronosDate implements Stringable
      */
     public function isThursday(): bool
     {
-        return $this->dayOfWeek === Chronos::THURSDAY;
+        return $this->dayOfWeek === \Cake\Chronos\Chronos::THURSDAY;
     }
-
     /**
      * Checks if this day is a Friday.
      *
@@ -1366,9 +1195,8 @@ class ChronosDate implements Stringable
      */
     public function isFriday(): bool
     {
-        return $this->dayOfWeek === Chronos::FRIDAY;
+        return $this->dayOfWeek === \Cake\Chronos\Chronos::FRIDAY;
     }
-
     /**
      * Checks if this day is a Saturday.
      *
@@ -1376,9 +1204,8 @@ class ChronosDate implements Stringable
      */
     public function isSaturday(): bool
     {
-        return $this->dayOfWeek === Chronos::SATURDAY;
+        return $this->dayOfWeek === \Cake\Chronos\Chronos::SATURDAY;
     }
-
     /**
      * Returns true this instance happened within the specified interval
      *
@@ -1388,13 +1215,11 @@ class ChronosDate implements Stringable
      */
     public function wasWithinLast(string|int $timeInterval): bool
     {
-        $now = new static(new Chronos());
+        $now = new static(new \Cake\Chronos\Chronos());
         $interval = $now->modify('-' . $timeInterval);
         $thisTime = $this->format('U');
-
         return $thisTime >= $interval->format('U') && $thisTime <= $now->format('U');
     }
-
     /**
      * Returns true this instance will happen within the specified interval
      *
@@ -1404,13 +1229,11 @@ class ChronosDate implements Stringable
      */
     public function isWithinNext(string|int $timeInterval): bool
     {
-        $now = new static(new Chronos());
+        $now = new static(new \Cake\Chronos\Chronos());
         $interval = $now->modify('+' . $timeInterval);
         $thisTime = $this->format('U');
-
         return $thisTime <= $interval->format('U') && $thisTime >= $now->format('U');
     }
-
     /**
      * Get the difference by the given interval using a filter callable
      *
@@ -1421,36 +1244,26 @@ class ChronosDate implements Stringable
      * @param int $options DatePeriod options, {@see https://www.php.net/manual/en/class.dateperiod.php}
      * @return int
      */
-    public function diffFiltered(
-        DateInterval $interval,
-        callable $callback,
-        ?ChronosDate $other = null,
-        bool $absolute = true,
-        int $options = 0,
-    ): int {
+    public function diffFiltered(DateInterval $interval, callable $callback, ?\Cake\Chronos\ChronosDate $other = null, bool $absolute = \true, int $options = 0): int
+    {
         $start = $this;
-        $end = $other ?? new ChronosDate(Chronos::now());
-        $inverse = false;
-
+        $end = $other ?? new \Cake\Chronos\ChronosDate(\Cake\Chronos\Chronos::now());
+        $inverse = \false;
         if ($end < $start) {
             $start = $end;
             $end = $this;
-            $inverse = true;
+            $inverse = \true;
         }
         // Hack around PHP's DatePeriod not counting equal dates at midnight as
         // within the range. Sadly INCLUDE_END_DATE doesn't land until 8.2
         $endTime = $end->native->modify('+1 second');
-
         $period = new DatePeriod($start->native, $interval, $endTime, $options);
         $vals = array_filter(iterator_to_array($period), function (DateTimeInterface $date) use ($callback) {
             return $callback(static::parse($date));
         });
-
         $diff = count($vals);
-
         return $inverse && !$absolute ? -$diff : $diff;
     }
-
     /**
      * Get the difference in years
      *
@@ -1458,13 +1271,11 @@ class ChronosDate implements Stringable
      * @param bool $absolute Get the absolute of the difference
      * @return int
      */
-    public function diffInYears(?ChronosDate $other = null, bool $absolute = true): int
+    public function diffInYears(?\Cake\Chronos\ChronosDate $other = null, bool $absolute = \true): int
     {
-        $diff = $this->diff($other ?? new static(new Chronos()), $absolute);
-
+        $diff = $this->diff($other ?? new static(new \Cake\Chronos\Chronos()), $absolute);
         return $diff->invert ? -$diff->y : $diff->y;
     }
-
     /**
      * Get the difference in months
      *
@@ -1472,14 +1283,12 @@ class ChronosDate implements Stringable
      * @param bool $absolute Get the absolute of the difference
      * @return int
      */
-    public function diffInMonths(?ChronosDate $other = null, bool $absolute = true): int
+    public function diffInMonths(?\Cake\Chronos\ChronosDate $other = null, bool $absolute = \true): int
     {
-        $diff = $this->diff($other ?? new static(Chronos::now()), $absolute);
-        $months = $diff->y * Chronos::MONTHS_PER_YEAR + $diff->m;
-
+        $diff = $this->diff($other ?? new static(\Cake\Chronos\Chronos::now()), $absolute);
+        $months = $diff->y * \Cake\Chronos\Chronos::MONTHS_PER_YEAR + $diff->m;
         return $diff->invert ? -$months : $months;
     }
-
     /**
      * Get the difference in weeks
      *
@@ -1487,11 +1296,10 @@ class ChronosDate implements Stringable
      * @param bool $absolute Get the absolute of the difference
      * @return int
      */
-    public function diffInWeeks(?ChronosDate $other = null, bool $absolute = true): int
+    public function diffInWeeks(?\Cake\Chronos\ChronosDate $other = null, bool $absolute = \true): int
     {
-        return (int)($this->diffInDays($other, $absolute) / Chronos::DAYS_PER_WEEK);
+        return (int) ($this->diffInDays($other, $absolute) / \Cake\Chronos\Chronos::DAYS_PER_WEEK);
     }
-
     /**
      * Get the difference in days
      *
@@ -1499,13 +1307,11 @@ class ChronosDate implements Stringable
      * @param bool $absolute Get the absolute of the difference
      * @return int
      */
-    public function diffInDays(?ChronosDate $other = null, bool $absolute = true): int
+    public function diffInDays(?\Cake\Chronos\ChronosDate $other = null, bool $absolute = \true): int
     {
-        $diff = $this->diff($other ?? new static(Chronos::now()), $absolute);
-
-        return $diff->invert ? -(int)$diff->days : (int)$diff->days;
+        $diff = $this->diff($other ?? new static(\Cake\Chronos\Chronos::now()), $absolute);
+        return $diff->invert ? -(int) $diff->days : (int) $diff->days;
     }
-
     /**
      * Get the difference in days using a filter callable
      *
@@ -1515,15 +1321,10 @@ class ChronosDate implements Stringable
      * @param int $options DatePeriod options, {@see https://www.php.net/manual/en/class.dateperiod.php}
      * @return int
      */
-    public function diffInDaysFiltered(
-        callable $callback,
-        ?ChronosDate $other = null,
-        bool $absolute = true,
-        int $options = 0,
-    ): int {
+    public function diffInDaysFiltered(callable $callback, ?\Cake\Chronos\ChronosDate $other = null, bool $absolute = \true, int $options = 0): int
+    {
         return $this->diffFiltered(new DateInterval('P1D'), $callback, $other, $absolute, $options);
     }
-
     /**
      * Get the difference in weekdays
      *
@@ -1532,13 +1333,12 @@ class ChronosDate implements Stringable
      * @param int $options DatePeriod options, {@see https://www.php.net/manual/en/class.dateperiod.php}
      * @return int
      */
-    public function diffInWeekdays(?ChronosDate $other = null, bool $absolute = true, int $options = 0): int
+    public function diffInWeekdays(?\Cake\Chronos\ChronosDate $other = null, bool $absolute = \true, int $options = 0): int
     {
-        return $this->diffInDaysFiltered(function (ChronosDate $date) {
+        return $this->diffInDaysFiltered(function (\Cake\Chronos\ChronosDate $date) {
             return $date->isWeekday();
         }, $other, $absolute, $options);
     }
-
     /**
      * Get the difference in weekend days using a filter
      *
@@ -1547,13 +1347,12 @@ class ChronosDate implements Stringable
      * @param int $options DatePeriod options, {@see https://www.php.net/manual/en/class.dateperiod.php}
      * @return int
      */
-    public function diffInWeekendDays(?ChronosDate $other = null, bool $absolute = true, int $options = 0): int
+    public function diffInWeekendDays(?\Cake\Chronos\ChronosDate $other = null, bool $absolute = \true, int $options = 0): int
     {
-        return $this->diffInDaysFiltered(function (ChronosDate $date) {
+        return $this->diffInDaysFiltered(function (\Cake\Chronos\ChronosDate $date) {
             return $date->isWeekend();
         }, $other, $absolute, $options);
     }
-
     /**
      * Get the difference in a human readable format.
      *
@@ -1573,11 +1372,10 @@ class ChronosDate implements Stringable
      * @param bool $absolute removes difference modifiers ago, after, etc
      * @return string
      */
-    public function diffForHumans(?ChronosDate $other = null, bool $absolute = false): string
+    public function diffForHumans(?\Cake\Chronos\ChronosDate $other = null, bool $absolute = \false): string
     {
         return static::diffFormatter()->diffForHumans($this, $other, $absolute);
     }
-
     /**
      * Returns the date as a `DateTimeImmutable` instance at midnight.
      *
@@ -1589,12 +1387,9 @@ class ChronosDate implements Stringable
         if ($timezone === null) {
             return $this->native;
         }
-
         $timezone = is_string($timezone) ? new DateTimeZone($timezone) : $timezone;
-
         return new DateTimeImmutable($this->native->format('Y-m-d H:i:s.u'), $timezone);
     }
-
     /**
      * Returns the date as a `DateTimeImmutable` instance at midnight.
      *
@@ -1607,7 +1402,6 @@ class ChronosDate implements Stringable
     {
         return $this->toDateTimeImmutable($timezone);
     }
-
     /**
      * Get a part of the object
      *
@@ -1617,41 +1411,24 @@ class ChronosDate implements Stringable
      */
     public function __get(string $name): string|float|int|bool
     {
-        static $formats = [
-            'year' => 'Y',
-            'yearIso' => 'o',
-            'month' => 'n',
-            'day' => 'j',
-            'dayOfWeek' => 'N',
-            'dayOfYear' => 'z',
-            'weekOfYear' => 'W',
-            'daysInMonth' => 't',
-        ];
-
-        switch (true) {
+        static $formats = ['year' => 'Y', 'yearIso' => 'o', 'month' => 'n', 'day' => 'j', 'dayOfWeek' => 'N', 'dayOfYear' => 'z', 'weekOfYear' => 'W', 'daysInMonth' => 't'];
+        switch (\true) {
             case isset($formats[$name]):
-                return (int)$this->format($formats[$name]);
-
+                return (int) $this->format($formats[$name]);
             case $name === 'dayOfWeekName':
                 return $this->format('l');
-
             case $name === 'weekOfMonth':
-                return (int)ceil($this->day / Chronos::DAYS_PER_WEEK);
-
+                return (int) ceil($this->day / \Cake\Chronos\Chronos::DAYS_PER_WEEK);
             case $name === 'age':
                 return $this->diffInYears();
-
             case $name === 'quarter':
-                return (int)ceil($this->month / 3);
-
+                return (int) ceil($this->month / 3);
             case $name === 'half':
                 return $this->month <= 6 ? 1 : 2;
-
             default:
                 throw new InvalidArgumentException(sprintf('Unknown getter `%s`', $name));
         }
     }
-
     /**
      * Check if an attribute exists on the object
      *
@@ -1663,12 +1440,10 @@ class ChronosDate implements Stringable
         try {
             $this->__get($name);
         } catch (InvalidArgumentException $e) {
-            return false;
+            return \false;
         }
-
-        return true;
+        return \true;
     }
-
     /**
      * Return properties for debugging.
      *
@@ -1676,11 +1451,7 @@ class ChronosDate implements Stringable
      */
     public function __debugInfo(): array
     {
-        $properties = [
-            'hasFixedNow' => Chronos::hasTestNow(),
-            'date' => $this->format('Y-m-d'),
-        ];
-
+        $properties = ['hasFixedNow' => \Cake\Chronos\Chronos::hasTestNow(), 'date' => $this->format('Y-m-d')];
         return $properties;
     }
 }

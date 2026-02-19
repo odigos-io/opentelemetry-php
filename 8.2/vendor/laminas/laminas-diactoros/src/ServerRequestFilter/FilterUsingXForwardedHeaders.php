@@ -1,15 +1,13 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Odigos\Laminas\Diactoros\ServerRequestFilter;
 
-namespace Laminas\Diactoros\ServerRequestFilter;
-
-use Laminas\Diactoros\Exception\InvalidForwardedHeaderNameException;
-use Laminas\Diactoros\Exception\InvalidProxyAddressException;
-use Laminas\Diactoros\UriFactory;
+use Odigos\Laminas\Diactoros\Exception\InvalidForwardedHeaderNameException;
+use Odigos\Laminas\Diactoros\Exception\InvalidProxyAddressException;
+use Odigos\Laminas\Diactoros\UriFactory;
 use Override;
 use Psr\Http\Message\ServerRequestInterface;
-
 use function array_values;
 use function assert;
 use function count;
@@ -19,11 +17,9 @@ use function in_array;
 use function is_string;
 use function str_contains;
 use function strtolower;
-
 use const FILTER_FLAG_IPV4;
 use const FILTER_FLAG_IPV6;
 use const FILTER_VALIDATE_IP;
-
 /**
  * Modify the URI to reflect the X-Forwarded-* headers.
  *
@@ -34,43 +30,31 @@ use const FILTER_VALIDATE_IP;
  */
 final class FilterUsingXForwardedHeaders implements FilterServerRequestInterface
 {
-    public const HEADER_HOST  = 'X-FORWARDED-HOST';
-    public const HEADER_PORT  = 'X-FORWARDED-PORT';
+    public const HEADER_HOST = 'X-FORWARDED-HOST';
+    public const HEADER_PORT = 'X-FORWARDED-PORT';
     public const HEADER_PROTO = 'X-FORWARDED-PROTO';
-
-    private const X_FORWARDED_HEADERS = [
-        self::HEADER_HOST,
-        self::HEADER_PORT,
-        self::HEADER_PROTO,
-    ];
-
+    private const X_FORWARDED_HEADERS = [self::HEADER_HOST, self::HEADER_PORT, self::HEADER_PROTO];
     /**
      * Only allow construction via named constructors
      *
      * @param list<non-empty-string> $trustedProxies
      * @param list<FilterUsingXForwardedHeaders::HEADER_*> $trustedHeaders
      */
-    private function __construct(
-        private readonly array $trustedProxies = [],
-        private readonly array $trustedHeaders = []
-    ) {
+    private function __construct(private readonly array $trustedProxies = [], private readonly array $trustedHeaders = [])
+    {
     }
-
     #[Override]
     public function __invoke(ServerRequestInterface $request): ServerRequestInterface
     {
         $remoteAddress = $request->getServerParams()['REMOTE_ADDR'] ?? '';
-
-        if ('' === $remoteAddress || ! is_string($remoteAddress)) {
+        if ('' === $remoteAddress || !is_string($remoteAddress)) {
             // Should we trigger a warning here?
             return $request;
         }
-
-        if (! $this->isFromTrustedProxy($remoteAddress)) {
+        if (!$this->isFromTrustedProxy($remoteAddress)) {
             // Do nothing
             return $request;
         }
-
         // Update the URI based on the trusted headers
         $uri = $originalUri = $request->getUri();
         foreach ($this->trustedHeaders as $headerName) {
@@ -79,12 +63,10 @@ final class FilterUsingXForwardedHeaders implements FilterServerRequestInterface
                 // Reject empty headers and/or headers with multiple values
                 continue;
             }
-
             switch ($headerName) {
                 case self::HEADER_HOST:
                     [$host, $port] = UriFactory::marshalHostAndPortFromHeader($header);
-                    $uri           = $uri
-                        ->withHost($host);
+                    $uri = $uri->withHost($host);
                     if ($port !== null) {
                         $uri = $uri->withPort($port);
                     }
@@ -94,18 +76,15 @@ final class FilterUsingXForwardedHeaders implements FilterServerRequestInterface
                     break;
                 case self::HEADER_PROTO:
                     $scheme = strtolower($header) === 'https' ? 'https' : 'http';
-                    $uri    = $uri->withScheme($scheme);
+                    $uri = $uri->withScheme($scheme);
                     break;
             }
         }
-
         if ($uri !== $originalUri) {
             return $request->withUri($uri);
         }
-
         return $request;
     }
-
     /**
      * Indicate which proxies and which X-Forwarded headers to trust.
      *
@@ -119,16 +98,12 @@ final class FilterUsingXForwardedHeaders implements FilterServerRequestInterface
      * @throws InvalidProxyAddressException
      * @throws InvalidForwardedHeaderNameException
      */
-    public static function trustProxies(
-        array $proxyCIDRList,
-        array $trustedHeaders = self::X_FORWARDED_HEADERS
-    ): self {
+    public static function trustProxies(array $proxyCIDRList, array $trustedHeaders = self::X_FORWARDED_HEADERS): self
+    {
         $proxyCIDRList = self::normalizeProxiesList($proxyCIDRList);
         self::validateTrustedHeaders($trustedHeaders);
-
         return new self($proxyCIDRList, $trustedHeaders);
     }
-
     /**
      * Trust any X-FORWARDED-* headers from any address.
      *
@@ -144,7 +119,6 @@ final class FilterUsingXForwardedHeaders implements FilterServerRequestInterface
     {
         return self::trustProxies(['*']);
     }
-
     /**
      * Trust X-Forwarded headers from reserved subnetworks.
      *
@@ -170,33 +144,31 @@ final class FilterUsingXForwardedHeaders implements FilterServerRequestInterface
             '127.0.0.0/8',
             '172.16.0.0/12',
             '192.168.0.0/16',
-            '::1/128', // ipv6 localhost
-            'fc00::/7', // ipv6 private networks
-            'fe80::/10', // ipv6 local-link addresses
+            '::1/128',
+            // ipv6 localhost
+            'fc00::/7',
+            // ipv6 private networks
+            'fe80::/10',
         ], $trustedHeaders);
     }
-
     private function isFromTrustedProxy(string $remoteAddress): bool
     {
         foreach ($this->trustedProxies as $proxy) {
             if (IPRange::matches($remoteAddress, $proxy)) {
-                return true;
+                return \true;
             }
         }
-
-        return false;
+        return \false;
     }
-
     /** @throws InvalidForwardedHeaderNameException */
     private static function validateTrustedHeaders(array $headers): void
     {
         foreach ($headers as $header) {
-            if (! in_array($header, self::X_FORWARDED_HEADERS, true)) {
+            if (!in_array($header, self::X_FORWARDED_HEADERS, \true)) {
                 throw InvalidForwardedHeaderNameException::forHeader($header);
             }
         }
     }
-
     /**
      * @param list<non-empty-string> $proxyCIDRList
      * @return list<non-empty-string>
@@ -204,63 +176,41 @@ final class FilterUsingXForwardedHeaders implements FilterServerRequestInterface
      */
     private static function normalizeProxiesList(array $proxyCIDRList): array
     {
-        $foundWildcard = false;
-
+        $foundWildcard = \false;
         foreach ($proxyCIDRList as $index => $cidr) {
             if ($cidr === '*') {
                 unset($proxyCIDRList[$index]);
-                $foundWildcard = true;
+                $foundWildcard = \true;
                 continue;
             }
-
-            if (! self::validateProxyCIDR($cidr)) {
+            if (!self::validateProxyCIDR($cidr)) {
                 throw InvalidProxyAddressException::forAddress($cidr);
             }
         }
-
         if ($foundWildcard) {
             $proxyCIDRList[] = '0.0.0.0/0';
             $proxyCIDRList[] = '::/0';
         }
-
         return array_values($proxyCIDRList);
     }
-
     private static function validateProxyCIDR(mixed $cidr): bool
     {
-        if (! is_string($cidr) || '' === $cidr) {
-            return false;
+        if (!is_string($cidr) || '' === $cidr) {
+            return \false;
         }
-
         $address = $cidr;
-        $mask    = null;
+        $mask = null;
         if (str_contains($cidr, '/')) {
             $parts = explode('/', $cidr, 2);
             assert(count($parts) >= 2);
             [$address, $mask] = $parts;
-            $mask             = (int) $mask;
+            $mask = (int) $mask;
         }
-
         if (str_contains($address, ':')) {
             // is IPV6
-            return filter_var($address, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)
-                && (
-                    $mask === null
-                    || (
-                        $mask <= 128
-                        && $mask >= 0
-                    )
-                );
+            return filter_var($address, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) && ($mask === null || $mask <= 128 && $mask >= 0);
         }
-
         // is IPV4
-        return filter_var($address, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)
-            && (
-                $mask === null
-                || (
-                    $mask <= 32
-                    && $mask >= 0
-                )
-            );
+        return filter_var($address, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4) && ($mask === null || $mask <= 32 && $mask >= 0);
     }
 }

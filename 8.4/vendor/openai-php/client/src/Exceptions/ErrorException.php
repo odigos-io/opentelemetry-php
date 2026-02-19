@@ -1,16 +1,13 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenAI\Exceptions;
 
 use Exception;
 use Psr\Http\Message\ResponseInterface;
-
 final class ErrorException extends Exception
 {
     private readonly int $statusCode;
-
     /**
      * Creates a new Exception instance.
      *
@@ -19,18 +16,14 @@ final class ErrorException extends Exception
     public function __construct(private readonly string|array $contents, public readonly ResponseInterface $response)
     {
         $this->statusCode = $response->getStatusCode();
-
         // Errors can be a string or an object with message, type, and code
         $contents = is_string($contents) ? ['message' => $contents] : $contents;
-        $message = ($contents['message'] ?? null) ?: (string) ($contents['code'] ?? null) ?: 'Unknown error';
-
+        $message = ($contents['message'] ?? null ?: (string) ($contents['code'] ?? null)) ?: 'Unknown error';
         if (is_array($message)) {
-            $message = implode(PHP_EOL, $message);
+            $message = implode(\PHP_EOL, $message);
         }
-
         parent::__construct($message);
     }
-
     /**
      * Returns the HTTP status code.
      *
@@ -40,7 +33,6 @@ final class ErrorException extends Exception
     {
         return $this->statusCode;
     }
-
     /**
      * Returns the error message.
      */
@@ -48,7 +40,6 @@ final class ErrorException extends Exception
     {
         return $this->getMessage();
     }
-
     /**
      * Returns the error type.
      */
@@ -56,7 +47,6 @@ final class ErrorException extends Exception
     {
         return $this->contents['type'] ?? null;
     }
-
     /**
      * Returns the error code.
      */

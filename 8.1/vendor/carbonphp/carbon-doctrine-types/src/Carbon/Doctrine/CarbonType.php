@@ -2,6 +2,6 @@
 
 namespace Carbon\Doctrine;
 
-class CarbonType extends DateTimeType implements CarbonDoctrineType
+class CarbonType extends \Carbon\Doctrine\DateTimeType implements \Carbon\Doctrine\CarbonDoctrineType
 {
 }

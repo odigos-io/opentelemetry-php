@@ -8,31 +8,26 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\Mime\Header;
 
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Exception\RfcComplianceException;
-
 /**
  * A Mailbox list MIME Header for something like From, To, Cc, and Bcc (one or more named addresses).
  *
  * @author Chris Corbyn
  */
-final class MailboxListHeader extends AbstractHeader
+final class MailboxListHeader extends \Symfony\Component\Mime\Header\AbstractHeader
 {
     private array $addresses = [];
-
     /**
      * @param Address[] $addresses
      */
     public function __construct(string $name, array $addresses)
     {
         parent::__construct($name);
-
         $this->setAddresses($addresses);
     }
-
     /**
      * @param Address[] $body
      *
@@ -42,7 +37,6 @@ final class MailboxListHeader extends AbstractHeader
     {
         $this->setAddresses($body);
     }
-
     /**
      * @return Address[]
      *
@@ -52,7 +46,6 @@ final class MailboxListHeader extends AbstractHeader
     {
         return $this->getAddresses();
     }
-
     /**
      * Sets a list of addresses to be shown in this Header.
      *
@@ -65,7 +58,6 @@ final class MailboxListHeader extends AbstractHeader
         $this->addresses = [];
         $this->addAddresses($addresses);
     }
-
     /**
      * Sets a list of addresses to be shown in this Header.
      *
@@ -79,7 +71,6 @@ final class MailboxListHeader extends AbstractHeader
             $this->addAddress($address);
         }
     }
-
     /**
      * @throws RfcComplianceException
      */
@@ -87,7 +78,6 @@ final class MailboxListHeader extends AbstractHeader
     {
         $this->addresses[] = $address;
     }
-
     /**
      * @return Address[]
      */
@@ -95,7 +85,6 @@ final class MailboxListHeader extends AbstractHeader
     {
         return $this->addresses;
     }
-
     /**
      * Gets the full mailbox list of this Header as an array of valid RFC 2822 strings.
      *
@@ -109,19 +98,16 @@ final class MailboxListHeader extends AbstractHeader
         foreach ($this->addresses as $address) {
             $str = $address->getEncodedAddress();
             if ($name = $address->getName()) {
-                $str = $this->createPhrase($this, $name, $this->getCharset(), !$strings).' <'.$str.'>';
+                $str = $this->createPhrase($this, $name, $this->getCharset(), !$strings) . ' <' . $str . '>';
             }
             $strings[] = $str;
         }
-
         return $strings;
     }
-
     public function getBodyAsString(): string
     {
         return implode(', ', $this->getAddressStrings());
     }
-
     /**
      * Redefine the encoding requirements for addresses.
      *

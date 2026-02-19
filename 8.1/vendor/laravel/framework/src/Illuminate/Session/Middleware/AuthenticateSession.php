@@ -7,7 +7,6 @@ use Illuminate\Auth\AuthenticationException;
 use Illuminate\Contracts\Auth\Factory as AuthFactory;
 use Illuminate\Contracts\Session\Middleware\AuthenticatesSessions;
 use Illuminate\Http\Request;
-
 class AuthenticateSession implements AuthenticatesSessions
 {
     /**
@@ -16,7 +15,6 @@ class AuthenticateSession implements AuthenticatesSessions
      * @var \Illuminate\Contracts\Auth\Factory
      */
     protected $auth;
-
     /**
      * Create a new middleware instance.
      *
@@ -27,7 +25,6 @@ class AuthenticateSession implements AuthenticatesSessions
     {
         $this->auth = $auth;
     }
-
     /**
      * Handle an incoming request.
      *
@@ -37,33 +34,27 @@ class AuthenticateSession implements AuthenticatesSessions
      */
     public function handle($request, Closure $next)
     {
-        if (! $request->hasSession() || ! $request->user()) {
+        if (!$request->hasSession() || !$request->user()) {
             return $next($request);
         }
-
         if ($this->guard()->viaRemember()) {
             $passwordHash = explode('|', $request->cookies->get($this->guard()->getRecallerName()))[2] ?? null;
-
-            if (! $passwordHash || $passwordHash != $request->user()->getAuthPassword()) {
+            if (!$passwordHash || $passwordHash != $request->user()->getAuthPassword()) {
                 $this->logout($request);
             }
         }
-
-        if (! $request->session()->has('password_hash_'.$this->auth->getDefaultDriver())) {
+        if (!$request->session()->has('password_hash_' . $this->auth->getDefaultDriver())) {
             $this->storePasswordHashInSession($request);
         }
-
-        if ($request->session()->get('password_hash_'.$this->auth->getDefaultDriver()) !== $request->user()->getAuthPassword()) {
+        if ($request->session()->get('password_hash_' . $this->auth->getDefaultDriver()) !== $request->user()->getAuthPassword()) {
             $this->logout($request);
         }
-
         return tap($next($request), function () use ($request) {
-            if (! is_null($this->guard()->user())) {
+            if (!is_null($this->guard()->user())) {
                 $this->storePasswordHashInSession($request);
             }
         });
     }
-
     /**
      * Store the user's current password hash in the session.
      *
@@ -72,15 +63,11 @@ class AuthenticateSession implements AuthenticatesSessions
      */
     protected function storePasswordHashInSession($request)
     {
-        if (! $request->user()) {
+        if (!$request->user()) {
             return;
         }
-
-        $request->session()->put([
-            'password_hash_'.$this->auth->getDefaultDriver() => $request->user()->getAuthPassword(),
-        ]);
+        $request->session()->put(['password_hash_' . $this->auth->getDefaultDriver() => $request->user()->getAuthPassword()]);
     }
-
     /**
      * Log the user out of the application.
      *
@@ -92,14 +79,9 @@ class AuthenticateSession implements AuthenticatesSessions
     protected function logout($request)
     {
         $this->guard()->logoutCurrentDevice();
-
         $request->session()->flush();
-
-        throw new AuthenticationException(
-            'Unauthenticated.', [$this->auth->getDefaultDriver()], $this->redirectTo($request)
-        );
+        throw new AuthenticationException('Unauthenticated.', [$this->auth->getDefaultDriver()], $this->redirectTo($request));
     }
-
     /**
      * Get the guard instance that should be used by the middleware.
      *
@@ -109,7 +91,6 @@ class AuthenticateSession implements AuthenticatesSessions
     {
         return $this->auth;
     }
-
     /**
      * Get the path the user should be redirected to when their session is not authenticated.
      *

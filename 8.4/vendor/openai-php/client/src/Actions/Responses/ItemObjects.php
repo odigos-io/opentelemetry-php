@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenAI\Actions\Responses;
 
 use OpenAI\Responses\Responses\Input\ComputerToolCallOutput;
@@ -23,7 +22,6 @@ use OpenAI\Responses\Responses\Output\OutputMcpListTools;
 use OpenAI\Responses\Responses\Output\OutputMessage;
 use OpenAI\Responses\Responses\Output\OutputReasoning;
 use OpenAI\Responses\Responses\Output\OutputWebSearchToolCall;
-
 /**
  * @phpstan-import-type InputMessageType from InputMessage
  * @phpstan-import-type ComputerToolCallOutputType from ComputerToolCallOutput
@@ -56,28 +54,25 @@ final class ItemObjects
      */
     public static function parse(array $outputItems): array
     {
-        return array_map(
-            fn (array $item): InputMessage|ComputerToolCallOutput|FunctionToolCallOutput|LocalShellCallOutput|McpApprovalResponse|CustomToolCallOutput|OutputMessage|OutputComputerToolCall|OutputFileSearchToolCall|OutputWebSearchToolCall|OutputFunctionToolCall|OutputReasoning|OutputMcpListTools|OutputMcpApprovalRequest|OutputMcpCall|OutputImageGenerationToolCall|OutputCodeInterpreterToolCall|OutputLocalShellCall|OutputCustomToolCall => match ($item['type']) {
-                'message' => $item['role'] === 'assistant' ? OutputMessage::from($item) : InputMessage::from($item),
-                'file_search_call' => OutputFileSearchToolCall::from($item),
-                'function_call' => OutputFunctionToolCall::from($item),
-                'function_call_output' => FunctionToolCallOutput::from($item),
-                'web_search_call' => OutputWebSearchToolCall::from($item),
-                'computer_call' => OutputComputerToolCall::from($item),
-                'computer_call_output' => ComputerToolCallOutput::from($item),
-                'reasoning' => OutputReasoning::from($item),
-                'mcp_list_tools' => OutputMcpListTools::from($item),
-                'mcp_approval_request' => OutputMcpApprovalRequest::from($item),
-                'mcp_call' => OutputMcpCall::from($item),
-                'image_generation_call' => OutputImageGenerationToolCall::from($item),
-                'code_interpreter_call' => OutputCodeInterpreterToolCall::from($item),
-                'local_shell_call' => OutputLocalShellCall::from($item),
-                'custom_tool_call' => OutputCustomToolCall::from($item),
-                'local_shell_call_output' => LocalShellCallOutput::from($item),
-                'custom_tool_call_output' => CustomToolCallOutput::from($item),
-                'mcp_approval_response' => McpApprovalResponse::from($item),
-            },
-            $outputItems,
-        );
+        return array_map(fn(array $item): InputMessage|ComputerToolCallOutput|FunctionToolCallOutput|LocalShellCallOutput|McpApprovalResponse|CustomToolCallOutput|OutputMessage|OutputComputerToolCall|OutputFileSearchToolCall|OutputWebSearchToolCall|OutputFunctionToolCall|OutputReasoning|OutputMcpListTools|OutputMcpApprovalRequest|OutputMcpCall|OutputImageGenerationToolCall|OutputCodeInterpreterToolCall|OutputLocalShellCall|OutputCustomToolCall => match ($item['type']) {
+            'message' => $item['role'] === 'assistant' ? OutputMessage::from($item) : InputMessage::from($item),
+            'file_search_call' => OutputFileSearchToolCall::from($item),
+            'function_call' => OutputFunctionToolCall::from($item),
+            'function_call_output' => FunctionToolCallOutput::from($item),
+            'web_search_call' => OutputWebSearchToolCall::from($item),
+            'computer_call' => OutputComputerToolCall::from($item),
+            'computer_call_output' => ComputerToolCallOutput::from($item),
+            'reasoning' => OutputReasoning::from($item),
+            'mcp_list_tools' => OutputMcpListTools::from($item),
+            'mcp_approval_request' => OutputMcpApprovalRequest::from($item),
+            'mcp_call' => OutputMcpCall::from($item),
+            'image_generation_call' => OutputImageGenerationToolCall::from($item),
+            'code_interpreter_call' => OutputCodeInterpreterToolCall::from($item),
+            'local_shell_call' => OutputLocalShellCall::from($item),
+            'custom_tool_call' => OutputCustomToolCall::from($item),
+            'local_shell_call_output' => LocalShellCallOutput::from($item),
+            'custom_tool_call_output' => CustomToolCallOutput::from($item),
+            'mcp_approval_response' => McpApprovalResponse::from($item),
+        }, $outputItems);
     }
 }

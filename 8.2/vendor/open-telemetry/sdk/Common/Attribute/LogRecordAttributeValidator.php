@@ -1,17 +1,15 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\SDK\Common\Attribute;
 
-class LogRecordAttributeValidator implements AttributeValidatorInterface
+class LogRecordAttributeValidator implements \OpenTelemetry\SDK\Common\Attribute\AttributeValidatorInterface
 {
     #[\Override]
     public function validate($value): bool
     {
-        return true;
+        return \true;
     }
-
     #[\Override]
     public function getInvalidMessage(): string
     {

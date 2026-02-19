@@ -5,7 +5,6 @@ namespace Illuminate\Queue\Middleware;
 use Illuminate\Cache\RateLimiter;
 use Illuminate\Container\Container;
 use Throwable;
-
 class ThrottlesExceptions
 {
     /**
@@ -14,77 +13,66 @@ class ThrottlesExceptions
      * @var string
      */
     protected $key;
-
     /**
      * Indicates whether the throttle key should use the job's UUID.
      *
      * @var bool
      */
-    protected $byJob = false;
-
+    protected $byJob = \false;
     /**
      * The maximum number of attempts allowed before rate limiting applies.
      *
      * @var int
      */
     protected $maxAttempts;
-
     /**
      * The number of seconds until the maximum attempts are reset.
      *
      * @var int
      */
     protected $decaySeconds;
-
     /**
      * The number of minutes to wait before retrying the job after an exception.
      *
      * @var int
      */
     protected $retryAfterMinutes = 0;
-
     /**
      * The callback that determines if the exception should be reported.
      *
      * @var callable
      */
     protected $reportCallback;
-
     /**
      * The callback that determines if rate limiting should apply.
      *
      * @var callable
      */
     protected $whenCallback;
-
     /**
      * The callbacks that determine if the job should be deleted.
      *
      * @var callable[]
      */
     protected array $deleteWhenCallbacks = [];
-
     /**
      * The callbacks that determine if the job should be failed.
      *
      * @var callable[]
      */
     protected array $failWhenCallbacks = [];
-
     /**
      * The prefix of the rate limiter key.
      *
      * @var string
      */
     protected $prefix = 'laravel_throttles_exceptions:';
-
     /**
      * The rate limiter instance.
      *
      * @var \Illuminate\Cache\RateLimiter
      */
     protected $limiter;
-
     /**
      * Create a new middleware instance.
      *
@@ -96,7 +84,6 @@ class ThrottlesExceptions
         $this->maxAttempts = $maxAttempts;
         $this->decaySeconds = $decaySeconds;
     }
-
     /**
      * Process the job.
      *
@@ -107,38 +94,29 @@ class ThrottlesExceptions
     public function handle($job, $next)
     {
         $this->limiter = Container::getInstance()->make(RateLimiter::class);
-
         if ($this->limiter->tooManyAttempts($jobKey = $this->getKey($job), $this->maxAttempts)) {
             return $job->release($this->getTimeUntilNextRetry($jobKey));
         }
-
         try {
             $next($job);
-
             $this->limiter->clear($jobKey);
         } catch (Throwable $throwable) {
-            if ($this->whenCallback && ! call_user_func($this->whenCallback, $throwable, $this->limiter)) {
+            if ($this->whenCallback && !call_user_func($this->whenCallback, $throwable, $this->limiter)) {
                 throw $throwable;
             }
-
             if ($this->reportCallback && call_user_func($this->reportCallback, $throwable, $this->limiter)) {
                 report($throwable);
             }
-
             if ($this->shouldDelete($throwable)) {
                 return $job->delete();
             }
-
             if ($this->shouldFail($throwable)) {
                 return $job->fail($throwable);
             }
-
             $this->limiter->hit($jobKey, $this->decaySeconds);
-
             return $job->release($this->retryAfterMinutes * 60);
         }
     }
-
     /**
      * Specify a callback that should determine if rate limiting behavior should apply.
      *
@@ -148,10 +126,8 @@ class ThrottlesExceptions
     public function when(callable $callback)
     {
         $this->whenCallback = $callback;
-
         return $this;
     }
-
     /**
      * Add a callback that should determine if the job should be deleted.
      *
@@ -160,13 +136,9 @@ class ThrottlesExceptions
      */
     public function deleteWhen(callable|string $callback)
     {
-        $this->deleteWhenCallbacks[] = is_string($callback)
-            ? fn (Throwable $e) => $e instanceof $callback
-            : $callback;
-
+        $this->deleteWhenCallbacks[] = is_string($callback) ? fn(Throwable $e) => $e instanceof $callback : $callback;
         return $this;
     }
-
     /**
      * Add a callback that should determine if the job should be failed.
      *
@@ -175,13 +147,9 @@ class ThrottlesExceptions
      */
     public function failWhen(callable|string $callback)
     {
-        $this->failWhenCallbacks[] = is_string($callback)
-            ? fn (Throwable $e) => $e instanceof $callback
-            : $callback;
-
+        $this->failWhenCallbacks[] = is_string($callback) ? fn(Throwable $e) => $e instanceof $callback : $callback;
         return $this;
     }
-
     /**
      * Run the skip / delete callbacks to determine if the job should be deleted for the given exception.
      *
@@ -192,13 +160,11 @@ class ThrottlesExceptions
     {
         foreach ($this->deleteWhenCallbacks as $callback) {
             if (call_user_func($callback, $throwable)) {
-                return true;
+                return \true;
             }
         }
-
-        return false;
+        return \false;
     }
-
     /**
      * Run the skip / fail callbacks to determine if the job should be failed for the given exception.
      *
@@ -209,13 +175,11 @@ class ThrottlesExceptions
     {
         foreach ($this->failWhenCallbacks as $callback) {
             if (call_user_func($callback, $throwable)) {
-                return true;
+                return \true;
             }
         }
-
-        return false;
+        return \false;
     }
-
     /**
      * Set the prefix of the rate limiter key.
      *
@@ -225,10 +189,8 @@ class ThrottlesExceptions
     public function withPrefix(string $prefix)
     {
         $this->prefix = $prefix;
-
         return $this;
     }
-
     /**
      * Specify the number of minutes a job should be delayed when it is released (before it has reached its max exceptions).
      *
@@ -238,10 +200,8 @@ class ThrottlesExceptions
     public function backoff($backoff)
     {
         $this->retryAfterMinutes = $backoff;
-
         return $this;
     }
-
     /**
      * Get the cache key associated for the rate limiter.
      *
@@ -251,18 +211,13 @@ class ThrottlesExceptions
     protected function getKey($job)
     {
         if ($this->key) {
-            return $this->prefix.$this->key;
+            return $this->prefix . $this->key;
         } elseif ($this->byJob) {
-            return $this->prefix.$job->job->uuid();
+            return $this->prefix . $job->job->uuid();
         }
-
-        $jobName = method_exists($job, 'displayName')
-            ? $job->displayName()
-            : get_class($job);
-
-        return $this->prefix.hash('xxh128', $jobName);
+        $jobName = method_exists($job, 'displayName') ? $job->displayName() : get_class($job);
+        return $this->prefix . hash('xxh128', $jobName);
     }
-
     /**
      * Set the value that the rate limiter should be keyed by.
      *
@@ -272,10 +227,8 @@ class ThrottlesExceptions
     public function by($key)
     {
         $this->key = $key;
-
         return $this;
     }
-
     /**
      * Indicate that the throttle key should use the job's UUID.
      *
@@ -283,11 +236,9 @@ class ThrottlesExceptions
      */
     public function byJob()
     {
-        $this->byJob = true;
-
+        $this->byJob = \true;
         return $this;
     }
-
     /**
      * Report exceptions and optionally specify a callback that determines if the exception should be reported.
      *
@@ -296,11 +247,9 @@ class ThrottlesExceptions
      */
     public function report(?callable $callback = null)
     {
-        $this->reportCallback = $callback ?? fn () => true;
-
+        $this->reportCallback = $callback ?? fn() => \true;
         return $this;
     }
-
     /**
      * Get the number of seconds that should elapse before the job is retried.
      *

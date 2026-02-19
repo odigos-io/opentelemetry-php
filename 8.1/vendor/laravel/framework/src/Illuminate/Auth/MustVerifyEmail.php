@@ -3,7 +3,6 @@
 namespace Illuminate\Auth;
 
 use Illuminate\Auth\Notifications\VerifyEmail;
-
 trait MustVerifyEmail
 {
     /**
@@ -13,9 +12,8 @@ trait MustVerifyEmail
      */
     public function hasVerifiedEmail()
     {
-        return ! is_null($this->email_verified_at);
+        return !is_null($this->email_verified_at);
     }
-
     /**
      * Mark the given user's email as verified.
      *
@@ -23,11 +21,8 @@ trait MustVerifyEmail
      */
     public function markEmailAsVerified()
     {
-        return $this->forceFill([
-            'email_verified_at' => $this->freshTimestamp(),
-        ])->save();
+        return $this->forceFill(['email_verified_at' => $this->freshTimestamp()])->save();
     }
-
     /**
      * Send the email verification notification.
      *
@@ -35,9 +30,8 @@ trait MustVerifyEmail
      */
     public function sendEmailVerificationNotification()
     {
-        $this->notify(new VerifyEmail);
+        $this->notify(new VerifyEmail());
     }
-
     /**
      * Get the email address that should be used for verification.
      *

@@ -1,16 +1,15 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\db\conditions;
 
 use yii\db\ExpressionBuilderInterface;
 use yii\db\ExpressionBuilderTrait;
 use yii\db\ExpressionInterface;
-
 /**
  * Class ConjunctionConditionBuilder builds objects of abstract class [[ConjunctionCondition]]
  *
@@ -20,8 +19,6 @@ use yii\db\ExpressionInterface;
 class ConjunctionConditionBuilder implements ExpressionBuilderInterface
 {
     use ExpressionBuilderTrait;
-
-
     /**
      * Method builds the raw SQL from the $expression that will not be additionally
      * escaped or quoted.
@@ -33,18 +30,14 @@ class ConjunctionConditionBuilder implements ExpressionBuilderInterface
     public function build(ExpressionInterface $condition, array &$params = [])
     {
         $parts = $this->buildExpressionsFrom($condition, $params);
-
         if (empty($parts)) {
             return '';
         }
-
         if (count($parts) === 1) {
             return reset($parts);
         }
-
         return '(' . implode(") {$condition->getOperator()} (", $parts) . ')';
     }
-
     /**
      * Builds expressions, that are stored in $condition
      *
@@ -66,7 +59,6 @@ class ConjunctionConditionBuilder implements ExpressionBuilderInterface
                 $parts[] = $condition;
             }
         }
-
         return $parts;
     }
 }

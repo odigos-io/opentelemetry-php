@@ -5,7 +5,6 @@ namespace Illuminate\Http\Middleware;
 use Closure;
 use Illuminate\Http\Exceptions\MalformedUrlException;
 use Illuminate\Http\Request;
-
 class ValidatePathEncoding
 {
     /**
@@ -18,11 +17,9 @@ class ValidatePathEncoding
     public function handle(Request $request, Closure $next)
     {
         $decodedPath = rawurldecode($request->path());
-
-        if (! mb_check_encoding($decodedPath, 'UTF-8')) {
-            throw new MalformedUrlException;
+        if (!mb_check_encoding($decodedPath, 'UTF-8')) {
+            throw new MalformedUrlException();
         }
-
         return $next($request);
     }
 }

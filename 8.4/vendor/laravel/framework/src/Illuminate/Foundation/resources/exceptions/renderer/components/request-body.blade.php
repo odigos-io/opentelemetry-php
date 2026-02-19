@@ -10,3 +10,4 @@
     <x-laravel-exceptions-renderer::empty-state message="No request body" />
     @endif
 </div>
+

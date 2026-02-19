@@ -1,10 +1,10 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\db\mssql;
 
 use yii\base\InvalidArgumentException;
@@ -12,7 +12,6 @@ use yii\base\NotSupportedException;
 use yii\db\Expression;
 use yii\db\Query;
 use yii\db\TableSchema;
-
 /**
  * QueryBuilder is the query builder for MS SQL Server databases (version 2008 and above).
  *
@@ -24,42 +23,14 @@ class QueryBuilder extends \yii\db\QueryBuilder
     /**
      * @var array mapping from abstract column types (keys) to physical column types (values).
      */
-    public $typeMap = [
-        Schema::TYPE_PK => 'int IDENTITY PRIMARY KEY',
-        Schema::TYPE_UPK => 'int IDENTITY PRIMARY KEY',
-        Schema::TYPE_BIGPK => 'bigint IDENTITY PRIMARY KEY',
-        Schema::TYPE_UBIGPK => 'bigint IDENTITY PRIMARY KEY',
-        Schema::TYPE_CHAR => 'nchar(1)',
-        Schema::TYPE_STRING => 'nvarchar(255)',
-        Schema::TYPE_TEXT => 'nvarchar(max)',
-        Schema::TYPE_TINYINT => 'tinyint',
-        Schema::TYPE_SMALLINT => 'smallint',
-        Schema::TYPE_INTEGER => 'int',
-        Schema::TYPE_BIGINT => 'bigint',
-        Schema::TYPE_FLOAT => 'float',
-        Schema::TYPE_DOUBLE => 'float',
-        Schema::TYPE_DECIMAL => 'decimal(18,0)',
-        Schema::TYPE_DATETIME => 'datetime',
-        Schema::TYPE_TIMESTAMP => 'datetime',
-        Schema::TYPE_TIME => 'time',
-        Schema::TYPE_DATE => 'date',
-        Schema::TYPE_BINARY => 'varbinary(max)',
-        Schema::TYPE_BOOLEAN => 'bit',
-        Schema::TYPE_MONEY => 'decimal(19,4)',
-    ];
-
-
+    public $typeMap = [\yii\db\mssql\Schema::TYPE_PK => 'int IDENTITY PRIMARY KEY', \yii\db\mssql\Schema::TYPE_UPK => 'int IDENTITY PRIMARY KEY', \yii\db\mssql\Schema::TYPE_BIGPK => 'bigint IDENTITY PRIMARY KEY', \yii\db\mssql\Schema::TYPE_UBIGPK => 'bigint IDENTITY PRIMARY KEY', \yii\db\mssql\Schema::TYPE_CHAR => 'nchar(1)', \yii\db\mssql\Schema::TYPE_STRING => 'nvarchar(255)', \yii\db\mssql\Schema::TYPE_TEXT => 'nvarchar(max)', \yii\db\mssql\Schema::TYPE_TINYINT => 'tinyint', \yii\db\mssql\Schema::TYPE_SMALLINT => 'smallint', \yii\db\mssql\Schema::TYPE_INTEGER => 'int', \yii\db\mssql\Schema::TYPE_BIGINT => 'bigint', \yii\db\mssql\Schema::TYPE_FLOAT => 'float', \yii\db\mssql\Schema::TYPE_DOUBLE => 'float', \yii\db\mssql\Schema::TYPE_DECIMAL => 'decimal(18,0)', \yii\db\mssql\Schema::TYPE_DATETIME => 'datetime', \yii\db\mssql\Schema::TYPE_TIMESTAMP => 'datetime', \yii\db\mssql\Schema::TYPE_TIME => 'time', \yii\db\mssql\Schema::TYPE_DATE => 'date', \yii\db\mssql\Schema::TYPE_BINARY => 'varbinary(max)', \yii\db\mssql\Schema::TYPE_BOOLEAN => 'bit', \yii\db\mssql\Schema::TYPE_MONEY => 'decimal(19,4)'];
     /**
      * {@inheritdoc}
      */
     protected function defaultExpressionBuilders()
     {
-        return array_merge(parent::defaultExpressionBuilders(), [
-            'yii\db\conditions\InCondition' => 'yii\db\mssql\conditions\InConditionBuilder',
-            'yii\db\conditions\LikeCondition' => 'yii\db\mssql\conditions\LikeConditionBuilder',
-        ]);
+        return array_merge(parent::defaultExpressionBuilders(), ['yii\db\conditions\InCondition' => 'yii\db\mssql\conditions\InConditionBuilder', 'yii\db\conditions\LikeCondition' => 'yii\db\mssql\conditions\LikeConditionBuilder']);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -69,14 +40,11 @@ class QueryBuilder extends \yii\db\QueryBuilder
             $orderBy = $this->buildOrderBy($orderBy);
             return $orderBy === '' ? $sql : $sql . $this->separator . $orderBy;
         }
-
         if (version_compare($this->db->getSchema()->getServerVersion(), '11', '<')) {
             return $this->oldBuildOrderByAndLimit($sql, $orderBy, $limit, $offset);
         }
-
         return $this->newBuildOrderByAndLimit($sql, $orderBy, $limit, $offset);
     }
-
     /**
      * Builds the ORDER BY/LIMIT/OFFSET clauses for SQL SERVER 2012 or newer.
      * @param string $sql the existing SQL (without ORDER BY/LIMIT/OFFSET)
@@ -93,17 +61,14 @@ class QueryBuilder extends \yii\db\QueryBuilder
             $orderBy = 'ORDER BY (SELECT NULL)';
         }
         $sql .= $this->separator . $orderBy;
-
         // https://technet.microsoft.com/en-us/library/gg699618.aspx
         $offset = $this->hasOffset($offset) ? $offset : '0';
-        $sql .= $this->separator . "OFFSET $offset ROWS";
+        $sql .= $this->separator . "OFFSET {$offset} ROWS";
         if ($this->hasLimit($limit)) {
-            $sql .= $this->separator . "FETCH NEXT $limit ROWS ONLY";
+            $sql .= $this->separator . "FETCH NEXT {$limit} ROWS ONLY";
         }
-
         return $sql;
     }
-
     /**
      * Builds the ORDER BY/LIMIT/OFFSET clauses for SQL SERVER 2005 to 2008.
      * @param string $sql the existing SQL (without ORDER BY/LIMIT/OFFSET)
@@ -119,24 +84,20 @@ class QueryBuilder extends \yii\db\QueryBuilder
             // ROW_NUMBER() requires an ORDER BY clause
             $orderBy = 'ORDER BY (SELECT NULL)';
         }
-
-        $sql = preg_replace('/^([\s(])*SELECT(\s+DISTINCT)?(?!\s*TOP\s*\()/i', "\\1SELECT\\2 rowNum = ROW_NUMBER() over ($orderBy),", $sql);
-
+        $sql = preg_replace('/^([\s(])*SELECT(\s+DISTINCT)?(?!\s*TOP\s*\()/i', "\\1SELECT\\2 rowNum = ROW_NUMBER() over ({$orderBy}),", $sql);
         if ($this->hasLimit($limit)) {
             if ($limit instanceof Expression) {
-                $limit = '(' . (string)$limit . ')';
+                $limit = '(' . (string) $limit . ')';
             }
-            $sql = "SELECT TOP $limit * FROM ($sql) sub";
+            $sql = "SELECT TOP {$limit} * FROM ({$sql}) sub";
         } else {
-            $sql = "SELECT * FROM ($sql) sub";
+            $sql = "SELECT * FROM ({$sql}) sub";
         }
         if ($this->hasOffset($offset)) {
-            $sql .= $this->separator . "WHERE rowNum > $offset";
+            $sql .= $this->separator . "WHERE rowNum > {$offset}";
         }
-
         return $sql;
     }
-
     /**
      * Builds a SQL statement for renaming a DB table.
      * @param string $oldName the table to be renamed. The name will be properly quoted by the method.
@@ -147,7 +108,6 @@ class QueryBuilder extends \yii\db\QueryBuilder
     {
         return 'sp_rename ' . $this->db->quoteTableName($oldName) . ', ' . $this->db->quoteTableName($newName);
     }
-
     /**
      * Builds a SQL statement for renaming a column.
      * @param string $table the table whose column is to be renamed. The name will be properly quoted by the method.
@@ -162,7 +122,6 @@ class QueryBuilder extends \yii\db\QueryBuilder
         $newName = $this->db->quoteColumnName($newName);
         return "sp_rename '{$table}.{$oldName}', {$newName}, 'COLUMN'";
     }
-
     /**
      * Builds a SQL statement for changing the definition of a column.
      * @param string $table the table whose column is to be changed. The table name will be properly quoted by the method.
@@ -176,62 +135,39 @@ class QueryBuilder extends \yii\db\QueryBuilder
     public function alterColumn($table, $column, $type)
     {
         $sqlAfter = [$this->dropConstraintsForColumn($table, $column, 'D')];
-
         $columnName = $this->db->quoteColumnName($column);
         $tableName = $this->db->quoteTableName($table);
         $constraintBase = preg_replace('/[^a-z0-9_]/i', '', $table . '_' . $column);
-
         if ($type instanceof \yii\db\mssql\ColumnSchemaBuilder) {
             $type->setAlterColumnFormat();
-
-
             $defaultValue = $type->getDefaultValue();
             if ($defaultValue !== null) {
-                $sqlAfter[] = $this->addDefaultValue(
-                    "DF_{$constraintBase}",
-                    $table,
-                    $column,
-                    $defaultValue instanceof Expression ? $defaultValue : new Expression($defaultValue)
-                );
+                $sqlAfter[] = $this->addDefaultValue("DF_{$constraintBase}", $table, $column, $defaultValue instanceof Expression ? $defaultValue : new Expression($defaultValue));
             }
-
             $checkValue = $type->getCheckValue();
             if ($checkValue !== null) {
-                $sqlAfter[] = "ALTER TABLE {$tableName} ADD CONSTRAINT " .
-                    $this->db->quoteColumnName("CK_{$constraintBase}") .
-                    ' CHECK (' . ($defaultValue instanceof Expression ?  $checkValue : new Expression($checkValue)) . ')';
+                $sqlAfter[] = "ALTER TABLE {$tableName} ADD CONSTRAINT " . $this->db->quoteColumnName("CK_{$constraintBase}") . ' CHECK (' . ($defaultValue instanceof Expression ? $checkValue : new Expression($checkValue)) . ')';
             }
-
             if ($type->isUnique()) {
                 $sqlAfter[] = "ALTER TABLE {$tableName} ADD CONSTRAINT " . $this->db->quoteColumnName("UQ_{$constraintBase}") . " UNIQUE ({$columnName})";
             }
         }
-
-        return 'ALTER TABLE ' . $tableName . ' ALTER COLUMN '
-            . $columnName . ' '
-            . $this->getColumnType($type) . "\n"
-            . implode("\n", $sqlAfter);
+        return 'ALTER TABLE ' . $tableName . ' ALTER COLUMN ' . $columnName . ' ' . $this->getColumnType($type) . "\n" . implode("\n", $sqlAfter);
     }
-
     /**
      * {@inheritdoc}
      */
     public function addDefaultValue($name, $table, $column, $value)
     {
-        return 'ALTER TABLE ' . $this->db->quoteTableName($table) . ' ADD CONSTRAINT '
-            . $this->db->quoteColumnName($name) . ' DEFAULT ' . $this->db->quoteValue($value) . ' FOR '
-            . $this->db->quoteColumnName($column);
+        return 'ALTER TABLE ' . $this->db->quoteTableName($table) . ' ADD CONSTRAINT ' . $this->db->quoteColumnName($name) . ' DEFAULT ' . $this->db->quoteValue($value) . ' FOR ' . $this->db->quoteColumnName($column);
     }
-
     /**
      * {@inheritdoc}
      */
     public function dropDefaultValue($name, $table)
     {
-        return 'ALTER TABLE ' . $this->db->quoteTableName($table)
-            . ' DROP CONSTRAINT ' . $this->db->quoteColumnName($name);
+        return 'ALTER TABLE ' . $this->db->quoteTableName($table) . ' DROP CONSTRAINT ' . $this->db->quoteColumnName($name);
     }
-
     /**
      * Creates a SQL statement for resetting the sequence value of a table's primary key.
      * The sequence will be reset such that the primary key of the next new row inserted
@@ -247,30 +183,20 @@ class QueryBuilder extends \yii\db\QueryBuilder
         $table = $this->db->getTableSchema($tableName);
         if ($table !== null && $table->sequenceName !== null) {
             $tableName = $this->db->quoteTableName($tableName);
-
             if ($value === null || $value === 1) {
                 $key = $this->db->quoteColumnName(reset($table->primaryKey));
-                $subSql = (new Query())
-                    ->select('last_value')
-                    ->from('sys.identity_columns')
-                    ->where(['object_id' => new Expression("OBJECT_ID('{$tableName}')")])
-                    ->andWhere(['IS NOT', 'last_value', null])
-                    ->createCommand($this->db)
-                    ->getRawSql();
+                $subSql = (new Query())->select('last_value')->from('sys.identity_columns')->where(['object_id' => new Expression("OBJECT_ID('{$tableName}')")])->andWhere(['IS NOT', 'last_value', null])->createCommand($this->db)->getRawSql();
                 $sql = "SELECT COALESCE(MAX({$key}), CASE WHEN EXISTS({$subSql}) THEN 0 ELSE 1 END) FROM {$tableName}";
                 $value = $this->db->createCommand($sql)->queryScalar();
             } else {
                 $value = (int) $value;
             }
-
             return "DBCC CHECKIDENT ('{$tableName}', RESEED, {$value})";
         } elseif ($table === null) {
-            throw new InvalidArgumentException("Table not found: $tableName");
+            throw new InvalidArgumentException("Table not found: {$tableName}");
         }
-
-        throw new InvalidArgumentException("There is not sequence associated with table '$tableName'.");
+        throw new InvalidArgumentException("There is not sequence associated with table '{$tableName}'.");
     }
-
     /**
      * Builds a SQL statement for enabling or disabling integrity check.
      * @param bool $check whether to turn on or off the integrity check.
@@ -278,7 +204,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
      * @param string $table the table name.
      * @return string the SQL statement for checking integrity
      */
-    public function checkIntegrity($check = true, $schema = '', $table = '')
+    public function checkIntegrity($check = \true, $schema = '', $table = '')
     {
         /**
          * @var Schema
@@ -291,64 +217,38 @@ class QueryBuilder extends \yii\db\QueryBuilder
         $viewNames = $dbSchema->getViewNames($schema);
         $tableNames = array_diff($tableNames, $viewNames);
         $command = '';
-
         foreach ($tableNames as $tableName) {
             $tableName = $this->db->quoteTableName("{$schema}.{$tableName}");
-            $command .= "ALTER TABLE $tableName $enable CONSTRAINT ALL; ";
+            $command .= "ALTER TABLE {$tableName} {$enable} CONSTRAINT ALL; ";
         }
-
         return $command;
     }
-
-     /**
-      * Builds a SQL command for adding or updating a comment to a table or a column. The command built will check if a comment
-      * already exists. If so, it will be updated, otherwise, it will be added.
-      *
-      * @param string $comment the text of the comment to be added. The comment will be properly quoted by the method.
-      * @param string $table the table to be commented or whose column is to be commented. The table name will be
-      * properly quoted by the method.
-      * @param string|null $column optional. The name of the column to be commented. If empty, the command will add the
-      * comment to the table instead. The column name will be properly quoted by the method.
-      * @return string the SQL statement for adding a comment.
-      * @throws InvalidArgumentException if the table does not exist.
-      * @since 2.0.24
-      */
+    /**
+     * Builds a SQL command for adding or updating a comment to a table or a column. The command built will check if a comment
+     * already exists. If so, it will be updated, otherwise, it will be added.
+     *
+     * @param string $comment the text of the comment to be added. The comment will be properly quoted by the method.
+     * @param string $table the table to be commented or whose column is to be commented. The table name will be
+     * properly quoted by the method.
+     * @param string|null $column optional. The name of the column to be commented. If empty, the command will add the
+     * comment to the table instead. The column name will be properly quoted by the method.
+     * @return string the SQL statement for adding a comment.
+     * @throws InvalidArgumentException if the table does not exist.
+     * @since 2.0.24
+     */
     protected function buildAddCommentSql($comment, $table, $column = null)
     {
         $tableSchema = $this->db->schema->getTableSchema($table);
-
         if ($tableSchema === null) {
-            throw new InvalidArgumentException("Table not found: $table");
+            throw new InvalidArgumentException("Table not found: {$table}");
         }
-
         $schemaName = $tableSchema->schemaName ? "N'" . $tableSchema->schemaName . "'" : 'SCHEMA_NAME()';
         $tableName = 'N' . $this->db->quoteValue($tableSchema->name);
         $columnName = $column ? 'N' . $this->db->quoteValue($column) : null;
         $comment = 'N' . $this->db->quoteValue($comment);
-
-        $functionParams = "
-            @name = N'MS_description',
-            @value = $comment,
-            @level0type = N'SCHEMA', @level0name = $schemaName,
-            @level1type = N'TABLE', @level1name = $tableName"
-            . ($column ? ", @level2type = N'COLUMN', @level2name = $columnName" : '') . ';';
-
-        return "
-            IF NOT EXISTS (
-                    SELECT 1
-                    FROM fn_listextendedproperty (
-                        N'MS_description',
-                        'SCHEMA', $schemaName,
-                        'TABLE', $tableName,
-                        " . ($column ? "'COLUMN', $columnName " : ' DEFAULT, DEFAULT ') . "
-                    )
-            )
-                EXEC sys.sp_addextendedproperty $functionParams
-            ELSE
-                EXEC sys.sp_updateextendedproperty $functionParams
-        ";
+        $functionParams = "\n            @name = N'MS_description',\n            @value = {$comment},\n            @level0type = N'SCHEMA', @level0name = {$schemaName},\n            @level1type = N'TABLE', @level1name = {$tableName}" . ($column ? ", @level2type = N'COLUMN', @level2name = {$columnName}" : '') . ';';
+        return "\n            IF NOT EXISTS (\n                    SELECT 1\n                    FROM fn_listextendedproperty (\n                        N'MS_description',\n                        'SCHEMA', {$schemaName},\n                        'TABLE', {$tableName},\n                        " . ($column ? "'COLUMN', {$columnName} " : ' DEFAULT, DEFAULT ') . "\n                    )\n            )\n                EXEC sys.sp_addextendedproperty {$functionParams}\n            ELSE\n                EXEC sys.sp_updateextendedproperty {$functionParams}\n        ";
     }
-
     /**
      * {@inheritdoc}
      * @since 2.0.8
@@ -357,7 +257,6 @@ class QueryBuilder extends \yii\db\QueryBuilder
     {
         return $this->buildAddCommentSql($comment, $table, $column);
     }
-
     /**
      * {@inheritdoc}
      * @since 2.0.8
@@ -366,7 +265,6 @@ class QueryBuilder extends \yii\db\QueryBuilder
     {
         return $this->buildAddCommentSql($comment, $table);
     }
-
     /**
      * Builds a SQL command for removing a comment from a table or a column. The command built will check if a comment
      * already exists before trying to perform the removal.
@@ -382,32 +280,14 @@ class QueryBuilder extends \yii\db\QueryBuilder
     protected function buildRemoveCommentSql($table, $column = null)
     {
         $tableSchema = $this->db->schema->getTableSchema($table);
-
         if ($tableSchema === null) {
-            throw new InvalidArgumentException("Table not found: $table");
+            throw new InvalidArgumentException("Table not found: {$table}");
         }
-
         $schemaName = $tableSchema->schemaName ? "N'" . $tableSchema->schemaName . "'" : 'SCHEMA_NAME()';
         $tableName = 'N' . $this->db->quoteValue($tableSchema->name);
         $columnName = $column ? 'N' . $this->db->quoteValue($column) : null;
-
-        return "
-            IF EXISTS (
-                    SELECT 1
-                    FROM fn_listextendedproperty (
-                        N'MS_description',
-                        'SCHEMA', $schemaName,
-                        'TABLE', $tableName,
-                        " . ($column ? "'COLUMN', $columnName " : ' DEFAULT, DEFAULT ') . "
-                    )
-            )
-                EXEC sys.sp_dropextendedproperty
-                    @name = N'MS_description',
-                    @level0type = N'SCHEMA', @level0name = $schemaName,
-                    @level1type = N'TABLE', @level1name = $tableName"
-                    . ($column ? ", @level2type = N'COLUMN', @level2name = $columnName" : '') . ';';
+        return "\n            IF EXISTS (\n                    SELECT 1\n                    FROM fn_listextendedproperty (\n                        N'MS_description',\n                        'SCHEMA', {$schemaName},\n                        'TABLE', {$tableName},\n                        " . ($column ? "'COLUMN', {$columnName} " : ' DEFAULT, DEFAULT ') . "\n                    )\n            )\n                EXEC sys.sp_dropextendedproperty\n                    @name = N'MS_description',\n                    @level0type = N'SCHEMA', @level0name = {$schemaName},\n                    @level1type = N'TABLE', @level1name = {$tableName}" . ($column ? ", @level2type = N'COLUMN', @level2name = {$columnName}" : '') . ';';
     }
-
     /**
      * {@inheritdoc}
      * @since 2.0.8
@@ -416,7 +296,6 @@ class QueryBuilder extends \yii\db\QueryBuilder
     {
         return $this->buildRemoveCommentSql($table, $column);
     }
-
     /**
      * {@inheritdoc}
      * @since 2.0.8
@@ -425,7 +304,6 @@ class QueryBuilder extends \yii\db\QueryBuilder
     {
         return $this->buildRemoveCommentSql($table);
     }
-
     /**
      * Returns an array of column names given model name.
      *
@@ -441,7 +319,6 @@ class QueryBuilder extends \yii\db\QueryBuilder
         $schema = $modelClass::getTableSchema();
         return array_keys($schema->columns);
     }
-
     /**
      * @return bool whether the version of the MSSQL being used is older than 2012.
      * @throws \yii\base\InvalidConfigException
@@ -452,7 +329,6 @@ class QueryBuilder extends \yii\db\QueryBuilder
     {
         return version_compare($this->db->getSchema()->getServerVersion(), '11', '<');
     }
-
     /**
      * {@inheritdoc}
      * @since 2.0.8
@@ -461,7 +337,6 @@ class QueryBuilder extends \yii\db\QueryBuilder
     {
         return 'SELECT CASE WHEN EXISTS(' . $rawSql . ') THEN 1 ELSE 0 END';
     }
-
     /**
      * Normalizes data to be saved into the table, performing extra preparations and type converting, if necessary.
      * @param string $table the table that data will be saved into.
@@ -474,16 +349,14 @@ class QueryBuilder extends \yii\db\QueryBuilder
             $columnSchemas = $tableSchema->columns;
             foreach ($columns as $name => $value) {
                 // @see https://github.com/yiisoft/yii2/issues/12599
-                if (isset($columnSchemas[$name]) && $columnSchemas[$name]->type === Schema::TYPE_BINARY && $columnSchemas[$name]->dbType === 'varbinary' && (is_string($value))) {
+                if (isset($columnSchemas[$name]) && $columnSchemas[$name]->type === \yii\db\mssql\Schema::TYPE_BINARY && $columnSchemas[$name]->dbType === 'varbinary' && is_string($value)) {
                     // @see https://github.com/yiisoft/yii2/issues/12599
                     $columns[$name] = new Expression('CONVERT(VARBINARY(MAX), ' . ('0x' . bin2hex($value)) . ')');
                 }
             }
         }
-
         return $columns;
     }
-
     /**
      * {@inheritdoc}
      * Added OUTPUT construction for getting inserted data (for SQL Server 2005 or later)
@@ -493,9 +366,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
     public function insert($table, $columns, &$params)
     {
         $columns = $this->normalizeTableRowData($table, $columns, $params);
-
         $version2005orLater = version_compare($this->db->getSchema()->getServerVersion(), '9', '>=');
-
         list($names, $placeholders, $values, $params) = $this->prepareInsertValues($table, $columns, $params);
         $cols = [];
         $outputColumns = [];
@@ -506,39 +377,27 @@ class QueryBuilder extends \yii\db\QueryBuilder
                 if ($column->isComputed) {
                     continue;
                 }
-
                 $dbType = $column->dbType;
                 if (in_array($dbType, ['varchar', 'nvarchar', 'binary', 'varbinary'])) {
                     $dbType .= '(MAX)';
-                } elseif (in_array($dbType, ['char',  'nchar'])) {
-                    $dbType .= "($column->size)";
+                } elseif (in_array($dbType, ['char', 'nchar'])) {
+                    $dbType .= "({$column->size})";
                 }
-
-                if ($column->dbType === Schema::TYPE_TIMESTAMP) {
+                if ($column->dbType === \yii\db\mssql\Schema::TYPE_TIMESTAMP) {
                     $dbType = $column->allowNull ? 'varbinary(8)' : 'binary(8)';
                 }
-
                 $quoteColumnName = $this->db->quoteColumnName($column->name);
                 $cols[] = $quoteColumnName . ' ' . $dbType . ' ' . ($column->allowNull ? 'NULL' : '');
                 $outputColumns[] = 'INSERTED.' . $quoteColumnName;
             }
         }
-
         $countColumns = count($outputColumns);
-
-        $sql = 'INSERT INTO ' . $this->db->quoteTableName($table)
-            . (!empty($names) ? ' (' . implode(', ', $names) . ')' : '')
-            . (($version2005orLater && $countColumns) ? ' OUTPUT ' . implode(',', $outputColumns) . ' INTO @temporary_inserted' : '')
-            . (!empty($placeholders) ? ' VALUES (' . implode(', ', $placeholders) . ')' : $values);
-
+        $sql = 'INSERT INTO ' . $this->db->quoteTableName($table) . (!empty($names) ? ' (' . implode(', ', $names) . ')' : '') . ($version2005orLater && $countColumns ? ' OUTPUT ' . implode(',', $outputColumns) . ' INTO @temporary_inserted' : '') . (!empty($placeholders) ? ' VALUES (' . implode(', ', $placeholders) . ')' : $values);
         if ($version2005orLater && $countColumns) {
-            $sql = 'SET NOCOUNT ON;DECLARE @temporary_inserted TABLE (' . implode(', ', $cols) . ');' . $sql .
-                ';SELECT * FROM @temporary_inserted';
+            $sql = 'SET NOCOUNT ON;DECLARE @temporary_inserted TABLE (' . implode(', ', $cols) . ');' . $sql . ';SELECT * FROM @temporary_inserted';
         }
-
         return $sql;
     }
-
     /**
      * {@inheritdoc}
      * @see https://docs.microsoft.com/en-us/sql/t-sql/statements/merge-transact-sql
@@ -547,72 +406,62 @@ class QueryBuilder extends \yii\db\QueryBuilder
     public function upsert($table, $insertColumns, $updateColumns, &$params)
     {
         $insertColumns = $this->normalizeTableRowData($table, $insertColumns, $params);
-
         list($uniqueNames, $insertNames, $updateNames) = $this->prepareUpsertColumns($table, $insertColumns, $updateColumns, $constraints);
         if (empty($uniqueNames)) {
             return $this->insert($table, $insertColumns, $params);
         }
         if ($updateNames === []) {
             // there are no columns to update
-            $updateColumns = false;
+            $updateColumns = \false;
         }
-
         $onCondition = ['or'];
         $quotedTableName = $this->db->quoteTableName($table);
         foreach ($constraints as $constraint) {
             $constraintCondition = ['and'];
             foreach ($constraint->columnNames as $name) {
                 $quotedName = $this->db->quoteColumnName($name);
-                $constraintCondition[] = "$quotedTableName.$quotedName=[EXCLUDED].$quotedName";
+                $constraintCondition[] = "{$quotedTableName}.{$quotedName}=[EXCLUDED].{$quotedName}";
             }
             $onCondition[] = $constraintCondition;
         }
         $on = $this->buildCondition($onCondition, $params);
         list(, $placeholders, $values, $params) = $this->prepareInsertValues($table, $insertColumns, $params);
-
         /**
          * Fix number of select query params for old MSSQL version that does not support offset correctly.
          * @see QueryBuilder::oldBuildOrderByAndLimit
          */
         $insertNamesUsing = $insertNames;
-        if (strstr($values, 'rowNum = ROW_NUMBER()') !== false) {
+        if (strstr($values, 'rowNum = ROW_NUMBER()') !== \false) {
             $insertNamesUsing = array_merge(['[rowNum]'], $insertNames);
         }
-
-        $mergeSql = 'MERGE ' . $this->db->quoteTableName($table) . ' WITH (HOLDLOCK) '
-            . 'USING (' . (!empty($placeholders) ? 'VALUES (' . implode(', ', $placeholders) . ')' : ltrim($values, ' ')) . ') AS [EXCLUDED] (' . implode(', ', $insertNamesUsing) . ') '
-            . "ON ($on)";
+        $mergeSql = 'MERGE ' . $this->db->quoteTableName($table) . ' WITH (HOLDLOCK) ' . 'USING (' . (!empty($placeholders) ? 'VALUES (' . implode(', ', $placeholders) . ')' : ltrim($values, ' ')) . ') AS [EXCLUDED] (' . implode(', ', $insertNamesUsing) . ') ' . "ON ({$on})";
         $insertValues = [];
         foreach ($insertNames as $name) {
             $quotedName = $this->db->quoteColumnName($name);
-            if (strrpos($quotedName, '.') === false) {
+            if (strrpos($quotedName, '.') === \false) {
                 $quotedName = '[EXCLUDED].' . $quotedName;
             }
             $insertValues[] = $quotedName;
         }
-        $insertSql = 'INSERT (' . implode(', ', $insertNames) . ')'
-            . ' VALUES (' . implode(', ', $insertValues) . ')';
-        if ($updateColumns === false) {
-            return "$mergeSql WHEN NOT MATCHED THEN $insertSql;";
+        $insertSql = 'INSERT (' . implode(', ', $insertNames) . ')' . ' VALUES (' . implode(', ', $insertValues) . ')';
+        if ($updateColumns === \false) {
+            return "{$mergeSql} WHEN NOT MATCHED THEN {$insertSql};";
         }
-
-        if ($updateColumns === true) {
+        if ($updateColumns === \true) {
             $updateColumns = [];
             foreach ($updateNames as $name) {
                 $quotedName = $this->db->quoteColumnName($name);
-                if (strrpos($quotedName, '.') === false) {
+                if (strrpos($quotedName, '.') === \false) {
                     $quotedName = '[EXCLUDED].' . $quotedName;
                 }
                 $updateColumns[$name] = new Expression($quotedName);
             }
         }
         $updateColumns = $this->normalizeTableRowData($table, $updateColumns, $params);
-
         list($updates, $params) = $this->prepareUpdateSets($table, $updateColumns, $params);
         $updateSql = 'UPDATE SET ' . implode(', ', $updates);
-        return "$mergeSql WHEN MATCHED THEN $updateSql WHEN NOT MATCHED THEN $insertSql;";
+        return "{$mergeSql} WHEN MATCHED THEN {$updateSql} WHEN NOT MATCHED THEN {$insertSql};";
     }
-
     /**
      * {@inheritdoc}
      */
@@ -620,7 +469,6 @@ class QueryBuilder extends \yii\db\QueryBuilder
     {
         return parent::update($table, $this->normalizeTableRowData($table, $columns, $params), $condition, $params);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -628,24 +476,20 @@ class QueryBuilder extends \yii\db\QueryBuilder
     {
         $columnType = parent::getColumnType($type);
         // remove unsupported keywords
-        $columnType = preg_replace("/\s*comment '.*'/i", '', $columnType);
+        $columnType = preg_replace("/\\s*comment '.*'/i", '', $columnType);
         $columnType = preg_replace('/ first$/i', '', $columnType);
-
         return $columnType;
     }
-
     /**
      * {@inheritdoc}
      */
     protected function extractAlias($table)
     {
         if (preg_match('/^\[.*\]$/', $table)) {
-            return false;
+            return \false;
         }
-
         return parent::extractAlias($table);
     }
-
     /**
      * Builds a SQL statement for dropping constraints for column of table.
      *
@@ -657,37 +501,14 @@ class QueryBuilder extends \yii\db\QueryBuilder
      */
     private function dropConstraintsForColumn($table, $column, $type = '')
     {
-        return "DECLARE @tableName VARCHAR(MAX) = '" . $this->db->quoteTableName($table) . "'
-DECLARE @columnName VARCHAR(MAX) = '{$column}'
-
-WHILE 1=1 BEGIN
-    DECLARE @constraintName NVARCHAR(128)
-    SET @constraintName = (SELECT TOP 1 OBJECT_NAME(cons.[object_id])
-        FROM (
-            SELECT sc.[constid] object_id
-            FROM [sys].[sysconstraints] sc
-            JOIN [sys].[columns] c ON c.[object_id]=sc.[id] AND c.[column_id]=sc.[colid] AND c.[name]=@columnName
-            WHERE sc.[id] = OBJECT_ID(@tableName)
-            UNION
-            SELECT object_id(i.[name]) FROM [sys].[indexes] i
-            JOIN [sys].[columns] c ON c.[object_id]=i.[object_id] AND c.[name]=@columnName
-            JOIN [sys].[index_columns] ic ON ic.[object_id]=i.[object_id] AND i.[index_id]=ic.[index_id] AND c.[column_id]=ic.[column_id]
-            WHERE i.[is_unique_constraint]=1 and i.[object_id]=OBJECT_ID(@tableName)
-        ) cons
-        JOIN [sys].[objects] so ON so.[object_id]=cons.[object_id]
-        " . (!empty($type) ? " WHERE so.[type]='{$type}'" : '') . ")
-    IF @constraintName IS NULL BREAK
-    EXEC (N'ALTER TABLE ' + @tableName + ' DROP CONSTRAINT [' + @constraintName + ']')
-END";
+        return "DECLARE @tableName VARCHAR(MAX) = '" . $this->db->quoteTableName($table) . "'\nDECLARE @columnName VARCHAR(MAX) = '{$column}'\n\nWHILE 1=1 BEGIN\n    DECLARE @constraintName NVARCHAR(128)\n    SET @constraintName = (SELECT TOP 1 OBJECT_NAME(cons.[object_id])\n        FROM (\n            SELECT sc.[constid] object_id\n            FROM [sys].[sysconstraints] sc\n            JOIN [sys].[columns] c ON c.[object_id]=sc.[id] AND c.[column_id]=sc.[colid] AND c.[name]=@columnName\n            WHERE sc.[id] = OBJECT_ID(@tableName)\n            UNION\n            SELECT object_id(i.[name]) FROM [sys].[indexes] i\n            JOIN [sys].[columns] c ON c.[object_id]=i.[object_id] AND c.[name]=@columnName\n            JOIN [sys].[index_columns] ic ON ic.[object_id]=i.[object_id] AND i.[index_id]=ic.[index_id] AND c.[column_id]=ic.[column_id]\n            WHERE i.[is_unique_constraint]=1 and i.[object_id]=OBJECT_ID(@tableName)\n        ) cons\n        JOIN [sys].[objects] so ON so.[object_id]=cons.[object_id]\n        " . (!empty($type) ? " WHERE so.[type]='{$type}'" : '') . ")\n    IF @constraintName IS NULL BREAK\n    EXEC (N'ALTER TABLE ' + @tableName + ' DROP CONSTRAINT [' + @constraintName + ']')\nEND";
     }
-
     /**
      * Drop all constraints before column delete
      * {@inheritdoc}
      */
     public function dropColumn($table, $column)
     {
-        return $this->dropConstraintsForColumn($table, $column) . "\nALTER TABLE " . $this->db->quoteTableName($table)
-            . ' DROP COLUMN ' . $this->db->quoteColumnName($column);
+        return $this->dropConstraintsForColumn($table, $column) . "\nALTER TABLE " . $this->db->quoteTableName($table) . ' DROP COLUMN ' . $this->db->quoteColumnName($column);
     }
 }

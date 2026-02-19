@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -18,7 +18,6 @@ namespace Cake\Mailer;
 
 use Cake\Core\App;
 use Cake\Mailer\Exception\MissingMailerException;
-
 /**
  * Provides functionality for loading mailer classes
  * onto properties of the host object.
@@ -36,13 +35,12 @@ trait MailerAwareTrait
      * @return \Cake\Mailer\Mailer
      * @throws \Cake\Mailer\Exception\MissingMailerException if undefined mailer class.
      */
-    protected function getMailer(string $name, array|string|null $config = null): Mailer
+    protected function getMailer(string $name, array|string|null $config = null): \Cake\Mailer\Mailer
     {
         $className = App::className($name, 'Mailer', 'Mailer');
         if ($className === null) {
             throw new MissingMailerException(compact('name'));
         }
-
         return new $className($config);
     }
 }

@@ -9,7 +9,6 @@ use Illuminate\Support\Enumerable;
 use IteratorAggregate;
 use Stringable;
 use Traversable;
-
 class InvokableComponentVariable implements DeferringDisplayableValue, IteratorAggregate, Stringable
 {
     /**
@@ -18,7 +17,6 @@ class InvokableComponentVariable implements DeferringDisplayableValue, IteratorA
      * @var \Closure
      */
     protected $callable;
-
     /**
      * Create a new variable instance.
      *
@@ -28,7 +26,6 @@ class InvokableComponentVariable implements DeferringDisplayableValue, IteratorA
     {
         $this->callable = $callable;
     }
-
     /**
      * Resolve the displayable value that the class is deferring.
      *
@@ -38,7 +35,6 @@ class InvokableComponentVariable implements DeferringDisplayableValue, IteratorA
     {
         return $this->__invoke();
     }
-
     /**
      * Get an iterator instance for the variable.
      *
@@ -47,10 +43,8 @@ class InvokableComponentVariable implements DeferringDisplayableValue, IteratorA
     public function getIterator(): Traversable
     {
         $result = $this->__invoke();
-
         return new ArrayIterator($result instanceof Enumerable ? $result->all() : $result);
     }
-
     /**
      * Dynamically proxy attribute access to the variable.
      *
@@ -61,7 +55,6 @@ class InvokableComponentVariable implements DeferringDisplayableValue, IteratorA
     {
         return $this->__invoke()->{$key};
     }
-
     /**
      * Dynamically proxy method access to the variable.
      *
@@ -73,7 +66,6 @@ class InvokableComponentVariable implements DeferringDisplayableValue, IteratorA
     {
         return $this->__invoke()->{$method}(...$parameters);
     }
-
     /**
      * Resolve the variable.
      *
@@ -83,7 +75,6 @@ class InvokableComponentVariable implements DeferringDisplayableValue, IteratorA
     {
         return call_user_func($this->callable);
     }
-
     /**
      * Resolve the variable as a string.
      *

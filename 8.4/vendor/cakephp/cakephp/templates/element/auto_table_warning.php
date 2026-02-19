@@ -1,4 +1,7 @@
 <?php
+
+namespace Odigos;
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -13,7 +16,6 @@
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
 use Cake\ORM\TableRegistry;
-
 $autoTables = TableRegistry::getTableLocator()->genericInstances();
 if (!$autoTables) {
     return;
@@ -36,8 +38,15 @@ instead of any other specific subclass.
 <br>
 <p>Please try correcting the issue for the following table aliases:</p>
 <ul>
-<?php foreach ($autoTables as $alias => $table) : ?>
-    <li><strong><?= $alias ?></strong></li>
-<?php endforeach; ?>
+<?php 
+foreach ($autoTables as $alias => $table) {
+    ?>
+    <li><strong><?php 
+    echo $alias;
+    ?></strong></li>
+<?php 
+}
+?>
 </ul>
 <br>
+<?php 

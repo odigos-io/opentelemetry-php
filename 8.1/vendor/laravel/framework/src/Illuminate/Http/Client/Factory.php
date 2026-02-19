@@ -11,8 +11,7 @@ use GuzzleHttp\TransferStats;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Str;
 use Illuminate\Support\Traits\Macroable;
-use PHPUnit\Framework\Assert as PHPUnit;
-
+use Odigos\PHPUnit\Framework\Assert as PHPUnit;
 /**
  * @mixin \Illuminate\Http\Client\PendingRequest
  */
@@ -21,63 +20,54 @@ class Factory
     use Macroable {
         __call as macroCall;
     }
-
     /**
      * The event dispatcher implementation.
      *
      * @var \Illuminate\Contracts\Events\Dispatcher|null
      */
     protected $dispatcher;
-
     /**
      * The middleware to apply to every request.
      *
      * @var array
      */
     protected $globalMiddleware = [];
-
     /**
      * The options to apply to every request.
      *
      * @var array
      */
     protected $globalOptions = [];
-
     /**
      * The stub callables that will handle requests.
      *
      * @var \Illuminate\Support\Collection
      */
     protected $stubCallbacks;
-
     /**
      * Indicates if the factory is recording requests and responses.
      *
      * @var bool
      */
-    protected $recording = false;
-
+    protected $recording = \false;
     /**
      * The recorded response array.
      *
      * @var array
      */
     protected $recorded = [];
-
     /**
      * All created response sequences.
      *
      * @var array
      */
     protected $responseSequences = [];
-
     /**
      * Indicates that an exception should be thrown if any request is not faked.
      *
      * @var bool
      */
-    protected $preventStrayRequests = false;
-
+    protected $preventStrayRequests = \false;
     /**
      * Create a new factory instance.
      *
@@ -87,10 +77,8 @@ class Factory
     public function __construct(?Dispatcher $dispatcher = null)
     {
         $this->dispatcher = $dispatcher;
-
         $this->stubCallbacks = collect();
     }
-
     /**
      * Add middleware to apply to every request.
      *
@@ -100,10 +88,8 @@ class Factory
     public function globalMiddleware($middleware)
     {
         $this->globalMiddleware[] = $middleware;
-
         return $this;
     }
-
     /**
      * Add request middleware to apply to every request.
      *
@@ -113,10 +99,8 @@ class Factory
     public function globalRequestMiddleware($middleware)
     {
         $this->globalMiddleware[] = Middleware::mapRequest($middleware);
-
         return $this;
     }
-
     /**
      * Add response middleware to apply to every request.
      *
@@ -126,10 +110,8 @@ class Factory
     public function globalResponseMiddleware($middleware)
     {
         $this->globalMiddleware[] = Middleware::mapResponse($middleware);
-
         return $this;
     }
-
     /**
      * Set the options to apply to every request.
      *
@@ -139,10 +121,8 @@ class Factory
     public function globalOptions($options)
     {
         $this->globalOptions = $options;
-
         return $this;
     }
-
     /**
      * Create a new response instance for use during stubbing.
      *
@@ -155,15 +135,11 @@ class Factory
     {
         if (is_array($body)) {
             $body = json_encode($body);
-
             $headers['Content-Type'] = 'application/json';
         }
-
         $response = new Psr7Response($status, $headers, $body);
-
         return Create::promiseFor($response);
     }
-
     /**
      * Get an invokable object that returns a sequence of responses in order for use during stubbing.
      *
@@ -172,9 +148,8 @@ class Factory
      */
     public function sequence(array $responses = [])
     {
-        return $this->responseSequences[] = new ResponseSequence($responses);
+        return $this->responseSequences[] = new \Illuminate\Http\Client\ResponseSequence($responses);
     }
-
     /**
      * Register a stub callable that will intercept requests and be able to return stub responses.
      *
@@ -184,43 +159,27 @@ class Factory
     public function fake($callback = null)
     {
         $this->record();
-
         $this->recorded = [];
-
         if (is_null($callback)) {
             $callback = function () {
                 return static::response();
             };
         }
-
         if (is_array($callback)) {
             foreach ($callback as $url => $callable) {
                 $this->stubUrl($url, $callable);
             }
-
             return $this;
         }
-
-        $this->stubCallbacks = $this->stubCallbacks->merge(collect([
-            function ($request, $options) use ($callback) {
-                $response = $callback instanceof Closure
-                                ? $callback($request, $options)
-                                : $callback;
-
-                if ($response instanceof PromiseInterface) {
-                    $options['on_stats'](new TransferStats(
-                        $request->toPsrRequest(),
-                        $response->wait(),
-                    ));
-                }
-
-                return $response;
-            },
-        ]));
-
+        $this->stubCallbacks = $this->stubCallbacks->merge(collect([function ($request, $options) use ($callback) {
+            $response = $callback instanceof Closure ? $callback($request, $options) : $callback;
+            if ($response instanceof PromiseInterface) {
+                $options['on_stats'](new TransferStats($request->toPsrRequest(), $response->wait()));
+            }
+            return $response;
+        }]));
         return $this;
     }
-
     /**
      * Register a response sequence for the given URL pattern.
      *
@@ -233,7 +192,6 @@ class Factory
             $this->fake([$url => $sequence]);
         });
     }
-
     /**
      * Stub the given URL using the given callback.
      *
@@ -244,29 +202,23 @@ class Factory
     public function stubUrl($url, $callback)
     {
         return $this->fake(function ($request, $options) use ($url, $callback) {
-            if (! Str::is(Str::start($url, '*'), $request->url())) {
+            if (!Str::is(Str::start($url, '*'), $request->url())) {
                 return;
             }
-
-            return $callback instanceof Closure || $callback instanceof ResponseSequence
-                        ? $callback($request, $options)
-                        : $callback;
+            return $callback instanceof Closure || $callback instanceof \Illuminate\Http\Client\ResponseSequence ? $callback($request, $options) : $callback;
         });
     }
-
     /**
      * Indicate that an exception should be thrown if any request is not faked.
      *
      * @param  bool  $prevent
      * @return $this
      */
-    public function preventStrayRequests($prevent = true)
+    public function preventStrayRequests($prevent = \true)
     {
         $this->preventStrayRequests = $prevent;
-
         return $this;
     }
-
     /**
      * Indicate that an exception should not be thrown if any request is not faked.
      *
@@ -274,9 +226,8 @@ class Factory
      */
     public function allowStrayRequests()
     {
-        return $this->preventStrayRequests(false);
+        return $this->preventStrayRequests(\false);
     }
-
     /**
      * Begin recording request / response pairs.
      *
@@ -284,11 +235,9 @@ class Factory
      */
     protected function record()
     {
-        $this->recording = true;
-
+        $this->recording = \true;
         return $this;
     }
-
     /**
      * Record a request response pair.
      *
@@ -302,7 +251,6 @@ class Factory
             $this->recorded[] = [$request, $response];
         }
     }
-
     /**
      * Assert that a request / response pair was recorded matching a given truth test.
      *
@@ -311,12 +259,8 @@ class Factory
      */
     public function assertSent($callback)
     {
-        PHPUnit::assertTrue(
-            $this->recorded($callback)->count() > 0,
-            'An expected request was not recorded.'
-        );
+        PHPUnit::assertTrue($this->recorded($callback)->count() > 0, 'An expected request was not recorded.');
     }
-
     /**
      * Assert that the given request was sent in the given order.
      *
@@ -326,19 +270,13 @@ class Factory
     public function assertSentInOrder($callbacks)
     {
         $this->assertSentCount(count($callbacks));
-
         foreach ($callbacks as $index => $url) {
             $callback = is_callable($url) ? $url : function ($request) use ($url) {
                 return $request->url() == $url;
             };
-
-            PHPUnit::assertTrue($callback(
-                $this->recorded[$index][0],
-                $this->recorded[$index][1]
-            ), 'An expected request (#'.($index + 1).') was not recorded.');
+            PHPUnit::assertTrue($callback($this->recorded[$index][0], $this->recorded[$index][1]), 'An expected request (#' . ($index + 1) . ') was not recorded.');
         }
     }
-
     /**
      * Assert that a request / response pair was not recorded matching a given truth test.
      *
@@ -347,12 +285,8 @@ class Factory
      */
     public function assertNotSent($callback)
     {
-        PHPUnit::assertFalse(
-            $this->recorded($callback)->count() > 0,
-            'Unexpected request was recorded.'
-        );
+        PHPUnit::assertFalse($this->recorded($callback)->count() > 0, 'Unexpected request was recorded.');
     }
-
     /**
      * Assert that no request / response pair was recorded.
      *
@@ -360,12 +294,8 @@ class Factory
      */
     public function assertNothingSent()
     {
-        PHPUnit::assertEmpty(
-            $this->recorded,
-            'Requests were recorded.'
-        );
+        PHPUnit::assertEmpty($this->recorded, 'Requests were recorded.');
     }
-
     /**
      * Assert how many requests have been recorded.
      *
@@ -376,7 +306,6 @@ class Factory
     {
         PHPUnit::assertCount($count, $this->recorded);
     }
-
     /**
      * Assert that every created response sequence is empty.
      *
@@ -385,13 +314,9 @@ class Factory
     public function assertSequencesAreEmpty()
     {
         foreach ($this->responseSequences as $responseSequence) {
-            PHPUnit::assertTrue(
-                $responseSequence->isEmpty(),
-                'Not all response sequences are empty.'
-            );
+            PHPUnit::assertTrue($responseSequence->isEmpty(), 'Not all response sequences are empty.');
         }
     }
-
     /**
      * Get a collection of the request / response pairs matching the given truth test.
      *
@@ -403,16 +328,13 @@ class Factory
         if (empty($this->recorded)) {
             return collect();
         }
-
         $callback = $callback ?: function () {
-            return true;
+            return \true;
         };
-
         return collect($this->recorded)->filter(function ($pair) use ($callback) {
             return $callback($pair[0], $pair[1]);
         });
     }
-
     /**
      * Create a new pending request instance for this factory.
      *
@@ -420,9 +342,8 @@ class Factory
      */
     protected function newPendingRequest()
     {
-        return (new PendingRequest($this, $this->globalMiddleware))->withOptions($this->globalOptions);
+        return (new \Illuminate\Http\Client\PendingRequest($this, $this->globalMiddleware))->withOptions($this->globalOptions);
     }
-
     /**
      * Get the current event dispatcher implementation.
      *
@@ -432,7 +353,6 @@ class Factory
     {
         return $this->dispatcher;
     }
-
     /**
      * Get the array of global middleware.
      *
@@ -442,7 +362,6 @@ class Factory
     {
         return $this->globalMiddleware;
     }
-
     /**
      * Execute a method against a new pending request instance.
      *
@@ -455,7 +374,6 @@ class Factory
         if (static::hasMacro($method)) {
             return $this->macroCall($method, $parameters);
         }
-
         return tap($this->newPendingRequest(), function ($request) {
             $request->stub($this->stubCallbacks)->preventStrayRequests($this->preventStrayRequests);
         })->{$method}(...$parameters);

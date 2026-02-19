@@ -3,12 +3,10 @@
 namespace Illuminate\Testing;
 
 use Illuminate\Testing\Concerns\RunsInParallel;
-
-if (interface_exists(\ParaTest\RunnerInterface::class)) {
-    class ParallelRunner implements \ParaTest\RunnerInterface
+if (interface_exists(\Odigos\ParaTest\RunnerInterface::class)) {
+    class ParallelRunner implements \Odigos\ParaTest\RunnerInterface
     {
         use RunsInParallel;
-
         /**
          * Runs the test suite.
          *
@@ -20,10 +18,9 @@ if (interface_exists(\ParaTest\RunnerInterface::class)) {
         }
     }
 } else {
-    class ParallelRunner implements \ParaTest\Runners\PHPUnit\RunnerInterface
+    class ParallelRunner implements \Odigos\ParaTest\Runners\PHPUnit\RunnerInterface
     {
         use RunsInParallel;
-
         /**
          * Runs the test suite.
          *

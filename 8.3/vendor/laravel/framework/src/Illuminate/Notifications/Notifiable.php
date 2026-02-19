@@ -4,5 +4,5 @@ namespace Illuminate\Notifications;
 
 trait Notifiable
 {
-    use HasDatabaseNotifications, RoutesNotifications;
+    use \Illuminate\Notifications\HasDatabaseNotifications, \Illuminate\Notifications\RoutesNotifications;
 }

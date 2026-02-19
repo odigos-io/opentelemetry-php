@@ -5,9 +5,7 @@
  *
  * @license https://github.com/slimphp/Slim/blob/4.x/LICENSE.md (MIT License)
  */
-
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Slim\Middleware;
 
 use InvalidArgumentException;
@@ -17,22 +15,17 @@ use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Throwable;
-
 use function in_array;
 use function ob_end_clean;
 use function ob_get_clean;
 use function ob_start;
-
 /** @api */
 class OutputBufferingMiddleware implements MiddlewareInterface
 {
     public const APPEND = 'append';
     public const PREPEND = 'prepend';
-
     protected StreamFactoryInterface $streamFactory;
-
     protected string $style;
-
     /**
      * @param string $style Either "append" or "prepend"
      */
@@ -40,12 +33,10 @@ class OutputBufferingMiddleware implements MiddlewareInterface
     {
         $this->streamFactory = $streamFactory;
         $this->style = $style;
-
-        if (!in_array($style, [static::APPEND, static::PREPEND], true)) {
+        if (!in_array($style, [static::APPEND, static::PREPEND], \true)) {
             throw new InvalidArgumentException("Invalid style `{$style}`. Must be `append` or `prepend`");
         }
     }
-
     /**
      * @throws Throwable
      */
@@ -59,7 +50,6 @@ class OutputBufferingMiddleware implements MiddlewareInterface
             ob_end_clean();
             throw $e;
         }
-
         if (!empty($output)) {
             if ($this->style === static::PREPEND) {
                 $body = $this->streamFactory->createStream();
@@ -69,7 +59,6 @@ class OutputBufferingMiddleware implements MiddlewareInterface
                 $response->getBody()->write($output);
             }
         }
-
         return $response;
     }
 }

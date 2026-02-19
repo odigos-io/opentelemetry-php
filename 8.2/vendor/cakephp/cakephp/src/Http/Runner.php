@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -21,7 +21,6 @@ use Cake\Routing\RoutingApplicationInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-
 /**
  * Executes the middleware queue and provides the `next` callable
  * that allows the queue to be iterated.
@@ -33,33 +32,26 @@ class Runner implements RequestHandlerInterface
      *
      * @var \Cake\Http\MiddlewareQueue
      */
-    protected MiddlewareQueue $queue;
-
+    protected \Cake\Http\MiddlewareQueue $queue;
     /**
      * Fallback handler to use if middleware queue does not generate response.
      *
      * @var \Psr\Http\Server\RequestHandlerInterface|null
      */
     protected ?RequestHandlerInterface $fallbackHandler = null;
-
     /**
      * @param \Cake\Http\MiddlewareQueue $queue The middleware queue
      * @param \Psr\Http\Message\ServerRequestInterface $request The Server Request
      * @param \Psr\Http\Server\RequestHandlerInterface|null $fallbackHandler Fallback request handler.
      * @return \Psr\Http\Message\ResponseInterface A response object
      */
-    public function run(
-        MiddlewareQueue $queue,
-        ServerRequestInterface $request,
-        ?RequestHandlerInterface $fallbackHandler = null,
-    ): ResponseInterface {
+    public function run(\Cake\Http\MiddlewareQueue $queue, ServerRequestInterface $request, ?RequestHandlerInterface $fallbackHandler = null): ResponseInterface
+    {
         $this->queue = $queue;
         $this->queue->rewind();
         $this->fallbackHandler = $fallbackHandler;
-
         return $this->handle($request);
     }
-
     /**
      * Handle incoming server request and return a response.
      *
@@ -68,28 +60,17 @@ class Runner implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        if (
-            $this->fallbackHandler instanceof RoutingApplicationInterface &&
-            $request instanceof ServerRequest
-        ) {
+        if ($this->fallbackHandler instanceof RoutingApplicationInterface && $request instanceof \Cake\Http\ServerRequest) {
             Router::setRequest($request);
         }
-
         if ($this->queue->valid()) {
             $middleware = $this->queue->current();
             $this->queue->next();
-
             return $middleware->process($request, $this);
         }
-
         if ($this->fallbackHandler) {
             return $this->fallbackHandler->handle($request);
         }
-
-        return new Response([
-            'body' => 'Middleware queue was exhausted without returning a response '
-                . 'and no fallback request handler was set for Runner',
-            'status' => 500,
-        ]);
+        return new \Cake\Http\Response(['body' => 'Middleware queue was exhausted without returning a response ' . 'and no fallback request handler was set for Runner', 'status' => 500]);
     }
 }

@@ -4,7 +4,6 @@ namespace Illuminate\Database\Query;
 
 use Illuminate\Contracts\Database\Query\Expression as ExpressionContract;
 use Illuminate\Database\Grammar;
-
 /**
  * @template TValue of string|int|float
  */
@@ -15,11 +14,9 @@ class Expression implements ExpressionContract
      *
      * @param  TValue  $value
      */
-    public function __construct(
-        protected $value,
-    ) {
+    public function __construct(protected $value)
+    {
     }
-
     /**
      * Get the value of the expression.
      *

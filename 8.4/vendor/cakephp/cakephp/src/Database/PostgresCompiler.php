@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -17,14 +17,13 @@ declare(strict_types=1);
 namespace Cake\Database;
 
 use Cake\Database\Expression\FunctionExpression;
-
 /**
  * Responsible for compiling a Query object into its SQL representation
  * for Postgres
  *
  * @internal
  */
-class PostgresCompiler extends QueryCompiler
+class PostgresCompiler extends \Cake\Database\QueryCompiler
 {
     /**
      * Always quote aliases in SELECT clause.
@@ -33,24 +32,13 @@ class PostgresCompiler extends QueryCompiler
      *
      * @var bool
      */
-    protected bool $_quotedSelectAliases = true;
-
+    protected bool $_quotedSelectAliases = \true;
     /**
      * {@inheritDoc}
      *
      * @var array<string, string>
      */
-    protected array $_templates = [
-        'delete' => 'DELETE',
-        'where' => ' WHERE %s',
-        'group' => ' GROUP BY %s',
-        'order' => ' %s',
-        'limit' => ' LIMIT %s',
-        'offset' => ' OFFSET %s',
-        'epilog' => ' %s',
-        'comment' => '/* %s */ ',
-    ];
-
+    protected array $_templates = ['delete' => 'DELETE', 'where' => ' WHERE %s', 'group' => ' GROUP BY %s', 'order' => ' %s', 'limit' => ' LIMIT %s', 'offset' => ' OFFSET %s', 'epilog' => ' %s', 'comment' => '/* %s */ '];
     /**
      * Helper function used to build the string representation of a HAVING clause,
      * it constructs the field list taking care of aliasing and
@@ -61,10 +49,9 @@ class PostgresCompiler extends QueryCompiler
      * @param \Cake\Database\ValueBinder $binder Value binder used to generate parameter placeholder
      * @return string
      */
-    protected function _buildHavingPart(array $parts, Query $query, ValueBinder $binder): string
+    protected function _buildHavingPart(array $parts, \Cake\Database\Query $query, \Cake\Database\ValueBinder $binder): string
     {
         $selectParts = $query->clause('select');
-
         foreach ($selectParts as $selectKey => $selectPart) {
             if (!$selectPart instanceof FunctionExpression) {
                 continue;
@@ -73,24 +60,13 @@ class PostgresCompiler extends QueryCompiler
                 if (!is_string($p)) {
                     continue;
                 }
-                preg_match_all(
-                    '/\b' . trim($selectKey, '"') . '\b/i',
-                    $p,
-                    $matches,
-                );
-
+                preg_match_all('/\b' . trim($selectKey, '"') . '\b/i', $p, $matches);
                 if (empty($matches[0])) {
                     continue;
                 }
-
-                $parts[$k] = preg_replace(
-                    ['/"/', '/\b' . trim($selectKey, '"') . '\b/i'],
-                    ['', $selectPart->sql($binder)],
-                    $p,
-                );
+                $parts[$k] = preg_replace(['/"/', '/\b' . trim($selectKey, '"') . '\b/i'], ['', $selectPart->sql($binder)], $p);
             }
         }
-
         return sprintf(' HAVING %s', implode(', ', $parts));
     }
 }

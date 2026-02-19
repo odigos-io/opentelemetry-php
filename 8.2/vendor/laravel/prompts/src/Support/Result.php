@@ -15,7 +15,6 @@ final class Result
     {
         //
     }
-
     public static function from(mixed $value): self
     {
         return new self($value);

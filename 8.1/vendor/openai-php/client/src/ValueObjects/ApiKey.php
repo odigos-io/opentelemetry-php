@@ -1,11 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenAI\ValueObjects;
 
 use OpenAI\Contracts\StringableContract;
-
 /**
  * @internal
  */
@@ -18,12 +16,10 @@ final class ApiKey implements StringableContract
     {
         // ..
     }
-
     public static function from(string $apiKey): self
     {
         return new self($apiKey);
     }
-
     /**
      * {@inheritdoc}
      */

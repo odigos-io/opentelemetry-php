@@ -3,7 +3,6 @@
 namespace Illuminate\Events;
 
 use Illuminate\Support\Collection;
-
 class InvokeQueuedClosure
 {
     /**
@@ -17,7 +16,6 @@ class InvokeQueuedClosure
     {
         call_user_func($closure->getClosure(), ...$arguments);
     }
-
     /**
      * Handle a job failure.
      *
@@ -30,7 +28,6 @@ class InvokeQueuedClosure
     public function failed($closure, array $arguments, array $catchCallbacks, $exception)
     {
         $arguments[] = $exception;
-
         (new Collection($catchCallbacks))->each->__invoke(...$arguments);
     }
 }

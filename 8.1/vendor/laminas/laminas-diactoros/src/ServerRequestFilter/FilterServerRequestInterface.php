@@ -1,11 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Laminas\Diactoros\ServerRequestFilter;
+declare (strict_types=1);
+namespace Odigos\Laminas\Diactoros\ServerRequestFilter;
 
 use Psr\Http\Message\ServerRequestInterface;
-
 /**
  * Filter/initialize a server request.
  *

@@ -4,7 +4,6 @@ namespace Illuminate\Queue\Console;
 
 use Illuminate\Console\MigrationGeneratorCommand;
 use Symfony\Component\Console\Attribute\AsCommand;
-
 #[AsCommand(name: 'queue:failed-table')]
 class FailedTableCommand extends MigrationGeneratorCommand
 {
@@ -14,14 +13,12 @@ class FailedTableCommand extends MigrationGeneratorCommand
      * @var string
      */
     protected $name = 'queue:failed-table';
-
     /**
      * The console command description.
      *
      * @var string
      */
     protected $description = 'Create a migration for the failed queue jobs database table';
-
     /**
      * Get the migration table name.
      *
@@ -31,7 +28,6 @@ class FailedTableCommand extends MigrationGeneratorCommand
     {
         return $this->laravel['config']['queue.failed.table'];
     }
-
     /**
      * Get the path to the migration stub file.
      *
@@ -39,6 +35,6 @@ class FailedTableCommand extends MigrationGeneratorCommand
      */
     protected function migrationStubFile()
     {
-        return __DIR__.'/stubs/failed_jobs.stub';
+        return __DIR__ . '/stubs/failed_jobs.stub';
     }
 }

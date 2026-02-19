@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -29,15 +29,13 @@ trait EventDispatcherTrait
      *
      * @var \Cake\Event\EventManagerInterface
      */
-    protected EventManagerInterface $_eventManager;
-
+    protected \Cake\Event\EventManagerInterface $_eventManager;
     /**
      * Default class name for new event objects.
      *
      * @var string
      */
-    protected string $_eventClass = Event::class;
-
+    protected string $_eventClass = \Cake\Event\Event::class;
     /**
      * Returns the Cake\Event\EventManager manager instance for this object.
      *
@@ -46,11 +44,10 @@ trait EventDispatcherTrait
      *
      * @return \Cake\Event\EventManagerInterface
      */
-    public function getEventManager(): EventManagerInterface
+    public function getEventManager(): \Cake\Event\EventManagerInterface
     {
-        return $this->_eventManager ??= new EventManager();
+        return $this->_eventManager ??= new \Cake\Event\EventManager();
     }
-
     /**
      * Returns the Cake\Event\EventManagerInterface instance for this object.
      *
@@ -60,13 +57,11 @@ trait EventDispatcherTrait
      * @param \Cake\Event\EventManagerInterface $eventManager the eventManager to set
      * @return $this
      */
-    public function setEventManager(EventManagerInterface $eventManager)
+    public function setEventManager(\Cake\Event\EventManagerInterface $eventManager)
     {
         $this->_eventManager = $eventManager;
-
         return $this;
     }
-
     /**
      * Wrapper for creating and dispatching events.
      *
@@ -79,14 +74,12 @@ trait EventDispatcherTrait
      * ($this by default).
      * @return \Cake\Event\EventInterface<TSubject>
      */
-    public function dispatchEvent(string $name, array $data = [], ?object $subject = null): EventInterface
+    public function dispatchEvent(string $name, array $data = [], ?object $subject = null): \Cake\Event\EventInterface
     {
         $subject ??= $this;
-
         /** @var \Cake\Event\EventInterface<TSubject> $event Coerce for psalm/phpstan */
         $event = new $this->_eventClass($name, $subject, $data);
         $this->getEventManager()->dispatch($event);
-
         return $event;
     }
 }

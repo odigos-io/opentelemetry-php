@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -17,7 +17,6 @@ declare(strict_types=1);
 namespace Cake\TestSuite\Fixture;
 
 use function Cake\Core\deprecationWarning;
-
 /**
  * Fixture strategy that wraps fixtures in a transaction that is rolled back
  * after each test.
@@ -27,18 +26,14 @@ use function Cake\Core\deprecationWarning;
  * @deprecated 5.2.10 Use {@link \Cake\TestSuite\Fixture\TransactionStrategy} instead.
  *   Will be removed in 5.3.0.
  */
-class TransactionFixtureStrategy extends TransactionStrategy
+class TransactionFixtureStrategy extends \Cake\TestSuite\Fixture\TransactionStrategy
 {
     /**
      * Initialize strategy.
      */
     public function __construct()
     {
-        deprecationWarning(
-            '5.2.10',
-            'TransactionFixtureStrategy is deprecated. Use TransactionStrategy instead.',
-        );
-
+        deprecationWarning('5.2.10', 'TransactionFixtureStrategy is deprecated. Use TransactionStrategy instead.');
         parent::__construct();
     }
 }

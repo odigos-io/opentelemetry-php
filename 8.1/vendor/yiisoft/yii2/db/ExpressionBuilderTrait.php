@@ -1,10 +1,10 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\db;
 
 /**
@@ -20,13 +20,12 @@ trait ExpressionBuilderTrait
      * @var QueryBuilder
      */
     protected $queryBuilder;
-
     /**
      * ExpressionBuilderTrait constructor.
      *
      * @param QueryBuilder $queryBuilder
      */
-    public function __construct(QueryBuilder $queryBuilder)
+    public function __construct(\yii\db\QueryBuilder $queryBuilder)
     {
         $this->queryBuilder = $queryBuilder;
     }

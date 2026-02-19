@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\API\Configuration;
 
 use function class_alias;
@@ -13,20 +12,13 @@ use OpenTelemetry\API\Trace\NoopTracerProvider;
 use OpenTelemetry\API\Trace\TracerProviderInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
-
 final class Context
 {
     /** @psalm-var class-string-map<T, T> */
     private array $extensions = [];
-
-    public function __construct(
-        public readonly TracerProviderInterface $tracerProvider = new NoopTracerProvider(),
-        public readonly MeterProviderInterface $meterProvider = new NoopMeterProvider(),
-        public readonly LoggerProviderInterface $loggerProvider = new NoopLoggerProvider(),
-        public readonly LoggerInterface $logger = new NullLogger(),
-    ) {
+    public function __construct(public readonly TracerProviderInterface $tracerProvider = new NoopTracerProvider(), public readonly MeterProviderInterface $meterProvider = new NoopMeterProvider(), public readonly LoggerProviderInterface $loggerProvider = new NoopLoggerProvider(), public readonly LoggerInterface $logger = new NullLogger())
+    {
     }
-
     /**
      * @psalm-template T of object
      * @psalm-param T $extension
@@ -35,13 +27,10 @@ final class Context
     public function withExtension(object $extension, ?string $type = null): self
     {
         $type ??= $extension::class;
-
         $clone = clone $this;
         $clone->extensions[$type] = $extension;
-
         return $clone;
     }
-
     /**
      * @psalm-template T of object
      * @psalm-param class-string<T> $type
@@ -52,6 +41,5 @@ final class Context
         return $this->extensions[$type] ?? null;
     }
 }
-
 /** @phpstan-ignore-next-line @phan-suppress-next-line PhanUndeclaredClassReference */
-class_alias(Context::class, \OpenTelemetry\Config\SDK\Configuration\Context::class);
+class_alias(\OpenTelemetry\API\Configuration\Context::class, \Odigos\OpenTelemetry\Config\SDK\Configuration\Context::class);

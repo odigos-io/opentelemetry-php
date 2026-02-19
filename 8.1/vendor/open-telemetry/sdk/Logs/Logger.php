@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\SDK\Logs;
 
 use OpenTelemetry\API\Behavior\LogsMessagesTrait;
@@ -10,24 +9,18 @@ use OpenTelemetry\API\Logs\LogRecord;
 use OpenTelemetry\Context\ContextInterface;
 use OpenTelemetry\SDK\Common\Instrumentation\InstrumentationScopeInterface;
 use OpenTelemetry\SDK\Common\InstrumentationScope\Configurator;
-
 class Logger implements LoggerInterface
 {
     use LogsMessagesTrait;
-    private LoggerConfig $config;
-
+    private \OpenTelemetry\SDK\Logs\LoggerConfig $config;
     /**
      * @internal
      * @param Configurator<LoggerConfig>|null $configurator
      */
-    public function __construct(
-        private readonly LoggerSharedState $loggerSharedState,
-        private readonly InstrumentationScopeInterface $scope,
-        ?Configurator $configurator = null,
-    ) {
-        $this->config = $configurator ? $configurator->resolve($scope) : LoggerConfig::default();
+    public function __construct(private readonly \OpenTelemetry\SDK\Logs\LoggerSharedState $loggerSharedState, private readonly InstrumentationScopeInterface $scope, ?Configurator $configurator = null)
+    {
+        $this->config = $configurator ? $configurator->resolve($scope) : \OpenTelemetry\SDK\Logs\LoggerConfig::default();
     }
-
     /**
      * @see https://github.com/open-telemetry/opentelemetry-specification/blob/v1.44.0/specification/logs/api.md#emit-a-logrecord
      */
@@ -35,22 +28,16 @@ class Logger implements LoggerInterface
     public function emit(LogRecord $logRecord): void
     {
         //If a Logger is disabled, it MUST behave equivalently to No-op Logger.
-        if ($this->isEnabled() === false) {
+        if ($this->isEnabled() === \false) {
             return;
         }
-        $readWriteLogRecord = new ReadWriteLogRecord($this->scope, $this->loggerSharedState, $logRecord);
+        $readWriteLogRecord = new \OpenTelemetry\SDK\Logs\ReadWriteLogRecord($this->scope, $this->loggerSharedState, $logRecord);
         // @see https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/logs/sdk.md#onemit
-        $this->loggerSharedState->getProcessor()->onEmit(
-            $readWriteLogRecord,
-            $readWriteLogRecord->getContext(),
-        );
+        $this->loggerSharedState->getProcessor()->onEmit($readWriteLogRecord, $readWriteLogRecord->getContext());
         if ($readWriteLogRecord->getAttributes()->getDroppedAttributesCount()) {
-            self::logWarning('Dropped log attributes', [
-                'attributes' => $readWriteLogRecord->getAttributes()->getDroppedAttributesCount(),
-            ]);
+            self::logWarning('Dropped log attributes', ['attributes' => $readWriteLogRecord->getAttributes()->getDroppedAttributesCount()]);
         }
     }
-
     /**
      * @see https://github.com/open-telemetry/opentelemetry-specification/blob/v1.44.0/specification/logs/api.md#enabled
      */
@@ -59,7 +46,6 @@ class Logger implements LoggerInterface
     {
         return $this->config->isEnabled();
     }
-
     /**
      * @see https://github.com/open-telemetry/opentelemetry-specification/blob/v1.44.0/specification/logs/sdk.md#loggerconfigurator
      * @param Configurator<LoggerConfig> $configurator

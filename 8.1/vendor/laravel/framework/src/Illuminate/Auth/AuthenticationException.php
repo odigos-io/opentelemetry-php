@@ -3,7 +3,6 @@
 namespace Illuminate\Auth;
 
 use Exception;
-
 class AuthenticationException extends Exception
 {
     /**
@@ -12,14 +11,12 @@ class AuthenticationException extends Exception
      * @var array
      */
     protected $guards;
-
     /**
      * The path the user should be redirected to.
      *
      * @var string|null
      */
     protected $redirectTo;
-
     /**
      * Create a new authentication exception.
      *
@@ -31,11 +28,9 @@ class AuthenticationException extends Exception
     public function __construct($message = 'Unauthenticated.', array $guards = [], $redirectTo = null)
     {
         parent::__construct($message);
-
         $this->guards = $guards;
         $this->redirectTo = $redirectTo;
     }
-
     /**
      * Get the guards that were checked.
      *
@@ -45,7 +40,6 @@ class AuthenticationException extends Exception
     {
         return $this->guards;
     }
-
     /**
      * Get the path the user should be redirected to.
      *

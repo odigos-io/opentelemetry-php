@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -41,8 +41,7 @@ interface EventDispatcherInterface
      * ($this by default).
      * @return \Cake\Event\EventInterface<TSubject>
      */
-    public function dispatchEvent(string $name, array $data = [], ?object $subject = null): EventInterface;
-
+    public function dispatchEvent(string $name, array $data = [], ?object $subject = null): \Cake\Event\EventInterface;
     /**
      * Sets the Cake\Event\EventManager manager instance for this object.
      *
@@ -52,12 +51,11 @@ interface EventDispatcherInterface
      * @param \Cake\Event\EventManagerInterface $eventManager the eventManager to set
      * @return $this
      */
-    public function setEventManager(EventManagerInterface $eventManager);
-
+    public function setEventManager(\Cake\Event\EventManagerInterface $eventManager);
     /**
      * Returns the Cake\Event\EventManager manager instance for this object.
      *
      * @return \Cake\Event\EventManagerInterface
      */
-    public function getEventManager(): EventManagerInterface;
+    public function getEventManager(): \Cake\Event\EventManagerInterface;
 }

@@ -1,17 +1,16 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\db\conditions;
 
 use yii\db\ExpressionBuilderInterface;
 use yii\db\ExpressionBuilderTrait;
 use yii\db\ExpressionInterface;
 use yii\db\Query;
-
 /**
  * Class BetweenColumnsConditionBuilder builds objects of [[BetweenColumnsCondition]]
  *
@@ -21,8 +20,6 @@ use yii\db\Query;
 class BetweenColumnsConditionBuilder implements ExpressionBuilderInterface
 {
     use ExpressionBuilderTrait;
-
-
     /**
      * Method builds the raw SQL from the $expression that will not be additionally
      * escaped or quoted.
@@ -34,14 +31,11 @@ class BetweenColumnsConditionBuilder implements ExpressionBuilderInterface
     public function build(ExpressionInterface $expression, array &$params = [])
     {
         $operator = $expression->getOperator();
-
         $startColumn = $this->escapeColumnName($expression->getIntervalStartColumn(), $params);
         $endColumn = $this->escapeColumnName($expression->getIntervalEndColumn(), $params);
         $value = $this->createPlaceholder($expression->getValue(), $params);
-
-        return "$value $operator $startColumn AND $endColumn";
+        return "{$value} {$operator} {$startColumn} AND {$endColumn}";
     }
-
     /**
      * Prepares column name to be used in SQL statement.
      *
@@ -53,16 +47,14 @@ class BetweenColumnsConditionBuilder implements ExpressionBuilderInterface
     {
         if ($columnName instanceof Query) {
             list($sql, $params) = $this->queryBuilder->build($columnName, $params);
-            return "($sql)";
+            return "({$sql})";
         } elseif ($columnName instanceof ExpressionInterface) {
             return $this->queryBuilder->buildExpression($columnName, $params);
-        } elseif (strpos($columnName, '(') === false) {
+        } elseif (strpos($columnName, '(') === \false) {
             return $this->queryBuilder->db->quoteColumnName($columnName);
         }
-
         return $columnName;
     }
-
     /**
      * Attaches $value to $params array and returns placeholder.
      *
@@ -75,7 +67,6 @@ class BetweenColumnsConditionBuilder implements ExpressionBuilderInterface
         if ($value instanceof ExpressionInterface) {
             return $this->queryBuilder->buildExpression($value, $params);
         }
-
         return $this->queryBuilder->bindParam($value, $params);
     }
 }

@@ -15,10 +15,8 @@ trait CompilesRawPhp
         if ($expression) {
             return "<?php {$expression}; ?>";
         }
-
         return '@php';
     }
-
     /**
      * Compile the unset statements into valid PHP.
      *

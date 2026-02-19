@@ -8,12 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\Console\Tester;
 
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
-
 /**
  * Eases the testing of console applications.
  *
@@ -26,15 +24,12 @@ use Symfony\Component\Console\Input\ArrayInput;
  */
 class ApplicationTester
 {
-    use TesterTrait;
-
+    use \Symfony\Component\Console\Tester\TesterTrait;
     private Application $application;
-
     public function __construct(Application $application)
     {
         $this->application = $application;
     }
-
     /**
      * Executes the application.
      *
@@ -50,24 +45,20 @@ class ApplicationTester
     public function run(array $input, array $options = []): int
     {
         $prevShellVerbosity = getenv('SHELL_VERBOSITY');
-
         try {
             $this->input = new ArrayInput($input);
             if (isset($options['interactive'])) {
                 $this->input->setInteractive($options['interactive']);
             }
-
             if ($this->inputs) {
                 $this->input->setStream(self::createStream($this->inputs));
             }
-
             $this->initOutput($options);
-
             return $this->statusCode = $this->application->run($this->input, $this->output);
         } finally {
             // SHELL_VERBOSITY is set by Application::configureIO so we need to unset/reset it
             // to its previous value to avoid one test's verbosity to spread to the following tests
-            if (false === $prevShellVerbosity) {
+            if (\false === $prevShellVerbosity) {
                 if (\function_exists('putenv')) {
                     @putenv('SHELL_VERBOSITY');
                 }
@@ -75,7 +66,7 @@ class ApplicationTester
                 unset($_SERVER['SHELL_VERBOSITY']);
             } else {
                 if (\function_exists('putenv')) {
-                    @putenv('SHELL_VERBOSITY='.$prevShellVerbosity);
+                    @putenv('SHELL_VERBOSITY=' . $prevShellVerbosity);
                 }
                 $_ENV['SHELL_VERBOSITY'] = $prevShellVerbosity;
                 $_SERVER['SHELL_VERBOSITY'] = $prevShellVerbosity;

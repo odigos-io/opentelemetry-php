@@ -19,7 +19,6 @@ class LuaScripts
 return redis.call('exists',KEYS[1])<1 and redis.call('setex',KEYS[1],ARGV[2],ARGV[1])
 LUA;
     }
-
     /**
      * Get the Lua script to atomically release a lock.
      *

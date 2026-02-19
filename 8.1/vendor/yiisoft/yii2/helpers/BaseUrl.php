@@ -1,15 +1,14 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\helpers;
 
-use Yii;
+use Odigos\Yii;
 use yii\base\InvalidArgumentException;
-
 /**
  * BaseUrl provides concrete implementation for [[Url]].
  *
@@ -25,8 +24,6 @@ class BaseUrl
      * @since 2.0.8
      */
     public static $urlManager;
-
-
     /**
      * Creates a URL for the given route.
      *
@@ -93,18 +90,15 @@ class BaseUrl
      * @return string the generated URL
      * @throws InvalidArgumentException a relative route is given while there is no active controller
      */
-    public static function toRoute($route, $scheme = false)
+    public static function toRoute($route, $scheme = \false)
     {
         $route = (array) $route;
         $route[0] = static::normalizeRoute($route[0]);
-
-        if ($scheme !== false) {
+        if ($scheme !== \false) {
             return static::getUrlManager()->createAbsoluteUrl($route, is_string($scheme) ? $scheme : null);
         }
-
         return static::getUrlManager()->createUrl($route);
     }
-
     /**
      * Normalizes route and makes it suitable for UrlManager. Absolute routes are staying as is
      * while relative routes are converted to absolute ones.
@@ -131,21 +125,17 @@ class BaseUrl
             // absolute route
             return ltrim($route, '/');
         }
-
         // relative route
         if (Yii::$app->controller === null) {
-            throw new InvalidArgumentException("Unable to resolve the relative route: $route. No active controller is available.");
+            throw new InvalidArgumentException("Unable to resolve the relative route: {$route}. No active controller is available.");
         }
-
-        if (strpos($route, '/') === false) {
+        if (strpos($route, '/') === \false) {
             // empty or an action ID
             return $route === '' ? Yii::$app->controller->getRoute() : Yii::$app->controller->getUniqueId() . '/' . $route;
         }
-
         // relative to module
         return ltrim(Yii::$app->controller->module->getUniqueId() . '/' . $route, '/');
     }
-
     /**
      * Creates a URL based on the given parameters.
      *
@@ -208,29 +198,24 @@ class BaseUrl
      * @return string the generated URL
      * @throws InvalidArgumentException a relative route is given while there is no active controller
      */
-    public static function to($url = '', $scheme = false)
+    public static function to($url = '', $scheme = \false)
     {
         if (is_array($url)) {
             return static::toRoute($url, $scheme);
         }
-
         $url = Yii::getAlias($url);
         if ($url === '') {
             $url = Yii::$app->getRequest()->getUrl();
         }
-
-        if ($scheme === false) {
+        if ($scheme === \false) {
             return $url;
         }
-
         if (static::isRelative($url)) {
             // turn relative URL into absolute
             $url = static::getUrlManager()->getHostInfo() . '/' . ltrim($url, '/');
         }
-
         return static::ensureScheme($url, $scheme);
     }
-
     /**
      * Normalize the URL by ensuring it uses specified scheme.
      *
@@ -247,23 +232,19 @@ class BaseUrl
         if (static::isRelative($url) || !is_string($scheme)) {
             return $url;
         }
-
         if (strncmp($url, '//', 2) === 0) {
             // e.g. //example.com/path/to/resource
-            return $scheme === '' ? $url : "$scheme:$url";
+            return $scheme === '' ? $url : "{$scheme}:{$url}";
         }
-
-        if (($pos = strpos($url, '://')) !== false) {
+        if (($pos = strpos($url, '://')) !== \false) {
             if ($scheme === '') {
                 $url = substr($url, $pos + 1);
             } else {
                 $url = $scheme . substr($url, $pos);
             }
         }
-
         return $url;
     }
-
     /**
      * Returns the base URL of the current request.
      * @param bool|string $scheme the URI scheme to use in the returned base URL:
@@ -274,17 +255,15 @@ class BaseUrl
      *   for protocol-relative URL).
      * @return string
      */
-    public static function base($scheme = false)
+    public static function base($scheme = \false)
     {
         $url = static::getUrlManager()->getBaseUrl();
-        if ($scheme !== false) {
+        if ($scheme !== \false) {
             $url = static::getUrlManager()->getHostInfo() . $url;
             $url = static::ensureScheme($url, $scheme);
         }
-
         return $url;
     }
-
     /**
      * Remembers the specified URL so that it can be later fetched back by [[previous()]].
      *
@@ -298,14 +277,12 @@ class BaseUrl
     public static function remember($url = '', $name = null)
     {
         $url = static::to($url);
-
         if ($name === null) {
             Yii::$app->getUser()->setReturnUrl($url);
         } else {
             Yii::$app->getSession()->set($name, $url);
         }
     }
-
     /**
      * Returns the URL previously [[remember()|remembered]].
      *
@@ -321,10 +298,8 @@ class BaseUrl
         if ($name === null) {
             return Yii::$app->getUser()->getReturnUrl();
         }
-
         return Yii::$app->getSession()->get($name);
     }
-
     /**
      * Returns the canonical URL of the currently requested page.
      *
@@ -342,10 +317,8 @@ class BaseUrl
     {
         $params = Yii::$app->controller->actionParams;
         $params[0] = Yii::$app->controller->getRoute();
-
         return static::getUrlManager()->createAbsoluteUrl($params);
     }
-
     /**
      * Returns the home URL.
      *
@@ -358,18 +331,15 @@ class BaseUrl
      *
      * @return string home URL
      */
-    public static function home($scheme = false)
+    public static function home($scheme = \false)
     {
         $url = Yii::$app->getHomeUrl();
-
-        if ($scheme !== false) {
+        if ($scheme !== \false) {
             $url = static::getUrlManager()->getHostInfo() . $url;
             $url = static::ensureScheme($url, $scheme);
         }
-
         return $url;
     }
-
     /**
      * Returns a value indicating whether a URL is relative.
      * A relative URL does not have host info part.
@@ -380,7 +350,6 @@ class BaseUrl
     {
         return preg_match('~^[[:alpha:]][[:alnum:]+-.]*://|^//~', $url) === 0;
     }
-
     /**
      * Creates a URL by using the current route and the GET parameters.
      *
@@ -425,14 +394,13 @@ class BaseUrl
      * @return string the generated URL
      * @since 2.0.3
      */
-    public static function current(array $params = [], $scheme = false)
+    public static function current(array $params = [], $scheme = \false)
     {
         $currentParams = Yii::$app->getRequest()->getQueryParams();
         $currentParams[0] = '/' . Yii::$app->controller->getRoute();
         $route = array_replace_recursive($currentParams, $params);
         return static::toRoute($route, $scheme);
     }
-
     /**
      * @return \yii\web\UrlManager URL manager used to create URLs
      * @since 2.0.8

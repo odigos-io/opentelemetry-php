@@ -1,4 +1,7 @@
 <?php
+
+namespace Odigos;
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -14,19 +17,22 @@
  * @var string $class
  */
 use function Cake\Core\h;
-
 $pluginDot = empty($plugin) ? null : $plugin . '.';
-
 $this->layout = 'dev_error';
-
 $this->assign('title', 'Missing Datasource');
 $this->assign('templateName', 'missing_datasource.php');
-
 $this->start('subheading');
 ?>
 <strong>Error</strong>
-Datasource class <em><?= h($pluginDot . $class) ?></em> could not be found.
-    <?php if (isset($message)):  ?>
-        <?= h($message); ?>
-    <?php endif; ?>
-<?php $this->end() ?>
+Datasource class <em><?php 
+echo h($pluginDot . $class);
+?></em> could not be found.
+    <?php 
+if (isset($message)) {
+    ?>
+        <?php 
+    echo h($message);
+    ?>
+    <?php 
+}
+$this->end();

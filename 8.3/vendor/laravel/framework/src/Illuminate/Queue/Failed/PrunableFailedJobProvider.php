@@ -3,7 +3,6 @@
 namespace Illuminate\Queue\Failed;
 
 use DateTimeInterface;
-
 interface PrunableFailedJobProvider
 {
     /**

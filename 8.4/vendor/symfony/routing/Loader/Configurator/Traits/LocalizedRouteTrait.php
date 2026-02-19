@@ -8,12 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\Routing\Loader\Configurator\Traits;
 
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
-
 /**
  * @internal
  *
@@ -30,9 +28,7 @@ trait LocalizedRouteTrait
     final protected function createLocalizedRoute(RouteCollection $collection, string $name, string|array $path, string $namePrefix = '', ?array $prefixes = null): RouteCollection
     {
         $paths = [];
-
         $routes = new RouteCollection();
-
         if (\is_array($path)) {
             if (null === $prefixes) {
                 $paths = $path;
@@ -43,32 +39,27 @@ trait LocalizedRouteTrait
                     if (!isset($prefixes[$locale])) {
                         throw new \LogicException(\sprintf('Route "%s" with locale "%s" is missing a corresponding prefix in its parent collection.', $name, $locale));
                     }
-
-                    $paths[$locale] = $prefixes[$locale].$localePath;
+                    $paths[$locale] = $prefixes[$locale] . $localePath;
                 }
             }
         } elseif (null !== $prefixes) {
             foreach ($prefixes as $locale => $prefix) {
-                $paths[$locale] = $prefix.$path;
+                $paths[$locale] = $prefix . $path;
             }
         } else {
-            $routes->add($namePrefix.$name, $route = $this->createRoute($path));
-            $collection->add($namePrefix.$name, $route);
-
+            $routes->add($namePrefix . $name, $route = $this->createRoute($path));
+            $collection->add($namePrefix . $name, $route);
             return $routes;
         }
-
         foreach ($paths as $locale => $path) {
-            $routes->add($name.'.'.$locale, $route = $this->createRoute($path));
-            $collection->add($namePrefix.$name.'.'.$locale, $route);
+            $routes->add($name . '.' . $locale, $route = $this->createRoute($path));
+            $collection->add($namePrefix . $name . '.' . $locale, $route);
             $route->setDefault('_locale', $locale);
             $route->setRequirement('_locale', preg_quote($locale));
-            $route->setDefault('_canonical_route', $namePrefix.$name);
+            $route->setDefault('_canonical_route', $namePrefix . $name);
         }
-
         return $routes;
     }
-
     private function createRoute(string $path): Route
     {
         return new Route($path);

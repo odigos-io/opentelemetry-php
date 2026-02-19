@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -27,7 +27,6 @@ interface SchemaInterface
      * @return string
      */
     public function name(): string;
-
     /**
      * Add a column to the table.
      *
@@ -57,7 +56,6 @@ interface SchemaInterface
      * @return $this
      */
     public function addColumn(string $name, array|string $attrs);
-
     /**
      * Get column data in the table.
      *
@@ -65,7 +63,6 @@ interface SchemaInterface
      * @return array<string, mixed>|null Column data or null.
      */
     public function getColumn(string $name): ?array;
-
     /**
      * Returns true if a column exists in the schema.
      *
@@ -73,7 +70,6 @@ interface SchemaInterface
      * @return bool
      */
     public function hasColumn(string $name): bool;
-
     /**
      * Remove a column from the table schema.
      *
@@ -83,14 +79,12 @@ interface SchemaInterface
      * @return $this
      */
     public function removeColumn(string $name);
-
     /**
      * Get the column names in the table.
      *
      * @return array<string>
      */
     public function columns(): array;
-
     /**
      * Returns column type or null if a column does not exist.
      *
@@ -98,7 +92,6 @@ interface SchemaInterface
      * @return string|null
      */
     public function getColumnType(string $name): ?string;
-
     /**
      * Sets the type of column.
      *
@@ -107,7 +100,6 @@ interface SchemaInterface
      * @return $this
      */
     public function setColumnType(string $name, string $type);
-
     /**
      * Returns the base type name for the provided column.
      * This represents the database type a more complex class is
@@ -117,7 +109,6 @@ interface SchemaInterface
      * @return string|null The base type name
      */
     public function baseColumnType(string $column): ?string;
-
     /**
      * Check whether a field is nullable
      *
@@ -127,7 +118,6 @@ interface SchemaInterface
      * @return bool Whether the field is nullable.
      */
     public function isNullable(string $name): bool;
-
     /**
      * Returns an array where the keys are the column names in the schema
      * and the values the database type they have.
@@ -135,14 +125,12 @@ interface SchemaInterface
      * @return array<string, string>
      */
     public function typeMap(): array;
-
     /**
      * Get a hash of columns and their default values.
      *
      * @return array<string, mixed>
      */
     public function defaultValues(): array;
-
     /**
      * Sets the options for a table.
      *
@@ -153,7 +141,6 @@ interface SchemaInterface
      * @return $this
      */
     public function setOptions(array $options);
-
     /**
      * Gets the options for a table.
      *

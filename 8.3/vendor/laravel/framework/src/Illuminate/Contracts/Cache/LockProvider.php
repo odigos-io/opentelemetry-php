@@ -13,7 +13,6 @@ interface LockProvider
      * @return \Illuminate\Contracts\Cache\Lock
      */
     public function lock($name, $seconds = 0, $owner = null);
-
     /**
      * Restore a lock instance using the owner identifier.
      *

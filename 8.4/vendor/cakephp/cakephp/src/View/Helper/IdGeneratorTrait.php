@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -17,7 +17,6 @@ declare(strict_types=1);
 namespace Cake\View\Helper;
 
 use Cake\Utility\Text;
-
 /**
  * A trait that provides id generating methods to be
  * used in various widget classes.
@@ -30,14 +29,12 @@ trait IdGeneratorTrait
      * @var string|null
      */
     protected ?string $_idPrefix = null;
-
     /**
      * A list of id suffixes used in the current rendering.
      *
      * @var array<string>
      */
     protected array $_idSuffixes = [];
-
     /**
      * Clear the stored ID suffixes.
      *
@@ -47,7 +44,6 @@ trait IdGeneratorTrait
     {
         $this->_idSuffixes = [];
     }
-
     /**
      * Generate an ID attribute for an element.
      *
@@ -61,10 +57,8 @@ trait IdGeneratorTrait
     {
         $name = $this->_domId($name);
         $suffix = $this->_idSuffix($val);
-
         return trim($name . '-' . $suffix, '-');
     }
-
     /**
      * Generate an ID suffix.
      *
@@ -78,14 +72,12 @@ trait IdGeneratorTrait
         $idSuffix = mb_strtolower(str_replace(['/', '@', '<', '>', ' ', '"', "'"], '-', $val));
         $count = 1;
         $check = $idSuffix;
-        while (in_array($check, $this->_idSuffixes, true)) {
+        while (in_array($check, $this->_idSuffixes, \true)) {
             $check = $idSuffix . $count++;
         }
         $this->_idSuffixes[] = $check;
-
         return $check;
     }
-
     /**
      * Generate an ID suitable for use in an ID attribute.
      *
@@ -98,7 +90,6 @@ trait IdGeneratorTrait
         if ($this->_idPrefix) {
             return $this->_idPrefix . '-' . $domId;
         }
-
         return $domId;
     }
 }

@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -18,7 +18,6 @@ declare(strict_types=1);
 namespace Cake\I18n;
 
 use Cake\I18n\Exception\I18nException;
-
 /**
  * A ServiceLocator implementation for loading and retaining formatter objects.
  *
@@ -32,7 +31,6 @@ class FormatterLocator
      * @var array<string, \Cake\I18n\FormatterInterface|class-string<\Cake\I18n\FormatterInterface>>
      */
     protected array $registry = [];
-
     /**
      * Tracks whether a registry entry has been converted from a
      * FQCN to a formatter object.
@@ -40,7 +38,6 @@ class FormatterLocator
      * @var array<bool>
      */
     protected array $converted = [];
-
     /**
      * Constructor.
      *
@@ -53,7 +50,6 @@ class FormatterLocator
             $this->set($name, $spec);
         }
     }
-
     /**
      * Sets a formatter into the registry by name.
      *
@@ -64,9 +60,8 @@ class FormatterLocator
     public function set(string $name, string $className): void
     {
         $this->registry[$name] = $className;
-        $this->converted[$name] = false;
+        $this->converted[$name] = \false;
     }
-
     /**
      * Gets a formatter from the registry by name.
      *
@@ -74,19 +69,17 @@ class FormatterLocator
      * @return \Cake\I18n\FormatterInterface A formatter object.
      * @throws \Cake\I18n\Exception\I18nException
      */
-    public function get(string $name): FormatterInterface
+    public function get(string $name): \Cake\I18n\FormatterInterface
     {
         if (!isset($this->registry[$name])) {
             throw new I18nException(sprintf('Formatter named `%s` has not been registered.', $name));
         }
-
         if (!$this->converted[$name]) {
             /** @var class-string<\Cake\I18n\FormatterInterface> $formatter */
             $formatter = $this->registry[$name];
             $this->registry[$name] = new $formatter();
-            $this->converted[$name] = true;
+            $this->converted[$name] = \true;
         }
-
         /** @var \Cake\I18n\FormatterInterface */
         return $this->registry[$name];
     }

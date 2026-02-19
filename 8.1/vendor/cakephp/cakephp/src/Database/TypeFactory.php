@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -17,7 +17,6 @@ declare(strict_types=1);
 namespace Cake\Database;
 
 use InvalidArgumentException;
-
 /**
  * Factory for building database type classes.
  */
@@ -31,42 +30,13 @@ class TypeFactory
      * @var array<string, string>
      * @phpstan-var array<string, class-string<\Cake\Database\TypeInterface>>
      */
-    protected static array $_types = [
-        'tinyinteger' => Type\IntegerType::class,
-        'smallinteger' => Type\IntegerType::class,
-        'integer' => Type\IntegerType::class,
-        'biginteger' => Type\IntegerType::class,
-        'binary' => Type\BinaryType::class,
-        'binaryuuid' => Type\BinaryUuidType::class,
-        'boolean' => Type\BoolType::class,
-        'date' => Type\DateType::class,
-        'datetime' => Type\DateTimeType::class,
-        'datetimefractional' => Type\DateTimeFractionalType::class,
-        'decimal' => Type\DecimalType::class,
-        'float' => Type\FloatType::class,
-        'json' => Type\JsonType::class,
-        'string' => Type\StringType::class,
-        'char' => Type\StringType::class,
-        'text' => Type\StringType::class,
-        'time' => Type\TimeType::class,
-        'timestamp' => Type\DateTimeType::class,
-        'timestampfractional' => Type\DateTimeFractionalType::class,
-        'timestamptimezone' => Type\DateTimeTimezoneType::class,
-        'uuid' => Type\UuidType::class,
-        'nativeuuid' => Type\UuidType::class,
-        'linestring' => Type\StringType::class,
-        'geometry' => Type\StringType::class,
-        'point' => Type\StringType::class,
-        'polygon' => Type\StringType::class,
-    ];
-
+    protected static array $_types = ['tinyinteger' => \Cake\Database\Type\IntegerType::class, 'smallinteger' => \Cake\Database\Type\IntegerType::class, 'integer' => \Cake\Database\Type\IntegerType::class, 'biginteger' => \Cake\Database\Type\IntegerType::class, 'binary' => \Cake\Database\Type\BinaryType::class, 'binaryuuid' => \Cake\Database\Type\BinaryUuidType::class, 'boolean' => \Cake\Database\Type\BoolType::class, 'date' => \Cake\Database\Type\DateType::class, 'datetime' => \Cake\Database\Type\DateTimeType::class, 'datetimefractional' => \Cake\Database\Type\DateTimeFractionalType::class, 'decimal' => \Cake\Database\Type\DecimalType::class, 'float' => \Cake\Database\Type\FloatType::class, 'json' => \Cake\Database\Type\JsonType::class, 'string' => \Cake\Database\Type\StringType::class, 'char' => \Cake\Database\Type\StringType::class, 'text' => \Cake\Database\Type\StringType::class, 'time' => \Cake\Database\Type\TimeType::class, 'timestamp' => \Cake\Database\Type\DateTimeType::class, 'timestampfractional' => \Cake\Database\Type\DateTimeFractionalType::class, 'timestamptimezone' => \Cake\Database\Type\DateTimeTimezoneType::class, 'uuid' => \Cake\Database\Type\UuidType::class, 'nativeuuid' => \Cake\Database\Type\UuidType::class, 'linestring' => \Cake\Database\Type\StringType::class, 'geometry' => \Cake\Database\Type\StringType::class, 'point' => \Cake\Database\Type\StringType::class, 'polygon' => \Cake\Database\Type\StringType::class];
     /**
      * Contains a map of type object instances to be reused if needed.
      *
      * @var array<\Cake\Database\TypeInterface>
      */
     protected static array $_builtTypes = [];
-
     /**
      * Returns a Type object capable of converting a type identified by name.
      *
@@ -74,7 +44,7 @@ class TypeFactory
      * @throws \InvalidArgumentException If type identifier is unknown
      * @return \Cake\Database\TypeInterface
      */
-    public static function build(string $name): TypeInterface
+    public static function build(string $name): \Cake\Database\TypeInterface
     {
         if (isset(static::$_builtTypes[$name])) {
             return static::$_builtTypes[$name];
@@ -82,10 +52,8 @@ class TypeFactory
         if (!isset(static::$_types[$name])) {
             throw new InvalidArgumentException(sprintf('Unknown type `%s`', $name));
         }
-
         return static::$_builtTypes[$name] = new static::$_types[$name]($name);
     }
-
     /**
      * Returns an arrays with all the mapped type objects, indexed by name.
      *
@@ -96,10 +64,8 @@ class TypeFactory
         foreach (static::$_types as $name => $type) {
             static::$_builtTypes[$name] ??= static::build($name);
         }
-
         return static::$_builtTypes;
     }
-
     /**
      * Set TypeInterface instance capable of converting a type identified by $name
      *
@@ -107,11 +73,10 @@ class TypeFactory
      * @param \Cake\Database\TypeInterface $instance The type instance you want to set.
      * @return void
      */
-    public static function set(string $name, TypeInterface $instance): void
+    public static function set(string $name, \Cake\Database\TypeInterface $instance): void
     {
         static::$_builtTypes[$name] = $instance;
     }
-
     /**
      * Registers a new type identifier and maps it to a fully namespaced classname.
      *
@@ -125,7 +90,6 @@ class TypeFactory
         static::$_types[$type] = $className;
         unset(static::$_builtTypes[$type]);
     }
-
     /**
      * Set type to classname mapping.
      *
@@ -138,7 +102,6 @@ class TypeFactory
         static::$_types = $map;
         static::$_builtTypes = [];
     }
-
     /**
      * Get mapped class name for given type or map array.
      *
@@ -150,10 +113,8 @@ class TypeFactory
         if ($type === null) {
             return static::$_types;
         }
-
         return static::$_types[$type] ?? null;
     }
-
     /**
      * Clears out all created instances and mapped types classes, useful for testing
      *

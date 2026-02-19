@@ -3,7 +3,6 @@
 namespace Illuminate\Database\Events;
 
 use Illuminate\Database\Connection;
-
 class MigrationsPruned
 {
     /**
@@ -12,21 +11,18 @@ class MigrationsPruned
      * @var \Illuminate\Database\Connection
      */
     public $connection;
-
     /**
      * The database connection name.
      *
      * @var string|null
      */
     public $connectionName;
-
     /**
      * The path to the directory where migrations were pruned.
      *
      * @var string
      */
     public $path;
-
     /**
      * Create a new event instance.
      *

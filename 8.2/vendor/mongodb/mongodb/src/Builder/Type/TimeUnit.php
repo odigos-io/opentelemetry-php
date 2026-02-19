@@ -1,13 +1,12 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace MongoDB\Builder\Type;
 
 /**
  * Values for "unit" property of stages like $derivative and $integral, and operators like $dateAdd and $dateDiff
  */
-enum TimeUnit: string implements DictionaryInterface
+enum TimeUnit : string implements \MongoDB\Builder\Type\DictionaryInterface
 {
     case Year = 'year';
     case Quarter = 'quarter';
@@ -18,7 +17,6 @@ enum TimeUnit: string implements DictionaryInterface
     case Minute = 'minute';
     case Second = 'second';
     case Millisecond = 'millisecond';
-
     public function getValue(): string
     {
         return $this->value;

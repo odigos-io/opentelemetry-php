@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -19,13 +19,12 @@ namespace Cake\Database\Type;
 use Cake\Core\Exception\CakeException;
 use Cake\Database\Driver;
 use PDO;
-
 /**
  * Binary type converter.
  *
  * Use to convert binary data between PHP and the database types.
  */
-class BinaryType extends BaseType
+class BinaryType extends \Cake\Database\Type\BaseType
 {
     /**
      * Convert binary data into the database format.
@@ -41,7 +40,6 @@ class BinaryType extends BaseType
     {
         return $value;
     }
-
     /**
      * Convert binary into resource handles
      *
@@ -63,7 +61,6 @@ class BinaryType extends BaseType
         }
         throw new CakeException(sprintf('Unable to convert `%s` into binary.', gettype($value)));
     }
-
     /**
      * @inheritDoc
      */
@@ -71,7 +68,6 @@ class BinaryType extends BaseType
     {
         return PDO::PARAM_LOB;
     }
-
     /**
      * Marshals flat data into PHP objects.
      *

@@ -1,5 +1,6 @@
-<?php declare(strict_types=1);
+<?php
 
+declare (strict_types=1);
 /*
  * This file is part of the Monolog package.
  *
@@ -8,12 +9,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Odigos\Monolog\Formatter;
 
-namespace Monolog\Formatter;
-
-use Monolog\Level;
-use Monolog\LogRecord;
-
+use Odigos\Monolog\Level;
+use Odigos\Monolog\LogRecord;
 /**
  * Serializes a log message according to Wildfire's header requirements
  *
@@ -29,11 +28,9 @@ class WildfireFormatter extends NormalizerFormatter
     public function __construct(?string $dateFormat = null)
     {
         parent::__construct($dateFormat);
-
         // http headers do not like non-ISO-8559-1 characters
-        $this->removeJsonEncodeOption(JSON_UNESCAPED_UNICODE);
+        $this->removeJsonEncodeOption(\JSON_UNESCAPED_UNICODE);
     }
-
     /**
      * Translates Monolog log levels to Wildfire levels.
      *
@@ -42,17 +39,16 @@ class WildfireFormatter extends NormalizerFormatter
     private function toWildfireLevel(Level $level): string
     {
         return match ($level) {
-            Level::Debug     => 'LOG',
-            Level::Info      => 'INFO',
-            Level::Notice    => 'INFO',
-            Level::Warning   => 'WARN',
-            Level::Error     => 'ERROR',
-            Level::Critical  => 'ERROR',
-            Level::Alert     => 'ERROR',
+            Level::Debug => 'LOG',
+            Level::Info => 'INFO',
+            Level::Notice => 'INFO',
+            Level::Warning => 'WARN',
+            Level::Error => 'ERROR',
+            Level::Critical => 'ERROR',
+            Level::Alert => 'ERROR',
             Level::Emergency => 'ERROR',
         };
     }
-
     /**
      * @inheritDoc
      */
@@ -68,49 +64,32 @@ class WildfireFormatter extends NormalizerFormatter
             $line = $record->extra['line'];
             unset($record->extra['line']);
         }
-
         $message = ['message' => $record->message];
-        $handleError = false;
+        $handleError = \false;
         if (\count($record->context) > 0) {
             $message['context'] = $this->normalize($record->context);
-            $handleError = true;
+            $handleError = \true;
         }
         if (\count($record->extra) > 0) {
             $message['extra'] = $this->normalize($record->extra);
-            $handleError = true;
+            $handleError = \true;
         }
         if (\count($message) === 1) {
             $message = reset($message);
         }
-
         if (is_array($message) && isset($message['context']) && \is_array($message['context']) && isset($message['context']['table'])) {
-            $type  = 'TABLE';
-            $label = $record->channel .': '. $record->message;
+            $type = 'TABLE';
+            $label = $record->channel . ': ' . $record->message;
             $message = $message['context']['table'];
         } else {
-            $type  = $this->toWildfireLevel($record->level);
+            $type = $this->toWildfireLevel($record->level);
             $label = $record->channel;
         }
-
         // Create JSON object describing the appearance of the message in the console
-        $json = $this->toJson([
-            [
-                'Type'  => $type,
-                'File'  => $file,
-                'Line'  => $line,
-                'Label' => $label,
-            ],
-            $message,
-        ], $handleError);
-
+        $json = $this->toJson([['Type' => $type, 'File' => $file, 'Line' => $line, 'Label' => $label], $message], $handleError);
         // The message itself is a serialization of the above JSON object + it's length
-        return sprintf(
-            '%d|%s|',
-            \strlen($json),
-            $json
-        );
+        return sprintf('%d|%s|', \strlen($json), $json);
     }
-
     /**
      * @inheritDoc
      *
@@ -120,7 +99,6 @@ class WildfireFormatter extends NormalizerFormatter
     {
         throw new \BadMethodCallException('Batch formatting does not make sense for the WildfireFormatter');
     }
-
     /**
      * @inheritDoc
      *
@@ -131,7 +109,6 @@ class WildfireFormatter extends NormalizerFormatter
         if (\is_object($data) && !$data instanceof \DateTimeInterface) {
             return $data;
         }
-
         return parent::normalize($data, $depth);
     }
 }

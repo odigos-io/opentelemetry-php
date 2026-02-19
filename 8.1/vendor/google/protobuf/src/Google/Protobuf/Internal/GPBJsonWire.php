@@ -6,18 +6,12 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file or at
 // https://developers.google.com/open-source/licenses/bsd
+namespace Odigos\Google\Protobuf\Internal;
 
-namespace Google\Protobuf\Internal;
-
-use Google\Protobuf\PrintOptions;
-
+use Odigos\Google\Protobuf\PrintOptions;
 class GPBJsonWire
 {
-
-    public static function serializeFieldToStream(
-        $value,
-        $field,
-        &$output, $has_field_name = true)
+    public static function serializeFieldToStream($value, $field, &$output, $has_field_name = \true)
     {
         if ($has_field_name) {
             $output->writeRaw("\"", 1);
@@ -25,101 +19,70 @@ class GPBJsonWire
             $output->writeRaw($field_name, strlen($field_name));
             $output->writeRaw("\":", 2);
         }
-        return static::serializeFieldValueToStream(
-            $value,
-            $field,
-            $output,
-            !$has_field_name);
+        return static::serializeFieldValueToStream($value, $field, $output, !$has_field_name);
     }
-
-    public static function serializeFieldValueToStream(
-        $values,
-        $field,
-        &$output,
-        $is_well_known = false)
+    public static function serializeFieldValueToStream($values, $field, &$output, $is_well_known = \false)
     {
         if ($field->isMap()) {
             $output->writeRaw("{", 1);
-            $first = true;
+            $first = \true;
             $map_entry = $field->getMessageType();
             $key_field = $map_entry->getFieldByNumber(1);
             $value_field = $map_entry->getFieldByNumber(2);
-
             switch ($key_field->getType()) {
-            case GPBType::STRING:
-            case GPBType::SFIXED64:
-            case GPBType::INT64:
-            case GPBType::SINT64:
-            case GPBType::FIXED64:
-            case GPBType::UINT64:
-                $additional_quote = false;
-                break;
-            default:
-                $additional_quote = true;
+                case GPBType::STRING:
+                case GPBType::SFIXED64:
+                case GPBType::INT64:
+                case GPBType::SINT64:
+                case GPBType::FIXED64:
+                case GPBType::UINT64:
+                    $additional_quote = \false;
+                    break;
+                default:
+                    $additional_quote = \true;
             }
-
             foreach ($values as $key => $value) {
                 if ($first) {
-                    $first = false;
+                    $first = \false;
                 } else {
                     $output->writeRaw(",", 1);
                 }
                 if ($additional_quote) {
                     $output->writeRaw("\"", 1);
                 }
-                if (!static::serializeSingularFieldValueToStream(
-                    $key,
-                    $key_field,
-                    $output,
-                    $is_well_known)) {
-                    return false;
+                if (!static::serializeSingularFieldValueToStream($key, $key_field, $output, $is_well_known)) {
+                    return \false;
                 }
                 if ($additional_quote) {
                     $output->writeRaw("\"", 1);
                 }
                 $output->writeRaw(":", 1);
-                if (!static::serializeSingularFieldValueToStream(
-                    $value,
-                    $value_field,
-                    $output,
-                    $is_well_known)) {
-                    return false;
+                if (!static::serializeSingularFieldValueToStream($value, $value_field, $output, $is_well_known)) {
+                    return \false;
                 }
             }
             $output->writeRaw("}", 1);
-            return true;
+            return \true;
         } elseif ($field->isRepeated()) {
             $output->writeRaw("[", 1);
-            $first = true;
+            $first = \true;
             foreach ($values as $value) {
                 if ($first) {
-                    $first = false;
+                    $first = \false;
                 } else {
                     $output->writeRaw(",", 1);
                 }
-                if (!static::serializeSingularFieldValueToStream(
-                    $value,
-                    $field,
-                    $output,
-                    $is_well_known)) {
-                    return false;
+                if (!static::serializeSingularFieldValueToStream($value, $field, $output, $is_well_known)) {
+                    return \false;
                 }
             }
             $output->writeRaw("]", 1);
-            return true;
+            return \true;
         } else {
-            return static::serializeSingularFieldValueToStream(
-                $values,
-                $field,
-                $output,
-                $is_well_known);
+            return static::serializeSingularFieldValueToStream($values, $field, $output, $is_well_known);
         }
     }
-
-    private static function serializeSingularFieldValueToStream(
-        $value,
-        $field,
-        &$output, $is_well_known = false)
+    private static function serializeSingularFieldValueToStream($value, $field, &$output, $is_well_known = \false)
     {
         switch ($field->getType()) {
             case GPBType::SFIXED32:
@@ -141,7 +104,7 @@ class GPBJsonWire
                 if ($value < 0) {
                     $value = bcadd($value, "18446744073709551616");
                 }
-                // Intentional fall through.
+            // Intentional fall through.
             case GPBType::SFIXED64:
             case GPBType::INT64:
             case GPBType::SINT64:
@@ -153,9 +116,9 @@ class GPBJsonWire
             case GPBType::FLOAT:
                 if (is_nan($value)) {
                     $str_value = "\"NaN\"";
-                } elseif ($value === INF) {
+                } elseif ($value === \INF) {
                     $str_value = "\"Infinity\"";
-                } elseif ($value === -INF) {
+                } elseif ($value === -\INF) {
                     $str_value = "\"-Infinity\"";
                 } else {
                     $str_value = sprintf("%.8g", $value);
@@ -165,9 +128,9 @@ class GPBJsonWire
             case GPBType::DOUBLE:
                 if (is_nan($value)) {
                     $str_value = "\"NaN\"";
-                } elseif ($value === INF) {
+                } elseif ($value === \INF) {
                     $str_value = "\"Infinity\"";
-                } elseif ($value === -INF) {
+                } elseif ($value === -\INF) {
                     $str_value = "\"-Infinity\"";
                 } else {
                     $str_value = sprintf("%.17g", $value);
@@ -176,7 +139,7 @@ class GPBJsonWire
                 break;
             case GPBType::ENUM:
                 $enum_desc = $field->getEnumType();
-                if ($enum_desc->getClass() === "Google\Protobuf\NullValue") {
+                if ($enum_desc->getClass() === "Google\\Protobuf\\NullValue") {
                     $output->writeRaw("null", 4);
                     break;
                 }
@@ -210,7 +173,7 @@ class GPBJsonWire
                 $output->writeRaw("\"", 1);
                 break;
             case GPBType::STRING:
-                $value = json_encode($value, JSON_UNESCAPED_UNICODE);
+                $value = json_encode($value, \JSON_UNESCAPED_UNICODE);
                 $output->writeRaw($value, strlen($value));
                 break;
             //    case GPBType::GROUP:
@@ -222,11 +185,10 @@ class GPBJsonWire
                 break;
             default:
                 user_error("Unsupported type.");
-                return false;
+                return \false;
         }
-        return true;
+        return \true;
     }
-
     private static function formatFieldName($field, $options)
     {
         if ($options & PrintOptions::PRESERVE_PROTO_FIELD_NAMES) {
@@ -234,31 +196,36 @@ class GPBJsonWire
         }
         return $field->getJsonName();
     }
-
     // Used for escaping control chars in strings.
     private static $k_control_char_limit = 0x20;
-
     private static function jsonNiceEscape($c)
     {
-      switch ($c) {
-          case '"':  return "\\\"";
-          case '\\': return "\\\\";
-          case '/': return "\\/";
-          case '\b': return "\\b";
-          case '\f': return "\\f";
-          case '\n': return "\\n";
-          case '\r': return "\\r";
-          case '\t': return "\\t";
-          default:   return NULL;
-      }
+        switch ($c) {
+            case '"':
+                return "\\\"";
+            case '\\':
+                return "\\\\";
+            case '/':
+                return "\\/";
+            case '\b':
+                return "\\b";
+            case '\f':
+                return "\\f";
+            case '\n':
+                return "\\n";
+            case '\r':
+                return "\\r";
+            case '\t':
+                return "\\t";
+            default:
+                return NULL;
+        }
     }
-
     private static function isJsonEscaped($c)
     {
         // See RFC 4627.
         return $c < chr($k_control_char_limit) || $c === "\"" || $c === "\\";
     }
-
     public static function escapedJson($value)
     {
         $escaped_value = "";
@@ -278,14 +245,11 @@ class GPBJsonWire
                     $unescaped_run = "";
                 }
                 $escaped_value .= $escape;
-            } else {
-              if ($unescaped_run === "") {
+            } else if ($unescaped_run === "") {
                 $unescaped_run .= $c;
-              }
             }
         }
         $escaped_value .= $unescaped_run;
         return $escaped_value;
     }
-
 }

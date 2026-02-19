@@ -16,7 +16,6 @@ class SkipIfBatchCancelled
         if (method_exists($job, 'batch') && $job->batch()?->cancelled()) {
             return;
         }
-
         $next($job);
     }
 }

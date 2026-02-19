@@ -5,33 +5,26 @@
  *
  * @license https://github.com/slimphp/Slim/blob/4.x/LICENSE.md (MIT License)
  */
-
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Slim\Exception;
 
 use function implode;
-
-class HttpMethodNotAllowedException extends HttpSpecializedException
+class HttpMethodNotAllowedException extends \Slim\Exception\HttpSpecializedException
 {
     /**
      * @var string[]
      */
     protected array $allowedMethods = [];
-
     /**
      * @var int
      */
     protected $code = 405;
-
     /**
      * @var string
      */
     protected $message = 'Method not allowed.';
-
     protected string $title = '405 Method Not Allowed';
     protected string $description = 'The request method is not supported for the requested resource.';
-
     /**
      * @return string[]
      */
@@ -39,7 +32,6 @@ class HttpMethodNotAllowedException extends HttpSpecializedException
     {
         return $this->allowedMethods;
     }
-
     /**
      * @param string[] $methods
      */

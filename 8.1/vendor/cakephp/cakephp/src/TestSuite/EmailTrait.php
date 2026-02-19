@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -26,9 +26,8 @@ use Cake\TestSuite\Constraint\Email\MailSentTo;
 use Cake\TestSuite\Constraint\Email\MailSentWith;
 use Cake\TestSuite\Constraint\Email\MailSubjectContains;
 use Cake\TestSuite\Constraint\Email\NoMailSent;
-use PHPUnit\Framework\Attributes\After;
-use PHPUnit\Framework\Attributes\Before;
-
+use Odigos\PHPUnit\Framework\Attributes\After;
+use Odigos\PHPUnit\Framework\Attributes\Before;
 /**
  * Make assertions on emails sent through the Cake\TestSuite\TestEmailTransport
  *
@@ -46,9 +45,8 @@ trait EmailTrait
     #[Before]
     public function setupTransports(): void
     {
-        TestEmailTransport::replaceAllTransports();
+        \Cake\TestSuite\TestEmailTransport::replaceAllTransports();
     }
-
     /**
      * Resets transport state
      *
@@ -57,9 +55,8 @@ trait EmailTrait
     #[After]
     public function cleanupEmailTrait(): void
     {
-        TestEmailTransport::clearMessages();
+        \Cake\TestSuite\TestEmailTransport::clearMessages();
     }
-
     /**
      * Asserts an expected number of emails were sent
      *
@@ -71,7 +68,6 @@ trait EmailTrait
     {
         $this->assertThat($count, new MailCount(), $message);
     }
-
     /**
      * Asserts that no emails were sent
      *
@@ -82,7 +78,6 @@ trait EmailTrait
     {
         $this->assertThat(null, new NoMailSent(), $message);
     }
-
     /**
      * Asserts an email at a specific index was sent to an address
      *
@@ -95,7 +90,6 @@ trait EmailTrait
     {
         $this->assertThat($address, new MailSentTo($at), $message);
     }
-
     /**
      * Asserts an email at a specific index was sent from an address
      *
@@ -108,7 +102,6 @@ trait EmailTrait
     {
         $this->assertThat($address, new MailSentFrom($at), $message);
     }
-
     /**
      * Asserts an email at a specific index contains expected contents
      *
@@ -121,7 +114,6 @@ trait EmailTrait
     {
         $this->assertThat($contents, new MailContains($at), $message);
     }
-
     /**
      * Asserts an email at a specific index contains expected html contents
      *
@@ -134,7 +126,6 @@ trait EmailTrait
     {
         $this->assertThat($contents, new MailContainsHtml($at), $message);
     }
-
     /**
      * Asserts an email at a specific index contains expected text contents
      *
@@ -147,7 +138,6 @@ trait EmailTrait
     {
         $this->assertThat($contents, new MailContainsText($at), $message);
     }
-
     /**
      * Asserts an email at a specific index contains the expected value within an Email getter
      *
@@ -161,7 +151,6 @@ trait EmailTrait
     {
         $this->assertThat($expected, new MailSentWith($at, $parameter), $message);
     }
-
     /**
      * Asserts an email was sent to an address
      *
@@ -173,7 +162,6 @@ trait EmailTrait
     {
         $this->assertThat($address, new MailSentTo(), $message);
     }
-
     /**
      * Asserts an email was sent from an address
      *
@@ -185,7 +173,6 @@ trait EmailTrait
     {
         $this->assertThat($address, new MailSentFrom(), $message);
     }
-
     /**
      * Asserts an email contains expected contents
      *
@@ -197,7 +184,6 @@ trait EmailTrait
     {
         $this->assertThat($contents, new MailContains(), $message);
     }
-
     /**
      * Asserts an email contains expected attachment
      *
@@ -210,7 +196,6 @@ trait EmailTrait
     {
         $this->assertThat([$filename, $file], new MailContainsAttachment(), $message);
     }
-
     /**
      * Asserts an email contains expected html contents
      *
@@ -222,7 +207,6 @@ trait EmailTrait
     {
         $this->assertThat($contents, new MailContainsHtml(), $message);
     }
-
     /**
      * Asserts an email contains an expected text content
      *
@@ -234,7 +218,6 @@ trait EmailTrait
     {
         $this->assertThat($expected, new MailContainsText(), $message);
     }
-
     /**
      * Asserts an email contains the expected value within an Email getter
      *
@@ -247,7 +230,6 @@ trait EmailTrait
     {
         $this->assertThat($expected, new MailSentWith(null, $parameter), $message);
     }
-
     /**
      * Asserts an email subject contains expected contents
      *
@@ -259,7 +241,6 @@ trait EmailTrait
     {
         $this->assertThat($contents, new MailSubjectContains(), $message);
     }
-
     /**
      * Asserts an email at a specific index contains expected html contents
      *

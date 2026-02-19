@@ -10,14 +10,12 @@ abstract class ConnectionEvent
      * @var string
      */
     public $connectionName;
-
     /**
      * The database connection instance.
      *
      * @var \Illuminate\Database\Connection
      */
     public $connection;
-
     /**
      * Create a new event instance.
      *

@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -18,7 +18,6 @@ namespace Cake\Console;
 
 use Cake\Console\Exception\ConsoleException;
 use function Cake\Core\deprecationWarning;
-
 /**
  * Provides an interface for interacting with
  * a command's options and arguments.
@@ -31,21 +30,18 @@ class Arguments
      * @var array<int, string>
      */
     protected array $argNames;
-
     /**
      * Positional arguments.
      *
      * @var array<int, array<string>|string>
      */
     protected array $args;
-
     /**
      * Named options
      *
      * @var array<string, array<string>|string|bool|null>
      */
     protected array $options;
-
     /**
      * Constructor
      *
@@ -60,7 +56,6 @@ class Arguments
         $this->options = $options;
         $this->argNames = $argNames;
     }
-
     /**
      * Get all positional arguments.
      *
@@ -70,7 +65,6 @@ class Arguments
     {
         return $this->args;
     }
-
     /**
      * Get positional arguments by index.
      *
@@ -82,19 +76,12 @@ class Arguments
         if (!$this->hasArgumentAt($index)) {
             return null;
         }
-
         $value = $this->args[$index];
-
         if ($value !== null && !is_string($value)) {
-            throw new ConsoleException(sprintf(
-                'Argument at index `%d` is not of type `string`, use `getArrayArgument()` instead.',
-                $index,
-            ));
+            throw new ConsoleException(sprintf('Argument at index `%d` is not of type `string`, use `getArrayArgument()` instead.', $index));
         }
-
         return $value;
     }
-
     /**
      * Get positional arguments (multiple) by index.
      *
@@ -106,19 +93,12 @@ class Arguments
         if (!$this->hasArgumentAt($index)) {
             return null;
         }
-
         $value = $this->args[$index];
-
         if ($value !== null && !is_array($value)) {
-            throw new ConsoleException(sprintf(
-                'Argument at index `%d` is not of type `array`, use `getArgument()` instead.',
-                $index,
-            ));
+            throw new ConsoleException(sprintf('Argument at index `%d` is not of type `array`, use `getArgument()` instead.', $index));
         }
-
         return $value;
     }
-
     /**
      * Check if a positional argument exists by index
      *
@@ -129,7 +109,6 @@ class Arguments
     {
         return isset($this->args[$index]);
     }
-
     /**
      * Check if a positional argument exists by name
      *
@@ -138,14 +117,12 @@ class Arguments
      */
     public function hasArgument(string $name): bool
     {
-        $offset = array_search($name, $this->argNames, true);
-        if ($offset === false) {
-            return false;
+        $offset = array_search($name, $this->argNames, \true);
+        if ($offset === \false) {
+            return \false;
         }
-
         return isset($this->args[$offset]);
     }
-
     /**
      * Returns positional argument value by name or null if doesn't exist
      *
@@ -155,20 +132,13 @@ class Arguments
     public function getArgument(string $name): ?string
     {
         $this->assertArgumentExists($name);
-
-        $offset = array_search($name, $this->argNames, true);
+        $offset = array_search($name, $this->argNames, \true);
         $value = $this->args[$offset] ?? null;
-
         if ($value !== null && !is_string($value)) {
-            throw new ConsoleException(sprintf(
-                'Argument `%s` is not of type `string`, use `getArrayArgument()` instead.',
-                $name,
-            ));
+            throw new ConsoleException(sprintf('Argument `%s` is not of type `string`, use `getArrayArgument()` instead.', $name));
         }
-
         return $value;
     }
-
     /**
      * Gets a multiple (array) argument's value or null if not set.
      *
@@ -178,20 +148,13 @@ class Arguments
     public function getArrayArgument(string $name): ?array
     {
         $this->assertArgumentExists($name);
-
-        $offset = array_search($name, $this->argNames, true);
+        $offset = array_search($name, $this->argNames, \true);
         $value = $this->args[$offset] ?? null;
-
         if ($value !== null && !is_array($value)) {
-            throw new ConsoleException(sprintf(
-                'Argument `%s` is not of type `array`, use `getArgument()` instead.',
-                $name,
-            ));
+            throw new ConsoleException(sprintf('Argument `%s` is not of type `array`, use `getArgument()` instead.', $name));
         }
-
         return $value;
     }
-
     /**
      * Get an array of all the options
      *
@@ -201,7 +164,6 @@ class Arguments
     {
         return $this->options;
     }
-
     /**
      * Get a non-multiple option's value or null if not set.
      *
@@ -212,17 +174,11 @@ class Arguments
     {
         $value = $this->options[$name] ?? null;
         if (is_array($value)) {
-            throw new ConsoleException(sprintf(
-                'Cannot get multiple values for option `%s`, use `getArrayOption()` instead.',
-                $name,
-            ));
+            throw new ConsoleException(sprintf('Cannot get multiple values for option `%s`, use `getArrayOption()` instead.', $name));
         }
-
         assert($value === null || is_string($value) || is_bool($value));
-
         return $value;
     }
-
     /**
      * Get a boolean option's value or null if not set.
      *
@@ -233,15 +189,10 @@ class Arguments
     {
         $value = $this->options[$name] ?? null;
         if ($value !== null && !is_bool($value)) {
-            throw new ConsoleException(sprintf(
-                'Option `%s` is not of type `bool`, use `getOption()` instead.',
-                $name,
-            ));
+            throw new ConsoleException(sprintf('Option `%s` is not of type `bool`, use `getOption()` instead.', $name));
         }
-
         return $value;
     }
-
     /**
      * Gets a multiple option's value or null if not set.
      *
@@ -250,14 +201,9 @@ class Arguments
      */
     public function getMultipleOption(string $name): ?array
     {
-        deprecationWarning(
-            '5.2.0',
-            'getMultipleOption() is deprecated. Use `getArrayOption()` instead.',
-        );
-
+        deprecationWarning('5.2.0', 'getMultipleOption() is deprecated. Use `getArrayOption()` instead.');
         return $this->getArrayOption($name);
     }
-
     /**
      * Gets a multiple (array) option's value or null if not set.
      *
@@ -267,15 +213,10 @@ class Arguments
     {
         $value = $this->options[$name] ?? null;
         if ($value !== null && !is_array($value)) {
-            throw new ConsoleException(sprintf(
-                'Option `%s` is not of type `array`, use `getOption()` instead.',
-                $name,
-            ));
+            throw new ConsoleException(sprintf('Option `%s` is not of type `array`, use `getOption()` instead.', $name));
         }
-
         return $value;
     }
-
     /**
      * Check if an option is defined and not null.
      *
@@ -286,20 +227,15 @@ class Arguments
     {
         return isset($this->options[$name]);
     }
-
     /**
      * @param string $name
      * @return void
      */
     protected function assertArgumentExists(string $name): void
     {
-        if (in_array($name, $this->argNames, true)) {
+        if (in_array($name, $this->argNames, \true)) {
             return;
         }
-
-        throw new ConsoleException(sprintf(
-            'Argument `%s` is not defined on this Command. Could this be an option maybe?',
-            $name,
-        ));
+        throw new ConsoleException(sprintf('Argument `%s` is not defined on this Command. Could this be an option maybe?', $name));
     }
 }

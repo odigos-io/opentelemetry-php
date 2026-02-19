@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\CssSelector\Node;
 
 /**
@@ -21,32 +20,27 @@ namespace Symfony\Component\CssSelector\Node;
  *
  * @internal
  */
-class ClassNode extends AbstractNode
+class ClassNode extends \Symfony\Component\CssSelector\Node\AbstractNode
 {
-    private NodeInterface $selector;
+    private \Symfony\Component\CssSelector\Node\NodeInterface $selector;
     private string $name;
-
-    public function __construct(NodeInterface $selector, string $name)
+    public function __construct(\Symfony\Component\CssSelector\Node\NodeInterface $selector, string $name)
     {
         $this->selector = $selector;
         $this->name = $name;
     }
-
-    public function getSelector(): NodeInterface
+    public function getSelector(): \Symfony\Component\CssSelector\Node\NodeInterface
     {
         return $this->selector;
     }
-
     public function getName(): string
     {
         return $this->name;
     }
-
-    public function getSpecificity(): Specificity
+    public function getSpecificity(): \Symfony\Component\CssSelector\Node\Specificity
     {
-        return $this->selector->getSpecificity()->plus(new Specificity(0, 1, 0));
+        return $this->selector->getSpecificity()->plus(new \Symfony\Component\CssSelector\Node\Specificity(0, 1, 0));
     }
-
     public function __toString(): string
     {
         return \sprintf('%s[%s.%s]', $this->getNodeName(), $this->selector, $this->name);

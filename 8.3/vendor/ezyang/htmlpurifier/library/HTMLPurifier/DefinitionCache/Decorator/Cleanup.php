@@ -1,5 +1,7 @@
 <?php
 
+namespace Odigos;
+
 /**
  * Definition cache decorator class that cleans up the cache
  * whenever there is a cache miss.
@@ -10,7 +12,6 @@ class HTMLPurifier_DefinitionCache_Decorator_Cleanup extends HTMLPurifier_Defini
      * @type string
      */
     public $name = 'Cleanup';
-
     /**
      * @return HTMLPurifier_DefinitionCache_Decorator_Cleanup
      */
@@ -18,7 +19,6 @@ class HTMLPurifier_DefinitionCache_Decorator_Cleanup extends HTMLPurifier_Defini
     {
         return new HTMLPurifier_DefinitionCache_Decorator_Cleanup();
     }
-
     /**
      * @param HTMLPurifier_Definition $def
      * @param HTMLPurifier_Config $config
@@ -32,7 +32,6 @@ class HTMLPurifier_DefinitionCache_Decorator_Cleanup extends HTMLPurifier_Defini
         }
         return $status;
     }
-
     /**
      * @param HTMLPurifier_Definition $def
      * @param HTMLPurifier_Config $config
@@ -46,7 +45,6 @@ class HTMLPurifier_DefinitionCache_Decorator_Cleanup extends HTMLPurifier_Defini
         }
         return $status;
     }
-
     /**
      * @param HTMLPurifier_Definition $def
      * @param HTMLPurifier_Config $config
@@ -60,7 +58,6 @@ class HTMLPurifier_DefinitionCache_Decorator_Cleanup extends HTMLPurifier_Defini
         }
         return $status;
     }
-
     /**
      * @param HTMLPurifier_Config $config
      * @return mixed
@@ -74,5 +71,9 @@ class HTMLPurifier_DefinitionCache_Decorator_Cleanup extends HTMLPurifier_Defini
         return $ret;
     }
 }
-
+/**
+ * Definition cache decorator class that cleans up the cache
+ * whenever there is a cache miss.
+ */
+\class_alias('Odigos\HTMLPurifier_DefinitionCache_Decorator_Cleanup', 'HTMLPurifier_DefinitionCache_Decorator_Cleanup', \false);
 // vim: et sw=4 sts=4

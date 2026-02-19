@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenAI\Actions\Responses;
 
 use OpenAI\Responses\Responses\Tool\CodeInterpreterTool;
@@ -11,7 +10,6 @@ use OpenAI\Responses\Responses\Tool\FunctionTool;
 use OpenAI\Responses\Responses\Tool\ImageGenerationTool;
 use OpenAI\Responses\Responses\Tool\RemoteMcpTool;
 use OpenAI\Responses\Responses\Tool\WebSearchTool;
-
 /**
  * @phpstan-import-type ComputerUseToolType from ComputerUseTool
  * @phpstan-import-type FileSearchToolType from FileSearchTool
@@ -32,17 +30,14 @@ final class ToolObjects
      */
     public static function parse(array $toolItems): array
     {
-        return array_map(
-            fn (array $tool): ComputerUseTool|FileSearchTool|FunctionTool|WebSearchTool|ImageGenerationTool|RemoteMcpTool|CodeInterpreterTool => match ($tool['type']) {
-                'file_search' => FileSearchTool::from($tool),
-                'web_search', 'web_search_preview', 'web_search_preview_2025_03_11' => WebSearchTool::from($tool),
-                'function' => FunctionTool::from($tool),
-                'computer_use_preview' => ComputerUseTool::from($tool),
-                'image_generation' => ImageGenerationTool::from($tool),
-                'mcp' => RemoteMcpTool::from($tool),
-                'code_interpreter' => CodeInterpreterTool::from($tool),
-            },
-            $toolItems,
-        );
+        return array_map(fn(array $tool): ComputerUseTool|FileSearchTool|FunctionTool|WebSearchTool|ImageGenerationTool|RemoteMcpTool|CodeInterpreterTool => match ($tool['type']) {
+            'file_search' => FileSearchTool::from($tool),
+            'web_search', 'web_search_preview', 'web_search_preview_2025_03_11' => WebSearchTool::from($tool),
+            'function' => FunctionTool::from($tool),
+            'computer_use_preview' => ComputerUseTool::from($tool),
+            'image_generation' => ImageGenerationTool::from($tool),
+            'mcp' => RemoteMcpTool::from($tool),
+            'code_interpreter' => CodeInterpreterTool::from($tool),
+        }, $toolItems);
     }
 }

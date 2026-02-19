@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\Contrib\Instrumentation\Laravel\Watchers;
 
 use Illuminate\Contracts\Foundation\Application;
@@ -10,8 +9,7 @@ use OpenTelemetry\API\Trace\Span;
 use OpenTelemetry\API\Trace\StatusCode;
 use OpenTelemetry\Context\Context;
 use Throwable;
-
-class ExceptionWatcher extends Watcher
+class ExceptionWatcher extends \OpenTelemetry\Contrib\Instrumentation\Laravel\Watchers\Watcher
 {
     /** @psalm-suppress UndefinedInterfaceMethod */
     public function register(Application $app): void
@@ -22,16 +20,13 @@ class ExceptionWatcher extends Watcher
     /**
      * Record an exception.
      * @psalm-suppress PossiblyUnusedMethod
-    */
+     */
     public function recordException(MessageLogged $log): void
     {
-        if (! isset($log->context['exception']) ||
-        ! $log->context['exception'] instanceof Throwable) {
+        if (!isset($log->context['exception']) || !$log->context['exception'] instanceof Throwable) {
             return;
         }
-
         $exception = $log->context['exception'];
-
         $scope = Context::storage()->scope();
         if (!$scope) {
             return;

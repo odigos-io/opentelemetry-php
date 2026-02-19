@@ -1,20 +1,19 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\filters;
 
-use Yii;
+use Odigos\Yii;
 use yii\base\Action;
 use yii\base\ActionEvent;
 use yii\base\Behavior;
 use yii\base\Module;
 use yii\web\Controller;
 use yii\web\MethodNotAllowedHttpException;
-
 /**
  * VerbFilter is an action filter that filters by HTTP request methods.
  *
@@ -76,8 +75,6 @@ class VerbFilter extends Behavior
      * ```
      */
     public $actions = [];
-
-
     /**
      * Declares event handlers for the [[owner]]'s events.
      * @return array events (array keys) and the corresponding event handler methods (array values).
@@ -86,7 +83,6 @@ class VerbFilter extends Behavior
     {
         return [Controller::EVENT_BEFORE_ACTION => 'beforeAction'];
     }
-
     /**
      * @param ActionEvent $event
      * @return bool
@@ -105,16 +101,14 @@ class VerbFilter extends Behavior
         } else {
             return $event->isValid;
         }
-
         $verb = Yii::$app->getRequest()->getMethod();
         $allowed = array_map('strtoupper', $verbs);
         if (!in_array($verb, $allowed)) {
-            $event->isValid = false;
+            $event->isValid = \false;
             // https://tools.ietf.org/html/rfc2616#section-14.7
             Yii::$app->getResponse()->getHeaders()->set('Allow', implode(', ', $allowed));
             throw new MethodNotAllowedHttpException('Method Not Allowed. This URL can only handle the following request methods: ' . implode(', ', $allowed) . '.');
         }
-
         return $event->isValid;
     }
 }

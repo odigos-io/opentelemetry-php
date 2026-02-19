@@ -1,15 +1,13 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\DBAL\Types;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
-
 /**
  * Represents a GUID/UUID datatype (both are actually synonyms) in the database.
  */
-class GuidType extends StringType
+class GuidType extends \Doctrine\DBAL\Types\StringType
 {
     /**
      * {@inheritDoc}

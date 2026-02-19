@@ -1,14 +1,13 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\db;
 
 use yii\base\InvalidConfigException;
-
 /**
  * Class JsonExpression represents data that should be encoded to JSON.
  *
@@ -21,7 +20,7 @@ use yii\base\InvalidConfigException;
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  * @since 2.0.14
  */
-class JsonExpression implements ExpressionInterface, \JsonSerializable
+class JsonExpression implements \yii\db\ExpressionInterface, \JsonSerializable
 {
     public const TYPE_JSON = 'json';
     public const TYPE_JSONB = 'jsonb';
@@ -37,8 +36,6 @@ class JsonExpression implements ExpressionInterface, \JsonSerializable
      * For example, PostgreSQL has `json` and `jsonb` types.
      */
     protected $type;
-
-
     /**
      * JsonExpression constructor.
      *
@@ -53,11 +50,9 @@ class JsonExpression implements ExpressionInterface, \JsonSerializable
         if ($value instanceof self) {
             $value = $value->getValue();
         }
-
         $this->value = $value;
         $this->type = $type;
     }
-
     /**
      * @return mixed
      * @see value
@@ -66,7 +61,6 @@ class JsonExpression implements ExpressionInterface, \JsonSerializable
     {
         return $this->value;
     }
-
     /**
      * @return string|null the type of JSON
      * @see type
@@ -75,7 +69,6 @@ class JsonExpression implements ExpressionInterface, \JsonSerializable
     {
         return $this->type;
     }
-
     /**
      * Specify data which should be serialized to JSON
      *
@@ -89,10 +82,9 @@ class JsonExpression implements ExpressionInterface, \JsonSerializable
     public function jsonSerialize()
     {
         $value = $this->getValue();
-        if ($value instanceof QueryInterface) {
+        if ($value instanceof \yii\db\QueryInterface) {
             throw new InvalidConfigException('The JsonExpression class can not be serialized to JSON when the value is a QueryInterface object');
         }
-
         return $value;
     }
 }

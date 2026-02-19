@@ -1,5 +1,6 @@
-<?php declare(strict_types=1);
+<?php
 
+declare (strict_types=1);
 /*
  * This file is part of the Monolog package.
  *
@@ -8,14 +9,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Odigos\Monolog\Handler;
 
-namespace Monolog\Handler;
-
-use Monolog\Level;
-use Rollbar\RollbarLogger;
+use Odigos\Monolog\Level;
+use Odigos\Rollbar\RollbarLogger;
 use Throwable;
-use Monolog\LogRecord;
-
+use Odigos\Monolog\LogRecord;
 /**
  * Sends errors to Rollbar
  *
@@ -35,24 +34,19 @@ use Monolog\LogRecord;
 class RollbarHandler extends AbstractProcessingHandler
 {
     protected RollbarLogger $rollbarLogger;
-
     /**
      * Records whether any log records have been added since the last flush of the rollbar notifier
      */
-    private bool $hasRecords = false;
-
-    protected bool $initialized = false;
-
+    private bool $hasRecords = \false;
+    protected bool $initialized = \false;
     /**
      * @param RollbarLogger $rollbarLogger RollbarLogger object constructed with valid token
      */
-    public function __construct(RollbarLogger $rollbarLogger, int|string|Level $level = Level::Error, bool $bubble = true)
+    public function __construct(RollbarLogger $rollbarLogger, int|string|Level $level = Level::Error, bool $bubble = \true)
     {
         $this->rollbarLogger = $rollbarLogger;
-
         parent::__construct($level, $bubble);
     }
-
     /**
      * Translates Monolog log levels to Rollbar levels.
      *
@@ -61,17 +55,16 @@ class RollbarHandler extends AbstractProcessingHandler
     protected function toRollbarLevel(Level $level): string
     {
         return match ($level) {
-            Level::Debug     => 'debug',
-            Level::Info      => 'info',
-            Level::Notice    => 'info',
-            Level::Warning   => 'warning',
-            Level::Error     => 'error',
-            Level::Critical  => 'critical',
-            Level::Alert     => 'critical',
+            Level::Debug => 'debug',
+            Level::Info => 'info',
+            Level::Notice => 'info',
+            Level::Warning => 'warning',
+            Level::Error => 'error',
+            Level::Critical => 'critical',
+            Level::Alert => 'critical',
             Level::Emergency => 'critical',
         };
     }
-
     /**
      * @inheritDoc
      */
@@ -80,17 +73,10 @@ class RollbarHandler extends AbstractProcessingHandler
         if (!$this->initialized) {
             // __destructor() doesn't get called on Fatal errors
             register_shutdown_function([$this, 'close']);
-            $this->initialized = true;
+            $this->initialized = \true;
         }
-
         $context = $record->context;
-        $context = array_merge($context, $record->extra, [
-            'level' => $this->toRollbarLevel($record->level),
-            'monolog_level' => $record->level->getName(),
-            'channel' => $record->channel,
-            'datetime' => $record->datetime->format('U'),
-        ]);
-
+        $context = array_merge($context, $record->extra, ['level' => $this->toRollbarLevel($record->level), 'monolog_level' => $record->level->getName(), 'channel' => $record->channel, 'datetime' => $record->datetime->format('U')]);
         if (isset($context['exception']) && $context['exception'] instanceof Throwable) {
             $exception = $context['exception'];
             unset($context['exception']);
@@ -98,20 +84,16 @@ class RollbarHandler extends AbstractProcessingHandler
         } else {
             $toLog = $record->message;
         }
-
         $this->rollbarLogger->log($context['level'], $toLog, $context);
-
-        $this->hasRecords = true;
+        $this->hasRecords = \true;
     }
-
     public function flush(): void
     {
         if ($this->hasRecords) {
             $this->rollbarLogger->flush();
-            $this->hasRecords = false;
+            $this->hasRecords = \false;
         }
     }
-
     /**
      * @inheritDoc
      */
@@ -119,14 +101,12 @@ class RollbarHandler extends AbstractProcessingHandler
     {
         $this->flush();
     }
-
     /**
      * @inheritDoc
      */
     public function reset(): void
     {
         $this->flush();
-
         parent::reset();
     }
 }

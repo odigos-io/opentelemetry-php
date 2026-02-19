@@ -11,7 +11,6 @@ interface ContextualBindingBuilder
      * @return $this
      */
     public function needs($abstract);
-
     /**
      * Define the implementation for the contextual binding.
      *
@@ -19,7 +18,6 @@ interface ContextualBindingBuilder
      * @return void
      */
     public function give($implementation);
-
     /**
      * Define tagged services to be used as the implementation for the contextual binding.
      *
@@ -27,7 +25,6 @@ interface ContextualBindingBuilder
      * @return void
      */
     public function giveTagged($tag);
-
     /**
      * Specify the configuration item to bind as a primitive.
      *

@@ -9,19 +9,16 @@
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
  */
+declare (strict_types=1);
+namespace Odigos\Ramsey\Uuid\Guid;
 
-declare(strict_types=1);
-
-namespace Ramsey\Uuid\Guid;
-
-use Ramsey\Uuid\Builder\UuidBuilderInterface;
-use Ramsey\Uuid\Codec\CodecInterface;
-use Ramsey\Uuid\Converter\NumberConverterInterface;
-use Ramsey\Uuid\Converter\TimeConverterInterface;
-use Ramsey\Uuid\Exception\UnableToBuildUuidException;
-use Ramsey\Uuid\UuidInterface;
+use Odigos\Ramsey\Uuid\Builder\UuidBuilderInterface;
+use Odigos\Ramsey\Uuid\Codec\CodecInterface;
+use Odigos\Ramsey\Uuid\Converter\NumberConverterInterface;
+use Odigos\Ramsey\Uuid\Converter\TimeConverterInterface;
+use Odigos\Ramsey\Uuid\Exception\UnableToBuildUuidException;
+use Odigos\Ramsey\Uuid\UuidInterface;
 use Throwable;
-
 /**
  * GuidBuilder builds instances of Guid
  *
@@ -36,12 +33,9 @@ class GuidBuilder implements UuidBuilderInterface
      * @param TimeConverterInterface $timeConverter The time converter to use for converting timestamps extracted from a
      *     UUID to Unix timestamps
      */
-    public function __construct(
-        private NumberConverterInterface $numberConverter,
-        private TimeConverterInterface $timeConverter,
-    ) {
+    public function __construct(private NumberConverterInterface $numberConverter, private TimeConverterInterface $timeConverter)
+    {
     }
-
     /**
      * Builds and returns a Guid
      *
@@ -62,7 +56,6 @@ class GuidBuilder implements UuidBuilderInterface
             throw new UnableToBuildUuidException($e->getMessage(), (int) $e->getCode(), $e);
         }
     }
-
     /**
      * Proxy method to allow injecting a mock for testing
      *

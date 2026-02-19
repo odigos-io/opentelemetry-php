@@ -1,11 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Brick\Math\Internal;
+declare (strict_types=1);
+namespace Odigos\Brick\Math\Internal;
 
 use function extension_loaded;
-
 /**
  * Stores the current Calculator instance used by BigNumber classes.
  *
@@ -17,7 +15,6 @@ final class CalculatorRegistry
      * The Calculator instance in use.
      */
     private static ?Calculator $instance = null;
-
     /**
      * Sets the Calculator instance to use.
      *
@@ -29,7 +26,6 @@ final class CalculatorRegistry
     {
         self::$instance = $calculator;
     }
-
     /**
      * Returns the Calculator instance to use.
      *
@@ -47,11 +43,9 @@ final class CalculatorRegistry
             /** @phpstan-ignore impure.propertyAssign */
             self::$instance = self::detect();
         }
-
         /** @phpstan-ignore impure.staticPropertyAccess */
         return self::$instance;
     }
-
     /**
      * Returns the fastest available Calculator implementation.
      *
@@ -64,11 +58,9 @@ final class CalculatorRegistry
         if (extension_loaded('gmp')) {
             return new Calculator\GmpCalculator();
         }
-
         if (extension_loaded('bcmath')) {
             return new Calculator\BcMathCalculator();
         }
-
         return new Calculator\NativeCalculator();
     }
 }

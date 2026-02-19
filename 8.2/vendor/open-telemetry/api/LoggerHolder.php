@@ -1,16 +1,13 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\API;
 
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
-
 final class LoggerHolder
 {
     private static ?LoggerInterface $logger = null;
-
     /**
      * This constructor is a temporary solution to ease the setup of the logger with DI libraries
      */
@@ -18,7 +15,6 @@ final class LoggerHolder
     {
         self::$logger = $logger;
     }
-
     /**
      * @suppress PhanTypeMismatchReturnNullable
      * @internal
@@ -27,17 +23,14 @@ final class LoggerHolder
     {
         return self::$logger;
     }
-
     public static function set(?LoggerInterface $logger): void
     {
         self::$logger = $logger;
     }
-
     public static function isSet(): bool
     {
         return null !== self::$logger;
     }
-
     /**
      * @internal
      */
@@ -45,7 +38,6 @@ final class LoggerHolder
     {
         self::$logger = null;
     }
-
     /**
      * Disable psr-3 logging
      * @internal

@@ -1,13 +1,13 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\rest;
 
-use Yii;
+use Odigos\Yii;
 use yii\base\Arrayable;
 use yii\base\Component;
 use yii\base\Model;
@@ -17,7 +17,6 @@ use yii\helpers\ArrayHelper;
 use yii\web\Link;
 use yii\web\Request;
 use yii\web\Response;
-
 /**
  * Serializer converts resource objects and collections into array representation.
  *
@@ -117,9 +116,7 @@ class Serializer extends Component
      * @see serializeDataProvider()
      * @since 2.0.10
      */
-    public $preserveKeys = false;
-
-
+    public $preserveKeys = \false;
     /**
      * {@inheritdoc}
      */
@@ -132,7 +129,6 @@ class Serializer extends Component
             $this->response = Yii::$app->getResponse();
         }
     }
-
     /**
      * Serializes the given data into a format that can be easily turned into other formats.
      * This method mainly converts the objects of recognized types into array representation.
@@ -159,10 +155,8 @@ class Serializer extends Component
             }
             return $serializedArray;
         }
-
         return $data;
     }
-
     /**
      * @return array the names of the requested fields. The first element is an array
      * representing the list of default fields requested, while the second element is
@@ -174,13 +168,8 @@ class Serializer extends Component
     {
         $fields = $this->request->get($this->fieldsParam);
         $expand = $this->request->get($this->expandParam);
-
-        return [
-            is_string($fields) ? preg_split('/\s*,\s*/', $fields, -1, PREG_SPLIT_NO_EMPTY) : [],
-            is_string($expand) ? preg_split('/\s*,\s*/', $expand, -1, PREG_SPLIT_NO_EMPTY) : [],
-        ];
+        return [is_string($fields) ? preg_split('/\s*,\s*/', $fields, -1, \PREG_SPLIT_NO_EMPTY) : [], is_string($expand) ? preg_split('/\s*,\s*/', $expand, -1, \PREG_SPLIT_NO_EMPTY) : []];
     }
-
     /**
      * Serializes a data provider.
      * @param DataProviderInterface $dataProvider
@@ -194,27 +183,20 @@ class Serializer extends Component
             $models = array_values($dataProvider->getModels());
         }
         $models = $this->serializeModels($models);
-
-        if (($pagination = $dataProvider->getPagination()) !== false) {
+        if (($pagination = $dataProvider->getPagination()) !== \false) {
             $this->addPaginationHeaders($pagination);
         }
-
         if ($this->request->getIsHead()) {
             return null;
         } elseif ($this->collectionEnvelope === null) {
             return $models;
         }
-
-        $result = [
-            $this->collectionEnvelope => $models,
-        ];
-        if ($pagination !== false) {
+        $result = [$this->collectionEnvelope => $models];
+        if ($pagination !== \false) {
             return array_merge($result, $this->serializePagination($pagination));
         }
-
         return $result;
     }
-
     /**
      * Serializes a pagination into an array.
      * @param Pagination $pagination
@@ -223,17 +205,8 @@ class Serializer extends Component
      */
     protected function serializePagination($pagination)
     {
-        return [
-            $this->linksEnvelope => Link::serialize($pagination->getLinks(true)),
-            $this->metaEnvelope => [
-                'totalCount' => $pagination->totalCount,
-                'pageCount' => $pagination->getPageCount(),
-                'currentPage' => $pagination->getPage() + 1,
-                'perPage' => $pagination->getPageSize(),
-            ],
-        ];
+        return [$this->linksEnvelope => Link::serialize($pagination->getLinks(\true)), $this->metaEnvelope => ['totalCount' => $pagination->totalCount, 'pageCount' => $pagination->getPageCount(), 'currentPage' => $pagination->getPage() + 1, 'perPage' => $pagination->getPageSize()]];
     }
-
     /**
      * Adds HTTP headers about the pagination to the response.
      * @param Pagination $pagination
@@ -241,18 +214,11 @@ class Serializer extends Component
     protected function addPaginationHeaders($pagination)
     {
         $links = [];
-        foreach ($pagination->getLinks(true) as $rel => $url) {
-            $links[] = "<$url>; rel=$rel";
+        foreach ($pagination->getLinks(\true) as $rel => $url) {
+            $links[] = "<{$url}>; rel={$rel}";
         }
-
-        $this->response->getHeaders()
-            ->set($this->totalCountHeader, $pagination->totalCount)
-            ->set($this->pageCountHeader, $pagination->getPageCount())
-            ->set($this->currentPageHeader, $pagination->getPage() + 1)
-            ->set($this->perPageHeader, $pagination->pageSize)
-            ->set('Link', implode(', ', $links));
+        $this->response->getHeaders()->set($this->totalCountHeader, $pagination->totalCount)->set($this->pageCountHeader, $pagination->getPageCount())->set($this->currentPageHeader, $pagination->getPage() + 1)->set($this->perPageHeader, $pagination->pageSize)->set('Link', implode(', ', $links));
     }
-
     /**
      * Serializes a model object.
      * @param Arrayable $model
@@ -263,11 +229,9 @@ class Serializer extends Component
         if ($this->request->getIsHead()) {
             return null;
         }
-
         list($fields, $expand) = $this->getRequestedFields();
         return $model->toArray($fields, $expand);
     }
-
     /**
      * Serializes the validation errors in a model.
      * @param Model $model
@@ -278,15 +242,10 @@ class Serializer extends Component
         $this->response->setStatusCode(422, 'Data Validation Failed.');
         $result = [];
         foreach ($model->getFirstErrors() as $name => $message) {
-            $result[] = [
-                'field' => $name,
-                'message' => $message,
-            ];
+            $result[] = ['field' => $name, 'message' => $message];
         }
-
         return $result;
     }
-
     /**
      * Serializes a set of models.
      * @param array $models
@@ -301,7 +260,6 @@ class Serializer extends Component
                 $models[$i] = ArrayHelper::toArray($model);
             }
         }
-
         return $models;
     }
 }

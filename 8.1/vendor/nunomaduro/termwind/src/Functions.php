@@ -1,16 +1,14 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Termwind;
+declare (strict_types=1);
+namespace Odigos\Termwind;
 
 use Closure;
 use Symfony\Component\Console\Output\OutputInterface;
-use Termwind\Repositories\Styles as StyleRepository;
-use Termwind\ValueObjects\Style;
-use Termwind\ValueObjects\Styles;
-
-if (! function_exists('Termwind\renderUsing')) {
+use Odigos\Termwind\Repositories\Styles as StyleRepository;
+use Odigos\Termwind\ValueObjects\Style;
+use Odigos\Termwind\ValueObjects\Styles;
+if (!function_exists('Odigos\Termwind\renderUsing')) {
     /**
      * Sets the renderer implementation.
      */
@@ -19,8 +17,7 @@ if (! function_exists('Termwind\renderUsing')) {
         Termwind::renderUsing($renderer);
     }
 }
-
-if (! function_exists('Termwind\style')) {
+if (!function_exists('Odigos\Termwind\style')) {
     /**
      * Creates a new style.
      *
@@ -31,28 +28,25 @@ if (! function_exists('Termwind\style')) {
         return StyleRepository::create($name, $callback);
     }
 }
-
-if (! function_exists('Termwind\render')) {
+if (!function_exists('Odigos\Termwind\render')) {
     /**
      * Render HTML to a string.
      */
     function render(string $html, int $options = OutputInterface::OUTPUT_NORMAL): void
     {
-        (new HtmlRenderer)->render($html, $options);
+        (new HtmlRenderer())->render($html, $options);
     }
 }
-
-if (! function_exists('Termwind\terminal')) {
+if (!function_exists('Odigos\Termwind\terminal')) {
     /**
      * Returns a Terminal instance.
      */
     function terminal(): Terminal
     {
-        return new Terminal;
+        return new Terminal();
     }
 }
-
-if (! function_exists('Termwind\ask')) {
+if (!function_exists('Odigos\Termwind\ask')) {
     /**
      * Renders a prompt to the user.
      *
@@ -60,6 +54,6 @@ if (! function_exists('Termwind\ask')) {
      */
     function ask(string $question, ?iterable $autocomplete = null): mixed
     {
-        return (new Question)->ask($question, $autocomplete);
+        return (new Question())->ask($question, $autocomplete);
     }
 }

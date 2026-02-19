@@ -1,14 +1,11 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\DBAL;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
-
 use function is_string;
-
 /**
  * A database abstraction-level statement that implements support for logging, DBAL mapping types, etc.
  */
@@ -20,19 +17,16 @@ class Statement
      * @var mixed[]
      */
     protected array $params = [];
-
     /**
      * The parameter types.
      *
      * @var ParameterType[]|string[]|Type[]
      */
     protected array $types = [];
-
     /**
      * The underlying database platform.
      */
     protected AbstractPlatform $platform;
-
     /**
      * Creates a new <tt>Statement</tt> for the given SQL and <tt>Connection</tt>.
      *
@@ -44,14 +38,10 @@ class Statement
      *
      * @throws Exception
      */
-    public function __construct(
-        protected Connection $conn,
-        protected Driver\Statement $stmt,
-        protected string $sql,
-    ) {
+    public function __construct(protected \Doctrine\DBAL\Connection $conn, protected \Doctrine\DBAL\Driver\Statement $stmt, protected string $sql)
+    {
         $this->platform = $conn->getDatabasePlatform();
     }
-
     /**
      * Binds a parameter value to the statement.
      *
@@ -70,55 +60,43 @@ class Statement
      *
      * @throws Exception
      */
-    public function bindValue(
-        string|int $param,
-        mixed $value,
-        string|ParameterType|Type $type = ParameterType::STRING,
-    ): void {
+    public function bindValue(string|int $param, mixed $value, string|\Doctrine\DBAL\ParameterType|Type $type = \Doctrine\DBAL\ParameterType::STRING): void
+    {
         $this->params[$param] = $value;
-        $this->types[$param]  = $type;
-
+        $this->types[$param] = $type;
         if (is_string($type)) {
             $type = Type::getType($type);
         }
-
         if ($type instanceof Type) {
-            $value       = $type->convertToDatabaseValue($value, $this->platform);
+            $value = $type->convertToDatabaseValue($value, $this->platform);
             $bindingType = $type->getBindingType();
         } else {
             $bindingType = $type;
         }
-
         try {
             $this->stmt->bindValue($param, $value, $bindingType);
-        } catch (Driver\Exception $e) {
+        } catch (\Doctrine\DBAL\Driver\Exception $e) {
             throw $this->conn->convertException($e);
         }
     }
-
     /** @throws Exception */
-    private function execute(): Result
+    private function execute(): \Doctrine\DBAL\Result
     {
         try {
-            return new Result(
-                $this->stmt->execute(),
-                $this->conn,
-            );
-        } catch (Driver\Exception $ex) {
+            return new \Doctrine\DBAL\Result($this->stmt->execute(), $this->conn);
+        } catch (\Doctrine\DBAL\Driver\Exception $ex) {
             throw $this->conn->convertExceptionDuringQuery($ex, $this->sql, $this->params, $this->types);
         }
     }
-
     /**
      * Executes the statement with the currently bound parameters and return result.
      *
      * @throws Exception
      */
-    public function executeQuery(): Result
+    public function executeQuery(): \Doctrine\DBAL\Result
     {
         return $this->execute();
     }
-
     /**
      * Executes the statement with the currently bound parameters and return affected rows.
      *
@@ -132,11 +110,10 @@ class Statement
     {
         return $this->execute()->rowCount();
     }
-
     /**
      * Gets the wrapped driver statement.
      */
-    public function getWrappedStatement(): Driver\Statement
+    public function getWrappedStatement(): \Doctrine\DBAL\Driver\Statement
     {
         return $this->stmt;
     }

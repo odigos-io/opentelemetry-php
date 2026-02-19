@@ -1,10 +1,10 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\web;
 
 /**
@@ -25,8 +25,6 @@ class SessionIterator implements \Iterator
      * @var string|int|false current key
      */
     private $_key;
-
-
     /**
      * Constructor.
      */
@@ -35,7 +33,6 @@ class SessionIterator implements \Iterator
         $this->_keys = array_keys(isset($_SESSION) ? $_SESSION : []);
         $this->rewind();
     }
-
     /**
      * Rewinds internal array pointer.
      * This method is required by the interface [[\Iterator]].
@@ -45,7 +42,6 @@ class SessionIterator implements \Iterator
     {
         $this->_key = reset($this->_keys);
     }
-
     /**
      * Returns the key of the current array element.
      * This method is required by the interface [[\Iterator]].
@@ -54,9 +50,8 @@ class SessionIterator implements \Iterator
     #[\ReturnTypeWillChange]
     public function key()
     {
-        return $this->_key === false ? null : $this->_key;
+        return $this->_key === \false ? null : $this->_key;
     }
-
     /**
      * Returns the current array element.
      * This method is required by the interface [[\Iterator]].
@@ -65,9 +60,8 @@ class SessionIterator implements \Iterator
     #[\ReturnTypeWillChange]
     public function current()
     {
-        return $this->_key !== false && isset($_SESSION[$this->_key]) ? $_SESSION[$this->_key] : null;
+        return $this->_key !== \false && isset($_SESSION[$this->_key]) ? $_SESSION[$this->_key] : null;
     }
-
     /**
      * Moves the internal pointer to the next array element.
      * This method is required by the interface [[\Iterator]].
@@ -77,9 +71,8 @@ class SessionIterator implements \Iterator
     {
         do {
             $this->_key = next($this->_keys);
-        } while ($this->_key !== false && !isset($_SESSION[$this->_key]));
+        } while ($this->_key !== \false && !isset($_SESSION[$this->_key]));
     }
-
     /**
      * Returns whether there is an element at current position.
      * This method is required by the interface [[\Iterator]].
@@ -88,6 +81,6 @@ class SessionIterator implements \Iterator
     #[\ReturnTypeWillChange]
     public function valid()
     {
-        return $this->_key !== false;
+        return $this->_key !== \false;
     }
 }

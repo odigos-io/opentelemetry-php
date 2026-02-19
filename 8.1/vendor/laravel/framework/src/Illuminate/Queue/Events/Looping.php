@@ -10,14 +10,12 @@ class Looping
      * @var string
      */
     public $connectionName;
-
     /**
      * The queue name.
      *
      * @var string
      */
     public $queue;
-
     /**
      * Create a new event instance.
      *

@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -20,7 +20,6 @@ use APCUIterator;
 use Cake\Cache\CacheEngine;
 use Cake\Core\Exception\CakeException;
 use DateInterval;
-
 /**
  * APCu storage engine for cache
  */
@@ -33,7 +32,6 @@ class ApcuEngine extends CacheEngine
      * @var array<string>
      */
     protected array $_compiledGroupNames = [];
-
     /**
      * Initialize the Cache Engine
      *
@@ -47,10 +45,8 @@ class ApcuEngine extends CacheEngine
         if (!extension_loaded('apcu')) {
             throw new CakeException('The `apcu` extension must be enabled to use ApcuEngine.');
         }
-
         return parent::init($config);
     }
-
     /**
      * Write data for key into cache
      *
@@ -66,10 +62,8 @@ class ApcuEngine extends CacheEngine
     {
         $key = $this->_key($key);
         $duration = $this->duration($ttl);
-
         return apcu_store($key, $value, $duration);
     }
-
     /**
      * Read a key from the cache
      *
@@ -82,13 +76,11 @@ class ApcuEngine extends CacheEngine
     public function get(string $key, mixed $default = null): mixed
     {
         $value = apcu_fetch($this->_key($key), $success);
-        if ($success === false) {
+        if ($success === \false) {
             return $default;
         }
-
         return $value;
     }
-
     /**
      * Increments the value of an integer cached key
      *
@@ -100,10 +92,8 @@ class ApcuEngine extends CacheEngine
     public function increment(string $key, int $offset = 1): int|false
     {
         $key = $this->_key($key);
-
         return apcu_inc($key, $offset);
     }
-
     /**
      * Decrements the value of an integer cached key
      *
@@ -115,10 +105,8 @@ class ApcuEngine extends CacheEngine
     public function decrement(string $key, int $offset = 1): int|false
     {
         $key = $this->_key($key);
-
         return apcu_dec($key, $offset);
     }
-
     /**
      * Delete a key from the cache
      *
@@ -129,10 +117,8 @@ class ApcuEngine extends CacheEngine
     public function delete(string $key): bool
     {
         $key = $this->_key($key);
-
         return apcu_delete($key);
     }
-
     /**
      * Delete all keys from the cache. This will clear every cache config using APC.
      *
@@ -142,26 +128,20 @@ class ApcuEngine extends CacheEngine
      */
     public function clear(): bool
     {
-        if (class_exists(APCUIterator::class, false)) {
-            $iterator = new APCUIterator(
-                '/^' . preg_quote($this->_config['prefix'], '/') . '/',
-                APC_ITER_NONE,
-            );
+        if (class_exists(APCUIterator::class, \false)) {
+            $iterator = new APCUIterator('/^' . preg_quote($this->_config['prefix'], '/') . '/', \APC_ITER_NONE);
             apcu_delete($iterator);
-
-            return true;
+            return \true;
         }
-
-        $cache = apcu_cache_info(); // Raises warning by itself already
+        $cache = apcu_cache_info();
+        // Raises warning by itself already
         foreach ($cache['cache_list'] as $key) {
             if (str_starts_with($key['info'], $this->_config['prefix'])) {
                 apcu_delete($key['info']);
             }
         }
-
-        return true;
+        return \true;
     }
-
     /**
      * Write data for key into cache if it doesn't exist already.
      * If it already exists, it fails and returns false.
@@ -175,10 +155,8 @@ class ApcuEngine extends CacheEngine
     {
         $key = $this->_key($key);
         $duration = $this->_config['duration'];
-
         return apcu_add($key, $value, $duration);
     }
-
     /**
      * Returns the `group value` for each of the configured groups
      * If the group initial value was not found, then it initializes
@@ -195,33 +173,27 @@ class ApcuEngine extends CacheEngine
                 $this->_compiledGroupNames[] = $this->_config['prefix'] . $group;
             }
         }
-
-        $success = false;
+        $success = \false;
         $groups = apcu_fetch($this->_compiledGroupNames, $success);
         if ($success && count($groups) !== count($this->_config['groups'])) {
             foreach ($this->_compiledGroupNames as $group) {
                 if (!isset($groups[$group])) {
                     $value = 1;
-                    if (apcu_store($group, $value) === false) {
-                        $this->warning(
-                            sprintf('Failed to store key `%s` with value `%s` into APCu cache.', $group, $value),
-                        );
+                    if (apcu_store($group, $value) === \false) {
+                        $this->warning(sprintf('Failed to store key `%s` with value `%s` into APCu cache.', $group, $value));
                     }
                     $groups[$group] = $value;
                 }
             }
             ksort($groups);
         }
-
         $result = [];
         $groups = array_values($groups);
         foreach ($this->_config['groups'] as $i => $group) {
             $result[] = $group . $groups[$i];
         }
-
         return $result;
     }
-
     /**
      * Increments the group value to simulate deletion of all keys under a group
      * old values will remain in storage until they expire.
@@ -232,9 +204,8 @@ class ApcuEngine extends CacheEngine
      */
     public function clearGroup(string $group): bool
     {
-        $success = false;
+        $success = \false;
         apcu_inc($this->_config['prefix'] . $group, 1, $success);
-
         return $success;
     }
 }

@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\Mailer;
 
 use Psr\EventDispatcher\EventDispatcherInterface;
@@ -40,46 +39,24 @@ use Symfony\Component\Mailer\Transport\TransportFactoryInterface;
 use Symfony\Component\Mailer\Transport\TransportInterface;
 use Symfony\Component\Mailer\Transport\Transports;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
-
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  * @author Konstantin Myakshin <molodchick@gmail.com>
  */
 final class Transport
 {
-    private const FACTORY_CLASSES = [
-        BrevoTransportFactory::class,
-        GmailTransportFactory::class,
-        InfobipTransportFactory::class,
-        MailerSendTransportFactory::class,
-        MailgunTransportFactory::class,
-        MailjetTransportFactory::class,
-        MailPaceTransportFactory::class,
-        MandrillTransportFactory::class,
-        OhMySmtpTransportFactory::class,
-        PostmarkTransportFactory::class,
-        ScalewayTransportFactory::class,
-        SendgridTransportFactory::class,
-        SendinblueTransportFactory::class,
-        SesTransportFactory::class,
-    ];
-
+    private const FACTORY_CLASSES = [BrevoTransportFactory::class, GmailTransportFactory::class, InfobipTransportFactory::class, MailerSendTransportFactory::class, MailgunTransportFactory::class, MailjetTransportFactory::class, MailPaceTransportFactory::class, MandrillTransportFactory::class, OhMySmtpTransportFactory::class, PostmarkTransportFactory::class, ScalewayTransportFactory::class, SendgridTransportFactory::class, SendinblueTransportFactory::class, SesTransportFactory::class];
     private iterable $factories;
-
     public static function fromDsn(#[\SensitiveParameter] string $dsn, ?EventDispatcherInterface $dispatcher = null, ?HttpClientInterface $client = null, ?LoggerInterface $logger = null): TransportInterface
     {
         $factory = new self(iterator_to_array(self::getDefaultFactories($dispatcher, $client, $logger)));
-
         return $factory->fromString($dsn);
     }
-
     public static function fromDsns(#[\SensitiveParameter] array $dsns, ?EventDispatcherInterface $dispatcher = null, ?HttpClientInterface $client = null, ?LoggerInterface $logger = null): TransportInterface
     {
         $factory = new self(iterator_to_array(self::getDefaultFactories($dispatcher, $client, $logger)));
-
         return $factory->fromStrings($dsns);
     }
-
     /**
      * @param TransportFactoryInterface[] $factories
      */
@@ -87,35 +64,26 @@ final class Transport
     {
         $this->factories = $factories;
     }
-
     public function fromStrings(#[\SensitiveParameter] array $dsns): Transports
     {
         $transports = [];
         foreach ($dsns as $name => $dsn) {
             $transports[$name] = $this->fromString($dsn);
         }
-
         return new Transports($transports);
     }
-
     public function fromString(#[\SensitiveParameter] string $dsn): TransportInterface
     {
         [$transport, $offset] = $this->parseDsn($dsn);
         if ($offset !== \strlen($dsn)) {
             throw new InvalidArgumentException('The mailer DSN has some garbage at the end.');
         }
-
         return $transport;
     }
-
     private function parseDsn(#[\SensitiveParameter] string $dsn, int $offset = 0): array
     {
-        static $keywords = [
-            'failover' => FailoverTransport::class,
-            'roundrobin' => RoundRobinTransport::class,
-        ];
-
-        while (true) {
+        static $keywords = ['failover' => FailoverTransport::class, 'roundrobin' => RoundRobinTransport::class];
+        while (\true) {
             foreach ($keywords as $name => $class) {
                 $name .= '(';
                 if ($name === substr($dsn, $offset, \strlen($name))) {
@@ -124,10 +92,9 @@ final class Transport
                     if (!isset($matches[0])) {
                         continue;
                     }
-
                     ++$offset;
                     $args = [];
-                    while (true) {
+                    while (\true) {
                         [$arg, $offset] = $this->parseDsn($dsn, $offset);
                         $args[] = $arg;
                         if (\strlen($dsn) === $offset) {
@@ -138,23 +105,18 @@ final class Transport
                             break;
                         }
                     }
-
                     return [new $class($args), $offset];
                 }
             }
-
             if (preg_match('{(\w+)\(}A', $dsn, $matches, 0, $offset)) {
                 throw new InvalidArgumentException(\sprintf('The "%s" keyword is not valid (valid ones are "%s"), ', $matches[1], implode('", "', array_keys($keywords))));
             }
-
             if ($pos = strcspn($dsn, ' )', $offset)) {
                 return [$this->fromDsnObject(Dsn::fromString(substr($dsn, $offset, $pos))), $offset + $pos];
             }
-
             return [$this->fromDsnObject(Dsn::fromString(substr($dsn, $offset))), \strlen($dsn)];
         }
     }
-
     public function fromDsnObject(Dsn $dsn): TransportInterface
     {
         foreach ($this->factories as $factory) {
@@ -162,10 +124,8 @@ final class Transport
                 return $factory->create($dsn);
             }
         }
-
         throw new UnsupportedSchemeException($dsn);
     }
-
     /**
      * @return \Traversable<int, TransportFactoryInterface>
      */
@@ -176,13 +136,9 @@ final class Transport
                 yield new $factoryClass($dispatcher, $client, $logger);
             }
         }
-
         yield new NullTransportFactory($dispatcher, $client, $logger);
-
         yield new SendmailTransportFactory($dispatcher, $client, $logger);
-
         yield new EsmtpTransportFactory($dispatcher, $client, $logger);
-
         yield new NativeTransportFactory($dispatcher, $client, $logger);
     }
 }

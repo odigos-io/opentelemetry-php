@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\Routing;
 
 use Symfony\Component\HttpFoundation\Request;
-
 /**
  * Holds information about the current request.
  *
@@ -32,7 +30,6 @@ class RequestContext
     private int $httpsPort;
     private string $queryString;
     private array $parameters = [];
-
     public function __construct(string $baseUrl = '', string $method = 'GET', string $host = 'localhost', string $scheme = 'http', int $httpPort = 80, int $httpsPort = 443, string $path = '/', string $queryString = '')
     {
         $this->setBaseUrl($baseUrl);
@@ -44,13 +41,11 @@ class RequestContext
         $this->setPathInfo($path);
         $this->setQueryString($queryString);
     }
-
     public static function fromUri(string $uri, string $host = 'localhost', string $scheme = 'http', int $httpPort = 80, int $httpsPort = 443): self
     {
         $uri = parse_url($uri);
         $scheme = $uri['scheme'] ?? $scheme;
         $host = $uri['host'] ?? $host;
-
         if (isset($uri['port'])) {
             if ('http' === $scheme) {
                 $httpPort = $uri['port'];
@@ -58,10 +53,8 @@ class RequestContext
                 $httpsPort = $uri['port'];
             }
         }
-
         return new self($uri['path'] ?? '', 'GET', $host, $scheme, $httpPort, $httpsPort);
     }
-
     /**
      * Updates the RequestContext information based on a HttpFoundation Request.
      *
@@ -77,10 +70,8 @@ class RequestContext
         $this->setHttpPort($request->isSecure() || null === $request->getPort() ? $this->httpPort : $request->getPort());
         $this->setHttpsPort($request->isSecure() && null !== $request->getPort() ? $request->getPort() : $this->httpsPort);
         $this->setQueryString($request->server->get('QUERY_STRING', ''));
-
         return $this;
     }
-
     /**
      * Gets the base URL.
      */
@@ -88,7 +79,6 @@ class RequestContext
     {
         return $this->baseUrl;
     }
-
     /**
      * Sets the base URL.
      *
@@ -97,10 +87,8 @@ class RequestContext
     public function setBaseUrl(string $baseUrl): static
     {
         $this->baseUrl = rtrim($baseUrl, '/');
-
         return $this;
     }
-
     /**
      * Gets the path info.
      */
@@ -108,7 +96,6 @@ class RequestContext
     {
         return $this->pathInfo;
     }
-
     /**
      * Sets the path info.
      *
@@ -117,10 +104,8 @@ class RequestContext
     public function setPathInfo(string $pathInfo): static
     {
         $this->pathInfo = $pathInfo;
-
         return $this;
     }
-
     /**
      * Gets the HTTP method.
      *
@@ -130,7 +115,6 @@ class RequestContext
     {
         return $this->method;
     }
-
     /**
      * Sets the HTTP method.
      *
@@ -139,10 +123,8 @@ class RequestContext
     public function setMethod(string $method): static
     {
         $this->method = strtoupper($method);
-
         return $this;
     }
-
     /**
      * Gets the HTTP host.
      *
@@ -152,7 +134,6 @@ class RequestContext
     {
         return $this->host;
     }
-
     /**
      * Sets the HTTP host.
      *
@@ -161,10 +142,8 @@ class RequestContext
     public function setHost(string $host): static
     {
         $this->host = strtolower($host);
-
         return $this;
     }
-
     /**
      * Gets the HTTP scheme.
      */
@@ -172,7 +151,6 @@ class RequestContext
     {
         return $this->scheme;
     }
-
     /**
      * Sets the HTTP scheme.
      *
@@ -181,10 +159,8 @@ class RequestContext
     public function setScheme(string $scheme): static
     {
         $this->scheme = strtolower($scheme);
-
         return $this;
     }
-
     /**
      * Gets the HTTP port.
      */
@@ -192,7 +168,6 @@ class RequestContext
     {
         return $this->httpPort;
     }
-
     /**
      * Sets the HTTP port.
      *
@@ -201,10 +176,8 @@ class RequestContext
     public function setHttpPort(int $httpPort): static
     {
         $this->httpPort = $httpPort;
-
         return $this;
     }
-
     /**
      * Gets the HTTPS port.
      */
@@ -212,7 +185,6 @@ class RequestContext
     {
         return $this->httpsPort;
     }
-
     /**
      * Sets the HTTPS port.
      *
@@ -221,10 +193,8 @@ class RequestContext
     public function setHttpsPort(int $httpsPort): static
     {
         $this->httpsPort = $httpsPort;
-
         return $this;
     }
-
     /**
      * Gets the query string without the "?".
      */
@@ -232,7 +202,6 @@ class RequestContext
     {
         return $this->queryString;
     }
-
     /**
      * Sets the query string.
      *
@@ -242,10 +211,8 @@ class RequestContext
     {
         // string cast to be fault-tolerant, accepting null
         $this->queryString = (string) $queryString;
-
         return $this;
     }
-
     /**
      * Returns the parameters.
      */
@@ -253,7 +220,6 @@ class RequestContext
     {
         return $this->parameters;
     }
-
     /**
      * Sets the parameters.
      *
@@ -264,10 +230,8 @@ class RequestContext
     public function setParameters(array $parameters): static
     {
         $this->parameters = $parameters;
-
         return $this;
     }
-
     /**
      * Gets a parameter value.
      */
@@ -275,7 +239,6 @@ class RequestContext
     {
         return $this->parameters[$name] ?? null;
     }
-
     /**
      * Checks if a parameter value is set for the given parameter.
      */
@@ -283,7 +246,6 @@ class RequestContext
     {
         return \array_key_exists($name, $this->parameters);
     }
-
     /**
      * Sets a parameter value.
      *
@@ -292,10 +254,8 @@ class RequestContext
     public function setParameter(string $name, mixed $parameter): static
     {
         $this->parameters[$name] = $parameter;
-
         return $this;
     }
-
     public function isSecure(): bool
     {
         return 'https' === $this->scheme;

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright 2015-present MongoDB, Inc.
  *
@@ -14,7 +15,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 namespace MongoDB\Operation;
 
 use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
@@ -22,7 +22,6 @@ use MongoDB\Driver\Server;
 use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\Exception\UnexpectedValueException;
 use MongoDB\Exception\UnsupportedException;
-
 use function array_intersect_key;
 use function count;
 use function current;
@@ -30,7 +29,6 @@ use function is_float;
 use function is_integer;
 use function is_object;
 use function MongoDB\is_document;
-
 /**
  * Operation for obtaining an exact count of documents in a collection
  *
@@ -40,11 +38,8 @@ use function MongoDB\is_document;
 final class CountDocuments
 {
     private array $aggregateOptions;
-
     private array $countOptions;
-
-    private Aggregate $aggregate;
-
+    private \MongoDB\Operation\Aggregate $aggregate;
     /**
      * Constructs an aggregate command for counting documents
      *
@@ -82,24 +77,19 @@ final class CountDocuments
      */
     public function __construct(private string $databaseName, private string $collectionName, private array|object $filter, array $options = [])
     {
-        if (! is_document($filter)) {
+        if (!is_document($filter)) {
             throw InvalidArgumentException::expectedDocumentType('$filter', $filter);
         }
-
-        if (isset($options['limit']) && ! is_integer($options['limit'])) {
+        if (isset($options['limit']) && !is_integer($options['limit'])) {
             throw InvalidArgumentException::invalidType('"limit" option', $options['limit'], 'integer');
         }
-
-        if (isset($options['skip']) && ! is_integer($options['skip'])) {
+        if (isset($options['skip']) && !is_integer($options['skip'])) {
             throw InvalidArgumentException::invalidType('"skip" option', $options['skip'], 'integer');
         }
-
         $this->aggregateOptions = array_intersect_key($options, ['collation' => 1, 'comment' => 1, 'hint' => 1, 'maxTimeMS' => 1, 'readConcern' => 1, 'readPreference' => 1, 'session' => 1]);
         $this->countOptions = array_intersect_key($options, ['limit' => 1, 'skip' => 1]);
-
         $this->aggregate = $this->createAggregate();
     }
-
     /**
      * Execute the operation.
      *
@@ -110,39 +100,28 @@ final class CountDocuments
     public function execute(Server $server): int
     {
         $cursor = $this->aggregate->execute($server);
-
         $allResults = $cursor->toArray();
-
         /* If there are no documents to count, the aggregation pipeline has no items to group, and
          * hence the result is an empty array (PHPLIB-376) */
         if (count($allResults) == 0) {
             return 0;
         }
-
         $result = current($allResults);
-        if (! is_object($result) || ! isset($result->n) || ! (is_integer($result->n) || is_float($result->n))) {
+        if (!is_object($result) || !isset($result->n) || !(is_integer($result->n) || is_float($result->n))) {
             throw new UnexpectedValueException('count command did not return a numeric "n" value');
         }
-
         return (int) $result->n;
     }
-
-    private function createAggregate(): Aggregate
+    private function createAggregate(): \MongoDB\Operation\Aggregate
     {
-        $pipeline = [
-            ['$match' => (object) $this->filter],
-        ];
-
+        $pipeline = [['$match' => (object) $this->filter]];
         if (isset($this->countOptions['skip'])) {
             $pipeline[] = ['$skip' => $this->countOptions['skip']];
         }
-
         if (isset($this->countOptions['limit'])) {
             $pipeline[] = ['$limit' => $this->countOptions['limit']];
         }
-
         $pipeline[] = ['$group' => ['_id' => 1, 'n' => ['$sum' => 1]]];
-
-        return new Aggregate($this->databaseName, $this->collectionName, $pipeline, $this->aggregateOptions);
+        return new \MongoDB\Operation\Aggregate($this->databaseName, $this->collectionName, $pipeline, $this->aggregateOptions);
     }
 }

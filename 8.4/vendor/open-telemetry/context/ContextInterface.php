@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\Context;
 
 /**
@@ -19,8 +18,7 @@ interface ContextInterface
      *
      * @see https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/context/README.md#create-a-key
      */
-    public static function createKey(string $key): ContextKeyInterface;
-
+    public static function createKey(string $key): \OpenTelemetry\Context\ContextKeyInterface;
     /**
      * Returns the current context.
      *
@@ -28,8 +26,7 @@ interface ContextInterface
      *
      * @see https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/context/README.md#get-current-context
      */
-    public static function getCurrent(): ContextInterface;
-
+    public static function getCurrent(): \OpenTelemetry\Context\ContextInterface;
     /**
      * Attaches this context as active context.
      *
@@ -49,8 +46,7 @@ interface ContextInterface
      *
      * @see https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/context/README.md#attach-context
      */
-    public function activate(): ScopeInterface;
-
+    public function activate(): \OpenTelemetry\Context\ScopeInterface;
     /**
      * Returns a context with the given key set to the given value.
      *
@@ -61,8 +57,7 @@ interface ContextInterface
      *
      * @see https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/context/README.md#set-value
      */
-    public function with(ContextKeyInterface $key, $value): ContextInterface;
-
+    public function with(\OpenTelemetry\Context\ContextKeyInterface $key, $value): \OpenTelemetry\Context\ContextInterface;
     /**
      * Returns a context with the given value set.
      *
@@ -71,8 +66,7 @@ interface ContextInterface
      *
      * @see https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/context/README.md#set-value
      */
-    public function withContextValue(ImplicitContextKeyedInterface $value): ContextInterface;
-
+    public function withContextValue(\OpenTelemetry\Context\ImplicitContextKeyedInterface $value): \OpenTelemetry\Context\ContextInterface;
     /**
      * Returns the value assigned to the given key.
      *
@@ -82,5 +76,5 @@ interface ContextInterface
      *
      * @see https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/context/README.md#get-value
      */
-    public function get(ContextKeyInterface $key);
+    public function get(\OpenTelemetry\Context\ContextKeyInterface $key);
 }

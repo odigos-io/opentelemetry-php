@@ -10,14 +10,12 @@ class ModelsPruned
      * @var string
      */
     public $model;
-
     /**
      * The number of pruned records.
      *
      * @var int
      */
     public $count;
-
     /**
      * Create a new event instance.
      *

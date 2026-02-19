@@ -8,18 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\Clock\Test;
 
-use PHPUnit\Framework\Attributes\After;
-use PHPUnit\Framework\Attributes\Before;
-use PHPUnit\Framework\Attributes\BeforeClass;
+use Odigos\PHPUnit\Framework\Attributes\After;
+use Odigos\PHPUnit\Framework\Attributes\Before;
+use Odigos\PHPUnit\Framework\Attributes\BeforeClass;
 use Symfony\Component\Clock\Clock;
 use Symfony\Component\Clock\ClockInterface;
 use Symfony\Component\Clock\MockClock;
-
 use function Symfony\Component\Clock\now;
-
 /**
  * Helps with mocking the time in your test cases.
  *
@@ -32,18 +29,16 @@ use function Symfony\Component\Clock\now;
  */
 trait ClockSensitiveTrait
 {
-    public static function mockTime(string|\DateTimeImmutable|bool $when = true): ClockInterface
+    public static function mockTime(string|\DateTimeImmutable|bool $when = \true): ClockInterface
     {
-        Clock::set(match (true) {
-            false === $when => self::saveClockBeforeTest(false),
-            true === $when => new MockClock(),
+        Clock::set(match (\true) {
+            \false === $when => self::saveClockBeforeTest(\false),
+            \true === $when => new MockClock(),
             $when instanceof \DateTimeImmutable => new MockClock($when),
             default => new MockClock(now($when)),
         });
-
         return Clock::get();
     }
-
     /**
      * @beforeClass
      *
@@ -53,17 +48,14 @@ trait ClockSensitiveTrait
      */
     #[Before]
     #[BeforeClass]
-    public static function saveClockBeforeTest(bool $save = true): ClockInterface
+    public static function saveClockBeforeTest(bool $save = \true): ClockInterface
     {
         static $originalClock;
-
         if ($save && $originalClock) {
             self::restoreClockAfterTest();
         }
-
         return $save ? $originalClock = Clock::get() : $originalClock;
     }
-
     /**
      * @after
      *
@@ -72,6 +64,6 @@ trait ClockSensitiveTrait
     #[After]
     protected static function restoreClockAfterTest(): void
     {
-        Clock::set(self::saveClockBeforeTest(false));
+        Clock::set(self::saveClockBeforeTest(\false));
     }
 }

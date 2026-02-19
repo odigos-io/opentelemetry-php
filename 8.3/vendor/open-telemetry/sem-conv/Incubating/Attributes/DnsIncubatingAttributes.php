@@ -1,9 +1,7 @@
 <?php
 
 // DO NOT EDIT, this is an Auto-generated file from script/semantic-conventions
-
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\SemConv\Incubating\Attributes;
 
 /**
@@ -19,7 +17,6 @@ interface DnsIncubatingAttributes
      * @experimental
      */
     public const DNS_ANSWERS = 'dns.answers';
-
     /**
      * The name being queried.
      * The name represents the queried domain name as it appears in the DNS query without any additional normalization.
@@ -27,5 +24,4 @@ interface DnsIncubatingAttributes
      * @experimental
      */
     public const DNS_QUESTION_NAME = 'dns.question.name';
-
 }

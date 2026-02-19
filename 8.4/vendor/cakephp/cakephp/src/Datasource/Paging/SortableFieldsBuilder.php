@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -18,7 +18,6 @@ namespace Cake\Datasource\Paging;
 
 use Closure;
 use InvalidArgumentException;
-
 /**
  * Builder for creating complete sortable fields configurations.
  *
@@ -31,12 +30,10 @@ class SortableFieldsBuilder
      * @var array<string, array<\Cake\Datasource\Paging\SortField|string>|string> The sortable fields map being built
      */
     protected array $map = [];
-
     /**
      * @var bool Whether this builder represents a simple array format
      */
-    protected bool $isSimpleArray = false;
-
+    protected bool $isSimpleArray = \false;
     /**
      * Create builder from various sortableFields configurations.
      *
@@ -48,14 +45,11 @@ class SortableFieldsBuilder
         if ($config === null) {
             return null;
         }
-
         if ($config instanceof Closure) {
             return static::fromCallable($config);
         }
-
         return static::fromArray($config);
     }
-
     /**
      * Create builder from array configuration.
      *
@@ -68,19 +62,17 @@ class SortableFieldsBuilder
     public static function fromArray(array $config): static
     {
         $builder = new static();
-        $hasNumericKeys = false;
-
+        $hasNumericKeys = \false;
         // Check if it's a simple array format
         foreach ($config as $key => $value) {
             if (is_int($key)) {
-                $hasNumericKeys = true;
+                $hasNumericKeys = \true;
                 break;
             }
         }
-
         if ($hasNumericKeys) {
             // Simple or mixed format - convert numeric keys
-            $builder->isSimpleArray = true;
+            $builder->isSimpleArray = \true;
             foreach ($config as $key => $value) {
                 if (is_int($key) && is_string($value)) {
                     // Numeric key with string value: 'field' becomes 'field' => ['field']
@@ -96,10 +88,8 @@ class SortableFieldsBuilder
                 $builder->set($key, $value);
             }
         }
-
         return $builder;
     }
-
     /**
      * Create builder from callable factory.
      *
@@ -110,10 +100,8 @@ class SortableFieldsBuilder
     {
         $builder = new static();
         $builder = $factory($builder);
-
         return $builder;
     }
-
     /**
      * Add a sort key with its associated SortField objects.
      *
@@ -121,7 +109,7 @@ class SortableFieldsBuilder
      * @param \Cake\Datasource\Paging\SortField|string ...$fields The sort fields to add
      * @return $this
      */
-    public function add(string $sortKey, SortField|string ...$fields)
+    public function add(string $sortKey, \Cake\Datasource\Paging\SortField|string ...$fields)
     {
         if ($fields === []) {
             // If no fields provided, use the key as the field name
@@ -129,10 +117,8 @@ class SortableFieldsBuilder
         } else {
             $this->map[$sortKey] = $fields;
         }
-
         return $this;
     }
-
     /**
      * Set a sort key with type-safe validation.
      *
@@ -147,21 +133,15 @@ class SortableFieldsBuilder
     {
         if (is_string($value)) {
             $this->map[$sortKey] = $value;
-        } elseif ($value instanceof SortField) {
+        } elseif ($value instanceof \Cake\Datasource\Paging\SortField) {
             $this->map[$sortKey] = [$value];
         } elseif (is_array($value)) {
             $this->add($sortKey, ...$value);
         } else {
-            throw new InvalidArgumentException(sprintf(
-                'Invalid sortable field value type for key `%s`. Expected string, array, or SortField, got `%s`.',
-                $sortKey,
-                get_debug_type($value),
-            ));
+            throw new InvalidArgumentException(sprintf('Invalid sortable field value type for key `%s`. Expected string, array, or SortField, got `%s`.', $sortKey, get_debug_type($value)));
         }
-
         return $this;
     }
-
     /**
      * Return the complete sortable fields map.
      *
@@ -171,7 +151,6 @@ class SortableFieldsBuilder
     {
         return $this->map;
     }
-
     /**
      * Resolve a sort key to its corresponding ORDER BY clause.
      *
@@ -180,26 +159,19 @@ class SortableFieldsBuilder
      * @param bool $directionSpecified Whether direction was explicitly specified
      * @return array<string, string>|null Array of field => direction pairs, or null if invalid
      */
-    public function resolve(
-        string $sortKey,
-        string $direction,
-        bool $directionSpecified = true,
-    ): ?array {
+    public function resolve(string $sortKey, string $direction, bool $directionSpecified = \true): ?array
+    {
         // Check if sort key exists in map
         if (!isset($this->map[$sortKey])) {
             return null;
         }
-
         $mapping = $this->map[$sortKey];
-
         // Empty array means use key as field
         if ($mapping === []) {
             return [$sortKey => $direction];
         }
-
         return $this->resolveMapping($mapping, $direction, $directionSpecified);
     }
-
     /**
      * Resolve a mapping configuration to ORDER BY clause.
      *
@@ -214,15 +186,12 @@ class SortableFieldsBuilder
         if (is_string($mapping)) {
             return [$mapping => $direction];
         }
-
         // Array of fields/SortField objects
         if (is_array($mapping)) {
             return $this->resolveArrayMapping($mapping, $direction, $directionSpecified);
         }
-
         return [];
     }
-
     /**
      * Resolve an array mapping to ORDER BY clause.
      *
@@ -234,10 +203,9 @@ class SortableFieldsBuilder
     protected function resolveArrayMapping(array $fields, string $direction, bool $directionSpecified): array
     {
         $order = [];
-        $shouldInvert = $directionSpecified && $direction === SortField::DESC;
-
+        $shouldInvert = $directionSpecified && $direction === \Cake\Datasource\Paging\SortField::DESC;
         foreach ($fields as $key => $value) {
-            if ($value instanceof SortField) {
+            if ($value instanceof \Cake\Datasource\Paging\SortField) {
                 // SortField object with locked/default directions
                 $field = $value->getField();
                 $fieldDirection = $value->getDirection($direction, $directionSpecified);
@@ -249,22 +217,19 @@ class SortableFieldsBuilder
                 // Associative array with default directions per field
                 // Format: ['field1' => 'ASC', 'field2' => 'DESC']
                 $defaultDirection = strtolower($value);
-
                 if ($shouldInvert) {
                     // Invert the direction when toggling to desc
-                    $fieldDirection = $defaultDirection === SortField::ASC ? SortField::DESC : SortField::ASC;
+                    $fieldDirection = $defaultDirection === \Cake\Datasource\Paging\SortField::ASC ? \Cake\Datasource\Paging\SortField::DESC : \Cake\Datasource\Paging\SortField::ASC;
                 } else {
                     // Use default direction (for asc or no direction specified)
                     $fieldDirection = $defaultDirection;
                 }
-
                 $order[$key] = $fieldDirection;
             } else {
                 // Fallback for other cases
                 $order[$key] = $direction;
             }
         }
-
         return $order;
     }
 }

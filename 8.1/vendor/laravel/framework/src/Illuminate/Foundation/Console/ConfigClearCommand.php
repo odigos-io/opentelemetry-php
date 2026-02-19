@@ -5,7 +5,6 @@ namespace Illuminate\Foundation\Console;
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
 use Symfony\Component\Console\Attribute\AsCommand;
-
 #[AsCommand(name: 'config:clear')]
 class ConfigClearCommand extends Command
 {
@@ -15,21 +14,18 @@ class ConfigClearCommand extends Command
      * @var string
      */
     protected $name = 'config:clear';
-
     /**
      * The console command description.
      *
      * @var string
      */
     protected $description = 'Remove the configuration cache file';
-
     /**
      * The filesystem instance.
      *
      * @var \Illuminate\Filesystem\Filesystem
      */
     protected $files;
-
     /**
      * Create a new config clear command instance.
      *
@@ -39,10 +35,8 @@ class ConfigClearCommand extends Command
     public function __construct(Filesystem $files)
     {
         parent::__construct();
-
         $this->files = $files;
     }
-
     /**
      * Execute the console command.
      *
@@ -51,7 +45,6 @@ class ConfigClearCommand extends Command
     public function handle()
     {
         $this->files->delete($this->laravel->getCachedConfigPath());
-
         $this->components->info('Configuration cache cleared successfully.');
     }
 }

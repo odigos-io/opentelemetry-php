@@ -1,10 +1,10 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\behaviors;
 
 use yii\base\Behavior;
@@ -14,7 +14,6 @@ use yii\base\WidgetEvent;
 use yii\caching\CacheInterface;
 use yii\caching\Dependency;
 use yii\di\Instance;
-
 /**
  * Cacheable widget behavior automatically caches widget contents according to duration and dependencies specified.
  *
@@ -101,19 +100,15 @@ class CacheableWidgetBehavior extends Behavior
      * empty(Yii::$app->request->get('disable-caching'))
      * ```
      */
-    public $cacheEnabled = true;
-
-
+    public $cacheEnabled = \true;
     /**
      * {@inheritdoc}
      */
     public function attach($owner)
     {
         parent::attach($owner);
-
         $this->initializeEventHandlers();
     }
-
     /**
      * Begins fragment caching. Prevents owner widget from execution
      * if its contents can be retrieved from the cache.
@@ -124,12 +119,10 @@ class CacheableWidgetBehavior extends Behavior
     {
         $cacheKey = $this->getCacheKey();
         $fragmentCacheConfiguration = $this->getFragmentCacheConfiguration();
-
         if (!$this->owner->view->beginCache($cacheKey, $fragmentCacheConfiguration)) {
-            $event->isValid = false;
+            $event->isValid = \false;
         }
     }
-
     /**
      * Outputs widget contents and ends fragment caching.
      *
@@ -139,10 +132,8 @@ class CacheableWidgetBehavior extends Behavior
     {
         echo $event->result;
         $event->result = null;
-
         $this->owner->view->endCache();
     }
-
     /**
      * Initializes widget event handlers.
      */
@@ -151,7 +142,6 @@ class CacheableWidgetBehavior extends Behavior
         $this->owner->on(Widget::EVENT_BEFORE_RUN, [$this, 'beforeRun']);
         $this->owner->on(Widget::EVENT_AFTER_RUN, [$this, 'afterRun']);
     }
-
     /**
      * Returns the cache instance.
      *
@@ -163,7 +153,6 @@ class CacheableWidgetBehavior extends Behavior
         $cacheInterface = 'yii\caching\CacheInterface';
         return Instance::ensure($this->cache, $cacheInterface);
     }
-
     /**
      * Returns the widget cache key.
      *
@@ -172,14 +161,9 @@ class CacheableWidgetBehavior extends Behavior
     private function getCacheKey()
     {
         // `$cacheKeyVariations` may be a `string` and needs to be cast to an `array`.
-        $cacheKey = array_merge(
-            (array)get_class($this->owner),
-            (array)$this->cacheKeyVariations
-        );
-
+        $cacheKey = array_merge((array) get_class($this->owner), (array) $this->cacheKeyVariations);
         return $cacheKey;
     }
-
     /**
      * Returns a fragment cache widget configuration array.
      *
@@ -188,13 +172,7 @@ class CacheableWidgetBehavior extends Behavior
     private function getFragmentCacheConfiguration()
     {
         $cache = $this->getCacheInstance();
-        $fragmentCacheConfiguration = [
-            'cache' => $cache,
-            'duration' => $this->cacheDuration,
-            'dependency' => $this->cacheDependency,
-            'enabled' => $this->cacheEnabled,
-        ];
-
+        $fragmentCacheConfiguration = ['cache' => $cache, 'duration' => $this->cacheDuration, 'dependency' => $this->cacheDependency, 'enabled' => $this->cacheEnabled];
         return $fragmentCacheConfiguration;
     }
 }

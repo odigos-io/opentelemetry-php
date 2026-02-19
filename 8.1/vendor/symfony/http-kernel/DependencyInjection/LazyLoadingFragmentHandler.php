@@ -8,14 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\HttpKernel\DependencyInjection;
 
 use Psr\Container\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Controller\ControllerReference;
 use Symfony\Component\HttpKernel\Fragment\FragmentHandler;
-
 /**
  * Lazily loads fragment renderers from the dependency injection container.
  *
@@ -24,26 +22,21 @@ use Symfony\Component\HttpKernel\Fragment\FragmentHandler;
 class LazyLoadingFragmentHandler extends FragmentHandler
 {
     private ContainerInterface $container;
-
     /**
      * @var array<string, bool>
      */
     private array $initialized = [];
-
-    public function __construct(ContainerInterface $container, RequestStack $requestStack, bool $debug = false)
+    public function __construct(ContainerInterface $container, RequestStack $requestStack, bool $debug = \false)
     {
         $this->container = $container;
-
         parent::__construct($requestStack, [], $debug);
     }
-
     public function render(string|ControllerReference $uri, string $renderer = 'inline', array $options = []): ?string
     {
         if (!isset($this->initialized[$renderer]) && $this->container->has($renderer)) {
             $this->addRenderer($this->container->get($renderer));
-            $this->initialized[$renderer] = true;
+            $this->initialized[$renderer] = \true;
         }
-
         return parent::render($uri, $renderer, $options);
     }
 }

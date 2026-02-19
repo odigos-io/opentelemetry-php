@@ -1,6 +1,6 @@
 <?php
-// GENERATED CODE -- DO NOT EDIT!
 
+// GENERATED CODE -- DO NOT EDIT!
 // Original file comments:
 // Copyright 2019, OpenTelemetry Authors
 //
@@ -16,36 +16,32 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-namespace Opentelemetry\Proto\Collector\Trace\V1;
+namespace Odigos\Opentelemetry\Proto\Collector\Trace\V1;
 
 /**
  * Service that can be used to push spans between one Application instrumented with
  * OpenTelemetry and a collector, or between a collector and a central collector (in this
  * case spans are sent/received to/from multiple Applications).
  */
-class TraceServiceClient extends \Grpc\BaseStub {
-
+class TraceServiceClient extends \Odigos\Grpc\BaseStub
+{
     /**
      * @param string $hostname hostname
      * @param array $opts channel options
      * @param \Grpc\Channel $channel (optional) re-use channel object
      */
-    public function __construct($hostname, $opts, $channel = null) {
+    public function __construct($hostname, $opts, $channel = null)
+    {
         parent::__construct($hostname, $opts, $channel);
     }
-
     /**
      * @param \Opentelemetry\Proto\Collector\Trace\V1\ExportTraceServiceRequest $argument input argument
      * @param array $metadata metadata
      * @param array $options call options
      * @return \Grpc\UnaryCall
      */
-    public function Export(\Opentelemetry\Proto\Collector\Trace\V1\ExportTraceServiceRequest $argument,
-      $metadata = [], $options = []) {
-        return $this->_simpleRequest('/opentelemetry.proto.collector.trace.v1.TraceService/Export',
-        $argument,
-        ['\Opentelemetry\Proto\Collector\Trace\V1\ExportTraceServiceResponse', 'decode'],
-        $metadata, $options);
+    public function Export(\Odigos\Opentelemetry\Proto\Collector\Trace\V1\ExportTraceServiceRequest $argument, $metadata = [], $options = [])
+    {
+        return $this->_simpleRequest('/opentelemetry.proto.collector.trace.v1.TraceService/Export', $argument, ['Odigos\Opentelemetry\Proto\Collector\Trace\V1\ExportTraceServiceResponse', 'decode'], $metadata, $options);
     }
-
 }

@@ -1,13 +1,11 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenAI\Responses\Threads\Runs\Steps;
 
 use OpenAI\Contracts\ResponseContract;
 use OpenAI\Responses\Concerns\ArrayAccessible;
 use OpenAI\Testing\Responses\Concerns\Fakeable;
-
 /**
  * @implements ResponseContract<array{file_id: string}>
  */
@@ -17,13 +15,10 @@ final class ThreadRunStepResponseCodeInterpreterOutputImageImage implements Resp
      * @use ArrayAccessible<array{file_id: string}>
      */
     use ArrayAccessible;
-
     use Fakeable;
-
-    private function __construct(
-        public string $fileId,
-    ) {}
-
+    private function __construct(public string $fileId)
+    {
+    }
     /**
      * Acts as static factory, and returns a new Response instance.
      *
@@ -31,18 +26,13 @@ final class ThreadRunStepResponseCodeInterpreterOutputImageImage implements Resp
      */
     public static function from(array $attributes): self
     {
-        return new self(
-            $attributes['file_id'],
-        );
+        return new self($attributes['file_id']);
     }
-
     /**
      * {@inheritDoc}
      */
     public function toArray(): array
     {
-        return [
-            'file_id' => $this->fileId,
-        ];
+        return ['file_id' => $this->fileId];
     }
 }

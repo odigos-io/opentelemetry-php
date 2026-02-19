@@ -1,4 +1,5 @@
 <?php
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -15,7 +16,6 @@
 namespace Cake\Test\Fixture;
 
 use Cake\TestSuite\Fixture\TestFixture;
-
 /**
  * TagFixture
  */
@@ -26,9 +26,5 @@ class TagsFixture extends TestFixture
      *
      * @var array
      */
-    public array $records = [
-        ['name' => 'tag1', 'description' => 'A big description', 'created' => '2016-01-01 00:00'],
-        ['name' => 'tag2', 'description' => 'Another big description', 'created' => '2016-01-01 00:00'],
-        ['name' => 'tag3', 'description' => 'Yet another one', 'created' => '2016-01-01 00:00'],
-    ];
+    public array $records = [['name' => 'tag1', 'description' => 'A big description', 'created' => '2016-01-01 00:00'], ['name' => 'tag2', 'description' => 'Another big description', 'created' => '2016-01-01 00:00'], ['name' => 'tag3', 'description' => 'Yet another one', 'created' => '2016-01-01 00:00']];
 }

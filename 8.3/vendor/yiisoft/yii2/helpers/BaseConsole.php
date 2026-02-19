@@ -1,16 +1,15 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\helpers;
 
-use Yii;
+use Odigos\Yii;
 use yii\console\Markdown as ConsoleMarkdown;
 use yii\base\Model;
-
 /**
  * BaseConsole provides concrete implementation for [[Console]].
  *
@@ -59,9 +58,8 @@ class BaseConsole
      */
     public static function moveCursorUp($rows = 1)
     {
-        echo "\033[" . (int) $rows . 'A';
+        echo "\x1b[" . (int) $rows . 'A';
     }
-
     /**
      * Moves the terminal cursor down by sending ANSI control code CUD to the terminal.
      * If the cursor is already at the edge of the screen, this has no effect.
@@ -69,9 +67,8 @@ class BaseConsole
      */
     public static function moveCursorDown($rows = 1)
     {
-        echo "\033[" . (int) $rows . 'B';
+        echo "\x1b[" . (int) $rows . 'B';
     }
-
     /**
      * Moves the terminal cursor forward by sending ANSI control code CUF to the terminal.
      * If the cursor is already at the edge of the screen, this has no effect.
@@ -79,9 +76,8 @@ class BaseConsole
      */
     public static function moveCursorForward($steps = 1)
     {
-        echo "\033[" . (int) $steps . 'C';
+        echo "\x1b[" . (int) $steps . 'C';
     }
-
     /**
      * Moves the terminal cursor backward by sending ANSI control code CUB to the terminal.
      * If the cursor is already at the edge of the screen, this has no effect.
@@ -89,27 +85,24 @@ class BaseConsole
      */
     public static function moveCursorBackward($steps = 1)
     {
-        echo "\033[" . (int) $steps . 'D';
+        echo "\x1b[" . (int) $steps . 'D';
     }
-
     /**
      * Moves the terminal cursor to the beginning of the next line by sending ANSI control code CNL to the terminal.
      * @param int $lines number of lines the cursor should be moved down
      */
     public static function moveCursorNextLine($lines = 1)
     {
-        echo "\033[" . (int) $lines . 'E';
+        echo "\x1b[" . (int) $lines . 'E';
     }
-
     /**
      * Moves the terminal cursor to the beginning of the previous line by sending ANSI control code CPL to the terminal.
      * @param int $lines number of lines the cursor should be moved up
      */
     public static function moveCursorPrevLine($lines = 1)
     {
-        echo "\033[" . (int) $lines . 'F';
+        echo "\x1b[" . (int) $lines . 'F';
     }
-
     /**
      * Moves the cursor to an absolute position given as column and row by sending ANSI control code CUP or CHA to the terminal.
      * @param int $column 1-based column number, 1 is the left edge of the screen.
@@ -118,12 +111,11 @@ class BaseConsole
     public static function moveCursorTo($column, $row = null)
     {
         if ($row === null) {
-            echo "\033[" . (int) $column . 'G';
+            echo "\x1b[" . (int) $column . 'G';
         } else {
-            echo "\033[" . (int) $row . ';' . (int) $column . 'H';
+            echo "\x1b[" . (int) $row . ';' . (int) $column . 'H';
         }
     }
-
     /**
      * Scrolls whole page up by sending ANSI control code SU to the terminal.
      * New lines are added at the bottom. This is not supported by ANSI.SYS used in windows.
@@ -131,9 +123,8 @@ class BaseConsole
      */
     public static function scrollUp($lines = 1)
     {
-        echo "\033[" . (int) $lines . 'S';
+        echo "\x1b[" . (int) $lines . 'S';
     }
-
     /**
      * Scrolls whole page down by sending ANSI control code SD to the terminal.
      * New lines are added at the top. This is not supported by ANSI.SYS used in windows.
@@ -141,26 +132,23 @@ class BaseConsole
      */
     public static function scrollDown($lines = 1)
     {
-        echo "\033[" . (int) $lines . 'T';
+        echo "\x1b[" . (int) $lines . 'T';
     }
-
     /**
      * Saves the current cursor position by sending ANSI control code SCP to the terminal.
      * Position can then be restored with [[restoreCursorPosition()]].
      */
     public static function saveCursorPosition()
     {
-        echo "\033[s";
+        echo "\x1b[s";
     }
-
     /**
      * Restores the cursor position saved with [[saveCursorPosition()]] by sending ANSI control code RCP to the terminal.
      */
     public static function restoreCursorPosition()
     {
-        echo "\033[u";
+        echo "\x1b[u";
     }
-
     /**
      * Hides the cursor by sending ANSI DECTCEM code ?25l to the terminal.
      * Use [[showCursor()]] to bring it back.
@@ -168,17 +156,15 @@ class BaseConsole
      */
     public static function hideCursor()
     {
-        echo "\033[?25l";
+        echo "\x1b[?25l";
     }
-
     /**
      * Will show a cursor again when it has been hidden by [[hideCursor()]]  by sending ANSI DECTCEM code ?25h to the terminal.
      */
     public static function showCursor()
     {
-        echo "\033[?25h";
+        echo "\x1b[?25h";
     }
-
     /**
      * Clears entire screen content by sending ANSI control code ED with argument 2 to the terminal.
      * Cursor position will not be changed.
@@ -186,54 +172,48 @@ class BaseConsole
      */
     public static function clearScreen()
     {
-        echo "\033[2J";
+        echo "\x1b[2J";
     }
-
     /**
      * Clears text from cursor to the beginning of the screen by sending ANSI control code ED with argument 1 to the terminal.
      * Cursor position will not be changed.
      */
     public static function clearScreenBeforeCursor()
     {
-        echo "\033[1J";
+        echo "\x1b[1J";
     }
-
     /**
      * Clears text from cursor to the end of the screen by sending ANSI control code ED with argument 0 to the terminal.
      * Cursor position will not be changed.
      */
     public static function clearScreenAfterCursor()
     {
-        echo "\033[0J";
+        echo "\x1b[0J";
     }
-
     /**
      * Clears the line, the cursor is currently on by sending ANSI control code EL with argument 2 to the terminal.
      * Cursor position will not be changed.
      */
     public static function clearLine()
     {
-        echo "\033[2K";
+        echo "\x1b[2K";
     }
-
     /**
      * Clears text from cursor position to the beginning of the line by sending ANSI control code EL with argument 1 to the terminal.
      * Cursor position will not be changed.
      */
     public static function clearLineBeforeCursor()
     {
-        echo "\033[1K";
+        echo "\x1b[1K";
     }
-
     /**
      * Clears text from cursor position to the end of the line by sending ANSI control code EL with argument 0 to the terminal.
      * Cursor position will not be changed.
      */
     public static function clearLineAfterCursor()
     {
-        echo "\033[0K";
+        echo "\x1b[0K";
     }
-
     /**
      * Returns the ANSI format code.
      *
@@ -244,9 +224,8 @@ class BaseConsole
      */
     public static function ansiFormatCode($format)
     {
-        return "\033[" . implode(';', $format) . 'm';
+        return "\x1b[" . implode(';', $format) . 'm';
     }
-
     /**
      * Echoes an ANSI format code that affects the formatting of any text that is printed afterwards.
      *
@@ -258,9 +237,8 @@ class BaseConsole
      */
     public static function beginAnsiFormat($format)
     {
-        echo "\033[" . implode(';', $format) . 'm';
+        echo "\x1b[" . implode(';', $format) . 'm';
     }
-
     /**
      * Resets any ANSI format set by previous method [[beginAnsiFormat()]]
      * Any output after this will have default text format.
@@ -272,9 +250,8 @@ class BaseConsole
      */
     public static function endAnsiFormat()
     {
-        echo "\033[0m";
+        echo "\x1b[0m";
     }
-
     /**
      * Will return a string formatted with the given ANSI style.
      *
@@ -287,10 +264,8 @@ class BaseConsole
     public static function ansiFormat($string, $format = [])
     {
         $code = implode(';', $format);
-
-        return "\033[0m" . ($code !== '' ? "\033[" . $code . 'm' : '') . $string . "\033[0m";
+        return "\x1b[0m" . ($code !== '' ? "\x1b[" . $code . 'm' : '') . $string . "\x1b[0m";
     }
-
     /**
      * Returns the ansi format code for xterm foreground color.
      *
@@ -305,7 +280,6 @@ class BaseConsole
     {
         return '38;5;' . $colorCode;
     }
-
     /**
      * Returns the ansi format code for xterm background color.
      *
@@ -320,7 +294,6 @@ class BaseConsole
     {
         return '48;5;' . $colorCode;
     }
-
     /**
      * Strips ANSI control codes from a string.
      *
@@ -329,9 +302,8 @@ class BaseConsole
      */
     public static function stripAnsiFormat($string)
     {
-        return preg_replace(self::ansiCodesPattern(), '', (string)$string);
+        return preg_replace(self::ansiCodesPattern(), '', (string) $string);
     }
-
     /**
      * Returns the length of the string without ANSI color codes.
      * @param string $string the string to measure
@@ -341,7 +313,6 @@ class BaseConsole
     {
         return mb_strlen(static::stripAnsiFormat($string));
     }
-
     /**
      * Returns the width of the string without ANSI color codes.
      * @param string $string the string to measure
@@ -352,7 +323,6 @@ class BaseConsole
     {
         return mb_strwidth(static::stripAnsiFormat($string), Yii::$app->charset);
     }
-
     /**
      * Returns the portion with ANSI color codes of string specified by the start and length parameters.
      * If string has color codes, then will be return "TEXT_COLOR + TEXT_STRING + DEFAULT_COLOR",
@@ -367,30 +337,24 @@ class BaseConsole
         if ($start < 0 || $length <= 0) {
             return '';
         }
-
-        $textItems = preg_split(self::ansiCodesPattern(), (string)$string);
-
-        preg_match_all(self::ansiCodesPattern(), (string)$string, $colors);
+        $textItems = preg_split(self::ansiCodesPattern(), (string) $string);
+        preg_match_all(self::ansiCodesPattern(), (string) $string, $colors);
         $colors = count($colors) ? $colors[0] : [];
         array_unshift($colors, '');
-
         $result = '';
         $curPos = 0;
-        $inRange = false;
-
+        $inRange = \false;
         foreach ($textItems as $k => $textItem) {
             $color = $colors[$k];
-
-            if ($curPos <= $start && $start < $curPos + Console::ansiStrwidth($textItem)) {
+            if ($curPos <= $start && $start < $curPos + \yii\helpers\Console::ansiStrwidth($textItem)) {
                 $text = mb_substr($textItem, $start - $curPos, null, Yii::$app->charset);
-                $inRange = true;
+                $inRange = \true;
             } else {
                 $text = $textItem;
             }
-
             if ($inRange) {
                 $result .= $color . $text;
-                $diff = $length - Console::ansiStrwidth($result);
+                $diff = $length - \yii\helpers\Console::ansiStrwidth($result);
                 if ($diff <= 0) {
                     if ($diff < 0) {
                         $result = mb_substr($result, 0, $diff, Yii::$app->charset);
@@ -402,18 +366,14 @@ class BaseConsole
                     break;
                 }
             }
-
             $curPos += mb_strlen($textItem, Yii::$app->charset);
         }
-
         return $result;
     }
-
     private static function ansiCodesPattern()
     {
-        return /** @lang PhpRegExp */ '/\033\[[\d;?]*\w/';
+        return '/\033\[[\d;?]*\w/';
     }
-
     /**
      * Converts an ANSI formatted string to HTML.
      *
@@ -457,77 +417,66 @@ class BaseConsole
             self::BLINK => ['text-decoration' => ['blink']],
             self::CONCEALED => ['visibility' => 'hidden'],
         ] + $styleMap;
-
         $tags = 0;
-        $result = preg_replace_callback(
-            '/\033\[([\d;]+)m/',
-            function ($ansi) use (&$tags, $styleMap) {
-                $style = [];
-                $reset = false;
-                $negative = false;
-                foreach (explode(';', $ansi[1]) as $controlCode) {
-                    if ($controlCode == 0) {
-                        $style = [];
-                        $reset = true;
-                    } elseif ($controlCode == self::NEGATIVE) {
-                        $negative = true;
-                    } elseif (isset($styleMap[$controlCode])) {
-                        $style[] = $styleMap[$controlCode];
-                    }
+        $result = preg_replace_callback('/\033\[([\d;]+)m/', function ($ansi) use (&$tags, $styleMap) {
+            $style = [];
+            $reset = \false;
+            $negative = \false;
+            foreach (explode(';', $ansi[1]) as $controlCode) {
+                if ($controlCode == 0) {
+                    $style = [];
+                    $reset = \true;
+                } elseif ($controlCode == self::NEGATIVE) {
+                    $negative = \true;
+                } elseif (isset($styleMap[$controlCode])) {
+                    $style[] = $styleMap[$controlCode];
                 }
-
-                $return = '';
-                while ($reset && $tags > 0) {
-                    $return .= '</span>';
-                    $tags--;
+            }
+            $return = '';
+            while ($reset && $tags > 0) {
+                $return .= '</span>';
+                $tags--;
+            }
+            if (empty($style)) {
+                return $return;
+            }
+            $currentStyle = [];
+            foreach ($style as $content) {
+                $currentStyle = \yii\helpers\ArrayHelper::merge($currentStyle, $content);
+            }
+            // if negative is set, invert background and foreground
+            if ($negative) {
+                if (isset($currentStyle['color'])) {
+                    $fgColor = $currentStyle['color'];
+                    unset($currentStyle['color']);
                 }
-                if (empty($style)) {
-                    return $return;
+                if (isset($currentStyle['background-color'])) {
+                    $bgColor = $currentStyle['background-color'];
+                    unset($currentStyle['background-color']);
                 }
-
-                $currentStyle = [];
-                foreach ($style as $content) {
-                    $currentStyle = ArrayHelper::merge($currentStyle, $content);
+                if (isset($fgColor)) {
+                    $currentStyle['background-color'] = $fgColor;
                 }
-
-                // if negative is set, invert background and foreground
-                if ($negative) {
-                    if (isset($currentStyle['color'])) {
-                        $fgColor = $currentStyle['color'];
-                        unset($currentStyle['color']);
-                    }
-                    if (isset($currentStyle['background-color'])) {
-                        $bgColor = $currentStyle['background-color'];
-                        unset($currentStyle['background-color']);
-                    }
-                    if (isset($fgColor)) {
-                        $currentStyle['background-color'] = $fgColor;
-                    }
-                    if (isset($bgColor)) {
-                        $currentStyle['color'] = $bgColor;
-                    }
+                if (isset($bgColor)) {
+                    $currentStyle['color'] = $bgColor;
                 }
-
-                $styleString = '';
-                foreach ($currentStyle as $name => $value) {
-                    if (is_array($value)) {
-                        $value = implode(' ', $value);
-                    }
-                    $styleString .= "$name: $value;";
+            }
+            $styleString = '';
+            foreach ($currentStyle as $name => $value) {
+                if (is_array($value)) {
+                    $value = implode(' ', $value);
                 }
-                $tags++;
-                return "$return<span style=\"$styleString\">";
-            },
-            $string
-        );
+                $styleString .= "{$name}: {$value};";
+            }
+            $tags++;
+            return "{$return}<span style=\"{$styleString}\">";
+        }, $string);
         while ($tags > 0) {
             $result .= '</span>';
             $tags--;
         }
-
         return $result;
     }
-
     /**
      * Converts Markdown to be better readable in console environments by applying some ANSI format.
      * @param string $markdown the markdown string.
@@ -538,7 +487,6 @@ class BaseConsole
         $parser = new ConsoleMarkdown();
         return $parser->parse($markdown);
     }
-
     /**
      * Converts a string to ansi formatted by replacing patterns like %y (for yellow) with ansi control codes.
      *
@@ -574,7 +522,7 @@ class BaseConsole
      * @param bool $colored Should the string be colored?
      * @return string
      */
-    public static function renderColoredString($string, $colored = true)
+    public static function renderColoredString($string, $colored = \true)
     {
         // TODO rework/refactor according to https://github.com/yiisoft/yii2/issues/746
         static $conversions = [
@@ -587,7 +535,8 @@ class BaseConsole
             '%c' => [self::FG_CYAN],
             '%w' => [self::FG_GREY],
             '%k' => [self::FG_BLACK],
-            '%n' => [0], // reset
+            '%n' => [0],
+            // reset
             '%Y' => [self::FG_YELLOW, self::BOLD],
             '%G' => [self::FG_GREEN, self::BOLD],
             '%B' => [self::FG_BLUE, self::BOLD],
@@ -612,24 +561,17 @@ class BaseConsole
             '%9' => [self::BOLD],
             '%_' => [self::BOLD],
         ];
-
         if ($colored) {
             $string = str_replace('%%', '% ', $string);
             foreach ($conversions as $key => $value) {
-                $string = str_replace(
-                    $key,
-                    static::ansiFormatCode($value),
-                    $string
-                );
+                $string = str_replace($key, static::ansiFormatCode($value), $string);
             }
             $string = str_replace('% ', '%', $string);
         } else {
             $string = preg_replace('/%((%)|.)/', '$2', $string);
         }
-
         return $string;
     }
-
     /**
      * Escapes % so they don't get interpreted as color codes when
      * the string is parsed by [[renderColoredString]].
@@ -643,7 +585,6 @@ class BaseConsole
         // TODO rework/refactor according to https://github.com/yiisoft/yii2/issues/746
         return str_replace('%', '%%', $string);
     }
-
     /**
      * Returns true if the stream supports colorization. ANSI colors are disabled if not supported by the stream.
      *
@@ -655,20 +596,16 @@ class BaseConsole
      */
     public static function streamSupportsAnsiColors($stream)
     {
-        return DIRECTORY_SEPARATOR === '\\'
-            ? getenv('ANSICON') !== false || getenv('ConEmuANSI') === 'ON'
-            : function_exists('posix_isatty') && @posix_isatty($stream);
+        return \DIRECTORY_SEPARATOR === '\\' ? getenv('ANSICON') !== \false || getenv('ConEmuANSI') === 'ON' : function_exists('posix_isatty') && @posix_isatty($stream);
     }
-
     /**
      * Returns true if the console is running on windows.
      * @return bool
      */
     public static function isRunningOnWindows()
     {
-        return DIRECTORY_SEPARATOR === '\\';
+        return \DIRECTORY_SEPARATOR === '\\';
     }
-
     /**
      * Returns terminal screen size.
      *
@@ -683,26 +620,23 @@ class BaseConsole
      * not get up to date values on every terminal.
      * @return array|bool An array of ($width, $height) or false when it was not able to determine size.
      */
-    public static function getScreenSize($refresh = false)
+    public static function getScreenSize($refresh = \false)
     {
         static $size;
         static $execDisabled;
-
         if ($size !== null && ($execDisabled || !$refresh)) {
             return $size;
         }
-
         if ($execDisabled === null) {
             $execDisabled = !function_exists('ini_get') || preg_match('/(\bexec\b)/i', ini_get('disable_functions'));
             if ($execDisabled) {
-                return $size = false;
+                return $size = \false;
             }
         }
-
         if (static::isRunningOnWindows()) {
             $output = [];
             exec('mode con', $output);
-            if (isset($output[1]) && strpos($output[1], 'CON') !== false) {
+            if (isset($output[1]) && strpos($output[1], 'CON') !== \false) {
                 return $size = [(int) preg_replace('~\D~', '', $output[4]), (int) preg_replace('~\D~', '', $output[3])];
             }
         } else {
@@ -710,32 +644,26 @@ class BaseConsole
             $stty = [];
             if (exec('stty -a 2>&1', $stty)) {
                 $stty = implode(' ', $stty);
-
                 // Linux stty output
                 if (preg_match('/rows\s+(\d+);\s*columns\s+(\d+);/mi', $stty, $matches)) {
                     return $size = [(int) $matches[2], (int) $matches[1]];
                 }
-
                 // MacOS stty output
                 if (preg_match('/(\d+)\s+rows;\s*(\d+)\s+columns;/mi', $stty, $matches)) {
                     return $size = [(int) $matches[2], (int) $matches[1]];
                 }
             }
-
             // fallback to tput, which may not be updated on terminal resize
             if (($width = (int) exec('tput cols 2>&1')) > 0 && ($height = (int) exec('tput lines 2>&1')) > 0) {
                 return $size = [$width, $height];
             }
-
             // fallback to ENV variables, which may not be updated on terminal resize
             if (($width = (int) getenv('COLUMNS')) > 0 && ($height = (int) getenv('LINES')) > 0) {
                 return $size = [$width, $height];
             }
         }
-
-        return $size = false;
+        return $size = \false;
     }
-
     /**
      * Word wrap text with indentation to fit the screen size.
      *
@@ -757,37 +685,34 @@ class BaseConsole
      * @return string the wrapped text.
      * @since 2.0.4
      */
-    public static function wrapText($text, $indent = 0, $refresh = false)
+    public static function wrapText($text, $indent = 0, $refresh = \false)
     {
         $size = static::getScreenSize($refresh);
-        if ($size === false || $size[0] <= $indent) {
+        if ($size === \false || $size[0] <= $indent) {
             return $text;
         }
         $pad = str_repeat(' ', $indent);
         $lines = explode("\n", wordwrap($text, $size[0] - $indent, "\n"));
-        $first = true;
+        $first = \true;
         foreach ($lines as $i => $line) {
             if ($first) {
-                $first = false;
+                $first = \false;
                 continue;
             }
             $lines[$i] = $pad . $line;
         }
-
         return implode("\n", $lines);
     }
-
     /**
      * Gets input from STDIN and returns a string right-trimmed for EOLs.
      *
      * @param bool $raw If set to true, returns the raw string without trimming
      * @return string the string read from stdin
      */
-    public static function stdin($raw = false)
+    public static function stdin($raw = \false)
     {
-        return $raw ? fgets(\STDIN) : rtrim(fgets(\STDIN), PHP_EOL);
+        return $raw ? fgets(\STDIN) : rtrim(fgets(\STDIN), \PHP_EOL);
     }
-
     /**
      * Prints a string to STDOUT.
      *
@@ -798,7 +723,6 @@ class BaseConsole
     {
         return fwrite(\STDOUT, $string);
     }
-
     /**
      * Prints a string to STDERR.
      *
@@ -809,7 +733,6 @@ class BaseConsole
     {
         return fwrite(\STDERR, $string);
     }
-
     /**
      * Asks the user for input. Ends when the user types a carriage return (PHP_EOL). Optionally, It also provides a
      * prompt.
@@ -822,10 +745,8 @@ class BaseConsole
         if (isset($prompt)) {
             static::stdout($prompt);
         }
-
         return static::stdin();
     }
-
     /**
      * Prints text to STDOUT appended with a carriage return (PHP_EOL).
      *
@@ -834,9 +755,8 @@ class BaseConsole
      */
     public static function output($string = null)
     {
-        return static::stdout($string . PHP_EOL);
+        return static::stdout($string . \PHP_EOL);
     }
-
     /**
      * Prints text to STDERR appended with a carriage return (PHP_EOL).
      *
@@ -845,9 +765,8 @@ class BaseConsole
      */
     public static function error($string = null)
     {
-        return static::stderr($string . PHP_EOL);
+        return static::stderr($string . \PHP_EOL);
     }
-
     /**
      * Prompts the user for input and validates it.
      *
@@ -865,23 +784,10 @@ class BaseConsole
      */
     public static function prompt($text, $options = [])
     {
-        $options = ArrayHelper::merge(
-            [
-                'required' => false,
-                'default' => null,
-                'pattern' => null,
-                'validator' => null,
-                'error' => 'Invalid input.',
-            ],
-            $options
-        );
+        $options = \yii\helpers\ArrayHelper::merge(['required' => \false, 'default' => null, 'pattern' => null, 'validator' => null, 'error' => 'Invalid input.'], $options);
         $error = null;
-
         top:
-        $input = $options['default']
-            ? static::input("$text [" . $options['default'] . '] ')
-            : static::input("$text ");
-
+        $input = $options['default'] ? static::input("{$text} [" . $options['default'] . '] ') : static::input("{$text} ");
         if ($input === '') {
             if (isset($options['default'])) {
                 $input = $options['default'];
@@ -896,10 +802,8 @@ class BaseConsole
             static::output(isset($error) ? $error : $options['error']);
             goto top;
         }
-
         return $input;
     }
-
     /**
      * Asks user to confirm by typing y or n.
      *
@@ -917,26 +821,22 @@ class BaseConsole
      * @param bool $default this value is returned if no selection is made.
      * @return bool whether user confirmed
      */
-    public static function confirm($message, $default = false)
+    public static function confirm($message, $default = \false)
     {
-        while (true) {
+        while (\true) {
             static::stdout($message . ' (yes|no) [' . ($default ? 'yes' : 'no') . ']:');
             $input = trim(static::stdin());
-
             if (empty($input)) {
                 return $default;
             }
-
             if (!strcasecmp($input, 'y') || !strcasecmp($input, 'yes')) {
-                return true;
+                return \true;
             }
-
             if (!strcasecmp($input, 'n') || !strcasecmp($input, 'no')) {
-                return false;
+                return \false;
             }
         }
     }
-
     /**
      * Gives the user an option to choose from. Giving '?' as an input will show
      * a list of options to choose from and their explanations.
@@ -953,12 +853,11 @@ class BaseConsole
     public static function select($prompt, $options = [], $default = null)
     {
         top:
-        static::stdout("$prompt (" . implode(',', array_keys($options)) . ',?)'
-            . ($default !== null ? '[' . $default . ']' : '') . ': ');
+        static::stdout("{$prompt} (" . implode(',', array_keys($options)) . ',?)' . ($default !== null ? '[' . $default . ']' : '') . ': ');
         $input = static::stdin();
         if ($input === '?') {
             foreach ($options as $key => $value) {
-                static::output(" $key - $value");
+                static::output(" {$key} - {$value}");
             }
             static::output(' ? - Show help');
             goto top;
@@ -967,17 +866,14 @@ class BaseConsole
         } elseif (!array_key_exists($input, $options)) {
             goto top;
         }
-
         return $input;
     }
-
     private static $_progressStart;
     private static $_progressWidth;
     private static $_progressPrefix;
     private static $_progressEta;
     private static $_progressEtaLastDone = 0;
     private static $_progressEtaLastUpdate;
-
     /**
      * Starts display of a progress bar on screen.
      *
@@ -1026,10 +922,8 @@ class BaseConsole
         self::$_progressEta = null;
         self::$_progressEtaLastDone = 0;
         self::$_progressEtaLastUpdate = time();
-
         static::updateProgress($done, $total);
     }
-
     /**
      * Updates a progress bar that has been started by [[startProgress()]].
      *
@@ -1049,18 +943,17 @@ class BaseConsole
             self::$_progressPrefix = $prefix;
         }
         $width = static::getProgressbarWidth($prefix);
-        $percent = ($total == 0) ? 1 : $done / $total;
+        $percent = $total == 0 ? 1 : $done / $total;
         $info = sprintf('%d%% (%d/%d)', $percent * 100, $done, $total);
         self::setETA($done, $total);
         $info .= self::$_progressEta === null ? ' ETA: n/a' : sprintf(' ETA: %d sec.', self::$_progressEta);
-
         // Number extra characters outputted. These are opening [, closing ], and space before info
         // Since Windows uses \r\n\ for line endings, there's one more in the case
         $extraChars = static::isRunningOnWindows() ? 4 : 3;
         $width -= $extraChars + static::ansiStrlen($info);
         // skipping progress bar on very small display or if forced to skip
         if ($width < 5) {
-            static::stdout("\r$prefix$info   ");
+            static::stdout("\r{$prefix}{$info}   ");
         } else {
             if ($percent < 0) {
                 $percent = 0;
@@ -1073,11 +966,10 @@ class BaseConsole
                 $status .= '>';
                 $status .= str_repeat(' ', $width - $bar - 1);
             }
-            static::stdout("\r$prefix" . "[$status] $info");
+            static::stdout("\r{$prefix}" . "[{$status}] {$info}");
         }
         flush();
     }
-
     /**
      * Return width of the progressbar
      * @param string $prefix an optional string to display before the progress bar.
@@ -1088,27 +980,21 @@ class BaseConsole
     private static function getProgressbarWidth($prefix)
     {
         $width = self::$_progressWidth;
-
-        if ($width === false) {
+        if ($width === \false) {
             return 0;
         }
-
-        $screenSize = static::getScreenSize(true);
-        if ($screenSize === false && $width < 1) {
+        $screenSize = static::getScreenSize(\true);
+        if ($screenSize === \false && $width < 1) {
             return 0;
         }
-
         if ($width === null) {
             $width = $screenSize[0];
         } elseif ($width > 0 && $width < 1) {
             $width = floor($screenSize[0] * $width);
         }
-
         $width -= static::ansiStrlen($prefix);
-
         return $width;
     }
-
     /**
      * Calculate $_progressEta, $_progressEtaLastUpdate and $_progressEtaLastDone
      * @param int $done the number of items that are completed.
@@ -1123,7 +1009,6 @@ class BaseConsole
             self::$_progressEtaLastUpdate = time();
             return;
         }
-
         if ($done < $total && (time() - self::$_progressEtaLastUpdate > 1 && $done > self::$_progressEtaLastDone)) {
             $rate = (time() - (self::$_progressEtaLastUpdate ?: self::$_progressStart)) / ($done - self::$_progressEtaLastDone);
             self::$_progressEta = $rate * ($total - $done);
@@ -1131,7 +1016,6 @@ class BaseConsole
             self::$_progressEtaLastDone = $done;
         }
     }
-
     /**
      * Ends a progress bar that has been started by [[startProgress()]].
      *
@@ -1143,18 +1027,17 @@ class BaseConsole
      * @see startProgress
      * @see updateProgress
      */
-    public static function endProgress($remove = false, $keepPrefix = true)
+    public static function endProgress($remove = \false, $keepPrefix = \true)
     {
-        if ($remove === false) {
-            static::stdout(PHP_EOL);
+        if ($remove === \false) {
+            static::stdout(\PHP_EOL);
         } else {
-            if (static::streamSupportsAnsiColors(STDOUT)) {
+            if (static::streamSupportsAnsiColors(\STDOUT)) {
                 static::clearLine();
             }
             static::stdout("\r" . ($keepPrefix ? self::$_progressPrefix : '') . (is_string($remove) ? $remove : ''));
         }
         flush();
-
         self::$_progressStart = null;
         self::$_progressWidth = null;
         self::$_progressPrefix = '';
@@ -1162,7 +1045,6 @@ class BaseConsole
         self::$_progressEtaLastDone = 0;
         self::$_progressEtaLastUpdate = null;
     }
-
     /**
      * Generates a summary of the validation errors.
      * @param Model|Model[] $models the model(s) whose validation errors are to be displayed.
@@ -1176,12 +1058,10 @@ class BaseConsole
      */
     public static function errorSummary($models, $options = [])
     {
-        $showAllErrors = ArrayHelper::remove($options, 'showAllErrors', false);
+        $showAllErrors = \yii\helpers\ArrayHelper::remove($options, 'showAllErrors', \false);
         $lines = self::collectErrors($models, $showAllErrors);
-
-        return implode(PHP_EOL, $lines);
+        return implode(\PHP_EOL, $lines);
     }
-
     /**
      * Return array of the validation errors
      * @param Model|Model[] $models the model(s) whose validation errors are to be displayed.
@@ -1196,11 +1076,9 @@ class BaseConsole
         if (!is_array($models)) {
             $models = [$models];
         }
-
         foreach ($models as $model) {
             $lines = array_unique(array_merge($lines, $model->getErrorSummary($showAllErrors)));
         }
-
         return $lines;
     }
 }

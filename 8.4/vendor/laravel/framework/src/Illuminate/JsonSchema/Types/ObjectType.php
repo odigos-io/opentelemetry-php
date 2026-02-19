@@ -2,13 +2,12 @@
 
 namespace Illuminate\JsonSchema\Types;
 
-class ObjectType extends Type
+class ObjectType extends \Illuminate\JsonSchema\Types\Type
 {
     /**
      * Whether additional properties are allowed.
      */
     protected ?bool $additionalProperties = null;
-
     /**
      * Create a new object type instance.
      *
@@ -18,17 +17,14 @@ class ObjectType extends Type
     {
         //
     }
-
     /**
      * Disallow additional properties.
      */
     public function withoutAdditionalProperties(): static
     {
-        $this->additionalProperties = false;
-
+        $this->additionalProperties = \false;
         return $this;
     }
-
     /**
      * Set the type's default value.
      *
@@ -37,7 +33,6 @@ class ObjectType extends Type
     public function default(array $value): static
     {
         $this->default = $value;
-
         return $this;
     }
 }

@@ -1,5 +1,6 @@
-<?php declare(strict_types=1);
+<?php
 
+declare (strict_types=1);
 /*
  * This file is part of the Monolog package.
  *
@@ -8,19 +9,17 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Monolog\Handler;
+namespace Odigos\Monolog\Handler;
 
 use Closure;
-use Monolog\Handler\FingersCrossed\ErrorLevelActivationStrategy;
-use Monolog\Handler\FingersCrossed\ActivationStrategyInterface;
-use Monolog\Level;
-use Monolog\Logger;
-use Monolog\ResettableInterface;
-use Monolog\Formatter\FormatterInterface;
+use Odigos\Monolog\Handler\FingersCrossed\ErrorLevelActivationStrategy;
+use Odigos\Monolog\Handler\FingersCrossed\ActivationStrategyInterface;
+use Odigos\Monolog\Level;
+use Odigos\Monolog\Logger;
+use Odigos\Monolog\ResettableInterface;
+use Odigos\Monolog\Formatter\FormatterInterface;
 use Psr\Log\LogLevel;
-use Monolog\LogRecord;
-
+use Odigos\Monolog\LogRecord;
 /**
  * Buffers all records until a certain level is reached
  *
@@ -40,29 +39,20 @@ use Monolog\LogRecord;
 class FingersCrossedHandler extends Handler implements ProcessableHandlerInterface, ResettableInterface, FormattableHandlerInterface
 {
     use ProcessableHandlerTrait;
-
     /**
      * Handler or factory Closure($record, $this)
      *
      * @phpstan-var (Closure(LogRecord|null, HandlerInterface): HandlerInterface)|HandlerInterface
      */
     protected Closure|HandlerInterface $handler;
-
     protected ActivationStrategyInterface $activationStrategy;
-
-    protected bool $buffering = true;
-
+    protected bool $buffering = \true;
     protected int $bufferSize;
-
     /** @var LogRecord[] */
     protected array $buffer = [];
-
     protected bool $stopBuffering;
-
     protected Level|null $passthruLevel = null;
-
     protected bool $bubble;
-
     /**
      * @phpstan-param (Closure(LogRecord|null, HandlerInterface): HandlerInterface)|HandlerInterface $handler
      *
@@ -76,49 +66,42 @@ class FingersCrossedHandler extends Handler implements ProcessableHandlerInterfa
      * @phpstan-param value-of<Level::VALUES>|value-of<Level::NAMES>|Level|LogLevel::*|ActivationStrategyInterface|null $activationStrategy
      * @phpstan-param value-of<Level::VALUES>|value-of<Level::NAMES>|Level|LogLevel::*|null $passthruLevel
      */
-    public function __construct(Closure|HandlerInterface $handler, int|string|Level|ActivationStrategyInterface|null $activationStrategy = null, int $bufferSize = 0, bool $bubble = true, bool $stopBuffering = true, int|string|Level|null $passthruLevel = null)
+    public function __construct(Closure|HandlerInterface $handler, int|string|Level|ActivationStrategyInterface|null $activationStrategy = null, int $bufferSize = 0, bool $bubble = \true, bool $stopBuffering = \true, int|string|Level|null $passthruLevel = null)
     {
         if (null === $activationStrategy) {
             $activationStrategy = new ErrorLevelActivationStrategy(Level::Warning);
         }
-
         // convert simple int activationStrategy to an object
         if (!$activationStrategy instanceof ActivationStrategyInterface) {
             $activationStrategy = new ErrorLevelActivationStrategy($activationStrategy);
         }
-
         $this->handler = $handler;
         $this->activationStrategy = $activationStrategy;
         $this->bufferSize = $bufferSize;
         $this->bubble = $bubble;
         $this->stopBuffering = $stopBuffering;
-
         if ($passthruLevel !== null) {
             $this->passthruLevel = Logger::toMonologLevel($passthruLevel);
         }
     }
-
     /**
      * @inheritDoc
      */
     public function isHandling(LogRecord $record): bool
     {
-        return true;
+        return \true;
     }
-
     /**
      * Manually activate this logger regardless of the activation strategy
      */
     public function activate(): void
     {
         if ($this->stopBuffering) {
-            $this->buffering = false;
+            $this->buffering = \false;
         }
-
         $this->getHandler(end($this->buffer) ?: null)->handleBatch($this->buffer);
         $this->buffer = [];
     }
-
     /**
      * @inheritDoc
      */
@@ -127,7 +110,6 @@ class FingersCrossedHandler extends Handler implements ProcessableHandlerInterfa
         if (\count($this->processors) > 0) {
             $record = $this->processRecord($record);
         }
-
         if ($this->buffering) {
             $this->buffer[] = $record;
             if ($this->bufferSize > 0 && \count($this->buffer) > $this->bufferSize) {
@@ -139,31 +121,24 @@ class FingersCrossedHandler extends Handler implements ProcessableHandlerInterfa
         } else {
             $this->getHandler($record)->handle($record);
         }
-
-        return false === $this->bubble;
+        return \false === $this->bubble;
     }
-
     /**
      * @inheritDoc
      */
     public function close(): void
     {
         $this->flushBuffer();
-
         $this->getHandler()->close();
     }
-
     public function reset(): void
     {
         $this->flushBuffer();
-
         $this->resetProcessors();
-
         if ($this->getHandler() instanceof ResettableInterface) {
             $this->getHandler()->reset();
         }
     }
-
     /**
      * Clears the buffer without flushing any messages down to the wrapped handler.
      *
@@ -174,7 +149,6 @@ class FingersCrossedHandler extends Handler implements ProcessableHandlerInterfa
         $this->buffer = [];
         $this->reset();
     }
-
     /**
      * Resets the state of the handler. Stops forwarding records to the wrapped handler.
      */
@@ -189,11 +163,9 @@ class FingersCrossedHandler extends Handler implements ProcessableHandlerInterfa
                 $this->getHandler(end($this->buffer))->handleBatch($this->buffer);
             }
         }
-
         $this->buffer = [];
-        $this->buffering = true;
+        $this->buffering = \true;
     }
-
     /**
      * Return the nested handler
      *
@@ -208,10 +180,8 @@ class FingersCrossedHandler extends Handler implements ProcessableHandlerInterfa
             }
             $this->handler = $handler;
         }
-
         return $this->handler;
     }
-
     /**
      * @inheritDoc
      */
@@ -220,13 +190,10 @@ class FingersCrossedHandler extends Handler implements ProcessableHandlerInterfa
         $handler = $this->getHandler();
         if ($handler instanceof FormattableHandlerInterface) {
             $handler->setFormatter($formatter);
-
             return $this;
         }
-
-        throw new \UnexpectedValueException('The nested handler of type '.\get_class($handler).' does not support formatters.');
+        throw new \UnexpectedValueException('The nested handler of type ' . \get_class($handler) . ' does not support formatters.');
     }
-
     /**
      * @inheritDoc
      */
@@ -236,7 +203,6 @@ class FingersCrossedHandler extends Handler implements ProcessableHandlerInterfa
         if ($handler instanceof FormattableHandlerInterface) {
             return $handler->getFormatter();
         }
-
-        throw new \UnexpectedValueException('The nested handler of type '.\get_class($handler).' does not support formatters.');
+        throw new \UnexpectedValueException('The nested handler of type ' . \get_class($handler) . ' does not support formatters.');
     }
 }

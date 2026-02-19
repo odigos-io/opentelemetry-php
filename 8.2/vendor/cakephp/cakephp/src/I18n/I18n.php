@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -23,7 +23,6 @@ use Cake\I18n\Formatter\IcuFormatter;
 use Cake\I18n\Formatter\SprintfFormatter;
 use Locale;
 use function Cake\Core\deprecationWarning;
-
 /**
  * I18n handles translation of Text and time format strings.
  */
@@ -35,21 +34,18 @@ class I18n
      * @var string
      */
     public const DEFAULT_LOCALE = 'en_US';
-
     /**
      * The translators collection
      *
      * @var \Cake\I18n\TranslatorRegistry|null
      */
-    protected static ?TranslatorRegistry $_collection = null;
-
+    protected static ?\Cake\I18n\TranslatorRegistry $_collection = null;
     /**
      * The environment default locale
      *
      * @var string|null
      */
     protected static ?string $_defaultLocale = null;
-
     /**
      * Returns the translators collection instance. It can be used
      * for getting specific translators based of their name and locale
@@ -57,37 +53,23 @@ class I18n
      *
      * @return \Cake\I18n\TranslatorRegistry The translator collection.
      */
-    public static function translators(): TranslatorRegistry
+    public static function translators(): \Cake\I18n\TranslatorRegistry
     {
         if (static::$_collection !== null) {
             return static::$_collection;
         }
-
-        static::$_collection = new TranslatorRegistry(
-            new PackageLocator(),
-            new FormatterLocator([
-                'default' => IcuFormatter::class,
-                'sprintf' => SprintfFormatter::class,
-            ]),
-            static::getLocale(),
-        );
-
+        static::$_collection = new \Cake\I18n\TranslatorRegistry(new \Cake\I18n\PackageLocator(), new \Cake\I18n\FormatterLocator(['default' => IcuFormatter::class, 'sprintf' => SprintfFormatter::class]), static::getLocale());
         if (class_exists(Cache::class)) {
             try {
                 $pool = Cache::pool('_cake_translations_');
             } catch (InvalidArgumentException) {
                 $pool = Cache::pool('_cake_core_');
-                deprecationWarning(
-                    '5.1.0',
-                    'Cache config `_cake_core_` is deprecated. Use `_cake_translations_` instead',
-                );
+                deprecationWarning('5.1.0', 'Cache config `_cake_core_` is deprecated. Use `_cake_translations_` instead');
             }
             static::$_collection->setCacher($pool);
         }
-
         return static::$_collection;
     }
-
     /**
      * Sets a translator.
      *
@@ -130,13 +112,11 @@ class I18n
     public static function setTranslator(string $name, callable $loader, ?string $locale = null): void
     {
         $locale = $locale ?: static::getLocale();
-
         $translators = static::translators();
         $loader = $translators->setLoaderFallback($name, $loader);
         $packages = $translators->getPackages();
         $packages->set($name, $locale, $loader);
     }
-
     /**
      * Returns an instance of a translator that was configured for the name and locale.
      *
@@ -147,31 +127,23 @@ class I18n
      * @return \Cake\I18n\Translator The configured translator.
      * @throws \Cake\I18n\Exception\I18nException
      */
-    public static function getTranslator(string $name = 'default', ?string $locale = null): Translator
+    public static function getTranslator(string $name = 'default', ?string $locale = null): \Cake\I18n\Translator
     {
         $translators = static::translators();
-
         $currentLocale = null;
         if ($locale) {
             $currentLocale = $translators->getLocale();
             $translators->setLocale($locale);
         }
-
         $translator = $translators->get($name);
         if ($translator === null) {
-            throw new I18nException(sprintf(
-                'Translator for domain `%s` could not be found.',
-                $name,
-            ));
+            throw new I18nException(sprintf('Translator for domain `%s` could not be found.', $name));
         }
-
         if ($currentLocale !== null) {
             $translators->setLocale($currentLocale);
         }
-
         return $translator;
     }
-
     /**
      * Registers a callable object that can be used for creating new translator
      * instances for the same translations domain. Loaders will be invoked whenever
@@ -219,7 +191,6 @@ class I18n
     {
         static::translators()->registerLoader($name, $loader);
     }
-
     /**
      * Sets the default locale to use for future translator instances.
      * This also affects the `intl.default_locale` PHP setting.
@@ -235,7 +206,6 @@ class I18n
             static::translators()->setLocale($locale);
         }
     }
-
     /**
      * Will return the currently configure locale as stored in the
      * `intl.default_locale` PHP setting.
@@ -250,10 +220,8 @@ class I18n
             $current = static::DEFAULT_LOCALE;
             Locale::setDefault($current);
         }
-
         return $current;
     }
-
     /**
      * Returns the default locale.
      *
@@ -267,7 +235,6 @@ class I18n
     {
         return static::$_defaultLocale ??= Locale::getDefault() ?: static::DEFAULT_LOCALE;
     }
-
     /**
      * Returns the currently configured default formatter.
      *
@@ -277,7 +244,6 @@ class I18n
     {
         return static::translators()->defaultFormatter();
     }
-
     /**
      * Sets the name of the default messages formatter to use for future
      * translator instances. By default, the `default` and `sprintf` formatters
@@ -290,18 +256,16 @@ class I18n
     {
         static::translators()->defaultFormatter($name);
     }
-
     /**
      * Set if the domain fallback is used.
      *
      * @param bool $enable flag to enable or disable fallback
      * @return void
      */
-    public static function useFallback(bool $enable = true): void
+    public static function useFallback(bool $enable = \true): void
     {
         static::translators()->useFallback($enable);
     }
-
     /**
      * Destroys all translator instances and creates a new empty translations
      * collection.

@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\HttpFoundation\Exception;
 
 /**
@@ -18,7 +17,7 @@ namespace Symfony\Component\HttpFoundation\Exception;
  *
  * @author Jérémy Derussé <jeremy@derusse.com>
  */
-class SessionNotFoundException extends \LogicException implements RequestExceptionInterface
+class SessionNotFoundException extends \LogicException implements \Symfony\Component\HttpFoundation\Exception\RequestExceptionInterface
 {
     public function __construct(string $message = 'There is currently no session available.', int $code = 0, ?\Throwable $previous = null)
     {

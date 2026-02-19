@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) :  Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -17,20 +17,14 @@ declare(strict_types=1);
 namespace Cake\Log\Formatter;
 
 use DateTime;
-
-class DefaultFormatter extends AbstractFormatter
+class DefaultFormatter extends \Cake\Log\Formatter\AbstractFormatter
 {
     /**
      * Default config for this class
      *
      * @var array<string, mixed>
      */
-    protected array $_defaultConfig = [
-        'dateFormat' => 'Y-m-d H:i:s',
-        'includeTags' => false,
-        'includeDate' => true,
-    ];
-
+    protected array $_defaultConfig = ['dateFormat' => 'Y-m-d H:i:s', 'includeTags' => \false, 'includeDate' => \true];
     /**
      * @inheritDoc
      */
@@ -44,7 +38,6 @@ class DefaultFormatter extends AbstractFormatter
         if ($this->_config['includeTags']) {
             return sprintf('<%s>%s</%s>', $level, $message, $level);
         }
-
         return $message;
     }
 }

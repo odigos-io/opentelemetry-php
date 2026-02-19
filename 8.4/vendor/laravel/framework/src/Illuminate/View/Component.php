@@ -10,7 +10,6 @@ use Illuminate\Support\Collection;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionProperty;
-
 abstract class Component
 {
     /**
@@ -19,77 +18,66 @@ abstract class Component
      * @var array
      */
     protected $except = [];
-
     /**
      * The component alias name.
      *
      * @var string
      */
     public $componentName;
-
     /**
      * The component attributes.
      *
      * @var \Illuminate\View\ComponentAttributeBag
      */
     public $attributes;
-
     /**
      * The view factory instance, if any.
      *
      * @var \Illuminate\Contracts\View\Factory|null
      */
     protected static $factory;
-
     /**
      * The component resolver callback.
      *
      * @var (\Closure(string, array): Component)|null
      */
     protected static $componentsResolver;
-
     /**
      * The cache of blade view names, keyed by contents.
      *
      * @var array<string, string>
      */
     protected static $bladeViewCache = [];
-
     /**
      * The cache of public property names, keyed by class.
      *
      * @var array
      */
     protected static $propertyCache = [];
-
     /**
      * The cache of public method names, keyed by class.
      *
      * @var array
      */
     protected static $methodCache = [];
-
     /**
      * The cache of constructor parameters, keyed by class.
      *
      * @var array<class-string, array<int, string>>
      */
     protected static $constructorParametersCache = [];
-
     /**
      * The cache of ignored parameter names.
      *
      * @var array
      */
     protected static $ignoredParameterNames = [];
-
     /**
      * Get the view / view contents that represent the component.
      *
      * @return \Illuminate\Contracts\View\View|\Illuminate\Contracts\Support\Htmlable|\Closure|string
      */
     abstract public function render();
-
     /**
      * Resolve the component instance with the given data.
      *
@@ -101,18 +89,13 @@ abstract class Component
         if (static::$componentsResolver) {
             return call_user_func(static::$componentsResolver, static::class, $data);
         }
-
         $parameters = static::extractConstructorParameters();
-
         $dataKeys = array_keys($data);
-
         if (empty(array_diff($parameters, $dataKeys))) {
             return new static(...array_intersect_key($data, array_flip($parameters)));
         }
-
         return Container::getInstance()->make(static::class, $data);
     }
-
     /**
      * Extract the constructor parameters for the component.
      *
@@ -120,19 +103,13 @@ abstract class Component
      */
     protected static function extractConstructorParameters()
     {
-        if (! isset(static::$constructorParametersCache[static::class])) {
+        if (!isset(static::$constructorParametersCache[static::class])) {
             $class = new ReflectionClass(static::class);
-
             $constructor = $class->getConstructor();
-
-            static::$constructorParametersCache[static::class] = $constructor
-                ? (new Collection($constructor->getParameters()))->map->getName()->all()
-                : [];
+            static::$constructorParametersCache[static::class] = $constructor ? (new Collection($constructor->getParameters()))->map->getName()->all() : [];
         }
-
         return static::$constructorParametersCache[static::class];
     }
-
     /**
      * Resolve the Blade view or view file that should be used when rendering the component.
      *
@@ -141,29 +118,22 @@ abstract class Component
     public function resolveView()
     {
         $view = $this->render();
-
         if ($view instanceof ViewContract) {
             return $view;
         }
-
         if ($view instanceof Htmlable) {
             return $view;
         }
-
         $resolver = function ($view) {
             if ($view instanceof ViewContract) {
                 return $view;
             }
-
             return $this->extractBladeViewFromString($view);
         };
-
         return $view instanceof Closure ? function (array $data = []) use ($view, $resolver) {
             return $resolver($view($data));
-        }
-        : $resolver($view);
+        } : $resolver($view);
     }
-
     /**
      * Create a Blade view with the raw component string content.
      *
@@ -173,18 +143,14 @@ abstract class Component
     protected function extractBladeViewFromString($contents)
     {
         $key = sprintf('%s::%s', static::class, $contents);
-
         if (isset(static::$bladeViewCache[$key])) {
             return static::$bladeViewCache[$key];
         }
-
         if ($this->factory()->exists($contents)) {
             return static::$bladeViewCache[$key] = $contents;
         }
-
         return static::$bladeViewCache[$key] = $this->createBladeViewFromString($this->factory(), $contents);
     }
-
     /**
      * Create a Blade view with the raw component string content.
      *
@@ -194,22 +160,15 @@ abstract class Component
      */
     protected function createBladeViewFromString($factory, $contents)
     {
-        $factory->addNamespace(
-            '__components',
-            $directory = Container::getInstance()['config']->get('view.compiled')
-        );
-
-        if (! is_file($viewFile = $directory.'/'.hash('xxh128', $contents).'.blade.php')) {
-            if (! is_dir($directory)) {
-                mkdir($directory, 0755, true);
+        $factory->addNamespace('__components', $directory = Container::getInstance()['config']->get('view.compiled'));
+        if (!is_file($viewFile = $directory . '/' . hash('xxh128', $contents) . '.blade.php')) {
+            if (!is_dir($directory)) {
+                mkdir($directory, 0755, \true);
             }
-
             file_put_contents($viewFile, $contents);
         }
-
-        return '__components::'.basename($viewFile, '.blade.php');
+        return '__components::' . basename($viewFile, '.blade.php');
     }
-
     /**
      * Get the data that should be supplied to the view.
      *
@@ -221,10 +180,8 @@ abstract class Component
     public function data()
     {
         $this->attributes = $this->attributes ?: $this->newAttributeBag();
-
         return array_merge($this->extractPublicProperties(), $this->extractPublicMethods());
     }
-
     /**
      * Extract the public properties for the component.
      *
@@ -233,26 +190,16 @@ abstract class Component
     protected function extractPublicProperties()
     {
         $class = get_class($this);
-
-        if (! isset(static::$propertyCache[$class])) {
+        if (!isset(static::$propertyCache[$class])) {
             $reflection = new ReflectionClass($this);
-
-            static::$propertyCache[$class] = (new Collection($reflection->getProperties(ReflectionProperty::IS_PUBLIC)))
-                ->reject(fn (ReflectionProperty $property) => $property->isStatic())
-                ->reject(fn (ReflectionProperty $property) => $this->shouldIgnore($property->getName()))
-                ->map(fn (ReflectionProperty $property) => $property->getName())
-                ->all();
+            static::$propertyCache[$class] = (new Collection($reflection->getProperties(ReflectionProperty::IS_PUBLIC)))->reject(fn(ReflectionProperty $property) => $property->isStatic())->reject(fn(ReflectionProperty $property) => $this->shouldIgnore($property->getName()))->map(fn(ReflectionProperty $property) => $property->getName())->all();
         }
-
         $values = [];
-
         foreach (static::$propertyCache[$class] as $property) {
             $values[$property] = $this->{$property};
         }
-
         return $values;
     }
-
     /**
      * Extract the public methods for the component.
      *
@@ -261,24 +208,16 @@ abstract class Component
     protected function extractPublicMethods()
     {
         $class = get_class($this);
-
-        if (! isset(static::$methodCache[$class])) {
+        if (!isset(static::$methodCache[$class])) {
             $reflection = new ReflectionClass($this);
-
-            static::$methodCache[$class] = (new Collection($reflection->getMethods(ReflectionMethod::IS_PUBLIC)))
-                ->reject(fn (ReflectionMethod $method) => $this->shouldIgnore($method->getName()))
-                ->map(fn (ReflectionMethod $method) => $method->getName());
+            static::$methodCache[$class] = (new Collection($reflection->getMethods(ReflectionMethod::IS_PUBLIC)))->reject(fn(ReflectionMethod $method) => $this->shouldIgnore($method->getName()))->map(fn(ReflectionMethod $method) => $method->getName());
         }
-
         $values = [];
-
         foreach (static::$methodCache[$class] as $method) {
             $values[$method] = $this->createVariableFromMethod(new ReflectionMethod($this, $method));
         }
-
         return $values;
     }
-
     /**
      * Create a callable variable from the given method.
      *
@@ -287,11 +226,8 @@ abstract class Component
      */
     protected function createVariableFromMethod(ReflectionMethod $method)
     {
-        return $method->getNumberOfParameters() === 0
-            ? $this->createInvokableVariable($method->getName())
-            : Closure::fromCallable([$this, $method->getName()]);
+        return $method->getNumberOfParameters() === 0 ? $this->createInvokableVariable($method->getName()) : Closure::fromCallable([$this, $method->getName()]);
     }
-
     /**
      * Create an invokable, toStringable variable for the given component method.
      *
@@ -300,11 +236,10 @@ abstract class Component
      */
     protected function createInvokableVariable(string $method)
     {
-        return new InvokableComponentVariable(function () use ($method) {
+        return new \Illuminate\View\InvokableComponentVariable(function () use ($method) {
             return $this->{$method}();
         });
     }
-
     /**
      * Determine if the given property / method should be ignored.
      *
@@ -313,10 +248,8 @@ abstract class Component
      */
     protected function shouldIgnore($name)
     {
-        return str_starts_with($name, '__') ||
-               in_array($name, $this->ignoredMethods());
+        return str_starts_with($name, '__') || in_array($name, $this->ignoredMethods());
     }
-
     /**
      * Get the methods that should be ignored.
      *
@@ -324,22 +257,8 @@ abstract class Component
      */
     protected function ignoredMethods()
     {
-        return array_merge([
-            'data',
-            'render',
-            'resolve',
-            'resolveView',
-            'shouldRender',
-            'view',
-            'withName',
-            'withAttributes',
-            'flushCache',
-            'forgetFactory',
-            'forgetComponentsResolver',
-            'resolveComponentsUsing',
-        ], $this->except);
+        return array_merge(['data', 'render', 'resolve', 'resolveView', 'shouldRender', 'view', 'withName', 'withAttributes', 'flushCache', 'forgetFactory', 'forgetComponentsResolver', 'resolveComponentsUsing'], $this->except);
     }
-
     /**
      * Set the component alias name.
      *
@@ -349,10 +268,8 @@ abstract class Component
     public function withName($name)
     {
         $this->componentName = $name;
-
         return $this;
     }
-
     /**
      * Set the extra attributes that the component should make available.
      *
@@ -362,12 +279,9 @@ abstract class Component
     public function withAttributes(array $attributes)
     {
         $this->attributes = $this->attributes ?: $this->newAttributeBag();
-
         $this->attributes->setAttributes($attributes);
-
         return $this;
     }
-
     /**
      * Get a new attribute bag instance.
      *
@@ -376,9 +290,8 @@ abstract class Component
      */
     protected function newAttributeBag(array $attributes = [])
     {
-        return new ComponentAttributeBag($attributes);
+        return new \Illuminate\View\ComponentAttributeBag($attributes);
     }
-
     /**
      * Determine if the component should be rendered.
      *
@@ -386,9 +299,8 @@ abstract class Component
      */
     public function shouldRender()
     {
-        return true;
+        return \true;
     }
-
     /**
      * Get the evaluated view contents for the given view.
      *
@@ -401,7 +313,6 @@ abstract class Component
     {
         return $this->factory()->make($view, $data, $mergeData);
     }
-
     /**
      * Get the view factory instance.
      *
@@ -412,10 +323,8 @@ abstract class Component
         if (is_null(static::$factory)) {
             static::$factory = Container::getInstance()->make('view');
         }
-
         return static::$factory;
     }
-
     /**
      * Get the cached set of anonymous component constructor parameter names to exclude.
      *
@@ -423,24 +332,15 @@ abstract class Component
      */
     public static function ignoredParameterNames()
     {
-        if (! isset(static::$ignoredParameterNames[static::class])) {
-            $constructor = (new ReflectionClass(
-                static::class
-            ))->getConstructor();
-
-            if (! $constructor) {
+        if (!isset(static::$ignoredParameterNames[static::class])) {
+            $constructor = (new ReflectionClass(static::class))->getConstructor();
+            if (!$constructor) {
                 return static::$ignoredParameterNames[static::class] = [];
             }
-
-            static::$ignoredParameterNames[static::class] = (new Collection($constructor->getParameters()))
-                ->map
-                ->getName()
-                ->all();
+            static::$ignoredParameterNames[static::class] = (new Collection($constructor->getParameters()))->map->getName()->all();
         }
-
         return static::$ignoredParameterNames[static::class];
     }
-
     /**
      * Flush the component's cached state.
      *
@@ -453,7 +353,6 @@ abstract class Component
         static::$methodCache = [];
         static::$propertyCache = [];
     }
-
     /**
      * Forget the component's factory instance.
      *
@@ -463,7 +362,6 @@ abstract class Component
     {
         static::$factory = null;
     }
-
     /**
      * Forget the component's resolver callback.
      *
@@ -475,7 +373,6 @@ abstract class Component
     {
         static::$componentsResolver = null;
     }
-
     /**
      * Set the callback that should be used to resolve components within views.
      *

@@ -5,18 +5,15 @@ namespace Illuminate\Routing;
 use Illuminate\Container\Container;
 use Illuminate\Routing\Contracts\CallableDispatcher as CallableDispatcherContract;
 use ReflectionFunction;
-
 class CallableDispatcher implements CallableDispatcherContract
 {
-    use ResolvesRouteDependencies;
-
+    use \Illuminate\Routing\ResolvesRouteDependencies;
     /**
      * The container instance.
      *
      * @var \Illuminate\Container\Container
      */
     protected $container;
-
     /**
      * Create a new callable dispatcher instance.
      *
@@ -27,7 +24,6 @@ class CallableDispatcher implements CallableDispatcherContract
     {
         $this->container = $container;
     }
-
     /**
      * Dispatch a request to a given callable.
      *
@@ -35,11 +31,10 @@ class CallableDispatcher implements CallableDispatcherContract
      * @param  callable  $callable
      * @return mixed
      */
-    public function dispatch(Route $route, $callable)
+    public function dispatch(\Illuminate\Routing\Route $route, $callable)
     {
         return $callable(...array_values($this->resolveParameters($route, $callable)));
     }
-
     /**
      * Resolve the parameters for the callable.
      *
@@ -47,7 +42,7 @@ class CallableDispatcher implements CallableDispatcherContract
      * @param  callable  $callable
      * @return array
      */
-    protected function resolveParameters(Route $route, $callable)
+    protected function resolveParameters(\Illuminate\Routing\Route $route, $callable)
     {
         return $this->resolveMethodDependencies($route->parametersWithoutNulls(), new ReflectionFunction($callable));
     }

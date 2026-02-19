@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -23,7 +23,6 @@ use Cake\Core\Plugin;
 use Cake\Utility\Filesystem;
 use Cake\Utility\Inflector;
 use InvalidArgumentException;
-
 /**
  * Trait for symlinking / copying plugin assets to app's webroot.
  *
@@ -37,14 +36,12 @@ trait PluginAssetsTrait
      * @var \Cake\Console\Arguments
      */
     protected Arguments $args;
-
     /**
      * Console IO
      *
      * @var \Cake\Console\ConsoleIo
      */
     protected ConsoleIo $io;
-
     /**
      * Get list of plugins to process. Plugins without a webroot directory are skipped.
      *
@@ -59,42 +56,28 @@ trait PluginAssetsTrait
         } else {
             $pluginsList = [$name];
         }
-
         $plugins = [];
-
         foreach ($pluginsList as $plugin) {
             $path = Plugin::path($plugin) . 'webroot';
             if (!is_dir($path)) {
                 $this->io->verbose('', 1);
-                $this->io->verbose(
-                    sprintf('Skipping plugin %s. It does not have webroot folder.', $plugin),
-                    2,
-                );
+                $this->io->verbose(sprintf('Skipping plugin %s. It does not have webroot folder.', $plugin), 2);
                 continue;
             }
-
             $link = Inflector::underscore($plugin);
             $wwwRoot = Configure::read('App.wwwRoot');
             $dir = $wwwRoot;
-            $namespaced = false;
+            $namespaced = \false;
             if (str_contains($link, '/')) {
-                $namespaced = true;
+                $namespaced = \true;
                 $parts = explode('/', $link);
                 $link = array_pop($parts);
-                $dir = $wwwRoot . implode(DIRECTORY_SEPARATOR, $parts) . DIRECTORY_SEPARATOR;
+                $dir = $wwwRoot . implode(\DIRECTORY_SEPARATOR, $parts) . \DIRECTORY_SEPARATOR;
             }
-
-            $plugins[$plugin] = [
-                'srcPath' => Plugin::path($plugin) . 'webroot',
-                'destDir' => $dir,
-                'link' => $link,
-                'namespaced' => $namespaced,
-            ];
+            $plugins[$plugin] = ['srcPath' => Plugin::path($plugin) . 'webroot', 'destDir' => $dir, 'link' => $link, 'namespaced' => $namespaced];
         }
-
         return $plugins;
     }
-
     /**
      * Process plugins
      *
@@ -104,31 +87,20 @@ trait PluginAssetsTrait
      * @param bool $relative Relative. Default false.
      * @return void
      */
-    protected function _process(
-        array $plugins,
-        bool $copy = false,
-        bool $overwrite = false,
-        bool $relative = false,
-    ): void {
+    protected function _process(array $plugins, bool $copy = \false, bool $overwrite = \false, bool $relative = \false): void
+    {
         foreach ($plugins as $plugin => $config) {
             $this->io->out();
             $this->io->out('For plugin: ' . $plugin);
             $this->io->hr();
-
-            if (
-                $config['namespaced'] &&
-                !is_dir($config['destDir']) &&
-                !$this->_createDirectory($config['destDir'])
-            ) {
+            if ($config['namespaced'] && !is_dir($config['destDir']) && !$this->_createDirectory($config['destDir'])) {
                 continue;
             }
-
             $dest = $config['destDir'] . $config['link'];
             if ($copy) {
                 if ((is_link($dest) || $overwrite) && !$this->_remove($config)) {
                     continue;
                 }
-
                 if (file_exists($dest)) {
                     $this->io->verbose($dest . ' already exists', 1);
                 } else {
@@ -136,34 +108,24 @@ trait PluginAssetsTrait
                 }
                 continue;
             }
-
-            $result = $this->_createSymlink(
-                $config['srcPath'],
-                $dest,
-                $relative,
-            );
+            $result = $this->_createSymlink($config['srcPath'], $dest, $relative);
             if ($result) {
                 continue;
             }
-
             if ($this->_isSymlinkValid($config['srcPath'], $dest)) {
                 $this->io->verbose($dest . ' already exists', 1);
                 continue;
             }
-
             if (!$this->_remove($config)) {
                 continue;
             }
-
             if (!$this->_createSymlink($config['srcPath'], $dest)) {
                 continue;
             }
         }
-
         $this->io->out();
         $this->io->out('Done');
     }
-
     /**
      * Remove folder/symlink.
      *
@@ -173,40 +135,30 @@ trait PluginAssetsTrait
     protected function _remove(array $config): bool
     {
         if ($config['namespaced'] && !is_dir($config['destDir'])) {
-            return true;
+            return \true;
         }
-
         $dest = $config['destDir'] . $config['link'];
-
         if (is_link($dest)) {
             // phpcs:ignore
-            $success = DIRECTORY_SEPARATOR === '\\' ? @rmdir($dest) : @unlink($dest);
+            $success = \DIRECTORY_SEPARATOR === '\\' ? @rmdir($dest) : @unlink($dest);
             if ($success) {
                 $this->io->out('Unlinked ' . $dest);
-
-                return true;
+                return \true;
             }
             $this->io->error('Failed to unlink  ' . $dest);
-
-            return false;
+            return \false;
         }
-
         if (!file_exists($dest)) {
-            return true;
+            return \true;
         }
-
         $fs = new Filesystem();
         if (!$fs->deleteDir($dest)) {
             $this->io->error('Failed to delete ' . $dest);
-
-            return false;
+            return \false;
         }
-
         $this->io->out('Deleted ' . $dest);
-
-        return true;
+        return \true;
     }
-
     /**
      * Create directory
      *
@@ -216,20 +168,15 @@ trait PluginAssetsTrait
     protected function _createDirectory(string $dir): bool
     {
         // phpcs:disable
-        $result = @mkdir($dir, 0777 ^ umask(), true);
+        $result = @mkdir($dir, 0777 ^ umask(), \true);
         // phpcs:enable
-
         if ($result) {
             $this->io->out('Created directory ' . $dir);
-
-            return true;
+            return \true;
         }
-
         $this->io->error('Failed creating directory ' . $dir);
-
-        return false;
+        return \false;
     }
-
     /**
      * Create symlink
      *
@@ -238,25 +185,20 @@ trait PluginAssetsTrait
      * @param bool $relative Relative (true) or Absolute (false)
      * @return bool
      */
-    protected function _createSymlink(string $target, string $link, bool $relative = false): bool
+    protected function _createSymlink(string $target, string $link, bool $relative = \false): bool
     {
         if ($relative) {
             $target = $this->_makeRelativePath($link, $target);
         }
-
         // phpcs:disable
         $result = @symlink($target, $link);
         // phpcs:enable
-
         if ($result) {
             $this->io->out('Created symlink ' . $link);
-
-            return true;
+            return \true;
         }
-
-        return false;
+        return \false;
     }
-
     /**
      * Generate a relative path from one directory to another.
      *
@@ -266,20 +208,16 @@ trait PluginAssetsTrait
      */
     protected function _makeRelativePath(string $from, string $to): string
     {
-        $from = is_dir($from) ? rtrim($from, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR : dirname($from);
+        $from = is_dir($from) ? rtrim($from, \DIRECTORY_SEPARATOR) . \DIRECTORY_SEPARATOR : dirname($from);
         $from = realpath($from);
         $to = realpath($to);
-
-        if ($from === false || $to === false) {
+        if ($from === \false || $to === \false) {
             throw new InvalidArgumentException('Invalid path provided to _makeRelativePath.');
         }
-
-        $fromParts = explode(DIRECTORY_SEPARATOR, $from);
-        $toParts = explode(DIRECTORY_SEPARATOR, $to);
-
+        $fromParts = explode(\DIRECTORY_SEPARATOR, $from);
+        $toParts = explode(\DIRECTORY_SEPARATOR, $to);
         $fromCount = count($fromParts);
         $toCount = count($toParts);
-
         // Remove common parts
         while ($fromCount && $toCount && $fromParts[0] === $toParts[0]) {
             array_shift($fromParts);
@@ -287,10 +225,8 @@ trait PluginAssetsTrait
             $fromCount--;
             $toCount--;
         }
-
-        return str_repeat('..' . DIRECTORY_SEPARATOR, $fromCount) . implode(DIRECTORY_SEPARATOR, $toParts);
+        return str_repeat('..' . \DIRECTORY_SEPARATOR, $fromCount) . implode(\DIRECTORY_SEPARATOR, $toParts);
     }
-
     /**
      * Checks if symlink exist and points to the correct target.
      *
@@ -301,17 +237,14 @@ trait PluginAssetsTrait
     protected function _isSymlinkValid(string $target, string $link): bool
     {
         if (!is_link($link)) {
-            return false;
+            return \false;
         }
-
         $linkedPath = readlink($link);
-        if ($linkedPath === false) {
-            return false;
+        if ($linkedPath === \false) {
+            return \false;
         }
-
         return realpath($target) === realpath($linkedPath);
     }
-
     /**
      * Copy directory
      *
@@ -324,12 +257,9 @@ trait PluginAssetsTrait
         $fs = new Filesystem();
         if ($fs->copyDir($source, $destination)) {
             $this->io->out('Copied assets to directory ' . $destination);
-
-            return true;
+            return \true;
         }
-
         $this->io->error('Error copying assets to directory ' . $destination);
-
-        return false;
+        return \false;
     }
 }

@@ -4,7 +4,6 @@ namespace Illuminate\Validation\Rules;
 
 use Closure;
 use InvalidArgumentException;
-
 class ProhibitedIf
 {
     /**
@@ -13,7 +12,6 @@ class ProhibitedIf
      * @var \Closure|bool
      */
     public $condition;
-
     /**
      * Create a new prohibited validation rule based on a condition.
      *
@@ -30,7 +28,6 @@ class ProhibitedIf
             throw new InvalidArgumentException('The provided condition must be a callable or boolean.');
         }
     }
-
     /**
      * Convert the rule to a validation string.
      *
@@ -41,7 +38,6 @@ class ProhibitedIf
         if (is_callable($this->condition)) {
             return call_user_func($this->condition) ? 'prohibited' : '';
         }
-
         return $this->condition ? 'prohibited' : '';
     }
 }

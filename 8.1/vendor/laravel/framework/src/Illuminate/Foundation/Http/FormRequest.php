@@ -11,67 +11,57 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
 use Illuminate\Validation\ValidatesWhenResolvedTrait;
-
 class FormRequest extends Request implements ValidatesWhenResolved
 {
     use ValidatesWhenResolvedTrait;
-
     /**
      * The container instance.
      *
      * @var \Illuminate\Contracts\Container\Container
      */
     protected $container;
-
     /**
      * The redirector instance.
      *
      * @var \Illuminate\Routing\Redirector
      */
     protected $redirector;
-
     /**
      * The URI to redirect to if validation fails.
      *
      * @var string
      */
     protected $redirect;
-
     /**
      * The route to redirect to if validation fails.
      *
      * @var string
      */
     protected $redirectRoute;
-
     /**
      * The controller action to redirect to if validation fails.
      *
      * @var string
      */
     protected $redirectAction;
-
     /**
      * The key to be used for the view error bag.
      *
      * @var string
      */
     protected $errorBag = 'default';
-
     /**
      * Indicates whether validation should stop after the first rule failure.
      *
      * @var bool
      */
-    protected $stopOnFirstFailure = false;
-
+    protected $stopOnFirstFailure = \false;
     /**
      * The validator instance.
      *
      * @var \Illuminate\Contracts\Validation\Validator
      */
     protected $validator;
-
     /**
      * Get the validator instance for the request.
      *
@@ -82,31 +72,21 @@ class FormRequest extends Request implements ValidatesWhenResolved
         if ($this->validator) {
             return $this->validator;
         }
-
         $factory = $this->container->make(ValidationFactory::class);
-
         if (method_exists($this, 'validator')) {
             $validator = $this->container->call([$this, 'validator'], compact('factory'));
         } else {
             $validator = $this->createDefaultValidator($factory);
         }
-
         if (method_exists($this, 'withValidator')) {
             $this->withValidator($validator);
         }
-
         if (method_exists($this, 'after')) {
-            $validator->after($this->container->call(
-                $this->after(...),
-                ['validator' => $validator]
-            ));
+            $validator->after($this->container->call($this->after(...), ['validator' => $validator]));
         }
-
         $this->setValidator($validator);
-
         return $this->validator;
     }
-
     /**
      * Create the default validator instance.
      *
@@ -116,23 +96,12 @@ class FormRequest extends Request implements ValidatesWhenResolved
     protected function createDefaultValidator(ValidationFactory $factory)
     {
         $rules = $this->validationRules();
-
-        $validator = $factory->make(
-            $this->validationData(),
-            $rules,
-            $this->messages(),
-            $this->attributes(),
-        )->stopOnFirstFailure($this->stopOnFirstFailure);
-
+        $validator = $factory->make($this->validationData(), $rules, $this->messages(), $this->attributes())->stopOnFirstFailure($this->stopOnFirstFailure);
         if ($this->isPrecognitive()) {
-            $validator->setRules(
-                $this->filterPrecognitiveRules($validator->getRulesWithoutPlaceholders())
-            );
+            $validator->setRules($this->filterPrecognitiveRules($validator->getRulesWithoutPlaceholders()));
         }
-
         return $validator;
     }
-
     /**
      * Get data to be validated from the request.
      *
@@ -142,7 +111,6 @@ class FormRequest extends Request implements ValidatesWhenResolved
     {
         return $this->all();
     }
-
     /**
      * Get the validation rules for this form request.
      *
@@ -152,7 +120,6 @@ class FormRequest extends Request implements ValidatesWhenResolved
     {
         return method_exists($this, 'rules') ? $this->container->call([$this, 'rules']) : [];
     }
-
     /**
      * Handle a failed validation attempt.
      *
@@ -164,12 +131,8 @@ class FormRequest extends Request implements ValidatesWhenResolved
     protected function failedValidation(Validator $validator)
     {
         $exception = $validator->getException();
-
-        throw (new $exception($validator))
-                    ->errorBag($this->errorBag)
-                    ->redirectTo($this->getRedirectUrl());
+        throw (new $exception($validator))->errorBag($this->errorBag)->redirectTo($this->getRedirectUrl());
     }
-
     /**
      * Get the URL to redirect to on a validation error.
      *
@@ -178,7 +141,6 @@ class FormRequest extends Request implements ValidatesWhenResolved
     protected function getRedirectUrl()
     {
         $url = $this->redirector->getUrlGenerator();
-
         if ($this->redirect) {
             return $url->to($this->redirect);
         } elseif ($this->redirectRoute) {
@@ -186,10 +148,8 @@ class FormRequest extends Request implements ValidatesWhenResolved
         } elseif ($this->redirectAction) {
             return $url->action($this->redirectAction);
         }
-
         return $url->previous();
     }
-
     /**
      * Determine if the request passes the authorization check.
      *
@@ -201,13 +161,10 @@ class FormRequest extends Request implements ValidatesWhenResolved
     {
         if (method_exists($this, 'authorize')) {
             $result = $this->container->call([$this, 'authorize']);
-
             return $result instanceof Response ? $result->authorize() : $result;
         }
-
-        return true;
+        return \true;
     }
-
     /**
      * Handle a failed authorization attempt.
      *
@@ -217,9 +174,8 @@ class FormRequest extends Request implements ValidatesWhenResolved
      */
     protected function failedAuthorization()
     {
-        throw new AuthorizationException;
+        throw new AuthorizationException();
     }
-
     /**
      * Get a validated input container for the validated input.
      *
@@ -228,11 +184,8 @@ class FormRequest extends Request implements ValidatesWhenResolved
      */
     public function safe(?array $keys = null)
     {
-        return is_array($keys)
-                    ? $this->validator->safe()->only($keys)
-                    : $this->validator->safe();
+        return is_array($keys) ? $this->validator->safe()->only($keys) : $this->validator->safe();
     }
-
     /**
      * Get the validated data from the request.
      *
@@ -244,7 +197,6 @@ class FormRequest extends Request implements ValidatesWhenResolved
     {
         return data_get($this->validator->validated(), $key, $default);
     }
-
     /**
      * Get custom messages for validator errors.
      *
@@ -254,7 +206,6 @@ class FormRequest extends Request implements ValidatesWhenResolved
     {
         return [];
     }
-
     /**
      * Get custom attributes for validator errors.
      *
@@ -264,7 +215,6 @@ class FormRequest extends Request implements ValidatesWhenResolved
     {
         return [];
     }
-
     /**
      * Set the Validator instance.
      *
@@ -274,10 +224,8 @@ class FormRequest extends Request implements ValidatesWhenResolved
     public function setValidator(Validator $validator)
     {
         $this->validator = $validator;
-
         return $this;
     }
-
     /**
      * Set the Redirector instance.
      *
@@ -287,10 +235,8 @@ class FormRequest extends Request implements ValidatesWhenResolved
     public function setRedirector(Redirector $redirector)
     {
         $this->redirector = $redirector;
-
         return $this;
     }
-
     /**
      * Set the container implementation.
      *
@@ -300,7 +246,6 @@ class FormRequest extends Request implements ValidatesWhenResolved
     public function setContainer(Container $container)
     {
         $this->container = $container;
-
         return $this;
     }
 }

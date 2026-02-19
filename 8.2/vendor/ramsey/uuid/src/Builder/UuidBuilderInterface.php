@@ -9,14 +9,11 @@
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
  */
+declare (strict_types=1);
+namespace Odigos\Ramsey\Uuid\Builder;
 
-declare(strict_types=1);
-
-namespace Ramsey\Uuid\Builder;
-
-use Ramsey\Uuid\Codec\CodecInterface;
-use Ramsey\Uuid\UuidInterface;
-
+use Odigos\Ramsey\Uuid\Codec\CodecInterface;
+use Odigos\Ramsey\Uuid\UuidInterface;
 /**
  * A UUID builder builds instances of UuidInterface
  *

@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\SDK\Trace\SpanSuppression;
 
 /**
@@ -9,5 +8,5 @@ namespace OpenTelemetry\SDK\Trace\SpanSuppression;
  */
 interface SpanSuppressionStrategy
 {
-    public function getSuppressor(string $name, ?string $version, ?string $schemaUrl): SpanSuppressor;
+    public function getSuppressor(string $name, ?string $version, ?string $schemaUrl): \OpenTelemetry\SDK\Trace\SpanSuppression\SpanSuppressor;
 }

@@ -1,10 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\SDK\Resource;
 
 interface ResourceDetectorInterface
 {
-    public function getResource(): ResourceInfo;
+    public function getResource(): \OpenTelemetry\SDK\Resource\ResourceInfo;
 }

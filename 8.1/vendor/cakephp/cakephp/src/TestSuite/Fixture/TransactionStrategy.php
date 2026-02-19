@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -18,33 +18,29 @@ namespace Cake\TestSuite\Fixture;
 
 use Cake\Database\Connection;
 use Cake\Database\Exception\DatabaseException;
-
 /**
  * Fixture strategy that wraps fixtures in a transaction that is rolled back
  * after each test.
  *
  * Any test that calls Connection::rollback(true) will break this strategy.
  */
-class TransactionStrategy implements FixtureStrategyInterface
+class TransactionStrategy implements \Cake\TestSuite\Fixture\FixtureStrategyInterface
 {
     /**
      * @var \Cake\TestSuite\Fixture\FixtureHelper
      */
-    protected FixtureHelper $helper;
-
+    protected \Cake\TestSuite\Fixture\FixtureHelper $helper;
     /**
      * @var array<\Cake\Datasource\FixtureInterface>
      */
     protected array $fixtures = [];
-
     /**
      * Initialize strategy.
      */
     public function __construct()
     {
-        $this->helper = new FixtureHelper();
+        $this->helper = new \Cake\TestSuite\Fixture\FixtureHelper();
     }
-
     /**
      * @inheritDoc
      */
@@ -53,33 +49,20 @@ class TransactionStrategy implements FixtureStrategyInterface
         if (!$fixtureNames) {
             return;
         }
-
         $this->fixtures = $this->helper->loadFixtures($fixtureNames);
-
         $this->helper->runPerConnection(function ($connection): void {
             if ($connection instanceof Connection) {
-                assert(
-                    $connection->inTransaction() === false,
-                    'Cannot start transaction strategy inside a transaction. ' .
-                    'Ensure you have closed all open transactions.',
-                );
+                assert($connection->inTransaction() === \false, 'Cannot start transaction strategy inside a transaction. ' . 'Ensure you have closed all open transactions.');
                 $connection->enableSavePoints();
                 if (!$connection->isSavePointsEnabled()) {
-                    throw new DatabaseException(
-                        "Could not enable save points for the `{$connection->configName()}` connection. " .
-                            'Your database needs to support savepoints in order to use ' .
-                            'TransactionStrategy.',
-                    );
+                    throw new DatabaseException("Could not enable save points for the `{$connection->configName()}` connection. " . 'Your database needs to support savepoints in order to use ' . 'TransactionStrategy.');
                 }
-
                 $connection->begin();
                 $connection->createSavePoint('__fixtures__');
             }
         }, $this->fixtures);
-
         $this->helper->insert($this->fixtures);
     }
-
     /**
      * @inheritDoc
      */
@@ -87,7 +70,7 @@ class TransactionStrategy implements FixtureStrategyInterface
     {
         $this->helper->runPerConnection(function (Connection $connection): void {
             if ($connection->inTransaction()) {
-                $connection->rollback(true);
+                $connection->rollback(\true);
             }
         }, $this->fixtures);
     }

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright 2015-present MongoDB, Inc.
  *
@@ -14,7 +15,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 namespace MongoDB\Operation;
 
 use MongoDB\Driver\Command;
@@ -24,9 +24,7 @@ use MongoDB\Driver\Session;
 use MongoDB\Driver\WriteConcern;
 use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\Exception\UnsupportedException;
-
 use function is_integer;
-
 /**
  * Operation for the dropIndexes command.
  *
@@ -62,24 +60,19 @@ final class DropIndexes
         if ($indexName === '') {
             throw new InvalidArgumentException('$indexName cannot be empty');
         }
-
-        if (isset($this->options['maxTimeMS']) && ! is_integer($this->options['maxTimeMS'])) {
+        if (isset($this->options['maxTimeMS']) && !is_integer($this->options['maxTimeMS'])) {
             throw InvalidArgumentException::invalidType('"maxTimeMS" option', $this->options['maxTimeMS'], 'integer');
         }
-
-        if (isset($this->options['session']) && ! $this->options['session'] instanceof Session) {
+        if (isset($this->options['session']) && !$this->options['session'] instanceof Session) {
             throw InvalidArgumentException::invalidType('"session" option', $this->options['session'], Session::class);
         }
-
-        if (isset($this->options['writeConcern']) && ! $this->options['writeConcern'] instanceof WriteConcern) {
+        if (isset($this->options['writeConcern']) && !$this->options['writeConcern'] instanceof WriteConcern) {
             throw InvalidArgumentException::invalidType('"writeConcern" option', $this->options['writeConcern'], WriteConcern::class);
         }
-
         if (isset($this->options['writeConcern']) && $this->options['writeConcern']->isDefault()) {
             unset($this->options['writeConcern']);
         }
     }
-
     /**
      * Execute the operation.
      *
@@ -92,29 +85,21 @@ final class DropIndexes
         if ($inTransaction && isset($this->options['writeConcern'])) {
             throw UnsupportedException::writeConcernNotSupportedInTransaction();
         }
-
         $server->executeWriteCommand($this->databaseName, $this->createCommand(), $this->createOptions());
     }
-
     /**
      * Create the dropIndexes command.
      */
     private function createCommand(): Command
     {
-        $cmd = [
-            'dropIndexes' => $this->collectionName,
-            'index' => $this->indexName,
-        ];
-
+        $cmd = ['dropIndexes' => $this->collectionName, 'index' => $this->indexName];
         foreach (['comment', 'maxTimeMS'] as $option) {
             if (isset($this->options[$option])) {
                 $cmd[$option] = $this->options[$option];
             }
         }
-
         return new Command($cmd);
     }
-
     /**
      * Create options for executing the command.
      *
@@ -123,15 +108,12 @@ final class DropIndexes
     private function createOptions(): array
     {
         $options = [];
-
         if (isset($this->options['session'])) {
             $options['session'] = $this->options['session'];
         }
-
         if (isset($this->options['writeConcern'])) {
             $options['writeConcern'] = $this->options['writeConcern'];
         }
-
         return $options;
     }
 }

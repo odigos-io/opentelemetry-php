@@ -8,29 +8,25 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\VarDumper\Dumper;
 
 use Symfony\Component\VarDumper\Cloner\Data;
 use Symfony\Component\VarDumper\Dumper\ContextProvider\ContextProviderInterface;
-
 /**
  * @author Kévin Thérage <therage.kevin@gmail.com>
  */
-class ContextualizedDumper implements DataDumperInterface
+class ContextualizedDumper implements \Symfony\Component\VarDumper\Dumper\DataDumperInterface
 {
-    private DataDumperInterface $wrappedDumper;
+    private \Symfony\Component\VarDumper\Dumper\DataDumperInterface $wrappedDumper;
     private array $contextProviders;
-
     /**
      * @param ContextProviderInterface[] $contextProviders
      */
-    public function __construct(DataDumperInterface $wrappedDumper, array $contextProviders)
+    public function __construct(\Symfony\Component\VarDumper\Dumper\DataDumperInterface $wrappedDumper, array $contextProviders)
     {
         $this->wrappedDumper = $wrappedDumper;
         $this->contextProviders = $contextProviders;
     }
-
     /**
      * @return string|null
      */
@@ -40,7 +36,6 @@ class ContextualizedDumper implements DataDumperInterface
         foreach ($this->contextProviders as $contextProvider) {
             $context[$contextProvider::class] = $contextProvider->getContext();
         }
-
         return $this->wrappedDumper->dump($data->withContext($context));
     }
 }

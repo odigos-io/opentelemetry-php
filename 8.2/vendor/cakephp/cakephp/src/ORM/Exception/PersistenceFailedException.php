@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -18,7 +18,6 @@ use Cake\Core\Exception\CakeException;
 use Cake\Datasource\EntityInterface;
 use Cake\Utility\Hash;
 use Throwable;
-
 /**
  * Used when a strict save or delete fails
  */
@@ -30,12 +29,10 @@ class PersistenceFailedException extends CakeException
      * @var \Cake\Datasource\EntityInterface
      */
     protected EntityInterface $_entity;
-
     /**
      * @inheritDoc
      */
     protected string $_messageTemplate = 'Entity %s failure.';
-
     /**
      * Constructor.
      *
@@ -45,12 +42,8 @@ class PersistenceFailedException extends CakeException
      * @param int|null $code The code of the error, is also the HTTP status code for the error.
      * @param \Throwable|null $previous the previous exception.
      */
-    public function __construct(
-        EntityInterface $entity,
-        array|string $message,
-        ?int $code = null,
-        ?Throwable $previous = null,
-    ) {
+    public function __construct(EntityInterface $entity, array|string $message, ?int $code = null, ?Throwable $previous = null)
+    {
         $this->_entity = $entity;
         if (is_array($message)) {
             $errors = [];
@@ -64,7 +57,6 @@ class PersistenceFailedException extends CakeException
         }
         parent::__construct($message, $code, $previous);
     }
-
     /**
      * Get the passed in entity
      *

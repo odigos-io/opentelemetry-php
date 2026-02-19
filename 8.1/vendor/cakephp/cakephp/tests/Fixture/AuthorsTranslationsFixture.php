@@ -1,4 +1,5 @@
 <?php
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -15,7 +16,6 @@
 namespace Cake\Test\Fixture;
 
 use Cake\TestSuite\Fixture\TestFixture;
-
 /**
  * Class AuthorsTranslationsFixture
  */
@@ -26,7 +26,5 @@ class AuthorsTranslationsFixture extends TestFixture
      *
      * @var array
      */
-    public array $records = [
-        ['locale' => 'eng', 'id' => 1, 'name' => 'May-rianoh'],
-    ];
+    public array $records = [['locale' => 'eng', 'id' => 1, 'name' => 'May-rianoh']];
 }

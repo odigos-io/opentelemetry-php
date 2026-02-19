@@ -4,7 +4,6 @@ namespace Illuminate\Support\Facades;
 
 use Laravel\Ui\UiServiceProvider;
 use RuntimeException;
-
 /**
  * @method static \Illuminate\Contracts\Auth\Guard|\Illuminate\Contracts\Auth\StatefulGuard guard(string|null $name = null)
  * @method static \Illuminate\Auth\SessionGuard createSessionDriver(string $name, array $config)
@@ -68,7 +67,7 @@ use RuntimeException;
  * @see \Illuminate\Auth\AuthManager
  * @see \Illuminate\Auth\SessionGuard
  */
-class Auth extends Facade
+class Auth extends \Illuminate\Support\Facades\Facade
 {
     /**
      * Get the registered name of the component.
@@ -79,7 +78,6 @@ class Auth extends Facade
     {
         return 'auth';
     }
-
     /**
      * Register the typical authentication routes for an application.
      *
@@ -90,10 +88,9 @@ class Auth extends Facade
      */
     public static function routes(array $options = [])
     {
-        if (! static::$app->providerIsLoaded(UiServiceProvider::class)) {
+        if (!static::$app->providerIsLoaded(UiServiceProvider::class)) {
             throw new RuntimeException('In order to use the Auth::routes() method, please install the laravel/ui package.');
         }
-
         static::$app->make('router')->auth($options);
     }
 }

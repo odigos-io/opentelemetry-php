@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -23,7 +23,6 @@ use Cake\Event\EventListenerInterface;
 use Countable;
 use IteratorAggregate;
 use Traversable;
-
 /**
  * Acts as a registry/factory for objects.
  *
@@ -51,7 +50,6 @@ abstract class ObjectRegistry implements Countable, IteratorAggregate
      * @phpstan-var array<string, TObject>
      */
     protected array $_loaded = [];
-
     /**
      * Loads/constructs an object instance.
      *
@@ -94,7 +92,6 @@ abstract class ObjectRegistry implements Countable, IteratorAggregate
                 $config['className'] = $name;
             }
         }
-
         $loaded = isset($this->_loaded[$objName]);
         if ($loaded && $config !== []) {
             $this->_checkDuplicate($objName, $config);
@@ -102,7 +99,6 @@ abstract class ObjectRegistry implements Countable, IteratorAggregate
         if ($loaded) {
             return $this->_loaded[$objName];
         }
-
         $className = $name;
         if (is_string($name)) {
             $className = $this->_resolveClassName($name);
@@ -111,13 +107,10 @@ abstract class ObjectRegistry implements Countable, IteratorAggregate
                 $this->_throwMissingClassError($name, $plugin);
             }
         }
-
         $instance = $this->_create($className, $objName, $config);
         $this->_loaded[$objName] = $instance;
-
         return $instance;
     }
-
     /**
      * Check for duplicate object loading.
      *
@@ -147,7 +140,6 @@ abstract class ObjectRegistry implements Countable, IteratorAggregate
         }
         $existingConfig = $existing->getConfig();
         unset($config['enabled'], $existingConfig['enabled']);
-
         $failure = null;
         foreach ($config as $key => $value) {
             if (!array_key_exists($key, $existingConfig)) {
@@ -155,12 +147,7 @@ abstract class ObjectRegistry implements Countable, IteratorAggregate
                 break;
             }
             if (isset($existingConfig[$key]) && $existingConfig[$key] !== $value) {
-                $failure = sprintf(
-                    ' The `%s` key has a value of `%s` but previously had a value of `%s`',
-                    $key,
-                    json_encode($value, JSON_THROW_ON_ERROR),
-                    json_encode($existingConfig[$key], JSON_THROW_ON_ERROR),
-                );
+                $failure = sprintf(' The `%s` key has a value of `%s` but previously had a value of `%s`', $key, json_encode($value, \JSON_THROW_ON_ERROR), json_encode($existingConfig[$key], \JSON_THROW_ON_ERROR));
                 break;
             }
         }
@@ -168,7 +155,6 @@ abstract class ObjectRegistry implements Countable, IteratorAggregate
             throw new CakeException($msg . $failure);
         }
     }
-
     /**
      * Should resolve the classname for a given object type.
      *
@@ -177,7 +163,6 @@ abstract class ObjectRegistry implements Countable, IteratorAggregate
      * @phpstan-return class-string<TObject>|null
      */
     abstract protected function _resolveClassName(string $class): ?string;
-
     /**
      * Throw an exception when the requested object name is missing.
      *
@@ -187,7 +172,6 @@ abstract class ObjectRegistry implements Countable, IteratorAggregate
      * @throws \Exception
      */
     abstract protected function _throwMissingClassError(string $class, ?string $plugin): void;
-
     /**
      * Create an instance of a given classname.
      *
@@ -202,7 +186,6 @@ abstract class ObjectRegistry implements Countable, IteratorAggregate
      * @phpstan-return TObject
      */
     abstract protected function _create(object|string $class, string $alias, array $config): object;
-
     /**
      * Get the list of loaded objects.
      *
@@ -212,7 +195,6 @@ abstract class ObjectRegistry implements Countable, IteratorAggregate
     {
         return array_keys($this->_loaded);
     }
-
     /**
      * Check whether a given object is loaded.
      *
@@ -223,7 +205,6 @@ abstract class ObjectRegistry implements Countable, IteratorAggregate
     {
         return isset($this->_loaded[$name]);
     }
-
     /**
      * Get loaded object instance.
      *
@@ -237,10 +218,8 @@ abstract class ObjectRegistry implements Countable, IteratorAggregate
         if (!isset($this->_loaded[$name])) {
             throw new CakeException(sprintf('Unknown object `%s`.', $name));
         }
-
         return $this->_loaded[$name];
     }
-
     /**
      * Provide public read access to the loaded objects
      *
@@ -252,7 +231,6 @@ abstract class ObjectRegistry implements Countable, IteratorAggregate
     {
         return $this->_loaded[$name] ?? null;
     }
-
     /**
      * Provide isset access to _loaded
      *
@@ -263,7 +241,6 @@ abstract class ObjectRegistry implements Countable, IteratorAggregate
     {
         return $this->has($name);
     }
-
     /**
      * Sets an object.
      *
@@ -276,7 +253,6 @@ abstract class ObjectRegistry implements Countable, IteratorAggregate
     {
         $this->set($name, $object);
     }
-
     /**
      * Unsets an object.
      *
@@ -287,7 +263,6 @@ abstract class ObjectRegistry implements Countable, IteratorAggregate
     {
         $this->unload($name);
     }
-
     /**
      * Normalizes an object configuration array into associative form for making
      * lazy loading easier.
@@ -303,18 +278,14 @@ abstract class ObjectRegistry implements Countable, IteratorAggregate
                 $objectName = $config;
                 $config = [];
             }
-
             [$plugin, $name] = pluginSplit($objectName);
             if ($plugin) {
                 $config['className'] = $objectName;
             }
-
             $normal[$name] = $config;
         }
-
         return $normal;
     }
-
     /**
      * Clear loaded instances in the registry.
      *
@@ -325,12 +296,10 @@ abstract class ObjectRegistry implements Countable, IteratorAggregate
     public function reset()
     {
         foreach (array_keys($this->_loaded) as $name) {
-            $this->unload((string)$name);
+            $this->unload((string) $name);
         }
-
         return $this;
     }
-
     /**
      * Set an object directly into the registry by name.
      *
@@ -352,10 +321,8 @@ abstract class ObjectRegistry implements Countable, IteratorAggregate
             $this->getEventManager()->on($object);
         }
         $this->_loaded[$name] = $object;
-
         return $this;
     }
-
     /**
      * Remove an object from the registry.
      *
@@ -369,16 +336,13 @@ abstract class ObjectRegistry implements Countable, IteratorAggregate
         if (!isset($this->_loaded[$name])) {
             throw new CakeException(sprintf('Object named `%s` is not loaded.', $name));
         }
-
         $object = $this->_loaded[$name];
         if ($this instanceof EventDispatcherInterface && $object instanceof EventListenerInterface) {
             $this->getEventManager()->off($object);
         }
         unset($this->_loaded[$name]);
-
         return $this;
     }
-
     /**
      * Returns an array iterator.
      *
@@ -389,7 +353,6 @@ abstract class ObjectRegistry implements Countable, IteratorAggregate
     {
         return new ArrayIterator($this->_loaded);
     }
-
     /**
      * Returns the number of loaded objects.
      *
@@ -399,7 +362,6 @@ abstract class ObjectRegistry implements Countable, IteratorAggregate
     {
         return count($this->_loaded);
     }
-
     /**
      * Debug friendly object properties.
      *
@@ -411,7 +373,6 @@ abstract class ObjectRegistry implements Countable, IteratorAggregate
         if (isset($properties['_loaded'])) {
             $properties['_loaded'] = array_keys($properties['_loaded']);
         }
-
         return $properties;
     }
 }

@@ -4,7 +4,6 @@ namespace Http\Client\Exception;
 
 use Psr\Http\Client\RequestExceptionInterface as PsrRequestException;
 use Psr\Http\Message\RequestInterface;
-
 /**
  * Exception for when a request failed, providing access to the failed request.
  *
@@ -13,17 +12,15 @@ use Psr\Http\Message\RequestInterface;
  *
  * @author Márk Sági-Kazár <mark.sagikazar@gmail.com>
  */
-class RequestException extends TransferException implements PsrRequestException
+class RequestException extends \Http\Client\Exception\TransferException implements PsrRequestException
 {
-    use RequestAwareTrait;
-
+    use \Http\Client\Exception\RequestAwareTrait;
     /**
      * @param string $message
      */
     public function __construct($message, RequestInterface $request, ?\Exception $previous = null)
     {
         $this->setRequest($request);
-
         parent::__construct($message, 0, $previous);
     }
 }

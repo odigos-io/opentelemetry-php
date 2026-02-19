@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenAI\Responses\Responses;
 
 use OpenAI\Actions\Responses\OutputObjects;
@@ -36,7 +35,6 @@ use OpenAI\Responses\Responses\Tool\WebSearchTool;
 use OpenAI\Responses\Responses\ToolChoice\FunctionToolChoice;
 use OpenAI\Responses\Responses\ToolChoice\HostedToolChoice;
 use OpenAI\Testing\Responses\Concerns\Fakeable;
-
 /**
  * @phpstan-import-type ResponseFormatType from CreateResponseFormat
  * @phpstan-import-type ErrorType from GenericResponseError
@@ -59,10 +57,8 @@ final class RetrieveResponse implements ResponseContract, ResponseHasMetaInforma
      * @use ArrayAccessible<RetrieveResponseType>
      */
     use ArrayAccessible;
-
     use Fakeable;
     use HasMetaInformation;
-
     /**
      * @param  'response'  $object
      * @param  'completed'|'failed'|'in_progress'|'incomplete'  $status
@@ -72,42 +68,9 @@ final class RetrieveResponse implements ResponseContract, ResponseHasMetaInforma
      * @param  'auto'|'disabled'|null  $truncation
      * @param  array<string, string>  $metadata
      */
-    private function __construct(
-        public readonly string $id,
-        public readonly ?bool $background,
-        public readonly string $object,
-        public readonly int $createdAt,
-        public readonly string $status,
-        public readonly ?GenericResponseError $error,
-        public readonly ?CreateResponseIncompleteDetails $incompleteDetails,
-        public readonly array|string|null $instructions,
-        public readonly ?int $maxToolCalls,
-        public readonly ?int $maxOutputTokens,
-        public readonly string $model,
-        public readonly array $output,
-        public readonly ?string $outputText,
-        public readonly bool $parallelToolCalls,
-        public readonly ?string $previousResponseId,
-        public readonly ?ReferencePromptObject $prompt,
-        public readonly ?string $promptCacheKey,
-        public readonly ?string $safetyIdentifier,
-        public readonly ?string $serviceTier,
-        public readonly ?CreateResponseReasoning $reasoning,
-        public readonly bool $store,
-        public readonly ?float $temperature,
-        public readonly CreateResponseFormat $text,
-        public readonly string|FunctionToolChoice|HostedToolChoice $toolChoice,
-        public readonly array $tools,
-        public readonly ?int $topLogProbs,
-        public readonly ?float $topP,
-        public readonly ?string $truncation,
-        public readonly ?CreateResponseUsage $usage,
-        public readonly ?string $user,
-        public readonly ?string $verbosity,
-        public array $metadata,
-        private readonly MetaInformation $meta,
-    ) {}
-
+    private function __construct(public readonly string $id, public readonly ?bool $background, public readonly string $object, public readonly int $createdAt, public readonly string $status, public readonly ?\OpenAI\Responses\Responses\GenericResponseError $error, public readonly ?\OpenAI\Responses\Responses\CreateResponseIncompleteDetails $incompleteDetails, public readonly array|string|null $instructions, public readonly ?int $maxToolCalls, public readonly ?int $maxOutputTokens, public readonly string $model, public readonly array $output, public readonly ?string $outputText, public readonly bool $parallelToolCalls, public readonly ?string $previousResponseId, public readonly ?\OpenAI\Responses\Responses\ReferencePromptObject $prompt, public readonly ?string $promptCacheKey, public readonly ?string $safetyIdentifier, public readonly ?string $serviceTier, public readonly ?\OpenAI\Responses\Responses\CreateResponseReasoning $reasoning, public readonly bool $store, public readonly ?float $temperature, public readonly \OpenAI\Responses\Responses\CreateResponseFormat $text, public readonly string|FunctionToolChoice|HostedToolChoice $toolChoice, public readonly array $tools, public readonly ?int $topLogProbs, public readonly ?float $topP, public readonly ?string $truncation, public readonly ?\OpenAI\Responses\Responses\CreateResponseUsage $usage, public readonly ?string $user, public readonly ?string $verbosity, public array $metadata, private readonly MetaInformation $meta)
+    {
+    }
     /**
      * @param  RetrieveResponseType  $attributes
      */
@@ -116,54 +79,8 @@ final class RetrieveResponse implements ResponseContract, ResponseHasMetaInforma
         $output = OutputObjects::parse($attributes['output']);
         $toolChoice = ToolChoiceObjects::parse($attributes['tool_choice']);
         $tools = ToolObjects::parse($attributes['tools']);
-
-        return new self(
-            id: $attributes['id'],
-            background: $attributes['background'] ?? null,
-            object: $attributes['object'],
-            createdAt: $attributes['created_at'],
-            status: $attributes['status'],
-            error: isset($attributes['error'])
-                ? GenericResponseError::from($attributes['error'])
-                : null,
-            incompleteDetails: isset($attributes['incomplete_details'])
-                ? CreateResponseIncompleteDetails::from($attributes['incomplete_details'])
-                : null,
-            instructions: $attributes['instructions'],
-            maxToolCalls: $attributes['max_tool_calls'] ?? null,
-            maxOutputTokens: $attributes['max_output_tokens'],
-            model: $attributes['model'],
-            output: $output,
-            outputText: OutputText::parse($output),
-            parallelToolCalls: $attributes['parallel_tool_calls'],
-            previousResponseId: $attributes['previous_response_id'],
-            prompt: isset($attributes['prompt'])
-                ? ReferencePromptObject::from($attributes['prompt'])
-                : null,
-            promptCacheKey: $attributes['prompt_cache_key'] ?? null,
-            safetyIdentifier: $attributes['safety_identifier'] ?? null,
-            serviceTier: $attributes['service_tier'] ?? null,
-            reasoning: isset($attributes['reasoning'])
-                ? CreateResponseReasoning::from($attributes['reasoning'])
-                : null,
-            store: $attributes['store'],
-            temperature: $attributes['temperature'],
-            text: CreateResponseFormat::from($attributes['text']),
-            toolChoice: $toolChoice,
-            tools: $tools,
-            topLogProbs: $attributes['top_logprobs'] ?? null,
-            topP: $attributes['top_p'],
-            truncation: $attributes['truncation'],
-            usage: isset($attributes['usage'])
-                ? CreateResponseUsage::from($attributes['usage'])
-                : null,
-            user: $attributes['user'] ?? null,
-            verbosity: $attributes['verbosity'] ?? null,
-            metadata: $attributes['metadata'] ?? [],
-            meta: $meta,
-        );
+        return new self(id: $attributes['id'], background: $attributes['background'] ?? null, object: $attributes['object'], createdAt: $attributes['created_at'], status: $attributes['status'], error: isset($attributes['error']) ? \OpenAI\Responses\Responses\GenericResponseError::from($attributes['error']) : null, incompleteDetails: isset($attributes['incomplete_details']) ? \OpenAI\Responses\Responses\CreateResponseIncompleteDetails::from($attributes['incomplete_details']) : null, instructions: $attributes['instructions'], maxToolCalls: $attributes['max_tool_calls'] ?? null, maxOutputTokens: $attributes['max_output_tokens'], model: $attributes['model'], output: $output, outputText: OutputText::parse($output), parallelToolCalls: $attributes['parallel_tool_calls'], previousResponseId: $attributes['previous_response_id'], prompt: isset($attributes['prompt']) ? \OpenAI\Responses\Responses\ReferencePromptObject::from($attributes['prompt']) : null, promptCacheKey: $attributes['prompt_cache_key'] ?? null, safetyIdentifier: $attributes['safety_identifier'] ?? null, serviceTier: $attributes['service_tier'] ?? null, reasoning: isset($attributes['reasoning']) ? \OpenAI\Responses\Responses\CreateResponseReasoning::from($attributes['reasoning']) : null, store: $attributes['store'], temperature: $attributes['temperature'], text: \OpenAI\Responses\Responses\CreateResponseFormat::from($attributes['text']), toolChoice: $toolChoice, tools: $tools, topLogProbs: $attributes['top_logprobs'] ?? null, topP: $attributes['top_p'], truncation: $attributes['truncation'], usage: isset($attributes['usage']) ? \OpenAI\Responses\Responses\CreateResponseUsage::from($attributes['usage']) : null, user: $attributes['user'] ?? null, verbosity: $attributes['verbosity'] ?? null, metadata: $attributes['metadata'] ?? [], meta: $meta);
     }
-
     /**
      * {@inheritDoc}
      */
@@ -171,47 +88,6 @@ final class RetrieveResponse implements ResponseContract, ResponseHasMetaInforma
     {
         // https://github.com/phpstan/phpstan/issues/8438
         // @phpstan-ignore-next-line
-        return [
-            'id' => $this->id,
-            'background' => $this->background,
-            'object' => $this->object,
-            'created_at' => $this->createdAt,
-            'status' => $this->status,
-            'error' => $this->error?->toArray(),
-            'incomplete_details' => $this->incompleteDetails?->toArray(),
-            'instructions' => $this->instructions,
-            'max_tool_calls' => $this->maxToolCalls,
-            'max_output_tokens' => $this->maxOutputTokens,
-            'metadata' => $this->metadata ?? [],
-            'model' => $this->model,
-            'output' => array_map(
-                fn (OutputMessage|OutputComputerToolCall|OutputFileSearchToolCall|OutputWebSearchToolCall|OutputFunctionToolCall|OutputReasoning|OutputMcpListTools|OutputMcpApprovalRequest|OutputMcpCall|OutputImageGenerationToolCall|OutputCodeInterpreterToolCall|OutputLocalShellCall|OutputCustomToolCall $output): array => $output->toArray(),
-                $this->output
-            ),
-            'output_text' => $this->outputText,
-            'parallel_tool_calls' => $this->parallelToolCalls,
-            'previous_response_id' => $this->previousResponseId,
-            'prompt' => $this->prompt?->toArray(),
-            'prompt_cache_key' => $this->promptCacheKey,
-            'safety_identifier' => $this->safetyIdentifier,
-            'service_tier' => $this->serviceTier,
-            'reasoning' => $this->reasoning?->toArray(),
-            'store' => $this->store,
-            'temperature' => $this->temperature,
-            'text' => $this->text->toArray(),
-            'tool_choice' => is_string($this->toolChoice)
-                ? $this->toolChoice
-                : $this->toolChoice->toArray(),
-            'tools' => array_map(
-                fn (ComputerUseTool|FileSearchTool|FunctionTool|WebSearchTool|ImageGenerationTool|RemoteMcpTool|CodeInterpreterTool $tool): array => $tool->toArray(),
-                $this->tools
-            ),
-            'top_logprobs' => $this->topLogProbs,
-            'top_p' => $this->topP,
-            'truncation' => $this->truncation,
-            'usage' => $this->usage?->toArray(),
-            'user' => $this->user,
-            'verbosity' => $this->verbosity,
-        ];
+        return ['id' => $this->id, 'background' => $this->background, 'object' => $this->object, 'created_at' => $this->createdAt, 'status' => $this->status, 'error' => $this->error?->toArray(), 'incomplete_details' => $this->incompleteDetails?->toArray(), 'instructions' => $this->instructions, 'max_tool_calls' => $this->maxToolCalls, 'max_output_tokens' => $this->maxOutputTokens, 'metadata' => $this->metadata ?? [], 'model' => $this->model, 'output' => array_map(fn(OutputMessage|OutputComputerToolCall|OutputFileSearchToolCall|OutputWebSearchToolCall|OutputFunctionToolCall|OutputReasoning|OutputMcpListTools|OutputMcpApprovalRequest|OutputMcpCall|OutputImageGenerationToolCall|OutputCodeInterpreterToolCall|OutputLocalShellCall|OutputCustomToolCall $output): array => $output->toArray(), $this->output), 'output_text' => $this->outputText, 'parallel_tool_calls' => $this->parallelToolCalls, 'previous_response_id' => $this->previousResponseId, 'prompt' => $this->prompt?->toArray(), 'prompt_cache_key' => $this->promptCacheKey, 'safety_identifier' => $this->safetyIdentifier, 'service_tier' => $this->serviceTier, 'reasoning' => $this->reasoning?->toArray(), 'store' => $this->store, 'temperature' => $this->temperature, 'text' => $this->text->toArray(), 'tool_choice' => is_string($this->toolChoice) ? $this->toolChoice : $this->toolChoice->toArray(), 'tools' => array_map(fn(ComputerUseTool|FileSearchTool|FunctionTool|WebSearchTool|ImageGenerationTool|RemoteMcpTool|CodeInterpreterTool $tool): array => $tool->toArray(), $this->tools), 'top_logprobs' => $this->topLogProbs, 'top_p' => $this->topP, 'truncation' => $this->truncation, 'usage' => $this->usage?->toArray(), 'user' => $this->user, 'verbosity' => $this->verbosity];
     }
 }

@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the league/config package.
  *
@@ -10,12 +9,10 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Odigos\League\Config;
 
-namespace League\Config;
-
-use League\Config\Exception\UnknownOptionException;
-use League\Config\Exception\ValidationException;
-
+use Odigos\League\Config\Exception\UnknownOptionException;
+use Odigos\League\Config\Exception\ValidationException;
 /**
  * Interface for reading configuration values
  */
@@ -32,7 +29,6 @@ interface ConfigurationInterface
      * @throws UnknownOptionException if the requested key does not exist or is malformed
      */
     public function get(string $key);
-
     /**
      * @param string $key Configuration option path/key
      *

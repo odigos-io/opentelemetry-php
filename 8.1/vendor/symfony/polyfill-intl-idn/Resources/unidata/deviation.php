@@ -1,8 +1,5 @@
 <?php
 
-return array (
-  223 => 'ss',
-  962 => 'σ',
-  8204 => '',
-  8205 => '',
-);
+namespace Odigos;
+
+return array(223 => 'ss', 962 => 'σ', 8204 => '', 8205 => '');

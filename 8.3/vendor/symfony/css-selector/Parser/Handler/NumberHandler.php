@@ -8,14 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\CssSelector\Parser\Handler;
 
 use Symfony\Component\CssSelector\Parser\Reader;
 use Symfony\Component\CssSelector\Parser\Token;
 use Symfony\Component\CssSelector\Parser\Tokenizer\TokenizerPatterns;
 use Symfony\Component\CssSelector\Parser\TokenStream;
-
 /**
  * CSS selector comment handler.
  *
@@ -26,24 +24,19 @@ use Symfony\Component\CssSelector\Parser\TokenStream;
  *
  * @internal
  */
-class NumberHandler implements HandlerInterface
+class NumberHandler implements \Symfony\Component\CssSelector\Parser\Handler\HandlerInterface
 {
-    public function __construct(
-        private TokenizerPatterns $patterns,
-    ) {
+    public function __construct(private TokenizerPatterns $patterns)
+    {
     }
-
     public function handle(Reader $reader, TokenStream $stream): bool
     {
         $match = $reader->findPattern($this->patterns->getNumberPattern());
-
         if (!$match) {
-            return false;
+            return \false;
         }
-
         $stream->push(new Token(Token::TYPE_NUMBER, $match[0], $reader->getPosition()));
         $reader->moveForward(\strlen($match[0]));
-
-        return true;
+        return \true;
     }
 }

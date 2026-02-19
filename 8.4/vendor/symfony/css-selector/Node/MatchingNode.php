@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\CssSelector\Node;
 
 /**
@@ -21,35 +20,22 @@ namespace Symfony\Component\CssSelector\Node;
  *
  * @internal
  */
-class MatchingNode extends AbstractNode
+class MatchingNode extends \Symfony\Component\CssSelector\Node\AbstractNode
 {
     /**
      * @param array<NodeInterface> $arguments
      */
-    public function __construct(
-        public readonly NodeInterface $selector,
-        public readonly array $arguments = [],
-    ) {
-    }
-
-    public function getSpecificity(): Specificity
+    public function __construct(public readonly \Symfony\Component\CssSelector\Node\NodeInterface $selector, public readonly array $arguments = [])
     {
-        $argumentsSpecificity = array_reduce(
-            $this->arguments,
-            fn ($c, $n) => 1 === $n->getSpecificity()->compareTo($c) ? $n->getSpecificity() : $c,
-            new Specificity(0, 0, 0),
-        );
-
+    }
+    public function getSpecificity(): \Symfony\Component\CssSelector\Node\Specificity
+    {
+        $argumentsSpecificity = array_reduce($this->arguments, fn($c, $n) => 1 === $n->getSpecificity()->compareTo($c) ? $n->getSpecificity() : $c, new \Symfony\Component\CssSelector\Node\Specificity(0, 0, 0));
         return $this->selector->getSpecificity()->plus($argumentsSpecificity);
     }
-
     public function __toString(): string
     {
-        $selectorArguments = array_map(
-            fn ($n): string => ltrim((string) $n, '*'),
-            $this->arguments,
-        );
-
+        $selectorArguments = array_map(fn($n): string => ltrim((string) $n, '*'), $this->arguments);
         return \sprintf('%s[%s:is(%s)]', $this->getNodeName(), $this->selector, implode(', ', $selectorArguments));
     }
 }

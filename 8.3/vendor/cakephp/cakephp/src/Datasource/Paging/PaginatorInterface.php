@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -29,9 +29,5 @@ interface PaginatorInterface
      * @param array $settings The settings/configuration used for pagination.
      * @return \Cake\Datasource\Paging\PaginatedInterface
      */
-    public function paginate(
-        mixed $target,
-        array $params = [],
-        array $settings = [],
-    ): PaginatedInterface;
+    public function paginate(mixed $target, array $params = [], array $settings = []): \Cake\Datasource\Paging\PaginatedInterface;
 }

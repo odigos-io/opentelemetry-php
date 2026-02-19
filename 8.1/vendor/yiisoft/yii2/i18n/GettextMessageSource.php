@@ -1,15 +1,14 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\i18n;
 
-use Yii;
+use Odigos\Yii;
 use yii\base\InvalidArgumentException;
-
 /**
  * GettextMessageSource represents a message source that is based on GNU Gettext.
  *
@@ -27,7 +26,7 @@ use yii\base\InvalidArgumentException;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class GettextMessageSource extends MessageSource
+class GettextMessageSource extends \yii\i18n\MessageSource
 {
     public const MO_FILE_EXT = '.mo';
     public const PO_FILE_EXT = '.po';
@@ -42,13 +41,11 @@ class GettextMessageSource extends MessageSource
     /**
      * @var bool whether to use generated MO files
      */
-    public $useMoFile = true;
+    public $useMoFile = \true;
     /**
      * @var bool whether to use big-endian when reading and writing an integer
      */
-    public $useBigEndian = false;
-
-
+    public $useBigEndian = \false;
     /**
      * Loads the message translation for the specified $language and $category.
      * If translation for specific locale code such as `en-US` isn't found it
@@ -68,21 +65,17 @@ class GettextMessageSource extends MessageSource
     {
         $messageFile = $this->getMessageFilePath($language);
         $messages = $this->loadMessagesFromFile($messageFile, $category);
-
         $fallbackLanguage = substr($language, 0, 2);
         $fallbackSourceLanguage = substr($this->sourceLanguage, 0, 2);
-
         if ($fallbackLanguage !== '' && $fallbackLanguage !== $language) {
             $messages = $this->loadFallbackMessages($category, $fallbackLanguage, $messages, $messageFile);
         } elseif ($fallbackSourceLanguage !== '' && $language === $fallbackSourceLanguage) {
             $messages = $this->loadFallbackMessages($category, $this->sourceLanguage, $messages, $messageFile);
         } elseif ($messages === null) {
-            Yii::error("The message file for category '$category' does not exist: $messageFile", __METHOD__);
+            Yii::error("The message file for category '{$category}' does not exist: {$messageFile}", __METHOD__);
         }
-
         return (array) $messages;
     }
-
     /**
      * The method is normally called by [[loadMessages]] to load the fallback messages for the language.
      * Method tries to load the $category messages for the $fallbackLanguage and adds them to the $messages array.
@@ -100,14 +93,8 @@ class GettextMessageSource extends MessageSource
     {
         $fallbackMessageFile = $this->getMessageFilePath($fallbackLanguage);
         $fallbackMessages = $this->loadMessagesFromFile($fallbackMessageFile, $category);
-
-        if (
-            $messages === null && $fallbackMessages === null
-            && $fallbackLanguage !== $this->sourceLanguage
-            && strpos($this->sourceLanguage, $fallbackLanguage) !== 0
-        ) {
-            Yii::error("The message file for category '$category' does not exist: $originalMessageFile "
-                . "Fallback file does not exist as well: $fallbackMessageFile", __METHOD__);
+        if ($messages === null && $fallbackMessages === null && $fallbackLanguage !== $this->sourceLanguage && strpos($this->sourceLanguage, $fallbackLanguage) !== 0) {
+            Yii::error("The message file for category '{$category}' does not exist: {$originalMessageFile} " . "Fallback file does not exist as well: {$fallbackMessageFile}", __METHOD__);
         } elseif (empty($messages)) {
             return $fallbackMessages;
         } elseif (!empty($fallbackMessages)) {
@@ -117,10 +104,8 @@ class GettextMessageSource extends MessageSource
                 }
             }
         }
-
         return (array) $messages;
     }
-
     /**
      * Returns message file path for the specified language and category.
      *
@@ -139,10 +124,8 @@ class GettextMessageSource extends MessageSource
         } else {
             $messageFile .= self::PO_FILE_EXT;
         }
-
         return $messageFile;
     }
-
     /**
      * Loads the message translation for the specified language and category or returns null if file doesn't exist.
      *
@@ -154,18 +137,16 @@ class GettextMessageSource extends MessageSource
     {
         if (is_file($messageFile)) {
             if ($this->useMoFile) {
-                $gettextFile = new GettextMoFile(['useBigEndian' => $this->useBigEndian]);
+                $gettextFile = new \yii\i18n\GettextMoFile(['useBigEndian' => $this->useBigEndian]);
             } else {
-                $gettextFile = new GettextPoFile();
+                $gettextFile = new \yii\i18n\GettextPoFile();
             }
             $messages = $gettextFile->load($messageFile, $category);
             if (!is_array($messages)) {
                 $messages = [];
             }
-
             return $messages;
         }
-
         return null;
     }
 }

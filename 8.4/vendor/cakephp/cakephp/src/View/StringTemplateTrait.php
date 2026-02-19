@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -17,7 +17,6 @@ declare(strict_types=1);
 namespace Cake\View;
 
 use function Cake\Core\deprecationWarning;
-
 /**
  * Adds string template functionality to any class by providing methods to
  * load and parse string templates.
@@ -33,8 +32,7 @@ trait StringTemplateTrait
      *
      * @var \Cake\View\StringTemplate|null
      */
-    protected ?StringTemplate $_templater = null;
-
+    protected ?\Cake\View\StringTemplate $_templater = null;
     /**
      * Sets templates to use.
      *
@@ -44,10 +42,8 @@ trait StringTemplateTrait
     public function setTemplates(array $templates)
     {
         $this->templater()->add($templates);
-
         return $this;
     }
-
     /**
      * Gets templates to use or a specific template.
      *
@@ -59,15 +55,10 @@ trait StringTemplateTrait
     public function getTemplates(?string $template = null): array|string
     {
         if ($template !== null) {
-            deprecationWarning(
-                '5.3.0',
-                'Returning a concrete template from getTemplates() is deprecated. Use getTemplate() instead.',
-            );
+            deprecationWarning('5.3.0', 'Returning a concrete template from getTemplates() is deprecated. Use getTemplate() instead.');
         }
-
         return $this->templater()->get($template);
     }
-
     /**
      * Gets templates to use or a specific template.
      *
@@ -78,7 +69,6 @@ trait StringTemplateTrait
     {
         return $this->templater()->get($template);
     }
-
     /**
      * Formats a template string with $data
      *
@@ -90,19 +80,17 @@ trait StringTemplateTrait
     {
         return $this->templater()->format($name, $data);
     }
-
     /**
      * Returns the templater instance.
      *
      * @return \Cake\View\StringTemplate
      */
-    public function templater(): StringTemplate
+    public function templater(): \Cake\View\StringTemplate
     {
         if ($this->_templater === null) {
             /** @var class-string<\Cake\View\StringTemplate> $class */
-            $class = $this->getConfig('templateClass') ?: StringTemplate::class;
+            $class = $this->getConfig('templateClass') ?: \Cake\View\StringTemplate::class;
             $this->_templater = new $class();
-
             $templates = $this->getConfig('templates');
             if ($templates) {
                 if (is_string($templates)) {
@@ -113,7 +101,6 @@ trait StringTemplateTrait
                 }
             }
         }
-
         return $this->_templater;
     }
 }

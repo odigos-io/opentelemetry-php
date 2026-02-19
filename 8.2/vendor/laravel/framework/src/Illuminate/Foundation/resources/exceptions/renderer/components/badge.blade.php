@@ -45,3 +45,4 @@ $classes = implode(' ', [$baseClasses, $typeClasses, $variantClasses]);
 <div {{ $attributes->merge(['class' => $classes]) }}>
     {{ $slot }}
 </div>
+

@@ -9,10 +9,8 @@
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
  */
-
-declare(strict_types=1);
-
-namespace Ramsey\Uuid;
+declare (strict_types=1);
+namespace Odigos\Ramsey\Uuid;
 
 /**
  * Provides binary math utilities
@@ -32,9 +30,8 @@ class BinaryUtils
      */
     public static function applyVariant(int $clockSeq): int
     {
-        return ($clockSeq & 0x3fff) | 0x8000;
+        return $clockSeq & 0x3fff | 0x8000;
     }
-
     /**
      * Applies the version field to the 16-bit `time_hi_and_version` field
      *
@@ -49,6 +46,6 @@ class BinaryUtils
      */
     public static function applyVersion(int $timeHi, int $version): int
     {
-        return ($timeHi & 0x0fff) | ($version << 12);
+        return $timeHi & 0xfff | $version << 12;
     }
 }

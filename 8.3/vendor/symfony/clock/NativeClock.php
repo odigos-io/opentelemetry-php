@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\Clock;
 
 /**
@@ -16,10 +15,9 @@ namespace Symfony\Component\Clock;
  *
  * @author Nicolas Grekas <p@tchwork.com>
  */
-final class NativeClock implements ClockInterface
+final class NativeClock implements \Symfony\Component\Clock\ClockInterface
 {
     private \DateTimeZone $timezone;
-
     /**
      * @throws \DateInvalidTimeZoneException When $timezone is invalid
      */
@@ -27,23 +25,19 @@ final class NativeClock implements ClockInterface
     {
         $this->timezone = \is_string($timezone ??= date_default_timezone_get()) ? $this->withTimeZone($timezone)->timezone : $timezone;
     }
-
-    public function now(): DatePoint
+    public function now(): \Symfony\Component\Clock\DatePoint
     {
-        return DatePoint::createFromInterface(new \DateTimeImmutable('now', $this->timezone));
+        return \Symfony\Component\Clock\DatePoint::createFromInterface(new \DateTimeImmutable('now', $this->timezone));
     }
-
     public function sleep(float|int $seconds): void
     {
         if (0 < $s = (int) $seconds) {
             sleep($s);
         }
-
         if (0 < $us = $seconds - $s) {
-            usleep((int) ($us * 1E6));
+            usleep((int) ($us * 1000000.0));
         }
     }
-
     /**
      * @throws \DateInvalidTimeZoneException When $timezone is invalid
      */
@@ -52,10 +46,8 @@ final class NativeClock implements ClockInterface
         if (\is_string($timezone)) {
             $timezone = new \DateTimeZone($timezone);
         }
-
         $clone = clone $this;
         $clone->timezone = $timezone;
-
         return $clone;
     }
 }

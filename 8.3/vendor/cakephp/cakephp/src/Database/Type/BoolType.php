@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -19,13 +19,12 @@ namespace Cake\Database\Type;
 use Cake\Database\Driver;
 use InvalidArgumentException;
 use PDO;
-
 /**
  * Bool type converter.
  *
  * Use to convert bool data between PHP and the database types.
  */
-class BoolType extends BaseType implements BatchCastingInterface
+class BoolType extends \Cake\Database\Type\BaseType implements \Cake\Database\Type\BatchCastingInterface
 {
     /**
      * Convert bool data into the database format.
@@ -36,21 +35,14 @@ class BoolType extends BaseType implements BatchCastingInterface
      */
     public function toDatabase(mixed $value, Driver $driver): ?bool
     {
-        if (in_array($value, [true, false, null], true)) {
+        if (in_array($value, [\true, \false, null], \true)) {
             return $value;
         }
-
-        if (in_array($value, [1, 0, '1', '0'], true)) {
-            return (bool)$value;
+        if (in_array($value, [1, 0, '1', '0'], \true)) {
+            return (bool) $value;
         }
-
-        throw new InvalidArgumentException(sprintf(
-            'Cannot convert value `%s` of type `%s` to bool',
-            print_r($value, true),
-            get_debug_type($value),
-        ));
+        throw new InvalidArgumentException(sprintf('Cannot convert value `%s` of type `%s` to bool', print_r($value, \true), get_debug_type($value)));
     }
-
     /**
      * Convert bool values to PHP booleans
      *
@@ -63,14 +55,11 @@ class BoolType extends BaseType implements BatchCastingInterface
         if ($value === null || is_bool($value)) {
             return $value;
         }
-
         if (!is_numeric($value)) {
             return strtolower($value) === 'true';
         }
-
         return !empty($value);
     }
-
     /**
      * @inheritDoc
      */
@@ -81,18 +70,14 @@ class BoolType extends BaseType implements BatchCastingInterface
             if ($value === null || is_bool($value)) {
                 continue;
             }
-
             if (!is_numeric($value)) {
                 $values[$field] = strtolower($value) === 'true';
                 continue;
             }
-
             $values[$field] = !empty($value);
         }
-
         return $values;
     }
-
     /**
      * @inheritDoc
      */
@@ -101,10 +86,8 @@ class BoolType extends BaseType implements BatchCastingInterface
         if ($value === null) {
             return PDO::PARAM_NULL;
         }
-
         return PDO::PARAM_BOOL;
     }
-
     /**
      * Marshals request data into PHP booleans.
      *
@@ -116,7 +99,6 @@ class BoolType extends BaseType implements BatchCastingInterface
         if ($value === null || $value === '') {
             return null;
         }
-
-        return filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+        return filter_var($value, \FILTER_VALIDATE_BOOLEAN, \FILTER_NULL_ON_FAILURE);
     }
 }

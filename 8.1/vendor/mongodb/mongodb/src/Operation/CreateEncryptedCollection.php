@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright 2023-present MongoDB, Inc.
  *
@@ -14,7 +15,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 namespace MongoDB\Operation;
 
 use MongoDB\BSON\Binary;
@@ -25,14 +25,12 @@ use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
 use MongoDB\Driver\Server;
 use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\Exception\UnsupportedException;
-
 use function array_key_exists;
 use function is_array;
 use function is_object;
 use function MongoDB\document_to_array;
 use function MongoDB\is_document;
 use function MongoDB\server_supports_feature;
-
 /**
  * Create an encrypted collection.
  *
@@ -51,14 +49,10 @@ use function MongoDB\server_supports_feature;
 final class CreateEncryptedCollection
 {
     private const WIRE_VERSION_FOR_QUERYABLE_ENCRYPTION_V2 = 21;
-
-    private CreateCollection $createCollection;
-
+    private \MongoDB\Operation\CreateCollection $createCollection;
     /** @var list<CreateCollection> */
     private array $createMetadataCollections;
-
-    private CreateIndexes $createSafeContentIndex;
-
+    private \MongoDB\Operation\CreateIndexes $createSafeContentIndex;
     /**
      * @see CreateCollection::__construct() for supported options
      * @param string $databaseName   Database name
@@ -68,28 +62,19 @@ final class CreateEncryptedCollection
      */
     public function __construct(private string $databaseName, private string $collectionName, private array $options)
     {
-        if (! isset($this->options['encryptedFields'])) {
+        if (!isset($this->options['encryptedFields'])) {
             throw new InvalidArgumentException('"encryptedFields" option is required');
         }
-
-        if (! is_document($this->options['encryptedFields'])) {
+        if (!is_document($this->options['encryptedFields'])) {
             throw InvalidArgumentException::expectedDocumentType('"encryptedFields" option', $this->options['encryptedFields']);
         }
-
-        $this->createCollection = new CreateCollection($databaseName, $collectionName, $this->options);
-
+        $this->createCollection = new \MongoDB\Operation\CreateCollection($databaseName, $collectionName, $this->options);
         /** @psalm-var array{ecocCollection?: ?string, escCollection?: ?string} */
         $encryptedFields = document_to_array($this->options['encryptedFields']);
-        $enxcolOptions = ['clusteredIndex' => ['key' => ['_id' => 1], 'unique' => true]];
-
-        $this->createMetadataCollections = [
-            new CreateCollection($databaseName, $encryptedFields['escCollection'] ?? 'enxcol_.' . $collectionName . '.esc', $enxcolOptions),
-            new CreateCollection($databaseName, $encryptedFields['ecocCollection'] ?? 'enxcol_.' . $collectionName . '.ecoc', $enxcolOptions),
-        ];
-
-        $this->createSafeContentIndex = new CreateIndexes($databaseName, $collectionName, [['key' => ['__safeContent__' => 1]]]);
+        $enxcolOptions = ['clusteredIndex' => ['key' => ['_id' => 1], 'unique' => \true]];
+        $this->createMetadataCollections = [new \MongoDB\Operation\CreateCollection($databaseName, $encryptedFields['escCollection'] ?? 'enxcol_.' . $collectionName . '.esc', $enxcolOptions), new \MongoDB\Operation\CreateCollection($databaseName, $encryptedFields['ecocCollection'] ?? 'enxcol_.' . $collectionName . '.ecoc', $enxcolOptions)];
+        $this->createSafeContentIndex = new \MongoDB\Operation\CreateIndexes($databaseName, $collectionName, [['key' => ['__safeContent__' => 1]]]);
     }
-
     /**
      * Create data keys for any encrypted fields where "keyId" is null.
      *
@@ -107,70 +92,50 @@ final class CreateEncryptedCollection
     {
         /** @psalm-var array{fields: list<array{keyId: ?Binary}|object{keyId: ?Binary}>|Serializable|PackedArray} */
         $encryptedFields = document_to_array($this->options['encryptedFields']);
-
         // NOP if there are no fields to examine
-        if (! isset($encryptedFields['fields'])) {
+        if (!isset($encryptedFields['fields'])) {
             return $encryptedFields;
         }
-
         // Allow PackedArray or Serializable object for the fields array
         if ($encryptedFields['fields'] instanceof PackedArray) {
             /** @psalm-var array */
-            $encryptedFields['fields'] = $encryptedFields['fields']->toPHP([
-                'array' => 'array',
-                'document' => 'object',
-                'root' => 'array',
-            ]);
+            $encryptedFields['fields'] = $encryptedFields['fields']->toPHP(['array' => 'array', 'document' => 'object', 'root' => 'array']);
         } elseif ($encryptedFields['fields'] instanceof Serializable) {
             $encryptedFields['fields'] = $encryptedFields['fields']->bsonSerialize();
         }
-
         // Skip invalid types and defer to the server to raise an error
-        if (! is_array($encryptedFields['fields'])) {
+        if (!is_array($encryptedFields['fields'])) {
             return $encryptedFields;
         }
-
-        $createDataKeyArgs = [
-            $kmsProvider,
-            $masterKey !== null ? ['masterKey' => $masterKey] : [],
-        ];
-
+        $createDataKeyArgs = [$kmsProvider, $masterKey !== null ? ['masterKey' => $masterKey] : []];
         foreach ($encryptedFields['fields'] as $i => $field) {
             // Skip invalid types and defer to the server to raise an error
-            if (! is_array($field) && ! is_object($field)) {
+            if (!is_array($field) && !is_object($field)) {
                 continue;
             }
-
             $field = document_to_array($field);
-
             if (array_key_exists('keyId', $field) && $field['keyId'] === null) {
                 $field['keyId'] = $clientEncryption->createDataKey(...$createDataKeyArgs);
                 $encryptedFields['fields'][$i] = $field;
             }
         }
-
         $this->options['encryptedFields'] = $encryptedFields;
-        $this->createCollection = new CreateCollection($this->databaseName, $this->collectionName, $this->options);
-
+        $this->createCollection = new \MongoDB\Operation\CreateCollection($this->databaseName, $this->collectionName, $this->options);
         return $encryptedFields;
     }
-
     /**
      * @throws DriverRuntimeException for other driver errors (e.g. connection errors)
      * @throws UnsupportedException if the server does not support Queryable Encryption
      */
     public function execute(Server $server): void
     {
-        if (! server_supports_feature($server, self::WIRE_VERSION_FOR_QUERYABLE_ENCRYPTION_V2)) {
+        if (!server_supports_feature($server, self::WIRE_VERSION_FOR_QUERYABLE_ENCRYPTION_V2)) {
             throw new UnsupportedException('Driver support of Queryable Encryption is incompatible with server. Upgrade server to use Queryable Encryption.');
         }
-
         foreach ($this->createMetadataCollections as $createMetadataCollection) {
             $createMetadataCollection->execute($server);
         }
-
         $this->createCollection->execute($server);
-
         $this->createSafeContentIndex->execute($server);
     }
 }

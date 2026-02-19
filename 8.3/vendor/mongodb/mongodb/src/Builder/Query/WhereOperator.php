@@ -3,18 +3,14 @@
 /**
  * THIS FILE IS AUTO-GENERATED. ANY CHANGES WILL BE LOST!
  */
-
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace MongoDB\Builder\Query;
 
 use MongoDB\BSON\Javascript;
 use MongoDB\Builder\Type\Encode;
 use MongoDB\Builder\Type\OperatorInterface;
 use MongoDB\Builder\Type\QueryInterface;
-
 use function is_string;
-
 /**
  * Matches documents that satisfy a JavaScript expression.
  *
@@ -26,10 +22,8 @@ final class WhereOperator implements QueryInterface, OperatorInterface
     public const ENCODE = Encode::Single;
     public const NAME = '$where';
     public const PROPERTIES = ['function' => 'function'];
-
     /** @var Javascript|string $function */
     public readonly Javascript|string $function;
-
     /**
      * @param Javascript|string $function
      */
@@ -38,7 +32,6 @@ final class WhereOperator implements QueryInterface, OperatorInterface
         if (is_string($function)) {
             $function = new Javascript($function);
         }
-
         $this->function = $function;
     }
 }

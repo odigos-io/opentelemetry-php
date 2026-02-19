@@ -2,7 +2,7 @@
 
 namespace Illuminate\Database\Migrations;
 
-enum MigrationResult: int
+enum MigrationResult : int
 {
     case Success = 1;
     case Failure = 2;

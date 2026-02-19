@@ -1,18 +1,16 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\DBAL\Types;
 
 use DateTimeImmutable;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Exception\InvalidFormat;
 use Doctrine\DBAL\Types\Exception\InvalidType;
-
 /**
  * Immutable type of {@see DateTimeTzType}.
  */
-class DateTimeTzImmutableType extends Type implements PhpDateTimeMappingType
+class DateTimeTzImmutableType extends \Doctrine\DBAL\Types\Type implements \Doctrine\DBAL\Types\PhpDateTimeMappingType
 {
     /**
      * {@inheritDoc}
@@ -21,7 +19,6 @@ class DateTimeTzImmutableType extends Type implements PhpDateTimeMappingType
     {
         return $platform->getDateTimeTzTypeDeclarationSQL($column);
     }
-
     /**
      * @phpstan-param T $value
      *
@@ -34,18 +31,11 @@ class DateTimeTzImmutableType extends Type implements PhpDateTimeMappingType
         if ($value === null) {
             return $value;
         }
-
         if ($value instanceof DateTimeImmutable) {
             return $value->format($platform->getDateTimeTzFormatString());
         }
-
-        throw InvalidType::new(
-            $value,
-            static::class,
-            ['null', DateTimeImmutable::class],
-        );
+        throw InvalidType::new($value, static::class, ['null', DateTimeImmutable::class]);
     }
-
     /**
      * @param T $value
      *
@@ -58,17 +48,10 @@ class DateTimeTzImmutableType extends Type implements PhpDateTimeMappingType
         if ($value === null || $value instanceof DateTimeImmutable) {
             return $value;
         }
-
         $dateTime = DateTimeImmutable::createFromFormat($platform->getDateTimeTzFormatString(), $value);
-
-        if ($dateTime !== false) {
+        if ($dateTime !== \false) {
             return $dateTime;
         }
-
-        throw InvalidFormat::new(
-            $value,
-            static::class,
-            $platform->getDateTimeTzFormatString(),
-        );
+        throw InvalidFormat::new($value, static::class, $platform->getDateTimeTzFormatString());
     }
 }

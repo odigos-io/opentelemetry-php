@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\HttpKernel\CacheWarmer;
 
 /**
@@ -16,7 +15,7 @@ namespace Symfony\Component\HttpKernel\CacheWarmer;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-interface CacheWarmerInterface extends WarmableInterface
+interface CacheWarmerInterface extends \Symfony\Component\HttpKernel\CacheWarmer\WarmableInterface
 {
     /**
      * Checks whether this warmer is optional or not.

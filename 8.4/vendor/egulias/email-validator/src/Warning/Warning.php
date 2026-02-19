@@ -1,6 +1,6 @@
 <?php
 
-namespace Egulias\EmailValidator\Warning;
+namespace Odigos\Egulias\EmailValidator\Warning;
 
 abstract class Warning
 {
@@ -8,17 +8,14 @@ abstract class Warning
      * @var int CODE
      */
     public const CODE = 0;
-
     /**
      * @var string
      */
     protected $message = '';
-
     /**
      * @var int
      */
     protected $rfcNumber = 0;
-
     /**
      * @return string
      */
@@ -26,7 +23,6 @@ abstract class Warning
     {
         return $this->message;
     }
-
     /**
      * @return int
      */
@@ -34,7 +30,6 @@ abstract class Warning
     {
         return self::CODE;
     }
-
     /**
      * @return int
      */
@@ -42,12 +37,11 @@ abstract class Warning
     {
         return $this->rfcNumber;
     }
-
     /**
      * @return string
      */
     public function __toString(): string
     {
-        return $this->message() . " rfc: " .  $this->rfcNumber . "internal code: " . static::CODE;
+        return $this->message() . " rfc: " . $this->rfcNumber . "internal code: " . static::CODE;
     }
 }

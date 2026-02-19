@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -17,11 +17,10 @@ declare(strict_types=1);
 namespace Cake\Http\RateLimit;
 
 use Psr\SimpleCache\CacheInterface;
-
 /**
  * Fixed window rate limiter implementation
  */
-class FixedWindowRateLimiter implements RateLimiterInterface
+class FixedWindowRateLimiter implements \Cake\Http\RateLimit\RateLimiterInterface
 {
     /**
      * Cache instance
@@ -29,7 +28,6 @@ class FixedWindowRateLimiter implements RateLimiterInterface
      * @var \Psr\SimpleCache\CacheInterface
      */
     protected CacheInterface $cache;
-
     /**
      * Constructor
      *
@@ -39,41 +37,32 @@ class FixedWindowRateLimiter implements RateLimiterInterface
     {
         $this->cache = $cache;
     }
-
     /**
      * @inheritDoc
      */
     public function attempt(string $identifier, int $limit, int $window, int $cost = 1): array
     {
         $now = time();
-        $windowStart = (int)($now / $window) * $window;
+        $windowStart = (int) ($now / $window) * $window;
         $key = $identifier . '_' . $windowStart;
-
-        $count = (int)$this->cache->get($key, 0);
+        $count = (int) $this->cache->get($key, 0);
         $allowed = $count + $cost <= $limit;
-
         if ($allowed) {
             $count += $cost;
             $ttl = $windowStart + $window - $now;
             $this->cache->set($key, $count, $ttl);
         }
-
-        return [
-            'allowed' => $allowed,
-            'limit' => $limit,
-            'remaining' => max(0, $limit - $count),
-            'reset' => $windowStart + $window,
-        ];
+        return ['allowed' => $allowed, 'limit' => $limit, 'remaining' => max(0, $limit - $count), 'reset' => $windowStart + $window];
     }
-
     /**
      * @inheritDoc
      */
     public function reset(string $identifier): void
     {
         $now = time();
-        $window = 3600; // Assume max window of 1 hour for reset
-        $windowStart = (int)($now / $window) * $window;
+        $window = 3600;
+        // Assume max window of 1 hour for reset
+        $windowStart = (int) ($now / $window) * $window;
         $this->cache->delete($identifier . '_' . $windowStart);
     }
 }

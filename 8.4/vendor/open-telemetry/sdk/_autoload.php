@@ -1,6 +1,7 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Odigos;
 
 /**
  * If OTEL_PHP_AUTOLOAD_ENABLED=true, there may be compatability issues
@@ -13,6 +14,6 @@ declare(strict_types=1);
  *
  * @see https://github.com/open-telemetry/opentelemetry-php/issues/1673
  */
-if (\OpenTelemetry\SDK\Common\Util\ComposerHandler::isRunning() === false) {
+if (\OpenTelemetry\SDK\Common\Util\ComposerHandler::isRunning() === \false) {
     \OpenTelemetry\SDK\SdkAutoloader::autoload();
 }

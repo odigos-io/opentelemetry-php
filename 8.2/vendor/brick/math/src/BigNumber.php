@@ -1,18 +1,16 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Odigos\Brick\Math;
 
-namespace Brick\Math;
-
-use Brick\Math\Exception\DivisionByZeroException;
-use Brick\Math\Exception\MathException;
-use Brick\Math\Exception\NumberFormatException;
-use Brick\Math\Exception\RoundingNecessaryException;
+use Odigos\Brick\Math\Exception\DivisionByZeroException;
+use Odigos\Brick\Math\Exception\MathException;
+use Odigos\Brick\Math\Exception\NumberFormatException;
+use Odigos\Brick\Math\Exception\RoundingNecessaryException;
 use InvalidArgumentException;
 use JsonSerializable;
 use Override;
 use Stringable;
-
 use function array_shift;
 use function assert;
 use function filter_var;
@@ -26,11 +24,8 @@ use function str_contains;
 use function str_repeat;
 use function strlen;
 use function substr;
-
 use const FILTER_VALIDATE_INT;
-
 use const PREG_UNMATCHED_AS_NULL;
-
 /**
  * Base class for arbitrary-precision numbers.
  *
@@ -44,26 +39,11 @@ abstract readonly class BigNumber implements JsonSerializable, Stringable
     /**
      * The regular expression used to parse integer or decimal numbers.
      */
-    private const PARSE_REGEXP_NUMERICAL =
-        '/^' .
-        '(?<sign>[\-\+])?' .
-        '(?<integral>[0-9]+)?' .
-        '(?<point>\.)?' .
-        '(?<fractional>[0-9]+)?' .
-        '(?:[eE](?<exponent>[\-\+]?[0-9]+))?' .
-        '$/';
-
+    private const PARSE_REGEXP_NUMERICAL = '/^' . '(?<sign>[\-\+])?' . '(?<integral>[0-9]+)?' . '(?<point>\.)?' . '(?<fractional>[0-9]+)?' . '(?:[eE](?<exponent>[\-\+]?[0-9]+))?' . '$/';
     /**
      * The regular expression used to parse rational numbers.
      */
-    private const PARSE_REGEXP_RATIONAL =
-        '/^' .
-        '(?<sign>[\-\+])?' .
-        '(?<numerator>[0-9]+)' .
-        '\/?' .
-        '(?<denominator>[0-9]+)' .
-        '$/';
-
+    private const PARSE_REGEXP_RATIONAL = '/^' . '(?<sign>[\-\+])?' . '(?<numerator>[0-9]+)' . '\/?' . '(?<denominator>[0-9]+)' . '$/';
     /**
      * Creates a BigNumber of the given value.
      *
@@ -89,16 +69,12 @@ abstract readonly class BigNumber implements JsonSerializable, Stringable
     final public static function of(BigNumber|int|float|string $value): static
     {
         $value = self::_of($value);
-
         if (static::class === BigNumber::class) {
             assert($value instanceof static);
-
             return $value;
         }
-
         return static::from($value);
     }
-
     /**
      * Creates a BigNumber of the given value, or returns null if the input is null.
      *
@@ -115,10 +91,8 @@ abstract readonly class BigNumber implements JsonSerializable, Stringable
         if (is_null($value)) {
             return null;
         }
-
         return static::of($value);
     }
-
     /**
      * Returns the minimum of the given values.
      *
@@ -133,22 +107,17 @@ abstract readonly class BigNumber implements JsonSerializable, Stringable
     final public static function min(BigNumber|int|float|string ...$values): static
     {
         $min = null;
-
         foreach ($values as $value) {
             $value = static::of($value);
-
             if ($min === null || $value->isLessThan($min)) {
                 $min = $value;
             }
         }
-
         if ($min === null) {
             throw new InvalidArgumentException(__METHOD__ . '() expects at least one value.');
         }
-
         return $min;
     }
-
     /**
      * Returns the maximum of the given values.
      *
@@ -163,22 +132,17 @@ abstract readonly class BigNumber implements JsonSerializable, Stringable
     final public static function max(BigNumber|int|float|string ...$values): static
     {
         $max = null;
-
         foreach ($values as $value) {
             $value = static::of($value);
-
             if ($max === null || $value->isGreaterThan($max)) {
                 $max = $value;
             }
         }
-
         if ($max === null) {
             throw new InvalidArgumentException(__METHOD__ . '() expects at least one value.');
         }
-
         return $max;
     }
-
     /**
      * Returns the sum of the given values.
      *
@@ -199,22 +163,16 @@ abstract readonly class BigNumber implements JsonSerializable, Stringable
     final public static function sum(BigNumber|int|float|string ...$values): static
     {
         $first = array_shift($values);
-
         if ($first === null) {
             throw new InvalidArgumentException(__METHOD__ . '() expects at least one value.');
         }
-
         $sum = static::of($first);
-
         foreach ($values as $value) {
             $sum = self::add($sum, static::of($value));
         }
-
         assert($sum instanceof static);
-
         return $sum;
     }
-
     /**
      * Checks if this number is equal to the given one.
      *
@@ -224,7 +182,6 @@ abstract readonly class BigNumber implements JsonSerializable, Stringable
     {
         return $this->compareTo($that) === 0;
     }
-
     /**
      * Checks if this number is strictly lower than the given one.
      *
@@ -234,7 +191,6 @@ abstract readonly class BigNumber implements JsonSerializable, Stringable
     {
         return $this->compareTo($that) < 0;
     }
-
     /**
      * Checks if this number is lower than or equal to the given one.
      *
@@ -244,7 +200,6 @@ abstract readonly class BigNumber implements JsonSerializable, Stringable
     {
         return $this->compareTo($that) <= 0;
     }
-
     /**
      * Checks if this number is strictly greater than the given one.
      *
@@ -254,7 +209,6 @@ abstract readonly class BigNumber implements JsonSerializable, Stringable
     {
         return $this->compareTo($that) > 0;
     }
-
     /**
      * Checks if this number is greater than or equal to the given one.
      *
@@ -264,7 +218,6 @@ abstract readonly class BigNumber implements JsonSerializable, Stringable
     {
         return $this->compareTo($that) >= 0;
     }
-
     /**
      * Checks if this number equals zero.
      *
@@ -274,7 +227,6 @@ abstract readonly class BigNumber implements JsonSerializable, Stringable
     {
         return $this->getSign() === 0;
     }
-
     /**
      * Checks if this number is strictly negative.
      *
@@ -284,7 +236,6 @@ abstract readonly class BigNumber implements JsonSerializable, Stringable
     {
         return $this->getSign() < 0;
     }
-
     /**
      * Checks if this number is negative or zero.
      *
@@ -294,7 +245,6 @@ abstract readonly class BigNumber implements JsonSerializable, Stringable
     {
         return $this->getSign() <= 0;
     }
-
     /**
      * Checks if this number is strictly positive.
      *
@@ -304,7 +254,6 @@ abstract readonly class BigNumber implements JsonSerializable, Stringable
     {
         return $this->getSign() > 0;
     }
-
     /**
      * Checks if this number is positive or zero.
      *
@@ -314,7 +263,6 @@ abstract readonly class BigNumber implements JsonSerializable, Stringable
     {
         return $this->getSign() >= 0;
     }
-
     /**
      * Returns the sign of this number.
      *
@@ -325,7 +273,6 @@ abstract readonly class BigNumber implements JsonSerializable, Stringable
      * @pure
      */
     abstract public function getSign(): int;
-
     /**
      * Compares this number to the given one.
      *
@@ -338,7 +285,6 @@ abstract readonly class BigNumber implements JsonSerializable, Stringable
      * @pure
      */
     abstract public function compareTo(BigNumber|int|float|string $that): int;
-
     /**
      * Converts this number to a BigInteger.
      *
@@ -347,7 +293,6 @@ abstract readonly class BigNumber implements JsonSerializable, Stringable
      * @pure
      */
     abstract public function toBigInteger(): BigInteger;
-
     /**
      * Converts this number to a BigDecimal.
      *
@@ -356,14 +301,12 @@ abstract readonly class BigNumber implements JsonSerializable, Stringable
      * @pure
      */
     abstract public function toBigDecimal(): BigDecimal;
-
     /**
      * Converts this number to a BigRational.
      *
      * @pure
      */
     abstract public function toBigRational(): BigRational;
-
     /**
      * Converts this number to a BigDecimal with the given scale, using rounding if necessary.
      *
@@ -376,7 +319,6 @@ abstract readonly class BigNumber implements JsonSerializable, Stringable
      * @pure
      */
     abstract public function toScale(int $scale, RoundingMode $roundingMode = RoundingMode::UNNECESSARY): BigDecimal;
-
     /**
      * Returns the exact value of this number as a native integer.
      *
@@ -388,7 +330,6 @@ abstract readonly class BigNumber implements JsonSerializable, Stringable
      * @pure
      */
     abstract public function toInt(): int;
-
     /**
      * Returns an approximation of this number as a floating-point value.
      *
@@ -401,13 +342,11 @@ abstract readonly class BigNumber implements JsonSerializable, Stringable
      * @pure
      */
     abstract public function toFloat(): float;
-
     #[Override]
     final public function jsonSerialize(): string
     {
         return $this->__toString();
     }
-
     /**
      * Returns a string representation of this number.
      *
@@ -417,7 +356,6 @@ abstract readonly class BigNumber implements JsonSerializable, Stringable
      * @pure
      */
     abstract public function __toString(): string;
-
     /**
      * Overridden by subclasses to convert a BigNumber to an instance of the subclass.
      *
@@ -426,7 +364,6 @@ abstract readonly class BigNumber implements JsonSerializable, Stringable
      * @pure
      */
     abstract protected static function from(BigNumber $number): static;
-
     /**
      * Proxy method to access BigInteger's protected constructor from sibling classes.
      *
@@ -438,7 +375,6 @@ abstract readonly class BigNumber implements JsonSerializable, Stringable
     {
         return new BigInteger($value);
     }
-
     /**
      * Proxy method to access BigDecimal's protected constructor from sibling classes.
      *
@@ -450,7 +386,6 @@ abstract readonly class BigNumber implements JsonSerializable, Stringable
     {
         return new BigDecimal($value, $scale);
     }
-
     /**
      * Proxy method to access BigRational's protected constructor from sibling classes.
      *
@@ -462,7 +397,6 @@ abstract readonly class BigNumber implements JsonSerializable, Stringable
     {
         return new BigRational($numerator, $denominator, $checkDenominator);
     }
-
     /**
      * @throws NumberFormatException   If the format of the number is not valid.
      * @throws DivisionByZeroException If the value represents a rational number with a denominator of zero.
@@ -474,11 +408,9 @@ abstract readonly class BigNumber implements JsonSerializable, Stringable
         if ($value instanceof BigNumber) {
             return $value;
         }
-
         if (is_int($value)) {
             return new BigInteger((string) $value);
         }
-
         if (is_float($value)) {
             if (is_nan($value)) {
                 $value = 'NAN';
@@ -486,57 +418,43 @@ abstract readonly class BigNumber implements JsonSerializable, Stringable
                 $value = (string) $value;
             }
         }
-
         if (str_contains($value, '/')) {
             // Rational number
             if (preg_match(self::PARSE_REGEXP_RATIONAL, $value, $matches, PREG_UNMATCHED_AS_NULL) !== 1) {
                 throw NumberFormatException::invalidFormat($value);
             }
-
             $sign = $matches['sign'];
             $numerator = $matches['numerator'];
             $denominator = $matches['denominator'];
-
             $numerator = self::cleanUp($sign, $numerator);
             $denominator = self::cleanUp(null, $denominator);
-
             if ($denominator === '0') {
                 throw DivisionByZeroException::denominatorMustNotBeZero();
             }
-
-            return new BigRational(
-                new BigInteger($numerator),
-                new BigInteger($denominator),
-                false,
-            );
+            return new BigRational(new BigInteger($numerator), new BigInteger($denominator), \false);
         } else {
             // Integer or decimal number
             if (preg_match(self::PARSE_REGEXP_NUMERICAL, $value, $matches, PREG_UNMATCHED_AS_NULL) !== 1) {
                 throw NumberFormatException::invalidFormat($value);
             }
-
             $sign = $matches['sign'];
             $point = $matches['point'];
             $integral = $matches['integral'];
             $fractional = $matches['fractional'];
             $exponent = $matches['exponent'];
-
             if ($integral === null && $fractional === null) {
                 throw NumberFormatException::invalidFormat($value);
             }
-
             if ($integral === null) {
                 $integral = '0';
             }
-
             if ($point !== null || $exponent !== null) {
                 $fractional ??= '';
-
                 if ($exponent !== null) {
                     if ($exponent[0] === '-') {
                         $exponent = ltrim(substr($exponent, 1), '0') ?: '0';
                         $exponent = filter_var($exponent, FILTER_VALIDATE_INT);
-                        if ($exponent !== false) {
+                        if ($exponent !== \false) {
                             $exponent = -$exponent;
                         }
                     } else {
@@ -549,31 +467,23 @@ abstract readonly class BigNumber implements JsonSerializable, Stringable
                 } else {
                     $exponent = 0;
                 }
-
-                if ($exponent === false) {
+                if ($exponent === \false) {
                     throw new NumberFormatException('Exponent too large.');
                 }
-
                 $unscaledValue = self::cleanUp($sign, $integral . $fractional);
-
                 $scale = strlen($fractional) - $exponent;
-
                 if ($scale < 0) {
                     if ($unscaledValue !== '0') {
                         $unscaledValue .= str_repeat('0', -$scale);
                     }
                     $scale = 0;
                 }
-
                 return new BigDecimal($unscaledValue, $scale);
             }
-
             $integral = self::cleanUp($sign, $integral);
-
             return new BigInteger($integral);
         }
     }
-
     /**
      * Removes optional leading zeros and applies sign.
      *
@@ -585,14 +495,11 @@ abstract readonly class BigNumber implements JsonSerializable, Stringable
     private static function cleanUp(string|null $sign, string $number): string
     {
         $number = ltrim($number, '0');
-
         if ($number === '') {
             return '0';
         }
-
         return $sign === '-' ? '-' . $number : $number;
     }
-
     /**
      * Adds two BigNumber instances in the correct order to avoid a RoundingNecessaryException.
      *
@@ -603,19 +510,15 @@ abstract readonly class BigNumber implements JsonSerializable, Stringable
         if ($a instanceof BigRational) {
             return $a->plus($b);
         }
-
         if ($b instanceof BigRational) {
             return $b->plus($a);
         }
-
         if ($a instanceof BigDecimal) {
             return $a->plus($b);
         }
-
         if ($b instanceof BigDecimal) {
             return $b->plus($a);
         }
-
         return $a->plus($b);
     }
 }

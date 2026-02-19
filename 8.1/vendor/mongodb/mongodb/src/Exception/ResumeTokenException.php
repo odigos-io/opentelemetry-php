@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright 2015-present MongoDB, Inc.
  *
@@ -14,13 +15,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 namespace MongoDB\Exception;
 
 use function get_debug_type;
 use function sprintf;
-
-class ResumeTokenException extends RuntimeException
+class ResumeTokenException extends \MongoDB\Exception\RuntimeException
 {
     /**
      * Thrown when a resume token has an invalid type.
@@ -32,7 +31,6 @@ class ResumeTokenException extends RuntimeException
     {
         return new self(sprintf('Expected resume token to have type "array or object" but found "%s"', get_debug_type($value)));
     }
-
     /**
      * Thrown when a resume token is not found in a change document.
      *

@@ -8,13 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\Mime\Encoder;
 
 /**
  * @author Chris Corbyn
  */
-class Base64Encoder implements EncoderInterface
+class Base64Encoder implements \Symfony\Component\Mime\Encoder\EncoderInterface
 {
     /**
      * Takes an unencoded string and produces a Base64 encoded string from it.
@@ -28,14 +27,12 @@ class Base64Encoder implements EncoderInterface
         if (0 >= $maxLineLength || 76 < $maxLineLength) {
             $maxLineLength = 76;
         }
-
         $encodedString = base64_encode($string);
         $firstLine = '';
         if (0 !== $firstLineOffset) {
-            $firstLine = substr($encodedString, 0, $maxLineLength - $firstLineOffset)."\r\n";
+            $firstLine = substr($encodedString, 0, $maxLineLength - $firstLineOffset) . "\r\n";
             $encodedString = substr($encodedString, $maxLineLength - $firstLineOffset);
         }
-
-        return $firstLine.trim(chunk_split($encodedString, $maxLineLength, "\r\n"));
+        return $firstLine . trim(chunk_split($encodedString, $maxLineLength, "\r\n"));
     }
 }

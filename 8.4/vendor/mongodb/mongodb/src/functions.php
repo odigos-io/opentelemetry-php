@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright 2015-present MongoDB, Inc.
  *
@@ -14,7 +15,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 namespace MongoDB;
 
 use Exception;
@@ -36,7 +36,6 @@ use Psr\Log\LoggerInterface;
 use ReflectionClass;
 use ReflectionException;
 use stdClass;
-
 use function array_is_list;
 use function array_key_first;
 use function assert;
@@ -47,7 +46,6 @@ use function is_object;
 use function is_string;
 use function str_ends_with;
 use function substr;
-
 /**
  * Registers a PSR-3 logger to receive log messages from the driver/library.
  *
@@ -56,9 +54,8 @@ use function substr;
  */
 function add_logger(LoggerInterface $logger): void
 {
-    PsrLogAdapter::addLogger($logger);
+    \MongoDB\PsrLogAdapter::addLogger($logger);
 }
-
 /**
  * Unregisters a PSR-3 logger.
  *
@@ -67,9 +64,8 @@ function add_logger(LoggerInterface $logger): void
  */
 function remove_logger(LoggerInterface $logger): void
 {
-    PsrLogAdapter::removeLogger($logger);
+    \MongoDB\PsrLogAdapter::removeLogger($logger);
 }
-
 /**
  * Create a new stdClass instance with the provided properties.
  * Use named arguments to specify the property names.
@@ -85,7 +81,6 @@ function object(mixed ...$values): stdClass
 {
     return (object) $values;
 }
-
 /**
  * Check whether all servers support executing a write stage on a secondary.
  *
@@ -97,21 +92,17 @@ function all_servers_support_write_stage_on_secondary(array $servers): bool
     /* Write stages on secondaries are technically supported by FCV 4.4, but the
      * CRUD spec requires all 5.0+ servers since FCV is not tracked by SDAM. */
     static $wireVersionForWriteStageOnSecondary = 13;
-
     foreach ($servers as $server) {
         // We can assume that load balancers only front 5.0+ servers
         if ($server->getType() === Server::TYPE_LOAD_BALANCER) {
             continue;
         }
-
-        if (! server_supports_feature($server, $wireVersionForWriteStageOnSecondary)) {
-            return false;
+        if (!server_supports_feature($server, $wireVersionForWriteStageOnSecondary)) {
+            return \false;
         }
     }
-
-    return true;
+    return \true;
 }
-
 /**
  * Applies a type map to a document.
  *
@@ -126,13 +117,11 @@ function all_servers_support_write_stage_on_secondary(array $servers): bool
  */
 function apply_type_map_to_document(array|object $document, array $typeMap): array|object
 {
-    if (! is_document($document)) {
+    if (!is_document($document)) {
         throw InvalidArgumentException::expectedDocumentType('$document', $document);
     }
-
     return Document::fromPHP($document)->toPHP($typeMap);
 }
-
 /**
  * Converts a document parameter to an array.
  *
@@ -152,27 +141,19 @@ function document_to_array(array|object $document): array
         /* Nested documents and arrays are intentionally left as BSON. We avoid
          * iterator_to_array() since Document and PackedArray iteration returns
          * all values as MongoDB\BSON\Value instances. */
-
         /** @psalm-var array */
-        return $document->toPHP([
-            'array' => 'bson',
-            'document' => 'bson',
-            'root' => 'array',
-        ]);
+        return $document->toPHP(['array' => 'bson', 'document' => 'bson', 'root' => 'array']);
     } elseif ($document instanceof Serializable) {
         $document = $document->bsonSerialize();
     }
-
     if (is_object($document)) {
         /* Note: this omits all uninitialized properties, whereas BSON encoding
          * includes untyped, uninitialized properties. This is acceptable given
          * document_to_array()'s use cases. */
         $document = get_object_vars($document);
     }
-
     return $document;
 }
-
 /**
  * Return a collection's encryptedFields from the encryptedFieldsMap
  * autoEncryption driver option (if available).
@@ -186,10 +167,8 @@ function document_to_array(array|object $document): array
 function get_encrypted_fields_from_driver(string $databaseName, string $collectionName, Manager $manager): array|object|null
 {
     $encryptedFieldsMap = (array) $manager->getEncryptedFieldsMap();
-
     return $encryptedFieldsMap[$databaseName . '.' . $collectionName] ?? null;
 }
-
 /**
  * Return a collection's encryptedFields option from the server (if any).
  *
@@ -201,7 +180,6 @@ function get_encrypted_fields_from_driver(string $databaseName, string $collecti
 function get_encrypted_fields_from_server(string $databaseName, string $collectionName, Server $server): array|object|null
 {
     $collectionInfoIterator = (new ListCollections($databaseName, ['filter' => ['name' => $collectionName]]))->execute($server);
-
     foreach ($collectionInfoIterator as $collectionInfo) {
         /* Note: ListCollections applies a typeMap that converts BSON documents
          * to PHP arrays. This should not be problematic as encryptedFields here
@@ -209,10 +187,8 @@ function get_encrypted_fields_from_server(string $databaseName, string $collecti
          * collections. */
         return $collectionInfo['options']['encryptedFields'] ?? null;
     }
-
     return null;
 }
-
 /**
  * Returns whether a given value is a valid document.
  *
@@ -223,9 +199,8 @@ function get_encrypted_fields_from_server(string $databaseName, string $collecti
  */
 function is_document(mixed $document): bool
 {
-    return is_array($document) || (is_object($document) && ! $document instanceof PackedArray);
+    return is_array($document) || is_object($document) && !$document instanceof PackedArray;
 }
-
 /**
  * Return whether the first key in the document starts with a "$" character.
  *
@@ -240,20 +215,15 @@ function is_document(mixed $document): bool
 function is_first_key_operator(array|object $document): bool
 {
     if ($document instanceof PackedArray) {
-        return false;
+        return \false;
     }
-
     $document = document_to_array($document);
-
     $firstKey = array_key_first($document);
-
-    if (! is_string($firstKey)) {
-        return false;
+    if (!is_string($firstKey)) {
+        return \false;
     }
-
     return '$' === ($firstKey[0] ?? null);
 }
-
 /**
  * Returns whether the argument is a valid aggregation or update pipeline.
  *
@@ -279,47 +249,36 @@ function is_first_key_operator(array|object $document): bool
  * @internal
  * @throws InvalidArgumentException
  */
-function is_pipeline(array|object $pipeline, bool $allowEmpty = false): bool
+function is_pipeline(array|object $pipeline, bool $allowEmpty = \false): bool
 {
     if ($pipeline instanceof PackedArray) {
         /* Nested documents and arrays are intentionally left as BSON. We avoid
          * iterator_to_array() since PackedArray iteration returns all values as
          * MongoDB\BSON\Value instances. */
         /** @psalm-var array */
-        $pipeline = $pipeline->toPHP([
-            'array' => 'bson',
-            'document' => 'bson',
-            'root' => 'array',
-        ]);
+        $pipeline = $pipeline->toPHP(['array' => 'bson', 'document' => 'bson', 'root' => 'array']);
     } elseif ($pipeline instanceof Serializable) {
         $pipeline = $pipeline->bsonSerialize();
     }
-
-    if (! is_array($pipeline)) {
-        return false;
+    if (!is_array($pipeline)) {
+        return \false;
     }
-
     if ($pipeline === []) {
         return $allowEmpty;
     }
-
-    if (! array_is_list($pipeline)) {
-        return false;
+    if (!array_is_list($pipeline)) {
+        return \false;
     }
-
     foreach ($pipeline as $stage) {
-        if (! is_document($stage)) {
-            return false;
+        if (!is_document($stage)) {
+            return \false;
         }
-
-        if (! is_first_key_operator($stage)) {
-            return false;
+        if (!is_first_key_operator($stage)) {
+            return \false;
         }
     }
-
-    return true;
+    return \true;
 }
-
 /**
  * Returns whether the argument is a list that contains at least one
  * {@see StageInterface} object.
@@ -328,19 +287,16 @@ function is_pipeline(array|object $pipeline, bool $allowEmpty = false): bool
  */
 function is_builder_pipeline(array $pipeline): bool
 {
-    if (! $pipeline || ! array_is_list($pipeline)) {
-        return false;
+    if (!$pipeline || !array_is_list($pipeline)) {
+        return \false;
     }
-
     foreach ($pipeline as $stage) {
         if (is_object($stage) && $stage instanceof StageInterface) {
-            return true;
+            return \true;
         }
     }
-
-    return false;
+    return \false;
 }
-
 /**
  * Returns whether we are currently in a transaction.
  *
@@ -350,12 +306,10 @@ function is_builder_pipeline(array $pipeline): bool
 function is_in_transaction(array $options): bool
 {
     if (isset($options['session']) && $options['session'] instanceof Session && $options['session']->isInTransaction()) {
-        return true;
+        return \true;
     }
-
-    return false;
+    return \false;
 }
-
 /**
  * Return whether the aggregation pipeline ends with an $out or $merge operator.
  *
@@ -368,20 +322,15 @@ function is_in_transaction(array $options): bool
 function is_last_pipeline_operator_write(array $pipeline): bool
 {
     $lastOp = end($pipeline);
-
-    if ($lastOp === false) {
-        return false;
+    if ($lastOp === \false) {
+        return \false;
     }
-
-    if (! is_array($lastOp) && ! is_object($lastOp)) {
-        return false;
+    if (!is_array($lastOp) && !is_object($lastOp)) {
+        return \false;
     }
-
     $key = array_key_first(document_to_array($lastOp));
-
     return $key === '$merge' || $key === '$out';
 }
-
 /**
  * Return whether the write concern is acknowledged.
  *
@@ -396,9 +345,8 @@ function is_write_concern_acknowledged(WriteConcern $writeConcern): bool
     /* Note: -1 corresponds to MONGOC_WRITE_CONCERN_W_ERRORS_IGNORED, which is
      * deprecated synonym of MONGOC_WRITE_CONCERN_W_UNACKNOWLEDGED and slated
      * for removal in libmongoc 2.0. */
-    return ($writeConcern->getW() !== 0 && $writeConcern->getW() !== -1) || $writeConcern->getJournal() === true;
+    return $writeConcern->getW() !== 0 && $writeConcern->getW() !== -1 || $writeConcern->getJournal() === \true;
 }
-
 /**
  * Return whether the server supports a particular feature.
  *
@@ -411,10 +359,8 @@ function server_supports_feature(Server $server, int $feature): bool
     $info = $server->getInfo();
     $maxWireVersion = isset($info['maxWireVersion']) ? (int) $info['maxWireVersion'] : 0;
     $minWireVersion = isset($info['minWireVersion']) ? (int) $info['minWireVersion'] : 0;
-
     return $minWireVersion <= $feature && $maxWireVersion >= $feature;
 }
-
 /**
  * Return whether the input is an array of strings.
  *
@@ -422,19 +368,16 @@ function server_supports_feature(Server $server, int $feature): bool
  */
 function is_string_array(mixed $input): bool
 {
-    if (! is_array($input)) {
-        return false;
+    if (!is_array($input)) {
+        return \false;
     }
-
     foreach ($input as $item) {
-        if (! is_string($item)) {
-            return false;
+        if (!is_string($item)) {
+            return \false;
         }
     }
-
-    return true;
+    return \true;
 }
-
 /**
  * Performs a deep copy of a value.
  *
@@ -451,21 +394,16 @@ function recursive_copy(mixed $element): mixed
         foreach ($element as $key => $value) {
             $element[$key] = recursive_copy($value);
         }
-
         return $element;
     }
-
-    if (! is_object($element)) {
+    if (!is_object($element)) {
         return $element;
     }
-
-    if (! (new ReflectionClass($element))->isCloneable()) {
+    if (!(new ReflectionClass($element))->isCloneable()) {
         return $element;
     }
-
     return clone $element;
 }
-
 /**
  * Creates a type map to apply to a field type
  *
@@ -484,30 +422,24 @@ function create_field_path_type_map(array $typeMap, string $fieldPath): array
     // If some field paths already exist, we prefix them with the field path we are assuming as the new root
     if (isset($typeMap['fieldPaths']) && is_array($typeMap['fieldPaths'])) {
         $fieldPaths = $typeMap['fieldPaths'];
-
         $typeMap['fieldPaths'] = [];
         foreach ($fieldPaths as $existingFieldPath => $type) {
             $typeMap['fieldPaths'][$fieldPath . '.' . $existingFieldPath] = $type;
         }
     }
-
     // If a root typemap was set, apply this to the field object
     if (isset($typeMap['root'])) {
         $typeMap['fieldPaths'][$fieldPath] = $typeMap['root'];
     }
-
     /* Special case if we want to convert an array, in which case we need to
      * ensure that the field containing the array is exposed as an array,
      * instead of the type given in the type map's array key. */
     if (str_ends_with($fieldPath, '.$')) {
         $typeMap['fieldPaths'][substr($fieldPath, 0, -2)] = 'array';
     }
-
     $typeMap['root'] = 'object';
-
     return $typeMap;
 }
-
 /**
  * Execute a callback within a transaction in the given session
  *
@@ -538,7 +470,6 @@ function with_transaction(Session $session, callable $callback, array $transacti
     $operation = new WithTransaction($callback, $transactionOptions);
     $operation->execute($session);
 }
-
 /**
  * Returns the session option if it is set and valid.
  *
@@ -549,10 +480,8 @@ function extract_session_from_options(array $options): ?Session
     if (isset($options['session']) && $options['session'] instanceof Session) {
         return $options['session'];
     }
-
     return null;
 }
-
 /**
  * Returns the readPreference option if it is set and valid.
  *
@@ -563,10 +492,8 @@ function extract_read_preference_from_options(array $options): ?ReadPreference
     if (isset($options['readPreference']) && $options['readPreference'] instanceof ReadPreference) {
         return $options['readPreference'];
     }
-
     return null;
 }
-
 /**
  * Performs server selection, respecting the readPreference and session options.
  *
@@ -580,26 +507,21 @@ function select_server(Manager $manager, array $options): Server
 {
     $session = extract_session_from_options($options);
     $server = $session instanceof Session ? $session->getServer() : null;
-
     // Pinned server for an active transaction takes priority
     if ($server !== null) {
         return $server;
     }
-
     // Operation read preference takes priority
     $readPreference = extract_read_preference_from_options($options);
-
     // Read preference for an active transaction takes priority
     if ($readPreference === null && $session instanceof Session && $session->isInTransaction()) {
         /* Session::getTransactionOptions() should always return an array if the
          * session is in a transaction, but we can be defensive. */
         $readPreference = extract_read_preference_from_options($session->getTransactionOptions() ?? []);
     }
-
     // Manager::selectServer() defaults to a primary read preference
     return $manager->selectServer($readPreference);
 }
-
 /**
  * Performs server selection for an aggregate operation with a write stage. The
  * $options parameter may be modified by reference if a primary read preference
@@ -611,7 +533,6 @@ function select_server(Manager $manager, array $options): Server
 function select_server_for_aggregate_write_stage(Manager $manager, array &$options): Server
 {
     $readPreference = extract_read_preference_from_options($options);
-
     /* If there is either no read preference or a primary read preference, there
      * is no special server selection logic to apply.
      *
@@ -621,37 +542,29 @@ function select_server_for_aggregate_write_stage(Manager $manager, array &$optio
     if ($readPreference === null || $readPreference->getModeString() === ReadPreference::PRIMARY) {
         return select_server($manager, $options);
     }
-
     $server = null;
     $serverSelectionError = null;
-
     try {
         $server = select_server($manager, $options);
     } catch (DriverRuntimeException $serverSelectionError) {
     }
-
     /* If any pre-5.0 servers exist in the topology, force a primary read
      * preference and repeat server selection if it previously failed or
      * selected a secondary. */
-    if (! all_servers_support_write_stage_on_secondary($manager->getServers())) {
+    if (!all_servers_support_write_stage_on_secondary($manager->getServers())) {
         $options['readPreference'] = new ReadPreference(ReadPreference::PRIMARY);
-
         if ($server === null || $server->isSecondary()) {
             return select_server($manager, $options);
         }
     }
-
     /* If the topology only contains 5.0+ servers, we should either return the
      * previously selected server or propagate the server selection error. */
     if ($serverSelectionError !== null) {
         throw $serverSelectionError;
     }
-
     assert($server instanceof Server);
-
     return $server;
 }
-
 /**
  * Performs server selection for a write operation.
  *

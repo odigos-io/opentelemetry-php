@@ -10,7 +10,6 @@ class NoPendingMigrations
      * @var string
      */
     public $method;
-
     /**
      * Create a new event instance.
      *

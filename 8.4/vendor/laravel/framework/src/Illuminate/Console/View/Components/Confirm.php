@@ -2,7 +2,7 @@
 
 namespace Illuminate\Console\View\Components;
 
-class Confirm extends Component
+class Confirm extends \Illuminate\Console\View\Components\Component
 {
     /**
      * Renders the component using the given arguments.
@@ -11,10 +11,8 @@ class Confirm extends Component
      * @param  bool  $default
      * @return bool
      */
-    public function render($question, $default = false)
+    public function render($question, $default = \false)
     {
-        return $this->usingQuestionHelper(
-            fn () => $this->output->confirm($question, $default),
-        );
+        return $this->usingQuestionHelper(fn() => $this->output->confirm($question, $default));
     }
 }

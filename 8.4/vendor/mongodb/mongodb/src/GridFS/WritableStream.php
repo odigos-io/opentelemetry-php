@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright 2016-present MongoDB, Inc.
  *
@@ -14,7 +15,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 namespace MongoDB\GridFS;
 
 use MongoDB\BSON\Binary;
@@ -22,14 +22,12 @@ use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;
 use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
 use MongoDB\Exception\InvalidArgumentException;
-
 use function array_intersect_key;
 use function is_integer;
 use function MongoDB\is_document;
 use function sprintf;
 use function strlen;
 use function substr;
-
 /**
  * WritableStream abstracts the process of writing a GridFS file.
  *
@@ -38,19 +36,12 @@ use function substr;
 final class WritableStream
 {
     private const DEFAULT_CHUNK_SIZE_BYTES = 261120;
-
     private string $buffer = '';
-
     private int $chunkOffset = 0;
-
     private int $chunkSize;
-
     private array $file;
-
-    private bool $isClosed = false;
-
+    private bool $isClosed = \false;
     private int $length = 0;
-
     /**
      * Constructs a writable GridFS stream.
      *
@@ -69,35 +60,21 @@ final class WritableStream
      * @param array             $options           Upload options
      * @throws InvalidArgumentException
      */
-    public function __construct(private CollectionWrapper $collectionWrapper, string $filename, array $options = [])
+    public function __construct(private \MongoDB\GridFS\CollectionWrapper $collectionWrapper, string $filename, array $options = [])
     {
-        $options += [
-            '_id' => new ObjectId(),
-            'chunkSizeBytes' => self::DEFAULT_CHUNK_SIZE_BYTES,
-        ];
-
-        if (! is_integer($options['chunkSizeBytes'])) {
+        $options += ['_id' => new ObjectId(), 'chunkSizeBytes' => self::DEFAULT_CHUNK_SIZE_BYTES];
+        if (!is_integer($options['chunkSizeBytes'])) {
             throw InvalidArgumentException::invalidType('"chunkSizeBytes" option', $options['chunkSizeBytes'], 'integer');
         }
-
         if ($options['chunkSizeBytes'] < 1) {
             throw new InvalidArgumentException(sprintf('Expected "chunkSizeBytes" option to be >= 1, %d given', $options['chunkSizeBytes']));
         }
-
-        if (isset($options['metadata']) && ! is_document($options['metadata'])) {
+        if (isset($options['metadata']) && !is_document($options['metadata'])) {
             throw InvalidArgumentException::expectedDocumentType('"metadata" option', $options['metadata']);
         }
-
         $this->chunkSize = $options['chunkSizeBytes'];
-        $this->file = [
-            '_id' => $options['_id'],
-            'chunkSize' => $this->chunkSize,
-            'filename' => $filename,
-            'length' => null,
-            'uploadDate' => null,
-        ] + array_intersect_key($options, ['metadata' => 1]);
+        $this->file = ['_id' => $options['_id'], 'chunkSize' => $this->chunkSize, 'filename' => $filename, 'length' => null, 'uploadDate' => null] + array_intersect_key($options, ['metadata' => 1]);
     }
-
     /**
      * Return internal properties for debugging purposes.
      *
@@ -105,13 +82,8 @@ final class WritableStream
      */
     public function __debugInfo(): array
     {
-        return [
-            'bucketName' => $this->collectionWrapper->getBucketName(),
-            'databaseName' => $this->collectionWrapper->getDatabaseName(),
-            'file' => $this->file,
-        ];
+        return ['bucketName' => $this->collectionWrapper->getBucketName(), 'databaseName' => $this->collectionWrapper->getDatabaseName(), 'file' => $this->file];
     }
-
     /**
      * Closes an active stream and flushes all buffered data to GridFS.
      */
@@ -121,15 +93,12 @@ final class WritableStream
             // TODO: Should this be an error condition? e.g. BadMethodCallException
             return;
         }
-
         if (strlen($this->buffer) > 0) {
             $this->insertChunkFromBuffer();
         }
-
         $this->fileCollectionInsert();
-        $this->isClosed = true;
+        $this->isClosed = \true;
     }
-
     /**
      * Return the stream's file document.
      */
@@ -137,7 +106,6 @@ final class WritableStream
     {
         return (object) $this->file;
     }
-
     /**
      * Return the stream's size in bytes.
      *
@@ -147,7 +115,6 @@ final class WritableStream
     {
         return $this->length + strlen($this->buffer);
     }
-
     /**
      * Return the current position of the stream.
      *
@@ -161,7 +128,6 @@ final class WritableStream
     {
         return $this->getSize();
     }
-
     /**
      * Inserts binary data into GridFS via chunks.
      *
@@ -176,22 +142,17 @@ final class WritableStream
             // TODO: Should this be an error condition? e.g. BadMethodCallException
             return 0;
         }
-
         $bytesRead = 0;
-
         while ($bytesRead != strlen($data)) {
             $initialBufferLength = strlen($this->buffer);
             $this->buffer .= substr($data, $bytesRead, $this->chunkSize - $initialBufferLength);
             $bytesRead += strlen($this->buffer) - $initialBufferLength;
-
             if (strlen($this->buffer) == $this->chunkSize) {
                 $this->insertChunkFromBuffer();
             }
         }
-
         return $bytesRead;
     }
-
     private function abort(): void
     {
         try {
@@ -199,47 +160,33 @@ final class WritableStream
         } catch (DriverRuntimeException) {
             // We are already handling an error if abort() is called, so suppress this
         }
-
-        $this->isClosed = true;
+        $this->isClosed = \true;
     }
-
     private function fileCollectionInsert(): void
     {
         $this->file['length'] = $this->length;
         $this->file['uploadDate'] = new UTCDateTime();
-
         try {
             $this->collectionWrapper->insertFile($this->file);
         } catch (DriverRuntimeException $e) {
             $this->abort();
-
             throw $e;
         }
     }
-
     private function insertChunkFromBuffer(): void
     {
         if (strlen($this->buffer) == 0) {
             return;
         }
-
         $data = $this->buffer;
         $this->buffer = '';
-
-        $chunk = [
-            'files_id' => $this->file['_id'],
-            'n' => $this->chunkOffset,
-            'data' => new Binary($data),
-        ];
-
+        $chunk = ['files_id' => $this->file['_id'], 'n' => $this->chunkOffset, 'data' => new Binary($data)];
         try {
             $this->collectionWrapper->insertChunk($chunk);
         } catch (DriverRuntimeException $e) {
             $this->abort();
-
             throw $e;
         }
-
         $this->length += strlen($data);
         $this->chunkOffset++;
     }

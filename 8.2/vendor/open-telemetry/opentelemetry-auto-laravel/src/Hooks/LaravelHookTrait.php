@@ -1,24 +1,18 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\Contrib\Instrumentation\Laravel\Hooks;
 
 use OpenTelemetry\API\Instrumentation\CachedInstrumentation;
-
 trait LaravelHookTrait
 {
-    private static LaravelHook $instance;
-
-    protected function __construct(
-        protected CachedInstrumentation $instrumentation,
-    ) {
+    private static \OpenTelemetry\Contrib\Instrumentation\Laravel\Hooks\LaravelHook $instance;
+    protected function __construct(protected CachedInstrumentation $instrumentation)
+    {
     }
-
     abstract public function instrument(): void;
-
     /** @psalm-suppress PossiblyUnusedReturnValue */
-    public static function hook(CachedInstrumentation $instrumentation): LaravelHook
+    public static function hook(CachedInstrumentation $instrumentation): \OpenTelemetry\Contrib\Instrumentation\Laravel\Hooks\LaravelHook
     {
         /** @psalm-suppress RedundantPropertyInitializationCheck */
         if (!isset(self::$instance)) {
@@ -26,7 +20,6 @@ trait LaravelHookTrait
             self::$instance = new self($instrumentation);
             self::$instance->instrument();
         }
-
         return self::$instance;
     }
 }

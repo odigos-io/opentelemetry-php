@@ -6,36 +6,29 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file or at
 // https://developers.google.com/open-source/licenses/bsd
-
-namespace Google\Protobuf\Internal;
+namespace Odigos\Google\Protobuf\Internal;
 
 class GPBWire
 {
-
     const TAG_TYPE_BITS = 3;
-
-    const WIRETYPE_VARINT  = 0;
+    const WIRETYPE_VARINT = 0;
     const WIRETYPE_FIXED64 = 1;
     const WIRETYPE_LENGTH_DELIMITED = 2;
     const WIRETYPE_START_GROUP = 3;
     const WIRETYPE_END_GROUP = 4;
     const WIRETYPE_FIXED32 = 5;
-
     const UNKNOWN = 0;
     const NORMAL_FORMAT = 1;
     const PACKED_FORMAT = 2;
-
     public static function getTagFieldNumber($tag)
     {
         // We have to mask because PHP has no arithmetic shift.
-        return ($tag >> self::TAG_TYPE_BITS) & 0x1fffffff;
+        return $tag >> self::TAG_TYPE_BITS & 0x1fffffff;
     }
-
     public static function getTagWireType($tag)
     {
         return $tag & 0x7;
     }
-
     public static function getWireType($type)
     {
         switch ($type) {
@@ -68,320 +61,276 @@ class GPBWire
                 return 0;
         }
     }
-
-  // ZigZag Transform:  Encodes signed integers so that they can be effectively
-  // used with varint encoding.
-  //
-  // varint operates on unsigned integers, encoding smaller numbers into fewer
-  // bytes.  If you try to use it on a signed integer, it will treat this
-  // number as a very large unsigned integer, which means that even small
-  // signed numbers like -1 will take the maximum number of bytes (10) to
-  // encode.  zigZagEncode() maps signed integers to unsigned in such a way
-  // that those with a small absolute value will have smaller encoded values,
-  // making them appropriate for encoding using varint.
-  //
-  // int32 ->     uint32
-  // -------------------------
-  //           0 ->          0
-  //          -1 ->          1
-  //           1 ->          2
-  //          -2 ->          3
-  //         ... ->        ...
-  //  2147483647 -> 4294967294
-  // -2147483648 -> 4294967295
-  //
-  //        >> encode >>
-  //        << decode <<
-  public static function zigZagEncode32($int32)
-  {
-      if (PHP_INT_SIZE == 8) {
-          $trim_int32 = $int32 & 0xFFFFFFFF;
-          return (($trim_int32 << 1) ^ ($int32 << 32 >> 63)) & 0xFFFFFFFF;
-      } else {
-          return ($int32 << 1) ^ ($int32 >> 31);
-      }
-  }
-
+    // ZigZag Transform:  Encodes signed integers so that they can be effectively
+    // used with varint encoding.
+    //
+    // varint operates on unsigned integers, encoding smaller numbers into fewer
+    // bytes.  If you try to use it on a signed integer, it will treat this
+    // number as a very large unsigned integer, which means that even small
+    // signed numbers like -1 will take the maximum number of bytes (10) to
+    // encode.  zigZagEncode() maps signed integers to unsigned in such a way
+    // that those with a small absolute value will have smaller encoded values,
+    // making them appropriate for encoding using varint.
+    //
+    // int32 ->     uint32
+    // -------------------------
+    //           0 ->          0
+    //          -1 ->          1
+    //           1 ->          2
+    //          -2 ->          3
+    //         ... ->        ...
+    //  2147483647 -> 4294967294
+    // -2147483648 -> 4294967295
+    //
+    //        >> encode >>
+    //        << decode <<
+    public static function zigZagEncode32($int32)
+    {
+        if (\PHP_INT_SIZE == 8) {
+            $trim_int32 = $int32 & 0xffffffff;
+            return ($trim_int32 << 1 ^ $int32 << 32 >> 63) & 0xffffffff;
+        } else {
+            return $int32 << 1 ^ $int32 >> 31;
+        }
+    }
     public static function zigZagDecode32($uint32)
     {
         // Fill high 32 bits.
-        if (PHP_INT_SIZE === 8) {
-            $uint32 |= ($uint32 & 0xFFFFFFFF);
+        if (\PHP_INT_SIZE === 8) {
+            $uint32 |= $uint32 & 0xffffffff;
         }
-
-        $int32 = (($uint32 >> 1) & 0x7FFFFFFF) ^ (-($uint32 & 1));
-
+        $int32 = $uint32 >> 1 & 0x7fffffff ^ -($uint32 & 1);
         return $int32;
     }
-
     public static function zigZagEncode64($int64)
     {
-        if (PHP_INT_SIZE == 4) {
+        if (\PHP_INT_SIZE == 4) {
             if (bccomp($int64, 0) >= 0) {
                 return bcmul($int64, 2);
             } else {
                 return bcsub(bcmul(bcsub(0, $int64), 2), 1);
             }
         } else {
-            return ((int)$int64 << 1) ^ ((int)$int64 >> 63);
+            return (int) $int64 << 1 ^ (int) $int64 >> 63;
         }
     }
-
     public static function zigZagDecode64($uint64)
     {
-        if (PHP_INT_SIZE == 4) {
+        if (\PHP_INT_SIZE == 4) {
             if (bcmod($uint64, 2) == 0) {
                 return bcdiv($uint64, 2, 0);
             } else {
                 return bcsub(0, bcdiv(bcadd($uint64, 1), 2, 0));
             }
         } else {
-            return (($uint64 >> 1) & 0x7FFFFFFFFFFFFFFF) ^ (-($uint64 & 1));
+            return $uint64 >> 1 & 0x7fffffffffffffff ^ -($uint64 & 1);
         }
     }
-
     public static function readInt32(&$input, &$value)
     {
         return $input->readVarint32($value);
     }
-
     public static function readInt64(&$input, &$value)
     {
         $success = $input->readVarint64($value);
-        if (PHP_INT_SIZE == 4 && bccomp($value, "9223372036854775807") > 0) {
+        if (\PHP_INT_SIZE == 4 && bccomp($value, "9223372036854775807") > 0) {
             $value = bcsub($value, "18446744073709551616");
         }
         return $success;
     }
-
     public static function readUint32(&$input, &$value)
     {
         return self::readInt32($input, $value);
     }
-
     public static function readUint64(&$input, &$value)
     {
         return self::readInt64($input, $value);
     }
-
     public static function readSint32(&$input, &$value)
     {
         if (!$input->readVarint32($value)) {
-            return false;
+            return \false;
         }
         $value = GPBWire::zigZagDecode32($value);
-        return true;
+        return \true;
     }
-
     public static function readSint64(&$input, &$value)
     {
         if (!$input->readVarint64($value)) {
-            return false;
+            return \false;
         }
         $value = GPBWire::zigZagDecode64($value);
-        return true;
+        return \true;
     }
-
     public static function readFixed32(&$input, &$value)
     {
         return $input->readLittleEndian32($value);
     }
-
     public static function readFixed64(&$input, &$value)
     {
         return $input->readLittleEndian64($value);
     }
-
     public static function readSfixed32(&$input, &$value)
     {
         if (!self::readFixed32($input, $value)) {
-            return false;
+            return \false;
         }
-        if (PHP_INT_SIZE === 8) {
-            $value |= (-($value >> 31) << 32);
+        if (\PHP_INT_SIZE === 8) {
+            $value |= -($value >> 31) << 32;
         }
-        return true;
+        return \true;
     }
-
     public static function readSfixed64(&$input, &$value)
     {
         $success = $input->readLittleEndian64($value);
-        if (PHP_INT_SIZE == 4 && bccomp($value, "9223372036854775807") > 0) {
+        if (\PHP_INT_SIZE == 4 && bccomp($value, "9223372036854775807") > 0) {
             $value = bcsub($value, "18446744073709551616");
         }
         return $success;
     }
-
     public static function readFloat(&$input, &$value)
     {
         $data = null;
         if (!$input->readRaw(4, $data)) {
-            return false;
+            return \false;
         }
         $value = unpack('g', $data)[1];
-        return true;
+        return \true;
     }
-
     public static function readDouble(&$input, &$value)
     {
         $data = null;
         if (!$input->readRaw(8, $data)) {
-            return false;
+            return \false;
         }
         $value = unpack('e', $data)[1];
-        return true;
+        return \true;
     }
-
     public static function readBool(&$input, &$value)
     {
         if (!$input->readVarint64($value)) {
-            return false;
+            return \false;
         }
         if ($value == 0) {
-            $value = false;
+            $value = \false;
         } else {
-            $value = true;
+            $value = \true;
         }
-        return true;
+        return \true;
     }
-
     public static function readString(&$input, &$value)
     {
         $length = 0;
         return $input->readVarintSizeAsInt($length) && $input->readRaw($length, $value);
     }
-
     public static function readMessage(&$input, &$message)
     {
         $length = 0;
         if (!$input->readVarintSizeAsInt($length)) {
-            return false;
+            return \false;
         }
         $old_limit = 0;
         $recursion_limit = 0;
-        $input->incrementRecursionDepthAndPushLimit(
-            $length,
-            $old_limit,
-            $recursion_limit);
+        $input->incrementRecursionDepthAndPushLimit($length, $old_limit, $recursion_limit);
         if ($recursion_limit < 0 || !$message->parseFromStream($input)) {
-            return false;
+            return \false;
         }
         return $input->decrementRecursionDepthAndPopLimit($old_limit);
     }
-
     public static function writeTag(&$output, $tag)
     {
         return $output->writeTag($tag);
     }
-
     public static function writeInt32(&$output, $value)
     {
-        return $output->writeVarint32($value, false);
+        return $output->writeVarint32($value, \false);
     }
-
     public static function writeInt64(&$output, $value)
     {
         return $output->writeVarint64($value);
     }
-
     public static function writeUint32(&$output, $value)
     {
-        return $output->writeVarint32($value, true);
+        return $output->writeVarint32($value, \true);
     }
-
     public static function writeUint64(&$output, $value)
     {
         return $output->writeVarint64($value);
     }
-
     public static function writeSint32(&$output, $value)
     {
         $value = GPBWire::zigZagEncode32($value);
-        return $output->writeVarint32($value, true);
+        return $output->writeVarint32($value, \true);
     }
-
     public static function writeSint64(&$output, $value)
     {
         $value = GPBWire::zigZagEncode64($value);
         return $output->writeVarint64($value);
     }
-
     public static function writeFixed32(&$output, $value)
     {
         return $output->writeLittleEndian32($value);
     }
-
     public static function writeFixed64(&$output, $value)
     {
         return $output->writeLittleEndian64($value);
     }
-
     public static function writeSfixed32(&$output, $value)
     {
         return $output->writeLittleEndian32($value);
     }
-
     public static function writeSfixed64(&$output, $value)
     {
         return $output->writeLittleEndian64($value);
     }
-
     public static function writeBool(&$output, $value)
     {
         if ($value) {
-            return $output->writeVarint32(1, true);
+            return $output->writeVarint32(1, \true);
         } else {
-            return $output->writeVarint32(0, true);
+            return $output->writeVarint32(0, \true);
         }
     }
-
     public static function writeFloat(&$output, $value)
     {
         $data = pack("g", $value);
         return $output->writeRaw($data, 4);
     }
-
     public static function writeDouble(&$output, $value)
     {
         $data = pack("e", $value);
         return $output->writeRaw($data, 8);
     }
-
     public static function writeString(&$output, $value)
     {
         return self::writeBytes($output, $value);
     }
-
     public static function writeBytes(&$output, $value)
     {
         $size = strlen($value);
-        if (!$output->writeVarint32($size, true)) {
-            return false;
+        if (!$output->writeVarint32($size, \true)) {
+            return \false;
         }
         return $output->writeRaw($value, $size);
     }
-
     public static function writeMessage(&$output, $value)
     {
         $size = $value->byteSize();
-        if (!$output->writeVarint32($size, true)) {
-            return false;
+        if (!$output->writeVarint32($size, \true)) {
+            return \false;
         }
         return $value->serializeToStream($output);
     }
-
     public static function makeTag($number, $type)
     {
-        return ($number << 3) | self::getWireType($type);
+        return $number << 3 | self::getWireType($type);
     }
-
     public static function tagSize($field)
     {
         $tag = self::makeTag($field->getNumber(), $field->getType());
         return self::varint32Size($tag);
     }
-
-    public static function varint32Size($value, $sign_extended = false)
+    public static function varint32Size($value, $sign_extended = \false)
     {
         if ($value < 0) {
             if ($sign_extended) {
@@ -390,38 +339,34 @@ class GPBWire
                 return 5;
             }
         }
-        if ($value < (1 <<  7)) {
+        if ($value < 1 << 7) {
             return 1;
         }
-        if ($value < (1 << 14)) {
+        if ($value < 1 << 14) {
             return 2;
         }
-        if ($value < (1 << 21)) {
+        if ($value < 1 << 21) {
             return 3;
         }
-        if ($value < (1 << 28)) {
+        if ($value < 1 << 28) {
             return 4;
         }
         return 5;
     }
-
     public static function sint32Size($value)
     {
         $value = self::zigZagEncode32($value);
         return self::varint32Size($value);
     }
-
     public static function sint64Size($value)
     {
         $value = self::zigZagEncode64($value);
         return self::varint64Size($value);
     }
-
     public static function varint64Size($value)
     {
-        if (PHP_INT_SIZE == 4) {
-            if (bccomp($value, 0) < 0 ||
-                bccomp($value, "9223372036854775807") > 0) {
+        if (\PHP_INT_SIZE == 4) {
+            if (bccomp($value, 0) < 0 || bccomp($value, "9223372036854775807") > 0) {
                 return 10;
             }
             if (bccomp($value, 1 << 7) < 0) {
@@ -453,93 +398,84 @@ class GPBWire
             if ($value < 0) {
                 return 10;
             }
-            if ($value < (1 <<  7)) {
+            if ($value < 1 << 7) {
                 return 1;
             }
-            if ($value < (1 << 14)) {
+            if ($value < 1 << 14) {
                 return 2;
             }
-            if ($value < (1 << 21)) {
+            if ($value < 1 << 21) {
                 return 3;
             }
-            if ($value < (1 << 28)) {
+            if ($value < 1 << 28) {
                 return 4;
             }
-            if ($value < (1 << 35)) {
+            if ($value < 1 << 35) {
                 return 5;
             }
-            if ($value < (1 << 42)) {
+            if ($value < 1 << 42) {
                 return 6;
             }
-            if ($value < (1 << 49)) {
+            if ($value < 1 << 49) {
                 return 7;
             }
-            if ($value < (1 << 56)) {
+            if ($value < 1 << 56) {
                 return 8;
             }
             return 9;
         }
     }
-
-    public static function serializeFieldToStream(
-        $value,
-        $field,
-        $need_tag,
-        &$output)
+    public static function serializeFieldToStream($value, $field, $need_tag, &$output)
     {
         if ($need_tag) {
-            if (!GPBWire::writeTag(
-                $output,
-                self::makeTag(
-                    $field->getNumber(),
-                    $field->getType()))) {
-                return false;
+            if (!GPBWire::writeTag($output, self::makeTag($field->getNumber(), $field->getType()))) {
+                return \false;
             }
         }
         switch ($field->getType()) {
             case GPBType::DOUBLE:
                 if (!GPBWire::writeDouble($output, $value)) {
-                    return false;
+                    return \false;
                 }
                 break;
             case GPBType::FLOAT:
                 if (!GPBWire::writeFloat($output, $value)) {
-                    return false;
+                    return \false;
                 }
                 break;
             case GPBType::INT64:
                 if (!GPBWire::writeInt64($output, $value)) {
-                    return false;
+                    return \false;
                 }
                 break;
             case GPBType::UINT64:
                 if (!GPBWire::writeUint64($output, $value)) {
-                    return false;
+                    return \false;
                 }
                 break;
             case GPBType::INT32:
                 if (!GPBWire::writeInt32($output, $value)) {
-                    return false;
+                    return \false;
                 }
                 break;
             case GPBType::FIXED32:
                 if (!GPBWire::writeFixed32($output, $value)) {
-                    return false;
+                    return \false;
                 }
                 break;
             case GPBType::FIXED64:
                 if (!GPBWire::writeFixed64($output, $value)) {
-                    return false;
+                    return \false;
                 }
                 break;
             case GPBType::BOOL:
                 if (!GPBWire::writeBool($output, $value)) {
-                    return false;
+                    return \false;
                 }
                 break;
             case GPBType::STRING:
                 if (!GPBWire::writeString($output, $value)) {
-                    return false;
+                    return \false;
                 }
                 break;
             //    case GPBType::GROUP:
@@ -548,52 +484,51 @@ class GPBWire
             //      break;
             case GPBType::MESSAGE:
                 if (!GPBWire::writeMessage($output, $value)) {
-                    return false;
+                    return \false;
                 }
                 break;
             case GPBType::BYTES:
                 if (!GPBWire::writeBytes($output, $value)) {
-                    return false;
+                    return \false;
                 }
                 break;
             case GPBType::UINT32:
-                if (PHP_INT_SIZE === 8 && $value < 0) {
+                if (\PHP_INT_SIZE === 8 && $value < 0) {
                     $value += 4294967296;
                 }
                 if (!GPBWire::writeUint32($output, $value)) {
-                    return false;
+                    return \false;
                 }
                 break;
             case GPBType::ENUM:
                 if (!GPBWire::writeInt32($output, $value)) {
-                    return false;
+                    return \false;
                 }
                 break;
             case GPBType::SFIXED32:
                 if (!GPBWire::writeSfixed32($output, $value)) {
-                    return false;
+                    return \false;
                 }
                 break;
             case GPBType::SFIXED64:
                 if (!GPBWire::writeSfixed64($output, $value)) {
-                    return false;
+                    return \false;
                 }
                 break;
             case GPBType::SINT32:
                 if (!GPBWire::writeSint32($output, $value)) {
-                    return false;
+                    return \false;
                 }
                 break;
             case GPBType::SINT64:
                 if (!GPBWire::writeSint64($output, $value)) {
-                    return false;
+                    return \false;
                 }
                 break;
             default:
                 user_error("Unsupported type.");
-                return false;
+                return \false;
         }
-
-        return true;
+        return \true;
     }
 }

@@ -1,10 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenAI\Enums\Moderations;
 
-enum Category: string
+enum Category : string
 {
     case Hate = 'hate';
     case HateThreatening = 'hate/threatening';

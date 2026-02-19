@@ -6,13 +6,11 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file or at
 // https://developers.google.com/open-source/licenses/bsd
-
 /**
  * MapField and MapFieldIter are used by generated protocol message classes to
  * manipulate map fields.
  */
-
-namespace Google\Protobuf\Internal;
+namespace Odigos\Google\Protobuf\Internal;
 
 /**
  * MapFieldIter is used to iterate MapField. It is also need for the foreach
@@ -20,17 +18,14 @@ namespace Google\Protobuf\Internal;
  */
 class MapFieldIter implements \Iterator
 {
-
     /**
      * @ignore
      */
     private $container;
-
     /**
      * @ignore
      */
     private $key_type;
-
     /**
      * Create iterator instance for MapField.
      *
@@ -43,7 +38,6 @@ class MapFieldIter implements \Iterator
         $this->container = $container;
         $this->key_type = $key_type;
     }
-
     /**
      * Reset the status of the iterator
      *
@@ -55,7 +49,6 @@ class MapFieldIter implements \Iterator
     {
         reset($this->container);
     }
-
     /**
      * Return the element at the current position.
      *
@@ -67,7 +60,6 @@ class MapFieldIter implements \Iterator
     {
         return current($this->container);
     }
-
     /**
      * Return the current key.
      *
@@ -84,10 +76,10 @@ class MapFieldIter implements \Iterator
             case GPBType::FIXED64:
             case GPBType::SFIXED64:
             case GPBType::SINT64:
-                if (PHP_INT_SIZE === 8) {
+                if (\PHP_INT_SIZE === 8) {
                     return $key;
                 }
-                // Intentionally fall through
+            // Intentionally fall through
             case GPBType::STRING:
                 // PHP associative array stores int string as int for key.
                 return strval($key);
@@ -98,7 +90,6 @@ class MapFieldIter implements \Iterator
                 return $key;
         }
     }
-
     /**
      * Move to the next position.
      *
@@ -110,7 +101,6 @@ class MapFieldIter implements \Iterator
     {
         next($this->container);
     }
-
     /**
      * Check whether there are more elements to iterate.
      *

@@ -1,16 +1,15 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\db\conditions;
 
 use yii\db\ExpressionBuilderInterface;
 use yii\db\ExpressionBuilderTrait;
 use yii\db\ExpressionInterface;
-
 /**
  * Class ExistsConditionBuilder builds objects of [[ExistsCondition]]
  *
@@ -20,8 +19,6 @@ use yii\db\ExpressionInterface;
 class ExistsConditionBuilder implements ExpressionBuilderInterface
 {
     use ExpressionBuilderTrait;
-
-
     /**
      * Method builds the raw SQL from the $expression that will not be additionally
      * escaped or quoted.
@@ -34,9 +31,7 @@ class ExistsConditionBuilder implements ExpressionBuilderInterface
     {
         $operator = $expression->getOperator();
         $query = $expression->getQuery();
-
         $sql = $this->queryBuilder->buildExpression($query, $params);
-
-        return "$operator $sql";
+        return "{$operator} {$sql}";
     }
 }

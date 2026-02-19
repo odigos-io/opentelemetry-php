@@ -1,4 +1,5 @@
 <?php
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -15,7 +16,6 @@
 namespace Cake\Test\Fixture;
 
 use Cake\TestSuite\Fixture\TestFixture;
-
 /**
  * Fixture for testing bindingKey in belongstomany associations.
  */
@@ -26,10 +26,5 @@ class ArticlesTagsBindingKeysFixture extends TestFixture
      *
      * @var array
      */
-    public array $records = [
-        ['article_id' => 1, 'tagname' => 'tag1'],
-        ['article_id' => 1, 'tagname' => 'tag2'],
-        ['article_id' => 2, 'tagname' => 'tag1'],
-        ['article_id' => 2, 'tagname' => 'tag3'],
-    ];
+    public array $records = [['article_id' => 1, 'tagname' => 'tag1'], ['article_id' => 1, 'tagname' => 'tag2'], ['article_id' => 2, 'tagname' => 'tag1'], ['article_id' => 2, 'tagname' => 'tag3']];
 }

@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace GuzzleHttp\Promise;
 
 /**
@@ -12,5 +11,5 @@ interface PromisorInterface
     /**
      * Returns a promise.
      */
-    public function promise(): PromiseInterface;
+    public function promise(): \GuzzleHttp\Promise\PromiseInterface;
 }

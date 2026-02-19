@@ -1,14 +1,13 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\db\oci\conditions;
 
 use yii\db\ExpressionInterface;
-
 /**
  * {@inheritdoc}
  */
@@ -23,13 +22,7 @@ class LikeConditionBuilder extends \yii\db\conditions\LikeConditionBuilder
      * we need to choose replacement value based on [[\yii\db\Schema::quoteValue()]].
      * {@inheritdoc}
      */
-    protected $escapingReplacements = [
-        '%' => '!%',
-        '_' => '!_',
-        '!' => '!!',
-    ];
-
-
+    protected $escapingReplacements = ['%' => '!%', '_' => '!_', '!' => '!!'];
     /**
      * {@inheritdoc}
      */
@@ -42,7 +35,6 @@ class LikeConditionBuilder extends \yii\db\conditions\LikeConditionBuilder
              */
             $this->escapingReplacements['\\'] = substr($this->queryBuilder->db->quoteValue('\\'), 1, -1);
         }
-
         return parent::build($expression, $params);
     }
 }

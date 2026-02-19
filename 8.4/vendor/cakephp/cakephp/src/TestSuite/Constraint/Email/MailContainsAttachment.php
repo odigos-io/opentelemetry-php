@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -21,7 +21,7 @@ namespace Cake\TestSuite\Constraint\Email;
  *
  * @internal
  */
-class MailContainsAttachment extends MailContains
+class MailContainsAttachment extends \Cake\TestSuite\Constraint\Email\MailContains
 {
     /**
      * Checks constraint
@@ -32,22 +32,19 @@ class MailContainsAttachment extends MailContains
     public function matches(mixed $other): bool
     {
         [$expectedFilename, $expectedFileInfo] = $other;
-
         $messages = $this->getMessages();
         foreach ($messages as $message) {
             foreach ($message->getAttachments() as $filename => $fileInfo) {
                 if ($filename === $expectedFilename && !$expectedFileInfo) {
-                    return true;
+                    return \true;
                 }
                 if ($expectedFileInfo && array_intersect($expectedFileInfo, $fileInfo) === $expectedFileInfo) {
-                    return true;
+                    return \true;
                 }
             }
         }
-
-        return false;
+        return \false;
     }
-
     /**
      * Assertion message string
      *
@@ -58,10 +55,8 @@ class MailContainsAttachment extends MailContains
         if ($this->at) {
             return sprintf('is an attachment of email #%d', $this->at);
         }
-
         return 'is an attachment of an email';
     }
-
     /**
      * Overwrites the descriptions so we can remove the automatic "expected" message
      *
@@ -71,7 +66,6 @@ class MailContainsAttachment extends MailContains
     protected function failureDescription(mixed $other): string
     {
         [$expectedFilename] = $other;
-
         return "'" . $expectedFilename . "' " . $this->toString();
     }
 }

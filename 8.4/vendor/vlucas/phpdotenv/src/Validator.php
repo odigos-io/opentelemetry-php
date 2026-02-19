@@ -1,14 +1,12 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Odigos\Dotenv;
 
-namespace Dotenv;
-
-use Dotenv\Exception\ValidationException;
-use Dotenv\Repository\RepositoryInterface;
-use Dotenv\Util\Regex;
-use Dotenv\Util\Str;
-
+use Odigos\Dotenv\Exception\ValidationException;
+use Odigos\Dotenv\Repository\RepositoryInterface;
+use Odigos\Dotenv\Util\Regex;
+use Odigos\Dotenv\Util\Str;
 class Validator
 {
     /**
@@ -17,14 +15,12 @@ class Validator
      * @var \Dotenv\Repository\RepositoryInterface
      */
     private $repository;
-
     /**
      * The variables to validate.
      *
      * @var string[]
      */
     private $variables;
-
     /**
      * Create a new validator instance.
      *
@@ -38,7 +34,6 @@ class Validator
         $this->repository = $repository;
         $this->variables = $variables;
     }
-
     /**
      * Assert that each variable is present.
      *
@@ -48,14 +43,10 @@ class Validator
      */
     public function required()
     {
-        return $this->assert(
-            static function (?string $value) {
-                return $value !== null;
-            },
-            'is missing'
-        );
+        return $this->assert(static function (?string $value) {
+            return $value !== null;
+        }, 'is missing');
     }
-
     /**
      * Assert that each variable is not empty.
      *
@@ -65,14 +56,10 @@ class Validator
      */
     public function notEmpty()
     {
-        return $this->assertNullable(
-            static function (string $value) {
-                return Str::len(\trim($value)) > 0;
-            },
-            'is empty'
-        );
+        return $this->assertNullable(static function (string $value) {
+            return Str::len(\trim($value)) > 0;
+        }, 'is empty');
     }
-
     /**
      * Assert that each specified variable is an integer.
      *
@@ -82,14 +69,10 @@ class Validator
      */
     public function isInteger()
     {
-        return $this->assertNullable(
-            static function (string $value) {
-                return \ctype_digit($value);
-            },
-            'is not an integer'
-        );
+        return $this->assertNullable(static function (string $value) {
+            return \ctype_digit($value);
+        }, 'is not an integer');
     }
-
     /**
      * Assert that each specified variable is a boolean.
      *
@@ -99,18 +82,13 @@ class Validator
      */
     public function isBoolean()
     {
-        return $this->assertNullable(
-            static function (string $value) {
-                if ($value === '') {
-                    return false;
-                }
-
-                return \filter_var($value, \FILTER_VALIDATE_BOOLEAN, \FILTER_NULL_ON_FAILURE) !== null;
-            },
-            'is not a boolean'
-        );
+        return $this->assertNullable(static function (string $value) {
+            if ($value === '') {
+                return \false;
+            }
+            return \filter_var($value, \FILTER_VALIDATE_BOOLEAN, \FILTER_NULL_ON_FAILURE) !== null;
+        }, 'is not a boolean');
     }
-
     /**
      * Assert that each variable is amongst the given choices.
      *
@@ -122,14 +100,10 @@ class Validator
      */
     public function allowedValues(array $choices)
     {
-        return $this->assertNullable(
-            static function (string $value) use ($choices) {
-                return \in_array($value, $choices, true);
-            },
-            \sprintf('is not one of [%s]', \implode(', ', $choices))
-        );
+        return $this->assertNullable(static function (string $value) use ($choices) {
+            return \in_array($value, $choices, \true);
+        }, \sprintf('is not one of [%s]', \implode(', ', $choices)));
     }
-
     /**
      * Assert that each variable matches the given regular expression.
      *
@@ -141,14 +115,10 @@ class Validator
      */
     public function allowedRegexValues(string $regex)
     {
-        return $this->assertNullable(
-            static function (string $value) use ($regex) {
-                return Regex::matches($regex, $value)->success()->getOrElse(false);
-            },
-            \sprintf('does not match "%s"', $regex)
-        );
+        return $this->assertNullable(static function (string $value) use ($regex) {
+            return Regex::matches($regex, $value)->success()->getOrElse(\false);
+        }, \sprintf('does not match "%s"', $regex));
     }
-
     /**
      * Assert that the callback returns true for each variable.
      *
@@ -162,23 +132,16 @@ class Validator
     public function assert(callable $callback, string $message)
     {
         $failing = [];
-
         foreach ($this->variables as $variable) {
-            if ($callback($this->repository->get($variable)) === false) {
+            if ($callback($this->repository->get($variable)) === \false) {
                 $failing[] = \sprintf('%s %s', $variable, $message);
             }
         }
-
         if (\count($failing) > 0) {
-            throw new ValidationException(\sprintf(
-                'One or more environment variables failed assertions: %s.',
-                \implode(', ', $failing)
-            ));
+            throw new ValidationException(\sprintf('One or more environment variables failed assertions: %s.', \implode(', ', $failing)));
         }
-
         return $this;
     }
-
     /**
      * Assert that the callback returns true for each variable.
      *
@@ -193,15 +156,11 @@ class Validator
      */
     public function assertNullable(callable $callback, string $message)
     {
-        return $this->assert(
-            static function (?string $value) use ($callback) {
-                if ($value === null) {
-                    return true;
-                }
-
-                return $callback($value);
-            },
-            $message
-        );
+        return $this->assert(static function (?string $value) use ($callback) {
+            if ($value === null) {
+                return \true;
+            }
+            return $callback($value);
+        }, $message);
     }
 }

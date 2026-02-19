@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright 2015-present MongoDB, Inc.
  *
@@ -14,14 +15,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 namespace MongoDB\Model;
 
 use ArrayAccess;
 use MongoDB\Exception\BadMethodCallException;
-
 use function array_key_exists;
-
 /**
  * Database information model class.
  *
@@ -38,7 +36,6 @@ class DatabaseInfo implements ArrayAccess
     public function __construct(private array $info)
     {
     }
-
     /**
      * Return the database info as an array.
      *
@@ -48,7 +45,6 @@ class DatabaseInfo implements ArrayAccess
     {
         return $this->info;
     }
-
     /**
      * Return the database name.
      */
@@ -56,7 +52,6 @@ class DatabaseInfo implements ArrayAccess
     {
         return (string) $this->info['name'];
     }
-
     /**
      * Return the databases size on disk (in bytes).
      */
@@ -65,7 +60,6 @@ class DatabaseInfo implements ArrayAccess
         /* The MongoDB server might return this number as an integer or float */
         return (int) $this->info['sizeOnDisk'];
     }
-
     /**
      * Return whether the database is empty.
      */
@@ -73,7 +67,6 @@ class DatabaseInfo implements ArrayAccess
     {
         return (bool) $this->info['empty'];
     }
-
     /**
      * Check whether a field exists in the database information.
      *
@@ -84,7 +77,6 @@ class DatabaseInfo implements ArrayAccess
     {
         return array_key_exists($offset, $this->info);
     }
-
     /**
      * Return the field's value from the database information.
      *
@@ -95,7 +87,6 @@ class DatabaseInfo implements ArrayAccess
     {
         return $this->info[$offset];
     }
-
     /**
      * Not supported.
      *
@@ -106,7 +97,6 @@ class DatabaseInfo implements ArrayAccess
     {
         throw BadMethodCallException::classIsImmutable(self::class);
     }
-
     /**
      * Not supported.
      *

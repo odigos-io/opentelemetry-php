@@ -1,13 +1,11 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenAI\Responses\Threads\Messages;
 
 use OpenAI\Contracts\ResponseContract;
 use OpenAI\Responses\Concerns\ArrayAccessible;
 use OpenAI\Testing\Responses\Concerns\Fakeable;
-
 /**
  * @implements ResponseContract<array{reason: string}>
  */
@@ -17,13 +15,10 @@ final class ThreadMessageResponseIncompleteDetails implements ResponseContract
      * @use ArrayAccessible<array{reason: string}>
      */
     use ArrayAccessible;
-
     use Fakeable;
-
-    private function __construct(
-        public string $reason,
-    ) {}
-
+    private function __construct(public string $reason)
+    {
+    }
     /**
      * Acts as static factory, and returns a new Response instance.
      *
@@ -31,18 +26,13 @@ final class ThreadMessageResponseIncompleteDetails implements ResponseContract
      */
     public static function from(array $attributes): self
     {
-        return new self(
-            $attributes['reason'],
-        );
+        return new self($attributes['reason']);
     }
-
     /**
      * {@inheritDoc}
      */
     public function toArray(): array
     {
-        return [
-            'reason' => $this->reason,
-        ];
+        return ['reason' => $this->reason];
     }
 }

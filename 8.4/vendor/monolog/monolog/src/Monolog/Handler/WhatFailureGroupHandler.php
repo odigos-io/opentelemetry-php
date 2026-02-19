@@ -1,5 +1,6 @@
-<?php declare(strict_types=1);
+<?php
 
+declare (strict_types=1);
 /*
  * This file is part of the Monolog package.
  *
@@ -8,12 +9,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Odigos\Monolog\Handler;
 
-namespace Monolog\Handler;
-
-use Monolog\LogRecord;
+use Odigos\Monolog\LogRecord;
 use Throwable;
-
 /**
  * Forwards records to multiple handlers suppressing failures of each handler
  * and continuing through to give every handler a chance to succeed.
@@ -30,7 +29,6 @@ class WhatFailureGroupHandler extends GroupHandler
         if (\count($this->processors) > 0) {
             $record = $this->processRecord($record);
         }
-
         foreach ($this->handlers as $handler) {
             try {
                 $handler->handle(clone $record);
@@ -38,10 +36,8 @@ class WhatFailureGroupHandler extends GroupHandler
                 // What failure?
             }
         }
-
-        return false === $this->bubble;
+        return \false === $this->bubble;
     }
-
     /**
      * @inheritDoc
      */
@@ -54,16 +50,14 @@ class WhatFailureGroupHandler extends GroupHandler
             }
             $records = $processed;
         }
-
         foreach ($this->handlers as $handler) {
             try {
-                $handler->handleBatch(array_map(fn ($record) => clone $record, $records));
+                $handler->handleBatch(array_map(fn($record) => clone $record, $records));
             } catch (Throwable) {
                 // What failure?
             }
         }
     }
-
     /**
      * {@inheritDoc}
      */

@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -33,7 +33,6 @@ interface CollectionInterface
      * @return array<string> The list of tables in the connected database/schema.
      */
     public function listTables(): array;
-
     /**
      * Get the column metadata for a table.
      *
@@ -50,5 +49,5 @@ interface CollectionInterface
      * @return \Cake\Database\Schema\TableSchemaInterface Object with column metadata.
      * @throws \Cake\Database\Exception\DatabaseException when table cannot be described.
      */
-    public function describe(string $name, array $options = []): TableSchemaInterface;
+    public function describe(string $name, array $options = []): \Cake\Database\Schema\TableSchemaInterface;
 }

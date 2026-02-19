@@ -2,14 +2,13 @@
 
 namespace Illuminate\Support;
 
-use Carbon\CarbonInterface;
-use Carbon\CarbonInterval;
+use Odigos\Carbon\CarbonInterface;
+use Odigos\Carbon\CarbonInterval;
 use Illuminate\Support\Defer\DeferredCallback;
 use Illuminate\Support\Defer\DeferredCallbackCollection;
 use Illuminate\Support\Facades\Date;
 use Symfony\Component\Process\PhpExecutableFinder;
-
-if (! function_exists('Illuminate\Support\defer')) {
+if (!function_exists('Illuminate\Support\defer')) {
     /**
      * Defer execution of the given callback.
      *
@@ -18,30 +17,24 @@ if (! function_exists('Illuminate\Support\defer')) {
      * @param  bool  $always
      * @return ($callback is null ? \Illuminate\Support\Defer\DeferredCallbackCollection : \Illuminate\Support\Defer\DeferredCallback)
      */
-    function defer(?callable $callback = null, ?string $name = null, bool $always = false): DeferredCallback|DeferredCallbackCollection
+    function defer(?callable $callback = null, ?string $name = null, bool $always = \false): DeferredCallback|DeferredCallbackCollection
     {
         if ($callback === null) {
             return app(DeferredCallbackCollection::class);
         }
-
-        return tap(
-            new DeferredCallback($callback, $name, $always),
-            fn ($deferred) => app(DeferredCallbackCollection::class)[] = $deferred
-        );
+        return tap(new DeferredCallback($callback, $name, $always), fn($deferred) => app(DeferredCallbackCollection::class)[] = $deferred);
     }
 }
-
-if (! function_exists('Illuminate\Support\php_binary')) {
+if (!function_exists('Illuminate\Support\php_binary')) {
     /**
      * Determine the PHP Binary.
      */
     function php_binary(): string
     {
-        return (new PhpExecutableFinder)->find(false) ?: 'php';
+        return (new PhpExecutableFinder())->find(\false) ?: 'php';
     }
 }
-
-if (! function_exists('Illuminate\Support\artisan_binary')) {
+if (!function_exists('Illuminate\Support\artisan_binary')) {
     /**
      * Determine the proper Artisan executable.
      */
@@ -50,10 +43,8 @@ if (! function_exists('Illuminate\Support\artisan_binary')) {
         return defined('ARTISAN_BINARY') ? ARTISAN_BINARY : 'artisan';
     }
 }
-
 // Time functions...
-
-if (! function_exists('Illuminate\Support\now')) {
+if (!function_exists('Illuminate\Support\now')) {
     /**
      * Create a new Carbon instance for the current time.
      *
@@ -65,8 +56,7 @@ if (! function_exists('Illuminate\Support\now')) {
         return Date::now(enum_value($tz));
     }
 }
-
-if (! function_exists('Illuminate\Support\microseconds')) {
+if (!function_exists('Illuminate\Support\microseconds')) {
     /**
      * Get the current date / time plus the given number of microseconds.
      */
@@ -75,8 +65,7 @@ if (! function_exists('Illuminate\Support\microseconds')) {
         return CarbonInterval::microseconds($microseconds);
     }
 }
-
-if (! function_exists('Illuminate\Support\milliseconds')) {
+if (!function_exists('Illuminate\Support\milliseconds')) {
     /**
      * Get the current date / time plus the given number of milliseconds.
      */
@@ -85,8 +74,7 @@ if (! function_exists('Illuminate\Support\milliseconds')) {
         return CarbonInterval::milliseconds($milliseconds);
     }
 }
-
-if (! function_exists('Illuminate\Support\seconds')) {
+if (!function_exists('Illuminate\Support\seconds')) {
     /**
      * Get the current date / time plus the given number of seconds.
      */
@@ -95,8 +83,7 @@ if (! function_exists('Illuminate\Support\seconds')) {
         return CarbonInterval::seconds($seconds);
     }
 }
-
-if (! function_exists('Illuminate\Support\minutes')) {
+if (!function_exists('Illuminate\Support\minutes')) {
     /**
      * Get the current date / time plus the given number of minutes.
      */
@@ -105,8 +92,7 @@ if (! function_exists('Illuminate\Support\minutes')) {
         return CarbonInterval::minutes($minutes);
     }
 }
-
-if (! function_exists('Illuminate\Support\hours')) {
+if (!function_exists('Illuminate\Support\hours')) {
     /**
      * Get the current date / time plus the given number of hours.
      */
@@ -115,8 +101,7 @@ if (! function_exists('Illuminate\Support\hours')) {
         return CarbonInterval::hours($hours);
     }
 }
-
-if (! function_exists('Illuminate\Support\days')) {
+if (!function_exists('Illuminate\Support\days')) {
     /**
      * Get the current date / time plus the given number of days.
      */
@@ -125,8 +110,7 @@ if (! function_exists('Illuminate\Support\days')) {
         return CarbonInterval::days($days);
     }
 }
-
-if (! function_exists('Illuminate\Support\weeks')) {
+if (!function_exists('Illuminate\Support\weeks')) {
     /**
      * Get the current date / time plus the given number of weeks.
      */
@@ -135,8 +119,7 @@ if (! function_exists('Illuminate\Support\weeks')) {
         return CarbonInterval::weeks($weeks);
     }
 }
-
-if (! function_exists('Illuminate\Support\months')) {
+if (!function_exists('Illuminate\Support\months')) {
     /**
      * Get the current date / time plus the given number of months.
      */
@@ -145,8 +128,7 @@ if (! function_exists('Illuminate\Support\months')) {
         return CarbonInterval::months($months);
     }
 }
-
-if (! function_exists('Illuminate\Support\years')) {
+if (!function_exists('Illuminate\Support\years')) {
     /**
      * Get the current date / time plus the given number of years.
      */

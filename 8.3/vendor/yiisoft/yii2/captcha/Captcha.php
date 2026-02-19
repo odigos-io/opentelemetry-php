@@ -1,10 +1,10 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\captcha;
 
 use yii\base\InvalidConfigException;
@@ -12,7 +12,6 @@ use yii\helpers\Html;
 use yii\helpers\Json;
 use yii\helpers\Url;
 use yii\widgets\InputWidget;
-
 /**
  * Captcha renders a CAPTCHA image and an input field that takes user-entered verification code.
  *
@@ -81,22 +80,17 @@ class Captcha extends InputWidget
      * @see \yii\helpers\Html::renderTagAttributes() for details on how attributes are being rendered.
      */
     public $options = ['class' => 'form-control'];
-
-
     /**
      * Initializes the widget.
      */
     public function init()
     {
         parent::init();
-
         static::checkRequirements();
-
         if (!isset($this->imageOptions['id'])) {
             $this->imageOptions['id'] = $this->options['id'] . '-image';
         }
     }
-
     /**
      * Renders the widget.
      */
@@ -106,17 +100,13 @@ class Captcha extends InputWidget
         $input = $this->renderInputHtml('text');
         $route = $this->captchaAction;
         if (is_array($route)) {
-            $route['v'] = uniqid('', true);
+            $route['v'] = uniqid('', \true);
         } else {
-            $route = [$route, 'v' => uniqid('', true)];
+            $route = [$route, 'v' => uniqid('', \true)];
         }
         $image = Html::img($route, $this->imageOptions);
-        echo strtr($this->template, [
-            '{input}' => $input,
-            '{image}' => $image,
-        ]);
+        echo strtr($this->template, ['{input}' => $input, '{image}' => $image]);
     }
-
     /**
      * Registers the needed JavaScript.
      */
@@ -126,10 +116,9 @@ class Captcha extends InputWidget
         $options = empty($options) ? '' : Json::htmlEncode($options);
         $id = $this->imageOptions['id'];
         $view = $this->getView();
-        CaptchaAsset::register($view);
-        $view->registerJs("jQuery('#$id').yiiCaptcha($options);");
+        \yii\captcha\CaptchaAsset::register($view);
+        $view->registerJs("jQuery('#{$id}').yiiCaptcha({$options});");
     }
-
     /**
      * Returns the options for the captcha JS widget.
      * @return array the options
@@ -138,19 +127,13 @@ class Captcha extends InputWidget
     {
         $route = $this->captchaAction;
         if (is_array($route)) {
-            $route[CaptchaAction::REFRESH_GET_VAR] = 1;
+            $route[\yii\captcha\CaptchaAction::REFRESH_GET_VAR] = 1;
         } else {
-            $route = [$route, CaptchaAction::REFRESH_GET_VAR => 1];
+            $route = [$route, \yii\captcha\CaptchaAction::REFRESH_GET_VAR => 1];
         }
-
-        $options = [
-            'refreshUrl' => Url::toRoute($route),
-            'hashKey' => 'yiiCaptcha/' . trim($route[0], '/'),
-        ];
-
+        $options = ['refreshUrl' => Url::toRoute($route), 'hashKey' => 'yiiCaptcha/' . trim($route[0], '/')];
         return $options;
     }
-
     /**
      * Checks if there is graphic extension available to generate CAPTCHA images.
      * This method will check the existence of ImageMagick and GD extensions.
@@ -161,7 +144,7 @@ class Captcha extends InputWidget
     {
         if (extension_loaded('imagick')) {
             $imagickFormats = (new \Imagick())->queryFormats('PNG');
-            if (in_array('PNG', $imagickFormats, true)) {
+            if (in_array('PNG', $imagickFormats, \true)) {
                 return 'imagick';
             }
         }

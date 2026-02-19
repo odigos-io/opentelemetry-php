@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -18,7 +18,6 @@ namespace Cake\Database;
 
 use IteratorAggregate;
 use PDO;
-
 /**
  * @template-extends \IteratorAggregate<array>
  */
@@ -31,7 +30,6 @@ interface StatementInterface extends IteratorAggregate
      * @link https://www.php.net/manual/en/pdo.constants.php
      */
     public const FETCH_TYPE_NUM = 'num';
-
     /**
      * Maps to PDO::FETCH_ASSOC.
      *
@@ -39,7 +37,6 @@ interface StatementInterface extends IteratorAggregate
      * @link https://www.php.net/manual/en/pdo.constants.php
      */
     public const FETCH_TYPE_ASSOC = 'assoc';
-
     /**
      * Maps to PDO::FETCH_OBJ.
      *
@@ -47,7 +44,6 @@ interface StatementInterface extends IteratorAggregate
      * @link https://www.php.net/manual/en/pdo.constants.php
      */
     public const FETCH_TYPE_OBJ = 'obj';
-
     /**
      * Assign a value to a positional or named variable in prepared query. If using
      * positional variables you need to start with index one, if using named params then
@@ -69,7 +65,6 @@ interface StatementInterface extends IteratorAggregate
      * @return void
      */
     public function bindValue(string|int $column, mixed $value, string|int|null $type = 'string'): void;
-
     /**
      * Closes the cursor, enabling the statement to be executed again.
      *
@@ -78,7 +73,6 @@ interface StatementInterface extends IteratorAggregate
      * @return void
      */
     public function closeCursor(): void;
-
     /**
      * Returns the number of columns in the result set.
      *
@@ -88,7 +82,6 @@ interface StatementInterface extends IteratorAggregate
      * @link https://php.net/manual/en/pdostatement.columncount.php
      */
     public function columnCount(): int;
-
     /**
      * Fetch the SQLSTATE associated with the last operation on the statement handle.
      *
@@ -98,7 +91,6 @@ interface StatementInterface extends IteratorAggregate
      * @link https://www.php.net/manual/en/pdostatement.errorcode.php
      */
     public function errorCode(): string;
-
     /**
      * Fetch extended error information associated with the last operation on the statement handle.
      *
@@ -108,7 +100,6 @@ interface StatementInterface extends IteratorAggregate
      * @link https://www.php.net/manual/en/pdostatement.errorinfo.php
      */
     public function errorInfo(): array;
-
     /**
      * Executes the statement by sending the SQL query to the database. It can optionally
      * take an array or arguments to be bound to the query variables. Please note
@@ -119,7 +110,6 @@ interface StatementInterface extends IteratorAggregate
      * @return bool true on success, false otherwise
      */
     public function execute(?array $params = null): bool;
-
     /**
      * Fetches the next row from a result set
      * and converts fields to types based on TypeMap.
@@ -133,7 +123,6 @@ interface StatementInterface extends IteratorAggregate
      * @link https://www.php.net/manual/en/pdo.constants.php
      */
     public function fetch(string|int $mode = PDO::FETCH_NUM): mixed;
-
     /**
      * Fetches the remaining rows from a result set
      * and converts fields to types based on TypeMap.
@@ -147,7 +136,6 @@ interface StatementInterface extends IteratorAggregate
      * @link https://www.php.net/manual/en/pdo.constants.php
      */
     public function fetchAll(string|int $mode = PDO::FETCH_NUM): array;
-
     /**
      * Fetches the next row from a result set using PDO::FETCH_NUM
      * and converts fields to types based on TypeMap.
@@ -159,7 +147,6 @@ interface StatementInterface extends IteratorAggregate
      * @return mixed
      */
     public function fetchColumn(int $position): mixed;
-
     /**
      * Fetches the next row from a result set using PDO::FETCH_ASSOC
      * and converts fields to types based on TypeMap.
@@ -170,7 +157,6 @@ interface StatementInterface extends IteratorAggregate
      * @return array
      */
     public function fetchAssoc(): array;
-
     /**
      * Returns the number of rows affected by the last SQL statement.
      *
@@ -180,7 +166,6 @@ interface StatementInterface extends IteratorAggregate
      * @link https://www.php.net/manual/en/pdostatement.rowcount.php
      */
     public function rowCount(): int;
-
     /**
      * Binds a set of values to statement object with corresponding type.
      *
@@ -189,7 +174,6 @@ interface StatementInterface extends IteratorAggregate
      * @return void
      */
     public function bind(array $params, array $types): void;
-
     /**
      * Returns the latest primary inserted using this statement.
      *
@@ -198,14 +182,12 @@ interface StatementInterface extends IteratorAggregate
      * @return string|int
      */
     public function lastInsertId(?string $table = null, ?string $column = null): string|int;
-
     /**
      * Returns prepared query string.
      *
      * @return string
      */
     public function queryString(): string;
-
     /**
      * Get the bound params.
      *

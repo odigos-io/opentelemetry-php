@@ -1,5 +1,7 @@
-<?php declare(strict_types=1);
-namespace Nevay\SPI;
+<?php
+
+declare (strict_types=1);
+namespace Odigos\Nevay\SPI;
 
 /**
  * Specifies requirements for a service provider.
@@ -9,8 +11,8 @@ namespace Nevay\SPI;
  * Requirements implementing this interface will be re-validated during runtime instead of during composer
  * autoload dumping.
  */
-interface ServiceProviderRequirementRuntimeValidated extends ServiceProviderRequirement {
-
+interface ServiceProviderRequirementRuntimeValidated extends ServiceProviderRequirement
+{
     /**
      * Returns a hash representing the state that lead to the {@link self::isSatisfied()} decision.
      *

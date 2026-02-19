@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\SDK\Metrics;
 
 /**
@@ -16,11 +15,9 @@ final class InstrumentType
     public const HISTOGRAM = 'Histogram';
     /** @experimental */
     public const GAUGE = 'Gauge';
-
     public const ASYNCHRONOUS_COUNTER = 'AsynchronousCounter';
     public const ASYNCHRONOUS_UP_DOWN_COUNTER = 'AsynchronousUpDownCounter';
     public const ASYNCHRONOUS_GAUGE = 'AsynchronousGauge';
-
     private function __construct()
     {
     }

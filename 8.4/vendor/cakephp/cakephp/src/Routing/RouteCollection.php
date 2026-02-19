@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -23,7 +23,6 @@ use Closure;
 use InvalidArgumentException;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
-
 /**
  * Contains a collection of routes.
  *
@@ -40,49 +39,42 @@ class RouteCollection
      * @var array<string, array<\Cake\Routing\Route\Route>>
      */
     protected array $_routeTable = [];
-
     /**
      * The hash map of named routes that are in this collection.
      *
      * @var array<\Cake\Routing\Route\Route>
      */
     protected array $_named = [];
-
     /**
      * Routes indexed by static path.
      *
      * @var array<string, array<\Cake\Routing\Route\Route>>
      */
     protected array $staticPaths = [];
-
     /**
      * Routes indexed by path prefix.
      *
      * @var array<string, array<\Cake\Routing\Route\Route>>
      */
     protected array $_paths = [];
-
     /**
      * A map of middleware names and the related objects.
      *
      * @var array
      */
     protected array $_middleware = [];
-
     /**
      * A map of middleware group names and the related middleware names.
      *
      * @var array
      */
     protected array $_middlewareGroups = [];
-
     /**
      * Route extensions
      *
      * @var array<string>
      */
     protected array $_extensions = [];
-
     /**
      * Add a route to the collection.
      *
@@ -97,35 +89,25 @@ class RouteCollection
         if (isset($options['_name'])) {
             if (isset($this->_named[$options['_name']])) {
                 $matched = $this->_named[$options['_name']];
-                throw new DuplicateNamedRouteException([
-                    'name' => $options['_name'],
-                    'url' => $matched->template,
-                    'duplicate' => $matched,
-                ]);
+                throw new DuplicateNamedRouteException(['name' => $options['_name'], 'url' => $matched->template, 'duplicate' => $matched]);
             }
             $this->_named[$options['_name']] = $route;
         }
-
         // Generated names.
         $name = $route->getName();
         $this->_routeTable[$name] ??= [];
         $this->_routeTable[$name][] = $route;
-
         // Index path prefixes (for parsing)
         $path = $route->staticPath();
-
         $extensions = $route->getExtensions();
         if ($extensions !== []) {
             $this->setExtensions($extensions);
         }
-
         if ($path === $route->template) {
             $this->staticPaths[$path][] = $route;
         }
-
         $this->_paths[$path][] = $route;
     }
-
     /**
      * Takes the ServerRequestInterface, iterates the routes until one is able to parse the route.
      *
@@ -140,10 +122,7 @@ class RouteCollection
         if (str_contains($urlPath, '%')) {
             // decode urlencoded segments, but don't decode %2f aka /
             $parts = explode('/', $urlPath);
-            $parts = array_map(
-                fn(string $part) => str_replace('/', '%2f', urldecode($part)),
-                $parts,
-            );
+            $parts = array_map(fn(string $part) => str_replace('/', '%2f', urldecode($part)), $parts);
             $urlPath = implode('/', $parts);
         }
         if ($urlPath !== '/') {
@@ -159,19 +138,15 @@ class RouteCollection
                     parse_str($uri->getQuery(), $queryParameters);
                     $r['?'] = array_merge($r['?'] ?? [], $queryParameters);
                 }
-
                 return $r;
             }
         }
-
         // Sort path segments matching longest paths first.
         krsort($this->_paths);
-
         foreach ($this->_paths as $path => $routes) {
             if (!str_starts_with($urlPath, $path)) {
                 continue;
             }
-
             foreach ($routes as $route) {
                 $r = $route->parseRequest($request);
                 if ($r === null) {
@@ -181,13 +156,11 @@ class RouteCollection
                     parse_str($uri->getQuery(), $queryParameters);
                     $r['?'] = $queryParameters;
                 }
-
                 return $r;
             }
         }
         throw new MissingRouteException(['url' => $urlPath]);
     }
-
     /**
      * Get the set of names from the $url. Accepts both older style array urls,
      * and newer style urls containing '_name'
@@ -197,79 +170,33 @@ class RouteCollection
      */
     protected function _getNames(array $url): array
     {
-        $plugin = false;
-        if (isset($url['plugin']) && $url['plugin'] !== false) {
+        $plugin = \false;
+        if (isset($url['plugin']) && $url['plugin'] !== \false) {
             $plugin = strtolower($url['plugin']);
         }
-        $prefix = false;
-        if (isset($url['prefix']) && $url['prefix'] !== false) {
+        $prefix = \false;
+        if (isset($url['prefix']) && $url['prefix'] !== \false) {
             $prefix = strtolower($url['prefix']);
         }
         $controller = isset($url['controller']) ? strtolower($url['controller']) : null;
         $action = strtolower($url['action']);
-
-        $names = [
-            "{$controller}:{$action}",
-            "{$controller}:_action",
-            "_controller:{$action}",
-            '_controller:_action',
-        ];
-
+        $names = ["{$controller}:{$action}", "{$controller}:_action", "_controller:{$action}", '_controller:_action'];
         // No prefix, no plugin
-        if ($prefix === false && $plugin === false) {
+        if ($prefix === \false && $plugin === \false) {
             return $names;
         }
-
         // Only a plugin
-        if ($prefix === false) {
-            return [
-                "{$plugin}.{$controller}:{$action}",
-                "{$plugin}.{$controller}:_action",
-                "{$plugin}._controller:{$action}",
-                "{$plugin}._controller:_action",
-                "_plugin.{$controller}:{$action}",
-                "_plugin.{$controller}:_action",
-                "_plugin._controller:{$action}",
-                '_plugin._controller:_action',
-            ];
+        if ($prefix === \false) {
+            return ["{$plugin}.{$controller}:{$action}", "{$plugin}.{$controller}:_action", "{$plugin}._controller:{$action}", "{$plugin}._controller:_action", "_plugin.{$controller}:{$action}", "_plugin.{$controller}:_action", "_plugin._controller:{$action}", '_plugin._controller:_action'];
         }
-
         // Only a prefix
-        if ($plugin === false) {
-            return [
-                "{$prefix}:{$controller}:{$action}",
-                "{$prefix}:{$controller}:_action",
-                "{$prefix}:_controller:{$action}",
-                "{$prefix}:_controller:_action",
-                "_prefix:{$controller}:{$action}",
-                "_prefix:{$controller}:_action",
-                "_prefix:_controller:{$action}",
-                '_prefix:_controller:_action',
-            ];
+        if ($plugin === \false) {
+            return ["{$prefix}:{$controller}:{$action}", "{$prefix}:{$controller}:_action", "{$prefix}:_controller:{$action}", "{$prefix}:_controller:_action", "_prefix:{$controller}:{$action}", "_prefix:{$controller}:_action", "_prefix:_controller:{$action}", '_prefix:_controller:_action'];
         }
-
         // Prefix and plugin has the most options
         // as there are 4 factors.
-        return [
-            "{$prefix}:{$plugin}.{$controller}:{$action}",
-            "{$prefix}:{$plugin}.{$controller}:_action",
-            "{$prefix}:{$plugin}._controller:{$action}",
-            "{$prefix}:{$plugin}._controller:_action",
-            "{$prefix}:_plugin.{$controller}:{$action}",
-            "{$prefix}:_plugin.{$controller}:_action",
-            "{$prefix}:_plugin._controller:{$action}",
-            "{$prefix}:_plugin._controller:_action",
-            "_prefix:{$plugin}.{$controller}:{$action}",
-            "_prefix:{$plugin}.{$controller}:_action",
-            "_prefix:{$plugin}._controller:{$action}",
-            "_prefix:{$plugin}._controller:_action",
-            "_prefix:_plugin.{$controller}:{$action}",
-            "_prefix:_plugin.{$controller}:_action",
-            "_prefix:_plugin._controller:{$action}",
-            '_prefix:_plugin._controller:_action',
-        ];
+        return ["{$prefix}:{$plugin}.{$controller}:{$action}", "{$prefix}:{$plugin}.{$controller}:_action", "{$prefix}:{$plugin}._controller:{$action}", "{$prefix}:{$plugin}._controller:_action", "{$prefix}:_plugin.{$controller}:{$action}", "{$prefix}:_plugin.{$controller}:_action", "{$prefix}:_plugin._controller:{$action}", "{$prefix}:_plugin._controller:_action", "_prefix:{$plugin}.{$controller}:{$action}", "_prefix:{$plugin}.{$controller}:_action", "_prefix:{$plugin}._controller:{$action}", "_prefix:{$plugin}._controller:_action", "_prefix:_plugin.{$controller}:{$action}", "_prefix:_plugin.{$controller}:_action", "_prefix:_plugin._controller:{$action}", '_prefix:_plugin._controller:_action'];
     }
-
     /**
      * Reverse route or match a $url array with the connected routes.
      *
@@ -294,15 +221,10 @@ class RouteCollection
                 if ($out) {
                     return $out;
                 }
-                throw new MissingRouteException([
-                    'url' => $name,
-                    'context' => $context,
-                    'message' => "A named route was found for `{$name}`, but matching failed.",
-                ]);
+                throw new MissingRouteException(['url' => $name, 'context' => $context, 'message' => "A named route was found for `{$name}`, but matching failed."]);
             }
             throw new MissingRouteException(['url' => $name, 'context' => $context]);
         }
-
         foreach ($this->_getNames($url) as $name) {
             if (empty($this->_routeTable[$name])) {
                 continue;
@@ -314,9 +236,8 @@ class RouteCollection
                 }
             }
         }
-        throw new MissingRouteException(['url' => var_export($url, true), 'context' => $context]);
+        throw new MissingRouteException(['url' => var_export($url, \true), 'context' => $context]);
     }
-
     /**
      * Get all the connected routes as a flat list.
      *
@@ -327,14 +248,8 @@ class RouteCollection
     public function routes(): array
     {
         krsort($this->_paths);
-
-        return array_reduce(
-            $this->_paths,
-            'array_merge',
-            [],
-        );
+        return array_reduce($this->_paths, 'array_merge', []);
     }
-
     /**
      * Get the connected named routes.
      *
@@ -344,7 +259,6 @@ class RouteCollection
     {
         return $this->_named;
     }
-
     /**
      * Get the extensions that can be handled.
      *
@@ -354,7 +268,6 @@ class RouteCollection
     {
         return $this->_extensions;
     }
-
     /**
      * Set the extensions that the route collection can handle.
      *
@@ -363,19 +276,14 @@ class RouteCollection
      *   Defaults to `true`.
      * @return $this
      */
-    public function setExtensions(array $extensions, bool $merge = true)
+    public function setExtensions(array $extensions, bool $merge = \true)
     {
         if ($merge) {
-            $extensions = array_unique(array_merge(
-                $this->_extensions,
-                $extensions,
-            ));
+            $extensions = array_unique(array_merge($this->_extensions, $extensions));
         }
         $this->_extensions = $extensions;
-
         return $this;
     }
-
     /**
      * Register a middleware with the RouteCollection.
      *
@@ -389,10 +297,8 @@ class RouteCollection
     public function registerMiddleware(string $name, MiddlewareInterface|Closure|string $middleware)
     {
         $this->_middleware[$name] = $middleware;
-
         return $this;
     }
-
     /**
      * Add middleware to a middleware group
      *
@@ -407,19 +313,15 @@ class RouteCollection
             $message = "Cannot add middleware group '{$name}'. A middleware by this name has already been registered.";
             throw new InvalidArgumentException($message);
         }
-
         foreach ($middlewareNames as $middlewareName) {
             if (!$this->hasMiddleware($middlewareName)) {
                 $message = "Cannot add '{$middlewareName}' middleware to group '{$name}'. It has not been registered.";
                 throw new InvalidArgumentException($message);
             }
         }
-
         $this->_middlewareGroups[$name] = $middlewareNames;
-
         return $this;
     }
-
     /**
      * Check if the named middleware group has been created.
      *
@@ -430,7 +332,6 @@ class RouteCollection
     {
         return array_key_exists($name, $this->_middlewareGroups);
     }
-
     /**
      * Check if the named middleware has been registered.
      *
@@ -441,7 +342,6 @@ class RouteCollection
     {
         return isset($this->_middleware[$name]);
     }
-
     /**
      * Check if the named middleware or middleware group has been registered.
      *
@@ -452,7 +352,6 @@ class RouteCollection
     {
         return $this->hasMiddleware($name) || $this->hasMiddlewareGroup($name);
     }
-
     /**
      * Get an array of middleware given a list of names
      *
@@ -470,14 +369,10 @@ class RouteCollection
                 continue;
             }
             if (!$this->hasMiddleware($name)) {
-                throw new InvalidArgumentException(sprintf(
-                    'The middleware named `%s` has not been registered. Use registerMiddleware() to define it.',
-                    $name,
-                ));
+                throw new InvalidArgumentException(sprintf('The middleware named `%s` has not been registered. Use registerMiddleware() to define it.', $name));
             }
             $out[] = $this->_middleware[$name];
         }
-
         return $out;
     }
 }

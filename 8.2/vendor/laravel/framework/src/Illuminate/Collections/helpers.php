@@ -1,9 +1,10 @@
 <?php
 
+namespace Odigos;
+
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
-
-if (! function_exists('collect')) {
+if (!\function_exists('Odigos\collect')) {
     /**
      * Create a collection from the given value.
      *
@@ -18,8 +19,7 @@ if (! function_exists('collect')) {
         return new Collection($value);
     }
 }
-
-if (! function_exists('data_fill')) {
+if (!\function_exists('Odigos\data_fill')) {
     /**
      * Fill in data where it's missing.
      *
@@ -30,11 +30,10 @@ if (! function_exists('data_fill')) {
      */
     function data_fill(&$target, $key, $value)
     {
-        return data_set($target, $key, $value, false);
+        return data_set($target, $key, $value, \false);
     }
 }
-
-if (! function_exists('data_has')) {
+if (!\function_exists('Odigos\data_has')) {
     /**
      * Determine if a key / property exists on an array or object using "dot" notation.
      *
@@ -44,27 +43,23 @@ if (! function_exists('data_has')) {
      */
     function data_has($target, $key): bool
     {
-        if (is_null($key) || $key === []) {
-            return false;
+        if (\is_null($key) || $key === []) {
+            return \false;
         }
-
-        $key = is_array($key) ? $key : explode('.', $key);
-
+        $key = \is_array($key) ? $key : \explode('.', $key);
         foreach ($key as $segment) {
             if (Arr::accessible($target) && Arr::exists($target, $segment)) {
                 $target = $target[$segment];
-            } elseif (is_object($target) && property_exists($target, $segment)) {
+            } elseif (\is_object($target) && \property_exists($target, $segment)) {
                 $target = $target->{$segment};
             } else {
-                return false;
+                return \false;
             }
         }
-
-        return true;
+        return \true;
     }
 }
-
-if (! function_exists('data_get')) {
+if (!\function_exists('Odigos\data_get')) {
     /**
      * Get an item from an array or object using "dot" notation.
      *
@@ -75,58 +70,47 @@ if (! function_exists('data_get')) {
      */
     function data_get($target, $key, $default = null)
     {
-        if (is_null($key)) {
+        if (\is_null($key)) {
             return $target;
         }
-
-        $key = is_array($key) ? $key : explode('.', $key);
-
+        $key = \is_array($key) ? $key : \explode('.', $key);
         foreach ($key as $i => $segment) {
             unset($key[$i]);
-
-            if (is_null($segment)) {
+            if (\is_null($segment)) {
                 return $target;
             }
-
             if ($segment === '*') {
                 if ($target instanceof Collection) {
                     $target = $target->all();
-                } elseif (! is_iterable($target)) {
+                } elseif (!\is_iterable($target)) {
                     return value($default);
                 }
-
                 $result = [];
-
                 foreach ($target as $item) {
                     $result[] = data_get($item, $key);
                 }
-
-                return in_array('*', $key) ? Arr::collapse($result) : $result;
+                return \in_array('*', $key) ? Arr::collapse($result) : $result;
             }
-
             $segment = match ($segment) {
                 '\*' => '*',
                 '\{first}' => '{first}',
-                '{first}' => array_key_first(Arr::from($target)),
+                '{first}' => \array_key_first(Arr::from($target)),
                 '\{last}' => '{last}',
-                '{last}' => array_key_last(Arr::from($target)),
+                '{last}' => \array_key_last(Arr::from($target)),
                 default => $segment,
             };
-
             if (Arr::accessible($target) && Arr::exists($target, $segment)) {
                 $target = $target[$segment];
-            } elseif (is_object($target) && isset($target->{$segment})) {
+            } elseif (\is_object($target) && isset($target->{$segment})) {
                 $target = $target->{$segment};
             } else {
                 return value($default);
             }
         }
-
         return $target;
     }
 }
-
-if (! function_exists('data_set')) {
+if (!\function_exists('Odigos\data_set')) {
     /**
      * Set an item on an array or object using dot notation.
      *
@@ -136,15 +120,13 @@ if (! function_exists('data_set')) {
      * @param  bool  $overwrite
      * @return mixed
      */
-    function data_set(&$target, $key, $value, $overwrite = true)
+    function data_set(&$target, $key, $value, $overwrite = \true)
     {
-        $segments = is_array($key) ? $key : explode('.', $key);
-
-        if (($segment = array_shift($segments)) === '*') {
-            if (! Arr::accessible($target)) {
+        $segments = \is_array($key) ? $key : \explode('.', $key);
+        if (($segment = \array_shift($segments)) === '*') {
+            if (!Arr::accessible($target)) {
                 $target = [];
             }
-
             if ($segments) {
                 foreach ($target as &$inner) {
                     data_set($inner, $segments, $value, $overwrite);
@@ -156,39 +138,34 @@ if (! function_exists('data_set')) {
             }
         } elseif (Arr::accessible($target)) {
             if ($segments) {
-                if (! Arr::exists($target, $segment)) {
+                if (!Arr::exists($target, $segment)) {
                     $target[$segment] = [];
                 }
-
                 data_set($target[$segment], $segments, $value, $overwrite);
-            } elseif ($overwrite || ! Arr::exists($target, $segment)) {
+            } elseif ($overwrite || !Arr::exists($target, $segment)) {
                 $target[$segment] = $value;
             }
-        } elseif (is_object($target)) {
+        } elseif (\is_object($target)) {
             if ($segments) {
-                if (! isset($target->{$segment})) {
+                if (!isset($target->{$segment})) {
                     $target->{$segment} = [];
                 }
-
                 data_set($target->{$segment}, $segments, $value, $overwrite);
-            } elseif ($overwrite || ! isset($target->{$segment})) {
+            } elseif ($overwrite || !isset($target->{$segment})) {
                 $target->{$segment} = $value;
             }
         } else {
             $target = [];
-
             if ($segments) {
                 data_set($target[$segment], $segments, $value, $overwrite);
             } elseif ($overwrite) {
                 $target[$segment] = $value;
             }
         }
-
         return $target;
     }
 }
-
-if (! function_exists('data_forget')) {
+if (!\function_exists('Odigos\data_forget')) {
     /**
      * Remove / unset an item from an array or object using "dot" notation.
      *
@@ -198,9 +175,8 @@ if (! function_exists('data_forget')) {
      */
     function data_forget(&$target, $key)
     {
-        $segments = is_array($key) ? $key : explode('.', $key);
-
-        if (($segment = array_shift($segments)) === '*' && Arr::accessible($target)) {
+        $segments = \is_array($key) ? $key : \explode('.', $key);
+        if (($segment = \array_shift($segments)) === '*' && Arr::accessible($target)) {
             if ($segments) {
                 foreach ($target as &$inner) {
                     data_forget($inner, $segments);
@@ -212,19 +188,17 @@ if (! function_exists('data_forget')) {
             } else {
                 Arr::forget($target, $segment);
             }
-        } elseif (is_object($target)) {
+        } elseif (\is_object($target)) {
             if ($segments && isset($target->{$segment})) {
                 data_forget($target->{$segment}, $segments);
             } elseif (isset($target->{$segment})) {
                 unset($target->{$segment});
             }
         }
-
         return $target;
     }
 }
-
-if (! function_exists('head')) {
+if (!\function_exists('Odigos\head')) {
     /**
      * Get the first element of an array. Useful for method chaining.
      *
@@ -233,11 +207,10 @@ if (! function_exists('head')) {
      */
     function head($array)
     {
-        return empty($array) ? false : array_first($array);
+        return empty($array) ? \false : array_first($array);
     }
 }
-
-if (! function_exists('last')) {
+if (!\function_exists('Odigos\last')) {
     /**
      * Get the last element from an array.
      *
@@ -246,11 +219,10 @@ if (! function_exists('last')) {
      */
     function last($array)
     {
-        return empty($array) ? false : array_last($array);
+        return empty($array) ? \false : array_last($array);
     }
 }
-
-if (! function_exists('value')) {
+if (!\function_exists('Odigos\value')) {
     /**
      * Return the default value of the given value.
      *
@@ -263,11 +235,10 @@ if (! function_exists('value')) {
      */
     function value($value, ...$args)
     {
-        return $value instanceof Closure ? $value(...$args) : $value;
+        return $value instanceof \Closure ? $value(...$args) : $value;
     }
 }
-
-if (! function_exists('when')) {
+if (!\function_exists('Odigos\when')) {
     /**
      * Return a value if the given condition is true.
      *
@@ -278,12 +249,10 @@ if (! function_exists('when')) {
      */
     function when($condition, $value, $default = null)
     {
-        $condition = $condition instanceof Closure ? $condition() : $condition;
-
+        $condition = $condition instanceof \Closure ? $condition() : $condition;
         if ($condition) {
             return value($value, $condition);
         }
-
         return value($default, $condition);
     }
 }

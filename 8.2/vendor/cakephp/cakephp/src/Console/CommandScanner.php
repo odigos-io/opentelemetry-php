@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -22,7 +22,6 @@ use Cake\Core\Plugin;
 use Cake\Utility\Filesystem;
 use Cake\Utility\Inflector;
 use ReflectionClass;
-
 /**
  * Used by CommandCollection and CommandTask to scan the filesystem
  * for command classes.
@@ -38,14 +37,8 @@ class CommandScanner
      */
     public function scanCore(): array
     {
-        return $this->scanDir(
-            dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Command' . DIRECTORY_SEPARATOR,
-            'Cake\Command\\',
-            '',
-            ['command_list'],
-        );
+        return $this->scanDir(dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Command' . \DIRECTORY_SEPARATOR, 'Cake\Command\\', '', ['command_list']);
     }
-
     /**
      * Scan the application for shells & commands.
      *
@@ -54,15 +47,8 @@ class CommandScanner
     public function scanApp(): array
     {
         $appNamespace = Configure::read('App.namespace');
-
-        return $this->scanDir(
-            App::classPath('Command')[0],
-            $appNamespace . '\Command\\',
-            '',
-            [],
-        );
+        return $this->scanDir(App::classPath('Command')[0], $appNamespace . '\Command\\', '', []);
     }
-
     /**
      * Scan the named plugin for shells and commands
      *
@@ -77,10 +63,8 @@ class CommandScanner
         $path = Plugin::classPath($plugin);
         $namespace = str_replace('/', '\\', $plugin);
         $prefix = Inflector::underscore($plugin) . '.';
-
         return $this->scanDir($path . 'Command', $namespace . '\Command\\', $prefix, []);
     }
-
     /**
      * Scan a directory for .php files and return the class names that
      * should be within them.
@@ -96,45 +80,33 @@ class CommandScanner
         if (!is_dir($path)) {
             return [];
         }
-
         // This ensures `Command` class is not added to the list.
         $hide[] = '';
-
         $classPattern = '/Command\.php$/';
         $fs = new Filesystem();
         /** @var \Iterator<\SplFileInfo> $files */
         $files = $fs->find($path, $classPattern);
-
         $commands = [];
         foreach ($files as $fileInfo) {
             $file = $fileInfo->getFilename();
-
-            $name = Inflector::underscore((string)preg_replace($classPattern, '', $file));
-            if (in_array($name, $hide, true)) {
+            $name = Inflector::underscore((string) preg_replace($classPattern, '', $file));
+            if (in_array($name, $hide, \true)) {
                 continue;
             }
-
             $class = $namespace . $fileInfo->getBasename('.php');
-            if (!is_subclass_of($class, CommandInterface::class)) {
+            if (!is_subclass_of($class, \Cake\Console\CommandInterface::class)) {
                 continue;
             }
             $reflection = new ReflectionClass($class);
             if ($reflection->isAbstract()) {
                 continue;
             }
-            if (is_subclass_of($class, BaseCommand::class)) {
+            if (is_subclass_of($class, \Cake\Console\BaseCommand::class)) {
                 $name = $class::defaultName();
             }
-            $commands[$path . $file] = [
-                'file' => $path . $file,
-                'fullName' => $prefix . $name,
-                'name' => $name,
-                'class' => $class,
-            ];
+            $commands[$path . $file] = ['file' => $path . $file, 'fullName' => $prefix . $name, 'name' => $name, 'class' => $class];
         }
-
         ksort($commands);
-
         return array_values($commands);
     }
 }

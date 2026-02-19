@@ -1,19 +1,18 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\rest;
 
-use Yii;
+use Odigos\Yii;
 use yii\data\ActiveDataProvider;
 use yii\data\DataFilter;
 use yii\data\Pagination;
 use yii\data\Sort;
 use yii\helpers\ArrayHelper;
-
 /**
  * IndexAction implements the API endpoint for listing multiple models.
  *
@@ -25,7 +24,7 @@ use yii\helpers\ArrayHelper;
  * @template T of Controller
  * @extends Action<T>
  */
-class IndexAction extends Action
+class IndexAction extends \yii\rest\Action
 {
     /**
      * @var callable|null a PHP callable that will be called to prepare a data provider that
@@ -106,8 +105,6 @@ class IndexAction extends Action
      * @since 2.0.45
      */
     public $sort = [];
-
-
     /**
      * @return ActiveDataProvider
      */
@@ -116,10 +113,8 @@ class IndexAction extends Action
         if ($this->checkAccess) {
             call_user_func($this->checkAccess, $this->id);
         }
-
         return $this->prepareDataProvider();
     }
-
     /**
      * Prepares the data provider that should return the requested collection of the models.
      * @return ActiveDataProvider
@@ -130,25 +125,21 @@ class IndexAction extends Action
         if (empty($requestParams)) {
             $requestParams = Yii::$app->getRequest()->getQueryParams();
         }
-
         $filter = null;
         if ($this->dataFilter !== null) {
             $this->dataFilter = Yii::createObject($this->dataFilter);
             if ($this->dataFilter->load($requestParams)) {
                 $filter = $this->dataFilter->build();
-                if ($filter === false) {
+                if ($filter === \false) {
                     return $this->dataFilter;
                 }
             }
         }
-
         if ($this->prepareDataProvider !== null) {
             return call_user_func($this->prepareDataProvider, $this, $filter);
         }
-
         /** @var \yii\db\BaseActiveRecord $modelClass */
         $modelClass = $this->modelClass;
-
         $query = $modelClass::find();
         if (!empty($filter)) {
             $query->andWhere($filter);
@@ -156,40 +147,22 @@ class IndexAction extends Action
         if (is_callable($this->prepareSearchQuery)) {
             $query = call_user_func($this->prepareSearchQuery, $query, $requestParams);
         }
-
         if (is_array($this->pagination)) {
-            $pagination = ArrayHelper::merge(
-                [
-                    'params' => $requestParams,
-                ],
-                $this->pagination
-            );
+            $pagination = ArrayHelper::merge(['params' => $requestParams], $this->pagination);
         } else {
             $pagination = $this->pagination;
             if ($this->pagination instanceof Pagination) {
                 $pagination->params = $requestParams;
             }
         }
-
         if (is_array($this->sort)) {
-            $sort = ArrayHelper::merge(
-                [
-                    'params' => $requestParams,
-                ],
-                $this->sort
-            );
+            $sort = ArrayHelper::merge(['params' => $requestParams], $this->sort);
         } else {
             $sort = $this->sort;
             if ($this->sort instanceof Sort) {
                 $sort->params = $requestParams;
             }
         }
-
-        return Yii::createObject([
-            'class' => ActiveDataProvider::className(),
-            'query' => $query,
-            'pagination' => $pagination,
-            'sort' => $sort,
-        ]);
+        return Yii::createObject(['class' => ActiveDataProvider::className(), 'query' => $query, 'pagination' => $pagination, 'sort' => $sort]);
     }
 }

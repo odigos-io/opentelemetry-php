@@ -3,7 +3,6 @@
 namespace Illuminate\View\Concerns;
 
 use InvalidArgumentException;
-
 trait ManagesFragments
 {
     /**
@@ -12,14 +11,12 @@ trait ManagesFragments
      * @var array
      */
     protected $fragments = [];
-
     /**
      * The stack of in-progress fragment renders.
      *
      * @var array
      */
     protected $fragmentStack = [];
-
     /**
      * Start injecting content into a fragment.
      *
@@ -32,7 +29,6 @@ trait ManagesFragments
             $this->fragmentStack[] = $fragment;
         }
     }
-
     /**
      * Stop injecting content into a fragment.
      *
@@ -45,14 +41,10 @@ trait ManagesFragments
         if (empty($this->fragmentStack)) {
             throw new InvalidArgumentException('Cannot end a fragment without first starting one.');
         }
-
         $last = array_pop($this->fragmentStack);
-
         $this->fragments[$last] = ob_get_clean();
-
         return $this->fragments[$last];
     }
-
     /**
      * Get the contents of a fragment.
      *
@@ -64,7 +56,6 @@ trait ManagesFragments
     {
         return $this->getFragments()[$name] ?? $default;
     }
-
     /**
      * Get the entire array of rendered fragments.
      *
@@ -74,7 +65,6 @@ trait ManagesFragments
     {
         return $this->fragments;
     }
-
     /**
      * Flush all of the fragments.
      *

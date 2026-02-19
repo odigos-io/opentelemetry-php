@@ -5,7 +5,6 @@ namespace Illuminate\Support\Facades;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Testing\Fakes\ExceptionHandlerFake;
-
 /**
  * @method static void register()
  * @method static \Illuminate\Foundation\Exceptions\ReportableHandler reportable(callable $reportUsing)
@@ -39,7 +38,7 @@ use Illuminate\Support\Testing\Fakes\ExceptionHandlerFake;
  * @see \Illuminate\Foundation\Exceptions\Handler
  * @see \Illuminate\Support\Testing\Fakes\ExceptionHandlerFake
  */
-class Exceptions extends Facade
+class Exceptions extends \Illuminate\Support\Facades\Facade
 {
     /**
      * Replace the bound instance with a fake.
@@ -49,15 +48,11 @@ class Exceptions extends Facade
      */
     public static function fake(array|string $exceptions = [])
     {
-        $exceptionHandler = static::isFake()
-            ? static::getFacadeRoot()->handler()
-            : static::getFacadeRoot();
-
+        $exceptionHandler = static::isFake() ? static::getFacadeRoot()->handler() : static::getFacadeRoot();
         return tap(new ExceptionHandlerFake($exceptionHandler, Arr::wrap($exceptions)), function ($fake) {
             static::swap($fake);
         });
     }
-
     /**
      * Get the registered name of the component.
      *

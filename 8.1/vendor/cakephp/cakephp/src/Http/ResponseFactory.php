@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -18,7 +18,6 @@ namespace Cake\Http;
 
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
-
 /**
  * Factory class for creating response instances.
  */
@@ -34,6 +33,6 @@ class ResponseFactory implements ResponseFactoryInterface
      */
     public function createResponse(int $code = 200, string $reasonPhrase = ''): ResponseInterface
     {
-        return (new Response())->withStatus($code, $reasonPhrase);
+        return (new \Cake\Http\Response())->withStatus($code, $reasonPhrase);
     }
 }

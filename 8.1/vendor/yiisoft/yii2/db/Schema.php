@@ -1,13 +1,13 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\db;
 
-use Yii;
+use Odigos\Yii;
 use yii\base\BaseObject;
 use yii\base\InvalidCallException;
 use yii\base\InvalidConfigException;
@@ -15,7 +15,6 @@ use yii\base\NotSupportedException;
 use yii\caching\Cache;
 use yii\caching\CacheInterface;
 use yii\caching\TagDependency;
-
 /**
  * Schema is the base class for concrete DBMS-specific schema classes.
  *
@@ -82,9 +81,7 @@ abstract class Schema extends BaseObject
      * @var array map of DB errors and corresponding exceptions
      * If left part is found in DB error message exception class from the right part is used.
      */
-    public $exceptionMap = [
-        'SQLSTATE[23' => 'yii\db\IntegrityException',
-    ];
+    public $exceptionMap = ['SQLSTATE[23' => 'yii\db\IntegrityException'];
     /**
      * @var string|array column schema class or class config
      * @since 2.0.11
@@ -93,7 +90,6 @@ abstract class Schema extends BaseObject
      * @psalm-var class-string<T>|array{class?: class-string<T>, __class?: class-string<T>, ...}
      */
     public $columnSchemaClass = 'yii\db\ColumnSchema';
-
     /**
      * @var string|string[] character used to quote schema, table, etc. names.
      * An array of 2 characters can be used in case starting and ending characters are different.
@@ -106,7 +102,6 @@ abstract class Schema extends BaseObject
      * @since 2.0.14
      */
     protected $columnQuoteCharacter = '"';
-
     /**
      * @var array list of ALL schema names in the database, except system schemas
      */
@@ -127,8 +122,6 @@ abstract class Schema extends BaseObject
      * @var string server version as a string.
      */
     private $_serverVersion;
-
-
     /**
      * Resolves the table name and schema name (if any).
      * @param string $name the table name
@@ -140,7 +133,6 @@ abstract class Schema extends BaseObject
     {
         throw new NotSupportedException(get_class($this) . ' does not support resolving table names.');
     }
-
     /**
      * Returns all schema names in the database, including the default one but not system schemas.
      * This method should be overridden by child classes in order to support this feature
@@ -153,7 +145,6 @@ abstract class Schema extends BaseObject
     {
         throw new NotSupportedException(get_class($this) . ' does not support fetching all schema names.');
     }
-
     /**
      * Returns all table names in the database.
      * This method should be overridden by child classes in order to support this feature
@@ -166,14 +157,12 @@ abstract class Schema extends BaseObject
     {
         throw new NotSupportedException(get_class($this) . ' does not support fetching all table names.');
     }
-
     /**
      * Loads the metadata for the specified table.
      * @param string $name table name
      * @return TableSchema|null DBMS-dependent table metadata, `null` if the table does not exist.
      */
     abstract protected function loadTableSchema($name);
-
     /**
      * Creates a column schema for the database.
      * This method may be overridden by child classes to create a DBMS-specific column schema.
@@ -187,18 +176,16 @@ abstract class Schema extends BaseObject
     {
         return Yii::createObject($this->columnSchemaClass);
     }
-
     /**
      * Obtains the metadata for the named table.
      * @param string $name table name. The table name may contain schema name if any. Do not quote the table name.
      * @param bool $refresh whether to reload the table schema even if it is found in the cache.
      * @return TableSchema|null table metadata. `null` if the named table does not exist.
      */
-    public function getTableSchema($name, $refresh = false)
+    public function getTableSchema($name, $refresh = \false)
     {
         return $this->getTableMetadata($name, 'schema', $refresh);
     }
-
     /**
      * Returns the metadata for all tables in the database.
      * @param string $schema the schema of the tables. Defaults to empty string, meaning the current or default schema name.
@@ -207,11 +194,10 @@ abstract class Schema extends BaseObject
      * @return TableSchema[] the metadata for all tables in the database.
      * Each array element is an instance of [[TableSchema]] or its child class.
      */
-    public function getTableSchemas($schema = '', $refresh = false)
+    public function getTableSchemas($schema = '', $refresh = \false)
     {
         return $this->getSchemaMetadata($schema, 'schema', $refresh);
     }
-
     /**
      * Returns all schema names in the database, except system schemas.
      * @param bool $refresh whether to fetch the latest available schema names. If this is false,
@@ -219,15 +205,13 @@ abstract class Schema extends BaseObject
      * @return string[] all schema names in the database, except system schemas.
      * @since 2.0.4
      */
-    public function getSchemaNames($refresh = false)
+    public function getSchemaNames($refresh = \false)
     {
         if ($this->_schemaNames === null || $refresh) {
             $this->_schemaNames = $this->findSchemaNames();
         }
-
         return $this->_schemaNames;
     }
-
     /**
      * Returns all table names in the database.
      * @param string $schema the schema of the tables. Defaults to empty string, meaning the current or default schema name.
@@ -236,15 +220,13 @@ abstract class Schema extends BaseObject
      * table names fetched previously (if available) will be returned.
      * @return string[] all table names in the database.
      */
-    public function getTableNames($schema = '', $refresh = false)
+    public function getTableNames($schema = '', $refresh = \false)
     {
         if (!isset($this->_tableNames[$schema]) || $refresh) {
             $this->_tableNames[$schema] = $this->findTableNames($schema);
         }
-
         return $this->_tableNames[$schema];
     }
-
     /**
      * @return QueryBuilder the query builder for this connection.
      */
@@ -253,10 +235,8 @@ abstract class Schema extends BaseObject
         if ($this->_builder === null) {
             $this->_builder = $this->createQueryBuilder();
         }
-
         return $this->_builder;
     }
-
     /**
      * Determines the PDO type for the given PHP data value.
      * @param mixed $data the data whose PDO type is to be determined
@@ -274,10 +254,8 @@ abstract class Schema extends BaseObject
             'NULL' => \PDO::PARAM_NULL,
         ];
         $type = gettype($data);
-
         return isset($typeMap[$type]) ? $typeMap[$type] : \PDO::PARAM_STR;
     }
-
     /**
      * Refreshes the schema.
      * This method cleans up all cached table schemas so that they can be re-created later
@@ -286,14 +264,13 @@ abstract class Schema extends BaseObject
     public function refresh()
     {
         /** @var CacheInterface $cache */
-        $cache = is_string($this->db->schemaCache) ? Yii::$app->get($this->db->schemaCache, false) : $this->db->schemaCache;
+        $cache = is_string($this->db->schemaCache) ? Yii::$app->get($this->db->schemaCache, \false) : $this->db->schemaCache;
         if ($this->db->enableSchemaCache && $cache instanceof CacheInterface) {
             TagDependency::invalidate($cache, $this->getCacheTag());
         }
         $this->_tableNames = [];
         $this->_tableMetadata = [];
     }
-
     /**
      * Refreshes the particular table schema.
      * This method cleans up cached table schema so that it can be re-created later
@@ -307,12 +284,11 @@ abstract class Schema extends BaseObject
         unset($this->_tableMetadata[$rawName]);
         $this->_tableNames = [];
         /** @var CacheInterface $cache */
-        $cache = is_string($this->db->schemaCache) ? Yii::$app->get($this->db->schemaCache, false) : $this->db->schemaCache;
+        $cache = is_string($this->db->schemaCache) ? Yii::$app->get($this->db->schemaCache, \false) : $this->db->schemaCache;
         if ($this->db->enableSchemaCache && $cache instanceof CacheInterface) {
             $cache->delete($this->getCacheKey($rawName));
         }
     }
-
     /**
      * Creates a query builder for the database.
      * This method may be overridden by child classes to create a DBMS-specific query builder.
@@ -320,9 +296,8 @@ abstract class Schema extends BaseObject
      */
     public function createQueryBuilder()
     {
-        return Yii::createObject(QueryBuilder::className(), [$this->db]);
+        return Yii::createObject(\yii\db\QueryBuilder::className(), [$this->db]);
     }
-
     /**
      * Create a column schema builder instance giving the type and value precision.
      *
@@ -335,9 +310,8 @@ abstract class Schema extends BaseObject
      */
     public function createColumnSchemaBuilder($type, $length = null)
     {
-        return Yii::createObject(ColumnSchemaBuilder::className(), [$type, $length]);
+        return Yii::createObject(\yii\db\ColumnSchemaBuilder::className(), [$type, $length]);
     }
-
     /**
      * Returns all unique indexes for the given table.
      *
@@ -360,7 +334,6 @@ abstract class Schema extends BaseObject
     {
         throw new NotSupportedException(get_class($this) . ' does not support getting unique indexes information.');
     }
-
     /**
      * Returns the ID of the last inserted row or sequence value.
      * @param string $sequenceName name of the sequence object (required by some DBMS)
@@ -373,10 +346,8 @@ abstract class Schema extends BaseObject
         if ($this->db->isActive) {
             return $this->db->pdo->lastInsertId($sequenceName === '' ? null : $this->quoteTableName($sequenceName));
         }
-
         throw new InvalidCallException('DB Connection is not active.');
     }
-
     /**
      * @return bool whether this DBMS supports [savepoint](https://en.wikipedia.org/wiki/Savepoint).
      */
@@ -384,34 +355,30 @@ abstract class Schema extends BaseObject
     {
         return $this->db->enableSavepoint;
     }
-
     /**
      * Creates a new savepoint.
      * @param string $name the savepoint name
      */
     public function createSavepoint($name)
     {
-        $this->db->createCommand("SAVEPOINT $name")->execute();
+        $this->db->createCommand("SAVEPOINT {$name}")->execute();
     }
-
     /**
      * Releases an existing savepoint.
      * @param string $name the savepoint name
      */
     public function releaseSavepoint($name)
     {
-        $this->db->createCommand("RELEASE SAVEPOINT $name")->execute();
+        $this->db->createCommand("RELEASE SAVEPOINT {$name}")->execute();
     }
-
     /**
      * Rolls back to a previously created savepoint.
      * @param string $name the savepoint name
      */
     public function rollBackSavepoint($name)
     {
-        $this->db->createCommand("ROLLBACK TO SAVEPOINT $name")->execute();
+        $this->db->createCommand("ROLLBACK TO SAVEPOINT {$name}")->execute();
     }
-
     /**
      * Sets the isolation level of the current transaction.
      * @param string $level The transaction isolation level to use for this transaction.
@@ -422,9 +389,8 @@ abstract class Schema extends BaseObject
      */
     public function setTransactionIsolationLevel($level)
     {
-        $this->db->createCommand("SET TRANSACTION ISOLATION LEVEL $level")->execute();
+        $this->db->createCommand("SET TRANSACTION ISOLATION LEVEL {$level}")->execute();
     }
-
     /**
      * Executes the INSERT command, returning primary key values.
      * @param string $table the table that new rows will be inserted into.
@@ -436,7 +402,7 @@ abstract class Schema extends BaseObject
     {
         $command = $this->db->createCommand()->insert($table, $columns);
         if (!$command->execute()) {
-            return false;
+            return \false;
         }
         $tableSchema = $this->getTableSchema($table);
         $result = [];
@@ -445,13 +411,10 @@ abstract class Schema extends BaseObject
                 $result[$name] = $this->getLastInsertID($tableSchema->sequenceName);
                 break;
             }
-
             $result[$name] = isset($columns[$name]) ? $columns[$name] : $tableSchema->columns[$name]->defaultValue;
         }
-
         return $result;
     }
-
     /**
      * Quotes a string value for use in a query.
      * Note that if the parameter is not a string, it will be returned without change.
@@ -464,15 +427,12 @@ abstract class Schema extends BaseObject
         if (!is_string($str)) {
             return $str;
         }
-
-        if (mb_stripos((string)$this->db->dsn, 'odbc:') === false && ($value = $this->db->getSlavePdo(true)->quote($str)) !== false) {
+        if (mb_stripos((string) $this->db->dsn, 'odbc:') === \false && ($value = $this->db->getSlavePdo(\true)->quote($str)) !== \false) {
             return $value;
         }
-
         // the driver doesn't support quote (e.g. oci)
-        return "'" . addcslashes(str_replace("'", "''", $str), "\000\n\r\\\032") . "'";
+        return "'" . addcslashes(str_replace("'", "''", $str), "\x00\n\r\\\x1a") . "'";
     }
-
     /**
      * Quotes a table name for use in a query.
      * If the table name contains schema prefix, the prefix will also be properly quoted.
@@ -484,14 +444,13 @@ abstract class Schema extends BaseObject
      */
     public function quoteTableName($name)
     {
-
         if (strncmp($name, '(', 1) === 0 && strpos($name, ')') === strlen($name) - 1) {
             return $name;
         }
-        if (strpos($name, '{{') !== false) {
+        if (strpos($name, '{{') !== \false) {
             return $name;
         }
-        if (strpos($name, '.') === false) {
+        if (strpos($name, '.') === \false) {
             return $this->quoteSimpleTableName($name);
         }
         $parts = $this->getTableNameParts($name);
@@ -500,7 +459,6 @@ abstract class Schema extends BaseObject
         }
         return implode('.', $parts);
     }
-
     /**
      * Splits full table name into parts
      * @param string $name
@@ -511,7 +469,6 @@ abstract class Schema extends BaseObject
     {
         return explode('.', $name);
     }
-
     /**
      * Quotes a column name for use in a query.
      * If the column name contains prefix, the prefix will also be properly quoted.
@@ -523,22 +480,20 @@ abstract class Schema extends BaseObject
      */
     public function quoteColumnName($name)
     {
-        if (strpos($name, '(') !== false || strpos($name, '[[') !== false) {
+        if (strpos($name, '(') !== \false || strpos($name, '[[') !== \false) {
             return $name;
         }
-        if (($pos = strrpos($name, '.')) !== false) {
+        if (($pos = strrpos($name, '.')) !== \false) {
             $prefix = $this->quoteTableName(substr($name, 0, $pos)) . '.';
             $name = substr($name, $pos + 1);
         } else {
             $prefix = '';
         }
-        if (strpos($name, '{{') !== false) {
+        if (strpos($name, '{{') !== \false) {
             return $name;
         }
-
         return $prefix . $this->quoteSimpleColumnName($name);
     }
-
     /**
      * Quotes a simple table name for use in a query.
      * A simple table name should contain the table name only without any schema prefix.
@@ -553,9 +508,8 @@ abstract class Schema extends BaseObject
         } else {
             list($startingCharacter, $endingCharacter) = $this->tableQuoteCharacter;
         }
-        return strpos($name, $startingCharacter) !== false ? $name : $startingCharacter . $name . $endingCharacter;
+        return strpos($name, $startingCharacter) !== \false ? $name : $startingCharacter . $name . $endingCharacter;
     }
-
     /**
      * Quotes a simple column name for use in a query.
      * A simple column name should contain the column name only without any prefix.
@@ -570,9 +524,8 @@ abstract class Schema extends BaseObject
         } else {
             list($startingCharacter, $endingCharacter) = $this->columnQuoteCharacter;
         }
-        return $name === '*' || strpos($name, $startingCharacter) !== false ? $name : $startingCharacter . $name . $endingCharacter;
+        return $name === '*' || strpos($name, $startingCharacter) !== \false ? $name : $startingCharacter . $name . $endingCharacter;
     }
-
     /**
      * Unquotes a simple table name.
      * A simple table name should contain the table name only without any schema prefix.
@@ -588,9 +541,8 @@ abstract class Schema extends BaseObject
         } else {
             $startingCharacter = $this->tableQuoteCharacter[0];
         }
-        return strpos($name, $startingCharacter) === false ? $name : substr($name, 1, -1);
+        return strpos($name, $startingCharacter) === \false ? $name : substr($name, 1, -1);
     }
-
     /**
      * Unquotes a simple column name.
      * A simple column name should contain the column name only without any prefix.
@@ -606,9 +558,8 @@ abstract class Schema extends BaseObject
         } else {
             $startingCharacter = $this->columnQuoteCharacter[0];
         }
-        return strpos($name, $startingCharacter) === false ? $name : substr($name, 1, -1);
+        return strpos($name, $startingCharacter) === \false ? $name : substr($name, 1, -1);
     }
-
     /**
      * Returns the actual name of a given table name.
      * This method will strip off curly brackets from the given table name
@@ -618,15 +569,12 @@ abstract class Schema extends BaseObject
      */
     public function getRawTableName($name)
     {
-        if (strpos($name, '{{') !== false) {
-            $name = preg_replace('/\\{\\{(.*?)\\}\\}/', '\1', $name);
-
+        if (strpos($name, '{{') !== \false) {
+            $name = preg_replace('/\{\{(.*?)\}\}/', '\1', $name);
             return str_replace('%', $this->db->tablePrefix, $name);
         }
-
         return $name;
     }
-
     /**
      * Extracts the PHP type from abstract DB type.
      * @param ColumnSchema $column the column schema information
@@ -648,17 +596,14 @@ abstract class Schema extends BaseObject
         ];
         if (isset($typeMap[$column->type])) {
             if ($column->type === 'bigint') {
-                return PHP_INT_SIZE === 8 && !$column->unsigned ? 'integer' : 'string';
+                return \PHP_INT_SIZE === 8 && !$column->unsigned ? 'integer' : 'string';
             } elseif ($column->type === 'integer') {
-                return PHP_INT_SIZE === 4 && $column->unsigned ? 'string' : 'integer';
+                return \PHP_INT_SIZE === 4 && $column->unsigned ? 'string' : 'integer';
             }
-
             return $typeMap[$column->type];
         }
-
         return 'string';
     }
-
     /**
      * Converts a DB exception to a more concrete one if possible.
      *
@@ -668,21 +613,19 @@ abstract class Schema extends BaseObject
      */
     public function convertException(\Exception $e, $rawSql)
     {
-        if ($e instanceof Exception) {
+        if ($e instanceof \yii\db\Exception) {
             return $e;
         }
-
         $exceptionClass = '\yii\db\Exception';
         foreach ($this->exceptionMap as $error => $class) {
-            if (strpos($e->getMessage(), $error) !== false) {
+            if (strpos($e->getMessage(), $error) !== \false) {
                 $exceptionClass = $class;
             }
         }
-        $message = $e->getMessage() . "\nThe SQL being executed was: $rawSql";
+        $message = $e->getMessage() . "\nThe SQL being executed was: {$rawSql}";
         $errorInfo = $e instanceof \PDOException ? $e->errorInfo : null;
         return new $exceptionClass($message, $errorInfo, $e->getCode(), $e);
     }
-
     /**
      * Returns a value indicating whether a SQL statement is for read purpose.
      * @param string $sql the SQL statement
@@ -693,7 +636,6 @@ abstract class Schema extends BaseObject
         $pattern = '/^\s*(SELECT|SHOW|DESCRIBE)\b/i';
         return preg_match($pattern, $sql) > 0;
     }
-
     /**
      * Returns a server version as a string comparable by [[\version_compare()]].
      * @return string server version as a string.
@@ -702,11 +644,10 @@ abstract class Schema extends BaseObject
     public function getServerVersion()
     {
         if ($this->_serverVersion === null) {
-            $this->_serverVersion = $this->db->getSlavePdo(true)->getAttribute(\PDO::ATTR_SERVER_VERSION);
+            $this->_serverVersion = $this->db->getSlavePdo(\true)->getAttribute(\PDO::ATTR_SERVER_VERSION);
         }
         return $this->_serverVersion;
     }
-
     /**
      * Returns the cache key for the specified table name.
      * @param string $name the table name.
@@ -714,14 +655,8 @@ abstract class Schema extends BaseObject
      */
     protected function getCacheKey($name)
     {
-        return [
-            __CLASS__,
-            $this->db->dsn,
-            $this->db->username,
-            $this->getRawTableName($name),
-        ];
+        return [__CLASS__, $this->db->dsn, $this->db->username, $this->getRawTableName($name)];
     }
-
     /**
      * Returns the cache tag name.
      * This allows [[refresh()]] to invalidate all cached table schemas.
@@ -729,13 +664,8 @@ abstract class Schema extends BaseObject
      */
     protected function getCacheTag()
     {
-        return md5(serialize([
-            __CLASS__,
-            $this->db->dsn,
-            $this->db->username,
-        ]));
+        return md5(serialize([__CLASS__, $this->db->dsn, $this->db->username]));
     }
-
     /**
      * Returns the metadata of the given type for the given table.
      * If there's no metadata in the cache, this method will call
@@ -749,8 +679,8 @@ abstract class Schema extends BaseObject
     protected function getTableMetadata($name, $type, $refresh)
     {
         $cache = null;
-        if ($this->db->enableSchemaCache && !in_array($name, $this->db->schemaCacheExclude, true)) {
-            $schemaCache = is_string($this->db->schemaCache) ? Yii::$app->get($this->db->schemaCache, false) : $this->db->schemaCache;
+        if ($this->db->enableSchemaCache && !in_array($name, $this->db->schemaCacheExclude, \true)) {
+            $schemaCache = is_string($this->db->schemaCache) ? Yii::$app->get($this->db->schemaCache, \false) : $this->db->schemaCache;
             if ($schemaCache instanceof CacheInterface) {
                 $cache = $schemaCache;
             }
@@ -763,10 +693,8 @@ abstract class Schema extends BaseObject
             $this->_tableMetadata[$rawName][$type] = $this->{'loadTable' . ucfirst($type)}($rawName);
             $this->saveTableMetadataToCache($cache, $rawName);
         }
-
         return $this->_tableMetadata[$rawName][$type];
     }
-
     /**
      * Returns the metadata of the given type for all tables in the given schema.
      * This method will call a `'getTable' . ucfirst($type)` named method with the table name
@@ -786,15 +714,13 @@ abstract class Schema extends BaseObject
             if ($schema !== '') {
                 $name = $schema . '.' . $name;
             }
-            $tableMetadata = $this->$methodName($name, $refresh);
+            $tableMetadata = $this->{$methodName}($name, $refresh);
             if ($tableMetadata !== null) {
                 $metadata[] = $tableMetadata;
             }
         }
-
         return $metadata;
     }
-
     /**
      * Sets the metadata of the given type for the given table.
      * @param string $name table name.
@@ -806,7 +732,6 @@ abstract class Schema extends BaseObject
     {
         $this->_tableMetadata[$this->getRawTableName($name)][$type] = $data;
     }
-
     /**
      * Changes row's array key case to lower if PDO's one is set to uppercase.
      * @param array $row row's array or an array of row's arrays.
@@ -816,19 +741,16 @@ abstract class Schema extends BaseObject
      */
     protected function normalizePdoRowKeyCase(array $row, $multiple)
     {
-        if ($this->db->getSlavePdo(true)->getAttribute(\PDO::ATTR_CASE) !== \PDO::CASE_UPPER) {
+        if ($this->db->getSlavePdo(\true)->getAttribute(\PDO::ATTR_CASE) !== \PDO::CASE_UPPER) {
             return $row;
         }
-
         if ($multiple) {
             return array_map(function (array $row) {
-                return array_change_key_case($row, CASE_LOWER);
+                return array_change_key_case($row, \CASE_LOWER);
             }, $row);
         }
-
-        return array_change_key_case($row, CASE_LOWER);
+        return array_change_key_case($row, \CASE_LOWER);
     }
-
     /**
      * Tries to load and populate table metadata from cache.
      * @param Cache|null $cache
@@ -840,17 +762,14 @@ abstract class Schema extends BaseObject
             $this->_tableMetadata[$name] = [];
             return;
         }
-
         $metadata = $cache->get($this->getCacheKey($name));
         if (!is_array($metadata) || !isset($metadata['cacheVersion']) || $metadata['cacheVersion'] !== static::SCHEMA_CACHE_VERSION) {
             $this->_tableMetadata[$name] = [];
             return;
         }
-
         unset($metadata['cacheVersion']);
         $this->_tableMetadata[$name] = $metadata;
     }
-
     /**
      * Saves table metadata to cache.
      * @param Cache|null $cache
@@ -861,14 +780,8 @@ abstract class Schema extends BaseObject
         if ($cache === null) {
             return;
         }
-
         $metadata = $this->_tableMetadata[$name];
         $metadata['cacheVersion'] = static::SCHEMA_CACHE_VERSION;
-        $cache->set(
-            $this->getCacheKey($name),
-            $metadata,
-            $this->db->schemaCacheDuration,
-            new TagDependency(['tags' => $this->getCacheTag()])
-        );
+        $cache->set($this->getCacheKey($name), $metadata, $this->db->schemaCacheDuration, new TagDependency(['tags' => $this->getCacheTag()]));
     }
 }

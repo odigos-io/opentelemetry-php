@@ -1,11 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\DBAL\Driver;
 
 use Doctrine\DBAL\ServerVersionProvider;
-
 /**
  * Connection interface.
  * Driver connections must implement this interface.
@@ -17,15 +15,13 @@ interface Connection extends ServerVersionProvider
      *
      * @throws Exception
      */
-    public function prepare(string $sql): Statement;
-
+    public function prepare(string $sql): \Doctrine\DBAL\Driver\Statement;
     /**
      * Executes an SQL statement, returning a result set as a Statement object.
      *
      * @throws Exception
      */
-    public function query(string $sql): Result;
-
+    public function query(string $sql): \Doctrine\DBAL\Driver\Result;
     /**
      * Quotes a string for use in a query.
      *
@@ -33,7 +29,6 @@ interface Connection extends ServerVersionProvider
      * or {@see AbstractPlatform::quoteStringLiteral()} instead.
      */
     public function quote(string $value): string;
-
     /**
      * Executes an SQL statement and return the number of affected rows.
      * If the number of affected rows is greater than the maximum int value (PHP_INT_MAX),
@@ -44,7 +39,6 @@ interface Connection extends ServerVersionProvider
      * @throws Exception
      */
     public function exec(string $sql): int|string;
-
     /**
      * Returns the ID of the last inserted row.
      *
@@ -62,28 +56,24 @@ interface Connection extends ServerVersionProvider
      * @throws Exception
      */
     public function lastInsertId(): int|string;
-
     /**
      * Initiates a transaction.
      *
      * @throws Exception
      */
     public function beginTransaction(): void;
-
     /**
      * Commits a transaction.
      *
      * @throws Exception
      */
     public function commit(): void;
-
     /**
      * Rolls back the current transaction, as initiated by beginTransaction().
      *
      * @throws Exception
      */
     public function rollBack(): void;
-
     /**
      * Provides access to the native database connection.
      *

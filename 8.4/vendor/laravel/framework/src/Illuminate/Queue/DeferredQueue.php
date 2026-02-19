@@ -2,7 +2,7 @@
 
 namespace Illuminate\Queue;
 
-class DeferredQueue extends SyncQueue
+class DeferredQueue extends \Illuminate\Queue\SyncQueue
 {
     /**
      * Push a new job onto the queue.
@@ -16,6 +16,6 @@ class DeferredQueue extends SyncQueue
      */
     public function push($job, $data = '', $queue = null)
     {
-        return \Illuminate\Support\defer(fn () => parent::push($job, $data, $queue));
+        return \Illuminate\Support\defer(fn() => parent::push($job, $data, $queue));
     }
 }

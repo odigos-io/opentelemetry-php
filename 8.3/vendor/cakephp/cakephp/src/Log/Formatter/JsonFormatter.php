@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) :  Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -16,27 +16,21 @@ declare(strict_types=1);
  */
 namespace Cake\Log\Formatter;
 
-class JsonFormatter extends AbstractFormatter
+class JsonFormatter extends \Cake\Log\Formatter\AbstractFormatter
 {
     /**
      * Default config for this class
      *
      * @var array<string, mixed>
      */
-    protected array $_defaultConfig = [
-        'dateFormat' => DATE_ATOM,
-        'flags' => JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES,
-        'appendNewline' => true,
-    ];
-
+    protected array $_defaultConfig = ['dateFormat' => \DATE_ATOM, 'flags' => \JSON_UNESCAPED_UNICODE | \JSON_UNESCAPED_SLASHES, 'appendNewline' => \true];
     /**
      * @inheritDoc
      */
     public function format($level, string $message, array $context = []): string
     {
-        $log = ['date' => date($this->_config['dateFormat']), 'level' => (string)$level, 'message' => $message];
-        $json = json_encode($log, JSON_THROW_ON_ERROR | $this->_config['flags']);
-
+        $log = ['date' => date($this->_config['dateFormat']), 'level' => (string) $level, 'message' => $message];
+        $json = json_encode($log, \JSON_THROW_ON_ERROR | $this->_config['flags']);
         return $this->_config['appendNewline'] ? $json . "\n" : $json;
     }
 }

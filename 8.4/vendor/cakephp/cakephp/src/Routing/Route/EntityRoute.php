@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -18,7 +18,6 @@ namespace Cake\Routing\Route;
 
 use ArrayAccess;
 use Cake\Core\Exception\CakeException;
-
 /**
  * Matches entities to routes
  *
@@ -26,7 +25,7 @@ use Cake\Core\Exception\CakeException;
  * comparing the field names with the template vars. This makes it easy and
  * convenient to change routes globally.
  */
-class EntityRoute extends Route
+class EntityRoute extends \Cake\Routing\Route\Route
 {
     /**
      * Match by entity and map its fields to the URL pattern by comparing the
@@ -46,21 +45,17 @@ class EntityRoute extends Route
         if (!$this->_compiledRoute) {
             $this->compile();
         }
-
         if (isset($url['_entity'])) {
             $entity = $url['_entity'];
             $this->_checkEntity($entity);
-
             foreach ($this->keys as $field) {
                 if (!isset($url[$field]) && isset($entity[$field])) {
                     $url[$field] = $entity[$field];
                 }
             }
         }
-
         return parent::match($url, $context);
     }
-
     /**
      * Checks that we really deal with an entity object
      *
@@ -71,12 +66,7 @@ class EntityRoute extends Route
     protected function _checkEntity(mixed $entity): void
     {
         if (!$entity instanceof ArrayAccess && !is_array($entity)) {
-            throw new CakeException(sprintf(
-                'Route `%s` expects the URL option `_entity` to be an array or object implementing \ArrayAccess, '
-                . 'but `%s` passed.',
-                $this->template,
-                get_debug_type($entity),
-            ));
+            throw new CakeException(sprintf('Route `%s` expects the URL option `_entity` to be an array or object implementing \ArrayAccess, ' . 'but `%s` passed.', $this->template, get_debug_type($entity)));
         }
     }
 }

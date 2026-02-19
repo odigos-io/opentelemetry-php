@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -19,7 +19,6 @@ use Psr\Http\Client\RequestExceptionInterface;
 use Psr\Http\Message\RequestInterface;
 use RuntimeException;
 use Throwable;
-
 /**
  * Exception for when a request failed.
  *
@@ -34,7 +33,6 @@ class RequestException extends RuntimeException implements RequestExceptionInter
      * @var \Psr\Http\Message\RequestInterface
      */
     protected RequestInterface $request;
-
     /**
      * Constructor.
      *
@@ -47,7 +45,6 @@ class RequestException extends RuntimeException implements RequestExceptionInter
         $this->request = $request;
         parent::__construct($message, 0, $previous);
     }
-
     /**
      * Returns the request.
      *

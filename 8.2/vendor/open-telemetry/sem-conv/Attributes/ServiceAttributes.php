@@ -1,9 +1,7 @@
 <?php
 
 // DO NOT EDIT, this is an Auto-generated file from script/semantic-conventions
-
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\SemConv\Attributes;
 
 /**
@@ -20,12 +18,10 @@ interface ServiceAttributes
      * @stable
      */
     public const SERVICE_NAME = 'service.name';
-
     /**
      * The version string of the service component. The format is not defined by these conventions.
      *
      * @stable
      */
     public const SERVICE_VERSION = 'service.version';
-
 }

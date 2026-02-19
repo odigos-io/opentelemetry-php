@@ -3,7 +3,6 @@
 namespace Illuminate\Auth;
 
 use Illuminate\Contracts\Auth\Authenticatable as UserContract;
-
 class GenericUser implements UserContract
 {
     /**
@@ -12,7 +11,6 @@ class GenericUser implements UserContract
      * @var array
      */
     protected $attributes;
-
     /**
      * Create a new generic User object.
      *
@@ -23,7 +21,6 @@ class GenericUser implements UserContract
     {
         $this->attributes = $attributes;
     }
-
     /**
      * Get the name of the unique identifier for the user.
      *
@@ -33,7 +30,6 @@ class GenericUser implements UserContract
     {
         return 'id';
     }
-
     /**
      * Get the unique identifier for the user.
      *
@@ -43,7 +39,6 @@ class GenericUser implements UserContract
     {
         return $this->attributes[$this->getAuthIdentifierName()];
     }
-
     /**
      * Get the password for the user.
      *
@@ -53,7 +48,6 @@ class GenericUser implements UserContract
     {
         return $this->attributes['password'];
     }
-
     /**
      * Get the "remember me" token value.
      *
@@ -63,7 +57,6 @@ class GenericUser implements UserContract
     {
         return $this->attributes[$this->getRememberTokenName()];
     }
-
     /**
      * Set the "remember me" token value.
      *
@@ -74,7 +67,6 @@ class GenericUser implements UserContract
     {
         $this->attributes[$this->getRememberTokenName()] = $value;
     }
-
     /**
      * Get the column name for the "remember me" token.
      *
@@ -84,7 +76,6 @@ class GenericUser implements UserContract
     {
         return 'remember_token';
     }
-
     /**
      * Dynamically access the user's attributes.
      *
@@ -95,7 +86,6 @@ class GenericUser implements UserContract
     {
         return $this->attributes[$key];
     }
-
     /**
      * Dynamically set an attribute on the user.
      *
@@ -107,7 +97,6 @@ class GenericUser implements UserContract
     {
         $this->attributes[$key] = $value;
     }
-
     /**
      * Dynamically check if a value is set on the user.
      *
@@ -118,7 +107,6 @@ class GenericUser implements UserContract
     {
         return isset($this->attributes[$key]);
     }
-
     /**
      * Dynamically unset a value on the user.
      *

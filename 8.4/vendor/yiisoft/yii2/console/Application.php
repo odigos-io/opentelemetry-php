@@ -1,22 +1,20 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\console;
 
-use Yii;
+use Odigos\Yii;
 use yii\base\InvalidRouteException;
 use yii\base\Module;
-
 // define STDIN, STDOUT and STDERR if the PHP SAPI did not define them (e.g. creating console application in web env)
 // https://www.php.net/manual/en/features.commandline.io-streams.php
 defined('STDIN') or define('STDIN', fopen('php://stdin', 'r'));
 defined('STDOUT') or define('STDOUT', fopen('php://stdout', 'w'));
 defined('STDERR') or define('STDERR', fopen('php://stderr', 'w'));
-
 /**
  * Application represents a console application.
  *
@@ -73,7 +71,7 @@ class Application extends \yii\base\Application
      * @var bool whether to enable the commands provided by the core framework.
      * Defaults to true.
      */
-    public $enableCoreCommands = true;
+    public $enableCoreCommands = \true;
     /**
      * @var Controller|null the currently active controller instance
      *
@@ -81,8 +79,6 @@ class Application extends \yii\base\Application
      * @psalm-var Controller<Module>|null
      */
     public $controller;
-
-
     /**
      * {@inheritdoc}
      */
@@ -91,7 +87,6 @@ class Application extends \yii\base\Application
         $config = $this->loadConfig($config);
         parent::__construct($config);
     }
-
     /**
      * Loads the configuration.
      * This method will check if the command line option [[OPTION_APPCONFIG]] is specified.
@@ -105,20 +100,17 @@ class Application extends \yii\base\Application
         if (!empty($_SERVER['argv'])) {
             $option = '--' . self::OPTION_APPCONFIG . '=';
             foreach ($_SERVER['argv'] as $param) {
-                if (strpos($param, $option) !== false) {
+                if (strpos($param, $option) !== \false) {
                     $path = substr($param, strlen($option));
                     if (!empty($path) && is_file($file = Yii::getAlias($path))) {
                         return require $file;
                     }
-
-                    exit("The configuration file does not exist: $path\n");
+                    exit("The configuration file does not exist: {$path}\n");
                 }
             }
         }
-
         return $config;
     }
-
     /**
      * Initialize the application.
      */
@@ -137,7 +129,6 @@ class Application extends \yii\base\Application
             $this->controllerMap['help'] = 'yii\console\controllers\HelpController';
         }
     }
-
     /**
      * Handles the specified request.
      * @param Request $request the request to be handled
@@ -148,16 +139,13 @@ class Application extends \yii\base\Application
         list($route, $params) = $request->resolve();
         $this->requestedRoute = $route;
         $result = $this->runAction($route, $params);
-        if ($result instanceof Response) {
+        if ($result instanceof \yii\console\Response) {
             return $result;
         }
-
         $response = $this->getResponse();
         $response->exitStatus = $result;
-
         return $response;
     }
-
     /**
      * Runs a controller action specified by a route.
      * This method parses the specified route and creates the corresponding child module(s), controller and action
@@ -183,27 +171,17 @@ class Application extends \yii\base\Application
             $res = parent::runAction($route, $params);
             return is_object($res) ? $res : (int) $res;
         } catch (InvalidRouteException $e) {
-            throw new UnknownCommandException($route, $this, 0, $e);
+            throw new \yii\console\UnknownCommandException($route, $this, 0, $e);
         }
     }
-
     /**
      * Returns the configuration of the built-in commands.
      * @return array the configuration of the built-in commands.
      */
     public function coreCommands()
     {
-        return [
-            'asset' => 'yii\console\controllers\AssetController',
-            'cache' => 'yii\console\controllers\CacheController',
-            'fixture' => 'yii\console\controllers\FixtureController',
-            'help' => 'yii\console\controllers\HelpController',
-            'message' => 'yii\console\controllers\MessageController',
-            'migrate' => 'yii\console\controllers\MigrateController',
-            'serve' => 'yii\console\controllers\ServeController',
-        ];
+        return ['asset' => 'yii\console\controllers\AssetController', 'cache' => 'yii\console\controllers\CacheController', 'fixture' => 'yii\console\controllers\FixtureController', 'help' => 'yii\console\controllers\HelpController', 'message' => 'yii\console\controllers\MessageController', 'migrate' => 'yii\console\controllers\MigrateController', 'serve' => 'yii\console\controllers\ServeController'];
     }
-
     /**
      * Returns the error handler component.
      * @return ErrorHandler the error handler application component.
@@ -212,7 +190,6 @@ class Application extends \yii\base\Application
     {
         return $this->get('errorHandler');
     }
-
     /**
      * Returns the request component.
      * @return Request the request component.
@@ -221,7 +198,6 @@ class Application extends \yii\base\Application
     {
         return $this->get('request');
     }
-
     /**
      * Returns the response component.
      * @return Response the response component.
@@ -230,16 +206,11 @@ class Application extends \yii\base\Application
     {
         return $this->get('response');
     }
-
     /**
      * {@inheritdoc}
      */
     public function coreComponents()
     {
-        return array_merge(parent::coreComponents(), [
-            'request' => ['class' => 'yii\console\Request'],
-            'response' => ['class' => 'yii\console\Response'],
-            'errorHandler' => ['class' => 'yii\console\ErrorHandler'],
-        ]);
+        return array_merge(parent::coreComponents(), ['request' => ['class' => 'yii\console\Request'], 'response' => ['class' => 'yii\console\Response'], 'errorHandler' => ['class' => 'yii\console\ErrorHandler']]);
     }
 }

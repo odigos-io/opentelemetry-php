@@ -5,8 +5,7 @@ namespace Illuminate\Database\Query\Grammars;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Query\JoinLateralClause;
 use RuntimeException;
-
-class MariaDbGrammar extends MySqlGrammar
+class MariaDbGrammar extends \Illuminate\Database\Query\Grammars\MySqlGrammar
 {
     /**
      * Compile a "lateral join" clause.
@@ -21,7 +20,6 @@ class MariaDbGrammar extends MySqlGrammar
     {
         throw new RuntimeException('This database engine does not support lateral joins.');
     }
-
     /**
      * Compile a "JSON value cast" statement into SQL.
      *
@@ -30,9 +28,8 @@ class MariaDbGrammar extends MySqlGrammar
      */
     public function compileJsonValueCast($value)
     {
-        return "json_query({$value}, '$')";
+        return "json_query({$value}, '\$')";
     }
-
     /**
      * Compile a query to get the number of open connections for a database.
      *
@@ -42,7 +39,6 @@ class MariaDbGrammar extends MySqlGrammar
     {
         return 'select variable_value as `Value` from information_schema.global_status where variable_name = \'THREADS_CONNECTED\'';
     }
-
     /**
      * Determine whether to use a legacy group limit clause for MySQL < 8.0.
      *
@@ -51,9 +47,8 @@ class MariaDbGrammar extends MySqlGrammar
      */
     public function useLegacyGroupLimit(Builder $query)
     {
-        return false;
+        return \false;
     }
-
     /**
      * Wrap the given JSON selector.
      *
@@ -63,7 +58,6 @@ class MariaDbGrammar extends MySqlGrammar
     protected function wrapJsonSelector($value)
     {
         [$field, $path] = $this->wrapJsonFieldAndPath($value);
-
-        return 'json_value('.$field.$path.')';
+        return 'json_value(' . $field . $path . ')';
     }
 }

@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Contracts\HttpClient;
 
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
@@ -16,7 +15,6 @@ use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
-
 /**
  * A (lazily retrieved) HTTP response.
  *
@@ -30,7 +28,6 @@ interface ResponseInterface
      * @throws TransportExceptionInterface when a network error occurs
      */
     public function getStatusCode(): int;
-
     /**
      * Gets the HTTP headers of the response.
      *
@@ -43,8 +40,7 @@ interface ResponseInterface
      * @throws ClientExceptionInterface      On a 4xx when $throw is true
      * @throws ServerExceptionInterface      On a 5xx when $throw is true
      */
-    public function getHeaders(bool $throw = true): array;
-
+    public function getHeaders(bool $throw = \true): array;
     /**
      * Gets the response body as a string.
      *
@@ -55,8 +51,7 @@ interface ResponseInterface
      * @throws ClientExceptionInterface      On a 4xx when $throw is true
      * @throws ServerExceptionInterface      On a 5xx when $throw is true
      */
-    public function getContent(bool $throw = true): string;
-
+    public function getContent(bool $throw = \true): string;
     /**
      * Gets the response body decoded as array, typically from a JSON payload.
      *
@@ -68,15 +63,13 @@ interface ResponseInterface
      * @throws ClientExceptionInterface      On a 4xx when $throw is true
      * @throws ServerExceptionInterface      On a 5xx when $throw is true
      */
-    public function toArray(bool $throw = true): array;
-
+    public function toArray(bool $throw = \true): array;
     /**
      * Closes the response stream and all related buffers.
      *
      * No further chunk will be yielded after this method has been called.
      */
     public function cancel(): void;
-
     /**
      * Returns info coming from the transport layer.
      *

@@ -10,17 +10,14 @@ class JobRetryRequested
      * @var array|null
      */
     protected $payload = null;
-
     /**
      * Create a new event instance.
      *
      * @param  \stdClass  $job  The job instance.
      */
-    public function __construct(
-        public $job,
-    ) {
+    public function __construct(public $job)
+    {
     }
-
     /**
      * The job payload.
      *
@@ -29,9 +26,8 @@ class JobRetryRequested
     public function payload()
     {
         if (is_null($this->payload)) {
-            $this->payload = json_decode($this->job->payload, true);
+            $this->payload = json_decode($this->job->payload, \true);
         }
-
         return $this->payload;
     }
 }

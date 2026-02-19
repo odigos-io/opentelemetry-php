@@ -9,7 +9,6 @@ use Illuminate\Foundation\Bootstrap\HandleExceptions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Symfony\Component\ErrorHandler\Exception\FlattenException;
-
 class Exception
 {
     /**
@@ -18,28 +17,24 @@ class Exception
      * @var \Symfony\Component\ErrorHandler\Exception\FlattenException
      */
     protected $exception;
-
     /**
      * The current request instance.
      *
      * @var \Illuminate\Http\Request
      */
     protected $request;
-
     /**
      * The exception listener instance.
      *
      * @var \Illuminate\Foundation\Exceptions\Renderer\Listener
      */
     protected $listener;
-
     /**
      * The application's base path.
      *
      * @var string
      */
     protected $basePath;
-
     /**
      * Creates a new exception renderer instance.
      *
@@ -48,14 +43,13 @@ class Exception
      * @param  \Illuminate\Foundation\Exceptions\Renderer\Listener  $listener
      * @param  string  $basePath
      */
-    public function __construct(FlattenException $exception, Request $request, Listener $listener, string $basePath)
+    public function __construct(FlattenException $exception, Request $request, \Illuminate\Foundation\Exceptions\Renderer\Listener $listener, string $basePath)
     {
         $this->exception = $exception;
         $this->request = $request;
         $this->listener = $listener;
         $this->basePath = $basePath;
     }
-
     /**
      * Get the exception title.
      *
@@ -65,7 +59,6 @@ class Exception
     {
         return $this->exception->getStatusText();
     }
-
     /**
      * Get the exception message.
      *
@@ -75,7 +68,6 @@ class Exception
     {
         return $this->exception->getMessage();
     }
-
     /**
      * Get the exception class name.
      *
@@ -85,7 +77,6 @@ class Exception
     {
         return $this->exception->getClass();
     }
-
     /**
      * Get the exception code.
      *
@@ -95,7 +86,6 @@ class Exception
     {
         return $this->exception->getCode();
     }
-
     /**
      * Get the HTTP status code.
      *
@@ -105,7 +95,6 @@ class Exception
     {
         return $this->exception->getStatusCode();
     }
-
     /**
      * Get the exception's frames.
      *
@@ -117,38 +106,28 @@ class Exception
             $classMap = array_map(function ($path) {
                 return (string) realpath($path);
             }, array_values(ClassLoader::getRegisteredLoaders())[0]->getClassMap());
-
-            $trace = array_values(array_filter(
-                $this->exception->getTrace(), fn ($trace) => isset($trace['file']),
-            ));
-
+            $trace = array_values(array_filter($this->exception->getTrace(), fn($trace) => isset($trace['file'])));
             if (($trace[1]['class'] ?? '') === HandleExceptions::class) {
                 array_shift($trace);
                 array_shift($trace);
             }
-
             $frames = [];
             $previousFrame = null;
-
             foreach (array_reverse($trace) as $frameData) {
-                $frame = new Frame($this->exception, $classMap, $frameData, $this->basePath, $previousFrame);
+                $frame = new \Illuminate\Foundation\Exceptions\Renderer\Frame($this->exception, $classMap, $frameData, $this->basePath, $previousFrame);
                 $frames[] = $frame;
                 $previousFrame = $frame;
             }
-
             $frames = array_reverse($frames);
-
             foreach ($frames as $frame) {
-                if (! $frame->isFromVendor()) {
+                if (!$frame->isFromVendor()) {
                     $frame->markAsMain();
                     break;
                 }
             }
-
             return new Collection($frames);
         });
     }
-
     /**
      * Get the exception's frames grouped by vendor status.
      *
@@ -157,23 +136,15 @@ class Exception
     public function frameGroups()
     {
         $groups = [];
-
         foreach ($this->frames() as $frame) {
             $isVendor = $frame->isFromVendor();
-
             if (empty($groups) || $groups[array_key_last($groups)]['is_vendor'] !== $isVendor) {
-                $groups[] = [
-                    'is_vendor' => $isVendor,
-                    'frames' => [],
-                ];
+                $groups[] = ['is_vendor' => $isVendor, 'frames' => []];
             }
-
             $groups[array_key_last($groups)]['frames'][] = $frame;
         }
-
         return $groups;
     }
-
     /**
      * Get the exception's request instance.
      *
@@ -183,7 +154,6 @@ class Exception
     {
         return $this->request;
     }
-
     /**
      * Get the request's headers.
      *
@@ -195,7 +165,6 @@ class Exception
             return implode(', ', $header);
         }, $this->request()->headers->all());
     }
-
     /**
      * Get the request's body parameters.
      *
@@ -206,12 +175,9 @@ class Exception
         if (empty($payload = $this->request()->all())) {
             return null;
         }
-
-        $json = (string) json_encode($payload, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
-
+        $json = (string) json_encode($payload, \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE | \JSON_PRETTY_PRINT);
         return str_replace('\\', '', $json);
     }
-
     /**
      * Get the application's route context.
      *
@@ -220,16 +186,10 @@ class Exception
     public function applicationRouteContext()
     {
         $route = $this->request()->route();
-
-        return $route ? array_filter([
-            'controller' => $route->getActionName(),
-            'route name' => $route->getName() ?: null,
-            'middleware' => implode(', ', array_map(function ($middleware) {
-                return $middleware instanceof Closure ? 'Closure' : $middleware;
-            }, $route->gatherMiddleware())),
-        ]) : [];
+        return $route ? array_filter(['controller' => $route->getActionName(), 'route name' => $route->getName() ?: null, 'middleware' => implode(', ', array_map(function ($middleware) {
+            return $middleware instanceof Closure ? 'Closure' : $middleware;
+        }, $route->gatherMiddleware()))]) : [];
     }
-
     /**
      * Get the application's route parameters context.
      *
@@ -238,13 +198,8 @@ class Exception
     public function applicationRouteParametersContext()
     {
         $parameters = $this->request()->route()?->parameters();
-
-        return $parameters ? json_encode(array_map(
-            fn ($value) => $value instanceof Model ? $value->withoutRelations() : $value,
-            $parameters
-        ), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) : null;
+        return $parameters ? json_encode(array_map(fn($value) => $value instanceof Model ? $value->withoutRelations() : $value, $parameters), \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE | \JSON_PRETTY_PRINT) : null;
     }
-
     /**
      * Get the application's SQL queries.
      *
@@ -254,20 +209,14 @@ class Exception
     {
         return array_map(function (array $query) {
             $sql = $query['sql'];
-
             foreach ($query['bindings'] as $binding) {
                 $sql = match (gettype($binding)) {
                     'integer', 'double' => preg_replace('/\?/', $binding, $sql, 1),
                     'NULL' => preg_replace('/\?/', 'NULL', $sql, 1),
-                    default => preg_replace('/\?/', "'$binding'", $sql, 1),
+                    default => preg_replace('/\?/', "'{$binding}'", $sql, 1),
                 };
             }
-
-            return [
-                'connectionName' => $query['connectionName'],
-                'time' => $query['time'],
-                'sql' => $sql,
-            ];
+            return ['connectionName' => $query['connectionName'], 'time' => $query['time'], 'sql' => $sql];
         }, $this->listener->queries());
     }
 }

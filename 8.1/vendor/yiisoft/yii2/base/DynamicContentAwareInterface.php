@@ -1,10 +1,10 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\base;
 
 /**
@@ -22,14 +22,12 @@ interface DynamicContentAwareInterface
      * @return array a list of placeholders.
      */
     public function getDynamicPlaceholders();
-
     /**
      * Sets a list of placeholders for dynamic content. This method
      * is used internally to implement the content caching feature.
      * @param array $placeholders a list of placeholders.
      */
     public function setDynamicPlaceholders($placeholders);
-
     /**
      * Adds a placeholder for dynamic content.
      * This method is used internally to implement the content caching feature.

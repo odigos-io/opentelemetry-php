@@ -1,5 +1,6 @@
-<?php declare(strict_types=1);
+<?php
 
+declare (strict_types=1);
 /*
  * This file is part of the Monolog package.
  *
@@ -8,16 +9,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Odigos\Monolog\Handler;
 
-namespace Monolog\Handler;
-
-use Monolog\Formatter\LineFormatter;
-use Monolog\Formatter\FormatterInterface;
-use Monolog\Level;
-use Monolog\LogRecord;
-use Predis\Client as Predis;
+use Odigos\Monolog\Formatter\LineFormatter;
+use Odigos\Monolog\Formatter\FormatterInterface;
+use Odigos\Monolog\Level;
+use Odigos\Monolog\LogRecord;
+use Odigos\Predis\Client as Predis;
 use Redis;
-
 /**
  * Sends the message to a Redis Pub/Sub channel using PUBLISH
  *
@@ -34,19 +33,16 @@ class RedisPubSubHandler extends AbstractProcessingHandler
     /** @var Predis<Predis>|Redis */
     private Predis|Redis $redisClient;
     private string $channelKey;
-
     /**
      * @param Predis<Predis>|Redis $redis The redis instance
      * @param string               $key   The channel key to publish records to
      */
-    public function __construct(Predis|Redis $redis, string $key, int|string|Level $level = Level::Debug, bool $bubble = true)
+    public function __construct(Predis|Redis $redis, string $key, int|string|Level $level = Level::Debug, bool $bubble = \true)
     {
         $this->redisClient = $redis;
         $this->channelKey = $key;
-
         parent::__construct($level, $bubble);
     }
-
     /**
      * @inheritDoc
      */
@@ -54,7 +50,6 @@ class RedisPubSubHandler extends AbstractProcessingHandler
     {
         $this->redisClient->publish($this->channelKey, $record->formatted);
     }
-
     /**
      * @inheritDoc
      */

@@ -1,12 +1,10 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Odigos\League\Flysystem\UrlGeneration;
 
-namespace League\Flysystem\UrlGeneration;
-
-use League\Flysystem\Config;
-use League\Flysystem\UnableToGeneratePublicUrl;
-
+use Odigos\League\Flysystem\Config;
+use Odigos\League\Flysystem\UnableToGeneratePublicUrl;
 final class ChainedPublicUrlGenerator implements PublicUrlGenerator
 {
     /**
@@ -15,7 +13,6 @@ final class ChainedPublicUrlGenerator implements PublicUrlGenerator
     public function __construct(private iterable $generators)
     {
     }
-
     public function publicUrl(string $path, Config $config): string
     {
         foreach ($this->generators as $generator) {
@@ -24,7 +21,6 @@ final class ChainedPublicUrlGenerator implements PublicUrlGenerator
             } catch (UnableToGeneratePublicUrl) {
             }
         }
-
         throw new UnableToGeneratePublicUrl('No supported public url generator found.', $path);
     }
 }

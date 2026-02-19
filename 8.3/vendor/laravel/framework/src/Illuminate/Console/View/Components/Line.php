@@ -4,37 +4,14 @@ namespace Illuminate\Console\View\Components;
 
 use Illuminate\Console\Contracts\NewLineAware;
 use Symfony\Component\Console\Output\OutputInterface;
-
-class Line extends Component
+class Line extends \Illuminate\Console\View\Components\Component
 {
     /**
      * The possible line styles.
      *
      * @var array<string, array<string, string>>
      */
-    protected static $styles = [
-        'info' => [
-            'bgColor' => 'blue',
-            'fgColor' => 'white',
-            'title' => 'info',
-        ],
-        'success' => [
-            'bgColor' => 'green',
-            'fgColor' => 'white',
-            'title' => 'success',
-        ],
-        'warn' => [
-            'bgColor' => 'yellow',
-            'fgColor' => 'black',
-            'title' => 'warn',
-        ],
-        'error' => [
-            'bgColor' => 'red',
-            'fgColor' => 'white',
-            'title' => 'error',
-        ],
-    ];
-
+    protected static $styles = ['info' => ['bgColor' => 'blue', 'fgColor' => 'white', 'title' => 'info'], 'success' => ['bgColor' => 'green', 'fgColor' => 'white', 'title' => 'success'], 'warn' => ['bgColor' => 'yellow', 'fgColor' => 'black', 'title' => 'warn'], 'error' => ['bgColor' => 'red', 'fgColor' => 'white', 'title' => 'error']];
     /**
      * Renders the component using the given arguments.
      *
@@ -45,15 +22,7 @@ class Line extends Component
      */
     public function render($style, $string, $verbosity = OutputInterface::VERBOSITY_NORMAL)
     {
-        $string = $this->mutate($string, [
-            Mutators\EnsureDynamicContentIsHighlighted::class,
-            Mutators\EnsurePunctuation::class,
-            Mutators\EnsureRelativePaths::class,
-        ]);
-
-        $this->renderView('line', array_merge(static::$styles[$style], [
-            'marginTop' => $this->output instanceof NewLineAware ? max(0, 2 - $this->output->newLinesWritten()) : 1,
-            'content' => $string,
-        ]), $verbosity);
+        $string = $this->mutate($string, [\Illuminate\Console\View\Components\Mutators\EnsureDynamicContentIsHighlighted::class, \Illuminate\Console\View\Components\Mutators\EnsurePunctuation::class, \Illuminate\Console\View\Components\Mutators\EnsureRelativePaths::class]);
+        $this->renderView('line', array_merge(static::$styles[$style], ['marginTop' => $this->output instanceof NewLineAware ? max(0, 2 - $this->output->newLinesWritten()) : 1, 'content' => $string]), $verbosity);
     }
 }

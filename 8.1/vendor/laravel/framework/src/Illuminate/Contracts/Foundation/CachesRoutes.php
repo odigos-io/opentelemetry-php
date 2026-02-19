@@ -10,7 +10,6 @@ interface CachesRoutes
      * @return bool
      */
     public function routesAreCached();
-
     /**
      * Get the path to the routes cache file.
      *

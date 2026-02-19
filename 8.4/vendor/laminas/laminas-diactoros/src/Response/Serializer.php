@@ -1,19 +1,16 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Odigos\Laminas\Diactoros\Response;
 
-namespace Laminas\Diactoros\Response;
-
-use Laminas\Diactoros\AbstractSerializer;
-use Laminas\Diactoros\Exception;
-use Laminas\Diactoros\Response;
-use Laminas\Diactoros\Stream;
+use Odigos\Laminas\Diactoros\AbstractSerializer;
+use Odigos\Laminas\Diactoros\Exception;
+use Odigos\Laminas\Diactoros\Response;
+use Odigos\Laminas\Diactoros\Stream;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
-
 use function preg_match;
 use function sprintf;
-
 final class Serializer extends AbstractSerializer
 {
     /**
@@ -27,7 +24,6 @@ final class Serializer extends AbstractSerializer
         $stream->write($message);
         return static::fromStream($stream);
     }
-
     /**
      * Parse a response from a stream.
      *
@@ -36,46 +32,29 @@ final class Serializer extends AbstractSerializer
      */
     public static function fromStream(StreamInterface $stream): Response
     {
-        if (! $stream->isReadable() || ! $stream->isSeekable()) {
+        if (!$stream->isReadable() || !$stream->isSeekable()) {
             throw new Exception\InvalidArgumentException('Message stream must be both readable and seekable');
         }
-
         $stream->rewind();
-
         [$version, $status, $reasonPhrase] = self::getStatusLine($stream);
-        [$headers, $body]                  = self::splitStream($stream);
-
-        return (new Response($body, $status, $headers))
-            ->withProtocolVersion($version)
-            ->withStatus((int) $status, $reasonPhrase);
+        [$headers, $body] = self::splitStream($stream);
+        return (new Response($body, $status, $headers))->withProtocolVersion($version)->withStatus((int) $status, $reasonPhrase);
     }
-
     /**
      * Create a string representation of a response.
      */
     public static function toString(ResponseInterface $response): string
     {
         $reasonPhrase = $response->getReasonPhrase();
-        $headers      = self::serializeHeaders($response->getHeaders());
-        $body         = (string) $response->getBody();
-        $format       = 'HTTP/%s %d%s%s%s';
-
-        if (! empty($headers)) {
+        $headers = self::serializeHeaders($response->getHeaders());
+        $body = (string) $response->getBody();
+        $format = 'HTTP/%s %d%s%s%s';
+        if (!empty($headers)) {
             $headers = "\r\n" . $headers;
         }
-
         $headers .= "\r\n\r\n";
-
-        return sprintf(
-            $format,
-            $response->getProtocolVersion(),
-            $response->getStatusCode(),
-            $reasonPhrase ? ' ' . $reasonPhrase : '',
-            $headers,
-            $body
-        );
+        return sprintf($format, $response->getProtocolVersion(), $response->getStatusCode(), $reasonPhrase ? ' ' . $reasonPhrase : '', $headers, $body);
     }
-
     /**
      * Retrieve the status line for the message.
      *
@@ -85,17 +64,9 @@ final class Serializer extends AbstractSerializer
     private static function getStatusLine(StreamInterface $stream): array
     {
         $line = self::getLine($stream);
-
-        if (
-            ! preg_match(
-                '#^HTTP/(?P<version>[1-9]\d*\.\d) (?P<status>[1-5]\d{2})(\s+(?P<reason>.+))?$#',
-                $line,
-                $matches
-            )
-        ) {
+        if (!preg_match('#^HTTP/(?P<version>[1-9]\d*\.\d) (?P<status>[1-5]\d{2})(\s+(?P<reason>.+))?$#', $line, $matches)) {
             throw Exception\SerializationException::forInvalidStatusLine();
         }
-
         return [$matches['version'], (int) $matches['status'], $matches['reason'] ?? ''];
     }
 }

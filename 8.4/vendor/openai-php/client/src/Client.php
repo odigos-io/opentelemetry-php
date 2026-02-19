@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenAI;
 
 use OpenAI\Contracts\ClientContract;
@@ -28,7 +27,6 @@ use OpenAI\Resources\Realtime;
 use OpenAI\Resources\Responses;
 use OpenAI\Resources\Threads;
 use OpenAI\Resources\VectorStores;
-
 final class Client implements ClientContract
 {
     /**
@@ -38,7 +36,6 @@ final class Client implements ClientContract
     {
         // ..
     }
-
     /**
      * Manage responses to assist models with tasks.
      *
@@ -48,7 +45,6 @@ final class Client implements ClientContract
     {
         return new Responses($this->transporter);
     }
-
     /**
      * Create and manage conversations to store and retrieve conversation state across Response API calls.
      *
@@ -58,7 +54,6 @@ final class Client implements ClientContract
     {
         return new Conversations($this->transporter);
     }
-
     /**
      * Given a prompt, the model will return one or more predicted completions, and can also return the probabilities
      * of alternative tokens at each position.
@@ -69,7 +64,6 @@ final class Client implements ClientContract
     {
         return new Completions($this->transporter);
     }
-
     /**
      * Given a chat conversation, the model will return a chat completion response.
      *
@@ -79,7 +73,6 @@ final class Client implements ClientContract
     {
         return new Chat($this->transporter);
     }
-
     /**
      * Create and manage containers for use with the Code Interpreter tool.
      *
@@ -89,7 +82,6 @@ final class Client implements ClientContract
     {
         return new Containers($this->transporter);
     }
-
     /**
      * Get a vector representation of a given input that can be easily consumed by machine learning models and algorithms.
      *
@@ -99,7 +91,6 @@ final class Client implements ClientContract
     {
         return new Embeddings($this->transporter);
     }
-
     /**
      * Learn how to turn audio into text.
      *
@@ -109,7 +100,6 @@ final class Client implements ClientContract
     {
         return new Audio($this->transporter);
     }
-
     /**
      * Given a prompt and an instruction, the model will return an edited version of the prompt.
      *
@@ -119,7 +109,6 @@ final class Client implements ClientContract
     {
         return new Edits($this->transporter);
     }
-
     /**
      * Files are used to upload documents that can be used with features like Fine-tuning.
      *
@@ -129,7 +118,6 @@ final class Client implements ClientContract
     {
         return new Files($this->transporter);
     }
-
     /**
      * List and describe the various models available in the API.
      *
@@ -139,7 +127,6 @@ final class Client implements ClientContract
     {
         return new Models($this->transporter);
     }
-
     /**
      * Manage fine-tuning jobs to tailor a model to your specific training data.
      *
@@ -149,7 +136,6 @@ final class Client implements ClientContract
     {
         return new FineTuning($this->transporter);
     }
-
     /**
      * Manage fine-tuning jobs to tailor a model to your specific training data.
      *
@@ -161,7 +147,6 @@ final class Client implements ClientContract
     {
         return new FineTunes($this->transporter);
     }
-
     /**
      * Given an input text, outputs if the model classifies it as violating OpenAI's content policy.
      *
@@ -171,7 +156,6 @@ final class Client implements ClientContract
     {
         return new Moderations($this->transporter);
     }
-
     /**
      * Given a prompt and/or an input image, the model will generate a new image.
      *
@@ -181,7 +165,6 @@ final class Client implements ClientContract
     {
         return new Images($this->transporter);
     }
-
     /**
      * Build assistants that can call models and use tools to perform tasks.
      *
@@ -191,7 +174,6 @@ final class Client implements ClientContract
     {
         return new Assistants($this->transporter);
     }
-
     /**
      * Communicate with a model in real time using WebRTC or WebSockets.
      *
@@ -201,7 +183,6 @@ final class Client implements ClientContract
     {
         return new Realtime($this->transporter);
     }
-
     /**
      * Create threads that assistants can interact with.
      *
@@ -211,7 +192,6 @@ final class Client implements ClientContract
     {
         return new Threads($this->transporter);
     }
-
     /**
      * Create large batches of API requests for asynchronous processing. The Batch API returns completions within 24 hours.
      *
@@ -221,7 +201,6 @@ final class Client implements ClientContract
     {
         return new Batches($this->transporter);
     }
-
     /**
      * Create and update vector stores that assistants can interact with
      *

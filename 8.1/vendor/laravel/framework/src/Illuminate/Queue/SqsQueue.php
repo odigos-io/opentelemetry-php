@@ -2,13 +2,12 @@
 
 namespace Illuminate\Queue;
 
-use Aws\Sqs\SqsClient;
+use Odigos\Aws\Sqs\SqsClient;
 use Illuminate\Contracts\Queue\ClearableQueue;
 use Illuminate\Contracts\Queue\Queue as QueueContract;
 use Illuminate\Queue\Jobs\SqsJob;
 use Illuminate\Support\Str;
-
-class SqsQueue extends Queue implements QueueContract, ClearableQueue
+class SqsQueue extends \Illuminate\Queue\Queue implements QueueContract, ClearableQueue
 {
     /**
      * The Amazon SQS instance.
@@ -16,28 +15,24 @@ class SqsQueue extends Queue implements QueueContract, ClearableQueue
      * @var \Aws\Sqs\SqsClient
      */
     protected $sqs;
-
     /**
      * The name of the default queue.
      *
      * @var string
      */
     protected $default;
-
     /**
      * The queue URL prefix.
      *
      * @var string
      */
     protected $prefix;
-
     /**
      * The queue name suffix.
      *
      * @var string
      */
     protected $suffix;
-
     /**
      * Create a new Amazon SQS queue instance.
      *
@@ -48,11 +43,7 @@ class SqsQueue extends Queue implements QueueContract, ClearableQueue
      * @param  bool  $dispatchAfterCommit
      * @return void
      */
-    public function __construct(SqsClient $sqs,
-                                $default,
-                                $prefix = '',
-                                $suffix = '',
-                                $dispatchAfterCommit = false)
+    public function __construct(SqsClient $sqs, $default, $prefix = '', $suffix = '', $dispatchAfterCommit = \false)
     {
         $this->sqs = $sqs;
         $this->prefix = $prefix;
@@ -60,7 +51,6 @@ class SqsQueue extends Queue implements QueueContract, ClearableQueue
         $this->suffix = $suffix;
         $this->dispatchAfterCommit = $dispatchAfterCommit;
     }
-
     /**
      * Get the size of the queue.
      *
@@ -69,16 +59,10 @@ class SqsQueue extends Queue implements QueueContract, ClearableQueue
      */
     public function size($queue = null)
     {
-        $response = $this->sqs->getQueueAttributes([
-            'QueueUrl' => $this->getQueue($queue),
-            'AttributeNames' => ['ApproximateNumberOfMessages'],
-        ]);
-
+        $response = $this->sqs->getQueueAttributes(['QueueUrl' => $this->getQueue($queue), 'AttributeNames' => ['ApproximateNumberOfMessages']]);
         $attributes = $response->get('Attributes');
-
         return (int) $attributes['ApproximateNumberOfMessages'];
     }
-
     /**
      * Push a new job onto the queue.
      *
@@ -89,17 +73,10 @@ class SqsQueue extends Queue implements QueueContract, ClearableQueue
      */
     public function push($job, $data = '', $queue = null)
     {
-        return $this->enqueueUsing(
-            $job,
-            $this->createPayload($job, $queue ?: $this->default, $data),
-            $queue,
-            null,
-            function ($payload, $queue) {
-                return $this->pushRaw($payload, $queue);
-            }
-        );
+        return $this->enqueueUsing($job, $this->createPayload($job, $queue ?: $this->default, $data), $queue, null, function ($payload, $queue) {
+            return $this->pushRaw($payload, $queue);
+        });
     }
-
     /**
      * Push a raw payload onto the queue.
      *
@@ -110,11 +87,8 @@ class SqsQueue extends Queue implements QueueContract, ClearableQueue
      */
     public function pushRaw($payload, $queue = null, array $options = [])
     {
-        return $this->sqs->sendMessage([
-            'QueueUrl' => $this->getQueue($queue), 'MessageBody' => $payload,
-        ])->get('MessageId');
+        return $this->sqs->sendMessage(['QueueUrl' => $this->getQueue($queue), 'MessageBody' => $payload])->get('MessageId');
     }
-
     /**
      * Push a new job onto the queue after (n) seconds.
      *
@@ -126,21 +100,10 @@ class SqsQueue extends Queue implements QueueContract, ClearableQueue
      */
     public function later($delay, $job, $data = '', $queue = null)
     {
-        return $this->enqueueUsing(
-            $job,
-            $this->createPayload($job, $queue ?: $this->default, $data),
-            $queue,
-            $delay,
-            function ($payload, $queue, $delay) {
-                return $this->sqs->sendMessage([
-                    'QueueUrl' => $this->getQueue($queue),
-                    'MessageBody' => $payload,
-                    'DelaySeconds' => $this->secondsUntil($delay),
-                ])->get('MessageId');
-            }
-        );
+        return $this->enqueueUsing($job, $this->createPayload($job, $queue ?: $this->default, $data), $queue, $delay, function ($payload, $queue, $delay) {
+            return $this->sqs->sendMessage(['QueueUrl' => $this->getQueue($queue), 'MessageBody' => $payload, 'DelaySeconds' => $this->secondsUntil($delay)])->get('MessageId');
+        });
     }
-
     /**
      * Push an array of jobs onto the queue.
      *
@@ -159,7 +122,6 @@ class SqsQueue extends Queue implements QueueContract, ClearableQueue
             }
         }
     }
-
     /**
      * Pop the next job off of the queue.
      *
@@ -168,19 +130,11 @@ class SqsQueue extends Queue implements QueueContract, ClearableQueue
      */
     public function pop($queue = null)
     {
-        $response = $this->sqs->receiveMessage([
-            'QueueUrl' => $queue = $this->getQueue($queue),
-            'AttributeNames' => ['ApproximateReceiveCount'],
-        ]);
-
-        if (! is_null($response['Messages']) && count($response['Messages']) > 0) {
-            return new SqsJob(
-                $this->container, $this->sqs, $response['Messages'][0],
-                $this->connectionName, $queue
-            );
+        $response = $this->sqs->receiveMessage(['QueueUrl' => $queue = $this->getQueue($queue), 'AttributeNames' => ['ApproximateReceiveCount']]);
+        if (!is_null($response['Messages']) && count($response['Messages']) > 0) {
+            return new SqsJob($this->container, $this->sqs, $response['Messages'][0], $this->connectionName, $queue);
         }
     }
-
     /**
      * Delete all of the jobs from the queue.
      *
@@ -190,12 +144,9 @@ class SqsQueue extends Queue implements QueueContract, ClearableQueue
     public function clear($queue)
     {
         return tap($this->size($queue), function () use ($queue) {
-            $this->sqs->purgeQueue([
-                'QueueUrl' => $this->getQueue($queue),
-            ]);
+            $this->sqs->purgeQueue(['QueueUrl' => $this->getQueue($queue)]);
         });
     }
-
     /**
      * Get the queue or return the default.
      *
@@ -205,12 +156,8 @@ class SqsQueue extends Queue implements QueueContract, ClearableQueue
     public function getQueue($queue)
     {
         $queue = $queue ?: $this->default;
-
-        return filter_var($queue, FILTER_VALIDATE_URL) === false
-            ? $this->suffixQueue($queue, $this->suffix)
-            : $queue;
+        return filter_var($queue, \FILTER_VALIDATE_URL) === \false ? $this->suffixQueue($queue, $this->suffix) : $queue;
     }
-
     /**
      * Add the given suffix to the given queue name.
      *
@@ -222,13 +169,10 @@ class SqsQueue extends Queue implements QueueContract, ClearableQueue
     {
         if (str_ends_with($queue, '.fifo')) {
             $queue = Str::beforeLast($queue, '.fifo');
-
-            return rtrim($this->prefix, '/').'/'.Str::finish($queue, $suffix).'.fifo';
+            return rtrim($this->prefix, '/') . '/' . Str::finish($queue, $suffix) . '.fifo';
         }
-
-        return rtrim($this->prefix, '/').'/'.Str::finish($queue, $this->suffix);
+        return rtrim($this->prefix, '/') . '/' . Str::finish($queue, $this->suffix);
     }
-
     /**
      * Get the underlying SQS instance.
      *

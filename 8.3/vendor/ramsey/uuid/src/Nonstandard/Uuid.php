@@ -9,16 +9,13 @@
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
  */
+declare (strict_types=1);
+namespace Odigos\Ramsey\Uuid\Nonstandard;
 
-declare(strict_types=1);
-
-namespace Ramsey\Uuid\Nonstandard;
-
-use Ramsey\Uuid\Codec\CodecInterface;
-use Ramsey\Uuid\Converter\NumberConverterInterface;
-use Ramsey\Uuid\Converter\TimeConverterInterface;
-use Ramsey\Uuid\Uuid as BaseUuid;
-
+use Odigos\Ramsey\Uuid\Codec\CodecInterface;
+use Odigos\Ramsey\Uuid\Converter\NumberConverterInterface;
+use Odigos\Ramsey\Uuid\Converter\TimeConverterInterface;
+use Odigos\Ramsey\Uuid\Uuid as BaseUuid;
 /**
  * Nonstandard\Uuid is a UUID that doesn't conform to RFC 9562 (formerly RFC 4122)
  *
@@ -27,12 +24,8 @@ use Ramsey\Uuid\Uuid as BaseUuid;
  */
 final class Uuid extends BaseUuid
 {
-    public function __construct(
-        Fields $fields,
-        NumberConverterInterface $numberConverter,
-        CodecInterface $codec,
-        TimeConverterInterface $timeConverter,
-    ) {
+    public function __construct(Fields $fields, NumberConverterInterface $numberConverter, CodecInterface $codec, TimeConverterInterface $timeConverter)
+    {
         parent::__construct($fields, $numberConverter, $codec, $timeConverter);
     }
 }

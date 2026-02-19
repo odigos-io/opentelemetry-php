@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\Routing\Exception;
 
 /**
@@ -16,6 +15,6 @@ namespace Symfony\Component\Routing\Exception;
  *
  * @author Yonel Ceruto <yonelceruto@gmail.com>
  */
-class NoConfigurationException extends ResourceNotFoundException
+class NoConfigurationException extends \Symfony\Component\Routing\Exception\ResourceNotFoundException
 {
 }

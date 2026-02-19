@@ -1,17 +1,16 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\Contrib\Otlp;
 
 use function base64_decode;
 use function bin2hex;
 use Exception;
-use Google\Protobuf\Descriptor;
-use Google\Protobuf\DescriptorPool;
-use Google\Protobuf\FieldDescriptor;
-use Google\Protobuf\Internal\GPBType;
-use Google\Protobuf\Internal\Message;
+use Odigos\Google\Protobuf\Descriptor;
+use Odigos\Google\Protobuf\DescriptorPool;
+use Odigos\Google\Protobuf\FieldDescriptor;
+use Odigos\Google\Protobuf\Internal\GPBType;
+use Odigos\Google\Protobuf\Internal\Message;
 use InvalidArgumentException;
 use function json_decode;
 use function json_encode;
@@ -23,7 +22,6 @@ use OpenTelemetry\SDK\Common\Export\TransportInterface;
 use function property_exists;
 use function sprintf;
 use function ucwords;
-
 /**
  * @internal
  * @psalm-type SUPPORTED_CONTENT_TYPES = ContentTypes::PROTOBUF|ContentTypes::JSON|ContentTypes::NDJSON
@@ -31,55 +29,48 @@ use function ucwords;
 final class ProtobufSerializer
 {
     use LogsMessagesTrait;
-
     private function __construct(private readonly string $contentType)
     {
     }
-
-    public static function getDefault(): ProtobufSerializer
+    public static function getDefault(): \OpenTelemetry\Contrib\Otlp\ProtobufSerializer
     {
-        return new self(ContentTypes::PROTOBUF);
+        return new self(\OpenTelemetry\Contrib\Otlp\ContentTypes::PROTOBUF);
     }
-
     /**
      * @psalm-param TransportInterface<SUPPORTED_CONTENT_TYPES> $transport
      */
-    public static function forTransport(TransportInterface $transport): ProtobufSerializer
+    public static function forTransport(TransportInterface $transport): \OpenTelemetry\Contrib\Otlp\ProtobufSerializer
     {
         return match ($contentType = $transport->contentType()) {
-            ContentTypes::PROTOBUF, ContentTypes::JSON, ContentTypes::NDJSON => new self($contentType),
+            \OpenTelemetry\Contrib\Otlp\ContentTypes::PROTOBUF, \OpenTelemetry\Contrib\Otlp\ContentTypes::JSON, \OpenTelemetry\Contrib\Otlp\ContentTypes::NDJSON => new self($contentType),
             default => throw new InvalidArgumentException(sprintf('Not supported content type "%s"', $contentType)),
         };
     }
-
     public function serializeTraceId(string $traceId): string
     {
         // @phpstan-ignore-next-line
         return match ($this->contentType) {
-            ContentTypes::PROTOBUF => $traceId,
-            ContentTypes::JSON, ContentTypes::NDJSON => base64_decode(bin2hex($traceId)),
+            \OpenTelemetry\Contrib\Otlp\ContentTypes::PROTOBUF => $traceId,
+            \OpenTelemetry\Contrib\Otlp\ContentTypes::JSON, \OpenTelemetry\Contrib\Otlp\ContentTypes::NDJSON => base64_decode(bin2hex($traceId)),
         };
     }
-
     public function serializeSpanId(string $spanId): string
     {
         // @phpstan-ignore-next-line
         return match ($this->contentType) {
-            ContentTypes::PROTOBUF => $spanId,
-            ContentTypes::JSON, ContentTypes::NDJSON => base64_decode(bin2hex($spanId)),
+            \OpenTelemetry\Contrib\Otlp\ContentTypes::PROTOBUF => $spanId,
+            \OpenTelemetry\Contrib\Otlp\ContentTypes::JSON, \OpenTelemetry\Contrib\Otlp\ContentTypes::NDJSON => base64_decode(bin2hex($spanId)),
         };
     }
-
     public function serialize(Message $message): string
     {
         // @phpstan-ignore-next-line
         return match ($this->contentType) {
-            ContentTypes::PROTOBUF => $message->serializeToString(),
-            ContentTypes::JSON => self::serializeToJsonString($message),
-            ContentTypes::NDJSON => self::serializeToJsonString($message) . "\n",
+            \OpenTelemetry\Contrib\Otlp\ContentTypes::PROTOBUF => $message->serializeToString(),
+            \OpenTelemetry\Contrib\Otlp\ContentTypes::JSON => self::serializeToJsonString($message),
+            \OpenTelemetry\Contrib\Otlp\ContentTypes::NDJSON => self::serializeToJsonString($message) . "\n",
         };
     }
-
     /**
      * @phan-suppress PhanParamTooManyInternal (@see https://github.com/phan/phan/pull/4840)
      * @throws Exception
@@ -88,11 +79,10 @@ final class ProtobufSerializer
     {
         // @phpstan-ignore-next-line
         match ($this->contentType) {
-            ContentTypes::PROTOBUF => $message->mergeFromString($payload),
-            ContentTypes::JSON, ContentTypes::NDJSON => $message->mergeFromJsonString($payload, true),
+            \OpenTelemetry\Contrib\Otlp\ContentTypes::PROTOBUF => $message->mergeFromString($payload),
+            \OpenTelemetry\Contrib\Otlp\ContentTypes::JSON, \OpenTelemetry\Contrib\Otlp\ContentTypes::NDJSON => $message->mergeFromJsonString($payload, \true),
         };
     }
-
     /**
      * [JSON Protobuf Encoding](https://opentelemetry.io/docs/specs/otlp/#json-protobuf-encoding):
      * > Values of enum fields MUST be encoded as integer values.
@@ -103,32 +93,27 @@ final class ProtobufSerializer
     private static function serializeToJsonString(Message $message): string
     {
         // @phan-suppress-next-line PhanUndeclaredClassReference
-        if (\class_exists(\Google\Protobuf\PrintOptions::class)) {
+        if (\class_exists(\Odigos\Google\Protobuf\PrintOptions::class)) {
             try {
                 /** @psalm-suppress TooManyArguments @phan-suppress-next-line PhanParamTooManyInternal,PhanUndeclaredClassConstant */
-                return $message->serializeToJsonString(\Google\Protobuf\PrintOptions::ALWAYS_PRINT_ENUMS_AS_INTS);
+                return $message->serializeToJsonString(\Odigos\Google\Protobuf\PrintOptions::ALWAYS_PRINT_ENUMS_AS_INTS);
             } catch (\TypeError) {
                 // google/protobuf ^4.31 w/ ext-protobuf <4.31 installed
             }
         }
-
         $payload = $message->serializeToJsonString();
         $pool = DescriptorPool::getGeneratedPool();
         $desc = $pool->getDescriptorByClassName($message::class);
         if (!$desc instanceof Descriptor) {
             return $payload;
         }
-
         $data = json_decode((string) $payload);
         unset($payload);
         self::traverseDescriptor($data, $desc);
-
         $encoded = json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-        assert($encoded !== false);
-
+        assert($encoded !== \false);
         return $encoded;
     }
-
     private static function traverseDescriptor(object $data, Descriptor $desc): void
     {
         for ($i = 0, $n = $desc->getFieldCount(); $i < $n; $i++) {
@@ -138,23 +123,20 @@ final class ProtobufSerializer
             if (!property_exists($data, $name)) {
                 continue;
             }
-
             if ($field->isRepeated()) {
-                foreach ($data->$name as $key => $value) {
-                    $data->$name[$key] = self::traverseFieldDescriptor($value, $field);
+                foreach ($data->{$name} as $key => $value) {
+                    $data->{$name}[$key] = self::traverseFieldDescriptor($value, $field);
                 }
             } else {
-                $data->$name = self::traverseFieldDescriptor($data->$name, $field);
+                $data->{$name} = self::traverseFieldDescriptor($data->{$name}, $field);
             }
         }
     }
-
     private static function traverseFieldDescriptor($data, FieldDescriptor $field)
     {
         switch ($field->getType()) {
             case GPBType::MESSAGE:
                 self::traverseDescriptor($data, $field->getMessageType());
-
                 break;
             case GPBType::ENUM:
                 $enum = $field->getEnumType();
@@ -163,10 +145,8 @@ final class ProtobufSerializer
                         return $enum->getValue($i)->getNumber();
                     }
                 }
-
                 break;
         }
-
         return $data;
     }
 }

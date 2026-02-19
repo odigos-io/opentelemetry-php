@@ -3,7 +3,6 @@
 namespace Illuminate\Translation;
 
 use Stringable;
-
 class PotentiallyTranslatedString implements Stringable
 {
     /**
@@ -12,21 +11,18 @@ class PotentiallyTranslatedString implements Stringable
      * @var string
      */
     protected $string;
-
     /**
      * The translated string.
      *
      * @var string|null
      */
     protected $translation;
-
     /**
      * The validator that may perform the translation.
      *
      * @var \Illuminate\Contracts\Translation\Translator
      */
     protected $translator;
-
     /**
      * Create a new potentially translated string.
      *
@@ -36,10 +32,8 @@ class PotentiallyTranslatedString implements Stringable
     public function __construct($string, $translator)
     {
         $this->string = $string;
-
         $this->translator = $translator;
     }
-
     /**
      * Translate the string.
      *
@@ -50,10 +44,8 @@ class PotentiallyTranslatedString implements Stringable
     public function translate($replace = [], $locale = null)
     {
         $this->translation = $this->translator->get($this->string, $replace, $locale);
-
         return $this;
     }
-
     /**
      * Translates the string based on a count.
      *
@@ -65,10 +57,8 @@ class PotentiallyTranslatedString implements Stringable
     public function translateChoice($number, array $replace = [], $locale = null)
     {
         $this->translation = $this->translator->choice($this->string, $number, $replace, $locale);
-
         return $this;
     }
-
     /**
      * Get the original string.
      *
@@ -78,7 +68,6 @@ class PotentiallyTranslatedString implements Stringable
     {
         return $this->string;
     }
-
     /**
      * Get the potentially translated string.
      *
@@ -88,7 +77,6 @@ class PotentiallyTranslatedString implements Stringable
     {
         return $this->translation ?? $this->string;
     }
-
     /**
      * Get the potentially translated string.
      *

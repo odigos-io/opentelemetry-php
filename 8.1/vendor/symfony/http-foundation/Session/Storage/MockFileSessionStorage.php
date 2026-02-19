@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\HttpFoundation\Session\Storage;
 
 /**
@@ -23,56 +22,43 @@ namespace Symfony\Component\HttpFoundation\Session\Storage;
  *
  * @author Drak <drak@zikula.org>
  */
-class MockFileSessionStorage extends MockArraySessionStorage
+class MockFileSessionStorage extends \Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage
 {
     private string $savePath;
-
     /**
      * @param string|null $savePath Path of directory to save session files
      */
-    public function __construct(?string $savePath = null, string $name = 'MOCKSESSID', ?MetadataBag $metaBag = null)
+    public function __construct(?string $savePath = null, string $name = 'MOCKSESSID', ?\Symfony\Component\HttpFoundation\Session\Storage\MetadataBag $metaBag = null)
     {
         $savePath ??= sys_get_temp_dir();
-
-        if (!is_dir($savePath) && !@mkdir($savePath, 0777, true) && !is_dir($savePath)) {
+        if (!is_dir($savePath) && !@mkdir($savePath, 0777, \true) && !is_dir($savePath)) {
             throw new \RuntimeException(\sprintf('Session Storage was not able to create directory "%s".', $savePath));
         }
-
         $this->savePath = $savePath;
-
         parent::__construct($name, $metaBag);
     }
-
     public function start(): bool
     {
         if ($this->started) {
-            return true;
+            return \true;
         }
-
         if (!$this->id) {
             $this->id = $this->generateId();
         }
-
         $this->read();
-
-        $this->started = true;
-
-        return true;
+        $this->started = \true;
+        return \true;
     }
-
-    public function regenerate(bool $destroy = false, ?int $lifetime = null): bool
+    public function regenerate(bool $destroy = \false, ?int $lifetime = null): bool
     {
         if (!$this->started) {
             $this->start();
         }
-
         if ($destroy) {
             $this->destroy();
         }
-
         return parent::regenerate($destroy, $lifetime);
     }
-
     /**
      * @return void
      */
@@ -81,9 +67,7 @@ class MockFileSessionStorage extends MockArraySessionStorage
         if (!$this->started) {
             throw new \RuntimeException('Trying to save a session that was not started yet or was already closed.');
         }
-
         $data = $this->data;
-
         foreach ($this->bags as $bag) {
             if (empty($data[$key = $bag->getStorageKey()])) {
                 unset($data[$key]);
@@ -92,11 +76,10 @@ class MockFileSessionStorage extends MockArraySessionStorage
         if ([$key = $this->metadataBag->getStorageKey()] === array_keys($data)) {
             unset($data[$key]);
         }
-
         try {
             if ($data) {
                 $path = $this->getFilePath();
-                $tmp = $path.bin2hex(random_bytes(6));
+                $tmp = $path . bin2hex(random_bytes(6));
                 file_put_contents($tmp, serialize($data));
                 rename($tmp, $path);
             } else {
@@ -105,48 +88,44 @@ class MockFileSessionStorage extends MockArraySessionStorage
         } finally {
             $this->data = $data;
         }
-
         // this is needed when the session object is re-used across multiple requests
         // in functional tests.
-        $this->started = false;
+        $this->started = \false;
     }
-
     /**
      * Deletes a session from persistent storage.
      * Deliberately leaves session data in memory intact.
      */
     private function destroy(): void
     {
-        set_error_handler(static function () {});
+        set_error_handler(static function () {
+        });
         try {
             unlink($this->getFilePath());
         } finally {
             restore_error_handler();
         }
     }
-
     /**
      * Calculate path to file.
      */
     private function getFilePath(): string
     {
-        return $this->savePath.'/'.$this->id.'.mocksess';
+        return $this->savePath . '/' . $this->id . '.mocksess';
     }
-
     /**
      * Reads session from storage and loads session.
      */
     private function read(): void
     {
-        set_error_handler(static function () {});
+        set_error_handler(static function () {
+        });
         try {
             $data = file_get_contents($this->getFilePath());
         } finally {
             restore_error_handler();
         }
-
         $this->data = $data ? unserialize($data) : [];
-
         $this->loadSession();
     }
 }

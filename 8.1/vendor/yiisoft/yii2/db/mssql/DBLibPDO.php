@@ -1,10 +1,10 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\db\mssql;
 
 /**
@@ -26,7 +26,6 @@ class DBLibPDO extends \PDO
     {
         return $this->query('SELECT CAST(COALESCE(SCOPE_IDENTITY(), @@IDENTITY) AS bigint)')->fetchColumn();
     }
-
     /**
      * Retrieve a database connection attribute.
      *

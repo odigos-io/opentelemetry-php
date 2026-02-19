@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright 2017-present MongoDB, Inc.
  *
@@ -14,7 +15,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 namespace MongoDB;
 
 use Iterator;
@@ -27,11 +27,9 @@ use MongoDB\Driver\Exception\ServerException;
 use MongoDB\Exception\BadMethodCallException;
 use MongoDB\Exception\ResumeTokenException;
 use MongoDB\Model\ChangeStreamIterator;
-
 use function assert;
 use function call_user_func;
 use function in_array;
-
 /**
  * Iterator for a change stream.
  *
@@ -44,59 +42,64 @@ use function in_array;
 class ChangeStream implements Iterator
 {
     private const CURSOR_NOT_FOUND = 43;
-
     private const RESUMABLE_ERROR_CODES = [
-        6, // HostUnreachable
-        7, // HostNotFound
-        89, // NetworkTimeout
-        91, // ShutdownInProgress
-        189, // PrimarySteppedDown
-        262, // ExceededTimeLimit
-        9001, // SocketException
-        10107, // NotPrimary
-        11600, // InterruptedAtShutdown
-        11602, // InterruptedDueToReplStateChange
-        13435, // NotPrimaryNoSecondaryOk
-        13436, // NotPrimaryOrSecondary
-        63, // StaleShardVersion
-        150, // StaleEpoch
-        13388, // StaleConfig
-        234, // RetryChangeStream
-        133, // FailedToSatisfyReadPreference
+        6,
+        // HostUnreachable
+        7,
+        // HostNotFound
+        89,
+        // NetworkTimeout
+        91,
+        // ShutdownInProgress
+        189,
+        // PrimarySteppedDown
+        262,
+        // ExceededTimeLimit
+        9001,
+        // SocketException
+        10107,
+        // NotPrimary
+        11600,
+        // InterruptedAtShutdown
+        11602,
+        // InterruptedDueToReplStateChange
+        13435,
+        // NotPrimaryNoSecondaryOk
+        13436,
+        // NotPrimaryOrSecondary
+        63,
+        // StaleShardVersion
+        150,
+        // StaleEpoch
+        13388,
+        // StaleConfig
+        234,
+        // RetryChangeStream
+        133,
     ];
-
     private const WIRE_VERSION_FOR_RESUMABLE_CHANGE_STREAM_ERROR = 9;
-
     /** @var ResumeCallable|null */
     private $resumeCallable;
-
     private int $key = 0;
-
     /**
      * Whether the change stream has advanced to its first result. This is used
      * to determine whether $key should be incremented after an iteration event.
      */
-    private bool $hasAdvanced = false;
-
+    private bool $hasAdvanced = \false;
     /** @see https://php.net/iterator.current */
     public function current(): array|object|null
     {
         $value = $this->iterator->current();
-
-        if (! $this->codec) {
+        if (!$this->codec) {
             return $value;
         }
-
         assert($value instanceof Document);
-
         return $this->codec->decode($value);
     }
-
     public function getCursorId(): Int64
     {
         return $this->iterator->getInnerIterator()->getId();
     }
-
     /**
      * Returns the resume token for the iterator's current position.
      *
@@ -108,17 +111,14 @@ class ChangeStream implements Iterator
     {
         return $this->iterator->getResumeToken();
     }
-
     /** @see https://php.net/iterator.key */
     public function key(): ?int
     {
         if ($this->valid()) {
             return $this->key;
         }
-
         return null;
     }
-
     /**
      * @see https://php.net/iterator.next
      * @throws ResumeTokenException
@@ -132,7 +132,6 @@ class ChangeStream implements Iterator
             $this->resumeOrThrow($e);
         }
     }
-
     /**
      * @see https://php.net/iterator.rewind
      * @throws ResumeTokenException
@@ -144,18 +143,16 @@ class ChangeStream implements Iterator
             /* Unlike next() and resume(), the decision to increment the key
              * does not depend on whether the change stream has advanced. This
              * ensures that multiple calls to rewind() do not alter state. */
-            $this->onIteration(false);
+            $this->onIteration(\false);
         } catch (RuntimeException $e) {
             $this->resumeOrThrow($e);
         }
     }
-
     /** @see https://php.net/iterator.valid */
     public function valid(): bool
     {
         return $this->iterator->valid();
     }
-
     /**
      * @internal
      *
@@ -164,12 +161,10 @@ class ChangeStream implements Iterator
     public function __construct(private ChangeStreamIterator $iterator, callable $resumeCallable, private ?DocumentCodec $codec = null)
     {
         $this->resumeCallable = $resumeCallable;
-
         if ($codec) {
             $this->iterator->getInnerIterator()->setTypeMap(['root' => 'bson']);
         }
     }
-
     /**
      * Determines if an exception is a resumable error.
      *
@@ -178,24 +173,19 @@ class ChangeStream implements Iterator
     private function isResumableError(RuntimeException $exception): bool
     {
         if ($exception instanceof ConnectionException) {
-            return true;
+            return \true;
         }
-
-        if (! $exception instanceof ServerException) {
-            return false;
+        if (!$exception instanceof ServerException) {
+            return \false;
         }
-
         if ($exception->getCode() === self::CURSOR_NOT_FOUND) {
-            return true;
+            return \true;
         }
-
         if (server_supports_feature($this->iterator->getServer(), self::WIRE_VERSION_FOR_RESUMABLE_CHANGE_STREAM_ERROR)) {
             return $exception->hasErrorLabel('ResumableChangeStreamError');
         }
-
         return in_array($exception->getCode(), self::RESUMABLE_ERROR_CODES);
     }
-
     /**
      * Perform housekeeping after an iteration event.
      *
@@ -214,20 +204,16 @@ class ChangeStream implements Iterator
         if ($this->getCursorId() == 0) {
             $this->resumeCallable = null;
         }
-
         /* Return early if there is not a current result. Avoid any attempt to
          * increment the iterator's key. */
-        if (! $this->valid()) {
+        if (!$this->valid()) {
             return;
         }
-
         if ($incrementKey) {
             $this->key++;
         }
-
-        $this->hasAdvanced = true;
+        $this->hasAdvanced = \true;
     }
-
     /**
      * Recreates the ChangeStreamIterator after a resumable server error.
      */
@@ -236,18 +222,13 @@ class ChangeStream implements Iterator
         if ($this->resumeCallable === null) {
             throw new BadMethodCallException('Cannot resume a closed change stream.');
         }
-
         $this->iterator = call_user_func($this->resumeCallable, $this->getResumeToken(), $this->hasAdvanced);
-
         $this->iterator->rewind();
-
         if ($this->codec) {
             $this->iterator->getInnerIterator()->setTypeMap(['root' => 'bson']);
         }
-
         $this->onIteration($this->hasAdvanced);
     }
-
     /**
      * Either resumes after a resumable error or re-throws the exception.
      *
@@ -257,10 +238,8 @@ class ChangeStream implements Iterator
     {
         if ($this->isResumableError($exception)) {
             $this->resume();
-
             return;
         }
-
         throw $exception;
     }
 }

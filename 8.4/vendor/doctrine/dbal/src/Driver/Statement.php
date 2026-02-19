@@ -1,11 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\DBAL\Driver;
 
 use Doctrine\DBAL\ParameterType;
-
 /**
  * Driver-level statement
  */
@@ -29,11 +27,10 @@ interface Statement
      * @throws Exception
      */
     public function bindValue(int|string $param, mixed $value, ParameterType $type): void;
-
     /**
      * Executes a prepared statement
      *
      * @throws Exception
      */
-    public function execute(): Result;
+    public function execute(): \Doctrine\DBAL\Driver\Result;
 }

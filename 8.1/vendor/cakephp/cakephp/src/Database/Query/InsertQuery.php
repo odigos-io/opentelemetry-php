@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -20,7 +20,6 @@ use Cake\Database\Exception\DatabaseException;
 use Cake\Database\Expression\ValuesExpression;
 use Cake\Database\Query;
 use InvalidArgumentException;
-
 /**
  * This class is used to generate INSERT queries for the relational database.
  */
@@ -32,21 +31,12 @@ class InsertQuery extends Query
      * @var string
      */
     protected string $_type = self::TYPE_INSERT;
-
     /**
      * List of SQL parts that will be used to build this query.
      *
      * @var array<string, mixed>
      */
-    protected array $_parts = [
-        'comment' => null,
-        'with' => [],
-        'insert' => [],
-        'modifier' => [],
-        'values' => [],
-        'epilog' => null,
-    ];
-
+    protected array $_parts = ['comment' => null, 'with' => [], 'insert' => [], 'modifier' => [], 'values' => [], 'epilog' => null];
     /**
      * Create an insert query.
      *
@@ -72,10 +62,8 @@ class InsertQuery extends Query
             $valuesExpr = $this->_parts['values'];
             $valuesExpr->setColumns($columns);
         }
-
         return $this;
     }
-
     /**
      * Set the table name for insert queries.
      *
@@ -86,10 +74,8 @@ class InsertQuery extends Query
     {
         $this->_dirty();
         $this->_parts['insert'][0] = $table;
-
         return $this;
     }
-
     /**
      * Set the values for an insert query.
      *
@@ -105,22 +91,16 @@ class InsertQuery extends Query
     public function values(ValuesExpression|Query|array $data)
     {
         if (empty($this->_parts['insert'])) {
-            throw new DatabaseException(
-                'You cannot add values before defining columns to use.',
-            );
+            throw new DatabaseException('You cannot add values before defining columns to use.');
         }
-
         $this->_dirty();
         if ($data instanceof ValuesExpression) {
             $this->_parts['values'] = $data;
-
             return $this;
         }
-
         /** @var \Cake\Database\Expression\ValuesExpression $valuesExpr */
         $valuesExpr = $this->_parts['values'];
         $valuesExpr->add($data);
-
         return $this;
     }
 }

@@ -2,8 +2,7 @@
 
 namespace Illuminate\Contracts\Log;
 
-use Monolog\Processor\ProcessorInterface;
-
+use Odigos\Monolog\Processor\ProcessorInterface;
 interface ContextLogProcessor extends ProcessorInterface
 {
 }

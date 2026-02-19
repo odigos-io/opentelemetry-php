@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -20,7 +20,6 @@ use Cake\Datasource\Exception\MissingModelException;
 use Cake\Datasource\Locator\LocatorInterface;
 use UnexpectedValueException;
 use function Cake\Core\pluginSplit;
-
 /**
  * Provides functionality for loading table classes
  * and other repositories onto properties of the host object.
@@ -44,21 +43,18 @@ trait ModelAwareTrait
      * @var string|null
      */
     protected ?string $modelClass = null;
-
     /**
      * A list of overridden model factory functions.
      *
      * @var array<callable|\Cake\Datasource\Locator\LocatorInterface>
      */
     protected array $_modelFactories = [];
-
     /**
      * The model type to use.
      *
      * @var string
      */
     protected string $_modelType = 'Table';
-
     /**
      * Set the modelClass property based on conventions.
      *
@@ -71,7 +67,6 @@ trait ModelAwareTrait
     {
         $this->modelClass ??= $name;
     }
-
     /**
      * Fetch or construct a model instance from a locator.
      *
@@ -91,28 +86,22 @@ trait ModelAwareTrait
      * @throws \UnexpectedValueException If $modelClass argument is not provided
      *   and ModelAwareTrait::$modelClass property value is empty.
      */
-    public function fetchModel(?string $modelClass = null, ?string $modelType = null): RepositoryInterface
+    public function fetchModel(?string $modelClass = null, ?string $modelType = null): \Cake\Datasource\RepositoryInterface
     {
         $modelClass ??= $this->modelClass;
         if (!$modelClass) {
             throw new UnexpectedValueException('Default modelClass is empty');
         }
         $modelType ??= $this->getModelType();
-
         $options = [];
         if (!str_contains($modelClass, '\\')) {
-            [, $alias] = pluginSplit($modelClass, true);
+            [, $alias] = pluginSplit($modelClass, \true);
         } else {
             $options['className'] = $modelClass;
-            $alias = substr(
-                $modelClass,
-                strrpos($modelClass, '\\') + 1,
-                -strlen($modelType),
-            );
+            $alias = substr($modelClass, strrpos($modelClass, '\\') + 1, -strlen($modelType));
             $modelClass = $alias;
         }
-
-        $factory = $this->_modelFactories[$modelType] ?? FactoryLocator::get($modelType);
+        $factory = $this->_modelFactories[$modelType] ?? \Cake\Datasource\FactoryLocator::get($modelType);
         if ($factory instanceof LocatorInterface) {
             $instance = $factory->get($modelClass, $options);
         } else {
@@ -121,10 +110,8 @@ trait ModelAwareTrait
         if ($instance) {
             return $instance;
         }
-
         throw new MissingModelException([$modelClass, $modelType]);
     }
-
     /**
      * Override a existing callable to generate repositories of a given type.
      *
@@ -136,7 +123,6 @@ trait ModelAwareTrait
     {
         $this->_modelFactories[$type] = $factory;
     }
-
     /**
      * Get the model type to be used by this class
      *
@@ -146,7 +132,6 @@ trait ModelAwareTrait
     {
         return $this->_modelType;
     }
-
     /**
      * Set the model type to be used by this class
      *
@@ -156,7 +141,6 @@ trait ModelAwareTrait
     public function setModelType(string $modelType)
     {
         $this->_modelType = $modelType;
-
         return $this;
     }
 }

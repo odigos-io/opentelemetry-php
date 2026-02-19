@@ -4,29 +4,16 @@ namespace Illuminate\Foundation\Testing;
 
 use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Foundation\Application;
-use PHPUnit\Framework\TestCase as BaseTestCase;
-
+use Odigos\PHPUnit\Framework\TestCase as BaseTestCase;
 abstract class TestCase extends BaseTestCase
 {
-    use Concerns\InteractsWithContainer,
-        Concerns\MakesHttpRequests,
-        Concerns\InteractsWithAuthentication,
-        Concerns\InteractsWithConsole,
-        Concerns\InteractsWithDatabase,
-        Concerns\InteractsWithDeprecationHandling,
-        Concerns\InteractsWithExceptionHandling,
-        Concerns\InteractsWithSession,
-        Concerns\InteractsWithTime,
-        Concerns\InteractsWithTestCaseLifecycle,
-        Concerns\InteractsWithViews;
-
+    use \Illuminate\Foundation\Testing\Concerns\InteractsWithContainer, \Illuminate\Foundation\Testing\Concerns\MakesHttpRequests, \Illuminate\Foundation\Testing\Concerns\InteractsWithAuthentication, \Illuminate\Foundation\Testing\Concerns\InteractsWithConsole, \Illuminate\Foundation\Testing\Concerns\InteractsWithDatabase, \Illuminate\Foundation\Testing\Concerns\InteractsWithDeprecationHandling, \Illuminate\Foundation\Testing\Concerns\InteractsWithExceptionHandling, \Illuminate\Foundation\Testing\Concerns\InteractsWithSession, \Illuminate\Foundation\Testing\Concerns\InteractsWithTime, \Illuminate\Foundation\Testing\Concerns\InteractsWithTestCaseLifecycle, \Illuminate\Foundation\Testing\Concerns\InteractsWithViews;
     /**
      * The list of trait that this test uses, fetched recursively.
      *
      * @var array<class-string, int>
      */
     protected array $traitsUsedByTest;
-
     /**
      * Creates the application.
      *
@@ -34,25 +21,17 @@ abstract class TestCase extends BaseTestCase
      */
     public function createApplication()
     {
-        $app = require Application::inferBasePath().'/bootstrap/app.php';
-
+        $app = require Application::inferBasePath() . '/bootstrap/app.php';
         $this->traitsUsedByTest = array_flip(class_uses_recursive(static::class));
-
-        if (isset(CachedState::$cachedConfig) &&
-            isset($this->traitsUsedByTest[WithCachedConfig::class])) {
+        if (isset(\Illuminate\Foundation\Testing\CachedState::$cachedConfig) && isset($this->traitsUsedByTest[\Illuminate\Foundation\Testing\WithCachedConfig::class])) {
             $this->markConfigCached($app);
         }
-
-        if (isset(CachedState::$cachedRoutes) &&
-            isset($this->traitsUsedByTest[WithCachedRoutes::class])) {
-            $app->booting(fn () => $this->markRoutesCached($app));
+        if (isset(\Illuminate\Foundation\Testing\CachedState::$cachedRoutes) && isset($this->traitsUsedByTest[\Illuminate\Foundation\Testing\WithCachedRoutes::class])) {
+            $app->booting(fn() => $this->markRoutesCached($app));
         }
-
         $app->make(Kernel::class)->bootstrap();
-
         return $app;
     }
-
     /**
      * Setup the test environment.
      *
@@ -62,7 +41,6 @@ abstract class TestCase extends BaseTestCase
     {
         $this->setUpTheTestEnvironment();
     }
-
     /**
      * Refresh the application instance.
      *
@@ -72,7 +50,6 @@ abstract class TestCase extends BaseTestCase
     {
         $this->app = $this->createApplication();
     }
-
     /**
      * Clean up the testing environment before the next test.
      *
@@ -84,7 +61,6 @@ abstract class TestCase extends BaseTestCase
     {
         $this->tearDownTheTestEnvironment();
     }
-
     /**
      * Clean up the testing environment before the next test case.
      *

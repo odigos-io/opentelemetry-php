@@ -5,7 +5,6 @@ namespace Illuminate\Database\Console;
 use Illuminate\Console\Command;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Support\Arr;
-
 abstract class DatabaseInspectionCommand extends Command
 {
     /**
@@ -21,7 +20,6 @@ abstract class DatabaseInspectionCommand extends Command
     {
         return $connection->getDriverTitle();
     }
-
     /**
      * Get the number of open connections for a database.
      *
@@ -34,7 +32,6 @@ abstract class DatabaseInspectionCommand extends Command
     {
         return $connection->threadCount();
     }
-
     /**
      * Get the connection configuration details for the given connection.
      *
@@ -44,7 +41,6 @@ abstract class DatabaseInspectionCommand extends Command
     protected function getConfigFromDatabase($database)
     {
         $database ??= config('database.default');
-
-        return Arr::except(config('database.connections.'.$database), ['password']);
+        return Arr::except(config('database.connections.' . $database), ['password']);
     }
 }

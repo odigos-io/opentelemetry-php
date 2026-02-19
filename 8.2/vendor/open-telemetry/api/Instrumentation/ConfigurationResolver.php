@@ -1,23 +1,20 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\API\Instrumentation;
 
-class ConfigurationResolver implements ConfigurationResolverInterface
+class ConfigurationResolver implements \OpenTelemetry\API\Instrumentation\ConfigurationResolverInterface
 {
     #[\Override]
     public function has(string $name): bool
     {
         return $this->getVariable($name) !== null;
     }
-
     #[\Override]
     public function getString(string $name): ?string
     {
         return $this->getVariable($name);
     }
-
     #[\Override]
     public function getBoolean(string $name): ?bool
     {
@@ -25,10 +22,8 @@ class ConfigurationResolver implements ConfigurationResolverInterface
         if ($value === null) {
             return null;
         }
-
-        return ($value === 'true');
+        return $value === 'true';
     }
-
     #[\Override]
     public function getInt(string $name): ?int
     {
@@ -36,14 +31,12 @@ class ConfigurationResolver implements ConfigurationResolverInterface
         if ($value === null) {
             return null;
         }
-        if (filter_var($value, FILTER_VALIDATE_INT) === false) {
+        if (filter_var($value, \FILTER_VALIDATE_INT) === \false) {
             //log warning
             return null;
         }
-
         return (int) $value;
     }
-
     #[\Override]
     public function getList(string $name): array
     {
@@ -51,32 +44,27 @@ class ConfigurationResolver implements ConfigurationResolverInterface
         if ($value === null) {
             return [];
         }
-
         return explode(',', $value);
     }
-
     private function getVariable(string $name): ?string
     {
         $value = $_SERVER[$name] ?? null;
-        if ($value !== false && !self::isEmpty($value)) {
+        if ($value !== \false && !self::isEmpty($value)) {
             assert(is_string($value));
-
             return $value;
         }
         $value = getenv($name);
-        if ($value !== false && !self::isEmpty($value)) {
+        if ($value !== \false && !self::isEmpty($value)) {
             return $value;
         }
         $value = ini_get($name);
-        if ($value !== false && !self::isEmpty($value)) {
+        if ($value !== \false && !self::isEmpty($value)) {
             return $value;
         }
-
         return null;
     }
-
     private static function isEmpty($value): bool
     {
-        return $value === false || $value === null || $value === '';
+        return $value === \false || $value === null || $value === '';
     }
 }

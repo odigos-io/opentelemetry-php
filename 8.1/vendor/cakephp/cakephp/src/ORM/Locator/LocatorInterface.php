@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -19,7 +19,6 @@ namespace Cake\ORM\Locator;
 use Cake\Datasource\Locator\LocatorInterface as BaseLocatorInterface;
 use Cake\Datasource\RepositoryInterface;
 use Cake\ORM\Table;
-
 /**
  * Registries for Table objects should implement this interface.
  */
@@ -33,7 +32,6 @@ interface LocatorInterface extends BaseLocatorInterface
      * @return array The config data.
      */
     public function getConfig(?string $alias = null): array;
-
     /**
      * Stores a list of options to be used when instantiating an object
      * with a matching alias.
@@ -46,7 +44,6 @@ interface LocatorInterface extends BaseLocatorInterface
      *   table instance.
      */
     public function setConfig(array|string $alias, ?array $options = null);
-
     /**
      * Get a table instance from the registry.
      *
@@ -55,7 +52,6 @@ interface LocatorInterface extends BaseLocatorInterface
      * @return \Cake\ORM\Table
      */
     public function get(string $alias, array $options = []): Table;
-
     /**
      * Set a table instance.
      *

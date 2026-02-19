@@ -5,17 +5,14 @@ namespace Laravel\Prompts\Themes\Default;
 use Laravel\Prompts\Concerns\Colors;
 use Laravel\Prompts\Concerns\Truncation;
 use Laravel\Prompts\Prompt;
-
 abstract class Renderer
 {
     use Colors;
     use Truncation;
-
     /**
      * The output to be rendered.
      */
     protected string $output = '';
-
     /**
      * Create a new renderer instance.
      */
@@ -23,27 +20,22 @@ abstract class Renderer
     {
         //
     }
-
     /**
      * Render a line of output.
      */
     protected function line(string $message): self
     {
-        $this->output .= $message.PHP_EOL;
-
+        $this->output .= $message . \PHP_EOL;
         return $this;
     }
-
     /**
      * Render a new line.
      */
     protected function newLine(int $count = 1): self
     {
-        $this->output .= str_repeat(PHP_EOL, $count);
-
+        $this->output .= str_repeat(\PHP_EOL, $count);
         return $this;
     }
-
     /**
      * Render a warning message.
      */
@@ -51,7 +43,6 @@ abstract class Renderer
     {
         return $this->line($this->yellow("  ⚠ {$message}"));
     }
-
     /**
      * Render an error message.
      */
@@ -59,7 +50,6 @@ abstract class Renderer
     {
         return $this->line($this->red("  ⚠ {$message}"));
     }
-
     /**
      * Render an hint message.
      */
@@ -68,12 +58,9 @@ abstract class Renderer
         if ($message === '') {
             return $this;
         }
-
         $message = $this->truncate($message, $this->prompt->terminal()->cols() - 6);
-
         return $this->line($this->gray("  {$message}"));
     }
-
     /**
      * Apply the callback if the given "value" is truthy.
      *
@@ -86,17 +73,13 @@ abstract class Renderer
         } elseif ($default) {
             $default($this);
         }
-
         return $this;
     }
-
     /**
      * Render the output with a blank line above and below.
      */
     public function __toString()
     {
-        return str_repeat(PHP_EOL, max(2 - $this->prompt->newLinesWritten(), 0))
-            .$this->output
-            .(in_array($this->prompt->state, ['submit', 'cancel']) ? PHP_EOL : '');
+        return str_repeat(\PHP_EOL, max(2 - $this->prompt->newLinesWritten(), 0)) . $this->output . (in_array($this->prompt->state, ['submit', 'cancel']) ? \PHP_EOL : '');
     }
 }

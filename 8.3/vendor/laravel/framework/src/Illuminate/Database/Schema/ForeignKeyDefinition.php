@@ -3,7 +3,6 @@
 namespace Illuminate\Database\Schema;
 
 use Illuminate\Support\Fluent;
-
 /**
  * @method ForeignKeyDefinition deferrable(bool $value = true) Set the foreign key as deferrable (PostgreSQL)
  * @method ForeignKeyDefinition initiallyImmediate(bool $value = true) Set the default time to check the constraint (PostgreSQL)
@@ -24,7 +23,6 @@ class ForeignKeyDefinition extends Fluent
     {
         return $this->onUpdate('cascade');
     }
-
     /**
      * Indicate that updates should be restricted.
      *
@@ -34,7 +32,6 @@ class ForeignKeyDefinition extends Fluent
     {
         return $this->onUpdate('restrict');
     }
-
     /**
      * Indicate that updates should set the foreign key value to null.
      *
@@ -44,7 +41,6 @@ class ForeignKeyDefinition extends Fluent
     {
         return $this->onUpdate('set null');
     }
-
     /**
      * Indicate that updates should have "no action".
      *
@@ -54,7 +50,6 @@ class ForeignKeyDefinition extends Fluent
     {
         return $this->onUpdate('no action');
     }
-
     /**
      * Indicate that deletes should cascade.
      *
@@ -64,7 +59,6 @@ class ForeignKeyDefinition extends Fluent
     {
         return $this->onDelete('cascade');
     }
-
     /**
      * Indicate that deletes should be restricted.
      *
@@ -74,7 +68,6 @@ class ForeignKeyDefinition extends Fluent
     {
         return $this->onDelete('restrict');
     }
-
     /**
      * Indicate that deletes should set the foreign key value to null.
      *
@@ -84,7 +77,6 @@ class ForeignKeyDefinition extends Fluent
     {
         return $this->onDelete('set null');
     }
-
     /**
      * Indicate that deletes should have "no action".
      *

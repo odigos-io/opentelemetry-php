@@ -1,16 +1,15 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\web;
 
-use Yii;
+use Odigos\Yii;
 use yii\base\BaseObject;
 use yii\base\InvalidConfigException;
-
 /**
  * UrlRule represents a rule used by [[UrlManager]] for parsing and generating URLs.
  *
@@ -30,7 +29,7 @@ use yii\base\InvalidConfigException;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class UrlRule extends BaseObject implements UrlRuleInterface
+class UrlRule extends BaseObject implements \yii\web\UrlRuleInterface
 {
     /**
      * Set [[mode]] with this value to mark that this rule is for URL parsing only.
@@ -118,7 +117,7 @@ class UrlRule extends BaseObject implements UrlRuleInterface
     /**
      * @var bool a value indicating if parameters should be url encoded.
      */
-    public $encodeParams = true;
+    public $encodeParams = \true;
     /**
      * @var UrlNormalizer|array|false|null the configuration for [[UrlNormalizer]] used by this rule.
      * If `null`, [[UrlManager::normalizer]] will be used, if `false`, normalization will be skipped
@@ -126,7 +125,6 @@ class UrlRule extends BaseObject implements UrlRuleInterface
      * @since 2.0.10
      */
     public $normalizer;
-
     /**
      * @var int|null status of the URL creation after the last [[createUrl()]] call.
      * @since 2.0.12
@@ -143,7 +141,6 @@ class UrlRule extends BaseObject implements UrlRuleInterface
      * @since 2.0.7
      */
     protected $placeholders = [];
-
     /**
      * @var string the template for generating a new URL. This is derived from [[pattern]] and is used in generating URL.
      */
@@ -160,8 +157,6 @@ class UrlRule extends BaseObject implements UrlRuleInterface
      * @var array list of parameters used in the route.
      */
     private $_routeParams = [];
-
-
     /**
      * @return string
      * @since 2.0.11
@@ -172,18 +167,15 @@ class UrlRule extends BaseObject implements UrlRuleInterface
         if ($this->verb !== null) {
             $str .= implode(',', $this->verb) . ' ';
         }
-        if ($this->host !== null && strrpos($this->name, $this->host) === false) {
+        if ($this->host !== null && strrpos($this->name, $this->host) === \false) {
             $str .= $this->host . '/';
         }
         $str .= $this->name;
-
         if ($str === '') {
             return '/';
         }
-
         return $str;
     }
-
     /**
      * Initializes this rule.
      */
@@ -196,10 +188,10 @@ class UrlRule extends BaseObject implements UrlRuleInterface
             throw new InvalidConfigException('UrlRule::route must be set.');
         }
         if (is_array($this->normalizer)) {
-            $normalizerConfig = array_merge(['class' => UrlNormalizer::className()], $this->normalizer);
+            $normalizerConfig = array_merge(['class' => \yii\web\UrlNormalizer::className()], $this->normalizer);
             $this->normalizer = Yii::createObject($normalizerConfig);
         }
-        if ($this->normalizer !== null && $this->normalizer !== false && !$this->normalizer instanceof UrlNormalizer) {
+        if ($this->normalizer !== null && $this->normalizer !== \false && !$this->normalizer instanceof \yii\web\UrlNormalizer) {
             throw new InvalidConfigException('Invalid config for UrlRule::normalizer.');
         }
         if ($this->verb !== null) {
@@ -214,10 +206,8 @@ class UrlRule extends BaseObject implements UrlRuleInterface
         if ($this->name === null) {
             $this->name = $this->pattern;
         }
-
         $this->preparePattern();
     }
-
     /**
      * Process [[$pattern]] on rule initialization.
      */
@@ -225,23 +215,21 @@ class UrlRule extends BaseObject implements UrlRuleInterface
     {
         $this->pattern = $this->trimSlashes($this->pattern);
         $this->route = trim($this->route, '/');
-
         if ($this->host !== null) {
             $this->host = rtrim($this->host, '/');
             $this->pattern = rtrim($this->host . '/' . $this->pattern, '/');
         } elseif ($this->pattern === '') {
             $this->_template = '';
             $this->pattern = '#^$#u';
-
             return;
-        } elseif (($pos = strpos($this->pattern, '://')) !== false) {
-            if (($pos2 = strpos($this->pattern, '/', $pos + 3)) !== false) {
+        } elseif (($pos = strpos($this->pattern, '://')) !== \false) {
+            if (($pos2 = strpos($this->pattern, '/', $pos + 3)) !== \false) {
                 $this->host = substr($this->pattern, 0, $pos2);
             } else {
                 $this->host = $this->pattern;
             }
         } elseif (strncmp($this->pattern, '//', 2) === 0) {
-            if (($pos2 = strpos($this->pattern, '/', 2)) !== false) {
+            if (($pos2 = strpos($this->pattern, '/', 2)) !== \false) {
                 $this->host = substr($this->pattern, 0, $pos2);
             } else {
                 $this->host = $this->pattern;
@@ -249,16 +237,13 @@ class UrlRule extends BaseObject implements UrlRuleInterface
         } else {
             $this->pattern = '/' . $this->pattern . '/';
         }
-
-        if (strpos($this->route, '<') !== false && preg_match_all('/<([\w._-]+)>/', $this->route, $matches)) {
+        if (strpos($this->route, '<') !== \false && preg_match_all('/<([\w._-]+)>/', $this->route, $matches)) {
             foreach ($matches[1] as $name) {
-                $this->_routeParams[$name] = "<$name>";
+                $this->_routeParams[$name] = "<{$name}>";
             }
         }
-
-        $this->translatePattern(true);
+        $this->translatePattern(\true);
     }
-
     /**
      * Prepares [[$pattern]] on rule initialization - replace parameter names by placeholders.
      *
@@ -268,84 +253,59 @@ class UrlRule extends BaseObject implements UrlRuleInterface
      */
     private function translatePattern($allowAppendSlash)
     {
-        $tr = [
-            '.' => '\\.',
-            '*' => '\\*',
-            '$' => '\\$',
-            '[' => '\\[',
-            ']' => '\\]',
-            '(' => '\\(',
-            ')' => '\\)',
-        ];
-
+        $tr = ['.' => '\.', '*' => '\*', '$' => '\$', '[' => '\[', ']' => '\]', '(' => '\(', ')' => '\)'];
         $tr2 = [];
         $requiredPatternPart = $this->pattern;
         $oldOffset = 0;
-        if (preg_match_all('/<([\w._-]+):?([^>]+)?>/', $this->pattern, $matches, PREG_OFFSET_CAPTURE | PREG_SET_ORDER)) {
-            $appendSlash = false;
+        if (preg_match_all('/<([\w._-]+):?([^>]+)?>/', $this->pattern, $matches, \PREG_OFFSET_CAPTURE | \PREG_SET_ORDER)) {
+            $appendSlash = \false;
             foreach ($matches as $match) {
                 $name = $match[1][0];
                 $pattern = isset($match[2][0]) ? $match[2][0] : '[^\/]+';
-                $placeholder = 'a' . hash('crc32b', $name); // placeholder must begin with a letter
+                $placeholder = 'a' . hash('crc32b', $name);
+                // placeholder must begin with a letter
                 $this->placeholders[$placeholder] = $name;
                 if (array_key_exists($name, $this->defaults)) {
                     $length = strlen($match[0][0]);
                     $offset = $match[0][1];
                     $requiredPatternPart = str_replace("/{$match[0][0]}/", '//', $requiredPatternPart);
-                    if (
-                        $allowAppendSlash
-                        && ($appendSlash || $offset === 1)
-                        && (($offset - $oldOffset) === 1)
-                        && isset($this->pattern[$offset + $length])
-                        && $this->pattern[$offset + $length] === '/'
-                        && isset($this->pattern[$offset + $length + 1])
-                    ) {
+                    if ($allowAppendSlash && ($appendSlash || $offset === 1) && $offset - $oldOffset === 1 && isset($this->pattern[$offset + $length]) && $this->pattern[$offset + $length] === '/' && isset($this->pattern[$offset + $length + 1])) {
                         // if pattern starts from optional params, put slash at the end of param pattern
                         // @see https://github.com/yiisoft/yii2/issues/13086
-                        $appendSlash = true;
-                        $tr["<$name>/"] = "((?P<$placeholder>$pattern)/)?";
-                    } elseif (
-                        $offset > 1
-                        && $this->pattern[$offset - 1] === '/'
-                        && (!isset($this->pattern[$offset + $length]) || $this->pattern[$offset + $length] === '/')
-                    ) {
-                        $appendSlash = false;
-                        $tr["/<$name>"] = "(/(?P<$placeholder>$pattern))?";
+                        $appendSlash = \true;
+                        $tr["<{$name}>/"] = "((?P<{$placeholder}>{$pattern})/)?";
+                    } elseif ($offset > 1 && $this->pattern[$offset - 1] === '/' && (!isset($this->pattern[$offset + $length]) || $this->pattern[$offset + $length] === '/')) {
+                        $appendSlash = \false;
+                        $tr["/<{$name}>"] = "(/(?P<{$placeholder}>{$pattern}))?";
                     }
-                    $tr["<$name>"] = "(?P<$placeholder>$pattern)?";
+                    $tr["<{$name}>"] = "(?P<{$placeholder}>{$pattern})?";
                     $oldOffset = $offset + $length;
                 } else {
-                    $appendSlash = false;
-                    $tr["<$name>"] = "(?P<$placeholder>$pattern)";
+                    $appendSlash = \false;
+                    $tr["<{$name}>"] = "(?P<{$placeholder}>{$pattern})";
                 }
-
                 if (isset($this->_routeParams[$name])) {
-                    $tr2["<$name>"] = "(?P<$placeholder>$pattern)";
+                    $tr2["<{$name}>"] = "(?P<{$placeholder}>{$pattern})";
                 } else {
-                    $this->_paramRules[$name] = $pattern === '[^\/]+' ? '' : "#^$pattern$#u";
+                    $this->_paramRules[$name] = $pattern === '[^\/]+' ? '' : "#^{$pattern}\$#u";
                 }
             }
         }
-
         // we have only optional params in route - ensure slash position on param patterns
         if ($allowAppendSlash && trim($requiredPatternPart, '/') === '') {
-            $this->translatePattern(false);
+            $this->translatePattern(\false);
             return;
         }
-
         $this->_template = preg_replace('/<([\w._-]+):?([^>]+)?>/', '<$1>', $this->pattern);
         $this->pattern = '#^' . trim(strtr($this->_template, $tr), '/') . '$#u';
-
         // if host starts with relative scheme, then insert pattern to match any
         if ($this->host !== null && strncmp($this->host, '//', 2) === 0) {
             $this->pattern = substr_replace($this->pattern, '[\w]+://', 2, 0);
         }
-
         if (!empty($this->_routeParams)) {
             $this->_routeRule = '#^' . strtr($this->route, $tr2) . '$#u';
         }
     }
-
     /**
      * @param UrlManager $manager the URL manager
      * @return UrlNormalizer|null
@@ -356,10 +316,8 @@ class UrlRule extends BaseObject implements UrlRuleInterface
         if ($this->normalizer === null) {
             return $manager->normalizer;
         }
-
         return $this->normalizer;
     }
-
     /**
      * @param UrlManager $manager the URL manager
      * @return bool
@@ -367,9 +325,8 @@ class UrlRule extends BaseObject implements UrlRuleInterface
      */
     protected function hasNormalizer($manager)
     {
-        return $this->getNormalizer($manager) instanceof UrlNormalizer;
+        return $this->getNormalizer($manager) instanceof \yii\web\UrlNormalizer;
     }
-
     /**
      * Parses the given request and returns the corresponding route and parameters.
      * @param UrlManager $manager the URL manager
@@ -380,16 +337,14 @@ class UrlRule extends BaseObject implements UrlRuleInterface
     public function parseRequest($manager, $request)
     {
         if ($this->mode === self::CREATION_ONLY) {
-            return false;
+            return \false;
         }
-
-        if (!empty($this->verb) && !in_array($request->getMethod(), $this->verb, true)) {
-            return false;
+        if (!empty($this->verb) && !in_array($request->getMethod(), $this->verb, \true)) {
+            return \false;
         }
-
         $suffix = (string) ($this->suffix === null ? $manager->suffix : $this->suffix);
         $pathInfo = $request->getPathInfo();
-        $normalized = false;
+        $normalized = \false;
         if ($this->hasNormalizer($manager)) {
             $pathInfo = $this->getNormalizer($manager)->normalizePathInfo($pathInfo, $suffix, $normalized);
         }
@@ -399,22 +354,19 @@ class UrlRule extends BaseObject implements UrlRuleInterface
                 $pathInfo = substr($pathInfo, 0, -$n);
                 if ($pathInfo === '') {
                     // suffix alone is not allowed
-                    return false;
+                    return \false;
                 }
             } else {
-                return false;
+                return \false;
             }
         }
-
         if ($this->host !== null) {
             $pathInfo = strtolower($request->getHostInfo()) . ($pathInfo === '' ? '' : '/' . $pathInfo);
         }
-
         if (!preg_match($this->pattern, $pathInfo, $matches)) {
-            return false;
+            return \false;
         }
         $matches = $this->substitutePlaceholderNames($matches);
-
         foreach ($this->defaults as $name => $value) {
             if (!isset($matches[$name]) || $matches[$name] === '') {
                 $matches[$name] = $value;
@@ -435,17 +387,13 @@ class UrlRule extends BaseObject implements UrlRuleInterface
         } else {
             $route = $this->route;
         }
-
         Yii::debug("Request parsed with URL rule: {$this->name}", __METHOD__);
-
         if ($normalized) {
             // pathInfo was changed by normalizer - we need also normalize route
             return $this->getNormalizer($manager)->normalizeRoute([$route, $params]);
         }
-
         return [$route, $params];
     }
-
     /**
      * Creates a URL according to the given route and parameters.
      * @param UrlManager $manager the URL manager
@@ -457,11 +405,9 @@ class UrlRule extends BaseObject implements UrlRuleInterface
     {
         if ($this->mode === self::PARSING_ONLY) {
             $this->createStatus = self::CREATE_STATUS_PARSING_ONLY;
-            return false;
+            return \false;
         }
-
         $tr = [];
-
         // match the route part first
         if ($route !== $this->route) {
             if ($this->_routeRule !== null && preg_match($this->_routeRule, $route, $matches)) {
@@ -475,10 +421,9 @@ class UrlRule extends BaseObject implements UrlRuleInterface
                 }
             } else {
                 $this->createStatus = self::CREATE_STATUS_ROUTE_MISMATCH;
-                return false;
+                return \false;
             }
         }
-
         // match default params
         // if a default param is not in the route pattern, its value must also be matched
         foreach ($this->defaults as $name => $value) {
@@ -492,53 +437,47 @@ class UrlRule extends BaseObject implements UrlRuleInterface
                     $params[$name] = '';
                 } else {
                     $this->createStatus = self::CREATE_STATUS_PARAMS_MISMATCH;
-                    return false;
+                    return \false;
                 }
             }
             if (strcmp($params[$name], (string) $value) === 0) {
                 unset($params[$name]);
                 if (isset($this->_paramRules[$name])) {
-                    $tr["<$name>"] = '';
+                    $tr["<{$name}>"] = '';
                 }
             } elseif (!isset($this->_paramRules[$name])) {
                 $this->createStatus = self::CREATE_STATUS_PARAMS_MISMATCH;
-                return false;
+                return \false;
             }
         }
-
         // match params in the pattern
         foreach ($this->_paramRules as $name => $rule) {
             if (isset($params[$name]) && !is_array($params[$name]) && ($rule === '' || preg_match($rule, $params[$name]))) {
-                $tr["<$name>"] = $this->encodeParams ? urlencode($params[$name]) : $params[$name];
+                $tr["<{$name}>"] = $this->encodeParams ? urlencode($params[$name]) : $params[$name];
                 unset($params[$name]);
             } elseif (!isset($this->defaults[$name]) || isset($params[$name])) {
                 $this->createStatus = self::CREATE_STATUS_PARAMS_MISMATCH;
-                return false;
+                return \false;
             }
         }
-
         $url = $this->trimSlashes(strtr($this->_template, $tr));
         if ($this->host !== null) {
             $pos = strpos($url, '/', 8);
-            if ($pos !== false) {
+            if ($pos !== \false) {
                 $url = substr($url, 0, $pos) . preg_replace('#/+#', '/', substr($url, $pos));
             }
-        } elseif (strpos($url, '//') !== false) {
+        } elseif (strpos($url, '//') !== \false) {
             $url = preg_replace('#/+#', '/', trim($url, '/'));
         }
-
         if ($url !== '') {
-            $url .= ($this->suffix === null ? $manager->suffix : $this->suffix);
+            $url .= $this->suffix === null ? $manager->suffix : $this->suffix;
         }
-
         if (!empty($params) && ($query = http_build_query($params)) !== '') {
             $url .= '?' . $query;
         }
-
         $this->createStatus = self::CREATE_STATUS_SUCCESS;
         return $url;
     }
-
     /**
      * Returns status of the URL creation after the last [[createUrl()]] call.
      *
@@ -551,7 +490,6 @@ class UrlRule extends BaseObject implements UrlRuleInterface
     {
         return $this->createStatus;
     }
-
     /**
      * Returns list of regex for matching parameter.
      * @return array parameter keys and regexp rules.
@@ -562,7 +500,6 @@ class UrlRule extends BaseObject implements UrlRuleInterface
     {
         return $this->_paramRules;
     }
-
     /**
      * Iterates over [[placeholders]] and checks whether each placeholder exists as a key in $matches array.
      * When found - replaces this placeholder key with a appropriate name of matching parameter.
@@ -581,10 +518,8 @@ class UrlRule extends BaseObject implements UrlRuleInterface
                 unset($matches[$placeholder]);
             }
         }
-
         return $matches;
     }
-
     /**
      * Trim slashes in passed string. If string begins with '//', two slashes are left as is
      * in the beginning of a string.
@@ -597,7 +532,6 @@ class UrlRule extends BaseObject implements UrlRuleInterface
         if (strncmp($string, '//', 2) === 0) {
             return '//' . trim($string, '/');
         }
-
         return trim($string, '/');
     }
 }

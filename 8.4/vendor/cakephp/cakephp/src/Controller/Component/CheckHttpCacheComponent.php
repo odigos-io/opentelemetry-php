@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -18,7 +18,6 @@ namespace Cake\Controller\Component;
 
 use Cake\Controller\Component;
 use Cake\Event\EventInterface;
-
 /**
  * Use HTTP caching headers to see if rendering can be skipped.
  *
@@ -47,7 +46,6 @@ class CheckHttpCacheComponent extends Component
         if (!$response->isNotModified($request)) {
             return;
         }
-
         $controller->setResponse($response->withNotModified());
         $event->stopPropagation();
     }

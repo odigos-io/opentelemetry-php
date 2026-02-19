@@ -3,7 +3,6 @@
 namespace Illuminate\Console\Events;
 
 use Illuminate\Console\Scheduling\Event;
-
 class ScheduledTaskStarting
 {
     /**
@@ -12,7 +11,6 @@ class ScheduledTaskStarting
      * @var \Illuminate\Console\Scheduling\Event
      */
     public $task;
-
     /**
      * Create a new event instance.
      *

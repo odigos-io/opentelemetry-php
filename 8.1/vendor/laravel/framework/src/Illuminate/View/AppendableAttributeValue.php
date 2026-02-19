@@ -10,7 +10,6 @@ class AppendableAttributeValue
      * @var mixed
      */
     public $value;
-
     /**
      * Create a new appendable attribute value.
      *
@@ -21,7 +20,6 @@ class AppendableAttributeValue
     {
         $this->value = $value;
     }
-
     /**
      * Get the string value.
      *

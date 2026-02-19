@@ -1,9 +1,7 @@
 <?php
 
 // DO NOT EDIT, this is an Auto-generated file from script/semantic-conventions
-
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\SemConv\Attributes;
 
 /**
@@ -19,7 +17,6 @@ interface ServerAttributes
      * @stable
      */
     public const SERVER_ADDRESS = 'server.address';
-
     /**
      * Server port number.
      * When observed from the client side, and when communicating through an intermediary, `server.port` SHOULD represent the server port behind any intermediaries, for example proxies, if it's available.
@@ -27,5 +24,4 @@ interface ServerAttributes
      * @stable
      */
     public const SERVER_PORT = 'server.port';
-
 }

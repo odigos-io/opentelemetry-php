@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -31,8 +31,7 @@ interface ValidatorAwareInterface
      * @param string|null $name The name of the validation set to return.
      * @return \Cake\Validation\Validator
      */
-    public function getValidator(?string $name = null): Validator;
-
+    public function getValidator(?string $name = null): \Cake\Validation\Validator;
     /**
      * This method stores a custom validator under the given name.
      *
@@ -40,8 +39,7 @@ interface ValidatorAwareInterface
      * @param \Cake\Validation\Validator $validator Validator object to be set.
      * @return $this
      */
-    public function setValidator(string $name, Validator $validator);
-
+    public function setValidator(string $name, \Cake\Validation\Validator $validator);
     /**
      * Checks whether a validator has been set.
      *

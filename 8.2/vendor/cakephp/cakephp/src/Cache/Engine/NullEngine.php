@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -18,7 +18,6 @@ namespace Cake\Cache\Engine;
 
 use Cake\Cache\CacheEngine;
 use DateInterval;
-
 /**
  * Null cache engine, all operations appear to work, but do nothing.
  *
@@ -31,25 +30,22 @@ class NullEngine extends CacheEngine
      */
     public function init(array $config = []): bool
     {
-        return true;
+        return \true;
     }
-
     /**
      * @inheritDoc
      */
     public function set(string $key, mixed $value, DateInterval|int|null $ttl = null): bool
     {
-        return true;
+        return \true;
     }
-
     /**
      * @inheritDoc
      */
     public function setMultiple(iterable $values, DateInterval|int|null $ttl = null): bool
     {
-        return true;
+        return \true;
     }
-
     /**
      * @inheritDoc
      */
@@ -57,21 +53,17 @@ class NullEngine extends CacheEngine
     {
         return $default;
     }
-
     /**
      * @inheritDoc
      */
     public function getMultiple(iterable $keys, mixed $default = null): iterable
     {
         $result = [];
-
         foreach ($keys as $key) {
             $result[$key] = $default;
         }
-
         return $result;
     }
-
     /**
      * @inheritDoc
      */
@@ -79,7 +71,6 @@ class NullEngine extends CacheEngine
     {
         return 1;
     }
-
     /**
      * @inheritDoc
      */
@@ -87,36 +78,32 @@ class NullEngine extends CacheEngine
     {
         return 0;
     }
-
     /**
      * @inheritDoc
      */
     public function delete(string $key): bool
     {
-        return true;
+        return \true;
     }
-
     /**
      * @inheritDoc
      */
     public function deleteMultiple(iterable $keys): bool
     {
-        return true;
+        return \true;
     }
-
     /**
      * @inheritDoc
      */
     public function clear(): bool
     {
-        return true;
+        return \true;
     }
-
     /**
      * @inheritDoc
      */
     public function clearGroup(string $group): bool
     {
-        return true;
+        return \true;
     }
 }

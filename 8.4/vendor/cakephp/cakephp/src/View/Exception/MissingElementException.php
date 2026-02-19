@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -17,7 +17,7 @@ namespace Cake\View\Exception;
 /**
  * Used when an element file cannot be found.
  */
-class MissingElementException extends MissingTemplateException
+class MissingElementException extends \Cake\View\Exception\MissingTemplateException
 {
     /**
      * @var string

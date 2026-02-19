@@ -7,10 +7,9 @@ final readonly class MetaInformationCustom
     /**
      * @param  array<string, string>  $headers
      */
-    private function __construct(
-        public array $headers
-    ) {}
-
+    private function __construct(public array $headers)
+    {
+    }
     /**
      * @param  array<string, string|null>  $headers
      */
@@ -18,7 +17,6 @@ final readonly class MetaInformationCustom
     {
         return new self(array_filter($headers));
     }
-
     /**
      * @return array<string, string>
      */
@@ -26,7 +24,6 @@ final readonly class MetaInformationCustom
     {
         return $this->headers;
     }
-
     public function isEmpty(): bool
     {
         return $this->headers === [];

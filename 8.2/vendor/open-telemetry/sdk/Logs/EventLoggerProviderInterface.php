@@ -1,11 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\SDK\Logs;
 
 use OpenTelemetry\API\Logs as API;
-
 /**
  * @phan-suppress PhanDeprecatedInterface
  */

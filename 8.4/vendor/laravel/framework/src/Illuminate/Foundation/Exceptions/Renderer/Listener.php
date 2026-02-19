@@ -10,7 +10,6 @@ use Laravel\Octane\Events\RequestReceived;
 use Laravel\Octane\Events\RequestTerminated;
 use Laravel\Octane\Events\TaskReceived;
 use Laravel\Octane\Events\TickReceived;
-
 class Listener
 {
     /**
@@ -19,7 +18,6 @@ class Listener
      * @var array<int, array{connectionName: string, time: float, sql: string, bindings: array}>
      */
     protected $queries = [];
-
     /**
      * Register the appropriate listeners on the given event dispatcher.
      *
@@ -29,18 +27,15 @@ class Listener
     public function registerListeners(Dispatcher $events)
     {
         $events->listen(QueryExecuted::class, $this->onQueryExecuted(...));
-
         $events->listen([JobProcessing::class, JobProcessed::class], function () {
             $this->queries = [];
         });
-
         if (isset($_SERVER['LARAVEL_OCTANE'])) {
             $events->listen([RequestReceived::class, TaskReceived::class, TickReceived::class, RequestTerminated::class], function () {
                 $this->queries = [];
             });
         }
     }
-
     /**
      * Returns the queries that have been executed.
      *
@@ -50,7 +45,6 @@ class Listener
     {
         return $this->queries;
     }
-
     /**
      * Listens for the query executed event.
      *
@@ -62,12 +56,6 @@ class Listener
         if (count($this->queries) === 101) {
             return;
         }
-
-        $this->queries[] = [
-            'connectionName' => $event->connectionName,
-            'time' => $event->time,
-            'sql' => $event->sql,
-            'bindings' => $event->connection->prepareBindings($event->bindings),
-        ];
+        $this->queries[] = ['connectionName' => $event->connectionName, 'time' => $event->time, 'sql' => $event->sql, 'bindings' => $event->connection->prepareBindings($event->bindings)];
     }
 }

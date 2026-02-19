@@ -1,10 +1,10 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\db\conditions;
 
 /**
@@ -14,14 +14,12 @@ namespace yii\db\conditions;
  * @since 2.0.14
  * @phpcs:disable Squiz.NamingConventions.ValidVariableName.PrivateNoUnderscore
  */
-class HashCondition implements ConditionInterface
+class HashCondition implements \yii\db\conditions\ConditionInterface
 {
     /**
      * @var array|null the condition specification.
      */
     private $hash;
-
-
     /**
      * HashCondition constructor.
      *
@@ -31,7 +29,6 @@ class HashCondition implements ConditionInterface
     {
         $this->hash = $hash;
     }
-
     /**
      * @return array|null
      */
@@ -39,7 +36,6 @@ class HashCondition implements ConditionInterface
     {
         return $this->hash;
     }
-
     /**
      * {@inheritdoc}
      */

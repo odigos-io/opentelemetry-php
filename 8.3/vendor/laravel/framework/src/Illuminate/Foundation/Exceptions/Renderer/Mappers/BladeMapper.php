@@ -12,7 +12,6 @@ use ReflectionClass;
 use ReflectionProperty;
 use Symfony\Component\ErrorHandler\Exception\FlattenException;
 use Throwable;
-
 /*
  * This file contains parts of https://github.com/spatie/laravel-ignition.
  *
@@ -42,7 +41,6 @@ use Throwable;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 class BladeMapper
 {
     /**
@@ -51,14 +49,12 @@ class BladeMapper
      * @var \Illuminate\Contracts\View\Factory
      */
     protected $factory;
-
     /**
      * The Blade compiler instance.
      *
      * @var \Illuminate\View\Compilers\BladeCompiler
      */
     protected $bladeCompiler;
-
     /**
      * Create a new Blade mapper instance.
      *
@@ -70,7 +66,6 @@ class BladeMapper
         $this->factory = $factory;
         $this->bladeCompiler = $bladeCompiler;
     }
-
     /**
      * Map cached view paths to their original paths.
      *
@@ -83,23 +78,17 @@ class BladeMapper
             if (($previous = $exception->getPrevious()) === null) {
                 break;
             }
-
             $exception = $previous;
         }
-
-        $trace = (new Collection($exception->getTrace()))
-            ->map(function ($frame) {
-                if ($originalPath = $this->findCompiledView((string) Arr::get($frame, 'file', ''))) {
-                    $frame['file'] = $originalPath;
-                    $frame['line'] = $this->detectLineNumber($frame['file'], $frame['line']);
-                }
-
-                return $frame;
-            })->toArray();
-
-        return tap($exception, fn () => (fn () => $this->trace = $trace)->call($exception));
+        $trace = (new Collection($exception->getTrace()))->map(function ($frame) {
+            if ($originalPath = $this->findCompiledView((string) Arr::get($frame, 'file', ''))) {
+                $frame['file'] = $originalPath;
+                $frame['line'] = $this->detectLineNumber($frame['file'], $frame['line']);
+            }
+            return $frame;
+        })->toArray();
+        return tap($exception, fn() => (fn() => $this->trace = $trace)->call($exception));
     }
-
     /**
      * Find the compiled view file for the given compiled path.
      *
@@ -108,9 +97,8 @@ class BladeMapper
      */
     protected function findCompiledView(string $compiledPath)
     {
-        return once(fn () => $this->getKnownPaths())[$compiledPath] ?? null;
+        return once(fn() => $this->getKnownPaths())[$compiledPath] ?? null;
     }
-
     /**
      * Get the list of known paths from the compiler engine.
      *
@@ -118,11 +106,8 @@ class BladeMapper
      */
     protected function getKnownPaths()
     {
-        $compilerEngineReflection = new ReflectionClass(
-            $bladeCompilerEngine = $this->factory->getEngineResolver()->resolve('blade'),
-        );
-
-        if (! $compilerEngineReflection->hasProperty('lastCompiled') && $compilerEngineReflection->hasProperty('engine')) {
+        $compilerEngineReflection = new ReflectionClass($bladeCompilerEngine = $this->factory->getEngineResolver()->resolve('blade'));
+        if (!$compilerEngineReflection->hasProperty('lastCompiled') && $compilerEngineReflection->hasProperty('engine')) {
             $compilerEngine = $compilerEngineReflection->getProperty('engine');
             $compilerEngine = $compilerEngine->getValue($bladeCompilerEngine);
             $lastCompiled = new ReflectionProperty($compilerEngine, 'lastCompiled');
@@ -131,17 +116,13 @@ class BladeMapper
             $lastCompiled = $compilerEngineReflection->getProperty('lastCompiled');
             $lastCompiled = $lastCompiled->getValue($bladeCompilerEngine);
         }
-
         $knownPaths = [];
         foreach ($lastCompiled as $lastCompiledPath) {
             $compiledPath = $bladeCompilerEngine->getCompiler()->getCompiledPath($lastCompiledPath);
-
             $knownPaths[realpath($compiledPath ?? $lastCompiledPath)] = realpath($lastCompiledPath);
         }
-
         return $knownPaths;
     }
-
     /**
      * Filter out the view data that should not be shown in the exception report.
      *
@@ -152,13 +133,11 @@ class BladeMapper
     {
         return array_filter($data, function ($value, $key) {
             if ($key === 'app') {
-                return ! $value instanceof Application;
+                return !$value instanceof Application;
             }
-
             return $key !== '__env';
-        }, ARRAY_FILTER_USE_BOTH);
+        }, \ARRAY_FILTER_USE_BOTH);
     }
-
     /**
      * Detect the line number in the original blade file.
      *
@@ -169,10 +148,8 @@ class BladeMapper
     protected function detectLineNumber(string $filename, int $compiledLineNumber)
     {
         $map = $this->compileSourcemap((string) file_get_contents($filename));
-
         return $this->findClosestLineNumberMapping($map, $compiledLineNumber);
     }
-
     /**
      * Compile the source map for the given blade file.
      *
@@ -185,17 +162,13 @@ class BladeMapper
             $value = $this->addEchoLineNumbers($value);
             $value = $this->addStatementLineNumbers($value);
             $value = $this->addBladeComponentLineNumbers($value);
-
             $value = $this->bladeCompiler->compileString($value);
-
             return $this->trimEmptyLines($value);
         } catch (Throwable $e) {
             report($e);
-
             return $value;
         }
     }
-
     /**
      * Add line numbers to echo statements.
      *
@@ -205,23 +178,18 @@ class BladeMapper
     protected function addEchoLineNumbers(string $value)
     {
         $echoPairs = [['{{', '}}'], ['{{{', '}}}'], ['{!!', '!!}']];
-
         foreach ($echoPairs as $pair) {
             // Matches {{ $value }}, {!! $value !!} and  {{{ $value }}} depending on $pair
             $pattern = sprintf('/(@)?%s\s*(.+?)\s*%s(\r?\n)?/s', $pair[0], $pair[1]);
-
-            if (preg_match_all($pattern, $value, $matches, PREG_OFFSET_CAPTURE)) {
+            if (preg_match_all($pattern, $value, $matches, \PREG_OFFSET_CAPTURE)) {
                 foreach (array_reverse($matches[0]) as $match) {
                     $position = mb_strlen(substr($value, 0, $match[1]));
-
                     $value = $this->insertLineNumberAtPosition($position, $value);
                 }
             }
         }
-
         return $value;
     }
-
     /**
      * Add line numbers to blade statements.
      *
@@ -230,24 +198,15 @@ class BladeMapper
      */
     protected function addStatementLineNumbers(string $value)
     {
-        $shouldInsertLineNumbers = preg_match_all(
-            '/\B@(@?\w+(?:::\w+)?)([ \t]*)(\( ( (?>[^()]+) | (?3) )* \))?/x',
-            $value,
-            $matches,
-            PREG_OFFSET_CAPTURE
-        );
-
+        $shouldInsertLineNumbers = preg_match_all('/\B@(@?\w+(?:::\w+)?)([ \t]*)(\( ( (?>[^()]+) | (?3) )* \))?/x', $value, $matches, \PREG_OFFSET_CAPTURE);
         if ($shouldInsertLineNumbers) {
             foreach (array_reverse($matches[0]) as $match) {
                 $position = mb_strlen(substr($value, 0, $match[1]));
-
                 $value = $this->insertLineNumberAtPosition($position, $value);
             }
         }
-
         return $value;
     }
-
     /**
      * Add line numbers to blade components.
      *
@@ -256,24 +215,15 @@ class BladeMapper
      */
     protected function addBladeComponentLineNumbers(string $value)
     {
-        $shouldInsertLineNumbers = preg_match_all(
-            '/<\s*x[-:]([\w\-:.]*)/mx',
-            $value,
-            $matches,
-            PREG_OFFSET_CAPTURE
-        );
-
+        $shouldInsertLineNumbers = preg_match_all('/<\s*x[-:]([\w\-:.]*)/mx', $value, $matches, \PREG_OFFSET_CAPTURE);
         if ($shouldInsertLineNumbers) {
             foreach (array_reverse($matches[0]) as $match) {
                 $position = mb_strlen(substr($value, 0, $match[1]));
-
                 $value = $this->insertLineNumberAtPosition($position, $value);
             }
         }
-
         return $value;
     }
-
     /**
      * Insert a line number at the given position.
      *
@@ -284,12 +234,9 @@ class BladeMapper
     protected function insertLineNumberAtPosition(int $position, string $value)
     {
         $before = mb_substr($value, 0, $position);
-
         $lineNumber = count(explode("\n", $before));
-
-        return mb_substr($value, 0, $position)."|---LINE:{$lineNumber}---|".mb_substr($value, $position);
+        return mb_substr($value, 0, $position) . "|---LINE:{$lineNumber}---|" . mb_substr($value, $position);
     }
-
     /**
      * Trim empty lines from the given value.
      *
@@ -299,10 +246,8 @@ class BladeMapper
     protected function trimEmptyLines(string $value)
     {
         $value = preg_replace('/^\|---LINE:([0-9]+)---\|$/m', '', $value);
-
-        return ltrim((string) $value, PHP_EOL);
+        return ltrim((string) $value, \PHP_EOL);
     }
-
     /**
      * Find the closest line number mapping in the given source map.
      *
@@ -313,22 +258,16 @@ class BladeMapper
     protected function findClosestLineNumberMapping(string $map, int $compiledLineNumber)
     {
         $map = explode("\n", $map);
-
         $maxDistance = 20;
-
         $pattern = '/\|---LINE:(?P<line>[0-9]+)---\|/m';
-
         $lineNumberToCheck = $compiledLineNumber - 1;
-
-        while (true) {
+        while (\true) {
             if ($lineNumberToCheck < $compiledLineNumber - $maxDistance) {
                 return min($compiledLineNumber, count($map));
             }
-
             if (preg_match($pattern, $map[$lineNumberToCheck] ?? '', $matches)) {
                 return (int) $matches['line'];
             }
-
             $lineNumberToCheck--;
         }
     }

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright 2016-present MongoDB, Inc.
  *
@@ -14,14 +15,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 namespace MongoDB\GridFS;
 
 use Closure;
 use MongoDB\BSON\UTCDateTime;
 use MongoDB\GridFS\Exception\FileNotFoundException;
 use MongoDB\GridFS\Exception\LogicException;
-
 use function array_slice;
 use function assert;
 use function explode;
@@ -35,12 +34,10 @@ use function stream_context_get_options;
 use function stream_get_wrappers;
 use function stream_wrapper_register;
 use function stream_wrapper_unregister;
-
 use const SEEK_CUR;
 use const SEEK_END;
 use const SEEK_SET;
 use const STREAM_IS_URL;
-
 /**
  * Stream wrapper for reading and writing a GridFS file.
  *
@@ -53,12 +50,9 @@ final class StreamWrapper
 {
     /** @var resource|null Stream context (set by PHP) */
     public $context;
-
-    private ReadableStream|WritableStream|null $stream = null;
-
+    private \MongoDB\GridFS\ReadableStream|\MongoDB\GridFS\WritableStream|null $stream = null;
     /** @var array<string, Closure(string, string, array): ContextOptions> */
     private static array $contextResolvers = [];
-
     public function __destruct()
     {
         /* Ensure the stream is closed so the last chunk is written. This is
@@ -67,17 +61,14 @@ final class StreamWrapper
          * segmentation faults during PHP shutdown. */
         $this->stream_close();
     }
-
     /**
      * Return the stream's file document.
      */
     public function getFile(): object
     {
         assert($this->stream !== null);
-
         return $this->stream->getFile();
     }
-
     /**
      * Register the GridFS stream wrapper.
      *
@@ -88,10 +79,8 @@ final class StreamWrapper
         if (in_array($protocol, stream_get_wrappers())) {
             stream_wrapper_unregister($protocol);
         }
-
         stream_wrapper_register($protocol, self::class, STREAM_IS_URL);
     }
-
     /**
      * Rename all revisions of a filename.
      *
@@ -101,23 +90,18 @@ final class StreamWrapper
     public function rename(string $fromPath, string $toPath): bool
     {
         $prefix = implode('/', array_slice(explode('/', $fromPath, 4), 0, 3)) . '/';
-        if (! str_starts_with($toPath, $prefix)) {
+        if (!str_starts_with($toPath, $prefix)) {
             throw LogicException::renamePathMismatch($fromPath, $toPath);
         }
-
         $context = $this->getContext($fromPath, 'w');
-
         $newFilename = explode('/', $toPath, 4)[3] ?? '';
         $count = $context['collectionWrapper']->updateFilenameForFilename($context['filename'], $newFilename);
-
         if ($count === 0) {
             throw FileNotFoundException::byFilename($fromPath);
         }
-
         // If $count is null, the update is unacknowledged, the operation is considered successful.
-        return true;
+        return \true;
     }
-
     /**
      * @see Bucket::resolveStreamContext()
      *
@@ -131,7 +115,6 @@ final class StreamWrapper
             self::$contextResolvers[$name] = $resolver;
         }
     }
-
     /**
      * Closes the stream.
      *
@@ -139,13 +122,11 @@ final class StreamWrapper
      */
     public function stream_close(): void
     {
-        if (! $this->stream) {
+        if (!$this->stream) {
             return;
         }
-
         $this->stream->close();
     }
-
     /**
      * Returns whether the file pointer is at the end of the stream.
      *
@@ -153,13 +134,11 @@ final class StreamWrapper
      */
     public function stream_eof(): bool
     {
-        if (! $this->stream instanceof ReadableStream) {
-            return false;
+        if (!$this->stream instanceof \MongoDB\GridFS\ReadableStream) {
+            return \false;
         }
-
         return $this->stream->isEOF();
     }
-
     /**
      * Opens the stream.
      *
@@ -174,14 +153,11 @@ final class StreamWrapper
         if ($mode === 'r' || $mode === 'rb') {
             return $this->initReadableStream($this->getContext($path, $mode));
         }
-
         if ($mode === 'w' || $mode === 'wb') {
             return $this->initWritableStream($this->getContext($path, $mode));
         }
-
         throw LogicException::openModeNotSupported($mode);
     }
-
     /**
      * Read bytes from the stream.
      *
@@ -193,13 +169,11 @@ final class StreamWrapper
      */
     public function stream_read(int $length): string
     {
-        if (! $this->stream instanceof ReadableStream) {
+        if (!$this->stream instanceof \MongoDB\GridFS\ReadableStream) {
             return '';
         }
-
         return $this->stream->readBytes($length);
     }
-
     /**
      * Return the current position of the stream.
      *
@@ -211,31 +185,23 @@ final class StreamWrapper
     public function stream_seek(int $offset, int $whence = SEEK_SET): bool
     {
         assert($this->stream !== null);
-
         $size = $this->stream->getSize();
-
         if ($whence === SEEK_CUR) {
             $offset += $this->stream->tell();
         }
-
         if ($whence === SEEK_END) {
             $offset += $size;
         }
-
         // WritableStreams are always positioned at the end of the stream
-        if ($this->stream instanceof WritableStream) {
+        if ($this->stream instanceof \MongoDB\GridFS\WritableStream) {
             return $offset === $size;
         }
-
         if ($offset < 0 || $offset > $size) {
-            return false;
+            return \false;
         }
-
         $this->stream->seek($offset);
-
-        return true;
+        return \true;
     }
-
     /**
      * Return information about the stream.
      *
@@ -244,29 +210,21 @@ final class StreamWrapper
     public function stream_stat(): array
     {
         assert($this->stream !== null);
-
         $stat = $this->getStatTemplate();
-
-        $stat[2] = $stat['mode'] = $this->stream instanceof ReadableStream
-            ? 0100444  // S_IFREG & S_IRUSR & S_IRGRP & S_IROTH
-            : 0100222; // S_IFREG & S_IWUSR & S_IWGRP & S_IWOTH
+        $stat[2] = $stat['mode'] = $this->stream instanceof \MongoDB\GridFS\ReadableStream ? 0100444 : 0100222;
+        // S_IFREG & S_IWUSR & S_IWGRP & S_IWOTH
         $stat[7] = $stat['size'] = $this->stream->getSize();
-
         $file = $this->stream->getFile();
-
         if (isset($file->uploadDate) && $file->uploadDate instanceof UTCDateTime) {
             $timestamp = $file->uploadDate->toDateTime()->getTimestamp();
             $stat[9] = $stat['mtime'] = $timestamp;
             $stat[10] = $stat['ctime'] = $timestamp;
         }
-
         if (isset($file->chunkSize) && is_integer($file->chunkSize)) {
             $stat[11] = $stat['blksize'] = $file->chunkSize;
         }
-
         return $stat;
     }
-
     /**
      * Return the current position of the stream.
      *
@@ -276,10 +234,8 @@ final class StreamWrapper
     public function stream_tell(): int
     {
         assert($this->stream !== null);
-
         return $this->stream->tell();
     }
-
     /**
      * Write bytes to the stream.
      *
@@ -289,13 +245,11 @@ final class StreamWrapper
      */
     public function stream_write(string $data): int
     {
-        if (! $this->stream instanceof WritableStream) {
+        if (!$this->stream instanceof \MongoDB\GridFS\WritableStream) {
             return 0;
         }
-
         return $this->stream->writeBytes($data);
     }
-
     /**
      * Remove all revisions of a filename.
      *
@@ -306,28 +260,22 @@ final class StreamWrapper
     {
         $context = $this->getContext($path, 'w');
         $count = $context['collectionWrapper']->deleteFileAndChunksByFilename($context['filename']);
-
         if ($count === 0) {
             throw FileNotFoundException::byFilename($path);
         }
-
         // If $count is null, the update is unacknowledged, the operation is considered successful.
-        return true;
+        return \true;
     }
-
     public function url_stat(string $path, int $flags): false|array
     {
         assert($this->stream === null);
-
         try {
             $this->stream_open($path, 'r', 0, $openedPath);
         } catch (FileNotFoundException) {
-            return false;
+            return \false;
         }
-
         return $this->stream_stat();
     }
-
     /**
      * @return array{collectionWrapper: CollectionWrapper, file: object}|array{collectionWrapper: CollectionWrapper, filename: string, options: array}
      * @psalm-return ($mode == 'r' or $mode == 'rb' ? array{collectionWrapper: CollectionWrapper, file: object} : array{collectionWrapper: CollectionWrapper, filename: string, options: array})
@@ -335,38 +283,30 @@ final class StreamWrapper
     private function getContext(string $path, string $mode): array
     {
         $context = [];
-
         /**
          * The Bucket methods { @see Bucket::openUploadStream() } and { @see Bucket::openDownloadStreamByFile() }
          * always set an internal context. But the context can also be set by the user.
          */
         if (is_resource($this->context)) {
             $context = stream_context_get_options($this->context)['gridfs'] ?? [];
-
-            if (! is_array($context)) {
+            if (!is_array($context)) {
                 throw LogicException::invalidContext($context);
             }
         }
-
         // When the stream is opened using fopen(), the context is not required, it can contain only options.
-        if (! isset($context['collectionWrapper'])) {
+        if (!isset($context['collectionWrapper'])) {
             $bucketAlias = explode('/', $path, 4)[2] ?? '';
-
-            if (! isset(self::$contextResolvers[$bucketAlias])) {
+            if (!isset(self::$contextResolvers[$bucketAlias])) {
                 throw LogicException::bucketAliasNotRegistered($bucketAlias);
             }
-
             /** @see Bucket::resolveStreamContext() */
             $context = self::$contextResolvers[$bucketAlias]($path, $mode, $context);
         }
-
-        if (! $context['collectionWrapper'] instanceof CollectionWrapper) {
+        if (!$context['collectionWrapper'] instanceof \MongoDB\GridFS\CollectionWrapper) {
             throw LogicException::invalidContextCollectionWrapper($context['collectionWrapper']);
         }
-
         return $context;
     }
-
     /**
      * Returns a stat template with default values.
      */
@@ -374,23 +314,34 @@ final class StreamWrapper
     {
         return [
             // phpcs:disable Squiz.Arrays.ArrayDeclaration.IndexNoNewline
-            0  => 0,  'dev'     => 0,
-            1  => 0,  'ino'     => 0,
-            2  => 0,  'mode'    => 0,
-            3  => 0,  'nlink'   => 0,
-            4  => 0,  'uid'     => 0,
-            5  => 0,  'gid'     => 0,
-            6  => -1, 'rdev'    => -1,
-            7  => 0,  'size'    => 0,
-            8  => 0,  'atime'   => 0,
-            9  => 0,  'mtime'   => 0,
-            10 => 0,  'ctime'   => 0,
-            11 => -1, 'blksize' => -1,
-            12 => -1, 'blocks'  => -1,
-            // phpcs:enable
+            0 => 0,
+            'dev' => 0,
+            1 => 0,
+            'ino' => 0,
+            2 => 0,
+            'mode' => 0,
+            3 => 0,
+            'nlink' => 0,
+            4 => 0,
+            'uid' => 0,
+            5 => 0,
+            'gid' => 0,
+            6 => -1,
+            'rdev' => -1,
+            7 => 0,
+            'size' => 0,
+            8 => 0,
+            'atime' => 0,
+            9 => 0,
+            'mtime' => 0,
+            10 => 0,
+            'ctime' => 0,
+            11 => -1,
+            'blksize' => -1,
+            12 => -1,
+            'blocks' => -1,
         ];
     }
-
     /**
      * Initialize the internal stream for reading.
      *
@@ -398,14 +349,9 @@ final class StreamWrapper
      */
     private function initReadableStream(array $contextOptions): bool
     {
-        $this->stream = new ReadableStream(
-            $contextOptions['collectionWrapper'],
-            $contextOptions['file'],
-        );
-
-        return true;
+        $this->stream = new \MongoDB\GridFS\ReadableStream($contextOptions['collectionWrapper'], $contextOptions['file']);
+        return \true;
     }
-
     /**
      * Initialize the internal stream for writing.
      *
@@ -413,12 +359,7 @@ final class StreamWrapper
      */
     private function initWritableStream(array $contextOptions): bool
     {
-        $this->stream = new WritableStream(
-            $contextOptions['collectionWrapper'],
-            $contextOptions['filename'],
-            $contextOptions['options'],
-        );
-
-        return true;
+        $this->stream = new \MongoDB\GridFS\WritableStream($contextOptions['collectionWrapper'], $contextOptions['filename'], $contextOptions['options']);
+        return \true;
     }
 }

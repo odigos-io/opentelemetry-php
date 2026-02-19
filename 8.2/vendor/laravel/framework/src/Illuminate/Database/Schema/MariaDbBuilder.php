@@ -2,7 +2,7 @@
 
 namespace Illuminate\Database\Schema;
 
-class MariaDbBuilder extends MySqlBuilder
+class MariaDbBuilder extends \Illuminate\Database\Schema\MySqlBuilder
 {
     //
 }

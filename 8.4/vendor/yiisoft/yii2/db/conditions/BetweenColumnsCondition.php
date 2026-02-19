@@ -1,16 +1,15 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\db\conditions;
 
 use yii\base\InvalidArgumentException;
 use yii\db\ExpressionInterface;
 use yii\db\Query;
-
 /**
  * Class BetweenColumnCondition represents a `BETWEEN` condition where
  * values is between two columns. For example:
@@ -39,7 +38,7 @@ use yii\db\Query;
  * @since 2.0.14
  * @phpcs:disable Squiz.NamingConventions.ValidVariableName.PrivateNoUnderscore
  */
-class BetweenColumnsCondition implements ConditionInterface
+class BetweenColumnsCondition implements \yii\db\conditions\ConditionInterface
 {
     /**
      * @var string $operator the operator to use (e.g. `BETWEEN` or `NOT BETWEEN`)
@@ -57,8 +56,6 @@ class BetweenColumnsCondition implements ConditionInterface
      * @var string|ExpressionInterface|Query the column name or expression that is an end of the interval
      */
     private $intervalEndColumn;
-
-
     /**
      * Creates a condition with the `BETWEEN` operator.
      *
@@ -74,7 +71,6 @@ class BetweenColumnsCondition implements ConditionInterface
         $this->intervalStartColumn = $intervalStartColumn;
         $this->intervalEndColumn = $intervalEndColumn;
     }
-
     /**
      * @return string
      */
@@ -82,7 +78,6 @@ class BetweenColumnsCondition implements ConditionInterface
     {
         return $this->operator;
     }
-
     /**
      * @return mixed
      */
@@ -90,7 +85,6 @@ class BetweenColumnsCondition implements ConditionInterface
     {
         return $this->value;
     }
-
     /**
      * @return string|ExpressionInterface|Query
      */
@@ -98,7 +92,6 @@ class BetweenColumnsCondition implements ConditionInterface
     {
         return $this->intervalStartColumn;
     }
-
     /**
      * @return string|ExpressionInterface|Query
      */
@@ -106,7 +99,6 @@ class BetweenColumnsCondition implements ConditionInterface
     {
         return $this->intervalEndColumn;
     }
-
     /**
      * {@inheritdoc}
      * @throws InvalidArgumentException if wrong number of operands have been given.
@@ -114,9 +106,8 @@ class BetweenColumnsCondition implements ConditionInterface
     public static function fromArrayDefinition($operator, $operands)
     {
         if (!isset($operands[0], $operands[1], $operands[2])) {
-            throw new InvalidArgumentException("Operator '$operator' requires three operands.");
+            throw new InvalidArgumentException("Operator '{$operator}' requires three operands.");
         }
-
         return new static($operands[0], $operator, $operands[1], $operands[2]);
     }
 }

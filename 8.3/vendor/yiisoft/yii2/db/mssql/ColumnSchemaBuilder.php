@@ -1,15 +1,14 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\db\mssql;
 
 use yii\db\ColumnSchemaBuilder as AbstractColumnSchemaBuilder;
 use yii\db\Expression;
-
 /**
  * ColumnSchemaBuilder is the schema builder for MSSQL databases.
  *
@@ -22,8 +21,6 @@ use yii\db\Expression;
 class ColumnSchemaBuilder extends AbstractColumnSchemaBuilder
 {
     protected $format = '{type}{length}{notnull}{unique}{default}{check}{append}';
-
-
     /**
      * Builds the full string for the column's schema.
      * @return string
@@ -35,10 +32,8 @@ class ColumnSchemaBuilder extends AbstractColumnSchemaBuilder
         } else {
             $format = $this->format;
         }
-
         return $this->buildCompleteString($format);
     }
-
     /**
      * Changes default format string to MSSQL ALTER COMMAND.
      */
@@ -46,7 +41,6 @@ class ColumnSchemaBuilder extends AbstractColumnSchemaBuilder
     {
         $this->format = '{type}{length}{notnull}{append}';
     }
-
     /**
      * Getting the `Default` value for constraint
      * @return string|Expression|null default value of the column.
@@ -56,10 +50,8 @@ class ColumnSchemaBuilder extends AbstractColumnSchemaBuilder
         if ($this->default instanceof Expression) {
             return $this->default;
         }
-
         return $this->buildDefaultValue();
     }
-
     /**
      * Get the `Check` value for constraint
      * @return string|null the `CHECK` constraint for the column.
@@ -68,7 +60,6 @@ class ColumnSchemaBuilder extends AbstractColumnSchemaBuilder
     {
         return $this->check !== null ? (string) $this->check : null;
     }
-
     /**
      * @return bool whether the column values should be unique. If this is `true`, a `UNIQUE` constraint will be added.
      */

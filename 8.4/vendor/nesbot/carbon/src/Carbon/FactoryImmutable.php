@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /**
  * This file is part of the Carbon package.
  *
@@ -10,8 +9,7 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Carbon;
+namespace Odigos\Carbon;
 
 use Closure;
 use DateTimeInterface;
@@ -19,7 +17,6 @@ use DateTimeZone;
 use Symfony\Component\Clock\ClockInterface;
 use Symfony\Component\Clock\NativeClock;
 use Symfony\Contracts\Translation\TranslatorInterface;
-
 /**
  * A factory to generate CarbonImmutable instances with common settings.
  *
@@ -130,11 +127,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class FactoryImmutable extends Factory implements ClockInterface
 {
     protected string $className = CarbonImmutable::class;
-
     private static ?self $defaultInstance = null;
-
     private static ?WrapperClock $currentClock = null;
-
     /**
      * @internal Instance used for static calls, such as Carbon::getTranslator(), CarbonImmutable::setTestNow(), etc.
      */
@@ -142,7 +136,6 @@ class FactoryImmutable extends Factory implements ClockInterface
     {
         return self::$defaultInstance ??= new self();
     }
-
     /**
      * @internal Instance used for static calls possibly called by non-static methods.
      */
@@ -150,19 +143,16 @@ class FactoryImmutable extends Factory implements ClockInterface
     {
         return self::$currentClock?->getFactory() ?? self::getDefaultInstance();
     }
-
     /**
      * @internal Set instance before creating new dates.
      */
     public static function setCurrentClock(ClockInterface|Factory|DateTimeInterface|null $currentClock): void
     {
-        if ($currentClock && !($currentClock instanceof WrapperClock)) {
+        if ($currentClock && !$currentClock instanceof WrapperClock) {
             $currentClock = new WrapperClock($currentClock);
         }
-
         self::$currentClock = $currentClock;
     }
-
     /**
      * @internal Instance used to link new object to their factory creator.
      */
@@ -170,7 +160,6 @@ class FactoryImmutable extends Factory implements ClockInterface
     {
         return self::$currentClock;
     }
-
     /**
      * Get a Carbon instance for the current date and time.
      */
@@ -178,15 +167,12 @@ class FactoryImmutable extends Factory implements ClockInterface
     {
         return $this->__call('now', [$timezone]);
     }
-
     public function sleep(int|float $seconds): void
     {
         if ($this->hasTestNow()) {
             $this->setTestNow($this->getTestNow()->avoidMutation()->addSeconds($seconds));
-
             return;
         }
-
         (new NativeClock('UTC'))->sleep($seconds);
     }
 }

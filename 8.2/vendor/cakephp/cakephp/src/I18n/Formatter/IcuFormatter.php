@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -19,7 +19,6 @@ namespace Cake\I18n\Formatter;
 use Cake\I18n\Exception\I18nException;
 use Cake\I18n\FormatterInterface;
 use MessageFormatter;
-
 /**
  * A formatter that will interpolate variables using the MessageFormatter class
  */
@@ -40,13 +39,11 @@ class IcuFormatter implements FormatterInterface
         if ($message === '') {
             return $message;
         }
-
         $formatter = new MessageFormatter($locale, $message);
         $result = $formatter->format($tokenValues);
-        if ($result === false) {
+        if ($result === \false) {
             throw new I18nException($formatter->getErrorMessage(), $formatter->getErrorCode());
         }
-
         return $result;
     }
 }

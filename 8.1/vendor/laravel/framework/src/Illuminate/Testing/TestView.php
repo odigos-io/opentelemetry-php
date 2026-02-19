@@ -10,25 +10,21 @@ use Illuminate\Support\Traits\Macroable;
 use Illuminate\Testing\Assert as PHPUnit;
 use Illuminate\Testing\Constraints\SeeInOrder;
 use Illuminate\View\View;
-
 class TestView
 {
     use Macroable;
-
     /**
      * The original view.
      *
      * @var \Illuminate\View\View
      */
     protected $view;
-
     /**
      * The rendered view contents.
      *
      * @var string
      */
     protected $rendered;
-
     /**
      * Create a new test view instance.
      *
@@ -40,7 +36,6 @@ class TestView
         $this->view = $view;
         $this->rendered = $view->render();
     }
-
     /**
      * Assert that the response view has a given piece of bound data.
      *
@@ -53,7 +48,6 @@ class TestView
         if (is_array($key)) {
             return $this->assertViewHasAll($key);
         }
-
         if (is_null($value)) {
             PHPUnit::assertTrue(Arr::has($this->view->gatherData(), $key));
         } elseif ($value instanceof Closure) {
@@ -62,18 +56,14 @@ class TestView
             PHPUnit::assertTrue($value->is(Arr::get($this->view->gatherData(), $key)));
         } elseif ($value instanceof Collection) {
             $actual = Arr::get($this->view->gatherData(), $key);
-
             PHPUnit::assertInstanceOf(Collection::class, $actual);
             PHPUnit::assertSameSize($value, $actual);
-
-            $value->each(fn ($item, $index) => PHPUnit::assertTrue($actual->get($index)->is($item)));
+            $value->each(fn($item, $index) => PHPUnit::assertTrue($actual->get($index)->is($item)));
         } else {
             PHPUnit::assertEquals($value, Arr::get($this->view->gatherData(), $key));
         }
-
         return $this;
     }
-
     /**
      * Assert that the response view has a given list of bound data.
      *
@@ -89,10 +79,8 @@ class TestView
                 $this->assertViewHas($key, $value);
             }
         }
-
         return $this;
     }
-
     /**
      * Assert that the response view is missing a piece of bound data.
      *
@@ -102,10 +90,8 @@ class TestView
     public function assertViewMissing($key)
     {
         PHPUnit::assertFalse(Arr::has($this->view->gatherData(), $key));
-
         return $this;
     }
-
     /**
      * Assert that the view's rendered content is empty.
      *
@@ -114,10 +100,8 @@ class TestView
     public function assertViewEmpty()
     {
         PHPUnit::assertEmpty($this->rendered);
-
         return $this;
     }
-
     /**
      * Assert that the given string is contained within the view.
      *
@@ -125,15 +109,12 @@ class TestView
      * @param  bool  $escape
      * @return $this
      */
-    public function assertSee($value, $escape = true)
+    public function assertSee($value, $escape = \true)
     {
         $value = $escape ? e($value) : $value;
-
         PHPUnit::assertStringContainsString((string) $value, $this->rendered);
-
         return $this;
     }
-
     /**
      * Assert that the given strings are contained in order within the view.
      *
@@ -141,15 +122,12 @@ class TestView
      * @param  bool  $escape
      * @return $this
      */
-    public function assertSeeInOrder(array $values, $escape = true)
+    public function assertSeeInOrder(array $values, $escape = \true)
     {
         $values = $escape ? array_map('e', $values) : $values;
-
         PHPUnit::assertThat($values, new SeeInOrder($this->rendered));
-
         return $this;
     }
-
     /**
      * Assert that the given string is contained within the view text.
      *
@@ -157,15 +135,12 @@ class TestView
      * @param  bool  $escape
      * @return $this
      */
-    public function assertSeeText($value, $escape = true)
+    public function assertSeeText($value, $escape = \true)
     {
         $value = $escape ? e($value) : $value;
-
         PHPUnit::assertStringContainsString((string) $value, strip_tags($this->rendered));
-
         return $this;
     }
-
     /**
      * Assert that the given strings are contained in order within the view text.
      *
@@ -173,15 +148,12 @@ class TestView
      * @param  bool  $escape
      * @return $this
      */
-    public function assertSeeTextInOrder(array $values, $escape = true)
+    public function assertSeeTextInOrder(array $values, $escape = \true)
     {
         $values = $escape ? array_map('e', $values) : $values;
-
         PHPUnit::assertThat($values, new SeeInOrder(strip_tags($this->rendered)));
-
         return $this;
     }
-
     /**
      * Assert that the given string is not contained within the view.
      *
@@ -189,15 +161,12 @@ class TestView
      * @param  bool  $escape
      * @return $this
      */
-    public function assertDontSee($value, $escape = true)
+    public function assertDontSee($value, $escape = \true)
     {
         $value = $escape ? e($value) : $value;
-
         PHPUnit::assertStringNotContainsString((string) $value, $this->rendered);
-
         return $this;
     }
-
     /**
      * Assert that the given string is not contained within the view text.
      *
@@ -205,15 +174,12 @@ class TestView
      * @param  bool  $escape
      * @return $this
      */
-    public function assertDontSeeText($value, $escape = true)
+    public function assertDontSeeText($value, $escape = \true)
     {
         $value = $escape ? e($value) : $value;
-
         PHPUnit::assertStringNotContainsString((string) $value, strip_tags($this->rendered));
-
         return $this;
     }
-
     /**
      * Get the string contents of the rendered view.
      *

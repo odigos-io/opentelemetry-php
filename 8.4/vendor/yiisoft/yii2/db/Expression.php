@@ -1,10 +1,10 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\db;
 
 /**
@@ -28,7 +28,7 @@ namespace yii\db;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class Expression extends \yii\base\BaseObject implements ExpressionInterface
+class Expression extends \yii\base\BaseObject implements \yii\db\ExpressionInterface
 {
     /**
      * @var string the DB expression
@@ -40,8 +40,6 @@ class Expression extends \yii\base\BaseObject implements ExpressionInterface
      * are the corresponding parameter values.
      */
     public $params = [];
-
-
     /**
      * Constructor.
      * @param string $expression the DB expression
@@ -54,7 +52,6 @@ class Expression extends \yii\base\BaseObject implements ExpressionInterface
         $this->params = $params;
         parent::__construct($config);
     }
-
     /**
      * String magic method.
      * @return string the DB expression.

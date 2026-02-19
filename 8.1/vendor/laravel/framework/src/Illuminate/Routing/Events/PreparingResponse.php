@@ -10,14 +10,12 @@ class PreparingResponse
      * @var \Symfony\Component\HttpFoundation\Request
      */
     public $request;
-
     /**
      * The response instance.
      *
      * @var mixed
      */
     public $response;
-
     /**
      * Create a new event instance.
      *

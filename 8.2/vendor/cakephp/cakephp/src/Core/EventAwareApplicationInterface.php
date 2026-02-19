@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright 2005-2011, Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -16,7 +16,6 @@ declare(strict_types=1);
 namespace Cake\Core;
 
 use Cake\Event\EventManagerInterface;
-
 interface EventAwareApplicationInterface
 {
     /**
@@ -26,7 +25,6 @@ interface EventAwareApplicationInterface
      * @return \Cake\Event\EventManagerInterface
      */
     public function events(EventManagerInterface $eventManager): EventManagerInterface;
-
     /**
      * @param \Cake\Event\EventManagerInterface $eventManager The global event manager to register listeners on
      * @return \Cake\Event\EventManagerInterface

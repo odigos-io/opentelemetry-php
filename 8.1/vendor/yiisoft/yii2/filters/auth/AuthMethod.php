@@ -1,13 +1,13 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\filters\auth;
 
-use Yii;
+use Odigos\Yii;
 use yii\base\Action;
 use yii\base\ActionFilter;
 use yii\base\Component;
@@ -19,7 +19,6 @@ use yii\web\Request;
 use yii\web\Response;
 use yii\web\UnauthorizedHttpException;
 use yii\web\User;
-
 /**
  * AuthMethod is a base class implementing the [[AuthInterface]] interface.
  *
@@ -29,7 +28,7 @@ use yii\web\User;
  * @template T of Component
  * @extends ActionFilter<T>
  */
-abstract class AuthMethod extends ActionFilter implements AuthInterface
+abstract class AuthMethod extends ActionFilter implements \yii\filters\auth\AuthInterface
 {
     /**
      * @var User|null the user object representing the user authentication status. If not set, the `user` application component will be used.
@@ -55,46 +54,33 @@ abstract class AuthMethod extends ActionFilter implements AuthInterface
      * @since 2.0.7
      */
     public $optional = [];
-
-
     /**
      * {@inheritdoc}
      */
     public function beforeAction($action)
     {
         $response = $this->response ?: Yii::$app->getResponse();
-
         try {
-            $identity = $this->authenticate(
-                $this->user ?: Yii::$app->getUser(),
-                $this->request ?: Yii::$app->getRequest(),
-                $response
-            );
+            $identity = $this->authenticate($this->user ?: Yii::$app->getUser(), $this->request ?: Yii::$app->getRequest(), $response);
         } catch (UnauthorizedHttpException $e) {
             if ($this->isOptional($action)) {
-                return true;
+                return \true;
             }
-
             throw $e;
         }
-
         if ($identity !== null || $this->isOptional($action)) {
-            return true;
+            return \true;
         }
-
         $this->challenge($response);
         $this->handleFailure($response);
-
-        return false;
+        return \false;
     }
-
     /**
      * {@inheritdoc}
      */
     public function challenge($response)
     {
     }
-
     /**
      * {@inheritdoc}
      */
@@ -102,7 +88,6 @@ abstract class AuthMethod extends ActionFilter implements AuthInterface
     {
         throw new UnauthorizedHttpException('Your request was made with invalid credentials.');
     }
-
     /**
      * Checks, whether authentication is optional for the given action.
      *
@@ -119,10 +104,9 @@ abstract class AuthMethod extends ActionFilter implements AuthInterface
         $id = $this->getActionId($action);
         foreach ($this->optional as $pattern) {
             if (StringHelper::matchWildcard($pattern, $id)) {
-                return true;
+                return \true;
             }
         }
-
-        return false;
+        return \false;
     }
 }

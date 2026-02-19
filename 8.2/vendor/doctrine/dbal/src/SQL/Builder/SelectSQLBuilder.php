@@ -1,12 +1,10 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\DBAL\SQL\Builder;
 
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Query\SelectQuery;
-
 interface SelectSQLBuilder
 {
     /** @throws Exception */

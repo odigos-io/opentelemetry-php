@@ -1,5 +1,6 @@
-<?php declare(strict_types=1);
+<?php
 
+declare (strict_types=1);
 /*
  * This file is part of the Monolog package.
  *
@@ -8,11 +9,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Odigos\Monolog\Formatter;
 
-namespace Monolog\Formatter;
-
-use Monolog\LogRecord;
-
+use Odigos\Monolog\LogRecord;
 /**
  * Interface for formatters
  *
@@ -27,7 +26,6 @@ interface FormatterInterface
      * @return mixed     The formatted record
      */
     public function format(LogRecord $record);
-
     /**
      * Formats a set of log records.
      *

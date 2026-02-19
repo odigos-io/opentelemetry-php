@@ -8,12 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Contracts\Service\Attribute;
 
 use Symfony\Contracts\Service\ServiceMethodsSubscriberTrait;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
-
 /**
  * For use as the return value for {@see ServiceSubscriberInterface}.
  *
@@ -29,19 +27,14 @@ final class SubscribedService
 {
     /** @var object[] */
     public array $attributes;
-
     /**
      * @param string|null       $key        The key to use for the service
      * @param class-string|null $type       The service class
      * @param bool              $nullable   Whether the service is optional
      * @param object|object[]   $attributes One or more dependency injection attributes to use
      */
-    public function __construct(
-        public ?string $key = null,
-        public ?string $type = null,
-        public bool $nullable = false,
-        array|object $attributes = [],
-    ) {
+    public function __construct(public ?string $key = null, public ?string $type = null, public bool $nullable = \false, array|object $attributes = [])
+    {
         $this->attributes = \is_array($attributes) ? $attributes : [$attributes];
     }
 }

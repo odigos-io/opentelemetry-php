@@ -3,8 +3,7 @@
 namespace Illuminate\Console\View\Components;
 
 use Symfony\Component\Console\Question\ChoiceQuestion;
-
-class Choice extends Component
+class Choice extends \Illuminate\Console\View\Components\Component
 {
     /**
      * Renders the component using the given arguments.
@@ -16,17 +15,10 @@ class Choice extends Component
      * @param  bool  $multiple
      * @return mixed
      */
-    public function render($question, $choices, $default = null, $attempts = null, $multiple = false)
+    public function render($question, $choices, $default = null, $attempts = null, $multiple = \false)
     {
-        return $this->usingQuestionHelper(
-            fn () => $this->output->askQuestion(
-                $this->getChoiceQuestion($question, $choices, $default)
-                    ->setMaxAttempts($attempts)
-                    ->setMultiselect($multiple)
-            ),
-        );
+        return $this->usingQuestionHelper(fn() => $this->output->askQuestion($this->getChoiceQuestion($question, $choices, $default)->setMaxAttempts($attempts)->setMultiselect($multiple)));
     }
-
     /**
      * Get a ChoiceQuestion instance that handles array keys like Prompts.
      *
@@ -41,7 +33,7 @@ class Choice extends Component
         {
             protected function isAssoc(array $array): bool
             {
-                return ! array_is_list($array);
+                return !array_is_list($array);
             }
         };
     }

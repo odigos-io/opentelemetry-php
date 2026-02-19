@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -17,7 +17,6 @@ declare(strict_types=1);
 namespace Cake\Database\Schema;
 
 use Cake\Datasource\SchemaInterface;
-
 /**
  * An interface used by database TableSchema objects.
  */
@@ -29,201 +28,168 @@ interface TableSchemaInterface extends SchemaInterface
      * @var string
      */
     public const TYPE_BINARY = 'binary';
-
     /**
      * Binary UUID column type
      *
      * @var string
      */
     public const TYPE_BINARY_UUID = 'binaryuuid';
-
     /**
      * Date column type
      *
      * @var string
      */
     public const TYPE_DATE = 'date';
-
     /**
      * Datetime column type
      *
      * @var string
      */
     public const TYPE_DATETIME = 'datetime';
-
     /**
      * Datetime with fractional seconds column type
      *
      * @var string
      */
     public const TYPE_DATETIME_FRACTIONAL = 'datetimefractional';
-
     /**
      * Time column type
      *
      * @var string
      */
     public const TYPE_TIME = 'time';
-
     /**
      * Timestamp column type
      *
      * @var string
      */
     public const TYPE_TIMESTAMP = 'timestamp';
-
     /**
      * Timestamp with fractional seconds column type
      *
      * @var string
      */
     public const TYPE_TIMESTAMP_FRACTIONAL = 'timestampfractional';
-
     /**
      * Timestamp with time zone column type
      *
      * @var string
      */
     public const TYPE_TIMESTAMP_TIMEZONE = 'timestamptimezone';
-
     /**
      * JSON column type
      *
      * @var string
      */
     public const TYPE_JSON = 'json';
-
     /**
      * String column type
      *
      * @var string
      */
     public const TYPE_STRING = 'string';
-
     /**
      * Char column type
      *
      * @var string
      */
     public const TYPE_CHAR = 'char';
-
     /**
      * Text column type
      *
      * @var string
      */
     public const TYPE_TEXT = 'text';
-
     /**
      * Tiny Integer column type
      *
      * @var string
      */
     public const TYPE_TINYINTEGER = 'tinyinteger';
-
     /**
      * Small Integer column type
      *
      * @var string
      */
     public const TYPE_SMALLINTEGER = 'smallinteger';
-
     /**
      * Integer column type
      *
      * @var string
      */
     public const TYPE_INTEGER = 'integer';
-
     /**
      * Big Integer column type
      *
      * @var string
      */
     public const TYPE_BIGINTEGER = 'biginteger';
-
     /**
      * Float column type
      *
      * @var string
      */
     public const TYPE_FLOAT = 'float';
-
     /**
      * Decimal column type
      *
      * @var string
      */
     public const TYPE_DECIMAL = 'decimal';
-
     /**
      * Boolean column type
      *
      * @var string
      */
     public const TYPE_BOOLEAN = 'boolean';
-
     /**
      * UUID column type
      *
      * @var string
      */
     public const TYPE_UUID = 'uuid';
-
     /**
      * Native UUID column type
      *
      * @var string
      */
     public const TYPE_NATIVE_UUID = 'nativeuuid';
-
     /**
      * Geometry column type
      *
      * @var string
      */
     public const TYPE_GEOMETRY = 'geometry';
-
     /**
      * Point column type
      *
      * @var string
      */
     public const TYPE_POINT = 'point';
-
     /**
      * Linestring column type
      *
      * @var string
      */
     public const TYPE_LINESTRING = 'linestring';
-
     /**
      * Polgon column type
      *
      * @var string
      */
     public const TYPE_POLYGON = 'polygon';
-
     /**
      * Geospatial column types
      *
      * @var array
      */
-    public const GEOSPATIAL_TYPES = [
-        self::TYPE_GEOMETRY,
-        self::TYPE_POINT,
-        self::TYPE_LINESTRING,
-        self::TYPE_POLYGON,
-    ];
-
+    public const GEOSPATIAL_TYPES = [self::TYPE_GEOMETRY, self::TYPE_POINT, self::TYPE_LINESTRING, self::TYPE_POLYGON];
     /**
      * Check whether a table has an autoIncrement column defined.
      *
      * @return bool
      */
     public function hasAutoincrement(): bool;
-
     /**
      * Sets whether the table is temporary in the database.
      *
@@ -231,14 +197,12 @@ interface TableSchemaInterface extends SchemaInterface
      * @return $this
      */
     public function setTemporary(bool $temporary);
-
     /**
      * Gets whether the table is temporary in the database.
      *
      * @return bool The current temporary setting.
      */
     public function isTemporary(): bool;
-
     /**
      * Get the column(s) used for the primary key.
      *
@@ -246,7 +210,6 @@ interface TableSchemaInterface extends SchemaInterface
      *   empty list will be returned when the table has no primary key.
      */
     public function getPrimaryKey(): array;
-
     /**
      * Add an index.
      *
@@ -265,7 +228,6 @@ interface TableSchemaInterface extends SchemaInterface
      * @throws \Cake\Database\Exception\DatabaseException
      */
     public function addIndex(string $name, array|string $attrs);
-
     /**
      * Read information about an index based on name.
      *
@@ -273,14 +235,12 @@ interface TableSchemaInterface extends SchemaInterface
      * @return array<string, mixed>|null Array of index data, or null
      */
     public function getIndex(string $name): ?array;
-
     /**
      * Get the names of all the indexes in the table.
      *
      * @return array<string>
      */
     public function indexes(): array;
-
     /**
      * Add a constraint.
      *
@@ -304,7 +264,6 @@ interface TableSchemaInterface extends SchemaInterface
      * @throws \Cake\Database\Exception\DatabaseException
      */
     public function addConstraint(string $name, array|string $attrs);
-
     /**
      * Read information about a constraint based on name.
      *
@@ -312,7 +271,6 @@ interface TableSchemaInterface extends SchemaInterface
      * @return array<string, mixed>|null Array of constraint data, or null
      */
     public function getConstraint(string $name): ?array;
-
     /**
      * Remove a constraint.
      *
@@ -320,7 +278,6 @@ interface TableSchemaInterface extends SchemaInterface
      * @return $this
      */
     public function dropConstraint(string $name);
-
     /**
      * Get the names of all the constraints in the table.
      *

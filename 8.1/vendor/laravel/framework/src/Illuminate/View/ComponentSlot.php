@@ -4,7 +4,6 @@ namespace Illuminate\View;
 
 use Illuminate\Contracts\Support\Htmlable;
 use InvalidArgumentException;
-
 class ComponentSlot implements Htmlable
 {
     /**
@@ -13,14 +12,12 @@ class ComponentSlot implements Htmlable
      * @var \Illuminate\View\ComponentAttributeBag
      */
     public $attributes;
-
     /**
      * The slot contents.
      *
      * @var string
      */
     protected $contents;
-
     /**
      * Create a new slot instance.
      *
@@ -31,10 +28,8 @@ class ComponentSlot implements Htmlable
     public function __construct($contents = '', $attributes = [])
     {
         $this->contents = $contents;
-
         $this->withAttributes($attributes);
     }
-
     /**
      * Set the extra attributes that the slot should make available.
      *
@@ -43,11 +38,9 @@ class ComponentSlot implements Htmlable
      */
     public function withAttributes(array $attributes)
     {
-        $this->attributes = new ComponentAttributeBag($attributes);
-
+        $this->attributes = new \Illuminate\View\ComponentAttributeBag($attributes);
         return $this;
     }
-
     /**
      * Get the slot's HTML string.
      *
@@ -57,7 +50,6 @@ class ComponentSlot implements Htmlable
     {
         return $this->contents;
     }
-
     /**
      * Determine if the slot is empty.
      *
@@ -67,7 +59,6 @@ class ComponentSlot implements Htmlable
     {
         return $this->contents === '';
     }
-
     /**
      * Determine if the slot is not empty.
      *
@@ -75,9 +66,8 @@ class ComponentSlot implements Htmlable
      */
     public function isNotEmpty()
     {
-        return ! $this->isEmpty();
+        return !$this->isEmpty();
     }
-
     /**
      * Determine if the slot has non-comment content.
      *
@@ -86,17 +76,11 @@ class ComponentSlot implements Htmlable
      */
     public function hasActualContent(callable|string|null $callable = null)
     {
-        if (is_string($callable) && ! function_exists($callable)) {
+        if (is_string($callable) && !function_exists($callable)) {
             throw new InvalidArgumentException('Callable does not exist.');
         }
-
-        return filter_var(
-            $this->contents,
-            FILTER_CALLBACK,
-            ['options' => $callable ?? fn ($input) => trim(preg_replace("/<!--([\s\S]*?)-->/", '', $input))]
-        ) !== '';
+        return filter_var($this->contents, \FILTER_CALLBACK, ['options' => $callable ?? fn($input) => trim(preg_replace("/<!--([\\s\\S]*?)-->/", '', $input))]) !== '';
     }
-
     /**
      * Get the slot's HTML string.
      *

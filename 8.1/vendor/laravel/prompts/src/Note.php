@@ -2,7 +2,7 @@
 
 namespace Laravel\Prompts;
 
-class Note extends Prompt
+class Note extends \Laravel\Prompts\Prompt
 {
     /**
      * Create a new Note instance.
@@ -11,7 +11,6 @@ class Note extends Prompt
     {
         //
     }
-
     /**
      * Display the note.
      */
@@ -19,26 +18,21 @@ class Note extends Prompt
     {
         $this->prompt();
     }
-
     /**
      * Display the note.
      */
     public function prompt(): bool
     {
         $this->capturePreviousNewLines();
-
         $this->state = 'submit';
-
         static::output()->write($this->renderTheme());
-
-        return true;
+        return \true;
     }
-
     /**
      * Get the value of the prompt.
      */
     public function value(): bool
     {
-        return true;
+        return \true;
     }
 }

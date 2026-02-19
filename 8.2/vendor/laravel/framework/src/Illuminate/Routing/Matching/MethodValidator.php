@@ -4,8 +4,7 @@ namespace Illuminate\Routing\Matching;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
-
-class MethodValidator implements ValidatorInterface
+class MethodValidator implements \Illuminate\Routing\Matching\ValidatorInterface
 {
     /**
      * Validate a given rule against a route and request.

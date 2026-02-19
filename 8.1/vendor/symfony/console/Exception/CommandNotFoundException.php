@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\Console\Exception;
 
 /**
@@ -16,10 +15,9 @@ namespace Symfony\Component\Console\Exception;
  *
  * @author Jérôme Tamarelle <jerome@tamarelle.net>
  */
-class CommandNotFoundException extends \InvalidArgumentException implements ExceptionInterface
+class CommandNotFoundException extends \InvalidArgumentException implements \Symfony\Component\Console\Exception\ExceptionInterface
 {
     private array $alternatives;
-
     /**
      * @param string          $message      Exception message to throw
      * @param string[]        $alternatives List of similar defined names
@@ -29,10 +27,8 @@ class CommandNotFoundException extends \InvalidArgumentException implements Exce
     public function __construct(string $message, array $alternatives = [], int $code = 0, ?\Throwable $previous = null)
     {
         parent::__construct($message, $code, $previous);
-
         $this->alternatives = $alternatives;
     }
-
     /**
      * @return string[]
      */

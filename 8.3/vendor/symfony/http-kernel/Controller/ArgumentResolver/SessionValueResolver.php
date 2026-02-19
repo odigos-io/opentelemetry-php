@@ -8,14 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\HttpKernel\Controller\ArgumentResolver;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
-
 /**
  * Yields the Session.
  *
@@ -28,12 +26,10 @@ final class SessionValueResolver implements ValueResolverInterface
         if (!$request->hasSession()) {
             return [];
         }
-
         $type = $argument->getType();
         if (SessionInterface::class !== $type && !is_subclass_of($type, SessionInterface::class)) {
             return [];
         }
-
         return $request->getSession() instanceof $type ? [$request->getSession()] : [];
     }
 }

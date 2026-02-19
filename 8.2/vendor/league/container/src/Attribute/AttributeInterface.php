@@ -1,8 +1,7 @@
 <?php
 
-declare(strict_types=1);
-
-namespace League\Container\Attribute;
+declare (strict_types=1);
+namespace Odigos\League\Container\Attribute;
 
 interface AttributeInterface
 {

@@ -1,8 +1,7 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Dotenv\Parser;
+declare (strict_types=1);
+namespace Odigos\Dotenv\Parser;
 
 interface ParserInterface
 {

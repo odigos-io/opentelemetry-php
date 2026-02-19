@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\CssSelector\Node;
 
 /**
@@ -21,32 +20,27 @@ namespace Symfony\Component\CssSelector\Node;
  *
  * @internal
  */
-class NegationNode extends AbstractNode
+class NegationNode extends \Symfony\Component\CssSelector\Node\AbstractNode
 {
-    private NodeInterface $selector;
-    private NodeInterface $subSelector;
-
-    public function __construct(NodeInterface $selector, NodeInterface $subSelector)
+    private \Symfony\Component\CssSelector\Node\NodeInterface $selector;
+    private \Symfony\Component\CssSelector\Node\NodeInterface $subSelector;
+    public function __construct(\Symfony\Component\CssSelector\Node\NodeInterface $selector, \Symfony\Component\CssSelector\Node\NodeInterface $subSelector)
     {
         $this->selector = $selector;
         $this->subSelector = $subSelector;
     }
-
-    public function getSelector(): NodeInterface
+    public function getSelector(): \Symfony\Component\CssSelector\Node\NodeInterface
     {
         return $this->selector;
     }
-
-    public function getSubSelector(): NodeInterface
+    public function getSubSelector(): \Symfony\Component\CssSelector\Node\NodeInterface
     {
         return $this->subSelector;
     }
-
-    public function getSpecificity(): Specificity
+    public function getSpecificity(): \Symfony\Component\CssSelector\Node\Specificity
     {
         return $this->selector->getSpecificity()->plus($this->subSelector->getSpecificity());
     }
-
     public function __toString(): string
     {
         return \sprintf('%s[%s:not(%s)]', $this->getNodeName(), $this->selector, $this->subSelector);

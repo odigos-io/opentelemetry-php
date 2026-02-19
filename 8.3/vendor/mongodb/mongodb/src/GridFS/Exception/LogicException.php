@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright 2023-present MongoDB, Inc.
  *
@@ -14,16 +15,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 namespace MongoDB\GridFS\Exception;
 
 use LogicException as BaseLogicException;
 use MongoDB\Exception\Exception;
 use MongoDB\GridFS\CollectionWrapper;
-
 use function get_debug_type;
 use function sprintf;
-
 class LogicException extends BaseLogicException implements Exception
 {
     /**
@@ -35,7 +33,6 @@ class LogicException extends BaseLogicException implements Exception
     {
         return new self(sprintf('GridFS stream wrapper has no bucket alias: "%s"', $alias));
     }
-
     /**
      * Throw when an invalid "gridfs" context option is provided.
      *
@@ -45,7 +42,6 @@ class LogicException extends BaseLogicException implements Exception
     {
         return new self(sprintf('Expected "gridfs" stream context to have type "array" but found "%s"', get_debug_type($context)));
     }
-
     /**
      * Thrown when a context is provided with an incorrect collection wrapper.
      *
@@ -55,7 +51,6 @@ class LogicException extends BaseLogicException implements Exception
     {
         return new self(sprintf('Expected "collectionWrapper" in "gridfs" stream context to have type "%s" but found "%s"', CollectionWrapper::class, get_debug_type($object)));
     }
-
     /**
      * Thrown when using an unsupported stream mode with fopen('gridfs://...', $mode).
      *
@@ -65,7 +60,6 @@ class LogicException extends BaseLogicException implements Exception
     {
         return new self(sprintf('Mode "%s" is not supported by "gridfs://" files. Use one of "r", "rb", "w", or "wb".', $mode));
     }
-
     /**
      * Thrown when the origin and destination paths are not in the same bucket.
      *

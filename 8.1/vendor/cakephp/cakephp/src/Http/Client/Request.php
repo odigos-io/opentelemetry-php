@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -16,21 +16,19 @@ declare(strict_types=1);
 namespace Cake\Http\Client;
 
 use Cake\Utility\Xml;
-use Laminas\Diactoros\RequestTrait;
-use Laminas\Diactoros\Stream;
+use Odigos\Laminas\Diactoros\RequestTrait;
+use Odigos\Laminas\Diactoros\Stream;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\UriInterface;
-
 /**
  * Implements methods for HTTP requests.
  *
  * Used by Cake\Http\Client to contain request information
  * for making requests.
  */
-class Request extends Message implements RequestInterface
+class Request extends \Cake\Http\Client\Message implements RequestInterface
 {
     use RequestTrait;
-
     /**
      * Constructor
      *
@@ -42,18 +40,11 @@ class Request extends Message implements RequestInterface
      * @param array $headers The HTTP headers to set.
      * @param array|string|null $data The request body to use.
      */
-    public function __construct(
-        UriInterface|string $url = '',
-        string $method = self::METHOD_GET,
-        array $headers = [],
-        array|string|null $data = null,
-    ) {
+    public function __construct(UriInterface|string $url = '', string $method = self::METHOD_GET, array $headers = [], array|string|null $data = null)
+    {
         $this->setMethod($method);
         $this->uri = $this->createUri($url);
-        $headers += [
-            'Connection' => 'close',
-            'User-Agent' => ini_get('user_agent') ?: 'CakePHP',
-        ];
+        $headers += ['Connection' => 'close', 'User-Agent' => ini_get('user_agent') ?: 'CakePHP'];
         $this->addHeaders($headers);
         if ($data === null || $data === '' || $data === []) {
             $this->stream = new Stream('php://memory', 'rw');
@@ -61,7 +52,6 @@ class Request extends Message implements RequestInterface
             $this->setContent($data);
         }
     }
-
     /**
      * Add an array of headers to the request.
      *
@@ -73,11 +63,10 @@ class Request extends Message implements RequestInterface
     {
         foreach ($headers as $key => $val) {
             $normalized = strtolower($key);
-            $this->headers[$key] = (array)$val;
+            $this->headers[$key] = (array) $val;
             $this->headerNames[$normalized] = $key;
         }
     }
-
     /**
      * Set the body/payload for the message.
      *
@@ -91,27 +80,23 @@ class Request extends Message implements RequestInterface
     {
         if (is_array($content)) {
             $contentType = $this->getHeaderLine('content-type');
-
             if (str_contains($contentType, 'application/json')) {
-                $content = json_encode($content, JSON_THROW_ON_ERROR);
+                $content = json_encode($content, \JSON_THROW_ON_ERROR);
             } elseif (str_contains($contentType, 'application/xml')) {
                 /** @phpstan-ignore-next-line */
-                $content = (string)Xml::fromArray($content);
+                $content = (string) Xml::fromArray($content);
             } else {
-                $formData = new FormData();
+                $formData = new \Cake\Http\Client\FormData();
                 $formData->addMany($content);
-
                 /** @phpstan-var array<non-empty-string, non-empty-string> $headers */
                 $headers = ['Content-Type' => $formData->contentType()];
                 $this->addHeaders($headers);
-                $content = (string)$formData;
+                $content = (string) $formData;
             }
         }
-
         $stream = new Stream('php://memory', 'rw');
         $stream->write($content);
         $this->stream = $stream;
-
         return $this;
     }
 }

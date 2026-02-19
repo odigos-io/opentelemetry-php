@@ -1,11 +1,9 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Odigos\Dotenv\Parser;
 
-namespace Dotenv\Parser;
-
-use PhpOption\Option;
-
+use Odigos\PhpOption\Option;
 final class Entry
 {
     /**
@@ -14,14 +12,12 @@ final class Entry
      * @var string
      */
     private $name;
-
     /**
      * The entry value.
      *
      * @var \Dotenv\Parser\Value|null
      */
     private $value;
-
     /**
      * Create a new entry instance.
      *
@@ -35,7 +31,6 @@ final class Entry
         $this->name = $name;
         $this->value = $value;
     }
-
     /**
      * Get the entry name.
      *
@@ -45,7 +40,6 @@ final class Entry
     {
         return $this->name;
     }
-
     /**
      * Get the entry value.
      *

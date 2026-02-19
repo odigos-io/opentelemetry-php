@@ -7,7 +7,6 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputOption;
-
 #[AsCommand(name: 'reload')]
 class ReloadCommand extends Command
 {
@@ -17,14 +16,12 @@ class ReloadCommand extends Command
      * @var string
      */
     protected $name = 'reload';
-
     /**
      * The console command description.
      *
      * @var string
      */
     protected $description = 'Reload running services';
-
     /**
      * Execute the console command.
      *
@@ -33,24 +30,13 @@ class ReloadCommand extends Command
     public function handle()
     {
         $this->components->info('Reloading services.');
-
-        $exceptions = Collection::wrap(explode(',', $this->option('except') ?? ''))
-            ->map(fn ($except) => trim($except))
-            ->filter()
-            ->unique()
-            ->flip();
-
-        $tasks = Collection::wrap($this->getReloadTasks())
-            ->reject(fn ($command, $key) => $exceptions->hasAny([$command, $key]))
-            ->toArray();
-
+        $exceptions = Collection::wrap(explode(',', $this->option('except') ?? ''))->map(fn($except) => trim($except))->filter()->unique()->flip();
+        $tasks = Collection::wrap($this->getReloadTasks())->reject(fn($command, $key) => $exceptions->hasAny([$command, $key]))->toArray();
         foreach ($tasks as $description => $command) {
-            $this->components->task($description, fn () => $this->callSilently($command) == 0);
+            $this->components->task($description, fn() => $this->callSilently($command) == 0);
         }
-
         $this->newLine();
     }
-
     /**
      * Get the commands that should be run to clear the "optimization" files.
      *
@@ -58,12 +44,8 @@ class ReloadCommand extends Command
      */
     public function getReloadTasks()
     {
-        return [
-            'queue' => 'queue:restart',
-            ...ServiceProvider::$reloadCommands,
-        ];
+        return ['queue' => 'queue:restart', ...ServiceProvider::$reloadCommands];
     }
-
     /**
      * Get the console command arguments.
      *
@@ -71,8 +53,6 @@ class ReloadCommand extends Command
      */
     protected function getOptions()
     {
-        return [
-            ['except', 'e', InputOption::VALUE_OPTIONAL, 'The commands to skip'],
-        ];
+        return [['except', 'e', InputOption::VALUE_OPTIONAL, 'The commands to skip']];
     }
 }

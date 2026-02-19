@@ -5,7 +5,6 @@ namespace Illuminate\Validation;
 use Exception;
 use Illuminate\Contracts\Validation\UncompromisedVerifier;
 use Illuminate\Support\Str;
-
 class NotPwnedVerifier implements UncompromisedVerifier
 {
     /**
@@ -14,14 +13,12 @@ class NotPwnedVerifier implements UncompromisedVerifier
      * @var \Illuminate\Http\Client\Factory
      */
     protected $factory;
-
     /**
      * The number of seconds the request can run before timing out.
      *
      * @var int
      */
     protected $timeout;
-
     /**
      * Create a new uncompromised verifier.
      *
@@ -34,7 +31,6 @@ class NotPwnedVerifier implements UncompromisedVerifier
         $this->factory = $factory;
         $this->timeout = $timeout ?? 30;
     }
-
     /**
      * Verify that the given data has not been compromised in public breaches.
      *
@@ -45,21 +41,15 @@ class NotPwnedVerifier implements UncompromisedVerifier
     {
         $value = $data['value'];
         $threshold = $data['threshold'];
-
         if (empty($value = (string) $value)) {
-            return false;
+            return \false;
         }
-
         [$hash, $hashPrefix] = $this->getHash($value);
-
-        return ! $this->search($hashPrefix)
-            ->contains(function ($line) use ($hash, $hashPrefix, $threshold) {
-                [$hashSuffix, $count] = explode(':', $line);
-
-                return $hashPrefix.$hashSuffix == $hash && $count > $threshold;
-            });
+        return !$this->search($hashPrefix)->contains(function ($line) use ($hash, $hashPrefix, $threshold) {
+            [$hashSuffix, $count] = explode(':', $line);
+            return $hashPrefix . $hashSuffix == $hash && $count > $threshold;
+        });
     }
-
     /**
      * Get the hash and its first 5 chars.
      *
@@ -69,12 +59,9 @@ class NotPwnedVerifier implements UncompromisedVerifier
     protected function getHash($value)
     {
         $hash = strtoupper(sha1((string) $value));
-
         $hashPrefix = substr($hash, 0, 5);
-
         return [$hash, $hashPrefix];
     }
-
     /**
      * Search by the given hash prefix and returns all occurrences of leaked passwords.
      *
@@ -84,19 +71,11 @@ class NotPwnedVerifier implements UncompromisedVerifier
     protected function search($hashPrefix)
     {
         try {
-            $response = $this->factory->withHeaders([
-                'Add-Padding' => true,
-            ])->timeout($this->timeout)->get(
-                'https://api.pwnedpasswords.com/range/'.$hashPrefix
-            );
+            $response = $this->factory->withHeaders(['Add-Padding' => \true])->timeout($this->timeout)->get('https://api.pwnedpasswords.com/range/' . $hashPrefix);
         } catch (Exception $e) {
             report($e);
         }
-
-        $body = (isset($response) && $response->successful())
-            ? $response->body()
-            : '';
-
+        $body = isset($response) && $response->successful() ? $response->body() : '';
         return Str::of($body)->trim()->explode("\n")->filter(function ($line) {
             return str_contains($line, ':');
         });

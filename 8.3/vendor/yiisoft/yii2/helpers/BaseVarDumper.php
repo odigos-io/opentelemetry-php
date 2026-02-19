@@ -1,15 +1,14 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\helpers;
 
 use yii\base\Arrayable;
 use yii\base\InvalidValueException;
-
 /**
  * BaseVarDumper provides concrete implementation for [[VarDumper]].
  *
@@ -23,8 +22,6 @@ class BaseVarDumper
     private static $_objects;
     private static $_output;
     private static $_depth;
-
-
     /**
      * Displays a variable.
      * This method achieves the similar functionality as var_dump and print_r
@@ -33,11 +30,10 @@ class BaseVarDumper
      * @param int $depth maximum depth that the dumper should go into the variable. Defaults to 10.
      * @param bool $highlight whether the result should be syntax-highlighted
      */
-    public static function dump($var, $depth = 10, $highlight = false)
+    public static function dump($var, $depth = 10, $highlight = \false)
     {
         echo static::dumpAsString($var, $depth, $highlight);
     }
-
     /**
      * Dumps a variable in terms of a string.
      * This method achieves the similar functionality as var_dump and print_r
@@ -47,20 +43,18 @@ class BaseVarDumper
      * @param bool $highlight whether the result should be syntax-highlighted
      * @return string the string representation of the variable
      */
-    public static function dumpAsString($var, $depth = 10, $highlight = false)
+    public static function dumpAsString($var, $depth = 10, $highlight = \false)
     {
         self::$_output = '';
         self::$_objects = [];
         self::$_depth = $depth;
         self::dumpInternal($var, 0);
         if ($highlight) {
-            $result = highlight_string("<?php\n" . self::$_output, true);
-            self::$_output = preg_replace('/&lt;\\?php<br \\/>/', '', $result, 1);
+            $result = highlight_string("<?php\n" . self::$_output, \true);
+            self::$_output = preg_replace('/&lt;\?php<br \/>/', '', $result, 1);
         }
-
         return self::$_output;
     }
-
     /**
      * @param mixed $var variable to be dumped
      * @param int $level depth level
@@ -72,10 +66,10 @@ class BaseVarDumper
                 self::$_output .= $var ? 'true' : 'false';
                 break;
             case 'integer':
-                self::$_output .= (string)$var;
+                self::$_output .= (string) $var;
                 break;
             case 'double':
-                self::$_output .= (string)$var;
+                self::$_output .= (string) $var;
                 break;
             case 'string':
                 self::$_output .= "'" . addslashes($var) . "'";
@@ -108,7 +102,7 @@ class BaseVarDumper
                 }
                 break;
             case 'object':
-                if (($id = array_search($var, self::$_objects, true)) !== false) {
+                if (($id = array_search($var, self::$_objects, \true)) !== \false) {
                     self::$_output .= get_class($var) . '#' . ($id + 1) . '(...)';
                 } elseif (self::$_depth <= $level) {
                     self::$_output .= get_class($var) . '(...)';
@@ -116,7 +110,7 @@ class BaseVarDumper
                     $id = array_push(self::$_objects, $var);
                     $className = get_class($var);
                     $spaces = str_repeat(' ', $level * 4);
-                    self::$_output .= "$className#$id\n" . $spaces . '(';
+                    self::$_output .= "{$className}#{$id}\n" . $spaces . '(';
                     if ('__PHP_Incomplete_Class' !== get_class($var) && method_exists($var, '__debugInfo')) {
                         $dumpValues = $var->__debugInfo();
                         if (!is_array($dumpValues)) {
@@ -126,8 +120,8 @@ class BaseVarDumper
                         $dumpValues = (array) $var;
                     }
                     foreach ($dumpValues as $key => $value) {
-                        $keyDisplay = strtr(trim($key), "\0", ':');
-                        self::$_output .= "\n" . $spaces . "    [$keyDisplay] => ";
+                        $keyDisplay = strtr(trim($key), "\x00", ':');
+                        self::$_output .= "\n" . $spaces . "    [{$keyDisplay}] => ";
                         self::dumpInternal($value, $level + 1);
                     }
                     self::$_output .= "\n" . $spaces . ')';
@@ -135,7 +129,6 @@ class BaseVarDumper
                 break;
         }
     }
-
     /**
      * Exports a variable as a string representation.
      *
@@ -158,7 +151,6 @@ class BaseVarDumper
         self::exportInternal($var, 0);
         return self::$_output;
     }
-
     /**
      * @param mixed $var variable to be exported
      * @param int $level depth level
@@ -174,7 +166,7 @@ class BaseVarDumper
                     self::$_output .= '[]';
                 } else {
                     $keys = array_keys($var);
-                    $outputKeys = ($keys !== range(0, count($var) - 1));
+                    $outputKeys = $keys !== range(0, count($var) - 1);
                     $spaces = str_repeat(' ', $level * 4);
                     self::$_output .= '[';
                     foreach ($keys as $key) {
@@ -194,7 +186,7 @@ class BaseVarDumper
                     self::$_output .= self::exportClosure($var);
                 } else {
                     try {
-                        $output = 'unserialize(' . var_export(serialize($var), true) . ')';
+                        $output = 'unserialize(' . var_export(serialize($var), \true) . ')';
                     } catch (\Exception $e) {
                         // serialize may fail, for example: if object contains a `\Closure` instance
                         // so we use a fallback
@@ -209,10 +201,10 @@ class BaseVarDumper
                             self::exportInternal($varAsArray, $level);
                             return;
                         } elseif ('__PHP_Incomplete_Class' !== get_class($var) && method_exists($var, '__toString')) {
-                            $output = var_export($var->__toString(), true);
+                            $output = var_export($var->__toString(), \true);
                         } else {
                             $outputBackup = self::$_output;
-                            $output = var_export(self::dumpAsString($var), true);
+                            $output = var_export(self::dumpAsString($var), \true);
                             self::$_output = $outputBackup;
                         }
                     }
@@ -220,10 +212,9 @@ class BaseVarDumper
                 }
                 break;
             default:
-                self::$_output .= var_export($var, true);
+                self::$_output .= var_export($var, \true);
         }
     }
-
     /**
      * Exports a [[Closure]] instance.
      * @param \Closure $closure closure instance.
@@ -232,25 +223,20 @@ class BaseVarDumper
     private static function exportClosure(\Closure $closure)
     {
         $reflection = new \ReflectionFunction($closure);
-
         $fileName = $reflection->getFileName();
         $start = $reflection->getStartLine();
         $end = $reflection->getEndLine();
-
-        if ($fileName === false || $start === false || $end === false) {
+        if ($fileName === \false || $start === \false || $end === \false) {
             return 'function() {/* Error: unable to determine Closure source */}';
         }
-
         --$start;
-
         $source = implode("\n", array_slice(file($fileName), $start, $end - $start));
         $tokens = token_get_all('<?php ' . $source);
         array_shift($tokens);
-
         $closureTokens = [];
         $pendingParenthesisCount = 0;
         foreach ($tokens as $token) {
-            if (isset($token[0]) && $token[0] === T_FUNCTION) {
+            if (isset($token[0]) && $token[0] === \T_FUNCTION) {
                 $closureTokens[] = $token[1];
                 continue;
             }
@@ -266,7 +252,6 @@ class BaseVarDumper
                 }
             }
         }
-
         return implode('', $closureTokens);
     }
 }

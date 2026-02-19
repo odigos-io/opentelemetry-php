@@ -1,14 +1,11 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\DBAL\Platforms\Exception;
 
 use Exception;
-
 use function sprintf;
-
-final class InvalidPlatformVersion extends Exception implements PlatformException
+final class InvalidPlatformVersion extends Exception implements \Doctrine\DBAL\Platforms\Exception\PlatformException
 {
     /**
      * Returns a new instance for an invalid specified platform version.
@@ -18,10 +15,6 @@ final class InvalidPlatformVersion extends Exception implements PlatformExceptio
      */
     public static function new(string $version, string $expectedFormat): self
     {
-        return new self(sprintf(
-            'Invalid platform version "%s" specified. The platform version has to be specified in the format: "%s".',
-            $version,
-            $expectedFormat,
-        ));
+        return new self(sprintf('Invalid platform version "%s" specified. The platform version has to be specified in the format: "%s".', $version, $expectedFormat));
     }
 }

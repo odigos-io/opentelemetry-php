@@ -1,10 +1,10 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\base;
 
 /**
@@ -37,7 +37,6 @@ trait ArrayAccessTrait
     {
         return new \ArrayIterator($this->data);
     }
-
     /**
      * Returns the number of data items.
      * This method is required by Countable interface.
@@ -48,7 +47,6 @@ trait ArrayAccessTrait
     {
         return count($this->data);
     }
-
     /**
      * This method is required by the interface [[\ArrayAccess]].
      * @param int|string $offset the offset to check on
@@ -59,7 +57,6 @@ trait ArrayAccessTrait
     {
         return isset($this->data[$offset]);
     }
-
     /**
      * This method is required by the interface [[\ArrayAccess]].
      * @param int|string $offset the offset to retrieve element.
@@ -70,7 +67,6 @@ trait ArrayAccessTrait
     {
         return isset($this->data[$offset]) ? $this->data[$offset] : null;
     }
-
     /**
      * This method is required by the interface [[\ArrayAccess]].
      * @param int|string $offset the offset to set element
@@ -81,7 +77,6 @@ trait ArrayAccessTrait
     {
         $this->data[$offset] = $item;
     }
-
     /**
      * This method is required by the interface [[\ArrayAccess]].
      * @param int|string $offset the offset to unset element

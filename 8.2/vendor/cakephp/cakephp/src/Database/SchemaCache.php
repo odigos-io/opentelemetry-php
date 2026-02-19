@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -17,7 +17,6 @@ declare(strict_types=1);
 namespace Cake\Database;
 
 use Cake\Database\Schema\CachedCollection;
-
 /**
  * Schema Cache.
  *
@@ -36,17 +35,15 @@ class SchemaCache
      * @var \Cake\Database\Schema\CachedCollection
      */
     protected CachedCollection $_schema;
-
     /**
      * Constructor
      *
      * @param \Cake\Database\Connection $connection Connection name to get the schema for or a connection instance
      */
-    public function __construct(Connection $connection)
+    public function __construct(\Cake\Database\Connection $connection)
     {
         $this->_schema = $this->getSchema($connection);
     }
-
     /**
      * Build metadata.
      *
@@ -60,14 +57,11 @@ class SchemaCache
         } else {
             $tables = $this->_schema->listTables();
         }
-
         foreach ($tables as $table) {
-            $this->_schema->describe($table, ['forceRefresh' => true]);
+            $this->_schema->describe($table, ['forceRefresh' => \true]);
         }
-
         return $tables;
     }
-
     /**
      * Clear metadata.
      *
@@ -81,17 +75,13 @@ class SchemaCache
         } else {
             $tables = $this->_schema->listTables();
         }
-
         $cacher = $this->_schema->getCacher();
-
         foreach ($tables as $table) {
             $key = $this->_schema->cacheKey($table);
             $cacher->delete($key);
         }
-
         return $tables;
     }
-
     /**
      * Helper method to get the schema collection.
      *
@@ -99,13 +89,12 @@ class SchemaCache
      * @return \Cake\Database\Schema\CachedCollection
      * @throws \RuntimeException If given connection object is not compatible with schema caching
      */
-    public function getSchema(Connection $connection): CachedCollection
+    public function getSchema(\Cake\Database\Connection $connection): CachedCollection
     {
         $config = $connection->config();
         if (empty($config['cacheMetadata'])) {
-            $connection->cacheMetadata(true);
+            $connection->cacheMetadata(\true);
         }
-
         /** @var \Cake\Database\Schema\CachedCollection */
         return $connection->getSchemaCollection();
     }

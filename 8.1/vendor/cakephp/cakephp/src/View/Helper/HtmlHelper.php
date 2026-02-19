@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -21,7 +21,6 @@ use Cake\Http\MimeType;
 use Cake\View\Helper;
 use Cake\View\StringTemplateTrait;
 use function Cake\Core\h;
-
 /**
  * Html Helper class for easy use of HTML widgets.
  *
@@ -33,70 +32,30 @@ use function Cake\Core\h;
 class HtmlHelper extends Helper
 {
     use StringTemplateTrait;
-
     /**
      * List of helpers used by this helper
      *
      * @var array
      */
     protected array $helpers = ['Url'];
-
     /**
      * Default config for this class
      *
      * @var array<string, mixed>
      */
-    protected array $_defaultConfig = [
-        'defaultScriptBlock' => null,
-        'defaultCssBlock' => null,
-        'defaultMetaBlock' => null,
-        'templates' => [
-            'meta' => '<meta{{attrs}}>',
-            'metalink' => '<link href="{{url}}"{{attrs}}>',
-            'link' => '<a href="{{url}}"{{attrs}}>{{content}}</a>',
-            'mailto' => '<a href="mailto:{{url}}"{{attrs}}>{{content}}</a>',
-            'image' => '<img src="{{url}}"{{attrs}}>',
-            'tableheader' => '<th{{attrs}}>{{content}}</th>',
-            'tableheaderrow' => '<tr{{attrs}}>{{content}}</tr>',
-            'tablecell' => '<td{{attrs}}>{{content}}</td>',
-            'tablerow' => '<tr{{attrs}}>{{content}}</tr>',
-            'block' => '<div{{attrs}}>{{content}}</div>',
-            'blockstart' => '<div{{attrs}}>',
-            'blockend' => '</div>',
-            'tag' => '<{{tag}}{{attrs}}>{{content}}</{{tag}}>',
-            'tagstart' => '<{{tag}}{{attrs}}>',
-            'tagend' => '</{{tag}}>',
-            'tagselfclosing' => '<{{tag}}{{attrs}}/>',
-            'para' => '<p{{attrs}}>{{content}}</p>',
-            'parastart' => '<p{{attrs}}>',
-            'css' => '<link rel="{{rel}}" href="{{url}}"{{attrs}}>',
-            'style' => '<style{{attrs}}>{{content}}</style>',
-            'charset' => '<meta charset="{{charset}}">',
-            'ul' => '<ul{{attrs}}>{{content}}</ul>',
-            'ol' => '<ol{{attrs}}>{{content}}</ol>',
-            'li' => '<li{{attrs}}>{{content}}</li>',
-            'javascriptblock' => '<script{{attrs}}>{{content}}</script>',
-            'javascriptstart' => '<script>',
-            'javascriptlink' => '<script src="{{url}}"{{attrs}}></script>',
-            'javascriptend' => '</script>',
-            'confirmJs' => '{{confirm}}',
-        ],
-    ];
-
+    protected array $_defaultConfig = ['defaultScriptBlock' => null, 'defaultCssBlock' => null, 'defaultMetaBlock' => null, 'templates' => ['meta' => '<meta{{attrs}}>', 'metalink' => '<link href="{{url}}"{{attrs}}>', 'link' => '<a href="{{url}}"{{attrs}}>{{content}}</a>', 'mailto' => '<a href="mailto:{{url}}"{{attrs}}>{{content}}</a>', 'image' => '<img src="{{url}}"{{attrs}}>', 'tableheader' => '<th{{attrs}}>{{content}}</th>', 'tableheaderrow' => '<tr{{attrs}}>{{content}}</tr>', 'tablecell' => '<td{{attrs}}>{{content}}</td>', 'tablerow' => '<tr{{attrs}}>{{content}}</tr>', 'block' => '<div{{attrs}}>{{content}}</div>', 'blockstart' => '<div{{attrs}}>', 'blockend' => '</div>', 'tag' => '<{{tag}}{{attrs}}>{{content}}</{{tag}}>', 'tagstart' => '<{{tag}}{{attrs}}>', 'tagend' => '</{{tag}}>', 'tagselfclosing' => '<{{tag}}{{attrs}}/>', 'para' => '<p{{attrs}}>{{content}}</p>', 'parastart' => '<p{{attrs}}>', 'css' => '<link rel="{{rel}}" href="{{url}}"{{attrs}}>', 'style' => '<style{{attrs}}>{{content}}</style>', 'charset' => '<meta charset="{{charset}}">', 'ul' => '<ul{{attrs}}>{{content}}</ul>', 'ol' => '<ol{{attrs}}>{{content}}</ol>', 'li' => '<li{{attrs}}>{{content}}</li>', 'javascriptblock' => '<script{{attrs}}>{{content}}</script>', 'javascriptstart' => '<script>', 'javascriptlink' => '<script src="{{url}}"{{attrs}}></script>', 'javascriptend' => '</script>', 'confirmJs' => '{{confirm}}']];
     /**
      * Names of script & css files that have been included once
      *
      * @var array<string, array>
      */
     protected array $_includedAssets = [];
-
     /**
      * Options for the currently opened script block buffer if any.
      *
      * @var array<string, mixed>
      */
     protected array $_scriptBlockOptions = [];
-
     /**
      * Creates a link to an external resource and handles basic meta tags
      *
@@ -140,30 +99,13 @@ class HtmlHelper extends Helper
     public function meta(array|string $type, array|string|null $content = null, array $options = []): ?string
     {
         if (is_string($type)) {
-            $types = [
-                'csrf-token' => ['name' => 'csrf-token'],
-                'rss' => ['type' => 'application/rss+xml', 'rel' => 'alternate', 'title' => $type, 'link' => $content],
-                'atom' => ['type' => 'application/atom+xml', 'title' => $type, 'link' => $content],
-                'icon' => ['type' => 'image/x-icon', 'rel' => 'icon', 'link' => $content],
-                'keywords' => ['name' => 'keywords', 'content' => $content],
-                'description' => ['name' => 'description', 'content' => $content],
-                'robots' => ['name' => 'robots', 'content' => $content],
-                'viewport' => ['name' => 'viewport', 'content' => $content],
-                'canonical' => ['rel' => 'canonical', 'link' => $content],
-                'next' => ['rel' => 'next', 'link' => $content],
-                'prev' => ['rel' => 'prev', 'link' => $content],
-                'first' => ['rel' => 'first', 'link' => $content],
-                'last' => ['rel' => 'last', 'link' => $content],
-            ];
-
+            $types = ['csrf-token' => ['name' => 'csrf-token'], 'rss' => ['type' => 'application/rss+xml', 'rel' => 'alternate', 'title' => $type, 'link' => $content], 'atom' => ['type' => 'application/atom+xml', 'title' => $type, 'link' => $content], 'icon' => ['type' => 'image/x-icon', 'rel' => 'icon', 'link' => $content], 'keywords' => ['name' => 'keywords', 'content' => $content], 'description' => ['name' => 'description', 'content' => $content], 'robots' => ['name' => 'robots', 'content' => $content], 'viewport' => ['name' => 'viewport', 'content' => $content], 'canonical' => ['rel' => 'canonical', 'link' => $content], 'next' => ['rel' => 'next', 'link' => $content], 'prev' => ['rel' => 'prev', 'link' => $content], 'first' => ['rel' => 'first', 'link' => $content], 'last' => ['rel' => 'last', 'link' => $content]];
             if ($type === 'icon' && $content === null) {
                 $types['icon']['link'] = 'favicon.ico';
             }
-
             if ($type === 'csrf-token') {
                 $types['csrf-token']['content'] = $this->_View->getRequest()->getAttribute('csrfToken');
             }
-
             if (isset($types[$type])) {
                 $type = $types[$type];
             } elseif (!isset($options['type']) && $content !== null) {
@@ -179,10 +121,8 @@ class HtmlHelper extends Helper
                 $type = [];
             }
         }
-
         $options += $type + ['block' => $this->getConfig('defaultMetaBlock')];
         $out = '';
-
         if (isset($options['link'])) {
             if (is_array($options['link'])) {
                 $options['link'] = $this->Url->build($options['link']);
@@ -190,33 +130,22 @@ class HtmlHelper extends Helper
                 $options['link'] = $this->Url->assetUrl($options['link']);
             }
             if (isset($options['rel']) && $options['rel'] === 'icon') {
-                $out = $this->formatTemplate('metalink', [
-                    'url' => $options['link'],
-                    'attrs' => $this->templater()->formatAttributes($options, ['block', 'link']),
-                ]);
+                $out = $this->formatTemplate('metalink', ['url' => $options['link'], 'attrs' => $this->templater()->formatAttributes($options, ['block', 'link'])]);
                 $options['rel'] = 'shortcut icon';
             }
-            $out .= $this->formatTemplate('metalink', [
-                'url' => $options['link'],
-                'attrs' => $this->templater()->formatAttributes($options, ['block', 'link']),
-            ]);
+            $out .= $this->formatTemplate('metalink', ['url' => $options['link'], 'attrs' => $this->templater()->formatAttributes($options, ['block', 'link'])]);
         } else {
-            $out = $this->formatTemplate('meta', [
-                'attrs' => $this->templater()->formatAttributes($options, ['block', 'type']),
-            ]);
+            $out = $this->formatTemplate('meta', ['attrs' => $this->templater()->formatAttributes($options, ['block', 'type'])]);
         }
-
         if (empty($options['block'])) {
             return $out;
         }
-        if ($options['block'] === true) {
+        if ($options['block'] === \true) {
             $options['block'] = __FUNCTION__;
         }
         $this->_View->append($options['block'], $out);
-
         return null;
     }
-
     /**
      * Returns a charset META-tag.
      *
@@ -228,14 +157,10 @@ class HtmlHelper extends Helper
     public function charset(?string $charset = null): string
     {
         if (!$charset) {
-            $charset = strtolower((string)Configure::read('App.encoding'));
+            $charset = strtolower((string) Configure::read('App.encoding'));
         }
-
-        return $this->formatTemplate('charset', [
-            'charset' => !empty($charset) ? $charset : 'utf-8',
-        ]);
+        return $this->formatTemplate('charset', ['charset' => !empty($charset) ? $charset : 'utf-8']);
     }
-
     /**
      * Creates an HTML link.
      *
@@ -262,30 +187,27 @@ class HtmlHelper extends Helper
      */
     public function link(array|string $title, array|string|null $url = null, array $options = []): string
     {
-        $escapeTitle = true;
+        $escapeTitle = \true;
         if ($url !== null) {
             $url = $this->Url->build($url, $options);
             unset($options['fullBase']);
         } else {
             $url = $this->Url->build($title);
-            $title = htmlspecialchars_decode($url, ENT_QUOTES);
+            $title = htmlspecialchars_decode($url, \ENT_QUOTES);
             $title = h(urldecode($title));
-            $escapeTitle = false;
+            $escapeTitle = \false;
         }
-
         if (isset($options['escapeTitle'])) {
             $escapeTitle = $options['escapeTitle'];
             unset($options['escapeTitle']);
         } elseif (isset($options['escape'])) {
             $escapeTitle = $options['escape'];
         }
-
-        if ($escapeTitle === true) {
+        if ($escapeTitle === \true) {
             $title = h($title);
         } elseif (is_string($escapeTitle)) {
-            $title = htmlentities($title, ENT_QUOTES, $escapeTitle);
+            $title = htmlentities($title, \ENT_QUOTES, $escapeTitle);
         }
-
         $templater = $this->templater();
         $confirmMessage = null;
         if (isset($options['confirm'])) {
@@ -295,19 +217,10 @@ class HtmlHelper extends Helper
         if ($confirmMessage) {
             $confirm = $this->_confirm('return true;', 'return false;');
             $options['data-confirm-message'] = $confirmMessage;
-            $options['onclick'] = $templater->format('confirmJs', [
-                'confirmMessage' => h($confirmMessage),
-                'confirm' => $confirm,
-            ]);
+            $options['onclick'] = $templater->format('confirmJs', ['confirmMessage' => h($confirmMessage), 'confirm' => $confirm]);
         }
-
-        return $templater->format('link', [
-            'url' => $url,
-            'attrs' => $templater->formatAttributes($options),
-            'content' => $title,
-        ]);
+        return $templater->format('link', ['url' => $url, 'attrs' => $templater->formatAttributes($options), 'content' => $title]);
     }
-
     /**
      * Creates an HTML link from route path string.
      *
@@ -331,7 +244,6 @@ class HtmlHelper extends Helper
     {
         return $this->link($title, ['_path' => $path] + $params, $options);
     }
-
     /**
      * Creates a link element for CSS stylesheets.
      *
@@ -385,13 +297,7 @@ class HtmlHelper extends Helper
      */
     public function css(array|string $path, array $options = []): ?string
     {
-        $options += [
-            'once' => true,
-            'block' => $this->getConfig('defaultCssBlock'),
-            'rel' => 'stylesheet',
-            'nonce' => $this->_View->getRequest()->getAttribute('cspStyleNonce'),
-        ];
-
+        $options += ['once' => \true, 'block' => $this->getConfig('defaultCssBlock'), 'rel' => 'stylesheet', 'nonce' => $this->_View->getRequest()->getAttribute('cspStyleNonce')];
         if (is_array($path)) {
             $out = '';
             foreach ($path as $i) {
@@ -400,44 +306,30 @@ class HtmlHelper extends Helper
             if (empty($options['block'])) {
                 return $out . "\n";
             }
-
             return null;
         }
-
         $url = $this->Url->css($path, $options);
         $options = array_diff_key($options, ['fullBase' => null, 'pathPrefix' => null]);
-
         if ($options['once'] && isset($this->_includedAssets[__METHOD__][$path])) {
             return null;
         }
         unset($options['once']);
-        $this->_includedAssets[__METHOD__][$path] = true;
-
+        $this->_includedAssets[__METHOD__][$path] = \true;
         $templater = $this->templater();
         if ($options['rel'] === 'import') {
-            $out = $templater->format('style', [
-                'attrs' => $templater->formatAttributes($options, ['rel', 'block']),
-                'content' => '@import url(' . $url . ');',
-            ]);
+            $out = $templater->format('style', ['attrs' => $templater->formatAttributes($options, ['rel', 'block']), 'content' => '@import url(' . $url . ');']);
         } else {
-            $out = $templater->format('css', [
-                'rel' => $options['rel'],
-                'url' => $url,
-                'attrs' => $templater->formatAttributes($options, ['rel', 'block']),
-            ]);
+            $out = $templater->format('css', ['rel' => $options['rel'], 'url' => $url, 'attrs' => $templater->formatAttributes($options, ['rel', 'block'])]);
         }
-
         if (empty($options['block'])) {
             return $out;
         }
-        if ($options['block'] === true) {
+        if ($options['block'] === \true) {
             $options['block'] = __FUNCTION__;
         }
         $this->_View->append($options['block'], $out);
-
         return null;
     }
-
     /**
      * Returns one or many `<script>` tags depending on the number of scripts given.
      *
@@ -485,13 +377,8 @@ class HtmlHelper extends Helper
      */
     public function script(array|string $url, array $options = []): ?string
     {
-        $defaults = [
-            'block' => $this->getConfig('defaultScriptBlock'),
-            'once' => true,
-            'nonce' => $this->_View->getRequest()->getAttribute('cspScriptNonce'),
-        ];
+        $defaults = ['block' => $this->getConfig('defaultScriptBlock'), 'once' => \true, 'nonce' => $this->_View->getRequest()->getAttribute('cspScriptNonce')];
         $options += $defaults;
-
         if (is_array($url)) {
             $out = '';
             foreach ($url as $i) {
@@ -500,34 +387,24 @@ class HtmlHelper extends Helper
             if (empty($options['block'])) {
                 return $out . "\n";
             }
-
             return null;
         }
-
         $url = $this->Url->script($url, $options);
         $options = array_diff_key($options, ['fullBase' => null, 'pathPrefix' => null]);
-
         if ($options['once'] && isset($this->_includedAssets[__METHOD__][$url])) {
             return null;
         }
-        $this->_includedAssets[__METHOD__][$url] = true;
-
-        $out = $this->formatTemplate('javascriptlink', [
-            'url' => $url,
-            'attrs' => $this->templater()->formatAttributes($options, ['block', 'once']),
-        ]);
-
+        $this->_includedAssets[__METHOD__][$url] = \true;
+        $out = $this->formatTemplate('javascriptlink', ['url' => $url, 'attrs' => $this->templater()->formatAttributes($options, ['block', 'once'])]);
         if (empty($options['block'])) {
             return $out;
         }
-        if ($options['block'] === true) {
+        if ($options['block'] === \true) {
             $options['block'] = __FUNCTION__;
         }
         $this->_View->append($options['block'], $out);
-
         return null;
     }
-
     /**
      * Generate the "importmap" script tag.
      *
@@ -540,19 +417,15 @@ class HtmlHelper extends Helper
     public function importmap(array $map, array $options = []): string
     {
         $options += ['pathPrefix' => Configure::read('App.jsBaseUrl')];
-
         if (!isset($map['imports'])) {
             $map = ['imports' => $map];
         }
-
         $map['imports'] = $this->getImportPaths($map['imports'], $options);
-
         if (isset($map['scopes'])) {
             foreach ($map['scopes'] as $path => $submap) {
                 $map['scopes'][$path] = $this->getImportPaths($submap, $options);
             }
         }
-
         if (isset($map['integrity'])) {
             $integrity = [];
             foreach ($map['integrity'] as $path => $hash) {
@@ -560,15 +433,12 @@ class HtmlHelper extends Helper
             }
             $map['integrity'] = $integrity;
         }
-
-        $jsonOpts = JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES;
+        $jsonOpts = \JSON_THROW_ON_ERROR | \JSON_UNESCAPED_SLASHES;
         if (Configure::read('debug')) {
-            $jsonOpts |= JSON_PRETTY_PRINT;
+            $jsonOpts |= \JSON_PRETTY_PRINT;
         }
-
-        return (string)$this->scriptBlock(json_encode($map, $jsonOpts), ['type' => 'importmap']);
+        return (string) $this->scriptBlock(json_encode($map, $jsonOpts), ['type' => 'importmap']);
     }
-
     /**
      * Get import paths for the importmap.
      *
@@ -585,10 +455,8 @@ class HtmlHelper extends Helper
                 $map[$key] = $this->Url->script($path, $options);
             }
         }
-
         return $map;
     }
-
     /**
      * Wrap $script in a script tag.
      *
@@ -605,27 +473,17 @@ class HtmlHelper extends Helper
      */
     public function scriptBlock(string $script, array $options = []): ?string
     {
-        $options += [
-            'block' => $this->getConfig('defaultScriptBlock'),
-            'nonce' => $this->_View->getRequest()->getAttribute('cspScriptNonce'),
-        ];
-
-        $out = $this->formatTemplate('javascriptblock', [
-            'attrs' => $this->templater()->formatAttributes($options, ['block']),
-            'content' => $script,
-        ]);
-
+        $options += ['block' => $this->getConfig('defaultScriptBlock'), 'nonce' => $this->_View->getRequest()->getAttribute('cspScriptNonce')];
+        $out = $this->formatTemplate('javascriptblock', ['attrs' => $this->templater()->formatAttributes($options, ['block']), 'content' => $script]);
         if (empty($options['block'])) {
             return $out;
         }
-        if ($options['block'] === true) {
+        if ($options['block'] === \true) {
             $options['block'] = 'script';
         }
         $this->_View->append($options['block'], $out);
-
         return null;
     }
-
     /**
      * Begin a script block that captures output until HtmlHelper::scriptEnd()
      * is called. This capturing block will capture all output between the methods
@@ -645,7 +503,6 @@ class HtmlHelper extends Helper
         $this->_scriptBlockOptions = $options;
         ob_start();
     }
-
     /**
      * End a Buffered section of JavaScript capturing.
      * Generates a script tag inline or appends to specified view block depending on
@@ -656,13 +513,11 @@ class HtmlHelper extends Helper
      */
     public function scriptEnd(): ?string
     {
-        $buffer = (string)ob_get_clean();
+        $buffer = (string) ob_get_clean();
         $options = $this->_scriptBlockOptions;
         $this->_scriptBlockOptions = [];
-
         return $this->scriptBlock($buffer, $options);
     }
-
     /**
      * Builds CSS style data from an array of CSS properties
      *
@@ -680,7 +535,7 @@ class HtmlHelper extends Helper
      * @return string CSS styling data
      * @link https://book.cakephp.org/5/en/views/helpers/html.html#creating-css-programatically
      */
-    public function style(array $data, bool $oneLine = true): string
+    public function style(array $data, bool $oneLine = \true): string
     {
         $out = [];
         foreach ($data as $key => $value) {
@@ -689,10 +544,8 @@ class HtmlHelper extends Helper
         if ($oneLine) {
             return implode(' ', $out);
         }
-
         return implode("\n", $out);
     }
-
     /**
      * Creates a formatted IMG element.
      *
@@ -732,34 +585,21 @@ class HtmlHelper extends Helper
             $path = $this->Url->build($path, $options);
         }
         $options = array_diff_key($options, ['fullBase' => null, 'pathPrefix' => null]);
-
         if (!isset($options['alt'])) {
             $options['alt'] = '';
         }
-
-        $url = false;
+        $url = \false;
         if (!empty($options['url'])) {
             $url = $options['url'];
             unset($options['url']);
         }
-
         $templater = $this->templater();
-        $image = $templater->format('image', [
-            'url' => $path,
-            'attrs' => $templater->formatAttributes($options),
-        ]);
-
+        $image = $templater->format('image', ['url' => $path, 'attrs' => $templater->formatAttributes($options)]);
         if ($url) {
-            return $templater->format('link', [
-                'url' => $this->Url->build($url),
-                'attrs' => null,
-                'content' => $image,
-            ]);
+            return $templater->format('link', ['url' => $this->Url->build($url), 'attrs' => null, 'content' => $image]);
         }
-
         return $image;
     }
-
     /**
      * Returns a row of formatted and named TABLE headers.
      *
@@ -784,16 +624,10 @@ class HtmlHelper extends Helper
                 $content = key($arg);
                 $attrs = current($arg);
             }
-
-            $out[] = $this->formatTemplate('tableheader', [
-                'attrs' => $this->templater()->formatAttributes($attrs),
-                'content' => $content,
-            ]);
+            $out[] = $this->formatTemplate('tableheader', ['attrs' => $this->templater()->formatAttributes($attrs), 'content' => $content]);
         }
-
-        return $this->tableRow(implode(' ', $out), (array)$trOptions);
+        return $this->tableRow(implode(' ', $out), (array) $trOptions);
     }
-
     /**
      * Returns a formatted string of table rows (TR's with TD's in them).
      *
@@ -806,48 +640,37 @@ class HtmlHelper extends Helper
      * @return string Formatted HTML
      * @link https://book.cakephp.org/5/en/views/helpers/html.html#creating-table-cells
      */
-    public function tableCells(
-        array|string $data,
-        array|bool|null $oddTrOptions = null,
-        array|bool|null $evenTrOptions = null,
-        bool $useCount = false,
-        bool $continueOddEven = true,
-    ): string {
+    public function tableCells(array|string $data, array|bool|null $oddTrOptions = null, array|bool|null $evenTrOptions = null, bool $useCount = \false, bool $continueOddEven = \true): string
+    {
         if (!is_array($data)) {
             $data = [[$data]];
         } elseif (empty($data[0]) || !is_array($data[0])) {
             $data = [$data];
         }
-
-        if ($oddTrOptions === true) {
-            $useCount = true;
+        if ($oddTrOptions === \true) {
+            $useCount = \true;
             $oddTrOptions = null;
         }
-
-        if ($evenTrOptions === false) {
-            $continueOddEven = false;
+        if ($evenTrOptions === \false) {
+            $continueOddEven = \false;
             $evenTrOptions = null;
         }
-
         if ($continueOddEven) {
             static $count = 0;
         } else {
             $count = 0;
         }
-
         $out = [];
         foreach ($data as $line) {
             $count++;
             $cellsOut = $this->_renderCells($line, $useCount);
             $opts = $count % 2 ? $oddTrOptions : $evenTrOptions;
             /** @var array<string, mixed> $options */
-            $options = (array)$opts;
+            $options = (array) $opts;
             $out[] = $this->tableRow(implode(' ', $cellsOut), $options);
         }
-
         return implode("\n", $out);
     }
-
     /**
      * Renders cells for a row of a table.
      *
@@ -858,18 +681,16 @@ class HtmlHelper extends Helper
      * @param bool $useCount Renders the count into the row. Default is false.
      * @return array<string>
      */
-    protected function _renderCells(array $line, bool $useCount = false): array
+    protected function _renderCells(array $line, bool $useCount = \false): array
     {
         $i = 0;
         $cellsOut = [];
         foreach ($line as $cell) {
             $cellOptions = [];
-
             if (is_array($cell)) {
                 $cellOptions = $cell[1];
                 $cell = $cell[0];
             }
-
             if ($useCount) {
                 $i += 1;
                 if (isset($cellOptions['class'])) {
@@ -878,13 +699,10 @@ class HtmlHelper extends Helper
                     $cellOptions['class'] = 'column-' . $i;
                 }
             }
-
-            $cellsOut[] = $this->tableCell((string)$cell, $cellOptions);
+            $cellsOut[] = $this->tableCell((string) $cell, $cellOptions);
         }
-
         return $cellsOut;
     }
-
     /**
      * Renders a single table row (A TR with attributes).
      *
@@ -894,12 +712,8 @@ class HtmlHelper extends Helper
      */
     public function tableRow(string $content, array $options = []): string
     {
-        return $this->formatTemplate('tablerow', [
-            'attrs' => $this->templater()->formatAttributes($options),
-            'content' => $content,
-        ]);
+        return $this->formatTemplate('tablerow', ['attrs' => $this->templater()->formatAttributes($options), 'content' => $content]);
     }
-
     /**
      * Renders a single table cell (A TD with attributes).
      *
@@ -909,12 +723,8 @@ class HtmlHelper extends Helper
      */
     public function tableCell(string $content, array $options = []): string
     {
-        return $this->formatTemplate('tablecell', [
-            'attrs' => $this->templater()->formatAttributes($options),
-            'content' => $content,
-        ]);
+        return $this->formatTemplate('tablecell', ['attrs' => $this->templater()->formatAttributes($options), 'content' => $content]);
     }
-
     /**
      * Returns a formatted block tag, i.e DIV, SPAN, P.
      *
@@ -939,14 +749,8 @@ class HtmlHelper extends Helper
         } else {
             $tag = 'tag';
         }
-
-        return $this->formatTemplate($tag, [
-            'attrs' => $this->templater()->formatAttributes($options),
-            'tag' => $name,
-            'content' => $text,
-        ]);
+        return $this->formatTemplate($tag, ['attrs' => $this->templater()->formatAttributes($options), 'tag' => $name, 'content' => $text]);
     }
-
     /**
      * Returns a formatted DIV tag for HTML FORMs.
      *
@@ -965,10 +769,8 @@ class HtmlHelper extends Helper
         if ($class) {
             $options['class'] = $class;
         }
-
         return $this->tag('div', $text, $options);
     }
-
     /**
      * Returns a formatted P tag.
      *
@@ -993,13 +795,8 @@ class HtmlHelper extends Helper
         if ($text === null) {
             $tag = 'parastart';
         }
-
-        return $this->formatTemplate($tag, [
-            'attrs' => $this->templater()->formatAttributes($options),
-            'content' => $text,
-        ]);
+        return $this->formatTemplate($tag, ['attrs' => $this->templater()->formatAttributes($options), 'content' => $text]);
     }
-
     /**
      * Returns an audio/video element
      *
@@ -1062,34 +859,23 @@ class HtmlHelper extends Helper
      */
     public function media(array|string|null $path, array $options = []): string
     {
-        $options += [
-            'tag' => null,
-            'pathPrefix' => 'files/',
-            'text' => '',
-        ];
-
+        $options += ['tag' => null, 'pathPrefix' => 'files/', 'text' => ''];
         if (!empty($options['tag'])) {
             $tag = $options['tag'];
         } else {
             $tag = null;
         }
-
         if (is_array($path)) {
             $sourceTags = '';
             foreach ($path as &$source) {
                 if (is_string($source)) {
-                    $source = [
-                        'src' => $source,
-                    ];
+                    $source = ['src' => $source];
                 }
                 if (!isset($source['type'])) {
                     $source['type'] = MimeType::getMimeTypeForFile($source['src']);
                 }
                 $source['src'] = $this->Url->assetUrl($source['src'], $options);
-                $sourceTags .= $this->formatTemplate('tagselfclosing', [
-                    'tag' => 'source',
-                    'attrs' => $this->templater()->formatAttributes($source),
-                ]);
+                $sourceTags .= $this->formatTemplate('tagselfclosing', ['tag' => 'source', 'attrs' => $this->templater()->formatAttributes($source)]);
             }
             unset($source);
             $options['text'] = $sourceTags . $options['text'];
@@ -1100,7 +886,6 @@ class HtmlHelper extends Helper
             }
             $options['src'] = $this->Url->assetUrl($path, $options);
         }
-
         if ($tag === null) {
             if (is_array($path)) {
                 $mimeType = $path[0]['type'];
@@ -1113,25 +898,13 @@ class HtmlHelper extends Helper
                 $tag = 'audio';
             }
         }
-
         if (isset($options['poster'])) {
-            $options['poster'] = $this->Url->assetUrl(
-                $options['poster'],
-                ['pathPrefix' => Configure::read('App.imageBaseUrl')] + $options,
-            );
+            $options['poster'] = $this->Url->assetUrl($options['poster'], ['pathPrefix' => Configure::read('App.imageBaseUrl')] + $options);
         }
         $text = $options['text'];
-
-        $options = array_diff_key($options, [
-            'tag' => null,
-            'fullBase' => null,
-            'pathPrefix' => null,
-            'text' => null,
-        ]);
-
+        $options = array_diff_key($options, ['tag' => null, 'fullBase' => null, 'pathPrefix' => null, 'text' => null]);
         return $this->tag($tag, $text, $options);
     }
-
     /**
      * Build a nested list (UL/OL) out of an associative array.
      *
@@ -1154,13 +927,8 @@ class HtmlHelper extends Helper
     {
         $options += ['tag' => 'ul'];
         $items = $this->_nestedListItem($list, $options, $itemOptions);
-
-        return $this->formatTemplate($options['tag'], [
-            'attrs' => $this->templater()->formatAttributes($options, ['tag']),
-            'content' => $items,
-        ]);
+        return $this->formatTemplate($options['tag'], ['attrs' => $this->templater()->formatAttributes($options, ['tag']), 'content' => $items]);
     }
-
     /**
      * Internal function to build a nested list (UL/OL) out of an associative array.
      *
@@ -1173,7 +941,6 @@ class HtmlHelper extends Helper
     protected function _nestedListItem(array $items, array $options, array $itemOptions): string
     {
         $out = '';
-
         $index = 1;
         foreach ($items as $key => $item) {
             if (is_array($item)) {
@@ -1184,16 +951,11 @@ class HtmlHelper extends Helper
             } elseif (isset($itemOptions['odd']) && $index % 2 !== 0) {
                 $itemOptions['class'] = $itemOptions['odd'];
             }
-            $out .= $this->formatTemplate('li', [
-                'attrs' => $this->templater()->formatAttributes($itemOptions, ['even', 'odd']),
-                'content' => $item,
-            ]);
+            $out .= $this->formatTemplate('li', ['attrs' => $this->templater()->formatAttributes($itemOptions, ['even', 'odd']), 'content' => $item]);
             $index++;
         }
-
         return $out;
     }
-
     /**
      * Event listeners.
      *

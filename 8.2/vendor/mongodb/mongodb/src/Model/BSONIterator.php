@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright 2018-present MongoDB, Inc.
  *
@@ -14,14 +15,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 namespace MongoDB\Model;
 
 use Iterator;
 use MongoDB\BSON\Document;
 use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\Exception\UnexpectedValueException;
-
 use function assert;
 use function is_array;
 use function is_int;
@@ -29,7 +28,6 @@ use function sprintf;
 use function strlen;
 use function substr;
 use function unpack;
-
 /**
  * Iterator for BSON documents.
  *
@@ -38,29 +36,21 @@ use function unpack;
 class BSONIterator implements Iterator
 {
     private const BSON_SIZE = 4;
-
     private string $buffer;
-
     private int $bufferLength;
-
     private array|object|null $current = null;
-
     private int $key = 0;
-
     private int $position = 0;
-
     /** @see https://php.net/iterator.current */
     public function current(): mixed
     {
         return $this->current;
     }
-
     /** @see https://php.net/iterator.key */
     public function key(): int
     {
         return $this->key;
     }
-
     /** @see https://php.net/iterator.next */
     public function next(): void
     {
@@ -68,7 +58,6 @@ class BSONIterator implements Iterator
         $this->current = null;
         $this->advance();
     }
-
     /** @see https://php.net/iterator.rewind */
     public function rewind(): void
     {
@@ -77,13 +66,11 @@ class BSONIterator implements Iterator
         $this->current = null;
         $this->advance();
     }
-
     /** @see https://php.net/iterator.valid */
     public function valid(): bool
     {
         return $this->current !== null;
     }
-
     /**
      * Constructs a BSON Iterator.
      *
@@ -99,35 +86,28 @@ class BSONIterator implements Iterator
      */
     public function __construct(string $data, private array $options = [])
     {
-        if (isset($options['typeMap']) && ! is_array($options['typeMap'])) {
+        if (isset($options['typeMap']) && !is_array($options['typeMap'])) {
             throw InvalidArgumentException::invalidType('"typeMap" option', $options['typeMap'], 'array');
         }
-
-        if (! isset($options['typeMap'])) {
+        if (!isset($options['typeMap'])) {
             $this->options['typeMap'] = [];
         }
-
         $this->buffer = $data;
         $this->bufferLength = strlen($data);
     }
-
     private function advance(): void
     {
         if ($this->position === $this->bufferLength) {
             return;
         }
-
         if ($this->bufferLength - $this->position < self::BSON_SIZE) {
             throw new UnexpectedValueException(sprintf('Expected at least %d bytes; %d remaining', self::BSON_SIZE, $this->bufferLength - $this->position));
         }
-
         [, $documentLength] = unpack('V', substr($this->buffer, $this->position, self::BSON_SIZE));
         assert(is_int($documentLength));
-
         if ($this->bufferLength - $this->position < $documentLength) {
             throw new UnexpectedValueException(sprintf('Expected %d bytes; %d remaining', $documentLength, $this->bufferLength - $this->position));
         }
-
         $this->current = Document::fromBSON(substr($this->buffer, $this->position, $documentLength))->toPHP($this->options['typeMap']);
         $this->position += $documentLength;
     }

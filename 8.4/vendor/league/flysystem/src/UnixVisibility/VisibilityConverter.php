@@ -1,8 +1,7 @@
 <?php
 
-declare(strict_types=1);
-
-namespace League\Flysystem\UnixVisibility;
+declare (strict_types=1);
+namespace Odigos\League\Flysystem\UnixVisibility;
 
 interface VisibilityConverter
 {

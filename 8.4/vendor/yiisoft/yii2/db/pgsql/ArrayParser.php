@@ -1,10 +1,10 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\db\pgsql;
 
 /**
@@ -21,8 +21,6 @@ class ArrayParser
      * @var string Character used in array
      */
     private $delimiter = ',';
-
-
     /**
      * Convert array from PostgreSQL to PHP
      *
@@ -34,14 +32,11 @@ class ArrayParser
         if ($value === null) {
             return null;
         }
-
         if ($value === '{}') {
             return [];
         }
-
         return $this->parseArray($value);
     }
-
     /**
      * Pares PgSQL array encoded in string
      *
@@ -61,10 +56,12 @@ class ArrayParser
                 case '}':
                     break 2;
                 case $this->delimiter:
-                    if (empty($result)) { // `{}` case
+                    if (empty($result)) {
+                        // `{}` case
                         $result[] = null;
                     }
-                    if (in_array($value[$i + 1], [$this->delimiter, '}'], true)) { // `{,}` case
+                    if (in_array($value[$i + 1], [$this->delimiter, '}'], \true)) {
+                        // `{,}` case
                         $result[] = null;
                     }
                     break;
@@ -72,10 +69,8 @@ class ArrayParser
                     $result[] = $this->parseString($value, $i);
             }
         }
-
         return $result;
     }
-
     /**
      * Parses PgSQL encoded string
      *
@@ -90,21 +85,17 @@ class ArrayParser
         $result = '';
         $len = strlen($value);
         for ($i += $isQuoted ? 1 : 0; $i < $len; ++$i) {
-            if (in_array($value[$i], ['\\', '"'], true) && in_array($value[$i + 1], [$value[$i], '"'], true)) {
+            if (in_array($value[$i], ['\\', '"'], \true) && in_array($value[$i + 1], [$value[$i], '"'], \true)) {
                 ++$i;
-            } elseif (in_array($value[$i], $stringEndChars, true)) {
+            } elseif (in_array($value[$i], $stringEndChars, \true)) {
                 break;
             }
-
             $result .= $value[$i];
         }
-
         $i -= $isQuoted ? 0 : 1;
-
         if (!$isQuoted && $result === 'NULL') {
             $result = null;
         }
-
         return $result;
     }
 }

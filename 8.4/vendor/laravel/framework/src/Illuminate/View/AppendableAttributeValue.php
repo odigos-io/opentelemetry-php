@@ -3,7 +3,6 @@
 namespace Illuminate\View;
 
 use Stringable;
-
 class AppendableAttributeValue implements Stringable
 {
     /**
@@ -12,7 +11,6 @@ class AppendableAttributeValue implements Stringable
      * @var mixed
      */
     public $value;
-
     /**
      * Create a new appendable attribute value.
      *
@@ -22,7 +20,6 @@ class AppendableAttributeValue implements Stringable
     {
         $this->value = $value;
     }
-
     /**
      * Get the string value.
      *

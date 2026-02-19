@@ -1,17 +1,16 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\rest;
 
-use Yii;
+use Odigos\Yii;
 use yii\base\Model;
 use yii\db\ActiveRecord;
 use yii\web\ServerErrorHttpException;
-
 /**
  * UpdateAction implements the API endpoint for updating a model.
  *
@@ -23,14 +22,12 @@ use yii\web\ServerErrorHttpException;
  * @template T of Controller
  * @extends Action<T>
  */
-class UpdateAction extends Action
+class UpdateAction extends \yii\rest\Action
 {
     /**
      * @var string the scenario to be assigned to the model before it is validated and updated.
      */
     public $scenario = Model::SCENARIO_DEFAULT;
-
-
     /**
      * Updates an existing model.
      * @param string $id the primary key of the model.
@@ -41,17 +38,14 @@ class UpdateAction extends Action
     {
         /** @var ActiveRecord $model */
         $model = $this->findModel($id);
-
         if ($this->checkAccess) {
             call_user_func($this->checkAccess, $this->id, $model);
         }
-
         $model->scenario = $this->scenario;
         $model->load(Yii::$app->getRequest()->getBodyParams(), '');
-        if ($model->save() === false && !$model->hasErrors()) {
+        if ($model->save() === \false && !$model->hasErrors()) {
             throw new ServerErrorHttpException('Failed to update the object for unknown reason.');
         }
-
         return $model;
     }
 }

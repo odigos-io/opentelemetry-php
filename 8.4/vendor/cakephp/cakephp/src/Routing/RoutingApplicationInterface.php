@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -29,5 +29,5 @@ interface RoutingApplicationInterface
      * @param \Cake\Routing\RouteBuilder $routes A route builder to add routes into.
      * @return void
      */
-    public function routes(RouteBuilder $routes): void;
+    public function routes(\Cake\Routing\RouteBuilder $routes): void;
 }

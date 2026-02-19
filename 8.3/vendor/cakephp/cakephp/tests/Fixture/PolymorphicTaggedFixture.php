@@ -1,4 +1,5 @@
 <?php
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -15,7 +16,6 @@
 namespace Cake\Test\Fixture;
 
 use Cake\TestSuite\Fixture\TestFixture;
-
 class PolymorphicTaggedFixture extends TestFixture
 {
     /**
@@ -24,14 +24,10 @@ class PolymorphicTaggedFixture extends TestFixture
      * @var string
      */
     public string $table = 'polymorphic_tagged';
-
     /**
      * records property
      *
      * @var array
      */
-    public array $records = [
-        ['tag_id' => 1, 'foreign_key' => 1, 'foreign_model' => 'Posts', 'position' => 1],
-        ['tag_id' => 1, 'foreign_key' => 1, 'foreign_model' => 'Articles', 'position' => 1],
-    ];
+    public array $records = [['tag_id' => 1, 'foreign_key' => 1, 'foreign_model' => 'Posts', 'position' => 1], ['tag_id' => 1, 'foreign_key' => 1, 'foreign_model' => 'Articles', 'position' => 1]];
 }

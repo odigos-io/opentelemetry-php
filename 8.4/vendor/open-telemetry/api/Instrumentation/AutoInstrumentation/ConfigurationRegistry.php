@@ -1,22 +1,17 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\API\Instrumentation\AutoInstrumentation;
 
 use OpenTelemetry\API\Configuration\ConfigProperties;
-
 final class ConfigurationRegistry implements ConfigProperties
 {
     private array $configurations = [];
-
-    public function add(InstrumentationConfiguration $configuration): self
+    public function add(\OpenTelemetry\API\Instrumentation\AutoInstrumentation\InstrumentationConfiguration $configuration): self
     {
         $this->configurations[$configuration::class] = $configuration;
-
         return $this;
     }
-
     /**
      * @template C of InstrumentationConfiguration
      * @psalm-suppress MoreSpecificImplementedParamType
@@ -24,7 +19,7 @@ final class ConfigurationRegistry implements ConfigProperties
      * @return C|null
      */
     #[\Override]
-    public function get(string $id): ?InstrumentationConfiguration
+    public function get(string $id): ?\OpenTelemetry\API\Instrumentation\AutoInstrumentation\InstrumentationConfiguration
     {
         return $this->configurations[$id] ?? null;
     }

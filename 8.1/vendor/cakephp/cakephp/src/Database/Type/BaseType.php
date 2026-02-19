@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -19,7 +19,6 @@ namespace Cake\Database\Type;
 use Cake\Database\Driver;
 use Cake\Database\TypeInterface;
 use PDO;
-
 /**
  * Base type class.
  */
@@ -31,7 +30,6 @@ abstract class BaseType implements TypeInterface
      * @var string|null
      */
     protected ?string $_name = null;
-
     /**
      * Constructor
      *
@@ -41,7 +39,6 @@ abstract class BaseType implements TypeInterface
     {
         $this->_name = $name;
     }
-
     /**
      * @inheritDoc
      */
@@ -49,7 +46,6 @@ abstract class BaseType implements TypeInterface
     {
         return $this->_name;
     }
-
     /**
      * @inheritDoc
      */
@@ -57,7 +53,6 @@ abstract class BaseType implements TypeInterface
     {
         return $this->_name;
     }
-
     /**
      * @inheritDoc
      */
@@ -66,10 +61,8 @@ abstract class BaseType implements TypeInterface
         if ($value === null) {
             return PDO::PARAM_NULL;
         }
-
         return PDO::PARAM_STR;
     }
-
     /**
      * @inheritDoc
      */

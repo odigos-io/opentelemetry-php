@@ -10,14 +10,12 @@ class CacheFlushFailed
      * @var string|null
      */
     public $storeName;
-
     /**
      * The tags that were assigned to the key.
      *
      * @var array
      */
     public $tags;
-
     /**
      * Create a new event instance.
      *
@@ -29,7 +27,6 @@ class CacheFlushFailed
         $this->storeName = $storeName;
         $this->tags = $tags;
     }
-
     /**
      * Set the tags for the cache event.
      *
@@ -39,7 +36,6 @@ class CacheFlushFailed
     public function setTags($tags)
     {
         $this->tags = $tags;
-
         return $this;
     }
 }

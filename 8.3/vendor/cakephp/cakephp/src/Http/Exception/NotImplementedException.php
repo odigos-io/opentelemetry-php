@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -17,13 +17,12 @@ namespace Cake\Http\Exception;
 /**
  * Not Implemented Exception - used when an API method is not implemented
  */
-class NotImplementedException extends HttpException
+class NotImplementedException extends \Cake\Http\Exception\HttpException
 {
     /**
      * @inheritDoc
      */
     protected string $_messageTemplate = '%s is not implemented.';
-
     /**
      * @inheritDoc
      */

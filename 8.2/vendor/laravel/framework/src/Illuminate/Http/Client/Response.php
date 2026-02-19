@@ -10,65 +10,56 @@ use Illuminate\Support\Traits\Macroable;
 use Illuminate\Support\Traits\Tappable;
 use LogicException;
 use Stringable;
-
 /**
  * @mixin \Psr\Http\Message\ResponseInterface
  */
 class Response implements ArrayAccess, Stringable
 {
-    use Concerns\DeterminesStatusCode, Tappable, Macroable {
+    use \Illuminate\Http\Client\Concerns\DeterminesStatusCode, Tappable, Macroable {
         __call as macroCall;
     }
-
     /**
      * The underlying PSR response.
      *
      * @var \Psr\Http\Message\ResponseInterface
      */
     protected $response;
-
     /**
      * The decoded JSON response.
      *
      * @var array
      */
     protected $decoded;
-
     /**
      * The flags that were used when decoding the JSON response.
      *
      * @var int-mask<JSON_BIGINT_AS_STRING, JSON_INVALID_UTF8_IGNORE, JSON_INVALID_UTF8_SUBSTITUTE, JSON_OBJECT_AS_ARRAY, JSON_THROW_ON_ERROR>
      */
     protected int $decodingFlags;
-
     /**
      * The request cookies.
      *
      * @var \GuzzleHttp\Cookie\CookieJar
      */
     public $cookies;
-
     /**
      * The transfer stats for the request.
      *
      * @var \GuzzleHttp\TransferStats|null
      */
     public $transferStats;
-
     /**
      * The length at which request exceptions will be truncated.
      *
      * @var int<1, max>|false|null
      */
     protected $truncateExceptionsAt = null;
-
     /**
      * The flags passed to `json_decode` by default.
      *
      * @var int-mask<JSON_BIGINT_AS_STRING, JSON_INVALID_UTF8_IGNORE, JSON_INVALID_UTF8_SUBSTITUTE, JSON_OBJECT_AS_ARRAY, JSON_THROW_ON_ERROR>
      */
     public static int $defaultJsonDecodingFlags = 0;
-
     /**
      * Create a new response instance.
      *
@@ -78,7 +69,6 @@ class Response implements ArrayAccess, Stringable
     {
         $this->response = $response;
     }
-
     /**
      * Get the body of the response.
      *
@@ -88,7 +78,6 @@ class Response implements ArrayAccess, Stringable
     {
         return (string) $this->response->getBody();
     }
-
     /**
      * Get the JSON decoded body of the response as an array or scalar value.
      *
@@ -100,22 +89,15 @@ class Response implements ArrayAccess, Stringable
     public function json($key = null, $default = null, $flags = null)
     {
         $flags = $flags ?? self::$defaultJsonDecodingFlags;
-
-        if (! $this->decoded || (isset($this->decodingFlags) && $this->decodingFlags !== $flags)) {
-            $this->decoded = json_decode(
-                $this->body(), true, flags: $flags
-            );
-
+        if (!$this->decoded || isset($this->decodingFlags) && $this->decodingFlags !== $flags) {
+            $this->decoded = json_decode($this->body(), \true, flags: $flags);
             $this->decodingFlags = $flags;
         }
-
         if (is_null($key)) {
             return $this->decoded;
         }
-
         return data_get($this->decoded, $key, $default);
     }
-
     /**
      * Get the JSON decoded body of the response as an object.
      *
@@ -124,9 +106,8 @@ class Response implements ArrayAccess, Stringable
      */
     public function object($flags = null)
     {
-        return json_decode($this->body(), false, flags: $flags ?? self::$defaultJsonDecodingFlags);
+        return json_decode($this->body(), \false, flags: $flags ?? self::$defaultJsonDecodingFlags);
     }
-
     /**
      * Get the JSON decoded body of the response as a collection.
      *
@@ -138,7 +119,6 @@ class Response implements ArrayAccess, Stringable
     {
         return new Collection($this->json($key, flags: $flags));
     }
-
     /**
      * Get the JSON decoded body of the response as a fluent object.
      *
@@ -150,7 +130,6 @@ class Response implements ArrayAccess, Stringable
     {
         return new Fluent((array) $this->json($key, flags: $flags));
     }
-
     /**
      * Get the body of the response as a PHP resource.
      *
@@ -162,7 +141,6 @@ class Response implements ArrayAccess, Stringable
     {
         return StreamWrapper::getResource($this->response->getBody());
     }
-
     /**
      * Get a header from the response.
      *
@@ -173,7 +151,6 @@ class Response implements ArrayAccess, Stringable
     {
         return $this->response->getHeaderLine($header);
     }
-
     /**
      * Get the headers from the response.
      *
@@ -183,7 +160,6 @@ class Response implements ArrayAccess, Stringable
     {
         return $this->response->getHeaders();
     }
-
     /**
      * Get the status code of the response.
      *
@@ -193,7 +169,6 @@ class Response implements ArrayAccess, Stringable
     {
         return (int) $this->response->getStatusCode();
     }
-
     /**
      * Get the reason phrase of the response.
      *
@@ -203,7 +178,6 @@ class Response implements ArrayAccess, Stringable
     {
         return $this->response->getReasonPhrase();
     }
-
     /**
      * Get the effective URI of the response.
      *
@@ -213,7 +187,6 @@ class Response implements ArrayAccess, Stringable
     {
         return $this->transferStats?->getEffectiveUri();
     }
-
     /**
      * Determine if the request was successful.
      *
@@ -223,7 +196,6 @@ class Response implements ArrayAccess, Stringable
     {
         return $this->status() >= 200 && $this->status() < 300;
     }
-
     /**
      * Determine if the response was a redirect.
      *
@@ -233,7 +205,6 @@ class Response implements ArrayAccess, Stringable
     {
         return $this->status() >= 300 && $this->status() < 400;
     }
-
     /**
      * Determine if the response indicates a client or server error occurred.
      *
@@ -243,7 +214,6 @@ class Response implements ArrayAccess, Stringable
     {
         return $this->serverError() || $this->clientError();
     }
-
     /**
      * Determine if the response indicates a client error occurred.
      *
@@ -253,7 +223,6 @@ class Response implements ArrayAccess, Stringable
     {
         return $this->status() >= 400 && $this->status() < 500;
     }
-
     /**
      * Determine if the response indicates a server error occurred.
      *
@@ -263,7 +232,6 @@ class Response implements ArrayAccess, Stringable
     {
         return $this->status() >= 500;
     }
-
     /**
      * Execute the given callback if there was a server or client error.
      *
@@ -275,10 +243,8 @@ class Response implements ArrayAccess, Stringable
         if ($this->failed()) {
             $callback($this);
         }
-
         return $this;
     }
-
     /**
      * Get the response cookies.
      *
@@ -288,7 +254,6 @@ class Response implements ArrayAccess, Stringable
     {
         return $this->cookies;
     }
-
     /**
      * Get the handler stats of the response.
      *
@@ -298,7 +263,6 @@ class Response implements ArrayAccess, Stringable
     {
         return $this->transferStats?->getHandlerStats() ?? [];
     }
-
     /**
      * Close the stream and any underlying resources.
      *
@@ -307,10 +271,8 @@ class Response implements ArrayAccess, Stringable
     public function close()
     {
         $this->response->getBody()->close();
-
         return $this;
     }
-
     /**
      * Get the underlying PSR response for the response.
      *
@@ -320,7 +282,6 @@ class Response implements ArrayAccess, Stringable
     {
         return $this->response;
     }
-
     /**
      * Create an exception if a server or client error occurred.
      *
@@ -329,10 +290,9 @@ class Response implements ArrayAccess, Stringable
     public function toException()
     {
         if ($this->failed()) {
-            return new RequestException($this, $this->truncateExceptionsAt);
+            return new \Illuminate\Http\Client\RequestException($this, $this->truncateExceptionsAt);
         }
     }
-
     /**
      * Throw an exception if a server or client error occurred.
      *
@@ -343,7 +303,6 @@ class Response implements ArrayAccess, Stringable
     public function throw()
     {
         $callback = func_get_args()[0] ?? null;
-
         if ($this->failed()) {
             throw tap($this->toException(), function ($exception) use ($callback) {
                 if ($callback && is_callable($callback)) {
@@ -351,10 +310,8 @@ class Response implements ArrayAccess, Stringable
                 }
             });
         }
-
         return $this;
     }
-
     /**
      * Throw an exception if a server or client error occurred and the given condition evaluates to true.
      *
@@ -367,7 +324,6 @@ class Response implements ArrayAccess, Stringable
     {
         return value($condition, $this) ? $this->throw(func_get_args()[1] ?? null) : $this;
     }
-
     /**
      * Throw an exception if a server or client error occurred and the given condition evaluates to false.
      *
@@ -378,9 +334,8 @@ class Response implements ArrayAccess, Stringable
      */
     public function throwUnless($condition)
     {
-        return $this->throwIf(! $condition);
+        return $this->throwIf(!$condition);
     }
-
     /**
      * Throw an exception if the response status code matches the given code.
      *
@@ -391,14 +346,11 @@ class Response implements ArrayAccess, Stringable
      */
     public function throwIfStatus($statusCode)
     {
-        if (is_callable($statusCode) &&
-            $statusCode($this->status(), $this)) {
+        if (is_callable($statusCode) && $statusCode($this->status(), $this)) {
             return $this->throw();
         }
-
         return $this->status() === $statusCode ? $this->throw() : $this;
     }
-
     /**
      * Throw an exception unless the response status code matches the given code.
      *
@@ -412,10 +364,8 @@ class Response implements ArrayAccess, Stringable
         if (is_callable($statusCode)) {
             return $statusCode($this->status(), $this) ? $this : $this->throw();
         }
-
         return $this->status() === $statusCode ? $this : $this->throw();
     }
-
     /**
      * Throw an exception if the response status code is a 4xx level code.
      *
@@ -427,7 +377,6 @@ class Response implements ArrayAccess, Stringable
     {
         return $this->clientError() ? $this->throw() : $this;
     }
-
     /**
      * Throw an exception if the response status code is a 5xx level code.
      *
@@ -439,7 +388,6 @@ class Response implements ArrayAccess, Stringable
     {
         return $this->serverError() ? $this->throw() : $this;
     }
-
     /**
      * Indicate that request exceptions should be truncated to the given length.
      *
@@ -449,10 +397,8 @@ class Response implements ArrayAccess, Stringable
     public function truncateExceptionsAt(int $length)
     {
         $this->truncateExceptionsAt = $length;
-
         return $this;
     }
-
     /**
      * Indicate that request exceptions should not be truncated.
      *
@@ -460,11 +406,9 @@ class Response implements ArrayAccess, Stringable
      */
     public function dontTruncateExceptions()
     {
-        $this->truncateExceptionsAt = false;
-
+        $this->truncateExceptionsAt = \false;
         return $this;
     }
-
     /**
      * Dump the content from the response.
      *
@@ -474,22 +418,17 @@ class Response implements ArrayAccess, Stringable
     public function dump($key = null)
     {
         $content = $this->body();
-
         $json = json_decode($content);
-
-        if (json_last_error() === JSON_ERROR_NONE) {
+        if (json_last_error() === \JSON_ERROR_NONE) {
             $content = $json;
         }
-
-        if (! is_null($key)) {
+        if (!is_null($key)) {
             dump(data_get($content, $key));
         } else {
             dump($content);
         }
-
         return $this;
     }
-
     /**
      * Dump the content from the response and end the script.
      *
@@ -499,10 +438,8 @@ class Response implements ArrayAccess, Stringable
     public function dd($key = null)
     {
         $this->dump($key);
-
         exit(1);
     }
-
     /**
      * Dump the headers from the response.
      *
@@ -511,10 +448,8 @@ class Response implements ArrayAccess, Stringable
     public function dumpHeaders()
     {
         dump($this->headers());
-
         return $this;
     }
-
     /**
      * Dump the headers from the response and end the script.
      *
@@ -523,10 +458,8 @@ class Response implements ArrayAccess, Stringable
     public function ddHeaders()
     {
         $this->dumpHeaders();
-
         exit(1);
     }
-
     /**
      * Determine if the given offset exists.
      *
@@ -537,7 +470,6 @@ class Response implements ArrayAccess, Stringable
     {
         return isset($this->json()[$offset]);
     }
-
     /**
      * Get the value for a given offset.
      *
@@ -548,7 +480,6 @@ class Response implements ArrayAccess, Stringable
     {
         return $this->json()[$offset];
     }
-
     /**
      * Set the value at the given offset.
      *
@@ -562,7 +493,6 @@ class Response implements ArrayAccess, Stringable
     {
         throw new LogicException('Response data may not be mutated using array access.');
     }
-
     /**
      * Unset the value at the given offset.
      *
@@ -575,7 +505,6 @@ class Response implements ArrayAccess, Stringable
     {
         throw new LogicException('Response data may not be mutated using array access.');
     }
-
     /**
      * Get the body of the response.
      *
@@ -585,7 +514,6 @@ class Response implements ArrayAccess, Stringable
     {
         return $this->body();
     }
-
     /**
      * Dynamically proxy other methods to the underlying response.
      *
@@ -595,11 +523,8 @@ class Response implements ArrayAccess, Stringable
      */
     public function __call($method, $parameters)
     {
-        return static::hasMacro($method)
-            ? $this->macroCall($method, $parameters)
-            : $this->response->{$method}(...$parameters);
+        return static::hasMacro($method) ? $this->macroCall($method, $parameters) : $this->response->{$method}(...$parameters);
     }
-
     /**
      * Flush the global state of the Response.
      */

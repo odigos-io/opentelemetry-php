@@ -1,12 +1,10 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\SDK\Common\Util;
 
 use function class_exists;
 use function getenv;
-
 final class ComposerHandler
 {
     public static function isRunning(): bool
@@ -19,9 +17,8 @@ final class ComposerHandler
          * composer test-psr3
          */
         if (getenv('COMPOSER_DEV_MODE')) {
-            return true;
+            return \true;
         }
-
-        return class_exists(\Composer\Console\Application::class, false);
+        return class_exists(\Composer\Console\Application::class, \false);
     }
 }

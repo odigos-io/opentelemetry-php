@@ -8,14 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-declare(strict_types=1);
-
-namespace League\Uri;
+declare (strict_types=1);
+namespace Odigos\League\Uri;
 
 use Psr\Http\Message\UriFactoryInterface;
 use Psr\Http\Message\UriInterface;
-
 final class HttpFactory implements UriFactoryInterface
 {
     public function createUri(string $uri = ''): UriInterface

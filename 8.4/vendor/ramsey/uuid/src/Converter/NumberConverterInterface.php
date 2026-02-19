@@ -9,10 +9,8 @@
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
  */
-
-declare(strict_types=1);
-
-namespace Ramsey\Uuid\Converter;
+declare (strict_types=1);
+namespace Odigos\Ramsey\Uuid\Converter;
 
 /**
  * A number converter converts UUIDs from hexadecimal characters into representations of integers and vice versa
@@ -34,7 +32,6 @@ interface NumberConverterInterface
      * @pure
      */
     public function fromHex(string $hex): string;
-
     /**
      * Converts a string integer representation into a hexadecimal string representation of the number
      *

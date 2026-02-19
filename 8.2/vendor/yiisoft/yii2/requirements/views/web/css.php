@@ -61,3 +61,4 @@ table td[class*=col-],table th[class*=col-]{position:static;float:none;display:t
     .table-bordered th,.table-bordered td{border:1px solid #ddd!important}
 }
 </style>
+

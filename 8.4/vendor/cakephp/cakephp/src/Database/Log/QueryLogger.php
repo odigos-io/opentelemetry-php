@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -19,7 +19,6 @@ namespace Cake\Database\Log;
 use Cake\Log\Engine\BaseLog;
 use Cake\Log\Log;
 use Stringable;
-
 /**
  * This class is a bridge used to write LoggedQuery objects into a real log.
  * by default this class use the built-in CakePHP Log class to accomplish this
@@ -37,25 +36,18 @@ class QueryLogger extends BaseLog
     {
         $this->_defaultConfig['scopes'] = ['queriesLog', 'cake.database.queries'];
         $this->_defaultConfig['connection'] = '';
-
         parent::__construct($config);
     }
-
     /**
      * @inheritDoc
      */
     public function log($level, string|Stringable $message, array $context = []): void
     {
-        $context += [
-            'scope' => $this->scopes() ?: ['queriesLog', 'cake.database.queries'],
-            'connection' => $this->getConfig('connection'),
-            'query' => null,
-        ];
-
-        if ($context['query'] instanceof LoggedQuery) {
+        $context += ['scope' => $this->scopes() ?: ['queriesLog', 'cake.database.queries'], 'connection' => $this->getConfig('connection'), 'query' => null];
+        if ($context['query'] instanceof \Cake\Database\Log\LoggedQuery) {
             $context = $context['query']->getContext() + $context;
             $message = 'connection={connection} role={role} duration={took} rows={numRows} ' . $message;
         }
-        Log::write('debug', (string)$message, $context);
+        Log::write('debug', (string) $message, $context);
     }
 }

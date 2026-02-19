@@ -5,7 +5,6 @@ namespace Illuminate\Database\Eloquent\Casts;
 use Illuminate\Contracts\Database\Eloquent\Castable;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use Illuminate\Support\Fluent;
-
 class AsFluent implements Castable
 {
     /**
@@ -20,12 +19,11 @@ class AsFluent implements Castable
         {
             public function get($model, $key, $value, $attributes)
             {
-                return isset($value) ? new Fluent(Json::decode($value)) : null;
+                return isset($value) ? new Fluent(\Illuminate\Database\Eloquent\Casts\Json::decode($value)) : null;
             }
-
             public function set($model, $key, $value, $attributes)
             {
-                return isset($value) ? [$key => Json::encode($value)] : null;
+                return isset($value) ? [$key => \Illuminate\Database\Eloquent\Casts\Json::encode($value)] : null;
             }
         };
     }

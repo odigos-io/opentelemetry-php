@@ -3,7 +3,6 @@
 namespace Illuminate\Contracts\Database\Eloquent;
 
 use Illuminate\Database\Eloquent\Model;
-
 interface CastsInboundAttributes
 {
     /**

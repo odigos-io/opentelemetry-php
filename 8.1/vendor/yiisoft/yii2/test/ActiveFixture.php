@@ -1,16 +1,15 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\test;
 
 use yii\base\InvalidConfigException;
 use yii\db\ActiveRecord;
 use yii\db\TableSchema;
-
 /**
  * ActiveFixture represents a fixture backed up by a [[modelClass|ActiveRecord class]] or a [[tableName|database table]].
  *
@@ -31,7 +30,7 @@ use yii\db\TableSchema;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class ActiveFixture extends BaseActiveFixture
+class ActiveFixture extends \yii\test\BaseActiveFixture
 {
     /**
      * @var string|null the name of the database table that this fixture is about. If this property is not set,
@@ -46,13 +45,10 @@ class ActiveFixture extends BaseActiveFixture
      * name of the table associated with this fixture. You can set this property to be false to prevent loading any data.
      */
     public $dataFile;
-
     /**
      * @var TableSchema the table schema for the table associated with this fixture
      */
     private $_table;
-
-
     /**
      * {@inheritdoc}
      */
@@ -68,7 +64,6 @@ class ActiveFixture extends BaseActiveFixture
             $this->db = $modelClass::getDb();
         }
     }
-
     /**
      * Loads the fixture.
      *
@@ -89,7 +84,6 @@ class ActiveFixture extends BaseActiveFixture
             $this->db->createCommand()->executeResetSequence($table->fullName);
         }
     }
-
     /**
      * Returns the fixture data.
      *
@@ -109,12 +103,10 @@ class ActiveFixture extends BaseActiveFixture
                 $class = new \ReflectionClass($this);
                 $dataFile = dirname($class->getFileName()) . '/data/' . $this->getTableSchema()->fullName . '.php';
             }
-
-            return $this->loadData($dataFile, false);
+            return $this->loadData($dataFile, \false);
         }
         return parent::getData();
     }
-
     /**
      * {@inheritdoc}
      */
@@ -123,7 +115,6 @@ class ActiveFixture extends BaseActiveFixture
         $this->resetTable();
         parent::unload();
     }
-
     /**
      * Removes all existing data from the specified table and resets sequence number to 1 (if any).
      * This method is called before populating fixture data into the table associated with this fixture.
@@ -136,7 +127,6 @@ class ActiveFixture extends BaseActiveFixture
             $this->db->createCommand()->executeResetSequence($table->fullName, 1);
         }
     }
-
     /**
      * @return TableSchema the schema information of the database table associated with this fixture.
      * @throws \yii\base\InvalidConfigException if the table does not exist
@@ -146,7 +136,6 @@ class ActiveFixture extends BaseActiveFixture
         if ($this->_table !== null) {
             return $this->_table;
         }
-
         $db = $this->db;
         $tableName = $this->tableName;
         if ($tableName === null) {
@@ -154,12 +143,10 @@ class ActiveFixture extends BaseActiveFixture
             $modelClass = $this->modelClass;
             $tableName = $modelClass::tableName();
         }
-
         $this->_table = $db->getSchema()->getTableSchema($tableName);
         if ($this->_table === null) {
             throw new InvalidConfigException("Table does not exist: {$tableName}");
         }
-
         return $this->_table;
     }
 }

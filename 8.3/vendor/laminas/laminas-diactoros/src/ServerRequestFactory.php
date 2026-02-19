@@ -1,18 +1,15 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Odigos\Laminas\Diactoros;
 
-namespace Laminas\Diactoros;
-
-use Laminas\Diactoros\ServerRequestFilter\FilterServerRequestInterface;
-use Laminas\Diactoros\ServerRequestFilter\FilterUsingXForwardedHeaders;
+use Odigos\Laminas\Diactoros\ServerRequestFilter\FilterServerRequestInterface;
+use Odigos\Laminas\Diactoros\ServerRequestFilter\FilterUsingXForwardedHeaders;
 use Override;
 use Psr\Http\Message\ServerRequestFactoryInterface;
 use Psr\Http\Message\ServerRequestInterface;
-
 use function array_key_exists;
 use function is_callable;
-
 /**
  * Class for marshaling a request object from the current PHP environment.
  */
@@ -24,7 +21,6 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
      * @var callable|string
      */
     private static $apacheRequestHeaders = 'apache_request_headers';
-
     /**
      * Create a request from the supplied superglobal values.
      *
@@ -47,41 +43,17 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
      *     FilterUsingXForwardedHeaders is created, using the `trustReservedSubnets()`
      *     constructor.
      */
-    public static function fromGlobals(
-        ?array $server = null,
-        ?array $query = null,
-        ?array $body = null,
-        ?array $cookies = null,
-        ?array $files = null,
-        ?FilterServerRequestInterface $requestFilter = null
-    ): ServerRequestInterface {
+    public static function fromGlobals(?array $server = null, ?array $query = null, ?array $body = null, ?array $cookies = null, ?array $files = null, ?FilterServerRequestInterface $requestFilter = null): ServerRequestInterface
+    {
         $requestFilter ??= FilterUsingXForwardedHeaders::trustReservedSubnets();
-
-        $server  = normalizeServer(
-            $server ?? $_SERVER,
-            is_callable(self::$apacheRequestHeaders) ? self::$apacheRequestHeaders : null
-        );
-        $files   = normalizeUploadedFiles($files ?? $_FILES);
+        $server = normalizeServer($server ?? $_SERVER, is_callable(self::$apacheRequestHeaders) ? self::$apacheRequestHeaders : null);
+        $files = normalizeUploadedFiles($files ?? $_FILES);
         $headers = marshalHeadersFromSapi($server);
-
         if (null === $cookies && array_key_exists('cookie', $headers)) {
             $cookies = parseCookieHeader($headers['cookie']);
         }
-
-        return $requestFilter(new ServerRequest(
-            $server,
-            $files,
-            UriFactory::createFromSapi($server, $headers),
-            marshalMethodFromSapi($server),
-            'php://input',
-            $headers,
-            $cookies ?? $_COOKIE,
-            $query ?? $_GET,
-            $body ?? $_POST,
-            marshalProtocolVersionFromSapi($server)
-        ));
+        return $requestFilter(new ServerRequest($server, $files, UriFactory::createFromSapi($server, $headers), marshalMethodFromSapi($server), 'php://input', $headers, $cookies ?? $_COOKIE, $query ?? $_GET, $body ?? $_POST, marshalProtocolVersionFromSapi($server)));
     }
-
     /**
      * {@inheritDoc}
      */
@@ -89,13 +61,6 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
     public function createServerRequest(string $method, $uri, array $serverParams = []): ServerRequestInterface
     {
         $uploadedFiles = [];
-
-        return new ServerRequest(
-            $serverParams,
-            $uploadedFiles,
-            $uri,
-            $method,
-            'php://temp'
-        );
+        return new ServerRequest($serverParams, $uploadedFiles, $uri, $method, 'php://temp');
     }
 }

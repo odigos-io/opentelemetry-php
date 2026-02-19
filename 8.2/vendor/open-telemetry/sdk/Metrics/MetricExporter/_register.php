@@ -1,6 +1,7 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Odigos;
 
 \OpenTelemetry\SDK\Registry::registerMetricExporterFactory('memory', \OpenTelemetry\SDK\Metrics\MetricExporter\InMemoryExporterFactory::class);
 \OpenTelemetry\SDK\Registry::registerMetricExporterFactory('console', \OpenTelemetry\SDK\Metrics\MetricExporter\ConsoleMetricExporterFactory::class);

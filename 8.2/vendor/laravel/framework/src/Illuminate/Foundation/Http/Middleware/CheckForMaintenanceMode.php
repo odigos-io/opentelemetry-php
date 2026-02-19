@@ -2,7 +2,7 @@
 
 namespace Illuminate\Foundation\Http\Middleware;
 
-class CheckForMaintenanceMode extends PreventRequestsDuringMaintenance
+class CheckForMaintenanceMode extends \Illuminate\Foundation\Http\Middleware\PreventRequestsDuringMaintenance
 {
     //
 }

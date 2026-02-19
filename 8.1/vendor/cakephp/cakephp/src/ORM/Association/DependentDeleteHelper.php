@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -18,7 +18,6 @@ namespace Cake\ORM\Association;
 
 use Cake\Datasource\EntityInterface;
 use Cake\ORM\Association;
-
 /**
  * Helper class for cascading deletes in associations.
  *
@@ -39,32 +38,28 @@ class DependentDeleteHelper
     public function cascadeDelete(Association $association, EntityInterface $entity, array $options = []): bool
     {
         if (!$association->getDependent()) {
-            return true;
+            return \true;
         }
         $table = $association->getTarget();
         /** @var callable $callable */
         $callable = $association->aliasField(...);
-        $foreignKey = array_map($callable, (array)$association->getForeignKey());
-        $bindingKey = (array)$association->getBindingKey();
+        $foreignKey = array_map($callable, (array) $association->getForeignKey());
+        $bindingKey = (array) $association->getBindingKey();
         $bindingValue = $entity->extract($bindingKey);
-        if (in_array(null, $bindingValue, true)) {
-            return true;
+        if (in_array(null, $bindingValue, \true)) {
+            return \true;
         }
         $conditions = array_combine($foreignKey, $bindingValue);
-
         if ($association->getCascadeCallbacks()) {
             foreach ($association->find()->where($conditions)->all()->toList() as $related) {
                 $success = $table->delete($related, $options);
                 if (!$success) {
-                    return false;
+                    return \false;
                 }
             }
-
-            return true;
+            return \true;
         }
-
         $association->deleteAll($conditions);
-
-        return true;
+        return \true;
     }
 }

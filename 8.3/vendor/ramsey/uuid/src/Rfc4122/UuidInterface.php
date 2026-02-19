@@ -9,13 +9,10 @@
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
  */
+declare (strict_types=1);
+namespace Odigos\Ramsey\Uuid\Rfc4122;
 
-declare(strict_types=1);
-
-namespace Ramsey\Uuid\Rfc4122;
-
-use Ramsey\Uuid\UuidInterface as BaseUuidInterface;
-
+use Odigos\Ramsey\Uuid\UuidInterface as BaseUuidInterface;
 /**
  * A universally unique identifier (UUID), as defined in RFC 9562 (formerly RFC 4122)
  *

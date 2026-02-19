@@ -1,11 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Termwind\ValueObjects;
+declare (strict_types=1);
+namespace Odigos\Termwind\ValueObjects;
 
 use Generator;
-
 /**
  * @internal
  */
@@ -14,8 +12,9 @@ final class Node
     /**
      * A value object with helper methods for working with DOM node.
      */
-    public function __construct(private \DOMNode $node) {}
-
+    public function __construct(private \DOMNode $node)
+    {
+    }
     /**
      * Gets the value of the node.
      */
@@ -23,7 +22,6 @@ final class Node
     {
         return $this->node->nodeValue ?? '';
     }
-
     /**
      * Gets child nodes of the node.
      *
@@ -35,7 +33,6 @@ final class Node
             yield new self($node);
         }
     }
-
     /**
      * Checks if the node is a text.
      */
@@ -43,7 +40,6 @@ final class Node
     {
         return $this->node instanceof \DOMText;
     }
-
     /**
      * Checks if the node is a comment.
      */
@@ -51,7 +47,6 @@ final class Node
     {
         return $this->node instanceof \DOMComment;
     }
-
     /**
      * Compares the current node name with a given name.
      */
@@ -59,7 +54,6 @@ final class Node
     {
         return $this->getName() === $name;
     }
-
     /**
      * Returns the current node type name.
      */
@@ -67,7 +61,6 @@ final class Node
     {
         return $this->node->nodeName;
     }
-
     /**
      * Returns value of [class] attribute.
      */
@@ -75,7 +68,6 @@ final class Node
     {
         return $this->getAttribute('class');
     }
-
     /**
      * Returns value of attribute with a given name.
      */
@@ -84,10 +76,8 @@ final class Node
         if ($this->node instanceof \DOMElement) {
             return $this->node->getAttribute($name);
         }
-
         return '';
     }
-
     /**
      * Checks if the node is empty.
      */
@@ -95,59 +85,44 @@ final class Node
     {
         return $this->isText() && preg_replace('/\s+/', '', $this->getValue()) === '';
     }
-
     /**
      * Gets the previous sibling from the node.
      */
     public function getPreviousSibling(): ?static
     {
         $node = $this->node;
-
         while ($node = $node->previousSibling) {
             $node = new self($node);
-
             if ($node->isEmpty()) {
                 $node = $node->node;
-
                 continue;
             }
-
-            if (! $node->isComment()) {
+            if (!$node->isComment()) {
                 return $node;
             }
-
             $node = $node->node;
         }
-
         return is_null($node) ? null : new self($node);
     }
-
     /**
      * Gets the next sibling from the node.
      */
     public function getNextSibling(): ?static
     {
         $node = $this->node;
-
         while ($node = $node->nextSibling) {
             $node = new self($node);
-
             if ($node->isEmpty()) {
                 $node = $node->node;
-
                 continue;
             }
-
-            if (! $node->isComment()) {
+            if (!$node->isComment()) {
                 return $node;
             }
-
             $node = $node->node;
         }
-
         return is_null($node) ? null : new self($node);
     }
-
     /**
      * Checks if the node is the first child.
      */
@@ -155,7 +130,6 @@ final class Node
     {
         return is_null($this->getPreviousSibling());
     }
-
     /**
      * Gets the inner HTML representation of the node including child nodes.
      */
@@ -167,10 +141,8 @@ final class Node
                 $html .= $child->ownerDocument->saveXML($child);
             }
         }
-
         return html_entity_decode($html);
     }
-
     /**
      * Converts the node to a string.
      */
@@ -179,25 +151,19 @@ final class Node
         if ($this->isComment()) {
             return '';
         }
-
         if ($this->getValue() === ' ') {
             return ' ';
         }
-
         if ($this->isEmpty()) {
             return '';
         }
-
         $text = preg_replace('/\s+/', ' ', $this->getValue()) ?? '';
-
         if (is_null($this->getPreviousSibling())) {
             $text = ltrim($text);
         }
-
         if (is_null($this->getNextSibling())) {
             $text = rtrim($text);
         }
-
         return $text;
     }
 }

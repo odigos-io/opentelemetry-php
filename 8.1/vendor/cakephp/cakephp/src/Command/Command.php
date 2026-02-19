@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -21,7 +21,6 @@ use Cake\Console\BaseCommand;
 use Cake\Console\ConsoleIo;
 use Cake\Log\LogTrait;
 use Cake\ORM\Locator\LocatorAwareTrait;
-
 /**
  * Base class for commands using the full stack
  * CakePHP Framework.
@@ -33,7 +32,6 @@ class Command extends BaseCommand
 {
     use LocatorAwareTrait;
     use LogTrait;
-
     /**
      * Implement this method with your command's logic.
      *

@@ -4,7 +4,6 @@ namespace Illuminate\View\Engines;
 
 use Illuminate\Contracts\View\Engine;
 use Illuminate\Filesystem\Filesystem;
-
 class FileEngine implements Engine
 {
     /**
@@ -13,7 +12,6 @@ class FileEngine implements Engine
      * @var \Illuminate\Filesystem\Filesystem
      */
     protected $files;
-
     /**
      * Create a new file engine instance.
      *
@@ -24,7 +22,6 @@ class FileEngine implements Engine
     {
         $this->files = $files;
     }
-
     /**
      * Get the evaluated contents of the view.
      *

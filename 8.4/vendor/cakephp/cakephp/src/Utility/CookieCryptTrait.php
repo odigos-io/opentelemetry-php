@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -17,7 +17,6 @@ declare(strict_types=1);
 namespace Cake\Utility;
 
 use InvalidArgumentException;
-
 /**
  * Cookie Crypt Trait.
  *
@@ -33,14 +32,12 @@ trait CookieCryptTrait
      * @var array<string>
      */
     protected array $_validCiphers = ['aes'];
-
     /**
      * Returns the encryption key to be used.
      *
      * @return string
      */
     abstract protected function _getCookieEncryptionKey(): string;
-
     /**
      * Encrypts $value using public $type method in Security class
      *
@@ -55,7 +52,7 @@ trait CookieCryptTrait
         if (is_array($value)) {
             $value = $this->_implode($value);
         }
-        if ($encrypt === false) {
+        if ($encrypt === \false) {
             return $value;
         }
         $this->_checkCipher($encrypt);
@@ -63,12 +60,10 @@ trait CookieCryptTrait
         $cipher = '';
         $key ??= $this->_getCookieEncryptionKey();
         if ($encrypt === 'aes') {
-            $cipher = Security::encrypt($value, $key);
+            $cipher = \Cake\Utility\Security::encrypt($value, $key);
         }
-
         return $prefix . base64_encode($cipher);
     }
-
     /**
      * Helper method for validating encryption cipher names.
      *
@@ -78,15 +73,11 @@ trait CookieCryptTrait
      */
     protected function _checkCipher(string $encrypt): void
     {
-        if (!in_array($encrypt, $this->_validCiphers, true)) {
-            $msg = sprintf(
-                'Invalid encryption cipher. Must be one of %s or false.',
-                implode(', ', $this->_validCiphers),
-            );
+        if (!in_array($encrypt, $this->_validCiphers, \true)) {
+            $msg = sprintf('Invalid encryption cipher. Must be one of %s or false.', implode(', ', $this->_validCiphers));
             throw new InvalidArgumentException($msg);
         }
     }
-
     /**
      * Decrypts $value using public $type method in Security class
      *
@@ -100,15 +91,12 @@ trait CookieCryptTrait
         if (is_string($values)) {
             return $this->_decode($values, $mode, $key);
         }
-
         $decrypted = [];
         foreach ($values as $name => $value) {
             $decrypted[$name] = $this->_decode($value, $mode, $key);
         }
-
         return $decrypted;
     }
-
     /**
      * Decodes and decrypts a single value.
      *
@@ -125,29 +113,22 @@ trait CookieCryptTrait
         $this->_checkCipher($encrypt);
         $prefix = 'Q2FrZQ==.';
         $prefixLength = strlen($prefix);
-
         if (strncmp($value, $prefix, $prefixLength) !== 0) {
             return '';
         }
-
-        $value = base64_decode(substr($value, $prefixLength), true);
-
-        if ($value === false || $value === '') {
+        $value = base64_decode(substr($value, $prefixLength), \true);
+        if ($value === \false || $value === '') {
             return '';
         }
-
         $key ??= $this->_getCookieEncryptionKey();
         if ($encrypt === 'aes') {
-            $value = Security::decrypt($value, $key);
+            $value = \Cake\Utility\Security::decrypt($value, $key);
         }
-
         if ($value === null) {
             return '';
         }
-
         return $this->_explode($value);
     }
-
     /**
      * Implode method to keep keys are multidimensional arrays
      *
@@ -156,9 +137,8 @@ trait CookieCryptTrait
      */
     protected function _implode(array $array): string
     {
-        return json_encode($array, JSON_THROW_ON_ERROR);
+        return json_encode($array, \JSON_THROW_ON_ERROR);
     }
-
     /**
      * Explode method to return array from string set in CookieComponent::_implode()
      * Maintains reading backwards compatibility with 1.x CookieComponent::_implode().
@@ -170,7 +150,7 @@ trait CookieCryptTrait
     {
         $first = substr($string, 0, 1);
         if ($first === '{' || $first === '[') {
-            return json_decode($string, true) ?? $string;
+            return json_decode($string, \true) ?? $string;
         }
         $array = [];
         foreach (explode(',', $string) as $pair) {
@@ -180,7 +160,6 @@ trait CookieCryptTrait
             }
             $array[$key[0]] = $key[1];
         }
-
         return $array;
     }
 }

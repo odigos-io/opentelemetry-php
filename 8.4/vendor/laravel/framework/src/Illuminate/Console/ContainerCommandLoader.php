@@ -6,7 +6,6 @@ use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\CommandLoader\CommandLoaderInterface;
 use Symfony\Component\Console\Exception\CommandNotFoundException;
-
 class ContainerCommandLoader implements CommandLoaderInterface
 {
     /**
@@ -15,14 +14,12 @@ class ContainerCommandLoader implements CommandLoaderInterface
      * @var \Psr\Container\ContainerInterface
      */
     protected $container;
-
     /**
      * A map of command names to classes.
      *
      * @var array
      */
     protected $commandMap;
-
     /**
      * Create a new command loader instance.
      *
@@ -34,7 +31,6 @@ class ContainerCommandLoader implements CommandLoaderInterface
         $this->container = $container;
         $this->commandMap = $commandMap;
     }
-
     /**
      * Resolve a command from the container.
      *
@@ -45,13 +41,11 @@ class ContainerCommandLoader implements CommandLoaderInterface
      */
     public function get(string $name): Command
     {
-        if (! $this->has($name)) {
+        if (!$this->has($name)) {
             throw new CommandNotFoundException(sprintf('Command "%s" does not exist.', $name));
         }
-
         return $this->container->get($this->commandMap[$name]);
     }
-
     /**
      * Determines if a command exists.
      *
@@ -62,7 +56,6 @@ class ContainerCommandLoader implements CommandLoaderInterface
     {
         return $name && isset($this->commandMap[$name]);
     }
-
     /**
      * Get the command names.
      *

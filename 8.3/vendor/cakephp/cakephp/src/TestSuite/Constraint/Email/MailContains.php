@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -21,7 +21,7 @@ namespace Cake\TestSuite\Constraint\Email;
  *
  * @internal
  */
-class MailContains extends MailConstraintBase
+class MailContains extends \Cake\TestSuite\Constraint\Email\MailConstraintBase
 {
     /**
      * Mail type to check contents of
@@ -29,7 +29,6 @@ class MailContains extends MailConstraintBase
      * @var string|null
      */
     protected ?string $type = null;
-
     /**
      * Checks constraint
      *
@@ -42,16 +41,13 @@ class MailContains extends MailConstraintBase
         $messages = $this->getMessages();
         foreach ($messages as $message) {
             $method = $this->getTypeMethod();
-            $message = $message->$method();
-
+            $message = $message->{$method}();
             if (preg_match("/{$other}/", $message) > 0) {
-                return true;
+                return \true;
             }
         }
-
-        return false;
+        return \false;
     }
-
     /**
      * @return string
      */
@@ -59,7 +55,6 @@ class MailContains extends MailConstraintBase
     {
         return 'getBody' . ($this->type ? ucfirst($this->type) : 'String');
     }
-
     /**
      * Returns the type-dependent strings of all messages
      * respects $this->at
@@ -72,16 +67,14 @@ class MailContains extends MailConstraintBase
         $messages = $this->getMessages();
         foreach ($messages as $message) {
             $method = $this->getTypeMethod();
-            $messageMembers[] = $message->$method();
+            $messageMembers[] = $message->{$method}();
         }
         if ($this->at && isset($messageMembers[$this->at - 1])) {
             $messageMembers = [$messageMembers[$this->at - 1]];
         }
-        $result = implode(PHP_EOL, $messageMembers);
-
-        return PHP_EOL . 'was: ' . mb_substr($result, 0, 1000);
+        $result = implode(\PHP_EOL, $messageMembers);
+        return \PHP_EOL . 'was: ' . mb_substr($result, 0, 1000);
     }
-
     /**
      * Assertion message string
      *
@@ -92,7 +85,6 @@ class MailContains extends MailConstraintBase
         if ($this->at) {
             return sprintf('is in email #%d', $this->at) . $this->getAssertedMessages();
         }
-
         return 'is in an email' . $this->getAssertedMessages();
     }
 }

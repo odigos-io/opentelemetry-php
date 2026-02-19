@@ -19,7 +19,6 @@ class LuaScripts
 return redis.call('llen', KEYS[1]) + redis.call('zcard', KEYS[2]) + redis.call('zcard', KEYS[3])
 LUA;
     }
-
     /**
      * Get the Lua script for pushing jobs onto the queue.
      *
@@ -38,7 +37,6 @@ redis.call('rpush', KEYS[1], ARGV[1])
 redis.call('rpush', KEYS[2], 1)
 LUA;
     }
-
     /**
      * Get the Lua script for popping the next job off of the queue.
      *
@@ -68,7 +66,6 @@ end
 return {job, reserved}
 LUA;
     }
-
     /**
      * Get the Lua script for releasing reserved jobs.
      *
@@ -91,7 +88,6 @@ redis.call('zadd', KEYS[1], ARGV[2], ARGV[1])
 return true
 LUA;
     }
-
     /**
      * Get the Lua script to migrate expired jobs back onto the queue.
      *
@@ -126,7 +122,6 @@ end
 return val
 LUA;
     }
-
     /**
      * Get the Lua script for removing all jobs from the queue.
      *

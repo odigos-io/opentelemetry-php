@@ -5,7 +5,6 @@ namespace Illuminate\Http\Middleware;
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Vite;
-
 class AddLinkHeadersForPreloadedAssets
 {
     /**
@@ -16,9 +15,8 @@ class AddLinkHeadersForPreloadedAssets
      */
     public static function using($limit)
     {
-        return static::class.':'.$limit;
+        return static::class . ':' . $limit;
     }
-
     /**
      * Handle the incoming request.
      *
@@ -31,10 +29,7 @@ class AddLinkHeadersForPreloadedAssets
     {
         return tap($next($request), function ($response) use ($limit) {
             if ($response instanceof Response && Vite::preloadedAssets() !== []) {
-                $response->header('Link', (new Collection(Vite::preloadedAssets()))
-                    ->when($limit, fn ($assets, $limit) => $assets->take($limit))
-                    ->map(fn ($attributes, $url) => "<{$url}>; ".implode('; ', $attributes))
-                    ->join(', '), false);
+                $response->header('Link', (new Collection(Vite::preloadedAssets()))->when($limit, fn($assets, $limit) => $assets->take($limit))->map(fn($attributes, $url) => "<{$url}>; " . implode('; ', $attributes))->join(', '), \false);
             }
         });
     }

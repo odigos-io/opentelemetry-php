@@ -1,9 +1,7 @@
 <?php
 
 // DO NOT EDIT, this is an Auto-generated file from script/semantic-conventions
-
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\SemConv\Metrics;
 
 /**
@@ -19,7 +17,6 @@ interface HttpMetrics
      * @stable
      */
     public const HTTP_CLIENT_REQUEST_DURATION = 'http.client.request.duration';
-
     /**
      * Duration of HTTP server requests.
      *
@@ -28,5 +25,4 @@ interface HttpMetrics
      * @stable
      */
     public const HTTP_SERVER_REQUEST_DURATION = 'http.server.request.duration';
-
 }

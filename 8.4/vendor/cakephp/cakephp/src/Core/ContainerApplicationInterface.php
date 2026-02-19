@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -31,8 +31,7 @@ interface ContainerApplicationInterface
      * @param \Cake\Core\ContainerInterface $container The container to add services to
      * @return void
      */
-    public function services(ContainerInterface $container): void;
-
+    public function services(\Cake\Core\ContainerInterface $container): void;
     /**
      * Create a new container and register services.
      *
@@ -41,5 +40,5 @@ interface ContainerApplicationInterface
      *
      * @return \Cake\Core\ContainerInterface A populated container
      */
-    public function getContainer(): ContainerInterface;
+    public function getContainer(): \Cake\Core\ContainerInterface;
 }

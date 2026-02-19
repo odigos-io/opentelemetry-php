@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\Contrib\Otlp;
 
 use function is_array;
@@ -9,11 +8,10 @@ use function is_bool;
 use function is_float;
 use function is_int;
 use function is_string;
-use Opentelemetry\Proto\Common\V1\AnyValue;
-use Opentelemetry\Proto\Common\V1\ArrayValue;
-use Opentelemetry\Proto\Common\V1\KeyValue;
-use Opentelemetry\Proto\Common\V1\KeyValueList;
-
+use Odigos\Opentelemetry\Proto\Common\V1\AnyValue;
+use Odigos\Opentelemetry\Proto\Common\V1\ArrayValue;
+use Odigos\Opentelemetry\Proto\Common\V1\KeyValue;
+use Odigos\Opentelemetry\Proto\Common\V1\KeyValueList;
 final class AttributesConverter
 {
     public static function convertAnyValue($value): AnyValue
@@ -52,17 +50,12 @@ final class AttributesConverter
                 $result->setBytesValue($value);
             }
         }
-
         return $result;
     }
-
     private static function isUtf8(string $value): bool
     {
-        return \extension_loaded('mbstring')
-            ? \mb_check_encoding($value, 'UTF-8')
-            : (bool) \preg_match('//u', $value);
+        return \extension_loaded('mbstring') ? \mb_check_encoding($value, 'UTF-8') : (bool) \preg_match('//u', $value);
     }
-
     /**
      * Test whether an array is simple (non-KeyValue)
      */

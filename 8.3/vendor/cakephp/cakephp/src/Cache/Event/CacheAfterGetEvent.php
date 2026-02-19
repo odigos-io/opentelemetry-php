@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -19,7 +19,6 @@ namespace Cake\Cache\Event;
 use Cake\Cache\CacheEngine;
 use Cake\Cache\Exception\InvalidArgumentException;
 use Cake\Event\Event;
-
 /**
  * Class Cache AfterGet Event
  *
@@ -28,11 +27,8 @@ use Cake\Event\Event;
 class CacheAfterGetEvent extends Event
 {
     public const NAME = 'Cache.afterGet';
-
     protected string $key;
-
     protected mixed $value = null;
-
     /**
      * Constructor
      *
@@ -54,10 +50,8 @@ class CacheAfterGetEvent extends Event
             $this->result = $data['success'];
             unset($data['success']);
         }
-
         parent::__construct($name, $subject, $data);
     }
-
     /**
      * The result value of the event listeners
      *
@@ -67,7 +61,6 @@ class CacheAfterGetEvent extends Event
     {
         return $this->result;
     }
-
     /**
      * Listeners can attach a result value to the event.
      *
@@ -77,14 +70,10 @@ class CacheAfterGetEvent extends Event
     public function setResult(mixed $value = null)
     {
         if ($value !== null && !is_bool($value)) {
-            throw new InvalidArgumentException(
-                'The result for CacheEngine events must be a `bool`.',
-            );
+            throw new InvalidArgumentException('The result for CacheEngine events must be a `bool`.');
         }
-
         return parent::setResult($value);
     }
-
     /**
      * @return string
      */
@@ -92,7 +81,6 @@ class CacheAfterGetEvent extends Event
     {
         return $this->key;
     }
-
     /**
      * @return mixed
      */

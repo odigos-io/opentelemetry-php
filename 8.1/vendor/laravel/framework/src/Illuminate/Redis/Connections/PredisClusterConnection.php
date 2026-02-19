@@ -2,10 +2,9 @@
 
 namespace Illuminate\Redis\Connections;
 
-use Predis\Command\Redis\FLUSHDB;
-use Predis\Command\ServerFlushDatabase;
-
-class PredisClusterConnection extends PredisConnection
+use Odigos\Predis\Command\Redis\FLUSHDB;
+use Odigos\Predis\Command\ServerFlushDatabase;
+class PredisClusterConnection extends \Illuminate\Redis\Connections\PredisConnection
 {
     /**
      * Flush the selected Redis database on all cluster nodes.
@@ -14,12 +13,9 @@ class PredisClusterConnection extends PredisConnection
      */
     public function flushdb()
     {
-        $command = class_exists(ServerFlushDatabase::class)
-            ? ServerFlushDatabase::class
-            : FLUSHDB::class;
-
+        $command = class_exists(ServerFlushDatabase::class) ? ServerFlushDatabase::class : FLUSHDB::class;
         foreach ($this->client as $node) {
-            $node->executeCommand(tap(new $command)->setArguments(func_get_args()));
+            $node->executeCommand(tap(new $command())->setArguments(func_get_args()));
         }
     }
 }

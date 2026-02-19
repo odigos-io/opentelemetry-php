@@ -1,15 +1,14 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\validators;
 
-use Yii;
+use Odigos\Yii;
 use yii\helpers\Json;
-
 /**
  * StringValidator validates that the attribute value is of certain length.
  *
@@ -18,7 +17,7 @@ use yii\helpers\Json;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class StringValidator extends Validator
+class StringValidator extends \yii\validators\Validator
 {
     /**
      * @var int|array|null specifies the length limit of the value to be validated.
@@ -70,9 +69,7 @@ class StringValidator extends Validator
      * If false any scalar value will be treated as it's string equivalent.
      * @since 2.0.33
      */
-    public $strict = true;
-
-
+    public $strict = \true;
     /**
      * {@inheritdoc}
      */
@@ -104,24 +101,20 @@ class StringValidator extends Validator
             $this->notEqual = Yii::t('yii', '{attribute} should contain {length, number} {length, plural, one{character} other{characters}}.');
         }
     }
-
     /**
      * {@inheritdoc}
      */
     public function validateAttribute($model, $attribute)
     {
-        $value = $model->$attribute;
+        $value = $model->{$attribute};
         if (!$this->strict && is_scalar($value) && !is_string($value)) {
-            $value = (string)$value;
+            $value = (string) $value;
         }
         if (!is_string($value)) {
             $this->addError($model, $attribute, $this->message);
-
             return;
         }
-
         $length = mb_strlen($value, $this->encoding);
-
         if ($this->min !== null && $length < $this->min) {
             $this->addError($model, $attribute, $this->tooShort, ['min' => $this->min]);
         }
@@ -132,22 +125,18 @@ class StringValidator extends Validator
             $this->addError($model, $attribute, $this->notEqual, ['length' => $this->length]);
         }
     }
-
     /**
      * {@inheritdoc}
      */
     protected function validateValue($value)
     {
         if (!$this->strict && is_scalar($value) && !is_string($value)) {
-            $value = (string)$value;
+            $value = (string) $value;
         }
-
         if (!is_string($value)) {
             return [$this->message, []];
         }
-
         $length = mb_strlen($value, $this->encoding);
-
         if ($this->min !== null && $length < $this->min) {
             return [$this->tooShort, ['min' => $this->min]];
         }
@@ -157,59 +146,39 @@ class StringValidator extends Validator
         if ($this->length !== null && $length !== $this->length) {
             return [$this->notEqual, ['length' => $this->length]];
         }
-
         return null;
     }
-
     /**
      * {@inheritdoc}
      */
     public function clientValidateAttribute($model, $attribute, $view)
     {
-        ValidationAsset::register($view);
+        \yii\validators\ValidationAsset::register($view);
         $options = $this->getClientOptions($model, $attribute);
-
         return 'yii.validation.string(value, messages, ' . Json::htmlEncode($options) . ');';
     }
-
     /**
      * {@inheritdoc}
      */
     public function getClientOptions($model, $attribute)
     {
         $label = $model->getAttributeLabel($attribute);
-
-        $options = [
-            'message' => $this->formatMessage($this->message, [
-                'attribute' => $label,
-            ]),
-        ];
-
+        $options = ['message' => $this->formatMessage($this->message, ['attribute' => $label])];
         if ($this->min !== null) {
             $options['min'] = $this->min;
-            $options['tooShort'] = $this->formatMessage($this->tooShort, [
-                'attribute' => $label,
-                'min' => $this->min,
-            ]);
+            $options['tooShort'] = $this->formatMessage($this->tooShort, ['attribute' => $label, 'min' => $this->min]);
         }
         if ($this->max !== null) {
             $options['max'] = $this->max;
-            $options['tooLong'] = $this->formatMessage($this->tooLong, [
-                'attribute' => $label,
-                'max' => $this->max,
-            ]);
+            $options['tooLong'] = $this->formatMessage($this->tooLong, ['attribute' => $label, 'max' => $this->max]);
         }
         if ($this->length !== null) {
             $options['is'] = $this->length;
-            $options['notEqual'] = $this->formatMessage($this->notEqual, [
-                'attribute' => $label,
-                'length' => $this->length,
-            ]);
+            $options['notEqual'] = $this->formatMessage($this->notEqual, ['attribute' => $label, 'length' => $this->length]);
         }
         if ($this->skipOnEmpty) {
             $options['skipOnEmpty'] = 1;
         }
-
         return $options;
     }
 }

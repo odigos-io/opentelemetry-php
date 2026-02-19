@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -18,13 +18,12 @@ namespace Cake\ORM\Rule;
 
 use Cake\ORM\Association;
 use Cake\ORM\Table;
-
 /**
  * ExistsIn rule with allowNullableNulls enabled by default.
  *
  * This rule accepts composite foreign keys where one or more nullable columns are null.
  */
-class ExistsInNullable extends ExistsIn
+class ExistsInNullable extends \Cake\ORM\Rule\ExistsIn
 {
     /**
      * Constructor.
@@ -36,7 +35,7 @@ class ExistsInNullable extends ExistsIn
      */
     public function __construct(array|string $fields, Table|Association|string $repository, array $options = [])
     {
-        $options += ['allowNullableNulls' => true];
+        $options += ['allowNullableNulls' => \true];
         parent::__construct($fields, $repository, $options);
     }
 }

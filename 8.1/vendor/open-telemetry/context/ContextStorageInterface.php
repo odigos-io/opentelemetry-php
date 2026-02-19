@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\Context;
 
 interface ContextStorageInterface
@@ -12,15 +11,13 @@ interface ContextStorageInterface
      * @return ContextStorageScopeInterface|null current scope, or null if no
      *         scope was attached in the current execution unit
      */
-    public function scope(): ?ContextStorageScopeInterface;
-
+    public function scope(): ?\OpenTelemetry\Context\ContextStorageScopeInterface;
     /**
      * Returns the current context.
      *
      * @return ContextInterface current context
      */
-    public function current(): ContextInterface;
-
+    public function current(): \OpenTelemetry\Context\ContextInterface;
     /**
      * Attaches the context as active context.
      *
@@ -28,5 +25,5 @@ interface ContextStorageInterface
      * @return ContextStorageScopeInterface scope to detach the context and
      *         restore the previous context
      */
-    public function attach(ContextInterface $context): ContextStorageScopeInterface;
+    public function attach(\OpenTelemetry\Context\ContextInterface $context): \OpenTelemetry\Context\ContextStorageScopeInterface;
 }

@@ -10,14 +10,12 @@ class JobTimedOut
      * @var string
      */
     public $connectionName;
-
     /**
      * The job instance.
      *
      * @var \Illuminate\Contracts\Queue\Job
      */
     public $job;
-
     /**
      * Create a new event instance.
      *

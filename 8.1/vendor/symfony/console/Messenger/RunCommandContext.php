@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\Console\Messenger;
 
 /**
@@ -16,10 +15,7 @@ namespace Symfony\Component\Console\Messenger;
  */
 final class RunCommandContext
 {
-    public function __construct(
-        public readonly RunCommandMessage $message,
-        public readonly int $exitCode,
-        public readonly string $output,
-    ) {
+    public function __construct(public readonly \Symfony\Component\Console\Messenger\RunCommandMessage $message, public readonly int $exitCode, public readonly string $output)
+    {
     }
 }

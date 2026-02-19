@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -27,11 +27,10 @@ use Cake\ORM\Query\QueryFactory;
 use Cake\ORM\Table;
 use Cake\Utility\Inflector;
 use function Cake\Core\pluginSplit;
-
 /**
  * Provides a default registry/factory for Table objects.
  */
-class TableLocator extends AbstractLocator implements LocatorInterface
+class TableLocator extends AbstractLocator implements \Cake\ORM\Locator\LocatorInterface
 {
     /**
      * Contains a list of locations where table classes should be looked for.
@@ -39,21 +38,18 @@ class TableLocator extends AbstractLocator implements LocatorInterface
      * @var array<string>
      */
     protected array $locations = [];
-
     /**
      * Configuration for aliases.
      *
      * @var array<string, array|null>
      */
     protected array $_config = [];
-
     /**
      * Instances that belong to the registry.
      *
      * @var array<string, \Cake\ORM\Table>
      */
     protected array $instances = [];
-
     /**
      * Contains a list of Table objects that were created out of the
      * built-in Table class. The list is indexed by table alias
@@ -61,7 +57,6 @@ class TableLocator extends AbstractLocator implements LocatorInterface
      * @var array<\Cake\ORM\Table>
      */
     protected array $_fallbacked = [];
-
     /**
      * Fallback class to use
      *
@@ -69,16 +64,13 @@ class TableLocator extends AbstractLocator implements LocatorInterface
      * @phpstan-var class-string<\Cake\ORM\Table>
      */
     protected string $fallbackClassName = Table::class;
-
     /**
      * Whether fallback class should be used if a table class could not be found.
      *
      * @var bool
      */
-    protected bool $allowFallbackClass = true;
-
+    protected bool $allowFallbackClass = \true;
     protected QueryFactory $queryFactory;
-
     /**
      * Constructor.
      *
@@ -88,18 +80,13 @@ class TableLocator extends AbstractLocator implements LocatorInterface
     public function __construct(?array $locations = null, ?QueryFactory $queryFactory = null)
     {
         if ($locations === null) {
-            $locations = [
-                'Model/Table',
-            ];
+            $locations = ['Model/Table'];
         }
-
         foreach ($locations as $location) {
             $this->addLocation($location);
         }
-
         $this->queryFactory = $queryFactory ?: new QueryFactory();
     }
-
     /**
      * Set if fallback class should be used.
      *
@@ -112,10 +99,8 @@ class TableLocator extends AbstractLocator implements LocatorInterface
     public function allowFallbackClass(bool $allow)
     {
         $this->allowFallbackClass = $allow;
-
         return $this;
     }
-
     /**
      * Set fallback class name.
      *
@@ -130,10 +115,8 @@ class TableLocator extends AbstractLocator implements LocatorInterface
     public function setFallbackClassName(string $className)
     {
         $this->fallbackClassName = $className;
-
         return $this;
     }
-
     /**
      * @inheritDoc
      */
@@ -141,22 +124,14 @@ class TableLocator extends AbstractLocator implements LocatorInterface
     {
         if (!is_string($alias)) {
             $this->_config = $alias;
-
             return $this;
         }
-
         if (isset($this->instances[$alias])) {
-            throw new DatabaseException(sprintf(
-                'You cannot configure `%s`, it has already been constructed.',
-                $alias,
-            ));
+            throw new DatabaseException(sprintf('You cannot configure `%s`, it has already been constructed.', $alias));
         }
-
         $this->_config[$alias] = $options;
-
         return $this;
     }
-
     /**
      * @inheritDoc
      */
@@ -165,10 +140,8 @@ class TableLocator extends AbstractLocator implements LocatorInterface
         if ($alias === null) {
             return $this->_config;
         }
-
         return $this->_config[$alias] ?? [];
     }
-
     /**
      * Get a table instance from the registry.
      *
@@ -210,7 +183,6 @@ class TableLocator extends AbstractLocator implements LocatorInterface
         /** @var \Cake\ORM\Table */
         return parent::get($alias, $options);
     }
-
     /**
      * @inheritDoc
      */
@@ -222,11 +194,9 @@ class TableLocator extends AbstractLocator implements LocatorInterface
         } elseif (!isset($options['alias'])) {
             $options['className'] = $alias;
         }
-
         if (isset($this->_config[$alias])) {
             $options += $this->_config[$alias];
         }
-
         $allowFallbackClass = $options['allowFallbackClass'] ?? $this->allowFallbackClass;
         $className = $this->_getClassName($alias, $options);
         if ($className) {
@@ -248,7 +218,6 @@ class TableLocator extends AbstractLocator implements LocatorInterface
             }
             throw new MissingTableClassException([$message]);
         }
-
         if (empty($options['connection'])) {
             if (!empty($options['connectionName'])) {
                 $connectionName = $options['connectionName'];
@@ -266,17 +235,13 @@ class TableLocator extends AbstractLocator implements LocatorInterface
         if (empty($options['queryFactory'])) {
             $options['queryFactory'] = $this->queryFactory;
         }
-
         $options['registryAlias'] = $alias;
         $instance = $this->_create($options);
-
         if ($options['className'] === $this->fallbackClassName) {
             $this->_fallbacked[$alias] = $instance;
         }
-
         return $instance;
     }
-
     /**
      * Gets the table class name.
      *
@@ -289,21 +254,17 @@ class TableLocator extends AbstractLocator implements LocatorInterface
         if (empty($options['className'])) {
             $options['className'] = $alias;
         }
-
         if (str_contains($options['className'], '\\') && class_exists($options['className'])) {
             return $options['className'];
         }
-
         foreach ($this->locations as $location) {
             $class = App::className($options['className'], $location, 'Table');
             if ($class !== null) {
                 return $class;
             }
         }
-
         return null;
     }
-
     /**
      * Wrapper for creating table instances
      *
@@ -314,10 +275,8 @@ class TableLocator extends AbstractLocator implements LocatorInterface
     {
         /** @var class-string<\Cake\ORM\Table> $class */
         $class = $options['className'];
-
         return new $class($options);
     }
-
     /**
      * Set a Table instance.
      *
@@ -329,18 +288,15 @@ class TableLocator extends AbstractLocator implements LocatorInterface
     {
         return $this->instances[$alias] = $repository;
     }
-
     /**
      * @inheritDoc
      */
     public function clear(): void
     {
         parent::clear();
-
         $this->_fallbacked = [];
         $this->_config = [];
     }
-
     /**
      * Returns the list of tables that were created by this registry that could
      * not be instantiated from a specific subclass. This method is useful for
@@ -353,17 +309,14 @@ class TableLocator extends AbstractLocator implements LocatorInterface
     {
         return $this->_fallbacked;
     }
-
     /**
      * @inheritDoc
      */
     public function remove(string $alias): void
     {
         parent::remove($alias);
-
         unset($this->_fallbacked[$alias]);
     }
-
     /**
      * Adds a location where tables should be looked for.
      *
@@ -375,7 +328,6 @@ class TableLocator extends AbstractLocator implements LocatorInterface
     {
         $location = str_replace('\\', '/', $location);
         $this->locations[] = trim($location, '/');
-
         return $this;
     }
 }

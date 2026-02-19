@@ -9,8 +9,7 @@ use Illuminate\Database\Schema\Grammars\SQLiteGrammar as SchemaGrammar;
 use Illuminate\Database\Schema\SQLiteBuilder;
 use Illuminate\Database\Schema\SqliteSchemaState;
 use Illuminate\Filesystem\Filesystem;
-
-class SQLiteConnection extends Connection
+class SQLiteConnection extends \Illuminate\Database\Connection
 {
     /**
      * {@inheritdoc}
@@ -19,7 +18,6 @@ class SQLiteConnection extends Connection
     {
         return 'SQLite';
     }
-
     /**
      * Run the statement to start a new transaction.
      *
@@ -27,17 +25,13 @@ class SQLiteConnection extends Connection
      */
     protected function executeBeginTransactionStatement()
     {
-        if (version_compare(PHP_VERSION, '8.4.0', '>=')) {
+        if (version_compare(\PHP_VERSION, '8.4.0', '>=')) {
             $mode = $this->getConfig('transaction_mode') ?? 'DEFERRED';
-
             $this->getPdo()->exec("BEGIN {$mode} TRANSACTION");
-
             return;
         }
-
         $this->getPdo()->beginTransaction();
     }
-
     /**
      * Escape a binary value for safe SQL embedding.
      *
@@ -47,10 +41,8 @@ class SQLiteConnection extends Connection
     protected function escapeBinary($value)
     {
         $hex = bin2hex($value);
-
         return "x'{$hex}'";
     }
-
     /**
      * Determine if the given database exception was caused by a unique constraint violation.
      *
@@ -61,7 +53,6 @@ class SQLiteConnection extends Connection
     {
         return (bool) preg_match('#(column(s)? .* (is|are) not unique|UNIQUE constraint failed: .*)#i', $exception->getMessage());
     }
-
     /**
      * Get the default query grammar instance.
      *
@@ -71,7 +62,6 @@ class SQLiteConnection extends Connection
     {
         return new QueryGrammar($this);
     }
-
     /**
      * Get a schema builder instance for the connection.
      *
@@ -82,10 +72,8 @@ class SQLiteConnection extends Connection
         if (is_null($this->schemaGrammar)) {
             $this->useDefaultSchemaGrammar();
         }
-
         return new SQLiteBuilder($this);
     }
-
     /**
      * Get the default schema grammar instance.
      *
@@ -95,7 +83,6 @@ class SQLiteConnection extends Connection
     {
         return new SchemaGrammar($this);
     }
-
     /**
      * Get the schema state for the connection.
      *
@@ -108,7 +95,6 @@ class SQLiteConnection extends Connection
     {
         return new SqliteSchemaState($this, $files, $processFactory);
     }
-
     /**
      * Get the default post processor instance.
      *
@@ -116,6 +102,6 @@ class SQLiteConnection extends Connection
      */
     protected function getDefaultPostProcessor()
     {
-        return new SQLiteProcessor;
+        return new SQLiteProcessor();
     }
 }

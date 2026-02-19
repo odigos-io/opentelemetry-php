@@ -1,10 +1,10 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\caching;
 
 /**
@@ -22,68 +22,60 @@ namespace yii\caching;
  * @author Carsten Brandt <mail@cebe.cc>
  * @since 2.0
  */
-class ArrayCache extends Cache
+class ArrayCache extends \yii\caching\Cache
 {
     private $_cache = [];
-
-
     /**
      * {@inheritdoc}
      */
     public function exists($key)
     {
         $key = $this->buildKey($key);
-        return isset($this->_cache[$key]) && ($this->_cache[$key][1] === 0 || $this->_cache[$key][1] > microtime(true));
+        return isset($this->_cache[$key]) && ($this->_cache[$key][1] === 0 || $this->_cache[$key][1] > microtime(\true));
     }
-
     /**
      * {@inheritdoc}
      */
     protected function getValue($key)
     {
-        if (isset($this->_cache[$key]) && ($this->_cache[$key][1] === 0 || $this->_cache[$key][1] > microtime(true))) {
+        if (isset($this->_cache[$key]) && ($this->_cache[$key][1] === 0 || $this->_cache[$key][1] > microtime(\true))) {
             return $this->_cache[$key][0];
         }
-
-        return false;
+        return \false;
     }
-
     /**
      * {@inheritdoc}
      */
     protected function setValue($key, $value, $duration)
     {
-        $this->_cache[$key] = [$value, $duration === 0 ? 0 : microtime(true) + $duration];
-        return true;
+        $this->_cache[$key] = [$value, $duration === 0 ? 0 : microtime(\true) + $duration];
+        return \true;
     }
-
     /**
      * {@inheritdoc}
      */
     protected function addValue($key, $value, $duration)
     {
-        if (isset($this->_cache[$key]) && ($this->_cache[$key][1] === 0 || $this->_cache[$key][1] > microtime(true))) {
-            return false;
+        if (isset($this->_cache[$key]) && ($this->_cache[$key][1] === 0 || $this->_cache[$key][1] > microtime(\true))) {
+            return \false;
         }
-        $this->_cache[$key] = [$value, $duration === 0 ? 0 : microtime(true) + $duration];
-        return true;
+        $this->_cache[$key] = [$value, $duration === 0 ? 0 : microtime(\true) + $duration];
+        return \true;
     }
-
     /**
      * {@inheritdoc}
      */
     protected function deleteValue($key)
     {
         unset($this->_cache[$key]);
-        return true;
+        return \true;
     }
-
     /**
      * {@inheritdoc}
      */
     protected function flushValues()
     {
         $this->_cache = [];
-        return true;
+        return \true;
     }
 }

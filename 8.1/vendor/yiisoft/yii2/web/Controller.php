@@ -1,20 +1,19 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\web;
 
-use Yii;
+use Odigos\Yii;
 use yii\base\Exception;
 use yii\base\InlineAction;
 use yii\helpers\Url;
 use yii\base\Action;
 use yii\base\Controller as BaseController;
 use yii\base\Module;
-
 /**
  * Controller is the base class of web controllers.
  *
@@ -36,13 +35,11 @@ class Controller extends BaseController
      * @var bool whether to enable CSRF validation for the actions in this controller.
      * CSRF validation is enabled only when both this property and [[\yii\web\Request::enableCsrfValidation]] are true.
      */
-    public $enableCsrfValidation = true;
+    public $enableCsrfValidation = \true;
     /**
      * @var array the parameters bound to the current action.
      */
     public $actionParams = [];
-
-
     /**
      * Renders a view in response to an AJAX request.
      *
@@ -59,10 +56,8 @@ class Controller extends BaseController
     {
         /** @var View */
         $viewComponent = $this->getView();
-
         return $viewComponent->renderAjax($view, $params, $this);
     }
-
     /**
      * Send data formatted as JSON.
      *
@@ -84,11 +79,10 @@ class Controller extends BaseController
      */
     public function asJson($data)
     {
-        $this->response->format = Response::FORMAT_JSON;
+        $this->response->format = \yii\web\Response::FORMAT_JSON;
         $this->response->data = $data;
         return $this->response;
     }
-
     /**
      * Send data formatted as XML.
      *
@@ -110,11 +104,10 @@ class Controller extends BaseController
      */
     public function asXml($data)
     {
-        $this->response->format = Response::FORMAT_XML;
+        $this->response->format = \yii\web\Response::FORMAT_XML;
         $this->response->data = $data;
         return $this->response;
     }
-
     /**
      * Binds the parameters to the action.
      * This method is invoked by [[Action]] when it begins to run with the given parameters.
@@ -142,7 +135,6 @@ class Controller extends BaseController
         } else {
             $method = new \ReflectionMethod($action, 'run');
         }
-
         $args = [];
         $missing = [];
         $actionParams = [];
@@ -150,7 +142,7 @@ class Controller extends BaseController
         foreach ($method->getParameters() as $param) {
             $name = $param->getName();
             if (array_key_exists($name, $params)) {
-                $isValid = true;
+                $isValid = \true;
                 $type = $param->getType();
                 if ($type instanceof \ReflectionNamedType) {
                     [$result, $isValid] = $this->filterSingleTypeActionParam($params[$name], $type);
@@ -159,26 +151,18 @@ class Controller extends BaseController
                     [$result, $isValid] = $this->filterUnionTypeActionParam($params[$name], $type);
                     $params[$name] = $result;
                 }
-
                 if (!$isValid) {
-                    throw new BadRequestHttpException(
-                        Yii::t('yii', 'Invalid data received for parameter "{param}".', ['param' => $name])
-                    );
+                    throw new \yii\web\BadRequestHttpException(Yii::t('yii', 'Invalid data received for parameter "{param}".', ['param' => $name]));
                 }
                 $args[] = $actionParams[$name] = $params[$name];
                 unset($params[$name]);
-            } elseif (
-                PHP_VERSION_ID >= 70100
-                && ($type = $param->getType()) !== null
-                && $type instanceof \ReflectionNamedType
-                && !$type->isBuiltin()
-            ) {
+            } elseif (\PHP_VERSION_ID >= 70100 && ($type = $param->getType()) !== null && $type instanceof \ReflectionNamedType && !$type->isBuiltin()) {
                 try {
                     $this->bindInjectedParams($type, $name, $args, $requestedParams);
-                } catch (HttpException $e) {
+                } catch (\yii\web\HttpException $e) {
                     throw $e;
                 } catch (Exception $e) {
-                    throw new ServerErrorHttpException($e->getMessage(), 0, $e);
+                    throw new \yii\web\ServerErrorHttpException($e->getMessage(), 0, $e);
                 }
             } elseif ($param->isDefaultValueAvailable()) {
                 $args[] = $actionParams[$name] = $param->getDefaultValue();
@@ -186,23 +170,16 @@ class Controller extends BaseController
                 $missing[] = $name;
             }
         }
-
         if (!empty($missing)) {
-            throw new BadRequestHttpException(
-                Yii::t('yii', 'Missing required parameters: {params}', ['params' => implode(', ', $missing)])
-            );
+            throw new \yii\web\BadRequestHttpException(Yii::t('yii', 'Missing required parameters: {params}', ['params' => implode(', ', $missing)]));
         }
-
         $this->actionParams = $actionParams;
-
         // We use a different array here, specifically one that doesn't contain service instances but descriptions instead.
         if (Yii::$app->requestedParams === null) {
             Yii::$app->requestedParams = array_merge($actionParams, $requestedParams);
         }
-
         return $args;
     }
-
     /**
      * The logic for [[bindActionParam]] to validate whether a given parameter matches the action's typing
      * if the function parameter has a single named type.
@@ -216,40 +193,32 @@ class Controller extends BaseController
     {
         $isArray = $type->getName() === 'array';
         if ($isArray) {
-            return [(array)$param, true];
+            return [(array) $param, \true];
         }
         $isMixed = $type->getName() === 'mixed';
         if ($isMixed) {
-            return [$param, true];
+            return [$param, \true];
         }
-
         if (is_array($param)) {
-            return [$param, false];
+            return [$param, \false];
         }
-
-        if (
-            PHP_VERSION_ID >= 70000
-            && method_exists($type, 'isBuiltin')
-            && $type->isBuiltin()
-            && ($param !== null || !$type->allowsNull())
-        ) {
-            $typeName = PHP_VERSION_ID >= 70100 ? $type->getName() : (string)$type;
+        if (\PHP_VERSION_ID >= 70000 && method_exists($type, 'isBuiltin') && $type->isBuiltin() && ($param !== null || !$type->allowsNull())) {
+            $typeName = \PHP_VERSION_ID >= 70100 ? $type->getName() : (string) $type;
             if ($param === '' && $type->allowsNull()) {
-                if ($typeName !== 'string') { // for old string behavior compatibility
-                    return [null, true];
+                if ($typeName !== 'string') {
+                    // for old string behavior compatibility
+                    return [null, \true];
                 }
-                return ['', true];
+                return ['', \true];
             }
-
             if ($typeName === 'string') {
-                return [$param, true];
+                return [$param, \true];
             }
             $filterResult = $this->filterParamByType($param, $typeName);
             return [$filterResult, $filterResult !== null];
         }
-        return [$param, true];
+        return [$param, \true];
     }
-
     /**
      * The logic for [[bindActionParam]] to validate whether a given parameter matches the action's typing
      * if the function parameter has a union type.
@@ -265,35 +234,27 @@ class Controller extends BaseController
         if ($param === '' && $type->allowsNull()) {
             // check if type can be string for old string behavior compatibility
             foreach ($types as $partialType) {
-                if (
-                    $partialType === null
-                    || !method_exists($partialType, 'isBuiltin')
-                    || !$partialType->isBuiltin()
-                ) {
+                if ($partialType === null || !method_exists($partialType, 'isBuiltin') || !$partialType->isBuiltin()) {
                     continue;
                 }
-                $typeName = PHP_VERSION_ID >= 70100 ? $partialType->getName() : (string)$partialType;
+                $typeName = \PHP_VERSION_ID >= 70100 ? $partialType->getName() : (string) $partialType;
                 if ($typeName === 'string') {
-                    return ['', true];
+                    return ['', \true];
                 }
             }
-            return [null, true];
+            return [null, \true];
         }
         // if we found a built-in type but didn't return out, its validation failed
-        $foundBuiltinType = false;
+        $foundBuiltinType = \false;
         // we save returning out an array or string for later because other types should take precedence
-        $canBeArray = false;
-        $canBeString = false;
+        $canBeArray = \false;
+        $canBeString = \false;
         foreach ($types as $partialType) {
-            if (
-                $partialType === null
-                || !method_exists($partialType, 'isBuiltin')
-                || !$partialType->isBuiltin()
-            ) {
+            if ($partialType === null || !method_exists($partialType, 'isBuiltin') || !$partialType->isBuiltin()) {
                 continue;
             }
-            $foundBuiltinType = true;
-            $typeName = PHP_VERSION_ID >= 70100 ? $partialType->getName() : (string)$partialType;
+            $foundBuiltinType = \true;
+            $typeName = \PHP_VERSION_ID >= 70100 ? $partialType->getName() : (string) $partialType;
             $canBeArray |= $typeName === 'array';
             $canBeString |= $typeName === 'string';
             if (is_array($param)) {
@@ -302,21 +263,19 @@ class Controller extends BaseController
                 }
                 continue;
             }
-
             $filterResult = $this->filterParamByType($param, $typeName);
             if ($filterResult !== null) {
-                return [$filterResult, true];
+                return [$filterResult, \true];
             }
         }
         if (!is_array($param) && $canBeString) {
-            return [$param, true];
+            return [$param, \true];
         }
         if ($canBeArray) {
-            return [(array)$param, true];
+            return [(array) $param, \true];
         }
         return [$param, $canBeString || !$foundBuiltinType];
     }
-
     /**
      * Run the according filter_var logic for teh given type.
      * @param string $param The value to filter.
@@ -327,15 +286,14 @@ class Controller extends BaseController
     {
         switch ($typeName) {
             case 'int':
-                return filter_var($param, FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE);
+                return filter_var($param, \FILTER_VALIDATE_INT, \FILTER_NULL_ON_FAILURE);
             case 'float':
-                return filter_var($param, FILTER_VALIDATE_FLOAT, FILTER_NULL_ON_FAILURE);
+                return filter_var($param, \FILTER_VALIDATE_FLOAT, \FILTER_NULL_ON_FAILURE);
             case 'bool':
-                return filter_var($param, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+                return filter_var($param, \FILTER_VALIDATE_BOOLEAN, \FILTER_NULL_ON_FAILURE);
         }
         return null;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -343,15 +301,12 @@ class Controller extends BaseController
     {
         if (parent::beforeAction($action)) {
             if ($this->enableCsrfValidation && Yii::$app->getErrorHandler()->exception === null && !$this->request->validateCsrfToken()) {
-                throw new BadRequestHttpException(Yii::t('yii', 'Unable to verify your data submission.'));
+                throw new \yii\web\BadRequestHttpException(Yii::t('yii', 'Unable to verify your data submission.'));
             }
-
-            return true;
+            return \true;
         }
-
-        return false;
+        return \false;
     }
-
     /**
      * Redirects the browser to the specified URL.
      * This method is a shortcut to [[Response::redirect()]].
@@ -383,7 +338,6 @@ class Controller extends BaseController
         // calling Url::to() here because Response::redirect() modifies route before calling Url::to()
         return $this->response->redirect(Url::to($url), $statusCode);
     }
-
     /**
      * Redirects the browser to the home page.
      *
@@ -400,7 +354,6 @@ class Controller extends BaseController
     {
         return $this->response->redirect(Yii::$app->getHomeUrl());
     }
-
     /**
      * Redirects the browser to the last visited page.
      *
@@ -423,7 +376,6 @@ class Controller extends BaseController
     {
         return $this->response->redirect(Yii::$app->getUser()->getReturnUrl($defaultUrl));
     }
-
     /**
      * Refreshes the current page.
      * This method is a shortcut to [[Response::refresh()]].

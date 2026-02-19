@@ -9,10 +9,8 @@
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
  */
-
-declare(strict_types=1);
-
-namespace Ramsey\Collection;
+declare (strict_types=1);
+namespace Odigos\Ramsey\Collection;
 
 /**
  * A collection represents a group of objects.
@@ -87,7 +85,6 @@ class Collection extends AbstractCollection
     {
         parent::__construct($data);
     }
-
     public function getType(): string
     {
         return $this->collectionType;

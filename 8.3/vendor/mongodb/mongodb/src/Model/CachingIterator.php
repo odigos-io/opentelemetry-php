@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright 2017-present MongoDB, Inc.
  *
@@ -14,19 +15,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 namespace MongoDB\Model;
 
 use Countable;
 use Iterator;
 use IteratorIterator;
 use Traversable;
-
 use function count;
 use function current;
 use function next;
 use function reset;
-
 /**
  * Iterator for wrapping a Traversable and caching its results.
  *
@@ -43,17 +41,12 @@ final class CachingIterator implements Countable, Iterator
 {
     private const FIELD_KEY = 0;
     private const FIELD_VALUE = 1;
-
     /** @var list<array{0: TKey, 1: TValue}> */
     private array $items = [];
-
     /** @var Iterator<TKey, TValue> */
     private Iterator $iterator;
-
-    private bool $iteratorAdvanced = false;
-
-    private bool $iteratorExhausted = false;
-
+    private bool $iteratorAdvanced = \false;
+    private bool $iteratorExhausted = \false;
     /**
      * Initialize the iterator and stores the first item in the cache. This
      * effectively rewinds the Traversable and the wrapping IteratorIterator.
@@ -65,27 +58,21 @@ final class CachingIterator implements Countable, Iterator
     public function __construct(Traversable $traversable)
     {
         $this->iterator = $traversable instanceof Iterator ? $traversable : new IteratorIterator($traversable);
-
         $this->iterator->rewind();
         $this->storeCurrentItem();
     }
-
     /** @see https://php.net/countable.count */
     public function count(): int
     {
         $this->exhaustIterator();
-
         return count($this->items);
     }
-
     /** @see https://php.net/iterator.current */
     public function current(): mixed
     {
         $currentItem = current($this->items);
-
-        return $currentItem !== false ? $currentItem[self::FIELD_VALUE] : null;
+        return $currentItem !== \false ? $currentItem[self::FIELD_VALUE] : null;
     }
-
     /**
      * @see https://php.net/iterator.key
      * @psalm-return TKey|null
@@ -93,23 +80,18 @@ final class CachingIterator implements Countable, Iterator
     public function key(): mixed
     {
         $currentItem = current($this->items);
-
-        return $currentItem !== false ? $currentItem[self::FIELD_KEY] : null;
+        return $currentItem !== \false ? $currentItem[self::FIELD_KEY] : null;
     }
-
     /** @see https://php.net/iterator.next */
     public function next(): void
     {
-        if (! $this->iteratorExhausted) {
-            $this->iteratorAdvanced = true;
+        if (!$this->iteratorExhausted) {
+            $this->iteratorAdvanced = \true;
             $this->iterator->next();
-
             $this->storeCurrentItem();
         }
-
         next($this->items);
     }
-
     /** @see https://php.net/iterator.rewind */
     public function rewind(): void
     {
@@ -119,41 +101,32 @@ final class CachingIterator implements Countable, Iterator
         if ($this->iteratorAdvanced) {
             $this->exhaustIterator();
         }
-
         reset($this->items);
     }
-
     /** @see https://php.net/iterator.valid */
     public function valid(): bool
     {
         return $this->key() !== null;
     }
-
     /**
      * Ensures that the inner iterator is fully consumed and cached.
      */
     private function exhaustIterator(): void
     {
-        while (! $this->iteratorExhausted) {
+        while (!$this->iteratorExhausted) {
             $this->next();
         }
     }
-
     /**
      * Stores the current item in the cache.
      */
     private function storeCurrentItem(): void
     {
-        if (! $this->iterator->valid()) {
-            $this->iteratorExhausted = true;
-
+        if (!$this->iterator->valid()) {
+            $this->iteratorExhausted = \true;
             return;
         }
-
         // Storing a new item in the internal cache
-        $this->items[] = [
-            self::FIELD_KEY => $this->iterator->key(),
-            self::FIELD_VALUE => $this->iterator->current(),
-        ];
+        $this->items[] = [self::FIELD_KEY => $this->iterator->key(), self::FIELD_VALUE => $this->iterator->current()];
     }
 }

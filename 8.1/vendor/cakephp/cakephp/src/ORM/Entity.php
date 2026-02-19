@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -19,7 +19,6 @@ namespace Cake\ORM;
 use Cake\Datasource\EntityInterface;
 use Cake\Datasource\EntityTrait;
 use Cake\Datasource\InvalidPropertyInterface;
-
 /**
  * An entity represents a single result row from a repository. It exposes the
  * methods for retrieving and storing properties associated in this row.
@@ -27,7 +26,6 @@ use Cake\Datasource\InvalidPropertyInterface;
 class Entity implements EntityInterface, InvalidPropertyInterface
 {
     use EntityTrait;
-
     /**
      * Initializes the internal properties of this entity out of the
      * keys in an array. The following list of options can be used:
@@ -49,39 +47,22 @@ class Entity implements EntityInterface, InvalidPropertyInterface
      */
     public function __construct(array $properties = [], array $options = [])
     {
-        $options += [
-            'useSetters' => true,
-            'markClean' => false,
-            'markNew' => null,
-            'guard' => false,
-            'source' => null,
-        ];
-
+        $options += ['useSetters' => \true, 'markClean' => \false, 'markNew' => null, 'guard' => \false, 'source' => null];
         if ($options['source'] !== null) {
             $this->setSource($options['source']);
         }
-
         if ($options['markNew'] !== null) {
             $this->setNew($options['markNew']);
         }
-
         if ($properties) {
             //Remember the original field names here.
             $this->setOriginalField(array_keys($properties));
-
             if ($options['markClean'] && !$options['useSetters']) {
                 $this->_fields = $properties;
-
                 return;
             }
-
-            $this->patch($properties, [
-                'asOriginal' => true,
-                'setter' => $options['useSetters'],
-                'guard' => $options['guard'],
-            ]);
+            $this->patch($properties, ['asOriginal' => \true, 'setter' => $options['useSetters'], 'guard' => $options['guard']]);
         }
-
         if ($options['markClean']) {
             $this->clean();
         }

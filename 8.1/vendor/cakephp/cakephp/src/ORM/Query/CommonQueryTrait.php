@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -18,7 +18,6 @@ namespace Cake\ORM\Query;
 
 use Cake\Datasource\RepositoryInterface;
 use Cake\ORM\Table;
-
 /**
  * Trait with common methods used by all ORM query classes.
  */
@@ -30,7 +29,6 @@ trait CommonQueryTrait
      * @var \Cake\ORM\Table
      */
     protected Table $_repository;
-
     /**
      * Hints this object to associate the correct types when casting conditions
      * for the database. This is done by extracting the field types from the schema
@@ -51,10 +49,8 @@ trait CommonQueryTrait
             $fields[$f] = $fields[$alias . '.' . $f] = $fields[$alias . '__' . $f] = $type;
         }
         $this->getTypeMap()->addDefaults($fields);
-
         return $this;
     }
-
     /**
      * Set the default Table object that will be used by this query
      * and form the `FROM` clause.
@@ -64,16 +60,10 @@ trait CommonQueryTrait
      */
     public function setRepository(RepositoryInterface $repository)
     {
-        assert(
-            $repository instanceof Table,
-            '`$repository` must be an instance of `' . Table::class . '`.',
-        );
-
+        assert($repository instanceof Table, '`$repository` must be an instance of `' . Table::class . '`.');
         $this->_repository = $repository;
-
         return $this;
     }
-
     /**
      * Returns the default repository object that will be used by this query,
      * that is, the table that will appear in the "from" clause.

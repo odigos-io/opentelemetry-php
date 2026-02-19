@@ -1,16 +1,15 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\db;
 
-use Yii;
+use Odigos\Yii;
 use yii\base\InvalidConfigException;
 use yii\base\NotSupportedException;
-
 /**
  * Transaction represents a DB transaction.
  *
@@ -75,13 +74,10 @@ class Transaction extends \yii\base\BaseObject
      * @var Connection the database connection that this transaction is associated with.
      */
     public $db;
-
     /**
      * @var int the nesting level of the transaction. 0 means the outermost level.
      */
     private $_level = 0;
-
-
     /**
      * Returns a value indicating whether this transaction is active.
      * @return bool whether this transaction is active. Only an active transaction
@@ -91,7 +87,6 @@ class Transaction extends \yii\base\BaseObject
     {
         return $this->_level > 0 && $this->db && $this->db->isActive;
     }
-
     /**
      * Begins a transaction.
      * @param string|null $isolationLevel The [isolation level][] to use for this transaction.
@@ -121,20 +116,16 @@ class Transaction extends \yii\base\BaseObject
             throw new InvalidConfigException('Transaction::db must be set.');
         }
         $this->db->open();
-
         if ($this->_level === 0) {
             if ($isolationLevel !== null) {
                 $this->db->getSchema()->setTransactionIsolationLevel($isolationLevel);
             }
             Yii::debug('Begin transaction' . ($isolationLevel ? ' with isolation level ' . $isolationLevel : ''), __METHOD__);
-
-            $this->db->trigger(Connection::EVENT_BEGIN_TRANSACTION);
+            $this->db->trigger(\yii\db\Connection::EVENT_BEGIN_TRANSACTION);
             $this->db->pdo->beginTransaction();
             $this->_level = 1;
-
             return;
         }
-
         $schema = $this->db->getSchema();
         if ($schema->supportsSavepoint()) {
             Yii::debug('Set savepoint ' . $this->_level, __METHOD__);
@@ -148,7 +139,6 @@ class Transaction extends \yii\base\BaseObject
         }
         $this->_level++;
     }
-
     /**
      * Commits a transaction.
      * @throws Exception if the transaction is not active
@@ -156,9 +146,8 @@ class Transaction extends \yii\base\BaseObject
     public function commit()
     {
         if (!$this->getIsActive()) {
-            throw new Exception('Failed to commit transaction: transaction was inactive.');
+            throw new \yii\db\Exception('Failed to commit transaction: transaction was inactive.');
         }
-
         $this->_level--;
         if ($this->_level === 0) {
             Yii::debug('Commit transaction', __METHOD__);
@@ -166,10 +155,9 @@ class Transaction extends \yii\base\BaseObject
             if ($this->db->pdo->inTransaction()) {
                 $this->db->pdo->commit();
             }
-            $this->db->trigger(Connection::EVENT_COMMIT_TRANSACTION);
+            $this->db->trigger(\yii\db\Connection::EVENT_COMMIT_TRANSACTION);
             return;
         }
-
         $schema = $this->db->getSchema();
         if ($schema->supportsSavepoint()) {
             Yii::debug('Release savepoint ' . $this->_level, __METHOD__);
@@ -181,7 +169,6 @@ class Transaction extends \yii\base\BaseObject
             Yii::info('Transaction not committed: nested transaction not supported', __METHOD__);
         }
     }
-
     /**
      * Rolls back a transaction.
      */
@@ -192,7 +179,6 @@ class Transaction extends \yii\base\BaseObject
             // but the event handler to "commitTransaction" throw an exception
             return;
         }
-
         $this->_level--;
         if ($this->_level === 0) {
             Yii::debug('Roll back transaction', __METHOD__);
@@ -200,10 +186,9 @@ class Transaction extends \yii\base\BaseObject
             if ($this->db->pdo->inTransaction()) {
                 $this->db->pdo->rollBack();
             }
-            $this->db->trigger(Connection::EVENT_ROLLBACK_TRANSACTION);
+            $this->db->trigger(\yii\db\Connection::EVENT_ROLLBACK_TRANSACTION);
             return;
         }
-
         $schema = $this->db->getSchema();
         if ($schema->supportsSavepoint()) {
             Yii::debug('Roll back to savepoint ' . $this->_level, __METHOD__);
@@ -215,7 +200,6 @@ class Transaction extends \yii\base\BaseObject
             Yii::info('Transaction not rolled back: nested transaction not supported', __METHOD__);
         }
     }
-
     /**
      * Sets the transaction isolation level for this transaction.
      *
@@ -231,12 +215,11 @@ class Transaction extends \yii\base\BaseObject
     public function setIsolationLevel($level)
     {
         if (!$this->getIsActive()) {
-            throw new Exception('Failed to set isolation level: transaction was inactive.');
+            throw new \yii\db\Exception('Failed to set isolation level: transaction was inactive.');
         }
         Yii::debug('Setting transaction isolation level to ' . $level, __METHOD__);
         $this->db->getSchema()->setTransactionIsolationLevel($level);
     }
-
     /**
      * @return int The current nesting level of the transaction.
      * @since 2.0.8

@@ -1,5 +1,6 @@
-<?php declare(strict_types=1);
+<?php
 
+declare (strict_types=1);
 /*
  * This file is part of the Monolog package.
  *
@@ -8,17 +9,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Odigos\Monolog\Handler;
 
-namespace Monolog\Handler;
-
-use Aws\Sdk;
-use Aws\DynamoDb\DynamoDbClient;
-use Monolog\Formatter\FormatterInterface;
-use Aws\DynamoDb\Marshaler;
-use Monolog\Formatter\ScalarFormatter;
-use Monolog\Level;
-use Monolog\LogRecord;
-
+use Odigos\Aws\Sdk;
+use Odigos\Aws\DynamoDb\DynamoDbClient;
+use Odigos\Monolog\Formatter\FormatterInterface;
+use Odigos\Aws\DynamoDb\Marshaler;
+use Odigos\Monolog\Formatter\ScalarFormatter;
+use Odigos\Monolog\Level;
+use Odigos\Monolog\LogRecord;
 /**
  * Amazon DynamoDB handler (http://aws.amazon.com/dynamodb/)
  *
@@ -28,23 +27,16 @@ use Monolog\LogRecord;
 class DynamoDbHandler extends AbstractProcessingHandler
 {
     public const DATE_FORMAT = 'Y-m-d\TH:i:s.uO';
-
     protected DynamoDbClient $client;
-
     protected string $table;
-
     protected Marshaler $marshaler;
-
-    public function __construct(DynamoDbClient $client, string $table, int|string|Level $level = Level::Debug, bool $bubble = true)
+    public function __construct(DynamoDbClient $client, string $table, int|string|Level $level = Level::Debug, bool $bubble = \true)
     {
-        $this->marshaler = new Marshaler;
-
+        $this->marshaler = new Marshaler();
         $this->client = $client;
         $this->table = $table;
-
         parent::__construct($level, $bubble);
     }
-
     /**
      * @inheritDoc
      */
@@ -52,13 +44,8 @@ class DynamoDbHandler extends AbstractProcessingHandler
     {
         $filtered = $this->filterEmptyFields($record->formatted);
         $formatted = $this->marshaler->marshalItem($filtered);
-
-        $this->client->putItem([
-            'TableName' => $this->table,
-            'Item' => $formatted,
-        ]);
+        $this->client->putItem(['TableName' => $this->table, 'Item' => $formatted]);
     }
-
     /**
      * @param  mixed[] $record
      * @return mixed[]
@@ -69,7 +56,6 @@ class DynamoDbHandler extends AbstractProcessingHandler
             return [] !== $value;
         });
     }
-
     /**
      * @inheritDoc
      */

@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenAI\Responses\Conversations\Objects;
 
 use OpenAI\Contracts\ResponseContract;
@@ -15,7 +14,6 @@ use OpenAI\Responses\Responses\Input\InputMessageContentInputText as InputText;
 use OpenAI\Responses\Responses\Output\OutputMessageContentOutputText as OutputText;
 use OpenAI\Responses\Responses\Output\OutputMessageContentRefusal as Refusal;
 use OpenAI\Testing\Responses\Concerns\Fakeable;
-
 /**
  * @phpstan-import-type ContentInputTextType from InputText as InputTextType
  * @phpstan-import-type ContentInputImageType from InputImage as InputImageType
@@ -36,65 +34,38 @@ final class Message implements ResponseContract
      * @use ArrayAccessible<MessageType>
      */
     use ArrayAccessible;
-
     use Fakeable;
-
     /**
      * @param  array<int, InputText|InputImage|InputFile|OutputText|Refusal|ComputerScreenshot|SummaryText|Text>  $content
      * @param  'unknown'|'user'|'assistant'|'system'|'critic'|'discriminator'|'developer'|'tool'  $role
      * @param  'in_progress'|'completed'|'incomplete'  $status
      * @param  'message'  $type
      */
-    private function __construct(
-        public readonly array $content,
-        public readonly string $id,
-        public readonly string $role,
-        public readonly string $status,
-        public readonly string $type,
-    ) {}
-
+    private function __construct(public readonly array $content, public readonly string $id, public readonly string $role, public readonly string $status, public readonly string $type)
+    {
+    }
     /**
      * @param  MessageType  $attributes
      */
     public static function from(array $attributes): self
     {
-        $content = array_map(
-            fn (array $item): InputText|InputImage|InputFile|OutputText|Refusal|ComputerScreenshot|SummaryText|Text => match ($item['type']) {
-                'computer_screenshot' => ComputerScreenshot::from($item),
-                'input_file' => InputFile::from($item),
-                'input_image' => InputImage::from($item),
-                'input_text' => InputText::from($item),
-                'output_text' => OutputText::from($item),
-                'refusal' => Refusal::from($item),
-                'summary_text' => SummaryText::from($item),
-                'text' => Text::from($item),
-            },
-            $attributes['content'],
-        );
-
-        return new self(
-            content: $content,
-            id: $attributes['id'],
-            role: $attributes['role'],
-            status: $attributes['status'],
-            type: $attributes['type'],
-        );
+        $content = array_map(fn(array $item): InputText|InputImage|InputFile|OutputText|Refusal|ComputerScreenshot|SummaryText|Text => match ($item['type']) {
+            'computer_screenshot' => ComputerScreenshot::from($item),
+            'input_file' => InputFile::from($item),
+            'input_image' => InputImage::from($item),
+            'input_text' => InputText::from($item),
+            'output_text' => OutputText::from($item),
+            'refusal' => Refusal::from($item),
+            'summary_text' => SummaryText::from($item),
+            'text' => Text::from($item),
+        }, $attributes['content']);
+        return new self(content: $content, id: $attributes['id'], role: $attributes['role'], status: $attributes['status'], type: $attributes['type']);
     }
-
     /**
      * {@inheritDoc}
      */
     public function toArray(): array
     {
-        return [
-            'content' => array_map(
-                fn (InputText|InputImage|InputFile|OutputText|Refusal|ComputerScreenshot|SummaryText|Text $item): array => $item->toArray(),
-                $this->content,
-            ),
-            'id' => $this->id,
-            'role' => $this->role,
-            'status' => $this->status,
-            'type' => $this->type,
-        ];
+        return ['content' => array_map(fn(InputText|InputImage|InputFile|OutputText|Refusal|ComputerScreenshot|SummaryText|Text $item): array => $item->toArray(), $this->content), 'id' => $this->id, 'role' => $this->role, 'status' => $this->status, 'type' => $this->type];
     }
 }

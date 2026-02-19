@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\HttpKernel\CacheWarmer;
 
 /**
@@ -16,17 +15,15 @@ namespace Symfony\Component\HttpKernel\CacheWarmer;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-abstract class CacheWarmer implements CacheWarmerInterface
+abstract class CacheWarmer implements \Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface
 {
     protected function writeCacheFile(string $file, $content): void
     {
         $tmpFile = @tempnam(\dirname($file), basename($file));
-        if (false !== @file_put_contents($tmpFile, $content) && @rename($tmpFile, $file)) {
-            @chmod($file, 0o666 & ~umask());
-
+        if (\false !== @file_put_contents($tmpFile, $content) && @rename($tmpFile, $file)) {
+            @chmod($file, 0666 & ~umask());
             return;
         }
-
         throw new \RuntimeException(\sprintf('Failed to write cache file "%s".', $file));
     }
 }

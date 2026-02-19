@@ -1,5 +1,7 @@
 <?php
 
+namespace Odigos;
+
 /**
  * Core strategy composed of the big four strategies.
  */
@@ -13,5 +15,8 @@ class HTMLPurifier_Strategy_Core extends HTMLPurifier_Strategy_Composite
         $this->strategies[] = new HTMLPurifier_Strategy_ValidateAttributes();
     }
 }
-
+/**
+ * Core strategy composed of the big four strategies.
+ */
+\class_alias('Odigos\HTMLPurifier_Strategy_Core', 'HTMLPurifier_Strategy_Core', \false);
 // vim: et sw=4 sts=4

@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\CssSelector\Node;
 
 /**
@@ -21,29 +20,21 @@ namespace Symfony\Component\CssSelector\Node;
  *
  * @internal
  */
-class SpecificityAdjustmentNode extends AbstractNode
+class SpecificityAdjustmentNode extends \Symfony\Component\CssSelector\Node\AbstractNode
 {
     /**
      * @param array<NodeInterface> $arguments
      */
-    public function __construct(
-        public readonly NodeInterface $selector,
-        public readonly array $arguments = [],
-    ) {
+    public function __construct(public readonly \Symfony\Component\CssSelector\Node\NodeInterface $selector, public readonly array $arguments = [])
+    {
     }
-
-    public function getSpecificity(): Specificity
+    public function getSpecificity(): \Symfony\Component\CssSelector\Node\Specificity
     {
         return $this->selector->getSpecificity();
     }
-
     public function __toString(): string
     {
-        $selectorArguments = array_map(
-            fn ($n) => ltrim((string) $n, '*'),
-            $this->arguments,
-        );
-
+        $selectorArguments = array_map(fn($n) => ltrim((string) $n, '*'), $this->arguments);
         return \sprintf('%s[%s:where(%s)]', $this->getNodeName(), $this->selector, implode(', ', $selectorArguments));
     }
 }

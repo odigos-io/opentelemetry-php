@@ -12,10 +12,9 @@ class EnsureRelativePaths
      */
     public function __invoke($string)
     {
-        if (function_exists('app') && app()->has('path.base')) {
-            $string = str_replace(base_path().'/', '', $string);
+        if (function_exists('Odigos\app') && app()->has('path.base')) {
+            $string = str_replace(base_path() . '/', '', $string);
         }
-
         return $string;
     }
 }

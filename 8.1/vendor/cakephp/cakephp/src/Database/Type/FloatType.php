@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -20,13 +20,12 @@ use Cake\Database\Driver;
 use Cake\Database\Exception\DatabaseException;
 use Cake\I18n\Number;
 use PDO;
-
 /**
  * Float type converter.
  *
  * Use to convert float/decimal data between PHP and the database types.
  */
-class FloatType extends BaseType implements BatchCastingInterface
+class FloatType extends \Cake\Database\Type\BaseType implements \Cake\Database\Type\BatchCastingInterface
 {
     /**
      * The class to use for representing number objects
@@ -34,15 +33,13 @@ class FloatType extends BaseType implements BatchCastingInterface
      * @var string
      */
     public static string $numberClass = Number::class;
-
     /**
      * Whether numbers should be parsed using a locale aware parser
      * when marshaling string inputs.
      *
      * @var bool
      */
-    protected bool $_useLocaleParser = false;
-
+    protected bool $_useLocaleParser = \false;
     /**
      * Convert integer data into the database format.
      *
@@ -55,10 +52,8 @@ class FloatType extends BaseType implements BatchCastingInterface
         if ($value === null || $value === '') {
             return null;
         }
-
-        return (float)$value;
+        return (float) $value;
     }
-
     /**
      * {@inheritDoc}
      *
@@ -71,10 +66,8 @@ class FloatType extends BaseType implements BatchCastingInterface
         if ($value === null) {
             return null;
         }
-
-        return (float)$value;
+        return (float) $value;
     }
-
     /**
      * @inheritDoc
      */
@@ -84,13 +77,10 @@ class FloatType extends BaseType implements BatchCastingInterface
             if (!isset($values[$field])) {
                 continue;
             }
-
-            $values[$field] = (float)$values[$field];
+            $values[$field] = (float) $values[$field];
         }
-
         return $values;
     }
-
     /**
      * @inheritDoc
      */
@@ -98,7 +88,6 @@ class FloatType extends BaseType implements BatchCastingInterface
     {
         return PDO::PARAM_STR;
     }
-
     /**
      * Marshals request data into PHP floats.
      *
@@ -114,15 +103,13 @@ class FloatType extends BaseType implements BatchCastingInterface
             return $this->_parseValue($value);
         }
         if (is_numeric($value)) {
-            return (float)$value;
+            return (float) $value;
         }
         if (is_string($value) && preg_match('/^[0-9,. ]+$/', $value)) {
             return $value;
         }
-
         return null;
     }
-
     /**
      * Sets whether to parse numbers passed to the marshal() function
      * by using a locale aware parser.
@@ -130,26 +117,18 @@ class FloatType extends BaseType implements BatchCastingInterface
      * @param bool $enable Whether to enable
      * @return $this
      */
-    public function useLocaleParser(bool $enable = true)
+    public function useLocaleParser(bool $enable = \true)
     {
-        if ($enable === false) {
+        if ($enable === \false) {
             $this->_useLocaleParser = $enable;
-
             return $this;
         }
-        if (
-            static::$numberClass === Number::class ||
-            is_subclass_of(static::$numberClass, Number::class)
-        ) {
+        if (static::$numberClass === Number::class || is_subclass_of(static::$numberClass, Number::class)) {
             $this->_useLocaleParser = $enable;
-
             return $this;
         }
-        throw new DatabaseException(
-            sprintf('Cannot use locale parsing with the %s class', static::$numberClass),
-        );
+        throw new DatabaseException(sprintf('Cannot use locale parsing with the %s class', static::$numberClass));
     }
-
     /**
      * Converts a string into a float point after parsing it using the locale
      * aware parser.
@@ -160,7 +139,6 @@ class FloatType extends BaseType implements BatchCastingInterface
     protected function _parseValue(string $value): float
     {
         $class = static::$numberClass;
-
         return $class::parseFloat($value);
     }
 }

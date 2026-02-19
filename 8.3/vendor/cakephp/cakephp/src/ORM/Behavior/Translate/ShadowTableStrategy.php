@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -29,19 +29,17 @@ use Cake\ORM\Query\SelectQuery;
 use Cake\ORM\Table;
 use Cake\Utility\Hash;
 use function Cake\Core\pluginSplit;
-
 /**
  * This class provides a way to translate dynamic data by keeping translations
  * in a separate shadow table where each row corresponds to a row of primary table.
  */
-class ShadowTableStrategy implements TranslateStrategyInterface
+class ShadowTableStrategy implements \Cake\ORM\Behavior\Translate\TranslateStrategyInterface
 {
     use InstanceConfigTrait;
     use LocatorAwareTrait;
-    use TranslateStrategyTrait {
+    use \Cake\ORM\Behavior\Translate\TranslateStrategyTrait {
         buildMarshalMap as private _buildMarshalMap;
     }
-
     /**
      * Default config
      *
@@ -49,17 +47,7 @@ class ShadowTableStrategy implements TranslateStrategyInterface
      *
      * @var array<string, mixed>
      */
-    protected array $_defaultConfig = [
-        'fields' => [],
-        'defaultLocale' => null,
-        'referenceName' => null,
-        'allowEmptyTranslations' => true,
-        'onlyTranslated' => false,
-        'strategy' => 'subquery',
-        'tableLocator' => null,
-        'validator' => false,
-    ];
-
+    protected array $_defaultConfig = ['fields' => [], 'defaultLocale' => null, 'referenceName' => null, 'allowEmptyTranslations' => \true, 'onlyTranslated' => \false, 'strategy' => 'subquery', 'tableLocator' => null, 'validator' => \false];
     /**
      * Constructor
      *
@@ -69,29 +57,17 @@ class ShadowTableStrategy implements TranslateStrategyInterface
     public function __construct(Table $table, array $config = [])
     {
         $tableAlias = $table->getAlias();
-        [$plugin] = pluginSplit($table->getRegistryAlias(), true);
+        [$plugin] = pluginSplit($table->getRegistryAlias(), \true);
         $tableReferenceName = $config['referenceName'];
-
-        $config += [
-            'mainTableAlias' => $tableAlias,
-            'translationTable' => $plugin . $tableReferenceName . 'Translations',
-            'hasOneAlias' => $tableAlias . 'Translation',
-        ];
-
+        $config += ['mainTableAlias' => $tableAlias, 'translationTable' => $plugin . $tableReferenceName . 'Translations', 'hasOneAlias' => $tableAlias . 'Translation'];
         if (isset($config['tableLocator'])) {
             $this->_tableLocator = $config['tableLocator'];
         }
-
         $this->setConfig($config);
         $this->table = $table;
-        $this->translationTable = $this->getTableLocator()->get(
-            $this->_config['translationTable'],
-            ['allowFallbackClass' => true],
-        );
-
+        $this->translationTable = $this->getTableLocator()->get($this->_config['translationTable'], ['allowFallbackClass' => \true]);
         $this->setupAssociations();
     }
-
     /**
      * Create a hasMany association for all records.
      *
@@ -103,22 +79,12 @@ class ShadowTableStrategy implements TranslateStrategyInterface
     protected function setupAssociations(): void
     {
         $config = $this->getConfig();
-
         $targetAlias = $this->translationTable->getAlias();
-
         if ($this->table->associations()->has($targetAlias)) {
             $this->table->associations()->remove($targetAlias);
         }
-
-        $this->table->hasMany($targetAlias, [
-            'className' => $config['translationTable'],
-            'foreignKey' => 'id',
-            'strategy' => $config['strategy'],
-            'propertyName' => '_i18n',
-            'dependent' => true,
-        ]);
+        $this->table->hasMany($targetAlias, ['className' => $config['translationTable'], 'foreignKey' => 'id', 'strategy' => $config['strategy'], 'propertyName' => '_i18n', 'dependent' => \true]);
     }
-
     /**
      * Callback method that listens to the `beforeFind` event in the bound
      * table. It modifies the passed query by eager loading the translated fields
@@ -133,32 +99,19 @@ class ShadowTableStrategy implements TranslateStrategyInterface
     {
         $locale = Hash::get($options, 'locale', $this->getLocale());
         $config = $this->getConfig();
-
         if ($locale === $config['defaultLocale']) {
             return;
         }
-
         $this->setupHasOneAssociation($locale, $options);
-
         $fieldsAdded = $this->addFieldsToQuery($query, $config);
         $orderByTranslatedField = $this->iterateClause($query, 'order', $config);
-        $filteredByTranslatedField =
-            $this->traverseClause($query, 'where', $config) ||
-            $config['onlyTranslated'] ||
-            ($options['filterByCurrentLocale'] ?? null);
-
+        $filteredByTranslatedField = $this->traverseClause($query, 'where', $config) || $config['onlyTranslated'] || ($options['filterByCurrentLocale'] ?? null);
         if (!$fieldsAdded && !$orderByTranslatedField && !$filteredByTranslatedField) {
             return;
         }
-
         $query->contain([$config['hasOneAlias']]);
-
-        $query->formatResults(
-            fn(CollectionInterface $results) => $this->rowMapper($results, $locale),
-            SelectQuery::PREPEND,
-        );
+        $query->formatResults(fn(CollectionInterface $results) => $this->rowMapper($results, $locale), SelectQuery::PREPEND);
     }
-
     /**
      * Create a hasOne association for record with required locale.
      *
@@ -169,41 +122,22 @@ class ShadowTableStrategy implements TranslateStrategyInterface
     protected function setupHasOneAssociation(string $locale, ArrayObject $options): void
     {
         $config = $this->getConfig();
-
         [$plugin] = pluginSplit($config['translationTable']);
-        $hasOneTargetAlias = $plugin ? ($plugin . '.' . $config['hasOneAlias']) : $config['hasOneAlias'];
+        $hasOneTargetAlias = $plugin ? $plugin . '.' . $config['hasOneAlias'] : $config['hasOneAlias'];
         if (!$this->getTableLocator()->exists($hasOneTargetAlias)) {
             // Load table before hand with fallback class usage enabled
-            $this->getTableLocator()->get(
-                $hasOneTargetAlias,
-                [
-                    'className' => $config['translationTable'],
-                    'allowFallbackClass' => true,
-                ],
-            );
+            $this->getTableLocator()->get($hasOneTargetAlias, ['className' => $config['translationTable'], 'allowFallbackClass' => \true]);
         }
-
         if (isset($options['filterByCurrentLocale'])) {
             $joinType = $options['filterByCurrentLocale'] ? 'INNER' : 'LEFT';
         } else {
             $joinType = $config['onlyTranslated'] ? 'INNER' : 'LEFT';
         }
-
         if ($this->table->associations()->has($config['hasOneAlias'])) {
             $this->table->associations()->remove($config['hasOneAlias']);
         }
-
-        $this->table->hasOne($config['hasOneAlias'], [
-            'foreignKey' => ['id'],
-            'joinType' => $joinType,
-            'propertyName' => 'translation',
-            'className' => $config['translationTable'],
-            'conditions' => [
-                $config['hasOneAlias'] . '.locale' => $locale,
-            ],
-        ]);
+        $this->table->hasOne($config['hasOneAlias'], ['foreignKey' => ['id'], 'joinType' => $joinType, 'propertyName' => 'translation', 'className' => $config['translationTable'], 'conditions' => [$config['hasOneAlias'] . '.locale' => $locale]]);
     }
-
     /**
      * Add translation fields to query.
      *
@@ -220,31 +154,25 @@ class ShadowTableStrategy implements TranslateStrategyInterface
     protected function addFieldsToQuery(SelectQuery $query, array $config): bool
     {
         if ($query->isAutoFieldsEnabled()) {
-            return true;
+            return \true;
         }
-
         $select = array_filter($query->clause('select'), is_string(...));
-
         if (!$select) {
-            return true;
+            return \true;
         }
-
         $alias = $config['mainTableAlias'];
-        $joinRequired = false;
+        $joinRequired = \false;
         foreach ($this->translatedFields() as $field) {
             if (array_intersect($select, [$field, "{$alias}.{$field}"])) {
-                $joinRequired = true;
+                $joinRequired = \true;
                 $query->select($query->aliasField($field, $config['hasOneAlias']));
             }
         }
-
         if ($joinRequired) {
             $query->select($query->aliasField('locale', $config['hasOneAlias']));
         }
-
         return $joinRequired;
     }
-
     /**
      * Iterate over a clause to alias fields.
      *
@@ -262,35 +190,27 @@ class ShadowTableStrategy implements TranslateStrategyInterface
         $clause = $query->clause($name);
         assert($clause === null || $clause instanceof QueryExpression);
         if (!$clause || !$clause->count()) {
-            return false;
+            return \false;
         }
-
         $alias = $config['hasOneAlias'];
         $fields = $this->translatedFields();
         $mainTableAlias = $config['mainTableAlias'];
         $mainTableFields = $this->mainFields();
-        $joinRequired = false;
-
-        $clause->iterateParts(
-            function ($c, &$field) use ($fields, $alias, $mainTableAlias, $mainTableFields, &$joinRequired) {
-                if (!is_string($field) || str_contains($field, '.')) {
-                    return $c;
-                }
-
-                if (in_array($field, $fields, true)) {
-                    $joinRequired = true;
-                    $field = "{$alias}.{$field}";
-                } elseif (in_array($field, $mainTableFields, true)) {
-                    $field = "{$mainTableAlias}.{$field}";
-                }
-
+        $joinRequired = \false;
+        $clause->iterateParts(function ($c, &$field) use ($fields, $alias, $mainTableAlias, $mainTableFields, &$joinRequired) {
+            if (!is_string($field) || str_contains($field, '.')) {
                 return $c;
-            },
-        );
-
+            }
+            if (in_array($field, $fields, \true)) {
+                $joinRequired = \true;
+                $field = "{$alias}.{$field}";
+            } elseif (in_array($field, $mainTableFields, \true)) {
+                $field = "{$mainTableAlias}.{$field}";
+            }
+            return $c;
+        });
         return $joinRequired;
     }
-
     /**
      * Traverse over a clause to alias fields.
      *
@@ -308,41 +228,32 @@ class ShadowTableStrategy implements TranslateStrategyInterface
         /** @var \Cake\Database\Expression\QueryExpression|null $clause */
         $clause = $query->clause($name);
         if (!$clause || !$clause->count()) {
-            return false;
+            return \false;
         }
-
         $alias = $config['hasOneAlias'];
         $fields = $this->translatedFields();
         $mainTableAlias = $config['mainTableAlias'];
         $mainTableFields = $this->mainFields();
-        $joinRequired = false;
-
-        $clause->traverse(
-            function ($expression) use ($fields, $alias, $mainTableAlias, $mainTableFields, &$joinRequired): void {
-                if (!($expression instanceof FieldInterface)) {
-                    return;
-                }
-                $field = $expression->getField();
-                if (!is_string($field) || str_contains($field, '.')) {
-                    return;
-                }
-
-                if (in_array($field, $fields, true)) {
-                    $joinRequired = true;
-                    $expression->setField("{$alias}.{$field}");
-
-                    return;
-                }
-
-                if (in_array($field, $mainTableFields, true)) {
-                    $expression->setField("{$mainTableAlias}.{$field}");
-                }
-            },
-        );
-
+        $joinRequired = \false;
+        $clause->traverse(function ($expression) use ($fields, $alias, $mainTableAlias, $mainTableFields, &$joinRequired): void {
+            if (!$expression instanceof FieldInterface) {
+                return;
+            }
+            $field = $expression->getField();
+            if (!is_string($field) || str_contains($field, '.')) {
+                return;
+            }
+            if (in_array($field, $fields, \true)) {
+                $joinRequired = \true;
+                $expression->setField("{$alias}.{$field}");
+                return;
+            }
+            if (in_array($field, $mainTableFields, \true)) {
+                $expression->setField("{$mainTableAlias}.{$field}");
+            }
+        });
         return $joinRequired;
     }
-
     /**
      * Modifies the entity before it is saved so that translated fields are persisted
      * in the database too.
@@ -355,68 +266,53 @@ class ShadowTableStrategy implements TranslateStrategyInterface
     public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options): void
     {
         $locale = $entity->has('_locale') ? $entity->get('_locale') : $this->getLocale();
-        $newOptions = [$this->translationTable->getAlias() => ['validate' => false]];
+        $newOptions = [$this->translationTable->getAlias() => ['validate' => \false]];
         $options['associated'] = $newOptions + $options['associated'];
-
         // Check early if empty translations are present in the entity.
         // If this is the case, unset them to prevent persistence.
         // This only applies if $this->_config['allowEmptyTranslations'] is false
-        if ($this->_config['allowEmptyTranslations'] === false) {
+        if ($this->_config['allowEmptyTranslations'] === \false) {
             $this->unsetEmptyFields($entity);
         }
-
         $this->bundleTranslatedFields($entity);
-        $bundled = $entity->has('_i18n') ? (array)$entity->get('_i18n') : [];
+        $bundled = $entity->has('_i18n') ? (array) $entity->get('_i18n') : [];
         $noBundled = $bundled === [];
-
         // No additional translation records need to be saved,
         // as the entity is in the default locale.
         if ($noBundled && $locale === $this->getConfig('defaultLocale')) {
             return;
         }
-
-        $values = $entity->extract($this->translatedFields(), true);
+        $values = $entity->extract($this->translatedFields(), \true);
         $fields = array_keys($values);
         $noFields = $fields === [];
-
         // If there are no fields and no bundled translations, or both fields
         // in the default locale and bundled translations we can
         // skip the remaining logic as it is not necessary.
-        if ($noFields && $noBundled || ($fields && $bundled)) {
+        if ($noFields && $noBundled || $fields && $bundled) {
             return;
         }
-
         /** @var string $primaryKey */
-        $primaryKey = current((array)$this->table->getPrimaryKey());
+        $primaryKey = current((array) $this->table->getPrimaryKey());
         $id = $entity->has($primaryKey) ? $entity->get($primaryKey) : null;
-
         // When we have no key and bundled translations, we
         // need to mark the entity dirty so the root
         // entity persists.
         if ($noFields && $bundled && !$id) {
             foreach ($this->translatedFields() as $field) {
-                $entity->setDirty($field, true);
+                $entity->setDirty($field, \true);
             }
-
             return;
         }
-
         if ($noFields) {
             return;
         }
-
         $where = ['locale' => $locale];
         $translation = null;
         if ($id) {
             $where['id'] = $id;
-
             /** @var \Cake\Datasource\EntityInterface|null $translation */
-            $translation = $this->translationTable->find()
-                ->select(array_merge(['id', 'locale'], $fields))
-                ->where($where)
-                ->first();
+            $translation = $this->translationTable->find()->select(array_merge(['id', 'locale'], $fields))->where($where)->first();
         }
-
         if ($translation) {
             if (method_exists($translation, 'patch')) {
                 $translation->patch($values);
@@ -424,34 +320,23 @@ class ShadowTableStrategy implements TranslateStrategyInterface
                 $translation->set($values);
             }
         } else {
-            $translation = new ($this->translationTable->getEntityClass())(
-                $where + $values,
-                [
-                    'useSetters' => false,
-                    'markNew' => true,
-                ],
-            );
+            $translation = new ($this->translationTable->getEntityClass())($where + $values, ['useSetters' => \false, 'markNew' => \true]);
         }
-
         $entity->set('_i18n', array_merge($bundled, [$translation]));
-        $entity->set('_locale', $locale, ['setter' => false]);
-        $entity->setDirty('_locale', false);
-
+        $entity->set('_locale', $locale, ['setter' => \false]);
+        $entity->setDirty('_locale', \false);
         foreach ($fields as $field) {
-            $entity->setDirty($field, false);
+            $entity->setDirty($field, \false);
         }
     }
-
     /**
      * @inheritDoc
      */
     public function buildMarshalMap(Marshaller $marshaller, array $map, array $options): array
     {
         $this->translatedFields();
-
         return $this->_buildMarshalMap($marshaller, $map, $options);
     }
-
     /**
      * Returns a fully aliased field name for translated fields.
      *
@@ -467,15 +352,12 @@ class ShadowTableStrategy implements TranslateStrategyInterface
         if ($this->getLocale() === $this->getConfig('defaultLocale')) {
             return $this->table->aliasField($field);
         }
-
         $translatedFields = $this->translatedFields();
-        if (in_array($field, $translatedFields, true)) {
+        if (in_array($field, $translatedFields, \true)) {
             return $this->getConfig('hasOneAlias') . '.' . $field;
         }
-
         return $this->table->aliasField($field);
     }
-
     /**
      * Modifies the results from a table find in order to merge the translated
      * fields into each entity for a given locale.
@@ -487,30 +369,23 @@ class ShadowTableStrategy implements TranslateStrategyInterface
     protected function rowMapper(CollectionInterface $results, string $locale): CollectionInterface
     {
         $allowEmpty = $this->_config['allowEmptyTranslations'];
-
         return $results->map(function ($row) use ($allowEmpty, $locale) {
             /** @var \Cake\Datasource\EntityInterface|array|null $row */
             if ($row === null) {
                 return $row;
             }
-
             $hydrated = $row instanceof EntityInterface;
-
             if (empty($row['translation'])) {
                 $row['_locale'] = $locale;
                 unset($row['translation']);
-
                 if ($hydrated) {
                     /** @var \Cake\Datasource\EntityInterface $row */
-                    $row->setDirty('_locale', false);
+                    $row->setDirty('_locale', \false);
                 }
-
                 return $row;
             }
-
             $translation = $row['translation'];
             assert($translation instanceof EntityInterface || is_array($translation));
-
             if ($hydrated) {
                 /** @var \Cake\Datasource\EntityInterface $translation */
                 $keys = $translation->getVisible();
@@ -518,33 +393,27 @@ class ShadowTableStrategy implements TranslateStrategyInterface
                 /** @var non-empty-array $translation */
                 $keys = array_keys($translation);
             }
-
             foreach ($keys as $field) {
                 if ($field === 'locale') {
                     $row['_locale'] = $translation[$field];
                     continue;
                 }
-
                 if ($translation[$field] !== null && ($allowEmpty || $translation[$field] !== '')) {
                     $row[$field] = $translation[$field];
                     if ($hydrated) {
                         /** @var \Cake\Datasource\EntityInterface $row */
-                        $row->setDirty($field, false);
+                        $row->setDirty($field, \false);
                     }
                 }
             }
-
             unset($row['translation']);
-
             if ($hydrated) {
                 /** @var \Cake\Datasource\EntityInterface $row */
-                $row->setDirty('_locale', false);
+                $row->setDirty('_locale', \false);
             }
-
             return $row;
         });
     }
-
     /**
      * Modifies the results from a table find in order to merge full translation
      * records into each entity under the `_translations` key.
@@ -558,34 +427,25 @@ class ShadowTableStrategy implements TranslateStrategyInterface
             if (!$row instanceof EntityInterface) {
                 return $row;
             }
-
             $translations = $row->has('_i18n') ? $row->get('_i18n') : [];
             if ($translations === []) {
                 if ($row->has('_translations')) {
                     return $row;
                 }
-
-                $row->set('_translations', [])
-                    ->setDirty('_translations', false);
+                $row->set('_translations', [])->setDirty('_translations', \false);
                 unset($row['_i18n']);
-
                 return $row;
             }
-
             $result = [];
             foreach ($translations as $translation) {
                 unset($translation['id']);
                 $result[$translation['locale']] = $translation;
             }
-
-            $row->set('_translations', $result)
-                ->setDirty('_translations', false);
+            $row->set('_translations', $result)->setDirty('_translations', \false);
             unset($row['_i18n']);
-
             return $row;
         });
     }
-
     /**
      * Helper method used to generated multiple translated field entities
      * out of the data found in the `_translations` property in the passed
@@ -597,38 +457,31 @@ class ShadowTableStrategy implements TranslateStrategyInterface
     protected function bundleTranslatedFields(EntityInterface $entity): void
     {
         /** @var array<string, \Cake\ORM\Entity> $translations */
-        $translations = $entity->has('_translations') ? (array)$entity->get('_translations') : [];
-
+        $translations = $entity->has('_translations') ? (array) $entity->get('_translations') : [];
         if (!$translations && !$entity->isDirty('_translations')) {
             return;
         }
-
         if ($entity->isNew()) {
             $key = null;
         } else {
-            $primaryKey = (array)$this->table->getPrimaryKey();
-            $key = $entity->get((string)current($primaryKey));
+            $primaryKey = (array) $this->table->getPrimaryKey();
+            $key = $entity->get((string) current($primaryKey));
         }
-
         foreach ($translations as $lang => $translation) {
             if ($translation->isNew()) {
-                $update = [
-                    'locale' => $lang,
-                ];
+                $update = ['locale' => $lang];
                 if ($key !== null) {
                     $update['id'] = $key;
                 }
                 if (method_exists($translation, 'patch')) {
-                    $translation->patch($update, ['guard' => false]);
+                    $translation->patch($update, ['guard' => \false]);
                 } else {
-                    $translation->set($update, ['guard' => false]);
+                    $translation->set($update, ['guard' => \false]);
                 }
             }
         }
-
         $entity->set('_i18n', $translations);
     }
-
     /**
      * Lazy define and return the main table fields.
      *
@@ -638,18 +491,13 @@ class ShadowTableStrategy implements TranslateStrategyInterface
     {
         /** @var array<string> $fields */
         $fields = $this->getConfig('mainTableFields');
-
         if ($fields) {
             return $fields;
         }
-
         $fields = $this->table->getSchema()->columns();
-
         $this->setConfig('mainTableFields', $fields);
-
         return $fields;
     }
-
     /**
      * Lazy define and return the translation table fields.
      *
@@ -658,17 +506,13 @@ class ShadowTableStrategy implements TranslateStrategyInterface
     protected function translatedFields(): array
     {
         $fields = $this->getConfig('fields');
-
         if ($fields) {
             return $fields;
         }
-
         $table = $this->translationTable;
         $fields = $table->getSchema()->columns();
         $fields = array_values(array_diff($fields, ['id', 'locale']));
-
         $this->setConfig('fields', $fields);
-
         return $fields;
     }
 }

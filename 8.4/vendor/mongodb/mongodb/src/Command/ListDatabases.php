@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright 2020-present MongoDB, Inc.
  *
@@ -14,7 +15,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 namespace MongoDB\Command;
 
 use MongoDB\Driver\Command;
@@ -23,13 +23,11 @@ use MongoDB\Driver\Server;
 use MongoDB\Driver\Session;
 use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\Exception\UnexpectedValueException;
-
 use function current;
 use function is_array;
 use function is_bool;
 use function is_integer;
 use function MongoDB\is_document;
-
 /**
  * Wrapper for the ListDatabases command.
  *
@@ -68,27 +66,22 @@ final class ListDatabases
      */
     public function __construct(private array $options = [])
     {
-        if (isset($options['authorizedDatabases']) && ! is_bool($options['authorizedDatabases'])) {
+        if (isset($options['authorizedDatabases']) && !is_bool($options['authorizedDatabases'])) {
             throw InvalidArgumentException::invalidType('"authorizedDatabases" option', $options['authorizedDatabases'], 'boolean');
         }
-
-        if (isset($options['filter']) && ! is_document($options['filter'])) {
+        if (isset($options['filter']) && !is_document($options['filter'])) {
             throw InvalidArgumentException::expectedDocumentType('"filter" option', $options['filter']);
         }
-
-        if (isset($options['maxTimeMS']) && ! is_integer($options['maxTimeMS'])) {
+        if (isset($options['maxTimeMS']) && !is_integer($options['maxTimeMS'])) {
             throw InvalidArgumentException::invalidType('"maxTimeMS" option', $options['maxTimeMS'], 'integer');
         }
-
-        if (isset($options['nameOnly']) && ! is_bool($options['nameOnly'])) {
+        if (isset($options['nameOnly']) && !is_bool($options['nameOnly'])) {
             throw InvalidArgumentException::invalidType('"nameOnly" option', $options['nameOnly'], 'boolean');
         }
-
-        if (isset($options['session']) && ! $options['session'] instanceof Session) {
+        if (isset($options['session']) && !$options['session'] instanceof Session) {
             throw InvalidArgumentException::invalidType('"session" option', $options['session'], Session::class);
         }
     }
-
     /**
      * Execute the operation.
      *
@@ -100,36 +93,28 @@ final class ListDatabases
     {
         $cursor = $server->executeReadCommand('admin', $this->createCommand(), $this->createOptions());
         $cursor->setTypeMap(['root' => 'array', 'document' => 'array']);
-
         $result = current($cursor->toArray());
-
-        if (! isset($result['databases']) || ! is_array($result['databases'])) {
+        if (!isset($result['databases']) || !is_array($result['databases'])) {
             throw new UnexpectedValueException('listDatabases command did not return a "databases" array');
         }
-
         return $result['databases'];
     }
-
     /**
      * Create the listDatabases command.
      */
     private function createCommand(): Command
     {
         $cmd = ['listDatabases' => 1];
-
-        if (! empty($this->options['filter'])) {
+        if (!empty($this->options['filter'])) {
             $cmd['filter'] = (object) $this->options['filter'];
         }
-
         foreach (['authorizedDatabases', 'comment', 'maxTimeMS', 'nameOnly'] as $option) {
             if (isset($this->options[$option])) {
                 $cmd[$option] = $this->options[$option];
             }
         }
-
         return new Command($cmd);
     }
-
     /**
      * Create options for executing the command.
      *
@@ -141,11 +126,9 @@ final class ListDatabases
     private function createOptions(): array
     {
         $options = [];
-
         if (isset($this->options['session'])) {
             $options['session'] = $this->options['session'];
         }
-
         return $options;
     }
 }

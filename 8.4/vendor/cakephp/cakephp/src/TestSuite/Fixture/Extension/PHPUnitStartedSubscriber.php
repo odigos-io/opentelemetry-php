@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -18,10 +18,9 @@ namespace Cake\TestSuite\Fixture\Extension;
 
 use Cake\Log\Log;
 use Cake\TestSuite\ConnectionHelper;
-use PHPUnit\Event\TestSuite\Started;
-use PHPUnit\Event\TestSuite\StartedSubscriber as PHPUnitStarted;
+use Odigos\PHPUnit\Event\TestSuite\Started;
+use Odigos\PHPUnit\Event\TestSuite\StartedSubscriber as PHPUnitStarted;
 use function Cake\Core\env;
-
 class PHPUnitStartedSubscriber implements PHPUnitStarted
 {
     /**
@@ -33,16 +32,11 @@ class PHPUnitStartedSubscriber implements PHPUnitStarted
     public function notify(Started $event): void
     {
         ConnectionHelper::addTestAliases();
-
-        $enableLogging = env('LOG_QUERIES', false);
-        if ((int)$enableLogging !== 0) {
+        $enableLogging = env('LOG_QUERIES', \false);
+        if ((int) $enableLogging !== 0) {
             ConnectionHelper::enableQueryLogging();
             Log::drop('queries');
-            Log::setConfig('queries', [
-                'className' => 'Console',
-                'stream' => 'php://stderr',
-                'scopes' => ['cake.database.queries'],
-            ]);
+            Log::setConfig('queries', ['className' => 'Console', 'stream' => 'php://stderr', 'scopes' => ['cake.database.queries']]);
         }
     }
 }

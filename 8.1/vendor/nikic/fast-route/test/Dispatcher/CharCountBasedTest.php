@@ -1,16 +1,15 @@
 <?php
 
-namespace FastRoute\Dispatcher;
+namespace Odigos\FastRoute\Dispatcher;
 
 class CharCountBasedTest extends DispatcherTest
 {
     protected function getDispatcherClass()
     {
-        return 'FastRoute\\Dispatcher\\CharCountBased';
+        return 'Odigos\FastRoute\Dispatcher\CharCountBased';
     }
-
     protected function getDataGeneratorClass()
     {
-        return 'FastRoute\\DataGenerator\\CharCountBased';
+        return 'Odigos\FastRoute\DataGenerator\CharCountBased';
     }
 }

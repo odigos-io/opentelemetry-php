@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\DBAL\Driver;
 
 /**
@@ -19,7 +18,6 @@ interface Result
      * @throws Exception
      */
     public function fetchNumeric(): array|false;
-
     /**
      * Returns the next row of the result as an associative array or FALSE if there are no more rows.
      *
@@ -28,14 +26,12 @@ interface Result
      * @throws Exception
      */
     public function fetchAssociative(): array|false;
-
     /**
      * Returns the first value of the next row of the result or FALSE if there are no more rows.
      *
      * @throws Exception
      */
     public function fetchOne(): mixed;
-
     /**
      * Returns an array containing all of the result rows represented as numeric arrays.
      *
@@ -44,7 +40,6 @@ interface Result
      * @throws Exception
      */
     public function fetchAllNumeric(): array;
-
     /**
      * Returns an array containing all of the result rows represented as associative arrays.
      *
@@ -53,7 +48,6 @@ interface Result
      * @throws Exception
      */
     public function fetchAllAssociative(): array;
-
     /**
      * Returns an array containing the values of the first column of the result.
      *
@@ -62,7 +56,6 @@ interface Result
      * @throws Exception
      */
     public function fetchFirstColumn(): array;
-
     /**
      * Returns the number of rows affected by the DELETE, INSERT, or UPDATE statement that produced the result.
      *
@@ -77,7 +70,6 @@ interface Result
      * @throws Exception
      */
     public function rowCount(): int|string;
-
     /**
      * Returns the number of columns in the result
      *
@@ -87,7 +79,6 @@ interface Result
      * @throws Exception
      */
     public function columnCount(): int;
-
     /**
      * Discards the non-fetched portion of the result, enabling the originating statement to be executed again.
      */

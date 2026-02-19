@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -15,9 +15,8 @@ declare(strict_types=1);
  */
 namespace Cake\TestSuite;
 
-use PHPUnit\Framework\Constraint\Callback;
-use PHPUnit\Framework\Constraint\Constraint;
-
+use Odigos\PHPUnit\Framework\Constraint\Callback;
+use Odigos\PHPUnit\Framework\Constraint\Constraint;
 trait PHPUnitConsecutiveTrait
 {
     /**
@@ -28,38 +27,25 @@ trait PHPUnitConsecutiveTrait
     public static function withConsecutive(array $firstCallArguments, array ...$consecutiveCallsArguments): iterable
     {
         $allConsecutiveCallsArguments = [$firstCallArguments, ...$consecutiveCallsArguments];
-
         $numberOfArguments = count($firstCallArguments);
         $argumentList = [];
         for ($argumentPosition = 0; $argumentPosition < $numberOfArguments; $argumentPosition++) {
             $argumentList[$argumentPosition] = array_column($allConsecutiveCallsArguments, $argumentPosition);
         }
-
         $mockedMethodCall = 0;
         $callbackCall = 0;
         foreach ($argumentList as $index => $argument) {
-            yield new Callback(
-                static function (mixed $actualArgument) use (
-                    $argumentList,
-                    &$mockedMethodCall,
-                    &$callbackCall,
-                    $index,
-                    $numberOfArguments,
-                ): bool {
-                    $expected = $argumentList[$index][$mockedMethodCall] ?? null;
-
-                    $callbackCall++;
-                    $mockedMethodCall = (int)($callbackCall / $numberOfArguments);
-
-                    if ($expected instanceof Constraint) {
-                        self::assertThat($actualArgument, $expected);
-                    } else {
-                        self::assertEquals($expected, $actualArgument);
-                    }
-
-                    return true;
-                },
-            );
+            yield new Callback(static function (mixed $actualArgument) use ($argumentList, &$mockedMethodCall, &$callbackCall, $index, $numberOfArguments): bool {
+                $expected = $argumentList[$index][$mockedMethodCall] ?? null;
+                $callbackCall++;
+                $mockedMethodCall = (int) ($callbackCall / $numberOfArguments);
+                if ($expected instanceof Constraint) {
+                    self::assertThat($actualArgument, $expected);
+                } else {
+                    self::assertEquals($expected, $actualArgument);
+                }
+                return \true;
+            });
         }
     }
 }

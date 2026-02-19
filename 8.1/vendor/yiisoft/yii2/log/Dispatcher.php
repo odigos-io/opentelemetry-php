@@ -1,16 +1,15 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\log;
 
-use Yii;
+use Odigos\Yii;
 use yii\base\Component;
 use yii\base\ErrorHandler;
-
 /**
  * Dispatcher manages a set of [[Target|log targets]].
  *
@@ -67,13 +66,10 @@ class Dispatcher extends Component
      * or the configuration for creating the log target instance.
      */
     public $targets = [];
-
     /**
      * @var Logger|null the logger.
      */
     private $_logger;
-
-
     /**
      * {@inheritdoc}
      */
@@ -86,24 +82,20 @@ class Dispatcher extends Component
         }
         // connect logger and dispatcher
         $this->getLogger();
-
         parent::__construct($config);
     }
-
     /**
      * {@inheritdoc}
      */
     public function init()
     {
         parent::init();
-
         foreach ($this->targets as $name => $target) {
-            if (!$target instanceof Target) {
+            if (!$target instanceof \yii\log\Target) {
                 $this->targets[$name] = Yii::createObject($target);
             }
         }
     }
-
     /**
      * Gets the connected logger.
      * If not set, [[Yii::getLogger()]] will be used.
@@ -114,10 +106,8 @@ class Dispatcher extends Component
         if ($this->_logger === null) {
             $this->setLogger(Yii::getLogger());
         }
-
         return $this->_logger;
     }
-
     /**
      * Sets the connected logger.
      * @param Logger|string|array $value the logger to be used. This can either be a logger instance
@@ -130,11 +120,9 @@ class Dispatcher extends Component
         if (is_string($value) || is_array($value)) {
             $value = Yii::createObject($value);
         }
-
         $this->_logger = $value;
         $this->_logger->dispatcher = $this;
     }
-
     /**
      * @return int how many application call stacks should be logged together with each message.
      * This method returns the value of [[Logger::traceLevel]]. Defaults to 0.
@@ -143,7 +131,6 @@ class Dispatcher extends Component
     {
         return $this->getLogger()->traceLevel;
     }
-
     /**
      * @param int $value how many application call stacks should be logged together with each message.
      * This method will set the value of [[Logger::traceLevel]]. If the value is greater than 0,
@@ -154,7 +141,6 @@ class Dispatcher extends Component
     {
         $this->getLogger()->traceLevel = $value;
     }
-
     /**
      * @return int how many messages should be logged before they are sent to targets.
      * This method returns the value of [[Logger::flushInterval]].
@@ -163,7 +149,6 @@ class Dispatcher extends Component
     {
         return $this->getLogger()->flushInterval;
     }
-
     /**
      * @param int $value how many messages should be logged before they are sent to targets.
      * This method will set the value of [[Logger::flushInterval]].
@@ -176,7 +161,6 @@ class Dispatcher extends Component
     {
         $this->getLogger()->flushInterval = $value;
     }
-
     /**
      * Dispatches the logged messages to [[targets]].
      * @param array $messages the logged messages
@@ -192,19 +176,17 @@ class Dispatcher extends Component
             try {
                 $target->collect($messages, $final);
             } catch (\Throwable $t) {
-                $target->enabled = false;
+                $target->enabled = \false;
                 $targetErrors[] = $this->generateTargetFailErrorMessage($target, $t, __METHOD__);
             } catch (\Exception $e) {
-                $target->enabled = false;
+                $target->enabled = \false;
                 $targetErrors[] = $this->generateTargetFailErrorMessage($target, $e, __METHOD__);
             }
         }
-
         if (!empty($targetErrors)) {
-            $this->dispatch($targetErrors, true);
+            $this->dispatch($targetErrors, \true);
         }
     }
-
     /**
      * Generate target error message
      *
@@ -216,12 +198,6 @@ class Dispatcher extends Component
      */
     protected function generateTargetFailErrorMessage($target, $throwable, $method)
     {
-        return [
-            'Unable to send log via ' . get_class($target) . ': ' . ErrorHandler::convertExceptionToVerboseString($throwable),
-            Logger::LEVEL_WARNING,
-            $method,
-            microtime(true),
-            [],
-        ];
+        return ['Unable to send log via ' . get_class($target) . ': ' . ErrorHandler::convertExceptionToVerboseString($throwable), \yii\log\Logger::LEVEL_WARNING, $method, microtime(\true), []];
     }
 }

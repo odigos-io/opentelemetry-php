@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of Result Type.
  *
@@ -10,8 +9,7 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace GrahamCampbell\ResultType;
+namespace Odigos\GrahamCampbell\ResultType;
 
 /**
  * @template T
@@ -25,7 +23,6 @@ abstract class Result
      * @return \PhpOption\Option<T>
      */
     abstract public function success();
-
     /**
      * Map over the success value.
      *
@@ -36,7 +33,6 @@ abstract class Result
      * @return \GrahamCampbell\ResultType\Result<S,E>
      */
     abstract public function map(callable $f);
-
     /**
      * Flat map over the success value.
      *
@@ -48,14 +44,12 @@ abstract class Result
      * @return \GrahamCampbell\ResultType\Result<S,F>
      */
     abstract public function flatMap(callable $f);
-
     /**
      * Get the error option value.
      *
      * @return \PhpOption\Option<E>
      */
     abstract public function error();
-
     /**
      * Map over the error value.
      *

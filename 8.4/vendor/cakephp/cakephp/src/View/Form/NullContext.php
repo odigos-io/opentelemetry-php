@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -22,7 +22,7 @@ namespace Cake\View\Form;
  * This context provider simply fulfils the interface requirements
  * that FormHelper has.
  */
-class NullContext implements ContextInterface
+class NullContext implements \Cake\View\Form\ContextInterface
 {
     /**
      * Constructor.
@@ -32,7 +32,6 @@ class NullContext implements ContextInterface
     public function __construct(array $context)
     {
     }
-
     /**
      * @inheritDoc
      */
@@ -40,23 +39,20 @@ class NullContext implements ContextInterface
     {
         return [];
     }
-
     /**
      * @inheritDoc
      */
     public function isPrimaryKey(string $field): bool
     {
-        return false;
+        return \false;
     }
-
     /**
      * @inheritDoc
      */
     public function isCreate(): bool
     {
-        return true;
+        return \true;
     }
-
     /**
      * @inheritDoc
      */
@@ -64,7 +60,6 @@ class NullContext implements ContextInterface
     {
         return null;
     }
-
     /**
      * @inheritDoc
      */
@@ -72,7 +67,6 @@ class NullContext implements ContextInterface
     {
         return null;
     }
-
     /**
      * @inheritDoc
      */
@@ -80,7 +74,6 @@ class NullContext implements ContextInterface
     {
         return null;
     }
-
     /**
      * @inheritDoc
      */
@@ -88,7 +81,6 @@ class NullContext implements ContextInterface
     {
         return null;
     }
-
     /**
      * @inheritDoc
      */
@@ -96,7 +88,6 @@ class NullContext implements ContextInterface
     {
         return [];
     }
-
     /**
      * @inheritDoc
      */
@@ -104,7 +95,6 @@ class NullContext implements ContextInterface
     {
         return null;
     }
-
     /**
      * @inheritDoc
      */
@@ -112,15 +102,13 @@ class NullContext implements ContextInterface
     {
         return [];
     }
-
     /**
      * @inheritDoc
      */
     public function hasError(string $field): bool
     {
-        return false;
+        return \false;
     }
-
     /**
      * @inheritDoc
      */

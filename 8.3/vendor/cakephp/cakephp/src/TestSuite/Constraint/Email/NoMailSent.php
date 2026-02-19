@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -21,7 +21,7 @@ namespace Cake\TestSuite\Constraint\Email;
  *
  * @internal
  */
-class NoMailSent extends MailConstraintBase
+class NoMailSent extends \Cake\TestSuite\Constraint\Email\MailConstraintBase
 {
     /**
      * Checks constraint
@@ -33,7 +33,6 @@ class NoMailSent extends MailConstraintBase
     {
         return $this->getMessages() === [];
     }
-
     /**
      * Assertion message string
      *
@@ -43,7 +42,6 @@ class NoMailSent extends MailConstraintBase
     {
         return 'no emails were sent';
     }
-
     /**
      * Overwrites the descriptions so we can remove the automatic "expected" message
      *

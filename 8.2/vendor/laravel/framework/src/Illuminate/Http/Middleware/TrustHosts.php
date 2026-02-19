@@ -4,7 +4,6 @@ namespace Illuminate\Http\Middleware;
 
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\Request;
-
 class TrustHosts
 {
     /**
@@ -13,21 +12,18 @@ class TrustHosts
      * @var \Illuminate\Contracts\Foundation\Application
      */
     protected $app;
-
     /**
      * The trusted hosts that have been configured to always be trusted.
      *
      * @var array<int, string>|(callable(): array<int, string>)|null
      */
     protected static $alwaysTrust;
-
     /**
      * Indicates whether subdomains of the application URL should be trusted.
      *
      * @var bool|null
      */
     protected static $subdomains;
-
     /**
      * Create a new middleware instance.
      *
@@ -37,7 +33,6 @@ class TrustHosts
     {
         $this->app = $app;
     }
-
     /**
      * Get the host patterns that should be trusted.
      *
@@ -48,20 +43,16 @@ class TrustHosts
         if (is_null(static::$alwaysTrust)) {
             return [$this->allSubdomainsOfApplicationUrl()];
         }
-
-        $hosts = match (true) {
+        $hosts = match (\true) {
             is_array(static::$alwaysTrust) => static::$alwaysTrust,
             is_callable(static::$alwaysTrust) => call_user_func(static::$alwaysTrust),
             default => [],
         };
-
         if (static::$subdomains) {
             $hosts[] = $this->allSubdomainsOfApplicationUrl();
         }
-
         return $hosts;
     }
-
     /**
      * Handle the incoming request.
      *
@@ -74,10 +65,8 @@ class TrustHosts
         if ($this->shouldSpecifyTrustedHosts()) {
             Request::setTrustedHosts(array_filter($this->hosts()));
         }
-
         return $next($request);
     }
-
     /**
      * Specify the hosts that should always be trusted.
      *
@@ -85,12 +74,11 @@ class TrustHosts
      * @param  bool  $subdomains
      * @return void
      */
-    public static function at(array|callable $hosts, bool $subdomains = true)
+    public static function at(array|callable $hosts, bool $subdomains = \true)
     {
         static::$alwaysTrust = $hosts;
         static::$subdomains = $subdomains;
     }
-
     /**
      * Determine if the application should specify trusted hosts.
      *
@@ -98,10 +86,8 @@ class TrustHosts
      */
     protected function shouldSpecifyTrustedHosts()
     {
-        return ! $this->app->environment('local') &&
-               ! $this->app->runningUnitTests();
+        return !$this->app->environment('local') && !$this->app->runningUnitTests();
     }
-
     /**
      * Get a regular expression matching the application URL and all of its subdomains.
      *
@@ -109,11 +95,10 @@ class TrustHosts
      */
     protected function allSubdomainsOfApplicationUrl()
     {
-        if ($host = parse_url($this->app['config']->get('app.url'), PHP_URL_HOST)) {
-            return '^(.+\.)?'.preg_quote($host).'$';
+        if ($host = parse_url($this->app['config']->get('app.url'), \PHP_URL_HOST)) {
+            return '^(.+\.)?' . preg_quote($host) . '$';
         }
     }
-
     /**
      * Flush the state of the middleware.
      *

@@ -1,10 +1,10 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\web;
 
 /**
@@ -23,7 +23,6 @@ interface UrlRuleInterface
      * If false, it means this rule cannot be used to parse this path info.
      */
     public function parseRequest($manager, $request);
-
     /**
      * Creates a URL according to the given route and parameters.
      * @param UrlManager $manager the URL manager

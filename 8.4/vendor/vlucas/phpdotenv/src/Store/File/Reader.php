@@ -1,13 +1,11 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Odigos\Dotenv\Store\File;
 
-namespace Dotenv\Store\File;
-
-use Dotenv\Exception\InvalidEncodingException;
-use Dotenv\Util\Str;
-use PhpOption\Option;
-
+use Odigos\Dotenv\Exception\InvalidEncodingException;
+use Odigos\Dotenv\Util\Str;
+use Odigos\PhpOption\Option;
 /**
  * @internal
  */
@@ -24,7 +22,6 @@ final class Reader
     {
         //
     }
-
     /**
      * Read the file(s), and return their raw content.
      *
@@ -40,10 +37,9 @@ final class Reader
      *
      * @return array<string, string>
      */
-    public static function read(array $filePaths, bool $shortCircuit = true, ?string $fileEncoding = null)
+    public static function read(array $filePaths, bool $shortCircuit = \true, ?string $fileEncoding = null)
     {
         $output = [];
-
         foreach ($filePaths as $filePath) {
             $content = self::readFromFile($filePath, $fileEncoding);
             if ($content->isDefined()) {
@@ -53,10 +49,8 @@ final class Reader
                 }
             }
         }
-
         return $output;
     }
-
     /**
      * Read the given file.
      *
@@ -70,8 +64,7 @@ final class Reader
     private static function readFromFile(string $path, ?string $encoding = null)
     {
         /** @var Option<string> */
-        $content = Option::fromValue(@\file_get_contents($path), false);
-
+        $content = Option::fromValue(@\file_get_contents($path), \false);
         return $content->flatMap(static function (string $content) use ($encoding) {
             return Str::utf8($content, $encoding)->mapError(static function (string $error) {
                 throw new InvalidEncodingException($error);

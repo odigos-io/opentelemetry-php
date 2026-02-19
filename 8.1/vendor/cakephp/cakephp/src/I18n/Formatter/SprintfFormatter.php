@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -17,7 +17,6 @@ declare(strict_types=1);
 namespace Cake\I18n\Formatter;
 
 use Cake\I18n\FormatterInterface;
-
 /**
  * A formatter that will interpolate variables using sprintf and
  * select the correct plural form when required

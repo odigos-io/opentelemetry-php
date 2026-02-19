@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright 2015-present MongoDB, Inc.
  *
@@ -14,7 +15,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 namespace MongoDB;
 
 use Countable;
@@ -69,7 +69,6 @@ use MongoDB\Operation\UpdateOne;
 use MongoDB\Operation\UpdateSearchIndex;
 use MongoDB\Operation\Watch;
 use stdClass;
-
 use function array_diff_key;
 use function array_intersect_key;
 use function array_key_exists;
@@ -77,32 +76,18 @@ use function current;
 use function is_array;
 use function is_bool;
 use function strlen;
-
 class Collection
 {
-    private const DEFAULT_TYPE_MAP = [
-        'array' => BSONArray::class,
-        'document' => BSONDocument::class,
-        'root' => BSONDocument::class,
-    ];
-
+    private const DEFAULT_TYPE_MAP = ['array' => BSONArray::class, 'document' => BSONDocument::class, 'root' => BSONDocument::class];
     private const WIRE_VERSION_FOR_READ_CONCERN_WITH_WRITE_STAGE = 8;
-
     /** @psalm-var Encoder<array|stdClass|Document|PackedArray, mixed> */
     private readonly Encoder $builderEncoder;
-
     private ?DocumentCodec $codec = null;
-
     private ReadConcern $readConcern;
-
     private ReadPreference $readPreference;
-
     private array $typeMap;
-
     private WriteConcern $writeConcern;
-
     private bool $autoEncryptionEnabled;
-
     /**
      * Constructs new Collection instance.
      *
@@ -141,48 +126,38 @@ class Collection
         if (strlen($databaseName) < 1) {
             throw new InvalidArgumentException('$databaseName is invalid: ' . $databaseName);
         }
-
         if (strlen($collectionName) < 1) {
             throw new InvalidArgumentException('$collectionName is invalid: ' . $collectionName);
         }
-
-        if (isset($options['builderEncoder']) && ! $options['builderEncoder'] instanceof Encoder) {
+        if (isset($options['builderEncoder']) && !$options['builderEncoder'] instanceof Encoder) {
             throw InvalidArgumentException::invalidType('"builderEncoder" option', $options['builderEncoder'], Encoder::class);
         }
-
-        if (isset($options['codec']) && ! $options['codec'] instanceof DocumentCodec) {
+        if (isset($options['codec']) && !$options['codec'] instanceof DocumentCodec) {
             throw InvalidArgumentException::invalidType('"codec" option', $options['codec'], DocumentCodec::class);
         }
-
-        if (isset($options['readConcern']) && ! $options['readConcern'] instanceof ReadConcern) {
+        if (isset($options['readConcern']) && !$options['readConcern'] instanceof ReadConcern) {
             throw InvalidArgumentException::invalidType('"readConcern" option', $options['readConcern'], ReadConcern::class);
         }
-
-        if (isset($options['readPreference']) && ! $options['readPreference'] instanceof ReadPreference) {
+        if (isset($options['readPreference']) && !$options['readPreference'] instanceof ReadPreference) {
             throw InvalidArgumentException::invalidType('"readPreference" option', $options['readPreference'], ReadPreference::class);
         }
-
-        if (isset($options['typeMap']) && ! is_array($options['typeMap'])) {
+        if (isset($options['typeMap']) && !is_array($options['typeMap'])) {
             throw InvalidArgumentException::invalidType('"typeMap" option', $options['typeMap'], 'array');
         }
-
-        if (isset($options['writeConcern']) && ! $options['writeConcern'] instanceof WriteConcern) {
+        if (isset($options['writeConcern']) && !$options['writeConcern'] instanceof WriteConcern) {
             throw InvalidArgumentException::invalidType('"writeConcern" option', $options['writeConcern'], WriteConcern::class);
         }
-
-        if (isset($options['autoEncryptionEnabled']) && ! is_bool($options['autoEncryptionEnabled'])) {
+        if (isset($options['autoEncryptionEnabled']) && !is_bool($options['autoEncryptionEnabled'])) {
             throw InvalidArgumentException::invalidType('"autoEncryptionEnabled" option', $options['autoEncryptionEnabled'], 'boolean');
         }
-
         $this->builderEncoder = $options['builderEncoder'] ?? new BuilderEncoder();
         $this->codec = $options['codec'] ?? null;
         $this->readConcern = $options['readConcern'] ?? $this->manager->getReadConcern();
         $this->readPreference = $options['readPreference'] ?? $this->manager->getReadPreference();
         $this->typeMap = $options['typeMap'] ?? self::DEFAULT_TYPE_MAP;
         $this->writeConcern = $options['writeConcern'] ?? $this->manager->getWriteConcern();
-        $this->autoEncryptionEnabled = $options['autoEncryptionEnabled'] ?? false;
+        $this->autoEncryptionEnabled = $options['autoEncryptionEnabled'] ?? \false;
     }
-
     /**
      * Return internal properties for debugging purposes.
      *
@@ -190,19 +165,8 @@ class Collection
      */
     public function __debugInfo(): array
     {
-        return [
-            'builderEncoder' => $this->builderEncoder,
-            'codec' => $this->codec,
-            'collectionName' => $this->collectionName,
-            'databaseName' => $this->databaseName,
-            'manager' => $this->manager,
-            'readConcern' => $this->readConcern,
-            'readPreference' => $this->readPreference,
-            'typeMap' => $this->typeMap,
-            'writeConcern' => $this->writeConcern,
-        ];
+        return ['builderEncoder' => $this->builderEncoder, 'codec' => $this->codec, 'collectionName' => $this->collectionName, 'databaseName' => $this->databaseName, 'manager' => $this->manager, 'readConcern' => $this->readConcern, 'readPreference' => $this->readPreference, 'typeMap' => $this->typeMap, 'writeConcern' => $this->writeConcern];
     }
-
     /**
      * Return the collection namespace (e.g. "db.collection").
      *
@@ -212,7 +176,6 @@ class Collection
     {
         return $this->databaseName . '.' . $this->collectionName;
     }
-
     /**
      * Executes an aggregation framework pipeline on the collection.
      *
@@ -229,35 +192,23 @@ class Collection
         if (is_array($pipeline) && is_builder_pipeline($pipeline)) {
             $pipeline = new Pipeline(...$pipeline);
         }
-
         $pipeline = $this->builderEncoder->encodeIfSupported($pipeline);
-
         $hasWriteStage = is_last_pipeline_operator_write($pipeline);
-
         $options = $this->inheritReadPreference($options);
-
-        $server = $hasWriteStage
-            ? select_server_for_aggregate_write_stage($this->manager, $options)
-            : select_server($this->manager, $options);
-
+        $server = $hasWriteStage ? select_server_for_aggregate_write_stage($this->manager, $options) : select_server($this->manager, $options);
         /* MongoDB 4.2 and later supports a read concern when an $out stage is
          * being used, but earlier versions do not.
          */
-        if (! $hasWriteStage || server_supports_feature($server, self::WIRE_VERSION_FOR_READ_CONCERN_WITH_WRITE_STAGE)) {
+        if (!$hasWriteStage || server_supports_feature($server, self::WIRE_VERSION_FOR_READ_CONCERN_WITH_WRITE_STAGE)) {
             $options = $this->inheritReadConcern($options);
         }
-
         $options = $this->inheritCodecOrTypeMap($options);
-
         if ($hasWriteStage) {
             $options = $this->inheritWriteOptions($options);
         }
-
         $operation = new Aggregate($this->databaseName, $this->collectionName, $pipeline, $options);
-
         return $operation->execute($server);
     }
-
     /**
      * Executes multiple write operations.
      *
@@ -268,17 +219,14 @@ class Collection
      * @throws InvalidArgumentException for parameter/option parsing errors
      * @throws DriverRuntimeException for other driver errors (e.g. connection errors)
      */
-    public function bulkWrite(array $operations, array $options = []): BulkWriteResult
+    public function bulkWrite(array $operations, array $options = []): \MongoDB\BulkWriteResult
     {
         $options = $this->inheritBuilderEncoder($options);
         $options = $this->inheritWriteOptions($options);
         $options = $this->inheritCodec($options);
-
         $operation = new BulkWrite($this->databaseName, $this->collectionName, $operations, $options);
-
         return $operation->execute(select_server_for_write($this->manager, $options));
     }
-
     /**
      * Gets the number of documents matching the filter.
      *
@@ -296,12 +244,9 @@ class Collection
     {
         $filter = $this->builderEncoder->encodeIfSupported($filter);
         $options = $this->inheritReadOptions($options);
-
         $operation = new Count($this->databaseName, $this->collectionName, $filter, $options);
-
         return $operation->execute(select_server($this->manager, $options));
     }
-
     /**
      * Gets the number of documents matching the filter.
      *
@@ -317,12 +262,9 @@ class Collection
     {
         $filter = $this->builderEncoder->encodeIfSupported($filter);
         $options = $this->inheritReadOptions($options);
-
         $operation = new CountDocuments($this->databaseName, $this->collectionName, $filter, $options);
-
         return $operation->execute(select_server($this->manager, $options));
     }
-
     /**
      * Create a single index for the collection.
      *
@@ -341,10 +283,8 @@ class Collection
         $operationOptionKeys = ['comment' => 1, 'commitQuorum' => 1, 'maxTimeMS' => 1, 'session' => 1, 'writeConcern' => 1];
         $indexOptions = array_diff_key($options, $operationOptionKeys);
         $operationOptions = array_intersect_key($options, $operationOptionKeys);
-
         return current($this->createIndexes([['key' => $key] + $indexOptions], $operationOptions));
     }
-
     /**
      * Create one or more indexes for the collection.
      *
@@ -375,12 +315,9 @@ class Collection
     public function createIndexes(array $indexes, array $options = []): array
     {
         $options = $this->inheritWriteOptions($options);
-
         $operation = new CreateIndexes($this->databaseName, $this->collectionName, $indexes, $options);
-
         return $operation->execute(select_server_for_write($this->manager, $options));
     }
-
     /**
      * Create an Atlas Search index for the collection.
      * Only available when used against a 7.0+ Atlas cluster.
@@ -401,12 +338,9 @@ class Collection
         $indexOptions = array_intersect_key($options, $indexOptionKeys);
         /** @psalm-var array{comment?: mixed} */
         $operationOptions = array_diff_key($options, $indexOptionKeys);
-
         $names = $this->createSearchIndexes([['definition' => $definition] + $indexOptions], $operationOptions);
-
         return current($names);
     }
-
     /**
      * Create one or more Atlas Search indexes for the collection.
      * Only available when used against a 7.0+ Atlas cluster.
@@ -435,10 +369,8 @@ class Collection
     {
         $operation = new CreateSearchIndexes($this->databaseName, $this->collectionName, $indexes, $options);
         $server = select_server_for_write($this->manager, $options);
-
         return $operation->execute($server);
     }
-
     /**
      * Deletes all documents matching the filter.
      *
@@ -450,16 +382,13 @@ class Collection
      * @throws InvalidArgumentException for parameter/option parsing errors
      * @throws DriverRuntimeException for other driver errors (e.g. connection errors)
      */
-    public function deleteMany(array|object $filter, array $options = []): DeleteResult
+    public function deleteMany(array|object $filter, array $options = []): \MongoDB\DeleteResult
     {
         $filter = $this->builderEncoder->encodeIfSupported($filter);
         $options = $this->inheritWriteOptions($options);
-
         $operation = new DeleteMany($this->databaseName, $this->collectionName, $filter, $options);
-
         return $operation->execute(select_server_for_write($this->manager, $options));
     }
-
     /**
      * Deletes at most one document matching the filter.
      *
@@ -471,16 +400,13 @@ class Collection
      * @throws InvalidArgumentException for parameter/option parsing errors
      * @throws DriverRuntimeException for other driver errors (e.g. connection errors)
      */
-    public function deleteOne(array|object $filter, array $options = []): DeleteResult
+    public function deleteOne(array|object $filter, array $options = []): \MongoDB\DeleteResult
     {
         $filter = $this->builderEncoder->encodeIfSupported($filter);
         $options = $this->inheritWriteOptions($options);
-
         $operation = new DeleteOne($this->databaseName, $this->collectionName, $filter, $options);
-
         return $operation->execute(select_server_for_write($this->manager, $options));
     }
-
     /**
      * Finds the distinct values for a specified field across the collection.
      *
@@ -498,12 +424,9 @@ class Collection
         $filter = $this->builderEncoder->encodeIfSupported($filter);
         $options = $this->inheritReadOptions($options);
         $options = $this->inheritTypeMap($options);
-
         $operation = new Distinct($this->databaseName, $this->collectionName, $fieldName, $filter, $options);
-
         return $operation->execute(select_server($this->manager, $options));
     }
-
     /**
      * Drop this collection.
      *
@@ -516,21 +439,13 @@ class Collection
     public function drop(array $options = []): void
     {
         $options = $this->inheritWriteOptions($options);
-
         $server = select_server_for_write($this->manager, $options);
-
-        if ($this->autoEncryptionEnabled && ! isset($options['encryptedFields'])) {
-            $options['encryptedFields'] = get_encrypted_fields_from_driver($this->databaseName, $this->collectionName, $this->manager)
-                ?? get_encrypted_fields_from_server($this->databaseName, $this->collectionName, $server);
+        if ($this->autoEncryptionEnabled && !isset($options['encryptedFields'])) {
+            $options['encryptedFields'] = get_encrypted_fields_from_driver($this->databaseName, $this->collectionName, $this->manager) ?? get_encrypted_fields_from_server($this->databaseName, $this->collectionName, $server);
         }
-
-        $operation = isset($options['encryptedFields'])
-            ? new DropEncryptedCollection($this->databaseName, $this->collectionName, $options)
-            : new DropCollection($this->databaseName, $this->collectionName, $options);
-
+        $operation = isset($options['encryptedFields']) ? new DropEncryptedCollection($this->databaseName, $this->collectionName, $options) : new DropCollection($this->databaseName, $this->collectionName, $options);
         $operation->execute($server);
     }
-
     /**
      * Drop a single index in the collection.
      *
@@ -544,18 +459,13 @@ class Collection
     public function dropIndex(string|IndexInfo $indexName, array $options = []): void
     {
         $indexName = (string) $indexName;
-
         if ($indexName === '*') {
             throw new InvalidArgumentException('dropIndexes() must be used to drop multiple indexes');
         }
-
         $options = $this->inheritWriteOptions($options);
-
         $operation = new DropIndexes($this->databaseName, $this->collectionName, $indexName, $options);
-
         $operation->execute(select_server_for_write($this->manager, $options));
     }
-
     /**
      * Drop all indexes in the collection.
      *
@@ -568,12 +478,9 @@ class Collection
     public function dropIndexes(array $options = []): void
     {
         $options = $this->inheritWriteOptions($options);
-
         $operation = new DropIndexes($this->databaseName, $this->collectionName, '*', $options);
-
         $operation->execute(select_server_for_write($this->manager, $options));
     }
-
     /**
      * Drop a single Atlas Search index in the collection.
      * Only available when used against a 7.0+ Atlas cluster.
@@ -588,10 +495,8 @@ class Collection
     {
         $operation = new DropSearchIndex($this->databaseName, $this->collectionName, $name);
         $server = select_server_for_write($this->manager, $options);
-
         $operation->execute($server);
     }
-
     /**
      * Gets an estimated number of documents in the collection using the collection metadata.
      *
@@ -605,12 +510,9 @@ class Collection
     public function estimatedDocumentCount(array $options = []): int
     {
         $options = $this->inheritReadOptions($options);
-
         $operation = new EstimatedDocumentCount($this->databaseName, $this->collectionName, $options);
-
         return $operation->execute(select_server($this->manager, $options));
     }
-
     /**
      * Explains explainable commands.
      *
@@ -626,12 +528,9 @@ class Collection
     {
         $options = $this->inheritReadPreference($options);
         $options = $this->inheritTypeMap($options);
-
         $operation = new Explain($this->databaseName, $explainable, $options);
-
         return $operation->execute(select_server($this->manager, $options));
     }
-
     /**
      * Finds documents matching the query.
      *
@@ -648,12 +547,9 @@ class Collection
         $filter = $this->builderEncoder->encodeIfSupported($filter);
         $options = $this->inheritReadOptions($options);
         $options = $this->inheritCodecOrTypeMap($options);
-
         $operation = new Find($this->databaseName, $this->collectionName, $filter, $options);
-
         return $operation->execute(select_server($this->manager, $options));
     }
-
     /**
      * Finds a single document matching the query.
      *
@@ -670,12 +566,9 @@ class Collection
         $filter = $this->builderEncoder->encodeIfSupported($filter);
         $options = $this->inheritReadOptions($options);
         $options = $this->inheritCodecOrTypeMap($options);
-
         $operation = new FindOne($this->databaseName, $this->collectionName, $filter, $options);
-
         return $operation->execute(select_server($this->manager, $options));
     }
-
     /**
      * Finds a single document and deletes it, returning the original.
      *
@@ -695,12 +588,9 @@ class Collection
         $filter = $this->builderEncoder->encodeIfSupported($filter);
         $options = $this->inheritWriteOptions($options);
         $options = $this->inheritCodecOrTypeMap($options);
-
         $operation = new FindOneAndDelete($this->databaseName, $this->collectionName, $filter, $options);
-
         return $operation->execute(select_server_for_write($this->manager, $options));
     }
-
     /**
      * Finds a single document and replaces it, returning either the original or
      * the replaced document.
@@ -725,12 +615,9 @@ class Collection
         $filter = $this->builderEncoder->encodeIfSupported($filter);
         $options = $this->inheritWriteOptions($options);
         $options = $this->inheritCodecOrTypeMap($options);
-
         $operation = new FindOneAndReplace($this->databaseName, $this->collectionName, $filter, $replacement, $options);
-
         return $operation->execute(select_server_for_write($this->manager, $options));
     }
-
     /**
      * Finds a single document and updates it, returning either the original or
      * the updated document.
@@ -755,23 +642,18 @@ class Collection
         $filter = $this->builderEncoder->encodeIfSupported($filter);
         $options = $this->inheritWriteOptions($options);
         $options = $this->inheritCodecOrTypeMap($options);
-
         $operation = new FindOneAndUpdate($this->databaseName, $this->collectionName, $filter, $update, $options);
-
         return $operation->execute(select_server_for_write($this->manager, $options));
     }
-
     /** @psalm-return Encoder<array|stdClass|Document|PackedArray, mixed> */
     public function getBuilderEncoder(): Encoder
     {
         return $this->builderEncoder;
     }
-
     public function getCodec(): ?DocumentCodec
     {
         return $this->codec;
     }
-
     /**
      * Return the collection name.
      */
@@ -779,7 +661,6 @@ class Collection
     {
         return $this->collectionName;
     }
-
     /**
      * Return the database name.
      */
@@ -787,7 +668,6 @@ class Collection
     {
         return $this->databaseName;
     }
-
     /**
      * Return the Manager.
      */
@@ -795,7 +675,6 @@ class Collection
     {
         return $this->manager;
     }
-
     /**
      * Return the collection namespace.
      *
@@ -805,7 +684,6 @@ class Collection
     {
         return $this->databaseName . '.' . $this->collectionName;
     }
-
     /**
      * Return the read concern for this collection.
      *
@@ -815,7 +693,6 @@ class Collection
     {
         return $this->readConcern;
     }
-
     /**
      * Return the read preference for this collection.
      */
@@ -823,7 +700,6 @@ class Collection
     {
         return $this->readPreference;
     }
-
     /**
      * Return the type map for this collection.
      */
@@ -831,7 +707,6 @@ class Collection
     {
         return $this->typeMap;
     }
-
     /**
      * Return the write concern for this collection.
      *
@@ -841,7 +716,6 @@ class Collection
     {
         return $this->writeConcern;
     }
-
     /**
      * Inserts multiple documents.
      *
@@ -852,16 +726,13 @@ class Collection
      * @throws InvalidArgumentException for parameter/option parsing errors
      * @throws DriverRuntimeException for other driver errors (e.g. connection errors)
      */
-    public function insertMany(array $documents, array $options = []): InsertManyResult
+    public function insertMany(array $documents, array $options = []): \MongoDB\InsertManyResult
     {
         $options = $this->inheritWriteOptions($options);
         $options = $this->inheritCodec($options);
-
         $operation = new InsertMany($this->databaseName, $this->collectionName, $documents, $options);
-
         return $operation->execute(select_server_for_write($this->manager, $options));
     }
-
     /**
      * Inserts one document.
      *
@@ -872,16 +743,13 @@ class Collection
      * @throws InvalidArgumentException for parameter/option parsing errors
      * @throws DriverRuntimeException for other driver errors (e.g. connection errors)
      */
-    public function insertOne(array|object $document, array $options = []): InsertOneResult
+    public function insertOne(array|object $document, array $options = []): \MongoDB\InsertOneResult
     {
         $options = $this->inheritWriteOptions($options);
         $options = $this->inheritCodec($options);
-
         $operation = new InsertOne($this->databaseName, $this->collectionName, $document, $options);
-
         return $operation->execute(select_server_for_write($this->manager, $options));
     }
-
     /**
      * Returns information for all indexes for the collection.
      *
@@ -893,10 +761,8 @@ class Collection
     public function listIndexes(array $options = []): Iterator
     {
         $operation = new ListIndexes($this->databaseName, $this->collectionName, $options);
-
         return $operation->execute(select_server($this->manager, $options));
     }
-
     /**
      * Returns information for all Atlas Search indexes for the collection.
      * Only available when used against a 7.0+ Atlas cluster.
@@ -910,13 +776,10 @@ class Collection
     public function listSearchIndexes(array $options = []): Iterator
     {
         $options = $this->inheritTypeMap($options);
-
         $operation = new ListSearchIndexes($this->databaseName, $this->collectionName, $options);
         $server = select_server($this->manager, $options);
-
         return $operation->execute($server);
     }
-
     /**
      * Renames the collection.
      *
@@ -930,17 +793,13 @@ class Collection
      */
     public function rename(string $toCollectionName, ?string $toDatabaseName = null, array $options = []): void
     {
-        if (! isset($toDatabaseName)) {
+        if (!isset($toDatabaseName)) {
             $toDatabaseName = $this->databaseName;
         }
-
         $options = $this->inheritWriteOptions($options);
-
         $operation = new RenameCollection($this->databaseName, $this->collectionName, $toDatabaseName, $toCollectionName, $options);
-
         $operation->execute(select_server_for_write($this->manager, $options));
     }
-
     /**
      * Replaces at most one document matching the filter.
      *
@@ -953,17 +812,14 @@ class Collection
      * @throws InvalidArgumentException for parameter/option parsing errors
      * @throws DriverRuntimeException for other driver errors (e.g. connection errors)
      */
-    public function replaceOne(array|object $filter, array|object $replacement, array $options = []): UpdateResult
+    public function replaceOne(array|object $filter, array|object $replacement, array $options = []): \MongoDB\UpdateResult
     {
         $filter = $this->builderEncoder->encodeIfSupported($filter);
         $options = $this->inheritWriteOptions($options);
         $options = $this->inheritCodec($options);
-
         $operation = new ReplaceOne($this->databaseName, $this->collectionName, $filter, $replacement, $options);
-
         return $operation->execute(select_server_for_write($this->manager, $options));
     }
-
     /**
      * Updates all documents matching the filter.
      *
@@ -976,17 +832,14 @@ class Collection
      * @throws InvalidArgumentException for parameter/option parsing errors
      * @throws DriverRuntimeException for other driver errors (e.g. connection errors)
      */
-    public function updateMany(array|object $filter, array|object $update, array $options = []): UpdateResult
+    public function updateMany(array|object $filter, array|object $update, array $options = []): \MongoDB\UpdateResult
     {
         $filter = $this->builderEncoder->encodeIfSupported($filter);
         $update = $this->builderEncoder->encodeIfSupported($update);
         $options = $this->inheritWriteOptions($options);
-
         $operation = new UpdateMany($this->databaseName, $this->collectionName, $filter, $update, $options);
-
         return $operation->execute(select_server_for_write($this->manager, $options));
     }
-
     /**
      * Updates at most one document matching the filter.
      *
@@ -999,17 +852,14 @@ class Collection
      * @throws InvalidArgumentException for parameter/option parsing errors
      * @throws DriverRuntimeException for other driver errors (e.g. connection errors)
      */
-    public function updateOne(array|object $filter, array|object $update, array $options = []): UpdateResult
+    public function updateOne(array|object $filter, array|object $update, array $options = []): \MongoDB\UpdateResult
     {
         $filter = $this->builderEncoder->encodeIfSupported($filter);
         $update = $this->builderEncoder->encodeIfSupported($update);
         $options = $this->inheritWriteOptions($options);
-
         $operation = new UpdateOne($this->databaseName, $this->collectionName, $filter, $update, $options);
-
         return $operation->execute(select_server_for_write($this->manager, $options));
     }
-
     /**
      * Update a single Atlas Search index in the collection.
      * Only available when used against a 7.0+ Atlas cluster.
@@ -1025,10 +875,8 @@ class Collection
     {
         $operation = new UpdateSearchIndex($this->databaseName, $this->collectionName, $name, $definition, $options);
         $server = select_server_for_write($this->manager, $options);
-
         $operation->execute($server);
     }
-
     /**
      * Create a change stream for watching changes to the collection.
      *
@@ -1037,22 +885,17 @@ class Collection
      * @param array          $options  Command options
      * @throws InvalidArgumentException for parameter/option parsing errors
      */
-    public function watch(array|Pipeline $pipeline = [], array $options = []): ChangeStream
+    public function watch(array|Pipeline $pipeline = [], array $options = []): \MongoDB\ChangeStream
     {
         if (is_array($pipeline) && is_builder_pipeline($pipeline)) {
             $pipeline = new Pipeline(...$pipeline);
         }
-
         $pipeline = $this->builderEncoder->encodeIfSupported($pipeline);
-
         $options = $this->inheritReadOptions($options);
         $options = $this->inheritCodecOrTypeMap($options);
-
         $operation = new Watch($this->manager, $this->databaseName, $this->collectionName, $pipeline, $options);
-
         return $operation->execute(select_server($this->manager, $options));
     }
-
     /**
      * Get a clone of this collection with different options.
      *
@@ -1060,106 +903,79 @@ class Collection
      * @param array $options Collection constructor options
      * @throws InvalidArgumentException for parameter/option parsing errors
      */
-    public function withOptions(array $options = []): Collection
+    public function withOptions(array $options = []): \MongoDB\Collection
     {
-        $options += [
-            'autoEncryptionEnabled' => $this->autoEncryptionEnabled,
-            'builderEncoder' => $this->builderEncoder,
-            'codec' => $this->codec,
-            'readConcern' => $this->readConcern,
-            'readPreference' => $this->readPreference,
-            'typeMap' => $this->typeMap,
-            'writeConcern' => $this->writeConcern,
-        ];
-
-        return new Collection($this->manager, $this->databaseName, $this->collectionName, $options);
+        $options += ['autoEncryptionEnabled' => $this->autoEncryptionEnabled, 'builderEncoder' => $this->builderEncoder, 'codec' => $this->codec, 'readConcern' => $this->readConcern, 'readPreference' => $this->readPreference, 'typeMap' => $this->typeMap, 'writeConcern' => $this->writeConcern];
+        return new \MongoDB\Collection($this->manager, $this->databaseName, $this->collectionName, $options);
     }
-
     private function inheritBuilderEncoder(array $options): array
     {
         return ['builderEncoder' => $this->builderEncoder] + $options;
     }
-
     private function inheritCodec(array $options): array
     {
         // If the options contain a type map, don't inherit anything
         if (isset($options['typeMap'])) {
             return $options;
         }
-
-        if (! array_key_exists('codec', $options)) {
+        if (!array_key_exists('codec', $options)) {
             $options['codec'] = $this->codec;
         }
-
         return $options;
     }
-
     private function inheritCodecOrTypeMap(array $options): array
     {
         // If the options contain a type map, don't inherit anything
         if (isset($options['typeMap'])) {
             return $options;
         }
-
         // If this collection does not use a codec, or if a codec was explicitly
         // defined in the options, only inherit the type map (if possible)
-        if (! $this->codec || array_key_exists('codec', $options)) {
+        if (!$this->codec || array_key_exists('codec', $options)) {
             return $this->inheritTypeMap($options);
         }
-
         // At this point, we know that we use a codec and the options array did
         // not explicitly contain a codec, so we can inherit ours
         $options['codec'] = $this->codec;
-
         return $options;
     }
-
     private function inheritReadConcern(array $options): array
     {
         // ReadConcern and ReadPreference may not change within a transaction
-        if (! isset($options['readConcern']) && ! is_in_transaction($options)) {
+        if (!isset($options['readConcern']) && !is_in_transaction($options)) {
             $options['readConcern'] = $this->readConcern;
         }
-
         return $options;
     }
-
     private function inheritReadOptions(array $options): array
     {
         $options = $this->inheritReadConcern($options);
-
         return $this->inheritReadPreference($options);
     }
-
     private function inheritReadPreference(array $options): array
     {
         // ReadConcern and ReadPreference may not change within a transaction
-        if (! isset($options['readPreference']) && ! is_in_transaction($options)) {
+        if (!isset($options['readPreference']) && !is_in_transaction($options)) {
             $options['readPreference'] = $this->readPreference;
         }
-
         return $options;
     }
-
     private function inheritTypeMap(array $options): array
     {
         // Only inherit the type map if no codec is used
-        if (! isset($options['typeMap']) && ! isset($options['codec'])) {
+        if (!isset($options['typeMap']) && !isset($options['codec'])) {
             $options['typeMap'] = $this->typeMap;
         }
-
         return $options;
     }
-
     private function inheritWriteOptions(array $options): array
     {
         // WriteConcern may not change within a transaction
-        if (! is_in_transaction($options)) {
-            if (! isset($options['writeConcern'])) {
+        if (!is_in_transaction($options)) {
+            if (!isset($options['writeConcern'])) {
                 $options['writeConcern'] = $this->writeConcern;
             }
         }
-
         return $options;
     }
 }

@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Symfony\Component\HttpFoundation\Response;
-
 class RedirectIfAuthenticated
 {
     /**
@@ -16,7 +15,6 @@ class RedirectIfAuthenticated
      * @var callable|null
      */
     protected static $redirectToCallback;
-
     /**
      * Specify the guards for the middleware.
      *
@@ -26,9 +24,8 @@ class RedirectIfAuthenticated
      */
     public static function using($guard, ...$others)
     {
-        return static::class.':'.implode(',', [$guard, ...$others]);
+        return static::class . ':' . implode(',', [$guard, ...$others]);
     }
-
     /**
      * Handle an incoming request.
      *
@@ -37,26 +34,20 @@ class RedirectIfAuthenticated
     public function handle(Request $request, Closure $next, string ...$guards): Response
     {
         $guards = empty($guards) ? [null] : $guards;
-
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
                 return redirect($this->redirectTo($request));
             }
         }
-
         return $next($request);
     }
-
     /**
      * Get the path the user should be redirected to when they are authenticated.
      */
     protected function redirectTo(Request $request): ?string
     {
-        return static::$redirectToCallback
-            ? call_user_func(static::$redirectToCallback, $request)
-            : $this->defaultRedirectUri();
+        return static::$redirectToCallback ? call_user_func(static::$redirectToCallback, $request) : $this->defaultRedirectUri();
     }
-
     /**
      * Get the default URI the user should be redirected to when they are authenticated.
      */
@@ -67,18 +58,14 @@ class RedirectIfAuthenticated
                 return route($uri);
             }
         }
-
         $routes = Route::getRoutes()->get('GET');
-
         foreach (['dashboard', 'home'] as $uri) {
             if (isset($routes[$uri])) {
-                return '/'.$uri;
+                return '/' . $uri;
             }
         }
-
         return '/';
     }
-
     /**
      * Specify the callback that should be used to generate the redirect path.
      *

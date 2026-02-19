@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\Uid;
 
 /**
@@ -18,12 +17,11 @@ namespace Symfony\Component\Uid;
  *
  * @author Grégoire Pineau <lyrixx@lyrixx.info>
  */
-class UuidV3 extends Uuid
+class UuidV3 extends \Symfony\Component\Uid\Uuid
 {
     protected const TYPE = 3;
-
     public function __construct(string $uuid)
     {
-        parent::__construct($uuid, true);
+        parent::__construct($uuid, \true);
     }
 }

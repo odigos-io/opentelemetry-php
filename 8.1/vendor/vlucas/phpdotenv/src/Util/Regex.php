@@ -1,12 +1,10 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Odigos\Dotenv\Util;
 
-namespace Dotenv\Util;
-
-use GrahamCampbell\ResultType\Error;
-use GrahamCampbell\ResultType\Success;
-
+use Odigos\GrahamCampbell\ResultType\Error;
+use Odigos\GrahamCampbell\ResultType\Success;
 /**
  * @internal
  */
@@ -23,7 +21,6 @@ final class Regex
     {
         //
     }
-
     /**
      * Perform a preg match, wrapping up the result.
      *
@@ -38,7 +35,6 @@ final class Regex
             return @\preg_match($pattern, $subject) === 1;
         }, $subject);
     }
-
     /**
      * Perform a preg match all, wrapping up the result.
      *
@@ -53,7 +49,6 @@ final class Regex
             return (int) @\preg_match_all($pattern, $subject);
         }, $subject);
     }
-
     /**
      * Perform a preg replace callback, wrapping up the result.
      *
@@ -70,7 +65,6 @@ final class Regex
             return (string) @\preg_replace_callback($pattern, $callback, $subject, $limit ?? -1);
         }, $subject);
     }
-
     /**
      * Perform a preg split, wrapping up the result.
      *
@@ -86,7 +80,6 @@ final class Regex
             return (array) @\preg_split($pattern, $subject);
         }, $subject);
     }
-
     /**
      * Perform a preg operation, wrapping up the result.
      *
@@ -100,12 +93,10 @@ final class Regex
     private static function pregAndWrap(callable $operation, string $subject)
     {
         $result = $operation($subject);
-
         if (\preg_last_error() !== \PREG_NO_ERROR) {
             /** @var \GrahamCampbell\ResultType\Result<V,string> */
             return Error::create(\preg_last_error_msg());
         }
-
         /** @var \GrahamCampbell\ResultType\Result<V,string> */
         return Success::create($result);
     }

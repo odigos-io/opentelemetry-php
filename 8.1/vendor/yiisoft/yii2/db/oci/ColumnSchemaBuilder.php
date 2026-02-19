@@ -1,14 +1,13 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\db\oci;
 
 use yii\db\ColumnSchemaBuilder as AbstractColumnSchemaBuilder;
-
 /**
  * ColumnSchemaBuilder is the schema builder for Oracle databases.
  *
@@ -25,7 +24,6 @@ class ColumnSchemaBuilder extends AbstractColumnSchemaBuilder
     {
         return $this->isUnsigned ? ' UNSIGNED' : '';
     }
-
     /**
      * {@inheritdoc}
      */
@@ -41,7 +39,6 @@ class ColumnSchemaBuilder extends AbstractColumnSchemaBuilder
             default:
                 $format = '{type}{length}{default}{notnull}{check}{append}';
         }
-
         return $this->buildCompleteString($format);
     }
 }

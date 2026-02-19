@@ -6,19 +6,15 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file or at
 // https://developers.google.com/open-source/licenses/bsd
+namespace Odigos\Google\Protobuf;
 
-namespace Google\Protobuf;
-
-use Google\Protobuf\Internal\GetPublicDescriptorTrait;
-use Google\Protobuf\Internal\GPBType;
-
+use Odigos\Google\Protobuf\Internal\GetPublicDescriptorTrait;
+use Odigos\Google\Protobuf\Internal\GPBType;
 class FieldDescriptor
 {
     use GetPublicDescriptorTrait;
-
     /** @var  \Google\Protobuf\Internal\FieldDescriptor $internal_desc */
     private $internal_desc;
-
     /**
      * @internal
      */
@@ -26,7 +22,6 @@ class FieldDescriptor
     {
         $this->internal_desc = $internal_desc;
     }
-
     /**
      * @return string Field name
      */
@@ -34,7 +29,6 @@ class FieldDescriptor
     {
         return $this->internal_desc->getName();
     }
-
     /**
      * @return int Protobuf field number
      */
@@ -42,7 +36,6 @@ class FieldDescriptor
     {
         return $this->internal_desc->getNumber();
     }
-
     /**
      * @deprecated Use isRepeated() or isRequired() instead.
      *
@@ -52,7 +45,6 @@ class FieldDescriptor
     {
         return $this->internal_desc->getLabel();
     }
-
     /**
      * @return boolean
      */
@@ -60,7 +52,6 @@ class FieldDescriptor
     {
         return $this->internal_desc->isRequired();
     }
-
     /**
      * @return boolean
      */
@@ -68,7 +59,6 @@ class FieldDescriptor
     {
         return $this->internal_desc->isRepeated();
     }
-
     /**
      * @return int
      */
@@ -76,7 +66,6 @@ class FieldDescriptor
     {
         return $this->internal_desc->getType();
     }
-
     /**
      * @return OneofDescriptor
      */
@@ -84,7 +73,6 @@ class FieldDescriptor
     {
         return $this->getPublicDescriptor($this->internal_desc->getContainingOneof());
     }
-
     /**
      * Gets the field's containing oneof, only if non-synthetic.
      *
@@ -94,7 +82,6 @@ class FieldDescriptor
     {
         return $this->getPublicDescriptor($this->internal_desc->getRealContainingOneof());
     }
-
     /**
      * @return boolean
      */
@@ -102,7 +89,6 @@ class FieldDescriptor
     {
         return $this->internal_desc->hasOptionalKeyword();
     }
-
     /**
      * @return Descriptor Returns a descriptor for the field type if the field type is a message, otherwise throws \Exception
      * @throws \Exception
@@ -115,7 +101,6 @@ class FieldDescriptor
             throw new \Exception("Cannot get message type for non-message field '" . $this->getName() . "'");
         }
     }
-
     /**
      * @return EnumDescriptor Returns an enum descriptor if the field type is an enum, otherwise throws \Exception
      * @throws \Exception
@@ -128,7 +113,6 @@ class FieldDescriptor
             throw new \Exception("Cannot get enum type for non-enum field '" . $this->getName() . "'");
         }
     }
-
     /**
      * @return boolean
      */

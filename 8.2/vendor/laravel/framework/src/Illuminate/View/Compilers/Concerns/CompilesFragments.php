@@ -10,7 +10,6 @@ trait CompilesFragments
      * @var string
      */
     protected $lastFragment;
-
     /**
      * Compile the fragment statements into valid PHP.
      *
@@ -20,10 +19,8 @@ trait CompilesFragments
     protected function compileFragment($expression)
     {
         $this->lastFragment = trim($expression, "()'\" ");
-
         return "<?php \$__env->startFragment{$expression}; ?>";
     }
-
     /**
      * Compile the end-fragment statements into valid PHP.
      *

@@ -4,7 +4,6 @@ namespace Illuminate\Foundation\Testing;
 
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider;
-
 trait WithCachedRoutes
 {
     /**
@@ -14,18 +13,14 @@ trait WithCachedRoutes
      */
     protected function setUpWithCachedRoutes(): void
     {
-        if ((CachedState::$cachedRoutes ?? null) === null) {
+        if ((\Illuminate\Foundation\Testing\CachedState::$cachedRoutes ?? null) === null) {
             $routes = $this->app['router']->getRoutes();
-
             $routes->refreshNameLookups();
             $routes->refreshActionLookups();
-
-            CachedState::$cachedRoutes = $routes->compile();
+            \Illuminate\Foundation\Testing\CachedState::$cachedRoutes = $routes->compile();
         }
-
         $this->markRoutesCached($this->app);
     }
-
     /**
      * Reset the route service provider so it's not defaulting to loading cached routes.
      *
@@ -37,16 +32,12 @@ trait WithCachedRoutes
     {
         RouteServiceProvider::loadCachedRoutesUsing(null);
     }
-
     /**
      * Inform the container to treat routes as cached.
      */
     protected function markRoutesCached(Application $app): void
     {
-        $app->instance('routes.cached', true);
-
-        RouteServiceProvider::loadCachedRoutesUsing(
-            static fn () => app('router')->setCompiledRoutes(CachedState::$cachedRoutes)
-        );
+        $app->instance('routes.cached', \true);
+        RouteServiceProvider::loadCachedRoutesUsing(static fn() => app('router')->setCompiledRoutes(\Illuminate\Foundation\Testing\CachedState::$cachedRoutes));
     }
 }

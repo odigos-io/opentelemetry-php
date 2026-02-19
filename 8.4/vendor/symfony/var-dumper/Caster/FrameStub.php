@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\VarDumper\Caster;
 
 /**
@@ -16,13 +15,10 @@ namespace Symfony\Component\VarDumper\Caster;
  *
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class FrameStub extends EnumStub
+class FrameStub extends \Symfony\Component\VarDumper\Caster\EnumStub
 {
-    public function __construct(
-        array $frame,
-        public bool $keepArgs = true,
-        public bool $inTraceStub = false,
-    ) {
+    public function __construct(array $frame, public bool $keepArgs = \true, public bool $inTraceStub = \false)
+    {
         parent::__construct($frame);
     }
 }

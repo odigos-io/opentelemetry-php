@@ -1,10 +1,10 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\data;
 
 use yii\base\InvalidConfigException;
@@ -13,7 +13,6 @@ use yii\db\ActiveQueryInterface;
 use yii\db\Connection;
 use yii\db\QueryInterface;
 use yii\di\Instance;
-
 /**
  * ActiveDataProvider implements a data provider based on [[\yii\db\Query]] and [[\yii\db\ActiveQuery]].
  *
@@ -53,7 +52,7 @@ use yii\di\Instance;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class ActiveDataProvider extends BaseDataProvider
+class ActiveDataProvider extends \yii\data\BaseDataProvider
 {
     /**
      * @var QueryInterface|null the query that is used to fetch data models and [[totalCount]] if it is not explicitly set.
@@ -77,8 +76,6 @@ class ActiveDataProvider extends BaseDataProvider
      * Starting from version 2.0.2, this can also be a configuration array for creating the object.
      */
     public $db;
-
-
     /**
      * Initializes the DB connection component.
      * This method will initialize the [[db]] property (when set) to make sure it refers to a valid DB connection.
@@ -91,7 +88,6 @@ class ActiveDataProvider extends BaseDataProvider
             $this->db = Instance::ensure($this->db);
         }
     }
-
     /**
      * {@inheritdoc}
      */
@@ -101,20 +97,18 @@ class ActiveDataProvider extends BaseDataProvider
             throw new InvalidConfigException('The "query" property must be an instance of a class that implements the QueryInterface e.g. yii\db\Query or its subclasses.');
         }
         $query = clone $this->query;
-        if (($pagination = $this->getPagination()) !== false) {
+        if (($pagination = $this->getPagination()) !== \false) {
             $pagination->totalCount = $this->getTotalCount();
             if ($pagination->totalCount === 0) {
                 return [];
             }
             $query->limit($pagination->getLimit())->offset($pagination->getOffset());
         }
-        if (($sort = $this->getSort()) !== false) {
+        if (($sort = $this->getSort()) !== \false) {
             $query->addOrderBy($sort->getOrders());
         }
-
         return $query->all($this->db);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -129,7 +123,6 @@ class ActiveDataProvider extends BaseDataProvider
                     $keys[] = call_user_func($this->key, $model);
                 }
             }
-
             return $keys;
         } elseif ($this->query instanceof ActiveQueryInterface) {
             /** @var \yii\db\ActiveRecordInterface $class */
@@ -149,13 +142,10 @@ class ActiveDataProvider extends BaseDataProvider
                     $keys[] = $kk;
                 }
             }
-
             return $keys;
         }
-
         return array_keys($models);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -167,23 +157,19 @@ class ActiveDataProvider extends BaseDataProvider
         $query = clone $this->query;
         return (int) $query->limit(-1)->offset(-1)->orderBy([])->count('*', $this->db);
     }
-
     /**
      * {@inheritdoc}
      */
     public function setSort($value)
     {
         parent::setSort($value);
-        if ($this->query instanceof ActiveQueryInterface && ($sort = $this->getSort()) !== false) {
+        if ($this->query instanceof ActiveQueryInterface && ($sort = $this->getSort()) !== \false) {
             /** @var Model $modelClass */
             $modelClass = $this->query->modelClass;
             $model = $modelClass::instance();
             if (empty($sort->attributes)) {
                 foreach ($model->attributes() as $attribute) {
-                    $sort->attributes[$attribute] = [
-                        'asc' => [$attribute => SORT_ASC],
-                        'desc' => [$attribute => SORT_DESC],
-                    ];
+                    $sort->attributes[$attribute] = ['asc' => [$attribute => \SORT_ASC], 'desc' => [$attribute => \SORT_DESC]];
                 }
             }
             if ($sort->modelClass === null) {
@@ -191,13 +177,11 @@ class ActiveDataProvider extends BaseDataProvider
             }
         }
     }
-
     public function __clone()
     {
         if (is_object($this->query)) {
             $this->query = clone $this->query;
         }
-
         parent::__clone();
     }
 }

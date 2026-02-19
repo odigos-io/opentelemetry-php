@@ -9,31 +9,24 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+declare (strict_types=1);
+namespace Odigos\League\CommonMark\Extension\Attributes\Node;
 
-declare(strict_types=1);
-
-namespace League\CommonMark\Extension\Attributes\Node;
-
-use League\CommonMark\Node\Inline\AbstractInline;
-
+use Odigos\League\CommonMark\Node\Inline\AbstractInline;
 final class AttributesInline extends AbstractInline
 {
     /** @var array<string, mixed> */
     private array $attributes;
-
     private bool $block;
-
     /**
      * @param array<string, mixed> $attributes
      */
     public function __construct(array $attributes, bool $block)
     {
         parent::__construct();
-
         $this->attributes = $attributes;
-        $this->block      = $block;
+        $this->block = $block;
     }
-
     /**
      * @return array<string, mixed>
      */
@@ -41,7 +34,6 @@ final class AttributesInline extends AbstractInline
     {
         return $this->attributes;
     }
-
     /**
      * @param array<string, mixed> $attributes
      */
@@ -49,7 +41,6 @@ final class AttributesInline extends AbstractInline
     {
         $this->attributes = $attributes;
     }
-
     public function isBlock(): bool
     {
         return $this->block;

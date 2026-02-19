@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\Finder\Iterator;
 
 /**
@@ -24,7 +23,6 @@ namespace Symfony\Component\Finder\Iterator;
 class DepthRangeFilterIterator extends \FilterIterator
 {
     private int $minDepth = 0;
-
     /**
      * @param \RecursiveIteratorIterator<\RecursiveIterator<TKey, TValue>> $iterator The Iterator to filter
      * @param int                                                          $minDepth The min depth
@@ -34,10 +32,8 @@ class DepthRangeFilterIterator extends \FilterIterator
     {
         $this->minDepth = $minDepth;
         $iterator->setMaxDepth(\PHP_INT_MAX === $maxDepth ? -1 : $maxDepth);
-
         parent::__construct($iterator);
     }
-
     /**
      * Filters the iterator values.
      */

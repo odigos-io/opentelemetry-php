@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright 2018-present MongoDB, Inc.
  *
@@ -14,7 +15,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 namespace MongoDB\Operation;
 
 use MongoDB\Driver\Command;
@@ -23,10 +23,8 @@ use MongoDB\Driver\Server;
 use MongoDB\Driver\Session;
 use MongoDB\Driver\WriteConcern;
 use MongoDB\Exception\InvalidArgumentException;
-
 use function current;
 use function is_array;
-
 /**
  * Operation for the collMod command.
  *
@@ -62,24 +60,19 @@ final class ModifyCollection
         if (empty($collectionOptions)) {
             throw new InvalidArgumentException('$collectionOptions is empty');
         }
-
-        if (isset($this->options['session']) && ! $this->options['session'] instanceof Session) {
+        if (isset($this->options['session']) && !$this->options['session'] instanceof Session) {
             throw InvalidArgumentException::invalidType('"session" option', $this->options['session'], Session::class);
         }
-
-        if (isset($this->options['typeMap']) && ! is_array($this->options['typeMap'])) {
+        if (isset($this->options['typeMap']) && !is_array($this->options['typeMap'])) {
             throw InvalidArgumentException::invalidType('"typeMap" option', $this->options['typeMap'], 'array');
         }
-
-        if (isset($this->options['writeConcern']) && ! $this->options['writeConcern'] instanceof WriteConcern) {
+        if (isset($this->options['writeConcern']) && !$this->options['writeConcern'] instanceof WriteConcern) {
             throw InvalidArgumentException::invalidType('"writeConcern" option', $this->options['writeConcern'], WriteConcern::class);
         }
-
         if (isset($this->options['writeConcern']) && $this->options['writeConcern']->isDefault()) {
             unset($this->options['writeConcern']);
         }
     }
-
     /**
      * Execute the operation.
      *
@@ -89,25 +82,19 @@ final class ModifyCollection
     public function execute(Server $server): array|object
     {
         $cursor = $server->executeWriteCommand($this->databaseName, $this->createCommand(), $this->createOptions());
-
         if (isset($this->options['typeMap'])) {
             $cursor->setTypeMap($this->options['typeMap']);
         }
-
         return current($cursor->toArray());
     }
-
     private function createCommand(): Command
     {
         $cmd = ['collMod' => $this->collectionName] + $this->collectionOptions;
-
         if (isset($this->options['comment'])) {
             $cmd['comment'] = $this->options['comment'];
         }
-
         return new Command($cmd);
     }
-
     /**
      * Create options for executing the command.
      *
@@ -116,15 +103,12 @@ final class ModifyCollection
     private function createOptions(): array
     {
         $options = [];
-
         if (isset($this->options['session'])) {
             $options['session'] = $this->options['session'];
         }
-
         if (isset($this->options['writeConcern'])) {
             $options['writeConcern'] = $this->options['writeConcern'];
         }
-
         return $options;
     }
 }

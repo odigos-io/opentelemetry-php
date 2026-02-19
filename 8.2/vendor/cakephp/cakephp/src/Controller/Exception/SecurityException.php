@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -17,7 +17,6 @@ namespace Cake\Controller\Exception;
 use Cake\Http\Exception\BadRequestException;
 use Throwable;
 use function Cake\Core\deprecationWarning;
-
 /**
  * Security exception - used when SecurityComponent detects any issue with the current request
  *
@@ -31,14 +30,12 @@ class SecurityException extends BadRequestException
      * @var string
      */
     protected string $_type = 'secure';
-
     /**
      * Reason for request blackhole
      *
      * @var string|null
      */
     protected ?string $_reason = null;
-
     /**
      * Constructor
      *
@@ -48,14 +45,9 @@ class SecurityException extends BadRequestException
      */
     public function __construct(?string $message = null, ?int $code = null, ?Throwable $previous = null)
     {
-        deprecationWarning(
-            '5.2.0',
-            static::class . ' is deprecated. Use BadRequestException or a custom exception instead.',
-        );
-
+        deprecationWarning('5.2.0', static::class . ' is deprecated. Use BadRequestException or a custom exception instead.');
         parent::__construct($message, $code, $previous);
     }
-
     /**
      * Getter for type
      *
@@ -65,7 +57,6 @@ class SecurityException extends BadRequestException
     {
         return $this->_type;
     }
-
     /**
      * Set Message
      *
@@ -76,7 +67,6 @@ class SecurityException extends BadRequestException
     {
         $this->message = $message;
     }
-
     /**
      * Set Reason
      *
@@ -86,10 +76,8 @@ class SecurityException extends BadRequestException
     public function setReason(?string $reason = null)
     {
         $this->_reason = $reason;
-
         return $this;
     }
-
     /**
      * Get Reason
      *

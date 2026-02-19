@@ -1,16 +1,15 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\web;
 
-use Yii;
+use Odigos\Yii;
 use yii\base\Component;
 use yii\helpers\Json;
-
 /**
  * JsonResponseFormatter formats the given data into a JSON or JSONP response content.
  *
@@ -36,7 +35,7 @@ use yii\helpers\Json;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class JsonResponseFormatter extends Component implements ResponseFormatterInterface
+class JsonResponseFormatter extends Component implements \yii\web\ResponseFormatterInterface
 {
     /**
      * JSON Content Type
@@ -64,7 +63,7 @@ class JsonResponseFormatter extends Component implements ResponseFormatterInterf
      * must be an array consisting of `data` and `callback` members. The latter should be a JavaScript
      * function name while the former will be passed to this function as a parameter.
      */
-    public $useJsonp = false;
+    public $useJsonp = \false;
     /**
      * @var int the encoding options passed to [[Json::encode()]]. For more details please refer to
      * <https://www.php.net/manual/en/function.json-encode.php>.
@@ -80,7 +79,7 @@ class JsonResponseFormatter extends Component implements ResponseFormatterInterf
      * This property has no effect, when [[useJsonp]] is `true`.
      * @since 2.0.7
      */
-    public $prettyPrint = false;
+    public $prettyPrint = \false;
     /**
      * @var bool Avoids objects with zero-indexed keys to be encoded as array
      * Json::encode((object)['test']) will be encoded as an object not array. This matches the behaviour of json_encode().
@@ -88,8 +87,6 @@ class JsonResponseFormatter extends Component implements ResponseFormatterInterf
      * @since 2.0.44
      */
     public $keepObjectType;
-
-
     /**
      * Formats the specified response.
      * @param Response $response the response to be formatted.
@@ -97,21 +94,17 @@ class JsonResponseFormatter extends Component implements ResponseFormatterInterf
     public function format($response)
     {
         if ($this->contentType === null) {
-            $this->contentType = $this->useJsonp
-                ? self::CONTENT_TYPE_JSONP
-                : self::CONTENT_TYPE_JSON;
-        } elseif (strpos($this->contentType, 'charset') === false) {
+            $this->contentType = $this->useJsonp ? self::CONTENT_TYPE_JSONP : self::CONTENT_TYPE_JSON;
+        } elseif (strpos($this->contentType, 'charset') === \false) {
             $this->contentType .= '; charset=UTF-8';
         }
         $response->getHeaders()->set('Content-Type', $this->contentType);
-
         if ($this->useJsonp) {
             $this->formatJsonp($response);
         } else {
             $this->formatJson($response);
         }
     }
-
     /**
      * Formats response data in JSON format.
      * @param Response $response
@@ -121,44 +114,30 @@ class JsonResponseFormatter extends Component implements ResponseFormatterInterf
         if ($response->data !== null) {
             $options = $this->encodeOptions;
             if ($this->prettyPrint) {
-                $options |= JSON_PRETTY_PRINT;
+                $options |= \JSON_PRETTY_PRINT;
             }
-
             $default = Json::$keepObjectType;
             if ($this->keepObjectType !== null) {
                 Json::$keepObjectType = $this->keepObjectType;
             }
-
             $response->content = Json::encode($response->data, $options);
-
             // Restore default value to avoid any unexpected behaviour
             Json::$keepObjectType = $default;
         } elseif ($response->content === null) {
             $response->content = 'null';
         }
     }
-
     /**
      * Formats response data in JSONP format.
      * @param Response $response
      */
     protected function formatJsonp($response)
     {
-        if (
-            is_array($response->data)
-            && isset($response->data['data'], $response->data['callback'])
-        ) {
-            $response->content = sprintf(
-                '%s(%s);',
-                $response->data['callback'],
-                Json::htmlEncode($response->data['data'])
-            );
+        if (is_array($response->data) && isset($response->data['data'], $response->data['callback'])) {
+            $response->content = sprintf('%s(%s);', $response->data['callback'], Json::htmlEncode($response->data['data']));
         } elseif ($response->data !== null) {
             $response->content = '';
-            Yii::warning(
-                "The 'jsonp' response requires that the data be an array consisting of both 'data' and 'callback' elements.",
-                __METHOD__
-            );
+            Yii::warning("The 'jsonp' response requires that the data be an array consisting of both 'data' and 'callback' elements.", __METHOD__);
         }
     }
 }

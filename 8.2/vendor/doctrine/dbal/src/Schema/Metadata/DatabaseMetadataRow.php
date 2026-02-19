@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\DBAL\Schema\Metadata;
 
 /**
@@ -13,7 +12,6 @@ final readonly class DatabaseMetadataRow
     public function __construct(private string $databaseName)
     {
     }
-
     /** @return non-empty-string */
     public function getDatabaseName(): string
     {

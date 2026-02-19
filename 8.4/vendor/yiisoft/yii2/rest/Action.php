@@ -1,17 +1,16 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\rest;
 
 use yii\base\InvalidConfigException;
 use yii\db\ActiveRecordInterface;
 use yii\web\NotFoundHttpException;
 use yii\base\Action as BaseAction;
-
 /**
  * Action is the base class for action classes that implement RESTful API.
  *
@@ -60,8 +59,6 @@ class Action extends BaseAction
      * ```
      */
     public $checkAccess;
-
-
     /**
      * {@inheritdoc}
      */
@@ -71,7 +68,6 @@ class Action extends BaseAction
             throw new InvalidConfigException(get_class($this) . '::$modelClass must be set.');
         }
     }
-
     /**
      * Returns the data model based on the primary key given.
      * If the data model is not found, a 404 HTTP exception will be raised.
@@ -87,7 +83,6 @@ class Action extends BaseAction
         if ($this->findModel !== null) {
             return call_user_func($this->findModel, $id, $this);
         }
-
         /** @var ActiveRecordInterface $modelClass */
         $modelClass = $this->modelClass;
         $keys = $modelClass::primaryKey();
@@ -99,11 +94,9 @@ class Action extends BaseAction
         } elseif ($id !== null) {
             $model = $modelClass::findOne($id);
         }
-
         if (isset($model)) {
             return $model;
         }
-
-        throw new NotFoundHttpException("Object not found: $id");
+        throw new NotFoundHttpException("Object not found: {$id}");
     }
 }

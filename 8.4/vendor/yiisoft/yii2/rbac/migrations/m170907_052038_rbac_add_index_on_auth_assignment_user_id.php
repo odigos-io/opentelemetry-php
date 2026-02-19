@@ -1,15 +1,15 @@
 <?php
 
+namespace Odigos;
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 use yii\base\InvalidConfigException;
 use yii\db\Migration;
 use yii\rbac\DbManager;
-
 /**
  * Adds index on `user_id` column in `auth_assignment` table for performance reasons.
  *
@@ -22,7 +22,6 @@ class m170907_052038_rbac_add_index_on_auth_assignment_user_id extends Migration
 {
     public $column = 'user_id';
     public $index = 'auth_assignment_user_id_idx';
-
     /**
      * @throws yii\base\InvalidConfigException
      * @return DbManager
@@ -33,10 +32,8 @@ class m170907_052038_rbac_add_index_on_auth_assignment_user_id extends Migration
         if (!$authManager instanceof DbManager) {
             throw new InvalidConfigException('You should configure "authManager" component to use database before executing this migration.');
         }
-
         return $authManager;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -44,10 +41,8 @@ class m170907_052038_rbac_add_index_on_auth_assignment_user_id extends Migration
     {
         $authManager = $this->getAuthManager();
         $this->db = $authManager->db;
-
         $this->createIndex($this->index, $authManager->assignmentTable, $this->column);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -55,7 +50,15 @@ class m170907_052038_rbac_add_index_on_auth_assignment_user_id extends Migration
     {
         $authManager = $this->getAuthManager();
         $this->db = $authManager->db;
-
         $this->dropIndex($this->index, $authManager->assignmentTable);
     }
 }
+/**
+ * Adds index on `user_id` column in `auth_assignment` table for performance reasons.
+ *
+ * @see https://github.com/yiisoft/yii2/pull/14765
+ *
+ * @author Ivan Buttinoni <ivan.buttinoni@cibi.it>
+ * @since 2.0.13
+ */
+\class_alias('Odigos\m170907_052038_rbac_add_index_on_auth_assignment_user_id', 'm170907_052038_rbac_add_index_on_auth_assignment_user_id', \false);

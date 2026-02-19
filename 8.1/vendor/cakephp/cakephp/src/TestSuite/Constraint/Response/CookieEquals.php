@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -17,24 +17,21 @@ namespace Cake\TestSuite\Constraint\Response;
 
 use Cake\Http\Response;
 use Psr\Http\Message\ResponseInterface;
-
 /**
  * CookieEquals
  *
  * @internal
  */
-class CookieEquals extends ResponseBase
+class CookieEquals extends \Cake\TestSuite\Constraint\Response\ResponseBase
 {
     /**
      * @var \Cake\Http\Response
      */
     protected ResponseInterface $response;
-
     /**
      * @var string
      */
     protected string $cookieName;
-
     /**
      * Constructor.
      *
@@ -44,10 +41,8 @@ class CookieEquals extends ResponseBase
     public function __construct(?Response $response, string $cookieName)
     {
         parent::__construct($response);
-
         $this->cookieName = $cookieName;
     }
-
     /**
      * Checks assertion
      *
@@ -58,10 +53,8 @@ class CookieEquals extends ResponseBase
     public function matches($other): bool
     {
         $cookie = $this->readCookie($this->cookieName);
-
         return $cookie !== null && $cookie['value'] === $other;
     }
-
     /**
      * Assertion message
      *

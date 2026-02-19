@@ -1,19 +1,18 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\behaviors;
 
-use Yii;
+use Odigos\Yii;
 use yii\base\InvalidConfigException;
 use yii\db\BaseActiveRecord;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Inflector;
 use yii\validators\UniqueValidator;
-
 /**
  * SluggableBehavior automatically fills the specified attribute with a value that can be used a slug in a URL.
  *
@@ -64,7 +63,7 @@ use yii\validators\UniqueValidator;
  * @template T of BaseActiveRecord
  * @extends AttributeBehavior<T>
  */
-class SluggableBehavior extends AttributeBehavior
+class SluggableBehavior extends \yii\behaviors\AttributeBehavior
 {
     /**
      * @var string the attribute that will receive the slug value
@@ -94,19 +93,19 @@ class SluggableBehavior extends AttributeBehavior
      * If true, the behavior will not generate a new slug even if [[attribute]] is changed.
      * @since 2.0.2
      */
-    public $immutable = false;
+    public $immutable = \false;
     /**
      * @var bool whether to ensure generated slug value to be unique among owner class records.
      * If enabled behavior will validate slug uniqueness automatically. If validation fails it will attempt
      * generating unique slug value from based one until success.
      */
-    public $ensureUnique = false;
+    public $ensureUnique = \false;
     /**
      * @var bool whether to skip slug generation if [[attribute]] is null or an empty string.
      * If true, the behaviour will not generate a new slug if [[attribute]] is null or an empty string.
      * @since 2.0.13
      */
-    public $skipOnEmpty = false;
+    public $skipOnEmpty = \false;
     /**
      * @var array configuration for slug uniqueness validator. Parameter 'class' may be omitted - by default
      * [[UniqueValidator]] will be used.
@@ -127,24 +126,19 @@ class SluggableBehavior extends AttributeBehavior
      * If not set unique slug will be generated adding incrementing suffix to the base slug.
      */
     public $uniqueSlugGenerator;
-
-
     /**
      * {@inheritdoc}
      */
     public function init()
     {
         parent::init();
-
         if (empty($this->attributes)) {
             $this->attributes = [BaseActiveRecord::EVENT_BEFORE_VALIDATE => $this->slugAttribute];
         }
-
         if ($this->attribute === null && $this->value === null) {
             throw new InvalidConfigException('Either "attribute" or "value" property must be specified.');
         }
     }
-
     /**
      * {@inheritdoc}
      */
@@ -153,7 +147,6 @@ class SluggableBehavior extends AttributeBehavior
         if (!$this->isNewSlugNeeded()) {
             return $this->owner->{$this->slugAttribute};
         }
-
         if ($this->attribute !== null) {
             $slugParts = [];
             foreach ((array) $this->attribute as $attribute) {
@@ -167,10 +160,8 @@ class SluggableBehavior extends AttributeBehavior
         } else {
             $slug = parent::getValue($event);
         }
-
         return $this->ensureUnique ? $this->makeUnique($slug) : $slug;
     }
-
     /**
      * Checks whether the new slug generation is needed
      * This method is called by [[getValue]] to check whether the new slug generation is needed.
@@ -181,26 +172,21 @@ class SluggableBehavior extends AttributeBehavior
     protected function isNewSlugNeeded()
     {
         if (empty($this->owner->{$this->slugAttribute})) {
-            return true;
+            return \true;
         }
-
         if ($this->immutable) {
-            return false;
+            return \false;
         }
-
         if ($this->attribute === null) {
-            return true;
+            return \true;
         }
-
         foreach ((array) $this->attribute as $attribute) {
             if ($this->owner->isAttributeChanged($attribute)) {
-                return true;
+                return \true;
             }
         }
-
-        return false;
+        return \false;
     }
-
     /**
      * This method is called by [[getValue]] to generate the slug.
      * You may override it to customize slug generation.
@@ -213,7 +199,6 @@ class SluggableBehavior extends AttributeBehavior
     {
         return Inflector::slug(implode('-', $slugParts));
     }
-
     /**
      * This method is called by [[getValue]] when [[ensureUnique]] is true to generate the unique slug.
      * Calls [[generateUniqueSlug]] until generated slug is unique and returns it.
@@ -231,10 +216,8 @@ class SluggableBehavior extends AttributeBehavior
             $iteration++;
             $uniqueSlug = $this->generateUniqueSlug($slug, $iteration);
         }
-
         return $uniqueSlug;
     }
-
     /**
      * Checks if given slug value is unique.
      * @param string $slug slug value
@@ -243,22 +226,14 @@ class SluggableBehavior extends AttributeBehavior
     protected function validateSlug($slug)
     {
         /** @var UniqueValidator $validator */
-        $validator = Yii::createObject(array_merge(
-            [
-                'class' => UniqueValidator::className(),
-            ],
-            $this->uniqueValidator
-        ));
-
+        $validator = Yii::createObject(array_merge(['class' => UniqueValidator::className()], $this->uniqueValidator));
         /** @var BaseActiveRecord $model */
         $model = clone $this->owner;
         $model->clearErrors();
         $model->{$this->slugAttribute} = $slug;
-
         $validator->validateAttribute($model, $this->slugAttribute);
         return !$model->hasErrors();
     }
-
     /**
      * Generates slug using configured callback or increment of iteration.
      * @param string $baseSlug base slug value
@@ -271,10 +246,8 @@ class SluggableBehavior extends AttributeBehavior
         if (is_callable($this->uniqueSlugGenerator)) {
             return call_user_func($this->uniqueSlugGenerator, $baseSlug, $iteration, $this->owner);
         }
-
         return $baseSlug . '-' . ($iteration + 1);
     }
-
     /**
      * Checks if $slugPart is empty string or null.
      *

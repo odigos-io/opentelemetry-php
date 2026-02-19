@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * ValidationRule.
  *
@@ -23,7 +23,6 @@ namespace Cake\Validation;
 use Cake\ORM\Table;
 use Closure;
 use ReflectionFunction;
-
 /**
  * ValidationRule object. Represents a validation method, error message and
  * rules for applying such method to a field.
@@ -36,28 +35,24 @@ class ValidationRule
      * @var callable|string
      */
     protected $_rule;
-
     /**
      * The 'on' key
      *
      * @var callable|string|null
      */
     protected $_on;
-
     /**
      * The 'last' key
      *
      * @var bool
      */
-    protected bool $_last = false;
-
+    protected bool $_last = \false;
     /**
      * The 'message' key
      *
      * @var string|null
      */
     protected ?string $_message = null;
-
     /**
      * Key under which the object or class where the method to be used for
      * validation will be found
@@ -65,14 +60,12 @@ class ValidationRule
      * @var string
      */
     protected string $_provider = 'default';
-
     /**
      * Extra arguments to be passed to the validation method
      *
      * @var array
      */
     protected array $_pass = [];
-
     /**
      * Constructor
      *
@@ -82,7 +75,6 @@ class ValidationRule
     {
         $this->_addValidatorProps($validator);
     }
-
     /**
      * Returns whether this rule should break validation process for associated field
      * after it fails
@@ -93,7 +85,6 @@ class ValidationRule
     {
         return $this->_last;
     }
-
     /**
      * Dispatches the validation rule to the given validator method and returns
      * a boolean indicating whether the rule passed or not. If a string is returned
@@ -114,28 +105,20 @@ class ValidationRule
      */
     public function process(mixed $value, array $providers, array $context = []): array|string|bool
     {
-        $context += ['data' => [], 'newRecord' => true, 'providers' => $providers];
-
+        $context += ['data' => [], 'newRecord' => \true, 'providers' => $providers];
         if ($this->_skip($context)) {
-            return true;
+            return \true;
         }
-
         if (is_string($this->_rule)) {
             $provider = $providers[$this->_provider];
-            if (
-                class_exists(Table::class)
-                && $provider instanceof Table
-                && !method_exists($provider, $this->_rule)
-                && $provider->behaviors()->hasMethod($this->_rule)
-            ) {
+            if (class_exists(Table::class) && $provider instanceof Table && !method_exists($provider, $this->_rule) && $provider->behaviors()->hasMethod($this->_rule)) {
                 foreach ($provider->behaviors() as $behavior) {
-                    if (in_array($this->_rule, $behavior->implementedMethods(), true)) {
+                    if (in_array($this->_rule, $behavior->implementedMethods(), \true)) {
                         $provider = $behavior;
                         break;
                     }
                 }
             }
-
             /** @phpstan-ignore-next-line */
             $callable = [$provider, $this->_rule](...);
         } else {
@@ -144,28 +127,21 @@ class ValidationRule
                 $callable = $callable(...);
             }
         }
-
         $args = [$value];
-
         if ($this->_pass) {
             $args = array_merge([$value], array_values($this->_pass));
         }
-
         $params = (new ReflectionFunction($callable))->getParameters();
         $lastParam = array_pop($params);
         if ($lastParam && $lastParam->getName() === 'context') {
             $args['context'] = $context;
         }
-
         $result = $callable(...$args);
-
-        if ($result === false) {
-            return $this->_message ?: false;
+        if ($result === \false) {
+            return $this->_message ?: \false;
         }
-
         return $result;
     }
-
     /**
      * Checks if the validation rule should be skipped
      *
@@ -182,20 +158,14 @@ class ValidationRule
     {
         if (is_string($this->_on)) {
             $newRecord = $context['newRecord'];
-
-            return ($this->_on === Validator::WHEN_CREATE && !$newRecord)
-                || ($this->_on === Validator::WHEN_UPDATE && $newRecord);
+            return $this->_on === \Cake\Validation\Validator::WHEN_CREATE && !$newRecord || $this->_on === \Cake\Validation\Validator::WHEN_UPDATE && $newRecord;
         }
-
         if ($this->_on !== null) {
             $function = $this->_on;
-
             return !$function($context);
         }
-
-        return false;
+        return \false;
     }
-
     /**
      * Sets the rule properties from the rule entry in validate
      *
@@ -212,12 +182,11 @@ class ValidationRule
                 $this->_pass = array_slice($value, 1);
                 $value = array_shift($value);
             }
-            if (in_array($key, ['rule', 'on', 'message', 'last', 'provider', 'pass'], true)) {
+            if (in_array($key, ['rule', 'on', 'message', 'last', 'provider', 'pass'], \true)) {
                 $this->{"_{$key}"} = $value;
             }
         }
     }
-
     /**
      * Returns the value of a property by name
      *
@@ -227,7 +196,6 @@ class ValidationRule
     public function get(string $property): mixed
     {
         $property = '_' . $property;
-
         return $this->{$property} ?? null;
     }
 }

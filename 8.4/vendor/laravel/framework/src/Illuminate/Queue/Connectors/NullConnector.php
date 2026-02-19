@@ -3,8 +3,7 @@
 namespace Illuminate\Queue\Connectors;
 
 use Illuminate\Queue\NullQueue;
-
-class NullConnector implements ConnectorInterface
+class NullConnector implements \Illuminate\Queue\Connectors\ConnectorInterface
 {
     /**
      * Establish a queue connection.
@@ -14,6 +13,6 @@ class NullConnector implements ConnectorInterface
      */
     public function connect(array $config)
     {
-        return new NullQueue;
+        return new NullQueue();
     }
 }

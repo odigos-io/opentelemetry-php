@@ -5,46 +5,39 @@ namespace Illuminate\Queue\Middleware;
 use Illuminate\Container\Container;
 use Illuminate\Contracts\Cache\Repository as Cache;
 use Illuminate\Support\InteractsWithTime;
-
 class WithoutOverlapping
 {
     use InteractsWithTime;
-
     /**
      * The job's unique key used for preventing overlaps.
      *
      * @var string
      */
     public $key;
-
     /**
      * The number of seconds before a job should be available again if no lock was acquired.
      *
      * @var \DateTimeInterface|int|null
      */
     public $releaseAfter;
-
     /**
      * The number of seconds before the lock should expire.
      *
      * @var int
      */
     public $expiresAfter;
-
     /**
      * The prefix of the lock key.
      *
      * @var string
      */
     public $prefix = 'laravel-queue-overlap:';
-
     /**
      * Share the key across different jobs.
      *
      * @var bool
      */
-    public $shareKey = false;
-
+    public $shareKey = \false;
     /**
      * Create a new middleware instance.
      *
@@ -58,7 +51,6 @@ class WithoutOverlapping
         $this->releaseAfter = $releaseAfter;
         $this->expiresAfter = $this->secondsUntil($expiresAfter);
     }
-
     /**
      * Process the job.
      *
@@ -68,21 +60,17 @@ class WithoutOverlapping
      */
     public function handle($job, $next)
     {
-        $lock = Container::getInstance()->make(Cache::class)->lock(
-            $this->getLockKey($job), $this->expiresAfter
-        );
-
+        $lock = Container::getInstance()->make(Cache::class)->lock($this->getLockKey($job), $this->expiresAfter);
         if ($lock->get()) {
             try {
                 $next($job);
             } finally {
                 $lock->release();
             }
-        } elseif (! is_null($this->releaseAfter)) {
+        } elseif (!is_null($this->releaseAfter)) {
             $job->release($this->releaseAfter);
         }
     }
-
     /**
      * Set the delay (in seconds) to release the job back to the queue.
      *
@@ -92,10 +80,8 @@ class WithoutOverlapping
     public function releaseAfter($releaseAfter)
     {
         $this->releaseAfter = $releaseAfter;
-
         return $this;
     }
-
     /**
      * Do not release the job back to the queue if no lock can be acquired.
      *
@@ -104,10 +90,8 @@ class WithoutOverlapping
     public function dontRelease()
     {
         $this->releaseAfter = null;
-
         return $this;
     }
-
     /**
      * Set the maximum number of seconds that can elapse before the lock is released.
      *
@@ -117,10 +101,8 @@ class WithoutOverlapping
     public function expireAfter($expiresAfter)
     {
         $this->expiresAfter = $this->secondsUntil($expiresAfter);
-
         return $this;
     }
-
     /**
      * Set the prefix of the lock key.
      *
@@ -130,10 +112,8 @@ class WithoutOverlapping
     public function withPrefix(string $prefix)
     {
         $this->prefix = $prefix;
-
         return $this;
     }
-
     /**
      * Indicate that the lock key should be shared across job classes.
      *
@@ -141,11 +121,9 @@ class WithoutOverlapping
      */
     public function shared()
     {
-        $this->shareKey = true;
-
+        $this->shareKey = \true;
         return $this;
     }
-
     /**
      * Get the lock key for the given job.
      *
@@ -155,13 +133,9 @@ class WithoutOverlapping
     public function getLockKey($job)
     {
         if ($this->shareKey) {
-            return $this->prefix.$this->key;
+            return $this->prefix . $this->key;
         }
-
-        $jobName = method_exists($job, 'displayName')
-            ? $job->displayName()
-            : get_class($job);
-
-        return $this->prefix.$jobName.':'.$this->key;
+        $jobName = method_exists($job, 'displayName') ? $job->displayName() : get_class($job);
+        return $this->prefix . $jobName . ':' . $this->key;
     }
 }

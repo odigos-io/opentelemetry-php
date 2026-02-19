@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -17,7 +17,6 @@ declare(strict_types=1);
 namespace Cake\Datasource;
 
 use Closure;
-
 /**
  * Contains logic for invoking an application rule.
  *
@@ -35,21 +34,18 @@ class RuleInvoker
      * @var string|null
      */
     protected ?string $name = null;
-
     /**
      * Rule options
      *
      * @var array<string, mixed>
      */
     protected array $options = [];
-
     /**
      * Rule callable
      *
      * @var callable
      */
     protected $rule;
-
     /**
      * Constructor
      *
@@ -72,7 +68,6 @@ class RuleInvoker
         $this->name = $name;
         $this->options = $options;
     }
-
     /**
      * Set options for the rule invocation.
      *
@@ -84,10 +79,8 @@ class RuleInvoker
     public function setOptions(array $options)
     {
         $this->options = $options + $this->options;
-
         return $this;
     }
-
     /**
      * Set the rule name.
      *
@@ -101,10 +94,8 @@ class RuleInvoker
         if ($name) {
             $this->name = $name;
         }
-
         return $this;
     }
-
     /**
      * Invoke the rule.
      *
@@ -113,14 +104,13 @@ class RuleInvoker
      * @param array $scope The rule's scope/options.
      * @return bool Whether the rule passed.
      */
-    public function __invoke(EntityInterface $entity, array $scope): bool
+    public function __invoke(\Cake\Datasource\EntityInterface $entity, array $scope): bool
     {
         $rule = $this->rule;
         $pass = $rule($entity, $this->options + $scope);
-        if ($pass === true) {
-            return true;
+        if ($pass === \true) {
+            return \true;
         }
-
         $message = $this->options['message'] ?? 'invalid';
         if (is_string($pass)) {
             $message = $pass;
@@ -133,15 +123,12 @@ class RuleInvoker
         } else {
             $message = [$message];
         }
-
-        $errorField = $this->options['errorField'] ?? ($this->name ?? '_rule');
+        $errorField = $this->options['errorField'] ?? $this->name ?? '_rule';
         $entity->setError($errorField, $message);
-
-        if ($entity instanceof InvalidPropertyInterface && isset($entity->{$errorField})) {
+        if ($entity instanceof \Cake\Datasource\InvalidPropertyInterface && isset($entity->{$errorField})) {
             $invalidValue = $entity->{$errorField};
             $entity->setInvalidField($errorField, $invalidValue);
         }
-
-        return false;
+        return \false;
     }
 }

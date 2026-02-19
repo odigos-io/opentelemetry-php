@@ -3,8 +3,7 @@
 namespace Illuminate\Queue;
 
 use Illuminate\Support\Facades\Concurrency;
-
-class BackgroundQueue extends SyncQueue
+class BackgroundQueue extends \Illuminate\Queue\SyncQueue
 {
     /**
      * Push a new job onto the queue.
@@ -18,8 +17,6 @@ class BackgroundQueue extends SyncQueue
      */
     public function push($job, $data = '', $queue = null)
     {
-        Concurrency::driver('process')->defer(
-            fn () => \Illuminate\Support\Facades\Queue::connection('sync')->push($job, $data, $queue)
-        );
+        Concurrency::driver('process')->defer(fn() => \Illuminate\Support\Facades\Queue::connection('sync')->push($job, $data, $queue));
     }
 }

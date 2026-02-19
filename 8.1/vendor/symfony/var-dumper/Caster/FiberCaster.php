@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\VarDumper\Caster;
 
 use Symfony\Component\VarDumper\Cloner\Stub;
-
 /**
  * Casts Fiber related classes to array representation.
  *
@@ -25,8 +23,7 @@ final class FiberCaster
      */
     public static function castFiber(\Fiber $fiber, array $a, Stub $stub, bool $isNested, int $filter = 0)
     {
-        $prefix = Caster::PREFIX_VIRTUAL;
-
+        $prefix = \Symfony\Component\VarDumper\Caster\Caster::PREFIX_VIRTUAL;
         if ($fiber->isTerminated()) {
             $status = 'terminated';
         } elseif ($fiber->isRunning()) {
@@ -38,9 +35,7 @@ final class FiberCaster
         } else {
             $status = 'not started';
         }
-
-        $a[$prefix.'status'] = $status;
-
+        $a[$prefix . 'status'] = $status;
         return $a;
     }
 }

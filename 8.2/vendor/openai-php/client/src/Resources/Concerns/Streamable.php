@@ -3,7 +3,6 @@
 namespace OpenAI\Resources\Concerns;
 
 use OpenAI\Exceptions\InvalidArgumentException;
-
 trait Streamable
 {
     /**
@@ -11,17 +10,14 @@ trait Streamable
      */
     private function ensureNotStreamed(array $parameters, string $fallbackFunction = 'createStreamed'): void
     {
-        if (! isset($parameters['stream'])) {
+        if (!isset($parameters['stream'])) {
             return;
         }
-
-        if ($parameters['stream'] !== true) {
+        if ($parameters['stream'] !== \true) {
             return;
         }
-
-        throw new InvalidArgumentException("Stream option is not supported. Please use the $fallbackFunction() method instead.");
+        throw new InvalidArgumentException("Stream option is not supported. Please use the {$fallbackFunction}() method instead.");
     }
-
     /**
      * Set the stream parameter to true.
      *
@@ -30,8 +26,7 @@ trait Streamable
      */
     private function setStreamParameter(array $parameters): array
     {
-        $parameters['stream'] = true;
-
+        $parameters['stream'] = \true;
         return $parameters;
     }
 }

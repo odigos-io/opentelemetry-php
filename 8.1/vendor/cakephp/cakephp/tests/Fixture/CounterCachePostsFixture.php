@@ -1,4 +1,5 @@
 <?php
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -15,15 +16,10 @@
 namespace Cake\Test\Fixture;
 
 use Cake\TestSuite\Fixture\TestFixture;
-
 /**
  * Counter Cache Test Fixtures
  */
 class CounterCachePostsFixture extends TestFixture
 {
-    public array $records = [
-        ['title' => 'Rock and Roll', 'user_id' => 1, 'category_id' => 1, 'published' => 0],
-        ['title' => 'Music', 'user_id' => 1, 'category_id' => 2, 'published' => 1],
-        ['title' => 'Food', 'user_id' => 2, 'category_id' => 2, 'published' => 1],
-    ];
+    public array $records = [['title' => 'Rock and Roll', 'user_id' => 1, 'category_id' => 1, 'published' => 0], ['title' => 'Music', 'user_id' => 1, 'category_id' => 2, 'published' => 1], ['title' => 'Food', 'user_id' => 2, 'category_id' => 2, 'published' => 1]];
 }

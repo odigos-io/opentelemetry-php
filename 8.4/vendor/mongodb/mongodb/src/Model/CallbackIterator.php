@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright 2017-present MongoDB, Inc.
  *
@@ -14,15 +15,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 namespace MongoDB\Model;
 
 use Iterator;
 use IteratorIterator;
 use Traversable;
-
 use function call_user_func;
-
 /**
  * Iterator to apply a callback before returning an element
  *
@@ -37,10 +35,8 @@ final class CallbackIterator implements Iterator
 {
     /** @var callable(TValue, TKey): TCallbackValue */
     private $callback;
-
     /** @var Iterator<TKey, TValue> */
     private Iterator $iterator;
-
     /**
      * @param Traversable<TKey, TValue>              $traversable
      * @param callable(TValue, TKey): TCallbackValue $callback
@@ -50,7 +46,6 @@ final class CallbackIterator implements Iterator
         $this->iterator = $traversable instanceof Iterator ? $traversable : new IteratorIterator($traversable);
         $this->callback = $callback;
     }
-
     /**
      * @see https://php.net/iterator.current
      * @return TCallbackValue
@@ -59,7 +54,6 @@ final class CallbackIterator implements Iterator
     {
         return call_user_func($this->callback, $this->iterator->current(), $this->iterator->key());
     }
-
     /**
      * @see https://php.net/iterator.key
      * @return TKey
@@ -68,19 +62,16 @@ final class CallbackIterator implements Iterator
     {
         return $this->iterator->key();
     }
-
     /** @see https://php.net/iterator.next */
     public function next(): void
     {
         $this->iterator->next();
     }
-
     /** @see https://php.net/iterator.rewind */
     public function rewind(): void
     {
         $this->iterator->rewind();
     }
-
     /** @see https://php.net/iterator.valid */
     public function valid(): bool
     {

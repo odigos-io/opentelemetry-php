@@ -3,16 +3,13 @@
 /**
  * THIS FILE IS AUTO-GENERATED. ANY CHANGES WILL BE LOST!
  */
-
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace MongoDB\Builder\Accumulator;
 
 use MongoDB\Builder\Type\AccumulatorInterface;
 use MongoDB\Builder\Type\Encode;
 use MongoDB\Builder\Type\OperatorInterface;
 use MongoDB\Builder\Type\WindowInterface;
-
 /**
  * Returns the number of documents in the group or window.
  * Distinct from the $count pipeline stage.
@@ -25,7 +22,6 @@ final class CountAccumulator implements AccumulatorInterface, WindowInterface, O
 {
     public const ENCODE = Encode::Object;
     public const NAME = '$count';
-
     public function __construct()
     {
     }

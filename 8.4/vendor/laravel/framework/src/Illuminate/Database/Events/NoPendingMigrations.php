@@ -3,7 +3,6 @@
 namespace Illuminate\Database\Events;
 
 use Illuminate\Contracts\Database\Events\MigrationEvent;
-
 class NoPendingMigrations implements MigrationEvent
 {
     /**
@@ -11,8 +10,7 @@ class NoPendingMigrations implements MigrationEvent
      *
      * @param  string  $method  The migration method that was called.
      */
-    public function __construct(
-        public $method,
-    ) {
+    public function __construct(public $method)
+    {
     }
 }

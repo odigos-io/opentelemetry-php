@@ -13,9 +13,8 @@ trait HandlesAuthorization
      */
     protected function allow($message = null, $code = null)
     {
-        return Response::allow($message, $code);
+        return \Illuminate\Auth\Access\Response::allow($message, $code);
     }
-
     /**
      * Throws an unauthorized exception.
      *
@@ -25,9 +24,8 @@ trait HandlesAuthorization
      */
     protected function deny($message = null, $code = null)
     {
-        return Response::deny($message, $code);
+        return \Illuminate\Auth\Access\Response::deny($message, $code);
     }
-
     /**
      * Deny with a HTTP status code.
      *
@@ -38,9 +36,8 @@ trait HandlesAuthorization
      */
     public function denyWithStatus($status, $message = null, $code = null)
     {
-        return Response::denyWithStatus($status, $message, $code);
+        return \Illuminate\Auth\Access\Response::denyWithStatus($status, $message, $code);
     }
-
     /**
      * Deny with a 404 HTTP status code.
      *
@@ -50,6 +47,6 @@ trait HandlesAuthorization
      */
     public function denyAsNotFound($message = null, $code = null)
     {
-        return Response::denyWithStatus(404, $message, $code);
+        return \Illuminate\Auth\Access\Response::denyWithStatus(404, $message, $code);
     }
 }

@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -19,23 +19,20 @@ namespace Cake\Error\Debug;
 /**
  * Dump node for objects/class instances.
  */
-class ClassNode implements NodeInterface
+class ClassNode implements \Cake\Error\Debug\NodeInterface
 {
     /**
      * @var string
      */
     private string $class;
-
     /**
      * @var int
      */
     private int $id;
-
     /**
      * @var array<\Cake\Error\Debug\PropertyNode>
      */
     private array $properties = [];
-
     /**
      * Constructor
      *
@@ -47,18 +44,16 @@ class ClassNode implements NodeInterface
         $this->class = $class;
         $this->id = $id;
     }
-
     /**
      * Add a property
      *
      * @param \Cake\Error\Debug\PropertyNode $node The property to add.
      * @return void
      */
-    public function addProperty(PropertyNode $node): void
+    public function addProperty(\Cake\Error\Debug\PropertyNode $node): void
     {
         $this->properties[] = $node;
     }
-
     /**
      * Get the class name
      *
@@ -68,7 +63,6 @@ class ClassNode implements NodeInterface
     {
         return $this->class;
     }
-
     /**
      * Get the reference id
      *
@@ -78,7 +72,6 @@ class ClassNode implements NodeInterface
     {
         return $this->id;
     }
-
     /**
      * Get property nodes
      *

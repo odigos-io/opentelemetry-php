@@ -1,10 +1,10 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\caching;
 
 /**
@@ -19,7 +19,7 @@ namespace yii\caching;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class ChainedDependency extends Dependency
+class ChainedDependency extends \yii\caching\Dependency
 {
     /**
      * @var Dependency[] list of dependencies that this dependency is composed of.
@@ -32,9 +32,7 @@ class ChainedDependency extends Dependency
      * When it is set false, it means if one of the dependencies has NOT changed, this dependency
      * is considered NOT changed.
      */
-    public $dependOnAll = true;
-
-
+    public $dependOnAll = \true;
     /**
      * Evaluates the dependency by generating and saving the data related with dependency.
      * @param CacheInterface $cache the cache component that is currently evaluating this dependency
@@ -45,7 +43,6 @@ class ChainedDependency extends Dependency
             $dependency->evaluateDependency($cache);
         }
     }
-
     /**
      * Generates the data needed to determine if dependency has been changed.
      * This method does nothing in this class.
@@ -56,7 +53,6 @@ class ChainedDependency extends Dependency
     {
         return null;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -64,12 +60,11 @@ class ChainedDependency extends Dependency
     {
         foreach ($this->dependencies as $dependency) {
             if ($this->dependOnAll && $dependency->isChanged($cache)) {
-                return true;
+                return \true;
             } elseif (!$this->dependOnAll && !$dependency->isChanged($cache)) {
-                return false;
+                return \false;
             }
         }
-
         return !$this->dependOnAll;
     }
 }

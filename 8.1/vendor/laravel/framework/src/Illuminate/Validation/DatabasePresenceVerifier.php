@@ -4,8 +4,7 @@ namespace Illuminate\Validation;
 
 use Closure;
 use Illuminate\Database\ConnectionResolverInterface;
-
-class DatabasePresenceVerifier implements DatabasePresenceVerifierInterface
+class DatabasePresenceVerifier implements \Illuminate\Validation\DatabasePresenceVerifierInterface
 {
     /**
      * The database connection instance.
@@ -13,14 +12,12 @@ class DatabasePresenceVerifier implements DatabasePresenceVerifierInterface
      * @var \Illuminate\Database\ConnectionResolverInterface
      */
     protected $db;
-
     /**
      * The database connection to use.
      *
      * @var string
      */
     protected $connection;
-
     /**
      * Create a new database presence verifier.
      *
@@ -31,7 +28,6 @@ class DatabasePresenceVerifier implements DatabasePresenceVerifierInterface
     {
         $this->db = $db;
     }
-
     /**
      * Count the number of objects in a collection having the given value.
      *
@@ -46,14 +42,11 @@ class DatabasePresenceVerifier implements DatabasePresenceVerifierInterface
     public function getCount($collection, $column, $value, $excludeId = null, $idColumn = null, array $extra = [])
     {
         $query = $this->table($collection)->where($column, '=', $value);
-
-        if (! is_null($excludeId) && $excludeId !== 'NULL') {
+        if (!is_null($excludeId) && $excludeId !== 'NULL') {
             $query->where($idColumn ?: 'id', '<>', $excludeId);
         }
-
         return $this->addConditions($query, $extra)->count();
     }
-
     /**
      * Count the number of objects in a collection with the given values.
      *
@@ -66,10 +59,8 @@ class DatabasePresenceVerifier implements DatabasePresenceVerifierInterface
     public function getMultiCount($collection, $column, array $values, array $extra = [])
     {
         $query = $this->table($collection)->whereIn($column, $values);
-
         return $this->addConditions($query, $extra)->distinct()->count($column);
     }
-
     /**
      * Add the given conditions to the query.
      *
@@ -88,10 +79,8 @@ class DatabasePresenceVerifier implements DatabasePresenceVerifierInterface
                 $this->addWhere($query, $key, $value);
             }
         }
-
         return $query;
     }
-
     /**
      * Add a "where" clause to the given query.
      *
@@ -112,7 +101,6 @@ class DatabasePresenceVerifier implements DatabasePresenceVerifierInterface
             $query->where($key, $extraValue);
         }
     }
-
     /**
      * Get a query builder for the given table.
      *
@@ -123,7 +111,6 @@ class DatabasePresenceVerifier implements DatabasePresenceVerifierInterface
     {
         return $this->db->connection($this->connection)->table($table)->useWritePdo();
     }
-
     /**
      * Set the connection to be used.
      *

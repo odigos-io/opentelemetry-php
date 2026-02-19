@@ -3,7 +3,6 @@
 namespace Illuminate\Support\Facades;
 
 use Illuminate\Contracts\Auth\Access\Gate as GateContract;
-
 /**
  * @method static bool has(string|array $ability)
  * @method static \Illuminate\Auth\Access\Response allowIf(\Illuminate\Auth\Access\Response|\Closure|bool $condition, string|null $message = null, string|null $code = null)
@@ -34,7 +33,7 @@ use Illuminate\Contracts\Auth\Access\Gate as GateContract;
  *
  * @see \Illuminate\Auth\Access\Gate
  */
-class Gate extends Facade
+class Gate extends \Illuminate\Support\Facades\Facade
 {
     /**
      * Get the registered name of the component.

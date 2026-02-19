@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright 2015-present MongoDB, Inc.
  *
@@ -14,7 +15,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 namespace MongoDB\Operation;
 
 use MongoDB\Codec\DocumentCodec;
@@ -23,11 +23,9 @@ use MongoDB\Driver\Server;
 use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\Exception\UnsupportedException;
 use MongoDB\UpdateResult;
-
 use function MongoDB\is_document;
 use function MongoDB\is_first_key_operator;
 use function MongoDB\is_pipeline;
-
 /**
  * Operation for replacing a single document with the update command.
  *
@@ -36,8 +34,7 @@ use function MongoDB\is_pipeline;
  */
 final class ReplaceOne
 {
-    private Update $update;
-
+    private \MongoDB\Operation\Update $update;
     /**
      * Constructs an update command.
      *
@@ -89,23 +86,14 @@ final class ReplaceOne
      */
     public function __construct(string $databaseName, string $collectionName, array|object $filter, array|object $replacement, array $options = [])
     {
-        if (isset($options['codec']) && ! $options['codec'] instanceof DocumentCodec) {
+        if (isset($options['codec']) && !$options['codec'] instanceof DocumentCodec) {
             throw InvalidArgumentException::invalidType('"codec" option', $options['codec'], DocumentCodec::class);
         }
-
         if (isset($options['codec'], $options['typeMap'])) {
             throw InvalidArgumentException::cannotCombineCodecAndTypeMap();
         }
-
-        $this->update = new Update(
-            $databaseName,
-            $collectionName,
-            $filter,
-            $this->validateReplacement($replacement, $options['codec'] ?? null),
-            ['multi' => false] + $options,
-        );
+        $this->update = new \MongoDB\Operation\Update($databaseName, $collectionName, $filter, $this->validateReplacement($replacement, $options['codec'] ?? null), ['multi' => \false] + $options);
     }
-
     /**
      * Execute the operation.
      *
@@ -116,30 +104,24 @@ final class ReplaceOne
     {
         return $this->update->execute($server);
     }
-
     private function validateReplacement(array|object $replacement, ?DocumentCodec $codec): array|object
     {
         if ($codec) {
             $replacement = $codec->encode($replacement);
         }
-
-        if (! is_document($replacement)) {
+        if (!is_document($replacement)) {
             throw InvalidArgumentException::expectedDocumentType('$replacement', $replacement);
         }
-
         // Treat empty arrays as replacement documents for BC
         if ($replacement === []) {
             $replacement = (object) $replacement;
         }
-
         if (is_first_key_operator($replacement)) {
             throw new InvalidArgumentException('First key in $replacement is an update operator');
         }
-
-        if (is_pipeline($replacement, true /* allowEmpty */)) {
+        if (is_pipeline($replacement, \true)) {
             throw new InvalidArgumentException('$replacement is an update pipeline');
         }
-
         return $replacement;
     }
 }

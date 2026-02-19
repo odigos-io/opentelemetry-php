@@ -1,12 +1,11 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\API\Trace;
 
 interface TraceFlags
 {
-    public const SAMPLED = 0x01;
-    public const RANDOM = 0x02;
-    public const DEFAULT = 0x00;
+    public const SAMPLED = 0x1;
+    public const RANDOM = 0x2;
+    public const DEFAULT = 0x0;
 }

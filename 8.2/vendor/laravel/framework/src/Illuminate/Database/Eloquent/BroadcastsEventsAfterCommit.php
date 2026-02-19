@@ -4,8 +4,7 @@ namespace Illuminate\Database\Eloquent;
 
 trait BroadcastsEventsAfterCommit
 {
-    use BroadcastsEvents;
-
+    use \Illuminate\Database\Eloquent\BroadcastsEvents;
     /**
      * Determine if the model event broadcast queued job should be dispatched after all transactions are committed.
      *
@@ -13,6 +12,6 @@ trait BroadcastsEventsAfterCommit
      */
     public function broadcastAfterCommit()
     {
-        return true;
+        return \true;
     }
 }

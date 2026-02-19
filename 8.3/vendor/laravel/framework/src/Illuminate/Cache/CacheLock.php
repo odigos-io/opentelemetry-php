@@ -2,7 +2,7 @@
 
 namespace Illuminate\Cache;
 
-class CacheLock extends Lock
+class CacheLock extends \Illuminate\Cache\Lock
 {
     /**
      * The cache store implementation.
@@ -10,7 +10,6 @@ class CacheLock extends Lock
      * @var \Illuminate\Contracts\Cache\Store
      */
     protected $store;
-
     /**
      * Create a new lock instance.
      *
@@ -22,10 +21,8 @@ class CacheLock extends Lock
     public function __construct($store, $name, $seconds, $owner = null)
     {
         parent::__construct($name, $seconds, $owner);
-
         $this->store = $store;
     }
-
     /**
      * Attempt to acquire the lock.
      *
@@ -34,20 +31,13 @@ class CacheLock extends Lock
     public function acquire()
     {
         if (method_exists($this->store, 'add') && $this->seconds > 0) {
-            return $this->store->add(
-                $this->name, $this->owner, $this->seconds
-            );
+            return $this->store->add($this->name, $this->owner, $this->seconds);
         }
-
-        if (! is_null($this->store->get($this->name))) {
-            return false;
+        if (!is_null($this->store->get($this->name))) {
+            return \false;
         }
-
-        return ($this->seconds > 0)
-            ? $this->store->put($this->name, $this->owner, $this->seconds)
-            : $this->store->forever($this->name, $this->owner);
+        return $this->seconds > 0 ? $this->store->put($this->name, $this->owner, $this->seconds) : $this->store->forever($this->name, $this->owner);
     }
-
     /**
      * Release the lock.
      *
@@ -58,10 +48,8 @@ class CacheLock extends Lock
         if ($this->isOwnedByCurrentProcess()) {
             return $this->store->forget($this->name);
         }
-
-        return false;
+        return \false;
     }
-
     /**
      * Releases this lock regardless of ownership.
      *
@@ -71,7 +59,6 @@ class CacheLock extends Lock
     {
         $this->store->forget($this->name);
     }
-
     /**
      * Returns the owner value written into the driver for this lock.
      *

@@ -1,21 +1,20 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\log;
 
 use yii\helpers\VarDumper;
-
 /**
  * SyslogTarget writes log to syslog.
  *
  * @author miramir <gmiramir@gmail.com>
  * @since 2.0
  */
-class SyslogTarget extends Target
+class SyslogTarget extends \yii\log\Target
 {
     /**
      * @var string syslog identity
@@ -24,7 +23,7 @@ class SyslogTarget extends Target
     /**
      * @var int syslog facility.
      */
-    public $facility = LOG_USER;
+    public $facility = \LOG_USER;
     /**
      * @var int|null openlog options. This is a bitfield passed as the `$option` parameter to [openlog()](https://www.php.net/openlog).
      * Defaults to `null` which means to use the default options `LOG_ODELAY | LOG_PID`.
@@ -32,21 +31,10 @@ class SyslogTarget extends Target
      * @since 2.0.11
      */
     public $options;
-
     /**
      * @var array syslog levels
      */
-    private $_syslogLevels = [
-        Logger::LEVEL_TRACE => LOG_DEBUG,
-        Logger::LEVEL_PROFILE_BEGIN => LOG_DEBUG,
-        Logger::LEVEL_PROFILE_END => LOG_DEBUG,
-        Logger::LEVEL_PROFILE => LOG_DEBUG,
-        Logger::LEVEL_INFO => LOG_INFO,
-        Logger::LEVEL_WARNING => LOG_WARNING,
-        Logger::LEVEL_ERROR => LOG_ERR,
-    ];
-
-
+    private $_syslogLevels = [\yii\log\Logger::LEVEL_TRACE => \LOG_DEBUG, \yii\log\Logger::LEVEL_PROFILE_BEGIN => \LOG_DEBUG, \yii\log\Logger::LEVEL_PROFILE_END => \LOG_DEBUG, \yii\log\Logger::LEVEL_PROFILE => \LOG_DEBUG, \yii\log\Logger::LEVEL_INFO => \LOG_INFO, \yii\log\Logger::LEVEL_WARNING => \LOG_WARNING, \yii\log\Logger::LEVEL_ERROR => \LOG_ERR];
     /**
      * {@inheritdoc}
      */
@@ -54,10 +42,9 @@ class SyslogTarget extends Target
     {
         parent::init();
         if ($this->options === null) {
-            $this->options = LOG_ODELAY | LOG_PID;
+            $this->options = \LOG_ODELAY | \LOG_PID;
         }
     }
-
     /**
      * Writes log messages to syslog.
      * Starting from version 2.0.14, this method throws LogRuntimeException in case the log can not be exported.
@@ -67,20 +54,19 @@ class SyslogTarget extends Target
     {
         openlog($this->identity, $this->options, $this->facility);
         foreach ($this->messages as $message) {
-            if (syslog($this->_syslogLevels[$message[1]], $this->formatMessage($message)) === false) {
-                throw new LogRuntimeException('Unable to export log through system log!');
+            if (syslog($this->_syslogLevels[$message[1]], $this->formatMessage($message)) === \false) {
+                throw new \yii\log\LogRuntimeException('Unable to export log through system log!');
             }
         }
         closelog();
     }
-
     /**
      * {@inheritdoc}
      */
     public function formatMessage($message)
     {
         list($text, $level, $category, $timestamp) = $message;
-        $level = Logger::getLevelName($level);
+        $level = \yii\log\Logger::getLevelName($level);
         if (!is_string($text)) {
             // exceptions may not be serializable if in the call stack somewhere is a Closure
             if ($text instanceof \Exception || $text instanceof \Throwable) {
@@ -89,8 +75,7 @@ class SyslogTarget extends Target
                 $text = VarDumper::export($text);
             }
         }
-
         $prefix = $this->getMessagePrefix($message);
-        return "{$prefix}[$level][$category] $text";
+        return "{$prefix}[{$level}][{$category}] {$text}";
     }
 }

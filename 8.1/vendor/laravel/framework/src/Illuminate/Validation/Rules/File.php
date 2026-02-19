@@ -11,74 +11,63 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Traits\Conditionable;
 use Illuminate\Support\Traits\Macroable;
 use InvalidArgumentException;
-
 class File implements Rule, DataAwareRule, ValidatorAwareRule
 {
     use Conditionable, Macroable;
-
     /**
      * The MIME types that the given file should match. This array may also contain file extensions.
      *
      * @var array
      */
     protected $allowedMimetypes = [];
-
     /**
      * The extensions that the given file should match.
      *
      * @var array
      */
     protected $allowedExtensions = [];
-
     /**
      * The minimum size in kilobytes that the file can be.
      *
      * @var null|int
      */
     protected $minimumFileSize = null;
-
     /**
      * The maximum size in kilobytes that the file can be.
      *
      * @var null|int
      */
     protected $maximumFileSize = null;
-
     /**
      * An array of custom rules that will be merged into the validation rules.
      *
      * @var array
      */
     protected $customRules = [];
-
     /**
      * The error message after validation, if any.
      *
      * @var array
      */
     protected $messages = [];
-
     /**
      * The data under validation.
      *
      * @var array
      */
     protected $data;
-
     /**
      * The validator performing the validation.
      *
      * @var \Illuminate\Validation\Validator
      */
     protected $validator;
-
     /**
      * The callback that will generate the "default" version of the file rule.
      *
      * @var string|array|callable|null
      */
     public static $defaultCallback;
-
     /**
      * Set the default callback to be used for determining the file default rules.
      *
@@ -92,14 +81,11 @@ class File implements Rule, DataAwareRule, ValidatorAwareRule
         if (is_null($callback)) {
             return static::default();
         }
-
-        if (! is_callable($callback) && ! $callback instanceof static) {
-            throw new InvalidArgumentException('The given callback should be callable or an instance of '.static::class);
+        if (!is_callable($callback) && !$callback instanceof static) {
+            throw new InvalidArgumentException('The given callback should be callable or an instance of ' . static::class);
         }
-
         static::$defaultCallback = $callback;
     }
-
     /**
      * Get the default configuration of the file rule.
      *
@@ -107,13 +93,9 @@ class File implements Rule, DataAwareRule, ValidatorAwareRule
      */
     public static function default()
     {
-        $file = is_callable(static::$defaultCallback)
-            ? call_user_func(static::$defaultCallback)
-            : static::$defaultCallback;
-
+        $file = is_callable(static::$defaultCallback) ? call_user_func(static::$defaultCallback) : static::$defaultCallback;
         return $file instanceof Rule ? $file : new self();
     }
-
     /**
      * Limit the uploaded file to only image types.
      *
@@ -121,9 +103,8 @@ class File implements Rule, DataAwareRule, ValidatorAwareRule
      */
     public static function image()
     {
-        return new ImageFile();
+        return new \Illuminate\Validation\Rules\ImageFile();
     }
-
     /**
      * Limit the uploaded file to the given MIME types or file extensions.
      *
@@ -132,9 +113,8 @@ class File implements Rule, DataAwareRule, ValidatorAwareRule
      */
     public static function types($mimetypes)
     {
-        return tap(new static(), fn ($file) => $file->allowedMimetypes = (array) $mimetypes);
+        return tap(new static(), fn($file) => $file->allowedMimetypes = (array) $mimetypes);
     }
-
     /**
      * Limit the uploaded file to the given file extensions.
      *
@@ -144,10 +124,8 @@ class File implements Rule, DataAwareRule, ValidatorAwareRule
     public function extensions($extensions)
     {
         $this->allowedExtensions = (array) $extensions;
-
         return $this;
     }
-
     /**
      * Indicate that the uploaded file should be exactly a certain size in kilobytes.
      *
@@ -158,10 +136,8 @@ class File implements Rule, DataAwareRule, ValidatorAwareRule
     {
         $this->minimumFileSize = $this->toKilobytes($size);
         $this->maximumFileSize = $this->minimumFileSize;
-
         return $this;
     }
-
     /**
      * Indicate that the uploaded file should be between a minimum and maximum size in kilobytes.
      *
@@ -173,10 +149,8 @@ class File implements Rule, DataAwareRule, ValidatorAwareRule
     {
         $this->minimumFileSize = $this->toKilobytes($minSize);
         $this->maximumFileSize = $this->toKilobytes($maxSize);
-
         return $this;
     }
-
     /**
      * Indicate that the uploaded file should be no less than the given number of kilobytes.
      *
@@ -186,10 +160,8 @@ class File implements Rule, DataAwareRule, ValidatorAwareRule
     public function min($size)
     {
         $this->minimumFileSize = $this->toKilobytes($size);
-
         return $this;
     }
-
     /**
      * Indicate that the uploaded file should be no more than the given number of kilobytes.
      *
@@ -199,10 +171,8 @@ class File implements Rule, DataAwareRule, ValidatorAwareRule
     public function max($size)
     {
         $this->maximumFileSize = $this->toKilobytes($size);
-
         return $this;
     }
-
     /**
      * Convert a potentially human-friendly file size to kilobytes.
      *
@@ -211,13 +181,11 @@ class File implements Rule, DataAwareRule, ValidatorAwareRule
      */
     protected function toKilobytes($size)
     {
-        if (! is_string($size)) {
+        if (!is_string($size)) {
             return $size;
         }
-
         $value = floatval($size);
-
-        return round(match (true) {
+        return round(match (\true) {
             Str::endsWith($size, 'kb') => $value * 1,
             Str::endsWith($size, 'mb') => $value * 1000,
             Str::endsWith($size, 'gb') => $value * 1000000,
@@ -225,7 +193,6 @@ class File implements Rule, DataAwareRule, ValidatorAwareRule
             default => throw new InvalidArgumentException('Invalid file size suffix.'),
         });
     }
-
     /**
      * Specify additional validation rules that should be merged with the default rules during validation.
      *
@@ -235,10 +202,8 @@ class File implements Rule, DataAwareRule, ValidatorAwareRule
     public function rules($rules)
     {
         $this->customRules = array_merge($this->customRules, Arr::wrap($rules));
-
         return $this;
     }
-
     /**
      * Determine if the validation rule passes.
      *
@@ -249,21 +214,12 @@ class File implements Rule, DataAwareRule, ValidatorAwareRule
     public function passes($attribute, $value)
     {
         $this->messages = [];
-
-        $validator = Validator::make(
-            $this->data,
-            [$attribute => $this->buildValidationRules()],
-            $this->validator->customMessages,
-            $this->validator->customAttributes
-        );
-
+        $validator = Validator::make($this->data, [$attribute => $this->buildValidationRules()], $this->validator->customMessages, $this->validator->customAttributes);
         if ($validator->fails()) {
             return $this->fail($validator->messages()->all());
         }
-
-        return true;
+        return \true;
     }
-
     /**
      * Build the array of underlying validation rules based on the current state.
      *
@@ -272,24 +228,19 @@ class File implements Rule, DataAwareRule, ValidatorAwareRule
     protected function buildValidationRules()
     {
         $rules = ['file'];
-
         $rules = array_merge($rules, $this->buildMimetypes());
-
-        if (! empty($this->allowedExtensions)) {
-            $rules[] = 'extensions:'.implode(',', array_map('strtolower', $this->allowedExtensions));
+        if (!empty($this->allowedExtensions)) {
+            $rules[] = 'extensions:' . implode(',', array_map('strtolower', $this->allowedExtensions));
         }
-
-        $rules[] = match (true) {
+        $rules[] = match (\true) {
             is_null($this->minimumFileSize) && is_null($this->maximumFileSize) => null,
             is_null($this->maximumFileSize) => "min:{$this->minimumFileSize}",
             is_null($this->minimumFileSize) => "max:{$this->maximumFileSize}",
             $this->minimumFileSize !== $this->maximumFileSize => "between:{$this->minimumFileSize},{$this->maximumFileSize}",
             default => "size:{$this->minimumFileSize}",
         };
-
         return array_merge(array_filter($rules), $this->customRules);
     }
-
     /**
      * Separate the given mimetypes from extensions and return an array of correct rules to validate against.
      *
@@ -300,27 +251,17 @@ class File implements Rule, DataAwareRule, ValidatorAwareRule
         if (count($this->allowedMimetypes) === 0) {
             return [];
         }
-
         $rules = [];
-
-        $mimetypes = array_filter(
-            $this->allowedMimetypes,
-            fn ($type) => str_contains($type, '/')
-        );
-
+        $mimetypes = array_filter($this->allowedMimetypes, fn($type) => str_contains($type, '/'));
         $mimes = array_diff($this->allowedMimetypes, $mimetypes);
-
         if (count($mimetypes) > 0) {
-            $rules[] = 'mimetypes:'.implode(',', $mimetypes);
+            $rules[] = 'mimetypes:' . implode(',', $mimetypes);
         }
-
         if (count($mimes) > 0) {
-            $rules[] = 'mimes:'.implode(',', $mimes);
+            $rules[] = 'mimes:' . implode(',', $mimes);
         }
-
         return $rules;
     }
-
     /**
      * Adds the given failures, and return false.
      *
@@ -332,12 +273,9 @@ class File implements Rule, DataAwareRule, ValidatorAwareRule
         $messages = collect(Arr::wrap($messages))->map(function ($message) {
             return $this->validator->getTranslator()->get($message);
         })->all();
-
         $this->messages = array_merge($this->messages, $messages);
-
-        return false;
+        return \false;
     }
-
     /**
      * Get the validation error message.
      *
@@ -347,7 +285,6 @@ class File implements Rule, DataAwareRule, ValidatorAwareRule
     {
         return $this->messages;
     }
-
     /**
      * Set the current validator.
      *
@@ -357,10 +294,8 @@ class File implements Rule, DataAwareRule, ValidatorAwareRule
     public function setValidator($validator)
     {
         $this->validator = $validator;
-
         return $this;
     }
-
     /**
      * Set the current data under validation.
      *
@@ -370,7 +305,6 @@ class File implements Rule, DataAwareRule, ValidatorAwareRule
     public function setData($data)
     {
         $this->data = $data;
-
         return $this;
     }
 }

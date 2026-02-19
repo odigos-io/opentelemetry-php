@@ -1,17 +1,16 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\web;
 
-use Yii;
+use Odigos\Yii;
 use yii\base\BaseObject;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
-
 /**
  * AssetBundle represents a collection of asset files, such as CSS, JS, images.
  *
@@ -140,8 +139,6 @@ class AssetBundle extends BaseObject
      * @psalm-var PublishOptions
      */
     public $publishOptions = [];
-
-
     /**
      * Registers this asset bundle with a view.
      * @param View $view the view to be registered with
@@ -151,10 +148,8 @@ class AssetBundle extends BaseObject
     {
         /** @var static */
         $result = $view->registerAssetBundle(get_called_class());
-
         return $result;
     }
-
     /**
      * Initializes the bundle.
      * If you override this method, make sure you call the parent implementation in the last.
@@ -171,7 +166,6 @@ class AssetBundle extends BaseObject
             $this->baseUrl = rtrim(Yii::getAlias($this->baseUrl), '/');
         }
     }
-
     /**
      * Registers the CSS and JS files with the given view.
      * @param \yii\web\View $view the view that the asset files are to be registered with.
@@ -198,7 +192,6 @@ class AssetBundle extends BaseObject
             }
         }
     }
-
     /**
      * Publishes the asset bundle if its source code is not under Web-accessible directory.
      * It will also try to convert non-CSS or JS files (e.g. LESS, Sass) into the corresponding
@@ -210,7 +203,6 @@ class AssetBundle extends BaseObject
         if ($this->sourcePath !== null && !isset($this->basePath, $this->baseUrl)) {
             list($this->basePath, $this->baseUrl) = $am->publish($this->sourcePath, $this->publishOptions);
         }
-
         if (isset($this->basePath, $this->baseUrl) && ($converter = $am->getConverter()) !== null) {
             foreach ($this->js as $i => $js) {
                 if (is_array($js)) {

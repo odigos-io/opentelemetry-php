@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenAI\Responses\Responses\Output;
 
 use OpenAI\Contracts\ResponseContract;
@@ -9,7 +8,6 @@ use OpenAI\Responses\Concerns\ArrayAccessible;
 use OpenAI\Responses\Responses\GenericResponseError;
 use OpenAI\Responses\Responses\McpGenericResponseError;
 use OpenAI\Testing\Responses\Concerns\Fakeable;
-
 /**
  * @phpstan-import-type ErrorType from GenericResponseError
  * @phpstan-import-type McpErrorType from McpGenericResponseError
@@ -24,23 +22,13 @@ final class OutputMcpCall implements ResponseContract
      * @use ArrayAccessible<OutputMcpCallType>
      */
     use ArrayAccessible;
-
     use Fakeable;
-
     /**
      * @param  'mcp_call'  $type
      */
-    private function __construct(
-        public readonly string $id,
-        public readonly string $serverLabel,
-        public readonly string $type,
-        public readonly string $arguments,
-        public readonly string $name,
-        public readonly ?string $approvalRequestId = null,
-        public readonly McpGenericResponseError|GenericResponseError|null $error = null,
-        public readonly ?string $output = null,
-    ) {}
-
+    private function __construct(public readonly string $id, public readonly string $serverLabel, public readonly string $type, public readonly string $arguments, public readonly string $name, public readonly ?string $approvalRequestId = null, public readonly McpGenericResponseError|GenericResponseError|null $error = null, public readonly ?string $output = null)
+    {
+    }
     /**
      * @param  OutputMcpCallType  $attributes
      */
@@ -56,41 +44,16 @@ final class OutputMcpCall implements ResponseContract
             } elseif (is_array($attributes['error']) && isset($attributes['error']['message'])) {
                 $errorType = GenericResponseError::from($attributes['error']);
             } elseif (is_string($attributes['error'])) {
-                $errorType = GenericResponseError::from([
-                    'code' => 'unknown_error',
-                    'message' => $attributes['error'],
-                ]);
+                $errorType = GenericResponseError::from(['code' => 'unknown_error', 'message' => $attributes['error']]);
             }
         }
-
-        return new self(
-            id: $attributes['id'],
-            serverLabel: $attributes['server_label'],
-            type: $attributes['type'],
-            arguments: $attributes['arguments'],
-            name: $attributes['name'],
-            approvalRequestId: $attributes['approval_request_id'],
-            error: $errorType,
-            output: $attributes['output'],
-        );
+        return new self(id: $attributes['id'], serverLabel: $attributes['server_label'], type: $attributes['type'], arguments: $attributes['arguments'], name: $attributes['name'], approvalRequestId: $attributes['approval_request_id'], error: $errorType, output: $attributes['output']);
     }
-
     /**
      * {@inheritDoc}
      */
     public function toArray(): array
     {
-        return [
-            'id' => $this->id,
-            'server_label' => $this->serverLabel,
-            'type' => $this->type,
-            'arguments' => $this->arguments,
-            'name' => $this->name,
-            'approval_request_id' => $this->approvalRequestId,
-            'error' => $this->error instanceof GenericResponseError || $this->error instanceof McpGenericResponseError
-                ? $this->error->toArray()
-                : $this->error,
-            'output' => $this->output,
-        ];
+        return ['id' => $this->id, 'server_label' => $this->serverLabel, 'type' => $this->type, 'arguments' => $this->arguments, 'name' => $this->name, 'approval_request_id' => $this->approvalRequestId, 'error' => $this->error instanceof GenericResponseError || $this->error instanceof McpGenericResponseError ? $this->error->toArray() : $this->error, 'output' => $this->output];
     }
 }

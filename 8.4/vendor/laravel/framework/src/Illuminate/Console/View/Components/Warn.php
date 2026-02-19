@@ -3,8 +3,7 @@
 namespace Illuminate\Console\View\Components;
 
 use Symfony\Component\Console\Output\OutputInterface;
-
-class Warn extends Component
+class Warn extends \Illuminate\Console\View\Components\Component
 {
     /**
      * Renders the component using the given arguments.
@@ -15,6 +14,6 @@ class Warn extends Component
      */
     public function render($string, $verbosity = OutputInterface::VERBOSITY_NORMAL)
     {
-        (new Line($this->output))->render('warn', $string, $verbosity);
+        (new \Illuminate\Console\View\Components\Line($this->output))->render('warn', $string, $verbosity);
     }
 }

@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -21,7 +21,6 @@ use Cake\Console\Helper;
 use Cake\Database\Type\EnumLabelInterface;
 use Closure;
 use UnitEnum;
-
 /**
  * Tree command helper.
  *
@@ -32,11 +31,7 @@ class TreeHelper extends Helper
     /**
      * @inheritDoc
      */
-    protected array $_defaultConfig = [
-        'baseIndent' => 0,
-        'elementIndent' => 0,
-    ];
-
+    protected array $_defaultConfig = ['baseIndent' => 0, 'elementIndent' => 0];
     /**
      * Outputs an array in tree form.
      *
@@ -46,9 +41,8 @@ class TreeHelper extends Helper
     public function output(array $args): void
     {
         $prefix = str_repeat(' ', $this->_config['baseIndent']);
-        $this->outputArray($args, $prefix, topLevel: true);
+        $this->outputArray($args, $prefix, topLevel: \true);
     }
-
     /**
      * Output an array in a tree.
      *
@@ -69,7 +63,6 @@ class TreeHelper extends Helper
             $this->outputElement($key, $value, $prefix . $elementPrefix, $marker, $indent);
         }
     }
-
     /**
      * Output an array element.
      *
@@ -80,16 +73,11 @@ class TreeHelper extends Helper
      * @param string $indent
      * @return void
      */
-    protected function outputElement(
-        string|int $key,
-        mixed $value,
-        string $prefix,
-        string $marker,
-        string $indent,
-    ): void {
+    protected function outputElement(string|int $key, mixed $value, string $prefix, string $marker, string $indent): void
+    {
         if (is_array($value)) {
             $this->_io->out($prefix . $marker . $key);
-            $this->outputArray($value, $prefix . $indent, topLevel: false);
+            $this->outputArray($value, $prefix . $indent, topLevel: \false);
         } elseif (is_string($key)) {
             $this->_io->out($prefix . $marker . $key);
             $this->outputValue($value, $prefix . $indent . '└── ');
@@ -97,7 +85,6 @@ class TreeHelper extends Helper
             $this->outputValue($value, $prefix . $marker);
         }
     }
-
     /**
      * Output a value in a tree.
      *

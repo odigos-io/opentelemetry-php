@@ -1,16 +1,15 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\data;
 
-use Yii;
+use Odigos\Yii;
 use yii\base\Component;
 use yii\base\InvalidArgumentException;
-
 /**
  * BaseDataProvider provides a base class that implements the [[DataProviderInterface]].
  *
@@ -31,7 +30,7 @@ use yii\base\InvalidArgumentException;
  * @since 2.0
  * @phpcs:disable Squiz.NamingConventions.ValidVariableName.PrivateNoUnderscore
  */
-abstract class BaseDataProvider extends Component implements DataProviderInterface
+abstract class BaseDataProvider extends Component implements \yii\data\DataProviderInterface
 {
     /**
      * @var int Number of data providers on the current page. Used to generate unique IDs.
@@ -45,14 +44,11 @@ abstract class BaseDataProvider extends Component implements DataProviderInterfa
      * - Second and all subsequent data provider IDs are: "dp-1", "dp-2", etc.
      */
     public $id;
-
     private $_sort;
     private $_pagination;
     private $_keys;
     private $_models;
     private $_totalCount;
-
-
     /**
      * {@inheritdoc}
      */
@@ -66,26 +62,22 @@ abstract class BaseDataProvider extends Component implements DataProviderInterfa
             self::$counter++;
         }
     }
-
     /**
      * Prepares the data models that will be made available in the current page.
      * @return array the available data models
      */
     abstract protected function prepareModels();
-
     /**
      * Prepares the keys associated with the currently available data models.
      * @param array $models the available data models
      * @return array the keys
      */
     abstract protected function prepareKeys($models);
-
     /**
      * Returns a value indicating the total number of data models in this data provider.
      * @return int total number of data models in this data provider.
      */
     abstract protected function prepareTotalCount();
-
     /**
      * Prepares the data models and keys.
      *
@@ -96,7 +88,7 @@ abstract class BaseDataProvider extends Component implements DataProviderInterfa
      *
      * @param bool $forcePrepare whether to force data preparation even if it has been done before.
      */
-    public function prepare($forcePrepare = false)
+    public function prepare($forcePrepare = \false)
     {
         if ($forcePrepare || $this->_models === null) {
             $this->_models = $this->prepareModels();
@@ -105,7 +97,6 @@ abstract class BaseDataProvider extends Component implements DataProviderInterfa
             $this->_keys = $this->prepareKeys($this->_models);
         }
     }
-
     /**
      * Returns the data models in the current page.
      * @return array the list of data models in the current page.
@@ -113,10 +104,8 @@ abstract class BaseDataProvider extends Component implements DataProviderInterfa
     public function getModels()
     {
         $this->prepare();
-
         return $this->_models;
     }
-
     /**
      * Sets the data models in the current page.
      * @param array $models the models in the current page
@@ -125,7 +114,6 @@ abstract class BaseDataProvider extends Component implements DataProviderInterfa
     {
         $this->_models = $models;
     }
-
     /**
      * Returns the key values associated with the data models.
      * @return array the list of key values corresponding to [[models]]. Each data model in [[models]]
@@ -134,10 +122,8 @@ abstract class BaseDataProvider extends Component implements DataProviderInterfa
     public function getKeys()
     {
         $this->prepare();
-
         return $this->_keys;
     }
-
     /**
      * Sets the key values associated with the data models.
      * @param array $keys the list of key values corresponding to [[models]].
@@ -146,7 +132,6 @@ abstract class BaseDataProvider extends Component implements DataProviderInterfa
     {
         $this->_keys = $keys;
     }
-
     /**
      * Returns the number of data models in the current page.
      * @return int the number of data models in the current page.
@@ -155,7 +140,6 @@ abstract class BaseDataProvider extends Component implements DataProviderInterfa
     {
         return count($this->getModels());
     }
-
     /**
      * Returns the total number of data models.
      * When [[pagination]] is false, this returns the same value as [[count]].
@@ -164,14 +148,13 @@ abstract class BaseDataProvider extends Component implements DataProviderInterfa
      */
     public function getTotalCount()
     {
-        if ($this->getPagination() === false) {
+        if ($this->getPagination() === \false) {
             return $this->getCount();
         } elseif ($this->_totalCount === null) {
             $this->_totalCount = $this->prepareTotalCount();
         }
         return $this->_totalCount;
     }
-
     /**
      * Sets the total number of data models.
      * @param int $value the total number of data models.
@@ -180,7 +163,6 @@ abstract class BaseDataProvider extends Component implements DataProviderInterfa
     {
         $this->_totalCount = $value;
     }
-
     /**
      * Returns the pagination object used by this data provider.
      * Note that you should call [[prepare()]] or [[getModels()]] first to get correct values
@@ -192,10 +174,8 @@ abstract class BaseDataProvider extends Component implements DataProviderInterfa
         if ($this->_pagination === null) {
             $this->setPagination([]);
         }
-
         return $this->_pagination;
     }
-
     /**
      * Sets the pagination for this data provider.
      * @param array|Pagination|bool $value the pagination to be used by this data provider.
@@ -211,19 +191,18 @@ abstract class BaseDataProvider extends Component implements DataProviderInterfa
     public function setPagination($value)
     {
         if (is_array($value)) {
-            $config = ['class' => Pagination::className()];
+            $config = ['class' => \yii\data\Pagination::className()];
             if ($this->id !== null) {
                 $config['pageParam'] = $this->id . '-page';
                 $config['pageSizeParam'] = $this->id . '-per-page';
             }
             $this->_pagination = Yii::createObject(array_merge($config, $value));
-        } elseif ($value instanceof Pagination || $value === false) {
+        } elseif ($value instanceof \yii\data\Pagination || $value === \false) {
             $this->_pagination = $value;
         } else {
             throw new InvalidArgumentException('Only Pagination instance, configuration array or false is allowed.');
         }
     }
-
     /**
      * Returns the sorting object used by this data provider.
      * @return Sort|bool the sorting object. If this is false, it means the sorting is disabled.
@@ -233,10 +212,8 @@ abstract class BaseDataProvider extends Component implements DataProviderInterfa
         if ($this->_sort === null) {
             $this->setSort([]);
         }
-
         return $this->_sort;
     }
-
     /**
      * Sets the sort definition for this data provider.
      * @param array|Sort|bool $value the sort definition to be used by this data provider.
@@ -252,18 +229,17 @@ abstract class BaseDataProvider extends Component implements DataProviderInterfa
     public function setSort($value)
     {
         if (is_array($value)) {
-            $config = ['class' => Sort::className()];
+            $config = ['class' => \yii\data\Sort::className()];
             if ($this->id !== null) {
                 $config['sortParam'] = $this->id . '-sort';
             }
             $this->_sort = Yii::createObject(array_merge($config, $value));
-        } elseif ($value instanceof Sort || $value === false) {
+        } elseif ($value instanceof \yii\data\Sort || $value === \false) {
             $this->_sort = $value;
         } else {
             throw new InvalidArgumentException('Only Sort instance, configuration array or false is allowed.');
         }
     }
-
     /**
      * Refreshes the data provider.
      * After calling this method, if [[getModels()]], [[getKeys()]] or [[getTotalCount()]] is called again,

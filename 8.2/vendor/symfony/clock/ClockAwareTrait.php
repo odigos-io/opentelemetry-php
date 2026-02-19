@@ -8,12 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\Clock;
 
 use Psr\Clock\ClockInterface;
 use Symfony\Contracts\Service\Attribute\Required;
-
 /**
  * A trait to help write time-sensitive classes.
  *
@@ -22,17 +20,14 @@ use Symfony\Contracts\Service\Attribute\Required;
 trait ClockAwareTrait
 {
     private readonly ClockInterface $clock;
-
     #[Required]
     public function setClock(ClockInterface $clock): void
     {
         $this->clock = $clock;
     }
-
-    protected function now(): DatePoint
+    protected function now(): \Symfony\Component\Clock\DatePoint
     {
-        $now = ($this->clock ??= new Clock())->now();
-
-        return $now instanceof DatePoint ? $now : DatePoint::createFromInterface($now);
+        $now = ($this->clock ??= new \Symfony\Component\Clock\Clock())->now();
+        return $now instanceof \Symfony\Component\Clock\DatePoint ? $now : \Symfony\Component\Clock\DatePoint::createFromInterface($now);
     }
 }

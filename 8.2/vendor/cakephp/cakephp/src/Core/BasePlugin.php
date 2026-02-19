@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright 2005-2011, Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -22,92 +22,80 @@ use Cake\Routing\RouteBuilder;
 use Closure;
 use InvalidArgumentException;
 use ReflectionClass;
-
 /**
  * Base Plugin Class
  *
  * Every plugin should extend from this class or implement the interfaces and
  * include a plugin class in its src root folder.
  */
-class BasePlugin implements PluginInterface
+class BasePlugin implements \Cake\Core\PluginInterface
 {
     /**
      * Do bootstrapping or not
      *
      * @var bool
      */
-    protected bool $bootstrapEnabled = true;
-
+    protected bool $bootstrapEnabled = \true;
     /**
      * Console middleware
      *
      * @var bool
      */
-    protected bool $consoleEnabled = true;
-
+    protected bool $consoleEnabled = \true;
     /**
      * Enable middleware
      *
      * @var bool
      */
-    protected bool $middlewareEnabled = true;
-
+    protected bool $middlewareEnabled = \true;
     /**
      * Register container services
      *
      * @var bool
      */
-    protected bool $servicesEnabled = true;
-
+    protected bool $servicesEnabled = \true;
     /**
      * Load routes or not
      *
      * @var bool
      */
-    protected bool $routesEnabled = true;
-
+    protected bool $routesEnabled = \true;
     /**
      * Load events or not
      *
      * @var bool
      */
-    protected bool $eventsEnabled = true;
-
+    protected bool $eventsEnabled = \true;
     /**
      * The path to this plugin.
      *
      * @var string|null
      */
     protected ?string $path = null;
-
     /**
      * The class path for this plugin.
      *
      * @var string|null
      */
     protected ?string $classPath = null;
-
     /**
      * The config path for this plugin.
      *
      * @var string|null
      */
     protected ?string $configPath = null;
-
     /**
      * The templates path for this plugin.
      *
      * @var string|null
      */
     protected ?string $templatePath = null;
-
     /**
      * The name of this plugin
      *
      * @var string|null
      */
     protected ?string $name = null;
-
     /**
      * Constructor
      *
@@ -117,7 +105,7 @@ class BasePlugin implements PluginInterface
     {
         foreach (static::VALID_HOOKS as $key) {
             if (isset($options[$key])) {
-                $this->{"{$key}Enabled"} = (bool)$options[$key];
+                $this->{"{$key}Enabled"} = (bool) $options[$key];
             }
         }
         foreach (['name', 'path', 'classPath', 'configPath', 'templatePath'] as $path) {
@@ -125,10 +113,8 @@ class BasePlugin implements PluginInterface
                 $this->{$path} = $options[$path];
             }
         }
-
         $this->initialize();
     }
-
     /**
      * Initialization hook called from constructor.
      *
@@ -137,7 +123,6 @@ class BasePlugin implements PluginInterface
     public function initialize(): void
     {
     }
-
     /**
      * @inheritDoc
      */
@@ -148,10 +133,8 @@ class BasePlugin implements PluginInterface
         }
         $parts = explode('\\', static::class);
         array_pop($parts);
-
         return $this->name = implode('/', $parts);
     }
-
     /**
      * @inheritDoc
      */
@@ -161,16 +144,13 @@ class BasePlugin implements PluginInterface
             return $this->path;
         }
         $reflection = new ReflectionClass($this);
-        $path = dirname((string)$reflection->getFileName());
-
+        $path = dirname((string) $reflection->getFileName());
         // Trim off src
         if (str_ends_with($path, 'src')) {
             $path = substr($path, 0, -3);
         }
-
-        return $this->path = rtrim($path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+        return $this->path = rtrim($path, \DIRECTORY_SEPARATOR) . \DIRECTORY_SEPARATOR;
     }
-
     /**
      * @inheritDoc
      */
@@ -180,10 +160,8 @@ class BasePlugin implements PluginInterface
             return $this->configPath;
         }
         $path = $this->getPath();
-
-        return $path . 'config' . DIRECTORY_SEPARATOR;
+        return $path . 'config' . \DIRECTORY_SEPARATOR;
     }
-
     /**
      * @inheritDoc
      */
@@ -193,10 +171,8 @@ class BasePlugin implements PluginInterface
             return $this->classPath;
         }
         $path = $this->getPath();
-
-        return $path . 'src' . DIRECTORY_SEPARATOR;
+        return $path . 'src' . \DIRECTORY_SEPARATOR;
     }
-
     /**
      * @inheritDoc
      */
@@ -206,42 +182,34 @@ class BasePlugin implements PluginInterface
             return $this->templatePath;
         }
         $path = $this->getPath();
-
-        return $this->templatePath = $path . 'templates' . DIRECTORY_SEPARATOR;
+        return $this->templatePath = $path . 'templates' . \DIRECTORY_SEPARATOR;
     }
-
     /**
      * @inheritDoc
      */
     public function enable(string $hook)
     {
         $this->checkHook($hook);
-        $this->{"{$hook}Enabled"} = true;
-
+        $this->{"{$hook}Enabled"} = \true;
         return $this;
     }
-
     /**
      * @inheritDoc
      */
     public function disable(string $hook)
     {
         $this->checkHook($hook);
-        $this->{"{$hook}Enabled"} = false;
-
+        $this->{"{$hook}Enabled"} = \false;
         return $this;
     }
-
     /**
      * @inheritDoc
      */
     public function isEnabled(string $hook): bool
     {
         $this->checkHook($hook);
-
-        return $this->{"{$hook}Enabled"} === true;
+        return $this->{"{$hook}Enabled"} === \true;
     }
-
     /**
      * Check if a hook name is valid
      *
@@ -251,15 +219,10 @@ class BasePlugin implements PluginInterface
      */
     protected function checkHook(string $hook): void
     {
-        if (!in_array($hook, static::VALID_HOOKS, true)) {
-            throw new InvalidArgumentException(sprintf(
-                '`%s` is not a valid hook name. Must be one of `%s.`',
-                $hook,
-                implode(', ', static::VALID_HOOKS),
-            ));
+        if (!in_array($hook, static::VALID_HOOKS, \true)) {
+            throw new InvalidArgumentException(sprintf('`%s` is not a valid hook name. Must be one of `%s.`', $hook, implode(', ', static::VALID_HOOKS)));
         }
     }
-
     /**
      * @inheritDoc
      */
@@ -273,18 +236,16 @@ class BasePlugin implements PluginInterface
             }
         }
     }
-
     /**
      * @inheritDoc
      */
-    public function bootstrap(PluginApplicationInterface $app): void
+    public function bootstrap(\Cake\Core\PluginApplicationInterface $app): void
     {
         $bootstrap = $this->getConfigPath() . 'bootstrap.php';
         if (is_file($bootstrap)) {
             require $bootstrap;
         }
     }
-
     /**
      * @inheritDoc
      */
@@ -292,7 +253,6 @@ class BasePlugin implements PluginInterface
     {
         return $commands->addMany($commands->discoverPlugin($this->getName()));
     }
-
     /**
      * @inheritDoc
      */
@@ -300,17 +260,15 @@ class BasePlugin implements PluginInterface
     {
         return $middlewareQueue;
     }
-
     /**
      * Register container services for this plugin.
      *
      * @param \Cake\Core\ContainerInterface $container The container to add services to.
      * @return void
      */
-    public function services(ContainerInterface $container): void
+    public function services(\Cake\Core\ContainerInterface $container): void
     {
     }
-
     /**
      * Register application events.
      *

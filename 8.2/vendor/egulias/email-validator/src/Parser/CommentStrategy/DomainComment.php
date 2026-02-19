@@ -1,20 +1,18 @@
 <?php
 
-namespace Egulias\EmailValidator\Parser\CommentStrategy;
+namespace Odigos\Egulias\EmailValidator\Parser\CommentStrategy;
 
-use Egulias\EmailValidator\EmailLexer;
-use Egulias\EmailValidator\Result\Result;
-use Egulias\EmailValidator\Result\ValidEmail;
-use Egulias\EmailValidator\Result\InvalidEmail;
-use Egulias\EmailValidator\Result\Reason\ExpectingATEXT;
-
+use Odigos\Egulias\EmailValidator\EmailLexer;
+use Odigos\Egulias\EmailValidator\Result\Result;
+use Odigos\Egulias\EmailValidator\Result\ValidEmail;
+use Odigos\Egulias\EmailValidator\Result\InvalidEmail;
+use Odigos\Egulias\EmailValidator\Result\Reason\ExpectingATEXT;
 class DomainComment implements CommentStrategy
 {
     public function exitCondition(EmailLexer $lexer, int $openedParenthesis): bool
     {
         return !($openedParenthesis === 0 && $lexer->isNextToken(EmailLexer::S_DOT));
     }
-
     public function endOfLoopValidations(EmailLexer $lexer): Result
     {
         //test for end of string
@@ -25,7 +23,6 @@ class DomainComment implements CommentStrategy
         //Address is valid within the message but cannot be used unmodified for the envelope
         return new ValidEmail();
     }
-
     public function getWarnings(): array
     {
         return [];

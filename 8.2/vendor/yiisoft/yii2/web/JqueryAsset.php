@@ -1,10 +1,10 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\web;
 
 /**
@@ -13,10 +13,8 @@ namespace yii\web;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class JqueryAsset extends AssetBundle
+class JqueryAsset extends \yii\web\AssetBundle
 {
     public $sourcePath = '@bower/jquery/dist';
-    public $js = [
-        'jquery.js',
-    ];
+    public $js = ['jquery.js'];
 }

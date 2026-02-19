@@ -5,12 +5,11 @@ namespace Illuminate\Mail;
 use Illuminate\Contracts\View\Factory as ViewFactory;
 use Illuminate\Support\HtmlString;
 use Illuminate\Support\Str;
-use League\CommonMark\Environment\Environment;
-use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
-use League\CommonMark\Extension\Table\TableExtension;
-use League\CommonMark\MarkdownConverter;
-use TijsVerkoyen\CssToInlineStyles\CssToInlineStyles;
-
+use Odigos\League\CommonMark\Environment\Environment;
+use Odigos\League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
+use Odigos\League\CommonMark\Extension\Table\TableExtension;
+use Odigos\League\CommonMark\MarkdownConverter;
+use Odigos\TijsVerkoyen\CssToInlineStyles\CssToInlineStyles;
 class Markdown
 {
     /**
@@ -19,21 +18,18 @@ class Markdown
      * @var \Illuminate\Contracts\View\Factory
      */
     protected $view;
-
     /**
      * The current theme being used when generating emails.
      *
      * @var string
      */
     protected $theme = 'default';
-
     /**
      * The registered component paths.
      *
      * @var array
      */
     protected $componentPaths = [];
-
     /**
      * Create a new Markdown renderer instance.
      *
@@ -47,7 +43,6 @@ class Markdown
         $this->theme = $options['theme'] ?? 'default';
         $this->loadComponentsFrom($options['paths'] ?? []);
     }
-
     /**
      * Render the Markdown template into HTML.
      *
@@ -59,24 +54,14 @@ class Markdown
     public function render($view, array $data = [], $inliner = null)
     {
         $this->view->flushFinderCache();
-
-        $contents = $this->view->replaceNamespace(
-            'mail', $this->htmlComponentPaths()
-        )->make($view, $data)->render();
-
+        $contents = $this->view->replaceNamespace('mail', $this->htmlComponentPaths())->make($view, $data)->render();
         if ($this->view->exists($customTheme = Str::start($this->theme, 'mail.'))) {
             $theme = $customTheme;
         } else {
-            $theme = str_contains($this->theme, '::')
-                ? $this->theme
-                : 'mail::themes.'.$this->theme;
+            $theme = str_contains($this->theme, '::') ? $this->theme : 'mail::themes.' . $this->theme;
         }
-
-        return new HtmlString(($inliner ?: new CssToInlineStyles)->convert(
-            $contents, $this->view->make($theme, $data)->render()
-        ));
+        return new HtmlString(($inliner ?: new CssToInlineStyles())->convert($contents, $this->view->make($theme, $data)->render()));
     }
-
     /**
      * Render the Markdown template into text.
      *
@@ -87,16 +72,9 @@ class Markdown
     public function renderText($view, array $data = [])
     {
         $this->view->flushFinderCache();
-
-        $contents = $this->view->replaceNamespace(
-            'mail', $this->textComponentPaths()
-        )->make($view, $data)->render();
-
-        return new HtmlString(
-            html_entity_decode(preg_replace("/[\r\n]{2,}/", "\n\n", $contents), ENT_QUOTES, 'UTF-8')
-        );
+        $contents = $this->view->replaceNamespace('mail', $this->textComponentPaths())->make($view, $data)->render();
+        return new HtmlString(html_entity_decode(preg_replace("/[\r\n]{2,}/", "\n\n", $contents), \ENT_QUOTES, 'UTF-8'));
     }
-
     /**
      * Parse the given Markdown text into HTML.
      *
@@ -105,18 +83,12 @@ class Markdown
      */
     public static function parse($text)
     {
-        $environment = new Environment([
-            'allow_unsafe_links' => false,
-        ]);
-
-        $environment->addExtension(new CommonMarkCoreExtension);
-        $environment->addExtension(new TableExtension);
-
+        $environment = new Environment(['allow_unsafe_links' => \false]);
+        $environment->addExtension(new CommonMarkCoreExtension());
+        $environment->addExtension(new TableExtension());
         $converter = new MarkdownConverter($environment);
-
         return new HtmlString($converter->convert($text)->getContent());
     }
-
     /**
      * Get the HTML component paths.
      *
@@ -125,10 +97,9 @@ class Markdown
     public function htmlComponentPaths()
     {
         return array_map(function ($path) {
-            return $path.'/html';
+            return $path . '/html';
         }, $this->componentPaths());
     }
-
     /**
      * Get the text component paths.
      *
@@ -137,10 +108,9 @@ class Markdown
     public function textComponentPaths()
     {
         return array_map(function ($path) {
-            return $path.'/text';
+            return $path . '/text';
         }, $this->componentPaths());
     }
-
     /**
      * Get the component paths.
      *
@@ -148,11 +118,8 @@ class Markdown
      */
     protected function componentPaths()
     {
-        return array_unique(array_merge($this->componentPaths, [
-            __DIR__.'/resources/views',
-        ]));
+        return array_unique(array_merge($this->componentPaths, [__DIR__ . '/resources/views']));
     }
-
     /**
      * Register new mail component paths.
      *
@@ -163,7 +130,6 @@ class Markdown
     {
         $this->componentPaths = $paths;
     }
-
     /**
      * Set the default theme to be used.
      *
@@ -173,10 +139,8 @@ class Markdown
     public function theme($theme)
     {
         $this->theme = $theme;
-
         return $this;
     }
-
     /**
      * Get the theme currently being used by the renderer.
      *

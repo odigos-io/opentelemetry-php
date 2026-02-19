@@ -5,7 +5,6 @@ namespace Illuminate\Container\Attributes;
 use Attribute;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Contracts\Container\ContextualAttribute;
-
 #[Attribute(Attribute::TARGET_PARAMETER)]
 class Authenticated implements ContextualAttribute
 {
@@ -15,7 +14,6 @@ class Authenticated implements ContextualAttribute
     public function __construct(public ?string $guard = null)
     {
     }
-
     /**
      * Resolve the currently authenticated user.
      *

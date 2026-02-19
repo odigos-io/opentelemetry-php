@@ -8,13 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\Routing\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
-
 /**
  * Registers the expression language providers.
  *
@@ -27,9 +25,8 @@ class AddExpressionLanguageProvidersPass implements CompilerPassInterface
         if (!$container->has('router.default')) {
             return;
         }
-
         $definition = $container->findDefinition('router.default');
-        foreach ($container->findTaggedServiceIds('routing.expression_language_provider', true) as $id => $attributes) {
+        foreach ($container->findTaggedServiceIds('routing.expression_language_provider', \true) as $id => $attributes) {
             $definition->addMethodCall('addExpressionLanguageProvider', [new Reference($id)]);
         }
     }

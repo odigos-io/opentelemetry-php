@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -18,7 +18,6 @@ declare(strict_types=1);
 namespace Cake\I18n;
 
 use Cake\I18n\Exception\I18nException;
-
 /**
  * A ServiceLocator implementation for loading and retaining package objects.
  *
@@ -36,7 +35,6 @@ class PackageLocator
      * @var array<string, array<string, \Cake\I18n\Package|callable>>
      */
     protected array $registry = [];
-
     /**
      * Tracks whether a registry entry has been converted from a
      * callable to a Package object.
@@ -44,7 +42,6 @@ class PackageLocator
      * @var array<string, array<string, bool>>
      */
     protected array $converted = [];
-
     /**
      * Constructor.
      *
@@ -59,7 +56,6 @@ class PackageLocator
             }
         }
     }
-
     /**
      * Sets a Package loader.
      *
@@ -68,12 +64,11 @@ class PackageLocator
      * @param \Cake\I18n\Package|callable $spec A callable that returns a package or Package instance.
      * @return void
      */
-    public function set(string $name, string $locale, Package|callable $spec): void
+    public function set(string $name, string $locale, \Cake\I18n\Package|callable $spec): void
     {
         $this->registry[$name][$locale] = $spec;
-        $this->converted[$name][$locale] = $spec instanceof Package;
+        $this->converted[$name][$locale] = $spec instanceof \Cake\I18n\Package;
     }
-
     /**
      * Gets a Package object.
      *
@@ -81,23 +76,20 @@ class PackageLocator
      * @param string $locale The locale for the package.
      * @return \Cake\I18n\Package
      */
-    public function get(string $name, string $locale): Package
+    public function get(string $name, string $locale): \Cake\I18n\Package
     {
         if (!isset($this->registry[$name][$locale])) {
             throw new I18nException(sprintf('Package `%s` with locale `%s` is not registered.', $name, $locale));
         }
-
         if (!$this->converted[$name][$locale]) {
             $func = $this->registry[$name][$locale];
             assert(is_callable($func));
             $this->registry[$name][$locale] = $func();
-            $this->converted[$name][$locale] = true;
+            $this->converted[$name][$locale] = \true;
         }
-
         /** @var \Cake\I18n\Package */
         return $this->registry[$name][$locale];
     }
-
     /**
      * Check if a Package object for given name and locale exists in registry.
      *

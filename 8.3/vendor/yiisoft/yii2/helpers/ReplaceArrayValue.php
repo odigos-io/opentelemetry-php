@@ -1,14 +1,13 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\helpers;
 
 use yii\base\InvalidConfigException;
-
 /**
  * Object that represents the replacement of array value while performing [[ArrayHelper::merge()]].
  *
@@ -62,8 +61,6 @@ class ReplaceArrayValue
      * @var mixed value used as replacement.
      */
     public $value;
-
-
     /**
      * Constructor.
      * @param mixed $value value used as replacement.
@@ -72,7 +69,6 @@ class ReplaceArrayValue
     {
         $this->value = $value;
     }
-
     /**
      * Restores class state after using `var_export()`.
      *
@@ -87,7 +83,6 @@ class ReplaceArrayValue
         if (!isset($state['value'])) {
             throw new InvalidConfigException('Failed to instantiate class "ReplaceArrayValue". Required parameter "value" is missing');
         }
-
         return new self($state['value']);
     }
 }

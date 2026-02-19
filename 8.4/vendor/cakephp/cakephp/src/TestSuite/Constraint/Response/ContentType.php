@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -17,19 +17,17 @@ namespace Cake\TestSuite\Constraint\Response;
 
 use Cake\Http\MimeType;
 use Psr\Http\Message\ResponseInterface;
-
 /**
  * ContentType
  *
  * @internal
  */
-class ContentType extends ResponseBase
+class ContentType extends \Cake\TestSuite\Constraint\Response\ResponseBase
 {
     /**
      * @var \Cake\Http\Response
      */
     protected ResponseInterface $response;
-
     /**
      * Checks assertion
      *
@@ -42,10 +40,8 @@ class ContentType extends ResponseBase
         if ($mimeType !== null) {
             $other = $mimeType;
         }
-
         return $other === $this->response->getType();
     }
-
     /**
      * Assertion message
      *

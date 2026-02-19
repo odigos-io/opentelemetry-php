@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -18,7 +18,6 @@ namespace Cake\Datasource;
 
 use Cake\Datasource\Locator\LocatorInterface;
 use InvalidArgumentException;
-
 /**
  * Class FactoryLocator
  */
@@ -30,7 +29,6 @@ class FactoryLocator
      * @var array<string, \Cake\Datasource\Locator\LocatorInterface>
      */
     protected static array $_modelFactories = [];
-
     /**
      * Register a locator to return repositories of a given type.
      *
@@ -42,7 +40,6 @@ class FactoryLocator
     {
         static::$_modelFactories[$type] = $factory;
     }
-
     /**
      * Drop a model factory.
      *
@@ -53,7 +50,6 @@ class FactoryLocator
     {
         unset(static::$_modelFactories[$type]);
     }
-
     /**
      * Get the factory for the specified repository type.
      *
@@ -66,10 +62,6 @@ class FactoryLocator
         if (isset(static::$_modelFactories[$type])) {
             return static::$_modelFactories[$type];
         }
-
-        throw new InvalidArgumentException(sprintf(
-            'Unknown repository type `%s`. Make sure you register a type before trying to use it.',
-            $type,
-        ));
+        throw new InvalidArgumentException(sprintf('Unknown repository type `%s`. Make sure you register a type before trying to use it.', $type));
     }
 }

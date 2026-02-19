@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 // phpcs:disable PSR1.Files.SideEffects
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
@@ -23,7 +23,7 @@ namespace Cake\Collection;
  * @param iterable $items The items from which the collection will be built.
  * @return \Cake\Collection\Collection
  */
-function collection(iterable $items): CollectionInterface
+function collection(iterable $items): \Cake\Collection\CollectionInterface
 {
-    return new Collection($items);
+    return new \Cake\Collection\Collection($items);
 }

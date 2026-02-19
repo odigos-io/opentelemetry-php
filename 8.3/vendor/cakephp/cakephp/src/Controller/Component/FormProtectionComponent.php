@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -24,7 +24,6 @@ use Cake\Form\FormProtector;
 use Cake\Http\Response;
 use Cake\Routing\Router;
 use Closure;
-
 /**
  * Protects against form tampering. It ensures that:
  *
@@ -43,7 +42,6 @@ class FormProtectionComponent extends Component
      * @var string
      */
     public const DEFAULT_EXCEPTION_MESSAGE = 'Form tampering protection token validation failed.';
-
     /**
      * Default config
      *
@@ -60,13 +58,7 @@ class FormProtectionComponent extends Component
      *
      * @var array<string, mixed>
      */
-    protected array $_defaultConfig = [
-        'validate' => true,
-        'unlockedFields' => [],
-        'unlockedActions' => [],
-        'validationFailureCallback' => null,
-    ];
-
+    protected array $_defaultConfig = ['validate' => \true, 'unlockedFields' => [], 'unlockedActions' => [], 'validationFailureCallback' => null];
     /**
      * Get Session id for FormProtector
      * Must be the same as in FormHelper
@@ -77,10 +69,8 @@ class FormProtectionComponent extends Component
     {
         $session = $this->getController()->getRequest()->getSession();
         $session->start();
-
         return $session->id();
     }
-
     /**
      * Component startup.
      *
@@ -93,43 +83,26 @@ class FormProtectionComponent extends Component
     {
         $request = $this->getController()->getRequest();
         $data = $request->getParsedBody();
-        $hasData = ($data || $request->is(['put', 'post', 'delete', 'patch']));
-
-        if (
-            !in_array($request->getParam('action'), $this->_config['unlockedActions'], true)
-            && $hasData
-            && $this->_config['validate']
-        ) {
+        $hasData = $data || $request->is(['put', 'post', 'delete', 'patch']);
+        if (!in_array($request->getParam('action'), $this->_config['unlockedActions'], \true) && $hasData && $this->_config['validate']) {
             $sessionId = $this->_getSessionId();
             $url = Router::url($request->getRequestTarget());
-
             $formProtector = new FormProtector($this->_config);
             $isValid = $formProtector->validate($data, $url, $sessionId);
-
             if (!$isValid) {
                 $event->setResult($this->validationFailure($formProtector));
-
                 return null;
             }
         }
-
-        $token = [
-            'unlockedFields' => $this->_config['unlockedFields'],
-        ];
-        $request = $request->withAttribute('formTokenData', [
-            'unlockedFields' => $token['unlockedFields'],
-        ]);
-
+        $token = ['unlockedFields' => $this->_config['unlockedFields']];
+        $request = $request->withAttribute('formTokenData', ['unlockedFields' => $token['unlockedFields']]);
         if (is_array($data)) {
             unset($data['_Token']);
             $request = $request->withParsedBody($data);
         }
-
         $this->getController()->setRequest($request);
-
         return null;
     }
-
     /**
      * Events supported by this component.
      *
@@ -137,11 +110,8 @@ class FormProtectionComponent extends Component
      */
     public function implementedEvents(): array
     {
-        return [
-            'Controller.startup' => 'startup',
-        ];
+        return ['Controller.startup' => 'startup'];
     }
-
     /**
      * Throws a 400 - Bad request exception or calls custom callback.
      *
@@ -159,14 +129,11 @@ class FormProtectionComponent extends Component
         } else {
             $exception = new FormProtectionException(static::DEFAULT_EXCEPTION_MESSAGE);
         }
-
         if ($this->_config['validationFailureCallback']) {
             return $this->executeCallback($this->_config['validationFailureCallback'], $exception);
         }
-
         throw $exception;
     }
-
     /**
      * Execute callback.
      *

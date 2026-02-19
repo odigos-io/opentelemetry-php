@@ -1,4 +1,5 @@
 <?php
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -14,7 +15,6 @@
 namespace Cake\Test\Fixture;
 
 use Cake\TestSuite\Fixture\TestFixture;
-
 /**
  * AuthorsTags fixture
  */
@@ -25,10 +25,5 @@ class AuthorsTagsFixture extends TestFixture
      *
      * @var array
      */
-    public array $records = [
-        ['author_id' => 3, 'tag_id' => 1],
-        ['author_id' => 3, 'tag_id' => 2],
-        ['author_id' => 2, 'tag_id' => 1],
-        ['author_id' => 2, 'tag_id' => 3],
-    ];
+    public array $records = [['author_id' => 3, 'tag_id' => 1], ['author_id' => 3, 'tag_id' => 2], ['author_id' => 2, 'tag_id' => 1], ['author_id' => 2, 'tag_id' => 3]];
 }

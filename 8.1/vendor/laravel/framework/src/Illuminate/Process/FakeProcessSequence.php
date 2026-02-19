@@ -4,7 +4,6 @@ namespace Illuminate\Process;
 
 use Illuminate\Contracts\Process\ProcessResult as ProcessResultContract;
 use OutOfBoundsException;
-
 class FakeProcessSequence
 {
     /**
@@ -13,21 +12,18 @@ class FakeProcessSequence
      * @var array
      */
     protected $processes = [];
-
     /**
      * Indicates that invoking this sequence when it is empty should throw an exception.
      *
      * @var bool
      */
-    protected $failWhenEmpty = true;
-
+    protected $failWhenEmpty = \true;
     /**
      * The response that should be returned when the sequence is empty.
      *
      * @var \Illuminate\Contracts\Process\ProcessResult|\Illuminate\Process\FakeProcessDescription
      */
     protected $emptyProcess;
-
     /**
      * Create a new fake process sequence instance.
      *
@@ -38,47 +34,39 @@ class FakeProcessSequence
     {
         $this->processes = $processes;
     }
-
     /**
      * Push a new process result or description onto the sequence.
      *
      * @param  \Illuminate\Contracts\Process\ProcessResult|\Illuminate\Process\FakeProcessDescription|array|string  $process
      * @return $this
      */
-    public function push(ProcessResultContract|FakeProcessDescription|array|string $process)
+    public function push(ProcessResultContract|\Illuminate\Process\FakeProcessDescription|array|string $process)
     {
         $this->processes[] = $this->toProcessResult($process);
-
         return $this;
     }
-
     /**
      * Make the sequence return a default result when it is empty.
      *
      * @param  \Illuminate\Contracts\Process\ProcessResult|\Illuminate\Process\FakeProcessDescription|array|string  $process
      * @return $this
      */
-    public function whenEmpty(ProcessResultContract|FakeProcessDescription|array|string $process)
+    public function whenEmpty(ProcessResultContract|\Illuminate\Process\FakeProcessDescription|array|string $process)
     {
-        $this->failWhenEmpty = false;
+        $this->failWhenEmpty = \false;
         $this->emptyProcess = $this->toProcessResult($process);
-
         return $this;
     }
-
     /**
      * Convert the given result into an actual process result or description.
      *
      * @param  \Illuminate\Contracts\Process\ProcessResult|\Illuminate\Process\FakeProcessDescription|array|string  $process
      * @return \Illuminate\Contracts\Process\ProcessResult|\Illuminate\Process\FakeProcessDescription
      */
-    protected function toProcessResult(ProcessResultContract|FakeProcessDescription|array|string $process)
+    protected function toProcessResult(ProcessResultContract|\Illuminate\Process\FakeProcessDescription|array|string $process)
     {
-        return is_array($process) || is_string($process)
-                ? new FakeProcessResult(output: $process)
-                : $process;
+        return is_array($process) || is_string($process) ? new \Illuminate\Process\FakeProcessResult(output: $process) : $process;
     }
-
     /**
      * Make the sequence return a default result when it is empty.
      *
@@ -86,9 +74,8 @@ class FakeProcessSequence
      */
     public function dontFailWhenEmpty()
     {
-        return $this->whenEmpty(new FakeProcessResult);
+        return $this->whenEmpty(new \Illuminate\Process\FakeProcessResult());
     }
-
     /**
      * Indicate that this sequence has depleted all of its process results.
      *
@@ -98,7 +85,6 @@ class FakeProcessSequence
     {
         return count($this->processes) === 0;
     }
-
     /**
      * Get the next process in the sequence.
      *
@@ -111,11 +97,9 @@ class FakeProcessSequence
         if ($this->failWhenEmpty && count($this->processes) === 0) {
             throw new OutOfBoundsException('A process was invoked, but the process result sequence is empty.');
         }
-
-        if (! $this->failWhenEmpty && count($this->processes) === 0) {
-            return value($this->emptyProcess ?? new FakeProcessResult);
+        if (!$this->failWhenEmpty && count($this->processes) === 0) {
+            return value($this->emptyProcess ?? new \Illuminate\Process\FakeProcessResult());
         }
-
         return array_shift($this->processes);
     }
 }

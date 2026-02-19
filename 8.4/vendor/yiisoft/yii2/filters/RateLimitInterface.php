@@ -1,16 +1,15 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\filters;
 
 use yii\base\Action;
 use yii\base\Controller;
 use yii\base\Module;
-
 /**
  * RateLimitInterface is the interface that may be implemented by an identity object to enforce rate limiting.
  *
@@ -30,7 +29,6 @@ interface RateLimitInterface
      * @psalm-param Action<Controller<Module>> $action
      */
     public function getRateLimit($request, $action);
-
     /**
      * Loads the number of allowed requests and the corresponding timestamp from a persistent storage.
      * @param \yii\web\Request $request the current request
@@ -42,7 +40,6 @@ interface RateLimitInterface
      * @psalm-param Action<Controller<Module>> $action
      */
     public function loadAllowance($request, $action);
-
     /**
      * Saves the number of allowed requests and the corresponding timestamp to a persistent storage.
      * @param \yii\web\Request $request the current request

@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -20,7 +20,6 @@ use Cake\View\Helper;
 use Cake\View\StringTemplateTrait;
 use LogicException;
 use function Cake\Core\deprecationWarning;
-
 /**
  * BreadcrumbsHelper to register and display a breadcrumb trail for your views
  *
@@ -29,35 +28,24 @@ use function Cake\Core\deprecationWarning;
 class BreadcrumbsHelper extends Helper
 {
     use StringTemplateTrait;
-
     /**
      * Other helpers used by BreadcrumbsHelper.
      *
      * @var array
      */
     protected array $helpers = ['Url'];
-
     /**
      * Default config for the helper.
      *
      * @var array<string, mixed>
      */
-    protected array $_defaultConfig = [
-        'templates' => [
-            'wrapper' => '<ul{{attrs}}>{{content}}</ul>',
-            'item' => '<li{{attrs}}><a href="{{url}}"{{innerAttrs}}>{{title}}</a></li>{{separator}}',
-            'itemWithoutLink' => '<li{{attrs}}><span{{innerAttrs}}>{{title}}</span></li>{{separator}}',
-            'separator' => '<li{{attrs}}><span{{innerAttrs}}>{{separator}}</span></li>',
-        ],
-    ];
-
+    protected array $_defaultConfig = ['templates' => ['wrapper' => '<ul{{attrs}}>{{content}}</ul>', 'item' => '<li{{attrs}}><a href="{{url}}"{{innerAttrs}}>{{title}}</a></li>{{separator}}', 'itemWithoutLink' => '<li{{attrs}}><span{{innerAttrs}}>{{title}}</span></li>{{separator}}', 'separator' => '<li{{attrs}}><span{{innerAttrs}}>{{separator}}</span></li>']];
     /**
      * The crumb list.
      *
      * @var array
      */
     protected array $crumbs = [];
-
     /**
      * Add a crumb to the end of the trail.
      *
@@ -82,20 +70,12 @@ class BreadcrumbsHelper extends Helper
     public function add(array|string $title, array|string|null $url = null, array $options = [])
     {
         if (is_array($title)) {
-            deprecationWarning(
-                '5.3.0',
-                'Passing an array as the first argument to BreadcrumbsHelper::add() is deprecated. ' .
-                'Use addMany() instead.',
-            );
-
+            deprecationWarning('5.3.0', 'Passing an array as the first argument to BreadcrumbsHelper::add() is deprecated. ' . 'Use addMany() instead.');
             return $this->addMany($title, $options);
         }
-
         $this->crumbs[] = compact('title', 'url', 'options');
-
         return $this;
     }
-
     /**
      * Add multiple crumbs to the end of the trail.
      *
@@ -116,10 +96,8 @@ class BreadcrumbsHelper extends Helper
             $crumb['options'] += $options;
             $this->crumbs[] = $crumb;
         }
-
         return $this;
     }
-
     /**
      * Prepend a crumb to the start of the queue.
      *
@@ -144,20 +122,12 @@ class BreadcrumbsHelper extends Helper
     public function prepend(array|string $title, array|string|null $url = null, array $options = [])
     {
         if (is_array($title)) {
-            deprecationWarning(
-                '5.3.0',
-                'Passing an array as the first argument to BreadcrumbsHelper::prepend() is deprecated. ' .
-                'Use prependMany() instead.',
-            );
-
+            deprecationWarning('5.3.0', 'Passing an array as the first argument to BreadcrumbsHelper::prepend() is deprecated. ' . 'Use prependMany() instead.');
             return $this->prependMany($title, $options);
         }
-
         array_unshift($this->crumbs, compact('title', 'url', 'options'));
-
         return $this;
     }
-
     /**
      * Prepend multiple crumbs to the start of the queue.
      *
@@ -179,12 +149,9 @@ class BreadcrumbsHelper extends Helper
             $crumb['options'] += $options;
             $prepend[] = $crumb;
         }
-
         array_splice($this->crumbs, 0, 0, $prepend);
-
         return $this;
     }
-
     /**
      * Insert a crumb at a specific index.
      *
@@ -212,12 +179,9 @@ class BreadcrumbsHelper extends Helper
         if (!isset($this->crumbs[$index]) && $index !== count($this->crumbs)) {
             throw new LogicException(sprintf('No crumb could be found at index `%s`.', $index));
         }
-
         array_splice($this->crumbs, $index, 0, [compact('title', 'url', 'options')]);
-
         return $this;
     }
-
     /**
      * Insert a crumb before the first matching crumb with the specified title.
      *
@@ -237,21 +201,14 @@ class BreadcrumbsHelper extends Helper
      * @return $this
      * @throws \LogicException In case the matching crumb can not be found
      */
-    public function insertBefore(
-        string $matchingTitle,
-        string $title,
-        array|string|null $url = null,
-        array $options = [],
-    ) {
+    public function insertBefore(string $matchingTitle, string $title, array|string|null $url = null, array $options = [])
+    {
         $key = $this->findCrumb($matchingTitle);
-
         if ($key === null) {
             throw new LogicException(sprintf('No crumb matching `%s` could be found.', $matchingTitle));
         }
-
         return $this->insertAt($key, $title, $url, $options);
     }
-
     /**
      * Insert a crumb after the first matching crumb with the specified title.
      *
@@ -271,21 +228,14 @@ class BreadcrumbsHelper extends Helper
      * @return $this
      * @throws \LogicException In case the matching crumb can not be found.
      */
-    public function insertAfter(
-        string $matchingTitle,
-        string $title,
-        array|string|null $url = null,
-        array $options = [],
-    ) {
+    public function insertAfter(string $matchingTitle, string $title, array|string|null $url = null, array $options = [])
+    {
         $key = $this->findCrumb($matchingTitle);
-
         if ($key === null) {
             throw new LogicException(sprintf('No crumb matching `%s` could be found.', $matchingTitle));
         }
-
         return $this->insertAt($key + 1, $title, $url, $options);
     }
-
     /**
      * Returns the crumb list.
      *
@@ -295,7 +245,6 @@ class BreadcrumbsHelper extends Helper
     {
         return $this->crumbs;
     }
-
     /**
      * Removes all existing crumbs.
      *
@@ -304,10 +253,8 @@ class BreadcrumbsHelper extends Helper
     public function reset()
     {
         $this->crumbs = [];
-
         return $this;
     }
-
     /**
      * Renders the breadcrumbs trail.
      *
@@ -329,65 +276,39 @@ class BreadcrumbsHelper extends Helper
         if (!$this->crumbs) {
             return '';
         }
-
         $crumbs = $this->crumbs;
         $crumbsCount = count($crumbs);
         $templater = $this->templater();
         $separatorString = '';
-
         if ($separator) {
             if (isset($separator['innerAttrs'])) {
                 $separator['innerAttrs'] = $templater->formatAttributes($separator['innerAttrs']);
             }
-
-            $separator['attrs'] = $templater->formatAttributes(
-                $separator,
-                ['innerAttrs', 'separator'],
-            );
-
+            $separator['attrs'] = $templater->formatAttributes($separator, ['innerAttrs', 'separator']);
             $separatorString = $this->formatTemplate('separator', $separator);
         }
-
         $crumbTrail = '';
         foreach ($crumbs as $key => $crumb) {
             $url = $crumb['url'] ? $this->Url->build($crumb['url']) : null;
             $title = $crumb['title'];
             $options = $crumb['options'];
-
             $optionsLink = [];
             if (isset($options['innerAttrs'])) {
                 $optionsLink = $options['innerAttrs'];
                 unset($options['innerAttrs']);
             }
-
             $template = 'item';
-            $templateParams = [
-                'attrs' => $templater->formatAttributes($options, ['templateVars']),
-                'innerAttrs' => $templater->formatAttributes($optionsLink),
-                'title' => $title,
-                'url' => $url,
-                'separator' => '',
-                'templateVars' => $options['templateVars'] ?? [],
-            ];
-
+            $templateParams = ['attrs' => $templater->formatAttributes($options, ['templateVars']), 'innerAttrs' => $templater->formatAttributes($optionsLink), 'title' => $title, 'url' => $url, 'separator' => '', 'templateVars' => $options['templateVars'] ?? []];
             if (!$url) {
                 $template = 'itemWithoutLink';
             }
-
             if ($separatorString && $key !== $crumbsCount - 1) {
                 $templateParams['separator'] = $separatorString;
             }
-
             $crumbTrail .= $this->formatTemplate($template, $templateParams);
         }
-
-        return $this->formatTemplate('wrapper', [
-            'content' => $crumbTrail,
-            'attrs' => $templater->formatAttributes($attributes, ['templateVars']),
-            'templateVars' => $attributes['templateVars'] ?? [],
-        ]);
+        return $this->formatTemplate('wrapper', ['content' => $crumbTrail, 'attrs' => $templater->formatAttributes($attributes, ['templateVars']), 'templateVars' => $attributes['templateVars'] ?? []]);
     }
-
     /**
      * Search a crumb in the current stack which title matches the one provided as argument.
      * If found, the index of the matching crumb will be returned.
@@ -402,7 +323,6 @@ class BreadcrumbsHelper extends Helper
                 return $key;
             }
         }
-
         return null;
     }
 }

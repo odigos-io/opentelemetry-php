@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the league/commonmark package.
  *
@@ -10,8 +9,7 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace League\CommonMark\Parser;
+namespace Odigos\League\CommonMark\Parser;
 
 /**
  * Encapsulates the current state of a cursor in case you need to rollback later.
@@ -33,7 +31,6 @@ final class CursorState
      * @psalm-readonly
      */
     private array $state;
-
     /**
      * @internal
      *
@@ -43,7 +40,6 @@ final class CursorState
     {
         $this->state = $state;
     }
-
     /**
      * @internal
      *

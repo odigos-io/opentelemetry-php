@@ -1,8 +1,7 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Termwind\Components;
+declare (strict_types=1);
+namespace Odigos\Termwind\Components;
 
 final class Dl extends Element
 {

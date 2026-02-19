@@ -1,10 +1,10 @@
 <?php
 
+namespace Odigos;
+
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
-
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Application Name
@@ -15,9 +15,7 @@ return [
     | other UI elements where an application name needs to be displayed.
     |
     */
-
     'name' => env('APP_NAME', 'Laravel'),
-
     /*
     |--------------------------------------------------------------------------
     | Application Environment
@@ -28,9 +26,7 @@ return [
     | services the application utilizes. Set this in your ".env" file.
     |
     */
-
     'env' => env('APP_ENV', 'production'),
-
     /*
     |--------------------------------------------------------------------------
     | Application Debug Mode
@@ -41,9 +37,7 @@ return [
     | application. If disabled, a simple generic error page is shown.
     |
     */
-
-    'debug' => (bool) env('APP_DEBUG', false),
-
+    'debug' => (bool) env('APP_DEBUG', \false),
     /*
     |--------------------------------------------------------------------------
     | Application URL
@@ -54,13 +48,9 @@ return [
     | the application so that it's available within Artisan commands.
     |
     */
-
     'url' => env('APP_URL', 'http://localhost'),
-
     'frontend_url' => env('FRONTEND_URL', 'http://localhost:3000'),
-
     'asset_url' => env('ASSET_URL'),
-
     /*
     |--------------------------------------------------------------------------
     | Application Timezone
@@ -71,9 +61,7 @@ return [
     | is set to "UTC" by default as it is suitable for most use cases.
     |
     */
-
     'timezone' => 'UTC',
-
     /*
     |--------------------------------------------------------------------------
     | Application Locale Configuration
@@ -84,9 +72,7 @@ return [
     | set to any locale for which you plan to have translation strings.
     |
     */
-
     'locale' => env('APP_LOCALE', 'en'),
-
     /*
     |--------------------------------------------------------------------------
     | Application Fallback Locale
@@ -97,9 +83,7 @@ return [
     | the languages which are currently supported by your application.
     |
     */
-
     'fallback_locale' => env('APP_FALLBACK_LOCALE', 'en'),
-
     /*
     |--------------------------------------------------------------------------
     | Faker Locale
@@ -110,9 +94,7 @@ return [
     | localized telephone numbers, street address information and more.
     |
     */
-
     'faker_locale' => env('APP_FAKER_LOCALE', 'en_US'),
-
     /*
     |--------------------------------------------------------------------------
     | Encryption Key
@@ -123,17 +105,9 @@ return [
     | are secure. You should do this prior to deploying the application.
     |
     */
-
     'cipher' => 'AES-256-CBC',
-
     'key' => env('APP_KEY'),
-
-    'previous_keys' => [
-        ...array_filter(
-            explode(',', (string) env('APP_PREVIOUS_KEYS', ''))
-        ),
-    ],
-
+    'previous_keys' => [...\array_filter(\explode(',', (string) env('APP_PREVIOUS_KEYS', '')))],
     /*
     |--------------------------------------------------------------------------
     | Maintenance Mode Driver
@@ -146,12 +120,7 @@ return [
     | Supported drivers: "file", "cache"
     |
     */
-
-    'maintenance' => [
-        'driver' => env('APP_MAINTENANCE_DRIVER', 'file'),
-        'store' => env('APP_MAINTENANCE_STORE', 'database'),
-    ],
-
+    'maintenance' => ['driver' => env('APP_MAINTENANCE_DRIVER', 'file'), 'store' => env('APP_MAINTENANCE_STORE', 'database')],
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers
@@ -162,16 +131,7 @@ return [
     | arrays below to provide additional features to this application.
     |
     */
-
-    'providers' => ServiceProvider::defaultProviders()->merge([
-        // Package Service Providers...
-    ])->merge([
-        // Application Service Providers...
-        // App\Providers\AppServiceProvider::class,
-    ])->merge([
-        // Added Service Providers (Do not remove this line)...
-    ])->toArray(),
-
+    'providers' => ServiceProvider::defaultProviders()->merge([])->merge([])->merge([])->toArray(),
     /*
     |--------------------------------------------------------------------------
     | Class Aliases
@@ -182,9 +142,5 @@ return [
     | be loaded to the array. For speed, all aliases are lazy loaded.
     |
     */
-
-    'aliases' => Facade::defaultAliases()->merge([
-        // 'Example' => App\Facades\Example::class,
-    ])->toArray(),
-
+    'aliases' => Facade::defaultAliases()->merge([])->toArray(),
 ];

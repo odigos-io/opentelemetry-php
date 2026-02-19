@@ -1,9 +1,8 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\Context;
 
-if (ZendObserverFiber::isEnabled()) {
-    ZendObserverFiber::init();
+if (\OpenTelemetry\Context\ZendObserverFiber::isEnabled()) {
+    \OpenTelemetry\Context\ZendObserverFiber::init();
 }

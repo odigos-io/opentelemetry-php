@@ -1,12 +1,10 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\API\Metrics;
 
 use OpenTelemetry\Context\ContextInterface;
-
-interface UpDownCounterInterface extends SynchronousInstrument
+interface UpDownCounterInterface extends \OpenTelemetry\API\Metrics\SynchronousInstrument
 {
     /**
      * @param float|int $amount amount to increment / decrement by

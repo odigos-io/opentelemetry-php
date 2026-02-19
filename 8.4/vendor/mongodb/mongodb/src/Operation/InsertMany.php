@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright 2015-present MongoDB, Inc.
  *
@@ -14,7 +15,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 namespace MongoDB\Operation;
 
 use MongoDB\Codec\DocumentCodec;
@@ -26,12 +26,10 @@ use MongoDB\Driver\WriteConcern;
 use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\Exception\UnsupportedException;
 use MongoDB\InsertManyResult;
-
 use function array_is_list;
 use function is_bool;
 use function MongoDB\is_document;
 use function sprintf;
-
 /**
  * Operation for inserting multiple documents with the insert command.
  *
@@ -42,9 +40,7 @@ final class InsertMany
 {
     /** @var list<object|array> */
     private array $documents;
-
     private array $options;
-
     /**
      * Constructs an insert command.
      *
@@ -77,40 +73,31 @@ final class InsertMany
      */
     public function __construct(private string $databaseName, private string $collectionName, array $documents, array $options = [])
     {
-        $options += ['ordered' => true];
-
-        if (isset($options['bypassDocumentValidation']) && ! is_bool($options['bypassDocumentValidation'])) {
+        $options += ['ordered' => \true];
+        if (isset($options['bypassDocumentValidation']) && !is_bool($options['bypassDocumentValidation'])) {
             throw InvalidArgumentException::invalidType('"bypassDocumentValidation" option', $options['bypassDocumentValidation'], 'boolean');
         }
-
-        if (isset($options['codec']) && ! $options['codec'] instanceof DocumentCodec) {
+        if (isset($options['codec']) && !$options['codec'] instanceof DocumentCodec) {
             throw InvalidArgumentException::invalidType('"codec" option', $options['codec'], DocumentCodec::class);
         }
-
-        if (! is_bool($options['ordered'])) {
+        if (!is_bool($options['ordered'])) {
             throw InvalidArgumentException::invalidType('"ordered" option', $options['ordered'], 'boolean');
         }
-
-        if (isset($options['session']) && ! $options['session'] instanceof Session) {
+        if (isset($options['session']) && !$options['session'] instanceof Session) {
             throw InvalidArgumentException::invalidType('"session" option', $options['session'], Session::class);
         }
-
-        if (isset($options['writeConcern']) && ! $options['writeConcern'] instanceof WriteConcern) {
+        if (isset($options['writeConcern']) && !$options['writeConcern'] instanceof WriteConcern) {
             throw InvalidArgumentException::invalidType('"writeConcern" option', $options['writeConcern'], WriteConcern::class);
         }
-
-        if (isset($options['bypassDocumentValidation']) && ! $options['bypassDocumentValidation']) {
+        if (isset($options['bypassDocumentValidation']) && !$options['bypassDocumentValidation']) {
             unset($options['bypassDocumentValidation']);
         }
-
         if (isset($options['writeConcern']) && $options['writeConcern']->isDefault()) {
             unset($options['writeConcern']);
         }
-
         $this->documents = $this->validateDocuments($documents, $options['codec'] ?? null);
         $this->options = $options;
     }
-
     /**
      * Execute the operation.
      *
@@ -123,19 +110,14 @@ final class InsertMany
         if ($inTransaction && isset($this->options['writeConcern'])) {
             throw UnsupportedException::writeConcernNotSupportedInTransaction();
         }
-
         $bulk = new Bulk($this->createBulkWriteOptions());
         $insertedIds = [];
-
         foreach ($this->documents as $i => $document) {
             $insertedIds[$i] = $bulk->insert($document);
         }
-
         $writeResult = $server->executeBulkWrite($this->databaseName . '.' . $this->collectionName, $bulk, $this->createExecuteOptions());
-
         return new InsertManyResult($writeResult, $insertedIds);
     }
-
     /**
      * Create options for constructing the bulk write.
      *
@@ -144,16 +126,13 @@ final class InsertMany
     private function createBulkWriteOptions(): array
     {
         $options = ['ordered' => $this->options['ordered']];
-
         foreach (['bypassDocumentValidation', 'comment'] as $option) {
             if (isset($this->options[$option])) {
                 $options[$option] = $this->options[$option];
             }
         }
-
         return $options;
     }
-
     /**
      * Create options for executing the bulk write.
      *
@@ -162,18 +141,14 @@ final class InsertMany
     private function createExecuteOptions(): array
     {
         $options = [];
-
         if (isset($this->options['session'])) {
             $options['session'] = $this->options['session'];
         }
-
         if (isset($this->options['writeConcern'])) {
             $options['writeConcern'] = $this->options['writeConcern'];
         }
-
         return $options;
     }
-
     /**
      * @param list<object|array> $documents
      * @return list<object|array>
@@ -183,21 +158,17 @@ final class InsertMany
         if (empty($documents)) {
             throw new InvalidArgumentException('$documents is empty');
         }
-
-        if (! array_is_list($documents)) {
+        if (!array_is_list($documents)) {
             throw new InvalidArgumentException('$documents is not a list');
         }
-
         foreach ($documents as $i => $document) {
             if ($codec) {
                 $document = $documents[$i] = $codec->encode($document);
             }
-
-            if (! is_document($document)) {
+            if (!is_document($document)) {
                 throw InvalidArgumentException::expectedDocumentType(sprintf('$documents[%d]', $i), $document);
             }
         }
-
         return $documents;
     }
 }
