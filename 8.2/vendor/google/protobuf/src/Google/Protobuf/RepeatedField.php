@@ -10,13 +10,13 @@
  * RepeatedField and RepeatedFieldIter are used by generated protocol message
  * classes to manipulate repeated fields.
  */
-namespace Google\Protobuf;
+namespace Odigos\Google\Protobuf;
 
-use Google\Protobuf\Internal\DescriptorPool;
-use Google\Protobuf\Internal\GPBType;
-use Google\Protobuf\Internal\GPBUtil;
-use Google\Protobuf\Internal\Message;
-use Google\Protobuf\Internal\RepeatedFieldIter;
+use Odigos\Google\Protobuf\Internal\DescriptorPool;
+use Odigos\Google\Protobuf\Internal\GPBType;
+use Odigos\Google\Protobuf\Internal\GPBUtil;
+use Odigos\Google\Protobuf\Internal\Message;
+use Odigos\Google\Protobuf\Internal\RepeatedFieldIter;
 use Traversable;
 /**
  * RepeatedField is used by generated protocol message classes to manipulate
@@ -221,11 +221,11 @@ class RepeatedField implements \ArrayAccess, \IteratorAggregate, \Countable
     public function __debugInfo()
     {
         return array_map(function ($item) {
-            if ($item instanceof Message || $item instanceof \Google\Protobuf\RepeatedField) {
+            if ($item instanceof Message || $item instanceof RepeatedField) {
                 return $item->__debugInfo();
             }
             return $item;
         }, iterator_to_array($this));
     }
 }
-class_alias(\Google\Protobuf\RepeatedField::class, \Google\Protobuf\Internal\RepeatedField::class);
+class_alias(RepeatedField::class, Internal\RepeatedField::class);

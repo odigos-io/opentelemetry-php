@@ -82,4 +82,4 @@ interface ComponentProviderRegistry
     public function componentNames(string $name, string $type): ArrayNodeDefinition;
 }
 /** @phpstan-ignore-next-line @phan-suppress-next-line PhanUndeclaredClassReference */
-class_alias(\OpenTelemetry\API\Configuration\Config\ComponentProviderRegistry::class, \OpenTelemetry\Config\SDK\Configuration\ComponentProviderRegistry::class);
+class_alias(\OpenTelemetry\API\Configuration\Config\ComponentProviderRegistry::class, \Odigos\OpenTelemetry\Config\SDK\Configuration\ComponentProviderRegistry::class);

@@ -10,7 +10,7 @@
  * RepeatedField and RepeatedFieldIter are used by generated protocol message
  * classes to manipulate repeated fields.
  */
-namespace Google\Protobuf\Internal;
+namespace Odigos\Google\Protobuf\Internal;
 
 /**
  * RepeatedFieldIter is used to iterate RepeatedField. It is also need for the

@@ -16,7 +16,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-namespace Opentelemetry\Proto\Collector\Profiles\V1development;
+namespace Odigos\Opentelemetry\Proto\Collector\Profiles\V1development;
 
 /**
  * Service that can be used to push profiles between one Application instrumented with
@@ -39,8 +39,8 @@ class ProfilesServiceClient extends \Odigos\Grpc\BaseStub
      * @param array $options call options
      * @return \Grpc\UnaryCall
      */
-    public function Export(\Opentelemetry\Proto\Collector\Profiles\V1development\ExportProfilesServiceRequest $argument, $metadata = [], $options = [])
+    public function Export(\Odigos\Opentelemetry\Proto\Collector\Profiles\V1development\ExportProfilesServiceRequest $argument, $metadata = [], $options = [])
     {
-        return $this->_simpleRequest('/opentelemetry.proto.collector.profiles.v1development.ProfilesService/Export', $argument, ['\Opentelemetry\Proto\Collector\Profiles\V1development\ExportProfilesServiceResponse', 'decode'], $metadata, $options);
+        return $this->_simpleRequest('/opentelemetry.proto.collector.profiles.v1development.ProfilesService/Export', $argument, ['Odigos\Opentelemetry\Proto\Collector\Profiles\V1development\ExportProfilesServiceResponse', 'decode'], $metadata, $options);
     }
 }

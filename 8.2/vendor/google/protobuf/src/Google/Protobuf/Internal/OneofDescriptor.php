@@ -6,17 +6,17 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file or at
 // https://developers.google.com/open-source/licenses/bsd
-namespace Google\Protobuf\Internal;
+namespace Odigos\Google\Protobuf\Internal;
 
 class OneofDescriptor
 {
-    use \Google\Protobuf\Internal\HasPublicDescriptorTrait;
+    use HasPublicDescriptorTrait;
     private $name;
     /** @var \Google\Protobuf\FieldDescriptor[] $fields */
     private $fields;
     public function __construct()
     {
-        $this->public_desc = new \Google\Protobuf\OneofDescriptor($this);
+        $this->public_desc = new \Odigos\Google\Protobuf\OneofDescriptor($this);
     }
     public function setName($name)
     {
@@ -26,7 +26,7 @@ class OneofDescriptor
     {
         return $this->name;
     }
-    public function addField(\Google\Protobuf\Internal\FieldDescriptor $field)
+    public function addField(FieldDescriptor $field)
     {
         $this->fields[] = $field;
     }
@@ -40,7 +40,7 @@ class OneofDescriptor
     }
     public static function buildFromProto($oneof_proto, $desc, $index)
     {
-        $oneof = new \Google\Protobuf\Internal\OneofDescriptor();
+        $oneof = new OneofDescriptor();
         $oneof->setName($oneof_proto->getName());
         foreach ($desc->getField() as $field) {
             /** @var FieldDescriptor $field */

@@ -10,7 +10,7 @@
  * MapField and MapFieldIter are used by generated protocol message classes to
  * manipulate map fields.
  */
-namespace Google\Protobuf\Internal;
+namespace Odigos\Google\Protobuf\Internal;
 
 /**
  * MapFieldIter is used to iterate MapField. It is also need for the foreach
@@ -71,19 +71,19 @@ class MapFieldIter implements \Iterator
     {
         $key = key($this->container);
         switch ($this->key_type) {
-            case \Google\Protobuf\Internal\GPBType::INT64:
-            case \Google\Protobuf\Internal\GPBType::UINT64:
-            case \Google\Protobuf\Internal\GPBType::FIXED64:
-            case \Google\Protobuf\Internal\GPBType::SFIXED64:
-            case \Google\Protobuf\Internal\GPBType::SINT64:
+            case GPBType::INT64:
+            case GPBType::UINT64:
+            case GPBType::FIXED64:
+            case GPBType::SFIXED64:
+            case GPBType::SINT64:
                 if (\PHP_INT_SIZE === 8) {
                     return $key;
                 }
             // Intentionally fall through
-            case \Google\Protobuf\Internal\GPBType::STRING:
+            case GPBType::STRING:
                 // PHP associative array stores int string as int for key.
                 return strval($key);
-            case \Google\Protobuf\Internal\GPBType::BOOL:
+            case GPBType::BOOL:
                 // PHP associative array stores bool as integer for key.
                 return boolval($key);
             default:

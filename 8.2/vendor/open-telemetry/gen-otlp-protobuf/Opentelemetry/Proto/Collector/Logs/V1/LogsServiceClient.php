@@ -16,7 +16,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-namespace Opentelemetry\Proto\Collector\Logs\V1;
+namespace Odigos\Opentelemetry\Proto\Collector\Logs\V1;
 
 /**
  * Service that can be used to push logs between one Application instrumented with
@@ -40,8 +40,8 @@ class LogsServiceClient extends \Odigos\Grpc\BaseStub
      * @param array $options call options
      * @return \Grpc\UnaryCall
      */
-    public function Export(\Opentelemetry\Proto\Collector\Logs\V1\ExportLogsServiceRequest $argument, $metadata = [], $options = [])
+    public function Export(\Odigos\Opentelemetry\Proto\Collector\Logs\V1\ExportLogsServiceRequest $argument, $metadata = [], $options = [])
     {
-        return $this->_simpleRequest('/opentelemetry.proto.collector.logs.v1.LogsService/Export', $argument, ['\Opentelemetry\Proto\Collector\Logs\V1\ExportLogsServiceResponse', 'decode'], $metadata, $options);
+        return $this->_simpleRequest('/opentelemetry.proto.collector.logs.v1.LogsService/Export', $argument, ['Odigos\Opentelemetry\Proto\Collector\Logs\V1\ExportLogsServiceResponse', 'decode'], $metadata, $options);
     }
 }

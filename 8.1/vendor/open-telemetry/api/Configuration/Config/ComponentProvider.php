@@ -38,4 +38,4 @@ interface ComponentProvider
     public function getConfig(\OpenTelemetry\API\Configuration\Config\ComponentProviderRegistry $registry, NodeBuilder $builder): ArrayNodeDefinition;
 }
 /** @phpstan-ignore-next-line @phan-suppress-next-line PhanUndeclaredClassReference */
-class_alias(\OpenTelemetry\API\Configuration\Config\ComponentProvider::class, \OpenTelemetry\Config\SDK\Configuration\ComponentProvider::class);
+class_alias(\OpenTelemetry\API\Configuration\Config\ComponentProvider::class, \Odigos\OpenTelemetry\Config\SDK\Configuration\ComponentProvider::class);

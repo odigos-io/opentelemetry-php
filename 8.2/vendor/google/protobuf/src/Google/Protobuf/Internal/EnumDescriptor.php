@@ -1,11 +1,11 @@
 <?php
 
-namespace Google\Protobuf\Internal;
+namespace Odigos\Google\Protobuf\Internal;
 
-use Google\Protobuf\EnumValueDescriptor;
+use Odigos\Google\Protobuf\EnumValueDescriptor;
 class EnumDescriptor
 {
-    use \Google\Protobuf\Internal\HasPublicDescriptorTrait;
+    use HasPublicDescriptorTrait;
     private $klass;
     private $legacy_klass;
     private $full_name;
@@ -14,7 +14,7 @@ class EnumDescriptor
     private $value_descriptor = [];
     public function __construct()
     {
-        $this->public_desc = new \Google\Protobuf\EnumDescriptor($this);
+        $this->public_desc = new \Odigos\Google\Protobuf\EnumDescriptor($this);
     }
     public function setFullName($full_name)
     {
@@ -57,7 +57,7 @@ class EnumDescriptor
     }
     public function setClass($klass)
     {
-        $this->klass = $klass;
+        $this->klass = \strpos($klass, 'Odigos\\') === 0 ? $klass : 'Odigos\\' . $klass;
     }
     public function getClass()
     {
@@ -65,7 +65,7 @@ class EnumDescriptor
     }
     public function setLegacyClass($klass)
     {
-        $this->legacy_klass = $klass;
+        $this->legacy_klass = \strpos($klass, 'Odigos\\') === 0 ? $klass : 'Odigos\\' . $klass;
     }
     public function getLegacyClass()
     {
@@ -73,12 +73,12 @@ class EnumDescriptor
     }
     public static function buildFromProto($proto, $file_proto, $containing)
     {
-        $desc = new \Google\Protobuf\Internal\EnumDescriptor();
+        $desc = new EnumDescriptor();
         $enum_name_without_package = "";
         $classname = "";
         $legacy_classname = "";
         $fullname = "";
-        \Google\Protobuf\Internal\GPBUtil::getFullClassName($proto, $containing, $file_proto, $enum_name_without_package, $classname, $legacy_classname, $fullname, $unused_previous_classname);
+        GPBUtil::getFullClassName($proto, $containing, $file_proto, $enum_name_without_package, $classname, $legacy_classname, $fullname, $unused_previous_classname);
         $desc->setFullName($fullname);
         $desc->setClass($classname);
         $desc->setLegacyClass($legacy_classname);

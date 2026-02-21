@@ -6,7 +6,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file or at
 // https://developers.google.com/open-source/licenses/bsd
-namespace Google\Protobuf\Internal;
+namespace Odigos\Google\Protobuf\Internal;
 
 class GPBWire
 {
@@ -32,28 +32,28 @@ class GPBWire
     public static function getWireType($type)
     {
         switch ($type) {
-            case \Google\Protobuf\Internal\GPBType::FLOAT:
-            case \Google\Protobuf\Internal\GPBType::FIXED32:
-            case \Google\Protobuf\Internal\GPBType::SFIXED32:
+            case GPBType::FLOAT:
+            case GPBType::FIXED32:
+            case GPBType::SFIXED32:
                 return self::WIRETYPE_FIXED32;
-            case \Google\Protobuf\Internal\GPBType::DOUBLE:
-            case \Google\Protobuf\Internal\GPBType::FIXED64:
-            case \Google\Protobuf\Internal\GPBType::SFIXED64:
+            case GPBType::DOUBLE:
+            case GPBType::FIXED64:
+            case GPBType::SFIXED64:
                 return self::WIRETYPE_FIXED64;
-            case \Google\Protobuf\Internal\GPBType::UINT32:
-            case \Google\Protobuf\Internal\GPBType::UINT64:
-            case \Google\Protobuf\Internal\GPBType::INT32:
-            case \Google\Protobuf\Internal\GPBType::INT64:
-            case \Google\Protobuf\Internal\GPBType::SINT32:
-            case \Google\Protobuf\Internal\GPBType::SINT64:
-            case \Google\Protobuf\Internal\GPBType::ENUM:
-            case \Google\Protobuf\Internal\GPBType::BOOL:
+            case GPBType::UINT32:
+            case GPBType::UINT64:
+            case GPBType::INT32:
+            case GPBType::INT64:
+            case GPBType::SINT32:
+            case GPBType::SINT64:
+            case GPBType::ENUM:
+            case GPBType::BOOL:
                 return self::WIRETYPE_VARINT;
-            case \Google\Protobuf\Internal\GPBType::STRING:
-            case \Google\Protobuf\Internal\GPBType::BYTES:
-            case \Google\Protobuf\Internal\GPBType::MESSAGE:
+            case GPBType::STRING:
+            case GPBType::BYTES:
+            case GPBType::MESSAGE:
                 return self::WIRETYPE_LENGTH_DELIMITED;
-            case \Google\Protobuf\Internal\GPBType::GROUP:
+            case GPBType::GROUP:
                 user_error("Unsupported type.");
                 return 0;
             default:
@@ -151,7 +151,7 @@ class GPBWire
         if (!$input->readVarint32($value)) {
             return \false;
         }
-        $value = \Google\Protobuf\Internal\GPBWire::zigZagDecode32($value);
+        $value = GPBWire::zigZagDecode32($value);
         return \true;
     }
     public static function readSint64(&$input, &$value)
@@ -159,7 +159,7 @@ class GPBWire
         if (!$input->readVarint64($value)) {
             return \false;
         }
-        $value = \Google\Protobuf\Internal\GPBWire::zigZagDecode64($value);
+        $value = GPBWire::zigZagDecode64($value);
         return \true;
     }
     public static function readFixed32(&$input, &$value)
@@ -259,12 +259,12 @@ class GPBWire
     }
     public static function writeSint32(&$output, $value)
     {
-        $value = \Google\Protobuf\Internal\GPBWire::zigZagEncode32($value);
+        $value = GPBWire::zigZagEncode32($value);
         return $output->writeVarint32($value, \true);
     }
     public static function writeSint64(&$output, $value)
     {
-        $value = \Google\Protobuf\Internal\GPBWire::zigZagEncode64($value);
+        $value = GPBWire::zigZagEncode64($value);
         return $output->writeVarint64($value);
     }
     public static function writeFixed32(&$output, $value)
@@ -428,53 +428,53 @@ class GPBWire
     public static function serializeFieldToStream($value, $field, $need_tag, &$output)
     {
         if ($need_tag) {
-            if (!\Google\Protobuf\Internal\GPBWire::writeTag($output, self::makeTag($field->getNumber(), $field->getType()))) {
+            if (!GPBWire::writeTag($output, self::makeTag($field->getNumber(), $field->getType()))) {
                 return \false;
             }
         }
         switch ($field->getType()) {
-            case \Google\Protobuf\Internal\GPBType::DOUBLE:
-                if (!\Google\Protobuf\Internal\GPBWire::writeDouble($output, $value)) {
+            case GPBType::DOUBLE:
+                if (!GPBWire::writeDouble($output, $value)) {
                     return \false;
                 }
                 break;
-            case \Google\Protobuf\Internal\GPBType::FLOAT:
-                if (!\Google\Protobuf\Internal\GPBWire::writeFloat($output, $value)) {
+            case GPBType::FLOAT:
+                if (!GPBWire::writeFloat($output, $value)) {
                     return \false;
                 }
                 break;
-            case \Google\Protobuf\Internal\GPBType::INT64:
-                if (!\Google\Protobuf\Internal\GPBWire::writeInt64($output, $value)) {
+            case GPBType::INT64:
+                if (!GPBWire::writeInt64($output, $value)) {
                     return \false;
                 }
                 break;
-            case \Google\Protobuf\Internal\GPBType::UINT64:
-                if (!\Google\Protobuf\Internal\GPBWire::writeUint64($output, $value)) {
+            case GPBType::UINT64:
+                if (!GPBWire::writeUint64($output, $value)) {
                     return \false;
                 }
                 break;
-            case \Google\Protobuf\Internal\GPBType::INT32:
-                if (!\Google\Protobuf\Internal\GPBWire::writeInt32($output, $value)) {
+            case GPBType::INT32:
+                if (!GPBWire::writeInt32($output, $value)) {
                     return \false;
                 }
                 break;
-            case \Google\Protobuf\Internal\GPBType::FIXED32:
-                if (!\Google\Protobuf\Internal\GPBWire::writeFixed32($output, $value)) {
+            case GPBType::FIXED32:
+                if (!GPBWire::writeFixed32($output, $value)) {
                     return \false;
                 }
                 break;
-            case \Google\Protobuf\Internal\GPBType::FIXED64:
-                if (!\Google\Protobuf\Internal\GPBWire::writeFixed64($output, $value)) {
+            case GPBType::FIXED64:
+                if (!GPBWire::writeFixed64($output, $value)) {
                     return \false;
                 }
                 break;
-            case \Google\Protobuf\Internal\GPBType::BOOL:
-                if (!\Google\Protobuf\Internal\GPBWire::writeBool($output, $value)) {
+            case GPBType::BOOL:
+                if (!GPBWire::writeBool($output, $value)) {
                     return \false;
                 }
                 break;
-            case \Google\Protobuf\Internal\GPBType::STRING:
-                if (!\Google\Protobuf\Internal\GPBWire::writeString($output, $value)) {
+            case GPBType::STRING:
+                if (!GPBWire::writeString($output, $value)) {
                     return \false;
                 }
                 break;
@@ -482,46 +482,46 @@ class GPBWire
             //      echo "GROUP\xA";
             //      trigger_error("Not implemented.", E_ERROR);
             //      break;
-            case \Google\Protobuf\Internal\GPBType::MESSAGE:
-                if (!\Google\Protobuf\Internal\GPBWire::writeMessage($output, $value)) {
+            case GPBType::MESSAGE:
+                if (!GPBWire::writeMessage($output, $value)) {
                     return \false;
                 }
                 break;
-            case \Google\Protobuf\Internal\GPBType::BYTES:
-                if (!\Google\Protobuf\Internal\GPBWire::writeBytes($output, $value)) {
+            case GPBType::BYTES:
+                if (!GPBWire::writeBytes($output, $value)) {
                     return \false;
                 }
                 break;
-            case \Google\Protobuf\Internal\GPBType::UINT32:
+            case GPBType::UINT32:
                 if (\PHP_INT_SIZE === 8 && $value < 0) {
                     $value += 4294967296;
                 }
-                if (!\Google\Protobuf\Internal\GPBWire::writeUint32($output, $value)) {
+                if (!GPBWire::writeUint32($output, $value)) {
                     return \false;
                 }
                 break;
-            case \Google\Protobuf\Internal\GPBType::ENUM:
-                if (!\Google\Protobuf\Internal\GPBWire::writeInt32($output, $value)) {
+            case GPBType::ENUM:
+                if (!GPBWire::writeInt32($output, $value)) {
                     return \false;
                 }
                 break;
-            case \Google\Protobuf\Internal\GPBType::SFIXED32:
-                if (!\Google\Protobuf\Internal\GPBWire::writeSfixed32($output, $value)) {
+            case GPBType::SFIXED32:
+                if (!GPBWire::writeSfixed32($output, $value)) {
                     return \false;
                 }
                 break;
-            case \Google\Protobuf\Internal\GPBType::SFIXED64:
-                if (!\Google\Protobuf\Internal\GPBWire::writeSfixed64($output, $value)) {
+            case GPBType::SFIXED64:
+                if (!GPBWire::writeSfixed64($output, $value)) {
                     return \false;
                 }
                 break;
-            case \Google\Protobuf\Internal\GPBType::SINT32:
-                if (!\Google\Protobuf\Internal\GPBWire::writeSint32($output, $value)) {
+            case GPBType::SINT32:
+                if (!GPBWire::writeSint32($output, $value)) {
                     return \false;
                 }
                 break;
-            case \Google\Protobuf\Internal\GPBType::SINT64:
-                if (!\Google\Protobuf\Internal\GPBWire::writeSint64($output, $value)) {
+            case GPBType::SINT64:
+                if (!GPBWire::writeSint64($output, $value)) {
                     return \false;
                 }
                 break;

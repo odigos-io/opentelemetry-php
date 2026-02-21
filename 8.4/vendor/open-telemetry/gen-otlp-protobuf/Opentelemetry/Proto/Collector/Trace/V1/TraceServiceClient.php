@@ -16,7 +16,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-namespace Opentelemetry\Proto\Collector\Trace\V1;
+namespace Odigos\Opentelemetry\Proto\Collector\Trace\V1;
 
 /**
  * Service that can be used to push spans between one Application instrumented with
@@ -40,8 +40,8 @@ class TraceServiceClient extends \Odigos\Grpc\BaseStub
      * @param array $options call options
      * @return \Grpc\UnaryCall
      */
-    public function Export(\Opentelemetry\Proto\Collector\Trace\V1\ExportTraceServiceRequest $argument, $metadata = [], $options = [])
+    public function Export(\Odigos\Opentelemetry\Proto\Collector\Trace\V1\ExportTraceServiceRequest $argument, $metadata = [], $options = [])
     {
-        return $this->_simpleRequest('/opentelemetry.proto.collector.trace.v1.TraceService/Export', $argument, ['\Opentelemetry\Proto\Collector\Trace\V1\ExportTraceServiceResponse', 'decode'], $metadata, $options);
+        return $this->_simpleRequest('/opentelemetry.proto.collector.trace.v1.TraceService/Export', $argument, ['Odigos\Opentelemetry\Proto\Collector\Trace\V1\ExportTraceServiceResponse', 'decode'], $metadata, $options);
     }
 }

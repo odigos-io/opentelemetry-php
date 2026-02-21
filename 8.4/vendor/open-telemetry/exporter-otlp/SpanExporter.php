@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace OpenTelemetry\Contrib\Otlp;
 
 use OpenTelemetry\API\Behavior\LogsMessagesTrait;
-use Opentelemetry\Proto\Collector\Trace\V1\ExportTraceServiceResponse;
+use Odigos\Opentelemetry\Proto\Collector\Trace\V1\ExportTraceServiceResponse;
 use OpenTelemetry\SDK\Common\Export\TransportInterface;
 use OpenTelemetry\SDK\Common\Future\CancellationInterface;
 use OpenTelemetry\SDK\Common\Future\FutureInterface;
@@ -23,7 +23,7 @@ final class SpanExporter implements SpanExporterInterface
      */
     public function __construct(private TransportInterface $transport)
     {
-        if (!class_exists('\Google\Protobuf\Api')) {
+        if (!class_exists('Odigos\Google\Protobuf\Api')) {
             throw new RuntimeException('No protobuf implementation found (ext-protobuf or google/protobuf)');
         }
         $this->serializer = \OpenTelemetry\Contrib\Otlp\ProtobufSerializer::forTransport($this->transport);

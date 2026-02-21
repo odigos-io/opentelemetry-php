@@ -6,9 +6,9 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file or at
 // https://developers.google.com/open-source/licenses/bsd
-namespace Google\Protobuf;
+namespace Odigos\Google\Protobuf;
 
-use Google\Protobuf\Internal\GetPublicDescriptorTrait;
+use Odigos\Google\Protobuf\Internal\GetPublicDescriptorTrait;
 class Descriptor
 {
     use GetPublicDescriptorTrait;

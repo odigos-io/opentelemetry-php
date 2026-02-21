@@ -1,12 +1,12 @@
 <?php
 
-namespace Google\Protobuf\Internal;
+namespace Odigos\Google\Protobuf\Internal;
 
 /**
  * Base class for Google\Protobuf\Timestamp, this contains hand-written
  * convenience methods.
  */
-class TimestampBase extends \Google\Protobuf\Internal\Message
+class TimestampBase extends \Odigos\Google\Protobuf\Internal\Message
 {
     /*
      * Converts PHP DateTime to Timestamp.

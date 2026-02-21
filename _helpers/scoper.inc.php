@@ -21,19 +21,20 @@ return [
     //  2. Auto-instrumentation registers hooks by class name — the class string
     //     must match the customer's actual runtime class
     //  3. PSR interfaces bridge customer code and instrumentation
-    //  4. Protobuf's descriptor pool maps PHP class names to message descriptors;
-    //     scoping breaks this lookup (Google\Protobuf, Opentelemetry\Proto, GPBMetadata)
+    //
+    // NOTE: We exclude specific OpenTelemetry\* sub-namespaces rather than the
+    // root "OpenTelemetry" because PHP namespaces are case-insensitive and
+    // PHP-Scoper follows suit. Excluding "OpenTelemetry" would also exclude
+    // "Opentelemetry\Proto" (the generated protobuf code, lowercase 't'),
+    // which MUST be scoped to prevent version conflicts with customer apps.
+    // The protobuf descriptor pool lookup is fixed via a patcher below.
     'exclude-namespaces' => [
-        // OTel packages — root exclusion covers API, SDK, Contrib, Context, SemConv,
-        // AND Opentelemetry\Proto (lowercase 't') which is the generated protobuf code.
-        // PHP namespaces are case-insensitive so this single entry covers both casings.
-        'OpenTelemetry',
-
-        // Protobuf runtime and descriptor metadata — the descriptor pool is global and
-        // maps PHP class names to protobuf message names at construction time.
-        // Scoping these classes adds a prefix that doesn't match registered descriptors.
-        'Google',
-        'GPBMetadata',
+        // OTel SDK, API, auto-instrumentation, C extension hooks
+        'OpenTelemetry\API',
+        'OpenTelemetry\SDK',
+        'OpenTelemetry\Contrib',
+        'OpenTelemetry\Context',
+        'OpenTelemetry\SemConv',
 
         // Framework namespaces targeted by auto-instrumentation hooks
         'Illuminate',
@@ -73,6 +74,39 @@ return [
                 '',
                 $content
             );
+        },
+        // Protobuf scoping compatibility: the descriptor pool registers classes
+        // by the original PHP names derived from .proto files. After scoping,
+        // our classes have the Odigos\ prefix. Rather than patching every
+        // downstream lookup and type-check, we prefix class names at the source:
+        // the Descriptor/EnumDescriptor setClass methods. This makes the entire
+        // protobuf runtime (descriptor pool, RepeatedField, GPBUtil type checks)
+        // consistently use scoped class names.
+        static function (string $filePath, string $prefix, string $content): string {
+            $isDesc = str_ends_with($filePath, 'Google/Protobuf/Internal/Descriptor.php');
+            $isEnum = str_ends_with($filePath, 'Google/Protobuf/Internal/EnumDescriptor.php');
+            if (!$isDesc && !$isEnum) {
+                return $content;
+            }
+            $fix = "\\strpos(\$klass, '{$prefix}\\\\') === 0 ? \$klass : '{$prefix}\\\\' . \$klass";
+            $content = str_replace(
+                '$this->klass = $klass;',
+                "\$this->klass = {$fix};",
+                $content
+            );
+            $content = str_replace(
+                '$this->legacy_klass = $klass;',
+                "\$this->legacy_klass = {$fix};",
+                $content
+            );
+            if ($isDesc) {
+                $content = str_replace(
+                    '$this->previous_klass = $klass;',
+                    "\$this->previous_klass = {$fix};",
+                    $content
+                );
+            }
+            return $content;
         },
     ],
 ];
