@@ -6,16 +6,16 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file or at
 // https://developers.google.com/open-source/licenses/bsd
-namespace Odigos\Google\Protobuf\Internal;
+namespace Google\Protobuf\Internal;
 
-use Odigos\Google\Protobuf\PrintOptions;
+use Google\Protobuf\PrintOptions;
 class GPBJsonWire
 {
     public static function serializeFieldToStream($value, $field, &$output, $has_field_name = \true)
     {
         if ($has_field_name) {
             $output->writeRaw("\"", 1);
-            $field_name = GPBJsonWire::formatFieldName($field, $output->getOptions());
+            $field_name = \Google\Protobuf\Internal\GPBJsonWire::formatFieldName($field, $output->getOptions());
             $output->writeRaw($field_name, strlen($field_name));
             $output->writeRaw("\":", 2);
         }
@@ -30,12 +30,12 @@ class GPBJsonWire
             $key_field = $map_entry->getFieldByNumber(1);
             $value_field = $map_entry->getFieldByNumber(2);
             switch ($key_field->getType()) {
-                case GPBType::STRING:
-                case GPBType::SFIXED64:
-                case GPBType::INT64:
-                case GPBType::SINT64:
-                case GPBType::FIXED64:
-                case GPBType::UINT64:
+                case \Google\Protobuf\Internal\GPBType::STRING:
+                case \Google\Protobuf\Internal\GPBType::SFIXED64:
+                case \Google\Protobuf\Internal\GPBType::INT64:
+                case \Google\Protobuf\Internal\GPBType::SINT64:
+                case \Google\Protobuf\Internal\GPBType::FIXED64:
+                case \Google\Protobuf\Internal\GPBType::UINT64:
                     $additional_quote = \false;
                     break;
                 default:
@@ -85,35 +85,35 @@ class GPBJsonWire
     private static function serializeSingularFieldValueToStream($value, $field, &$output, $is_well_known = \false)
     {
         switch ($field->getType()) {
-            case GPBType::SFIXED32:
-            case GPBType::SINT32:
-            case GPBType::INT32:
+            case \Google\Protobuf\Internal\GPBType::SFIXED32:
+            case \Google\Protobuf\Internal\GPBType::SINT32:
+            case \Google\Protobuf\Internal\GPBType::INT32:
                 $str_value = strval($value);
                 $output->writeRaw($str_value, strlen($str_value));
                 break;
-            case GPBType::FIXED32:
-            case GPBType::UINT32:
+            case \Google\Protobuf\Internal\GPBType::FIXED32:
+            case \Google\Protobuf\Internal\GPBType::UINT32:
                 if ($value < 0) {
                     $value = bcadd($value, "4294967296");
                 }
                 $str_value = strval($value);
                 $output->writeRaw($str_value, strlen($str_value));
                 break;
-            case GPBType::FIXED64:
-            case GPBType::UINT64:
+            case \Google\Protobuf\Internal\GPBType::FIXED64:
+            case \Google\Protobuf\Internal\GPBType::UINT64:
                 if ($value < 0) {
                     $value = bcadd($value, "18446744073709551616");
                 }
             // Intentional fall through.
-            case GPBType::SFIXED64:
-            case GPBType::INT64:
-            case GPBType::SINT64:
+            case \Google\Protobuf\Internal\GPBType::SFIXED64:
+            case \Google\Protobuf\Internal\GPBType::INT64:
+            case \Google\Protobuf\Internal\GPBType::SINT64:
                 $output->writeRaw("\"", 1);
                 $str_value = strval($value);
                 $output->writeRaw($str_value, strlen($str_value));
                 $output->writeRaw("\"", 1);
                 break;
-            case GPBType::FLOAT:
+            case \Google\Protobuf\Internal\GPBType::FLOAT:
                 if (is_nan($value)) {
                     $str_value = "\"NaN\"";
                 } elseif ($value === \INF) {
@@ -125,7 +125,7 @@ class GPBJsonWire
                 }
                 $output->writeRaw($str_value, strlen($str_value));
                 break;
-            case GPBType::DOUBLE:
+            case \Google\Protobuf\Internal\GPBType::DOUBLE:
                 if (is_nan($value)) {
                     $str_value = "\"NaN\"";
                 } elseif ($value === \INF) {
@@ -137,7 +137,7 @@ class GPBJsonWire
                 }
                 $output->writeRaw($str_value, strlen($str_value));
                 break;
-            case GPBType::ENUM:
+            case \Google\Protobuf\Internal\GPBType::ENUM:
                 $enum_desc = $field->getEnumType();
                 if ($enum_desc->getClass() === "Google\\Protobuf\\NullValue") {
                     $output->writeRaw("null", 4);
@@ -159,20 +159,20 @@ class GPBJsonWire
                     $output->writeRaw($str_value, strlen($str_value));
                 }
                 break;
-            case GPBType::BOOL:
+            case \Google\Protobuf\Internal\GPBType::BOOL:
                 if ($value) {
                     $output->writeRaw("true", 4);
                 } else {
                     $output->writeRaw("false", 5);
                 }
                 break;
-            case GPBType::BYTES:
+            case \Google\Protobuf\Internal\GPBType::BYTES:
                 $bytes_value = base64_encode($value);
                 $output->writeRaw("\"", 1);
                 $output->writeRaw($bytes_value, strlen($bytes_value));
                 $output->writeRaw("\"", 1);
                 break;
-            case GPBType::STRING:
+            case \Google\Protobuf\Internal\GPBType::STRING:
                 $value = json_encode($value, \JSON_UNESCAPED_UNICODE);
                 $output->writeRaw($value, strlen($value));
                 break;
@@ -180,7 +180,7 @@ class GPBJsonWire
             //      echo "GROUP\xA";
             //      trigger_error("Not implemented.", E_ERROR);
             //      break;
-            case GPBType::MESSAGE:
+            case \Google\Protobuf\Internal\GPBType::MESSAGE:
                 $value->serializeToJsonStream($output);
                 break;
             default:

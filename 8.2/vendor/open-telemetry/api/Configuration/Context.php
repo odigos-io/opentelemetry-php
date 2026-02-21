@@ -42,4 +42,4 @@ final class Context
     }
 }
 /** @phpstan-ignore-next-line @phan-suppress-next-line PhanUndeclaredClassReference */
-class_alias(\OpenTelemetry\API\Configuration\Context::class, \Odigos\OpenTelemetry\Config\SDK\Configuration\Context::class);
+class_alias(\OpenTelemetry\API\Configuration\Context::class, \OpenTelemetry\Config\SDK\Configuration\Context::class);

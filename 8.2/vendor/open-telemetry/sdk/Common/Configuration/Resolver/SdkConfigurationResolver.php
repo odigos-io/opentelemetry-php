@@ -5,11 +5,11 @@ namespace OpenTelemetry\SDK\Common\Configuration\Resolver;
 
 use Odigos\Nevay\SPI\ServiceLoader;
 use Odigos\Nevay\SPI\ServiceProviderDependency\PackageDependency;
-use Odigos\OpenTelemetry\Config\SDK\Configuration\Environment\EnvSourceProvider;
-use Odigos\OpenTelemetry\Config\SDK\Configuration\Environment\EnvSourceReader;
-use Odigos\OpenTelemetry\Config\SDK\Configuration\Environment\LazyEnvSource;
-use Odigos\OpenTelemetry\Config\SDK\Configuration\Environment\PhpIniEnvSource;
-use Odigos\OpenTelemetry\Config\SDK\Configuration\Environment\ServerEnvSource;
+use OpenTelemetry\Config\SDK\Configuration\Environment\EnvSourceProvider;
+use OpenTelemetry\Config\SDK\Configuration\Environment\EnvSourceReader;
+use OpenTelemetry\Config\SDK\Configuration\Environment\LazyEnvSource;
+use OpenTelemetry\Config\SDK\Configuration\Environment\PhpIniEnvSource;
+use OpenTelemetry\Config\SDK\Configuration\Environment\ServerEnvSource;
 use OpenTelemetry\SDK\Common\Configuration\Configuration;
 /**
  * @internal

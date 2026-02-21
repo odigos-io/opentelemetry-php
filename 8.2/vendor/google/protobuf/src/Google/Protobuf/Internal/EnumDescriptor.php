@@ -1,11 +1,11 @@
 <?php
 
-namespace Odigos\Google\Protobuf\Internal;
+namespace Google\Protobuf\Internal;
 
-use Odigos\Google\Protobuf\EnumValueDescriptor;
+use Google\Protobuf\EnumValueDescriptor;
 class EnumDescriptor
 {
-    use HasPublicDescriptorTrait;
+    use \Google\Protobuf\Internal\HasPublicDescriptorTrait;
     private $klass;
     private $legacy_klass;
     private $full_name;
@@ -14,7 +14,7 @@ class EnumDescriptor
     private $value_descriptor = [];
     public function __construct()
     {
-        $this->public_desc = new \Odigos\Google\Protobuf\EnumDescriptor($this);
+        $this->public_desc = new \Google\Protobuf\EnumDescriptor($this);
     }
     public function setFullName($full_name)
     {
@@ -73,12 +73,12 @@ class EnumDescriptor
     }
     public static function buildFromProto($proto, $file_proto, $containing)
     {
-        $desc = new EnumDescriptor();
+        $desc = new \Google\Protobuf\Internal\EnumDescriptor();
         $enum_name_without_package = "";
         $classname = "";
         $legacy_classname = "";
         $fullname = "";
-        GPBUtil::getFullClassName($proto, $containing, $file_proto, $enum_name_without_package, $classname, $legacy_classname, $fullname, $unused_previous_classname);
+        \Google\Protobuf\Internal\GPBUtil::getFullClassName($proto, $containing, $file_proto, $enum_name_without_package, $classname, $legacy_classname, $fullname, $unused_previous_classname);
         $desc->setFullName($fullname);
         $desc->setClass($classname);
         $desc->setLegacyClass($legacy_classname);

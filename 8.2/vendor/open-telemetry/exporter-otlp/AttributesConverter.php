@@ -8,10 +8,10 @@ use function is_bool;
 use function is_float;
 use function is_int;
 use function is_string;
-use Odigos\Opentelemetry\Proto\Common\V1\AnyValue;
-use Odigos\Opentelemetry\Proto\Common\V1\ArrayValue;
-use Odigos\Opentelemetry\Proto\Common\V1\KeyValue;
-use Odigos\Opentelemetry\Proto\Common\V1\KeyValueList;
+use Opentelemetry\Proto\Common\V1\AnyValue;
+use Opentelemetry\Proto\Common\V1\ArrayValue;
+use Opentelemetry\Proto\Common\V1\KeyValue;
+use Opentelemetry\Proto\Common\V1\KeyValueList;
 final class AttributesConverter
 {
     public static function convertAnyValue($value): AnyValue

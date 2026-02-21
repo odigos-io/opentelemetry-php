@@ -21,19 +21,19 @@ return [
     //  2. Auto-instrumentation registers hooks by class name — the class string
     //     must match the customer's actual runtime class
     //  3. PSR interfaces bridge customer code and instrumentation
-    //
-    // NOTE: We exclude specific OpenTelemetry\* sub-namespaces rather than the
-    // root "OpenTelemetry" because PHP namespaces are case-insensitive and
-    // PHP-Scoper follows suit. Excluding "OpenTelemetry" would also exclude
-    // "Opentelemetry\Proto" (the generated protobuf code, lowercase 't'),
-    // which MUST be scoped to prevent version conflicts.
+    //  4. Protobuf's descriptor pool maps PHP class names to message descriptors;
+    //     scoping breaks this lookup (Google\Protobuf, Opentelemetry\Proto, GPBMetadata)
     'exclude-namespaces' => [
-        // OTel SDK, API, auto-instrumentation, C extension hooks
-        'OpenTelemetry\API',
-        'OpenTelemetry\SDK',
-        'OpenTelemetry\Contrib',
-        'OpenTelemetry\Context',
-        'OpenTelemetry\SemConv',
+        // OTel packages — root exclusion covers API, SDK, Contrib, Context, SemConv,
+        // AND Opentelemetry\Proto (lowercase 't') which is the generated protobuf code.
+        // PHP namespaces are case-insensitive so this single entry covers both casings.
+        'OpenTelemetry',
+
+        // Protobuf runtime and descriptor metadata — the descriptor pool is global and
+        // maps PHP class names to protobuf message names at construction time.
+        // Scoping these classes adds a prefix that doesn't match registered descriptors.
+        'Google',
+        'GPBMetadata',
 
         // Framework namespaces targeted by auto-instrumentation hooks
         'Illuminate',
