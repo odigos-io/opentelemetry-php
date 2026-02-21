@@ -75,9 +75,9 @@ DEV_IMAGE = php-community-dev
 
 .PHONY: deploy-dev
 deploy-dev:
-	@echo "📦 Building release image …"
+	@echo "📦 Building release image..."
 	@docker build -f release.Dockerfile -t $(DEV_IMAGE) .
-	@echo "📤 Extracting instrumentations from image …"
+	@echo "📤 Extracting instrumentations from image..."
 	@CID=$$(docker create $(DEV_IMAGE) true); \
 	docker cp $$CID:/instrumentations/php - | \
 		docker exec -i $(KIND_NODE) sh -c 'rm -rf $(ODIGLET_PHP_PATH) && mkdir -p $(ODIGLET_PHP_PATH) && tar xf - -C $(ODIGLET_PHP_PATH) --strip-components=1'; \
