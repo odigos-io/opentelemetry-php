@@ -3,13 +3,13 @@
 declare (strict_types=1);
 namespace OpenTelemetry\Contrib\Otlp;
 
-use Odigos\Opentelemetry\Proto\Collector\Logs\V1\ExportLogsServiceRequest;
-use Odigos\Opentelemetry\Proto\Common\V1\InstrumentationScope;
-use Odigos\Opentelemetry\Proto\Common\V1\KeyValue;
-use Odigos\Opentelemetry\Proto\Logs\V1\LogRecord;
-use Odigos\Opentelemetry\Proto\Logs\V1\ResourceLogs;
-use Odigos\Opentelemetry\Proto\Logs\V1\ScopeLogs;
-use Odigos\Opentelemetry\Proto\Resource\V1\Resource as Resource_;
+use Opentelemetry\Proto\Collector\Logs\V1\ExportLogsServiceRequest;
+use Opentelemetry\Proto\Common\V1\InstrumentationScope;
+use Opentelemetry\Proto\Common\V1\KeyValue;
+use Opentelemetry\Proto\Logs\V1\LogRecord;
+use Opentelemetry\Proto\Logs\V1\ResourceLogs;
+use Opentelemetry\Proto\Logs\V1\ScopeLogs;
+use Opentelemetry\Proto\Resource\V1\Resource as Resource_;
 use OpenTelemetry\SDK\Common\Attribute\AttributesInterface;
 use OpenTelemetry\SDK\Common\Instrumentation\InstrumentationScopeInterface;
 use OpenTelemetry\SDK\Logs\ReadableLogRecord;

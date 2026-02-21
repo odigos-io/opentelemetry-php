@@ -6,7 +6,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file or at
 // https://developers.google.com/open-source/licenses/bsd
-namespace Odigos\Google\Protobuf\Internal;
+namespace Google\Protobuf\Internal;
 
 class CodedOutputStream
 {
@@ -77,7 +77,7 @@ class CodedOutputStream
         $high = 0;
         $low = 0;
         if (\PHP_INT_SIZE == 4) {
-            GPBUtil::divideInt64ToInt32($value, $high, $low, $trim);
+            \Google\Protobuf\Internal\GPBUtil::divideInt64ToInt32($value, $high, $low, $trim);
         } else {
             $low = $value;
         }
@@ -105,7 +105,7 @@ class CodedOutputStream
         $high = 0;
         $low = 0;
         if (\PHP_INT_SIZE == 4) {
-            GPBUtil::divideInt64ToInt32($value, $high, $low);
+            \Google\Protobuf\Internal\GPBUtil::divideInt64ToInt32($value, $high, $low);
         } else {
             $low = $value & 0xffffffff;
             $high = $value >> 32 & 0xffffffff;

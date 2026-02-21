@@ -6,12 +6,12 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file or at
 // https://developers.google.com/open-source/licenses/bsd
-namespace Odigos\Google\Protobuf\Internal;
+namespace Google\Protobuf\Internal;
 
-use Odigos\Google\Protobuf\Internal\GPBLabel;
-use Odigos\Google\Protobuf\Internal\GPBType;
-use Odigos\Google\Protobuf\Internal\Descriptor;
-use Odigos\Google\Protobuf\Internal\FieldDescriptor;
+use Google\Protobuf\Internal\GPBLabel;
+use Google\Protobuf\Internal\GPBType;
+use Google\Protobuf\Internal\Descriptor;
+use Google\Protobuf\Internal\FieldDescriptor;
 class MessageBuilderContext
 {
     private $descriptor;

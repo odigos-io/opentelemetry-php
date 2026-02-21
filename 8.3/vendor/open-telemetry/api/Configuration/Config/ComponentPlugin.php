@@ -21,4 +21,4 @@ interface ComponentPlugin
     public function create(Context $context): mixed;
 }
 /** @phpstan-ignore-next-line @phan-suppress-next-line PhanUndeclaredClassReference */
-class_alias(\OpenTelemetry\API\Configuration\Config\ComponentPlugin::class, \Odigos\OpenTelemetry\Config\SDK\Configuration\ComponentPlugin::class);
+class_alias(\OpenTelemetry\API\Configuration\Config\ComponentPlugin::class, \OpenTelemetry\Config\SDK\Configuration\ComponentPlugin::class);

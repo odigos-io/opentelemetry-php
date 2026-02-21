@@ -6,13 +6,13 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file or at
 // https://developers.google.com/open-source/licenses/bsd
-namespace Odigos\Google\Protobuf\Internal;
+namespace Google\Protobuf\Internal;
 
-use Odigos\Google\Protobuf\Internal\Descriptor;
-use Odigos\Google\Protobuf\Internal\FileDescriptor;
-use Odigos\Google\Protobuf\Internal\FileDescriptorSet;
-use Odigos\Google\Protobuf\Internal\MessageBuilderContext;
-use Odigos\Google\Protobuf\Internal\EnumBuilderContext;
+use Google\Protobuf\Internal\Descriptor;
+use Google\Protobuf\Internal\FileDescriptor;
+use Google\Protobuf\Internal\FileDescriptorSet;
+use Google\Protobuf\Internal\MessageBuilderContext;
+use Google\Protobuf\Internal\EnumBuilderContext;
 class DescriptorPool
 {
     private static $pool;
@@ -25,7 +25,7 @@ class DescriptorPool
     public static function getGeneratedPool()
     {
         if (!isset(self::$pool)) {
-            self::$pool = new DescriptorPool();
+            self::$pool = new \Google\Protobuf\Internal\DescriptorPool();
         }
         return self::$pool;
     }
@@ -111,7 +111,7 @@ class DescriptorPool
     {
         foreach ($desc->getField() as $field) {
             switch ($field->getType()) {
-                case GPBType::MESSAGE:
+                case \Google\Protobuf\Internal\GPBType::MESSAGE:
                     $proto = $field->getMessageType();
                     if ($proto[0] == '.') {
                         $proto = substr($proto, 1);
@@ -122,7 +122,7 @@ class DescriptorPool
                     }
                     $field->setMessageType($subdesc);
                     break;
-                case GPBType::ENUM:
+                case \Google\Protobuf\Internal\GPBType::ENUM:
                     $proto = $field->getEnumType();
                     if ($proto[0] == '.') {
                         $proto = substr($proto, 1);

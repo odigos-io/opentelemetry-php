@@ -6,10 +6,10 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file or at
 // https://developers.google.com/open-source/licenses/bsd
-namespace Odigos\Google\Protobuf;
+namespace Google\Protobuf;
 
-use Odigos\Google\Protobuf\Internal\GetPublicDescriptorTrait;
-use Odigos\Google\Protobuf\Internal\GPBType;
+use Google\Protobuf\Internal\GetPublicDescriptorTrait;
+use Google\Protobuf\Internal\GPBType;
 class FieldDescriptor
 {
     use GetPublicDescriptorTrait;

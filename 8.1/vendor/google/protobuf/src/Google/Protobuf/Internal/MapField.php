@@ -10,7 +10,7 @@
  * MapField and MapFieldIter are used by generated protocol message classes to
  * manipulate map fields.
  */
-namespace Odigos\Google\Protobuf\Internal;
+namespace Google\Protobuf\Internal;
 
 use Traversable;
 /**
@@ -54,8 +54,8 @@ class MapField implements \ArrayAccess, \IteratorAggregate, \Countable
         $this->key_type = $key_type;
         $this->value_type = $value_type;
         $this->klass = $klass;
-        if ($this->value_type == GPBType::MESSAGE) {
-            $pool = DescriptorPool::getGeneratedPool();
+        if ($this->value_type == \Google\Protobuf\Internal\GPBType::MESSAGE) {
+            $pool = \Google\Protobuf\Internal\DescriptorPool::getGeneratedPool();
             $desc = $pool->getDescriptorByClassName($klass);
             if ($desc == NULL) {
                 new $klass();
@@ -128,42 +128,42 @@ class MapField implements \ArrayAccess, \IteratorAggregate, \Countable
     {
         $this->checkKey($this->key_type, $key);
         switch ($this->value_type) {
-            case GPBType::SFIXED32:
-            case GPBType::SINT32:
-            case GPBType::INT32:
-            case GPBType::ENUM:
-                GPBUtil::checkInt32($value);
+            case \Google\Protobuf\Internal\GPBType::SFIXED32:
+            case \Google\Protobuf\Internal\GPBType::SINT32:
+            case \Google\Protobuf\Internal\GPBType::INT32:
+            case \Google\Protobuf\Internal\GPBType::ENUM:
+                \Google\Protobuf\Internal\GPBUtil::checkInt32($value);
                 break;
-            case GPBType::FIXED32:
-            case GPBType::UINT32:
-                GPBUtil::checkUint32($value);
+            case \Google\Protobuf\Internal\GPBType::FIXED32:
+            case \Google\Protobuf\Internal\GPBType::UINT32:
+                \Google\Protobuf\Internal\GPBUtil::checkUint32($value);
                 break;
-            case GPBType::SFIXED64:
-            case GPBType::SINT64:
-            case GPBType::INT64:
-                GPBUtil::checkInt64($value);
+            case \Google\Protobuf\Internal\GPBType::SFIXED64:
+            case \Google\Protobuf\Internal\GPBType::SINT64:
+            case \Google\Protobuf\Internal\GPBType::INT64:
+                \Google\Protobuf\Internal\GPBUtil::checkInt64($value);
                 break;
-            case GPBType::FIXED64:
-            case GPBType::UINT64:
-                GPBUtil::checkUint64($value);
+            case \Google\Protobuf\Internal\GPBType::FIXED64:
+            case \Google\Protobuf\Internal\GPBType::UINT64:
+                \Google\Protobuf\Internal\GPBUtil::checkUint64($value);
                 break;
-            case GPBType::FLOAT:
-                GPBUtil::checkFloat($value);
+            case \Google\Protobuf\Internal\GPBType::FLOAT:
+                \Google\Protobuf\Internal\GPBUtil::checkFloat($value);
                 break;
-            case GPBType::DOUBLE:
-                GPBUtil::checkDouble($value);
+            case \Google\Protobuf\Internal\GPBType::DOUBLE:
+                \Google\Protobuf\Internal\GPBUtil::checkDouble($value);
                 break;
-            case GPBType::BOOL:
-                GPBUtil::checkBool($value);
+            case \Google\Protobuf\Internal\GPBType::BOOL:
+                \Google\Protobuf\Internal\GPBUtil::checkBool($value);
                 break;
-            case GPBType::STRING:
-                GPBUtil::checkString($value, \true);
+            case \Google\Protobuf\Internal\GPBType::STRING:
+                \Google\Protobuf\Internal\GPBUtil::checkString($value, \true);
                 break;
-            case GPBType::MESSAGE:
+            case \Google\Protobuf\Internal\GPBType::MESSAGE:
                 if (is_null($value)) {
                     trigger_error("Map element cannot be null.", \E_USER_ERROR);
                 }
-                GPBUtil::checkMessage($value, $this->klass);
+                \Google\Protobuf\Internal\GPBUtil::checkMessage($value, $this->klass);
                 break;
             default:
                 break;
@@ -205,7 +205,7 @@ class MapField implements \ArrayAccess, \IteratorAggregate, \Countable
      */
     public function getIterator(): Traversable
     {
-        return new MapFieldIter($this->container, $this->key_type);
+        return new \Google\Protobuf\Internal\MapFieldIter($this->container, $this->key_type);
     }
     /**
      * Return the number of stored elements.
@@ -224,29 +224,29 @@ class MapField implements \ArrayAccess, \IteratorAggregate, \Countable
     private function checkKey($key_type, &$key)
     {
         switch ($key_type) {
-            case GPBType::SFIXED32:
-            case GPBType::SINT32:
-            case GPBType::INT32:
-                GPBUtil::checkInt32($key);
+            case \Google\Protobuf\Internal\GPBType::SFIXED32:
+            case \Google\Protobuf\Internal\GPBType::SINT32:
+            case \Google\Protobuf\Internal\GPBType::INT32:
+                \Google\Protobuf\Internal\GPBUtil::checkInt32($key);
                 break;
-            case GPBType::FIXED32:
-            case GPBType::UINT32:
-                GPBUtil::checkUint32($key);
+            case \Google\Protobuf\Internal\GPBType::FIXED32:
+            case \Google\Protobuf\Internal\GPBType::UINT32:
+                \Google\Protobuf\Internal\GPBUtil::checkUint32($key);
                 break;
-            case GPBType::SFIXED64:
-            case GPBType::SINT64:
-            case GPBType::INT64:
-                GPBUtil::checkInt64($key);
+            case \Google\Protobuf\Internal\GPBType::SFIXED64:
+            case \Google\Protobuf\Internal\GPBType::SINT64:
+            case \Google\Protobuf\Internal\GPBType::INT64:
+                \Google\Protobuf\Internal\GPBUtil::checkInt64($key);
                 break;
-            case GPBType::FIXED64:
-            case GPBType::UINT64:
-                GPBUtil::checkUint64($key);
+            case \Google\Protobuf\Internal\GPBType::FIXED64:
+            case \Google\Protobuf\Internal\GPBType::UINT64:
+                \Google\Protobuf\Internal\GPBUtil::checkUint64($key);
                 break;
-            case GPBType::BOOL:
-                GPBUtil::checkBool($key);
+            case \Google\Protobuf\Internal\GPBType::BOOL:
+                \Google\Protobuf\Internal\GPBUtil::checkBool($key);
                 break;
-            case GPBType::STRING:
-                GPBUtil::checkString($key, \true);
+            case \Google\Protobuf\Internal\GPBType::STRING:
+                \Google\Protobuf\Internal\GPBUtil::checkString($key, \true);
                 break;
             default:
                 trigger_error("Given type cannot be map key.", \E_USER_ERROR);

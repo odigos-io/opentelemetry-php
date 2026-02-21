@@ -6,11 +6,11 @@ namespace OpenTelemetry\Contrib\Otlp;
 use function base64_decode;
 use function bin2hex;
 use Exception;
-use Odigos\Google\Protobuf\Descriptor;
-use Odigos\Google\Protobuf\DescriptorPool;
-use Odigos\Google\Protobuf\FieldDescriptor;
-use Odigos\Google\Protobuf\Internal\GPBType;
-use Odigos\Google\Protobuf\Internal\Message;
+use Google\Protobuf\Descriptor;
+use Google\Protobuf\DescriptorPool;
+use Google\Protobuf\FieldDescriptor;
+use Google\Protobuf\Internal\GPBType;
+use Google\Protobuf\Internal\Message;
 use InvalidArgumentException;
 use function json_decode;
 use function json_encode;
@@ -93,10 +93,10 @@ final class ProtobufSerializer
     private static function serializeToJsonString(Message $message): string
     {
         // @phan-suppress-next-line PhanUndeclaredClassReference
-        if (\class_exists(\Odigos\Google\Protobuf\PrintOptions::class)) {
+        if (\class_exists(\Google\Protobuf\PrintOptions::class)) {
             try {
                 /** @psalm-suppress TooManyArguments @phan-suppress-next-line PhanParamTooManyInternal,PhanUndeclaredClassConstant */
-                return $message->serializeToJsonString(\Odigos\Google\Protobuf\PrintOptions::ALWAYS_PRINT_ENUMS_AS_INTS);
+                return $message->serializeToJsonString(\Google\Protobuf\PrintOptions::ALWAYS_PRINT_ENUMS_AS_INTS);
             } catch (\TypeError) {
                 // google/protobuf ^4.31 w/ ext-protobuf <4.31 installed
             }

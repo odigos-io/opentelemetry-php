@@ -6,7 +6,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file or at
 // https://developers.google.com/open-source/licenses/bsd
-namespace Odigos\Google\Protobuf\Internal;
+namespace Google\Protobuf\Internal;
 
 class FileDescriptor
 {
@@ -39,13 +39,13 @@ class FileDescriptor
     }
     public static function buildFromProto($proto)
     {
-        $file = new FileDescriptor();
+        $file = new \Google\Protobuf\Internal\FileDescriptor();
         $file->setPackage($proto->getPackage());
         foreach ($proto->getMessageType() as $message_proto) {
-            $file->addMessageType(Descriptor::buildFromProto($message_proto, $proto, ""));
+            $file->addMessageType(\Google\Protobuf\Internal\Descriptor::buildFromProto($message_proto, $proto, ""));
         }
         foreach ($proto->getEnumType() as $enum_proto) {
-            $file->addEnumType(EnumDescriptor::buildFromProto($enum_proto, $proto, ""));
+            $file->addEnumType(\Google\Protobuf\Internal\EnumDescriptor::buildFromProto($enum_proto, $proto, ""));
         }
         return $file;
     }

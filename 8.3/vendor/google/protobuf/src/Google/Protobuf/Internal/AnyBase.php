@@ -1,12 +1,12 @@
 <?php
 
-namespace Odigos\Google\Protobuf\Internal;
+namespace Google\Protobuf\Internal;
 
 /**
  * Base class for Google\Protobuf\Any, this contains hand-written convenience
  * methods like pack() and unpack().
  */
-class AnyBase extends \Odigos\Google\Protobuf\Internal\Message
+class AnyBase extends \Google\Protobuf\Internal\Message
 {
     const TYPE_URL_PREFIX = 'type.googleapis.com/';
     /**
@@ -22,13 +22,13 @@ class AnyBase extends \Odigos\Google\Protobuf\Internal\Message
     public function unpack()
     {
         // Get fully qualified name from type url.
-        $url_prifix_len = strlen(GPBUtil::TYPE_URL_PREFIX);
-        if (substr($this->type_url, 0, $url_prifix_len) != GPBUtil::TYPE_URL_PREFIX) {
+        $url_prifix_len = strlen(\Google\Protobuf\Internal\GPBUtil::TYPE_URL_PREFIX);
+        if (substr($this->type_url, 0, $url_prifix_len) != \Google\Protobuf\Internal\GPBUtil::TYPE_URL_PREFIX) {
             throw new \Exception("Type url needs to be type.googleapis.com/fully-qulified");
         }
         $fully_qualified_name = substr($this->type_url, $url_prifix_len);
         // Create message according to fully qualified name.
-        $pool = \Odigos\Google\Protobuf\Internal\DescriptorPool::getGeneratedPool();
+        $pool = \Google\Protobuf\Internal\DescriptorPool::getGeneratedPool();
         $desc = $pool->getDescriptorByProtoName($fully_qualified_name);
         if (is_null($desc)) {
             throw new \Exception("Class " . $fully_qualified_name . " hasn't been added to descriptor pool");
@@ -46,17 +46,17 @@ class AnyBase extends \Odigos\Google\Protobuf\Internal\Message
      */
     public function pack($msg)
     {
-        if (!$msg instanceof Message) {
+        if (!$msg instanceof \Google\Protobuf\Internal\Message) {
             trigger_error("Given parameter is not a message instance.", \E_USER_ERROR);
             return;
         }
         // Set value using serialized message.
         $this->value = $msg->serializeToString();
         // Set type url.
-        $pool = \Odigos\Google\Protobuf\Internal\DescriptorPool::getGeneratedPool();
+        $pool = \Google\Protobuf\Internal\DescriptorPool::getGeneratedPool();
         $desc = $pool->getDescriptorByClassName(get_class($msg));
         $fully_qualified_name = $desc->getFullName();
-        $this->type_url = GPBUtil::TYPE_URL_PREFIX . $fully_qualified_name;
+        $this->type_url = \Google\Protobuf\Internal\GPBUtil::TYPE_URL_PREFIX . $fully_qualified_name;
     }
     /**
      * This method returns whether the type_url in any_message is corresponded
@@ -65,10 +65,10 @@ class AnyBase extends \Odigos\Google\Protobuf\Internal\Message
      */
     public function is($klass)
     {
-        $pool = \Odigos\Google\Protobuf\Internal\DescriptorPool::getGeneratedPool();
+        $pool = \Google\Protobuf\Internal\DescriptorPool::getGeneratedPool();
         $desc = $pool->getDescriptorByClassName($klass);
         $fully_qualified_name = $desc->getFullName();
-        $type_url = GPBUtil::TYPE_URL_PREFIX . $fully_qualified_name;
+        $type_url = \Google\Protobuf\Internal\GPBUtil::TYPE_URL_PREFIX . $fully_qualified_name;
         return $this->type_url === $type_url;
     }
 }

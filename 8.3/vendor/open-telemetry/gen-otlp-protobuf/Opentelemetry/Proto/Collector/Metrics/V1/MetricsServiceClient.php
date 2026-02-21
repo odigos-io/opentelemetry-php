@@ -16,7 +16,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-namespace Odigos\Opentelemetry\Proto\Collector\Metrics\V1;
+namespace Opentelemetry\Proto\Collector\Metrics\V1;
 
 /**
  * Service that can be used to push metrics between one Application
@@ -40,8 +40,8 @@ class MetricsServiceClient extends \Odigos\Grpc\BaseStub
      * @param array $options call options
      * @return \Grpc\UnaryCall
      */
-    public function Export(\Odigos\Opentelemetry\Proto\Collector\Metrics\V1\ExportMetricsServiceRequest $argument, $metadata = [], $options = [])
+    public function Export(\Opentelemetry\Proto\Collector\Metrics\V1\ExportMetricsServiceRequest $argument, $metadata = [], $options = [])
     {
-        return $this->_simpleRequest('/opentelemetry.proto.collector.metrics.v1.MetricsService/Export', $argument, ['Odigos\Opentelemetry\Proto\Collector\Metrics\V1\ExportMetricsServiceResponse', 'decode'], $metadata, $options);
+        return $this->_simpleRequest('/opentelemetry.proto.collector.metrics.v1.MetricsService/Export', $argument, ['\Opentelemetry\Proto\Collector\Metrics\V1\ExportMetricsServiceResponse', 'decode'], $metadata, $options);
     }
 }

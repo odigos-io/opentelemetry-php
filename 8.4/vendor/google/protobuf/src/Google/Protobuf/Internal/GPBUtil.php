@@ -6,13 +6,13 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file or at
 // https://developers.google.com/open-source/licenses/bsd
-namespace Odigos\Google\Protobuf\Internal;
+namespace Google\Protobuf\Internal;
 
-use Odigos\Google\Protobuf\Duration;
-use Odigos\Google\Protobuf\FieldMask;
-use Odigos\Google\Protobuf\Internal\GPBType;
-use Odigos\Google\Protobuf\Internal\MapField;
-use Odigos\Google\Protobuf\RepeatedField;
+use Google\Protobuf\Duration;
+use Google\Protobuf\FieldMask;
+use Google\Protobuf\Internal\GPBType;
+use Google\Protobuf\Internal\MapField;
+use Google\Protobuf\RepeatedField;
 use function bccomp;
 function camel2underscore($input)
 {
@@ -198,11 +198,11 @@ class GPBUtil
     }
     public static function Int64($value)
     {
-        return new Int64($value);
+        return new \Google\Protobuf\Internal\Int64($value);
     }
     public static function Uint64($value)
     {
-        return new Uint64($value);
+        return new \Google\Protobuf\Internal\Uint64($value);
     }
     public static function getClassNamePrefix($classname, $file_proto)
     {
@@ -365,7 +365,7 @@ class GPBUtil
         if ($date === \false) {
             throw new \Exception("Invalid RFC 3339 timestamp.");
         }
-        $value = new \Odigos\Google\Protobuf\Timestamp();
+        $value = new \Google\Protobuf\Timestamp();
         $seconds = $date->format("U");
         $value->setSeconds($seconds);
         $value->setNanos($nanoseconds);
@@ -374,10 +374,10 @@ class GPBUtil
     public static function formatTimestamp($value)
     {
         if (bccomp($value->getSeconds(), "253402300800") != -1) {
-            throw new GPBDecodeException("Duration number too large.");
+            throw new \Google\Protobuf\Internal\GPBDecodeException("Duration number too large.");
         }
         if (bccomp($value->getSeconds(), "-62135596801") != 1) {
-            throw new GPBDecodeException("Duration number too small.");
+            throw new \Google\Protobuf\Internal\GPBDecodeException("Duration number too small.");
         }
         $nanoseconds = static::getNanosecondsForTimestamp($value->getNanos());
         if (!empty($nanoseconds)) {
@@ -389,14 +389,14 @@ class GPBUtil
     public static function parseDuration($value)
     {
         if (strlen($value) < 2 || substr($value, -1) !== "s") {
-            throw new GPBDecodeException("Missing s after duration string");
+            throw new \Google\Protobuf\Internal\GPBDecodeException("Missing s after duration string");
         }
         $number = substr($value, 0, -1);
         if (bccomp($number, "315576000001") != -1) {
-            throw new GPBDecodeException("Duration number too large.");
+            throw new \Google\Protobuf\Internal\GPBDecodeException("Duration number too large.");
         }
         if (bccomp($number, "-315576000001") != 1) {
-            throw new GPBDecodeException("Duration number too small.");
+            throw new \Google\Protobuf\Internal\GPBDecodeException("Duration number too small.");
         }
         $pos = strrpos($number, ".");
         if ($pos !== \false) {
@@ -418,10 +418,10 @@ class GPBUtil
     public static function formatDuration($value)
     {
         if (bccomp($value->getSeconds(), '315576000001') != -1) {
-            throw new GPBDecodeException('Duration number too large.');
+            throw new \Google\Protobuf\Internal\GPBDecodeException('Duration number too large.');
         }
         if (bccomp($value->getSeconds(), '-315576000001') != 1) {
-            throw new GPBDecodeException('Duration number too small.');
+            throw new \Google\Protobuf\Internal\GPBDecodeException('Duration number too small.');
         }
         $nanos = $value->getNanos();
         if ($nanos === 0) {
@@ -496,10 +496,10 @@ class GPBUtil
     }
     public static function hasSpecialJsonMapping($msg)
     {
-        return is_a($msg, 'Odigos\Google\Protobuf\Any') || is_a($msg, "Odigos\\Google\\Protobuf\\ListValue") || is_a($msg, "Odigos\\Google\\Protobuf\\Struct") || is_a($msg, "Odigos\\Google\\Protobuf\\Value") || is_a($msg, "Odigos\\Google\\Protobuf\\Duration") || is_a($msg, "Odigos\\Google\\Protobuf\\Timestamp") || is_a($msg, "Odigos\\Google\\Protobuf\\FieldMask") || static::hasJsonValue($msg);
+        return is_a($msg, 'Google\Protobuf\Any') || is_a($msg, "Google\\Protobuf\\ListValue") || is_a($msg, "Google\\Protobuf\\Struct") || is_a($msg, "Google\\Protobuf\\Value") || is_a($msg, "Google\\Protobuf\\Duration") || is_a($msg, "Google\\Protobuf\\Timestamp") || is_a($msg, "Google\\Protobuf\\FieldMask") || static::hasJsonValue($msg);
     }
     public static function hasJsonValue($msg)
     {
-        return is_a($msg, "Odigos\\Google\\Protobuf\\DoubleValue") || is_a($msg, "Odigos\\Google\\Protobuf\\FloatValue") || is_a($msg, "Odigos\\Google\\Protobuf\\Int64Value") || is_a($msg, "Odigos\\Google\\Protobuf\\UInt64Value") || is_a($msg, "Odigos\\Google\\Protobuf\\Int32Value") || is_a($msg, "Odigos\\Google\\Protobuf\\UInt32Value") || is_a($msg, "Odigos\\Google\\Protobuf\\BoolValue") || is_a($msg, "Odigos\\Google\\Protobuf\\StringValue") || is_a($msg, "Odigos\\Google\\Protobuf\\BytesValue");
+        return is_a($msg, "Google\\Protobuf\\DoubleValue") || is_a($msg, "Google\\Protobuf\\FloatValue") || is_a($msg, "Google\\Protobuf\\Int64Value") || is_a($msg, "Google\\Protobuf\\UInt64Value") || is_a($msg, "Google\\Protobuf\\Int32Value") || is_a($msg, "Google\\Protobuf\\UInt32Value") || is_a($msg, "Google\\Protobuf\\BoolValue") || is_a($msg, "Google\\Protobuf\\StringValue") || is_a($msg, "Google\\Protobuf\\BytesValue");
     }
 }

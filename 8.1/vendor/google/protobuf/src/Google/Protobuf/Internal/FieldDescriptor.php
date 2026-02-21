@@ -6,11 +6,11 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file or at
 // https://developers.google.com/open-source/licenses/bsd
-namespace Odigos\Google\Protobuf\Internal;
+namespace Google\Protobuf\Internal;
 
 class FieldDescriptor
 {
-    use HasPublicDescriptorTrait;
+    use \Google\Protobuf\Internal\HasPublicDescriptorTrait;
     private $name;
     private $json_name;
     private $setter;
@@ -27,7 +27,7 @@ class FieldDescriptor
     private $containing_oneof;
     public function __construct()
     {
-        $this->public_desc = new \Odigos\Google\Protobuf\FieldDescriptor($this);
+        $this->public_desc = new \Google\Protobuf\FieldDescriptor($this);
     }
     public function setOneofIndex($index)
     {
@@ -87,11 +87,11 @@ class FieldDescriptor
     }
     public function isRequired()
     {
-        return $this->label === GPBLabel::REQUIRED;
+        return $this->label === \Google\Protobuf\Internal\GPBLabel::REQUIRED;
     }
     public function isRepeated()
     {
-        return $this->label === GPBLabel::REPEATED;
+        return $this->label === \Google\Protobuf\Internal\GPBLabel::REPEATED;
     }
     public function setType($type)
     {
@@ -151,15 +151,15 @@ class FieldDescriptor
     }
     public function isMap()
     {
-        return $this->getType() == GPBType::MESSAGE && !is_null($this->getMessageType()->getOptions()) && $this->getMessageType()->getOptions()->getMapEntry();
+        return $this->getType() == \Google\Protobuf\Internal\GPBType::MESSAGE && !is_null($this->getMessageType()->getOptions()) && $this->getMessageType()->getOptions()->getMapEntry();
     }
     public function isTimestamp()
     {
-        return $this->getType() == GPBType::MESSAGE && $this->getMessageType()->getClass() === "Google\\Protobuf\\Timestamp";
+        return $this->getType() == \Google\Protobuf\Internal\GPBType::MESSAGE && $this->getMessageType()->getClass() === "Google\\Protobuf\\Timestamp";
     }
     public function isWrapperType()
     {
-        if ($this->getType() == GPBType::MESSAGE) {
+        if ($this->getType() == \Google\Protobuf\Internal\GPBType::MESSAGE) {
             $class = $this->getMessageType()->getClass();
             return in_array($class, ["Google\\Protobuf\\DoubleValue", "Google\\Protobuf\\FloatValue", "Google\\Protobuf\\Int64Value", "Google\\Protobuf\\UInt64Value", "Google\\Protobuf\\Int32Value", "Google\\Protobuf\\UInt32Value", "Google\\Protobuf\\BoolValue", "Google\\Protobuf\\StringValue", "Google\\Protobuf\\BytesValue"]);
         }
@@ -167,7 +167,7 @@ class FieldDescriptor
     }
     private static function isTypePackable($field_type)
     {
-        return $field_type !== GPBType::STRING && $field_type !== GPBType::GROUP && $field_type !== GPBType::MESSAGE && $field_type !== GPBType::BYTES;
+        return $field_type !== \Google\Protobuf\Internal\GPBType::STRING && $field_type !== \Google\Protobuf\Internal\GPBType::GROUP && $field_type !== \Google\Protobuf\Internal\GPBType::MESSAGE && $field_type !== \Google\Protobuf\Internal\GPBType::BYTES;
     }
     /**
      * @param FieldDescriptorProto $proto
@@ -178,9 +178,9 @@ class FieldDescriptor
         $type_name = null;
         $type = $proto->getType();
         switch ($type) {
-            case GPBType::MESSAGE:
-            case GPBType::GROUP:
-            case GPBType::ENUM:
+            case \Google\Protobuf\Internal\GPBType::MESSAGE:
+            case \Google\Protobuf\Internal\GPBType::GROUP:
+            case \Google\Protobuf\Internal\GPBType::ENUM:
                 $type_name = $proto->getTypeName();
                 break;
             default:
@@ -189,7 +189,7 @@ class FieldDescriptor
         $oneof_index = $proto->hasOneofIndex() ? $proto->getOneofIndex() : -1;
         // TODO: once proto2 is supported, this default should be false
         // for proto2.
-        if ($proto->getLabel() === GPBLabel::REPEATED && $proto->getType() !== GPBType::MESSAGE && $proto->getType() !== GPBType::GROUP && $proto->getType() !== GPBType::STRING && $proto->getType() !== GPBType::BYTES) {
+        if ($proto->getLabel() === \Google\Protobuf\Internal\GPBLabel::REPEATED && $proto->getType() !== \Google\Protobuf\Internal\GPBType::MESSAGE && $proto->getType() !== \Google\Protobuf\Internal\GPBType::GROUP && $proto->getType() !== \Google\Protobuf\Internal\GPBType::STRING && $proto->getType() !== \Google\Protobuf\Internal\GPBType::BYTES) {
             $packed = \true;
         } else {
             $packed = \false;
@@ -198,7 +198,7 @@ class FieldDescriptor
         if ($options !== null) {
             $packed = $options->getPacked();
         }
-        $field = new FieldDescriptor();
+        $field = new \Google\Protobuf\Internal\FieldDescriptor();
         $field->setName($proto->getName());
         if ($proto->hasJsonName()) {
             $json_name = $proto->getJsonName();
@@ -223,10 +223,10 @@ class FieldDescriptor
         // So we use the type name as place holder and will replace it with the
         // actual descriptor in cross building.
         switch ($type) {
-            case GPBType::MESSAGE:
+            case \Google\Protobuf\Internal\GPBType::MESSAGE:
                 $field->setMessageType($type_name);
                 break;
-            case GPBType::ENUM:
+            case \Google\Protobuf\Internal\GPBType::ENUM:
                 $field->setEnumType($type_name);
                 break;
             default:
@@ -236,6 +236,6 @@ class FieldDescriptor
     }
     public static function buildFromProto($proto)
     {
-        return FieldDescriptor::getFieldDescriptor($proto);
+        return \Google\Protobuf\Internal\FieldDescriptor::getFieldDescriptor($proto);
     }
 }

@@ -6,11 +6,11 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file or at
 // https://developers.google.com/open-source/licenses/bsd
-namespace Odigos\Google\Protobuf\Internal;
+namespace Google\Protobuf\Internal;
 
 class Descriptor
 {
-    use HasPublicDescriptorTrait;
+    use \Google\Protobuf\Internal\HasPublicDescriptorTrait;
     private $full_name;
     private $field = [];
     private $json_to_field = [];
@@ -25,7 +25,7 @@ class Descriptor
     private $oneof_decl = [];
     public function __construct()
     {
-        $this->public_desc = new \Odigos\Google\Protobuf\Descriptor($this);
+        $this->public_desc = new \Google\Protobuf\Descriptor($this);
     }
     public function addOneofDecl($oneof)
     {
@@ -136,33 +136,33 @@ class Descriptor
     }
     public static function buildFromProto($proto, $file_proto, $containing)
     {
-        $desc = new Descriptor();
+        $desc = new \Google\Protobuf\Internal\Descriptor();
         $message_name_without_package = "";
         $classname = "";
         $legacy_classname = "";
         $previous_classname = "";
         $fullname = "";
-        GPBUtil::getFullClassName($proto, $containing, $file_proto, $message_name_without_package, $classname, $legacy_classname, $fullname, $previous_classname);
+        \Google\Protobuf\Internal\GPBUtil::getFullClassName($proto, $containing, $file_proto, $message_name_without_package, $classname, $legacy_classname, $fullname, $previous_classname);
         $desc->setFullName($fullname);
         $desc->setClass($classname);
         $desc->setLegacyClass($legacy_classname);
         $desc->setPreviouslyUnreservedClass($previous_classname);
         $desc->setOptions($proto->getOptions());
         foreach ($proto->getField() as $field_proto) {
-            $desc->addField(FieldDescriptor::buildFromProto($field_proto));
+            $desc->addField(\Google\Protobuf\Internal\FieldDescriptor::buildFromProto($field_proto));
         }
         // Handle nested types.
         foreach ($proto->getNestedType() as $nested_proto) {
-            $desc->addNestedType(Descriptor::buildFromProto($nested_proto, $file_proto, $message_name_without_package));
+            $desc->addNestedType(\Google\Protobuf\Internal\Descriptor::buildFromProto($nested_proto, $file_proto, $message_name_without_package));
         }
         // Handle nested enum.
         foreach ($proto->getEnumType() as $enum_proto) {
-            $desc->addEnumType(EnumDescriptor::buildFromProto($enum_proto, $file_proto, $message_name_without_package));
+            $desc->addEnumType(\Google\Protobuf\Internal\EnumDescriptor::buildFromProto($enum_proto, $file_proto, $message_name_without_package));
         }
         // Handle oneof fields.
         $index = 0;
         foreach ($proto->getOneofDecl() as $oneof_proto) {
-            $desc->addOneofDecl(OneofDescriptor::buildFromProto($oneof_proto, $desc, $index));
+            $desc->addOneofDecl(\Google\Protobuf\Internal\OneofDescriptor::buildFromProto($oneof_proto, $desc, $index));
             $index++;
         }
         return $desc;

@@ -6,9 +6,9 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file or at
 // https://developers.google.com/open-source/licenses/bsd
-namespace Odigos\Google\Protobuf\Internal;
+namespace Google\Protobuf\Internal;
 
-use Odigos\Google\Protobuf\Internal\Uint64;
+use Google\Protobuf\Internal\Uint64;
 class CodedInputStream
 {
     private $buffer;
@@ -131,7 +131,7 @@ class CodedInputStream
                 $this->advance(1);
                 $count += 1;
             } while ($b & 0x80);
-            $var = GPBUtil::combineInt32ToInt64($high, $low);
+            $var = \Google\Protobuf\Internal\GPBUtil::combineInt32ToInt64($high, $low);
             if (bccomp($var, 0) < 0) {
                 $var = bcadd($var, "18446744073709551616");
             }
@@ -200,7 +200,7 @@ class CodedInputStream
         }
         $high = unpack('V', $data)[1];
         if (\PHP_INT_SIZE == 4) {
-            $var = GPBUtil::combineInt32ToInt64($high, $low);
+            $var = \Google\Protobuf\Internal\GPBUtil::combineInt32ToInt64($high, $low);
         } else {
             $var = $high << 32 | $low;
         }
@@ -273,7 +273,7 @@ class CodedInputStream
             $this->current_limit = $current_position + $byte_limit;
             $this->recomputeBufferLimits();
         } else {
-            throw new GPBDecodeException("Fail to push limit.");
+            throw new \Google\Protobuf\Internal\GPBDecodeException("Fail to push limit.");
         }
         return $old_limit;
     }

@@ -6,7 +6,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file or at
 // https://developers.google.com/open-source/licenses/bsd
-namespace Odigos\Google\Protobuf;
+namespace Google\Protobuf;
 
 class DescriptorPool
 {
@@ -18,7 +18,7 @@ class DescriptorPool
     public static function getGeneratedPool()
     {
         if (!isset(self::$pool)) {
-            self::$pool = new DescriptorPool(\Odigos\Google\Protobuf\Internal\DescriptorPool::getGeneratedPool());
+            self::$pool = new \Google\Protobuf\DescriptorPool(\Google\Protobuf\Internal\DescriptorPool::getGeneratedPool());
         }
         return self::$pool;
     }
