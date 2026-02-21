@@ -113,3 +113,60 @@ $count = 0;
 $realContent = str_replace('__composer_autoload_files', '__odigos_autoload_files', $realContent, $count);
 file_put_contents($realFile, $realContent);
 echo "Patched autoload_real.php: $count replacements (__composer_autoload_files -> __odigos_autoload_files)\n";
+
+// Propagate excluded-namespace file hashes to __composer_autoload_files.
+// The __odigos_autoload_files isolation above prevents the agent from marking
+// hashes in the customer app's __composer_autoload_files. This is correct for
+// scoped packages (different function names), but excluded-namespace packages
+// declare the same functions/classes. Propagating their hashes tells the app's
+// autoloader to skip them, preventing "Cannot redeclare" fatal errors.
+$autoloadFilesPath = $vendorDir . '/composer/autoload_files.php';
+if (file_exists($autoloadFilesPath)) {
+    $filesContent = file_get_contents($autoloadFilesPath);
+    preg_match_all(
+        "/^\\s*'([a-f0-9]+)'\\s*=>\\s*\\\$(vendorDir|baseDir)\\s*\\.\\s*'([^']+)'/m",
+        $filesContent,
+        $fileMatches,
+        PREG_SET_ORDER
+    );
+
+    $excludedHashes = [];
+    foreach ($fileMatches as $fm) {
+        $hash = $fm[1];
+        $dir = $fm[2] === 'vendorDir' ? $vendorDir : $baseDir;
+        $filePath = $dir . $fm[3];
+        $src = @file_get_contents($filePath);
+        if ($src === false) {
+            continue;
+        }
+        if (!preg_match('/^\\s*namespace\\s+Odigos[\\s\\\\;{]/m', $src)) {
+            $excludedHashes[] = $hash;
+        }
+    }
+
+    if (!empty($excludedHashes)) {
+        $entries = [];
+        foreach ($excludedHashes as $h) {
+            $entries[] = "            '$h' => true,";
+        }
+
+        $code = "        foreach (array(\n"
+            . implode("\n", $entries) . "\n"
+            . "        ) as \$h => \$v) {\n"
+            . "            \$GLOBALS['__composer_autoload_files'][\$h] = \$v;\n"
+            . "        }\n\n";
+
+        $realContent = file_get_contents($realFile);
+        $realContent = str_replace(
+            '        return $loader;',
+            $code . '        return $loader;',
+            $realContent
+        );
+        file_put_contents($realFile, $realContent);
+        echo "Injected " . count($excludedHashes) . " excluded-namespace hash(es) into autoload_real.php\n";
+    } else {
+        echo "No excluded-namespace file hashes to propagate\n";
+    }
+} else {
+    echo "Warning: autoload_files.php not found\n";
+}
