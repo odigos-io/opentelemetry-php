@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenTelemetry\Contrib\Otlp;
+namespace Odigos\OpenTelemetry\Contrib\Otlp;
 
 use OpenTelemetry\SDK\Common\Export\Stream\StreamTransportFactory;
 use OpenTelemetry\SDK\Metrics\MetricExporterFactoryInterface;
@@ -11,7 +11,7 @@ class StdoutMetricExporterFactory implements MetricExporterFactoryInterface
     #[\Override]
     public function create(): MetricExporterInterface
     {
-        $transport = (new StreamTransportFactory())->create('php://stdout', \OpenTelemetry\Contrib\Otlp\ContentTypes::NDJSON);
-        return new \OpenTelemetry\Contrib\Otlp\MetricExporter($transport);
+        $transport = (new StreamTransportFactory())->create('php://stdout', ContentTypes::NDJSON);
+        return new MetricExporter($transport);
     }
 }

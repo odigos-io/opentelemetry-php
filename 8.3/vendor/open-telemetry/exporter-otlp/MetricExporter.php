@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenTelemetry\Contrib\Otlp;
+namespace Odigos\OpenTelemetry\Contrib\Otlp;
 
 use OpenTelemetry\API\Behavior\LogsMessagesTrait;
 use Odigos\Opentelemetry\Proto\Collector\Metrics\V1\ExportMetricsServiceResponse;
@@ -20,7 +20,7 @@ use Throwable;
 final class MetricExporter implements PushMetricExporterInterface, AggregationTemporalitySelectorInterface
 {
     use LogsMessagesTrait;
-    private \OpenTelemetry\Contrib\Otlp\ProtobufSerializer $serializer;
+    private ProtobufSerializer $serializer;
     /**
      * @psalm-param TransportInterface<SUPPORTED_CONTENT_TYPES> $transport
      */
@@ -29,7 +29,7 @@ final class MetricExporter implements PushMetricExporterInterface, AggregationTe
         if (!class_exists('Odigos\Google\Protobuf\Api')) {
             throw new RuntimeException('No protobuf implementation found (ext-protobuf or google/protobuf)');
         }
-        $this->serializer = \OpenTelemetry\Contrib\Otlp\ProtobufSerializer::forTransport($this->transport);
+        $this->serializer = ProtobufSerializer::forTransport($this->transport);
     }
     #[\Override]
     public function temporality(MetricMetadataInterface $metric): Temporality|string|null
@@ -39,7 +39,7 @@ final class MetricExporter implements PushMetricExporterInterface, AggregationTe
     #[\Override]
     public function export(iterable $batch): bool
     {
-        return $this->transport->send($this->serializer->serialize((new \OpenTelemetry\Contrib\Otlp\MetricConverter($this->serializer))->convert($batch)))->map(function (?string $payload): bool {
+        return $this->transport->send($this->serializer->serialize((new MetricConverter($this->serializer))->convert($batch)))->map(function (?string $payload): bool {
             if ($payload === null) {
                 return \true;
             }

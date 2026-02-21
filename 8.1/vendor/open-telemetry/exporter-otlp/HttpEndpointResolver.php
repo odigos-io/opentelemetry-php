@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenTelemetry\Contrib\Otlp;
+namespace Odigos\OpenTelemetry\Contrib\Otlp;
 
 use InvalidArgumentException;
 use OpenTelemetry\API\Signals;
@@ -12,7 +12,7 @@ use Psr\Http\Message\UriInterface;
  * Resolves non-signal-specific OTLP HTTP endpoints to signal-specific ones according to the specification.
  * @see https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/protocol/exporter.md#endpoint-urls-for-otlphttp
  */
-class HttpEndpointResolver implements \OpenTelemetry\Contrib\Otlp\HttpEndpointResolverInterface
+class HttpEndpointResolver implements HttpEndpointResolverInterface
 {
     private const SCHEME_ATTRIBUTE = 'scheme';
     private const HOST_ATTRIBUTE = 'host';
@@ -55,7 +55,7 @@ class HttpEndpointResolver implements \OpenTelemetry\Contrib\Otlp\HttpEndpointRe
     }
     private static function validateScheme(string $protocol): void
     {
-        if (!in_array($protocol, \OpenTelemetry\Contrib\Otlp\HttpEndpointResolverInterface::VALID_SCHEMES, \true)) {
+        if (!in_array($protocol, HttpEndpointResolverInterface::VALID_SCHEMES, \true)) {
             throw new InvalidArgumentException(sprintf('Expected protocol to be http or https, given: "%s"', $protocol));
         }
     }
@@ -94,6 +94,6 @@ class HttpEndpointResolver implements \OpenTelemetry\Contrib\Otlp\HttpEndpointRe
     }
     private static function getDefaultPath(string $signal): string
     {
-        return \OpenTelemetry\Contrib\Otlp\HttpEndpointResolverInterface::DEFAULT_PATHS[$signal];
+        return HttpEndpointResolverInterface::DEFAULT_PATHS[$signal];
     }
 }

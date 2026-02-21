@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenTelemetry\Contrib\Instrumentation\ExtAmqp;
+namespace Odigos\OpenTelemetry\Contrib\Instrumentation\ExtAmqp;
 
 use AMQPExchange;
 use AMQPQueue;

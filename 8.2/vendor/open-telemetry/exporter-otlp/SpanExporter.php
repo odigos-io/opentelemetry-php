@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenTelemetry\Contrib\Otlp;
+namespace Odigos\OpenTelemetry\Contrib\Otlp;
 
 use OpenTelemetry\API\Behavior\LogsMessagesTrait;
 use Odigos\Opentelemetry\Proto\Collector\Trace\V1\ExportTraceServiceResponse;
@@ -17,7 +17,7 @@ use Throwable;
 final class SpanExporter implements SpanExporterInterface
 {
     use LogsMessagesTrait;
-    private \OpenTelemetry\Contrib\Otlp\ProtobufSerializer $serializer;
+    private ProtobufSerializer $serializer;
     /**
      * @psalm-param TransportInterface<SUPPORTED_CONTENT_TYPES> $transport
      */
@@ -26,12 +26,12 @@ final class SpanExporter implements SpanExporterInterface
         if (!class_exists('Odigos\Google\Protobuf\Api')) {
             throw new RuntimeException('No protobuf implementation found (ext-protobuf or google/protobuf)');
         }
-        $this->serializer = \OpenTelemetry\Contrib\Otlp\ProtobufSerializer::forTransport($this->transport);
+        $this->serializer = ProtobufSerializer::forTransport($this->transport);
     }
     #[\Override]
     public function export(iterable $batch, ?CancellationInterface $cancellation = null): FutureInterface
     {
-        return $this->transport->send($this->serializer->serialize((new \OpenTelemetry\Contrib\Otlp\SpanConverter($this->serializer))->convert($batch)), $cancellation)->map(function (?string $payload): bool {
+        return $this->transport->send($this->serializer->serialize((new SpanConverter($this->serializer))->convert($batch)), $cancellation)->map(function (?string $payload): bool {
             if ($payload === null) {
                 return \true;
             }

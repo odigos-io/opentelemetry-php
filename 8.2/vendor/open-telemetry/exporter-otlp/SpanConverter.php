@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenTelemetry\Contrib\Otlp;
+namespace Odigos\OpenTelemetry\Contrib\Otlp;
 
 use OpenTelemetry\API\Trace as API;
 use OpenTelemetry\API\Trace\SpanContextInterface;
@@ -26,10 +26,10 @@ use function serialize;
 use function spl_object_id;
 final class SpanConverter
 {
-    private readonly \OpenTelemetry\Contrib\Otlp\ProtobufSerializer $serializer;
-    public function __construct(?\OpenTelemetry\Contrib\Otlp\ProtobufSerializer $serializer = null)
+    private readonly ProtobufSerializer $serializer;
+    public function __construct(?ProtobufSerializer $serializer = null)
     {
-        $this->serializer = $serializer ?? \OpenTelemetry\Contrib\Otlp\ProtobufSerializer::getDefault();
+        $this->serializer = $serializer ?? ProtobufSerializer::getDefault();
     }
     public function convert(iterable $spans): ExportTraceServiceRequest
     {
@@ -83,7 +83,7 @@ final class SpanConverter
     {
         foreach ($attributes as $key => $value) {
             /** @psalm-suppress InvalidArgument */
-            $pElement->getAttributes()[] = (new KeyValue())->setKey($key)->setValue(\OpenTelemetry\Contrib\Otlp\AttributesConverter::convertAnyValue($value));
+            $pElement->getAttributes()[] = (new KeyValue())->setKey($key)->setValue(AttributesConverter::convertAnyValue($value));
         }
         $pElement->setDroppedAttributesCount($attributes->getDroppedAttributesCount());
     }

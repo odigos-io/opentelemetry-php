@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenTelemetry\Contrib\Instrumentation\Guzzle;
+namespace Odigos\OpenTelemetry\Contrib\Instrumentation\Guzzle;
 
 use function assert;
 use OpenTelemetry\Context\Propagation\PropagationSetterInterface;

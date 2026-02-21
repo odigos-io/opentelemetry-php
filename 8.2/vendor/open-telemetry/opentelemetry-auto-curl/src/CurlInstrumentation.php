@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenTelemetry\Contrib\Instrumentation\Curl;
+namespace Odigos\OpenTelemetry\Contrib\Instrumentation\Curl;
 
 use CurlHandle;
 use CurlMultiHandle;
@@ -41,10 +41,10 @@ class CurlInstrumentation
         $instrumentation = new CachedInstrumentation('io.opentelemetry.contrib.php.curl', null, Version::VERSION_1_32_0->url());
         hook(null, 'curl_init', pre: null, post: static function ($obj, array $params, mixed $retVal) use ($curlHandleToAttributes) {
             if ($retVal instanceof CurlHandle) {
-                $curlHandleToAttributes[$retVal] = new \OpenTelemetry\Contrib\Instrumentation\Curl\CurlHandleMetadata();
+                $curlHandleToAttributes[$retVal] = new CurlHandleMetadata();
                 if (($fullUrl = $params[0] ?? null) !== null) {
                     /** @psalm-suppress PossiblyNullReference */
-                    $curlHandleToAttributes[$retVal]->setAttribute(TraceAttributes::URL_FULL, \OpenTelemetry\Contrib\Instrumentation\Curl\CurlHandleMetadata::redactUrlString($fullUrl));
+                    $curlHandleToAttributes[$retVal]->setAttribute(TraceAttributes::URL_FULL, CurlHandleMetadata::redactUrlString($fullUrl));
                 }
             }
         });
@@ -89,7 +89,7 @@ class CurlInstrumentation
         });
         hook(null, 'curl_reset', pre: static function ($obj, array $params) use ($curlHandleToAttributes) {
             if (count($params) > 0 && $params[0] instanceof CurlHandle) {
-                $curlHandleToAttributes[$params[0]] = new \OpenTelemetry\Contrib\Instrumentation\Curl\CurlHandleMetadata();
+                $curlHandleToAttributes[$params[0]] = new CurlHandleMetadata();
             }
         }, post: null);
         hook(null, 'curl_exec', pre: static function ($obj, array $params, ?string $class, ?string $function, ?string $filename, ?int $lineno) use ($instrumentation, $curlHandleToAttributes, &$curlSetOptInstrumentationSuppressed) {
@@ -110,7 +110,7 @@ class CurlInstrumentation
             $span = $builder->startSpan();
             $context = $span->storeInContext($parent);
             if (isset($curlHandleToAttributes[$params[0]])) {
-                $propagator->inject($curlHandleToAttributes[$params[0]], \OpenTelemetry\Contrib\Instrumentation\Curl\HeadersPropagator::instance(), $context);
+                $propagator->inject($curlHandleToAttributes[$params[0]], HeadersPropagator::instance(), $context);
             }
             Context::storage()->attach($context);
             if (!isset($curlHandleToAttributes[$params[0]])) {
@@ -211,7 +211,7 @@ class CurlInstrumentation
                         $builder = $instrumentation->tracer()->spanBuilder($spanName)->setParent($parent)->setSpanKind(SpanKind::KIND_CLIENT)->setAttribute(TraceAttributes::CODE_FUNCTION_NAME, 'curl_multi_exec')->setAttributes($curlHandleToAttributes[$cHandle]->getAttributes());
                         $span = $builder->startSpan();
                         $context = $span->storeInContext($parent);
-                        $propagator->inject($curlHandleToAttributes[$cHandle], \OpenTelemetry\Contrib\Instrumentation\Curl\HeadersPropagator::instance(), $context);
+                        $propagator->inject($curlHandleToAttributes[$cHandle], HeadersPropagator::instance(), $context);
                         Context::storage()->attach($context);
                         $curlSetOptInstrumentationSuppressed = \true;
                         $headers = $curlHandleToAttributes[$cHandle]->getRequestHeadersToSend();

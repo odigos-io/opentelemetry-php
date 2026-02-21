@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Odigos;
 
-use OpenTelemetry\Contrib\Instrumentation\ExtRdKafka\ExtRdKafkaInstrumentation;
+use Odigos\OpenTelemetry\Contrib\Instrumentation\ExtRdKafka\ExtRdKafkaInstrumentation;
 use OpenTelemetry\SDK\Sdk;
 if (\class_exists(Sdk::class) && Sdk::isInstrumentationDisabled(ExtRdKafkaInstrumentation::NAME) === \true) {
     return;

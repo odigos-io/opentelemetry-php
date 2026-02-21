@@ -3,11 +3,7 @@
 /**
  * Regenerates the Composer classmap after PHP-Scoper has scoped vendor files.
  *
- * PHP-Scoper modifies namespace declarations in PHP files but cannot reliably
- * update Composer's autoloader because classmap files are enormous single-line
- * arrays and entries get dropped. This script scans all PHP files under vendor/,
- * extracts the actual declared class/interface/trait/enum names, and rewrites
- * both autoload_classmap.php and the $classMap in autoload_static.php.
+ * PHP-Scoper modifies namespace declarations in PHP files but cannot reliably update Composer's autoloader because classmap files are enormous single-line arrays and entries get dropped. This script scans all PHP files under vendor/, extracts the actual declared class/interface/trait/enum names, and rewrites both autoload_classmap.php and the $classMap in autoload_static.php.
  */
 
 $baseDir = $argv[1] ?? getcwd();
@@ -32,8 +28,7 @@ foreach ($iterator as $file) {
         str_contains($relPath, '/test/')) {
         continue;
     }
-    // Skip Composer autoloader internals (ClassLoader, autoload_*, etc.) but
-    // keep InstalledVersions which is referenced by auto-instrumentation packages.
+    // Skip Composer autoloader internals (ClassLoader, autoload_*, etc.) but keep InstalledVersions which is referenced by auto-instrumentation packages.
     if (str_starts_with($relPath, 'composer/') && !str_contains($relPath, 'InstalledVersions')) {
         continue;
     }
@@ -102,11 +97,7 @@ file_put_contents($staticFile, $staticContent);
 echo "Updated autoload_static.php\n";
 
 // Isolate the agent's autoload_files deduplication from the customer app's.
-// Composer uses $GLOBALS['__composer_autoload_files'] to skip files already
-// loaded by another autoloader. When the agent loads first (via auto_prepend_file),
-// it marks file hashes as loaded. The app sees the same hashes and skips its own
-// copies — but the agent loaded SCOPED versions, so global functions like \value()
-// end up undefined. Using a separate global key prevents this entirely.
+// Composer uses $GLOBALS['__composer_autoload_files'] to skip files already loaded by another autoloader. When the agent loads first (via auto_prepend_file), it marks file hashes as loaded. The app sees the same hashes and skips its own copies — but the agent loaded SCOPED versions, so global functions like \value() end up undefined. Using a separate global key prevents this entirely.
 $realFile = $vendorDir . '/composer/autoload_real.php';
 $realContent = file_get_contents($realFile);
 $count = 0;
@@ -115,11 +106,7 @@ file_put_contents($realFile, $realContent);
 echo "Patched autoload_real.php: $count replacements (__composer_autoload_files -> __odigos_autoload_files)\n";
 
 // Propagate excluded-namespace file hashes to __composer_autoload_files.
-// The __odigos_autoload_files isolation above prevents the agent from marking
-// hashes in the customer app's __composer_autoload_files. This is correct for
-// scoped packages (different function names), but excluded-namespace packages
-// declare the same functions/classes. Propagating their hashes tells the app's
-// autoloader to skip them, preventing "Cannot redeclare" fatal errors.
+// The __odigos_autoload_files isolation above prevents the agent from marking hashes in the customer app's __composer_autoload_files. This is correct for scoped packages (different function names), but excluded-namespace packages declare the same functions/classes. Propagating their hashes tells the app's autoloader to skip them, preventing "Cannot redeclare" fatal errors.
 $autoloadFilesPath = $vendorDir . '/composer/autoload_files.php';
 if (file_exists($autoloadFilesPath)) {
     $filesContent = file_get_contents($autoloadFilesPath);

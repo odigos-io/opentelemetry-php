@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenTelemetry\Contrib\Instrumentation\Guzzle;
+namespace Odigos\OpenTelemetry\Contrib\Instrumentation\Guzzle;
 
 use function get_cfg_var;
 use GuzzleHttp\Client;
@@ -47,7 +47,7 @@ class GuzzleInstrumentation
             }
             $span = $spanBuilder->startSpan();
             $context = $span->storeInContext($parentContext);
-            $propagator->inject($request, \OpenTelemetry\Contrib\Instrumentation\Guzzle\HeadersPropagator::instance(), $context);
+            $propagator->inject($request, HeadersPropagator::instance(), $context);
             Context::storage()->attach($context);
             return [$request];
         }, post: static function (Client $client, array $params, PromiseInterface $promise, ?Throwable $exception): void {

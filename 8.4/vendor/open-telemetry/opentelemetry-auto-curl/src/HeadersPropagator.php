@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenTelemetry\Contrib\Instrumentation\Curl;
+namespace Odigos\OpenTelemetry\Contrib\Instrumentation\Curl;
 
 use function assert;
 use OpenTelemetry\Context\Propagation\PropagationSetterInterface;
@@ -17,7 +17,7 @@ class HeadersPropagator implements PropagationSetterInterface
     }
     public function set(&$carrier, string $key, string $value): void
     {
-        assert($carrier instanceof \OpenTelemetry\Contrib\Instrumentation\Curl\CurlHandleMetadata);
+        assert($carrier instanceof CurlHandleMetadata);
         $carrier = $carrier->setHeaderToPropagate($key, $value);
     }
 }

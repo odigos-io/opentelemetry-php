@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Odigos;
 
-use OpenTelemetry\Contrib\Instrumentation\Curl\CurlInstrumentation;
+use Odigos\OpenTelemetry\Contrib\Instrumentation\Curl\CurlInstrumentation;
 use OpenTelemetry\SDK\Sdk;
 if (\class_exists(Sdk::class) && Sdk::isInstrumentationDisabled(CurlInstrumentation::NAME) === \true) {
     return;

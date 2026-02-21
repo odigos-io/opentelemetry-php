@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenTelemetry\Contrib\Instrumentation\Curl;
+namespace Odigos\OpenTelemetry\Contrib\Instrumentation\Curl;
 
 use CurlHandle;
 use OpenTelemetry\SemConv\TraceAttributes;
@@ -31,7 +31,7 @@ class CurlHandleMetadata
     {
         $this->attributes[$key] = $value;
     }
-    public function setHeaderToPropagate(string $key, $value): \OpenTelemetry\Contrib\Instrumentation\Curl\CurlHandleMetadata
+    public function setHeaderToPropagate(string $key, $value): CurlHandleMetadata
     {
         $this->headersToPropagate[] = $key . ': ' . $value;
         return $this;

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenTelemetry\Contrib\Otlp;
+namespace Odigos\OpenTelemetry\Contrib\Otlp;
 
 use OpenTelemetry\API\Behavior\LogsMessagesTrait;
 use OpenTelemetry\API\Signals;
@@ -27,7 +27,7 @@ class SpanExporterFactory implements SpanExporterFactoryInterface
     public function create(): SpanExporterInterface
     {
         $transport = $this->buildTransport();
-        return new \OpenTelemetry\Contrib\Otlp\SpanExporter($transport);
+        return new SpanExporter($transport);
     }
     /**
      * @psalm-suppress ArgumentTypeCoercion
@@ -36,9 +36,9 @@ class SpanExporterFactory implements SpanExporterFactoryInterface
     private function buildTransport(): TransportInterface
     {
         $protocol = $this->getProtocol();
-        $contentType = \OpenTelemetry\Contrib\Otlp\Protocols::contentType($protocol);
+        $contentType = Protocols::contentType($protocol);
         $endpoint = $this->getEndpoint($protocol);
-        $headers = \OpenTelemetry\Contrib\Otlp\OtlpUtil::getHeaders(Signals::TRACE);
+        $headers = OtlpUtil::getHeaders(Signals::TRACE);
         $compression = $this->getCompression();
         $timeout = $this->getTimeout();
         $factoryClass = Registry::transportFactory($protocol);
@@ -55,10 +55,10 @@ class SpanExporterFactory implements SpanExporterFactoryInterface
             return Configuration::getString(Variables::OTEL_EXPORTER_OTLP_TRACES_ENDPOINT);
         }
         $endpoint = Configuration::has(Variables::OTEL_EXPORTER_OTLP_ENDPOINT) ? Configuration::getString(Variables::OTEL_EXPORTER_OTLP_ENDPOINT) : Defaults::OTEL_EXPORTER_OTLP_ENDPOINT;
-        if ($protocol === \OpenTelemetry\Contrib\Otlp\Protocols::GRPC) {
-            return $endpoint . \OpenTelemetry\Contrib\Otlp\OtlpUtil::method(Signals::TRACE);
+        if ($protocol === Protocols::GRPC) {
+            return $endpoint . OtlpUtil::method(Signals::TRACE);
         }
-        return \OpenTelemetry\Contrib\Otlp\HttpEndpointResolver::create()->resolveToString($endpoint, Signals::TRACE);
+        return HttpEndpointResolver::create()->resolveToString($endpoint, Signals::TRACE);
     }
     private function getCompression(): string
     {

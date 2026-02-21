@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenTelemetry\Contrib\Instrumentation\PDO;
+namespace Odigos\OpenTelemetry\Contrib\Instrumentation\PDO;
 
 use OpenTelemetry\API\Instrumentation\CachedInstrumentation;
 use OpenTelemetry\API\Trace\Span;
@@ -25,7 +25,7 @@ class PDOInstrumentation
     public static function register(): void
     {
         $instrumentation = new CachedInstrumentation('io.opentelemetry.contrib.php.pdo', null, Version::VERSION_1_36_0->url());
-        $pdoTracker = new \OpenTelemetry\Contrib\Instrumentation\PDO\PDOTracker();
+        $pdoTracker = new PDOTracker();
         // Hook for the new PDO::connect static method
         if (method_exists(PDO::class, 'connect')) {
             hook(PDO::class, 'connect', pre: static function ($object, array $params, string $class, string $function, ?string $filename, ?int $lineno) use ($instrumentation) {
@@ -81,7 +81,7 @@ class PDOInstrumentation
             $attributes = $pdoTracker->trackedAttributesForPdo($pdo);
             $span->setAttributes($attributes);
             Context::storage()->attach($span->storeInContext($parent));
-            if (class_exists('OpenTelemetry\Contrib\SqlCommenter\SqlCommenter') && $query !== self::UNDEFINED) {
+            if (class_exists('Odigos\OpenTelemetry\Contrib\SqlCommenter\SqlCommenter') && $query !== self::UNDEFINED) {
                 if (array_key_exists(DbAttributes::DB_SYSTEM_NAME, $attributes)) {
                     /** @psalm-suppress PossiblyInvalidCast */
                     switch ((string) $attributes[DbAttributes::DB_SYSTEM_NAME]) {
@@ -90,7 +90,7 @@ class PDOInstrumentation
                             /**
                              * @psalm-suppress UndefinedClass
                              */
-                            $commenter = \OpenTelemetry\Contrib\SqlCommenter\SqlCommenter::getInstance();
+                            $commenter = \Odigos\OpenTelemetry\Contrib\SqlCommenter\SqlCommenter::getInstance();
                             $query = $commenter->inject($query);
                             if ($commenter->isAttributeEnabled()) {
                                 $span->setAttributes([DbAttributes::DB_QUERY_TEXT => (string) $query]);
@@ -121,7 +121,7 @@ class PDOInstrumentation
             $attributes = $pdoTracker->trackedAttributesForPdo($pdo);
             $span->setAttributes($attributes);
             Context::storage()->attach($span->storeInContext($parent));
-            if (class_exists('OpenTelemetry\Contrib\SqlCommenter\SqlCommenter') && $query !== self::UNDEFINED) {
+            if (class_exists('Odigos\OpenTelemetry\Contrib\SqlCommenter\SqlCommenter') && $query !== self::UNDEFINED) {
                 if (array_key_exists(DbAttributes::DB_SYSTEM_NAME, $attributes)) {
                     /** @psalm-suppress PossiblyInvalidCast */
                     switch ((string) $attributes[DbAttributes::DB_SYSTEM_NAME]) {
@@ -130,7 +130,7 @@ class PDOInstrumentation
                             /**
                              * @psalm-suppress UndefinedClass
                              */
-                            $commenter = \OpenTelemetry\Contrib\SqlCommenter\SqlCommenter::getInstance();
+                            $commenter = \Odigos\OpenTelemetry\Contrib\SqlCommenter\SqlCommenter::getInstance();
                             $query = $commenter->inject($query);
                             if ($commenter->isAttributeEnabled()) {
                                 $span->setAttributes([DbAttributes::DB_QUERY_TEXT => (string) $query]);

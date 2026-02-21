@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenTelemetry\Contrib\Otlp;
+namespace Odigos\OpenTelemetry\Contrib\Otlp;
 
 use function hex2bin;
 use function is_float;
@@ -25,10 +25,10 @@ use Odigos\OpenTelemetry\SDK;
 use function serialize;
 final class MetricConverter
 {
-    private readonly \OpenTelemetry\Contrib\Otlp\ProtobufSerializer $serializer;
-    public function __construct(?\OpenTelemetry\Contrib\Otlp\ProtobufSerializer $serializer = null)
+    private readonly ProtobufSerializer $serializer;
+    public function __construct(?ProtobufSerializer $serializer = null)
     {
-        $this->serializer = $serializer ?? \OpenTelemetry\Contrib\Otlp\ProtobufSerializer::getDefault();
+        $this->serializer = $serializer ?? ProtobufSerializer::getDefault();
     }
     /**
      * @param iterable<SDK\Metrics\Data\Metric> $batch
@@ -198,7 +198,7 @@ final class MetricConverter
             /** @psalm-suppress InvalidArgument */
             $pElement->getAttributes()[] = $pAttribute = new KeyValue();
             $pAttribute->setKey($key);
-            $pAttribute->setValue(\OpenTelemetry\Contrib\Otlp\AttributesConverter::convertAnyValue($value));
+            $pAttribute->setValue(AttributesConverter::convertAnyValue($value));
         }
         if (method_exists($pElement, 'setDroppedAttributesCount')) {
             $pElement->setDroppedAttributesCount($attributes->getDroppedAttributesCount());
@@ -210,7 +210,7 @@ final class MetricConverter
             /** @psalm-suppress InvalidArgument */
             $pElement->getFilteredAttributes()[] = $pAttribute = new KeyValue();
             $pAttribute->setKey($key);
-            $pAttribute->setValue(\OpenTelemetry\Contrib\Otlp\AttributesConverter::convertAnyValue($value));
+            $pAttribute->setValue(AttributesConverter::convertAnyValue($value));
         }
     }
 }

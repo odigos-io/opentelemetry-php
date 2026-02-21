@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenTelemetry\Contrib\Otlp;
+namespace Odigos\OpenTelemetry\Contrib\Otlp;
 
 use Odigos\Opentelemetry\Proto\Collector\Logs\V1\ExportLogsServiceRequest;
 use Odigos\Opentelemetry\Proto\Common\V1\InstrumentationScope;
@@ -16,10 +16,10 @@ use OpenTelemetry\SDK\Logs\ReadableLogRecord;
 use OpenTelemetry\SDK\Resource\ResourceInfo;
 class LogsConverter
 {
-    private readonly \OpenTelemetry\Contrib\Otlp\ProtobufSerializer $serializer;
-    public function __construct(?\OpenTelemetry\Contrib\Otlp\ProtobufSerializer $serializer = null)
+    private readonly ProtobufSerializer $serializer;
+    public function __construct(?ProtobufSerializer $serializer = null)
     {
-        $this->serializer = $serializer ?? \OpenTelemetry\Contrib\Otlp\ProtobufSerializer::getDefault();
+        $this->serializer = $serializer ?? ProtobufSerializer::getDefault();
     }
     /**
      * @param iterable<ReadableLogRecord> $logs
@@ -51,7 +51,7 @@ class LogsConverter
     private function convertLogRecord(ReadableLogRecord $record): LogRecord
     {
         $pLogRecord = new LogRecord();
-        $pLogRecord->setBody(\OpenTelemetry\Contrib\Otlp\AttributesConverter::convertAnyValue($record->getBody()));
+        $pLogRecord->setBody(AttributesConverter::convertAnyValue($record->getBody()));
         $pLogRecord->setTimeUnixNano($record->getTimestamp() ?? 0);
         $pLogRecord->setObservedTimeUnixNano($record->getObservedTimestamp() ?? 0);
         $spanContext = $record->getSpanContext();
@@ -104,7 +104,7 @@ class LogsConverter
     {
         foreach ($attributes as $key => $value) {
             /** @psalm-suppress InvalidArgument */
-            $pElement->getAttributes()[] = (new KeyValue())->setKey($key)->setValue(\OpenTelemetry\Contrib\Otlp\AttributesConverter::convertAnyValue($value));
+            $pElement->getAttributes()[] = (new KeyValue())->setKey($key)->setValue(AttributesConverter::convertAnyValue($value));
         }
         $pElement->setDroppedAttributesCount($attributes->getDroppedAttributesCount());
     }

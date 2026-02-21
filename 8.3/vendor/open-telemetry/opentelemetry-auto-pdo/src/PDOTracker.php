@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenTelemetry\Contrib\Instrumentation\PDO;
+namespace Odigos\OpenTelemetry\Contrib\Instrumentation\PDO;
 
 use OpenTelemetry\API\Trace\SpanContextInterface;
 use OpenTelemetry\SemConv\TraceAttributes;

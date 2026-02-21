@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenTelemetry\Contrib\Instrumentation\ExtRdKafka;
+namespace Odigos\OpenTelemetry\Contrib\Instrumentation\ExtRdKafka;
 
 use Composer\InstalledVersions;
 use OpenTelemetry\API\Globals;

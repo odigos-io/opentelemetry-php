@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Odigos;
 
-use OpenTelemetry\Contrib\Instrumentation\PDO\PDOInstrumentation;
+use Odigos\OpenTelemetry\Contrib\Instrumentation\PDO\PDOInstrumentation;
 use OpenTelemetry\SDK\Sdk;
 if (\class_exists(Sdk::class) && Sdk::isInstrumentationDisabled(PDOInstrumentation::NAME) === \true) {
     return;

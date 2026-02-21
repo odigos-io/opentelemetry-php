@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenTelemetry\Contrib\Otlp;
+namespace Odigos\OpenTelemetry\Contrib\Otlp;
 
 use function base64_decode;
 use function bin2hex;
@@ -32,17 +32,17 @@ final class ProtobufSerializer
     private function __construct(private readonly string $contentType)
     {
     }
-    public static function getDefault(): \OpenTelemetry\Contrib\Otlp\ProtobufSerializer
+    public static function getDefault(): ProtobufSerializer
     {
-        return new self(\OpenTelemetry\Contrib\Otlp\ContentTypes::PROTOBUF);
+        return new self(ContentTypes::PROTOBUF);
     }
     /**
      * @psalm-param TransportInterface<SUPPORTED_CONTENT_TYPES> $transport
      */
-    public static function forTransport(TransportInterface $transport): \OpenTelemetry\Contrib\Otlp\ProtobufSerializer
+    public static function forTransport(TransportInterface $transport): ProtobufSerializer
     {
         return match ($contentType = $transport->contentType()) {
-            \OpenTelemetry\Contrib\Otlp\ContentTypes::PROTOBUF, \OpenTelemetry\Contrib\Otlp\ContentTypes::JSON, \OpenTelemetry\Contrib\Otlp\ContentTypes::NDJSON => new self($contentType),
+            ContentTypes::PROTOBUF, ContentTypes::JSON, ContentTypes::NDJSON => new self($contentType),
             default => throw new InvalidArgumentException(sprintf('Not supported content type "%s"', $contentType)),
         };
     }
@@ -50,25 +50,25 @@ final class ProtobufSerializer
     {
         // @phpstan-ignore-next-line
         return match ($this->contentType) {
-            \OpenTelemetry\Contrib\Otlp\ContentTypes::PROTOBUF => $traceId,
-            \OpenTelemetry\Contrib\Otlp\ContentTypes::JSON, \OpenTelemetry\Contrib\Otlp\ContentTypes::NDJSON => base64_decode(bin2hex($traceId)),
+            ContentTypes::PROTOBUF => $traceId,
+            ContentTypes::JSON, ContentTypes::NDJSON => base64_decode(bin2hex($traceId)),
         };
     }
     public function serializeSpanId(string $spanId): string
     {
         // @phpstan-ignore-next-line
         return match ($this->contentType) {
-            \OpenTelemetry\Contrib\Otlp\ContentTypes::PROTOBUF => $spanId,
-            \OpenTelemetry\Contrib\Otlp\ContentTypes::JSON, \OpenTelemetry\Contrib\Otlp\ContentTypes::NDJSON => base64_decode(bin2hex($spanId)),
+            ContentTypes::PROTOBUF => $spanId,
+            ContentTypes::JSON, ContentTypes::NDJSON => base64_decode(bin2hex($spanId)),
         };
     }
     public function serialize(Message $message): string
     {
         // @phpstan-ignore-next-line
         return match ($this->contentType) {
-            \OpenTelemetry\Contrib\Otlp\ContentTypes::PROTOBUF => $message->serializeToString(),
-            \OpenTelemetry\Contrib\Otlp\ContentTypes::JSON => self::serializeToJsonString($message),
-            \OpenTelemetry\Contrib\Otlp\ContentTypes::NDJSON => self::serializeToJsonString($message) . "\n",
+            ContentTypes::PROTOBUF => $message->serializeToString(),
+            ContentTypes::JSON => self::serializeToJsonString($message),
+            ContentTypes::NDJSON => self::serializeToJsonString($message) . "\n",
         };
     }
     /**
@@ -79,8 +79,8 @@ final class ProtobufSerializer
     {
         // @phpstan-ignore-next-line
         match ($this->contentType) {
-            \OpenTelemetry\Contrib\Otlp\ContentTypes::PROTOBUF => $message->mergeFromString($payload),
-            \OpenTelemetry\Contrib\Otlp\ContentTypes::JSON, \OpenTelemetry\Contrib\Otlp\ContentTypes::NDJSON => $message->mergeFromJsonString($payload, \true),
+            ContentTypes::PROTOBUF => $message->mergeFromString($payload),
+            ContentTypes::JSON, ContentTypes::NDJSON => $message->mergeFromJsonString($payload, \true),
         };
     }
     /**

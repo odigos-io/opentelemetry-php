@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenTelemetry\Contrib\Instrumentation\MySqli;
+namespace Odigos\OpenTelemetry\Contrib\Instrumentation\MySqli;
 
 use mysqli;
 use mysqli_stmt;

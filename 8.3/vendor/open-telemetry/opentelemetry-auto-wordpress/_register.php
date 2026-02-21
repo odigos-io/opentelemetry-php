@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Odigos;
 
-use OpenTelemetry\Contrib\Instrumentation\Wordpress\WordpressInstrumentation;
+use Odigos\OpenTelemetry\Contrib\Instrumentation\Wordpress\WordpressInstrumentation;
 use OpenTelemetry\SDK\Sdk;
 if (\class_exists(Sdk::class) && Sdk::isInstrumentationDisabled(WordpressInstrumentation::NAME) === \true) {
     return;

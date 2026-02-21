@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Odigos;
 
-use OpenTelemetry\Contrib\Instrumentation\MySqli\MySqliInstrumentation;
+use Odigos\OpenTelemetry\Contrib\Instrumentation\MySqli\MySqliInstrumentation;
 use OpenTelemetry\SDK\Sdk;
 if (\class_exists(Sdk::class) && Sdk::isInstrumentationDisabled(MySqliInstrumentation::NAME) === \true) {
     return;

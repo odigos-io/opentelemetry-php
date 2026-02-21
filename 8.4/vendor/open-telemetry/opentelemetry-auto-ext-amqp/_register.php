@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Odigos;
 
-use OpenTelemetry\Contrib\Instrumentation\ExtAmqp\ExtAmqpInstrumentation;
+use Odigos\OpenTelemetry\Contrib\Instrumentation\ExtAmqp\ExtAmqpInstrumentation;
 use OpenTelemetry\SDK\Sdk;
 if (\class_exists(Sdk::class) && Sdk::isInstrumentationDisabled(ExtAmqpInstrumentation::NAME) === \true) {
     return;

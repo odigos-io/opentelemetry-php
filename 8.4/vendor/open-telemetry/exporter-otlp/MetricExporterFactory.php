@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenTelemetry\Contrib\Otlp;
+namespace Odigos\OpenTelemetry\Contrib\Otlp;
 
 use OpenTelemetry\API\Signals;
 use OpenTelemetry\SDK\Common\Configuration\Configuration;
@@ -27,7 +27,7 @@ class MetricExporterFactory implements MetricExporterFactoryInterface
     {
         $protocol = Configuration::has(Variables::OTEL_EXPORTER_OTLP_METRICS_PROTOCOL) ? Configuration::getEnum(Variables::OTEL_EXPORTER_OTLP_METRICS_PROTOCOL) : Configuration::getEnum(Variables::OTEL_EXPORTER_OTLP_PROTOCOL);
         $temporality = $this->getTemporality();
-        return new \OpenTelemetry\Contrib\Otlp\MetricExporter($this->buildTransport($protocol), $temporality);
+        return new MetricExporter($this->buildTransport($protocol), $temporality);
     }
     /**
      * @psalm-suppress UndefinedClass
@@ -39,12 +39,12 @@ class MetricExporterFactory implements MetricExporterFactoryInterface
          * - OTEL_METRIC_EXPORT_INTERVAL
          */
         $endpoint = $this->getEndpoint($protocol);
-        $headers = \OpenTelemetry\Contrib\Otlp\OtlpUtil::getHeaders(Signals::METRICS);
+        $headers = OtlpUtil::getHeaders(Signals::METRICS);
         $compression = $this->getCompression();
         $timeout = $this->getTimeout();
         $factoryClass = Registry::transportFactory($protocol);
         $factory = $this->transportFactory ?: new $factoryClass();
-        return $factory->create($endpoint, \OpenTelemetry\Contrib\Otlp\Protocols::contentType($protocol), $headers, $compression, $timeout);
+        return $factory->create($endpoint, Protocols::contentType($protocol), $headers, $compression, $timeout);
     }
     /**
      * @phpstan-ignore-next-line
@@ -74,9 +74,9 @@ class MetricExporterFactory implements MetricExporterFactoryInterface
             return Configuration::getString(Variables::OTEL_EXPORTER_OTLP_METRICS_ENDPOINT);
         }
         $endpoint = Configuration::has(Variables::OTEL_EXPORTER_OTLP_ENDPOINT) ? Configuration::getString(Variables::OTEL_EXPORTER_OTLP_ENDPOINT) : Defaults::OTEL_EXPORTER_OTLP_ENDPOINT;
-        if ($protocol === \OpenTelemetry\Contrib\Otlp\Protocols::GRPC) {
-            return $endpoint . \OpenTelemetry\Contrib\Otlp\OtlpUtil::method(Signals::METRICS);
+        if ($protocol === Protocols::GRPC) {
+            return $endpoint . OtlpUtil::method(Signals::METRICS);
         }
-        return \OpenTelemetry\Contrib\Otlp\HttpEndpointResolver::create()->resolveToString($endpoint, Signals::METRICS);
+        return HttpEndpointResolver::create()->resolveToString($endpoint, Signals::METRICS);
     }
 }
