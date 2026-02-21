@@ -4,7 +4,6 @@ namespace Illuminate\Console\Events;
 
 use Illuminate\Console\Scheduling\Event;
 use Throwable;
-
 class ScheduledTaskFailed
 {
     /**
@@ -13,14 +12,12 @@ class ScheduledTaskFailed
      * @var \Illuminate\Console\Scheduling\Event
      */
     public $task;
-
     /**
      * The exception that was thrown.
      *
      * @var \Throwable
      */
     public $exception;
-
     /**
      * Create a new event instance.
      *

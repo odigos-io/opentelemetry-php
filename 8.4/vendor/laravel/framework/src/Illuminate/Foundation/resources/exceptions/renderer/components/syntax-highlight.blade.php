@@ -58,3 +58,4 @@
     ></div>
     <div x-show="!highlightedCode">{!! $fallback !!}</div>
 </div>
+

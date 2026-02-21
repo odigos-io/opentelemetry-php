@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\Context\Propagation;
 
 /**
@@ -17,9 +16,8 @@ interface PropagationGetterInterface
      * @return list<string>
      */
     public function keys($carrier): array;
-
     /**
      * Gets the value of a given key from a carrier.
      */
-    public function get($carrier, string $key) : ?string;
+    public function get($carrier, string $key): ?string;
 }

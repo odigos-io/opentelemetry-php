@@ -1,14 +1,13 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\rbac;
 
 use yii\base\BaseObject;
-
 /**
  * Assignment represents an assignment of a role to a user.
  *

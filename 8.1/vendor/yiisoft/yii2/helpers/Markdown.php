@@ -1,10 +1,10 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\helpers;
 
 /**
@@ -28,6 +28,6 @@ namespace yii\helpers;
  * @author Carsten Brandt <mail@cebe.cc>
  * @since 2.0
  */
-class Markdown extends BaseMarkdown
+class Markdown extends \yii\helpers\BaseMarkdown
 {
 }

@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -25,7 +25,6 @@ use Cake\ORM\Rule\LinkConstraint;
 use Cake\ORM\Rule\ValidCount;
 use Cake\Utility\Inflector;
 use function Cake\I18n\__d;
-
 /**
  * ORM flavored rules checker.
  *
@@ -59,7 +58,6 @@ class RulesChecker extends BaseRulesChecker
         $options = is_array($message) ? $message : ['message' => $message];
         $message = $options['message'] ?? null;
         unset($options['message']);
-
         if (!$message) {
             if ($this->_useI18n) {
                 $message = __d('cake', 'This value is already in use');
@@ -67,12 +65,9 @@ class RulesChecker extends BaseRulesChecker
                 $message = 'This value is already in use';
             }
         }
-
         $errorField = current($fields);
-
         return $this->_addError(new IsUnique($fields, $options), '_isUnique', compact('errorField', 'message'));
     }
-
     /**
      * Returns a callable that can be used as a rule for checking that the values
      * extracted from the entity to check exist as the primary key in another table.
@@ -99,18 +94,14 @@ class RulesChecker extends BaseRulesChecker
      *   also be an array of options. When an array, the 'message' key can be used to provide a message.
      * @return \Cake\Datasource\RuleInvoker
      */
-    public function existsIn(
-        array|string $field,
-        Table|Association|string $table,
-        array|string|null $message = null,
-    ): RuleInvoker {
+    public function existsIn(array|string $field, \Cake\ORM\Table|\Cake\ORM\Association|string $table, array|string|null $message = null): RuleInvoker
+    {
         $options = [];
         if (is_array($message)) {
             $options = $message + ['message' => null];
             $message = $options['message'];
             unset($options['message']);
         }
-
         if (!$message) {
             if ($this->_useI18n) {
                 $message = __d('cake', 'This value does not exist');
@@ -118,12 +109,9 @@ class RulesChecker extends BaseRulesChecker
                 $message = 'This value does not exist';
             }
         }
-
         $errorField = is_string($field) ? $field : current($field);
-
         return $this->_addError(new ExistsIn($field, $table, $options), '_existsIn', compact('errorField', 'message'));
     }
-
     /**
      * Returns a callable that can be used as a rule for checking that the value provided in a
      * field exists as the primary key of another table. Accepts composite foreign keys where
@@ -151,18 +139,14 @@ class RulesChecker extends BaseRulesChecker
      * @return \Cake\Datasource\RuleInvoker
      * @since 5.3.0
      */
-    public function existsInNullable(
-        array|string $field,
-        Table|Association|string $table,
-        array|string|null $message = null,
-    ): RuleInvoker {
+    public function existsInNullable(array|string $field, \Cake\ORM\Table|\Cake\ORM\Association|string $table, array|string|null $message = null): RuleInvoker
+    {
         $options = [];
         if (is_array($message)) {
             $options = $message + ['message' => null];
             $message = $options['message'];
             unset($options['message']);
         }
-
         if (!$message) {
             if ($this->_useI18n) {
                 $message = __d('cake', 'This value does not exist');
@@ -170,16 +154,9 @@ class RulesChecker extends BaseRulesChecker
                 $message = 'This value does not exist';
             }
         }
-
         $errorField = is_string($field) ? $field : current($field);
-
-        return $this->_addError(
-            new ExistsInNullable($field, $table, $options),
-            '_existsIn',
-            compact('errorField', 'message'),
-        );
+        return $this->_addError(new ExistsInNullable($field, $table, $options), '_existsIn', compact('errorField', 'message'));
     }
-
     /**
      * Validates whether links to the given association exist.
      *
@@ -199,20 +176,10 @@ class RulesChecker extends BaseRulesChecker
      * @return \Cake\Datasource\RuleInvoker
      * @since 4.0.0
      */
-    public function isLinkedTo(
-        Association|string $association,
-        ?string $field = null,
-        ?string $message = null,
-    ): RuleInvoker {
-        return $this->_addLinkConstraintRule(
-            $association,
-            $field,
-            $message,
-            LinkConstraint::STATUS_LINKED,
-            '_isLinkedTo',
-        );
+    public function isLinkedTo(\Cake\ORM\Association|string $association, ?string $field = null, ?string $message = null): RuleInvoker
+    {
+        return $this->_addLinkConstraintRule($association, $field, $message, LinkConstraint::STATUS_LINKED, '_isLinkedTo');
     }
-
     /**
      * Validates whether links to the given association do not exist.
      *
@@ -232,20 +199,10 @@ class RulesChecker extends BaseRulesChecker
      * @return \Cake\Datasource\RuleInvoker
      * @since 4.0.0
      */
-    public function isNotLinkedTo(
-        Association|string $association,
-        ?string $field = null,
-        ?string $message = null,
-    ): RuleInvoker {
-        return $this->_addLinkConstraintRule(
-            $association,
-            $field,
-            $message,
-            LinkConstraint::STATUS_NOT_LINKED,
-            '_isNotLinkedTo',
-        );
+    public function isNotLinkedTo(\Cake\ORM\Association|string $association, ?string $field = null, ?string $message = null): RuleInvoker
+    {
+        return $this->_addLinkConstraintRule($association, $field, $message, LinkConstraint::STATUS_NOT_LINKED, '_isNotLinkedTo');
     }
-
     /**
      * Adds a link constraint rule.
      *
@@ -263,22 +220,16 @@ class RulesChecker extends BaseRulesChecker
      * @see \Cake\ORM\Rule\LinkConstraint::STATUS_LINKED
      * @see \Cake\ORM\Rule\LinkConstraint::STATUS_NOT_LINKED
      */
-    protected function _addLinkConstraintRule(
-        Association|string $association,
-        ?string $errorField,
-        ?string $message,
-        string $linkStatus,
-        string $ruleName,
-    ): RuleInvoker {
-        if ($association instanceof Association) {
+    protected function _addLinkConstraintRule(\Cake\ORM\Association|string $association, ?string $errorField, ?string $message, string $linkStatus, string $ruleName): RuleInvoker
+    {
+        if ($association instanceof \Cake\ORM\Association) {
             $associationAlias = $association->getName();
             $errorField ??= $association->getProperty();
         } else {
             $associationAlias = $association;
-
             if ($errorField === null) {
                 $repository = $this->_options['repository'] ?? null;
-                if ($repository instanceof Table) {
+                if ($repository instanceof \Cake\ORM\Table) {
                     $association = $repository->getAssociation($association);
                     $errorField = $association->getProperty();
                 } else {
@@ -286,30 +237,16 @@ class RulesChecker extends BaseRulesChecker
                 }
             }
         }
-
         if (!$message) {
             if ($this->_useI18n) {
-                $message = __d(
-                    'cake',
-                    'Cannot modify row: a constraint for the `{0}` association fails.',
-                    $associationAlias,
-                );
+                $message = __d('cake', 'Cannot modify row: a constraint for the `{0}` association fails.', $associationAlias);
             } else {
-                $message = sprintf(
-                    'Cannot modify row: a constraint for the `%s` association fails.',
-                    $associationAlias,
-                );
+                $message = sprintf('Cannot modify row: a constraint for the `%s` association fails.', $associationAlias);
             }
         }
-
-        $rule = new LinkConstraint(
-            $association,
-            $linkStatus,
-        );
-
+        $rule = new LinkConstraint($association, $linkStatus);
         return $this->_addError($rule, $ruleName, compact('errorField', 'message'));
     }
-
     /**
      * Validates the count of associated records.
      *
@@ -319,12 +256,8 @@ class RulesChecker extends BaseRulesChecker
      * @param string|null $message The error message to show in case the rule does not pass.
      * @return \Cake\Datasource\RuleInvoker
      */
-    public function validCount(
-        string $field,
-        int $count = 0,
-        string $operator = '>',
-        ?string $message = null,
-    ): RuleInvoker {
+    public function validCount(string $field, int $count = 0, string $operator = '>', ?string $message = null): RuleInvoker
+    {
         if (!$message) {
             if ($this->_useI18n) {
                 $message = __d('cake', 'The count does not match {0}{1}', [$operator, $count]);
@@ -332,13 +265,7 @@ class RulesChecker extends BaseRulesChecker
                 $message = sprintf('The count does not match %s%d', $operator, $count);
             }
         }
-
         $errorField = $field;
-
-        return $this->_addError(
-            new ValidCount($field),
-            '_validCount',
-            compact('count', 'operator', 'errorField', 'message'),
-        );
+        return $this->_addError(new ValidCount($field), '_validCount', compact('count', 'operator', 'errorField', 'message'));
     }
 }

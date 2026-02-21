@@ -1,10 +1,10 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\db;
 
 /**
@@ -23,7 +23,7 @@ namespace yii\db;
  * @since 2.0.14
  * @phpcs:disable Squiz.NamingConventions.ValidVariableName.PrivateNoUnderscore
  */
-final class PdoValue implements ExpressionInterface
+final class PdoValue implements \yii\db\ExpressionInterface
 {
     /**
      * @var mixed
@@ -34,8 +34,6 @@ final class PdoValue implements ExpressionInterface
      * @see https://www.php.net/manual/en/pdo.constants.php
      */
     private $type;
-
-
     /**
      * PdoValue constructor.
      *
@@ -47,7 +45,6 @@ final class PdoValue implements ExpressionInterface
         $this->value = $value;
         $this->type = $type;
     }
-
     /**
      * @return mixed
      */
@@ -55,7 +52,6 @@ final class PdoValue implements ExpressionInterface
     {
         return $this->value;
     }
-
     /**
      * @return int
      */

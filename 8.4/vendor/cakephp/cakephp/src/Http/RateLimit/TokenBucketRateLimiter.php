@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -17,11 +17,10 @@ declare(strict_types=1);
 namespace Cake\Http\RateLimit;
 
 use Psr\SimpleCache\CacheInterface;
-
 /**
  * Token bucket rate limiter implementation
  */
-class TokenBucketRateLimiter implements RateLimiterInterface
+class TokenBucketRateLimiter implements \Cake\Http\RateLimit\RateLimiterInterface
 {
     /**
      * Cache instance
@@ -29,7 +28,6 @@ class TokenBucketRateLimiter implements RateLimiterInterface
      * @var \Psr\SimpleCache\CacheInterface
      */
     protected CacheInterface $cache;
-
     /**
      * Constructor
      *
@@ -39,49 +37,31 @@ class TokenBucketRateLimiter implements RateLimiterInterface
     {
         $this->cache = $cache;
     }
-
     /**
      * @inheritDoc
      */
     public function attempt(string $identifier, int $limit, int $window, int $cost = 1): array
     {
-        $now = microtime(true);
+        $now = microtime(\true);
         $key = $identifier;
-
-        $data = $this->cache->get($identifier, [
-            'tokens' => $limit,
-            'last_update' => $now,
-        ]);
-
+        $data = $this->cache->get($identifier, ['tokens' => $limit, 'last_update' => $now]);
         // Refill tokens based on time elapsed
         $elapsed = $now - $data['last_update'];
         $refillRate = $limit / $window;
         $tokensToAdd = $elapsed * $refillRate;
-
         $data['tokens'] = min($limit, $data['tokens'] + $tokensToAdd);
         $data['last_update'] = $now;
-
         $allowed = $data['tokens'] >= $cost;
-
         if ($allowed) {
             $data['tokens'] -= $cost;
         }
-
         $this->cache->set($key, $data, $window);
-
         // Calculate when bucket will be full
         $tokensNeeded = $limit - $data['tokens'];
         $secondsToFull = $tokensNeeded / $refillRate;
-        $reset = (int)($now + $secondsToFull);
-
-        return [
-            'allowed' => $allowed,
-            'limit' => $limit,
-            'remaining' => (int)$data['tokens'],
-            'reset' => $reset,
-        ];
+        $reset = (int) ($now + $secondsToFull);
+        return ['allowed' => $allowed, 'limit' => $limit, 'remaining' => (int) $data['tokens'], 'reset' => $reset];
     }
-
     /**
      * @inheritDoc
      */

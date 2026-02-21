@@ -5,74 +5,63 @@ namespace Illuminate\Mail\Mailables;
 use Closure;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Traits\Conditionable;
-
 class Envelope
 {
     use Conditionable;
-
     /**
      * The address sending the message.
      *
      * @var \Illuminate\Mail\Mailables\Address|string|null
      */
     public $from;
-
     /**
      * The recipients of the message.
      *
      * @var array
      */
     public $to;
-
     /**
      * The recipients receiving a copy of the message.
      *
      * @var array
      */
     public $cc;
-
     /**
      * The recipients receiving a blind copy of the message.
      *
      * @var array
      */
     public $bcc;
-
     /**
      * The recipients that should be replied to.
      *
      * @var array
      */
     public $replyTo;
-
     /**
      * The subject of the message.
      *
      * @var string|null
      */
     public $subject;
-
     /**
      * The message's tags.
      *
      * @var array
      */
     public $tags = [];
-
     /**
      * The message's meta data.
      *
      * @var array
      */
     public $metadata = [];
-
     /**
      * The message's Symfony Message customization callbacks.
      *
      * @var array
      */
     public $using = [];
-
     /**
      * Create a new message envelope instance.
      *
@@ -89,9 +78,9 @@ class Envelope
      *
      * @named-arguments-supported
      */
-    public function __construct(Address|string|null $from = null, $to = [], $cc = [], $bcc = [], $replyTo = [], ?string $subject = null, array $tags = [], array $metadata = [], Closure|array $using = [])
+    public function __construct(\Illuminate\Mail\Mailables\Address|string|null $from = null, $to = [], $cc = [], $bcc = [], $replyTo = [], ?string $subject = null, array $tags = [], array $metadata = [], Closure|array $using = [])
     {
-        $this->from = is_string($from) ? new Address($from) : $from;
+        $this->from = is_string($from) ? new \Illuminate\Mail\Mailables\Address($from) : $from;
         $this->to = $this->normalizeAddresses($to);
         $this->cc = $this->normalizeAddresses($cc);
         $this->bcc = $this->normalizeAddresses($bcc);
@@ -101,7 +90,6 @@ class Envelope
         $this->metadata = $metadata;
         $this->using = Arr::wrap($using);
     }
-
     /**
      * Normalize the given array of addresses.
      *
@@ -111,10 +99,9 @@ class Envelope
     protected function normalizeAddresses($addresses)
     {
         return collect($addresses)->map(function ($address) {
-            return is_string($address) ? new Address($address) : $address;
+            return is_string($address) ? new \Illuminate\Mail\Mailables\Address($address) : $address;
         })->all();
     }
-
     /**
      * Specify who the message will be "from".
      *
@@ -122,13 +109,11 @@ class Envelope
      * @param  string|null  $name
      * @return $this
      */
-    public function from(Address|string $address, $name = null)
+    public function from(\Illuminate\Mail\Mailables\Address|string $address, $name = null)
     {
-        $this->from = is_string($address) ? new Address($address, $name) : $address;
-
+        $this->from = is_string($address) ? new \Illuminate\Mail\Mailables\Address($address, $name) : $address;
         return $this;
     }
-
     /**
      * Add a "to" recipient to the message envelope.
      *
@@ -136,15 +121,11 @@ class Envelope
      * @param  string|null  $name
      * @return $this
      */
-    public function to(Address|array|string $address, $name = null)
+    public function to(\Illuminate\Mail\Mailables\Address|array|string $address, $name = null)
     {
-        $this->to = array_merge($this->to, $this->normalizeAddresses(
-            is_string($name) ? [new Address($address, $name)] : Arr::wrap($address),
-        ));
-
+        $this->to = array_merge($this->to, $this->normalizeAddresses(is_string($name) ? [new \Illuminate\Mail\Mailables\Address($address, $name)] : Arr::wrap($address)));
         return $this;
     }
-
     /**
      * Add a "cc" recipient to the message envelope.
      *
@@ -152,15 +133,11 @@ class Envelope
      * @param  string|null  $name
      * @return $this
      */
-    public function cc(Address|array|string $address, $name = null)
+    public function cc(\Illuminate\Mail\Mailables\Address|array|string $address, $name = null)
     {
-        $this->cc = array_merge($this->cc, $this->normalizeAddresses(
-            is_string($name) ? [new Address($address, $name)] : Arr::wrap($address),
-        ));
-
+        $this->cc = array_merge($this->cc, $this->normalizeAddresses(is_string($name) ? [new \Illuminate\Mail\Mailables\Address($address, $name)] : Arr::wrap($address)));
         return $this;
     }
-
     /**
      * Add a "bcc" recipient to the message envelope.
      *
@@ -168,15 +145,11 @@ class Envelope
      * @param  string|null  $name
      * @return $this
      */
-    public function bcc(Address|array|string $address, $name = null)
+    public function bcc(\Illuminate\Mail\Mailables\Address|array|string $address, $name = null)
     {
-        $this->bcc = array_merge($this->bcc, $this->normalizeAddresses(
-            is_string($name) ? [new Address($address, $name)] : Arr::wrap($address),
-        ));
-
+        $this->bcc = array_merge($this->bcc, $this->normalizeAddresses(is_string($name) ? [new \Illuminate\Mail\Mailables\Address($address, $name)] : Arr::wrap($address)));
         return $this;
     }
-
     /**
      * Add a "reply to" recipient to the message envelope.
      *
@@ -184,15 +157,11 @@ class Envelope
      * @param  string|null  $name
      * @return $this
      */
-    public function replyTo(Address|array|string $address, $name = null)
+    public function replyTo(\Illuminate\Mail\Mailables\Address|array|string $address, $name = null)
     {
-        $this->replyTo = array_merge($this->replyTo, $this->normalizeAddresses(
-            is_string($name) ? [new Address($address, $name)] : Arr::wrap($address),
-        ));
-
+        $this->replyTo = array_merge($this->replyTo, $this->normalizeAddresses(is_string($name) ? [new \Illuminate\Mail\Mailables\Address($address, $name)] : Arr::wrap($address)));
         return $this;
     }
-
     /**
      * Set the subject of the message.
      *
@@ -202,10 +171,8 @@ class Envelope
     public function subject(string $subject)
     {
         $this->subject = $subject;
-
         return $this;
     }
-
     /**
      * Add "tags" to the message.
      *
@@ -215,10 +182,8 @@ class Envelope
     public function tags(array $tags)
     {
         $this->tags = array_merge($this->tags, $tags);
-
         return $this;
     }
-
     /**
      * Add a "tag" to the message.
      *
@@ -228,10 +193,8 @@ class Envelope
     public function tag(string $tag)
     {
         $this->tags[] = $tag;
-
         return $this;
     }
-
     /**
      * Add metadata to the message.
      *
@@ -242,10 +205,8 @@ class Envelope
     public function metadata(string $key, string|int $value)
     {
         $this->metadata[$key] = $value;
-
         return $this;
     }
-
     /**
      * Add a Symfony Message customization callback to the message.
      *
@@ -255,10 +216,8 @@ class Envelope
     public function using(Closure $callback)
     {
         $this->using[] = $callback;
-
         return $this;
     }
-
     /**
      * Determine if the message is from the given address.
      *
@@ -271,11 +230,8 @@ class Envelope
         if (is_null($name)) {
             return $this->from->address === $address;
         }
-
-        return $this->from->address === $address &&
-               $this->from->name === $name;
+        return $this->from->address === $address && $this->from->name === $name;
     }
-
     /**
      * Determine if the message has the given address as a recipient.
      *
@@ -287,7 +243,6 @@ class Envelope
     {
         return $this->hasRecipient($this->to, $address, $name);
     }
-
     /**
      * Determine if the message has the given address as a "cc" recipient.
      *
@@ -299,7 +254,6 @@ class Envelope
     {
         return $this->hasRecipient($this->cc, $address, $name);
     }
-
     /**
      * Determine if the message has the given address as a "bcc" recipient.
      *
@@ -311,7 +265,6 @@ class Envelope
     {
         return $this->hasRecipient($this->bcc, $address, $name);
     }
-
     /**
      * Determine if the message has the given address as a "reply to" recipient.
      *
@@ -323,7 +276,6 @@ class Envelope
     {
         return $this->hasRecipient($this->replyTo, $address, $name);
     }
-
     /**
      * Determine if the message has the given recipient.
      *
@@ -338,12 +290,9 @@ class Envelope
             if (is_null($name)) {
                 return $recipient->address === $address;
             }
-
-            return $recipient->address === $address &&
-                   $recipient->name === $name;
+            return $recipient->address === $address && $recipient->name === $name;
         });
     }
-
     /**
      * Determine if the message has the given subject.
      *
@@ -354,7 +303,6 @@ class Envelope
     {
         return $this->subject === $subject;
     }
-
     /**
      * Determine if the message has the given metadata.
      *

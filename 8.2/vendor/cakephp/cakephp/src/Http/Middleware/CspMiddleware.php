@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -14,17 +14,15 @@ declare(strict_types=1);
  * @since         4.0.0
  * @license       https://www.opensource.org/licenses/mit-license.php MIT License
  */
-
 namespace Cake\Http\Middleware;
 
 use Cake\Core\Exception\CakeException;
 use Cake\Core\InstanceConfigTrait;
-use ParagonIE\CSPBuilder\CSPBuilder;
+use Odigos\ParagonIE\CSPBuilder\CSPBuilder;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-
 /**
  * Content Security Policy Middleware
  *
@@ -36,24 +34,18 @@ use Psr\Http\Server\RequestHandlerInterface;
 class CspMiddleware implements MiddlewareInterface
 {
     use InstanceConfigTrait;
-
     /**
      * CSP Builder
      *
      * @var \ParagonIE\CSPBuilder\CSPBuilder $csp CSP Builder or config array
      */
     protected CSPBuilder $csp;
-
     /**
      * Configuration options.
      *
      * @var array<string, mixed>
      */
-    protected array $_defaultConfig = [
-        'scriptNonce' => false,
-        'styleNonce' => false,
-    ];
-
+    protected array $_defaultConfig = ['scriptNonce' => \false, 'styleNonce' => \false];
     /**
      * Constructor
      *
@@ -66,14 +58,11 @@ class CspMiddleware implements MiddlewareInterface
             throw new CakeException('You must install paragonie/csp-builder to use CspMiddleware');
         }
         $this->setConfig($config);
-
         if (!$csp instanceof CSPBuilder) {
             $csp = new CSPBuilder($csp);
         }
-
         $this->csp = $csp;
     }
-
     /**
      * Add nonces (if enabled) to the request and apply the CSP header to the response.
      *
@@ -90,7 +79,6 @@ class CspMiddleware implements MiddlewareInterface
             $request = $request->withAttribute('cspStyleNonce', $this->csp->nonce('style-src'));
         }
         $response = $handler->handle($request);
-
         /** @var \Psr\Http\Message\ResponseInterface */
         return $this->csp->injectCSPHeader($response);
     }

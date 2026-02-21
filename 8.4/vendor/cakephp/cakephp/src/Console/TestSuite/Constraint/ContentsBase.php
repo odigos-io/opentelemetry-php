@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -15,8 +15,7 @@ declare(strict_types=1);
  */
 namespace Cake\Console\TestSuite\Constraint;
 
-use PHPUnit\Framework\Constraint\Constraint;
-
+use Odigos\PHPUnit\Framework\Constraint\Constraint;
 /**
  * Base constraint for content constraints
  *
@@ -28,12 +27,10 @@ abstract class ContentsBase extends Constraint
      * @var string
      */
     protected string $contents;
-
     /**
      * @var string
      */
     protected string $output;
-
     /**
      * Constructor
      *
@@ -42,14 +39,10 @@ abstract class ContentsBase extends Constraint
      */
     public function __construct(array $contents, string $output)
     {
-        $this->contents = implode(PHP_EOL, $contents);
+        $this->contents = implode(\PHP_EOL, $contents);
         $this->output = $output;
     }
 }
-
 // phpcs:disable
-class_alias(
-    'Cake\Console\TestSuite\Constraint\ContentsBase',
-    'Cake\TestSuite\Constraint\Console\ContentsBase'
-);
+class_alias('Cake\Console\TestSuite\Constraint\ContentsBase', 'Cake\TestSuite\Constraint\Console\ContentsBase');
 // phpcs:enable

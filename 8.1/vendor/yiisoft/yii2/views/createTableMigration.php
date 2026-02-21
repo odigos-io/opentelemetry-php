@@ -1,5 +1,7 @@
 <?php
 
+namespace Odigos;
+
 /**
  * This view is used by console/controllers/MigrateController.php.
  *
@@ -13,7 +15,6 @@
  * @var array $fields the fields
  * @var array $foreignKeys the foreign keys
  */
-
 echo "<?php\n";
 if (!empty($namespace)) {
     echo "\nnamespace {$namespace};\n";
@@ -23,29 +24,26 @@ if (!empty($namespace)) {
 use yii\db\Migration;
 
 /**
- * Handles the creation of table `<?= $table ?>`.
-<?= $this->render('_foreignTables', [
-    'foreignKeys' => $foreignKeys,
-]) ?>
+ * Handles the creation of table `<?php 
+echo $table;
+?>`.
+<?php 
+echo $this->render('_foreignTables', ['foreignKeys' => $foreignKeys]);
+?>
  */
-class <?= $className ?> extends Migration
+class <?php 
+echo $className;
+?> extends Migration
 {
     /**
      * {@inheritdoc}
      */
     public function safeUp()
     {
-<?= $this->render('_createTable', [
-    'table' => $table,
-    'fields' => $fields,
-    'foreignKeys' => $foreignKeys,
-])
-?>
-<?php if (!empty($tableComment)) {
-    echo $this->render('_addComments', [
-        'table' => $table,
-        'tableComment' => $tableComment,
-    ]);
+<?php 
+echo $this->render('_createTable', ['table' => $table, 'fields' => $fields, 'foreignKeys' => $foreignKeys]);
+if (!empty($tableComment)) {
+    echo $this->render('_addComments', ['table' => $table, 'tableComment' => $tableComment]);
 }
 ?>
     }
@@ -55,10 +53,9 @@ class <?= $className ?> extends Migration
      */
     public function safeDown()
     {
-<?= $this->render('_dropTable', [
-    'table' => $table,
-    'foreignKeys' => $foreignKeys,
-])
+<?php 
+echo $this->render('_dropTable', ['table' => $table, 'foreignKeys' => $foreignKeys]);
 ?>
     }
 }
+<?php 

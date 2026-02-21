@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -18,7 +18,6 @@ namespace Cake\Datasource;
 
 use Closure;
 use Psr\SimpleCache\CacheInterface;
-
 /**
  * Describes the methods that any class representing a data storage should
  * comply with.
@@ -32,14 +31,12 @@ interface RepositoryInterface
      * @return $this
      */
     public function setAlias(string $alias);
-
     /**
      * Returns the repository alias.
      *
      * @return string
      */
     public function getAlias(): string;
-
     /**
      * Alias a field with the repository's current alias.
      *
@@ -49,7 +46,6 @@ interface RepositoryInterface
      * @return string The field prefixed with the repository alias.
      */
     public function aliasField(string $field): string;
-
     /**
      * Sets the table registry key used to create this table instance.
      *
@@ -57,14 +53,12 @@ interface RepositoryInterface
      * @return $this
      */
     public function setRegistryAlias(string $registryAlias);
-
     /**
      * Returns the table registry key used to create this table instance.
      *
      * @return string
      */
     public function getRegistryAlias(): string;
-
     /**
      * Test to see if a Repository has a specific field/column.
      *
@@ -72,7 +66,6 @@ interface RepositoryInterface
      * @return bool True if the field exists, false if it does not.
      */
     public function hasField(string $field): bool;
-
     /**
      * Creates a new Query for this repository and applies some defaults based on the
      * type of search that was selected.
@@ -81,8 +74,7 @@ interface RepositoryInterface
      * @param mixed ...$args Arguments that match up to finder-specific parameters
      * @return \Cake\Datasource\QueryInterface
      */
-    public function find(string $type = 'all', mixed ...$args): QueryInterface;
-
+    public function find(string $type = 'all', mixed ...$args): \Cake\Datasource\QueryInterface;
     /**
      * Returns a single record after finding it by its primary key, if no record is
      * found this method throws an exception.
@@ -107,21 +99,13 @@ interface RepositoryInterface
      * @return \Cake\Datasource\EntityInterface
      * @see \Cake\Datasource\RepositoryInterface::find()
      */
-    public function get(
-        mixed $primaryKey,
-        array|string $finder = 'all',
-        CacheInterface|string|null $cache = null,
-        Closure|string|null $cacheKey = null,
-        mixed ...$args,
-    ): EntityInterface;
-
+    public function get(mixed $primaryKey, array|string $finder = 'all', CacheInterface|string|null $cache = null, Closure|string|null $cacheKey = null, mixed ...$args): \Cake\Datasource\EntityInterface;
     /**
      * Creates a new Query instance for this repository
      *
      * @return \Cake\Datasource\QueryInterface
      */
-    public function query(): QueryInterface;
-
+    public function query(): \Cake\Datasource\QueryInterface;
     /**
      * Update all matching records.
      *
@@ -135,7 +119,6 @@ interface RepositoryInterface
      * @return int Count Returns the affected rows.
      */
     public function updateAll(Closure|array|string $fields, Closure|array|string|null $conditions): int;
-
     /**
      * Deletes all records matching the provided conditions.
      *
@@ -152,7 +135,6 @@ interface RepositoryInterface
      * @see \Cake\Datasource\RepositoryInterface::delete()
      */
     public function deleteAll(Closure|array|string|null $conditions): int;
-
     /**
      * Returns true if there is any record in this repository matching the specified
      * conditions.
@@ -161,7 +143,6 @@ interface RepositoryInterface
      * @return bool
      */
     public function exists(Closure|array|string|null $conditions): bool;
-
     /**
      * Persists an entity based on the fields that are marked as dirty and
      * returns the same entity after a successful save or false in case
@@ -171,8 +152,7 @@ interface RepositoryInterface
      * @param array<string, mixed> $options The options to use when saving.
      * @return \Cake\Datasource\EntityInterface|false
      */
-    public function save(EntityInterface $entity, array $options = []): EntityInterface|false;
-
+    public function save(\Cake\Datasource\EntityInterface $entity, array $options = []): \Cake\Datasource\EntityInterface|false;
     /**
      * Delete a single entity.
      *
@@ -183,8 +163,7 @@ interface RepositoryInterface
      * @param array<string, mixed> $options The options for the delete.
      * @return bool success
      */
-    public function delete(EntityInterface $entity, array $options = []): bool;
-
+    public function delete(\Cake\Datasource\EntityInterface $entity, array $options = []): bool;
     /**
      * This creates a new entity object.
      *
@@ -194,8 +173,7 @@ interface RepositoryInterface
      *
      * @return \Cake\Datasource\EntityInterface
      */
-    public function newEmptyEntity(): EntityInterface;
-
+    public function newEmptyEntity(): \Cake\Datasource\EntityInterface;
     /**
      * Create a new entity + associated entities from an array.
      *
@@ -214,8 +192,7 @@ interface RepositoryInterface
      * @param array<string, mixed> $options A list of options for the object hydration.
      * @return \Cake\Datasource\EntityInterface
      */
-    public function newEntity(array $data, array $options = []): EntityInterface;
-
+    public function newEntity(array $data, array $options = []): \Cake\Datasource\EntityInterface;
     /**
      * Create a list of entities + associated entities from an array.
      *
@@ -233,7 +210,6 @@ interface RepositoryInterface
      * @return array<\Cake\Datasource\EntityInterface> An array of hydrated records.
      */
     public function newEntities(array $data, array $options = []): array;
-
     /**
      * Merges the passed `$data` into `$entity` respecting the accessible
      * fields configured on the entity. Returns the same entity after being
@@ -251,8 +227,7 @@ interface RepositoryInterface
      * @param array<string, mixed> $options A list of options for the object hydration.
      * @return \Cake\Datasource\EntityInterface
      */
-    public function patchEntity(EntityInterface $entity, array $data, array $options = []): EntityInterface;
-
+    public function patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = []): \Cake\Datasource\EntityInterface;
     /**
      * Merges each of the elements passed in `$data` into the entities
      * found in `$entities` respecting the accessible fields configured on the entities.

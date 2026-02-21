@@ -1,19 +1,18 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\web;
 
-use Yii;
+use Odigos\Yii;
 use yii\base\Component;
 use yii\base\InvalidArgumentException;
 use yii\base\InvalidConfigException;
 use yii\helpers\FileHelper;
 use yii\helpers\Url;
-
 /**
  * AssetManager manages asset bundle configuration and loading.
  *
@@ -139,7 +138,7 @@ class AssetManager extends Component
      * Options FollowSymLinks
      * ```
      */
-    public $linkAssets = false;
+    public $linkAssets = \false;
     /**
      * @var int|null the permission to be set for newly published asset files.
      * This value will be used by PHP chmod() function. No umask will be applied.
@@ -178,7 +177,7 @@ class AssetManager extends Component
      * directory is always up-to-date. Do not set this to true on production servers as it will
      * significantly degrade the performance.
      */
-    public $forceCopy = false;
+    public $forceCopy = \false;
     /**
      * @var bool whether to append a timestamp to the URL of every published asset. When this is true,
      * the URL of a published asset may look like `/path/to/asset?v=timestamp`, where `timestamp` is the
@@ -187,7 +186,7 @@ class AssetManager extends Component
      * because it allows you to bust caching when the assets are updated.
      * @since 2.0.3
      */
-    public $appendTimestamp = false;
+    public $appendTimestamp = \false;
     /**
      * @var callable|null a callback that will be called to produce hash for asset directory generation.
      * The signature of the callback should be as follows:
@@ -215,13 +214,10 @@ class AssetManager extends Component
      * @since 2.0.6
      */
     public $hashCallback;
-
     /**
      * @var array
      */
     private $_dummyBundles = [];
-
-
     /**
      * Initializes the component.
      * @throws InvalidConfigException if [[basePath]] does not exist.
@@ -230,16 +226,13 @@ class AssetManager extends Component
     {
         parent::init();
         $this->basePath = Yii::getAlias($this->basePath);
-
         $this->basePath = realpath($this->basePath);
         $this->baseUrl = rtrim(Yii::getAlias($this->baseUrl), '/');
     }
-
     /**
      * @var bool|null
      */
     private $_isBasePathPermissionChecked;
-
     /**
      * Check whether the basePath exists and is writeable.
      *
@@ -251,18 +244,14 @@ class AssetManager extends Component
         if ($this->_isBasePathPermissionChecked) {
             return;
         }
-
         if (!is_dir($this->basePath)) {
             throw new InvalidConfigException("The directory does not exist: {$this->basePath}");
         }
-
         if (!is_writable($this->basePath)) {
             throw new InvalidConfigException("The directory is not writable by the Web process: {$this->basePath}");
         }
-
-        $this->_isBasePathPermissionChecked = true;
+        $this->_isBasePathPermissionChecked = \true;
     }
-
     /**
      * Returns the named asset bundle.
      *
@@ -275,23 +264,21 @@ class AssetManager extends Component
      * @return AssetBundle the asset bundle instance
      * @throws InvalidConfigException if $name does not refer to a valid asset bundle
      */
-    public function getBundle($name, $publish = true)
+    public function getBundle($name, $publish = \true)
     {
-        if ($this->bundles === false) {
+        if ($this->bundles === \false) {
             return $this->loadDummyBundle($name);
         } elseif (!isset($this->bundles[$name])) {
             return $this->bundles[$name] = $this->loadBundle($name, [], $publish);
-        } elseif ($this->bundles[$name] instanceof AssetBundle) {
+        } elseif ($this->bundles[$name] instanceof \yii\web\AssetBundle) {
             return $this->bundles[$name];
         } elseif (is_array($this->bundles[$name])) {
             return $this->bundles[$name] = $this->loadBundle($name, $this->bundles[$name], $publish);
-        } elseif ($this->bundles[$name] === false) {
+        } elseif ($this->bundles[$name] === \false) {
             return $this->loadDummyBundle($name);
         }
-
-        throw new InvalidConfigException("Invalid asset bundle configuration: $name");
+        throw new InvalidConfigException("Invalid asset bundle configuration: {$name}");
     }
-
     /**
      * Loads asset bundle class by name.
      *
@@ -301,7 +288,7 @@ class AssetManager extends Component
      * @return AssetBundle
      * @throws InvalidConfigException if configuration isn't valid
      */
-    protected function loadBundle($name, $config = [], $publish = true)
+    protected function loadBundle($name, $config = [], $publish = \true)
     {
         if (!isset($config['class'])) {
             $config['class'] = $name;
@@ -311,10 +298,8 @@ class AssetManager extends Component
         if ($publish) {
             $bundle->publish($this);
         }
-
         return $bundle;
     }
-
     /**
      * Loads dummy bundle by name.
      *
@@ -328,13 +313,10 @@ class AssetManager extends Component
             $bundle->sourcePath = null;
             $bundle->js = [];
             $bundle->css = [];
-
             $this->_dummyBundles[$name] = $bundle;
         }
-
         return $this->_dummyBundles[$name];
     }
-
     /**
      * Returns the actual URL for the specified asset.
      * The actual URL is obtained by prepending either [[AssetBundle::$baseUrl]] or [[AssetManager::$baseUrl]] to the given asset path.
@@ -347,19 +329,15 @@ class AssetManager extends Component
     {
         $assetUrl = $this->getActualAssetUrl($bundle, $asset);
         $assetPath = $this->getAssetPath($bundle, $asset);
-
         $withTimestamp = $this->appendTimestamp;
         if ($appendTimestamp !== null) {
             $withTimestamp = $appendTimestamp;
         }
-
         if ($withTimestamp && $assetPath && ($timestamp = @filemtime($assetPath)) > 0) {
-            return "$assetUrl?v=$timestamp";
+            return "{$assetUrl}?v={$timestamp}";
         }
-
         return $assetUrl;
     }
-
     /**
      * Returns the actual file path for the specified asset.
      * @param AssetBundle $bundle the asset bundle which the asset file belongs to
@@ -368,13 +346,11 @@ class AssetManager extends Component
      */
     public function getAssetPath($bundle, $asset)
     {
-        if (($actualAsset = $this->resolveAsset($bundle, $asset)) !== false) {
-            return Url::isRelative($actualAsset) ? $this->basePath . '/' . $actualAsset : false;
+        if (($actualAsset = $this->resolveAsset($bundle, $asset)) !== \false) {
+            return Url::isRelative($actualAsset) ? $this->basePath . '/' . $actualAsset : \false;
         }
-
-        return Url::isRelative($asset) ? $bundle->basePath . '/' . $asset : false;
+        return Url::isRelative($asset) ? $bundle->basePath . '/' . $asset : \false;
     }
-
     /**
      * @param AssetBundle $bundle
      * @param string $asset
@@ -388,7 +364,6 @@ class AssetManager extends Component
         if ($bundle->sourcePath !== null && Url::isRelative($asset)) {
             $asset = $bundle->sourcePath . '/' . $asset;
         }
-
         $n = mb_strlen($asset, Yii::$app->charset);
         foreach ($this->assetMap as $from => $to) {
             $n2 = mb_strlen($from, Yii::$app->charset);
@@ -396,15 +371,12 @@ class AssetManager extends Component
                 return $to;
             }
         }
-
-        return false;
+        return \false;
     }
-
     /**
      * @var AssetConverterInterface
      */
     private $_converter;
-
     /**
      * Returns the asset converter.
      * @return AssetConverterInterface the asset converter.
@@ -412,17 +384,15 @@ class AssetManager extends Component
     public function getConverter()
     {
         if ($this->_converter === null) {
-            $this->_converter = Yii::createObject(AssetConverter::className());
+            $this->_converter = Yii::createObject(\yii\web\AssetConverter::className());
         } elseif (is_array($this->_converter) || is_string($this->_converter)) {
             if (is_array($this->_converter) && !isset($this->_converter['class'])) {
-                $this->_converter['class'] = AssetConverter::className();
+                $this->_converter['class'] = \yii\web\AssetConverter::className();
             }
             $this->_converter = Yii::createObject($this->_converter);
         }
-
         return $this->_converter;
     }
-
     /**
      * Sets the asset converter.
      * @param array|AssetConverterInterface $value the asset converter. This can be either
@@ -433,12 +403,10 @@ class AssetManager extends Component
     {
         $this->_converter = $value;
     }
-
     /**
      * @var array published assets
      */
     private $_published = [];
-
     /**
      * Publishes a file or a directory.
      *
@@ -488,26 +456,20 @@ class AssetManager extends Component
     public function publish($path, $options = [])
     {
         $path = Yii::getAlias($path);
-
         if (isset($this->_published[$path])) {
             return $this->_published[$path];
         }
-
-        if (!is_string($path) || ($src = realpath($path)) === false) {
-            throw new InvalidArgumentException("The file or directory to be published does not exist: $path");
+        if (!is_string($path) || ($src = realpath($path)) === \false) {
+            throw new InvalidArgumentException("The file or directory to be published does not exist: {$path}");
         }
-
         if (!is_readable($path)) {
-            throw new InvalidArgumentException("The file or directory to be published is not readable: $path");
+            throw new InvalidArgumentException("The file or directory to be published is not readable: {$path}");
         }
-
         if (is_file($src)) {
             return $this->_published[$path] = $this->publishFile($src);
         }
-
         return $this->_published[$path] = $this->publishDirectory($src, $options);
     }
-
     /**
      * Publishes a file.
      * @param string $src the asset file to be published
@@ -517,19 +479,17 @@ class AssetManager extends Component
     protected function publishFile($src)
     {
         $this->checkBasePathPermission();
-
         $dir = $this->hash($src);
         $fileName = basename($src);
-        $dstDir = $this->basePath . DIRECTORY_SEPARATOR . $dir;
-        $dstFile = $dstDir . DIRECTORY_SEPARATOR . $fileName;
-
+        $dstDir = $this->basePath . \DIRECTORY_SEPARATOR . $dir;
+        $dstFile = $dstDir . \DIRECTORY_SEPARATOR . $fileName;
         if (!is_dir($dstDir)) {
-            FileHelper::createDirectory($dstDir, $this->dirMode, true);
+            FileHelper::createDirectory($dstDir, $this->dirMode, \true);
         }
-
         if ($this->linkAssets) {
             if (!is_file($dstFile)) {
-                try { // fix #6226 symlinking multi threaded
+                try {
+                    // fix #6226 symlinking multi threaded
                     symlink($src, $dstFile);
                 } catch (\Exception $e) {
                     if (!is_file($dstFile)) {
@@ -543,14 +503,11 @@ class AssetManager extends Component
                 @chmod($dstFile, $this->fileMode);
             }
         }
-
         if ($this->appendTimestamp && ($timestamp = @filemtime($dstFile)) > 0) {
-            $fileName = $fileName . "?v=$timestamp";
+            $fileName = $fileName . "?v={$timestamp}";
         }
-
-        return [$dstFile, $this->baseUrl . "/$dir/$fileName"];
+        return [$dstFile, $this->baseUrl . "/{$dir}/{$fileName}"];
     }
-
     /**
      * Publishes a directory.
      * @param string $src the asset directory to be published
@@ -574,13 +531,13 @@ class AssetManager extends Component
     protected function publishDirectory($src, $options)
     {
         $this->checkBasePathPermission();
-
         $dir = $this->hash($src);
-        $dstDir = $this->basePath . DIRECTORY_SEPARATOR . $dir;
+        $dstDir = $this->basePath . \DIRECTORY_SEPARATOR . $dir;
         if ($this->linkAssets) {
             if (!is_dir($dstDir)) {
-                FileHelper::createDirectory(dirname($dstDir), $this->dirMode, true);
-                try { // fix #6226 symlinking multi threaded
+                FileHelper::createDirectory(dirname($dstDir), $this->dirMode, \true);
+                try {
+                    // fix #6226 symlinking multi threaded
                     symlink($src, $dstDir);
                 } catch (\Exception $e) {
                     if (!is_dir($dstDir)) {
@@ -588,15 +545,8 @@ class AssetManager extends Component
                     }
                 }
             }
-        } elseif (!empty($options['forceCopy']) || ($this->forceCopy && !isset($options['forceCopy'])) || !is_dir($dstDir)) {
-            $opts = array_merge(
-                $options,
-                [
-                    'dirMode' => $this->dirMode,
-                    'fileMode' => $this->fileMode,
-                    'copyEmptyDirectories' => false,
-                ]
-            );
+        } elseif (!empty($options['forceCopy']) || $this->forceCopy && !isset($options['forceCopy']) || !is_dir($dstDir)) {
+            $opts = array_merge($options, ['dirMode' => $this->dirMode, 'fileMode' => $this->fileMode, 'copyEmptyDirectories' => \false]);
             if (!isset($opts['beforeCopy'])) {
                 if ($this->beforeCopy !== null) {
                     $opts['beforeCopy'] = $this->beforeCopy;
@@ -611,10 +561,8 @@ class AssetManager extends Component
             }
             FileHelper::copyDirectory($src, $dstDir, $opts);
         }
-
         return [$dstDir, $this->baseUrl . '/' . $dir];
     }
-
     /**
      * Returns the published path of a file path.
      * This method does not perform any publishing. It merely tells you
@@ -625,17 +573,14 @@ class AssetManager extends Component
     public function getPublishedPath($path)
     {
         $path = Yii::getAlias($path);
-
         if (isset($this->_published[$path])) {
             return $this->_published[$path][0];
         }
-        if (is_string($path) && ($path = realpath($path)) !== false) {
-            return $this->basePath . DIRECTORY_SEPARATOR . $this->hash($path) . (is_file($path) ? DIRECTORY_SEPARATOR . basename($path) : '');
+        if (is_string($path) && ($path = realpath($path)) !== \false) {
+            return $this->basePath . \DIRECTORY_SEPARATOR . $this->hash($path) . (is_file($path) ? \DIRECTORY_SEPARATOR . basename($path) : '');
         }
-
-        return false;
+        return \false;
     }
-
     /**
      * Returns the URL of a published file path.
      * This method does not perform any publishing. It merely tells you
@@ -646,17 +591,14 @@ class AssetManager extends Component
     public function getPublishedUrl($path)
     {
         $path = Yii::getAlias($path);
-
         if (isset($this->_published[$path])) {
             return $this->_published[$path][1];
         }
-        if (is_string($path) && ($path = realpath($path)) !== false) {
+        if (is_string($path) && ($path = realpath($path)) !== \false) {
             return $this->baseUrl . '/' . $this->hash($path) . (is_file($path) ? '/' . basename($path) : '');
         }
-
-        return false;
+        return \false;
     }
-
     /**
      * Generate a CRC32 hash for the directory path. Collisions are higher
      * than MD5 but generates a much smaller hash string.
@@ -671,7 +613,6 @@ class AssetManager extends Component
         $path = (is_file($path) ? dirname($path) : $path) . filemtime($path);
         return sprintf('%x', crc32($path . Yii::getVersion() . '|' . $this->linkAssets));
     }
-
     /**
      * Returns the actual URL for the specified asset. Without parameters.
      * The actual URL is obtained by prepending either [[AssetBundle::$baseUrl]] or [[AssetManager::$baseUrl]] to the given asset path.
@@ -682,7 +623,7 @@ class AssetManager extends Component
      */
     public function getActualAssetUrl($bundle, $asset)
     {
-        if (($actualAsset = $this->resolveAsset($bundle, $asset)) !== false) {
+        if (($actualAsset = $this->resolveAsset($bundle, $asset)) !== \false) {
             if (strncmp($actualAsset, '@web/', 5) === 0) {
                 $asset = substr($actualAsset, 5);
                 $baseUrl = Yii::getAlias('@web');
@@ -693,11 +634,9 @@ class AssetManager extends Component
         } else {
             $baseUrl = $bundle->baseUrl;
         }
-
         if (!Url::isRelative($asset) || strncmp($asset, '/', 1) === 0) {
             return $asset;
         }
-
-        return "$baseUrl/$asset";
+        return "{$baseUrl}/{$asset}";
     }
 }

@@ -10,14 +10,12 @@ class UpdatedBatchJobCounts
      * @var int
      */
     public $pendingJobs;
-
     /**
      * The number of failed jobs that belong to the batch.
      *
      * @var int
      */
     public $failedJobs;
-
     /**
      * Create a new batch job counts object.
      *
@@ -29,7 +27,6 @@ class UpdatedBatchJobCounts
         $this->pendingJobs = $pendingJobs;
         $this->failedJobs = $failedJobs;
     }
-
     /**
      * Determine if all jobs have run exactly once.
      *
@@ -37,6 +34,6 @@ class UpdatedBatchJobCounts
      */
     public function allJobsHaveRanExactlyOnce()
     {
-        return ($this->pendingJobs - $this->failedJobs) === 0;
+        return $this->pendingJobs - $this->failedJobs === 0;
     }
 }

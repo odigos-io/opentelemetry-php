@@ -1,12 +1,10 @@
 <?php
 
-declare(strict_types=1);
-
-namespace League\Container\ServiceProvider;
+declare (strict_types=1);
+namespace Odigos\League\Container\ServiceProvider;
 
 use IteratorAggregate;
-use League\Container\ContainerAwareInterface;
-
+use Odigos\League\Container\ContainerAwareInterface;
 interface ServiceProviderAggregateInterface extends ContainerAwareInterface, IteratorAggregate
 {
     public function add(ServiceProviderInterface $provider): ServiceProviderAggregateInterface;

@@ -1,10 +1,10 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\db\mysql;
 
 use yii\db\ExpressionBuilderInterface;
@@ -13,7 +13,6 @@ use yii\db\ExpressionInterface;
 use yii\db\JsonExpression;
 use yii\db\Query;
 use yii\helpers\Json;
-
 /**
  * Class JsonExpressionBuilder builds [[JsonExpression]] for MySQL DBMS.
  *
@@ -23,8 +22,6 @@ use yii\helpers\Json;
 class JsonExpressionBuilder implements ExpressionBuilderInterface
 {
     use ExpressionBuilderTrait;
-
-
     public const PARAM_PREFIX = ':qp';
     /**
      * {@inheritdoc}
@@ -33,15 +30,12 @@ class JsonExpressionBuilder implements ExpressionBuilderInterface
     public function build(ExpressionInterface $expression, array &$params = [])
     {
         $value = $expression->getValue();
-
         if ($value instanceof Query) {
-            list ($sql, $params) = $this->queryBuilder->build($value, $params);
-            return "($sql)";
+            list($sql, $params) = $this->queryBuilder->build($value, $params);
+            return "({$sql})";
         }
-
         $placeholder = static::PARAM_PREFIX . count($params);
         $params[$placeholder] = Json::encode($value);
-
         return $placeholder;
     }
 }

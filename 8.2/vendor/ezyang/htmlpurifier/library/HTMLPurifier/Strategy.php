@@ -1,5 +1,7 @@
 <?php
 
+namespace Odigos;
+
 /**
  * Supertype for classes that define a strategy for modifying/purifying tokens.
  *
@@ -7,11 +9,8 @@
  * strategies provide plug points for extra configuration or even extra
  * features, such as custom tags, custom parsing of text, etc.
  */
-
-
 abstract class HTMLPurifier_Strategy
 {
-
     /**
      * Executes the strategy on the tokens.
      *
@@ -22,5 +21,12 @@ abstract class HTMLPurifier_Strategy
      */
     abstract public function execute($tokens, $config, $context);
 }
-
+/**
+ * Supertype for classes that define a strategy for modifying/purifying tokens.
+ *
+ * While HTMLPurifier's core purpose is fixing HTML into something proper,
+ * strategies provide plug points for extra configuration or even extra
+ * features, such as custom tags, custom parsing of text, etc.
+ */
+\class_alias('Odigos\HTMLPurifier_Strategy', 'HTMLPurifier_Strategy', \false);
 // vim: et sw=4 sts=4

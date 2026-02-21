@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -29,8 +29,7 @@ interface TypeInterface
      * @param \Cake\Database\Driver $driver Object from which database preferences and configuration will be extracted.
      * @return mixed Given PHP type casted to one acceptable by a database.
      */
-    public function toDatabase(mixed $value, Driver $driver): mixed;
-
+    public function toDatabase(mixed $value, \Cake\Database\Driver $driver): mixed;
     /**
      * Casts given value from a database type to a PHP equivalent.
      *
@@ -38,8 +37,7 @@ interface TypeInterface
      * @param \Cake\Database\Driver $driver Object from which database preferences and configuration will be extracted
      * @return mixed Given value casted from a database to a PHP equivalent.
      */
-    public function toPHP(mixed $value, Driver $driver): mixed;
-
+    public function toPHP(mixed $value, \Cake\Database\Driver $driver): mixed;
     /**
      * Get the binding type to use in a PDO statement.
      *
@@ -47,8 +45,7 @@ interface TypeInterface
      * @param \Cake\Database\Driver $driver Object from which database preferences and configuration will be extracted.
      * @return int One of PDO::PARAM_* constants.
      */
-    public function toStatement(mixed $value, Driver $driver): int;
-
+    public function toStatement(mixed $value, \Cake\Database\Driver $driver): int;
     /**
      * Marshals flat data into PHP objects.
      *
@@ -59,7 +56,6 @@ interface TypeInterface
      * @return mixed Converted value.
      */
     public function marshal(mixed $value): mixed;
-
     /**
      * Returns the base type name that this class is inheriting.
      *
@@ -70,14 +66,12 @@ interface TypeInterface
      * @return string|null The base type name that this class is inheriting.
      */
     public function getBaseType(): ?string;
-
     /**
      * Returns type identifier name for this object.
      *
      * @return string|null The type identifier name for this object.
      */
     public function getName(): ?string;
-
     /**
      * Generate a new primary key value for a given type.
      *

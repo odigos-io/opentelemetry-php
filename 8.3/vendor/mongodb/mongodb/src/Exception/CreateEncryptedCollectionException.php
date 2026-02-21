@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright 2023-present MongoDB, Inc.
  *
@@ -14,24 +15,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 namespace MongoDB\Exception;
 
 use Throwable;
-
 use function sprintf;
-
 /**
  * @internal
  * @see \MongoDB\Database::createEncryptedCollection()
  */
-final class CreateEncryptedCollectionException extends RuntimeException
+final class CreateEncryptedCollectionException extends \MongoDB\Exception\RuntimeException
 {
     public function __construct(Throwable $previous, private array $encryptedFields)
     {
         parent::__construct(sprintf('Creating encrypted collection failed due to previous %s: %s', $previous::class, $previous->getMessage()), 0, $previous);
     }
-
     /**
      * Returns the encryptedFields option in its last known state before the
      * operation was interrupted.

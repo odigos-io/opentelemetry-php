@@ -3,7 +3,6 @@
 namespace Illuminate\Encryption;
 
 use RuntimeException;
-
 class MissingAppKeyException extends RuntimeException
 {
     /**

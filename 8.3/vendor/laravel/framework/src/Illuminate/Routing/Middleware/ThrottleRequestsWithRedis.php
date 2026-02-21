@@ -6,8 +6,7 @@ use Closure;
 use Illuminate\Cache\RateLimiter;
 use Illuminate\Contracts\Redis\Factory as Redis;
 use Illuminate\Redis\Limiters\DurationLimiter;
-
-class ThrottleRequestsWithRedis extends ThrottleRequests
+class ThrottleRequestsWithRedis extends \Illuminate\Routing\Middleware\ThrottleRequests
 {
     /**
      * The Redis factory implementation.
@@ -15,21 +14,18 @@ class ThrottleRequestsWithRedis extends ThrottleRequests
      * @var \Illuminate\Contracts\Redis\Factory
      */
     protected $redis;
-
     /**
      * The timestamp of the end of the current duration by key.
      *
      * @var array
      */
     public $decaysAt = [];
-
     /**
      * The number of remaining slots by key.
      *
      * @var array
      */
     public $remaining = [];
-
     /**
      * Create a new request throttler.
      *
@@ -39,10 +35,8 @@ class ThrottleRequestsWithRedis extends ThrottleRequests
     public function __construct(RateLimiter $limiter, Redis $redis)
     {
         parent::__construct($limiter);
-
         $this->redis = $redis;
     }
-
     /**
      * Handle an incoming request.
      *
@@ -60,20 +54,12 @@ class ThrottleRequestsWithRedis extends ThrottleRequests
                 throw $this->buildException($request, $limit->key, $limit->maxAttempts, $limit->responseCallback);
             }
         }
-
         $response = $next($request);
-
         foreach ($limits as $limit) {
-            $response = $this->addHeaders(
-                $response,
-                $limit->maxAttempts,
-                $this->calculateRemainingAttempts($limit->key, $limit->maxAttempts)
-            );
+            $response = $this->addHeaders($response, $limit->maxAttempts, $this->calculateRemainingAttempts($limit->key, $limit->maxAttempts));
         }
-
         return $response;
     }
-
     /**
      * Determine if the given key has been "accessed" too many times.
      *
@@ -84,17 +70,11 @@ class ThrottleRequestsWithRedis extends ThrottleRequests
      */
     protected function tooManyAttempts($key, $maxAttempts, $decaySeconds)
     {
-        $limiter = new DurationLimiter(
-            $this->getRedisConnection(), $key, $maxAttempts, $decaySeconds
-        );
-
-        return tap(! $limiter->acquire(), function () use ($key, $limiter) {
-            [$this->decaysAt[$key], $this->remaining[$key]] = [
-                $limiter->decaysAt, $limiter->remaining,
-            ];
+        $limiter = new DurationLimiter($this->getRedisConnection(), $key, $maxAttempts, $decaySeconds);
+        return tap(!$limiter->acquire(), function () use ($key, $limiter) {
+            [$this->decaysAt[$key], $this->remaining[$key]] = [$limiter->decaysAt, $limiter->remaining];
         });
     }
-
     /**
      * Calculate the number of remaining attempts.
      *
@@ -107,7 +87,6 @@ class ThrottleRequestsWithRedis extends ThrottleRequests
     {
         return is_null($retryAfter) ? $this->remaining[$key] : 0;
     }
-
     /**
      * Get the number of seconds until the lock is released.
      *
@@ -118,7 +97,6 @@ class ThrottleRequestsWithRedis extends ThrottleRequests
     {
         return $this->decaysAt[$key] - $this->currentTime();
     }
-
     /**
      * Get the Redis connection that should be used for throttling.
      *

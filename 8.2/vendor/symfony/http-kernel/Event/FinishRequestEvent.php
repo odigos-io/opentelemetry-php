@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\HttpKernel\Event;
 
 /**
@@ -16,6 +15,6 @@ namespace Symfony\Component\HttpKernel\Event;
  *
  * @author Benjamin Eberlei <kontakt@beberlei.de>
  */
-final class FinishRequestEvent extends KernelEvent
+final class FinishRequestEvent extends \Symfony\Component\HttpKernel\Event\KernelEvent
 {
 }

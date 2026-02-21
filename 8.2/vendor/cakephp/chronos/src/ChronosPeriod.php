@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
  *
@@ -11,12 +11,10 @@ declare(strict_types=1);
  * @link          https://cakephp.org CakePHP(tm) Project
  * @license       https://www.opensource.org/licenses/mit-license.php MIT License
  */
-
 namespace Cake\Chronos;
 
 use DatePeriod;
 use Iterator;
-
 /**
  * DatePeriod wrapper that returns Chronos instances.
  *
@@ -30,7 +28,6 @@ class ChronosPeriod implements Iterator
      * @var \Iterator<int, \DateTimeInterface>
      */
     protected Iterator $iterator;
-
     /**
      * @param \DatePeriod $period
      */
@@ -40,15 +37,13 @@ class ChronosPeriod implements Iterator
         $iterator = $period->getIterator();
         $this->iterator = $iterator;
     }
-
     /**
      * @return \Cake\Chronos\Chronos
      */
-    public function current(): Chronos
+    public function current(): \Cake\Chronos\Chronos
     {
-        return new Chronos($this->iterator->current());
+        return new \Cake\Chronos\Chronos($this->iterator->current());
     }
-
     /**
      * @return int
      */
@@ -56,7 +51,6 @@ class ChronosPeriod implements Iterator
     {
         return $this->iterator->key();
     }
-
     /**
      * @return void
      */
@@ -64,7 +58,6 @@ class ChronosPeriod implements Iterator
     {
         $this->iterator->next();
     }
-
     /**
      * @return void
      */
@@ -72,7 +65,6 @@ class ChronosPeriod implements Iterator
     {
         $this->iterator->rewind();
     }
-
     /**
      * @return bool
      */

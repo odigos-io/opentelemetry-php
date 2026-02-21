@@ -10,7 +10,6 @@ class ControllerMiddlewareOptions
      * @var array
      */
     protected $options;
-
     /**
      * Create a new middleware option instance.
      *
@@ -18,9 +17,8 @@ class ControllerMiddlewareOptions
      */
     public function __construct(array &$options)
     {
-        $this->options = &$options;
+        $this->options =& $options;
     }
-
     /**
      * Set the controller methods the middleware should apply to.
      *
@@ -30,10 +28,8 @@ class ControllerMiddlewareOptions
     public function only($methods)
     {
         $this->options['only'] = is_array($methods) ? $methods : func_get_args();
-
         return $this;
     }
-
     /**
      * Set the controller methods the middleware should exclude.
      *
@@ -43,7 +39,6 @@ class ControllerMiddlewareOptions
     public function except($methods)
     {
         $this->options['except'] = is_array($methods) ? $methods : func_get_args();
-
         return $this;
     }
 }

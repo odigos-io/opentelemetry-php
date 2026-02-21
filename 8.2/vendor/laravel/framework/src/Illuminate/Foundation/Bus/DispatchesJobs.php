@@ -14,7 +14,6 @@ trait DispatchesJobs
     {
         return dispatch($job);
     }
-
     /**
      * Dispatch a job to its appropriate handler in the current process.
      *

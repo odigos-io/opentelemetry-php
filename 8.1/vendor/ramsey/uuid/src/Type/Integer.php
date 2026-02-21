@@ -9,20 +9,16 @@
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
  */
+declare (strict_types=1);
+namespace Odigos\Ramsey\Uuid\Type;
 
-declare(strict_types=1);
-
-namespace Ramsey\Uuid\Type;
-
-use Ramsey\Uuid\Exception\InvalidArgumentException;
+use Odigos\Ramsey\Uuid\Exception\InvalidArgumentException;
 use ValueError;
-
 use function assert;
 use function is_numeric;
 use function preg_match;
 use function sprintf;
 use function substr;
-
 /**
  * A value object representing an integer
  *
@@ -40,22 +36,18 @@ final class Integer implements NumberInterface
      * @var numeric-string
      */
     private string $value;
-
     /**
      * @phpstan-ignore property.readOnlyByPhpDocDefaultValue
      */
-    private bool $isNegative = false;
-
-    public function __construct(self | float | int | string $value)
+    private bool $isNegative = \false;
+    public function __construct(self|float|int|string $value)
     {
         $this->value = $value instanceof self ? (string) $value : $this->prepareValue($value);
     }
-
     public function isNegative(): bool
     {
         return $this->isNegative;
     }
-
     /**
      * @return numeric-string
      *
@@ -65,7 +57,6 @@ final class Integer implements NumberInterface
     {
         return $this->value;
     }
-
     /**
      * @return numeric-string
      */
@@ -73,17 +64,14 @@ final class Integer implements NumberInterface
     {
         return $this->toString();
     }
-
     public function jsonSerialize(): string
     {
         return $this->toString();
     }
-
     public function serialize(): string
     {
         return $this->toString();
     }
-
     /**
      * @return array{string: string}
      */
@@ -91,7 +79,6 @@ final class Integer implements NumberInterface
     {
         return ['string' => $this->toString()];
     }
-
     /**
      * Constructs the object from a serialized string representation
      *
@@ -101,7 +88,6 @@ final class Integer implements NumberInterface
     {
         $this->__construct($data);
     }
-
     /**
      * @param array{string?: string} $data
      */
@@ -112,49 +98,36 @@ final class Integer implements NumberInterface
             throw new ValueError(sprintf('%s(): Argument #1 ($data) is invalid', __METHOD__));
         }
         // @codeCoverageIgnoreEnd
-
         $this->unserialize($data['string']);
     }
-
     /**
      * @return numeric-string
      */
-    private function prepareValue(float | int | string $value): string
+    private function prepareValue(float|int|string $value): string
     {
         $value = (string) $value;
         $sign = '+';
-
         // If the value contains a sign, remove it for the digit pattern check.
         if (str_starts_with($value, '-') || str_starts_with($value, '+')) {
             $sign = substr($value, 0, 1);
             $value = substr($value, 1);
         }
-
         if (!preg_match('/^\d+$/', $value)) {
-            throw new InvalidArgumentException(
-                'Value must be a signed integer or a string containing only '
-                . 'digits 0-9 and, optionally, a sign (+ or -)'
-            );
+            throw new InvalidArgumentException('Value must be a signed integer or a string containing only ' . 'digits 0-9 and, optionally, a sign (+ or -)');
         }
-
         // Trim any leading zeros.
         $value = ltrim($value, '0');
-
         // Set to zero if the string is empty after trimming zeros.
         if ($value === '') {
             $value = '0';
         }
-
         // Add the negative sign back to the value.
         if ($sign === '-' && $value !== '0') {
             $value = $sign . $value;
-
             /** @phpstan-ignore property.readOnlyByPhpDocAssignNotInConstructor */
-            $this->isNegative = true;
+            $this->isNegative = \true;
         }
-
         assert(is_numeric($value));
-
         return $value;
     }
 }

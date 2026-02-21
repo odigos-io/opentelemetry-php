@@ -10,8 +10,7 @@ use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Support\Collection;
 use IteratorAggregate;
 use JsonSerializable;
-
-class LengthAwarePaginator extends AbstractPaginator implements Arrayable, ArrayAccess, Countable, IteratorAggregate, Jsonable, JsonSerializable, LengthAwarePaginatorContract
+class LengthAwarePaginator extends \Illuminate\Pagination\AbstractPaginator implements Arrayable, ArrayAccess, Countable, IteratorAggregate, Jsonable, JsonSerializable, LengthAwarePaginatorContract
 {
     /**
      * The total number of items before slicing.
@@ -19,14 +18,12 @@ class LengthAwarePaginator extends AbstractPaginator implements Arrayable, Array
      * @var int
      */
     protected $total;
-
     /**
      * The last available page.
      *
      * @var int
      */
     protected $lastPage;
-
     /**
      * Create a new paginator instance.
      *
@@ -40,11 +37,9 @@ class LengthAwarePaginator extends AbstractPaginator implements Arrayable, Array
     public function __construct($items, $total, $perPage, $currentPage = null, array $options = [])
     {
         $this->options = $options;
-
         foreach ($options as $key => $value) {
             $this->{$key} = $value;
         }
-
         $this->total = $total;
         $this->perPage = (int) $perPage;
         $this->lastPage = max((int) ceil($total / $perPage), 1);
@@ -52,7 +47,6 @@ class LengthAwarePaginator extends AbstractPaginator implements Arrayable, Array
         $this->currentPage = $this->setCurrentPage($currentPage, $this->pageName);
         $this->items = $items instanceof Collection ? $items : Collection::make($items);
     }
-
     /**
      * Get the current page for the request.
      *
@@ -63,10 +57,8 @@ class LengthAwarePaginator extends AbstractPaginator implements Arrayable, Array
     protected function setCurrentPage($currentPage, $pageName)
     {
         $currentPage = $currentPage ?: static::resolveCurrentPage($pageName);
-
         return $this->isValidPageNumber($currentPage) ? (int) $currentPage : 1;
     }
-
     /**
      * Render the paginator using the given view.
      *
@@ -78,7 +70,6 @@ class LengthAwarePaginator extends AbstractPaginator implements Arrayable, Array
     {
         return $this->render($view, $data);
     }
-
     /**
      * Render the paginator using the given view.
      *
@@ -88,12 +79,8 @@ class LengthAwarePaginator extends AbstractPaginator implements Arrayable, Array
      */
     public function render($view = null, $data = [])
     {
-        return static::viewFactory()->make($view ?: static::$defaultView, array_merge($data, [
-            'paginator' => $this,
-            'elements' => $this->elements(),
-        ]));
+        return static::viewFactory()->make($view ?: static::$defaultView, array_merge($data, ['paginator' => $this, 'elements' => $this->elements()]));
     }
-
     /**
      * Get the paginator links as a collection (for JSON responses).
      *
@@ -102,28 +89,14 @@ class LengthAwarePaginator extends AbstractPaginator implements Arrayable, Array
     public function linkCollection()
     {
         return collect($this->elements())->flatMap(function ($item) {
-            if (! is_array($item)) {
-                return [['url' => null, 'label' => '...', 'active' => false]];
+            if (!is_array($item)) {
+                return [['url' => null, 'label' => '...', 'active' => \false]];
             }
-
             return collect($item)->map(function ($url, $page) {
-                return [
-                    'url' => $url,
-                    'label' => (string) $page,
-                    'active' => $this->currentPage() === $page,
-                ];
+                return ['url' => $url, 'label' => (string) $page, 'active' => $this->currentPage() === $page];
             });
-        })->prepend([
-            'url' => $this->previousPageUrl(),
-            'label' => function_exists('__') ? __('pagination.previous') : 'Previous',
-            'active' => false,
-        ])->push([
-            'url' => $this->nextPageUrl(),
-            'label' => function_exists('__') ? __('pagination.next') : 'Next',
-            'active' => false,
-        ]);
+        })->prepend(['url' => $this->previousPageUrl(), 'label' => function_exists('Odigos\__') ? __('pagination.previous') : 'Previous', 'active' => \false])->push(['url' => $this->nextPageUrl(), 'label' => function_exists('Odigos\__') ? __('pagination.next') : 'Next', 'active' => \false]);
     }
-
     /**
      * Get the array of elements to pass to the view.
      *
@@ -131,17 +104,9 @@ class LengthAwarePaginator extends AbstractPaginator implements Arrayable, Array
      */
     protected function elements()
     {
-        $window = UrlWindow::make($this);
-
-        return array_filter([
-            $window['first'],
-            is_array($window['slider']) ? '...' : null,
-            $window['slider'],
-            is_array($window['last']) ? '...' : null,
-            $window['last'],
-        ]);
+        $window = \Illuminate\Pagination\UrlWindow::make($this);
+        return array_filter([$window['first'], is_array($window['slider']) ? '...' : null, $window['slider'], is_array($window['last']) ? '...' : null, $window['last']]);
     }
-
     /**
      * Get the total number of items being paginated.
      *
@@ -151,7 +116,6 @@ class LengthAwarePaginator extends AbstractPaginator implements Arrayable, Array
     {
         return $this->total;
     }
-
     /**
      * Determine if there are more items in the data source.
      *
@@ -161,7 +125,6 @@ class LengthAwarePaginator extends AbstractPaginator implements Arrayable, Array
     {
         return $this->currentPage() < $this->lastPage();
     }
-
     /**
      * Get the URL for the next page.
      *
@@ -173,7 +136,6 @@ class LengthAwarePaginator extends AbstractPaginator implements Arrayable, Array
             return $this->url($this->currentPage() + 1);
         }
     }
-
     /**
      * Get the last page.
      *
@@ -183,7 +145,6 @@ class LengthAwarePaginator extends AbstractPaginator implements Arrayable, Array
     {
         return $this->lastPage;
     }
-
     /**
      * Get the instance as an array.
      *
@@ -191,23 +152,8 @@ class LengthAwarePaginator extends AbstractPaginator implements Arrayable, Array
      */
     public function toArray()
     {
-        return [
-            'current_page' => $this->currentPage(),
-            'data' => $this->items->toArray(),
-            'first_page_url' => $this->url(1),
-            'from' => $this->firstItem(),
-            'last_page' => $this->lastPage(),
-            'last_page_url' => $this->url($this->lastPage()),
-            'links' => $this->linkCollection()->toArray(),
-            'next_page_url' => $this->nextPageUrl(),
-            'path' => $this->path(),
-            'per_page' => $this->perPage(),
-            'prev_page_url' => $this->previousPageUrl(),
-            'to' => $this->lastItem(),
-            'total' => $this->total(),
-        ];
+        return ['current_page' => $this->currentPage(), 'data' => $this->items->toArray(), 'first_page_url' => $this->url(1), 'from' => $this->firstItem(), 'last_page' => $this->lastPage(), 'last_page_url' => $this->url($this->lastPage()), 'links' => $this->linkCollection()->toArray(), 'next_page_url' => $this->nextPageUrl(), 'path' => $this->path(), 'per_page' => $this->perPage(), 'prev_page_url' => $this->previousPageUrl(), 'to' => $this->lastItem(), 'total' => $this->total()];
     }
-
     /**
      * Convert the object into something JSON serializable.
      *
@@ -217,7 +163,6 @@ class LengthAwarePaginator extends AbstractPaginator implements Arrayable, Array
     {
         return $this->toArray();
     }
-
     /**
      * Convert the object to its JSON representation.
      *

@@ -9,10 +9,8 @@
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
  */
-
-declare(strict_types=1);
-
-namespace Ramsey\Uuid\Validator;
+declare (strict_types=1);
+namespace Odigos\Ramsey\Uuid\Validator;
 
 /**
  * A validator validates a string as a proper UUID
@@ -27,7 +25,6 @@ interface ValidatorInterface
      * @return non-empty-string The regular expression pattern this validator uses
      */
     public function getPattern(): string;
-
     /**
      * Returns true if the provided string represents a UUID
      *

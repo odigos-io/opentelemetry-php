@@ -10,14 +10,12 @@ class Address
      * @var string
      */
     public $address;
-
     /**
      * The recipient's name.
      *
      * @var string|null
      */
     public $name;
-
     /**
      * Create a new address instance.
      *

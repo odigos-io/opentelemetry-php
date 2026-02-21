@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -18,7 +18,6 @@ namespace Cake\Cache\Event;
 
 use Cake\Cache\CacheEngine;
 use Cake\Event\Event;
-
 /**
  * Class Cache BeforeDecrement Event
  *
@@ -27,11 +26,8 @@ use Cake\Event\Event;
 class CacheBeforeDecrementEvent extends Event
 {
     public const NAME = 'Cache.beforeDecrement';
-
     protected string $key;
-
     protected int $offset;
-
     /**
      * Constructor
      *
@@ -49,10 +45,8 @@ class CacheBeforeDecrementEvent extends Event
             $this->offset = $data['offset'];
             unset($data['offset']);
         }
-
         parent::__construct($name, $subject, $data);
     }
-
     /**
      * Get the cache key.
      *
@@ -62,7 +56,6 @@ class CacheBeforeDecrementEvent extends Event
     {
         return $this->key;
     }
-
     /**
      * Get the decrement offset.
      *

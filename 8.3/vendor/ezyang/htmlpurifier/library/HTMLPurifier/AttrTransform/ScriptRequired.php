@@ -1,5 +1,7 @@
 <?php
 
+namespace Odigos;
+
 /**
  * Implements required attribute stipulation for <script>
  */
@@ -19,5 +21,8 @@ class HTMLPurifier_AttrTransform_ScriptRequired extends HTMLPurifier_AttrTransfo
         return $attr;
     }
 }
-
+/**
+ * Implements required attribute stipulation for <script>
+ */
+\class_alias('Odigos\HTMLPurifier_AttrTransform_ScriptRequired', 'HTMLPurifier_AttrTransform_ScriptRequired', \false);
 // vim: et sw=4 sts=4

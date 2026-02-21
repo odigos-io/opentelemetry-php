@@ -1,14 +1,11 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Laminas\Diactoros;
+declare (strict_types=1);
+namespace Odigos\Laminas\Diactoros;
 
 use Psr\Http\Message\UploadedFileInterface;
-
 use function is_array;
 use function sprintf;
-
 /**
  * Normalize uploaded files
  *
@@ -30,37 +27,18 @@ function normalizeUploadedFiles(array $files): array
      * @param string[]|array[]|null $typeTree
      * @return UploadedFile[]|array[]
      */
-    $recursiveNormalize = static function (
-        array $tmpNameTree,
-        array $sizeTree,
-        array $errorTree,
-        ?array $nameTree = null,
-        ?array $typeTree = null
-    ) use (&$recursiveNormalize): array {
+    $recursiveNormalize = static function (array $tmpNameTree, array $sizeTree, array $errorTree, ?array $nameTree = null, ?array $typeTree = null) use (&$recursiveNormalize): array {
         $normalized = [];
         foreach ($tmpNameTree as $key => $value) {
             if (is_array($value)) {
                 // Traverse
-                $normalized[$key] = $recursiveNormalize(
-                    $tmpNameTree[$key],
-                    $sizeTree[$key],
-                    $errorTree[$key],
-                    $nameTree[$key] ?? null,
-                    $typeTree[$key] ?? null
-                );
+                $normalized[$key] = $recursiveNormalize($tmpNameTree[$key], $sizeTree[$key], $errorTree[$key], $nameTree[$key] ?? null, $typeTree[$key] ?? null);
                 continue;
             }
-            $normalized[$key] = createUploadedFile([
-                'tmp_name' => $tmpNameTree[$key],
-                'size'     => $sizeTree[$key],
-                'error'    => $errorTree[$key],
-                'name'     => $nameTree[$key] ?? null,
-                'type'     => $typeTree[$key] ?? null,
-            ]);
+            $normalized[$key] = createUploadedFile(['tmp_name' => $tmpNameTree[$key], 'size' => $sizeTree[$key], 'error' => $errorTree[$key], 'name' => $nameTree[$key] ?? null, 'type' => $typeTree[$key] ?? null]);
         }
         return $normalized;
     };
-
     /**
      * Normalize an array of file specifications.
      *
@@ -76,50 +54,29 @@ function normalizeUploadedFiles(array $files): array
      * @return UploadedFile[]
      */
     $normalizeUploadedFileSpecification = static function (array $files = []) use (&$recursiveNormalize): array {
-        if (
-            ! isset($files['tmp_name']) || ! is_array($files['tmp_name'])
-            || ! isset($files['size']) || ! is_array($files['size'])
-            || ! isset($files['error']) || ! is_array($files['error'])
-        ) {
-            throw new Exception\InvalidArgumentException(sprintf(
-                '$files provided to %s MUST contain each of the keys "tmp_name",'
-                . ' "size", and "error", with each represented as an array;'
-                . ' one or more were missing or non-array values',
-                __FUNCTION__
-            ));
+        if (!isset($files['tmp_name']) || !is_array($files['tmp_name']) || !isset($files['size']) || !is_array($files['size']) || !isset($files['error']) || !is_array($files['error'])) {
+            throw new Exception\InvalidArgumentException(sprintf('$files provided to %s MUST contain each of the keys "tmp_name",' . ' "size", and "error", with each represented as an array;' . ' one or more were missing or non-array values', __FUNCTION__));
         }
-
-        return $recursiveNormalize(
-            $files['tmp_name'],
-            $files['size'],
-            $files['error'],
-            $files['name'] ?? null,
-            $files['type'] ?? null
-        );
+        return $recursiveNormalize($files['tmp_name'], $files['size'], $files['error'], $files['name'] ?? null, $files['type'] ?? null);
     };
-
     $normalized = [];
     foreach ($files as $key => $value) {
         if ($value instanceof UploadedFileInterface) {
             $normalized[$key] = $value;
             continue;
         }
-
         if (is_array($value) && isset($value['tmp_name']) && is_array($value['tmp_name'])) {
             $normalized[$key] = $normalizeUploadedFileSpecification($value);
             continue;
         }
-
         if (is_array($value) && isset($value['tmp_name'])) {
             $normalized[$key] = createUploadedFile($value);
             continue;
         }
-
         if (is_array($value)) {
             $normalized[$key] = normalizeUploadedFiles($value);
             continue;
         }
-
         throw new Exception\InvalidArgumentException('Invalid value in files specification');
     }
     return $normalized;

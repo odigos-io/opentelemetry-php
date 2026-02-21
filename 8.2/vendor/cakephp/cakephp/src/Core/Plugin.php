@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -30,8 +30,7 @@ class Plugin
      *
      * @var \Cake\Core\PluginCollection|null
      */
-    protected static ?PluginCollection $plugins = null;
-
+    protected static ?\Cake\Core\PluginCollection $plugins = null;
     /**
      * Returns the filesystem path for a plugin
      *
@@ -43,10 +42,8 @@ class Plugin
     public static function path(string $name): string
     {
         $plugin = static::getCollection()->get($name);
-
         return $plugin->getPath();
     }
-
     /**
      * Returns the filesystem path for plugin's folder containing class files.
      *
@@ -57,10 +54,8 @@ class Plugin
     public static function classPath(string $name): string
     {
         $plugin = static::getCollection()->get($name);
-
         return $plugin->getClassPath();
     }
-
     /**
      * Returns the filesystem path for plugin's folder containing config files.
      *
@@ -71,10 +66,8 @@ class Plugin
     public static function configPath(string $name): string
     {
         $plugin = static::getCollection()->get($name);
-
         return $plugin->getConfigPath();
     }
-
     /**
      * Returns the filesystem path for plugin's folder containing template files.
      *
@@ -85,10 +78,8 @@ class Plugin
     public static function templatePath(string $name): string
     {
         $plugin = static::getCollection()->get($name);
-
         return $plugin->getTemplatePath();
     }
-
     /**
      * Returns true if the plugin $plugin is already loaded.
      *
@@ -100,7 +91,6 @@ class Plugin
     {
         return static::getCollection()->has($plugin);
     }
-
     /**
      * Return a list of loaded plugins.
      *
@@ -113,10 +103,8 @@ class Plugin
             $names[] = $plugin->getName();
         }
         sort($names);
-
         return $names;
     }
-
     /**
      * Get the shared plugin collection.
      *
@@ -125,18 +113,17 @@ class Plugin
      *
      * @return \Cake\Core\PluginCollection
      */
-    public static function getCollection(): PluginCollection
+    public static function getCollection(): \Cake\Core\PluginCollection
     {
-        return static::$plugins ??= new PluginCollection();
+        return static::$plugins ??= new \Cake\Core\PluginCollection();
     }
-
     /**
      * Set the shared plugin collection.
      *
      * @param \Cake\Core\PluginCollection $collection
      * @return void
      */
-    public static function setCollection(PluginCollection $collection): void
+    public static function setCollection(\Cake\Core\PluginCollection $collection): void
     {
         static::$plugins = $collection;
     }

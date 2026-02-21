@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the league/commonmark package.
  *
@@ -16,12 +15,10 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Odigos\League\CommonMark\Delimiter\Processor;
 
-namespace League\CommonMark\Delimiter\Processor;
-
-use League\CommonMark\Delimiter\DelimiterInterface;
-use League\CommonMark\Node\Inline\AbstractStringContainer;
-
+use Odigos\League\CommonMark\Delimiter\DelimiterInterface;
+use Odigos\League\CommonMark\Node\Inline\AbstractStringContainer;
 /**
  * Interface for a delimiter processor
  */
@@ -33,7 +30,6 @@ interface DelimiterProcessorInterface
      * This must not clash with any other processors being added to the environment.
      */
     public function getOpeningCharacter(): string;
-
     /**
      * Returns the character that marks the ending of a delimited node.
      *
@@ -42,14 +38,12 @@ interface DelimiterProcessorInterface
      * Note that for a symmetric delimiter such as "*", this is the same as the opening.
      */
     public function getClosingCharacter(): string;
-
     /**
      * Minimum number of delimiter characters that are needed to active this.
      *
      * Must be at least 1.
      */
     public function getMinLength(): int;
-
     /**
      * Determine how many (if any) of the delimiter characters should be used.
      *
@@ -65,7 +59,6 @@ interface DelimiterProcessorInterface
      * @param DelimiterInterface $closer The closing delimiter run
      */
     public function getDelimiterUse(DelimiterInterface $opener, DelimiterInterface $closer): int;
-
     /**
      * Process the matched delimiters, e.g. by wrapping the nodes between opener
      * and closer in a new node, or appending a new node after the opener.

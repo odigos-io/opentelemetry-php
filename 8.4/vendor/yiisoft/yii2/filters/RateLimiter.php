@@ -1,14 +1,14 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\filters;
 
 use Closure;
-use Yii;
+use Odigos\Yii;
 use yii\base\Action;
 use yii\base\ActionFilter;
 use yii\base\Component;
@@ -18,7 +18,6 @@ use yii\web\IdentityInterface;
 use yii\web\Request;
 use yii\web\Response;
 use yii\web\TooManyRequestsHttpException;
-
 /**
  * RateLimiter implements a rate limiting algorithm based on the [leaky bucket algorithm](https://en.wikipedia.org/wiki/Leaky_bucket).
  *
@@ -51,7 +50,7 @@ class RateLimiter extends ActionFilter
     /**
      * @var bool whether to include rate limit headers in the response
      */
-    public $enableRateLimitHeaders = true;
+    public $enableRateLimitHeaders = \true;
     /**
      * @var string the message to be displayed when rate limit exceeds
      */
@@ -75,8 +74,6 @@ class RateLimiter extends ActionFilter
      * @var Response|null the response to be sent. If not set, the `response` application component will be used.
      */
     public $response;
-
-
     /**
      * {@inheritdoc}
      */
@@ -89,21 +86,18 @@ class RateLimiter extends ActionFilter
             $this->response = Yii::$app->getResponse();
         }
     }
-
     /**
      * {@inheritdoc}
      */
     public function beforeAction($action)
     {
         if ($this->user === null && Yii::$app->getUser()) {
-            $this->user = Yii::$app->getUser()->getIdentity(false);
+            $this->user = Yii::$app->getUser()->getIdentity(\false);
         }
-
         if ($this->user instanceof Closure) {
             $this->user = call_user_func($this->user, $action);
         }
-
-        if ($this->user instanceof RateLimitInterface) {
+        if ($this->user instanceof \yii\filters\RateLimitInterface) {
             Yii::debug('Check rate limit', __METHOD__);
             $this->checkRateLimit($this->user, $this->request, $this->response, $action);
         } elseif ($this->user) {
@@ -111,10 +105,8 @@ class RateLimiter extends ActionFilter
         } else {
             Yii::info('Rate limit skipped: user not logged in.', __METHOD__);
         }
-
-        return true;
+        return \true;
     }
-
     /**
      * Checks whether the rate limit exceeds.
      * @param RateLimitInterface $user the current user
@@ -130,24 +122,19 @@ class RateLimiter extends ActionFilter
     {
         list($limit, $window) = $user->getRateLimit($request, $action);
         list($allowance, $timestamp) = $user->loadAllowance($request, $action);
-
         $current = time();
-
         $allowance += (int) (($current - $timestamp) * $limit / $window);
         if ($allowance > $limit) {
             $allowance = $limit;
         }
-
         if ($allowance < 1) {
             $user->saveAllowance($request, $action, 0, $current);
             $this->addRateLimitHeaders($response, $limit, 0, $window);
             throw new TooManyRequestsHttpException($this->errorMessage);
         }
-
         $user->saveAllowance($request, $action, $allowance - 1, $current);
         $this->addRateLimitHeaders($response, $limit, $allowance - 1, (int) (($limit - $allowance + 1) * $window / $limit));
     }
-
     /**
      * Adds the rate limit headers to the response.
      * @param Response $response
@@ -158,10 +145,7 @@ class RateLimiter extends ActionFilter
     public function addRateLimitHeaders($response, $limit, $remaining, $reset)
     {
         if ($this->enableRateLimitHeaders) {
-            $response->getHeaders()
-                ->set('X-Rate-Limit-Limit', $limit)
-                ->set('X-Rate-Limit-Remaining', $remaining)
-                ->set('X-Rate-Limit-Reset', $reset);
+            $response->getHeaders()->set('X-Rate-Limit-Limit', $limit)->set('X-Rate-Limit-Remaining', $remaining)->set('X-Rate-Limit-Reset', $reset);
         }
     }
 }

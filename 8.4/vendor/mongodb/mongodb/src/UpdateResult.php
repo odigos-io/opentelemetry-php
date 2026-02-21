@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright 2015-present MongoDB, Inc.
  *
@@ -14,12 +15,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 namespace MongoDB;
 
 use MongoDB\Driver\Exception\LogicException;
 use MongoDB\Driver\WriteResult;
-
 /**
  * Result class for an update operation.
  */
@@ -28,7 +27,6 @@ class UpdateResult
     public function __construct(private WriteResult $writeResult)
     {
     }
-
     /**
      * Return the number of documents that were matched by the filter.
      *
@@ -41,7 +39,6 @@ class UpdateResult
     {
         return $this->writeResult->getMatchedCount();
     }
-
     /**
      * Return the number of documents that were modified.
      *
@@ -57,7 +54,6 @@ class UpdateResult
     {
         return $this->writeResult->getModifiedCount();
     }
-
     /**
      * Return the number of documents that were upserted.
      *
@@ -70,7 +66,6 @@ class UpdateResult
     {
         return $this->writeResult->getUpsertedCount();
     }
-
     /**
      * Return the ID of the document inserted by an upsert operation.
      *
@@ -90,10 +85,8 @@ class UpdateResult
         foreach ($this->writeResult->getUpsertedIds() as $id) {
             return $id;
         }
-
         return null;
     }
-
     /**
      * Return whether this update was acknowledged by the server.
      *

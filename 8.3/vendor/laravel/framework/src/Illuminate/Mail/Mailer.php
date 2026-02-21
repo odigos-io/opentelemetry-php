@@ -20,74 +20,63 @@ use InvalidArgumentException;
 use Symfony\Component\Mailer\Envelope;
 use Symfony\Component\Mailer\Transport\TransportInterface;
 use Symfony\Component\Mime\Email;
-
 class Mailer implements MailerContract, MailQueueContract
 {
     use Macroable;
-
     /**
      * The name that is configured for the mailer.
      *
      * @var string
      */
     protected $name;
-
     /**
      * The view factory instance.
      *
      * @var \Illuminate\Contracts\View\Factory
      */
     protected $views;
-
     /**
      * The Symfony Transport instance.
      *
      * @var \Symfony\Component\Mailer\Transport\TransportInterface
      */
     protected $transport;
-
     /**
      * The event dispatcher instance.
      *
      * @var \Illuminate\Contracts\Events\Dispatcher|null
      */
     protected $events;
-
     /**
      * The global from address and name.
      *
      * @var array
      */
     protected $from;
-
     /**
      * The global reply-to address and name.
      *
      * @var array
      */
     protected $replyTo;
-
     /**
      * The global return path address.
      *
      * @var array
      */
     protected $returnPath;
-
     /**
      * The global to address and name.
      *
      * @var array
      */
     protected $to;
-
     /**
      * The queue factory implementation.
      *
      * @var \Illuminate\Contracts\Queue\Factory
      */
     protected $queue;
-
     /**
      * Create a new Mailer instance.
      *
@@ -103,7 +92,6 @@ class Mailer implements MailerContract, MailQueueContract
         $this->events = $events;
         $this->transport = $transport;
     }
-
     /**
      * Set the global from address and name.
      *
@@ -115,7 +103,6 @@ class Mailer implements MailerContract, MailQueueContract
     {
         $this->from = compact('address', 'name');
     }
-
     /**
      * Set the global reply-to address and name.
      *
@@ -127,7 +114,6 @@ class Mailer implements MailerContract, MailQueueContract
     {
         $this->replyTo = compact('address', 'name');
     }
-
     /**
      * Set the global return path address.
      *
@@ -138,7 +124,6 @@ class Mailer implements MailerContract, MailQueueContract
     {
         $this->returnPath = compact('address');
     }
-
     /**
      * Set the global to address and name.
      *
@@ -150,7 +135,6 @@ class Mailer implements MailerContract, MailQueueContract
     {
         $this->to = compact('address', 'name');
     }
-
     /**
      * Begin the process of mailing a mailable class instance.
      *
@@ -160,13 +144,11 @@ class Mailer implements MailerContract, MailQueueContract
      */
     public function to($users, $name = null)
     {
-        if (! is_null($name) && is_string($users)) {
+        if (!is_null($name) && is_string($users)) {
             $users = new Address($users, $name);
         }
-
-        return (new PendingMail($this))->to($users);
+        return (new \Illuminate\Mail\PendingMail($this))->to($users);
     }
-
     /**
      * Begin the process of mailing a mailable class instance.
      *
@@ -176,13 +158,11 @@ class Mailer implements MailerContract, MailQueueContract
      */
     public function cc($users, $name = null)
     {
-        if (! is_null($name) && is_string($users)) {
+        if (!is_null($name) && is_string($users)) {
             $users = new Address($users, $name);
         }
-
-        return (new PendingMail($this))->cc($users);
+        return (new \Illuminate\Mail\PendingMail($this))->cc($users);
     }
-
     /**
      * Begin the process of mailing a mailable class instance.
      *
@@ -192,13 +172,11 @@ class Mailer implements MailerContract, MailQueueContract
      */
     public function bcc($users, $name = null)
     {
-        if (! is_null($name) && is_string($users)) {
+        if (!is_null($name) && is_string($users)) {
             $users = new Address($users, $name);
         }
-
-        return (new PendingMail($this))->bcc($users);
+        return (new \Illuminate\Mail\PendingMail($this))->bcc($users);
     }
-
     /**
      * Send a new message with only an HTML part.
      *
@@ -210,7 +188,6 @@ class Mailer implements MailerContract, MailQueueContract
     {
         return $this->send(['html' => new HtmlString($html)], [], $callback);
     }
-
     /**
      * Send a new message with only a raw text part.
      *
@@ -222,7 +199,6 @@ class Mailer implements MailerContract, MailQueueContract
     {
         return $this->send(['raw' => $text], [], $callback);
     }
-
     /**
      * Send a new message with only a plain part.
      *
@@ -235,7 +211,6 @@ class Mailer implements MailerContract, MailQueueContract
     {
         return $this->send(['text' => $view], $data, $callback);
     }
-
     /**
      * Render the given message as a view.
      *
@@ -249,15 +224,9 @@ class Mailer implements MailerContract, MailQueueContract
         // containing both an HTML and plain text versions of the view which should
         // be used when sending an e-mail. We will extract both of them out here.
         [$view, $plain] = $this->parseView($view);
-
         $data['message'] = $this->createMessage();
-
-        return $this->replaceEmbeddedAttachments(
-            $this->renderView($view ?: $plain, $data),
-            $data['message']->getSymfonyMessage()->getAttachments()
-        );
+        return $this->replaceEmbeddedAttachments($this->renderView($view ?: $plain, $data), $data['message']->getSymfonyMessage()->getAttachments());
     }
-
     /**
      * Replace the embedded image attachments with raw, inline image data for browser rendering.
      *
@@ -271,21 +240,14 @@ class Mailer implements MailerContract, MailQueueContract
             foreach (array_unique($matches[1]) as $image) {
                 foreach ($attachments as $attachment) {
                     if ($attachment->getContentId() === $image || $attachment->getFilename() === $image) {
-                        $renderedView = str_replace(
-                            'cid:'.$image,
-                            'data:'.$attachment->getContentType().';base64,'.$attachment->bodyToString(),
-                            $renderedView
-                        );
-
+                        $renderedView = str_replace('cid:' . $image, 'data:' . $attachment->getContentType() . ';base64,' . $attachment->bodyToString(), $renderedView);
                         break;
                     }
                 }
             }
         }
-
         return $renderedView;
     }
-
     /**
      * Send a new message using a view.
      *
@@ -299,47 +261,35 @@ class Mailer implements MailerContract, MailQueueContract
         if ($view instanceof MailableContract) {
             return $this->sendMailable($view);
         }
-
         $data['mailer'] = $this->name;
-
         // Once we have retrieved the view content for the e-mail we will set the body
         // of this message using the HTML type, which will provide a simple wrapper
         // to creating view based emails that are able to receive arrays of data.
         [$view, $plain, $raw] = $this->parseView($view);
-
         $data['message'] = $message = $this->createMessage();
-
         $this->addContent($message, $view, $plain, $raw, $data);
-
-        if (! is_null($callback)) {
+        if (!is_null($callback)) {
             $callback($message);
         }
-
         // If a global "to" address has been set, we will set that address on the mail
         // message. This is primarily useful during local development in which each
         // message should be delivered into a single mail address for inspection.
         if (isset($this->to['address'])) {
             $this->setGlobalToAndRemoveCcAndBcc($message);
         }
-
         // Next we will determine if the message should be sent. We give the developer
         // one final chance to stop this message and then we will send it to all of
         // its recipients. We will then fire the sent event for the sent message.
         $symfonyMessage = $message->getSymfonyMessage();
-
         if ($this->shouldSendMessage($symfonyMessage, $data)) {
             $symfonySentMessage = $this->sendSymfonyMessage($symfonyMessage);
-
             if ($symfonySentMessage) {
-                $sentMessage = new SentMessage($symfonySentMessage);
-
+                $sentMessage = new \Illuminate\Mail\SentMessage($symfonySentMessage);
                 $this->dispatchSentEvent($sentMessage, $data);
-
                 return $sentMessage;
             }
         }
     }
-
     /**
      * Send the given mailable.
      *
@@ -348,11 +298,8 @@ class Mailer implements MailerContract, MailQueueContract
      */
     protected function sendMailable(MailableContract $mailable)
     {
-        return $mailable instanceof ShouldQueue
-            ? $mailable->mailer($this->name)->queue($this->queue)
-            : $mailable->mailer($this->name)->send($this);
+        return $mailable instanceof ShouldQueue ? $mailable->mailer($this->name)->queue($this->queue) : $mailable->mailer($this->name)->send($this);
     }
-
     /**
      * Send a new message synchronously using a view.
      *
@@ -363,11 +310,8 @@ class Mailer implements MailerContract, MailQueueContract
      */
     public function sendNow($mailable, array $data = [], $callback = null)
     {
-        return $mailable instanceof MailableContract
-            ? $mailable->mailer($this->name)->send($this)
-            : $this->send($mailable, $data, $callback);
+        return $mailable instanceof MailableContract ? $mailable->mailer($this->name)->send($this) : $this->send($mailable, $data, $callback);
     }
-
     /**
      * Parse the given view name or array.
      *
@@ -381,28 +325,20 @@ class Mailer implements MailerContract, MailQueueContract
         if (is_string($view) || $view instanceof Closure) {
             return [$view, null, null];
         }
-
         // If the given view is an array with numeric keys, we will just assume that
         // both a "pretty" and "plain" view were provided, so we will return this
         // array as is, since it should contain both views with numerical keys.
         if (is_array($view) && isset($view[0])) {
             return [$view[0], $view[1], null];
         }
-
         // If this view is an array but doesn't contain numeric keys, we will assume
         // the views are being explicitly specified and will extract them via the
         // named keys instead, allowing the developers to use one or the other.
         if (is_array($view)) {
-            return [
-                $view['html'] ?? null,
-                $view['text'] ?? null,
-                $view['raw'] ?? null,
-            ];
+            return [$view['html'] ?? null, $view['text'] ?? null, $view['raw'] ?? null];
         }
-
         throw new InvalidArgumentException('Invalid view.');
     }
-
     /**
      * Add the content to a given message.
      *
@@ -418,16 +354,13 @@ class Mailer implements MailerContract, MailQueueContract
         if (isset($view)) {
             $message->html($this->renderView($view, $data) ?: ' ');
         }
-
         if (isset($plain)) {
             $message->text($this->renderView($plain, $data) ?: ' ');
         }
-
         if (isset($raw)) {
             $message->text($raw);
         }
     }
-
     /**
      * Render the given view.
      *
@@ -438,12 +371,8 @@ class Mailer implements MailerContract, MailQueueContract
     protected function renderView($view, $data)
     {
         $view = value($view, $data);
-
-        return $view instanceof Htmlable
-            ? $view->toHtml()
-            : $this->views->make($view, $data)->render();
+        return $view instanceof Htmlable ? $view->toHtml() : $this->views->make($view, $data)->render();
     }
-
     /**
      * Set the global "to" address on the given message.
      *
@@ -453,13 +382,10 @@ class Mailer implements MailerContract, MailQueueContract
     protected function setGlobalToAndRemoveCcAndBcc($message)
     {
         $message->forgetTo();
-
-        $message->to($this->to['address'], $this->to['name'], true);
-
+        $message->to($this->to['address'], $this->to['name'], \true);
         $message->forgetCc();
         $message->forgetBcc();
     }
-
     /**
      * Queue a new mail message for sending.
      *
@@ -471,17 +397,14 @@ class Mailer implements MailerContract, MailQueueContract
      */
     public function queue($view, $queue = null)
     {
-        if (! $view instanceof MailableContract) {
+        if (!$view instanceof MailableContract) {
             throw new InvalidArgumentException('Only mailables may be queued.');
         }
-
         if (is_string($queue)) {
             $view->onQueue($queue);
         }
-
         return $view->mailer($this->name)->queue($this->queue);
     }
-
     /**
      * Queue a new mail message for sending on the given queue.
      *
@@ -493,7 +416,6 @@ class Mailer implements MailerContract, MailQueueContract
     {
         return $this->queue($view, $queue);
     }
-
     /**
      * Queue a new mail message for sending on the given queue.
      *
@@ -507,7 +429,6 @@ class Mailer implements MailerContract, MailQueueContract
     {
         return $this->onQueue($queue, $view);
     }
-
     /**
      * Queue a new mail message for sending after (n) seconds.
      *
@@ -520,15 +441,11 @@ class Mailer implements MailerContract, MailQueueContract
      */
     public function later($delay, $view, $queue = null)
     {
-        if (! $view instanceof MailableContract) {
+        if (!$view instanceof MailableContract) {
             throw new InvalidArgumentException('Only mailables may be queued.');
         }
-
-        return $view->mailer($this->name)->later(
-            $delay, is_null($queue) ? $this->queue : $queue
-        );
+        return $view->mailer($this->name)->later($delay, is_null($queue) ? $this->queue : $queue);
     }
-
     /**
      * Queue a new mail message for sending after (n) seconds on the given queue.
      *
@@ -541,7 +458,6 @@ class Mailer implements MailerContract, MailQueueContract
     {
         return $this->later($delay, $view, $queue);
     }
-
     /**
      * Create a new message instance.
      *
@@ -549,29 +465,24 @@ class Mailer implements MailerContract, MailQueueContract
      */
     protected function createMessage()
     {
-        $message = new Message(new Email());
-
+        $message = new \Illuminate\Mail\Message(new Email());
         // If a global from address has been specified we will set it on every message
         // instance so the developer does not have to repeat themselves every time
         // they create a new message. We'll just go ahead and push this address.
-        if (! empty($this->from['address'])) {
+        if (!empty($this->from['address'])) {
             $message->from($this->from['address'], $this->from['name']);
         }
-
         // When a global reply address was specified we will set this on every message
         // instance so the developer does not have to repeat themselves every time
         // they create a new message. We will just go ahead and push this address.
-        if (! empty($this->replyTo['address'])) {
+        if (!empty($this->replyTo['address'])) {
             $message->replyTo($this->replyTo['address'], $this->replyTo['name']);
         }
-
-        if (! empty($this->returnPath['address'])) {
+        if (!empty($this->returnPath['address'])) {
             $message->returnPath($this->returnPath['address']);
         }
-
         return $message;
     }
-
     /**
      * Send a Symfony Email instance.
      *
@@ -586,7 +497,6 @@ class Mailer implements MailerContract, MailQueueContract
             //
         }
     }
-
     /**
      * Determines if the email can be sent.
      *
@@ -596,15 +506,11 @@ class Mailer implements MailerContract, MailQueueContract
      */
     protected function shouldSendMessage($message, $data = [])
     {
-        if (! $this->events) {
-            return true;
+        if (!$this->events) {
+            return \true;
         }
-
-        return $this->events->until(
-            new MessageSending($message, $data)
-        ) !== false;
+        return $this->events->until(new MessageSending($message, $data)) !== \false;
     }
-
     /**
      * Dispatch the message sent event.
      *
@@ -614,11 +520,8 @@ class Mailer implements MailerContract, MailQueueContract
      */
     protected function dispatchSentEvent($message, $data = [])
     {
-        $this->events?->dispatch(
-            new MessageSent($message, $data)
-        );
+        $this->events?->dispatch(new MessageSent($message, $data));
     }
-
     /**
      * Get the Symfony Transport instance.
      *
@@ -628,7 +531,6 @@ class Mailer implements MailerContract, MailQueueContract
     {
         return $this->transport;
     }
-
     /**
      * Get the view factory instance.
      *
@@ -638,7 +540,6 @@ class Mailer implements MailerContract, MailQueueContract
     {
         return $this->views;
     }
-
     /**
      * Set the Symfony Transport instance.
      *
@@ -649,7 +550,6 @@ class Mailer implements MailerContract, MailQueueContract
     {
         $this->transport = $transport;
     }
-
     /**
      * Set the queue manager instance.
      *
@@ -659,7 +559,6 @@ class Mailer implements MailerContract, MailQueueContract
     public function setQueue(QueueContract $queue)
     {
         $this->queue = $queue;
-
         return $this;
     }
 }

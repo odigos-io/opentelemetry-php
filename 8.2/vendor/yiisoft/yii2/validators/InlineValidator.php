@@ -1,10 +1,10 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\validators;
 
 /**
@@ -13,7 +13,7 @@ namespace yii\validators;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class InlineValidator extends Validator
+class InlineValidator extends \yii\validators\Validator
 {
     /**
      * @var string|callable an anonymous function or the name of a model class method that will be
@@ -56,8 +56,6 @@ class InlineValidator extends Validator
      * @since 2.0.36
      */
     public $current;
-
-
     /**
      * {@inheritdoc}
      */
@@ -69,14 +67,12 @@ class InlineValidator extends Validator
         } elseif ($method instanceof \Closure) {
             $method = $method->bindTo($model);
         }
-
         $current = $this->current;
         if ($current === null) {
-            $current = $model->$attribute;
+            $current = $model->{$attribute};
         }
         $method($attribute, $this->params, $this, $current);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -91,11 +87,10 @@ class InlineValidator extends Validator
             }
             $current = $this->current;
             if ($current === null) {
-                $current = $model->$attribute;
+                $current = $model->{$attribute};
             }
             return $method($attribute, $this->params, $this, $current, $view);
         }
-
         return null;
     }
 }

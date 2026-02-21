@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -19,26 +19,23 @@ namespace Cake\TestSuite\Fixture;
 /**
  * Fixture strategy that truncates all fixture tables at the end of test.
  */
-class TruncateStrategy implements FixtureStrategyInterface
+class TruncateStrategy implements \Cake\TestSuite\Fixture\FixtureStrategyInterface
 {
     /**
      * @var \Cake\TestSuite\Fixture\FixtureHelper
      */
-    protected FixtureHelper $helper;
-
+    protected \Cake\TestSuite\Fixture\FixtureHelper $helper;
     /**
      * @var array<\Cake\Datasource\FixtureInterface>
      */
     protected array $fixtures = [];
-
     /**
      * Initialize strategy.
      */
     public function __construct()
     {
-        $this->helper = new FixtureHelper();
+        $this->helper = new \Cake\TestSuite\Fixture\FixtureHelper();
     }
-
     /**
      * @inheritDoc
      */
@@ -47,11 +44,9 @@ class TruncateStrategy implements FixtureStrategyInterface
         if (!$fixtureNames) {
             return;
         }
-
         $this->fixtures = $this->helper->loadFixtures($fixtureNames);
         $this->helper->insert($this->fixtures);
     }
-
     /**
      * @inheritDoc
      */

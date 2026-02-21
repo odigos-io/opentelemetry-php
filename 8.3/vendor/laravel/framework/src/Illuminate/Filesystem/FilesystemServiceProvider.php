@@ -6,7 +6,6 @@ use Illuminate\Contracts\Foundation\CachesRoutes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
-
 class FilesystemServiceProvider extends ServiceProvider
 {
     /**
@@ -18,7 +17,6 @@ class FilesystemServiceProvider extends ServiceProvider
     {
         $this->serveFiles();
     }
-
     /**
      * Register the service provider.
      *
@@ -29,7 +27,6 @@ class FilesystemServiceProvider extends ServiceProvider
         $this->registerNativeFilesystem();
         $this->registerFlysystem();
     }
-
     /**
      * Register the native filesystem implementation.
      *
@@ -38,10 +35,9 @@ class FilesystemServiceProvider extends ServiceProvider
     protected function registerNativeFilesystem()
     {
         $this->app->singleton('files', function () {
-            return new Filesystem;
+            return new \Illuminate\Filesystem\Filesystem();
         });
     }
-
     /**
      * Register the driver based filesystem.
      *
@@ -50,16 +46,13 @@ class FilesystemServiceProvider extends ServiceProvider
     protected function registerFlysystem()
     {
         $this->registerManager();
-
         $this->app->singleton('filesystem.disk', function ($app) {
             return $app['filesystem']->disk($this->getDefaultDriver());
         });
-
         $this->app->singleton('filesystem.cloud', function ($app) {
             return $app['filesystem']->disk($this->getCloudDriver());
         });
     }
-
     /**
      * Register the filesystem manager.
      *
@@ -68,10 +61,9 @@ class FilesystemServiceProvider extends ServiceProvider
     protected function registerManager()
     {
         $this->app->singleton('filesystem', function ($app) {
-            return new FilesystemManager($app);
+            return new \Illuminate\Filesystem\FilesystemManager($app);
         });
     }
-
     /**
      * Register protected file serving.
      *
@@ -82,30 +74,19 @@ class FilesystemServiceProvider extends ServiceProvider
         if ($this->app instanceof CachesRoutes && $this->app->routesAreCached()) {
             return;
         }
-
         foreach ($this->app['config']['filesystems.disks'] ?? [] as $disk => $config) {
-            if (! $this->shouldServeFiles($config)) {
+            if (!$this->shouldServeFiles($config)) {
                 continue;
             }
-
             $this->app->booted(function ($app) use ($disk, $config) {
-                $uri = isset($config['url'])
-                    ? rtrim(parse_url($config['url'])['path'], '/')
-                    : '/storage';
-
+                $uri = isset($config['url']) ? rtrim(parse_url($config['url'])['path'], '/') : '/storage';
                 $isProduction = $app->isProduction();
-
-                Route::get($uri.'/{path}', function (Request $request, string $path) use ($disk, $config, $isProduction) {
-                    return (new ServeFile(
-                        $disk,
-                        $config,
-                        $isProduction
-                    ))($request, $path);
-                })->where('path', '.*')->name('storage.'.$disk);
+                Route::get($uri . '/{path}', function (Request $request, string $path) use ($disk, $config, $isProduction) {
+                    return (new \Illuminate\Filesystem\ServeFile($disk, $config, $isProduction))($request, $path);
+                })->where('path', '.*')->name('storage.' . $disk);
             });
         }
     }
-
     /**
      * Determine if the disk is serveable.
      *
@@ -114,9 +95,8 @@ class FilesystemServiceProvider extends ServiceProvider
      */
     protected function shouldServeFiles(array $config)
     {
-        return $config['driver'] === 'local' && ($config['serve'] ?? false);
+        return $config['driver'] === 'local' && ($config['serve'] ?? \false);
     }
-
     /**
      * Get the default file driver.
      *
@@ -126,7 +106,6 @@ class FilesystemServiceProvider extends ServiceProvider
     {
         return $this->app['config']['filesystems.default'];
     }
-
     /**
      * Get the default cloud based file driver.
      *

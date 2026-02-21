@@ -8,7 +8,6 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\URL;
-
 class VerifyEmail extends Notification
 {
     /**
@@ -17,14 +16,12 @@ class VerifyEmail extends Notification
      * @var \Closure|null
      */
     public static $createUrlCallback;
-
     /**
      * The callback that should be used to build the mail message.
      *
      * @var (\Closure(mixed, string): \Illuminate\Notifications\Messages\MailMessage|\Illuminate\Contracts\Mail\Mailable)|null
      */
     public static $toMailCallback;
-
     /**
      * Get the notification's channels.
      *
@@ -35,7 +32,6 @@ class VerifyEmail extends Notification
     {
         return ['mail'];
     }
-
     /**
      * Build the mail representation of the notification.
      *
@@ -45,14 +41,11 @@ class VerifyEmail extends Notification
     public function toMail($notifiable)
     {
         $verificationUrl = $this->verificationUrl($notifiable);
-
         if (static::$toMailCallback) {
             return call_user_func(static::$toMailCallback, $notifiable, $verificationUrl);
         }
-
         return $this->buildMailMessage($verificationUrl);
     }
-
     /**
      * Get the verify email notification mail message for the given URL.
      *
@@ -61,13 +54,8 @@ class VerifyEmail extends Notification
      */
     protected function buildMailMessage($url)
     {
-        return (new MailMessage)
-            ->subject(Lang::get('Verify Email Address'))
-            ->line(Lang::get('Please click the button below to verify your email address.'))
-            ->action(Lang::get('Verify Email Address'), $url)
-            ->line(Lang::get('If you did not create an account, no further action is required.'));
+        return (new MailMessage())->subject(Lang::get('Verify Email Address'))->line(Lang::get('Please click the button below to verify your email address.'))->action(Lang::get('Verify Email Address'), $url)->line(Lang::get('If you did not create an account, no further action is required.'));
     }
-
     /**
      * Get the verification URL for the given notifiable.
      *
@@ -79,17 +67,8 @@ class VerifyEmail extends Notification
         if (static::$createUrlCallback) {
             return call_user_func(static::$createUrlCallback, $notifiable);
         }
-
-        return URL::temporarySignedRoute(
-            'verification.verify',
-            Carbon::now()->addMinutes(Config::get('auth.verification.expire', 60)),
-            [
-                'id' => $notifiable->getKey(),
-                'hash' => sha1($notifiable->getEmailForVerification()),
-            ]
-        );
+        return URL::temporarySignedRoute('verification.verify', Carbon::now()->addMinutes(Config::get('auth.verification.expire', 60)), ['id' => $notifiable->getKey(), 'hash' => sha1($notifiable->getEmailForVerification())]);
     }
-
     /**
      * Set a callback that should be used when creating the email verification URL.
      *
@@ -100,7 +79,6 @@ class VerifyEmail extends Notification
     {
         static::$createUrlCallback = $callback;
     }
-
     /**
      * Set a callback that should be used when building the notification mail message.
      *

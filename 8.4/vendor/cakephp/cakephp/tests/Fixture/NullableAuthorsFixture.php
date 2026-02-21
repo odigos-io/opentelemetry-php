@@ -1,4 +1,5 @@
 <?php
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -15,7 +16,6 @@
 namespace Cake\Test\Fixture;
 
 use Cake\TestSuite\Fixture\TestFixture;
-
 class NullableAuthorsFixture extends TestFixture
 {
     /**
@@ -23,19 +23,11 @@ class NullableAuthorsFixture extends TestFixture
      *
      * @var array
      */
-    public array $fields = [
-        'id' => ['type' => 'integer'],
-        'author_id' => ['type' => 'integer', 'null' => true],
-        '_constraints' => ['primary' => ['type' => 'primary', 'columns' => ['id']]],
-    ];
-
+    public array $fields = ['id' => ['type' => 'integer'], 'author_id' => ['type' => 'integer', 'null' => \true], '_constraints' => ['primary' => ['type' => 'primary', 'columns' => ['id']]]];
     /**
      * records property
      *
      * @var array
      */
-    public array $records = [
-        ['author_id' => 3],
-        ['author_id' => null],
-    ];
+    public array $records = [['author_id' => 3], ['author_id' => null]];
 }

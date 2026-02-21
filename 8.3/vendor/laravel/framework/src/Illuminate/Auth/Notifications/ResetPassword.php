@@ -5,7 +5,6 @@ namespace Illuminate\Auth\Notifications;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Lang;
-
 class ResetPassword extends Notification
 {
     /**
@@ -14,21 +13,18 @@ class ResetPassword extends Notification
      * @var string
      */
     public $token;
-
     /**
      * The callback that should be used to create the reset password URL.
      *
      * @var (\Closure(mixed, string): string)|null
      */
     public static $createUrlCallback;
-
     /**
      * The callback that should be used to build the mail message.
      *
      * @var (\Closure(mixed, string): \Illuminate\Notifications\Messages\MailMessage|\Illuminate\Contracts\Mail\Mailable)|null
      */
     public static $toMailCallback;
-
     /**
      * Create a notification instance.
      *
@@ -38,7 +34,6 @@ class ResetPassword extends Notification
     {
         $this->token = $token;
     }
-
     /**
      * Get the notification's channels.
      *
@@ -49,7 +44,6 @@ class ResetPassword extends Notification
     {
         return ['mail'];
     }
-
     /**
      * Build the mail representation of the notification.
      *
@@ -61,10 +55,8 @@ class ResetPassword extends Notification
         if (static::$toMailCallback) {
             return call_user_func(static::$toMailCallback, $notifiable, $this->token);
         }
-
         return $this->buildMailMessage($this->resetUrl($notifiable));
     }
-
     /**
      * Get the reset password notification mail message for the given URL.
      *
@@ -73,14 +65,8 @@ class ResetPassword extends Notification
      */
     protected function buildMailMessage($url)
     {
-        return (new MailMessage)
-            ->subject(Lang::get('Reset Password Notification'))
-            ->line(Lang::get('You are receiving this email because we received a password reset request for your account.'))
-            ->action(Lang::get('Reset Password'), $url)
-            ->line(Lang::get('This password reset link will expire in :count minutes.', ['count' => config('auth.passwords.'.config('auth.defaults.passwords').'.expire')]))
-            ->line(Lang::get('If you did not request a password reset, no further action is required.'));
+        return (new MailMessage())->subject(Lang::get('Reset Password Notification'))->line(Lang::get('You are receiving this email because we received a password reset request for your account.'))->action(Lang::get('Reset Password'), $url)->line(Lang::get('This password reset link will expire in :count minutes.', ['count' => config('auth.passwords.' . config('auth.defaults.passwords') . '.expire')]))->line(Lang::get('If you did not request a password reset, no further action is required.'));
     }
-
     /**
      * Get the reset URL for the given notifiable.
      *
@@ -92,13 +78,8 @@ class ResetPassword extends Notification
         if (static::$createUrlCallback) {
             return call_user_func(static::$createUrlCallback, $notifiable, $this->token);
         }
-
-        return url(route('password.reset', [
-            'token' => $this->token,
-            'email' => $notifiable->getEmailForPasswordReset(),
-        ], false));
+        return url(route('password.reset', ['token' => $this->token, 'email' => $notifiable->getEmailForPasswordReset()], \false));
     }
-
     /**
      * Set a callback that should be used when creating the reset password button URL.
      *
@@ -109,7 +90,6 @@ class ResetPassword extends Notification
     {
         static::$createUrlCallback = $callback;
     }
-
     /**
      * Set a callback that should be used when building the notification mail message.
      *

@@ -1,15 +1,12 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Laminas\Diactoros;
+declare (strict_types=1);
+namespace Odigos\Laminas\Diactoros;
 
 use Override;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
-
 use function sprintf;
-
 /**
  * HTTP response encapsulation.
  *
@@ -20,10 +17,8 @@ use function sprintf;
 class Response implements ResponseInterface
 {
     use MessageTrait;
-
     public const MIN_STATUS_CODE_VALUE = 100;
     public const MAX_STATUS_CODE_VALUE = 599;
-
     /**
      * Map of standard HTTP status code/reason phrases
      *
@@ -55,7 +50,8 @@ class Response implements ResponseInterface
         303 => 'See Other',
         304 => 'Not Modified',
         305 => 'Use Proxy',
-        306 => 'Switch Proxy', // Deprecated to 306 => '(Unused)'
+        306 => 'Switch Proxy',
+        // Deprecated to 306 => '(Unused)'
         307 => 'Temporary Redirect',
         308 => 'Permanent Redirect',
         // CLIENT ERROR
@@ -104,11 +100,8 @@ class Response implements ResponseInterface
         511 => 'Network Authentication Required',
         599 => 'Network Connect Timeout Error',
     ];
-
     private string $reasonPhrase;
-
     private int $statusCode;
-
     /**
      * @param string|resource|StreamInterface $body Stream identifier and/or actual stream resource
      * @param int $status Status code for the response, if any.
@@ -121,7 +114,6 @@ class Response implements ResponseInterface
         $this->stream = $this->getStream($body, 'wb+');
         $this->setHeaders($headers);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -130,7 +122,6 @@ class Response implements ResponseInterface
     {
         return $this->statusCode;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -139,7 +130,6 @@ class Response implements ResponseInterface
     {
         return $this->reasonPhrase;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -150,7 +140,6 @@ class Response implements ResponseInterface
         $new->setStatusCode($code, $reasonPhrase);
         return $new;
     }
-
     /**
      * Set a valid status code.
      *
@@ -158,23 +147,13 @@ class Response implements ResponseInterface
      */
     private function setStatusCode(int $code, string $reasonPhrase = ''): void
     {
-        if (
-            $code < static::MIN_STATUS_CODE_VALUE
-            || $code > static::MAX_STATUS_CODE_VALUE
-        ) {
-            throw new Exception\InvalidArgumentException(sprintf(
-                'Invalid status code "%s"; must be an integer between %d and %d, inclusive',
-                $code,
-                self::MIN_STATUS_CODE_VALUE,
-                self::MAX_STATUS_CODE_VALUE
-            ));
+        if ($code < static::MIN_STATUS_CODE_VALUE || $code > static::MAX_STATUS_CODE_VALUE) {
+            throw new Exception\InvalidArgumentException(sprintf('Invalid status code "%s"; must be an integer between %d and %d, inclusive', $code, self::MIN_STATUS_CODE_VALUE, self::MAX_STATUS_CODE_VALUE));
         }
-
         if ($reasonPhrase === '' && isset($this->phrases[$code])) {
             $reasonPhrase = $this->phrases[$code];
         }
-
         $this->reasonPhrase = $reasonPhrase;
-        $this->statusCode   = $code;
+        $this->statusCode = $code;
     }
 }

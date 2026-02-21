@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\DBAL\Schema;
 
 /**
@@ -18,5 +17,5 @@ interface OptionallyNamedObject
      *
      * @return ?N
      */
-    public function getObjectName(): ?Name;
+    public function getObjectName(): ?\Doctrine\DBAL\Schema\Name;
 }

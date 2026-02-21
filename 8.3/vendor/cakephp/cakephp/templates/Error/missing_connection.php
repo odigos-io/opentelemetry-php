@@ -1,4 +1,7 @@
 <?php
+
+namespace Odigos;
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -14,14 +17,10 @@
  * @var string $message
  */
 use function Cake\Core\h;
-
 $this->layout = 'dev_error';
-
 $this->assign('templateName', 'missing_connection.php');
 $this->assign('title', 'Missing Database Connection');
-
 $this->assign('subheading', h($message));
-
 $this->start('file');
 echo $this->element('auto_table_warning');
 $this->end();

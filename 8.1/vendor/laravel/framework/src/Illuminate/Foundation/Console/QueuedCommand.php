@@ -6,18 +6,15 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Console\Kernel as KernelContract;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-
 class QueuedCommand implements ShouldQueue
 {
     use Dispatchable, Queueable;
-
     /**
      * The data to pass to the Artisan command.
      *
      * @var array
      */
     protected $data;
-
     /**
      * Create a new job instance.
      *
@@ -28,7 +25,6 @@ class QueuedCommand implements ShouldQueue
     {
         $this->data = $data;
     }
-
     /**
      * Handle the job.
      *
@@ -39,7 +35,6 @@ class QueuedCommand implements ShouldQueue
     {
         $kernel->call(...array_values($this->data));
     }
-
     /**
      * Get the display name for the queued job.
      *

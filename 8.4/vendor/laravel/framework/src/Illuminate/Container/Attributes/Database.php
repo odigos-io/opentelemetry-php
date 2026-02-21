@@ -6,7 +6,6 @@ use Attribute;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Contracts\Container\ContextualAttribute;
 use UnitEnum;
-
 #[Attribute(Attribute::TARGET_PARAMETER)]
 class Database implements ContextualAttribute
 {
@@ -16,7 +15,6 @@ class Database implements ContextualAttribute
     public function __construct(public UnitEnum|string|null $connection = null)
     {
     }
-
     /**
      * Resolve the database connection.
      *

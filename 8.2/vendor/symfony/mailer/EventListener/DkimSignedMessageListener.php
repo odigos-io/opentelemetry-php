@@ -8,14 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\Mailer\EventListener;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Mailer\Event\MessageEvent;
 use Symfony\Component\Mime\Crypto\DkimSigner;
 use Symfony\Component\Mime\Message;
-
 /**
  * Signs messages using DKIM.
  *
@@ -23,11 +21,9 @@ use Symfony\Component\Mime\Message;
  */
 class DkimSignedMessageListener implements EventSubscriberInterface
 {
-    public function __construct(
-        private DkimSigner $signer,
-    ) {
+    public function __construct(private DkimSigner $signer)
+    {
     }
-
     public function onMessage(MessageEvent $event): void
     {
         $message = $event->getMessage();
@@ -36,11 +32,8 @@ class DkimSignedMessageListener implements EventSubscriberInterface
         }
         $event->setMessage($this->signer->sign($message));
     }
-
     public static function getSubscribedEvents(): array
     {
-        return [
-            MessageEvent::class => ['onMessage', -128],
-        ];
+        return [MessageEvent::class => ['onMessage', -128]];
     }
 }

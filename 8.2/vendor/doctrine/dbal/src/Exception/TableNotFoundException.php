@@ -1,12 +1,11 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\DBAL\Exception;
 
 /**
  * Exception for an unknown table referenced in a statement detected in the driver.
  */
-class TableNotFoundException extends DatabaseObjectNotFoundException
+class TableNotFoundException extends \Doctrine\DBAL\Exception\DatabaseObjectNotFoundException
 {
 }

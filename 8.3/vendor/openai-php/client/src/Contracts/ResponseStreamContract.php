@@ -1,11 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenAI\Contracts;
 
 use IteratorAggregate;
-
 /**
  * @template T
  *
@@ -13,4 +11,6 @@ use IteratorAggregate;
  *
  * @internal
  */
-interface ResponseStreamContract extends IteratorAggregate {}
+interface ResponseStreamContract extends IteratorAggregate
+{
+}

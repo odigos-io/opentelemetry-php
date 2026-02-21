@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright 2025-present MongoDB, Inc.
  *
@@ -14,7 +15,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 namespace MongoDB\Operation;
 
 use MongoDB\Driver\BulkWriteCommand;
@@ -25,10 +25,8 @@ use MongoDB\Driver\Session;
 use MongoDB\Driver\WriteConcern;
 use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\Exception\UnsupportedException;
-
 use function array_filter;
 use function count;
-
 /**
  * Operation for executing multiple write operations via the bulkWrite command.
  *
@@ -56,25 +54,22 @@ final class ClientBulkWriteCommand
     public function __construct(
         private BulkWriteCommand $bulkWriteCommand,
         /** @param array{session: ?Session, writeConcern: ?WriteConcern} */
-        private array $options = [],
-    ) {
+        private array $options = []
+    )
+    {
         if (count($bulkWriteCommand) === 0) {
             throw new InvalidArgumentException('$bulkWriteCommand is empty');
         }
-
-        if (isset($this->options['session']) && ! $this->options['session'] instanceof Session) {
+        if (isset($this->options['session']) && !$this->options['session'] instanceof Session) {
             throw InvalidArgumentException::invalidType('"session" option', $this->options['session'], Session::class);
         }
-
-        if (isset($this->options['writeConcern']) && ! $this->options['writeConcern'] instanceof WriteConcern) {
+        if (isset($this->options['writeConcern']) && !$this->options['writeConcern'] instanceof WriteConcern) {
             throw InvalidArgumentException::invalidType('"writeConcern" option', $this->options['writeConcern'], WriteConcern::class);
         }
-
         if (isset($this->options['writeConcern']) && $this->options['writeConcern']->isDefault()) {
             unset($this->options['writeConcern']);
         }
     }
-
     /**
      * Execute the operation.
      *
@@ -87,9 +82,7 @@ final class ClientBulkWriteCommand
         if ($inTransaction && isset($this->options['writeConcern'])) {
             throw UnsupportedException::writeConcernNotSupportedInTransaction();
         }
-
-        $options = array_filter($this->options, fn ($value) => $value !== null);
-
+        $options = array_filter($this->options, fn($value) => $value !== null);
         return $server->executeBulkWriteCommand($this->bulkWriteCommand, $options);
     }
 }

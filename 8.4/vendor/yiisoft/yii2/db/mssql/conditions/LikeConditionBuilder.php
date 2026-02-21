@@ -1,10 +1,10 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\db\mssql\conditions;
 
 /**
@@ -15,11 +15,5 @@ class LikeConditionBuilder extends \yii\db\conditions\LikeConditionBuilder
     /**
      * {@inheritdoc}
      */
-    protected $escapingReplacements = [
-        '%' => '[%]',
-        '_' => '[_]',
-        '[' => '[[]',
-        ']' => '[]]',
-        '\\' => '[\\]',
-    ];
+    protected $escapingReplacements = ['%' => '[%]', '_' => '[_]', '[' => '[[]', ']' => '[]]', '\\' => '[\]'];
 }

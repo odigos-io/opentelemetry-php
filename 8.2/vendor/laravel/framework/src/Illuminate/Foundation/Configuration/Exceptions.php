@@ -6,7 +6,6 @@ use Closure;
 use Illuminate\Foundation\Exceptions\Handler;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Arr;
-
 class Exceptions
 {
     /**
@@ -17,7 +16,6 @@ class Exceptions
     public function __construct(public Handler $handler)
     {
     }
-
     /**
      * Register a reportable callback.
      *
@@ -28,7 +26,6 @@ class Exceptions
     {
         return $this->handler->reportable($using);
     }
-
     /**
      * Register a reportable callback.
      *
@@ -39,7 +36,6 @@ class Exceptions
     {
         return $this->handler->reportable($reportUsing);
     }
-
     /**
      * Register a renderable callback.
      *
@@ -49,10 +45,8 @@ class Exceptions
     public function render(callable $using)
     {
         $this->handler->renderable($using);
-
         return $this;
     }
-
     /**
      * Register a renderable callback.
      *
@@ -62,10 +56,8 @@ class Exceptions
     public function renderable(callable $renderUsing)
     {
         $this->handler->renderable($renderUsing);
-
         return $this;
     }
-
     /**
      * Register a callback to prepare the final, rendered exception response.
      *
@@ -75,10 +67,8 @@ class Exceptions
     public function respond(callable $using)
     {
         $this->handler->respondUsing($using);
-
         return $this;
     }
-
     /**
      * Specify the callback that should be used to throttle reportable exceptions.
      *
@@ -88,10 +78,8 @@ class Exceptions
     public function throttle(callable $throttleUsing)
     {
         $this->handler->throttleUsing($throttleUsing);
-
         return $this;
     }
-
     /**
      * Register a new exception mapping.
      *
@@ -104,10 +92,8 @@ class Exceptions
     public function map($from, $to = null)
     {
         $this->handler->map($from, $to);
-
         return $this;
     }
-
     /**
      * Set the log level for the given exception type.
      *
@@ -118,10 +104,8 @@ class Exceptions
     public function level(string $type, string $level)
     {
         $this->handler->level($type, $level);
-
         return $this;
     }
-
     /**
      * Register a closure that should be used to build exception context data.
      *
@@ -131,10 +115,8 @@ class Exceptions
     public function context(Closure $contextCallback)
     {
         $this->handler->buildContextUsing($contextCallback);
-
         return $this;
     }
-
     /**
      * Indicate that the given exception type should not be reported.
      *
@@ -146,10 +128,8 @@ class Exceptions
         foreach (Arr::wrap($class) as $exceptionClass) {
             $this->handler->dontReport($exceptionClass);
         }
-
         return $this;
     }
-
     /**
      * Register a callback to determine if an exception should not be reported.
      *
@@ -159,10 +139,8 @@ class Exceptions
     public function dontReportWhen(Closure $dontReportWhen)
     {
         $this->handler->dontReportWhen($dontReportWhen);
-
         return $this;
     }
-
     /**
      * Do not report duplicate exceptions.
      *
@@ -171,10 +149,8 @@ class Exceptions
     public function dontReportDuplicates()
     {
         $this->handler->dontReportDuplicates();
-
         return $this;
     }
-
     /**
      * Indicate that the given attributes should never be flashed to the session on validation errors.
      *
@@ -184,10 +160,8 @@ class Exceptions
     public function dontFlash(array|string $attributes)
     {
         $this->handler->dontFlash($attributes);
-
         return $this;
     }
-
     /**
      * Register the callable that determines if the exception handler response should be JSON.
      *
@@ -197,10 +171,8 @@ class Exceptions
     public function shouldRenderJsonWhen(callable $callback)
     {
         $this->handler->shouldRenderJsonWhen($callback);
-
         return $this;
     }
-
     /**
      * Indicate that the given exception class should not be ignored.
      *
@@ -210,10 +182,8 @@ class Exceptions
     public function stopIgnoring(array|string $class)
     {
         $this->handler->stopIgnoring($class);
-
         return $this;
     }
-
     /**
      * Set the truncation length for request exception messages.
      *
@@ -223,10 +193,8 @@ class Exceptions
     public function truncateRequestExceptionsAt(int $length)
     {
         RequestException::truncateAt($length);
-
         return $this;
     }
-
     /**
      * Disable truncation of request exception messages.
      *
@@ -235,7 +203,6 @@ class Exceptions
     public function dontTruncateRequestExceptions()
     {
         RequestException::dontTruncate();
-
         return $this;
     }
 }

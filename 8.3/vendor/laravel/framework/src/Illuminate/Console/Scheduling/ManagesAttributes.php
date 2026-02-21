@@ -3,7 +3,6 @@
 namespace Illuminate\Console\Scheduling;
 
 use Illuminate\Support\Reflector;
-
 trait ManagesAttributes
 {
     /**
@@ -12,91 +11,78 @@ trait ManagesAttributes
      * @var string
      */
     public $expression = '* * * * *';
-
     /**
      * How often to repeat the event during a minute.
      *
      * @var int|null
      */
     public $repeatSeconds = null;
-
     /**
      * The timezone the date should be evaluated on.
      *
      * @var \DateTimeZone|string
      */
     public $timezone;
-
     /**
      * The user the command should run as.
      *
      * @var string|null
      */
     public $user;
-
     /**
      * The list of environments the command should run under.
      *
      * @var array
      */
     public $environments = [];
-
     /**
      * Indicates if the command should run in maintenance mode.
      *
      * @var bool
      */
-    public $evenInMaintenanceMode = false;
-
+    public $evenInMaintenanceMode = \false;
     /**
      * Indicates if the command should not overlap itself.
      *
      * @var bool
      */
-    public $withoutOverlapping = false;
-
+    public $withoutOverlapping = \false;
     /**
      * Indicates if the command should only be allowed to run on one server for each cron expression.
      *
      * @var bool
      */
-    public $onOneServer = false;
-
+    public $onOneServer = \false;
     /**
      * The number of minutes the mutex should be valid.
      *
      * @var int
      */
     public $expiresAt = 1440;
-
     /**
      * Indicates if the command should run in the background.
      *
      * @var bool
      */
-    public $runInBackground = false;
-
+    public $runInBackground = \false;
     /**
      * The array of filter callbacks.
      *
      * @var array
      */
     protected $filters = [];
-
     /**
      * The array of reject callbacks.
      *
      * @var array
      */
     protected $rejects = [];
-
     /**
      * The human-readable description of the event.
      *
      * @var string|null
      */
     public $description;
-
     /**
      * Set which user the command should run as.
      *
@@ -106,10 +92,8 @@ trait ManagesAttributes
     public function user($user)
     {
         $this->user = $user;
-
         return $this;
     }
-
     /**
      * Limit the environments the command should run in.
      *
@@ -119,10 +103,8 @@ trait ManagesAttributes
     public function environments($environments)
     {
         $this->environments = is_array($environments) ? $environments : func_get_args();
-
         return $this;
     }
-
     /**
      * State that the command should run even in maintenance mode.
      *
@@ -130,11 +112,9 @@ trait ManagesAttributes
      */
     public function evenInMaintenanceMode()
     {
-        $this->evenInMaintenanceMode = true;
-
+        $this->evenInMaintenanceMode = \true;
         return $this;
     }
-
     /**
      * Do not allow the event to overlap each other.
      * The expiration time of the underlying cache lock may be specified in minutes.
@@ -144,15 +124,12 @@ trait ManagesAttributes
      */
     public function withoutOverlapping($expiresAt = 1440)
     {
-        $this->withoutOverlapping = true;
-
+        $this->withoutOverlapping = \true;
         $this->expiresAt = $expiresAt;
-
         return $this->skip(function () {
             return $this->mutex->exists($this);
         });
     }
-
     /**
      * Allow the event to only run on one server for each cron expression.
      *
@@ -160,11 +137,9 @@ trait ManagesAttributes
      */
     public function onOneServer()
     {
-        $this->onOneServer = true;
-
+        $this->onOneServer = \true;
         return $this;
     }
-
     /**
      * State that the command should run in the background.
      *
@@ -172,11 +147,9 @@ trait ManagesAttributes
      */
     public function runInBackground()
     {
-        $this->runInBackground = true;
-
+        $this->runInBackground = \true;
         return $this;
     }
-
     /**
      * Register a callback to further filter the schedule.
      *
@@ -188,10 +161,8 @@ trait ManagesAttributes
         $this->filters[] = Reflector::isCallable($callback) ? $callback : function () use ($callback) {
             return $callback;
         };
-
         return $this;
     }
-
     /**
      * Register a callback to further filter the schedule.
      *
@@ -203,10 +174,8 @@ trait ManagesAttributes
         $this->rejects[] = Reflector::isCallable($callback) ? $callback : function () use ($callback) {
             return $callback;
         };
-
         return $this;
     }
-
     /**
      * Set the human-friendly description of the event.
      *
@@ -217,7 +186,6 @@ trait ManagesAttributes
     {
         return $this->description($description);
     }
-
     /**
      * Set the human-friendly description of the event.
      *
@@ -227,7 +195,6 @@ trait ManagesAttributes
     public function description($description)
     {
         $this->description = $description;
-
         return $this;
     }
 }

@@ -4,7 +4,6 @@ namespace Illuminate\Auth;
 
 use Exception;
 use Illuminate\Http\Request;
-
 class AuthenticationException extends Exception
 {
     /**
@@ -13,21 +12,18 @@ class AuthenticationException extends Exception
      * @var array
      */
     protected $guards;
-
     /**
      * The path the user should be redirected to.
      *
      * @var string|null
      */
     protected $redirectTo;
-
     /**
      * The callback that should be used to generate the authentication redirect path.
      *
      * @var callable
      */
     protected static $redirectToCallback;
-
     /**
      * Create a new authentication exception.
      *
@@ -38,11 +34,9 @@ class AuthenticationException extends Exception
     public function __construct($message = 'Unauthenticated.', array $guards = [], $redirectTo = null)
     {
         parent::__construct($message);
-
         $this->guards = $guards;
         $this->redirectTo = $redirectTo;
     }
-
     /**
      * Get the guards that were checked.
      *
@@ -52,7 +46,6 @@ class AuthenticationException extends Exception
     {
         return $this->guards;
     }
-
     /**
      * Get the path the user should be redirected to.
      *
@@ -64,12 +57,10 @@ class AuthenticationException extends Exception
         if ($this->redirectTo) {
             return $this->redirectTo;
         }
-
         if (static::$redirectToCallback) {
             return call_user_func(static::$redirectToCallback, $request);
         }
     }
-
     /**
      * Specify the callback that should be used to generate the redirect path.
      *

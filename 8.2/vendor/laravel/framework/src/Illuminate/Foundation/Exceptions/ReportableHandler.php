@@ -4,25 +4,21 @@ namespace Illuminate\Foundation\Exceptions;
 
 use Illuminate\Support\Traits\ReflectsClosures;
 use Throwable;
-
 class ReportableHandler
 {
     use ReflectsClosures;
-
     /**
      * The underlying callback.
      *
      * @var callable
      */
     protected $callback;
-
     /**
      * Indicates if reporting should stop after invoking this handler.
      *
      * @var bool
      */
-    protected $shouldStop = false;
-
+    protected $shouldStop = \false;
     /**
      * Create a new reportable handler instance.
      *
@@ -32,7 +28,6 @@ class ReportableHandler
     {
         $this->callback = $callback;
     }
-
     /**
      * Invoke the handler.
      *
@@ -42,14 +37,11 @@ class ReportableHandler
     public function __invoke(Throwable $e)
     {
         $result = call_user_func($this->callback, $e);
-
-        if ($result === false) {
-            return false;
+        if ($result === \false) {
+            return \false;
         }
-
-        return ! $this->shouldStop;
+        return !$this->shouldStop;
     }
-
     /**
      * Determine if the callback handles the given exception.
      *
@@ -60,13 +52,11 @@ class ReportableHandler
     {
         foreach ($this->firstClosureParameterTypes($this->callback) as $type) {
             if (is_a($e, $type)) {
-                return true;
+                return \true;
             }
         }
-
-        return false;
+        return \false;
     }
-
     /**
      * Indicate that report handling should stop after invoking this callback.
      *
@@ -74,8 +64,7 @@ class ReportableHandler
      */
     public function stop()
     {
-        $this->shouldStop = true;
-
+        $this->shouldStop = \true;
         return $this;
     }
 }

@@ -3,7 +3,6 @@
 namespace Illuminate\Console\View\Components\Mutators;
 
 use Illuminate\Support\Stringable;
-
 class EnsureNoPunctuation
 {
     /**
@@ -17,7 +16,6 @@ class EnsureNoPunctuation
         if ((new Stringable($string))->endsWith(['.', '?', '!', ':'])) {
             return substr_replace($string, '', -1);
         }
-
         return $string;
     }
 }

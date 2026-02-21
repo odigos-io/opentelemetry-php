@@ -8,28 +8,24 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\Routing\Loader\Configurator\Traits;
 
 use Symfony\Component\Routing\Loader\Configurator\AliasConfigurator;
 use Symfony\Component\Routing\Loader\Configurator\CollectionConfigurator;
 use Symfony\Component\Routing\Loader\Configurator\RouteConfigurator;
 use Symfony\Component\Routing\RouteCollection;
-
 /**
  * @author Nicolas Grekas <p@tchwork.com>
  */
 trait AddTrait
 {
-    use LocalizedRouteTrait;
-
+    use \Symfony\Component\Routing\Loader\Configurator\Traits\LocalizedRouteTrait;
     /**
      * @var RouteCollection
      */
     protected $collection;
     protected $name = '';
     protected $prefixes;
-
     /**
      * Adds a route.
      *
@@ -39,15 +35,12 @@ trait AddTrait
     {
         $parentConfigurator = $this instanceof CollectionConfigurator ? $this : ($this instanceof RouteConfigurator ? $this->parentConfigurator : null);
         $route = $this->createLocalizedRoute($this->collection, $name, $path, $this->name, $this->prefixes);
-
         return new RouteConfigurator($this->collection, $route, $this->name, $parentConfigurator, $this->prefixes);
     }
-
     public function alias(string $name, string $alias): AliasConfigurator
     {
         return new AliasConfigurator($this->collection->addAlias($name, $alias));
     }
-
     /**
      * Adds a route.
      *

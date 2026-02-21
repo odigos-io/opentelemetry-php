@@ -1,10 +1,10 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\db\conditions;
 
 /**
@@ -13,7 +13,7 @@ namespace yii\db\conditions;
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  * @since 2.0.14
  */
-class OrCondition extends ConjunctionCondition
+class OrCondition extends \yii\db\conditions\ConjunctionCondition
 {
     /**
      * Returns the operator that is represented by this condition class, e.g. `AND`, `OR`.

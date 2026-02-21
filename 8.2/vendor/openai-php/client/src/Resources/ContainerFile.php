@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenAI\Resources;
 
 use OpenAI\Contracts\Resources\ContainerFileContract;
@@ -10,7 +9,6 @@ use OpenAI\Responses\Containers\Files\ContainerFileListResponse;
 use OpenAI\Responses\Containers\Files\ContainerFileResponse;
 use OpenAI\ValueObjects\Transporter\Payload;
 use OpenAI\ValueObjects\Transporter\Response;
-
 /**
  * @phpstan-import-type ContainerFileType from ContainerFileResponse
  * @phpstan-import-type ContainerFileListType from ContainerFileListResponse
@@ -18,8 +16,7 @@ use OpenAI\ValueObjects\Transporter\Response;
  */
 final class ContainerFile implements ContainerFileContract
 {
-    use Concerns\Transportable;
-
+    use \OpenAI\Resources\Concerns\Transportable;
     /**
      * Create a container file
      *
@@ -32,18 +29,12 @@ final class ContainerFile implements ContainerFileContract
         if (isset($parameters['file_id']) && isset($parameters['file'])) {
             throw new \InvalidArgumentException('You cannot set both "file_id" and "file" parameters.');
         }
-
-        $url = "containers/$containerId/files";
-        $payload = isset($parameters['file'])
-            ? Payload::upload($url, $parameters)
-            : Payload::create($url, $parameters);
-
+        $url = "containers/{$containerId}/files";
+        $payload = isset($parameters['file']) ? Payload::upload($url, $parameters) : Payload::create($url, $parameters);
         /** @var Response<ContainerFileType> $response */
         $response = $this->transporter->requestObject($payload);
-
         return ContainerFileResponse::from($response->data(), $response->meta());
     }
-
     /**
      * List container files
      *
@@ -53,14 +44,11 @@ final class ContainerFile implements ContainerFileContract
      */
     public function list(string $containerId, array $parameters = []): ContainerFileListResponse
     {
-        $payload = Payload::list("containers/$containerId/files", $parameters);
-
+        $payload = Payload::list("containers/{$containerId}/files", $parameters);
         /** @var Response<ContainerFileListType> $response */
         $response = $this->transporter->requestObject($payload);
-
         return ContainerFileListResponse::from($response->data(), $response->meta());
     }
-
     /**
      * Retrieve a container file
      *
@@ -68,14 +56,11 @@ final class ContainerFile implements ContainerFileContract
      */
     public function retrieve(string $containerId, string $fileId): ContainerFileResponse
     {
-        $payload = Payload::retrieve("containers/$containerId/files", $fileId);
-
+        $payload = Payload::retrieve("containers/{$containerId}/files", $fileId);
         /** @var Response<ContainerFileType> $response */
         $response = $this->transporter->requestObject($payload);
-
         return ContainerFileResponse::from($response->data(), $response->meta());
     }
-
     /**
      * Retrieve container file content
      *
@@ -83,11 +68,9 @@ final class ContainerFile implements ContainerFileContract
      */
     public function content(string $containerId, string $fileId): string
     {
-        $payload = Payload::retrieveContent("containers/$containerId/files", $fileId);
-
+        $payload = Payload::retrieveContent("containers/{$containerId}/files", $fileId);
         return $this->transporter->requestContent($payload);
     }
-
     /**
      * Delete a container file
      *
@@ -95,11 +78,9 @@ final class ContainerFile implements ContainerFileContract
      */
     public function delete(string $containerId, string $fileId): ContainerFileDeleteResponse
     {
-        $payload = Payload::delete("containers/$containerId/files", $fileId);
-
+        $payload = Payload::delete("containers/{$containerId}/files", $fileId);
         /** @var Response<ContainerFileDeleteType> $response */
         $response = $this->transporter->requestObject($payload);
-
         return ContainerFileDeleteResponse::from($response->data(), $response->meta());
     }
 }

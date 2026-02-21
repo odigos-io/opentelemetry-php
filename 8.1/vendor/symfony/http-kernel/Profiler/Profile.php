@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\HttpKernel\Profiler;
 
 use Symfony\Component\HttpKernel\DataCollector\DataCollectorInterface;
-
 /**
  * Profile.
  *
@@ -21,12 +19,10 @@ use Symfony\Component\HttpKernel\DataCollector\DataCollectorInterface;
 class Profile
 {
     private string $token;
-
     /**
      * @var DataCollectorInterface[]
      */
     private array $collectors = [];
-
     private ?string $ip = null;
     private ?string $method = null;
     private ?string $url = null;
@@ -34,17 +30,14 @@ class Profile
     private ?int $statusCode = null;
     private ?self $parent = null;
     private ?string $virtualType = null;
-
     /**
      * @var Profile[]
      */
     private array $children = [];
-
     public function __construct(string $token)
     {
         $this->token = $token;
     }
-
     /**
      * @return void
      */
@@ -52,7 +45,6 @@ class Profile
     {
         $this->token = $token;
     }
-
     /**
      * Gets the token.
      */
@@ -60,7 +52,6 @@ class Profile
     {
         return $this->token;
     }
-
     /**
      * Sets the parent token.
      *
@@ -70,7 +61,6 @@ class Profile
     {
         $this->parent = $parent;
     }
-
     /**
      * Returns the parent profile.
      */
@@ -78,7 +68,6 @@ class Profile
     {
         return $this->parent;
     }
-
     /**
      * Returns the parent token.
      */
@@ -86,7 +75,6 @@ class Profile
     {
         return $this->parent?->getToken();
     }
-
     /**
      * Returns the IP.
      */
@@ -94,7 +82,6 @@ class Profile
     {
         return $this->ip;
     }
-
     /**
      * @return void
      */
@@ -102,7 +89,6 @@ class Profile
     {
         $this->ip = $ip;
     }
-
     /**
      * Returns the request method.
      */
@@ -110,7 +96,6 @@ class Profile
     {
         return $this->method;
     }
-
     /**
      * @return void
      */
@@ -118,7 +103,6 @@ class Profile
     {
         $this->method = $method;
     }
-
     /**
      * Returns the URL.
      */
@@ -126,7 +110,6 @@ class Profile
     {
         return $this->url;
     }
-
     /**
      * @return void
      */
@@ -134,12 +117,10 @@ class Profile
     {
         $this->url = $url;
     }
-
     public function getTime(): int
     {
         return $this->time ?? 0;
     }
-
     /**
      * @return void
      */
@@ -147,7 +128,6 @@ class Profile
     {
         $this->time = $time;
     }
-
     /**
      * @return void
      */
@@ -155,12 +135,10 @@ class Profile
     {
         $this->statusCode = $statusCode;
     }
-
     public function getStatusCode(): ?int
     {
         return $this->statusCode;
     }
-
     /**
      * @internal
      */
@@ -168,7 +146,6 @@ class Profile
     {
         $this->virtualType = $virtualType;
     }
-
     /**
      * @internal
      */
@@ -176,7 +153,6 @@ class Profile
     {
         return $this->virtualType;
     }
-
     /**
      * Finds children profilers.
      *
@@ -186,7 +162,6 @@ class Profile
     {
         return $this->children;
     }
-
     /**
      * Sets children profiler.
      *
@@ -201,7 +176,6 @@ class Profile
             $this->addChild($child);
         }
     }
-
     /**
      * Adds the child token.
      *
@@ -212,7 +186,6 @@ class Profile
         $this->children[] = $child;
         $child->setParent($this);
     }
-
     public function getChildByToken(string $token): ?self
     {
         foreach ($this->children as $child) {
@@ -220,10 +193,8 @@ class Profile
                 return $child;
             }
         }
-
         return null;
     }
-
     /**
      * Gets a Collector by name.
      *
@@ -234,10 +205,8 @@ class Profile
         if (!isset($this->collectors[$name])) {
             throw new \InvalidArgumentException(\sprintf('Collector "%s" does not exist.', $name));
         }
-
         return $this->collectors[$name];
     }
-
     /**
      * Gets the Collectors associated with this profile.
      *
@@ -247,7 +216,6 @@ class Profile
     {
         return $this->collectors;
     }
-
     /**
      * Sets the Collectors associated with this profile.
      *
@@ -262,7 +230,6 @@ class Profile
             $this->addCollector($collector);
         }
     }
-
     /**
      * Adds a Collector.
      *
@@ -272,12 +239,10 @@ class Profile
     {
         $this->collectors[$collector->getName()] = $collector;
     }
-
     public function hasCollector(string $name): bool
     {
         return isset($this->collectors[$name]);
     }
-
     public function __sleep(): array
     {
         return ['token', 'parent', 'children', 'collectors', 'ip', 'method', 'url', 'time', 'statusCode', 'virtualType'];

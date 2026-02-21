@@ -13,25 +13,21 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\StreamedJsonResponse;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Throwable;
-
 class ResponseFactory implements FactoryContract
 {
     use Macroable;
-
     /**
      * The view factory instance.
      *
      * @var \Illuminate\Contracts\View\Factory
      */
     protected $view;
-
     /**
      * The redirector instance.
      *
      * @var \Illuminate\Routing\Redirector
      */
     protected $redirector;
-
     /**
      * Create a new response factory instance.
      *
@@ -39,12 +35,11 @@ class ResponseFactory implements FactoryContract
      * @param  \Illuminate\Routing\Redirector  $redirector
      * @return void
      */
-    public function __construct(ViewFactory $view, Redirector $redirector)
+    public function __construct(ViewFactory $view, \Illuminate\Routing\Redirector $redirector)
     {
         $this->view = $view;
         $this->redirector = $redirector;
     }
-
     /**
      * Create a new response instance.
      *
@@ -57,7 +52,6 @@ class ResponseFactory implements FactoryContract
     {
         return new Response($content, $status, $headers);
     }
-
     /**
      * Create a new "no content" response.
      *
@@ -69,7 +63,6 @@ class ResponseFactory implements FactoryContract
     {
         return $this->make('', $status, $headers);
     }
-
     /**
      * Create a new response for a given view.
      *
@@ -84,10 +77,8 @@ class ResponseFactory implements FactoryContract
         if (is_array($view)) {
             return $this->make($this->view->first($view, $data), $status, $headers);
         }
-
         return $this->make($this->view->make($view, $data), $status, $headers);
     }
-
     /**
      * Create a new JSON response instance.
      *
@@ -101,7 +92,6 @@ class ResponseFactory implements FactoryContract
     {
         return new JsonResponse($data, $status, $headers, $options);
     }
-
     /**
      * Create a new JSONP response instance.
      *
@@ -116,7 +106,6 @@ class ResponseFactory implements FactoryContract
     {
         return $this->json($data, $status, $headers, $options)->setCallback($callback);
     }
-
     /**
      * Create a new streamed response instance.
      *
@@ -129,7 +118,6 @@ class ResponseFactory implements FactoryContract
     {
         return new StreamedResponse($callback, $status, $headers);
     }
-
     /**
      * Create a new streamed response instance.
      *
@@ -143,7 +131,6 @@ class ResponseFactory implements FactoryContract
     {
         return new StreamedJsonResponse($data, $status, $headers, $encodingOptions);
     }
-
     /**
      * Create a new streamed response instance as a file download.
      *
@@ -162,20 +149,12 @@ class ResponseFactory implements FactoryContract
                 throw new StreamedResponseException($e);
             }
         };
-
         $response = new StreamedResponse($withWrappedException, 200, $headers);
-
-        if (! is_null($name)) {
-            $response->headers->set('Content-Disposition', $response->headers->makeDisposition(
-                $disposition,
-                $name,
-                $this->fallbackName($name)
-            ));
+        if (!is_null($name)) {
+            $response->headers->set('Content-Disposition', $response->headers->makeDisposition($disposition, $name, $this->fallbackName($name)));
         }
-
         return $response;
     }
-
     /**
      * Create a new file download response.
      *
@@ -187,15 +166,12 @@ class ResponseFactory implements FactoryContract
      */
     public function download($file, $name = null, array $headers = [], $disposition = 'attachment')
     {
-        $response = new BinaryFileResponse($file, 200, $headers, true, $disposition);
-
-        if (! is_null($name)) {
+        $response = new BinaryFileResponse($file, 200, $headers, \true, $disposition);
+        if (!is_null($name)) {
             return $response->setContentDisposition($disposition, $name, $this->fallbackName($name));
         }
-
         return $response;
     }
-
     /**
      * Convert the string to ASCII characters that are equivalent to the given name.
      *
@@ -206,7 +182,6 @@ class ResponseFactory implements FactoryContract
     {
         return str_replace('%', '', Str::ascii($name));
     }
-
     /**
      * Return the raw contents of a binary file.
      *
@@ -218,7 +193,6 @@ class ResponseFactory implements FactoryContract
     {
         return new BinaryFileResponse($file, 200, $headers);
     }
-
     /**
      * Create a new redirect response to the given path.
      *
@@ -232,7 +206,6 @@ class ResponseFactory implements FactoryContract
     {
         return $this->redirector->to($path, $status, $headers, $secure);
     }
-
     /**
      * Create a new redirect response to a named route.
      *
@@ -246,7 +219,6 @@ class ResponseFactory implements FactoryContract
     {
         return $this->redirector->route($route, $parameters, $status, $headers);
     }
-
     /**
      * Create a new redirect response to a controller action.
      *
@@ -260,7 +232,6 @@ class ResponseFactory implements FactoryContract
     {
         return $this->redirector->action($action, $parameters, $status, $headers);
     }
-
     /**
      * Create a new redirect response, while putting the current URL in the session.
      *
@@ -274,7 +245,6 @@ class ResponseFactory implements FactoryContract
     {
         return $this->redirector->guest($path, $status, $headers, $secure);
     }
-
     /**
      * Create a new redirect response to the previously intended location.
      *

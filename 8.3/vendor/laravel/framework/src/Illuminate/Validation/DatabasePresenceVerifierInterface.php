@@ -2,7 +2,7 @@
 
 namespace Illuminate\Validation;
 
-interface DatabasePresenceVerifierInterface extends PresenceVerifierInterface
+interface DatabasePresenceVerifierInterface extends \Illuminate\Validation\PresenceVerifierInterface
 {
     /**
      * Set the connection to be used.

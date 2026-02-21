@@ -1,12 +1,10 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\DBAL\Driver\PDO;
 
 use Doctrine\DBAL\Driver\AbstractException;
 use PDOException;
-
 /** @internal */
 final class Exception extends AbstractException
 {
@@ -14,13 +12,11 @@ final class Exception extends AbstractException
     {
         if ($exception->errorInfo !== null) {
             [$sqlState, $code] = $exception->errorInfo;
-
             $code ??= 0;
         } else {
-            $code     = $exception->getCode();
+            $code = $exception->getCode();
             $sqlState = null;
         }
-
         return new self($exception->getMessage(), $sqlState, $code, $exception);
     }
 }

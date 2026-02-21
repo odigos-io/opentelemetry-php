@@ -14,25 +14,21 @@ use Illuminate\Http\Resources\ConditionallyLoadsAttributes;
 use Illuminate\Http\Resources\DelegatesToResource;
 use JsonException;
 use JsonSerializable;
-
 class JsonResource implements ArrayAccess, JsonSerializable, Responsable, UrlRoutable
 {
     use ConditionallyLoadsAttributes, DelegatesToResource;
-
     /**
      * The resource instance.
      *
      * @var mixed
      */
     public $resource;
-
     /**
      * The additional data that should be added to the top-level resource array.
      *
      * @var array
      */
     public $with = [];
-
     /**
      * The additional meta data that should be added to the resource response.
      *
@@ -41,21 +37,18 @@ class JsonResource implements ArrayAccess, JsonSerializable, Responsable, UrlRou
      * @var array
      */
     public $additional = [];
-
     /**
      * The "data" wrapper that should be applied.
      *
      * @var string|null
      */
     public static $wrap = 'data';
-
     /**
      * Whether to force wrapping even if the $wrap key exists in underlying resource data.
      *
      * @var bool
      */
-    public static bool $forceWrapping = false;
-
+    public static bool $forceWrapping = \false;
     /**
      * Create a new resource instance.
      *
@@ -65,7 +58,6 @@ class JsonResource implements ArrayAccess, JsonSerializable, Responsable, UrlRou
     {
         $this->resource = $resource;
     }
-
     /**
      * Create a new resource instance.
      *
@@ -76,7 +68,6 @@ class JsonResource implements ArrayAccess, JsonSerializable, Responsable, UrlRou
     {
         return new static(...$parameters);
     }
-
     /**
      * Create a new anonymous resource collection.
      *
@@ -87,11 +78,10 @@ class JsonResource implements ArrayAccess, JsonSerializable, Responsable, UrlRou
     {
         return tap(static::newCollection($resource), function ($collection) {
             if (property_exists(static::class, 'preserveKeys')) {
-                $collection->preserveKeys = (new static([]))->preserveKeys === true;
+                $collection->preserveKeys = (new static([]))->preserveKeys === \true;
             }
         });
     }
-
     /**
      * Create a new resource collection instance.
      *
@@ -100,9 +90,8 @@ class JsonResource implements ArrayAccess, JsonSerializable, Responsable, UrlRou
      */
     protected static function newCollection($resource)
     {
-        return new AnonymousResourceCollection($resource, static::class);
+        return new \Illuminate\Http\Resources\Json\AnonymousResourceCollection($resource, static::class);
     }
-
     /**
      * Resolve the resource to an array.
      *
@@ -111,19 +100,14 @@ class JsonResource implements ArrayAccess, JsonSerializable, Responsable, UrlRou
      */
     public function resolve($request = null)
     {
-        $data = $this->resolveResourceData(
-            $request ?: $this->resolveRequestFromContainer()
-        );
-
+        $data = $this->resolveResourceData($request ?: $this->resolveRequestFromContainer());
         if ($data instanceof Arrayable) {
             $data = $data->toArray();
         } elseif ($data instanceof JsonSerializable) {
             $data = $data->jsonSerialize();
         }
-
         return $this->filter((array) $data);
     }
-
     /**
      * Transform the resource into an array.
      *
@@ -135,10 +119,8 @@ class JsonResource implements ArrayAccess, JsonSerializable, Responsable, UrlRou
         if (property_exists($this, 'attributes')) {
             return $this->attributes;
         }
-
         return $this->toArray($request);
     }
-
     /**
      * Resolve the resource data to an array.
      *
@@ -149,7 +131,6 @@ class JsonResource implements ArrayAccess, JsonSerializable, Responsable, UrlRou
     {
         return $this->toAttributes($request);
     }
-
     /**
      * Transform the resource into an array.
      *
@@ -161,12 +142,8 @@ class JsonResource implements ArrayAccess, JsonSerializable, Responsable, UrlRou
         if (is_null($this->resource)) {
             return [];
         }
-
-        return is_array($this->resource)
-            ? $this->resource
-            : $this->resource->toArray();
+        return is_array($this->resource) ? $this->resource : $this->resource->toArray();
     }
-
     /**
      * Convert the resource to JSON.
      *
@@ -178,14 +155,12 @@ class JsonResource implements ArrayAccess, JsonSerializable, Responsable, UrlRou
     public function toJson($options = 0)
     {
         try {
-            $json = json_encode($this->jsonSerialize(), $options | JSON_THROW_ON_ERROR);
+            $json = json_encode($this->jsonSerialize(), $options | \JSON_THROW_ON_ERROR);
         } catch (JsonException $e) {
             throw JsonEncodingException::forResource($this, $e->getMessage());
         }
-
         return $json;
     }
-
     /**
      * Convert the resource to pretty print formatted JSON.
      *
@@ -196,9 +171,8 @@ class JsonResource implements ArrayAccess, JsonSerializable, Responsable, UrlRou
      */
     public function toPrettyJson(int $options = 0)
     {
-        return $this->toJson(JSON_PRETTY_PRINT | $options);
+        return $this->toJson(\JSON_PRETTY_PRINT | $options);
     }
-
     /**
      * Get any additional data that should be returned with the resource array.
      *
@@ -209,7 +183,6 @@ class JsonResource implements ArrayAccess, JsonSerializable, Responsable, UrlRou
     {
         return $this->with;
     }
-
     /**
      * Add additional meta data to the resource response.
      *
@@ -219,10 +192,8 @@ class JsonResource implements ArrayAccess, JsonSerializable, Responsable, UrlRou
     public function additional(array $data)
     {
         $this->additional = $data;
-
         return $this;
     }
-
     /**
      * Get the JSON serialization options that should be applied to the resource response.
      *
@@ -232,7 +203,6 @@ class JsonResource implements ArrayAccess, JsonSerializable, Responsable, UrlRou
     {
         return 0;
     }
-
     /**
      * Customize the response for a request.
      *
@@ -244,7 +214,6 @@ class JsonResource implements ArrayAccess, JsonSerializable, Responsable, UrlRou
     {
         //
     }
-
     /**
      * Resolve the HTTP request instance from container.
      *
@@ -254,7 +223,6 @@ class JsonResource implements ArrayAccess, JsonSerializable, Responsable, UrlRou
     {
         return Container::getInstance()->make('request');
     }
-
     /**
      * Set the string that should wrap the outer-most resource array.
      *
@@ -265,7 +233,6 @@ class JsonResource implements ArrayAccess, JsonSerializable, Responsable, UrlRou
     {
         static::$wrap = $value;
     }
-
     /**
      * Disable wrapping of the outer-most resource array.
      *
@@ -275,7 +242,6 @@ class JsonResource implements ArrayAccess, JsonSerializable, Responsable, UrlRou
     {
         static::$wrap = null;
     }
-
     /**
      * Transform the resource into an HTTP response.
      *
@@ -284,11 +250,8 @@ class JsonResource implements ArrayAccess, JsonSerializable, Responsable, UrlRou
      */
     public function response($request = null)
     {
-        return $this->toResponse(
-            $request ?: $this->resolveRequestFromContainer()
-        );
+        return $this->toResponse($request ?: $this->resolveRequestFromContainer());
     }
-
     /**
      * Create an HTTP response that represents the object.
      *
@@ -297,9 +260,8 @@ class JsonResource implements ArrayAccess, JsonSerializable, Responsable, UrlRou
      */
     public function toResponse($request)
     {
-        return (new ResourceResponse($this))->toResponse($request);
+        return (new \Illuminate\Http\Resources\Json\ResourceResponse($this))->toResponse($request);
     }
-
     /**
      * Prepare the resource for JSON serialization.
      *
@@ -309,7 +271,6 @@ class JsonResource implements ArrayAccess, JsonSerializable, Responsable, UrlRou
     {
         return $this->resolve($this->resolveRequestFromContainer());
     }
-
     /**
      * Flush the resource's global state.
      *
@@ -318,6 +279,6 @@ class JsonResource implements ArrayAccess, JsonSerializable, Responsable, UrlRou
     public static function flushState()
     {
         static::$wrap = 'data';
-        static::$forceWrapping = false;
+        static::$forceWrapping = \false;
     }
 }

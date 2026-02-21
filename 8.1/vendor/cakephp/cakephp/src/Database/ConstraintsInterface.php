@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -17,7 +17,6 @@ declare(strict_types=1);
 namespace Cake\Database;
 
 use Cake\Datasource\ConnectionInterface;
-
 /**
  * Defines the interface for a fixture that needs to manage constraints.
  *
@@ -34,7 +33,6 @@ interface ConstraintsInterface
      * @return bool on success or if there are no constraints to create, or false on failure
      */
     public function createConstraints(ConnectionInterface $connection): bool;
-
     /**
      * Build and execute SQL queries necessary to drop the constraints for the
      * fixture

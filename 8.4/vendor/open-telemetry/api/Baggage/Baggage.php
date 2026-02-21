@@ -1,69 +1,58 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\API\Baggage;
 
 use OpenTelemetry\Context\Context;
 use OpenTelemetry\Context\ContextInterface;
 use OpenTelemetry\Context\ContextKeys;
 use OpenTelemetry\Context\ScopeInterface;
-
-final class Baggage implements BaggageInterface
+final class Baggage implements \OpenTelemetry\API\Baggage\BaggageInterface
 {
     private static ?self $emptyBaggage = null;
-
     /** @inheritDoc */
     #[\Override]
-    public static function fromContext(ContextInterface $context): BaggageInterface
+    public static function fromContext(ContextInterface $context): \OpenTelemetry\API\Baggage\BaggageInterface
     {
         return $context->get(ContextKeys::baggage()) ?? self::getEmpty();
     }
-
     /** @inheritDoc */
     #[\Override]
-    public static function getBuilder(): BaggageBuilderInterface
+    public static function getBuilder(): \OpenTelemetry\API\Baggage\BaggageBuilderInterface
     {
-        return new BaggageBuilder();
+        return new \OpenTelemetry\API\Baggage\BaggageBuilder();
     }
-
     /** @inheritDoc */
     #[\Override]
-    public static function getCurrent(): BaggageInterface
+    public static function getCurrent(): \OpenTelemetry\API\Baggage\BaggageInterface
     {
         return self::fromContext(Context::getCurrent());
     }
-
     /** @inheritDoc */
     #[\Override]
-    public static function getEmpty(): BaggageInterface
+    public static function getEmpty(): \OpenTelemetry\API\Baggage\BaggageInterface
     {
         if (null === self::$emptyBaggage) {
             self::$emptyBaggage = new self();
         }
-
         return self::$emptyBaggage;
     }
-
     /** @param array<string, Entry> $entries */
     public function __construct(private readonly array $entries = [])
     {
     }
-
     /** @inheritDoc */
     #[\Override]
     public function activate(): ScopeInterface
     {
         return Context::getCurrent()->withContextValue($this)->activate();
     }
-
     /** @inheritDoc */
     #[\Override]
-    public function getEntry(string $key): ?Entry
+    public function getEntry(string $key): ?\OpenTelemetry\API\Baggage\Entry
     {
         return $this->entries[$key] ?? null;
     }
-
     /** @inheritDoc */
     #[\Override]
     public function getValue(string $key)
@@ -71,10 +60,8 @@ final class Baggage implements BaggageInterface
         if (($entry = $this->getEntry($key)) !== null) {
             return $entry->getValue();
         }
-
         return null;
     }
-
     /** @inheritDoc */
     #[\Override]
     public function getAll(): iterable
@@ -83,21 +70,18 @@ final class Baggage implements BaggageInterface
             yield $key => $entry;
         }
     }
-
     /** @inheritDoc */
     #[\Override]
     public function isEmpty(): bool
     {
         return $this->entries === [];
     }
-
     /** @inheritDoc */
     #[\Override]
-    public function toBuilder(): BaggageBuilderInterface
+    public function toBuilder(): \OpenTelemetry\API\Baggage\BaggageBuilderInterface
     {
-        return new BaggageBuilder($this->entries);
+        return new \OpenTelemetry\API\Baggage\BaggageBuilder($this->entries);
     }
-
     /** @inheritDoc */
     #[\Override]
     public function storeInContext(ContextInterface $context): ContextInterface

@@ -1,10 +1,10 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\web;
 
 use DOMDocument;
@@ -13,7 +13,6 @@ use DOMException;
 use yii\base\Arrayable;
 use yii\base\Component;
 use yii\helpers\StringHelper;
-
 /**
  * XmlResponseFormatter formats the given data into an XML response content.
  *
@@ -22,7 +21,7 @@ use yii\helpers\StringHelper;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class XmlResponseFormatter extends Component implements ResponseFormatterInterface
+class XmlResponseFormatter extends Component implements \yii\web\ResponseFormatterInterface
 {
     /**
      * @var string the Content-Type header for the response
@@ -52,25 +51,22 @@ class XmlResponseFormatter extends Component implements ResponseFormatterInterfa
      * Defaults to `true`.
      * @since 2.0.7
      */
-    public $useTraversableAsArray = true;
+    public $useTraversableAsArray = \true;
     /**
      * @var bool if object class names should be used as tag names
      * @since 2.0.11
      */
-    public $useObjectTags = true;
+    public $useObjectTags = \true;
     /**
      * @var bool if true, converts object tags to lowercase, `$useObjectTags` must be enabled
      * @since 2.0.43
      */
-    public $objectTagToLowercase = false;
-
+    public $objectTagToLowercase = \false;
     /**
      * @var DOMDocument the XML document, serves as the root of the document tree
      * @since 2.0.43
      */
     protected $dom;
-
-
     /**
      * Formats the specified response.
      *
@@ -79,7 +75,7 @@ class XmlResponseFormatter extends Component implements ResponseFormatterInterfa
     public function format($response)
     {
         $charset = $this->encoding === null ? $response->charset : $this->encoding;
-        if (stripos($this->contentType, 'charset') === false) {
+        if (stripos($this->contentType, 'charset') === \false) {
             $this->contentType .= '; charset=' . $charset;
         }
         $response->getHeaders()->set('Content-Type', $this->contentType);
@@ -99,7 +95,6 @@ class XmlResponseFormatter extends Component implements ResponseFormatterInterfa
             $response->content = $this->dom->saveXML();
         }
     }
-
     /**
      * Recursively adds data to XML document.
      *
@@ -108,10 +103,7 @@ class XmlResponseFormatter extends Component implements ResponseFormatterInterfa
      */
     protected function buildXml($element, $data)
     {
-        if (
-            is_array($data) ||
-            ($data instanceof \Traversable && $this->useTraversableAsArray && !$data instanceof Arrayable)
-        ) {
+        if (is_array($data) || $data instanceof \Traversable && $this->useTraversableAsArray && !$data instanceof Arrayable) {
             foreach ($data as $name => $value) {
                 if (is_int($name) && is_object($value)) {
                     $this->buildXml($element, $value);
@@ -149,7 +141,6 @@ class XmlResponseFormatter extends Component implements ResponseFormatterInterfa
             $element->appendChild($this->dom->createTextNode($this->formatScalarValue($data)));
         }
     }
-
     /**
      * Formats scalar value to use in XML text node.
      *
@@ -159,10 +150,10 @@ class XmlResponseFormatter extends Component implements ResponseFormatterInterfa
      */
     protected function formatScalarValue($value)
     {
-        if ($value === true) {
+        if ($value === \true) {
             return 'true';
         }
-        if ($value === false) {
+        if ($value === \false) {
             return 'false';
         }
         if (is_float($value)) {
@@ -170,7 +161,6 @@ class XmlResponseFormatter extends Component implements ResponseFormatterInterfa
         }
         return (string) $value;
     }
-
     /**
      * Returns element name ready to be used in DOMElement if
      * name is not empty, is not int and is valid.
@@ -186,10 +176,8 @@ class XmlResponseFormatter extends Component implements ResponseFormatterInterfa
         if (empty($name) || is_int($name) || !$this->isValidXmlName($name)) {
             return $this->itemTag;
         }
-
         return $name;
     }
-
     /**
      * Checks if name is valid to be used in XML.
      *
@@ -201,9 +189,9 @@ class XmlResponseFormatter extends Component implements ResponseFormatterInterfa
     protected function isValidXmlName($name)
     {
         try {
-            return $this->dom->createElement($name) !== false;
+            return $this->dom->createElement($name) !== \false;
         } catch (DOMException $e) {
-            return false;
+            return \false;
         }
     }
 }

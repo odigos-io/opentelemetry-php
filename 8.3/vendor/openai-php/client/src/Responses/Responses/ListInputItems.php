@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenAI\Responses\Responses;
 
 use OpenAI\Actions\Responses\ItemObjects;
@@ -30,7 +29,6 @@ use OpenAI\Responses\Responses\Output\OutputMessage;
 use OpenAI\Responses\Responses\Output\OutputReasoning;
 use OpenAI\Responses\Responses\Output\OutputWebSearchToolCall;
 use OpenAI\Testing\Responses\Concerns\Fakeable;
-
 /**
  * @phpstan-import-type ResponseItemObjectTypes from ItemObjects
  *
@@ -42,54 +40,28 @@ final class ListInputItems implements ResponseContract, ResponseHasMetaInformati
 {
     /** @use ArrayAccessible<ListInputItemsType> */
     use ArrayAccessible;
-
     use Fakeable;
     use HasMetaInformation;
-
     /**
      * @param  array<int, InputMessage|OutputMessage|OutputFileSearchToolCall|OutputComputerToolCall|ComputerToolCallOutput|LocalShellCallOutput|McpApprovalResponse|CustomToolCallOutput|OutputWebSearchToolCall|OutputFunctionToolCall|FunctionToolCallOutput|OutputReasoning|OutputMcpListTools|OutputMcpApprovalRequest|OutputMcpCall|OutputImageGenerationToolCall|OutputCodeInterpreterToolCall|OutputLocalShellCall|OutputCustomToolCall>  $data
      * @param  'list'  $object
      */
-    private function __construct(
-        public readonly string $object,
-        public readonly array $data,
-        public readonly string $firstId,
-        public readonly string $lastId,
-        public readonly bool $hasMore,
-        private readonly MetaInformation $meta,
-    ) {}
-
+    private function __construct(public readonly string $object, public readonly array $data, public readonly string $firstId, public readonly string $lastId, public readonly bool $hasMore, private readonly MetaInformation $meta)
+    {
+    }
     /**
      * @param  ListInputItemsType  $attributes
      */
     public static function from(array $attributes, MetaInformation $meta): self
     {
         $data = ItemObjects::parse($attributes['data']);
-
-        return new self(
-            object: $attributes['object'],
-            data: $data,
-            firstId: $attributes['first_id'],
-            lastId: $attributes['last_id'],
-            hasMore: $attributes['has_more'],
-            meta: $meta,
-        );
+        return new self(object: $attributes['object'], data: $data, firstId: $attributes['first_id'], lastId: $attributes['last_id'], hasMore: $attributes['has_more'], meta: $meta);
     }
-
     /**
      * {@inheritDoc}
      */
     public function toArray(): array
     {
-        return [
-            'object' => $this->object,
-            'data' => array_map(
-                fn (InputMessage|OutputMessage|OutputFileSearchToolCall|OutputFunctionToolCall|FunctionToolCallOutput|OutputWebSearchToolCall|OutputComputerToolCall|ComputerToolCallOutput|LocalShellCallOutput|McpApprovalResponse|CustomToolCallOutput|OutputReasoning|OutputMcpListTools|OutputMcpApprovalRequest|OutputMcpCall|OutputImageGenerationToolCall|OutputCodeInterpreterToolCall|OutputLocalShellCall|OutputCustomToolCall $item): array => $item->toArray(),
-                $this->data,
-            ),
-            'first_id' => $this->firstId,
-            'last_id' => $this->lastId,
-            'has_more' => $this->hasMore,
-        ];
+        return ['object' => $this->object, 'data' => array_map(fn(InputMessage|OutputMessage|OutputFileSearchToolCall|OutputFunctionToolCall|FunctionToolCallOutput|OutputWebSearchToolCall|OutputComputerToolCall|ComputerToolCallOutput|LocalShellCallOutput|McpApprovalResponse|CustomToolCallOutput|OutputReasoning|OutputMcpListTools|OutputMcpApprovalRequest|OutputMcpCall|OutputImageGenerationToolCall|OutputCodeInterpreterToolCall|OutputLocalShellCall|OutputCustomToolCall $item): array => $item->toArray(), $this->data), 'first_id' => $this->firstId, 'last_id' => $this->lastId, 'has_more' => $this->hasMore];
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright 2015-present MongoDB, Inc.
  *
@@ -14,16 +15,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 namespace MongoDB\Model;
 
 use MongoDB\BSON\Serializable;
 use MongoDB\Exception\InvalidArgumentException;
 use stdClass;
-
 use function is_string;
 use function MongoDB\is_document;
-
 /**
  * Search index input model class.
  *
@@ -42,24 +40,20 @@ final class SearchIndexInput implements Serializable
      */
     public function __construct(private array $index)
     {
-        if (! isset($index['definition'])) {
+        if (!isset($index['definition'])) {
             throw new InvalidArgumentException('Required "definition" document is missing from search index specification');
         }
-
-        if (! is_document($index['definition'])) {
+        if (!is_document($index['definition'])) {
             throw InvalidArgumentException::expectedDocumentType('"definition" option', $index['definition']);
         }
-
         // Name is optional, but must be a non-empty string if provided
-        if (isset($index['name']) && ! is_string($index['name'])) {
+        if (isset($index['name']) && !is_string($index['name'])) {
             throw InvalidArgumentException::invalidType('"name" option', $index['name'], 'string');
         }
-
-        if (isset($index['type']) && ! is_string($index['type'])) {
+        if (isset($index['type']) && !is_string($index['type'])) {
             throw InvalidArgumentException::invalidType('"type" option', $index['type'], 'string');
         }
     }
-
     /**
      * Serialize the search index information to BSON for search index creation.
      *

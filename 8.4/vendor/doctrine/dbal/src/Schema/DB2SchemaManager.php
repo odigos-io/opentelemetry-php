@@ -1,14 +1,12 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\DBAL\Schema;
 
 use Doctrine\DBAL\Platforms\DB2Platform;
 use Doctrine\DBAL\Result;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\Types\Types;
-
 use function array_change_key_case;
 use function implode;
 use function preg_match;
@@ -18,9 +16,7 @@ use function strpos;
 use function strtolower;
 use function strtoupper;
 use function substr;
-
 use const CASE_LOWER;
-
 /**
  * Db2 Schema Manager.
  *
@@ -28,79 +24,58 @@ use const CASE_LOWER;
  *
  * @extends AbstractSchemaManager<DB2Platform>
  */
-class DB2SchemaManager extends AbstractSchemaManager
+class DB2SchemaManager extends \Doctrine\DBAL\Schema\AbstractSchemaManager
 {
     /**
      * {@inheritDoc}
      */
-    protected function _getPortableTableColumnDefinition(array $tableColumn): Column
+    protected function _getPortableTableColumnDefinition(array $tableColumn): \Doctrine\DBAL\Schema\Column
     {
         $tableColumn = array_change_key_case($tableColumn, CASE_LOWER);
-
         $length = $precision = $default = null;
-        $scale  = 0;
-        $fixed  = false;
-
+        $scale = 0;
+        $fixed = \false;
         if ($tableColumn['default'] !== null && $tableColumn['default'] !== 'NULL') {
             $default = $tableColumn['default'];
-
             if (preg_match('/^\'(.*)\'$/s', $default, $matches) === 1) {
                 $default = str_replace("''", "'", $matches[1]);
             }
         }
-
         $type = $this->platform->getDoctrineTypeMapping($tableColumn['typename']);
-
         switch (strtolower($tableColumn['typename'])) {
             case 'varchar':
                 if ($tableColumn['codepage'] === 0) {
                     $type = Types::BINARY;
                 }
-
                 $length = $tableColumn['length'];
                 break;
-
             case 'character':
                 if ($tableColumn['codepage'] === 0) {
                     $type = Types::BINARY;
                 }
-
                 $length = $tableColumn['length'];
-                $fixed  = true;
+                $fixed = \true;
                 break;
-
             case 'clob':
                 $length = $tableColumn['length'];
                 break;
-
             case 'decimal':
             case 'double':
             case 'real':
-                $scale     = $tableColumn['scale'];
+                $scale = $tableColumn['scale'];
                 $precision = $tableColumn['length'];
                 break;
         }
-
-        $options = [
-            'length'          => $length,
-            'fixed'           => $fixed,
-            'default'         => $default,
-            'autoincrement'   => (bool) $tableColumn['autoincrement'],
-            'notnull'         => $tableColumn['nulls'] === 'N',
-        ];
-
+        $options = ['length' => $length, 'fixed' => $fixed, 'default' => $default, 'autoincrement' => (bool) $tableColumn['autoincrement'], 'notnull' => $tableColumn['nulls'] === 'N'];
         if ($tableColumn['comment'] !== null) {
             $options['comment'] = $tableColumn['comment'];
         }
-
         if ($scale !== null && $precision !== null) {
-            $options['scale']     = $scale;
+            $options['scale'] = $scale;
             $options['precision'] = $precision;
         }
-
-        return new Column($tableColumn['colname'], Type::getType($type), $options);
+        return new \Doctrine\DBAL\Schema\Column($tableColumn['colname'], Type::getType($type), $options);
     }
-
     /**
      * @deprecated Use the schema name and the unqualified table name separately instead.
      *
@@ -109,92 +84,62 @@ class DB2SchemaManager extends AbstractSchemaManager
     protected function _getPortableTableDefinition(array $table): string
     {
         $table = array_change_key_case($table, CASE_LOWER);
-
         return $table['name'];
     }
-
     /**
      * {@inheritDoc}
      */
     protected function _getPortableTableIndexesList(array $rows, string $tableName): array
     {
         foreach ($rows as &$row) {
-            $row            = array_change_key_case($row, CASE_LOWER);
+            $row = array_change_key_case($row, CASE_LOWER);
             $row['primary'] = (bool) $row['primary'];
         }
-
         return parent::_getPortableTableIndexesList($rows, $tableName);
     }
-
     /**
      * {@inheritDoc}
      */
-    protected function _getPortableTableForeignKeyDefinition(array $tableForeignKey): ForeignKeyConstraint
+    protected function _getPortableTableForeignKeyDefinition(array $tableForeignKey): \Doctrine\DBAL\Schema\ForeignKeyConstraint
     {
-        return new ForeignKeyConstraint(
-            $tableForeignKey['local_columns'],
-            $tableForeignKey['foreign_table'],
-            $tableForeignKey['foreign_columns'],
-            $tableForeignKey['name'],
-            $tableForeignKey['options'],
-        );
+        return new \Doctrine\DBAL\Schema\ForeignKeyConstraint($tableForeignKey['local_columns'], $tableForeignKey['foreign_table'], $tableForeignKey['foreign_columns'], $tableForeignKey['name'], $tableForeignKey['options']);
     }
-
     /**
      * {@inheritDoc}
      */
     protected function _getPortableTableForeignKeysList(array $rows): array
     {
         $foreignKeys = [];
-
         foreach ($rows as $tableForeignKey) {
             $tableForeignKey = array_change_key_case($tableForeignKey, CASE_LOWER);
-
-            if (! isset($foreignKeys[$tableForeignKey['index_name']])) {
-                $foreignKeys[$tableForeignKey['index_name']] = [
-                    'local_columns'   => [$tableForeignKey['local_column']],
-                    'foreign_table'   => $tableForeignKey['foreign_table'],
-                    'foreign_columns' => [$tableForeignKey['foreign_column']],
-                    'name'            => $tableForeignKey['index_name'],
-                    'options'         => [
-                        'onUpdate' => $tableForeignKey['on_update'],
-                        'onDelete' => $tableForeignKey['on_delete'],
-                    ],
-                ];
+            if (!isset($foreignKeys[$tableForeignKey['index_name']])) {
+                $foreignKeys[$tableForeignKey['index_name']] = ['local_columns' => [$tableForeignKey['local_column']], 'foreign_table' => $tableForeignKey['foreign_table'], 'foreign_columns' => [$tableForeignKey['foreign_column']], 'name' => $tableForeignKey['index_name'], 'options' => ['onUpdate' => $tableForeignKey['on_update'], 'onDelete' => $tableForeignKey['on_delete']]];
             } else {
-                $foreignKeys[$tableForeignKey['index_name']]['local_columns'][]   = $tableForeignKey['local_column'];
+                $foreignKeys[$tableForeignKey['index_name']]['local_columns'][] = $tableForeignKey['local_column'];
                 $foreignKeys[$tableForeignKey['index_name']]['foreign_columns'][] = $tableForeignKey['foreign_column'];
             }
         }
-
         return parent::_getPortableTableForeignKeysList($foreignKeys);
     }
-
     /**
      * {@inheritDoc}
      */
-    protected function _getPortableViewDefinition(array $view): View
+    protected function _getPortableViewDefinition(array $view): \Doctrine\DBAL\Schema\View
     {
         $view = array_change_key_case($view, CASE_LOWER);
-
         $sql = '';
         $pos = strpos($view['text'], ' AS ');
-
-        if ($pos !== false) {
+        if ($pos !== \false) {
             $sql = substr($view['text'], $pos + 4);
         }
-
-        return new View($view['name'], $sql);
+        return new \Doctrine\DBAL\Schema\View($view['name'], $sql);
     }
-
     /** @deprecated Use {@see Identifier::toNormalizedValue()} instead. */
     protected function normalizeName(string $name): string
     {
-        $identifier = new Identifier($name);
-
+        $identifier = new \Doctrine\DBAL\Schema\Identifier($name);
         return $identifier->isQuoted() ? $identifier->getName() : strtoupper($name);
     }
-
     protected function selectTableNames(string $databaseName): Result
     {
         $sql = <<<'SQL'
@@ -203,22 +148,17 @@ FROM SYSCAT.TABLES
 WHERE TYPE = 'T'
   AND TABSCHEMA = ?
 SQL;
-
         return $this->connection->executeQuery($sql, [$databaseName]);
     }
-
     protected function selectTableColumns(string $databaseName, ?string $tableName = null): Result
     {
         $conditions = ['C.TABSCHEMA = ?'];
-        $params     = [$databaseName];
-
+        $params = [$databaseName];
         if ($tableName !== null) {
             $conditions[] = 'C.TABNAME = ?';
-            $params[]     = $tableName;
+            $params[] = $tableName;
         }
-
-        $sql = sprintf(
-            <<<'SQL'
+        $sql = sprintf(<<<'SQL'
 SELECT
        C.TABNAME AS NAME,
        C.COLNAME,
@@ -240,25 +180,19 @@ FROM SYSCAT.COLUMNS C
  WHERE %s
    AND T.TYPE = 'T'
 ORDER BY C.TABNAME, C.COLNO
-SQL,
-            implode(' AND ', $conditions),
-        );
-
+SQL
+, implode(' AND ', $conditions));
         return $this->connection->executeQuery($sql, $params);
     }
-
     protected function selectIndexColumns(string $databaseName, ?string $tableName = null): Result
     {
         $conditions = ['IDX.TABSCHEMA = ?'];
-        $params     = [$databaseName];
-
+        $params = [$databaseName];
         if ($tableName !== null) {
             $conditions[] = 'IDX.TABNAME = ?';
-            $params[]     = $tableName;
+            $params[] = $tableName;
         }
-
-        $sql = sprintf(
-            <<<'SQL'
+        $sql = sprintf(<<<'SQL'
       SELECT
              IDX.TABNAME AS NAME,
              IDX.INDNAME AS KEY_NAME,
@@ -281,25 +215,19 @@ SQL,
     ORDER BY IDX.TABNAME,
              IDX.INDNAME,
              IDXCOL.COLSEQ
-SQL,
-            implode(' AND ', $conditions),
-        );
-
+SQL
+, implode(' AND ', $conditions));
         return $this->connection->executeQuery($sql, $params);
     }
-
     protected function selectForeignKeyColumns(string $databaseName, ?string $tableName = null): Result
     {
         $conditions = ['R.TABSCHEMA = ?'];
-        $params     = [$databaseName];
-
+        $params = [$databaseName];
         if ($tableName !== null) {
             $conditions[] = 'R.TABNAME = ?';
-            $params[]     = $tableName;
+            $params[] = $tableName;
         }
-
-        $sql = sprintf(
-            <<<'SQL'
+        $sql = sprintf(<<<'SQL'
       SELECT
              R.TABNAME AS NAME,
              FKCOL.COLNAME AS LOCAL_COLUMN,
@@ -332,43 +260,34 @@ SQL,
    ORDER BY R.TABNAME,
             R.CONSTNAME,
             FKCOL.COLSEQ
-SQL,
-            implode(' AND ', $conditions),
-        );
-
+SQL
+, implode(' AND ', $conditions));
         return $this->connection->executeQuery($sql, $params);
     }
-
     /**
      * {@inheritDoc}
      */
     protected function fetchTableOptionsByTable(string $databaseName, ?string $tableName = null): array
     {
         $conditions = ['TABSCHEMA = ?'];
-        $params     = [$databaseName];
-
+        $params = [$databaseName];
         if ($tableName !== null) {
             $conditions[] = 'TABNAME = ?';
-            $params[]     = $tableName;
+            $params[] = $tableName;
         }
-
-        $sql = sprintf(
-            <<<'SQL'
+        $sql = sprintf(<<<'SQL'
       SELECT TABNAME,
              REMARKS
         FROM SYSCAT.TABLES
       WHERE %s
         AND TYPE = 'T'
    ORDER BY TABNAME
-SQL,
-            implode(' AND ', $conditions),
-        );
-
+SQL
+, implode(' AND ', $conditions));
         $tableOptions = [];
         foreach ($this->connection->iterateKeyValue($sql, $params) as $table => $remarks) {
             $tableOptions[$table] = ['comment' => $remarks];
         }
-
         return $tableOptions;
     }
 }

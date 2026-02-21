@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -19,11 +19,10 @@ namespace Cake\View;
 use Cake\View\Exception\SerializationFailureException;
 use Exception;
 use TypeError;
-
 /**
  * Parent class for view classes generating serialized outputs like JsonView and XmlView.
  */
-abstract class SerializedView extends View
+abstract class SerializedView extends \Cake\View\View
 {
     /**
      * Default config options.
@@ -37,10 +36,7 @@ abstract class SerializedView extends View
      *
      * @var array<string, mixed>
      */
-    protected array $_defaultConfig = [
-        'serialize' => null,
-    ];
-
+    protected array $_defaultConfig = ['serialize' => null];
     /**
      * Load helpers only if serialization is disabled.
      *
@@ -51,10 +47,8 @@ abstract class SerializedView extends View
         if (!$this->getConfig('serialize')) {
             parent::loadHelpers();
         }
-
         return $this;
     }
-
     /**
      * Serialize view vars.
      *
@@ -63,7 +57,6 @@ abstract class SerializedView extends View
      * @return string The serialized data.
      */
     abstract protected function _serialize(array|string $serialize): string;
-
     /**
      * Render view template or return serialized data.
      *
@@ -75,32 +68,24 @@ abstract class SerializedView extends View
     public function render(?string $template = null, string|false|null $layout = null): string
     {
         $serialize = $this->serializeKeys();
-        if ($serialize !== false) {
+        if ($serialize !== \false) {
             try {
                 return $this->_serialize($serialize);
-            } catch (Exception | TypeError $e) {
-                throw new SerializationFailureException(
-                    'Serialization of View data failed.',
-                    null,
-                    $e,
-                );
+            } catch (Exception|TypeError $e) {
+                throw new SerializationFailureException('Serialization of View data failed.', null, $e);
             }
         }
-
-        return parent::render($template, false);
+        return parent::render($template, \false);
     }
-
     /**
      * @return array|string|false
      */
     protected function serializeKeys(): array|string|false
     {
-        $serialize = $this->getConfig('serialize', false);
-
-        if ($serialize === true) {
+        $serialize = $this->getConfig('serialize', \false);
+        if ($serialize === \true) {
             $serialize = array_keys($this->viewVars);
         }
-
         return $serialize;
     }
 }

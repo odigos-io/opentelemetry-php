@@ -4,7 +4,6 @@ namespace Illuminate\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-
 class TrustProxies
 {
     /**
@@ -13,33 +12,24 @@ class TrustProxies
      * @var array<int, string>|string|null
      */
     protected $proxies;
-
     /**
      * The trusted proxies headers for the application.
      *
      * @var int
      */
-    protected $headers = Request::HEADER_X_FORWARDED_FOR |
-        Request::HEADER_X_FORWARDED_HOST |
-        Request::HEADER_X_FORWARDED_PORT |
-        Request::HEADER_X_FORWARDED_PROTO |
-        Request::HEADER_X_FORWARDED_PREFIX |
-        Request::HEADER_X_FORWARDED_AWS_ELB;
-
+    protected $headers = Request::HEADER_X_FORWARDED_FOR | Request::HEADER_X_FORWARDED_HOST | Request::HEADER_X_FORWARDED_PORT | Request::HEADER_X_FORWARDED_PROTO | Request::HEADER_X_FORWARDED_PREFIX | Request::HEADER_X_FORWARDED_AWS_ELB;
     /**
      * The proxies that have been configured to always be trusted.
      *
      * @var array<int, string>|string|null
      */
     protected static $alwaysTrustProxies;
-
     /**
      * The proxies headers that have been configured to always be trusted.
      *
      * @var int|null
      */
     protected static $alwaysTrustHeaders;
-
     /**
      * Handle an incoming request.
      *
@@ -52,12 +42,9 @@ class TrustProxies
     public function handle(Request $request, Closure $next)
     {
         $request::setTrustedProxies([], $this->getTrustedHeaderNames());
-
         $this->setTrustedProxyIpAddresses($request);
-
         return $next($request);
     }
-
     /**
      * Sets the trusted proxies on the request.
      *
@@ -67,32 +54,20 @@ class TrustProxies
     protected function setTrustedProxyIpAddresses(Request $request)
     {
         $trustedIps = $this->proxies() ?: config('trustedproxy.proxies');
-
-        if (is_null($trustedIps) &&
-            (laravel_cloud() ||
-             str_ends_with($request->host(), '.on-forge.com') ||
-             str_ends_with($request->host(), '.on-vapor.com'))) {
+        if (is_null($trustedIps) && (laravel_cloud() || str_ends_with($request->host(), '.on-forge.com') || str_ends_with($request->host(), '.on-vapor.com'))) {
             $trustedIps = '*';
         }
-
-        if (str_ends_with($request->host(), '.on-forge.com') ||
-            str_ends_with($request->host(), '.on-vapor.com')) {
+        if (str_ends_with($request->host(), '.on-forge.com') || str_ends_with($request->host(), '.on-vapor.com')) {
             $request->headers->remove('X-Forwarded-Host');
         }
-
         if ($trustedIps === '*' || $trustedIps === '**') {
             return $this->setTrustedProxyIpAddressesToTheCallingIp($request);
         }
-
-        $trustedIps = is_string($trustedIps)
-            ? array_map(trim(...), explode(',', $trustedIps))
-            : $trustedIps;
-
+        $trustedIps = is_string($trustedIps) ? array_map(trim(...), explode(',', $trustedIps)) : $trustedIps;
         if (is_array($trustedIps)) {
             return $this->setTrustedProxyIpAddressesToSpecificIps($request, $trustedIps);
         }
     }
-
     /**
      * Specify the IP addresses to trust explicitly.
      *
@@ -103,14 +78,10 @@ class TrustProxies
     protected function setTrustedProxyIpAddressesToSpecificIps(Request $request, array $trustedIps)
     {
         $request->setTrustedProxies(array_reduce($trustedIps, function ($ips, $trustedIp) use ($request) {
-            $ips[] = $trustedIp === 'REMOTE_ADDR'
-                ? $request->server->get('REMOTE_ADDR')
-                : $trustedIp;
-
+            $ips[] = $trustedIp === 'REMOTE_ADDR' ? $request->server->get('REMOTE_ADDR') : $trustedIp;
             return $ips;
         }, []), $this->getTrustedHeaderNames());
     }
-
     /**
      * Set the trusted proxy to be the IP address calling this servers.
      *
@@ -121,7 +92,6 @@ class TrustProxies
     {
         $request->setTrustedProxies([$request->server->get('REMOTE_ADDR')], $this->getTrustedHeaderNames());
     }
-
     /**
      * Retrieve trusted header name(s), falling back to defaults if config not set.
      *
@@ -130,11 +100,9 @@ class TrustProxies
     protected function getTrustedHeaderNames()
     {
         $headers = $this->headers();
-
         if (is_int($headers)) {
             return $headers;
         }
-
         return match ($headers) {
             'HEADER_X_FORWARDED_AWS_ELB' => Request::HEADER_X_FORWARDED_AWS_ELB,
             'HEADER_FORWARDED' => Request::HEADER_FORWARDED,
@@ -146,7 +114,6 @@ class TrustProxies
             default => Request::HEADER_X_FORWARDED_FOR | Request::HEADER_X_FORWARDED_HOST | Request::HEADER_X_FORWARDED_PORT | Request::HEADER_X_FORWARDED_PROTO | Request::HEADER_X_FORWARDED_PREFIX | Request::HEADER_X_FORWARDED_AWS_ELB,
         };
     }
-
     /**
      * Get the trusted headers.
      *
@@ -156,7 +123,6 @@ class TrustProxies
     {
         return static::$alwaysTrustHeaders ?: $this->headers;
     }
-
     /**
      * Get the trusted proxies.
      *
@@ -166,7 +132,6 @@ class TrustProxies
     {
         return static::$alwaysTrustProxies ?: $this->proxies;
     }
-
     /**
      * Specify the IP addresses of proxies that should always be trusted.
      *
@@ -177,7 +142,6 @@ class TrustProxies
     {
         static::$alwaysTrustProxies = $proxies;
     }
-
     /**
      * Specify the proxy headers that should always be trusted.
      *
@@ -188,7 +152,6 @@ class TrustProxies
     {
         static::$alwaysTrustHeaders = $headers;
     }
-
     /**
      * Flush the state of the middleware.
      *

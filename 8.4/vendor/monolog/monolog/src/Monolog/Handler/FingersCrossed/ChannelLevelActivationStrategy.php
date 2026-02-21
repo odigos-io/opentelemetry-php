@@ -1,5 +1,6 @@
-<?php declare(strict_types=1);
+<?php
 
+declare (strict_types=1);
 /*
  * This file is part of the Monolog package.
  *
@@ -8,14 +9,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Odigos\Monolog\Handler\FingersCrossed;
 
-namespace Monolog\Handler\FingersCrossed;
-
-use Monolog\Level;
-use Monolog\Logger;
+use Odigos\Monolog\Level;
+use Odigos\Monolog\Logger;
 use Psr\Log\LogLevel;
-use Monolog\LogRecord;
-
+use Odigos\Monolog\LogRecord;
 /**
  * Channel and Error level based monolog activation strategy. Allows to trigger activation
  * based on level per channel. e.g. trigger activation on level 'ERROR' by default, except
@@ -39,12 +38,10 @@ use Monolog\LogRecord;
 class ChannelLevelActivationStrategy implements ActivationStrategyInterface
 {
     private Level $defaultActionLevel;
-
     /**
      * @var array<string, Level>
      */
     private array $channelToActionLevel;
-
     /**
      * @param int|string|Level|LogLevel::*                $defaultActionLevel   The default action level to be used if the record's category doesn't match any
      * @param array<string, int|string|Level|LogLevel::*> $channelToActionLevel An array that maps channel names to action levels.
@@ -57,13 +54,11 @@ class ChannelLevelActivationStrategy implements ActivationStrategyInterface
         $this->defaultActionLevel = Logger::toMonologLevel($defaultActionLevel);
         $this->channelToActionLevel = array_map(Logger::toMonologLevel(...), $channelToActionLevel);
     }
-
     public function isHandlerActivated(LogRecord $record): bool
     {
         if (isset($this->channelToActionLevel[$record->channel])) {
             return $record->level->value >= $this->channelToActionLevel[$record->channel]->value;
         }
-
         return $record->level->value >= $this->defaultActionLevel->value;
     }
 }

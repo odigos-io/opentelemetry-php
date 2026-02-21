@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -20,7 +20,6 @@ use Cake\Event\Event;
 use Cake\Http\Client;
 use InvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
-
 /**
  * Class Client Event
  *
@@ -42,20 +41,17 @@ class ClientEvent extends Event
             $this->result = $data['response'];
             unset($data['response']);
         }
-
         parent::__construct($name, $subject, $data);
     }
-
     /**
      * The result value of the event listeners
      *
      * @return \Cake\Http\Client\Response|null
      */
-    public function getResult(): ?Response
+    public function getResult(): ?\Cake\Http\Client\Response
     {
         return $this->result;
     }
-
     /**
      * Listeners can attach a result value to the event.
      *
@@ -64,15 +60,11 @@ class ClientEvent extends Event
      */
     public function setResult(mixed $value = null)
     {
-        if ($value !== null && !$value instanceof Response) {
-            throw new InvalidArgumentException(
-                'The result for Http Client events must be a `Cake\Http\Client\Response` instance.',
-            );
+        if ($value !== null && !$value instanceof \Cake\Http\Client\Response) {
+            throw new InvalidArgumentException('The result for Http Client events must be a `Cake\Http\Client\Response` instance.');
         }
-
         return parent::setResult($value);
     }
-
     /**
      * Set request instance.
      *
@@ -82,10 +74,8 @@ class ClientEvent extends Event
     public function setRequest(RequestInterface $request)
     {
         $this->_data['request'] = $request;
-
         return $this;
     }
-
     /**
      * Get the request instance.
      *
@@ -95,7 +85,6 @@ class ClientEvent extends Event
     {
         return $this->_data['request'];
     }
-
     /**
      * Set the adapter options.
      *
@@ -104,10 +93,8 @@ class ClientEvent extends Event
     public function setAdapterOptions(array $options = [])
     {
         $this->_data['adapterOptions'] = $options;
-
         return $this;
     }
-
     /**
      * Get the adapter options.
      *

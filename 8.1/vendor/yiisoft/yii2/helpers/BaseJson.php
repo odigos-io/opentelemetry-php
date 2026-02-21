@@ -1,10 +1,10 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\helpers;
 
 use yii\base\Arrayable;
@@ -12,7 +12,6 @@ use yii\base\InvalidArgumentException;
 use yii\base\Model;
 use yii\web\JsExpression;
 use yii\web\JsonResponseFormatter;
-
 /**
  * BaseJson provides concrete implementation for [[Json]].
  *
@@ -38,21 +37,12 @@ class BaseJson
      * @see JsonResponseFormatter documentation to enable for all JSON responses
      * @since 2.0.44
      */
-    public static $keepObjectType = false;
+    public static $keepObjectType = \false;
     /**
      * @var array List of JSON Error messages assigned to constant names for better handling of PHP <= 5.5.
      * @since 2.0.7
      */
-    public static $jsonErrorMessages = [
-        'JSON_ERROR_SYNTAX' => 'Syntax error',
-        'JSON_ERROR_UNSUPPORTED_TYPE' => 'Type is not supported',
-        'JSON_ERROR_DEPTH' => 'The maximum stack depth has been exceeded',
-        'JSON_ERROR_STATE_MISMATCH' => 'Invalid or malformed JSON',
-        'JSON_ERROR_CTRL_CHAR' => 'Control character error, possibly incorrectly encoded',
-        'JSON_ERROR_UTF8' => 'Malformed UTF-8 characters, possibly incorrectly encoded',
-    ];
-
-
+    public static $jsonErrorMessages = ['JSON_ERROR_SYNTAX' => 'Syntax error', 'JSON_ERROR_UNSUPPORTED_TYPE' => 'Type is not supported', 'JSON_ERROR_DEPTH' => 'The maximum stack depth has been exceeded', 'JSON_ERROR_STATE_MISMATCH' => 'Invalid or malformed JSON', 'JSON_ERROR_CTRL_CHAR' => 'Control character error, possibly incorrectly encoded', 'JSON_ERROR_UTF8' => 'Malformed UTF-8 characters, possibly incorrectly encoded'];
     /**
      * Encodes the given value into a JSON string.
      *
@@ -72,24 +62,20 @@ class BaseJson
     public static function encode($value, $options = 320)
     {
         $expressions = [];
-        $value = static::processData($value, $expressions, uniqid('', true));
+        $value = static::processData($value, $expressions, uniqid('', \true));
         set_error_handler(function () {
-            static::handleJsonError(JSON_ERROR_SYNTAX);
-        }, E_WARNING);
-
-        if (static::$prettyPrint === true) {
-            $options |= JSON_PRETTY_PRINT;
-        } elseif (static::$prettyPrint === false) {
-            $options &= ~JSON_PRETTY_PRINT;
+            static::handleJsonError(\JSON_ERROR_SYNTAX);
+        }, \E_WARNING);
+        if (static::$prettyPrint === \true) {
+            $options |= \JSON_PRETTY_PRINT;
+        } elseif (static::$prettyPrint === \false) {
+            $options &= ~\JSON_PRETTY_PRINT;
         }
-
         $json = json_encode($value, $options);
         restore_error_handler();
         static::handleJsonError(json_last_error());
-
         return $expressions === [] ? $json : strtr($json, $expressions);
     }
-
     /**
      * Encodes the given value into a JSON string HTML-escaping entities so it is safe to be embedded in HTML code.
      *
@@ -107,9 +93,8 @@ class BaseJson
      */
     public static function htmlEncode($value)
     {
-        return static::encode($value, JSON_UNESCAPED_UNICODE | JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS);
+        return static::encode($value, \JSON_UNESCAPED_UNICODE | \JSON_HEX_QUOT | \JSON_HEX_TAG | \JSON_HEX_AMP | \JSON_HEX_APOS);
     }
-
     /**
      * Decodes the given JSON string into a PHP data structure.
      * @param string $json the JSON string to be decoded
@@ -117,7 +102,7 @@ class BaseJson
      * @return mixed the PHP data
      * @throws InvalidArgumentException if there is any decoding error
      */
-    public static function decode($json, $asArray = true)
+    public static function decode($json, $asArray = \true)
     {
         if (is_array($json)) {
             throw new InvalidArgumentException('Invalid JSON data.');
@@ -126,10 +111,8 @@ class BaseJson
         }
         $decode = json_decode((string) $json, $asArray);
         static::handleJsonError(json_last_error());
-
         return $decode;
     }
-
     /**
      * Handles [[encode()]] and [[decode()]] errors by throwing exceptions with the respective error message.
      *
@@ -139,23 +122,19 @@ class BaseJson
      */
     protected static function handleJsonError($lastError)
     {
-        if ($lastError === JSON_ERROR_NONE) {
+        if ($lastError === \JSON_ERROR_NONE) {
             return;
         }
-
-        if (PHP_VERSION_ID >= 50500) {
+        if (\PHP_VERSION_ID >= 50500) {
             throw new InvalidArgumentException(json_last_error_msg(), $lastError);
         }
-
         foreach (static::$jsonErrorMessages as $const => $message) {
             if (defined($const) && constant($const) === $lastError) {
                 throw new InvalidArgumentException($message, $lastError);
             }
         }
-
         throw new InvalidArgumentException('Unknown JSON encoding/decoding error.');
     }
-
     /**
      * Pre-processes the data before sending it to `json_encode()`.
      * @param mixed $data the data to be processed
@@ -165,24 +144,19 @@ class BaseJson
      */
     protected static function processData($data, &$expressions, $expPrefix)
     {
-        $revertToObject = false;
-
+        $revertToObject = \false;
         if (is_object($data)) {
             if ($data instanceof JsExpression) {
-                $token = "!{[$expPrefix=" . count($expressions) . ']}!';
+                $token = "!{[{$expPrefix}=" . count($expressions) . ']}!';
                 $expressions['"' . $token . '"'] = $data->expression;
-
                 return $token;
             }
-
             if ($data instanceof \JsonSerializable) {
                 return static::processData($data->jsonSerialize(), $expressions, $expPrefix);
             }
-
             if ($data instanceof \DateTimeInterface) {
-                return static::processData((array)$data, $expressions, $expPrefix);
+                return static::processData((array) $data, $expressions, $expPrefix);
             }
-
             if ($data instanceof Arrayable) {
                 $data = $data->toArray();
             } elseif ($data instanceof \Generator) {
@@ -193,10 +167,9 @@ class BaseJson
                 $data = $_data;
             } elseif ($data instanceof \SimpleXMLElement) {
                 $data = (array) $data;
-
                 // Avoid empty elements to be returned as array.
                 // Not breaking BC because empty array was always cast to stdClass before.
-                $revertToObject = true;
+                $revertToObject = \true;
             } else {
                 /*
                  * $data type is changed to array here and its elements will be processed further
@@ -204,20 +177,17 @@ class BaseJson
                  * Revert is only done when keepObjectType flag is provided to avoid breaking BC
                  */
                 $revertToObject = static::$keepObjectType;
-
                 $result = [];
                 foreach ($data as $name => $value) {
                     $result[$name] = $value;
                 }
                 $data = $result;
-
                 // Avoid empty objects to be returned as array (would break BC without keepObjectType flag)
                 if ($data === []) {
-                    $revertToObject = true;
+                    $revertToObject = \true;
                 }
             }
         }
-
         if (is_array($data)) {
             foreach ($data as $key => $value) {
                 if (is_array($value) || is_object($value)) {
@@ -225,10 +195,8 @@ class BaseJson
                 }
             }
         }
-
         return $revertToObject ? (object) $data : $data;
     }
-
     /**
      * Generates a summary of the validation errors.
      *
@@ -243,12 +211,10 @@ class BaseJson
      */
     public static function errorSummary($models, $options = [])
     {
-        $showAllErrors = ArrayHelper::remove($options, 'showAllErrors', false);
+        $showAllErrors = \yii\helpers\ArrayHelper::remove($options, 'showAllErrors', \false);
         $lines = self::collectErrors($models, $showAllErrors);
-
         return static::encode($lines);
     }
-
     /**
      * Return array of the validation errors.
      *
@@ -261,14 +227,12 @@ class BaseJson
     private static function collectErrors($models, $showAllErrors)
     {
         $lines = [];
-
         if (!is_array($models)) {
             $models = [$models];
         }
         foreach ($models as $model) {
             $lines[] = $model->getErrorSummary($showAllErrors);
         }
-
         return array_unique(call_user_func_array('array_merge', $lines));
     }
 }

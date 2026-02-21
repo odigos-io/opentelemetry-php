@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -16,7 +16,6 @@ namespace Cake\Routing\Exception;
 
 use Cake\Core\Exception\CakeException;
 use Throwable;
-
 /**
  * Exception raised when a route names used twice.
  */
@@ -26,7 +25,6 @@ class DuplicateNamedRouteException extends CakeException
      * @inheritDoc
      */
     protected string $_messageTemplate = 'A route named `%s` has already been connected to `%s`.';
-
     /**
      * Constructor.
      *

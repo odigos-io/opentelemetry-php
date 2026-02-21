@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -20,7 +20,7 @@ namespace Cake\TestSuite\Constraint\Response;
  *
  * @internal
  */
-class HeaderNotContains extends HeaderContains
+class HeaderNotContains extends \Cake\TestSuite\Constraint\Response\HeaderContains
 {
     /**
      * Checks assertion
@@ -30,9 +30,8 @@ class HeaderNotContains extends HeaderContains
      */
     public function matches(mixed $other): bool
     {
-        return parent::matches($other) === false;
+        return parent::matches($other) === \false;
     }
-
     /**
      * Assertion message
      *
@@ -40,10 +39,6 @@ class HeaderNotContains extends HeaderContains
      */
     public function toString(): string
     {
-        return sprintf(
-            "is not in header '%s' (`%s`)",
-            $this->headerName,
-            $this->response->getHeaderLine($this->headerName),
-        );
+        return sprintf("is not in header '%s' (`%s`)", $this->headerName, $this->response->getHeaderLine($this->headerName));
     }
 }

@@ -1,4 +1,7 @@
 <?php
+
+namespace Odigos;
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -16,42 +19,43 @@
  */
 use Cake\Utility\Inflector;
 use function Cake\Core\h;
-
 $this->layout = 'dev_error';
-
 $this->assign('title', 'Missing Template');
 $this->assign('templateName', 'missing_template.php');
-
-$isEmail = str_starts_with($file, 'Email/');
-
+$isEmail = \str_starts_with($file, 'Email/');
 $this->start('subheading');
+if ($isEmail) {
+    ?>
+    <strong>Error</strong>
+    <?php 
+    echo \sprintf('The template %s</em> was not found.', h($file));
+} else {
+    ?>
+    <strong>Error</strong>
+    <?php 
+    echo \sprintf('The view for <em>%sController::%s()</em> was not found.', h(Inflector::camelize($this->request->getParam('controller', ''))), h($this->request->getParam('action')));
+}
+$this->end();
 ?>
-<?php if ($isEmail): ?>
-    <strong>Error</strong>
-    <?= sprintf('The template %s</em> was not found.', h($file)); ?>
-<?php else: ?>
-    <strong>Error</strong>
-    <?= sprintf(
-        'The view for <em>%sController::%s()</em> was not found.',
-        h(Inflector::camelize($this->request->getParam('controller', ''))),
-        h($this->request->getParam('action'))
-    ); ?>
-<?php endif ?>
-<?php $this->end() ?>
 
-<?php $this->start('file') ?>
+<?php 
+$this->start('file');
+?>
 <p>
-    <?= sprintf('Confirm you have created the file: "%s"', h($file)) ?>
+    <?php 
+echo \sprintf('Confirm you have created the file: "%s"', h($file));
+?>
     in one of the following paths:
 </p>
 <ul>
-<?php
-    foreach ($paths as $path):
-        if (str_contains($path, CORE_PATH)) {
-            continue;
-        }
-        echo sprintf('<li>%s%s</li>', h($path), h($file));
-    endforeach;
+<?php 
+foreach ($paths as $path) {
+    if (\str_contains($path, \CORE_PATH)) {
+        continue;
+    }
+    echo \sprintf('<li>%s%s</li>', h($path), h($file));
+}
 ?>
 </ul>
-<?php $this->end() ?>
+<?php 
+$this->end();

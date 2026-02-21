@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -20,7 +20,7 @@ namespace Cake\TestSuite\Constraint\Response;
  *
  * @internal
  */
-class BodyNotRegExp extends BodyRegExp
+class BodyNotRegExp extends \Cake\TestSuite\Constraint\Response\BodyRegExp
 {
     /**
      * Checks assertion
@@ -30,9 +30,8 @@ class BodyNotRegExp extends BodyRegExp
      */
     public function matches(mixed $other): bool
     {
-        return parent::matches($other) === false;
+        return parent::matches($other) === \false;
     }
-
     /**
      * Assertion message
      *

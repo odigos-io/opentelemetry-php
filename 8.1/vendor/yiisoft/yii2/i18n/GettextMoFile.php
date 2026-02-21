@@ -1,14 +1,13 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\i18n;
 
 use yii\base\Exception;
-
 /**
  * GettextMoFile represents an MO Gettext message file.
  *
@@ -41,14 +40,12 @@ use yii\base\Exception;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class GettextMoFile extends GettextFile
+class GettextMoFile extends \yii\i18n\GettextFile
 {
     /**
      * @var bool whether to use big-endian when reading and writing an integer.
      */
-    public $useBigEndian = false;
-
-
+    public $useBigEndian = \false;
     /**
      * Loads messages from an MO file.
      * @param string $filePath file path
@@ -59,34 +56,30 @@ class GettextMoFile extends GettextFile
      */
     public function load($filePath, $context)
     {
-        if (false === ($fileHandle = @fopen($filePath, 'rb'))) {
+        if (\false === $fileHandle = @fopen($filePath, 'rb')) {
             throw new Exception('Unable to read file "' . $filePath . '".');
         }
-        if (false === @flock($fileHandle, LOCK_SH)) {
+        if (\false === @flock($fileHandle, \LOCK_SH)) {
             throw new Exception('Unable to lock file "' . $filePath . '" for reading.');
         }
-
         // magic
         $array = unpack('c', $this->readBytes($fileHandle, 4));
         $magic = current($array);
         if ($magic == -34) {
-            $this->useBigEndian = false;
+            $this->useBigEndian = \false;
         } elseif ($magic == -107) {
-            $this->useBigEndian = true;
+            $this->useBigEndian = \true;
         } else {
             throw new Exception('Invalid MO file: ' . $filePath . ' (magic: ' . $magic . ').');
         }
-
         // revision
         $revision = $this->readInteger($fileHandle);
         if ($revision !== 0) {
             throw new Exception('Invalid MO file revision: ' . $revision . '.');
         }
-
         $count = $this->readInteger($fileHandle);
         $sourceOffset = $this->readInteger($fileHandle);
         $targetOffset = $this->readInteger($fileHandle);
-
         $sourceLengths = [];
         $sourceOffsets = [];
         fseek($fileHandle, $sourceOffset);
@@ -94,7 +87,6 @@ class GettextMoFile extends GettextFile
             $sourceLengths[] = $this->readInteger($fileHandle);
             $sourceOffsets[] = $this->readInteger($fileHandle);
         }
-
         $targetLengths = [];
         $targetOffsets = [];
         fseek($fileHandle, $targetOffset);
@@ -102,29 +94,22 @@ class GettextMoFile extends GettextFile
             $targetLengths[] = $this->readInteger($fileHandle);
             $targetOffsets[] = $this->readInteger($fileHandle);
         }
-
         $messages = [];
         for ($i = 0; $i < $count; ++$i) {
             $id = $this->readString($fileHandle, $sourceLengths[$i], $sourceOffsets[$i]);
-            $separatorPosition = strpos((string)$id, chr(4));
-
-
-            if ((!$context && $separatorPosition === false) || ($context && $separatorPosition !== false && strncmp($id, $context, $separatorPosition) === 0)) {
-                if ($separatorPosition !== false) {
+            $separatorPosition = strpos((string) $id, chr(4));
+            if (!$context && $separatorPosition === \false || $context && $separatorPosition !== \false && strncmp($id, $context, $separatorPosition) === 0) {
+                if ($separatorPosition !== \false) {
                     $id = substr($id, $separatorPosition + 1);
                 }
-
                 $message = $this->readString($fileHandle, $targetLengths[$i], $targetOffsets[$i]);
                 $messages[$id] = $message;
             }
         }
-
-        @flock($fileHandle, LOCK_UN);
+        @flock($fileHandle, \LOCK_UN);
         @fclose($fileHandle);
-
         return $messages;
     }
-
     /**
      * Saves messages to an MO file.
      * @param string $filePath file path
@@ -135,38 +120,34 @@ class GettextMoFile extends GettextFile
      */
     public function save($filePath, $messages)
     {
-        if (false === ($fileHandle = @fopen($filePath, 'wb'))) {
+        if (\false === $fileHandle = @fopen($filePath, 'wb')) {
             throw new Exception('Unable to write file "' . $filePath . '".');
         }
-        if (false === @flock($fileHandle, LOCK_EX)) {
+        if (\false === @flock($fileHandle, \LOCK_EX)) {
             throw new Exception('Unable to lock file "' . $filePath . '" for reading.');
         }
-
         // magic
         if ($this->useBigEndian) {
-            $this->writeBytes($fileHandle, pack('c*', 0x95, 0x04, 0x12, 0xde)); // -107
+            $this->writeBytes($fileHandle, pack('c*', 0x95, 0x4, 0x12, 0xde));
+            // -107
         } else {
-            $this->writeBytes($fileHandle, pack('c*', 0xde, 0x12, 0x04, 0x95)); // -34
+            $this->writeBytes($fileHandle, pack('c*', 0xde, 0x12, 0x4, 0x95));
+            // -34
         }
-
         // revision
         $this->writeInteger($fileHandle, 0);
-
         // message count
         $messageCount = count($messages);
         $this->writeInteger($fileHandle, $messageCount);
-
         // offset of source message table
         $offset = 28;
         $this->writeInteger($fileHandle, $offset);
         $offset += $messageCount * 8;
         $this->writeInteger($fileHandle, $offset);
-
         // hashtable size, omitted
         $this->writeInteger($fileHandle, 0);
         $offset += $messageCount * 8;
         $this->writeInteger($fileHandle, $offset);
-
         // length and offsets for source messages
         foreach (array_keys($messages) as $id) {
             $length = strlen($id);
@@ -174,7 +155,6 @@ class GettextMoFile extends GettextFile
             $this->writeInteger($fileHandle, $offset);
             $offset += $length + 1;
         }
-
         // length and offsets for target messages
         foreach ($messages as $message) {
             $length = strlen($message);
@@ -182,21 +162,17 @@ class GettextMoFile extends GettextFile
             $this->writeInteger($fileHandle, $offset);
             $offset += $length + 1;
         }
-
         // source messages
         foreach (array_keys($messages) as $id) {
             $this->writeString($fileHandle, $id);
         }
-
         // target messages
         foreach ($messages as $message) {
             $this->writeString($fileHandle, $message);
         }
-
-        @flock($fileHandle, LOCK_UN);
+        @flock($fileHandle, \LOCK_UN);
         @fclose($fileHandle);
     }
-
     /**
      * Reads one or several bytes.
      * @param resource $fileHandle to read from
@@ -208,10 +184,8 @@ class GettextMoFile extends GettextFile
         if ($byteCount > 0) {
             return fread($fileHandle, $byteCount);
         }
-
         return null;
     }
-
     /**
      * Write bytes.
      * @param resource $fileHandle to write to
@@ -222,7 +196,6 @@ class GettextMoFile extends GettextFile
     {
         return fwrite($fileHandle, $bytes);
     }
-
     /**
      * Reads a 4-byte integer.
      * @param resource $fileHandle to read from
@@ -231,10 +204,8 @@ class GettextMoFile extends GettextFile
     protected function readInteger($fileHandle)
     {
         $array = unpack($this->useBigEndian ? 'N' : 'V', $this->readBytes($fileHandle, 4));
-
         return current($array);
     }
-
     /**
      * Writes a 4-byte integer.
      * @param resource $fileHandle to write to
@@ -245,7 +216,6 @@ class GettextMoFile extends GettextFile
     {
         return $this->writeBytes($fileHandle, pack($this->useBigEndian ? 'N' : 'V', (int) $integer));
     }
-
     /**
      * Reads a string.
      * @param resource $fileHandle file handle
@@ -258,10 +228,8 @@ class GettextMoFile extends GettextFile
         if ($offset !== null) {
             fseek($fileHandle, $offset);
         }
-
         return $this->readBytes($fileHandle, $length);
     }
-
     /**
      * Writes a string.
      * @param resource $fileHandle to write to
@@ -270,6 +238,6 @@ class GettextMoFile extends GettextFile
      */
     protected function writeString($fileHandle, $string)
     {
-        return $this->writeBytes($fileHandle, $string . "\0");
+        return $this->writeBytes($fileHandle, $string . "\x00");
     }
 }

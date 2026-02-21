@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -20,7 +20,7 @@ namespace Cake\TestSuite\Constraint\Response;
  *
  * @internal
  */
-class BodyRegExp extends ResponseBase
+class BodyRegExp extends \Cake\TestSuite\Constraint\Response\ResponseBase
 {
     /**
      * Checks assertion
@@ -32,7 +32,6 @@ class BodyRegExp extends ResponseBase
     {
         return preg_match($other, $this->_getBodyAsString()) > 0;
     }
-
     /**
      * Assertion message
      *
@@ -42,7 +41,6 @@ class BodyRegExp extends ResponseBase
     {
         return 'PCRE pattern found in response body';
     }
-
     /**
      * @param mixed $other Expected
      * @return string

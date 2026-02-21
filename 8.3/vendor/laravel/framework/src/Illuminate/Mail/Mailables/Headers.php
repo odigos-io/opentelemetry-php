@@ -5,32 +5,27 @@ namespace Illuminate\Mail\Mailables;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Illuminate\Support\Traits\Conditionable;
-
 class Headers
 {
     use Conditionable;
-
     /**
      * The message's message ID.
      *
      * @var string|null
      */
     public $messageId;
-
     /**
      * The message IDs that are referenced by the message.
      *
      * @var array
      */
     public $references;
-
     /**
      * The message's text headers.
      *
      * @var array
      */
     public $text;
-
     /**
      * Create a new instance of headers for a message.
      *
@@ -46,7 +41,6 @@ class Headers
         $this->references = $references;
         $this->text = $text;
     }
-
     /**
      * Set the message ID.
      *
@@ -56,10 +50,8 @@ class Headers
     public function messageId(string $messageId)
     {
         $this->messageId = $messageId;
-
         return $this;
     }
-
     /**
      * Set the message IDs referenced by this message.
      *
@@ -69,10 +61,8 @@ class Headers
     public function references(array $references)
     {
         $this->references = array_merge($this->references, $references);
-
         return $this;
     }
-
     /**
      * Set the headers for this message.
      *
@@ -82,10 +72,8 @@ class Headers
     public function text(array $text)
     {
         $this->text = array_merge($this->text, $text);
-
         return $this;
     }
-
     /**
      * Get the references header as a string.
      *
@@ -93,8 +81,6 @@ class Headers
      */
     public function referencesString(): string
     {
-        return (new Collection($this->references))
-            ->map(fn ($messageId) => Str::of($messageId)->start('<')->finish('>')->value())
-            ->implode(' ');
+        return (new Collection($this->references))->map(fn($messageId) => Str::of($messageId)->start('<')->finish('>')->value())->implode(' ');
     }
 }

@@ -3,7 +3,6 @@
 namespace Illuminate\Support;
 
 use RuntimeException;
-
 class Lottery
 {
     /**
@@ -12,35 +11,30 @@ class Lottery
      * @var int|float
      */
     protected $chances;
-
     /**
      * The number of potential opportunities to win.
      *
      * @var int|null
      */
     protected $outOf;
-
     /**
      * The winning callback.
      *
      * @var null|callable
      */
     protected $winner;
-
     /**
      * The losing callback.
      *
      * @var null|callable
      */
     protected $loser;
-
     /**
      * The factory that should be used to generate results.
      *
      * @var callable|null
      */
     protected static $resultFactory;
-
     /**
      * Create a new Lottery instance.
      *
@@ -52,16 +46,12 @@ class Lottery
         if ($outOf === null && is_float($chances) && $chances > 1) {
             throw new RuntimeException('Float must not be greater than 1.');
         }
-
         if ($outOf !== null && $outOf < 1) {
             throw new RuntimeException('Lottery "out of" value must be greater than or equal to 1.');
         }
-
         $this->chances = $chances;
-
         $this->outOf = $outOf;
     }
-
     /**
      * Create a new Lottery instance.
      *
@@ -73,7 +63,6 @@ class Lottery
     {
         return new static($chances, $outOf);
     }
-
     /**
      * Set the winner callback.
      *
@@ -83,10 +72,8 @@ class Lottery
     public function winner($callback)
     {
         $this->winner = $callback;
-
         return $this;
     }
-
     /**
      * Set the loser callback.
      *
@@ -96,10 +83,8 @@ class Lottery
     public function loser($callback)
     {
         $this->loser = $callback;
-
         return $this;
     }
-
     /**
      * Run the lottery.
      *
@@ -110,7 +95,6 @@ class Lottery
     {
         return $this->runCallback(...$args);
     }
-
     /**
      * Run the lottery.
      *
@@ -122,16 +106,12 @@ class Lottery
         if ($times === null) {
             return $this->runCallback();
         }
-
         $results = [];
-
         for ($i = 0; $i < $times; $i++) {
             $results[] = $this->runCallback();
         }
-
         return $results;
     }
-
     /**
      * Run the winner or loser callback, randomly.
      *
@@ -140,11 +120,8 @@ class Lottery
      */
     protected function runCallback(...$args)
     {
-        return $this->wins()
-            ? ($this->winner ?? fn () => true)(...$args)
-            : ($this->loser ?? fn () => false)(...$args);
+        return $this->wins() ? ($this->winner ?? fn() => \true)(...$args) : ($this->loser ?? fn() => \false)(...$args);
     }
-
     /**
      * Determine if the lottery "wins" or "loses".
      *
@@ -154,7 +131,6 @@ class Lottery
     {
         return static::resultFactory()($this->chances, $this->outOf);
     }
-
     /**
      * The factory that determines the lottery result.
      *
@@ -162,11 +138,8 @@ class Lottery
      */
     protected static function resultFactory()
     {
-        return static::$resultFactory ?? fn ($chances, $outOf) => $outOf === null
-            ? random_int(0, PHP_INT_MAX) / PHP_INT_MAX <= $chances
-            : random_int(1, $outOf) <= $chances;
+        return static::$resultFactory ?? fn($chances, $outOf) => $outOf === null ? random_int(0, \PHP_INT_MAX) / \PHP_INT_MAX <= $chances : random_int(1, $outOf) <= $chances;
     }
-
     /**
      * Force the lottery to always result in a win.
      *
@@ -175,17 +148,13 @@ class Lottery
      */
     public static function alwaysWin($callback = null)
     {
-        self::setResultFactory(fn () => true);
-
+        self::setResultFactory(fn() => \true);
         if ($callback === null) {
             return;
         }
-
         $callback();
-
         static::determineResultNormally();
     }
-
     /**
      * Force the lottery to always result in a lose.
      *
@@ -194,17 +163,13 @@ class Lottery
      */
     public static function alwaysLose($callback = null)
     {
-        self::setResultFactory(fn () => false);
-
+        self::setResultFactory(fn() => \false);
         if ($callback === null) {
             return;
         }
-
         $callback();
-
         static::determineResultNormally();
     }
-
     /**
      * Set the sequence that will be used to determine lottery results.
      *
@@ -216,7 +181,6 @@ class Lottery
     {
         static::forceResultWithSequence($sequence, $whenMissing);
     }
-
     /**
      * Set the sequence that will be used to determine lottery results.
      *
@@ -227,30 +191,21 @@ class Lottery
     public static function forceResultWithSequence($sequence, $whenMissing = null)
     {
         $next = 0;
-
         $whenMissing ??= function ($chances, $outOf) use (&$next) {
             $factoryCache = static::$resultFactory;
-
             static::$resultFactory = null;
-
             $result = static::resultFactory()($chances, $outOf);
-
             static::$resultFactory = $factoryCache;
-
             $next++;
-
             return $result;
         };
-
         static::setResultFactory(function ($chances, $outOf) use (&$next, $sequence, $whenMissing) {
             if (array_key_exists($next, $sequence)) {
                 return $sequence[$next++];
             }
-
             return $whenMissing($chances, $outOf);
         });
     }
-
     /**
      * Indicate that the lottery results should be determined normally.
      *
@@ -260,7 +215,6 @@ class Lottery
     {
         static::determineResultNormally();
     }
-
     /**
      * Indicate that the lottery results should be determined normally.
      *
@@ -270,7 +224,6 @@ class Lottery
     {
         static::$resultFactory = null;
     }
-
     /**
      * Set the factory that should be used to determine the lottery results.
      *

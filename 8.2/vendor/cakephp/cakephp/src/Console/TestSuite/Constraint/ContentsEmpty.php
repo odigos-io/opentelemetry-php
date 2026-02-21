@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -20,7 +20,7 @@ namespace Cake\Console\TestSuite\Constraint;
  *
  * @internal
  */
-class ContentsEmpty extends ContentsBase
+class ContentsEmpty extends \Cake\Console\TestSuite\Constraint\ContentsBase
 {
     /**
      * Checks if contents are empty
@@ -32,7 +32,6 @@ class ContentsEmpty extends ContentsBase
     {
         return $this->contents === '';
     }
-
     /**
      * Assertion message
      *
@@ -42,7 +41,6 @@ class ContentsEmpty extends ContentsBase
     {
         return sprintf('%s is empty.', $this->output);
     }
-
     /**
      * Overwrites the descriptions so we can remove the automatic "expected" message
      *
@@ -53,7 +51,6 @@ class ContentsEmpty extends ContentsBase
     {
         return $this->toString();
     }
-
     /**
      * @inheritDoc
      */
@@ -62,10 +59,6 @@ class ContentsEmpty extends ContentsBase
         return sprintf("actual result:\n%s", $this->contents);
     }
 }
-
 // phpcs:disable
-class_alias(
-    'Cake\Console\TestSuite\Constraint\ContentsEmpty',
-    'Cake\TestSuite\Constraint\Console\ContentsEmpty'
-);
+class_alias('Cake\Console\TestSuite\Constraint\ContentsEmpty', 'Cake\TestSuite\Constraint\Console\ContentsEmpty');
 // phpcs:enable

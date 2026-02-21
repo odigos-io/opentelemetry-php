@@ -14,3 +14,4 @@ $type = match ($method) {
     <x-laravel-exceptions-renderer::icons.globe class="w-2.5 h-2.5" />
     {{ $method }}
 </x-laravel-exceptions-renderer::badge>
+

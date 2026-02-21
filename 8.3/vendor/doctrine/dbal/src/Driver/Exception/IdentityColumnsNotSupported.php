@@ -1,12 +1,10 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\DBAL\Driver\Exception;
 
 use Doctrine\DBAL\Driver\AbstractException;
 use Throwable;
-
 /** @internal */
 final class IdentityColumnsNotSupported extends AbstractException
 {

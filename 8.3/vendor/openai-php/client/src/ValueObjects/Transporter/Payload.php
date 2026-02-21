@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenAI\ValueObjects\Transporter;
 
 use Http\Discovery\Psr17Factory;
@@ -12,7 +11,6 @@ use OpenAI\Enums\Transporter\Method;
 use OpenAI\ValueObjects\ResourceUri;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\StreamInterface;
-
 /**
  * @internal
  */
@@ -23,15 +21,10 @@ final class Payload
      *
      * @param  array<string, mixed>  $parameters
      */
-    private function __construct(
-        private readonly ContentType $contentType,
-        private readonly Method $method,
-        private readonly ResourceUri $uri,
-        private readonly array $parameters = [],
-    ) {
+    private function __construct(private readonly ContentType $contentType, private readonly Method $method, private readonly ResourceUri $uri, private readonly array $parameters = [])
+    {
         // ..
     }
-
     /**
      * Creates a new Payload value object from the given parameters.
      *
@@ -42,10 +35,8 @@ final class Payload
         $contentType = ContentType::JSON;
         $method = Method::GET;
         $uri = ResourceUri::list($resource);
-
         return new self($contentType, $method, $uri, $parameters);
     }
-
     /**
      * Creates a new Payload value object from the given parameters.
      *
@@ -56,10 +47,8 @@ final class Payload
         $contentType = ContentType::JSON;
         $method = Method::GET;
         $uri = ResourceUri::retrieve($resource, $id, $suffix);
-
         return new self($contentType, $method, $uri, $parameters);
     }
-
     /**
      * Creates a new Payload value object from the given parameters.
      *
@@ -70,10 +59,8 @@ final class Payload
         $contentType = ContentType::JSON;
         $method = Method::POST;
         $uri = ResourceUri::modify($resource, $id);
-
         return new self($contentType, $method, $uri, $parameters);
     }
-
     /**
      * Creates a new Payload value object from the given parameters.
      */
@@ -82,10 +69,8 @@ final class Payload
         $contentType = ContentType::JSON;
         $method = Method::GET;
         $uri = ResourceUri::retrieveContent($resource, $id);
-
         return new self($contentType, $method, $uri);
     }
-
     /**
      * Creates a new Payload value object from the given parameters.
      *
@@ -96,10 +81,8 @@ final class Payload
         $contentType = ContentType::JSON;
         $method = Method::POST;
         $uri = ResourceUri::create($resource);
-
         return new self($contentType, $method, $uri, $parameters);
     }
-
     /**
      * Creates a new Payload value object from the given parameters.
      *
@@ -110,10 +93,8 @@ final class Payload
         $contentType = ContentType::MULTIPART;
         $method = Method::POST;
         $uri = ResourceUri::upload($resource);
-
         return new self($contentType, $method, $uri, $parameters);
     }
-
     /**
      * Creates a new Payload value object from the given parameters.
      */
@@ -122,10 +103,8 @@ final class Payload
         $contentType = ContentType::JSON;
         $method = Method::POST;
         $uri = ResourceUri::cancel($resource, $id);
-
         return new self($contentType, $method, $uri);
     }
-
     /**
      * Creates a new Payload value object from the given parameters.
      */
@@ -134,73 +113,54 @@ final class Payload
         $contentType = ContentType::JSON;
         $method = Method::DELETE;
         $uri = ResourceUri::delete($resource, $id);
-
         return new self($contentType, $method, $uri);
     }
-
     /**
      * Creates a new Psr 7 Request instance.
      */
-    public function toRequest(BaseUri $baseUri, Headers $headers, QueryParams $queryParams): RequestInterface
+    public function toRequest(\OpenAI\ValueObjects\Transporter\BaseUri $baseUri, \OpenAI\ValueObjects\Transporter\Headers $headers, \OpenAI\ValueObjects\Transporter\QueryParams $queryParams): RequestInterface
     {
-        $psr17Factory = new Psr17Factory;
-
+        $psr17Factory = new Psr17Factory();
         $body = null;
-
-        $uri = $baseUri->toString().$this->uri->toString();
-
+        $uri = $baseUri->toString() . $this->uri->toString();
         $queryParams = $queryParams->toArray();
         if ($this->method === Method::GET) {
             $queryParams = [...$queryParams, ...$this->parameters];
         }
-
         if ($queryParams !== []) {
-            $uri .= '?'.http_build_query($queryParams);
+            $uri .= '?' . http_build_query($queryParams);
         }
-
         $headers = $headers->withContentType($this->contentType);
-
         if ($this->method === Method::POST) {
             if ($this->contentType === ContentType::MULTIPART) {
                 $streamBuilder = new MultipartStreamBuilder($psr17Factory);
-
                 /** @var array<string, StreamInterface|string|int|float|bool|array<int, string>> $parameters */
                 $parameters = $this->parameters;
-
                 foreach ($parameters as $key => $value) {
                     if (is_int($value) || is_float($value) || is_bool($value)) {
                         $value = (string) $value;
                     }
-
                     if (is_array($value)) {
                         foreach ($value as $nestedValue) {
-                            $streamBuilder->addResource($key.'[]', $nestedValue);
+                            $streamBuilder->addResource($key . '[]', $nestedValue);
                         }
-
                         continue;
                     }
-
                     $streamBuilder->addResource($key, $value);
                 }
-
                 $body = $streamBuilder->build();
-
-                $headers = $headers->withContentType($this->contentType, '; boundary='.$streamBuilder->getBoundary());
+                $headers = $headers->withContentType($this->contentType, '; boundary=' . $streamBuilder->getBoundary());
             } else {
-                $body = $psr17Factory->createStream(json_encode($this->parameters, JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE));
+                $body = $psr17Factory->createStream(json_encode($this->parameters, \JSON_THROW_ON_ERROR | \JSON_UNESCAPED_UNICODE));
             }
         }
-
         $request = $psr17Factory->createRequest($this->method->value, $uri);
-
         if ($body instanceof StreamInterface) {
             $request = $request->withBody($body);
         }
-
         foreach ($headers->toArray() as $name => $value) {
             $request = $request->withHeader($name, $value);
         }
-
         return $request;
     }
 }

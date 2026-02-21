@@ -1,9 +1,7 @@
 <?php
 
 // DO NOT EDIT, this is an Auto-generated file from script/semantic-conventions
-
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\SemConv\Incubating\Attributes;
 
 /**
@@ -21,7 +19,6 @@ interface UrlIncubatingAttributes
      * @experimental
      */
     public const URL_DOMAIN = 'url.domain';
-
     /**
      * The file extension extracted from the `url.full`, excluding the leading dot.
      *
@@ -30,14 +27,12 @@ interface UrlIncubatingAttributes
      * @experimental
      */
     public const URL_EXTENSION = 'url.extension';
-
     /**
      * The [URI fragment](https://www.rfc-editor.org/rfc/rfc3986#section-3.5) component
      *
      * @stable
      */
     public const URL_FRAGMENT = 'url.fragment';
-
     /**
      * Absolute URL describing a network resource according to [RFC3986](https://www.rfc-editor.org/rfc/rfc3986)
      * For network calls, URL usually has `scheme://host[:port][path][?query][#fragment]` format, where the fragment
@@ -67,7 +62,6 @@ interface UrlIncubatingAttributes
      * @stable
      */
     public const URL_FULL = 'url.full';
-
     /**
      * Unmodified original URL as seen in the event source.
      *
@@ -77,7 +71,6 @@ interface UrlIncubatingAttributes
      * @experimental
      */
     public const URL_ORIGINAL = 'url.original';
-
     /**
      * The [URI path](https://www.rfc-editor.org/rfc/rfc3986#section-3.3) component
      *
@@ -86,14 +79,12 @@ interface UrlIncubatingAttributes
      * @stable
      */
     public const URL_PATH = 'url.path';
-
     /**
      * Port extracted from the `url.full`
      *
      * @experimental
      */
     public const URL_PORT = 'url.port';
-
     /**
      * The [URI query](https://www.rfc-editor.org/rfc/rfc3986#section-3.4) component
      *
@@ -115,7 +106,6 @@ interface UrlIncubatingAttributes
      * @stable
      */
     public const URL_QUERY = 'url.query';
-
     /**
      * The highest registered url domain, stripped of the subdomain.
      *
@@ -124,14 +114,12 @@ interface UrlIncubatingAttributes
      * @experimental
      */
     public const URL_REGISTERED_DOMAIN = 'url.registered_domain';
-
     /**
      * The [URI scheme](https://www.rfc-editor.org/rfc/rfc3986#section-3.1) component identifying the used protocol.
      *
      * @stable
      */
     public const URL_SCHEME = 'url.scheme';
-
     /**
      * The subdomain portion of a fully qualified domain name includes all of the names except the host name under the registered_domain. In a partially qualified domain, or if the qualification level of the full name cannot be determined, subdomain contains all of the names below the registered domain.
      *
@@ -140,14 +128,12 @@ interface UrlIncubatingAttributes
      * @experimental
      */
     public const URL_SUBDOMAIN = 'url.subdomain';
-
     /**
      * The low-cardinality template of an [absolute path reference](https://www.rfc-editor.org/rfc/rfc3986#section-4.2).
      *
      * @experimental
      */
     public const URL_TEMPLATE = 'url.template';
-
     /**
      * The effective top level domain (eTLD), also known as the domain suffix, is the last part of the domain name. For example, the top level domain for example.com is `com`.
      *
@@ -156,5 +142,4 @@ interface UrlIncubatingAttributes
      * @experimental
      */
     public const URL_TOP_LEVEL_DOMAIN = 'url.top_level_domain';
-
 }

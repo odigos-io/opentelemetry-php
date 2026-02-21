@@ -1,8 +1,7 @@
 <?php
 
-declare(strict_types=1);
-
-namespace League\Container\Argument;
+declare (strict_types=1);
+namespace Odigos\League\Container\Argument;
 
 class DefaultValueArgument extends ResolvableArgument implements DefaultValueInterface
 {
@@ -10,7 +9,6 @@ class DefaultValueArgument extends ResolvableArgument implements DefaultValueInt
     {
         parent::__construct($value);
     }
-
     public function getDefaultValue(): mixed
     {
         return $this->defaultValue;

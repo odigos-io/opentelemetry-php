@@ -9,7 +9,6 @@ use Illuminate\Validation\ValidationException;
 use Symfony\Component\Console\Application as ConsoleApplication;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
-
 trait InteractsWithExceptionHandling
 {
     /**
@@ -18,7 +17,6 @@ trait InteractsWithExceptionHandling
      * @var \Illuminate\Contracts\Debug\ExceptionHandler|null
      */
     protected $originalExceptionHandler;
-
     /**
      * Restore exception handling.
      *
@@ -29,10 +27,8 @@ trait InteractsWithExceptionHandling
         if ($this->originalExceptionHandler) {
             $this->app->instance(ExceptionHandler::class, $this->originalExceptionHandler);
         }
-
         return $this;
     }
-
     /**
      * Only handle the given exceptions via the exception handler.
      *
@@ -43,7 +39,6 @@ trait InteractsWithExceptionHandling
     {
         return $this->withoutExceptionHandling($exceptions);
     }
-
     /**
      * Only handle validation exceptions via the exception handler.
      *
@@ -53,7 +48,6 @@ trait InteractsWithExceptionHandling
     {
         return $this->handleExceptions([ValidationException::class]);
     }
-
     /**
      * Disable exception handling for the test.
      *
@@ -65,12 +59,10 @@ trait InteractsWithExceptionHandling
         if ($this->originalExceptionHandler == null) {
             $this->originalExceptionHandler = app(ExceptionHandler::class);
         }
-
         $this->app->instance(ExceptionHandler::class, new class($this->originalExceptionHandler, $except) implements ExceptionHandler
         {
             protected $except;
             protected $originalHandler;
-
             /**
              * Create a new class instance.
              *
@@ -83,7 +75,6 @@ trait InteractsWithExceptionHandling
                 $this->except = $except;
                 $this->originalHandler = $originalHandler;
             }
-
             /**
              * Report or log an exception.
              *
@@ -96,7 +87,6 @@ trait InteractsWithExceptionHandling
             {
                 //
             }
-
             /**
              * Determine if the exception should be reported.
              *
@@ -105,9 +95,8 @@ trait InteractsWithExceptionHandling
              */
             public function shouldReport(Throwable $e)
             {
-                return false;
+                return \false;
             }
-
             /**
              * Render an exception into an HTTP response.
              *
@@ -124,16 +113,11 @@ trait InteractsWithExceptionHandling
                         return $this->originalHandler->render($request, $e);
                     }
                 }
-
                 if ($e instanceof NotFoundHttpException) {
-                    throw new NotFoundHttpException(
-                        "{$request->method()} {$request->url()}", $e, is_int($e->getCode()) ? $e->getCode() : 0
-                    );
+                    throw new NotFoundHttpException("{$request->method()} {$request->url()}", $e, is_int($e->getCode()) ? $e->getCode() : 0);
                 }
-
                 throw $e;
             }
-
             /**
              * Render an exception to the console.
              *
@@ -143,13 +127,11 @@ trait InteractsWithExceptionHandling
              */
             public function renderForConsole($output, Throwable $e)
             {
-                (new ConsoleApplication)->renderThrowable($e, $output);
+                (new ConsoleApplication())->renderThrowable($e, $output);
             }
         });
-
         return $this;
     }
-
     /**
      * Assert that the given callback throws an exception with the given message when invoked.
      *
@@ -162,33 +144,19 @@ trait InteractsWithExceptionHandling
     {
         try {
             $test();
-
-            $thrown = false;
+            $thrown = \false;
         } catch (Throwable $exception) {
             $thrown = $exception instanceof $expectedClass;
-
             $actualMessage = $exception->getMessage();
         }
-
-        Assert::assertTrue(
-            $thrown,
-            sprintf('Failed asserting that exception of type "%s" was thrown.', $expectedClass)
-        );
-
+        Assert::assertTrue($thrown, sprintf('Failed asserting that exception of type "%s" was thrown.', $expectedClass));
         if (isset($expectedMessage)) {
-            if (! isset($actualMessage)) {
-                Assert::fail(
-                    sprintf(
-                        'Failed asserting that exception of type "%s" with message "%s" was thrown.',
-                        $expectedClass,
-                        $expectedMessage
-                    )
-                );
+            if (!isset($actualMessage)) {
+                Assert::fail(sprintf('Failed asserting that exception of type "%s" with message "%s" was thrown.', $expectedClass, $expectedMessage));
             } else {
                 Assert::assertStringContainsString($expectedMessage, $actualMessage);
             }
         }
-
         return $this;
     }
 }

@@ -1,16 +1,14 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\DBAL\Types;
 
 use Doctrine\DBAL\ParameterType;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
-
 /**
  * Type that maps a database SMALLINT to a PHP integer.
  */
-class SmallIntType extends Type implements PhpIntegerMappingType
+class SmallIntType extends \Doctrine\DBAL\Types\Type implements \Doctrine\DBAL\Types\PhpIntegerMappingType
 {
     /**
      * {@inheritDoc}
@@ -19,7 +17,6 @@ class SmallIntType extends Type implements PhpIntegerMappingType
     {
         return $platform->getSmallIntTypeDeclarationSQL($column);
     }
-
     /**
      * @param T $value
      *
@@ -31,7 +28,6 @@ class SmallIntType extends Type implements PhpIntegerMappingType
     {
         return $value === null ? null : (int) $value;
     }
-
     public function getBindingType(): ParameterType
     {
         return ParameterType::INTEGER;

@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -19,7 +19,6 @@ namespace Cake\Database\Expression;
 use Cake\Database\ExpressionInterface;
 use Cake\Database\ValueBinder;
 use Closure;
-
 /**
  * Represents a single identifier name in the database.
  *
@@ -36,12 +35,10 @@ class IdentifierExpression implements ExpressionInterface
      * @var string
      */
     protected string $_identifier;
-
     /**
      * @var string|null
      */
     protected ?string $collation = null;
-
     /**
      * Constructor
      *
@@ -53,7 +50,6 @@ class IdentifierExpression implements ExpressionInterface
         $this->_identifier = $identifier;
         $this->collation = $collation;
     }
-
     /**
      * Sets the identifier this expression represents
      *
@@ -64,7 +60,6 @@ class IdentifierExpression implements ExpressionInterface
     {
         $this->_identifier = $identifier;
     }
-
     /**
      * Returns the identifier this expression represents
      *
@@ -74,7 +69,6 @@ class IdentifierExpression implements ExpressionInterface
     {
         return $this->_identifier;
     }
-
     /**
      * Sets the collation.
      *
@@ -85,7 +79,6 @@ class IdentifierExpression implements ExpressionInterface
     {
         $this->collation = $collation;
     }
-
     /**
      * Returns the collation.
      *
@@ -95,7 +88,6 @@ class IdentifierExpression implements ExpressionInterface
     {
         return $this->collation;
     }
-
     /**
      * @inheritDoc
      */
@@ -105,10 +97,8 @@ class IdentifierExpression implements ExpressionInterface
         if ($this->collation) {
             $sql .= ' COLLATE ' . $this->collation;
         }
-
         return $sql;
     }
-
     /**
      * @inheritDoc
      */

@@ -3,8 +3,7 @@
 namespace Illuminate\Queue\Connectors;
 
 use Illuminate\Queue\DeferredQueue;
-
-class DeferredConnector implements ConnectorInterface
+class DeferredConnector implements \Illuminate\Queue\Connectors\ConnectorInterface
 {
     /**
      * Establish a queue connection.

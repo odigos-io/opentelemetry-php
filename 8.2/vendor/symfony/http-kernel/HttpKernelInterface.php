@@ -8,12 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\HttpKernel;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-
 /**
  * HttpKernelInterface handles a Request to convert it to a Response.
  *
@@ -23,7 +21,6 @@ interface HttpKernelInterface
 {
     public const MAIN_REQUEST = 1;
     public const SUB_REQUEST = 2;
-
     /**
      * Handles a Request to convert it to a Response.
      *
@@ -36,5 +33,5 @@ interface HttpKernelInterface
      *
      * @throws \Exception When an Exception occurs during processing
      */
-    public function handle(Request $request, int $type = self::MAIN_REQUEST, bool $catch = true): Response;
+    public function handle(Request $request, int $type = self::MAIN_REQUEST, bool $catch = \true): Response;
 }

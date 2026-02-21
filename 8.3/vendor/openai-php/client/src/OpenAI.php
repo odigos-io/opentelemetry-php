@@ -1,10 +1,10 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Odigos;
 
 use OpenAI\Client;
 use OpenAI\Factory;
-
 final class OpenAI
 {
     /**
@@ -12,18 +12,14 @@ final class OpenAI
      */
     public static function client(string $apiKey, ?string $organization = null, ?string $project = null): Client
     {
-        return self::factory()
-            ->withApiKey($apiKey)
-            ->withOrganization($organization)
-            ->withProject($project)
-            ->make();
+        return self::factory()->withApiKey($apiKey)->withOrganization($organization)->withProject($project)->make();
     }
-
     /**
      * Creates a new factory instance to configure a custom Open AI Client
      */
     public static function factory(): Factory
     {
-        return new Factory;
+        return new Factory();
     }
 }
+\class_alias('Odigos\OpenAI', 'OpenAI', \false);

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright 2015-present MongoDB, Inc.
  *
@@ -14,7 +15,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 namespace MongoDB\Operation;
 
 use MongoDB\DeleteResult;
@@ -25,12 +25,10 @@ use MongoDB\Driver\Session;
 use MongoDB\Driver\WriteConcern;
 use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\Exception\UnsupportedException;
-
 use function is_string;
 use function MongoDB\is_document;
 use function MongoDB\is_write_concern_acknowledged;
 use function MongoDB\server_supports_feature;
-
 /**
  * Operation for the delete command.
  *
@@ -40,10 +38,9 @@ use function MongoDB\server_supports_feature;
  * @internal
  * @see https://mongodb.com/docs/manual/reference/command/delete/
  */
-final class Delete implements Explainable
+final class Delete implements \MongoDB\Operation\Explainable
 {
     private const WIRE_VERSION_FOR_HINT = 9;
-
     /**
      * Constructs a delete command.
      *
@@ -82,39 +79,31 @@ final class Delete implements Explainable
      */
     public function __construct(private string $databaseName, private string $collectionName, private array|object $filter, private int $limit, private array $options = [])
     {
-        if (! is_document($filter)) {
+        if (!is_document($filter)) {
             throw InvalidArgumentException::expectedDocumentType('$filter', $filter);
         }
-
         if ($limit !== 0 && $limit !== 1) {
             throw new InvalidArgumentException('$limit must be 0 or 1');
         }
-
-        if (isset($this->options['collation']) && ! is_document($this->options['collation'])) {
+        if (isset($this->options['collation']) && !is_document($this->options['collation'])) {
             throw InvalidArgumentException::expectedDocumentType('"collation" option', $this->options['collation']);
         }
-
-        if (isset($this->options['hint']) && ! is_string($this->options['hint']) && ! is_document($this->options['hint'])) {
+        if (isset($this->options['hint']) && !is_string($this->options['hint']) && !is_document($this->options['hint'])) {
             throw InvalidArgumentException::expectedDocumentOrStringType('"hint" option', $this->options['hint']);
         }
-
-        if (isset($this->options['session']) && ! $this->options['session'] instanceof Session) {
+        if (isset($this->options['session']) && !$this->options['session'] instanceof Session) {
             throw InvalidArgumentException::invalidType('"session" option', $this->options['session'], Session::class);
         }
-
-        if (isset($this->options['writeConcern']) && ! $this->options['writeConcern'] instanceof WriteConcern) {
+        if (isset($this->options['writeConcern']) && !$this->options['writeConcern'] instanceof WriteConcern) {
             throw InvalidArgumentException::invalidType('"writeConcern" option', $this->options['writeConcern'], WriteConcern::class);
         }
-
-        if (isset($this->options['let']) && ! is_document($this->options['let'])) {
+        if (isset($this->options['let']) && !is_document($this->options['let'])) {
             throw InvalidArgumentException::expectedDocumentType('"let" option', $this->options['let']);
         }
-
         if (isset($this->options['writeConcern']) && $this->options['writeConcern']->isDefault()) {
             unset($this->options['writeConcern']);
         }
     }
-
     /**
      * Execute the operation.
      *
@@ -125,26 +114,18 @@ final class Delete implements Explainable
     {
         /* CRUD spec requires a client-side error when using "hint" with an
          * unacknowledged write concern on an unsupported server. */
-        if (
-            isset($this->options['writeConcern']) && ! is_write_concern_acknowledged($this->options['writeConcern']) &&
-            isset($this->options['hint']) && ! server_supports_feature($server, self::WIRE_VERSION_FOR_HINT)
-        ) {
+        if (isset($this->options['writeConcern']) && !is_write_concern_acknowledged($this->options['writeConcern']) && isset($this->options['hint']) && !server_supports_feature($server, self::WIRE_VERSION_FOR_HINT)) {
             throw UnsupportedException::hintNotSupported();
         }
-
         $inTransaction = isset($this->options['session']) && $this->options['session']->isInTransaction();
         if ($inTransaction && isset($this->options['writeConcern'])) {
             throw UnsupportedException::writeConcernNotSupportedInTransaction();
         }
-
         $bulk = new Bulk($this->createBulkWriteOptions());
         $bulk->delete($this->filter, $this->createDeleteOptions());
-
         $writeResult = $server->executeBulkWrite($this->databaseName . '.' . $this->collectionName, $bulk, $this->createExecuteOptions());
-
         return new DeleteResult($writeResult);
     }
-
     /**
      * Returns the command document for this operation.
      *
@@ -153,18 +134,14 @@ final class Delete implements Explainable
     public function getCommandDocument(): array
     {
         $cmd = ['delete' => $this->collectionName, 'deletes' => [['q' => $this->filter] + $this->createDeleteOptions()]];
-
         if (isset($this->options['comment'])) {
             $cmd['comment'] = $this->options['comment'];
         }
-
         if (isset($this->options['let'])) {
             $cmd['let'] = (object) $this->options['let'];
         }
-
         return $cmd;
     }
-
     /**
      * Create options for constructing the bulk write.
      *
@@ -173,18 +150,14 @@ final class Delete implements Explainable
     private function createBulkWriteOptions(): array
     {
         $options = [];
-
         if (isset($this->options['comment'])) {
             $options['comment'] = $this->options['comment'];
         }
-
         if (isset($this->options['let'])) {
             $options['let'] = (object) $this->options['let'];
         }
-
         return $options;
     }
-
     /**
      * Create options for the delete command.
      *
@@ -194,18 +167,14 @@ final class Delete implements Explainable
     private function createDeleteOptions(): array
     {
         $deleteOptions = ['limit' => $this->limit];
-
         if (isset($this->options['collation'])) {
             $deleteOptions['collation'] = (object) $this->options['collation'];
         }
-
         if (isset($this->options['hint'])) {
             $deleteOptions['hint'] = $this->options['hint'];
         }
-
         return $deleteOptions;
     }
-
     /**
      * Create options for executing the bulk write.
      *
@@ -214,15 +183,12 @@ final class Delete implements Explainable
     private function createExecuteOptions(): array
     {
         $options = [];
-
         if (isset($this->options['session'])) {
             $options['session'] = $this->options['session'];
         }
-
         if (isset($this->options['writeConcern'])) {
             $options['writeConcern'] = $this->options['writeConcern'];
         }
-
         return $options;
     }
 }

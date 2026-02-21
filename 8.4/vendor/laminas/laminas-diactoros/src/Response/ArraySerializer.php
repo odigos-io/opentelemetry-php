@@ -1,17 +1,14 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Odigos\Laminas\Diactoros\Response;
 
-namespace Laminas\Diactoros\Response;
-
-use Laminas\Diactoros\Exception;
-use Laminas\Diactoros\Response;
-use Laminas\Diactoros\Stream;
+use Odigos\Laminas\Diactoros\Exception;
+use Odigos\Laminas\Diactoros\Response;
+use Odigos\Laminas\Diactoros\Stream;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
-
 use function sprintf;
-
 /**
  * Serialize or deserialize response messages to/from arrays.
  *
@@ -34,15 +31,8 @@ final class ArraySerializer
      */
     public static function toArray(ResponseInterface $response): array
     {
-        return [
-            'status_code'      => $response->getStatusCode(),
-            'reason_phrase'    => $response->getReasonPhrase(),
-            'protocol_version' => $response->getProtocolVersion(),
-            'headers'          => $response->getHeaders(),
-            'body'             => (string) $response->getBody(),
-        ];
+        return ['status_code' => $response->getStatusCode(), 'reason_phrase' => $response->getReasonPhrase(), 'protocol_version' => $response->getProtocolVersion(), 'headers' => $response->getHeaders(), 'body' => (string) $response->getBody()];
     }
-
     /**
      * Deserialize a response array to a response instance.
      *
@@ -53,20 +43,15 @@ final class ArraySerializer
         try {
             $body = new Stream('php://memory', 'wb+');
             $body->write(self::getValueFromKey($serializedResponse, 'body'));
-
-            $statusCode      = self::getValueFromKey($serializedResponse, 'status_code');
-            $headers         = self::getValueFromKey($serializedResponse, 'headers');
+            $statusCode = self::getValueFromKey($serializedResponse, 'status_code');
+            $headers = self::getValueFromKey($serializedResponse, 'headers');
             $protocolVersion = self::getValueFromKey($serializedResponse, 'protocol_version');
-            $reasonPhrase    = self::getValueFromKey($serializedResponse, 'reason_phrase');
-
-            return (new Response($body, $statusCode, $headers))
-                ->withProtocolVersion($protocolVersion)
-                ->withStatus($statusCode, $reasonPhrase);
+            $reasonPhrase = self::getValueFromKey($serializedResponse, 'reason_phrase');
+            return (new Response($body, $statusCode, $headers))->withProtocolVersion($protocolVersion)->withStatus($statusCode, $reasonPhrase);
         } catch (Throwable $exception) {
             throw Exception\DeserializationException::forResponseFromArray($exception);
         }
     }
-
     /**
      * @return mixed
      * @throws Exception\DeserializationException

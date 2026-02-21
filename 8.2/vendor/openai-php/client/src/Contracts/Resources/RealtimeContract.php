@@ -1,12 +1,10 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenAI\Contracts\Resources;
 
 use OpenAI\Responses\Realtime\SessionResponse;
 use OpenAI\Responses\Realtime\TranscriptionSessionResponse;
-
 interface RealtimeContract
 {
     /**
@@ -17,7 +15,6 @@ interface RealtimeContract
      * @param  array<string, mixed>  $parameters
      */
     public function token(array $parameters = []): SessionResponse;
-
     /**
      * Create an ephemeral API token for real time transcription sessions.
      *

@@ -6,7 +6,6 @@ use Illuminate\Bus\BatchRepository;
 use Illuminate\Contracts\Bus\Dispatcher as BusDispatcherContract;
 use Illuminate\Foundation\Bus\PendingChain;
 use Illuminate\Support\Testing\Fakes\BusFake;
-
 /**
  * @method static mixed dispatch(mixed $command)
  * @method static mixed dispatchSync(mixed $command, mixed $handler = null)
@@ -51,7 +50,7 @@ use Illuminate\Support\Testing\Fakes\BusFake;
  * @see \Illuminate\Bus\Dispatcher
  * @see \Illuminate\Support\Testing\Fakes\BusFake
  */
-class Bus extends Facade
+class Bus extends \Illuminate\Support\Facades\Facade
 {
     /**
      * Replace the bound instance with a fake.
@@ -62,15 +61,11 @@ class Bus extends Facade
      */
     public static function fake($jobsToFake = [], ?BatchRepository $batchRepository = null)
     {
-        $actualDispatcher = static::isFake()
-                ? static::getFacadeRoot()->dispatcher
-                : static::getFacadeRoot();
-
+        $actualDispatcher = static::isFake() ? static::getFacadeRoot()->dispatcher : static::getFacadeRoot();
         return tap(new BusFake($actualDispatcher, $jobsToFake, $batchRepository), function ($fake) {
             static::swap($fake);
         });
     }
-
     /**
      * Dispatch the given chain of jobs.
      *
@@ -80,11 +75,8 @@ class Bus extends Facade
     public static function dispatchChain($jobs)
     {
         $jobs = is_array($jobs) ? $jobs : func_get_args();
-
-        return (new PendingChain(array_shift($jobs), $jobs))
-                    ->dispatch();
+        return (new PendingChain(array_shift($jobs), $jobs))->dispatch();
     }
-
     /**
      * Get the registered name of the component.
      *

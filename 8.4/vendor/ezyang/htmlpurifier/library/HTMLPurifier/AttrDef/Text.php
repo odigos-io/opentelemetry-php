@@ -1,11 +1,12 @@
 <?php
 
+namespace Odigos;
+
 /**
  * Validates arbitrary text according to the HTML spec.
  */
 class HTMLPurifier_AttrDef_Text extends HTMLPurifier_AttrDef
 {
-
     /**
      * @param string $string
      * @param HTMLPurifier_Config $config
@@ -17,5 +18,8 @@ class HTMLPurifier_AttrDef_Text extends HTMLPurifier_AttrDef
         return $this->parseCDATA($string);
     }
 }
-
+/**
+ * Validates arbitrary text according to the HTML spec.
+ */
+\class_alias('Odigos\HTMLPurifier_AttrDef_Text', 'HTMLPurifier_AttrDef_Text', \false);
 // vim: et sw=4 sts=4

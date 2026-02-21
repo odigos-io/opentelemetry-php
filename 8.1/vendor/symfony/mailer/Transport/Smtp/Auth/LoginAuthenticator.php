@@ -8,23 +8,20 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\Mailer\Transport\Smtp\Auth;
 
 use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransport;
-
 /**
  * Handles LOGIN authentication.
  *
  * @author Chris Corbyn
  */
-class LoginAuthenticator implements AuthenticatorInterface
+class LoginAuthenticator implements \Symfony\Component\Mailer\Transport\Smtp\Auth\AuthenticatorInterface
 {
     public function getAuthKeyword(): string
     {
         return 'LOGIN';
     }
-
     /**
      * @see https://www.ietf.org/rfc/rfc4954.txt
      */

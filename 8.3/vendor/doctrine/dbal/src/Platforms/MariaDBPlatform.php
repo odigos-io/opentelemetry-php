@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\DBAL\Platforms;
 
 use Doctrine\DBAL\Platforms\Keywords\KeywordList;
@@ -10,16 +9,14 @@ use Doctrine\DBAL\Schema\ForeignKeyConstraint;
 use Doctrine\DBAL\Schema\TableDiff;
 use Doctrine\DBAL\Types\JsonType;
 use Doctrine\Deprecations\Deprecation;
-
 use function array_diff_key;
 use function array_merge;
 use function count;
 use function in_array;
-
 /**
  * Provides the behavior, features and SQL dialect of the MariaDB database platform of the oldest supported version.
  */
-class MariaDBPlatform extends AbstractMySQLPlatform
+class MariaDBPlatform extends \Doctrine\DBAL\Platforms\AbstractMySQLPlatform
 {
     /**
      * Generate SQL snippets to reverse the aliasing of JSON to LONGTEXT.
@@ -35,81 +32,63 @@ class MariaDBPlatform extends AbstractMySQLPlatform
     public function getColumnTypeSQLSnippet(string $tableAlias, string $databaseName): string
     {
         $subQueryAlias = 'i_' . $tableAlias;
-
         $databaseName = $this->quoteStringLiteral($databaseName);
-
         // The check for `CONSTRAINT_SCHEMA = $databaseName` is mandatory here to prevent performance issues
         return <<<SQL
-            IF(
-                $tableAlias.DATA_TYPE = 'longtext'
-                AND EXISTS(
-                    SELECT * FROM information_schema.CHECK_CONSTRAINTS $subQueryAlias
-                    WHERE $subQueryAlias.CONSTRAINT_SCHEMA = $databaseName
-                    AND $subQueryAlias.TABLE_NAME = $tableAlias.TABLE_NAME
-                    AND $subQueryAlias.CHECK_CLAUSE = CONCAT(
-                        'json_valid(`',
-                            $tableAlias.COLUMN_NAME,
-                        '`)'
-                    )
-                ),
-                'json',
-                $tableAlias.DATA_TYPE
+    IF(
+        {$tableAlias}.DATA_TYPE = 'longtext'
+        AND EXISTS(
+            SELECT * FROM information_schema.CHECK_CONSTRAINTS {$subQueryAlias}
+            WHERE {$subQueryAlias}.CONSTRAINT_SCHEMA = {$databaseName}
+            AND {$subQueryAlias}.TABLE_NAME = {$tableAlias}.TABLE_NAME
+            AND {$subQueryAlias}.CHECK_CLAUSE = CONCAT(
+                'json_valid(`',
+                    {$tableAlias}.COLUMN_NAME,
+                '`)'
             )
-        SQL;
+        ),
+        'json',
+        {$tableAlias}.DATA_TYPE
+    )
+SQL;
     }
-
     /**
      * {@inheritDoc}
      */
     protected function getPreAlterTableRenameIndexForeignKeySQL(TableDiff $diff): array
     {
-        $sql       = [];
+        $sql = [];
         $tableName = $diff->getOldTable()->getQuotedName($this);
-
         $modifiedForeignKeys = $diff->getModifiedForeignKeys();
-
         foreach ($this->getRemainingForeignKeyConstraintsRequiringRenamedIndexes($diff) as $foreignKey) {
-            if (in_array($foreignKey, $modifiedForeignKeys, true)) {
+            if (in_array($foreignKey, $modifiedForeignKeys, \true)) {
                 continue;
             }
-
             $sql[] = $this->getDropForeignKeySQL($foreignKey->getQuotedName($this), $tableName);
         }
-
         return $sql;
     }
-
     /**
      * {@inheritDoc}
      */
     protected function getPostAlterTableIndexForeignKeySQL(TableDiff $diff): array
     {
-        return array_merge(
-            parent::getPostAlterTableIndexForeignKeySQL($diff),
-            $this->getPostAlterTableRenameIndexForeignKeySQL($diff),
-        );
+        return array_merge(parent::getPostAlterTableIndexForeignKeySQL($diff), $this->getPostAlterTableRenameIndexForeignKeySQL($diff));
     }
-
     /** @return list<string> */
     private function getPostAlterTableRenameIndexForeignKeySQL(TableDiff $diff): array
     {
         $sql = [];
-
         $tableName = $diff->getOldTable()->getQuotedName($this);
-
         $modifiedForeignKeys = $diff->getModifiedForeignKeys();
-
         foreach ($this->getRemainingForeignKeyConstraintsRequiringRenamedIndexes($diff) as $foreignKey) {
-            if (in_array($foreignKey, $modifiedForeignKeys, true)) {
+            if (in_array($foreignKey, $modifiedForeignKeys, \true)) {
                 continue;
             }
-
             $sql[] = $this->getCreateForeignKeySQL($foreignKey, $tableName);
         }
-
         return $sql;
     }
-
     /**
      * Returns the remaining foreign key constraints that require one of the renamed indexes.
      *
@@ -123,31 +102,21 @@ class MariaDBPlatform extends AbstractMySQLPlatform
     private function getRemainingForeignKeyConstraintsRequiringRenamedIndexes(TableDiff $diff): array
     {
         $renamedIndexes = $diff->getRenamedIndexes();
-
         if (count($renamedIndexes) === 0) {
             return [];
         }
-
         $foreignKeys = [];
-
-        $remainingForeignKeys = array_diff_key(
-            $diff->getOldTable()->getForeignKeys(),
-            $diff->getDroppedForeignKeys(),
-        );
-
+        $remainingForeignKeys = array_diff_key($diff->getOldTable()->getForeignKeys(), $diff->getDroppedForeignKeys());
         foreach ($remainingForeignKeys as $foreignKey) {
             foreach ($renamedIndexes as $index) {
                 if ($foreignKey->intersectsIndexColumns($index)) {
                     $foreignKeys[] = $foreignKey;
-
                     break;
                 }
             }
         }
-
         return $foreignKeys;
     }
-
     /** {@inheritDoc} */
     public function getColumnDeclarationSQL(string $name, array $column): string
     {
@@ -157,20 +126,12 @@ class MariaDBPlatform extends AbstractMySQLPlatform
             unset($column['collation']);
             unset($column['charset']);
         }
-
         return parent::getColumnDeclarationSQL($name, $column);
     }
-
     /** @deprecated */
     protected function createReservedKeywordsList(): KeywordList
     {
-        Deprecation::triggerIfCalledFromOutside(
-            'doctrine/dbal',
-            'https://github.com/doctrine/dbal/pull/6607',
-            '%s is deprecated.',
-            __METHOD__,
-        );
-
+        Deprecation::triggerIfCalledFromOutside('doctrine/dbal', 'https://github.com/doctrine/dbal/pull/6607', '%s is deprecated.', __METHOD__);
         return new MariaDBKeywords();
     }
 }

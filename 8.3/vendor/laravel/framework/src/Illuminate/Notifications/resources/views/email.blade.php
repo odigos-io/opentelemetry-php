@@ -18,11 +18,13 @@
 
 {{-- Action Button --}}
 @isset($actionText)
-<?php
-    $color = match ($level) {
-        'success', 'error' => $level,
-        default => 'primary',
-    };
+<?php 
+namespace Odigos;
+
+$color = match ($level) {
+    'success', 'error' => $level,
+    default => 'primary',
+};
 ?>
 <x-mail::button :url="$actionUrl" :color="$color">
 {{ $actionText }}
@@ -56,3 +58,4 @@
 </x-slot:subcopy>
 @endisset
 </x-mail::message>
+<?php 

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright 2016-present MongoDB, Inc.
  *
@@ -14,13 +15,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 namespace MongoDB\GridFS\Exception;
 
 use MongoDB\Exception\RuntimeException;
-
 use function sprintf;
-
 class CorruptFileException extends RuntimeException
 {
     /**
@@ -32,7 +30,6 @@ class CorruptFileException extends RuntimeException
     {
         return new self(sprintf('Invalid data found for index "%d"', $chunkIndex));
     }
-
     /**
      * Thrown when a chunk is not found for an expected index.
      *
@@ -43,7 +40,6 @@ class CorruptFileException extends RuntimeException
     {
         return new self(sprintf('Chunk not found for index "%d"', $expectedIndex));
     }
-
     /**
      * Thrown when a chunk has an unexpected index number.
      *
@@ -55,7 +51,6 @@ class CorruptFileException extends RuntimeException
     {
         return new self(sprintf('Expected chunk to have index "%d" but found "%d"', $expectedIndex, $index));
     }
-
     /**
      * Thrown when a chunk has an unexpected data size.
      *

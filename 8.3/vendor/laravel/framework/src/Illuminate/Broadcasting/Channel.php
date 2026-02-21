@@ -4,7 +4,6 @@ namespace Illuminate\Broadcasting;
 
 use Illuminate\Contracts\Broadcasting\HasBroadcastChannel;
 use Stringable;
-
 class Channel implements Stringable
 {
     /**
@@ -13,7 +12,6 @@ class Channel implements Stringable
      * @var string
      */
     public $name;
-
     /**
      * Create a new channel instance.
      *
@@ -23,7 +21,6 @@ class Channel implements Stringable
     {
         $this->name = $name instanceof HasBroadcastChannel ? $name->broadcastChannel() : $name;
     }
-
     /**
      * Convert the channel instance to a string.
      *

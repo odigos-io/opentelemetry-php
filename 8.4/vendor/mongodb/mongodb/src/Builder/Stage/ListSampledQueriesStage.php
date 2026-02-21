@@ -3,16 +3,13 @@
 /**
  * THIS FILE IS AUTO-GENERATED. ANY CHANGES WILL BE LOST!
  */
-
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace MongoDB\Builder\Stage;
 
 use MongoDB\Builder\Type\Encode;
 use MongoDB\Builder\Type\OperatorInterface;
 use MongoDB\Builder\Type\Optional;
 use MongoDB\Builder\Type\StageInterface;
-
 /**
  * Lists sampled queries for all collections or a specific collection.
  *
@@ -24,10 +21,8 @@ final class ListSampledQueriesStage implements StageInterface, OperatorInterface
     public const ENCODE = Encode::Object;
     public const NAME = '$listSampledQueries';
     public const PROPERTIES = ['namespace' => 'namespace'];
-
     /** @var Optional|string $namespace */
     public readonly Optional|string $namespace;
-
     /**
      * @param Optional|string $namespace
      */

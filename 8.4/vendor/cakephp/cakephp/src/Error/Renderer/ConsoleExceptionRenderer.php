@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -24,7 +24,6 @@ use Cake\Error\ExceptionRendererInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Throwable;
-
 /**
  * Plain text exception rendering with a stack trace.
  *
@@ -36,17 +35,14 @@ class ConsoleExceptionRenderer implements ExceptionRendererInterface
      * @var \Throwable
      */
     private Throwable $error;
-
     /**
      * @var \Cake\Console\ConsoleOutput
      */
     private ConsoleOutput $output;
-
     /**
      * @var bool
      */
     private bool $trace;
-
     /**
      * Constructor.
      *
@@ -58,9 +54,8 @@ class ConsoleExceptionRenderer implements ExceptionRendererInterface
     {
         $this->error = $error;
         $this->output = $config['stderr'] ?? new ConsoleOutput('php://stderr');
-        $this->trace = $config['trace'] ?? true;
+        $this->trace = $config['trace'] ?? \true;
     }
-
     /**
      * Render an exception into a plain text message.
      *
@@ -79,10 +74,8 @@ class ConsoleExceptionRenderer implements ExceptionRendererInterface
             $parent = $i > 0 ? $exceptions[$i - 1] : null;
             $out = array_merge($out, $this->renderException($error, $parent));
         }
-
         return implode("\n", $out);
     }
-
     /**
      * Render an individual exception
      *
@@ -92,17 +85,7 @@ class ConsoleExceptionRenderer implements ExceptionRendererInterface
      */
     protected function renderException(Throwable $exception, ?Throwable $parent): array
     {
-        $out = [
-            sprintf(
-                '<error>%s[%s] %s</error> in %s on line %s',
-                $parent ? 'Caused by ' : '',
-                $exception::class,
-                $exception->getMessage(),
-                $exception->getFile(),
-                $exception->getLine(),
-            ),
-        ];
-
+        $out = [sprintf('<error>%s[%s] %s</error> in %s on line %s', $parent ? 'Caused by ' : '', $exception::class, $exception->getMessage(), $exception->getFile(), $exception->getLine())];
         $debug = Configure::read('debug');
         if ($debug && $exception instanceof CakeException) {
             $attributes = $exception->getAttributes();
@@ -110,10 +93,9 @@ class ConsoleExceptionRenderer implements ExceptionRendererInterface
                 $out[] = '';
                 $out[] = '<info>Exception Attributes</info>';
                 $out[] = '';
-                $out[] = var_export($exception->getAttributes(), true);
+                $out[] = var_export($exception->getAttributes(), \true);
             }
         }
-
         if ($this->trace) {
             $stacktrace = Debugger::getUniqueFrames($exception, $parent);
             $out[] = '';
@@ -122,10 +104,8 @@ class ConsoleExceptionRenderer implements ExceptionRendererInterface
             $out[] = Debugger::formatTrace($stacktrace, ['format' => 'text']);
             $out[] = '';
         }
-
         return $out;
     }
-
     /**
      * Write output to the output stream
      *

@@ -3,7 +3,6 @@
 namespace Illuminate\Foundation\Auth\Access;
 
 use Illuminate\Contracts\Auth\Access\Gate;
-
 trait Authorizable
 {
     /**
@@ -17,7 +16,6 @@ trait Authorizable
     {
         return app(Gate::class)->forUser($this)->check($abilities, $arguments);
     }
-
     /**
      * Determine if the entity has any of the given abilities.
      *
@@ -29,7 +27,6 @@ trait Authorizable
     {
         return app(Gate::class)->forUser($this)->any($abilities, $arguments);
     }
-
     /**
      * Determine if the entity does not have the given abilities.
      *
@@ -39,9 +36,8 @@ trait Authorizable
      */
     public function cant($abilities, $arguments = [])
     {
-        return ! $this->can($abilities, $arguments);
+        return !$this->can($abilities, $arguments);
     }
-
     /**
      * Determine if the entity does not have the given abilities.
      *

@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -23,7 +23,6 @@ use Cake\ORM\Table;
 use Cake\Utility\Inflector;
 use Closure;
 use function Cake\Core\pluginSplit;
-
 /**
  * Represents an 1 - 1 relationship where the source side of the relation is
  * related to only one record in the target table and vice versa.
@@ -40,11 +39,7 @@ class HasOne extends Association
      *
      * @var array<string>
      */
-    protected array $_validStrategies = [
-        self::STRATEGY_JOIN,
-        self::STRATEGY_SELECT,
-    ];
-
+    protected array $_validStrategies = [self::STRATEGY_JOIN, self::STRATEGY_SELECT];
     /**
      * @inheritDoc
      */
@@ -52,7 +47,6 @@ class HasOne extends Association
     {
         return $this->_foreignKey ??= $this->_modelKey($this->getSource()->getAlias());
     }
-
     /**
      * Sets the name of the field representing the foreign key to the target table.
      *
@@ -63,10 +57,8 @@ class HasOne extends Association
     public function setForeignKey(array|string|false $key)
     {
         $this->_foreignKey = $key;
-
         return $this;
     }
-
     /**
      * Returns default property name based on association name.
      *
@@ -75,10 +67,8 @@ class HasOne extends Association
     protected function _propertyName(): string
     {
         [, $name] = pluginSplit($this->_name);
-
         return Inflector::underscore(Inflector::singularize($name));
     }
-
     /**
      * Returns whether the passed table is the owning side for this
      * association. This means that rows in the 'target' table would miss important
@@ -91,7 +81,6 @@ class HasOne extends Association
     {
         return $side === $this->getSource();
     }
-
     /**
      * Get the relationship type.
      *
@@ -101,7 +90,6 @@ class HasOne extends Association
     {
         return self::ONE_TO_ONE;
     }
-
     /**
      * Takes an entity from the source table and looks if there is a field
      * matching the property name for this association. The found entity will be
@@ -120,54 +108,34 @@ class HasOne extends Association
         if (!$targetEntity instanceof EntityInterface) {
             return $entity;
         }
-
         /** @var array<string> $foreignKeys */
-        $foreignKeys = (array)$this->getForeignKey();
-        $properties = array_combine(
-            $foreignKeys,
-            $entity->extract((array)$this->getBindingKey()),
-        );
+        $foreignKeys = (array) $this->getForeignKey();
+        $properties = array_combine($foreignKeys, $entity->extract((array) $this->getBindingKey()));
         if (method_exists($targetEntity, 'patch')) {
-            $targetEntity = $targetEntity->patch($properties, ['guard' => false]);
+            $targetEntity = $targetEntity->patch($properties, ['guard' => \false]);
         } else {
-            $targetEntity->set($properties, ['guard' => false]);
+            $targetEntity->set($properties, ['guard' => \false]);
         }
-
         if (!$this->getTarget()->save($targetEntity, $options)) {
             $targetEntity->unset(array_keys($properties));
-
-            return false;
+            return \false;
         }
-
         return $entity;
     }
-
     /**
      * @inheritDoc
      */
     public function eagerLoader(array $options): Closure
     {
-        $loader = new SelectLoader([
-            'alias' => $this->getAlias(),
-            'sourceAlias' => $this->getSource()->getAlias(),
-            'targetAlias' => $this->getTarget()->getAlias(),
-            'foreignKey' => $this->getForeignKey(),
-            'bindingKey' => $this->getBindingKey(),
-            'strategy' => $this->getStrategy(),
-            'associationType' => $this->type(),
-            'finder' => $this->find(...),
-        ]);
-
+        $loader = new SelectLoader(['alias' => $this->getAlias(), 'sourceAlias' => $this->getSource()->getAlias(), 'targetAlias' => $this->getTarget()->getAlias(), 'foreignKey' => $this->getForeignKey(), 'bindingKey' => $this->getBindingKey(), 'strategy' => $this->getStrategy(), 'associationType' => $this->type(), 'finder' => $this->find(...)]);
         return $loader->buildEagerLoader($options);
     }
-
     /**
      * @inheritDoc
      */
     public function cascadeDelete(EntityInterface $entity, array $options = []): bool
     {
-        $helper = new DependentDeleteHelper();
-
+        $helper = new \Cake\ORM\Association\DependentDeleteHelper();
         return $helper->cascadeDelete($this, $entity, $options);
     }
 }

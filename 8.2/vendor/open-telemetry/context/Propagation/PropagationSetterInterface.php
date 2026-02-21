@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\Context\Propagation;
 
 /**
@@ -12,5 +11,5 @@ interface PropagationSetterInterface
     /**
      * Set the value for a given key on the associated carrier.
      */
-    public function set(&$carrier, string $key, string $value) : void;
+    public function set(&$carrier, string $key, string $value): void;
 }

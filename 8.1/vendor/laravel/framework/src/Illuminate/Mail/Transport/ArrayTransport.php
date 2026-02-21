@@ -7,7 +7,6 @@ use Symfony\Component\Mailer\Envelope;
 use Symfony\Component\Mailer\SentMessage;
 use Symfony\Component\Mailer\Transport\TransportInterface;
 use Symfony\Component\Mime\RawMessage;
-
 class ArrayTransport implements TransportInterface
 {
     /**
@@ -16,7 +15,6 @@ class ArrayTransport implements TransportInterface
      * @var \Illuminate\Support\Collection
      */
     protected $messages;
-
     /**
      * Create a new array transport instance.
      *
@@ -24,9 +22,8 @@ class ArrayTransport implements TransportInterface
      */
     public function __construct()
     {
-        $this->messages = new Collection;
+        $this->messages = new Collection();
     }
-
     /**
      * {@inheritdoc}
      */
@@ -34,7 +31,6 @@ class ArrayTransport implements TransportInterface
     {
         return $this->messages[] = new SentMessage($message, $envelope ?? Envelope::create($message));
     }
-
     /**
      * Retrieve the collection of messages.
      *
@@ -44,7 +40,6 @@ class ArrayTransport implements TransportInterface
     {
         return $this->messages;
     }
-
     /**
      * Clear all of the messages from the local collection.
      *
@@ -52,9 +47,8 @@ class ArrayTransport implements TransportInterface
      */
     public function flush()
     {
-        return $this->messages = new Collection;
+        return $this->messages = new Collection();
     }
-
     /**
      * Get the string representation of the transport.
      *

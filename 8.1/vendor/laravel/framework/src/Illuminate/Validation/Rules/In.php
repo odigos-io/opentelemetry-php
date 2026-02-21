@@ -5,7 +5,6 @@ namespace Illuminate\Validation\Rules;
 use BackedEnum;
 use Illuminate\Contracts\Support\Arrayable;
 use UnitEnum;
-
 class In
 {
     /**
@@ -14,14 +13,12 @@ class In
      * @var string
      */
     protected $rule = 'in';
-
     /**
      * The accepted values.
      *
      * @var array
      */
     protected $values;
-
     /**
      * Create a new in rule instance.
      *
@@ -33,10 +30,8 @@ class In
         if ($values instanceof Arrayable) {
             $values = $values->toArray();
         }
-
         $this->values = is_array($values) ? $values : func_get_args();
     }
-
     /**
      * Convert the rule to a validation string.
      *
@@ -47,15 +42,13 @@ class In
     public function __toString()
     {
         $values = array_map(function ($value) {
-            $value = match (true) {
+            $value = match (\true) {
                 $value instanceof BackedEnum => $value->value,
                 $value instanceof UnitEnum => $value->name,
                 default => $value,
             };
-
-            return '"'.str_replace('"', '""', $value).'"';
+            return '"' . str_replace('"', '""', $value) . '"';
         }, $this->values);
-
-        return $this->rule.':'.implode(',', $values);
+        return $this->rule . ':' . implode(',', $values);
     }
 }

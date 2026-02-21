@@ -1,10 +1,10 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\behaviors;
 
 use Closure;
@@ -12,7 +12,6 @@ use yii\base\Behavior;
 use yii\base\Event;
 use yii\db\ActiveRecord;
 use yii\db\BaseActiveRecord;
-
 /**
  * AttributesBehavior automatically assigns values specified to one or multiple attributes of an ActiveRecord
  * object when certain events happen.
@@ -118,56 +117,42 @@ class AttributesBehavior extends Behavior
     /**
      * @var bool whether to skip this behavior when the `$owner` has not been modified
      */
-    public $skipUpdateOnClean = true;
+    public $skipUpdateOnClean = \true;
     /**
      * @var bool whether to preserve non-empty attribute values.
      */
-    public $preserveNonEmptyValues = false;
-
-
+    public $preserveNonEmptyValues = \false;
     /**
      * {@inheritdoc}
      */
     public function events()
     {
-        return array_fill_keys(
-            array_reduce($this->attributes, function ($carry, $item) {
-                return array_merge($carry, array_keys($item));
-            }, []),
-            'evaluateAttributes'
-        );
+        return array_fill_keys(array_reduce($this->attributes, function ($carry, $item) {
+            return array_merge($carry, array_keys($item));
+        }, []), 'evaluateAttributes');
     }
-
     /**
      * Evaluates the attributes values and assigns it to the current attributes.
      * @param Event $event
      */
     public function evaluateAttributes($event)
     {
-        if (
-            $this->skipUpdateOnClean
-            && $event->name === ActiveRecord::EVENT_BEFORE_UPDATE
-            && empty($this->owner->dirtyAttributes)
-        ) {
+        if ($this->skipUpdateOnClean && $event->name === ActiveRecord::EVENT_BEFORE_UPDATE && empty($this->owner->dirtyAttributes)) {
             return;
         }
         $attributes = array_keys(array_filter($this->attributes, function ($carry) use ($event) {
             return array_key_exists($event->name, $carry);
         }));
         if (!empty($this->order[$event->name])) {
-            $attributes = array_merge(
-                array_intersect((array) $this->order[$event->name], $attributes),
-                array_diff($attributes, (array) $this->order[$event->name])
-            );
+            $attributes = array_merge(array_intersect((array) $this->order[$event->name], $attributes), array_diff($attributes, (array) $this->order[$event->name]));
         }
         foreach ($attributes as $attribute) {
-            if ($this->preserveNonEmptyValues && !empty($this->owner->$attribute)) {
+            if ($this->preserveNonEmptyValues && !empty($this->owner->{$attribute})) {
                 continue;
             }
-            $this->owner->$attribute = $this->getValue($attribute, $event);
+            $this->owner->{$attribute} = $this->getValue($attribute, $event);
         }
     }
-
     /**
      * Returns the value for the current attributes.
      * This method is called by [[evaluateAttributes()]]. Its return value will be assigned
@@ -182,10 +167,9 @@ class AttributesBehavior extends Behavior
             return null;
         }
         $value = $this->attributes[$attribute][$event->name];
-        if ($value instanceof Closure || (is_array($value) && is_callable($value))) {
+        if ($value instanceof Closure || is_array($value) && is_callable($value)) {
             return $value($event, $attribute);
         }
-
         return $value;
     }
 }

@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -26,7 +26,6 @@ use Cake\Utility\Inflector;
 use Closure;
 use InvalidArgumentException;
 use Psr\Http\Server\MiddlewareInterface;
-
 /**
  * Provides features for building routes and parsing/matching URLs to routes.
  */
@@ -38,69 +37,54 @@ class RouteBuilder
      * @var string
      */
     public const ID = '[0-9]+';
-
     /**
      * Regular expression for UUIDs
      *
      * @var string
      */
     public const UUID = '[A-Fa-f0-9]{8}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{12}';
-
     /**
      * Default HTTP request method => controller action map.
      *
      * @var array<string, array>
      */
-    protected static array $_resourceMap = [
-        'index' => ['action' => 'index', 'method' => 'GET', 'path' => ''],
-        'create' => ['action' => 'add', 'method' => 'POST', 'path' => ''],
-        'view' => ['action' => 'view', 'method' => 'GET', 'path' => '{id}'],
-        'update' => ['action' => 'edit', 'method' => ['PUT', 'PATCH'], 'path' => '{id}'],
-        'delete' => ['action' => 'delete', 'method' => 'DELETE', 'path' => '{id}'],
-    ];
-
+    protected static array $_resourceMap = ['index' => ['action' => 'index', 'method' => 'GET', 'path' => ''], 'create' => ['action' => 'add', 'method' => 'POST', 'path' => ''], 'view' => ['action' => 'view', 'method' => 'GET', 'path' => '{id}'], 'update' => ['action' => 'edit', 'method' => ['PUT', 'PATCH'], 'path' => '{id}'], 'delete' => ['action' => 'delete', 'method' => 'DELETE', 'path' => '{id}']];
     /**
      * Default route class to use if none is provided in connect() options.
      *
      * @var string
      */
     protected string $_routeClass = Route::class;
-
     /**
      * The extensions that should be set into the routes connected.
      *
      * @var array<string>
      */
     protected array $_extensions = [];
-
     /**
      * The path prefix scope that this collection uses.
      *
      * @var string
      */
     protected string $_path;
-
     /**
      * The scope parameters if there are any.
      *
      * @var array
      */
     protected array $_params;
-
     /**
      * Name prefix for connected routes.
      *
      * @var string
      */
     protected string $_namePrefix = '';
-
     /**
      * The route collection routes should be added to.
      *
      * @var \Cake\Routing\RouteCollection
      */
-    protected RouteCollection $_collection;
-
+    protected \Cake\Routing\RouteCollection $_collection;
     /**
      * The list of middleware that routes in this builder get
      * added during construction.
@@ -108,7 +92,6 @@ class RouteBuilder
      * @var array<string>
      */
     protected array $middleware = [];
-
     /**
      * Constructor
      *
@@ -124,7 +107,7 @@ class RouteBuilder
      * @param array $params The scope's routing parameters.
      * @param array<string, mixed> $options Options list.
      */
-    public function __construct(RouteCollection $collection, string $path, array $params = [], array $options = [])
+    public function __construct(\Cake\Routing\RouteCollection $collection, string $path, array $params = [], array $options = [])
     {
         $this->_collection = $collection;
         $this->_path = $path;
@@ -139,10 +122,9 @@ class RouteBuilder
             $this->_namePrefix = $options['namePrefix'];
         }
         if (isset($options['middleware'])) {
-            $this->middleware = (array)$options['middleware'];
+            $this->middleware = (array) $options['middleware'];
         }
     }
-
     /**
      * Set default route class.
      *
@@ -152,10 +134,8 @@ class RouteBuilder
     public function setRouteClass(string $routeClass)
     {
         $this->_routeClass = $routeClass;
-
         return $this;
     }
-
     /**
      * Get default route class.
      *
@@ -165,7 +145,6 @@ class RouteBuilder
     {
         return $this->_routeClass;
     }
-
     /**
      * Set the extensions in this route builder's scope.
      *
@@ -177,11 +156,9 @@ class RouteBuilder
      */
     public function setExtensions(array|string $extensions)
     {
-        $this->_extensions = (array)$extensions;
-
+        $this->_extensions = (array) $extensions;
         return $this;
     }
-
     /**
      * Get the extensions in this route builder's scope.
      *
@@ -191,7 +168,6 @@ class RouteBuilder
     {
         return $this->_extensions;
     }
-
     /**
      * Add additional extensions to what is already in current scope
      *
@@ -200,12 +176,10 @@ class RouteBuilder
      */
     public function addExtensions(array|string $extensions)
     {
-        $extensions = array_merge($this->_extensions, (array)$extensions);
+        $extensions = array_merge($this->_extensions, (array) $extensions);
         $this->_extensions = array_unique($extensions);
-
         return $this;
     }
-
     /**
      * Get the path this scope is for.
      *
@@ -214,18 +188,15 @@ class RouteBuilder
     public function path(): string
     {
         $routeKey = strpos($this->_path, '{');
-        if ($routeKey !== false && str_contains($this->_path, '}')) {
+        if ($routeKey !== \false && str_contains($this->_path, '}')) {
             return substr($this->_path, 0, $routeKey);
         }
-
         $routeKey = strpos($this->_path, ':');
-        if ($routeKey !== false) {
+        if ($routeKey !== \false) {
             return substr($this->_path, 0, $routeKey);
         }
-
         return $this->_path;
     }
-
     /**
      * Get the parameter names/values for this scope.
      *
@@ -235,7 +206,6 @@ class RouteBuilder
     {
         return $this->_params;
     }
-
     /**
      * Checks if there is already a route with a given name.
      *
@@ -246,7 +216,6 @@ class RouteBuilder
     {
         return array_key_exists($name, $this->_collection->named());
     }
-
     /**
      * Get/set the name prefix for this scope.
      *
@@ -261,10 +230,8 @@ class RouteBuilder
         if ($value !== null) {
             $this->_namePrefix = $value;
         }
-
         return $this->_namePrefix;
     }
-
     /**
      * Generate REST resource routes for the given controller(s).
      *
@@ -358,38 +325,24 @@ class RouteBuilder
             $callback = $options;
             $options = [];
         }
-        $options += [
-            'connectOptions' => [],
-            'inflect' => 'dasherize',
-            'id' => static::ID . '|' . static::UUID,
-            'only' => [],
-            'actions' => [],
-            'map' => [],
-            'prefix' => null,
-            'path' => null,
-        ];
-
+        $options += ['connectOptions' => [], 'inflect' => 'dasherize', 'id' => static::ID . '|' . static::UUID, 'only' => [], 'actions' => [], 'map' => [], 'prefix' => null, 'path' => null];
         foreach ($options['map'] as $k => $mapped) {
             $options['map'][$k] += ['method' => 'GET', 'path' => $k, 'action' => ''];
         }
-
         $ext = null;
         if (!empty($options['_ext'])) {
             $ext = $options['_ext'];
         }
-
         $connectOptions = $options['connectOptions'];
         if (empty($options['path'])) {
             $method = $options['inflect'];
             $options['path'] = Inflector::$method($name);
         }
         $resourceMap = array_merge(static::$_resourceMap, $options['map']);
-
-        $only = (array)$options['only'];
+        $only = (array) $options['only'];
         if (!$only) {
             $only = array_keys($resourceMap);
         }
-
         $prefix = '';
         if ($options['prefix']) {
             $prefix = $options['prefix'];
@@ -397,40 +350,26 @@ class RouteBuilder
         if (isset($this->_params['prefix']) && $prefix) {
             $prefix = $this->_params['prefix'] . '/' . $prefix;
         }
-
         foreach ($resourceMap as $method => $params) {
-            if (!in_array($method, $only, true)) {
+            if (!in_array($method, $only, \true)) {
                 continue;
             }
-
             $action = $options['actions'][$method] ?? $params['action'];
-
             $url = '/' . implode('/', array_filter([$options['path'], $params['path']]));
-            $params = [
-                'controller' => $name,
-                'action' => $action,
-                '_method' => $params['method'],
-            ];
+            $params = ['controller' => $name, 'action' => $action, '_method' => $params['method']];
             if ($prefix) {
                 $params['prefix'] = $prefix;
             }
-            $routeOptions = $connectOptions + [
-                'id' => $options['id'],
-                'pass' => ['id'],
-                '_ext' => $ext,
-            ];
+            $routeOptions = $connectOptions + ['id' => $options['id'], 'pass' => ['id'], '_ext' => $ext];
             $this->connect($url, $params, $routeOptions);
         }
-
         if ($callback !== null) {
             $idName = Inflector::singularize(Inflector::underscore($name)) . '_id';
             $path = '/' . $options['path'] . '/{' . $idName . '}';
             $this->scope($path, [], $callback);
         }
-
         return $this;
     }
-
     /**
      * Create a route that only responds to GET requests.
      *
@@ -444,7 +383,6 @@ class RouteBuilder
     {
         return $this->_methodRoute('GET', $template, $target, $name);
     }
-
     /**
      * Create a route that only responds to POST requests.
      *
@@ -458,7 +396,6 @@ class RouteBuilder
     {
         return $this->_methodRoute('POST', $template, $target, $name);
     }
-
     /**
      * Create a route that only responds to PUT requests.
      *
@@ -472,7 +409,6 @@ class RouteBuilder
     {
         return $this->_methodRoute('PUT', $template, $target, $name);
     }
-
     /**
      * Create a route that only responds to PATCH requests.
      *
@@ -486,7 +422,6 @@ class RouteBuilder
     {
         return $this->_methodRoute('PATCH', $template, $target, $name);
     }
-
     /**
      * Create a route that only responds to DELETE requests.
      *
@@ -500,7 +435,6 @@ class RouteBuilder
     {
         return $this->_methodRoute('DELETE', $template, $target, $name);
     }
-
     /**
      * Create a route that only responds to HEAD requests.
      *
@@ -514,7 +448,6 @@ class RouteBuilder
     {
         return $this->_methodRoute('HEAD', $template, $target, $name);
     }
-
     /**
      * Create a route that only responds to OPTIONS requests.
      *
@@ -528,7 +461,6 @@ class RouteBuilder
     {
         return $this->_methodRoute('OPTIONS', $template, $target, $name);
     }
-
     /**
      * Helper to create routes that only respond to a single HTTP method.
      *
@@ -544,22 +476,13 @@ class RouteBuilder
         if ($name !== null) {
             $name = $this->_namePrefix . $name;
         }
-        $options = [
-            '_name' => $name,
-            '_ext' => $this->_extensions,
-            '_middleware' => $this->middleware,
-            'routeClass' => $this->_routeClass,
-        ];
-
+        $options = ['_name' => $name, '_ext' => $this->_extensions, '_middleware' => $this->middleware, 'routeClass' => $this->_routeClass];
         $target = $this->parseDefaults($target);
         $target['_method'] = $method;
-
         $route = $this->_makeRoute($template, $target, $options);
         $this->_collection->add($route, $options);
-
         return $route;
     }
-
     /**
      * Load routes from a plugin.
      *
@@ -579,13 +502,10 @@ class RouteBuilder
         }
         $plugin = $plugins->get($name);
         $plugin->routes($this);
-
         // Disable the routes hook to prevent duplicate route issues.
         $plugin->disable('routes');
-
         return $this;
     }
-
     /**
      * Connects a new Route.
      *
@@ -683,13 +603,10 @@ class RouteBuilder
         if (empty($options['_middleware'])) {
             $options['_middleware'] = $this->middleware;
         }
-
         $route = $this->_makeRoute($route, $defaults, $options);
         $this->_collection->add($route, $options);
-
         return $route;
     }
-
     /**
      * Parse the defaults if they're a string
      *
@@ -699,12 +616,10 @@ class RouteBuilder
     protected function parseDefaults(array|string $defaults): array
     {
         if (is_string($defaults)) {
-            return Router::parseRoutePath($defaults);
+            return \Cake\Routing\Router::parseRoutePath($defaults);
         }
-
         return $defaults;
     }
-
     /**
      * Create a route object, or return the provided object.
      *
@@ -721,41 +636,26 @@ class RouteBuilder
             /** @var class-string<\Cake\Routing\Route\Route>|null $routeClass */
             $routeClass = App::className($options['routeClass'], 'Routing/Route');
             if ($routeClass === null) {
-                throw new InvalidArgumentException(sprintf(
-                    'Cannot find route class %s',
-                    $options['routeClass'],
-                ));
+                throw new InvalidArgumentException(sprintf('Cannot find route class %s', $options['routeClass']));
             }
-
             $route = str_replace('//', '/', $this->_path . $route);
             if ($route !== '/') {
                 $route = rtrim($route, '/');
             }
-
             foreach ($this->_params as $param => $val) {
                 if (isset($defaults[$param]) && $param !== 'prefix' && $defaults[$param] !== $val) {
-                    $msg = 'You cannot define routes that conflict with the scope. ' .
-                        'Scope had %s = %s, while route had %s = %s';
-                    throw new BadMethodCallException(sprintf(
-                        $msg,
-                        $param,
-                        $val,
-                        $param,
-                        $defaults[$param],
-                    ));
+                    $msg = 'You cannot define routes that conflict with the scope. ' . 'Scope had %s = %s, while route had %s = %s';
+                    throw new BadMethodCallException(sprintf($msg, $param, $val, $param, $defaults[$param]));
                 }
             }
             $defaults += $this->_params + ['plugin' => null];
             if (!isset($defaults['action']) && !isset($options['action'])) {
                 $defaults['action'] = 'index';
             }
-
             $route = new $routeClass($route, $defaults, $options);
         }
-
         return $route;
     }
-
     /**
      * Connects a new redirection Route in the router.
      *
@@ -797,10 +697,8 @@ class RouteBuilder
         if (is_string($url)) {
             $url = ['redirect' => $url];
         }
-
         return $this->connect($route, $url, $options);
     }
-
     /**
      * Add prefixed routes.
      *
@@ -850,10 +748,8 @@ class RouteBuilder
         }
         $params = array_merge($params, ['prefix' => $name]);
         $this->scope($path, $params, $callback);
-
         return $this;
     }
-
     /**
      * Add plugin routes.
      *
@@ -884,15 +780,12 @@ class RouteBuilder
             $callback = $options;
             $options = [];
         }
-
         $path = $options['path'] ?? '/' . Inflector::dasherize($name);
         unset($options['path']);
         $options = ['plugin' => $name] + $options;
         $this->scope($path, $options, $callback);
-
         return $this;
     }
-
     /**
      * Create a new routing scope.
      *
@@ -921,7 +814,6 @@ class RouteBuilder
         if ($callback === null) {
             throw new InvalidArgumentException('Need a valid Closure to connect routes.');
         }
-
         if ($this->_path !== '/') {
             $path = $this->_path . $path;
         }
@@ -930,19 +822,11 @@ class RouteBuilder
             $namePrefix .= $params['_namePrefix'];
         }
         unset($params['_namePrefix']);
-
         $params += $this->_params;
-        $builder = new static($this->_collection, $path, $params, [
-            'routeClass' => $this->_routeClass,
-            'extensions' => $this->_extensions,
-            'namePrefix' => $namePrefix,
-            'middleware' => $this->middleware,
-        ]);
+        $builder = new static($this->_collection, $path, $params, ['routeClass' => $this->_routeClass, 'extensions' => $this->_extensions, 'namePrefix' => $namePrefix, 'middleware' => $this->middleware]);
         $callback($builder);
-
         return $this;
     }
-
     /**
      * Connect the `/{controller}` and `/{controller}/{action}/*` fallback routes.
      *
@@ -957,10 +841,8 @@ class RouteBuilder
         $routeClass = $routeClass ?: $this->_routeClass;
         $this->connect('/{controller}', ['action' => 'index'], compact('routeClass'));
         $this->connect('/{controller}/{action}/*', [], compact('routeClass'));
-
         return $this;
     }
-
     /**
      * Register a middleware with the RouteCollection.
      *
@@ -975,10 +857,8 @@ class RouteBuilder
     public function registerMiddleware(string $name, MiddlewareInterface|Closure|string $middleware)
     {
         $this->_collection->registerMiddleware($name, $middleware);
-
         return $this;
     }
-
     /**
      * Apply one or many middleware to the current route scope.
      *
@@ -994,16 +874,13 @@ class RouteBuilder
         /** @var array<string> $names */
         foreach ($names as $name) {
             if (!$this->_collection->middlewareExists($name)) {
-                $message = "Cannot apply `{$name}` middleware or middleware group. " .
-                    'Use `registerMiddleware()` to register middleware.';
+                $message = "Cannot apply `{$name}` middleware or middleware group. " . 'Use `registerMiddleware()` to register middleware.';
                 throw new InvalidArgumentException($message);
             }
         }
         $this->middleware = array_unique(array_merge($this->middleware, $names));
-
         return $this;
     }
-
     /**
      * Get the middleware that this builder will apply to routes.
      *
@@ -1013,7 +890,6 @@ class RouteBuilder
     {
         return $this->middleware;
     }
-
     /**
      * Apply a set of middleware to a group
      *
@@ -1024,7 +900,6 @@ class RouteBuilder
     public function middlewareGroup(string $name, array $middlewareNames)
     {
         $this->_collection->middlewareGroup($name, $middlewareNames);
-
         return $this;
     }
 }

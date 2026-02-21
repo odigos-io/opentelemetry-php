@@ -1,11 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenAI\ValueObjects\Transporter;
 
 use OpenAI\Contracts\StringableContract;
-
 /**
  * @internal
  */
@@ -18,7 +16,6 @@ final class BaseUri implements StringableContract
     {
         // ..
     }
-
     /**
      * Creates a new Base URI value object.
      */
@@ -26,7 +23,6 @@ final class BaseUri implements StringableContract
     {
         return new self($baseUri);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -37,7 +33,6 @@ final class BaseUri implements StringableContract
                 return "{$this->baseUri}/";
             }
         }
-
         return "https://{$this->baseUri}/";
     }
 }

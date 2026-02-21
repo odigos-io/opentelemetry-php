@@ -9,10 +9,8 @@
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
  */
-
-declare(strict_types=1);
-
-namespace Ramsey\Uuid\Converter\Time;
+declare (strict_types=1);
+namespace Odigos\Ramsey\Uuid\Converter\Time;
 
 /**
  * @deprecated DegradedTimeConverter is no longer necessary for converting time on 32-bit systems. Please transition to

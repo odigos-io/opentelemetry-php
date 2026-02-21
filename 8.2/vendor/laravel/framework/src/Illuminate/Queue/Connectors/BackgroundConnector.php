@@ -3,8 +3,7 @@
 namespace Illuminate\Queue\Connectors;
 
 use Illuminate\Queue\BackgroundQueue;
-
-class BackgroundConnector implements ConnectorInterface
+class BackgroundConnector implements \Illuminate\Queue\Connectors\ConnectorInterface
 {
     /**
      * Establish a queue connection.

@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\HttpKernel\Fragment;
 
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -16,7 +15,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpKernel\Controller\ControllerReference;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-
 /**
  * Renders a URI that represents a resource fragment.
  *
@@ -32,12 +30,11 @@ class FragmentHandler
     private bool $debug;
     private array $renderers = [];
     private RequestStack $requestStack;
-
     /**
      * @param FragmentRendererInterface[] $renderers An array of FragmentRendererInterface instances
      * @param bool                        $debug     Whether the debug mode is enabled or not
      */
-    public function __construct(RequestStack $requestStack, array $renderers = [], bool $debug = false)
+    public function __construct(RequestStack $requestStack, array $renderers = [], bool $debug = \false)
     {
         $this->requestStack = $requestStack;
         foreach ($renderers as $renderer) {
@@ -45,17 +42,15 @@ class FragmentHandler
         }
         $this->debug = $debug;
     }
-
     /**
      * Adds a renderer.
      *
      * @return void
      */
-    public function addRenderer(FragmentRendererInterface $renderer)
+    public function addRenderer(\Symfony\Component\HttpKernel\Fragment\FragmentRendererInterface $renderer)
     {
         $this->renderers[$renderer->getName()] = $renderer;
     }
-
     /**
      * Renders a URI and returns the Response content.
      *
@@ -71,18 +66,14 @@ class FragmentHandler
         if (!isset($options['ignore_errors'])) {
             $options['ignore_errors'] = !$this->debug;
         }
-
         if (!isset($this->renderers[$renderer])) {
             throw new \InvalidArgumentException(\sprintf('The "%s" renderer does not exist.', $renderer));
         }
-
         if (!$request = $this->requestStack->getCurrentRequest()) {
             throw new \LogicException('Rendering a fragment can only be done when handling a Request.');
         }
-
         return $this->deliver($this->renderers[$renderer]->render($uri, $request, $options));
     }
-
     /**
      * Delivers the Response as a string.
      *
@@ -99,13 +90,10 @@ class FragmentHandler
             $responseStatusCode = $response->getStatusCode();
             throw new \RuntimeException(\sprintf('Error when rendering "%s" (Status code is %d).', $this->requestStack->getCurrentRequest()->getUri(), $responseStatusCode), 0, new HttpException($responseStatusCode));
         }
-
         if (!$response instanceof StreamedResponse) {
             return $response->getContent();
         }
-
         $response->sendContent();
-
         return null;
     }
 }

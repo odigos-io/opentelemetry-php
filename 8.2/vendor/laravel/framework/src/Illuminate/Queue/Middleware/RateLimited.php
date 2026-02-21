@@ -6,9 +6,7 @@ use Illuminate\Cache\RateLimiter;
 use Illuminate\Cache\RateLimiting\Unlimited;
 use Illuminate\Container\Container;
 use Illuminate\Support\Collection;
-
 use function Illuminate\Support\enum_value;
-
 class RateLimited
 {
     /**
@@ -17,28 +15,24 @@ class RateLimited
      * @var \Illuminate\Cache\RateLimiter
      */
     protected $limiter;
-
     /**
      * The name of the rate limiter.
      *
      * @var string
      */
     protected $limiterName;
-
     /**
      * The number of seconds before a job should be available again if the limit is exceeded.
      *
      * @var \DateTimeInterface|int|null
      */
     public $releaseAfter;
-
     /**
      * Indicates if the job should be released if the limit is exceeded.
      *
      * @var bool
      */
-    public $shouldRelease = true;
-
+    public $shouldRelease = \true;
     /**
      * Create a new middleware instance.
      *
@@ -47,10 +41,8 @@ class RateLimited
     public function __construct($limiterName)
     {
         $this->limiter = Container::getInstance()->make(RateLimiter::class);
-
         $this->limiterName = (string) enum_value($limiterName);
     }
-
     /**
      * Process the job.
      *
@@ -63,26 +55,14 @@ class RateLimited
         if (is_null($limiter = $this->limiter->limiter($this->limiterName))) {
             return $next($job);
         }
-
         $limiterResponse = $limiter($job);
-
         if ($limiterResponse instanceof Unlimited) {
             return $next($job);
         }
-
-        return $this->handleJob(
-            $job,
-            $next,
-            Collection::wrap($limiterResponse)->map(function ($limit) {
-                return (object) [
-                    'key' => md5($this->limiterName.$limit->key),
-                    'maxAttempts' => $limit->maxAttempts,
-                    'decaySeconds' => $limit->decaySeconds,
-                ];
-            })->all()
-        );
+        return $this->handleJob($job, $next, Collection::wrap($limiterResponse)->map(function ($limit) {
+            return (object) ['key' => md5($this->limiterName . $limit->key), 'maxAttempts' => $limit->maxAttempts, 'decaySeconds' => $limit->decaySeconds];
+        })->all());
     }
-
     /**
      * Handle a rate limited job.
      *
@@ -95,17 +75,12 @@ class RateLimited
     {
         foreach ($limits as $limit) {
             if ($this->limiter->tooManyAttempts($limit->key, $limit->maxAttempts)) {
-                return $this->shouldRelease
-                    ? $job->release($this->releaseAfter ?: $this->getTimeUntilNextRetry($limit->key))
-                    : false;
+                return $this->shouldRelease ? $job->release($this->releaseAfter ?: $this->getTimeUntilNextRetry($limit->key)) : \false;
             }
-
             $this->limiter->hit($limit->key, $limit->decaySeconds);
         }
-
         return $next($job);
     }
-
     /**
      * Set the delay (in seconds) to release the job back to the queue.
      *
@@ -115,10 +90,8 @@ class RateLimited
     public function releaseAfter($releaseAfter)
     {
         $this->releaseAfter = $releaseAfter;
-
         return $this;
     }
-
     /**
      * Do not release the job back to the queue if the limit is exceeded.
      *
@@ -126,11 +99,9 @@ class RateLimited
      */
     public function dontRelease()
     {
-        $this->shouldRelease = false;
-
+        $this->shouldRelease = \false;
         return $this;
     }
-
     /**
      * Get the number of seconds that should elapse before the job is retried.
      *
@@ -141,7 +112,6 @@ class RateLimited
     {
         return $this->limiter->availableIn($key) + 3;
     }
-
     /**
      * Prepare the object for serialization.
      *
@@ -149,12 +119,8 @@ class RateLimited
      */
     public function __sleep()
     {
-        return [
-            'limiterName',
-            'shouldRelease',
-        ];
+        return ['limiterName', 'shouldRelease'];
     }
-
     /**
      * Prepare the object after unserialization.
      *

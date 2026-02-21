@@ -9,21 +9,17 @@
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
  */
+declare (strict_types=1);
+namespace Odigos\Ramsey\Collection\Tool;
 
-declare(strict_types=1);
-
-namespace Ramsey\Collection\Tool;
-
-use Ramsey\Collection\Exception\InvalidPropertyOrMethod;
-use Ramsey\Collection\Exception\UnsupportedOperationException;
+use Odigos\Ramsey\Collection\Exception\InvalidPropertyOrMethod;
+use Odigos\Ramsey\Collection\Exception\UnsupportedOperationException;
 use ReflectionProperty;
-
 use function is_array;
 use function is_object;
 use function method_exists;
 use function property_exists;
 use function sprintf;
-
 /**
  * Provides functionality to extract the value of a property or method from an object.
  */
@@ -33,7 +29,6 @@ trait ValueExtractorTrait
      * Returns the type associated with this collection.
      */
     abstract public function getType(): string;
-
     /**
      * Extracts the value of the given property, method, or array key from the
      * element.
@@ -55,46 +50,28 @@ trait ValueExtractorTrait
         if ($propertyOrMethod === null) {
             return $element;
         }
-
         if (!is_object($element) && !is_array($element)) {
-            throw new UnsupportedOperationException(sprintf(
-                'The collection type "%s" does not support the $propertyOrMethod parameter',
-                $this->getType(),
-            ));
+            throw new UnsupportedOperationException(sprintf('The collection type "%s" does not support the $propertyOrMethod parameter', $this->getType()));
         }
-
         if (is_array($element)) {
-            return $element[$propertyOrMethod] ?? throw new InvalidPropertyOrMethod(sprintf(
-                'Key or index "%s" not found in collection elements',
-                $propertyOrMethod,
-            ));
+            return $element[$propertyOrMethod] ?? throw new InvalidPropertyOrMethod(sprintf('Key or index "%s" not found in collection elements', $propertyOrMethod));
         }
-
         if (property_exists($element, $propertyOrMethod) && method_exists($element, $propertyOrMethod)) {
             $reflectionProperty = new ReflectionProperty($element, $propertyOrMethod);
             if ($reflectionProperty->isPublic()) {
-                return $element->$propertyOrMethod;
+                return $element->{$propertyOrMethod};
             }
-
             return $element->{$propertyOrMethod}();
         }
-
         if (property_exists($element, $propertyOrMethod)) {
-            return $element->$propertyOrMethod;
+            return $element->{$propertyOrMethod};
         }
-
         if (method_exists($element, $propertyOrMethod)) {
             return $element->{$propertyOrMethod}();
         }
-
-        if (isset($element->$propertyOrMethod)) {
-            return $element->$propertyOrMethod;
+        if (isset($element->{$propertyOrMethod})) {
+            return $element->{$propertyOrMethod};
         }
-
-        throw new InvalidPropertyOrMethod(sprintf(
-            'Method or property "%s" not defined in %s',
-            $propertyOrMethod,
-            $element::class,
-        ));
+        throw new InvalidPropertyOrMethod(sprintf('Method or property "%s" not defined in %s', $propertyOrMethod, $element::class));
     }
 }

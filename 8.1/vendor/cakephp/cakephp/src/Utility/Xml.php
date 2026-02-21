@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -27,7 +27,6 @@ use DOMText;
 use Exception;
 use SimpleXMLElement;
 use UnitEnum;
-
 /**
  * XML handling for CakePHP.
  *
@@ -108,34 +107,23 @@ class Xml
      */
     public static function build(object|array|string $input, array $options = []): SimpleXMLElement|DOMDocument
     {
-        $defaults = [
-            'return' => 'simplexml',
-            'loadEntities' => false,
-            'readFile' => false,
-            'parseHuge' => false,
-        ];
+        $defaults = ['return' => 'simplexml', 'loadEntities' => \false, 'readFile' => \false, 'parseHuge' => \false];
         $options += $defaults;
-
         if (is_array($input) || is_object($input)) {
             return static::fromArray($input, $options);
         }
-
         if ($options['readFile'] && file_exists($input)) {
             $content = file_get_contents($input);
-            if ($content === false) {
+            if ($content === \false) {
                 throw new CakeException(sprintf('Cannot read file content of `%s`', $input));
             }
-
             return static::_loadXml($content, $options);
         }
-
         if (str_contains($input, '<')) {
             return static::_loadXml($input, $options);
         }
-
         throw new XmlException('XML cannot be read.');
     }
-
     /**
      * Parse the input data and create either a SimpleXmlElement object or a DOMDocument.
      *
@@ -146,23 +134,17 @@ class Xml
      */
     protected static function _loadXml(string $input, array $options): SimpleXMLElement|DOMDocument
     {
-        return static::load(
-            $input,
-            $options,
-            function ($input, $options, $flags) {
-                if ($options['return'] === 'simplexml' || $options['return'] === 'simplexmlelement') {
-                    $flags |= LIBXML_NOCDATA;
-                    $xml = new SimpleXMLElement($input, $flags);
-                } else {
-                    $xml = new DOMDocument();
-                    $xml->loadXML($input, $flags);
-                }
-
-                return $xml;
-            },
-        );
+        return static::load($input, $options, function ($input, $options, $flags) {
+            if ($options['return'] === 'simplexml' || $options['return'] === 'simplexmlelement') {
+                $flags |= \LIBXML_NOCDATA;
+                $xml = new SimpleXMLElement($input, $flags);
+            } else {
+                $xml = new DOMDocument();
+                $xml->loadXML($input, $flags);
+            }
+            return $xml;
+        });
     }
-
     /**
      * Parse the input html string and create either a SimpleXmlElement object or a DOMDocument.
      *
@@ -173,28 +155,17 @@ class Xml
      */
     public static function loadHtml(string $input, array $options = []): SimpleXMLElement|DOMDocument
     {
-        $defaults = [
-            'return' => 'simplexml',
-            'loadEntities' => false,
-        ];
+        $defaults = ['return' => 'simplexml', 'loadEntities' => \false];
         $options += $defaults;
-
-        return static::load(
-            $input,
-            $options,
-            function ($input, $options, $flags) {
-                $xml = new DOMDocument();
-                $xml->loadHTML($input, $flags);
-
-                if ($options['return'] === 'simplexml' || $options['return'] === 'simplexmlelement') {
-                    return simplexml_import_dom($xml);
-                }
-
-                return $xml;
-            },
-        );
+        return static::load($input, $options, function ($input, $options, $flags) {
+            $xml = new DOMDocument();
+            $xml->loadHTML($input, $flags);
+            if ($options['return'] === 'simplexml' || $options['return'] === 'simplexmlelement') {
+                return simplexml_import_dom($xml);
+            }
+            return $xml;
+        });
     }
-
     /**
      * Parse the input data and create either a SimpleXmlElement object or a DOMDocument.
      *
@@ -208,14 +179,12 @@ class Xml
     {
         $flags = 0;
         if (!empty($options['parseHuge'])) {
-            $flags |= LIBXML_PARSEHUGE;
+            $flags |= \LIBXML_PARSEHUGE;
         }
-
-        $internalErrors = libxml_use_internal_errors(true);
+        $internalErrors = libxml_use_internal_errors(\true);
         if ($options['loadEntities']) {
-            $flags |= LIBXML_NOENT;
+            $flags |= \LIBXML_NOENT;
         }
-
         try {
             return $callable($input, $options, $flags);
         } catch (Exception $e) {
@@ -224,7 +193,6 @@ class Xml
             libxml_use_internal_errors($internalErrors);
         }
     }
-
     /**
      * Transform an array into a SimpleXMLElement
      *
@@ -271,60 +239,37 @@ class Xml
             $input = $input->toArray();
         }
         if (!is_array($input) || count($input) !== 1) {
-            throw new XmlException(
-                'Invalid input of type `' . gettype($input) . '`'
-                . (is_array($input) ? ' (Count of ' . count($input) . ')' : '') . '.',
-            );
+            throw new XmlException('Invalid input of type `' . gettype($input) . '`' . (is_array($input) ? ' (Count of ' . count($input) . ')' : '') . '.');
         }
         $key = key($input);
         if (is_int($key)) {
             throw new XmlException('The key of input must be alphanumeric');
         }
-
-        $defaults = [
-            'format' => 'tags',
-            'version' => '1.0',
-            'encoding' => mb_internal_encoding(),
-            'return' => 'simplexml',
-            'pretty' => false,
-        ];
+        $defaults = ['format' => 'tags', 'version' => '1.0', 'encoding' => mb_internal_encoding(), 'return' => 'simplexml', 'pretty' => \false];
         $options += $defaults;
-
         $dom = new DOMDocument($options['version'], $options['encoding']);
         if ($options['pretty']) {
-            $dom->formatOutput = true;
+            $dom->formatOutput = \true;
         }
         self::_fromArray($dom, $dom, $input, $options['format']);
-
         $options['return'] = strtolower($options['return']);
         if ($options['return'] === 'simplexml' || $options['return'] === 'simplexmlelement') {
-            $xmlString = (string)$dom->saveXML();
+            $xmlString = (string) $dom->saveXML();
             $check = new DOMDocument();
-            libxml_use_internal_errors(true);
-
-            if (!$check->loadXML($xmlString, LIBXML_NOWARNING | LIBXML_NOERROR)) {
+            libxml_use_internal_errors(\true);
+            if (!$check->loadXML($xmlString, \LIBXML_NOWARNING | \LIBXML_NOERROR)) {
                 $errors = libxml_get_errors();
                 $messages = [];
-
                 foreach ($errors as $error) {
-                    $messages[] = trim(sprintf(
-                        'File: %s, Line %d, Column %d: %s',
-                        $error->file ?: '[string input]',
-                        $error->line,
-                        $error->column,
-                        $error->message,
-                    ));
+                    $messages[] = trim(sprintf('File: %s, Line %d, Column %d: %s', $error->file ?: '[string input]', $error->line, $error->column, $error->message));
                 }
                 libxml_clear_errors();
                 throw new XmlException("Invalid XML string:\n" . implode("\n", $messages));
             }
-
             return new SimpleXMLElement($xmlString);
         }
-
         return $dom;
     }
-
     /**
      * Recursive method to create children from array
      *
@@ -335,12 +280,8 @@ class Xml
      * @return void
      * @throws \Cake\Utility\Exception\XmlException
      */
-    protected static function _fromArray(
-        DOMDocument $dom,
-        DOMDocument|DOMElement $node,
-        mixed $data,
-        string $format,
-    ): void {
+    protected static function _fromArray(DOMDocument $dom, DOMDocument|DOMElement $node, mixed $data, string $format): void
+    {
         if (!$data || !is_array($data)) {
             return;
         }
@@ -349,16 +290,15 @@ class Xml
                 if (is_object($value) && method_exists($value, 'toArray') && is_callable([$value, 'toArray'])) {
                     $value = $value->toArray();
                 }
-
                 if (!is_array($value)) {
                     if (is_bool($value)) {
-                        $value = (int)$value;
+                        $value = (int) $value;
                     } elseif ($value === null) {
                         $value = '';
                     }
                     if (str_contains($key, 'xmlns:')) {
                         assert($node instanceof DOMElement);
-                        $node->setAttributeNS('http://www.w3.org/2000/xmlns/', $key, (string)$value);
+                        $node->setAttributeNS('http://www.w3.org/2000/xmlns/', $key, (string) $value);
                         continue;
                     }
                     if (!str_starts_with($key, '@') && $format === 'tags') {
@@ -368,15 +308,15 @@ class Xml
                             // https://bugs.php.net/bug.php?id=36795
                             $child = $dom->createElement($key, '');
                             if ($value instanceof BackedEnum) {
-                                $value = (string)$value->value;
+                                $value = (string) $value->value;
                             } elseif ($value instanceof UnitEnum) {
                                 $value = $value->name;
                             } else {
-                                $value = (string)$value;
+                                $value = (string) $value;
                             }
                             $child->appendChild(new DOMText($value));
                         } else {
-                            $child = $dom->createElement($key, (string)$value);
+                            $child = $dom->createElement($key, (string) $value);
                         }
                         $node->appendChild($child);
                     } else {
@@ -384,7 +324,7 @@ class Xml
                             $key = substr($key, 1);
                         }
                         $attribute = $dom->createAttribute($key);
-                        $attribute->appendChild($dom->createTextNode((string)$value));
+                        $attribute->appendChild($dom->createTextNode((string) $value));
                         $node->appendChild($attribute);
                     }
                 } else {
@@ -392,14 +332,14 @@ class Xml
                         throw new XmlException('Invalid array');
                     }
                     if (is_numeric(implode('', array_keys($value)))) {
-// List
+                        // List
                         foreach ($value as $item) {
                             $itemData = compact('dom', 'node', 'key', 'format');
                             $itemData['value'] = $item;
                             static::_createChild($itemData);
                         }
                     } else {
-// Struct
+                        // Struct
                         static::_createChild(compact('dom', 'node', 'key', 'value', 'format'));
                     }
                 }
@@ -408,7 +348,6 @@ class Xml
             }
         }
     }
-
     /**
      * Helper to _fromArray(). It will create children of arrays
      *
@@ -418,10 +357,7 @@ class Xml
      */
     protected static function _createChild(array $data): void
     {
-        $data += [
-            'value' => null,
-        ];
-
+        $data += ['value' => null];
         $key = $data['key'];
         $format = $data['format'];
         $value = $data['value'];
@@ -434,7 +370,7 @@ class Xml
         }
         if (is_array($value)) {
             if (isset($value['@'])) {
-                $childValue = (string)$value['@'];
+                $childValue = (string) $value['@'];
                 unset($value['@']);
             }
             if (isset($value['xmlns:'])) {
@@ -442,9 +378,8 @@ class Xml
                 unset($value['xmlns:']);
             }
         } elseif ($value || $value === 0 || $value === '0') {
-            $childValue = (string)$value;
+            $childValue = (string) $value;
         }
-
         $child = $dom->createElement($key);
         if ($childValue !== null) {
             $child->appendChild($dom->createTextNode($childValue));
@@ -452,11 +387,9 @@ class Xml
         if ($childNS) {
             $child->setAttribute('xmlns', $childNS);
         }
-
         static::_fromArray($dom, $child, $value, $format);
         $node->appendChild($child);
     }
-
     /**
      * Returns this XML structure as an array.
      *
@@ -469,18 +402,14 @@ class Xml
         if ($obj instanceof DOMNode) {
             $obj = simplexml_import_dom($obj);
         }
-
         if ($obj === null) {
             throw new XmlException('Failed converting DOMNode to SimpleXMLElement');
         }
-
         $result = [];
-        $namespaces = array_merge(['' => ''], $obj->getNamespaces(true));
+        $namespaces = array_merge(['' => ''], $obj->getNamespaces(\true));
         static::_toArray($obj, $result, '', array_keys($namespaces));
-
         return $result;
     }
-
     /**
      * Recursive method to toArray
      *
@@ -493,28 +422,24 @@ class Xml
     protected static function _toArray(SimpleXMLElement $xml, array &$parentData, string $ns, array $namespaces): void
     {
         $data = [];
-
         foreach ($namespaces as $namespace) {
-            $attributes = $xml->attributes($namespace, true);
+            $attributes = $xml->attributes($namespace, \true);
             foreach ($attributes as $key => $value) {
                 if ($namespace) {
                     $key = $namespace . ':' . $key;
                 }
-                $data['@' . $key] = (string)$value;
+                $data['@' . $key] = (string) $value;
             }
-
-            foreach ($xml->children($namespace, true) as $child) {
+            foreach ($xml->children($namespace, \true) as $child) {
                 static::_toArray($child, $data, $namespace, $namespaces);
             }
         }
-
-        $asString = trim((string)$xml);
+        $asString = trim((string) $xml);
         if (!$data) {
             $data = $asString;
         } elseif ($asString !== '') {
             $data['@'] = $asString;
         }
-
         if ($ns) {
             $ns .= ':';
         }

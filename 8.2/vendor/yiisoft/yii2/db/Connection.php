@@ -1,19 +1,18 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\db;
 
 use PDO;
-use Yii;
+use Odigos\Yii;
 use yii\base\Component;
 use yii\base\InvalidConfigException;
 use yii\base\NotSupportedException;
 use yii\caching\CacheInterface;
-
 /**
  * Connection represents a connection to a database via [PDO](https://www.php.net/manual/en/book.pdo.php).
  *
@@ -195,7 +194,7 @@ class Connection extends Component
      * @see schemaCacheExclude
      * @see schemaCache
      */
-    public $enableSchemaCache = false;
+    public $enableSchemaCache = \false;
     /**
      * @var int number of seconds that table metadata can remain valid in cache.
      * Use 0 to indicate that the cached data will never expire.
@@ -223,7 +222,7 @@ class Connection extends Component
      * @see cache()
      * @see noCache()
      */
-    public $enableQueryCache = true;
+    public $enableQueryCache = \true;
     /**
      * @var int the default number of seconds that query results can remain valid in cache.
      * Defaults to 3600, meaning 3600 seconds, or one hour. Use 0 to indicate that the cached data will never expire.
@@ -275,16 +274,25 @@ class Connection extends Component
      * [[Schema]] class to support DBMS that is not supported by Yii.
      */
     public $schemaMap = [
-        'pgsql' => 'yii\db\pgsql\Schema', // PostgreSQL
-        'mysqli' => 'yii\db\mysql\Schema', // MySQL
-        'mysql' => 'yii\db\mysql\Schema', // MySQL
-        'sqlite' => 'yii\db\sqlite\Schema', // sqlite 3
-        'sqlite2' => 'yii\db\sqlite\Schema', // sqlite 2
-        'sqlsrv' => 'yii\db\mssql\Schema', // newer MSSQL driver on MS Windows hosts
-        'oci' => 'yii\db\oci\Schema', // Oracle driver
-        'mssql' => 'yii\db\mssql\Schema', // older MSSQL driver on MS Windows hosts
-        'dblib' => 'yii\db\mssql\Schema', // dblib drivers on GNU/Linux (and maybe other OSes) hosts
-        'cubrid' => 'yii\db\cubrid\Schema', // CUBRID
+        'pgsql' => 'yii\db\pgsql\Schema',
+        // PostgreSQL
+        'mysqli' => 'yii\db\mysql\Schema',
+        // MySQL
+        'mysql' => 'yii\db\mysql\Schema',
+        // MySQL
+        'sqlite' => 'yii\db\sqlite\Schema',
+        // sqlite 3
+        'sqlite2' => 'yii\db\sqlite\Schema',
+        // sqlite 2
+        'sqlsrv' => 'yii\db\mssql\Schema',
+        // newer MSSQL driver on MS Windows hosts
+        'oci' => 'yii\db\oci\Schema',
+        // Oracle driver
+        'mssql' => 'yii\db\mssql\Schema',
+        // older MSSQL driver on MS Windows hosts
+        'dblib' => 'yii\db\mssql\Schema',
+        // dblib drivers on GNU/Linux (and maybe other OSes) hosts
+        'cubrid' => 'yii\db\cubrid\Schema',
     ];
     /**
      * @var string|null Custom PDO wrapper class. If not set, it will use [[PDO]] or [[\yii\db\mssql\PDO]] when MSSQL is used.
@@ -312,22 +320,31 @@ class Connection extends Component
      * @since 2.0.14
      */
     public $commandMap = [
-        'pgsql' => 'yii\db\Command', // PostgreSQL
-        'mysqli' => 'yii\db\Command', // MySQL
-        'mysql' => 'yii\db\Command', // MySQL
-        'sqlite' => 'yii\db\sqlite\Command', // sqlite 3
-        'sqlite2' => 'yii\db\sqlite\Command', // sqlite 2
-        'sqlsrv' => 'yii\db\Command', // newer MSSQL driver on MS Windows hosts
-        'oci' => 'yii\db\oci\Command', // Oracle driver
-        'mssql' => 'yii\db\Command', // older MSSQL driver on MS Windows hosts
-        'dblib' => 'yii\db\Command', // dblib drivers on GNU/Linux (and maybe other OSes) hosts
-        'cubrid' => 'yii\db\Command', // CUBRID
+        'pgsql' => 'yii\db\Command',
+        // PostgreSQL
+        'mysqli' => 'yii\db\Command',
+        // MySQL
+        'mysql' => 'yii\db\Command',
+        // MySQL
+        'sqlite' => 'yii\db\sqlite\Command',
+        // sqlite 3
+        'sqlite2' => 'yii\db\sqlite\Command',
+        // sqlite 2
+        'sqlsrv' => 'yii\db\Command',
+        // newer MSSQL driver on MS Windows hosts
+        'oci' => 'yii\db\oci\Command',
+        // Oracle driver
+        'mssql' => 'yii\db\Command',
+        // older MSSQL driver on MS Windows hosts
+        'dblib' => 'yii\db\Command',
+        // dblib drivers on GNU/Linux (and maybe other OSes) hosts
+        'cubrid' => 'yii\db\Command',
     ];
     /**
      * @var bool whether to enable [savepoint](https://en.wikipedia.org/wiki/Savepoint).
      * Note that if the underlying DBMS does not support savepoint, setting this property to be true will have no effect.
      */
-    public $enableSavepoint = true;
+    public $enableSavepoint = \true;
     /**
      * @var CacheInterface|string|false the cache object or the ID of the cache application component that is used to store
      * the health status of the DB servers specified in [[masters]] and [[slaves]].
@@ -346,7 +363,7 @@ class Connection extends Component
      * @var bool whether to enable read/write splitting by using [[slaves]] to read data.
      * Note that if [[slaves]] is empty, read/write splitting will NOT be enabled no matter what value this property takes.
      */
-    public $enableSlaves = true;
+    public $enableSlaves = \true;
     /**
      * @var array list of slave connection configurations. Each configuration is used to create a slave DB connection.
      * When [[enableSlaves]] is true, one of these configurations will be chosen and used to create a DB connection
@@ -402,7 +419,7 @@ class Connection extends Component
      * @since 2.0.11
      * @see masters
      */
-    public $shuffleMasters = true;
+    public $shuffleMasters = \true;
     /**
      * @var bool whether to enable logging of database queries. Defaults to true.
      * You may want to disable this option in a production environment to gain performance
@@ -410,7 +427,7 @@ class Connection extends Component
      * @since 2.0.12
      * @see enableProfiling
      */
-    public $enableLogging = true;
+    public $enableLogging = \true;
     /**
      * @var bool whether to enable profiling of opening database connection and database queries. Defaults to true.
      * You may want to disable this option in a production environment to gain performance
@@ -418,13 +435,12 @@ class Connection extends Component
      * @since 2.0.12
      * @see enableLogging
      */
-    public $enableProfiling = true;
+    public $enableProfiling = \true;
     /**
      * @var bool If the database connected via pdo_dblib is SyBase.
      * @since 2.0.38
      */
-    public $isSybase = false;
-
+    public $isSybase = \false;
     /**
      * @var array An array of [[setQueryBuilder()]] calls, holding the passed arguments.
      * Is used to restore a QueryBuilder configuration after the connection close/open cycle.
@@ -449,11 +465,11 @@ class Connection extends Component
     /**
      * @var Connection|false the currently active master connection
      */
-    private $_master = false;
+    private $_master = \false;
     /**
      * @var Connection|false the currently active slave connection
      */
-    private $_slave = false;
+    private $_slave = \false;
     /**
      * @var array query cache parameters for the [[cache()]] calls
      */
@@ -466,8 +482,6 @@ class Connection extends Component
      * @var string[]|null quoted column name cache for [[quoteColumnName()]] calls
      */
     private $_quotedColumnNames;
-
-
     /**
      * Returns a value indicating whether the DB connection is established.
      * @return bool whether the DB connection is established
@@ -476,7 +490,6 @@ class Connection extends Component
     {
         return $this->pdo !== null;
     }
-
     /**
      * Uses query cache for the queries performed with the callable.
      *
@@ -522,7 +535,6 @@ class Connection extends Component
             throw $e;
         }
     }
-
     /**
      * Disables query cache temporarily.
      *
@@ -550,7 +562,7 @@ class Connection extends Component
      */
     public function noCache(callable $callable)
     {
-        $this->_queryCacheInfo[] = false;
+        $this->_queryCacheInfo[] = \false;
         try {
             $result = call_user_func($callable, $this);
             array_pop($this->_queryCacheInfo);
@@ -563,7 +575,6 @@ class Connection extends Component
             throw $e;
         }
     }
-
     /**
      * Returns the current query cache information.
      * This method is used internally by [[Command]].
@@ -577,7 +588,6 @@ class Connection extends Component
         if (!$this->enableQueryCache) {
             return null;
         }
-
         $info = end($this->_queryCacheInfo);
         if (is_array($info)) {
             if ($duration === null) {
@@ -587,10 +597,9 @@ class Connection extends Component
                 $dependency = $info[1];
             }
         }
-
         if ($duration === 0 || $duration > 0) {
             if (is_string($this->queryCache) && Yii::$app) {
-                $cache = Yii::$app->get($this->queryCache, false);
+                $cache = Yii::$app->get($this->queryCache, \false);
             } else {
                 $cache = $this->queryCache;
             }
@@ -598,10 +607,8 @@ class Connection extends Component
                 return [$cache, $duration, $dependency];
             }
         }
-
         return null;
     }
-
     /**
      * Establishes a DB connection.
      * It does nothing if a DB connection has already been established.
@@ -612,35 +619,28 @@ class Connection extends Component
         if ($this->pdo !== null) {
             return;
         }
-
         if (!empty($this->masters)) {
             $db = $this->getMaster();
             if ($db !== null) {
                 $this->pdo = $db->pdo;
                 return;
             }
-
             throw new InvalidConfigException('None of the master DB servers is available.');
         }
-
         if (empty($this->dsn)) {
             throw new InvalidConfigException('Connection::dsn cannot be empty.');
         }
-
         $token = 'Opening DB connection: ' . $this->dsn;
         $enableProfiling = $this->enableProfiling;
         try {
             if ($this->enableLogging) {
                 Yii::info($token, __METHOD__);
             }
-
             if ($enableProfiling) {
                 Yii::beginProfile($token, __METHOD__);
             }
-
             $this->pdo = $this->createPdoInstance();
             $this->initConnection();
-
             if ($enableProfiling) {
                 Yii::endProfile($token, __METHOD__);
             }
@@ -648,11 +648,9 @@ class Connection extends Component
             if ($enableProfiling) {
                 Yii::endProfile($token, __METHOD__);
             }
-
-            throw new Exception($e->getMessage(), $e->errorInfo, $e->getCode(), $e);
+            throw new \yii\db\Exception($e->getMessage(), $e->errorInfo, $e->getCode(), $e);
         }
     }
-
     /**
      * Closes the currently active DB connection.
      * It does nothing if the connection is already closed.
@@ -663,21 +661,17 @@ class Connection extends Component
             if ($this->pdo === $this->_master->pdo) {
                 $this->pdo = null;
             }
-
             $this->_master->close();
-            $this->_master = false;
+            $this->_master = \false;
         }
-
         if ($this->pdo !== null) {
             Yii::debug('Closing DB connection: ' . $this->dsn, __METHOD__);
             $this->pdo = null;
         }
-
         if ($this->_slave) {
             $this->_slave->close();
-            $this->_slave = false;
+            $this->_slave = \false;
         }
-
         $this->_schema = null;
         $this->_transaction = null;
         $this->_driverName = null;
@@ -685,7 +679,6 @@ class Connection extends Component
         $this->_quotedTableNames = null;
         $this->_quotedColumnNames = null;
     }
-
     /**
      * Creates the PDO instance.
      * This method is called by [[open]] to establish a DB connection.
@@ -700,7 +693,7 @@ class Connection extends Component
             $driver = null;
             if ($this->_driverName !== null) {
                 $driver = $this->_driverName;
-            } elseif (($pos = strpos($this->dsn, ':')) !== false) {
+            } elseif (($pos = strpos($this->dsn, ':')) !== \false) {
                 $driver = strtolower(substr($this->dsn, 0, $pos));
             }
             switch ($driver) {
@@ -717,15 +710,12 @@ class Connection extends Component
                     $pdoClass = 'PDO';
             }
         }
-
         $dsn = $this->dsn;
         if (strncmp('sqlite:@', $dsn, 8) === 0) {
             $dsn = 'sqlite:' . Yii::getAlias(substr($dsn, 7));
         }
-
         return new $pdoClass($dsn, $this->username, $this->password, $this->attributes);
     }
-
     /**
      * Initializes the DB connection.
      * This method is invoked right after the DB connection is established.
@@ -741,20 +731,17 @@ class Connection extends Component
                 $this->pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, $this->emulatePrepare);
             }
         }
-
-        if (PHP_VERSION_ID >= 80100 && $this->getDriverName() === 'sqlite') {
-            $this->pdo->setAttribute(PDO::ATTR_STRINGIFY_FETCHES, true);
+        if (\PHP_VERSION_ID >= 80100 && $this->getDriverName() === 'sqlite') {
+            $this->pdo->setAttribute(PDO::ATTR_STRINGIFY_FETCHES, \true);
         }
-
-        if (!$this->isSybase && in_array($this->getDriverName(), ['mssql', 'dblib'], true)) {
+        if (!$this->isSybase && in_array($this->getDriverName(), ['mssql', 'dblib'], \true)) {
             $this->pdo->exec('SET ANSI_NULL_DFLT_ON ON');
         }
-        if ($this->charset !== null && in_array($this->getDriverName(), ['pgsql', 'mysql', 'mysqli', 'cubrid'], true)) {
+        if ($this->charset !== null && in_array($this->getDriverName(), ['pgsql', 'mysql', 'mysqli', 'cubrid'], \true)) {
             $this->pdo->exec('SET NAMES ' . $this->pdo->quote($this->charset));
         }
         $this->trigger(self::EVENT_AFTER_OPEN);
     }
-
     /**
      * Creates a command for execution.
      * @param string|null $sql the SQL statement to be executed
@@ -776,7 +763,6 @@ class Connection extends Component
         $command = Yii::createObject($config);
         return $command->bindValues($params);
     }
-
     /**
      * Returns the currently active transaction.
      * @return Transaction|null the currently active transaction. Null if no active transaction.
@@ -785,7 +771,6 @@ class Connection extends Component
     {
         return $this->_transaction && $this->_transaction->getIsActive() ? $this->_transaction : null;
     }
-
     /**
      * Starts a transaction.
      * @param string|null $isolationLevel The isolation level to use for this transaction.
@@ -795,15 +780,12 @@ class Connection extends Component
     public function beginTransaction($isolationLevel = null)
     {
         $this->open();
-
         if (($transaction = $this->getTransaction()) === null) {
-            $transaction = $this->_transaction = new Transaction(['db' => $this]);
+            $transaction = $this->_transaction = new \yii\db\Transaction(['db' => $this]);
         }
         $transaction->begin($isolationLevel);
-
         return $transaction;
     }
-
     /**
      * Executes callback provided in a transaction.
      *
@@ -817,7 +799,6 @@ class Connection extends Component
     {
         $transaction = $this->beginTransaction($isolationLevel);
         $level = $transaction->level;
-
         try {
             $result = call_user_func($callback, $this);
             if ($transaction->isActive && $transaction->level === $level) {
@@ -830,10 +811,8 @@ class Connection extends Component
             $this->rollbackTransactionOnLevel($transaction, $level);
             throw $e;
         }
-
         return $result;
     }
-
     /**
      * Rolls back given [[Transaction]] object if it's still active and level match.
      * In some cases rollback can fail, so this method is fail safe. Exception thrown
@@ -848,12 +827,11 @@ class Connection extends Component
             try {
                 $transaction->rollBack();
             } catch (\Exception $e) {
-                \Yii::error($e, __METHOD__);
+                \Odigos\Yii::error($e, __METHOD__);
                 // hide this exception to be able to continue throwing original exception outside
             }
         }
     }
-
     /**
      * Returns the schema information for the database opened by this connection.
      * @return Schema the schema information for the database opened by this connection.
@@ -867,21 +845,16 @@ class Connection extends Component
         if ($this->_schema !== null) {
             return $this->_schema;
         }
-
         $driver = $this->getDriverName();
         if (isset($this->schemaMap[$driver])) {
             $config = !is_array($this->schemaMap[$driver]) ? ['class' => $this->schemaMap[$driver]] : $this->schemaMap[$driver];
             $config['db'] = $this;
-
             $this->_schema = Yii::createObject($config);
             $this->restoreQueryBuilderConfiguration();
-
             return $this->_schema;
         }
-
-        throw new NotSupportedException("Connection does not support reading schema information for '$driver' DBMS.");
+        throw new NotSupportedException("Connection does not support reading schema information for '{$driver}' DBMS.");
     }
-
     /**
      * Returns the query builder for the current DB connection.
      * @return QueryBuilder the query builder for the current DB connection.
@@ -890,7 +863,6 @@ class Connection extends Component
     {
         return $this->getSchema()->getQueryBuilder();
     }
-
     /**
      * Can be used to set [[QueryBuilder]] configuration via Connection configuration array.
      *
@@ -902,7 +874,6 @@ class Connection extends Component
         Yii::configure($this->getQueryBuilder(), $value);
         $this->_queryBuilderConfigurations[] = $value;
     }
-
     /**
      * Restores custom QueryBuilder configuration after the connection close/open cycle
      */
@@ -911,25 +882,22 @@ class Connection extends Component
         if ($this->_queryBuilderConfigurations === []) {
             return;
         }
-
         $queryBuilderConfigurations = $this->_queryBuilderConfigurations;
         $this->_queryBuilderConfigurations = [];
         foreach ($queryBuilderConfigurations as $queryBuilderConfiguration) {
             $this->setQueryBuilder($queryBuilderConfiguration);
         }
     }
-
     /**
      * Obtains the schema information for the named table.
      * @param string $name table name.
      * @param bool $refresh whether to reload the table schema even if it is found in the cache.
      * @return TableSchema|null table schema information. Null if the named table does not exist.
      */
-    public function getTableSchema($name, $refresh = false)
+    public function getTableSchema($name, $refresh = \false)
     {
         return $this->getSchema()->getTableSchema($name, $refresh);
     }
-
     /**
      * Returns the ID of the last inserted row or sequence value.
      * @param string $sequenceName name of the sequence object (required by some DBMS)
@@ -940,7 +908,6 @@ class Connection extends Component
     {
         return $this->getSchema()->getLastInsertID($sequenceName);
     }
-
     /**
      * Quotes a string value for use in a query.
      * Note that if the parameter is not a string, it will be returned without change.
@@ -952,7 +919,6 @@ class Connection extends Component
     {
         return $this->getSchema()->quoteValue($value);
     }
-
     /**
      * Quotes a table name for use in a query.
      * If the table name contains schema prefix, the prefix will also be properly quoted.
@@ -968,7 +934,6 @@ class Connection extends Component
         }
         return $this->_quotedTableNames[$name] = $this->getSchema()->quoteTableName($name);
     }
-
     /**
      * Quotes a column name for use in a query.
      * If the column name contains prefix, the prefix will also be properly quoted.
@@ -984,7 +949,6 @@ class Connection extends Component
         }
         return $this->_quotedColumnNames[$name] = $this->getSchema()->quoteColumnName($name);
     }
-
     /**
      * Processes a SQL statement by quoting table and column names that are enclosed within double brackets.
      * Tokens enclosed within double curly brackets are treated as table names, while
@@ -996,19 +960,13 @@ class Connection extends Component
      */
     public function quoteSql($sql)
     {
-        return preg_replace_callback(
-            '/(\\{\\{(%?[\w\-\. ]+%?)\\}\\}|\\[\\[([\w\-\. ]+)\\]\\])/',
-            function ($matches) {
-                if (isset($matches[3])) {
-                    return $this->quoteColumnName($matches[3]);
-                }
-
-                return str_replace('%', $this->tablePrefix, $this->quoteTableName($matches[2]));
-            },
-            $sql
-        );
+        return preg_replace_callback('/(\{\{(%?[\w\-\. ]+%?)\}\}|\[\[([\w\-\. ]+)\]\])/', function ($matches) {
+            if (isset($matches[3])) {
+                return $this->quoteColumnName($matches[3]);
+            }
+            return str_replace('%', $this->tablePrefix, $this->quoteTableName($matches[2]));
+        }, $sql);
     }
-
     /**
      * Returns the name of the DB driver. Based on the the current [[dsn]], in case it was not set explicitly
      * by an end user.
@@ -1017,16 +975,14 @@ class Connection extends Component
     public function getDriverName()
     {
         if ($this->_driverName === null) {
-            if (($pos = strpos((string)$this->dsn, ':')) !== false) {
+            if (($pos = strpos((string) $this->dsn, ':')) !== \false) {
                 $this->_driverName = strtolower(substr($this->dsn, 0, $pos));
             } else {
-                $this->_driverName = strtolower($this->getSlavePdo(true)->getAttribute(PDO::ATTR_DRIVER_NAME));
+                $this->_driverName = strtolower($this->getSlavePdo(\true)->getAttribute(PDO::ATTR_DRIVER_NAME));
             }
         }
-
         return $this->_driverName;
     }
-
     /**
      * Changes the current driver name.
      * @param string $driverName name of the DB driver
@@ -1035,7 +991,6 @@ class Connection extends Component
     {
         $this->_driverName = strtolower($driverName);
     }
-
     /**
      * Returns a server version as a string comparable by [[\version_compare()]].
      * @return string server version as a string.
@@ -1045,7 +1000,6 @@ class Connection extends Component
     {
         return $this->getSchema()->getServerVersion();
     }
-
     /**
      * Returns the PDO instance for the currently active slave connection.
      * When [[enableSlaves]] is true, one of the slaves will be used for read queries, and its PDO instance
@@ -1054,16 +1008,14 @@ class Connection extends Component
      * @return PDO|null the PDO instance for the currently active slave connection. `null` is returned if no slave connection
      * is available and `$fallbackToMaster` is false.
      */
-    public function getSlavePdo($fallbackToMaster = true)
+    public function getSlavePdo($fallbackToMaster = \true)
     {
-        $db = $this->getSlave(false);
+        $db = $this->getSlave(\false);
         if ($db === null) {
             return $fallbackToMaster ? $this->getMasterPdo() : null;
         }
-
         return $db->pdo;
     }
-
     /**
      * Returns the PDO instance for the currently active master connection.
      * This method will open the master DB connection and then return [[pdo]].
@@ -1074,7 +1026,6 @@ class Connection extends Component
         $this->open();
         return $this->pdo;
     }
-
     /**
      * Returns the currently active slave connection.
      * If this method is called for the first time, it will try to open a slave connection when [[enableSlaves]] is true.
@@ -1082,19 +1033,16 @@ class Connection extends Component
      * @return Connection|null the currently active slave connection. `null` is returned if there is no slave available and
      * `$fallbackToMaster` is false.
      */
-    public function getSlave($fallbackToMaster = true)
+    public function getSlave($fallbackToMaster = \true)
     {
         if (!$this->enableSlaves) {
             return $fallbackToMaster ? $this : null;
         }
-
-        if ($this->_slave === false) {
+        if ($this->_slave === \false) {
             $this->_slave = $this->openFromPool($this->slaves, $this->slaveConfig);
         }
-
         return $this->_slave === null && $fallbackToMaster ? $this : $this->_slave;
     }
-
     /**
      * Returns the currently active master connection.
      * If this method is called for the first time, it will try to open a master connection.
@@ -1103,15 +1051,11 @@ class Connection extends Component
      */
     public function getMaster()
     {
-        if ($this->_master === false) {
-            $this->_master = $this->shuffleMasters
-                ? $this->openFromPool($this->masters, $this->masterConfig)
-                : $this->openFromPoolSequentially($this->masters, $this->masterConfig);
+        if ($this->_master === \false) {
+            $this->_master = $this->shuffleMasters ? $this->openFromPool($this->masters, $this->masterConfig) : $this->openFromPoolSequentially($this->masters, $this->masterConfig);
         }
-
         return $this->_master;
     }
-
     /**
      * Executes the provided callback by using the master connection.
      *
@@ -1132,25 +1076,23 @@ class Connection extends Component
     public function useMaster(callable $callback)
     {
         if ($this->enableSlaves) {
-            $this->enableSlaves = false;
+            $this->enableSlaves = \false;
             try {
                 $result = call_user_func($callback, $this);
             } catch (\Exception $e) {
-                $this->enableSlaves = true;
+                $this->enableSlaves = \true;
                 throw $e;
             } catch (\Throwable $e) {
-                $this->enableSlaves = true;
+                $this->enableSlaves = \true;
                 throw $e;
             }
             // TODO: use "finally" keyword when miminum required PHP version is >= 5.5
-            $this->enableSlaves = true;
+            $this->enableSlaves = \true;
         } else {
             $result = call_user_func($callback, $this);
         }
-
         return $result;
     }
-
     /**
      * Opens the connection to a server in the pool.
      *
@@ -1169,7 +1111,6 @@ class Connection extends Component
         shuffle($pool);
         return $this->openFromPoolSequentially($pool, $sharedConfig);
     }
-
     /**
      * Opens the connection to a server in the pool.
      *
@@ -1198,28 +1139,22 @@ class Connection extends Component
         if (empty($pool)) {
             return null;
         }
-
         if (!isset($sharedConfig['class'])) {
             $sharedConfig['class'] = get_class($this);
         }
-
-        $cache = is_string($this->serverStatusCache) ? Yii::$app->get($this->serverStatusCache, false) : $this->serverStatusCache;
-
+        $cache = is_string($this->serverStatusCache) ? Yii::$app->get($this->serverStatusCache, \false) : $this->serverStatusCache;
         foreach ($pool as $i => $config) {
             $pool[$i] = $config = array_merge($sharedConfig, $config);
             if (empty($config['dsn'])) {
                 throw new InvalidConfigException('The "dsn" option must be specified.');
             }
-
             $key = [__METHOD__, $config['dsn']];
             if ($cache instanceof CacheInterface && $cache->get($key)) {
                 // should not try this dead server now
                 continue;
             }
-
             /** @var self $db */
             $db = Yii::createObject($config);
-
             try {
                 $db->open();
                 return $db;
@@ -1233,7 +1168,6 @@ class Connection extends Component
                 unset($pool[$i]);
             }
         }
-
         if ($cache instanceof CacheInterface) {
             // if server status cache is enabled and no server is available
             // ignore the cache and try to connect anyway
@@ -1247,17 +1181,13 @@ class Connection extends Component
                     Yii::warning("Connection ({$config['dsn']}) failed: " . $e->getMessage(), __METHOD__);
                     continue;
                 }
-
                 // mark this server as available again after successful connection
                 $cache->delete([__METHOD__, $config['dsn']]);
-
                 return $db;
             }
         }
-
         return null;
     }
-
     /**
      * Close the connection before serializing.
      * @return array
@@ -1265,25 +1195,21 @@ class Connection extends Component
     public function __sleep()
     {
         $fields = (array) $this;
-
         unset($fields['pdo']);
-        unset($fields["\000" . __CLASS__ . "\000" . '_master']);
-        unset($fields["\000" . __CLASS__ . "\000" . '_slave']);
-        unset($fields["\000" . __CLASS__ . "\000" . '_transaction']);
-        unset($fields["\000" . __CLASS__ . "\000" . '_schema']);
-
+        unset($fields["\x00" . __CLASS__ . "\x00" . '_master']);
+        unset($fields["\x00" . __CLASS__ . "\x00" . '_slave']);
+        unset($fields["\x00" . __CLASS__ . "\x00" . '_transaction']);
+        unset($fields["\x00" . __CLASS__ . "\x00" . '_schema']);
         return array_keys($fields);
     }
-
     /**
      * Reset the connection after cloning.
      */
     public function __clone()
     {
         parent::__clone();
-
-        $this->_master = false;
-        $this->_slave = false;
+        $this->_master = \false;
+        $this->_slave = \false;
         $this->_schema = null;
         $this->_transaction = null;
         if (strncmp($this->dsn, 'sqlite::memory:', 15) !== 0) {

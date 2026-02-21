@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\HttpFoundation\Session\Storage\Handler;
 
 use MongoDB\BSON\Binary;
@@ -17,7 +16,6 @@ use MongoDB\Client;
 use MongoDB\Driver\BulkWrite;
 use MongoDB\Driver\Manager;
 use MongoDB\Driver\Query;
-
 /**
  * Session handler using the MongoDB driver extension.
  *
@@ -26,13 +24,12 @@ use MongoDB\Driver\Query;
  *
  * @see https://php.net/mongodb
  */
-class MongoDbSessionHandler extends AbstractSessionHandler
+class MongoDbSessionHandler extends \Symfony\Component\HttpFoundation\Session\Storage\Handler\AbstractSessionHandler
 {
     private Manager $manager;
     private string $namespace;
     private array $options;
     private int|\Closure|null $ttl;
-
     /**
      * Constructor.
      *
@@ -69,116 +66,60 @@ class MongoDbSessionHandler extends AbstractSessionHandler
         if (!isset($options['database']) || !isset($options['collection'])) {
             throw new \InvalidArgumentException('You must provide the "database" and "collection" option for MongoDBSessionHandler.');
         }
-
         if ($mongo instanceof Client) {
             $mongo = $mongo->getManager();
         }
-
         $this->manager = $mongo;
-        $this->namespace = $options['database'].'.'.$options['collection'];
-
-        $this->options = array_merge([
-            'id_field' => '_id',
-            'data_field' => 'data',
-            'time_field' => 'time',
-            'expiry_field' => 'expires_at',
-        ], $options);
+        $this->namespace = $options['database'] . '.' . $options['collection'];
+        $this->options = array_merge(['id_field' => '_id', 'data_field' => 'data', 'time_field' => 'time', 'expiry_field' => 'expires_at'], $options);
         $this->ttl = $this->options['ttl'] ?? null;
     }
-
     public function close(): bool
     {
-        return true;
+        return \true;
     }
-
     protected function doDestroy(#[\SensitiveParameter] string $sessionId): bool
     {
         $write = new BulkWrite();
-        $write->delete(
-            [$this->options['id_field'] => $sessionId],
-            ['limit' => 1]
-        );
-
+        $write->delete([$this->options['id_field'] => $sessionId], ['limit' => 1]);
         $this->manager->executeBulkWrite($this->namespace, $write);
-
-        return true;
+        return \true;
     }
-
     public function gc(int $maxlifetime): int|false
     {
         $write = new BulkWrite();
-        $write->delete(
-            [$this->options['expiry_field'] => ['$lt' => $this->getUTCDateTime()]],
-        );
+        $write->delete([$this->options['expiry_field'] => ['$lt' => $this->getUTCDateTime()]]);
         $result = $this->manager->executeBulkWrite($this->namespace, $write);
-
-        return $result->getDeletedCount() ?? false;
+        return $result->getDeletedCount() ?? \false;
     }
-
     protected function doWrite(#[\SensitiveParameter] string $sessionId, string $data): bool
     {
         $ttl = ($this->ttl instanceof \Closure ? ($this->ttl)() : $this->ttl) ?? \ini_get('session.gc_maxlifetime');
         $expiry = $this->getUTCDateTime($ttl);
-
-        $fields = [
-            $this->options['time_field'] => $this->getUTCDateTime(),
-            $this->options['expiry_field'] => $expiry,
-            $this->options['data_field'] => new Binary($data, Binary::TYPE_GENERIC),
-        ];
-
+        $fields = [$this->options['time_field'] => $this->getUTCDateTime(), $this->options['expiry_field'] => $expiry, $this->options['data_field'] => new Binary($data, Binary::TYPE_GENERIC)];
         $write = new BulkWrite();
-        $write->update(
-            [$this->options['id_field'] => $sessionId],
-            ['$set' => $fields],
-            ['upsert' => true]
-        );
-
+        $write->update([$this->options['id_field'] => $sessionId], ['$set' => $fields], ['upsert' => \true]);
         $this->manager->executeBulkWrite($this->namespace, $write);
-
-        return true;
+        return \true;
     }
-
     public function updateTimestamp(#[\SensitiveParameter] string $sessionId, string $data): bool
     {
         $ttl = ($this->ttl instanceof \Closure ? ($this->ttl)() : $this->ttl) ?? \ini_get('session.gc_maxlifetime');
         $expiry = $this->getUTCDateTime($ttl);
-
         $write = new BulkWrite();
-        $write->update(
-            [$this->options['id_field'] => $sessionId],
-            ['$set' => [
-                $this->options['time_field'] => $this->getUTCDateTime(),
-                $this->options['expiry_field'] => $expiry,
-            ]],
-            ['multi' => false],
-        );
-
+        $write->update([$this->options['id_field'] => $sessionId], ['$set' => [$this->options['time_field'] => $this->getUTCDateTime(), $this->options['expiry_field'] => $expiry]], ['multi' => \false]);
         $this->manager->executeBulkWrite($this->namespace, $write);
-
-        return true;
+        return \true;
     }
-
     protected function doRead(#[\SensitiveParameter] string $sessionId): string
     {
-        $cursor = $this->manager->executeQuery($this->namespace, new Query([
-            $this->options['id_field'] => $sessionId,
-            $this->options['expiry_field'] => ['$gte' => $this->getUTCDateTime()],
-        ], [
-            'projection' => [
-                '_id' => false,
-                $this->options['data_field'] => true,
-            ],
-            'limit' => 1,
-        ]));
-
+        $cursor = $this->manager->executeQuery($this->namespace, new Query([$this->options['id_field'] => $sessionId, $this->options['expiry_field'] => ['$gte' => $this->getUTCDateTime()]], ['projection' => ['_id' => \false, $this->options['data_field'] => \true], 'limit' => 1]));
         foreach ($cursor as $document) {
             return (string) $document->{$this->options['data_field']} ?? '';
         }
-
         // Not found
         return '';
     }
-
     private function getUTCDateTime(int $additionalSeconds = 0): UTCDateTime
     {
         return new UTCDateTime((time() + $additionalSeconds) * 1000);

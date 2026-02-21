@@ -3,7 +3,6 @@
 namespace Laravel\Prompts\Themes\Default\Concerns;
 
 use Illuminate\Support\Collection;
-
 trait DrawsScrollbars
 {
     /**
@@ -17,18 +16,12 @@ trait DrawsScrollbars
         if ($height >= $total) {
             return $visible;
         }
-
         $scrollPosition = $this->scrollPosition($firstVisible, $height, $total);
-
-        return $visible // @phpstan-ignore return.type
-            ->values()
-            ->map(fn ($line) => $this->pad($line, $width))
-            ->map(fn ($line, $index) => match ($index) {
-                $scrollPosition => preg_replace('/.$/', $this->{$color}('┃'), $line),
-                default => preg_replace('/.$/', $this->gray('│'), $line),
-            });
+        return $visible->values()->map(fn($line) => $this->pad($line, $width))->map(fn($line, $index) => match ($index) {
+            $scrollPosition => preg_replace('/.$/', $this->{$color}('┃'), $line),
+            default => preg_replace('/.$/', $this->gray('│'), $line),
+        });
     }
-
     /**
      * Return the position where the scrollbar "handle" should be rendered.
      */
@@ -37,19 +30,14 @@ trait DrawsScrollbars
         if ($firstVisible === 0) {
             return 0;
         }
-
         $maxPosition = $total - $height;
-
         if ($firstVisible === $maxPosition) {
             return $height - 1;
         }
-
         if ($height <= 2) {
             return -1;
         }
-
         $percent = $firstVisible / $maxPosition;
-
         return (int) round($percent * ($height - 3)) + 1;
     }
 }

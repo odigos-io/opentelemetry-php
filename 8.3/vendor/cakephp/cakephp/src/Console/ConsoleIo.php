@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -21,7 +21,6 @@ use Cake\Log\Engine\ConsoleLog;
 use Cake\Log\Log;
 use RuntimeException;
 use SplFileObject;
-
 /**
  * A wrapper around the various IO operations shell tasks need to do.
  *
@@ -37,56 +36,48 @@ class ConsoleIo
      * @var int
      */
     public const VERBOSE = 2;
-
     /**
      * Output constant for making normal shells.
      *
      * @var int
      */
     public const NORMAL = 1;
-
     /**
      * Output constants for making quiet shells.
      *
      * @var int
      */
     public const QUIET = 0;
-
     /**
      * The output stream
      *
      * @var \Cake\Console\ConsoleOutput
      */
-    protected ConsoleOutput $_out;
-
+    protected \Cake\Console\ConsoleOutput $_out;
     /**
      * The error stream
      *
      * @var \Cake\Console\ConsoleOutput
      */
-    protected ConsoleOutput $_err;
-
+    protected \Cake\Console\ConsoleOutput $_err;
     /**
      * The input stream
      *
      * @var \Cake\Console\ConsoleInput
      */
-    protected ConsoleInput $_in;
-
+    protected \Cake\Console\ConsoleInput $_in;
     /**
      * The helper registry.
      *
      * @var \Cake\Console\HelperRegistry
      */
-    protected HelperRegistry $_helpers;
-
+    protected \Cake\Console\HelperRegistry $_helpers;
     /**
      * The current output level.
      *
      * @var int
      */
     protected int $_level = self::NORMAL;
-
     /**
      * The number of bytes last written to the output stream
      * used when overwriting the previous message.
@@ -94,19 +85,16 @@ class ConsoleIo
      * @var int
      */
     protected int $_lastWritten = 0;
-
     /**
      * Whether files should be overwritten
      *
      * @var bool
      */
-    protected bool $forceOverwrite = false;
-
+    protected bool $forceOverwrite = \false;
     /**
      * @var bool
      */
-    protected bool $interactive = true;
-
+    protected bool $interactive = \true;
     /**
      * Constructor
      *
@@ -115,19 +103,14 @@ class ConsoleIo
      * @param \Cake\Console\ConsoleInput|null $in A ConsoleInput object for stdin.
      * @param \Cake\Console\HelperRegistry|null $helpers A HelperRegistry instance
      */
-    public function __construct(
-        ?ConsoleOutput $out = null,
-        ?ConsoleOutput $err = null,
-        ?ConsoleInput $in = null,
-        ?HelperRegistry $helpers = null,
-    ) {
-        $this->_out = $out ?: new ConsoleOutput('php://stdout');
-        $this->_err = $err ?: new ConsoleOutput('php://stderr');
-        $this->_in = $in ?: new ConsoleInput('php://stdin');
-        $this->_helpers = $helpers ?: new HelperRegistry();
+    public function __construct(?\Cake\Console\ConsoleOutput $out = null, ?\Cake\Console\ConsoleOutput $err = null, ?\Cake\Console\ConsoleInput $in = null, ?\Cake\Console\HelperRegistry $helpers = null)
+    {
+        $this->_out = $out ?: new \Cake\Console\ConsoleOutput('php://stdout');
+        $this->_err = $err ?: new \Cake\Console\ConsoleOutput('php://stderr');
+        $this->_in = $in ?: new \Cake\Console\ConsoleInput('php://stdin');
+        $this->_helpers = $helpers ?: new \Cake\Console\HelperRegistry();
         $this->_helpers->setIo($this);
     }
-
     /**
      * @param bool $value Value
      * @return void
@@ -136,7 +119,6 @@ class ConsoleIo
     {
         $this->interactive = $value;
     }
-
     /**
      * Get/set the current output level.
      *
@@ -148,10 +130,8 @@ class ConsoleIo
         if ($level !== null) {
             $this->_level = $level;
         }
-
         return $this->_level;
     }
-
     /**
      * Output at the verbose level.
      *
@@ -164,7 +144,6 @@ class ConsoleIo
     {
         return $this->out($message, $newlines, self::VERBOSE);
     }
-
     /**
      * Output at all levels.
      *
@@ -177,7 +156,6 @@ class ConsoleIo
     {
         return $this->out($message, $newlines, self::QUIET);
     }
-
     /**
      * Outputs a single or multiple messages to stdout. If no parameters
      * are passed outputs just a newline.
@@ -200,12 +178,9 @@ class ConsoleIo
         if ($level > $this->_level) {
             return null;
         }
-
         $this->_lastWritten = $this->_out->write($message, $newlines);
-
         return $this->_lastWritten;
     }
-
     /**
      * Convenience method for out() that wraps message between <info> tag
      *
@@ -220,10 +195,8 @@ class ConsoleIo
     {
         $messageType = 'info';
         $message = $this->wrapMessageWithType($messageType, $message);
-
         return $this->out($message, $newlines, $level);
     }
-
     /**
      * Convenience method for out() that wraps message between <comment> tag
      *
@@ -238,10 +211,8 @@ class ConsoleIo
     {
         $messageType = 'comment';
         $message = $this->wrapMessageWithType($messageType, $message);
-
         return $this->out($message, $newlines, $level);
     }
-
     /**
      * Convenience method for err() that wraps message between <warning> tag
      *
@@ -254,10 +225,8 @@ class ConsoleIo
     {
         $messageType = 'warning';
         $message = $this->wrapMessageWithType($messageType, $message);
-
         return $this->err($message, $newlines);
     }
-
     /**
      * Convenience method for err() that wraps message between <error> tag
      *
@@ -270,10 +239,8 @@ class ConsoleIo
     {
         $messageType = 'error';
         $message = $this->wrapMessageWithType($messageType, $message);
-
         return $this->err($message, $newlines);
     }
-
     /**
      * Convenience method for out() that wraps message between <success> tag
      *
@@ -288,10 +255,8 @@ class ConsoleIo
     {
         $messageType = 'success';
         $message = $this->wrapMessageWithType($messageType, $message);
-
         return $this->out($message, $newlines, $level);
     }
-
     /**
      * Halts the the current process with a StopException.
      *
@@ -300,13 +265,11 @@ class ConsoleIo
      * @return never
      * @throws \Cake\Console\Exception\StopException
      */
-    public function abort(string $message, int $code = CommandInterface::CODE_ERROR): never
+    public function abort(string $message, int $code = \Cake\Console\CommandInterface::CODE_ERROR): never
     {
         $this->error($message);
-
         throw new StopException($message, $code);
     }
-
     /**
      * Wraps a message with a given message type, e.g. <warning>
      *
@@ -323,10 +286,8 @@ class ConsoleIo
         } else {
             $message = "<{$messageType}>{$message}</{$messageType}>";
         }
-
         return $message;
     }
-
     /**
      * Overwrite some already output text.
      *
@@ -344,12 +305,9 @@ class ConsoleIo
     public function overwrite(array|string $message, int $newlines = 1, ?int $size = null): void
     {
         $size = $size ?: $this->_lastWritten;
-
         // Output backspaces.
         $this->out(str_repeat("\x08", $size), 0);
-
-        $newBytes = (int)$this->out($message, 0);
-
+        $newBytes = (int) $this->out($message, 0);
         // Fill any remaining bytes with spaces.
         $fill = $size - $newBytes;
         if ($fill > 0) {
@@ -358,7 +316,6 @@ class ConsoleIo
         if ($newlines) {
             $this->out($this->nl($newlines), 0);
         }
-
         // Store length of content + fill so if the new content
         // is shorter than the old content the next overwrite
         // will work.
@@ -366,7 +323,6 @@ class ConsoleIo
             $this->_lastWritten = $newBytes + $fill;
         }
     }
-
     /**
      * Outputs a single or multiple error messages to stderr. If no parameters
      * are passed outputs just a newline.
@@ -379,7 +335,6 @@ class ConsoleIo
     {
         return $this->_err->write($message, $newlines);
     }
-
     /**
      * Returns a single or multiple linefeeds sequences.
      *
@@ -388,9 +343,8 @@ class ConsoleIo
      */
     public function nl(int $multiplier = 1): string
     {
-        return str_repeat(ConsoleOutput::LF, $multiplier);
+        return str_repeat(\Cake\Console\ConsoleOutput::LF, $multiplier);
     }
-
     /**
      * Outputs a series of minus characters to the standard output, acts as a visual separator.
      *
@@ -404,7 +358,6 @@ class ConsoleIo
         $this->out(str_repeat('-', $width));
         $this->out('', $newlines);
     }
-
     /**
      * Prompts the user for input, and returns it.
      *
@@ -416,7 +369,6 @@ class ConsoleIo
     {
         return $this->_getInput($prompt, null, $default);
     }
-
     /**
      * Change the output mode of the stdout stream
      *
@@ -428,7 +380,6 @@ class ConsoleIo
     {
         $this->_out->setOutputAs($mode);
     }
-
     /**
      * Gets defined styles.
      *
@@ -439,7 +390,6 @@ class ConsoleIo
     {
         return $this->_out->styles();
     }
-
     /**
      * Get defined style.
      *
@@ -451,7 +401,6 @@ class ConsoleIo
     {
         return $this->_out->getStyle($style);
     }
-
     /**
      * Adds a new output style.
      *
@@ -464,7 +413,6 @@ class ConsoleIo
     {
         $this->_out->setStyle($style, $definition);
     }
-
     /**
      * Prompts the user for input based on a list of options, and returns it.
      *
@@ -484,21 +432,14 @@ class ConsoleIo
                 $options = [$options];
             }
         }
-
         $printOptions = '(' . implode('/', $options) . ')';
-        $options = array_merge(
-            array_map('strtolower', $options),
-            array_map('strtoupper', $options),
-            $options,
-        );
+        $options = array_merge(array_map('strtolower', $options), array_map('strtoupper', $options), $options);
         $in = '';
-        while ($in === '' || !in_array($in, $options, true)) {
+        while ($in === '' || !in_array($in, $options, \true)) {
             $in = $this->_getInput($prompt, $printOptions, $default);
         }
-
         return $in;
     }
-
     /**
      * Prompts the user for input, and returns it.
      *
@@ -510,29 +451,24 @@ class ConsoleIo
     protected function _getInput(string $prompt, ?string $options, ?string $default): string
     {
         if (!$this->interactive) {
-            return (string)$default;
+            return (string) $default;
         }
-
         $optionsText = '';
         if ($options !== null) {
             $optionsText = " {$options} ";
         }
-
         $defaultText = '';
         if ($default !== null) {
             $defaultText = "[{$default}] ";
         }
         $this->_out->write('<question>' . $prompt . "</question>{$optionsText}\n{$defaultText}> ", 0);
         $result = $this->_in->read();
-
         $result = $result === null ? '' : trim($result);
         if ($default !== null && $result === '') {
             return $default;
         }
-
         return $result;
     }
-
     /**
      * Connects or disconnects the loggers to the console output.
      *
@@ -554,7 +490,7 @@ class ConsoleIo
     {
         Log::drop('stdout');
         Log::drop('stderr');
-        if ($enable === false) {
+        if ($enable === \false) {
             return;
         }
         // If the application has configured a console logger
@@ -565,25 +501,17 @@ class ConsoleIo
                 return;
             }
         }
-
         $outLevels = ['notice', 'info'];
-        if ($enable === static::VERBOSE || $enable === true) {
+        if ($enable === static::VERBOSE || $enable === \true) {
             $outLevels[] = 'debug';
         }
         if ($enable !== static::QUIET) {
-            $stdout = new ConsoleLog([
-                'types' => $outLevels,
-                'stream' => $this->_out,
-            ]);
+            $stdout = new ConsoleLog(['types' => $outLevels, 'stream' => $this->_out]);
             Log::setConfig('stdout', ['engine' => $stdout]);
         }
-        $stderr = new ConsoleLog([
-            'types' => ['emergency', 'alert', 'critical', 'error', 'warning'],
-            'stream' => $this->_err,
-        ]);
+        $stderr = new ConsoleLog(['types' => ['emergency', 'alert', 'critical', 'error', 'warning'], 'stream' => $this->_err]);
         Log::setConfig('stderr', ['engine' => $stderr]);
     }
-
     /**
      * Render a Console Helper
      *
@@ -594,14 +522,12 @@ class ConsoleIo
      * @param array<string, mixed> $config Configuration data for the helper.
      * @return \Cake\Console\Helper The created helper instance.
      */
-    public function helper(string $name, array $config = []): Helper
+    public function helper(string $name, array $config = []): \Cake\Console\Helper
     {
         $name = ucfirst($name);
-
         /** @var \Cake\Console\Helper */
         return $this->_helpers->load($name, $config);
     }
-
     /**
      * Create a file at the given path.
      *
@@ -620,56 +546,47 @@ class ConsoleIo
      * @throws \Cake\Console\Exception\StopException When `q` is given as an answer
      *   to whether a file should be overwritten.
      */
-    public function createFile(string $path, string $contents, bool $forceOverwrite = false): bool
+    public function createFile(string $path, string $contents, bool $forceOverwrite = \false): bool
     {
         $this->out();
         $forceOverwrite = $forceOverwrite || $this->forceOverwrite;
-
-        if (file_exists($path) && $forceOverwrite === false) {
+        if (file_exists($path) && $forceOverwrite === \false) {
             $this->warning("File `{$path}` exists");
             $key = $this->askChoice('Do you want to overwrite?', ['y', 'n', 'a', 'q'], 'n');
             $key = strtolower($key);
-
             if ($key === 'q') {
                 $this->error('Quitting.', 2);
                 throw new StopException('Not creating file. Quitting.');
             }
             if ($key === 'a') {
-                $this->forceOverwrite = true;
+                $this->forceOverwrite = \true;
                 $key = 'y';
             }
             if ($key !== 'y') {
                 $this->out("Skip `{$path}`", 2);
-
-                return false;
+                return \false;
             }
         } else {
             $this->out("Creating file {$path}");
         }
-
         try {
             // Create the directory using the current user permissions.
             $directory = dirname($path);
             if (!file_exists($directory)) {
-                mkdir($directory, 0777 ^ umask(), true);
+                mkdir($directory, 0777 ^ umask(), \true);
             }
-
             $file = new SplFileObject($path, 'w');
         } catch (RuntimeException) {
             $this->error("Could not write to `{$path}`. Permission denied.", 2);
-
-            return false;
+            return \false;
         }
-
         $file->rewind();
         $file->fwrite($contents);
         if (file_exists($path)) {
             $this->out("<success>Wrote</success> `{$path}`");
-
-            return true;
+            return \true;
         }
         $this->error("Could not write to `{$path}`.", 2);
-
-        return false;
+        return \false;
     }
 }

@@ -1,14 +1,13 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\data;
 
 use yii\helpers\ArrayHelper;
-
 /**
  * ArrayDataProvider implements a data provider based on a data array.
  *
@@ -50,7 +49,7 @@ use yii\helpers\ArrayHelper;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class ArrayDataProvider extends BaseDataProvider
+class ArrayDataProvider extends \yii\data\BaseDataProvider
 {
     /**
      * @var string|array|callable|null the column that is used as the key of the data models.
@@ -72,8 +71,6 @@ class ArrayDataProvider extends BaseDataProvider
      * @since 2.0.9
      */
     public $modelClass;
-
-
     /**
      * {@inheritdoc}
      */
@@ -82,34 +79,27 @@ class ArrayDataProvider extends BaseDataProvider
         if (($models = $this->allModels) === null) {
             return [];
         }
-
-        if (($sort = $this->getSort()) !== false) {
+        if (($sort = $this->getSort()) !== \false) {
             $models = $this->sortModels($models, $sort);
         }
-
-        if (($pagination = $this->getPagination()) !== false) {
+        if (($pagination = $this->getPagination()) !== \false) {
             $pagination->totalCount = $this->getTotalCount();
-
             if ($pagination->getPageSize() > 0) {
-                $models = array_slice($models, $pagination->getOffset(), $pagination->getLimit(), true);
+                $models = array_slice($models, $pagination->getOffset(), $pagination->getLimit(), \true);
             }
         }
-
         return $models;
     }
-
     /**
      * {@inheritdoc}
      */
     protected function prepareKeys($models)
     {
         if ($this->key !== null) {
-            return ArrayHelper::getColumn($models, $this->key, false);
+            return ArrayHelper::getColumn($models, $this->key, \false);
         }
-
         return array_keys($models);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -117,7 +107,6 @@ class ArrayDataProvider extends BaseDataProvider
     {
         return is_array($this->allModels) ? count($this->allModels) : 0;
     }
-
     /**
      * Sorts the data models according to the given sort definition.
      * @param array $models the models to be sorted
@@ -130,7 +119,6 @@ class ArrayDataProvider extends BaseDataProvider
         if (!empty($orders)) {
             ArrayHelper::multisort($models, array_keys($orders), array_values($orders), $sort->sortFlags);
         }
-
         return $models;
     }
 }

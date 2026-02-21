@@ -2,9 +2,8 @@
 
 namespace Illuminate\Testing\Constraints;
 
-use PHPUnit\Framework\Constraint\Constraint;
+use Odigos\PHPUnit\Framework\Constraint\Constraint;
 use ReflectionClass;
-
 class SeeInOrder extends Constraint
 {
     /**
@@ -13,14 +12,12 @@ class SeeInOrder extends Constraint
      * @var string
      */
     protected $content;
-
     /**
      * The last value that failed to pass validation.
      *
      * @var string
      */
     protected $failedValue;
-
     /**
      * Create a new constraint instance.
      *
@@ -31,7 +28,6 @@ class SeeInOrder extends Constraint
     {
         $this->content = $content;
     }
-
     /**
      * Determine if the rule passes validation.
      *
@@ -41,26 +37,19 @@ class SeeInOrder extends Constraint
     public function matches($values): bool
     {
         $position = 0;
-
         foreach ($values as $value) {
             if (empty($value)) {
                 continue;
             }
-
             $valuePosition = mb_strpos($this->content, $value, $position);
-
-            if ($valuePosition === false || $valuePosition < $position) {
+            if ($valuePosition === \false || $valuePosition < $position) {
                 $this->failedValue = $value;
-
-                return false;
+                return \false;
             }
-
             $position = $valuePosition + mb_strlen($value);
         }
-
-        return true;
+        return \true;
     }
-
     /**
      * Get the description of the failure.
      *
@@ -69,13 +58,8 @@ class SeeInOrder extends Constraint
      */
     public function failureDescription($values): string
     {
-        return sprintf(
-            'Failed asserting that \'%s\' contains "%s" in specified order.',
-            $this->content,
-            $this->failedValue
-        );
+        return sprintf('Failed asserting that \'%s\' contains "%s" in specified order.', $this->content, $this->failedValue);
     }
-
     /**
      * Get a string representation of the object.
      *

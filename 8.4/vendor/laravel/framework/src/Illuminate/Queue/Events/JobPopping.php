@@ -10,9 +10,7 @@ class JobPopping
      * @param  string  $connectionName  The connection name.
      * @param  string|null  $queue  The queue name.
      */
-    public function __construct(
-        public $connectionName,
-        public $queue = null
-    ) {
+    public function __construct(public $connectionName, public $queue = null)
+    {
     }
 }

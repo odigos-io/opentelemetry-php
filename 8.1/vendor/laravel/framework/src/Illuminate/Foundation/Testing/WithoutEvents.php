@@ -3,7 +3,6 @@
 namespace Illuminate\Foundation\Testing;
 
 use Exception;
-
 trait WithoutEvents
 {
     /**

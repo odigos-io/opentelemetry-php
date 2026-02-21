@@ -1,11 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\API\Trace;
 
 use OpenTelemetry\Context\ContextInterface;
-
 /**
  * Obtained from a {@see TracerInterface} and used to construct a {@see SpanInterface}.
  */
@@ -20,25 +18,21 @@ interface SpanBuilderInterface
      *
      * @see https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/trace/api.md#span-creation
      */
-    public function setParent(ContextInterface|false|null $context): SpanBuilderInterface;
-
-    public function addLink(SpanContextInterface $context, iterable $attributes = []): SpanBuilderInterface;
-    public function setAttribute(string $key, mixed $value): SpanBuilderInterface;
-    public function setAttributes(iterable $attributes): SpanBuilderInterface;
-
+    public function setParent(ContextInterface|false|null $context): \OpenTelemetry\API\Trace\SpanBuilderInterface;
+    public function addLink(\OpenTelemetry\API\Trace\SpanContextInterface $context, iterable $attributes = []): \OpenTelemetry\API\Trace\SpanBuilderInterface;
+    public function setAttribute(string $key, mixed $value): \OpenTelemetry\API\Trace\SpanBuilderInterface;
+    public function setAttributes(iterable $attributes): \OpenTelemetry\API\Trace\SpanBuilderInterface;
     /**
      * Sets an explicit start timestamp for the newly created {@see SpanInterface}.
      * The provided *$timestamp* is assumed to be in nanoseconds.
      *
      * Defaults to the timestamp when {@see SpanBuilderInterface::startSpan} was called if not explicitly set.
      */
-    public function setStartTimestamp(int $timestampNanos): SpanBuilderInterface;
-
+    public function setStartTimestamp(int $timestampNanos): \OpenTelemetry\API\Trace\SpanBuilderInterface;
     /**
      * @psalm-param SpanKind::KIND_* $spanKind
      */
-    public function setSpanKind(int $spanKind): SpanBuilderInterface;
-
+    public function setSpanKind(int $spanKind): \OpenTelemetry\API\Trace\SpanBuilderInterface;
     /**
      * Starts and returns a new {@see SpanInterface}.
      *
@@ -47,5 +41,5 @@ interface SpanBuilderInterface
      * This method does _NOT_ automatically install the span into the current context.
      * The user is responsible for calling {@see SpanInterface::activate} when they wish to do so.
      */
-    public function startSpan(): SpanInterface;
+    public function startSpan(): \OpenTelemetry\API\Trace\SpanInterface;
 }

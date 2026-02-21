@@ -1,5 +1,6 @@
-<?php declare(strict_types=1);
+<?php
 
+declare (strict_types=1);
 /*
  * This file is part of the Monolog package.
  *
@@ -8,11 +9,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Odigos\Monolog\Processor;
 
-namespace Monolog\Processor;
-
-use Monolog\LogRecord;
-
+use Odigos\Monolog\LogRecord;
 /**
  * Adds a tags array into record
  *
@@ -22,7 +21,6 @@ class TagProcessor implements ProcessorInterface
 {
     /** @var string[] */
     private array $tags;
-
     /**
      * @param string[] $tags
      */
@@ -30,7 +28,6 @@ class TagProcessor implements ProcessorInterface
     {
         $this->setTags($tags);
     }
-
     /**
      * @param  string[] $tags
      * @return $this
@@ -38,10 +35,8 @@ class TagProcessor implements ProcessorInterface
     public function addTags(array $tags = []): self
     {
         $this->tags = array_merge($this->tags, $tags);
-
         return $this;
     }
-
     /**
      * @param  string[] $tags
      * @return $this
@@ -49,17 +44,14 @@ class TagProcessor implements ProcessorInterface
     public function setTags(array $tags = []): self
     {
         $this->tags = $tags;
-
         return $this;
     }
-
     /**
      * @inheritDoc
      */
     public function __invoke(LogRecord $record): LogRecord
     {
         $record->extra['tags'] = $this->tags;
-
         return $record;
     }
 }

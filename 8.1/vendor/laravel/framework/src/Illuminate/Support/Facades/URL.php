@@ -49,7 +49,7 @@ namespace Illuminate\Support\Facades;
  *
  * @see \Illuminate\Routing\UrlGenerator
  */
-class URL extends Facade
+class URL extends \Illuminate\Support\Facades\Facade
 {
     /**
      * Get the registered name of the component.

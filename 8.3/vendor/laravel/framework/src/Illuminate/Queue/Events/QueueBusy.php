@@ -11,10 +11,7 @@ class QueueBusy
      * @param  string  $queue  The queue name.
      * @param  int  $size  The size of the queue.
      */
-    public function __construct(
-        public $connection,
-        public $queue,
-        public $size,
-    ) {
+    public function __construct(public $connection, public $queue, public $size)
+    {
     }
 }

@@ -8,13 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\Mime;
 
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  */
-interface MimeTypesInterface extends MimeTypeGuesserInterface
+interface MimeTypesInterface extends \Symfony\Component\Mime\MimeTypeGuesserInterface
 {
     /**
      * Gets the extensions for the given MIME type in decreasing order of preference.
@@ -22,7 +21,6 @@ interface MimeTypesInterface extends MimeTypeGuesserInterface
      * @return string[]
      */
     public function getExtensions(string $mimeType): array;
-
     /**
      * Gets the MIME types for the given extension in decreasing order of preference.
      *

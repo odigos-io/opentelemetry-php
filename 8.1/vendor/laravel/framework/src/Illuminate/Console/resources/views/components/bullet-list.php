@@ -1,7 +1,16 @@
 <div>
-    <?php foreach ($elements as $element) { ?>
+    <?php 
+namespace Odigos;
+
+foreach ($elements as $element) {
+    ?>
         <div class="text-gray mx-2">
-            ⇂ <?php echo htmlspecialchars($element) ?>
+            ⇂ <?php 
+    echo \htmlspecialchars($element);
+    ?>
         </div>
-    <?php } ?>
+    <?php 
+}
+?>
 </div>
+<?php 

@@ -1,13 +1,11 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Odigos\Dotenv\Repository;
 
-namespace Dotenv\Repository;
-
-use Dotenv\Repository\Adapter\ReaderInterface;
-use Dotenv\Repository\Adapter\WriterInterface;
+use Odigos\Dotenv\Repository\Adapter\ReaderInterface;
+use Odigos\Dotenv\Repository\Adapter\WriterInterface;
 use InvalidArgumentException;
-
 final class AdapterRepository implements RepositoryInterface
 {
     /**
@@ -16,14 +14,12 @@ final class AdapterRepository implements RepositoryInterface
      * @var \Dotenv\Repository\Adapter\ReaderInterface
      */
     private $reader;
-
     /**
      * The writer to use.
      *
      * @var \Dotenv\Repository\Adapter\WriterInterface
      */
     private $writer;
-
     /**
      * Create a new adapter repository instance.
      *
@@ -37,7 +33,6 @@ final class AdapterRepository implements RepositoryInterface
         $this->reader = $reader;
         $this->writer = $writer;
     }
-
     /**
      * Determine if the given environment variable is defined.
      *
@@ -49,7 +44,6 @@ final class AdapterRepository implements RepositoryInterface
     {
         return '' !== $name && $this->reader->read($name)->isDefined();
     }
-
     /**
      * Get an environment variable.
      *
@@ -64,10 +58,8 @@ final class AdapterRepository implements RepositoryInterface
         if ('' === $name) {
             throw new InvalidArgumentException('Expected name to be a non-empty string.');
         }
-
         return $this->reader->read($name)->getOrElse(null);
     }
-
     /**
      * Set an environment variable.
      *
@@ -83,10 +75,8 @@ final class AdapterRepository implements RepositoryInterface
         if ('' === $name) {
             throw new InvalidArgumentException('Expected name to be a non-empty string.');
         }
-
         return $this->writer->write($name, $value);
     }
-
     /**
      * Clear an environment variable.
      *
@@ -101,7 +91,6 @@ final class AdapterRepository implements RepositoryInterface
         if ('' === $name) {
             throw new InvalidArgumentException('Expected name to be a non-empty string.');
         }
-
         return $this->writer->delete($name);
     }
 }

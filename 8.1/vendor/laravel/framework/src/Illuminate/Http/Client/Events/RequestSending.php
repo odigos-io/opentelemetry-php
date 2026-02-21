@@ -3,7 +3,6 @@
 namespace Illuminate\Http\Client\Events;
 
 use Illuminate\Http\Client\Request;
-
 class RequestSending
 {
     /**
@@ -12,7 +11,6 @@ class RequestSending
      * @var \Illuminate\Http\Client\Request
      */
     public $request;
-
     /**
      * Create a new event instance.
      *

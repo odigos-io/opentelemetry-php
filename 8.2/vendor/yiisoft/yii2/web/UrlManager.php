@@ -1,19 +1,18 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\web;
 
-use Yii;
+use Odigos\Yii;
 use yii\base\Component;
 use yii\base\InvalidConfigException;
 use yii\caching\CacheInterface;
 use yii\di\Instance;
 use yii\helpers\Url;
-
 /**
  * UrlManager handles HTTP request parsing and creation of URLs based on a set of rules.
  *
@@ -55,14 +54,14 @@ class UrlManager extends Component
      * and can thus produce more user-friendly URLs, such as "/news/Yii-is-released", instead of
      * "/index.php?r=news%2Fview&id=100".
      */
-    public $enablePrettyUrl = false;
+    public $enablePrettyUrl = \false;
     /**
      * @var bool whether to enable strict parsing. If strict parsing is enabled, the incoming
      * requested URL must match at least one of the [[rules]] in order to be treated as a valid request.
      * Otherwise, the path info part of the request will be treated as the requested route.
      * This property is used only when [[enablePrettyUrl]] is `true`.
      */
-    public $enableStrictParsing = false;
+    public $enableStrictParsing = \false;
     /**
      * @var array the rules for creating and parsing URLs when [[enablePrettyUrl]] is `true`.
      * This property is used only if [[enablePrettyUrl]] is `true`. Each element in the array
@@ -113,7 +112,7 @@ class UrlManager extends Component
      * @var bool whether to show entry script name in the constructed URL. Defaults to `true`.
      * This property is used only if [[enablePrettyUrl]] is `true`.
      */
-    public $showScriptName = true;
+    public $showScriptName = \true;
     /**
      * @var string the GET parameter name for route. This property is used only if [[enablePrettyUrl]] is `false`.
      */
@@ -154,43 +153,35 @@ class UrlManager extends Component
      *
      * @since 2.0.10
      */
-    public $normalizer = false;
-
+    public $normalizer = \false;
     /**
      * @var string the cache key for cached rules
      * @since 2.0.8
      */
     protected $cacheKey = __CLASS__;
-
     private $_baseUrl;
     private $_scriptUrl;
     private $_hostInfo;
     private $_ruleCache;
-
-
     /**
      * Initializes UrlManager.
      */
     public function init()
     {
         parent::init();
-
-        if ($this->normalizer !== false) {
+        if ($this->normalizer !== \false) {
             $this->normalizer = Yii::createObject($this->normalizer);
-            if (!$this->normalizer instanceof UrlNormalizer) {
-                throw new InvalidConfigException('`' . get_class($this) . '::normalizer` should be an instance of `' . UrlNormalizer::className() . '` or its DI compatible configuration.');
+            if (!$this->normalizer instanceof \yii\web\UrlNormalizer) {
+                throw new InvalidConfigException('`' . get_class($this) . '::normalizer` should be an instance of `' . \yii\web\UrlNormalizer::className() . '` or its DI compatible configuration.');
             }
         }
-
         if (!$this->enablePrettyUrl) {
             return;
         }
-
         if (!empty($this->rules)) {
             $this->rules = $this->buildRules($this->rules);
         }
     }
-
     /**
      * Adds additional URL rules.
      *
@@ -203,7 +194,7 @@ class UrlManager extends Component
      * Please refer to [[rules]] for the acceptable rule format.
      * @param bool $append whether to add the new rules by appending them to the end of the existing rules.
      */
-    public function addRules($rules, $append = true)
+    public function addRules($rules, $append = \true)
     {
         if (!$this->enablePrettyUrl) {
             return;
@@ -215,7 +206,6 @@ class UrlManager extends Component
             $this->rules = array_merge($rules, $this->rules);
         }
     }
-
     /**
      * Builds URL rule objects from the given rule declarations.
      *
@@ -227,16 +217,15 @@ class UrlManager extends Component
     protected function buildRules($ruleDeclarations)
     {
         $builtRules = $this->getBuiltRulesFromCache($ruleDeclarations);
-        if ($builtRules !== false) {
+        if ($builtRules !== \false) {
             return $builtRules;
         }
-
         $builtRules = [];
         $verbs = 'GET|HEAD|POST|PUT|PATCH|DELETE|OPTIONS';
         foreach ($ruleDeclarations as $key => $rule) {
             if (is_string($rule)) {
                 $rule = ['route' => $rule];
-                if (preg_match("/^((?:($verbs),)*($verbs))\\s+(.*)$/", $key, $matches)) {
+                if (preg_match("/^((?:({$verbs}),)*({$verbs}))\\s+(.*)\$/", $key, $matches)) {
                     $rule['verb'] = explode(',', $matches[1]);
                     $key = $matches[4];
                 }
@@ -245,23 +234,20 @@ class UrlManager extends Component
             if (is_array($rule)) {
                 $rule = Yii::createObject(array_merge($this->ruleConfig, $rule));
             }
-            if (!$rule instanceof UrlRuleInterface) {
+            if (!$rule instanceof \yii\web\UrlRuleInterface) {
                 throw new InvalidConfigException('URL rule class must implement UrlRuleInterface.');
             }
             $builtRules[] = $rule;
         }
-
         $this->setBuiltRulesCache($ruleDeclarations, $builtRules);
-
         return $builtRules;
     }
-
     /**
      * @return CacheInterface|null|bool
      */
     private function ensureCache()
     {
-        if (!$this->cache instanceof CacheInterface && $this->cache !== false && $this->cache !== null) {
+        if (!$this->cache instanceof CacheInterface && $this->cache !== \false && $this->cache !== null) {
             try {
                 $this->cache = Instance::ensure($this->cache, 'yii\caching\CacheInterface');
             } catch (InvalidConfigException $e) {
@@ -269,10 +255,8 @@ class UrlManager extends Component
                 $this->cache = null;
             }
         }
-
         return $this->cache;
     }
-
     /**
      * Stores $builtRules to cache, using $rulesDeclaration as a part of cache key.
      *
@@ -286,12 +270,10 @@ class UrlManager extends Component
     {
         $cache = $this->ensureCache();
         if (!$cache) {
-            return false;
+            return \false;
         }
-
         return $cache->set([$this->cacheKey, $this->ruleConfig, $ruleDeclarations], $builtRules);
     }
-
     /**
      * Provides the built URL rules that are associated with the $ruleDeclarations from cache.
      *
@@ -305,12 +287,10 @@ class UrlManager extends Component
     {
         $cache = $this->ensureCache();
         if (!$cache) {
-            return false;
+            return \false;
         }
-
         return $cache->get([$this->cacheKey, $this->ruleConfig, $ruleDeclarations]);
     }
-
     /**
      * Parses the user request.
      * @param Request $request the request component
@@ -324,27 +304,20 @@ class UrlManager extends Component
             foreach ($this->rules as $rule) {
                 $result = $rule->parseRequest($this, $request);
                 if (YII_DEBUG) {
-                    Yii::debug([
-                        'rule' => method_exists($rule, '__toString') ? $rule->__toString() : get_class($rule),
-                        'match' => $result !== false,
-                        'parent' => null,
-                    ], __METHOD__);
+                    Yii::debug(['rule' => method_exists($rule, '__toString') ? $rule->__toString() : get_class($rule), 'match' => $result !== \false, 'parent' => null], __METHOD__);
                 }
-                if ($result !== false) {
+                if ($result !== \false) {
                     return $result;
                 }
             }
-
             if ($this->enableStrictParsing) {
-                return false;
+                return \false;
             }
-
             Yii::debug('No matching URL rules. Using default URL parsing logic.', __METHOD__);
-
             $suffix = (string) $this->suffix;
             $pathInfo = $request->getPathInfo();
-            $normalized = false;
-            if ($this->normalizer !== false) {
+            $normalized = \false;
+            if ($this->normalizer !== \false) {
                 $pathInfo = $this->normalizer->normalizePathInfo($pathInfo, $suffix, $normalized);
             }
             if ($suffix !== '' && $pathInfo !== '') {
@@ -353,31 +326,26 @@ class UrlManager extends Component
                     $pathInfo = substr($pathInfo, 0, -$n);
                     if ($pathInfo === '') {
                         // suffix alone is not allowed
-                        return false;
+                        return \false;
                     }
                 } else {
                     // suffix doesn't match
-                    return false;
+                    return \false;
                 }
             }
-
             if ($normalized) {
                 // pathInfo was changed by normalizer - we need also normalize route
                 return $this->normalizer->normalizeRoute([$pathInfo, []]);
             }
-
             return [$pathInfo, []];
         }
-
         Yii::debug('Pretty URL not enabled. Using default URL parsing logic.', __METHOD__);
         $route = $request->getQueryParam($this->routeParam, '');
         if (is_array($route)) {
             $route = '';
         }
-
         return [(string) $route, []];
     }
-
     /**
      * Creates a URL using the given route and query parameters.
      *
@@ -412,12 +380,9 @@ class UrlManager extends Component
         $params = (array) $params;
         $anchor = isset($params['#']) ? '#' . $params['#'] : '';
         unset($params['#'], $params[$this->routeParam]);
-
         $route = trim(isset($params[0]) ? $params[0] : '', '/');
         unset($params[0]);
-
         $baseUrl = $this->showScriptName || !$this->enablePrettyUrl ? $this->getScriptUrl() : $this->getBaseUrl();
-
         if ($this->enablePrettyUrl) {
             $cacheKey = $route . '?';
             foreach ($params as $key => $value) {
@@ -425,12 +390,11 @@ class UrlManager extends Component
                     $cacheKey .= $key . '&';
                 }
             }
-
             $url = $this->getUrlFromCache($cacheKey, $route, $params);
-            if ($url === false) {
+            if ($url === \false) {
                 /** @var UrlRule $rule */
                 foreach ($this->rules as $rule) {
-                    if (in_array($rule, $this->_ruleCache[$cacheKey], true)) {
+                    if (in_array($rule, $this->_ruleCache[$cacheKey], \true)) {
                         // avoid redundant calls of `UrlRule::createUrl()` for rules checked in `getUrlFromCache()`
                         // @see https://github.com/yiisoft/yii2/issues/14094
                         continue;
@@ -439,50 +403,41 @@ class UrlManager extends Component
                     if ($this->canBeCached($rule)) {
                         $this->setRuleToCache($cacheKey, $rule);
                     }
-                    if ($url !== false) {
+                    if ($url !== \false) {
                         break;
                     }
                 }
             }
-
-            if ($url !== false) {
-                if (strpos($url, '://') !== false) {
-                    if ($baseUrl !== '' && ($pos = strpos($url, '/', 8)) !== false) {
+            if ($url !== \false) {
+                if (strpos($url, '://') !== \false) {
+                    if ($baseUrl !== '' && ($pos = strpos($url, '/', 8)) !== \false) {
                         return substr($url, 0, $pos) . $baseUrl . substr($url, $pos) . $anchor;
                     }
-
                     return $url . $baseUrl . $anchor;
                 } elseif (strncmp($url, '//', 2) === 0) {
-                    if ($baseUrl !== '' && ($pos = strpos($url, '/', 2)) !== false) {
+                    if ($baseUrl !== '' && ($pos = strpos($url, '/', 2)) !== \false) {
                         return substr($url, 0, $pos) . $baseUrl . substr($url, $pos) . $anchor;
                     }
-
                     return $url . $baseUrl . $anchor;
                 }
-
                 $url = ltrim($url, '/');
-                return "$baseUrl/{$url}{$anchor}";
+                return "{$baseUrl}/{$url}{$anchor}";
             }
-
             if ($this->suffix !== null) {
                 $route .= $this->suffix;
             }
             if (!empty($params) && ($query = http_build_query($params)) !== '') {
                 $route .= '?' . $query;
             }
-
             $route = ltrim($route, '/');
-            return "$baseUrl/{$route}{$anchor}";
+            return "{$baseUrl}/{$route}{$anchor}";
         }
-
-        $url = "$baseUrl?{$this->routeParam}=" . urlencode($route);
+        $url = "{$baseUrl}?{$this->routeParam}=" . urlencode($route);
         if (!empty($params) && ($query = http_build_query($params)) !== '') {
             $url .= '&' . $query;
         }
-
         return $url . $anchor;
     }
-
     /**
      * Returns the value indicating whether result of [[createUrl()]] of rule should be cached in internal cache.
      *
@@ -493,16 +448,10 @@ class UrlManager extends Component
      * @see setRuleToCache()
      * @see UrlRule::getCreateUrlStatus()
      */
-    protected function canBeCached(UrlRuleInterface $rule)
+    protected function canBeCached(\yii\web\UrlRuleInterface $rule)
     {
-        return
-            // if rule does not provide info about create status, we cache it every time to prevent bugs like #13350
-            // @see https://github.com/yiisoft/yii2/pull/13350#discussion_r114873476
-            !method_exists($rule, 'getCreateUrlStatus') || ($status = $rule->getCreateUrlStatus()) === null
-            || $status === UrlRule::CREATE_STATUS_SUCCESS
-            || $status & UrlRule::CREATE_STATUS_PARAMS_MISMATCH;
+        return !method_exists($rule, 'getCreateUrlStatus') || ($status = $rule->getCreateUrlStatus()) === null || $status === \yii\web\UrlRule::CREATE_STATUS_SUCCESS || $status & \yii\web\UrlRule::CREATE_STATUS_PARAMS_MISMATCH;
     }
-
     /**
      * Get URL from internal cache if exists.
      * @param string $cacheKey generated cache key to store data.
@@ -517,28 +466,25 @@ class UrlManager extends Component
         if (!empty($this->_ruleCache[$cacheKey])) {
             foreach ($this->_ruleCache[$cacheKey] as $rule) {
                 /** @var UrlRule $rule */
-                if (($url = $rule->createUrl($this, $route, $params)) !== false) {
+                if (($url = $rule->createUrl($this, $route, $params)) !== \false) {
                     return $url;
                 }
             }
         } else {
             $this->_ruleCache[$cacheKey] = [];
         }
-
-        return false;
+        return \false;
     }
-
     /**
      * Store rule (e.g. [[UrlRule]]) to internal cache.
      * @param $cacheKey
      * @param UrlRuleInterface $rule
      * @since 2.0.8
      */
-    protected function setRuleToCache($cacheKey, UrlRuleInterface $rule)
+    protected function setRuleToCache($cacheKey, \yii\web\UrlRuleInterface $rule)
     {
         $this->_ruleCache[$cacheKey][] = $rule;
     }
-
     /**
      * Creates an absolute URL using the given route and query parameters.
      *
@@ -559,7 +505,7 @@ class UrlManager extends Component
     {
         $params = (array) $params;
         $url = $this->createUrl($params);
-        if (strpos($url, '://') === false) {
+        if (strpos($url, '://') === \false) {
             $hostInfo = $this->getHostInfo();
             if (strncmp($url, '//', 2) === 0) {
                 $url = substr($hostInfo, 0, strpos($hostInfo, '://')) . ':' . $url;
@@ -567,10 +513,8 @@ class UrlManager extends Component
                 $url = $hostInfo . $url;
             }
         }
-
         return Url::ensureScheme($url, $scheme);
     }
-
     /**
      * Returns the base URL that is used by [[createUrl()]] to prepend to created URLs.
      * It defaults to [[Request::baseUrl]].
@@ -582,16 +526,14 @@ class UrlManager extends Component
     {
         if ($this->_baseUrl === null) {
             $request = Yii::$app->getRequest();
-            if ($request instanceof Request) {
+            if ($request instanceof \yii\web\Request) {
                 $this->_baseUrl = $request->getBaseUrl();
             } else {
                 throw new InvalidConfigException('Please configure UrlManager::baseUrl correctly as you are running a console application.');
             }
         }
-
         return $this->_baseUrl;
     }
-
     /**
      * Sets the base URL that is used by [[createUrl()]] to prepend to created URLs.
      * This is mainly used when [[enablePrettyUrl]] is `true` and [[showScriptName]] is `false`.
@@ -601,7 +543,6 @@ class UrlManager extends Component
     {
         $this->_baseUrl = $value === null ? null : rtrim(Yii::getAlias($value), '/');
     }
-
     /**
      * Returns the entry script URL that is used by [[createUrl()]] to prepend to created URLs.
      * It defaults to [[Request::scriptUrl]].
@@ -613,16 +554,14 @@ class UrlManager extends Component
     {
         if ($this->_scriptUrl === null) {
             $request = Yii::$app->getRequest();
-            if ($request instanceof Request) {
+            if ($request instanceof \yii\web\Request) {
                 $this->_scriptUrl = $request->getScriptUrl();
             } else {
                 throw new InvalidConfigException('Please configure UrlManager::scriptUrl correctly as you are running a console application.');
             }
         }
-
         return $this->_scriptUrl;
     }
-
     /**
      * Sets the entry script URL that is used by [[createUrl()]] to prepend to created URLs.
      * This is mainly used when [[enablePrettyUrl]] is `false` or [[showScriptName]] is `true`.
@@ -632,7 +571,6 @@ class UrlManager extends Component
     {
         $this->_scriptUrl = $value;
     }
-
     /**
      * Returns the host info that is used by [[createAbsoluteUrl()]] to prepend to created URLs.
      * @return string the host info (e.g. `https://www.example.com`) that is used by [[createAbsoluteUrl()]] to prepend to created URLs.
@@ -648,10 +586,8 @@ class UrlManager extends Component
                 throw new InvalidConfigException('Please configure UrlManager::hostInfo correctly as you are running a console application.');
             }
         }
-
         return $this->_hostInfo;
     }
-
     /**
      * Sets the host info that is used by [[createAbsoluteUrl()]] to prepend to created URLs.
      * @param string $value the host info (e.g. "https://www.example.com") that is used by [[createAbsoluteUrl()]] to prepend to created URLs.

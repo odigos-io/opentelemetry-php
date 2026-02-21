@@ -4,7 +4,6 @@ namespace Illuminate\Queue\Console;
 
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Attribute\AsCommand;
-
 #[AsCommand(name: 'queue:forget')]
 class ForgetFailedCommand extends Command
 {
@@ -14,14 +13,12 @@ class ForgetFailedCommand extends Command
      * @var string
      */
     protected $signature = 'queue:forget {id : The ID of the failed job}';
-
     /**
      * The console command description.
      *
      * @var string
      */
     protected $description = 'Delete a failed queue job';
-
     /**
      * Execute the console command.
      *
@@ -33,7 +30,6 @@ class ForgetFailedCommand extends Command
             $this->components->info('Failed job deleted successfully.');
         } else {
             $this->components->error('No failed job matches the given ID.');
-
             return 1;
         }
     }

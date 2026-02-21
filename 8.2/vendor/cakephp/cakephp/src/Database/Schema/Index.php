@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -19,7 +19,6 @@ declare(strict_types=1);
 namespace Cake\Database\Schema;
 
 use RuntimeException;
-
 /**
  * Index value object
  *
@@ -32,12 +31,10 @@ class Index
      * @var string
      */
     public const INDEX = 'index';
-
     /**
      * @var string
      */
     public const FULLTEXT = 'fulltext';
-
     /**
      * Constructor
      *
@@ -49,17 +46,9 @@ class Index
      * @param array<string>|null $include The included columns for covering indexes.
      * @param ?string $where The where clause for partial indexes.
      */
-    public function __construct(
-        protected string $name,
-        protected array $columns,
-        protected string $type = self::INDEX,
-        protected array|int|null $length = null,
-        protected ?array $order = null,
-        protected ?array $include = null,
-        protected ?string $where = null,
-    ) {
+    public function __construct(protected string $name, protected array $columns, protected string $type = self::INDEX, protected array|int|null $length = null, protected ?array $order = null, protected ?array $include = null, protected ?string $where = null)
+    {
     }
-
     /**
      * Sets the index columns.
      *
@@ -68,11 +57,9 @@ class Index
      */
     public function setColumns(string|array $columns)
     {
-        $this->columns = (array)$columns;
-
+        $this->columns = (array) $columns;
         return $this;
     }
-
     /**
      * Gets the index columns.
      *
@@ -82,7 +69,6 @@ class Index
     {
         return $this->columns;
     }
-
     /**
      * Sets the index type.
      *
@@ -92,10 +78,8 @@ class Index
     public function setType(string $type)
     {
         $this->type = $type;
-
         return $this;
     }
-
     /**
      * Gets the index type.
      *
@@ -105,7 +89,6 @@ class Index
     {
         return $this->type;
     }
-
     /**
      * Sets the index name.
      *
@@ -115,10 +98,8 @@ class Index
     public function setName(string $name)
     {
         $this->name = $name;
-
         return $this;
     }
-
     /**
      * Gets the index name.
      *
@@ -128,7 +109,6 @@ class Index
     {
         return $this->name;
     }
-
     /**
      * Sets the index length.
      *
@@ -141,10 +121,8 @@ class Index
     public function setLength(int|array $length)
     {
         $this->length = $length;
-
         return $this;
     }
-
     /**
      * Gets the index length.
      *
@@ -156,7 +134,6 @@ class Index
     {
         return $this->length;
     }
-
     /**
      * Sets the index columns sort order.
      *
@@ -166,10 +143,8 @@ class Index
     public function setOrder(array $order)
     {
         $this->order = $order;
-
         return $this;
     }
-
     /**
      * Gets the index columns sort order.
      *
@@ -179,7 +154,6 @@ class Index
     {
         return $this->order;
     }
-
     /**
      * Sets the index included columns for a 'covering index'.
      *
@@ -194,10 +168,8 @@ class Index
     public function setInclude(array $includedColumns)
     {
         $this->include = $includedColumns;
-
         return $this;
     }
-
     /**
      * Gets the index included columns.
      *
@@ -207,7 +179,6 @@ class Index
     {
         return $this->include;
     }
-
     /**
      * Set the where clause for partial indexes.
      *
@@ -217,10 +188,8 @@ class Index
     public function setWhere(?string $where)
     {
         $this->where = $where;
-
         return $this;
     }
-
     /**
      * Get the where clause for partial indexes.
      *
@@ -230,7 +199,6 @@ class Index
     {
         return $this->where;
     }
-
     /**
      * Utility method that maps an array of index options to this object's methods.
      *
@@ -243,16 +211,14 @@ class Index
         // Valid Options
         $validOptions = ['columns', 'type', 'name', 'length', 'order', 'include', 'where'];
         foreach ($attributes as $attr => $value) {
-            if (!in_array($attr, $validOptions, true)) {
+            if (!in_array($attr, $validOptions, \true)) {
                 throw new RuntimeException(sprintf('"%s" is not a valid index option.', $attr));
             }
             $method = 'set' . ucfirst($attr);
-            $this->$method($value);
+            $this->{$method}($value);
         }
-
         return $this;
     }
-
     /**
      * Convert an index into an array that is compatible with the Index constructor.
      *
@@ -260,14 +226,6 @@ class Index
      */
     public function toArray(): array
     {
-        return [
-            'name' => $this->getName(),
-            'columns' => $this->getColumns(),
-            'type' => $this->getType(),
-            'length' => $this->getLength(),
-            'order' => $this->getOrder(),
-            'include' => $this->getInclude(),
-            'where' => $this->getWhere(),
-        ];
+        return ['name' => $this->getName(), 'columns' => $this->getColumns(), 'type' => $this->getType(), 'length' => $this->getLength(), 'order' => $this->getOrder(), 'include' => $this->getInclude(), 'where' => $this->getWhere()];
     }
 }

@@ -9,13 +9,10 @@
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
  */
-
-declare(strict_types=1);
-
-namespace Ramsey\Collection\Exception;
+declare (strict_types=1);
+namespace Odigos\Ramsey\Collection\Exception;
 
 use InvalidArgumentException as PhpInvalidArgumentException;
-
 /**
  * Thrown to indicate an argument is not of the expected type.
  */

@@ -1,10 +1,10 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\base;
 
 /**
@@ -17,7 +17,7 @@ namespace yii\base;
  *
  * @template T of Action
  */
-class ActionEvent extends Event
+class ActionEvent extends \yii\base\Event
 {
     /**
      * @var Action the action currently being executed
@@ -35,9 +35,7 @@ class ActionEvent extends Event
      * [[Controller::EVENT_BEFORE_ACTION]] may set this property to decide whether
      * to continue running the current action.
      */
-    public $isValid = true;
-
-
+    public $isValid = \true;
     /**
      * Constructor.
      * @param Action $action the action associated with this action event.

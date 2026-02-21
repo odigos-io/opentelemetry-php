@@ -4,8 +4,7 @@ namespace Illuminate\Queue\Connectors;
 
 use Illuminate\Contracts\Redis\Factory as Redis;
 use Illuminate\Queue\RedisQueue;
-
-class RedisConnector implements ConnectorInterface
+class RedisConnector implements \Illuminate\Queue\Connectors\ConnectorInterface
 {
     /**
      * The Redis database instance.
@@ -13,14 +12,12 @@ class RedisConnector implements ConnectorInterface
      * @var \Illuminate\Contracts\Redis\Factory
      */
     protected $redis;
-
     /**
      * The connection name.
      *
      * @var string
      */
     protected $connection;
-
     /**
      * Create a new Redis queue connector instance.
      *
@@ -33,7 +30,6 @@ class RedisConnector implements ConnectorInterface
         $this->redis = $redis;
         $this->connection = $connection;
     }
-
     /**
      * Establish a queue connection.
      *
@@ -42,13 +38,6 @@ class RedisConnector implements ConnectorInterface
      */
     public function connect(array $config)
     {
-        return new RedisQueue(
-            $this->redis, $config['queue'],
-            $config['connection'] ?? $this->connection,
-            $config['retry_after'] ?? 60,
-            $config['block_for'] ?? null,
-            $config['after_commit'] ?? null,
-            $config['migration_batch_size'] ?? -1
-        );
+        return new RedisQueue($this->redis, $config['queue'], $config['connection'] ?? $this->connection, $config['retry_after'] ?? 60, $config['block_for'] ?? null, $config['after_commit'] ?? null, $config['migration_batch_size'] ?? -1);
     }
 }

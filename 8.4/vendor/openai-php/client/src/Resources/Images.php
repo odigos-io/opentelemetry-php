@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenAI\Resources;
 
 use OpenAI\Contracts\Resources\ImagesContract;
@@ -10,11 +9,9 @@ use OpenAI\Responses\Images\EditResponse;
 use OpenAI\Responses\Images\VariationResponse;
 use OpenAI\ValueObjects\Transporter\Payload;
 use OpenAI\ValueObjects\Transporter\Response;
-
 final class Images implements ImagesContract
 {
-    use Concerns\Transportable;
-
+    use \OpenAI\Resources\Concerns\Transportable;
     /**
      * Creates an image given a prompt.
      *
@@ -25,13 +22,10 @@ final class Images implements ImagesContract
     public function create(array $parameters): CreateResponse
     {
         $payload = Payload::create('images/generations', $parameters);
-
         /** @var Response<array{created: int, data: array<int, array{url?: string, b64_json?: string, revised_prompt?: string}>, usage?: array{total_tokens: int, input_tokens: int, output_tokens: int, input_tokens_details: array{text_tokens: int, image_tokens: int}}}> $response */
         $response = $this->transporter->requestObject($payload);
-
         return CreateResponse::from($response->data(), $response->meta());
     }
-
     /**
      * Creates an edited or extended image given an original image and a prompt.
      *
@@ -42,13 +36,10 @@ final class Images implements ImagesContract
     public function edit(array $parameters): EditResponse
     {
         $payload = Payload::upload('images/edits', $parameters);
-
         /** @var Response<array{created: int, data: array<int, array{url?: string, b64_json?: string}>, usage?: array{total_tokens: int, input_tokens: int, output_tokens: int, input_tokens_details: array{text_tokens: int, image_tokens: int}}}> $response */
         $response = $this->transporter->requestObject($payload);
-
         return EditResponse::from($response->data(), $response->meta());
     }
-
     /**
      * Creates a variation of a given image.
      *
@@ -59,10 +50,8 @@ final class Images implements ImagesContract
     public function variation(array $parameters): VariationResponse
     {
         $payload = Payload::upload('images/variations', $parameters);
-
         /** @var Response<array{created: int, data: array<int, array{url?: string, b64_json?: string}>, usage?: array{total_tokens: int, input_tokens: int, output_tokens: int, input_tokens_details: array{text_tokens: int, image_tokens: int}}}> $response */
         $response = $this->transporter->requestObject($payload);
-
         return VariationResponse::from($response->data(), $response->meta());
     }
 }

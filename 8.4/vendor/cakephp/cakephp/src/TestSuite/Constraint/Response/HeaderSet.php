@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -16,19 +16,17 @@ declare(strict_types=1);
 namespace Cake\TestSuite\Constraint\Response;
 
 use Psr\Http\Message\ResponseInterface;
-
 /**
  * HeaderSet
  *
  * @internal
  */
-class HeaderSet extends ResponseBase
+class HeaderSet extends \Cake\TestSuite\Constraint\Response\ResponseBase
 {
     /**
      * @var string
      */
     protected string $headerName;
-
     /**
      * Constructor.
      *
@@ -38,10 +36,8 @@ class HeaderSet extends ResponseBase
     public function __construct(?ResponseInterface $response, string $headerName)
     {
         parent::__construct($response);
-
         $this->headerName = $headerName;
     }
-
     /**
      * Checks assertion
      *
@@ -52,7 +48,6 @@ class HeaderSet extends ResponseBase
     {
         return $this->response->hasHeader($this->headerName);
     }
-
     /**
      * Assertion message
      *
@@ -62,7 +57,6 @@ class HeaderSet extends ResponseBase
     {
         return sprintf("response has header '%s'", $this->headerName);
     }
-
     /**
      * Overwrites the descriptions so we can remove the automatic "expected" message
      *

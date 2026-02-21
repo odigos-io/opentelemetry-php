@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -16,7 +16,7 @@ declare(strict_types=1);
  */
 namespace Cake\Command;
 
-use Brick\VarExporter\VarExporter;
+use Odigos\Brick\VarExporter\VarExporter;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
@@ -24,29 +24,25 @@ use Cake\Core\Exception\MissingPluginException;
 use Cake\Core\Plugin;
 use Cake\Core\PluginInterface;
 use Cake\Utility\Hash;
-
 /**
  * Command for loading plugins.
  */
-class PluginLoadCommand extends Command
+class PluginLoadCommand extends \Cake\Command\Command
 {
     /**
      * @var array<string>
      */
     protected static array $devTags = ['dev', 'testing', 'static analysis'];
-
     /**
      * @var array<string>
      */
     protected static array $cliTags = ['cli', 'command line', 'shell'];
-
     /**
      * Config file
      *
      * @var string
      */
     protected string $configFile = CONFIG . 'plugins.php';
-
     /**
      * @inheritDoc
      */
@@ -54,7 +50,6 @@ class PluginLoadCommand extends Command
     {
         return 'plugin load';
     }
-
     /**
      * @inheritDoc
      */
@@ -62,7 +57,6 @@ class PluginLoadCommand extends Command
     {
         return 'Command for loading plugins.';
     }
-
     /**
      * Execute the command
      *
@@ -72,24 +66,22 @@ class PluginLoadCommand extends Command
      */
     public function execute(Arguments $args, ConsoleIo $io): ?int
     {
-        $plugin = (string)$args->getArgument('plugin');
+        $plugin = (string) $args->getArgument('plugin');
         $options = [];
         if ($args->getOption('only-debug')) {
-            $options['onlyDebug'] = true;
+            $options['onlyDebug'] = \true;
         }
         if ($args->getOption('only-cli')) {
-            $options['onlyCli'] = true;
+            $options['onlyCli'] = \true;
         }
         if ($args->getOption('optional')) {
-            $options['optional'] = true;
+            $options['optional'] = \true;
         }
-
         foreach (PluginInterface::VALID_HOOKS as $hook) {
             if ($args->getOption('no-' . $hook)) {
-                $options[$hook] = false;
+                $options[$hook] = \false;
             }
         }
-
         $path = null;
         try {
             $path = Plugin::getCollection()->findPath($plugin);
@@ -97,17 +89,14 @@ class PluginLoadCommand extends Command
             if (empty($options['optional'])) {
                 $io->error($e->getMessage());
                 $io->error('Ensure you have the correct spelling and casing.');
-
                 return static::CODE_ERROR;
             }
         }
-
         $recommendations = $path ? $this->recommendations($path) : [];
         foreach ($recommendations as $name => $v) {
             if (isset($options[$name]) && $options[$name] === $v) {
                 continue;
             }
-
             $option = $name . ': ' . ($v ? 'true' : 'false');
             $question = 'Based on the plugin composer keywords, this seems to be `' . $option . '`. ';
             $question .= 'Do you want to change this?';
@@ -115,20 +104,15 @@ class PluginLoadCommand extends Command
             if ($in !== 'y') {
                 continue;
             }
-
             $options[$name] = $v;
         }
-
         $result = $this->modifyConfigFile($plugin, $options);
         if ($result === static::CODE_ERROR) {
             $io->error('Failed to update `CONFIG/plugins.php`');
         }
-
         $io->success('Plugin added successfully to `CONFIG/plugins.php`');
-
         return $result;
     }
-
     /**
      * Modify the plugins config file.
      *
@@ -145,23 +129,18 @@ class PluginLoadCommand extends Command
         } else {
             $config = Hash::normalize($config);
         }
-
         $config[$plugin] = $options;
-
         if (class_exists(VarExporter::class)) {
             $array = VarExporter::export($config, VarExporter::TRAILING_COMMA_IN_ARRAY);
         } else {
-            $array = var_export($config, true);
+            $array = var_export($config, \true);
         }
-
         $contents = '<?php' . "\n\n" . 'return ' . $array . ';' . "\n";
         if (file_put_contents($this->configFile, $contents)) {
             return static::CODE_SUCCESS;
         }
-
         return static::CODE_ERROR;
     }
-
     /**
      * @param string $path
      * @return array<string, bool>
@@ -172,33 +151,28 @@ class PluginLoadCommand extends Command
         if (!file_exists($file)) {
             return [];
         }
-
         $content = file_get_contents($file);
-        $array = $content ? json_decode($content, true) : [];
+        $array = $content ? json_decode($content, \true) : [];
         $keywords = $array['keywords'] ?? [];
         if (!$keywords) {
             return [];
         }
-
         $recommendations = [];
         foreach (static::$devTags as $tag) {
-            if (in_array($tag, $keywords, true)) {
-                $recommendations['onlyDebug'] = true;
+            if (in_array($tag, $keywords, \true)) {
+                $recommendations['onlyDebug'] = \true;
             }
         }
         foreach (static::$cliTags as $tag) {
-            if (in_array($tag, $keywords, true)) {
-                $recommendations['onlyCli'] = true;
+            if (in_array($tag, $keywords, \true)) {
+                $recommendations['onlyCli'] = \true;
             }
         }
-
         if (!empty($recommendations['onlyDebug'])) {
-            $recommendations['optional'] = true;
+            $recommendations['optional'] = \true;
         }
-
         return $recommendations;
     }
-
     /**
      * Get the option parser.
      *
@@ -207,43 +181,6 @@ class PluginLoadCommand extends Command
      */
     public function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
     {
-        return $parser
-            ->setDescription(static::getDescription())
-            ->addArgument('plugin', [
-                'help' => 'Name of the plugin to load. Must be in CamelCase format. Example: cake plugin load Example',
-                'required' => true,
-            ])
-            ->addOption('only-debug', [
-                'boolean' => true,
-                'help' => 'Load the plugin only when `debug` is enabled.',
-            ])
-            ->addOption('only-cli', [
-                'boolean' => true,
-                'help' => 'Load the plugin only for CLI.',
-            ])
-            ->addOption('optional', [
-                'boolean' => true,
-                'help' => 'Do not throw an error if the plugin is not available.',
-            ])
-            ->addOption('no-bootstrap', [
-                'boolean' => true,
-                'help' => 'Do not run the `bootstrap()` hook.',
-            ])
-            ->addOption('no-console', [
-                'boolean' => true,
-                'help' => 'Do not run the `console()` hook.',
-            ])
-            ->addOption('no-middleware', [
-                'boolean' => true,
-                'help' => 'Do not run the `middleware()` hook..',
-            ])
-            ->addOption('no-routes', [
-                'boolean' => true,
-                'help' => 'Do not run the `routes()` hook.',
-            ])
-            ->addOption('no-services', [
-                'boolean' => true,
-                'help' => 'Do not run the `services()` hook.',
-            ]);
+        return $parser->setDescription(static::getDescription())->addArgument('plugin', ['help' => 'Name of the plugin to load. Must be in CamelCase format. Example: cake plugin load Example', 'required' => \true])->addOption('only-debug', ['boolean' => \true, 'help' => 'Load the plugin only when `debug` is enabled.'])->addOption('only-cli', ['boolean' => \true, 'help' => 'Load the plugin only for CLI.'])->addOption('optional', ['boolean' => \true, 'help' => 'Do not throw an error if the plugin is not available.'])->addOption('no-bootstrap', ['boolean' => \true, 'help' => 'Do not run the `bootstrap()` hook.'])->addOption('no-console', ['boolean' => \true, 'help' => 'Do not run the `console()` hook.'])->addOption('no-middleware', ['boolean' => \true, 'help' => 'Do not run the `middleware()` hook..'])->addOption('no-routes', ['boolean' => \true, 'help' => 'Do not run the `routes()` hook.'])->addOption('no-services', ['boolean' => \true, 'help' => 'Do not run the `services()` hook.']);
     }
 }

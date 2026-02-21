@@ -1,23 +1,19 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\DBAL\Platforms;
 
 use Doctrine\DBAL\SQL\Builder\SelectSQLBuilder;
-
 use function implode;
-
 /**
  * Provides the behavior, features and SQL dialect of the MariaDB 10.10 database platform.
  */
-class MariaDB1010Platform extends MariaDB1060Platform
+class MariaDB1010Platform extends \Doctrine\DBAL\Platforms\MariaDB1060Platform
 {
     public function createSelectSQLBuilder(): SelectSQLBuilder
     {
-        return AbstractPlatform::createSelectSQLBuilder();
+        return \Doctrine\DBAL\Platforms\AbstractPlatform::createSelectSQLBuilder();
     }
-
     /** @internal The method should be only used from within the {@see MySQLSchemaManager} class hierarchy. */
     public function fetchTableOptionsByTable(bool $includeTableName): string
     {
@@ -36,15 +32,11 @@ class MariaDB1010Platform extends MariaDB1060Platform
         INNER JOIN information_schema.COLLATION_CHARACTER_SET_APPLICABILITY ccsa
           ON ccsa.FULL_COLLATION_NAME = t.TABLE_COLLATION
 SQL;
-
         $conditions = ['t.TABLE_SCHEMA = ?'];
-
         if ($includeTableName) {
             $conditions[] = 't.TABLE_NAME = ?';
         }
-
         $conditions[] = "t.TABLE_TYPE = 'BASE TABLE'";
-
         return $sql . ' WHERE ' . implode(' AND ', $conditions);
     }
 }

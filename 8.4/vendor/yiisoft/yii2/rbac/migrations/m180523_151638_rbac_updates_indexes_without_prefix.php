@@ -1,15 +1,15 @@
 <?php
 
+namespace Odigos;
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 use yii\base\InvalidConfigException;
 use yii\db\Migration;
 use yii\rbac\DbManager;
-
 /**
  * Updates indexes without a prefix.
  *
@@ -30,10 +30,8 @@ class m180523_151638_rbac_updates_indexes_without_prefix extends Migration
         if (!$authManager instanceof DbManager) {
             throw new InvalidConfigException('You should configure "authManager" component to use database before executing this migration.');
         }
-
         return $authManager;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -41,14 +39,11 @@ class m180523_151638_rbac_updates_indexes_without_prefix extends Migration
     {
         $authManager = $this->getAuthManager();
         $this->db = $authManager->db;
-
         $this->dropIndex('auth_assignment_user_id_idx', $authManager->assignmentTable);
         $this->createIndex('{{%idx-auth_assignment-user_id}}', $authManager->assignmentTable, 'user_id');
-
         $this->dropIndex('idx-auth_item-type', $authManager->itemTable);
         $this->createIndex('{{%idx-auth_item-type}}', $authManager->itemTable, 'type');
     }
-
     /**
      * {@inheritdoc}
      */
@@ -56,12 +51,18 @@ class m180523_151638_rbac_updates_indexes_without_prefix extends Migration
     {
         $authManager = $this->getAuthManager();
         $this->db = $authManager->db;
-
         $this->dropIndex('{{%idx-auth_assignment-user_id}}', $authManager->assignmentTable);
         $this->createIndex('auth_assignment_user_id_idx', $authManager->assignmentTable, 'user_id');
-
-
         $this->dropIndex('{{%idx-auth_item-type}}', $authManager->itemTable);
         $this->createIndex('idx-auth_item-type', $authManager->itemTable, 'type');
     }
 }
+/**
+ * Updates indexes without a prefix.
+ *
+ * @see https://github.com/yiisoft/yii2/pull/15548
+ *
+ * @author Sergey Gonimar <sergey.gonimar@gmail.com>
+ * @since 2.0.16
+ */
+\class_alias('Odigos\m180523_151638_rbac_updates_indexes_without_prefix', 'm180523_151638_rbac_updates_indexes_without_prefix', \false);

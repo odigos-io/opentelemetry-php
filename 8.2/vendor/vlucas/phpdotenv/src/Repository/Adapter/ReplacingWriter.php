@@ -1,8 +1,7 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Dotenv\Repository\Adapter;
+declare (strict_types=1);
+namespace Odigos\Dotenv\Repository\Adapter;
 
 final class ReplacingWriter implements WriterInterface
 {
@@ -12,21 +11,18 @@ final class ReplacingWriter implements WriterInterface
      * @var \Dotenv\Repository\Adapter\WriterInterface
      */
     private $writer;
-
     /**
      * The inner reader to use.
      *
      * @var \Dotenv\Repository\Adapter\ReaderInterface
      */
     private $reader;
-
     /**
      * The record of seen variables.
      *
      * @var array<string, string>
      */
     private $seen;
-
     /**
      * Create a new replacement writer instance.
      *
@@ -41,7 +37,6 @@ final class ReplacingWriter implements WriterInterface
         $this->reader = $reader;
         $this->seen = [];
     }
-
     /**
      * Write to an environment variable, if possible.
      *
@@ -55,11 +50,9 @@ final class ReplacingWriter implements WriterInterface
         if ($this->exists($name)) {
             return $this->writer->write($name, $value);
         }
-
         // succeed if nothing to do
-        return true;
+        return \true;
     }
-
     /**
      * Delete an environment variable, if possible.
      *
@@ -72,11 +65,9 @@ final class ReplacingWriter implements WriterInterface
         if ($this->exists($name)) {
             return $this->writer->delete($name);
         }
-
         // succeed if nothing to do
-        return true;
+        return \true;
     }
-
     /**
      * Does the given environment variable exist.
      *
@@ -90,15 +81,12 @@ final class ReplacingWriter implements WriterInterface
     private function exists(string $name)
     {
         if (isset($this->seen[$name])) {
-            return true;
+            return \true;
         }
-
         if ($this->reader->read($name)->isDefined()) {
             $this->seen[$name] = '';
-
-            return true;
+            return \true;
         }
-
-        return false;
+        return \false;
     }
 }

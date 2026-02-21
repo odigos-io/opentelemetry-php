@@ -1,10 +1,10 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\caching;
 
 /**
@@ -20,7 +20,7 @@ namespace yii\caching;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class DummyCache extends Cache
+class DummyCache extends \yii\caching\Cache
 {
     /**
      * Retrieves a value from cache with a specified key.
@@ -30,9 +30,8 @@ class DummyCache extends Cache
      */
     protected function getValue($key)
     {
-        return false;
+        return \false;
     }
-
     /**
      * Stores a value identified by a key in cache.
      * This is the implementation of the method declared in the parent class.
@@ -44,9 +43,8 @@ class DummyCache extends Cache
      */
     protected function setValue($key, $value, $duration)
     {
-        return true;
+        return \true;
     }
-
     /**
      * Stores a value identified by a key into cache if the cache does not contain this key.
      * This is the implementation of the method declared in the parent class.
@@ -57,9 +55,8 @@ class DummyCache extends Cache
      */
     protected function addValue($key, $value, $duration)
     {
-        return true;
+        return \true;
     }
-
     /**
      * Deletes a value with the specified key from cache
      * This is the implementation of the method declared in the parent class.
@@ -68,9 +65,8 @@ class DummyCache extends Cache
      */
     protected function deleteValue($key)
     {
-        return true;
+        return \true;
     }
-
     /**
      * Deletes all values from cache.
      * This is the implementation of the method declared in the parent class.
@@ -78,6 +74,6 @@ class DummyCache extends Cache
      */
     protected function flushValues()
     {
-        return true;
+        return \true;
     }
 }

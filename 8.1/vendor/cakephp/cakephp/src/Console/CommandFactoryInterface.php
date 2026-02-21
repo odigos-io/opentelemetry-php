@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -25,5 +25,5 @@ interface CommandFactoryInterface
      * @param string $className Command class name.
      * @return \Cake\Console\CommandInterface
      */
-    public function create(string $className): CommandInterface;
+    public function create(string $className): \Cake\Console\CommandInterface;
 }

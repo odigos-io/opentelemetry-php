@@ -15,48 +15,41 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Traits\Macroable;
 use Illuminate\Support\ViewErrorBag;
 use Throwable;
-
 class View implements ArrayAccess, Htmlable, ViewContract
 {
     use Macroable {
         __call as macroCall;
     }
-
     /**
      * The view factory instance.
      *
      * @var \Illuminate\View\Factory
      */
     protected $factory;
-
     /**
      * The engine implementation.
      *
      * @var \Illuminate\Contracts\View\Engine
      */
     protected $engine;
-
     /**
      * The name of the view.
      *
      * @var string
      */
     protected $view;
-
     /**
      * The array of view data.
      *
      * @var array
      */
     protected $data;
-
     /**
      * The path to the view file.
      *
      * @var string
      */
     protected $path;
-
     /**
      * Create a new view instance.
      *
@@ -67,16 +60,14 @@ class View implements ArrayAccess, Htmlable, ViewContract
      * @param  mixed  $data
      * @return void
      */
-    public function __construct(Factory $factory, Engine $engine, $view, $path, $data = [])
+    public function __construct(\Illuminate\View\Factory $factory, Engine $engine, $view, $path, $data = [])
     {
         $this->view = $view;
         $this->path = $path;
         $this->engine = $engine;
         $this->factory = $factory;
-
         $this->data = $data instanceof Arrayable ? $data->toArray() : (array) $data;
     }
-
     /**
      * Get the evaluated contents of a given fragment.
      *
@@ -89,7 +80,6 @@ class View implements ArrayAccess, Htmlable, ViewContract
             return $this->factory->getFragment($fragment);
         });
     }
-
     /**
      * Get the evaluated contents for a given array of fragments or return all fragments.
      *
@@ -98,11 +88,8 @@ class View implements ArrayAccess, Htmlable, ViewContract
      */
     public function fragments(?array $fragments = null)
     {
-        return is_null($fragments)
-            ? $this->allFragments()
-            : collect($fragments)->map(fn ($f) => $this->fragment($f))->implode('');
+        return is_null($fragments) ? $this->allFragments() : collect($fragments)->map(fn($f) => $this->fragment($f))->implode('');
     }
-
     /**
      * Get the evaluated contents of a given fragment if the given condition is true.
      *
@@ -115,10 +102,8 @@ class View implements ArrayAccess, Htmlable, ViewContract
         if (value($boolean)) {
             return $this->fragment($fragment);
         }
-
         return $this->render();
     }
-
     /**
      * Get the evaluated contents for a given array of fragments if the given condition is true.
      *
@@ -131,10 +116,8 @@ class View implements ArrayAccess, Htmlable, ViewContract
         if (value($boolean)) {
             return $this->fragments($fragments);
         }
-
         return $this->render();
     }
-
     /**
      * Get all fragments as a single string.
      *
@@ -142,9 +125,8 @@ class View implements ArrayAccess, Htmlable, ViewContract
      */
     protected function allFragments()
     {
-        return collect($this->render(fn () => $this->factory->getFragments()))->implode('');
+        return collect($this->render(fn() => $this->factory->getFragments()))->implode('');
     }
-
     /**
      * Get the string contents of the view.
      *
@@ -157,22 +139,17 @@ class View implements ArrayAccess, Htmlable, ViewContract
     {
         try {
             $contents = $this->renderContents();
-
             $response = isset($callback) ? $callback($this, $contents) : null;
-
             // Once we have the contents of the view, we will flush the sections if we are
             // done rendering all views so that there is nothing left hanging over when
             // another view gets rendered in the future by the application developer.
             $this->factory->flushStateIfDoneRendering();
-
-            return ! is_null($response) ? $response : $contents;
+            return !is_null($response) ? $response : $contents;
         } catch (Throwable $e) {
             $this->factory->flushState();
-
             throw $e;
         }
     }
-
     /**
      * Get the contents of the view instance.
      *
@@ -184,19 +161,14 @@ class View implements ArrayAccess, Htmlable, ViewContract
         // the section after the complete rendering operation is done. This will
         // clear out the sections for any separate views that may be rendered.
         $this->factory->incrementRender();
-
         $this->factory->callComposer($this);
-
         $contents = $this->getContents();
-
         // Once we've finished rendering the view, we'll decrement the render count
         // so that each section gets flushed out next time a view is created and
         // no old sections are staying around in the memory of an environment.
         $this->factory->decrementRender();
-
         return $contents;
     }
-
     /**
      * Get the evaluated contents of the view.
      *
@@ -206,7 +178,6 @@ class View implements ArrayAccess, Htmlable, ViewContract
     {
         return $this->engine->get($this->path, $this->gatherData());
     }
-
     /**
      * Get the data bound to the view instance.
      *
@@ -215,16 +186,13 @@ class View implements ArrayAccess, Htmlable, ViewContract
     public function gatherData()
     {
         $data = array_merge($this->factory->getShared(), $this->data);
-
         foreach ($data as $key => $value) {
             if ($value instanceof Renderable) {
                 $data[$key] = $value->render();
             }
         }
-
         return $data;
     }
-
     /**
      * Get the sections of the rendered view.
      *
@@ -238,7 +206,6 @@ class View implements ArrayAccess, Htmlable, ViewContract
             return $this->factory->getSections();
         });
     }
-
     /**
      * Add a piece of data to the view.
      *
@@ -253,10 +220,8 @@ class View implements ArrayAccess, Htmlable, ViewContract
         } else {
             $this->data[$key] = $value;
         }
-
         return $this;
     }
-
     /**
      * Add a view instance to the view data.
      *
@@ -269,7 +234,6 @@ class View implements ArrayAccess, Htmlable, ViewContract
     {
         return $this->with($key, $this->factory->make($view, $data));
     }
-
     /**
      * Add validation errors to the view.
      *
@@ -279,11 +243,8 @@ class View implements ArrayAccess, Htmlable, ViewContract
      */
     public function withErrors($provider, $bag = 'default')
     {
-        return $this->with('errors', (new ViewErrorBag)->put(
-            $bag, $this->formatErrors($provider)
-        ));
+        return $this->with('errors', (new ViewErrorBag())->put($bag, $this->formatErrors($provider)));
     }
-
     /**
      * Parse the given errors into an appropriate value.
      *
@@ -292,11 +253,8 @@ class View implements ArrayAccess, Htmlable, ViewContract
      */
     protected function formatErrors($provider)
     {
-        return $provider instanceof MessageProvider
-                        ? $provider->getMessageBag()
-                        : new MessageBag((array) $provider);
+        return $provider instanceof MessageProvider ? $provider->getMessageBag() : new MessageBag((array) $provider);
     }
-
     /**
      * Get the name of the view.
      *
@@ -306,7 +264,6 @@ class View implements ArrayAccess, Htmlable, ViewContract
     {
         return $this->getName();
     }
-
     /**
      * Get the name of the view.
      *
@@ -316,7 +273,6 @@ class View implements ArrayAccess, Htmlable, ViewContract
     {
         return $this->view;
     }
-
     /**
      * Get the array of view data.
      *
@@ -326,7 +282,6 @@ class View implements ArrayAccess, Htmlable, ViewContract
     {
         return $this->data;
     }
-
     /**
      * Get the path to the view file.
      *
@@ -336,7 +291,6 @@ class View implements ArrayAccess, Htmlable, ViewContract
     {
         return $this->path;
     }
-
     /**
      * Set the path to the view.
      *
@@ -347,7 +301,6 @@ class View implements ArrayAccess, Htmlable, ViewContract
     {
         $this->path = $path;
     }
-
     /**
      * Get the view factory instance.
      *
@@ -357,7 +310,6 @@ class View implements ArrayAccess, Htmlable, ViewContract
     {
         return $this->factory;
     }
-
     /**
      * Get the view's rendering engine.
      *
@@ -367,7 +319,6 @@ class View implements ArrayAccess, Htmlable, ViewContract
     {
         return $this->engine;
     }
-
     /**
      * Determine if a piece of data is bound.
      *
@@ -378,7 +329,6 @@ class View implements ArrayAccess, Htmlable, ViewContract
     {
         return array_key_exists($key, $this->data);
     }
-
     /**
      * Get a piece of bound data to the view.
      *
@@ -389,7 +339,6 @@ class View implements ArrayAccess, Htmlable, ViewContract
     {
         return $this->data[$key];
     }
-
     /**
      * Set a piece of data on the view.
      *
@@ -401,7 +350,6 @@ class View implements ArrayAccess, Htmlable, ViewContract
     {
         $this->with($key, $value);
     }
-
     /**
      * Unset a piece of data from the view.
      *
@@ -412,7 +360,6 @@ class View implements ArrayAccess, Htmlable, ViewContract
     {
         unset($this->data[$key]);
     }
-
     /**
      * Get a piece of data from the view.
      *
@@ -423,7 +370,6 @@ class View implements ArrayAccess, Htmlable, ViewContract
     {
         return $this->data[$key];
     }
-
     /**
      * Set a piece of data on the view.
      *
@@ -435,7 +381,6 @@ class View implements ArrayAccess, Htmlable, ViewContract
     {
         $this->with($key, $value);
     }
-
     /**
      * Check if a piece of data is bound to the view.
      *
@@ -446,7 +391,6 @@ class View implements ArrayAccess, Htmlable, ViewContract
     {
         return isset($this->data[$key]);
     }
-
     /**
      * Remove a piece of bound data from the view.
      *
@@ -457,7 +401,6 @@ class View implements ArrayAccess, Htmlable, ViewContract
     {
         unset($this->data[$key]);
     }
-
     /**
      * Dynamically bind parameters to the view.
      *
@@ -472,16 +415,11 @@ class View implements ArrayAccess, Htmlable, ViewContract
         if (static::hasMacro($method)) {
             return $this->macroCall($method, $parameters);
         }
-
-        if (! str_starts_with($method, 'with')) {
-            throw new BadMethodCallException(sprintf(
-                'Method %s::%s does not exist.', static::class, $method
-            ));
+        if (!str_starts_with($method, 'with')) {
+            throw new BadMethodCallException(sprintf('Method %s::%s does not exist.', static::class, $method));
         }
-
         return $this->with(Str::camel(substr($method, 4)), $parameters[0]);
     }
-
     /**
      * Get content as a string of HTML.
      *
@@ -491,7 +429,6 @@ class View implements ArrayAccess, Htmlable, ViewContract
     {
         return $this->render();
     }
-
     /**
      * Get the string contents of the view.
      *

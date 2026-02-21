@@ -1,14 +1,13 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\widgets;
 
 use yii\base\Widget;
-
 /**
  * Block records all output between [[begin()]] and [[end()]] calls and stores it in [[\yii\base\View::$blocks]].
  * for later use.
@@ -42,20 +41,16 @@ class Block extends Widget
      * @var bool whether to render the block content in place. Defaults to false,
      * meaning the captured block content will not be displayed.
      */
-    public $renderInPlace = false;
-
-
+    public $renderInPlace = \false;
     /**
      * Starts recording a block.
      */
     public function init()
     {
         parent::init();
-
         ob_start();
-        ob_implicit_flush(false);
+        ob_implicit_flush(\false);
     }
-
     /**
      * Ends recording a block.
      * This method stops output buffering and saves the rendering result as a named block in the view.

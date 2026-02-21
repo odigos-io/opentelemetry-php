@@ -1,17 +1,16 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\base;
 
-use Yii;
+use Odigos\Yii;
 use yii\helpers\ArrayHelper;
 use yii\web\Link;
 use yii\web\Linkable;
-
 /**
  * ArrayableTrait provides a common implementation of the [[Arrayable]] interface.
  *
@@ -73,7 +72,6 @@ trait ArrayableTrait
         $fields = array_keys(Yii::getObjectVars($this));
         return array_combine($fields, $fields);
     }
-
     /**
      * Returns the list of fields that can be expanded further and returned by [[toArray()]].
      *
@@ -96,7 +94,6 @@ trait ArrayableTrait
     {
         return [];
     }
-
     /**
      * Converts the model into an array.
      *
@@ -119,43 +116,36 @@ trait ArrayableTrait
      * @param bool $recursive whether to recursively return array representation of embedded objects.
      * @return array the array representation of the object
      */
-    public function toArray(array $fields = [], array $expand = [], $recursive = true)
+    public function toArray(array $fields = [], array $expand = [], $recursive = \true)
     {
         $data = [];
         foreach ($this->resolveFields($fields, $expand) as $field => $definition) {
-            $attribute = is_string($definition) ? ($this->$definition ?? null) : $definition($this, $field);
-
+            $attribute = is_string($definition) ? $this->{$definition} ?? null : $definition($this, $field);
             if ($recursive) {
                 $nestedFields = $this->extractFieldsFor($fields, $field);
                 $nestedExpand = $this->extractFieldsFor($expand, $field);
-                if ($attribute instanceof Arrayable) {
+                if ($attribute instanceof \yii\base\Arrayable) {
                     $attribute = $attribute->toArray($nestedFields, $nestedExpand);
                 } elseif ($attribute instanceof \JsonSerializable) {
                     $attribute = $attribute->jsonSerialize();
                 } elseif (is_array($attribute)) {
-                    $attribute = array_map(
-                        function ($item) use ($nestedFields, $nestedExpand) {
-                            if ($item instanceof Arrayable) {
-                                return $item->toArray($nestedFields, $nestedExpand);
-                            } elseif ($item instanceof \JsonSerializable) {
-                                return $item->jsonSerialize();
-                            }
-                            return $item;
-                        },
-                        $attribute
-                    );
+                    $attribute = array_map(function ($item) use ($nestedFields, $nestedExpand) {
+                        if ($item instanceof \yii\base\Arrayable) {
+                            return $item->toArray($nestedFields, $nestedExpand);
+                        } elseif ($item instanceof \JsonSerializable) {
+                            return $item->jsonSerialize();
+                        }
+                        return $item;
+                    }, $attribute);
                 }
             }
             $data[$field] = $attribute;
         }
-
         if ($this instanceof Linkable) {
             $data['_links'] = Link::serialize($this->getLinks());
         }
-
         return $recursive ? ArrayHelper::toArray($data) : $data;
     }
-
     /**
      * Extracts the root field names from nested fields.
      * Nested fields are separated with dots (.). e.g: "item.id"
@@ -168,18 +158,14 @@ trait ArrayableTrait
     protected function extractRootFields(array $fields)
     {
         $result = [];
-
         foreach ($fields as $field) {
             $result[] = current(explode('.', $field, 2));
         }
-
-        if (in_array('*', $result, true)) {
+        if (in_array('*', $result, \true)) {
             $result = [];
         }
-
         return array_unique($result);
     }
-
     /**
      * Extract nested fields from a fields collection for a given root field
      * Nested fields are separated with dots (.). e.g: "item.id"
@@ -193,16 +179,13 @@ trait ArrayableTrait
     protected function extractFieldsFor(array $fields, $rootField)
     {
         $result = [];
-
         foreach ($fields as $field) {
             if (0 === strpos($field, "{$rootField}.")) {
                 $result[] = preg_replace('/^' . preg_quote($rootField, '/') . '\./i', '', $field);
             }
         }
-
         return array_unique($result);
     }
-
     /**
      * Determines which fields can be returned by [[toArray()]].
      * This method will first extract the root fields from the given fields.
@@ -218,29 +201,25 @@ trait ArrayableTrait
         $fields = $this->extractRootFields($fields);
         $expand = $this->extractRootFields($expand);
         $result = [];
-
         foreach ($this->fields() as $field => $definition) {
             if (is_int($field)) {
                 $field = $definition;
             }
-            if (empty($fields) || in_array($field, $fields, true)) {
+            if (empty($fields) || in_array($field, $fields, \true)) {
                 $result[$field] = $definition;
             }
         }
-
         if (empty($expand)) {
             return $result;
         }
-
         foreach ($this->extraFields() as $field => $definition) {
             if (is_int($field)) {
                 $field = $definition;
             }
-            if (in_array($field, $expand, true)) {
+            if (in_array($field, $expand, \true)) {
                 $result[$field] = $definition;
             }
         }
-
         return $result;
     }
 }

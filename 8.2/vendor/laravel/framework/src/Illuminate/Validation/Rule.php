@@ -22,11 +22,9 @@ use Illuminate\Validation\Rules\Numeric;
 use Illuminate\Validation\Rules\ProhibitedIf;
 use Illuminate\Validation\Rules\RequiredIf;
 use Illuminate\Validation\Rules\Unique;
-
 class Rule
 {
     use Macroable;
-
     /**
      * Get a can constraint builder instance.
      *
@@ -38,7 +36,6 @@ class Rule
     {
         return new Can($ability, $arguments);
     }
-
     /**
      * Apply the given rules if the given condition is truthy.
      *
@@ -49,9 +46,8 @@ class Rule
      */
     public static function when($condition, $rules, $defaultRules = [])
     {
-        return new ConditionalRules($condition, $rules, $defaultRules);
+        return new \Illuminate\Validation\ConditionalRules($condition, $rules, $defaultRules);
     }
-
     /**
      * Apply the given rules if the given condition is falsy.
      *
@@ -62,9 +58,8 @@ class Rule
      */
     public static function unless($condition, $rules, $defaultRules = [])
     {
-        return new ConditionalRules($condition, $defaultRules, $rules);
+        return new \Illuminate\Validation\ConditionalRules($condition, $defaultRules, $rules);
     }
-
     /**
      * Get an array rule builder instance.
      *
@@ -75,7 +70,6 @@ class Rule
     {
         return new ArrayRule(...func_get_args());
     }
-
     /**
      * Create a new nested rule set.
      *
@@ -84,9 +78,8 @@ class Rule
      */
     public static function forEach($callback)
     {
-        return new NestedRules($callback);
+        return new \Illuminate\Validation\NestedRules($callback);
     }
-
     /**
      * Get a unique constraint builder instance.
      *
@@ -98,7 +91,6 @@ class Rule
     {
         return new Unique($table, $column);
     }
-
     /**
      * Get an exists constraint builder instance.
      *
@@ -110,7 +102,6 @@ class Rule
     {
         return new Exists($table, $column);
     }
-
     /**
      * Get an in rule builder instance.
      *
@@ -122,10 +113,8 @@ class Rule
         if ($values instanceof Arrayable) {
             $values = $values->toArray();
         }
-
         return new In(is_array($values) ? $values : func_get_args());
     }
-
     /**
      * Get a not_in rule builder instance.
      *
@@ -137,10 +126,8 @@ class Rule
         if ($values instanceof Arrayable) {
             $values = $values->toArray();
         }
-
         return new NotIn(is_array($values) ? $values : func_get_args());
     }
-
     /**
      * Get a required_if rule builder instance.
      *
@@ -151,7 +138,6 @@ class Rule
     {
         return new RequiredIf($callback);
     }
-
     /**
      * Get a exclude_if rule builder instance.
      *
@@ -162,7 +148,6 @@ class Rule
     {
         return new ExcludeIf($callback);
     }
-
     /**
      * Get a prohibited_if rule builder instance.
      *
@@ -173,7 +158,6 @@ class Rule
     {
         return new ProhibitedIf($callback);
     }
-
     /**
      * Get a date rule builder instance.
      *
@@ -181,17 +165,15 @@ class Rule
      */
     public static function date()
     {
-        return new Date;
+        return new Date();
     }
-
     /**
      * Get a datetime rule builder instance.
      */
     public static function dateTime(): Date
     {
-        return (new Date)->format('Y-m-d H:i:s');
+        return (new Date())->format('Y-m-d H:i:s');
     }
-
     /**
      * Get an email rule builder instance.
      *
@@ -199,9 +181,8 @@ class Rule
      */
     public static function email()
     {
-        return new Email;
+        return new Email();
     }
-
     /**
      * Get an enum rule builder instance.
      *
@@ -212,7 +193,6 @@ class Rule
     {
         return new Enum($type);
     }
-
     /**
      * Get a file rule builder instance.
      *
@@ -220,20 +200,18 @@ class Rule
      */
     public static function file()
     {
-        return new File;
+        return new File();
     }
-
     /**
      * Get an image file rule builder instance.
      *
      * @param  bool  $allowSvg
      * @return \Illuminate\Validation\Rules\ImageFile
      */
-    public static function imageFile($allowSvg = false)
+    public static function imageFile($allowSvg = \false)
     {
         return new ImageFile($allowSvg);
     }
-
     /**
      * Get a dimensions rule builder instance.
      *
@@ -244,7 +222,6 @@ class Rule
     {
         return new Dimensions($constraints);
     }
-
     /**
      * Get a numeric rule builder instance.
      *
@@ -252,9 +229,8 @@ class Rule
      */
     public static function numeric()
     {
-        return new Numeric;
+        return new Numeric();
     }
-
     /**
      * Get an "any of" rule builder instance.
      *
@@ -267,7 +243,6 @@ class Rule
     {
         return new AnyOf($rules);
     }
-
     /**
      * Get a contains rule builder instance.
      *
@@ -279,10 +254,8 @@ class Rule
         if ($values instanceof Arrayable) {
             $values = $values->toArray();
         }
-
-        return new Rules\Contains(is_array($values) ? $values : func_get_args());
+        return new \Illuminate\Validation\Rules\Contains(is_array($values) ? $values : func_get_args());
     }
-
     /**
      * Get a "does not contain" rule builder instance.
      *
@@ -294,10 +267,8 @@ class Rule
         if ($values instanceof Arrayable) {
             $values = $values->toArray();
         }
-
-        return new Rules\DoesntContain(is_array($values) ? $values : func_get_args());
+        return new \Illuminate\Validation\Rules\DoesntContain(is_array($values) ? $values : func_get_args());
     }
-
     /**
      * Compile a set of rules for an attribute.
      *
@@ -308,22 +279,16 @@ class Rule
      */
     public static function compile($attribute, $rules, $data = null)
     {
-        $parser = new ValidationRuleParser(
-            Arr::undot(Arr::wrap($data))
-        );
-
-        if (is_array($rules) && ! array_is_list($rules)) {
+        $parser = new \Illuminate\Validation\ValidationRuleParser(Arr::undot(Arr::wrap($data)));
+        if (is_array($rules) && !array_is_list($rules)) {
             $nested = [];
-
             foreach ($rules as $key => $rule) {
-                $nested[$attribute.'.'.$key] = $rule;
+                $nested[$attribute . '.' . $key] = $rule;
             }
-
             $rules = $nested;
         } else {
             $rules = [$attribute => $rules];
         }
-
-        return $parser->explode(ValidationRuleParser::filterConditionalRules($rules, $data));
+        return $parser->explode(\Illuminate\Validation\ValidationRuleParser::filterConditionalRules($rules, $data));
     }
 }

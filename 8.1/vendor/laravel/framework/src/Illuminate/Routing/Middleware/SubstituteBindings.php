@@ -5,7 +5,6 @@ namespace Illuminate\Routing\Middleware;
 use Closure;
 use Illuminate\Contracts\Routing\Registrar;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-
 class SubstituteBindings
 {
     /**
@@ -14,7 +13,6 @@ class SubstituteBindings
      * @var \Illuminate\Contracts\Routing\Registrar
      */
     protected $router;
-
     /**
      * Create a new bindings substitutor.
      *
@@ -25,7 +23,6 @@ class SubstituteBindings
     {
         $this->router = $router;
     }
-
     /**
      * Handle an incoming request.
      *
@@ -37,16 +34,13 @@ class SubstituteBindings
     {
         try {
             $this->router->substituteBindings($route = $request->route());
-
             $this->router->substituteImplicitBindings($route);
         } catch (ModelNotFoundException $exception) {
             if ($route->getMissing()) {
                 return $route->getMissing()($request, $exception);
             }
-
             throw $exception;
         }
-
         return $next($request);
     }
 }

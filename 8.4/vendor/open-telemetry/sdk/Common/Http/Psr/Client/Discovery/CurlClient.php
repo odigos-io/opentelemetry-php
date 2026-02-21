@@ -1,13 +1,11 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\SDK\Common\Http\Psr\Client\Discovery;
 
 use Http\Client\Curl\Client;
 use Psr\Http\Client\ClientInterface;
-
-class CurlClient implements DiscoveryInterface
+class CurlClient implements \OpenTelemetry\SDK\Common\Http\Psr\Client\Discovery\DiscoveryInterface
 {
     /**
      * @phan-suppress PhanUndeclaredClassReference
@@ -17,7 +15,6 @@ class CurlClient implements DiscoveryInterface
     {
         return extension_loaded('curl') && class_exists(Client::class);
     }
-
     /**
      * @phan-suppress PhanUndeclaredClassReference,PhanTypeMismatchReturn,PhanUndeclaredClassMethod
      * @psalm-suppress UndefinedClass,InvalidReturnType,InvalidReturnStatement
@@ -25,10 +22,7 @@ class CurlClient implements DiscoveryInterface
     #[\Override]
     public function create(mixed $options): ClientInterface
     {
-        $options = [
-            \CURLOPT_TIMEOUT => $options['timeout'] ?? null,
-        ];
-
+        $options = [\CURLOPT_TIMEOUT => $options['timeout'] ?? null];
         /** @phpstan-ignore-next-line  */
         return new Client(options: array_filter($options));
     }

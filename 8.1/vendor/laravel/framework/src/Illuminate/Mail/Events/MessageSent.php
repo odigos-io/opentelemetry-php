@@ -4,7 +4,6 @@ namespace Illuminate\Mail\Events;
 
 use Exception;
 use Illuminate\Mail\SentMessage;
-
 /**
  * @property \Symfony\Component\Mime\Email $message
  */
@@ -16,14 +15,12 @@ class MessageSent
      * @var \Illuminate\Mail\SentMessage
      */
     public $sent;
-
     /**
      * The message data.
      *
      * @var array
      */
     public $data;
-
     /**
      * Create a new event instance.
      *
@@ -36,7 +33,6 @@ class MessageSent
         $this->sent = $message;
         $this->data = $data;
     }
-
     /**
      * Get the serializable representation of the object.
      *
@@ -45,14 +41,8 @@ class MessageSent
     public function __serialize()
     {
         $hasAttachments = collect($this->message->getAttachments())->isNotEmpty();
-
-        return [
-            'sent' => $this->sent,
-            'data' => $hasAttachments ? base64_encode(serialize($this->data)) : $this->data,
-            'hasAttachments' => $hasAttachments,
-        ];
+        return ['sent' => $this->sent, 'data' => $hasAttachments ? base64_encode(serialize($this->data)) : $this->data, 'hasAttachments' => $hasAttachments];
     }
-
     /**
      * Marshal the object from its serialized data.
      *
@@ -62,12 +52,8 @@ class MessageSent
     public function __unserialize(array $data)
     {
         $this->sent = $data['sent'];
-
-        $this->data = (($data['hasAttachments'] ?? false) === true)
-            ? unserialize(base64_decode($data['data']))
-            : $data['data'];
+        $this->data = ($data['hasAttachments'] ?? \false) === \true ? unserialize(base64_decode($data['data'])) : $data['data'];
     }
-
     /**
      * Dynamically get the original message.
      *
@@ -81,7 +67,6 @@ class MessageSent
         if ($key === 'message') {
             return $this->sent->getOriginalMessage();
         }
-
-        throw new Exception('Unable to access undefined property on '.__CLASS__.': '.$key);
+        throw new Exception('Unable to access undefined property on ' . __CLASS__ . ': ' . $key);
     }
 }

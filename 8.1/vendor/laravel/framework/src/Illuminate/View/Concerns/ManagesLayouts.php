@@ -5,7 +5,6 @@ namespace Illuminate\View\Concerns;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
-
 trait ManagesLayouts
 {
     /**
@@ -14,28 +13,24 @@ trait ManagesLayouts
      * @var array
      */
     protected $sections = [];
-
     /**
      * The stack of in-progress sections.
      *
      * @var array
      */
     protected $sectionStack = [];
-
     /**
      * The parent placeholder for the request.
      *
      * @var mixed
      */
     protected static $parentPlaceholder = [];
-
     /**
      * The parent placeholder salt for the request.
      *
      * @var string
      */
     protected static $parentPlaceholderSalt;
-
     /**
      * Start injecting content into a section.
      *
@@ -53,7 +48,6 @@ trait ManagesLayouts
             $this->extendSection($section, $content instanceof View ? $content : e($content));
         }
     }
-
     /**
      * Inject inline content into a section.
      *
@@ -65,7 +59,6 @@ trait ManagesLayouts
     {
         $this->startSection($section, $content);
     }
-
     /**
      * Stop injecting content into a section and return its contents.
      *
@@ -76,10 +69,8 @@ trait ManagesLayouts
         if (empty($this->sectionStack)) {
             return '';
         }
-
         return $this->yieldContent($this->stopSection());
     }
-
     /**
      * Stop injecting content into a section.
      *
@@ -88,23 +79,19 @@ trait ManagesLayouts
      *
      * @throws \InvalidArgumentException
      */
-    public function stopSection($overwrite = false)
+    public function stopSection($overwrite = \false)
     {
         if (empty($this->sectionStack)) {
             throw new InvalidArgumentException('Cannot end a section without first starting one.');
         }
-
         $last = array_pop($this->sectionStack);
-
         if ($overwrite) {
             $this->sections[$last] = ob_get_clean();
         } else {
             $this->extendSection($last, ob_get_clean());
         }
-
         return $last;
     }
-
     /**
      * Stop injecting content into a section and append it.
      *
@@ -117,18 +104,14 @@ trait ManagesLayouts
         if (empty($this->sectionStack)) {
             throw new InvalidArgumentException('Cannot end a section without first starting one.');
         }
-
         $last = array_pop($this->sectionStack);
-
         if (isset($this->sections[$last])) {
             $this->sections[$last] .= ob_get_clean();
         } else {
             $this->sections[$last] = ob_get_clean();
         }
-
         return $last;
     }
-
     /**
      * Append content to a given section.
      *
@@ -141,10 +124,8 @@ trait ManagesLayouts
         if (isset($this->sections[$section])) {
             $content = str_replace(static::parentPlaceholder($section), $content, $this->sections[$section]);
         }
-
         $this->sections[$section] = $content;
     }
-
     /**
      * Get the string contents of a section.
      *
@@ -155,18 +136,12 @@ trait ManagesLayouts
     public function yieldContent($section, $default = '')
     {
         $sectionContent = $default instanceof View ? $default : e($default);
-
         if (isset($this->sections[$section])) {
             $sectionContent = $this->sections[$section];
         }
-
         $sectionContent = str_replace('@@parent', '--parent--holder--', $sectionContent);
-
-        return str_replace(
-            '--parent--holder--', '@parent', str_replace(static::parentPlaceholder($section), '', $sectionContent)
-        );
+        return str_replace('--parent--holder--', '@parent', str_replace(static::parentPlaceholder($section), '', $sectionContent));
     }
-
     /**
      * Get the parent placeholder for the current request.
      *
@@ -175,15 +150,12 @@ trait ManagesLayouts
      */
     public static function parentPlaceholder($section = '')
     {
-        if (! isset(static::$parentPlaceholder[$section])) {
+        if (!isset(static::$parentPlaceholder[$section])) {
             $salt = static::parentPlaceholderSalt();
-
-            static::$parentPlaceholder[$section] = '##parent-placeholder-'.hash('xxh128', $salt.$section).'##';
+            static::$parentPlaceholder[$section] = '##parent-placeholder-' . hash('xxh128', $salt . $section) . '##';
         }
-
         return static::$parentPlaceholder[$section];
     }
-
     /**
      * Get the parent placeholder salt.
      *
@@ -191,13 +163,11 @@ trait ManagesLayouts
      */
     protected static function parentPlaceholderSalt()
     {
-        if (! static::$parentPlaceholderSalt) {
+        if (!static::$parentPlaceholderSalt) {
             return static::$parentPlaceholderSalt = Str::random(40);
         }
-
         return static::$parentPlaceholderSalt;
     }
-
     /**
      * Check if section exists.
      *
@@ -208,7 +178,6 @@ trait ManagesLayouts
     {
         return array_key_exists($name, $this->sections);
     }
-
     /**
      * Check if section does not exist.
      *
@@ -217,9 +186,8 @@ trait ManagesLayouts
      */
     public function sectionMissing($name)
     {
-        return ! $this->hasSection($name);
+        return !$this->hasSection($name);
     }
-
     /**
      * Get the contents of a section.
      *
@@ -231,7 +199,6 @@ trait ManagesLayouts
     {
         return $this->getSections()[$name] ?? $default;
     }
-
     /**
      * Get the entire array of sections.
      *
@@ -241,7 +208,6 @@ trait ManagesLayouts
     {
         return $this->sections;
     }
-
     /**
      * Flush all of the sections.
      *

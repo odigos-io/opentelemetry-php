@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -16,9 +16,8 @@ declare(strict_types=1);
 namespace Cake\TestSuite\Constraint;
 
 use Cake\Event\EventManager;
-use PHPUnit\Framework\AssertionFailedError;
-use PHPUnit\Framework\Constraint\Constraint;
-
+use Odigos\PHPUnit\Framework\AssertionFailedError;
+use Odigos\PHPUnit\Framework\Constraint\Constraint;
 /**
  * EventFired constraint
  *
@@ -32,7 +31,6 @@ class EventFired extends Constraint
      * @var \Cake\Event\EventManager
      */
     protected EventManager $_eventManager;
-
     /**
      * Constructor
      *
@@ -41,14 +39,10 @@ class EventFired extends Constraint
     public function __construct(EventManager $eventManager)
     {
         $this->_eventManager = $eventManager;
-
         if ($this->_eventManager->getEventList() === null) {
-            throw new AssertionFailedError(
-                'The event manager you are asserting against is not configured to track events.',
-            );
+            throw new AssertionFailedError('The event manager you are asserting against is not configured to track events.');
         }
     }
-
     /**
      * Checks if event is in fired array
      *
@@ -58,10 +52,8 @@ class EventFired extends Constraint
     public function matches(mixed $other): bool
     {
         $list = $this->_eventManager->getEventList();
-
-        return $list === null ? false : $list->hasEvent($other);
+        return $list === null ? \false : $list->hasEvent($other);
     }
-
     /**
      * Assertion message string
      *

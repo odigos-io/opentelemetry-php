@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -23,7 +23,6 @@ use Cake\ORM\Table;
 use Cake\Utility\Inflector;
 use Closure;
 use function Cake\Core\pluginSplit;
-
 /**
  * Represents an 1 - N relationship where the source side of the relation is
  * related to only one record in the target table.
@@ -40,11 +39,7 @@ class BelongsTo extends Association
      *
      * @var array<string>
      */
-    protected array $_validStrategies = [
-        self::STRATEGY_JOIN,
-        self::STRATEGY_SELECT,
-    ];
-
+    protected array $_validStrategies = [self::STRATEGY_JOIN, self::STRATEGY_SELECT];
     /**
      * @inheritDoc
      */
@@ -52,7 +47,6 @@ class BelongsTo extends Association
     {
         return $this->_foreignKey ??= $this->_modelKey($this->getTarget()->getAlias());
     }
-
     /**
      * Sets the name of the field representing the foreign key to the target table.
      *
@@ -63,10 +57,8 @@ class BelongsTo extends Association
     public function setForeignKey(array|string|false $key)
     {
         $this->_foreignKey = $key;
-
         return $this;
     }
-
     /**
      * Handle cascading deletes.
      *
@@ -78,9 +70,8 @@ class BelongsTo extends Association
      */
     public function cascadeDelete(EntityInterface $entity, array $options = []): bool
     {
-        return true;
+        return \true;
     }
-
     /**
      * Returns default property name based on association name.
      *
@@ -89,10 +80,8 @@ class BelongsTo extends Association
     protected function _propertyName(): string
     {
         [, $name] = pluginSplit($this->_name);
-
         return Inflector::underscore(Inflector::singularize($name));
     }
-
     /**
      * Returns whether the passed table is the owning side for this
      * association. This means that rows in the 'target' table would miss important
@@ -105,7 +94,6 @@ class BelongsTo extends Association
     {
         return $side === $this->getTarget();
     }
-
     /**
      * Get the relationship type.
      *
@@ -115,7 +103,6 @@ class BelongsTo extends Association
     {
         return self::MANY_TO_ONE;
     }
-
     /**
      * Takes an entity from the source table and looks if there is a field
      * matching the property name for this association. The found entity will be
@@ -134,46 +121,28 @@ class BelongsTo extends Association
         if (!$targetEntity instanceof EntityInterface) {
             return $entity;
         }
-
         $table = $this->getTarget();
         $targetEntity = $table->save($targetEntity, $options);
         if (!$targetEntity) {
-            return false;
+            return \false;
         }
-
         /** @var array<string> $foreignKeys */
-        $foreignKeys = (array)$this->getForeignKey();
-        $properties = array_combine(
-            $foreignKeys,
-            $targetEntity->extract((array)$this->getBindingKey()),
-        );
-
+        $foreignKeys = (array) $this->getForeignKey();
+        $properties = array_combine($foreignKeys, $targetEntity->extract((array) $this->getBindingKey()));
         // @phpstan-ignore function.alreadyNarrowedType (patch method available on EntityInterface)
         if (method_exists($entity, 'patch')) {
-            $entity = $entity->patch($properties, ['guard' => false]);
+            $entity = $entity->patch($properties, ['guard' => \false]);
         } else {
-            $entity->set($properties, ['guard' => false]);
+            $entity->set($properties, ['guard' => \false]);
         }
-
         return $entity;
     }
-
     /**
      * @inheritDoc
      */
     public function eagerLoader(array $options): Closure
     {
-        $loader = new SelectLoader([
-            'alias' => $this->getAlias(),
-            'sourceAlias' => $this->getSource()->getAlias(),
-            'targetAlias' => $this->getTarget()->getAlias(),
-            'foreignKey' => $this->getForeignKey(),
-            'bindingKey' => $this->getBindingKey(),
-            'strategy' => $this->getStrategy(),
-            'associationType' => $this->type(),
-            'finder' => $this->find(...),
-        ]);
-
+        $loader = new SelectLoader(['alias' => $this->getAlias(), 'sourceAlias' => $this->getSource()->getAlias(), 'targetAlias' => $this->getTarget()->getAlias(), 'foreignKey' => $this->getForeignKey(), 'bindingKey' => $this->getBindingKey(), 'strategy' => $this->getStrategy(), 'associationType' => $this->type(), 'finder' => $this->find(...)]);
         return $loader->buildEagerLoader($options);
     }
 }

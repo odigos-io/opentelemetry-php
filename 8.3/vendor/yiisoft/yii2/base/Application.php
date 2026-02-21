@@ -1,14 +1,13 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\base;
 
-use Yii;
-
+use Odigos\Yii;
 /**
  * Application is the base class for all application classes.
  *
@@ -44,7 +43,7 @@ use Yii;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-abstract class Application extends Module
+abstract class Application extends \yii\base\Module
 {
     /**
      * @event Event an event raised before the application starts to handle a request.
@@ -89,7 +88,7 @@ abstract class Application extends Module
      *
      * Please refer to the [guide about class autoloading](guide:concept-autoloading.md) for more details.
      */
-    public $controllerNamespace = 'app\\controllers';
+    public $controllerNamespace = 'Odigos\app\controllers';
     /**
      * @var string the application name.
      */
@@ -187,8 +186,6 @@ abstract class Application extends Module
      * @var array list of loaded modules indexed by their class names.
      */
     public $loadedModules = [];
-
-
     /**
      * Constructor.
      * @param array $config name-value pairs that will be used to initialize the object properties.
@@ -202,16 +199,11 @@ abstract class Application extends Module
     {
         Yii::$app = $this;
         static::setInstance($this);
-
         $this->state = self::STATE_BEGIN;
-
         $this->preInit($config);
-
         $this->registerErrorHandler($config);
-
-        Component::__construct($config);
+        \yii\base\Component::__construct($config);
     }
-
     /**
      * Pre-initializes the application.
      * This method is called at the beginning of the application constructor.
@@ -223,15 +215,14 @@ abstract class Application extends Module
     public function preInit(&$config)
     {
         if (!isset($config['id'])) {
-            throw new InvalidConfigException('The "id" configuration for the Application is required.');
+            throw new \yii\base\InvalidConfigException('The "id" configuration for the Application is required.');
         }
         if (isset($config['basePath'])) {
             $this->setBasePath($config['basePath']);
             unset($config['basePath']);
         } else {
-            throw new InvalidConfigException('The "basePath" configuration for the Application is required.');
+            throw new \yii\base\InvalidConfigException('The "basePath" configuration for the Application is required.');
         }
-
         if (isset($config['vendorPath'])) {
             $this->setVendorPath($config['vendorPath']);
             unset($config['vendorPath']);
@@ -246,20 +237,16 @@ abstract class Application extends Module
             // set "@runtime"
             $this->getRuntimePath();
         }
-
         if (isset($config['timeZone'])) {
             $this->setTimeZone($config['timeZone']);
             unset($config['timeZone']);
         } elseif (!ini_get('date.timezone')) {
             $this->setTimeZone('UTC');
         }
-
         if (isset($config['container'])) {
             $this->setContainer($config['container']);
-
             unset($config['container']);
         }
-
         // merge core components with custom components
         foreach ($this->coreComponents() as $id => $component) {
             if (!isset($config['components'][$id])) {
@@ -269,7 +256,6 @@ abstract class Application extends Module
             }
         }
     }
-
     /**
      * {@inheritdoc}
      */
@@ -278,7 +264,6 @@ abstract class Application extends Module
         $this->state = self::STATE_INIT;
         $this->bootstrap();
     }
-
     /**
      * Initializes extensions and executes bootstrap components.
      * This method is called by [[init()]] after the application has been fully configured.
@@ -298,7 +283,7 @@ abstract class Application extends Module
             }
             if (isset($extension['bootstrap'])) {
                 $component = Yii::createObject($extension['bootstrap']);
-                if ($component instanceof BootstrapInterface) {
+                if ($component instanceof \yii\base\BootstrapInterface) {
                     Yii::debug('Bootstrap with ' . get_class($component) . '::bootstrap()', __METHOD__);
                     $component->bootstrap($this);
                 } else {
@@ -306,7 +291,6 @@ abstract class Application extends Module
                 }
             }
         }
-
         foreach ($this->bootstrap as $mixed) {
             $component = null;
             if ($mixed instanceof \Closure) {
@@ -319,16 +303,14 @@ abstract class Application extends Module
                     $component = $this->get($mixed);
                 } elseif ($this->hasModule($mixed)) {
                     $component = $this->getModule($mixed);
-                } elseif (strpos($mixed, '\\') === false) {
-                    throw new InvalidConfigException("Unknown bootstrapping component ID: $mixed");
+                } elseif (strpos($mixed, '\\') === \false) {
+                    throw new \yii\base\InvalidConfigException("Unknown bootstrapping component ID: {$mixed}");
                 }
             }
-
             if (!isset($component)) {
                 $component = Yii::createObject($mixed);
             }
-
-            if ($component instanceof BootstrapInterface) {
+            if ($component instanceof \yii\base\BootstrapInterface) {
                 Yii::debug('Bootstrap with ' . get_class($component) . '::bootstrap()', __METHOD__);
                 $component->bootstrap($this);
             } else {
@@ -336,7 +318,6 @@ abstract class Application extends Module
             }
         }
     }
-
     /**
      * Registers the errorHandler component as a PHP error handler.
      * @param array $config application config
@@ -353,7 +334,6 @@ abstract class Application extends Module
             $this->getErrorHandler()->register();
         }
     }
-
     /**
      * Returns an ID that uniquely identifies this module among all modules within the current application.
      * Since this is an application instance, it will always return an empty string.
@@ -363,7 +343,6 @@ abstract class Application extends Module
     {
         return '';
     }
-
     /**
      * Sets the root directory of the application and the @app alias.
      * This method can only be invoked at the beginning of the constructor.
@@ -375,7 +354,6 @@ abstract class Application extends Module
         parent::setBasePath($path);
         Yii::setAlias('@app', $this->getBasePath());
     }
-
     /**
      * Runs the application.
      * This is the main entrance of an application.
@@ -386,25 +364,19 @@ abstract class Application extends Module
         try {
             $this->state = self::STATE_BEFORE_REQUEST;
             $this->trigger(self::EVENT_BEFORE_REQUEST);
-
             $this->state = self::STATE_HANDLING_REQUEST;
             $response = $this->handleRequest($this->getRequest());
-
             $this->state = self::STATE_AFTER_REQUEST;
             $this->trigger(self::EVENT_AFTER_REQUEST);
-
             $this->state = self::STATE_SENDING_RESPONSE;
             $response->send();
-
             $this->state = self::STATE_END;
-
             return $response->exitStatus;
-        } catch (ExitException $e) {
+        } catch (\yii\base\ExitException $e) {
             $this->end($e->statusCode, isset($response) ? $response : null);
             return $e->statusCode;
         }
     }
-
     /**
      * Handles the specified request.
      *
@@ -415,9 +387,7 @@ abstract class Application extends Module
      * @return Response the resulting response
      */
     abstract public function handleRequest($request);
-
     private $_runtimePath;
-
     /**
      * Returns the directory that stores runtime files.
      * @return string the directory that stores runtime files.
@@ -426,12 +396,10 @@ abstract class Application extends Module
     public function getRuntimePath()
     {
         if ($this->_runtimePath === null) {
-            $this->setRuntimePath($this->getBasePath() . DIRECTORY_SEPARATOR . 'runtime');
+            $this->setRuntimePath($this->getBasePath() . \DIRECTORY_SEPARATOR . 'runtime');
         }
-
         return $this->_runtimePath;
     }
-
     /**
      * Sets the directory that stores runtime files.
      * @param string $path the directory that stores runtime files.
@@ -441,9 +409,7 @@ abstract class Application extends Module
         $this->_runtimePath = Yii::getAlias($path);
         Yii::setAlias('@runtime', $this->_runtimePath);
     }
-
     private $_vendorPath;
-
     /**
      * Returns the directory that stores vendor files.
      * @return string the directory that stores vendor files.
@@ -452,12 +418,10 @@ abstract class Application extends Module
     public function getVendorPath()
     {
         if ($this->_vendorPath === null) {
-            $this->setVendorPath($this->getBasePath() . DIRECTORY_SEPARATOR . 'vendor');
+            $this->setVendorPath($this->getBasePath() . \DIRECTORY_SEPARATOR . 'vendor');
         }
-
         return $this->_vendorPath;
     }
-
     /**
      * Sets the directory that stores vendor files.
      * @param string $path the directory that stores vendor files.
@@ -466,10 +430,9 @@ abstract class Application extends Module
     {
         $this->_vendorPath = Yii::getAlias($path);
         Yii::setAlias('@vendor', $this->_vendorPath);
-        Yii::setAlias('@bower', $this->_vendorPath . DIRECTORY_SEPARATOR . 'bower');
-        Yii::setAlias('@npm', $this->_vendorPath . DIRECTORY_SEPARATOR . 'npm');
+        Yii::setAlias('@bower', $this->_vendorPath . \DIRECTORY_SEPARATOR . 'bower');
+        Yii::setAlias('@npm', $this->_vendorPath . \DIRECTORY_SEPARATOR . 'npm');
     }
-
     /**
      * Returns the time zone used by this application.
      * This is a simple wrapper of PHP function date_default_timezone_get().
@@ -482,7 +445,6 @@ abstract class Application extends Module
     {
         return date_default_timezone_get();
     }
-
     /**
      * Sets the time zone used by this application.
      * This is a simple wrapper of PHP function date_default_timezone_set().
@@ -494,7 +456,6 @@ abstract class Application extends Module
     {
         date_default_timezone_set($value);
     }
-
     /**
      * Returns the database connection component.
      * @return \yii\db\Connection the database connection.
@@ -503,7 +464,6 @@ abstract class Application extends Module
     {
         return $this->get('db');
     }
-
     /**
      * Returns the log dispatcher component.
      * @return \yii\log\Dispatcher the log dispatcher application component.
@@ -512,7 +472,6 @@ abstract class Application extends Module
     {
         return $this->get('log');
     }
-
     /**
      * Returns the error handler component.
      * @return \yii\web\ErrorHandler|\yii\console\ErrorHandler the error handler application component.
@@ -521,16 +480,14 @@ abstract class Application extends Module
     {
         return $this->get('errorHandler');
     }
-
     /**
      * Returns the cache component.
      * @return \yii\caching\CacheInterface|null the cache application component. Null if the component is not enabled.
      */
     public function getCache()
     {
-        return $this->get('cache', false);
+        return $this->get('cache', \false);
     }
-
     /**
      * Returns the formatter component.
      * @return \yii\i18n\Formatter the formatter application component.
@@ -539,7 +496,6 @@ abstract class Application extends Module
     {
         return $this->get('formatter');
     }
-
     /**
      * Returns the request component.
      * @return \yii\web\Request|\yii\console\Request the request component.
@@ -548,7 +504,6 @@ abstract class Application extends Module
     {
         return $this->get('request');
     }
-
     /**
      * Returns the response component.
      * @return \yii\web\Response|\yii\console\Response the response component.
@@ -557,7 +512,6 @@ abstract class Application extends Module
     {
         return $this->get('response');
     }
-
     /**
      * Returns the view object.
      * @return View|\yii\web\View the view application component that is used to render various view files.
@@ -566,7 +520,6 @@ abstract class Application extends Module
     {
         return $this->get('view');
     }
-
     /**
      * Returns the URL manager for this application.
      * @return \yii\web\UrlManager the URL manager for this application.
@@ -575,7 +528,6 @@ abstract class Application extends Module
     {
         return $this->get('urlManager');
     }
-
     /**
      * Returns the internationalization (i18n) component.
      * @return \yii\i18n\I18N the internationalization application component.
@@ -584,7 +536,6 @@ abstract class Application extends Module
     {
         return $this->get('i18n');
     }
-
     /**
      * Returns the mailer component.
      * @return \yii\mail\MailerInterface the mailer application component.
@@ -594,16 +545,14 @@ abstract class Application extends Module
     {
         return $this->get('mailer');
     }
-
     /**
      * Returns the auth manager for this application.
      * @return \yii\rbac\ManagerInterface|null the auth manager application component or null if it's not configured.
      */
     public function getAuthManager()
     {
-        return $this->get('authManager', false);
+        return $this->get('authManager', \false);
     }
-
     /**
      * Returns the asset manager.
      * @return \yii\web\AssetManager the asset manager application component.
@@ -612,7 +561,6 @@ abstract class Application extends Module
     {
         return $this->get('assetManager');
     }
-
     /**
      * Returns the security component.
      * @return \yii\base\Security the security application component.
@@ -621,7 +569,6 @@ abstract class Application extends Module
     {
         return $this->get('security');
     }
-
     /**
      * Returns the configuration of core application components.
      * @return array
@@ -629,22 +576,12 @@ abstract class Application extends Module
      */
     public function coreComponents()
     {
-        $components = [
-            'log' => ['class' => 'yii\log\Dispatcher'],
-            'view' => ['class' => 'yii\web\View'],
-            'formatter' => ['class' => 'yii\i18n\Formatter'],
-            'i18n' => ['class' => 'yii\i18n\I18N'],
-            'urlManager' => ['class' => 'yii\web\UrlManager'],
-            'assetManager' => ['class' => 'yii\web\AssetManager'],
-            'security' => ['class' => 'yii\base\Security'],
-        ];
+        $components = ['log' => ['class' => 'yii\log\Dispatcher'], 'view' => ['class' => 'yii\web\View'], 'formatter' => ['class' => 'yii\i18n\Formatter'], 'i18n' => ['class' => 'yii\i18n\I18N'], 'urlManager' => ['class' => 'yii\web\UrlManager'], 'assetManager' => ['class' => 'yii\web\AssetManager'], 'security' => ['class' => 'yii\base\Security']];
         if (class_exists('yii\swiftmailer\Mailer')) {
             $components['mailer'] = ['class' => 'yii\swiftmailer\Mailer'];
         }
-
         return $components;
     }
-
     /**
      * Terminates the application.
      * This method replaces the `exit()` function by ensuring the application life cycle is completed
@@ -659,20 +596,16 @@ abstract class Application extends Module
             $this->state = self::STATE_AFTER_REQUEST;
             $this->trigger(self::EVENT_AFTER_REQUEST);
         }
-
         if ($this->state !== self::STATE_SENDING_RESPONSE && $this->state !== self::STATE_END) {
             $this->state = self::STATE_END;
             $response = $response ?: $this->getResponse();
             $response->send();
         }
-
         if (YII_ENV_TEST) {
-            throw new ExitException($status);
+            throw new \yii\base\ExitException($status);
         }
-
         exit($status);
     }
-
     /**
      * Configures [[Yii::$container]] with the $config.
      *

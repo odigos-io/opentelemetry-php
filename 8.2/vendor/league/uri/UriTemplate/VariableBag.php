@@ -8,10 +8,8 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-declare(strict_types=1);
-
-namespace League\Uri\UriTemplate;
+declare (strict_types=1);
+namespace Odigos\League\Uri\UriTemplate;
 
 use ArrayAccess;
 use BackedEnum;
@@ -20,13 +18,10 @@ use Countable;
 use IteratorAggregate;
 use Stringable;
 use Traversable;
-
 use function array_filter;
 use function is_bool;
 use function is_scalar;
-
 use const ARRAY_FILTER_USE_BOTH;
-
 /**
  * @internal The class exposes the internal representation of variable bags
  *
@@ -41,7 +36,6 @@ final class VariableBag implements ArrayAccess, Countable, IteratorAggregate
      * @var array<string,string|array<string>>
      */
     private array $variables = [];
-
     /**
      * @param iterable<array-key, InputValue> $variables
      */
@@ -51,37 +45,31 @@ final class VariableBag implements ArrayAccess, Countable, IteratorAggregate
             $this->assign((string) $name, $value);
         }
     }
-
     public function count(): int
     {
         return count($this->variables);
     }
-
     public function getIterator(): Traversable
     {
         yield from $this->variables;
     }
-
     public function offsetExists(mixed $offset): bool
     {
         return array_key_exists($offset, $this->variables);
     }
-
     public function offsetUnset(mixed $offset): void
     {
         unset($this->variables[$offset]);
     }
-
     public function offsetSet(mixed $offset, mixed $value): void
     {
-        $this->assign($offset, $value); /* @phpstan-ignore-line */
+        $this->assign($offset, $value);
+        /* @phpstan-ignore-line */
     }
-
     public function offsetGet(mixed $offset): mixed
     {
         return $this->fetch($offset);
     }
-
     /**
      * Tells whether the bag is empty or not.
      */
@@ -89,7 +77,6 @@ final class VariableBag implements ArrayAccess, Countable, IteratorAggregate
     {
         return [] === $this->variables;
     }
-
     /**
      * Tells whether the bag is empty or not.
      */
@@ -97,13 +84,10 @@ final class VariableBag implements ArrayAccess, Countable, IteratorAggregate
     {
         return [] !== $this->variables;
     }
-
     public function equals(mixed $value): bool
     {
-        return $value instanceof self
-            && $this->variables === $value->variables;
+        return $value instanceof self && $this->variables === $value->variables;
     }
-
     /**
      * Fetches the variable value if none found returns null.
      *
@@ -113,37 +97,30 @@ final class VariableBag implements ArrayAccess, Countable, IteratorAggregate
     {
         return $this->variables[$name] ?? null;
     }
-
     /**
      * @param Stringable|InputValue $value
      */
     public function assign(string $name, BackedEnum|Stringable|string|bool|int|float|array|null $value): void
     {
-        $this->variables[$name] = $this->normalizeValue($value, $name, true);
+        $this->variables[$name] = $this->normalizeValue($value, $name, \true);
     }
-
     /**
      * @param Stringable|InputValue $value
      *
      * @throws TemplateCanNotBeExpanded if the value contains nested list
      */
-    private function normalizeValue(
-        BackedEnum|Stringable|string|float|int|bool|array|null $value,
-        string $name,
-        bool $isNestedListAllowed
-    ): array|string {
+    private function normalizeValue(BackedEnum|Stringable|string|float|int|bool|array|null $value, string $name, bool $isNestedListAllowed): array|string
+    {
         if ($value instanceof BackedEnum) {
             $value = $value->value;
         }
-
-        return match (true) {
-            is_bool($value) => true === $value ? '1' : '0',
-            (null === $value || is_scalar($value) || $value instanceof Stringable) => (string) $value,
+        return match (\true) {
+            is_bool($value) => \true === $value ? '1' : '0',
+            null === $value || is_scalar($value) || $value instanceof Stringable => (string) $value,
             !$isNestedListAllowed => throw TemplateCanNotBeExpanded::dueToNestedListOfValue($name),
-            default => array_map(fn ($var): array|string => self::normalizeValue($var, $name, false), $value),
+            default => array_map(fn($var): array|string => self::normalizeValue($var, $name, \false), $value),
         };
     }
-
     /**
      * Replaces elements from passed variables into the current instance.
      */
@@ -151,7 +128,6 @@ final class VariableBag implements ArrayAccess, Countable, IteratorAggregate
     {
         return new self($this->variables + $variables->variables);
     }
-
     /**
      * Filters elements using the closure.
      */

@@ -1,13 +1,11 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\DBAL\Schema;
 
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Schema\Name\OptionallyQualifiedName;
 use Doctrine\DBAL\Schema\Name\UnqualifiedName;
-
 /**
  * Provides access to the database schema.
  *
@@ -26,7 +24,6 @@ interface SchemaProvider
      * @throws Exception
      */
     public function getAllDatabaseNames(): array;
-
     /**
      * Returns names of all available schemas.
      *
@@ -35,7 +32,6 @@ interface SchemaProvider
      * @throws Exception
      */
     public function getAllSchemaNames(): array;
-
     /**
      * Returns names of all tables.
      *
@@ -44,7 +40,6 @@ interface SchemaProvider
      * @throws Exception
      */
     public function getAllTableNames(): array;
-
     /**
      * Returns all tables.
      *
@@ -53,7 +48,6 @@ interface SchemaProvider
      * @throws Exception
      */
     public function getAllTables(): array;
-
     /**
      * Returns columns for the given table.
      *
@@ -70,7 +64,6 @@ interface SchemaProvider
      * @throws Exception
      */
     public function getColumnsForTable(?string $schemaName, string $tableName): array;
-
     /**
      * Returns indexes for the given table.
      *
@@ -87,7 +80,6 @@ interface SchemaProvider
      * @throws Exception
      */
     public function getIndexesForTable(?string $schemaName, string $tableName): array;
-
     /**
      * Returns the primary key constraint for the given table.
      *
@@ -102,8 +94,7 @@ interface SchemaProvider
      *
      * @throws Exception
      */
-    public function getPrimaryKeyConstraintForTable(?string $schemaName, string $tableName): ?PrimaryKeyConstraint;
-
+    public function getPrimaryKeyConstraintForTable(?string $schemaName, string $tableName): ?\Doctrine\DBAL\Schema\PrimaryKeyConstraint;
     /**
      * Returns the foreign key constraints in the given table.
      *
@@ -120,7 +111,6 @@ interface SchemaProvider
      * @throws Exception
      */
     public function getForeignKeyConstraintsForTable(?string $schemaName, string $tableName): array;
-
     /**
      * Returns options of the given table.
      *
@@ -137,14 +127,12 @@ interface SchemaProvider
      * @throws Exception
      */
     public function getOptionsForTable(?string $schemaName, string $tableName): ?array;
-
     /**
      * @return list<View>
      *
      * @throws Exception
      */
     public function getAllViews(): array;
-
     /**
      * @return list<Sequence>
      *

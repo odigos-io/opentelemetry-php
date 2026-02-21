@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -19,13 +19,12 @@ namespace Cake\Error\Debug;
 /**
  * Dump node for Array values.
  */
-class ArrayNode implements NodeInterface
+class ArrayNode implements \Cake\Error\Debug\NodeInterface
 {
     /**
      * @var array<\Cake\Error\Debug\ArrayItemNode>
      */
     private array $items = [];
-
     /**
      * Constructor
      *
@@ -37,18 +36,16 @@ class ArrayNode implements NodeInterface
             $this->add($item);
         }
     }
-
     /**
      * Add an item
      *
      * @param \Cake\Error\Debug\ArrayItemNode $node The item to add.
      * @return void
      */
-    public function add(ArrayItemNode $node): void
+    public function add(\Cake\Error\Debug\ArrayItemNode $node): void
     {
         $this->items[] = $node;
     }
-
     /**
      * Get the contained items
      *
@@ -58,7 +55,6 @@ class ArrayNode implements NodeInterface
     {
         return $this->items;
     }
-
     /**
      * Get Item nodes
      *

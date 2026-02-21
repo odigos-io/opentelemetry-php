@@ -3,7 +3,6 @@
 namespace Illuminate\Contracts\Database;
 
 use Throwable;
-
 interface ConcurrencyErrorDetector
 {
     /**

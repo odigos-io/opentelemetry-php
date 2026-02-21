@@ -1,15 +1,14 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\db\sqlite\conditions;
 
 use yii\base\NotSupportedException;
 use yii\db\Expression;
-
 /**
  * {@inheritdoc}
  *
@@ -27,10 +26,8 @@ class InConditionBuilder extends \yii\db\conditions\InConditionBuilder
         if (is_array($columns)) {
             throw new NotSupportedException(__METHOD__ . ' is not supported by SQLite.');
         }
-
         return parent::buildSubqueryInCondition($operator, $columns, $values, $params);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -41,7 +38,7 @@ class InConditionBuilder extends \yii\db\conditions\InConditionBuilder
             if ($column instanceof Expression) {
                 $column = $column->expression;
             }
-            $quotedColumns[$i] = strpos($column, '(') === false ? $this->queryBuilder->db->quoteColumnName($column) : $column;
+            $quotedColumns[$i] = strpos($column, '(') === \false ? $this->queryBuilder->db->quoteColumnName($column) : $column;
         }
         $vss = [];
         foreach ($values as $value) {
@@ -59,7 +56,6 @@ class InConditionBuilder extends \yii\db\conditions\InConditionBuilder
             }
             $vss[] = '(' . implode($operator === 'IN' ? ' AND ' : ' OR ', $vs) . ')';
         }
-
         return '(' . implode($operator === 'IN' ? ' OR ' : ' AND ', $vss) . ')';
     }
 }

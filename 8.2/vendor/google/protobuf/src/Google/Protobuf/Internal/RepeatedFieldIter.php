@@ -6,13 +6,11 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file or at
 // https://developers.google.com/open-source/licenses/bsd
-
 /**
  * RepeatedField and RepeatedFieldIter are used by generated protocol message
  * classes to manipulate repeated fields.
  */
-
-namespace Google\Protobuf\Internal;
+namespace Odigos\Google\Protobuf\Internal;
 
 /**
  * RepeatedFieldIter is used to iterate RepeatedField. It is also need for the
@@ -20,7 +18,6 @@ namespace Google\Protobuf\Internal;
  */
 class RepeatedFieldIter implements \Iterator
 {
-
     /**
      * @ignore
      */
@@ -29,7 +26,6 @@ class RepeatedFieldIter implements \Iterator
      * @ignore
      */
     private $container;
-
     /**
      * Create iterator instance for RepeatedField.
      *
@@ -41,7 +37,6 @@ class RepeatedFieldIter implements \Iterator
         $this->position = 0;
         $this->container = $container;
     }
-
     /**
      * Reset the status of the iterator
      *
@@ -53,7 +48,6 @@ class RepeatedFieldIter implements \Iterator
     {
         $this->position = 0;
     }
-
     /**
      * Return the element at the current position.
      *
@@ -65,7 +59,6 @@ class RepeatedFieldIter implements \Iterator
     {
         return $this->container[$this->position];
     }
-
     /**
      * Return the current position.
      *
@@ -77,7 +70,6 @@ class RepeatedFieldIter implements \Iterator
     {
         return $this->position;
     }
-
     /**
      * Move to the next position.
      *
@@ -89,7 +81,6 @@ class RepeatedFieldIter implements \Iterator
     {
         ++$this->position;
     }
-
     /**
      * Check whether there are more elements to iterate.
      *

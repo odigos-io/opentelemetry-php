@@ -1,18 +1,17 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\mail;
 
-use Yii;
+use Odigos\Yii;
 use yii\base\Component;
 use yii\base\InvalidConfigException;
 use yii\base\ViewContextInterface;
 use yii\web\View;
-
 /**
  * BaseMailer serves as a base class that implements the basic functions required by [[MailerInterface]].
  *
@@ -30,7 +29,7 @@ use yii\web\View;
  * @author Paul Klimov <klimov.paul@gmail.com>
  * @since 2.0
  */
-abstract class BaseMailer extends Component implements MailerInterface, ViewContextInterface
+abstract class BaseMailer extends Component implements \yii\mail\MailerInterface, ViewContextInterface
 {
     /**
      * @event MailEvent an event raised right before send.
@@ -80,7 +79,7 @@ abstract class BaseMailer extends Component implements MailerInterface, ViewCont
      * to the actual recipients. This is usually used during development for debugging purpose.
      * @see fileTransportPath
      */
-    public $useFileTransport = false;
+    public $useFileTransport = \false;
     /**
      * @var string the directory where the email messages are saved when [[useFileTransport]] is true.
      */
@@ -97,7 +96,6 @@ abstract class BaseMailer extends Component implements MailerInterface, ViewCont
      * ```
      */
     public $fileTransportCallback;
-
     /**
      * @var View|array view instance or its array configuration.
      */
@@ -106,8 +104,6 @@ abstract class BaseMailer extends Component implements MailerInterface, ViewCont
      * @var string the directory containing view files for composing mail messages.
      */
     private $_viewPath;
-
-
     /**
      * @param array|View $view view instance or its array configuration that will be used to
      * render message bodies.
@@ -120,7 +116,6 @@ abstract class BaseMailer extends Component implements MailerInterface, ViewCont
         }
         $this->_view = $view;
     }
-
     /**
      * @return View view instance.
      */
@@ -129,10 +124,8 @@ abstract class BaseMailer extends Component implements MailerInterface, ViewCont
         if (!is_object($this->_view)) {
             $this->_view = $this->createView($this->_view);
         }
-
         return $this->_view;
     }
-
     /**
      * Creates view instance from given configuration.
      * @param array $config view configuration.
@@ -143,12 +136,9 @@ abstract class BaseMailer extends Component implements MailerInterface, ViewCont
         if (!array_key_exists('class', $config)) {
             $config['class'] = View::className();
         }
-
         return Yii::createObject($config);
     }
-
     private $_message;
-
     /**
      * Creates a new message instance and optionally composes its body content via view rendering.
      *
@@ -175,13 +165,10 @@ abstract class BaseMailer extends Component implements MailerInterface, ViewCont
         if ($view === null) {
             return $message;
         }
-
         if (!array_key_exists('message', $params)) {
             $params['message'] = $message;
         }
-
         $this->_message = $message;
-
         if (is_array($view)) {
             if (isset($view['html'])) {
                 $html = $this->render($view['html'], $params, $this->htmlLayout);
@@ -192,10 +179,7 @@ abstract class BaseMailer extends Component implements MailerInterface, ViewCont
         } else {
             $html = $this->render($view, $params, $this->htmlLayout);
         }
-
-
         $this->_message = null;
-
         if (isset($html)) {
             $message->setHtmlBody($html);
         }
@@ -208,16 +192,14 @@ abstract class BaseMailer extends Component implements MailerInterface, ViewCont
             // remove style and script
             $html = preg_replace('~<((style|script))[^>]*>(.*?)</\1>~is', '', $html);
             // strip all HTML tags and decoded HTML entities
-            $text = html_entity_decode(strip_tags($html), ENT_QUOTES | ENT_HTML5, Yii::$app ? Yii::$app->charset : 'UTF-8');
+            $text = html_entity_decode(strip_tags($html), \ENT_QUOTES | \ENT_HTML5, Yii::$app ? Yii::$app->charset : 'UTF-8');
             // improve whitespace
             $text = preg_replace("~^[ \t]+~m", '', trim($text));
             $text = preg_replace('~\R\R+~mu', "\n\n", $text);
             $message->setTextBody($text);
         }
-
         return $message;
     }
-
     /**
      * Creates a new message instance.
      * The newly created instance will be initialized with the configuration specified by [[messageConfig]].
@@ -234,7 +216,6 @@ abstract class BaseMailer extends Component implements MailerInterface, ViewCont
         $config['mailer'] = $this;
         return Yii::createObject($config);
     }
-
     /**
      * Sends the given email message.
      * This method will log a message about the email being sent.
@@ -247,25 +228,21 @@ abstract class BaseMailer extends Component implements MailerInterface, ViewCont
     public function send($message)
     {
         if (!$this->beforeSend($message)) {
-            return false;
+            return \false;
         }
-
         $address = $message->getTo();
         if (is_array($address)) {
             $address = implode(', ', array_keys($address));
         }
         Yii::info('Sending email "' . $message->getSubject() . '" to "' . $address . '"', __METHOD__);
-
         if ($this->useFileTransport) {
             $isSuccessful = $this->saveMessage($message);
         } else {
             $isSuccessful = $this->sendMessage($message);
         }
         $this->afterSend($message, $isSuccessful);
-
         return $isSuccessful;
     }
-
     /**
      * Sends multiple messages at once.
      *
@@ -284,10 +261,8 @@ abstract class BaseMailer extends Component implements MailerInterface, ViewCont
                 $successCount++;
             }
         }
-
         return $successCount;
     }
-
     /**
      * Renders the specified view with optional parameters and layout.
      * The view will be rendered using the [[view]] component.
@@ -296,16 +271,14 @@ abstract class BaseMailer extends Component implements MailerInterface, ViewCont
      * @param string|bool $layout layout view name or [path alias](guide:concept-aliases). If false, no layout will be applied.
      * @return string the rendering result.
      */
-    public function render($view, $params = [], $layout = false)
+    public function render($view, $params = [], $layout = \false)
     {
         $output = $this->getView()->render($view, $params, $this);
-        if ($layout !== false) {
+        if ($layout !== \false) {
             return $this->getView()->render($layout, ['content' => $output, 'message' => $this->_message], $this);
         }
-
         return $output;
     }
-
     /**
      * Sends the specified message.
      * This method should be implemented by child classes with the actual email sending logic.
@@ -313,7 +286,6 @@ abstract class BaseMailer extends Component implements MailerInterface, ViewCont
      * @return bool whether the message is sent successfully
      */
     abstract protected function sendMessage($message);
-
     /**
      * Saves the message as a file under [[fileTransportPath]].
      * @param MessageInterface $message
@@ -323,7 +295,7 @@ abstract class BaseMailer extends Component implements MailerInterface, ViewCont
     {
         $path = Yii::getAlias($this->fileTransportPath);
         if (!is_dir($path)) {
-            mkdir($path, 0777, true);
+            mkdir($path, 0777, \true);
         }
         if ($this->fileTransportCallback !== null) {
             $file = $path . '/' . call_user_func($this->fileTransportCallback, $this, $message);
@@ -331,21 +303,17 @@ abstract class BaseMailer extends Component implements MailerInterface, ViewCont
             $file = $path . '/' . $this->generateMessageFileName();
         }
         file_put_contents($file, $message->toString());
-
-        return true;
+        return \true;
     }
-
     /**
      * @return string the file name for saving the message when [[useFileTransport]] is true.
      */
     public function generateMessageFileName()
     {
-        $time = microtime(true);
+        $time = microtime(\true);
         $timeInt = (int) $time;
-
         return date('Ymd-His-', $timeInt) . sprintf('%04d', (int) (($time - $timeInt) * 10000)) . '-' . sprintf('%04d', random_int(0, 10000)) . '.eml';
     }
-
     /**
      * @return string the directory that contains the view files for composing mail messages
      * Defaults to '@app/mail'.
@@ -355,10 +323,8 @@ abstract class BaseMailer extends Component implements MailerInterface, ViewCont
         if ($this->_viewPath === null) {
             $this->setViewPath('@app/mail');
         }
-
         return $this->_viewPath;
     }
-
     /**
      * @param string $path the directory that contains the view files for composing mail messages
      * This can be specified as an absolute path or a [path alias](guide:concept-aliases).
@@ -367,7 +333,6 @@ abstract class BaseMailer extends Component implements MailerInterface, ViewCont
     {
         $this->_viewPath = Yii::getAlias($path);
     }
-
     /**
      * This method is invoked right before mail send.
      * You may override this method to do last-minute preparation for the message.
@@ -377,12 +342,10 @@ abstract class BaseMailer extends Component implements MailerInterface, ViewCont
      */
     public function beforeSend($message)
     {
-        $event = new MailEvent(['message' => $message]);
+        $event = new \yii\mail\MailEvent(['message' => $message]);
         $this->trigger(self::EVENT_BEFORE_SEND, $event);
-
         return $event->isValid;
     }
-
     /**
      * This method is invoked right after mail was send.
      * You may override this method to do some postprocessing or logging based on mail send status.
@@ -392,7 +355,7 @@ abstract class BaseMailer extends Component implements MailerInterface, ViewCont
      */
     public function afterSend($message, $isSuccessful)
     {
-        $event = new MailEvent(['message' => $message, 'isSuccessful' => $isSuccessful]);
+        $event = new \yii\mail\MailEvent(['message' => $message, 'isSuccessful' => $isSuccessful]);
         $this->trigger(self::EVENT_AFTER_SEND, $event);
     }
 }

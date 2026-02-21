@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -20,7 +20,6 @@ use Cake\Core\App;
 use Cake\Utility\Inflector;
 use Cake\View\Exception\MissingCellException;
 use function Cake\Core\pluginSplit;
-
 /**
  * Provides cell() method for usage in Controller and View classes.
  */
@@ -56,28 +55,22 @@ trait CellTrait
      * @return \Cake\View\Cell The cell instance
      * @throws \Cake\View\Exception\MissingCellException If Cell class was not found.
      */
-    protected function cell(string $cell, array $data = [], array $options = []): Cell
+    protected function cell(string $cell, array $data = [], array $options = []): \Cake\View\Cell
     {
         $parts = explode('::', $cell);
-
         if (count($parts) === 2) {
             [$pluginAndCell, $action] = [$parts[0], $parts[1]];
         } else {
             [$pluginAndCell, $action] = [$parts[0], 'display'];
         }
-
         [$plugin] = pluginSplit($pluginAndCell);
         $className = App::className($pluginAndCell, 'View/Cell', 'Cell');
-
         if (!$className) {
             throw new MissingCellException(['className' => $pluginAndCell . 'Cell']);
         }
-
         $options = ['action' => $action, 'args' => $data] + $options;
-
         return $this->_createCell($className, $action, $plugin, $options);
     }
-
     /**
      * Create and configure the cell instance.
      *
@@ -87,42 +80,32 @@ trait CellTrait
      * @param array<string, mixed> $options The constructor options for the cell.
      * @return \Cake\View\Cell
      */
-    protected function _createCell(string $className, string $action, ?string $plugin, array $options): Cell
+    protected function _createCell(string $className, string $action, ?string $plugin, array $options): \Cake\View\Cell
     {
         if ($plugin) {
             $options['plugin'] = $plugin;
         }
-
         /** @var \Cake\View\Cell $instance */
         $instance = new $className($this->request, $this->response, $this->getEventManager(), $options);
-
         $builder = $instance->viewBuilder();
         $builder->setTemplate(Inflector::underscore($action));
-
         if ($plugin) {
             $builder->setPlugin($plugin);
         }
-
-        if ($this instanceof View) {
+        if ($this instanceof \Cake\View\View) {
             $builder->addHelpers($this->helpers);
-
             if ($this->theme) {
                 $builder->setTheme($this->theme);
             }
-
             $builder->setClassName(static::class);
-
             return $instance;
         }
-
         if (method_exists($this, 'viewBuilder')) {
             $builder->setTheme($this->viewBuilder()->getTheme());
-
             if ($this->viewBuilder()->getClassName() !== null) {
                 $builder->setClassName($this->viewBuilder()->getClassName());
             }
         }
-
         return $instance;
     }
 }

@@ -5,7 +5,6 @@ namespace OpenAI\Contracts\Resources;
 use OpenAI\Responses\Models\DeleteResponse;
 use OpenAI\Responses\Models\ListResponse;
 use OpenAI\Responses\Models\RetrieveResponse;
-
 interface ModelsContract
 {
     /**
@@ -14,14 +13,12 @@ interface ModelsContract
      * @see https://platform.openai.com/docs/api-reference/models/list
      */
     public function list(): ListResponse;
-
     /**
      * Retrieves a model instance, providing basic information about the model such as the owner and permissioning.
      *
      * @see https://platform.openai.com/docs/api-reference/models/retrieve
      */
     public function retrieve(string $model): RetrieveResponse;
-
     /**
      * Delete a fine-tuned model. You must have the Owner role in your organization.
      *

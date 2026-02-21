@@ -4,10 +4,9 @@ namespace Illuminate\Queue;
 
 use Illuminate\Contracts\Queue\Queue as QueueContract;
 use Illuminate\Queue\Jobs\BeanstalkdJob;
-use Pheanstalk\Job as PheanstalkJob;
-use Pheanstalk\Pheanstalk;
-
-class BeanstalkdQueue extends Queue implements QueueContract
+use Odigos\Pheanstalk\Job as PheanstalkJob;
+use Odigos\Pheanstalk\Pheanstalk;
+class BeanstalkdQueue extends \Illuminate\Queue\Queue implements QueueContract
 {
     /**
      * The Pheanstalk instance.
@@ -15,28 +14,24 @@ class BeanstalkdQueue extends Queue implements QueueContract
      * @var \Pheanstalk\Pheanstalk
      */
     protected $pheanstalk;
-
     /**
      * The name of the default tube.
      *
      * @var string
      */
     protected $default;
-
     /**
      * The "time to run" for all pushed jobs.
      *
      * @var int
      */
     protected $timeToRun;
-
     /**
      * The maximum number of seconds to block for a job.
      *
      * @var int
      */
     protected $blockFor;
-
     /**
      * Create a new Beanstalkd queue instance.
      *
@@ -47,11 +42,7 @@ class BeanstalkdQueue extends Queue implements QueueContract
      * @param  bool  $dispatchAfterCommit
      * @return void
      */
-    public function __construct(Pheanstalk $pheanstalk,
-                                $default,
-                                $timeToRun,
-                                $blockFor = 0,
-                                $dispatchAfterCommit = false)
+    public function __construct(Pheanstalk $pheanstalk, $default, $timeToRun, $blockFor = 0, $dispatchAfterCommit = \false)
     {
         $this->default = $default;
         $this->blockFor = $blockFor;
@@ -59,7 +50,6 @@ class BeanstalkdQueue extends Queue implements QueueContract
         $this->pheanstalk = $pheanstalk;
         $this->dispatchAfterCommit = $dispatchAfterCommit;
     }
-
     /**
      * Get the size of the queue.
      *
@@ -69,10 +59,8 @@ class BeanstalkdQueue extends Queue implements QueueContract
     public function size($queue = null)
     {
         $queue = $this->getQueue($queue);
-
         return (int) $this->pheanstalk->statsTube($queue)->current_jobs_ready;
     }
-
     /**
      * Push a new job onto the queue.
      *
@@ -83,17 +71,10 @@ class BeanstalkdQueue extends Queue implements QueueContract
      */
     public function push($job, $data = '', $queue = null)
     {
-        return $this->enqueueUsing(
-            $job,
-            $this->createPayload($job, $this->getQueue($queue), $data),
-            $queue,
-            null,
-            function ($payload, $queue) {
-                return $this->pushRaw($payload, $queue);
-            }
-        );
+        return $this->enqueueUsing($job, $this->createPayload($job, $this->getQueue($queue), $data), $queue, null, function ($payload, $queue) {
+            return $this->pushRaw($payload, $queue);
+        });
     }
-
     /**
      * Push a raw payload onto the queue.
      *
@@ -104,11 +85,8 @@ class BeanstalkdQueue extends Queue implements QueueContract
      */
     public function pushRaw($payload, $queue = null, array $options = [])
     {
-        return $this->pheanstalk->useTube($this->getQueue($queue))->put(
-            $payload, Pheanstalk::DEFAULT_PRIORITY, Pheanstalk::DEFAULT_DELAY, $this->timeToRun
-        );
+        return $this->pheanstalk->useTube($this->getQueue($queue))->put($payload, Pheanstalk::DEFAULT_PRIORITY, Pheanstalk::DEFAULT_DELAY, $this->timeToRun);
     }
-
     /**
      * Push a new job onto the queue after (n) seconds.
      *
@@ -120,22 +98,10 @@ class BeanstalkdQueue extends Queue implements QueueContract
      */
     public function later($delay, $job, $data = '', $queue = null)
     {
-        return $this->enqueueUsing(
-            $job,
-            $this->createPayload($job, $this->getQueue($queue), $data),
-            $queue,
-            $delay,
-            function ($payload, $queue, $delay) {
-                return $this->pheanstalk->useTube($this->getQueue($queue))->put(
-                    $payload,
-                    Pheanstalk::DEFAULT_PRIORITY,
-                    $this->secondsUntil($delay),
-                    $this->timeToRun
-                );
-            }
-        );
+        return $this->enqueueUsing($job, $this->createPayload($job, $this->getQueue($queue), $data), $queue, $delay, function ($payload, $queue, $delay) {
+            return $this->pheanstalk->useTube($this->getQueue($queue))->put($payload, Pheanstalk::DEFAULT_PRIORITY, $this->secondsUntil($delay), $this->timeToRun);
+        });
     }
-
     /**
      * Push an array of jobs onto the queue.
      *
@@ -154,7 +120,6 @@ class BeanstalkdQueue extends Queue implements QueueContract
             }
         }
     }
-
     /**
      * Pop the next job off of the queue.
      *
@@ -164,16 +129,11 @@ class BeanstalkdQueue extends Queue implements QueueContract
     public function pop($queue = null)
     {
         $queue = $this->getQueue($queue);
-
         $job = $this->pheanstalk->watchOnly($queue)->reserveWithTimeout($this->blockFor);
-
         if ($job instanceof PheanstalkJob) {
-            return new BeanstalkdJob(
-                $this->container, $this->pheanstalk, $job, $this->connectionName, $queue
-            );
+            return new BeanstalkdJob($this->container, $this->pheanstalk, $job, $this->connectionName, $queue);
         }
     }
-
     /**
      * Delete a message from the Beanstalk queue.
      *
@@ -184,10 +144,8 @@ class BeanstalkdQueue extends Queue implements QueueContract
     public function deleteMessage($queue, $id)
     {
         $queue = $this->getQueue($queue);
-
         $this->pheanstalk->useTube($queue)->delete(new PheanstalkJob($id, ''));
     }
-
     /**
      * Get the queue or return the default.
      *
@@ -198,7 +156,6 @@ class BeanstalkdQueue extends Queue implements QueueContract
     {
         return $queue ?: $this->default;
     }
-
     /**
      * Get the underlying Pheanstalk instance.
      *

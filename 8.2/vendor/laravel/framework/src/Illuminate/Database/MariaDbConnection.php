@@ -9,8 +9,7 @@ use Illuminate\Database\Schema\MariaDbBuilder;
 use Illuminate\Database\Schema\MariaDbSchemaState;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Str;
-
-class MariaDbConnection extends MySqlConnection
+class MariaDbConnection extends \Illuminate\Database\MySqlConnection
 {
     /**
      * {@inheritdoc}
@@ -19,7 +18,6 @@ class MariaDbConnection extends MySqlConnection
     {
         return 'MariaDB';
     }
-
     /**
      * Determine if the connected database is a MariaDB database.
      *
@@ -27,9 +25,8 @@ class MariaDbConnection extends MySqlConnection
      */
     public function isMaria()
     {
-        return true;
+        return \true;
     }
-
     /**
      * Get the server version for the connection.
      *
@@ -39,7 +36,6 @@ class MariaDbConnection extends MySqlConnection
     {
         return Str::between(parent::getServerVersion(), '5.5.5-', '-MariaDB');
     }
-
     /**
      * Get the default query grammar instance.
      *
@@ -49,7 +45,6 @@ class MariaDbConnection extends MySqlConnection
     {
         return new QueryGrammar($this);
     }
-
     /**
      * Get a schema builder instance for the connection.
      *
@@ -60,10 +55,8 @@ class MariaDbConnection extends MySqlConnection
         if (is_null($this->schemaGrammar)) {
             $this->useDefaultSchemaGrammar();
         }
-
         return new MariaDbBuilder($this);
     }
-
     /**
      * Get the default schema grammar instance.
      *
@@ -73,7 +66,6 @@ class MariaDbConnection extends MySqlConnection
     {
         return new SchemaGrammar($this);
     }
-
     /**
      * Get the schema state for the connection.
      *
@@ -85,7 +77,6 @@ class MariaDbConnection extends MySqlConnection
     {
         return new MariaDbSchemaState($this, $files, $processFactory);
     }
-
     /**
      * Get the default post processor instance.
      *
@@ -93,6 +84,6 @@ class MariaDbConnection extends MySqlConnection
      */
     protected function getDefaultPostProcessor()
     {
-        return new MariaDbProcessor;
+        return new MariaDbProcessor();
     }
 }

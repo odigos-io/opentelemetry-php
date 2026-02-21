@@ -12,16 +12,8 @@ trait CanConfigureMigrationCommands
     protected function migrateFreshUsing()
     {
         $seeder = $this->seeder();
-
-        return array_merge(
-            [
-                '--drop-views' => $this->shouldDropViews(),
-                '--drop-types' => $this->shouldDropTypes(),
-            ],
-            $seeder ? ['--seeder' => $seeder] : ['--seed' => $this->shouldSeed()]
-        );
+        return array_merge(['--drop-views' => $this->shouldDropViews(), '--drop-types' => $this->shouldDropTypes()], $seeder ? ['--seeder' => $seeder] : ['--seed' => $this->shouldSeed()]);
     }
-
     /**
      * Determine if views should be dropped when refreshing the database.
      *
@@ -29,9 +21,8 @@ trait CanConfigureMigrationCommands
      */
     protected function shouldDropViews()
     {
-        return property_exists($this, 'dropViews') ? $this->dropViews : false;
+        return property_exists($this, 'dropViews') ? $this->dropViews : \false;
     }
-
     /**
      * Determine if types should be dropped when refreshing the database.
      *
@@ -39,9 +30,8 @@ trait CanConfigureMigrationCommands
      */
     protected function shouldDropTypes()
     {
-        return property_exists($this, 'dropTypes') ? $this->dropTypes : false;
+        return property_exists($this, 'dropTypes') ? $this->dropTypes : \false;
     }
-
     /**
      * Determine if the seed task should be run when refreshing the database.
      *
@@ -49,9 +39,8 @@ trait CanConfigureMigrationCommands
      */
     protected function shouldSeed()
     {
-        return property_exists($this, 'seed') ? $this->seed : false;
+        return property_exists($this, 'seed') ? $this->seed : \false;
     }
-
     /**
      * Determine the specific seeder class that should be used when refreshing the database.
      *
@@ -59,6 +48,6 @@ trait CanConfigureMigrationCommands
      */
     protected function seeder()
     {
-        return property_exists($this, 'seeder') ? $this->seeder : false;
+        return property_exists($this, 'seeder') ? $this->seeder : \false;
     }
 }

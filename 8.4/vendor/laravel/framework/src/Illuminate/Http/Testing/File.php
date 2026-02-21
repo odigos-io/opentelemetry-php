@@ -3,7 +3,6 @@
 namespace Illuminate\Http\Testing;
 
 use Illuminate\Http\UploadedFile;
-
 class File extends UploadedFile
 {
     /**
@@ -12,28 +11,24 @@ class File extends UploadedFile
      * @var string
      */
     public $name;
-
     /**
      * The temporary file resource.
      *
      * @var resource
      */
     public $tempFile;
-
     /**
      * The "size" to report.
      *
      * @var int
      */
     public $sizeToReport;
-
     /**
      * The MIME type to report.
      *
      * @var string|null
      */
     public $mimeTypeToReport;
-
     /**
      * Create a new file instance.
      *
@@ -44,13 +39,8 @@ class File extends UploadedFile
     {
         $this->name = $name;
         $this->tempFile = $tempFile;
-
-        parent::__construct(
-            $this->tempFilePath(), $name, $this->getMimeType(),
-            null, true
-        );
+        parent::__construct($this->tempFilePath(), $name, $this->getMimeType(), null, \true);
     }
-
     /**
      * Create a new fake file.
      *
@@ -60,9 +50,8 @@ class File extends UploadedFile
      */
     public static function create($name, $kilobytes = 0)
     {
-        return (new FileFactory)->create($name, $kilobytes);
+        return (new \Illuminate\Http\Testing\FileFactory())->create($name, $kilobytes);
     }
-
     /**
      * Create a new fake file with content.
      *
@@ -72,9 +61,8 @@ class File extends UploadedFile
      */
     public static function createWithContent($name, $content)
     {
-        return (new FileFactory)->createWithContent($name, $content);
+        return (new \Illuminate\Http\Testing\FileFactory())->createWithContent($name, $content);
     }
-
     /**
      * Create a new fake image.
      *
@@ -85,9 +73,8 @@ class File extends UploadedFile
      */
     public static function image($name, $width = 10, $height = 10)
     {
-        return (new FileFactory)->image($name, $width, $height);
+        return (new \Illuminate\Http\Testing\FileFactory())->image($name, $width, $height);
     }
-
     /**
      * Set the "size" of the file in kilobytes.
      *
@@ -97,10 +84,8 @@ class File extends UploadedFile
     public function size($kilobytes)
     {
         $this->sizeToReport = $kilobytes * 1024;
-
         return $this;
     }
-
     /**
      * Get the size of the file.
      *
@@ -110,7 +95,6 @@ class File extends UploadedFile
     {
         return $this->sizeToReport ?: parent::getSize();
     }
-
     /**
      * Set the MIME type for the file.
      *
@@ -120,10 +104,8 @@ class File extends UploadedFile
     public function mimeType($mimeType)
     {
         $this->mimeTypeToReport = $mimeType;
-
         return $this;
     }
-
     /**
      * Get the MIME type of the file.
      *
@@ -131,9 +113,8 @@ class File extends UploadedFile
      */
     public function getMimeType(): string
     {
-        return $this->mimeTypeToReport ?: MimeType::from($this->name);
+        return $this->mimeTypeToReport ?: \Illuminate\Http\Testing\MimeType::from($this->name);
     }
-
     /**
      * Get the path to the temporary file.
      *

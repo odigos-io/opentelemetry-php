@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\HttpFoundation\Exception;
 
 /**
@@ -16,6 +15,6 @@ namespace Symfony\Component\HttpFoundation\Exception;
  *
  * @author Tobias Nyholm <tobias.nyholm@gmail.com>
  */
-final class JsonException extends UnexpectedValueException implements RequestExceptionInterface
+final class JsonException extends \Symfony\Component\HttpFoundation\Exception\UnexpectedValueException implements \Symfony\Component\HttpFoundation\Exception\RequestExceptionInterface
 {
 }

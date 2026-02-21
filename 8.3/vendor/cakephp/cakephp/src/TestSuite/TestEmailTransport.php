@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -19,7 +19,6 @@ namespace Cake\TestSuite;
 use Cake\Mailer\Message;
 use Cake\Mailer\Transport\DebugTransport;
 use Cake\Mailer\TransportFactory;
-
 /**
  * TestEmailTransport
  *
@@ -33,7 +32,6 @@ class TestEmailTransport extends DebugTransport
      * @var array
      */
     protected static array $messages = [];
-
     /**
      * Stores email for later assertions
      *
@@ -44,10 +42,8 @@ class TestEmailTransport extends DebugTransport
     public function send(Message $message): array
     {
         static::$messages[] = clone $message;
-
         return parent::send($message);
     }
-
     /**
      * Replaces all currently configured transports with this one
      *
@@ -56,7 +52,6 @@ class TestEmailTransport extends DebugTransport
     public static function replaceAllTransports(): void
     {
         $configuredTransports = TransportFactory::configured();
-
         foreach ($configuredTransports as $configuredTransport) {
             $config = TransportFactory::getConfig($configuredTransport);
             $config['className'] = self::class;
@@ -64,7 +59,6 @@ class TestEmailTransport extends DebugTransport
             TransportFactory::setConfig($configuredTransport, $config);
         }
     }
-
     /**
      * Gets emails sent
      *
@@ -74,7 +68,6 @@ class TestEmailTransport extends DebugTransport
     {
         return static::$messages;
     }
-
     /**
      * Clears list of emails that have been sent
      *

@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -23,7 +23,6 @@ use DateTimeInterface;
 use Iterator;
 use const SORT_DESC;
 use const SORT_NUMERIC;
-
 /**
  * An iterator that will return the passed items in order. The order is given by
  * the value returned in a callback function that maps each of the elements.
@@ -67,39 +66,28 @@ class SortIterator extends Collection
      * @param int $type the type of comparison to perform, either SORT_STRING
      * SORT_NUMERIC or SORT_NATURAL
      */
-    public function __construct(
-        iterable $items,
-        callable|string $callback,
-        int $dir = SORT_DESC,
-        int $type = SORT_NUMERIC,
-    ) {
+    public function __construct(iterable $items, callable|string $callback, int $dir = SORT_DESC, int $type = SORT_NUMERIC)
+    {
         if (!is_array($items)) {
-            $items = iterator_to_array((new Collection($items))->unwrap(), false);
+            $items = iterator_to_array((new Collection($items))->unwrap(), \false);
         }
-
         $callback = $this->_propertyExtractor($callback);
         $results = [];
         foreach ($items as $key => $val) {
             $val = $callback($val);
-            $isDateTime =
-                $val instanceof ChronosDate ||
-                $val instanceof ChronosTime ||
-                $val instanceof DateTimeInterface;
+            $isDateTime = $val instanceof ChronosDate || $val instanceof ChronosTime || $val instanceof DateTimeInterface;
             if ($isDateTime && $type === SORT_NUMERIC) {
                 $val = $val->format('U');
             }
             $results[$key] = $val;
         }
-
         $dir === SORT_DESC ? arsort($results, $type) : asort($results, $type);
-
         foreach (array_keys($results) as $key) {
             $results[$key] = $items[$key];
         }
         /** @phpstan-ignore argument.type (sorted array keys may differ from TKey) */
         parent::__construct($results);
     }
-
     /**
      * {@inheritDoc}
      *

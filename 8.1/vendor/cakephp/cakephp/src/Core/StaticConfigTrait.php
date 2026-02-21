@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -19,7 +19,6 @@ namespace Cake\Core;
 use BadMethodCallException;
 use InvalidArgumentException;
 use LogicException;
-
 /**
  * A trait that provides a set of static methods to manage configuration
  * for classes that provide an adapter facade or need to have sets of
@@ -35,7 +34,6 @@ trait StaticConfigTrait
      * @var array<string|int, array<string, mixed>>
      */
     protected static array $_config = [];
-
     /**
      * This method can be used to define configuration adapters for an application.
      *
@@ -80,37 +78,30 @@ trait StaticConfigTrait
                 throw new LogicException('If config is null, key must be an array.');
             }
             foreach ($key as $name => $settings) {
-                static::setConfig((string)$name, $settings);
+                static::setConfig((string) $name, $settings);
             }
-
             return;
         }
         if (!is_string($key)) {
             throw new LogicException('If config is not null, key must be a string.');
         }
-
         if (isset(static::$_config[$key])) {
             throw new BadMethodCallException(sprintf('Cannot reconfigure existing key `%s`.', $key));
         }
-
         if (is_object($config)) {
             $config = ['className' => $config];
         }
-
         if (is_array($config) && isset($config['url'])) {
             $parsed = static::parseDsn($config['url']);
             unset($config['url']);
             $config = $parsed + $config;
         }
-
         if (isset($config['engine']) && empty($config['className'])) {
             $config['className'] = $config['engine'];
             unset($config['engine']);
         }
-
         static::$_config[$key] = $config;
     }
-
     /**
      * Reads existing configuration.
      *
@@ -121,7 +112,6 @@ trait StaticConfigTrait
     {
         return static::$_config[$key] ?? null;
     }
-
     /**
      * Reads existing configuration for a specific key.
      *
@@ -136,10 +126,8 @@ trait StaticConfigTrait
         if (!isset(static::$_config[$key])) {
             throw new InvalidArgumentException(sprintf('Expected configuration `%s` not found.', $key));
         }
-
         return static::$_config[$key];
     }
-
     /**
      * Drops a constructed adapter.
      *
@@ -155,17 +143,15 @@ trait StaticConfigTrait
     public static function drop(string $config): bool
     {
         if (!isset(static::$_config[$config])) {
-            return false;
+            return \false;
         }
         /** @phpstan-ignore-next-line */
         if (isset(static::$_registry)) {
             static::$_registry->unload($config);
         }
         unset(static::$_config[$config]);
-
-        return true;
+        return \true;
     }
-
     /**
      * Returns an array containing the named configurations
      *
@@ -174,12 +160,10 @@ trait StaticConfigTrait
     public static function configured(): array
     {
         $configurations = array_keys(static::$_config);
-
         return array_map(function ($key) {
-            return (string)$key;
+            return (string) $key;
         }, $configurations);
     }
-
     /**
      * Parses a DSN into a valid connection configuration
      *
@@ -217,7 +201,6 @@ trait StaticConfigTrait
         if (!$dsn) {
             return [];
         }
-
         $pattern = <<<'REGEXP'
 {
     ^
@@ -249,13 +232,10 @@ trait StaticConfigTrait
     $
 }x
 REGEXP;
-
         preg_match($pattern, $dsn, $parsed);
-
         if (!$parsed) {
             throw new InvalidArgumentException(sprintf('The DSN string `%s` could not be parsed.', $dsn));
         }
-
         $exists = [];
         /**
          * @var string|int $k
@@ -264,40 +244,33 @@ REGEXP;
             if (is_int($k)) {
                 unset($parsed[$k]);
             } elseif (str_starts_with($k, '_')) {
-                $exists[substr($k, 1)] = ($v !== '');
+                $exists[substr($k, 1)] = $v !== '';
                 unset($parsed[$k]);
             } elseif ($v === '' && !$exists[$k]) {
                 unset($parsed[$k]);
             }
         }
-
         $query = '';
-
         if (isset($parsed['query'])) {
             $query = $parsed['query'];
             unset($parsed['query']);
         }
-
         parse_str($query, $queryArgs);
-
         /**
          * @var string $key
          */
         foreach ($queryArgs as $key => $value) {
             if ($value === 'true') {
-                $queryArgs[$key] = true;
+                $queryArgs[$key] = \true;
             } elseif ($value === 'false') {
-                $queryArgs[$key] = false;
+                $queryArgs[$key] = \false;
             } elseif ($value === 'null') {
                 $queryArgs[$key] = null;
             }
         }
-
         $parsed = $queryArgs + $parsed;
-
         if (empty($parsed['className'])) {
             $classMap = static::getDsnClassMap();
-
             /** @var string $scheme */
             $scheme = $parsed['scheme'];
             $parsed['className'] = $scheme;
@@ -305,10 +278,8 @@ REGEXP;
                 $parsed['className'] = $classMap[$scheme];
             }
         }
-
         return $parsed;
     }
-
     /**
      * Updates the DSN class map for this class.
      *
@@ -320,7 +291,6 @@ REGEXP;
     {
         static::$_dsnClassMap = $map + static::$_dsnClassMap;
     }
-
     /**
      * Returns the DSN class map for this class.
      *

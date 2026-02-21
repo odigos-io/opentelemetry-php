@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright 2015-present MongoDB, Inc.
  *
@@ -14,26 +15,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 namespace MongoDB\Operation;
 
 use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
 use MongoDB\Driver\Server;
 use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\Exception\UnsupportedException;
-
 use function MongoDB\is_document;
-
 /**
  * Operation for deleting a document with the findAndModify command.
  *
  * @see \MongoDB\Collection::findOneAndDelete()
  * @see https://mongodb.com/docs/manual/reference/command/findAndModify/
  */
-final class FindOneAndDelete implements Explainable
+final class FindOneAndDelete implements \MongoDB\Operation\Explainable
 {
-    private FindAndModify $findAndModify;
-
+    private \MongoDB\Operation\FindAndModify $findAndModify;
     /**
      * Constructs a findAndModify command for deleting a document.
      *
@@ -83,27 +80,18 @@ final class FindOneAndDelete implements Explainable
      */
     public function __construct(string $databaseName, string $collectionName, array|object $filter, array $options = [])
     {
-        if (! is_document($filter)) {
+        if (!is_document($filter)) {
             throw InvalidArgumentException::expectedDocumentType('$filter', $filter);
         }
-
-        if (isset($options['projection']) && ! is_document($options['projection'])) {
+        if (isset($options['projection']) && !is_document($options['projection'])) {
             throw InvalidArgumentException::expectedDocumentType('"projection" option', $options['projection']);
         }
-
         if (isset($options['projection'])) {
             $options['fields'] = $options['projection'];
         }
-
         unset($options['projection']);
-
-        $this->findAndModify = new FindAndModify(
-            $databaseName,
-            $collectionName,
-            ['query' => $filter, 'remove' => true] + $options,
-        );
+        $this->findAndModify = new \MongoDB\Operation\FindAndModify($databaseName, $collectionName, ['query' => $filter, 'remove' => \true] + $options);
     }
-
     /**
      * Execute the operation.
      *
@@ -114,7 +102,6 @@ final class FindOneAndDelete implements Explainable
     {
         return $this->findAndModify->execute($server);
     }
-
     /**
      * Returns the command document for this operation.
      *

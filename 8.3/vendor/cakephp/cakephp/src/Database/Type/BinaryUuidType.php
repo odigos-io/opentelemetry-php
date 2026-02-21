@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -20,13 +20,12 @@ use Cake\Core\Exception\CakeException;
 use Cake\Database\Driver;
 use Cake\Utility\Text;
 use PDO;
-
 /**
  * Binary UUID type converter.
  *
  * Use to convert binary uuid data between PHP and the database types.
  */
-class BinaryUuidType extends BaseType
+class BinaryUuidType extends \Cake\Database\Type\BaseType
 {
     /**
      * Convert binary uuid data into the database format.
@@ -43,15 +42,12 @@ class BinaryUuidType extends BaseType
         if (!is_string($value)) {
             return $value;
         }
-
         $length = strlen($value);
         if ($length !== 36 && $length !== 32) {
             return null;
         }
-
         return $this->convertStringToBinaryUuid($value);
     }
-
     /**
      * Generate a new binary UUID
      *
@@ -61,7 +57,6 @@ class BinaryUuidType extends BaseType
     {
         return Text::uuid();
     }
-
     /**
      * Convert binary uuid into resource handles
      *
@@ -81,10 +76,8 @@ class BinaryUuidType extends BaseType
         if (is_resource($value)) {
             return $value;
         }
-
         throw new CakeException(sprintf('Unable to convert %s into binary uuid.', gettype($value)));
     }
-
     /**
      * @inheritDoc
      */
@@ -92,7 +85,6 @@ class BinaryUuidType extends BaseType
     {
         return PDO::PARAM_LOB;
     }
-
     /**
      * Marshals flat data into PHP objects.
      *
@@ -106,7 +98,6 @@ class BinaryUuidType extends BaseType
     {
         return $value;
     }
-
     /**
      * Converts a binary uuid to a string representation
      *
@@ -116,18 +107,11 @@ class BinaryUuidType extends BaseType
     protected function convertBinaryUuidToString(mixed $binary): string
     {
         $string = unpack('H*', $binary);
-        assert($string !== false, 'Could not unpack uuid');
-
+        assert($string !== \false, 'Could not unpack uuid');
         /** @var array<int, string> $string */
-        $string = preg_replace(
-            '/([0-9a-f]{8})([0-9a-f]{4})([0-9a-f]{4})([0-9a-f]{4})([0-9a-f]{12})/',
-            '$1-$2-$3-$4-$5',
-            $string,
-        );
-
+        $string = preg_replace('/([0-9a-f]{8})([0-9a-f]{4})([0-9a-f]{4})([0-9a-f]{4})([0-9a-f]{12})/', '$1-$2-$3-$4-$5', $string);
         return $string[1];
     }
-
     /**
      * Converts a string UUID (36 or 32 char) to a binary representation.
      *
@@ -137,7 +121,6 @@ class BinaryUuidType extends BaseType
     protected function convertStringToBinaryUuid(string $string): string
     {
         $string = str_replace('-', '', $string);
-
         return pack('H*', $string);
     }
 }

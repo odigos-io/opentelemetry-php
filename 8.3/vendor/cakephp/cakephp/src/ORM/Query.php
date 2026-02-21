@@ -1,5 +1,7 @@
 <?php
-declare(strict_types=1);
+
+declare (strict_types=1);
+namespace Odigos;
 
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
@@ -12,5 +14,4 @@ declare(strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-
-class_alias('Cake\ORM\Query\SelectQuery', 'Cake\ORM\Query');
+\class_alias('Cake\ORM\Query\SelectQuery', 'Cake\ORM\Query');

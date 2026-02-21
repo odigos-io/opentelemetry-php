@@ -1,4 +1,7 @@
 <?php
+
+namespace Odigos;
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -17,19 +20,17 @@ use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Utility\Inflector;
 use function Cake\Core\h;
-
 $namespace = Configure::read('App.namespace');
 if (!empty($plugin)) {
-    $namespace = str_replace('/', '\\', $plugin);
+    $namespace = \str_replace('/', '\\', $plugin);
 }
 $prefixNs = '';
 $prefix ??= '';
 if ($prefix) {
-    $prefix = array_map('Cake\Utility\Inflector::camelize', explode('/', $prefix));
-    $prefixNs = '\\' . implode('\\', $prefix);
-    $prefix = implode(DIRECTORY_SEPARATOR, $prefix) . DIRECTORY_SEPARATOR;
+    $prefix = \array_map('Cake\Utility\Inflector::camelize', \explode('/', $prefix));
+    $prefixNs = '\\' . \implode('\\', $prefix);
+    $prefix = \implode(\DIRECTORY_SEPARATOR, $prefix) . \DIRECTORY_SEPARATOR;
 }
-
 // Controller MissingAction support
 if (isset($controller)) {
     $baseClass = $namespace . '\Controller\AppController';
@@ -44,30 +45,25 @@ if (isset($mailer)) {
     $extends = 'Mailer';
     $class = Inflector::camelize($mailer);
 }
-
 if (empty($plugin)) {
-    $path = APP_DIR . DIRECTORY_SEPARATOR . $type . DIRECTORY_SEPARATOR . $prefix . h($class) . '.php';
+    $path = \APP_DIR . \DIRECTORY_SEPARATOR . $type . \DIRECTORY_SEPARATOR . $prefix . h($class) . '.php';
 } else {
-    $path = Plugin::classPath($plugin) . $type . DIRECTORY_SEPARATOR . $prefix . h($class) . '.php';
+    $path = Plugin::classPath($plugin) . $type . \DIRECTORY_SEPARATOR . $prefix . h($class) . '.php';
 }
-
 $this->layout = 'dev_error';
-
-$this->assign('title', sprintf('Missing Method in %s', h($class)));
-$this->assign(
-    'subheading',
-    sprintf('<strong>Error</strong> The action <em>%s</em> is not defined in <em>%s</em>', h($action), h($class))
-);
+$this->assign('title', \sprintf('Missing Method in %s', h($class)));
+$this->assign('subheading', \sprintf('<strong>Error</strong> The action <em>%s</em> is not defined in <em>%s</em>', h($action), h($class)));
 $this->assign('templateName', 'missing_action.php');
-
 $this->start('file');
 ?>
 <p class="error">
     <strong>Error</strong>
-    <?= sprintf('Create <em>%s::%s()</em> in file: %s.', h($class), h($action), $path); ?>
+    <?php 
+echo \sprintf('Create <em>%s::%s()</em> in file: %s.', h($class), h($action), $path);
+?>
 </p>
 
-<?php
+<?php 
 $code = <<<PHP
 <?php
 namespace {$namespace}\\{$type}{$prefixNs};
@@ -85,5 +81,8 @@ class {$class} extends {$extends}
 PHP;
 ?>
 
-<div class="code-dump"><?php highlight_string($code) ?></div>
-<?php $this->end() ?>
+<div class="code-dump"><?php 
+\highlight_string($code);
+?></div>
+<?php 
+$this->end();

@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Polyfill\Php82;
 
 /**
@@ -18,6 +17,6 @@ trait NoDynamicProperties
 {
     public function __set(string $name, $value): void
     {
-        throw new \Error('Cannot create dynamic property '.self::class.'::$'.$name);
+        throw new \Error('Cannot create dynamic property ' . self::class . '::$' . $name);
     }
 }

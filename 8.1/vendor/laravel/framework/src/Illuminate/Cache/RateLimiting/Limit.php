@@ -10,28 +10,24 @@ class Limit
      * @var mixed
      */
     public $key;
-
     /**
      * The maximum number of attempts allowed within the given number of minutes.
      *
      * @var int
      */
     public $maxAttempts;
-
     /**
      * The number of minutes until the rate limit is reset.
      *
      * @var int
      */
     public $decayMinutes;
-
     /**
      * The response generator callback.
      *
      * @var callable
      */
     public $responseCallback;
-
     /**
      * Create a new limit instance.
      *
@@ -46,7 +42,6 @@ class Limit
         $this->maxAttempts = $maxAttempts;
         $this->decayMinutes = $decayMinutes;
     }
-
     /**
      * Create a new rate limit.
      *
@@ -57,7 +52,6 @@ class Limit
     {
         return new static('', $maxAttempts);
     }
-
     /**
      * Create a new rate limit using minutes as decay time.
      *
@@ -69,7 +63,6 @@ class Limit
     {
         return new static('', $maxAttempts, $decayMinutes);
     }
-
     /**
      * Create a new rate limit using hours as decay time.
      *
@@ -81,7 +74,6 @@ class Limit
     {
         return new static('', $maxAttempts, 60 * $decayHours);
     }
-
     /**
      * Create a new rate limit using days as decay time.
      *
@@ -93,7 +85,6 @@ class Limit
     {
         return new static('', $maxAttempts, 60 * 24 * $decayDays);
     }
-
     /**
      * Create a new unlimited rate limit.
      *
@@ -101,9 +92,8 @@ class Limit
      */
     public static function none()
     {
-        return new Unlimited;
+        return new \Illuminate\Cache\RateLimiting\Unlimited();
     }
-
     /**
      * Set the key of the rate limit.
      *
@@ -113,10 +103,8 @@ class Limit
     public function by($key)
     {
         $this->key = $key;
-
         return $this;
     }
-
     /**
      * Set the callback that should generate the response when the limit is exceeded.
      *
@@ -126,7 +114,6 @@ class Limit
     public function response(callable $callback)
     {
         $this->responseCallback = $callback;
-
         return $this;
     }
 }

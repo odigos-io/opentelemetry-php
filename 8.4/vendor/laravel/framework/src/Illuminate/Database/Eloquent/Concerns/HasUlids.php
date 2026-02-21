@@ -3,11 +3,9 @@
 namespace Illuminate\Database\Eloquent\Concerns;
 
 use Illuminate\Support\Str;
-
 trait HasUlids
 {
-    use HasUniqueStringIds;
-
+    use \Illuminate\Database\Eloquent\Concerns\HasUniqueStringIds;
     /**
      * Generate a new unique key for the model.
      *
@@ -17,7 +15,6 @@ trait HasUlids
     {
         return strtolower((string) Str::ulid());
     }
-
     /**
      * Determine if given key is valid.
      *

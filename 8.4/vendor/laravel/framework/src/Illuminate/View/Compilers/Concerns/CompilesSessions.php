@@ -13,13 +13,11 @@ trait CompilesSessions
     protected function compileSession($expression)
     {
         $expression = $this->stripParentheses($expression);
-
-        return '<?php $__sessionArgs = ['.$expression.'];
+        return '<?php $__sessionArgs = [' . $expression . '];
 if (session()->has($__sessionArgs[0])) :
 if (isset($value)) { $__sessionPrevious[] = $value; }
 $value = session()->get($__sessionArgs[0]); ?>';
     }
-
     /**
      * Compile the endsession statements into valid PHP.
      *

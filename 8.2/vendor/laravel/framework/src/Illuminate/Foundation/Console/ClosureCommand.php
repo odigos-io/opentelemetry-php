@@ -10,28 +10,24 @@ use Illuminate\Support\Traits\ForwardsCalls;
 use ReflectionFunction;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-
 /**
  * @mixin \Illuminate\Console\Scheduling\Event
  */
 class ClosureCommand extends Command
 {
     use ForwardsCalls;
-
     /**
      * The command callback.
      *
      * @var \Closure
      */
     protected $callback;
-
     /**
      * The console command description.
      *
      * @var string
      */
     protected $description = '';
-
     /**
      * Create a new command instance.
      *
@@ -42,10 +38,8 @@ class ClosureCommand extends Command
     {
         $this->callback = $callback;
         $this->signature = $signature;
-
         parent::__construct();
     }
-
     /**
      * Execute the console command.
      *
@@ -56,26 +50,19 @@ class ClosureCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $inputs = array_merge($input->getArguments(), $input->getOptions());
-
         $parameters = [];
-
         foreach ((new ReflectionFunction($this->callback))->getParameters() as $parameter) {
             if (isset($inputs[$parameter->getName()])) {
                 $parameters[$parameter->getName()] = $inputs[$parameter->getName()];
             }
         }
-
         try {
-            return (int) $this->laravel->call(
-                $this->callback->bindTo($this, $this), $parameters
-            );
+            return (int) $this->laravel->call($this->callback->bindTo($this, $this), $parameters);
         } catch (ManuallyFailedException $e) {
             $this->components->error($e->getMessage());
-
             return static::FAILURE;
         }
     }
-
     /**
      * Set the description for the command.
      *
@@ -86,7 +73,6 @@ class ClosureCommand extends Command
     {
         return $this->describe($description);
     }
-
     /**
      * Set the description for the command.
      *
@@ -96,10 +82,8 @@ class ClosureCommand extends Command
     public function describe($description)
     {
         $this->setDescription($description);
-
         return $this;
     }
-
     /**
      * Create a new scheduled event for the command.
      *
@@ -110,7 +94,6 @@ class ClosureCommand extends Command
     {
         return Schedule::command($this->name, $parameters);
     }
-
     /**
      * Dynamically proxy calls to a new scheduled event.
      *

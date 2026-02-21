@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the league/commonmark package.
  *
@@ -10,13 +9,11 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Odigos\League\CommonMark\Xml;
 
-namespace League\CommonMark\Xml;
-
-use League\CommonMark\Node\Block\AbstractBlock;
-use League\CommonMark\Node\Inline\AbstractInline;
-use League\CommonMark\Node\Node;
-
+use Odigos\League\CommonMark\Node\Block\AbstractBlock;
+use Odigos\League\CommonMark\Node\Inline\AbstractInline;
+use Odigos\League\CommonMark\Node\Node;
 /**
  * @internal
  */
@@ -28,7 +25,6 @@ final class FallbackNodeXmlRenderer implements XmlNodeRendererInterface
      * @psalm-allow-private-mutation
      */
     private array $classCache = [];
-
     /**
      * @psalm-allow-private-mutation
      */
@@ -38,13 +34,10 @@ final class FallbackNodeXmlRenderer implements XmlNodeRendererInterface
         if (isset($this->classCache[$className])) {
             return $this->classCache[$className];
         }
-
-        $type      = $node instanceof AbstractBlock ? 'block' : 'inline';
+        $type = $node instanceof AbstractBlock ? 'block' : 'inline';
         $shortName = \strtolower((new \ReflectionClass($node))->getShortName());
-
         return $this->classCache[$className] = \sprintf('custom_%s_%s', $type, $shortName);
     }
-
     /**
      * {@inheritDoc}
      */
@@ -56,23 +49,19 @@ final class FallbackNodeXmlRenderer implements XmlNodeRendererInterface
                 $attrs[$k] = $v;
             }
         }
-
         $reflClass = new \ReflectionClass($node);
         foreach ($reflClass->getProperties() as $property) {
-            if (\in_array($property->getDeclaringClass()->getName(), [Node::class, AbstractBlock::class, AbstractInline::class], true)) {
+            if (\in_array($property->getDeclaringClass()->getName(), [Node::class, AbstractBlock::class, AbstractInline::class], \true)) {
                 continue;
             }
-
-            $property->setAccessible(true);
+            $property->setAccessible(\true);
             $value = $property->getValue($node);
             if (self::isValueUsable($value)) {
                 $attrs[$property->getName()] = $value;
             }
         }
-
         return $attrs;
     }
-
     /**
      * @param mixed $var
      *

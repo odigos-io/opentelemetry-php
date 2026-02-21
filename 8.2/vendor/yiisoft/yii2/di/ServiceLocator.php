@@ -1,17 +1,16 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\di;
 
 use Closure;
-use Yii;
+use Odigos\Yii;
 use yii\base\Component;
 use yii\base\InvalidConfigException;
-
 /**
  * ServiceLocator implements a [service locator](https://en.wikipedia.org/wiki/Service_locator_pattern).
  *
@@ -60,8 +59,6 @@ class ServiceLocator extends Component
      * @var array component definitions indexed by their IDs
      */
     private $_definitions = [];
-
-
     /**
      * Getter magic method.
      * This method is overridden to support accessing components like reading properties.
@@ -73,10 +70,8 @@ class ServiceLocator extends Component
         if ($this->has($name)) {
             return $this->get($name);
         }
-
         return parent::__get($name);
     }
-
     /**
      * Checks if a property value is null.
      * This method overrides the parent implementation by checking if the named component is loaded.
@@ -86,12 +81,10 @@ class ServiceLocator extends Component
     public function __isset($name)
     {
         if ($this->has($name)) {
-            return true;
+            return \true;
         }
-
         return parent::__isset($name);
     }
-
     /**
      * Returns a value indicating whether the locator has the specified component definition or has instantiated the component.
      * This method may return different results depending on the value of `$checkInstance`.
@@ -106,11 +99,10 @@ class ServiceLocator extends Component
      * @return bool whether the locator has the specified component definition or has instantiated the component.
      * @see set()
      */
-    public function has($id, $checkInstance = false)
+    public function has($id, $checkInstance = \false)
     {
         return $checkInstance ? isset($this->_components[$id]) : isset($this->_definitions[$id]);
     }
-
     /**
      * Returns the component instance with the specified ID.
      *
@@ -125,26 +117,22 @@ class ServiceLocator extends Component
      * @phpstan-return ($throwException is true ? object : object|null)
      * @psalm-return ($throwException is true ? object : object|null)
      */
-    public function get($id, $throwException = true)
+    public function get($id, $throwException = \true)
     {
         if (isset($this->_components[$id])) {
             return $this->_components[$id];
         }
-
         if (isset($this->_definitions[$id])) {
             $definition = $this->_definitions[$id];
             if (is_object($definition) && !$definition instanceof Closure) {
                 return $this->_components[$id] = $definition;
             }
-
             return $this->_components[$id] = Yii::createObject($definition);
         } elseif ($throwException) {
-            throw new InvalidConfigException("Unknown component ID: $id");
+            throw new InvalidConfigException("Unknown component ID: {$id}");
         }
-
         return null;
     }
-
     /**
      * Registers a component definition with this locator.
      *
@@ -191,13 +179,11 @@ class ServiceLocator extends Component
     public function set($id, $definition)
     {
         unset($this->_components[$id]);
-
         if ($definition === null) {
             unset($this->_definitions[$id]);
             return;
         }
-
-        if (is_object($definition) || is_callable($definition, true)) {
+        if (is_object($definition) || is_callable($definition, \true)) {
             // an object, a class name, or a PHP callable
             $this->_definitions[$id] = $definition;
         } elseif (is_array($definition)) {
@@ -209,13 +195,12 @@ class ServiceLocator extends Component
             } elseif (isset($definition['class'])) {
                 $this->_definitions[$id] = $definition;
             } else {
-                throw new InvalidConfigException("The configuration for the \"$id\" component must contain a \"class\" element.");
+                throw new InvalidConfigException("The configuration for the \"{$id}\" component must contain a \"class\" element.");
             }
         } else {
-            throw new InvalidConfigException("Unexpected configuration type for the \"$id\" component: " . gettype($definition));
+            throw new InvalidConfigException("Unexpected configuration type for the \"{$id}\" component: " . gettype($definition));
         }
     }
-
     /**
      * Removes the component from the locator.
      * @param string $id the component ID
@@ -224,17 +209,15 @@ class ServiceLocator extends Component
     {
         unset($this->_definitions[$id], $this->_components[$id]);
     }
-
     /**
      * Returns the list of the component definitions or the loaded component instances.
      * @param bool $returnDefinitions whether to return component definitions instead of the loaded component instances.
      * @return array the list of the component definitions or the loaded component instances (ID => definition or instance).
      */
-    public function getComponents($returnDefinitions = true)
+    public function getComponents($returnDefinitions = \true)
     {
         return $returnDefinitions ? $this->_definitions : $this->_components;
     }
-
     /**
      * Registers a set of component definitions in this locator.
      *

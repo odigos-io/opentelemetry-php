@@ -2,7 +2,7 @@
 
 namespace Illuminate\Contracts\Queue;
 
-interface ShouldQueueAfterCommit extends ShouldQueue
+interface ShouldQueueAfterCommit extends \Illuminate\Contracts\Queue\ShouldQueue
 {
     //
 }

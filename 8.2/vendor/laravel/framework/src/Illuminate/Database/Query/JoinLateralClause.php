@@ -2,7 +2,7 @@
 
 namespace Illuminate\Database\Query;
 
-class JoinLateralClause extends JoinClause
+class JoinLateralClause extends \Illuminate\Database\Query\JoinClause
 {
     //
 }

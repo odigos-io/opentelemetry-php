@@ -9,14 +9,11 @@
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
  */
-
-declare(strict_types=1);
-
-namespace Ramsey\Uuid\Type;
+declare (strict_types=1);
+namespace Odigos\Ramsey\Uuid\Type;
 
 use JsonSerializable;
 use Serializable;
-
 /**
  * TypeInterface ensures consistency in typed values returned by ramsey/uuid
  *
@@ -28,7 +25,6 @@ interface TypeInterface extends JsonSerializable, Serializable
      * @pure
      */
     public function toString(): string;
-
     /**
      * @pure
      */

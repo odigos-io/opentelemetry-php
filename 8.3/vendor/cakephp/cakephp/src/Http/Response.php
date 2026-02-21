@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -25,15 +25,14 @@ use DateTime;
 use DateTimeInterface;
 use DateTimeZone;
 use InvalidArgumentException;
-use Laminas\Diactoros\MessageTrait;
-use Laminas\Diactoros\Stream;
+use Odigos\Laminas\Diactoros\MessageTrait;
+use Odigos\Laminas\Diactoros\Stream;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
 use SplFileInfo;
 use Stringable;
 use function Cake\Core\env;
 use function Cake\I18n\__d;
-
 /**
  * Responses contain the response text, status and headers of a HTTP response.
  *
@@ -46,118 +45,44 @@ use function Cake\I18n\__d;
 class Response implements ResponseInterface, Stringable
 {
     use MessageTrait;
-
     /**
      * @var int
      */
     public const STATUS_CODE_MIN = 100;
-
     /**
      * @var int
      */
     public const STATUS_CODE_MAX = 599;
-
     /**
      * Allowed HTTP status codes and their default description.
      *
      * @var array<int, string>
      */
-    protected array $_statusCodes = [
-        100 => 'Continue',
-        101 => 'Switching Protocols',
-        102 => 'Processing',
-        200 => 'OK',
-        201 => 'Created',
-        202 => 'Accepted',
-        203 => 'Non-Authoritative Information',
-        204 => 'No Content',
-        205 => 'Reset Content',
-        206 => 'Partial Content',
-        207 => 'Multi-status',
-        208 => 'Already Reported',
-        226 => 'IM used',
-        300 => 'Multiple Choices',
-        301 => 'Moved Permanently',
-        302 => 'Found',
-        303 => 'See Other',
-        304 => 'Not Modified',
-        305 => 'Use Proxy',
-        306 => '(Unused)',
-        307 => 'Temporary Redirect',
-        308 => 'Permanent Redirect',
-        400 => 'Bad Request',
-        401 => 'Unauthorized',
-        402 => 'Payment Required',
-        403 => 'Forbidden',
-        404 => 'Not Found',
-        405 => 'Method Not Allowed',
-        406 => 'Not Acceptable',
-        407 => 'Proxy Authentication Required',
-        408 => 'Request Timeout',
-        409 => 'Conflict',
-        410 => 'Gone',
-        411 => 'Length Required',
-        412 => 'Precondition Failed',
-        413 => 'Request Entity Too Large',
-        414 => 'Request-URI Too Large',
-        415 => 'Unsupported Media Type',
-        416 => 'Requested range not satisfiable',
-        417 => 'Expectation Failed',
-        418 => "I'm a teapot",
-        421 => 'Misdirected Request',
-        422 => 'Unprocessable Entity',
-        423 => 'Locked',
-        424 => 'Failed Dependency',
-        425 => 'Unordered Collection',
-        426 => 'Upgrade Required',
-        428 => 'Precondition Required',
-        429 => 'Too Many Requests',
-        431 => 'Request Header Fields Too Large',
-        444 => 'Connection Closed Without Response',
-        451 => 'Unavailable For Legal Reasons',
-        499 => 'Client Closed Request',
-        500 => 'Internal Server Error',
-        501 => 'Not Implemented',
-        502 => 'Bad Gateway',
-        503 => 'Service Unavailable',
-        504 => 'Gateway Timeout',
-        505 => 'Unsupported Version',
-        506 => 'Variant Also Negotiates',
-        507 => 'Insufficient Storage',
-        508 => 'Loop Detected',
-        510 => 'Not Extended',
-        511 => 'Network Authentication Required',
-        599 => 'Network Connect Timeout Error',
-    ];
-
+    protected array $_statusCodes = [100 => 'Continue', 101 => 'Switching Protocols', 102 => 'Processing', 200 => 'OK', 201 => 'Created', 202 => 'Accepted', 203 => 'Non-Authoritative Information', 204 => 'No Content', 205 => 'Reset Content', 206 => 'Partial Content', 207 => 'Multi-status', 208 => 'Already Reported', 226 => 'IM used', 300 => 'Multiple Choices', 301 => 'Moved Permanently', 302 => 'Found', 303 => 'See Other', 304 => 'Not Modified', 305 => 'Use Proxy', 306 => '(Unused)', 307 => 'Temporary Redirect', 308 => 'Permanent Redirect', 400 => 'Bad Request', 401 => 'Unauthorized', 402 => 'Payment Required', 403 => 'Forbidden', 404 => 'Not Found', 405 => 'Method Not Allowed', 406 => 'Not Acceptable', 407 => 'Proxy Authentication Required', 408 => 'Request Timeout', 409 => 'Conflict', 410 => 'Gone', 411 => 'Length Required', 412 => 'Precondition Failed', 413 => 'Request Entity Too Large', 414 => 'Request-URI Too Large', 415 => 'Unsupported Media Type', 416 => 'Requested range not satisfiable', 417 => 'Expectation Failed', 418 => "I'm a teapot", 421 => 'Misdirected Request', 422 => 'Unprocessable Entity', 423 => 'Locked', 424 => 'Failed Dependency', 425 => 'Unordered Collection', 426 => 'Upgrade Required', 428 => 'Precondition Required', 429 => 'Too Many Requests', 431 => 'Request Header Fields Too Large', 444 => 'Connection Closed Without Response', 451 => 'Unavailable For Legal Reasons', 499 => 'Client Closed Request', 500 => 'Internal Server Error', 501 => 'Not Implemented', 502 => 'Bad Gateway', 503 => 'Service Unavailable', 504 => 'Gateway Timeout', 505 => 'Unsupported Version', 506 => 'Variant Also Negotiates', 507 => 'Insufficient Storage', 508 => 'Loop Detected', 510 => 'Not Extended', 511 => 'Network Authentication Required', 599 => 'Network Connect Timeout Error'];
     /**
      * Status code to send to the client
      *
      * @var int
      */
     protected int $_status = 200;
-
     /**
      * File object for file to be read out as response
      *
      * @var \SplFileInfo|null
      */
     protected ?SplFileInfo $_file = null;
-
     /**
      * File range. Used for requesting ranges of files.
      *
      * @var array<int>
      */
     protected array $_fileRange = [];
-
     /**
      * The charset the response body is encoded with
      *
      * @var string
      */
     protected string $_charset = 'UTF-8';
-
     /**
      * Holds all the cache directives that will be converted
      * into headers when sending the response
@@ -165,35 +90,30 @@ class Response implements ResponseInterface, Stringable
      * @var array<string, mixed>
      */
     protected array $_cacheDirectives = [];
-
     /**
      * Collection of cookies to send to the client
      *
      * @var \Cake\Http\Cookie\CookieCollection
      */
     protected CookieCollection $_cookies;
-
     /**
      * Reason Phrase
      *
      * @var string
      */
     protected string $_reasonPhrase = 'OK';
-
     /**
      * Stream mode options.
      *
      * @var string
      */
     protected string $_streamMode = 'wb+';
-
     /**
      * Stream target or resource object.
      *
      * @var resource|string
      */
     protected $_streamTarget = 'php://memory';
-
     /**
      * Constructor
      *
@@ -232,7 +152,6 @@ class Response implements ResponseInterface, Stringable
         $this->_setContentType($type);
         $this->_cookies = new CookieCollection();
     }
-
     /**
      * Creates the stream object.
      *
@@ -242,7 +161,6 @@ class Response implements ResponseInterface, Stringable
     {
         $this->stream = new Stream($this->_streamTarget, $this->_streamMode);
     }
-
     /**
      * Formats the Content-Type header based on the configured contentType and charset
      * the charset will only be set in the header if the response is of type text/*
@@ -255,33 +173,21 @@ class Response implements ResponseInterface, Stringable
      */
     protected function _setContentType(string $type): void
     {
-        if (in_array($this->_status, [304, 204], true)) {
+        if (in_array($this->_status, [304, 204], \true)) {
             $this->_clearHeader('Content-Type');
-
             return;
         }
-        $allowed = [
-            'application/javascript', 'application/xml', 'application/rss+xml',
-        ];
-
-        $charset = false;
-        if (
-            $this->_charset &&
-            (
-                str_starts_with($type, 'text/') ||
-                in_array($type, $allowed, true)
-            )
-        ) {
-            $charset = true;
+        $allowed = ['application/javascript', 'application/xml', 'application/rss+xml'];
+        $charset = \false;
+        if ($this->_charset && (str_starts_with($type, 'text/') || in_array($type, $allowed, \true))) {
+            $charset = \true;
         }
-
         if ($charset && !str_contains($type, ';')) {
             $this->_setHeader('Content-Type', "{$type}; charset={$this->_charset}");
         } else {
             $this->_setHeader('Content-Type', $type);
         }
     }
-
     /**
      * Return an instance with an updated location header.
      *
@@ -297,10 +203,8 @@ class Response implements ResponseInterface, Stringable
         if ($new->_status === 200) {
             $new->_status = 302;
         }
-
         return $new;
     }
-
     /**
      * Sets a header.
      *
@@ -315,7 +219,6 @@ class Response implements ResponseInterface, Stringable
         $this->headerNames[$normalized] = $header;
         $this->headers[$header] = [$value];
     }
-
     /**
      * Clear header
      *
@@ -332,7 +235,6 @@ class Response implements ResponseInterface, Stringable
         $original = $this->headerNames[$normalized];
         unset($this->headerNames[$normalized], $this->headers[$original]);
     }
-
     /**
      * Gets the response status code.
      *
@@ -345,7 +247,6 @@ class Response implements ResponseInterface, Stringable
     {
         return $this->_status;
     }
-
     /**
      * Return an instance with the specified status code and, optionally, reason phrase.
      *
@@ -379,10 +280,8 @@ class Response implements ResponseInterface, Stringable
     {
         $new = clone $this;
         $new->_setStatus($code, $reasonPhrase);
-
         return $new;
     }
-
     /**
      * Modifier for response status
      *
@@ -394,24 +293,18 @@ class Response implements ResponseInterface, Stringable
     protected function _setStatus(int $code, string $reasonPhrase = ''): void
     {
         if ($code < static::STATUS_CODE_MIN || $code > static::STATUS_CODE_MAX) {
-            throw new InvalidArgumentException(sprintf(
-                'Invalid status code: %s. Use a valid HTTP status code in range 1xx - 5xx.',
-                $code,
-            ));
+            throw new InvalidArgumentException(sprintf('Invalid status code: %s. Use a valid HTTP status code in range 1xx - 5xx.', $code));
         }
-
         $this->_status = $code;
         if ($reasonPhrase === '' && isset($this->_statusCodes[$code])) {
             $reasonPhrase = $this->_statusCodes[$code];
         }
         $this->_reasonPhrase = $reasonPhrase;
-
         // These status codes don't have bodies and can't have content-types.
-        if (in_array($code, [304, 204], true)) {
+        if (in_array($code, [304, 204], \true)) {
             $this->_clearHeader('Content-Type');
         }
     }
-
     /**
      * Gets the response reason phrase associated with the status code.
      *
@@ -429,7 +322,6 @@ class Response implements ResponseInterface, Stringable
     {
         return $this->_reasonPhrase;
     }
-
     /**
      * Sets a content type definition into the map.
      *
@@ -443,9 +335,8 @@ class Response implements ResponseInterface, Stringable
      */
     public function setTypeMap(string $type, array|string $mimeType): void
     {
-        MimeType::setMimeTypes($type, $mimeType);
+        \Cake\Http\MimeType::setMimeTypes($type, $mimeType);
     }
-
     /**
      * Returns the current content type.
      *
@@ -457,10 +348,8 @@ class Response implements ResponseInterface, Stringable
         if (str_contains($header, ';')) {
             return explode(';', $header)[0];
         }
-
         return $header;
     }
-
     /**
      * Get an updated response with the content type set.
      *
@@ -475,10 +364,8 @@ class Response implements ResponseInterface, Stringable
         $mappedType = $this->resolveType($contentType);
         $new = clone $this;
         $new->_setContentType($mappedType);
-
         return $new;
     }
-
     /**
      * Translate and validate content-types.
      *
@@ -491,15 +378,12 @@ class Response implements ResponseInterface, Stringable
         if (str_contains($contentType, '/')) {
             return $contentType;
         }
-
-        $mimeType = MimeType::getMimeType($contentType);
+        $mimeType = \Cake\Http\MimeType::getMimeType($contentType);
         if ($mimeType === null) {
             throw new InvalidArgumentException(sprintf('`%s` is an invalid content type.', $contentType));
         }
-
         return $mimeType;
     }
-
     /**
      * Returns the mime type definition for an alias
      *
@@ -510,15 +394,12 @@ class Response implements ResponseInterface, Stringable
      */
     public function getMimeType(string $alias): array|string|false
     {
-        $mimeTypes = MimeType::getMimeTypes($alias);
-
+        $mimeTypes = \Cake\Http\MimeType::getMimeTypes($alias);
         if ($mimeTypes === null) {
-            return false;
+            return \false;
         }
-
         return count($mimeTypes) === 1 ? $mimeTypes[0] : $mimeTypes;
     }
-
     /**
      * Maps a content-type back to an alias
      *
@@ -532,10 +413,8 @@ class Response implements ResponseInterface, Stringable
         if (is_array($ctype)) {
             return array_map($this->mapType(...), $ctype);
         }
-
-        return MimeType::getExtension($ctype);
+        return \Cake\Http\MimeType::getExtension($ctype);
     }
-
     /**
      * Returns the current charset.
      *
@@ -545,7 +424,6 @@ class Response implements ResponseInterface, Stringable
     {
         return $this->_charset;
     }
-
     /**
      * Get a new instance with an updated charset.
      *
@@ -557,10 +435,8 @@ class Response implements ResponseInterface, Stringable
         $new = clone $this;
         $new->_charset = $charset;
         $new->_setContentType($this->getType());
-
         return $new;
     }
-
     /**
      * Create a new instance with headers to instruct the client to not cache the response
      *
@@ -568,11 +444,8 @@ class Response implements ResponseInterface, Stringable
      */
     public function withDisabledCache(): static
     {
-        return $this->withHeader('Expires', 'Mon, 26 Jul 1997 05:00:00 GMT')
-            ->withHeader('Last-Modified', CakeDateTime::parse(time())->toRfc7231String())
-            ->withHeader('Cache-Control', 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
+        return $this->withHeader('Expires', 'Mon, 26 Jul 1997 05:00:00 GMT')->withHeader('Last-Modified', CakeDateTime::parse(time())->toRfc7231String())->withHeader('Cache-Control', 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
     }
-
     /**
      * Create a new instance with the headers to enable client caching.
      *
@@ -584,20 +457,12 @@ class Response implements ResponseInterface, Stringable
     {
         if (!is_int($time)) {
             $time = strtotime($time);
-            if ($time === false) {
-                throw new InvalidArgumentException(
-                    'Invalid time parameter. Ensure your time value can be parsed by strtotime',
-                );
+            if ($time === \false) {
+                throw new InvalidArgumentException('Invalid time parameter. Ensure your time value can be parsed by strtotime');
             }
         }
-
-        return $this->withHeader('Date', CakeDateTime::parse(time())->toRfc7231String())
-            ->withModified($since)
-            ->withExpires($time)
-            ->withSharable(true)
-            ->withMaxAge($time - time());
+        return $this->withHeader('Date', CakeDateTime::parse(time())->toRfc7231String())->withModified($since)->withExpires($time)->withSharable(\true)->withMaxAge($time - time());
     }
-
     /**
      * Create a new instace with the public/private Cache-Control directive set.
      *
@@ -610,18 +475,14 @@ class Response implements ResponseInterface, Stringable
     {
         $new = clone $this;
         unset($new->_cacheDirectives['private'], $new->_cacheDirectives['public']);
-
         $key = $public ? 'public' : 'private';
-        $new->_cacheDirectives[$key] = true;
-
+        $new->_cacheDirectives[$key] = \true;
         if ($time !== null) {
             $new->_cacheDirectives['max-age'] = $time;
         }
         $new->_setCacheControl();
-
         return $new;
     }
-
     /**
      * Create a new instance with the Cache-Control s-maxage directive.
      *
@@ -636,10 +497,8 @@ class Response implements ResponseInterface, Stringable
         $new = clone $this;
         $new->_cacheDirectives['s-maxage'] = $seconds;
         $new->_setCacheControl();
-
         return $new;
     }
-
     /**
      * Create an instance with Cache-Control max-age directive set.
      *
@@ -654,10 +513,8 @@ class Response implements ResponseInterface, Stringable
         $new = clone $this;
         $new->_cacheDirectives['max-age'] = $seconds;
         $new->_setCacheControl();
-
         return $new;
     }
-
     /**
      * Create an instance with Cache-Control must-revalidate directive set.
      *
@@ -673,15 +530,13 @@ class Response implements ResponseInterface, Stringable
     {
         $new = clone $this;
         if ($enable) {
-            $new->_cacheDirectives['must-revalidate'] = true;
+            $new->_cacheDirectives['must-revalidate'] = \true;
         } else {
             unset($new->_cacheDirectives['must-revalidate']);
         }
         $new->_setCacheControl();
-
         return $new;
     }
-
     /**
      * Helper method to generate a valid Cache-Control header from the options set
      * in other methods
@@ -692,13 +547,12 @@ class Response implements ResponseInterface, Stringable
     {
         $control = '';
         foreach ($this->_cacheDirectives as $key => $val) {
-            $control .= $val === true ? $key : sprintf('%s=%s', $key, $val);
+            $control .= $val === \true ? $key : sprintf('%s=%s', $key, $val);
             $control .= ', ';
         }
         $control = rtrim($control, ', ');
         $this->_setHeader('Cache-Control', $control);
     }
-
     /**
      * Create a new instance with the Expires header set.
      *
@@ -722,7 +576,6 @@ class Response implements ResponseInterface, Stringable
     {
         return $this->withHeader('Expires', $this->getRfc7231($time));
     }
-
     /**
      * Create a new instance with the Last-Modified header set.
      *
@@ -746,7 +599,6 @@ class Response implements ResponseInterface, Stringable
     {
         return $this->withHeader('Last-Modified', $this->getRfc7231($time));
     }
-
     /**
      * Create a new instance as 'not modified'
      *
@@ -760,22 +612,12 @@ class Response implements ResponseInterface, Stringable
     {
         $new = $this->withStatus(304);
         $new->_createStream();
-        $remove = [
-            'Allow',
-            'Content-Encoding',
-            'Content-Language',
-            'Content-Length',
-            'Content-MD5',
-            'Content-Type',
-            'Last-Modified',
-        ];
+        $remove = ['Allow', 'Content-Encoding', 'Content-Language', 'Content-Length', 'Content-MD5', 'Content-Type', 'Last-Modified'];
         foreach ($remove as $header) {
             $new = $new->withoutHeader($header);
         }
-
         return $new;
     }
-
     /**
      * Create a new instance with the Vary header set.
      *
@@ -789,9 +631,8 @@ class Response implements ResponseInterface, Stringable
      */
     public function withVary(array|string $cacheVariances): static
     {
-        return $this->withHeader('Vary', (array)$cacheVariances);
+        return $this->withHeader('Vary', (array) $cacheVariances);
     }
-
     /**
      * Create a new instance with the Etag header set.
      *
@@ -813,13 +654,11 @@ class Response implements ResponseInterface, Stringable
      *   other with the same hash or not. Defaults to false
      * @return static
      */
-    public function withEtag(string $hash, bool $weak = false): static
+    public function withEtag(string $hash, bool $weak = \false): static
     {
         $hash = sprintf('%s"%s"', $weak ? 'W/' : '', $hash);
-
         return $this->withHeader('Etag', $hash);
     }
-
     /**
      * Returns a DateTime object initialized at the $time param and using UTC
      * as timezone
@@ -836,11 +675,9 @@ class Response implements ResponseInterface, Stringable
         } else {
             $result = new DateTime($time ?? 'now');
         }
-
         /** @phpstan-ignore-next-line */
         return $result->setTimezone(new DateTimeZone('UTC'));
     }
-
     /**
      * Converts the time zone to GMT and returns a string in RFC7231 format.
      * This replaced the deprecated and broken ``DATE_RFC7231`` formatting constant.
@@ -852,7 +689,6 @@ class Response implements ResponseInterface, Stringable
     {
         return $this->_getUTCDate($time)->format('D, d M Y H:i:s \G\M\T');
     }
-
     /**
      * Sets the correct output buffering handler to send a compressed response. Responses will
      * be compressed with zlib, if the extension is available.
@@ -861,12 +697,8 @@ class Response implements ResponseInterface, Stringable
      */
     public function compress(): bool
     {
-        return ini_get('zlib.output_compression') !== '1' &&
-            extension_loaded('zlib') &&
-            str_contains((string)env('HTTP_ACCEPT_ENCODING'), 'gzip') &&
-            ob_start('ob_gzhandler');
+        return ini_get('zlib.output_compression') !== '1' && extension_loaded('zlib') && str_contains((string) env('HTTP_ACCEPT_ENCODING'), 'gzip') && ob_start('ob_gzhandler');
     }
-
     /**
      * Returns whether the resulting output will be compressed by PHP
      *
@@ -874,10 +706,8 @@ class Response implements ResponseInterface, Stringable
      */
     public function outputCompressed(): bool
     {
-        return str_contains((string)env('HTTP_ACCEPT_ENCODING'), 'gzip')
-            && (ini_get('zlib.output_compression') === '1' || in_array('ob_gzhandler', ob_list_handlers(), true));
+        return str_contains((string) env('HTTP_ACCEPT_ENCODING'), 'gzip') && (ini_get('zlib.output_compression') === '1' || in_array('ob_gzhandler', ob_list_handlers(), \true));
     }
-
     /**
      * Create a new instance with the Content-Disposition header set.
      *
@@ -888,7 +718,6 @@ class Response implements ResponseInterface, Stringable
     {
         return $this->withHeader('Content-Disposition', 'attachment; filename="' . $filename . '"');
     }
-
     /**
      * Create a new response with the Content-Length header set.
      *
@@ -897,9 +726,8 @@ class Response implements ResponseInterface, Stringable
      */
     public function withLength(string|int $bytes): static
     {
-        return $this->withHeader('Content-Length', (string)$bytes);
+        return $this->withHeader('Content-Length', (string) $bytes);
     }
-
     /**
      * Create a new response with the Link header set.
      *
@@ -928,15 +756,12 @@ class Response implements ResponseInterface, Stringable
         foreach ($options as $key => $option) {
             $params[] = $key . '="' . $option . '"';
         }
-
         $param = '';
         if ($params) {
             $param = '; ' . implode('; ', $params);
         }
-
         return $this->withAddedHeader('Link', '<' . $url . '>' . $param);
     }
-
     /**
      * Checks whether a response has not been modified according to the 'If-None-Match'
      * (Etags) and 'If-Modified-Since' (last modification date) request
@@ -949,27 +774,24 @@ class Response implements ResponseInterface, Stringable
      * @param \Cake\Http\ServerRequest $request Request object
      * @return bool Whether the response is 'modified' based on cache headers.
      */
-    public function isNotModified(ServerRequest $request): bool
+    public function isNotModified(\Cake\Http\ServerRequest $request): bool
     {
-        $etags = preg_split('/\s*,\s*/', $request->getHeaderLine('If-None-Match'), 0, PREG_SPLIT_NO_EMPTY) ?: [];
+        $etags = preg_split('/\s*,\s*/', $request->getHeaderLine('If-None-Match'), 0, \PREG_SPLIT_NO_EMPTY) ?: [];
         $responseTag = $this->getHeaderLine('Etag');
         $etagMatches = null;
         if ($responseTag) {
-            $etagMatches = in_array('*', $etags, true) || in_array($responseTag, $etags, true);
+            $etagMatches = in_array('*', $etags, \true) || in_array($responseTag, $etags, \true);
         }
-
         $modifiedSince = $request->getHeaderLine('If-Modified-Since');
         $timeMatches = null;
         if ($modifiedSince && $this->hasHeader('Last-Modified')) {
             $timeMatches = strtotime($this->getHeaderLine('Last-Modified')) === strtotime($modifiedSince);
         }
         if ($etagMatches === null && $timeMatches === null) {
-            return false;
+            return \false;
         }
-
-        return $etagMatches !== false && $timeMatches !== false;
+        return $etagMatches !== \false && $timeMatches !== \false;
     }
-
     /**
      * String conversion. Fetches the response body as a string.
      * Does *not* send headers.
@@ -980,10 +802,8 @@ class Response implements ResponseInterface, Stringable
     public function __toString(): string
     {
         $this->stream->rewind();
-
         return $this->stream->getContents();
     }
-
     /**
      * Create a new response with a cookie set.
      *
@@ -1001,10 +821,8 @@ class Response implements ResponseInterface, Stringable
     {
         $new = clone $this;
         $new->_cookies = $new->_cookies->add($cookie);
-
         return $new;
     }
-
     /**
      * Create a new response with an expired cookie set.
      *
@@ -1021,13 +839,10 @@ class Response implements ResponseInterface, Stringable
     public function withExpiredCookie(CookieInterface $cookie): static
     {
         $cookie = $cookie->withExpired();
-
         $new = clone $this;
         $new->_cookies = $new->_cookies->add($cookie);
-
         return $new;
     }
-
     /**
      * Read a single cookie from the response.
      *
@@ -1042,10 +857,8 @@ class Response implements ResponseInterface, Stringable
         if (!$this->_cookies->has($name)) {
             return null;
         }
-
         return $this->_cookies->get($name)->toArray();
     }
-
     /**
      * Get all cookies in the response.
      *
@@ -1059,10 +872,8 @@ class Response implements ResponseInterface, Stringable
         foreach ($this->_cookies as $cookie) {
             $out[$cookie->getName()] = $cookie->toArray();
         }
-
         return $out;
     }
-
     /**
      * Get the CookieCollection from the response
      *
@@ -1072,7 +883,6 @@ class Response implements ResponseInterface, Stringable
     {
         return $this->_cookies;
     }
-
     /**
      * Get a new instance with provided cookie collection.
      *
@@ -1083,10 +893,8 @@ class Response implements ResponseInterface, Stringable
     {
         $new = clone $this;
         $new->_cookies = $cookieCollection;
-
         return $new;
     }
-
     /**
      * Get a CorsBuilder instance for defining CORS headers.
      *
@@ -1094,14 +902,12 @@ class Response implements ResponseInterface, Stringable
      * @return \Cake\Http\CorsBuilder A builder object the provides a fluent interface for defining
      *   additional CORS headers.
      */
-    public function cors(ServerRequest $request): CorsBuilder
+    public function cors(\Cake\Http\ServerRequest $request): \Cake\Http\CorsBuilder
     {
         $origin = $request->getHeaderLine('Origin');
         $https = $request->is('https');
-
-        return new CorsBuilder($this, $origin, $https);
+        return new \Cake\Http\CorsBuilder($this, $origin, $https);
     }
-
     /**
      * Create a new instance that is based on a file.
      *
@@ -1124,42 +930,32 @@ class Response implements ResponseInterface, Stringable
     public function withFile(string $path, array $options = []): static
     {
         $file = $this->validateFile($path);
-        $options += [
-            'name' => null,
-            'download' => null,
-        ];
-
+        $options += ['name' => null, 'download' => null];
         $extension = $file->getExtension();
-        $mapped = MimeType::getMimeTypeForFile($file->getRealPath());
+        $mapped = \Cake\Http\MimeType::getMimeTypeForFile($file->getRealPath());
         if ($extension === '' && $options['download'] === null) {
-            $options['download'] = true;
+            $options['download'] = \true;
         }
-
         $new = clone $this;
         if ($mapped) {
             $new = $new->withType($mapped);
         }
-
         $fileSize = $file->getSize();
         if ($options['download']) {
             $name = $options['name'] ?: $file->getFileName();
-            $new = $new->withDownload($name)
-                ->withHeader('Content-Transfer-Encoding', 'binary');
+            $new = $new->withDownload($name)->withHeader('Content-Transfer-Encoding', 'binary');
         }
-
         $new = $new->withHeader('Accept-Ranges', 'bytes');
-        $httpRange = (string)env('HTTP_RANGE');
+        $httpRange = (string) env('HTTP_RANGE');
         if ($httpRange) {
             $new->_fileRange($file, $httpRange);
         } else {
-            $new = $new->withHeader('Content-Length', (string)$fileSize);
+            $new = $new->withHeader('Content-Length', (string) $fileSize);
         }
         $new->_file = $file;
         $new->stream = new Stream($file->getPathname(), 'rb');
-
         return $new;
     }
-
     /**
      * Convenience method to set a string into the response body
      *
@@ -1170,11 +966,9 @@ class Response implements ResponseInterface, Stringable
     {
         $new = clone $this;
         $new->_createStream();
-        $new->stream->write((string)$string);
-
+        $new->stream->write((string) $string);
         return $new;
     }
-
     /**
      * Validate a file path is a valid response body.
      *
@@ -1187,7 +981,6 @@ class Response implements ResponseInterface, Stringable
         if (str_contains($path, '../') || str_contains($path, '..\\')) {
             throw new NotFoundException(__d('cake', 'The requested file contains `..` and will not be read.'));
         }
-
         $file = new SplFileInfo($path);
         if (!$file->isFile() || !$file->isReadable()) {
             if (Configure::read('debug')) {
@@ -1195,10 +988,8 @@ class Response implements ResponseInterface, Stringable
             }
             throw new NotFoundException(__d('cake', 'The requested file was not found'));
         }
-
         return $file;
     }
-
     /**
      * Get the current file if one exists.
      *
@@ -1208,7 +999,6 @@ class Response implements ResponseInterface, Stringable
     {
         return $this->_file;
     }
-
     /**
      * Apply a file range to a file and set the end offset.
      *
@@ -1225,29 +1015,24 @@ class Response implements ResponseInterface, Stringable
         $lastByte = $fileSize - 1;
         $start = 0;
         $end = $lastByte;
-
         preg_match('/^bytes\s*=\s*(\d+)?\s*-\s*(\d+)?$/', $httpRange, $matches);
         if ($matches) {
             $start = $matches[1];
             $end = $matches[2] ?? '';
         }
-
         if ($start === '') {
-            $start = $fileSize - (int)$end;
+            $start = $fileSize - (int) $end;
             $end = $lastByte;
         }
         if ($end === '') {
             $end = $lastByte;
         }
-
         if ($start > $end || $end > $lastByte || $start > $lastByte) {
             $this->_setStatus(416);
             $this->_setHeader('Content-Range', 'bytes 0-' . $lastByte . '/' . $fileSize);
-
             return;
         }
-
-        $this->_setHeader('Content-Length', (string)((int)$end - (int)$start + 1));
+        $this->_setHeader('Content-Length', (string) ((int) $end - (int) $start + 1));
         $this->_setHeader('Content-Range', 'bytes ' . $start . '-' . $end . '/' . $fileSize);
         $this->_setStatus(206);
         /**
@@ -1256,7 +1041,6 @@ class Response implements ResponseInterface, Stringable
          */
         $this->_fileRange = [$start, $end];
     }
-
     /**
      * Returns an array that can be used to describe the internal state of this
      * object.
@@ -1265,15 +1049,6 @@ class Response implements ResponseInterface, Stringable
      */
     public function __debugInfo(): array
     {
-        return [
-            'status' => $this->_status,
-            'contentType' => $this->getType(),
-            'headers' => $this->headers,
-            'file' => $this->_file,
-            'fileRange' => $this->_fileRange,
-            'cookies' => $this->_cookies,
-            'cacheDirectives' => $this->_cacheDirectives,
-            'body' => (string)$this->getBody(),
-        ];
+        return ['status' => $this->_status, 'contentType' => $this->getType(), 'headers' => $this->headers, 'file' => $this->_file, 'fileRange' => $this->_fileRange, 'cookies' => $this->_cookies, 'cacheDirectives' => $this->_cacheDirectives, 'body' => (string) $this->getBody()];
     }
 }

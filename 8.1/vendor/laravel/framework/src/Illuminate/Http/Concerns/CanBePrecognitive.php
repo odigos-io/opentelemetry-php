@@ -3,7 +3,6 @@
 namespace Illuminate\Http\Concerns;
 
 use Illuminate\Support\Collection;
-
 trait CanBePrecognitive
 {
     /**
@@ -14,15 +13,11 @@ trait CanBePrecognitive
      */
     public function filterPrecognitiveRules($rules)
     {
-        if (! $this->headers->has('Precognition-Validate-Only')) {
+        if (!$this->headers->has('Precognition-Validate-Only')) {
             return $rules;
         }
-
-        return Collection::make($rules)
-            ->only(explode(',', $this->header('Precognition-Validate-Only')))
-            ->all();
+        return Collection::make($rules)->only(explode(',', $this->header('Precognition-Validate-Only')))->all();
     }
-
     /**
      * Determine if the request is attempting to be precognitive.
      *
@@ -32,7 +27,6 @@ trait CanBePrecognitive
     {
         return $this->header('Precognition') === 'true';
     }
-
     /**
      * Determine if the request is precognitive.
      *
@@ -40,6 +34,6 @@ trait CanBePrecognitive
      */
     public function isPrecognitive()
     {
-        return $this->attributes->get('precognitive', false);
+        return $this->attributes->get('precognitive', \false);
     }
 }

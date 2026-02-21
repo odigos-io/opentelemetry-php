@@ -5,7 +5,6 @@ namespace OpenAI\Contracts\Resources;
 use OpenAI\Responses\FineTuning\ListJobEventsResponse;
 use OpenAI\Responses\FineTuning\ListJobsResponse;
 use OpenAI\Responses\FineTuning\RetrieveJobResponse;
-
 interface FineTuningContract
 {
     /**
@@ -18,7 +17,6 @@ interface FineTuningContract
      * @param  array<string, mixed>  $parameters
      */
     public function createJob(array $parameters): RetrieveJobResponse;
-
     /**
      * List your organization's fine-tuning jobs.
      *
@@ -27,21 +25,18 @@ interface FineTuningContract
      * @param  array<string, mixed>  $parameters
      */
     public function listJobs(array $parameters = []): ListJobsResponse;
-
     /**
      * Get info about a fine-tuning job.
      *
      * @see https://platform.openai.com/docs/api-reference/fine-tuning/retrieve
      */
     public function retrieveJob(string $jobId): RetrieveJobResponse;
-
     /**
      * Immediately cancel a fine-tune job.
      *
      * @see https://platform.openai.com/docs/api-reference/fine-tuning/cancel
      */
     public function cancelJob(string $jobId): RetrieveJobResponse;
-
     /**
      * Get status updates for a fine-tuning job.
      *

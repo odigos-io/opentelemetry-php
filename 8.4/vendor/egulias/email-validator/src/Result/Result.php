@@ -1,6 +1,6 @@
 <?php
 
-namespace Egulias\EmailValidator\Result;
+namespace Odigos\Egulias\EmailValidator\Result;
 
 interface Result
 {
@@ -9,20 +9,17 @@ interface Result
      * 
      */
     public function isValid(): bool;
-
     /**
      * Is validation result invalid?
      * Usually the inverse of isValid()
      * 
      */
     public function isInvalid(): bool;
-
     /**
      * Short description of the result, human readable.
      * 
      */
     public function description(): string;
-
     /**
      * Code for user land to act upon.
      * 

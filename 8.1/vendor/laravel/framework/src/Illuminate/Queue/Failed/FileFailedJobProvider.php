@@ -5,8 +5,7 @@ namespace Illuminate\Queue\Failed;
 use Closure;
 use DateTimeInterface;
 use Illuminate\Support\Facades\Date;
-
-class FileFailedJobProvider implements CountableFailedJobProvider, FailedJobProviderInterface, PrunableFailedJobProvider
+class FileFailedJobProvider implements \Illuminate\Queue\Failed\CountableFailedJobProvider, \Illuminate\Queue\Failed\FailedJobProviderInterface, \Illuminate\Queue\Failed\PrunableFailedJobProvider
 {
     /**
      * The file path where the failed job file should be stored.
@@ -14,21 +13,18 @@ class FileFailedJobProvider implements CountableFailedJobProvider, FailedJobProv
      * @var string
      */
     protected $path;
-
     /**
      * The maximum number of failed jobs to retain.
      *
      * @var int
      */
     protected $limit;
-
     /**
      * The lock provider resolver.
      *
      * @var \Closure
      */
     protected $lockProviderResolver;
-
     /**
      * Create a new database failed job provider.
      *
@@ -43,7 +39,6 @@ class FileFailedJobProvider implements CountableFailedJobProvider, FailedJobProv
         $this->limit = $limit;
         $this->lockProviderResolver = $lockProviderResolver;
     }
-
     /**
      * Log a failed job into storage.
      *
@@ -56,28 +51,14 @@ class FileFailedJobProvider implements CountableFailedJobProvider, FailedJobProv
     public function log($connection, $queue, $payload, $exception)
     {
         return $this->lock(function () use ($connection, $queue, $payload, $exception) {
-            $id = json_decode($payload, true)['uuid'];
-
+            $id = json_decode($payload, \true)['uuid'];
             $jobs = $this->read();
-
             $failedAt = Date::now();
-
-            array_unshift($jobs, [
-                'id' => $id,
-                'connection' => $connection,
-                'queue' => $queue,
-                'payload' => $payload,
-                'exception' => (string) mb_convert_encoding($exception, 'UTF-8'),
-                'failed_at' => $failedAt->format('Y-m-d H:i:s'),
-                'failed_at_timestamp' => $failedAt->getTimestamp(),
-            ]);
-
+            array_unshift($jobs, ['id' => $id, 'connection' => $connection, 'queue' => $queue, 'payload' => $payload, 'exception' => (string) mb_convert_encoding($exception, 'UTF-8'), 'failed_at' => $failedAt->format('Y-m-d H:i:s'), 'failed_at_timestamp' => $failedAt->getTimestamp()]);
             $this->write(array_slice($jobs, 0, $this->limit));
-
             return $id;
         });
     }
-
     /**
      * Get the IDs of all of the failed jobs.
      *
@@ -86,12 +67,8 @@ class FileFailedJobProvider implements CountableFailedJobProvider, FailedJobProv
      */
     public function ids($queue = null)
     {
-        return collect($this->all())
-            ->when(! is_null($queue), fn ($collect) => $collect->where('queue', $queue))
-            ->pluck('id')
-            ->all();
+        return collect($this->all())->when(!is_null($queue), fn($collect) => $collect->where('queue', $queue))->pluck('id')->all();
     }
-
     /**
      * Get a list of all of the failed jobs.
      *
@@ -101,7 +78,6 @@ class FileFailedJobProvider implements CountableFailedJobProvider, FailedJobProv
     {
         return $this->read();
     }
-
     /**
      * Get a single failed job.
      *
@@ -110,10 +86,8 @@ class FileFailedJobProvider implements CountableFailedJobProvider, FailedJobProv
      */
     public function find($id)
     {
-        return collect($this->read())
-            ->first(fn ($job) => $job->id === $id);
+        return collect($this->read())->first(fn($job) => $job->id === $id);
     }
-
     /**
      * Delete a single failed job from storage.
      *
@@ -123,15 +97,10 @@ class FileFailedJobProvider implements CountableFailedJobProvider, FailedJobProv
     public function forget($id)
     {
         return $this->lock(function () use ($id) {
-            $this->write($pruned = collect($jobs = $this->read())
-                ->reject(fn ($job) => $job->id === $id)
-                ->values()
-                ->all());
-
+            $this->write($pruned = collect($jobs = $this->read())->reject(fn($job) => $job->id === $id)->values()->all());
             return count($jobs) !== count($pruned);
         });
     }
-
     /**
      * Flush all of the failed jobs from storage.
      *
@@ -142,7 +111,6 @@ class FileFailedJobProvider implements CountableFailedJobProvider, FailedJobProv
     {
         $this->prune(Date::now()->subHours($hours ?: 0));
     }
-
     /**
      * Prune all of the entries older than the given date.
      *
@@ -153,15 +121,12 @@ class FileFailedJobProvider implements CountableFailedJobProvider, FailedJobProv
     {
         return $this->lock(function () use ($before) {
             $jobs = $this->read();
-
             $this->write($prunedJobs = collect($jobs)->reject(function ($job) use ($before) {
                 return $job->failed_at_timestamp <= $before->getTimestamp();
             })->values()->all());
-
             return count($jobs) - count($prunedJobs);
         });
     }
-
     /**
      * Execute the given callback while holding a lock.
      *
@@ -170,17 +135,13 @@ class FileFailedJobProvider implements CountableFailedJobProvider, FailedJobProv
      */
     protected function lock(Closure $callback)
     {
-        if (! $this->lockProviderResolver) {
+        if (!$this->lockProviderResolver) {
             return $callback();
         }
-
-        return ($this->lockProviderResolver)()
-            ->lock('laravel-failed-jobs', 5)
-            ->block(10, function () use ($callback) {
-                return $callback();
-            });
+        return ($this->lockProviderResolver)()->lock('laravel-failed-jobs', 5)->block(10, function () use ($callback) {
+            return $callback();
+        });
     }
-
     /**
      * Read the failed jobs file.
      *
@@ -188,21 +149,16 @@ class FileFailedJobProvider implements CountableFailedJobProvider, FailedJobProv
      */
     protected function read()
     {
-        if (! file_exists($this->path)) {
+        if (!file_exists($this->path)) {
             return [];
         }
-
         $content = file_get_contents($this->path);
-
         if (empty(trim($content))) {
             return [];
         }
-
         $content = json_decode($content);
-
         return is_array($content) ? $content : [];
     }
-
     /**
      * Write the given array of jobs to the failed jobs file.
      *
@@ -211,12 +167,8 @@ class FileFailedJobProvider implements CountableFailedJobProvider, FailedJobProv
      */
     protected function write(array $jobs)
     {
-        file_put_contents(
-            $this->path,
-            json_encode($jobs, JSON_PRETTY_PRINT)
-        );
+        file_put_contents($this->path, json_encode($jobs, \JSON_PRETTY_PRINT));
     }
-
     /**
      * Count the failed jobs.
      *
@@ -229,9 +181,6 @@ class FileFailedJobProvider implements CountableFailedJobProvider, FailedJobProv
         if (($connection ?? $queue) === null) {
             return count($this->read());
         }
-
-        return collect($this->read())
-            ->filter(fn ($job) => $job->connection === ($connection ?? $job->connection) && $job->queue === ($queue ?? $job->queue))
-            ->count();
+        return collect($this->read())->filter(fn($job) => $job->connection === ($connection ?? $job->connection) && $job->queue === ($queue ?? $job->queue))->count();
     }
 }

@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace GuzzleHttp\Promise;
 
 /**
@@ -12,38 +11,30 @@ namespace GuzzleHttp\Promise;
  *
  * @final
  */
-class RejectedPromise implements PromiseInterface
+class RejectedPromise implements \GuzzleHttp\Promise\PromiseInterface
 {
     private $reason;
-
     /**
      * @param mixed $reason
      */
     public function __construct($reason)
     {
         if (is_object($reason) && method_exists($reason, 'then')) {
-            throw new \InvalidArgumentException(
-                'You cannot create a RejectedPromise with a promise.'
-            );
+            throw new \InvalidArgumentException('You cannot create a RejectedPromise with a promise.');
         }
-
         $this->reason = $reason;
     }
-
-    public function then(
-        ?callable $onFulfilled = null,
-        ?callable $onRejected = null
-    ): PromiseInterface {
+    public function then(?callable $onFulfilled = null, ?callable $onRejected = null): \GuzzleHttp\Promise\PromiseInterface
+    {
         // If there's no onRejected callback then just return self.
         if (!$onRejected) {
             return $this;
         }
-
-        $queue = Utils::queue();
+        $queue = \GuzzleHttp\Promise\Utils::queue();
         $reason = $this->reason;
-        $p = new Promise([$queue, 'run']);
+        $p = new \GuzzleHttp\Promise\Promise([$queue, 'run']);
         $queue->add(static function () use ($p, $reason, $onRejected): void {
-            if (Is::pending($p)) {
+            if (\GuzzleHttp\Promise\Is::pending($p)) {
                 try {
                     // Return a resolved promise if onRejected does not throw.
                     $p->resolve($onRejected($reason));
@@ -53,41 +44,33 @@ class RejectedPromise implements PromiseInterface
                 }
             }
         });
-
         return $p;
     }
-
-    public function otherwise(callable $onRejected): PromiseInterface
+    public function otherwise(callable $onRejected): \GuzzleHttp\Promise\PromiseInterface
     {
         return $this->then(null, $onRejected);
     }
-
-    public function wait(bool $unwrap = true)
+    public function wait(bool $unwrap = \true)
     {
         if ($unwrap) {
-            throw Create::exceptionFor($this->reason);
+            throw \GuzzleHttp\Promise\Create::exceptionFor($this->reason);
         }
-
         return null;
     }
-
     public function getState(): string
     {
         return self::REJECTED;
     }
-
     public function resolve($value): void
     {
         throw new \LogicException('Cannot resolve a rejected promise');
     }
-
     public function reject($reason): void
     {
         if ($reason !== $this->reason) {
             throw new \LogicException('Cannot reject a rejected promise');
         }
     }
-
     public function cancel(): void
     {
         // pass

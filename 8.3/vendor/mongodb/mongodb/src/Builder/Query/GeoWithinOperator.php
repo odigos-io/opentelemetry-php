@@ -3,9 +3,7 @@
 /**
  * THIS FILE IS AUTO-GENERATED. ANY CHANGES WILL BE LOST!
  */
-
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace MongoDB\Builder\Query;
 
 use MongoDB\BSON\Document;
@@ -15,7 +13,6 @@ use MongoDB\Builder\Type\FieldQueryInterface;
 use MongoDB\Builder\Type\GeometryInterface;
 use MongoDB\Builder\Type\OperatorInterface;
 use stdClass;
-
 /**
  * Selects geometries within a bounding GeoJSON geometry. The 2dsphere and 2d indexes support $geoWithin.
  *
@@ -27,10 +24,8 @@ final class GeoWithinOperator implements FieldQueryInterface, OperatorInterface
     public const ENCODE = Encode::Object;
     public const NAME = '$geoWithin';
     public const PROPERTIES = ['geometry' => null];
-
     /** @var Document|GeometryInterface|Serializable|array|stdClass $geometry */
     public readonly Document|Serializable|GeometryInterface|stdClass|array $geometry;
-
     /**
      * @param Document|GeometryInterface|Serializable|array|stdClass $geometry
      */

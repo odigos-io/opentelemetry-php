@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\Console\Helper;
 
 use Symfony\Component\Console\Output\OutputInterface;
-
 /**
  * The TreeHelper class provides methods to display tree-like structures.
  *
@@ -26,85 +24,65 @@ final class TreeHelper implements \RecursiveIterator
      * @var \Iterator<int, TreeNode>
      */
     private \Iterator $children;
-
-    private function __construct(
-        private readonly OutputInterface $output,
-        private readonly TreeNode $node,
-        private readonly TreeStyle $style,
-    ) {
+    private function __construct(private readonly OutputInterface $output, private readonly \Symfony\Component\Console\Helper\TreeNode $node, private readonly \Symfony\Component\Console\Helper\TreeStyle $style)
+    {
         $this->children = new \IteratorIterator($this->node->getChildren());
         $this->children->rewind();
     }
-
-    public static function createTree(OutputInterface $output, string|TreeNode|null $root = null, iterable $values = [], ?TreeStyle $style = null): self
+    public static function createTree(OutputInterface $output, string|\Symfony\Component\Console\Helper\TreeNode|null $root = null, iterable $values = [], ?\Symfony\Component\Console\Helper\TreeStyle $style = null): self
     {
-        $node = $root instanceof TreeNode ? $root : new TreeNode($root ?? '');
-
-        return new self($output, TreeNode::fromValues($values, $node), $style ?? TreeStyle::default());
+        $node = $root instanceof \Symfony\Component\Console\Helper\TreeNode ? $root : new \Symfony\Component\Console\Helper\TreeNode($root ?? '');
+        return new self($output, \Symfony\Component\Console\Helper\TreeNode::fromValues($values, $node), $style ?? \Symfony\Component\Console\Helper\TreeStyle::default());
     }
-
-    public function current(): TreeNode
+    public function current(): \Symfony\Component\Console\Helper\TreeNode
     {
         return $this->children->current();
     }
-
     public function key(): int
     {
         return $this->children->key();
     }
-
     public function next(): void
     {
         $this->children->next();
     }
-
     public function rewind(): void
     {
         $this->children->rewind();
     }
-
     public function valid(): bool
     {
         return $this->children->valid();
     }
-
     public function hasChildren(): bool
     {
         if (null === $current = $this->current()) {
-            return false;
+            return \false;
         }
-
         foreach ($current->getChildren() as $child) {
-            return true;
+            return \true;
         }
-
-        return false;
+        return \false;
     }
-
     public function getChildren(): \RecursiveIterator
     {
         return new self($this->output, $this->current(), $this->style);
     }
-
     /**
      * Recursively renders the tree to the output, applying the tree style.
      */
     public function render(): void
     {
         $treeIterator = new \RecursiveTreeIterator($this);
-
         $this->style->applyPrefixes($treeIterator);
-
         $this->output->writeln($this->node->getValue());
-
         $visited = new \SplObjectStorage();
         foreach ($treeIterator as $node) {
-            $currentNode = $node instanceof TreeNode ? $node : $treeIterator->getInnerIterator()->current();
+            $currentNode = $node instanceof \Symfony\Component\Console\Helper\TreeNode ? $node : $treeIterator->getInnerIterator()->current();
             if (isset($visited[$currentNode])) {
                 throw new \LogicException(\sprintf('Cycle detected at node: "%s".', $currentNode->getValue()));
             }
-            $visited[$currentNode] = true;
-
+            $visited[$currentNode] = \true;
             $this->output->writeln($node);
         }
     }

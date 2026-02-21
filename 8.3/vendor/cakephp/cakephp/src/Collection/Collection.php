@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -19,7 +19,6 @@ namespace Cake\Collection;
 use ArrayIterator;
 use IteratorIterator;
 use SplFixedArray;
-
 /**
  * A collection is an immutable list of elements with a handful of functions to
  * iterate, group, transform and extract information from it.
@@ -29,17 +28,15 @@ use SplFixedArray;
  * @extends \IteratorIterator<TKey, TValue, \Traversable<TKey, TValue>>
  * @implements \Cake\Collection\CollectionInterface<TKey, TValue>
  */
-class Collection extends IteratorIterator implements CollectionInterface
+class Collection extends IteratorIterator implements \Cake\Collection\CollectionInterface
 {
-    use CollectionTrait;
-
+    use \Cake\Collection\CollectionTrait;
     /**
      * Whether or not the items in this collection are an array.
      *
      * @var bool
      */
-    protected bool $innerIsArray = false;
-
+    protected bool $innerIsArray = \false;
     /**
      * Constructor. You can provide an array or any traversable object
      *
@@ -51,12 +48,9 @@ class Collection extends IteratorIterator implements CollectionInterface
         if (is_array($items)) {
             $items = new ArrayIterator($items);
         }
-
         $this->innerIsArray = $items instanceof ArrayIterator || $items instanceof SplFixedArray;
-
         parent::__construct($items);
     }
-
     /**
      * Returns an array for serializing this of this object.
      *
@@ -66,7 +60,6 @@ class Collection extends IteratorIterator implements CollectionInterface
     {
         return $this->buffered()->toArray();
     }
-
     /**
      * Rebuilds the Collection instance.
      *
@@ -78,7 +71,6 @@ class Collection extends IteratorIterator implements CollectionInterface
         /** @phpstan-ignore argument.type (unserialize rebuilds from array) */
         $this->__construct($data);
     }
-
     /**
      * Returns an array that can be used to describe the internal state of this
      * object.
@@ -90,20 +82,12 @@ class Collection extends IteratorIterator implements CollectionInterface
         if ($this->innerIsArray) {
             $index = $this->key();
             $items = $this->toArray();
-
             $this->rewind();
             while ($this->key() !== $index) {
                 $this->next();
             }
-
-            return [
-                'count' => count($items),
-                'items' => $items,
-            ];
+            return ['count' => count($items), 'items' => $items];
         }
-
-        return [
-            'innerIterator' => $this->unwrap(),
-        ];
+        return ['innerIterator' => $this->unwrap()];
     }
 }

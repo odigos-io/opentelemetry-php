@@ -10,14 +10,12 @@ class DatabaseBusy
      * @var string
      */
     public $connectionName;
-
     /**
      * The number of open connections.
      *
      * @var int
      */
     public $connections;
-
     /**
      * Create a new event instance.
      *

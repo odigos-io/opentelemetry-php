@@ -3,7 +3,6 @@
 namespace Laravel\SerializableClosure\Support;
 
 use SplObjectStorage;
-
 class ClosureScope extends SplObjectStorage
 {
     /**
@@ -12,7 +11,6 @@ class ClosureScope extends SplObjectStorage
      * @var int
      */
     public $serializations = 0;
-
     /**
      * The number of closures that have to be serialized.
      *

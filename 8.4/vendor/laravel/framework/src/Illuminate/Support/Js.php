@@ -8,7 +8,6 @@ use Illuminate\Contracts\Support\Jsonable;
 use JsonSerializable;
 use Stringable;
 use UnitEnum;
-
 class Js implements Htmlable, Stringable
 {
     /**
@@ -17,14 +16,12 @@ class Js implements Htmlable, Stringable
      * @var string
      */
     protected $js;
-
     /**
      * Flags that should be used when encoding to JSON.
      *
      * @var int
      */
-    protected const REQUIRED_FLAGS = JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT | JSON_THROW_ON_ERROR;
-
+    protected const REQUIRED_FLAGS = \JSON_HEX_TAG | \JSON_HEX_APOS | \JSON_HEX_AMP | \JSON_HEX_QUOT | \JSON_THROW_ON_ERROR;
     /**
      * Create a new class instance.
      *
@@ -38,7 +35,6 @@ class Js implements Htmlable, Stringable
     {
         $this->js = $this->convertDataToJavaScriptExpression($data, $flags, $depth);
     }
-
     /**
      * Create a new JavaScript string from the given data.
      *
@@ -53,7 +49,6 @@ class Js implements Htmlable, Stringable
     {
         return new static($data, $flags, $depth);
     }
-
     /**
      * Convert the given data to a JavaScript expression.
      *
@@ -69,27 +64,18 @@ class Js implements Htmlable, Stringable
         if ($data instanceof self) {
             return $data->toHtml();
         }
-
-        if ($data instanceof Htmlable &&
-            ! $data instanceof Arrayable &&
-            ! $data instanceof Jsonable &&
-            ! $data instanceof JsonSerializable) {
+        if ($data instanceof Htmlable && !$data instanceof Arrayable && !$data instanceof Jsonable && !$data instanceof JsonSerializable) {
             $data = $data->toHtml();
         }
-
         if ($data instanceof UnitEnum) {
             $data = enum_value($data);
         }
-
         $json = static::encode($data, $flags, $depth);
-
         if (is_string($data)) {
-            return "'".substr($json, 1, -1)."'";
+            return "'" . substr($json, 1, -1) . "'";
         }
-
         return $this->convertJsonToJavaScriptExpression($json, $flags);
     }
-
     /**
      * Encode the given data as JSON.
      *
@@ -105,14 +91,11 @@ class Js implements Htmlable, Stringable
         if ($data instanceof Jsonable) {
             return $data->toJson($flags | static::REQUIRED_FLAGS);
         }
-
-        if ($data instanceof Arrayable && ! ($data instanceof JsonSerializable)) {
+        if ($data instanceof Arrayable && !$data instanceof JsonSerializable) {
             $data = $data->toArray();
         }
-
         return json_encode($data, $flags | static::REQUIRED_FLAGS, $depth);
     }
-
     /**
      * Convert the given JSON to a JavaScript expression.
      *
@@ -127,14 +110,11 @@ class Js implements Htmlable, Stringable
         if ($json === '[]' || $json === '{}') {
             return $json;
         }
-
-        if (Str::startsWith($json, ['"', '{', '['])) {
-            return "JSON.parse('".substr(json_encode($json, $flags | static::REQUIRED_FLAGS), 1, -1)."')";
+        if (\Illuminate\Support\Str::startsWith($json, ['"', '{', '['])) {
+            return "JSON.parse('" . substr(json_encode($json, $flags | static::REQUIRED_FLAGS), 1, -1) . "')";
         }
-
         return $json;
     }
-
     /**
      * Get the string representation of the data for use in HTML.
      *
@@ -144,7 +124,6 @@ class Js implements Htmlable, Stringable
     {
         return $this->js;
     }
-
     /**
      * Get the string representation of the data for use in HTML.
      *

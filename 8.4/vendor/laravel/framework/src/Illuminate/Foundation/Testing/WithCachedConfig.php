@@ -4,7 +4,6 @@ namespace Illuminate\Foundation\Testing;
 
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Bootstrap\LoadConfiguration;
-
 trait WithCachedConfig
 {
     /**
@@ -12,13 +11,11 @@ trait WithCachedConfig
      */
     protected function setUpWithCachedConfig(): void
     {
-        if ((CachedState::$cachedConfig ?? null) === null) {
-            CachedState::$cachedConfig = $this->app->make('config')->all();
+        if ((\Illuminate\Foundation\Testing\CachedState::$cachedConfig ?? null) === null) {
+            \Illuminate\Foundation\Testing\CachedState::$cachedConfig = $this->app->make('config')->all();
         }
-
         $this->markConfigCached($this->app);
     }
-
     /**
      * Reset the cached configuration.
      *
@@ -28,14 +25,12 @@ trait WithCachedConfig
     {
         LoadConfiguration::alwaysUse(null);
     }
-
     /**
      * Inform the container that the configuration is cached.
      */
     protected function markConfigCached(Application $app): void
     {
-        $app->instance('config_loaded_from_cache', true);
-
-        LoadConfiguration::alwaysUse(static fn () => CachedState::$cachedConfig);
+        $app->instance('config_loaded_from_cache', \true);
+        LoadConfiguration::alwaysUse(static fn() => \Illuminate\Foundation\Testing\CachedState::$cachedConfig);
     }
 }

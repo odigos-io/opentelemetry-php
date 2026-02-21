@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -18,7 +18,6 @@ namespace Cake\Error\Renderer;
 
 use Cake\Error\ErrorRendererInterface;
 use Cake\Error\PhpError;
-
 /**
  * Plain text error rendering with a stack trace.
  *
@@ -33,7 +32,6 @@ class TextErrorRenderer implements ErrorRendererInterface
     {
         echo $out;
     }
-
     /**
      * @inheritDoc
      */
@@ -42,15 +40,6 @@ class TextErrorRenderer implements ErrorRendererInterface
         if (!$debug) {
             return '';
         }
-
-        return sprintf(
-            "%s: %s :: %s on line %s of %s\nTrace:\n%s",
-            $error->getLabel(),
-            $error->getCode(),
-            $error->getMessage(),
-            $error->getLine() ?? '',
-            $error->getFile() ?? '',
-            $error->getTraceAsString(),
-        );
+        return sprintf("%s: %s :: %s on line %s of %s\nTrace:\n%s", $error->getLabel(), $error->getCode(), $error->getMessage(), $error->getLine() ?? '', $error->getFile() ?? '', $error->getTraceAsString());
     }
 }

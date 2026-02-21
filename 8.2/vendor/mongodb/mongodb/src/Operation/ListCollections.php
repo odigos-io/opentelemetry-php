@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright 2015-present MongoDB, Inc.
  *
@@ -14,7 +15,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 namespace MongoDB\Operation;
 
 use Iterator;
@@ -25,7 +25,6 @@ use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\Model\CachingIterator;
 use MongoDB\Model\CallbackIterator;
 use MongoDB\Model\CollectionInfo;
-
 /**
  * Operation for the listCollections command.
  *
@@ -35,7 +34,6 @@ use MongoDB\Model\CollectionInfo;
 final class ListCollections
 {
     private ListCollectionsCommand $listCollections;
-
     /**
      * Constructs a listCollections command.
      *
@@ -63,9 +61,8 @@ final class ListCollections
      */
     public function __construct(string $databaseName, array $options = [])
     {
-        $this->listCollections = new ListCollectionsCommand($databaseName, ['nameOnly' => false] + $options);
+        $this->listCollections = new ListCollectionsCommand($databaseName, ['nameOnly' => \false] + $options);
     }
-
     /**
      * Execute the operation.
      *
@@ -76,12 +73,6 @@ final class ListCollections
     {
         /** @var Iterator<int, array> $collections */
         $collections = $this->listCollections->execute($server);
-
-        return new CachingIterator(
-            new CallbackIterator(
-                $collections,
-                fn (array $collectionInfo, int $key): CollectionInfo => new CollectionInfo($collectionInfo),
-            ),
-        );
+        return new CachingIterator(new CallbackIterator($collections, fn(array $collectionInfo, int $key): CollectionInfo => new CollectionInfo($collectionInfo)));
     }
 }

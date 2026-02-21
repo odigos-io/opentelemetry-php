@@ -7,7 +7,6 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\StreamedResponse;
-
 class SetCacheHeaders
 {
     /**
@@ -19,15 +18,10 @@ class SetCacheHeaders
     public static function using($options)
     {
         if (is_string($options)) {
-            return static::class.':'.$options;
+            return static::class . ':' . $options;
         }
-
-        return collect($options)
-            ->map(fn ($value, $key) => is_int($key) ? $value : "{$key}={$value}")
-            ->map(fn ($value) => Str::finish($value, ';'))
-            ->pipe(fn ($options) => rtrim(static::class.':'.$options->implode(''), ';'));
+        return collect($options)->map(fn($value, $key) => is_int($key) ? $value : "{$key}={$value}")->map(fn($value) => Str::finish($value, ';'))->pipe(fn($options) => rtrim(static::class . ':' . $options->implode(''), ';'));
     }
-
     /**
      * Add cache related HTTP headers.
      *
@@ -41,19 +35,15 @@ class SetCacheHeaders
     public function handle($request, Closure $next, $options = [])
     {
         $response = $next($request);
-
-        if (! $request->isMethodCacheable() || (! $response->getContent() && ! $response instanceof BinaryFileResponse && ! $response instanceof StreamedResponse)) {
+        if (!$request->isMethodCacheable() || !$response->getContent() && !$response instanceof BinaryFileResponse && !$response instanceof StreamedResponse) {
             return $response;
         }
-
         if (is_string($options)) {
             $options = $this->parseOptions($options);
         }
-
-        if (isset($options['etag']) && $options['etag'] === true) {
+        if (isset($options['etag']) && $options['etag'] === \true) {
             $options['etag'] = $response->getEtag() ?? md5($response->getContent());
         }
-
         if (isset($options['last_modified'])) {
             if (is_numeric($options['last_modified'])) {
                 $options['last_modified'] = Carbon::createFromTimestamp($options['last_modified']);
@@ -61,13 +51,10 @@ class SetCacheHeaders
                 $options['last_modified'] = Carbon::parse($options['last_modified']);
             }
         }
-
         $response->setCache($options);
         $response->isNotModified($request);
-
         return $response;
     }
-
     /**
      * Parse the given header options.
      *
@@ -78,8 +65,7 @@ class SetCacheHeaders
     {
         return collect(explode(';', rtrim($options, ';')))->mapWithKeys(function ($option) {
             $data = explode('=', $option, 2);
-
-            return [$data[0] => $data[1] ?? true];
+            return [$data[0] => $data[1] ?? \true];
         })->all();
     }
 }

@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -21,7 +21,6 @@ use Cake\Core\InstanceConfigTrait;
 use Cake\Event\EventListenerInterface;
 use ReflectionClass;
 use ReflectionMethod;
-
 /**
  * Base class for behaviors.
  *
@@ -115,14 +114,12 @@ use ReflectionMethod;
 class Behavior implements EventListenerInterface
 {
     use InstanceConfigTrait;
-
     /**
      * Table instance.
      *
      * @var \Cake\ORM\Table
      */
-    protected Table $_table;
-
+    protected \Cake\ORM\Table $_table;
     /**
      * Reflection method cache for behaviors.
      *
@@ -132,7 +129,6 @@ class Behavior implements EventListenerInterface
      * @var array<string, array>
      */
     protected static array $_reflectionCache = [];
-
     /**
      * Default configuration
      *
@@ -141,7 +137,6 @@ class Behavior implements EventListenerInterface
      * @var array<string, mixed>
      */
     protected array $_defaultConfig = [];
-
     /**
      * Constructor
      *
@@ -150,23 +145,14 @@ class Behavior implements EventListenerInterface
      * @param \Cake\ORM\Table $table The table this behavior is attached to.
      * @param array<string, mixed> $config The config for this behavior.
      */
-    public function __construct(Table $table, array $config = [])
+    public function __construct(\Cake\ORM\Table $table, array $config = [])
     {
-        $config = $this->_resolveMethodAliases(
-            'implementedFinders',
-            $this->_defaultConfig,
-            $config,
-        );
-        $config = $this->_resolveMethodAliases(
-            'implementedMethods',
-            $this->_defaultConfig,
-            $config,
-        );
+        $config = $this->_resolveMethodAliases('implementedFinders', $this->_defaultConfig, $config);
+        $config = $this->_resolveMethodAliases('implementedMethods', $this->_defaultConfig, $config);
         $this->_table = $table;
         $this->setConfig($config);
         $this->initialize($config);
     }
-
     /**
      * Constructor hook method.
      *
@@ -179,17 +165,15 @@ class Behavior implements EventListenerInterface
     public function initialize(array $config): void
     {
     }
-
     /**
      * Get the table instance this behavior is bound to.
      *
      * @return \Cake\ORM\Table The bound table instance.
      */
-    public function table(): Table
+    public function table(): \Cake\ORM\Table
     {
         return $this->_table;
     }
-
     /**
      * Removes aliased methods that would otherwise be duplicated by userland configuration.
      *
@@ -204,23 +188,19 @@ class Behavior implements EventListenerInterface
             return $config;
         }
         if ($config[$key] === []) {
-            $this->setConfig($key, [], false);
+            $this->setConfig($key, [], \false);
             unset($config[$key]);
-
             return $config;
         }
-
         $indexed = array_flip($defaults[$key]);
         $indexedCustom = array_flip($config[$key]);
         foreach ($indexed as $method => $alias) {
             $indexedCustom[$method] ??= $alias;
         }
-        $this->setConfig($key, array_flip($indexedCustom), false);
+        $this->setConfig($key, array_flip($indexedCustom), \false);
         unset($config[$key]);
-
         return $config;
     }
-
     /**
      * verifyConfig
      *
@@ -236,19 +216,13 @@ class Behavior implements EventListenerInterface
             if (!isset($this->_config[$key])) {
                 continue;
             }
-
             foreach ($this->_config[$key] as $method) {
                 if (!is_callable([$this, $method])) {
-                    throw new CakeException(sprintf(
-                        'The method `%s` is not callable on class `%s`.',
-                        $method,
-                        static::class,
-                    ));
+                    throw new CakeException(sprintf('The method `%s` is not callable on class `%s`.', $method, static::class));
                 }
             }
         }
     }
-
     /**
      * Gets the Model callbacks this behavior is interested in.
      *
@@ -262,25 +236,10 @@ class Behavior implements EventListenerInterface
      */
     public function implementedEvents(): array
     {
-        $eventMap = [
-            'Model.beforeMarshal' => 'beforeMarshal',
-            'Model.afterMarshal' => 'afterMarshal',
-            'Model.beforeFind' => 'beforeFind',
-            'Model.beforeSave' => 'beforeSave',
-            'Model.afterSave' => 'afterSave',
-            'Model.afterSaveCommit' => 'afterSaveCommit',
-            'Model.beforeDelete' => 'beforeDelete',
-            'Model.afterDelete' => 'afterDelete',
-            'Model.afterDeleteCommit' => 'afterDeleteCommit',
-            'Model.buildValidator' => 'buildValidator',
-            'Model.buildRules' => 'buildRules',
-            'Model.beforeRules' => 'beforeRules',
-            'Model.afterRules' => 'afterRules',
-        ];
+        $eventMap = ['Model.beforeMarshal' => 'beforeMarshal', 'Model.afterMarshal' => 'afterMarshal', 'Model.beforeFind' => 'beforeFind', 'Model.beforeSave' => 'beforeSave', 'Model.afterSave' => 'afterSave', 'Model.afterSaveCommit' => 'afterSaveCommit', 'Model.beforeDelete' => 'beforeDelete', 'Model.afterDelete' => 'afterDelete', 'Model.afterDeleteCommit' => 'afterDeleteCommit', 'Model.buildValidator' => 'buildValidator', 'Model.buildRules' => 'buildRules', 'Model.beforeRules' => 'beforeRules', 'Model.afterRules' => 'afterRules'];
         $config = $this->getConfig();
         $priority = $config['priority'] ?? null;
         $events = [];
-
         foreach ($eventMap as $event => $method) {
             if (!method_exists($this, $method)) {
                 continue;
@@ -288,16 +247,11 @@ class Behavior implements EventListenerInterface
             if ($priority === null) {
                 $events[$event] = $method;
             } else {
-                $events[$event] = [
-                    'callable' => $method,
-                    'priority' => $priority,
-                ];
+                $events[$event] = ['callable' => $method, 'priority' => $priority];
             }
         }
-
         return $events;
     }
-
     /**
      * implementedFinders
      *
@@ -326,10 +280,8 @@ class Behavior implements EventListenerInterface
         if ($methods !== null) {
             return $methods;
         }
-
         return $this->_reflectionCache()['finders'];
     }
-
     /**
      * implementedMethods
      *
@@ -359,10 +311,8 @@ class Behavior implements EventListenerInterface
         if ($methods !== null) {
             return $methods;
         }
-
         return $this->_reflectionCache()['methods'];
     }
-
     /**
      * Gets the methods implemented by this behavior
      *
@@ -379,7 +329,6 @@ class Behavior implements EventListenerInterface
         if (isset(self::$_reflectionCache[$class])) {
             return self::$_reflectionCache[$class];
         }
-
         $events = $this->implementedEvents();
         $eventMethods = [];
         foreach ($events as $binding) {
@@ -388,9 +337,8 @@ class Behavior implements EventListenerInterface
                 assert(is_string($callable));
                 $binding = $callable;
             }
-            $eventMethods[$binding] = true;
+            $eventMethods[$binding] = \true;
         }
-
         $baseClass = self::class;
         if (isset(self::$_reflectionCache[$baseClass])) {
             $baseMethods = self::$_reflectionCache[$baseClass];
@@ -398,30 +346,19 @@ class Behavior implements EventListenerInterface
             $baseMethods = get_class_methods($baseClass);
             self::$_reflectionCache[$baseClass] = $baseMethods;
         }
-
-        $return = [
-            'finders' => [],
-            'methods' => [],
-        ];
-
+        $return = ['finders' => [], 'methods' => []];
         $reflection = new ReflectionClass($class);
-
         foreach ($reflection->getMethods(ReflectionMethod::IS_PUBLIC) as $method) {
             $methodName = $method->getName();
-            if (
-                in_array($methodName, $baseMethods, true) ||
-                isset($eventMethods[$methodName])
-            ) {
+            if (in_array($methodName, $baseMethods, \true) || isset($eventMethods[$methodName])) {
                 continue;
             }
-
             if (str_starts_with($methodName, 'find')) {
                 $return['finders'][lcfirst(substr($methodName, 4))] = $methodName;
             } else {
                 $return['methods'][$methodName] = $methodName;
             }
         }
-
         return self::$_reflectionCache[$class] = $return;
     }
 }

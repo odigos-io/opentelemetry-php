@@ -2,7 +2,7 @@
 
 namespace Illuminate\Database\Schema;
 
-class MariaDbSchemaState extends MySqlSchemaState
+class MariaDbSchemaState extends \Illuminate\Database\Schema\MySqlSchemaState
 {
     /**
      * Load the given schema file into the database.
@@ -12,15 +12,10 @@ class MariaDbSchemaState extends MySqlSchemaState
      */
     public function load($path)
     {
-        $command = 'mariadb '.$this->connectionString().' --database="${:LARAVEL_LOAD_DATABASE}" < "${:LARAVEL_LOAD_PATH}"';
-
+        $command = 'mariadb ' . $this->connectionString() . ' --database="${:LARAVEL_LOAD_DATABASE}" < "${:LARAVEL_LOAD_PATH}"';
         $process = $this->makeProcess($command)->setTimeout(null);
-
-        $process->mustRun(null, array_merge($this->baseVariables($this->connection->getConfig()), [
-            'LARAVEL_LOAD_PATH' => $path,
-        ]));
+        $process->mustRun(null, array_merge($this->baseVariables($this->connection->getConfig()), ['LARAVEL_LOAD_PATH' => $path]));
     }
-
     /**
      * Get the base dump command arguments for MariaDB as a string.
      *
@@ -28,8 +23,7 @@ class MariaDbSchemaState extends MySqlSchemaState
      */
     protected function baseDumpCommand()
     {
-        $command = 'mariadb-dump '.$this->connectionString().' --no-tablespaces --skip-add-locks --skip-comments --skip-set-charset --tz-utc';
-
-        return $command.' "${:LARAVEL_LOAD_DATABASE}"';
+        $command = 'mariadb-dump ' . $this->connectionString() . ' --no-tablespaces --skip-add-locks --skip-comments --skip-set-charset --tz-utc';
+        return $command . ' "${:LARAVEL_LOAD_DATABASE}"';
     }
 }

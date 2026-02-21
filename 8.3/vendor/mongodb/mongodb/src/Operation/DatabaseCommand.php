@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright 2015-present MongoDB, Inc.
  *
@@ -14,7 +15,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 namespace MongoDB\Operation;
 
 use MongoDB\Driver\Command;
@@ -23,10 +23,8 @@ use MongoDB\Driver\ReadPreference;
 use MongoDB\Driver\Server;
 use MongoDB\Driver\Session;
 use MongoDB\Exception\InvalidArgumentException;
-
 use function is_array;
 use function MongoDB\is_document;
-
 /**
  * Operation for executing a database command.
  *
@@ -35,7 +33,6 @@ use function MongoDB\is_document;
 final class DatabaseCommand
 {
     private Command $command;
-
     /**
      * Constructs a command.
      *
@@ -59,36 +56,28 @@ final class DatabaseCommand
      */
     public function __construct(private string $databaseName, array|object $command, private array $options = [])
     {
-        if (! is_document($command)) {
+        if (!is_document($command)) {
             throw InvalidArgumentException::expectedDocumentType('$command', $command);
         }
-
-        if (isset($this->options['readPreference']) && ! $this->options['readPreference'] instanceof ReadPreference) {
+        if (isset($this->options['readPreference']) && !$this->options['readPreference'] instanceof ReadPreference) {
             throw InvalidArgumentException::invalidType('"readPreference" option', $this->options['readPreference'], ReadPreference::class);
         }
-
-        if (isset($this->options['session']) && ! $this->options['session'] instanceof Session) {
+        if (isset($this->options['session']) && !$this->options['session'] instanceof Session) {
             throw InvalidArgumentException::invalidType('"session" option', $this->options['session'], Session::class);
         }
-
-        if (isset($this->options['typeMap']) && ! is_array($this->options['typeMap'])) {
+        if (isset($this->options['typeMap']) && !is_array($this->options['typeMap'])) {
             throw InvalidArgumentException::invalidType('"typeMap" option', $this->options['typeMap'], 'array');
         }
-
         $this->command = $command instanceof Command ? $command : new Command($command);
     }
-
     public function execute(Server $server): CursorInterface
     {
         $cursor = $server->executeCommand($this->databaseName, $this->command, $this->createOptions());
-
         if (isset($this->options['typeMap'])) {
             $cursor->setTypeMap($this->options['typeMap']);
         }
-
         return $cursor;
     }
-
     /**
      * Create options for executing the command.
      *
@@ -97,15 +86,12 @@ final class DatabaseCommand
     private function createOptions(): array
     {
         $options = [];
-
         if (isset($this->options['readPreference'])) {
             $options['readPreference'] = $this->options['readPreference'];
         }
-
         if (isset($this->options['session'])) {
             $options['session'] = $this->options['session'];
         }
-
         return $options;
     }
 }

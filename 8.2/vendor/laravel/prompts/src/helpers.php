@@ -4,80 +4,46 @@ namespace Laravel\Prompts;
 
 use Closure;
 use Illuminate\Support\Collection;
-
-if (! function_exists('\Laravel\Prompts\text')) {
+if (!function_exists('\Laravel\Prompts\text')) {
     /**
      * Prompt the user for text input.
      */
-    function text(
-        string $label,
-        string $placeholder = '',
-        string $default = '',
-        bool|string $required = false,
-        mixed $validate = null,
-        string $hint = '',
-        ?Closure $transform = null,
-    ): string {
-        return (new TextPrompt(...get_defined_vars()))->prompt();
+    function text(string $label, string $placeholder = '', string $default = '', bool|string $required = \false, mixed $validate = null, string $hint = '', ?Closure $transform = null): string
+    {
+        return (new \Laravel\Prompts\TextPrompt(...get_defined_vars()))->prompt();
     }
 }
-
-if (! function_exists('\Laravel\Prompts\textarea')) {
+if (!function_exists('\Laravel\Prompts\textarea')) {
     /**
      * Prompt the user for multiline text input.
      */
-    function textarea(
-        string $label,
-        string $placeholder = '',
-        string $default = '',
-        bool|string $required = false,
-        mixed $validate = null,
-        string $hint = '',
-        int $rows = 5,
-        ?Closure $transform = null,
-    ): string {
-        return (new TextareaPrompt(...get_defined_vars()))->prompt();
+    function textarea(string $label, string $placeholder = '', string $default = '', bool|string $required = \false, mixed $validate = null, string $hint = '', int $rows = 5, ?Closure $transform = null): string
+    {
+        return (new \Laravel\Prompts\TextareaPrompt(...get_defined_vars()))->prompt();
     }
 }
-
-if (! function_exists('\Laravel\Prompts\password')) {
+if (!function_exists('\Laravel\Prompts\password')) {
     /**
      * Prompt the user for input, hiding the value.
      */
-    function password(
-        string $label,
-        string $placeholder = '',
-        bool|string $required = false,
-        mixed $validate = null,
-        string $hint = '',
-        ?Closure $transform = null,
-    ): string {
-        return (new PasswordPrompt(...get_defined_vars()))->prompt();
+    function password(string $label, string $placeholder = '', bool|string $required = \false, mixed $validate = null, string $hint = '', ?Closure $transform = null): string
+    {
+        return (new \Laravel\Prompts\PasswordPrompt(...get_defined_vars()))->prompt();
     }
 }
-
-if (! function_exists('\Laravel\Prompts\select')) {
+if (!function_exists('\Laravel\Prompts\select')) {
     /**
      * Prompt the user to select an option.
      *
      * @param  array<int|string, string>|Collection<int|string, string>  $options
      * @param  true|string  $required
      */
-    function select(
-        string $label,
-        array|Collection $options,
-        int|string|null $default = null,
-        int $scroll = 5,
-        mixed $validate = null,
-        string $hint = '',
-        bool|string $required = true,
-        ?Closure $transform = null,
-    ): int|string {
-        return (new SelectPrompt(...get_defined_vars()))->prompt();
+    function select(string $label, array|Collection $options, int|string|null $default = null, int $scroll = 5, mixed $validate = null, string $hint = '', bool|string $required = \true, ?Closure $transform = null): int|string
+    {
+        return (new \Laravel\Prompts\SelectPrompt(...get_defined_vars()))->prompt();
     }
 }
-
-if (! function_exists('\Laravel\Prompts\multiselect')) {
+if (!function_exists('\Laravel\Prompts\multiselect')) {
     /**
      * Prompt the user to select multiple options.
      *
@@ -85,122 +51,74 @@ if (! function_exists('\Laravel\Prompts\multiselect')) {
      * @param  array<int|string>|Collection<int, int|string>  $default
      * @return array<int|string>
      */
-    function multiselect(
-        string $label,
-        array|Collection $options,
-        array|Collection $default = [],
-        int $scroll = 5,
-        bool|string $required = false,
-        mixed $validate = null,
-        string $hint = 'Use the space bar to select options.',
-        ?Closure $transform = null,
-    ): array {
-        return (new MultiSelectPrompt(...get_defined_vars()))->prompt();
+    function multiselect(string $label, array|Collection $options, array|Collection $default = [], int $scroll = 5, bool|string $required = \false, mixed $validate = null, string $hint = 'Use the space bar to select options.', ?Closure $transform = null): array
+    {
+        return (new \Laravel\Prompts\MultiSelectPrompt(...get_defined_vars()))->prompt();
     }
 }
-
-if (! function_exists('\Laravel\Prompts\confirm')) {
+if (!function_exists('\Laravel\Prompts\confirm')) {
     /**
      * Prompt the user to confirm an action.
      */
-    function confirm(
-        string $label,
-        bool $default = true,
-        string $yes = 'Yes',
-        string $no = 'No',
-        bool|string $required = false,
-        mixed $validate = null,
-        string $hint = '',
-        ?Closure $transform = null,
-    ): bool {
-        return (new ConfirmPrompt(...get_defined_vars()))->prompt();
+    function confirm(string $label, bool $default = \true, string $yes = 'Yes', string $no = 'No', bool|string $required = \false, mixed $validate = null, string $hint = '', ?Closure $transform = null): bool
+    {
+        return (new \Laravel\Prompts\ConfirmPrompt(...get_defined_vars()))->prompt();
     }
 }
-
-if (! function_exists('\Laravel\Prompts\pause')) {
+if (!function_exists('\Laravel\Prompts\pause')) {
     /**
      * Prompt the user to continue or cancel after pausing.
      */
     function pause(string $message = 'Press enter to continue...'): bool
     {
-        return (new PausePrompt(...get_defined_vars()))->prompt();
+        return (new \Laravel\Prompts\PausePrompt(...get_defined_vars()))->prompt();
     }
 }
-
-if (! function_exists('\Laravel\Prompts\clear')) {
+if (!function_exists('\Laravel\Prompts\clear')) {
     /**
      * Clear the terminal.
      */
     function clear(): void
     {
-        (new Clear)->display();
+        (new \Laravel\Prompts\Clear())->display();
     }
 }
-
-if (! function_exists('\Laravel\Prompts\suggest')) {
+if (!function_exists('\Laravel\Prompts\suggest')) {
     /**
      * Prompt the user for text input with auto-completion.
      *
      * @param  array<string>|Collection<int, string>|Closure(string): array<string>  $options
      */
-    function suggest(
-        string $label,
-        array|Collection|Closure $options,
-        string $placeholder = '',
-        string $default = '',
-        int $scroll = 5,
-        bool|string $required = false,
-        mixed $validate = null,
-        string $hint = '',
-        ?Closure $transform = null,
-    ): string {
-        return (new SuggestPrompt(...get_defined_vars()))->prompt();
+    function suggest(string $label, array|Collection|Closure $options, string $placeholder = '', string $default = '', int $scroll = 5, bool|string $required = \false, mixed $validate = null, string $hint = '', ?Closure $transform = null): string
+    {
+        return (new \Laravel\Prompts\SuggestPrompt(...get_defined_vars()))->prompt();
     }
 }
-
-if (! function_exists('\Laravel\Prompts\search')) {
+if (!function_exists('\Laravel\Prompts\search')) {
     /**
      * Allow the user to search for an option.
      *
      * @param  Closure(string): array<int|string, string>  $options
      * @param  true|string  $required
      */
-    function search(
-        string $label,
-        Closure $options,
-        string $placeholder = '',
-        int $scroll = 5,
-        mixed $validate = null,
-        string $hint = '',
-        bool|string $required = true,
-        ?Closure $transform = null,
-    ): int|string {
-        return (new SearchPrompt(...get_defined_vars()))->prompt();
+    function search(string $label, Closure $options, string $placeholder = '', int $scroll = 5, mixed $validate = null, string $hint = '', bool|string $required = \true, ?Closure $transform = null): int|string
+    {
+        return (new \Laravel\Prompts\SearchPrompt(...get_defined_vars()))->prompt();
     }
 }
-
-if (! function_exists('\Laravel\Prompts\multisearch')) {
+if (!function_exists('\Laravel\Prompts\multisearch')) {
     /**
      * Allow the user to search for multiple option.
      *
      * @param  Closure(string): array<int|string, string>  $options
      * @return array<int|string>
      */
-    function multisearch(
-        string $label,
-        Closure $options,
-        string $placeholder = '',
-        int $scroll = 5,
-        bool|string $required = false,
-        mixed $validate = null,
-        string $hint = 'Use the space bar to select options.',
-        ?Closure $transform = null,
-    ): array {
-        return (new MultiSearchPrompt(...get_defined_vars()))->prompt();
+    function multisearch(string $label, Closure $options, string $placeholder = '', int $scroll = 5, bool|string $required = \false, mixed $validate = null, string $hint = 'Use the space bar to select options.', ?Closure $transform = null): array
+    {
+        return (new \Laravel\Prompts\MultiSearchPrompt(...get_defined_vars()))->prompt();
     }
 }
-
-if (! function_exists('\Laravel\Prompts\spin')) {
+if (!function_exists('\Laravel\Prompts\spin')) {
     /**
      * Render a spinner while the given callback is executing.
      *
@@ -211,81 +129,73 @@ if (! function_exists('\Laravel\Prompts\spin')) {
      */
     function spin(Closure $callback, string $message = ''): mixed
     {
-        return (new Spinner($message))->spin($callback);
+        return (new \Laravel\Prompts\Spinner($message))->spin($callback);
     }
 }
-
-if (! function_exists('\Laravel\Prompts\note')) {
+if (!function_exists('\Laravel\Prompts\note')) {
     /**
      * Display a note.
      */
     function note(string $message, ?string $type = null): void
     {
-        (new Note($message, $type))->display();
+        (new \Laravel\Prompts\Note($message, $type))->display();
     }
 }
-
-if (! function_exists('\Laravel\Prompts\error')) {
+if (!function_exists('\Laravel\Prompts\error')) {
     /**
      * Display an error.
      */
     function error(string $message): void
     {
-        (new Note($message, 'error'))->display();
+        (new \Laravel\Prompts\Note($message, 'error'))->display();
     }
 }
-
-if (! function_exists('\Laravel\Prompts\warning')) {
+if (!function_exists('\Laravel\Prompts\warning')) {
     /**
      * Display a warning.
      */
     function warning(string $message): void
     {
-        (new Note($message, 'warning'))->display();
+        (new \Laravel\Prompts\Note($message, 'warning'))->display();
     }
 }
-
-if (! function_exists('\Laravel\Prompts\alert')) {
+if (!function_exists('\Laravel\Prompts\alert')) {
     /**
      * Display an alert.
      */
     function alert(string $message): void
     {
-        (new Note($message, 'alert'))->display();
+        (new \Laravel\Prompts\Note($message, 'alert'))->display();
     }
 }
-
-if (! function_exists('\Laravel\Prompts\info')) {
+if (!function_exists('\Laravel\Prompts\info')) {
     /**
      * Display an informational message.
      */
     function info(string $message): void
     {
-        (new Note($message, 'info'))->display();
+        (new \Laravel\Prompts\Note($message, 'info'))->display();
     }
 }
-
-if (! function_exists('\Laravel\Prompts\intro')) {
+if (!function_exists('\Laravel\Prompts\intro')) {
     /**
      * Display an introduction.
      */
     function intro(string $message): void
     {
-        (new Note($message, 'intro'))->display();
+        (new \Laravel\Prompts\Note($message, 'intro'))->display();
     }
 }
-
-if (! function_exists('\Laravel\Prompts\outro')) {
+if (!function_exists('\Laravel\Prompts\outro')) {
     /**
      * Display a closing message.
      */
     function outro(string $message): void
     {
-        (new Note($message, 'outro'))->display();
+        (new \Laravel\Prompts\Note($message, 'outro'))->display();
     }
 }
-
-if (! function_exists('\Laravel\Prompts\table')) {
+if (!function_exists('\Laravel\Prompts\table')) {
     /**
      * Display a table.
      *
@@ -294,11 +204,10 @@ if (! function_exists('\Laravel\Prompts\table')) {
      */
     function table(array|Collection $headers = [], array|Collection|null $rows = null): void
     {
-        (new Table($headers, $rows))->display();
+        (new \Laravel\Prompts\Table($headers, $rows))->display();
     }
 }
-
-if (! function_exists('\Laravel\Prompts\grid')) {
+if (!function_exists('\Laravel\Prompts\grid')) {
     /**
      * Display a grid.
      *
@@ -306,11 +215,10 @@ if (! function_exists('\Laravel\Prompts\grid')) {
      */
     function grid(array|Collection $items = [], ?int $maxWidth = null): void
     {
-        (new Grid($items, $maxWidth))->display();
+        (new \Laravel\Prompts\Grid($items, $maxWidth))->display();
     }
 }
-
-if (! function_exists('\Laravel\Prompts\progress')) {
+if (!function_exists('\Laravel\Prompts\progress')) {
     /**
      * Display a progress bar.
      *
@@ -321,25 +229,18 @@ if (! function_exists('\Laravel\Prompts\progress')) {
      * @param  ?Closure((TSteps is int ? int : value-of<TSteps>), Progress<TSteps>): TReturn  $callback
      * @return ($callback is null ? Progress<TSteps> : array<TReturn>)
      */
-    function progress(
-        string $label,
-        iterable|int $steps,
-        ?Closure $callback = null,
-        string $hint = '',
-    ): array|Progress {
-        $progress = new Progress($label, $steps, $hint);
-
+    function progress(string $label, iterable|int $steps, ?Closure $callback = null, string $hint = ''): array|\Laravel\Prompts\Progress
+    {
+        $progress = new \Laravel\Prompts\Progress($label, $steps, $hint);
         if ($callback !== null) {
             return $progress->map($callback);
         }
-
         return $progress;
     }
 }
-
-if (! function_exists('\Laravel\Prompts\form')) {
-    function form(): FormBuilder
+if (!function_exists('\Laravel\Prompts\form')) {
+    function form(): \Laravel\Prompts\FormBuilder
     {
-        return new FormBuilder;
+        return new \Laravel\Prompts\FormBuilder();
     }
 }

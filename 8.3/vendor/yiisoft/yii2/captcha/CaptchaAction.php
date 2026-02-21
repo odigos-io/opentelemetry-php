@@ -1,19 +1,18 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\captcha;
 
-use Yii;
+use Odigos\Yii;
 use yii\base\Action;
 use yii\base\InvalidConfigException;
 use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\Response;
-
 /**
  * CaptchaAction renders a CAPTCHA image.
  *
@@ -67,15 +66,15 @@ class CaptchaAction extends Action
      * @var int the background color. For example, 0x55FF00.
      * Defaults to 0xFFFFFF, meaning white color.
      */
-    public $backColor = 0xFFFFFF;
+    public $backColor = 0xffffff;
     /**
      * @var int the font color. For example, 0x55FF00. Defaults to 0x2040A0 (blue color).
      */
-    public $foreColor = 0x2040A0;
+    public $foreColor = 0x2040a0;
     /**
      * @var bool whether to use transparent background. Defaults to false.
      */
-    public $transparent = false;
+    public $transparent = \false;
     /**
      * @var int the minimum length for randomly generated word. Defaults to 6.
      */
@@ -107,8 +106,6 @@ class CaptchaAction extends Action
      * @since 2.0.7
      */
     public $imageLibrary;
-
-
     /**
      * Initializes the action.
      * @throws InvalidConfigException if the font file does not exist.
@@ -120,7 +117,6 @@ class CaptchaAction extends Action
             throw new InvalidConfigException("The font file does not exist: {$this->fontFile}");
         }
     }
-
     /**
      * Runs the action.
      */
@@ -128,23 +124,20 @@ class CaptchaAction extends Action
     {
         if (Yii::$app->request->getQueryParam(self::REFRESH_GET_VAR) !== null) {
             // AJAX request for regenerating code
-            $code = $this->getVerifyCode(true);
+            $code = $this->getVerifyCode(\true);
             Yii::$app->response->format = Response::FORMAT_JSON;
             return [
                 'hash1' => $this->generateValidationHash($code),
                 'hash2' => $this->generateValidationHash(strtolower($code)),
                 // we add a random 'v' parameter so that FireFox can refresh the image
                 // when src attribute of image tag is changed
-                'url' => Url::to([$this->id, 'v' => uniqid('', true)]),
+                'url' => Url::to([$this->id, 'v' => uniqid('', \true)]),
             ];
         }
-
         $this->setHttpHeaders();
         Yii::$app->response->format = Response::FORMAT_RAW;
-
         return $this->renderImage($this->getVerifyCode());
     }
-
     /**
      * Generates a hash code that can be used for client-side validation.
      * @param string $code the CAPTCHA code
@@ -155,21 +148,18 @@ class CaptchaAction extends Action
         for ($h = 0, $i = strlen($code) - 1; $i >= 0; --$i) {
             $h += ord($code[$i]) << $i;
         }
-
         return $h;
     }
-
     /**
      * Gets the verification code.
      * @param bool $regenerate whether the verification code should be regenerated.
      * @return string the verification code.
      */
-    public function getVerifyCode($regenerate = false)
+    public function getVerifyCode($regenerate = \false)
     {
         if ($this->fixedVerifyCode !== null) {
             return $this->fixedVerifyCode;
         }
-
         $session = Yii::$app->getSession();
         $session->open();
         $name = $this->getSessionKey();
@@ -177,10 +167,8 @@ class CaptchaAction extends Action
             $session[$name] = $this->generateVerifyCode();
             $session[$name . 'count'] = 1;
         }
-
         return $session[$name];
     }
-
     /**
      * Validates the input to see if it matches the generated code.
      * @param string $input user input
@@ -190,18 +178,16 @@ class CaptchaAction extends Action
     public function validate($input, $caseSensitive)
     {
         $code = $this->getVerifyCode();
-        $valid = $caseSensitive ? ($input === $code) : strcasecmp($input, $code) === 0;
+        $valid = $caseSensitive ? $input === $code : strcasecmp($input, $code) === 0;
         $session = Yii::$app->getSession();
         $session->open();
         $name = $this->getSessionKey() . 'count';
         $session[$name] += 1;
         if ($valid || $session[$name] > $this->testLimit && $this->testLimit > 0) {
-            $this->getVerifyCode(true);
+            $this->getVerifyCode(\true);
         }
-
         return $valid;
     }
-
     /**
      * Generates a new verification code.
      * @return string the generated verification code
@@ -217,9 +203,7 @@ class CaptchaAction extends Action
         if ($this->maxLength > 20) {
             $this->maxLength = 20;
         }
-
         $length = random_int($this->minLength, $this->maxLength);
-
         $letters = 'bcdfghjklmnpqrstvwxyz';
         $vowels = 'aeiou';
         $code = '';
@@ -230,10 +214,8 @@ class CaptchaAction extends Action
                 $code .= $letters[random_int(0, 20)];
             }
         }
-
         return $code;
     }
-
     /**
      * Returns the session variable name used to store verification code.
      * @return string the session variable name
@@ -242,7 +224,6 @@ class CaptchaAction extends Action
     {
         return '__captcha/' . $this->getUniqueId();
     }
-
     /**
      * Renders the CAPTCHA image.
      * @param string $code the verification code
@@ -254,17 +235,15 @@ class CaptchaAction extends Action
         if (isset($this->imageLibrary)) {
             $imageLibrary = $this->imageLibrary;
         } else {
-            $imageLibrary = Captcha::checkRequirements();
+            $imageLibrary = \yii\captcha\Captcha::checkRequirements();
         }
         if ($imageLibrary === 'gd') {
             return $this->renderImageByGD($code);
         } elseif ($imageLibrary === 'imagick') {
             return $this->renderImageByImagick($code);
         }
-
         throw new InvalidConfigException("Defined library '{$imageLibrary}' is not supported");
     }
-
     /**
      * Renders the CAPTCHA image based on the code using GD library.
      * @param string $code the verification code
@@ -273,27 +252,13 @@ class CaptchaAction extends Action
     protected function renderImageByGD($code)
     {
         $image = imagecreatetruecolor($this->width, $this->height);
-
-        $backColor = imagecolorallocate(
-            $image,
-            (int) ($this->backColor % 0x1000000 / 0x10000),
-            (int) ($this->backColor % 0x10000 / 0x100),
-            $this->backColor % 0x100
-        );
+        $backColor = imagecolorallocate($image, (int) ($this->backColor % 0x1000000 / 0x10000), (int) ($this->backColor % 0x10000 / 0x100), $this->backColor % 0x100);
         imagefilledrectangle($image, 0, 0, $this->width - 1, $this->height - 1, $backColor);
         imagecolordeallocate($image, $backColor);
-
         if ($this->transparent) {
             imagecolortransparent($image, $backColor);
         }
-
-        $foreColor = imagecolorallocate(
-            $image,
-            (int) ($this->foreColor % 0x1000000 / 0x10000),
-            (int) ($this->foreColor % 0x10000 / 0x100),
-            $this->foreColor % 0x100
-        );
-
+        $foreColor = imagecolorallocate($image, (int) ($this->foreColor % 0x1000000 / 0x10000), (int) ($this->foreColor % 0x10000 / 0x100), $this->foreColor % 0x100);
         $length = strlen($code);
         $box = imagettfbbox(30, 0, $this->fontFile, $code);
         $w = $box[4] - $box[0] + $this->offset * ($length - 1);
@@ -308,20 +273,15 @@ class CaptchaAction extends Action
             $box = imagettftext($image, $fontSize, $angle, $x, $y, $foreColor, $this->fontFile, $letter);
             $x = $box[2] + $this->offset;
         }
-
         imagecolordeallocate($image, $foreColor);
-
         ob_start();
         imagepng($image);
-
         // Function `imagedestroy` is deprecated since PHP `8.5`, as it has no effect since PHP `8.0`
-        if (PHP_VERSION_ID < 80000) {
+        if (\PHP_VERSION_ID < 80000) {
             imagedestroy($image);
         }
-
         return ob_get_clean();
     }
-
     /**
      * Renders the CAPTCHA image based on the code using ImageMagick library.
      * @param string $code the verification code
@@ -329,17 +289,14 @@ class CaptchaAction extends Action
      */
     protected function renderImageByImagick($code)
     {
-        $backColor = $this->transparent ? new \ImagickPixel('transparent') : new \ImagickPixel('#' . str_pad(dechex($this->backColor), 6, 0, STR_PAD_LEFT));
-        $foreColor = new \ImagickPixel('#' . str_pad(dechex($this->foreColor), 6, 0, STR_PAD_LEFT));
-
+        $backColor = $this->transparent ? new \ImagickPixel('transparent') : new \ImagickPixel('#' . str_pad(dechex($this->backColor), 6, 0, \STR_PAD_LEFT));
+        $foreColor = new \ImagickPixel('#' . str_pad(dechex($this->foreColor), 6, 0, \STR_PAD_LEFT));
         $image = new \Imagick();
         $image->newImage($this->width, $this->height, $backColor);
-
         $draw = new \ImagickDraw();
         $draw->setFont($this->fontFile);
         $draw->setFontSize(30);
         $fontMetrics = $image->queryFontMetrics($draw, $code);
-
         $length = strlen($code);
         $w = (int) $fontMetrics['textWidth'] - 8 + $this->offset * ($length - 1);
         $h = (int) $fontMetrics['textHeight'] - 8;
@@ -355,21 +312,14 @@ class CaptchaAction extends Action
             $fontMetrics = $image->queryFontMetrics($draw, $code[$i]);
             $x += (int) $fontMetrics['textWidth'] + $this->offset;
         }
-
         $image->setImageFormat('png');
         return $image->getImageBlob();
     }
-
     /**
      * Sets the HTTP headers needed by image response.
      */
     protected function setHttpHeaders()
     {
-        Yii::$app->getResponse()->getHeaders()
-            ->set('Pragma', 'public')
-            ->set('Expires', '0')
-            ->set('Cache-Control', 'must-revalidate, post-check=0, pre-check=0')
-            ->set('Content-Transfer-Encoding', 'binary')
-            ->set('Content-type', 'image/png');
+        Yii::$app->getResponse()->getHeaders()->set('Pragma', 'public')->set('Expires', '0')->set('Cache-Control', 'must-revalidate, post-check=0, pre-check=0')->set('Content-Transfer-Encoding', 'binary')->set('Content-type', 'image/png');
     }
 }

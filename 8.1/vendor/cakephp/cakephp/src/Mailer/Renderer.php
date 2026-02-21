@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -19,21 +19,18 @@ namespace Cake\Mailer;
 use Cake\View\View;
 use Cake\View\ViewVarsTrait;
 use function Cake\Core\pluginSplit;
-
 /**
  * Class for rendering email message.
  */
 class Renderer
 {
     use ViewVarsTrait;
-
     /**
      * Constant for folder name containing email templates.
      *
      * @var string
      */
     public const TEMPLATE_FOLDER = 'email';
-
     /**
      * Constructor
      */
@@ -41,7 +38,6 @@ class Renderer
     {
         $this->reset();
     }
-
     /**
      * Render text/HTML content.
      *
@@ -62,12 +58,9 @@ class Renderer
             foreach ($types as $type) {
                 $rendered[$type] = $content;
             }
-
             return $rendered;
         }
-
         $view = $this->createView();
-
         [$templatePlugin] = pluginSplit($view->getTemplate());
         [$layoutPlugin] = pluginSplit($view->getLayout());
         if ($templatePlugin) {
@@ -75,21 +68,16 @@ class Renderer
         } elseif ($layoutPlugin) {
             $view->setPlugin($layoutPlugin);
         }
-
         if ($view->get('content') === null) {
             $view->set('content', $content);
         }
-
         foreach ($types as $type) {
-            $view->setTemplatePath(static::TEMPLATE_FOLDER . DIRECTORY_SEPARATOR . $type);
-            $view->setLayoutPath(static::TEMPLATE_FOLDER . DIRECTORY_SEPARATOR . $type);
-
+            $view->setTemplatePath(static::TEMPLATE_FOLDER . \DIRECTORY_SEPARATOR . $type);
+            $view->setLayoutPath(static::TEMPLATE_FOLDER . \DIRECTORY_SEPARATOR . $type);
             $rendered[$type] = $view->render();
         }
-
         return $rendered;
     }
-
     /**
      * Reset view builder to defaults.
      *
@@ -98,15 +86,9 @@ class Renderer
     public function reset()
     {
         $this->_viewBuilder = null;
-
-        $this->viewBuilder()
-            ->setClassName(View::class)
-            ->setLayout('default')
-            ->setHelpers(['Html']);
-
+        $this->viewBuilder()->setClassName(View::class)->setLayout('default')->setHelpers(['Html']);
         return $this;
     }
-
     /**
      * Clone ViewBuilder instance when renderer is cloned.
      *

@@ -5,7 +5,6 @@ namespace Illuminate\Validation;
 use Exception;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator as ValidatorFacade;
-
 class ValidationException extends Exception
 {
     /**
@@ -14,35 +13,30 @@ class ValidationException extends Exception
      * @var \Illuminate\Contracts\Validation\Validator
      */
     public $validator;
-
     /**
      * The recommended response to send to the client.
      *
      * @var \Symfony\Component\HttpFoundation\Response|null
      */
     public $response;
-
     /**
      * The status code to use for the response.
      *
      * @var int
      */
     public $status = 422;
-
     /**
      * The name of the error bag.
      *
      * @var string
      */
     public $errorBag;
-
     /**
      * The path the client should be redirected to.
      *
      * @var string
      */
     public $redirectTo;
-
     /**
      * Create a new exception instance.
      *
@@ -54,12 +48,10 @@ class ValidationException extends Exception
     public function __construct($validator, $response = null, $errorBag = 'default')
     {
         parent::__construct(static::summarize($validator));
-
         $this->response = $response;
         $this->errorBag = $errorBag;
         $this->validator = $validator;
     }
-
     /**
      * Create a new validation exception from a plain array of messages.
      *
@@ -76,7 +68,6 @@ class ValidationException extends Exception
             }
         }));
     }
-
     /**
      * Create an error message summary from the validation errors.
      *
@@ -86,22 +77,16 @@ class ValidationException extends Exception
     protected static function summarize($validator)
     {
         $messages = $validator->errors()->all();
-
-        if (! count($messages) || ! is_string($messages[0])) {
+        if (!count($messages) || !is_string($messages[0])) {
             return $validator->getTranslator()->get('The given data was invalid.');
         }
-
         $message = array_shift($messages);
-
         if ($count = count($messages)) {
             $pluralized = $count === 1 ? 'error' : 'errors';
-
-            $message .= ' '.$validator->getTranslator()->get("(and :count more $pluralized)", compact('count'));
+            $message .= ' ' . $validator->getTranslator()->get("(and :count more {$pluralized})", compact('count'));
         }
-
         return $message;
     }
-
     /**
      * Get all of the validation error messages.
      *
@@ -111,7 +96,6 @@ class ValidationException extends Exception
     {
         return $this->validator->errors()->messages();
     }
-
     /**
      * Set the HTTP status code to be used for the response.
      *
@@ -121,10 +105,8 @@ class ValidationException extends Exception
     public function status($status)
     {
         $this->status = $status;
-
         return $this;
     }
-
     /**
      * Set the error bag on the exception.
      *
@@ -134,10 +116,8 @@ class ValidationException extends Exception
     public function errorBag($errorBag)
     {
         $this->errorBag = $errorBag;
-
         return $this;
     }
-
     /**
      * Set the URL to redirect to on a validation error.
      *
@@ -147,10 +127,8 @@ class ValidationException extends Exception
     public function redirectTo($url)
     {
         $this->redirectTo = $url;
-
         return $this;
     }
-
     /**
      * Get the underlying response instance.
      *

@@ -1,18 +1,17 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\widgets;
 
-use Yii;
+use Odigos\Yii;
 use yii\base\InvalidConfigException;
 use yii\base\Widget;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
-
 /**
  * Breadcrumbs displays a list of links indicating the position of the current page in the whole site hierarchy.
  *
@@ -66,7 +65,7 @@ class Breadcrumbs extends Widget
     /**
      * @var bool whether to HTML-encode the link labels.
      */
-    public $encodeLabels = true;
+    public $encodeLabels = \true;
     /**
      * @var array|null the first hyperlink in the breadcrumbs (called home link).
      * Please refer to [[links]] on the format of the link.
@@ -122,8 +121,6 @@ class Breadcrumbs extends Widget
      * will be replaced with the actual HTML link for each active item.
      */
     public $activeItemTemplate = "<li class=\"active\">{link}</li>\n";
-
-
     /**
      * Renders the widget.
      */
@@ -134,11 +131,8 @@ class Breadcrumbs extends Widget
         }
         $links = [];
         if ($this->homeLink === null) {
-            $links[] = $this->renderItem([
-                'label' => Yii::t('yii', 'Home'),
-                'url' => Yii::$app->homeUrl,
-            ], $this->itemTemplate);
-        } elseif ($this->homeLink !== false) {
+            $links[] = $this->renderItem(['label' => Yii::t('yii', 'Home'), 'url' => Yii::$app->homeUrl], $this->itemTemplate);
+        } elseif ($this->homeLink !== \false) {
             $links[] = $this->renderItem($this->homeLink, $this->itemTemplate);
         }
         foreach ($this->links as $link) {
@@ -149,7 +143,6 @@ class Breadcrumbs extends Widget
         }
         echo Html::tag($this->tag, implode('', $links), $this->options);
     }
-
     /**
      * Renders a single breadcrumb item.
      * @param array $link the link to be rendered. It must contain the "label" element. The "url" element is optional.
@@ -175,7 +168,6 @@ class Breadcrumbs extends Widget
         } else {
             $link = $label;
         }
-
         return strtr($template, ['{link}' => $link]);
     }
 }

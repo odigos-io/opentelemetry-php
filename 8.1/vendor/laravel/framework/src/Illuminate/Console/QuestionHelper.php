@@ -9,7 +9,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Question\Question;
-
 class QuestionHelper extends SymfonyQuestionHelper
 {
     /**
@@ -20,53 +19,35 @@ class QuestionHelper extends SymfonyQuestionHelper
     protected function writePrompt(OutputInterface $output, Question $question)
     {
         $text = OutputFormatter::escapeTrailingBackslash($question->getQuestion());
-
         $text = $this->ensureEndsWithPunctuation($text);
-
-        $text = "  <fg=default;options=bold>$text</></>";
-
+        $text = "  <fg=default;options=bold>{$text}</></>";
         $default = $question->getDefault();
-
         if ($question->isMultiline()) {
-            $text .= sprintf(' (press %s to continue)', 'Windows' == PHP_OS_FAMILY
-                ? '<comment>Ctrl+Z</comment> then <comment>Enter</comment>'
-                : '<comment>Ctrl+D</comment>');
+            $text .= sprintf(' (press %s to continue)', 'Windows' == \PHP_OS_FAMILY ? '<comment>Ctrl+Z</comment> then <comment>Enter</comment>' : '<comment>Ctrl+D</comment>');
         }
-
-        switch (true) {
+        switch (\true) {
             case null === $default:
                 $text = sprintf('<info>%s</info>', $text);
-
                 break;
-
             case $question instanceof ConfirmationQuestion:
                 $text = sprintf('<info>%s (yes/no)</info> [<comment>%s</comment>]', $text, $default ? 'yes' : 'no');
-
                 break;
-
             case $question instanceof ChoiceQuestion:
                 $choices = $question->getChoices();
                 $text = sprintf('<info>%s</info> [<comment>%s</comment>]', $text, OutputFormatter::escape($choices[$default] ?? $default));
-
                 break;
-
             default:
                 $text = sprintf('<info>%s</info> [<comment>%s</comment>]', $text, OutputFormatter::escape($default));
-
                 break;
         }
-
         $output->writeln($text);
-
         if ($question instanceof ChoiceQuestion) {
             foreach ($question->getChoices() as $key => $value) {
                 with(new TwoColumnDetail($output))->render($value, $key);
             }
         }
-
         $output->write('<options=bold>❯ </>');
     }
-
     /**
      * Ensures the given string ends with punctuation.
      *
@@ -75,10 +56,9 @@ class QuestionHelper extends SymfonyQuestionHelper
      */
     protected function ensureEndsWithPunctuation($string)
     {
-        if (! str($string)->endsWith(['?', ':', '!', '.'])) {
-            return "$string:";
+        if (!str($string)->endsWith(['?', ':', '!', '.'])) {
+            return "{$string}:";
         }
-
         return $string;
     }
 }

@@ -1,10 +1,10 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\db;
 
 /**
@@ -32,19 +32,16 @@ trait ActiveQueryTrait
      * of [[modelClass]] will be created to represent each record.
      */
     public $asArray;
-
-
     /**
      * Sets the [[asArray]] property.
      * @param bool $value whether to return the query results in terms of arrays instead of Active Records.
      * @return $this the query object itself
      */
-    public function asArray($value = true)
+    public function asArray($value = \true)
     {
         $this->asArray = $value;
         return $this;
     }
-
     /**
      * Specifies the relations with which this query should be performed.
      *
@@ -89,7 +86,6 @@ trait ActiveQueryTrait
             // the parameter is given as an array
             $with = $with[0];
         }
-
         if (empty($this->with)) {
             $this->with = $with;
         } elseif (!empty($with)) {
@@ -102,10 +98,8 @@ trait ActiveQueryTrait
                 }
             }
         }
-
         return $this;
     }
-
     /**
      * Converts found rows into model instances.
      * @param array $rows
@@ -129,7 +123,6 @@ trait ActiveQueryTrait
             return $models;
         }
     }
-
     /**
      * Finds records corresponding to one or multiple relations and populates them into the primary models.
      * @param array $with a list of relations that this query should be performed with. Please
@@ -141,9 +134,8 @@ trait ActiveQueryTrait
         if (empty($models)) {
             return;
         }
-
         $primaryModel = reset($models);
-        if (!$primaryModel instanceof ActiveRecordInterface) {
+        if (!$primaryModel instanceof \yii\db\ActiveRecordInterface) {
             /** @var ActiveRecordInterface $modelClass */
             $modelClass = $this->modelClass;
             $primaryModel = $modelClass::instance();
@@ -161,7 +153,6 @@ trait ActiveQueryTrait
             $relation->populateRelation($name, $models);
         }
     }
-
     /**
      * @param ActiveRecord $model
      * @param array $with
@@ -175,14 +166,13 @@ trait ActiveQueryTrait
                 $name = $callback;
                 $callback = null;
             }
-            if (($pos = strpos($name, '.')) !== false) {
+            if (($pos = strpos($name, '.')) !== \false) {
                 // with sub-relations
                 $childName = substr($name, $pos + 1);
                 $name = substr($name, 0, $pos);
             } else {
                 $childName = null;
             }
-
             if (!isset($relations[$name])) {
                 $relation = $model->getRelation($name);
                 $relation->primaryModel = null;
@@ -190,14 +180,12 @@ trait ActiveQueryTrait
             } else {
                 $relation = $relations[$name];
             }
-
             if (isset($childName)) {
                 $relation->with[$childName] = $callback;
             } elseif ($callback !== null) {
                 call_user_func($callback, $relation);
             }
         }
-
         return $relations;
     }
 }

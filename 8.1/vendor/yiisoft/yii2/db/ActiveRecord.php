@@ -1,19 +1,18 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\db;
 
-use Yii;
+use Odigos\Yii;
 use yii\base\InvalidArgumentException;
 use yii\base\InvalidConfigException;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Inflector;
 use yii\helpers\StringHelper;
-
 /**
  * ActiveRecord is the base class for classes representing relational data in terms of objects.
  *
@@ -74,25 +73,25 @@ use yii\helpers\StringHelper;
  * @author Carsten Brandt <mail@cebe.cc>
  * @since 2.0
  */
-class ActiveRecord extends BaseActiveRecord
+class ActiveRecord extends \yii\db\BaseActiveRecord
 {
     /**
      * The insert operation. This is mainly used when overriding [[transactions()]] to specify which operations are transactional.
      */
-    public const OP_INSERT = 0x01;
+    public const OP_INSERT = 0x1;
     /**
      * The update operation. This is mainly used when overriding [[transactions()]] to specify which operations are transactional.
      */
-    public const OP_UPDATE = 0x02;
+    public const OP_UPDATE = 0x2;
     /**
      * The delete operation. This is mainly used when overriding [[transactions()]] to specify which operations are transactional.
      */
-    public const OP_DELETE = 0x04;
+    public const OP_DELETE = 0x4;
     /**
      * All three operations: insert, update, delete.
      * This is a shortcut of the expression: OP_INSERT | OP_UPDATE | OP_DELETE.
      */
-    public const OP_ALL = 0x07;
+    public const OP_ALL = 0x7;
     /**
      * Loads default values from database table schema.
      *
@@ -108,7 +107,7 @@ class ActiveRecord extends BaseActiveRecord
      * This will only set defaults for attributes that are `null`.
      * @return $this the model instance itself.
      */
-    public function loadDefaultValues($skipIfSet = true)
+    public function loadDefaultValues($skipIfSet = \true)
     {
         $columns = static::getTableSchema()->columns;
         foreach ($this->attributes() as $name) {
@@ -119,10 +118,8 @@ class ActiveRecord extends BaseActiveRecord
                 }
             }
         }
-
         return $this;
     }
-
     /**
      * Returns the database connection used by this AR class.
      * By default, the "db" application component is used as the database connection.
@@ -133,7 +130,6 @@ class ActiveRecord extends BaseActiveRecord
     {
         return Yii::$app->getDb();
     }
-
     /**
      * Creates an [[ActiveQuery]] instance with a given SQL statement.
      *
@@ -159,10 +155,8 @@ class ActiveRecord extends BaseActiveRecord
     {
         $query = static::find();
         $query->sql = $sql;
-
         return $query->params($params);
     }
-
     /**
      * Finds ActiveRecord instance(s) by the given condition.
      * This method is internally called by [[findOne()]] and [[findAll()]].
@@ -174,8 +168,7 @@ class ActiveRecord extends BaseActiveRecord
     protected static function findByCondition($condition)
     {
         $query = static::find();
-
-        if (!ArrayHelper::isAssociative($condition) && !$condition instanceof ExpressionInterface) {
+        if (!ArrayHelper::isAssociative($condition) && !$condition instanceof \yii\db\ExpressionInterface) {
             // query by primary key
             $primaryKey = static::primaryKey();
             if (isset($primaryKey[0])) {
@@ -192,10 +185,8 @@ class ActiveRecord extends BaseActiveRecord
             $aliases = static::filterValidAliases($query);
             $condition = static::filterCondition($condition, $aliases);
         }
-
         return $query->andWhere($condition);
     }
-
     /**
      * Returns table aliases which are not the same as the name of the tables.
      *
@@ -205,17 +196,14 @@ class ActiveRecord extends BaseActiveRecord
      * @since 2.0.17
      * @internal
      */
-    protected static function filterValidAliases(Query $query)
+    protected static function filterValidAliases(\yii\db\Query $query)
     {
         $tables = $query->getTablesUsedInFrom();
-
         $aliases = array_diff(array_keys($tables), $tables);
-
         return array_map(function ($alias) {
             return preg_replace('/{{(\w+)}}/', '$1', $alias);
         }, array_values($aliases));
     }
-
     /**
      * Filters array condition before it is assiged to a Query filter.
      *
@@ -234,17 +222,14 @@ class ActiveRecord extends BaseActiveRecord
         $result = [];
         $db = static::getDb();
         $columnNames = static::filterValidColumnNames($db, $aliases);
-
         foreach ($condition as $key => $value) {
-            if (is_string($key) && !in_array($db->quoteSql($key), $columnNames, true)) {
+            if (is_string($key) && !in_array($db->quoteSql($key), $columnNames, \true)) {
                 throw new InvalidArgumentException('Key "' . $key . '" is not a column name and can not be used as a filter');
             }
             $result[$key] = is_array($value) ? array_values($value) : $value;
         }
-
         return $result;
     }
-
     /**
      * Valid column names are table column names or column names prefixed with table name or table alias
      *
@@ -260,22 +245,19 @@ class ActiveRecord extends BaseActiveRecord
         $columnNames = [];
         $tableName = static::tableName();
         $quotedTableName = $db->quoteTableName($tableName);
-
         foreach (static::getTableSchema()->getColumnNames() as $columnName) {
             $columnNames[] = $columnName;
             $columnNames[] = $db->quoteColumnName($columnName);
-            $columnNames[] = "$tableName.$columnName";
-            $columnNames[] = $db->quoteSql("$quotedTableName.[[$columnName]]");
+            $columnNames[] = "{$tableName}.{$columnName}";
+            $columnNames[] = $db->quoteSql("{$quotedTableName}.[[{$columnName}]]");
             foreach ($aliases as $tableAlias) {
-                $columnNames[] = "$tableAlias.$columnName";
+                $columnNames[] = "{$tableAlias}.{$columnName}";
                 $quotedTableAlias = $db->quoteTableName($tableAlias);
-                $columnNames[] = $db->quoteSql("$quotedTableAlias.[[$columnName]]");
+                $columnNames[] = $db->quoteSql("{$quotedTableAlias}.[[{$columnName}]]");
             }
         }
-
         return $columnNames;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -285,16 +267,14 @@ class ActiveRecord extends BaseActiveRecord
         $tableName = key($query->getTablesUsedInFrom());
         $pk = [];
         // disambiguate column names in case ActiveQuery adds a JOIN
-        foreach ($this->getPrimaryKey(true) as $key => $value) {
+        foreach ($this->getPrimaryKey(\true) as $key => $value) {
             $pk[$tableName . '.' . $key] = $value;
         }
         $query->where($pk);
-
         /** @var BaseActiveRecord $record */
         $record = $query->noCache()->one();
         return $this->refreshInternal($record);
     }
-
     /**
      * Updates the whole table using the provided attribute values and conditions.
      *
@@ -330,10 +310,8 @@ class ActiveRecord extends BaseActiveRecord
     {
         $command = static::getDb()->createCommand();
         $command->update(static::tableName(), $attributes, $condition, $params);
-
         return $command->execute();
     }
-
     /**
      * Updates the whole table using the provided counter changes and conditions.
      *
@@ -357,15 +335,13 @@ class ActiveRecord extends BaseActiveRecord
     {
         $n = 0;
         foreach ($counters as $name => $value) {
-            $counters[$name] = new Expression("[[$name]]+:bp{$n}", [":bp{$n}" => $value]);
+            $counters[$name] = new \yii\db\Expression("[[{$name}]]+:bp{$n}", [":bp{$n}" => $value]);
             $n++;
         }
         $command = static::getDb()->createCommand();
         $command->update(static::tableName(), $counters, $condition, $params);
-
         return $command->execute();
     }
-
     /**
      * Deletes rows in the table using the provided conditions.
      *
@@ -399,10 +375,8 @@ class ActiveRecord extends BaseActiveRecord
     {
         $command = static::getDb()->createCommand();
         $command->delete(static::tableName(), $condition, $params);
-
         return $command->execute();
     }
-
     /**
      * {@inheritdoc}
      * @return ActiveQuery the newly created [[ActiveQuery]] instance.
@@ -412,9 +386,8 @@ class ActiveRecord extends BaseActiveRecord
      */
     public static function find()
     {
-        return Yii::createObject(ActiveQuery::className(), [get_called_class()]);
+        return Yii::createObject(\yii\db\ActiveQuery::className(), [get_called_class()]);
     }
-
     /**
      * Declares the name of the database table associated with this AR class.
      * By default this method returns the class name as the table name by calling [[Inflector::camel2id()]]
@@ -427,7 +400,6 @@ class ActiveRecord extends BaseActiveRecord
     {
         return '{{%' . Inflector::camel2id(StringHelper::basename(get_called_class()), '_') . '}}';
     }
-
     /**
      * Returns the schema information of the DB table associated with this AR class.
      * @return TableSchema the schema information of the DB table associated with this AR class.
@@ -435,17 +407,12 @@ class ActiveRecord extends BaseActiveRecord
      */
     public static function getTableSchema()
     {
-        $tableSchema = static::getDb()
-            ->getSchema()
-            ->getTableSchema(static::tableName());
-
+        $tableSchema = static::getDb()->getSchema()->getTableSchema(static::tableName());
         if ($tableSchema === null) {
             throw new InvalidConfigException('The table does not exist: ' . static::tableName());
         }
-
         return $tableSchema;
     }
-
     /**
      * Returns the primary key name(s) for this AR class.
      * The default implementation will return the primary key(s) as declared
@@ -463,7 +430,6 @@ class ActiveRecord extends BaseActiveRecord
     {
         return static::getTableSchema()->primaryKey;
     }
-
     /**
      * Returns the list of all attribute names of the model.
      * The default implementation will return all column names of the table associated with this AR class.
@@ -473,7 +439,6 @@ class ActiveRecord extends BaseActiveRecord
     {
         return static::getTableSchema()->getColumnNames();
     }
-
     /**
      * Declares which DB operations should be performed within a transaction in different scenarios.
      * The supported DB operations are: [[OP_INSERT]], [[OP_UPDATE]] and [[OP_DELETE]],
@@ -505,7 +470,6 @@ class ActiveRecord extends BaseActiveRecord
     {
         return [];
     }
-
     /**
      * {@inheritdoc}
      */
@@ -519,7 +483,6 @@ class ActiveRecord extends BaseActiveRecord
         }
         parent::populateRecord($record, $row);
     }
-
     /**
      * Inserts a row into the associated database table using the attribute values of this record.
      *
@@ -560,26 +523,23 @@ class ActiveRecord extends BaseActiveRecord
      * @return bool whether the attributes are valid and the record is inserted successfully.
      * @throws \Throwable in case insert failed.
      */
-    public function insert($runValidation = true, $attributes = null)
+    public function insert($runValidation = \true, $attributes = null)
     {
         if ($runValidation && !$this->validate($attributes)) {
             Yii::info('Model not inserted due to validation error.', __METHOD__);
-            return false;
+            return \false;
         }
-
         if (!$this->isTransactional(self::OP_INSERT)) {
             return $this->insertInternal($attributes);
         }
-
         $transaction = static::getDb()->beginTransaction();
         try {
             $result = $this->insertInternal($attributes);
-            if ($result === false) {
+            if ($result === \false) {
                 $transaction->rollBack();
             } else {
                 $transaction->commit();
             }
-
             return $result;
         } catch (\Exception $e) {
             $transaction->rollBack();
@@ -589,7 +549,6 @@ class ActiveRecord extends BaseActiveRecord
             throw $e;
         }
     }
-
     /**
      * {@inheritdoc}
      *
@@ -607,7 +566,6 @@ class ActiveRecord extends BaseActiveRecord
     {
         return parent::hasMany($class, $link);
     }
-
     /**
      * {@inheritdoc}
      *
@@ -625,7 +583,6 @@ class ActiveRecord extends BaseActiveRecord
     {
         return parent::hasOne($class, $link);
     }
-
     /**
      * Inserts an ActiveRecord into DB without considering transaction.
      * @param array|null $attributes list of attributes that need to be saved. Defaults to `null`,
@@ -634,26 +591,23 @@ class ActiveRecord extends BaseActiveRecord
      */
     protected function insertInternal($attributes = null)
     {
-        if (!$this->beforeSave(true)) {
-            return false;
+        if (!$this->beforeSave(\true)) {
+            return \false;
         }
         $values = $this->getDirtyAttributes($attributes);
-        if (($primaryKeys = static::getDb()->schema->insert(static::tableName(), $values)) === false) {
-            return false;
+        if (($primaryKeys = static::getDb()->schema->insert(static::tableName(), $values)) === \false) {
+            return \false;
         }
         foreach ($primaryKeys as $name => $value) {
             $id = static::getTableSchema()->columns[$name]->phpTypecast($value);
             $this->setAttribute($name, $id);
             $values[$name] = $id;
         }
-
         $changedAttributes = array_fill_keys(array_keys($values), null);
         $this->setOldAttributes($values);
-        $this->afterSave(true, $changedAttributes);
-
-        return true;
+        $this->afterSave(\true, $changedAttributes);
+        return \true;
     }
-
     /**
      * Saves the changes to this active record into the associated database table.
      *
@@ -706,26 +660,23 @@ class ActiveRecord extends BaseActiveRecord
      * being updated is outdated.
      * @throws \Throwable in case update failed.
      */
-    public function update($runValidation = true, $attributeNames = null)
+    public function update($runValidation = \true, $attributeNames = null)
     {
         if ($runValidation && !$this->validate($attributeNames)) {
             Yii::info('Model not updated due to validation error.', __METHOD__);
-            return false;
+            return \false;
         }
-
         if (!$this->isTransactional(self::OP_UPDATE)) {
             return $this->updateInternal($attributeNames);
         }
-
         $transaction = static::getDb()->beginTransaction();
         try {
             $result = $this->updateInternal($attributeNames);
-            if ($result === false) {
+            if ($result === \false) {
                 $transaction->rollBack();
             } else {
                 $transaction->commit();
             }
-
             return $result;
         } catch (\Exception $e) {
             $transaction->rollBack();
@@ -735,7 +686,6 @@ class ActiveRecord extends BaseActiveRecord
             throw $e;
         }
     }
-
     /**
      * Deletes the table row corresponding to this active record.
      *
@@ -760,16 +710,14 @@ class ActiveRecord extends BaseActiveRecord
         if (!$this->isTransactional(self::OP_DELETE)) {
             return $this->deleteInternal();
         }
-
         $transaction = static::getDb()->beginTransaction();
         try {
             $result = $this->deleteInternal();
-            if ($result === false) {
+            if ($result === \false) {
                 $transaction->rollBack();
             } else {
                 $transaction->commit();
             }
-
             return $result;
         } catch (\Exception $e) {
             $transaction->rollBack();
@@ -779,7 +727,6 @@ class ActiveRecord extends BaseActiveRecord
             throw $e;
         }
     }
-
     /**
      * Deletes an ActiveRecord without considering transaction.
      * @return int|false the number of rows deleted, or `false` if the deletion is unsuccessful for some reason.
@@ -789,26 +736,23 @@ class ActiveRecord extends BaseActiveRecord
     protected function deleteInternal()
     {
         if (!$this->beforeDelete()) {
-            return false;
+            return \false;
         }
-
         // we do not check the return value of deleteAll() because it's possible
         // the record is already deleted in the database and thus the method will return 0
-        $condition = $this->getOldPrimaryKey(true);
+        $condition = $this->getOldPrimaryKey(\true);
         $lock = $this->optimisticLock();
         if ($lock !== null) {
-            $condition[$lock] = $this->$lock;
+            $condition[$lock] = $this->{$lock};
         }
         $result = static::deleteAll($condition);
         if ($lock !== null && !$result) {
-            throw new StaleObjectException('The object being deleted is outdated.');
+            throw new \yii\db\StaleObjectException('The object being deleted is outdated.');
         }
         $this->setOldAttributes(null);
         $this->afterDelete();
-
         return $result;
     }
-
     /**
      * Returns a value indicating whether the given active record is the same as the current one.
      * The comparison is made by comparing the table names and the primary key values of the two active records.
@@ -819,12 +763,10 @@ class ActiveRecord extends BaseActiveRecord
     public function equals($record)
     {
         if ($this->isNewRecord || $record->isNewRecord) {
-            return false;
+            return \false;
         }
-
         return static::tableName() === $record->tableName() && $this->getPrimaryKey() === $record->getPrimaryKey();
     }
-
     /**
      * Returns a value indicating whether the specified operation is transactional in the current [[$scenario]].
      * @param int $operation the operation to check. Possible values are [[OP_INSERT]], [[OP_UPDATE]] and [[OP_DELETE]].
@@ -834,7 +776,6 @@ class ActiveRecord extends BaseActiveRecord
     {
         $scenario = $this->getScenario();
         $transactions = $this->transactions();
-
-        return isset($transactions[$scenario]) && ($transactions[$scenario] & $operation);
+        return isset($transactions[$scenario]) && $transactions[$scenario] & $operation;
     }
 }

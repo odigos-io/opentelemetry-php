@@ -1,9 +1,7 @@
 <?php
 
 // DO NOT EDIT, this is an Auto-generated file from script/semantic-conventions
-
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\SemConv\Attributes;
 
 /**
@@ -18,7 +16,6 @@ interface UrlAttributes
      * @stable
      */
     public const URL_FRAGMENT = 'url.fragment';
-
     /**
      * Absolute URL describing a network resource according to [RFC3986](https://www.rfc-editor.org/rfc/rfc3986)
      * For network calls, URL usually has `scheme://host[:port][path][?query][#fragment]` format, where the fragment
@@ -48,7 +45,6 @@ interface UrlAttributes
      * @stable
      */
     public const URL_FULL = 'url.full';
-
     /**
      * The [URI path](https://www.rfc-editor.org/rfc/rfc3986#section-3.3) component
      *
@@ -57,7 +53,6 @@ interface UrlAttributes
      * @stable
      */
     public const URL_PATH = 'url.path';
-
     /**
      * The [URI query](https://www.rfc-editor.org/rfc/rfc3986#section-3.4) component
      *
@@ -79,12 +74,10 @@ interface UrlAttributes
      * @stable
      */
     public const URL_QUERY = 'url.query';
-
     /**
      * The [URI scheme](https://www.rfc-editor.org/rfc/rfc3986#section-3.1) component identifying the used protocol.
      *
      * @stable
      */
     public const URL_SCHEME = 'url.scheme';
-
 }

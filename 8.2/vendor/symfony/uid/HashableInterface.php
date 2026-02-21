@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\Uid;
 
 if (interface_exists(\Ds\Hashable::class)) {
@@ -26,7 +25,6 @@ if (interface_exists(\Ds\Hashable::class)) {
     interface HashableInterface
     {
         public function equals(mixed $other): bool;
-
         public function hash(): string;
     }
 }

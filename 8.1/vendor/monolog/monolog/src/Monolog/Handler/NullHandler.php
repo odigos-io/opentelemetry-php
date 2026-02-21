@@ -1,5 +1,6 @@
-<?php declare(strict_types=1);
+<?php
 
+declare (strict_types=1);
 /*
  * This file is part of the Monolog package.
  *
@@ -8,14 +9,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Odigos\Monolog\Handler;
 
-namespace Monolog\Handler;
-
-use Monolog\Level;
+use Odigos\Monolog\Level;
 use Psr\Log\LogLevel;
-use Monolog\Logger;
-use Monolog\LogRecord;
-
+use Odigos\Monolog\Logger;
+use Odigos\Monolog\LogRecord;
 /**
  * Blackhole
  *
@@ -27,7 +26,6 @@ use Monolog\LogRecord;
 class NullHandler extends Handler
 {
     private Level $level;
-
     /**
      * @param string|int|Level $level The minimum logging level at which this handler will be triggered
      *
@@ -37,7 +35,6 @@ class NullHandler extends Handler
     {
         $this->level = Logger::toMonologLevel($level);
     }
-
     /**
      * @inheritDoc
      */
@@ -45,7 +42,6 @@ class NullHandler extends Handler
     {
         return $record->level->value >= $this->level->value;
     }
-
     /**
      * @inheritDoc
      */

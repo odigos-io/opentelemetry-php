@@ -1,5 +1,6 @@
-<?php declare(strict_types=1);
+<?php
 
+declare (strict_types=1);
 /*
  * This file is part of the Monolog package.
  *
@@ -8,12 +9,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Odigos\Monolog\Processor;
 
-namespace Monolog\Processor;
-
-use Monolog\ResettableInterface;
-use Monolog\LogRecord;
-
+use Odigos\Monolog\ResettableInterface;
+use Odigos\Monolog\LogRecord;
 /**
  * Adds a unique identifier into records
  *
@@ -23,7 +22,6 @@ class UidProcessor implements ProcessorInterface, ResettableInterface
 {
     /** @var non-empty-string */
     private string $uid;
-
     /**
      * @param int<1, 32> $length
      */
@@ -32,30 +30,24 @@ class UidProcessor implements ProcessorInterface, ResettableInterface
         if ($length > 32 || $length < 1) {
             throw new \InvalidArgumentException('The uid length must be an integer between 1 and 32');
         }
-
         $this->uid = $this->generateUid($length);
     }
-
     /**
      * @inheritDoc
      */
     public function __invoke(LogRecord $record): LogRecord
     {
         $record->extra['uid'] = $this->uid;
-
         return $record;
     }
-
     public function getUid(): string
     {
         return $this->uid;
     }
-
     public function reset(): void
     {
         $this->uid = $this->generateUid(\strlen($this->uid));
     }
-
     /**
      * @param  positive-int     $length
      * @return non-empty-string

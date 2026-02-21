@@ -3,11 +3,9 @@
 namespace Illuminate\Validation\Rules;
 
 use Illuminate\Support\Traits\Conditionable;
-
 class Exists
 {
-    use Conditionable, DatabaseRule;
-
+    use Conditionable, \Illuminate\Validation\Rules\DatabaseRule;
     /**
      * Convert the rule to a validation string.
      *
@@ -15,10 +13,6 @@ class Exists
      */
     public function __toString()
     {
-        return rtrim(sprintf('exists:%s,%s,%s',
-            $this->table,
-            $this->column,
-            $this->formatWheres()
-        ), ',');
+        return rtrim(sprintf('exists:%s,%s,%s', $this->table, $this->column, $this->formatWheres()), ',');
     }
 }

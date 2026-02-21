@@ -1,11 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\API\Metrics\Noop;
 
 use OpenTelemetry\API\Metrics\GaugeInterface;
-
 /**
  * @internal
  */
@@ -16,10 +14,9 @@ final class NoopGauge implements GaugeInterface
     {
         // no-op
     }
-
     #[\Override]
     public function isEnabled(): bool
     {
-        return false;
+        return \false;
     }
 }

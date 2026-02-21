@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -19,7 +19,6 @@ namespace Cake\Core\Configure\Engine;
 use Cake\Core\Configure\ConfigEngineInterface;
 use Cake\Core\Configure\FileConfigTrait;
 use Cake\Core\Exception\CakeException;
-
 /**
  * JSON engine allows Configure to load configuration values from
  * files containing JSON strings.
@@ -41,14 +40,12 @@ use Cake\Core\Exception\CakeException;
 class JsonConfig implements ConfigEngineInterface
 {
     use FileConfigTrait;
-
     /**
      * File extension.
      *
      * @var string
      */
     protected string $_extension = '.json';
-
     /**
      * Constructor for JSON Config file reading.
      *
@@ -58,7 +55,6 @@ class JsonConfig implements ConfigEngineInterface
     {
         $this->_path = $path ?? CONFIG;
     }
-
     /**
      * Read a config file and return its contents.
      *
@@ -74,30 +70,20 @@ class JsonConfig implements ConfigEngineInterface
      */
     public function read(string $key): array
     {
-        $file = $this->_getFilePath($key, true);
-
+        $file = $this->_getFilePath($key, \true);
         $jsonContent = file_get_contents($file);
-        if ($jsonContent === false) {
+        if ($jsonContent === \false) {
             throw new CakeException(sprintf('Cannot read file content of `%s`', $file));
         }
-        $values = json_decode($jsonContent, true);
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            throw new CakeException(sprintf(
-                'Error parsing JSON string fetched from config file `%s.json`: %s',
-                $key,
-                json_last_error_msg(),
-            ));
+        $values = json_decode($jsonContent, \true);
+        if (json_last_error() !== \JSON_ERROR_NONE) {
+            throw new CakeException(sprintf('Error parsing JSON string fetched from config file `%s.json`: %s', $key, json_last_error_msg()));
         }
         if (!is_array($values)) {
-            throw new CakeException(sprintf(
-                'Decoding JSON config file `%s.json` did not return an array',
-                $key,
-            ));
+            throw new CakeException(sprintf('Decoding JSON config file `%s.json` did not return an array', $key));
         }
-
         return $values;
     }
-
     /**
      * Converts the provided $data into a JSON string that can be used saved
      * into a file and loaded later.
@@ -110,7 +96,6 @@ class JsonConfig implements ConfigEngineInterface
     public function dump(string $key, array $data): bool
     {
         $filename = $this->_getFilePath($key);
-
-        return file_put_contents($filename, json_encode($data, JSON_PRETTY_PRINT)) !== false;
+        return file_put_contents($filename, json_encode($data, \JSON_PRETTY_PRINT)) !== \false;
     }
 }

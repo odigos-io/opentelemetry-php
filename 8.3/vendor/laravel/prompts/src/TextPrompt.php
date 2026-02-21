@@ -3,26 +3,16 @@
 namespace Laravel\Prompts;
 
 use Closure;
-
-class TextPrompt extends Prompt
+class TextPrompt extends \Laravel\Prompts\Prompt
 {
-    use Concerns\TypedValue;
-
+    use \Laravel\Prompts\Concerns\TypedValue;
     /**
      * Create a new TextPrompt instance.
      */
-    public function __construct(
-        public string $label,
-        public string $placeholder = '',
-        public string $default = '',
-        public bool|string $required = false,
-        public mixed $validate = null,
-        public string $hint = '',
-        public ?Closure $transform = null,
-    ) {
+    public function __construct(public string $label, public string $placeholder = '', public string $default = '', public bool|string $required = \false, public mixed $validate = null, public string $hint = '', public ?Closure $transform = null)
+    {
         $this->trackTypedValue($default);
     }
-
     /**
      * Get the entered value with a virtual cursor.
      */
@@ -31,7 +21,6 @@ class TextPrompt extends Prompt
         if ($this->value() === '') {
             return $this->dim($this->addCursor($this->placeholder, 0, $maxWidth));
         }
-
         return $this->addCursor($this->value(), $this->cursorPosition, $maxWidth);
     }
 }

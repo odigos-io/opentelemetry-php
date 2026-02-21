@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -20,7 +20,6 @@ use Cake\ORM\Attribute\CollectionOf;
 use ReflectionClass;
 use ReflectionNamedType;
 use ReflectionParameter;
-
 /**
  * Maps array data to DTO objects using reflection.
  *
@@ -62,7 +61,6 @@ class DtoMapper
      * @var array<string, array{params: array<string, array{name: string, nullable: bool, hasDefault: bool, default: mixed, dtoClass: class-string|null, collectionOf: class-string|null}>}>
      */
     protected static array $cache = [];
-
     /**
      * Map array data to a DTO instance.
      *
@@ -74,13 +72,11 @@ class DtoMapper
     public function map(array $data, string $dtoClass): object
     {
         $info = $this->getClassInfo($dtoClass);
-
         $args = [];
         foreach ($info['params'] as $name => $paramInfo) {
             // isset() is faster than array_key_exists(), check for null separately
             if (isset($data[$name])) {
                 $value = $data[$name];
-
                 // Handle nested DTO (type hint is a class) - only map arrays, pass objects through
                 if ($paramInfo['dtoClass'] !== null && is_array($value)) {
                     $value = $this->map($value, $paramInfo['dtoClass']);
@@ -93,7 +89,6 @@ class DtoMapper
                     }
                     $value = $mapped;
                 }
-
                 $args[$name] = $value;
             } elseif (array_key_exists($name, $data)) {
                 // Value is explicitly null in data
@@ -105,10 +100,8 @@ class DtoMapper
             }
             // If required and not provided, let PHP throw the error
         }
-
         return new $dtoClass(...$args);
     }
-
     /**
      * Get cached class info via reflection.
      *
@@ -120,22 +113,17 @@ class DtoMapper
         if (isset(static::$cache[$class])) {
             return static::$cache[$class];
         }
-
         $reflection = new ReflectionClass($class);
         $constructor = $reflection->getConstructor();
-
         $params = [];
         if ($constructor !== null) {
             foreach ($constructor->getParameters() as $param) {
                 $params[$param->getName()] = $this->analyzeParameter($param);
             }
         }
-
         static::$cache[$class] = ['params' => $params];
-
         return static::$cache[$class];
     }
-
     /**
      * Analyze a constructor parameter for DTO mapping info.
      *
@@ -145,39 +133,25 @@ class DtoMapper
     protected function analyzeParameter(ReflectionParameter $param): array
     {
         $type = $param->getType();
-
-        $info = [
-            'name' => $param->getName(),
-            'nullable' => $param->allowsNull(),
-            'hasDefault' => $param->isDefaultValueAvailable(),
-            'default' => $param->isDefaultValueAvailable() ? $param->getDefaultValue() : null,
-            'dtoClass' => null,
-            'collectionOf' => null,
-        ];
-
+        $info = ['name' => $param->getName(), 'nullable' => $param->allowsNull(), 'hasDefault' => $param->isDefaultValueAvailable(), 'default' => $param->isDefaultValueAvailable() ? $param->getDefaultValue() : null, 'dtoClass' => null, 'collectionOf' => null];
         // Check if type is a class (potential nested DTO)
         if ($type instanceof ReflectionNamedType && !$type->isBuiltin()) {
             $typeName = $type->getName();
             // Exclude common non-DTO classes
-            if (
-                !in_array($typeName, ['DateTime', 'DateTimeImmutable', 'DateTimeInterface', 'stdClass'], true)
-                && class_exists($typeName)
-            ) {
+            if (!in_array($typeName, ['DateTime', 'DateTimeImmutable', 'DateTimeInterface', 'stdClass'], \true) && class_exists($typeName)) {
                 $info['dtoClass'] = $typeName;
             }
         }
-
         // Check for #[CollectionOf(SomeDto::class)] attribute
         foreach ($param->getAttributes(CollectionOf::class) as $attr) {
             /** @var class-string $collectionClass */
             $collectionClass = $attr->getArguments()[0];
             $info['collectionOf'] = $collectionClass;
-            $info['dtoClass'] = null; // Collection takes precedence
+            $info['dtoClass'] = null;
+            // Collection takes precedence
         }
-
         return $info;
     }
-
     /**
      * Clear the reflection cache.
      *

@@ -7,7 +7,6 @@ use Illuminate\Notifications\Events\BroadcastNotificationCreated;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Notification;
 use RuntimeException;
-
 class BroadcastChannel
 {
     /**
@@ -16,7 +15,6 @@ class BroadcastChannel
      * @var \Illuminate\Contracts\Events\Dispatcher
      */
     protected $events;
-
     /**
      * Create a new broadcast channel.
      *
@@ -27,7 +25,6 @@ class BroadcastChannel
     {
         $this->events = $events;
     }
-
     /**
      * Send the given notification.
      *
@@ -38,19 +35,12 @@ class BroadcastChannel
     public function send($notifiable, Notification $notification)
     {
         $message = $this->getData($notifiable, $notification);
-
-        $event = new BroadcastNotificationCreated(
-            $notifiable, $notification, is_array($message) ? $message : $message->data
-        );
-
+        $event = new BroadcastNotificationCreated($notifiable, $notification, is_array($message) ? $message : $message->data);
         if ($message instanceof BroadcastMessage) {
-            $event->onConnection($message->connection)
-                  ->onQueue($message->queue);
+            $event->onConnection($message->connection)->onQueue($message->queue);
         }
-
         return $this->events->dispatch($event);
     }
-
     /**
      * Get the data for the notification.
      *
@@ -65,11 +55,9 @@ class BroadcastChannel
         if (method_exists($notification, 'toBroadcast')) {
             return $notification->toBroadcast($notifiable);
         }
-
         if (method_exists($notification, 'toArray')) {
             return $notification->toArray($notifiable);
         }
-
         throw new RuntimeException('Notification is missing toArray method.');
     }
 }

@@ -4,21 +4,18 @@ namespace Illuminate\Support;
 
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Traits\InteractsWithData;
-use League\Uri\QueryString;
+use Odigos\League\Uri\QueryString;
 use Stringable;
-
 class UriQueryString implements Arrayable, Stringable
 {
     use InteractsWithData;
-
     /**
      * Create a new URI query string instance.
      */
-    public function __construct(protected Uri $uri)
+    public function __construct(protected \Illuminate\Support\Uri $uri)
     {
         //
     }
-
     /**
      * Retrieve all data from the instance.
      *
@@ -28,20 +25,15 @@ class UriQueryString implements Arrayable, Stringable
     public function all($keys = null)
     {
         $query = $this->toArray();
-
-        if (! $keys) {
+        if (!$keys) {
             return $query;
         }
-
         $results = [];
-
         foreach (is_array($keys) ? $keys : func_get_args() as $key) {
-            Arr::set($results, $key, Arr::get($query, $key));
+            \Illuminate\Support\Arr::set($results, $key, \Illuminate\Support\Arr::get($query, $key));
         }
-
         return $results;
     }
-
     /**
      * Retrieve data from the instance.
      *
@@ -53,7 +45,6 @@ class UriQueryString implements Arrayable, Stringable
     {
         return $this->get($key, $default);
     }
-
     /**
      * Get a query string parameter.
      */
@@ -61,7 +52,6 @@ class UriQueryString implements Arrayable, Stringable
     {
         return data_get($this->toArray(), $key, $default);
     }
-
     /**
      * Get the URL decoded version of the query string.
      */
@@ -69,7 +59,6 @@ class UriQueryString implements Arrayable, Stringable
     {
         return rawurldecode((string) $this);
     }
-
     /**
      * Get the string representation of the query string.
      */
@@ -77,7 +66,6 @@ class UriQueryString implements Arrayable, Stringable
     {
         return (string) $this;
     }
-
     /**
      * Convert the query string into an array.
      */
@@ -85,7 +73,6 @@ class UriQueryString implements Arrayable, Stringable
     {
         return QueryString::extract($this->value());
     }
-
     /**
      * Get the string representation of the query string.
      */

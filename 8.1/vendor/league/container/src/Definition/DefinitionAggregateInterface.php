@@ -1,12 +1,10 @@
 <?php
 
-declare(strict_types=1);
-
-namespace League\Container\Definition;
+declare (strict_types=1);
+namespace Odigos\League\Container\Definition;
 
 use IteratorAggregate;
-use League\Container\ContainerAwareInterface;
-
+use Odigos\League\Container\ContainerAwareInterface;
 interface DefinitionAggregateInterface extends ContainerAwareInterface, IteratorAggregate
 {
     public function add(string $id, $definition): DefinitionInterface;

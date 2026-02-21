@@ -9,14 +9,11 @@
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
  */
+declare (strict_types=1);
+namespace Odigos\Ramsey\Collection;
 
-declare(strict_types=1);
-
-namespace Ramsey\Collection;
-
-use Ramsey\Collection\Exception\NoSuchElementException;
+use Odigos\Ramsey\Collection\Exception\NoSuchElementException;
 use RuntimeException;
-
 /**
  * A linear collection that supports element insertion and removal at both ends.
  *
@@ -182,7 +179,6 @@ interface DoubleEndedQueueInterface extends QueueInterface
      *     `\RuntimeException`.
      */
     public function addFirst(mixed $element): bool;
-
     /**
      * Inserts the specified element at the end of this queue if it is possible
      * to do so immediately without violating capacity restrictions.
@@ -202,7 +198,6 @@ interface DoubleEndedQueueInterface extends QueueInterface
      *     `\RuntimeException`.
      */
     public function addLast(mixed $element): bool;
-
     /**
      * Inserts the specified element at the front of this queue if it is
      * possible to do so immediately without violating capacity restrictions.
@@ -216,7 +211,6 @@ interface DoubleEndedQueueInterface extends QueueInterface
      * @return bool `true` if the element was added to this queue, else `false`.
      */
     public function offerFirst(mixed $element): bool;
-
     /**
      * Inserts the specified element at the end of this queue if it is possible
      * to do so immediately without violating capacity restrictions.
@@ -230,7 +224,6 @@ interface DoubleEndedQueueInterface extends QueueInterface
      * @return bool `true` if the element was added to this queue, else `false`.
      */
     public function offerLast(mixed $element): bool;
-
     /**
      * Retrieves and removes the head of this queue.
      *
@@ -242,7 +235,6 @@ interface DoubleEndedQueueInterface extends QueueInterface
      * @throws NoSuchElementException if this queue is empty.
      */
     public function removeFirst(): mixed;
-
     /**
      * Retrieves and removes the tail of this queue.
      *
@@ -254,7 +246,6 @@ interface DoubleEndedQueueInterface extends QueueInterface
      * @throws NoSuchElementException if this queue is empty.
      */
     public function removeLast(): mixed;
-
     /**
      * Retrieves and removes the head of this queue, or returns `null` if this
      * queue is empty.
@@ -262,7 +253,6 @@ interface DoubleEndedQueueInterface extends QueueInterface
      * @return T | null the head of this queue, or `null` if this queue is empty.
      */
     public function pollFirst(): mixed;
-
     /**
      * Retrieves and removes the tail of this queue, or returns `null` if this
      * queue is empty.
@@ -270,7 +260,6 @@ interface DoubleEndedQueueInterface extends QueueInterface
      * @return T | null the tail of this queue, or `null` if this queue is empty.
      */
     public function pollLast(): mixed;
-
     /**
      * Retrieves, but does not remove, the head of this queue.
      *
@@ -282,7 +271,6 @@ interface DoubleEndedQueueInterface extends QueueInterface
      * @throws NoSuchElementException if this queue is empty.
      */
     public function firstElement(): mixed;
-
     /**
      * Retrieves, but does not remove, the tail of this queue.
      *
@@ -294,7 +282,6 @@ interface DoubleEndedQueueInterface extends QueueInterface
      * @throws NoSuchElementException if this queue is empty.
      */
     public function lastElement(): mixed;
-
     /**
      * Retrieves, but does not remove, the head of this queue, or returns `null`
      * if this queue is empty.
@@ -302,7 +289,6 @@ interface DoubleEndedQueueInterface extends QueueInterface
      * @return T | null the head of this queue, or `null` if this queue is empty.
      */
     public function peekFirst(): mixed;
-
     /**
      * Retrieves, but does not remove, the tail of this queue, or returns `null`
      * if this queue is empty.

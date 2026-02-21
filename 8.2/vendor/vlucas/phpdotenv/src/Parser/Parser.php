@@ -1,14 +1,12 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Odigos\Dotenv\Parser;
 
-namespace Dotenv\Parser;
-
-use Dotenv\Exception\InvalidFileException;
-use Dotenv\Util\Regex;
-use GrahamCampbell\ResultType\Result;
-use GrahamCampbell\ResultType\Success;
-
+use Odigos\Dotenv\Exception\InvalidFileException;
+use Odigos\Dotenv\Util\Regex;
+use Odigos\GrahamCampbell\ResultType\Result;
+use Odigos\GrahamCampbell\ResultType\Success;
 final class Parser implements ParserInterface
 {
     /**
@@ -30,7 +28,6 @@ final class Parser implements ParserInterface
             throw new InvalidFileException(\sprintf('Failed to parse dotenv file. %s', $error));
         })->success()->get();
     }
-
     /**
      * Convert the raw entries into proper entries.
      *

@@ -2,11 +2,10 @@
 
 namespace Carbon\Doctrine;
 
-use Carbon\Carbon;
+use Odigos\Carbon\Carbon;
 use Doctrine\DBAL\Types\VarDateTimeType;
-
-class DateTimeType extends VarDateTimeType implements CarbonDoctrineType
+class DateTimeType extends VarDateTimeType implements \Carbon\Doctrine\CarbonDoctrineType
 {
     /** @use CarbonTypeConverter<Carbon> */
-    use CarbonTypeConverter;
+    use \Carbon\Doctrine\CarbonTypeConverter;
 }

@@ -1,10 +1,10 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\base;
 
 /**
@@ -21,8 +21,6 @@ class ExitException extends \Exception
      * @var int the exit status code
      */
     public $statusCode;
-
-
     /**
      * Constructor.
      * @param int $status the exit status code
@@ -34,9 +32,9 @@ class ExitException extends \Exception
     {
         $this->statusCode = $status;
         if ($previous === null) {
-            parent::__construct((string)$message, $code);
+            parent::__construct((string) $message, $code);
         } else {
-            parent::__construct((string)$message, $code, $previous);
+            parent::__construct((string) $message, $code, $previous);
         }
     }
 }

@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -20,12 +20,11 @@ use Cake\Database\ExpressionInterface;
 use Cake\Database\ValueBinder;
 use Closure;
 use InvalidArgumentException;
-
 /**
  * This expression represents SQL fragments that are used for comparing one tuple
  * to another, one tuple to a set of other tuples or one tuple to an expression
  */
-class TupleComparison extends ComparisonExpression
+class TupleComparison extends \Cake\Database\Expression\ComparisonExpression
 {
     /**
      * The type to be used for casting the value to a database representation
@@ -33,7 +32,6 @@ class TupleComparison extends ComparisonExpression
      * @var array<string|null>
      */
     protected array $types;
-
     /**
      * Constructor
      *
@@ -43,18 +41,13 @@ class TupleComparison extends ComparisonExpression
      * one type per position in the value array in needed
      * @param string $conjunction the operator used for comparing field and value
      */
-    public function __construct(
-        ExpressionInterface|array|string $fields,
-        ExpressionInterface|array $values,
-        array $types = [],
-        string $conjunction = '=',
-    ) {
+    public function __construct(ExpressionInterface|array|string $fields, ExpressionInterface|array $values, array $types = [], string $conjunction = '=')
+    {
         $this->types = $types;
         $this->setField($fields);
         $this->_operator = $conjunction;
         $this->setValue($values);
     }
-
     /**
      * Returns the type to be used for casting the value to a database representation
      *
@@ -64,7 +57,6 @@ class TupleComparison extends ComparisonExpression
     {
         return $this->types;
     }
-
     /**
      * Sets the value
      *
@@ -75,19 +67,13 @@ class TupleComparison extends ComparisonExpression
     {
         if ($this->isMulti()) {
             if (is_array($value) && !is_array(current($value))) {
-                throw new InvalidArgumentException(
-                    'Multi-tuple comparisons require a multi-tuple value, single-tuple given.',
-                );
+                throw new InvalidArgumentException('Multi-tuple comparisons require a multi-tuple value, single-tuple given.');
             }
         } elseif (is_array($value) && is_array(current($value))) {
-            throw new InvalidArgumentException(
-                'Single-tuple comparisons require a single-tuple value, multi-tuple given.',
-            );
+            throw new InvalidArgumentException('Single-tuple comparisons require a single-tuple value, multi-tuple given.');
         }
-
         $this->_value = $value;
     }
-
     /**
      * @inheritDoc
      */
@@ -96,22 +82,16 @@ class TupleComparison extends ComparisonExpression
         $template = '(%s) %s (%s)';
         $fields = [];
         $originalFields = $this->getField();
-
         if (!is_array($originalFields)) {
             $originalFields = [$originalFields];
         }
-
         foreach ($originalFields as $field) {
             $fields[] = $field instanceof ExpressionInterface ? $field->sql($binder) : $field;
         }
-
         $values = $this->_stringifyValues($binder);
-
         $field = implode(', ', $fields);
-
         return sprintf($template, $field, $this->_operator, $values);
     }
-
     /**
      * Returns a string with the values as placeholders in a string to be used
      * for the SQL version of this expression
@@ -123,23 +103,19 @@ class TupleComparison extends ComparisonExpression
     {
         $values = [];
         $parts = $this->getValue();
-
         if ($parts instanceof ExpressionInterface) {
             return $parts->sql($binder);
         }
-
         foreach ($parts as $i => $value) {
             if ($value instanceof ExpressionInterface) {
                 $values[] = $value->sql($binder);
                 continue;
             }
-
             $type = $this->types;
             $isMultiOperation = $this->isMulti();
             if (!$type) {
                 $type = null;
             }
-
             if ($isMultiOperation) {
                 $bound = [];
                 foreach ($value as $k => $val) {
@@ -147,19 +123,15 @@ class TupleComparison extends ComparisonExpression
                     assert($valType === null || is_scalar($valType));
                     $bound[] = $this->_bindValue($val, $binder, $valType);
                 }
-
                 $values[] = sprintf('(%s)', implode(',', $bound));
                 continue;
             }
-
             $valType = $type && isset($type[$i]) ? $type[$i] : $type;
             assert($valType === null || is_scalar($valType));
             $values[] = $this->_bindValue($value, $binder, $valType);
         }
-
         return implode(', ', $values);
     }
-
     /**
      * @inheritDoc
      */
@@ -167,28 +139,23 @@ class TupleComparison extends ComparisonExpression
     {
         $placeholder = $binder->placeholder('tuple');
         $binder->bind($placeholder, $value, $type);
-
         return $placeholder;
     }
-
     /**
      * @inheritDoc
      */
     public function traverse(Closure $callback)
     {
-        $fields = (array)$this->getField();
+        $fields = (array) $this->getField();
         foreach ($fields as $field) {
             $this->_traverseValue($field, $callback);
         }
-
         $value = $this->getValue();
         if ($value instanceof ExpressionInterface) {
             $callback($value);
             $value->traverse($callback);
-
             return $this;
         }
-
         foreach ($value as $val) {
             if ($this->isMulti()) {
                 foreach ($val as $v) {
@@ -198,10 +165,8 @@ class TupleComparison extends ComparisonExpression
                 $this->_traverseValue($val, $callback);
             }
         }
-
         return $this;
     }
-
     /**
      * Conditionally executes the callback for the passed value if
      * it is an ExpressionInterface
@@ -217,7 +182,6 @@ class TupleComparison extends ComparisonExpression
             $value->traverse($callback);
         }
     }
-
     /**
      * Determines if each of the values in this expressions is a tuple in
      * itself

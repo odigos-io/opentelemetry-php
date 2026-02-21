@@ -3,7 +3,6 @@
 namespace Illuminate\Process;
 
 use Symfony\Component\Process\Process;
-
 class FakeProcessDescription
 {
     /**
@@ -12,28 +11,24 @@ class FakeProcessDescription
      * @var int|null
      */
     public $processId = 1000;
-
     /**
      * All of the process' output in the order it was described.
      *
      * @var array
      */
     public $output = [];
-
     /**
      * The process' exit code.
      *
      * @var int
      */
     public $exitCode = 0;
-
     /**
      * The number of times the process should indicate that it is "running".
      *
      * @var int
      */
     public $runIterations = 0;
-
     /**
      * Specify the process ID that should be assigned to the process.
      *
@@ -43,10 +38,8 @@ class FakeProcessDescription
     public function id(int $processId)
     {
         $this->processId = $processId;
-
         return $this;
     }
-
     /**
      * Describe a line of standard output.
      *
@@ -56,16 +49,12 @@ class FakeProcessDescription
     public function output(array|string $output)
     {
         if (is_array($output)) {
-            collect($output)->each(fn ($line) => $this->output($line));
-
+            collect($output)->each(fn($line) => $this->output($line));
             return $this;
         }
-
-        $this->output[] = ['type' => 'out', 'buffer' => rtrim($output, "\n")."\n"];
-
+        $this->output[] = ['type' => 'out', 'buffer' => rtrim($output, "\n") . "\n"];
         return $this;
     }
-
     /**
      * Describe a line of error output.
      *
@@ -75,16 +64,12 @@ class FakeProcessDescription
     public function errorOutput(array|string $output)
     {
         if (is_array($output)) {
-            collect($output)->each(fn ($line) => $this->errorOutput($line));
-
+            collect($output)->each(fn($line) => $this->errorOutput($line));
             return $this;
         }
-
-        $this->output[] = ['type' => 'err', 'buffer' => rtrim($output, "\n")."\n"];
-
+        $this->output[] = ['type' => 'err', 'buffer' => rtrim($output, "\n") . "\n"];
         return $this;
     }
-
     /**
      * Replace the entire output buffer with the given string.
      *
@@ -96,17 +81,11 @@ class FakeProcessDescription
         $this->output = collect($this->output)->reject(function ($output) {
             return $output['type'] === 'out';
         })->values()->all();
-
         if (strlen($output) > 0) {
-            $this->output[] = [
-                'type' => 'out',
-                'buffer' => rtrim($output, "\n")."\n",
-            ];
+            $this->output[] = ['type' => 'out', 'buffer' => rtrim($output, "\n") . "\n"];
         }
-
         return $this;
     }
-
     /**
      * Replace the entire error output buffer with the given string.
      *
@@ -118,17 +97,11 @@ class FakeProcessDescription
         $this->output = collect($this->output)->reject(function ($output) {
             return $output['type'] === 'err';
         })->values()->all();
-
         if (strlen($output) > 0) {
-            $this->output[] = [
-                'type' => 'err',
-                'buffer' => rtrim($output, "\n")."\n",
-            ];
+            $this->output[] = ['type' => 'err', 'buffer' => rtrim($output, "\n") . "\n"];
         }
-
         return $this;
     }
-
     /**
      * Specify the process exit code.
      *
@@ -138,10 +111,8 @@ class FakeProcessDescription
     public function exitCode(int $exitCode)
     {
         $this->exitCode = $exitCode;
-
         return $this;
     }
-
     /**
      * Specify how many times the "isRunning" method should return "true".
      *
@@ -152,7 +123,6 @@ class FakeProcessDescription
     {
         return $this->runsFor(iterations: $iterations);
     }
-
     /**
      * Specify how many times the "isRunning" method should return "true".
      *
@@ -162,10 +132,8 @@ class FakeProcessDescription
     public function runsFor(int $iterations)
     {
         $this->runIterations = $iterations;
-
         return $this;
     }
-
     /**
      * Turn the fake process description into an actual process.
      *
@@ -176,7 +144,6 @@ class FakeProcessDescription
     {
         return Process::fromShellCommandline($command);
     }
-
     /**
      * Convert the process description into a process result.
      *
@@ -185,14 +152,8 @@ class FakeProcessDescription
      */
     public function toProcessResult(string $command)
     {
-        return new FakeProcessResult(
-            command: $command,
-            exitCode: $this->exitCode,
-            output: $this->resolveOutput(),
-            errorOutput: $this->resolveErrorOutput(),
-        );
+        return new \Illuminate\Process\FakeProcessResult(command: $command, exitCode: $this->exitCode, output: $this->resolveOutput(), errorOutput: $this->resolveErrorOutput());
     }
-
     /**
      * Resolve the standard output as a string.
      *
@@ -200,14 +161,9 @@ class FakeProcessDescription
      */
     protected function resolveOutput()
     {
-        $output = collect($this->output)
-            ->filter(fn ($output) => $output['type'] === 'out');
-
-        return $output->isNotEmpty()
-                    ? rtrim($output->map->buffer->implode(''), "\n")."\n"
-                    : '';
+        $output = collect($this->output)->filter(fn($output) => $output['type'] === 'out');
+        return $output->isNotEmpty() ? rtrim($output->map->buffer->implode(''), "\n") . "\n" : '';
     }
-
     /**
      * Resolve the error output as a string.
      *
@@ -215,11 +171,7 @@ class FakeProcessDescription
      */
     protected function resolveErrorOutput()
     {
-        $output = collect($this->output)
-            ->filter(fn ($output) => $output['type'] === 'err');
-
-        return $output->isNotEmpty()
-                    ? rtrim($output->map->buffer->implode(''), "\n")."\n"
-                    : '';
+        $output = collect($this->output)->filter(fn($output) => $output['type'] === 'err');
+        return $output->isNotEmpty() ? rtrim($output->map->buffer->implode(''), "\n") . "\n" : '';
     }
 }

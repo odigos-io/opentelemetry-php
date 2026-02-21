@@ -1,11 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Laminas\Diactoros\Exception;
+declare (strict_types=1);
+namespace Odigos\Laminas\Diactoros\Exception;
 
 use Throwable;
-
 /**
  * Marker interface for package-specific exceptions.
  */

@@ -1,13 +1,13 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\filters;
 
-use Yii;
+use Odigos\Yii;
 use yii\base\ActionFilter;
 use yii\base\BootstrapInterface;
 use yii\base\Component;
@@ -15,7 +15,6 @@ use yii\web\BadRequestHttpException;
 use yii\web\NotAcceptableHttpException;
 use yii\web\Request;
 use yii\web\Response;
-
 /**
  * ContentNegotiator supports response format negotiation and application language negotiation.
  *
@@ -131,8 +130,6 @@ class ContentNegotiator extends ActionFilter implements BootstrapInterface
      * @var Response|null the response to be sent. If not set, the `response` application component will be used.
      */
     public $response;
-
-
     /**
      * {@inheritdoc}
      */
@@ -140,16 +137,14 @@ class ContentNegotiator extends ActionFilter implements BootstrapInterface
     {
         $this->negotiate();
     }
-
     /**
      * {@inheritdoc}
      */
     public function beforeAction($action)
     {
         $this->negotiate();
-        return true;
+        return \true;
     }
-
     /**
      * Negotiates the response format and application language.
      */
@@ -170,7 +165,6 @@ class ContentNegotiator extends ActionFilter implements BootstrapInterface
             Yii::$app->language = $this->negotiateLanguage($request);
         }
     }
-
     /**
      * Negotiates the response format.
      * @param Request $request
@@ -184,22 +178,18 @@ class ContentNegotiator extends ActionFilter implements BootstrapInterface
             if (is_array($format)) {
                 throw new BadRequestHttpException("Invalid data received for GET parameter '{$this->formatParam}'.");
             }
-
             if (in_array($format, $this->formats)) {
                 $response->format = $format;
                 $response->acceptMimeType = null;
                 $response->acceptParams = [];
                 return;
             }
-
             throw new NotAcceptableHttpException('The requested response format is not supported: ' . $format);
         }
-
         $types = $request->getAcceptableContentTypes();
         if (empty($types)) {
             $types['*/*'] = [];
         }
-
         foreach ($types as $type => $params) {
             if (isset($this->formats[$type])) {
                 $response->format = $this->formats[$type];
@@ -208,21 +198,17 @@ class ContentNegotiator extends ActionFilter implements BootstrapInterface
                 return;
             }
         }
-
         foreach ($this->formats as $type => $format) {
             $response->format = $format;
             $response->acceptMimeType = $type;
             $response->acceptParams = [];
             break;
         }
-
         if (isset($types['*/*'])) {
             return;
         }
-
         throw new NotAcceptableHttpException('None of your requested content types is supported.');
     }
-
     /**
      * Negotiates the application language.
      * @param Request $request
@@ -243,10 +229,8 @@ class ContentNegotiator extends ActionFilter implements BootstrapInterface
                     return $supported;
                 }
             }
-
             return reset($this->languages);
         }
-
         foreach ($request->getAcceptableLanguages() as $language) {
             if (isset($this->languages[$language])) {
                 return $this->languages[$language];
@@ -257,10 +241,8 @@ class ContentNegotiator extends ActionFilter implements BootstrapInterface
                 }
             }
         }
-
         return reset($this->languages);
     }
-
     /**
      * Returns a value indicating whether the requested language matches the supported language.
      * @param string $requested the requested language code

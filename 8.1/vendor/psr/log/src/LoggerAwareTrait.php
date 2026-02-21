@@ -10,12 +10,11 @@ trait LoggerAwareTrait
     /**
      * The logger instance.
      */
-    protected ?LoggerInterface $logger = null;
-
+    protected ?\Psr\Log\LoggerInterface $logger = null;
     /**
      * Sets a logger.
      */
-    public function setLogger(LoggerInterface $logger): void
+    public function setLogger(\Psr\Log\LoggerInterface $logger): void
     {
         $this->logger = $logger;
     }

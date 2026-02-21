@@ -1,14 +1,12 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Laminas\HttpHandlerRunner\Emitter;
 
 use Laminas\HttpHandlerRunner\Exception;
 use Psr\Http\Message\ResponseInterface;
 use ReturnTypeWillChange;
 use SplStack;
-
 /**
  * Provides an EmitterInterface implementation that acts as a stack of Emitters.
  *
@@ -20,7 +18,7 @@ use SplStack;
  * @template-extends SplStack<EmitterInterface>
  * @final
  */
-class EmitterStack extends SplStack implements EmitterInterface
+class EmitterStack extends SplStack implements \Laminas\HttpHandlerRunner\Emitter\EmitterInterface
 {
     /**
      * Emit a response
@@ -35,14 +33,12 @@ class EmitterStack extends SplStack implements EmitterInterface
     public function emit(ResponseInterface $response): bool
     {
         foreach ($this as $emitter) {
-            if (false !== $emitter->emit($response)) {
-                return true;
+            if (\false !== $emitter->emit($response)) {
+                return \true;
             }
         }
-
-        return false;
+        return \false;
     }
-
     /**
      * Set an emitter on the stack by index.
      *
@@ -57,7 +53,6 @@ class EmitterStack extends SplStack implements EmitterInterface
         $this->validateEmitter($value);
         parent::offsetSet($offset, $value);
     }
-
     /**
      * Push an emitter to the stack.
      *
@@ -71,7 +66,6 @@ class EmitterStack extends SplStack implements EmitterInterface
         $this->validateEmitter($value);
         parent::push($value);
     }
-
     /**
      * Unshift an emitter to the stack.
      *
@@ -85,7 +79,6 @@ class EmitterStack extends SplStack implements EmitterInterface
         $this->validateEmitter($value);
         parent::unshift($value);
     }
-
     /**
      * Validate that an emitter implements EmitterInterface.
      *
@@ -94,7 +87,7 @@ class EmitterStack extends SplStack implements EmitterInterface
      */
     private function validateEmitter(mixed $emitter): void
     {
-        if (! $emitter instanceof EmitterInterface) {
+        if (!$emitter instanceof \Laminas\HttpHandlerRunner\Emitter\EmitterInterface) {
             throw Exception\InvalidEmitterException::forEmitter($emitter);
         }
     }

@@ -3,7 +3,6 @@
 namespace Illuminate\Routing;
 
 use Illuminate\Http\Request;
-
 interface RouteCollectionInterface
 {
     /**
@@ -12,8 +11,7 @@ interface RouteCollectionInterface
      * @param  \Illuminate\Routing\Route  $route
      * @return \Illuminate\Routing\Route
      */
-    public function add(Route $route);
-
+    public function add(\Illuminate\Routing\Route $route);
     /**
      * Refresh the name look-up table.
      *
@@ -22,7 +20,6 @@ interface RouteCollectionInterface
      * @return void
      */
     public function refreshNameLookups();
-
     /**
      * Refresh the action look-up table.
      *
@@ -31,7 +28,6 @@ interface RouteCollectionInterface
      * @return void
      */
     public function refreshActionLookups();
-
     /**
      * Find the first route matching a given request.
      *
@@ -42,7 +38,6 @@ interface RouteCollectionInterface
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
     public function match(Request $request);
-
     /**
      * Get routes from the collection by method.
      *
@@ -50,7 +45,6 @@ interface RouteCollectionInterface
      * @return \Illuminate\Routing\Route[]
      */
     public function get($method = null);
-
     /**
      * Determine if the route collection contains a given named route.
      *
@@ -58,7 +52,6 @@ interface RouteCollectionInterface
      * @return bool
      */
     public function hasNamedRoute($name);
-
     /**
      * Get a route instance by its name.
      *
@@ -66,7 +59,6 @@ interface RouteCollectionInterface
      * @return \Illuminate\Routing\Route|null
      */
     public function getByName($name);
-
     /**
      * Get a route instance by its controller action.
      *
@@ -74,21 +66,18 @@ interface RouteCollectionInterface
      * @return \Illuminate\Routing\Route|null
      */
     public function getByAction($action);
-
     /**
      * Get all of the routes in the collection.
      *
      * @return \Illuminate\Routing\Route[]
      */
     public function getRoutes();
-
     /**
      * Get all of the routes keyed by their HTTP verb / method.
      *
      * @return array
      */
     public function getRoutesByMethod();
-
     /**
      * Get all of the routes keyed by their name.
      *

@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -20,7 +20,7 @@ namespace Cake\Routing\Route;
  * Plugin short route, that copies the plugin param to the controller parameters
  * It is used for supporting /{plugin} routes.
  */
-class PluginShortRoute extends InflectedRoute
+class PluginShortRoute extends \Cake\Routing\Route\InflectedRoute
 {
     /**
      * Parses a string URL into an array. If a plugin key is found, it will be copied to the
@@ -37,10 +37,8 @@ class PluginShortRoute extends InflectedRoute
             return null;
         }
         $params['controller'] = $params['plugin'];
-
         return $params;
     }
-
     /**
      * Reverses route plugin shortcut URLs. If the plugin and controller
      * are not the same the match is an auto fail.
@@ -59,7 +57,6 @@ class PluginShortRoute extends InflectedRoute
         $this->defaults['controller'] = $url['controller'];
         $result = parent::match($url, $context);
         unset($this->defaults['controller']);
-
         return $result;
     }
 }

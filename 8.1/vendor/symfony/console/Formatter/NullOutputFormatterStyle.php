@@ -8,19 +8,17 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\Console\Formatter;
 
 /**
  * @author Tien Xuan Vo <tien.xuan.vo@gmail.com>
  */
-final class NullOutputFormatterStyle implements OutputFormatterStyleInterface
+final class NullOutputFormatterStyle implements \Symfony\Component\Console\Formatter\OutputFormatterStyleInterface
 {
     public function apply(string $text): string
     {
         return $text;
     }
-
     public function setBackground(?string $color = null): void
     {
         if (1 > \func_num_args()) {
@@ -28,7 +26,6 @@ final class NullOutputFormatterStyle implements OutputFormatterStyleInterface
         }
         // do nothing
     }
-
     public function setForeground(?string $color = null): void
     {
         if (1 > \func_num_args()) {
@@ -36,17 +33,14 @@ final class NullOutputFormatterStyle implements OutputFormatterStyleInterface
         }
         // do nothing
     }
-
     public function setOption(string $option): void
     {
         // do nothing
     }
-
     public function setOptions(array $options): void
     {
         // do nothing
     }
-
     public function unsetOption(string $option): void
     {
         // do nothing

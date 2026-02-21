@@ -5,7 +5,6 @@ namespace Illuminate\Container\Attributes;
 use Attribute;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Contracts\Container\ContextualAttribute;
-
 #[Attribute(Attribute::TARGET_PARAMETER)]
 class Give implements ContextualAttribute
 {
@@ -15,12 +14,9 @@ class Give implements ContextualAttribute
      * @param  string  $class
      * @param  array|null  $params
      */
-    public function __construct(
-        public string $class,
-        public array $params = [],
-    ) {
+    public function __construct(public string $class, public array $params = [])
+    {
     }
-
     /**
      * Resolve the dependency.
      *

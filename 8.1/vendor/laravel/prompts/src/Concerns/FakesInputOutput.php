@@ -4,9 +4,8 @@ namespace Laravel\Prompts\Concerns;
 
 use Laravel\Prompts\Output\BufferedConsoleOutput;
 use Laravel\Prompts\Terminal;
-use PHPUnit\Framework\Assert;
+use Odigos\PHPUnit\Framework\Assert;
 use RuntimeException;
-
 trait FakesInputOutput
 {
     /**
@@ -18,9 +17,7 @@ trait FakesInputOutput
     {
         // Force interactive mode when testing because we will be mocking the terminal.
         static::interactive();
-
-        $mock = \Mockery::mock(Terminal::class);
-
+        $mock = \Odigos\Mockery::mock(Terminal::class);
         $mock->shouldReceive('write')->byDefault();
         $mock->shouldReceive('exit')->byDefault();
         $mock->shouldReceive('setTty')->byDefault();
@@ -28,16 +25,12 @@ trait FakesInputOutput
         $mock->shouldReceive('cols')->byDefault()->andReturn(80);
         $mock->shouldReceive('lines')->byDefault()->andReturn(24);
         $mock->shouldReceive('initDimensions')->byDefault();
-
         foreach ($keys as $key) {
             $mock->shouldReceive('read')->once()->andReturn($key);
         }
-
         static::$terminal = $mock;
-
-        self::setOutput(new BufferedConsoleOutput);
+        self::setOutput(new BufferedConsoleOutput());
     }
-
     /**
      * Assert that the output contains the given string.
      */
@@ -45,7 +38,6 @@ trait FakesInputOutput
     {
         Assert::assertStringContainsString($string, static::content());
     }
-
     /**
      * Assert that the output doesn't contain the given string.
      */
@@ -53,7 +45,6 @@ trait FakesInputOutput
     {
         Assert::assertStringNotContainsString($string, static::content());
     }
-
     /**
      * Assert that the stripped output contains the given string.
      */
@@ -61,7 +52,6 @@ trait FakesInputOutput
     {
         Assert::assertStringContainsString($string, static::strippedContent());
     }
-
     /**
      * Assert that the stripped output doesn't contain the given string.
      */
@@ -69,24 +59,21 @@ trait FakesInputOutput
     {
         Assert::assertStringNotContainsString($string, static::strippedContent());
     }
-
     /**
      * Get the buffered console output.
      */
     public static function content(): string
     {
-        if (! static::output() instanceof BufferedConsoleOutput) {
+        if (!static::output() instanceof BufferedConsoleOutput) {
             throw new RuntimeException('Prompt must be faked before accessing content.');
         }
-
         return static::output()->content();
     }
-
     /**
      * Get the buffered console output, stripped of escape sequences.
      */
     public static function strippedContent(): string
     {
-        return preg_replace("/\e\[[0-9;?]*[A-Za-z]/", '', static::content());
+        return preg_replace("/\x1b\\[[0-9;?]*[A-Za-z]/", '', static::content());
     }
 }

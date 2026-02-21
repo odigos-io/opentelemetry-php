@@ -2,7 +2,7 @@
 
 namespace Illuminate\Console\View\Components;
 
-class Ask extends Component
+class Ask extends \Illuminate\Console\View\Components\Component
 {
     /**
      * Renders the component using the given arguments.
@@ -13,6 +13,6 @@ class Ask extends Component
      */
     public function render($question, $default = null)
     {
-        return $this->usingQuestionHelper(fn () => $this->output->ask($question, $default));
+        return $this->usingQuestionHelper(fn() => $this->output->ask($question, $default));
     }
 }

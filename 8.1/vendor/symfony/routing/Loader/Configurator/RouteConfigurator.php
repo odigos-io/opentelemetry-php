@@ -8,31 +8,27 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\Routing\Loader\Configurator;
 
 use Symfony\Component\Routing\RouteCollection;
-
 /**
  * @author Nicolas Grekas <p@tchwork.com>
  */
 class RouteConfigurator
 {
-    use Traits\AddTrait;
-    use Traits\HostTrait;
-    use Traits\RouteTrait;
-
+    use \Symfony\Component\Routing\Loader\Configurator\Traits\AddTrait;
+    use \Symfony\Component\Routing\Loader\Configurator\Traits\HostTrait;
+    use \Symfony\Component\Routing\Loader\Configurator\Traits\RouteTrait;
     protected $parentConfigurator;
-
-    public function __construct(RouteCollection $collection, RouteCollection $route, string $name = '', ?CollectionConfigurator $parentConfigurator = null, ?array $prefixes = null)
+    public function __construct(RouteCollection $collection, RouteCollection $route, string $name = '', ?\Symfony\Component\Routing\Loader\Configurator\CollectionConfigurator $parentConfigurator = null, ?array $prefixes = null)
     {
         $this->collection = $collection;
         $this->route = $route;
         $this->name = $name;
-        $this->parentConfigurator = $parentConfigurator; // for GC control
+        $this->parentConfigurator = $parentConfigurator;
+        // for GC control
         $this->prefixes = $prefixes;
     }
-
     /**
      * Sets the host to use for all child routes.
      *
@@ -50,7 +46,6 @@ class RouteConfigurator
             }
         }
         $this->collection->addCollection($this->route);
-
         return $this;
     }
 }

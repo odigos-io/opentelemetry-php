@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\HttpKernel\ControllerMetadata;
 
 /**
@@ -19,23 +18,13 @@ namespace Symfony\Component\HttpKernel\ControllerMetadata;
 class ArgumentMetadata
 {
     public const IS_INSTANCEOF = 2;
-
     /**
      * @param object[] $attributes
      */
-    public function __construct(
-        private string $name,
-        private ?string $type,
-        private bool $isVariadic,
-        private bool $hasDefaultValue,
-        private mixed $defaultValue,
-        private bool $isNullable = false,
-        private array $attributes = [],
-        private string $controllerName = 'n/a',
-    ) {
-        $this->isNullable = $isNullable || null === $type || ($hasDefaultValue && null === $defaultValue);
+    public function __construct(private string $name, private ?string $type, private bool $isVariadic, private bool $hasDefaultValue, private mixed $defaultValue, private bool $isNullable = \false, private array $attributes = [], private string $controllerName = 'n/a')
+    {
+        $this->isNullable = $isNullable || null === $type || $hasDefaultValue && null === $defaultValue;
     }
-
     /**
      * Returns the name as given in PHP, $foo would yield "foo".
      */
@@ -43,7 +32,6 @@ class ArgumentMetadata
     {
         return $this->name;
     }
-
     /**
      * Returns the type of the argument.
      */
@@ -51,7 +39,6 @@ class ArgumentMetadata
     {
         return $this->type;
     }
-
     /**
      * Returns whether the argument is defined as "...$variadic".
      */
@@ -59,7 +46,6 @@ class ArgumentMetadata
     {
         return $this->isVariadic;
     }
-
     /**
      * Returns whether the argument has a default value.
      *
@@ -69,7 +55,6 @@ class ArgumentMetadata
     {
         return $this->hasDefaultValue;
     }
-
     /**
      * Returns whether the argument accepts null values.
      */
@@ -77,7 +62,6 @@ class ArgumentMetadata
     {
         return $this->isNullable;
     }
-
     /**
      * Returns the default value of the argument.
      *
@@ -88,10 +72,8 @@ class ArgumentMetadata
         if (!$this->hasDefaultValue) {
             throw new \LogicException(\sprintf('Argument $%s does not have a default value. Use "%s::hasDefaultValue()" to avoid this exception.', $this->name, __CLASS__));
         }
-
         return $this->defaultValue;
     }
-
     /**
      * @param class-string          $name
      * @param self::IS_INSTANCEOF|0 $flags
@@ -103,10 +85,8 @@ class ArgumentMetadata
         if (!$name) {
             return $this->attributes;
         }
-
         return $this->getAttributesOfType($name, $flags);
     }
-
     /**
      * @template T of object
      *
@@ -131,10 +111,8 @@ class ArgumentMetadata
                 }
             }
         }
-
         return $attributes;
     }
-
     public function getControllerName(): string
     {
         return $this->controllerName;

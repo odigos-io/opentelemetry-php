@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenAI\Responses\Chat;
 
 final class CreateResponseChoiceLogprobsContent
@@ -9,12 +8,9 @@ final class CreateResponseChoiceLogprobsContent
     /**
      * @param  ?array<int, int>  $bytes
      */
-    private function __construct(
-        public readonly string $token,
-        public readonly float $logprob,
-        public readonly ?array $bytes,
-    ) {}
-
+    private function __construct(public readonly string $token, public readonly float $logprob, public readonly ?array $bytes)
+    {
+    }
     /**
      * @param array{
      *     token: string,
@@ -24,13 +20,8 @@ final class CreateResponseChoiceLogprobsContent
      */
     public static function from(array $attributes): self
     {
-        return new self(
-            $attributes['token'],
-            $attributes['logprob'],
-            $attributes['bytes'],
-        );
+        return new self($attributes['token'], $attributes['logprob'], $attributes['bytes']);
     }
-
     /**
      * @return array{
      *     token: string,
@@ -40,10 +31,6 @@ final class CreateResponseChoiceLogprobsContent
      */
     public function toArray(): array
     {
-        return [
-            'token' => $this->token,
-            'logprob' => $this->logprob,
-            'bytes' => $this->bytes,
-        ];
+        return ['token' => $this->token, 'logprob' => $this->logprob, 'bytes' => $this->bytes];
     }
 }

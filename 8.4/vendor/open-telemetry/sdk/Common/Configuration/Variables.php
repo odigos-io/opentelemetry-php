@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\SDK\Common\Configuration;
 
 /**
@@ -137,7 +136,8 @@ interface Variables
     public const OTEL_PHP_LOG_DESTINATION = 'OTEL_PHP_LOG_DESTINATION';
     public const OTEL_PHP_DETECTORS = 'OTEL_PHP_DETECTORS';
     public const OTEL_PHP_AUTOLOAD_ENABLED = 'OTEL_PHP_AUTOLOAD_ENABLED';
-    public const OTEL_PHP_INTERNAL_METRICS_ENABLED = 'OTEL_PHP_INTERNAL_METRICS_ENABLED'; //whether the SDK should emit its own metrics
+    public const OTEL_PHP_INTERNAL_METRICS_ENABLED = 'OTEL_PHP_INTERNAL_METRICS_ENABLED';
+    //whether the SDK should emit its own metrics
     public const OTEL_PHP_DISABLED_INSTRUMENTATIONS = 'OTEL_PHP_DISABLED_INSTRUMENTATIONS';
     public const OTEL_PHP_EXCLUDED_URLS = 'OTEL_PHP_EXCLUDED_URLS';
     public const OTEL_PHP_EXPERIMENTAL_AUTO_ROOT_SPAN = 'OTEL_PHP_EXPERIMENTAL_AUTO_ROOT_SPAN';

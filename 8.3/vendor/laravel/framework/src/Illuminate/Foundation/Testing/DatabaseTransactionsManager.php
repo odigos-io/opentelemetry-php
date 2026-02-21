@@ -3,14 +3,12 @@
 namespace Illuminate\Foundation\Testing;
 
 use Illuminate\Database\DatabaseTransactionsManager as BaseManager;
-
 class DatabaseTransactionsManager extends BaseManager
 {
     /**
      * The names of the connections transacting during tests.
      */
     protected array $connectionsTransacting;
-
     /**
      * Create a new database transaction manager instance.
      *
@@ -19,10 +17,8 @@ class DatabaseTransactionsManager extends BaseManager
     public function __construct(array $connectionsTransacting)
     {
         parent::__construct();
-
         $this->connectionsTransacting = $connectionsTransacting;
     }
-
     /**
      * Register a transaction callback.
      *
@@ -37,10 +33,8 @@ class DatabaseTransactionsManager extends BaseManager
         if ($this->callbackApplicableTransactions()->count() === 0) {
             return $callback();
         }
-
         $this->pendingTransactions->last()->addCallback($callback);
     }
-
     /**
      * Get the transactions that are applicable to callbacks.
      *
@@ -50,7 +44,6 @@ class DatabaseTransactionsManager extends BaseManager
     {
         return $this->pendingTransactions->skip(count($this->connectionsTransacting))->values();
     }
-
     /**
      * Determine if after commit callbacks should be executed for the given transaction level.
      *

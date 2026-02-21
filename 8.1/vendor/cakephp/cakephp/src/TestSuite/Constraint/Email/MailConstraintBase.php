@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -17,8 +17,7 @@ declare(strict_types=1);
 namespace Cake\TestSuite\Constraint\Email;
 
 use Cake\TestSuite\TestEmailTransport;
-use PHPUnit\Framework\Constraint\Constraint;
-
+use Odigos\PHPUnit\Framework\Constraint\Constraint;
 /**
  * Base class for all mail assertion constraints
  *
@@ -30,7 +29,6 @@ abstract class MailConstraintBase extends Constraint
      * @var int|null
      */
     protected ?int $at = null;
-
     /**
      * Constructor
      *
@@ -41,7 +39,6 @@ abstract class MailConstraintBase extends Constraint
     {
         $this->at = $at;
     }
-
     /**
      * Gets the email or emails to check
      *
@@ -50,15 +47,12 @@ abstract class MailConstraintBase extends Constraint
     public function getMessages(): array
     {
         $messages = TestEmailTransport::getMessages();
-
         if ($this->at !== null) {
             if (!isset($messages[$this->at])) {
                 return [];
             }
-
             return [$messages[$this->at]];
         }
-
         return $messages;
     }
 }

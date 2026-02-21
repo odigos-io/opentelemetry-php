@@ -1,5 +1,7 @@
 <?php
-declare(strict_types=1);
+
+declare (strict_types=1);
+namespace Odigos;
 
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
@@ -15,7 +17,6 @@ declare(strict_types=1);
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
 // phpcs:disable PSR1.Files.SideEffects
-
 use function Cake\Core\deprecationWarning as cakeDeprecationWarning;
 use function Cake\Core\env as cakeEnv;
 use function Cake\Core\h as cakeH;
@@ -29,8 +30,7 @@ use function Cake\Core\toFloat as cakeToFloat;
 use function Cake\Core\toInt as cakeToInt;
 use function Cake\Core\toString as cakeToString;
 use function Cake\Core\triggerWarning as cakeTriggerWarning;
-
-if (!function_exists('pathCombine')) {
+if (!\function_exists('Odigos\pathCombine')) {
     /**
      * Combines parts with a forward-slash `/`.
      *
@@ -48,8 +48,7 @@ if (!function_exists('pathCombine')) {
         return cakePathCombine($parts, $trailing);
     }
 }
-
-if (!function_exists('h')) {
+if (!\function_exists('Odigos\h')) {
     /**
      * Convenience method for htmlspecialchars.
      *
@@ -63,13 +62,12 @@ if (!function_exists('h')) {
      * @return mixed Wrapped text.
      * @link https://book.cakephp.org/5/en/core-libraries/global-constants-and-functions.html#h
      */
-    function h(mixed $text, bool $double = true, ?string $charset = null): mixed
+    function h(mixed $text, bool $double = \true, ?string $charset = null): mixed
     {
         return cakeH($text, $double, $charset);
     }
 }
-
-if (!function_exists('pluginSplit')) {
+if (!\function_exists('Odigos\pluginSplit')) {
     /**
      * Splits a dot syntax plugin name into its plugin and class name.
      * If $name does not have a dot, then index 0 will be null.
@@ -86,13 +84,12 @@ if (!function_exists('pluginSplit')) {
      * @link https://book.cakephp.org/5/en/core-libraries/global-constants-and-functions.html#pluginSplit
      * @phpstan-return array{string|null, string}
      */
-    function pluginSplit(string $name, bool $dotAppend = false, ?string $plugin = null): array
+    function pluginSplit(string $name, bool $dotAppend = \false, ?string $plugin = null): array
     {
         return cakePluginSplit($name, $dotAppend, $plugin);
     }
 }
-
-if (!function_exists('namespaceSplit')) {
+if (!\function_exists('Odigos\namespaceSplit')) {
     /**
      * Split the namespace from the classname.
      *
@@ -106,8 +103,7 @@ if (!function_exists('namespaceSplit')) {
         return cakeNamespaceSplit($class);
     }
 }
-
-if (!function_exists('pr')) {
+if (!\function_exists('Odigos\pr')) {
     /**
      * print_r() convenience function.
      *
@@ -126,8 +122,7 @@ if (!function_exists('pr')) {
         return cakePr($var);
     }
 }
-
-if (!function_exists('pj')) {
+if (!\function_exists('Odigos\pj')) {
     /**
      * JSON pretty print convenience function.
      *
@@ -146,8 +141,7 @@ if (!function_exists('pj')) {
         return cakePj($var);
     }
 }
-
-if (!function_exists('env')) {
+if (!\function_exists('Odigos\env')) {
     /**
      * Gets an environment variable from available sources, and provides emulation
      * for unsupported or inconsistent environment variables (i.e. DOCUMENT_ROOT on
@@ -164,8 +158,7 @@ if (!function_exists('env')) {
         return cakeEnv($key, $default);
     }
 }
-
-if (!function_exists('triggerWarning')) {
+if (!\function_exists('Odigos\triggerWarning')) {
     /**
      * Triggers an E_USER_WARNING.
      *
@@ -177,8 +170,7 @@ if (!function_exists('triggerWarning')) {
         cakeTriggerWarning($message);
     }
 }
-
-if (!function_exists('deprecationWarning')) {
+if (!\function_exists('Odigos\deprecationWarning')) {
     /**
      * Helper method for outputting deprecation warnings
      *
@@ -193,8 +185,7 @@ if (!function_exists('deprecationWarning')) {
         cakeDeprecationWarning($version, $message, $stackFrame + 1);
     }
 }
-
-if (!function_exists('toString')) {
+if (!\function_exists('Odigos\toString')) {
     /**
      * Converts the given value to a string.
      *
@@ -211,8 +202,7 @@ if (!function_exists('toString')) {
         return cakeToString($value);
     }
 }
-
-if (!function_exists('toInt')) {
+if (!\function_exists('Odigos\toInt')) {
     /**
      * Converts a value to an integer.
      *
@@ -231,8 +221,7 @@ if (!function_exists('toInt')) {
         return cakeToInt($value);
     }
 }
-
-if (!function_exists('toFloat')) {
+if (!\function_exists('Odigos\toFloat')) {
     /**
      * Converts a value to a float.
      *
@@ -251,8 +240,7 @@ if (!function_exists('toFloat')) {
         return cakeToFloat($value);
     }
 }
-
-if (!function_exists('toBool')) {
+if (!\function_exists('Odigos\toBool')) {
     /**
      * Converts a value to boolean.
      *

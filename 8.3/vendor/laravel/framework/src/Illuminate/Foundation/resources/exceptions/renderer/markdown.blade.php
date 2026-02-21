@@ -47,3 +47,4 @@ No route parameter data available.
 @empty
 No database queries detected.
 @endforelse
+

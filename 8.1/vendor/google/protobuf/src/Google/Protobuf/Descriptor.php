@@ -6,17 +6,13 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file or at
 // https://developers.google.com/open-source/licenses/bsd
+namespace Odigos\Google\Protobuf;
 
-namespace Google\Protobuf;
-
-use Google\Protobuf\Internal\GetPublicDescriptorTrait;
-
+use Odigos\Google\Protobuf\Internal\GetPublicDescriptorTrait;
 class Descriptor
 {
     use GetPublicDescriptorTrait;
-
     private $internal_desc;
-
     /**
      * @internal
      */
@@ -24,7 +20,6 @@ class Descriptor
     {
         $this->internal_desc = $internal_desc;
     }
-
     /**
      * @return string Full protobuf message name
      */
@@ -32,7 +27,6 @@ class Descriptor
     {
         return trim($this->internal_desc->getFullName(), ".");
     }
-
     /**
      * @return string PHP class name
      */
@@ -40,7 +34,6 @@ class Descriptor
     {
         return $this->internal_desc->getClass();
     }
-
     /**
      * @param int $index Must be >= 0 and < getFieldCount()
      * @return FieldDescriptor
@@ -49,7 +42,6 @@ class Descriptor
     {
         return $this->getPublicDescriptor($this->internal_desc->getFieldByIndex($index));
     }
-
     /**
      * @return int Number of fields in message
      */
@@ -57,7 +49,6 @@ class Descriptor
     {
         return count($this->internal_desc->getField());
     }
-
     /**
      * @param int $index Must be >= 0 and < getOneofDeclCount()
      * @return OneofDescriptor
@@ -66,7 +57,6 @@ class Descriptor
     {
         return $this->getPublicDescriptor($this->internal_desc->getOneofDecl()[$index]);
     }
-
     /**
      * @return int Number of oneofs in message
      */
@@ -74,7 +64,6 @@ class Descriptor
     {
         return count($this->internal_desc->getOneofDecl());
     }
-
     /**
      * @return int Number of real oneofs in message
      */

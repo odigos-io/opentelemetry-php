@@ -1,10 +1,10 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\db\mssql;
 
 /**
@@ -26,7 +26,6 @@ class PDO extends \PDO
     {
         return $this->query('SELECT CAST(COALESCE(SCOPE_IDENTITY(), @@IDENTITY) AS bigint)')->fetchColumn();
     }
-
     /**
      * Starts a transaction. It is necessary to override PDO's method as MSSQL PDO driver does not
      * natively support transactions.
@@ -36,10 +35,8 @@ class PDO extends \PDO
     public function beginTransaction()
     {
         $this->exec('BEGIN TRANSACTION');
-
-        return true;
+        return \true;
     }
-
     /**
      * Commits a transaction. It is necessary to override PDO's method as MSSQL PDO driver does not
      * natively support transactions.
@@ -49,10 +46,8 @@ class PDO extends \PDO
     public function commit()
     {
         $this->exec('COMMIT TRANSACTION');
-
-        return true;
+        return \true;
     }
-
     /**
      * Rollbacks a transaction. It is necessary to override PDO's method as MSSQL PDO driver does not
      * natively support transactions.
@@ -62,10 +57,8 @@ class PDO extends \PDO
     public function rollBack()
     {
         $this->exec('ROLLBACK TRANSACTION');
-
-        return true;
+        return \true;
     }
-
     /**
      * Retrieve a database connection attribute.
      *

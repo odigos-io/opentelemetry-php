@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\SDK\Trace;
 
 use InvalidArgumentException;
@@ -9,13 +8,12 @@ use OpenTelemetry\SDK\Common\Configuration\Configuration;
 use OpenTelemetry\SDK\Common\Configuration\Variables;
 use OpenTelemetry\SDK\Registry;
 use RuntimeException;
-
 class ExporterFactory
 {
     /**
      * @throws RuntimeException
      */
-    public function create(): ?SpanExporterInterface
+    public function create(): ?\OpenTelemetry\SDK\Trace\SpanExporterInterface
     {
         $exporters = Configuration::getList(Variables::OTEL_TRACES_EXPORTER);
         if (1 !== count($exporters)) {
@@ -26,7 +24,6 @@ class ExporterFactory
             return null;
         }
         $factory = Registry::spanExporterFactory($exporter);
-
         return $factory->create();
     }
 }

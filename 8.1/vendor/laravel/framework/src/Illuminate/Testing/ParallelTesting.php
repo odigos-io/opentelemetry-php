@@ -4,7 +4,6 @@ namespace Illuminate\Testing;
 
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Support\Str;
-
 class ParallelTesting
 {
     /**
@@ -13,56 +12,48 @@ class ParallelTesting
      * @var \Illuminate\Contracts\Container\Container
      */
     protected $container;
-
     /**
      * The options resolver callback.
      *
      * @var \Closure|null
      */
     protected $optionsResolver;
-
     /**
      * The token resolver callback.
      *
      * @var \Closure|null
      */
     protected $tokenResolver;
-
     /**
      * All of the registered "setUp" process callbacks.
      *
      * @var array
      */
     protected $setUpProcessCallbacks = [];
-
     /**
      * All of the registered "setUp" test case callbacks.
      *
      * @var array
      */
     protected $setUpTestCaseCallbacks = [];
-
     /**
      * All of the registered "setUp" test database callbacks.
      *
      * @var array
      */
     protected $setUpTestDatabaseCallbacks = [];
-
     /**
      * All of the registered "tearDown" process callbacks.
      *
      * @var array
      */
     protected $tearDownProcessCallbacks = [];
-
     /**
      * All of the registered "tearDown" test case callbacks.
      *
      * @var array
      */
     protected $tearDownTestCaseCallbacks = [];
-
     /**
      * Create a new parallel testing instance.
      *
@@ -73,7 +64,6 @@ class ParallelTesting
     {
         $this->container = $container;
     }
-
     /**
      * Set a callback that should be used when resolving options.
      *
@@ -84,7 +74,6 @@ class ParallelTesting
     {
         $this->optionsResolver = $resolver;
     }
-
     /**
      * Set a callback that should be used when resolving the unique process token.
      *
@@ -95,7 +84,6 @@ class ParallelTesting
     {
         $this->tokenResolver = $resolver;
     }
-
     /**
      * Register a "setUp" process callback.
      *
@@ -106,7 +94,6 @@ class ParallelTesting
     {
         $this->setUpProcessCallbacks[] = $callback;
     }
-
     /**
      * Register a "setUp" test case callback.
      *
@@ -117,7 +104,6 @@ class ParallelTesting
     {
         $this->setUpTestCaseCallbacks[] = $callback;
     }
-
     /**
      * Register a "setUp" test database callback.
      *
@@ -128,7 +114,6 @@ class ParallelTesting
     {
         $this->setUpTestDatabaseCallbacks[] = $callback;
     }
-
     /**
      * Register a "tearDown" process callback.
      *
@@ -139,7 +124,6 @@ class ParallelTesting
     {
         $this->tearDownProcessCallbacks[] = $callback;
     }
-
     /**
      * Register a "tearDown" test case callback.
      *
@@ -150,7 +134,6 @@ class ParallelTesting
     {
         $this->tearDownTestCaseCallbacks[] = $callback;
     }
-
     /**
      * Call all of the "setUp" process callbacks.
      *
@@ -160,13 +143,10 @@ class ParallelTesting
     {
         $this->whenRunningInParallel(function () {
             foreach ($this->setUpProcessCallbacks as $callback) {
-                $this->container->call($callback, [
-                    'token' => $this->token(),
-                ]);
+                $this->container->call($callback, ['token' => $this->token()]);
             }
         });
     }
-
     /**
      * Call all of the "setUp" test case callbacks.
      *
@@ -177,14 +157,10 @@ class ParallelTesting
     {
         $this->whenRunningInParallel(function () use ($testCase) {
             foreach ($this->setUpTestCaseCallbacks as $callback) {
-                $this->container->call($callback, [
-                    'testCase' => $testCase,
-                    'token' => $this->token(),
-                ]);
+                $this->container->call($callback, ['testCase' => $testCase, 'token' => $this->token()]);
             }
         });
     }
-
     /**
      * Call all of the "setUp" test database callbacks.
      *
@@ -195,14 +171,10 @@ class ParallelTesting
     {
         $this->whenRunningInParallel(function () use ($database) {
             foreach ($this->setUpTestDatabaseCallbacks as $callback) {
-                $this->container->call($callback, [
-                    'database' => $database,
-                    'token' => $this->token(),
-                ]);
+                $this->container->call($callback, ['database' => $database, 'token' => $this->token()]);
             }
         });
     }
-
     /**
      * Call all of the "tearDown" process callbacks.
      *
@@ -212,13 +184,10 @@ class ParallelTesting
     {
         $this->whenRunningInParallel(function () {
             foreach ($this->tearDownProcessCallbacks as $callback) {
-                $this->container->call($callback, [
-                    'token' => $this->token(),
-                ]);
+                $this->container->call($callback, ['token' => $this->token()]);
             }
         });
     }
-
     /**
      * Call all of the "tearDown" test case callbacks.
      *
@@ -229,14 +198,10 @@ class ParallelTesting
     {
         $this->whenRunningInParallel(function () use ($testCase) {
             foreach ($this->tearDownTestCaseCallbacks as $callback) {
-                $this->container->call($callback, [
-                    'testCase' => $testCase,
-                    'token' => $this->token(),
-                ]);
+                $this->container->call($callback, ['testCase' => $testCase, 'token' => $this->token()]);
             }
         });
     }
-
     /**
      * Get a parallel testing option.
      *
@@ -246,14 +211,11 @@ class ParallelTesting
     public function option($option)
     {
         $optionsResolver = $this->optionsResolver ?: function ($option) {
-            $option = 'LARAVEL_PARALLEL_TESTING_'.Str::upper($option);
-
-            return $_SERVER[$option] ?? false;
+            $option = 'LARAVEL_PARALLEL_TESTING_' . Str::upper($option);
+            return $_SERVER[$option] ?? \false;
         };
-
         return $optionsResolver($option);
     }
-
     /**
      * Gets a unique test token.
      *
@@ -261,11 +223,8 @@ class ParallelTesting
      */
     public function token()
     {
-        return $this->tokenResolver
-            ? call_user_func($this->tokenResolver)
-            : ($_SERVER['TEST_TOKEN'] ?? false);
+        return $this->tokenResolver ? call_user_func($this->tokenResolver) : $_SERVER['TEST_TOKEN'] ?? \false;
     }
-
     /**
      * Apply the callback if tests are running in parallel.
      *
@@ -278,7 +237,6 @@ class ParallelTesting
             $callback();
         }
     }
-
     /**
      * Indicates if the current tests are been run in parallel.
      *
@@ -286,6 +244,6 @@ class ParallelTesting
      */
     protected function inParallel()
     {
-        return ! empty($_SERVER['LARAVEL_PARALLEL_TESTING']) && $this->token();
+        return !empty($_SERVER['LARAVEL_PARALLEL_TESTING']) && $this->token();
     }
 }

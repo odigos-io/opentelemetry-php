@@ -5,7 +5,6 @@ namespace Illuminate\Foundation\Console;
 use Illuminate\Console\GeneratorCommand;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputOption;
-
 #[AsCommand(name: 'make:cast')]
 class CastMakeCommand extends GeneratorCommand
 {
@@ -15,21 +14,18 @@ class CastMakeCommand extends GeneratorCommand
      * @var string
      */
     protected $name = 'make:cast';
-
     /**
      * The console command description.
      *
      * @var string
      */
     protected $description = 'Create a new custom Eloquent cast class';
-
     /**
      * The type of class being generated.
      *
      * @var string
      */
     protected $type = 'Cast';
-
     /**
      * Get the stub file for the generator.
      *
@@ -37,11 +33,8 @@ class CastMakeCommand extends GeneratorCommand
      */
     protected function getStub()
     {
-        return $this->option('inbound')
-                    ? $this->resolveStubPath('/stubs/cast.inbound.stub')
-                    : $this->resolveStubPath('/stubs/cast.stub');
+        return $this->option('inbound') ? $this->resolveStubPath('/stubs/cast.inbound.stub') : $this->resolveStubPath('/stubs/cast.stub');
     }
-
     /**
      * Resolve the fully-qualified path to the stub.
      *
@@ -50,11 +43,8 @@ class CastMakeCommand extends GeneratorCommand
      */
     protected function resolveStubPath($stub)
     {
-        return file_exists($customPath = $this->laravel->basePath(trim($stub, '/')))
-            ? $customPath
-            : __DIR__.$stub;
+        return file_exists($customPath = $this->laravel->basePath(trim($stub, '/'))) ? $customPath : __DIR__ . $stub;
     }
-
     /**
      * Get the default namespace for the class.
      *
@@ -63,9 +53,8 @@ class CastMakeCommand extends GeneratorCommand
      */
     protected function getDefaultNamespace($rootNamespace)
     {
-        return $rootNamespace.'\Casts';
+        return $rootNamespace . '\Casts';
     }
-
     /**
      * Get the console command arguments.
      *
@@ -73,9 +62,6 @@ class CastMakeCommand extends GeneratorCommand
      */
     protected function getOptions()
     {
-        return [
-            ['force', 'f', InputOption::VALUE_NONE, 'Create the class even if the cast already exists'],
-            ['inbound', null, InputOption::VALUE_NONE, 'Generate an inbound cast class'],
-        ];
+        return [['force', 'f', InputOption::VALUE_NONE, 'Create the class even if the cast already exists'], ['inbound', null, InputOption::VALUE_NONE, 'Generate an inbound cast class']];
     }
 }

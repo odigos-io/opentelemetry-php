@@ -8,7 +8,6 @@ use Illuminate\Testing\ParallelConsoleOutput;
 use RuntimeException;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\OutputInterface;
-
 trait RunsInParallel
 {
     /**
@@ -17,35 +16,30 @@ trait RunsInParallel
      * @var \Closure|null
      */
     protected static $applicationResolver;
-
     /**
      * The runner resolver callback.
      *
      * @var \Closure|null
      */
     protected static $runnerResolver;
-
     /**
      * The original test runner options.
      *
      * @var \ParaTest\Runners\PHPUnit\Options|\ParaTest\Options
      */
     protected $options;
-
     /**
      * The output instance.
      *
      * @var \Symfony\Component\Console\Output\OutputInterface
      */
     protected $output;
-
     /**
      * The original test runner.
      *
      * @var \ParaTest\Runners\PHPUnit\RunnerInterface|\ParaTest\RunnerInterface
      */
     protected $runner;
-
     /**
      * Creates a new test runner instance.
      *
@@ -56,22 +50,15 @@ trait RunsInParallel
     public function __construct($options, OutputInterface $output)
     {
         $this->options = $options;
-
         if ($output instanceof ConsoleOutput) {
             $output = new ParallelConsoleOutput($output);
         }
-
         $runnerResolver = static::$runnerResolver ?: function ($options, OutputInterface $output) {
-            $wrapperRunnerClass = class_exists(\ParaTest\WrapperRunner\WrapperRunner::class)
-                ? \ParaTest\WrapperRunner\WrapperRunner::class
-                : \ParaTest\Runners\PHPUnit\WrapperRunner::class;
-
+            $wrapperRunnerClass = class_exists(\Odigos\ParaTest\WrapperRunner\WrapperRunner::class) ? \Odigos\ParaTest\WrapperRunner\WrapperRunner::class : \Odigos\ParaTest\Runners\PHPUnit\WrapperRunner::class;
             return new $wrapperRunnerClass($options, $output);
         };
-
         $this->runner = $runnerResolver($options, $output);
     }
-
     /**
      * Set the application resolver callback.
      *
@@ -82,7 +69,6 @@ trait RunsInParallel
     {
         static::$applicationResolver = $resolver;
     }
-
     /**
      * Set the runner resolver callback.
      *
@@ -93,7 +79,6 @@ trait RunsInParallel
     {
         static::$runnerResolver = $resolver;
     }
-
     /**
      * Runs the test suite.
      *
@@ -101,20 +86,12 @@ trait RunsInParallel
      */
     public function execute(): int
     {
-        $phpHandlerClass = class_exists(\PHPUnit\TextUI\Configuration\PhpHandler::class)
-            ? \PHPUnit\TextUI\Configuration\PhpHandler::class
-            : \PHPUnit\TextUI\XmlConfiguration\PhpHandler::class;
-
-        $configuration = $this->options instanceof \ParaTest\Options
-            ? $this->options->configuration
-            : $this->options->configuration();
-
-        (new $phpHandlerClass)->handle($configuration->php());
-
+        $phpHandlerClass = class_exists(\Odigos\PHPUnit\TextUI\Configuration\PhpHandler::class) ? \Odigos\PHPUnit\TextUI\Configuration\PhpHandler::class : \Odigos\PHPUnit\TextUI\XmlConfiguration\PhpHandler::class;
+        $configuration = $this->options instanceof \Odigos\ParaTest\Options ? $this->options->configuration : $this->options->configuration();
+        (new $phpHandlerClass())->handle($configuration->php());
         $this->forEachProcess(function () {
             ParallelTesting::callSetUpProcessCallbacks();
         });
-
         try {
             $potentialExitCode = $this->runner->run();
         } finally {
@@ -122,12 +99,8 @@ trait RunsInParallel
                 ParallelTesting::callTearDownProcessCallbacks();
             });
         }
-
-        return $potentialExitCode === null
-            ? $this->getExitCode()
-            : $potentialExitCode;
+        return $potentialExitCode === null ? $this->getExitCode() : $potentialExitCode;
     }
-
     /**
      * Returns the highest exit code encountered throughout the course of test execution.
      *
@@ -137,7 +110,6 @@ trait RunsInParallel
     {
         return $this->runner->getExitCode();
     }
-
     /**
      * Apply the given callback for each process.
      *
@@ -146,19 +118,14 @@ trait RunsInParallel
      */
     protected function forEachProcess($callback)
     {
-        $processes = $this->options instanceof \ParaTest\Options
-            ? $this->options->processes
-            : $this->options->processes();
-
+        $processes = $this->options instanceof \Odigos\ParaTest\Options ? $this->options->processes : $this->options->processes();
         collect(range(1, $processes))->each(function ($token) use ($callback) {
             tap($this->createApplication(), function ($app) use ($callback, $token) {
-                ParallelTesting::resolveTokenUsing(fn () => $token);
-
+                ParallelTesting::resolveTokenUsing(fn() => $token);
                 $callback($app);
             })->flush();
         });
     }
-
     /**
      * Creates the application.
      *
@@ -169,25 +136,19 @@ trait RunsInParallel
     protected function createApplication()
     {
         $applicationResolver = static::$applicationResolver ?: function () {
-            if (trait_exists(\Tests\CreatesApplication::class)) {
+            if (trait_exists(\Odigos\Tests\CreatesApplication::class)) {
                 $applicationCreator = new class
                 {
-                    use \Tests\CreatesApplication;
+                    use \Odigos\Tests\CreatesApplication;
                 };
-
                 return $applicationCreator->createApplication();
-            } elseif (file_exists($path = getcwd().'/bootstrap/app.php') ||
-                      file_exists($path = getcwd().'/.laravel/app.php')) {
+            } elseif (file_exists($path = getcwd() . '/bootstrap/app.php') || file_exists($path = getcwd() . '/.laravel/app.php')) {
                 $app = require $path;
-
                 $app->make(Kernel::class)->bootstrap();
-
                 return $app;
             }
-
             throw new RuntimeException('Parallel Runner unable to resolve application.');
         };
-
         return $applicationResolver();
     }
 }

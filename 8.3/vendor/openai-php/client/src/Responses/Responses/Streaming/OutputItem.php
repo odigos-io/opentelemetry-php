@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenAI\Responses\Responses\Streaming;
 
 use OpenAI\Contracts\ResponseContract;
@@ -21,7 +20,6 @@ use OpenAI\Responses\Responses\Output\OutputMessage;
 use OpenAI\Responses\Responses\Output\OutputReasoning;
 use OpenAI\Responses\Responses\Output\OutputWebSearchToolCall;
 use OpenAI\Testing\Responses\Concerns\Fakeable;
-
 /**
  * @phpstan-import-type OutputComputerToolCallType from OutputComputerToolCall
  * @phpstan-import-type OutputFileSearchToolCallType from OutputFileSearchToolCall
@@ -45,16 +43,11 @@ final class OutputItem implements ResponseContract, ResponseHasMetaInformationCo
      * @use ArrayAccessible<OutputItemType>
      */
     use ArrayAccessible;
-
     use Fakeable;
     use HasMetaInformation;
-
-    private function __construct(
-        public readonly int $outputIndex,
-        public readonly OutputMessage|OutputCodeInterpreterToolCall|OutputFileSearchToolCall|OutputFunctionToolCall|OutputWebSearchToolCall|OutputComputerToolCall|OutputReasoning|OutputMcpListTools|OutputMcpApprovalRequest|OutputMcpCall|OutputImageGenerationToolCall $item,
-        private readonly MetaInformation $meta,
-    ) {}
-
+    private function __construct(public readonly int $outputIndex, public readonly OutputMessage|OutputCodeInterpreterToolCall|OutputFileSearchToolCall|OutputFunctionToolCall|OutputWebSearchToolCall|OutputComputerToolCall|OutputReasoning|OutputMcpListTools|OutputMcpApprovalRequest|OutputMcpCall|OutputImageGenerationToolCall $item, private readonly MetaInformation $meta)
+    {
+    }
     /**
      * @param  OutputItemType  $attributes
      */
@@ -73,22 +66,13 @@ final class OutputItem implements ResponseContract, ResponseHasMetaInformationCo
             'mcp_call' => OutputMcpCall::from($attributes['item']),
             'code_interpreter_call' => OutputCodeInterpreterToolCall::from($attributes['item']),
         };
-
-        return new self(
-            outputIndex: $attributes['output_index'],
-            item: $item,
-            meta: $meta,
-        );
+        return new self(outputIndex: $attributes['output_index'], item: $item, meta: $meta);
     }
-
     /**
      * {@inheritDoc}
      */
     public function toArray(): array
     {
-        return [
-            'output_index' => $this->outputIndex,
-            'item' => $this->item->toArray(),
-        ];
+        return ['output_index' => $this->outputIndex, 'item' => $this->item->toArray()];
     }
 }

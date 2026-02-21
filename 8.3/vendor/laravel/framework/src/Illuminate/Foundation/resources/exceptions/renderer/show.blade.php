@@ -35,3 +35,4 @@
         <x-laravel-exceptions-renderer::laravel-ascii-spotlight />
     </x-laravel-exceptions-renderer::section-container>
 </x-laravel-exceptions-renderer::layout>
+

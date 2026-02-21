@@ -4,7 +4,6 @@ namespace Illuminate\Cookie\Middleware;
 
 use Closure;
 use Illuminate\Contracts\Cookie\QueueingFactory as CookieJar;
-
 class AddQueuedCookiesToResponse
 {
     /**
@@ -13,7 +12,6 @@ class AddQueuedCookiesToResponse
      * @var \Illuminate\Contracts\Cookie\QueueingFactory
      */
     protected $cookies;
-
     /**
      * Create a new CookieQueue instance.
      *
@@ -23,7 +21,6 @@ class AddQueuedCookiesToResponse
     {
         $this->cookies = $cookies;
     }
-
     /**
      * Handle an incoming request.
      *
@@ -34,11 +31,9 @@ class AddQueuedCookiesToResponse
     public function handle($request, Closure $next)
     {
         $response = $next($request);
-
         foreach ($this->cookies->getQueuedCookies() as $cookie) {
             $response->headers->setCookie($cookie);
         }
-
         return $response;
     }
 }

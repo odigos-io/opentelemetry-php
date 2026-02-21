@@ -31,3 +31,4 @@
 
     <x-laravel-exceptions-renderer::request-url :$exception :request="$exception->request()" class="relative z-50" />
 </div>
+

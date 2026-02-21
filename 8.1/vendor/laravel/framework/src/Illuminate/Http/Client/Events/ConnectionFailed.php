@@ -3,7 +3,6 @@
 namespace Illuminate\Http\Client\Events;
 
 use Illuminate\Http\Client\Request;
-
 class ConnectionFailed
 {
     /**
@@ -12,7 +11,6 @@ class ConnectionFailed
      * @var \Illuminate\Http\Client\Request
      */
     public $request;
-
     /**
      * Create a new event instance.
      *

@@ -1,15 +1,14 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\db\mysql;
 
 use yii\db\ExpressionInterface;
 use yii\db\JsonExpression;
-
 /**
  * Class ColumnSchema for MySQL database
  *
@@ -26,9 +25,7 @@ class ColumnSchema extends \yii\db\ColumnSchema
      * @since 2.0.14.1
      * @deprecated Since 2.0.14.1 and will be removed in 2.1.
      */
-    public $disableJsonSupport = false;
-
-
+    public $disableJsonSupport = \false;
     /**
      * {@inheritdoc}
      */
@@ -37,18 +34,14 @@ class ColumnSchema extends \yii\db\ColumnSchema
         if ($value === null) {
             return $value;
         }
-
         if ($value instanceof ExpressionInterface) {
             return $value;
         }
-
-        if (!$this->disableJsonSupport && $this->dbType === Schema::TYPE_JSON) {
+        if (!$this->disableJsonSupport && $this->dbType === \yii\db\mysql\Schema::TYPE_JSON) {
             return new JsonExpression($value, $this->type);
         }
-
         return $this->typecast($value);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -57,11 +50,9 @@ class ColumnSchema extends \yii\db\ColumnSchema
         if ($value === null) {
             return null;
         }
-
-        if (!$this->disableJsonSupport && $this->type === Schema::TYPE_JSON) {
-            return json_decode($value, true);
+        if (!$this->disableJsonSupport && $this->type === \yii\db\mysql\Schema::TYPE_JSON) {
+            return json_decode($value, \true);
         }
-
         return parent::phpTypecast($value);
     }
 }

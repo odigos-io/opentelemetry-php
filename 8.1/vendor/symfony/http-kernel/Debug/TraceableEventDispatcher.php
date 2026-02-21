@@ -8,12 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\HttpKernel\Debug;
 
 use Symfony\Component\EventDispatcher\Debug\TraceableEventDispatcher as BaseTraceableEventDispatcher;
 use Symfony\Component\HttpKernel\KernelEvents;
-
 /**
  * Collects some data about event listeners.
  *
@@ -27,7 +25,7 @@ class TraceableEventDispatcher extends BaseTraceableEventDispatcher
     {
         switch ($eventName) {
             case KernelEvents::REQUEST:
-                $event->getRequest()->attributes->set('_stopwatch_token', substr(hash('sha256', uniqid(mt_rand(), true)), 0, 6));
+                $event->getRequest()->attributes->set('_stopwatch_token', substr(hash('sha256', uniqid(mt_rand(), \true)), 0, 6));
                 $this->stopwatch->openSection();
                 break;
             case KernelEvents::VIEW:
@@ -54,7 +52,6 @@ class TraceableEventDispatcher extends BaseTraceableEventDispatcher
                 break;
         }
     }
-
     protected function afterDispatch(string $eventName, object $event): void
     {
         switch ($eventName) {

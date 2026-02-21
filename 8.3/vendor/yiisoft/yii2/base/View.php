@@ -1,18 +1,17 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\base;
 
-use Yii;
+use Odigos\Yii;
 use yii\helpers\FileHelper;
 use yii\widgets\Block;
 use yii\widgets\ContentDecorator;
 use yii\widgets\FragmentCache;
-
 /**
  * View represents a view object in the MVC pattern.
  *
@@ -27,7 +26,7 @@ use yii\widgets\FragmentCache;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class View extends Component implements DynamicContentAwareInterface
+class View extends \yii\base\Component implements \yii\base\DynamicContentAwareInterface
 {
     /**
      * @event Event an event that is triggered by [[beginPage()]].
@@ -101,14 +100,11 @@ class View extends Component implements DynamicContentAwareInterface
      * [[setDynamicPlaceholders()]], [[addDynamicPlaceholder()]] instead.
      */
     public $dynamicPlaceholders = [];
-
     /**
      * @var array the view files currently being rendered. There may be multiple view files being
      * rendered at a moment because one view may be rendered within another.
      */
     private $_viewFiles = [];
-
-
     /**
      * Initializes the view component.
      */
@@ -124,7 +120,6 @@ class View extends Component implements DynamicContentAwareInterface
             $this->theme = Yii::createObject($this->theme);
         }
     }
-
     /**
      * Renders a view.
      *
@@ -155,7 +150,6 @@ class View extends Component implements DynamicContentAwareInterface
         $viewFile = $this->findViewFile($view, $context);
         return $this->renderFile($viewFile, $params, $context);
     }
-
     /**
      * Finds the view file based on the given view name.
      * @param string $view the view name or the [path alias](guide:concept-aliases) of the view file. Please refer to [[render()]]
@@ -174,33 +168,30 @@ class View extends Component implements DynamicContentAwareInterface
             $file = Yii::getAlias($view);
         } elseif (strncmp($view, '//', 2) === 0) {
             // e.g. "//layouts/main"
-            $file = Yii::$app->getViewPath() . DIRECTORY_SEPARATOR . ltrim($view, '/');
+            $file = Yii::$app->getViewPath() . \DIRECTORY_SEPARATOR . ltrim($view, '/');
         } elseif (strncmp($view, '/', 1) === 0) {
             // e.g. "/site/index"
             if (Yii::$app->controller !== null) {
-                $file = Yii::$app->controller->module->getViewPath() . DIRECTORY_SEPARATOR . ltrim($view, '/');
+                $file = Yii::$app->controller->module->getViewPath() . \DIRECTORY_SEPARATOR . ltrim($view, '/');
             } else {
-                throw new InvalidCallException("Unable to locate view file for view '$view': no active controller.");
+                throw new \yii\base\InvalidCallException("Unable to locate view file for view '{$view}': no active controller.");
             }
-        } elseif ($context instanceof ViewContextInterface) {
-            $file = $context->getViewPath() . DIRECTORY_SEPARATOR . $view;
-        } elseif (($currentViewFile = $this->getRequestedViewFile()) !== false) {
-            $file = dirname($currentViewFile) . DIRECTORY_SEPARATOR . $view;
+        } elseif ($context instanceof \yii\base\ViewContextInterface) {
+            $file = $context->getViewPath() . \DIRECTORY_SEPARATOR . $view;
+        } elseif (($currentViewFile = $this->getRequestedViewFile()) !== \false) {
+            $file = dirname($currentViewFile) . \DIRECTORY_SEPARATOR . $view;
         } else {
-            throw new InvalidCallException("Unable to resolve view file for view '$view': no active view context.");
+            throw new \yii\base\InvalidCallException("Unable to resolve view file for view '{$view}': no active view context.");
         }
-
-        if (pathinfo($file, PATHINFO_EXTENSION) !== '') {
+        if (pathinfo($file, \PATHINFO_EXTENSION) !== '') {
             return $file;
         }
         $path = $file . '.' . $this->defaultExtension;
         if ($this->defaultExtension !== 'php' && !is_file($path)) {
             $path = $file . '.php';
         }
-
         return $path;
     }
-
     /**
      * Renders a view file.
      *
@@ -223,29 +214,23 @@ class View extends Component implements DynamicContentAwareInterface
     public function renderFile($viewFile, $params = [], $context = null)
     {
         $viewFile = $requestedFile = Yii::getAlias($viewFile);
-
         if ($this->theme !== null) {
             $viewFile = $this->theme->applyTo($viewFile);
         }
         if (is_file($viewFile)) {
             $viewFile = FileHelper::localize($viewFile);
         } else {
-            throw new ViewNotFoundException("The view file does not exist: $viewFile");
+            throw new \yii\base\ViewNotFoundException("The view file does not exist: {$viewFile}");
         }
-
         $oldContext = $this->context;
         if ($context !== null) {
             $this->context = $context;
         }
         $output = '';
-        $this->_viewFiles[] = [
-            'resolved' => $viewFile,
-            'requested' => $requestedFile
-        ];
-
+        $this->_viewFiles[] = ['resolved' => $viewFile, 'requested' => $requestedFile];
         if ($this->beforeRender($viewFile, $params)) {
-            Yii::debug("Rendering view file: $viewFile", __METHOD__);
-            $ext = pathinfo($viewFile, PATHINFO_EXTENSION);
+            Yii::debug("Rendering view file: {$viewFile}", __METHOD__);
+            $ext = pathinfo($viewFile, \PATHINFO_EXTENSION);
             if (isset($this->renderers[$ext])) {
                 if (is_array($this->renderers[$ext]) || is_string($this->renderers[$ext])) {
                     $this->renderers[$ext] = Yii::createObject($this->renderers[$ext]);
@@ -258,30 +243,25 @@ class View extends Component implements DynamicContentAwareInterface
             }
             $this->afterRender($viewFile, $params, $output);
         }
-
         array_pop($this->_viewFiles);
         $this->context = $oldContext;
-
         return $output;
     }
-
     /**
      * @return string|bool the view file currently being rendered. False if no view file is being rendered.
      */
     public function getViewFile()
     {
-        return empty($this->_viewFiles) ? false : end($this->_viewFiles)['resolved'];
+        return empty($this->_viewFiles) ? \false : end($this->_viewFiles)['resolved'];
     }
-
     /**
      * @return string|bool the requested view currently being rendered. False if no view file is being rendered.
      * @since 2.0.16
      */
     protected function getRequestedViewFile()
     {
-        return empty($this->_viewFiles) ? false : end($this->_viewFiles)['requested'];
+        return empty($this->_viewFiles) ? \false : end($this->_viewFiles)['requested'];
     }
-
     /**
      * This method is invoked right before [[renderFile()]] renders a view file.
      * The default implementation will trigger the [[EVENT_BEFORE_RENDER]] event.
@@ -292,15 +272,10 @@ class View extends Component implements DynamicContentAwareInterface
      */
     public function beforeRender($viewFile, $params)
     {
-        $event = new ViewEvent([
-            'viewFile' => $viewFile,
-            'params' => $params,
-        ]);
+        $event = new \yii\base\ViewEvent(['viewFile' => $viewFile, 'params' => $params]);
         $this->trigger(self::EVENT_BEFORE_RENDER, $event);
-
         return $event->isValid;
     }
-
     /**
      * This method is invoked right after [[renderFile()]] renders a view file.
      * The default implementation will trigger the [[EVENT_AFTER_RENDER]] event.
@@ -313,16 +288,11 @@ class View extends Component implements DynamicContentAwareInterface
     public function afterRender($viewFile, $params, &$output)
     {
         if ($this->hasEventHandlers(self::EVENT_AFTER_RENDER)) {
-            $event = new ViewEvent([
-                'viewFile' => $viewFile,
-                'params' => $params,
-            ]);
+            $event = new \yii\base\ViewEvent(['viewFile' => $viewFile, 'params' => $params]);
             $event->output =& $output;
-
             $this->trigger(self::EVENT_AFTER_RENDER, $event);
         }
     }
-
     /**
      * Renders a view file as a PHP script.
      *
@@ -341,8 +311,8 @@ class View extends Component implements DynamicContentAwareInterface
     {
         $_obInitialLevel_ = ob_get_level();
         ob_start();
-        ob_implicit_flush(false);
-        extract($_params_, EXTR_OVERWRITE);
+        ob_implicit_flush(\false);
+        extract($_params_, \EXTR_OVERWRITE);
         try {
             require $_file_;
             return ob_get_clean();
@@ -362,7 +332,6 @@ class View extends Component implements DynamicContentAwareInterface
             throw $e;
         }
     }
-
     /**
      * Renders dynamic content returned by the given PHP statements.
      * This method is mainly used together with content caching (fragment caching and page caching)
@@ -381,15 +350,12 @@ class View extends Component implements DynamicContentAwareInterface
     {
         if (!empty($this->cacheStack)) {
             $n = count($this->dynamicPlaceholders);
-            $placeholder = "<![CDATA[YII-DYNAMIC-$n]]>";
+            $placeholder = "<![CDATA[YII-DYNAMIC-{$n}]]>";
             $this->addDynamicPlaceholder($placeholder, $statements);
-
             return $placeholder;
         }
-
         return $this->evaluateDynamicContent($statements);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -397,7 +363,6 @@ class View extends Component implements DynamicContentAwareInterface
     {
         return $this->dynamicPlaceholders;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -405,14 +370,13 @@ class View extends Component implements DynamicContentAwareInterface
     {
         $this->dynamicPlaceholders = $placeholders;
     }
-
     /**
      * {@inheritdoc}
      */
     public function addDynamicPlaceholder($placeholder, $statements)
     {
         foreach ($this->cacheStack as $cache) {
-            if ($cache instanceof DynamicContentAwareInterface) {
+            if ($cache instanceof \yii\base\DynamicContentAwareInterface) {
                 $cache->addDynamicPlaceholder($placeholder, $statements);
             } else {
                 // TODO: Remove in 2.1
@@ -421,7 +385,6 @@ class View extends Component implements DynamicContentAwareInterface
         }
         $this->dynamicPlaceholders[$placeholder] = $statements;
     }
-
     /**
      * Evaluates the given PHP statements.
      * This method is mainly used internally to implement dynamic content feature.
@@ -432,7 +395,6 @@ class View extends Component implements DynamicContentAwareInterface
     {
         return eval($statements);
     }
-
     /**
      * Returns a list of currently active dynamic content class instances.
      * @return DynamicContentAwareInterface[] class instances supporting dynamic contents.
@@ -442,18 +404,16 @@ class View extends Component implements DynamicContentAwareInterface
     {
         return $this->cacheStack;
     }
-
     /**
      * Adds a class instance supporting dynamic contents to the end of a list of currently active
      * dynamic content class instances.
      * @param DynamicContentAwareInterface $instance class instance supporting dynamic contents.
      * @since 2.0.14
      */
-    public function pushDynamicContent(DynamicContentAwareInterface $instance)
+    public function pushDynamicContent(\yii\base\DynamicContentAwareInterface $instance)
     {
         $this->cacheStack[] = $instance;
     }
-
     /**
      * Removes a last class instance supporting dynamic contents from a list of currently active
      * dynamic content class instances.
@@ -463,7 +423,6 @@ class View extends Component implements DynamicContentAwareInterface
     {
         array_pop($this->cacheStack);
     }
-
     /**
      * Begins recording a block.
      *
@@ -473,15 +432,10 @@ class View extends Component implements DynamicContentAwareInterface
      * Defaults to false, meaning the captured block will not be displayed.
      * @return Block the Block widget instance
      */
-    public function beginBlock($id, $renderInPlace = false)
+    public function beginBlock($id, $renderInPlace = \false)
     {
-        return Block::begin([
-            'id' => $id,
-            'renderInPlace' => $renderInPlace,
-            'view' => $this,
-        ]);
+        return Block::begin(['id' => $id, 'renderInPlace' => $renderInPlace, 'view' => $this]);
     }
-
     /**
      * Ends recording a block.
      */
@@ -489,7 +443,6 @@ class View extends Component implements DynamicContentAwareInterface
     {
         Block::end();
     }
-
     /**
      * Begins the rendering of content that is to be decorated by the specified view.
      *
@@ -510,13 +463,8 @@ class View extends Component implements DynamicContentAwareInterface
      */
     public function beginContent($viewFile, $params = [])
     {
-        return ContentDecorator::begin([
-            'viewFile' => $viewFile,
-            'params' => $params,
-            'view' => $this,
-        ]);
+        return ContentDecorator::begin(['viewFile' => $viewFile, 'params' => $params, 'view' => $this]);
     }
-
     /**
      * Ends the rendering of content.
      */
@@ -524,7 +472,6 @@ class View extends Component implements DynamicContentAwareInterface
     {
         ContentDecorator::end();
     }
-
     /**
      * Begins fragment caching.
      *
@@ -551,15 +498,12 @@ class View extends Component implements DynamicContentAwareInterface
         $properties['view'] = $this;
         /** @var FragmentCache $cache */
         $cache = FragmentCache::begin($properties);
-        if ($cache->getCachedContent() !== false) {
+        if ($cache->getCachedContent() !== \false) {
             $this->endCache();
-
-            return false;
+            return \false;
         }
-
-        return true;
+        return \true;
     }
-
     /**
      * Ends fragment caching.
      */
@@ -567,18 +511,15 @@ class View extends Component implements DynamicContentAwareInterface
     {
         FragmentCache::end();
     }
-
     /**
      * Marks the beginning of a page.
      */
     public function beginPage()
     {
         ob_start();
-        ob_implicit_flush(false);
-
+        ob_implicit_flush(\false);
         $this->trigger(self::EVENT_BEGIN_PAGE);
     }
-
     /**
      * Marks the ending of a page.
      */

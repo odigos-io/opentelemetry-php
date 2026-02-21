@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -23,7 +23,6 @@ use Cake\Event\EventDispatcherTrait;
 use Cake\Event\EventInterface;
 use Cake\Event\EventListenerInterface;
 use Cake\Utility\Inflector;
-
 /**
  * Base class for console commands.
  *
@@ -48,47 +47,38 @@ use Cake\Utility\Inflector;
  * @template TSubject of \Cake\Command\Command
  * @implements \Cake\Event\EventDispatcherInterface<TSubject>
  */
-abstract class BaseCommand implements CommandInterface, EventDispatcherInterface, EventListenerInterface
+abstract class BaseCommand implements \Cake\Console\CommandInterface, EventDispatcherInterface, EventListenerInterface
 {
     /**
      * @use \Cake\Event\EventDispatcherTrait<TSubject>
      */
     use EventDispatcherTrait;
-
     /**
      * The name of this command.
      *
      * @var string
      */
     protected string $name = 'cake unknown';
-
-    protected ?CommandFactoryInterface $factory = null;
-
+    protected ?\Cake\Console\CommandFactoryInterface $factory = null;
     /**
      * Constructor
      *
      * @param \Cake\Console\CommandFactoryInterface|null $factory Command factory instance.
      */
-    public function __construct(?CommandFactoryInterface $factory = null)
+    public function __construct(?\Cake\Console\CommandFactoryInterface $factory = null)
     {
         $this->factory = $factory;
         $this->getEventManager()->on($this);
     }
-
     /**
      * @inheritDoc
      */
     public function setName(string $name)
     {
-        assert(
-            str_contains($name, ' ') && !str_starts_with($name, ' '),
-            "The name '{$name}' is missing a space. Names should look like `cake routes`",
-        );
+        assert(str_contains($name, ' ') && !str_starts_with($name, ' '), "The name '{$name}' is missing a space. Names should look like `cake routes`");
         $this->name = $name;
-
         return $this;
     }
-
     /**
      * Get the command name.
      *
@@ -98,7 +88,6 @@ abstract class BaseCommand implements CommandInterface, EventDispatcherInterface
     {
         return $this->name;
     }
-
     /**
      * Get the command description.
      *
@@ -108,7 +97,6 @@ abstract class BaseCommand implements CommandInterface, EventDispatcherInterface
     {
         return '';
     }
-
     /**
      * Get the root command name.
      *
@@ -117,10 +105,8 @@ abstract class BaseCommand implements CommandInterface, EventDispatcherInterface
     public function getRootName(): string
     {
         [$root] = explode(' ', $this->name);
-
         return $root;
     }
-
     /**
      * Get the command name.
      *
@@ -134,10 +120,8 @@ abstract class BaseCommand implements CommandInterface, EventDispatcherInterface
     {
         $pos = strrpos(static::class, '\\');
         $name = substr(static::class, $pos + 1, -7);
-
         return Inflector::underscore($name);
     }
-
     /**
      * Get the option parser.
      *
@@ -146,27 +130,24 @@ abstract class BaseCommand implements CommandInterface, EventDispatcherInterface
      * @return \Cake\Console\ConsoleOptionParser
      * @throws \Cake\Core\Exception\CakeException When the parser is invalid
      */
-    public function getOptionParser(): ConsoleOptionParser
+    public function getOptionParser(): \Cake\Console\ConsoleOptionParser
     {
         [$root, $name] = explode(' ', $this->name, 2);
-        $parser = new ConsoleOptionParser($name);
+        $parser = new \Cake\Console\ConsoleOptionParser($name);
         $parser->setRootName($root);
         $parser->setDescription(static::getDescription());
-
         return $this->buildOptionParser($parser);
     }
-
     /**
      * Hook method for defining this command's option parser.
      *
      * @param \Cake\Console\ConsoleOptionParser $parser The parser to be defined
      * @return \Cake\Console\ConsoleOptionParser The built parser.
      */
-    protected function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
+    protected function buildOptionParser(\Cake\Console\ConsoleOptionParser $parser): \Cake\Console\ConsoleOptionParser
     {
         return $parser;
     }
-
     /**
      * Hook method invoked by CakePHP when a command is about to be executed.
      *
@@ -179,7 +160,6 @@ abstract class BaseCommand implements CommandInterface, EventDispatcherInterface
     public function initialize(): void
     {
     }
-
     /**
      * Returns a list of all events that will fire in the command during its lifecycle.
      * You can override this function to add your own listener callbacks
@@ -188,12 +168,8 @@ abstract class BaseCommand implements CommandInterface, EventDispatcherInterface
      */
     public function implementedEvents(): array
     {
-        return [
-            'Command.beforeExecute' => 'beforeExecute',
-            'Command.afterExecute' => 'afterExecute',
-        ];
+        return ['Command.beforeExecute' => 'beforeExecute', 'Command.afterExecute' => 'afterExecute'];
     }
-
     /**
      * Called immediately prior to the command's run method. You can use this method to configure and customize the
      * command or perform logic that needs to happen before the command runs.
@@ -204,10 +180,9 @@ abstract class BaseCommand implements CommandInterface, EventDispatcherInterface
      * @return void
      * @link https://book.cakephp.org/5/en/console-commands/commands.html#lifecycle-callbacks
      */
-    public function beforeExecute(EventInterface $event, Arguments $args, ConsoleIo $io): void
+    public function beforeExecute(EventInterface $event, \Cake\Console\Arguments $args, \Cake\Console\ConsoleIo $io): void
     {
     }
-
     /**
      * Called immediately after the command's run method, unless an exception occurs. You can use this method to
      * perform logic that needs to happen after the command runs.
@@ -219,49 +194,36 @@ abstract class BaseCommand implements CommandInterface, EventDispatcherInterface
      * @return void
      * @link https://book.cakephp.org/5/en/console-commands/commands.html#lifecycle-callbacks
      */
-    public function afterExecute(EventInterface $event, Arguments $args, ConsoleIo $io, ?int $result): void
+    public function afterExecute(EventInterface $event, \Cake\Console\Arguments $args, \Cake\Console\ConsoleIo $io, ?int $result): void
     {
     }
-
     /**
      * @inheritDoc
      */
-    public function run(array $argv, ConsoleIo $io): ?int
+    public function run(array $argv, \Cake\Console\ConsoleIo $io): ?int
     {
         $this->initialize();
-
         $parser = $this->getOptionParser();
         try {
             [$options, $arguments] = $parser->parse($argv, $io);
-            $args = new Arguments(
-                $arguments,
-                $options,
-                $parser->argumentNames(),
-            );
+            $args = new \Cake\Console\Arguments($arguments, $options, $parser->argumentNames());
         } catch (ConsoleException $e) {
             $io->error('Error: ' . $e->getMessage());
-
             return static::CODE_ERROR;
         }
         $this->setOutputLevel($args, $io);
-
         if ($args->getOption('help')) {
             $this->displayHelp($parser, $args, $io);
-
             return static::CODE_SUCCESS;
         }
-
         if ($args->getOption('quiet')) {
-            $io->setInteractive(false);
+            $io->setInteractive(\false);
         }
-
         $this->dispatchEvent('Command.beforeExecute', ['args' => $args, 'io' => $io]);
         $result = $this->execute($args, $io);
         $this->dispatchEvent('Command.afterExecute', ['args' => $args, 'io' => $io, 'result' => $result]);
-
         return $result;
     }
-
     /**
      * Output help content
      *
@@ -270,17 +232,15 @@ abstract class BaseCommand implements CommandInterface, EventDispatcherInterface
      * @param \Cake\Console\ConsoleIo $io The console io
      * @return void
      */
-    protected function displayHelp(ConsoleOptionParser $parser, Arguments $args, ConsoleIo $io): void
+    protected function displayHelp(\Cake\Console\ConsoleOptionParser $parser, \Cake\Console\Arguments $args, \Cake\Console\ConsoleIo $io): void
     {
         $format = 'text';
         if ($args->getArgumentAt(0) === 'xml') {
             $format = 'xml';
-            $io->setOutputAs(ConsoleOutput::RAW);
+            $io->setOutputAs(\Cake\Console\ConsoleOutput::RAW);
         }
-
         $io->out($parser->help($format));
     }
-
     /**
      * Set the output level based on the Arguments.
      *
@@ -288,19 +248,18 @@ abstract class BaseCommand implements CommandInterface, EventDispatcherInterface
      * @param \Cake\Console\ConsoleIo $io The console io
      * @return void
      */
-    protected function setOutputLevel(Arguments $args, ConsoleIo $io): void
+    protected function setOutputLevel(\Cake\Console\Arguments $args, \Cake\Console\ConsoleIo $io): void
     {
-        $io->setLoggers(ConsoleIo::NORMAL);
+        $io->setLoggers(\Cake\Console\ConsoleIo::NORMAL);
         if ($args->getOption('quiet')) {
-            $io->level(ConsoleIo::QUIET);
-            $io->setLoggers(ConsoleIo::QUIET);
+            $io->level(\Cake\Console\ConsoleIo::QUIET);
+            $io->setLoggers(\Cake\Console\ConsoleIo::QUIET);
         }
         if ($args->getOption('verbose')) {
-            $io->level(ConsoleIo::VERBOSE);
-            $io->setLoggers(ConsoleIo::VERBOSE);
+            $io->level(\Cake\Console\ConsoleIo::VERBOSE);
+            $io->setLoggers(\Cake\Console\ConsoleIo::VERBOSE);
         }
     }
-
     /**
      * Implement this method with your command's logic.
      *
@@ -308,8 +267,7 @@ abstract class BaseCommand implements CommandInterface, EventDispatcherInterface
      * @param \Cake\Console\ConsoleIo $io The console io
      * @return int|null|void The exit code or null for success
      */
-    abstract public function execute(Arguments $args, ConsoleIo $io);
-
+    abstract public function execute(\Cake\Console\Arguments $args, \Cake\Console\ConsoleIo $io);
     /**
      * Halt the current process with a StopException.
      *
@@ -321,7 +279,6 @@ abstract class BaseCommand implements CommandInterface, EventDispatcherInterface
     {
         throw new StopException('Command aborted', $code);
     }
-
     /**
      * Execute another command with the provided set of arguments.
      *
@@ -334,18 +291,13 @@ abstract class BaseCommand implements CommandInterface, EventDispatcherInterface
      * @param \Cake\Console\ConsoleIo|null $io The ConsoleIo instance to use for the executed command.
      * @return int|null The exit code or null for success of the command.
      */
-    public function executeCommand(CommandInterface|string $command, array $args = [], ?ConsoleIo $io = null): ?int
+    public function executeCommand(\Cake\Console\CommandInterface|string $command, array $args = [], ?\Cake\Console\ConsoleIo $io = null): ?int
     {
         if (is_string($command)) {
-            assert(
-                is_subclass_of($command, CommandInterface::class),
-                sprintf('Command `%s` is not a subclass of `%s`.', $command, CommandInterface::class),
-            );
-
+            assert(is_subclass_of($command, \Cake\Console\CommandInterface::class), sprintf('Command `%s` is not a subclass of `%s`.', $command, \Cake\Console\CommandInterface::class));
             $command = $this->factory?->create($command) ?? new $command();
         }
-        $io = $io ?: new ConsoleIo();
-
+        $io = $io ?: new \Cake\Console\ConsoleIo();
         try {
             return $command->run($args, $io);
         } catch (StopException $e) {

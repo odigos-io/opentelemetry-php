@@ -1,6 +1,6 @@
 <?php
 
-namespace Egulias\EmailValidator\Validation;
+namespace Odigos\Egulias\EmailValidator\Validation;
 
 class DNSRecords
 {
@@ -8,10 +8,9 @@ class DNSRecords
      * @param list<array<array-key, mixed>> $records
      * @param bool $error
      */
-    public function __construct(private readonly array $records, private readonly bool $error = false)
+    public function __construct(private readonly array $records, private readonly bool $error = \false)
     {
     }
-
     /**
      * @return list<array<array-key, mixed>>
      */
@@ -19,7 +18,6 @@ class DNSRecords
     {
         return $this->records;
     }
-
     public function withError(): bool
     {
         return $this->error;

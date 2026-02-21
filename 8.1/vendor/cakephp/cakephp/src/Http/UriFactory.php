@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -17,12 +17,11 @@ declare(strict_types=1);
 namespace Cake\Http;
 
 use Cake\Core\Configure;
-use Laminas\Diactoros\Uri;
-use Laminas\Diactoros\UriFactory as DiactorosUriFactory;
+use Odigos\Laminas\Diactoros\Uri;
+use Odigos\Laminas\Diactoros\UriFactory as DiactorosUriFactory;
 use Psr\Http\Message\UriFactoryInterface;
 use Psr\Http\Message\UriInterface;
-use function Laminas\Diactoros\marshalHeadersFromSapi;
-
+use function Odigos\Laminas\Diactoros\marshalHeadersFromSapi;
 /**
  * Factory class for creating uri instances.
  */
@@ -38,7 +37,6 @@ class UriFactory implements UriFactoryInterface
     {
         return new Uri($uri);
     }
-
     /**
      * Get a new Uri instance and base info from the provided server data.
      *
@@ -51,19 +49,14 @@ class UriFactory implements UriFactoryInterface
     {
         $server ??= $_SERVER;
         $headers = marshalHeadersFromSapi($server);
-
         $uri = DiactorosUriFactory::createFromSapi($server, $headers);
         ['base' => $base, 'webroot' => $webroot] = static::getBase($uri, $server);
-
         $uri = static::updatePath($base, $uri);
-
         if (!$uri->getHost()) {
             $uri = $uri->withHost('localhost');
         }
-
         return ['uri' => $uri, 'base' => $base, 'webroot' => $webroot];
     }
-
     /**
      * Updates the request URI to remove the base directory.
      *
@@ -77,23 +70,19 @@ class UriFactory implements UriFactoryInterface
         if ($base !== '' && str_starts_with($path, $base)) {
             $path = substr($path, strlen($base));
         }
-
         // App.baseUrl is meant to be set only when URL rewriting is not used.
         if (!Configure::read('App.baseUrl')) {
             if ($path === '' || $path === '//') {
                 $path = '/';
             }
-
             return $uri->withPath($path);
         }
-
         if ($path === '/index.php' && $uri->getQuery()) {
             $path = $uri->getQuery();
         }
         if ($path === '' || $path === '//' || $path === '/index.php') {
             $path = '/';
         }
-
         // Check for $webroot/index.php at the start and end of the path.
         $search = '';
         if (str_starts_with($path, '/')) {
@@ -108,10 +97,8 @@ class UriFactory implements UriFactoryInterface
         if (!$path) {
             $path = '/';
         }
-
         return $uri->withPath($path);
     }
-
     /**
      * Calculate the base directory and webroot directory.
      *
@@ -122,61 +109,44 @@ class UriFactory implements UriFactoryInterface
      */
     protected static function getBase(UriInterface $uri, array $server): array
     {
-        $config = (array)Configure::read('App') + [
-            'base' => null,
-            'webroot' => null,
-            'baseUrl' => null,
-        ];
+        $config = (array) Configure::read('App') + ['base' => null, 'webroot' => null, 'baseUrl' => null];
         $base = $config['base'];
         $baseUrl = $config['baseUrl'];
-        $webroot = (string)$config['webroot'];
-
-        if ($base !== false && $base !== null) {
+        $webroot = (string) $config['webroot'];
+        if ($base !== \false && $base !== null) {
             return ['base' => $base, 'webroot' => $base . '/'];
         }
-
         if (!$baseUrl) {
             $phpSelf = $server['PHP_SELF'] ?? null;
             if ($phpSelf === null) {
                 return ['base' => '', 'webroot' => '/'];
             }
-
-            $base = dirname($server['PHP_SELF'] ?? DIRECTORY_SEPARATOR);
+            $base = dirname($server['PHP_SELF'] ?? \DIRECTORY_SEPARATOR);
             // Clean up additional / which cause following code to fail..
-            $base = (string)preg_replace('#/+#', '/', $base);
-
+            $base = (string) preg_replace('#/+#', '/', $base);
             $indexPos = strpos($base, '/index.php');
-            if ($indexPos !== false) {
+            if ($indexPos !== \false) {
                 $base = substr($base, 0, $indexPos);
             }
             if ($webroot === basename($base)) {
                 $base = dirname($base);
             }
-
-            if ($base === DIRECTORY_SEPARATOR || $base === '.') {
+            if ($base === \DIRECTORY_SEPARATOR || $base === '.') {
                 $base = '';
             }
             $base = implode('/', array_map('rawurlencode', explode('/', $base)));
-
             return ['base' => $base, 'webroot' => $base . '/'];
         }
-
         $file = '/' . basename($baseUrl);
         $base = dirname($baseUrl);
-
-        if ($base === DIRECTORY_SEPARATOR || $base === '.') {
+        if ($base === \DIRECTORY_SEPARATOR || $base === '.') {
             $base = '';
         }
         $webrootDir = $base . '/';
-
         $docRoot = $server['DOCUMENT_ROOT'] ?? '';
-        if (
-            ($base || !str_contains($docRoot, $webroot))
-            && !str_contains($webrootDir, '/' . $webroot . '/')
-        ) {
+        if (($base || !str_contains($docRoot, $webroot)) && !str_contains($webrootDir, '/' . $webroot . '/')) {
             $webrootDir .= $webroot . '/';
         }
-
         return ['base' => $base . $file, 'webroot' => $webrootDir];
     }
 }

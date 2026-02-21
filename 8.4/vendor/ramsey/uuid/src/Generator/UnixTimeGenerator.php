@@ -9,15 +9,12 @@
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
  */
+declare (strict_types=1);
+namespace Odigos\Ramsey\Uuid\Generator;
 
-declare(strict_types=1);
-
-namespace Ramsey\Uuid\Generator;
-
-use Brick\Math\BigInteger;
+use Odigos\Brick\Math\BigInteger;
 use DateTimeInterface;
-use Ramsey\Uuid\Type\Hexadecimal;
-
+use Odigos\Ramsey\Uuid\Type\Hexadecimal;
 use function assert;
 use function hash;
 use function pack;
@@ -26,10 +23,8 @@ use function strlen;
 use function substr;
 use function substr_replace;
 use function unpack;
-
 use const PHP_INT_SIZE;
 use const STR_PAD_LEFT;
-
 /**
  * UnixTimeGenerator generates bytes, combining a 48-bit timestamp in milliseconds since the Unix Epoch with 80 random bits
  *
@@ -47,19 +42,13 @@ class UnixTimeGenerator implements TimeGeneratorInterface
     private static string $time = '';
     private static ?string $seed = null;
     private static int $seedIndex = 0;
-
     /** @var int[] */
     private static array $rand = [];
-
     /** @var int[] */
     private static array $seedParts;
-
-    public function __construct(
-        private RandomGeneratorInterface $randomGenerator,
-        private int $intSize = PHP_INT_SIZE,
-    ) {
+    public function __construct(private RandomGeneratorInterface $randomGenerator, private int $intSize = PHP_INT_SIZE)
+    {
     }
-
     /**
      * @param Hexadecimal | int | string | null $node Unused in this generator
      * @param int | null $clockSeq Unused in this generator
@@ -68,29 +57,24 @@ class UnixTimeGenerator implements TimeGeneratorInterface
     public function generate($node = null, ?int $clockSeq = null, ?DateTimeInterface $dateTime = null): string
     {
         if ($dateTime === null) {
-            $time = microtime(false);
+            $time = microtime(\false);
             $time = substr($time, 11) . substr($time, 2, 3);
         } else {
             $time = $dateTime->format('Uv');
         }
-
-        if ($time > self::$time || ($dateTime !== null && $time !== self::$time)) {
+        if ($time > self::$time || $dateTime !== null && $time !== self::$time) {
             $this->randomize($time);
         } else {
             $time = $this->increment();
         }
-
         if ($this->intSize >= 8) {
             $time = substr(pack('J', (int) $time), -6);
         } else {
-            $time = str_pad(BigInteger::of($time)->toBytes(false), 6, "\x00", STR_PAD_LEFT);
+            $time = str_pad(BigInteger::of($time)->toBytes(\false), 6, "\x00", STR_PAD_LEFT);
         }
-
         assert(strlen($time) === 6);
-
         return $time . pack('n*', self::$rand[1], self::$rand[2], self::$rand[3], self::$rand[4], self::$rand[5]);
     }
-
     private function randomize(string $time): void
     {
         if (self::$seed === null) {
@@ -99,15 +83,12 @@ class UnixTimeGenerator implements TimeGeneratorInterface
         } else {
             $seed = $this->randomGenerator->generate(10);
         }
-
         /** @var int[] $rand */
         $rand = unpack('n*', $seed);
-        $rand[1] &= 0x03ff;
-
+        $rand[1] &= 0x3ff;
         self::$rand = $rand;
         self::$time = $time;
     }
-
     /**
      * Special thanks to Nicolas Grekas (<https://github.com/nicolas-grekas>) for sharing the following information:
      *
@@ -124,42 +105,35 @@ class UnixTimeGenerator implements TimeGeneratorInterface
     private function increment(): string
     {
         if (self::$seedIndex === 0 && self::$seed !== null) {
-            self::$seed = hash('sha512', self::$seed, true);
-
+            self::$seed = hash('sha512', self::$seed, \true);
             /** @var int[] $s */
             $s = unpack('l*', self::$seed);
-            $s[] = ($s[1] >> 8 & 0xff0000) | ($s[2] >> 16 & 0xff00) | ($s[3] >> 24 & 0xff);
-            $s[] = ($s[4] >> 8 & 0xff0000) | ($s[5] >> 16 & 0xff00) | ($s[6] >> 24 & 0xff);
-            $s[] = ($s[7] >> 8 & 0xff0000) | ($s[8] >> 16 & 0xff00) | ($s[9] >> 24 & 0xff);
-            $s[] = ($s[10] >> 8 & 0xff0000) | ($s[11] >> 16 & 0xff00) | ($s[12] >> 24 & 0xff);
-            $s[] = ($s[13] >> 8 & 0xff0000) | ($s[14] >> 16 & 0xff00) | ($s[15] >> 24 & 0xff);
-
+            $s[] = $s[1] >> 8 & 0xff0000 | $s[2] >> 16 & 0xff00 | $s[3] >> 24 & 0xff;
+            $s[] = $s[4] >> 8 & 0xff0000 | $s[5] >> 16 & 0xff00 | $s[6] >> 24 & 0xff;
+            $s[] = $s[7] >> 8 & 0xff0000 | $s[8] >> 16 & 0xff00 | $s[9] >> 24 & 0xff;
+            $s[] = $s[10] >> 8 & 0xff0000 | $s[11] >> 16 & 0xff00 | $s[12] >> 24 & 0xff;
+            $s[] = $s[13] >> 8 & 0xff0000 | $s[14] >> 16 & 0xff00 | $s[15] >> 24 & 0xff;
             self::$seedParts = $s;
             self::$seedIndex = 21;
         }
-
         self::$rand[5] = 0xffff & $carry = self::$rand[5] + 1 + (self::$seedParts[self::$seedIndex--] & 0xffffff);
         self::$rand[4] = 0xffff & $carry = self::$rand[4] + ($carry >> 16);
         self::$rand[3] = 0xffff & $carry = self::$rand[3] + ($carry >> 16);
         self::$rand[2] = 0xffff & $carry = self::$rand[2] + ($carry >> 16);
         self::$rand[1] += $carry >> 16;
-
         if (0xfc00 & self::$rand[1]) {
             $time = self::$time;
             $mtime = (int) substr($time, -9);
-
             if ($this->intSize >= 8 || strlen($time) < 10) {
                 $time = (string) ((int) $time + 1);
             } elseif ($mtime === 999999999) {
-                $time = (1 + (int) substr($time, 0, -9)) . '000000000';
+                $time = 1 + (int) substr($time, 0, -9) . '000000000';
             } else {
                 $mtime++;
                 $time = substr_replace($time, str_pad((string) $mtime, 9, '0', STR_PAD_LEFT), -9);
             }
-
             $this->randomize($time);
         }
-
         return self::$time;
     }
 }

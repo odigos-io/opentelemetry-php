@@ -1,15 +1,14 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\base;
 
-use Yii;
+use Odigos\Yii;
 use yii\helpers\StringHelper;
-
 /**
  * Component is the base class that implements the *property*, *event* and *behavior* features.
  *
@@ -101,7 +100,7 @@ use yii\helpers\StringHelper;
  * @phpstan-property-read Behavior<$this>[] $behaviors
  * @psalm-property-read Behavior<$this>[] $behaviors
  */
-class Component extends BaseObject
+class Component extends \yii\base\BaseObject
 {
     /**
      * @var array the attached event handlers (event name => handlers)
@@ -118,8 +117,6 @@ class Component extends BaseObject
      * @phpstan-var Behavior<$this>[]|null
      */
     private $_behaviors;
-
-
     /**
      * Returns the value of a component property.
      *
@@ -141,24 +138,20 @@ class Component extends BaseObject
         $getter = 'get' . $name;
         if (method_exists($this, $getter)) {
             // read property, e.g. getName()
-            return $this->$getter();
+            return $this->{$getter}();
         }
-
         // behavior property
         $this->ensureBehaviors();
         foreach ($this->_behaviors as $behavior) {
             if ($behavior->canGetProperty($name)) {
-                return $behavior->$name;
+                return $behavior->{$name};
             }
         }
-
         if (method_exists($this, 'set' . $name)) {
-            throw new InvalidCallException('Getting write-only property: ' . get_class($this) . '::' . $name);
+            throw new \yii\base\InvalidCallException('Getting write-only property: ' . get_class($this) . '::' . $name);
         }
-
-        throw new UnknownPropertyException('Getting unknown property: ' . get_class($this) . '::' . $name);
+        throw new \yii\base\UnknownPropertyException('Getting unknown property: ' . get_class($this) . '::' . $name);
     }
-
     /**
      * Sets the value of a component property.
      *
@@ -182,50 +175,43 @@ class Component extends BaseObject
         $setter = 'set' . $name;
         if (method_exists($this, $setter)) {
             // set property
-            $this->$setter($value);
-
+            $this->{$setter}($value);
             return;
         } elseif (strncmp($name, 'on ', 3) === 0) {
             // on event: attach event handler
             $this->on(trim(substr($name, 3)), $value);
-
             return;
         } elseif (strncmp($name, 'as ', 3) === 0) {
             // as behavior: attach behavior
             $name = trim(substr($name, 3));
-            if ($value instanceof Behavior) {
+            if ($value instanceof \yii\base\Behavior) {
                 $this->attachBehavior($name, $value);
             } elseif ($value instanceof \Closure) {
                 $this->attachBehavior($name, call_user_func($value));
-            } elseif (isset($value['__class']) && is_subclass_of($value['__class'], Behavior::class)) {
+            } elseif (isset($value['__class']) && is_subclass_of($value['__class'], \yii\base\Behavior::class)) {
                 $this->attachBehavior($name, Yii::createObject($value));
-            } elseif (!isset($value['__class']) && isset($value['class']) && is_subclass_of($value['class'], Behavior::class)) {
+            } elseif (!isset($value['__class']) && isset($value['class']) && is_subclass_of($value['class'], \yii\base\Behavior::class)) {
                 $this->attachBehavior($name, Yii::createObject($value));
-            } elseif (is_string($value) && is_subclass_of($value, Behavior::class, true)) {
+            } elseif (is_string($value) && is_subclass_of($value, \yii\base\Behavior::class, \true)) {
                 $this->attachBehavior($name, Yii::createObject($value));
             } else {
-                throw new InvalidConfigException('Class is not of type ' . Behavior::class . ' or its subclasses');
+                throw new \yii\base\InvalidConfigException('Class is not of type ' . \yii\base\Behavior::class . ' or its subclasses');
             }
-
             return;
         }
-
         // behavior property
         $this->ensureBehaviors();
         foreach ($this->_behaviors as $behavior) {
             if ($behavior->canSetProperty($name)) {
-                $behavior->$name = $value;
+                $behavior->{$name} = $value;
                 return;
             }
         }
-
         if (method_exists($this, 'get' . $name)) {
-            throw new InvalidCallException('Setting read-only property: ' . get_class($this) . '::' . $name);
+            throw new \yii\base\InvalidCallException('Setting read-only property: ' . get_class($this) . '::' . $name);
         }
-
-        throw new UnknownPropertyException('Setting unknown property: ' . get_class($this) . '::' . $name);
+        throw new \yii\base\UnknownPropertyException('Setting unknown property: ' . get_class($this) . '::' . $name);
     }
-
     /**
      * Checks if a property is set, i.e. defined and not null.
      *
@@ -245,20 +231,17 @@ class Component extends BaseObject
     {
         $getter = 'get' . $name;
         if (method_exists($this, $getter)) {
-            return $this->$getter() !== null;
+            return $this->{$getter}() !== null;
         }
-
         // behavior property
         $this->ensureBehaviors();
         foreach ($this->_behaviors as $behavior) {
             if ($behavior->canGetProperty($name)) {
-                return $behavior->$name !== null;
+                return $behavior->{$name} !== null;
             }
         }
-
-        return false;
+        return \false;
     }
-
     /**
      * Sets a component property to be null.
      *
@@ -277,22 +260,19 @@ class Component extends BaseObject
     {
         $setter = 'set' . $name;
         if (method_exists($this, $setter)) {
-            $this->$setter(null);
+            $this->{$setter}(null);
             return;
         }
-
         // behavior property
         $this->ensureBehaviors();
         foreach ($this->_behaviors as $behavior) {
             if ($behavior->canSetProperty($name)) {
-                $behavior->$name = null;
+                $behavior->{$name} = null;
                 return;
             }
         }
-
-        throw new InvalidCallException('Unsetting an unknown or read-only property: ' . get_class($this) . '::' . $name);
+        throw new \yii\base\InvalidCallException('Unsetting an unknown or read-only property: ' . get_class($this) . '::' . $name);
     }
-
     /**
      * Calls the named method which is not a class method.
      *
@@ -314,9 +294,8 @@ class Component extends BaseObject
                 return call_user_func_array([$object, $name], $params);
             }
         }
-        throw new UnknownMethodException('Calling unknown method: ' . get_class($this) . "::$name()");
+        throw new \yii\base\UnknownMethodException('Calling unknown method: ' . get_class($this) . "::{$name}()");
     }
-
     /**
      * This method is called after the object is created by cloning an existing one.
      * It removes all behaviors because they are attached to the old object.
@@ -327,7 +306,6 @@ class Component extends BaseObject
         $this->_eventWildcards = [];
         $this->_behaviors = null;
     }
-
     /**
      * Returns a value indicating whether a property is defined for this component.
      *
@@ -345,11 +323,10 @@ class Component extends BaseObject
      * @see canGetProperty()
      * @see canSetProperty()
      */
-    public function hasProperty($name, $checkVars = true, $checkBehaviors = true)
+    public function hasProperty($name, $checkVars = \true, $checkBehaviors = \true)
     {
-        return $this->canGetProperty($name, $checkVars, $checkBehaviors) || $this->canSetProperty($name, false, $checkBehaviors);
+        return $this->canGetProperty($name, $checkVars, $checkBehaviors) || $this->canSetProperty($name, \false, $checkBehaviors);
     }
-
     /**
      * Returns a value indicating whether a property can be read.
      *
@@ -366,22 +343,20 @@ class Component extends BaseObject
      * @return bool whether the property can be read
      * @see canSetProperty()
      */
-    public function canGetProperty($name, $checkVars = true, $checkBehaviors = true)
+    public function canGetProperty($name, $checkVars = \true, $checkBehaviors = \true)
     {
         if (method_exists($this, 'get' . $name) || $checkVars && property_exists($this, $name)) {
-            return true;
+            return \true;
         } elseif ($checkBehaviors) {
             $this->ensureBehaviors();
             foreach ($this->_behaviors as $behavior) {
                 if ($behavior->canGetProperty($name, $checkVars)) {
-                    return true;
+                    return \true;
                 }
             }
         }
-
-        return false;
+        return \false;
     }
-
     /**
      * Returns a value indicating whether a property can be set.
      *
@@ -398,22 +373,20 @@ class Component extends BaseObject
      * @return bool whether the property can be written
      * @see canGetProperty()
      */
-    public function canSetProperty($name, $checkVars = true, $checkBehaviors = true)
+    public function canSetProperty($name, $checkVars = \true, $checkBehaviors = \true)
     {
         if (method_exists($this, 'set' . $name) || $checkVars && property_exists($this, $name)) {
-            return true;
+            return \true;
         } elseif ($checkBehaviors) {
             $this->ensureBehaviors();
             foreach ($this->_behaviors as $behavior) {
                 if ($behavior->canSetProperty($name, $checkVars)) {
-                    return true;
+                    return \true;
                 }
             }
         }
-
-        return false;
+        return \false;
     }
-
     /**
      * Returns a value indicating whether a method is defined.
      *
@@ -426,22 +399,20 @@ class Component extends BaseObject
      * @param bool $checkBehaviors whether to treat behaviors' methods as methods of this component
      * @return bool whether the method is defined
      */
-    public function hasMethod($name, $checkBehaviors = true)
+    public function hasMethod($name, $checkBehaviors = \true)
     {
         if (method_exists($this, $name)) {
-            return true;
+            return \true;
         } elseif ($checkBehaviors) {
             $this->ensureBehaviors();
             foreach ($this->_behaviors as $behavior) {
                 if ($behavior->hasMethod($name)) {
-                    return true;
+                    return \true;
                 }
             }
         }
-
-        return false;
+        return \false;
     }
-
     /**
      * Returns a list of behaviors that this component should behave as.
      *
@@ -474,7 +445,6 @@ class Component extends BaseObject
     {
         return [];
     }
-
     /**
      * Returns a value indicating whether there is any handler attached to the named event.
      * @param string $name the event name
@@ -483,20 +453,16 @@ class Component extends BaseObject
     public function hasEventHandlers($name)
     {
         $this->ensureBehaviors();
-
         if (!empty($this->_events[$name])) {
-            return true;
+            return \true;
         }
-
         foreach ($this->_eventWildcards as $wildcard => $handlers) {
             if (!empty($handlers) && StringHelper::matchWildcard($wildcard, $name)) {
-                return true;
+                return \true;
             }
         }
-
-        return Event::hasHandlers($this, $name);
+        return \yii\base\Event::hasHandlers($this, $name);
     }
-
     /**
      * Attaches an event handler to an event.
      *
@@ -535,11 +501,10 @@ class Component extends BaseObject
      * handler list.
      * @see off()
      */
-    public function on($name, $handler, $data = null, $append = true)
+    public function on($name, $handler, $data = null, $append = \true)
     {
         $this->ensureBehaviors();
-
-        if (strpos($name, '*') !== false) {
+        if (strpos($name, '*') !== \false) {
             if ($append || empty($this->_eventWildcards[$name])) {
                 $this->_eventWildcards[$name][] = [$handler, $data];
             } else {
@@ -547,14 +512,12 @@ class Component extends BaseObject
             }
             return;
         }
-
         if ($append || empty($this->_events[$name])) {
             $this->_events[$name][] = [$handler, $data];
         } else {
             array_unshift($this->_events[$name], [$handler, $data]);
         }
     }
-
     /**
      * Detaches an existing event handler from this component.
      *
@@ -573,34 +536,32 @@ class Component extends BaseObject
     {
         $this->ensureBehaviors();
         if (empty($this->_events[$name]) && empty($this->_eventWildcards[$name])) {
-            return false;
+            return \false;
         }
         if ($handler === null) {
             unset($this->_events[$name], $this->_eventWildcards[$name]);
-            return true;
+            return \true;
         }
-
-        $removed = false;
+        $removed = \false;
         // plain event names
         if (isset($this->_events[$name])) {
             foreach ($this->_events[$name] as $i => $event) {
                 if ($event[0] === $handler) {
                     unset($this->_events[$name][$i]);
-                    $removed = true;
+                    $removed = \true;
                 }
             }
             if ($removed) {
                 $this->_events[$name] = array_values($this->_events[$name]);
-                return true;
+                return \true;
             }
         }
-
         // wildcard event names
         if (isset($this->_eventWildcards[$name])) {
             foreach ($this->_eventWildcards[$name] as $i => $event) {
                 if ($event[0] === $handler) {
                     unset($this->_eventWildcards[$name][$i]);
-                    $removed = true;
+                    $removed = \true;
                 }
             }
             if ($removed) {
@@ -611,10 +572,8 @@ class Component extends BaseObject
                 }
             }
         }
-
         return $removed;
     }
-
     /**
      * Triggers an event.
      *
@@ -624,10 +583,9 @@ class Component extends BaseObject
      * @param string $name the event name
      * @param Event|null $event the event instance. If not set, a default [[Event]] object will be created.
      */
-    public function trigger($name, ?Event $event = null)
+    public function trigger($name, ?\yii\base\Event $event = null)
     {
         $this->ensureBehaviors();
-
         $eventHandlers = [];
         foreach ($this->_eventWildcards as $wildcard => $handlers) {
             if (StringHelper::matchWildcard($wildcard, $name)) {
@@ -637,16 +595,15 @@ class Component extends BaseObject
         if (!empty($this->_events[$name])) {
             $eventHandlers[] = $this->_events[$name];
         }
-
         if (!empty($eventHandlers)) {
             $eventHandlers = call_user_func_array('array_merge', $eventHandlers);
             if ($event === null) {
-                $event = new Event();
+                $event = new \yii\base\Event();
             }
             if ($event->sender === null) {
                 $event->sender = $this;
             }
-            $event->handled = false;
+            $event->handled = \false;
             $event->name = $name;
             foreach ($eventHandlers as $handler) {
                 $event->data = $handler[1];
@@ -657,11 +614,9 @@ class Component extends BaseObject
                 }
             }
         }
-
         // invoke class-level attached handlers
-        Event::trigger($this, $name, $event);
+        \yii\base\Event::trigger($this, $name, $event);
     }
-
     /**
      * Returns the named behavior object.
      * @param string $name the behavior name
@@ -675,7 +630,6 @@ class Component extends BaseObject
         $this->ensureBehaviors();
         return isset($this->_behaviors[$name]) ? $this->_behaviors[$name] : null;
     }
-
     /**
      * Returns all behaviors attached to this component.
      * @return Behavior[] list of behaviors attached to this component
@@ -688,7 +642,6 @@ class Component extends BaseObject
         $this->ensureBehaviors();
         return $this->_behaviors;
     }
-
     /**
      * Attaches a behavior to this component.
      * This method will create the behavior object based on the given
@@ -715,7 +668,6 @@ class Component extends BaseObject
         $this->ensureBehaviors();
         return $this->attachBehaviorInternal($name, $behavior);
     }
-
     /**
      * Attaches a list of behaviors to the component.
      * Each behavior is indexed by its name and should be a [[Behavior]] object,
@@ -730,7 +682,6 @@ class Component extends BaseObject
             $this->attachBehaviorInternal($name, $behavior);
         }
     }
-
     /**
      * Detaches a behavior from the component.
      * The behavior's [[Behavior::detach()]] method will be invoked.
@@ -749,10 +700,8 @@ class Component extends BaseObject
             $behavior->detach();
             return $behavior;
         }
-
         return null;
     }
-
     /**
      * Detaches all behaviors from the component.
      */
@@ -763,7 +712,6 @@ class Component extends BaseObject
             $this->detachBehavior($name);
         }
     }
-
     /**
      * Makes sure that the behaviors declared in [[behaviors()]] are attached to this component.
      */
@@ -776,7 +724,6 @@ class Component extends BaseObject
             }
         }
     }
-
     /**
      * Attaches a behavior to this component.
      * @param string|int $name the name of the behavior. If this is an integer, it means the behavior
@@ -791,7 +738,7 @@ class Component extends BaseObject
      */
     private function attachBehaviorInternal($name, $behavior)
     {
-        if (!($behavior instanceof Behavior)) {
+        if (!$behavior instanceof \yii\base\Behavior) {
             $behavior = Yii::createObject($behavior);
         }
         if (is_int($name)) {
@@ -804,7 +751,6 @@ class Component extends BaseObject
             $behavior->attach($this);
             $this->_behaviors[$name] = $behavior;
         }
-
         return $behavior;
     }
 }

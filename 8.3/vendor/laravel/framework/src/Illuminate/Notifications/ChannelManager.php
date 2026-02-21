@@ -9,25 +9,21 @@ use Illuminate\Contracts\Notifications\Factory as FactoryContract;
 use Illuminate\Support\Manager;
 use Illuminate\Support\Traits\Macroable;
 use InvalidArgumentException;
-
 class ChannelManager extends Manager implements DispatcherContract, FactoryContract
 {
     use Macroable;
-
     /**
      * The default channel used to deliver messages.
      *
      * @var string
      */
     protected $defaultChannel = 'mail';
-
     /**
      * The locale used when sending notifications.
      *
      * @var string|null
      */
     protected $locale;
-
     /**
      * Send the given notification to the given notifiable entities.
      *
@@ -37,11 +33,8 @@ class ChannelManager extends Manager implements DispatcherContract, FactoryContr
      */
     public function send($notifiables, $notification)
     {
-        (new NotificationSender(
-            $this, $this->container->make(Bus::class), $this->container->make(Dispatcher::class), $this->locale)
-        )->send($notifiables, $notification);
+        (new \Illuminate\Notifications\NotificationSender($this, $this->container->make(Bus::class), $this->container->make(Dispatcher::class), $this->locale))->send($notifiables, $notification);
     }
-
     /**
      * Send the given notification immediately.
      *
@@ -52,11 +45,8 @@ class ChannelManager extends Manager implements DispatcherContract, FactoryContr
      */
     public function sendNow($notifiables, $notification, ?array $channels = null)
     {
-        (new NotificationSender(
-            $this, $this->container->make(Bus::class), $this->container->make(Dispatcher::class), $this->locale)
-        )->sendNow($notifiables, $notification, $channels);
+        (new \Illuminate\Notifications\NotificationSender($this, $this->container->make(Bus::class), $this->container->make(Dispatcher::class), $this->locale))->sendNow($notifiables, $notification, $channels);
     }
-
     /**
      * Get a channel instance.
      *
@@ -67,7 +57,6 @@ class ChannelManager extends Manager implements DispatcherContract, FactoryContr
     {
         return $this->driver($name);
     }
-
     /**
      * Create an instance of the database driver.
      *
@@ -75,9 +64,8 @@ class ChannelManager extends Manager implements DispatcherContract, FactoryContr
      */
     protected function createDatabaseDriver()
     {
-        return $this->container->make(Channels\DatabaseChannel::class);
+        return $this->container->make(\Illuminate\Notifications\Channels\DatabaseChannel::class);
     }
-
     /**
      * Create an instance of the broadcast driver.
      *
@@ -85,9 +73,8 @@ class ChannelManager extends Manager implements DispatcherContract, FactoryContr
      */
     protected function createBroadcastDriver()
     {
-        return $this->container->make(Channels\BroadcastChannel::class);
+        return $this->container->make(\Illuminate\Notifications\Channels\BroadcastChannel::class);
     }
-
     /**
      * Create an instance of the mail driver.
      *
@@ -95,9 +82,8 @@ class ChannelManager extends Manager implements DispatcherContract, FactoryContr
      */
     protected function createMailDriver()
     {
-        return $this->container->make(Channels\MailChannel::class);
+        return $this->container->make(\Illuminate\Notifications\Channels\MailChannel::class);
     }
-
     /**
      * Create a new driver instance.
      *
@@ -114,11 +100,9 @@ class ChannelManager extends Manager implements DispatcherContract, FactoryContr
             if (class_exists($driver)) {
                 return $this->container->make($driver);
             }
-
             throw $e;
         }
     }
-
     /**
      * Get the default channel driver name.
      *
@@ -128,7 +112,6 @@ class ChannelManager extends Manager implements DispatcherContract, FactoryContr
     {
         return $this->defaultChannel;
     }
-
     /**
      * Get the default channel driver name.
      *
@@ -138,7 +121,6 @@ class ChannelManager extends Manager implements DispatcherContract, FactoryContr
     {
         return $this->getDefaultDriver();
     }
-
     /**
      * Set the default channel driver name.
      *
@@ -149,7 +131,6 @@ class ChannelManager extends Manager implements DispatcherContract, FactoryContr
     {
         $this->defaultChannel = $channel;
     }
-
     /**
      * Set the locale of notifications.
      *
@@ -159,7 +140,6 @@ class ChannelManager extends Manager implements DispatcherContract, FactoryContr
     public function locale($locale)
     {
         $this->locale = $locale;
-
         return $this;
     }
 }

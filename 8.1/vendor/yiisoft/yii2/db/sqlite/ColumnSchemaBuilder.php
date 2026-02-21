@@ -1,14 +1,13 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\db\sqlite;
 
 use yii\db\ColumnSchemaBuilder as AbstractColumnSchemaBuilder;
-
 /**
  * ColumnSchemaBuilder is the schema builder for Sqlite databases.
  *
@@ -24,7 +23,6 @@ class ColumnSchemaBuilder extends AbstractColumnSchemaBuilder
     {
         return $this->isUnsigned ? ' UNSIGNED' : '';
     }
-
     /**
      * {@inheritdoc}
      */
@@ -40,7 +38,6 @@ class ColumnSchemaBuilder extends AbstractColumnSchemaBuilder
             default:
                 $format = '{type}{length}{notnull}{unique}{check}{default}{append}';
         }
-
         return $this->buildCompleteString($format);
     }
 }

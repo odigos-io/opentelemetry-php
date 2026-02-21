@@ -7,7 +7,6 @@ use OpenAI\Responses\Audio\TranscriptionResponse;
 use OpenAI\Responses\Audio\TranscriptionStreamResponse;
 use OpenAI\Responses\Audio\TranslationResponse;
 use OpenAI\Responses\StreamResponse;
-
 interface AudioContract
 {
     /**
@@ -18,7 +17,6 @@ interface AudioContract
      * @param  array<string, mixed>  $parameters
      */
     public function speech(array $parameters): string;
-
     /**
      * Generates streamed audio from the input text.
      *
@@ -27,7 +25,6 @@ interface AudioContract
      * @param  array<string, mixed>  $parameters
      */
     public function speechStreamed(array $parameters): SpeechStreamResponse;
-
     /**
      * Transcribes audio into the input language.
      *
@@ -36,7 +33,6 @@ interface AudioContract
      * @param  array<string, mixed>  $parameters
      */
     public function transcribe(array $parameters): TranscriptionResponse;
-
     /**
      * Transcribes audio input the streamed events.
      *
@@ -46,7 +42,6 @@ interface AudioContract
      * @return StreamResponse<TranscriptionStreamResponse>
      */
     public function transcribeStreamed(array $parameters): StreamResponse;
-
     /**
      * Translates audio into English.
      *

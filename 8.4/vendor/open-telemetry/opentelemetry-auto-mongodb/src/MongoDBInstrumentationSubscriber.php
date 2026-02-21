@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\Contrib\Instrumentation\MongoDB;
 
 use Closure;
@@ -29,7 +28,6 @@ use OpenTelemetry\SemConv\Attributes\DbAttributes;
 use OpenTelemetry\SemConv\Attributes\NetworkAttributes;
 use OpenTelemetry\SemConv\Attributes\ServerAttributes;
 use Throwable;
-
 /**
  * @phan-file-suppress PhanTypeMismatchDeclaredParamNullable
  */
@@ -44,7 +42,6 @@ final class MongoDBInstrumentationSubscriber implements CommandSubscriber, SDAMS
      * @var array<string, array<int, array<string, mixed>>>
      */
     private array $serverAttributes = [];
-
     /**
      * @param callable(object):string $commandSerializer
      */
@@ -59,7 +56,6 @@ final class MongoDBInstrumentationSubscriber implements CommandSubscriber, SDAMS
             }
         };
     }
-
     /**
      * @psalm-suppress MixedAssignment,MixedArrayTypeCoercion,MixedArrayOffset,MixedArgument
      * @phan-suppress PhanDeprecatedFunctionInternal,PhanUndeclaredMethod
@@ -67,12 +63,11 @@ final class MongoDBInstrumentationSubscriber implements CommandSubscriber, SDAMS
     public function commandStarted(CommandStartedEvent $event): void
     {
         $command = $event->getCommand();
-        $collectionName = MongoDBCollectionExtractor::extract($command);
+        $collectionName = \OpenTelemetry\Contrib\Instrumentation\MongoDB\MongoDBCollectionExtractor::extract($command);
         $databaseName = $event->getDatabaseName();
         $commandName = $event->getCommandName();
-
         $version = phpversion('mongodb');
-        if ($version !== false && version_compare($version, '1.20.0', '>=')) {
+        if ($version !== \false && version_compare($version, '1.20.0', '>=')) {
             $host = $event->getHost();
             $port = $event->getPort();
         } else {
@@ -81,66 +76,43 @@ final class MongoDBInstrumentationSubscriber implements CommandSubscriber, SDAMS
             $port = $server->getPort();
         }
         $attributes = $this->serverAttributes[$host][$port] ?? [];
-
         $isSocket = str_starts_with($host, '/');
         /** @psalm-suppress RiskyTruthyFalsyComparison **/
         $scopedCommand = ($collectionName ? $collectionName . '.' : '') . $commandName;
-
-        $builder = self::startSpan($this->instrumentation, 'MongoDB ' . $scopedCommand)
-            ->setSpanKind(SpanKind::KIND_CLIENT)
-            ->setAttribute(DbAttributes::DB_SYSTEM_NAME, 'mongodb')
-            ->setAttribute(DbAttributes::DB_NAMESPACE, $databaseName)
-            ->setAttribute(DbAttributes::DB_OPERATION_NAME, $commandName)
-            ->setAttribute(ServerAttributes::SERVER_ADDRESS, $isSocket ? null : $host)
-            ->setAttribute(ServerAttributes::SERVER_PORT, $isSocket ? null : $port)
-            ->setAttribute(NetworkAttributes::NETWORK_TRANSPORT, $isSocket ? 'unix' : 'tcp')
-            ->setAttribute(DbAttributes::DB_QUERY_TEXT, ($this->commandSerializer)($command))
-            ->setAttribute(DbAttributes::DB_COLLECTION_NAME, $collectionName)
-            ->setAttribute(MongoDBTraceAttributes::DB_MONGODB_REQUEST_ID, $event->getRequestId())
-            ->setAttribute(MongoDBTraceAttributes::DB_MONGODB_OPERATION_ID, $event->getOperationId())
-            ->setAttributes($attributes)
-        ;
+        $builder = self::startSpan($this->instrumentation, 'MongoDB ' . $scopedCommand)->setSpanKind(SpanKind::KIND_CLIENT)->setAttribute(DbAttributes::DB_SYSTEM_NAME, 'mongodb')->setAttribute(DbAttributes::DB_NAMESPACE, $databaseName)->setAttribute(DbAttributes::DB_OPERATION_NAME, $commandName)->setAttribute(ServerAttributes::SERVER_ADDRESS, $isSocket ? null : $host)->setAttribute(ServerAttributes::SERVER_PORT, $isSocket ? null : $port)->setAttribute(NetworkAttributes::NETWORK_TRANSPORT, $isSocket ? 'unix' : 'tcp')->setAttribute(DbAttributes::DB_QUERY_TEXT, ($this->commandSerializer)($command))->setAttribute(DbAttributes::DB_COLLECTION_NAME, $collectionName)->setAttribute(\OpenTelemetry\Contrib\Instrumentation\MongoDB\MongoDBTraceAttributes::DB_MONGODB_REQUEST_ID, $event->getRequestId())->setAttribute(\OpenTelemetry\Contrib\Instrumentation\MongoDB\MongoDBTraceAttributes::DB_MONGODB_OPERATION_ID, $event->getOperationId())->setAttributes($attributes);
         $parent = Context::getCurrent();
         $span = $builder->startSpan();
         Context::storage()->attach($span->storeInContext($parent));
     }
-
     public function commandSucceeded(CommandSucceededEvent $event): void
     {
         self::endSpan();
     }
-
     public function commandFailed(CommandFailedEvent $event): void
     {
         self::endSpan($event->getError());
     }
-
     /**
      * @param non-empty-string $name
      */
     private static function startSpan(CachedInstrumentation $instrumentation, string $name): SpanBuilderInterface
     {
-        return $instrumentation->tracer()
-            ->spanBuilder($name);
+        return $instrumentation->tracer()->spanBuilder($name);
     }
-
     private static function endSpan(?Throwable $exception = null): void
     {
         $scope = Context::storage()->scope();
         if ($scope === null) {
             return;
         }
-
         $scope->detach();
         $span = Span::fromContext($scope->context());
         if ($exception) {
             $span->recordException($exception);
             $span->setStatus(StatusCode::STATUS_ERROR, $exception->getMessage());
         }
-
         $span->end();
     }
-
     /**
      * @todo In a load-balanced scenario, the hello response may be empty.
      */
@@ -149,51 +121,33 @@ final class MongoDBInstrumentationSubscriber implements CommandSubscriber, SDAMS
         $host = $event->getHost();
         $port = $event->getPort();
         $info = $event->getNewDescription()->getHelloResponse();
-        $attributes = [
-            MongoDBTraceAttributes::DB_MONGODB_MASTER => $info['ismaster'] ?? null,
-            MongoDBTraceAttributes::DB_MONGODB_READ_ONLY => $info['readOnly'] ?? null,
-            MongoDBTraceAttributes::DB_MONGODB_CONNECTION_ID => $info['connectionId'] ?? null,
-            MongoDBTraceAttributes::DB_MONGODB_MAX_WIRE_VERSION => $info['maxWireVersion'] ?? null,
-            MongoDBTraceAttributes::DB_MONGODB_MIN_WIRE_VERSION => $info['minWireVersion'] ?? null,
-            MongoDBTraceAttributes::DB_MONGODB_MAX_BSON_OBJECT_SIZE_BYTES => $info['maxBsonObjectSize'] ?? null,
-            MongoDBTraceAttributes::DB_MONGODB_MAX_MESSAGE_SIZE_BYTES => $info['maxMessageSizeBytes'] ?? null,
-            MongoDBTraceAttributes::DB_MONGODB_MAX_WRITE_BATCH_SIZE => $info['maxWriteBatchSize'] ?? null,
-        ];
+        $attributes = [\OpenTelemetry\Contrib\Instrumentation\MongoDB\MongoDBTraceAttributes::DB_MONGODB_MASTER => $info['ismaster'] ?? null, \OpenTelemetry\Contrib\Instrumentation\MongoDB\MongoDBTraceAttributes::DB_MONGODB_READ_ONLY => $info['readOnly'] ?? null, \OpenTelemetry\Contrib\Instrumentation\MongoDB\MongoDBTraceAttributes::DB_MONGODB_CONNECTION_ID => $info['connectionId'] ?? null, \OpenTelemetry\Contrib\Instrumentation\MongoDB\MongoDBTraceAttributes::DB_MONGODB_MAX_WIRE_VERSION => $info['maxWireVersion'] ?? null, \OpenTelemetry\Contrib\Instrumentation\MongoDB\MongoDBTraceAttributes::DB_MONGODB_MIN_WIRE_VERSION => $info['minWireVersion'] ?? null, \OpenTelemetry\Contrib\Instrumentation\MongoDB\MongoDBTraceAttributes::DB_MONGODB_MAX_BSON_OBJECT_SIZE_BYTES => $info['maxBsonObjectSize'] ?? null, \OpenTelemetry\Contrib\Instrumentation\MongoDB\MongoDBTraceAttributes::DB_MONGODB_MAX_MESSAGE_SIZE_BYTES => $info['maxMessageSizeBytes'] ?? null, \OpenTelemetry\Contrib\Instrumentation\MongoDB\MongoDBTraceAttributes::DB_MONGODB_MAX_WRITE_BATCH_SIZE => $info['maxWriteBatchSize'] ?? null];
         $this->serverAttributes[$host][$port] = $attributes;
     }
-
     public function serverOpened(ServerOpeningEvent $event): void
     {
     }
-
     public function serverClosed(ServerClosedEvent $event): void
     {
     }
-
     public function serverOpening(ServerOpeningEvent $event): void
     {
     }
-
     public function serverHeartbeatFailed(ServerHeartbeatFailedEvent $event): void
     {
     }
-
     public function serverHeartbeatStarted(ServerHeartbeatStartedEvent $event): void
     {
     }
-
     public function serverHeartbeatSucceeded(ServerHeartbeatSucceededEvent $event): void
     {
     }
-
     public function topologyChanged(TopologyChangedEvent $event): void
     {
     }
-
     public function topologyClosed(TopologyClosedEvent $event): void
     {
     }
-
     public function topologyOpening(TopologyOpeningEvent $event): void
     {
     }

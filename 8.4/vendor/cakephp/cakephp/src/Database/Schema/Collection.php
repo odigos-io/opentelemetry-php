@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -17,7 +17,6 @@ declare(strict_types=1);
 namespace Cake\Database\Schema;
 
 use Cake\Database\Connection;
-
 /**
  * Represents a database schema collection
  *
@@ -26,7 +25,7 @@ use Cake\Database\Connection;
  *
  * @see \Cake\Database\Schema\SchemaDialect For lower level schema reflection API
  */
-class Collection implements CollectionInterface
+class Collection implements \Cake\Database\Schema\CollectionInterface
 {
     /**
      * Connection object
@@ -34,14 +33,12 @@ class Collection implements CollectionInterface
      * @var \Cake\Database\Connection
      */
     protected Connection $_connection;
-
     /**
      * Schema dialect instance.
      *
      * @var \Cake\Database\Schema\SchemaDialect|null
      */
-    protected ?SchemaDialect $_dialect = null;
-
+    protected ?\Cake\Database\Schema\SchemaDialect $_dialect = null;
     /**
      * Constructor.
      *
@@ -51,7 +48,6 @@ class Collection implements CollectionInterface
     {
         $this->_connection = $connection;
     }
-
     /**
      * Get the list of tables, excluding any views, available in the current connection.
      *
@@ -61,7 +57,6 @@ class Collection implements CollectionInterface
     {
         return $this->getDialect()->listTablesWithoutViews();
     }
-
     /**
      * Get the list of tables and views available in the current connection.
      *
@@ -71,7 +66,6 @@ class Collection implements CollectionInterface
     {
         return $this->getDialect()->listTables();
     }
-
     /**
      * Get the column metadata for a table.
      *
@@ -82,17 +76,16 @@ class Collection implements CollectionInterface
      * @return \Cake\Database\Schema\TableSchemaInterface Object with column metadata.
      * @throws \Cake\Database\Exception\DatabaseException when table cannot be described.
      */
-    public function describe(string $name, array $options = []): TableSchemaInterface
+    public function describe(string $name, array $options = []): \Cake\Database\Schema\TableSchemaInterface
     {
         return $this->getDialect()->describe($name);
     }
-
     /**
      * Setups the schema dialect to be used for this collection.
      *
      * @return \Cake\Database\Schema\SchemaDialect
      */
-    protected function getDialect(): SchemaDialect
+    protected function getDialect(): \Cake\Database\Schema\SchemaDialect
     {
         return $this->_dialect ??= $this->_connection->getWriteDriver()->schemaDialect();
     }

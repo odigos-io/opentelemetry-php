@@ -9,19 +9,16 @@
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
  */
+declare (strict_types=1);
+namespace Odigos\Ramsey\Uuid\Builder;
 
-declare(strict_types=1);
-
-namespace Ramsey\Uuid\Builder;
-
-use Ramsey\Uuid\Codec\CodecInterface;
-use Ramsey\Uuid\Converter\NumberConverterInterface;
-use Ramsey\Uuid\Converter\Time\DegradedTimeConverter;
-use Ramsey\Uuid\Converter\TimeConverterInterface;
-use Ramsey\Uuid\DegradedUuid;
-use Ramsey\Uuid\Rfc4122\Fields as Rfc4122Fields;
-use Ramsey\Uuid\UuidInterface;
-
+use Odigos\Ramsey\Uuid\Codec\CodecInterface;
+use Odigos\Ramsey\Uuid\Converter\NumberConverterInterface;
+use Odigos\Ramsey\Uuid\Converter\Time\DegradedTimeConverter;
+use Odigos\Ramsey\Uuid\Converter\TimeConverterInterface;
+use Odigos\Ramsey\Uuid\DegradedUuid;
+use Odigos\Ramsey\Uuid\Rfc4122\Fields as Rfc4122Fields;
+use Odigos\Ramsey\Uuid\UuidInterface;
 /**
  * @deprecated DegradedUuid instances are no longer necessary to support 32-bit systems. Please transition to {@see DefaultUuidBuilder}.
  *
@@ -30,19 +27,15 @@ use Ramsey\Uuid\UuidInterface;
 class DegradedUuidBuilder implements UuidBuilderInterface
 {
     private TimeConverterInterface $timeConverter;
-
     /**
      * @param NumberConverterInterface $numberConverter The number converter to use when constructing the DegradedUuid
      * @param TimeConverterInterface|null $timeConverter The time converter to use for converting timestamps extracted
      *     from a UUID to Unix timestamps
      */
-    public function __construct(
-        private NumberConverterInterface $numberConverter,
-        ?TimeConverterInterface $timeConverter = null
-    ) {
+    public function __construct(private NumberConverterInterface $numberConverter, ?TimeConverterInterface $timeConverter = null)
+    {
         $this->timeConverter = $timeConverter ?: new DegradedTimeConverter();
     }
-
     /**
      * Builds and returns a DegradedUuid
      *

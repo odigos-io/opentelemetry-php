@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright 2016-present MongoDB, Inc.
  *
@@ -14,14 +15,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 namespace MongoDB\GridFS\Exception;
 
 use MongoDB\BSON\Document;
 use MongoDB\Exception\RuntimeException;
-
 use function sprintf;
-
 class FileNotFoundException extends RuntimeException
 {
     /**
@@ -34,7 +32,6 @@ class FileNotFoundException extends RuntimeException
     {
         return new self(sprintf('File with name "%s" not found', $filename));
     }
-
     /**
      * Thrown when a file cannot be found by its filename and revision.
      *
@@ -47,7 +44,6 @@ class FileNotFoundException extends RuntimeException
     {
         return new self(sprintf('File with name "%s" and revision "%d" not found in "%s"', $filename, $revision, $namespace));
     }
-
     /**
      * Thrown when a file cannot be found by its ID.
      *
@@ -58,7 +54,6 @@ class FileNotFoundException extends RuntimeException
     public static function byId(mixed $id, string $namespace): self
     {
         $json = Document::fromPHP(['_id' => $id])->toRelaxedExtendedJSON();
-
         return new self(sprintf('File "%s" not found in "%s"', $json, $namespace));
     }
 }

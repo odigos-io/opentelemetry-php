@@ -1,4 +1,5 @@
 <?php
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -15,7 +16,6 @@
 namespace Cake\Test\Fixture;
 
 use Cake\TestSuite\Fixture\TestFixture;
-
 class CompositeIncrementsFixture extends TestFixture
 {
     /**
@@ -23,6 +23,5 @@ class CompositeIncrementsFixture extends TestFixture
      *
      * @var array
      */
-    public array $records = [
-    ];
+    public array $records = [];
 }

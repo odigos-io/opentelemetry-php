@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenAI\Responses\Responses;
 
 use OpenAI\Contracts\ResponseContract;
@@ -10,7 +9,6 @@ use OpenAI\Responses\Responses\Format\JsonObjectFormat;
 use OpenAI\Responses\Responses\Format\JsonSchemaFormat;
 use OpenAI\Responses\Responses\Format\TextFormat;
 use OpenAI\Testing\Responses\Concerns\Fakeable;
-
 /**
  * @phpstan-import-type JsonObjectFormatType from JsonObjectFormat
  * @phpstan-import-type JsonSchemaFormatType from JsonSchemaFormat
@@ -26,13 +24,10 @@ final class CreateResponseFormat implements ResponseContract
      * @use ArrayAccessible<ResponseFormatType>
      */
     use ArrayAccessible;
-
     use Fakeable;
-
-    private function __construct(
-        public readonly TextFormat|JsonSchemaFormat|JsonObjectFormat $format
-    ) {}
-
+    private function __construct(public readonly TextFormat|JsonSchemaFormat|JsonObjectFormat $format)
+    {
+    }
     /**
      * @param  ResponseFormatType  $attributes
      */
@@ -43,19 +38,13 @@ final class CreateResponseFormat implements ResponseContract
             'json_schema' => JsonSchemaFormat::from($attributes['format']),
             'json_object' => JsonObjectFormat::from($attributes['format']),
         };
-
-        return new self(
-            format: $format
-        );
+        return new self(format: $format);
     }
-
     /**
      * {@inheritDoc}
      */
     public function toArray(): array
     {
-        return [
-            'format' => $this->format->toArray(),
-        ];
+        return ['format' => $this->format->toArray()];
     }
 }

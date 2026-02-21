@@ -4,7 +4,6 @@ namespace Illuminate\Queue\Console;
 
 use Illuminate\Console\MigrationGeneratorCommand;
 use Symfony\Component\Console\Attribute\AsCommand;
-
 #[AsCommand(name: 'queue:batches-table')]
 class BatchesTableCommand extends MigrationGeneratorCommand
 {
@@ -14,14 +13,12 @@ class BatchesTableCommand extends MigrationGeneratorCommand
      * @var string
      */
     protected $name = 'queue:batches-table';
-
     /**
      * The console command description.
      *
      * @var string
      */
     protected $description = 'Create a migration for the batches database table';
-
     /**
      * Get the migration table name.
      *
@@ -31,7 +28,6 @@ class BatchesTableCommand extends MigrationGeneratorCommand
     {
         return $this->laravel['config']['queue.batching.table'] ?? 'job_batches';
     }
-
     /**
      * Get the path to the migration stub file.
      *
@@ -39,6 +35,6 @@ class BatchesTableCommand extends MigrationGeneratorCommand
      */
     protected function migrationStubFile()
     {
-        return __DIR__.'/stubs/batches.stub';
+        return __DIR__ . '/stubs/batches.stub';
     }
 }

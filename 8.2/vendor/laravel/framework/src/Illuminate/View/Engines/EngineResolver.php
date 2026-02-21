@@ -4,7 +4,6 @@ namespace Illuminate\View\Engines;
 
 use Closure;
 use InvalidArgumentException;
-
 class EngineResolver
 {
     /**
@@ -13,14 +12,12 @@ class EngineResolver
      * @var array
      */
     protected $resolvers = [];
-
     /**
      * The resolved engine instances.
      *
      * @var array
      */
     protected $resolved = [];
-
     /**
      * Register a new engine resolver.
      *
@@ -33,10 +30,8 @@ class EngineResolver
     public function register($engine, Closure $resolver)
     {
         $this->forget($engine);
-
         $this->resolvers[$engine] = $resolver;
     }
-
     /**
      * Resolve an engine instance by name.
      *
@@ -50,14 +45,11 @@ class EngineResolver
         if (isset($this->resolved[$engine])) {
             return $this->resolved[$engine];
         }
-
         if (isset($this->resolvers[$engine])) {
             return $this->resolved[$engine] = call_user_func($this->resolvers[$engine]);
         }
-
         throw new InvalidArgumentException("Engine [{$engine}] not found.");
     }
-
     /**
      * Remove a resolved engine.
      *

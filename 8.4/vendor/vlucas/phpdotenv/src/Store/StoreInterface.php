@@ -1,8 +1,7 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Dotenv\Store;
+declare (strict_types=1);
+namespace Odigos\Dotenv\Store;
 
 interface StoreInterface
 {

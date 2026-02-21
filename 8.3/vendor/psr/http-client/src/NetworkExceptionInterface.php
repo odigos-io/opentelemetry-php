@@ -3,7 +3,6 @@
 namespace Psr\Http\Client;
 
 use Psr\Http\Message\RequestInterface;
-
 /**
  * Thrown when the request cannot be completed because of network issues.
  *
@@ -11,7 +10,7 @@ use Psr\Http\Message\RequestInterface;
  *
  * Example: the target host name can not be resolved or the connection failed.
  */
-interface NetworkExceptionInterface extends ClientExceptionInterface
+interface NetworkExceptionInterface extends \Psr\Http\Client\ClientExceptionInterface
 {
     /**
      * Returns the request.

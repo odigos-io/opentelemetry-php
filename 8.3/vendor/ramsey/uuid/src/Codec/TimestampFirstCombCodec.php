@@ -9,19 +9,15 @@
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
  */
+declare (strict_types=1);
+namespace Odigos\Ramsey\Uuid\Codec;
 
-declare(strict_types=1);
-
-namespace Ramsey\Uuid\Codec;
-
-use Ramsey\Uuid\Exception\InvalidUuidStringException;
-use Ramsey\Uuid\UuidInterface;
-
+use Odigos\Ramsey\Uuid\Exception\InvalidUuidStringException;
+use Odigos\Ramsey\Uuid\UuidInterface;
 use function bin2hex;
 use function sprintf;
 use function substr;
 use function substr_replace;
-
 /**
  * TimestampFirstCombCodec encodes and decodes COMBs, with the timestamp as the first 48 bits
  *
@@ -57,17 +53,8 @@ class TimestampFirstCombCodec extends StringCodec
     {
         /** @phpstan-ignore possiblyImpure.methodCall */
         $bytes = $this->swapBytes($uuid->getFields()->getBytes());
-
-        return sprintf(
-            '%08s-%04s-%04s-%04s-%012s',
-            bin2hex(substr($bytes, 0, 4)),
-            bin2hex(substr($bytes, 4, 2)),
-            bin2hex(substr($bytes, 6, 2)),
-            bin2hex(substr($bytes, 8, 2)),
-            bin2hex(substr($bytes, 10))
-        );
+        return sprintf('%08s-%04s-%04s-%04s-%012s', bin2hex(substr($bytes, 0, 4)), bin2hex(substr($bytes, 4, 2)), bin2hex(substr($bytes, 6, 2)), bin2hex(substr($bytes, 8, 2)), bin2hex(substr($bytes, 10)));
     }
-
     /**
      * @return non-empty-string
      */
@@ -76,7 +63,6 @@ class TimestampFirstCombCodec extends StringCodec
         /** @phpstan-ignore-next-line PHPStan complains that this is not a non-empty-string. */
         return $this->swapBytes($uuid->getFields()->getBytes());
     }
-
     /**
      * @throws InvalidUuidStringException
      *
@@ -86,17 +72,14 @@ class TimestampFirstCombCodec extends StringCodec
     {
         /** @phpstan-ignore possiblyImpure.methodCall */
         $bytes = $this->getBytes($encodedUuid);
-
         /** @phpstan-ignore possiblyImpure.methodCall */
         return $this->getBuilder()->build($this, $this->swapBytes($bytes));
     }
-
     public function decodeBytes(string $bytes): UuidInterface
     {
         /** @phpstan-ignore possiblyImpure.methodCall */
         return $this->getBuilder()->build($this, $this->swapBytes($bytes));
     }
-
     /**
      * Swaps bytes according to the timestamp-first COMB rules
      *
@@ -106,7 +89,6 @@ class TimestampFirstCombCodec extends StringCodec
     {
         $first48Bits = substr($bytes, 0, 6);
         $last48Bits = substr($bytes, -6);
-
         return substr_replace(substr_replace($bytes, $last48Bits, 0, 6), $first48Bits, -6);
     }
 }

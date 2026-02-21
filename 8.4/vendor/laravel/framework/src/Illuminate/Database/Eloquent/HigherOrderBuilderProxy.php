@@ -13,26 +13,23 @@ class HigherOrderBuilderProxy
      * @var \Illuminate\Database\Eloquent\Builder<*>
      */
     protected $builder;
-
     /**
      * The method being proxied.
      *
      * @var string
      */
     protected $method;
-
     /**
      * Create a new proxy instance.
      *
      * @param  \Illuminate\Database\Eloquent\Builder<*>  $builder
      * @param  string  $method
      */
-    public function __construct(Builder $builder, $method)
+    public function __construct(\Illuminate\Database\Eloquent\Builder $builder, $method)
     {
         $this->method = $method;
         $this->builder = $builder;
     }
-
     /**
      * Proxy a scope call onto the query builder.
      *

@@ -1,21 +1,17 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\Common\Lexer;
 
 use ReflectionClass;
 use UnitEnum;
-
 use function implode;
 use function preg_split;
 use function sprintf;
 use function substr;
-
 use const PREG_SPLIT_DELIM_CAPTURE;
 use const PREG_SPLIT_NO_EMPTY;
 use const PREG_SPLIT_OFFSET_CAPTURE;
-
 /**
  * Base class for writing simple lexers, i.e. for creating small DSLs.
  *
@@ -28,45 +24,38 @@ abstract class AbstractLexer
      * Lexer original input string.
      */
     private string $input;
-
     /**
      * Array of scanned tokens.
      *
      * @var list<Token<T, V>>
      */
     private array $tokens = [];
-
     /**
      * Current lexer position in input string.
      */
     private int $position = 0;
-
     /**
      * Current peek of current lexer position.
      */
     private int $peek = 0;
-
     /**
      * The next token in the input.
      *
      * @var Token<T, V>|null
      */
-    public Token|null $lookahead;
-
+    public \Doctrine\Common\Lexer\Token|null $lookahead;
     /**
      * The last matched/seen token.
      *
      * @var Token<T, V>|null
      */
-    public Token|null $token;
-
+    public \Doctrine\Common\Lexer\Token|null $token;
     /**
      * Composed regex for input parsing.
      *
      * @var non-empty-string|null
      */
     private string|null $regex = null;
-
     /**
      * Sets the input data to be tokenized.
      *
@@ -79,13 +68,11 @@ abstract class AbstractLexer
      */
     public function setInput(string $input)
     {
-        $this->input  = $input;
+        $this->input = $input;
         $this->tokens = [];
-
         $this->reset();
         $this->scan($input);
     }
-
     /**
      * Resets the lexer.
      *
@@ -94,11 +81,10 @@ abstract class AbstractLexer
     public function reset()
     {
         $this->lookahead = null;
-        $this->token     = null;
-        $this->peek      = 0;
-        $this->position  = 0;
+        $this->token = null;
+        $this->peek = 0;
+        $this->position = 0;
     }
-
     /**
      * Resets the peek pointer to 0.
      *
@@ -108,7 +94,6 @@ abstract class AbstractLexer
     {
         $this->peek = 0;
     }
-
     /**
      * Resets the lexer position on the input to the given position.
      *
@@ -120,7 +105,6 @@ abstract class AbstractLexer
     {
         $this->position = $position;
     }
-
     /**
      * Retrieve the original lexer's input until a given position.
      *
@@ -130,7 +114,6 @@ abstract class AbstractLexer
     {
         return substr($this->input, 0, $position);
     }
-
     /**
      * Checks whether a given token matches the current lookahead.
      *
@@ -144,7 +127,6 @@ abstract class AbstractLexer
     {
         return $this->lookahead !== null && $this->lookahead->isA($type);
     }
-
     /**
      * Checks whether any of the given tokens matches the current lookahead.
      *
@@ -158,7 +140,6 @@ abstract class AbstractLexer
     {
         return $this->lookahead !== null && $this->lookahead->isA(...$types);
     }
-
     /**
      * Moves to the next token in the input string.
      *
@@ -168,14 +149,11 @@ abstract class AbstractLexer
      */
     public function moveNext()
     {
-        $this->peek      = 0;
-        $this->token     = $this->lookahead;
-        $this->lookahead = isset($this->tokens[$this->position])
-            ? $this->tokens[$this->position++] : null;
-
+        $this->peek = 0;
+        $this->token = $this->lookahead;
+        $this->lookahead = isset($this->tokens[$this->position]) ? $this->tokens[$this->position++] : null;
         return $this->lookahead !== null;
     }
-
     /**
      * Tells the lexer to skip input tokens until it sees a token with the given value.
      *
@@ -185,11 +163,10 @@ abstract class AbstractLexer
      */
     public function skipUntil(int|string|UnitEnum $type)
     {
-        while ($this->lookahead !== null && ! $this->lookahead->isA($type)) {
+        while ($this->lookahead !== null && !$this->lookahead->isA($type)) {
             $this->moveNext();
         }
     }
-
     /**
      * Checks if given value is identical to the given token.
      *
@@ -199,7 +176,6 @@ abstract class AbstractLexer
     {
         return $this->getType($value) === $token;
     }
-
     /**
      * Moves the lookahead token forward.
      *
@@ -210,10 +186,8 @@ abstract class AbstractLexer
         if (isset($this->tokens[$this->position + $this->peek])) {
             return $this->tokens[$this->position + $this->peek++];
         }
-
         return null;
     }
-
     /**
      * Peeks at the next token, returns it and immediately resets the peek.
      *
@@ -221,12 +195,10 @@ abstract class AbstractLexer
      */
     public function glimpse()
     {
-        $peek       = $this->peek();
+        $peek = $this->peek();
         $this->peek = 0;
-
         return $peek;
     }
-
     /**
      * Scans the input string for tokens.
      *
@@ -236,36 +208,22 @@ abstract class AbstractLexer
      */
     protected function scan(string $input)
     {
-        if (! isset($this->regex)) {
-            $this->regex = sprintf(
-                '/(%s)|%s/%s',
-                implode(')|(', $this->getCatchablePatterns()),
-                implode('|', $this->getNonCatchablePatterns()),
-                $this->getModifiers(),
-            );
+        if (!isset($this->regex)) {
+            $this->regex = sprintf('/(%s)|%s/%s', implode(')|(', $this->getCatchablePatterns()), implode('|', $this->getNonCatchablePatterns()), $this->getModifiers());
         }
-
-        $flags   = PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_OFFSET_CAPTURE;
+        $flags = PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_OFFSET_CAPTURE;
         $matches = preg_split($this->regex, $input, -1, $flags);
-
-        if ($matches === false) {
+        if ($matches === \false) {
             // Work around https://bugs.php.net/78122
             $matches = [[$input, 0]];
         }
-
         foreach ($matches as $match) {
             // Must remain before 'value' assignment since it can change content
             $firstMatch = $match[0];
-            $type       = $this->getType($firstMatch);
-
-            $this->tokens[] = new Token(
-                $firstMatch,
-                $type,
-                $match[1],
-            );
+            $type = $this->getType($firstMatch);
+            $this->tokens[] = new \Doctrine\Common\Lexer\Token($firstMatch, $type, $match[1]);
         }
     }
-
     /**
      * Gets the literal for a given token.
      *
@@ -278,21 +236,16 @@ abstract class AbstractLexer
         if ($token instanceof UnitEnum) {
             return $token::class . '::' . $token->name;
         }
-
         $className = static::class;
-
         $reflClass = new ReflectionClass($className);
         $constants = $reflClass->getConstants();
-
         foreach ($constants as $name => $value) {
             if ($value === $token) {
                 return $className . '::' . $name;
             }
         }
-
         return $token;
     }
-
     /**
      * Regex modifiers
      *
@@ -302,21 +255,18 @@ abstract class AbstractLexer
     {
         return 'iu';
     }
-
     /**
      * Lexical catchable patterns.
      *
      * @return string[]
      */
     abstract protected function getCatchablePatterns();
-
     /**
      * Lexical non-catchable patterns.
      *
      * @return string[]
      */
     abstract protected function getNonCatchablePatterns();
-
     /**
      * Retrieve token type. Also processes the token value if necessary.
      *

@@ -1,18 +1,16 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\DBAL\Platforms\Keywords;
 
 use function array_diff;
 use function array_merge;
-
 /**
  * MySQL 8.4 reserved keywords list.
  *
  * @deprecated
  */
-class MySQL84Keywords extends MySQL80Keywords
+class MySQL84Keywords extends \Doctrine\DBAL\Platforms\Keywords\MySQL80Keywords
 {
     /**
      * {@inheritDoc}
@@ -22,27 +20,10 @@ class MySQL84Keywords extends MySQL80Keywords
     protected function getKeywords(): array
     {
         $keywords = parent::getKeywords();
-
         // Removed Keywords and Reserved Words
-        $keywords = array_diff($keywords, [
-            'MASTER_BIND',
-            'MASTER_SSL_VERIFY_SERVER_CERT',
-        ]);
-
+        $keywords = array_diff($keywords, ['MASTER_BIND', 'MASTER_SSL_VERIFY_SERVER_CERT']);
         // New Keywords and Reserved Words
-        $keywords = array_merge($keywords, [
-            'AUTO',
-            'BERNOULLI',
-            'GTIDS',
-            'LOG',
-            'MANUAL',
-            'PARALLEL',
-            'PARSE_TREE',
-            'QUALIFY',
-            'S3',
-            'TABLESAMPLE',
-        ]);
-
+        $keywords = array_merge($keywords, ['AUTO', 'BERNOULLI', 'GTIDS', 'LOG', 'MANUAL', 'PARALLEL', 'PARSE_TREE', 'QUALIFY', 'S3', 'TABLESAMPLE']);
         return $keywords;
     }
 }

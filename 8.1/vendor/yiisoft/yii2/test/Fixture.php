@@ -1,14 +1,13 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\test;
 
 use yii\base\Component;
-
 /**
  * Fixture represents a fixed state of a test environment.
  *
@@ -36,8 +35,6 @@ class Fixture extends Component
      * fixture class names.
      */
     public $depends = [];
-
-
     /**
      * Loads the fixture.
      * This method is called before performing every test method.
@@ -46,21 +43,18 @@ class Fixture extends Component
     public function load()
     {
     }
-
     /**
      * This method is called BEFORE any fixture data is loaded for the current test.
      */
     public function beforeLoad()
     {
     }
-
     /**
      * This method is called AFTER all fixture data have been loaded for the current test.
      */
     public function afterLoad()
     {
     }
-
     /**
      * Unloads the fixture.
      * This method is called after every test method finishes.
@@ -69,14 +63,12 @@ class Fixture extends Component
     public function unload()
     {
     }
-
     /**
      * This method is called BEFORE any fixture data is unloaded for the current test.
      */
     public function beforeUnload()
     {
     }
-
     /**
      * This method is called AFTER all fixture data have been unloaded for the current test.
      */

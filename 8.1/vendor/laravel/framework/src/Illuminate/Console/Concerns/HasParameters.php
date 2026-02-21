@@ -4,7 +4,6 @@ namespace Illuminate\Console\Concerns;
 
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
-
 trait HasParameters
 {
     /**
@@ -24,7 +23,6 @@ trait HasParameters
                 $this->addArgument(...$arguments);
             }
         }
-
         foreach ($this->getOptions() as $options) {
             if ($options instanceof InputOption) {
                 $this->getDefinition()->addOption($options);
@@ -33,7 +31,6 @@ trait HasParameters
             }
         }
     }
-
     /**
      * Get the console command arguments.
      *
@@ -43,7 +40,6 @@ trait HasParameters
     {
         return [];
     }
-
     /**
      * Get the console command options.
      *

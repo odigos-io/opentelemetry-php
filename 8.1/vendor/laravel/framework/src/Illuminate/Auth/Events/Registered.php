@@ -3,18 +3,15 @@
 namespace Illuminate\Auth\Events;
 
 use Illuminate\Queue\SerializesModels;
-
 class Registered
 {
     use SerializesModels;
-
     /**
      * The authenticated user.
      *
      * @var \Illuminate\Contracts\Auth\Authenticatable
      */
     public $user;
-
     /**
      * Create a new event instance.
      *

@@ -1,18 +1,17 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\widgets;
 
-use Yii;
+use Odigos\Yii;
 use yii\base\InvalidConfigException;
 use yii\base\Widget;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
-
 /**
  * BaseListView is a base class for widgets displaying data from data provider
  * such as ListView and GridView.
@@ -75,7 +74,7 @@ abstract class BaseListView extends Widget
      * The default value is false which displays an element according to the [[emptyText]]
      * and [[emptyTextOptions]] properties.
      */
-    public $showOnEmpty = false;
+    public $showOnEmpty = \false;
     /**
      * @var string|false|null the HTML content to be displayed when [[dataProvider]] does not have any data.
      * When this is set to `false` no extra HTML content will be generated.
@@ -100,14 +99,11 @@ abstract class BaseListView extends Widget
      * - `{pager}`: the pager. See [[renderPager()]].
      */
     public $layout = "{summary}\n{items}\n{pager}";
-
-
     /**
      * Renders the data models.
      * @return string the rendering result.
      */
     abstract public function renderItems();
-
     /**
      * Initializes the view.
      */
@@ -124,27 +120,23 @@ abstract class BaseListView extends Widget
             $this->options['id'] = $this->getId();
         }
     }
-
     /**
      * Runs the widget.
      */
     public function run()
     {
         if ($this->showOnEmpty || $this->dataProvider->getCount() > 0) {
-            $content = preg_replace_callback('/{\\w+}/', function ($matches) {
+            $content = preg_replace_callback('/{\w+}/', function ($matches) {
                 $content = $this->renderSection($matches[0]);
-
-                return $content === false ? $matches[0] : $content;
+                return $content === \false ? $matches[0] : $content;
             }, $this->layout);
         } else {
             $content = $this->renderEmpty();
         }
-
         $options = $this->options;
         $tag = ArrayHelper::remove($options, 'tag', 'div');
         echo Html::tag($tag, $content, $options);
     }
-
     /**
      * Renders a section of the specified name.
      * If the named section is not supported, false will be returned.
@@ -163,10 +155,9 @@ abstract class BaseListView extends Widget
             case '{sorter}':
                 return $this->renderSorter();
             default:
-                return false;
+                return \false;
         }
     }
-
     /**
      * Renders the HTML content indicating that the list view has no data.
      * @return string the rendering result
@@ -174,14 +165,13 @@ abstract class BaseListView extends Widget
      */
     public function renderEmpty()
     {
-        if ($this->emptyText === false) {
+        if ($this->emptyText === \false) {
             return '';
         }
         $options = $this->emptyTextOptions;
         $tag = ArrayHelper::remove($options, 'tag', 'div');
         return Html::tag($tag, $this->emptyText, $options);
     }
-
     /**
      * Renders the summary text.
      */
@@ -193,7 +183,7 @@ abstract class BaseListView extends Widget
         }
         $summaryOptions = $this->summaryOptions;
         $tag = ArrayHelper::remove($summaryOptions, 'tag', 'div');
-        if (($pagination = $this->dataProvider->getPagination()) !== false) {
+        if (($pagination = $this->dataProvider->getPagination()) !== \false) {
             $totalCount = $this->dataProvider->getTotalCount();
             $begin = $pagination->getPage() * $pagination->pageSize + 1;
             $end = $begin + $count - 1;
@@ -203,44 +193,20 @@ abstract class BaseListView extends Widget
             $page = $pagination->getPage() + 1;
             $pageCount = $pagination->pageCount;
             if (($summaryContent = $this->summary) === null) {
-                return Html::tag($tag, Yii::t('yii', 'Showing <b>{begin, number}-{end, number}</b> of <b>{totalCount, number}</b> {totalCount, plural, one{item} other{items}}.', [
-                        'begin' => $begin,
-                        'end' => $end,
-                        'count' => $count,
-                        'totalCount' => $totalCount,
-                        'page' => $page,
-                        'pageCount' => $pageCount,
-                    ]), $summaryOptions);
+                return Html::tag($tag, Yii::t('yii', 'Showing <b>{begin, number}-{end, number}</b> of <b>{totalCount, number}</b> {totalCount, plural, one{item} other{items}}.', ['begin' => $begin, 'end' => $end, 'count' => $count, 'totalCount' => $totalCount, 'page' => $page, 'pageCount' => $pageCount]), $summaryOptions);
             }
         } else {
             $begin = $page = $pageCount = 1;
             $end = $totalCount = $count;
             if (($summaryContent = $this->summary) === null) {
-                return Html::tag($tag, Yii::t('yii', 'Total <b>{count, number}</b> {count, plural, one{item} other{items}}.', [
-                    'begin' => $begin,
-                    'end' => $end,
-                    'count' => $count,
-                    'totalCount' => $totalCount,
-                    'page' => $page,
-                    'pageCount' => $pageCount,
-                ]), $summaryOptions);
+                return Html::tag($tag, Yii::t('yii', 'Total <b>{count, number}</b> {count, plural, one{item} other{items}}.', ['begin' => $begin, 'end' => $end, 'count' => $count, 'totalCount' => $totalCount, 'page' => $page, 'pageCount' => $pageCount]), $summaryOptions);
             }
         }
-
         if ($summaryContent === '') {
             return '';
         }
-
-        return Html::tag($tag, Yii::$app->getI18n()->format($summaryContent, [
-            'begin' => $begin,
-            'end' => $end,
-            'count' => $count,
-            'totalCount' => $totalCount,
-            'page' => $page,
-            'pageCount' => $pageCount,
-        ], Yii::$app->language), $summaryOptions);
+        return Html::tag($tag, Yii::$app->getI18n()->format($summaryContent, ['begin' => $begin, 'end' => $end, 'count' => $count, 'totalCount' => $totalCount, 'page' => $page, 'pageCount' => $pageCount], Yii::$app->language), $summaryOptions);
     }
-
     /**
      * Renders the pager.
      * @return string the rendering result
@@ -248,18 +214,16 @@ abstract class BaseListView extends Widget
     public function renderPager()
     {
         $pagination = $this->dataProvider->getPagination();
-        if ($pagination === false || $this->dataProvider->getCount() <= 0) {
+        if ($pagination === \false || $this->dataProvider->getCount() <= 0) {
             return '';
         }
         $pager = $this->pager;
         /** @var LinkPager $class */
-        $class = ArrayHelper::remove($pager, 'class', LinkPager::className());
+        $class = ArrayHelper::remove($pager, 'class', \yii\widgets\LinkPager::className());
         $pager['pagination'] = $pagination;
         $pager['view'] = $this->getView();
-
         return $class::widget($pager);
     }
-
     /**
      * Renders the sorter.
      * @return string the rendering result
@@ -267,15 +231,14 @@ abstract class BaseListView extends Widget
     public function renderSorter()
     {
         $sort = $this->dataProvider->getSort();
-        if ($sort === false || empty($sort->attributes) || $this->dataProvider->getCount() <= 0) {
+        if ($sort === \false || empty($sort->attributes) || $this->dataProvider->getCount() <= 0) {
             return '';
         }
         $sorter = $this->sorter;
         /** @var LinkSorter $class */
-        $class = ArrayHelper::remove($sorter, 'class', LinkSorter::className());
+        $class = ArrayHelper::remove($sorter, 'class', \yii\widgets\LinkSorter::className());
         $sorter['sort'] = $sort;
         $sorter['view'] = $this->getView();
-
         return $class::widget($sorter);
     }
 }

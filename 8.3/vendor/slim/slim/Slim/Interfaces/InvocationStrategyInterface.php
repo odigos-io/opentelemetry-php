@@ -5,14 +5,11 @@
  *
  * @license https://github.com/slimphp/Slim/blob/4.x/LICENSE.md (MIT License)
  */
-
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Slim\Interfaces;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-
 /**
  * Defines a contract for invoking a route callable.
  */
@@ -28,10 +25,5 @@ interface InvocationStrategyInterface
      *
      * @return ResponseInterface The response from the callable.
      */
-    public function __invoke(
-        callable $callable,
-        ServerRequestInterface $request,
-        ResponseInterface $response,
-        array $routeArguments
-    ): ResponseInterface;
+    public function __invoke(callable $callable, ServerRequestInterface $request, ResponseInterface $response, array $routeArguments): ResponseInterface;
 }

@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\Routing\Requirement;
 
 /*
@@ -16,9 +15,11 @@ namespace Symfony\Component\Routing\Requirement;
  */
 enum Requirement
 {
-    public const ASCII_SLUG = '[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*'; // symfony/string AsciiSlugger default implementation
+    public const ASCII_SLUG = '[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*';
+    // symfony/string AsciiSlugger default implementation
     public const CATCH_ALL = '.+';
-    public const DATE_YMD = '[0-9]{4}-(?:0[1-9]|1[012])-(?:0[1-9]|[12][0-9]|(?<!02-)3[01])'; // YYYY-MM-DD
+    public const DATE_YMD = '[0-9]{4}-(?:0[1-9]|1[012])-(?:0[1-9]|[12][0-9]|(?<!02-)3[01])';
+    // YYYY-MM-DD
     public const DIGITS = '[0-9]+';
     public const MONGODB_ID = '[0-9a-f]{24}';
     public const POSITIVE_INT = '[1-9][0-9]*';

@@ -1,15 +1,14 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\caching;
 
-use Yii;
+use Odigos\Yii;
 use yii\helpers\FileHelper;
-
 /**
  * FileCache implements a cache component using files.
  *
@@ -24,7 +23,7 @@ use yii\helpers\FileHelper;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class FileCache extends Cache
+class FileCache extends \yii\caching\Cache
 {
     /**
      * @var string a string prefixed to every cache key. This is needed when you store
@@ -69,8 +68,6 @@ class FileCache extends Cache
      * but read-only for other users.
      */
     public $dirMode = 0775;
-
-
     /**
      * Initializes this component by ensuring the existence of the cache path.
      */
@@ -79,10 +76,9 @@ class FileCache extends Cache
         parent::init();
         $this->cachePath = Yii::getAlias($this->cachePath);
         if (!is_dir($this->cachePath)) {
-            FileHelper::createDirectory($this->cachePath, $this->dirMode, true);
+            FileHelper::createDirectory($this->cachePath, $this->dirMode, \true);
         }
     }
-
     /**
      * Checks whether a specified key exists in the cache.
      * This can be faster than getting the value from the cache if the data is big.
@@ -96,10 +92,8 @@ class FileCache extends Cache
     public function exists($key)
     {
         $cacheFile = $this->getCacheFile($this->buildKey($key));
-
         return @filemtime($cacheFile) > time();
     }
-
     /**
      * Retrieves a value from cache with a specified key.
      * This is the implementation of the method declared in the parent class.
@@ -109,21 +103,18 @@ class FileCache extends Cache
     protected function getValue($key)
     {
         $cacheFile = $this->getCacheFile($key);
-
         if (@filemtime($cacheFile) > time()) {
             $fp = @fopen($cacheFile, 'r');
-            if ($fp !== false) {
-                @flock($fp, LOCK_SH);
+            if ($fp !== \false) {
+                @flock($fp, \LOCK_SH);
                 $cacheValue = @stream_get_contents($fp);
-                @flock($fp, LOCK_UN);
+                @flock($fp, \LOCK_UN);
                 @fclose($fp);
                 return $cacheValue;
             }
         }
-
-        return false;
+        return \false;
     }
-
     /**
      * Stores a value identified by a key in cache.
      * This is the implementation of the method declared in the parent class.
@@ -139,7 +130,7 @@ class FileCache extends Cache
         $this->gc();
         $cacheFile = $this->getCacheFile($key);
         if ($this->directoryLevel > 0) {
-            @FileHelper::createDirectory(dirname($cacheFile), $this->dirMode, true);
+            @FileHelper::createDirectory(dirname($cacheFile), $this->dirMode, \true);
         }
         // If ownership differs the touch call will fail, so we try to
         // rebuild the file from scratch by deleting it first
@@ -147,33 +138,27 @@ class FileCache extends Cache
         if (is_file($cacheFile) && function_exists('posix_geteuid') && fileowner($cacheFile) !== posix_geteuid()) {
             @unlink($cacheFile);
         }
-        if (@file_put_contents($cacheFile, $value, LOCK_EX) !== false) {
+        if (@file_put_contents($cacheFile, $value, \LOCK_EX) !== \false) {
             if ($this->fileMode !== null) {
                 @chmod($cacheFile, $this->fileMode);
             }
             if ($duration <= 0) {
-                $duration = 31536000; // 1 year
+                $duration = 31536000;
+                // 1 year
             }
-
             if (@touch($cacheFile, $duration + time())) {
                 clearstatcache();
-                return true;
+                return \true;
             }
-
-            return false;
+            return \false;
         }
-
         $message = "Unable to write cache file '{$cacheFile}'";
-
         if ($error = error_get_last()) {
             $message .= ": {$error['message']}";
         }
-
         Yii::warning($message, __METHOD__);
-
-        return false;
+        return \false;
     }
-
     /**
      * Stores a value identified by a key into cache if the cache does not contain this key.
      * This is the implementation of the method declared in the parent class.
@@ -188,12 +173,10 @@ class FileCache extends Cache
     {
         $cacheFile = $this->getCacheFile($key);
         if (@filemtime($cacheFile) > time()) {
-            return false;
+            return \false;
         }
-
         return $this->setValue($key, $value, $duration);
     }
-
     /**
      * Deletes a value with the specified key from cache
      * This is the implementation of the method declared in the parent class.
@@ -203,10 +186,8 @@ class FileCache extends Cache
     protected function deleteValue($key)
     {
         $cacheFile = $this->getCacheFile($key);
-
         return @unlink($cacheFile);
     }
-
     /**
      * Returns the cache file path given the normalized cache key.
      * @param string $normalizedKey normalized cache key by [[buildKey]] method
@@ -215,26 +196,21 @@ class FileCache extends Cache
     protected function getCacheFile($normalizedKey)
     {
         $cacheKey = $normalizedKey;
-
         if ($this->keyPrefix !== '') {
             // Remove key prefix to avoid generating constant directory levels
             $lenKeyPrefix = strlen($this->keyPrefix);
             $cacheKey = substr_replace($normalizedKey, '', 0, $lenKeyPrefix);
         }
-
         $cachePath = $this->cachePath;
-
         if ($this->directoryLevel > 0) {
             for ($i = 0; $i < $this->directoryLevel; ++$i) {
-                if (($subDirectory = substr($cacheKey, $i + $i, 2)) !== false) {
-                    $cachePath .= DIRECTORY_SEPARATOR . $subDirectory;
+                if (($subDirectory = substr($cacheKey, $i + $i, 2)) !== \false) {
+                    $cachePath .= \DIRECTORY_SEPARATOR . $subDirectory;
                 }
             }
         }
-
-        return $cachePath . DIRECTORY_SEPARATOR . $normalizedKey . $this->cacheFileSuffix;
+        return $cachePath . \DIRECTORY_SEPARATOR . $normalizedKey . $this->cacheFileSuffix;
     }
-
     /**
      * Deletes all values from cache.
      * This is the implementation of the method declared in the parent class.
@@ -242,11 +218,9 @@ class FileCache extends Cache
      */
     protected function flushValues()
     {
-        $this->gc(true, false);
-
-        return true;
+        $this->gc(\true, \false);
+        return \true;
     }
-
     /**
      * Removes expired cache files.
      * @param bool $force whether to enforce the garbage collection regardless of [[gcProbability]].
@@ -254,13 +228,12 @@ class FileCache extends Cache
      * @param bool $expiredOnly whether to removed expired cache files only.
      * If false, all cache files under [[cachePath]] will be removed.
      */
-    public function gc($force = false, $expiredOnly = true)
+    public function gc($force = \false, $expiredOnly = \true)
     {
         if ($force || random_int(0, 1000000) < $this->gcProbability) {
             $this->gcRecursive($this->cachePath, $expiredOnly);
         }
     }
-
     /**
      * Recursively removing expired cache files under a directory.
      * This method is mainly used by [[gc()]].
@@ -270,18 +243,18 @@ class FileCache extends Cache
      */
     protected function gcRecursive($path, $expiredOnly)
     {
-        if (($handle = opendir($path)) !== false) {
-            while (($file = readdir($handle)) !== false) {
+        if (($handle = opendir($path)) !== \false) {
+            while (($file = readdir($handle)) !== \false) {
                 if (strncmp($file, '.', 1) === 0) {
                     continue;
                 }
-                $fullPath = $path . DIRECTORY_SEPARATOR . $file;
+                $fullPath = $path . \DIRECTORY_SEPARATOR . $file;
                 $message = null;
                 if (is_dir($fullPath)) {
                     $this->gcRecursive($fullPath, $expiredOnly);
                     if (!$expiredOnly) {
                         if (!@rmdir($fullPath)) {
-                            $message = "Unable to remove directory '$fullPath'";
+                            $message = "Unable to remove directory '{$fullPath}'";
                             if ($error = error_get_last()) {
                                 $message .= ": {$error['message']}";
                             }
@@ -289,7 +262,7 @@ class FileCache extends Cache
                     }
                 } elseif (!$expiredOnly || $expiredOnly && @filemtime($fullPath) < time()) {
                     if (!@unlink($fullPath)) {
-                        $message = "Unable to remove file '$fullPath'";
+                        $message = "Unable to remove file '{$fullPath}'";
                         if ($error = error_get_last()) {
                             $message .= ": {$error['message']}";
                         }

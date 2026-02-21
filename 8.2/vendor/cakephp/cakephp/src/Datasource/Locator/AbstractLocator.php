@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -18,14 +18,13 @@ namespace Cake\Datasource\Locator;
 
 use Cake\Core\Exception\CakeException;
 use Cake\Datasource\RepositoryInterface;
-
 /**
  * Provides an abstract registry/factory for repository objects.
  *
  * @template TRepo of \Cake\Datasource\RepositoryInterface
  * @implements \Cake\Datasource\Locator\LocatorInterface<TRepo>
  */
-abstract class AbstractLocator implements LocatorInterface
+abstract class AbstractLocator implements \Cake\Datasource\Locator\LocatorInterface
 {
     /**
      * Instances that belong to the registry.
@@ -33,14 +32,12 @@ abstract class AbstractLocator implements LocatorInterface
      * @var array<string, TRepo>
      */
     protected array $instances = [];
-
     /**
      * Contains a list of options that were passed to get() method.
      *
      * @var array<string, array>
      */
     protected array $options = [];
-
     /**
      * {@inheritDoc}
      *
@@ -54,23 +51,15 @@ abstract class AbstractLocator implements LocatorInterface
     {
         $storeOptions = $options;
         unset($storeOptions['allowFallbackClass']);
-
         if (isset($this->instances[$alias])) {
             if ($storeOptions && isset($this->options[$alias]) && $this->options[$alias] !== $storeOptions) {
-                throw new CakeException(sprintf(
-                    'You cannot configure `%s`, it already exists in the registry.',
-                    $alias,
-                ));
+                throw new CakeException(sprintf('You cannot configure `%s`, it already exists in the registry.', $alias));
             }
-
             return $this->instances[$alias];
         }
-
         $this->options[$alias] = $storeOptions;
-
         return $this->instances[$alias] = $this->createInstance($alias, $options);
     }
-
     /**
      * Create an instance of a given classname.
      *
@@ -79,7 +68,6 @@ abstract class AbstractLocator implements LocatorInterface
      * @return TRepo
      */
     abstract protected function createInstance(string $alias, array $options): RepositoryInterface;
-
     /**
      * @inheritDoc
      */
@@ -87,7 +75,6 @@ abstract class AbstractLocator implements LocatorInterface
     {
         return $this->instances[$alias] = $repository;
     }
-
     /**
      * @inheritDoc
      */
@@ -95,18 +82,13 @@ abstract class AbstractLocator implements LocatorInterface
     {
         return isset($this->instances[$alias]);
     }
-
     /**
      * @inheritDoc
      */
     public function remove(string $alias): void
     {
-        unset(
-            $this->instances[$alias],
-            $this->options[$alias],
-        );
+        unset($this->instances[$alias], $this->options[$alias]);
     }
-
     /**
      * @inheritDoc
      */

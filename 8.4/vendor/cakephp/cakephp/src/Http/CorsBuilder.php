@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -17,7 +17,6 @@ declare(strict_types=1);
 namespace Cake\Http;
 
 use Psr\Http\Message\ResponseInterface;
-
 /**
  * A builder object that assists in defining Cross Origin Request related
  * headers.
@@ -38,28 +37,24 @@ class CorsBuilder
      * @var \Psr\Http\Message\ResponseInterface
      */
     protected ResponseInterface $_response;
-
     /**
      * The request's Origin header value
      *
      * @var string
      */
     protected string $_origin;
-
     /**
      * Whether the request was over SSL.
      *
      * @var bool
      */
     protected bool $_isSsl;
-
     /**
      * The headers that have been queued so far.
      *
      * @var array<string, mixed>
      */
     protected array $_headers = [];
-
     /**
      * Constructor.
      *
@@ -67,13 +62,12 @@ class CorsBuilder
      * @param string $origin The request's Origin header.
      * @param bool $isSsl Whether the request was over SSL.
      */
-    public function __construct(ResponseInterface $response, string $origin, bool $isSsl = false)
+    public function __construct(ResponseInterface $response, string $origin, bool $isSsl = \false)
     {
         $this->_origin = $origin;
         $this->_isSsl = $isSsl;
         $this->_response = $response;
     }
-
     /**
      * Apply the queued headers to the response.
      *
@@ -88,16 +82,13 @@ class CorsBuilder
         if (empty($this->_origin)) {
             return $response;
         }
-
         if (isset($this->_headers['Access-Control-Allow-Origin'])) {
             foreach ($this->_headers as $key => $value) {
                 $response = $response->withHeader($key, $value);
             }
         }
-
         return $response;
     }
-
     /**
      * Set the list of allowed domains.
      *
@@ -109,7 +100,7 @@ class CorsBuilder
      */
     public function allowOrigin(array|string $domains)
     {
-        $allowed = $this->_normalizeDomains((array)$domains);
+        $allowed = $this->_normalizeDomains((array) $domains);
         foreach ($allowed as $domain) {
             if (!preg_match($domain['preg'], $this->_origin)) {
                 continue;
@@ -118,10 +109,8 @@ class CorsBuilder
             $this->_headers['Access-Control-Allow-Origin'] = $value;
             break;
         }
-
         return $this;
     }
-
     /**
      * Normalize the origin to regular expressions and put in an array format
      *
@@ -144,10 +133,8 @@ class CorsBuilder
             $preg = '@^' . str_replace('\*', '.*', preg_quote($preg, '@')) . '$@';
             $result[] = compact('original', 'preg');
         }
-
         return $result;
     }
-
     /**
      * Set the list of allowed HTTP Methods.
      *
@@ -157,10 +144,8 @@ class CorsBuilder
     public function allowMethods(array $methods)
     {
         $this->_headers['Access-Control-Allow-Methods'] = implode(', ', $methods);
-
         return $this;
     }
-
     /**
      * Enable cookies to be sent in CORS requests.
      *
@@ -169,10 +154,8 @@ class CorsBuilder
     public function allowCredentials()
     {
         $this->_headers['Access-Control-Allow-Credentials'] = 'true';
-
         return $this;
     }
-
     /**
      * Allowed headers that can be sent in CORS requests.
      *
@@ -182,10 +165,8 @@ class CorsBuilder
     public function allowHeaders(array $headers)
     {
         $this->_headers['Access-Control-Allow-Headers'] = implode(', ', $headers);
-
         return $this;
     }
-
     /**
      * Define the headers a client library/browser can expose to scripting
      *
@@ -195,10 +176,8 @@ class CorsBuilder
     public function exposeHeaders(array $headers)
     {
         $this->_headers['Access-Control-Expose-Headers'] = implode(', ', $headers);
-
         return $this;
     }
-
     /**
      * Define the max-age preflight OPTIONS requests are valid for.
      *
@@ -208,7 +187,6 @@ class CorsBuilder
     public function maxAge(string|int $age)
     {
         $this->_headers['Access-Control-Max-Age'] = $age;
-
         return $this;
     }
 }

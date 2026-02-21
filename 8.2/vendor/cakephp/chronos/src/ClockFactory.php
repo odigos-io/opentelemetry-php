@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 namespace Cake\Chronos;
 
 /**
@@ -13,18 +13,15 @@ namespace Cake\Chronos;
  * @link          https://cakephp.org CakePHP(tm) Project
  * @license       https://www.opensource.org/licenses/mit-license.php MIT License
  */
-
 use DateTimeImmutable;
 use DateTimeZone;
 use Psr\Clock\ClockInterface;
-
 /**
  * PSR-20 Clock implementation.
  */
 class ClockFactory implements ClockInterface
 {
     private DateTimeZone|string|null $timezone;
-
     /**
      * Constructor.
      *
@@ -34,7 +31,6 @@ class ClockFactory implements ClockInterface
     {
         $this->timezone = $timezone;
     }
-
     /**
      * Returns the current time object.
      *
@@ -42,6 +38,6 @@ class ClockFactory implements ClockInterface
      */
     public function now(): DateTimeImmutable
     {
-        return Chronos::now($this->timezone);
+        return \Cake\Chronos\Chronos::now($this->timezone);
     }
 }

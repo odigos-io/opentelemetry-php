@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -18,7 +18,6 @@ namespace Cake\Validation;
 
 use Cake\Event\EventDispatcherInterface;
 use InvalidArgumentException;
-
 /**
  * A trait that provides methods for building and
  * interacting with Validators.
@@ -45,15 +44,13 @@ trait ValidatorAwareTrait
      *
      * @var string
      */
-    protected string $_validatorClass = Validator::class;
-
+    protected string $_validatorClass = \Cake\Validation\Validator::class;
     /**
      * A list of validation objects indexed by name
      *
      * @var array<\Cake\Validation\Validator>
      */
     protected array $_validators = [];
-
     /**
      * Returns the validation rules tagged with $name. It is possible to have
      * multiple different named validation sets, this is useful when you need
@@ -88,16 +85,14 @@ trait ValidatorAwareTrait
      * @param string|null $name The name of the validation set to return.
      * @return \Cake\Validation\Validator
      */
-    public function getValidator(?string $name = null): Validator
+    public function getValidator(?string $name = null): \Cake\Validation\Validator
     {
         $name = $name ?: static::DEFAULT_VALIDATOR;
         if (!isset($this->_validators[$name])) {
             $this->setValidator($name, $this->createValidator($name));
         }
-
         return $this->_validators[$name];
     }
-
     /**
      * Creates a validator using a custom method inside your class.
      *
@@ -109,36 +104,22 @@ trait ValidatorAwareTrait
      * @return \Cake\Validation\Validator
      * @throws \InvalidArgumentException
      */
-    protected function createValidator(string $name): Validator
+    protected function createValidator(string $name): \Cake\Validation\Validator
     {
         $method = 'validation' . ucfirst($name);
         if (!$this->validationMethodExists($method)) {
             $message = sprintf('The `%s::%s()` validation method does not exists.', static::class, $method);
             throw new InvalidArgumentException($message);
         }
-
         $validator = new $this->_validatorClass();
-        $validator = $this->$method($validator);
+        $validator = $this->{$method}($validator);
         if ($this instanceof EventDispatcherInterface) {
-            $event = defined(static::class . '::BUILD_VALIDATOR_EVENT')
-                ? static::BUILD_VALIDATOR_EVENT
-                : 'Model.buildValidator';
+            $event = defined(static::class . '::BUILD_VALIDATOR_EVENT') ? static::BUILD_VALIDATOR_EVENT : 'Model.buildValidator';
             $this->dispatchEvent($event, compact('validator', 'name'));
         }
-
-        assert(
-            $validator instanceof Validator,
-            sprintf(
-                'The `%s::%s()` validation method must return an instance of `%s`.',
-                static::class,
-                $method,
-                Validator::class,
-            ),
-        );
-
+        assert($validator instanceof \Cake\Validation\Validator, sprintf('The `%s::%s()` validation method must return an instance of `%s`.', static::class, $method, \Cake\Validation\Validator::class));
         return $validator;
     }
-
     /**
      * This method stores a custom validator under the given name.
      *
@@ -157,14 +138,12 @@ trait ValidatorAwareTrait
      * @param \Cake\Validation\Validator $validator Validator object to be set.
      * @return $this
      */
-    public function setValidator(string $name, Validator $validator)
+    public function setValidator(string $name, \Cake\Validation\Validator $validator)
     {
         $validator->setProvider(static::VALIDATOR_PROVIDER_NAME, $this);
         $this->_validators[$name] = $validator;
-
         return $this;
     }
-
     /**
      * Checks whether a validator has been set.
      *
@@ -175,12 +154,10 @@ trait ValidatorAwareTrait
     {
         $method = 'validation' . ucfirst($name);
         if ($this->validationMethodExists($method)) {
-            return true;
+            return \true;
         }
-
         return isset($this->_validators[$name]);
     }
-
     /**
      * Checks if validation method exists.
      *
@@ -191,7 +168,6 @@ trait ValidatorAwareTrait
     {
         return method_exists($this, $name);
     }
-
     /**
      * Returns the default validator object. Subclasses can override this function
      * to add a default validation set to the validator object.
@@ -200,7 +176,7 @@ trait ValidatorAwareTrait
      * add some rules to it.
      * @return \Cake\Validation\Validator
      */
-    public function validationDefault(Validator $validator): Validator
+    public function validationDefault(\Cake\Validation\Validator $validator): \Cake\Validation\Validator
     {
         return $validator;
     }

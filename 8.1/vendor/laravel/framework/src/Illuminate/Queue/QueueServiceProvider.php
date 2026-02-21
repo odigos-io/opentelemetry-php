@@ -2,7 +2,7 @@
 
 namespace Illuminate\Queue;
 
-use Aws\DynamoDb\DynamoDbClient;
+use Odigos\Aws\DynamoDb\DynamoDbClient;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Queue\Connectors\BeanstalkdConnector;
@@ -20,11 +20,9 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
 use Laravel\SerializableClosure\SerializableClosure;
-
 class QueueServiceProvider extends ServiceProvider implements DeferrableProvider
 {
-    use SerializesAndRestoresModelIdentifiers;
-
+    use \Illuminate\Queue\SerializesAndRestoresModelIdentifiers;
     /**
      * Register the service provider.
      *
@@ -33,14 +31,12 @@ class QueueServiceProvider extends ServiceProvider implements DeferrableProvider
     public function register()
     {
         $this->configureSerializableClosureUses();
-
         $this->registerManager();
         $this->registerConnection();
         $this->registerWorker();
         $this->registerListener();
         $this->registerFailedJobServices();
     }
-
     /**
      * Configure serializable closures uses.
      *
@@ -52,19 +48,15 @@ class QueueServiceProvider extends ServiceProvider implements DeferrableProvider
             foreach ($data as $key => $value) {
                 $data[$key] = $this->getSerializedPropertyValue($value);
             }
-
             return $data;
         });
-
         SerializableClosure::resolveUseVariablesUsing(function ($data) {
             foreach ($data as $key => $value) {
                 $data[$key] = $this->getRestoredPropertyValue($value);
             }
-
             return $data;
         });
     }
-
     /**
      * Register the queue manager.
      *
@@ -76,12 +68,11 @@ class QueueServiceProvider extends ServiceProvider implements DeferrableProvider
             // Once we have an instance of the queue manager, we will register the various
             // resolvers for the queue connectors. These connectors are responsible for
             // creating the classes that accept queue configs and instantiate queues.
-            return tap(new QueueManager($app), function ($manager) {
+            return tap(new \Illuminate\Queue\QueueManager($app), function ($manager) {
                 $this->registerConnectors($manager);
             });
         });
     }
-
     /**
      * Register the default queue connection binding.
      *
@@ -93,7 +84,6 @@ class QueueServiceProvider extends ServiceProvider implements DeferrableProvider
             return $app['queue']->connection();
         });
     }
-
     /**
      * Register the connectors on the queue manager.
      *
@@ -106,7 +96,6 @@ class QueueServiceProvider extends ServiceProvider implements DeferrableProvider
             $this->{"register{$connector}Connector"}($manager);
         }
     }
-
     /**
      * Register the Null queue connector.
      *
@@ -116,10 +105,9 @@ class QueueServiceProvider extends ServiceProvider implements DeferrableProvider
     protected function registerNullConnector($manager)
     {
         $manager->addConnector('null', function () {
-            return new NullConnector;
+            return new NullConnector();
         });
     }
-
     /**
      * Register the Sync queue connector.
      *
@@ -129,10 +117,9 @@ class QueueServiceProvider extends ServiceProvider implements DeferrableProvider
     protected function registerSyncConnector($manager)
     {
         $manager->addConnector('sync', function () {
-            return new SyncConnector;
+            return new SyncConnector();
         });
     }
-
     /**
      * Register the database queue connector.
      *
@@ -145,7 +132,6 @@ class QueueServiceProvider extends ServiceProvider implements DeferrableProvider
             return new DatabaseConnector($this->app['db']);
         });
     }
-
     /**
      * Register the Redis queue connector.
      *
@@ -158,7 +144,6 @@ class QueueServiceProvider extends ServiceProvider implements DeferrableProvider
             return new RedisConnector($this->app['redis']);
         });
     }
-
     /**
      * Register the Beanstalkd queue connector.
      *
@@ -168,10 +153,9 @@ class QueueServiceProvider extends ServiceProvider implements DeferrableProvider
     protected function registerBeanstalkdConnector($manager)
     {
         $manager->addConnector('beanstalkd', function () {
-            return new BeanstalkdConnector;
+            return new BeanstalkdConnector();
         });
     }
-
     /**
      * Register the Amazon SQS queue connector.
      *
@@ -181,10 +165,9 @@ class QueueServiceProvider extends ServiceProvider implements DeferrableProvider
     protected function registerSqsConnector($manager)
     {
         $manager->addConnector('sqs', function () {
-            return new SqsConnector;
+            return new SqsConnector();
         });
     }
-
     /**
      * Register the queue worker.
      *
@@ -196,36 +179,23 @@ class QueueServiceProvider extends ServiceProvider implements DeferrableProvider
             $isDownForMaintenance = function () {
                 return $this->app->isDownForMaintenance();
             };
-
             $resetScope = function () use ($app) {
                 $app['log']->flushSharedContext();
-
                 if (method_exists($app['log'], 'withoutContext')) {
                     $app['log']->withoutContext();
                 }
-
                 if (method_exists($app['db'], 'getConnections')) {
                     foreach ($app['db']->getConnections() as $connection) {
                         $connection->resetTotalQueryDuration();
                         $connection->allowQueryDurationHandlersToRunAgain();
                     }
                 }
-
                 $app->forgetScopedInstances();
-
                 Facade::clearResolvedInstances();
             };
-
-            return new Worker(
-                $app['queue'],
-                $app['events'],
-                $app[ExceptionHandler::class],
-                $isDownForMaintenance,
-                $resetScope
-            );
+            return new \Illuminate\Queue\Worker($app['queue'], $app['events'], $app[ExceptionHandler::class], $isDownForMaintenance, $resetScope);
         });
     }
-
     /**
      * Register the queue listener.
      *
@@ -234,10 +204,9 @@ class QueueServiceProvider extends ServiceProvider implements DeferrableProvider
     protected function registerListener()
     {
         $this->app->singleton('queue.listener', function ($app) {
-            return new Listener($app->basePath());
+            return new \Illuminate\Queue\Listener($app->basePath());
         });
     }
-
     /**
      * Register the failed job services.
      *
@@ -247,18 +216,11 @@ class QueueServiceProvider extends ServiceProvider implements DeferrableProvider
     {
         $this->app->singleton('queue.failer', function ($app) {
             $config = $app['config']['queue.failed'];
-
-            if (array_key_exists('driver', $config) &&
-                (is_null($config['driver']) || $config['driver'] === 'null')) {
-                return new NullFailedJobProvider;
+            if (array_key_exists('driver', $config) && (is_null($config['driver']) || $config['driver'] === 'null')) {
+                return new NullFailedJobProvider();
             }
-
             if (isset($config['driver']) && $config['driver'] === 'file') {
-                return new FileFailedJobProvider(
-                    $config['path'] ?? $this->app->storagePath('framework/cache/failed-jobs.json'),
-                    $config['limit'] ?? 100,
-                    fn () => $app['cache']->store('file'),
-                );
+                return new FileFailedJobProvider($config['path'] ?? $this->app->storagePath('framework/cache/failed-jobs.json'), $config['limit'] ?? 100, fn() => $app['cache']->store('file'));
             } elseif (isset($config['driver']) && $config['driver'] === 'dynamodb') {
                 return $this->dynamoFailedJobProvider($config);
             } elseif (isset($config['driver']) && $config['driver'] === 'database-uuids') {
@@ -266,11 +228,10 @@ class QueueServiceProvider extends ServiceProvider implements DeferrableProvider
             } elseif (isset($config['table'])) {
                 return $this->databaseFailedJobProvider($config);
             } else {
-                return new NullFailedJobProvider;
+                return new NullFailedJobProvider();
             }
         });
     }
-
     /**
      * Create a new database failed job provider.
      *
@@ -279,11 +240,8 @@ class QueueServiceProvider extends ServiceProvider implements DeferrableProvider
      */
     protected function databaseFailedJobProvider($config)
     {
-        return new DatabaseFailedJobProvider(
-            $this->app['db'], $config['database'], $config['table']
-        );
+        return new DatabaseFailedJobProvider($this->app['db'], $config['database'], $config['table']);
     }
-
     /**
      * Create a new database failed job provider that uses UUIDs as IDs.
      *
@@ -292,11 +250,8 @@ class QueueServiceProvider extends ServiceProvider implements DeferrableProvider
      */
     protected function databaseUuidFailedJobProvider($config)
     {
-        return new DatabaseUuidFailedJobProvider(
-            $this->app['db'], $config['database'], $config['table']
-        );
+        return new DatabaseUuidFailedJobProvider($this->app['db'], $config['database'], $config['table']);
     }
-
     /**
      * Create a new DynamoDb failed job provider.
      *
@@ -305,25 +260,12 @@ class QueueServiceProvider extends ServiceProvider implements DeferrableProvider
      */
     protected function dynamoFailedJobProvider($config)
     {
-        $dynamoConfig = [
-            'region' => $config['region'],
-            'version' => 'latest',
-            'endpoint' => $config['endpoint'] ?? null,
-        ];
-
-        if (! empty($config['key']) && ! empty($config['secret'])) {
-            $dynamoConfig['credentials'] = Arr::only(
-                $config, ['key', 'secret', 'token']
-            );
+        $dynamoConfig = ['region' => $config['region'], 'version' => 'latest', 'endpoint' => $config['endpoint'] ?? null];
+        if (!empty($config['key']) && !empty($config['secret'])) {
+            $dynamoConfig['credentials'] = Arr::only($config, ['key', 'secret', 'token']);
         }
-
-        return new DynamoDbFailedJobProvider(
-            new DynamoDbClient($dynamoConfig),
-            $this->app['config']['app.name'],
-            $config['table']
-        );
+        return new DynamoDbFailedJobProvider(new DynamoDbClient($dynamoConfig), $this->app['config']['app.name'], $config['table']);
     }
-
     /**
      * Get the services provided by the provider.
      *
@@ -331,12 +273,6 @@ class QueueServiceProvider extends ServiceProvider implements DeferrableProvider
      */
     public function provides()
     {
-        return [
-            'queue',
-            'queue.connection',
-            'queue.failer',
-            'queue.listener',
-            'queue.worker',
-        ];
+        return ['queue', 'queue.connection', 'queue.failer', 'queue.listener', 'queue.worker'];
     }
 }

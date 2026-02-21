@@ -1,4 +1,7 @@
 <?php
+
+namespace Odigos;
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -15,25 +18,29 @@
  */
 use Cake\Core\Configure;
 use function Cake\Core\h;
-
 $this->layout = 'dev_error';
-
 $pluginPath = Configure::read('App.paths.plugins.0');
-
 $this->assign('title', 'Missing Plugin');
 $this->assign('templateName', 'missing_plugin.php');
-
 $this->start('subheading');
 ?>
     <strong>Error</strong>
-    The application is trying to load a file from the <em><?= h($plugin) ?></em> plugin.
+    The application is trying to load a file from the <em><?php 
+echo h($plugin);
+?></em> plugin.
     <br>
     <br>
-    Make sure your plugin <em><?= h($plugin) ?></em> is in the <?= h($pluginPath) ?> directory and was loaded.
-<?php $this->end() ?>
+    Make sure your plugin <em><?php 
+echo h($plugin);
+?></em> is in the <?php 
+echo h($pluginPath);
+?> directory and was loaded.
+<?php 
+$this->end();
+?>
 
-<?php $this->start('file') ?>
-<?php
+<?php 
+$this->start('file');
 $code = <<<PHP
 <?php
 // src/Application.php
@@ -44,8 +51,10 @@ public function bootstrap()
     \$this->addPlugin('{$plugin}');
 }
 PHP;
-
 ?>
-<div class="code-dump"><?php highlight_string($code) ?></div>
+<div class="code-dump"><?php 
+\highlight_string($code);
+?></div>
 
-<?php $this->end() ?>
+<?php 
+$this->end();

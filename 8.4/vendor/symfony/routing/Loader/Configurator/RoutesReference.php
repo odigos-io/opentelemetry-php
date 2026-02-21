@@ -8,13 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\Routing\Loader\Configurator;
 
 // For the phpdoc to remain compatible with the generation of per-app Routes class,
 // this file should have no "use" statements: all symbols referenced by
 // the phpdoc need to be in the current namespace or be root-scoped.
-
 /**
  * This class provides array-shapes for configuring the routes of an application.
  *

@@ -1,9 +1,7 @@
 <?php
 
 // DO NOT EDIT, this is an Auto-generated file from script/semantic-conventions
-
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\SemConv\Incubating\Attributes;
 
 /**
@@ -21,14 +19,12 @@ interface UserAgentIncubatingAttributes
      * @experimental
      */
     public const USER_AGENT_NAME = 'user_agent.name';
-
     /**
      * Value of the [HTTP User-Agent](https://www.rfc-editor.org/rfc/rfc9110.html#field.user-agent) header sent by the client.
      *
      * @stable
      */
     public const USER_AGENT_ORIGINAL = 'user_agent.original';
-
     /**
      * Human readable operating system name.
      * For mapping user agent strings to OS names, libraries such as [ua-parser](https://github.com/ua-parser) can be utilized.
@@ -36,7 +32,6 @@ interface UserAgentIncubatingAttributes
      * @experimental
      */
     public const USER_AGENT_OS_NAME = 'user_agent.os.name';
-
     /**
      * The version string of the operating system as defined in [Version Attributes](/docs/resource/README.md#version-attributes).
      *
@@ -45,7 +40,6 @@ interface UserAgentIncubatingAttributes
      * @experimental
      */
     public const USER_AGENT_OS_VERSION = 'user_agent.os.version';
-
     /**
      * Specifies the category of synthetic traffic, such as tests or bots.
      *
@@ -54,19 +48,16 @@ interface UserAgentIncubatingAttributes
      * @experimental
      */
     public const USER_AGENT_SYNTHETIC_TYPE = 'user_agent.synthetic.type';
-
     /**
      * Bot source.
      * @experimental
      */
     public const USER_AGENT_SYNTHETIC_TYPE_VALUE_BOT = 'bot';
-
     /**
      * Synthetic test source.
      * @experimental
      */
     public const USER_AGENT_SYNTHETIC_TYPE_VALUE_TEST = 'test';
-
     /**
      * Version of the user-agent extracted from original. Usually refers to the browser's version
      *
@@ -75,5 +66,4 @@ interface UserAgentIncubatingAttributes
      * @experimental
      */
     public const USER_AGENT_VERSION = 'user_agent.version';
-
 }

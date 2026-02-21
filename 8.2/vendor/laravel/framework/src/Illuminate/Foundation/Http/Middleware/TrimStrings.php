@@ -5,34 +5,26 @@ namespace Illuminate\Foundation\Http\Middleware;
 use Closure;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
-
-class TrimStrings extends TransformsRequest
+class TrimStrings extends \Illuminate\Foundation\Http\Middleware\TransformsRequest
 {
     /**
      * The attributes that should not be trimmed.
      *
      * @var array<int, string>
      */
-    protected $except = [
-        'current_password',
-        'password',
-        'password_confirmation',
-    ];
-
+    protected $except = ['current_password', 'password', 'password_confirmation'];
     /**
      * The globally ignored attributes that should not be trimmed.
      *
      * @var array
      */
     protected static $neverTrim = [];
-
     /**
      * All of the registered skip callbacks.
      *
      * @var array
      */
     protected static $skipCallbacks = [];
-
     /**
      * Handle an incoming request.
      *
@@ -47,10 +39,8 @@ class TrimStrings extends TransformsRequest
                 return $next($request);
             }
         }
-
         return parent::handle($request, $next);
     }
-
     /**
      * Transform the given value.
      *
@@ -61,14 +51,11 @@ class TrimStrings extends TransformsRequest
     protected function transform($key, $value)
     {
         $except = array_merge($this->except, static::$neverTrim);
-
-        if ($this->shouldSkip($key, $except) || ! is_string($value)) {
+        if ($this->shouldSkip($key, $except) || !is_string($value)) {
             return $value;
         }
-
         return Str::trim($value);
     }
-
     /**
      * Determine if the given key should be skipped.
      *
@@ -80,7 +67,6 @@ class TrimStrings extends TransformsRequest
     {
         return Str::is($except, $key);
     }
-
     /**
      * Indicate that the given attributes should never be trimmed.
      *
@@ -89,11 +75,8 @@ class TrimStrings extends TransformsRequest
      */
     public static function except($attributes)
     {
-        static::$neverTrim = array_values(array_unique(
-            array_merge(static::$neverTrim, Arr::wrap($attributes))
-        ));
+        static::$neverTrim = array_values(array_unique(array_merge(static::$neverTrim, Arr::wrap($attributes))));
     }
-
     /**
      * Register a callback that instructs the middleware to be skipped.
      *
@@ -104,7 +87,6 @@ class TrimStrings extends TransformsRequest
     {
         static::$skipCallbacks[] = $callback;
     }
-
     /**
      * Flush the middleware's global state.
      *
@@ -113,7 +95,6 @@ class TrimStrings extends TransformsRequest
     public static function flushState()
     {
         static::$neverTrim = [];
-
         static::$skipCallbacks = [];
     }
 }

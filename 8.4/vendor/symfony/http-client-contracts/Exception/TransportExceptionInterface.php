@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Contracts\HttpClient\Exception;
 
 /**
@@ -16,6 +15,6 @@ namespace Symfony\Contracts\HttpClient\Exception;
  *
  * @author Nicolas Grekas <p@tchwork.com>
  */
-interface TransportExceptionInterface extends ExceptionInterface
+interface TransportExceptionInterface extends \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
 {
 }

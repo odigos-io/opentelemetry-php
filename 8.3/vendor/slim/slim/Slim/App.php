@@ -5,9 +5,7 @@
  *
  * @license https://github.com/slimphp/Slim/blob/4.x/LICENSE.md (MIT License)
  */
-
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Slim;
 
 use Psr\Container\ContainerInterface;
@@ -28,9 +26,7 @@ use Slim\Middleware\RoutingMiddleware;
 use Slim\Routing\RouteCollectorProxy;
 use Slim\Routing\RouteResolver;
 use Slim\Routing\RouteRunner;
-
 use function strtoupper;
-
 /**
  * @api
  * @template TContainerInterface of (ContainerInterface|null)
@@ -44,41 +40,23 @@ class App extends RouteCollectorProxy implements RequestHandlerInterface
      * @var string
      */
     public const VERSION = '4.15.1';
-
     protected RouteResolverInterface $routeResolver;
-
     protected MiddlewareDispatcherInterface $middlewareDispatcher;
-
     /**
      * @param TContainerInterface $container
      */
-    public function __construct(
-        ResponseFactoryInterface $responseFactory,
-        ?ContainerInterface $container = null,
-        ?CallableResolverInterface $callableResolver = null,
-        ?RouteCollectorInterface $routeCollector = null,
-        ?RouteResolverInterface $routeResolver = null,
-        ?MiddlewareDispatcherInterface $middlewareDispatcher = null
-    ) {
-        parent::__construct(
-            $responseFactory,
-            $callableResolver ?? new CallableResolver($container),
-            $container,
-            $routeCollector
-        );
-
+    public function __construct(ResponseFactoryInterface $responseFactory, ?ContainerInterface $container = null, ?CallableResolverInterface $callableResolver = null, ?RouteCollectorInterface $routeCollector = null, ?RouteResolverInterface $routeResolver = null, ?MiddlewareDispatcherInterface $middlewareDispatcher = null)
+    {
+        parent::__construct($responseFactory, $callableResolver ?? new \Slim\CallableResolver($container), $container, $routeCollector);
         $this->routeResolver = $routeResolver ?? new RouteResolver($this->routeCollector);
         $routeRunner = new RouteRunner($this->routeResolver, $this->routeCollector->getRouteParser(), $this);
-
         if (!$middlewareDispatcher) {
-            $middlewareDispatcher = new MiddlewareDispatcher($routeRunner, $this->callableResolver, $container);
+            $middlewareDispatcher = new \Slim\MiddlewareDispatcher($routeRunner, $this->callableResolver, $container);
         } else {
             $middlewareDispatcher->seedMiddlewareStack($routeRunner);
         }
-
         $this->middlewareDispatcher = $middlewareDispatcher;
     }
-
     /**
      * @return RouteResolverInterface
      */
@@ -86,7 +64,6 @@ class App extends RouteCollectorProxy implements RequestHandlerInterface
     {
         return $this->routeResolver;
     }
-
     /**
      * @return MiddlewareDispatcherInterface
      */
@@ -94,7 +71,6 @@ class App extends RouteCollectorProxy implements RequestHandlerInterface
     {
         return $this->middlewareDispatcher;
     }
-
     /**
      * @param MiddlewareInterface|string|callable $middleware
      * @return App<TContainerInterface>
@@ -104,7 +80,6 @@ class App extends RouteCollectorProxy implements RequestHandlerInterface
         $this->middlewareDispatcher->add($middleware);
         return $this;
     }
-
     /**
      * @param MiddlewareInterface $middleware
      * @return App<TContainerInterface>
@@ -114,7 +89,6 @@ class App extends RouteCollectorProxy implements RequestHandlerInterface
         $this->middlewareDispatcher->addMiddleware($middleware);
         return $this;
     }
-
     /**
      * Add the Slim built-in routing middleware to the app middleware stack
      *
@@ -124,14 +98,10 @@ class App extends RouteCollectorProxy implements RequestHandlerInterface
      */
     public function addRoutingMiddleware(): RoutingMiddleware
     {
-        $routingMiddleware = new RoutingMiddleware(
-            $this->getRouteResolver(),
-            $this->getRouteCollector()->getRouteParser()
-        );
+        $routingMiddleware = new RoutingMiddleware($this->getRouteResolver(), $this->getRouteCollector()->getRouteParser());
         $this->add($routingMiddleware);
         return $routingMiddleware;
     }
-
     /**
      * Add the Slim built-in error middleware to the app middleware stack
      *
@@ -142,24 +112,12 @@ class App extends RouteCollectorProxy implements RequestHandlerInterface
      *
      * @return ErrorMiddleware
      */
-    public function addErrorMiddleware(
-        bool $displayErrorDetails,
-        bool $logErrors,
-        bool $logErrorDetails,
-        ?LoggerInterface $logger = null
-    ): ErrorMiddleware {
-        $errorMiddleware = new ErrorMiddleware(
-            $this->getCallableResolver(),
-            $this->getResponseFactory(),
-            $displayErrorDetails,
-            $logErrors,
-            $logErrorDetails,
-            $logger
-        );
+    public function addErrorMiddleware(bool $displayErrorDetails, bool $logErrors, bool $logErrorDetails, ?LoggerInterface $logger = null): ErrorMiddleware
+    {
+        $errorMiddleware = new ErrorMiddleware($this->getCallableResolver(), $this->getResponseFactory(), $displayErrorDetails, $logErrors, $logErrorDetails, $logger);
         $this->add($errorMiddleware);
         return $errorMiddleware;
     }
-
     /**
      * Add the Slim body parsing middleware to the app middleware stack
      *
@@ -173,7 +131,6 @@ class App extends RouteCollectorProxy implements RequestHandlerInterface
         $this->add($bodyParsingMiddleware);
         return $bodyParsingMiddleware;
     }
-
     /**
      * Run application
      *
@@ -189,12 +146,10 @@ class App extends RouteCollectorProxy implements RequestHandlerInterface
             $serverRequestCreator = ServerRequestCreatorFactory::create();
             $request = $serverRequestCreator->createServerRequestFromGlobals();
         }
-
         $response = $this->handle($request);
-        $responseEmitter = new ResponseEmitter();
+        $responseEmitter = new \Slim\ResponseEmitter();
         $responseEmitter->emit($response);
     }
-
     /**
      * Handle a request
      *
@@ -207,7 +162,6 @@ class App extends RouteCollectorProxy implements RequestHandlerInterface
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $response = $this->middlewareDispatcher->handle($request);
-
         /**
          * This is to be in compliance with RFC 2616, Section 9.
          * If the incoming request method is HEAD, we need to ensure that the response body
@@ -220,7 +174,6 @@ class App extends RouteCollectorProxy implements RequestHandlerInterface
             $emptyBody = $this->responseFactory->createResponse()->getBody();
             return $response->withBody($emptyBody);
         }
-
         return $response;
     }
 }

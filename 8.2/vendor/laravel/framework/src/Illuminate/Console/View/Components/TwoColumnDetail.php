@@ -3,8 +3,7 @@
 namespace Illuminate\Console\View\Components;
 
 use Symfony\Component\Console\Output\OutputInterface;
-
-class TwoColumnDetail extends Component
+class TwoColumnDetail extends \Illuminate\Console\View\Components\Component
 {
     /**
      * Renders the component using the given arguments.
@@ -16,21 +15,8 @@ class TwoColumnDetail extends Component
      */
     public function render($first, $second = null, $verbosity = OutputInterface::VERBOSITY_NORMAL)
     {
-        $first = $this->mutate($first, [
-            Mutators\EnsureDynamicContentIsHighlighted::class,
-            Mutators\EnsureNoPunctuation::class,
-            Mutators\EnsureRelativePaths::class,
-        ]);
-
-        $second = $this->mutate($second, [
-            Mutators\EnsureDynamicContentIsHighlighted::class,
-            Mutators\EnsureNoPunctuation::class,
-            Mutators\EnsureRelativePaths::class,
-        ]);
-
-        $this->renderView('two-column-detail', [
-            'first' => $first,
-            'second' => $second,
-        ], $verbosity);
+        $first = $this->mutate($first, [\Illuminate\Console\View\Components\Mutators\EnsureDynamicContentIsHighlighted::class, \Illuminate\Console\View\Components\Mutators\EnsureNoPunctuation::class, \Illuminate\Console\View\Components\Mutators\EnsureRelativePaths::class]);
+        $second = $this->mutate($second, [\Illuminate\Console\View\Components\Mutators\EnsureDynamicContentIsHighlighted::class, \Illuminate\Console\View\Components\Mutators\EnsureNoPunctuation::class, \Illuminate\Console\View\Components\Mutators\EnsureRelativePaths::class]);
+        $this->renderView('two-column-detail', ['first' => $first, 'second' => $second], $verbosity);
     }
 }

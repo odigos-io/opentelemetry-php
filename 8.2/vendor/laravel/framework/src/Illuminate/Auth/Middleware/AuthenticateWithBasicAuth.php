@@ -4,7 +4,6 @@ namespace Illuminate\Auth\Middleware;
 
 use Closure;
 use Illuminate\Contracts\Auth\Factory as AuthFactory;
-
 class AuthenticateWithBasicAuth
 {
     /**
@@ -13,7 +12,6 @@ class AuthenticateWithBasicAuth
      * @var \Illuminate\Contracts\Auth\Factory
      */
     protected $auth;
-
     /**
      * Create a new middleware instance.
      *
@@ -23,7 +21,6 @@ class AuthenticateWithBasicAuth
     {
         $this->auth = $auth;
     }
-
     /**
      * Specify the guard and field for the middleware.
      *
@@ -35,9 +32,8 @@ class AuthenticateWithBasicAuth
      */
     public static function using($guard = null, $field = null)
     {
-        return static::class.':'.implode(',', func_get_args());
+        return static::class . ':' . implode(',', func_get_args());
     }
-
     /**
      * Handle an incoming request.
      *
@@ -52,7 +48,6 @@ class AuthenticateWithBasicAuth
     public function handle($request, Closure $next, $guard = null, $field = null)
     {
         $this->auth->guard($guard)->basic($field ?: 'email');
-
         return $next($request);
     }
 }

@@ -1,10 +1,10 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\db;
 
 /**
@@ -13,17 +13,16 @@ namespace yii\db;
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  * @since 2.0.14
  */
-class PdoValueBuilder implements ExpressionBuilderInterface
+class PdoValueBuilder implements \yii\db\ExpressionBuilderInterface
 {
     public const PARAM_PREFIX = ':pv';
     /**
      * {@inheritdoc}
      */
-    public function build(ExpressionInterface $expression, array &$params = [])
+    public function build(\yii\db\ExpressionInterface $expression, array &$params = [])
     {
         $placeholder = static::PARAM_PREFIX . count($params);
         $params[$placeholder] = $expression;
-
         return $placeholder;
     }
 }

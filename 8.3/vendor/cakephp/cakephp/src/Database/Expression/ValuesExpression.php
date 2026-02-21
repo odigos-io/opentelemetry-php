@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -24,7 +24,6 @@ use Cake\Database\TypeMap;
 use Cake\Database\TypeMapTrait;
 use Cake\Database\ValueBinder;
 use Closure;
-
 /**
  * An expression object to contain values being inserted.
  *
@@ -35,36 +34,31 @@ class ValuesExpression implements ExpressionInterface
 {
     use ExpressionTypeCasterTrait;
     use TypeMapTrait;
-
     /**
      * Array of values to insert.
      *
      * @var array
      */
     protected array $_values = [];
-
     /**
      * List of columns to ensure are part of the insert.
      *
      * @var array
      */
     protected array $_columns = [];
-
     /**
      * The Query object to use as a values expression
      *
      * @var \Cake\Database\Query|null
      */
     protected ?Query $_query = null;
-
     /**
      * Whether values have been casted to expressions
      * already.
      *
      * @var bool
      */
-    protected bool $_castedExpressions = false;
-
+    protected bool $_castedExpressions = \false;
     /**
      * Constructor
      *
@@ -76,7 +70,6 @@ class ValuesExpression implements ExpressionInterface
         $this->_columns = $columns;
         $this->setTypeMap($typeMap);
     }
-
     /**
      * Add a row of data to be inserted.
      *
@@ -87,29 +80,16 @@ class ValuesExpression implements ExpressionInterface
      */
     public function add(Query|array $values): void
     {
-        if (
-            (
-                count($this->_values) &&
-                $values instanceof Query
-            ) ||
-            (
-                $this->_query &&
-                is_array($values)
-            )
-        ) {
-            throw new DatabaseException(
-                'You cannot mix subqueries and array values in inserts.',
-            );
+        if (count($this->_values) && $values instanceof Query || $this->_query && is_array($values)) {
+            throw new DatabaseException('You cannot mix subqueries and array values in inserts.');
         }
         if ($values instanceof Query) {
             $this->setQuery($values);
-
             return;
         }
         $this->_values[] = $values;
-        $this->_castedExpressions = false;
+        $this->_castedExpressions = \false;
     }
-
     /**
      * Sets the columns to be inserted.
      *
@@ -119,11 +99,9 @@ class ValuesExpression implements ExpressionInterface
     public function setColumns(array $columns)
     {
         $this->_columns = $columns;
-        $this->_castedExpressions = false;
-
+        $this->_castedExpressions = \false;
         return $this;
     }
-
     /**
      * Gets the columns to be inserted.
      *
@@ -133,7 +111,6 @@ class ValuesExpression implements ExpressionInterface
     {
         return $this->_columns;
     }
-
     /**
      * Get the bare column names.
      *
@@ -151,10 +128,8 @@ class ValuesExpression implements ExpressionInterface
             }
             $columns[] = $col;
         }
-
         return $columns;
     }
-
     /**
      * Sets the values to be inserted.
      *
@@ -164,11 +139,9 @@ class ValuesExpression implements ExpressionInterface
     public function setValues(array $values)
     {
         $this->_values = $values;
-        $this->_castedExpressions = false;
-
+        $this->_castedExpressions = \false;
         return $this;
     }
-
     /**
      * Gets the values to be inserted.
      *
@@ -179,10 +152,8 @@ class ValuesExpression implements ExpressionInterface
         if (!$this->_castedExpressions) {
             $this->_processExpressions();
         }
-
         return $this->_values;
     }
-
     /**
      * Sets the query object to be used as the values expression to be evaluated
      * to insert records in the table.
@@ -193,10 +164,8 @@ class ValuesExpression implements ExpressionInterface
     public function setQuery(Query $query)
     {
         $this->_query = $query;
-
         return $this;
     }
-
     /**
      * Gets the query object to be used as the values expression to be evaluated
      * to insert records in the table.
@@ -207,7 +176,6 @@ class ValuesExpression implements ExpressionInterface
     {
         return $this->_query;
     }
-
     /**
      * @inheritDoc
      */
@@ -216,49 +184,38 @@ class ValuesExpression implements ExpressionInterface
         if (!$this->_values && $this->_query === null) {
             return '';
         }
-
         if (!$this->_castedExpressions) {
             $this->_processExpressions();
         }
-
         $columns = $this->_columnNames();
         $defaults = array_fill_keys($columns, null);
         $placeholders = [];
-
         $types = [];
         $typeMap = $this->getTypeMap();
         foreach ($defaults as $col => $v) {
             $types[$col] = $typeMap->type($col);
         }
-
         foreach ($this->_values as $row) {
             $row += $defaults;
             $rowPlaceholders = [];
-
             foreach ($columns as $column) {
                 $value = $row[$column];
-
                 if ($value instanceof ExpressionInterface) {
                     $rowPlaceholders[] = '(' . $value->sql($binder) . ')';
                     continue;
                 }
-
                 $placeholder = $binder->placeholder('c');
                 $rowPlaceholders[] = $placeholder;
                 $binder->bind($placeholder, $value, $types[$column]);
             }
-
             $placeholders[] = implode(', ', $rowPlaceholders);
         }
-
         $query = $this->getQuery();
         if ($query) {
             return ' ' . $query->sql($binder);
         }
-
         return sprintf(' VALUES (%s)', implode('), (', $placeholders));
     }
-
     /**
      * @inheritDoc
      */
@@ -267,11 +224,9 @@ class ValuesExpression implements ExpressionInterface
         if ($this->_query) {
             return $this;
         }
-
         if (!$this->_castedExpressions) {
             $this->_processExpressions();
         }
-
         foreach ($this->_values as $v) {
             if ($v instanceof ExpressionInterface) {
                 $v->traverse($callback);
@@ -286,10 +241,8 @@ class ValuesExpression implements ExpressionInterface
                 }
             }
         }
-
         return $this;
     }
-
     /**
      * Converts values that need to be casted to expressions
      *
@@ -299,7 +252,6 @@ class ValuesExpression implements ExpressionInterface
     {
         $types = [];
         $typeMap = $this->getTypeMap();
-
         $columns = $this->_columnNames();
         foreach ($columns as $c) {
             if (!is_string($c) && !is_int($c)) {
@@ -307,19 +259,16 @@ class ValuesExpression implements ExpressionInterface
             }
             $types[$c] = $typeMap->type($c);
         }
-
         $types = $this->_requiresToExpressionCasting($types);
-
         if (!$types) {
             return;
         }
-
         foreach ($this->_values as $row => $values) {
             foreach ($types as $col => $type) {
                 /** @var \Cake\Database\Type\ExpressionTypeInterface $type */
                 $this->_values[$row][$col] = $type->toExpression($values[$col]);
             }
         }
-        $this->_castedExpressions = true;
+        $this->_castedExpressions = \true;
     }
 }

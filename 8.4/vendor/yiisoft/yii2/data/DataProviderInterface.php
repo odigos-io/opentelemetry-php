@@ -1,10 +1,10 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\data;
 
 /**
@@ -30,8 +30,7 @@ interface DataProviderInterface
      *
      * @param bool $forcePrepare whether to force data preparation even if it has been done before.
      */
-    public function prepare($forcePrepare = false);
-
+    public function prepare($forcePrepare = \false);
     /**
      * Returns the number of data models in the current page.
      * This is equivalent to `count($provider->getModels())`.
@@ -39,32 +38,27 @@ interface DataProviderInterface
      * @return int the number of data models in the current page.
      */
     public function getCount();
-
     /**
      * Returns the total number of data models.
      * When [[getPagination|pagination]] is false, this is the same as [[getCount|count]].
      * @return int total number of possible data models.
      */
     public function getTotalCount();
-
     /**
      * Returns the data models in the current page.
      * @return array the list of data models in the current page.
      */
     public function getModels();
-
     /**
      * Returns the key values associated with the data models.
      * @return array the list of key values corresponding to [[getModels|models]]. Each data model in [[getModels|models]]
      * is uniquely identified by the corresponding key value in this array.
      */
     public function getKeys();
-
     /**
      * @return Sort|false the sorting object. If this is false, it means the sorting is disabled.
      */
     public function getSort();
-
     /**
      * @return Pagination|false the pagination object. If this is false, it means the pagination is disabled.
      */

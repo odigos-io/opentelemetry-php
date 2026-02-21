@@ -1,10 +1,10 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\db\pgsql;
 
 use yii\db\ArrayExpression;
@@ -13,7 +13,6 @@ use yii\db\ExpressionBuilderTrait;
 use yii\db\ExpressionInterface;
 use yii\db\JsonExpression;
 use yii\db\Query;
-
 /**
  * Class ArrayExpressionBuilder builds [[ArrayExpression]] for PostgreSQL DBMS.
  *
@@ -23,8 +22,6 @@ use yii\db\Query;
 class ArrayExpressionBuilder implements ExpressionBuilderInterface
 {
     use ExpressionBuilderTrait;
-
-
     /**
      * {@inheritdoc}
      * @param ArrayExpression|ExpressionInterface $expression the expression to be built
@@ -35,17 +32,13 @@ class ArrayExpressionBuilder implements ExpressionBuilderInterface
         if ($value === null) {
             return 'NULL';
         }
-
         if ($value instanceof Query) {
-            list ($sql, $params) = $this->queryBuilder->build($value, $params);
+            list($sql, $params) = $this->queryBuilder->build($value, $params);
             return $this->buildSubqueryArray($sql, $expression);
         }
-
         $placeholders = $this->buildPlaceholders($expression, $params);
-
         return 'ARRAY[' . implode(', ', $placeholders) . ']' . $this->getTypehint($expression);
     }
-
     /**
      * Builds placeholders array out of $expression values
      * @param ExpressionInterface|ArrayExpression $expression
@@ -55,38 +48,31 @@ class ArrayExpressionBuilder implements ExpressionBuilderInterface
     protected function buildPlaceholders(ExpressionInterface $expression, &$params)
     {
         $value = $expression->getValue();
-
         $placeholders = [];
         if ($value === null || !is_array($value) && !$value instanceof \Traversable) {
             return $placeholders;
         }
-
         if ($expression->getDimension() > 1) {
             foreach ($value as $item) {
                 $placeholders[] = $this->build($this->unnestArrayExpression($expression, $item), $params);
             }
             return $placeholders;
         }
-
         foreach ($value as $item) {
             if ($item instanceof Query) {
-                list ($sql, $params) = $this->queryBuilder->build($item, $params);
+                list($sql, $params) = $this->queryBuilder->build($item, $params);
                 $placeholders[] = $this->buildSubqueryArray($sql, $expression);
                 continue;
             }
-
             $item = $this->typecastValue($expression, $item);
             if ($item instanceof ExpressionInterface) {
                 $placeholders[] = $this->queryBuilder->buildExpression($item, $params);
                 continue;
             }
-
             $placeholders[] = $this->queryBuilder->bindParam($item, $params);
         }
-
         return $placeholders;
     }
-
     /**
      * @param ArrayExpression $expression
      * @param mixed $value
@@ -95,10 +81,8 @@ class ArrayExpressionBuilder implements ExpressionBuilderInterface
     private function unnestArrayExpression(ArrayExpression $expression, $value)
     {
         $expressionClass = get_class($expression);
-
         return new $expressionClass($value, $expression->getType(), $expression->getDimension() - 1);
     }
-
     /**
      * @param ArrayExpression $expression
      * @return string the typecast expression based on [[type]].
@@ -108,13 +92,10 @@ class ArrayExpressionBuilder implements ExpressionBuilderInterface
         if ($expression->getType() === null) {
             return '';
         }
-
         $result = '::' . $expression->getType();
         $result .= str_repeat('[]', $expression->getDimension());
-
         return $result;
     }
-
     /**
      * Build an array expression from a subquery SQL.
      *
@@ -126,7 +107,6 @@ class ArrayExpressionBuilder implements ExpressionBuilderInterface
     {
         return 'ARRAY(' . $sql . ')' . $this->getTypehint($expression);
     }
-
     /**
      * Casts $value to use in $expression
      *
@@ -139,11 +119,9 @@ class ArrayExpressionBuilder implements ExpressionBuilderInterface
         if ($value instanceof ExpressionInterface) {
             return $value;
         }
-
-        if (in_array($expression->getType(), [Schema::TYPE_JSON, Schema::TYPE_JSONB], true)) {
+        if (in_array($expression->getType(), [\yii\db\pgsql\Schema::TYPE_JSON, \yii\db\pgsql\Schema::TYPE_JSONB], \true)) {
             return new JsonExpression($value);
         }
-
         return $value;
     }
 }

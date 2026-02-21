@@ -5,7 +5,6 @@ namespace Illuminate\Routing\Exceptions;
 use Illuminate\Http\Response;
 use RuntimeException;
 use Throwable;
-
 class StreamedResponseException extends RuntimeException
 {
     /**
@@ -14,7 +13,6 @@ class StreamedResponseException extends RuntimeException
      * @var \Throwable
      */
     public $originalException;
-
     /**
      * Create a new exception instance.
      *
@@ -23,10 +21,8 @@ class StreamedResponseException extends RuntimeException
     public function __construct(Throwable $originalException)
     {
         $this->originalException = $originalException;
-
         parent::__construct($originalException->getMessage());
     }
-
     /**
      * Render the exception.
      *
@@ -36,7 +32,6 @@ class StreamedResponseException extends RuntimeException
     {
         return new Response('');
     }
-
     /**
      * Get the actual exception thrown during the stream.
      *

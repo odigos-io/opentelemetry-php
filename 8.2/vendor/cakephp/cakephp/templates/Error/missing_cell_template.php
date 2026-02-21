@@ -1,4 +1,7 @@
 <?php
+
+namespace Odigos;
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -16,30 +19,29 @@
  * @var array<string> $paths
  */
 use function Cake\Core\h;
-
 $this->layout = 'dev_error';
-
 $this->assign('templateName', 'missing_cell_view.php');
 $this->assign('title', 'Missing Cell View');
-
 $this->start('subheading');
-printf('The view for <em>%sCell</em> was not be found.', h($name));
+\printf('The view for <em>%sCell</em> was not be found.', h($name));
 $this->end();
-
 $this->start('file');
 ?>
 <p>
-    Confirm you have created the file: "<?= h($file) ?>"
+    Confirm you have created the file: "<?php 
+echo h($file);
+?>"
     in one of the following paths:
 </p>
 <ul>
-<?php
-    foreach ($paths as $path) :
-        if (str_contains($path, CORE_PATH)) {
-            continue;
-        }
-        echo sprintf('<li>%sCell/%s/%s</li>', h($path), h($name), h($file));
-    endforeach;
+<?php 
+foreach ($paths as $path) {
+    if (\str_contains($path, \CORE_PATH)) {
+        continue;
+    }
+    echo \sprintf('<li>%sCell/%s/%s</li>', h($path), h($name), h($file));
+}
 ?>
 </ul>
-<?php $this->end(); ?>
+<?php 
+$this->end();

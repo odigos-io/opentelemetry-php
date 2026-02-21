@@ -4,7 +4,6 @@ namespace Illuminate\Session;
 
 use Illuminate\Contracts\Cache\Repository as CacheContract;
 use SessionHandlerInterface;
-
 class CacheBasedSessionHandler implements SessionHandlerInterface
 {
     /**
@@ -13,14 +12,12 @@ class CacheBasedSessionHandler implements SessionHandlerInterface
      * @var \Illuminate\Contracts\Cache\Repository
      */
     protected $cache;
-
     /**
      * The number of minutes to store the data in the cache.
      *
      * @var int
      */
     protected $minutes;
-
     /**
      * Create a new cache driven handler instance.
      *
@@ -33,7 +30,6 @@ class CacheBasedSessionHandler implements SessionHandlerInterface
         $this->cache = $cache;
         $this->minutes = $minutes;
     }
-
     /**
      * {@inheritdoc}
      *
@@ -41,9 +37,8 @@ class CacheBasedSessionHandler implements SessionHandlerInterface
      */
     public function open($savePath, $sessionName): bool
     {
-        return true;
+        return \true;
     }
-
     /**
      * {@inheritdoc}
      *
@@ -51,9 +46,8 @@ class CacheBasedSessionHandler implements SessionHandlerInterface
      */
     public function close(): bool
     {
-        return true;
+        return \true;
     }
-
     /**
      * {@inheritdoc}
      *
@@ -63,7 +57,6 @@ class CacheBasedSessionHandler implements SessionHandlerInterface
     {
         return $this->cache->get($sessionId, '');
     }
-
     /**
      * {@inheritdoc}
      *
@@ -73,7 +66,6 @@ class CacheBasedSessionHandler implements SessionHandlerInterface
     {
         return $this->cache->put($sessionId, $data, $this->minutes * 60);
     }
-
     /**
      * {@inheritdoc}
      *
@@ -83,7 +75,6 @@ class CacheBasedSessionHandler implements SessionHandlerInterface
     {
         return $this->cache->forget($sessionId);
     }
-
     /**
      * {@inheritdoc}
      *
@@ -93,7 +84,6 @@ class CacheBasedSessionHandler implements SessionHandlerInterface
     {
         return 0;
     }
-
     /**
      * Get the underlying cache repository.
      *

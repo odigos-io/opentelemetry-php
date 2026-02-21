@@ -5,7 +5,6 @@ namespace Illuminate\Container\Attributes;
 use Attribute;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Contracts\Container\ContextualAttribute;
-
 #[Attribute(Attribute::TARGET_PARAMETER)]
 class RouteParameter implements ContextualAttribute
 {
@@ -15,7 +14,6 @@ class RouteParameter implements ContextualAttribute
     public function __construct(public string $parameter)
     {
     }
-
     /**
      * Resolve the route parameter.
      *

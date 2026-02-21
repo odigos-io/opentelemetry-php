@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\Console\Helper;
 
 /**
@@ -22,16 +21,12 @@ final class TreeNode implements \Countable, \IteratorAggregate
      * @var array<TreeNode|callable(): \Generator>
      */
     private array $children = [];
-
-    public function __construct(
-        private readonly string $value = '',
-        iterable $children = [],
-    ) {
+    public function __construct(private readonly string $value = '', iterable $children = [])
+    {
         foreach ($children as $child) {
             $this->addChild($child);
         }
     }
-
     public static function fromValues(iterable $nodes, ?self $node = null): self
     {
         $node ??= new self();
@@ -46,26 +41,20 @@ final class TreeNode implements \Countable, \IteratorAggregate
                 $node->addChild(new self($value));
             }
         }
-
         return $node;
     }
-
     public function getValue(): string
     {
         return $this->value;
     }
-
     public function addChild(self|string|callable $node): self
     {
         if (\is_string($node)) {
             $node = new self($node);
         }
-
         $this->children[] = $node;
-
         return $this;
     }
-
     /**
      * @return \Traversable<int, TreeNode>
      */
@@ -79,7 +68,6 @@ final class TreeNode implements \Countable, \IteratorAggregate
             }
         }
     }
-
     /**
      * @return \Traversable<int, TreeNode>
      */
@@ -87,17 +75,14 @@ final class TreeNode implements \Countable, \IteratorAggregate
     {
         return $this->getChildren();
     }
-
     public function count(): int
     {
         $count = 0;
         foreach ($this->getChildren() as $child) {
             ++$count;
         }
-
         return $count;
     }
-
     public function __toString(): string
     {
         return $this->value;

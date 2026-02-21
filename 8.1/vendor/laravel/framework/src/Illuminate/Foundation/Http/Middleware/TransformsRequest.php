@@ -4,7 +4,6 @@ namespace Illuminate\Foundation\Http\Middleware;
 
 use Closure;
 use Symfony\Component\HttpFoundation\ParameterBag;
-
 class TransformsRequest
 {
     /**
@@ -17,10 +16,8 @@ class TransformsRequest
     public function handle($request, Closure $next)
     {
         $this->clean($request);
-
         return $next($request);
     }
-
     /**
      * Clean the request's data.
      *
@@ -30,14 +27,12 @@ class TransformsRequest
     protected function clean($request)
     {
         $this->cleanParameterBag($request->query);
-
         if ($request->isJson()) {
             $this->cleanParameterBag($request->json());
         } elseif ($request->request !== $request->query) {
             $this->cleanParameterBag($request->request);
         }
     }
-
     /**
      * Clean the data in the parameter bag.
      *
@@ -48,7 +43,6 @@ class TransformsRequest
     {
         $bag->replace($this->cleanArray($bag->all()));
     }
-
     /**
      * Clean the data in the given array.
      *
@@ -59,12 +53,10 @@ class TransformsRequest
     protected function cleanArray(array $data, $keyPrefix = '')
     {
         foreach ($data as $key => $value) {
-            $data[$key] = $this->cleanValue($keyPrefix.$key, $value);
+            $data[$key] = $this->cleanValue($keyPrefix . $key, $value);
         }
-
         return $data;
     }
-
     /**
      * Clean the given value.
      *
@@ -75,12 +67,10 @@ class TransformsRequest
     protected function cleanValue($key, $value)
     {
         if (is_array($value)) {
-            return $this->cleanArray($value, $key.'.');
+            return $this->cleanArray($value, $key . '.');
         }
-
         return $this->transform($key, $value);
     }
-
     /**
      * Transform the given value.
      *

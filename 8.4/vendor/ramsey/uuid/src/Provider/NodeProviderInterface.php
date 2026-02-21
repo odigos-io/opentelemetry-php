@@ -9,13 +9,10 @@
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
  */
+declare (strict_types=1);
+namespace Odigos\Ramsey\Uuid\Provider;
 
-declare(strict_types=1);
-
-namespace Ramsey\Uuid\Provider;
-
-use Ramsey\Uuid\Type\Hexadecimal;
-
+use Odigos\Ramsey\Uuid\Type\Hexadecimal;
 /**
  * A node provider retrieves or generates a node ID
  */

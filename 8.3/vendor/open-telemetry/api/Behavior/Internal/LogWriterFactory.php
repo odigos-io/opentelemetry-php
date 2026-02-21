@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\API\Behavior\Internal;
 
 use OpenTelemetry\API\Behavior\Internal\LogWriter\ErrorLogWriter;
@@ -11,16 +10,13 @@ use OpenTelemetry\API\Behavior\Internal\LogWriter\Psr3LogWriter;
 use OpenTelemetry\API\Behavior\Internal\LogWriter\StreamLogWriter;
 use OpenTelemetry\API\Instrumentation\ConfigurationResolver;
 use OpenTelemetry\API\LoggerHolder;
-
 class LogWriterFactory
 {
     private const OTEL_PHP_LOG_DESTINATION = 'OTEL_PHP_LOG_DESTINATION';
-
     public function create(): LogWriterInterface
     {
         $dest = (new ConfigurationResolver())->getString(self::OTEL_PHP_LOG_DESTINATION);
         $logger = LoggerHolder::get();
-
         switch ($dest) {
             case 'none':
                 return new NoopLogWriter();
@@ -33,7 +29,6 @@ class LogWriterFactory
                     return new Psr3LogWriter($logger);
                 }
                 error_log('OpenTelemetry: cannot use OTEL_PHP_LOG_DESTINATION=psr3 without providing a PSR-3 logger');
-
                 //default to error log
                 return new ErrorLogWriter();
             case 'error_log':
@@ -42,7 +37,6 @@ class LogWriterFactory
                 if ($logger) {
                     return new Psr3LogWriter($logger);
                 }
-
                 return new ErrorLogWriter();
         }
     }

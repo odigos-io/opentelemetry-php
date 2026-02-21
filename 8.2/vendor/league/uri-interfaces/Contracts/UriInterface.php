@@ -8,17 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-declare(strict_types=1);
-
-namespace League\Uri\Contracts;
+declare (strict_types=1);
+namespace Odigos\League\Uri\Contracts;
 
 use JsonSerializable;
-use League\Uri\Exceptions\MissingFeature;
-use League\Uri\Exceptions\SyntaxError;
-use League\Uri\UriString;
+use Odigos\League\Uri\Exceptions\MissingFeature;
+use Odigos\League\Uri\Exceptions\SyntaxError;
+use Odigos\League\Uri\UriString;
 use Stringable;
-
 /**
  * @phpstan-import-type ComponentMap from UriString
  *
@@ -41,14 +38,12 @@ interface UriInterface extends JsonSerializable, Stringable
      * @see http://tools.ietf.org/html/rfc3986#section-4.1
      */
     public function __toString(): string;
-
     /**
      * Returns the string representation as a URI reference.
      *
      * @see http://tools.ietf.org/html/rfc3986#section-4.1
      */
     public function toString(): string;
-
     /**
      * Returns the string representation as a URI reference.
      *
@@ -56,7 +51,6 @@ interface UriInterface extends JsonSerializable, Stringable
      * @see ::__toString
      */
     public function jsonSerialize(): string;
-
     /**
      * Retrieve the scheme component of the URI.
      *
@@ -71,7 +65,6 @@ interface UriInterface extends JsonSerializable, Stringable
      * @see https://tools.ietf.org/html/rfc3986#section-3.1
      */
     public function getScheme(): ?string;
-
     /**
      * Retrieve the authority component of the URI.
      *
@@ -83,7 +76,6 @@ interface UriInterface extends JsonSerializable, Stringable
      * @see https://tools.ietf.org/html/rfc3986#section-3.2
      */
     public function getAuthority(): ?string;
-
     /**
      * Retrieve the user information component of the URI.
      *
@@ -97,7 +89,6 @@ interface UriInterface extends JsonSerializable, Stringable
      * NOT be added.
      */
     public function getUserInfo(): ?string;
-
     /**
      * Retrieve the host component of the URI.
      *
@@ -109,7 +100,6 @@ interface UriInterface extends JsonSerializable, Stringable
      * @see http://tools.ietf.org/html/rfc3986#section-3.2.2
      */
     public function getHost(): ?string;
-
     /**
      * Retrieve the port component of the URI.
      *
@@ -124,7 +114,6 @@ interface UriInterface extends JsonSerializable, Stringable
      * the standard port for that scheme, but SHOULD return null.
      */
     public function getPort(): ?int;
-
     /**
      * Retrieve the path component of the URI.
      *
@@ -150,7 +139,6 @@ interface UriInterface extends JsonSerializable, Stringable
      * @see https://tools.ietf.org/html/rfc3986#section-3.3
      */
     public function getPath(): string;
-
     /**
      * Retrieve the query string of the URI.
      *
@@ -171,7 +159,6 @@ interface UriInterface extends JsonSerializable, Stringable
      * @see https://tools.ietf.org/html/rfc3986#section-3.4
      */
     public function getQuery(): ?string;
-
     /**
      * Retrieve the fragment component of the URI.
      *
@@ -188,7 +175,6 @@ interface UriInterface extends JsonSerializable, Stringable
      * @see https://tools.ietf.org/html/rfc3986#section-3.5
      */
     public function getFragment(): ?string;
-
     /**
      * Returns an associative array containing all the URI components.
      *
@@ -206,7 +192,6 @@ interface UriInterface extends JsonSerializable, Stringable
      * @return ComponentMap
      */
     public function getComponents(): array;
-
     /**
      * Return an instance with the specified scheme.
      *
@@ -220,7 +205,6 @@ interface UriInterface extends JsonSerializable, Stringable
      *                     that would result in an object in invalid state.
      */
     public function withScheme(Stringable|string|null $scheme): self;
-
     /**
      * Return an instance with the specified user information.
      *
@@ -235,7 +219,6 @@ interface UriInterface extends JsonSerializable, Stringable
      *                     that would result in an object in invalid state.
      */
     public function withUserInfo(Stringable|string|null $user, Stringable|string|null $password = null): self;
-
     /**
      * Return an instance with the specified host.
      *
@@ -252,7 +235,6 @@ interface UriInterface extends JsonSerializable, Stringable
      *                        or misconfigured.
      */
     public function withHost(Stringable|string|null $host): self;
-
     /**
      * Return an instance with the specified port.
      *
@@ -266,7 +248,6 @@ interface UriInterface extends JsonSerializable, Stringable
      *                     that would result in an object in invalid state.
      */
     public function withPort(?int $port): self;
-
     /**
      * Return an instance with the specified path.
      *
@@ -284,7 +265,6 @@ interface UriInterface extends JsonSerializable, Stringable
      *                     that would result in an object in invalid state.
      */
     public function withPath(Stringable|string $path): self;
-
     /**
      * Return an instance with the specified query string.
      *
@@ -301,7 +281,6 @@ interface UriInterface extends JsonSerializable, Stringable
      *                     that would result in an object in invalid state.
      */
     public function withQuery(Stringable|string|null $query): self;
-
     /**
      * Return an instance with the specified URI fragment.
      *

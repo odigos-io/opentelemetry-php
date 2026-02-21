@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace MongoDB\Builder;
 
 use MongoDB\Builder\Expression\ResolvesToAny;
@@ -10,7 +9,6 @@ use MongoDB\Builder\Expression\ResolvesToDate;
 use MongoDB\Builder\Expression\ResolvesToObject;
 use MongoDB\Builder\Expression\ResolvesToTimestamp;
 use MongoDB\Builder\Type\ExpressionInterface;
-
 /**
  * Enum for system variables that can be used in aggregation expressions.
  *
@@ -28,9 +26,8 @@ final class Variable
      */
     public static function clusterTime(): ResolvesToTimestamp
     {
-        return new Expression\Variable('CLUSTER_TIME');
+        return new \MongoDB\Builder\Expression\Variable('CLUSTER_TIME');
     }
-
     /**
      * References the start of the field path being processed in the aggregation pipeline stage.
      * Unless documented otherwise, all stages start with CURRENT the same as ROOT.
@@ -39,9 +36,8 @@ final class Variable
      */
     public static function current(string $fieldPath = ''): ResolvesToAny
     {
-        return new Expression\Variable('CURRENT' . ($fieldPath ? '.' . $fieldPath : ''));
+        return new \MongoDB\Builder\Expression\Variable('CURRENT' . ($fieldPath ? '.' . $fieldPath : ''));
     }
-
     /**
      * One of the allowed results of a $redact expression.
      *
@@ -53,9 +49,8 @@ final class Variable
      */
     public static function descend(): ExpressionInterface
     {
-        return new Expression\Variable('DESCEND');
+        return new \MongoDB\Builder\Expression\Variable('DESCEND');
     }
-
     /**
      * One of the allowed results of a $redact expression.
      *
@@ -67,9 +62,8 @@ final class Variable
      */
     public static function keep(): ExpressionInterface
     {
-        return new Expression\Variable('KEEP');
+        return new \MongoDB\Builder\Expression\Variable('KEEP');
     }
-
     /**
      * A variable that returns the current datetime value.
      * NOW returns the same value for all members of the deployment and remains the same throughout all stages of the
@@ -79,9 +73,8 @@ final class Variable
      */
     public static function now(): ResolvesToDate
     {
-        return new Expression\Variable('NOW');
+        return new \MongoDB\Builder\Expression\Variable('NOW');
     }
-
     /**
      * One of the allowed results of a $redact expression.
      *
@@ -93,9 +86,8 @@ final class Variable
      */
     public static function prune(): ExpressionInterface
     {
-        return new Expression\Variable('PRUNE');
+        return new \MongoDB\Builder\Expression\Variable('PRUNE');
     }
-
     /**
      * A variable which evaluates to the missing value. Allows for the conditional exclusion of fields. In a $project,
      * a field set to the variable REMOVE is excluded from the output.
@@ -105,18 +97,16 @@ final class Variable
      */
     public static function remove(): ResolvesToAny
     {
-        return new Expression\Variable('REMOVE');
+        return new \MongoDB\Builder\Expression\Variable('REMOVE');
     }
-
     /**
      * References the root document, i.e. the top-level document, currently being processed in the aggregation pipeline
      * stage.
      */
     public static function root(): ResolvesToObject
     {
-        return new Expression\Variable('ROOT');
+        return new \MongoDB\Builder\Expression\Variable('ROOT');
     }
-
     /**
      * A variable that stores the metadata results of an Atlas Search query. In all supported aggregation pipeline
      * stages, a field set to the variable $$SEARCH_META returns the metadata results for the query.
@@ -126,9 +116,8 @@ final class Variable
      */
     public static function searchMeta(): ResolvesToObject
     {
-        return new Expression\Variable('SEARCH_META');
+        return new \MongoDB\Builder\Expression\Variable('SEARCH_META');
     }
-
     /**
      * Returns the roles assigned to the current user.
      * For use cases that include USER_ROLES, see the find, aggregation, view, updateOne, updateMany, and findAndModify
@@ -138,19 +127,17 @@ final class Variable
      */
     public static function userRoles(): ResolvesToArray
     {
-        return new Expression\Variable('USER_ROLES');
+        return new \MongoDB\Builder\Expression\Variable('USER_ROLES');
     }
-
     /**
      * User-defined variable that can be used to store any BSON type.
      *
      * @see https://www.mongodb.com/docs/manual/reference/operator/aggregation/let/
      */
-    public static function variable(string $name): Expression\Variable
+    public static function variable(string $name): \MongoDB\Builder\Expression\Variable
     {
-        return new Expression\Variable($name);
+        return new \MongoDB\Builder\Expression\Variable($name);
     }
-
     private function __construct()
     {
         // This class cannot be instantiated

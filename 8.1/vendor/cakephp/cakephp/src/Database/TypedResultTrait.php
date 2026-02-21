@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -27,7 +27,6 @@ trait TypedResultTrait
      * @var string
      */
     protected string $_returnType = 'string';
-
     /**
      * Gets the type of the value this object will generate.
      *
@@ -37,7 +36,6 @@ trait TypedResultTrait
     {
         return $this->_returnType;
     }
-
     /**
      * Sets the type of the value this object will generate.
      *
@@ -47,7 +45,6 @@ trait TypedResultTrait
     public function setReturnType(string $type)
     {
         $this->_returnType = $type;
-
         return $this;
     }
 }

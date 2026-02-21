@@ -1,10 +1,10 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\caching;
 
 /**
@@ -55,7 +55,6 @@ interface CacheInterface extends \ArrayAccess
      * @return string the generated cache key
      */
     public function buildKey($key);
-
     /**
      * Retrieves a value from cache with a specified key.
      * @param mixed $key a key identifying the cached value. This can be a simple string or
@@ -64,7 +63,6 @@ interface CacheInterface extends \ArrayAccess
      * or the dependency associated with the cached data has changed.
      */
     public function get($key);
-
     /**
      * Checks whether a specified key exists in the cache.
      * This can be faster than getting the value from the cache if the data is big.
@@ -78,7 +76,6 @@ interface CacheInterface extends \ArrayAccess
      * @return bool true if a value exists in cache, false if the value is not in the cache or expired.
      */
     public function exists($key);
-
     /**
      * Retrieves multiple values from cache with the specified keys.
      * Some caches (such as memcache, apc) allow retrieving multiple cached values at the same time,
@@ -90,7 +87,6 @@ interface CacheInterface extends \ArrayAccess
      * If a value is not cached or expired, the corresponding array value will be false.
      */
     public function multiGet($keys);
-
     /**
      * Stores a value identified by a key into cache.
      * If the cache already contains such a key, the existing value and
@@ -107,7 +103,6 @@ interface CacheInterface extends \ArrayAccess
      * @return bool whether the value is successfully stored into cache
      */
     public function set($key, $value, $duration = null, $dependency = null);
-
     /**
      * Stores multiple items in cache. Each item contains a value identified by a key.
      * If the cache already contains such a key, the existing value and
@@ -122,7 +117,6 @@ interface CacheInterface extends \ArrayAccess
      * @return array array of failed keys
      */
     public function multiSet($items, $duration = null, $dependency = null);
-
     /**
      * Stores a value identified by a key into cache if the cache does not contain this key.
      * Nothing will be done if the cache already contains the key.
@@ -136,7 +130,6 @@ interface CacheInterface extends \ArrayAccess
      * @return bool whether the value is successfully stored into cache
      */
     public function add($key, $value, $duration = 0, $dependency = null);
-
     /**
      * Stores multiple items in cache. Each item contains a value identified by a key.
      * If the cache already contains such a key, the existing value and expiration time will be preserved.
@@ -149,7 +142,6 @@ interface CacheInterface extends \ArrayAccess
      * @return array array of failed keys
      */
     public function multiAdd($items, $duration = 0, $dependency = null);
-
     /**
      * Deletes a value with the specified key from cache.
      * @param mixed $key a key identifying the value to be deleted from cache. This can be a simple string or
@@ -157,14 +149,12 @@ interface CacheInterface extends \ArrayAccess
      * @return bool if no error happens during deletion
      */
     public function delete($key);
-
     /**
      * Deletes all values from cache.
      * Be careful of performing this operation if the cache is shared among multiple applications.
      * @return bool whether the flush operation was successful.
      */
     public function flush();
-
     /**
      * Method combines both [[set()]] and [[get()]] methods to retrieve value identified by a $key,
      * or to store the result of $callable execution if there is no cache available for the $key.

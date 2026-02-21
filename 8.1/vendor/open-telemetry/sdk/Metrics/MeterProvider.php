@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\SDK\Metrics;
 
 use ArrayAccess;
@@ -20,114 +19,70 @@ use OpenTelemetry\SDK\Metrics\MetricRegistry\MetricWriterInterface;
 use OpenTelemetry\SDK\Resource\ResourceInfo;
 use OpenTelemetry\SDK\Sdk;
 use WeakMap;
-
-final class MeterProvider implements MeterProviderInterface
+final class MeterProvider implements \OpenTelemetry\SDK\Metrics\MeterProviderInterface
 {
-    private readonly MeterInstruments $instruments;
+    private readonly \OpenTelemetry\SDK\Metrics\MeterInstruments $instruments;
     private readonly MetricRegistryInterface $registry;
     private readonly MetricWriterInterface $writer;
     private readonly ArrayAccess $destructors;
-
-    private bool $closed = false;
+    private bool $closed = \false;
     private readonly WeakMap $meters;
-
     /**
      * @param iterable<MetricReaderInterface&MetricSourceRegistryInterface&DefaultAggregationProviderInterface> $metricReaders
      */
-    public function __construct(
-        ?ContextStorageInterface $contextStorage,
-        private readonly ResourceInfo $resource,
-        private readonly ClockInterface $clock,
-        AttributesFactoryInterface $attributesFactory,
-        private readonly InstrumentationScopeFactoryInterface $instrumentationScopeFactory,
-        private readonly iterable $metricReaders,
-        private readonly ViewRegistryInterface $viewRegistry,
-        private readonly ?ExemplarFilterInterface $exemplarFilter,
-        private readonly StalenessHandlerFactoryInterface $stalenessHandlerFactory,
-        private readonly MetricFactoryInterface $metricFactory = new StreamFactory(),
-        private ?Configurator $configurator = null,
-    ) {
-        $this->instruments = new MeterInstruments();
-
+    public function __construct(?ContextStorageInterface $contextStorage, private readonly ResourceInfo $resource, private readonly ClockInterface $clock, AttributesFactoryInterface $attributesFactory, private readonly InstrumentationScopeFactoryInterface $instrumentationScopeFactory, private readonly iterable $metricReaders, private readonly \OpenTelemetry\SDK\Metrics\ViewRegistryInterface $viewRegistry, private readonly ?ExemplarFilterInterface $exemplarFilter, private readonly \OpenTelemetry\SDK\Metrics\StalenessHandlerFactoryInterface $stalenessHandlerFactory, private readonly \OpenTelemetry\SDK\Metrics\MetricFactoryInterface $metricFactory = new StreamFactory(), private ?Configurator $configurator = null)
+    {
+        $this->instruments = new \OpenTelemetry\SDK\Metrics\MeterInstruments();
         $registry = new MetricRegistry($contextStorage, $attributesFactory, $clock);
         $this->registry = $registry;
         $this->writer = $registry;
         $this->destructors = new WeakMap();
         $this->meters = new WeakMap();
     }
-
     #[\Override]
-    public function getMeter(
-        string $name,
-        ?string $version = null,
-        ?string $schemaUrl = null,
-        iterable $attributes = [],
-    ): MeterInterface {
-        if ($this->closed || Sdk::isDisabled()) { //@todo create meter provider from factory, and move Sdk::isDisabled() there
+    public function getMeter(string $name, ?string $version = null, ?string $schemaUrl = null, iterable $attributes = []): MeterInterface
+    {
+        if ($this->closed || Sdk::isDisabled()) {
+            //@todo create meter provider from factory, and move Sdk::isDisabled() there
             return new NoopMeter();
         }
-
-        $meter = new Meter(
-            $this->metricFactory,
-            $this->resource,
-            $this->clock,
-            $this->stalenessHandlerFactory,
-            $this->metricReaders,
-            $this->viewRegistry,
-            $this->exemplarFilter,
-            $this->instruments,
-            $this->instrumentationScopeFactory->create($name, $version, $schemaUrl, $attributes),
-            $this->registry,
-            $this->writer,
-            $this->destructors,
-            $this->configurator,
-        );
+        $meter = new \OpenTelemetry\SDK\Metrics\Meter($this->metricFactory, $this->resource, $this->clock, $this->stalenessHandlerFactory, $this->metricReaders, $this->viewRegistry, $this->exemplarFilter, $this->instruments, $this->instrumentationScopeFactory->create($name, $version, $schemaUrl, $attributes), $this->registry, $this->writer, $this->destructors, $this->configurator);
         $this->meters->offsetSet($meter, null);
-
         return $meter;
     }
-
     #[\Override]
     public function shutdown(): bool
     {
         if ($this->closed) {
-            return false;
+            return \false;
         }
-
-        $this->closed = true;
-
-        $success = true;
+        $this->closed = \true;
+        $success = \true;
         foreach ($this->metricReaders as $metricReader) {
             if (!$metricReader->shutdown()) {
-                $success = false;
+                $success = \false;
             }
         }
-
         return $success;
     }
-
     #[\Override]
     public function forceFlush(): bool
     {
         if ($this->closed) {
-            return false;
+            return \false;
         }
-
-        $success = true;
+        $success = \true;
         foreach ($this->metricReaders as $metricReader) {
             if (!$metricReader->forceFlush()) {
-                $success = false;
+                $success = \false;
             }
         }
-
         return $success;
     }
-
-    public static function builder(): MeterProviderBuilder
+    public static function builder(): \OpenTelemetry\SDK\Metrics\MeterProviderBuilder
     {
-        return new MeterProviderBuilder();
+        return new \OpenTelemetry\SDK\Metrics\MeterProviderBuilder();
     }
-
     /**
      * Update the {@link Configurator} for a {@link MeterProvider}, which will reconfigure
      *  all meters created from the provider.
@@ -138,7 +93,6 @@ final class MeterProvider implements MeterProviderInterface
     public function updateConfigurator(Configurator $configurator): void
     {
         $this->configurator = $configurator;
-
         foreach ($this->meters as $meter => $unused) {
             $meter->updateConfigurator($configurator);
         }

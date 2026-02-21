@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\SDK\Metrics;
 
 interface DefaultAggregationProviderInterface
@@ -13,5 +12,5 @@ interface DefaultAggregationProviderInterface
      * @noinspection PhpDocSignatureInspection not added for BC
      * @phan-suppress PhanCommentParamWithoutRealParam @phpstan-ignore-next-line
      */
-    public function defaultAggregation($instrumentType /*, array $advisory = [] */): ?AggregationInterface;
+    public function defaultAggregation($instrumentType): ?\OpenTelemetry\SDK\Metrics\AggregationInterface;
 }

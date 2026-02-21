@@ -4,7 +4,6 @@ namespace Illuminate\Routing\Controllers;
 
 use Closure;
 use Illuminate\Support\Arr;
-
 class Middleware
 {
     /**
@@ -13,21 +12,18 @@ class Middleware
      * @var \Closure|string|array
      */
     public $middleware;
-
     /**
      * The controller methods the middleware should only apply to.
      *
      * @var array|null
      */
     public $only;
-
     /**
      * The controller methods the middleware should not apply to.
      *
      * @var array|null
      */
     public $except;
-
     /**
      * Create a new controller middleware definition.
      *
@@ -38,7 +34,6 @@ class Middleware
     {
         $this->middleware = $middleware;
     }
-
     /**
      * Specify the only controller methods the middleware should apply to.
      *
@@ -48,10 +43,8 @@ class Middleware
     public function only(array|string $only)
     {
         $this->only = Arr::wrap($only);
-
         return $this;
     }
-
     /**
      * Specify the controller methods the middleware should not apply to.
      *
@@ -61,7 +54,6 @@ class Middleware
     public function except(array|string $except)
     {
         $this->except = Arr::wrap($except);
-
         return $this;
     }
 }

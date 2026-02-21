@@ -3,25 +3,16 @@
 namespace Laravel\Prompts;
 
 use Closure;
-
-class PasswordPrompt extends Prompt
+class PasswordPrompt extends \Laravel\Prompts\Prompt
 {
-    use Concerns\TypedValue;
-
+    use \Laravel\Prompts\Concerns\TypedValue;
     /**
      * Create a new PasswordPrompt instance.
      */
-    public function __construct(
-        public string $label,
-        public string $placeholder = '',
-        public bool|string $required = false,
-        public mixed $validate = null,
-        public string $hint = '',
-        public ?Closure $transform = null,
-    ) {
+    public function __construct(public string $label, public string $placeholder = '', public bool|string $required = \false, public mixed $validate = null, public string $hint = '', public ?Closure $transform = null)
+    {
         $this->trackTypedValue();
     }
-
     /**
      * Get a masked version of the entered value.
      */
@@ -29,7 +20,6 @@ class PasswordPrompt extends Prompt
     {
         return str_repeat('•', mb_strlen($this->value()));
     }
-
     /**
      * Get the masked value with a virtual cursor.
      */
@@ -38,7 +28,6 @@ class PasswordPrompt extends Prompt
         if ($this->value() === '') {
             return $this->dim($this->addCursor($this->placeholder, 0, $maxWidth));
         }
-
         return $this->addCursor($this->masked(), $this->cursorPosition, $maxWidth);
     }
 }

@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -19,7 +19,6 @@ namespace Cake\Cache\Event;
 use Cake\Cache\CacheEngine;
 use Cake\Cache\Exception\InvalidArgumentException;
 use Cake\Event\Event;
-
 /**
  * Class Cache AfterDelete Event
  *
@@ -28,9 +27,7 @@ use Cake\Event\Event;
 class CacheAfterDeleteEvent extends Event
 {
     public const NAME = 'Cache.afterDelete';
-
     protected string $key;
-
     /**
      * Constructor
      *
@@ -48,10 +45,8 @@ class CacheAfterDeleteEvent extends Event
             $this->result = $data['success'];
             unset($data['success']);
         }
-
         parent::__construct($name, $subject, $data);
     }
-
     /**
      * The result value of the event listeners
      *
@@ -61,7 +56,6 @@ class CacheAfterDeleteEvent extends Event
     {
         return $this->result;
     }
-
     /**
      * Listeners can attach a result value to the event.
      *
@@ -71,14 +65,10 @@ class CacheAfterDeleteEvent extends Event
     public function setResult(mixed $value = null)
     {
         if ($value !== null && !is_bool($value)) {
-            throw new InvalidArgumentException(
-                'The result for CacheEngine events must be a `bool`.',
-            );
+            throw new InvalidArgumentException('The result for CacheEngine events must be a `bool`.');
         }
-
         return parent::setResult($value);
     }
-
     /**
      * @return string
      */

@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\DBAL;
 
 use Doctrine\DBAL\Driver\Exception as DriverException;
@@ -9,21 +8,18 @@ use Doctrine\DBAL\Driver\Result as DriverResult;
 use Doctrine\DBAL\Exception\NoKeyValue;
 use LogicException;
 use Traversable;
-
 use function array_shift;
 use function assert;
 use function count;
 use function get_debug_type;
 use function method_exists;
 use function sprintf;
-
 class Result
 {
     /** @internal The result can be only instantiated by {@see Connection} or {@see Statement}. */
-    public function __construct(private readonly DriverResult $result, private readonly Connection $connection)
+    public function __construct(private readonly DriverResult $result, private readonly \Doctrine\DBAL\Connection $connection)
     {
     }
-
     /**
      * Returns the next row of the result as a numeric array or FALSE if there are no more rows.
      *
@@ -39,7 +35,6 @@ class Result
             throw $this->connection->convertException($e);
         }
     }
-
     /**
      * Returns the next row of the result as an associative array or FALSE if there are no more rows.
      *
@@ -55,7 +50,6 @@ class Result
             throw $this->connection->convertException($e);
         }
     }
-
     /**
      * Returns the first value of the next row of the result or FALSE if there are no more rows.
      *
@@ -69,7 +63,6 @@ class Result
             throw $this->connection->convertException($e);
         }
     }
-
     /**
      * Returns an array containing all of the result rows represented as numeric arrays.
      *
@@ -85,7 +78,6 @@ class Result
             throw $this->connection->convertException($e);
         }
     }
-
     /**
      * Returns an array containing all of the result rows represented as associative arrays.
      *
@@ -101,7 +93,6 @@ class Result
             throw $this->connection->convertException($e);
         }
     }
-
     /**
      * Returns an array containing the values of the first column of the result.
      *
@@ -112,18 +103,14 @@ class Result
     public function fetchAllKeyValue(): array
     {
         $this->ensureHasKeyValue();
-
         $data = [];
-
         foreach ($this->fetchAllNumeric() as $row) {
             assert(count($row) >= 2);
             [$key, $value] = $row;
-            $data[$key]    = $value;
+            $data[$key] = $value;
         }
-
         return $data;
     }
-
     /**
      * Returns an associative array with the keys mapped to the first column and the values being
      * an associative array representing the rest of the columns and their values.
@@ -135,14 +122,11 @@ class Result
     public function fetchAllAssociativeIndexed(): array
     {
         $data = [];
-
         foreach ($this->fetchAllAssociative() as $row) {
             $data[array_shift($row)] = $row;
         }
-
         return $data;
     }
-
     /**
      * @return list<mixed>
      *
@@ -156,7 +140,6 @@ class Result
             throw $this->connection->convertException($e);
         }
     }
-
     /**
      * @return Traversable<int,list<mixed>>
      *
@@ -164,11 +147,10 @@ class Result
      */
     public function iterateNumeric(): Traversable
     {
-        while (($row = $this->fetchNumeric()) !== false) {
+        while (($row = $this->fetchNumeric()) !== \false) {
             yield $row;
         }
     }
-
     /**
      * @return Traversable<int,array<string,mixed>>
      *
@@ -176,11 +158,10 @@ class Result
      */
     public function iterateAssociative(): Traversable
     {
-        while (($row = $this->fetchAssociative()) !== false) {
+        while (($row = $this->fetchAssociative()) !== \false) {
             yield $row;
         }
     }
-
     /**
      * @return Traversable<mixed, mixed>
      *
@@ -189,15 +170,12 @@ class Result
     public function iterateKeyValue(): Traversable
     {
         $this->ensureHasKeyValue();
-
         foreach ($this->iterateNumeric() as $row) {
             assert(count($row) >= 2);
             [$key, $value] = $row;
-
             yield $key => $value;
         }
     }
-
     /**
      * Returns an iterator over the result set with the keys mapped to the first column and the values being
      * an associative array representing the rest of the columns and their values.
@@ -212,7 +190,6 @@ class Result
             yield array_shift($row) => $row;
         }
     }
-
     /**
      * @return Traversable<int,mixed>
      *
@@ -220,11 +197,10 @@ class Result
      */
     public function iterateColumn(): Traversable
     {
-        while (($value = $this->fetchOne()) !== false) {
+        while (($value = $this->fetchOne()) !== \false) {
             yield $value;
         }
     }
-
     /**
      * Returns the number of rows affected by the DELETE, INSERT, or UPDATE statement that produced the result.
      *
@@ -246,7 +222,6 @@ class Result
             throw $this->connection->convertException($e);
         }
     }
-
     /** @throws Exception */
     public function columnCount(): int
     {
@@ -256,7 +231,6 @@ class Result
             throw $this->connection->convertException($e);
         }
     }
-
     /**
      * Returns the name of the column in the result set for the given 0-based index.
      *
@@ -266,30 +240,23 @@ class Result
      */
     public function getColumnName(int $index): string
     {
-        if (! method_exists($this->result, 'getColumnName')) {
-            throw new LogicException(sprintf(
-                'The driver result %s does not support accessing the column name.',
-                get_debug_type($this->result),
-            ));
+        if (!method_exists($this->result, 'getColumnName')) {
+            throw new LogicException(sprintf('The driver result %s does not support accessing the column name.', get_debug_type($this->result)));
         }
-
         try {
             return $this->result->getColumnName($index);
         } catch (DriverException $e) {
             throw $this->connection->convertException($e);
         }
     }
-
     public function free(): void
     {
         $this->result->free();
     }
-
     /** @throws Exception */
     private function ensureHasKeyValue(): void
     {
         $columnCount = $this->columnCount();
-
         if ($columnCount < 2) {
             throw NoKeyValue::fromColumnCount($columnCount);
         }

@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\DBAL\Query;
 
 final class SelectQuery
@@ -14,64 +13,46 @@ final class SelectQuery
      * @param string[] $groupBy
      * @param string[] $orderBy
      */
-    public function __construct(
-        private readonly bool $distinct,
-        private readonly array $columns,
-        private readonly array $from,
-        private readonly ?string $where,
-        private readonly array $groupBy,
-        private readonly ?string $having,
-        private readonly array $orderBy,
-        private readonly Limit $limit,
-        private readonly ?ForUpdate $forUpdate,
-    ) {
+    public function __construct(private readonly bool $distinct, private readonly array $columns, private readonly array $from, private readonly ?string $where, private readonly array $groupBy, private readonly ?string $having, private readonly array $orderBy, private readonly \Doctrine\DBAL\Query\Limit $limit, private readonly ?\Doctrine\DBAL\Query\ForUpdate $forUpdate)
+    {
     }
-
     public function isDistinct(): bool
     {
         return $this->distinct;
     }
-
     /** @return string[] */
     public function getColumns(): array
     {
         return $this->columns;
     }
-
     /** @return string[] */
     public function getFrom(): array
     {
         return $this->from;
     }
-
     public function getWhere(): ?string
     {
         return $this->where;
     }
-
     /** @return string[] */
     public function getGroupBy(): array
     {
         return $this->groupBy;
     }
-
     public function getHaving(): ?string
     {
         return $this->having;
     }
-
     /** @return string[] */
     public function getOrderBy(): array
     {
         return $this->orderBy;
     }
-
-    public function getLimit(): Limit
+    public function getLimit(): \Doctrine\DBAL\Query\Limit
     {
         return $this->limit;
     }
-
-    public function getForUpdate(): ?ForUpdate
+    public function getForUpdate(): ?\Doctrine\DBAL\Query\ForUpdate
     {
         return $this->forUpdate;
     }

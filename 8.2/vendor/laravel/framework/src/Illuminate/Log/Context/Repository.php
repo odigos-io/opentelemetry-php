@@ -14,39 +14,33 @@ use Illuminate\Support\Traits\Conditionable;
 use Illuminate\Support\Traits\Macroable;
 use RuntimeException;
 use Throwable;
-
 class Repository
 {
     use Conditionable, Macroable, SerializesModels;
-
     /**
      * The event dispatcher instance.
      *
      * @var \Illuminate\Contracts\Events\Dispatcher
      */
     protected $events;
-
     /**
      * The contextual data.
      *
      * @var array<string, mixed>
      */
     protected $data = [];
-
     /**
      * The hidden contextual data.
      *
      * @var array<string, mixed>
      */
     protected $hidden = [];
-
     /**
      * The callback that should handle unserialize exceptions.
      *
      * @var callable|null
      */
     protected static $handleUnserializeExceptionsUsing;
-
     /**
      * Create a new Context instance.
      */
@@ -54,7 +48,6 @@ class Repository
     {
         $this->events = $events;
     }
-
     /**
      * Determine if the given key exists.
      *
@@ -65,7 +58,6 @@ class Repository
     {
         return array_key_exists($key, $this->data);
     }
-
     /**
      * Determine if the given key is missing.
      *
@@ -74,9 +66,8 @@ class Repository
      */
     public function missing($key)
     {
-        return ! $this->has($key);
+        return !$this->has($key);
     }
-
     /**
      * Determine if the given key exists within the hidden context data.
      *
@@ -87,7 +78,6 @@ class Repository
     {
         return array_key_exists($key, $this->hidden);
     }
-
     /**
      * Determine if the given key is missing within the hidden context data.
      *
@@ -96,9 +86,8 @@ class Repository
      */
     public function missingHidden($key)
     {
-        return ! $this->hasHidden($key);
+        return !$this->hasHidden($key);
     }
-
     /**
      * Retrieve all the context data.
      *
@@ -108,7 +97,6 @@ class Repository
     {
         return $this->data;
     }
-
     /**
      * Retrieve all the hidden context data.
      *
@@ -118,7 +106,6 @@ class Repository
     {
         return $this->hidden;
     }
-
     /**
      * Retrieve the given key's value.
      *
@@ -130,7 +117,6 @@ class Repository
     {
         return $this->data[$key] ?? value($default);
     }
-
     /**
      * Retrieve the given key's hidden value.
      *
@@ -142,7 +128,6 @@ class Repository
     {
         return $this->hidden[$key] ?? value($default);
     }
-
     /**
      * Retrieve the given key's value and then forget it.
      *
@@ -156,7 +141,6 @@ class Repository
             $this->forget($key);
         });
     }
-
     /**
      * Retrieve the given key's hidden value and then forget it.
      *
@@ -170,7 +154,6 @@ class Repository
             $this->forgetHidden($key);
         });
     }
-
     /**
      * Retrieve only the values of the given keys.
      *
@@ -181,7 +164,6 @@ class Repository
     {
         return array_intersect_key($this->data, array_flip($keys));
     }
-
     /**
      * Retrieve only the hidden values of the given keys.
      *
@@ -192,7 +174,6 @@ class Repository
     {
         return array_intersect_key($this->hidden, array_flip($keys));
     }
-
     /**
      * Retrieve all values except those with the given keys.
      *
@@ -203,7 +184,6 @@ class Repository
     {
         return array_diff_key($this->data, array_flip($keys));
     }
-
     /**
      * Retrieve all hidden values except those with the given keys.
      *
@@ -214,7 +194,6 @@ class Repository
     {
         return array_diff_key($this->hidden, array_flip($keys));
     }
-
     /**
      * Add a context value.
      *
@@ -224,14 +203,9 @@ class Repository
      */
     public function add($key, $value = null)
     {
-        $this->data = array_merge(
-            $this->data,
-            is_array($key) ? $key : [$key => $value]
-        );
-
+        $this->data = array_merge($this->data, is_array($key) ? $key : [$key => $value]);
         return $this;
     }
-
     /**
      * Add a hidden context value.
      *
@@ -241,14 +215,9 @@ class Repository
      */
     public function addHidden($key, #[\SensitiveParameter] $value = null)
     {
-        $this->hidden = array_merge(
-            $this->hidden,
-            is_array($key) ? $key : [$key => $value]
-        );
-
+        $this->hidden = array_merge($this->hidden, is_array($key) ? $key : [$key => $value]);
         return $this;
     }
-
     /**
      * Add a context value if it does not exist yet, and return the value.
      *
@@ -261,12 +230,10 @@ class Repository
         if ($this->has($key)) {
             return $this->get($key);
         }
-
         return tap(value($value), function ($value) use ($key) {
             $this->add($key, $value);
         });
     }
-
     /**
      * Add a hidden context value if it does not exist yet, and return the value.
      *
@@ -279,12 +246,10 @@ class Repository
         if ($this->hasHidden($key)) {
             return $this->getHidden($key);
         }
-
         return tap(value($value), function ($value) use ($key) {
             $this->addHidden($key, $value);
         });
     }
-
     /**
      * Forget the given context key.
      *
@@ -296,10 +261,8 @@ class Repository
         foreach ((array) $key as $k) {
             unset($this->data[$k]);
         }
-
         return $this;
     }
-
     /**
      * Forget the given hidden context key.
      *
@@ -311,10 +274,8 @@ class Repository
         foreach ((array) $key as $k) {
             unset($this->hidden[$k]);
         }
-
         return $this;
     }
-
     /**
      * Add a context value if it does not exist yet.
      *
@@ -324,13 +285,11 @@ class Repository
      */
     public function addIf($key, $value)
     {
-        if (! $this->has($key)) {
+        if (!$this->has($key)) {
             $this->add($key, $value);
         }
-
         return $this;
     }
-
     /**
      * Add a hidden context value if it does not exist yet.
      *
@@ -340,13 +299,11 @@ class Repository
      */
     public function addHiddenIf($key, #[\SensitiveParameter] $value)
     {
-        if (! $this->hasHidden($key)) {
+        if (!$this->hasHidden($key)) {
             $this->addHidden($key, $value);
         }
-
         return $this;
     }
-
     /**
      * Push the given values onto the key's stack.
      *
@@ -358,18 +315,12 @@ class Repository
      */
     public function push($key, ...$values)
     {
-        if (! $this->isStackable($key)) {
+        if (!$this->isStackable($key)) {
             throw new RuntimeException("Unable to push value onto context stack for key [{$key}].");
         }
-
-        $this->data[$key] = [
-            ...$this->data[$key] ?? [],
-            ...$values,
-        ];
-
+        $this->data[$key] = [...$this->data[$key] ?? [], ...$values];
         return $this;
     }
-
     /**
      * Pop the latest value from the key's stack.
      *
@@ -380,13 +331,11 @@ class Repository
      */
     public function pop($key)
     {
-        if (! $this->isStackable($key) || ! count($this->data[$key])) {
+        if (!$this->isStackable($key) || !count($this->data[$key])) {
             throw new RuntimeException("Unable to pop value from context stack for key [{$key}].");
         }
-
         return array_pop($this->data[$key]);
     }
-
     /**
      * Push the given hidden values onto the key's stack.
      *
@@ -398,18 +347,12 @@ class Repository
      */
     public function pushHidden($key, ...$values)
     {
-        if (! $this->isHiddenStackable($key)) {
+        if (!$this->isHiddenStackable($key)) {
             throw new RuntimeException("Unable to push value onto hidden context stack for key [{$key}].");
         }
-
-        $this->hidden[$key] = [
-            ...$this->hidden[$key] ?? [],
-            ...$values,
-        ];
-
+        $this->hidden[$key] = [...$this->hidden[$key] ?? [], ...$values];
         return $this;
     }
-
     /**
      * Pop the latest hidden value from the key's stack.
      *
@@ -420,13 +363,11 @@ class Repository
      */
     public function popHidden($key)
     {
-        if (! $this->isHiddenStackable($key) || ! count($this->hidden[$key])) {
+        if (!$this->isHiddenStackable($key) || !count($this->hidden[$key])) {
             throw new RuntimeException("Unable to pop value from hidden context stack for key [{$key}].");
         }
-
         return array_pop($this->hidden[$key]);
     }
-
     /**
      * Increment a context counter.
      *
@@ -436,14 +377,9 @@ class Repository
      */
     public function increment(string $key, int $amount = 1)
     {
-        $this->add(
-            $key,
-            (int) $this->get($key, 0) + $amount,
-        );
-
+        $this->add($key, (int) $this->get($key, 0) + $amount);
         return $this;
     }
-
     /**
      * Decrement a context counter.
      *
@@ -455,7 +391,6 @@ class Repository
     {
         return $this->increment($key, $amount * -1);
     }
-
     /**
      * Determine if the given value is in the given stack.
      *
@@ -466,23 +401,19 @@ class Repository
      *
      * @throws \RuntimeException
      */
-    public function stackContains(string $key, mixed $value, bool $strict = false): bool
+    public function stackContains(string $key, mixed $value, bool $strict = \false): bool
     {
-        if (! $this->isStackable($key)) {
+        if (!$this->isStackable($key)) {
             throw new RuntimeException("Given key [{$key}] is not a stack.");
         }
-
-        if (! array_key_exists($key, $this->data)) {
-            return false;
+        if (!array_key_exists($key, $this->data)) {
+            return \false;
         }
-
         if ($value instanceof Closure) {
             return (new Collection($this->data[$key]))->contains($value);
         }
-
         return in_array($value, $this->data[$key], $strict);
     }
-
     /**
      * Determine if the given value is in the given hidden stack.
      *
@@ -493,23 +424,19 @@ class Repository
      *
      * @throws \RuntimeException
      */
-    public function hiddenStackContains(string $key, mixed $value, bool $strict = false): bool
+    public function hiddenStackContains(string $key, mixed $value, bool $strict = \false): bool
     {
-        if (! $this->isHiddenStackable($key)) {
+        if (!$this->isHiddenStackable($key)) {
             throw new RuntimeException("Given key [{$key}] is not a stack.");
         }
-
-        if (! array_key_exists($key, $this->hidden)) {
-            return false;
+        if (!array_key_exists($key, $this->hidden)) {
+            return \false;
         }
-
         if ($value instanceof Closure) {
             return (new Collection($this->hidden[$key]))->contains($value);
         }
-
         return in_array($value, $this->hidden[$key], $strict);
     }
-
     /**
      * Determine if a given key can be used as a stack.
      *
@@ -518,10 +445,8 @@ class Repository
      */
     protected function isStackable($key)
     {
-        return ! $this->has($key) ||
-            (is_array($this->data[$key]) && array_is_list($this->data[$key]));
+        return !$this->has($key) || is_array($this->data[$key]) && array_is_list($this->data[$key]);
     }
-
     /**
      * Determine if a given key can be used as a hidden stack.
      *
@@ -530,10 +455,8 @@ class Repository
      */
     protected function isHiddenStackable($key)
     {
-        return ! $this->hasHidden($key) ||
-            (is_array($this->hidden[$key]) && array_is_list($this->hidden[$key]));
+        return !$this->hasHidden($key) || is_array($this->hidden[$key]) && array_is_list($this->hidden[$key]);
     }
-
     /**
      * @template TReturn of mixed
      *
@@ -550,15 +473,12 @@ class Repository
     {
         $dataBefore = $this->data;
         $hiddenBefore = $this->hidden;
-
         if ($data !== []) {
             $this->add($data);
         }
-
         if ($hidden !== []) {
             $this->addHidden($hidden);
         }
-
         try {
             return $callback();
         } finally {
@@ -566,7 +486,6 @@ class Repository
             $this->hidden = $hiddenBefore;
         }
     }
-
     /**
      * Determine if the repository is empty.
      *
@@ -576,7 +495,6 @@ class Repository
     {
         return $this->all() === [] && $this->allHidden() === [];
     }
-
     /**
      * Execute the given callback when context is about to be dehydrated.
      *
@@ -585,11 +503,9 @@ class Repository
      */
     public function dehydrating($callback)
     {
-        $this->events->listen(fn (Dehydrating $event) => $callback($event->context));
-
+        $this->events->listen(fn(Dehydrating $event) => $callback($event->context));
         return $this;
     }
-
     /**
      * Execute the given callback when context has been hydrated.
      *
@@ -598,11 +514,9 @@ class Repository
      */
     public function hydrated($callback)
     {
-        $this->events->listen(fn (Hydrated $event) => $callback($event->context));
-
+        $this->events->listen(fn(Hydrated $event) => $callback($event->context));
         return $this;
     }
-
     /**
      * Handle unserialize exceptions using the given callback.
      *
@@ -612,10 +526,8 @@ class Repository
     public function handleUnserializeExceptionsUsing($callback)
     {
         static::$handleUnserializeExceptionsUsing = $callback;
-
         return $this;
     }
-
     /**
      * Flush all context data.
      *
@@ -625,10 +537,8 @@ class Repository
     {
         $this->data = [];
         $this->hidden = [];
-
         return $this;
     }
-
     /**
      * Dehydrate the context data.
      *
@@ -638,20 +548,11 @@ class Repository
      */
     public function dehydrate()
     {
-        $instance = (new static($this->events))
-            ->add($this->all())
-            ->addHidden($this->allHidden());
-
+        $instance = (new static($this->events))->add($this->all())->addHidden($this->allHidden());
         $instance->events->dispatch(new Dehydrating($instance));
-
-        $serialize = fn ($value) => serialize($instance->getSerializedPropertyValue($value, withRelations: false));
-
-        return $instance->isEmpty() ? null : [
-            'data' => array_map($serialize, $instance->all()),
-            'hidden' => array_map($serialize, $instance->allHidden()),
-        ];
+        $serialize = fn($value) => serialize($instance->getSerializedPropertyValue($value, withRelations: \false));
+        return $instance->isEmpty() ? null : ['data' => array_map($serialize, $instance->all()), 'hidden' => array_map($serialize, $instance->allHidden())];
     }
-
     /**
      * Hydrate the context instance.
      *
@@ -668,35 +569,24 @@ class Repository
             try {
                 return tap($this->getRestoredPropertyValue(unserialize($value)), function ($value) {
                     if ($value instanceof __PHP_Incomplete_Class) {
-                        throw new RuntimeException('Value is incomplete class: '.json_encode($value));
+                        throw new RuntimeException('Value is incomplete class: ' . json_encode($value));
                     }
                 });
             } catch (Throwable $e) {
                 if (static::$handleUnserializeExceptionsUsing !== null) {
                     return (static::$handleUnserializeExceptionsUsing)($e, $key, $value, $hidden);
                 }
-
                 if ($e instanceof ModelNotFoundException) {
-                    if (function_exists('report')) {
+                    if (function_exists('Odigos\report')) {
                         report($e);
                     }
-
                     return null;
                 }
-
                 throw $e;
             }
         };
-
-        [$data, $hidden] = [
-            (new Collection($context['data'] ?? []))->map(fn ($value, $key) => $unserialize($value, $key, false))->all(),
-            (new Collection($context['hidden'] ?? []))->map(fn ($value, $key) => $unserialize($value, $key, true))->all(),
-        ];
-
-        $this->events->dispatch(new Hydrated(
-            $this->flush()->add($data)->addHidden($hidden)
-        ));
-
+        [$data, $hidden] = [(new Collection($context['data'] ?? []))->map(fn($value, $key) => $unserialize($value, $key, \false))->all(), (new Collection($context['hidden'] ?? []))->map(fn($value, $key) => $unserialize($value, $key, \true))->all()];
+        $this->events->dispatch(new Hydrated($this->flush()->add($data)->addHidden($hidden)));
         return $this;
     }
 }

@@ -7,53 +7,45 @@ use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Queue\CallQueuedClosure;
 use Illuminate\Support\Traits\Conditionable;
 use Laravel\SerializableClosure\SerializableClosure;
-
 class PendingChain
 {
     use Conditionable;
-
     /**
      * The class name of the job being dispatched.
      *
      * @var mixed
      */
     public $job;
-
     /**
      * The jobs to be chained.
      *
      * @var array
      */
     public $chain;
-
     /**
      * The name of the connection the chain should be sent to.
      *
      * @var string|null
      */
     public $connection;
-
     /**
      * The name of the queue the chain should be sent to.
      *
      * @var string|null
      */
     public $queue;
-
     /**
      * The number of seconds before the chain should be made available.
      *
      * @var \DateTimeInterface|\DateInterval|int|null
      */
     public $delay;
-
     /**
      * The callbacks to be executed on failure.
      *
      * @var array
      */
     public $catchCallbacks = [];
-
     /**
      * Create a new PendingChain instance.
      *
@@ -66,7 +58,6 @@ class PendingChain
         $this->job = $job;
         $this->chain = $chain;
     }
-
     /**
      * Set the desired connection for the job.
      *
@@ -76,10 +67,8 @@ class PendingChain
     public function onConnection($connection)
     {
         $this->connection = $connection;
-
         return $this;
     }
-
     /**
      * Set the desired queue for the job.
      *
@@ -89,10 +78,8 @@ class PendingChain
     public function onQueue($queue)
     {
         $this->queue = $queue;
-
         return $this;
     }
-
     /**
      * Set the desired delay in seconds for the chain.
      *
@@ -102,10 +89,8 @@ class PendingChain
     public function delay($delay)
     {
         $this->delay = $delay;
-
         return $this;
     }
-
     /**
      * Add a callback to be executed on job failure.
      *
@@ -114,13 +99,9 @@ class PendingChain
      */
     public function catch($callback)
     {
-        $this->catchCallbacks[] = $callback instanceof Closure
-                        ? new SerializableClosure($callback)
-                        : $callback;
-
+        $this->catchCallbacks[] = $callback instanceof Closure ? new SerializableClosure($callback) : $callback;
         return $this;
     }
-
     /**
      * Get the "catch" callbacks that have been registered.
      *
@@ -130,7 +111,6 @@ class PendingChain
     {
         return $this->catchCallbacks ?? [];
     }
-
     /**
      * Dispatch the job chain.
      *
@@ -145,27 +125,21 @@ class PendingChain
         } else {
             $firstJob = $this->job;
         }
-
         if ($this->connection) {
             $firstJob->chainConnection = $this->connection;
             $firstJob->connection = $firstJob->connection ?: $this->connection;
         }
-
         if ($this->queue) {
             $firstJob->chainQueue = $this->queue;
             $firstJob->queue = $firstJob->queue ?: $this->queue;
         }
-
         if ($this->delay) {
-            $firstJob->delay = ! is_null($firstJob->delay) ? $firstJob->delay : $this->delay;
+            $firstJob->delay = !is_null($firstJob->delay) ? $firstJob->delay : $this->delay;
         }
-
         $firstJob->chain($this->chain);
         $firstJob->chainCatchCallbacks = $this->catchCallbacks();
-
         return app(Dispatcher::class)->dispatch($firstJob);
     }
-
     /**
      * Dispatch the job chain if the given truth test passes.
      *
@@ -176,7 +150,6 @@ class PendingChain
     {
         return value($boolean) ? $this->dispatch() : null;
     }
-
     /**
      * Dispatch the job chain unless the given truth test passes.
      *
@@ -185,6 +158,6 @@ class PendingChain
      */
     public function dispatchUnless($boolean)
     {
-        return ! value($boolean) ? $this->dispatch() : null;
+        return !value($boolean) ? $this->dispatch() : null;
     }
 }

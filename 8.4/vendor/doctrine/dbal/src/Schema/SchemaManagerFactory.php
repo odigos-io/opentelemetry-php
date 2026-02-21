@@ -1,11 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\DBAL\Schema;
 
 use Doctrine\DBAL\Connection;
-
 /**
  * Creates a schema manager for the given connection.
  *
@@ -13,5 +11,5 @@ use Doctrine\DBAL\Connection;
  */
 interface SchemaManagerFactory
 {
-    public function createSchemaManager(Connection $connection): AbstractSchemaManager;
+    public function createSchemaManager(Connection $connection): \Doctrine\DBAL\Schema\AbstractSchemaManager;
 }

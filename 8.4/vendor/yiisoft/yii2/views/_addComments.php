@@ -1,8 +1,16 @@
 <?php
+
+namespace Odigos;
+
 /**
  * Creates a call for the method `yii\db\Migration::createTable()`
  *
  * @var string $table the name table
  * @var string $tableComment the comment table
  */
-?>        $this->addCommentOnTable('<?= $table ?>', '<?= $tableComment ?>');
+?>        $this->addCommentOnTable('<?php 
+echo $table;
+?>', '<?php 
+echo $tableComment;
+?>');
+<?php 

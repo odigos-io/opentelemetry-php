@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright 2015-present MongoDB, Inc.
  *
@@ -14,7 +15,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 namespace MongoDB\Operation;
 
 use MongoDB\Codec\DocumentCodec;
@@ -26,10 +26,8 @@ use MongoDB\Driver\WriteConcern;
 use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\Exception\UnsupportedException;
 use MongoDB\InsertOneResult;
-
 use function is_bool;
 use function MongoDB\is_document;
-
 /**
  * Operation for inserting a single document with the insert command.
  *
@@ -39,7 +37,6 @@ use function MongoDB\is_document;
 final class InsertOne
 {
     private array|object $document;
-
     /**
      * Constructs an insert command.
      *
@@ -67,33 +64,26 @@ final class InsertOne
      */
     public function __construct(private string $databaseName, private string $collectionName, array|object $document, private array $options = [])
     {
-        if (isset($this->options['bypassDocumentValidation']) && ! is_bool($this->options['bypassDocumentValidation'])) {
+        if (isset($this->options['bypassDocumentValidation']) && !is_bool($this->options['bypassDocumentValidation'])) {
             throw InvalidArgumentException::invalidType('"bypassDocumentValidation" option', $this->options['bypassDocumentValidation'], 'boolean');
         }
-
-        if (isset($this->options['codec']) && ! $this->options['codec'] instanceof DocumentCodec) {
+        if (isset($this->options['codec']) && !$this->options['codec'] instanceof DocumentCodec) {
             throw InvalidArgumentException::invalidType('"codec" option', $this->options['codec'], DocumentCodec::class);
         }
-
-        if (isset($this->options['session']) && ! $this->options['session'] instanceof Session) {
+        if (isset($this->options['session']) && !$this->options['session'] instanceof Session) {
             throw InvalidArgumentException::invalidType('"session" option', $this->options['session'], Session::class);
         }
-
-        if (isset($this->options['writeConcern']) && ! $this->options['writeConcern'] instanceof WriteConcern) {
+        if (isset($this->options['writeConcern']) && !$this->options['writeConcern'] instanceof WriteConcern) {
             throw InvalidArgumentException::invalidType('"writeConcern" option', $this->options['writeConcern'], WriteConcern::class);
         }
-
-        if (isset($this->options['bypassDocumentValidation']) && ! $this->options['bypassDocumentValidation']) {
+        if (isset($this->options['bypassDocumentValidation']) && !$this->options['bypassDocumentValidation']) {
             unset($this->options['bypassDocumentValidation']);
         }
-
         if (isset($this->options['writeConcern']) && $this->options['writeConcern']->isDefault()) {
             unset($this->options['writeConcern']);
         }
-
         $this->document = $this->validateDocument($document, $this->options['codec'] ?? null);
     }
-
     /**
      * Execute the operation.
      *
@@ -106,16 +96,11 @@ final class InsertOne
         if (isset($this->options['writeConcern']) && $inTransaction) {
             throw UnsupportedException::writeConcernNotSupportedInTransaction();
         }
-
         $bulk = new Bulk($this->createBulkWriteOptions());
-
         $insertedId = $bulk->insert($this->document);
-
         $writeResult = $server->executeBulkWrite($this->databaseName . '.' . $this->collectionName, $bulk, $this->createExecuteOptions());
-
         return new InsertOneResult($writeResult, $insertedId);
     }
-
     /**
      * Create options for constructing the bulk write.
      *
@@ -124,16 +109,13 @@ final class InsertOne
     private function createBulkWriteOptions(): array
     {
         $options = [];
-
         foreach (['bypassDocumentValidation', 'comment'] as $option) {
             if (isset($this->options[$option])) {
                 $options[$option] = $this->options[$option];
             }
         }
-
         return $options;
     }
-
     /**
      * Create options for executing the bulk write.
      *
@@ -142,28 +124,22 @@ final class InsertOne
     private function createExecuteOptions(): array
     {
         $options = [];
-
         if (isset($this->options['session'])) {
             $options['session'] = $this->options['session'];
         }
-
         if (isset($this->options['writeConcern'])) {
             $options['writeConcern'] = $this->options['writeConcern'];
         }
-
         return $options;
     }
-
     private function validateDocument(array|object $document, ?DocumentCodec $codec): array|object
     {
         if ($codec) {
             $document = $codec->encode($document);
         }
-
-        if (! is_document($document)) {
+        if (!is_document($document)) {
             throw InvalidArgumentException::expectedDocumentType('$document', $document);
         }
-
         return $document;
     }
 }

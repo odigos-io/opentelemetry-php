@@ -1,13 +1,11 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenAI\Contracts\Resources;
 
 use OpenAI\Responses\Conversations\ConversationItem;
 use OpenAI\Responses\Conversations\ConversationItemList;
 use OpenAI\Responses\Conversations\ConversationResponse;
-
 interface ConversationsItemsContract
 {
     /**
@@ -18,7 +16,6 @@ interface ConversationsItemsContract
      * @param  array<string, mixed>  $parameters
      */
     public function create(string $conversationId, array $parameters): ConversationItemList;
-
     /**
      * List items for a conversation
      *
@@ -27,7 +24,6 @@ interface ConversationsItemsContract
      * @param  array<string, mixed>  $parameters
      */
     public function list(string $conversationId, array $parameters = []): ConversationItemList;
-
     /**
      * Retrieve a specific item from a conversation
      *
@@ -36,7 +32,6 @@ interface ConversationsItemsContract
      * @param  array<string, mixed>  $parameters
      */
     public function retrieve(string $conversationId, string $itemId, array $parameters = []): ConversationItem;
-
     /**
      * Delete a specific item from a conversation. Returns updated Conversation.
      *

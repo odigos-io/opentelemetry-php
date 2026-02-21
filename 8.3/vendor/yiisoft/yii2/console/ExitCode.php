@@ -1,10 +1,10 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\console;
 
 /**
@@ -124,27 +124,7 @@ class ExitCode
     /**
      * @var array a map of reason descriptions for exit codes.
      */
-    public static $reasons = [
-        self::OK => 'Success',
-        self::UNSPECIFIED_ERROR => 'Unspecified error',
-        self::USAGE => 'Incorrect usage, argument or option error',
-        self::DATAERR => 'Error in input data',
-        self::NOINPUT => 'Input file not found or unreadable',
-        self::NOUSER => 'User not found',
-        self::NOHOST => 'Host not found',
-        self::UNAVAILABLE => 'A required service is unavailable',
-        self::SOFTWARE => 'Internal error',
-        self::OSERR => 'Error making system call or using OS service',
-        self::OSFILE => 'Error accessing system file',
-        self::CANTCREAT => 'Cannot create output file',
-        self::IOERR => 'I/O error',
-        self::TEMPFAIL => 'Temporary failure',
-        self::PROTOCOL => 'Unexpected remote service behavior',
-        self::NOPERM => 'Insufficient permissions',
-        self::CONFIG => 'Configuration error',
-    ];
-
-
+    public static $reasons = [self::OK => 'Success', self::UNSPECIFIED_ERROR => 'Unspecified error', self::USAGE => 'Incorrect usage, argument or option error', self::DATAERR => 'Error in input data', self::NOINPUT => 'Input file not found or unreadable', self::NOUSER => 'User not found', self::NOHOST => 'Host not found', self::UNAVAILABLE => 'A required service is unavailable', self::SOFTWARE => 'Internal error', self::OSERR => 'Error making system call or using OS service', self::OSFILE => 'Error accessing system file', self::CANTCREAT => 'Cannot create output file', self::IOERR => 'I/O error', self::TEMPFAIL => 'Temporary failure', self::PROTOCOL => 'Unexpected remote service behavior', self::NOPERM => 'Insufficient permissions', self::CONFIG => 'Configuration error'];
     /**
      * Returns a short reason text for the given exit code.
      *

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright 2015-present MongoDB, Inc.
  *
@@ -14,14 +15,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 namespace MongoDB\Model;
 
 use ArrayAccess;
 use MongoDB\Exception\BadMethodCallException;
-
 use function array_key_exists;
-
 /**
  * Collection information model class.
  *
@@ -39,7 +37,6 @@ class CollectionInfo implements ArrayAccess
     public function __construct(private array $info)
     {
     }
-
     /**
      * Return the collection info as an array.
      *
@@ -49,7 +46,6 @@ class CollectionInfo implements ArrayAccess
     {
         return $this->info;
     }
-
     /**
      * Return the maximum number of documents to keep in the capped collection.
      *
@@ -60,7 +56,6 @@ class CollectionInfo implements ArrayAccess
         /* The MongoDB server might return this number as an integer or float */
         return isset($this->info['options']['max']) ? (int) $this->info['options']['max'] : null;
     }
-
     /**
      * Return the maximum size (in bytes) of the capped collection.
      *
@@ -71,7 +66,6 @@ class CollectionInfo implements ArrayAccess
         /* The MongoDB server might return this number as an integer or float */
         return isset($this->info['options']['size']) ? (int) $this->info['options']['size'] : null;
     }
-
     /**
      * Return information about the _id index for the collection.
      */
@@ -79,7 +73,6 @@ class CollectionInfo implements ArrayAccess
     {
         return (array) ($this->info['idIndex'] ?? []);
     }
-
     /**
      * Return the "info" property of the server response.
      *
@@ -89,7 +82,6 @@ class CollectionInfo implements ArrayAccess
     {
         return (array) ($this->info['info'] ?? []);
     }
-
     /**
      * Return the collection name.
      *
@@ -99,7 +91,6 @@ class CollectionInfo implements ArrayAccess
     {
         return (string) $this->info['name'];
     }
-
     /**
      * Return the collection options.
      *
@@ -109,7 +100,6 @@ class CollectionInfo implements ArrayAccess
     {
         return (array) ($this->info['options'] ?? []);
     }
-
     /**
      * Return the collection type.
      *
@@ -119,7 +109,6 @@ class CollectionInfo implements ArrayAccess
     {
         return (string) $this->info['type'];
     }
-
     /**
      * Return whether the collection is a capped collection.
      *
@@ -127,9 +116,8 @@ class CollectionInfo implements ArrayAccess
      */
     public function isCapped(): bool
     {
-        return ! empty($this->info['options']['capped']);
+        return !empty($this->info['options']['capped']);
     }
-
     /**
      * Check whether a field exists in the collection information.
      *
@@ -140,7 +128,6 @@ class CollectionInfo implements ArrayAccess
     {
         return array_key_exists($offset, $this->info);
     }
-
     /**
      * Return the field's value from the collection information.
      *
@@ -151,7 +138,6 @@ class CollectionInfo implements ArrayAccess
     {
         return $this->info[$offset];
     }
-
     /**
      * Not supported.
      *
@@ -162,7 +148,6 @@ class CollectionInfo implements ArrayAccess
     {
         throw BadMethodCallException::classIsImmutable(self::class);
     }
-
     /**
      * Not supported.
      *

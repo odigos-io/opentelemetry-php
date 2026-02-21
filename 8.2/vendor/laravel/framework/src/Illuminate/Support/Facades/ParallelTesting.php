@@ -22,7 +22,7 @@ namespace Illuminate\Support\Facades;
  *
  * @see \Illuminate\Testing\ParallelTesting
  */
-class ParallelTesting extends Facade
+class ParallelTesting extends \Illuminate\Support\Facades\Facade
 {
     /**
      * Get the registered name of the component.

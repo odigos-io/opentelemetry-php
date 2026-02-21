@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\HttpFoundation\Session;
 
 use Symfony\Component\HttpFoundation\Session\Storage\MetadataBag;
-
 /**
  * Interface for the session.
  *
@@ -26,31 +24,26 @@ interface SessionInterface
      * @throws \RuntimeException if session fails to start
      */
     public function start(): bool;
-
     /**
      * Returns the session ID.
      */
     public function getId(): string;
-
     /**
      * Sets the session ID.
      *
      * @return void
      */
     public function setId(string $id);
-
     /**
      * Returns the session name.
      */
     public function getName(): string;
-
     /**
      * Sets the session name.
      *
      * @return void
      */
     public function setName(string $name);
-
     /**
      * Invalidates the current session.
      *
@@ -63,7 +56,6 @@ interface SessionInterface
      *                           not a Unix timestamp.
      */
     public function invalidate(?int $lifetime = null): bool;
-
     /**
      * Migrates the current session to a new session id while maintaining all
      * session attributes.
@@ -74,8 +66,7 @@ interface SessionInterface
      *                           to expire with browser session. Time is in seconds, and is
      *                           not a Unix timestamp.
      */
-    public function migrate(bool $destroy = false, ?int $lifetime = null): bool;
-
+    public function migrate(bool $destroy = \false, ?int $lifetime = null): bool;
     /**
      * Force the session to be saved and closed.
      *
@@ -86,67 +77,56 @@ interface SessionInterface
      * @return void
      */
     public function save();
-
     /**
      * Checks if an attribute is defined.
      */
     public function has(string $name): bool;
-
     /**
      * Returns an attribute.
      */
     public function get(string $name, mixed $default = null): mixed;
-
     /**
      * Sets an attribute.
      *
      * @return void
      */
     public function set(string $name, mixed $value);
-
     /**
      * Returns attributes.
      */
     public function all(): array;
-
     /**
      * Sets attributes.
      *
      * @return void
      */
     public function replace(array $attributes);
-
     /**
      * Removes an attribute.
      *
      * @return mixed The removed value or null when it does not exist
      */
     public function remove(string $name): mixed;
-
     /**
      * Clears all attributes.
      *
      * @return void
      */
     public function clear();
-
     /**
      * Checks if the session was started.
      */
     public function isStarted(): bool;
-
     /**
      * Registers a SessionBagInterface with the session.
      *
      * @return void
      */
-    public function registerBag(SessionBagInterface $bag);
-
+    public function registerBag(\Symfony\Component\HttpFoundation\Session\SessionBagInterface $bag);
     /**
      * Gets a bag instance by name.
      */
-    public function getBag(string $name): SessionBagInterface;
-
+    public function getBag(string $name): \Symfony\Component\HttpFoundation\Session\SessionBagInterface;
     /**
      * Gets session meta.
      */

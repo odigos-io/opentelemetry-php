@@ -10,7 +10,6 @@ class LocaleUpdated
      * @var string
      */
     public $locale;
-
     /**
      * Create a new event instance.
      *

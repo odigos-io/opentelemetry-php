@@ -3,8 +3,7 @@
 namespace Illuminate\Database\Schema;
 
 use Illuminate\Support\Arr;
-
-class SqlServerBuilder extends Builder
+class SqlServerBuilder extends \Illuminate\Database\Schema\Builder
 {
     /**
      * Drop all tables from the database.
@@ -14,10 +13,8 @@ class SqlServerBuilder extends Builder
     public function dropAllTables()
     {
         $this->connection->statement($this->grammar->compileDropAllForeignKeys());
-
         $this->connection->statement($this->grammar->compileDropAllTables());
     }
-
     /**
      * Drop all views from the database.
      *
@@ -27,7 +24,6 @@ class SqlServerBuilder extends Builder
     {
         $this->connection->statement($this->grammar->compileDropAllViews());
     }
-
     /**
      * Get the default schema name for the connection.
      *
@@ -35,6 +31,6 @@ class SqlServerBuilder extends Builder
      */
     public function getCurrentSchemaName()
     {
-        return Arr::first($this->getSchemas(), fn ($schema) => $schema['default'])['name'];
+        return Arr::first($this->getSchemas(), fn($schema) => $schema['default'])['name'];
     }
 }

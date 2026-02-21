@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -18,7 +18,6 @@ namespace Cake\Error;
 
 use Psr\Http\Message\ServerRequestInterface;
 use Throwable;
-
 /**
  * Interface for error logging handlers.
  *
@@ -34,12 +33,7 @@ interface ErrorLoggerInterface
      * @param bool $includeTrace Should the log message include a stacktrace.
      * @return void
      */
-    public function logException(
-        Throwable $exception,
-        ?ServerRequestInterface $request = null,
-        bool $includeTrace = false,
-    ): void;
-
+    public function logException(Throwable $exception, ?ServerRequestInterface $request = null, bool $includeTrace = \false): void;
     /**
      * Log an error to Cake's Log subsystem
      *
@@ -48,9 +42,5 @@ interface ErrorLoggerInterface
      * @param bool $includeTrace Should the log message include a stacktrace.
      * @return void
      */
-    public function logError(
-        PhpError $error,
-        ?ServerRequestInterface $request = null,
-        bool $includeTrace = false,
-    ): void;
+    public function logError(\Cake\Error\PhpError $error, ?ServerRequestInterface $request = null, bool $includeTrace = \false): void;
 }

@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -17,11 +17,10 @@ namespace Cake\Http\Client;
 
 use Cake\Core\Exception\CakeException;
 use Cake\Http\Cookie\CookieCollection;
-use Laminas\Diactoros\MessageTrait;
-use Laminas\Diactoros\Stream;
+use Odigos\Laminas\Diactoros\MessageTrait;
+use Odigos\Laminas\Diactoros\Stream;
 use Psr\Http\Message\ResponseInterface;
 use SimpleXMLElement;
-
 /**
  * Implements methods for HTTP responses.
  *
@@ -80,45 +79,39 @@ use SimpleXMLElement;
  * $content = $response->getStatusCode();
  * ```
  */
-class Response extends Message implements ResponseInterface
+class Response extends \Cake\Http\Client\Message implements ResponseInterface
 {
     use MessageTrait;
-
     /**
      * The status code of the response.
      *
      * @var int
      */
     protected int $code = 0;
-
     /**
      * Cookie Collection instance
      *
      * @var \Cake\Http\Cookie\CookieCollection|null
      */
     protected ?CookieCollection $cookies = null;
-
     /**
      * The reason phrase for the status code
      *
      * @var string
      */
     protected string $reasonPhrase;
-
     /**
      * Cached decoded XML data.
      *
      * @var \SimpleXMLElement|null
      */
     protected ?SimpleXMLElement $_xml = null;
-
     /**
      * Cached decoded JSON data.
      *
      * @var mixed
      */
     protected mixed $_json = null;
-
     /**
      * Constructor
      *
@@ -136,7 +129,6 @@ class Response extends Message implements ResponseInterface
         $stream->rewind();
         $this->stream = $stream;
     }
-
     /**
      * Uncompress a gzip response.
      *
@@ -159,12 +151,10 @@ class Response extends Message implements ResponseInterface
         }
         // Check the format byte
         if (substr($body, $offset, 1) === "\x08") {
-            return (string)gzinflate(substr($body, $offset + 8));
+            return (string) gzinflate(substr($body, $offset + 8));
         }
-
         throw new CakeException('Invalid gzip response');
     }
-
     /**
      * Parses headers if necessary.
      *
@@ -180,7 +170,7 @@ class Response extends Message implements ResponseInterface
             if (str_starts_with($value, 'HTTP/')) {
                 preg_match('/HTTP\/([\d.]+) ([0-9]+)(.*)/i', $value, $matches);
                 $this->protocol = $matches[1];
-                $this->code = (int)$matches[2];
+                $this->code = (int) $matches[2];
                 $this->reasonPhrase = trim($matches[3]);
                 continue;
             }
@@ -191,18 +181,15 @@ class Response extends Message implements ResponseInterface
             $value = trim($value);
             /** @var non-empty-string $name */
             $name = trim($name);
-
             $normalized = strtolower($name);
-
             if (isset($this->headers[$name])) {
                 $this->headers[$name][] = $value;
             } else {
-                $this->headers[$name] = (array)$value;
+                $this->headers[$name] = (array) $value;
                 $this->headerNames[$normalized] = $name;
             }
         }
     }
-
     /**
      * Check if the response status code was in the 2xx/3xx range
      *
@@ -212,7 +199,6 @@ class Response extends Message implements ResponseInterface
     {
         return $this->code >= 200 && $this->code <= 399;
     }
-
     /**
      * Check if the response status code was in the 2xx range
      *
@@ -222,7 +208,6 @@ class Response extends Message implements ResponseInterface
     {
         return $this->code >= 200 && $this->code <= 299;
     }
-
     /**
      * Check if the response had a redirect status code.
      *
@@ -230,18 +215,9 @@ class Response extends Message implements ResponseInterface
      */
     public function isRedirect(): bool
     {
-        $codes = [
-            static::STATUS_MOVED_PERMANENTLY,
-            static::STATUS_FOUND,
-            static::STATUS_SEE_OTHER,
-            static::STATUS_TEMPORARY_REDIRECT,
-            static::STATUS_PERMANENT_REDIRECT,
-        ];
-
-        return in_array($this->code, $codes, true) &&
-            $this->getHeaderLine('Location');
+        $codes = [static::STATUS_MOVED_PERMANENTLY, static::STATUS_FOUND, static::STATUS_SEE_OTHER, static::STATUS_TEMPORARY_REDIRECT, static::STATUS_PERMANENT_REDIRECT];
+        return in_array($this->code, $codes, \true) && $this->getHeaderLine('Location');
     }
-
     /**
      * {@inheritDoc}
      *
@@ -251,7 +227,6 @@ class Response extends Message implements ResponseInterface
     {
         return $this->code;
     }
-
     /**
      * {@inheritDoc}
      *
@@ -264,10 +239,8 @@ class Response extends Message implements ResponseInterface
         $new = clone $this;
         $new->code = $code;
         $new->reasonPhrase = $reasonPhrase;
-
         return $new;
     }
-
     /**
      * {@inheritDoc}
      *
@@ -277,7 +250,6 @@ class Response extends Message implements ResponseInterface
     {
         return $this->reasonPhrase;
     }
-
     /**
      * Get the encoding if it was set.
      *
@@ -293,10 +265,8 @@ class Response extends Message implements ResponseInterface
         if (empty($matches[1])) {
             return null;
         }
-
         return $matches[1];
     }
-
     /**
      * Get the all cookie data.
      *
@@ -306,7 +276,6 @@ class Response extends Message implements ResponseInterface
     {
         return $this->_getCookies();
     }
-
     /**
      * Get the cookie collection from this response.
      *
@@ -319,7 +288,6 @@ class Response extends Message implements ResponseInterface
     {
         return $this->buildCookieCollection();
     }
-
     /**
      * Get the value of a single cookie.
      *
@@ -329,14 +297,11 @@ class Response extends Message implements ResponseInterface
     public function getCookie(string $name): array|string|null
     {
         $cookies = $this->buildCookieCollection();
-
         if (!$cookies->has($name)) {
             return null;
         }
-
         return $cookies->get($name)->getValue();
     }
-
     /**
      * Get the full data for a single cookie.
      *
@@ -346,14 +311,11 @@ class Response extends Message implements ResponseInterface
     public function getCookieData(string $name): ?array
     {
         $cookies = $this->buildCookieCollection();
-
         if (!$cookies->has($name)) {
             return null;
         }
-
         return $cookies->get($name)->toArray();
     }
-
     /**
      * Lazily build the CookieCollection and cookie objects from the response header
      *
@@ -362,10 +324,8 @@ class Response extends Message implements ResponseInterface
     protected function buildCookieCollection(): CookieCollection
     {
         $this->cookies ??= CookieCollection::createFromHeader($this->getHeader('Set-Cookie'));
-
         return $this->cookies;
     }
-
     /**
      * Property accessor for `$this->cookies`
      *
@@ -377,10 +337,8 @@ class Response extends Message implements ResponseInterface
         foreach ($this->buildCookieCollection() as $cookie) {
             $out[$cookie->getName()] = $cookie->toArray();
         }
-
         return $out;
     }
-
     /**
      * Get the response body as string.
      *
@@ -390,7 +348,6 @@ class Response extends Message implements ResponseInterface
     {
         return $this->_getBody();
     }
-
     /**
      * Get the response body as JSON decoded data.
      *
@@ -400,7 +357,6 @@ class Response extends Message implements ResponseInterface
     {
         return $this->_getJson();
     }
-
     /**
      * Get the response body as JSON decoded data.
      *
@@ -411,10 +367,8 @@ class Response extends Message implements ResponseInterface
         if ($this->_json) {
             return $this->_json;
         }
-
-        return $this->_json = json_decode($this->_getBody(), true);
+        return $this->_json = json_decode($this->_getBody(), \true);
     }
-
     /**
      * Get the response body as XML decoded data.
      *
@@ -424,7 +378,6 @@ class Response extends Message implements ResponseInterface
     {
         return $this->_getXml();
     }
-
     /**
      * Get the response body as XML decoded data.
      *
@@ -440,12 +393,9 @@ class Response extends Message implements ResponseInterface
         if (!$data) {
             return null;
         }
-
         $this->_xml = $data;
-
         return $this->_xml;
     }
-
     /**
      * Provides magic __get() support.
      *
@@ -457,10 +407,8 @@ class Response extends Message implements ResponseInterface
         foreach ($this->headers as $key => $values) {
             $out[$key] = implode(',', $values);
         }
-
         return $out;
     }
-
     /**
      * Provides magic __get() support.
      *
@@ -469,7 +417,6 @@ class Response extends Message implements ResponseInterface
     protected function _getBody(): string
     {
         $this->stream->rewind();
-
         return $this->stream->getContents();
     }
 }

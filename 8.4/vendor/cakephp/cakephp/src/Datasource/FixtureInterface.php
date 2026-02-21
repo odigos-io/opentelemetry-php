@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -30,23 +30,20 @@ interface FixtureInterface
      *   into which the records will be inserted.
      * @return bool
      */
-    public function insert(ConnectionInterface $connection): bool;
-
+    public function insert(\Cake\Datasource\ConnectionInterface $connection): bool;
     /**
      * Truncates the current fixture.
      *
      * @param \Cake\Datasource\ConnectionInterface $connection A reference to a db instance
      * @return bool
      */
-    public function truncate(ConnectionInterface $connection): bool;
-
+    public function truncate(\Cake\Datasource\ConnectionInterface $connection): bool;
     /**
      * Get the connection name this fixture should be inserted into.
      *
      * @return string
      */
     public function connection(): string;
-
     /**
      * Get the table/collection name for this fixture.
      *

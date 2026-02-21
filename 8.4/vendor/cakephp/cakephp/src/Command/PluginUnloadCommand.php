@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -16,16 +16,15 @@ declare(strict_types=1);
  */
 namespace Cake\Command;
 
-use Brick\VarExporter\VarExporter;
+use Odigos\Brick\VarExporter\VarExporter;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Utility\Hash;
-
 /**
  * Command for unloading plugins.
  */
-class PluginUnloadCommand extends Command
+class PluginUnloadCommand extends \Cake\Command\Command
 {
     /**
      * Config file
@@ -33,7 +32,6 @@ class PluginUnloadCommand extends Command
      * @var string
      */
     protected string $configFile = CONFIG . 'plugins.php';
-
     /**
      * @inheritDoc
      */
@@ -41,7 +39,6 @@ class PluginUnloadCommand extends Command
     {
         return 'plugin unload';
     }
-
     /**
      * @inheritDoc
      */
@@ -49,7 +46,6 @@ class PluginUnloadCommand extends Command
     {
         return 'Command for unloading plugins.';
     }
-
     /**
      * Execute the command
      *
@@ -59,20 +55,15 @@ class PluginUnloadCommand extends Command
      */
     public function execute(Arguments $args, ConsoleIo $io): ?int
     {
-        $plugin = (string)$args->getArgument('plugin');
-
+        $plugin = (string) $args->getArgument('plugin');
         $result = $this->modifyConfigFile($plugin);
         if ($result === null) {
             $io->success('Plugin removed from `CONFIG/plugins.php`');
-
             return static::CODE_SUCCESS;
         }
-
         $io->err($result);
-
         return static::CODE_ERROR;
     }
-
     /**
      * Modify the plugins config file.
      *
@@ -86,28 +77,22 @@ class PluginUnloadCommand extends Command
         if (!is_array($config)) {
             return '`CONFIG/plugins.php` not found or does not return an array';
         }
-
         $config = Hash::normalize($config);
         if (!array_key_exists($plugin, $config)) {
             return sprintf('Plugin `%s` could not be found', $plugin);
         }
-
         unset($config[$plugin]);
-
         if (class_exists(VarExporter::class)) {
             $array = VarExporter::export($config);
         } else {
-            $array = var_export($config, true);
+            $array = var_export($config, \true);
         }
         $contents = '<?php' . "\n" . 'return ' . $array . ';';
-
         if (file_put_contents($this->configFile, $contents)) {
             return null;
         }
-
         return 'Failed to update `CONFIG/plugins.php`';
     }
-
     /**
      * Get the option parser.
      *
@@ -116,14 +101,7 @@ class PluginUnloadCommand extends Command
      */
     public function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
     {
-        $parser->setDescription(
-            static::getDescription(),
-        )
-        ->addArgument('plugin', [
-            'help' => 'Name of the plugin to unload.',
-            'required' => true,
-        ]);
-
+        $parser->setDescription(static::getDescription())->addArgument('plugin', ['help' => 'Name of the plugin to unload.', 'required' => \true]);
         return $parser;
     }
 }

@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -25,7 +25,7 @@ namespace Cake\View;
  * to require clients to pick an available content-type and that you have no
  * default type.
  */
-class NegotiationRequiredView extends View
+class NegotiationRequiredView extends \Cake\View\View
 {
     /**
      * Get the content-type
@@ -36,7 +36,6 @@ class NegotiationRequiredView extends View
     {
         return static::TYPE_MATCH_ALL;
     }
-
     /**
      * Initialization hook method.
      *
@@ -47,7 +46,6 @@ class NegotiationRequiredView extends View
         $response = $this->getResponse()->withStatus(406);
         $this->setResponse($response);
     }
-
     /**
      * Renders view with no body and a 406 status code.
      *

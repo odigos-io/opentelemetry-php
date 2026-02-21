@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -21,7 +21,7 @@ namespace Cake\TestSuite\Constraint\Email;
  *
  * @internal
  */
-class MailCount extends MailConstraintBase
+class MailCount extends \Cake\TestSuite\Constraint\Email\MailConstraintBase
 {
     /**
      * Checks constraint
@@ -33,7 +33,6 @@ class MailCount extends MailConstraintBase
     {
         return count($this->getMessages()) === $other;
     }
-
     /**
      * Assertion message string
      *

@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\SDK\Metrics;
 
 /**
@@ -9,9 +8,7 @@ namespace OpenTelemetry\SDK\Metrics;
  */
 final class RegisteredInstrument
 {
-    public function __construct(
-        public bool $dormant,
-        public readonly object $configKeepAlive,
-    ) {
+    public function __construct(public bool $dormant, public readonly object $configKeepAlive)
+    {
     }
 }

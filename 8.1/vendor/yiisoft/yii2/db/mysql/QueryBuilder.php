@@ -1,10 +1,10 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\db\mysql;
 
 use yii\base\InvalidArgumentException;
@@ -13,7 +13,6 @@ use yii\caching\DbCache;
 use yii\db\Exception;
 use yii\db\Expression;
 use yii\db\Query;
-
 /**
  * QueryBuilder is the query builder for MySQL databases.
  *
@@ -25,49 +24,22 @@ class QueryBuilder extends \yii\db\QueryBuilder
     /**
      * @var array mapping from abstract column types (keys) to physical column types (values).
      */
-    public $typeMap = [
-        Schema::TYPE_PK => 'int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY',
-        Schema::TYPE_UPK => 'int(10) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY',
-        Schema::TYPE_BIGPK => 'bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY',
-        Schema::TYPE_UBIGPK => 'bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY',
-        Schema::TYPE_CHAR => 'char(1)',
-        Schema::TYPE_STRING => 'varchar(255)',
-        Schema::TYPE_TEXT => 'text',
-        Schema::TYPE_TINYINT => 'tinyint(3)',
-        Schema::TYPE_SMALLINT => 'smallint(6)',
-        Schema::TYPE_INTEGER => 'int(11)',
-        Schema::TYPE_BIGINT => 'bigint(20)',
-        Schema::TYPE_FLOAT => 'float',
-        Schema::TYPE_DOUBLE => 'double',
-        Schema::TYPE_DECIMAL => 'decimal(10,0)',
-        Schema::TYPE_DATE => 'date',
-        Schema::TYPE_BINARY => 'blob',
-        Schema::TYPE_BOOLEAN => 'tinyint(1)',
-        Schema::TYPE_MONEY => 'decimal(19,4)',
-        Schema::TYPE_JSON => 'json'
-    ];
-
-
+    public $typeMap = [\yii\db\mysql\Schema::TYPE_PK => 'int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY', \yii\db\mysql\Schema::TYPE_UPK => 'int(10) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY', \yii\db\mysql\Schema::TYPE_BIGPK => 'bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY', \yii\db\mysql\Schema::TYPE_UBIGPK => 'bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY', \yii\db\mysql\Schema::TYPE_CHAR => 'char(1)', \yii\db\mysql\Schema::TYPE_STRING => 'varchar(255)', \yii\db\mysql\Schema::TYPE_TEXT => 'text', \yii\db\mysql\Schema::TYPE_TINYINT => 'tinyint(3)', \yii\db\mysql\Schema::TYPE_SMALLINT => 'smallint(6)', \yii\db\mysql\Schema::TYPE_INTEGER => 'int(11)', \yii\db\mysql\Schema::TYPE_BIGINT => 'bigint(20)', \yii\db\mysql\Schema::TYPE_FLOAT => 'float', \yii\db\mysql\Schema::TYPE_DOUBLE => 'double', \yii\db\mysql\Schema::TYPE_DECIMAL => 'decimal(10,0)', \yii\db\mysql\Schema::TYPE_DATE => 'date', \yii\db\mysql\Schema::TYPE_BINARY => 'blob', \yii\db\mysql\Schema::TYPE_BOOLEAN => 'tinyint(1)', \yii\db\mysql\Schema::TYPE_MONEY => 'decimal(19,4)', \yii\db\mysql\Schema::TYPE_JSON => 'json'];
     /**
      * {@inheritdoc}
      */
     public function init()
     {
         parent::init();
-
         $this->typeMap = array_merge($this->typeMap, $this->defaultTimeTypeMap());
     }
-
     /**
      * {@inheritdoc}
      */
     protected function defaultExpressionBuilders()
     {
-        return array_merge(parent::defaultExpressionBuilders(), [
-            'yii\db\JsonExpression' => 'yii\db\mysql\JsonExpressionBuilder',
-        ]);
+        return array_merge(parent::defaultExpressionBuilders(), ['yii\db\JsonExpression' => 'yii\db\mysql\JsonExpressionBuilder']);
     }
-
     /**
      * Builds a SQL statement for renaming a column.
      * @param string $table the table whose column is to be renamed. The name will be properly quoted by the method.
@@ -80,8 +52,8 @@ class QueryBuilder extends \yii\db\QueryBuilder
     {
         $quotedTable = $this->db->quoteTableName($table);
         $row = $this->db->createCommand('SHOW CREATE TABLE ' . $quotedTable)->queryOne();
-        if ($row === false) {
-            throw new Exception("Unable to find column '$oldName' in table '$table'.");
+        if ($row === \false) {
+            throw new Exception("Unable to find column '{$oldName}' in table '{$table}'.");
         }
         if (isset($row['Create Table'])) {
             $sql = $row['Create Table'];
@@ -92,32 +64,21 @@ class QueryBuilder extends \yii\db\QueryBuilder
         if (preg_match_all('/^\s*[`"](.*?)[`"]\s+(.*?),?$/m', $sql, $matches)) {
             foreach ($matches[1] as $i => $c) {
                 if ($c === $oldName) {
-                    return "ALTER TABLE $quotedTable CHANGE "
-                        . $this->db->quoteColumnName($oldName) . ' '
-                        . $this->db->quoteColumnName($newName) . ' '
-                        . $matches[2][$i];
+                    return "ALTER TABLE {$quotedTable} CHANGE " . $this->db->quoteColumnName($oldName) . ' ' . $this->db->quoteColumnName($newName) . ' ' . $matches[2][$i];
                 }
             }
         }
         // try to give back a SQL anyway
-        return "ALTER TABLE $quotedTable CHANGE "
-            . $this->db->quoteColumnName($oldName) . ' '
-            . $this->db->quoteColumnName($newName);
+        return "ALTER TABLE {$quotedTable} CHANGE " . $this->db->quoteColumnName($oldName) . ' ' . $this->db->quoteColumnName($newName);
     }
-
     /**
      * {@inheritdoc}
      * @see https://bugs.mysql.com/bug.php?id=48875
      */
-    public function createIndex($name, $table, $columns, $unique = false)
+    public function createIndex($name, $table, $columns, $unique = \false)
     {
-        return 'ALTER TABLE '
-        . $this->db->quoteTableName($table)
-        . ($unique ? ' ADD UNIQUE INDEX ' : ' ADD INDEX ')
-        . $this->db->quoteTableName($name)
-        . ' (' . $this->buildColumns($columns) . ')';
+        return 'ALTER TABLE ' . $this->db->quoteTableName($table) . ($unique ? ' ADD UNIQUE INDEX ' : ' ADD INDEX ') . $this->db->quoteTableName($name) . ' (' . $this->buildColumns($columns) . ')';
     }
-
     /**
      * Builds a SQL statement for dropping a foreign key constraint.
      * @param string $name the name of the foreign key constraint to be dropped. The name will be properly quoted by the method.
@@ -126,10 +87,8 @@ class QueryBuilder extends \yii\db\QueryBuilder
      */
     public function dropForeignKey($name, $table)
     {
-        return 'ALTER TABLE ' . $this->db->quoteTableName($table)
-            . ' DROP FOREIGN KEY ' . $this->db->quoteColumnName($name);
+        return 'ALTER TABLE ' . $this->db->quoteTableName($table) . ' DROP FOREIGN KEY ' . $this->db->quoteColumnName($name);
     }
-
     /**
      * Builds a SQL statement for removing a primary key constraint to an existing table.
      * @param string $name the name of the primary key constraint to be removed.
@@ -140,7 +99,6 @@ class QueryBuilder extends \yii\db\QueryBuilder
     {
         return 'ALTER TABLE ' . $this->db->quoteTableName($table) . ' DROP PRIMARY KEY';
     }
-
     /**
      * {@inheritdoc}
      */
@@ -148,7 +106,6 @@ class QueryBuilder extends \yii\db\QueryBuilder
     {
         return $this->dropIndex($name, $table);
     }
-
     /**
      * Creates a SQL statement for resetting the sequence value of a table's primary key.
      * The sequence will be reset such that the primary key of the next new row inserted
@@ -166,19 +123,16 @@ class QueryBuilder extends \yii\db\QueryBuilder
             $tableName = $this->db->quoteTableName($tableName);
             if ($value === null) {
                 $key = reset($table->primaryKey);
-                $value = $this->db->createCommand("SELECT MAX(`$key`) FROM $tableName")->queryScalar() + 1;
+                $value = $this->db->createCommand("SELECT MAX(`{$key}`) FROM {$tableName}")->queryScalar() + 1;
             } else {
                 $value = (int) $value;
             }
-
-            return "ALTER TABLE $tableName AUTO_INCREMENT=$value";
+            return "ALTER TABLE {$tableName} AUTO_INCREMENT={$value}";
         } elseif ($table === null) {
-            throw new InvalidArgumentException("Table not found: $tableName");
+            throw new InvalidArgumentException("Table not found: {$tableName}");
         }
-
-        throw new InvalidArgumentException("There is no sequence associated with table '$tableName'.");
+        throw new InvalidArgumentException("There is no sequence associated with table '{$tableName}'.");
     }
-
     /**
      * Builds a SQL statement for enabling or disabling integrity check.
      * @param bool $check whether to turn on or off the integrity check.
@@ -186,11 +140,10 @@ class QueryBuilder extends \yii\db\QueryBuilder
      * @param string $table the table name. Meaningless for MySQL.
      * @return string the SQL statement for checking integrity
      */
-    public function checkIntegrity($check = true, $schema = '', $table = '')
+    public function checkIntegrity($check = \true, $schema = '', $table = '')
     {
         return 'SET FOREIGN_KEY_CHECKS = ' . ($check ? 1 : 0);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -206,12 +159,11 @@ class QueryBuilder extends \yii\db\QueryBuilder
             // limit is not optional in MySQL
             // https://stackoverflow.com/questions/255517/mysql-offset-infinite-rows/271650#271650
             // https://dev.mysql.com/doc/refman/5.7/en/select.html#idm46193796386608
-            $sql = "LIMIT $offset, 18446744073709551615"; // 2^64-1
+            $sql = "LIMIT {$offset}, 18446744073709551615";
+            // 2^64-1
         }
-
         return $sql;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -220,7 +172,6 @@ class QueryBuilder extends \yii\db\QueryBuilder
         // In MySQL limit argument must be nonnegative integer constant
         return ctype_digit((string) $limit);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -230,7 +181,6 @@ class QueryBuilder extends \yii\db\QueryBuilder
         $offset = (string) $offset;
         return ctype_digit($offset) && $offset !== '0';
     }
-
     /**
      * {@inheritdoc}
      */
@@ -247,7 +197,6 @@ class QueryBuilder extends \yii\db\QueryBuilder
                     $columns = [reset($tableSchema->columns)->name];
                     $defaultValue = 'DEFAULT';
                 }
-
                 foreach ($columns as $name) {
                     $names[] = $this->db->quoteColumnName($name);
                     $placeholders[] = $defaultValue;
@@ -256,7 +205,6 @@ class QueryBuilder extends \yii\db\QueryBuilder
         }
         return [$names, $placeholders, $values, $params];
     }
-
     /**
      * {@inheritdoc}
      * @see https://downloads.mysql.com/docs/refman-5.1-en.pdf
@@ -270,22 +218,20 @@ class QueryBuilder extends \yii\db\QueryBuilder
         }
         if ($updateNames === []) {
             // there are no columns to update
-            $updateColumns = false;
+            $updateColumns = \false;
         }
-
-        if ($updateColumns === true) {
+        if ($updateColumns === \true) {
             $updateColumns = [];
             foreach ($updateNames as $name) {
                 $updateColumns[$name] = new Expression('VALUES(' . $this->db->quoteColumnName($name) . ')');
             }
-        } elseif ($updateColumns === false) {
+        } elseif ($updateColumns === \false) {
             $name = $this->db->quoteColumnName(reset($uniqueNames));
             $updateColumns = [$name => new Expression($this->db->quoteTableName($table) . '.' . $name)];
         }
         list($updates, $params) = $this->prepareUpdateSets($table, $updateColumns, $params);
         return $insertSql . ' ON DUPLICATE KEY UPDATE ' . implode(', ', $updates);
     }
-
     /**
      * {@inheritdoc}
      * @since 2.0.8
@@ -294,23 +240,17 @@ class QueryBuilder extends \yii\db\QueryBuilder
     {
         // Strip existing comment which may include escaped quotes
         $definition = trim(preg_replace("/COMMENT '(?:''|[^'])*'/i", '', $this->getColumnDefinition($table, $column)));
-
         $checkRegex = '/CHECK *(\(([^()]|(?-2))*\))/';
         $check = preg_match($checkRegex, $definition, $checkMatches);
         if ($check === 1) {
             $definition = preg_replace($checkRegex, '', $definition);
         }
-        $alterSql = 'ALTER TABLE ' . $this->db->quoteTableName($table)
-            . ' CHANGE ' . $this->db->quoteColumnName($column)
-            . ' ' . $this->db->quoteColumnName($column)
-            . (empty($definition) ? '' : ' ' . $definition)
-            . ' COMMENT ' . $this->db->quoteValue($comment);
+        $alterSql = 'ALTER TABLE ' . $this->db->quoteTableName($table) . ' CHANGE ' . $this->db->quoteColumnName($column) . ' ' . $this->db->quoteColumnName($column) . (empty($definition) ? '' : ' ' . $definition) . ' COMMENT ' . $this->db->quoteValue($comment);
         if ($check === 1) {
             $alterSql .= ' ' . $checkMatches[0];
         }
         return $alterSql;
     }
-
     /**
      * {@inheritdoc}
      * @since 2.0.8
@@ -319,7 +259,6 @@ class QueryBuilder extends \yii\db\QueryBuilder
     {
         return 'ALTER TABLE ' . $this->db->quoteTableName($table) . ' COMMENT ' . $this->db->quoteValue($comment);
     }
-
     /**
      * {@inheritdoc}
      * @since 2.0.8
@@ -328,7 +267,6 @@ class QueryBuilder extends \yii\db\QueryBuilder
     {
         return $this->addCommentOnColumn($table, $column, '');
     }
-
     /**
      * {@inheritdoc}
      * @since 2.0.8
@@ -337,7 +275,6 @@ class QueryBuilder extends \yii\db\QueryBuilder
     {
         return $this->addCommentOnTable($table, '');
     }
-
     /**
      * {@inheritdoc}
      * @since 2.0.8
@@ -346,7 +283,6 @@ class QueryBuilder extends \yii\db\QueryBuilder
     {
         return 'SELECT EXISTS(' . $rawSql . ') AS ' . $this->db->quoteColumnName('result');
     }
-
     /**
      * Gets column definition.
      *
@@ -359,8 +295,8 @@ class QueryBuilder extends \yii\db\QueryBuilder
     {
         $quotedTable = $this->db->quoteTableName($table);
         $row = $this->db->createCommand('SHOW CREATE TABLE ' . $quotedTable)->queryOne();
-        if ($row === false) {
-            throw new Exception("Unable to find column '$column' in table '$table'.");
+        if ($row === \false) {
+            throw new Exception("Unable to find column '{$column}' in table '{$table}'.");
         }
         if (isset($row['Create Table'])) {
             $sql = $row['Create Table'];
@@ -375,10 +311,8 @@ class QueryBuilder extends \yii\db\QueryBuilder
                 }
             }
         }
-
         return null;
     }
-
     /**
      * Checks the ability to use fractional seconds.
      *
@@ -391,22 +325,20 @@ class QueryBuilder extends \yii\db\QueryBuilder
         // https://github.com/yiisoft/yii2/issues/13749#issuecomment-481657224
         $key = [__METHOD__, $this->db->dsn];
         $cache = null;
-        $schemaCache = (\Yii::$app && is_string($this->db->schemaCache)) ? \Yii::$app->get($this->db->schemaCache, false) : $this->db->schemaCache;
+        $schemaCache = \Odigos\Yii::$app && is_string($this->db->schemaCache) ? \Odigos\Yii::$app->get($this->db->schemaCache, \false) : $this->db->schemaCache;
         // If the `$schemaCache` is an instance of `DbCache` we don't use it to avoid a loop
-        if ($this->db->enableSchemaCache && $schemaCache instanceof CacheInterface && !($schemaCache instanceof DbCache)) {
+        if ($this->db->enableSchemaCache && $schemaCache instanceof CacheInterface && !$schemaCache instanceof DbCache) {
             $cache = $schemaCache;
         }
         $version = $cache ? $cache->get($key) : null;
         if (!$version) {
-            $version = $this->db->getSlavePdo(true)->getAttribute(\PDO::ATTR_SERVER_VERSION);
+            $version = $this->db->getSlavePdo(\true)->getAttribute(\PDO::ATTR_SERVER_VERSION);
             if ($cache) {
                 $cache->set($key, $version, $this->db->schemaCacheDuration);
             }
         }
-
         return version_compare($version, '5.6.4', '>=');
     }
-
     /**
      * Returns the map for default time type.
      * If the version of MySQL is lower than 5.6.4, then the types will be without fractional seconds,
@@ -416,20 +348,10 @@ class QueryBuilder extends \yii\db\QueryBuilder
      */
     private function defaultTimeTypeMap()
     {
-        $map = [
-            Schema::TYPE_DATETIME => 'datetime',
-            Schema::TYPE_TIMESTAMP => 'timestamp',
-            Schema::TYPE_TIME => 'time',
-        ];
-
+        $map = [\yii\db\mysql\Schema::TYPE_DATETIME => 'datetime', \yii\db\mysql\Schema::TYPE_TIMESTAMP => 'timestamp', \yii\db\mysql\Schema::TYPE_TIME => 'time'];
         if ($this->supportsFractionalSeconds()) {
-            $map = [
-                Schema::TYPE_DATETIME => 'datetime(0)',
-                Schema::TYPE_TIMESTAMP => 'timestamp(0)',
-                Schema::TYPE_TIME => 'time(0)',
-            ];
+            $map = [\yii\db\mysql\Schema::TYPE_DATETIME => 'datetime(0)', \yii\db\mysql\Schema::TYPE_TIMESTAMP => 'timestamp(0)', \yii\db\mysql\Schema::TYPE_TIME => 'time(0)'];
         }
-
         return $map;
     }
 }

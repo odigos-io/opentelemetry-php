@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the league/commonmark package.
  *
@@ -10,11 +9,9 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Odigos\League\CommonMark\Extension\TableOfContents\Normalizer;
 
-namespace League\CommonMark\Extension\TableOfContents\Normalizer;
-
-use League\CommonMark\Extension\CommonMark\Node\Block\ListItem;
-
+use Odigos\League\CommonMark\Extension\CommonMark\Node\Block\ListItem;
 interface NormalizerStrategyInterface
 {
     public function addItem(int $level, ListItem $listItemToAdd): void;

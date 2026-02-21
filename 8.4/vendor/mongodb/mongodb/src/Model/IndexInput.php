@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright 2015-present MongoDB, Inc.
  *
@@ -14,20 +15,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 namespace MongoDB\Model;
 
 use MongoDB\BSON\Serializable;
 use MongoDB\Exception\InvalidArgumentException;
 use stdClass;
-
 use function is_float;
 use function is_int;
 use function is_string;
 use function MongoDB\document_to_array;
 use function MongoDB\is_document;
 use function sprintf;
-
 /**
  * Index input model class.
  *
@@ -46,29 +44,24 @@ final class IndexInput implements Serializable
      */
     public function __construct(private array $index)
     {
-        if (! isset($index['key'])) {
+        if (!isset($index['key'])) {
             throw new InvalidArgumentException('Required "key" document is missing from index specification');
         }
-
-        if (! is_document($index['key'])) {
+        if (!is_document($index['key'])) {
             throw InvalidArgumentException::expectedDocumentType('"key" option', $index['key']);
         }
-
         foreach ($index['key'] as $fieldName => $order) {
-            if (! is_int($order) && ! is_float($order) && ! is_string($order)) {
+            if (!is_int($order) && !is_float($order) && !is_string($order)) {
                 throw InvalidArgumentException::invalidType(sprintf('order value for "%s" field within "key" option', $fieldName), $order, 'numeric or string');
             }
         }
-
-        if (! isset($index['name'])) {
+        if (!isset($index['name'])) {
             $this->index['name'] = $this->generateIndexName($index['key']);
         }
-
-        if (! is_string($this->index['name'])) {
+        if (!is_string($this->index['name'])) {
             throw InvalidArgumentException::invalidType('"name" option', $this->index['name'], 'string');
         }
     }
-
     /**
      * Return the index name.
      */
@@ -76,7 +69,6 @@ final class IndexInput implements Serializable
     {
         return $this->index['name'];
     }
-
     /**
      * Serialize the index information to BSON for index creation.
      *
@@ -87,7 +79,6 @@ final class IndexInput implements Serializable
     {
         return (object) $this->index;
     }
-
     /**
      * Generate an index name from a key specification.
      *
@@ -98,13 +89,10 @@ final class IndexInput implements Serializable
     private function generateIndexName(array|object $document): string
     {
         $document = document_to_array($document);
-
         $name = '';
-
         foreach ($document as $field => $type) {
             $name .= ($name !== '' ? '_' : '') . $field . '_' . $type;
         }
-
         return $name;
     }
 }

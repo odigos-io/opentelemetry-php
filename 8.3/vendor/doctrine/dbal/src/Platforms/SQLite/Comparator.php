@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\DBAL\Platforms\SQLite;
 
 use Doctrine\DBAL\Platforms\SQLitePlatform;
@@ -9,9 +8,7 @@ use Doctrine\DBAL\Schema\Comparator as BaseComparator;
 use Doctrine\DBAL\Schema\ComparatorConfig;
 use Doctrine\DBAL\Schema\Table;
 use Doctrine\DBAL\Schema\TableDiff;
-
 use function strcasecmp;
-
 /**
  * Compares schemas in the context of SQLite platform.
  *
@@ -24,30 +21,21 @@ class Comparator extends BaseComparator
     {
         parent::__construct($platform, $config);
     }
-
     public function compareTables(Table $oldTable, Table $newTable): TableDiff
     {
-        return parent::compareTables(
-            $this->normalizeColumns($oldTable),
-            $this->normalizeColumns($newTable),
-        );
+        return parent::compareTables($this->normalizeColumns($oldTable), $this->normalizeColumns($newTable));
     }
-
     private function normalizeColumns(Table $table): Table
     {
         $table = clone $table;
-
         foreach ($table->getColumns() as $column) {
             $options = $column->getPlatformOptions();
-
-            if (! isset($options['collation']) || strcasecmp($options['collation'], 'binary') !== 0) {
+            if (!isset($options['collation']) || strcasecmp($options['collation'], 'binary') !== 0) {
                 continue;
             }
-
             unset($options['collation']);
             $column->setPlatformOptions($options);
         }
-
         return $table;
     }
 }

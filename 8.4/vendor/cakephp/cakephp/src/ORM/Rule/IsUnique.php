@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -18,7 +18,6 @@ namespace Cake\ORM\Rule;
 
 use Cake\Datasource\EntityInterface;
 use Cake\Utility\Hash;
-
 /**
  * Checks that a list of fields from an entity are unique in the table
  */
@@ -30,16 +29,12 @@ class IsUnique
      * @var array<string>
      */
     protected array $_fields;
-
     /**
      * The unique check options
      *
      * @var array<string, mixed>
      */
-    protected array $_options = [
-        'allowMultipleNulls' => true,
-    ];
-
+    protected array $_options = ['allowMultipleNulls' => \true];
     /**
      * Constructor.
      *
@@ -55,7 +50,6 @@ class IsUnique
         $this->_fields = $fields;
         $this->_options = $options + $this->_options;
     }
-
     /**
      * Performs the uniqueness check
      *
@@ -66,31 +60,26 @@ class IsUnique
      */
     public function __invoke(EntityInterface $entity, array $options): bool
     {
-        if (!$entity->extract($this->_fields, true)) {
-            return true;
+        if (!$entity->extract($this->_fields, \true)) {
+            return \true;
         }
-
         $fields = $entity->extract($this->_fields);
         if ($this->_options['allowMultipleNulls'] && array_filter($fields, 'is_null')) {
-            return true;
+            return \true;
         }
-
         /** @var \Cake\ORM\Table $repository */
         $repository = $options['repository'];
-
         $alias = $repository->getAlias();
         $conditions = $this->_alias($alias, $fields);
-        if ($entity->isNew() === false) {
-            $keys = (array)$repository->getPrimaryKey();
+        if ($entity->isNew() === \false) {
+            $keys = (array) $repository->getPrimaryKey();
             $keys = $this->_alias($alias, $entity->extract($keys));
             if (Hash::filter($keys)) {
                 $conditions['NOT'] = $keys;
             }
         }
-
         return !$repository->exists($conditions);
     }
-
     /**
      * Add a model alias to all the keys in a set of conditions.
      *
@@ -104,7 +93,6 @@ class IsUnique
         foreach ($conditions as $key => $value) {
             $aliased["{$alias}.{$key} IS"] = $value;
         }
-
         return $aliased;
     }
 }

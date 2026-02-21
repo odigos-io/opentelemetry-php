@@ -10,9 +10,7 @@ class QueueResumed
      * @param  string  $connection  The connection name.
      * @param  string  $queue  The queue name.
      */
-    public function __construct(
-        public $connection,
-        public $queue,
-    ) {
+    public function __construct(public $connection, public $queue)
+    {
     }
 }

@@ -1,8 +1,7 @@
 <?php
 
-declare(strict_types=1);
-
-namespace League\Flysystem;
+declare (strict_types=1);
+namespace Odigos\League\Flysystem;
 
 final class PortableVisibilityGuard
 {
@@ -10,10 +9,7 @@ final class PortableVisibilityGuard
     {
         if ($visibility !== Visibility::PUBLIC && $visibility !== Visibility::PRIVATE) {
             $className = Visibility::class;
-            throw InvalidVisibilityProvided::withVisibility(
-                $visibility,
-                "either {$className}::PUBLIC or {$className}::PRIVATE"
-            );
+            throw InvalidVisibilityProvided::withVisibility($visibility, "either {$className}::PUBLIC or {$className}::PRIVATE");
         }
     }
 }

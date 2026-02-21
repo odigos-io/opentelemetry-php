@@ -8,18 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-declare(strict_types=1);
-
-namespace League\Uri;
+declare (strict_types=1);
+namespace Odigos\League\Uri;
 
 use BackedEnum;
 use Deprecated;
-use League\Uri\Exceptions\SyntaxError;
-use League\Uri\Idna\Converter as IdnaConverter;
+use Odigos\League\Uri\Exceptions\SyntaxError;
+use Odigos\League\Uri\Idna\Converter as IdnaConverter;
 use Stringable;
 use Throwable;
-
 use function array_map;
 use function array_merge;
 use function array_pop;
@@ -35,10 +32,8 @@ use function str_replace;
 use function strpos;
 use function strtolower;
 use function substr;
-
 use const FILTER_FLAG_IPV4;
 use const FILTER_VALIDATE_IP;
-
 /**
  * A class to parse a URI string according to RFC3986.
  *
@@ -58,40 +53,25 @@ final class UriString
      *
      * @var ComponentMap
      */
-    private const URI_COMPONENTS = [
-        'scheme' => null, 'user' => null, 'pass' => null, 'host' => null,
-        'port' => null, 'path' => '', 'query' => null, 'fragment' => null,
-    ];
-
+    private const URI_COMPONENTS = ['scheme' => null, 'user' => null, 'pass' => null, 'host' => null, 'port' => null, 'path' => '', 'query' => null, 'fragment' => null];
     /**
      * Simple URI which do not need any parsing.
      *
      * @var array<string, array<string>>
      */
-    private const URI_SHORTCUTS = [
-        '' => ['path' => ''],
-        '#' => ['fragment' => ''],
-        '?' => ['query' => ''],
-        '?#' => ['query' => '', 'fragment' => ''],
-        '/' => ['path' => '/'],
-        '//' => ['host' => ''],
-        '///' => ['host' => '', 'path' => '/'],
-    ];
-
+    private const URI_SHORTCUTS = ['' => ['path' => ''], '#' => ['fragment' => ''], '?' => ['query' => ''], '?#' => ['query' => '', 'fragment' => ''], '/' => ['path' => '/'], '//' => ['host' => ''], '///' => ['host' => '', 'path' => '/']];
     /**
      * Range of invalid characters in URI 3986 string.
      *
      * @var string
      */
     private const REGEXP_VALID_URI_RFC3986_CHARS = '/^(?:[A-Za-z0-9\-._~:\/?#[\]@!$&\'()*+,;=%]|%[0-9A-Fa-f]{2})*$/';
-
     /**
      * Range of invalid characters in URI 3987 string.
      *
      * @var string
      */
     private const REGEXP_INVALID_URI_RFC3987_CHARS = '/[\x00-\x1f\x7f\s]/';
-
     /**
      * RFC3986 regular expression URI splitter.
      *
@@ -105,7 +85,6 @@ final class UriString
         (?<query>\?(?<qcontent>[^\#]*))?       # URI query component
         (?<fragment>\#(?<fcontent>.*))?        # URI fragment component
     ,x';
-
     /**
      * URI scheme regular expression.
      *
@@ -113,7 +92,6 @@ final class UriString
      * @var string
      */
     private const REGEXP_URI_SCHEME = '/^([a-z][a-z\d+.-]*)?$/i';
-
     /**
      * Invalid path for URI without scheme and authority regular expression.
      *
@@ -121,17 +99,14 @@ final class UriString
      * @var string
      */
     private const REGEXP_INVALID_PATH = ',^(([^/]*):)(.*)?/,';
-
     /**
      * Host and Port splitter regular expression.
      *
      * @var string
      */
     private const REGEXP_HOST_PORT = ',^(?<host>\[.*\]|[^:]*)(:(?<port>.*))?$,';
-
     /** @var array<string,int> */
     private const DOT_SEGMENTS = ['.' => 1, '..' => 1];
-
     /**
      * Generate an IRI string representation (RFC3987) from its parsed representation
      * returned by League\UriString::parse() or PHP's parse_url.
@@ -150,27 +125,19 @@ final class UriString
             $port = (int) $components['port'];
             unset($components['port']);
         }
-
         if (null !== $components['host']) {
             $components['host'] = IdnaConverter::toUnicode($components['host'])->domain();
         }
-
         $components['path'] = Encoder::decodePath($components['path']);
         $components['user'] = Encoder::decodeNecessary($components['user']);
         $components['pass'] = Encoder::decodeNecessary($components['pass']);
         $components['query'] = Encoder::decodeQuery($components['query']);
         $components['fragment'] = Encoder::decodeFragment($components['fragment']);
-
-        return self::build([
-            ...array_map(fn (?string $value) => match (true) {
-                null === $value,
-                !str_contains($value, '%20') => $value,
-                default => str_replace('%20', ' ', $value),
-            }, $components),
-            ...['port' => $port],
-        ]);
+        return self::build([...array_map(fn(?string $value) => match (\true) {
+            null === $value, !str_contains($value, '%20') => $value,
+            default => str_replace('%20', ' ', $value),
+        }, $components), ...['port' => $port]]);
     }
-
     /**
      * Generate a URI string representation from its parsed representation
      * returned by League\UriString::parse() or PHP's parse_url.
@@ -185,15 +152,8 @@ final class UriString
      */
     public static function build(array $components): string
     {
-        return self::buildUri(
-            $components['scheme'] ?? null,
-            self::buildAuthority($components),
-            $components['path'] ?? null,
-            $components['query'] ?? null,
-            $components['fragment'] ?? null,
-        );
+        return self::buildUri($components['scheme'] ?? null, self::buildAuthority($components), $components['path'] ?? null, $components['query'] ?? null, $components['fragment'] ?? null);
     }
-
     /**
      * Generates a URI string representation based on RFC3986 algorithm.
      *
@@ -203,35 +163,25 @@ final class UriString
      * @link https://tools.ietf.org/html/rfc3986#section-5.3
      * @link https://tools.ietf.org/html/rfc3986#section-7.5§
      */
-    public static function buildUri(
-        ?string $scheme = null,
-        ?string $authority = null,
-        ?string $path = null,
-        ?string $query = null,
-        ?string $fragment = null,
-    ): string {
+    public static function buildUri(?string $scheme = null, ?string $authority = null, ?string $path = null, ?string $query = null, ?string $fragment = null): string
+    {
         self::validateComponents($scheme, $authority, $path);
         $uri = '';
         if (null !== $scheme) {
-            $uri .= $scheme.':';
+            $uri .= $scheme . ':';
         }
-
         if (null !== $authority) {
-            $uri .= '//'.$authority;
+            $uri .= '//' . $authority;
         }
-
         $uri .= $path;
         if (null !== $query) {
-            $uri .= '?'.$query;
+            $uri .= '?' . $query;
         }
-
         if (null !== $fragment) {
-            $uri .= '#'.$fragment;
+            $uri .= '#' . $fragment;
         }
-
         return $uri;
     }
-
     /**
      * Generate a URI authority representation from its parsed representation.
      *
@@ -240,30 +190,24 @@ final class UriString
     public static function buildAuthority(array $components): ?string
     {
         if (!isset($components['host'])) {
-            (!isset($components['user']) && !isset($components['pass'])) || throw new SyntaxError('The user info component must not be set if the host is not defined.');
+            !isset($components['user']) && !isset($components['pass']) || throw new SyntaxError('The user info component must not be set if the host is not defined.');
             !isset($components['port']) || throw new SyntaxError('The port component must not be set if the host is not defined.');
-
             return null;
         }
-
         $userInfo = $components['user'] ?? null;
         if (isset($components['pass'])) {
-            $userInfo .= ':'.$components['pass'];
+            $userInfo .= ':' . $components['pass'];
         }
-
         $authority = '';
         if (isset($userInfo)) {
-            $authority .= $userInfo.'@';
+            $authority .= $userInfo . '@';
         }
-
         $authority .= $components['host'];
         if (isset($components['port'])) {
-            $authority .= ':'.$components['port'];
+            $authority .= ':' . $components['port'];
         }
-
         return $authority;
     }
-
     /**
      * Parses and normalizes the URI following RFC3986 destructive and non-destructive constraints.
      *
@@ -277,33 +221,28 @@ final class UriString
         if (null !== $components['scheme']) {
             $components['scheme'] = strtolower($components['scheme']);
         }
-
         $components['host'] = self::normalizeHost($components['host']);
         $path = $components['path'];
         $authority = self::buildAuthority($components);
         //dot segment only happens when:
         // - the path is absolute
         // - the scheme and/or the authority are defined
-        if ('/' === ($path[0] ?? '') || '' !== $components['scheme'].$authority) {
+        if ('/' === ($path[0] ?? '') || '' !== $components['scheme'] . $authority) {
             $path = self::removeDotSegments($path);
         }
-
         // if there is an authority, the path must be absolute
         if ('' !== $path && '/' !== $path[0]) {
             if (null !== $authority) {
-                $path = '/'.$path;
+                $path = '/' . $path;
             }
         }
-
         $components['path'] = (string) Encoder::normalizePath($path);
         $components['query'] = Encoder::normalizeQuery($components['query']);
         $components['fragment'] = Encoder::normalizeFragment($components['fragment']);
         $components['user'] = Encoder::normalizeUser($components['user']);
         $components['pass'] = Encoder::normalizePassword($components['pass']);
-
         return $components;
     }
-
     /**
      * Parses and normalizes the URI following RFC3986 destructive and non-destructive constraints.
      *
@@ -313,7 +252,6 @@ final class UriString
     {
         return self::build(self::parseNormalized($uri));
     }
-
     /**
      * Parses and normalizes the URI following RFC3986 destructive and non-destructive constraints.
      *
@@ -324,15 +262,12 @@ final class UriString
         if (null === $authority) {
             return null;
         }
-
         $components = UriString::parseAuthority($authority);
         $components['host'] = self::normalizeHost($components['host'] ?? null);
         $components['user'] = Encoder::normalizeUser($components['user']);
         $components['pass'] = Encoder::normalizePassword($components['pass']);
-
         return (string) self::buildAuthority($components);
     }
-
     /**
      * Resolves a URI against a base URI using RFC3986 rules.
      *
@@ -351,59 +286,47 @@ final class UriString
         if ($uri instanceof BackedEnum) {
             $uri = (string) $uri->value;
         }
-
         if ($baseUri instanceof BackedEnum) {
             $baseUri = (string) $baseUri->value;
         }
-
         $uri = (string) $uri;
         if ('' === $uri) {
             $uri = $baseUri ?? throw new SyntaxError('The uri can not be the empty string when there\'s no base URI.');
         }
-
         $uriComponents = self::parse($uri);
         $baseUriComponents = $uriComponents;
         if (null !== $baseUri && (string) $uri !== (string) $baseUri) {
             $baseUriComponents = self::parse($baseUri);
         }
-
         $hasLeadingSlash = str_starts_with($baseUriComponents['path'], '/');
         if (null === $baseUriComponents['scheme']) {
             throw new SyntaxError('The base URI must be an absolute URI or null; If the base URI is null the URI must be an absolute URI.');
         }
-
         if (null !== $uriComponents['scheme'] && '' !== $uriComponents['scheme']) {
             $uriComponents['path'] = self::removeDotSegments($uriComponents['path']);
             if ('' !== $uriComponents['path'] && '/' !== $uriComponents['path'][0] && $hasLeadingSlash) {
-                $uriComponents['path'] = '/'.$uriComponents['path'];
+                $uriComponents['path'] = '/' . $uriComponents['path'];
             }
-
             return UriString::build($uriComponents);
         }
-
         if (null !== self::buildAuthority($uriComponents)) {
             $uriComponents['scheme'] = $baseUriComponents['scheme'];
             $uriComponents['path'] = self::removeDotSegments($uriComponents['path']);
             if ('' !== $uriComponents['path'] && '/' !== $uriComponents['path'][0] && $hasLeadingSlash) {
-                $uriComponents['path'] = '/'.$uriComponents['path'];
+                $uriComponents['path'] = '/' . $uriComponents['path'];
             }
-
             return UriString::build($uriComponents);
         }
-
         [$path, $query] = self::resolvePathAndQuery($uriComponents, $baseUriComponents);
         $path = UriString::removeDotSegments($path);
         if ('' !== $path && '/' !== $path[0] && $hasLeadingSlash) {
-            $path = '/'.$path;
+            $path = '/' . $path;
         }
-
         $baseUriComponents['path'] = $path;
         $baseUriComponents['query'] = $query;
         $baseUriComponents['fragment'] = $uriComponents['fragment'];
-
         return UriString::build($baseUriComponents);
     }
-
     /**
      * Filter Dot segment according to RFC3986.
      *
@@ -415,30 +338,23 @@ final class UriString
         if (!str_contains($path, '.')) {
             return $path;
         }
-
         $reducer = function (array $carry, string $segment): array {
             if ('..' === $segment) {
                 array_pop($carry);
-
                 return $carry;
             }
-
             if (!isset(self::DOT_SEGMENTS[$segment])) {
                 $carry[] = $segment;
             }
-
             return $carry;
         };
-
         $oldSegments = explode('/', $path);
         $newPath = implode('/', array_reduce($oldSegments, $reducer(...), []));
         if (isset(self::DOT_SEGMENTS[$oldSegments[array_key_last($oldSegments)]])) {
             $newPath .= '/';
         }
-
         return $newPath;
     }
-
     /**
      * Resolves an URI path and query component.
      *
@@ -452,37 +368,30 @@ final class UriString
         if (str_starts_with($uri['path'], '/')) {
             return [$uri['path'], $uri['query']];
         }
-
         if ('' === $uri['path']) {
             return [$baseUri['path'], $uri['query'] ?? $baseUri['query']];
         }
-
         $targetPath = $uri['path'];
         if (null !== self::buildAuthority($baseUri) && '' === $baseUri['path']) {
-            $targetPath = '/'.$targetPath;
+            $targetPath = '/' . $targetPath;
         }
-
         if ('' !== $baseUri['path']) {
             $segments = explode('/', $baseUri['path']);
             array_pop($segments);
             if ([] !== $segments) {
-                $targetPath = implode('/', $segments).'/'.$targetPath;
+                $targetPath = implode('/', $segments) . '/' . $targetPath;
             }
         }
-
         return [$targetPath, $uri['query']];
     }
-
     public static function containsRfc3986Chars(Stringable|string $uri): bool
     {
         return 1 === preg_match(self::REGEXP_VALID_URI_RFC3986_CHARS, (string) $uri);
     }
-
     public static function containsRfc3987Chars(Stringable|string $uri): bool
     {
         return 1 !== preg_match(self::REGEXP_INVALID_URI_RFC3987_CHARS, (string) $uri);
     }
-
     /**
      * Parse a URI string into its components.
      *
@@ -530,29 +439,22 @@ final class UriString
         if ($uri instanceof BackedEnum) {
             $uri = $uri->value;
         }
-
         $uri = (string) $uri;
         if (isset(self::URI_SHORTCUTS[$uri])) {
             /** @var ComponentMap $components */
             $components = [...self::URI_COMPONENTS, ...self::URI_SHORTCUTS[$uri]];
-
             return $components;
         }
-
         self::containsRfc3987Chars($uri) || throw new SyntaxError(sprintf('The uri `%s` contains invalid characters', $uri));
-
         //if the first character is a known URI delimiter, parsing can be simplified
         $first_char = $uri[0];
-
         //The URI is made of the fragment only
         if ('#' === $first_char) {
             [, $fragment] = explode('#', $uri, 2);
             $components = self::URI_COMPONENTS;
             $components['fragment'] = $fragment;
-
             return $components;
         }
-
         //The URI is made of the query and fragment
         if ('?' === $first_char) {
             [, $partial] = explode('?', $uri, 2);
@@ -560,37 +462,21 @@ final class UriString
             $components = self::URI_COMPONENTS;
             $components['query'] = $query;
             $components['fragment'] = $fragment;
-
             return $components;
         }
-
         //use RFC3986 URI regexp to split the URI
         preg_match(self::REGEXP_URI_PARTS, $uri, $parts);
         $parts += ['query' => '', 'fragment' => ''];
-
-        if (':' === ($parts['scheme']  ?? null) || 1 !== preg_match(self::REGEXP_URI_SCHEME, $parts['scontent'] ?? '')) {
+        if (':' === ($parts['scheme'] ?? null) || 1 !== preg_match(self::REGEXP_URI_SCHEME, $parts['scontent'] ?? '')) {
             throw new SyntaxError(sprintf('The uri `%s` contains an invalid scheme', $uri));
         }
-
-        if ('' === ($parts['scheme'] ?? '').($parts['authority'] ?? '') && 1 === preg_match(self::REGEXP_INVALID_PATH, $parts['path'] ?? '')) {
+        if ('' === ($parts['scheme'] ?? '') . ($parts['authority'] ?? '') && 1 === preg_match(self::REGEXP_INVALID_PATH, $parts['path'] ?? '')) {
             throw new SyntaxError(sprintf('The uri `%s` contains an invalid path.', $uri));
         }
-
         /** @var ComponentMap $components */
-        $components = array_merge(
-            self::URI_COMPONENTS,
-            '' === ($parts['authority'] ?? null) ? [] : self::parseAuthority($parts['acontent'] ?? null),
-            [
-                'path' => $parts['path'] ?? '',
-                'scheme' => '' === ($parts['scheme'] ?? null) ? null : ($parts['scontent'] ?? null),
-                'query' => '' === $parts['query'] ? null : ($parts['qcontent'] ?? null),
-                'fragment' => '' === $parts['fragment'] ? null : ($parts['fcontent'] ?? null),
-            ]
-        );
-
+        $components = array_merge(self::URI_COMPONENTS, '' === ($parts['authority'] ?? null) ? [] : self::parseAuthority($parts['acontent'] ?? null), ['path' => $parts['path'] ?? '', 'scheme' => '' === ($parts['scheme'] ?? null) ? null : $parts['scontent'] ?? null, 'query' => '' === $parts['query'] ? null : $parts['qcontent'] ?? null, 'fragment' => '' === $parts['fragment'] ? null : $parts['fcontent'] ?? null]);
         return $components;
     }
-
     /**
      * Assert the URI internal state is valid.
      *
@@ -605,27 +491,21 @@ final class UriString
             if (null !== $path && '' !== $path && '/' !== $path[0]) {
                 throw new SyntaxError('If an authority is present the path must be empty or start with a `/`.');
             }
-
             return;
         }
-
         if (null === $path || '' === $path) {
             return;
         }
-
         if (str_starts_with($path, '//')) {
-            throw new SyntaxError('If there is no authority the path `'.$path.'` cannot start with a `//`.');
+            throw new SyntaxError('If there is no authority the path `' . $path . '` cannot start with a `//`.');
         }
-
-        if (null !== $scheme || false === ($pos = strpos($path, ':'))) {
+        if (null !== $scheme || \false === $pos = strpos($path, ':')) {
             return;
         }
-
         if (!str_contains(substr($path, 0, $pos), '/')) {
             throw new SyntaxError('In absence of a scheme and an authority the first path segment cannot contain a colon (":") character.');
         }
     }
-
     /**
      * Parses the URI authority part.
      *
@@ -641,7 +521,6 @@ final class UriString
         if (null === $authority) {
             return $components;
         }
-
         if ($authority instanceof BackedEnum) {
             $authority = $authority->value;
         }
@@ -650,21 +529,16 @@ final class UriString
         if ('' === $authority) {
             return $components;
         }
-
         $parts = explode('@', $authority, 2);
         if (isset($parts[1])) {
             [$components['user'], $components['pass']] = explode(':', $parts[0], 2) + [1 => null];
         }
-
         preg_match(self::REGEXP_HOST_PORT, $parts[1] ?? $parts[0], $matches);
         $matches += ['port' => ''];
-
         $components['port'] = self::filterPort($matches['port']);
         $components['host'] = self::filterHost($matches['host'] ?? '');
-
         return $components;
     }
-
     /**
      * Filter and format the port component.
      *
@@ -674,13 +548,12 @@ final class UriString
      */
     private static function filterPort(string $port): ?int
     {
-        return match (true) {
+        return match (\true) {
             '' === $port => null,
             1 === preg_match('/^\d*$/', $port) => (int) $port,
             default => throw new SyntaxError(sprintf('The port `%s` is invalid', $port)),
         };
     }
-
     /**
      * Returns whether a hostname is valid.
      *
@@ -696,7 +569,6 @@ final class UriString
             throw new SyntaxError(sprintf('Host `%s` is invalid : the IP host is malformed', $host));
         }
     }
-
     /**
      * Tells whether the scheme component is valid.
      */
@@ -705,39 +577,31 @@ final class UriString
         if ($scheme instanceof BackedEnum) {
             $scheme = $scheme->value;
         }
-
         return null === $scheme || 1 === preg_match('/^[A-Za-z]([-A-Za-z\d+.]+)?$/', (string) $scheme);
     }
-
     private static function normalizeHost(BackedEnum|Stringable|string|null $host): ?string
     {
         if ($host instanceof BackedEnum) {
             $host = $host->value;
         }
-
         if (null !== $host) {
             $host = (string) $host;
         }
-
-        if (null === $host || false !== filter_var($host, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
+        if (null === $host || \false !== filter_var($host, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
             return $host;
         }
-
         $host = (string) Encoder::normalizeHost($host);
         static $isSupported = null;
-        $isSupported ??= (function_exists('\idn_to_ascii') && defined('\INTL_IDNA_VARIANT_UTS46'));
-        if (! $isSupported) {
+        $isSupported ??= function_exists('\idn_to_ascii') && defined('\INTL_IDNA_VARIANT_UTS46');
+        if (!$isSupported) {
             return $host;
         }
-
         $idnaHost = IdnaConverter::toAscii($host);
         if (!$idnaHost->hasErrors()) {
             return $idnaHost->domain();
         }
-
         return $host;
     }
-
     /**
      * DEPRECATION WARNING! This method will be removed in the next major point release.
      *
@@ -747,7 +611,7 @@ final class UriString
      *
      * Create a new instance from the environment.
      */
-    #[Deprecated(message:'use League\Uri\HostRecord::validate() instead', since:'league/uri:7.6.0')]
+    #[Deprecated(message: 'use League\Uri\HostRecord::validate() instead', since: 'league/uri:7.6.0')]
     public static function isValidHost(Stringable|string|null $host): bool
     {
         return HostRecord::isValid($host);

@@ -1,12 +1,10 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Odigos\League\Flysystem\UrlGeneration;
 
-namespace League\Flysystem\UrlGeneration;
-
-use League\Flysystem\Config;
-use League\Flysystem\UnableToGeneratePublicUrl;
-
+use Odigos\League\Flysystem\Config;
+use Odigos\League\Flysystem\UnableToGeneratePublicUrl;
 interface PublicUrlGenerator
 {
     /**

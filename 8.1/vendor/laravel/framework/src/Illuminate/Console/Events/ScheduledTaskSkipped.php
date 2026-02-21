@@ -3,7 +3,6 @@
 namespace Illuminate\Console\Events;
 
 use Illuminate\Console\Scheduling\Event;
-
 class ScheduledTaskSkipped
 {
     /**
@@ -12,7 +11,6 @@ class ScheduledTaskSkipped
      * @var \Illuminate\Console\Scheduling\Event
      */
     public $task;
-
     /**
      * Create a new event instance.
      *

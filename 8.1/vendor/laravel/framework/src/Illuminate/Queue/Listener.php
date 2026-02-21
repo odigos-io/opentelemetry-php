@@ -5,7 +5,6 @@ namespace Illuminate\Queue;
 use Closure;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\Process;
-
 class Listener
 {
     /**
@@ -14,35 +13,30 @@ class Listener
      * @var string
      */
     protected $commandPath;
-
     /**
      * The environment the workers should run under.
      *
      * @var string
      */
     protected $environment;
-
     /**
      * The amount of seconds to wait before polling the queue.
      *
      * @var int
      */
     protected $sleep = 3;
-
     /**
      * The number of times to try a job before logging it failed.
      *
      * @var int
      */
     protected $maxTries = 0;
-
     /**
      * The output handler callback.
      *
      * @var \Closure|null
      */
     protected $outputHandler;
-
     /**
      * Create a new queue listener.
      *
@@ -53,7 +47,6 @@ class Listener
     {
         $this->commandPath = $commandPath;
     }
-
     /**
      * Get the PHP binary.
      *
@@ -61,9 +54,8 @@ class Listener
      */
     protected function phpBinary()
     {
-        return (new PhpExecutableFinder)->find(false);
+        return (new PhpExecutableFinder())->find(\false);
     }
-
     /**
      * Get the Artisan binary.
      *
@@ -73,7 +65,6 @@ class Listener
     {
         return defined('ARTISAN_BINARY') ? ARTISAN_BINARY : 'artisan';
     }
-
     /**
      * Listen to the given queue connection.
      *
@@ -82,19 +73,16 @@ class Listener
      * @param  \Illuminate\Queue\ListenerOptions  $options
      * @return void
      */
-    public function listen($connection, $queue, ListenerOptions $options)
+    public function listen($connection, $queue, \Illuminate\Queue\ListenerOptions $options)
     {
         $process = $this->makeProcess($connection, $queue, $options);
-
-        while (true) {
+        while (\true) {
             $this->runProcess($process, $options->memory);
-
             if ($options->rest) {
                 sleep($options->rest);
             }
         }
     }
-
     /**
      * Create a new Symfony process for the worker.
      *
@@ -103,30 +91,17 @@ class Listener
      * @param  \Illuminate\Queue\ListenerOptions  $options
      * @return \Symfony\Component\Process\Process
      */
-    public function makeProcess($connection, $queue, ListenerOptions $options)
+    public function makeProcess($connection, $queue, \Illuminate\Queue\ListenerOptions $options)
     {
-        $command = $this->createCommand(
-            $connection,
-            $queue,
-            $options
-        );
-
+        $command = $this->createCommand($connection, $queue, $options);
         // If the environment is set, we will append it to the command array so the
         // workers will run under the specified environment. Otherwise, they will
         // just run under the production environment which is not always right.
         if (isset($options->environment)) {
             $command = $this->addEnvironment($command, $options);
         }
-
-        return new Process(
-            $command,
-            $this->commandPath,
-            null,
-            null,
-            $options->timeout
-        );
+        return new Process($command, $this->commandPath, null, null, $options->timeout);
     }
-
     /**
      * Add the environment option to the given command.
      *
@@ -134,11 +109,10 @@ class Listener
      * @param  \Illuminate\Queue\ListenerOptions  $options
      * @return array
      */
-    protected function addEnvironment($command, ListenerOptions $options)
+    protected function addEnvironment($command, \Illuminate\Queue\ListenerOptions $options)
     {
         return array_merge($command, ["--env={$options->environment}"]);
     }
-
     /**
      * Create the command with the listener options.
      *
@@ -147,26 +121,12 @@ class Listener
      * @param  \Illuminate\Queue\ListenerOptions  $options
      * @return array
      */
-    protected function createCommand($connection, $queue, ListenerOptions $options)
+    protected function createCommand($connection, $queue, \Illuminate\Queue\ListenerOptions $options)
     {
-        return array_filter([
-            $this->phpBinary(),
-            $this->artisanBinary(),
-            'queue:work',
-            $connection,
-            '--once',
-            "--name={$options->name}",
-            "--queue={$queue}",
-            "--backoff={$options->backoff}",
-            "--memory={$options->memory}",
-            "--sleep={$options->sleep}",
-            "--tries={$options->maxTries}",
-            $options->force ? '--force' : null,
-        ], function ($value) {
-            return ! is_null($value);
+        return array_filter([$this->phpBinary(), $this->artisanBinary(), 'queue:work', $connection, '--once', "--name={$options->name}", "--queue={$queue}", "--backoff={$options->backoff}", "--memory={$options->memory}", "--sleep={$options->sleep}", "--tries={$options->maxTries}", $options->force ? '--force' : null], function ($value) {
+            return !is_null($value);
         });
     }
-
     /**
      * Run the given process.
      *
@@ -179,7 +139,6 @@ class Listener
         $process->run(function ($type, $line) {
             $this->handleWorkerOutput($type, $line);
         });
-
         // Once we have run the job we'll go check if the memory limit has been exceeded
         // for the script. If it has, we will kill this script so the process manager
         // will restart this with a clean slate of memory automatically on exiting.
@@ -187,7 +146,6 @@ class Listener
             $this->stop();
         }
     }
-
     /**
      * Handle output from the worker process.
      *
@@ -201,7 +159,6 @@ class Listener
             call_user_func($this->outputHandler, $type, $line);
         }
     }
-
     /**
      * Determine if the memory limit has been exceeded.
      *
@@ -210,9 +167,8 @@ class Listener
      */
     public function memoryExceeded($memoryLimit)
     {
-        return (memory_get_usage(true) / 1024 / 1024) >= $memoryLimit;
+        return memory_get_usage(\true) / 1024 / 1024 >= $memoryLimit;
     }
-
     /**
      * Stop listening and bail out of the script.
      *
@@ -222,7 +178,6 @@ class Listener
     {
         exit;
     }
-
     /**
      * Set the output handler callback.
      *

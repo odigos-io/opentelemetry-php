@@ -4,11 +4,9 @@ namespace Illuminate\Foundation\Testing;
 
 use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Foundation\Testing\Traits\CanConfigureMigrationCommands;
-
 trait RefreshDatabase
 {
     use CanConfigureMigrationCommands;
-
     /**
      * Define hooks to migrate the database before and after each test.
      *
@@ -17,14 +15,9 @@ trait RefreshDatabase
     public function refreshDatabase()
     {
         $this->beforeRefreshingDatabase();
-
-        $this->usingInMemoryDatabase()
-                        ? $this->refreshInMemoryDatabase()
-                        : $this->refreshTestDatabase();
-
+        $this->usingInMemoryDatabase() ? $this->refreshInMemoryDatabase() : $this->refreshTestDatabase();
         $this->afterRefreshingDatabase();
     }
-
     /**
      * Determine if an in-memory database is being used.
      *
@@ -33,10 +26,8 @@ trait RefreshDatabase
     protected function usingInMemoryDatabase()
     {
         $default = config('database.default');
-
-        return config("database.connections.$default.database") === ':memory:';
+        return config("database.connections.{$default}.database") === ':memory:';
     }
-
     /**
      * Refresh the in-memory database.
      *
@@ -45,10 +36,8 @@ trait RefreshDatabase
     protected function refreshInMemoryDatabase()
     {
         $this->artisan('migrate', $this->migrateUsing());
-
         $this->app[Kernel::class]->setArtisan(null);
     }
-
     /**
      * The parameters that should be used when running "migrate".
      *
@@ -56,12 +45,8 @@ trait RefreshDatabase
      */
     protected function migrateUsing()
     {
-        return [
-            '--seed' => $this->shouldSeed(),
-            '--seeder' => $this->seeder(),
-        ];
+        return ['--seed' => $this->shouldSeed(), '--seeder' => $this->seeder()];
     }
-
     /**
      * Refresh a conventional test database.
      *
@@ -69,17 +54,13 @@ trait RefreshDatabase
      */
     protected function refreshTestDatabase()
     {
-        if (! RefreshDatabaseState::$migrated) {
+        if (!\Illuminate\Foundation\Testing\RefreshDatabaseState::$migrated) {
             $this->artisan('migrate:fresh', $this->migrateFreshUsing());
-
             $this->app[Kernel::class]->setArtisan(null);
-
-            RefreshDatabaseState::$migrated = true;
+            \Illuminate\Foundation\Testing\RefreshDatabaseState::$migrated = \true;
         }
-
         $this->beginDatabaseTransaction();
     }
-
     /**
      * Begin a database transaction on the testing database.
      *
@@ -88,24 +69,19 @@ trait RefreshDatabase
     public function beginDatabaseTransaction()
     {
         $database = $this->app->make('db');
-
-        $this->app->instance('db.transactions', $transactionsManager = new DatabaseTransactionsManager);
-
+        $this->app->instance('db.transactions', $transactionsManager = new \Illuminate\Foundation\Testing\DatabaseTransactionsManager());
         foreach ($this->connectionsToTransact() as $name) {
             $connection = $database->connection($name);
             $connection->setTransactionManager($transactionsManager);
             $dispatcher = $connection->getEventDispatcher();
-
             $connection->unsetEventDispatcher();
             $connection->beginTransaction();
             $connection->setEventDispatcher($dispatcher);
         }
-
         $this->beforeApplicationDestroyed(function () use ($database) {
             foreach ($this->connectionsToTransact() as $name) {
                 $connection = $database->connection($name);
                 $dispatcher = $connection->getEventDispatcher();
-
                 $connection->unsetEventDispatcher();
                 $connection->rollBack();
                 $connection->setEventDispatcher($dispatcher);
@@ -113,7 +89,6 @@ trait RefreshDatabase
             }
         });
     }
-
     /**
      * The database connections that should have transactions.
      *
@@ -121,10 +96,8 @@ trait RefreshDatabase
      */
     protected function connectionsToTransact()
     {
-        return property_exists($this, 'connectionsToTransact')
-                            ? $this->connectionsToTransact : [null];
+        return property_exists($this, 'connectionsToTransact') ? $this->connectionsToTransact : [null];
     }
-
     /**
      * Perform any work that should take place before the database has started refreshing.
      *
@@ -134,7 +107,6 @@ trait RefreshDatabase
     {
         // ...
     }
-
     /**
      * Perform any work that should take place once the database has finished refreshing.
      *

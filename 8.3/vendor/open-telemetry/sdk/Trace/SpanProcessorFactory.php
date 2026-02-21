@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\SDK\Trace;
 
 use InvalidArgumentException;
@@ -14,17 +13,14 @@ use OpenTelemetry\SDK\Metrics\NoopMeterProvider;
 use OpenTelemetry\SDK\Trace\SpanProcessor\BatchSpanProcessor;
 use OpenTelemetry\SDK\Trace\SpanProcessor\NoopSpanProcessor;
 use OpenTelemetry\SDK\Trace\SpanProcessor\SimpleSpanProcessor;
-
 class SpanProcessorFactory
 {
-    public function create(?SpanExporterInterface $exporter = null, ?MeterProviderInterface $meterProvider = null): SpanProcessorInterface
+    public function create(?\OpenTelemetry\SDK\Trace\SpanExporterInterface $exporter = null, ?MeterProviderInterface $meterProvider = null): \OpenTelemetry\SDK\Trace\SpanProcessorInterface
     {
         if ($exporter === null) {
             return new NoopSpanProcessor();
         }
-
         $name = Configuration::getEnum(Env::OTEL_PHP_TRACES_PROCESSOR);
-
         return match ($name) {
             Values::VALUE_BATCH => new BatchSpanProcessor(
                 $exporter,
@@ -33,8 +29,9 @@ class SpanProcessorFactory
                 Configuration::getInt(Env::OTEL_BSP_SCHEDULE_DELAY, BatchSpanProcessor::DEFAULT_SCHEDULE_DELAY),
                 Configuration::getInt(Env::OTEL_BSP_EXPORT_TIMEOUT, BatchSpanProcessor::DEFAULT_EXPORT_TIMEOUT),
                 Configuration::getInt(Env::OTEL_BSP_MAX_EXPORT_BATCH_SIZE, BatchSpanProcessor::DEFAULT_MAX_EXPORT_BATCH_SIZE),
-                true, //autoflush
-                $meterProvider ?? new NoopMeterProvider(),
+                \true,
+                //autoflush
+                $meterProvider ?? new NoopMeterProvider()
             ),
             Values::VALUE_SIMPLE => new SimpleSpanProcessor($exporter),
             Values::VALUE_NOOP, Values::VALUE_NONE => NoopSpanProcessor::getInstance(),

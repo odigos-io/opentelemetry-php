@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -20,7 +20,6 @@ use Cake\Core\App;
 use Cake\Core\ObjectRegistry;
 use Cake\Datasource\Exception\MissingDatasourceException;
 use Closure;
-
 /**
  * A registry object for connection instances.
  *
@@ -42,7 +41,6 @@ class ConnectionRegistry extends ObjectRegistry
         /** @var class-string<\Cake\Datasource\ConnectionInterface>|null */
         return App::className($class, 'Datasource');
     }
-
     /**
      * Throws an exception when a datasource is missing
      *
@@ -55,12 +53,8 @@ class ConnectionRegistry extends ObjectRegistry
      */
     protected function _throwMissingClassError(string $class, ?string $plugin): void
     {
-        throw new MissingDatasourceException([
-            'class' => $class,
-            'plugin' => $plugin,
-        ]);
+        throw new MissingDatasourceException(['class' => $class, 'plugin' => $plugin]);
     }
-
     /**
      * Create the connection object with the correct settings.
      *
@@ -74,21 +68,17 @@ class ConnectionRegistry extends ObjectRegistry
      * @param array<string, mixed> $config An array of settings to use for the datasource.
      * @return \Cake\Datasource\ConnectionInterface A connection with the correct settings.
      */
-    protected function _create(object|string $class, string $alias, array $config): ConnectionInterface
+    protected function _create(object|string $class, string $alias, array $config): \Cake\Datasource\ConnectionInterface
     {
         if (is_string($class)) {
             unset($config['className']);
-
             return new $class($config);
         }
-
         if ($class instanceof Closure) {
             return $class($alias);
         }
-
         return $class;
     }
-
     /**
      * Remove a single adapter from the registry.
      *
@@ -98,7 +88,6 @@ class ConnectionRegistry extends ObjectRegistry
     public function unload(string $name)
     {
         unset($this->_loaded[$name]);
-
         return $this;
     }
 }

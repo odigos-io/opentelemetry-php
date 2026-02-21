@@ -10,42 +10,36 @@ class QueryExecuted
      * @var string
      */
     public $sql;
-
     /**
      * The array of query bindings.
      *
      * @var array
      */
     public $bindings;
-
     /**
      * The number of milliseconds it took to execute the query.
      *
      * @var float
      */
     public $time;
-
     /**
      * The database connection instance.
      *
      * @var \Illuminate\Database\Connection
      */
     public $connection;
-
     /**
      * The database connection name.
      *
      * @var string
      */
     public $connectionName;
-
     /**
      * The PDO read / write type for the executed query.
      *
      * @var null|'read'|'write'
      */
     public $readWriteType;
-
     /**
      * Create a new event instance.
      *
@@ -64,7 +58,6 @@ class QueryExecuted
         $this->connectionName = $connection->getName();
         $this->readWriteType = $readWriteType;
     }
-
     /**
      * Get the raw SQL representation of the query with embedded bindings.
      *
@@ -72,9 +65,6 @@ class QueryExecuted
      */
     public function toRawSql()
     {
-        return $this->connection
-            ->query()
-            ->getGrammar()
-            ->substituteBindingsIntoRawSql($this->sql, $this->connection->prepareBindings($this->bindings));
+        return $this->connection->query()->getGrammar()->substituteBindingsIntoRawSql($this->sql, $this->connection->prepareBindings($this->bindings));
     }
 }

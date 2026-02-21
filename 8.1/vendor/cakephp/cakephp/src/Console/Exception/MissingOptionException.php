@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -16,11 +16,10 @@ declare(strict_types=1);
 namespace Cake\Console\Exception;
 
 use Throwable;
-
 /**
  * Exception raised with suggestions
  */
-class MissingOptionException extends ConsoleException
+class MissingOptionException extends \Cake\Console\Exception\ConsoleException
 {
     /**
      * The requested thing that was not found.
@@ -28,14 +27,12 @@ class MissingOptionException extends ConsoleException
      * @var string
      */
     protected string $requested = '';
-
     /**
      * The valid suggestions.
      *
      * @var array<string>
      */
     protected array $suggestions = [];
-
     /**
      * Constructor.
      *
@@ -45,18 +42,12 @@ class MissingOptionException extends ConsoleException
      * @param int|null $code The exception code if relevant.
      * @param \Throwable|null $previous the previous exception.
      */
-    public function __construct(
-        string $message,
-        string $requested = '',
-        array $suggestions = [],
-        ?int $code = null,
-        ?Throwable $previous = null,
-    ) {
+    public function __construct(string $message, string $requested = '', array $suggestions = [], ?int $code = null, ?Throwable $previous = null)
+    {
         $this->suggestions = $suggestions;
         $this->requested = $requested;
         parent::__construct($message, $code, $previous);
     }
-
     /**
      * Get the message with suggestions
      *
@@ -75,14 +66,11 @@ class MissingOptionException extends ConsoleException
                 $good[] = '- ' . $option;
             }
         }
-
         if ($good) {
             $out .= "\n\nOther valid choices:\n\n" . implode("\n", $good);
         }
-
         return $out;
     }
-
     /**
      * Find the best match for requested in suggestions
      *
@@ -98,17 +86,14 @@ class MissingOptionException extends ConsoleException
                 return $item;
             }
         }
-
         $bestScore = 4;
         foreach ($haystack as $item) {
             $score = levenshtein($needle, $item);
-
             if ($score < $bestScore) {
                 $bestScore = $score;
                 $bestGuess = $item;
             }
         }
-
         return $bestGuess;
     }
 }

@@ -1,11 +1,9 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Odigos\Dotenv\Repository\Adapter;
 
-namespace Dotenv\Repository\Adapter;
-
-use PhpOption\None;
-
+use Odigos\PhpOption\None;
 final class MultiReader implements ReaderInterface
 {
     /**
@@ -14,7 +12,6 @@ final class MultiReader implements ReaderInterface
      * @var \Dotenv\Repository\Adapter\ReaderInterface[]
      */
     private $readers;
-
     /**
      * Create a new multi-reader instance.
      *
@@ -26,7 +23,6 @@ final class MultiReader implements ReaderInterface
     {
         $this->readers = $readers;
     }
-
     /**
      * Read an environment variable, if it exists.
      *
@@ -42,7 +38,6 @@ final class MultiReader implements ReaderInterface
                 return $result;
             }
         }
-
         return None::create();
     }
 }

@@ -1,10 +1,10 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\helpers;
 
 /**
@@ -19,6 +19,6 @@ namespace yii\helpers;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class Html extends BaseHtml
+class Html extends \yii\helpers\BaseHtml
 {
 }

@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\API;
 
 interface Signals
@@ -13,9 +12,5 @@ interface Signals
     /** @var string  */
     public const LOGS = 'logs';
     /** @var string[]  */
-    public const SIGNALS = [
-        self::TRACE,
-        self::METRICS,
-        self::LOGS,
-    ];
+    public const SIGNALS = [self::TRACE, self::METRICS, self::LOGS];
 }

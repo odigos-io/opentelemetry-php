@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -19,26 +19,23 @@ namespace Cake\Database\Type;
 use Cake\Database\Driver;
 use InvalidArgumentException;
 use PDO;
-
 /**
  * JSON type converter.
  *
  * Used to convert JSON data between PHP and the database types.
  */
-class JsonType extends BaseType implements BatchCastingInterface
+class JsonType extends \Cake\Database\Type\BaseType implements \Cake\Database\Type\BatchCastingInterface
 {
     /**
      * @var int
      */
     protected int $_encodingOptions = 0;
-
     /**
      * Flags for json_decode()
      *
      * @var int
      */
-    protected int $_decodingOptions = JSON_OBJECT_AS_ARRAY;
-
+    protected int $_decodingOptions = \JSON_OBJECT_AS_ARRAY;
     /**
      * Convert a value data into a JSON string
      *
@@ -53,14 +50,11 @@ class JsonType extends BaseType implements BatchCastingInterface
         if (is_resource($value)) {
             throw new InvalidArgumentException('Cannot convert a resource value to JSON');
         }
-
         if ($value === null) {
             return null;
         }
-
-        return json_encode($value, JSON_THROW_ON_ERROR | $this->_encodingOptions);
+        return json_encode($value, \JSON_THROW_ON_ERROR | $this->_encodingOptions);
     }
-
     /**
      * {@inheritDoc}
      *
@@ -73,10 +67,8 @@ class JsonType extends BaseType implements BatchCastingInterface
         if (!is_string($value)) {
             return null;
         }
-
         return json_decode($value, flags: $this->_decodingOptions);
     }
-
     /**
      * @inheritDoc
      */
@@ -86,13 +78,10 @@ class JsonType extends BaseType implements BatchCastingInterface
             if (!isset($values[$field])) {
                 continue;
             }
-
             $values[$field] = json_decode($values[$field], flags: $this->_decodingOptions);
         }
-
         return $values;
     }
-
     /**
      * @inheritDoc
      */
@@ -100,7 +89,6 @@ class JsonType extends BaseType implements BatchCastingInterface
     {
         return PDO::PARAM_STR;
     }
-
     /**
      * Marshals request data into a JSON compatible structure.
      *
@@ -111,7 +99,6 @@ class JsonType extends BaseType implements BatchCastingInterface
     {
         return $value;
     }
-
     /**
      * Set json_encode options.
      *
@@ -122,10 +109,8 @@ class JsonType extends BaseType implements BatchCastingInterface
     public function setEncodingOptions(int $options)
     {
         $this->_encodingOptions = $options;
-
         return $this;
     }
-
     /**
      * Set json_decode() options.
      *
@@ -137,7 +122,6 @@ class JsonType extends BaseType implements BatchCastingInterface
     public function setDecodingOptions(int $options)
     {
         $this->_decodingOptions = $options;
-
         return $this;
     }
 }

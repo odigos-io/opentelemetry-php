@@ -3,8 +3,7 @@
 namespace Illuminate\Log;
 
 use Psr\Log\LoggerInterface;
-
-if (! function_exists('Illuminate\Log\log')) {
+if (!function_exists('Illuminate\Log\log')) {
     /**
      * Log a debug message to the logs.
      *

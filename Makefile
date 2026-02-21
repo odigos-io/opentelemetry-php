@@ -4,100 +4,83 @@ ARCHES=arm64 amd64
 DOCKER_MOUNT_NAME=otel-php
 
 ##################################################
-# Composer commands (no local PHP needed)
+# Full build: vendor + extension for all versions x arches
 ##################################################
 
-# Note: We use --ignore-platform-req=ext-* to skip extension checks (ext-opentelemetry, ext-mongodb)
-# but we do NOT use --ignore-platform-reqs which would also skip PHP version checks.
-# This ensures packages are installed for the correct PHP version.
-
-.PHONY: install-libs
-install-libs:
-	@for vers in $(PHP_VERSIONS); do \
-		echo "🚀 Installing libraries for PHP $$vers using Docker"; \
-		docker run --rm -v $(PWD)/$$vers:/app -w /app \
-			php:$$vers-cli sh -c "\
-				apt-get update -qq && apt-get install -y -qq unzip > /dev/null 2>&1 && \
-				curl -sS https://getcomposer.org/installer | php -- --quiet && \
-				php composer.phar install --optimize-autoloader --no-dev --no-plugins --ignore-platform-req=ext-*"; \
-	done
-	@echo "✅ All libraries have been installed."
-
-.PHONY: update-libs
-update-libs:
-	@for vers in $(PHP_VERSIONS); do \
-		echo "🚀 Updating libraries for PHP $$vers using Docker"; \
-		docker run --rm -v $(PWD)/$$vers:/app -w /app \
-			php:$$vers-cli sh -c "\
-				apt-get update -qq && apt-get install -y -qq unzip > /dev/null 2>&1 && \
-				curl -sS https://getcomposer.org/installer | php -- --quiet && \
-				php composer.phar update --optimize-autoloader --no-dev --no-plugins --ignore-platform-req=ext-*"; \
-	done
-	@echo "✅ All libraries have been updated."
-
-##################################################
-# Main method to build the binaries
-##################################################
-
-.PHONY: binaries
-binaries:
+.PHONY: all
+all:
 	@$(MAKE) prepare-multiarch
 	@$(MAKE) bake-images
-	@for vers in $(PHP_VERSIONS); do \
-		for arch in $(ARCHES); do \
-			echo "🚀 Handling binaries for PHP $$vers on $$arch"; \
-			($(MAKE) unmount-container/$$vers-$$arch || true); \
-			$(MAKE) mount-container/$$vers-$$arch; \
-			$(MAKE) copy-files/$$vers-$$arch; \
-			$(MAKE) unmount-container/$$vers-$$arch; \
-		done; \
-	done
-	@$(MAKE) cleanup
-	@echo "✅ All binaries have been built and copied to the respective directories."
-	@for vers in $(PHP_VERSIONS); do \
-		for arch in $(ARCHES); do \
-			echo "👀 Checking output for $$vers $$arch"; \
-			file ./$$vers/bin/$$arch/opentelemetry.so; \
-		done; \
-	done
+	@$(MAKE) copy-files
+	@$(MAKE) check-binaries
+	@$(MAKE) cleanup-multiarch
+
+##################################################
+# Internal targets
+##################################################
 
 prepare-multiarch:
-	@echo "🚀 Bootstraping buildx with QEMU support"
+	@echo "🚀 Bootstrapping buildx with QEMU support"
 	@docker buildx create --name multiarch --driver docker-container --use || true
 	@docker buildx inspect --bootstrap
+
+cleanup-multiarch:
+	@echo "🧹 Cleaning up"
+	@rm -rf tmp
+	@docker buildx use default || docker context use default
+	@docker buildx rm multiarch 2>/dev/null || true
 
 bake-images:
 	@echo "🚀 Building images"
 	@mkdir -p tmp
 	@docker buildx bake --file docker-bake.hcl \
-		--set *.args.PHP_OTEL_VERSION=$(PHP_OTEL_VERSION)
+		--set '*.args.PHP_OTEL_VERSION=$(PHP_OTEL_VERSION)'
 
-mount-container/%:
-	@echo "🧪 Mounting container"
-	@{ \
-		VERS=$$(echo "$*" | cut -d '-' -f 1); \
-		ARCH=$$(echo "$*" | cut -d '-' -f 2); \
-		docker load -i tmp/${DOCKER_MOUNT_NAME}-$*.tar; \
-		docker create --platform=linux/$${ARCH} --name ${DOCKER_MOUNT_NAME}-$* ${DOCKER_MOUNT_NAME}:$*; \
-	}
+copy-files:
+	@echo "📦 Copying files"
+	@for vers in $(PHP_VERSIONS); do \
+		VENDOR_DONE=0; \
+		for arch in $(ARCHES); do \
+			echo "📦 Extracting artifacts for PHP $$vers / $$arch"; \
+			docker load -i tmp/$(DOCKER_MOUNT_NAME)-$$vers-$$arch.tar; \
+			CID=$$(docker create --platform=linux/$$arch $(DOCKER_MOUNT_NAME):$$vers-$$arch true); \
+			mkdir -p ./$$vers/bin/$$arch; \
+			docker cp $$CID:/opentelemetry.so  ./$$vers/bin/$$arch/opentelemetry.so; \
+			docker cp $$CID:/opentelemetry.ini ./$$vers/opentelemetry.ini; \
+			if [ $$VENDOR_DONE -eq 0 ]; then \
+				rm -rf ./$$vers/vendor; \
+				docker cp $$CID:/vendor ./$$vers/vendor; \
+				VENDOR_DONE=1; \
+			fi; \
+			docker rm $$CID > /dev/null 2>&1; \
+		done; \
+	done
 
-unmount-container/%:
-	@echo "🧪 Unmounting container"
-	@docker rm ${DOCKER_MOUNT_NAME}-$*
+check-binaries:
+	@echo "🔍 Checking binaries"
+	@for vers in $(PHP_VERSIONS); do \
+		for arch in $(ARCHES); do \
+			echo "👀 $$vers/bin/$$arch/opentelemetry.so"; \
+			file ./$$vers/bin/$$arch/opentelemetry.so; \
+		done; \
+	done
 
-copy-files/%:
-	@echo "🧪 Copying files"
-	@{ \
-		VERS=$$(echo "$*" | cut -d '-' -f 1); \
-		ARCH=$$(echo "$*" | cut -d '-' -f 2); \
-		rm -rf ./$${VERS}/bin/$${ARCH}; \
-		mkdir -p ./$${VERS}/bin/$${ARCH}; \
-		docker cp ${DOCKER_MOUNT_NAME}-$*:/opentelemetry.so ./$${VERS}/bin/$${ARCH}/opentelemetry.so; \
-		docker cp ${DOCKER_MOUNT_NAME}-$*:/opentelemetry.ini ./$${VERS}/opentelemetry.ini; \
-	}
+##################################################
+# Dev: build release image and deploy to Kind cluster
+##################################################
 
-cleanup:
-	@echo "🚀 Cleaning up leftovers"
-	@rm -rf tmp
-	@docker buildx use default || docker context use default
-	@docker buildx rm multiarch
+KIND_NODE ?= kind-control-plane
+ODIGLET_PHP_PATH ?= /var/odigos/php
+DEV_IMAGE = php-community-dev
+
+.PHONY: deploy-dev
+deploy-dev:
+	@echo "📦 Building release image..."
+	@docker build -f release.Dockerfile -t $(DEV_IMAGE) .
+	@echo "📤 Extracting instrumentations from image..."
+	@CID=$$(docker create $(DEV_IMAGE) true); \
+	docker cp $$CID:/instrumentations/php - | \
+		docker exec -i $(KIND_NODE) sh -c 'rm -rf $(ODIGLET_PHP_PATH) && mkdir -p $(ODIGLET_PHP_PATH) && tar xf - -C $(ODIGLET_PHP_PATH) --strip-components=1'; \
+	docker rm $$CID > /dev/null 2>&1
+	@echo "✅ PHP instrumentations deployed to $(KIND_NODE):$(ODIGLET_PHP_PATH)"
+	@docker exec $(KIND_NODE) ls -la $(ODIGLET_PHP_PATH)

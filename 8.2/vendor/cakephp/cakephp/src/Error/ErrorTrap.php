@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 namespace Cake\Error;
 
 use Cake\Core\Configure;
@@ -10,7 +10,6 @@ use Cake\Error\Renderer\HtmlErrorRenderer;
 use Cake\Event\EventDispatcherTrait;
 use Cake\Routing\Router;
 use Exception;
-
 /**
  * Entry point to CakePHP's error handling.
  *
@@ -27,7 +26,6 @@ class ErrorTrap
      */
     use EventDispatcherTrait;
     use InstanceConfigTrait;
-
     /**
      * Configuration options. Generally these are defined in config/app.php
      *
@@ -41,14 +39,7 @@ class ErrorTrap
      *
      * @var array<string, mixed>
      */
-    protected array $_defaultConfig = [
-        'errorLevel' => E_ALL,
-        'errorRenderer' => null,
-        'log' => true,
-        'logger' => ErrorLogger::class,
-        'trace' => false,
-    ];
-
+    protected array $_defaultConfig = ['errorLevel' => \E_ALL, 'errorRenderer' => null, 'log' => \true, 'logger' => \Cake\Error\ErrorLogger::class, 'trace' => \false];
     /**
      * Constructor
      *
@@ -58,7 +49,6 @@ class ErrorTrap
     {
         $this->setConfig($options);
     }
-
     /**
      * Choose an error renderer based on config or the SAPI
      *
@@ -70,11 +60,9 @@ class ErrorTrap
         if ($config !== null) {
             return $config;
         }
-
         /** @var class-string<\Cake\Error\ErrorRendererInterface> */
-        return PHP_SAPI === 'cli' ? ConsoleErrorRenderer::class : HtmlErrorRenderer::class;
+        return \PHP_SAPI === 'cli' ? ConsoleErrorRenderer::class : HtmlErrorRenderer::class;
     }
-
     /**
      * Attach this ErrorTrap to PHP's default error handler.
      *
@@ -92,7 +80,6 @@ class ErrorTrap
         error_reporting($level);
         set_error_handler($this->handleError(...), $level);
     }
-
     /**
      * Handle an error from PHP set_error_handler
      *
@@ -108,91 +95,76 @@ class ErrorTrap
      * @param int|null $line Line that triggered the error
      * @return bool True if error was handled
      */
-    public function handleError(
-        int $code,
-        string $description,
-        ?string $file = null,
-        ?int $line = null,
-    ): bool {
+    public function handleError(int $code, string $description, ?string $file = null, ?int $line = null): bool
+    {
         if (!(error_reporting() & $code)) {
-            return false;
+            return \false;
         }
-        if (in_array($code, [E_USER_ERROR, E_ERROR, E_PARSE], true)) {
-            throw new FatalErrorException($description, $code, $file, $line);
+        if (in_array($code, [\E_USER_ERROR, \E_ERROR, \E_PARSE], \true)) {
+            throw new \Cake\Error\FatalErrorException($description, $code, $file, $line);
         }
-
-        $trace = (array)Debugger::trace(['start' => 0, 'format' => 'points']);
-        $error = new PhpError($code, $description, $file, $line, $trace);
-
-        $ignoredPaths = (array)Configure::read('Error.ignoredDeprecationPaths');
-        if ($code === E_USER_DEPRECATED && $ignoredPaths) {
-            $relativePath = str_replace(DIRECTORY_SEPARATOR, '/', substr((string)$file, strlen(ROOT) + 1));
+        $trace = (array) \Cake\Error\Debugger::trace(['start' => 0, 'format' => 'points']);
+        $error = new \Cake\Error\PhpError($code, $description, $file, $line, $trace);
+        $ignoredPaths = (array) Configure::read('Error.ignoredDeprecationPaths');
+        if ($code === \E_USER_DEPRECATED && $ignoredPaths) {
+            $relativePath = str_replace(\DIRECTORY_SEPARATOR, '/', substr((string) $file, strlen(ROOT) + 1));
             foreach ($ignoredPaths as $pattern) {
-                $pattern = str_replace(DIRECTORY_SEPARATOR, '/', $pattern);
+                $pattern = str_replace(\DIRECTORY_SEPARATOR, '/', $pattern);
                 if (fnmatch($pattern, $relativePath)) {
-                    return true;
+                    return \true;
                 }
             }
         }
-
         $debug = Configure::read('debug');
         $renderer = $this->renderer();
-
         try {
             // Log first in case rendering or event listeners fail
             $this->logError($error);
             $event = $this->dispatchEvent('Error.beforeRender', ['error' => $error]);
             if ($event->isStopped()) {
-                return true;
+                return \true;
             }
             $renderer->write($event->getResult() ?: $renderer->render($error, $debug));
         } catch (Exception $e) {
             // Fatal errors always log.
             $this->logger()->logException($e);
-
-            return false;
+            return \false;
         }
-
-        return true;
+        return \true;
     }
-
     /**
      * Logging helper method.
      *
      * @param \Cake\Error\PhpError $error The error object to log.
      * @return void
      */
-    protected function logError(PhpError $error): void
+    protected function logError(\Cake\Error\PhpError $error): void
     {
         if (!$this->_config['log']) {
             return;
         }
         $this->logger()->logError($error, Router::getRequest(), $this->_config['trace']);
     }
-
     /**
      * Get an instance of the renderer.
      *
      * @return \Cake\Error\ErrorRendererInterface
      */
-    public function renderer(): ErrorRendererInterface
+    public function renderer(): \Cake\Error\ErrorRendererInterface
     {
         /** @var class-string<\Cake\Error\ErrorRendererInterface> $class */
         $class = $this->getConfig('errorRenderer') ?: $this->chooseErrorRenderer();
-
         return new $class($this->_config);
     }
-
     /**
      * Get an instance of the logger.
      *
      * @return \Cake\Error\ErrorLoggerInterface
      */
-    public function logger(): ErrorLoggerInterface
+    public function logger(): \Cake\Error\ErrorLoggerInterface
     {
         /** @var class-string<\Cake\Error\ErrorLoggerInterface> $class */
         $class = $this->getConfig('logger', $this->_defaultConfig['logger']);
-
         return new $class($this->_config);
     }
 }

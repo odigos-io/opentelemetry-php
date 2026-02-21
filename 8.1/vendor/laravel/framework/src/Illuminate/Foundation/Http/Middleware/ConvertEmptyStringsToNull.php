@@ -3,8 +3,7 @@
 namespace Illuminate\Foundation\Http\Middleware;
 
 use Closure;
-
-class ConvertEmptyStringsToNull extends TransformsRequest
+class ConvertEmptyStringsToNull extends \Illuminate\Foundation\Http\Middleware\TransformsRequest
 {
     /**
      * All of the registered skip callbacks.
@@ -12,7 +11,6 @@ class ConvertEmptyStringsToNull extends TransformsRequest
      * @var array
      */
     protected static $skipCallbacks = [];
-
     /**
      * Handle an incoming request.
      *
@@ -27,10 +25,8 @@ class ConvertEmptyStringsToNull extends TransformsRequest
                 return $next($request);
             }
         }
-
         return parent::handle($request, $next);
     }
-
     /**
      * Transform the given value.
      *
@@ -42,7 +38,6 @@ class ConvertEmptyStringsToNull extends TransformsRequest
     {
         return $value === '' ? null : $value;
     }
-
     /**
      * Register a callback that instructs the middleware to be skipped.
      *
@@ -53,7 +48,6 @@ class ConvertEmptyStringsToNull extends TransformsRequest
     {
         static::$skipCallbacks[] = $callback;
     }
-
     /**
      * Flush the middleware's global state.
      *

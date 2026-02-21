@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\DBAL\Driver\PDO\SQLSrv;
 
 use Doctrine\DBAL\Driver\AbstractSQLServerDriver;
@@ -13,24 +12,18 @@ use Doctrine\DBAL\Driver\PDO\Exception\InvalidConfiguration;
 use Doctrine\DBAL\Driver\PDO\PDOConnect;
 use PDO;
 use SensitiveParameter;
-
 use function is_int;
 use function is_string;
 use function sprintf;
-
 final class Driver extends AbstractSQLServerDriver
 {
     use PDOConnect;
-
     /**
      * {@inheritDoc}
      */
-    public function connect(
-        #[SensitiveParameter]
-        array $params,
-    ): Connection {
+    public function connect(#[SensitiveParameter] array $params): \Doctrine\DBAL\Driver\PDO\SQLSrv\Connection
+    {
         $driverOptions = $dsnOptions = [];
-
         if (isset($params['driverOptions'])) {
             foreach ($params['driverOptions'] as $option => $value) {
                 if (is_int($option)) {
@@ -40,34 +33,23 @@ final class Driver extends AbstractSQLServerDriver
                 }
             }
         }
-
-        if (! empty($params['persistent'])) {
-            $driverOptions[PDO::ATTR_PERSISTENT] = true;
+        if (!empty($params['persistent'])) {
+            $driverOptions[PDO::ATTR_PERSISTENT] = \true;
         }
-
         foreach (['user', 'password'] as $key) {
-            if (isset($params[$key]) && ! is_string($params[$key])) {
+            if (isset($params[$key]) && !is_string($params[$key])) {
                 throw InvalidConfiguration::notAStringOrNull($key, $params[$key]);
             }
         }
-
         $safeParams = $params;
         unset($safeParams['password']);
-
         try {
-            $pdo = $this->doConnect(
-                $this->constructDsn($safeParams, $dsnOptions),
-                $params['user'] ?? '',
-                $params['password'] ?? '',
-                $driverOptions,
-            );
+            $pdo = $this->doConnect($this->constructDsn($safeParams, $dsnOptions), $params['user'] ?? '', $params['password'] ?? '', $driverOptions);
         } catch (\PDOException $exception) {
             throw PDOException::new($exception);
         }
-
-        return new Connection(new PDOConnection($pdo));
+        return new \Doctrine\DBAL\Driver\PDO\SQLSrv\Connection(new PDOConnection($pdo));
     }
-
     /**
      * Constructs the Sqlsrv PDO DSN.
      *
@@ -79,28 +61,22 @@ final class Driver extends AbstractSQLServerDriver
     private function constructDsn(array $params, array $connectionOptions): string
     {
         $dsn = 'sqlsrv:server=';
-
         if (isset($params['host'])) {
             $dsn .= $params['host'];
-
             if (isset($params['port'])) {
                 $dsn .= ',' . $params['port'];
             }
         } elseif (isset($params['port'])) {
             throw PortWithoutHost::new();
         }
-
         if (isset($params['dbname'])) {
             $connectionOptions['Database'] = $params['dbname'];
         }
-
         if (isset($params['MultipleActiveResultSets'])) {
             $connectionOptions['MultipleActiveResultSets'] = $params['MultipleActiveResultSets'] ? 'true' : 'false';
         }
-
         return $dsn . $this->getConnectionOptionsDsn($connectionOptions);
     }
-
     /**
      * Converts a connection options array to the DSN
      *
@@ -109,11 +85,9 @@ final class Driver extends AbstractSQLServerDriver
     private function getConnectionOptionsDsn(array $connectionOptions): string
     {
         $connectionOptionsDsn = '';
-
         foreach ($connectionOptions as $paramName => $paramValue) {
             $connectionOptionsDsn .= sprintf(';%s=%s', $paramName, $paramValue);
         }
-
         return $connectionOptionsDsn;
     }
 }

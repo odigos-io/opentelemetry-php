@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright 2005-2011, Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -22,7 +22,6 @@ use Countable;
 use Generator;
 use InvalidArgumentException;
 use Iterator;
-
 /**
  * Plugin Collection
  *
@@ -47,28 +46,24 @@ class PluginCollection implements Iterator, Countable
      * @var array<string, \Cake\Core\PluginInterface>
      */
     protected array $plugins = [];
-
     /**
      * Names of plugins
      *
      * @var array<string>
      */
     protected array $names = [];
-
     /**
      * Iterator position stack.
      *
      * @var array<int>
      */
     protected array $positions = [];
-
     /**
      * Loop depth
      *
      * @var int
      */
     protected int $loopDepth = -1;
-
     /**
      * Constructor
      *
@@ -79,9 +74,8 @@ class PluginCollection implements Iterator, Countable
         foreach ($plugins as $plugin) {
             $this->add($plugin);
         }
-        PluginConfig::loadInstallerConfig();
+        \Cake\Core\PluginConfig::loadInstallerConfig();
     }
-
     /**
      * Add plugins from config array.
      *
@@ -98,22 +92,16 @@ class PluginCollection implements Iterator, Countable
      */
     public function addFromConfig(array $config): void
     {
-        $notDebug = !Configure::read('debug');
-        $notCli = PHP_SAPI !== 'cli';
-
+        $notDebug = !\Cake\Core\Configure::read('debug');
+        $notCli = \PHP_SAPI !== 'cli';
         /** @var array{onlyDebug?: bool, onlyCli?: bool, optional?: bool} $options */
         foreach (Hash::normalize($config, default: []) as $name => $options) {
-            $onlyDebug = $options['onlyDebug'] ?? false;
-            $onlyCli = $options['onlyCli'] ?? false;
-            $optional = $options['optional'] ?? false;
-
-            if (
-                ($onlyDebug && $notDebug)
-                || ($onlyCli && $notCli)
-            ) {
+            $onlyDebug = $options['onlyDebug'] ?? \false;
+            $onlyCli = $options['onlyCli'] ?? \false;
+            $optional = $options['optional'] ?? \false;
+            if ($onlyDebug && $notDebug || $onlyCli && $notCli) {
                 continue;
             }
-
             try {
                 $plugin = $this->create($name, $options);
                 $this->add($plugin);
@@ -124,7 +112,6 @@ class PluginCollection implements Iterator, Countable
             }
         }
     }
-
     /**
      * Locate a plugin path by looking at configuration data.
      *
@@ -143,25 +130,21 @@ class PluginCollection implements Iterator, Countable
         // Ensure plugin config is loaded each time. This is necessary primarily
         // for testing because the Configure::clear() call in TestCase::tearDown()
         // wipes out all configuration including plugin paths config.
-        PluginConfig::loadInstallerConfig();
-
+        \Cake\Core\PluginConfig::loadInstallerConfig();
         /** @var string|null $path */
-        $path = Configure::read('plugins.' . $name);
+        $path = \Cake\Core\Configure::read('plugins.' . $name);
         if ($path) {
             return $path;
         }
-
-        $pluginPath = str_replace('/', DIRECTORY_SEPARATOR, $name);
-        $paths = App::path('plugins');
+        $pluginPath = str_replace('/', \DIRECTORY_SEPARATOR, $name);
+        $paths = \Cake\Core\App::path('plugins');
         foreach ($paths as $path) {
             if (is_dir($path . $pluginPath)) {
-                return $path . $pluginPath . DIRECTORY_SEPARATOR;
+                return $path . $pluginPath . \DIRECTORY_SEPARATOR;
             }
         }
-
         throw new MissingPluginException(['plugin' => $name]);
     }
-
     /**
      * Add a plugin to the collection
      *
@@ -170,19 +153,16 @@ class PluginCollection implements Iterator, Countable
      * @param \Cake\Core\PluginInterface $plugin The plugin to load.
      * @return $this
      */
-    public function add(PluginInterface $plugin)
+    public function add(\Cake\Core\PluginInterface $plugin)
     {
         $name = $plugin->getName();
         if (isset($this->plugins[$name])) {
             throw new CakeException(sprintf('Plugin named `%s` is already loaded', $name));
         }
-
         $this->plugins[$name] = $plugin;
         $this->names = array_keys($this->plugins);
-
         return $this;
     }
-
     /**
      * Remove a plugin from the collection if it exists.
      *
@@ -193,10 +173,8 @@ class PluginCollection implements Iterator, Countable
     {
         unset($this->plugins[$name]);
         $this->names = array_keys($this->plugins);
-
         return $this;
     }
-
     /**
      * Remove all plugins from the collection
      *
@@ -208,10 +186,8 @@ class PluginCollection implements Iterator, Countable
         $this->names = [];
         $this->positions = [];
         $this->loopDepth = -1;
-
         return $this;
     }
-
     /**
      * Check whether the named plugin exists in the collection.
      *
@@ -222,7 +198,6 @@ class PluginCollection implements Iterator, Countable
     {
         return isset($this->plugins[$name]);
     }
-
     /**
      * Get the a plugin by name.
      *
@@ -233,18 +208,15 @@ class PluginCollection implements Iterator, Countable
      * @return \Cake\Core\PluginInterface The plugin.
      * @throws \Cake\Core\Exception\MissingPluginException when unknown plugins are fetched.
      */
-    public function get(string $name): PluginInterface
+    public function get(string $name): \Cake\Core\PluginInterface
     {
         if ($this->has($name)) {
             return $this->plugins[$name];
         }
-
         $plugin = $this->create($name);
         $this->add($plugin);
-
         return $plugin;
     }
-
     /**
      * Create a plugin instance from a name/classname and configuration.
      *
@@ -255,58 +227,40 @@ class PluginCollection implements Iterator, Countable
      * @throws \InvalidArgumentException When class name cannot be found or an empty name is provided.
      * @phpstan-param class-string<\Cake\Core\PluginInterface>|string $name
      */
-    public function create(string $name, array $config = []): PluginInterface
+    public function create(string $name, array $config = []): \Cake\Core\PluginInterface
     {
         if ($name === '') {
             throw new InvalidArgumentException('Plugin name cannot be empty.');
         }
-
         if (str_contains($name, '\\')) {
             if (!class_exists($name)) {
                 throw new InvalidArgumentException(sprintf('Class `%s` does not exist.', $name));
             }
-
             /** @var \Cake\Core\PluginInterface */
             return new $name($config);
         }
-
         $config += ['name' => $name];
         $namespace = str_replace('/', '\\', $name);
-
         $pos = strpos($name, '/');
-        $namePart = $pos === false ? $name : substr($name, $pos + 1);
-
+        $namePart = $pos === \false ? $name : substr($name, $pos + 1);
         // Check for [Vendor/]Foo/FooPlugin class
         $className = $namespace . '\\' . $namePart . 'Plugin';
-
         if (!class_exists($className)) {
             // Check for [Vendor/]Foo/Plugin class
             $className = $namespace . '\\' . 'Plugin';
-
             if (class_exists($className)) {
-                deprecationWarning(
-                    '5.3.0',
-                    'Loading plugins with a plugin class named `Plugin` is deprecated.'
-                    . " Rename the class to `{$namePart}Plugin` instead.",
-                );
+                deprecationWarning('5.3.0', 'Loading plugins with a plugin class named `Plugin` is deprecated.' . " Rename the class to `{$namePart}Plugin` instead.");
             } else {
-                $className = BasePlugin::class;
+                $className = \Cake\Core\BasePlugin::class;
                 if (empty($config['path'])) {
                     $config['path'] = $this->findPath($name);
                 }
-
-                deprecationWarning(
-                    '5.3.0',
-                    'Loading plugins without a plugin class is deprecated.'
-                    . " You can create the missing class using `bin/cake bake plugin {$name} --class-only`.",
-                );
+                deprecationWarning('5.3.0', 'Loading plugins without a plugin class is deprecated.' . " You can create the missing class using `bin/cake bake plugin {$name} --class-only`.");
             }
         }
-
         /** @var class-string<\Cake\Core\PluginInterface> $className */
         return new $className($config);
     }
-
     /**
      * Implementation of Countable.
      *
@@ -318,7 +272,6 @@ class PluginCollection implements Iterator, Countable
     {
         return count($this->plugins);
     }
-
     /**
      * Part of Iterator Interface
      *
@@ -328,7 +281,6 @@ class PluginCollection implements Iterator, Countable
     {
         $this->positions[$this->loopDepth]++;
     }
-
     /**
      * Part of Iterator Interface
      *
@@ -338,20 +290,17 @@ class PluginCollection implements Iterator, Countable
     {
         return $this->names[$this->positions[$this->loopDepth]];
     }
-
     /**
      * Part of Iterator Interface
      *
      * @return \Cake\Core\PluginInterface
      */
-    public function current(): PluginInterface
+    public function current(): \Cake\Core\PluginInterface
     {
         $position = $this->positions[$this->loopDepth];
         $name = $this->names[$position];
-
         return $this->plugins[$name];
     }
-
     /**
      * Part of Iterator Interface
      *
@@ -362,7 +311,6 @@ class PluginCollection implements Iterator, Countable
         $this->positions[] = 0;
         $this->loopDepth += 1;
     }
-
     /**
      * Part of Iterator Interface
      *
@@ -375,10 +323,8 @@ class PluginCollection implements Iterator, Countable
             array_pop($this->positions);
             $this->loopDepth -= 1;
         }
-
         return $valid;
     }
-
     /**
      * Filter the plugins to those with the named hook enabled.
      *
@@ -388,7 +334,7 @@ class PluginCollection implements Iterator, Countable
      */
     public function with(string $hook): Generator
     {
-        if (!in_array($hook, PluginInterface::VALID_HOOKS, true)) {
+        if (!in_array($hook, \Cake\Core\PluginInterface::VALID_HOOKS, \true)) {
             throw new InvalidArgumentException(sprintf('The `%s` hook is not a known plugin hook.', $hook));
         }
         foreach ($this as $plugin) {

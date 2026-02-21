@@ -1,16 +1,15 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\i18n;
 
-use Yii;
+use Odigos\Yii;
 use yii\base\Component;
 use yii\base\InvalidConfigException;
-
 /**
  * I18N provides features related with internationalization (I18N) and localization (L10N).
  *
@@ -47,8 +46,6 @@ class I18N extends Component
      * You may override the configuration of both categories.
      */
     public $translations;
-
-
     /**
      * Initializes the component by configuring the default message categories.
      */
@@ -56,22 +53,12 @@ class I18N extends Component
     {
         parent::init();
         if (!isset($this->translations['yii']) && !isset($this->translations['yii*'])) {
-            $this->translations['yii'] = [
-                'class' => 'yii\i18n\PhpMessageSource',
-                'sourceLanguage' => 'en-US',
-                'basePath' => '@yii/messages',
-            ];
+            $this->translations['yii'] = ['class' => 'yii\i18n\PhpMessageSource', 'sourceLanguage' => 'en-US', 'basePath' => '@yii/messages'];
         }
-
         if (!isset($this->translations['app']) && !isset($this->translations['app*'])) {
-            $this->translations['app'] = [
-                'class' => 'yii\i18n\PhpMessageSource',
-                'sourceLanguage' => Yii::$app->sourceLanguage,
-                'basePath' => '@app/messages',
-            ];
+            $this->translations['app'] = ['class' => 'yii\i18n\PhpMessageSource', 'sourceLanguage' => Yii::$app->sourceLanguage, 'basePath' => '@app/messages'];
         }
     }
-
     /**
      * Translates a message to the specified language.
      *
@@ -88,13 +75,11 @@ class I18N extends Component
     {
         $messageSource = $this->getMessageSource($category);
         $translation = $messageSource->translate($category, $message, $language);
-        if ($translation === false) {
+        if ($translation === \false) {
             return $this->format($message, $params, $messageSource->sourceLanguage);
         }
-
         return $this->format($translation, $params, $language);
     }
-
     /**
      * Formats a message using [[MessageFormatter]].
      *
@@ -109,33 +94,26 @@ class I18N extends Component
         if ($params === []) {
             return $message;
         }
-
         if (preg_match('~{\s*[\w.]+\s*,~u', $message)) {
             $formatter = $this->getMessageFormatter();
             $result = $formatter->format($message, $params, $language);
-            if ($result === false) {
+            if ($result === \false) {
                 $errorMessage = $formatter->getErrorMessage();
-                Yii::warning("Formatting message for language '$language' failed with error: $errorMessage. The message being formatted was: $message.", __METHOD__);
-
+                Yii::warning("Formatting message for language '{$language}' failed with error: {$errorMessage}. The message being formatted was: {$message}.", __METHOD__);
                 return $message;
             }
-
             return $result;
         }
-
         $p = [];
         foreach ($params as $name => $value) {
             $p['{' . $name . '}'] = $value;
         }
-
         return strtr($message, $p);
     }
-
     /**
      * @var string|array|MessageFormatter
      */
     private $_messageFormatter;
-
     /**
      * Returns the message formatter instance.
      * @return MessageFormatter the message formatter to be used to format message via ICU message format.
@@ -143,14 +121,12 @@ class I18N extends Component
     public function getMessageFormatter()
     {
         if ($this->_messageFormatter === null) {
-            $this->_messageFormatter = new MessageFormatter();
+            $this->_messageFormatter = new \yii\i18n\MessageFormatter();
         } elseif (is_array($this->_messageFormatter) || is_string($this->_messageFormatter)) {
             $this->_messageFormatter = Yii::createObject($this->_messageFormatter);
         }
-
         return $this->_messageFormatter;
     }
-
     /**
      * @param string|array|MessageFormatter $value the message formatter to be used to format message via ICU message format.
      * Can be given as array or string configuration that will be given to [[Yii::createObject]] to create an instance
@@ -160,7 +136,6 @@ class I18N extends Component
     {
         $this->_messageFormatter = $value;
     }
-
     /**
      * Returns the message source for the given category.
      * @param string $category the category name.
@@ -171,33 +146,28 @@ class I18N extends Component
     {
         if (isset($this->translations[$category])) {
             $source = $this->translations[$category];
-            if ($source instanceof MessageSource) {
+            if ($source instanceof \yii\i18n\MessageSource) {
                 return $source;
             }
-
             return $this->translations[$category] = Yii::createObject($source);
         }
         // try wildcard matching
         foreach ($this->translations as $pattern => $source) {
             if (strpos($pattern, '*') > 0 && strpos($category, rtrim($pattern, '*')) === 0) {
-                if ($source instanceof MessageSource) {
+                if ($source instanceof \yii\i18n\MessageSource) {
                     return $source;
                 }
-
                 return $this->translations[$category] = $this->translations[$pattern] = Yii::createObject($source);
             }
         }
-
         // match '*' in the last
         if (isset($this->translations['*'])) {
             $source = $this->translations['*'];
-            if ($source instanceof MessageSource) {
+            if ($source instanceof \yii\i18n\MessageSource) {
                 return $source;
             }
-
             return $this->translations[$category] = $this->translations['*'] = Yii::createObject($source);
         }
-
-        throw new InvalidConfigException("Unable to locate message source for category '$category'.");
+        throw new InvalidConfigException("Unable to locate message source for category '{$category}'.");
     }
 }

@@ -8,13 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-declare(strict_types=1);
-
-namespace League\Uri\Contracts;
+declare (strict_types=1);
+namespace Odigos\League\Uri\Contracts;
 
 use Stringable;
-
 /**
  * @see https://wicg.github.io/scroll-to-text-fragment/#the-fragment-directive
  *
@@ -28,17 +25,14 @@ interface FragmentDirective extends Stringable
      * @return non-empty-string
      */
     public function name(): string;
-
     /**
      * The decoded Directive value.
      */
     public function value(): ?string;
-
     /**
      * The encoded string representation of the directive.
      */
     public function toString(): string;
-
     /**
      * The encoded string representation of the fragment using
      * the Stringable interface.
@@ -46,7 +40,6 @@ interface FragmentDirective extends Stringable
      * @see FragmentDirective::toString()
      */
     public function __toString(): string;
-
     /**
      * Tells whether the submitted value is equals to the string
      * representation of the given directive.

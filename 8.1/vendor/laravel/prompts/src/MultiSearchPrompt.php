@@ -3,65 +3,49 @@
 namespace Laravel\Prompts;
 
 use Closure;
-
-class MultiSearchPrompt extends Prompt
+class MultiSearchPrompt extends \Laravel\Prompts\Prompt
 {
-    use Concerns\Scrolling;
-    use Concerns\Truncation;
-    use Concerns\TypedValue;
-
+    use \Laravel\Prompts\Concerns\Scrolling;
+    use \Laravel\Prompts\Concerns\Truncation;
+    use \Laravel\Prompts\Concerns\TypedValue;
     /**
      * The cached matches.
      *
      * @var array<int|string, string>|null
      */
     protected ?array $matches = null;
-
     /**
      * Whether the matches are initially a list.
      */
     protected bool $isList;
-
     /**
      * The selected values.
      *
      * @var array<int|string, string>
      */
     public array $values = [];
-
     /**
      * Create a new MultiSearchPrompt instance.
      *
      * @param  Closure(string): array<int|string, string>  $options
      */
-    public function __construct(
-        public string $label,
-        public Closure $options,
-        public string $placeholder = '',
-        public int $scroll = 5,
-        public bool|string $required = false,
-        public mixed $validate = null,
-        public string $hint = '',
-        public ?Closure $transform = null,
-    ) {
-        $this->trackTypedValue(submit: false, ignore: fn ($key) => Key::oneOf([Key::SPACE, Key::HOME, Key::END, Key::CTRL_A, Key::CTRL_E], $key) && $this->highlighted !== null);
-
+    public function __construct(public string $label, public Closure $options, public string $placeholder = '', public int $scroll = 5, public bool|string $required = \false, public mixed $validate = null, public string $hint = '', public ?Closure $transform = null)
+    {
+        $this->trackTypedValue(submit: \false, ignore: fn($key) => \Laravel\Prompts\Key::oneOf([\Laravel\Prompts\Key::SPACE, \Laravel\Prompts\Key::HOME, \Laravel\Prompts\Key::END, \Laravel\Prompts\Key::CTRL_A, \Laravel\Prompts\Key::CTRL_E], $key) && $this->highlighted !== null);
         $this->initializeScrolling(null);
-
-        $this->on('key', fn ($key) => match ($key) {
-            Key::UP, Key::UP_ARROW, Key::SHIFT_TAB => $this->highlightPrevious(count($this->matches), true),
-            Key::DOWN, Key::DOWN_ARROW, Key::TAB => $this->highlightNext(count($this->matches), true),
-            Key::oneOf(Key::HOME, $key) => $this->highlighted !== null ? $this->highlight(0) : null,
-            Key::oneOf(Key::END, $key) => $this->highlighted !== null ? $this->highlight(count($this->matches()) - 1) : null,
-            Key::SPACE => $this->highlighted !== null ? $this->toggleHighlighted() : null,
-            Key::CTRL_A => $this->highlighted !== null ? $this->toggleAll() : null,
-            Key::CTRL_E => null,
-            Key::ENTER => $this->submit(),
-            Key::LEFT, Key::LEFT_ARROW, Key::RIGHT, Key::RIGHT_ARROW => $this->highlighted = null,
+        $this->on('key', fn($key) => match ($key) {
+            \Laravel\Prompts\Key::UP, \Laravel\Prompts\Key::UP_ARROW, \Laravel\Prompts\Key::SHIFT_TAB => $this->highlightPrevious(count($this->matches), \true),
+            \Laravel\Prompts\Key::DOWN, \Laravel\Prompts\Key::DOWN_ARROW, \Laravel\Prompts\Key::TAB => $this->highlightNext(count($this->matches), \true),
+            \Laravel\Prompts\Key::oneOf(\Laravel\Prompts\Key::HOME, $key) => $this->highlighted !== null ? $this->highlight(0) : null,
+            \Laravel\Prompts\Key::oneOf(\Laravel\Prompts\Key::END, $key) => $this->highlighted !== null ? $this->highlight(count($this->matches()) - 1) : null,
+            \Laravel\Prompts\Key::SPACE => $this->highlighted !== null ? $this->toggleHighlighted() : null,
+            \Laravel\Prompts\Key::CTRL_A => $this->highlighted !== null ? $this->toggleAll() : null,
+            \Laravel\Prompts\Key::CTRL_E => null,
+            \Laravel\Prompts\Key::ENTER => $this->submit(),
+            \Laravel\Prompts\Key::LEFT, \Laravel\Prompts\Key::LEFT_ARROW, \Laravel\Prompts\Key::RIGHT, \Laravel\Prompts\Key::RIGHT_ARROW => $this->highlighted = null,
             default => $this->search(),
         });
     }
-
     /**
      * Perform the search.
      */
@@ -74,25 +58,19 @@ class MultiSearchPrompt extends Prompt
         $this->firstVisible = 0;
         $this->state = 'active';
     }
-
     /**
      * Get the entered value with a virtual cursor.
      */
     public function valueWithCursor(int $maxWidth): string
     {
         if ($this->highlighted !== null) {
-            return $this->typedValue === ''
-                ? $this->dim($this->truncate($this->placeholder, $maxWidth))
-                : $this->truncate($this->typedValue, $maxWidth);
+            return $this->typedValue === '' ? $this->dim($this->truncate($this->placeholder, $maxWidth)) : $this->truncate($this->typedValue, $maxWidth);
         }
-
         if ($this->typedValue === '') {
             return $this->dim($this->addCursor($this->placeholder, 0, $maxWidth));
         }
-
         return $this->addCursor($this->typedValue, $this->cursorPosition, $maxWidth);
     }
-
     /**
      * Get options that match the input.
      *
@@ -103,28 +81,20 @@ class MultiSearchPrompt extends Prompt
         if (is_array($this->matches)) {
             return $this->matches;
         }
-
         $matches = ($this->options)($this->typedValue);
-
-        if (! isset($this->isList) && count($matches) > 0) {
+        if (!isset($this->isList) && count($matches) > 0) {
             // This needs to be captured the first time we receive matches so
             // we know what we're dealing with later if matches is empty.
             $this->isList = array_is_list($matches);
         }
-
-        if (! isset($this->isList)) {
+        if (!isset($this->isList)) {
             return $this->matches = [];
         }
-
         if (strlen($this->typedValue) > 0) {
             return $this->matches = $matches;
         }
-
-        return $this->matches = $this->isList
-            ? [...array_diff(array_values($this->values), $matches), ...$matches]
-            : array_diff($this->values, $matches) + $matches;
+        return $this->matches = $this->isList ? [...array_diff(array_values($this->values), $matches), ...$matches] : array_diff($this->values, $matches) + $matches;
     }
-
     /**
      * The currently visible matches
      *
@@ -132,30 +102,20 @@ class MultiSearchPrompt extends Prompt
      */
     public function visible(): array
     {
-        return array_slice($this->matches(), $this->firstVisible, $this->scroll, preserve_keys: true);
+        return array_slice($this->matches(), $this->firstVisible, $this->scroll, preserve_keys: \true);
     }
-
     /**
      * Toggle all options.
      */
     protected function toggleAll(): void
     {
-        $allMatchesSelected = collect($this->matches)->every(fn ($label, $key) => $this->isList()
-            ? array_key_exists($label, $this->values)
-            : array_key_exists($key, $this->values));
-
+        $allMatchesSelected = collect($this->matches)->every(fn($label, $key) => $this->isList() ? array_key_exists($label, $this->values) : array_key_exists($key, $this->values));
         if ($allMatchesSelected) {
-            $this->values = array_filter($this->values, fn ($value) => $this->isList()
-                ? ! in_array($value, $this->matches)
-                : ! array_key_exists(array_search($value, $this->matches), $this->matches)
-            );
+            $this->values = array_filter($this->values, fn($value) => $this->isList() ? !in_array($value, $this->matches) : !array_key_exists(array_search($value, $this->matches), $this->matches));
         } else {
-            $this->values = $this->isList()
-                ? array_merge($this->values, array_combine(array_values($this->matches), array_values($this->matches)))
-                : array_merge($this->values, array_combine(array_keys($this->matches), array_values($this->matches)));
+            $this->values = $this->isList() ? array_merge($this->values, array_combine(array_values($this->matches), array_values($this->matches))) : array_merge($this->values, array_combine(array_keys($this->matches), array_values($this->matches)));
         }
     }
-
     /**
      * Toggle the highlighted entry.
      */
@@ -168,14 +128,12 @@ class MultiSearchPrompt extends Prompt
             $key = array_keys($this->matches)[$this->highlighted];
             $label = $this->matches[$key];
         }
-
         if (array_key_exists($key, $this->values)) {
             unset($this->values[$key]);
         } else {
             $this->values[$key] = $label;
         }
     }
-
     /**
      * Get the current search query.
      */
@@ -183,7 +141,6 @@ class MultiSearchPrompt extends Prompt
     {
         return $this->typedValue;
     }
-
     /**
      * Get the selected value.
      *
@@ -193,7 +150,6 @@ class MultiSearchPrompt extends Prompt
     {
         return array_keys($this->values);
     }
-
     /**
      * Get the selected labels.
      *
@@ -203,7 +159,6 @@ class MultiSearchPrompt extends Prompt
     {
         return array_values($this->values);
     }
-
     /**
      * Whether the matches are initially a list.
      */

@@ -1,10 +1,10 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\db;
 
 /**
@@ -14,11 +14,9 @@ namespace yii\db;
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  * @since 2.0.14
  */
-class QueryExpressionBuilder implements ExpressionBuilderInterface
+class QueryExpressionBuilder implements \yii\db\ExpressionBuilderInterface
 {
-    use ExpressionBuilderTrait;
-
-
+    use \yii\db\ExpressionBuilderTrait;
     /**
      * Method builds the raw SQL from the $expression that will not be additionally
      * escaped or quoted.
@@ -27,10 +25,9 @@ class QueryExpressionBuilder implements ExpressionBuilderInterface
      * @param array $params the binding parameters.
      * @return string the raw SQL that will not be additionally escaped or quoted.
      */
-    public function build(ExpressionInterface $expression, array &$params = [])
+    public function build(\yii\db\ExpressionInterface $expression, array &$params = [])
     {
         list($sql, $params) = $this->queryBuilder->build($expression, $params);
-
-        return "($sql)";
+        return "({$sql})";
     }
 }

@@ -3,7 +3,6 @@
 namespace OpenAI\Contracts\Resources;
 
 use OpenAI\Responses\Edits\CreateResponse;
-
 interface EditsContract
 {
     /**

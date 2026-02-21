@@ -11,9 +11,8 @@ trait HasDatabaseNotifications
      */
     public function notifications()
     {
-        return $this->morphMany(DatabaseNotification::class, 'notifiable')->latest();
+        return $this->morphMany(\Illuminate\Notifications\DatabaseNotification::class, 'notifiable')->latest();
     }
-
     /**
      * Get the entity's read notifications.
      *
@@ -23,7 +22,6 @@ trait HasDatabaseNotifications
     {
         return $this->notifications()->read();
     }
-
     /**
      * Get the entity's unread notifications.
      *

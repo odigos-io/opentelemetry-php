@@ -5,7 +5,6 @@ namespace Illuminate\Encryption;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Laravel\SerializableClosure\SerializableClosure;
-
 class EncryptionServiceProvider extends ServiceProvider
 {
     /**
@@ -18,7 +17,6 @@ class EncryptionServiceProvider extends ServiceProvider
         $this->registerEncrypter();
         $this->registerSerializableClosureSecurityKey();
     }
-
     /**
      * Register the encrypter.
      *
@@ -28,15 +26,9 @@ class EncryptionServiceProvider extends ServiceProvider
     {
         $this->app->singleton('encrypter', function ($app) {
             $config = $app->make('config')->get('app');
-
-            return (new Encrypter($this->parseKey($config), $config['cipher']))
-                ->previousKeys(array_map(
-                    fn ($key) => $this->parseKey(['key' => $key]),
-                    $config['previous_keys'] ?? []
-                ));
+            return (new \Illuminate\Encryption\Encrypter($this->parseKey($config), $config['cipher']))->previousKeys(array_map(fn($key) => $this->parseKey(['key' => $key]), $config['previous_keys'] ?? []));
         });
     }
-
     /**
      * Configure Serializable Closure signing for security.
      *
@@ -45,14 +37,11 @@ class EncryptionServiceProvider extends ServiceProvider
     protected function registerSerializableClosureSecurityKey()
     {
         $config = $this->app->make('config')->get('app');
-
-        if (! class_exists(SerializableClosure::class) || empty($config['key'])) {
+        if (!class_exists(SerializableClosure::class) || empty($config['key'])) {
             return;
         }
-
         SerializableClosure::setSecretKey($this->parseKey($config));
     }
-
     /**
      * Parse the encryption key.
      *
@@ -64,10 +53,8 @@ class EncryptionServiceProvider extends ServiceProvider
         if (Str::startsWith($key = $this->key($config), $prefix = 'base64:')) {
             $key = base64_decode(Str::after($key, $prefix));
         }
-
         return $key;
     }
-
     /**
      * Extract the encryption key from the given configuration.
      *
@@ -80,7 +67,7 @@ class EncryptionServiceProvider extends ServiceProvider
     {
         return tap($config['key'], function ($key) {
             if (empty($key)) {
-                throw new MissingAppKeyException;
+                throw new \Illuminate\Encryption\MissingAppKeyException();
             }
         });
     }

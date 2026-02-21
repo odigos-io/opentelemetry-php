@@ -1,16 +1,13 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace MongoDB\Builder\Encoder;
 
 use MongoDB\Codec\Encoder;
 use stdClass;
 use WeakReference;
-
 use function get_object_vars;
 use function is_array;
-
 /** @internal */
 trait RecursiveEncode
 {
@@ -18,7 +15,6 @@ trait RecursiveEncode
     final public function __construct(private readonly WeakReference $encoder)
     {
     }
-
     /**
      * Nested arrays and objects must be encoded recursively.
      *
@@ -35,18 +31,14 @@ trait RecursiveEncode
             foreach ($value as $key => $val) {
                 $value[$key] = $this->recursiveEncode($val);
             }
-
             return $value;
         }
-
         if ($value instanceof stdClass) {
             foreach (get_object_vars($value) as $key => $val) {
                 $value->{$key} = $this->recursiveEncode($val);
             }
-
             return $value;
         }
-
         /**
          * If the BuilderEncoder instance is removed from the memory, the
          * instances of the classes using this trait will be removed as well.

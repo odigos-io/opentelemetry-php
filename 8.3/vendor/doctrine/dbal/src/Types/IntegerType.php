@@ -1,16 +1,14 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\DBAL\Types;
 
 use Doctrine\DBAL\ParameterType;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
-
 /**
  * Type that maps an SQL INT to a PHP integer.
  */
-class IntegerType extends Type implements PhpIntegerMappingType
+class IntegerType extends \Doctrine\DBAL\Types\Type implements \Doctrine\DBAL\Types\PhpIntegerMappingType
 {
     /**
      * {@inheritDoc}
@@ -19,7 +17,6 @@ class IntegerType extends Type implements PhpIntegerMappingType
     {
         return $platform->getIntegerTypeDeclarationSQL($column);
     }
-
     /**
      * @param T $value
      *
@@ -31,7 +28,6 @@ class IntegerType extends Type implements PhpIntegerMappingType
     {
         return $value === null ? null : (int) $value;
     }
-
     public function getBindingType(): ParameterType
     {
         return ParameterType::INTEGER;

@@ -12,7 +12,6 @@ interface Connector
      * @return \Illuminate\Redis\Connections\Connection
      */
     public function connect(array $config, array $options);
-
     /**
      * Create a connection to a Redis instance.
      *

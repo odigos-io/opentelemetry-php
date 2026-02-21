@@ -4,7 +4,6 @@ namespace Illuminate\Notifications;
 
 use Illuminate\Contracts\Notifications\Dispatcher;
 use Illuminate\Support\Str;
-
 trait RoutesNotifications
 {
     /**
@@ -17,7 +16,6 @@ trait RoutesNotifications
     {
         app(Dispatcher::class)->send($this, $instance);
     }
-
     /**
      * Send the given notification immediately.
      *
@@ -29,7 +27,6 @@ trait RoutesNotifications
     {
         app(Dispatcher::class)->sendNow($this, $instance, $channels);
     }
-
     /**
      * Get the notification routing information for the given driver.
      *
@@ -39,10 +36,9 @@ trait RoutesNotifications
      */
     public function routeNotificationFor($driver, $notification = null)
     {
-        if (method_exists($this, $method = 'routeNotificationFor'.Str::studly($driver))) {
+        if (method_exists($this, $method = 'routeNotificationFor' . Str::studly($driver))) {
             return $this->{$method}($notification);
         }
-
         return match ($driver) {
             'database' => $this->notifications(),
             'mail' => $this->email,

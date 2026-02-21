@@ -3,8 +3,7 @@
 namespace Illuminate\Cache;
 
 use Illuminate\Redis\Connections\PhpRedisConnection;
-
-class PhpRedisLock extends RedisLock
+class PhpRedisLock extends \Illuminate\Cache\RedisLock
 {
     /**
      * Create a new phpredis lock instance.
@@ -18,17 +17,11 @@ class PhpRedisLock extends RedisLock
     {
         parent::__construct($redis, $name, $seconds, $owner);
     }
-
     /**
      * {@inheritDoc}
      */
     public function release()
     {
-        return (bool) $this->redis->eval(
-            LuaScripts::releaseLock(),
-            1,
-            $this->name,
-            ...$this->redis->pack([$this->owner])
-        );
+        return (bool) $this->redis->eval(\Illuminate\Cache\LuaScripts::releaseLock(), 1, $this->name, ...$this->redis->pack([$this->owner]));
     }
 }

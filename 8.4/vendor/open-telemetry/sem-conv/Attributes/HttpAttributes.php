@@ -1,9 +1,7 @@
 <?php
 
 // DO NOT EDIT, this is an Auto-generated file from script/semantic-conventions
-
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\SemConv\Attributes;
 
 /**
@@ -35,7 +33,6 @@ interface HttpAttributes
      * @stable
      */
     public const HTTP_REQUEST_HEADER = 'http.request.header';
-
     /**
      * HTTP request method.
      * HTTP request method value SHOULD be "known" to the instrumentation.
@@ -57,74 +54,62 @@ interface HttpAttributes
      * @stable
      */
     public const HTTP_REQUEST_METHOD = 'http.request.method';
-
     /**
      * CONNECT method.
      * @stable
      */
     public const HTTP_REQUEST_METHOD_VALUE_CONNECT = 'CONNECT';
-
     /**
      * DELETE method.
      * @stable
      */
     public const HTTP_REQUEST_METHOD_VALUE_DELETE = 'DELETE';
-
     /**
      * GET method.
      * @stable
      */
     public const HTTP_REQUEST_METHOD_VALUE_GET = 'GET';
-
     /**
      * HEAD method.
      * @stable
      */
     public const HTTP_REQUEST_METHOD_VALUE_HEAD = 'HEAD';
-
     /**
      * OPTIONS method.
      * @stable
      */
     public const HTTP_REQUEST_METHOD_VALUE_OPTIONS = 'OPTIONS';
-
     /**
      * PATCH method.
      * @stable
      */
     public const HTTP_REQUEST_METHOD_VALUE_PATCH = 'PATCH';
-
     /**
      * POST method.
      * @stable
      */
     public const HTTP_REQUEST_METHOD_VALUE_POST = 'POST';
-
     /**
      * PUT method.
      * @stable
      */
     public const HTTP_REQUEST_METHOD_VALUE_PUT = 'PUT';
-
     /**
      * TRACE method.
      * @stable
      */
     public const HTTP_REQUEST_METHOD_VALUE_TRACE = 'TRACE';
-
     /**
      * Any HTTP method that the instrumentation has no prior knowledge of.
      * @stable
      */
     public const HTTP_REQUEST_METHOD_VALUE_OTHER = '_OTHER';
-
     /**
      * Original HTTP method sent by the client in the request line.
      *
      * @stable
      */
     public const HTTP_REQUEST_METHOD_ORIGINAL = 'http.request.method_original';
-
     /**
      * The ordinal number of request resending attempt (for any reason, including redirects).
      *
@@ -133,7 +118,6 @@ interface HttpAttributes
      * @stable
      */
     public const HTTP_REQUEST_RESEND_COUNT = 'http.request.resend_count';
-
     /**
      * HTTP response headers, `<key>` being the normalized HTTP Header name (lowercase), the value being the header values.
      *
@@ -156,14 +140,12 @@ interface HttpAttributes
      * @stable
      */
     public const HTTP_RESPONSE_HEADER = 'http.response.header';
-
     /**
      * [HTTP response status code](https://tools.ietf.org/html/rfc7231#section-6).
      *
      * @stable
      */
     public const HTTP_RESPONSE_STATUS_CODE = 'http.response.status_code';
-
     /**
      * The matched route template for the request. This MUST be low-cardinality and include all static path segments, with dynamic path segments represented with placeholders.
      *
@@ -181,5 +163,4 @@ interface HttpAttributes
      * @stable
      */
     public const HTTP_ROUTE = 'http.route';
-
 }

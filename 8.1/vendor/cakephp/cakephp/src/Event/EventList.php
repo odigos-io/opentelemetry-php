@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -18,7 +18,6 @@ namespace Cake\Event;
 
 use ArrayAccess;
 use Countable;
-
 /**
  * The Event List
  *
@@ -32,7 +31,6 @@ class EventList implements ArrayAccess, Countable
      * @var array<\Cake\Event\EventInterface<object>>
      */
     protected array $_events = [];
-
     /**
      * Empties the list of dispatched events.
      *
@@ -42,18 +40,16 @@ class EventList implements ArrayAccess, Countable
     {
         $this->_events = [];
     }
-
     /**
      * Adds an event to the list when event listing is enabled.
      *
      * @param \Cake\Event\EventInterface<object> $event An event to the list of dispatched events.
      * @return void
      */
-    public function add(EventInterface $event): void
+    public function add(\Cake\Event\EventInterface $event): void
     {
         $this->_events[] = $event;
     }
-
     /**
      * Whether a offset exists
      *
@@ -65,7 +61,6 @@ class EventList implements ArrayAccess, Countable
     {
         return isset($this->_events[$offset]);
     }
-
     /**
      * Offset to retrieve
      *
@@ -73,15 +68,13 @@ class EventList implements ArrayAccess, Countable
      * @param mixed $offset The offset to retrieve.
      * @return \Cake\Event\EventInterface<object>|null
      */
-    public function offsetGet(mixed $offset): ?EventInterface
+    public function offsetGet(mixed $offset): ?\Cake\Event\EventInterface
     {
         if (!$this->offsetExists($offset)) {
             return null;
         }
-
         return $this->_events[$offset];
     }
-
     /**
      * Offset to set
      *
@@ -94,7 +87,6 @@ class EventList implements ArrayAccess, Countable
     {
         $this->_events[$offset] = $value;
     }
-
     /**
      * Offset to unset
      *
@@ -106,7 +98,6 @@ class EventList implements ArrayAccess, Countable
     {
         unset($this->_events[$offset]);
     }
-
     /**
      * Count elements of an object
      *
@@ -117,7 +108,6 @@ class EventList implements ArrayAccess, Countable
     {
         return count($this->_events);
     }
-
     /**
      * Checks if an event is in the list.
      *
@@ -128,10 +118,9 @@ class EventList implements ArrayAccess, Countable
     {
         foreach ($this->_events as $event) {
             if ($event->getName() === $name) {
-                return true;
+                return \true;
             }
         }
-
-        return false;
+        return \false;
     }
 }

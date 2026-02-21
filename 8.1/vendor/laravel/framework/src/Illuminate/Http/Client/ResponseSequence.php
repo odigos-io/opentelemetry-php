@@ -4,32 +4,27 @@ namespace Illuminate\Http\Client;
 
 use Illuminate\Support\Traits\Macroable;
 use OutOfBoundsException;
-
 class ResponseSequence
 {
     use Macroable;
-
     /**
      * The responses in the sequence.
      *
      * @var array
      */
     protected $responses;
-
     /**
      * Indicates that invoking this sequence when it is empty should throw an exception.
      *
      * @var bool
      */
-    protected $failWhenEmpty = true;
-
+    protected $failWhenEmpty = \true;
     /**
      * The response that should be returned when the sequence is empty.
      *
      * @var \GuzzleHttp\Promise\PromiseInterface
      */
     protected $emptyResponse;
-
     /**
      * Create a new response sequence.
      *
@@ -40,7 +35,6 @@ class ResponseSequence
     {
         $this->responses = $responses;
     }
-
     /**
      * Push a response to the sequence.
      *
@@ -51,11 +45,8 @@ class ResponseSequence
      */
     public function push($body = null, int $status = 200, array $headers = [])
     {
-        return $this->pushResponse(
-            Factory::response($body, $status, $headers)
-        );
+        return $this->pushResponse(\Illuminate\Http\Client\Factory::response($body, $status, $headers));
     }
-
     /**
      * Push a response with the given status code to the sequence.
      *
@@ -65,11 +56,8 @@ class ResponseSequence
      */
     public function pushStatus(int $status, array $headers = [])
     {
-        return $this->pushResponse(
-            Factory::response('', $status, $headers)
-        );
+        return $this->pushResponse(\Illuminate\Http\Client\Factory::response('', $status, $headers));
     }
-
     /**
      * Push response with the contents of a file as the body to the sequence.
      *
@@ -81,12 +69,8 @@ class ResponseSequence
     public function pushFile(string $filePath, int $status = 200, array $headers = [])
     {
         $string = file_get_contents($filePath);
-
-        return $this->pushResponse(
-            Factory::response($string, $status, $headers)
-        );
+        return $this->pushResponse(\Illuminate\Http\Client\Factory::response($string, $status, $headers));
     }
-
     /**
      * Push a response to the sequence.
      *
@@ -96,10 +80,8 @@ class ResponseSequence
     public function pushResponse($response)
     {
         $this->responses[] = $response;
-
         return $this;
     }
-
     /**
      * Make the sequence return a default response when it is empty.
      *
@@ -108,12 +90,10 @@ class ResponseSequence
      */
     public function whenEmpty($response)
     {
-        $this->failWhenEmpty = false;
+        $this->failWhenEmpty = \false;
         $this->emptyResponse = $response;
-
         return $this;
     }
-
     /**
      * Make the sequence return a default response when it is empty.
      *
@@ -121,9 +101,8 @@ class ResponseSequence
      */
     public function dontFailWhenEmpty()
     {
-        return $this->whenEmpty(Factory::response());
+        return $this->whenEmpty(\Illuminate\Http\Client\Factory::response());
     }
-
     /**
      * Indicate that this sequence has depleted all of its responses.
      *
@@ -133,7 +112,6 @@ class ResponseSequence
     {
         return count($this->responses) === 0;
     }
-
     /**
      * Get the next response in the sequence.
      *
@@ -146,11 +124,9 @@ class ResponseSequence
         if ($this->failWhenEmpty && $this->isEmpty()) {
             throw new OutOfBoundsException('A request was made, but the response sequence is empty.');
         }
-
-        if (! $this->failWhenEmpty && $this->isEmpty()) {
-            return value($this->emptyResponse ?? Factory::response());
+        if (!$this->failWhenEmpty && $this->isEmpty()) {
+            return value($this->emptyResponse ?? \Illuminate\Http\Client\Factory::response());
         }
-
         return array_shift($this->responses);
     }
 }

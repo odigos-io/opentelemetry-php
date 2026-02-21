@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenAI\ValueObjects\Transporter;
 
 /**
@@ -18,7 +17,6 @@ final class QueryParams
     {
         // ..
     }
-
     /**
      * Creates a new Query Params value object
      */
@@ -26,18 +24,13 @@ final class QueryParams
     {
         return new self([]);
     }
-
     /**
      * Creates a new Query Params value object, with the newly added param, and the existing params.
      */
     public function withParam(string $name, string|int $value): self
     {
-        return new self([
-            ...$this->params,
-            $name => $value,
-        ]);
+        return new self([...$this->params, $name => $value]);
     }
-
     /**
      * @return array<string, string|int>
      */

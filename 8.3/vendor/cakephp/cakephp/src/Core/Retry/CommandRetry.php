@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -18,7 +18,6 @@ namespace Cake\Core\Retry;
 
 use Closure;
 use Exception;
-
 /**
  * Allows any action to be retried in case of an exception.
  *
@@ -32,30 +31,26 @@ class CommandRetry
      *
      * @var \Cake\Core\Retry\RetryStrategyInterface
      */
-    protected RetryStrategyInterface $strategy;
-
+    protected \Cake\Core\Retry\RetryStrategyInterface $strategy;
     /**
      * @var int
      */
     protected int $maxRetries;
-
     /**
      * @var int
      */
     protected int $numRetries;
-
     /**
      * Creates the CommandRetry object with the given strategy and retry count
      *
      * @param \Cake\Core\Retry\RetryStrategyInterface $strategy The strategy to follow should the action fail
      * @param int $maxRetries The maximum number of retry attempts allowed
      */
-    public function __construct(RetryStrategyInterface $strategy, int $maxRetries = 1)
+    public function __construct(\Cake\Core\Retry\RetryStrategyInterface $strategy, int $maxRetries = 1)
     {
         $this->strategy = $strategy;
         $this->maxRetries = $maxRetries;
     }
-
     /**
      * The number of retries to perform in case of failure
      *
@@ -66,23 +61,18 @@ class CommandRetry
     public function run(Closure $action): mixed
     {
         $this->numRetries = 0;
-        while (true) {
+        while (\true) {
             try {
                 return $action();
             } catch (Exception $e) {
-                if (
-                    $this->numRetries < $this->maxRetries &&
-                    $this->strategy->shouldRetry($e, $this->numRetries)
-                ) {
+                if ($this->numRetries < $this->maxRetries && $this->strategy->shouldRetry($e, $this->numRetries)) {
                     $this->numRetries++;
                     continue;
                 }
-
                 throw $e;
             }
         }
     }
-
     /**
      * Returns the last number of retry attempts.
      *

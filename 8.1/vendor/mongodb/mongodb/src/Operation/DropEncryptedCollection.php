@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright 2023-present MongoDB, Inc.
  *
@@ -14,16 +15,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 namespace MongoDB\Operation;
 
 use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
 use MongoDB\Driver\Server;
 use MongoDB\Exception\InvalidArgumentException;
-
 use function MongoDB\document_to_array;
 use function MongoDB\is_document;
-
 /**
  * Drop an encrypted collection.
  *
@@ -39,11 +37,9 @@ use function MongoDB\is_document;
  */
 final class DropEncryptedCollection
 {
-    private DropCollection $dropCollection;
-
+    private \MongoDB\Operation\DropCollection $dropCollection;
     /** @var list<DropCollection> */
     private array $dropMetadataCollections;
-
     /**
      * Constructs an operation to drop an encrypted collection and its related
      * metadata collections.
@@ -62,35 +58,25 @@ final class DropEncryptedCollection
      */
     public function __construct(string $databaseName, string $collectionName, array $options)
     {
-        if (! isset($options['encryptedFields'])) {
+        if (!isset($options['encryptedFields'])) {
             throw new InvalidArgumentException('"encryptedFields" option is required');
         }
-
-        if (! is_document($options['encryptedFields'])) {
+        if (!is_document($options['encryptedFields'])) {
             throw InvalidArgumentException::expectedDocumentType('"encryptedFields" option', $options['encryptedFields']);
         }
-
         /** @psalm-var array{ecocCollection?: ?string, escCollection?: ?string} */
         $encryptedFields = document_to_array($options['encryptedFields']);
-
-        $this->dropMetadataCollections = [
-            new DropCollection($databaseName, $encryptedFields['escCollection'] ?? 'enxcol_.' . $collectionName . '.esc'),
-            new DropCollection($databaseName, $encryptedFields['ecocCollection'] ?? 'enxcol_.' . $collectionName . '.ecoc'),
-        ];
-
+        $this->dropMetadataCollections = [new \MongoDB\Operation\DropCollection($databaseName, $encryptedFields['escCollection'] ?? 'enxcol_.' . $collectionName . '.esc'), new \MongoDB\Operation\DropCollection($databaseName, $encryptedFields['ecocCollection'] ?? 'enxcol_.' . $collectionName . '.ecoc')];
         // DropCollection does not use the "encryptedFields" option
         unset($options['encryptedFields']);
-
-        $this->dropCollection = new DropCollection($databaseName, $collectionName, $options);
+        $this->dropCollection = new \MongoDB\Operation\DropCollection($databaseName, $collectionName, $options);
     }
-
     /** @throws DriverRuntimeException for other driver errors (e.g. connection errors) */
     public function execute(Server $server): void
     {
         foreach ($this->dropMetadataCollections as $dropMetadataCollection) {
             $dropMetadataCollection->execute($server);
         }
-
         $this->dropCollection->execute($server);
     }
 }

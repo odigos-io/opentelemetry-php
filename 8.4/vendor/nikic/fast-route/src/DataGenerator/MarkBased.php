@@ -1,6 +1,6 @@
 <?php
 
-namespace FastRoute\DataGenerator;
+namespace Odigos\FastRoute\DataGenerator;
 
 class MarkBased extends RegexBasedAbstract
 {
@@ -8,7 +8,6 @@ class MarkBased extends RegexBasedAbstract
     {
         return 30;
     }
-
     protected function processChunk($regexToRoutesMap)
     {
         $routeMap = [];
@@ -17,10 +16,8 @@ class MarkBased extends RegexBasedAbstract
         foreach ($regexToRoutesMap as $regex => $route) {
             $regexes[] = $regex . '(*MARK:' . $markName . ')';
             $routeMap[$markName] = [$route->handler, $route->variables];
-
             ++$markName;
         }
-
         $regex = '~^(?|' . implode('|', $regexes) . ')$~';
         return ['regex' => $regex, 'routeMap' => $routeMap];
     }

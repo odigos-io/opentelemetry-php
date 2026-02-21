@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\Console\Helper;
 
 /**
@@ -18,51 +17,37 @@ namespace Symfony\Component\Console\Helper;
  */
 final class TreeStyle
 {
-    public function __construct(
-        private readonly string $prefixEndHasNext,
-        private readonly string $prefixEndLast,
-        private readonly string $prefixLeft,
-        private readonly string $prefixMidHasNext,
-        private readonly string $prefixMidLast,
-        private readonly string $prefixRight,
-    ) {
+    public function __construct(private readonly string $prefixEndHasNext, private readonly string $prefixEndLast, private readonly string $prefixLeft, private readonly string $prefixMidHasNext, private readonly string $prefixMidLast, private readonly string $prefixRight)
+    {
     }
-
     public static function box(): self
     {
         return new self('┃╸ ', '┗╸ ', '', '┃  ', '   ', '');
     }
-
     public static function boxDouble(): self
     {
         return new self('╠═ ', '╚═ ', '', '║  ', '  ', '');
     }
-
     public static function compact(): self
     {
         return new self('├ ', '└ ', '', '│ ', '  ', '');
     }
-
     public static function default(): self
     {
         return new self('├── ', '└── ', '', '│   ', '   ', '');
     }
-
     public static function light(): self
     {
         return new self('|-- ', '`-- ', '', '|   ', '    ', '');
     }
-
     public static function minimal(): self
     {
         return new self('. ', '. ', '', '. ', '  ', '');
     }
-
     public static function rounded(): self
     {
         return new self('├─ ', '╰─ ', '', '│  ', '   ', '');
     }
-
     /**
      * @internal
      */

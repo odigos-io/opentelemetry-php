@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -18,7 +18,6 @@ namespace Cake\Cache\Event;
 
 use Cake\Cache\CacheEngine;
 use Cake\Event\Event;
-
 /**
  * Class GroupClearCache Event
  *
@@ -27,9 +26,7 @@ use Cake\Event\Event;
 class CacheGroupClearEvent extends Event
 {
     public const NAME = 'Cache.clearedGroup';
-
     protected string $group;
-
     /**
      * Constructor
      *
@@ -43,10 +40,8 @@ class CacheGroupClearEvent extends Event
             $this->group = $data['group'];
             unset($data['group']);
         }
-
         parent::__construct($name, $subject, $data);
     }
-
     /**
      * Get the group name
      *

@@ -1,14 +1,13 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\db;
 
 use yii\base\InvalidCallException;
-
 /**
  * DataReader represents a forward-only stream of rows from a query result set.
  *
@@ -56,23 +55,20 @@ class DataReader extends \yii\base\BaseObject implements \Iterator, \Countable
      * @var \PDOStatement the PDOStatement associated with the command
      */
     private $_statement;
-    private $_closed = false;
+    private $_closed = \false;
     private $_row;
     private $_index = -1;
-
-
     /**
      * Constructor.
      * @param Command $command the command generating the query result
      * @param array $config name-value pairs that will be used to initialize the object properties
      */
-    public function __construct(Command $command, $config = [])
+    public function __construct(\yii\db\Command $command, $config = [])
     {
         $this->_statement = $command->pdoStatement;
         $this->_statement->setFetchMode(\PDO::FETCH_ASSOC);
         parent::__construct($config);
     }
-
     /**
      * Binds a column to a PHP variable.
      * When rows of data are being fetched, the corresponding column value
@@ -92,7 +88,6 @@ class DataReader extends \yii\base\BaseObject implements \Iterator, \Countable
             $this->_statement->bindColumn($column, $value, $dataType);
         }
     }
-
     /**
      * Set the default fetch mode for this statement.
      *
@@ -104,7 +99,6 @@ class DataReader extends \yii\base\BaseObject implements \Iterator, \Countable
         $params = func_get_args();
         call_user_func_array([$this->_statement, 'setFetchMode'], $params);
     }
-
     /**
      * Advances the reader to the next row in a result set.
      * @return array|false the current row, false if no more row available
@@ -113,7 +107,6 @@ class DataReader extends \yii\base\BaseObject implements \Iterator, \Countable
     {
         return $this->_statement->fetch();
     }
-
     /**
      * Returns a single column from the next row of a result set.
      * @param int $columnIndex zero-based column index
@@ -123,7 +116,6 @@ class DataReader extends \yii\base\BaseObject implements \Iterator, \Countable
     {
         return $this->_statement->fetchColumn($columnIndex);
     }
-
     /**
      * Returns an object populated with the next row of data.
      * @param string $className class name of the object to be created and populated
@@ -134,7 +126,6 @@ class DataReader extends \yii\base\BaseObject implements \Iterator, \Countable
     {
         return $this->_statement->fetchObject($className, $fields);
     }
-
     /**
      * Reads the whole result set into an array.
      * @return array the result set (each array element represents a row of data).
@@ -144,7 +135,6 @@ class DataReader extends \yii\base\BaseObject implements \Iterator, \Countable
     {
         return $this->_statement->fetchAll();
     }
-
     /**
      * Advances the reader to the next result when reading the results of a batch of statements.
      * This method is only useful when there are multiple result sets
@@ -153,13 +143,11 @@ class DataReader extends \yii\base\BaseObject implements \Iterator, \Countable
      */
     public function nextResult()
     {
-        if (($result = $this->_statement->nextRowset()) !== false) {
+        if (($result = $this->_statement->nextRowset()) !== \false) {
             $this->_index = -1;
         }
-
         return $result;
     }
-
     /**
      * Closes the reader.
      * This frees up the resources allocated for executing this SQL statement.
@@ -168,9 +156,8 @@ class DataReader extends \yii\base\BaseObject implements \Iterator, \Countable
     public function close()
     {
         $this->_statement->closeCursor();
-        $this->_closed = true;
+        $this->_closed = \true;
     }
-
     /**
      * whether the reader is closed or not.
      * @return bool whether the reader is closed or not.
@@ -179,7 +166,6 @@ class DataReader extends \yii\base\BaseObject implements \Iterator, \Countable
     {
         return $this->_closed;
     }
-
     /**
      * Returns the number of rows in the result set.
      * Note, most DBMS may not give a meaningful count.
@@ -190,7 +176,6 @@ class DataReader extends \yii\base\BaseObject implements \Iterator, \Countable
     {
         return $this->_statement->rowCount();
     }
-
     /**
      * Returns the number of rows in the result set.
      * This method is required by the Countable interface.
@@ -203,7 +188,6 @@ class DataReader extends \yii\base\BaseObject implements \Iterator, \Countable
     {
         return $this->getRowCount();
     }
-
     /**
      * Returns the number of columns in the result set.
      * Note, even there's no row in the reader, this still gives correct column number.
@@ -213,7 +197,6 @@ class DataReader extends \yii\base\BaseObject implements \Iterator, \Countable
     {
         return $this->_statement->columnCount();
     }
-
     /**
      * Resets the iterator to the initial state.
      * This method is required by the interface [[\Iterator]].
@@ -229,7 +212,6 @@ class DataReader extends \yii\base\BaseObject implements \Iterator, \Countable
             throw new InvalidCallException('DataReader cannot rewind. It is a forward-only reader.');
         }
     }
-
     /**
      * Returns the index of the current row.
      * This method is required by the interface [[\Iterator]].
@@ -240,7 +222,6 @@ class DataReader extends \yii\base\BaseObject implements \Iterator, \Countable
     {
         return $this->_index;
     }
-
     /**
      * Returns the current row.
      * This method is required by the interface [[\Iterator]].
@@ -251,7 +232,6 @@ class DataReader extends \yii\base\BaseObject implements \Iterator, \Countable
     {
         return $this->_row;
     }
-
     /**
      * Moves the internal pointer to the next row.
      * This method is required by the interface [[\Iterator]].
@@ -262,7 +242,6 @@ class DataReader extends \yii\base\BaseObject implements \Iterator, \Countable
         $this->_row = $this->_statement->fetch();
         $this->_index++;
     }
-
     /**
      * Returns whether there is a row of data at current position.
      * This method is required by the interface [[\Iterator]].
@@ -271,6 +250,6 @@ class DataReader extends \yii\base\BaseObject implements \Iterator, \Countable
     #[\ReturnTypeWillChange]
     public function valid()
     {
-        return $this->_row !== false;
+        return $this->_row !== \false;
     }
 }

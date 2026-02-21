@@ -1,12 +1,10 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Odigos\Dotenv\Store;
 
-namespace Dotenv\Store;
-
-use Dotenv\Exception\InvalidPathException;
-use Dotenv\Store\File\Reader;
-
+use Odigos\Dotenv\Exception\InvalidPathException;
+use Odigos\Dotenv\Store\File\Reader;
 final class FileStore implements StoreInterface
 {
     /**
@@ -15,21 +13,18 @@ final class FileStore implements StoreInterface
      * @var string[]
      */
     private $filePaths;
-
     /**
      * Should file loading short circuit?
      *
      * @var bool
      */
     private $shortCircuit;
-
     /**
      * The file encoding.
      *
      * @var string|null
      */
     private $fileEncoding;
-
     /**
      * Create a new file store instance.
      *
@@ -45,7 +40,6 @@ final class FileStore implements StoreInterface
         $this->shortCircuit = $shortCircuit;
         $this->fileEncoding = $fileEncoding;
     }
-
     /**
      * Read the content of the environment file(s).
      *
@@ -58,15 +52,10 @@ final class FileStore implements StoreInterface
         if ($this->filePaths === []) {
             throw new InvalidPathException('At least one environment file path must be provided.');
         }
-
         $contents = Reader::read($this->filePaths, $this->shortCircuit, $this->fileEncoding);
-
         if (\count($contents) > 0) {
             return \implode("\n", $contents);
         }
-
-        throw new InvalidPathException(
-            \sprintf('Unable to read any of the environment file(s) at [%s].', \implode(', ', $this->filePaths))
-        );
+        throw new InvalidPathException(\sprintf('Unable to read any of the environment file(s) at [%s].', \implode(', ', $this->filePaths)));
     }
 }

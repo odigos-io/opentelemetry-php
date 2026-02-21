@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -18,7 +18,6 @@ namespace Cake\Routing\Route;
 
 use Cake\Http\Exception\RedirectException;
 use Cake\Routing\Router;
-
 /**
  * Redirect route will perform an immediate redirect. Redirect routes
  * are useful when you want to have Routing layer redirects occur in your
@@ -27,7 +26,7 @@ use Cake\Routing\Router;
  * Redirection is signaled by an exception that halts route matching and
  * defines the redirect URL and status code.
  */
-class RedirectRoute extends Route
+class RedirectRoute extends \Cake\Routing\Route\Route
 {
     /**
      * The location to redirect to.
@@ -35,7 +34,6 @@ class RedirectRoute extends Route
      * @var array
      */
     public array $redirect;
-
     /**
      * Constructor
      *
@@ -47,11 +45,10 @@ class RedirectRoute extends Route
     {
         parent::__construct($template, $defaults, $options);
         if (isset($defaults['redirect'])) {
-            $defaults = (array)$defaults['redirect'];
+            $defaults = (array) $defaults['redirect'];
         }
         $this->redirect = $defaults;
     }
-
     /**
      * Parses a string URL into an array. Parsed URLs will result in an automatic
      * redirection.
@@ -87,9 +84,8 @@ class RedirectRoute extends Route
         if (isset($this->options['status']) && ($this->options['status'] >= 300 && $this->options['status'] < 400)) {
             $status = $this->options['status'];
         }
-        throw new RedirectException(Router::url($redirect, true), $status);
+        throw new RedirectException(Router::url($redirect, \true), $status);
     }
-
     /**
      * There is no reverse routing redirection routes.
      *
@@ -101,7 +97,6 @@ class RedirectRoute extends Route
     {
         return null;
     }
-
     /**
      * Sets the HTTP status
      *
@@ -111,7 +106,6 @@ class RedirectRoute extends Route
     public function setStatus(int $status)
     {
         $this->options['status'] = $status;
-
         return $this;
     }
 }

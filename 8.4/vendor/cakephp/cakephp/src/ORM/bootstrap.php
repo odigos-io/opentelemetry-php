@@ -1,5 +1,7 @@
 <?php
-declare(strict_types=1);
+
+declare (strict_types=1);
+namespace Odigos;
 
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
@@ -14,8 +16,6 @@ declare(strict_types=1);
  * @since         5.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-
 use Cake\Datasource\FactoryLocator;
 use Cake\ORM\Locator\TableLocator;
-
 FactoryLocator::add('Table', new TableLocator());

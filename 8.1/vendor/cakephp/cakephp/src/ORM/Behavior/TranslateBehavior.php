@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -29,7 +29,6 @@ use Cake\ORM\Query\SelectQuery;
 use Cake\ORM\Table;
 use Cake\Utility\Inflector;
 use function Cake\Core\namespaceSplit;
-
 /**
  * This behavior provides a way to translate dynamic data by keeping translations
  * in a separate table linked to the original record from another one. Translated
@@ -51,25 +50,7 @@ class TranslateBehavior extends Behavior implements PropertyMarshalInterface
      *
      * @var array<string, mixed>
      */
-    protected array $_defaultConfig = [
-        'implementedFinders' => ['translations' => 'findTranslations'],
-        'implementedMethods' => [
-            'setLocale' => 'setLocale',
-            'getLocale' => 'getLocale',
-            'translationField' => 'translationField',
-            'getStrategy' => 'getStrategy',
-        ],
-        'fields' => [],
-        'defaultLocale' => null,
-        'referenceName' => '',
-        'allowEmptyTranslations' => true,
-        'onlyTranslated' => false,
-        'strategy' => 'subquery',
-        'tableLocator' => null,
-        'validator' => false,
-        'strategyClass' => null,
-    ];
-
+    protected array $_defaultConfig = ['implementedFinders' => ['translations' => 'findTranslations'], 'implementedMethods' => ['setLocale' => 'setLocale', 'getLocale' => 'getLocale', 'translationField' => 'translationField', 'getStrategy' => 'getStrategy'], 'fields' => [], 'defaultLocale' => null, 'referenceName' => '', 'allowEmptyTranslations' => \true, 'onlyTranslated' => \false, 'strategy' => 'subquery', 'tableLocator' => null, 'validator' => \false, 'strategyClass' => null];
     /**
      * Default strategy class name.
      *
@@ -77,14 +58,12 @@ class TranslateBehavior extends Behavior implements PropertyMarshalInterface
      * @phpstan-var class-string<\Cake\ORM\Behavior\Translate\TranslateStrategyInterface>
      */
     protected static string $defaultStrategyClass = ShadowTableStrategy::class;
-
     /**
      * Translation strategy instance.
      *
      * @var \Cake\ORM\Behavior\Translate\TranslateStrategyInterface|null
      */
     protected ?TranslateStrategyInterface $strategy = null;
-
     /**
      * Constructor
      *
@@ -113,15 +92,9 @@ class TranslateBehavior extends Behavior implements PropertyMarshalInterface
      */
     public function __construct(Table $table, array $config = [])
     {
-        $config += [
-            'defaultLocale' => I18n::getDefaultLocale(),
-            'referenceName' => $this->referenceName($table),
-            'tableLocator' => $table->associations()->getTableLocator(),
-        ];
-
+        $config += ['defaultLocale' => I18n::getDefaultLocale(), 'referenceName' => $this->referenceName($table), 'tableLocator' => $table->associations()->getTableLocator()];
         parent::__construct($table, $config);
     }
-
     /**
      * Initialize hook
      *
@@ -132,7 +105,6 @@ class TranslateBehavior extends Behavior implements PropertyMarshalInterface
     {
         $this->getStrategy();
     }
-
     /**
      * Set default strategy class name.
      *
@@ -145,7 +117,6 @@ class TranslateBehavior extends Behavior implements PropertyMarshalInterface
     {
         static::$defaultStrategyClass = $class;
     }
-
     /**
      * Get default strategy class name.
      *
@@ -157,7 +128,6 @@ class TranslateBehavior extends Behavior implements PropertyMarshalInterface
     {
         return static::$defaultStrategyClass;
     }
-
     /**
      * Get strategy class instance.
      *
@@ -168,7 +138,6 @@ class TranslateBehavior extends Behavior implements PropertyMarshalInterface
     {
         return $this->strategy ??= $this->createStrategy();
     }
-
     /**
      * Create strategy instance.
      *
@@ -177,16 +146,11 @@ class TranslateBehavior extends Behavior implements PropertyMarshalInterface
      */
     protected function createStrategy(): TranslateStrategyInterface
     {
-        $config = array_diff_key(
-            $this->_config,
-            ['implementedFinders', 'implementedMethods', 'strategyClass'],
-        );
+        $config = array_diff_key($this->_config, ['implementedFinders', 'implementedMethods', 'strategyClass']);
         /** @var class-string<\Cake\ORM\Behavior\Translate\TranslateStrategyInterface> $className */
         $className = $this->getConfig('strategyClass', static::$defaultStrategyClass);
-
         return new $className($this->_table, $config);
     }
-
     /**
      * Set strategy class instance.
      *
@@ -197,10 +161,8 @@ class TranslateBehavior extends Behavior implements PropertyMarshalInterface
     public function setStrategy(TranslateStrategyInterface $strategy)
     {
         $this->strategy = $strategy;
-
         return $this;
     }
-
     /**
      * Gets the Model callbacks this behavior is interested in.
      *
@@ -208,14 +170,8 @@ class TranslateBehavior extends Behavior implements PropertyMarshalInterface
      */
     public function implementedEvents(): array
     {
-        return [
-            'Model.beforeFind' => 'beforeFind',
-            'Model.beforeMarshal' => 'beforeMarshal',
-            'Model.beforeSave' => 'beforeSave',
-            'Model.afterSave' => 'afterSave',
-        ];
+        return ['Model.beforeFind' => 'beforeFind', 'Model.beforeMarshal' => 'beforeMarshal', 'Model.beforeSave' => 'beforeSave', 'Model.afterSave' => 'afterSave'];
     }
-
     /**
      * Hoist fields for the default locale under `_translations` key to the root
      * in the data.
@@ -233,19 +189,15 @@ class TranslateBehavior extends Behavior implements PropertyMarshalInterface
         if (isset($options['translations']) && !$options['translations']) {
             return;
         }
-
         $defaultLocale = $this->getConfig('defaultLocale');
         if (!isset($data['_translations'][$defaultLocale])) {
             return;
         }
-
         foreach ($data['_translations'][$defaultLocale] as $field => $value) {
             $data[$field] = $value;
         }
-
         unset($data['_translations'][$defaultLocale]);
     }
-
     /**
      * {@inheritDoc}
      *
@@ -262,7 +214,6 @@ class TranslateBehavior extends Behavior implements PropertyMarshalInterface
     {
         return $this->getStrategy()->buildMarshalMap($marshaller, $map, $options);
     }
-
     /**
      * Sets the locale that should be used for all future find and save operations on
      * the table where this behavior is attached to.
@@ -286,10 +237,8 @@ class TranslateBehavior extends Behavior implements PropertyMarshalInterface
     public function setLocale(?string $locale)
     {
         $this->getStrategy()->setLocale($locale);
-
         return $this;
     }
-
     /**
      * Returns the current locale.
      *
@@ -304,7 +253,6 @@ class TranslateBehavior extends Behavior implements PropertyMarshalInterface
     {
         return $this->getStrategy()->getLocale();
     }
-
     /**
      * Returns a fully aliased field name for translated fields.
      *
@@ -319,7 +267,6 @@ class TranslateBehavior extends Behavior implements PropertyMarshalInterface
     {
         return $this->getStrategy()->translationField($field);
     }
-
     /**
      * Custom finder method used to retrieve all translations for the found records.
      * Fetched translations can be filtered by locale by passing the `locales` key
@@ -345,18 +292,13 @@ class TranslateBehavior extends Behavior implements PropertyMarshalInterface
     public function findTranslations(SelectQuery $query, array $locales = []): SelectQuery
     {
         $targetAlias = $this->getStrategy()->getTranslationTable()->getAlias();
-
-        return $query
-            ->contain([$targetAlias => function (QueryInterface $query) use ($locales, $targetAlias) {
-                if ($locales) {
-                    $query->where(["{$targetAlias}.locale IN" => $locales]);
-                }
-
-                return $query;
-            }])
-            ->formatResults($this->getStrategy()->groupTranslations(...), $query::PREPEND);
+        return $query->contain([$targetAlias => function (QueryInterface $query) use ($locales, $targetAlias) {
+            if ($locales) {
+                $query->where(["{$targetAlias}.locale IN" => $locales]);
+            }
+            return $query;
+        }])->formatResults($this->getStrategy()->groupTranslations(...), $query::PREPEND);
     }
-
     /**
      * Proxy method calls to strategy class instance.
      *
@@ -368,7 +310,6 @@ class TranslateBehavior extends Behavior implements PropertyMarshalInterface
     {
         return $this->getStrategy()->{$method}(...$args);
     }
-
     /**
      * Determine the reference name to use for a given table
      *
@@ -388,7 +329,6 @@ class TranslateBehavior extends Behavior implements PropertyMarshalInterface
             $name = $table->getTable() ?: $table->getAlias();
             $name = Inflector::camelize($name);
         }
-
         return $name;
     }
 }

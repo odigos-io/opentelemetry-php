@@ -9,18 +9,14 @@
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
  */
+declare (strict_types=1);
+namespace Odigos\Ramsey\Uuid\Type;
 
-declare(strict_types=1);
-
-namespace Ramsey\Uuid\Type;
-
-use Ramsey\Uuid\Exception\InvalidArgumentException;
+use Odigos\Ramsey\Uuid\Exception\InvalidArgumentException;
 use ValueError;
-
 use function is_numeric;
 use function sprintf;
 use function str_starts_with;
-
 /**
  * A value object representing a decimal
  *
@@ -35,62 +31,47 @@ final class Decimal implements NumberInterface
 {
     private string $value;
     private bool $isNegative;
-
-    public function __construct(float | int | string | self $value)
+    public function __construct(float|int|string|self $value)
     {
         $value = (string) $value;
-
         if (!is_numeric($value)) {
-            throw new InvalidArgumentException(
-                'Value must be a signed decimal or a string containing only '
-                . 'digits 0-9 and, optionally, a decimal point or sign (+ or -)'
-            );
+            throw new InvalidArgumentException('Value must be a signed decimal or a string containing only ' . 'digits 0-9 and, optionally, a decimal point or sign (+ or -)');
         }
-
         // Remove the leading +-symbol.
         if (str_starts_with($value, '+')) {
             $value = substr($value, 1);
         }
-
         // For cases like `-0` or `-0.0000`, convert the value to `0`.
         if (abs((float) $value) === 0.0) {
             $value = '0';
         }
-
         if (str_starts_with($value, '-')) {
-            $this->isNegative = true;
+            $this->isNegative = \true;
         } else {
-            $this->isNegative = false;
+            $this->isNegative = \false;
         }
-
         $this->value = $value;
     }
-
     public function isNegative(): bool
     {
         return $this->isNegative;
     }
-
     public function toString(): string
     {
         return $this->value;
     }
-
     public function __toString(): string
     {
         return $this->toString();
     }
-
     public function jsonSerialize(): string
     {
         return $this->toString();
     }
-
     public function serialize(): string
     {
         return $this->toString();
     }
-
     /**
      * @return array{string: string}
      */
@@ -98,7 +79,6 @@ final class Decimal implements NumberInterface
     {
         return ['string' => $this->toString()];
     }
-
     /**
      * Constructs the object from a serialized string representation
      *
@@ -108,7 +88,6 @@ final class Decimal implements NumberInterface
     {
         $this->__construct($data);
     }
-
     /**
      * @param array{string?: string} $data
      */
@@ -119,7 +98,6 @@ final class Decimal implements NumberInterface
             throw new ValueError(sprintf('%s(): Argument #1 ($data) is invalid', __METHOD__));
         }
         // @codeCoverageIgnoreEnd
-
         $this->unserialize($data['string']);
     }
 }

@@ -3,7 +3,6 @@
 namespace Illuminate\Mail\Events;
 
 use Symfony\Component\Mime\Email;
-
 class MessageSending
 {
     /**
@@ -12,14 +11,12 @@ class MessageSending
      * @var \Symfony\Component\Mime\Email
      */
     public $message;
-
     /**
      * The message data.
      *
      * @var array
      */
     public $data;
-
     /**
      * Create a new event instance.
      *

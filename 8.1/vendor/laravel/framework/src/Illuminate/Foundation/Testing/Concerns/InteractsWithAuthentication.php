@@ -3,7 +3,6 @@
 namespace Illuminate\Foundation\Testing\Concerns;
 
 use Illuminate\Contracts\Auth\Authenticatable as UserContract;
-
 trait InteractsWithAuthentication
 {
     /**
@@ -17,7 +16,6 @@ trait InteractsWithAuthentication
     {
         return $this->be($user, $guard);
     }
-
     /**
      * Set the currently logged in user for the application.
      *
@@ -28,16 +26,12 @@ trait InteractsWithAuthentication
     public function be(UserContract $user, $guard = null)
     {
         if (isset($user->wasRecentlyCreated) && $user->wasRecentlyCreated) {
-            $user->wasRecentlyCreated = false;
+            $user->wasRecentlyCreated = \false;
         }
-
         $this->app['auth']->guard($guard)->setUser($user);
-
         $this->app['auth']->shouldUse($guard);
-
         return $this;
     }
-
     /**
      * Assert that the user is authenticated.
      *
@@ -47,10 +41,8 @@ trait InteractsWithAuthentication
     public function assertAuthenticated($guard = null)
     {
         $this->assertTrue($this->isAuthenticated($guard), 'The user is not authenticated');
-
         return $this;
     }
-
     /**
      * Assert that the user is not authenticated.
      *
@@ -60,10 +52,8 @@ trait InteractsWithAuthentication
     public function assertGuest($guard = null)
     {
         $this->assertFalse($this->isAuthenticated($guard), 'The user is authenticated');
-
         return $this;
     }
-
     /**
      * Return true if the user is authenticated, false otherwise.
      *
@@ -74,7 +64,6 @@ trait InteractsWithAuthentication
     {
         return $this->app->make('auth')->guard($guard)->check();
     }
-
     /**
      * Assert that the user is authenticated as the given user.
      *
@@ -85,22 +74,11 @@ trait InteractsWithAuthentication
     public function assertAuthenticatedAs($user, $guard = null)
     {
         $expected = $this->app->make('auth')->guard($guard)->user();
-
         $this->assertNotNull($expected, 'The current user is not authenticated.');
-
-        $this->assertInstanceOf(
-            get_class($expected), $user,
-            'The currently authenticated user is not who was expected'
-        );
-
-        $this->assertSame(
-            $expected->getAuthIdentifier(), $user->getAuthIdentifier(),
-            'The currently authenticated user is not who was expected'
-        );
-
+        $this->assertInstanceOf(get_class($expected), $user, 'The currently authenticated user is not who was expected');
+        $this->assertSame($expected->getAuthIdentifier(), $user->getAuthIdentifier(), 'The currently authenticated user is not who was expected');
         return $this;
     }
-
     /**
      * Assert that the given credentials are valid.
      *
@@ -110,13 +88,9 @@ trait InteractsWithAuthentication
      */
     public function assertCredentials(array $credentials, $guard = null)
     {
-        $this->assertTrue(
-            $this->hasCredentials($credentials, $guard), 'The given credentials are invalid.'
-        );
-
+        $this->assertTrue($this->hasCredentials($credentials, $guard), 'The given credentials are invalid.');
         return $this;
     }
-
     /**
      * Assert that the given credentials are invalid.
      *
@@ -126,13 +100,9 @@ trait InteractsWithAuthentication
      */
     public function assertInvalidCredentials(array $credentials, $guard = null)
     {
-        $this->assertFalse(
-            $this->hasCredentials($credentials, $guard), 'The given credentials are valid.'
-        );
-
+        $this->assertFalse($this->hasCredentials($credentials, $guard), 'The given credentials are valid.');
         return $this;
     }
-
     /**
      * Return true if the credentials are valid, false otherwise.
      *
@@ -143,9 +113,7 @@ trait InteractsWithAuthentication
     protected function hasCredentials(array $credentials, $guard = null)
     {
         $provider = $this->app->make('auth')->guard($guard)->getProvider();
-
         $user = $provider->retrieveByCredentials($credentials);
-
         return $user && $provider->validateCredentials($user, $credentials);
     }
 }

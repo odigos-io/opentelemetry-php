@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright 2023-present MongoDB, Inc.
  *
@@ -14,12 +15,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 namespace MongoDB\Codec;
 
 use MongoDB\BSON\Document;
 use MongoDB\Exception\UnsupportedValueException;
-
 /**
  * The DocumentCodec interface allows decoding BSON document data to native PHP
  * objects and back to BSON documents.
@@ -27,7 +26,7 @@ use MongoDB\Exception\UnsupportedValueException;
  * @psalm-template ObjectType of object
  * @template-extends Codec<Document, ObjectType>
  */
-interface DocumentCodec extends Codec
+interface DocumentCodec extends \MongoDB\Codec\Codec
 {
     /**
      * @psalm-param Document $value
@@ -35,7 +34,6 @@ interface DocumentCodec extends Codec
      * @throws UnsupportedValueException if the decoder does not support the value
      */
     public function decode(mixed $value): object;
-
     /**
      * @psalm-param ObjectType $value
      * @throws UnsupportedValueException if the encoder does not support the value

@@ -1,8 +1,7 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Dotenv\Repository\Adapter;
+declare (strict_types=1);
+namespace Odigos\Dotenv\Repository\Adapter;
 
 final class GuardedWriter implements WriterInterface
 {
@@ -12,14 +11,12 @@ final class GuardedWriter implements WriterInterface
      * @var \Dotenv\Repository\Adapter\WriterInterface
      */
     private $writer;
-
     /**
      * The variable name allow list.
      *
      * @var string[]
      */
     private $allowList;
-
     /**
      * Create a new guarded writer instance.
      *
@@ -33,7 +30,6 @@ final class GuardedWriter implements WriterInterface
         $this->writer = $writer;
         $this->allowList = $allowList;
     }
-
     /**
      * Write to an environment variable, if possible.
      *
@@ -46,13 +42,11 @@ final class GuardedWriter implements WriterInterface
     {
         // Don't set non-allowed variables
         if (!$this->isAllowed($name)) {
-            return false;
+            return \false;
         }
-
         // Set the value on the inner writer
         return $this->writer->write($name, $value);
     }
-
     /**
      * Delete an environment variable, if possible.
      *
@@ -64,13 +58,11 @@ final class GuardedWriter implements WriterInterface
     {
         // Don't clear non-allowed variables
         if (!$this->isAllowed($name)) {
-            return false;
+            return \false;
         }
-
         // Set the value on the inner writer
         return $this->writer->delete($name);
     }
-
     /**
      * Determine if the given variable is allowed.
      *
@@ -80,6 +72,6 @@ final class GuardedWriter implements WriterInterface
      */
     private function isAllowed(string $name)
     {
-        return \in_array($name, $this->allowList, true);
+        return \in_array($name, $this->allowList, \true);
     }
 }

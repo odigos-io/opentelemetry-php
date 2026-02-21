@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -18,7 +18,6 @@ namespace Cake\Cache\Engine;
 
 use Cake\Cache\CacheEngine;
 use DateInterval;
-
 /**
  * Array storage engine for cache.
  *
@@ -39,7 +38,6 @@ class ArrayEngine extends CacheEngine
      * @var array<string, array>
      */
     protected array $data = [];
-
     /**
      * Write data for key into cache
      *
@@ -55,10 +53,8 @@ class ArrayEngine extends CacheEngine
         $key = $this->_key($key);
         $expires = time() + $this->duration($ttl);
         $this->data[$key] = ['exp' => $expires, 'val' => $value];
-
-        return true;
+        return \true;
     }
-
     /**
      * Read a key from the cache
      *
@@ -74,18 +70,14 @@ class ArrayEngine extends CacheEngine
             return $default;
         }
         $data = $this->data[$key];
-
         // Check expiration
         $now = time();
         if ($data['exp'] <= $now) {
             unset($this->data[$key]);
-
             return $default;
         }
-
         return $data['val'];
     }
-
     /**
      * Increments the value of an integer cached key
      *
@@ -100,10 +92,8 @@ class ArrayEngine extends CacheEngine
         }
         $key = $this->_key($key);
         $this->data[$key]['val'] += $offset;
-
         return $this->data[$key]['val'];
     }
-
     /**
      * Decrements the value of an integer cached key
      *
@@ -118,10 +108,8 @@ class ArrayEngine extends CacheEngine
         }
         $key = $this->_key($key);
         $this->data[$key]['val'] -= $offset;
-
         return $this->data[$key]['val'];
     }
-
     /**
      * Delete a key from the cache
      *
@@ -132,10 +120,8 @@ class ArrayEngine extends CacheEngine
     {
         $key = $this->_key($key);
         unset($this->data[$key]);
-
-        return true;
+        return \true;
     }
-
     /**
      * Delete all keys from the cache. This will clear every cache config using APC.
      *
@@ -144,10 +130,8 @@ class ArrayEngine extends CacheEngine
     public function clear(): bool
     {
         $this->data = [];
-
-        return true;
+        return \true;
     }
-
     /**
      * Returns the `group value` for each of the configured groups
      * If the group initial value was not found, then it initializes
@@ -160,14 +144,12 @@ class ArrayEngine extends CacheEngine
         $result = [];
         foreach ($this->_config['groups'] as $group) {
             $key = $this->_config['prefix'] . $group;
-            $this->data[$key] ??= ['exp' => PHP_INT_MAX, 'val' => 1];
+            $this->data[$key] ??= ['exp' => \PHP_INT_MAX, 'val' => 1];
             $value = $this->data[$key]['val'];
             $result[] = $group . $value;
         }
-
         return $result;
     }
-
     /**
      * Increments the group value to simulate deletion of all keys under a group
      * old values will remain in storage until they expire.
@@ -181,7 +163,6 @@ class ArrayEngine extends CacheEngine
         if (isset($this->data[$key])) {
             $this->data[$key]['val'] += 1;
         }
-
-        return true;
+        return \true;
     }
 }

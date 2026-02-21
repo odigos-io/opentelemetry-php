@@ -1,4 +1,5 @@
 <?php
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -15,7 +16,6 @@
 namespace Cake\Test\Fixture;
 
 use Cake\TestSuite\Fixture\TestFixture;
-
 /**
  * Tables of unique author ids
  */
@@ -26,7 +26,5 @@ class UniqueAuthorsFixture extends TestFixture
      *
      * @var array
      */
-    public array $records = [
-        ['first_author_id' => null, 'second_author_id' => 1],
-    ];
+    public array $records = [['first_author_id' => null, 'second_author_id' => 1]];
 }

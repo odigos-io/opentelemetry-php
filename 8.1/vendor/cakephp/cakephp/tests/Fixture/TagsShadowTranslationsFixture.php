@@ -1,4 +1,5 @@
 <?php
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -15,7 +16,6 @@
 namespace Cake\Test\Fixture;
 
 use Cake\TestSuite\Fixture\TestFixture;
-
 /**
  * Class TagsShadowTranslationsFixture
  */
@@ -26,15 +26,5 @@ class TagsShadowTranslationsFixture extends TestFixture
      *
      * @var array
      */
-    public array $records = [
-        ['locale' => 'eng', 'id' => 1, 'name' => 'tag1 in eng'],
-        ['locale' => 'deu', 'id' => 1, 'name' => 'tag1 in deu'],
-        ['locale' => 'cze', 'id' => 1, 'name' => 'tag1 in cze'],
-        ['locale' => 'eng', 'id' => 2, 'name' => 'tag2 in eng'],
-        ['locale' => 'deu', 'id' => 2, 'name' => 'tag2 in deu'],
-        ['locale' => 'cze', 'id' => 2, 'name' => 'tag2 in cze'],
-        ['locale' => 'eng', 'id' => 3, 'name' => 'tag3 in eng'],
-        ['locale' => 'deu', 'id' => 3, 'name' => 'tag3 in deu'],
-        ['locale' => 'cze', 'id' => 3, 'name' => 'tag3 in cze'],
-    ];
+    public array $records = [['locale' => 'eng', 'id' => 1, 'name' => 'tag1 in eng'], ['locale' => 'deu', 'id' => 1, 'name' => 'tag1 in deu'], ['locale' => 'cze', 'id' => 1, 'name' => 'tag1 in cze'], ['locale' => 'eng', 'id' => 2, 'name' => 'tag2 in eng'], ['locale' => 'deu', 'id' => 2, 'name' => 'tag2 in deu'], ['locale' => 'cze', 'id' => 2, 'name' => 'tag2 in cze'], ['locale' => 'eng', 'id' => 3, 'name' => 'tag3 in eng'], ['locale' => 'deu', 'id' => 3, 'name' => 'tag3 in deu'], ['locale' => 'cze', 'id' => 3, 'name' => 'tag3 in cze']];
 }

@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\CssSelector\Node;
 
 /**
@@ -21,29 +20,23 @@ namespace Symfony\Component\CssSelector\Node;
  *
  * @internal
  */
-class HashNode extends AbstractNode
+class HashNode extends \Symfony\Component\CssSelector\Node\AbstractNode
 {
-    public function __construct(
-        private NodeInterface $selector,
-        private string $id,
-    ) {
+    public function __construct(private \Symfony\Component\CssSelector\Node\NodeInterface $selector, private string $id)
+    {
     }
-
-    public function getSelector(): NodeInterface
+    public function getSelector(): \Symfony\Component\CssSelector\Node\NodeInterface
     {
         return $this->selector;
     }
-
     public function getId(): string
     {
         return $this->id;
     }
-
-    public function getSpecificity(): Specificity
+    public function getSpecificity(): \Symfony\Component\CssSelector\Node\Specificity
     {
-        return $this->selector->getSpecificity()->plus(new Specificity(1, 0, 0));
+        return $this->selector->getSpecificity()->plus(new \Symfony\Component\CssSelector\Node\Specificity(1, 0, 0));
     }
-
     public function __toString(): string
     {
         return \sprintf('%s[%s#%s]', $this->getNodeName(), $this->selector, $this->id);

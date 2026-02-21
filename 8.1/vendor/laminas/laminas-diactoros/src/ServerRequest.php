@@ -1,21 +1,18 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Laminas\Diactoros;
+declare (strict_types=1);
+namespace Odigos\Laminas\Diactoros;
 
 use Override;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UploadedFileInterface;
 use Psr\Http\Message\UriInterface;
-
 use function array_key_exists;
 use function gettype;
 use function is_array;
 use function is_object;
 use function sprintf;
-
 /**
  * Server-side HTTP request
  *
@@ -33,11 +30,8 @@ use function sprintf;
 class ServerRequest implements ServerRequestInterface
 {
     use RequestTrait;
-
     private array $attributes = [];
-
     private array $uploadedFiles;
-
     /**
      * @param array $serverParams Server parameters, typically from $_SERVER
      * @param array $uploadedFiles Upload file information, a tree of UploadedFiles
@@ -51,29 +45,16 @@ class ServerRequest implements ServerRequestInterface
      * @param string $protocol HTTP protocol version.
      * @throws Exception\InvalidArgumentException For any invalid value.
      */
-    public function __construct(
-        private array $serverParams = [],
-        array $uploadedFiles = [],
-        null|string|UriInterface $uri = null,
-        ?string $method = null,
-        $body = 'php://input',
-        array $headers = [],
-        private array $cookieParams = [],
-        private array $queryParams = [],
-        private $parsedBody = null,
-        string $protocol = '1.1'
-    ) {
+    public function __construct(private array $serverParams = [], array $uploadedFiles = [], null|string|UriInterface $uri = null, ?string $method = null, $body = 'php://input', array $headers = [], private array $cookieParams = [], private array $queryParams = [], private $parsedBody = null, string $protocol = '1.1')
+    {
         $this->validateUploadedFiles($uploadedFiles);
-
         if ($body === 'php://input') {
             $body = new Stream($body, 'r');
         }
-
         $this->initialize($uri, $method, $body, $headers);
         $this->uploadedFiles = $uploadedFiles;
-        $this->protocol      = $protocol;
+        $this->protocol = $protocol;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -82,7 +63,6 @@ class ServerRequest implements ServerRequestInterface
     {
         return $this->serverParams;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -91,7 +71,6 @@ class ServerRequest implements ServerRequestInterface
     {
         return $this->uploadedFiles;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -99,11 +78,10 @@ class ServerRequest implements ServerRequestInterface
     public function withUploadedFiles(array $uploadedFiles): ServerRequest
     {
         $this->validateUploadedFiles($uploadedFiles);
-        $new                = clone $this;
+        $new = clone $this;
         $new->uploadedFiles = $uploadedFiles;
         return $new;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -112,18 +90,16 @@ class ServerRequest implements ServerRequestInterface
     {
         return $this->cookieParams;
     }
-
     /**
      * {@inheritdoc}
      */
     #[Override]
     public function withCookieParams(array $cookies): ServerRequest
     {
-        $new               = clone $this;
+        $new = clone $this;
         $new->cookieParams = $cookies;
         return $new;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -132,18 +108,16 @@ class ServerRequest implements ServerRequestInterface
     {
         return $this->queryParams;
     }
-
     /**
      * {@inheritdoc}
      */
     #[Override]
     public function withQueryParams(array $query): ServerRequest
     {
-        $new              = clone $this;
+        $new = clone $this;
         $new->queryParams = $query;
         return $new;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -152,7 +126,6 @@ class ServerRequest implements ServerRequestInterface
     {
         return $this->parsedBody;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -160,19 +133,13 @@ class ServerRequest implements ServerRequestInterface
     public function withParsedBody($data): ServerRequest
     {
         /** @psalm-suppress DocblockTypeContradiction */
-        if (! is_array($data) && ! is_object($data) && null !== $data) {
-            throw new Exception\InvalidArgumentException(sprintf(
-                '%s expects a null, array, or object argument; received %s',
-                __METHOD__,
-                gettype($data)
-            ));
+        if (!is_array($data) && !is_object($data) && null !== $data) {
+            throw new Exception\InvalidArgumentException(sprintf('%s expects a null, array, or object argument; received %s', __METHOD__, gettype($data)));
         }
-
-        $new             = clone $this;
+        $new = clone $this;
         $new->parsedBody = $data;
         return $new;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -181,31 +148,27 @@ class ServerRequest implements ServerRequestInterface
     {
         return $this->attributes;
     }
-
     /**
      * {@inheritdoc}
      */
     #[Override]
     public function getAttribute(string $name, $default = null)
     {
-        if (! array_key_exists($name, $this->attributes)) {
+        if (!array_key_exists($name, $this->attributes)) {
             return $default;
         }
-
         return $this->attributes[$name];
     }
-
     /**
      * {@inheritdoc}
      */
     #[Override]
     public function withAttribute(string $name, $value): ServerRequest
     {
-        $new                    = clone $this;
+        $new = clone $this;
         $new->attributes[$name] = $value;
         return $new;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -216,7 +179,6 @@ class ServerRequest implements ServerRequestInterface
         unset($new->attributes[$name]);
         return $new;
     }
-
     /**
      * Recursively validate the structure in an uploaded files array.
      *
@@ -229,8 +191,7 @@ class ServerRequest implements ServerRequestInterface
                 $this->validateUploadedFiles($file);
                 continue;
             }
-
-            if (! $file instanceof UploadedFileInterface) {
+            if (!$file instanceof UploadedFileInterface) {
                 throw new Exception\InvalidArgumentException('Invalid leaf in uploaded files structure');
             }
         }

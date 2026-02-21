@@ -1,10 +1,10 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\db;
 
 /**
@@ -13,7 +13,7 @@ namespace yii\db;
  * @author Sergey Makinen <sergey@makinen.ru>
  * @since 2.0.13
  */
-class DefaultValueConstraint extends Constraint
+class DefaultValueConstraint extends \yii\db\Constraint
 {
     /**
      * @var mixed default value as returned by the DBMS.

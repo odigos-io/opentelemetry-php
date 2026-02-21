@@ -1,9 +1,7 @@
 <?php
 
 // DO NOT EDIT, this is an Auto-generated file from script/semantic-conventions
-
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\SemConv\Incubating\Attributes;
 
 /**
@@ -19,47 +17,40 @@ interface LogIncubatingAttributes
      * @experimental
      */
     public const LOG_FILE_NAME = 'log.file.name';
-
     /**
      * The basename of the file, with symlinks resolved.
      *
      * @experimental
      */
     public const LOG_FILE_NAME_RESOLVED = 'log.file.name_resolved';
-
     /**
      * The full path to the file.
      *
      * @experimental
      */
     public const LOG_FILE_PATH = 'log.file.path';
-
     /**
      * The full path to the file, with symlinks resolved.
      *
      * @experimental
      */
     public const LOG_FILE_PATH_RESOLVED = 'log.file.path_resolved';
-
     /**
      * The stream associated with the log. See below for a list of well-known values.
      *
      * @experimental
      */
     public const LOG_IOSTREAM = 'log.iostream';
-
     /**
      * Logs from stdout stream
      * @experimental
      */
     public const LOG_IOSTREAM_VALUE_STDOUT = 'stdout';
-
     /**
      * Events from stderr stream
      * @experimental
      */
     public const LOG_IOSTREAM_VALUE_STDERR = 'stderr';
-
     /**
      * The complete original Log Record.
      *
@@ -68,7 +59,6 @@ interface LogIncubatingAttributes
      * @experimental
      */
     public const LOG_RECORD_ORIGINAL = 'log.record.original';
-
     /**
      * A unique identifier for the Log Record.
      *
@@ -78,5 +68,4 @@ interface LogIncubatingAttributes
      * @experimental
      */
     public const LOG_RECORD_UID = 'log.record.uid';
-
 }

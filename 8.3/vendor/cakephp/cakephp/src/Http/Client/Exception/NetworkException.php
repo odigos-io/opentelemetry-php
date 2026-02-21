@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -19,7 +19,6 @@ use Psr\Http\Client\NetworkExceptionInterface;
 use Psr\Http\Message\RequestInterface;
 use RuntimeException;
 use Throwable;
-
 /**
  * Thrown when the request cannot be completed because of network issues.
  *
@@ -33,7 +32,6 @@ class NetworkException extends RuntimeException implements NetworkExceptionInter
      * @var \Psr\Http\Message\RequestInterface
      */
     protected RequestInterface $request;
-
     /**
      * Constructor.
      *
@@ -46,7 +44,6 @@ class NetworkException extends RuntimeException implements NetworkExceptionInter
         $this->request = $request;
         parent::__construct($message, 0, $previous);
     }
-
     /**
      * Returns the request.
      *

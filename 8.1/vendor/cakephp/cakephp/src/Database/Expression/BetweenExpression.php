@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -20,36 +20,31 @@ use Cake\Database\ExpressionInterface;
 use Cake\Database\Type\ExpressionTypeCasterTrait;
 use Cake\Database\ValueBinder;
 use Closure;
-
 /**
  * An expression object that represents a SQL BETWEEN snippet
  */
-class BetweenExpression implements ExpressionInterface, FieldInterface
+class BetweenExpression implements ExpressionInterface, \Cake\Database\Expression\FieldInterface
 {
     use ExpressionTypeCasterTrait;
-    use FieldTrait;
-
+    use \Cake\Database\Expression\FieldTrait;
     /**
      * The first value in the expression
      *
      * @var mixed
      */
     protected mixed $_from;
-
     /**
      * The second value in the expression
      *
      * @var mixed
      */
     protected mixed $_to;
-
     /**
      * The data type for the from and to arguments
      *
      * @var mixed
      */
     protected mixed $_type;
-
     /**
      * Constructor
      *
@@ -64,28 +59,21 @@ class BetweenExpression implements ExpressionInterface, FieldInterface
             $from = $this->_castToExpression($from, $type);
             $to = $this->_castToExpression($to, $type);
         }
-
         $this->_field = $field;
         $this->_from = $from;
         $this->_to = $to;
         $this->_type = $type;
     }
-
     /**
      * @inheritDoc
      */
     public function sql(ValueBinder $binder): string
     {
-        $parts = [
-            'from' => $this->_from,
-            'to' => $this->_to,
-        ];
-
+        $parts = ['from' => $this->_from, 'to' => $this->_to];
         $field = $this->_field;
         if ($field instanceof ExpressionInterface) {
             $field = $field->sql($binder);
         }
-
         foreach ($parts as $name => $part) {
             if ($part instanceof ExpressionInterface) {
                 $parts[$name] = $part->sql($binder);
@@ -94,10 +82,8 @@ class BetweenExpression implements ExpressionInterface, FieldInterface
             $parts[$name] = $this->_bindValue($part, $binder, $this->_type);
         }
         assert(is_string($field));
-
         return sprintf('%s BETWEEN %s AND %s', $field, $parts['from'], $parts['to']);
     }
-
     /**
      * @inheritDoc
      */
@@ -108,10 +94,8 @@ class BetweenExpression implements ExpressionInterface, FieldInterface
                 $callback($part);
             }
         }
-
         return $this;
     }
-
     /**
      * Registers a value in the placeholder generator and returns the generated placeholder
      *
@@ -124,10 +108,8 @@ class BetweenExpression implements ExpressionInterface, FieldInterface
     {
         $placeholder = $binder->placeholder('c');
         $binder->bind($placeholder, $value, $type);
-
         return $placeholder;
     }
-
     /**
      * Do a deep clone of this expression.
      *

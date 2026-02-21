@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -29,8 +29,7 @@ use Cake\Console\TestSuite\Constraint\ExitCode;
 use Cake\Core\ConsoleApplicationInterface;
 use Cake\Core\TestSuite\ContainerStubTrait;
 use Cake\Error\Debugger;
-use PHPUnit\Framework\Attributes\After;
-
+use Odigos\PHPUnit\Framework\Attributes\After;
 /**
  * A bundle of methods that makes testing commands
  * and shell classes easier.
@@ -41,35 +40,30 @@ use PHPUnit\Framework\Attributes\After;
 trait ConsoleIntegrationTestTrait
 {
     use ContainerStubTrait;
-
     /**
      * Last exit code
      *
      * @var int|null
      */
     protected ?int $_exitCode = null;
-
     /**
      * Console output stub
      *
      * @var \Cake\Console\TestSuite\StubConsoleOutput|null
      */
-    protected ?StubConsoleOutput $_out = null;
-
+    protected ?\Cake\Console\TestSuite\StubConsoleOutput $_out = null;
     /**
      * Console error output stub
      *
      * @var \Cake\Console\TestSuite\StubConsoleOutput|null
      */
-    protected ?StubConsoleOutput $_err = null;
-
+    protected ?\Cake\Console\TestSuite\StubConsoleOutput $_err = null;
     /**
      * Console input mock
      *
      * @var \Cake\Console\TestSuite\StubConsoleInput|null
      */
-    protected ?StubConsoleInput $_in = null;
-
+    protected ?\Cake\Console\TestSuite\StubConsoleInput $_in = null;
     /**
      * Runs CLI integration test
      *
@@ -82,21 +76,18 @@ trait ConsoleIntegrationTestTrait
     public function exec(string $command, array $input = []): void
     {
         $runner = $this->makeRunner();
-
-        $this->_out ??= new StubConsoleOutput();
-        $this->_err ??= new StubConsoleOutput();
+        $this->_out ??= new \Cake\Console\TestSuite\StubConsoleOutput();
+        $this->_err ??= new \Cake\Console\TestSuite\StubConsoleOutput();
         if ($this->_in === null || $input) {
-            $this->_in = new StubConsoleInput($input);
+            $this->_in = new \Cake\Console\TestSuite\StubConsoleInput($input);
         }
         $this->_out->clear();
         $this->_err->clear();
-
         $args = $this->commandStringToArgs("cake {$command}");
         $io = new ConsoleIo($this->_out, $this->_err, $this->_in);
-
         try {
             $this->_exitCode = $runner->run($args, $io);
-        } catch (MissingConsoleInputException $e) {
+        } catch (\Cake\Console\TestSuite\MissingConsoleInputException $e) {
             $messages = $this->_out->messages();
             if ($messages !== []) {
                 $e->setQuestion($messages[count($messages) - 1]);
@@ -106,7 +97,6 @@ trait ConsoleIntegrationTestTrait
             $this->_exitCode = $exception->getCode();
         }
     }
-
     /**
      * Cleans state to get ready for the next test
      *
@@ -120,7 +110,6 @@ trait ConsoleIntegrationTestTrait
         $this->_err = null;
         $this->_in = null;
     }
-
     /**
      * Asserts shell exited with the expected code
      *
@@ -130,13 +119,8 @@ trait ConsoleIntegrationTestTrait
      */
     public function assertExitCode(int $expected, string $message = ''): void
     {
-        $this->assertThat(
-            $expected,
-            new ExitCode($this->_exitCode, $this->_out->messages(), $this->_err->messages()),
-            $message,
-        );
+        $this->assertThat($expected, new ExitCode($this->_exitCode, $this->_out->messages(), $this->_err->messages()), $message);
     }
-
     /**
      * Asserts shell exited with the CommandInterface::CODE_SUCCESS
      *
@@ -145,13 +129,8 @@ trait ConsoleIntegrationTestTrait
      */
     public function assertExitSuccess(string $message = ''): void
     {
-        $this->assertThat(
-            CommandInterface::CODE_SUCCESS,
-            new ExitCode($this->_exitCode, $this->_out->messages(), $this->_err->messages()),
-            $message,
-        );
+        $this->assertThat(CommandInterface::CODE_SUCCESS, new ExitCode($this->_exitCode, $this->_out->messages(), $this->_err->messages()), $message);
     }
-
     /**
      * Asserts shell exited with CommandInterface::CODE_ERROR
      *
@@ -160,13 +139,8 @@ trait ConsoleIntegrationTestTrait
      */
     public function assertExitError(string $message = ''): void
     {
-        $this->assertThat(
-            CommandInterface::CODE_ERROR,
-            new ExitCode($this->_exitCode, $this->_out->messages(), $this->_err->messages()),
-            $message,
-        );
+        $this->assertThat(CommandInterface::CODE_ERROR, new ExitCode($this->_exitCode, $this->_out->messages(), $this->_err->messages()), $message);
     }
-
     /**
      * Asserts that `stdout` is empty
      *
@@ -177,7 +151,6 @@ trait ConsoleIntegrationTestTrait
     {
         $this->assertThat(null, new ContentsEmpty($this->_out->messages(), 'output'), $message);
     }
-
     /**
      * Asserts `stdout` contains expected output
      *
@@ -189,7 +162,6 @@ trait ConsoleIntegrationTestTrait
     {
         $this->assertThat($expected, new ContentsContain($this->_out->messages(), 'output'), $message);
     }
-
     /**
      * Asserts `stdout` does not contain expected output
      *
@@ -201,7 +173,6 @@ trait ConsoleIntegrationTestTrait
     {
         $this->assertThat($expected, new ContentsNotContain($this->_out->messages(), 'output'), $message);
     }
-
     /**
      * Asserts `stdout` contains expected regexp
      *
@@ -213,7 +184,6 @@ trait ConsoleIntegrationTestTrait
     {
         $this->assertThat($pattern, new ContentsRegExp($this->_out->messages(), 'output'), $message);
     }
-
     /**
      * Check that a row of cells exists in the output.
      *
@@ -225,7 +195,6 @@ trait ConsoleIntegrationTestTrait
     {
         $this->assertThat($row, new ContentsContainRow($this->_out->messages(), 'output'), $message);
     }
-
     /**
      * Asserts `stderr` contains expected output
      *
@@ -237,7 +206,6 @@ trait ConsoleIntegrationTestTrait
     {
         $this->assertThat($expected, new ContentsContain($this->_err->messages(), 'error output'), $message);
     }
-
     /**
      * Asserts `stderr` contains expected regexp
      *
@@ -249,7 +217,6 @@ trait ConsoleIntegrationTestTrait
     {
         $this->assertThat($pattern, new ContentsRegExp($this->_err->messages(), 'error output'), $message);
     }
-
     /**
      * Asserts that `stderr` is empty
      *
@@ -260,7 +227,6 @@ trait ConsoleIntegrationTestTrait
     {
         $this->assertThat(null, new ContentsEmpty($this->_err->messages(), 'error output'), $message);
     }
-
     /**
      * Dump the exit code, stdout and stderr from the most recently run command
      *
@@ -277,19 +243,16 @@ trait ConsoleIntegrationTestTrait
             $output->write("{$file} on {$line}");
         }
         $output->write('########## debugOutput() ##########');
-
         if ($this->_exitCode !== null) {
             $output->write('<info>Exit Code</info>');
-            $output->write((string)$this->_exitCode, 2);
+            $output->write((string) $this->_exitCode, 2);
         }
         $output->write('<info>STDOUT</info>');
         $output->write($this->_out->messages(), 2);
-
         $output->write('<info>STDERR</info>');
         $output->write($this->_err->messages());
         $output->write('###################################');
     }
-
     /**
      * Builds the appropriate command dispatcher
      *
@@ -299,10 +262,8 @@ trait ConsoleIntegrationTestTrait
     {
         $app = $this->createApp();
         assert($app instanceof ConsoleApplicationInterface);
-
         return new CommandRunner($app);
     }
-
     /**
      * Creates an $argv array from a command string
      *
@@ -314,11 +275,10 @@ trait ConsoleIntegrationTestTrait
         $charCount = strlen($command);
         $argv = [];
         $arg = '';
-        $inDQuote = false;
-        $inSQuote = false;
+        $inDQuote = \false;
+        $inSQuote = \false;
         for ($i = 0; $i < $charCount; $i++) {
             $char = substr($command, $i, 1);
-
             // end of argument
             if ($char === ' ' && !$inDQuote && !$inSQuote) {
                 if ($arg !== '') {
@@ -327,42 +287,32 @@ trait ConsoleIntegrationTestTrait
                 $arg = '';
                 continue;
             }
-
             // exiting single quote
             if ($inSQuote && $char === "'") {
-                $inSQuote = false;
+                $inSQuote = \false;
                 continue;
             }
-
             // exiting double quote
             if ($inDQuote && $char === '"') {
-                $inDQuote = false;
+                $inDQuote = \false;
                 continue;
             }
-
             // entering double quote
             if ($char === '"' && !$inSQuote) {
-                $inDQuote = true;
+                $inDQuote = \true;
                 continue;
             }
-
             // entering single quote
             if ($char === "'" && !$inDQuote) {
-                $inSQuote = true;
+                $inSQuote = \true;
                 continue;
             }
-
             $arg .= $char;
         }
         $argv[] = $arg;
-
         return $argv;
     }
 }
-
 // phpcs:disable
-class_alias(
-    'Cake\Console\TestSuite\ConsoleIntegrationTestTrait',
-    'Cake\TestSuite\ConsoleIntegrationTestTrait'
-);
+class_alias('Cake\Console\TestSuite\ConsoleIntegrationTestTrait', 'Cake\TestSuite\ConsoleIntegrationTestTrait');
 // phpcs:enable

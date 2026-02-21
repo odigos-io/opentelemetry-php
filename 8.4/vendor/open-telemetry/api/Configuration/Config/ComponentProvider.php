@@ -1,14 +1,12 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\API\Configuration\Config;
 
 use function class_alias;
 use OpenTelemetry\API\Configuration\Context;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\NodeBuilder;
-
 /**
  * A component provider is responsible for interpreting configuration and returning an
  * implementation of a particular type.
@@ -26,7 +24,6 @@ interface ComponentProvider
      * @see ComponentPlugin::create()
      */
     public function createPlugin(array $properties, Context $context): mixed;
-
     /**
      * Returns an array node describing the properties of this component provider.
      *
@@ -38,8 +35,7 @@ interface ComponentProvider
      * @see ComponentProviderRegistry::componentList()
      * @see ComponentProviderRegistry::componentNames()
      */
-    public function getConfig(ComponentProviderRegistry $registry, NodeBuilder $builder): ArrayNodeDefinition;
+    public function getConfig(\OpenTelemetry\API\Configuration\Config\ComponentProviderRegistry $registry, NodeBuilder $builder): ArrayNodeDefinition;
 }
-
 /** @phpstan-ignore-next-line @phan-suppress-next-line PhanUndeclaredClassReference */
-class_alias(ComponentProvider::class, \OpenTelemetry\Config\SDK\Configuration\ComponentProvider::class);
+class_alias(\OpenTelemetry\API\Configuration\Config\ComponentProvider::class, \Odigos\OpenTelemetry\Config\SDK\Configuration\ComponentProvider::class);

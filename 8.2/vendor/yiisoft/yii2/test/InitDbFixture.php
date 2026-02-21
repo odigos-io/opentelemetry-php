@@ -1,14 +1,13 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\test;
 
-use Yii;
-
+use Odigos\Yii;
 /**
  * InitDbFixture represents the initial state needed for DB-related tests.
  *
@@ -26,7 +25,7 @@ use Yii;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class InitDbFixture extends DbFixture
+class InitDbFixture extends \yii\test\DbFixture
 {
     /**
      * @var string the init script file that should be executed when loading this fixture.
@@ -41,24 +40,20 @@ class InitDbFixture extends DbFixture
      * so that fixture data can be populated into the database without causing problem.
      */
     public $schemas = [''];
-
-
     /**
      * {@inheritdoc}
      */
     public function beforeLoad()
     {
-        $this->checkIntegrity(false);
+        $this->checkIntegrity(\false);
     }
-
     /**
      * {@inheritdoc}
      */
     public function afterLoad()
     {
-        $this->checkIntegrity(true);
+        $this->checkIntegrity(\true);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -69,23 +64,20 @@ class InitDbFixture extends DbFixture
             require $file;
         }
     }
-
     /**
      * {@inheritdoc}
      */
     public function beforeUnload()
     {
-        $this->checkIntegrity(false);
+        $this->checkIntegrity(\false);
     }
-
     /**
      * {@inheritdoc}
      */
     public function afterUnload()
     {
-        $this->checkIntegrity(true);
+        $this->checkIntegrity(\true);
     }
-
     /**
      * Toggles the DB integrity check.
      * @param bool $check whether to turn on or off the integrity check.
@@ -95,11 +87,9 @@ class InitDbFixture extends DbFixture
         if (!$this->db instanceof \yii\db\Connection) {
             return;
         }
-
         if ($this->db->getDriverName() === 'oci') {
             return;
         }
-
         foreach ($this->schemas as $schema) {
             $this->db->createCommand()->checkIntegrity($check, $schema)->execute();
         }

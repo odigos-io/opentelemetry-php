@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -17,7 +17,6 @@ namespace Cake\Command\Helper;
 
 use Cake\Console\Helper;
 use UnexpectedValueException;
-
 /**
  * Create a visually pleasing ASCII art table
  * from 2-dimensional array data.
@@ -29,12 +28,7 @@ class TableHelper extends Helper
      *
      * @var array<string, mixed>
      */
-    protected array $_defaultConfig = [
-        'headers' => true,
-        'rowSeparator' => false,
-        'headerStyle' => 'info',
-    ];
-
+    protected array $_defaultConfig = ['headers' => \true, 'rowSeparator' => \false, 'headerStyle' => 'info'];
     /**
      * Calculate the column widths
      *
@@ -46,16 +40,14 @@ class TableHelper extends Helper
         $widths = [];
         foreach ($rows as $line) {
             foreach (array_values($line) as $k => $v) {
-                $columnLength = $this->_cellWidth((string)$v);
+                $columnLength = $this->_cellWidth((string) $v);
                 if ($columnLength >= ($widths[$k] ?? 0)) {
                     $widths[$k] = $columnLength;
                 }
             }
         }
-
         return $widths;
     }
-
     /**
      * Get the width of a cell exclusive of style tags.
      *
@@ -67,18 +59,14 @@ class TableHelper extends Helper
         if ($text === '') {
             return 0;
         }
-
         if (!str_contains($text, '<') && !str_contains($text, '>')) {
             return mb_strwidth($text);
         }
-
         $styles = $this->_io->styles();
         $tags = implode('|', array_keys($styles));
-        $text = (string)preg_replace('#</?(?:' . $tags . ')>#', '', $text);
-
+        $text = (string) preg_replace('#</?(?:' . $tags . ')>#', '', $text);
         return mb_strwidth($text);
     }
-
     /**
      * Output a row separator.
      *
@@ -94,7 +82,6 @@ class TableHelper extends Helper
         $out .= '+';
         $this->_io->out($out);
     }
-
     /**
      * Output a row.
      *
@@ -108,10 +95,9 @@ class TableHelper extends Helper
         if ($row === []) {
             return;
         }
-
         $out = '';
         foreach (array_values($row) as $i => $column) {
-            $column = (string)$column;
+            $column = (string) $column;
             $pad = $widths[$i] - $this->_cellWidth($column);
             if (!empty($options['style'])) {
                 $column = $this->_addStyle($column, $options['style']);
@@ -129,7 +115,6 @@ class TableHelper extends Helper
         $out .= '|';
         $this->_io->out($out);
     }
-
     /**
      * Output a table.
      *
@@ -144,33 +129,27 @@ class TableHelper extends Helper
         if (!$args) {
             return;
         }
-
         $this->_io->setStyle('text-right', ['text' => null]);
-
         $config = $this->getConfig();
         $widths = $this->_calculateWidths($args);
-
         $this->_rowSeparator($widths);
-        if ($config['headers'] === true) {
+        if ($config['headers'] === \true) {
             $this->_render(array_shift($args), $widths, ['style' => $config['headerStyle']]);
             $this->_rowSeparator($widths);
         }
-
         if (!$args) {
             return;
         }
-
         foreach ($args as $line) {
             $this->_render($line, $widths);
-            if ($config['rowSeparator'] === true) {
+            if ($config['rowSeparator'] === \true) {
                 $this->_rowSeparator($widths);
             }
         }
-        if ($config['rowSeparator'] !== true) {
+        if ($config['rowSeparator'] !== \true) {
             $this->_rowSeparator($widths);
         }
     }
-
     /**
      * Add style tags
      *

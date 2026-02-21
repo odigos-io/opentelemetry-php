@@ -3,7 +3,6 @@
 namespace Illuminate\Foundation\Testing;
 
 use Illuminate\Database\DatabaseTransactionsManager as BaseManager;
-
 class DatabaseTransactionsManager extends BaseManager
 {
     /**
@@ -20,10 +19,8 @@ class DatabaseTransactionsManager extends BaseManager
         if ($this->callbackApplicableTransactions()->count() === 0) {
             return $callback();
         }
-
         $this->pendingTransactions->last()->addCallback($callback);
     }
-
     /**
      * Get the transactions that are applicable to callbacks.
      *
@@ -33,7 +30,6 @@ class DatabaseTransactionsManager extends BaseManager
     {
         return $this->pendingTransactions->skip(1)->values();
     }
-
     /**
      * Determine if after commit callbacks should be executed for the given transaction level.
      *

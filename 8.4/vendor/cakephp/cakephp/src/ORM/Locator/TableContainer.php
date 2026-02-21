@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -18,7 +18,6 @@ namespace Cake\ORM\Locator;
 
 use Cake\ORM\Table;
 use Psr\Container\ContainerInterface;
-
 /**
  * Dependency injection container for Tables. Will create Tables
  * as if fetchTable() was called with default options.
@@ -28,8 +27,7 @@ use Psr\Container\ContainerInterface;
  */
 class TableContainer implements ContainerInterface
 {
-    use LocatorAwareTrait;
-
+    use \Cake\ORM\Locator\LocatorAwareTrait;
     /**
      * @inheritDoc
      */
@@ -37,7 +35,6 @@ class TableContainer implements ContainerInterface
     {
         return $this->fetchTable($id);
     }
-
     /**
      * @inheritDoc
      */

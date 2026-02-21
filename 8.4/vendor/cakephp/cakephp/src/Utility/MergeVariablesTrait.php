@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -37,7 +37,7 @@ trait MergeVariablesTrait
     {
         $class = static::class;
         $parents = [];
-        while (true) {
+        while (\true) {
             $parent = get_parent_class($class);
             if (!$parent) {
                 break;
@@ -50,13 +50,12 @@ trait MergeVariablesTrait
                 continue;
             }
             $thisValue = $this->{$property};
-            if ($thisValue === null || $thisValue === false) {
+            if ($thisValue === null || $thisValue === \false) {
                 continue;
             }
             $this->_mergeProperty($property, $parents, $options);
         }
     }
-
     /**
      * Merge a single property with the values declared in all parent classes.
      *
@@ -68,16 +67,12 @@ trait MergeVariablesTrait
     protected function _mergeProperty(string $property, array $parentClasses, array $options): void
     {
         $thisValue = $this->{$property};
-        $isAssoc = false;
-        if (
-            isset($options['associative']) &&
-            in_array($property, (array)$options['associative'], true)
-        ) {
-            $isAssoc = true;
+        $isAssoc = \false;
+        if (isset($options['associative']) && in_array($property, (array) $options['associative'], \true)) {
+            $isAssoc = \true;
         }
-
         if ($isAssoc) {
-            $thisValue = Hash::normalize($thisValue);
+            $thisValue = \Cake\Utility\Hash::normalize($thisValue);
         }
         foreach ($parentClasses as $class) {
             $parentProperties = get_class_vars($class);
@@ -92,7 +87,6 @@ trait MergeVariablesTrait
         }
         $this->{$property} = $thisValue;
     }
-
     /**
      * Merge each of the keys in a property together.
      *
@@ -106,11 +100,10 @@ trait MergeVariablesTrait
         if (!$isAssoc) {
             return array_merge($parent, $current);
         }
-        $parent = Hash::normalize($parent);
+        $parent = \Cake\Utility\Hash::normalize($parent);
         foreach ($parent as $key => $value) {
             $current[$key] ??= $value;
         }
-
         return $current;
     }
 }

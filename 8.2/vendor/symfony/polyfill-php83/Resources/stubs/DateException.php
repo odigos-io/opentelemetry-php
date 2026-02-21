@@ -1,5 +1,7 @@
 <?php
 
+namespace Odigos;
+
 /*
  * This file is part of the Symfony package.
  *
@@ -8,9 +10,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 if (\PHP_VERSION_ID < 80300) {
-    class DateException extends Exception
+    class DateException extends \Exception
     {
     }
+    \class_alias('Odigos\DateException', 'DateException', \false);
 }

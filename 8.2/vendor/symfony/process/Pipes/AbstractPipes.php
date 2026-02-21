@@ -8,26 +8,22 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\Process\Pipes;
 
 use Symfony\Component\Process\Exception\InvalidArgumentException;
-
 /**
  * @author Romain Neutron <imprec@gmail.com>
  *
  * @internal
  */
-abstract class AbstractPipes implements PipesInterface
+abstract class AbstractPipes implements \Symfony\Component\Process\Pipes\PipesInterface
 {
     public array $pipes = [];
-
     private string $inputBuffer = '';
     /** @var resource|string|\Iterator */
     private $input;
-    private bool $blocked = true;
+    private bool $blocked = \true;
     private ?string $lastError = null;
-
     /**
      * @param resource|string|\Iterator $input
      */
@@ -39,7 +35,6 @@ abstract class AbstractPipes implements PipesInterface
             $this->inputBuffer = (string) $input;
         }
     }
-
     public function close(): void
     {
         foreach ($this->pipes as $pipe) {
@@ -49,7 +44,6 @@ abstract class AbstractPipes implements PipesInterface
         }
         $this->pipes = [];
     }
-
     /**
      * Returns true if a system call has been interrupted.
      *
@@ -59,21 +53,17 @@ abstract class AbstractPipes implements PipesInterface
     {
         $lastError = $this->lastError;
         $this->lastError = null;
-
         if (null === $lastError) {
-            return false;
+            return \false;
         }
-
-        if (false !== stripos($lastError, 'interrupted system call')) {
-            return true;
+        if (\false !== stripos($lastError, 'interrupted system call')) {
+            return \true;
         }
-
         // on applications with a different locale than english, the message above is not found because
         // it's translated. So we also check for the SOCKET_EINTR constant which is defined under
         // Windows and UNIX-like platforms (if available on the platform).
-        return \defined('SOCKET_EINTR') && str_starts_with($lastError, 'stream_select(): Unable to select ['.\SOCKET_EINTR.']');
+        return \defined('SOCKET_EINTR') && str_starts_with($lastError, 'stream_select(): Unable to select [' . \SOCKET_EINTR . ']');
     }
-
     /**
      * Unblocks streams.
      */
@@ -82,17 +72,14 @@ abstract class AbstractPipes implements PipesInterface
         if (!$this->blocked) {
             return;
         }
-
         foreach ($this->pipes as $pipe) {
-            stream_set_blocking($pipe, false);
+            stream_set_blocking($pipe, \false);
         }
         if (\is_resource($this->input)) {
-            stream_set_blocking($this->input, false);
+            stream_set_blocking($this->input, \false);
         }
-
-        $this->blocked = false;
+        $this->blocked = \false;
     }
-
     /**
      * Writes input to stdin.
      *
@@ -104,12 +91,11 @@ abstract class AbstractPipes implements PipesInterface
             return null;
         }
         $input = $this->input;
-
         if ($input instanceof \Iterator) {
             if (!$input->valid()) {
                 $input = null;
             } elseif (\is_resource($input = $input->current())) {
-                stream_set_blocking($input, false);
+                stream_set_blocking($input, \false);
             } elseif (!isset($this->inputBuffer[0])) {
                 if (!\is_string($input)) {
                     if (!\is_scalar($input)) {
@@ -124,18 +110,15 @@ abstract class AbstractPipes implements PipesInterface
                 $input = null;
             }
         }
-
         $r = $e = [];
         $w = [$this->pipes[0]];
-
         // let's have a look if something changed in streams
-        if (false === @stream_select($r, $w, $e, 0, 0)) {
+        if (\false === @stream_select($r, $w, $e, 0, 0)) {
             return null;
         }
-
         foreach ($w as $stdin) {
             if (isset($this->inputBuffer[0])) {
-                if (false === $written = @fwrite($stdin, $this->inputBuffer)) {
+                if (\false === $written = @fwrite($stdin, $this->inputBuffer)) {
                     return $this->closeBrokenInputPipe();
                 }
                 $this->inputBuffer = substr($this->inputBuffer, $written);
@@ -143,20 +126,18 @@ abstract class AbstractPipes implements PipesInterface
                     return [$this->pipes[0]];
                 }
             }
-
             if ($input) {
-                while (true) {
+                while (\true) {
                     $data = fread($input, self::CHUNK_SIZE);
                     if (!isset($data[0])) {
                         break;
                     }
-                    if (false === $written = @fwrite($stdin, $data)) {
+                    if (\false === $written = @fwrite($stdin, $data)) {
                         return $this->closeBrokenInputPipe();
                     }
                     $data = substr($data, $written);
                     if (isset($data[0])) {
                         $this->inputBuffer = $data;
-
                         return isset($this->pipes[0]) ? [$this->pipes[0]] : null;
                     }
                 }
@@ -169,7 +150,6 @@ abstract class AbstractPipes implements PipesInterface
                 }
             }
         }
-
         // no input to read on resource, buffer is empty
         if (!isset($this->inputBuffer[0]) && !($this->input instanceof \Iterator ? $this->input->valid() : $this->input)) {
             $this->input = null;
@@ -178,10 +158,8 @@ abstract class AbstractPipes implements PipesInterface
         } elseif (!$w) {
             return [$this->pipes[0]];
         }
-
         return null;
     }
-
     private function closeBrokenInputPipe(): void
     {
         $this->lastError = error_get_last()['message'] ?? null;
@@ -189,11 +167,9 @@ abstract class AbstractPipes implements PipesInterface
             fclose($this->pipes[0]);
         }
         unset($this->pipes[0]);
-
         $this->input = null;
         $this->inputBuffer = '';
     }
-
     /**
      * @internal
      */

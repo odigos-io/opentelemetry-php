@@ -8,13 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\HttpKernel\EventListener;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
-
 /**
  * Adds configured formats to each request.
  *
@@ -24,11 +22,9 @@ use Symfony\Component\HttpKernel\KernelEvents;
  */
 class AddRequestFormatsListener implements EventSubscriberInterface
 {
-    public function __construct(
-        private array $formats,
-    ) {
+    public function __construct(private array $formats)
+    {
     }
-
     /**
      * Adds request formats.
      */
@@ -39,7 +35,6 @@ class AddRequestFormatsListener implements EventSubscriberInterface
             $request->setFormat($format, $mimeTypes);
         }
     }
-
     public static function getSubscribedEvents(): array
     {
         return [KernelEvents::REQUEST => ['onKernelRequest', 100]];

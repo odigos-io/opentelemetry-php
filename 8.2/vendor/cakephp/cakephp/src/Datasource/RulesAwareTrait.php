@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -18,7 +18,6 @@ namespace Cake\Datasource;
 
 use ArrayObject;
 use Cake\Event\EventDispatcherInterface;
-
 /**
  * A trait that allows a class to build and apply application.
  * rules.
@@ -36,8 +35,7 @@ trait RulesAwareTrait
      *
      * @var \Cake\Datasource\RulesChecker|null
      */
-    protected ?RulesChecker $_rulesChecker = null;
-
+    protected ?\Cake\Datasource\RulesChecker $_rulesChecker = null;
     /**
      * Returns whether the passed entity complies with all the rules stored in
      * the rules checker.
@@ -47,42 +45,27 @@ trait RulesAwareTrait
      * @param \ArrayObject<string, mixed>|array|null $options The options To be passed to the rules.
      * @return bool
      */
-    public function checkRules(
-        EntityInterface $entity,
-        string $operation = RulesChecker::CREATE,
-        ArrayObject|array|null $options = null,
-    ): bool {
+    public function checkRules(\Cake\Datasource\EntityInterface $entity, string $operation = \Cake\Datasource\RulesChecker::CREATE, ArrayObject|array|null $options = null): bool
+    {
         $rules = $this->rulesChecker();
         $options = $options ?: new ArrayObject();
         $options = is_array($options) ? new ArrayObject($options) : $options;
-        $hasEvents = ($this instanceof EventDispatcherInterface);
-
+        $hasEvents = $this instanceof EventDispatcherInterface;
         if ($hasEvents) {
-            $event = $this->dispatchEvent(
-                'Model.beforeRules',
-                compact('entity', 'options', 'operation'),
-            );
+            $event = $this->dispatchEvent('Model.beforeRules', compact('entity', 'options', 'operation'));
             if ($event->isStopped()) {
                 return $event->getResult();
             }
         }
-
         $result = $rules->check($entity, $operation, $options->getArrayCopy());
-
         if ($hasEvents) {
-            $event = $this->dispatchEvent(
-                'Model.afterRules',
-                compact('entity', 'options', 'result', 'operation'),
-            );
-
+            $event = $this->dispatchEvent('Model.afterRules', compact('entity', 'options', 'result', 'operation'));
             if ($event->isStopped()) {
                 return $event->getResult();
             }
         }
-
         return $result;
     }
-
     /**
      * Returns the RulesChecker for this instance.
      *
@@ -93,22 +76,20 @@ trait RulesAwareTrait
      * @see \Cake\Datasource\RulesChecker
      * @return \Cake\Datasource\RulesChecker
      */
-    public function rulesChecker(): RulesChecker
+    public function rulesChecker(): \Cake\Datasource\RulesChecker
     {
         if ($this->_rulesChecker !== null) {
             return $this->_rulesChecker;
         }
         /** @var class-string<\Cake\Datasource\RulesChecker> $class */
-        $class = defined('static::RULES_CLASS') ? static::RULES_CLASS : RulesChecker::class;
+        $class = defined('static::RULES_CLASS') ? static::RULES_CLASS : \Cake\Datasource\RulesChecker::class;
         /**
          * @phpstan-ignore-next-line
          */
         $this->_rulesChecker = $this->buildRules(new $class(['repository' => $this]));
         $this->dispatchEvent('Model.buildRules', ['rules' => $this->_rulesChecker]);
-
         return $this->_rulesChecker;
     }
-
     /**
      * Returns a RulesChecker object after modifying the one that was supplied.
      *
@@ -118,7 +99,7 @@ trait RulesAwareTrait
      * @param \Cake\Datasource\RulesChecker $rules The rules object to be modified.
      * @return \Cake\Datasource\RulesChecker
      */
-    public function buildRules(RulesChecker $rules): RulesChecker
+    public function buildRules(\Cake\Datasource\RulesChecker $rules): \Cake\Datasource\RulesChecker
     {
         return $rules;
     }

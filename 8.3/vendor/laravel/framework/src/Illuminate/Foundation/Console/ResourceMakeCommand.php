@@ -5,7 +5,6 @@ namespace Illuminate\Foundation\Console;
 use Illuminate\Console\GeneratorCommand;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputOption;
-
 #[AsCommand(name: 'make:resource')]
 class ResourceMakeCommand extends GeneratorCommand
 {
@@ -15,21 +14,18 @@ class ResourceMakeCommand extends GeneratorCommand
      * @var string
      */
     protected $name = 'make:resource';
-
     /**
      * The console command description.
      *
      * @var string
      */
     protected $description = 'Create a new resource';
-
     /**
      * The type of class being generated.
      *
      * @var string
      */
     protected $type = 'Resource';
-
     /**
      * Execute the console command.
      *
@@ -40,10 +36,8 @@ class ResourceMakeCommand extends GeneratorCommand
         if ($this->collection()) {
             $this->type = 'Resource collection';
         }
-
         parent::handle();
     }
-
     /**
      * Get the stub file for the generator.
      *
@@ -51,13 +45,12 @@ class ResourceMakeCommand extends GeneratorCommand
      */
     protected function getStub()
     {
-        return match (true) {
+        return match (\true) {
             $this->collection() => $this->resolveStubPath('/stubs/resource-collection.stub'),
             $this->option('json-api') => $this->resolveStubPath('/stubs/resource-json-api.stub'),
             default => $this->resolveStubPath('/stubs/resource.stub'),
         };
     }
-
     /**
      * Determine if the command is generating a resource collection.
      *
@@ -65,10 +58,8 @@ class ResourceMakeCommand extends GeneratorCommand
      */
     protected function collection()
     {
-        return $this->option('collection') ||
-               str_ends_with($this->argument('name'), 'Collection');
+        return $this->option('collection') || str_ends_with($this->argument('name'), 'Collection');
     }
-
     /**
      * Resolve the fully-qualified path to the stub.
      *
@@ -77,11 +68,8 @@ class ResourceMakeCommand extends GeneratorCommand
      */
     protected function resolveStubPath($stub)
     {
-        return file_exists($customPath = $this->laravel->basePath(trim($stub, '/')))
-            ? $customPath
-            : __DIR__.$stub;
+        return file_exists($customPath = $this->laravel->basePath(trim($stub, '/'))) ? $customPath : __DIR__ . $stub;
     }
-
     /**
      * Get the default namespace for the class.
      *
@@ -90,9 +78,8 @@ class ResourceMakeCommand extends GeneratorCommand
      */
     protected function getDefaultNamespace($rootNamespace)
     {
-        return $rootNamespace.'\Http\Resources';
+        return $rootNamespace . '\Http\Resources';
     }
-
     /**
      * Get the console command options.
      *
@@ -100,10 +87,6 @@ class ResourceMakeCommand extends GeneratorCommand
      */
     protected function getOptions()
     {
-        return [
-            ['force', 'f', InputOption::VALUE_NONE, 'Create the class even if the resource already exists'],
-            ['json-api', 'j', InputOption::VALUE_NONE, 'Create a JSON:API resource'],
-            ['collection', 'c', InputOption::VALUE_NONE, 'Create a resource collection'],
-        ];
+        return [['force', 'f', InputOption::VALUE_NONE, 'Create the class even if the resource already exists'], ['json-api', 'j', InputOption::VALUE_NONE, 'Create a JSON:API resource'], ['collection', 'c', InputOption::VALUE_NONE, 'Create a resource collection']];
     }
 }

@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -19,7 +19,6 @@ namespace Cake\Error\Renderer;
 use Cake\Error\ExceptionRendererInterface;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
-
 /**
  * Plain text exception rendering with a stack trace.
  *
@@ -31,7 +30,6 @@ class TextExceptionRenderer implements ExceptionRendererInterface
      * @var \Throwable
      */
     protected Throwable $error;
-
     /**
      * Constructor.
      *
@@ -41,7 +39,6 @@ class TextExceptionRenderer implements ExceptionRendererInterface
     {
         $this->error = $error;
     }
-
     /**
      * Render an exception into a plain text message.
      *
@@ -49,16 +46,8 @@ class TextExceptionRenderer implements ExceptionRendererInterface
      */
     public function render(): ResponseInterface|string
     {
-        return sprintf(
-            "%s : %s on line %s of %s\nTrace:\n%s",
-            $this->error->getCode(),
-            $this->error->getMessage(),
-            $this->error->getLine(),
-            $this->error->getFile(),
-            $this->error->getTraceAsString(),
-        );
+        return sprintf("%s : %s on line %s of %s\nTrace:\n%s", $this->error->getCode(), $this->error->getMessage(), $this->error->getLine(), $this->error->getFile(), $this->error->getTraceAsString());
     }
-
     /**
      * Write output to stdout.
      *

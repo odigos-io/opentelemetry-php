@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Scope;
 use Illuminate\Support\Arr;
 use InvalidArgumentException;
 use ReflectionClass;
-
 trait HasGlobalScopes
 {
     /**
@@ -20,7 +19,6 @@ trait HasGlobalScopes
     {
         static::addGlobalScopes(static::resolveGlobalScopeAttributes());
     }
-
     /**
      * Resolve the global scope class names from the attributes.
      *
@@ -29,13 +27,8 @@ trait HasGlobalScopes
     public static function resolveGlobalScopeAttributes()
     {
         $reflectionClass = new ReflectionClass(static::class);
-
-        return collect($reflectionClass->getAttributes(ScopedBy::class))
-            ->map(fn ($attribute) => $attribute->getArguments())
-            ->flatten()
-            ->all();
+        return collect($reflectionClass->getAttributes(ScopedBy::class))->map(fn($attribute) => $attribute->getArguments())->flatten()->all();
     }
-
     /**
      * Register a new global scope on the model.
      *
@@ -54,12 +47,10 @@ trait HasGlobalScopes
         } elseif ($scope instanceof Scope) {
             return static::$globalScopes[static::class][get_class($scope)] = $scope;
         } elseif (is_string($scope) && class_exists($scope) && is_subclass_of($scope, Scope::class)) {
-            return static::$globalScopes[static::class][$scope] = new $scope;
+            return static::$globalScopes[static::class][$scope] = new $scope();
         }
-
-        throw new InvalidArgumentException('Global scope must be an instance of Closure or Scope or be a class name of a class extending '.Scope::class);
+        throw new InvalidArgumentException('Global scope must be an instance of Closure or Scope or be a class name of a class extending ' . Scope::class);
     }
-
     /**
      * Register multiple global scopes on the model.
      *
@@ -76,7 +67,6 @@ trait HasGlobalScopes
             }
         }
     }
-
     /**
      * Determine if a model has a global scope.
      *
@@ -85,9 +75,8 @@ trait HasGlobalScopes
      */
     public static function hasGlobalScope($scope)
     {
-        return ! is_null(static::getGlobalScope($scope));
+        return !is_null(static::getGlobalScope($scope));
     }
-
     /**
      * Get a global scope registered with the model.
      *
@@ -97,14 +86,10 @@ trait HasGlobalScopes
     public static function getGlobalScope($scope)
     {
         if (is_string($scope)) {
-            return Arr::get(static::$globalScopes, static::class.'.'.$scope);
+            return Arr::get(static::$globalScopes, static::class . '.' . $scope);
         }
-
-        return Arr::get(
-            static::$globalScopes, static::class.'.'.get_class($scope)
-        );
+        return Arr::get(static::$globalScopes, static::class . '.' . get_class($scope));
     }
-
     /**
      * Get all of the global scopes that are currently registered.
      *
@@ -114,7 +99,6 @@ trait HasGlobalScopes
     {
         return static::$globalScopes;
     }
-
     /**
      * Set the current global scopes.
      *
@@ -125,7 +109,6 @@ trait HasGlobalScopes
     {
         static::$globalScopes = $scopes;
     }
-
     /**
      * Get the global scopes for this class instance.
      *

@@ -1,18 +1,17 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\web;
 
-use Yii;
+use Odigos\Yii;
 use yii\base\InvalidConfigException;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\helpers\Url;
-
 /**
  * View represents a view object in the MVC pattern.
  *
@@ -165,17 +164,13 @@ class View extends \yii\base\View
      * @var array the script tag options.
      */
     public $scriptOptions = [];
-
     private $_assetManager;
-
-
     /**
      * Whether [[endPage()]] has been called and all files have been registered
      * @var bool
      * @since 2.0.44
      */
-    protected $isPageEnded = false;
-
+    protected $isPageEnded = \false;
     /**
      * Marks the position of an HTML head section.
      */
@@ -183,7 +178,6 @@ class View extends \yii\base\View
     {
         echo self::PH_HEAD;
     }
-
     /**
      * Marks the beginning of an HTML body section.
      */
@@ -192,7 +186,6 @@ class View extends \yii\base\View
         echo self::PH_BODY_BEGIN;
         $this->trigger(self::EVENT_BEGIN_BODY);
     }
-
     /**
      * Marks the ending of an HTML body section.
      */
@@ -200,35 +193,24 @@ class View extends \yii\base\View
     {
         $this->trigger(self::EVENT_END_BODY);
         echo self::PH_BODY_END;
-
         foreach (array_keys($this->assetBundles) as $bundle) {
             $this->registerAssetFiles($bundle);
         }
     }
-
     /**
      * Marks the ending of an HTML page.
      * @param bool $ajaxMode whether the view is rendering in AJAX mode.
      * If true, the JS scripts registered at [[POS_READY]] and [[POS_LOAD]] positions
      * will be rendered at the end of the view like normal scripts.
      */
-    public function endPage($ajaxMode = false)
+    public function endPage($ajaxMode = \false)
     {
         $this->trigger(self::EVENT_END_PAGE);
-
-        $this->isPageEnded = true;
-
+        $this->isPageEnded = \true;
         $content = ob_get_clean();
-
-        echo strtr($content, [
-            self::PH_HEAD => $this->renderHeadHtml(),
-            self::PH_BODY_BEGIN => $this->renderBodyBeginHtml(),
-            self::PH_BODY_END => $this->renderBodyEndHtml($ajaxMode),
-        ]);
-
+        echo strtr($content, [self::PH_HEAD => $this->renderHeadHtml(), self::PH_BODY_BEGIN => $this->renderBodyBeginHtml(), self::PH_BODY_END => $this->renderBodyEndHtml($ajaxMode)]);
         $this->clear();
     }
-
     /**
      * Renders a view in response to an AJAX request.
      *
@@ -247,20 +229,16 @@ class View extends \yii\base\View
     public function renderAjax($view, $params = [], $context = null)
     {
         $viewFile = $this->findViewFile($view, $context);
-
         ob_start();
-        ob_implicit_flush(false);
-
+        ob_implicit_flush(\false);
         $this->beginPage();
         $this->head();
         $this->beginBody();
         echo $this->renderFile($viewFile, $params, $context);
         $this->endBody();
-        $this->endPage(true);
-
+        $this->endPage(\true);
         return ob_get_clean();
     }
-
     /**
      * Registers the asset manager being used by this view object.
      * @return \yii\web\AssetManager the asset manager. Defaults to the "assetManager" application component.
@@ -269,7 +247,6 @@ class View extends \yii\base\View
     {
         return $this->_assetManager ?: Yii::$app->getAssetManager();
     }
-
     /**
      * Sets the asset manager.
      * @param \yii\web\AssetManager $value the asset manager
@@ -278,7 +255,6 @@ class View extends \yii\base\View
     {
         $this->_assetManager = $value;
     }
-
     /**
      * Clears up the registered meta tags, link tags, css/js scripts and files.
      */
@@ -292,7 +268,6 @@ class View extends \yii\base\View
         $this->jsFiles = [];
         $this->assetBundles = [];
     }
-
     /**
      * Registers all files provided by an asset bundle including depending bundles files.
      * Removes a bundle from [[assetBundles]] once files are registered.
@@ -312,7 +287,6 @@ class View extends \yii\base\View
         }
         unset($this->assetBundles[$name]);
     }
-
     /**
      * Registers the named asset bundle.
      * All dependent asset bundles will be registered.
@@ -329,35 +303,32 @@ class View extends \yii\base\View
         if (!isset($this->assetBundles[$name])) {
             $am = $this->getAssetManager();
             $bundle = $am->getBundle($name);
-            $this->assetBundles[$name] = false;
+            $this->assetBundles[$name] = \false;
             // register dependencies
             $pos = isset($bundle->jsOptions['position']) ? $bundle->jsOptions['position'] : null;
             foreach ($bundle->depends as $dep) {
                 $this->registerAssetBundle($dep, $pos);
             }
             $this->assetBundles[$name] = $bundle;
-        } elseif ($this->assetBundles[$name] === false) {
-            throw new InvalidConfigException("A circular dependency is detected for bundle '$name'.");
+        } elseif ($this->assetBundles[$name] === \false) {
+            throw new InvalidConfigException("A circular dependency is detected for bundle '{$name}'.");
         } else {
             $bundle = $this->assetBundles[$name];
         }
-
         if ($position !== null) {
             $pos = isset($bundle->jsOptions['position']) ? $bundle->jsOptions['position'] : null;
             if ($pos === null) {
                 $bundle->jsOptions['position'] = $pos = $position;
             } elseif ($pos > $position) {
-                throw new InvalidConfigException("An asset bundle that depends on '$name' has a higher javascript file position configured than '$name'.");
+                throw new InvalidConfigException("An asset bundle that depends on '{$name}' has a higher javascript file position configured than '{$name}'.");
             }
             // update position for all dependencies
             foreach ($bundle->depends as $dep) {
                 $this->registerAssetBundle($dep, $pos);
             }
         }
-
         return $bundle;
     }
-
     /**
      * Registers a meta tag.
      *
@@ -385,7 +356,6 @@ class View extends \yii\base\View
             $this->metaTags[$key] = Html::tag('meta', '', $options);
         }
     }
-
     /**
      * Registers CSRF meta tags.
      * They are rendered dynamically to retrieve a new CSRF token for each request.
@@ -406,7 +376,6 @@ class View extends \yii\base\View
     {
         $this->metaTags['csrf_meta_tags'] = $this->renderDynamic('return yii\helpers\Html::csrfMetaTags();');
     }
-
     /**
      * Registers a link tag.
      *
@@ -435,7 +404,6 @@ class View extends \yii\base\View
             $this->linkTags[$key] = Html::tag('link', '', $options);
         }
     }
-
     /**
      * Registers a CSS code block.
      * @param string $css the content of the CSS code block to be registered
@@ -449,7 +417,6 @@ class View extends \yii\base\View
         $key = $key ?: md5($css);
         $this->css[$key] = Html::style($css, $options);
     }
-
     /**
      * Registers a CSS file.
      *
@@ -476,7 +443,6 @@ class View extends \yii\base\View
     {
         $this->registerFile('css', $url, $options, $key);
     }
-
     /**
      * Registers a JS code block.
      * @param string $js the JS code block to be registered
@@ -500,10 +466,9 @@ class View extends \yii\base\View
         $key = $key ?: md5($js);
         $this->js[$position][$key] = $js;
         if ($position === self::POS_READY || $position === self::POS_LOAD) {
-            JqueryAsset::register($this);
+            \yii\web\JqueryAsset::register($this);
         }
     }
-
     /**
      * Registers a JS or CSS file.
      *
@@ -528,28 +493,26 @@ class View extends \yii\base\View
         $depends = ArrayHelper::remove($options, 'depends', []);
         $originalOptions = $options;
         $position = ArrayHelper::remove($options, 'position', self::POS_END);
-
         try {
             $assetManagerAppendTimestamp = $this->getAssetManager()->appendTimestamp;
         } catch (InvalidConfigException $e) {
-            $depends = null; // the AssetManager is not available
-            $assetManagerAppendTimestamp = false;
+            $depends = null;
+            // the AssetManager is not available
+            $assetManagerAppendTimestamp = \false;
         }
         $appendTimestamp = ArrayHelper::remove($options, 'appendTimestamp', $assetManagerAppendTimestamp);
-
         if ($this->isPageEnded) {
             Yii::warning('You\'re trying to register a file after View::endPage() has been called.');
         }
-
         if (empty($depends)) {
             // register directly without AssetManager
             if ($appendTimestamp && Url::isRelative($url)) {
                 $prefix = Yii::getAlias('@web');
                 $prefixLength = strlen($prefix);
-                $trimmedUrl = ltrim((substr($url, 0, $prefixLength) === $prefix) ? substr($url, $prefixLength) : $url, '/');
-                $timestamp = @filemtime(Yii::getAlias('@webroot/' . $trimmedUrl, false));
+                $trimmedUrl = ltrim(substr($url, 0, $prefixLength) === $prefix ? substr($url, $prefixLength) : $url, '/');
+                $timestamp = @filemtime(Yii::getAlias('@webroot/' . $trimmedUrl, \false));
                 if ($timestamp > 0) {
-                    $url = $timestamp ? "$url?v=$timestamp" : $url;
+                    $url = $timestamp ? "{$url}?v={$timestamp}" : $url;
                 }
             }
             if ($type === 'js') {
@@ -558,18 +521,10 @@ class View extends \yii\base\View
                 $this->cssFiles[$key] = Html::cssFile($url, $options);
             }
         } else {
-            $this->getAssetManager()->bundles[$key] = Yii::createObject([
-                'class' => AssetBundle::className(),
-                'baseUrl' => '',
-                'basePath' => '@webroot',
-                (string)$type => [ArrayHelper::merge([!Url::isRelative($url) ? $url : ltrim($url, '/')], $originalOptions)],
-                "{$type}Options" => $options,
-                'depends' => (array)$depends,
-            ]);
+            $this->getAssetManager()->bundles[$key] = Yii::createObject(['class' => \yii\web\AssetBundle::className(), 'baseUrl' => '', 'basePath' => '@webroot', (string) $type => [ArrayHelper::merge([!Url::isRelative($url) ? $url : ltrim($url, '/')], $originalOptions)], "{$type}Options" => $options, 'depends' => (array) $depends]);
             $this->registerAssetBundle($key);
         }
     }
-
     /**
      * Registers a JS file.
      *
@@ -603,7 +558,6 @@ class View extends \yii\base\View
     {
         $this->registerFile('js', $url, $options, $key);
     }
-
     /**
      * Registers a JS code block defining a variable. The name of variable will be
      * used as key, preventing duplicated variable names.
@@ -628,7 +582,6 @@ class View extends \yii\base\View
         $js = sprintf('var %s = %s;', $name, \yii\helpers\Json::htmlEncode($value));
         $this->registerJs($js, $position, $name);
     }
-
     /**
      * Renders the content to be inserted in the head section.
      * The content is rendered using the registered meta tags, link tags, CSS/JS code blocks and files.
@@ -640,7 +593,6 @@ class View extends \yii\base\View
         if (!empty($this->metaTags)) {
             $lines[] = implode("\n", $this->metaTags);
         }
-
         if (!empty($this->linkTags)) {
             $lines[] = implode("\n", $this->linkTags);
         }
@@ -656,10 +608,8 @@ class View extends \yii\base\View
         if (!empty($this->js[self::POS_HEAD])) {
             $lines[] = Html::script(implode("\n", $this->js[self::POS_HEAD]));
         }
-
         return empty($lines) ? '' : implode("\n", $lines);
     }
-
     /**
      * Renders the content to be inserted at the beginning of the body section.
      * The content is rendered using the registered JS code blocks and files.
@@ -674,10 +624,8 @@ class View extends \yii\base\View
         if (!empty($this->js[self::POS_BEGIN])) {
             $lines[] = Html::script(implode("\n", $this->js[self::POS_BEGIN]));
         }
-
         return empty($lines) ? '' : implode("\n", $lines);
     }
-
     /**
      * Renders the content to be inserted at the end of the body section.
      * The content is rendered using the registered JS code blocks and files.
@@ -689,11 +637,9 @@ class View extends \yii\base\View
     protected function renderBodyEndHtml($ajaxMode)
     {
         $lines = [];
-
         if (!empty($this->jsFiles[self::POS_END])) {
             $lines[] = implode("\n", $this->jsFiles[self::POS_END]);
         }
-
         if ($ajaxMode) {
             $scripts = [];
             if (!empty($this->js[self::POS_END])) {
@@ -713,7 +659,7 @@ class View extends \yii\base\View
                 $lines[] = Html::script(implode("\n", $this->js[self::POS_END]));
             }
             if (!empty($this->js[self::POS_READY])) {
-                $js = "jQuery(function ($) {\n" . implode("\n", $this->js[self::POS_READY]) . "\n});";
+                $js = "jQuery(function (\$) {\n" . implode("\n", $this->js[self::POS_READY]) . "\n});";
                 $lines[] = Html::script($js);
             }
             if (!empty($this->js[self::POS_LOAD])) {
@@ -721,7 +667,6 @@ class View extends \yii\base\View
                 $lines[] = Html::script($js);
             }
         }
-
         return empty($lines) ? '' : implode("\n", $lines);
     }
 }

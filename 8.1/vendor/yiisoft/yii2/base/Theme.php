@@ -1,15 +1,14 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\base;
 
-use Yii;
+use Odigos\Yii;
 use yii\helpers\FileHelper;
-
 /**
  * Theme represents an application theme.
  *
@@ -71,7 +70,7 @@ use yii\helpers\FileHelper;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class Theme extends Component
+class Theme extends \yii\base\Component
 {
     /**
      * @var array|null the mapping between view directories and their corresponding themed versions.
@@ -80,10 +79,7 @@ class Theme extends Component
      * If this property is empty or not set, a mapping [[Application::basePath]] to [[basePath]] will be used.
      */
     public $pathMap;
-
     private $_baseUrl;
-
-
     /**
      * @return string the base URL (without ending slash) for this theme. All resources of this theme are considered
      * to be under this base URL.
@@ -92,7 +88,6 @@ class Theme extends Component
     {
         return $this->_baseUrl;
     }
-
     /**
      * @param string $url the base URL or [path alias](guide:concept-aliases) for this theme. All resources of this theme are considered
      * to be under this base URL.
@@ -101,9 +96,7 @@ class Theme extends Component
     {
         $this->_baseUrl = $url === null ? null : rtrim(Yii::getAlias($url), '/');
     }
-
     private $_basePath;
-
     /**
      * @return string the root path of this theme. All resources of this theme are located under this directory.
      * @see pathMap
@@ -112,7 +105,6 @@ class Theme extends Component
     {
         return $this->_basePath;
     }
-
     /**
      * @param string $path the root path or [path alias](guide:concept-aliases) of this theme. All resources of this theme are located
      * under this directory.
@@ -122,7 +114,6 @@ class Theme extends Component
     {
         $this->_basePath = Yii::getAlias($path);
     }
-
     /**
      * Converts a file to a themed file if possible.
      * If there is no corresponding themed file, the original file will be returned.
@@ -135,17 +126,17 @@ class Theme extends Component
         $pathMap = $this->pathMap;
         if (empty($pathMap)) {
             if (($basePath = $this->getBasePath()) === null) {
-                throw new InvalidConfigException('The "basePath" property must be set.');
+                throw new \yii\base\InvalidConfigException('The "basePath" property must be set.');
             }
             $pathMap = [Yii::$app->getBasePath() => [$basePath]];
         }
         $path = FileHelper::normalizePath($path);
         foreach ($pathMap as $from => $tos) {
-            $from = FileHelper::normalizePath(Yii::getAlias($from)) . DIRECTORY_SEPARATOR;
+            $from = FileHelper::normalizePath(Yii::getAlias($from)) . \DIRECTORY_SEPARATOR;
             if (strpos($path, $from) === 0) {
                 $n = strlen($from);
                 foreach ((array) $tos as $to) {
-                    $to = FileHelper::normalizePath(Yii::getAlias($to)) . DIRECTORY_SEPARATOR;
+                    $to = FileHelper::normalizePath(Yii::getAlias($to)) . \DIRECTORY_SEPARATOR;
                     $file = $to . substr($path, $n);
                     if (is_file($file)) {
                         return $file;
@@ -153,10 +144,8 @@ class Theme extends Component
                 }
             }
         }
-
         return $path;
     }
-
     /**
      * Converts a relative URL into an absolute URL using [[baseUrl]].
      * @param string $url the relative URL to be converted.
@@ -168,10 +157,8 @@ class Theme extends Component
         if (($baseUrl = $this->getBaseUrl()) !== null) {
             return $baseUrl . '/' . ltrim($url, '/');
         }
-
-        throw new InvalidConfigException('The "baseUrl" property must be set.');
+        throw new \yii\base\InvalidConfigException('The "baseUrl" property must be set.');
     }
-
     /**
      * Converts a relative file path into an absolute one using [[basePath]].
      * @param string $path the relative file path to be converted.
@@ -181,9 +168,8 @@ class Theme extends Component
     public function getPath($path)
     {
         if (($basePath = $this->getBasePath()) !== null) {
-            return $basePath . DIRECTORY_SEPARATOR . ltrim($path, '/\\');
+            return $basePath . \DIRECTORY_SEPARATOR . ltrim($path, '/\\');
         }
-
-        throw new InvalidConfigException('The "basePath" property must be set.');
+        throw new \yii\base\InvalidConfigException('The "basePath" property must be set.');
     }
 }

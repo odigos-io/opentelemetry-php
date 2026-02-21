@@ -8,13 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+declare (strict_types=1);
+namespace Odigos\League\Uri\Contracts;
 
-declare(strict_types=1);
-
-namespace League\Uri\Contracts;
-
-use League\Uri\Exceptions\SyntaxError;
-
+use Odigos\League\Uri\Exceptions\SyntaxError;
 /**
  * @method static normalize() returns the normalized string representation of the component
  */
@@ -24,17 +21,14 @@ interface PathInterface extends UriComponentInterface
      * Returns the decoded path.
      */
     public function decoded(): string;
-
     /**
      * Tells whether the path is absolute or relative.
      */
     public function isAbsolute(): bool;
-
     /**
      * Tells whether the path has a trailing slash.
      */
     public function hasTrailingSlash(): bool;
-
     /**
      * Returns an instance without dot segments.
      *
@@ -46,7 +40,6 @@ interface PathInterface extends UriComponentInterface
      *                     that would result in a object in invalid state.
      */
     public function withoutDotSegments(): self;
-
     /**
      * Returns an instance with a leading slash.
      *
@@ -57,7 +50,6 @@ interface PathInterface extends UriComponentInterface
      *                     that would result in a object in invalid state.
      */
     public function withLeadingSlash(): self;
-
     /**
      * Returns an instance without a leading slash.
      *
@@ -68,7 +60,6 @@ interface PathInterface extends UriComponentInterface
      *                     that would result in a object in invalid state.
      */
     public function withoutLeadingSlash(): self;
-
     /**
      * Returns an instance with a trailing slash.
      *
@@ -79,7 +70,6 @@ interface PathInterface extends UriComponentInterface
      *                     that would result in a object in invalid state.
      */
     public function withTrailingSlash(): self;
-
     /**
      * Returns an instance without a trailing slash.
      *

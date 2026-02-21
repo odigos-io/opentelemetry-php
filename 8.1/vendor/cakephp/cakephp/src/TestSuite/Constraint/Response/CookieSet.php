@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -16,19 +16,17 @@ declare(strict_types=1);
 namespace Cake\TestSuite\Constraint\Response;
 
 use Psr\Http\Message\ResponseInterface;
-
 /**
  * CookieSet
  *
  * @internal
  */
-class CookieSet extends ResponseBase
+class CookieSet extends \Cake\TestSuite\Constraint\Response\ResponseBase
 {
     /**
      * @var \Cake\Http\Response
      */
     protected ResponseInterface $response;
-
     /**
      * Checks assertion
      *
@@ -39,10 +37,8 @@ class CookieSet extends ResponseBase
     public function matches($other): bool
     {
         $cookie = $this->readCookie($other);
-
         return $cookie !== null && $cookie['value'] !== '';
     }
-
     /**
      * Assertion message
      *

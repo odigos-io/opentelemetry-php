@@ -4,7 +4,6 @@ namespace Illuminate\Mail;
 
 use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Support\ServiceProvider;
-
 class MailServiceProvider extends ServiceProvider implements DeferrableProvider
 {
     /**
@@ -17,7 +16,6 @@ class MailServiceProvider extends ServiceProvider implements DeferrableProvider
         $this->registerIlluminateMailer();
         $this->registerMarkdownRenderer();
     }
-
     /**
      * Register the Illuminate mailer instance.
      *
@@ -26,14 +24,12 @@ class MailServiceProvider extends ServiceProvider implements DeferrableProvider
     protected function registerIlluminateMailer()
     {
         $this->app->singleton('mail.manager', function ($app) {
-            return new MailManager($app);
+            return new \Illuminate\Mail\MailManager($app);
         });
-
         $this->app->bind('mailer', function ($app) {
             return $app->make('mail.manager')->mailer();
         });
     }
-
     /**
      * Register the Markdown renderer instance.
      *
@@ -42,21 +38,13 @@ class MailServiceProvider extends ServiceProvider implements DeferrableProvider
     protected function registerMarkdownRenderer()
     {
         if ($this->app->runningInConsole()) {
-            $this->publishes([
-                __DIR__.'/resources/views' => $this->app->resourcePath('views/vendor/mail'),
-            ], 'laravel-mail');
+            $this->publishes([__DIR__ . '/resources/views' => $this->app->resourcePath('views/vendor/mail')], 'laravel-mail');
         }
-
-        $this->app->singleton(Markdown::class, function ($app) {
+        $this->app->singleton(\Illuminate\Mail\Markdown::class, function ($app) {
             $config = $app->make('config');
-
-            return new Markdown($app->make('view'), [
-                'theme' => $config->get('mail.markdown.theme', 'default'),
-                'paths' => $config->get('mail.markdown.paths', []),
-            ]);
+            return new \Illuminate\Mail\Markdown($app->make('view'), ['theme' => $config->get('mail.markdown.theme', 'default'), 'paths' => $config->get('mail.markdown.paths', [])]);
         });
     }
-
     /**
      * Get the services provided by the provider.
      *
@@ -64,10 +52,6 @@ class MailServiceProvider extends ServiceProvider implements DeferrableProvider
      */
     public function provides()
     {
-        return [
-            'mail.manager',
-            'mailer',
-            Markdown::class,
-        ];
+        return ['mail.manager', 'mailer', \Illuminate\Mail\Markdown::class];
     }
 }

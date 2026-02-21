@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace MongoDB\Builder\Type;
 
 /**
@@ -9,12 +8,11 @@ namespace MongoDB\Builder\Type;
  *
  * @see https://www.mongodb.com/docs/manual/reference/operator/aggregation/sort/
  */
-enum Sort implements DictionaryInterface
+enum Sort implements \MongoDB\Builder\Type\DictionaryInterface
 {
     case Asc;
     case Desc;
     case TextScore;
-
     public function getValue(): int|array
     {
         return match ($this) {

@@ -10,9 +10,7 @@ class JobTimedOut
      * @param  string  $connectionName  The connection name.
      * @param  \Illuminate\Contracts\Queue\Job  $job  The job instance.
      */
-    public function __construct(
-        public $connectionName,
-        public $job,
-    ) {
+    public function __construct(public $connectionName, public $job)
+    {
     }
 }

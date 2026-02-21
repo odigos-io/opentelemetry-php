@@ -3,7 +3,6 @@
 namespace OpenAI\Contracts\Resources;
 
 use OpenAI\Responses\Moderations\CreateResponse;
-
 interface ModerationsContract
 {
     /**

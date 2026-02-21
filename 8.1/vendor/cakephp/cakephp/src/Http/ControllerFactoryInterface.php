@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -18,7 +18,6 @@ namespace Cake\Http;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-
 /**
  * Factory method for building controllers from request/response pairs.
  *
@@ -35,7 +34,6 @@ interface ControllerFactoryInterface
      * @phpstan-return TController
      */
     public function create(ServerRequestInterface $request): mixed;
-
     /**
      * Invoke a controller's action and wrapping methods.
      *

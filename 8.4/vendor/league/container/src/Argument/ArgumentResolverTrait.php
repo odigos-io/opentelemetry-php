@@ -1,14 +1,16 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Odigos\League\Container\Argument;
 
-namespace League\Container\Argument;
-
-use League\Container\Exception\{ContainerException, NotFoundException};
-use League\Container\{DefinitionContainerInterface, ReflectionContainer};
-use Psr\Container\{ContainerExceptionInterface, ContainerInterface, NotFoundExceptionInterface};
+use Odigos\League\Container\Exception\ContainerException;
+use Odigos\League\Container\Exception\NotFoundException;
+use Odigos\League\Container\DefinitionContainerInterface;
+use Odigos\League\Container\ReflectionContainer;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\ContainerInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use ReflectionException;
-
 trait ArgumentResolverTrait
 {
     /**
@@ -21,50 +23,41 @@ trait ArgumentResolverTrait
         try {
             $container = $this->getContainer();
         } catch (ContainerException) {
-            $container = ($this instanceof ReflectionContainer) ? $this : null;
+            $container = $this instanceof ReflectionContainer ? $this : null;
         }
-
         foreach ($arguments as &$arg) {
             // if we have a literal, we don't want to do anything more with it
             if ($arg instanceof LiteralArgumentInterface) {
                 $arg = $arg->getValue();
                 continue;
             }
-
             if ($arg instanceof ArgumentInterface) {
                 $argValue = $arg->getValue();
             } else {
                 $argValue = $arg;
             }
-
             if (!is_string($argValue)) {
-                 continue;
+                continue;
             }
-
             // resolve the argument from the container, if it happens to be another
             // argument wrapper, use that value
             if ($container instanceof ContainerInterface && $container->has($argValue)) {
                 try {
                     $arg = $container->get($argValue);
-
                     if ($arg instanceof ArgumentInterface) {
                         $arg = $arg->getValue();
                     }
-
                     continue;
                 } catch (NotFoundException) {
                 }
             }
-
             // if we have a default value, we use that, no more resolution as
             // we expect a default/optional argument value to be literal
             if ($arg instanceof DefaultValueInterface) {
                 $arg = $arg->getDefaultValue();
             }
         }
-
         return $arguments;
     }
-
     abstract public function getContainer(): DefinitionContainerInterface;
 }

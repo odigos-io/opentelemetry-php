@@ -9,11 +9,9 @@ use Illuminate\Notifications\AnonymousNotifiable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
-
 class BroadcastNotificationCreated implements ShouldBroadcast
 {
     use Queueable, SerializesModels;
-
     /**
      * Create a new event instance.
      *
@@ -21,13 +19,9 @@ class BroadcastNotificationCreated implements ShouldBroadcast
      * @param  \Illuminate\Notifications\Notification  $notification  The notification instance.
      * @param  array  $data  The notification data.
      */
-    public function __construct(
-        public $notifiable,
-        public $notification,
-        public $data = [],
-    ) {
+    public function __construct(public $notifiable, public $notification, public $data = [])
+    {
     }
-
     /**
      * Get the channels the event should broadcast on.
      *
@@ -35,26 +29,19 @@ class BroadcastNotificationCreated implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        if ($this->notifiable instanceof AnonymousNotifiable &&
-            $this->notifiable->routeNotificationFor('broadcast')) {
+        if ($this->notifiable instanceof AnonymousNotifiable && $this->notifiable->routeNotificationFor('broadcast')) {
             $channels = Arr::wrap($this->notifiable->routeNotificationFor('broadcast'));
         } else {
             $channels = $this->notification->broadcastOn();
         }
-
-        if (! empty($channels)) {
+        if (!empty($channels)) {
             return $channels;
         }
-
         if (is_string($channels = $this->channelName())) {
             return [new PrivateChannel($channels)];
         }
-
-        return (new Collection($channels))
-            ->map(fn ($channel) => new PrivateChannel($channel))
-            ->all();
+        return (new Collection($channels))->map(fn($channel) => new PrivateChannel($channel))->all();
     }
-
     /**
      * Get the broadcast channel name for the event.
      *
@@ -65,12 +52,9 @@ class BroadcastNotificationCreated implements ShouldBroadcast
         if (method_exists($this->notifiable, 'receivesBroadcastNotificationsOn')) {
             return $this->notifiable->receivesBroadcastNotificationsOn($this->notification);
         }
-
         $class = str_replace('\\', '.', get_class($this->notifiable));
-
-        return $class.'.'.$this->notifiable->getKey();
+        return $class . '.' . $this->notifiable->getKey();
     }
-
     /**
      * Get the data that should be sent with the broadcasted event.
      *
@@ -81,13 +65,8 @@ class BroadcastNotificationCreated implements ShouldBroadcast
         if (method_exists($this->notification, 'broadcastWith')) {
             return $this->notification->broadcastWith();
         }
-
-        return array_merge($this->data, [
-            'id' => $this->notification->id,
-            'type' => $this->broadcastType(),
-        ]);
+        return array_merge($this->data, ['id' => $this->notification->id, 'type' => $this->broadcastType()]);
     }
-
     /**
      * Get the type of the notification being broadcast.
      *
@@ -95,11 +74,8 @@ class BroadcastNotificationCreated implements ShouldBroadcast
      */
     public function broadcastType()
     {
-        return method_exists($this->notification, 'broadcastType')
-            ? $this->notification->broadcastType()
-            : get_class($this->notification);
+        return method_exists($this->notification, 'broadcastType') ? $this->notification->broadcastType() : get_class($this->notification);
     }
-
     /**
      * Get the event name of the notification being broadcast.
      *
@@ -107,8 +83,6 @@ class BroadcastNotificationCreated implements ShouldBroadcast
      */
     public function broadcastAs()
     {
-        return method_exists($this->notification, 'broadcastAs')
-            ? $this->notification->broadcastAs()
-            : __CLASS__;
+        return method_exists($this->notification, 'broadcastAs') ? $this->notification->broadcastAs() : __CLASS__;
     }
 }

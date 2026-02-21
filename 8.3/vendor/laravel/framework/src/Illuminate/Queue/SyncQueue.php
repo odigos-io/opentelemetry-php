@@ -13,19 +13,17 @@ use Illuminate\Queue\Events\JobProcessed;
 use Illuminate\Queue\Events\JobProcessing;
 use Illuminate\Queue\Jobs\SyncJob;
 use Throwable;
-
-class SyncQueue extends Queue implements QueueContract
+class SyncQueue extends \Illuminate\Queue\Queue implements QueueContract
 {
     /**
      * Create a new sync queue instance.
      *
      * @param  bool  $dispatchAfterCommit
      */
-    public function __construct($dispatchAfterCommit = false)
+    public function __construct($dispatchAfterCommit = \false)
     {
         $this->dispatchAfterCommit = $dispatchAfterCommit;
     }
-
     /**
      * Get the size of the queue.
      *
@@ -36,7 +34,6 @@ class SyncQueue extends Queue implements QueueContract
     {
         return 0;
     }
-
     /**
      * Get the number of pending jobs.
      *
@@ -47,7 +44,6 @@ class SyncQueue extends Queue implements QueueContract
     {
         return 0;
     }
-
     /**
      * Get the number of delayed jobs.
      *
@@ -58,7 +54,6 @@ class SyncQueue extends Queue implements QueueContract
     {
         return 0;
     }
-
     /**
      * Get the number of reserved jobs.
      *
@@ -69,7 +64,6 @@ class SyncQueue extends Queue implements QueueContract
     {
         return 0;
     }
-
     /**
      * Get the creation timestamp of the oldest pending job, excluding delayed jobs.
      *
@@ -80,7 +74,6 @@ class SyncQueue extends Queue implements QueueContract
     {
         return null;
     }
-
     /**
      * Push a new job onto the queue.
      *
@@ -93,24 +86,16 @@ class SyncQueue extends Queue implements QueueContract
      */
     public function push($job, $data = '', $queue = null)
     {
-        if ($this->shouldDispatchAfterCommit($job) &&
-            $this->container->bound('db.transactions')) {
+        if ($this->shouldDispatchAfterCommit($job) && $this->container->bound('db.transactions')) {
             if ($job instanceof ShouldBeUnique) {
-                $this->container->make('db.transactions')->addCallbackForRollback(
-                    function () use ($job) {
-                        (new UniqueLock($this->container->make(Cache::class)))->release($job);
-                    }
-                );
+                $this->container->make('db.transactions')->addCallbackForRollback(function () use ($job) {
+                    (new UniqueLock($this->container->make(Cache::class)))->release($job);
+                });
             }
-
-            return $this->container->make('db.transactions')->addCallback(
-                fn () => $this->executeJob($job, $data, $queue)
-            );
+            return $this->container->make('db.transactions')->addCallback(fn() => $this->executeJob($job, $data, $queue));
         }
-
         return $this->executeJob($job, $data, $queue);
     }
-
     /**
      * Execute a given job synchronously.
      *
@@ -124,24 +109,18 @@ class SyncQueue extends Queue implements QueueContract
     protected function executeJob($job, $data = '', $queue = null)
     {
         $queueJob = $this->resolveJob($this->createPayload($job, $queue, $data), $queue);
-
         try {
             $this->raiseBeforeJobEvent($queueJob);
-
             $queueJob->fire();
-
             $this->raiseAfterJobEvent($queueJob);
         } catch (Throwable $e) {
-            $exceptionOccurred = true;
-
+            $exceptionOccurred = \true;
             $this->handleException($queueJob, $e);
         } finally {
-            $this->raiseJobAttemptedEvent($queueJob, $exceptionOccurred ?? false);
+            $this->raiseJobAttemptedEvent($queueJob, $exceptionOccurred ?? \false);
         }
-
         return 0;
     }
-
     /**
      * Resolve a Sync job instance.
      *
@@ -153,7 +132,6 @@ class SyncQueue extends Queue implements QueueContract
     {
         return new SyncJob($this->container, $payload, $this->connectionName, $queue);
     }
-
     /**
      * Raise the before queue job event.
      *
@@ -166,7 +144,6 @@ class SyncQueue extends Queue implements QueueContract
             $this->container['events']->dispatch(new JobProcessing($this->connectionName, $job));
         }
     }
-
     /**
      * Raise the after queue job event.
      *
@@ -179,7 +156,6 @@ class SyncQueue extends Queue implements QueueContract
             $this->container['events']->dispatch(new JobProcessed($this->connectionName, $job));
         }
     }
-
     /**
      * Raise the job attempted event.
      *
@@ -187,13 +163,12 @@ class SyncQueue extends Queue implements QueueContract
      * @param  bool  $exceptionOccurred
      * @return void
      */
-    protected function raiseJobAttemptedEvent(Job $job, bool $exceptionOccurred = false)
+    protected function raiseJobAttemptedEvent(Job $job, bool $exceptionOccurred = \false)
     {
         if ($this->container->bound('events')) {
             $this->container['events']->dispatch(new JobAttempted($this->connectionName, $job, $exceptionOccurred));
         }
     }
-
     /**
      * Raise the exception occurred queue job event.
      *
@@ -207,7 +182,6 @@ class SyncQueue extends Queue implements QueueContract
             $this->container['events']->dispatch(new JobExceptionOccurred($this->connectionName, $job, $e));
         }
     }
-
     /**
      * Handle an exception that occurred while processing a job.
      *
@@ -220,12 +194,9 @@ class SyncQueue extends Queue implements QueueContract
     protected function handleException(Job $queueJob, Throwable $e)
     {
         $this->raiseExceptionOccurredJobEvent($queueJob, $e);
-
         $queueJob->fail($e);
-
         throw $e;
     }
-
     /**
      * Push a raw payload onto the queue.
      *
@@ -238,7 +209,6 @@ class SyncQueue extends Queue implements QueueContract
     {
         //
     }
-
     /**
      * Push a new job onto the queue after (n) seconds.
      *
@@ -252,7 +222,6 @@ class SyncQueue extends Queue implements QueueContract
     {
         return $this->push($job, $data, $queue);
     }
-
     /**
      * Pop the next job off of the queue.
      *

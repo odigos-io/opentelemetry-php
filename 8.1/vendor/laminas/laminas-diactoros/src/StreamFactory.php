@@ -1,19 +1,16 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Laminas\Diactoros;
+declare (strict_types=1);
+namespace Odigos\Laminas\Diactoros;
 
 use Override;
 use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Message\StreamInterface;
-
 use function assert;
 use function fopen;
 use function fwrite;
 use function is_resource;
 use function rewind;
-
 class StreamFactory implements StreamFactoryInterface
 {
     /**
@@ -26,10 +23,8 @@ class StreamFactory implements StreamFactoryInterface
         assert(is_resource($resource), 'Something is really wrong if PHP failed to open stream in memory');
         fwrite($resource, $content);
         rewind($resource);
-
         return $this->createStreamFromResource($resource);
     }
-
     /**
      * {@inheritDoc}
      */
@@ -38,7 +33,6 @@ class StreamFactory implements StreamFactoryInterface
     {
         return new Stream($filename, $mode);
     }
-
     /**
      * {@inheritDoc}
      */

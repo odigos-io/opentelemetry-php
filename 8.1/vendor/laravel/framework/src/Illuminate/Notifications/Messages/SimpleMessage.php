@@ -4,7 +4,6 @@ namespace Illuminate\Notifications\Messages;
 
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Notifications\Action;
-
 class SimpleMessage
 {
     /**
@@ -13,63 +12,54 @@ class SimpleMessage
      * @var string
      */
     public $level = 'info';
-
     /**
      * The subject of the notification.
      *
      * @var string
      */
     public $subject;
-
     /**
      * The notification's greeting.
      *
      * @var string
      */
     public $greeting;
-
     /**
      * The notification's salutation.
      *
      * @var string
      */
     public $salutation;
-
     /**
      * The "intro" lines of the notification.
      *
      * @var array
      */
     public $introLines = [];
-
     /**
      * The "outro" lines of the notification.
      *
      * @var array
      */
     public $outroLines = [];
-
     /**
      * The text / label for the action.
      *
      * @var string
      */
     public $actionText;
-
     /**
      * The action URL.
      *
      * @var string
      */
     public $actionUrl;
-
     /**
      * The name of the mailer that should send the notification.
      *
      * @var string
      */
     public $mailer;
-
     /**
      * Indicate that the notification gives information about a successful operation.
      *
@@ -78,10 +68,8 @@ class SimpleMessage
     public function success()
     {
         $this->level = 'success';
-
         return $this;
     }
-
     /**
      * Indicate that the notification gives information about an error.
      *
@@ -90,10 +78,8 @@ class SimpleMessage
     public function error()
     {
         $this->level = 'error';
-
         return $this;
     }
-
     /**
      * Set the "level" of the notification (success, error, etc.).
      *
@@ -103,10 +89,8 @@ class SimpleMessage
     public function level($level)
     {
         $this->level = $level;
-
         return $this;
     }
-
     /**
      * Set the subject of the notification.
      *
@@ -116,10 +100,8 @@ class SimpleMessage
     public function subject($subject)
     {
         $this->subject = $subject;
-
         return $this;
     }
-
     /**
      * Set the greeting of the notification.
      *
@@ -129,10 +111,8 @@ class SimpleMessage
     public function greeting($greeting)
     {
         $this->greeting = $greeting;
-
         return $this;
     }
-
     /**
      * Set the salutation of the notification.
      *
@@ -142,10 +122,8 @@ class SimpleMessage
     public function salutation($salutation)
     {
         $this->salutation = $salutation;
-
         return $this;
     }
-
     /**
      * Add a line of text to the notification.
      *
@@ -156,7 +134,6 @@ class SimpleMessage
     {
         return $this->with($line);
     }
-
     /**
      * Add a line of text to the notification if the given condition is true.
      *
@@ -169,10 +146,8 @@ class SimpleMessage
         if ($boolean) {
             return $this->line($line);
         }
-
         return $this;
     }
-
     /**
      * Add lines of text to the notification.
      *
@@ -184,10 +159,8 @@ class SimpleMessage
         foreach ($lines as $line) {
             $this->line($line);
         }
-
         return $this;
     }
-
     /**
      * Add lines of text to the notification if the given condition is true.
      *
@@ -200,10 +173,8 @@ class SimpleMessage
         if ($boolean) {
             return $this->lines($lines);
         }
-
         return $this;
     }
-
     /**
      * Add a line of text to the notification.
      *
@@ -214,15 +185,13 @@ class SimpleMessage
     {
         if ($line instanceof Action) {
             $this->action($line->text, $line->url);
-        } elseif (! $this->actionText) {
+        } elseif (!$this->actionText) {
             $this->introLines[] = $this->formatLine($line);
         } else {
             $this->outroLines[] = $this->formatLine($line);
         }
-
         return $this;
     }
-
     /**
      * Format the given line of text.
      *
@@ -234,14 +203,11 @@ class SimpleMessage
         if ($line instanceof Htmlable) {
             return $line;
         }
-
         if (is_array($line)) {
             return implode(' ', array_map('trim', $line));
         }
-
-        return trim(implode(' ', array_map('trim', preg_split('/\\r\\n|\\r|\\n/', $line ?? ''))));
+        return trim(implode(' ', array_map('trim', preg_split('/\r\n|\r|\n/', $line ?? ''))));
     }
-
     /**
      * Configure the "call to action" button.
      *
@@ -253,10 +219,8 @@ class SimpleMessage
     {
         $this->actionText = $text;
         $this->actionUrl = $url;
-
         return $this;
     }
-
     /**
      * Set the name of the mailer that should send the notification.
      *
@@ -266,10 +230,8 @@ class SimpleMessage
     public function mailer($mailer)
     {
         $this->mailer = $mailer;
-
         return $this;
     }
-
     /**
      * Get an array representation of the message.
      *
@@ -277,16 +239,6 @@ class SimpleMessage
      */
     public function toArray()
     {
-        return [
-            'level' => $this->level,
-            'subject' => $this->subject,
-            'greeting' => $this->greeting,
-            'salutation' => $this->salutation,
-            'introLines' => $this->introLines,
-            'outroLines' => $this->outroLines,
-            'actionText' => $this->actionText,
-            'actionUrl' => $this->actionUrl,
-            'displayableActionUrl' => str_replace(['mailto:', 'tel:'], '', $this->actionUrl ?? ''),
-        ];
+        return ['level' => $this->level, 'subject' => $this->subject, 'greeting' => $this->greeting, 'salutation' => $this->salutation, 'introLines' => $this->introLines, 'outroLines' => $this->outroLines, 'actionText' => $this->actionText, 'actionUrl' => $this->actionUrl, 'displayableActionUrl' => str_replace(['mailto:', 'tel:'], '', $this->actionUrl ?? '')];
     }
 }

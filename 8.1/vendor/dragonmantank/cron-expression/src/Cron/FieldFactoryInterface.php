@@ -1,6 +1,6 @@
 <?php
 
-namespace Cron;
+namespace Odigos\Cron;
 
 interface FieldFactoryInterface
 {

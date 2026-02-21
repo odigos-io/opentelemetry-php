@@ -1,14 +1,13 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\rbac;
 
 use yii\base\BaseObject;
-
 /**
  * Rule represents a business constraint that may be associated with a role, permission or assignment.
  *
@@ -31,8 +30,6 @@ abstract class Rule extends BaseObject
      * @var int UNIX timestamp representing the rule updating time
      */
     public $updatedAt;
-
-
     /**
      * Executes the rule.
      *

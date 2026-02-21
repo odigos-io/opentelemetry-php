@@ -1,16 +1,14 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\DBAL\Types;
 
 use Doctrine\DBAL\ParameterType;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
-
 /**
  * Type that maps an SQL boolean to a PHP boolean.
  */
-class BooleanType extends Type
+class BooleanType extends \Doctrine\DBAL\Types\Type
 {
     /**
      * {@inheritDoc}
@@ -19,12 +17,10 @@ class BooleanType extends Type
     {
         return $platform->getBooleanTypeDeclarationSQL($column);
     }
-
     public function convertToDatabaseValue(mixed $value, AbstractPlatform $platform): mixed
     {
         return $platform->convertBooleansToDatabaseValue($value);
     }
-
     /**
      * @param T $value
      *
@@ -36,7 +32,6 @@ class BooleanType extends Type
     {
         return $platform->convertFromBoolean($value);
     }
-
     public function getBindingType(): ParameterType
     {
         return ParameterType::BOOLEAN;

@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\HttpFoundation;
 
-trigger_deprecation('symfony/http-foundation', '6.2', 'The "%s" class is deprecated, use "%s" instead.', RequestMatcher::class, ChainRequestMatcher::class);
-
+trigger_deprecation('symfony/http-foundation', '6.2', 'The "%s" class is deprecated, use "%s" instead.', \Symfony\Component\HttpFoundation\RequestMatcher::class, \Symfony\Component\HttpFoundation\ChainRequestMatcher::class);
 /**
  * RequestMatcher compares a pre-defined set of checks against a Request instance.
  *
@@ -20,32 +18,27 @@ trigger_deprecation('symfony/http-foundation', '6.2', 'The "%s" class is depreca
  *
  * @deprecated since Symfony 6.2, use ChainRequestMatcher instead
  */
-class RequestMatcher implements RequestMatcherInterface
+class RequestMatcher implements \Symfony\Component\HttpFoundation\RequestMatcherInterface
 {
     private ?string $path = null;
     private ?string $host = null;
     private ?int $port = null;
-
     /**
      * @var string[]
      */
     private array $methods = [];
-
     /**
      * @var string[]
      */
     private array $ips = [];
-
     /**
      * @var string[]
      */
     private array $attributes = [];
-
     /**
      * @var string[]
      */
     private array $schemes = [];
-
     /**
      * @param string|string[]|null $methods
      * @param string|string[]|null $ips
@@ -59,12 +52,10 @@ class RequestMatcher implements RequestMatcherInterface
         $this->matchIps($ips);
         $this->matchScheme($schemes);
         $this->matchPort($port);
-
         foreach ($attributes as $k => $v) {
             $this->matchAttribute($k, $v);
         }
     }
-
     /**
      * Adds a check for the HTTP scheme.
      *
@@ -76,7 +67,6 @@ class RequestMatcher implements RequestMatcherInterface
     {
         $this->schemes = null !== $scheme ? array_map('strtolower', (array) $scheme) : [];
     }
-
     /**
      * Adds a check for the URL host name.
      *
@@ -86,7 +76,6 @@ class RequestMatcher implements RequestMatcherInterface
     {
         $this->host = $regexp;
     }
-
     /**
      * Adds a check for the URL port.
      *
@@ -98,7 +87,6 @@ class RequestMatcher implements RequestMatcherInterface
     {
         $this->port = $port;
     }
-
     /**
      * Adds a check for the URL path info.
      *
@@ -108,7 +96,6 @@ class RequestMatcher implements RequestMatcherInterface
     {
         $this->path = $regexp;
     }
-
     /**
      * Adds a check for the client IP.
      *
@@ -120,7 +107,6 @@ class RequestMatcher implements RequestMatcherInterface
     {
         $this->matchIps($ip);
     }
-
     /**
      * Adds a check for the client IP.
      *
@@ -131,10 +117,8 @@ class RequestMatcher implements RequestMatcherInterface
     public function matchIps(string|array|null $ips)
     {
         $ips = null !== $ips ? (array) $ips : [];
-
-        $this->ips = array_reduce($ips, static fn (array $ips, string $ip) => array_merge($ips, preg_split('/\s*,\s*/', $ip)), []);
+        $this->ips = array_reduce($ips, static fn(array $ips, string $ip) => array_merge($ips, preg_split('/\s*,\s*/', $ip)), []);
     }
-
     /**
      * Adds a check for the HTTP method.
      *
@@ -146,7 +130,6 @@ class RequestMatcher implements RequestMatcherInterface
     {
         $this->methods = null !== $method ? array_map('strtoupper', (array) $method) : [];
     }
-
     /**
      * Adds a check for request attribute.
      *
@@ -156,43 +139,35 @@ class RequestMatcher implements RequestMatcherInterface
     {
         $this->attributes[$key] = $regexp;
     }
-
-    public function matches(Request $request): bool
+    public function matches(\Symfony\Component\HttpFoundation\Request $request): bool
     {
-        if ($this->schemes && !\in_array($request->getScheme(), $this->schemes, true)) {
-            return false;
+        if ($this->schemes && !\in_array($request->getScheme(), $this->schemes, \true)) {
+            return \false;
         }
-
-        if ($this->methods && !\in_array($request->getMethod(), $this->methods, true)) {
-            return false;
+        if ($this->methods && !\in_array($request->getMethod(), $this->methods, \true)) {
+            return \false;
         }
-
         foreach ($this->attributes as $key => $pattern) {
             $requestAttribute = $request->attributes->get($key);
             if (!\is_string($requestAttribute)) {
-                return false;
+                return \false;
             }
-            if (!preg_match('{'.$pattern.'}', $requestAttribute)) {
-                return false;
+            if (!preg_match('{' . $pattern . '}', $requestAttribute)) {
+                return \false;
             }
         }
-
-        if (null !== $this->path && !preg_match('{'.$this->path.'}', rawurldecode($request->getPathInfo()))) {
-            return false;
+        if (null !== $this->path && !preg_match('{' . $this->path . '}', rawurldecode($request->getPathInfo()))) {
+            return \false;
         }
-
-        if (null !== $this->host && !preg_match('{'.$this->host.'}i', $request->getHost())) {
-            return false;
+        if (null !== $this->host && !preg_match('{' . $this->host . '}i', $request->getHost())) {
+            return \false;
         }
-
         if (null !== $this->port && 0 < $this->port && $request->getPort() !== $this->port) {
-            return false;
+            return \false;
         }
-
-        if (IpUtils::checkIp($request->getClientIp() ?? '', $this->ips)) {
-            return true;
+        if (\Symfony\Component\HttpFoundation\IpUtils::checkIp($request->getClientIp() ?? '', $this->ips)) {
+            return \true;
         }
-
         // Note to future implementors: add additional checks above the
         // foreach above or else your check might not be run!
         return 0 === \count($this->ips);

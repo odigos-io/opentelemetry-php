@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -17,19 +17,17 @@ declare(strict_types=1);
 namespace Cake\TestSuite\Constraint\Email;
 
 use Cake\Mailer\Message;
-
 /**
  * MailContainsHtml
  *
  * @internal
  */
-class MailContainsHtml extends MailContains
+class MailContainsHtml extends \Cake\TestSuite\Constraint\Email\MailContains
 {
     /**
      * @inheritDoc
      */
     protected ?string $type = Message::MESSAGE_HTML;
-
     /**
      * Assertion message string
      *
@@ -40,7 +38,6 @@ class MailContainsHtml extends MailContains
         if ($this->at) {
             return sprintf('is in the html message of email #%d', $this->at) . $this->getAssertedMessages();
         }
-
         return 'is in the html message of an email' . $this->getAssertedMessages();
     }
 }

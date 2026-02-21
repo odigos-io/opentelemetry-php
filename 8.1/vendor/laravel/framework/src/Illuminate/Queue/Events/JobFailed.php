@@ -10,21 +10,18 @@ class JobFailed
      * @var string
      */
     public $connectionName;
-
     /**
      * The job instance.
      *
      * @var \Illuminate\Contracts\Queue\Job
      */
     public $job;
-
     /**
      * The exception that caused the job to fail.
      *
      * @var \Throwable
      */
     public $exception;
-
     /**
      * Create a new event instance.
      *

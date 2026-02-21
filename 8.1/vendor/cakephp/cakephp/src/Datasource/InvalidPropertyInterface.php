@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -28,7 +28,6 @@ interface InvalidPropertyInterface
      * @return array
      */
     public function getInvalid(): array;
-
     /**
      * Set fields as invalid and not patchable into the entity.
      *
@@ -40,8 +39,7 @@ interface InvalidPropertyInterface
      * @param bool $overwrite Whether to overwrite pre-existing values for $field.
      * @return $this
      */
-    public function setInvalid(array $fields, bool $overwrite = false);
-
+    public function setInvalid(array $fields, bool $overwrite = \false);
     /**
      * Get a single value of an invalid field. Returns null if not set.
      *
@@ -49,7 +47,6 @@ interface InvalidPropertyInterface
      * @return mixed|null
      */
     public function getInvalidField(string $field): mixed;
-
     /**
      * Sets a field as invalid and not patchable into the entity.
      *

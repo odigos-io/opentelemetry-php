@@ -4,39 +4,33 @@ namespace Illuminate\Notifications\Events;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
-
 class NotificationFailed
 {
     use Queueable, SerializesModels;
-
     /**
      * The notifiable entity who received the notification.
      *
      * @var mixed
      */
     public $notifiable;
-
     /**
      * The notification instance.
      *
      * @var \Illuminate\Notifications\Notification
      */
     public $notification;
-
     /**
      * The channel name.
      *
      * @var string
      */
     public $channel;
-
     /**
      * The data needed to process this failure.
      *
      * @var array
      */
     public $data = [];
-
     /**
      * Create a new event instance.
      *

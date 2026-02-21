@@ -10,7 +10,6 @@ class ContextDehydrating
      * @var \Illuminate\Log\Context\Repository
      */
     public $context;
-
     /**
      * Create a new event instance.
      *

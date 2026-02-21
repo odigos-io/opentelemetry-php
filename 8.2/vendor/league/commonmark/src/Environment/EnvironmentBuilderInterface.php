@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the league/commonmark package.
  *
@@ -10,18 +9,16 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Odigos\League\CommonMark\Environment;
 
-namespace League\CommonMark\Environment;
-
-use League\CommonMark\Delimiter\Processor\DelimiterProcessorInterface;
-use League\CommonMark\Exception\AlreadyInitializedException;
-use League\CommonMark\Extension\ExtensionInterface;
-use League\CommonMark\Node\Node;
-use League\CommonMark\Parser\Block\BlockStartParserInterface;
-use League\CommonMark\Parser\Inline\InlineParserInterface;
-use League\CommonMark\Renderer\NodeRendererInterface;
-use League\Config\ConfigurationProviderInterface;
-
+use Odigos\League\CommonMark\Delimiter\Processor\DelimiterProcessorInterface;
+use Odigos\League\CommonMark\Exception\AlreadyInitializedException;
+use Odigos\League\CommonMark\Extension\ExtensionInterface;
+use Odigos\League\CommonMark\Node\Node;
+use Odigos\League\CommonMark\Parser\Block\BlockStartParserInterface;
+use Odigos\League\CommonMark\Parser\Inline\InlineParserInterface;
+use Odigos\League\CommonMark\Renderer\NodeRendererInterface;
+use Odigos\League\Config\ConfigurationProviderInterface;
 /**
  * Interface for building the Environment with any extensions, parsers, listeners, etc. that it may need
  */
@@ -33,7 +30,6 @@ interface EnvironmentBuilderInterface extends ConfigurationProviderInterface
      * @throws AlreadyInitializedException if the Environment has already been initialized
      */
     public function addExtension(ExtensionInterface $extension): EnvironmentBuilderInterface;
-
     /**
      * Registers the given block start parser with the Environment
      *
@@ -45,7 +41,6 @@ interface EnvironmentBuilderInterface extends ConfigurationProviderInterface
      * @throws AlreadyInitializedException if the Environment has already been initialized
      */
     public function addBlockStartParser(BlockStartParserInterface $parser, int $priority = 0): EnvironmentBuilderInterface;
-
     /**
      * Registers the given inline parser with the Environment
      *
@@ -57,7 +52,6 @@ interface EnvironmentBuilderInterface extends ConfigurationProviderInterface
      * @throws AlreadyInitializedException if the Environment has already been initialized
      */
     public function addInlineParser(InlineParserInterface $parser, int $priority = 0): EnvironmentBuilderInterface;
-
     /**
      * Registers the given delimiter processor with the Environment
      *
@@ -66,7 +60,6 @@ interface EnvironmentBuilderInterface extends ConfigurationProviderInterface
      * @throws AlreadyInitializedException if the Environment has already been initialized
      */
     public function addDelimiterProcessor(DelimiterProcessorInterface $processor): EnvironmentBuilderInterface;
-
     /**
      * Registers the given node renderer with the Environment
      *
@@ -81,7 +74,6 @@ interface EnvironmentBuilderInterface extends ConfigurationProviderInterface
      * @throws AlreadyInitializedException if the Environment has already been initialized
      */
     public function addRenderer(string $nodeClass, NodeRendererInterface $renderer, int $priority = 0): EnvironmentBuilderInterface;
-
     /**
      * Registers the given event listener
      *

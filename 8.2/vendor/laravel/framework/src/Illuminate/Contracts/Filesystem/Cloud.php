@@ -2,7 +2,7 @@
 
 namespace Illuminate\Contracts\Filesystem;
 
-interface Cloud extends Filesystem
+interface Cloud extends \Illuminate\Contracts\Filesystem\Filesystem
 {
     /**
      * Get the URL for the file at the given path.

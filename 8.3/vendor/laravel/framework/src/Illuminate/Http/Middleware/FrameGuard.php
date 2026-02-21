@@ -3,7 +3,6 @@
 namespace Illuminate\Http\Middleware;
 
 use Closure;
-
 class FrameGuard
 {
     /**
@@ -16,9 +15,7 @@ class FrameGuard
     public function handle($request, Closure $next)
     {
         $response = $next($request);
-
-        $response->headers->set('X-Frame-Options', 'SAMEORIGIN', false);
-
+        $response->headers->set('X-Frame-Options', 'SAMEORIGIN', \false);
         return $response;
     }
 }

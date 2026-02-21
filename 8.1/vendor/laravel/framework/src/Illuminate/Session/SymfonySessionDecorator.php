@@ -7,7 +7,6 @@ use Illuminate\Contracts\Session\Session;
 use Symfony\Component\HttpFoundation\Session\SessionBagInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpFoundation\Session\Storage\MetadataBag;
-
 class SymfonySessionDecorator implements SessionInterface
 {
     /**
@@ -16,7 +15,6 @@ class SymfonySessionDecorator implements SessionInterface
      * @var \Illuminate\Session\Store
      */
     protected $store;
-
     /**
      * Create a new session decorator.
      *
@@ -27,7 +25,6 @@ class SymfonySessionDecorator implements SessionInterface
     {
         $this->store = $store;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -35,7 +32,6 @@ class SymfonySessionDecorator implements SessionInterface
     {
         return $this->store->start();
     }
-
     /**
      * {@inheritdoc}
      */
@@ -43,7 +39,6 @@ class SymfonySessionDecorator implements SessionInterface
     {
         return $this->store->getId();
     }
-
     /**
      * {@inheritdoc}
      *
@@ -53,7 +48,6 @@ class SymfonySessionDecorator implements SessionInterface
     {
         $this->store->setId($id);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -61,7 +55,6 @@ class SymfonySessionDecorator implements SessionInterface
     {
         return $this->store->getName();
     }
-
     /**
      * {@inheritdoc}
      *
@@ -71,27 +64,22 @@ class SymfonySessionDecorator implements SessionInterface
     {
         $this->store->setName($name);
     }
-
     /**
      * {@inheritdoc}
      */
     public function invalidate(?int $lifetime = null): bool
     {
         $this->store->invalidate();
-
-        return true;
+        return \true;
     }
-
     /**
      * {@inheritdoc}
      */
-    public function migrate(bool $destroy = false, ?int $lifetime = null): bool
+    public function migrate(bool $destroy = \false, ?int $lifetime = null): bool
     {
         $this->store->migrate($destroy);
-
-        return true;
+        return \true;
     }
-
     /**
      * {@inheritdoc}
      *
@@ -101,7 +89,6 @@ class SymfonySessionDecorator implements SessionInterface
     {
         $this->store->save();
     }
-
     /**
      * {@inheritdoc}
      */
@@ -109,7 +96,6 @@ class SymfonySessionDecorator implements SessionInterface
     {
         return $this->store->has($name);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -117,7 +103,6 @@ class SymfonySessionDecorator implements SessionInterface
     {
         return $this->store->get($name, $default);
     }
-
     /**
      * {@inheritdoc}
      *
@@ -127,7 +112,6 @@ class SymfonySessionDecorator implements SessionInterface
     {
         $this->store->put($name, $value);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -135,7 +119,6 @@ class SymfonySessionDecorator implements SessionInterface
     {
         return $this->store->all();
     }
-
     /**
      * {@inheritdoc}
      *
@@ -145,7 +128,6 @@ class SymfonySessionDecorator implements SessionInterface
     {
         $this->store->replace($attributes);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -153,7 +135,6 @@ class SymfonySessionDecorator implements SessionInterface
     {
         return $this->store->remove($name);
     }
-
     /**
      * {@inheritdoc}
      *
@@ -163,7 +144,6 @@ class SymfonySessionDecorator implements SessionInterface
     {
         $this->store->flush();
     }
-
     /**
      * {@inheritdoc}
      */
@@ -171,7 +151,6 @@ class SymfonySessionDecorator implements SessionInterface
     {
         return $this->store->isStarted();
     }
-
     /**
      * {@inheritdoc}
      *
@@ -181,7 +160,6 @@ class SymfonySessionDecorator implements SessionInterface
     {
         throw new BadMethodCallException('Method not implemented by Laravel.');
     }
-
     /**
      * {@inheritdoc}
      */
@@ -189,7 +167,6 @@ class SymfonySessionDecorator implements SessionInterface
     {
         throw new BadMethodCallException('Method not implemented by Laravel.');
     }
-
     /**
      * {@inheritdoc}
      */

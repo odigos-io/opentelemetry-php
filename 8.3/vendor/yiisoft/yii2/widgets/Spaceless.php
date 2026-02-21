@@ -1,14 +1,13 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\widgets;
 
 use yii\base\Widget;
-
 /**
  * Spaceless widget removes whitespace characters between HTML tags. Whitespaces within HTML tags
  * or in a plain text are always left untouched.
@@ -56,9 +55,8 @@ class Spaceless extends Widget
     {
         parent::init();
         ob_start();
-        ob_implicit_flush(false);
+        ob_implicit_flush(\false);
     }
-
     /**
      * Marks the end of content to be cleaned from whitespace characters between HTML tags.
      * Stops capturing an output and echoes cleaned result.

@@ -1,11 +1,10 @@
 <?php
 
-namespace Egulias\EmailValidator\Parser;
+namespace Odigos\Egulias\EmailValidator\Parser;
 
-use Egulias\EmailValidator\Result\Result;
-use Egulias\EmailValidator\Result\InvalidEmail;
-use Egulias\EmailValidator\Result\Reason\CommentsInIDRight;
-
+use Odigos\Egulias\EmailValidator\Result\Result;
+use Odigos\Egulias\EmailValidator\Result\InvalidEmail;
+use Odigos\Egulias\EmailValidator\Result\Reason\CommentsInIDRight;
 class IDLeftPart extends LocalPart
 {
     protected function parseComments(): Result

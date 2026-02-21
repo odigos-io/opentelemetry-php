@@ -8,13 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\HttpKernel\Event;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Contracts\EventDispatcher\Event;
-
 /**
  * Base class for events dispatched in the HttpKernel component.
  *
@@ -25,7 +23,6 @@ class KernelEvent extends Event
     private HttpKernelInterface $kernel;
     private Request $request;
     private ?int $requestType;
-
     /**
      * @param int $requestType The request type the kernel is currently processing; one of
      *                         HttpKernelInterface::MAIN_REQUEST or HttpKernelInterface::SUB_REQUEST
@@ -36,7 +33,6 @@ class KernelEvent extends Event
         $this->request = $request;
         $this->requestType = $requestType;
     }
-
     /**
      * Returns the kernel in which this event was thrown.
      */
@@ -44,7 +40,6 @@ class KernelEvent extends Event
     {
         return $this->kernel;
     }
-
     /**
      * Returns the request the kernel is currently processing.
      */
@@ -52,7 +47,6 @@ class KernelEvent extends Event
     {
         return $this->request;
     }
-
     /**
      * Returns the request type the kernel is currently processing.
      *
@@ -63,7 +57,6 @@ class KernelEvent extends Event
     {
         return $this->requestType;
     }
-
     /**
      * Checks if this is the main request.
      */

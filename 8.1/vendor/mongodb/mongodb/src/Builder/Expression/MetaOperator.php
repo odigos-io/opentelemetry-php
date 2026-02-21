@@ -3,29 +3,24 @@
 /**
  * THIS FILE IS AUTO-GENERATED. ANY CHANGES WILL BE LOST!
  */
-
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace MongoDB\Builder\Expression;
 
 use MongoDB\Builder\Type\Encode;
 use MongoDB\Builder\Type\OperatorInterface;
-
 /**
  * Access available per-document metadata related to the aggregation operation.
  *
  * @see https://www.mongodb.com/docs/manual/reference/operator/aggregation/meta/
  * @internal
  */
-final class MetaOperator implements ResolvesToAny, OperatorInterface
+final class MetaOperator implements \MongoDB\Builder\Expression\ResolvesToAny, OperatorInterface
 {
     public const ENCODE = Encode::Single;
     public const NAME = '$meta';
     public const PROPERTIES = ['keyword' => 'keyword'];
-
     /** @var string $keyword */
     public readonly string $keyword;
-
     /**
      * @param string $keyword
      */

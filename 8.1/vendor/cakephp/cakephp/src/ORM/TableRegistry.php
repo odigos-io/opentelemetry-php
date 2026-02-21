@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -18,7 +18,6 @@ namespace Cake\ORM;
 
 use Cake\Datasource\FactoryLocator;
 use Cake\ORM\Locator\LocatorInterface;
-
 /**
  * Provides a registry/factory for Table objects.
  *
@@ -62,7 +61,6 @@ class TableRegistry
         /** @var \Cake\ORM\Locator\LocatorInterface */
         return FactoryLocator::get('Table');
     }
-
     /**
      * Sets singleton instance of LocatorInterface implementation.
      *

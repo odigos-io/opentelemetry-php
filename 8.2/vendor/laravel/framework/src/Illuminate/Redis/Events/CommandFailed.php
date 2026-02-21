@@ -3,7 +3,6 @@
 namespace Illuminate\Redis\Events;
 
 use Throwable;
-
 class CommandFailed
 {
     /**
@@ -12,35 +11,30 @@ class CommandFailed
      * @var string
      */
     public $command;
-
     /**
      * The array of command parameters.
      *
      * @var array
      */
     public $parameters;
-
     /**
      * The exception that was thrown.
      *
      * @var \Throwable
      */
     public $exception;
-
     /**
      * The Redis connection instance.
      *
      * @var \Illuminate\Redis\Connections\Connection
      */
     public $connection;
-
     /**
      * The Redis connection name.
      *
      * @var string
      */
     public $connectionName;
-
     /**
      * Create a new event instance.
      *

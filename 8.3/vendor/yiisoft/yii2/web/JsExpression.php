@@ -1,14 +1,13 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\web;
 
 use yii\base\BaseObject;
-
 /**
  * `JsExpression` marks a string as a JavaScript expression.
  *
@@ -24,8 +23,6 @@ class JsExpression extends BaseObject
      * @var string the JavaScript expression represented by this object
      */
     public $expression;
-
-
     /**
      * Constructor.
      * @param string $expression the JavaScript expression represented by this object
@@ -36,7 +33,6 @@ class JsExpression extends BaseObject
         $this->expression = $expression;
         parent::__construct($config);
     }
-
     /**
      * The PHP magic function converting an object into a string.
      * @return string the JavaScript expression.

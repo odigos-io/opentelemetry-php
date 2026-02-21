@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -22,7 +22,6 @@ use IntlDateFormatter;
 use InvalidArgumentException;
 use JsonSerializable;
 use Stringable;
-
 /**
  * Extends time class provided by Chronos.
  *
@@ -32,8 +31,7 @@ use Stringable;
  */
 class Time extends ChronosTime implements JsonSerializable, Stringable
 {
-    use DateFormatTrait;
-
+    use \Cake\I18n\DateFormatTrait;
     /**
      * The format to use when formatting a time using `Cake\I18n\Time::i18nFormat()`
      * and `__toString`.
@@ -46,7 +44,6 @@ class Time extends ChronosTime implements JsonSerializable, Stringable
      * @see \Cake\I18n\Time::i18nFormat()
      */
     protected static string|int $_toStringFormat = IntlDateFormatter::SHORT;
-
     /**
      * The format to use when converting this object to JSON.
      *
@@ -58,7 +55,6 @@ class Time extends ChronosTime implements JsonSerializable, Stringable
      * @see \Cake\I18n\Date::i18nFormat()
      */
     protected static Closure|string|int $_jsonEncodeFormat = "HH':'mm':'ss";
-
     /**
      * The format to use when formatting a time using `Cake\I18n\Time::nice()`
      *
@@ -70,7 +66,6 @@ class Time extends ChronosTime implements JsonSerializable, Stringable
      * @see \Cake\I18n\Time::nice()
      */
     public static string|int $niceFormat = IntlDateFormatter::MEDIUM;
-
     /**
      * Sets the default format used when type converting instances of this type to string
      *
@@ -86,7 +81,6 @@ class Time extends ChronosTime implements JsonSerializable, Stringable
     {
         static::$_toStringFormat = $format;
     }
-
     /**
      * Resets the format used to the default when converting an instance of this type to
      * a string
@@ -97,7 +91,6 @@ class Time extends ChronosTime implements JsonSerializable, Stringable
     {
         static::setToStringFormat(IntlDateFormatter::SHORT);
     }
-
     /**
      * Sets the default format used when converting this object to JSON
      *
@@ -116,7 +109,6 @@ class Time extends ChronosTime implements JsonSerializable, Stringable
     {
         static::$_jsonEncodeFormat = $format;
     }
-
     /**
      * Returns a new Time object after parsing the provided $time string based on
      * the passed or configured date time format. This method is locale dependent,
@@ -143,10 +135,8 @@ class Time extends ChronosTime implements JsonSerializable, Stringable
         if (is_int($format)) {
             $format = [IntlDateFormatter::NONE, $format];
         }
-
         return static::_parseDateTime($time, $format);
     }
-
     /**
      * Returns a formatted string for this time object using the preferred format and
      * language for the specified locale.
@@ -188,21 +178,16 @@ class Time extends ChronosTime implements JsonSerializable, Stringable
      * @param string|null $locale The locale name in which the time should be displayed (e.g. pt-BR)
      * @return string|int Formatted and translated time string
      */
-    public function i18nFormat(
-        string|int|null $format = null,
-        ?string $locale = null,
-    ): string|int {
-        if ($format === DateTime::UNIX_TIMESTAMP_FORMAT) {
+    public function i18nFormat(string|int|null $format = null, ?string $locale = null): string|int
+    {
+        if ($format === \Cake\I18n\DateTime::UNIX_TIMESTAMP_FORMAT) {
             throw new InvalidArgumentException('UNIT_TIMESTAMP_FORMAT is not supported for Time.');
         }
-
         $format ??= static::$_toStringFormat;
         $format = is_int($format) ? [IntlDateFormatter::NONE, $format] : $format;
-        $locale = $locale ?: DateTime::getDefaultLocale();
-
+        $locale = $locale ?: \Cake\I18n\DateTime::getDefaultLocale();
         return $this->_formatObject($this->toNative(), $format, $locale);
     }
-
     /**
      * Returns a nicely formatted date string for this object.
      *
@@ -213,9 +198,8 @@ class Time extends ChronosTime implements JsonSerializable, Stringable
      */
     public function nice(?string $locale = null): string
     {
-        return (string)$this->i18nFormat(static::$niceFormat, $locale);
+        return (string) $this->i18nFormat(static::$niceFormat, $locale);
     }
-
     /**
      * Returns a string that should be serialized when converting this object to JSON
      *
@@ -226,15 +210,13 @@ class Time extends ChronosTime implements JsonSerializable, Stringable
         if (static::$_jsonEncodeFormat instanceof Closure) {
             return call_user_func(static::$_jsonEncodeFormat, $this);
         }
-
         return $this->i18nFormat(static::$_jsonEncodeFormat);
     }
-
     /**
      * @inheritDoc
      */
     public function __toString(): string
     {
-        return (string)$this->i18nFormat();
+        return (string) $this->i18nFormat();
     }
 }

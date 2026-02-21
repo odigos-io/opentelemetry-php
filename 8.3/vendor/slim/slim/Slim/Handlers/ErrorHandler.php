@@ -5,9 +5,7 @@
  *
  * @license https://github.com/slimphp/Slim/blob/4.x/LICENSE.md (MIT License)
  */
-
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Slim\Handlers;
 
 use Psr\Http\Message\ResponseFactoryInterface;
@@ -26,7 +24,6 @@ use Slim\Interfaces\ErrorHandlerInterface;
 use Slim\Interfaces\ErrorRendererInterface;
 use Slim\Logger;
 use Throwable;
-
 use function array_intersect;
 use function array_key_exists;
 use function array_keys;
@@ -37,7 +34,6 @@ use function explode;
 use function implode;
 use function next;
 use function preg_match;
-
 /**
  * Default Slim application error handler
  *
@@ -48,60 +44,35 @@ use function preg_match;
 class ErrorHandler implements ErrorHandlerInterface
 {
     protected string $defaultErrorRendererContentType = 'text/html';
-
     /**
      * @var ErrorRendererInterface|string|callable
      */
     protected $defaultErrorRenderer = HtmlErrorRenderer::class;
-
     /**
      * @var ErrorRendererInterface|string|callable
      */
     protected $logErrorRenderer = PlainTextErrorRenderer::class;
-
     /**
      * @var array<string|callable>
      */
-    protected array $errorRenderers = [
-        'application/json' => JsonErrorRenderer::class,
-        'application/xml' => XmlErrorRenderer::class,
-        'text/xml' => XmlErrorRenderer::class,
-        'text/html' => HtmlErrorRenderer::class,
-        'text/plain' => PlainTextErrorRenderer::class,
-    ];
-
-    protected bool $displayErrorDetails = false;
-
+    protected array $errorRenderers = ['application/json' => JsonErrorRenderer::class, 'application/xml' => XmlErrorRenderer::class, 'text/xml' => XmlErrorRenderer::class, 'text/html' => HtmlErrorRenderer::class, 'text/plain' => PlainTextErrorRenderer::class];
+    protected bool $displayErrorDetails = \false;
     protected bool $logErrors;
-
-    protected bool $logErrorDetails = false;
-
+    protected bool $logErrorDetails = \false;
     protected ?string $contentType = null;
-
     protected ?string $method = null;
-
     protected ServerRequestInterface $request;
-
     protected Throwable $exception;
-
     protected int $statusCode;
-
     protected CallableResolverInterface $callableResolver;
-
     protected ResponseFactoryInterface $responseFactory;
-
     protected LoggerInterface $logger;
-
-    public function __construct(
-        CallableResolverInterface $callableResolver,
-        ResponseFactoryInterface $responseFactory,
-        ?LoggerInterface $logger = null
-    ) {
+    public function __construct(CallableResolverInterface $callableResolver, ResponseFactoryInterface $responseFactory, ?LoggerInterface $logger = null)
+    {
         $this->callableResolver = $callableResolver;
         $this->responseFactory = $responseFactory;
         $this->logger = $logger ?: $this->getDefaultLogger();
     }
-
     /**
      * Invoke error handler
      *
@@ -111,13 +82,8 @@ class ErrorHandler implements ErrorHandlerInterface
      * @param bool                   $logErrors           Whether or not to log errors
      * @param bool                   $logErrorDetails     Whether or not to log error details
      */
-    public function __invoke(
-        ServerRequestInterface $request,
-        Throwable $exception,
-        bool $displayErrorDetails,
-        bool $logErrors,
-        bool $logErrorDetails
-    ): ResponseInterface {
+    public function __invoke(ServerRequestInterface $request, Throwable $exception, bool $displayErrorDetails, bool $logErrors, bool $logErrorDetails): ResponseInterface
+    {
         $this->displayErrorDetails = $displayErrorDetails;
         $this->logErrors = $logErrors;
         $this->logErrorDetails = $logErrorDetails;
@@ -128,14 +94,11 @@ class ErrorHandler implements ErrorHandlerInterface
         if ($this->contentType === null) {
             $this->contentType = $this->determineContentType($request);
         }
-
         if ($logErrors) {
             $this->writeToErrorLog();
         }
-
         return $this->respond();
     }
-
     /**
      * Force the content type for all error handler responses.
      *
@@ -145,20 +108,16 @@ class ErrorHandler implements ErrorHandlerInterface
     {
         $this->contentType = $contentType;
     }
-
     protected function determineStatusCode(): int
     {
         if ($this->method === 'OPTIONS') {
             return 200;
         }
-
         if ($this->exception instanceof HttpException) {
             return $this->exception->getCode();
         }
-
         return 500;
     }
-
     /**
      * Determine which content type we know about is wanted using Accept header
      *
@@ -169,15 +128,10 @@ class ErrorHandler implements ErrorHandlerInterface
     protected function determineContentType(ServerRequestInterface $request): ?string
     {
         $acceptHeader = $request->getHeaderLine('Accept');
-        $selectedContentTypes = array_intersect(
-            explode(',', $acceptHeader),
-            array_keys($this->errorRenderers)
-        );
+        $selectedContentTypes = array_intersect(explode(',', $acceptHeader), array_keys($this->errorRenderers));
         $count = count($selectedContentTypes);
-
         if ($count) {
             $current = current($selectedContentTypes);
-
             /**
              * Ensure other supported content types take precedence over text/plain
              * when multiple content types are provided via Accept header.
@@ -188,23 +142,19 @@ class ErrorHandler implements ErrorHandlerInterface
                     return $next;
                 }
             }
-
             // @phpstan-ignore-next-line
             if (is_string($current)) {
                 return $current;
             }
         }
-
         if (preg_match('/\+(json|xml)/', $acceptHeader, $matches)) {
             $mediaType = 'application/' . $matches[1];
             if (array_key_exists($mediaType, $this->errorRenderers)) {
                 return $mediaType;
             }
         }
-
         return null;
     }
-
     /**
      * Determine which renderer to use based on content type
      *
@@ -217,10 +167,8 @@ class ErrorHandler implements ErrorHandlerInterface
         } else {
             $renderer = $this->defaultErrorRenderer;
         }
-
         return $this->callableResolver->resolve($renderer);
     }
-
     /**
      * Register an error renderer for a specific content-type
      *
@@ -231,7 +179,6 @@ class ErrorHandler implements ErrorHandlerInterface
     {
         $this->errorRenderers[$contentType] = $errorRenderer;
     }
-
     /**
      * Set the default error renderer
      *
@@ -243,7 +190,6 @@ class ErrorHandler implements ErrorHandlerInterface
         $this->defaultErrorRendererContentType = $contentType;
         $this->defaultErrorRenderer = $errorRenderer;
     }
-
     /**
      * Set the renderer for the error logger
      *
@@ -253,25 +199,20 @@ class ErrorHandler implements ErrorHandlerInterface
     {
         $this->logErrorRenderer = $logErrorRenderer;
     }
-
     /**
      * Write to the error log if $logErrors has been set to true
      */
     protected function writeToErrorLog(): void
     {
         $renderer = $this->callableResolver->resolve($this->logErrorRenderer);
-
         /** @var string $error */
         $error = $renderer($this->exception, $this->logErrorDetails);
-
         if ($this->logErrorRenderer === PlainTextErrorRenderer::class && !$this->displayErrorDetails) {
             $error .= "\nTips: To display error details in HTTP response ";
             $error .= 'set "displayErrorDetails" to true in the ErrorHandler constructor.';
         }
-
         $this->logError($error);
     }
-
     /**
      * Wraps the error_log function so that this can be easily tested
      */
@@ -279,7 +220,6 @@ class ErrorHandler implements ErrorHandlerInterface
     {
         $this->logger->error($error);
     }
-
     /**
      * Returns a default logger implementation.
      */
@@ -287,7 +227,6 @@ class ErrorHandler implements ErrorHandlerInterface
     {
         return new Logger();
     }
-
     protected function respond(): ResponseInterface
     {
         $response = $this->responseFactory->createResponse($this->statusCode);
@@ -296,19 +235,16 @@ class ErrorHandler implements ErrorHandlerInterface
         } else {
             $response = $response->withHeader('Content-type', $this->defaultErrorRendererContentType);
         }
-
         if ($this->exception instanceof HttpMethodNotAllowedException) {
             $allowedMethods = implode(', ', $this->exception->getAllowedMethods());
             $response = $response->withHeader('Allow', $allowedMethods);
         }
-
         $renderer = $this->determineRenderer();
         $body = call_user_func($renderer, $this->exception, $this->displayErrorDetails);
-        if ($body !== false) {
+        if ($body !== \false) {
             /** @var string $body */
             $response->getBody()->write($body);
         }
-
         return $response;
     }
 }

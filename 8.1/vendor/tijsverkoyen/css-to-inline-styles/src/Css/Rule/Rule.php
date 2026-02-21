@@ -1,32 +1,27 @@
 <?php
 
-namespace TijsVerkoyen\CssToInlineStyles\Css\Rule;
+namespace Odigos\TijsVerkoyen\CssToInlineStyles\Css\Rule;
 
 use Symfony\Component\CssSelector\Node\Specificity;
-use TijsVerkoyen\CssToInlineStyles\Css\Property\Property;
-
+use Odigos\TijsVerkoyen\CssToInlineStyles\Css\Property\Property;
 final class Rule
 {
     /**
      * @var string
      */
     private $selector;
-
     /**
      * @var Property[]
      */
     private $properties;
-
     /**
      * @var Specificity
      */
     private $specificity;
-
     /**
      * @var integer
      */
     private $order;
-
     /**
      * Rule constructor.
      *
@@ -42,7 +37,6 @@ final class Rule
         $this->specificity = $specificity;
         $this->order = $order;
     }
-
     /**
      * Get selector
      *
@@ -52,7 +46,6 @@ final class Rule
     {
         return $this->selector;
     }
-
     /**
      * Get properties
      *
@@ -62,7 +55,6 @@ final class Rule
     {
         return $this->properties;
     }
-
     /**
      * Get specificity
      *
@@ -72,7 +64,6 @@ final class Rule
     {
         return $this->specificity;
     }
-
     /**
      * Get order
      *

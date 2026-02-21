@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright 2015-present MongoDB, Inc.
  *
@@ -14,10 +15,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 namespace MongoDB\Exception;
 
-class UnsupportedException extends RuntimeException
+class UnsupportedException extends \MongoDB\Exception\RuntimeException
 {
     /**
      * Thrown when the commitQuorum option for createIndexes is not supported
@@ -29,7 +29,6 @@ class UnsupportedException extends RuntimeException
     {
         return new self('The "commitQuorum" option is not supported by the server executing this operation');
     }
-
     /**
      * Thrown when a command's hint option is not supported by a server.
      *
@@ -39,7 +38,6 @@ class UnsupportedException extends RuntimeException
     {
         return new self('Hint is not supported by the server executing this operation');
     }
-
     /**
      * Thrown when a readConcern is used with a read operation in a transaction.
      *
@@ -49,7 +47,6 @@ class UnsupportedException extends RuntimeException
     {
         return new self('Cannot set read concern after starting a transaction. Instead, specify the "readConcern" option when starting the transaction.');
     }
-
     /**
      * Thrown when a writeConcern is used with a write operation in a transaction.
      *

@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the league/commonmark package.
  *
@@ -10,8 +9,7 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace League\CommonMark\Util;
+namespace Odigos\League\CommonMark\Util;
 
 /**
  * Array collection
@@ -31,7 +29,6 @@ final class ArrayCollection implements \IteratorAggregate, \Countable, \ArrayAcc
      * @phpstan-var array<int, T>
      */
     private array $elements;
-
     /**
      * Constructor
      *
@@ -43,7 +40,6 @@ final class ArrayCollection implements \IteratorAggregate, \Countable, \ArrayAcc
     {
         $this->elements = $elements;
     }
-
     /**
      * @return mixed|false
      *
@@ -53,7 +49,6 @@ final class ArrayCollection implements \IteratorAggregate, \Countable, \ArrayAcc
     {
         return \reset($this->elements);
     }
-
     /**
      * @return mixed|false
      *
@@ -63,7 +58,6 @@ final class ArrayCollection implements \IteratorAggregate, \Countable, \ArrayAcc
     {
         return \end($this->elements);
     }
-
     /**
      * Retrieve an external iterator
      *
@@ -76,7 +70,6 @@ final class ArrayCollection implements \IteratorAggregate, \Countable, \ArrayAcc
     {
         return new \ArrayIterator($this->elements);
     }
-
     /**
      * Count elements of an object
      *
@@ -86,7 +79,6 @@ final class ArrayCollection implements \IteratorAggregate, \Countable, \ArrayAcc
     {
         return \count($this->elements);
     }
-
     /**
      * Whether an offset exists
      *
@@ -98,7 +90,6 @@ final class ArrayCollection implements \IteratorAggregate, \Countable, \ArrayAcc
     {
         return \array_key_exists($offset, $this->elements);
     }
-
     /**
      * Offset to retrieve
      *
@@ -113,7 +104,6 @@ final class ArrayCollection implements \IteratorAggregate, \Countable, \ArrayAcc
     {
         return $this->elements[$offset] ?? null;
     }
-
     /**
      * Offset to set
      *
@@ -131,7 +121,6 @@ final class ArrayCollection implements \IteratorAggregate, \Countable, \ArrayAcc
             $this->elements[$offset] = $value;
         }
     }
-
     /**
      * Offset to unset
      *
@@ -142,13 +131,11 @@ final class ArrayCollection implements \IteratorAggregate, \Countable, \ArrayAcc
     #[\ReturnTypeWillChange]
     public function offsetUnset($offset): void
     {
-        if (! \array_key_exists($offset, $this->elements)) {
+        if (!\array_key_exists($offset, $this->elements)) {
             return;
         }
-
         unset($this->elements[$offset]);
     }
-
     /**
      * Returns a subset of the array
      *
@@ -158,9 +145,8 @@ final class ArrayCollection implements \IteratorAggregate, \Countable, \ArrayAcc
      */
     public function slice(int $offset, ?int $length = null): array
     {
-        return \array_slice($this->elements, $offset, $length, true);
+        return \array_slice($this->elements, $offset, $length, \true);
     }
-
     /**
      * @return array<int, mixed>
      *

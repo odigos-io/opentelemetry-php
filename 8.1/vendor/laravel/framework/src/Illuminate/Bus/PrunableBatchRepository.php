@@ -3,8 +3,7 @@
 namespace Illuminate\Bus;
 
 use DateTimeInterface;
-
-interface PrunableBatchRepository extends BatchRepository
+interface PrunableBatchRepository extends \Illuminate\Bus\BatchRepository
 {
     /**
      * Prune all of the entries older than the given date.

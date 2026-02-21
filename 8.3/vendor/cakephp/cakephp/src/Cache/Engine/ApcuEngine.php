@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -34,7 +34,6 @@ use Cake\Cache\Event\CacheClearedEvent;
 use Cake\Cache\Event\CacheGroupClearEvent;
 use Cake\Core\Exception\CakeException;
 use DateInterval;
-
 /**
  * APCu storage engine for cache
  */
@@ -47,7 +46,6 @@ class ApcuEngine extends CacheEngine
      * @var array<string>
      */
     protected array $_compiledGroupNames = [];
-
     /**
      * Initialize the Cache Engine
      *
@@ -61,10 +59,8 @@ class ApcuEngine extends CacheEngine
         if (!extension_loaded('apcu')) {
             throw new CakeException('The `apcu` extension must be enabled to use ApcuEngine.');
         }
-
         return parent::init($config);
     }
-
     /**
      * Write data for key into cache
      *
@@ -80,20 +76,13 @@ class ApcuEngine extends CacheEngine
     {
         $key = $this->_key($key);
         $duration = $this->duration($ttl);
-
         $this->_eventClass = CacheBeforeSetEvent::class;
         $this->dispatchEvent(CacheBeforeSetEvent::NAME, ['key' => $key, 'value' => $value, 'ttl' => $duration]);
-
         $success = apcu_store($key, $value, $duration);
-
         $this->_eventClass = CacheAfterSetEvent::class;
-        $this->dispatchEvent(CacheAfterSetEvent::NAME, [
-            'key' => $key, 'value' => $value, 'success' => $success, 'ttl' => $duration,
-        ]);
-
+        $this->dispatchEvent(CacheAfterSetEvent::NAME, ['key' => $key, 'value' => $value, 'success' => $success, 'ttl' => $duration]);
         return $success;
     }
-
     /**
      * Read a key from the cache
      *
@@ -108,18 +97,14 @@ class ApcuEngine extends CacheEngine
         $key = $this->_key($key);
         $this->_eventClass = CacheBeforeGetEvent::class;
         $this->dispatchEvent(CacheBeforeGetEvent::NAME, ['key' => $key, 'default' => $default]);
-
         $value = apcu_fetch($key, $success);
-
         $this->_eventClass = CacheAfterGetEvent::class;
         $this->dispatchEvent(CacheAfterGetEvent::NAME, ['key' => $key, 'value' => $value, 'success' => $success]);
-        if ($success === false) {
+        if ($success === \false) {
             return $default;
         }
-
         return $value;
     }
-
     /**
      * Increments the value of an integer cached key
      *
@@ -133,17 +118,11 @@ class ApcuEngine extends CacheEngine
         $key = $this->_key($key);
         $this->_eventClass = CacheBeforeIncrementEvent::class;
         $this->dispatchEvent(CacheBeforeIncrementEvent::NAME, ['key' => $key, 'offset' => $offset]);
-
         $value = apcu_inc($key, $offset);
-
         $this->_eventClass = CacheAfterIncrementEvent::class;
-        $this->dispatchEvent(CacheAfterIncrementEvent::NAME, [
-            'key' => $key, 'offset' => $offset, 'success' => $value !== false, 'value' => $value,
-        ]);
-
+        $this->dispatchEvent(CacheAfterIncrementEvent::NAME, ['key' => $key, 'offset' => $offset, 'success' => $value !== \false, 'value' => $value]);
         return $value;
     }
-
     /**
      * Decrements the value of an integer cached key
      *
@@ -157,17 +136,11 @@ class ApcuEngine extends CacheEngine
         $key = $this->_key($key);
         $this->_eventClass = CacheBeforeDecrementEvent::class;
         $this->dispatchEvent(CacheBeforeDecrementEvent::NAME, ['key' => $key, 'offset' => $offset]);
-
         $result = apcu_dec($key, $offset);
-
         $this->_eventClass = CacheAfterDecrementEvent::class;
-        $this->dispatchEvent(CacheAfterDecrementEvent::NAME, [
-            'key' => $key, 'offset' => $offset, 'success' => $result !== false, 'value' => $result,
-        ]);
-
+        $this->dispatchEvent(CacheAfterDecrementEvent::NAME, ['key' => $key, 'offset' => $offset, 'success' => $result !== \false, 'value' => $result]);
         return $result;
     }
-
     /**
      * Delete a key from the cache
      *
@@ -180,15 +153,11 @@ class ApcuEngine extends CacheEngine
         $key = $this->_key($key);
         $this->_eventClass = CacheBeforeDeleteEvent::class;
         $this->dispatchEvent(CacheBeforeDeleteEvent::NAME, ['key' => $key]);
-
         $result = apcu_delete($key);
-
         $this->_eventClass = CacheAfterDeleteEvent::class;
         $this->dispatchEvent(CacheAfterDeleteEvent::NAME, ['key' => $key, 'success' => $result]);
-
         return $result;
     }
-
     /**
      * Delete all keys from the cache. This will clear every cache config using APC.
      *
@@ -198,31 +167,24 @@ class ApcuEngine extends CacheEngine
      */
     public function clear(): bool
     {
-        if (class_exists(APCUIterator::class, false)) {
-            $iterator = new APCUIterator(
-                '/^' . preg_quote($this->_config['prefix'], '/') . '/',
-                APC_ITER_NONE,
-            );
+        if (class_exists(APCUIterator::class, \false)) {
+            $iterator = new APCUIterator('/^' . preg_quote($this->_config['prefix'], '/') . '/', \APC_ITER_NONE);
             apcu_delete($iterator);
             $this->_eventClass = CacheClearedEvent::class;
             $this->dispatchEvent(CacheClearedEvent::NAME);
-
-            return true;
+            return \true;
         }
-
-        $cache = apcu_cache_info(); // Raises warning by itself already
+        $cache = apcu_cache_info();
+        // Raises warning by itself already
         foreach ($cache['cache_list'] as $key) {
             if (str_starts_with($key['info'], $this->_config['prefix'])) {
                 apcu_delete($key['info']);
             }
         }
-
         $this->_eventClass = CacheClearedEvent::class;
         $this->dispatchEvent(CacheClearedEvent::NAME);
-
-        return true;
+        return \true;
     }
-
     /**
      * Write data for key into cache if it doesn't exist already.
      * If it already exists, it fails and returns false.
@@ -237,20 +199,12 @@ class ApcuEngine extends CacheEngine
         $key = $this->_key($key);
         $duration = $this->_config['duration'];
         $this->_eventClass = CacheBeforeAddEvent::class;
-        $this->dispatchEvent(CacheBeforeAddEvent::NAME, [
-            'key' => $key, 'value' => $value, 'ttl' => $duration,
-        ]);
-
+        $this->dispatchEvent(CacheBeforeAddEvent::NAME, ['key' => $key, 'value' => $value, 'ttl' => $duration]);
         $result = apcu_add($key, $value, $duration);
-
         $this->_eventClass = CacheAfterAddEvent::class;
-        $this->dispatchEvent(CacheAfterAddEvent::NAME, [
-            'key' => $key, 'value' => $value, 'success' => $result, 'ttl' => $duration,
-        ]);
-
+        $this->dispatchEvent(CacheAfterAddEvent::NAME, ['key' => $key, 'value' => $value, 'success' => $result, 'ttl' => $duration]);
         return $result;
     }
-
     /**
      * Returns the `group value` for each of the configured groups
      * If the group initial value was not found, then it initializes
@@ -267,33 +221,27 @@ class ApcuEngine extends CacheEngine
                 $this->_compiledGroupNames[] = $this->_config['prefix'] . $group;
             }
         }
-
-        $success = false;
+        $success = \false;
         $groups = apcu_fetch($this->_compiledGroupNames, $success);
         if ($success && count($groups) !== count($this->_config['groups'])) {
             foreach ($this->_compiledGroupNames as $group) {
                 if (!isset($groups[$group])) {
                     $value = 1;
-                    if (apcu_store($group, $value) === false) {
-                        $this->warning(
-                            sprintf('Failed to store key `%s` with value `%s` into APCu cache.', $group, $value),
-                        );
+                    if (apcu_store($group, $value) === \false) {
+                        $this->warning(sprintf('Failed to store key `%s` with value `%s` into APCu cache.', $group, $value));
                     }
                     $groups[$group] = $value;
                 }
             }
             ksort($groups);
         }
-
         $result = [];
         $groups = array_values($groups);
         foreach ($this->_config['groups'] as $i => $group) {
             $result[] = $group . $groups[$i];
         }
-
         return $result;
     }
-
     /**
      * Increments the group value to simulate deletion of all keys under a group
      * old values will remain in storage until they expire.
@@ -304,11 +252,10 @@ class ApcuEngine extends CacheEngine
      */
     public function clearGroup(string $group): bool
     {
-        $success = false;
+        $success = \false;
         apcu_inc($this->_config['prefix'] . $group, 1, $success);
         $this->_eventClass = CacheGroupClearEvent::class;
         $this->dispatchEvent(CacheGroupClearEvent::NAME, ['group' => $group]);
-
         return $success;
     }
 }

@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -16,8 +16,7 @@ declare(strict_types=1);
 namespace Cake\TestSuite\Constraint\Session;
 
 use Cake\Utility\Hash;
-use PHPUnit\Framework\Constraint\Constraint;
-
+use Odigos\PHPUnit\Framework\Constraint\Constraint;
 /**
  * SessionHasKey
  *
@@ -29,7 +28,6 @@ class SessionHasKey extends Constraint
      * @var string
      */
     protected string $path;
-
     /**
      * Constructor
      *
@@ -39,7 +37,6 @@ class SessionHasKey extends Constraint
     {
         $this->path = $path;
     }
-
     /**
      * Compare session value
      *
@@ -53,7 +50,6 @@ class SessionHasKey extends Constraint
         // Call to Session::read will start new session (and will erase the data).
         return Hash::check($_SESSION, $this->path);
     }
-
     /**
      * Assertion message
      *

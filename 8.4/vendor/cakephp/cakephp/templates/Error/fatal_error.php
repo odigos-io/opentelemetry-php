@@ -1,4 +1,7 @@
 <?php
+
+namespace Odigos;
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -14,29 +17,32 @@
  * @var \Cake\Core\Exception\CakeException $error
  */
 use function Cake\Core\h;
-
 $this->layout = 'dev_error';
-
 $this->assign('title', 'Fatal Error');
 $this->assign('templateName', 'fatal_error.php');
-
 $this->start('subheading');
 ?>
     <strong>Error</strong>
-    <?= h($error->getMessage()) ?>
+    <?php 
+echo h($error->getMessage());
+?>
     <br>
     <br>
 
     <strong>File</strong>
-    <?= h($error->getFile()) ?>
+    <?php 
+echo h($error->getFile());
+?>
     <br><br>
     <strong>Line</strong>
-    <?= h($error->getLine()) ?>
-<?php $this->end() ?>
+    <?php 
+echo h($error->getLine());
+$this->end();
+?>
 
-<?php
+<?php 
 $this->start('file');
-if (extension_loaded('xdebug')):
-    xdebug_print_function_stack();
-endif;
+if (\extension_loaded('xdebug')) {
+    \xdebug_print_function_stack();
+}
 $this->end();

@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -17,13 +17,12 @@ declare(strict_types=1);
 namespace Cake\TestSuite\Constraint\Email;
 
 use InvalidArgumentException;
-
 /**
  * MailSubjectContains
  *
  * @internal
  */
-class MailSubjectContains extends MailConstraintBase
+class MailSubjectContains extends \Cake\TestSuite\Constraint\Email\MailConstraintBase
 {
     /**
      * Checks constraint
@@ -34,21 +33,17 @@ class MailSubjectContains extends MailConstraintBase
     public function matches(mixed $other): bool
     {
         if (!is_string($other)) {
-            throw new InvalidArgumentException(
-                'Invalid data type, must be a string.',
-            );
+            throw new InvalidArgumentException('Invalid data type, must be a string.');
         }
         $messages = $this->getMessages();
         foreach ($messages as $message) {
             $subject = $message->getOriginalSubject();
             if (str_contains($subject, $other)) {
-                return true;
+                return \true;
             }
         }
-
-        return false;
+        return \false;
     }
-
     /**
      * Returns the subjects of all messages
      * respects $this->at
@@ -65,11 +60,9 @@ class MailSubjectContains extends MailConstraintBase
         if ($this->at && isset($messageMembers[$this->at - 1])) {
             $messageMembers = [$messageMembers[$this->at - 1]];
         }
-        $result = implode(PHP_EOL, $messageMembers);
-
-        return PHP_EOL . 'was: ' . mb_substr($result, 0, 1000);
+        $result = implode(\PHP_EOL, $messageMembers);
+        return \PHP_EOL . 'was: ' . mb_substr($result, 0, 1000);
     }
-
     /**
      * Assertion message string
      *
@@ -80,7 +73,6 @@ class MailSubjectContains extends MailConstraintBase
         if ($this->at) {
             return sprintf('is in an email subject #%d', $this->at) . $this->getAssertedMessages();
         }
-
         return 'is in an email subject' . $this->getAssertedMessages();
     }
 }

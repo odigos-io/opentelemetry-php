@@ -1,35 +1,30 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 namespace Cake\PHPStan;
 
 use Cake\ORM\Association;
 use Cake\ORM\Table;
-use PHPStan\Reflection\ClassReflection;
-use PHPStan\Reflection\MethodReflection;
-use PHPStan\Reflection\MethodsClassReflectionExtension;
-use PHPStan\Reflection\PropertiesClassReflectionExtension;
-use PHPStan\Reflection\PropertyReflection;
-use PHPStan\Reflection\ReflectionProvider;
-
+use Odigos\PHPStan\Reflection\ClassReflection;
+use Odigos\PHPStan\Reflection\MethodReflection;
+use Odigos\PHPStan\Reflection\MethodsClassReflectionExtension;
+use Odigos\PHPStan\Reflection\PropertiesClassReflectionExtension;
+use Odigos\PHPStan\Reflection\PropertyReflection;
+use Odigos\PHPStan\Reflection\ReflectionProvider;
 class AssociationTableMixinClassReflectionExtension implements PropertiesClassReflectionExtension, MethodsClassReflectionExtension
 {
     /**
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private ReflectionProvider $reflectionProvider;
-
-    public function __construct(
-        ReflectionProvider $reflectionProvider,
-    ) {
+    public function __construct(ReflectionProvider $reflectionProvider)
+    {
         $this->reflectionProvider = $reflectionProvider;
     }
-
     protected function getTableReflection(): ClassReflection
     {
         return $this->reflectionProvider->getClass(Table::class);
     }
-
     /**
      * @param ClassReflection $classReflection Class reflection
      * @param string $methodName Method name
@@ -38,16 +33,13 @@ class AssociationTableMixinClassReflectionExtension implements PropertiesClassRe
     {
         // magic findBy* method
         if ($classReflection->isSubclassOf(Table::class) && preg_match('/^find(?:\w+)?By/', $methodName) > 0) {
-            return true;
+            return \true;
         }
-
         if (!$classReflection->isSubclassOf(Association::class)) {
-            return false;
+            return \false;
         }
-
         return $this->getTableReflection()->hasMethod($methodName);
     }
-
     /**
      * @param ClassReflection $classReflection Class reflection
      * @param string $methodName Method name
@@ -56,12 +48,10 @@ class AssociationTableMixinClassReflectionExtension implements PropertiesClassRe
     {
         // magic findBy* method
         if ($classReflection->isSubclassOf(Table::class) && preg_match('/^find(?:\w+)?By/', $methodName) > 0) {
-            return new TableFindByPropertyMethodReflection($methodName, $classReflection);
+            return new \Cake\PHPStan\TableFindByPropertyMethodReflection($methodName, $classReflection);
         }
-
         return $this->getTableReflection()->getNativeMethod($methodName);
     }
-
     /**
      * @param ClassReflection $classReflection Class reflection
      * @param string $propertyName Method name
@@ -69,12 +59,10 @@ class AssociationTableMixinClassReflectionExtension implements PropertiesClassRe
     public function hasProperty(ClassReflection $classReflection, string $propertyName): bool
     {
         if (!$classReflection->isSubclassOf(Association::class)) {
-            return false;
+            return \false;
         }
-
         return $this->getTableReflection()->hasProperty($propertyName);
     }
-
     /**
      * @param ClassReflection $classReflection Class reflection
      * @param string $propertyName Method name

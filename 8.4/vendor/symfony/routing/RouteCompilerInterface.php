@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\Routing;
 
 /**
@@ -24,5 +23,5 @@ interface RouteCompilerInterface
      * @throws \LogicException If the Route cannot be compiled because the
      *                         path or host pattern is invalid
      */
-    public static function compile(Route $route): CompiledRoute;
+    public static function compile(\Symfony\Component\Routing\Route $route): \Symfony\Component\Routing\CompiledRoute;
 }

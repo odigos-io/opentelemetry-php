@@ -7,13 +7,12 @@ namespace Http\Promise;
  *
  * @author Joel Wurtz <joel.wurtz@gmail.com>
  */
-final class FulfilledPromise implements Promise
+final class FulfilledPromise implements \Http\Promise\Promise
 {
     /**
      * @var mixed
      */
     private $result;
-
     /**
      * @param mixed $result
      */
@@ -21,31 +20,26 @@ final class FulfilledPromise implements Promise
     {
         $this->result = $result;
     }
-
     public function then(?callable $onFulfilled = null, ?callable $onRejected = null)
     {
         if (null === $onFulfilled) {
             return $this;
         }
-
         try {
             return new self($onFulfilled($this->result));
         } catch (\Exception $e) {
-            return new RejectedPromise($e);
+            return new \Http\Promise\RejectedPromise($e);
         }
     }
-
     public function getState()
     {
-        return Promise::FULFILLED;
+        return \Http\Promise\Promise::FULFILLED;
     }
-
-    public function wait($unwrap = true)
+    public function wait($unwrap = \true)
     {
         if ($unwrap) {
             return $this->result;
         }
-
         return null;
     }
 }

@@ -3,7 +3,6 @@
 namespace Illuminate\Translation;
 
 use Illuminate\Contracts\Translation\Loader;
-
 class ArrayLoader implements Loader
 {
     /**
@@ -12,7 +11,6 @@ class ArrayLoader implements Loader
      * @var array
      */
     protected $messages = [];
-
     /**
      * Load the messages for the given locale.
      *
@@ -24,10 +22,8 @@ class ArrayLoader implements Loader
     public function load($locale, $group, $namespace = null)
     {
         $namespace = $namespace ?: '*';
-
         return $this->messages[$namespace][$locale][$group] ?? [];
     }
-
     /**
      * Add a new namespace to the loader.
      *
@@ -39,7 +35,6 @@ class ArrayLoader implements Loader
     {
         //
     }
-
     /**
      * Add a new JSON path to the loader.
      *
@@ -50,7 +45,6 @@ class ArrayLoader implements Loader
     {
         //
     }
-
     /**
      * Add messages to the loader.
      *
@@ -63,12 +57,9 @@ class ArrayLoader implements Loader
     public function addMessages($locale, $group, array $messages, $namespace = null)
     {
         $namespace = $namespace ?: '*';
-
         $this->messages[$namespace][$locale][$group] = $messages;
-
         return $this;
     }
-
     /**
      * Get an array of all the registered namespaces.
      *

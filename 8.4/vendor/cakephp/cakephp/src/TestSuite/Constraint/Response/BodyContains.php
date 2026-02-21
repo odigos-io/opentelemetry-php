@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -16,32 +16,28 @@ declare(strict_types=1);
 namespace Cake\TestSuite\Constraint\Response;
 
 use Psr\Http\Message\ResponseInterface;
-
 /**
  * BodyContains
  *
  * @internal
  */
-class BodyContains extends ResponseBase
+class BodyContains extends \Cake\TestSuite\Constraint\Response\ResponseBase
 {
     /**
      * @var bool
      */
     protected bool $ignoreCase;
-
     /**
      * Constructor.
      *
      * @param \Psr\Http\Message\ResponseInterface $response A response instance.
      * @param bool $ignoreCase Ignore case
      */
-    public function __construct(ResponseInterface $response, bool $ignoreCase = false)
+    public function __construct(ResponseInterface $response, bool $ignoreCase = \false)
     {
         parent::__construct($response);
-
         $this->ignoreCase = $ignoreCase;
     }
-
     /**
      * Checks assertion
      *
@@ -54,10 +50,8 @@ class BodyContains extends ResponseBase
         if ($this->ignoreCase) {
             $method = 'mb_stripos';
         }
-
-        return $method($this->_getBodyAsString(), $other) !== false;
+        return $method($this->_getBodyAsString(), $other) !== \false;
     }
-
     /**
      * Assertion message
      *

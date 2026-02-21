@@ -1,16 +1,15 @@
 <?php
 
-namespace FastRoute\Dispatcher;
+namespace Odigos\FastRoute\Dispatcher;
 
 class GroupCountBasedTest extends DispatcherTest
 {
     protected function getDispatcherClass()
     {
-        return 'FastRoute\\Dispatcher\\GroupCountBased';
+        return 'Odigos\FastRoute\Dispatcher\GroupCountBased';
     }
-
     protected function getDataGeneratorClass()
     {
-        return 'FastRoute\\DataGenerator\\GroupCountBased';
+        return 'Odigos\FastRoute\DataGenerator\GroupCountBased';
     }
 }

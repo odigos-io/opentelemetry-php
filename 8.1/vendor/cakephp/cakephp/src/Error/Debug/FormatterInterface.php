@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -29,8 +29,7 @@ interface FormatterInterface
      * @param \Cake\Error\Debug\NodeInterface $node The node tree to dump.
      * @return string
      */
-    public function dump(NodeInterface $node): string;
-
+    public function dump(\Cake\Error\Debug\NodeInterface $node): string;
     /**
      * Output a dump wrapper with location context.
      *

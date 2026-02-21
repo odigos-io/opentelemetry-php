@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenAI\Responses\Images;
 
 use OpenAI\Contracts\ResponseContract;
@@ -10,7 +9,6 @@ use OpenAI\Responses\Concerns\ArrayAccessible;
 use OpenAI\Responses\Concerns\HasMetaInformation;
 use OpenAI\Responses\Meta\MetaInformation;
 use OpenAI\Testing\Responses\Concerns\Fakeable;
-
 /**
  * @implements ResponseContract<array{created: int, data: array<int, array{url?: string, b64_json?: string}>, usage?: array{total_tokens: int, input_tokens: int|null, output_tokens: int|null, input_tokens_details: array{text_tokens: int, image_tokens: int}|null}}>
  */
@@ -20,20 +18,14 @@ final class EditResponse implements ResponseContract, ResponseHasMetaInformation
      * @use ArrayAccessible<array{created: int, data: array<int, array{url?: string, b64_json?: string}>, usage?: array{total_tokens: int, input_tokens: int|null, output_tokens: int|null, input_tokens_details: array{text_tokens: int, image_tokens: int}|null}}>
      */
     use ArrayAccessible;
-
     use Fakeable;
     use HasMetaInformation;
-
     /**
      * @param  array<int, EditResponseData>  $data
      */
-    private function __construct(
-        public readonly int $created,
-        public readonly array $data,
-        private readonly MetaInformation $meta,
-        public readonly ?ImageResponseUsage $usage = null,
-    ) {}
-
+    private function __construct(public readonly int $created, public readonly array $data, private readonly MetaInformation $meta, public readonly ?\OpenAI\Responses\Images\ImageResponseUsage $usage = null)
+    {
+    }
     /**
      * Acts as static factory, and returns a new Response instance.
      *
@@ -41,35 +33,18 @@ final class EditResponse implements ResponseContract, ResponseHasMetaInformation
      */
     public static function from(array $attributes, MetaInformation $meta): self
     {
-        $results = array_map(fn (array $result): EditResponseData => EditResponseData::from(
-            $result
-        ), $attributes['data']);
-
-        return new self(
-            $attributes['created'],
-            $results,
-            $meta,
-            isset($attributes['usage']) ? ImageResponseUsage::from($attributes['usage']) : null,
-        );
+        $results = array_map(fn(array $result): \OpenAI\Responses\Images\EditResponseData => \OpenAI\Responses\Images\EditResponseData::from($result), $attributes['data']);
+        return new self($attributes['created'], $results, $meta, isset($attributes['usage']) ? \OpenAI\Responses\Images\ImageResponseUsage::from($attributes['usage']) : null);
     }
-
     /**
      * {@inheritDoc}
      */
     public function toArray(): array
     {
-        $result = [
-            'created' => $this->created,
-            'data' => array_map(
-                static fn (EditResponseData $result): array => $result->toArray(),
-                $this->data,
-            ),
-        ];
-
+        $result = ['created' => $this->created, 'data' => array_map(static fn(\OpenAI\Responses\Images\EditResponseData $result): array => $result->toArray(), $this->data)];
         if ($this->usage !== null) {
             $result['usage'] = $this->usage->toArray();
         }
-
         return $result;
     }
 }

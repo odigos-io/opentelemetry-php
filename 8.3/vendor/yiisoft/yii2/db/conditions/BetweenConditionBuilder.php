@@ -1,16 +1,15 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\db\conditions;
 
 use yii\db\ExpressionBuilderInterface;
 use yii\db\ExpressionBuilderTrait;
 use yii\db\ExpressionInterface;
-
 /**
  * Class BetweenConditionBuilder builds objects of [[BetweenCondition]]
  *
@@ -20,8 +19,6 @@ use yii\db\ExpressionInterface;
 class BetweenConditionBuilder implements ExpressionBuilderInterface
 {
     use ExpressionBuilderTrait;
-
-
     /**
      * Method builds the raw SQL from the $expression that will not be additionally
      * escaped or quoted.
@@ -34,17 +31,13 @@ class BetweenConditionBuilder implements ExpressionBuilderInterface
     {
         $operator = $expression->getOperator();
         $column = $expression->getColumn();
-
-        if (strpos($column, '(') === false) {
+        if (strpos($column, '(') === \false) {
             $column = $this->queryBuilder->db->quoteColumnName($column);
         }
-
         $phName1 = $this->createPlaceholder($expression->getIntervalStart(), $params);
         $phName2 = $this->createPlaceholder($expression->getIntervalEnd(), $params);
-
-        return "$column $operator $phName1 AND $phName2";
+        return "{$column} {$operator} {$phName1} AND {$phName2}";
     }
-
     /**
      * Attaches $value to $params array and returns placeholder.
      *
@@ -57,7 +50,6 @@ class BetweenConditionBuilder implements ExpressionBuilderInterface
         if ($value instanceof ExpressionInterface) {
             return $this->queryBuilder->buildExpression($value, $params);
         }
-
         return $this->queryBuilder->bindParam($value, $params);
     }
 }

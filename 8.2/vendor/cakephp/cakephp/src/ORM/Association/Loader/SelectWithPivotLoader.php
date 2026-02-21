@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -21,13 +21,12 @@ use Cake\Database\ExpressionInterface;
 use Cake\ORM\Association\HasMany;
 use Cake\ORM\Query\SelectQuery;
 use Closure;
-
 /**
  * Implements the logic for loading an association using a SELECT query and a pivot table
  *
  * @internal
  */
-class SelectWithPivotLoader extends SelectLoader
+class SelectWithPivotLoader extends \Cake\ORM\Association\Loader\SelectLoader
 {
     /**
      * The name of the junction association
@@ -35,28 +34,24 @@ class SelectWithPivotLoader extends SelectLoader
      * @var string
      */
     protected string $junctionAssociationName;
-
     /**
      * The property name for the junction association, where its results should be nested at.
      *
      * @var string
      */
     protected string $junctionProperty;
-
     /**
      * The junction association instance
      *
      * @var \Cake\ORM\Association\HasMany
      */
     protected HasMany $junctionAssoc;
-
     /**
      * Custom conditions for the junction association
      *
      * @var \Cake\Database\ExpressionInterface|\Closure|array|string|null
      */
     protected ExpressionInterface|Closure|array|string|null $junctionConditions = null;
-
     /**
      * @inheritDoc
      */
@@ -68,7 +63,6 @@ class SelectWithPivotLoader extends SelectLoader
         $this->junctionAssoc = $options['junctionAssoc'];
         $this->junctionConditions = $options['junctionConditions'];
     }
-
     /**
      * Auxiliary function to construct a new Query object to return all the records
      * in the target table that are associated to those specified in $options from
@@ -84,57 +78,37 @@ class SelectWithPivotLoader extends SelectLoader
     {
         $name = $this->junctionAssociationName;
         $assoc = $this->junctionAssoc;
-        $queryBuilder = false;
-
+        $queryBuilder = \false;
         if (!empty($options['queryBuilder'])) {
             assert(is_callable($options['queryBuilder']));
             $queryBuilder = $options['queryBuilder'];
             unset($options['queryBuilder']);
         }
-
         $query = parent::_buildQuery($options);
-
         if ($queryBuilder) {
             /** @var \Cake\ORM\Query\SelectQuery $query */
             $query = $queryBuilder($query);
         }
-
         if ($query->isAutoFieldsEnabled() === null) {
             $query->enableAutoFields($query->clause('select') === []);
         }
-
         // Ensure that association conditions are applied
         // and that the required keys are in the selected columns.
-
         $tempName = $this->alias . '_CJoin';
         $schema = $assoc->getSchema();
         $joinFields = [];
         $types = [];
-
         foreach ($schema->typeMap() as $f => $type) {
             $key = $tempName . '__' . $f;
             $joinFields[$key] = "{$name}.{$f}";
             $types[$key] = $type;
         }
-
-        $query
-            ->where($this->junctionConditions)
-            ->select($joinFields);
-
-        $query
-            ->getEagerLoader()
-            ->addToJoinsMap($tempName, $assoc, false, $this->junctionProperty);
-
-        $assoc->attachTo($query, [
-            'aliasPath' => $assoc->getAlias(),
-            'includeFields' => false,
-            'propertyPath' => $this->junctionProperty,
-        ]);
+        $query->where($this->junctionConditions)->select($joinFields);
+        $query->getEagerLoader()->addToJoinsMap($tempName, $assoc, \false, $this->junctionProperty);
+        $assoc->attachTo($query, ['aliasPath' => $assoc->getAlias(), 'includeFields' => \false, 'propertyPath' => $this->junctionProperty]);
         $query->getTypeMap()->addDefaults($types);
-
         return $query;
     }
-
     /**
      * @inheritDoc
      */
@@ -142,7 +116,6 @@ class SelectWithPivotLoader extends SelectLoader
     {
         // _buildQuery() manually adds in required fields from junction table
     }
-
     /**
      * Generates a string used as a table field that contains the values upon
      * which the filter should be applied
@@ -154,18 +127,14 @@ class SelectWithPivotLoader extends SelectLoader
     {
         $links = [];
         $name = $this->junctionAssociationName;
-
-        foreach ((array)$options['foreignKey'] as $key) {
+        foreach ((array) $options['foreignKey'] as $key) {
             $links[] = sprintf('%s.%s', $name, $key);
         }
-
         if (count($links) === 1) {
             return array_pop($links);
         }
-
         return $links;
     }
-
     /**
      * Builds an array containing the results from fetchQuery indexed by
      * the foreignKey value corresponding to this association.
@@ -178,30 +147,22 @@ class SelectWithPivotLoader extends SelectLoader
     protected function _buildResultMap(SelectQuery $fetchQuery, array $options): array
     {
         $resultMap = [];
-        $key = (array)$options['foreignKey'];
-        $preserveKeys = $fetchQuery->getOptions()['preserveKeys'] ?? false;
-
+        $key = (array) $options['foreignKey'];
+        $preserveKeys = $fetchQuery->getOptions()['preserveKeys'] ?? \false;
         foreach ($fetchQuery->all() as $i => $result) {
             if (!isset($result[$this->junctionProperty])) {
-                throw new DatabaseException(sprintf(
-                    '`%s` is missing from the belongsToMany results. Results cannot be created.',
-                    $this->junctionProperty,
-                ));
+                throw new DatabaseException(sprintf('`%s` is missing from the belongsToMany results. Results cannot be created.', $this->junctionProperty));
             }
-
             $values = [];
             foreach ($key as $k) {
                 $values[] = $result[$this->junctionProperty][$k];
             }
-
             if ($preserveKeys) {
                 $resultMap[implode(';', $values)][$i] = $result;
                 continue;
             }
-
             $resultMap[implode(';', $values)][] = $result;
         }
-
         return $resultMap;
     }
 }

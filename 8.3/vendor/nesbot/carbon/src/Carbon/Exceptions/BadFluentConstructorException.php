@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /**
  * This file is part of the Carbon package.
  *
@@ -10,12 +9,10 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Carbon\Exceptions;
+namespace Odigos\Carbon\Exceptions;
 
 use BadMethodCallException as BaseBadMethodCallException;
 use Throwable;
-
 class BadFluentConstructorException extends BaseBadMethodCallException implements BadMethodCallException
 {
     /**
@@ -24,7 +21,6 @@ class BadFluentConstructorException extends BaseBadMethodCallException implement
      * @var string
      */
     protected $method;
-
     /**
      * Constructor.
      *
@@ -35,10 +31,8 @@ class BadFluentConstructorException extends BaseBadMethodCallException implement
     public function __construct($method, $code = 0, ?Throwable $previous = null)
     {
         $this->method = $method;
-
         parent::__construct(\sprintf("Unknown fluent constructor '%s'.", $method), $code, $previous);
     }
-
     /**
      * Get the method.
      *

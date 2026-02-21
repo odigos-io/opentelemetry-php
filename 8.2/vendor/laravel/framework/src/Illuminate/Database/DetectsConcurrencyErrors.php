@@ -5,7 +5,6 @@ namespace Illuminate\Database;
 use Illuminate\Container\Container;
 use Illuminate\Contracts\Database\ConcurrencyErrorDetector as ConcurrencyErrorDetectorContract;
 use Throwable;
-
 trait DetectsConcurrencyErrors
 {
     /**
@@ -17,11 +16,7 @@ trait DetectsConcurrencyErrors
     protected function causedByConcurrencyError(Throwable $e)
     {
         $container = Container::getInstance();
-
-        $detector = $container->bound(ConcurrencyErrorDetectorContract::class)
-            ? $container[ConcurrencyErrorDetectorContract::class]
-            : new ConcurrencyErrorDetector();
-
+        $detector = $container->bound(ConcurrencyErrorDetectorContract::class) ? $container[ConcurrencyErrorDetectorContract::class] : new \Illuminate\Database\ConcurrencyErrorDetector();
         return $detector->causedByConcurrencyError($e);
     }
 }

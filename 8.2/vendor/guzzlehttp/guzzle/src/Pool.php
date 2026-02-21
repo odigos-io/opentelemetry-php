@@ -7,7 +7,6 @@ use GuzzleHttp\Promise\EachPromise;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Promise\PromisorInterface;
 use Psr\Http\Message\RequestInterface;
-
 /**
  * Sends an iterator of requests concurrently using a capped pool size.
  *
@@ -27,7 +26,6 @@ class Pool implements PromisorInterface
      * @var EachPromise
      */
     private $each;
-
     /**
      * @param ClientInterface $client   Client used to send the requests.
      * @param array|\Iterator $requests Requests or functions that return
@@ -38,19 +36,17 @@ class Pool implements PromisorInterface
      *                                  - fulfilled: (callable) Function to invoke when a request completes.
      *                                  - rejected: (callable) Function to invoke when a request is rejected.
      */
-    public function __construct(ClientInterface $client, $requests, array $config = [])
+    public function __construct(\GuzzleHttp\ClientInterface $client, $requests, array $config = [])
     {
         if (!isset($config['concurrency'])) {
             $config['concurrency'] = 25;
         }
-
         if (isset($config['options'])) {
             $opts = $config['options'];
             unset($config['options']);
         } else {
             $opts = [];
         }
-
         $iterable = P\Create::iterFor($requests);
         $requests = static function () use ($iterable, $client, $opts) {
             foreach ($iterable as $key => $rfn) {
@@ -63,10 +59,8 @@ class Pool implements PromisorInterface
                 }
             }
         };
-
         $this->each = new EachPromise($requests(), $config);
     }
-
     /**
      * Get promise
      */
@@ -74,7 +68,6 @@ class Pool implements PromisorInterface
     {
         return $this->each->promise();
     }
-
     /**
      * Sends multiple requests concurrently and returns an array of responses
      * and exceptions that uses the same ordering as the provided requests.
@@ -93,7 +86,7 @@ class Pool implements PromisorInterface
      *
      * @throws \InvalidArgumentException if the event format is incorrect.
      */
-    public static function batch(ClientInterface $client, $requests, array $options = []): array
+    public static function batch(\GuzzleHttp\ClientInterface $client, $requests, array $options = []): array
     {
         $res = [];
         self::cmpCallback($options, 'fulfilled', $res);
@@ -101,10 +94,8 @@ class Pool implements PromisorInterface
         $pool = new static($client, $requests, $options);
         $pool->promise()->wait();
         \ksort($res);
-
         return $res;
     }
-
     /**
      * Execute callback(s)
      */

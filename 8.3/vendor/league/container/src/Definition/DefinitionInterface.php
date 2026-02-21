@@ -1,11 +1,9 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Odigos\League\Container\Definition;
 
-namespace League\Container\Definition;
-
-use League\Container\ContainerAwareInterface;
-
+use Odigos\League\Container\ContainerAwareInterface;
 interface DefinitionInterface extends ContainerAwareInterface
 {
     public function addArgument(mixed $arg): DefinitionInterface;

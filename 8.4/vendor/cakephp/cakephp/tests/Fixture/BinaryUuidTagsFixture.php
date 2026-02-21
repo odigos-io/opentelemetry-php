@@ -1,4 +1,5 @@
 <?php
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -15,7 +16,6 @@
 namespace Cake\Test\Fixture;
 
 use Cake\TestSuite\Fixture\TestFixture;
-
 /**
  * BinaryUuidTagsFixture
  */
@@ -26,8 +26,5 @@ class BinaryUuidTagsFixture extends TestFixture
      *
      * @var array
      */
-    public array $records = [
-        ['id' => '481fc6d0-b920-43e0-a40d-111111111111', 'name' => 'Defect'],
-        ['id' => '48298a29-81c0-4c26-a7fb-222222222222', 'name' => 'Enhancement'],
-    ];
+    public array $records = [['id' => '481fc6d0-b920-43e0-a40d-111111111111', 'name' => 'Defect'], ['id' => '48298a29-81c0-4c26-a7fb-222222222222', 'name' => 'Enhancement']];
 }

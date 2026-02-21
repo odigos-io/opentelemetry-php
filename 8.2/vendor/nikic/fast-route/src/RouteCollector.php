@@ -1,18 +1,15 @@
 <?php
 
-namespace FastRoute;
+namespace Odigos\FastRoute;
 
 class RouteCollector
 {
     /** @var RouteParser */
     protected $routeParser;
-
     /** @var DataGenerator */
     protected $dataGenerator;
-
     /** @var string */
     protected $currentGroupPrefix;
-
     /**
      * Constructs a route collector.
      *
@@ -25,7 +22,6 @@ class RouteCollector
         $this->dataGenerator = $dataGenerator;
         $this->currentGroupPrefix = '';
     }
-
     /**
      * Adds a route to the collection.
      *
@@ -45,7 +41,6 @@ class RouteCollector
             }
         }
     }
-
     /**
      * Create a route group with a common prefix.
      *
@@ -61,7 +56,6 @@ class RouteCollector
         $callback($this);
         $this->currentGroupPrefix = $previousGroupPrefix;
     }
-
     /**
      * Adds a GET route to the collection
      * 
@@ -74,7 +68,6 @@ class RouteCollector
     {
         $this->addRoute('GET', $route, $handler);
     }
-
     /**
      * Adds a POST route to the collection
      * 
@@ -87,7 +80,6 @@ class RouteCollector
     {
         $this->addRoute('POST', $route, $handler);
     }
-
     /**
      * Adds a PUT route to the collection
      * 
@@ -100,7 +92,6 @@ class RouteCollector
     {
         $this->addRoute('PUT', $route, $handler);
     }
-
     /**
      * Adds a DELETE route to the collection
      * 
@@ -113,7 +104,6 @@ class RouteCollector
     {
         $this->addRoute('DELETE', $route, $handler);
     }
-
     /**
      * Adds a PATCH route to the collection
      * 
@@ -126,7 +116,6 @@ class RouteCollector
     {
         $this->addRoute('PATCH', $route, $handler);
     }
-
     /**
      * Adds a HEAD route to the collection
      *
@@ -139,7 +128,6 @@ class RouteCollector
     {
         $this->addRoute('HEAD', $route, $handler);
     }
-
     /**
      * Returns the collected route data, as provided by the data generator.
      *

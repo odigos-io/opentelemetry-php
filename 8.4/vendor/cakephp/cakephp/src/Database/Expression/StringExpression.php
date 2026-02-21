@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -19,7 +19,6 @@ namespace Cake\Database\Expression;
 use Cake\Database\ExpressionInterface;
 use Cake\Database\ValueBinder;
 use Closure;
-
 /**
  * String expression with collation.
  */
@@ -29,12 +28,10 @@ class StringExpression implements ExpressionInterface
      * @var string
      */
     protected string $string;
-
     /**
      * @var string
      */
     protected string $collation;
-
     /**
      * @param string $string String value
      * @param string $collation String collation
@@ -44,7 +41,6 @@ class StringExpression implements ExpressionInterface
         $this->string = $string;
         $this->collation = $collation;
     }
-
     /**
      * Sets the string collation.
      *
@@ -55,7 +51,6 @@ class StringExpression implements ExpressionInterface
     {
         $this->collation = $collation;
     }
-
     /**
      * Returns the string collation.
      *
@@ -65,7 +60,6 @@ class StringExpression implements ExpressionInterface
     {
         return $this->collation;
     }
-
     /**
      * @inheritDoc
      */
@@ -73,10 +67,8 @@ class StringExpression implements ExpressionInterface
     {
         $placeholder = $binder->placeholder('c');
         $binder->bind($placeholder, $this->string, 'string');
-
         return $placeholder . ' COLLATE ' . $this->collation;
     }
-
     /**
      * @inheritDoc
      */

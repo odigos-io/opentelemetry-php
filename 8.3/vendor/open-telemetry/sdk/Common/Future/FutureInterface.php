@@ -1,11 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\SDK\Common\Future;
 
 use Closure;
-
 /**
  * @template-covariant T
  */
@@ -15,7 +13,6 @@ interface FutureInterface
      * @psalm-return T
      */
     public function await();
-
     /**
      * @psalm-template U
      * @psalm-param Closure(T): U $closure
@@ -23,12 +20,11 @@ interface FutureInterface
      *
      * @psalm-suppress InvalidTemplateParam
      */
-    public function map(Closure $closure): FutureInterface;
-
+    public function map(Closure $closure): \OpenTelemetry\SDK\Common\Future\FutureInterface;
     /**
      * @psalm-template U
      * @psalm-param Closure(\Throwable): U $closure
      * @psalm-return FutureInterface<T|U>
      */
-    public function catch(Closure $closure): FutureInterface;
+    public function catch(Closure $closure): \OpenTelemetry\SDK\Common\Future\FutureInterface;
 }

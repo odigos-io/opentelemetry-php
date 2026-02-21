@@ -3,7 +3,6 @@
 namespace Illuminate\Foundation\Testing;
 
 use Illuminate\Contracts\Console\Kernel as ConsoleKernel;
-
 trait WithConsoleEvents
 {
     /**

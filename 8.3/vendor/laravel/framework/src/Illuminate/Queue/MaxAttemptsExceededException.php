@@ -3,7 +3,6 @@
 namespace Illuminate\Queue;
 
 use RuntimeException;
-
 class MaxAttemptsExceededException extends RuntimeException
 {
     /**
@@ -12,7 +11,6 @@ class MaxAttemptsExceededException extends RuntimeException
      * @var \Illuminate\Contracts\Queue\Job|null
      */
     public $job;
-
     /**
      * Create a new instance for the job.
      *
@@ -21,7 +19,7 @@ class MaxAttemptsExceededException extends RuntimeException
      */
     public static function forJob($job)
     {
-        return tap(new static($job->resolveName().' has been attempted too many times.'), function ($e) use ($job) {
+        return tap(new static($job->resolveName() . ' has been attempted too many times.'), function ($e) use ($job) {
             $e->job = $job;
         });
     }

@@ -1,17 +1,16 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\widgets;
 
 use yii\base\InvalidConfigException;
 use yii\base\Model;
 use yii\base\Widget;
 use yii\helpers\Html;
-
 /**
  * InputWidget is the base class for widgets that collect user inputs.
  *
@@ -62,8 +61,6 @@ class InputWidget extends Widget
      * @see \yii\helpers\Html::renderTagAttributes() for details on how attributes are being rendered.
      */
     public $options = [];
-
-
     /**
      * Initializes the widget.
      * If you override this method, make sure you call the parent implementation first.
@@ -78,7 +75,6 @@ class InputWidget extends Widget
         }
         parent::init();
     }
-
     /**
      * @return bool whether this widget is associated with a data model.
      */
@@ -86,7 +82,6 @@ class InputWidget extends Widget
     {
         return $this->model instanceof Model && $this->attribute !== null;
     }
-
     /**
      * Render a HTML input tag.
      *

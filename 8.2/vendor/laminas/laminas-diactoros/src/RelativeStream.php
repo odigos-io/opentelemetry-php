@@ -1,15 +1,12 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Laminas\Diactoros;
+declare (strict_types=1);
+namespace Odigos\Laminas\Diactoros;
 
 use Override;
 use Psr\Http\Message\StreamInterface;
 use Stringable;
-
 use const SEEK_SET;
-
 /**
  * Wrapper for default Stream class, representing subpart (starting from given offset) of initial stream.
  * It can be used to avoid copying full stream, conserving memory.
@@ -19,12 +16,10 @@ use const SEEK_SET;
 final class RelativeStream implements StreamInterface, Stringable
 {
     private readonly int $offset;
-
     public function __construct(private readonly StreamInterface $decoratedStream, ?int $offset)
     {
         $this->offset = (int) $offset;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -36,7 +31,6 @@ final class RelativeStream implements StreamInterface, Stringable
         }
         return $this->getContents();
     }
-
     /**
      * {@inheritdoc}
      */
@@ -45,7 +39,6 @@ final class RelativeStream implements StreamInterface, Stringable
     {
         $this->decoratedStream->close();
     }
-
     /**
      * {@inheritdoc}
      */
@@ -54,7 +47,6 @@ final class RelativeStream implements StreamInterface, Stringable
     {
         return $this->decoratedStream->detach();
     }
-
     /**
      * {@inheritdoc}
      */
@@ -67,7 +59,6 @@ final class RelativeStream implements StreamInterface, Stringable
         }
         return $size - $this->offset;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -76,7 +67,6 @@ final class RelativeStream implements StreamInterface, Stringable
     {
         return $this->decoratedStream->tell() - $this->offset;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -85,7 +75,6 @@ final class RelativeStream implements StreamInterface, Stringable
     {
         return $this->decoratedStream->eof();
     }
-
     /**
      * {@inheritdoc}
      */
@@ -94,7 +83,6 @@ final class RelativeStream implements StreamInterface, Stringable
     {
         return $this->decoratedStream->isSeekable();
     }
-
     /**
      * {@inheritdoc}
      */
@@ -107,7 +95,6 @@ final class RelativeStream implements StreamInterface, Stringable
         }
         $this->decoratedStream->seek($offset, $whence);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -116,7 +103,6 @@ final class RelativeStream implements StreamInterface, Stringable
     {
         $this->seek(0);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -125,7 +111,6 @@ final class RelativeStream implements StreamInterface, Stringable
     {
         return $this->decoratedStream->isWritable();
     }
-
     /**
      * {@inheritdoc}
      */
@@ -137,7 +122,6 @@ final class RelativeStream implements StreamInterface, Stringable
         }
         return $this->decoratedStream->write($string);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -146,7 +130,6 @@ final class RelativeStream implements StreamInterface, Stringable
     {
         return $this->decoratedStream->isReadable();
     }
-
     /**
      * {@inheritdoc}
      */
@@ -158,7 +141,6 @@ final class RelativeStream implements StreamInterface, Stringable
         }
         return $this->decoratedStream->read($length);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -170,7 +152,6 @@ final class RelativeStream implements StreamInterface, Stringable
         }
         return $this->decoratedStream->getContents();
     }
-
     /**
      * {@inheritdoc}
      */

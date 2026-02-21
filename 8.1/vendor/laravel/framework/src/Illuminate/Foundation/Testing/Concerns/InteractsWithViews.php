@@ -8,7 +8,6 @@ use Illuminate\Support\ViewErrorBag;
 use Illuminate\Testing\TestComponent;
 use Illuminate\Testing\TestView;
 use Illuminate\View\View;
-
 trait InteractsWithViews
 {
     /**
@@ -22,7 +21,6 @@ trait InteractsWithViews
     {
         return new TestView(view($view, $data));
     }
-
     /**
      * Render the contents of the given Blade template string.
      *
@@ -33,20 +31,14 @@ trait InteractsWithViews
     protected function blade(string $template, $data = [])
     {
         $tempDirectory = sys_get_temp_dir();
-
-        if (! in_array($tempDirectory, ViewFacade::getFinder()->getPaths())) {
+        if (!in_array($tempDirectory, ViewFacade::getFinder()->getPaths())) {
             ViewFacade::addLocation(sys_get_temp_dir());
         }
-
         $tempFileInfo = pathinfo(tempnam($tempDirectory, 'laravel-blade'));
-
-        $tempFile = $tempFileInfo['dirname'].'/'.$tempFileInfo['filename'].'.blade.php';
-
+        $tempFile = $tempFileInfo['dirname'] . '/' . $tempFileInfo['filename'] . '.blade.php';
         file_put_contents($tempFile, $template);
-
         return new TestView(view($tempFileInfo['filename'], $data));
     }
-
     /**
      * Render the given view component.
      *
@@ -57,16 +49,10 @@ trait InteractsWithViews
     protected function component(string $componentClass, $data = [])
     {
         $component = $this->app->make($componentClass, $data);
-
         $view = value($component->resolveView(), $data);
-
-        $view = $view instanceof View
-            ? $view->with($component->data())
-            : view($view, $component->data());
-
+        $view = $view instanceof View ? $view->with($component->data()) : view($view, $component->data());
         return new TestComponent($component, $view);
     }
-
     /**
      * Populate the shared view error bag with the given errors.
      *
@@ -76,8 +62,7 @@ trait InteractsWithViews
      */
     protected function withViewErrors(array $errors, $key = 'default')
     {
-        ViewFacade::share('errors', (new ViewErrorBag)->put($key, new MessageBag($errors)));
-
+        ViewFacade::share('errors', (new ViewErrorBag())->put($key, new MessageBag($errors)));
         return $this;
     }
 }

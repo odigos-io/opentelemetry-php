@@ -5,9 +5,7 @@
  *
  * @license https://github.com/slimphp/Slim/blob/4.x/LICENSE.md (MIT License)
  */
-
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Slim\Routing;
 
 use Psr\Container\ContainerInterface;
@@ -17,7 +15,6 @@ use Slim\Interfaces\RouteCollectorInterface;
 use Slim\Interfaces\RouteCollectorProxyInterface;
 use Slim\Interfaces\RouteGroupInterface;
 use Slim\Interfaces\RouteInterface;
-
 /**
  * @template TContainerInterface of (ContainerInterface|null)
  * @template-implements RouteCollectorProxyInterface<TContainerInterface>
@@ -25,33 +22,22 @@ use Slim\Interfaces\RouteInterface;
 class RouteCollectorProxy implements RouteCollectorProxyInterface
 {
     protected ResponseFactoryInterface $responseFactory;
-
     protected CallableResolverInterface $callableResolver;
-
     /** @var TContainerInterface */
     protected ?ContainerInterface $container = null;
-
     protected RouteCollectorInterface $routeCollector;
-
     protected string $groupPattern;
-
     /**
      * @param TContainerInterface $container
      */
-    public function __construct(
-        ResponseFactoryInterface $responseFactory,
-        CallableResolverInterface $callableResolver,
-        ?ContainerInterface $container = null,
-        ?RouteCollectorInterface $routeCollector = null,
-        string $groupPattern = ''
-    ) {
+    public function __construct(ResponseFactoryInterface $responseFactory, CallableResolverInterface $callableResolver, ?ContainerInterface $container = null, ?RouteCollectorInterface $routeCollector = null, string $groupPattern = '')
+    {
         $this->responseFactory = $responseFactory;
         $this->callableResolver = $callableResolver;
         $this->container = $container;
-        $this->routeCollector = $routeCollector ?? new RouteCollector($responseFactory, $callableResolver, $container);
+        $this->routeCollector = $routeCollector ?? new \Slim\Routing\RouteCollector($responseFactory, $callableResolver, $container);
         $this->groupPattern = $groupPattern;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -59,7 +45,6 @@ class RouteCollectorProxy implements RouteCollectorProxyInterface
     {
         return $this->responseFactory;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -67,7 +52,6 @@ class RouteCollectorProxy implements RouteCollectorProxyInterface
     {
         return $this->callableResolver;
     }
-
     /**
      * {@inheritdoc}
      * @return TContainerInterface
@@ -76,7 +60,6 @@ class RouteCollectorProxy implements RouteCollectorProxyInterface
     {
         return $this->container;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -84,7 +67,6 @@ class RouteCollectorProxy implements RouteCollectorProxyInterface
     {
         return $this->routeCollector;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -92,17 +74,14 @@ class RouteCollectorProxy implements RouteCollectorProxyInterface
     {
         return $this->routeCollector->getBasePath();
     }
-
     /**
      * {@inheritdoc}
      */
     public function setBasePath(string $basePath): RouteCollectorProxyInterface
     {
         $this->routeCollector->setBasePath($basePath);
-
         return $this;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -110,7 +89,6 @@ class RouteCollectorProxy implements RouteCollectorProxyInterface
     {
         return $this->map(['GET'], $pattern, $callable);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -118,7 +96,6 @@ class RouteCollectorProxy implements RouteCollectorProxyInterface
     {
         return $this->map(['POST'], $pattern, $callable);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -126,7 +103,6 @@ class RouteCollectorProxy implements RouteCollectorProxyInterface
     {
         return $this->map(['PUT'], $pattern, $callable);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -134,7 +110,6 @@ class RouteCollectorProxy implements RouteCollectorProxyInterface
     {
         return $this->map(['PATCH'], $pattern, $callable);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -142,7 +117,6 @@ class RouteCollectorProxy implements RouteCollectorProxyInterface
     {
         return $this->map(['DELETE'], $pattern, $callable);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -150,7 +124,6 @@ class RouteCollectorProxy implements RouteCollectorProxyInterface
     {
         return $this->map(['OPTIONS'], $pattern, $callable);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -158,39 +131,32 @@ class RouteCollectorProxy implements RouteCollectorProxyInterface
     {
         return $this->map(['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'], $pattern, $callable);
     }
-
     /**
      * {@inheritdoc}
      */
     public function map(array $methods, string $pattern, $callable): RouteInterface
     {
         $pattern = $this->groupPattern . $pattern;
-
         return $this->routeCollector->map($methods, $pattern, $callable);
     }
-
     /**
      * {@inheritdoc}
      */
     public function group(string $pattern, $callable): RouteGroupInterface
     {
         $pattern = $this->groupPattern . $pattern;
-
         return $this->routeCollector->group($pattern, $callable);
     }
-
     /**
      * {@inheritdoc}
      */
     public function redirect(string $from, $to, int $status = 302): RouteInterface
     {
         $responseFactory = $this->responseFactory;
-
         $handler = function () use ($to, $status, $responseFactory) {
             $response = $responseFactory->createResponse($status);
             return $response->withHeader('Location', (string) $to);
         };
-
         return $this->get($from, $handler);
     }
 }

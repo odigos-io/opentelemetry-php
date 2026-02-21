@@ -7,7 +7,6 @@ use Illuminate\Database\Console\Migrations\RefreshCommand;
 use Illuminate\Database\Console\Migrations\ResetCommand;
 use Illuminate\Database\Console\Migrations\RollbackCommand;
 use Illuminate\Database\Console\WipeCommand;
-
 /**
  * @method static \Illuminate\Database\Connection connection(\UnitEnum|string|null $name = null)
  * @method static \Illuminate\Database\ConnectionInterface build(array $config)
@@ -119,7 +118,7 @@ use Illuminate\Database\Console\WipeCommand;
  *
  * @see \Illuminate\Database\DatabaseManager
  */
-class DB extends Facade
+class DB extends \Illuminate\Support\Facades\Facade
 {
     /**
      * Indicate if destructive Artisan commands should be prohibited.
@@ -129,7 +128,7 @@ class DB extends Facade
      * @param  bool  $prohibit
      * @return void
      */
-    public static function prohibitDestructiveCommands(bool $prohibit = true)
+    public static function prohibitDestructiveCommands(bool $prohibit = \true)
     {
         FreshCommand::prohibit($prohibit);
         RefreshCommand::prohibit($prohibit);
@@ -137,7 +136,6 @@ class DB extends Facade
         RollbackCommand::prohibit($prohibit);
         WipeCommand::prohibit($prohibit);
     }
-
     /**
      * Get the registered name of the component.
      *

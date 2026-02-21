@@ -1,13 +1,13 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\log;
 
-use Yii;
+use Odigos\Yii;
 use yii\base\Component;
 use yii\base\InvalidConfigException;
 use yii\helpers\ArrayHelper;
@@ -16,7 +16,6 @@ use yii\helpers\VarDumper;
 use yii\web\IdentityInterface;
 use yii\web\Request;
 use yii\web\User;
-
 /**
  * Target is the base class for all log target classes.
  *
@@ -75,14 +74,7 @@ abstract class Target extends Component
      *
      * @see \yii\helpers\ArrayHelper::filter()
      */
-    public $logVars = [
-        '_GET',
-        '_POST',
-        '_FILES',
-        '_COOKIE',
-        '_SESSION',
-        '_SERVER',
-    ];
+    public $logVars = ['_GET', '_POST', '_FILES', '_COOKIE', '_SESSION', '_SERVER'];
     /**
      * @var array list of the PHP predefined variables that should NOT be logged "as is" and should always be replaced
      * with a mask `***` before logging, when exist.
@@ -101,11 +93,7 @@ abstract class Target extends Component
      *
      * @since 2.0.16
      */
-    public $maskVars = [
-        '_SERVER.HTTP_AUTHORIZATION',
-        '_SERVER.PHP_AUTH_USER',
-        '_SERVER.PHP_AUTH_PW',
-    ];
+    public $maskVars = ['_SERVER.HTTP_AUTHORIZATION', '_SERVER.PHP_AUTH_USER', '_SERVER.PHP_AUTH_PW'];
     /**
      * @var callable|null a PHP callable that returns a string to be prefixed to every exported message.
      *
@@ -131,18 +119,14 @@ abstract class Target extends Component
      * Defaults to false.
      * @since 2.0.13
      */
-    public $microtime = false;
-
+    public $microtime = \false;
     private $_levels = 0;
-    private $_enabled = true;
-
-
+    private $_enabled = \true;
     /**
      * Exports log [[messages]] to a specific destination.
      * Child classes must implement this method.
      */
     abstract public function export();
-
     /**
      * Processes the given log messages.
      * This method will filter the given messages with [[levels]] and [[categories]].
@@ -157,18 +141,16 @@ abstract class Target extends Component
         $count = count($this->messages);
         if ($count > 0 && ($final || $this->exportInterval > 0 && $count >= $this->exportInterval)) {
             if (($context = $this->getContextMessage()) !== '') {
-                $this->messages[] = [$context, Logger::LEVEL_INFO, 'application', YII_BEGIN_TIME, [], 0];
+                $this->messages[] = [$context, \yii\log\Logger::LEVEL_INFO, 'application', YII_BEGIN_TIME, [], 0];
             }
             // set exportInterval to 0 to avoid triggering export again while exporting
             $oldExportInterval = $this->exportInterval;
             $this->exportInterval = 0;
             $this->export();
             $this->exportInterval = $oldExportInterval;
-
             $this->messages = [];
         }
     }
-
     /**
      * Generates the context information to be logged.
      * The default implementation will dump user information, system variables, etc.
@@ -180,7 +162,7 @@ abstract class Target extends Component
         $items = ArrayHelper::flatten($context);
         foreach ($this->maskVars as $var) {
             foreach ($items as $key => $value) {
-                if (StringHelper::matchWildcard($var, $key, ['caseSensitive' => false])) {
+                if (StringHelper::matchWildcard($var, $key, ['caseSensitive' => \false])) {
                     ArrayHelper::setValue($context, $key, '***');
                 }
             }
@@ -189,10 +171,8 @@ abstract class Target extends Component
         foreach ($context as $key => $value) {
             $result[] = "\${$key} = " . VarDumper::dumpAsString($value);
         }
-
         return implode("\n\n", $result);
     }
-
     /**
      * @return int the message levels that this target is interested in. This is a bitmap of
      * level values. Defaults to 0, meaning all available levels.
@@ -201,7 +181,6 @@ abstract class Target extends Component
     {
         return $this->_levels;
     }
-
     /**
      * Sets the message levels that this target is interested in.
      *
@@ -224,20 +203,14 @@ abstract class Target extends Component
      */
     public function setLevels($levels)
     {
-        static $levelMap = [
-            'error' => Logger::LEVEL_ERROR,
-            'warning' => Logger::LEVEL_WARNING,
-            'info' => Logger::LEVEL_INFO,
-            'trace' => Logger::LEVEL_TRACE,
-            'profile' => Logger::LEVEL_PROFILE,
-        ];
+        static $levelMap = ['error' => \yii\log\Logger::LEVEL_ERROR, 'warning' => \yii\log\Logger::LEVEL_WARNING, 'info' => \yii\log\Logger::LEVEL_INFO, 'trace' => \yii\log\Logger::LEVEL_TRACE, 'profile' => \yii\log\Logger::LEVEL_PROFILE];
         if (is_array($levels)) {
             $this->_levels = 0;
             foreach ($levels as $level) {
                 if (isset($levelMap[$level])) {
                     $this->_levels |= $levelMap[$level];
                 } else {
-                    throw new InvalidConfigException("Unrecognized level: $level");
+                    throw new InvalidConfigException("Unrecognized level: {$level}");
                 }
             }
         } else {
@@ -245,12 +218,11 @@ abstract class Target extends Component
                 return $carry | $item;
             });
             if (!($bitmapValues & $levels) && $levels !== 0) {
-                throw new InvalidConfigException("Incorrect $levels value");
+                throw new InvalidConfigException("Incorrect {$levels} value");
             }
             $this->_levels = $levels;
         }
     }
-
     /**
      * Filters the given messages according to their categories and levels.
      * @param array $messages messages to be filtered.
@@ -268,33 +240,28 @@ abstract class Target extends Component
                 unset($messages[$i]);
                 continue;
             }
-
             $matched = empty($categories);
             foreach ($categories as $category) {
                 if ($message[2] === $category || !empty($category) && substr_compare($category, '*', -1, 1) === 0 && strpos($message[2], rtrim($category, '*')) === 0) {
-                    $matched = true;
+                    $matched = \true;
                     break;
                 }
             }
-
             if ($matched) {
                 foreach ($except as $category) {
                     $prefix = rtrim($category, '*');
                     if (($message[2] === $category || $prefix !== $category) && strpos($message[2], $prefix) === 0) {
-                        $matched = false;
+                        $matched = \false;
                         break;
                     }
                 }
             }
-
             if (!$matched) {
                 unset($messages[$i]);
             }
         }
-
         return $messages;
     }
-
     /**
      * Formats a log message for display as a string.
      * @param array $message the log message to be formatted.
@@ -304,7 +271,7 @@ abstract class Target extends Component
     public function formatMessage($message)
     {
         [$text, $level, $category, $timestamp] = $message;
-        $level = Logger::getLevelName($level);
+        $level = \yii\log\Logger::getLevelName($level);
         if (!is_string($text)) {
             // exceptions may not be serializable if in the call stack somewhere is a Closure
             if ($text instanceof \Exception || $text instanceof \Throwable) {
@@ -319,12 +286,9 @@ abstract class Target extends Component
                 $traces[] = "in {$trace['file']}:{$trace['line']}";
             }
         }
-
         $prefix = $this->getMessagePrefix($message);
-        return $this->getTime($timestamp) . " {$prefix}[$level][$category] $text"
-            . (empty($traces) ? '' : "\n    " . implode("\n    ", $traces));
+        return $this->getTime($timestamp) . " {$prefix}[{$level}][{$category}] {$text}" . (empty($traces) ? '' : "\n    " . implode("\n    ", $traces));
     }
-
     /**
      * Returns a string to be prefixed to the given message.
      * If [[prefix]] is configured it will return the result of the callback.
@@ -338,32 +302,26 @@ abstract class Target extends Component
         if ($this->prefix !== null) {
             return call_user_func($this->prefix, $message);
         }
-
         if (Yii::$app === null) {
             return '';
         }
-
         $request = Yii::$app->getRequest();
         $ip = $request instanceof Request ? $request->getUserIP() : '-';
-
         /**
          * @var User $user
          * @phpstan-var User<IdentityInterface>
          */
-        $user = Yii::$app->has('user', true) ? Yii::$app->get('user') : null;
-        if ($user && ($identity = $user->getIdentity(false))) {
+        $user = Yii::$app->has('user', \true) ? Yii::$app->get('user') : null;
+        if ($user && $identity = $user->getIdentity(\false)) {
             $userID = $identity->getId();
         } else {
             $userID = '-';
         }
-
         /** @var \yii\web\Session $session */
-        $session = Yii::$app->has('session', true) ? Yii::$app->get('session') : null;
+        $session = Yii::$app->has('session', \true) ? Yii::$app->get('session') : null;
         $sessionID = $session && $session->getIsActive() ? $session->getId() : '-';
-
-        return "[$ip][$userID][$sessionID]";
+        return "[{$ip}][{$userID}][{$sessionID}]";
     }
-
     /**
      * Sets a value indicating whether this log target is enabled.
      * @param bool|callable $value a boolean value or a callable to obtain the value from.
@@ -383,7 +341,6 @@ abstract class Target extends Component
     {
         $this->_enabled = $value;
     }
-
     /**
      * Check whether the log target is enabled.
      * @return bool A value indicating whether this log target is enabled.
@@ -393,10 +350,8 @@ abstract class Target extends Component
         if (is_callable($this->_enabled)) {
             return call_user_func($this->_enabled, $this);
         }
-
         return $this->_enabled;
     }
-
     /**
      * Returns formatted ('Y-m-d H:i:s') timestamp for message.
      * If [[microtime]] is configured to true it will return format 'Y-m-d H:i:s.u'.
@@ -407,7 +362,6 @@ abstract class Target extends Component
     protected function getTime($timestamp)
     {
         $parts = explode('.', sprintf('%F', $timestamp));
-
-        return date('Y-m-d H:i:s', $parts[0]) . ($this->microtime ? ('.' . $parts[1]) : '');
+        return date('Y-m-d H:i:s', $parts[0]) . ($this->microtime ? '.' . $parts[1] : '');
     }
 }

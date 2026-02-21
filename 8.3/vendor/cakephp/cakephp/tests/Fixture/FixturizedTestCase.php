@@ -1,4 +1,5 @@
 <?php
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -17,7 +18,6 @@ namespace Cake\Test\Fixture;
 use Cake\TestSuite\Fixture\FixtureManager;
 use Cake\TestSuite\TestCase;
 use Exception;
-
 /**
  * This class helps in testing the life-cycle of fixtures inside a CakeTestCase
  */
@@ -29,7 +29,6 @@ class FixturizedTestCase extends TestCase
      * @var array<string>
      */
     protected array $fixtures = ['core.Categories', 'core.Articles'];
-
     /**
      * test that the shared fixture is correctly set
      */
@@ -37,7 +36,6 @@ class FixturizedTestCase extends TestCase
     {
         $this->assertInstanceOf(FixtureManager::class, $this->fixtureManager);
     }
-
     /**
      * test that it is possible to load fixtures on demand
      */
@@ -45,7 +43,6 @@ class FixturizedTestCase extends TestCase
     {
         $this->loadFixtures('Categories');
     }
-
     /**
      * test that calling loadFixtures without args loads all fixtures
      */
@@ -57,24 +54,21 @@ class FixturizedTestCase extends TestCase
         $category = $this->getTableLocator()->get('Categories')->get(1);
         $this->assertSame(1, $category->id);
     }
-
     /**
      * test that a test is marked as skipped using skipIf and its first parameter evaluates to true
      */
     public function testSkipIfTrue(): void
     {
-        $this->skipIf(true);
+        $this->skipIf(\true);
     }
-
     /**
      * test that a test is not marked as skipped using skipIf and its first parameter evaluates to false
      */
     public function testSkipIfFalse(): void
     {
-        $this->skipIf(false);
-        $this->assertTrue(true, 'Avoid phpunit warnings');
+        $this->skipIf(\false);
+        $this->assertTrue(\true, 'Avoid phpunit warnings');
     }
-
     /**
      * test that a fixtures are unloaded even if the test throws exceptions
      *

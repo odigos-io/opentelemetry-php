@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -28,7 +28,6 @@ use Cake\TestSuite\ConnectionHelper;
 use Closure;
 use PDOException;
 use UnexpectedValueException;
-
 /**
  * Helper for managing fixtures.
  */
@@ -43,7 +42,6 @@ class FixtureHelper
     public function loadFixtures(array $fixtureNames): array
     {
         static $cachedFixtures = [];
-
         $fixtures = [];
         foreach ($fixtureNames as $fixtureName) {
             if (str_contains($fixtureName, '.')) {
@@ -51,7 +49,6 @@ class FixtureHelper
                 $path = explode('/', $pathName);
                 $name = array_pop($path);
                 $additionalPath = implode('\\', $path);
-
                 if ($type === 'core') {
                     $baseNamespace = 'Cake';
                 } elseif ($type === 'app') {
@@ -64,39 +61,27 @@ class FixtureHelper
                     $baseNamespace = '';
                     $name = $fixtureName;
                 }
-
                 if (strpos($name, '/') > 0) {
                     $name = str_replace('/', '\\', $name);
                 }
-
-                $nameSegments = [
-                    $baseNamespace,
-                    'Test\Fixture',
-                    $additionalPath,
-                    $name . 'Fixture',
-                ];
+                $nameSegments = [$baseNamespace, 'Odigos\Test\Fixture', $additionalPath, $name . 'Fixture'];
                 /** @var class-string<\Cake\Datasource\FixtureInterface> $className */
                 $className = implode('\\', array_filter($nameSegments));
             } else {
                 /** @var class-string<\Cake\Datasource\FixtureInterface> $className */
                 $className = $fixtureName;
             }
-
             if (isset($fixtures[$className])) {
                 throw new UnexpectedValueException(sprintf('Found duplicate fixture `%s`.', $fixtureName));
             }
-
             if (!class_exists($className)) {
                 throw new UnexpectedValueException(sprintf('Could not find fixture `%s`.', $fixtureName));
             }
-
             $cachedFixtures[$className] ??= new $className();
             $fixtures[$className] = $cachedFixtures[$className];
         }
-
         return $fixtures;
     }
-
     /**
      * Runs the callback once per connection.
      *
@@ -115,12 +100,10 @@ class FixtureHelper
         foreach ($fixtures as $fixture) {
             $groups[$fixture->connection()][] = $fixture;
         }
-
         foreach ($groups as $connectionName => $fixtures) {
             $callback(ConnectionManager::get($connectionName), $fixtures);
         }
     }
-
     /**
      * Inserts fixture data.
      *
@@ -136,17 +119,13 @@ class FixtureHelper
                 if ($sortedFixtures) {
                     $this->insertConnection($connection, $sortedFixtures);
                 } else {
-                    ConnectionHelper::runWithoutConstraints(
-                        $connection,
-                        fn(Connection $connection) => $this->insertConnection($connection, $groupFixtures),
-                    );
+                    ConnectionHelper::runWithoutConstraints($connection, fn(Connection $connection) => $this->insertConnection($connection, $groupFixtures));
                 }
             } else {
                 $this->insertConnection($connection, $groupFixtures);
             }
         }, $fixtures);
     }
-
     /**
      * Inserts all fixtures for a connection and provides friendly errors for bad data.
      *
@@ -160,17 +139,11 @@ class FixtureHelper
             try {
                 $fixture->insert($connection);
             } catch (PDOException $exception) {
-                $message = sprintf(
-                    'Unable to insert rows for table `%s`.'
-                        . " Fixture records might have invalid data or unknown constraints.\n%s",
-                    $fixture->sourceName(),
-                    $exception->getMessage(),
-                );
+                $message = sprintf('Unable to insert rows for table `%s`.' . " Fixture records might have invalid data or unknown constraints.\n%s", $fixture->sourceName(), $exception->getMessage());
                 throw new CakeException($message);
             }
         }
     }
-
     /**
      * Truncates fixture tables.
      *
@@ -186,22 +159,17 @@ class FixtureHelper
                 if ($connection->getWriteDriver()->supports(DriverFeatureEnum::TRUNCATE_WITH_CONSTRAINTS)) {
                     $sortedFixtures = $this->sortByConstraint($connection, $groupFixtures);
                 }
-
                 if ($sortedFixtures !== null) {
                     $this->truncateConnection($connection, array_reverse($sortedFixtures));
                 } else {
                     $helper = new ConnectionHelper();
-                    $helper->runWithoutConstraints(
-                        $connection,
-                        fn(Connection $connection) => $this->truncateConnection($connection, $groupFixtures),
-                    );
+                    $helper->runWithoutConstraints($connection, fn(Connection $connection) => $this->truncateConnection($connection, $groupFixtures));
                 }
             } else {
                 $this->truncateConnection($connection, $groupFixtures);
             }
         }, $fixtures);
     }
-
     /**
      * Truncates all fixtures for a connection and provides friendly errors for bad data.
      *
@@ -215,17 +183,11 @@ class FixtureHelper
             try {
                 $fixture->truncate($connection);
             } catch (PDOException $exception) {
-                $message = sprintf(
-                    'Unable to truncate table `%s`.'
-                        . " Fixture records might have invalid data or unknown constraints.\n%s",
-                    $fixture->sourceName(),
-                    $exception->getMessage(),
-                );
+                $message = sprintf('Unable to truncate table `%s`.' . " Fixture records might have invalid data or unknown constraints.\n%s", $fixture->sourceName(), $exception->getMessage());
                 throw new CakeException($message);
             }
         }
     }
-
     /**
      * Sort fixtures with foreign constraints last if possible, otherwise returns null.
      *
@@ -245,7 +207,6 @@ class FixtureHelper
                 $unconstrained[] = $fixture;
             }
         }
-
         // Check if any fixtures reference another fixture with constraints
         // If they do, then there might be cross-dependencies which we don't support sorting
         foreach ($constrained as ['references' => $references]) {
@@ -255,10 +216,8 @@ class FixtureHelper
                 }
             }
         }
-
         return array_merge($unconstrained, array_column($constrained, 'fixture'));
     }
-
     /**
      * Gets array of foreign references for fixtures table.
      *
@@ -270,23 +229,19 @@ class FixtureHelper
     {
         /** @var array<string, \Cake\Database\Schema\TableSchemaInterface> $schemas */
         static $schemas = [];
-
         // Get and cache off the schema since TestFixture generates a fake schema based on $fields
         $tableName = $fixture->sourceName();
         if (!isset($schemas[$tableName])) {
             $schemas[$tableName] = $connection->getSchemaCollection()->describe($tableName);
         }
         $schema = $schemas[$tableName];
-
         $references = [];
         foreach ($schema->constraints() as $constraintName) {
-            $constraint = $schema->getConstraint((string)$constraintName);
-
+            $constraint = $schema->getConstraint((string) $constraintName);
             if ($constraint && $constraint['type'] === TableSchema::CONSTRAINT_FOREIGN) {
                 $references[] = $constraint['references'][0];
             }
         }
-
         return $references;
     }
 }

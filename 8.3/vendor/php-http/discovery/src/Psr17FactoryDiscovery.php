@@ -10,23 +10,17 @@ use Psr\Http\Message\ServerRequestFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Message\UploadedFileFactoryInterface;
 use Psr\Http\Message\UriFactoryInterface;
-
 /**
  * Finds PSR-17 factories.
  *
  * @author Tobias Nyholm <tobias.nyholm@gmail.com>
  */
-final class Psr17FactoryDiscovery extends ClassDiscovery
+final class Psr17FactoryDiscovery extends \Http\Discovery\ClassDiscovery
 {
-    private static function createException($type, Exception $e)
+    private static function createException($type, \Http\Discovery\Exception $e)
     {
-        return new RealNotFoundException(
-            'No PSR-17 '.$type.' found. Install a package from this list: https://packagist.org/providers/psr/http-factory-implementation',
-            0,
-            $e
-        );
+        return new RealNotFoundException('No PSR-17 ' . $type . ' found. Install a package from this list: https://packagist.org/providers/psr/http-factory-implementation', 0, $e);
     }
-
     /**
      * @return RequestFactoryInterface
      *
@@ -39,10 +33,8 @@ final class Psr17FactoryDiscovery extends ClassDiscovery
         } catch (DiscoveryFailedException $e) {
             throw self::createException('request factory', $e);
         }
-
         return static::instantiateClass($messageFactory);
     }
-
     /**
      * @return ResponseFactoryInterface
      *
@@ -55,10 +47,8 @@ final class Psr17FactoryDiscovery extends ClassDiscovery
         } catch (DiscoveryFailedException $e) {
             throw self::createException('response factory', $e);
         }
-
         return static::instantiateClass($messageFactory);
     }
-
     /**
      * @return ServerRequestFactoryInterface
      *
@@ -71,10 +61,8 @@ final class Psr17FactoryDiscovery extends ClassDiscovery
         } catch (DiscoveryFailedException $e) {
             throw self::createException('server request factory', $e);
         }
-
         return static::instantiateClass($messageFactory);
     }
-
     /**
      * @return StreamFactoryInterface
      *
@@ -87,10 +75,8 @@ final class Psr17FactoryDiscovery extends ClassDiscovery
         } catch (DiscoveryFailedException $e) {
             throw self::createException('stream factory', $e);
         }
-
         return static::instantiateClass($messageFactory);
     }
-
     /**
      * @return UploadedFileFactoryInterface
      *
@@ -103,10 +89,8 @@ final class Psr17FactoryDiscovery extends ClassDiscovery
         } catch (DiscoveryFailedException $e) {
             throw self::createException('uploaded file factory', $e);
         }
-
         return static::instantiateClass($messageFactory);
     }
-
     /**
      * @return UriFactoryInterface
      *
@@ -119,10 +103,8 @@ final class Psr17FactoryDiscovery extends ClassDiscovery
         } catch (DiscoveryFailedException $e) {
             throw self::createException('url factory', $e);
         }
-
         return static::instantiateClass($messageFactory);
     }
-
     /**
      * @return UriFactoryInterface
      *

@@ -3,7 +3,6 @@
 namespace Illuminate\Process;
 
 use InvalidArgumentException;
-
 /**
  * @mixin \Illuminate\Process\Factory
  * @mixin \Illuminate\Process\PendingProcess
@@ -16,21 +15,18 @@ class Pool
      * @var \Illuminate\Process\Factory
      */
     protected $factory;
-
     /**
      * The callback that resolves the pending processes.
      *
      * @var callable
      */
     protected $callback;
-
     /**
      * The array of pending processes.
      *
      * @var array
      */
     protected $pendingProcesses = [];
-
     /**
      * Create a new process pool.
      *
@@ -38,12 +34,11 @@ class Pool
      * @param  callable  $callback
      * @return void
      */
-    public function __construct(Factory $factory, callable $callback)
+    public function __construct(\Illuminate\Process\Factory $factory, callable $callback)
     {
         $this->factory = $factory;
         $this->callback = $callback;
     }
-
     /**
      * Add a process to the pool with a key.
      *
@@ -56,7 +51,6 @@ class Pool
             $this->pendingProcesses[$key] = $pendingProcess;
         });
     }
-
     /**
      * Start all of the processes in the pool.
      *
@@ -66,22 +60,16 @@ class Pool
     public function start(?callable $output = null)
     {
         call_user_func($this->callback, $this);
-
-        return new InvokedProcessPool(
-            collect($this->pendingProcesses)
-                ->each(function ($pendingProcess) {
-                    if (! $pendingProcess instanceof PendingProcess) {
-                        throw new InvalidArgumentException('Process pool must only contain pending processes.');
-                    }
-                })->mapWithKeys(function ($pendingProcess, $key) use ($output) {
-                    return [$key => $pendingProcess->start(output: $output ? function ($type, $buffer) use ($key, $output) {
-                        $output($type, $buffer, $key);
-                    } : null)];
-                })
-            ->all()
-        );
+        return new \Illuminate\Process\InvokedProcessPool(collect($this->pendingProcesses)->each(function ($pendingProcess) {
+            if (!$pendingProcess instanceof \Illuminate\Process\PendingProcess) {
+                throw new InvalidArgumentException('Process pool must only contain pending processes.');
+            }
+        })->mapWithKeys(function ($pendingProcess, $key) use ($output) {
+            return [$key => $pendingProcess->start(output: $output ? function ($type, $buffer) use ($key, $output) {
+                $output($type, $buffer, $key);
+            } : null)];
+        })->all());
     }
-
     /**
      * Start and wait for the processes to finish.
      *
@@ -91,7 +79,6 @@ class Pool
     {
         return $this->wait();
     }
-
     /**
      * Start and wait for the processes to finish.
      *
@@ -101,7 +88,6 @@ class Pool
     {
         return $this->start()->wait();
     }
-
     /**
      * Dynamically proxy methods calls to a new pending process.
      *

@@ -1,10 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\SDK\Common\InstrumentationScope;
 
 interface Configurable
 {
-    public function updateConfigurator(Configurator $configurator): void;
+    public function updateConfigurator(\OpenTelemetry\SDK\Common\InstrumentationScope\Configurator $configurator): void;
 }

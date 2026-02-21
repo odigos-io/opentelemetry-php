@@ -10,7 +10,6 @@ class SelfReference
      * @var string
      */
     public $hash;
-
     /**
      * Creates a new self reference instance.
      *

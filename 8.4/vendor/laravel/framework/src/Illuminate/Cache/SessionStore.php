@@ -5,25 +5,21 @@ namespace Illuminate\Cache;
 use Illuminate\Contracts\Cache\Store;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\InteractsWithTime;
-
 class SessionStore implements Store
 {
-    use InteractsWithTime, RetrievesMultipleKeys;
-
+    use InteractsWithTime, \Illuminate\Cache\RetrievesMultipleKeys;
     /**
      * The key for cache items.
      *
      * @var string
      */
     public $key;
-
     /**
      * The session instance.
      *
      * @var \Illuminate\Contracts\Session\Session
      */
     public $session;
-
     /**
      * Create a new session cache store.
      *
@@ -35,7 +31,6 @@ class SessionStore implements Store
         $this->key = $key;
         $this->session = $session;
     }
-
     /**
      * Get all of the cached values and their expiration times.
      *
@@ -45,7 +40,6 @@ class SessionStore implements Store
     {
         return $this->session->get($this->key, []);
     }
-
     /**
      * Retrieve an item from the cache by key.
      *
@@ -54,23 +48,17 @@ class SessionStore implements Store
      */
     public function get($key)
     {
-        if (! $this->session->exists($this->itemKey($key))) {
+        if (!$this->session->exists($this->itemKey($key))) {
             return;
         }
-
         $item = $this->session->get($this->itemKey($key));
-
         $expiresAt = $item['expiresAt'] ?? 0;
-
         if ($this->isExpired($expiresAt)) {
             $this->forget($key);
-
             return;
         }
-
         return $item['value'];
     }
-
     /**
      * Determine if the given expiration time is expired.
      *
@@ -79,9 +67,8 @@ class SessionStore implements Store
      */
     protected function isExpired($expiresAt)
     {
-        return $expiresAt !== 0 && (Carbon::now()->getPreciseTimestamp(3) / 1000) >= $expiresAt;
+        return $expiresAt !== 0 && Carbon::now()->getPreciseTimestamp(3) / 1000 >= $expiresAt;
     }
-
     /**
      * Store an item in the cache for a given number of seconds.
      *
@@ -92,14 +79,9 @@ class SessionStore implements Store
      */
     public function put($key, $value, $seconds)
     {
-        $this->session->put($this->itemKey($key), [
-            'value' => $value,
-            'expiresAt' => $this->toTimestamp($seconds),
-        ]);
-
-        return true;
+        $this->session->put($this->itemKey($key), ['value' => $value, 'expiresAt' => $this->toTimestamp($seconds)]);
+        return \true;
     }
-
     /**
      * Get the UNIX timestamp, with milliseconds, for the given number of seconds in the future.
      *
@@ -108,9 +90,8 @@ class SessionStore implements Store
      */
     protected function toTimestamp($seconds)
     {
-        return $seconds > 0 ? (Carbon::now()->getPreciseTimestamp(3) / 1000) + $seconds : 0;
+        return $seconds > 0 ? Carbon::now()->getPreciseTimestamp(3) / 1000 + $seconds : 0;
     }
-
     /**
      * Increment the value of an item in the cache.
      *
@@ -120,17 +101,14 @@ class SessionStore implements Store
      */
     public function increment($key, $value = 1)
     {
-        if (! is_null($existing = $this->get($key))) {
-            return tap(((int) $existing) + $value, function ($incremented) use ($key) {
+        if (!is_null($existing = $this->get($key))) {
+            return tap((int) $existing + $value, function ($incremented) use ($key) {
                 $this->session->put($this->itemKey("{$key}.value"), $incremented);
             });
         }
-
         $this->forever($key, $value);
-
         return $value;
     }
-
     /**
      * Decrement the value of an item in the cache.
      *
@@ -142,7 +120,6 @@ class SessionStore implements Store
     {
         return $this->increment($key, $value * -1);
     }
-
     /**
      * Store an item in the cache indefinitely.
      *
@@ -154,7 +131,6 @@ class SessionStore implements Store
     {
         return $this->put($key, $value, 0);
     }
-
     /**
      * Remove an item from the cache.
      *
@@ -165,13 +141,10 @@ class SessionStore implements Store
     {
         if ($this->session->exists($this->itemKey($key))) {
             $this->session->forget($this->itemKey($key));
-
-            return true;
+            return \true;
         }
-
-        return false;
+        return \false;
     }
-
     /**
      * Remove all items from the cache.
      *
@@ -180,10 +153,8 @@ class SessionStore implements Store
     public function flush()
     {
         $this->session->put($this->key, []);
-
-        return true;
+        return \true;
     }
-
     /**
      * Get the cache key prefix.
      *
@@ -193,7 +164,6 @@ class SessionStore implements Store
     {
         return "{$this->key}.{$key}";
     }
-
     /**
      * Get the cache key prefix.
      *

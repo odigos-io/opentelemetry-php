@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -17,7 +17,6 @@ declare(strict_types=1);
 namespace Cake\Datasource\Locator;
 
 use Cake\Datasource\RepositoryInterface;
-
 /**
  * Registries for repository objects should implement this interface.
  *
@@ -35,7 +34,6 @@ interface LocatorInterface
      *   has already been created with different options.
      */
     public function get(string $alias, array $options = []): RepositoryInterface;
-
     /**
      * Set a repository instance.
      *
@@ -44,7 +42,6 @@ interface LocatorInterface
      * @return TRepo
      */
     public function set(string $alias, RepositoryInterface $repository): RepositoryInterface;
-
     /**
      * Check to see if an instance exists in the registry.
      *
@@ -52,7 +49,6 @@ interface LocatorInterface
      * @return bool
      */
     public function exists(string $alias): bool;
-
     /**
      * Removes an repository instance from the registry.
      *
@@ -60,7 +56,6 @@ interface LocatorInterface
      * @return void
      */
     public function remove(string $alias): void;
-
     /**
      * Clears the registry of configuration and instances.
      *

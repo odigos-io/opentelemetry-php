@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright 2023-present MongoDB, Inc.
  *
@@ -14,11 +15,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 namespace MongoDB\Codec;
 
 use MongoDB\Exception\UnsupportedValueException;
-
 /**
  * @psalm-template BSONType
  * @psalm-template NativeType
@@ -31,7 +30,6 @@ interface Decoder
      * @psalm-assert-if-true BSONType $value
      */
     public function canDecode(mixed $value): bool;
-
     /**
      * Decodes a given value. If the decoder does not support the value, it
      * should throw an exception.
@@ -41,7 +39,6 @@ interface Decoder
      * @throws UnsupportedValueException if the decoder does not support the value
      */
     public function decode(mixed $value): mixed;
-
     /**
      * Decodes a given value if supported, otherwise returns the value as-is.
      *

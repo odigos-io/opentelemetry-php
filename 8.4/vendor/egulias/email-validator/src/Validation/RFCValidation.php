@@ -1,25 +1,22 @@
 <?php
 
-namespace Egulias\EmailValidator\Validation;
+namespace Odigos\Egulias\EmailValidator\Validation;
 
-use Egulias\EmailValidator\EmailLexer;
-use Egulias\EmailValidator\EmailParser;
-use Egulias\EmailValidator\Result\InvalidEmail;
-use Egulias\EmailValidator\Result\Reason\ExceptionFound;
-use Egulias\EmailValidator\Warning\Warning;
-
+use Odigos\Egulias\EmailValidator\EmailLexer;
+use Odigos\Egulias\EmailValidator\EmailParser;
+use Odigos\Egulias\EmailValidator\Result\InvalidEmail;
+use Odigos\Egulias\EmailValidator\Result\Reason\ExceptionFound;
+use Odigos\Egulias\EmailValidator\Warning\Warning;
 class RFCValidation implements EmailValidation
 {
     /**
      * @var Warning[]
      */
     private array $warnings = [];
-
     /**
      * @var ?InvalidEmail
      */
     private $error;
-
     public function isValid(string $email, EmailLexer $emailLexer): bool
     {
         $parser = new EmailParser($emailLexer);
@@ -29,21 +26,18 @@ class RFCValidation implements EmailValidation
             if ($result->isInvalid()) {
                 /** @psalm-suppress PropertyTypeCoercion */
                 $this->error = $result;
-                return false;
+                return \false;
             }
         } catch (\Exception $invalid) {
             $this->error = new InvalidEmail(new ExceptionFound($invalid), '');
-            return false;
+            return \false;
         }
-
-        return true;
+        return \true;
     }
-
     public function getError(): ?InvalidEmail
     {
         return $this->error;
     }
-
     /**
      * @return Warning[]
      */

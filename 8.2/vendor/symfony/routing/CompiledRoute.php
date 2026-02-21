@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\Routing;
 
 /**
@@ -28,40 +27,20 @@ class CompiledRoute implements \Serializable
      * @param array       $hostVariables An array of host variables
      * @param array       $variables     An array of variables (variables defined in the path and in the host patterns)
      */
-    public function __construct(
-        private string $staticPrefix,
-        private string $regex,
-        private array $tokens,
-        private array $pathVariables,
-        private ?string $hostRegex = null,
-        private array $hostTokens = [],
-        private array $hostVariables = [],
-        private array $variables = [],
-    ) {
+    public function __construct(private string $staticPrefix, private string $regex, private array $tokens, private array $pathVariables, private ?string $hostRegex = null, private array $hostTokens = [], private array $hostVariables = [], private array $variables = [])
+    {
     }
-
     public function __serialize(): array
     {
-        return [
-            'vars' => $this->variables,
-            'path_prefix' => $this->staticPrefix,
-            'path_regex' => $this->regex,
-            'path_tokens' => $this->tokens,
-            'path_vars' => $this->pathVariables,
-            'host_regex' => $this->hostRegex,
-            'host_tokens' => $this->hostTokens,
-            'host_vars' => $this->hostVariables,
-        ];
+        return ['vars' => $this->variables, 'path_prefix' => $this->staticPrefix, 'path_regex' => $this->regex, 'path_tokens' => $this->tokens, 'path_vars' => $this->pathVariables, 'host_regex' => $this->hostRegex, 'host_tokens' => $this->hostTokens, 'host_vars' => $this->hostVariables];
     }
-
     /**
      * @internal
      */
     final public function serialize(): string
     {
-        throw new \BadMethodCallException('Cannot serialize '.__CLASS__);
+        throw new \BadMethodCallException('Cannot serialize ' . __CLASS__);
     }
-
     public function __unserialize(array $data): void
     {
         $this->variables = $data['vars'];
@@ -73,15 +52,13 @@ class CompiledRoute implements \Serializable
         $this->hostTokens = $data['host_tokens'];
         $this->hostVariables = $data['host_vars'];
     }
-
     /**
      * @internal
      */
     final public function unserialize(string $serialized): void
     {
-        $this->__unserialize(unserialize($serialized, ['allowed_classes' => false]));
+        $this->__unserialize(unserialize($serialized, ['allowed_classes' => \false]));
     }
-
     /**
      * Returns the static prefix.
      */
@@ -89,7 +66,6 @@ class CompiledRoute implements \Serializable
     {
         return $this->staticPrefix;
     }
-
     /**
      * Returns the regex.
      */
@@ -97,7 +73,6 @@ class CompiledRoute implements \Serializable
     {
         return $this->regex;
     }
-
     /**
      * Returns the host regex.
      */
@@ -105,7 +80,6 @@ class CompiledRoute implements \Serializable
     {
         return $this->hostRegex;
     }
-
     /**
      * Returns the tokens.
      */
@@ -113,7 +87,6 @@ class CompiledRoute implements \Serializable
     {
         return $this->tokens;
     }
-
     /**
      * Returns the host tokens.
      */
@@ -121,7 +94,6 @@ class CompiledRoute implements \Serializable
     {
         return $this->hostTokens;
     }
-
     /**
      * Returns the variables.
      */
@@ -129,7 +101,6 @@ class CompiledRoute implements \Serializable
     {
         return $this->variables;
     }
-
     /**
      * Returns the path variables.
      */
@@ -137,7 +108,6 @@ class CompiledRoute implements \Serializable
     {
         return $this->pathVariables;
     }
-
     /**
      * Returns the host variables.
      */

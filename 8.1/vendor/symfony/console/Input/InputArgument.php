@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\Console\Input;
 
 use Symfony\Component\Console\Command\Command;
@@ -17,7 +16,6 @@ use Symfony\Component\Console\Completion\CompletionSuggestions;
 use Symfony\Component\Console\Completion\Suggestion;
 use Symfony\Component\Console\Exception\InvalidArgumentException;
 use Symfony\Component\Console\Exception\LogicException;
-
 /**
  * Represents a command line argument.
  *
@@ -28,13 +26,11 @@ class InputArgument
     public const REQUIRED = 1;
     public const OPTIONAL = 2;
     public const IS_ARRAY = 4;
-
     private string $name;
     private int $mode;
     private string|int|bool|array|float|null $default;
     private array|\Closure $suggestedValues;
     private string $description;
-
     /**
      * @param string                                                                        $name            The argument name
      * @param int|null                                                                      $mode            The argument mode: a bit mask of self::REQUIRED, self::OPTIONAL and self::IS_ARRAY
@@ -51,15 +47,12 @@ class InputArgument
         } elseif ($mode > 7 || $mode < 1) {
             throw new InvalidArgumentException(\sprintf('Argument mode "%s" is not valid.', $mode));
         }
-
         $this->name = $name;
         $this->mode = $mode;
         $this->description = $description;
         $this->suggestedValues = $suggestedValues;
-
         $this->setDefault($default);
     }
-
     /**
      * Returns the argument name.
      */
@@ -67,7 +60,6 @@ class InputArgument
     {
         return $this->name;
     }
-
     /**
      * Returns true if the argument is required.
      *
@@ -77,7 +69,6 @@ class InputArgument
     {
         return self::REQUIRED === (self::REQUIRED & $this->mode);
     }
-
     /**
      * Returns true if the argument can take multiple values.
      *
@@ -87,7 +78,6 @@ class InputArgument
     {
         return self::IS_ARRAY === (self::IS_ARRAY & $this->mode);
     }
-
     /**
      * Sets the default value.
      *
@@ -103,7 +93,6 @@ class InputArgument
         if ($this->isRequired() && null !== $default) {
             throw new LogicException('Cannot set a default value except for InputArgument::OPTIONAL mode.');
         }
-
         if ($this->isArray()) {
             if (null === $default) {
                 $default = [];
@@ -111,10 +100,8 @@ class InputArgument
                 throw new LogicException('A default value for an array argument must be an array.');
             }
         }
-
         $this->default = $default;
     }
-
     /**
      * Returns the default value.
      */
@@ -122,12 +109,10 @@ class InputArgument
     {
         return $this->default;
     }
-
     public function hasCompletion(): bool
     {
         return [] !== $this->suggestedValues;
     }
-
     /**
      * Adds suggestions to $suggestions for the current completion input.
      *
@@ -143,7 +128,6 @@ class InputArgument
             $suggestions->suggestValues($values);
         }
     }
-
     /**
      * Returns the description text.
      */

@@ -13,10 +13,8 @@ trait InteractsWithSession
     public function withSession(array $data)
     {
         $this->session($data);
-
         return $this;
     }
-
     /**
      * Set the session to the given array.
      *
@@ -26,14 +24,11 @@ trait InteractsWithSession
     public function session(array $data)
     {
         $this->startSession();
-
         foreach ($data as $key => $value) {
             $this->app['session']->put($key, $value);
         }
-
         return $this;
     }
-
     /**
      * Start the session for the application.
      *
@@ -41,13 +36,11 @@ trait InteractsWithSession
      */
     protected function startSession()
     {
-        if (! $this->app['session']->isStarted()) {
+        if (!$this->app['session']->isStarted()) {
             $this->app['session']->start();
         }
-
         return $this;
     }
-
     /**
      * Flush all of the current session data.
      *
@@ -56,9 +49,7 @@ trait InteractsWithSession
     public function flushSession()
     {
         $this->startSession();
-
         $this->app['session']->flush();
-
         return $this;
     }
 }

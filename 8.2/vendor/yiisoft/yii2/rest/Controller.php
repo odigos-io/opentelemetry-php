@@ -1,13 +1,13 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\rest;
 
-use Yii;
+use Odigos\Yii;
 use yii\filters\auth\CompositeAuth;
 use yii\filters\ContentNegotiator;
 use yii\filters\RateLimiter;
@@ -15,7 +15,6 @@ use yii\filters\VerbFilter;
 use yii\web\Response;
 use yii\web\Controller as WebController;
 use yii\base\Module;
-
 /**
  * Controller is the base class for RESTful API controller classes.
  *
@@ -44,35 +43,14 @@ class Controller extends WebController
     /**
      * {@inheritdoc}
      */
-    public $enableCsrfValidation = false;
-
-
+    public $enableCsrfValidation = \false;
     /**
      * {@inheritdoc}
      */
     public function behaviors()
     {
-        return [
-            'contentNegotiator' => [
-                'class' => ContentNegotiator::className(),
-                'formats' => [
-                    'application/json' => Response::FORMAT_JSON,
-                    'application/xml' => Response::FORMAT_XML,
-                ],
-            ],
-            'verbFilter' => [
-                'class' => VerbFilter::className(),
-                'actions' => $this->verbs(),
-            ],
-            'authenticator' => [
-                'class' => CompositeAuth::className(),
-            ],
-            'rateLimiter' => [
-                'class' => RateLimiter::className(),
-            ],
-        ];
+        return ['contentNegotiator' => ['class' => ContentNegotiator::className(), 'formats' => ['application/json' => Response::FORMAT_JSON, 'application/xml' => Response::FORMAT_XML]], 'verbFilter' => ['class' => VerbFilter::className(), 'actions' => $this->verbs()], 'authenticator' => ['class' => CompositeAuth::className()], 'rateLimiter' => ['class' => RateLimiter::className()]];
     }
-
     /**
      * {@inheritdoc}
      */
@@ -81,7 +59,6 @@ class Controller extends WebController
         $result = parent::afterAction($action, $result);
         return $this->serializeData($result);
     }
-
     /**
      * Declares the allowed HTTP verbs.
      * Please refer to [[VerbFilter::actions]] on how to declare the allowed verbs.
@@ -91,7 +68,6 @@ class Controller extends WebController
     {
         return [];
     }
-
     /**
      * Serializes the specified data.
      * The default implementation will create a serializer based on the configuration given by [[serializer]].

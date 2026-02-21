@@ -3,7 +3,6 @@
 namespace Http\Discovery;
 
 use Http\Discovery\Exception\NotFoundException as RealNotFoundException;
-
 /**
  * Thrown when a discovery does not find any matches.
  *

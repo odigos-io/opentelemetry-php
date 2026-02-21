@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -19,7 +19,6 @@ namespace Cake\Cache\Event;
 use Cake\Cache\CacheEngine;
 use Cake\Event\Event;
 use DateInterval;
-
 /**
  * Class Cache BeforeSet Event
  *
@@ -28,13 +27,9 @@ use DateInterval;
 class CacheBeforeSetEvent extends Event
 {
     public const NAME = 'Cache.beforeSet';
-
     protected string $key;
-
     protected mixed $value = null;
-
     protected DateInterval|int|null $ttl = null;
-
     /**
      * Constructor
      *
@@ -56,10 +51,8 @@ class CacheBeforeSetEvent extends Event
             $this->ttl = $data['ttl'];
             unset($data['ttl']);
         }
-
         parent::__construct($name, $subject, $data);
     }
-
     /**
      * @return string
      */
@@ -67,7 +60,6 @@ class CacheBeforeSetEvent extends Event
     {
         return $this->key;
     }
-
     /**
      * @return mixed
      */
@@ -75,7 +67,6 @@ class CacheBeforeSetEvent extends Event
     {
         return $this->value;
     }
-
     /**
      * @return \DateInterval|int|null
      */

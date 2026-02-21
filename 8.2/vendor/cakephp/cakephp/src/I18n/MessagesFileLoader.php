@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -22,7 +22,6 @@ use Cake\Core\Plugin;
 use Cake\Utility\Inflector;
 use Locale;
 use function Cake\Core\pluginSplit;
-
 /**
  * A generic translations package factory that will load translations files
  * based on the file extension and the package name.
@@ -37,28 +36,24 @@ class MessagesFileLoader
      * @var string
      */
     protected string $_name;
-
     /**
      * The package (domain) plugin
      *
      * @var string|null
      */
     protected ?string $_plugin = null;
-
     /**
      * The locale to load for the given package.
      *
      * @var string
      */
     protected string $_locale;
-
     /**
      * The extension name.
      *
      * @var string
      */
     protected string $_extension;
-
     /**
      * Creates a translation file loader. The file to be loaded corresponds to
      * the following rules:
@@ -113,7 +108,6 @@ class MessagesFileLoader
         $this->_locale = $locale;
         $this->_extension = $extension;
     }
-
     /**
      * Loads the translation file and parses it. Returns an instance of a translations
      * package containing the messages loaded from the file.
@@ -122,30 +116,25 @@ class MessagesFileLoader
      * @throws \Cake\Core\Exception\CakeException if no file parser class could be found for the specified
      * file extension.
      */
-    public function __invoke(): Package|false
+    public function __invoke(): \Cake\I18n\Package|false
     {
         $folders = $this->translationsFolders();
         $file = $this->translationFile($folders, $this->_name, $this->_extension);
         if (!$file) {
-            return false;
+            return \false;
         }
-
         $name = ucfirst($this->_extension);
-        $class = App::className($name, 'I18n\Parser', 'FileParser');
-
+        $class = App::className($name, 'Odigos\I18n\Parser', 'FileParser');
         if (!$class) {
             throw new CakeException(sprintf('Could not find class `%s`.', "{$name}FileParser"));
         }
-
         /** @var \Cake\I18n\Parser\MoFileParser|\Cake\I18n\Parser\PoFileParser $object */
         $object = new $class();
         $messages = $object->parse($file);
-        $package = new Package('default');
+        $package = new \Cake\I18n\Package('default');
         $package->setMessages($messages);
-
         return $package;
     }
-
     /**
      * Returns the folders where the file should be looked for according to the locale
      * and package name.
@@ -155,39 +144,32 @@ class MessagesFileLoader
     public function translationsFolders(): array
     {
         $locale = Locale::parseLocale($this->_locale) + ['region' => null];
-
         $folders = [
             $locale['language'],
             // gettext compatible paths, see https://www.php.net/manual/en/function.gettext.php
-            $locale['language'] . DIRECTORY_SEPARATOR . 'LC_MESSAGES',
+            $locale['language'] . \DIRECTORY_SEPARATOR . 'LC_MESSAGES',
         ];
         if ($locale['region']) {
             $languageRegion = implode('_', [$locale['language'], $locale['region']]);
             $folders[] = $languageRegion;
             // gettext compatible paths, see https://www.php.net/manual/en/function.gettext.php
-            $folders[] = $languageRegion . DIRECTORY_SEPARATOR . 'LC_MESSAGES';
+            $folders[] = $languageRegion . \DIRECTORY_SEPARATOR . 'LC_MESSAGES';
         }
-
         $searchPaths = [];
-
         $localePaths = App::path('locales');
         if (!$localePaths && defined('ROOT')) {
-            $localePaths[] = ROOT . DIRECTORY_SEPARATOR
-                . 'resources' . DIRECTORY_SEPARATOR
-                . 'locales' . DIRECTORY_SEPARATOR;
+            $localePaths[] = ROOT . \DIRECTORY_SEPARATOR . 'resources' . \DIRECTORY_SEPARATOR . 'locales' . \DIRECTORY_SEPARATOR;
         }
         if ($this->_plugin && Plugin::isLoaded($this->_plugin)) {
             $localePaths[] = App::path('locales', $this->_plugin)[0];
         }
         foreach ($localePaths as $path) {
             foreach ($folders as $folder) {
-                $searchPaths[] = $path . $folder . DIRECTORY_SEPARATOR;
+                $searchPaths[] = $path . $folder . \DIRECTORY_SEPARATOR;
             }
         }
-
         return $searchPaths;
     }
-
     /**
      * @param array<string> $folders Folders
      * @param string $name File name
@@ -197,9 +179,7 @@ class MessagesFileLoader
     protected function translationFile(array $folders, string $name, string $ext): ?string
     {
         $file = null;
-
         $name = str_replace('/', '_', $name);
-
         foreach ($folders as $folder) {
             $path = "{$folder}{$name}.{$ext}";
             if (is_file($path)) {
@@ -207,7 +187,6 @@ class MessagesFileLoader
                 break;
             }
         }
-
         return $file;
     }
 }

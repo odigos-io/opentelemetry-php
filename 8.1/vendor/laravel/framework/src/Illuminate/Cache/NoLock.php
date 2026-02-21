@@ -2,7 +2,7 @@
 
 namespace Illuminate\Cache;
 
-class NoLock extends Lock
+class NoLock extends \Illuminate\Cache\Lock
 {
     /**
      * Attempt to acquire the lock.
@@ -11,9 +11,8 @@ class NoLock extends Lock
      */
     public function acquire()
     {
-        return true;
+        return \true;
     }
-
     /**
      * Release the lock.
      *
@@ -21,9 +20,8 @@ class NoLock extends Lock
      */
     public function release()
     {
-        return true;
+        return \true;
     }
-
     /**
      * Releases this lock in disregard of ownership.
      *
@@ -33,7 +31,6 @@ class NoLock extends Lock
     {
         //
     }
-
     /**
      * Returns the owner value written into the driver for this lock.
      *

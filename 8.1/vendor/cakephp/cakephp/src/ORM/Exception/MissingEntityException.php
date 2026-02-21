@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * MissingEntityException file
  *
@@ -19,7 +19,6 @@ declare(strict_types=1);
 namespace Cake\ORM\Exception;
 
 use Cake\Core\Exception\CakeException;
-
 /**
  * Exception raised when an Entity could not be found.
  */

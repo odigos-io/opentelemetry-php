@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -21,11 +21,10 @@ use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Routing\Exception\MissingRouteException;
 use Cake\Routing\Router;
-
 /**
  * Provides interactive CLI tools for URL generation
  */
-class RoutesGenerateCommand extends Command
+class RoutesGenerateCommand extends \Cake\Command\Command
 {
     /**
      * @inheritDoc
@@ -34,7 +33,6 @@ class RoutesGenerateCommand extends Command
     {
         return 'routes generate';
     }
-
     /**
      * @inheritDoc
      */
@@ -42,7 +40,6 @@ class RoutesGenerateCommand extends Command
     {
         return 'Check a routing array against the routes.';
     }
-
     /**
      * Display all routes in an application
      *
@@ -60,13 +57,10 @@ class RoutesGenerateCommand extends Command
         } catch (MissingRouteException) {
             $io->err('<warning>The provided parameters do not match any routes.</warning>');
             $io->out();
-
             return static::CODE_ERROR;
         }
-
         return static::CODE_SUCCESS;
     }
-
     /**
      * Split the CLI arguments into a hash.
      *
@@ -79,7 +73,7 @@ class RoutesGenerateCommand extends Command
         foreach ($args as $arg) {
             if (str_contains($arg, ':')) {
                 [$key, $value] = explode(':', $arg, 2);
-                if (in_array($value, ['true', 'false'], true)) {
+                if (in_array($value, ['true', 'false'], \true)) {
                     $value = $value === 'true';
                 }
                 $out[$key] = $value;
@@ -87,10 +81,8 @@ class RoutesGenerateCommand extends Command
                 $out[] = $arg;
             }
         }
-
         return $out;
     }
-
     /**
      * Get the option parser.
      *
@@ -99,14 +91,7 @@ class RoutesGenerateCommand extends Command
      */
     public function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
     {
-        $parser->setDescription([
-            static::getDescription(),
-            'Will output the URL if there is a match.' .
-            "\n\n" .
-            'Routing parameters should be supplied in a key:value format. ' .
-            'For example `controller:Articles action:view 2`',
-        ]);
-
+        $parser->setDescription([static::getDescription(), 'Will output the URL if there is a match.' . "\n\n" . 'Routing parameters should be supplied in a key:value format. ' . 'For example `controller:Articles action:view 2`']);
         return $parser;
     }
 }

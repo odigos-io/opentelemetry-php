@@ -5,7 +5,6 @@ namespace Illuminate\Routing\Middleware;
 use Closure;
 use Illuminate\Routing\Exceptions\InvalidSignatureException;
 use Illuminate\Support\Arr;
-
 class ValidateSignature
 {
     /**
@@ -13,10 +12,7 @@ class ValidateSignature
      *
      * @var array<int, string>
      */
-    protected $ignore = [
-        //
-    ];
-
+    protected $ignore = [];
     /**
      * Specify that the URL signature is for a relative URL.
      *
@@ -26,10 +22,8 @@ class ValidateSignature
     public static function relative($ignore = [])
     {
         $ignore = Arr::wrap($ignore);
-
-        return static::class.':'.implode(',', empty($ignore) ? ['relative'] : ['relative',  ...$ignore]);
+        return static::class . ':' . implode(',', empty($ignore) ? ['relative'] : ['relative', ...$ignore]);
     }
-
     /**
      * Specify that the URL signature is for an absolute URL.
      *
@@ -39,12 +33,8 @@ class ValidateSignature
     public static function absolute($ignore = [])
     {
         $ignore = Arr::wrap($ignore);
-
-        return empty($ignore)
-            ? static::class
-            : static::class.':'.implode(',', $ignore);
+        return empty($ignore) ? static::class : static::class . ':' . implode(',', $ignore);
     }
-
     /**
      * Handle an incoming request.
      *
@@ -58,14 +48,11 @@ class ValidateSignature
     public function handle($request, Closure $next, ...$args)
     {
         [$relative, $ignore] = $this->parseArguments($args);
-
-        if ($request->hasValidSignatureWhileIgnoring($ignore, ! $relative)) {
+        if ($request->hasValidSignatureWhileIgnoring($ignore, !$relative)) {
             return $next($request);
         }
-
-        throw new InvalidSignatureException;
+        throw new InvalidSignatureException();
     }
-
     /**
      * Parse the additional arguments given to the middleware.
      *
@@ -74,17 +61,11 @@ class ValidateSignature
      */
     protected function parseArguments(array $args)
     {
-        $relative = ! empty($args) && $args[0] === 'relative';
-
+        $relative = !empty($args) && $args[0] === 'relative';
         if ($relative) {
             array_shift($args);
         }
-
-        $ignore = array_merge(
-            property_exists($this, 'except') ? $this->except : $this->ignore,
-            $args
-        );
-
+        $ignore = array_merge(property_exists($this, 'except') ? $this->except : $this->ignore, $args);
         return [$relative, $ignore];
     }
 }

@@ -1,15 +1,13 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\SDK\Metrics;
 
 use OpenTelemetry\API\Metrics\ObservableGaugeInterface;
-
 /**
  * @internal
  */
-final class ObservableGauge implements ObservableGaugeInterface, InstrumentHandle
+final class ObservableGauge implements ObservableGaugeInterface, \OpenTelemetry\SDK\Metrics\InstrumentHandle
 {
-    use ObservableInstrumentTrait;
+    use \OpenTelemetry\SDK\Metrics\ObservableInstrumentTrait;
 }

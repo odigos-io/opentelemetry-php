@@ -1,9 +1,8 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\SDK\Logs;
 
-class ReadWriteLogRecord extends ReadableLogRecord
+class ReadWriteLogRecord extends \OpenTelemetry\SDK\Logs\ReadableLogRecord
 {
 }

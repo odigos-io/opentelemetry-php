@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\Mailer\Test;
 
 use Psr\Log\LoggerInterface;
@@ -18,7 +17,6 @@ use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\Mailer\Transport\Dsn;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
-
 /**
  * A test case to ease testing Transport Factory.
  *
@@ -26,14 +24,12 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
  *
  * @deprecated since Symfony 7.2, use AbstractTransportFactoryTestCase instead
  */
-abstract class TransportFactoryTestCase extends AbstractTransportFactoryTestCase
+abstract class TransportFactoryTestCase extends \Symfony\Component\Mailer\Test\AbstractTransportFactoryTestCase
 {
-    use IncompleteDsnTestTrait;
-
+    use \Symfony\Component\Mailer\Test\IncompleteDsnTestTrait;
     protected EventDispatcherInterface $dispatcher;
     protected HttpClientInterface $client;
     protected LoggerInterface $logger;
-
     /**
      * @psalm-return iterable<array{0: Dsn, 1?: string|null}>
      */
@@ -41,7 +37,6 @@ abstract class TransportFactoryTestCase extends AbstractTransportFactoryTestCase
     {
         return [];
     }
-
     /**
      * @psalm-return iterable<array{0: Dsn}>
      */
@@ -49,17 +44,14 @@ abstract class TransportFactoryTestCase extends AbstractTransportFactoryTestCase
     {
         return [];
     }
-
     protected function getDispatcher(): EventDispatcherInterface
     {
         return $this->dispatcher ??= new EventDispatcher();
     }
-
     protected function getClient(): HttpClientInterface
     {
         return $this->client ??= new MockHttpClient();
     }
-
     protected function getLogger(): LoggerInterface
     {
         return $this->logger ??= new NullLogger();

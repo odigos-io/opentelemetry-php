@@ -1,9 +1,8 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Carbon\Doctrine;
 
-class CarbonType extends DateTimeType implements CarbonDoctrineType
+class CarbonType extends \Carbon\Doctrine\DateTimeType implements \Carbon\Doctrine\CarbonDoctrineType
 {
 }

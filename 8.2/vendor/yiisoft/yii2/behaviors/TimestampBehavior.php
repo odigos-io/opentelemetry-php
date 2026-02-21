@@ -1,15 +1,14 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\behaviors;
 
 use yii\base\InvalidCallException;
 use yii\db\BaseActiveRecord;
-
 /**
  * TimestampBehavior automatically fills the specified attributes with the current timestamp.
  *
@@ -72,7 +71,7 @@ use yii\db\BaseActiveRecord;
  * @template T of BaseActiveRecord
  * @extends AttributeBehavior<T>
  */
-class TimestampBehavior extends AttributeBehavior
+class TimestampBehavior extends \yii\behaviors\AttributeBehavior
 {
     /**
      * @var string the attribute that will receive timestamp value
@@ -91,23 +90,16 @@ class TimestampBehavior extends AttributeBehavior
      * will be used as value.
      */
     public $value;
-
-
     /**
      * {@inheritdoc}
      */
     public function init()
     {
         parent::init();
-
         if (empty($this->attributes)) {
-            $this->attributes = [
-                BaseActiveRecord::EVENT_BEFORE_INSERT => [$this->createdAtAttribute, $this->updatedAtAttribute],
-                BaseActiveRecord::EVENT_BEFORE_UPDATE => $this->updatedAtAttribute,
-            ];
+            $this->attributes = [BaseActiveRecord::EVENT_BEFORE_INSERT => [$this->createdAtAttribute, $this->updatedAtAttribute], BaseActiveRecord::EVENT_BEFORE_UPDATE => $this->updatedAtAttribute];
         }
     }
-
     /**
      * {@inheritdoc}
      *
@@ -119,10 +111,8 @@ class TimestampBehavior extends AttributeBehavior
         if ($this->value === null) {
             return time();
         }
-
         return parent::getValue($event);
     }
-
     /**
      * Updates a timestamp attribute to the current timestamp.
      *

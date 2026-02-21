@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -17,7 +17,6 @@ declare(strict_types=1);
 namespace Cake\Core;
 
 use Cake\Utility\Inflector;
-
 /**
  * Provides methods that allow other classes access to conventions based inflections.
  */
@@ -33,7 +32,6 @@ trait ConventionsTrait
     {
         return Inflector::camelize($name);
     }
-
     /**
      * Creates the proper entity name (singular) for the specified name
      *
@@ -44,7 +42,6 @@ trait ConventionsTrait
     {
         return Inflector::singularize(Inflector::camelize($name));
     }
-
     /**
      * Creates the proper underscored model key for associations
      *
@@ -56,10 +53,8 @@ trait ConventionsTrait
     protected function _modelKey(string $name): string
     {
         [, $name] = pluginSplit($name);
-
         return Inflector::underscore(Inflector::singularize($name)) . '_id';
     }
-
     /**
      * Creates the proper model name from a foreign key
      *
@@ -69,10 +64,8 @@ trait ConventionsTrait
     protected function _modelNameFromKey(string $key): string
     {
         $key = str_replace('_id', '', $key);
-
         return Inflector::camelize(Inflector::pluralize($key));
     }
-
     /**
      * Creates the singular name for use in views.
      *
@@ -83,7 +76,6 @@ trait ConventionsTrait
     {
         return Inflector::variable(Inflector::singularize($name));
     }
-
     /**
      * Creates the plural variable name for views
      *
@@ -94,7 +86,6 @@ trait ConventionsTrait
     {
         return Inflector::variable($name);
     }
-
     /**
      * Creates the singular human name used in views
      *
@@ -105,7 +96,6 @@ trait ConventionsTrait
     {
         return Inflector::humanize(Inflector::underscore(Inflector::singularize($name)));
     }
-
     /**
      * Creates a camelized version of $name
      *
@@ -116,7 +106,6 @@ trait ConventionsTrait
     {
         return Inflector::camelize($name);
     }
-
     /**
      * Creates the plural human name used in views
      *
@@ -127,7 +116,6 @@ trait ConventionsTrait
     {
         return Inflector::humanize(Inflector::underscore($name));
     }
-
     /**
      * Find the correct path for a plugin. Scans $pluginPaths for the plugin you want.
      *
@@ -136,13 +124,11 @@ trait ConventionsTrait
      */
     protected function _pluginPath(string $pluginName): string
     {
-        if (Plugin::isLoaded($pluginName)) {
-            return Plugin::path($pluginName);
+        if (\Cake\Core\Plugin::isLoaded($pluginName)) {
+            return \Cake\Core\Plugin::path($pluginName);
         }
-
-        return current(App::path('plugins')) . $pluginName . DIRECTORY_SEPARATOR;
+        return current(\Cake\Core\App::path('plugins')) . $pluginName . \DIRECTORY_SEPARATOR;
     }
-
     /**
      * Return plugin's namespace
      *

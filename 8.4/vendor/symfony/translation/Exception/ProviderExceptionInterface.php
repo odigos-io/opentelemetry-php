@@ -8,13 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\Translation\Exception;
 
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  */
-interface ProviderExceptionInterface extends ExceptionInterface
+interface ProviderExceptionInterface extends \Symfony\Component\Translation\Exception\ExceptionInterface
 {
     /*
      * Returns debug info coming from the Symfony\Contracts\HttpClient\ResponseInterface

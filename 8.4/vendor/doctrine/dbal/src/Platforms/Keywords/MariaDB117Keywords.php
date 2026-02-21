@@ -1,13 +1,11 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\DBAL\Platforms\Keywords;
 
 use function array_merge;
-
 /** @deprecated */
-class MariaDB117Keywords extends MariaDBKeywords
+class MariaDB117Keywords extends \Doctrine\DBAL\Platforms\Keywords\MariaDBKeywords
 {
     /**
      * {@inheritDoc}
@@ -17,10 +15,8 @@ class MariaDB117Keywords extends MariaDBKeywords
     protected function getKeywords(): array
     {
         $keywords = parent::getKeywords();
-
         // New Keywords and Reserved Words
         $keywords = array_merge($keywords, ['VECTOR']);
-
         return $keywords;
     }
 }

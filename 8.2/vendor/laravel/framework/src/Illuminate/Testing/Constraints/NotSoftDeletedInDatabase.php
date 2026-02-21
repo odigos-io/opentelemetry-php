@@ -3,8 +3,7 @@
 namespace Illuminate\Testing\Constraints;
 
 use Illuminate\Database\Connection;
-use PHPUnit\Framework\Constraint\Constraint;
-
+use Odigos\PHPUnit\Framework\Constraint\Constraint;
 class NotSoftDeletedInDatabase extends Constraint
 {
     /**
@@ -13,28 +12,24 @@ class NotSoftDeletedInDatabase extends Constraint
      * @var int
      */
     protected $show = 3;
-
     /**
      * The database connection.
      *
      * @var \Illuminate\Database\Connection
      */
     protected $database;
-
     /**
      * The data that will be used to narrow the search in the database table.
      *
      * @var array
      */
     protected $data;
-
     /**
      * The name of the column that indicates soft deletion has occurred.
      *
      * @var string
      */
     protected $deletedAtColumn;
-
     /**
      * Create a new constraint instance.
      *
@@ -48,7 +43,6 @@ class NotSoftDeletedInDatabase extends Constraint
         $this->data = $data;
         $this->deletedAtColumn = $deletedAtColumn;
     }
-
     /**
      * Check if the data is found in the given table.
      *
@@ -57,12 +51,8 @@ class NotSoftDeletedInDatabase extends Constraint
      */
     public function matches($table): bool
     {
-        return $this->database->table($table)
-            ->where($this->data)
-            ->whereNull($this->deletedAtColumn)
-            ->exists();
+        return $this->database->table($table)->where($this->data)->whereNull($this->deletedAtColumn)->exists();
     }
-
     /**
      * Get the description of the failure.
      *
@@ -71,12 +61,8 @@ class NotSoftDeletedInDatabase extends Constraint
      */
     public function failureDescription($table): string
     {
-        return sprintf(
-            "any existing row in the table [%s] matches the attributes %s.\n\n%s",
-            $table, $this->toString(), $this->getAdditionalInfo($table)
-        );
+        return sprintf("any existing row in the table [%s] matches the attributes %s.\n\n%s", $table, $this->toString(), $this->getAdditionalInfo($table));
     }
-
     /**
      * Get additional info about the records found in the database table.
      *
@@ -86,22 +72,16 @@ class NotSoftDeletedInDatabase extends Constraint
     protected function getAdditionalInfo($table)
     {
         $query = $this->database->table($table);
-
         $results = $query->limit($this->show)->get();
-
         if ($results->isEmpty()) {
             return 'The table is empty';
         }
-
-        $description = 'Found: '.json_encode($results, JSON_PRETTY_PRINT);
-
+        $description = 'Found: ' . json_encode($results, \JSON_PRETTY_PRINT);
         if ($query->count() > $this->show) {
             $description .= sprintf(' and %s others', $query->count() - $this->show);
         }
-
         return $description;
     }
-
     /**
      * Get a string representation of the object.
      *

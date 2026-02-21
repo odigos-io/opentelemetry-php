@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -20,7 +20,6 @@ use Cake\Error\Debugger;
 use Cake\Error\ErrorRendererInterface;
 use Cake\Error\PhpError;
 use function Cake\Core\h;
-
 /**
  * Interactive HTML error rendering with a stack trace.
  *
@@ -36,7 +35,6 @@ class HtmlErrorRenderer implements ErrorRendererInterface
         // Output to stdout which is the server response.
         echo $out;
     }
-
     /**
      * @inheritDoc
      */
@@ -47,27 +45,19 @@ class HtmlErrorRenderer implements ErrorRendererInterface
         }
         $id = 'cakeErr' . uniqid();
         $file = $error->getFile();
-
         // Some of the error data is not HTML safe so we escape everything.
         $description = h($error->getMessage());
         $path = h($file);
         $trace = h($error->getTraceAsString());
         $line = $error->getLine();
-
-        $errorMessage = sprintf(
-            '<b>%s</b> (%s)',
-            h(ucfirst($error->getLabel())),
-            h($error->getCode()),
-        );
+        $errorMessage = sprintf('<b>%s</b> (%s)', h(ucfirst($error->getLabel())), h($error->getCode()));
         $toggle = $this->renderToggle($errorMessage, $id, 'trace');
         $codeToggle = $this->renderToggle('Code', $id, 'code');
-
         $excerpt = [];
         if ($file && $line) {
             $excerpt = Debugger::excerpt($file, $line, 1);
         }
         $code = implode("\n", $excerpt);
-
         return <<<HTML
 <div class="cake-error">
     {$toggle}: {$description} [in <b>{$path}</b>, line <b>{$line}</b>]
@@ -79,7 +69,6 @@ class HtmlErrorRenderer implements ErrorRendererInterface
 </div>
 HTML;
     }
-
     /**
      * Render a toggle link in the error content.
      *
@@ -91,7 +80,6 @@ HTML;
     private function renderToggle(string $text, string $id, string $suffix): string
     {
         $selector = $id . '-' . $suffix;
-
         // phpcs:disable
         return <<<HTML
 <a href="javascript:void(0);"

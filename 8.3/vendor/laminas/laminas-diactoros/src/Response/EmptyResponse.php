@@ -1,12 +1,10 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Odigos\Laminas\Diactoros\Response;
 
-namespace Laminas\Diactoros\Response;
-
-use Laminas\Diactoros\Response;
-use Laminas\Diactoros\Stream;
-
+use Odigos\Laminas\Diactoros\Response;
+use Odigos\Laminas\Diactoros\Stream;
 /**
  * A class representing empty HTTP responses.
  */
@@ -23,7 +21,6 @@ class EmptyResponse extends Response
         $body = new Stream('php://temp', 'r');
         parent::__construct($body, $status, $headers);
     }
-
     /**
      * Create an empty response with the given headers.
      *

@@ -4,7 +4,6 @@ namespace Illuminate\Database\Events;
 
 use Illuminate\Contracts\Database\Events\MigrationEvent as MigrationEventContract;
 use Illuminate\Database\Migrations\Migration;
-
 abstract class MigrationEvent implements MigrationEventContract
 {
     /**
@@ -13,14 +12,12 @@ abstract class MigrationEvent implements MigrationEventContract
      * @var \Illuminate\Database\Migrations\Migration
      */
     public $migration;
-
     /**
      * The migration method that was called.
      *
      * @var string
      */
     public $method;
-
     /**
      * Create a new event instance.
      *

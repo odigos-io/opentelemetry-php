@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -17,7 +17,6 @@ declare(strict_types=1);
 namespace Cake\Error\Debug;
 
 use SplObjectStorage;
-
 /**
  * Context tracking for Debugger::exportVar()
  *
@@ -32,17 +31,14 @@ class DebugContext
      * @var int
      */
     private int $maxDepth = 0;
-
     /**
      * @var int
      */
     private int $depth = 0;
-
     /**
      * @var \SplObjectStorage<object, int>
      */
     private SplObjectStorage $refs;
-
     /**
      * Constructor
      *
@@ -53,7 +49,6 @@ class DebugContext
         $this->maxDepth = $maxDepth;
         $this->refs = new SplObjectStorage();
     }
-
     /**
      * Return a clone with increased depth.
      *
@@ -63,10 +58,8 @@ class DebugContext
     {
         $new = clone $this;
         $new->depth += 1;
-
         return $new;
     }
-
     /**
      * Get the remaining depth levels
      *
@@ -76,7 +69,6 @@ class DebugContext
     {
         return $this->maxDepth - $this->depth;
     }
-
     /**
      * Get the reference ID for an object.
      *
@@ -93,10 +85,8 @@ class DebugContext
         }
         $refId = $this->refs->count();
         $this->refs->offsetSet($object, $refId);
-
         return $refId;
     }
-
     /**
      * Check whether an object has been seen before.
      *

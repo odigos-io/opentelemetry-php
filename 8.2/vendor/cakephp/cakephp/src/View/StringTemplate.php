@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -23,7 +23,6 @@ use Cake\Utility\Hash;
 use InvalidArgumentException;
 use function Cake\Core\deprecationWarning;
 use function Cake\Core\h;
-
 /**
  * Provides an interface for registering and inserting
  * content into simple logic-less string templates.
@@ -36,78 +35,30 @@ class StringTemplate
     use InstanceConfigTrait {
         getConfig as get;
     }
-
     /**
      * List of attributes that can be made compact.
      *
      * @var array<string, bool>
      */
-    protected array $_compactAttributes = [
-        'allowfullscreen' => true,
-        'async' => true,
-        'autofocus' => true,
-        'autoload' => true,
-        'autoplay' => true,
-        'checked' => true,
-        'compact' => true,
-        'controls' => true,
-        'declare' => true,
-        'default' => true,
-        'defaultchecked' => true,
-        'defaultmuted' => true,
-        'defaultselected' => true,
-        'defer' => true,
-        'disabled' => true,
-        'enabled' => true,
-        'formnovalidate' => true,
-        'hidden' => true,
-        'indeterminate' => true,
-        'inert' => true,
-        'ismap' => true,
-        'itemscope' => true,
-        'loop' => true,
-        'multiple' => true,
-        'muted' => true,
-        'nohref' => true,
-        'noresize' => true,
-        'noshade' => true,
-        'novalidate' => true,
-        'nowrap' => true,
-        'open' => true,
-        'pauseonexit' => true,
-        'readonly' => true,
-        'required' => true,
-        'reversed' => true,
-        'scoped' => true,
-        'seamless' => true,
-        'selected' => true,
-        'sortable' => true,
-        'truespeed' => true,
-        'typemustmatch' => true,
-        'visible' => true,
-    ];
-
+    protected array $_compactAttributes = ['allowfullscreen' => \true, 'async' => \true, 'autofocus' => \true, 'autoload' => \true, 'autoplay' => \true, 'checked' => \true, 'compact' => \true, 'controls' => \true, 'declare' => \true, 'default' => \true, 'defaultchecked' => \true, 'defaultmuted' => \true, 'defaultselected' => \true, 'defer' => \true, 'disabled' => \true, 'enabled' => \true, 'formnovalidate' => \true, 'hidden' => \true, 'indeterminate' => \true, 'inert' => \true, 'ismap' => \true, 'itemscope' => \true, 'loop' => \true, 'multiple' => \true, 'muted' => \true, 'nohref' => \true, 'noresize' => \true, 'noshade' => \true, 'novalidate' => \true, 'nowrap' => \true, 'open' => \true, 'pauseonexit' => \true, 'readonly' => \true, 'required' => \true, 'reversed' => \true, 'scoped' => \true, 'seamless' => \true, 'selected' => \true, 'sortable' => \true, 'truespeed' => \true, 'typemustmatch' => \true, 'visible' => \true];
     /**
      * The default templates this instance holds.
      *
      * @var array<string, mixed>
      */
     protected array $_defaultConfig = [];
-
     /**
      * A stack of template sets that have been stashed temporarily.
      *
      * @var array
      */
     protected array $_configStack = [];
-
     /**
      * Contains the list of compiled templates
      *
      * @var array<string, array>
      */
     protected array $_compiled = [];
-
     /**
      * Constructor.
      *
@@ -117,7 +68,6 @@ class StringTemplate
     {
         $this->add($config);
     }
-
     /**
      * Push the current templates into the template stack.
      *
@@ -125,12 +75,8 @@ class StringTemplate
      */
     public function push(): void
     {
-        $this->_configStack[] = [
-            $this->_config,
-            $this->_compiled,
-        ];
+        $this->_configStack[] = [$this->_config, $this->_compiled];
     }
-
     /**
      * Restore the most recently pushed set of templates.
      *
@@ -143,7 +89,6 @@ class StringTemplate
         }
         [$this->_config, $this->_compiled] = array_pop($this->_configStack);
     }
-
     /**
      * Registers a list of templates by name
      *
@@ -163,10 +108,8 @@ class StringTemplate
     {
         $this->setConfig($templates);
         $this->_compileTemplates(array_keys($templates));
-
         return $this;
     }
-
     /**
      * Compile templates into a more efficient printf() compatible format.
      *
@@ -183,21 +126,12 @@ class StringTemplate
             if ($template === null) {
                 throw new InvalidArgumentException(sprintf('String template `%s` is not valid.', $name));
             }
-
-            assert(
-                is_string($template),
-                sprintf('Template for `%s` must be of type `string`, but is `%s`', $name, gettype($template)),
-            );
-
+            assert(is_string($template), sprintf('Template for `%s` must be of type `string`, but is `%s`', $name, gettype($template)));
             $template = str_replace('%', '%%', $template);
             preg_match_all('#\{\{([\w\.]+)\}\}#', $template, $matches);
-            $this->_compiled[$name] = [
-                str_replace($matches[0], '%s', $template),
-                $matches[1],
-            ];
+            $this->_compiled[$name] = [str_replace($matches[0], '%s', $template), $matches[1]];
         }
     }
-
     /**
      * Load a config file containing templates.
      *
@@ -213,12 +147,10 @@ class StringTemplate
         if ($file === '') {
             throw new CakeException('String template filename cannot be an empty string');
         }
-
         $loader = new PhpConfig();
         $templates = $loader->read($file);
         $this->add($templates);
     }
-
     /**
      * Remove the named template.
      *
@@ -230,7 +162,6 @@ class StringTemplate
         $this->deleteConfig($name);
         unset($this->_compiled[$name]);
     }
-
     /**
      * Format a template string with $data
      *
@@ -245,7 +176,6 @@ class StringTemplate
             throw new InvalidArgumentException(sprintf('Cannot find template named `%s`.', $name));
         }
         [$template, $placeholders] = $this->_compiled[$name];
-
         if (isset($data['templateVars'])) {
             $data += $data['templateVars'];
             unset($data['templateVars']);
@@ -258,10 +188,8 @@ class StringTemplate
             }
             $replace[] = $replacement;
         }
-
         return vsprintf($template, $replace);
     }
-
     /**
      * Returns a space-delimited string with items of the $options array. If a key
      * of $options array happens to be one of those listed
@@ -291,27 +219,21 @@ class StringTemplate
     public function formatAttributes(?array $options, ?array $exclude = null): string
     {
         $insertBefore = ' ';
-        $options = (array)$options + ['escape' => true];
-
+        $options = (array) $options + ['escape' => \true];
         if (!is_array($exclude)) {
             $exclude = [];
         }
-
-        $exclude = ['escape' => true, 'idPrefix' => true, 'templateVars' => true, 'fieldName' => true]
-            + array_flip($exclude);
+        $exclude = ['escape' => \true, 'idPrefix' => \true, 'templateVars' => \true, 'fieldName' => \true] + array_flip($exclude);
         $escape = $options['escape'];
         $attributes = [];
-
         foreach ($options as $key => $value) {
-            if (!isset($exclude[$key]) && $value !== false && $value !== null) {
-                $attributes[] = $this->_formatAttribute((string)$key, $value, $escape);
+            if (!isset($exclude[$key]) && $value !== \false && $value !== null) {
+                $attributes[] = $this->_formatAttribute((string) $key, $value, $escape);
             }
         }
         $out = trim(implode(' ', $attributes));
-
         return $out ? $insertBefore . $out : '';
     }
-
     /**
      * Formats an individual attribute, and returns the string value of the composed attribute.
      * Works with minimized attributes that have the same value as their name such as 'disabled' and 'checked'
@@ -321,7 +243,7 @@ class StringTemplate
      * @param bool $escape Define if the value must be escaped
      * @return string The composed attribute.
      */
-    protected function _formatAttribute(string $key, mixed $value, bool $escape = true): string
+    protected function _formatAttribute(string $key, mixed $value, bool $escape = \true): string
     {
         if (is_array($value)) {
             $value = implode(' ', $value);
@@ -329,21 +251,19 @@ class StringTemplate
         if (is_numeric($key)) {
             return "{$value}=\"{$value}\"";
         }
-        $truthy = [1, '1', true, 'true', $key];
+        $truthy = [1, '1', \true, 'true', $key];
         $isMinimized = isset($this->_compactAttributes[$key]);
         if (!preg_match('/\A(\w|[.-])+\z/', $key)) {
             $key = h($key);
         }
-        if ($isMinimized && in_array($value, $truthy, true)) {
+        if ($isMinimized && in_array($value, $truthy, \true)) {
             return "{$key}=\"{$key}\"";
         }
         if ($isMinimized) {
             return '';
         }
-
         return $key . '="' . ($escape ? h($value) : $value) . '"';
     }
-
     /**
      * Merges two sets of CSS classes into a unique array.
      *
@@ -378,10 +298,8 @@ class StringTemplate
         // Remove any classes and then add.
         $update = array_diff($existing, $remove);
         $update = array_merge($update, $add);
-
         return array_values(array_unique($update));
     }
-
     /**
      * Adds CSS classes to an attribute array.
      *
@@ -398,49 +316,30 @@ class StringTemplate
      * @param string $useIndex The array key to use. Defaults to 'class'.
      * @return array<string, string>|string|null The updated attribute array.
      */
-    public function addClass(
-        mixed $input,
-        array|string|false|null $newClass,
-        string $useIndex = 'class',
-    ): array|string|null {
+    public function addClass(mixed $input, array|string|false|null $newClass, string $useIndex = 'class'): array|string|null
+    {
         if (!is_array($input)) {
-            deprecationWarning(
-                '5.3.0',
-                'Passing a non-array as first argument to `StringTemplate::addClass()` is deprecated. ' .
-                'Pass an attributes array instead.',
-            );
+            deprecationWarning('5.3.0', 'Passing a non-array as first argument to `StringTemplate::addClass()` is deprecated. ' . 'Pass an attributes array instead.');
         }
-
         // NOOP
         if (!$newClass) {
             return $input;
         }
-
         if (!is_array($input)) {
             if (is_string($input) && $input !== '') {
                 $class = explode(' ', $input);
             } else {
                 $class = [];
             }
-
             if (is_string($newClass)) {
                 $newClass = explode(' ', $newClass);
             }
-
             $class = array_unique(array_merge($class, $newClass));
-
-            deprecationWarning(
-                '5.3.0',
-                'Returning a non-array value from `StringTemplate::addClass()` is deprecated. ' .
-                'The method will only return arrays in the future.',
-            );
-
+            deprecationWarning('5.3.0', 'Returning a non-array value from `StringTemplate::addClass()` is deprecated. ' . 'The method will only return arrays in the future.');
             return Hash::insert([], $useIndex, $class);
         }
-
         $existingClasses = Hash::get($input, $useIndex, []);
         $mergedClasses = $this->addClassNames($existingClasses, $newClass);
-
         return Hash::insert($input, $useIndex, $mergedClasses);
     }
 }

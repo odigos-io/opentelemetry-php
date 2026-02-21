@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace MongoDB\Builder;
 
 use DateTimeInterface;
@@ -10,13 +9,11 @@ use MongoDB\Builder\Stage\MatchStage;
 use MongoDB\Builder\Type\FieldQueryInterface;
 use MongoDB\Builder\Type\QueryInterface;
 use stdClass;
-
 final class Stage
 {
-    use Stage\FactoryTrait {
+    use \MongoDB\Builder\Stage\FactoryTrait {
         match as private generatedMatch;
     }
-
     /**
      * Filters the document stream to allow only matching documents to pass unmodified into the next pipeline stage. $match uses standard MongoDB queries. For each input document, outputs either one document (a match) or zero documents (no match).
      *
@@ -29,7 +26,6 @@ final class Stage
         // Override the generated method to allow variadic arguments
         return self::generatedMatch($queries);
     }
-
     private function __construct()
     {
         // This class cannot be instantiated

@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\DBAL\Schema;
 
 /**
@@ -17,7 +16,6 @@ final readonly class TableConfiguration
     public function __construct(private int $maxIdentifierLength)
     {
     }
-
     /**
      * Returns the maximum length of identifiers to be generated for the objects scoped to the table.
      *

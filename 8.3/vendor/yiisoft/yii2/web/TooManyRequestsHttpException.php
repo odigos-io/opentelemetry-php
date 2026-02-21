@@ -1,10 +1,10 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\web;
 
 /**
@@ -18,7 +18,7 @@ namespace yii\web;
  * @author Dan Schmidt <danschmidt5189@gmail.com>
  * @since 2.0
  */
-class TooManyRequestsHttpException extends HttpException
+class TooManyRequestsHttpException extends \yii\web\HttpException
 {
     /**
      * Constructor.

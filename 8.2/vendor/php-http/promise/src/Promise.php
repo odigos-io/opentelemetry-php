@@ -19,17 +19,14 @@ interface Promise
      * Promise has not been fulfilled or rejected.
      */
     const PENDING = 'pending';
-
     /**
      * Promise has been fulfilled.
      */
     const FULFILLED = 'fulfilled';
-
     /**
      * Promise has been rejected.
      */
     const REJECTED = 'rejected';
-
     /**
      * Adds behavior for when the promise is resolved or rejected (response will be available, or error happens).
      *
@@ -42,14 +39,12 @@ interface Promise
      * @return Promise a new resolved promise with value of the executed callback (onFulfilled / onRejected)
      */
     public function then(?callable $onFulfilled = null, ?callable $onRejected = null);
-
     /**
      * Returns the state of the promise, one of PENDING, FULFILLED or REJECTED.
      *
      * @return string
      */
     public function getState();
-
     /**
      * Wait for the promise to be fulfilled or rejected.
      *
@@ -65,5 +60,5 @@ interface Promise
      *
      * @throws \Throwable the rejection reason if $unwrap is set to true and the request failed
      */
-    public function wait($unwrap = true);
+    public function wait($unwrap = \true);
 }

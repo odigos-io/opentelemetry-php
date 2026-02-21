@@ -1,12 +1,10 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\DBAL\Types;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
-
-class SmallFloatType extends Type
+class SmallFloatType extends \Doctrine\DBAL\Types\Type
 {
     /**
      * {@inheritDoc}
@@ -15,7 +13,6 @@ class SmallFloatType extends Type
     {
         return $platform->getSmallFloatDeclarationSQL($column);
     }
-
     /**
      * @param T $value
      *

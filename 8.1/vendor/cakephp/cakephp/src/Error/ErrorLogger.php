@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -25,15 +25,13 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerTrait;
 use Stringable;
 use Throwable;
-
 /**
  * Log errors and unhandled exceptions to `Cake\Log\Log`
  */
-class ErrorLogger implements ErrorLoggerInterface
+class ErrorLogger implements \Cake\Error\ErrorLoggerInterface
 {
     use InstanceConfigTrait;
     use LoggerTrait;
-
     /**
      * Default configuration values.
      *
@@ -41,10 +39,7 @@ class ErrorLogger implements ErrorLoggerInterface
      *
      * @var array<string, mixed>
      */
-    protected array $_defaultConfig = [
-        'trace' => false,
-    ];
-
+    protected array $_defaultConfig = ['trace' => \false];
     /**
      * Constructor
      *
@@ -54,7 +49,6 @@ class ErrorLogger implements ErrorLoggerInterface
     {
         $this->setConfig($config);
     }
-
     /**
      * @inheritDoc
      */
@@ -62,28 +56,23 @@ class ErrorLogger implements ErrorLoggerInterface
     {
         Log::write($level, $message, $context);
     }
-
     /**
      * @inheritDoc
      */
-    public function logError(PhpError $error, ?ServerRequestInterface $request = null, bool $includeTrace = false): void
+    public function logError(\Cake\Error\PhpError $error, ?ServerRequestInterface $request = null, bool $includeTrace = \false): void
     {
         $message = $this->getErrorMessage($error, $includeTrace);
-
         if ($request instanceof ServerRequestInterface) {
             $message .= $this->getRequestContext($request);
         }
-
         $label = $error->getLabel();
         $level = match ($label) {
-            'strict' => LOG_NOTICE,
-            'deprecated' => LOG_DEBUG,
+            'strict' => \LOG_NOTICE,
+            'deprecated' => \LOG_DEBUG,
             default => $label,
         };
-
         $this->log($level, $message);
     }
-
     /**
      * Generate the message for the error
      *
@@ -91,40 +80,26 @@ class ErrorLogger implements ErrorLoggerInterface
      * @param bool $includeTrace Whether to include a stack trace.
      * @return string Error message
      */
-    protected function getErrorMessage(PhpError $error, bool $includeTrace = false): string
+    protected function getErrorMessage(\Cake\Error\PhpError $error, bool $includeTrace = \false): string
     {
-        $message = sprintf(
-            '%s in %s on line %s',
-            $error->getMessage(),
-            $error->getFile(),
-            $error->getLine(),
-        );
-
+        $message = sprintf('%s in %s on line %s', $error->getMessage(), $error->getFile(), $error->getLine());
         if (!$includeTrace) {
             return $message;
         }
-
         $message .= "\nTrace:\n" . $error->getTraceAsString() . "\n";
-
         return $message;
     }
-
     /**
      * @inheritDoc
      */
-    public function logException(
-        Throwable $exception,
-        ?ServerRequestInterface $request = null,
-        bool $includeTrace = false,
-    ): void {
-        $message = $this->getMessage($exception, false, $includeTrace);
-
+    public function logException(Throwable $exception, ?ServerRequestInterface $request = null, bool $includeTrace = \false): void
+    {
+        $message = $this->getMessage($exception, \false, $includeTrace);
         if ($request !== null) {
             $message .= $this->getRequestContext($request);
         }
         $this->error($message);
     }
-
     /**
      * Generate the message for the exception
      *
@@ -133,27 +108,18 @@ class ErrorLogger implements ErrorLoggerInterface
      * @param bool $includeTrace Whether to include a stack trace.
      * @return string Error message
      */
-    protected function getMessage(Throwable $exception, bool $isPrevious = false, bool $includeTrace = false): string
+    protected function getMessage(Throwable $exception, bool $isPrevious = \false, bool $includeTrace = \false): string
     {
-        $message = sprintf(
-            '%s[%s] %s in %s on line %s',
-            $isPrevious ? "\nCaused by: " : '',
-            $exception::class,
-            $exception->getMessage(),
-            $exception->getFile(),
-            $exception->getLine(),
-        );
+        $message = sprintf('%s[%s] %s in %s on line %s', $isPrevious ? "\nCaused by: " : '', $exception::class, $exception->getMessage(), $exception->getFile(), $exception->getLine());
         $debug = Configure::read('debug');
-
         if ($debug && $exception instanceof CakeException) {
             $attributes = $exception->getAttributes();
             if ($attributes) {
-                $message .= "\nException Attributes: " . var_export($exception->getAttributes(), true);
+                $message .= "\nException Attributes: " . var_export($exception->getAttributes(), \true);
             }
         }
-
         if ($includeTrace) {
-            $trace = Debugger::formatTrace($exception, ['format' => 'shortPoints']);
+            $trace = \Cake\Error\Debugger::formatTrace($exception, ['format' => 'shortPoints']);
             assert(is_array($trace));
             $message .= "\nStack Trace:\n";
             foreach ($trace as $line) {
@@ -164,15 +130,12 @@ class ErrorLogger implements ErrorLoggerInterface
                 }
             }
         }
-
         $previous = $exception->getPrevious();
         if ($previous) {
-            $message .= $this->getMessage($previous, true, $includeTrace);
+            $message .= $this->getMessage($previous, \true, $includeTrace);
         }
-
         return $message;
     }
-
     /**
      * Get the request context for an error/exception trace.
      *
@@ -182,19 +145,16 @@ class ErrorLogger implements ErrorLoggerInterface
     public function getRequestContext(ServerRequestInterface $request): string
     {
         $message = "\nRequest URL: " . $request->getRequestTarget();
-
         $referer = $request->getHeaderLine('Referer');
         if ($referer) {
             $message .= "\nReferer URL: " . $referer;
         }
-
         if ($request instanceof ServerRequest) {
             $clientIp = $request->clientIp();
             if ($clientIp && $clientIp !== '::1') {
                 $message .= "\nClient IP: " . $clientIp;
             }
         }
-
         return $message;
     }
 }

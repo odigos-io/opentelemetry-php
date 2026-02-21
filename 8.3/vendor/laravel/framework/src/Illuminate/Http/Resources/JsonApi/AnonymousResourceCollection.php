@@ -6,11 +6,9 @@ use Illuminate\Container\Container;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
-
 class AnonymousResourceCollection extends \Illuminate\Http\Resources\Json\AnonymousResourceCollection
 {
-    use Concerns\ResolvesJsonApiRequest;
-
+    use \Illuminate\Http\Resources\JsonApi\Concerns\ResolvesJsonApiRequest;
     /**
      * Get any additional data that should be returned with the resource array.
      *
@@ -20,20 +18,8 @@ class AnonymousResourceCollection extends \Illuminate\Http\Resources\Json\Anonym
     #[\Override]
     public function with($request)
     {
-        return array_filter([
-            'included' => $this->collection
-                ->map(fn ($resource) => $resource->resolveIncludedResourceObjects($request))
-                ->flatten(depth: 1)
-                ->uniqueStrict('_uniqueKey')
-                ->map(fn ($included) => Arr::except($included, ['_uniqueKey']))
-                ->values()
-                ->all(),
-            ...($implementation = JsonApiResource::$jsonApiInformation)
-                ? ['jsonapi' => $implementation]
-                : [],
-        ]);
+        return array_filter(['included' => $this->collection->map(fn($resource) => $resource->resolveIncludedResourceObjects($request))->flatten(depth: 1)->uniqueStrict('_uniqueKey')->map(fn($included) => Arr::except($included, ['_uniqueKey']))->values()->all(), ...($implementation = \Illuminate\Http\Resources\JsonApi\JsonApiResource::$jsonApiInformation) ? ['jsonapi' => $implementation] : []]);
     }
-
     /**
      * Transform the resource into a JSON array.
      *
@@ -43,11 +29,8 @@ class AnonymousResourceCollection extends \Illuminate\Http\Resources\Json\Anonym
     #[\Override]
     public function toAttributes(Request $request)
     {
-        return $this->collection
-            ->map(fn ($resource) => $resource->resolveResourceData($request))
-            ->all();
+        return $this->collection->map(fn($resource) => $resource->resolveResourceData($request))->all();
     }
-
     /**
      * Customize the outgoing response for the resource.
      *
@@ -60,7 +43,6 @@ class AnonymousResourceCollection extends \Illuminate\Http\Resources\Json\Anonym
     {
         $response->header('Content-Type', 'application/vnd.api+json');
     }
-
     /**
      * Create an HTTP response that represents the object.
      *
@@ -72,7 +54,6 @@ class AnonymousResourceCollection extends \Illuminate\Http\Resources\Json\Anonym
     {
         return parent::toResponse($this->resolveJsonApiRequestFrom($request));
     }
-
     /**
      * Resolve the HTTP request instance from container.
      *

@@ -3,18 +3,15 @@
 namespace Illuminate\Auth\Events;
 
 use Illuminate\Queue\SerializesModels;
-
 class Verified
 {
     use SerializesModels;
-
     /**
      * The verified user.
      *
      * @var \Illuminate\Contracts\Auth\MustVerifyEmail
      */
     public $user;
-
     /**
      * Create a new event instance.
      *

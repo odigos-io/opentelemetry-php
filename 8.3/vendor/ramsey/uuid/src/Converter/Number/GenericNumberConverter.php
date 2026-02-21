@@ -9,15 +9,12 @@
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
  */
+declare (strict_types=1);
+namespace Odigos\Ramsey\Uuid\Converter\Number;
 
-declare(strict_types=1);
-
-namespace Ramsey\Uuid\Converter\Number;
-
-use Ramsey\Uuid\Converter\NumberConverterInterface;
-use Ramsey\Uuid\Math\CalculatorInterface;
-use Ramsey\Uuid\Type\Integer as IntegerObject;
-
+use Odigos\Ramsey\Uuid\Converter\NumberConverterInterface;
+use Odigos\Ramsey\Uuid\Math\CalculatorInterface;
+use Odigos\Ramsey\Uuid\Type\Integer as IntegerObject;
 /**
  * GenericNumberConverter uses the provided calculator to convert decimal numbers to and from hexadecimal values
  *
@@ -28,7 +25,6 @@ class GenericNumberConverter implements NumberConverterInterface
     public function __construct(private CalculatorInterface $calculator)
     {
     }
-
     /**
      * @pure
      */
@@ -36,7 +32,6 @@ class GenericNumberConverter implements NumberConverterInterface
     {
         return $this->calculator->fromBase($hex, 16)->toString();
     }
-
     /**
      * @pure
      */

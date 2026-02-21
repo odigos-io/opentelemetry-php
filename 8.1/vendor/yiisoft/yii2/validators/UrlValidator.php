@@ -1,17 +1,16 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\validators;
 
-use Yii;
+use Odigos\Yii;
 use yii\base\InvalidConfigException;
 use yii\helpers\Json;
 use yii\web\JsExpression;
-
 /**
  * UrlValidator validates that the attribute value is a valid http or https URL.
  *
@@ -21,7 +20,7 @@ use yii\web\JsExpression;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class UrlValidator extends Validator
+class UrlValidator extends \yii\validators\Validator
 {
     /**
      * @var string the regular expression used to validate the attribute value.
@@ -46,9 +45,7 @@ class UrlValidator extends Validator
      * fail. Note that in order to use IDN validation you have to install and enable `intl` PHP
      * extension, otherwise an exception would be thrown.
      */
-    public $enableIDN = false;
-
-
+    public $enableIDN = \false;
     /**
      * {@inheritdoc}
      */
@@ -62,21 +59,19 @@ class UrlValidator extends Validator
             $this->message = Yii::t('yii', '{attribute} is not a valid URL.');
         }
     }
-
     /**
      * {@inheritdoc}
      */
     public function validateAttribute($model, $attribute)
     {
-        $value = $model->$attribute;
+        $value = $model->{$attribute};
         $result = $this->validateValue($value);
         if (!empty($result)) {
             $this->addError($model, $attribute, $result[0], $result[1]);
-        } elseif ($this->defaultScheme !== null && strpos($value, '://') === false) {
-            $model->$attribute = $this->defaultScheme . '://' . $value;
+        } elseif ($this->defaultScheme !== null && strpos($value, '://') === \false) {
+            $model->{$attribute} = $this->defaultScheme . '://' . $value;
         }
     }
-
     /**
      * {@inheritdoc}
      */
@@ -84,79 +79,62 @@ class UrlValidator extends Validator
     {
         // make sure the length is limited to avoid DOS attacks
         if (is_string($value) && strlen($value) < 2000) {
-            if ($this->defaultScheme !== null && strpos($value, '://') === false) {
+            if ($this->defaultScheme !== null && strpos($value, '://') === \false) {
                 $value = $this->defaultScheme . '://' . $value;
             }
-
-            if (strpos($this->pattern, '{schemes}') !== false) {
+            if (strpos($this->pattern, '{schemes}') !== \false) {
                 $pattern = str_replace('{schemes}', '(' . implode('|', $this->validSchemes) . ')', $this->pattern);
             } else {
                 $pattern = $this->pattern;
             }
-
             if ($this->enableIDN) {
                 $value = preg_replace_callback('/:\/\/([^\/]+)/', function ($matches) {
                     return '://' . $this->idnToAscii($matches[1]);
                 }, $value);
             }
-
             if (preg_match($pattern, $value)) {
                 return null;
             }
         }
-
         return [$this->message, []];
     }
-
     private function idnToAscii($idn)
     {
-        if (PHP_VERSION_ID < 50600) {
+        if (\PHP_VERSION_ID < 50600) {
             // TODO: drop old PHP versions support
             return idn_to_ascii($idn);
         }
-
-        return idn_to_ascii($idn, IDNA_NONTRANSITIONAL_TO_ASCII, INTL_IDNA_VARIANT_UTS46);
+        return idn_to_ascii($idn, \IDNA_NONTRANSITIONAL_TO_ASCII, \INTL_IDNA_VARIANT_UTS46);
     }
-
     /**
      * {@inheritdoc}
      */
     public function clientValidateAttribute($model, $attribute, $view)
     {
-        ValidationAsset::register($view);
+        \yii\validators\ValidationAsset::register($view);
         if ($this->enableIDN) {
-            PunycodeAsset::register($view);
+            \yii\validators\PunycodeAsset::register($view);
         }
         $options = $this->getClientOptions($model, $attribute);
-
         return 'yii.validation.url(value, messages, ' . Json::htmlEncode($options) . ');';
     }
-
     /**
      * {@inheritdoc}
      */
     public function getClientOptions($model, $attribute)
     {
-        if (strpos($this->pattern, '{schemes}') !== false) {
+        if (strpos($this->pattern, '{schemes}') !== \false) {
             $pattern = str_replace('{schemes}', '(' . implode('|', $this->validSchemes) . ')', $this->pattern);
         } else {
             $pattern = $this->pattern;
         }
-
-        $options = [
-            'pattern' => new JsExpression($pattern),
-            'message' => $this->formatMessage($this->message, [
-                'attribute' => $model->getAttributeLabel($attribute),
-            ]),
-            'enableIDN' => (bool) $this->enableIDN,
-        ];
+        $options = ['pattern' => new JsExpression($pattern), 'message' => $this->formatMessage($this->message, ['attribute' => $model->getAttributeLabel($attribute)]), 'enableIDN' => (bool) $this->enableIDN];
         if ($this->skipOnEmpty) {
             $options['skipOnEmpty'] = 1;
         }
         if ($this->defaultScheme !== null) {
             $options['defaultScheme'] = $this->defaultScheme;
         }
-
         return $options;
     }
 }

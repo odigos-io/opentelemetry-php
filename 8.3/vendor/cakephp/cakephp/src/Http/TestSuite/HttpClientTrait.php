@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -18,8 +18,7 @@ namespace Cake\Http\TestSuite;
 
 use Cake\Http\Client;
 use Cake\Http\Client\Response;
-use PHPUnit\Framework\Attributes\After;
-
+use Odigos\PHPUnit\Framework\Attributes\After;
 /**
  * Define mock responses and have mocks automatically cleared.
  */
@@ -35,7 +34,6 @@ trait HttpClientTrait
     {
         Client::clearMockResponses();
     }
-
     /**
      * Create a new response.
      *
@@ -47,10 +45,8 @@ trait HttpClientTrait
     public function newClientResponse(int $code = 200, array $headers = [], string $body = ''): Response
     {
         $headers = array_merge(["HTTP/1.1 {$code}"], $headers);
-
         return new Response($headers, $body);
     }
-
     /**
      * Add a mock response for a POST request.
      *
@@ -63,7 +59,6 @@ trait HttpClientTrait
     {
         Client::addMockResponse('POST', $url, $response, $options);
     }
-
     /**
      * Add a mock response for a GET request.
      *
@@ -76,7 +71,6 @@ trait HttpClientTrait
     {
         Client::addMockResponse('GET', $url, $response, $options);
     }
-
     /**
      * Add a mock response for a PATCH request.
      *
@@ -89,7 +83,6 @@ trait HttpClientTrait
     {
         Client::addMockResponse('PATCH', $url, $response, $options);
     }
-
     /**
      * Add a mock response for a PUT request.
      *
@@ -102,7 +95,6 @@ trait HttpClientTrait
     {
         Client::addMockResponse('PUT', $url, $response, $options);
     }
-
     /**
      * Add a mock response for a DELETE request.
      *
@@ -116,10 +108,6 @@ trait HttpClientTrait
         Client::addMockResponse('DELETE', $url, $response, $options);
     }
 }
-
 // phpcs:disable
-class_alias(
-    'Cake\Http\TestSuite\HttpClientTrait',
-    'Cake\TestSuite\HttpClientTrait'
-);
+class_alias('Cake\Http\TestSuite\HttpClientTrait', 'Cake\TestSuite\HttpClientTrait');
 // phpcs:enable

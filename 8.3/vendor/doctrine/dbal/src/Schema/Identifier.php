@@ -1,13 +1,11 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\DBAL\Schema;
 
 use Doctrine\DBAL\Schema\Name\GenericName;
 use Doctrine\DBAL\Schema\Name\Parser\GenericNameParser;
 use Doctrine\DBAL\Schema\Name\Parsers;
-
 /**
  * An abstraction class for an asset identifier.
  *
@@ -18,23 +16,20 @@ use Doctrine\DBAL\Schema\Name\Parsers;
  *
  * @extends AbstractNamedObject<GenericName>
  */
-class Identifier extends AbstractNamedObject
+class Identifier extends \Doctrine\DBAL\Schema\AbstractNamedObject
 {
     /**
      * @param string $identifier Identifier name to wrap.
      * @param bool   $quote      Whether to force quoting the given identifier.
      */
-    public function __construct(string $identifier, bool $quote = false)
+    public function __construct(string $identifier, bool $quote = \false)
     {
         parent::__construct($identifier);
-
-        if (! $quote || $this->_quoted) {
+        if (!$quote || $this->_quoted) {
             return;
         }
-
         $this->_setName('"' . $this->getName() . '"');
     }
-
     protected function getNameParser(): GenericNameParser
     {
         return Parsers::getGenericNameParser();

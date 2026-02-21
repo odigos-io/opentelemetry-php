@@ -10,28 +10,24 @@ class AliasLoader
      * @var array
      */
     protected $aliases;
-
     /**
      * Indicates if a loader has been registered.
      *
      * @var bool
      */
-    protected $registered = false;
-
+    protected $registered = \false;
     /**
      * The namespace for all real-time facades.
      *
      * @var string
      */
     protected static $facadeNamespace = 'Facades\\';
-
     /**
      * The singleton instance of the loader.
      *
      * @var \Illuminate\Foundation\AliasLoader
      */
     protected static $instance;
-
     /**
      * Create a new AliasLoader instance.
      *
@@ -42,7 +38,6 @@ class AliasLoader
     {
         $this->aliases = $aliases;
     }
-
     /**
      * Get or create the singleton alias loader instance.
      *
@@ -54,14 +49,10 @@ class AliasLoader
         if (is_null(static::$instance)) {
             return static::$instance = new static($aliases);
         }
-
         $aliases = array_merge(static::$instance->getAliases(), $aliases);
-
         static::$instance->setAliases($aliases);
-
         return static::$instance;
     }
-
     /**
      * Load a class alias if it is registered.
      *
@@ -72,15 +63,12 @@ class AliasLoader
     {
         if (static::$facadeNamespace && str_starts_with($alias, static::$facadeNamespace)) {
             $this->loadFacade($alias);
-
-            return true;
+            return \true;
         }
-
         if (isset($this->aliases[$alias])) {
             return class_alias($this->aliases[$alias], $alias);
         }
     }
-
     /**
      * Load a real-time facade for the given alias.
      *
@@ -91,7 +79,6 @@ class AliasLoader
     {
         require $this->ensureFacadeExists($alias);
     }
-
     /**
      * Ensure that the given alias has an existing real-time facade class.
      *
@@ -100,17 +87,12 @@ class AliasLoader
      */
     protected function ensureFacadeExists($alias)
     {
-        if (is_file($path = storage_path('framework/cache/facade-'.sha1($alias).'.php'))) {
+        if (is_file($path = storage_path('framework/cache/facade-' . sha1($alias) . '.php'))) {
             return $path;
         }
-
-        file_put_contents($path, $this->formatFacadeStub(
-            $alias, file_get_contents(__DIR__.'/stubs/facade.stub')
-        ));
-
+        file_put_contents($path, $this->formatFacadeStub($alias, file_get_contents(__DIR__ . '/stubs/facade.stub')));
         return $path;
     }
-
     /**
      * Format the facade stub with the proper namespace and class.
      *
@@ -120,17 +102,9 @@ class AliasLoader
      */
     protected function formatFacadeStub($alias, $stub)
     {
-        $replacements = [
-            str_replace('/', '\\', dirname(str_replace('\\', '/', $alias))),
-            class_basename($alias),
-            substr($alias, strlen(static::$facadeNamespace)),
-        ];
-
-        return str_replace(
-            ['DummyNamespace', 'DummyClass', 'DummyTarget'], $replacements, $stub
-        );
+        $replacements = [str_replace('/', '\\', dirname(str_replace('\\', '/', $alias))), class_basename($alias), substr($alias, strlen(static::$facadeNamespace))];
+        return str_replace(['DummyNamespace', 'DummyClass', 'DummyTarget'], $replacements, $stub);
     }
-
     /**
      * Add an alias to the loader.
      *
@@ -142,7 +116,6 @@ class AliasLoader
     {
         $this->aliases[$alias] = $class;
     }
-
     /**
      * Register the loader on the auto-loader stack.
      *
@@ -150,13 +123,11 @@ class AliasLoader
      */
     public function register()
     {
-        if (! $this->registered) {
+        if (!$this->registered) {
             $this->prependToLoaderStack();
-
-            $this->registered = true;
+            $this->registered = \true;
         }
     }
-
     /**
      * Prepend the load method to the auto-loader stack.
      *
@@ -164,9 +135,8 @@ class AliasLoader
      */
     protected function prependToLoaderStack()
     {
-        spl_autoload_register([$this, 'load'], true, true);
+        spl_autoload_register([$this, 'load'], \true, \true);
     }
-
     /**
      * Get the registered aliases.
      *
@@ -176,7 +146,6 @@ class AliasLoader
     {
         return $this->aliases;
     }
-
     /**
      * Set the registered aliases.
      *
@@ -187,7 +156,6 @@ class AliasLoader
     {
         $this->aliases = $aliases;
     }
-
     /**
      * Indicates if the loader has been registered.
      *
@@ -197,7 +165,6 @@ class AliasLoader
     {
         return $this->registered;
     }
-
     /**
      * Set the "registered" state of the loader.
      *
@@ -208,7 +175,6 @@ class AliasLoader
     {
         $this->registered = $value;
     }
-
     /**
      * Set the real-time facade namespace.
      *
@@ -217,9 +183,8 @@ class AliasLoader
      */
     public static function setFacadeNamespace($namespace)
     {
-        static::$facadeNamespace = rtrim($namespace, '\\').'\\';
+        static::$facadeNamespace = rtrim($namespace, '\\') . '\\';
     }
-
     /**
      * Set the value of the singleton alias loader.
      *
@@ -230,7 +195,6 @@ class AliasLoader
     {
         static::$instance = $loader;
     }
-
     /**
      * Clone method.
      *

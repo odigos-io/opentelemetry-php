@@ -5,8 +5,7 @@ namespace Illuminate\Queue\Jobs;
 use Illuminate\Container\Container;
 use Illuminate\Contracts\Queue\Job as JobContract;
 use Illuminate\Queue\RedisQueue;
-
-class RedisJob extends Job implements JobContract
+class RedisJob extends \Illuminate\Queue\Jobs\Job implements JobContract
 {
     /**
      * The Redis queue instance.
@@ -14,28 +13,24 @@ class RedisJob extends Job implements JobContract
      * @var \Illuminate\Queue\RedisQueue
      */
     protected $redis;
-
     /**
      * The Redis raw job payload.
      *
      * @var string
      */
     protected $job;
-
     /**
      * The JSON decoded version of "$job".
      *
      * @var array
      */
     protected $decoded;
-
     /**
      * The Redis job payload inside the reserved queue.
      *
      * @var string
      */
     protected $reserved;
-
     /**
      * Create a new job instance.
      *
@@ -57,10 +52,8 @@ class RedisJob extends Job implements JobContract
         $this->reserved = $reserved;
         $this->container = $container;
         $this->connectionName = $connectionName;
-
         $this->decoded = $this->payload();
     }
-
     /**
      * Get the raw body string for the job.
      *
@@ -70,7 +63,6 @@ class RedisJob extends Job implements JobContract
     {
         return $this->job;
     }
-
     /**
      * Delete the job from the queue.
      *
@@ -79,10 +71,8 @@ class RedisJob extends Job implements JobContract
     public function delete()
     {
         parent::delete();
-
         $this->redis->deleteReserved($this->queue, $this);
     }
-
     /**
      * Release the job back into the queue after (n) seconds.
      *
@@ -92,10 +82,8 @@ class RedisJob extends Job implements JobContract
     public function release($delay = 0)
     {
         parent::release($delay);
-
         $this->redis->deleteAndRelease($this->queue, $this, $delay);
     }
-
     /**
      * Get the number of times the job has been attempted.
      *
@@ -105,7 +93,6 @@ class RedisJob extends Job implements JobContract
     {
         return ($this->decoded['attempts'] ?? null) + 1;
     }
-
     /**
      * Get the job identifier.
      *
@@ -115,7 +102,6 @@ class RedisJob extends Job implements JobContract
     {
         return $this->decoded['id'] ?? null;
     }
-
     /**
      * Get the underlying Redis factory implementation.
      *
@@ -125,7 +111,6 @@ class RedisJob extends Job implements JobContract
     {
         return $this->redis;
     }
-
     /**
      * Get the underlying reserved Redis job.
      *

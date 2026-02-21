@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the league/commonmark package.
  *
@@ -13,42 +12,33 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Odigos\League\CommonMark\Extension\CommonMark\Node\Block;
 
-namespace League\CommonMark\Extension\CommonMark\Node\Block;
-
-use League\CommonMark\Node\Block\AbstractBlock;
-use League\CommonMark\Node\Block\TightBlockInterface;
-
+use Odigos\League\CommonMark\Node\Block\AbstractBlock;
+use Odigos\League\CommonMark\Node\Block\TightBlockInterface;
 class ListBlock extends AbstractBlock implements TightBlockInterface
 {
-    public const TYPE_BULLET  = 'bullet';
+    public const TYPE_BULLET = 'bullet';
     public const TYPE_ORDERED = 'ordered';
-
     public const DELIM_PERIOD = 'period';
-    public const DELIM_PAREN  = 'paren';
-
-    protected bool $tight = false; // TODO Make lists tight by default in v3
-
+    public const DELIM_PAREN = 'paren';
+    protected bool $tight = \false;
+    // TODO Make lists tight by default in v3
     /** @psalm-readonly */
     protected ListData $listData;
-
     public function __construct(ListData $listData)
     {
         parent::__construct();
-
         $this->listData = $listData;
     }
-
     public function getListData(): ListData
     {
         return $this->listData;
     }
-
     public function isTight(): bool
     {
         return $this->tight;
     }
-
     public function setTight(bool $tight): void
     {
         $this->tight = $tight;

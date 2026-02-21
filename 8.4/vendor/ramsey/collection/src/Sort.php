@@ -9,21 +9,18 @@
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
  */
-
-declare(strict_types=1);
-
-namespace Ramsey\Collection;
+declare (strict_types=1);
+namespace Odigos\Ramsey\Collection;
 
 /**
  * Collection sorting
  */
-enum Sort: string
+enum Sort : string
 {
     /**
      * Sort items in a collection in ascending order.
      */
     case Ascending = 'asc';
-
     /**
      * Sort items in a collection in descending order.
      */

@@ -10,7 +10,6 @@ class ModelPruningFinished
      * @var array<class-string>
      */
     public $models;
-
     /**
      * Create a new event instance.
      *

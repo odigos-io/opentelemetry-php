@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -20,11 +20,10 @@ use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Core\Plugin;
-
 /**
  * Displays all currently loaded plugins.
  */
-class PluginLoadedCommand extends Command
+class PluginLoadedCommand extends \Cake\Command\Command
 {
     /**
      * @inheritDoc
@@ -33,7 +32,6 @@ class PluginLoadedCommand extends Command
     {
         return 'plugin loaded';
     }
-
     /**
      * @inheritDoc
      */
@@ -41,7 +39,6 @@ class PluginLoadedCommand extends Command
     {
         return 'Displays all currently loaded plugins.';
     }
-
     /**
      * Displays all currently loaded plugins.
      *
@@ -53,10 +50,8 @@ class PluginLoadedCommand extends Command
     {
         $loaded = Plugin::loaded();
         $io->out($loaded);
-
         return static::CODE_SUCCESS;
     }
-
     /**
      * Get the option parser.
      *
@@ -66,7 +61,6 @@ class PluginLoadedCommand extends Command
     public function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
     {
         $parser->setDescription(static::getDescription());
-
         return $parser;
     }
 }

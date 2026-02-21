@@ -4,7 +4,6 @@ namespace Illuminate\Hashing;
 
 use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Support\ServiceProvider;
-
 class HashServiceProvider extends ServiceProvider implements DeferrableProvider
 {
     /**
@@ -15,14 +14,12 @@ class HashServiceProvider extends ServiceProvider implements DeferrableProvider
     public function register()
     {
         $this->app->singleton('hash', function ($app) {
-            return new HashManager($app);
+            return new \Illuminate\Hashing\HashManager($app);
         });
-
         $this->app->singleton('hash.driver', function ($app) {
             return $app['hash']->driver();
         });
     }
-
     /**
      * Get the services provided by the provider.
      *

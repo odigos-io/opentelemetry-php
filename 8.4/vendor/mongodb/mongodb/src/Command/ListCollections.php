@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright 2020-present MongoDB, Inc.
  *
@@ -14,7 +15,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 namespace MongoDB\Command;
 
 use MongoDB\Driver\Command;
@@ -23,11 +23,9 @@ use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
 use MongoDB\Driver\Server;
 use MongoDB\Driver\Session;
 use MongoDB\Exception\InvalidArgumentException;
-
 use function is_bool;
 use function is_integer;
 use function MongoDB\is_document;
-
 /**
  * Wrapper for the listCollections command.
  *
@@ -67,27 +65,22 @@ final class ListCollections
      */
     public function __construct(private string $databaseName, private array $options = [])
     {
-        if (isset($options['authorizedCollections']) && ! is_bool($options['authorizedCollections'])) {
+        if (isset($options['authorizedCollections']) && !is_bool($options['authorizedCollections'])) {
             throw InvalidArgumentException::invalidType('"authorizedCollections" option', $options['authorizedCollections'], 'boolean');
         }
-
-        if (isset($options['filter']) && ! is_document($options['filter'])) {
+        if (isset($options['filter']) && !is_document($options['filter'])) {
             throw InvalidArgumentException::expectedDocumentType('"filter" option', $options['filter']);
         }
-
-        if (isset($options['maxTimeMS']) && ! is_integer($options['maxTimeMS'])) {
+        if (isset($options['maxTimeMS']) && !is_integer($options['maxTimeMS'])) {
             throw InvalidArgumentException::invalidType('"maxTimeMS" option', $options['maxTimeMS'], 'integer');
         }
-
-        if (isset($options['nameOnly']) && ! is_bool($options['nameOnly'])) {
+        if (isset($options['nameOnly']) && !is_bool($options['nameOnly'])) {
             throw InvalidArgumentException::invalidType('"nameOnly" option', $options['nameOnly'], 'boolean');
         }
-
-        if (isset($options['session']) && ! $options['session'] instanceof Session) {
+        if (isset($options['session']) && !$options['session'] instanceof Session) {
             throw InvalidArgumentException::invalidType('"session" option', $options['session'], Session::class);
         }
     }
-
     /**
      * Execute the operation.
      *
@@ -99,30 +92,24 @@ final class ListCollections
         /** @var CursorInterface<array> $cursor */
         $cursor = $server->executeReadCommand($this->databaseName, $this->createCommand(), $this->createOptions());
         $cursor->setTypeMap(['root' => 'array', 'document' => 'array']);
-
         return $cursor;
     }
-
     /**
      * Create the listCollections command.
      */
     private function createCommand(): Command
     {
         $cmd = ['listCollections' => 1];
-
-        if (! empty($this->options['filter'])) {
+        if (!empty($this->options['filter'])) {
             $cmd['filter'] = (object) $this->options['filter'];
         }
-
         foreach (['authorizedCollections', 'comment', 'maxTimeMS', 'nameOnly'] as $option) {
             if (isset($this->options[$option])) {
                 $cmd[$option] = $this->options[$option];
             }
         }
-
         return new Command($cmd);
     }
-
     /**
      * Create options for executing the command.
      *
@@ -134,11 +121,9 @@ final class ListCollections
     private function createOptions(): array
     {
         $options = [];
-
         if (isset($this->options['session'])) {
             $options['session'] = $this->options['session'];
         }
-
         return $options;
     }
 }

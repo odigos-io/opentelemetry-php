@@ -1,15 +1,14 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\db\conditions;
 
 use yii\base\InvalidArgumentException;
 use yii\db\ExpressionInterface;
-
 /**
  * Class InCondition represents `IN` condition.
  *
@@ -17,7 +16,7 @@ use yii\db\ExpressionInterface;
  * @since 2.0.14
  * @phpcs:disable Squiz.NamingConventions.ValidVariableName.PrivateNoUnderscore
  */
-class InCondition implements ConditionInterface
+class InCondition implements \yii\db\conditions\ConditionInterface
 {
     /**
      * @var string $operator the operator to use (e.g. `IN` or `NOT IN`)
@@ -34,8 +33,6 @@ class InCondition implements ConditionInterface
      * [[operator]] is `IN` and empty if operator is `NOT IN`.
      */
     private $values;
-
-
     /**
      * SimpleCondition constructor
      *
@@ -51,7 +48,6 @@ class InCondition implements ConditionInterface
         $this->operator = $operator;
         $this->values = $values;
     }
-
     /**
      * @return string
      */
@@ -59,7 +55,6 @@ class InCondition implements ConditionInterface
     {
         return $this->operator;
     }
-
     /**
      * @return mixed
      */
@@ -67,7 +62,6 @@ class InCondition implements ConditionInterface
     {
         return $this->column;
     }
-
     /**
      * @return ExpressionInterface[]|string[]|int[]
      */
@@ -82,9 +76,8 @@ class InCondition implements ConditionInterface
     public static function fromArrayDefinition($operator, $operands)
     {
         if (!isset($operands[0], $operands[1])) {
-            throw new InvalidArgumentException("Operator '$operator' requires two operands.");
+            throw new InvalidArgumentException("Operator '{$operator}' requires two operands.");
         }
-
         return new static($operands[0], $operator, $operands[1]);
     }
 }

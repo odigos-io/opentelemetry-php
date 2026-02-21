@@ -5,7 +5,6 @@ namespace Illuminate\Process;
 use Illuminate\Contracts\Process\ProcessResult as ProcessResultContract;
 use Illuminate\Process\Exceptions\ProcessFailedException;
 use Symfony\Component\Process\Process;
-
 class ProcessResult implements ProcessResultContract
 {
     /**
@@ -14,7 +13,6 @@ class ProcessResult implements ProcessResultContract
      * @var \Symfony\Component\Process\Process
      */
     protected $process;
-
     /**
      * Create a new process result instance.
      *
@@ -25,7 +23,6 @@ class ProcessResult implements ProcessResultContract
     {
         $this->process = $process;
     }
-
     /**
      * Get the original command executed by the process.
      *
@@ -35,7 +32,6 @@ class ProcessResult implements ProcessResultContract
     {
         return $this->process->getCommandLine();
     }
-
     /**
      * Determine if the process was successful.
      *
@@ -45,7 +41,6 @@ class ProcessResult implements ProcessResultContract
     {
         return $this->process->isSuccessful();
     }
-
     /**
      * Determine if the process failed.
      *
@@ -53,9 +48,8 @@ class ProcessResult implements ProcessResultContract
      */
     public function failed()
     {
-        return ! $this->successful();
+        return !$this->successful();
     }
-
     /**
      * Get the exit code of the process.
      *
@@ -65,7 +59,6 @@ class ProcessResult implements ProcessResultContract
     {
         return $this->process->getExitCode();
     }
-
     /**
      * Get the standard output of the process.
      *
@@ -75,7 +68,6 @@ class ProcessResult implements ProcessResultContract
     {
         return $this->process->getOutput();
     }
-
     /**
      * Determine if the output contains the given string.
      *
@@ -86,7 +78,6 @@ class ProcessResult implements ProcessResultContract
     {
         return str_contains($this->output(), $output);
     }
-
     /**
      * Get the error output of the process.
      *
@@ -96,7 +87,6 @@ class ProcessResult implements ProcessResultContract
     {
         return $this->process->getErrorOutput();
     }
-
     /**
      * Determine if the error output contains the given string.
      *
@@ -107,7 +97,6 @@ class ProcessResult implements ProcessResultContract
     {
         return str_contains($this->errorOutput(), $output);
     }
-
     /**
      * Throw an exception if the process failed.
      *
@@ -121,16 +110,12 @@ class ProcessResult implements ProcessResultContract
         if ($this->successful()) {
             return $this;
         }
-
         $exception = new ProcessFailedException($this);
-
         if ($callback) {
             $callback($this, $exception);
         }
-
         throw $exception;
     }
-
     /**
      * Throw an exception if the process failed and the given condition is true.
      *
@@ -145,7 +130,6 @@ class ProcessResult implements ProcessResultContract
         if ($condition) {
             return $this->throw($callback);
         }
-
         return $this;
     }
 }

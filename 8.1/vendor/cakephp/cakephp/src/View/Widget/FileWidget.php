@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -17,26 +17,20 @@ declare(strict_types=1);
 namespace Cake\View\Widget;
 
 use Cake\View\Form\ContextInterface;
-
 /**
  * Input widget class for generating a file upload control.
  *
  * This class is usually used internally by `Cake\View\Helper\FormHelper`,
  * it but can be used to generate standalone file upload controls.
  */
-class FileWidget extends BasicWidget
+class FileWidget extends \Cake\View\Widget\BasicWidget
 {
     /**
      * Data defaults.
      *
      * @var array<string, mixed>
      */
-    protected array $defaults = [
-        'name' => '',
-        'escape' => true,
-        'templateVars' => [],
-    ];
-
+    protected array $defaults = ['name' => '', 'escape' => \true, 'templateVars' => []];
     /**
      * Render a file upload form widget.
      *
@@ -56,16 +50,7 @@ class FileWidget extends BasicWidget
     public function render(array $data, ContextInterface $context): string
     {
         $data += $this->mergeDefaults($data, $context);
-
         unset($data['val']);
-
-        return $this->_templates->format('file', [
-            'name' => $data['name'],
-            'templateVars' => $data['templateVars'],
-            'attrs' => $this->_templates->formatAttributes(
-                $data,
-                ['name'],
-            ),
-        ]);
+        return $this->_templates->format('file', ['name' => $data['name'], 'templateVars' => $data['templateVars'], 'attrs' => $this->_templates->formatAttributes($data, ['name'])]);
     }
 }

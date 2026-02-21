@@ -3,7 +3,6 @@
 namespace Illuminate\Support;
 
 use WeakMap;
-
 class Once
 {
     /**
@@ -12,14 +11,12 @@ class Once
      * @var static|null
      */
     protected static ?self $instance = null;
-
     /**
      * Indicates if the once instance is enabled.
      *
      * @var bool
      */
-    protected static bool $enabled = true;
-
+    protected static bool $enabled = \true;
     /**
      * Create a new once instance.
      *
@@ -29,7 +26,6 @@ class Once
     {
         //
     }
-
     /**
      * Create a new once instance.
      *
@@ -37,36 +33,29 @@ class Once
      */
     public static function instance()
     {
-        return static::$instance ??= new static(new WeakMap);
+        return static::$instance ??= new static(new WeakMap());
     }
-
     /**
      * Get the value of the given onceable.
      *
      * @param  Onceable  $onceable
      * @return mixed
      */
-    public function value(Onceable $onceable)
+    public function value(\Illuminate\Support\Onceable $onceable)
     {
-        if (! static::$enabled) {
+        if (!static::$enabled) {
             return call_user_func($onceable->callable);
         }
-
         $object = $onceable->object ?: $this;
-
         $hash = $onceable->hash;
-
-        if (! isset($this->values[$object])) {
+        if (!isset($this->values[$object])) {
             $this->values[$object] = [];
         }
-
         if (array_key_exists($hash, $this->values[$object])) {
             return $this->values[$object][$hash];
         }
-
         return $this->values[$object][$hash] = call_user_func($onceable->callable);
     }
-
     /**
      * Re-enable the once instance if it was disabled.
      *
@@ -74,9 +63,8 @@ class Once
      */
     public static function enable()
     {
-        static::$enabled = true;
+        static::$enabled = \true;
     }
-
     /**
      * Disable the once instance.
      *
@@ -84,9 +72,8 @@ class Once
      */
     public static function disable()
     {
-        static::$enabled = false;
+        static::$enabled = \false;
     }
-
     /**
      * Flush the once instance.
      *

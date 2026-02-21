@@ -1,10 +1,10 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Odigos;
 
-define('YII_ENABLE_ERROR_HANDLER', false);
-define('YII_DEBUG', true);
-define('YII_ENV', 'test');
-
+\define('YII_ENABLE_ERROR_HANDLER', \false);
+\define('YII_DEBUG', \true);
+\define('YII_ENV', 'test');
 require __DIR__ . '/../vendor/autoload.php';
 require __DIR__ . '/../vendor/yiisoft/yii2/Yii.php';

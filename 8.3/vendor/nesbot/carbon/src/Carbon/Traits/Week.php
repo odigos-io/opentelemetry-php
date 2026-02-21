@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /**
  * This file is part of the Carbon package.
  *
@@ -10,11 +9,9 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Odigos\Carbon\Traits;
 
-namespace Carbon\Traits;
-
-use Carbon\CarbonInterval;
-
+use Odigos\Carbon\CarbonInterval;
 /**
  * Trait Week.
  *
@@ -53,13 +50,8 @@ trait Week
      */
     public function isoWeekYear($year = null, $dayOfWeek = null, $dayOfYear = null)
     {
-        return $this->weekYear(
-            $year,
-            $dayOfWeek ?? static::MONDAY,
-            $dayOfYear ?? static::THURSDAY,
-        );
+        return $this->weekYear($year, $dayOfWeek ?? static::MONDAY, $dayOfYear ?? static::THURSDAY);
     }
-
     /**
      * Set/get the week number of year using given first day of week and first
      * day of year included in the first week. Or use US format if no settings
@@ -75,52 +67,37 @@ trait Week
     {
         $dayOfWeek = $dayOfWeek ?? $this->getTranslationMessage('first_day_of_week') ?? static::SUNDAY;
         $dayOfYear = $dayOfYear ?? $this->getTranslationMessage('day_of_first_week_of_year') ?? 1;
-
         if ($year !== null) {
             $year = (int) round($year);
-
             if ($this->weekYear(null, $dayOfWeek, $dayOfYear) === $year) {
                 return $this->avoidMutation();
             }
-
             $week = $this->week(null, $dayOfWeek, $dayOfYear);
             $day = $this->dayOfWeek;
             $date = $this->year($year);
-
             $date = match ($date->weekYear(null, $dayOfWeek, $dayOfYear) - $year) {
                 CarbonInterval::POSITIVE => $date->subWeeks(static::WEEKS_PER_YEAR / 2),
                 CarbonInterval::NEGATIVE => $date->addWeeks(static::WEEKS_PER_YEAR / 2),
                 default => $date,
             };
-
-            $date = $date
-                ->addWeeks($week - $date->week(null, $dayOfWeek, $dayOfYear))
-                ->startOfWeek($dayOfWeek);
-
+            $date = $date->addWeeks($week - $date->week(null, $dayOfWeek, $dayOfYear))->startOfWeek($dayOfWeek);
             if ($date->dayOfWeek === $day) {
                 return $date;
             }
-
             return $date->next($day);
         }
-
         $year = $this->year;
         $day = $this->dayOfYear;
         $date = $this->avoidMutation()->dayOfYear($dayOfYear)->startOfWeek($dayOfWeek);
-
         if ($date->year === $year && $day < $date->dayOfYear) {
             return $year - 1;
         }
-
         $date = $this->avoidMutation()->addYear()->dayOfYear($dayOfYear)->startOfWeek($dayOfWeek);
-
         if ($date->year === $year && $day >= $date->dayOfYear) {
             return $year + 1;
         }
-
         return $year;
     }
-
     /**
      * Get the number of weeks of the current week-year using given first day of week and first
      * day of year included in the first week. Or use ISO format if no settings
@@ -133,12 +110,8 @@ trait Week
      */
     public function isoWeeksInYear($dayOfWeek = null, $dayOfYear = null)
     {
-        return $this->weeksInYear(
-            $dayOfWeek ?? static::MONDAY,
-            $dayOfYear ?? static::THURSDAY,
-        );
+        return $this->weeksInYear($dayOfWeek ?? static::MONDAY, $dayOfYear ?? static::THURSDAY);
     }
-
     /**
      * Get the number of weeks of the current week-year using given first day of week and first
      * day of year included in the first week. Or use US format if no settings
@@ -164,10 +137,8 @@ trait Week
         if ($end->year !== $year) {
             $endDay += $this->daysInYear;
         }
-
         return (int) round(($endDay - $startDay) / static::DAYS_PER_WEEK);
     }
-
     /**
      * Get/set the week number using given first day of week and first
      * day of year included in the first week. Or use US format if no settings
@@ -184,23 +155,17 @@ trait Week
         $date = $this;
         $dayOfWeek = $dayOfWeek ?? $this->getTranslationMessage('first_day_of_week') ?? 0;
         $dayOfYear = $dayOfYear ?? $this->getTranslationMessage('day_of_first_week_of_year') ?? 1;
-
         if ($week !== null) {
             return $date->addWeeks(round($week) - $this->week(null, $dayOfWeek, $dayOfYear));
         }
-
         $start = $date->avoidMutation()->shiftTimezone('UTC')->dayOfYear($dayOfYear)->startOfWeek($dayOfWeek);
         $end = $date->avoidMutation()->shiftTimezone('UTC')->startOfWeek($dayOfWeek);
-
         if ($start > $end) {
             $start = $start->subWeeks(static::WEEKS_PER_YEAR / 2)->dayOfYear($dayOfYear)->startOfWeek($dayOfWeek);
         }
-
         $week = (int) ($start->diffInDays($end) / static::DAYS_PER_WEEK + 1);
-
         return $week > $end->weeksInYear($dayOfWeek, $dayOfYear) ? 1 : $week;
     }
-
     /**
      * Get/set the week number using given first day of week and first
      * day of year included in the first week. Or use ISO format if no settings
@@ -214,10 +179,6 @@ trait Week
      */
     public function isoWeek($week = null, $dayOfWeek = null, $dayOfYear = null)
     {
-        return $this->week(
-            $week,
-            $dayOfWeek ?? static::MONDAY,
-            $dayOfYear ?? static::THURSDAY,
-        );
+        return $this->week($week, $dayOfWeek ?? static::MONDAY, $dayOfYear ?? static::THURSDAY);
     }
 }

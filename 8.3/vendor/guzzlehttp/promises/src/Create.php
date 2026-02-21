@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace GuzzleHttp\Promise;
 
 final class Create
@@ -11,40 +10,34 @@ final class Create
      *
      * @param mixed $value Promise or value.
      */
-    public static function promiseFor($value): PromiseInterface
+    public static function promiseFor($value): \GuzzleHttp\Promise\PromiseInterface
     {
-        if ($value instanceof PromiseInterface) {
+        if ($value instanceof \GuzzleHttp\Promise\PromiseInterface) {
             return $value;
         }
-
         // Return a Guzzle promise that shadows the given promise.
         if (is_object($value) && method_exists($value, 'then')) {
             $wfn = method_exists($value, 'wait') ? [$value, 'wait'] : null;
             $cfn = method_exists($value, 'cancel') ? [$value, 'cancel'] : null;
-            $promise = new Promise($wfn, $cfn);
+            $promise = new \GuzzleHttp\Promise\Promise($wfn, $cfn);
             $value->then([$promise, 'resolve'], [$promise, 'reject']);
-
             return $promise;
         }
-
-        return new FulfilledPromise($value);
+        return new \GuzzleHttp\Promise\FulfilledPromise($value);
     }
-
     /**
      * Creates a rejected promise for a reason if the reason is not a promise.
      * If the provided reason is a promise, then it is returned as-is.
      *
      * @param mixed $reason Promise or reason.
      */
-    public static function rejectionFor($reason): PromiseInterface
+    public static function rejectionFor($reason): \GuzzleHttp\Promise\PromiseInterface
     {
-        if ($reason instanceof PromiseInterface) {
+        if ($reason instanceof \GuzzleHttp\Promise\PromiseInterface) {
             return $reason;
         }
-
-        return new RejectedPromise($reason);
+        return new \GuzzleHttp\Promise\RejectedPromise($reason);
     }
-
     /**
      * Create an exception for a rejected promise value.
      *
@@ -55,10 +48,8 @@ final class Create
         if ($reason instanceof \Throwable) {
             return $reason;
         }
-
-        return new RejectionException($reason);
+        return new \GuzzleHttp\Promise\RejectionException($reason);
     }
-
     /**
      * Returns an iterator for the given value.
      *
@@ -69,11 +60,9 @@ final class Create
         if ($value instanceof \Iterator) {
             return $value;
         }
-
         if (is_array($value)) {
             return new \ArrayIterator($value);
         }
-
         return new \ArrayIterator([$value]);
     }
 }

@@ -1,11 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\DBAL\Schema\Metadata;
 
 use Doctrine\DBAL\Schema\Column;
-
 /**
  * A row of metadata describing a table column.
  *
@@ -20,25 +18,19 @@ final readonly class TableColumnMetadataRow
      * @param ?non-empty-string $schemaName
      * @param non-empty-string  $tableName
      */
-    public function __construct(
-        private ?string $schemaName,
-        private string $tableName,
-        private Column $column,
-    ) {
+    public function __construct(private ?string $schemaName, private string $tableName, private Column $column)
+    {
     }
-
     /** @return ?non-empty-string */
     public function getSchemaName(): ?string
     {
         return $this->schemaName;
     }
-
     /** @return non-empty-string */
     public function getTableName(): string
     {
         return $this->tableName;
     }
-
     public function getColumn(): Column
     {
         return $this->column;

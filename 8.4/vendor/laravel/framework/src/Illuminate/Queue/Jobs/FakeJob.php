@@ -4,8 +4,7 @@ namespace Illuminate\Queue\Jobs;
 
 use Illuminate\Contracts\Queue\Job as JobContract;
 use Illuminate\Support\Str;
-
-class FakeJob extends Job implements JobContract
+class FakeJob extends \Illuminate\Queue\Jobs\Job implements JobContract
 {
     /**
      * The number of seconds the released job was delayed.
@@ -13,21 +12,18 @@ class FakeJob extends Job implements JobContract
      * @var int
      */
     public $releaseDelay;
-
     /**
      * The number of attempts made to process the job.
      *
      * @var int
      */
     public $attempts = 1;
-
     /**
      * The exception the job failed with.
      *
      * @var \Throwable
      */
     public $failedWith;
-
     /**
      * Get the job identifier.
      *
@@ -35,9 +31,8 @@ class FakeJob extends Job implements JobContract
      */
     public function getJobId()
     {
-        return once(fn () => (string) Str::uuid());
+        return once(fn() => (string) Str::uuid());
     }
-
     /**
      * Get the raw body of the job.
      *
@@ -47,7 +42,6 @@ class FakeJob extends Job implements JobContract
     {
         return '';
     }
-
     /**
      * Release the job back into the queue after (n) seconds.
      *
@@ -56,10 +50,9 @@ class FakeJob extends Job implements JobContract
      */
     public function release($delay = 0)
     {
-        $this->released = true;
+        $this->released = \true;
         $this->releaseDelay = $delay;
     }
-
     /**
      * Get the number of times the job has been attempted.
      *
@@ -69,7 +62,6 @@ class FakeJob extends Job implements JobContract
     {
         return $this->attempts;
     }
-
     /**
      * Delete the job from the queue.
      *
@@ -77,9 +69,8 @@ class FakeJob extends Job implements JobContract
      */
     public function delete()
     {
-        $this->deleted = true;
+        $this->deleted = \true;
     }
-
     /**
      * Delete the job, call the "failed" method, and raise the failed job event.
      *
@@ -88,7 +79,7 @@ class FakeJob extends Job implements JobContract
      */
     public function fail($exception = null)
     {
-        $this->failed = true;
+        $this->failed = \true;
         $this->failedWith = $exception;
     }
 }

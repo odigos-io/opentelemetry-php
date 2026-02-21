@@ -7,36 +7,29 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Arr;
-
 class JsonApiResource extends JsonResource
 {
-    use Concerns\ResolvesJsonApiElements,
-        Concerns\ResolvesJsonApiRequest;
-
+    use \Illuminate\Http\Resources\JsonApi\Concerns\ResolvesJsonApiElements, \Illuminate\Http\Resources\JsonApi\Concerns\ResolvesJsonApiRequest;
     /**
      * The "data" wrapper that should be applied.
      *
      * @var string|null
      */
     public static $wrap = 'data';
-
     /**
      * The resource's "version" for JSON:API.
      *
      * @var array{version?: string, ext?: array, profile?: array, meta?: array}
      */
     public static $jsonApiInformation = [];
-
     /**
      * The resource's "links" for JSON:API.
      */
     protected array $jsonApiLinks = [];
-
     /**
      * The resource's "meta" for JSON:API.
      */
     protected array $jsonApiMeta = [];
-
     /**
      * Set the JSON:API version for the request.
      *
@@ -44,14 +37,8 @@ class JsonApiResource extends JsonResource
      */
     public static function configure(?string $version = null, array $ext = [], array $profile = [], array $meta = [])
     {
-        static::$jsonApiInformation = array_filter([
-            'version' => $version,
-            'ext' => $ext,
-            'profile' => $profile,
-            'meta' => $meta,
-        ]);
+        static::$jsonApiInformation = array_filter(['version' => $version, 'ext' => $ext, 'profile' => $profile, 'meta' => $meta]);
     }
-
     /**
      * Get the resource's ID.
      *
@@ -61,7 +48,6 @@ class JsonApiResource extends JsonResource
     {
         return null;
     }
-
     /**
      * Get the resource's type.
      *
@@ -71,7 +57,6 @@ class JsonApiResource extends JsonResource
     {
         return null;
     }
-
     /**
      * Transform the resource into an array.
      *
@@ -84,10 +69,8 @@ class JsonApiResource extends JsonResource
         if (property_exists($this, 'attributes')) {
             return $this->attributes;
         }
-
         return $this->toArray($request);
     }
-
     /**
      * Get the resource's relationships.
      *
@@ -99,10 +82,8 @@ class JsonApiResource extends JsonResource
         if (property_exists($this, 'relationships')) {
             return $this->relationships;
         }
-
         return [];
     }
-
     /**
      * Get the resource's links.
      *
@@ -112,7 +93,6 @@ class JsonApiResource extends JsonResource
     {
         return $this->jsonApiLinks;
     }
-
     /**
      * Get the resource's meta information.
      *
@@ -122,7 +102,6 @@ class JsonApiResource extends JsonResource
     {
         return $this->jsonApiMeta;
     }
-
     /**
      * Get any additional data that should be returned with the resource array.
      *
@@ -132,18 +111,8 @@ class JsonApiResource extends JsonResource
     #[\Override]
     public function with($request)
     {
-        return array_filter([
-            'included' => $this->resolveIncludedResourceObjects($request)
-                ->uniqueStrict('_uniqueKey')
-                ->map(fn ($included) => Arr::except($included, ['_uniqueKey']))
-                ->values()
-                ->all(),
-            ...($implementation = static::$jsonApiInformation)
-                ? ['jsonapi' => $implementation]
-                : [],
-        ]);
+        return array_filter(['included' => $this->resolveIncludedResourceObjects($request)->uniqueStrict('_uniqueKey')->map(fn($included) => Arr::except($included, ['_uniqueKey']))->values()->all(), ...($implementation = static::$jsonApiInformation) ? ['jsonapi' => $implementation] : []]);
     }
-
     /**
      * Resolve the resource to an array.
      *
@@ -153,11 +122,8 @@ class JsonApiResource extends JsonResource
     #[\Override]
     public function resolve($request = null)
     {
-        return [
-            'data' => $this->resolveResourceData($this->resolveJsonApiRequestFrom($request ?? $this->resolveRequestFromContainer())),
-        ];
+        return ['data' => $this->resolveResourceData($this->resolveJsonApiRequestFrom($request ?? $this->resolveRequestFromContainer()))];
     }
-
     /**
      * Resolve the resource data to an array.
      *
@@ -169,7 +135,6 @@ class JsonApiResource extends JsonResource
     {
         return $this->resolveResourceObject($request);
     }
-
     /**
      * Customize the outgoing response for the resource.
      */
@@ -178,7 +143,6 @@ class JsonApiResource extends JsonResource
     {
         $response->header('Content-Type', 'application/vnd.api+json');
     }
-
     /**
      * Create an HTTP response that represents the object.
      *
@@ -190,7 +154,6 @@ class JsonApiResource extends JsonResource
     {
         return parent::toResponse($this->resolveJsonApiRequestFrom($request));
     }
-
     /**
      * Resolve the HTTP request instance from container.
      *
@@ -201,7 +164,6 @@ class JsonApiResource extends JsonResource
     {
         return $this->resolveJsonApiRequestFrom(parent::resolveRequestFromContainer());
     }
-
     /**
      * Create a new resource collection instance.
      *
@@ -211,9 +173,8 @@ class JsonApiResource extends JsonResource
     #[\Override]
     protected static function newCollection($resource)
     {
-        return new AnonymousResourceCollection($resource, static::class);
+        return new \Illuminate\Http\Resources\JsonApi\AnonymousResourceCollection($resource, static::class);
     }
-
     /**
      * Set the string that should wrap the outer-most resource array.
      *
@@ -227,7 +188,6 @@ class JsonApiResource extends JsonResource
     {
         throw new BadMethodCallException(sprintf('Using %s() method is not allowed.', __METHOD__));
     }
-
     /**
      * Disable wrapping of the outer-most resource array.
      *
@@ -238,7 +198,6 @@ class JsonApiResource extends JsonResource
     {
         throw new BadMethodCallException(sprintf('Using %s() method is not allowed.', __METHOD__));
     }
-
     /**
      * Flush the resource's global state.
      *
@@ -248,7 +207,6 @@ class JsonApiResource extends JsonResource
     public static function flushState()
     {
         parent::flushState();
-
         static::$jsonApiInformation = [];
         static::$maxRelationshipDepth = 3;
     }

@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Broadcast;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-
 class BroadcastController extends Controller
 {
     /**
@@ -20,10 +19,8 @@ class BroadcastController extends Controller
         if ($request->hasSession()) {
             $request->session()->reflash();
         }
-
         return Broadcast::auth($request);
     }
-
     /**
      * Authenticate the current user.
      *
@@ -39,8 +36,6 @@ class BroadcastController extends Controller
         if ($request->hasSession()) {
             $request->session()->reflash();
         }
-
-        return Broadcast::resolveAuthenticatedUser($request)
-            ?? throw new AccessDeniedHttpException;
+        return Broadcast::resolveAuthenticatedUser($request) ?? throw new AccessDeniedHttpException();
     }
 }

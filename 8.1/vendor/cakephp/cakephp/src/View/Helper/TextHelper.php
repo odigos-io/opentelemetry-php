@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -20,7 +20,6 @@ use Cake\Utility\Security;
 use Cake\Utility\Text;
 use Cake\View\Helper;
 use function Cake\Core\h;
-
 /**
  * Text helper library.
  *
@@ -44,7 +43,6 @@ class TextHelper extends Helper
      * @var array
      */
     protected array $helpers = ['Html'];
-
     /**
      * An array of hashes and their contents.
      * Used when inserting links into text.
@@ -52,7 +50,6 @@ class TextHelper extends Helper
      * @var array<string, array>
      */
     protected array $_placeholders = [];
-
     /**
      * Call methods from String utility class
      *
@@ -62,9 +59,8 @@ class TextHelper extends Helper
      */
     public function __call(string $method, array $params): mixed
     {
-        return Text::{$method}(...$params);
+        return Text::$method(...$params);
     }
-
     /**
      * Adds links (<a href=....) to a given text, by finding text that begins with
      * strings like http:// and ftp://.
@@ -84,8 +80,7 @@ class TextHelper extends Helper
     public function autoLinkUrls(string $text, array $options = []): string
     {
         $this->_placeholders = [];
-        $options += ['escape' => true];
-
+        $options += ['escape' => \true];
         // phpcs:disable Generic.Files.LineLength
         $pattern = '/(?:(?<!href="|src="|">)
             (?>
@@ -102,26 +97,15 @@ class TextHelper extends Helper
             )
             )/ixu';
         // phpcs:enable Generic.Files.LineLength
-
-        $text = (string)preg_replace_callback(
-            $pattern,
-            [&$this, '_insertPlaceHolder'],
-            $text,
-        );
+        $text = (string) preg_replace_callback($pattern, [&$this, '_insertPlaceHolder'], $text);
         // phpcs:disable Generic.Files.LineLength
-        $text = preg_replace_callback(
-            '#(?<!href="|">)(?<!\b[[:punct:]])(?<!http://|https://|ftp://|nntp://)www\.[^\s\n\%\ <]+[^\s<\n\%\,\.\ ](?<!\))#i',
-            [&$this, '_insertPlaceHolder'],
-            $text,
-        );
+        $text = preg_replace_callback('#(?<!href="|">)(?<!\b[[:punct:]])(?<!http://|https://|ftp://|nntp://)www\.[^\s\n\%\ <]+[^\s<\n\%\,\.\ ](?<!\))#i', [&$this, '_insertPlaceHolder'], $text);
         // phpcs:enable Generic.Files.LineLength
         if ($options['escape']) {
             $text = h($text);
         }
-
         return $this->_linkUrls($text, $options);
     }
-
     /**
      * Saves the placeholder for a string, for later use. This gets around double
      * escaping content in URL's.
@@ -141,14 +125,9 @@ class TextHelper extends Helper
             $match = $matches['url_bare'];
         }
         $key = hash_hmac('sha1', $match, Security::getSalt());
-        $this->_placeholders[$key] = [
-            'content' => $match,
-            'envelope' => $envelope,
-        ];
-
+        $this->_placeholders[$key] = ['content' => $match, 'envelope' => $envelope];
         return $key;
     }
-
     /**
      * Replace placeholders with links.
      *
@@ -166,17 +145,13 @@ class TextHelper extends Helper
             if (!preg_match('#^[a-z]+\://#i', $url)) {
                 $url = 'http://' . $url;
             }
-
             $linkOptions = $htmlOptions;
             unset($htmlOptions['maxLength'], $htmlOptions['stripProtocol'], $htmlOptions['ellipsis']);
             $link = $this->_prepareLinkLabel($link, $linkOptions);
-
             $replace[$hash] = $envelope[0] . $this->Html->link($link, $url, $htmlOptions) . $envelope[1];
         }
-
         return strtr($text, $replace);
     }
-
     /**
      * Prepares the link label.
      *
@@ -186,8 +161,8 @@ class TextHelper extends Helper
      */
     protected function _prepareLinkLabel(string $name, array $options): string
     {
-        if (isset($options['stripProtocol']) && $options['stripProtocol'] === true) {
-            $name = (string)preg_replace('(^https?://)', '', $name);
+        if (isset($options['stripProtocol']) && $options['stripProtocol'] === \true) {
+            $name = (string) preg_replace('(^https?://)', '', $name);
         }
         if (!empty($options['maxLength'])) {
             $ellipsis = $options['ellipsis'] ?? '…';
@@ -197,10 +172,8 @@ class TextHelper extends Helper
                 $name .= $ellipsis;
             }
         }
-
         return $name;
     }
-
     /**
      * Links email addresses
      *
@@ -217,10 +190,8 @@ class TextHelper extends Helper
             $envelope = $content['envelope'];
             $replace[$hash] = $envelope[0] . $this->Html->link($url, 'mailto:' . $url, $options) . $envelope[1];
         }
-
         return strtr($text, $replace);
     }
-
     /**
      * Adds email links (<a href="mailto:....") to a given text.
      *
@@ -235,22 +206,15 @@ class TextHelper extends Helper
      */
     public function autoLinkEmails(string $text, array $options = []): string
     {
-        $options += ['escape' => true];
+        $options += ['escape' => \true];
         $this->_placeholders = [];
-
         $atom = '[\p{L}0-9!#$%&\'*+\/=?^_`{|}~-]';
-        $text = preg_replace_callback(
-            '/(?<=\s|^|\(|\>|\;)(' . $atom . '*(?:\.' . $atom . '+)*@[\p{L}0-9-]+(?:\.[\p{L}0-9-]+)+)/ui',
-            [&$this, '_insertPlaceholder'],
-            $text,
-        );
+        $text = preg_replace_callback('/(?<=\s|^|\(|\>|\;)(' . $atom . '*(?:\.' . $atom . '+)*@[\p{L}0-9-]+(?:\.[\p{L}0-9-]+)+)/ui', [&$this, '_insertPlaceholder'], $text);
         if ($options['escape']) {
             $text = h($text);
         }
-
         return $this->_linkEmails($text, $options);
     }
-
     /**
      * Convert all links and email addresses to HTML links.
      *
@@ -266,10 +230,8 @@ class TextHelper extends Helper
     public function autoLink(string $text, array $options = []): string
     {
         $text = $this->autoLinkUrls($text, $options);
-
-        return $this->autoLinkEmails($text, ['escape' => false] + $options);
+        return $this->autoLinkEmails($text, ['escape' => \false] + $options);
     }
-
     /**
      * Formats paragraphs around given text for all line breaks
      *  <br> added for single line return
@@ -283,19 +245,17 @@ class TextHelper extends Helper
     {
         $text ??= '';
         if (trim($text) !== '') {
-            $text = (string)preg_replace('|<br[^>]*>\s*<br[^>]*>|i', "\n\n", $text . "\n");
-            $text = (string)preg_replace("/\n\n+/", "\n\n", str_replace(["\r\n", "\r"], "\n", $text));
-            $texts = preg_split('/\n\s*\n/', $text, -1, PREG_SPLIT_NO_EMPTY) ?: [];
+            $text = (string) preg_replace('|<br[^>]*>\s*<br[^>]*>|i', "\n\n", $text . "\n");
+            $text = (string) preg_replace("/\n\n+/", "\n\n", str_replace(["\r\n", "\r"], "\n", $text));
+            $texts = preg_split('/\n\s*\n/', $text, -1, \PREG_SPLIT_NO_EMPTY) ?: [];
             $text = '';
             foreach ($texts as $txt) {
                 $text .= '<p>' . nl2br(trim($txt, "\n")) . "</p>\n";
             }
-            $text = (string)preg_replace('|<p>\s*</p>|', '', $text);
+            $text = (string) preg_replace('|<p>\s*</p>|', '', $text);
         }
-
         return $text;
     }
-
     /**
      * Event listeners.
      *

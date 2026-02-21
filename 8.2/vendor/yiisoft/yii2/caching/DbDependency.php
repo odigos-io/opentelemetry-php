@@ -1,16 +1,15 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\caching;
 
 use yii\base\InvalidConfigException;
 use yii\db\Connection;
 use yii\di\Instance;
-
 /**
  * DbDependency represents a dependency based on the query result of a SQL statement.
  *
@@ -22,7 +21,7 @@ use yii\di\Instance;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class DbDependency extends Dependency
+class DbDependency extends \yii\caching\Dependency
 {
     /**
      * @var string the application component ID of the DB connection.
@@ -37,8 +36,6 @@ class DbDependency extends Dependency
      * @var array the parameters (name => value) to be bound to the SQL statement specified by [[sql]].
      */
     public $params = [];
-
-
     /**
      * Generates the data needed to determine if dependency has been changed.
      * This method returns the value of the global state.
@@ -53,16 +50,14 @@ class DbDependency extends Dependency
         if ($this->sql === null) {
             throw new InvalidConfigException('DbDependency::sql must be set.');
         }
-
         if ($db->enableQueryCache) {
             // temporarily disable and re-enable query caching
-            $db->enableQueryCache = false;
+            $db->enableQueryCache = \false;
             $result = $db->createCommand($this->sql, $this->params)->queryOne();
-            $db->enableQueryCache = true;
+            $db->enableQueryCache = \true;
         } else {
             $result = $db->createCommand($this->sql, $this->params)->queryOne();
         }
-
         return $result;
     }
 }

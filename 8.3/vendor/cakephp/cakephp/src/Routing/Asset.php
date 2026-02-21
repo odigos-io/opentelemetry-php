@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -20,7 +20,6 @@ use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Utility\Inflector;
 use function Cake\Core\pluginSplit;
-
 /**
  * Class for generating asset URLs.
  */
@@ -32,7 +31,6 @@ class Asset
      * @var string
      */
     protected static string $inflectionType = 'underscore';
-
     /**
      * Set inflection type to use when inflecting plugin/theme name.
      *
@@ -44,7 +42,6 @@ class Asset
     {
         static::$inflectionType = $inflectionType;
     }
-
     /**
      * Generates URL for given image file.
      *
@@ -65,10 +62,8 @@ class Asset
     public static function imageUrl(string $path, array $options = []): string
     {
         $pathPrefix = Configure::read('App.imageBaseUrl');
-
         return static::url($path, $options + compact('pathPrefix'));
     }
-
     /**
      * Generates URL for given CSS file.
      *
@@ -91,10 +86,8 @@ class Asset
     {
         $pathPrefix = Configure::read('App.cssBaseUrl');
         $ext = '.css';
-
         return static::url($path, $options + compact('pathPrefix', 'ext'));
     }
-
     /**
      * Generates URL for given javascript file.
      *
@@ -117,10 +110,8 @@ class Asset
     {
         $pathPrefix = Configure::read('App.jsBaseUrl');
         $ext = '.js';
-
         return static::url($path, $options + compact('pathPrefix', 'ext'));
     }
-
     /**
      * Generates URL for given asset file.
      *
@@ -149,13 +140,11 @@ class Asset
         if (preg_match('/^data:[a-z]+\/[a-z]+;/', $path)) {
             return $path;
         }
-
         if (str_contains($path, '://') || preg_match('/^[a-z]+:/i', $path)) {
-            return ltrim(Router::url($path), '/');
+            return ltrim(\Cake\Routing\Router::url($path), '/');
         }
-
         $plugin = null;
-        if (!array_key_exists('plugin', $options) || $options['plugin'] !== false) {
+        if (!array_key_exists('plugin', $options) || $options['plugin'] !== \false) {
             [$plugin, $path] = static::pluginSplit($path);
         }
         if (!empty($options['pathPrefix']) && !str_starts_with($path, '/')) {
@@ -166,47 +155,30 @@ class Asset
             } elseif ($plugin !== null) {
                 $placeHolderVal = static::inflectString($plugin) . '/';
             }
-
             $path = str_replace('{plugin}', $placeHolderVal, $pathPrefix) . $path;
         }
-        if (
-            !empty($options['ext']) &&
-            !str_contains($path, '?') &&
-            !str_ends_with($path, $options['ext'])
-        ) {
+        if (!empty($options['ext']) && !str_contains($path, '?') && !str_ends_with($path, $options['ext'])) {
             $path .= $options['ext'];
         }
-
         // Check again if path has protocol as `pathPrefix` could be for CDNs.
         if (preg_match('|^([a-z0-9]+:)?//|', $path)) {
-            return Router::url($path);
+            return \Cake\Routing\Router::url($path);
         }
-
         if ($plugin !== null) {
             $path = static::inflectString($plugin) . '/' . $path;
         }
-
         $optionTimestamp = null;
         if (array_key_exists('timestamp', $options)) {
             $optionTimestamp = $options['timestamp'];
         }
-        $webPath = static::assetTimestamp(
-            static::webroot($path, $options),
-            $optionTimestamp,
-        );
-
+        $webPath = static::assetTimestamp(static::webroot($path, $options), $optionTimestamp);
         $path = static::encodeUrl($webPath);
-
         if (!empty($options['fullBase'])) {
-            $fullBaseUrl = is_string($options['fullBase'])
-                ? $options['fullBase']
-                : Router::fullBaseUrl();
+            $fullBaseUrl = is_string($options['fullBase']) ? $options['fullBase'] : \Cake\Routing\Router::fullBaseUrl();
             $path = rtrim($fullBaseUrl, '/') . '/' . ltrim($path, '/');
         }
-
         return $path;
     }
-
     /**
      * Encodes URL parts using rawurlencode().
      *
@@ -215,18 +187,15 @@ class Asset
      */
     protected static function encodeUrl(string $url): string
     {
-        $path = parse_url($url, PHP_URL_PATH);
-        if ($path === false || $path === null) {
+        $path = parse_url($url, \PHP_URL_PATH);
+        if ($path === \false || $path === null) {
             $path = $url;
         }
-
         $parts = array_map('rawurldecode', explode('/', $path));
         $parts = array_map('rawurlencode', $parts);
         $encoded = implode('/', $parts);
-
         return str_replace($path, $encoded, $url);
     }
-
     /**
      * Adds a timestamp to a file based resource based on the value of `Asset.timestamp` in
      * Configure. If Asset.timestamp is true and debug is true, or Asset.timestamp === 'force'
@@ -241,16 +210,11 @@ class Asset
         if (str_contains($path, '?')) {
             return $path;
         }
-
         $timestamp ??= Configure::read('Asset.timestamp');
-        $timestampEnabled = $timestamp === 'force' || ($timestamp === true && Configure::read('debug'));
+        $timestampEnabled = $timestamp === 'force' || $timestamp === \true && Configure::read('debug');
         if ($timestampEnabled) {
-            $filepath = (string)preg_replace(
-                '/^' . preg_quote(static::requestWebroot(), '/') . '/',
-                '',
-                urldecode($path),
-            );
-            $webrootPath = Configure::read('App.wwwRoot') . str_replace('/', DIRECTORY_SEPARATOR, $filepath);
+            $filepath = (string) preg_replace('/^' . preg_quote(static::requestWebroot(), '/') . '/', '', urldecode($path));
+            $webrootPath = Configure::read('App.wwwRoot') . str_replace('/', \DIRECTORY_SEPARATOR, $filepath);
             if (is_file($webrootPath)) {
                 return $path . '?' . filemtime($webrootPath);
             }
@@ -263,19 +227,14 @@ class Asset
             }
             if (Plugin::isLoaded($plugin)) {
                 unset($segments[0]);
-                $pluginPath = Plugin::path($plugin)
-                    . 'webroot'
-                    . DIRECTORY_SEPARATOR
-                    . implode(DIRECTORY_SEPARATOR, $segments);
+                $pluginPath = Plugin::path($plugin) . 'webroot' . \DIRECTORY_SEPARATOR . implode(\DIRECTORY_SEPARATOR, $segments);
                 if (is_file($pluginPath)) {
                     return $path . '?' . filemtime($pluginPath);
                 }
             }
         }
-
         return $path;
     }
-
     /**
      * Checks if a file exists when theme is used, if no file is found default location is returned.
      *
@@ -291,21 +250,17 @@ class Asset
     {
         $options += ['theme' => null];
         $requestWebroot = static::requestWebroot();
-
         $asset = explode('?', $file);
         $asset[1] = isset($asset[1]) ? '?' . $asset[1] : '';
         $webPath = $requestWebroot . $asset[0];
         $file = $asset[0];
-
         $themeName = $options['theme'];
         if ($themeName) {
             $file = trim($file, '/');
             $theme = static::inflectString($themeName) . '/';
-
-            if (DIRECTORY_SEPARATOR === '\\') {
+            if (\DIRECTORY_SEPARATOR === '\\') {
                 $file = str_replace('/', '\\', $file);
             }
-
             if (is_file(Configure::read('App.wwwRoot') . $theme . $file)) {
                 $webPath = $requestWebroot . $theme . $asset[0];
             } else {
@@ -319,10 +274,8 @@ class Asset
         if (str_contains($webPath, '//')) {
             return str_replace('//', '/', $webPath . $asset[1]);
         }
-
         return $webPath . $asset[1];
     }
-
     /**
      * Inflect the theme/plugin name to type set using `Asset::setInflectionType()`.
      *
@@ -333,7 +286,6 @@ class Asset
     {
         return Inflector::{static::$inflectionType}($string);
     }
-
     /**
      * Get webroot from request.
      *
@@ -341,14 +293,12 @@ class Asset
      */
     protected static function requestWebroot(): string
     {
-        $request = Router::getRequest();
+        $request = \Cake\Routing\Router::getRequest();
         if ($request === null) {
             return '/';
         }
-
         return $request->getAttribute('webroot');
     }
-
     /**
      * Splits a dot syntax plugin name into its plugin and filename.
      * If $name does not have a dot, then index 0 will be null.
@@ -366,7 +316,6 @@ class Asset
             $name = $second;
             $plugin = $first;
         }
-
         return [$plugin, $name];
     }
 }

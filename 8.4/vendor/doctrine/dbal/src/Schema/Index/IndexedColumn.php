@@ -1,12 +1,10 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\DBAL\Schema\Index;
 
 use Doctrine\DBAL\Schema\Exception\InvalidIndexDefinition;
 use Doctrine\DBAL\Schema\Name\UnqualifiedName;
-
 final readonly class IndexedColumn
 {
     /**
@@ -20,12 +18,10 @@ final readonly class IndexedColumn
             throw InvalidIndexDefinition::fromNonPositiveColumnLength($columnName, $length);
         }
     }
-
     public function getColumnName(): UnqualifiedName
     {
         return $this->columnName;
     }
-
     /** @return ?positive-int */
     public function getLength(): ?int
     {

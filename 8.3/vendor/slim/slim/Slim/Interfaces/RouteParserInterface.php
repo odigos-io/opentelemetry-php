@@ -5,15 +5,12 @@
  *
  * @license https://github.com/slimphp/Slim/blob/4.x/LICENSE.md (MIT License)
  */
-
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Slim\Interfaces;
 
 use InvalidArgumentException;
 use Psr\Http\Message\UriInterface;
 use RuntimeException;
-
 /** @api */
 interface RouteParserInterface
 {
@@ -28,7 +25,6 @@ interface RouteParserInterface
      * @throws InvalidArgumentException If required data not provided
      */
     public function relativeUrlFor(string $routeName, array $data = [], array $queryParams = []): string;
-
     /**
      * Build the path for a named route including the base path
      *
@@ -40,7 +36,6 @@ interface RouteParserInterface
      * @throws InvalidArgumentException If required data not provided
      */
     public function urlFor(string $routeName, array $data = [], array $queryParams = []): string;
-
     /**
      * Get fully qualified URL for named route
      *

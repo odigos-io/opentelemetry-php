@@ -11,60 +11,51 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Collection;
-
 class SendQueuedNotifications implements ShouldQueue
 {
     use InteractsWithQueue, Queueable, SerializesModels;
-
     /**
      * The notifiable entities that should receive the notification.
      *
      * @var \Illuminate\Support\Collection
      */
     public $notifiables;
-
     /**
      * The notification to be sent.
      *
      * @var \Illuminate\Notifications\Notification
      */
     public $notification;
-
     /**
      * All of the channels to send the notification to.
      *
      * @var array
      */
     public $channels;
-
     /**
      * The number of times the job may be attempted.
      *
      * @var int
      */
     public $tries;
-
     /**
      * The number of seconds the job can run before timing out.
      *
      * @var int
      */
     public $timeout;
-
     /**
      * The maximum number of unhandled exceptions to allow before failing.
      *
      * @var int
      */
     public $maxExceptions;
-
     /**
      * Indicates if the job should be encrypted.
      *
      * @var bool
      */
-    public $shouldBeEncrypted = false;
-
+    public $shouldBeEncrypted = \false;
     /**
      * Create a new job instance.
      *
@@ -81,16 +72,13 @@ class SendQueuedNotifications implements ShouldQueue
         $this->tries = property_exists($notification, 'tries') ? $notification->tries : null;
         $this->timeout = property_exists($notification, 'timeout') ? $notification->timeout : null;
         $this->maxExceptions = property_exists($notification, 'maxExceptions') ? $notification->maxExceptions : null;
-
         if ($notification instanceof ShouldQueueAfterCommit) {
-            $this->afterCommit = true;
+            $this->afterCommit = \true;
         } else {
             $this->afterCommit = property_exists($notification, 'afterCommit') ? $notification->afterCommit : null;
         }
-
         $this->shouldBeEncrypted = $notification instanceof ShouldBeEncrypted;
     }
-
     /**
      * Wrap the notifiable(s) in a collection.
      *
@@ -104,21 +92,18 @@ class SendQueuedNotifications implements ShouldQueue
         } elseif ($notifiables instanceof Model) {
             return EloquentCollection::wrap($notifiables);
         }
-
         return Collection::wrap($notifiables);
     }
-
     /**
      * Send the notifications.
      *
      * @param  \Illuminate\Notifications\ChannelManager  $manager
      * @return void
      */
-    public function handle(ChannelManager $manager)
+    public function handle(\Illuminate\Notifications\ChannelManager $manager)
     {
         $manager->sendNow($this->notifiables, $this->notification, $this->channels);
     }
-
     /**
      * Get the display name for the queued job.
      *
@@ -128,7 +113,6 @@ class SendQueuedNotifications implements ShouldQueue
     {
         return get_class($this->notification);
     }
-
     /**
      * Call the failed method on the notification instance.
      *
@@ -141,7 +125,6 @@ class SendQueuedNotifications implements ShouldQueue
             $this->notification->failed($e);
         }
     }
-
     /**
      * Get the number of seconds before a released notification will be available.
      *
@@ -149,13 +132,11 @@ class SendQueuedNotifications implements ShouldQueue
      */
     public function backoff()
     {
-        if (! method_exists($this->notification, 'backoff') && ! isset($this->notification->backoff)) {
+        if (!method_exists($this->notification, 'backoff') && !isset($this->notification->backoff)) {
             return;
         }
-
         return $this->notification->backoff ?? $this->notification->backoff();
     }
-
     /**
      * Determine the time at which the job should timeout.
      *
@@ -163,13 +144,11 @@ class SendQueuedNotifications implements ShouldQueue
      */
     public function retryUntil()
     {
-        if (! method_exists($this->notification, 'retryUntil') && ! isset($this->notification->retryUntil)) {
+        if (!method_exists($this->notification, 'retryUntil') && !isset($this->notification->retryUntil)) {
             return;
         }
-
         return $this->notification->retryUntil ?? $this->notification->retryUntil();
     }
-
     /**
      * Prepare the instance for cloning.
      *

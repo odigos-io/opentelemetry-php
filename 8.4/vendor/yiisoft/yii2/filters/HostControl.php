@@ -1,13 +1,13 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\filters;
 
-use Yii;
+use Odigos\Yii;
 use yii\base\Action;
 use yii\base\ActionFilter;
 use yii\base\Component;
@@ -15,7 +15,6 @@ use yii\base\Controller;
 use yii\base\Module;
 use yii\helpers\StringHelper;
 use yii\web\NotFoundHttpException;
-
 /**
  * HostControl provides simple control over requested host name.
  *
@@ -121,8 +120,6 @@ class HostControl extends ActionFilter
      * @see \yii\web\Request::getHostInfo()
      */
     public $fallbackHostInfo = '';
-
-
     /**
      * {@inheritdoc}
      */
@@ -133,35 +130,28 @@ class HostControl extends ActionFilter
             $allowedHosts = call_user_func($allowedHosts, $action);
         }
         if ($allowedHosts === null) {
-            return true;
+            return \true;
         }
-
         if (!is_array($allowedHosts) && !$allowedHosts instanceof \Traversable) {
             $allowedHosts = (array) $allowedHosts;
         }
-
         $currentHost = Yii::$app->getRequest()->getHostName();
-
         foreach ($allowedHosts as $allowedHost) {
             if (StringHelper::matchWildcard($allowedHost, $currentHost)) {
-                return true;
+                return \true;
             }
         }
-
         // replace invalid host info to prevent using it in further processing
         if ($this->fallbackHostInfo !== null) {
             Yii::$app->getRequest()->setHostInfo($this->fallbackHostInfo);
         }
-
         if ($this->denyCallback !== null) {
             call_user_func($this->denyCallback, $action);
         } else {
             $this->denyAccess($action);
         }
-
-        return false;
+        return \false;
     }
-
     /**
      * Denies the access.
      * The default implementation will display 404 page right away, terminating the program execution.
@@ -176,19 +166,15 @@ class HostControl extends ActionFilter
     protected function denyAccess($action)
     {
         $exception = new NotFoundHttpException(Yii::t('yii', 'Page not found.'));
-
         // use regular error handling if $this->fallbackHostInfo was set
         if (!empty(Yii::$app->getRequest()->hostName)) {
             throw $exception;
         }
-
         $response = Yii::$app->getResponse();
         $errorHandler = Yii::$app->getErrorHandler();
-
         $response->setStatusCode($exception->statusCode, $exception->getMessage());
         $response->data = $errorHandler->renderFile($errorHandler->errorView, ['exception' => $exception]);
         $response->send();
-
         Yii::$app->end();
     }
 }

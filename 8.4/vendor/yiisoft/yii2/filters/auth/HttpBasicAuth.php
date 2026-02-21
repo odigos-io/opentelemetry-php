@@ -1,14 +1,13 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\filters\auth;
 
 use yii\base\Component;
-
 /**
  * HttpBasicAuth is an action filter that supports the HTTP Basic authentication method.
  *
@@ -62,7 +61,7 @@ use yii\base\Component;
  * @template T of Component
  * @extends AuthMethod<T>
  */
-class HttpBasicAuth extends AuthMethod
+class HttpBasicAuth extends \yii\filters\auth\AuthMethod
 {
     /**
      * @var string the HTTP authentication realm
@@ -90,25 +89,20 @@ class HttpBasicAuth extends AuthMethod
      * method will be called to authenticate and login the user.
      */
     public $auth;
-
-
     /**
      * {@inheritdoc}
      */
     public function authenticate($user, $request, $response)
     {
         list($username, $password) = $request->getAuthCredentials();
-
         if ($this->auth) {
             if ($username !== null || $password !== null) {
                 $identity = $user->getIdentity() ?: call_user_func($this->auth, $username, $password);
-
                 if ($identity === null) {
                     $this->handleFailure($response);
-                } elseif ($user->getIdentity(false) !== $identity) {
+                } elseif ($user->getIdentity(\false) !== $identity) {
                     $user->login($identity);
                 }
-
                 return $identity;
             }
         } elseif ($username !== null) {
@@ -116,13 +110,10 @@ class HttpBasicAuth extends AuthMethod
             if ($identity === null) {
                 $this->handleFailure($response);
             }
-
             return $identity;
         }
-
         return null;
     }
-
     /**
      * {@inheritdoc}
      */

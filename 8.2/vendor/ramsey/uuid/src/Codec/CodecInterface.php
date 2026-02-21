@@ -9,13 +9,10 @@
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
  */
+declare (strict_types=1);
+namespace Odigos\Ramsey\Uuid\Codec;
 
-declare(strict_types=1);
-
-namespace Ramsey\Uuid\Codec;
-
-use Ramsey\Uuid\UuidInterface;
-
+use Odigos\Ramsey\Uuid\UuidInterface;
 /**
  * A codec encodes and decodes a UUID according to defined rules
  *
@@ -33,7 +30,6 @@ interface CodecInterface
      * @pure
      */
     public function encode(UuidInterface $uuid): string;
-
     /**
      * Returns a binary string representation of a UuidInterface
      *
@@ -44,7 +40,6 @@ interface CodecInterface
      * @pure
      */
     public function encodeBinary(UuidInterface $uuid): string;
-
     /**
      * Returns a UuidInterface derived from a hexadecimal string representation
      *
@@ -55,7 +50,6 @@ interface CodecInterface
      * @pure
      */
     public function decode(string $encodedUuid): UuidInterface;
-
     /**
      * Returns a UuidInterface derived from a binary string representation
      *

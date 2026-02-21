@@ -5,7 +5,6 @@ namespace Illuminate\Foundation\Testing\Concerns;
 use Illuminate\Console\OutputStyle;
 use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Testing\PendingCommand;
-
 trait InteractsWithConsole
 {
     /**
@@ -13,57 +12,49 @@ trait InteractsWithConsole
      *
      * @var bool
      */
-    public $mockConsoleOutput = true;
-
+    public $mockConsoleOutput = \true;
     /**
      * All of the expected output lines.
      *
      * @var array
      */
     public $expectedOutput = [];
-
     /**
      * All of the expected text to be present in the output.
      *
      * @var array
      */
     public $expectedOutputSubstrings = [];
-
     /**
      * All of the output lines that aren't expected to be displayed.
      *
      * @var array
      */
     public $unexpectedOutput = [];
-
     /**
      * All of the text that is not expected to be present in the output.
      *
      * @var array
      */
     public $unexpectedOutputSubstrings = [];
-
     /**
      * All of the expected output tables.
      *
      * @var array
      */
     public $expectedTables = [];
-
     /**
      * All of the expected questions.
      *
      * @var array
      */
     public $expectedQuestions = [];
-
     /**
      * All of the expected choice questions.
      *
      * @var array
      */
     public $expectedChoices = [];
-
     /**
      * Call artisan command and return code.
      *
@@ -73,13 +64,11 @@ trait InteractsWithConsole
      */
     public function artisan($command, $parameters = [])
     {
-        if (! $this->mockConsoleOutput) {
+        if (!$this->mockConsoleOutput) {
             return $this->app[Kernel::class]->call($command, $parameters);
         }
-
         return new PendingCommand($this, $this->app, $command, $parameters);
     }
-
     /**
      * Disable mocking the console output.
      *
@@ -87,10 +76,8 @@ trait InteractsWithConsole
      */
     protected function withoutMockingConsoleOutput()
     {
-        $this->mockConsoleOutput = false;
-
+        $this->mockConsoleOutput = \false;
         $this->app->offsetUnset(OutputStyle::class);
-
         return $this;
     }
 }

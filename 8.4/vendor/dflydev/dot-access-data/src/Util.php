@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is a part of dflydev/dot-access-data.
  *
@@ -10,8 +9,7 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Dflydev\DotAccessData;
+namespace Odigos\Dflydev\DotAccessData;
 
 class Util
 {
@@ -31,7 +29,6 @@ class Util
     {
         return !count($arr) || count(array_filter(array_keys($arr), 'is_string')) == count($arr);
     }
-
     /**
      * Merge contents from one associtative array to another
      *
@@ -48,7 +45,6 @@ class Util
         if ($mode === DataInterface::MERGE && self::isList($to) && self::isList($from)) {
             return array_merge($to, $from);
         }
-
         if (is_array($from) && is_array($to)) {
             foreach ($from as $k => $v) {
                 if (!isset($to[$k])) {
@@ -57,13 +53,10 @@ class Util
                     $to[$k] = self::mergeAssocArray($to[$k], $v, $mode);
                 }
             }
-
             return $to;
         }
-
         return $mode === DataInterface::PRESERVE ? $to : $from;
     }
-
     /**
      * @param mixed $value
      *

@@ -3,8 +3,7 @@
 namespace Illuminate\Database\Eloquent\Relations;
 
 use Illuminate\Database\Eloquent\Collection;
-
-class HasMany extends HasOneOrMany
+class HasMany extends \Illuminate\Database\Eloquent\Relations\HasOneOrMany
 {
     /**
      * Convert the relationship to a "has one" relationship.
@@ -13,14 +12,8 @@ class HasMany extends HasOneOrMany
      */
     public function one()
     {
-        return HasOne::noConstraints(fn () => new HasOne(
-            $this->getQuery(),
-            $this->parent,
-            $this->foreignKey,
-            $this->localKey
-        ));
+        return \Illuminate\Database\Eloquent\Relations\HasOne::noConstraints(fn() => new \Illuminate\Database\Eloquent\Relations\HasOne($this->getQuery(), $this->parent, $this->foreignKey, $this->localKey));
     }
-
     /**
      * Get the results of the relationship.
      *
@@ -28,11 +21,8 @@ class HasMany extends HasOneOrMany
      */
     public function getResults()
     {
-        return ! is_null($this->getParentKey())
-                ? $this->query->get()
-                : $this->related->newCollection();
+        return !is_null($this->getParentKey()) ? $this->query->get() : $this->related->newCollection();
     }
-
     /**
      * Initialize the relation on a set of models.
      *
@@ -45,10 +35,8 @@ class HasMany extends HasOneOrMany
         foreach ($models as $model) {
             $model->setRelation($relation, $this->related->newCollection());
         }
-
         return $models;
     }
-
     /**
      * Match the eagerly loaded results to their parents.
      *

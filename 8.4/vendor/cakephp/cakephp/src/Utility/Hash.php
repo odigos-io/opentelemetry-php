@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -25,7 +25,6 @@ use const SORT_NATURAL;
 use const SORT_NUMERIC;
 use const SORT_REGULAR;
 use const SORT_STRING;
-
 /**
  * Library of array functions for manipulating and extracting data
  * from arrays or 'sets' of data.
@@ -59,13 +58,11 @@ class Hash
         if (!$data || $path === null) {
             return $default;
         }
-
         if (is_string($path) || is_int($path)) {
-            $parts = explode('.', (string)$path);
+            $parts = explode('.', (string) $path);
         } else {
             $parts = $path;
         }
-
         switch (count($parts)) {
             case 1:
                 return $data[$parts[0]] ?? $default;
@@ -82,10 +79,8 @@ class Hash
                     }
                 }
         }
-
         return $data;
     }
-
     /**
      * Gets the values from an array matching the $path expression.
      * The path expression is a dot separated expression, that can contain a set
@@ -123,55 +118,40 @@ class Hash
         if (!$path) {
             return $data;
         }
-
         // Simple paths.
         if (!preg_match('/[{\[]/', $path)) {
             $data = static::get($data, $path);
             if ($data !== null && (!is_array($data) && !$data instanceof ArrayAccess)) {
                 return [$data];
             }
-
-            return $data !== null ? (array)$data : [];
+            return $data !== null ? (array) $data : [];
         }
-
         if (!str_contains($path, '[')) {
             $tokens = explode('.', $path);
         } else {
-            $tokens = Text::tokenize($path, '.', '[', ']');
+            $tokens = \Cake\Utility\Text::tokenize($path, '.', '[', ']');
         }
-
         $_key = '__set_item__';
-
         $context = [$_key => [$data]];
-
         foreach ($tokens as $token) {
             $next = [];
-
             [$token, $conditions] = self::_splitConditions($token);
-
             foreach ($context[$_key] as $item) {
                 if (is_object($item) && method_exists($item, 'toArray')) {
                     /** @var \Cake\Datasource\EntityInterface $item */
                     $item = $item->toArray();
                 }
-                foreach ((array)$item as $k => $v) {
+                foreach ((array) $item as $k => $v) {
                     if (static::_matchToken($k, $token)) {
                         $next[] = $v;
                     }
                 }
             }
-
             // Filter for attributes.
             if ($conditions) {
                 $filter = [];
                 foreach ($next as $item) {
-                    if (
-                        (
-                            is_array($item) ||
-                            $item instanceof ArrayAccess
-                        ) &&
-                        static::_matches($item, $conditions)
-                    ) {
+                    if ((is_array($item) || $item instanceof ArrayAccess) && static::_matches($item, $conditions)) {
                         $filter[] = $item;
                     }
                 }
@@ -179,10 +159,8 @@ class Hash
             }
             $context = [$_key => $next];
         }
-
         return $context[$_key];
     }
-
     /**
      * Split token conditions
      *
@@ -191,16 +169,14 @@ class Hash
      */
     protected static function _splitConditions(string $token): array
     {
-        $conditions = false;
+        $conditions = \false;
         $position = strpos($token, '[');
-        if ($position !== false) {
+        if ($position !== \false) {
             $conditions = substr($token, $position);
             $token = substr($token, 0, $position);
         }
-
         return [$token, $conditions];
     }
-
     /**
      * Check a key against a token.
      *
@@ -213,11 +189,10 @@ class Hash
         return match ($token) {
             '{n}' => is_numeric($key),
             '{s}' => is_string($key),
-            '{*}' => true,
-            default => is_numeric($token) ? ($key == $token) : $key === $token,
+            '{*}' => \true,
+            default => is_numeric($token) ? $key == $token : $key === $token,
         };
     }
-
     /**
      * Checks whether $data matches the attribute patterns
      *
@@ -227,23 +202,15 @@ class Hash
      */
     protected static function _matches(ArrayAccess|array $data, string $selector): bool
     {
-        preg_match_all(
-            '/(\[ (?P<attr>[^=><!]+?) (\s* (?P<op>[><!]?[=]|[><]) \s* (?P<val>(?:\/.*?\/ | [^\]]+)) )? \])/x',
-            $selector,
-            $conditions,
-            PREG_SET_ORDER,
-        );
-
+        preg_match_all('/(\[ (?P<attr>[^=><!]+?) (\s* (?P<op>[><!]?[=]|[><]) \s* (?P<val>(?:\/.*?\/ | [^\]]+)) )? \])/x', $selector, $conditions, \PREG_SET_ORDER);
         foreach ($conditions as $cond) {
             $attr = $cond['attr'];
             $op = $cond['op'] ?? null;
             $val = $cond['val'] ?? null;
-
             // Presence test.
             if (!$op && !$val && !isset($data[$attr])) {
-                return false;
+                return \false;
             }
-
             if (is_array($data)) {
                 $attrPresent = array_key_exists($attr, $data);
             } else {
@@ -251,9 +218,8 @@ class Hash
             }
             // Empty attribute = fail.
             if (!$attrPresent) {
-                return false;
+                return \false;
             }
-
             $prop = $data[$attr] ?? '';
             $isBool = is_bool($prop);
             if ($isBool && is_numeric($val)) {
@@ -261,31 +227,20 @@ class Hash
             } elseif ($isBool) {
                 $prop = $prop ? 'true' : 'false';
             } elseif (is_numeric($prop)) {
-                $prop = (string)$prop;
+                $prop = (string) $prop;
             }
-
             // Pattern matches and other operators.
             if ($op === '=' && $val && $val[0] === '/') {
                 if (!preg_match($val, $prop)) {
-                    return false;
+                    return \false;
                 }
                 // phpcs:disable
-            } elseif (
-                ($op === '=' && $prop != $val) ||
-                ($op === '!=' && $prop == $val) ||
-                ($op === '>' && $prop <= $val) ||
-                ($op === '<' && $prop >= $val) ||
-                ($op === '>=' && $prop < $val) ||
-                ($op === '<=' && $prop > $val)
-                // phpcs:enable
-            ) {
-                return false;
+            } elseif ($op === '=' && $prop != $val || $op === '!=' && $prop == $val || $op === '>' && $prop <= $val || $op === '<' && $prop >= $val || $op === '>=' && $prop < $val || $op === '<=' && $prop > $val) {
+                return \false;
             }
         }
-
-        return true;
+        return \true;
     }
-
     /**
      * Insert $values into an array with the given $path. You can use
      * `{n}` and `{s}` elements to insert $data multiple times.
@@ -303,44 +258,30 @@ class Hash
         $noTokens = !str_contains($path, '[');
         if ($noTokens && !str_contains($path, '.')) {
             $data[$path] = $values;
-
             return $data;
         }
-
         if ($noTokens) {
             $tokens = explode('.', $path);
         } else {
-            $tokens = Text::tokenize($path, '.', '[', ']');
+            $tokens = \Cake\Utility\Text::tokenize($path, '.', '[', ']');
         }
-
         if ($noTokens && !str_contains($path, '{')) {
             return static::_simpleOp('insert', $data, $tokens, $values);
         }
-
         if (!is_iterable($data)) {
             throw new CakeException('Cannot use path tokens of type `{}` or `[]` for non-iterable objects.');
         }
-
         /** @var string $token */
         $token = array_shift($tokens);
         $nextPath = implode('.', $tokens);
-
         [$token, $conditions] = static::_splitConditions($token);
-
         foreach ($data as $k => $v) {
-            if (
-                static::_matchToken($k, $token) &&
-                (!$conditions || ((is_array($v) || $v instanceof ArrayAccess) && static::_matches($v, $conditions)))
-            ) {
-                $data[$k] = $nextPath
-                    ? static::insert($v, $nextPath, $values)
-                    : array_merge($v, (array)$values);
+            if (static::_matchToken($k, $token) && (!$conditions || (is_array($v) || $v instanceof ArrayAccess) && static::_matches($v, $conditions))) {
+                $data[$k] = $nextPath ? static::insert($v, $nextPath, $values) : array_merge($v, (array) $values);
             }
         }
-
         return $data;
     }
-
     /**
      * Perform a simple insert/remove operation.
      *
@@ -350,25 +291,19 @@ class Hash
      * @param mixed $values The values to insert when doing inserts.
      * @return \ArrayAccess|array
      */
-    protected static function _simpleOp(
-        string $op,
-        ArrayAccess|array $data,
-        array $path,
-        mixed $values = null,
-    ): ArrayAccess|array {
-        $_list = &$data;
-
+    protected static function _simpleOp(string $op, ArrayAccess|array $data, array $path, mixed $values = null): ArrayAccess|array
+    {
+        $_list =& $data;
         $count = count($path);
         $last = $count - 1;
         foreach ($path as $i => $key) {
             if ($op === 'insert') {
                 if ($i === $last) {
                     $_list[$key] = $values;
-
                     return $data;
                 }
                 $_list[$key] ??= [];
-                $_list = &$_list[$key];
+                $_list =& $_list[$key];
                 if (!is_array($_list) && !$_list instanceof ArrayAccess) {
                     $_list = [];
                 }
@@ -377,19 +312,16 @@ class Hash
                     if (is_array($_list) || $_list instanceof ArrayAccess) {
                         unset($_list[$key]);
                     }
-
                     return $data;
                 }
                 if (!isset($_list[$key])) {
                     return $data;
                 }
-                $_list = &$_list[$key];
+                $_list =& $_list[$key];
             }
         }
-
         return $data;
     }
-
     /**
      * Remove data matching $path from the $data array.
      * You can use `{n}` and `{s}` to remove multiple elements
@@ -406,29 +338,21 @@ class Hash
     {
         $noTokens = !str_contains($path, '[');
         $noExpansion = !str_contains($path, '{');
-
         if ($noExpansion && $noTokens && !str_contains($path, '.')) {
             unset($data[$path]);
-
             return $data;
         }
-
-        $tokens = $noTokens ? explode('.', $path) : Text::tokenize($path, '.', '[', ']');
-
+        $tokens = $noTokens ? explode('.', $path) : \Cake\Utility\Text::tokenize($path, '.', '[', ']');
         if ($noExpansion && $noTokens) {
             return static::_simpleOp('remove', $data, $tokens);
         }
-
         if (!is_iterable($data)) {
             throw new CakeException('Cannot use path tokens of type `{}` or `[]` for non-iterable objects.');
         }
-
         /** @var string $token */
         $token = array_shift($tokens);
         $nextPath = implode('.', $tokens);
-
         [$token, $conditions] = self::_splitConditions($token);
-
         foreach ($data as $k => $v) {
             $match = static::_matchToken($k, $token);
             if ($match && (is_array($v) || $v instanceof ArrayAccess)) {
@@ -450,10 +374,8 @@ class Hash
                 unset($data[$k]);
             }
         }
-
         return $data;
     }
-
     /**
      * Creates an associative array using `$keyPath` as the path to build its keys, and optionally
      * `$valuePath` as path to get the values. If `$valuePath` is not specified, all values will be initialized
@@ -468,16 +390,11 @@ class Hash
      * @link https://book.cakephp.org/5/en/core-libraries/hash.html#Cake\Utility\Hash::combine
      * @throws \InvalidArgumentException When keys and values count is unequal.
      */
-    public static function combine(
-        array $data,
-        array|string|null $keyPath,
-        array|string|null $valuePath = null,
-        ?string $groupPath = null,
-    ): array {
+    public static function combine(array $data, array|string|null $keyPath, array|string|null $valuePath = null, ?string $groupPath = null): array
+    {
         if (!$data) {
             return [];
         }
-
         if (is_array($keyPath)) {
             /** @var string $format */
             $format = array_shift($keyPath);
@@ -492,7 +409,6 @@ class Hash
         if ($keyPath !== null && empty($keys)) {
             return [];
         }
-
         $vals = null;
         if ($valuePath && is_array($valuePath)) {
             $format = array_shift($valuePath);
@@ -505,13 +421,9 @@ class Hash
         if (!$vals) {
             $vals = array_fill(0, $keys === null ? count($data) : count($keys), null);
         }
-
         if (is_array($keys) && count($keys) !== count($vals)) {
-            throw new InvalidArgumentException(
-                '`Hash::combine()` needs an equal number of keys + values.',
-            );
+            throw new InvalidArgumentException('`Hash::combine()` needs an equal number of keys + values.');
         }
-
         if ($groupPath !== null) {
             $group = static::extract($data, $groupPath);
             if ($group) {
@@ -526,17 +438,14 @@ class Hash
                         $out[$group[$i]][$keys[$i]] = $vals[$i];
                     }
                 }
-
                 return $out;
             }
         }
         if (!$vals) {
             return [];
         }
-
         return array_combine($keys ?? range(0, count($vals) - 1), $vals);
     }
-
     /**
      * Returns a formatted series of values extracted from `$data`, using
      * `$format` as the format and `$paths` as the values to extract.
@@ -563,11 +472,9 @@ class Hash
     {
         $extracted = [];
         $count = count($paths);
-
         if ($count === 0) {
             return null;
         }
-
         for ($i = 0; $i < $count; $i++) {
             $extracted[] = static::extract($data, $paths[$i]);
         }
@@ -575,7 +482,6 @@ class Hash
         /** @var array<mixed, array> $data */
         $data = $extracted;
         $count = count($data[0]);
-
         $countTwo = count($data);
         for ($j = 0; $j < $count; $j++) {
             $args = [];
@@ -586,10 +492,8 @@ class Hash
             }
             $out[] = vsprintf($format, $args);
         }
-
         return $out;
     }
-
     /**
      * Determines if one array contains the exact keys and values of another.
      *
@@ -601,34 +505,28 @@ class Hash
     public static function contains(array $data, array $needle): bool
     {
         if (!$data || !$needle) {
-            return false;
+            return \false;
         }
         $stack = [];
-
         while ($needle) {
             $key = key($needle);
             $val = $needle[$key];
             unset($needle[$key]);
-
             if (array_key_exists($key, $data) && is_array($val)) {
                 $next = $data[$key];
                 unset($data[$key]);
-
                 if ($val) {
                     $stack[] = [$val, $next];
                 }
             } elseif (!array_key_exists($key, $data) || $data[$key] != $val) {
-                return false;
+                return \false;
             }
-
             if (!$needle && $stack) {
                 [$needle, $data] = array_pop($stack);
             }
         }
-
-        return true;
+        return \true;
     }
-
     /**
      * Test whether a given path exists in $data.
      * This method uses the same path syntax as Hash::extract()
@@ -646,12 +544,10 @@ class Hash
     {
         $results = static::extract($data, $path);
         if (!is_array($results)) {
-            return false;
+            return \false;
         }
-
         return $results !== [];
     }
-
     /**
      * Recursively filters a data set.
      *
@@ -668,10 +564,8 @@ class Hash
                 $data[$k] = static::filter($v, $callback);
             }
         }
-
         return array_filter($data, $callback ?? static::_filter(...));
     }
-
     /**
      * Callback function for filtering.
      *
@@ -680,9 +574,8 @@ class Hash
      */
     protected static function _filter(mixed $var): bool
     {
-        return in_array($var, [0, 0.0, '0'], true) || !empty($var);
+        return in_array($var, [0, 0.0, '0'], \true) || !empty($var);
     }
-
     /**
      * Collapses a multi-dimensional array into a single dimension, using a delimited array path for
      * each array element's key, i.e. `[['Foo' => ['Bar' => 'Far']]]` becomes `['0.Foo.Bar' => 'Far']`.
@@ -697,12 +590,10 @@ class Hash
         $result = [];
         $stack = [];
         $path = '';
-
         while (!empty($data)) {
             $key = array_key_first($data);
             $element = $data[$key];
             unset($data[$key]);
-
             if (is_array($element) && $element !== []) {
                 if ($data) {
                     $stack[] = [$data, $path];
@@ -713,16 +604,13 @@ class Hash
             } else {
                 $result[$path . $key] = $element;
             }
-
             if (!$data && $stack) {
                 [$data, $path] = array_pop($stack);
                 reset($data);
             }
         }
-
         return $result;
     }
-
     /**
      * Expands a flat array to a nested array.
      *
@@ -740,28 +628,24 @@ class Hash
     {
         $hash = [];
         foreach ($data as $path => $value) {
-            $keys = explode($separator, (string)$path);
+            $keys = explode($separator, (string) $path);
             if (count($keys) === 1) {
                 $hash[$path] = $value;
                 continue;
             }
-
             $valueKey = end($keys);
             $keys = array_slice($keys, 0, -1);
-
-            $keyHash = &$hash;
+            $keyHash =& $hash;
             foreach ($keys as $key) {
                 if (!array_key_exists($key, $keyHash)) {
                     $keyHash[$key] = [];
                 }
-                $keyHash = &$keyHash[$key];
+                $keyHash =& $keyHash[$key];
             }
             $keyHash[$valueKey] = $value;
         }
-
         return $hash;
     }
-
     /**
      * This function can be thought of as a hybrid between PHP's `array_merge` and `array_merge_recursive`.
      *
@@ -781,16 +665,13 @@ class Hash
         $args = array_slice(func_get_args(), 1);
         $return = $data;
         $stack = [];
-
         foreach ($args as &$curArg) {
-            $stack[] = [(array)$curArg, &$return];
+            $stack[] = [(array) $curArg, &$return];
         }
         unset($curArg);
         static::_merge($stack, $return);
-
         return $return;
     }
-
     /**
      * Merge helper function to reduce duplicated code between merge() and expand().
      *
@@ -806,15 +687,10 @@ class Hash
                     if (!is_array($curMerge[1])) {
                         continue;
                     }
-
-                    if (
-                        !empty($curMerge[1][$key])
-                        && (array)$curMerge[1][$key] === $curMerge[1][$key]
-                        && (array)$val === $val
-                    ) {
+                    if (!empty($curMerge[1][$key]) && (array) $curMerge[1][$key] === $curMerge[1][$key] && (array) $val === $val) {
                         // Recurse into the current merge data as it is an array.
                         $stack[] = [&$val, &$curMerge[1][$key]];
-                    } elseif ((int)$key === $key && isset($curMerge[1][$key])) {
+                    } elseif ((int) $key === $key && isset($curMerge[1][$key])) {
                         $curMerge[1][] = $val;
                     } else {
                         $curMerge[1][$key] = $val;
@@ -825,7 +701,6 @@ class Hash
             unset($curMerge);
         }
     }
-
     /**
      * Checks to see if all the values in the array are numeric
      *
@@ -836,12 +711,10 @@ class Hash
     public static function numeric(array $data): bool
     {
         if (!$data) {
-            return false;
+            return \false;
         }
-
         return $data === array_filter($data, 'is_numeric');
     }
-
     /**
      * Counts the dimensions of an array.
      * Only considers the dimension of the first element in the array.
@@ -868,10 +741,8 @@ class Hash
                 break;
             }
         }
-
         return $depth;
     }
-
     /**
      * Counts the dimensions of *all* array elements. Useful for finding the maximum
      * number of dimensions in a mixed array.
@@ -890,10 +761,8 @@ class Hash
                 $depth[] = 1;
             }
         }
-
         return $depth === [] ? 0 : max($depth);
     }
-
     /**
      * Map a callback across all elements in a set.
      * Can be provided a path to only modify slices of the set.
@@ -906,11 +775,9 @@ class Hash
      */
     public static function map(array $data, string $path, callable $function): array
     {
-        $values = (array)static::extract($data, $path);
-
+        $values = (array) static::extract($data, $path);
         return array_map($function, $values);
     }
-
     /**
      * Reduce a set of extracted values using `$function`.
      *
@@ -922,11 +789,9 @@ class Hash
      */
     public static function reduce(array $data, string $path, callable $function): mixed
     {
-        $values = (array)static::extract($data, $path);
-
+        $values = (array) static::extract($data, $path);
         return array_reduce($values, $function);
     }
-
     /**
      * Apply a callback to a set of extracted values using `$function`.
      * The function will get the extracted values as the first argument.
@@ -954,11 +819,9 @@ class Hash
      */
     public static function apply(array $data, string $path, callable $function): mixed
     {
-        $values = (array)static::extract($data, $path);
-
+        $values = (array) static::extract($data, $path);
         return $function($values);
     }
-
     /**
      * Sorts an array by any value, determined by a Set-compatible path
      *
@@ -992,12 +855,8 @@ class Hash
      * @return array Sorted array of data
      * @link https://book.cakephp.org/5/en/core-libraries/hash.html#Cake\Utility\Hash::sort
      */
-    public static function sort(
-        array $data,
-        string $path,
-        string|int $dir = 'asc',
-        array|string $type = 'regular',
-    ): array {
+    public static function sort(array $data, string $path, string|int $dir = 'asc', array|string $type = 'regular'): array
+    {
         if (!$data) {
             return [];
         }
@@ -1009,7 +868,6 @@ class Hash
         $sortValues = static::extract($data, $path);
         assert(is_array($sortValues));
         $dataCount = count($data);
-
         // Make sortValues match the data length, as some keys could be missing
         // the sorted value path.
         $missingData = count($sortValues) < $dataCount;
@@ -1024,26 +882,21 @@ class Hash
         }
         $result = static::_squash($sortValues);
         $keys = static::extract($result, '{n}.id');
-
         $values = static::extract($result, '{n}.value');
-
         if (is_string($dir)) {
             $dir = strtolower($dir);
         }
-        if (!in_array($dir, [SORT_ASC, SORT_DESC], true)) {
+        if (!in_array($dir, [SORT_ASC, SORT_DESC], \true)) {
             $dir = $dir === 'asc' ? SORT_ASC : SORT_DESC;
         }
-
-        $ignoreCase = false;
-
+        $ignoreCase = \false;
         // $type can be overloaded for case insensitive sort
         if (is_array($type)) {
-            $type += ['ignoreCase' => false, 'type' => 'regular'];
+            $type += ['ignoreCase' => \false, 'type' => 'regular'];
             $ignoreCase = $type['ignoreCase'];
             $type = $type['type'];
         }
         $type = strtolower($type);
-
         if ($type === 'numeric') {
             $type = SORT_NUMERIC;
         } elseif ($type === 'string') {
@@ -1061,7 +914,6 @@ class Hash
         array_multisort($values, $dir, $type, $keys, $dir, $type);
         $sorted = [];
         $keys = array_unique($keys);
-
         foreach ($keys as $k) {
             if ($numeric) {
                 $sorted[] = $data[$k];
@@ -1073,10 +925,8 @@ class Hash
                 $sorted[$k] = $data[$k];
             }
         }
-
         return $sorted;
     }
-
     /**
      * Helper method for sort()
      * Squashes an array to a single hash so it can be sorted.
@@ -1099,10 +949,8 @@ class Hash
                 $stack[] = ['id' => $id, 'value' => $r];
             }
         }
-
         return $stack;
     }
-
     /**
      * Computes the difference between two complex arrays.
      * This method differs from the built-in array_diff() in that it will preserve keys
@@ -1129,10 +977,8 @@ class Hash
             }
             next($intersection);
         }
-
         return $data + $compare;
     }
-
     /**
      * Merges the difference between $data and $compare onto $data.
      *
@@ -1156,10 +1002,8 @@ class Hash
                 $data[$key] = static::mergeDiff($data[$key], $value);
             }
         }
-
         return $data;
     }
-
     /**
      * Normalizes an array, and converts it to a standard format.
      *
@@ -1169,16 +1013,15 @@ class Hash
      * @return array
      * @link https://book.cakephp.org/5/en/core-libraries/hash.html#Cake\Utility\Hash::normalize
      */
-    public static function normalize(array $data, bool $assoc = true, mixed $default = null): array
+    public static function normalize(array $data, bool $assoc = \true, mixed $default = null): array
     {
         $keys = array_keys($data);
         $count = count($keys);
-        $numeric = true;
-
+        $numeric = \true;
         if (!$assoc) {
             for ($i = 0; $i < $count; $i++) {
                 if (!is_int($keys[$i])) {
-                    $numeric = false;
+                    $numeric = \false;
                     break;
                 }
             }
@@ -1194,10 +1037,8 @@ class Hash
             }
             $data = $newList;
         }
-
         return $data;
     }
-
     /**
      * Takes in a flat array and returns a nested array
      *
@@ -1223,53 +1064,39 @@ class Hash
         if (!$data) {
             return $data;
         }
-
         $alias = key(current($data));
-        $options += [
-            'idPath' => "{n}.{$alias}.id",
-            'parentPath' => "{n}.{$alias}.parent_id",
-            'children' => 'children',
-            'root' => null,
-        ];
+        $options += ['idPath' => "{n}.{$alias}.id", 'parentPath' => "{n}.{$alias}.parent_id", 'children' => 'children', 'root' => null];
         $return = [];
         $idMap = [];
         $ids = static::extract($data, $options['idPath']);
         assert(is_array($ids));
-
         $idKeys = explode('.', $options['idPath']);
         array_shift($idKeys);
-
         $parentKeys = explode('.', $options['parentPath']);
         array_shift($parentKeys);
-
         foreach ($data as $result) {
             $result[$options['children']] = [];
-
             $id = static::get($result, $idKeys);
             $parentId = static::get($result, $parentKeys);
-
             if (isset($idMap[$id][$options['children']])) {
                 $idMap[$id] = array_merge($result, $idMap[$id]);
             } else {
                 $idMap[$id] = array_merge($result, [$options['children'] => []]);
             }
             if (!$parentId || !in_array($parentId, $ids)) {
-                $return[] = &$idMap[$id];
+                $return[] =& $idMap[$id];
             } else {
-                $idMap[$parentId][$options['children']][] = &$idMap[$id];
+                $idMap[$parentId][$options['children']][] =& $idMap[$id];
             }
         }
-
         if (!$return) {
             throw new InvalidArgumentException('Invalid data array to nest.');
         }
-
         if ($options['root']) {
             $root = $options['root'];
         } else {
             $root = static::get($return[0], $parentKeys);
         }
-
         foreach ($return as $i => $result) {
             $id = static::get($result, $idKeys);
             $parentId = static::get($result, $parentKeys);
@@ -1277,7 +1104,6 @@ class Hash
                 unset($return[$i]);
             }
         }
-
         /** @var array<array> */
         return array_values($return);
     }

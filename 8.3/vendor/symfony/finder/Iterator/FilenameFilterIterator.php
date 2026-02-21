@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\Finder\Iterator;
 
 use Symfony\Component\Finder\Glob;
-
 /**
  * FilenameFilterIterator filters files by patterns (a regexp, a glob, or a string).
  *
@@ -20,7 +18,7 @@ use Symfony\Component\Finder\Glob;
  *
  * @extends MultiplePcreFilterIterator<string, \SplFileInfo>
  */
-class FilenameFilterIterator extends MultiplePcreFilterIterator
+class FilenameFilterIterator extends \Symfony\Component\Finder\Iterator\MultiplePcreFilterIterator
 {
     /**
      * Filters the iterator values.
@@ -29,7 +27,6 @@ class FilenameFilterIterator extends MultiplePcreFilterIterator
     {
         return $this->isAccepted($this->current()->getFilename());
     }
-
     /**
      * Converts glob to regexp.
      *

@@ -3,7 +3,6 @@
 namespace Http\Client;
 
 use Psr\Http\Client\ClientExceptionInterface as PsrClientException;
-
 /**
  * Every HTTP Client related Exception must implement this interface.
  *

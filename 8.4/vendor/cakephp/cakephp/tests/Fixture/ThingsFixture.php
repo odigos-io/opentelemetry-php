@@ -1,4 +1,5 @@
 <?php
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -15,7 +16,6 @@
 namespace Cake\Test\Fixture;
 
 use Cake\TestSuite\Fixture\TestFixture;
-
 class ThingsFixture extends TestFixture
 {
     /**
@@ -23,8 +23,5 @@ class ThingsFixture extends TestFixture
      *
      * @var array
      */
-    public array $records = [
-        ['id' => 1, 'title' => 'a title', 'body' => 'a body'],
-        ['id' => 2, 'title' => 'another title', 'body' => 'another body'],
-    ];
+    public array $records = [['id' => 1, 'title' => 'a title', 'body' => 'a body'], ['id' => 2, 'title' => 'another title', 'body' => 'another body']];
 }

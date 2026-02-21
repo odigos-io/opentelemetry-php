@@ -1,13 +1,11 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\SDK\Common\Configuration\Parser;
 
 class ListParser
 {
     private const DEFAULT_SEPARATOR = ',';
-
     /**
      * @param string|array $value
      */
@@ -19,10 +17,6 @@ class ListParser
         if (trim($value) === '') {
             return [];
         }
-
-        return array_map(
-            fn ($value) => trim($value),
-            explode(self::DEFAULT_SEPARATOR, $value)
-        );
+        return array_map(fn($value) => trim($value), explode(self::DEFAULT_SEPARATOR, $value));
     }
 }

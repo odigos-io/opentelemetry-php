@@ -6,15 +6,13 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file or at
 // https://developers.google.com/open-source/licenses/bsd
+namespace Odigos\Google\Protobuf\Internal;
 
-namespace Google\Protobuf\Internal;
-
-use Google\Protobuf\Internal\Descriptor;
-use Google\Protobuf\Internal\FileDescriptor;
-use Google\Protobuf\Internal\FileDescriptorSet;
-use Google\Protobuf\Internal\MessageBuilderContext;
-use Google\Protobuf\Internal\EnumBuilderContext;
-
+use Odigos\Google\Protobuf\Internal\Descriptor;
+use Odigos\Google\Protobuf\Internal\FileDescriptor;
+use Odigos\Google\Protobuf\Internal\FileDescriptorSet;
+use Odigos\Google\Protobuf\Internal\MessageBuilderContext;
+use Odigos\Google\Protobuf\Internal\EnumBuilderContext;
 class DescriptorPool
 {
     private static $pool;
@@ -24,7 +22,6 @@ class DescriptorPool
     private $class_to_desc = [];
     private $class_to_enum_desc = [];
     private $proto_to_class = [];
-
     public static function getGeneratedPool()
     {
         if (!isset(self::$pool)) {
@@ -32,48 +29,38 @@ class DescriptorPool
         }
         return self::$pool;
     }
-
-    public function internalAddGeneratedFile($data, $use_nested = false)
+    public function internalAddGeneratedFile($data, $use_nested = \false)
     {
         $files = new FileDescriptorSet();
         $files->mergeFromString($data);
-
-        foreach($files->getFile() as $file_proto) {
+        foreach ($files->getFile() as $file_proto) {
             $file = FileDescriptor::buildFromProto($file_proto);
-
             foreach ($file->getMessageType() as $desc) {
                 $this->addDescriptor($desc);
             }
             unset($desc);
-
             foreach ($file->getEnumType() as $desc) {
                 $this->addEnumDescriptor($desc);
             }
             unset($desc);
-
             foreach ($file->getMessageType() as $desc) {
                 $this->crossLink($desc);
             }
             unset($desc);
         }
     }
-
     public function addMessage($name, $klass)
     {
         return new MessageBuilderContext($name, $klass, $this);
     }
-
     public function addEnum($name, $klass)
     {
         return new EnumBuilderContext($name, $klass, $this);
     }
-
     public function addDescriptor($descriptor)
     {
-        $this->proto_to_class[$descriptor->getFullName()] =
-            $descriptor->getClass();
-        $this->unique_descs[$descriptor->getFullName()] =
-            $descriptor;
+        $this->proto_to_class[$descriptor->getFullName()] = $descriptor->getClass();
+        $this->unique_descs[$descriptor->getFullName()] = $descriptor;
         $this->class_to_desc[$descriptor->getClass()] = $descriptor;
         $this->class_to_desc[$descriptor->getLegacyClass()] = $descriptor;
         $this->class_to_desc[$descriptor->getPreviouslyUnreservedClass()] = $descriptor;
@@ -84,15 +71,12 @@ class DescriptorPool
             $this->addEnumDescriptor($enum_type);
         }
     }
-
     public function addEnumDescriptor($descriptor)
     {
-        $this->proto_to_class[$descriptor->getFullName()] =
-            $descriptor->getClass();
+        $this->proto_to_class[$descriptor->getFullName()] = $descriptor->getClass();
         $this->class_to_enum_desc[$descriptor->getClass()] = $descriptor;
         $this->class_to_enum_desc[$descriptor->getLegacyClass()] = $descriptor;
     }
-
     public function getDescriptorByClassName($klass)
     {
         if (isset($this->class_to_desc[$klass])) {
@@ -101,7 +85,6 @@ class DescriptorPool
             return null;
         }
     }
-
     public function getEnumDescriptorByClassName($klass)
     {
         if (isset($this->class_to_enum_desc[$klass])) {
@@ -110,23 +93,20 @@ class DescriptorPool
             return null;
         }
     }
-
     public function getDescriptorByProtoName($proto)
     {
         if (isset($this->proto_to_class[$proto])) {
             $klass = $this->proto_to_class[$proto];
             return $this->class_to_desc[$klass];
         } else {
-          return null;
+            return null;
         }
     }
-
     public function getEnumDescriptorByProtoName($proto)
     {
         $klass = $this->proto_to_class[$proto];
         return $this->class_to_enum_desc[$klass];
     }
-
     private function crossLink(Descriptor $desc)
     {
         foreach ($desc->getField() as $field) {
@@ -134,36 +114,31 @@ class DescriptorPool
                 case GPBType::MESSAGE:
                     $proto = $field->getMessageType();
                     if ($proto[0] == '.') {
-                      $proto = substr($proto, 1);
+                        $proto = substr($proto, 1);
                     }
                     $subdesc = $this->getDescriptorByProtoName($proto);
                     if (is_null($subdesc)) {
-                        trigger_error(
-                            'proto not added: ' . $proto
-                            . " for " . $desc->getFullName(), E_USER_ERROR);
+                        trigger_error('proto not added: ' . $proto . " for " . $desc->getFullName(), \E_USER_ERROR);
                     }
                     $field->setMessageType($subdesc);
                     break;
                 case GPBType::ENUM:
                     $proto = $field->getEnumType();
                     if ($proto[0] == '.') {
-                      $proto = substr($proto, 1);
+                        $proto = substr($proto, 1);
                     }
-                    $field->setEnumType(
-                        $this->getEnumDescriptorByProtoName($proto));
+                    $field->setEnumType($this->getEnumDescriptorByProtoName($proto));
                     break;
                 default:
                     break;
             }
         }
         unset($field);
-
         foreach ($desc->getNestedType() as $nested_type) {
             $this->crossLink($nested_type);
         }
         unset($nested_type);
     }
-
     public function finish()
     {
         foreach ($this->unique_descs as $klass => $desc) {

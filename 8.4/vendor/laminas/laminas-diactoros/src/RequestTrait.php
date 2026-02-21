@@ -1,19 +1,16 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Laminas\Diactoros;
+declare (strict_types=1);
+namespace Odigos\Laminas\Diactoros;
 
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UriInterface;
-
 use function array_keys;
 use function is_string;
 use function preg_match;
 use function sprintf;
 use function strtolower;
-
 /**
  * Trait with common request behaviors.
  *
@@ -27,20 +24,16 @@ use function strtolower;
 trait RequestTrait
 {
     use MessageTrait;
-
     /** @var string */
     private $method = 'GET';
-
     /**
      * The request-target, if it has been provided or calculated.
      *
      * @var null|string
      */
     private $requestTarget;
-
     /** @var UriInterface */
     private $uri;
-
     /**
      * Initialize request state.
      *
@@ -52,29 +45,21 @@ trait RequestTrait
      * @param array<non-empty-string, string|string[]> $headers Headers for the message, if any.
      * @throws Exception\InvalidArgumentException For any invalid value.
      */
-    private function initialize(
-        $uri = null,
-        ?string $method = null,
-        $body = 'php://memory',
-        array $headers = []
-    ): void {
+    private function initialize($uri = null, ?string $method = null, $body = 'php://memory', array $headers = []): void
+    {
         if ($method !== null) {
             $this->setMethod($method);
         }
-
-        $this->uri    = $this->createUri($uri);
+        $this->uri = $this->createUri($uri);
         $this->stream = $this->getStream($body, 'wb+');
-
         $this->setHeaders($headers);
-
         // per PSR-7: attempt to set the Host header from a provided URI if no
         // Host header is provided
-        if (! $this->hasHeader('Host') && $this->uri->getHost()) {
+        if (!$this->hasHeader('Host') && $this->uri->getHost()) {
             $this->headerNames['host'] = 'Host';
-            $this->headers['Host']     = [$this->getHostFromUri()];
+            $this->headers['Host'] = [$this->getHostFromUri()];
         }
     }
-
     /**
      * Create and return a URI instance.
      *
@@ -94,14 +79,11 @@ trait RequestTrait
         if ($uri instanceof UriInterface) {
             return $uri;
         }
-
         if (is_string($uri)) {
             return new Uri($uri);
         }
-
         return new Uri();
     }
-
     /**
      * Retrieves the message's request target.
      *
@@ -121,19 +103,15 @@ trait RequestTrait
         if (null !== $this->requestTarget) {
             return $this->requestTarget;
         }
-
         $target = $this->uri->getPath();
         if ($this->uri->getQuery()) {
             $target .= '?' . $this->uri->getQuery();
         }
-
         if (empty($target)) {
             $target = '/';
         }
-
         return $target;
     }
-
     /**
      * Create a new instance with a specific request-target.
      *
@@ -155,16 +133,12 @@ trait RequestTrait
     public function withRequestTarget(string $requestTarget): RequestInterface
     {
         if (preg_match('#\s#', $requestTarget)) {
-            throw new Exception\InvalidArgumentException(
-                'Invalid request target provided; cannot contain whitespace'
-            );
+            throw new Exception\InvalidArgumentException('Invalid request target provided; cannot contain whitespace');
         }
-
-        $new                = clone $this;
+        $new = clone $this;
         $new->requestTarget = $requestTarget;
         return $new;
     }
-
     /**
      * Retrieves the HTTP method of the request.
      *
@@ -174,7 +148,6 @@ trait RequestTrait
     {
         return $this->method;
     }
-
     /**
      * Return an instance with the provided HTTP method.
      *
@@ -196,7 +169,6 @@ trait RequestTrait
         $new->setMethod($method);
         return $new;
     }
-
     /**
      * Retrieves the URI instance.
      *
@@ -211,7 +183,6 @@ trait RequestTrait
     {
         return $this->uri;
     }
-
     /**
      * Returns an instance with the provided URI.
      *
@@ -238,26 +209,21 @@ trait RequestTrait
      * @param bool $preserveHost Preserve the original state of the Host header.
      * @return static
      */
-    public function withUri(UriInterface $uri, bool $preserveHost = false): RequestInterface
+    public function withUri(UriInterface $uri, bool $preserveHost = \false): RequestInterface
     {
-        $new      = clone $this;
+        $new = clone $this;
         $new->uri = $uri;
-
         if ($preserveHost && $this->hasHeader('Host')) {
             return $new;
         }
-
-        if (! $uri->getHost()) {
+        if (!$uri->getHost()) {
             return $new;
         }
-
         $host = $uri->getHost();
         if ($uri->getPort() !== null) {
             $host .= ':' . $uri->getPort();
         }
-
         $new->headerNames['host'] = 'Host';
-
         // Remove an existing host header if present, regardless of current
         // de-normalization of the header name.
         // @see https://github.com/zendframework/zend-diactoros/issues/91
@@ -266,12 +232,9 @@ trait RequestTrait
                 unset($new->headers[$header]);
             }
         }
-
         $new->headers['Host'] = [$host];
-
         return $new;
     }
-
     /**
      * Set and validate the HTTP method
      *
@@ -279,21 +242,17 @@ trait RequestTrait
      */
     private function setMethod(string $method): void
     {
-        if (! preg_match('/^[!#$%&\'*+.^_`\|~0-9a-z-]+$/i', $method)) {
-            throw new Exception\InvalidArgumentException(sprintf(
-                'Unsupported HTTP method "%s" provided',
-                $method
-            ));
+        if (!preg_match('/^[!#$%&\'*+.^_`\|~0-9a-z-]+$/i', $method)) {
+            throw new Exception\InvalidArgumentException(sprintf('Unsupported HTTP method "%s" provided', $method));
         }
         $this->method = $method;
     }
-
     /**
      * Retrieve the host from the URI instance
      */
     private function getHostFromUri(): string
     {
-        $host  = $this->uri->getHost();
+        $host = $this->uri->getHost();
         $host .= $this->uri->getPort() !== null ? ':' . $this->uri->getPort() : '';
         return $host;
     }

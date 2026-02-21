@@ -2,7 +2,7 @@
 
 namespace Illuminate\Validation\Rules;
 
-class ImageFile extends File
+class ImageFile extends \Illuminate\Validation\Rules\File
 {
     /**
      * Create a new image file rule instance.
@@ -13,7 +13,6 @@ class ImageFile extends File
     {
         $this->rules('image');
     }
-
     /**
      * The dimension constraints for the uploaded file.
      *
@@ -22,7 +21,6 @@ class ImageFile extends File
     public function dimensions($dimensions)
     {
         $this->rules($dimensions);
-
         return $this;
     }
 }

@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the league/config package.
  *
@@ -10,11 +9,9 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Odigos\League\Config;
 
-namespace League\Config;
-
-use Nette\Schema\Schema;
-
+use Odigos\Nette\Schema\Schema;
 /**
  * Interface that allows new schemas to be added to a configuration
  */

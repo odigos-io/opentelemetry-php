@@ -1,27 +1,26 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\validators;
 
-use Yii;
+use Odigos\Yii;
 use yii\helpers\Json;
-
 /**
  * RequiredValidator validates that the specified attribute does not have null or empty value.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class RequiredValidator extends Validator
+class RequiredValidator extends \yii\validators\Validator
 {
     /**
      * @var bool whether to skip this validator if the value being validated is empty.
      */
-    public $skipOnEmpty = false;
+    public $skipOnEmpty = \false;
     /**
      * @var mixed the desired value that the attribute must have.
      * If this is null, the validator will validate that the specified attribute is not empty.
@@ -41,7 +40,7 @@ class RequiredValidator extends Validator
      * - In strict mode, the validator will check if the attribute value is null
      * - In non-strict mode validation will fail
      */
-    public $strict = false;
+    public $strict = \false;
     /**
      * @var string the user-defined error message. It may contain the following placeholders which
      * will be replaced accordingly by the validator:
@@ -51,8 +50,6 @@ class RequiredValidator extends Validator
      * - `{requiredValue}`: the value of [[requiredValue]]
      */
     public $message;
-
-
     /**
      * {@inheritdoc}
      */
@@ -60,11 +57,9 @@ class RequiredValidator extends Validator
     {
         parent::init();
         if ($this->message === null) {
-            $this->message = $this->requiredValue === null ? Yii::t('yii', '{attribute} cannot be blank.')
-                : Yii::t('yii', '{attribute} must be "{requiredValue}".');
+            $this->message = $this->requiredValue === null ? Yii::t('yii', '{attribute} cannot be blank.') : Yii::t('yii', '{attribute} must be "{requiredValue}".');
         }
     }
-
     /**
      * {@inheritdoc}
      */
@@ -80,23 +75,17 @@ class RequiredValidator extends Validator
         if ($this->requiredValue === null) {
             return [$this->message, []];
         }
-
-        return [$this->message, [
-            'requiredValue' => $this->requiredValue,
-        ]];
+        return [$this->message, ['requiredValue' => $this->requiredValue]];
     }
-
     /**
      * {@inheritdoc}
      */
     public function clientValidateAttribute($model, $attribute, $view)
     {
-        ValidationAsset::register($view);
+        \yii\validators\ValidationAsset::register($view);
         $options = $this->getClientOptions($model, $attribute);
-
         return 'yii.validation.required(value, messages, ' . Json::htmlEncode($options) . ');';
     }
-
     /**
      * {@inheritdoc}
      */
@@ -104,9 +93,7 @@ class RequiredValidator extends Validator
     {
         $options = [];
         if ($this->requiredValue !== null) {
-            $options['message'] = $this->formatMessage($this->message, [
-                'requiredValue' => $this->requiredValue,
-            ]);
+            $options['message'] = $this->formatMessage($this->message, ['requiredValue' => $this->requiredValue]);
             $options['requiredValue'] = $this->requiredValue;
         } else {
             $options['message'] = $this->message;
@@ -114,11 +101,7 @@ class RequiredValidator extends Validator
         if ($this->strict) {
             $options['strict'] = 1;
         }
-
-        $options['message'] = $this->formatMessage($options['message'], [
-            'attribute' => $model->getAttributeLabel($attribute),
-        ]);
-
+        $options['message'] = $this->formatMessage($options['message'], ['attribute' => $model->getAttributeLabel($attribute)]);
         return $options;
     }
 }

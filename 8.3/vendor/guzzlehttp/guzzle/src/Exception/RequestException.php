@@ -7,34 +7,25 @@ use GuzzleHttp\BodySummarizerInterface;
 use Psr\Http\Client\RequestExceptionInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-
 /**
  * HTTP Request exception
  */
-class RequestException extends TransferException implements RequestExceptionInterface
+class RequestException extends \GuzzleHttp\Exception\TransferException implements RequestExceptionInterface
 {
     /**
      * @var RequestInterface
      */
     private $request;
-
     /**
      * @var ResponseInterface|null
      */
     private $response;
-
     /**
      * @var array
      */
     private $handlerContext;
-
-    public function __construct(
-        string $message,
-        RequestInterface $request,
-        ?ResponseInterface $response = null,
-        ?\Throwable $previous = null,
-        array $handlerContext = []
-    ) {
+    public function __construct(string $message, RequestInterface $request, ?ResponseInterface $response = null, ?\Throwable $previous = null, array $handlerContext = [])
+    {
         // Set the code of the exception if the response is set and not future.
         $code = $response ? $response->getStatusCode() : 0;
         parent::__construct($message, $code, $previous);
@@ -42,15 +33,13 @@ class RequestException extends TransferException implements RequestExceptionInte
         $this->response = $response;
         $this->handlerContext = $handlerContext;
     }
-
     /**
      * Wrap non-RequestExceptions with a RequestException
      */
-    public static function wrapException(RequestInterface $request, \Throwable $e): RequestException
+    public static function wrapException(RequestInterface $request, \Throwable $e): \GuzzleHttp\Exception\RequestException
     {
-        return $e instanceof RequestException ? $e : new RequestException($e->getMessage(), $request, null, $e);
+        return $e instanceof \GuzzleHttp\Exception\RequestException ? $e : new \GuzzleHttp\Exception\RequestException($e->getMessage(), $request, null, $e);
     }
-
     /**
      * Factory method to create a new exception with a normalized error message
      *
@@ -60,57 +49,32 @@ class RequestException extends TransferException implements RequestExceptionInte
      * @param array                        $handlerContext Optional handler context
      * @param BodySummarizerInterface|null $bodySummarizer Optional body summarizer
      */
-    public static function create(
-        RequestInterface $request,
-        ?ResponseInterface $response = null,
-        ?\Throwable $previous = null,
-        array $handlerContext = [],
-        ?BodySummarizerInterface $bodySummarizer = null
-    ): self {
+    public static function create(RequestInterface $request, ?ResponseInterface $response = null, ?\Throwable $previous = null, array $handlerContext = [], ?BodySummarizerInterface $bodySummarizer = null): self
+    {
         if (!$response) {
-            return new self(
-                'Error completing request',
-                $request,
-                null,
-                $previous,
-                $handlerContext
-            );
+            return new self('Error completing request', $request, null, $previous, $handlerContext);
         }
-
         $level = (int) \floor($response->getStatusCode() / 100);
         if ($level === 4) {
             $label = 'Client error';
-            $className = ClientException::class;
+            $className = \GuzzleHttp\Exception\ClientException::class;
         } elseif ($level === 5) {
             $label = 'Server error';
-            $className = ServerException::class;
+            $className = \GuzzleHttp\Exception\ServerException::class;
         } else {
             $label = 'Unsuccessful request';
             $className = __CLASS__;
         }
-
         $uri = \GuzzleHttp\Psr7\Utils::redactUserInfo($request->getUri());
-
         // Client Error: `GET /` resulted in a `404 Not Found` response:
         // <html> ... (truncated)
-        $message = \sprintf(
-            '%s: `%s %s` resulted in a `%s %s` response',
-            $label,
-            $request->getMethod(),
-            $uri->__toString(),
-            $response->getStatusCode(),
-            $response->getReasonPhrase()
-        );
-
+        $message = \sprintf('%s: `%s %s` resulted in a `%s %s` response', $label, $request->getMethod(), $uri->__toString(), $response->getStatusCode(), $response->getReasonPhrase());
         $summary = ($bodySummarizer ?? new BodySummarizer())->summarize($response);
-
         if ($summary !== null) {
             $message .= ":\n{$summary}\n";
         }
-
         return new $className($message, $request, $response, $previous, $handlerContext);
     }
-
     /**
      * Get the request that caused the exception
      */
@@ -118,7 +82,6 @@ class RequestException extends TransferException implements RequestExceptionInte
     {
         return $this->request;
     }
-
     /**
      * Get the associated response
      */
@@ -126,7 +89,6 @@ class RequestException extends TransferException implements RequestExceptionInte
     {
         return $this->response;
     }
-
     /**
      * Check if a response was received
      */
@@ -134,7 +96,6 @@ class RequestException extends TransferException implements RequestExceptionInte
     {
         return $this->response !== null;
     }
-
     /**
      * Get contextual information about the error from the underlying handler.
      *

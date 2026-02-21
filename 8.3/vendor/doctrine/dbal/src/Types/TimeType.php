@@ -1,18 +1,16 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\DBAL\Types;
 
 use DateTime;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Exception\InvalidFormat;
 use Doctrine\DBAL\Types\Exception\InvalidType;
-
 /**
  * Type that maps an SQL TIME to a PHP DateTime object.
  */
-class TimeType extends Type implements PhpTimeMappingType
+class TimeType extends \Doctrine\DBAL\Types\Type implements \Doctrine\DBAL\Types\PhpTimeMappingType
 {
     /**
      * {@inheritDoc}
@@ -21,7 +19,6 @@ class TimeType extends Type implements PhpTimeMappingType
     {
         return $platform->getTimeTypeDeclarationSQL($column);
     }
-
     /**
      * @param T $value
      *
@@ -34,14 +31,11 @@ class TimeType extends Type implements PhpTimeMappingType
         if ($value === null) {
             return $value;
         }
-
         if ($value instanceof DateTime) {
             return $value->format($platform->getTimeFormatString());
         }
-
         throw InvalidType::new($value, static::class, ['null', DateTime::class]);
     }
-
     /**
      * @param T $value
      *
@@ -54,16 +48,10 @@ class TimeType extends Type implements PhpTimeMappingType
         if ($value === null || $value instanceof DateTime) {
             return $value;
         }
-
         $dateTime = DateTime::createFromFormat('!' . $platform->getTimeFormatString(), $value);
-        if ($dateTime !== false) {
+        if ($dateTime !== \false) {
             return $dateTime;
         }
-
-        throw InvalidFormat::new(
-            $value,
-            static::class,
-            $platform->getTimeFormatString(),
-        );
+        throw InvalidFormat::new($value, static::class, $platform->getTimeFormatString());
     }
 }

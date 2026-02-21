@@ -9,8 +9,7 @@ class Routing
      *
      * @param  \Illuminate\Http\Request  $request  The request instance.
      */
-    public function __construct(
-        public $request,
-    ) {
+    public function __construct(public $request)
+    {
     }
 }

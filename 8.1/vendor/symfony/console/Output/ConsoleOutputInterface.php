@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\Console\Output;
 
 /**
@@ -17,17 +16,15 @@ namespace Symfony\Component\Console\Output;
  *
  * @author Dariusz Górecki <darek.krk@gmail.com>
  */
-interface ConsoleOutputInterface extends OutputInterface
+interface ConsoleOutputInterface extends \Symfony\Component\Console\Output\OutputInterface
 {
     /**
      * Gets the OutputInterface for errors.
      */
-    public function getErrorOutput(): OutputInterface;
-
+    public function getErrorOutput(): \Symfony\Component\Console\Output\OutputInterface;
     /**
      * @return void
      */
-    public function setErrorOutput(OutputInterface $error);
-
-    public function section(): ConsoleSectionOutput;
+    public function setErrorOutput(\Symfony\Component\Console\Output\OutputInterface $error);
+    public function section(): \Symfony\Component\Console\Output\ConsoleSectionOutput;
 }

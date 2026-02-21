@@ -4,7 +4,6 @@ namespace Illuminate\Http\Resources\JsonApi\Concerns;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\JsonApi\JsonApiRequest;
-
 trait ResolvesJsonApiRequest
 {
     /**
@@ -14,8 +13,6 @@ trait ResolvesJsonApiRequest
      */
     protected function resolveJsonApiRequestFrom(Request $request)
     {
-        return $request instanceof JsonApiRequest
-            ? $request
-            : JsonApiRequest::createFrom($request);
+        return $request instanceof JsonApiRequest ? $request : JsonApiRequest::createFrom($request);
     }
 }

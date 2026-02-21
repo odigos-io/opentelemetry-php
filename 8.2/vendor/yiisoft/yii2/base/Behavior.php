@@ -1,10 +1,10 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\base;
 
 /**
@@ -22,7 +22,7 @@ namespace yii\base;
  *
  * @template T of Component
  */
-class Behavior extends BaseObject
+class Behavior extends \yii\base\BaseObject
 {
     /**
      * @var Component|null the owner of this behavior
@@ -31,13 +31,10 @@ class Behavior extends BaseObject
      * @psalm-var T|null
      */
     public $owner;
-
     /**
      * @var array Attached events handlers
      */
     private $_attachedEvents = [];
-
-
     /**
      * Declares event handlers for the [[owner]]'s events.
      *
@@ -70,7 +67,6 @@ class Behavior extends BaseObject
     {
         return [];
     }
-
     /**
      * Attaches the behavior object to the component.
      * The default implementation will set the [[owner]] property
@@ -89,7 +85,6 @@ class Behavior extends BaseObject
             $owner->on($event, is_string($handler) ? [$this, $handler] : $handler);
         }
     }
-
     /**
      * Detaches the behavior object from the component.
      * The default implementation will unset the [[owner]] property

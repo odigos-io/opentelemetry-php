@@ -1,5 +1,6 @@
-<?php declare(strict_types=1);
+<?php
 
+declare (strict_types=1);
 /*
  * This file is part of the Monolog package.
  *
@@ -8,16 +9,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Odigos\Monolog\Handler;
 
-namespace Monolog\Handler;
-
-use Monolog\Formatter\LineFormatter;
-use Monolog\Formatter\FormatterInterface;
-use Monolog\Level;
-use Monolog\LogRecord;
-use Predis\Client as Predis;
+use Odigos\Monolog\Formatter\LineFormatter;
+use Odigos\Monolog\Formatter\FormatterInterface;
+use Odigos\Monolog\Level;
+use Odigos\Monolog\LogRecord;
+use Odigos\Predis\Client as Predis;
 use Redis;
-
 /**
  * Logs to a Redis key using rpush
  *
@@ -35,21 +34,18 @@ class RedisHandler extends AbstractProcessingHandler
     private Predis|Redis $redisClient;
     private string $redisKey;
     protected int $capSize;
-
     /**
      * @param Predis<Predis>|Redis $redis   The redis instance
      * @param string               $key     The key name to push records to
      * @param int                  $capSize Number of entries to limit list size to, 0 = unlimited
      */
-    public function __construct(Predis|Redis $redis, string $key, int|string|Level $level = Level::Debug, bool $bubble = true, int $capSize = 0)
+    public function __construct(Predis|Redis $redis, string $key, int|string|Level $level = Level::Debug, bool $bubble = \true, int $capSize = 0)
     {
         $this->redisClient = $redis;
         $this->redisKey = $key;
         $this->capSize = $capSize;
-
         parent::__construct($level, $bubble);
     }
-
     /**
      * @inheritDoc
      */
@@ -61,7 +57,6 @@ class RedisHandler extends AbstractProcessingHandler
             $this->redisClient->rpush($this->redisKey, $record->formatted);
         }
     }
-
     /**
      * Write and cap the collection
      * Writes the record to the redis list and caps its
@@ -70,10 +65,7 @@ class RedisHandler extends AbstractProcessingHandler
     {
         if ($this->redisClient instanceof Redis) {
             $mode = \defined('Redis::MULTI') ? Redis::MULTI : 1;
-            $this->redisClient->multi($mode)
-                ->rPush($this->redisKey, $record->formatted)
-                ->ltrim($this->redisKey, -$this->capSize, -1)
-                ->exec();
+            $this->redisClient->multi($mode)->rPush($this->redisKey, $record->formatted)->ltrim($this->redisKey, -$this->capSize, -1)->exec();
         } else {
             $redisKey = $this->redisKey;
             $capSize = $this->capSize;
@@ -83,7 +75,6 @@ class RedisHandler extends AbstractProcessingHandler
             });
         }
     }
-
     /**
      * @inheritDoc
      */

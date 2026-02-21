@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -18,7 +18,6 @@ namespace Cake\Cache\Event;
 
 use Cake\Cache\CacheEngine;
 use Cake\Event\Event;
-
 /**
  * Class Cache BeforeDelete Event
  *
@@ -27,9 +26,7 @@ use Cake\Event\Event;
 class CacheBeforeDeleteEvent extends Event
 {
     public const NAME = 'Cache.beforeDelete';
-
     protected string $key;
-
     /**
      * Constructor
      *
@@ -43,10 +40,8 @@ class CacheBeforeDeleteEvent extends Event
             $this->key = $data['key'];
             unset($data['key']);
         }
-
         parent::__construct($name, $subject, $data);
     }
-
     /**
      * @return string
      */

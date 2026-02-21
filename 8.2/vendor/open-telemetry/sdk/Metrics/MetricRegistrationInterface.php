@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\SDK\Metrics;
 
 /**
@@ -9,5 +8,5 @@ namespace OpenTelemetry\SDK\Metrics;
  */
 interface MetricRegistrationInterface
 {
-    public function register(MetricSourceProviderInterface $provider, MetricMetadataInterface $metadata): void;
+    public function register(\OpenTelemetry\SDK\Metrics\MetricSourceProviderInterface $provider, \OpenTelemetry\SDK\Metrics\MetricMetadataInterface $metadata): void;
 }

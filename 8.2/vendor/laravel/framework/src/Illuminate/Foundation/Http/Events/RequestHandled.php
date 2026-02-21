@@ -10,14 +10,12 @@ class RequestHandled
      * @var \Illuminate\Http\Request
      */
     public $request;
-
     /**
      * The response instance.
      *
      * @var \Illuminate\Http\Response
      */
     public $response;
-
     /**
      * Create a new event instance.
      *

@@ -1,16 +1,15 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\grid;
 
 use Closure;
 use yii\base\BaseObject;
 use yii\helpers\Html;
-
 /**
  * Column is the base class of all [[GridView]] column classes.
  *
@@ -43,7 +42,7 @@ class Column extends BaseObject
     /**
      * @var bool whether this column is visible. Defaults to true.
      */
-    public $visible = true;
+    public $visible = \true;
     /**
      * @var array the HTML attributes for the column group tag.
      * @see \yii\helpers\Html::renderTagAttributes() for details on how attributes are being rendered.
@@ -75,8 +74,6 @@ class Column extends BaseObject
      * @see \yii\helpers\Html::renderTagAttributes() for details on how attributes are being rendered.
      */
     public $filterOptions = [];
-
-
     /**
      * Renders the header cell.
      */
@@ -84,7 +81,6 @@ class Column extends BaseObject
     {
         return Html::tag('th', $this->renderHeaderCellContent(), $this->headerOptions);
     }
-
     /**
      * Renders the footer cell.
      */
@@ -92,7 +88,6 @@ class Column extends BaseObject
     {
         return Html::tag('td', $this->renderFooterCellContent(), $this->footerOptions);
     }
-
     /**
      * Renders a data cell.
      * @param mixed $model the data model being rendered
@@ -107,10 +102,8 @@ class Column extends BaseObject
         } else {
             $options = $this->contentOptions;
         }
-
         return Html::tag('td', $this->renderDataCellContent($model, $key, $index), $options);
     }
-
     /**
      * Renders the filter cell.
      */
@@ -118,7 +111,6 @@ class Column extends BaseObject
     {
         return Html::tag('td', $this->renderFilterCellContent(), $this->filterOptions);
     }
-
     /**
      * Renders the header cell content.
      * The default implementation simply renders [[header]].
@@ -129,7 +121,6 @@ class Column extends BaseObject
     {
         return $this->header !== null && trim($this->header) !== '' ? $this->header : $this->getHeaderCellLabel();
     }
-
     /**
      * Returns header cell label.
      * This method may be overridden to customize the label of the header cell.
@@ -140,7 +131,6 @@ class Column extends BaseObject
     {
         return $this->grid->emptyCell;
     }
-
     /**
      * Renders the footer cell content.
      * The default implementation simply renders [[footer]].
@@ -151,7 +141,6 @@ class Column extends BaseObject
     {
         return $this->footer !== null && trim($this->footer) !== '' ? $this->footer : $this->grid->emptyCell;
     }
-
     /**
      * Renders the data cell content.
      * @param mixed $model the data model
@@ -164,10 +153,8 @@ class Column extends BaseObject
         if ($this->content !== null) {
             return call_user_func($this->content, $model, $key, $index, $this);
         }
-
         return $this->grid->emptyCell;
     }
-
     /**
      * Renders the filter cell content.
      * The default implementation simply renders a space.

@@ -1,16 +1,13 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\DBAL\Schema;
 
 use Doctrine\DBAL\Schema\Exception\InvalidPrimaryKeyConstraintDefinition;
 use Doctrine\DBAL\Schema\Name\UnqualifiedName;
-
 use function count;
-
 /** @implements OptionallyNamedObject<UnqualifiedName> */
-final readonly class PrimaryKeyConstraint implements OptionallyNamedObject
+final readonly class PrimaryKeyConstraint implements \Doctrine\DBAL\Schema\OptionallyNamedObject
 {
     /**
      * @internal Use {@link PrimaryKeyConstraint::editor()} to instantiate an editor and
@@ -22,21 +19,16 @@ final readonly class PrimaryKeyConstraint implements OptionallyNamedObject
      *                                                     platform.
      * @param non-empty-list<UnqualifiedName> $columnNames
      */
-    public function __construct(
-        private ?UnqualifiedName $name,
-        private array $columnNames,
-        private bool $isClustered,
-    ) {
+    public function __construct(private ?UnqualifiedName $name, private array $columnNames, private bool $isClustered)
+    {
         if (count($this->columnNames) < 1) {
             throw InvalidPrimaryKeyConstraintDefinition::columnNamesNotSet();
         }
     }
-
     public function getObjectName(): ?UnqualifiedName
     {
         return $this->name;
     }
-
     /**
      * Returns the names of the columns.
      *
@@ -46,7 +38,6 @@ final readonly class PrimaryKeyConstraint implements OptionallyNamedObject
     {
         return $this->columnNames;
     }
-
     /**
      * Returns whether the primary key constraint is clustered.
      */
@@ -54,23 +45,18 @@ final readonly class PrimaryKeyConstraint implements OptionallyNamedObject
     {
         return $this->isClustered;
     }
-
     /**
      * Instantiates a new primary key constraint editor.
      */
-    public static function editor(): PrimaryKeyConstraintEditor
+    public static function editor(): \Doctrine\DBAL\Schema\PrimaryKeyConstraintEditor
     {
-        return new PrimaryKeyConstraintEditor();
+        return new \Doctrine\DBAL\Schema\PrimaryKeyConstraintEditor();
     }
-
     /**
      * Instantiates a new foreign key constraint editor and initializes it with the constraint's properties.
      */
-    public function edit(): PrimaryKeyConstraintEditor
+    public function edit(): \Doctrine\DBAL\Schema\PrimaryKeyConstraintEditor
     {
-        return self::editor()
-            ->setName($this->name)
-            ->setColumnNames(...$this->columnNames)
-            ->setIsClustered($this->isClustered);
+        return self::editor()->setName($this->name)->setColumnNames(...$this->columnNames)->setIsClustered($this->isClustered);
     }
 }

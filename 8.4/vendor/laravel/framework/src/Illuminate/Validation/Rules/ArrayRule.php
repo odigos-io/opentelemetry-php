@@ -4,9 +4,7 @@ namespace Illuminate\Validation\Rules;
 
 use Illuminate\Contracts\Support\Arrayable;
 use Stringable;
-
 use function Illuminate\Support\enum_value;
-
 class ArrayRule implements Stringable
 {
     /**
@@ -15,7 +13,6 @@ class ArrayRule implements Stringable
      * @var array
      */
     protected $keys;
-
     /**
      * Create a new array rule instance.
      *
@@ -26,10 +23,8 @@ class ArrayRule implements Stringable
         if ($keys instanceof Arrayable) {
             $keys = $keys->toArray();
         }
-
         $this->keys = is_array($keys) ? $keys : func_get_args();
     }
-
     /**
      * Convert the rule to a validation string.
      *
@@ -40,12 +35,7 @@ class ArrayRule implements Stringable
         if (empty($this->keys)) {
             return 'array';
         }
-
-        $keys = array_map(
-            static fn ($key) => enum_value($key),
-            $this->keys,
-        );
-
-        return 'array:'.implode(',', $keys);
+        $keys = array_map(static fn($key) => enum_value($key), $this->keys);
+        return 'array:' . implode(',', $keys);
     }
 }

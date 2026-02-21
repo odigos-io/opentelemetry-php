@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -22,24 +22,20 @@ use DateInterval;
 use DateTime;
 use Psr\SimpleCache\CacheInterface;
 use function Cake\Core\triggerWarning;
-
 /**
  * Storage engine for CakePHP caching
  */
-abstract class CacheEngine implements CacheInterface, CacheEngineInterface
+abstract class CacheEngine implements CacheInterface, \Cake\Cache\CacheEngineInterface
 {
     use InstanceConfigTrait;
-
     /**
      * @var string
      */
     protected const CHECK_KEY = 'key';
-
     /**
      * @var string
      */
     protected const CHECK_VALUE = 'value';
-
     /**
      * The default cache configuration is overridden in most cache adapters. These are
      * the keys that are common to all adapters. If overridden, this property is not used.
@@ -54,13 +50,7 @@ abstract class CacheEngine implements CacheInterface, CacheEngineInterface
      *
      * @var array<string, mixed>
      */
-    protected array $_defaultConfig = [
-        'duration' => 3600,
-        'groups' => [],
-        'prefix' => 'cake_',
-        'warnOnWriteFailures' => true,
-    ];
-
+    protected array $_defaultConfig = ['duration' => 3600, 'groups' => [], 'prefix' => 'cake_', 'warnOnWriteFailures' => \true];
     /**
      * Contains the compiled string with all group
      * prefixes to be prepended to every key in this cache engine
@@ -68,7 +58,6 @@ abstract class CacheEngine implements CacheInterface, CacheEngineInterface
      * @var string
      */
     protected string $_groupPrefix = '';
-
     /**
      * Initialize the cache engine
      *
@@ -81,7 +70,6 @@ abstract class CacheEngine implements CacheInterface, CacheEngineInterface
     public function init(array $config = []): bool
     {
         $this->setConfig($config);
-
         if (!empty($this->_config['groups'])) {
             sort($this->_config['groups']);
             $this->_groupPrefix = str_repeat('%s_', count($this->_config['groups']));
@@ -89,10 +77,8 @@ abstract class CacheEngine implements CacheInterface, CacheEngineInterface
         if (!is_numeric($this->_config['duration'])) {
             $this->_config['duration'] = strtotime($this->_config['duration']) - time();
         }
-
-        return true;
+        return \true;
     }
-
     /**
      * Ensure the validity of the given cache key.
      *
@@ -106,7 +92,6 @@ abstract class CacheEngine implements CacheInterface, CacheEngineInterface
             throw new InvalidArgumentException('A cache key must be a non-empty string.');
         }
     }
-
     /**
      * Ensure the validity of the argument type and cache keys.
      *
@@ -125,7 +110,6 @@ abstract class CacheEngine implements CacheInterface, CacheEngineInterface
             }
         }
     }
-
     /**
      * Obtains multiple cache items by their unique keys.
      *
@@ -138,15 +122,12 @@ abstract class CacheEngine implements CacheInterface, CacheEngineInterface
     public function getMultiple(iterable $keys, mixed $default = null): iterable
     {
         $this->ensureValidType($keys);
-
         $results = [];
         foreach ($keys as $key) {
             $results[$key] = $this->get($key, $default);
         }
-
         return $results;
     }
-
     /**
      * Persists a set of key => value pairs in the cache, with an optional TTL.
      *
@@ -161,7 +142,6 @@ abstract class CacheEngine implements CacheInterface, CacheEngineInterface
     public function setMultiple(iterable $values, DateInterval|int|null $ttl = null): bool
     {
         $this->ensureValidType($values, self::CHECK_KEY);
-
         $restore = null;
         if ($ttl !== null) {
             $restore = $this->getConfig('duration');
@@ -170,19 +150,17 @@ abstract class CacheEngine implements CacheInterface, CacheEngineInterface
         try {
             foreach ($values as $key => $value) {
                 $success = $this->set($key, $value);
-                if ($success === false) {
-                    return false;
+                if ($success === \false) {
+                    return \false;
                 }
             }
-
-            return true;
+            return \true;
         } finally {
             if ($restore !== null) {
                 $this->setConfig('duration', $restore);
             }
         }
     }
-
     /**
      * Deletes multiple cache items as a list
      *
@@ -198,17 +176,14 @@ abstract class CacheEngine implements CacheInterface, CacheEngineInterface
     public function deleteMultiple(iterable $keys): bool
     {
         $this->ensureValidType($keys);
-
-        $result = true;
+        $result = \true;
         foreach ($keys as $key) {
             if (!$this->delete($key)) {
-                $result = false;
+                $result = \false;
             }
         }
-
         return $result;
     }
-
     /**
      * Determines whether an item is present in the cache.
      *
@@ -225,7 +200,6 @@ abstract class CacheEngine implements CacheInterface, CacheEngineInterface
     {
         return $this->get($key) !== null;
     }
-
     /**
      * Fetches the value for a given key from the cache.
      *
@@ -235,7 +209,6 @@ abstract class CacheEngine implements CacheInterface, CacheEngineInterface
      * @throws \Cake\Cache\Exception\InvalidArgumentException If the $key string is not a legal value.
      */
     abstract public function get(string $key, mixed $default = null): mixed;
-
     /**
      * Persists data in the cache, uniquely referenced by the given key with an optional expiration TTL time.
      *
@@ -249,7 +222,6 @@ abstract class CacheEngine implements CacheInterface, CacheEngineInterface
      *   MUST be thrown if the $key string is not a legal value.
      */
     abstract public function set(string $key, mixed $value, DateInterval|int|null $ttl = null): bool;
-
     /**
      * Increment a number under the key and return incremented value
      *
@@ -258,7 +230,6 @@ abstract class CacheEngine implements CacheInterface, CacheEngineInterface
      * @return int|false New incremented value, false otherwise
      */
     abstract public function increment(string $key, int $offset = 1): int|false;
-
     /**
      * Decrement a number under the key and return decremented value
      *
@@ -267,7 +238,6 @@ abstract class CacheEngine implements CacheInterface, CacheEngineInterface
      * @return int|false New decremented value, false otherwise
      */
     abstract public function decrement(string $key, int $offset = 1): int|false;
-
     /**
      * Delete a key from the cache
      *
@@ -275,14 +245,12 @@ abstract class CacheEngine implements CacheInterface, CacheEngineInterface
      * @return bool True if the value was successfully deleted, false if it didn't exist or couldn't be removed
      */
     abstract public function delete(string $key): bool;
-
     /**
      * Delete all keys from the cache
      *
      * @return bool True if the cache was successfully cleared, false otherwise
      */
     abstract public function clear(): bool;
-
     /**
      * Add a key to the cache if it does not already exist.
      *
@@ -299,10 +267,8 @@ abstract class CacheEngine implements CacheInterface, CacheEngineInterface
         if ($cachedValue === null) {
             return $this->set($key, $value);
         }
-
-        return false;
+        return \false;
     }
-
     /**
      * Clears all values belonging to a group. Is up to the implementing engine
      * to decide whether actually delete the keys or just simulate it to achieve
@@ -312,7 +278,6 @@ abstract class CacheEngine implements CacheInterface, CacheEngineInterface
      * @return bool
      */
     abstract public function clearGroup(string $group): bool;
-
     /**
      * Does whatever initialization for each group is required
      * and returns the `group value` for each of them, this is
@@ -324,7 +289,6 @@ abstract class CacheEngine implements CacheInterface, CacheEngineInterface
     {
         return $this->_config['groups'];
     }
-
     /**
      * Generates a key for cache backend usage.
      *
@@ -338,16 +302,13 @@ abstract class CacheEngine implements CacheInterface, CacheEngineInterface
     protected function _key(string $key): string
     {
         $this->ensureValidKey($key);
-
         $prefix = '';
         if ($this->_groupPrefix) {
             $prefix = hash('xxh128', implode('_', $this->groups()));
         }
         $key = preg_replace('/[\s]+/', '_', $key);
-
         return $this->_config['prefix'] . $prefix . $key;
     }
-
     /**
      * Cache Engines may trigger warnings if they encounter failures during operation,
      * if option warnOnWriteFailures is set to true.
@@ -357,13 +318,11 @@ abstract class CacheEngine implements CacheInterface, CacheEngineInterface
      */
     protected function warning(string $message): void
     {
-        if ($this->getConfig('warnOnWriteFailures') !== true) {
+        if ($this->getConfig('warnOnWriteFailures') !== \true) {
             return;
         }
-
         triggerWarning($message);
     }
-
     /**
      * Convert the various expressions of a TTL value into duration in seconds
      *
@@ -379,12 +338,8 @@ abstract class CacheEngine implements CacheInterface, CacheEngineInterface
         if (is_int($ttl)) {
             return $ttl;
         }
-
         /** @var \DateTime $datetime */
         $datetime = DateTime::createFromFormat('U', '0');
-
-        return (int)$datetime
-            ->add($ttl)
-            ->format('U');
+        return (int) $datetime->add($ttl)->format('U');
     }
 }

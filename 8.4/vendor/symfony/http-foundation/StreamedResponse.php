@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\HttpFoundation;
 
 /**
@@ -24,13 +23,11 @@ namespace Symfony\Component\HttpFoundation;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class StreamedResponse extends Response
+class StreamedResponse extends \Symfony\Component\HttpFoundation\Response
 {
     protected ?\Closure $callback = null;
-    protected bool $streamed = false;
-
-    private bool $headersSent = false;
-
+    protected bool $streamed = \false;
+    private bool $headersSent = \false;
     /**
      * @param callable|iterable<string>|null $callbackOrChunks
      * @param int                            $status           The HTTP status code (200 "OK" by default)
@@ -38,16 +35,14 @@ class StreamedResponse extends Response
     public function __construct(callable|iterable|null $callbackOrChunks = null, int $status = 200, array $headers = [])
     {
         parent::__construct(null, $status, $headers);
-
         if (\is_callable($callbackOrChunks)) {
             $this->setCallback($callbackOrChunks);
         } elseif ($callbackOrChunks) {
             $this->setChunks($callbackOrChunks);
         }
-        $this->streamed = false;
-        $this->headersSent = false;
+        $this->streamed = \false;
+        $this->headersSent = \false;
     }
-
     /**
      * @param iterable<string> $chunks
      */
@@ -60,10 +55,8 @@ class StreamedResponse extends Response
                 flush();
             }
         };
-
         return $this;
     }
-
     /**
      * Sets the PHP callback associated with this Response.
      *
@@ -72,19 +65,15 @@ class StreamedResponse extends Response
     public function setCallback(callable $callback): static
     {
         $this->callback = $callback(...);
-
         return $this;
     }
-
     public function getCallback(): ?\Closure
     {
         if (!isset($this->callback)) {
             return null;
         }
-
         return ($this->callback)(...);
     }
-
     /**
      * This method only sends the headers once.
      *
@@ -97,14 +86,11 @@ class StreamedResponse extends Response
         if ($this->headersSent) {
             return $this;
         }
-
         if ($statusCode < 100 || $statusCode >= 200) {
-            $this->headersSent = true;
+            $this->headersSent = \true;
         }
-
         return parent::sendHeaders($statusCode);
     }
-
     /**
      * This method only sends the content once.
      *
@@ -115,18 +101,13 @@ class StreamedResponse extends Response
         if ($this->streamed) {
             return $this;
         }
-
-        $this->streamed = true;
-
+        $this->streamed = \true;
         if (!isset($this->callback)) {
             throw new \LogicException('The Response callback must be set.');
         }
-
         ($this->callback)();
-
         return $this;
     }
-
     /**
      * @return $this
      *
@@ -137,14 +118,11 @@ class StreamedResponse extends Response
         if (null !== $content) {
             throw new \LogicException('The content cannot be set on a StreamedResponse instance.');
         }
-
-        $this->streamed = true;
-
+        $this->streamed = \true;
         return $this;
     }
-
     public function getContent(): string|false
     {
-        return false;
+        return \false;
     }
 }

@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
@@ -18,7 +18,6 @@ namespace Cake\Datasource\Paging;
 
 use Countable;
 use Traversable;
-
 /**
  * This interface describes the methods for pagination instance.
  *
@@ -35,49 +34,42 @@ interface PaginatedInterface extends Countable, Traversable
      * @return int
      */
     public function currentPage(): int;
-
     /**
      * Get items per page.
      *
      * @return int
      */
     public function perPage(): int;
-
     /**
      * Get Total items counts.
      *
      * @return int|null
      */
     public function totalCount(): ?int;
-
     /**
      * Get total page count.
      *
      * @return int|null
      */
     public function pageCount(): ?int;
-
     /**
      * Get whether there's a previous page.
      *
      * @return bool
      */
     public function hasPrevPage(): bool;
-
     /**
      * Get whether there's a next page.
      *
      * @return bool
      */
     public function hasNextPage(): bool;
-
     /**
      * Get paginated items.
      *
      * @return iterable<TKey, TValue>
      */
     public function items(): iterable;
-
     /**
      * Get paging param.
      *
@@ -85,7 +77,6 @@ interface PaginatedInterface extends Countable, Traversable
      * @return mixed
      */
     public function pagingParam(string $name): mixed;
-
     /**
      * Get all paging params.
      *

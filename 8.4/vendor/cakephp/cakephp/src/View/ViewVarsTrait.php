@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -16,7 +16,6 @@ declare(strict_types=1);
 namespace Cake\View;
 
 use Cake\Event\EventDispatcherInterface;
-
 /**
  * Provides the set() method for collecting template context.
  *
@@ -30,18 +29,16 @@ trait ViewVarsTrait
      *
      * @var \Cake\View\ViewBuilder|null
      */
-    protected ?ViewBuilder $_viewBuilder = null;
-
+    protected ?\Cake\View\ViewBuilder $_viewBuilder = null;
     /**
      * Get the view builder being used.
      *
      * @return \Cake\View\ViewBuilder
      */
-    public function viewBuilder(): ViewBuilder
+    public function viewBuilder(): \Cake\View\ViewBuilder
     {
-        return $this->_viewBuilder ??= new ViewBuilder();
+        return $this->_viewBuilder ??= new \Cake\View\ViewBuilder();
     }
-
     /**
      * Constructs the view class instance based on the current configuration.
      *
@@ -49,27 +46,20 @@ trait ViewVarsTrait
      * @return \Cake\View\View
      * @throws \Cake\View\Exception\MissingViewException If view class was not found.
      */
-    public function createView(?string $viewClass = null): View
+    public function createView(?string $viewClass = null): \Cake\View\View
     {
         $builder = $this->viewBuilder();
         if ($viewClass) {
             $builder->setClassName($viewClass);
         }
-
         foreach (['name', 'plugin'] as $prop) {
             if (isset($this->{$prop})) {
                 $method = 'set' . ucfirst($prop);
                 $builder->{$method}($this->{$prop});
             }
         }
-
-        return $builder->build(
-            $this->request ?? null,
-            $this->response ?? null,
-            $this instanceof EventDispatcherInterface ? $this->getEventManager() : null,
-        );
+        return $builder->build($this->request ?? null, $this->response ?? null, $this instanceof EventDispatcherInterface ? $this->getEventManager() : null);
     }
-
     /**
      * Saves a variable or an associative array of variables for use inside a template.
      *
@@ -90,7 +80,6 @@ trait ViewVarsTrait
             $data = [$name => $value];
         }
         $this->viewBuilder()->setVars($data);
-
         return $this;
     }
 }

@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -18,7 +18,6 @@ namespace Cake\Collection\Iterator;
 
 use Cake\Collection\Collection;
 use SplDoublyLinkedList;
-
 /**
  * Creates an iterator from another iterator that will keep the results of the inner
  * iterator in memory, so that results don't have to be re-calculated.
@@ -35,43 +34,37 @@ class BufferedIterator extends Collection
      * @var \SplDoublyLinkedList<mixed>
      */
     protected SplDoublyLinkedList $_buffer;
-
     /**
      * Points to the next record number that should be fetched
      *
      * @var int
      */
     protected int $_index = 0;
-
     /**
      * Last record fetched from the inner iterator
      *
      * @var mixed
      */
     protected mixed $_current;
-
     /**
      * Last key obtained from the inner iterator
      *
      * @var mixed
      */
     protected mixed $_key;
-
     /**
      * Whether the internal iterator's rewind method was already
      * called
      *
      * @var bool
      */
-    protected bool $_started = false;
-
+    protected bool $_started = \false;
     /**
      * Whether the internal iterator has reached its end.
      *
      * @var bool
      */
-    protected bool $_finished = false;
-
+    protected bool $_finished = \false;
     /**
      * Maintains an in-memory cache of the results yielded by the internal
      * iterator.
@@ -83,7 +76,6 @@ class BufferedIterator extends Collection
         $this->_buffer = new SplDoublyLinkedList();
         parent::__construct($items);
     }
-
     /**
      * Returns the current key in the iterator
      *
@@ -93,7 +85,6 @@ class BufferedIterator extends Collection
     {
         return $this->_key;
     }
-
     /**
      * Returns the current record in the iterator
      *
@@ -103,7 +94,6 @@ class BufferedIterator extends Collection
     {
         return $this->_current;
     }
-
     /**
      * Rewinds the collection
      *
@@ -112,15 +102,12 @@ class BufferedIterator extends Collection
     public function rewind(): void
     {
         if ($this->_index === 0 && !$this->_started) {
-            $this->_started = true;
+            $this->_started = \true;
             parent::rewind();
-
             return;
         }
-
         $this->_index = 0;
     }
-
     /**
      * Returns whether the iterator has more elements
      *
@@ -132,26 +119,17 @@ class BufferedIterator extends Collection
             $current = $this->_buffer->offsetGet($this->_index);
             $this->_current = $current['value'];
             $this->_key = $current['key'];
-
-            return true;
+            return \true;
         }
-
         $valid = parent::valid();
-
         if ($valid) {
             $this->_current = parent::current();
             $this->_key = parent::key();
-            $this->_buffer->push([
-                'key' => $this->_key,
-                'value' => $this->_current,
-            ]);
+            $this->_buffer->push(['key' => $this->_key, 'value' => $this->_current]);
         }
-
         $this->_finished = !$valid;
-
         return $valid;
     }
-
     /**
      * Advances the iterator pointer to the next element
      *
@@ -160,7 +138,6 @@ class BufferedIterator extends Collection
     public function next(): void
     {
         $this->_index++;
-
         // Don't move inner iterator if we have more buffer
         if ($this->_buffer->offsetExists($this->_index)) {
             return;
@@ -169,7 +146,6 @@ class BufferedIterator extends Collection
             parent::next();
         }
     }
-
     /**
      * Returns the number of items in this collection.
      *
@@ -180,14 +156,11 @@ class BufferedIterator extends Collection
         if (!$this->_started) {
             $this->rewind();
         }
-
         while ($this->valid()) {
             $this->next();
         }
-
         return $this->_buffer->count();
     }
-
     /**
      * Magic method used for serializing the iterator instance.
      *
@@ -198,10 +171,8 @@ class BufferedIterator extends Collection
         if (!$this->_finished) {
             $this->count();
         }
-
         return iterator_to_array($this->_buffer);
     }
-
     /**
      * Magic method used to rebuild the iterator instance.
      *
@@ -211,12 +182,10 @@ class BufferedIterator extends Collection
     public function __unserialize(array $data): void
     {
         $this->__construct([]);
-
         foreach ($data as $value) {
             $this->_buffer->push($value);
         }
-
-        $this->_started = true;
-        $this->_finished = true;
+        $this->_started = \true;
+        $this->_finished = \true;
     }
 }

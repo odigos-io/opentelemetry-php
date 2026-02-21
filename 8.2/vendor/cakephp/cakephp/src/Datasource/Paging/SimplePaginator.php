@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -18,7 +18,6 @@ namespace Cake\Datasource\Paging;
 
 use Cake\Datasource\QueryInterface;
 use Cake\Datasource\ResultSetInterface;
-
 /**
  * Simplified paginator which avoids potentially expensive queries
  * to get the total count of records.
@@ -26,7 +25,7 @@ use Cake\Datasource\ResultSetInterface;
  * When using a simple paginator you will not be able to generate page numbers.
  * Instead use only the prev/next pagination controls.
  */
-class SimplePaginator extends NumericPaginator
+class SimplePaginator extends \Cake\Datasource\Paging\NumericPaginator
 {
     /**
      * Get paginated items.
@@ -41,25 +40,20 @@ class SimplePaginator extends NumericPaginator
     {
         return $query->limit($data['options']['limit'] + 1)->all();
     }
-
     /**
      * @inheritDoc
      */
     protected function buildParams(array $data): array
     {
-        $hasNextPage = false;
+        $hasNextPage = \false;
         if ($this->pagingParams['count'] > $data['options']['limit']) {
-            $hasNextPage = true;
+            $hasNextPage = \true;
             $this->pagingParams['count'] -= 1;
         }
-
         parent::buildParams($data);
-
         $this->pagingParams['hasNextPage'] = $hasNextPage;
-
         return $this->pagingParams;
     }
-
     /**
      * Build paginated result set.
      *
@@ -70,15 +64,13 @@ class SimplePaginator extends NumericPaginator
      * @param array $pagingParams
      * @return \Cake\Datasource\Paging\PaginatedInterface
      */
-    protected function buildPaginated(ResultSetInterface $items, array $pagingParams): PaginatedInterface
+    protected function buildPaginated(ResultSetInterface $items, array $pagingParams): \Cake\Datasource\Paging\PaginatedInterface
     {
         if (count($items) > $this->pagingParams['perPage']) {
             $items = $items->take($this->pagingParams['perPage']);
         }
-
-        return new PaginatedResultSet($items, $pagingParams);
+        return new \Cake\Datasource\Paging\PaginatedResultSet($items, $pagingParams);
     }
-
     /**
      * Simple pagination does not perform any count query, so this method returns `null`.
      *

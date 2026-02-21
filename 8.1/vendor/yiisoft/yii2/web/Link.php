@@ -1,14 +1,13 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\web;
 
 use yii\base\BaseObject;
-
 /**
  * Link represents a link object as defined in [JSON Hypermedia API Language](https://tools.ietf.org/html/draft-kelly-json-hal-03).
  *
@@ -37,7 +36,7 @@ class Link extends BaseObject
     /**
      * @var bool a value indicating whether [[href]] refers to a URI or URI template.
      */
-    public $templated = false;
+    public $templated = \false;
     /**
      * @var string a URI that hints about the profile of the target resource.
      */
@@ -50,8 +49,6 @@ class Link extends BaseObject
      * @var string the language of the target resource
      */
     public $hreflang;
-
-
     /**
      * Serializes a list of links into proper array format.
      * @param array $links the links to be serialized
@@ -63,12 +60,11 @@ class Link extends BaseObject
             if (is_array($link)) {
                 $links[$rel] = self::serialize($link);
             } elseif ($link instanceof self) {
-                $links[$rel] = array_filter((array)$link);
+                $links[$rel] = array_filter((array) $link);
             } else {
                 $links[$rel] = ['href' => $link];
             }
         }
-
         return $links;
     }
 }

@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\SDK\Common\Http\Psr\Message;
 
 use Psr\Http\Message\RequestFactoryInterface;
@@ -10,7 +9,6 @@ use Psr\Http\Message\ServerRequestFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Message\UploadedFileFactoryInterface;
 use Psr\Http\Message\UriFactoryInterface;
-
 interface FactoryResolverInterface
 {
     public function resolveRequestFactory(): RequestFactoryInterface;

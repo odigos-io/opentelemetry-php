@@ -9,8 +9,7 @@ class ApcWrapper
      *
      * @var bool
      */
-    protected $apcu = false;
-
+    protected $apcu = \false;
     /**
      * Create a new APC wrapper instance.
      *
@@ -20,7 +19,6 @@ class ApcWrapper
     {
         $this->apcu = function_exists('apcu_fetch');
     }
-
     /**
      * Get an item from the cache.
      *
@@ -30,10 +28,8 @@ class ApcWrapper
     public function get($key)
     {
         $fetchedValue = $this->apcu ? apcu_fetch($key, $success) : apc_fetch($key, $success);
-
         return $success ? $fetchedValue : null;
     }
-
     /**
      * Store an item in the cache.
      *
@@ -46,7 +42,6 @@ class ApcWrapper
     {
         return $this->apcu ? apcu_store($key, $value, $seconds) : apc_store($key, $value, $seconds);
     }
-
     /**
      * Increment the value of an item in the cache.
      *
@@ -58,7 +53,6 @@ class ApcWrapper
     {
         return $this->apcu ? apcu_inc($key, $value) : apc_inc($key, $value);
     }
-
     /**
      * Decrement the value of an item in the cache.
      *
@@ -70,7 +64,6 @@ class ApcWrapper
     {
         return $this->apcu ? apcu_dec($key, $value) : apc_dec($key, $value);
     }
-
     /**
      * Remove an item from the cache.
      *
@@ -81,7 +74,6 @@ class ApcWrapper
     {
         return $this->apcu ? apcu_delete($key) : apc_delete($key);
     }
-
     /**
      * Remove all items from the cache.
      *

@@ -2,7 +2,7 @@
 
 namespace Illuminate\Cache\Events;
 
-class RetrievingManyKeys extends CacheEvent
+class RetrievingManyKeys extends \Illuminate\Cache\Events\CacheEvent
 {
     /**
      * The keys that are being retrieved.
@@ -10,7 +10,6 @@ class RetrievingManyKeys extends CacheEvent
      * @var array
      */
     public $keys;
-
     /**
      * Create a new event instance.
      *
@@ -21,7 +20,6 @@ class RetrievingManyKeys extends CacheEvent
     public function __construct($storeName, $keys, array $tags = [])
     {
         parent::__construct($storeName, $keys[0] ?? '', $tags);
-
         $this->keys = $keys;
     }
 }

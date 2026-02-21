@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright 2023-present MongoDB, Inc.
  *
@@ -14,7 +15,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 namespace MongoDB\Operation;
 
 use MongoDB\Driver\Command;
@@ -22,9 +22,7 @@ use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
 use MongoDB\Driver\Server;
 use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\Exception\UnsupportedException;
-
 use function MongoDB\is_document;
-
 /**
  * Operation for the createIndexes command.
  *
@@ -34,7 +32,6 @@ use function MongoDB\is_document;
 final class UpdateSearchIndex
 {
     private object $definition;
-
     /**
      * Constructs a createSearchIndexes command.
      *
@@ -50,14 +47,11 @@ final class UpdateSearchIndex
         if ($name === '') {
             throw new InvalidArgumentException('Index name cannot be empty');
         }
-
-        if (! is_document($definition)) {
+        if (!is_document($definition)) {
             throw InvalidArgumentException::expectedDocumentType('$definition', $definition);
         }
-
         $this->definition = (object) $definition;
     }
-
     /**
      * Execute the operation.
      *
@@ -66,16 +60,10 @@ final class UpdateSearchIndex
      */
     public function execute(Server $server): void
     {
-        $cmd = [
-            'updateSearchIndex' => $this->collectionName,
-            'name' => $this->name,
-            'definition' => $this->definition,
-        ];
-
+        $cmd = ['updateSearchIndex' => $this->collectionName, 'name' => $this->name, 'definition' => $this->definition];
         if (isset($this->options['comment'])) {
             $cmd['comment'] = $this->options['comment'];
         }
-
         $server->executeCommand($this->databaseName, new Command($cmd));
     }
 }

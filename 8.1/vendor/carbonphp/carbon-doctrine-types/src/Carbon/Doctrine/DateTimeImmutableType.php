@@ -2,14 +2,12 @@
 
 namespace Carbon\Doctrine;
 
-use Carbon\CarbonImmutable;
+use Odigos\Carbon\CarbonImmutable;
 use Doctrine\DBAL\Types\VarDateTimeImmutableType;
-
-class DateTimeImmutableType extends VarDateTimeImmutableType implements CarbonDoctrineType
+class DateTimeImmutableType extends VarDateTimeImmutableType implements \Carbon\Doctrine\CarbonDoctrineType
 {
     /** @use CarbonTypeConverter<CarbonImmutable> */
-    use CarbonTypeConverter;
-
+    use \Carbon\Doctrine\CarbonTypeConverter;
     /**
      * @return class-string<CarbonImmutable>
      */

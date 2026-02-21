@@ -1,12 +1,10 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\API\Trace;
 
 use Closure;
 use Throwable;
-
 /**
  * Executes the given closure within the provided span.
  *
@@ -20,22 +18,19 @@ use Throwable;
  *
  * @phpstan-ignore-next-line
  */
-function trace(SpanInterface $span, Closure $closure, iterable $args = [])
+function trace(\OpenTelemetry\API\Trace\SpanInterface $span, Closure $closure, iterable $args = [])
 {
     $s = $span;
     $c = $closure;
     $a = $args;
     unset($span, $closure, $args);
-
     $scope = $s->activate();
-
     try {
         /** @psalm-suppress InvalidArgument */
-        return $c(...$a, ...($a = []));
+        return $c(...$a, ...$a = []);
     } catch (Throwable $e) {
-        $s->setStatus(StatusCode::STATUS_ERROR, $e->getMessage());
-        $s->recordException($e, ['exception.escaped' => true]);
-
+        $s->setStatus(\OpenTelemetry\API\Trace\StatusCode::STATUS_ERROR, $e->getMessage());
+        $s->recordException($e, ['exception.escaped' => \true]);
         throw $e;
     } finally {
         $scope->detach();

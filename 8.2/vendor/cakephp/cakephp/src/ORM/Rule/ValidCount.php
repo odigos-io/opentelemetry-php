@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -19,7 +19,6 @@ namespace Cake\ORM\Rule;
 use Cake\Datasource\EntityInterface;
 use Cake\Validation\Validation;
 use Countable;
-
 /**
  * Validates the count of associated records.
  */
@@ -31,7 +30,6 @@ class ValidCount
      * @var string
      */
     protected string $_field;
-
     /**
      * Constructor.
      *
@@ -41,7 +39,6 @@ class ValidCount
     {
         $this->_field = $field;
     }
-
     /**
      * Performs the count check
      *
@@ -53,9 +50,8 @@ class ValidCount
     {
         $value = $entity->{$this->_field};
         if (!is_array($value) && !$value instanceof Countable) {
-            return false;
+            return \false;
         }
-
         return Validation::comparison(count($value), $options['operator'], $options['count']);
     }
 }

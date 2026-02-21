@@ -1,4 +1,5 @@
 <?php
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -15,15 +16,10 @@
 namespace Cake\Test\Fixture;
 
 use Cake\TestSuite\Fixture\TestFixture;
-
 /**
  * Counter Cache Test Fixtures
  */
 class CounterCacheCommentsFixture extends TestFixture
 {
-    public array $records = [
-        ['title' => 'First Comment', 'user_id' => 1],
-        ['title' => 'Second Comment', 'user_id' => 1],
-        ['title' => 'Third Comment', 'user_id' => 2],
-    ];
+    public array $records = [['title' => 'First Comment', 'user_id' => 1], ['title' => 'Second Comment', 'user_id' => 1], ['title' => 'Third Comment', 'user_id' => 2]];
 }

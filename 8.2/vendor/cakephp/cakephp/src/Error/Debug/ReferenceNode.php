@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -23,18 +23,16 @@ namespace Cake\Error\Debug;
  * a reference node can be used after an object has been seen the
  * first time.
  */
-class ReferenceNode implements NodeInterface
+class ReferenceNode implements \Cake\Error\Debug\NodeInterface
 {
     /**
      * @var string
      */
     private string $class;
-
     /**
      * @var int
      */
     private int $id;
-
     /**
      * Constructor
      *
@@ -46,7 +44,6 @@ class ReferenceNode implements NodeInterface
         $this->class = $class;
         $this->id = $id;
     }
-
     /**
      * Get the class name/value
      *
@@ -56,7 +53,6 @@ class ReferenceNode implements NodeInterface
     {
         return $this->class;
     }
-
     /**
      * Get the reference id for this node.
      *
@@ -66,7 +62,6 @@ class ReferenceNode implements NodeInterface
     {
         return $this->id;
     }
-
     /**
      * @inheritDoc
      */

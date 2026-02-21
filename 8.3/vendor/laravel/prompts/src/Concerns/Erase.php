@@ -11,21 +11,18 @@ trait Erase
     {
         $clear = '';
         for ($i = 0; $i < $count; $i++) {
-            $clear .= "\e[2K".($i < $count - 1 ? "\e[{$count}A" : '');
+            $clear .= "\x1b[2K" . ($i < $count - 1 ? "\x1b[{$count}A" : '');
         }
-
         if ($count) {
-            $clear .= "\e[G";
+            $clear .= "\x1b[G";
         }
-
         static::writeDirectly($clear);
     }
-
     /**
      * Erase from cursor until end of screen.
      */
     public function eraseDown(): void
     {
-        static::writeDirectly("\e[J");
+        static::writeDirectly("\x1b[J");
     }
 }

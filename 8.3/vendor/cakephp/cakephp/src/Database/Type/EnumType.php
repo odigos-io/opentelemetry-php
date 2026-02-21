@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -27,13 +27,12 @@ use ReflectionEnum;
 use ReflectionException;
 use TypeError;
 use ValueError;
-
 /**
  * Enum type converter.
  *
  * Use to convert string data between PHP and the database types.
  */
-class EnumType extends BaseType
+class EnumType extends \Cake\Database\Type\BaseType
 {
     /**
      * The type of the enum which is either string or int
@@ -41,46 +40,31 @@ class EnumType extends BaseType
      * @var string
      */
     protected string $backingType;
-
     /**
      * The enum classname which is associated to the type instance
      *
      * @var class-string<\BackedEnum>
      */
     protected string $enumClassName;
-
     /**
      * @param string $name The name identifying this type
      * @param class-string<\BackedEnum> $enumClassName The associated enum class name
      */
-    public function __construct(
-        string $name,
-        string $enumClassName,
-    ) {
+    public function __construct(string $name, string $enumClassName)
+    {
         parent::__construct($name);
         $this->enumClassName = $enumClassName;
-
         try {
             $reflectionEnum = new ReflectionEnum($enumClassName);
         } catch (ReflectionException $e) {
-            throw new DatabaseException(sprintf(
-                'Unable to use `%s` for type `%s`. %s.',
-                $enumClassName,
-                $name,
-                $e->getMessage(),
-            ));
+            throw new DatabaseException(sprintf('Unable to use `%s` for type `%s`. %s.', $enumClassName, $name, $e->getMessage()));
         }
-
         $namedType = $reflectionEnum->getBackingType();
         if ($namedType == null) {
-            throw new DatabaseException(
-                sprintf('Unable to use enum `%s` for type `%s`, must be a backed enum.', $enumClassName, $name),
-            );
+            throw new DatabaseException(sprintf('Unable to use enum `%s` for type `%s`, must be a backed enum.', $enumClassName, $name));
         }
-
-        $this->backingType = (string)$namedType;
+        $this->backingType = (string) $namedType;
     }
-
     /**
      * Convert enum instances into the database format.
      *
@@ -94,39 +78,24 @@ class EnumType extends BaseType
         if ($value === null) {
             return null;
         }
-
         if ($value instanceof $this->enumClassName) {
             return $value->value;
         }
-
         if ($this->backingType === 'int' && is_string($value)) {
-            $intVal = filter_var($value, FILTER_VALIDATE_INT);
-            if ($intVal !== false) {
+            $intVal = filter_var($value, \FILTER_VALIDATE_INT);
+            if ($intVal !== \false) {
                 $value = $intVal;
             }
         }
-
         try {
             return $this->enumClassName::from($value)->value;
-        } catch (ValueError | TypeError $exception) {
+        } catch (ValueError|TypeError $exception) {
             if ($exception instanceof TypeError) {
-                throw new InvalidArgumentException(sprintf(
-                    'Given value `%s` of type `%s` does not match associated `%s` backed enum in `%s`',
-                    print_r($value, true),
-                    get_debug_type($value),
-                    $this->backingType,
-                    $this->enumClassName,
-                ));
+                throw new InvalidArgumentException(sprintf('Given value `%s` of type `%s` does not match associated `%s` backed enum in `%s`', print_r($value, \true), get_debug_type($value), $this->backingType, $this->enumClassName));
             }
-
-            throw new InvalidArgumentException(sprintf(
-                '`%s` is not a valid value for `%s`',
-                $value,
-                $this->enumClassName,
-            ));
+            throw new InvalidArgumentException(sprintf('`%s` is not a valid value for `%s`', $value, $this->enumClassName));
         }
     }
-
     /**
      * Transform DB value to backed enum instance
      *
@@ -139,17 +108,14 @@ class EnumType extends BaseType
         if ($value === null) {
             return null;
         }
-
         if ($this->backingType === 'int' && is_string($value)) {
-            $intVal = filter_var($value, FILTER_VALIDATE_INT);
-            if ($intVal !== false) {
+            $intVal = filter_var($value, \FILTER_VALIDATE_INT);
+            if ($intVal !== \false) {
                 $value = $intVal;
             }
         }
-
         return $this->enumClassName::from($value);
     }
-
     /**
      * @inheritDoc
      */
@@ -158,10 +124,8 @@ class EnumType extends BaseType
         if ($this->backingType === 'int') {
             return PDO::PARAM_INT;
         }
-
         return PDO::PARAM_STR;
     }
-
     /**
      * Marshals request data
      *
@@ -173,28 +137,23 @@ class EnumType extends BaseType
         if ($value === null) {
             return null;
         }
-
         if ($value instanceof $this->enumClassName) {
             return $value;
         }
-
         if ($this->backingType === 'int') {
             if ($value === '') {
                 return null;
             }
-
             if (is_numeric($value)) {
-                $value = (int)$value;
+                $value = (int) $value;
             }
         }
-
         try {
             return $this->enumClassName::from($value);
-        } catch (ValueError | TypeError) {
+        } catch (ValueError|TypeError) {
             return null;
         }
     }
-
     /**
      * Create an `EnumType` that is paired with the provided `$enumClassName`.
      *
@@ -211,12 +170,10 @@ class EnumType extends BaseType
     public static function from(string $enumClassName): string
     {
         $typeName = 'enum-' . strtolower(Text::slug($enumClassName));
-        $instance = new EnumType($typeName, $enumClassName);
+        $instance = new \Cake\Database\Type\EnumType($typeName, $enumClassName);
         TypeFactory::set($typeName, $instance);
-
         return $typeName;
     }
-
     /**
      * @return class-string<\BackedEnum>
      */

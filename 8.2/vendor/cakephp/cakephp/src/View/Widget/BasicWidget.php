@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -18,7 +18,6 @@ namespace Cake\View\Widget;
 
 use Cake\View\Form\ContextInterface;
 use Cake\View\StringTemplate;
-
 /**
  * Basic input class.
  *
@@ -26,7 +25,7 @@ use Cake\View\StringTemplate;
  * input elements like hidden, text, email, tel and other
  * types.
  */
-class BasicWidget implements WidgetInterface
+class BasicWidget implements \Cake\View\Widget\WidgetInterface
 {
     /**
      * StringTemplate instance.
@@ -34,20 +33,12 @@ class BasicWidget implements WidgetInterface
      * @var \Cake\View\StringTemplate
      */
     protected StringTemplate $_templates;
-
     /**
      * Data defaults.
      *
      * @var array<string, mixed>
      */
-    protected array $defaults = [
-        'name' => '',
-        'val' => null,
-        'type' => 'text',
-        'escape' => true,
-        'templateVars' => [],
-    ];
-
+    protected array $defaults = ['name' => '', 'val' => null, 'type' => 'text', 'escape' => \true, 'templateVars' => []];
     /**
      * Constructor.
      *
@@ -57,7 +48,6 @@ class BasicWidget implements WidgetInterface
     {
         $this->_templates = $templates;
     }
-
     /**
      * Render a text widget or other simple widget like email/tel/number.
      *
@@ -76,40 +66,24 @@ class BasicWidget implements WidgetInterface
     public function render(array $data, ContextInterface $context): string
     {
         $data = $this->mergeDefaults($data, $context);
-
         $data['value'] = $data['val'];
         unset($data['val']);
-        if ($data['value'] === false) {
+        if ($data['value'] === \false) {
             // explicitly convert to 0 to avoid empty string which is marshaled as null
             $data['value'] = '0';
         }
-
         $fieldName = $data['fieldName'] ?? null;
         if ($fieldName) {
             if ($data['type'] === 'number' && !isset($data['step'])) {
                 $data = $this->setStep($data, $context, $fieldName);
             }
-
             $typesWithMaxLength = ['text', 'email', 'tel', 'url', 'search'];
-            if (
-                !array_key_exists('maxlength', $data)
-                && in_array($data['type'], $typesWithMaxLength, true)
-            ) {
+            if (!array_key_exists('maxlength', $data) && in_array($data['type'], $typesWithMaxLength, \true)) {
                 $data = $this->setMaxLength($data, $context, $fieldName);
             }
         }
-
-        return $this->_templates->format('input', [
-            'name' => $data['name'],
-            'type' => $data['type'],
-            'templateVars' => $data['templateVars'],
-            'attrs' => $this->_templates->formatAttributes(
-                $data,
-                ['name', 'type'],
-            ),
-        ]);
+        return $this->_templates->format('input', ['name' => $data['name'], 'type' => $data['type'], 'templateVars' => $data['templateVars'], 'attrs' => $this->_templates->formatAttributes($data, ['name', 'type'])]);
     }
-
     /**
      * Merge default values with supplied data.
      *
@@ -120,14 +94,11 @@ class BasicWidget implements WidgetInterface
     protected function mergeDefaults(array $data, ContextInterface $context): array
     {
         $data += $this->defaults;
-
         if (isset($data['fieldName']) && !array_key_exists('required', $data)) {
             return $this->setRequired($data, $context, $data['fieldName']);
         }
-
         return $data;
     }
-
     /**
      * Set value for "required" attribute if applicable.
      *
@@ -138,22 +109,11 @@ class BasicWidget implements WidgetInterface
      */
     protected function setRequired(array $data, ContextInterface $context, string $fieldName): array
     {
-        if (
-            empty($data['disabled'])
-            && (
-                (isset($data['type'])
-                    && $data['type'] !== 'hidden'
-                )
-                || !isset($data['type'])
-            )
-            && $context->isRequired($fieldName)
-        ) {
-            $data['required'] = true;
+        if (empty($data['disabled']) && (isset($data['type']) && $data['type'] !== 'hidden' || !isset($data['type'])) && $context->isRequired($fieldName)) {
+            $data['required'] = \true;
         }
-
         return $data;
     }
-
     /**
      * Set value for "maxlength" attribute if applicable.
      *
@@ -168,10 +128,8 @@ class BasicWidget implements WidgetInterface
         if ($maxLength !== null) {
             $data['maxlength'] = min($maxLength, 100000);
         }
-
         return $data;
     }
-
     /**
      * Set value for "step" attribute if applicable.
      *
@@ -184,17 +142,14 @@ class BasicWidget implements WidgetInterface
     {
         $dbType = $context->type($fieldName);
         $fieldDef = $context->attributes($fieldName);
-
         if ($dbType === 'decimal' && isset($fieldDef['precision'])) {
             $decimalPlaces = $fieldDef['precision'];
             $data['step'] = sprintf('%.' . $decimalPlaces . 'F', pow(10, -1 * $decimalPlaces));
         } elseif ($dbType === 'float') {
             $data['step'] = 'any';
         }
-
         return $data;
     }
-
     /**
      * @inheritDoc
      */
@@ -203,7 +158,6 @@ class BasicWidget implements WidgetInterface
         if (!isset($data['name']) || $data['name'] === '') {
             return [];
         }
-
         return [$data['name']];
     }
 }

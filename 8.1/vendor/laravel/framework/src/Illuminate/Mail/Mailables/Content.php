@@ -3,18 +3,15 @@
 namespace Illuminate\Mail\Mailables;
 
 use Illuminate\Support\Traits\Conditionable;
-
 class Content
 {
     use Conditionable;
-
     /**
      * The Blade view that should be rendered for the mailable.
      *
      * @var string|null
      */
     public $view;
-
     /**
      * The Blade view that should be rendered for the mailable.
      *
@@ -23,35 +20,30 @@ class Content
      * @var string|null
      */
     public $html;
-
     /**
      * The Blade view that represents the text version of the message.
      *
      * @var string|null
      */
     public $text;
-
     /**
      * The Blade view that represents the Markdown version of the message.
      *
      * @var string|null
      */
     public $markdown;
-
     /**
      * The pre-rendered HTML of the message.
      *
      * @var string|null
      */
     public $htmlString;
-
     /**
      * The message's view data.
      *
      * @var array
      */
     public $with;
-
     /**
      * Create a new content definition.
      *
@@ -73,7 +65,6 @@ class Content
         $this->with = $with;
         $this->htmlString = $htmlString;
     }
-
     /**
      * Set the view for the message.
      *
@@ -83,10 +74,8 @@ class Content
     public function view(string $view)
     {
         $this->view = $view;
-
         return $this;
     }
-
     /**
      * Set the view for the message.
      *
@@ -97,7 +86,6 @@ class Content
     {
         return $this->view($view);
     }
-
     /**
      * Set the plain text view for the message.
      *
@@ -107,10 +95,8 @@ class Content
     public function text(string $view)
     {
         $this->text = $view;
-
         return $this;
     }
-
     /**
      * Set the Markdown view for the message.
      *
@@ -120,10 +106,8 @@ class Content
     public function markdown(string $view)
     {
         $this->markdown = $view;
-
         return $this;
     }
-
     /**
      * Set the pre-rendered HTML for the message.
      *
@@ -133,10 +117,8 @@ class Content
     public function htmlString(string $html)
     {
         $this->htmlString = $html;
-
         return $this;
     }
-
     /**
      * Add a piece of view data to the message.
      *
@@ -151,7 +133,6 @@ class Content
         } else {
             $this->with[$key] = $value;
         }
-
         return $this;
     }
 }

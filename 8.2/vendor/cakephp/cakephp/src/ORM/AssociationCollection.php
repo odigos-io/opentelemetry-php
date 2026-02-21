@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -26,7 +26,6 @@ use IteratorAggregate;
 use Traversable;
 use function Cake\Core\namespaceSplit;
 use function Cake\Core\pluginSplit;
-
 /**
  * A container/collection for association classes.
  *
@@ -37,16 +36,14 @@ use function Cake\Core\pluginSplit;
  */
 class AssociationCollection implements IteratorAggregate
 {
-    use AssociationsNormalizerTrait;
+    use \Cake\ORM\AssociationsNormalizerTrait;
     use LocatorAwareTrait;
-
     /**
      * Stored associations
      *
      * @var array<string, \Cake\ORM\Association>
      */
     protected array $_items = [];
-
     /**
      * Constructor.
      *
@@ -61,7 +58,6 @@ class AssociationCollection implements IteratorAggregate
             $this->_tableLocator = $tableLocator;
         }
     }
-
     /**
      * Add an association to the collection
      *
@@ -76,17 +72,14 @@ class AssociationCollection implements IteratorAggregate
      * @phpstan-param T $association
      * @phpstan-return T
      */
-    public function add(string $alias, Association $association): Association
+    public function add(string $alias, \Cake\ORM\Association $association): \Cake\ORM\Association
     {
         [, $alias] = pluginSplit($alias);
-
         if (isset($this->_items[$alias])) {
             throw new CakeException(sprintf('Association alias `%s` is already set.', $alias));
         }
-
         return $this->_items[$alias] = $association;
     }
-
     /**
      * Creates and adds the Association object to this collection.
      *
@@ -99,45 +92,37 @@ class AssociationCollection implements IteratorAggregate
      * @phpstan-param class-string<T> $className
      * @phpstan-return T
      */
-    public function load(string $className, string $associated, array $options = []): Association
+    public function load(string $className, string $associated, array $options = []): \Cake\ORM\Association
     {
-        $options += [
-            'tableLocator' => $this->getTableLocator(),
-        ];
-
+        $options += ['tableLocator' => $this->getTableLocator()];
         $association = new $className($associated, $options);
-
         return $this->add($association->getName(), $association);
     }
-
     /**
      * Fetch an attached association by name.
      *
      * @param string $alias The association alias to get.
      * @return \Cake\ORM\Association|null Either the association or null.
      */
-    public function get(string $alias): ?Association
+    public function get(string $alias): ?\Cake\ORM\Association
     {
         return $this->_items[$alias] ?? null;
     }
-
     /**
      * Fetch an association by property name.
      *
      * @param string $prop The property to find an association by.
      * @return \Cake\ORM\Association|null Either the association or null.
      */
-    public function getByProperty(string $prop): ?Association
+    public function getByProperty(string $prop): ?\Cake\ORM\Association
     {
         foreach ($this->_items as $assoc) {
             if ($assoc->getProperty() === $prop) {
                 return $assoc;
             }
         }
-
         return null;
     }
-
     /**
      * Check for an attached association by name.
      *
@@ -148,7 +133,6 @@ class AssociationCollection implements IteratorAggregate
     {
         return isset($this->_items[$alias]);
     }
-
     /**
      * Get the names of all the associations in the collection.
      *
@@ -158,7 +142,6 @@ class AssociationCollection implements IteratorAggregate
     {
         return array_keys($this->_items);
     }
-
     /**
      * Get an array of associations matching a specific type.
      *
@@ -169,17 +152,13 @@ class AssociationCollection implements IteratorAggregate
      */
     public function getByType(array|string $class): array
     {
-        $class = array_map('strtolower', (array)$class);
-
-        $out = array_filter($this->_items, function (Association $assoc) use ($class) {
+        $class = array_map('strtolower', (array) $class);
+        $out = array_filter($this->_items, function (\Cake\ORM\Association $assoc) use ($class) {
             [, $name] = namespaceSplit($assoc::class);
-
-            return in_array(strtolower($name), $class, true);
+            return in_array(strtolower($name), $class, \true);
         });
-
         return array_values($out);
     }
-
     /**
      * Drop/remove an association.
      *
@@ -192,7 +171,6 @@ class AssociationCollection implements IteratorAggregate
     {
         unset($this->_items[$alias]);
     }
-
     /**
      * Remove all registered associations.
      *
@@ -206,7 +184,6 @@ class AssociationCollection implements IteratorAggregate
             $this->remove($alias);
         }
     }
-
     /**
      * Save all the associations that are parents of the given entity.
      *
@@ -220,15 +197,13 @@ class AssociationCollection implements IteratorAggregate
      * @param array<string, mixed> $options The options for the save operation.
      * @return bool Success
      */
-    public function saveParents(Table $table, EntityInterface $entity, array $associations, array $options = []): bool
+    public function saveParents(\Cake\ORM\Table $table, EntityInterface $entity, array $associations, array $options = []): bool
     {
         if (!$associations) {
-            return true;
+            return \true;
         }
-
-        return $this->_saveAssociations($table, $entity, $associations, $options, false);
+        return $this->_saveAssociations($table, $entity, $associations, $options, \false);
     }
-
     /**
      * Save all the associations that are children of the given entity.
      *
@@ -242,15 +217,13 @@ class AssociationCollection implements IteratorAggregate
      * @param array<string, mixed> $options The options for the save operation.
      * @return bool Success
      */
-    public function saveChildren(Table $table, EntityInterface $entity, array $associations, array $options): bool
+    public function saveChildren(\Cake\ORM\Table $table, EntityInterface $entity, array $associations, array $options): bool
     {
         if (!$associations) {
-            return true;
+            return \true;
         }
-
-        return $this->_saveAssociations($table, $entity, $associations, $options, true);
+        return $this->_saveAssociations($table, $entity, $associations, $options, \true);
     }
-
     /**
      * Helper method for saving an association's data.
      *
@@ -263,13 +236,8 @@ class AssociationCollection implements IteratorAggregate
      * @return bool Success
      * @throws \InvalidArgumentException When an unknown alias is used.
      */
-    protected function _saveAssociations(
-        Table $table,
-        EntityInterface $entity,
-        array $associations,
-        array $options,
-        bool $owningSide,
-    ): bool {
+    protected function _saveAssociations(\Cake\ORM\Table $table, EntityInterface $entity, array $associations, array $options, bool $owningSide): bool
+    {
         unset($options['associated']);
         foreach ($associations as $alias => $nested) {
             if (is_int($alias)) {
@@ -278,24 +246,18 @@ class AssociationCollection implements IteratorAggregate
             }
             $relation = $this->get($alias);
             if (!$relation) {
-                $msg = sprintf(
-                    'Cannot save `%s`, it is not associated to `%s`.',
-                    $alias,
-                    $table->getAlias(),
-                );
+                $msg = sprintf('Cannot save `%s`, it is not associated to `%s`.', $alias, $table->getAlias());
                 throw new InvalidArgumentException($msg);
             }
             if ($relation->isOwningSide($table) !== $owningSide) {
                 continue;
             }
             if (!$this->_save($relation, $entity, $nested, $options)) {
-                return false;
+                return \false;
             }
         }
-
-        return true;
+        return \true;
     }
-
     /**
      * Helper method for saving an association's data.
      *
@@ -305,22 +267,16 @@ class AssociationCollection implements IteratorAggregate
      * @param array<string, mixed> $options Original options
      * @return bool Success
      */
-    protected function _save(
-        Association $association,
-        EntityInterface $entity,
-        array $nested,
-        array $options,
-    ): bool {
+    protected function _save(\Cake\ORM\Association $association, EntityInterface $entity, array $nested, array $options): bool
+    {
         if (!$entity->isDirty($association->getProperty())) {
-            return true;
+            return \true;
         }
         if ($nested) {
             $options = $nested + $options;
         }
-
-        return (bool)$association->saveAssociated($entity, $options);
+        return (bool) $association->saveAssociated($entity, $options);
     }
-
     /**
      * Cascade a delete across the various associations.
      * Cascade first across associations for which cascadeCallbacks is true.
@@ -339,20 +295,17 @@ class AssociationCollection implements IteratorAggregate
             }
             $success = $assoc->cascadeDelete($entity, $options);
             if (!$success) {
-                return false;
+                return \false;
             }
         }
-
         foreach ($noCascade as $assoc) {
             $success = $assoc->cascadeDelete($entity, $options);
             if (!$success) {
-                return false;
+                return \false;
             }
         }
-
-        return true;
+        return \true;
     }
-
     /**
      * Returns an associative array of association names out a mixed
      * array. If true is passed, then it returns all association names
@@ -363,17 +316,14 @@ class AssociationCollection implements IteratorAggregate
      */
     public function normalizeKeys(array|string|bool $keys): array
     {
-        if ($keys === true) {
+        if ($keys === \true) {
             $keys = $this->keys();
         }
-
         if (!$keys) {
             return [];
         }
-
         return $this->_normalizeAssociations($keys);
     }
-
     /**
      * Allow looping through the associations
      *

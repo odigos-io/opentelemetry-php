@@ -178,13 +178,6 @@ jobs:
 
           # Update paths in configuration files
           sed -i "s|/var/odigos/php/${{ matrix.php-version }}|$(pwd)/${{ matrix.php-version }}|g" ${{ matrix.php-version }}/opentelemetry.ini
-          sed -i "s|/var/odigos/php/${{ matrix.php-version }}|$(pwd)/${{ matrix.php-version }}|g" ${{ matrix.php-version }}/preload.php
-
-          # Fix preload user for GitHub Actions (runs as 'runner', not 'www-data')
-          sed -i "s|opcache.preload_user=www-data|opcache.preload_user=runner|g" ${{ matrix.php-version }}/opentelemetry.ini
-
-          # Remove preload settings (not needed for CLI/built-in server testing)
-          sed -i '/opcache.preload/d' ${{ matrix.php-version }}/opentelemetry.ini
 
           # Show the final configuration
           echo "=== OpenTelemetry INI Configuration ==="
@@ -198,8 +191,9 @@ jobs:
           PHP_INI_SCAN_DIR=$(pwd)/${{ matrix.php-version }}: php -m | grep opentelemetry || (echo "⚠️ OpenTelemetry extension not loaded" && exit 1)
           echo "✅ OpenTelemetry extension loaded"
 
-          # Save the INI scan dir for later use (with trailing colon to preserve defaults)
-          echo "PHP_INI_SCAN_DIR=$(pwd)/${{ matrix.php-version }}:" >> $GITHUB_ENV
+          # NOTE: PHP_INI_SCAN_DIR is NOT persisted here — the agent's auto_prepend_file
+          # would interfere with Composer operations in subsequent framework setup steps.
+          # It is set in the "Start Application" step instead.
 
       - name: Setup Symfony Application
         if: matrix.framework == 'symfony'
@@ -258,6 +252,12 @@ jobs:
 
       - name: Start Application
         run: |
+          # Activate the agent INI now (after framework setup steps are done).
+          # This was deferred from Configure Agent to avoid the auto_prepend_file
+          # interfering with Composer operations during framework setup.
+          echo "PHP_INI_SCAN_DIR=$(pwd)/${{ matrix.php-version }}:" >> $GITHUB_ENV
+          export PHP_INI_SCAN_DIR="$(pwd)/${{ matrix.php-version }}:"
+
           # Determine the public directory and test route based on framework
           case "${{ matrix.framework }}" in
             symfony)

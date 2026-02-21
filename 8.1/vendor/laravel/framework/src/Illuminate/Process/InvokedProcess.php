@@ -6,7 +6,6 @@ use Illuminate\Contracts\Process\InvokedProcess as InvokedProcessContract;
 use Illuminate\Process\Exceptions\ProcessTimedOutException;
 use Symfony\Component\Process\Exception\ProcessTimedOutException as SymfonyTimeoutException;
 use Symfony\Component\Process\Process;
-
 class InvokedProcess implements InvokedProcessContract
 {
     /**
@@ -15,7 +14,6 @@ class InvokedProcess implements InvokedProcessContract
      * @var \Symfony\Component\Process\Process
      */
     protected $process;
-
     /**
      * Create a new invoked process instance.
      *
@@ -26,7 +24,6 @@ class InvokedProcess implements InvokedProcessContract
     {
         $this->process = $process;
     }
-
     /**
      * Get the process ID if the process is still running.
      *
@@ -36,7 +33,6 @@ class InvokedProcess implements InvokedProcessContract
     {
         return $this->process->getPid();
     }
-
     /**
      * Send a signal to the process.
      *
@@ -46,10 +42,8 @@ class InvokedProcess implements InvokedProcessContract
     public function signal(int $signal)
     {
         $this->process->signal($signal);
-
         return $this;
     }
-
     /**
      * Determine if the process is still running.
      *
@@ -59,7 +53,6 @@ class InvokedProcess implements InvokedProcessContract
     {
         return $this->process->isRunning();
     }
-
     /**
      * Get the standard output for the process.
      *
@@ -69,7 +62,6 @@ class InvokedProcess implements InvokedProcessContract
     {
         return $this->process->getOutput();
     }
-
     /**
      * Get the error output for the process.
      *
@@ -79,7 +71,6 @@ class InvokedProcess implements InvokedProcessContract
     {
         return $this->process->getErrorOutput();
     }
-
     /**
      * Get the latest standard output for the process.
      *
@@ -89,7 +80,6 @@ class InvokedProcess implements InvokedProcessContract
     {
         return $this->process->getIncrementalOutput();
     }
-
     /**
      * Get the latest error output for the process.
      *
@@ -99,7 +89,6 @@ class InvokedProcess implements InvokedProcessContract
     {
         return $this->process->getIncrementalErrorOutput();
     }
-
     /**
      * Wait for the process to finish.
      *
@@ -112,10 +101,9 @@ class InvokedProcess implements InvokedProcessContract
     {
         try {
             $this->process->wait($output);
-
-            return new ProcessResult($this->process);
+            return new \Illuminate\Process\ProcessResult($this->process);
         } catch (SymfonyTimeoutException $e) {
-            throw new ProcessTimedOutException($e, new ProcessResult($this->process));
+            throw new ProcessTimedOutException($e, new \Illuminate\Process\ProcessResult($this->process));
         }
     }
 }

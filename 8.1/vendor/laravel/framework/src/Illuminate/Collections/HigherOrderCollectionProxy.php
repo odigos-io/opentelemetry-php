@@ -13,14 +13,12 @@ class HigherOrderCollectionProxy
      * @var \Illuminate\Support\Enumerable
      */
     protected $collection;
-
     /**
      * The method being proxied.
      *
      * @var string
      */
     protected $method;
-
     /**
      * Create a new proxy instance.
      *
@@ -28,12 +26,11 @@ class HigherOrderCollectionProxy
      * @param  string  $method
      * @return void
      */
-    public function __construct(Enumerable $collection, $method)
+    public function __construct(\Illuminate\Support\Enumerable $collection, $method)
     {
         $this->method = $method;
         $this->collection = $collection;
     }
-
     /**
      * Proxy accessing an attribute onto the collection items.
      *
@@ -46,7 +43,6 @@ class HigherOrderCollectionProxy
             return is_array($value) ? $value[$key] : $value->{$key};
         });
     }
-
     /**
      * Proxy a method call onto the collection items.
      *

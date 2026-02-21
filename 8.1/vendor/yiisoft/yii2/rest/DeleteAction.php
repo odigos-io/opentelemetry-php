@@ -1,15 +1,14 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\rest;
 
-use Yii;
+use Odigos\Yii;
 use yii\web\ServerErrorHttpException;
-
 /**
  * DeleteAction implements the API endpoint for deleting a model.
  *
@@ -21,7 +20,7 @@ use yii\web\ServerErrorHttpException;
  * @template T of Controller
  * @extends Action<T>
  */
-class DeleteAction extends Action
+class DeleteAction extends \yii\rest\Action
 {
     /**
      * Deletes a model.
@@ -31,15 +30,12 @@ class DeleteAction extends Action
     public function run($id)
     {
         $model = $this->findModel($id);
-
         if ($this->checkAccess) {
             call_user_func($this->checkAccess, $this->id, $model);
         }
-
-        if ($model->delete() === false) {
+        if ($model->delete() === \false) {
             throw new ServerErrorHttpException('Failed to delete the object for unknown reason.');
         }
-
         Yii::$app->getResponse()->setStatusCode(204);
     }
 }

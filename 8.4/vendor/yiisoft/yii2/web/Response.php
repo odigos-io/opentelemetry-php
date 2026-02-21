@@ -1,13 +1,13 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\web;
 
-use Yii;
+use Odigos\Yii;
 use yii\base\InvalidArgumentException;
 use yii\base\InvalidConfigException;
 use yii\base\InvalidRouteException;
@@ -15,7 +15,6 @@ use yii\helpers\FileHelper;
 use yii\helpers\Inflector;
 use yii\helpers\StringHelper;
 use yii\helpers\Url;
-
 /**
  * The web Response class represents an HTTP response.
  *
@@ -159,80 +158,11 @@ class Response extends \yii\base\Response
     /**
      * @var bool whether the response has been sent. If this is true, calling [[send()]] will do nothing.
      */
-    public $isSent = false;
+    public $isSent = \false;
     /**
      * @var array list of HTTP status codes and the corresponding texts
      */
-    public static $httpStatuses = [
-        100 => 'Continue',
-        101 => 'Switching Protocols',
-        102 => 'Processing',
-        118 => 'Connection timed out',
-        200 => 'OK',
-        201 => 'Created',
-        202 => 'Accepted',
-        203 => 'Non-Authoritative',
-        204 => 'No Content',
-        205 => 'Reset Content',
-        206 => 'Partial Content',
-        207 => 'Multi-Status',
-        208 => 'Already Reported',
-        210 => 'Content Different',
-        226 => 'IM Used',
-        300 => 'Multiple Choices',
-        301 => 'Moved Permanently',
-        302 => 'Found',
-        303 => 'See Other',
-        304 => 'Not Modified',
-        305 => 'Use Proxy',
-        306 => 'Reserved',
-        307 => 'Temporary Redirect',
-        308 => 'Permanent Redirect',
-        310 => 'Too many Redirect',
-        400 => 'Bad Request',
-        401 => 'Unauthorized',
-        402 => 'Payment Required',
-        403 => 'Forbidden',
-        404 => 'Not Found',
-        405 => 'Method Not Allowed',
-        406 => 'Not Acceptable',
-        407 => 'Proxy Authentication Required',
-        408 => 'Request Time-out',
-        409 => 'Conflict',
-        410 => 'Gone',
-        411 => 'Length Required',
-        412 => 'Precondition Failed',
-        413 => 'Request Entity Too Large',
-        414 => 'Request-URI Too Long',
-        415 => 'Unsupported Media Type',
-        416 => 'Requested range unsatisfiable',
-        417 => 'Expectation failed',
-        418 => 'I\'m a teapot',
-        421 => 'Misdirected Request',
-        422 => 'Unprocessable entity',
-        423 => 'Locked',
-        424 => 'Method failure',
-        425 => 'Unordered Collection',
-        426 => 'Upgrade Required',
-        428 => 'Precondition Required',
-        429 => 'Too Many Requests',
-        431 => 'Request Header Fields Too Large',
-        449 => 'Retry With',
-        450 => 'Blocked by Windows Parental Controls',
-        451 => 'Unavailable For Legal Reasons',
-        500 => 'Internal Server Error',
-        501 => 'Not Implemented',
-        502 => 'Bad Gateway or Proxy Error',
-        503 => 'Service Unavailable',
-        504 => 'Gateway Time-out',
-        505 => 'HTTP Version not supported',
-        507 => 'Insufficient storage',
-        508 => 'Loop Detected',
-        509 => 'Bandwidth Limit Exceeded',
-        510 => 'Not Extended',
-        511 => 'Network Authentication Required',
-    ];
-
+    public static $httpStatuses = [100 => 'Continue', 101 => 'Switching Protocols', 102 => 'Processing', 118 => 'Connection timed out', 200 => 'OK', 201 => 'Created', 202 => 'Accepted', 203 => 'Non-Authoritative', 204 => 'No Content', 205 => 'Reset Content', 206 => 'Partial Content', 207 => 'Multi-Status', 208 => 'Already Reported', 210 => 'Content Different', 226 => 'IM Used', 300 => 'Multiple Choices', 301 => 'Moved Permanently', 302 => 'Found', 303 => 'See Other', 304 => 'Not Modified', 305 => 'Use Proxy', 306 => 'Reserved', 307 => 'Temporary Redirect', 308 => 'Permanent Redirect', 310 => 'Too many Redirect', 400 => 'Bad Request', 401 => 'Unauthorized', 402 => 'Payment Required', 403 => 'Forbidden', 404 => 'Not Found', 405 => 'Method Not Allowed', 406 => 'Not Acceptable', 407 => 'Proxy Authentication Required', 408 => 'Request Time-out', 409 => 'Conflict', 410 => 'Gone', 411 => 'Length Required', 412 => 'Precondition Failed', 413 => 'Request Entity Too Large', 414 => 'Request-URI Too Long', 415 => 'Unsupported Media Type', 416 => 'Requested range unsatisfiable', 417 => 'Expectation failed', 418 => 'I\'m a teapot', 421 => 'Misdirected Request', 422 => 'Unprocessable entity', 423 => 'Locked', 424 => 'Method failure', 425 => 'Unordered Collection', 426 => 'Upgrade Required', 428 => 'Precondition Required', 429 => 'Too Many Requests', 431 => 'Request Header Fields Too Large', 449 => 'Retry With', 450 => 'Blocked by Windows Parental Controls', 451 => 'Unavailable For Legal Reasons', 500 => 'Internal Server Error', 501 => 'Not Implemented', 502 => 'Bad Gateway or Proxy Error', 503 => 'Service Unavailable', 504 => 'Gateway Time-out', 505 => 'HTTP Version not supported', 507 => 'Insufficient storage', 508 => 'Loop Detected', 509 => 'Bandwidth Limit Exceeded', 510 => 'Not Extended', 511 => 'Network Authentication Required'];
     /**
      * @var int the HTTP status code to send with the response.
      */
@@ -241,8 +171,6 @@ class Response extends \yii\base\Response
      * @var HeaderCollection|null
      */
     private $_headers;
-
-
     /**
      * Initializes this component.
      */
@@ -260,7 +188,6 @@ class Response extends \yii\base\Response
         }
         $this->formatters = array_merge($this->defaultFormatters(), $this->formatters);
     }
-
     /**
      * @return int the HTTP status code to send with the response.
      */
@@ -268,7 +195,6 @@ class Response extends \yii\base\Response
     {
         return $this->_statusCode;
     }
-
     /**
      * Sets the response status code.
      * This method will set the corresponding status text if `$text` is null.
@@ -284,17 +210,15 @@ class Response extends \yii\base\Response
         }
         $this->_statusCode = (int) $value;
         if ($this->getIsInvalid()) {
-            throw new InvalidArgumentException("The HTTP status code is invalid: $value");
+            throw new InvalidArgumentException("The HTTP status code is invalid: {$value}");
         }
         if ($text === null) {
             $this->statusText = isset(static::$httpStatuses[$this->_statusCode]) ? static::$httpStatuses[$this->_statusCode] : '';
         } else {
             $this->statusText = $text;
         }
-
         return $this;
     }
-
     /**
      * Sets the response status code based on the exception.
      * @param \Throwable $e the exception object.
@@ -304,15 +228,13 @@ class Response extends \yii\base\Response
      */
     public function setStatusCodeByException($e)
     {
-        if ($e instanceof HttpException) {
+        if ($e instanceof \yii\web\HttpException) {
             $this->setStatusCode($e->statusCode);
         } else {
             $this->setStatusCode(500);
         }
-
         return $this;
     }
-
     /**
      * Returns the header collection.
      * The header collection contains the currently registered HTTP headers.
@@ -321,12 +243,10 @@ class Response extends \yii\base\Response
     public function getHeaders()
     {
         if ($this->_headers === null) {
-            $this->_headers = new HeaderCollection();
+            $this->_headers = new \yii\web\HeaderCollection();
         }
-
         return $this->_headers;
     }
-
     /**
      * Sends the response to the client.
      */
@@ -341,9 +261,8 @@ class Response extends \yii\base\Response
         $this->sendHeaders();
         $this->sendContent();
         $this->trigger(self::EVENT_AFTER_SEND);
-        $this->isSent = true;
+        $this->isSent = \true;
     }
-
     /**
      * Clears the headers, cookies, content, status code of the response.
      */
@@ -356,25 +275,24 @@ class Response extends \yii\base\Response
         $this->data = null;
         $this->stream = null;
         $this->content = null;
-        $this->isSent = false;
+        $this->isSent = \false;
     }
-
     /**
      * Sends the response headers to the client.
      */
     protected function sendHeaders()
     {
         if (headers_sent($file, $line)) {
-            throw new HeadersAlreadySentException($file, $line);
+            throw new \yii\web\HeadersAlreadySentException($file, $line);
         }
         if ($this->_headers) {
             foreach ($this->getHeaders() as $name => $values) {
                 $name = str_replace(' ', '-', ucwords(str_replace('-', ' ', $name)));
                 // set replace for first occurrence of header but false afterwards to allow multiple
-                $replace = true;
+                $replace = \true;
                 foreach ($values as $value) {
-                    header("$name: $value", $replace);
-                    $replace = false;
+                    header("{$name}: {$value}", $replace);
+                    $replace = \false;
                 }
             }
         }
@@ -382,7 +300,6 @@ class Response extends \yii\base\Response
         header("HTTP/{$this->version} {$statusCode} {$this->statusText}");
         $this->sendCookies();
     }
-
     /**
      * Sends the cookies to the client.
      */
@@ -403,24 +320,17 @@ class Response extends \yii\base\Response
             $expire = $cookie->expire;
             if (is_string($expire)) {
                 $expire = strtotime($expire);
-            } elseif (interface_exists('\\DateTimeInterface') && $expire instanceof \DateTimeInterface) {
+            } elseif (interface_exists('\DateTimeInterface') && $expire instanceof \DateTimeInterface) {
                 $expire = $expire->getTimestamp();
             }
-            if ($expire === null || $expire === false) {
+            if ($expire === null || $expire === \false) {
                 $expire = 0;
             }
             if ($expire != 1 && isset($validationKey)) {
                 $value = Yii::$app->getSecurity()->hashData(serialize([$cookie->name, $value]), $validationKey);
             }
-            if (PHP_VERSION_ID >= 70300) {
-                setcookie($cookie->name, $value, [
-                    'expires' => $expire,
-                    'path' => $cookie->path,
-                    'domain' => $cookie->domain,
-                    'secure' => $cookie->secure,
-                    'httpOnly' => $cookie->httpOnly,
-                    'sameSite' => !empty($cookie->sameSite) ? $cookie->sameSite : null,
-                ]);
+            if (\PHP_VERSION_ID >= 70300) {
+                setcookie($cookie->name, $value, ['expires' => $expire, 'path' => $cookie->path, 'domain' => $cookie->domain, 'secure' => $cookie->secure, 'httpOnly' => $cookie->httpOnly, 'sameSite' => !empty($cookie->sameSite) ? $cookie->sameSite : null]);
             } else {
                 // Work around for setting sameSite cookie prior PHP 7.3
                 // https://stackoverflow.com/questions/39750906/php-setcookie-samesite-strict/46971326#46971326
@@ -432,7 +342,6 @@ class Response extends \yii\base\Response
             }
         }
     }
-
     /**
      * Sends the response content to the client.
      */
@@ -440,15 +349,12 @@ class Response extends \yii\base\Response
     {
         if ($this->stream === null) {
             echo $this->content;
-
             return;
         }
-
         // Try to reset time limit for big files
         if (!function_exists('set_time_limit') || !@set_time_limit(0)) {
             Yii::warning('set_time_limit() is not available', __METHOD__);
         }
-
         if (is_callable($this->stream)) {
             $data = call_user_func($this->stream);
             foreach ($data as $datum) {
@@ -457,23 +363,21 @@ class Response extends \yii\base\Response
             }
             return;
         }
-
-        $chunkSize = 8 * 1024 * 1024; // 8MB per chunk
-
+        $chunkSize = 8 * 1024 * 1024;
+        // 8MB per chunk
         if (is_array($this->stream)) {
             list($handle, $begin, $end) = $this->stream;
-
             // only seek if stream is seekable
             if ($this->isSeekable($handle)) {
                 fseek($handle, $begin);
             }
-
             while (!feof($handle) && ($pos = ftell($handle)) <= $end) {
                 if ($pos + $chunkSize > $end) {
                     $chunkSize = $end - $pos + 1;
                 }
                 echo fread($handle, $chunkSize);
-                flush(); // Free up memory. Otherwise large files will trigger PHP's memory limit.
+                flush();
+                // Free up memory. Otherwise large files will trigger PHP's memory limit.
             }
             fclose($handle);
         } else {
@@ -484,7 +388,6 @@ class Response extends \yii\base\Response
             fclose($this->stream);
         }
     }
-
     /**
      * Sends a file to the browser.
      *
@@ -530,10 +433,8 @@ class Response extends \yii\base\Response
         }
         $handle = fopen($filePath, 'rb');
         $this->sendStreamAsFile($handle, $attachmentName, $options);
-
         return $this;
     }
-
     /**
      * Sends the specified content as a file to the browser.
      *
@@ -555,33 +456,26 @@ class Response extends \yii\base\Response
     public function sendContentAsFile($content, $attachmentName, $options = [])
     {
         $headers = $this->getHeaders();
-
         $contentLength = StringHelper::byteLength($content);
         $range = $this->getHttpRange($contentLength);
-
-        if ($range === false) {
-            $headers->set('Content-Range', "bytes */$contentLength");
-            throw new RangeNotSatisfiableHttpException();
+        if ($range === \false) {
+            $headers->set('Content-Range', "bytes */{$contentLength}");
+            throw new \yii\web\RangeNotSatisfiableHttpException();
         }
-
         list($begin, $end) = $range;
         if ($begin != 0 || $end != $contentLength - 1) {
             $this->setStatusCode(206);
-            $headers->set('Content-Range', "bytes $begin-$end/$contentLength");
+            $headers->set('Content-Range', "bytes {$begin}-{$end}/{$contentLength}");
             $this->content = StringHelper::byteSubstr($content, $begin, $end - $begin + 1);
         } else {
             $this->setStatusCode(200);
             $this->content = $content;
         }
-
         $mimeType = isset($options['mimeType']) ? $options['mimeType'] : 'application/octet-stream';
         $this->setDownloadHeaders($attachmentName, $mimeType, !empty($options['inline']), $end - $begin + 1);
-
         $this->format = self::FORMAT_RAW;
-
         return $this;
     }
-
     /**
      * Sends the specified stream as a file to the browser.
      *
@@ -608,38 +502,30 @@ class Response extends \yii\base\Response
         $headers = $this->getHeaders();
         if (isset($options['fileSize'])) {
             $fileSize = $options['fileSize'];
+        } else if ($this->isSeekable($handle)) {
+            fseek($handle, 0, \SEEK_END);
+            $fileSize = ftell($handle);
         } else {
-            if ($this->isSeekable($handle)) {
-                fseek($handle, 0, SEEK_END);
-                $fileSize = ftell($handle);
-            } else {
-                $fileSize = 0;
-            }
+            $fileSize = 0;
         }
-
         $range = $this->getHttpRange($fileSize);
-        if ($range === false) {
-            $headers->set('Content-Range', "bytes */$fileSize");
-            throw new RangeNotSatisfiableHttpException();
+        if ($range === \false) {
+            $headers->set('Content-Range', "bytes */{$fileSize}");
+            throw new \yii\web\RangeNotSatisfiableHttpException();
         }
-
         list($begin, $end) = $range;
         if ($begin != 0 || $end != $fileSize - 1) {
             $this->setStatusCode(206);
-            $headers->set('Content-Range', "bytes $begin-$end/$fileSize");
+            $headers->set('Content-Range', "bytes {$begin}-{$end}/{$fileSize}");
         } else {
             $this->setStatusCode(200);
         }
-
         $mimeType = isset($options['mimeType']) ? $options['mimeType'] : 'application/octet-stream';
         $this->setDownloadHeaders($attachmentName, $mimeType, !empty($options['inline']), $end - $begin + 1);
-
         $this->format = self::FORMAT_RAW;
         $this->stream = [$handle, $begin, $end];
-
         return $this;
     }
-
     /**
      * Sets a default set of HTTP headers for file downloading purpose.
      * @param string $attachmentName the attachment file name
@@ -649,28 +535,19 @@ class Response extends \yii\base\Response
      * @param int|null $contentLength the byte length of the file being downloaded. If null, `Content-Length` header will NOT be set.
      * @return $this the response object itself
      */
-    public function setDownloadHeaders($attachmentName, $mimeType = null, $inline = false, $contentLength = null)
+    public function setDownloadHeaders($attachmentName, $mimeType = null, $inline = \false, $contentLength = null)
     {
         $headers = $this->getHeaders();
-
         $disposition = $inline ? 'inline' : 'attachment';
-        $headers->setDefault('Pragma', 'public')
-            ->setDefault('Accept-Ranges', 'bytes')
-            ->setDefault('Expires', '0')
-            ->setDefault('Cache-Control', 'must-revalidate, post-check=0, pre-check=0')
-            ->setDefault('Content-Disposition', $this->getDispositionHeaderValue($disposition, $attachmentName));
-
+        $headers->setDefault('Pragma', 'public')->setDefault('Accept-Ranges', 'bytes')->setDefault('Expires', '0')->setDefault('Cache-Control', 'must-revalidate, post-check=0, pre-check=0')->setDefault('Content-Disposition', $this->getDispositionHeaderValue($disposition, $attachmentName));
         if ($mimeType !== null) {
             $headers->setDefault('Content-Type', $mimeType);
         }
-
         if ($contentLength !== null) {
             $headers->setDefault('Content-Length', $contentLength);
         }
-
         return $this;
     }
-
     /**
      * Determines the HTTP range given in the request.
      * @param int $fileSize the size of the file that will be used to validate the requested HTTP range.
@@ -683,7 +560,7 @@ class Response extends \yii\base\Response
             return [0, $fileSize - 1];
         }
         if (!preg_match('/^bytes=(\d*)-(\d*)$/', $rangeHeader, $matches)) {
-            return false;
+            return \false;
         }
         if ($matches[1] === '') {
             $start = $fileSize - $matches[2];
@@ -699,12 +576,10 @@ class Response extends \yii\base\Response
             $end = $fileSize - 1;
         }
         if ($start < 0 || $start > $end) {
-            return false;
+            return \false;
         }
-
         return [$start, $end];
     }
-
     /**
      * Sends existing file to a browser as a download using x-sendfile.
      *
@@ -778,18 +653,11 @@ class Response extends \yii\base\Response
         } else {
             $xHeader = 'X-Sendfile';
         }
-
         $disposition = empty($options['inline']) ? 'attachment' : 'inline';
-        $this->getHeaders()
-            ->setDefault($xHeader, $filePath)
-            ->setDefault('Content-Type', $mimeType)
-            ->setDefault('Content-Disposition', $this->getDispositionHeaderValue($disposition, $attachmentName));
-
+        $this->getHeaders()->setDefault($xHeader, $filePath)->setDefault('Content-Type', $mimeType)->setDefault('Content-Disposition', $this->getDispositionHeaderValue($disposition, $attachmentName));
         $this->format = self::FORMAT_RAW;
-
         return $this;
     }
-
     /**
      * Returns Content-Disposition header value that is safe to use with both old and new browsers.
      *
@@ -816,21 +684,14 @@ class Response extends \yii\base\Response
      */
     protected function getDispositionHeaderValue($disposition, $attachmentName)
     {
-        $fallbackName = str_replace(
-            ['%', '/', '\\', '"', "\x7F"],
-            ['_', '_', '_', '\\"', '_'],
-            Inflector::transliterate($attachmentName, Inflector::TRANSLITERATE_LOOSE)
-        );
+        $fallbackName = str_replace(['%', '/', '\\', '"', ""], ['_', '_', '_', '\"', '_'], Inflector::transliterate($attachmentName, Inflector::TRANSLITERATE_LOOSE));
         $utfName = rawurlencode(str_replace(['%', '/', '\\'], '', $attachmentName));
-
         $dispositionHeader = "{$disposition}; filename=\"{$fallbackName}\"";
         if ($utfName !== $fallbackName) {
             $dispositionHeader .= "; filename*=utf-8''{$utfName}";
         }
-
         return $dispositionHeader;
     }
-
     /**
      * Redirects the browser to the specified URL.
      *
@@ -887,7 +748,7 @@ class Response extends \yii\base\Response
      * Takes effect only when request header `X-Ie-Redirect-Compatibility` is absent.
      * @return $this the response object itself
      */
-    public function redirect($url, $statusCode = 302, $checkAjax = true)
+    public function redirect($url, $statusCode = 302, $checkAjax = \true)
     {
         if (is_array($url) && isset($url[0])) {
             // ensure the route is absolute
@@ -903,12 +764,8 @@ class Response extends \yii\base\Response
                 $normalizedUrl = $request->getHostInfo() . $normalizedUrl;
             }
         }
-
         if ($checkAjax && $request->getIsAjax()) {
-            if (
-                in_array($statusCode, [301, 302])
-                && preg_match('/Trident\/|MSIE /', (string)$request->userAgent)
-            ) {
+            if (in_array($statusCode, [301, 302]) && preg_match('/Trident\/|MSIE /', (string) $request->userAgent)) {
                 $statusCode = 200;
             }
             if ($request->getIsPjax()) {
@@ -919,12 +776,9 @@ class Response extends \yii\base\Response
         } else {
             $this->getHeaders()->set('Location', $normalizedUrl);
         }
-
         $this->setStatusCode($statusCode);
-
         return $this;
     }
-
     /**
      * Refreshes the current page.
      * The effect of this method call is the same as the user pressing the refresh button of his browser
@@ -944,12 +798,10 @@ class Response extends \yii\base\Response
     {
         return $this->redirect(Yii::$app->getRequest()->getUrl() . $anchor);
     }
-
     /**
      * @var CookieCollection|null
      */
     private $_cookies;
-
     /**
      * Returns the cookie collection.
      *
@@ -973,12 +825,10 @@ class Response extends \yii\base\Response
     public function getCookies()
     {
         if ($this->_cookies === null) {
-            $this->_cookies = new CookieCollection();
+            $this->_cookies = new \yii\web\CookieCollection();
         }
-
         return $this->_cookies;
     }
-
     /**
      * @return bool whether this response has a valid [[statusCode]].
      */
@@ -986,7 +836,6 @@ class Response extends \yii\base\Response
     {
         return $this->getStatusCode() < 100 || $this->getStatusCode() >= 600;
     }
-
     /**
      * @return bool whether this response is informational
      */
@@ -994,7 +843,6 @@ class Response extends \yii\base\Response
     {
         return $this->getStatusCode() >= 100 && $this->getStatusCode() < 200;
     }
-
     /**
      * @return bool whether this response is successful
      */
@@ -1002,7 +850,6 @@ class Response extends \yii\base\Response
     {
         return $this->getStatusCode() >= 200 && $this->getStatusCode() < 300;
     }
-
     /**
      * @return bool whether this response is a redirection
      */
@@ -1010,7 +857,6 @@ class Response extends \yii\base\Response
     {
         return $this->getStatusCode() >= 300 && $this->getStatusCode() < 400;
     }
-
     /**
      * @return bool whether this response indicates a client error
      */
@@ -1018,7 +864,6 @@ class Response extends \yii\base\Response
     {
         return $this->getStatusCode() >= 400 && $this->getStatusCode() < 500;
     }
-
     /**
      * @return bool whether this response indicates a server error
      */
@@ -1026,7 +871,6 @@ class Response extends \yii\base\Response
     {
         return $this->getStatusCode() >= 500 && $this->getStatusCode() < 600;
     }
-
     /**
      * @return bool whether this response is OK
      */
@@ -1034,7 +878,6 @@ class Response extends \yii\base\Response
     {
         return $this->getStatusCode() == 200;
     }
-
     /**
      * @return bool whether this response indicates the current request is forbidden
      */
@@ -1042,7 +885,6 @@ class Response extends \yii\base\Response
     {
         return $this->getStatusCode() == 403;
     }
-
     /**
      * @return bool whether this response indicates the currently requested resource is not found
      */
@@ -1050,7 +892,6 @@ class Response extends \yii\base\Response
     {
         return $this->getStatusCode() == 404;
     }
-
     /**
      * @return bool whether this response is empty
      */
@@ -1058,29 +899,13 @@ class Response extends \yii\base\Response
     {
         return in_array($this->getStatusCode(), [201, 204, 304]);
     }
-
     /**
      * @return array the formatters that are supported by default
      */
     protected function defaultFormatters()
     {
-        return [
-            self::FORMAT_HTML => [
-                'class' => 'yii\web\HtmlResponseFormatter',
-            ],
-            self::FORMAT_XML => [
-                'class' => 'yii\web\XmlResponseFormatter',
-            ],
-            self::FORMAT_JSON => [
-                'class' => 'yii\web\JsonResponseFormatter',
-            ],
-            self::FORMAT_JSONP => [
-                'class' => 'yii\web\JsonResponseFormatter',
-                'useJsonp' => true,
-            ],
-        ];
+        return [self::FORMAT_HTML => ['class' => 'yii\web\HtmlResponseFormatter'], self::FORMAT_XML => ['class' => 'yii\web\XmlResponseFormatter'], self::FORMAT_JSON => ['class' => 'yii\web\JsonResponseFormatter'], self::FORMAT_JSONP => ['class' => 'yii\web\JsonResponseFormatter', 'useJsonp' => \true]];
     }
-
     /**
      * Prepares for sending the response.
      * The default implementation will convert [[data]] into [[content]] and set headers accordingly.
@@ -1097,17 +922,15 @@ class Response extends \yii\base\Response
             $this->stream = null;
             return;
         }
-
         if ($this->stream !== null) {
             return;
         }
-
         if (isset($this->formatters[$this->format])) {
             $formatter = $this->formatters[$this->format];
             if (!is_object($formatter)) {
                 $this->formatters[$this->format] = $formatter = Yii::createObject($formatter);
             }
-            if ($formatter instanceof ResponseFormatterInterface) {
+            if ($formatter instanceof \yii\web\ResponseFormatterInterface) {
                 $formatter->format($this);
             } else {
                 throw new InvalidConfigException("The '{$this->format}' response formatter is invalid. It must implement the ResponseFormatterInterface.");
@@ -1119,7 +942,6 @@ class Response extends \yii\base\Response
         } else {
             throw new InvalidConfigException("Unsupported response format: {$this->format}");
         }
-
         if (is_array($this->content)) {
             throw new InvalidArgumentException('Response content must not be an array.');
         } elseif (is_object($this->content)) {
@@ -1130,7 +952,6 @@ class Response extends \yii\base\Response
             }
         }
     }
-
     /**
      * Checks if a stream is seekable
      *
@@ -1140,10 +961,9 @@ class Response extends \yii\base\Response
     private function isSeekable($handle)
     {
         if (!is_resource($handle)) {
-            return true;
+            return \true;
         }
-
         $metaData = stream_get_meta_data($handle);
-        return isset($metaData['seekable']) && $metaData['seekable'] === true;
+        return isset($metaData['seekable']) && $metaData['seekable'] === \true;
     }
 }

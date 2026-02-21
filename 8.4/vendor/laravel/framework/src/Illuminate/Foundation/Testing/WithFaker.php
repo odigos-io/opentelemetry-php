@@ -2,9 +2,8 @@
 
 namespace Illuminate\Foundation\Testing;
 
-use Faker\Factory;
-use Faker\Generator;
-
+use Odigos\Faker\Factory;
+use Odigos\Faker\Generator;
 trait WithFaker
 {
     /**
@@ -13,7 +12,6 @@ trait WithFaker
      * @var \Faker\Generator
      */
     protected $faker;
-
     /**
      * Setup up the Faker instance.
      *
@@ -23,7 +21,6 @@ trait WithFaker
     {
         $this->faker = $this->makeFaker();
     }
-
     /**
      * Get the default Faker instance for a given locale.
      *
@@ -34,7 +31,6 @@ trait WithFaker
     {
         return is_null($locale) ? $this->faker : $this->makeFaker($locale);
     }
-
     /**
      * Create a Faker instance for the given locale.
      *
@@ -45,12 +41,10 @@ trait WithFaker
     {
         if (isset($this->app)) {
             $locale ??= $this->app->make('config')->get('app.faker_locale', Factory::DEFAULT_LOCALE);
-
             if ($this->app->bound(Generator::class)) {
                 return $this->app->make(Generator::class, ['locale' => $locale]);
             }
         }
-
         return Factory::create($locale ?? Factory::DEFAULT_LOCALE);
     }
 }

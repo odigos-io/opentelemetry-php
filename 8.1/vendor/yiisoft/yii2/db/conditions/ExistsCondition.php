@@ -1,15 +1,14 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\db\conditions;
 
 use yii\base\InvalidArgumentException;
 use yii\db\Query;
-
 /**
  * Condition that represents `EXISTS` operator.
  *
@@ -17,7 +16,7 @@ use yii\db\Query;
  * @since 2.0.14
  * @phpcs:disable Squiz.NamingConventions.ValidVariableName.PrivateNoUnderscore
  */
-class ExistsCondition implements ConditionInterface
+class ExistsCondition implements \yii\db\conditions\ConditionInterface
 {
     /**
      * @var string $operator the operator to use (e.g. `EXISTS` or `NOT EXISTS`)
@@ -27,8 +26,6 @@ class ExistsCondition implements ConditionInterface
      * @var Query the [[Query]] object representing the sub-query.
      */
     private $query;
-
-
     /**
      * ExistsCondition constructor.
      *
@@ -40,7 +37,6 @@ class ExistsCondition implements ConditionInterface
         $this->operator = $operator;
         $this->query = $query;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -49,10 +45,8 @@ class ExistsCondition implements ConditionInterface
         if (!isset($operands[0]) || !$operands[0] instanceof Query) {
             throw new InvalidArgumentException('Subquery for EXISTS operator must be a Query object.');
         }
-
         return new static($operator, $operands[0]);
     }
-
     /**
      * @return string
      */
@@ -60,7 +54,6 @@ class ExistsCondition implements ConditionInterface
     {
         return $this->operator;
     }
-
     /**
      * @return Query
      */

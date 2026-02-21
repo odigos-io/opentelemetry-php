@@ -5,8 +5,7 @@ namespace Illuminate\Queue\Jobs;
 use Illuminate\Container\Container;
 use Illuminate\Contracts\Queue\Job as JobContract;
 use Illuminate\Queue\DatabaseQueue;
-
-class DatabaseJob extends Job implements JobContract
+class DatabaseJob extends \Illuminate\Queue\Jobs\Job implements JobContract
 {
     /**
      * The database queue instance.
@@ -14,14 +13,12 @@ class DatabaseJob extends Job implements JobContract
      * @var \Illuminate\Queue\DatabaseQueue
      */
     protected $database;
-
     /**
      * The database job payload.
      *
      * @var \stdClass
      */
     protected $job;
-
     /**
      * Create a new job instance.
      *
@@ -39,7 +36,6 @@ class DatabaseJob extends Job implements JobContract
         $this->container = $container;
         $this->connectionName = $connectionName;
     }
-
     /**
      * Release the job back into the queue after (n) seconds.
      *
@@ -49,10 +45,8 @@ class DatabaseJob extends Job implements JobContract
     public function release($delay = 0)
     {
         parent::release($delay);
-
         $this->database->deleteAndRelease($this->queue, $this, $delay);
     }
-
     /**
      * Delete the job from the queue.
      *
@@ -61,10 +55,8 @@ class DatabaseJob extends Job implements JobContract
     public function delete()
     {
         parent::delete();
-
         $this->database->deleteReserved($this->queue, $this->job->id);
     }
-
     /**
      * Get the number of times the job has been attempted.
      *
@@ -74,7 +66,6 @@ class DatabaseJob extends Job implements JobContract
     {
         return (int) $this->job->attempts;
     }
-
     /**
      * Get the job identifier.
      *
@@ -84,7 +75,6 @@ class DatabaseJob extends Job implements JobContract
     {
         return $this->job->id;
     }
-
     /**
      * Get the raw body string for the job.
      *
@@ -94,7 +84,6 @@ class DatabaseJob extends Job implements JobContract
     {
         return $this->job->payload;
     }
-
     /**
      * Get the database job record.
      *

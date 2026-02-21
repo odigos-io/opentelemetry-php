@@ -1,11 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\API\Configuration\ConfigEnv;
 
 use OpenTelemetry\API\Configuration\Context;
-
 interface EnvComponentLoaderRegistry
 {
     /**
@@ -13,5 +11,5 @@ interface EnvComponentLoaderRegistry
      * @param class-string<T> $type
      * @return T
      */
-    public function load(string $type, string $name, EnvResolver $env, Context $context): mixed;
+    public function load(string $type, string $name, \OpenTelemetry\API\Configuration\ConfigEnv\EnvResolver $env, Context $context): mixed;
 }

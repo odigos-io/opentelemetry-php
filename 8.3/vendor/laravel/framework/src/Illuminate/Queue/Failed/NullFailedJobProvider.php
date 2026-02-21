@@ -2,7 +2,7 @@
 
 namespace Illuminate\Queue\Failed;
 
-class NullFailedJobProvider implements CountableFailedJobProvider, FailedJobProviderInterface
+class NullFailedJobProvider implements \Illuminate\Queue\Failed\CountableFailedJobProvider, \Illuminate\Queue\Failed\FailedJobProviderInterface
 {
     /**
      * Log a failed job into storage.
@@ -17,7 +17,6 @@ class NullFailedJobProvider implements CountableFailedJobProvider, FailedJobProv
     {
         //
     }
-
     /**
      * Get the IDs of all of the failed jobs.
      *
@@ -28,7 +27,6 @@ class NullFailedJobProvider implements CountableFailedJobProvider, FailedJobProv
     {
         return [];
     }
-
     /**
      * Get a list of all of the failed jobs.
      *
@@ -38,7 +36,6 @@ class NullFailedJobProvider implements CountableFailedJobProvider, FailedJobProv
     {
         return [];
     }
-
     /**
      * Get a single failed job.
      *
@@ -49,7 +46,6 @@ class NullFailedJobProvider implements CountableFailedJobProvider, FailedJobProv
     {
         //
     }
-
     /**
      * Delete a single failed job from storage.
      *
@@ -58,9 +54,8 @@ class NullFailedJobProvider implements CountableFailedJobProvider, FailedJobProv
      */
     public function forget($id)
     {
-        return true;
+        return \true;
     }
-
     /**
      * Flush all of the failed jobs from storage.
      *
@@ -71,7 +66,6 @@ class NullFailedJobProvider implements CountableFailedJobProvider, FailedJobProv
     {
         //
     }
-
     /**
      * Count the failed jobs.
      *

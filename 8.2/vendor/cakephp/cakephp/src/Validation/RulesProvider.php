@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -18,7 +18,6 @@ namespace Cake\Validation;
 
 use ReflectionClass;
 use function Cake\Core\deprecationWarning;
-
 /**
  * A Proxy class used to remove any extra arguments when the user intended to call
  * a method in another class that is not aware of validation providers signature
@@ -35,14 +34,12 @@ class RulesProvider
      * @var object|string
      */
     protected object|string $_class;
-
     /**
      * The proxied class' reflection
      *
      * @var \ReflectionClass<object>
      */
     protected ReflectionClass $_reflection;
-
     /**
      * Constructor, sets the default class to use for calling methods
      *
@@ -50,21 +47,12 @@ class RulesProvider
      * @throws \ReflectionException
      * @phpstan-param object|class-string $class
      */
-    public function __construct(object|string $class = Validation::class)
+    public function __construct(object|string $class = \Cake\Validation\Validation::class)
     {
-        deprecationWarning(
-            '5.2.0',
-            sprintf(
-                'The class Cake\Validation\RulesProvider is deprecated. '
-                . 'Directly set %s as a validation provider.',
-                (is_string($class) ? $class : get_class($class)),
-            ),
-        );
-
+        deprecationWarning('5.2.0', sprintf('The class Cake\Validation\RulesProvider is deprecated. ' . 'Directly set %s as a validation provider.', is_string($class) ? $class : get_class($class)));
         $this->_class = $class;
         $this->_reflection = new ReflectionClass($class);
     }
-
     /**
      * Proxies validation method calls to the Validation class.
      *
@@ -87,7 +75,6 @@ class RulesProvider
             $arguments = array_slice($arguments, 0, -1);
         }
         $object = is_string($this->_class) ? null : $this->_class;
-
         return $method->invokeArgs($object, $arguments);
     }
 }

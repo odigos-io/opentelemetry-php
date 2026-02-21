@@ -6,41 +6,35 @@ use ArrayAccess;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Traits\Macroable;
 use LogicException;
-
 class Response implements ArrayAccess
 {
-    use Concerns\DeterminesStatusCode, Macroable {
+    use \Illuminate\Http\Client\Concerns\DeterminesStatusCode, Macroable {
         __call as macroCall;
     }
-
     /**
      * The underlying PSR response.
      *
      * @var \Psr\Http\Message\ResponseInterface
      */
     protected $response;
-
     /**
      * The decoded JSON response.
      *
      * @var array
      */
     protected $decoded;
-
     /**
      * The request cookies.
      *
      * @var \GuzzleHttp\Cookie\CookieJar
      */
     public $cookies;
-
     /**
      * The transfer stats for the request.
      *
      * @var \GuzzleHttp\TransferStats|null
      */
     public $transferStats;
-
     /**
      * Create a new response instance.
      *
@@ -51,7 +45,6 @@ class Response implements ArrayAccess
     {
         $this->response = $response;
     }
-
     /**
      * Get the body of the response.
      *
@@ -61,7 +54,6 @@ class Response implements ArrayAccess
     {
         return (string) $this->response->getBody();
     }
-
     /**
      * Get the JSON decoded body of the response as an array or scalar value.
      *
@@ -71,17 +63,14 @@ class Response implements ArrayAccess
      */
     public function json($key = null, $default = null)
     {
-        if (! $this->decoded) {
-            $this->decoded = json_decode($this->body(), true);
+        if (!$this->decoded) {
+            $this->decoded = json_decode($this->body(), \true);
         }
-
         if (is_null($key)) {
             return $this->decoded;
         }
-
         return data_get($this->decoded, $key, $default);
     }
-
     /**
      * Get the JSON decoded body of the response as an object.
      *
@@ -89,9 +78,8 @@ class Response implements ArrayAccess
      */
     public function object()
     {
-        return json_decode($this->body(), false);
+        return json_decode($this->body(), \false);
     }
-
     /**
      * Get the JSON decoded body of the response as a collection.
      *
@@ -102,7 +90,6 @@ class Response implements ArrayAccess
     {
         return Collection::make($this->json($key));
     }
-
     /**
      * Get a header from the response.
      *
@@ -113,7 +100,6 @@ class Response implements ArrayAccess
     {
         return $this->response->getHeaderLine($header);
     }
-
     /**
      * Get the headers from the response.
      *
@@ -123,7 +109,6 @@ class Response implements ArrayAccess
     {
         return $this->response->getHeaders();
     }
-
     /**
      * Get the status code of the response.
      *
@@ -133,7 +118,6 @@ class Response implements ArrayAccess
     {
         return (int) $this->response->getStatusCode();
     }
-
     /**
      * Get the reason phrase of the response.
      *
@@ -143,7 +127,6 @@ class Response implements ArrayAccess
     {
         return $this->response->getReasonPhrase();
     }
-
     /**
      * Get the effective URI of the response.
      *
@@ -153,7 +136,6 @@ class Response implements ArrayAccess
     {
         return $this->transferStats?->getEffectiveUri();
     }
-
     /**
      * Determine if the request was successful.
      *
@@ -163,7 +145,6 @@ class Response implements ArrayAccess
     {
         return $this->status() >= 200 && $this->status() < 300;
     }
-
     /**
      * Determine if the response was a redirect.
      *
@@ -173,7 +154,6 @@ class Response implements ArrayAccess
     {
         return $this->status() >= 300 && $this->status() < 400;
     }
-
     /**
      * Determine if the response indicates a client or server error occurred.
      *
@@ -183,7 +163,6 @@ class Response implements ArrayAccess
     {
         return $this->serverError() || $this->clientError();
     }
-
     /**
      * Determine if the response indicates a client error occurred.
      *
@@ -193,7 +172,6 @@ class Response implements ArrayAccess
     {
         return $this->status() >= 400 && $this->status() < 500;
     }
-
     /**
      * Determine if the response indicates a server error occurred.
      *
@@ -203,7 +181,6 @@ class Response implements ArrayAccess
     {
         return $this->status() >= 500;
     }
-
     /**
      * Execute the given callback if there was a server or client error.
      *
@@ -215,10 +192,8 @@ class Response implements ArrayAccess
         if ($this->failed()) {
             $callback($this);
         }
-
         return $this;
     }
-
     /**
      * Get the response cookies.
      *
@@ -228,7 +203,6 @@ class Response implements ArrayAccess
     {
         return $this->cookies;
     }
-
     /**
      * Get the handler stats of the response.
      *
@@ -238,7 +212,6 @@ class Response implements ArrayAccess
     {
         return $this->transferStats?->getHandlerStats() ?? [];
     }
-
     /**
      * Close the stream and any underlying resources.
      *
@@ -247,10 +220,8 @@ class Response implements ArrayAccess
     public function close()
     {
         $this->response->getBody()->close();
-
         return $this;
     }
-
     /**
      * Get the underlying PSR response for the response.
      *
@@ -260,7 +231,6 @@ class Response implements ArrayAccess
     {
         return $this->response;
     }
-
     /**
      * Create an exception if a server or client error occurred.
      *
@@ -269,10 +239,9 @@ class Response implements ArrayAccess
     public function toException()
     {
         if ($this->failed()) {
-            return new RequestException($this);
+            return new \Illuminate\Http\Client\RequestException($this);
         }
     }
-
     /**
      * Throw an exception if a server or client error occurred.
      *
@@ -284,7 +253,6 @@ class Response implements ArrayAccess
     public function throw()
     {
         $callback = func_get_args()[0] ?? null;
-
         if ($this->failed()) {
             throw tap($this->toException(), function ($exception) use ($callback) {
                 if ($callback && is_callable($callback)) {
@@ -292,10 +260,8 @@ class Response implements ArrayAccess
                 }
             });
         }
-
         return $this;
     }
-
     /**
      * Throw an exception if a server or client error occurred and the given condition evaluates to true.
      *
@@ -309,7 +275,6 @@ class Response implements ArrayAccess
     {
         return value($condition, $this) ? $this->throw(func_get_args()[1] ?? null) : $this;
     }
-
     /**
      * Throw an exception if the response status code matches the given code.
      *
@@ -320,14 +285,11 @@ class Response implements ArrayAccess
      */
     public function throwIfStatus($statusCode)
     {
-        if (is_callable($statusCode) &&
-            $statusCode($this->status(), $this)) {
+        if (is_callable($statusCode) && $statusCode($this->status(), $this)) {
             return $this->throw();
         }
-
         return $this->status() === $statusCode ? $this->throw() : $this;
     }
-
     /**
      * Throw an exception unless the response status code matches the given code.
      *
@@ -341,10 +303,8 @@ class Response implements ArrayAccess
         if (is_callable($statusCode)) {
             return $statusCode($this->status(), $this) ? $this : $this->throw();
         }
-
         return $this->status() === $statusCode ? $this : $this->throw();
     }
-
     /**
      * Throw an exception if the response status code is a 4xx level code.
      *
@@ -356,7 +316,6 @@ class Response implements ArrayAccess
     {
         return $this->clientError() ? $this->throw() : $this;
     }
-
     /**
      * Throw an exception if the response status code is a 5xx level code.
      *
@@ -368,7 +327,6 @@ class Response implements ArrayAccess
     {
         return $this->serverError() ? $this->throw() : $this;
     }
-
     /**
      * Determine if the given offset exists.
      *
@@ -379,7 +337,6 @@ class Response implements ArrayAccess
     {
         return isset($this->json()[$offset]);
     }
-
     /**
      * Get the value for a given offset.
      *
@@ -390,7 +347,6 @@ class Response implements ArrayAccess
     {
         return $this->json()[$offset];
     }
-
     /**
      * Set the value at the given offset.
      *
@@ -404,7 +360,6 @@ class Response implements ArrayAccess
     {
         throw new LogicException('Response data may not be mutated using array access.');
     }
-
     /**
      * Unset the value at the given offset.
      *
@@ -417,7 +372,6 @@ class Response implements ArrayAccess
     {
         throw new LogicException('Response data may not be mutated using array access.');
     }
-
     /**
      * Get the body of the response.
      *
@@ -427,7 +381,6 @@ class Response implements ArrayAccess
     {
         return $this->body();
     }
-
     /**
      * Dynamically proxy other methods to the underlying response.
      *
@@ -437,8 +390,6 @@ class Response implements ArrayAccess
      */
     public function __call($method, $parameters)
     {
-        return static::hasMacro($method)
-                    ? $this->macroCall($method, $parameters)
-                    : $this->response->{$method}(...$parameters);
+        return static::hasMacro($method) ? $this->macroCall($method, $parameters) : $this->response->{$method}(...$parameters);
     }
 }

@@ -1,17 +1,17 @@
 <?php
 
+namespace Odigos;
+
 /**
  * Composite strategy that runs multiple strategies on tokens.
  */
 abstract class HTMLPurifier_Strategy_Composite extends HTMLPurifier_Strategy
 {
-
     /**
      * List of strategies to run tokens through.
      * @type HTMLPurifier_Strategy[]
      */
     protected $strategies = array();
-
     /**
      * @param HTMLPurifier_Token[] $tokens
      * @param HTMLPurifier_Config $config
@@ -26,5 +26,8 @@ abstract class HTMLPurifier_Strategy_Composite extends HTMLPurifier_Strategy
         return $tokens;
     }
 }
-
+/**
+ * Composite strategy that runs multiple strategies on tokens.
+ */
+\class_alias('Odigos\HTMLPurifier_Strategy_Composite', 'HTMLPurifier_Strategy_Composite', \false);
 // vim: et sw=4 sts=4

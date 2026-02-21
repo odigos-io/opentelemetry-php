@@ -10,14 +10,12 @@ class RouteUri
      * @var string
      */
     public $uri;
-
     /**
      * The fields that should be used when resolving bindings.
      *
      * @var array
      */
     public $bindingFields = [];
-
     /**
      * Create a new route URI instance.
      *
@@ -30,7 +28,6 @@ class RouteUri
         $this->uri = $uri;
         $this->bindingFields = $bindingFields;
     }
-
     /**
      * Parse the given URI.
      *
@@ -40,23 +37,15 @@ class RouteUri
     public static function parse($uri)
     {
         preg_match_all('/\{([\w\:]+?)\??\}/', $uri, $matches);
-
         $bindingFields = [];
-
         foreach ($matches[0] as $match) {
-            if (! str_contains($match, ':')) {
+            if (!str_contains($match, ':')) {
                 continue;
             }
-
             $segments = explode(':', trim($match, '{}?'));
-
             $bindingFields[$segments[0]] = $segments[1];
-
-            $uri = str_contains($match, '?')
-                ? str_replace($match, '{'.$segments[0].'?}', $uri)
-                : str_replace($match, '{'.$segments[0].'}', $uri);
+            $uri = str_contains($match, '?') ? str_replace($match, '{' . $segments[0] . '?}', $uri) : str_replace($match, '{' . $segments[0] . '}', $uri);
         }
-
         return new static($uri, $bindingFields);
     }
 }

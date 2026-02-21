@@ -9,10 +9,8 @@
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
  */
-
-declare(strict_types=1);
-
-namespace Ramsey\Collection\Tool;
+declare (strict_types=1);
+namespace Odigos\Ramsey\Collection\Tool;
 
 use function is_array;
 use function is_bool;
@@ -24,7 +22,6 @@ use function is_object;
 use function is_resource;
 use function is_scalar;
 use function is_string;
-
 /**
  * Provides functionality to check values for specific types.
  */
@@ -50,7 +47,7 @@ trait TypeTrait
             'resource' => is_resource($value),
             'scalar' => is_scalar($value),
             'string' => is_string($value),
-            'mixed' => true,
+            'mixed' => \true,
             default => $value instanceof $type,
         };
     }

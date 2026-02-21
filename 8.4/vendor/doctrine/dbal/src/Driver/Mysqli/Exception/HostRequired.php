@@ -1,11 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\DBAL\Driver\Mysqli\Exception;
 
 use Doctrine\DBAL\Driver\AbstractException;
-
 /** @internal */
 final class HostRequired extends AbstractException
 {

@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\SDK\Common\Attribute;
 
 use function array_key_exists;
@@ -10,26 +9,22 @@ use function is_array;
 use function is_string;
 use function mb_substr;
 use OpenTelemetry\API\Behavior\LogsMessagesTrait;
-
 /**
  * @internal
  */
-final class AttributesBuilder implements AttributesBuilderInterface
+final class AttributesBuilder implements \OpenTelemetry\SDK\Common\Attribute\AttributesBuilderInterface
 {
     use LogsMessagesTrait;
-
-    public function __construct(private array $attributes, private ?int $attributeCountLimit, private ?int $attributeValueLengthLimit, private int $droppedAttributesCount, private AttributeValidatorInterface $attributeValidator = new AttributeValidator())
+    public function __construct(private array $attributes, private ?int $attributeCountLimit, private ?int $attributeValueLengthLimit, private int $droppedAttributesCount, private \OpenTelemetry\SDK\Common\Attribute\AttributeValidatorInterface $attributeValidator = new \OpenTelemetry\SDK\Common\Attribute\AttributeValidator())
     {
     }
-
     #[\Override]
-    public function build(): AttributesInterface
+    public function build(): \OpenTelemetry\SDK\Common\Attribute\AttributesInterface
     {
-        return new Attributes($this->attributes, $this->droppedAttributesCount);
+        return new \OpenTelemetry\SDK\Common\Attribute\Attributes($this->attributes, $this->droppedAttributesCount);
     }
-
     #[\Override]
-    public function merge(AttributesInterface $old, AttributesInterface $updating): AttributesInterface
+    public function merge(\OpenTelemetry\SDK\Common\Attribute\AttributesInterface $old, \OpenTelemetry\SDK\Common\Attribute\AttributesInterface $updating): \OpenTelemetry\SDK\Common\Attribute\AttributesInterface
     {
         $new = $old->toArray();
         $dropped = $old->getDroppedAttributesCount() + $updating->getDroppedAttributesCount();
@@ -40,16 +35,13 @@ final class AttributesBuilder implements AttributesBuilderInterface
                 $new[$key] = $value;
             }
         }
-
-        return new Attributes($new, $dropped);
+        return new \OpenTelemetry\SDK\Common\Attribute\Attributes($new, $dropped);
     }
-
     #[\Override]
     public function offsetExists($offset): bool
     {
         return array_key_exists($offset, $this->attributes);
     }
-
     /**
      * @phan-suppress PhanUndeclaredClassAttribute
      */
@@ -58,7 +50,6 @@ final class AttributesBuilder implements AttributesBuilderInterface
     {
         return $this->attributes[$offset] ?? null;
     }
-
     /**
      * @phan-suppress PhanUndeclaredClassAttribute
      */
@@ -70,24 +61,19 @@ final class AttributesBuilder implements AttributesBuilderInterface
         }
         if ($value === null) {
             unset($this->attributes[$offset]);
-
             return;
         }
         if (!$this->attributeValidator->validate($value)) {
             self::logWarning($this->attributeValidator->getInvalidMessage() . ': ' . $offset);
             $this->droppedAttributesCount++;
-
             return;
         }
         if (count($this->attributes) === $this->attributeCountLimit && !array_key_exists($offset, $this->attributes)) {
             $this->droppedAttributesCount++;
-
             return;
         }
-
         $this->attributes[$offset] = $this->normalizeValue($value);
     }
-
     /**
      * @phan-suppress PhanUndeclaredClassAttribute
      */
@@ -96,13 +82,11 @@ final class AttributesBuilder implements AttributesBuilderInterface
     {
         unset($this->attributes[$offset]);
     }
-
     private function normalizeValue($value)
     {
         if (is_string($value) && $this->attributeValueLengthLimit !== null) {
             return mb_substr($value, 0, $this->attributeValueLengthLimit);
         }
-
         if (is_array($value)) {
             foreach ($value as $k => $v) {
                 $processed = $this->normalizeValue($v);
@@ -110,10 +94,8 @@ final class AttributesBuilder implements AttributesBuilderInterface
                     $value[$k] = $processed;
                 }
             }
-
             return $value;
         }
-
         return $value;
     }
 }

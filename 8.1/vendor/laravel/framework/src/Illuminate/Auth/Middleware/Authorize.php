@@ -5,7 +5,6 @@ namespace Illuminate\Auth\Middleware;
 use Closure;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Database\Eloquent\Model;
-
 class Authorize
 {
     /**
@@ -14,7 +13,6 @@ class Authorize
      * @var \Illuminate\Contracts\Auth\Access\Gate
      */
     protected $gate;
-
     /**
      * Create a new middleware instance.
      *
@@ -25,7 +23,6 @@ class Authorize
     {
         $this->gate = $gate;
     }
-
     /**
      * Specify the ability and models for the middleware.
      *
@@ -35,9 +32,8 @@ class Authorize
      */
     public static function using($ability, ...$models)
     {
-        return static::class.':'.implode(',', [$ability, ...$models]);
+        return static::class . ':' . implode(',', [$ability, ...$models]);
     }
-
     /**
      * Handle an incoming request.
      *
@@ -53,10 +49,8 @@ class Authorize
     public function handle($request, Closure $next, $ability, ...$models)
     {
         $this->gate->authorize($ability, $this->getGateArguments($request, $models));
-
         return $next($request);
     }
-
     /**
      * Get the arguments parameter for the gate.
      *
@@ -69,12 +63,10 @@ class Authorize
         if (is_null($models)) {
             return [];
         }
-
         return collect($models)->map(function ($model) use ($request) {
             return $model instanceof Model ? $model : $this->getModel($request, $model);
         })->all();
     }
-
     /**
      * Get the model to authorize.
      *
@@ -87,11 +79,8 @@ class Authorize
         if ($this->isClassName($model)) {
             return trim($model);
         }
-
-        return $request->route($model, null) ??
-            ((preg_match("/^['\"](.*)['\"]$/", trim($model), $matches)) ? $matches[1] : null);
+        return $request->route($model, null) ?? (preg_match("/^['\"](.*)['\"]\$/", trim($model), $matches) ? $matches[1] : null);
     }
-
     /**
      * Checks if the given string looks like a fully qualified class name.
      *

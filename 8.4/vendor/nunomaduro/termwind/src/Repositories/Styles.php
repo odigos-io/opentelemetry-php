@@ -1,13 +1,11 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Termwind\Repositories;
+declare (strict_types=1);
+namespace Odigos\Termwind\Repositories;
 
 use Closure;
-use Termwind\ValueObjects\Style;
-use Termwind\ValueObjects\Styles as StylesValueObject;
-
+use Odigos\Termwind\ValueObjects\Style;
+use Odigos\Termwind\ValueObjects\Styles as StylesValueObject;
 /**
  * @internal
  */
@@ -17,7 +15,6 @@ final class Styles
      * @var array<string, Style>
      */
     private static array $storage = [];
-
     /**
      * Creates a new style from the given arguments.
      *
@@ -25,13 +22,9 @@ final class Styles
      */
     public static function create(string $name, ?Closure $callback = null): Style
     {
-        self::$storage[$name] = $style = new Style(
-            $callback ?? static fn (StylesValueObject $styles) => $styles
-        );
-
+        self::$storage[$name] = $style = new Style($callback ?? static fn(StylesValueObject $styles) => $styles);
         return $style;
     }
-
     /**
      * Removes all existing styles.
      */
@@ -39,7 +32,6 @@ final class Styles
     {
         self::$storage = [];
     }
-
     /**
      * Checks a style with the given name exists.
      */
@@ -47,7 +39,6 @@ final class Styles
     {
         return array_key_exists($name, self::$storage);
     }
-
     /**
      * Gets the style with the given name.
      */

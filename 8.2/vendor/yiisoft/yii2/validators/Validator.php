@@ -1,16 +1,15 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\validators;
 
-use Yii;
+use Odigos\Yii;
 use yii\base\Component;
 use yii\base\NotSupportedException;
-
 /**
  * Validator is the base class for all validators.
  *
@@ -59,45 +58,7 @@ class Validator extends Component
     /**
      * @var array list of built-in validators (name => class or configuration)
      */
-    public static $builtInValidators = [
-        'boolean' => 'yii\validators\BooleanValidator',
-        'captcha' => 'yii\captcha\CaptchaValidator',
-        'compare' => 'yii\validators\CompareValidator',
-        'date' => 'yii\validators\DateValidator',
-        'datetime' => [
-            'class' => 'yii\validators\DateValidator',
-            'type' => DateValidator::TYPE_DATETIME,
-        ],
-        'time' => [
-            'class' => 'yii\validators\DateValidator',
-            'type' => DateValidator::TYPE_TIME,
-        ],
-        'default' => 'yii\validators\DefaultValueValidator',
-        'double' => 'yii\validators\NumberValidator',
-        'each' => 'yii\validators\EachValidator',
-        'email' => 'yii\validators\EmailValidator',
-        'exist' => 'yii\validators\ExistValidator',
-        'file' => 'yii\validators\FileValidator',
-        'filter' => 'yii\validators\FilterValidator',
-        'image' => 'yii\validators\ImageValidator',
-        'in' => 'yii\validators\RangeValidator',
-        'integer' => [
-            'class' => 'yii\validators\NumberValidator',
-            'integerOnly' => true,
-        ],
-        'match' => 'yii\validators\RegularExpressionValidator',
-        'number' => 'yii\validators\NumberValidator',
-        'required' => 'yii\validators\RequiredValidator',
-        'safe' => 'yii\validators\SafeValidator',
-        'string' => 'yii\validators\StringValidator',
-        'trim' => [
-            'class' => 'yii\validators\TrimValidator',
-            'skipOnArray' => true,
-        ],
-        'unique' => 'yii\validators\UniqueValidator',
-        'url' => 'yii\validators\UrlValidator',
-        'ip' => 'yii\validators\IpValidator',
-    ];
+    public static $builtInValidators = ['boolean' => 'yii\validators\BooleanValidator', 'captcha' => 'yii\captcha\CaptchaValidator', 'compare' => 'yii\validators\CompareValidator', 'date' => 'yii\validators\DateValidator', 'datetime' => ['class' => 'yii\validators\DateValidator', 'type' => \yii\validators\DateValidator::TYPE_DATETIME], 'time' => ['class' => 'yii\validators\DateValidator', 'type' => \yii\validators\DateValidator::TYPE_TIME], 'default' => 'yii\validators\DefaultValueValidator', 'double' => 'yii\validators\NumberValidator', 'each' => 'yii\validators\EachValidator', 'email' => 'yii\validators\EmailValidator', 'exist' => 'yii\validators\ExistValidator', 'file' => 'yii\validators\FileValidator', 'filter' => 'yii\validators\FilterValidator', 'image' => 'yii\validators\ImageValidator', 'in' => 'yii\validators\RangeValidator', 'integer' => ['class' => 'yii\validators\NumberValidator', 'integerOnly' => \true], 'match' => 'yii\validators\RegularExpressionValidator', 'number' => 'yii\validators\NumberValidator', 'required' => 'yii\validators\RequiredValidator', 'safe' => 'yii\validators\SafeValidator', 'string' => 'yii\validators\StringValidator', 'trim' => ['class' => 'yii\validators\TrimValidator', 'skipOnArray' => \true], 'unique' => 'yii\validators\UniqueValidator', 'url' => 'yii\validators\UrlValidator', 'ip' => 'yii\validators\IpValidator'];
     /**
      * @var array|string attributes to be validated by this validator. For multiple attributes,
      * please specify them as an array; for single attribute, you may use either a string or an array.
@@ -130,19 +91,19 @@ class Validator extends Component
      * @var bool whether this validation rule should be skipped if the attribute being validated
      * already has some validation error according to some previous rules. Defaults to true.
      */
-    public $skipOnError = true;
+    public $skipOnError = \true;
     /**
      * @var bool whether this validation rule should be skipped if the attribute value
      * is null or an empty string. This property is used only when validating [[yii\base\Model]].
      */
-    public $skipOnEmpty = true;
+    public $skipOnEmpty = \true;
     /**
      * @var bool whether to enable client-side validation for this validator.
      * The actual client-side validation is done via the JavaScript code returned
      * by [[clientValidateAttribute()]]. If that method returns null, even if this property
      * is true, no client-side validation will be done by this validator.
      */
-    public $enableClientValidation = true;
+    public $enableClientValidation = \true;
     /**
      * @var callable|null a PHP callable that replaces the default implementation of [[isEmpty()]].
      * If not set, [[isEmpty()]] will be used to check if a value is empty. The signature
@@ -189,8 +150,6 @@ class Validator extends Component
      * @see when
      */
     public $whenClient;
-
-
     /**
      * Creates a validator object.
      * @param string|\Closure $type the validator type. This can be either:
@@ -207,7 +166,6 @@ class Validator extends Component
     public static function createValidator($type, $model, $attributes, $params = [])
     {
         $params['attributes'] = $attributes;
-
         if ($type instanceof \Closure) {
             $params['class'] = __NAMESPACE__ . '\InlineValidator';
             $params['method'] = $type;
@@ -226,10 +184,8 @@ class Validator extends Component
                 $params['class'] = $type;
             }
         }
-
         return Yii::createObject($params);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -240,7 +196,6 @@ class Validator extends Component
         $this->on = (array) $this->on;
         $this->except = (array) $this->except;
     }
-
     /**
      * Validates the specified object.
      * @param \yii\base\Model $model the data model being validated
@@ -251,10 +206,8 @@ class Validator extends Component
     public function validateAttributes($model, $attributes = null)
     {
         $attributes = $this->getValidationAttributes($attributes);
-
         foreach ($attributes as $attribute) {
-            $skip = $this->skipOnError && $model->hasErrors($attribute)
-                || $this->skipOnEmpty && $this->isEmpty($model->$attribute);
+            $skip = $this->skipOnError && $model->hasErrors($attribute) || $this->skipOnEmpty && $this->isEmpty($model->{$attribute});
             if (!$skip) {
                 if ($this->when === null || call_user_func($this->when, $model, $attribute)) {
                     $this->validateAttribute($model, $attribute);
@@ -262,7 +215,6 @@ class Validator extends Component
             }
         }
     }
-
     /**
      * Returns a list of attributes this validator applies to.
      * @param array|string|null $attributes the list of attributes to be validated.
@@ -279,22 +231,19 @@ class Validator extends Component
         if ($attributes === null) {
             return $this->getAttributeNames();
         }
-
         if (is_scalar($attributes)) {
             $attributes = [$attributes];
         }
-
         $newAttributes = [];
         $attributeNames = $this->getAttributeNames();
         foreach ($attributes as $attribute) {
             // do not strict compare, otherwise int attributes would fail due to to string conversion in getAttributeNames() using ltrim().
-            if (in_array($attribute, $attributeNames, false)) {
+            if (in_array($attribute, $attributeNames, \false)) {
                 $newAttributes[] = $attribute;
             }
         }
         return $newAttributes;
     }
-
     /**
      * Validates a single attribute.
      * Child classes must implement this method to provide the actual validation logic.
@@ -303,12 +252,11 @@ class Validator extends Component
      */
     public function validateAttribute($model, $attribute)
     {
-        $result = $this->validateValue($model->$attribute);
+        $result = $this->validateValue($model->{$attribute});
         if (!empty($result)) {
             $this->addError($model, $attribute, $result[0], $result[1]);
         }
     }
-
     /**
      * Validates a given value.
      * You may use this method to validate a value out of the context of a data model.
@@ -320,9 +268,8 @@ class Validator extends Component
     {
         $result = $this->validateValue($value);
         if (empty($result)) {
-            return true;
+            return \true;
         }
-
         list($message, $params) = $result;
         $params['attribute'] = Yii::t('yii', 'the input value');
         if (is_array($value)) {
@@ -333,10 +280,8 @@ class Validator extends Component
             $params['value'] = $value;
         }
         $error = $this->formatMessage($message, $params);
-
-        return false;
+        return \false;
     }
-
     /**
      * Validates a value.
      * A validator class can implement this method to support data validation out of the context of a data model.
@@ -363,7 +308,6 @@ class Validator extends Component
     {
         throw new NotSupportedException(get_class($this) . ' does not support validateValue().');
     }
-
     /**
      * Returns the JavaScript needed for performing client-side validation.
      *
@@ -401,7 +345,6 @@ class Validator extends Component
     {
         return null;
     }
-
     /**
      * Returns the client-side validation options.
      * This method is usually called from [[clientValidateAttribute()]]. You may override this method to modify options
@@ -415,7 +358,6 @@ class Validator extends Component
     {
         return [];
     }
-
     /**
      * Returns a value indicating whether the validator is active for the given scenario and attribute.
      *
@@ -429,9 +371,8 @@ class Validator extends Component
      */
     public function isActive($scenario)
     {
-        return !in_array($scenario, $this->except, true) && (empty($this->on) || in_array($scenario, $this->on, true));
+        return !in_array($scenario, $this->except, \true) && (empty($this->on) || in_array($scenario, $this->on, \true));
     }
-
     /**
      * Adds an error about the specified attribute to the model object.
      * This is a helper method that performs message selection and internationalization.
@@ -444,7 +385,7 @@ class Validator extends Component
     {
         $params['attribute'] = $model->getAttributeLabel($attribute);
         if (!isset($params['value'])) {
-            $value = $model->$attribute;
+            $value = $model->{$attribute};
             if (is_array($value)) {
                 $params['value'] = 'array()';
             } elseif (is_object($value) && !method_exists($value, '__toString')) {
@@ -455,7 +396,6 @@ class Validator extends Component
         }
         $model->addError($attribute, $this->formatMessage($message, $params));
     }
-
     /**
      * Checks if the given value is empty.
      * A value is considered empty if it is null, an empty array, or an empty string.
@@ -468,10 +408,8 @@ class Validator extends Component
         if ($this->isEmpty !== null) {
             return call_user_func($this->isEmpty, $value);
         }
-
         return $value === null || $value === [] || $value === '';
     }
-
     /**
      * Formats a mesage using the I18N, or simple strtr if `\Yii::$app` is not available.
      * @param string $message
@@ -482,17 +420,14 @@ class Validator extends Component
     protected function formatMessage($message, $params)
     {
         if (Yii::$app !== null) {
-            return \Yii::$app->getI18n()->format($message, $params, Yii::$app->language);
+            return \Odigos\Yii::$app->getI18n()->format($message, $params, Yii::$app->language);
         }
-
         $placeholders = [];
         foreach ((array) $params as $name => $value) {
             $placeholders['{' . $name . '}'] = $value;
         }
-
-        return ($placeholders === []) ? $message : strtr($message, $placeholders);
+        return $placeholders === [] ? $message : strtr($message, $placeholders);
     }
-
     /**
      * Returns cleaned attribute names without the `!` character at the beginning.
      * @return array attribute names.

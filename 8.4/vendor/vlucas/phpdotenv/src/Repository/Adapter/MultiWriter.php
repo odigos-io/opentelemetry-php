@@ -1,8 +1,7 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Dotenv\Repository\Adapter;
+declare (strict_types=1);
+namespace Odigos\Dotenv\Repository\Adapter;
 
 final class MultiWriter implements WriterInterface
 {
@@ -12,7 +11,6 @@ final class MultiWriter implements WriterInterface
      * @var \Dotenv\Repository\Adapter\WriterInterface[]
      */
     private $writers;
-
     /**
      * Create a new multi-writer instance.
      *
@@ -24,7 +22,6 @@ final class MultiWriter implements WriterInterface
     {
         $this->writers = $writers;
     }
-
     /**
      * Write to an environment variable, if possible.
      *
@@ -37,13 +34,11 @@ final class MultiWriter implements WriterInterface
     {
         foreach ($this->writers as $writers) {
             if (!$writers->write($name, $value)) {
-                return false;
+                return \false;
             }
         }
-
-        return true;
+        return \true;
     }
-
     /**
      * Delete an environment variable, if possible.
      *
@@ -55,10 +50,9 @@ final class MultiWriter implements WriterInterface
     {
         foreach ($this->writers as $writers) {
             if (!$writers->delete($name)) {
-                return false;
+                return \false;
             }
         }
-
-        return true;
+        return \true;
     }
 }

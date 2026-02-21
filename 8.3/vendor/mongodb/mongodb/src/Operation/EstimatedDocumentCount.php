@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright 2015-present MongoDB, Inc.
  *
@@ -14,7 +15,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 namespace MongoDB\Operation;
 
 use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
@@ -25,20 +25,17 @@ use MongoDB\Driver\Session;
 use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\Exception\UnexpectedValueException;
 use MongoDB\Exception\UnsupportedException;
-
 use function array_intersect_key;
 use function is_integer;
-
 /**
  * Operation for obtaining an estimated count of documents in a collection
  *
  * @see \MongoDB\Collection::estimatedDocumentCount()
  * @see https://mongodb.com/docs/manual/reference/command/count/
  */
-final class EstimatedDocumentCount implements Explainable
+final class EstimatedDocumentCount implements \MongoDB\Operation\Explainable
 {
     private array $options;
-
     /**
      * Constructs a command to get the estimated number of documents in a
      * collection.
@@ -65,25 +62,20 @@ final class EstimatedDocumentCount implements Explainable
      */
     public function __construct(private string $databaseName, private string $collectionName, array $options = [])
     {
-        if (isset($options['maxTimeMS']) && ! is_integer($options['maxTimeMS'])) {
+        if (isset($options['maxTimeMS']) && !is_integer($options['maxTimeMS'])) {
             throw InvalidArgumentException::invalidType('"maxTimeMS" option', $options['maxTimeMS'], 'integer');
         }
-
-        if (isset($options['readConcern']) && ! $options['readConcern'] instanceof ReadConcern) {
+        if (isset($options['readConcern']) && !$options['readConcern'] instanceof ReadConcern) {
             throw InvalidArgumentException::invalidType('"readConcern" option', $options['readConcern'], ReadConcern::class);
         }
-
-        if (isset($options['readPreference']) && ! $options['readPreference'] instanceof ReadPreference) {
+        if (isset($options['readPreference']) && !$options['readPreference'] instanceof ReadPreference) {
             throw InvalidArgumentException::invalidType('"readPreference" option', $options['readPreference'], ReadPreference::class);
         }
-
-        if (isset($options['session']) && ! $options['session'] instanceof Session) {
+        if (isset($options['session']) && !$options['session'] instanceof Session) {
             throw InvalidArgumentException::invalidType('"session" option', $options['session'], Session::class);
         }
-
         $this->options = array_intersect_key($options, ['comment' => 1, 'maxTimeMS' => 1, 'readConcern' => 1, 'readPreference' => 1, 'session' => 1]);
     }
-
     /**
      * Execute the operation.
      *
@@ -95,7 +87,6 @@ final class EstimatedDocumentCount implements Explainable
     {
         return $this->createCount()->execute($server);
     }
-
     /**
      * Returns the command document for this operation.
      *
@@ -105,9 +96,8 @@ final class EstimatedDocumentCount implements Explainable
     {
         return $this->createCount()->getCommandDocument();
     }
-
-    private function createCount(): Count
+    private function createCount(): \MongoDB\Operation\Count
     {
-        return new Count($this->databaseName, $this->collectionName, [], $this->options);
+        return new \MongoDB\Operation\Count($this->databaseName, $this->collectionName, [], $this->options);
     }
 }

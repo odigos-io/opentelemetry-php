@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -19,29 +19,16 @@ namespace Cake\Database\Type;
 /**
  * Extends DateTimeType with support for time zones.
  */
-class DateTimeTimezoneType extends DateTimeType
+class DateTimeTimezoneType extends \Cake\Database\Type\DateTimeType
 {
     /**
      * @inheritDoc
      */
     protected string $_format = 'Y-m-d H:i:s.uP';
-
     /**
      * {@inheritDoc}
      *
      * @var array<string>
      */
-
-    protected array $_marshalFormats = [
-        'Y-m-d H:i',
-        'Y-m-d H:i:s',
-        'Y-m-d H:i:sP',
-        'Y-m-d H:i:s.u',
-        'Y-m-d H:i:s.uP',
-        'Y-m-d\TH:i',
-        'Y-m-d\TH:i:s',
-        'Y-m-d\TH:i:sP',
-        'Y-m-d\TH:i:s.u',
-        'Y-m-d\TH:i:s.uP',
-    ];
+    protected array $_marshalFormats = ['Y-m-d H:i', 'Y-m-d H:i:s', 'Y-m-d H:i:sP', 'Y-m-d H:i:s.u', 'Y-m-d H:i:s.uP', 'Y-m-d\TH:i', 'Y-m-d\TH:i:s', 'Y-m-d\TH:i:sP', 'Y-m-d\TH:i:s.u', 'Y-m-d\TH:i:s.uP'];
 }

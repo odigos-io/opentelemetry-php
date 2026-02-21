@@ -1,9 +1,8 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\DBAL\Exception;
 
-class SchemaDoesNotExist extends DatabaseObjectNotFoundException
+class SchemaDoesNotExist extends \Doctrine\DBAL\Exception\DatabaseObjectNotFoundException
 {
 }

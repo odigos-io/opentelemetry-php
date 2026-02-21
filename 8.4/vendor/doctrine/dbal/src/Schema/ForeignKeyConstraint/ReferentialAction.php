@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\DBAL\Schema\ForeignKeyConstraint;
 
 /**
@@ -15,19 +14,17 @@ namespace Doctrine\DBAL\Schema\ForeignKeyConstraint;
  * @link https://www.ibm.com/docs/en/db2/11.5?topic=constraints-foreign-key-referential
  * @link https://www.sqlite.org/foreignkeys.html
  */
-enum ReferentialAction: string
+enum ReferentialAction : string
 {
-    case CASCADE     = 'CASCADE';
-    case NO_ACTION   = 'NO ACTION';
+    case CASCADE = 'CASCADE';
+    case NO_ACTION = 'NO ACTION';
     case SET_DEFAULT = 'SET DEFAULT';
-    case SET_NULL    = 'SET NULL';
-
+    case SET_NULL = 'SET NULL';
     /**
      * The <code>RESTRICT</code> referential action is not part of the SQL-92 standard but is supported by MySQL,
      * PostgreSQL, IBM DB2 and SQLite.
      */
     case RESTRICT = 'RESTRICT';
-
     /**
      * Returns the SQL representation of the referential action.
      */

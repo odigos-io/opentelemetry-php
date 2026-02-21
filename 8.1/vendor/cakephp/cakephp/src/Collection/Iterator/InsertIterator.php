@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -17,7 +17,6 @@ declare(strict_types=1);
 namespace Cake\Collection\Iterator;
 
 use Cake\Collection\Collection;
-
 /**
  * This iterator will insert values into a property of each of the records returned.
  * The values to be inserted come out of another traversal object. This is useful
@@ -32,14 +31,12 @@ class InsertIterator extends Collection
      * @var \Cake\Collection\Collection
      */
     protected Collection $_values;
-
     /**
      * Holds whether the values collection is still valid. (has more records)
      *
      * @var bool
      */
-    protected bool $_validValues = true;
-
+    protected bool $_validValues = \true;
     /**
      * An array containing each of the properties to be traversed to reach the
      * point where the values should be inserted.
@@ -47,14 +44,12 @@ class InsertIterator extends Collection
      * @var array<string>
      */
     protected array $_path;
-
     /**
      * The property name to which values will be assigned
      *
      * @var string
      */
     protected string $_target;
-
     /**
      * Constructs a new collection that will dynamically add properties to it out of
      * the values found in $values.
@@ -69,18 +64,15 @@ class InsertIterator extends Collection
     public function __construct(iterable $into, string $path, iterable $values)
     {
         parent::__construct($into);
-
-        if (!($values instanceof Collection)) {
+        if (!$values instanceof Collection) {
             $values = new Collection($values);
         }
-
         $path = explode('.', $path);
         $target = array_pop($path);
         $this->_path = $path;
         $this->_target = $target;
         $this->_values = $values;
     }
-
     /**
      * Advances the cursor to the next record
      *
@@ -94,7 +86,6 @@ class InsertIterator extends Collection
         }
         $this->_validValues = $this->_values->valid();
     }
-
     /**
      * Returns the current element in the target collection after inserting
      * the value from the source collection into the specified path.
@@ -104,24 +95,19 @@ class InsertIterator extends Collection
     public function current(): mixed
     {
         $row = parent::current();
-
         if (!$this->_validValues) {
             return $row;
         }
-
-        $pointer = &$row;
+        $pointer =& $row;
         foreach ($this->_path as $step) {
             if (!isset($pointer[$step])) {
                 return $row;
             }
-            $pointer = &$pointer[$step];
+            $pointer =& $pointer[$step];
         }
-
         $pointer[$this->_target] = $this->_values->current();
-
         return $row;
     }
-
     /**
      * Resets the collection pointer.
      *

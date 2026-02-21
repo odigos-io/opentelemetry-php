@@ -4,7 +4,6 @@ namespace Illuminate\Database\Eloquent\Casts;
 
 use Illuminate\Contracts\Database\Eloquent\Castable;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
-
 class AsArrayObject implements Castable
 {
     /**
@@ -19,20 +18,16 @@ class AsArrayObject implements Castable
         {
             public function get($model, $key, $value, $attributes)
             {
-                if (! isset($attributes[$key])) {
+                if (!isset($attributes[$key])) {
                     return;
                 }
-
-                $data = Json::decode($attributes[$key]);
-
-                return is_array($data) ? new ArrayObject($data, ArrayObject::ARRAY_AS_PROPS) : null;
+                $data = \Illuminate\Database\Eloquent\Casts\Json::decode($attributes[$key]);
+                return is_array($data) ? new \Illuminate\Database\Eloquent\Casts\ArrayObject($data, \Illuminate\Database\Eloquent\Casts\ArrayObject::ARRAY_AS_PROPS) : null;
             }
-
             public function set($model, $key, $value, $attributes)
             {
-                return [$key => Json::encode($value)];
+                return [$key => \Illuminate\Database\Eloquent\Casts\Json::encode($value)];
             }
-
             public function serialize($model, string $key, $value, array $attributes)
             {
                 return $value->getArrayCopy();

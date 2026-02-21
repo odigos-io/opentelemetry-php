@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -18,7 +18,6 @@ declare(strict_types=1);
 namespace Cake\Routing;
 
 use Psr\Http\Message\UriInterface;
-
 /**
  * Returns an array URL from a route path string.
  *
@@ -30,15 +29,10 @@ use Psr\Http\Message\UriInterface;
  */
 function urlArray(string $path, array $params = []): array
 {
-    $url = Router::parseRoutePath($path);
-    $url += [
-        'plugin' => false,
-        'prefix' => false,
-    ];
-
+    $url = \Cake\Routing\Router::parseRoutePath($path);
+    $url += ['plugin' => \false, 'prefix' => \false];
     return $url + $params;
 }
-
 /**
  * Convenience wrapper for Router::url().
  *
@@ -53,7 +47,7 @@ function urlArray(string $path, array $params = []): array
  * @see \Cake\Routing\Router::url()
  * @since 4.5.0
  */
-function url(UriInterface|array|string|null $url = null, bool $full = false): string
+function url(UriInterface|array|string|null $url = null, bool $full = \false): string
 {
-    return Router::url($url, $full);
+    return \Cake\Routing\Router::url($url, $full);
 }

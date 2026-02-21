@@ -1,15 +1,14 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\mutex;
 
 use yii\base\InvalidConfigException;
 use yii\db\Expression;
-
 /**
  * MysqlMutex implements mutex "lock" mechanism via MySQL locks.
  *
@@ -34,15 +33,13 @@ use yii\db\Expression;
  * @author resurtm <resurtm@gmail.com>
  * @since 2.0
  */
-class MysqlMutex extends DbMutex
+class MysqlMutex extends \yii\mutex\DbMutex
 {
     /**
      * @var Expression|string|null prefix value. If null (by default) then connection's current database name is used.
      * @since 2.0.47
      */
     public $keyPrefix = null;
-
-
     /**
      * Initializes MySQL specific mutex component implementation.
      * @throws InvalidConfigException if [[db]] is not MySQL connection.
@@ -57,7 +54,6 @@ class MysqlMutex extends DbMutex
             $this->keyPrefix = new Expression('DATABASE()');
         }
     }
-
     /**
      * Acquires lock by given name.
      * @param string $name of the lock to be acquired.
@@ -70,16 +66,9 @@ class MysqlMutex extends DbMutex
         return $this->db->useMaster(function ($db) use ($name, $timeout) {
             /** @var \yii\db\Connection $db */
             $nameData = $this->prepareName();
-            return (bool)$db->createCommand(
-                'SELECT GET_LOCK(' . $nameData[0] . ', :timeout), :prefix',
-                array_merge(
-                    [':name' => $this->hashLockName($name), ':timeout' => $timeout, ':prefix' => $this->keyPrefix],
-                    $nameData[1]
-                )
-            )->queryScalar();
+            return (bool) $db->createCommand('SELECT GET_LOCK(' . $nameData[0] . ', :timeout), :prefix', array_merge([':name' => $this->hashLockName($name), ':timeout' => $timeout, ':prefix' => $this->keyPrefix], $nameData[1]))->queryScalar();
         });
     }
-
     /**
      * Releases lock by given name.
      * @param string $name of the lock to be released.
@@ -91,16 +80,9 @@ class MysqlMutex extends DbMutex
         return $this->db->useMaster(function ($db) use ($name) {
             /** @var \yii\db\Connection $db */
             $nameData = $this->prepareName();
-            return (bool)$db->createCommand(
-                'SELECT RELEASE_LOCK(' . $nameData[0] . '), :prefix',
-                array_merge(
-                    [':name' => $this->hashLockName($name), ':prefix' => $this->keyPrefix],
-                    $nameData[1]
-                )
-            )->queryScalar();
+            return (bool) $db->createCommand('SELECT RELEASE_LOCK(' . $nameData[0] . '), :prefix', array_merge([':name' => $this->hashLockName($name), ':prefix' => $this->keyPrefix], $nameData[1]))->queryScalar();
         });
     }
-
     /**
      * Prepare lock name
      * @return array expression and params
@@ -116,7 +98,6 @@ class MysqlMutex extends DbMutex
         }
         return [$expression, $params];
     }
-
     /**
      * Generate hash for lock name to avoid exceeding lock name length limit.
      *

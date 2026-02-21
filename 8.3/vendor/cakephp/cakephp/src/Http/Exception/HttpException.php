@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -16,7 +16,6 @@ namespace Cake\Http\Exception;
 
 use Cake\Core\Exception\CakeException;
 use Cake\Core\Exception\HttpErrorCodeInterface;
-
 /**
  * Parent class for all the HTTP related exceptions in CakePHP.
  * All HTTP status/error related exceptions should extend this class so
@@ -31,12 +30,10 @@ class HttpException extends CakeException implements HttpErrorCodeInterface
      * @inheritDoc
      */
     protected int $_defaultCode = 500;
-
     /**
      * @var array<non-empty-string, array<string>|string>
      */
     protected array $headers = [];
-
     /**
      * Set a single HTTP response header.
      *
@@ -48,7 +45,6 @@ class HttpException extends CakeException implements HttpErrorCodeInterface
     {
         $this->headers[$header] = $value ?? '';
     }
-
     /**
      * Sets HTTP response headers.
      *
@@ -59,7 +55,6 @@ class HttpException extends CakeException implements HttpErrorCodeInterface
     {
         $this->headers = $headers;
     }
-
     /**
      * Returns array of response headers.
      *

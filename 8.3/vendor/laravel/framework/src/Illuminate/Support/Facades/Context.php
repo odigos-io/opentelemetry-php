@@ -49,7 +49,7 @@ namespace Illuminate\Support\Facades;
  *
  * @see \Illuminate\Log\Context\Repository
  */
-class Context extends Facade
+class Context extends \Illuminate\Support\Facades\Facade
 {
     /**
      * Get the registered name of the component.

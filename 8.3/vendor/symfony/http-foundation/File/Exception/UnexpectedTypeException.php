@@ -8,10 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\HttpFoundation\File\Exception;
 
-class UnexpectedTypeException extends FileException
+class UnexpectedTypeException extends \Symfony\Component\HttpFoundation\File\Exception\FileException
 {
     public function __construct(mixed $value, string $expectedType)
     {

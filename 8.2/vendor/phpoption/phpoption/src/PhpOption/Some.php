@@ -15,11 +15,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-namespace PhpOption;
+namespace Odigos\PhpOption;
 
 use ArrayIterator;
-
 /**
  * @template T
  *
@@ -29,7 +27,6 @@ final class Some extends Option
 {
     /** @var T */
     private $value;
-
     /**
      * @param T $value
      */
@@ -37,7 +34,6 @@ final class Some extends Option
     {
         $this->value = $value;
     }
-
     /**
      * @template U
      *
@@ -49,59 +45,47 @@ final class Some extends Option
     {
         return new self($value);
     }
-
     public function isDefined(): bool
     {
-        return true;
+        return \true;
     }
-
     public function isEmpty(): bool
     {
-        return false;
+        return \false;
     }
-
     public function get()
     {
         return $this->value;
     }
-
     public function getOrElse($default)
     {
         return $this->value;
     }
-
     public function getOrCall($callable)
     {
         return $this->value;
     }
-
     public function getOrThrow(\Exception $ex)
     {
         return $this->value;
     }
-
     public function orElse(Option $else)
     {
         return $this;
     }
-
     public function ifDefined($callable)
     {
         $this->forAll($callable);
     }
-
     public function forAll($callable)
     {
         $callable($this->value);
-
         return $this;
     }
-
     public function map($callable)
     {
         return new self($callable($this->value));
     }
-
     public function flatMap($callable)
     {
         /** @var mixed */
@@ -109,46 +93,36 @@ final class Some extends Option
         if (!$rs instanceof Option) {
             throw new \RuntimeException('Callables passed to flatMap() must return an Option. Maybe you should use map() instead?');
         }
-
         return $rs;
     }
-
     public function filter($callable)
     {
-        if (true === $callable($this->value)) {
+        if (\true === $callable($this->value)) {
             return $this;
         }
-
         return None::create();
     }
-
     public function filterNot($callable)
     {
-        if (false === $callable($this->value)) {
+        if (\false === $callable($this->value)) {
             return $this;
         }
-
         return None::create();
     }
-
     public function select($value)
     {
         if ($this->value === $value) {
             return $this;
         }
-
         return None::create();
     }
-
     public function reject($value)
     {
         if ($this->value === $value) {
             return None::create();
         }
-
         return $this;
     }
-
     /**
      * @return ArrayIterator<int, T>
      */
@@ -156,12 +130,10 @@ final class Some extends Option
     {
         return new ArrayIterator([$this->value]);
     }
-
     public function foldLeft($initialValue, $callable)
     {
         return $callable($initialValue, $this->value);
     }
-
     public function foldRight($initialValue, $callable)
     {
         return $callable($this->value, $initialValue);

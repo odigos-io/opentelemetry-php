@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /**
  * This file is part of the Carbon package.
  *
@@ -10,11 +9,9 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Odigos\Carbon\Traits;
 
-namespace Carbon\Traits;
-
-use Carbon\FactoryImmutable;
-
+use Odigos\Carbon\FactoryImmutable;
 /**
  * Trait Macros.
  *
@@ -23,7 +20,6 @@ use Carbon\FactoryImmutable;
 trait Macro
 {
     use Mixin;
-
     /**
      * Register a custom macro.
      *
@@ -47,7 +43,6 @@ trait Macro
     {
         FactoryImmutable::getDefaultInstance()->macro($name, $macro);
     }
-
     /**
      * Remove all macros and generic macros.
      */
@@ -55,7 +50,6 @@ trait Macro
     {
         FactoryImmutable::getDefaultInstance()->resetMacros();
     }
-
     /**
      * Register a custom macro.
      *
@@ -68,7 +62,6 @@ trait Macro
     {
         FactoryImmutable::getDefaultInstance()->genericMacro($macro, $priority);
     }
-
     /**
      * Checks if macro is registered globally.
      *
@@ -80,7 +73,6 @@ trait Macro
     {
         return FactoryImmutable::getInstance()->hasMacro($name);
     }
-
     /**
      * Get the raw callable macro registered globally for a given name.
      */
@@ -88,24 +80,18 @@ trait Macro
     {
         return FactoryImmutable::getInstance()->getMacro($name);
     }
-
     /**
      * Checks if macro is registered globally or locally.
      */
     public function hasLocalMacro(string $name): bool
     {
-        return ($this->localMacros && isset($this->localMacros[$name])) || $this->transmitFactory(
-            static fn () => static::hasMacro($name),
-        );
+        return $this->localMacros && isset($this->localMacros[$name]) || $this->transmitFactory(static fn() => static::hasMacro($name));
     }
-
     /**
      * Get the raw callable macro registered globally or locally for a given name.
      */
     public function getLocalMacro(string $name): ?callable
     {
-        return ($this->localMacros ?? [])[$name] ?? $this->transmitFactory(
-            static fn () => static::getMacro($name),
-        );
+        return ($this->localMacros ?? [])[$name] ?? $this->transmitFactory(static fn() => static::getMacro($name));
     }
 }

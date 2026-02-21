@@ -1,10 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\SDK\Metrics;
 
 interface StalenessHandlerFactoryInterface
 {
-    public function create(): StalenessHandlerInterface&ReferenceCounterInterface;
+    public function create(): \OpenTelemetry\SDK\Metrics\StalenessHandlerInterface&\OpenTelemetry\SDK\Metrics\ReferenceCounterInterface;
 }

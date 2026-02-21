@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -16,7 +16,6 @@ declare(strict_types=1);
 namespace Cake\Http\Client\Auth;
 
 use Cake\Http\Client\Request;
-
 /**
  * Basic authentication adapter for Cake\Http\Client
  *
@@ -39,10 +38,8 @@ class Basic
             $value = $this->_generateHeader($credentials['username'], $credentials['password']);
             $request = $request->withHeader('Authorization', $value);
         }
-
         return $request;
     }
-
     /**
      * Proxy Authentication
      *
@@ -57,10 +54,8 @@ class Basic
             $value = $this->_generateHeader($credentials['username'], $credentials['password']);
             $request = $request->withHeader('Proxy-Authorization', $value);
         }
-
         return $request;
     }
-
     /**
      * Generate basic [proxy] authentication header
      *

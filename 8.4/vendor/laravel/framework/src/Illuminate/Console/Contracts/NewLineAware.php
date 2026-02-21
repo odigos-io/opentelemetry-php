@@ -10,7 +10,6 @@ interface NewLineAware
      * @return int
      */
     public function newLinesWritten();
-
     /**
      * Whether a newline has already been written.
      *

@@ -8,32 +8,26 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+declare (strict_types=1);
+namespace Odigos\League\Uri\Contracts;
 
-declare(strict_types=1);
-
-namespace League\Uri\Contracts;
-
-use League\Uri\Exceptions\MissingFeature;
-use League\Uri\Exceptions\SyntaxError;
+use Odigos\League\Uri\Exceptions\MissingFeature;
+use Odigos\League\Uri\Exceptions\SyntaxError;
 use Stringable;
-
 interface AuthorityInterface extends UriComponentInterface
 {
     /**
      * Returns the host component of the authority.
      */
     public function getHost(): ?string;
-
     /**
      * Returns the port component of the authority.
      */
     public function getPort(): ?int;
-
     /**
      * Returns the user information component of the authority.
      */
     public function getUserInfo(): ?string;
-
     /**
      * Returns an associative array containing all the Authority components.
      *
@@ -44,7 +38,6 @@ interface AuthorityInterface extends UriComponentInterface
      * @return array{user: ?string, pass : ?string, host: ?string, port: ?int}
      */
     public function components(): array;
-
     /**
      * Return an instance with the specified host.
      *
@@ -61,7 +54,6 @@ interface AuthorityInterface extends UriComponentInterface
      *                        or misconfigured.
      */
     public function withHost(Stringable|string|null $host): self;
-
     /**
      * Return an instance with the specified port.
      *
@@ -75,7 +67,6 @@ interface AuthorityInterface extends UriComponentInterface
      *                     that would result in an object in invalid state.
      */
     public function withPort(?int $port): self;
-
     /**
      * Return an instance with the specified user information.
      *

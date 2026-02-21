@@ -2,7 +2,7 @@
 
 namespace Illuminate\Cache\Events;
 
-class RetrievingKey extends CacheEvent
+class RetrievingKey extends \Illuminate\Cache\Events\CacheEvent
 {
     //
 }

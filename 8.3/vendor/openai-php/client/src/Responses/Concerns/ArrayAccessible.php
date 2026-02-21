@@ -1,11 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenAI\Responses\Concerns;
 
 use BadMethodCallException;
-
 /**
  * @template TArray of array
  *
@@ -20,15 +18,14 @@ trait ArrayAccessible
     {
         return array_key_exists($offset, $this->toArray());
     }
-
     /**
      * {@inheritDoc}
      */
     public function offsetGet(mixed $offset): mixed
     {
-        return $this->toArray()[$offset]; // @phpstan-ignore-line
+        return $this->toArray()[$offset];
+        // @phpstan-ignore-line
     }
-
     /**
      * {@inheritDoc}
      */
@@ -36,7 +33,6 @@ trait ArrayAccessible
     {
         throw new BadMethodCallException('Cannot set response attributes.');
     }
-
     /**
      * {@inheritDoc}
      */

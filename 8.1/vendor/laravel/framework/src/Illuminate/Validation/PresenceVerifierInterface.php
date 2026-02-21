@@ -16,7 +16,6 @@ interface PresenceVerifierInterface
      * @return int
      */
     public function getCount($collection, $column, $value, $excludeId = null, $idColumn = null, array $extra = []);
-
     /**
      * Count the number of objects in a collection with the given values.
      *

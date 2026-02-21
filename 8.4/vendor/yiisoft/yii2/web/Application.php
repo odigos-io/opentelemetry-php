@@ -1,17 +1,16 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\web;
 
-use Yii;
+use Odigos\Yii;
 use yii\base\InvalidRouteException;
 use yii\base\Module;
 use yii\helpers\Url;
-
 /**
  * Application is the base class for all web application classes.
  *
@@ -64,8 +63,6 @@ class Application extends \yii\base\Application
      * @psalm-var Controller<Module>|null
      */
     public $controller;
-
-
     /**
      * {@inheritdoc}
      */
@@ -74,10 +71,8 @@ class Application extends \yii\base\Application
         $request = $this->getRequest();
         Yii::setAlias('@webroot', dirname($request->getScriptFile()));
         Yii::setAlias('@web', $request->getBaseUrl());
-
         parent::bootstrap();
     }
-
     /**
      * Handles the specified request.
      * @param Request $request the request to be handled
@@ -89,7 +84,7 @@ class Application extends \yii\base\Application
         if (empty($this->catchAll)) {
             try {
                 list($route, $params) = $request->resolve();
-            } catch (UrlNormalizerRedirectException $e) {
+            } catch (\yii\web\UrlNormalizerRedirectException $e) {
                 $url = $e->url;
                 if (is_array($url)) {
                     if (isset($url[0])) {
@@ -98,7 +93,6 @@ class Application extends \yii\base\Application
                     }
                     $url += $request->getQueryParams();
                 }
-
                 return $this->getResponse()->redirect(Url::to($url, $e->scheme), $e->statusCode);
             }
         } else {
@@ -107,26 +101,22 @@ class Application extends \yii\base\Application
             unset($params[0]);
         }
         try {
-            Yii::debug("Route requested: '$route'", __METHOD__);
+            Yii::debug("Route requested: '{$route}'", __METHOD__);
             $this->requestedRoute = $route;
             $result = $this->runAction($route, $params);
-            if ($result instanceof Response) {
+            if ($result instanceof \yii\web\Response) {
                 return $result;
             }
-
             $response = $this->getResponse();
             if ($result !== null) {
                 $response->data = $result;
             }
-
             return $response;
         } catch (InvalidRouteException $e) {
-            throw new NotFoundHttpException(Yii::t('yii', 'Page not found.'), $e->getCode(), $e);
+            throw new \yii\web\NotFoundHttpException(Yii::t('yii', 'Page not found.'), $e->getCode(), $e);
         }
     }
-
     private $_homeUrl;
-
     /**
      * @return string the homepage URL
      */
@@ -136,13 +126,10 @@ class Application extends \yii\base\Application
             if ($this->getUrlManager()->showScriptName) {
                 return $this->getRequest()->getScriptUrl();
             }
-
             return $this->getRequest()->getBaseUrl() . '/';
         }
-
         return $this->_homeUrl;
     }
-
     /**
      * @param string $value the homepage URL
      */
@@ -150,7 +137,6 @@ class Application extends \yii\base\Application
     {
         $this->_homeUrl = $value;
     }
-
     /**
      * Returns the error handler component.
      * @return ErrorHandler the error handler application component.
@@ -159,7 +145,6 @@ class Application extends \yii\base\Application
     {
         return $this->get('errorHandler');
     }
-
     /**
      * Returns the request component.
      * @return Request the request component.
@@ -168,7 +153,6 @@ class Application extends \yii\base\Application
     {
         return $this->get('request');
     }
-
     /**
      * Returns the response component.
      * @return Response the response component.
@@ -177,7 +161,6 @@ class Application extends \yii\base\Application
     {
         return $this->get('response');
     }
-
     /**
      * Returns the session component.
      * @return Session the session component.
@@ -186,7 +169,6 @@ class Application extends \yii\base\Application
     {
         return $this->get('session');
     }
-
     /**
      * Returns the user component.
      * @return User the user component.
@@ -198,18 +180,11 @@ class Application extends \yii\base\Application
     {
         return $this->get('user');
     }
-
     /**
      * {@inheritdoc}
      */
     public function coreComponents()
     {
-        return array_merge(parent::coreComponents(), [
-            'request' => ['class' => 'yii\web\Request'],
-            'response' => ['class' => 'yii\web\Response'],
-            'session' => ['class' => 'yii\web\Session'],
-            'user' => ['class' => 'yii\web\User'],
-            'errorHandler' => ['class' => 'yii\web\ErrorHandler'],
-        ]);
+        return array_merge(parent::coreComponents(), ['request' => ['class' => 'yii\web\Request'], 'response' => ['class' => 'yii\web\Response'], 'session' => ['class' => 'yii\web\Session'], 'user' => ['class' => 'yii\web\User'], 'errorHandler' => ['class' => 'yii\web\ErrorHandler']]);
     }
 }

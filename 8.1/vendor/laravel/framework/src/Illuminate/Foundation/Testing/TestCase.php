@@ -2,23 +2,11 @@
 
 namespace Illuminate\Foundation\Testing;
 
-use PHPUnit\Framework\TestCase as BaseTestCase;
+use Odigos\PHPUnit\Framework\TestCase as BaseTestCase;
 use Throwable;
-
 abstract class TestCase extends BaseTestCase
 {
-    use Concerns\InteractsWithContainer,
-        Concerns\MakesHttpRequests,
-        Concerns\InteractsWithAuthentication,
-        Concerns\InteractsWithConsole,
-        Concerns\InteractsWithDatabase,
-        Concerns\InteractsWithDeprecationHandling,
-        Concerns\InteractsWithExceptionHandling,
-        Concerns\InteractsWithSession,
-        Concerns\InteractsWithTime,
-        Concerns\InteractsWithTestCaseLifecycle,
-        Concerns\InteractsWithViews;
-
+    use \Illuminate\Foundation\Testing\Concerns\InteractsWithContainer, \Illuminate\Foundation\Testing\Concerns\MakesHttpRequests, \Illuminate\Foundation\Testing\Concerns\InteractsWithAuthentication, \Illuminate\Foundation\Testing\Concerns\InteractsWithConsole, \Illuminate\Foundation\Testing\Concerns\InteractsWithDatabase, \Illuminate\Foundation\Testing\Concerns\InteractsWithDeprecationHandling, \Illuminate\Foundation\Testing\Concerns\InteractsWithExceptionHandling, \Illuminate\Foundation\Testing\Concerns\InteractsWithSession, \Illuminate\Foundation\Testing\Concerns\InteractsWithTime, \Illuminate\Foundation\Testing\Concerns\InteractsWithTestCaseLifecycle, \Illuminate\Foundation\Testing\Concerns\InteractsWithViews;
     /**
      * Creates the application.
      *
@@ -27,7 +15,6 @@ abstract class TestCase extends BaseTestCase
      * @return \Symfony\Component\HttpKernel\HttpKernelInterface
      */
     abstract public function createApplication();
-
     /**
      * Setup the test environment.
      *
@@ -36,10 +23,8 @@ abstract class TestCase extends BaseTestCase
     protected function setUp(): void
     {
         static::$latestResponse = null;
-
         $this->setUpTheTestEnvironment();
     }
-
     /**
      * Refresh the application instance.
      *
@@ -49,28 +34,23 @@ abstract class TestCase extends BaseTestCase
     {
         $this->app = $this->createApplication();
     }
-
     /**
      * {@inheritdoc}
      */
     protected function runTest(): mixed
     {
         $result = null;
-
         try {
             // @phpstan-ignore-next-line
             $result = parent::runTest();
         } catch (Throwable $e) {
-            if (! is_null(static::$latestResponse)) {
+            if (!is_null(static::$latestResponse)) {
                 static::$latestResponse->transformNotSuccessfulException($e);
             }
-
             throw $e;
         }
-
         return $result;
     }
-
     /**
      * Clean up the testing environment before the next test.
      *
@@ -82,7 +62,6 @@ abstract class TestCase extends BaseTestCase
     {
         $this->tearDownTheTestEnvironment();
     }
-
     /**
      * Clean up the testing environment before the next test case.
      *
@@ -91,7 +70,6 @@ abstract class TestCase extends BaseTestCase
     public static function tearDownAfterClass(): void
     {
         static::$latestResponse = null;
-
         static::tearDownAfterClassUsingTestCase();
     }
 }

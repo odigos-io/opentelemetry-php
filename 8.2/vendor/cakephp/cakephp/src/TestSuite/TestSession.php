@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * A class to contain and retain the session during integration testing.
  *
@@ -19,7 +19,6 @@ declare(strict_types=1);
 namespace Cake\TestSuite;
 
 use Cake\Utility\Hash;
-
 /**
  * Read only access to the session during testing.
  */
@@ -29,7 +28,6 @@ class TestSession
      * @var array|null
      */
     protected ?array $session = null;
-
     /**
      * @param array|null $session Session data.
      */
@@ -37,7 +35,6 @@ class TestSession
     {
         $this->session = $session;
     }
-
     /**
      * Returns true if given variable name is set in session.
      *
@@ -47,16 +44,13 @@ class TestSession
     public function check(?string $name = null): bool
     {
         if ($this->session === null) {
-            return false;
+            return \false;
         }
-
         if ($name === null) {
-            return (bool)$this->session;
+            return (bool) $this->session;
         }
-
         return Hash::get($this->session, $name) !== null;
     }
-
     /**
      * Returns given session variable, or all of them, if no parameters given.
      *
@@ -69,11 +63,9 @@ class TestSession
         if ($this->session === null) {
             return null;
         }
-
         if ($name === null) {
             return $this->session ?: [];
         }
-
         return Hash::get($this->session, $name);
     }
 }

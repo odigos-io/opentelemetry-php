@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -16,19 +16,17 @@ declare(strict_types=1);
 namespace Cake\TestSuite\Constraint\Response;
 
 use Psr\Http\Message\ResponseInterface;
-
 /**
  * FileSent
  *
  * @internal
  */
-class FileSent extends ResponseBase
+class FileSent extends \Cake\TestSuite\Constraint\Response\ResponseBase
 {
     /**
      * @var \Cake\Http\Response
      */
     protected ResponseInterface $response;
-
     /**
      * Checks assertion
      *
@@ -39,7 +37,6 @@ class FileSent extends ResponseBase
     {
         return $this->response->getFile() !== null;
     }
-
     /**
      * Assertion message
      *
@@ -49,7 +46,6 @@ class FileSent extends ResponseBase
     {
         return 'file was sent';
     }
-
     /**
      * Overwrites the descriptions so we can remove the automatic "expected" message
      *

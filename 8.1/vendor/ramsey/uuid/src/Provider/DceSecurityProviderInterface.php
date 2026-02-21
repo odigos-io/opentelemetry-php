@@ -9,14 +9,11 @@
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
  */
+declare (strict_types=1);
+namespace Odigos\Ramsey\Uuid\Provider;
 
-declare(strict_types=1);
-
-namespace Ramsey\Uuid\Provider;
-
-use Ramsey\Uuid\Rfc4122\UuidV2;
-use Ramsey\Uuid\Type\Integer as IntegerObject;
-
+use Odigos\Ramsey\Uuid\Rfc4122\UuidV2;
+use Odigos\Ramsey\Uuid\Type\Integer as IntegerObject;
 /**
  * A DCE provider provides access to local domain identifiers for version 2, DCE Security, UUIDs
  *
@@ -30,7 +27,6 @@ interface DceSecurityProviderInterface
      * @link https://en.wikipedia.org/wiki/User_identifier User identifier
      */
     public function getUid(): IntegerObject;
-
     /**
      * Returns a group identifier for the system
      *

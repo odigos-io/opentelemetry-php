@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -17,13 +17,12 @@ declare(strict_types=1);
 namespace Cake\Routing\Route;
 
 use Cake\Utility\Inflector;
-
 /**
  * This route class will transparently inflect the controller, action and plugin
  * routing parameters, so that requesting `/my-plugin/my-controller/my-action`
  * is parsed as `['plugin' => 'MyPlugin', 'controller' => 'MyController', 'action' => 'myAction']`
  */
-class DashedRoute extends Route
+class DashedRoute extends \Cake\Routing\Route\Route
 {
     /**
      * Flag for tracking whether the defaults have been inflected.
@@ -34,7 +33,6 @@ class DashedRoute extends Route
      * @var array|null
      */
     protected ?array $_inflectedDefaults = null;
-
     /**
      * Camelizes the previously dashed plugin route taking into account plugin vendors
      *
@@ -48,10 +46,8 @@ class DashedRoute extends Route
             return Inflector::camelize($plugin);
         }
         [$vendor, $plugin] = explode('/', $plugin, 2);
-
         return Inflector::camelize($vendor) . '/' . Inflector::camelize($plugin);
     }
-
     /**
      * Parses a string URL into an array. If it matches, it will convert the
      * controller and plugin keys to their CamelCased form and action key to
@@ -74,16 +70,10 @@ class DashedRoute extends Route
             $params['plugin'] = $this->_camelizePlugin($params['plugin']);
         }
         if (!empty($params['action'])) {
-            $params['action'] = Inflector::variable(str_replace(
-                '-',
-                '_',
-                $params['action'],
-            ));
+            $params['action'] = Inflector::variable(str_replace('-', '_', $params['action']));
         }
-
         return $params;
     }
-
     /**
      * Dasherizes the controller, action and plugin params before passing them on
      * to the parent class.
@@ -104,13 +94,11 @@ class DashedRoute extends Route
         $restore = $this->defaults;
         try {
             $this->defaults = $this->_inflectedDefaults;
-
             return parent::match($url, $context);
         } finally {
             $this->defaults = $restore;
         }
     }
-
     /**
      * Helper method for dasherizing keys in a URL array.
      *
@@ -124,7 +112,6 @@ class DashedRoute extends Route
                 $url[$element] = Inflector::dasherize($url[$element]);
             }
         }
-
         return $url;
     }
 }

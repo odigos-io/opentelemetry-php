@@ -8,20 +8,17 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-declare(strict_types=1);
-
-namespace League\Uri\Contracts;
+declare (strict_types=1);
+namespace Odigos\League\Uri\Contracts;
 
 use BackedEnum;
 use Countable;
 use Deprecated;
 use Iterator;
 use IteratorAggregate;
-use League\Uri\QueryComposeMode;
-use League\Uri\StringCoercionMode;
+use Odigos\League\Uri\QueryComposeMode;
+use Odigos\League\Uri\StringCoercionMode;
 use Stringable;
-
 /**
  * @extends IteratorAggregate<array{0:string, 1:string|null}>
  *
@@ -56,12 +53,10 @@ interface QueryInterface extends Countable, IteratorAggregate, UriComponentInter
      * @return non-empty-string
      */
     public function getSeparator(): string;
-
     /**
      * Returns the number of key/value pairs present in the object.
      */
     public function count(): int;
-
     /**
      * Returns an iterator allowing to go through all key/value pairs contained in this object.
      *
@@ -74,7 +69,6 @@ interface QueryInterface extends Countable, IteratorAggregate, UriComponentInter
      * @return Iterator<int, array{0:string, 1:string|null}>
      */
     public function getIterator(): Iterator;
-
     /**
      * Returns an iterator allowing to go through all key/value pairs contained in this object.
      *
@@ -86,14 +80,12 @@ interface QueryInterface extends Countable, IteratorAggregate, UriComponentInter
      * @return iterable<string, string|null>
      */
     public function pairs(): iterable;
-
     /**
      * Tells whether a list of pair with a specific key exists.
      *
      * @see https://url.spec.whatwg.org/#dom-urlsearchparams-has
      */
     public function has(string ...$keys): bool;
-
     /**
      * Returns the first value associated to the given pair name.
      *
@@ -102,7 +94,6 @@ interface QueryInterface extends Countable, IteratorAggregate, UriComponentInter
      * @see https://url.spec.whatwg.org/#dom-urlsearchparams-get
      */
     public function get(string $key): ?string;
-
     /**
      * Returns all the values associated to the given pair name as an array or all
      * the instance pairs.
@@ -114,7 +105,6 @@ interface QueryInterface extends Countable, IteratorAggregate, UriComponentInter
      * @return array<int, string|null>
      */
     public function getAll(string $key): array;
-
     /**
      * Returns the store PHP variables as elements of an array.
      *
@@ -128,7 +118,6 @@ interface QueryInterface extends Countable, IteratorAggregate, UriComponentInter
      * @return array the collection of stored PHP variables or the empty array if no input is given,
      */
     public function parameters(): array;
-
     /**
      * Returns the value attached to the specific key.
      *
@@ -144,19 +133,16 @@ interface QueryInterface extends Countable, IteratorAggregate, UriComponentInter
      *               the single value of a stored PHP variable or null if the variable is not present in the collection
      */
     public function parameter(string $name): mixed;
-
     /**
      * Tells whether a list of variable with specific names exists.
      *
      * @see https://url.spec.whatwg.org/#dom-urlsearchparams-has
      */
     public function hasParameter(string ...$names): bool;
-
     /**
      * Returns the RFC1738 encoded query.
      */
     public function toRFC1738(): ?string;
-
     /**
      * Returns an instance with a different separator.
      *
@@ -164,7 +150,6 @@ interface QueryInterface extends Countable, IteratorAggregate, UriComponentInter
      * an instance that contains the query component with a different separator
      */
     public function withSeparator(string $separator): self;
-
     /**
      * Returns an instance with the new pairs set to it.
      *
@@ -174,7 +159,6 @@ interface QueryInterface extends Countable, IteratorAggregate, UriComponentInter
      * @see ::withPair
      */
     public function merge(Stringable|string $query): self;
-
     /**
      * Returns an instance with the new pairs appended to it.
      *
@@ -184,7 +168,6 @@ interface QueryInterface extends Countable, IteratorAggregate, UriComponentInter
      * If the pair already exists the value will be added to it.
      */
     public function append(Stringable|string $query): self;
-
     /**
      * Returns a new instance with a specified key/value pair appended as a new pair.
      *
@@ -192,7 +175,6 @@ interface QueryInterface extends Countable, IteratorAggregate, UriComponentInter
      * an instance that contains the modified query
      */
     public function appendTo(string $key, Stringable|string|int|bool|null $value): self;
-
     /**
      * Sorts the query string by offset, maintaining offset to data correlations.
      *
@@ -202,7 +184,6 @@ interface QueryInterface extends Countable, IteratorAggregate, UriComponentInter
      * @see https://url.spec.whatwg.org/#dom-urlsearchparams-sort
      */
     public function sort(): self;
-
     /**
      * Returns an instance without duplicate key/value pair.
      *
@@ -211,7 +192,6 @@ interface QueryInterface extends Countable, IteratorAggregate, UriComponentInter
      * duplicate pairs whose key/value are the same.
      */
     public function withoutDuplicates(): self;
-
     /**
      * Returns an instance without empty key/value where the value is the null value.
      *
@@ -222,7 +202,6 @@ interface QueryInterface extends Countable, IteratorAggregate, UriComponentInter
      * A pair is considered empty if its value is equal to the null value
      */
     public function withoutEmptyPairs(): self;
-
     /**
      * Returns an instance where numeric indices associated to PHP's array like key are removed.
      *
@@ -233,7 +212,6 @@ interface QueryInterface extends Countable, IteratorAggregate, UriComponentInter
      * i.e.: toto[3]=bar[3]&foo=bar becomes toto[]=bar[3]&foo=bar
      */
     public function withoutNumericIndices(): self;
-
     /**
      * Returns an instance with a new key/value pair added to it.
      *
@@ -245,7 +223,6 @@ interface QueryInterface extends Countable, IteratorAggregate, UriComponentInter
      * @see https://url.spec.whatwg.org/#dom-urlsearchparams-set
      */
     public function withPair(string $key, Stringable|string|int|float|bool|null $value): self;
-
     /**
      * DEPRECATION WARNING! This method will be removed in the next major point release.
      *
@@ -258,9 +235,8 @@ interface QueryInterface extends Countable, IteratorAggregate, UriComponentInter
      * This method MUST retain the state of the current instance, and return
      * an instance that contains the modified component
      */
-    #[Deprecated(message:'use League\Uri\Contracts\QueryInterface::withoutPairByKey() instead', since:'league/uri-interfaces:7.3.0')]
+    #[Deprecated(message: 'use League\Uri\Contracts\QueryInterface::withoutPairByKey() instead', since: 'league/uri-interfaces:7.3.0')]
     public function withoutPair(string ...$keys): self;
-
     /**
      * Returns an instance without the specified params.
      *

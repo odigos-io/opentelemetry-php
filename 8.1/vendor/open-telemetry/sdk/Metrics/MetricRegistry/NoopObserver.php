@@ -1,11 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\SDK\Metrics\MetricRegistry;
 
 use OpenTelemetry\API\Metrics\ObserverInterface;
-
 /**
  * @internal
  */

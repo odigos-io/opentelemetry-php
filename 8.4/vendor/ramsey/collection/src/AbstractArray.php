@@ -9,16 +9,12 @@
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
  */
-
-declare(strict_types=1);
-
-namespace Ramsey\Collection;
+declare (strict_types=1);
+namespace Odigos\Ramsey\Collection;
 
 use ArrayIterator;
 use Traversable;
-
 use function count;
-
 /**
  * This class provides a basic implementation of `ArrayInterface`, to minimize
  * the effort required to implement this interface.
@@ -34,7 +30,6 @@ abstract class AbstractArray implements ArrayInterface
      * @var array<array-key, T>
      */
     protected array $data = [];
-
     /**
      * Constructs a new array object.
      *
@@ -48,7 +43,6 @@ abstract class AbstractArray implements ArrayInterface
             $this[$key] = $value;
         }
     }
-
     /**
      * Returns an iterator for this array.
      *
@@ -60,7 +54,6 @@ abstract class AbstractArray implements ArrayInterface
     {
         return new ArrayIterator($this->data);
     }
-
     /**
      * Returns `true` if the given offset exists in this array.
      *
@@ -72,7 +65,6 @@ abstract class AbstractArray implements ArrayInterface
     {
         return isset($this->data[$offset]);
     }
-
     /**
      * Returns the value at the specified offset.
      *
@@ -87,7 +79,6 @@ abstract class AbstractArray implements ArrayInterface
     {
         return $this->data[$offset];
     }
-
     /**
      * Sets the given value to the given offset in the array.
      *
@@ -105,7 +96,6 @@ abstract class AbstractArray implements ArrayInterface
             $this->data[$offset] = $value;
         }
     }
-
     /**
      * Removes the given offset and its value from the array.
      *
@@ -117,7 +107,6 @@ abstract class AbstractArray implements ArrayInterface
     {
         unset($this->data[$offset]);
     }
-
     /**
      * Returns data suitable for PHP serialization.
      *
@@ -130,7 +119,6 @@ abstract class AbstractArray implements ArrayInterface
     {
         return $this->data;
     }
-
     /**
      * Adds unserialized data to the object.
      *
@@ -140,7 +128,6 @@ abstract class AbstractArray implements ArrayInterface
     {
         $this->data = $data;
     }
-
     /**
      * Returns the number of items in this array.
      *
@@ -150,12 +137,10 @@ abstract class AbstractArray implements ArrayInterface
     {
         return count($this->data);
     }
-
     public function clear(): void
     {
         $this->data = [];
     }
-
     /**
      * @inheritDoc
      */
@@ -163,7 +148,6 @@ abstract class AbstractArray implements ArrayInterface
     {
         return $this->data;
     }
-
     public function isEmpty(): bool
     {
         return $this->data === [];

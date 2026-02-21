@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -19,23 +19,20 @@ namespace Cake\Error\Debug;
 /**
  * Dump node for object properties.
  */
-class PropertyNode implements NodeInterface
+class PropertyNode implements \Cake\Error\Debug\NodeInterface
 {
     /**
      * @var string
      */
     private string $name;
-
     /**
      * @var string|null
      */
     private ?string $visibility = null;
-
     /**
      * @var \Cake\Error\Debug\NodeInterface
      */
-    private NodeInterface $value;
-
+    private \Cake\Error\Debug\NodeInterface $value;
     /**
      * Constructor
      *
@@ -43,23 +40,21 @@ class PropertyNode implements NodeInterface
      * @param string|null $visibility The visibility of the property.
      * @param \Cake\Error\Debug\NodeInterface $value The property value node.
      */
-    public function __construct(string $name, ?string $visibility, NodeInterface $value)
+    public function __construct(string $name, ?string $visibility, \Cake\Error\Debug\NodeInterface $value)
     {
         $this->name = $name;
         $this->visibility = $visibility;
         $this->value = $value;
     }
-
     /**
      * Get the value
      *
      * @return \Cake\Error\Debug\NodeInterface
      */
-    public function getValue(): NodeInterface
+    public function getValue(): \Cake\Error\Debug\NodeInterface
     {
         return $this->value;
     }
-
     /**
      * Get the property visibility
      *
@@ -69,7 +64,6 @@ class PropertyNode implements NodeInterface
     {
         return $this->visibility;
     }
-
     /**
      * Get the property name
      *
@@ -79,7 +73,6 @@ class PropertyNode implements NodeInterface
     {
         return $this->name;
     }
-
     /**
      * @inheritDoc
      */

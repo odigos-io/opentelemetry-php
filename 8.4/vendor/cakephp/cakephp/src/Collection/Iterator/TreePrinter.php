@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -20,7 +20,6 @@ use Cake\Collection\CollectionInterface;
 use Cake\Collection\CollectionTrait;
 use RecursiveIterator;
 use RecursiveIteratorIterator;
-
 /**
  * Iterator for flattening elements in a tree structure while adding some
  * visual markers for their relative position in the tree
@@ -30,35 +29,30 @@ use RecursiveIteratorIterator;
 class TreePrinter extends RecursiveIteratorIterator implements CollectionInterface
 {
     use CollectionTrait;
-
     /**
      * A callable to generate the iteration key
      *
      * @var callable
      */
     protected $_key;
-
     /**
      * A callable to extract the display value
      *
      * @var callable
      */
     protected $_value;
-
     /**
      * Cached value for the current iteration element
      *
      * @var mixed
      */
     protected mixed $_current = null;
-
     /**
      * The string to use for prefixing the values according to their depth in the tree.
      *
      * @var string
      */
     protected string $_spacer;
-
     /**
      * Constructor
      *
@@ -72,19 +66,13 @@ class TreePrinter extends RecursiveIteratorIterator implements CollectionInterfa
      * @param int $mode Iterator mode.
      * @phpstan-param \RecursiveIteratorIterator::LEAVES_ONLY|\RecursiveIteratorIterator::SELF_FIRST|\RecursiveIteratorIterator::CHILD_FIRST $mode
      */
-    public function __construct(
-        RecursiveIterator $items,
-        callable|string $valuePath,
-        callable|string $keyPath,
-        string $spacer,
-        int $mode = RecursiveIteratorIterator::SELF_FIRST,
-    ) {
+    public function __construct(RecursiveIterator $items, callable|string $valuePath, callable|string $keyPath, string $spacer, int $mode = RecursiveIteratorIterator::SELF_FIRST)
+    {
         parent::__construct($items, $mode);
         $this->_value = $this->_propertyExtractor($valuePath);
         $this->_key = $this->_propertyExtractor($keyPath);
         $this->_spacer = $spacer;
     }
-
     /**
      * Returns the current iteration key
      *
@@ -93,10 +81,8 @@ class TreePrinter extends RecursiveIteratorIterator implements CollectionInterfa
     public function key(): mixed
     {
         $extractor = $this->_key;
-
         return $extractor($this->_fetchCurrent(), parent::key(), $this);
     }
-
     /**
      * Returns the current iteration value
      *
@@ -107,10 +93,8 @@ class TreePrinter extends RecursiveIteratorIterator implements CollectionInterfa
         $extractor = $this->_value;
         $current = $this->_fetchCurrent();
         $spacer = str_repeat($this->_spacer, $this->getDepth());
-
         return $spacer . $extractor($current, parent::key(), $this);
     }
-
     /**
      * Advances the cursor one position
      *
@@ -121,7 +105,6 @@ class TreePrinter extends RecursiveIteratorIterator implements CollectionInterfa
         parent::next();
         $this->_current = null;
     }
-
     /**
      * Returns the current iteration element and caches its value
      *
@@ -132,7 +115,6 @@ class TreePrinter extends RecursiveIteratorIterator implements CollectionInterfa
         if ($this->_current !== null) {
             return $this->_current;
         }
-
         return $this->_current = parent::current();
     }
 }

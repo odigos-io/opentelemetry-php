@@ -5,7 +5,6 @@ namespace Illuminate\View\Engines;
 use Illuminate\Contracts\View\Engine;
 use Illuminate\Filesystem\Filesystem;
 use Throwable;
-
 class PhpEngine implements Engine
 {
     /**
@@ -14,7 +13,6 @@ class PhpEngine implements Engine
      * @var \Illuminate\Filesystem\Filesystem
      */
     protected $files;
-
     /**
      * Create a new file engine instance.
      *
@@ -25,7 +23,6 @@ class PhpEngine implements Engine
     {
         $this->files = $files;
     }
-
     /**
      * Get the evaluated contents of the view.
      *
@@ -37,7 +34,6 @@ class PhpEngine implements Engine
     {
         return $this->evaluatePath($path, $data);
     }
-
     /**
      * Get the evaluated contents of the view at the given path.
      *
@@ -48,9 +44,7 @@ class PhpEngine implements Engine
     protected function evaluatePath($path, $data)
     {
         $obLevel = ob_get_level();
-
         ob_start();
-
         // We'll evaluate the contents of the view inside a try/catch block so we can
         // flush out any stray output that might get out before an error occurs or
         // an exception is thrown. This prevents any partial views from leaking.
@@ -59,10 +53,8 @@ class PhpEngine implements Engine
         } catch (Throwable $e) {
             $this->handleViewException($e, $obLevel);
         }
-
         return ltrim(ob_get_clean());
     }
-
     /**
      * Handle a view exception.
      *
@@ -77,7 +69,6 @@ class PhpEngine implements Engine
         while (ob_get_level() > $obLevel) {
             ob_end_clean();
         }
-
         throw $e;
     }
 }

@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -19,11 +19,10 @@ namespace Cake\Command;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Core\Configure;
-
 /**
  * Print out the version of CakePHP in use.
  */
-class VersionCommand extends Command
+class VersionCommand extends \Cake\Command\Command
 {
     /**
      * @inheritDoc
@@ -32,7 +31,6 @@ class VersionCommand extends Command
     {
         return 'Show the CakePHP version.';
     }
-
     /**
      * Print out the version of CakePHP in use.
      *
@@ -44,14 +42,11 @@ class VersionCommand extends Command
     {
         $version = Configure::version();
         $io->out($version);
-
         if ($args->getOption('verbose')) {
             $this->outputVerbose($io, $version);
         }
-
         return static::CODE_SUCCESS;
     }
-
     /**
      * Output verbose version information.
      *
@@ -62,15 +57,10 @@ class VersionCommand extends Command
     protected function outputVerbose(ConsoleIo $io, string $version): void
     {
         $io->out();
-
         // Show release link for stable and RC versions, but not dev
         if (!str_contains($version, '-dev')) {
-            $io->out(sprintf(
-                '<info>Release:</info> https://github.com/cakephp/cakephp/releases/tag/%s',
-                $version,
-            ));
+            $io->out(sprintf('<info>Release:</info> https://github.com/cakephp/cakephp/releases/tag/%s', $version));
         }
-
-        $io->out(sprintf('<info>PHP:</info> %s (%s)', PHP_VERSION, PHP_SAPI));
+        $io->out(sprintf('<info>PHP:</info> %s (%s)', \PHP_VERSION, \PHP_SAPI));
     }
 }

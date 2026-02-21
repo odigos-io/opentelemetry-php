@@ -13,7 +13,6 @@ trait DeterminesStatusCode
     {
         return $this->status() === 200;
     }
-
     /**
      * Determine if the response code was 201 "Created" response.
      *
@@ -23,7 +22,6 @@ trait DeterminesStatusCode
     {
         return $this->status() === 201;
     }
-
     /**
      * Determine if the response code was 202 "Accepted" response.
      *
@@ -33,7 +31,6 @@ trait DeterminesStatusCode
     {
         return $this->status() === 202;
     }
-
     /**
      * Determine if the response code was the given status code and the body has no content.
      *
@@ -44,7 +41,6 @@ trait DeterminesStatusCode
     {
         return $this->status() === $status && $this->body() === '';
     }
-
     /**
      * Determine if the response code was a 301 "Moved Permanently".
      *
@@ -54,7 +50,6 @@ trait DeterminesStatusCode
     {
         return $this->status() === 301;
     }
-
     /**
      * Determine if the response code was a 302 "Found" response.
      *
@@ -64,7 +59,6 @@ trait DeterminesStatusCode
     {
         return $this->status() === 302;
     }
-
     /**
      * Determine if the response code was a 304 "Not Modified" response.
      *
@@ -74,7 +68,6 @@ trait DeterminesStatusCode
     {
         return $this->status() === 304;
     }
-
     /**
      * Determine if the response was a 400 "Bad Request" response.
      *
@@ -84,7 +77,6 @@ trait DeterminesStatusCode
     {
         return $this->status() === 400;
     }
-
     /**
      * Determine if the response was a 401 "Unauthorized" response.
      *
@@ -94,7 +86,6 @@ trait DeterminesStatusCode
     {
         return $this->status() === 401;
     }
-
     /**
      * Determine if the response was a 402 "Payment Required" response.
      *
@@ -104,7 +95,6 @@ trait DeterminesStatusCode
     {
         return $this->status() === 402;
     }
-
     /**
      * Determine if the response was a 403 "Forbidden" response.
      *
@@ -114,7 +104,6 @@ trait DeterminesStatusCode
     {
         return $this->status() === 403;
     }
-
     /**
      * Determine if the response was a 404 "Not Found" response.
      *
@@ -124,7 +113,6 @@ trait DeterminesStatusCode
     {
         return $this->status() === 404;
     }
-
     /**
      * Determine if the response was a 408 "Request Timeout" response.
      *
@@ -134,7 +122,6 @@ trait DeterminesStatusCode
     {
         return $this->status() === 408;
     }
-
     /**
      * Determine if the response was a 409 "Conflict" response.
      *
@@ -144,7 +131,6 @@ trait DeterminesStatusCode
     {
         return $this->status() === 409;
     }
-
     /**
      * Determine if the response was a 422 "Unprocessable Content" response.
      *
@@ -154,7 +140,6 @@ trait DeterminesStatusCode
     {
         return $this->status() === 422;
     }
-
     /**
      * Determine if the response was a 422 "Unprocessable Content" response.
      *
@@ -164,7 +149,6 @@ trait DeterminesStatusCode
     {
         return $this->unprocessableContent();
     }
-
     /**
      * Determine if the response was a 429 "Too Many Requests" response.
      *

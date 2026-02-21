@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the league/commonmark package.
  *
@@ -13,24 +12,21 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Odigos\League\CommonMark\Extension\CommonMark\Renderer\Inline;
 
-namespace League\CommonMark\Extension\CommonMark\Renderer\Inline;
-
-use League\CommonMark\Extension\CommonMark\Node\Inline\Link;
-use League\CommonMark\Node\Node;
-use League\CommonMark\Renderer\ChildNodeRendererInterface;
-use League\CommonMark\Renderer\NodeRendererInterface;
-use League\CommonMark\Util\HtmlElement;
-use League\CommonMark\Util\RegexHelper;
-use League\CommonMark\Xml\XmlNodeRendererInterface;
-use League\Config\ConfigurationAwareInterface;
-use League\Config\ConfigurationInterface;
-
+use Odigos\League\CommonMark\Extension\CommonMark\Node\Inline\Link;
+use Odigos\League\CommonMark\Node\Node;
+use Odigos\League\CommonMark\Renderer\ChildNodeRendererInterface;
+use Odigos\League\CommonMark\Renderer\NodeRendererInterface;
+use Odigos\League\CommonMark\Util\HtmlElement;
+use Odigos\League\CommonMark\Util\RegexHelper;
+use Odigos\League\CommonMark\Xml\XmlNodeRendererInterface;
+use Odigos\League\Config\ConfigurationAwareInterface;
+use Odigos\League\Config\ConfigurationInterface;
 final class LinkRenderer implements NodeRendererInterface, XmlNodeRendererInterface, ConfigurationAwareInterface
 {
     /** @psalm-readonly-allow-private-mutation */
     private ConfigurationInterface $config;
-
     /**
      * @param Link $node
      *
@@ -41,35 +37,27 @@ final class LinkRenderer implements NodeRendererInterface, XmlNodeRendererInterf
     public function render(Node $node, ChildNodeRendererInterface $childRenderer): \Stringable
     {
         Link::assertInstanceOf($node);
-
         $attrs = $node->data->get('attributes');
-
-        $forbidUnsafeLinks = ! $this->config->get('allow_unsafe_links');
-        if (! ($forbidUnsafeLinks && RegexHelper::isLinkPotentiallyUnsafe($node->getUrl()))) {
+        $forbidUnsafeLinks = !$this->config->get('allow_unsafe_links');
+        if (!($forbidUnsafeLinks && RegexHelper::isLinkPotentiallyUnsafe($node->getUrl()))) {
             $attrs['href'] = $node->getUrl();
         }
-
         if (($title = $node->getTitle()) !== null) {
             $attrs['title'] = $title;
         }
-
-        if (isset($attrs['target']) && $attrs['target'] === '_blank' && ! isset($attrs['rel'])) {
+        if (isset($attrs['target']) && $attrs['target'] === '_blank' && !isset($attrs['rel'])) {
             $attrs['rel'] = 'noopener noreferrer';
         }
-
         return new HtmlElement('a', $attrs, $childRenderer->renderNodes($node->children()));
     }
-
     public function setConfiguration(ConfigurationInterface $configuration): void
     {
         $this->config = $configuration;
     }
-
     public function getXmlTagName(Node $node): string
     {
         return 'link';
     }
-
     /**
      * @param Link $node
      *
@@ -80,10 +68,6 @@ final class LinkRenderer implements NodeRendererInterface, XmlNodeRendererInterf
     public function getXmlAttributes(Node $node): array
     {
         Link::assertInstanceOf($node);
-
-        return [
-            'destination' => $node->getUrl(),
-            'title' => $node->getTitle() ?? '',
-        ];
+        return ['destination' => $node->getUrl(), 'title' => $node->getTitle() ?? ''];
     }
 }

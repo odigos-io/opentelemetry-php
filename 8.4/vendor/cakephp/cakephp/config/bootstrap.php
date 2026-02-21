@@ -1,4 +1,7 @@
 <?php
+
+namespace Odigos;
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -12,10 +15,7 @@
  * @since         0.2.9
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-
 use Cake\Routing\Router;
-
-define('TIME_START', microtime(true));
-
+\define('TIME_START', \microtime(\true));
 // Sets the initial router state so future reloads work.
 Router::reload();

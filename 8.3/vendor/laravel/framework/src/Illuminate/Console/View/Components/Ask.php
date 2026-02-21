@@ -3,8 +3,7 @@
 namespace Illuminate\Console\View\Components;
 
 use Symfony\Component\Console\Question\Question;
-
-class Ask extends Component
+class Ask extends \Illuminate\Console\View\Components\Component
 {
     /**
      * Renders the component using the given arguments.
@@ -14,13 +13,8 @@ class Ask extends Component
      * @param  bool  $multiline
      * @return mixed
      */
-    public function render($question, $default = null, $multiline = false)
+    public function render($question, $default = null, $multiline = \false)
     {
-        return $this->usingQuestionHelper(
-            fn () => $this->output->askQuestion(
-                (new Question($question, $default))
-                    ->setMultiline($multiline)
-            )
-        );
+        return $this->usingQuestionHelper(fn() => $this->output->askQuestion((new Question($question, $default))->setMultiline($multiline)));
     }
 }

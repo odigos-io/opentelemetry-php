@@ -1,13 +1,13 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\filters;
 
-use Yii;
+use Odigos\Yii;
 use yii\base\Action;
 use yii\base\ActionFilter;
 use yii\base\Component;
@@ -16,7 +16,6 @@ use yii\base\InvalidConfigException;
 use yii\base\Module;
 use yii\web\Request;
 use yii\web\Response;
-
 /**
  * Cors filter implements [Cross Origin Resource Sharing](https://en.wikipedia.org/wiki/Cross-origin_resource_sharing).
  *
@@ -91,16 +90,7 @@ class Cors extends ActionFilter
     /**
      * @var array Basic headers handled for the CORS requests.
      */
-    public $cors = [
-        'Origin' => ['*'],
-        'Access-Control-Request-Method' => ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'],
-        'Access-Control-Request-Headers' => ['*'],
-        'Access-Control-Allow-Credentials' => null,
-        'Access-Control-Max-Age' => 86400,
-        'Access-Control-Expose-Headers' => [],
-    ];
-
-
+    public $cors = ['Origin' => ['*'], 'Access-Control-Request-Method' => ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'], 'Access-Control-Request-Headers' => ['*'], 'Access-Control-Allow-Credentials' => null, 'Access-Control-Max-Age' => 86400, 'Access-Control-Expose-Headers' => []];
     /**
      * {@inheritdoc}
      */
@@ -108,22 +98,17 @@ class Cors extends ActionFilter
     {
         $this->request = $this->request ?: Yii::$app->getRequest();
         $this->response = $this->response ?: Yii::$app->getResponse();
-
         $this->overrideDefaultSettings($action);
-
         $requestCorsHeaders = $this->extractHeaders();
         $responseCorsHeaders = $this->prepareHeaders($requestCorsHeaders);
         $this->addCorsHeaders($this->response, $responseCorsHeaders);
-
         if ($this->request->isOptions && $this->request->headers->has('Access-Control-Request-Method')) {
             // it is CORS preflight request, respond with 200 OK without further processing
             $this->response->setStatusCode(200);
-            return false;
+            return \false;
         }
-
-        return true;
+        return \true;
     }
-
     /**
      * Override settings for specific action.
      * @param Action $action the action settings to override
@@ -134,7 +119,6 @@ class Cors extends ActionFilter
     public function overrideDefaultSettings($action)
     {
         $actionId = $this->getActionId($action);
-
         if (isset($this->actions[$actionId])) {
             $actionParams = $this->actions[$actionId];
             $actionParamsKeys = array_keys($actionParams);
@@ -145,7 +129,6 @@ class Cors extends ActionFilter
             }
         }
     }
-
     /**
      * Extract CORS headers from the request.
      * @return array CORS headers to handle
@@ -160,10 +143,8 @@ class Cors extends ActionFilter
                 $headers[$headerField] = $headerData;
             }
         }
-
         return $headers;
     }
-
     /**
      * For each CORS headers create the specific response.
      * @param array $requestHeaders CORS headers we have detected
@@ -174,11 +155,10 @@ class Cors extends ActionFilter
         $responseHeaders = [];
         // handle Origin
         if (isset($requestHeaders['Origin'], $this->cors['Origin'])) {
-            if (in_array($requestHeaders['Origin'], $this->cors['Origin'], true)) {
+            if (in_array($requestHeaders['Origin'], $this->cors['Origin'], \true)) {
                 $responseHeaders['Access-Control-Allow-Origin'] = $requestHeaders['Origin'];
             }
-
-            if (in_array('*', $this->cors['Origin'], true)) {
+            if (in_array('*', $this->cors['Origin'], \true)) {
                 // Per CORS standard (https://fetch.spec.whatwg.org), wildcard origins shouldn't be used together with credentials
                 if (isset($this->cors['Access-Control-Allow-Credentials']) && $this->cors['Access-Control-Allow-Credentials']) {
                     if (YII_DEBUG) {
@@ -191,32 +171,24 @@ class Cors extends ActionFilter
                 }
             }
         }
-
         $this->prepareAllowHeaders('Headers', $requestHeaders, $responseHeaders);
-
         if (isset($requestHeaders['Access-Control-Request-Method'])) {
             $responseHeaders['Access-Control-Allow-Methods'] = implode(', ', $this->cors['Access-Control-Request-Method']);
         }
-
         if (isset($this->cors['Access-Control-Allow-Credentials'])) {
             $responseHeaders['Access-Control-Allow-Credentials'] = $this->cors['Access-Control-Allow-Credentials'] ? 'true' : 'false';
         }
-
         if (isset($this->cors['Access-Control-Max-Age']) && $this->request->getIsOptions()) {
             $responseHeaders['Access-Control-Max-Age'] = $this->cors['Access-Control-Max-Age'];
         }
-
         if (isset($this->cors['Access-Control-Expose-Headers'])) {
             $responseHeaders['Access-Control-Expose-Headers'] = implode(', ', $this->cors['Access-Control-Expose-Headers']);
         }
-
         if (isset($this->cors['Access-Control-Allow-Headers'])) {
             $responseHeaders['Access-Control-Allow-Headers'] = implode(', ', $this->cors['Access-Control-Allow-Headers']);
         }
-
         return $responseHeaders;
     }
-
     /**
      * Handle classic CORS request to avoid duplicate code.
      * @param string $type the kind of headers we would handle
@@ -233,14 +205,13 @@ class Cors extends ActionFilter
         if (in_array('*', $this->cors[$requestHeaderField])) {
             $responseHeaders[$responseHeaderField] = $this->headerize($requestHeaders[$requestHeaderField]);
         } else {
-            $requestedData = preg_split('/[\\s,]+/', $requestHeaders[$requestHeaderField], -1, PREG_SPLIT_NO_EMPTY);
+            $requestedData = preg_split('/[\s,]+/', $requestHeaders[$requestHeaderField], -1, \PREG_SPLIT_NO_EMPTY);
             $acceptedData = array_uintersect($requestedData, $this->cors[$requestHeaderField], 'strcasecmp');
             if (!empty($acceptedData)) {
                 $responseHeaders[$responseHeaderField] = implode(', ', $acceptedData);
             }
         }
     }
-
     /**
      * Adds the CORS headers to the response.
      * @param Response $response
@@ -248,14 +219,13 @@ class Cors extends ActionFilter
      */
     public function addCorsHeaders($response, $headers)
     {
-        if (empty($headers) === false) {
+        if (empty($headers) === \false) {
             $responseHeaders = $response->getHeaders();
             foreach ($headers as $field => $value) {
                 $responseHeaders->set($field, $value);
             }
         }
     }
-
     /**
      * Convert any string (including php headers with HTTP prefix) to header format.
      *
@@ -267,13 +237,12 @@ class Cors extends ActionFilter
      */
     protected function headerize($string)
     {
-        $headers = preg_split('/[\\s,]+/', $string, -1, PREG_SPLIT_NO_EMPTY);
+        $headers = preg_split('/[\s,]+/', $string, -1, \PREG_SPLIT_NO_EMPTY);
         $headers = array_map(function ($element) {
             return str_replace(' ', '-', ucwords(strtolower(str_replace(['_', '-'], [' ', ' '], $element))));
         }, $headers);
         return implode(', ', $headers);
     }
-
     /**
      * Convert any string (including php headers with HTTP prefix) to header format.
      *

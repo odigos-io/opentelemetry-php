@@ -3,7 +3,6 @@
 namespace Illuminate\Http\Concerns;
 
 use Illuminate\Database\Eloquent\Model;
-
 trait InteractsWithFlashData
 {
     /**
@@ -16,10 +15,8 @@ trait InteractsWithFlashData
     public function old($key = null, $default = null)
     {
         $default = $default instanceof Model ? $default->getAttribute($key) : $default;
-
         return $this->hasSession() ? $this->session()->getOldInput($key, $default) : $default;
     }
-
     /**
      * Flash the input for the current request to the session.
      *
@@ -29,7 +26,6 @@ trait InteractsWithFlashData
     {
         $this->session()->flashInput($this->input());
     }
-
     /**
      * Flash only some of the input to the session.
      *
@@ -38,11 +34,8 @@ trait InteractsWithFlashData
      */
     public function flashOnly($keys)
     {
-        $this->session()->flashInput(
-            $this->only(is_array($keys) ? $keys : func_get_args())
-        );
+        $this->session()->flashInput($this->only(is_array($keys) ? $keys : func_get_args()));
     }
-
     /**
      * Flash only some of the input to the session.
      *
@@ -51,11 +44,8 @@ trait InteractsWithFlashData
      */
     public function flashExcept($keys)
     {
-        $this->session()->flashInput(
-            $this->except(is_array($keys) ? $keys : func_get_args())
-        );
+        $this->session()->flashInput($this->except(is_array($keys) ? $keys : func_get_args()));
     }
-
     /**
      * Flush all of the old input from the session.
      *

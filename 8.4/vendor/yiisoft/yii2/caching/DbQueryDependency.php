@@ -1,16 +1,15 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\caching;
 
 use yii\base\InvalidConfigException;
 use yii\db\QueryInterface;
 use yii\di\Instance;
-
 /**
  * DbQueryDependency represents a dependency based on the query result of an [[QueryInterface]] instance.
  *
@@ -27,7 +26,7 @@ use yii\di\Instance;
  * @author Paul Klimov <klimov.paul@gmail.com>
  * @since 2.0.12
  */
-class DbQueryDependency extends Dependency
+class DbQueryDependency extends \yii\caching\Dependency
 {
     /**
      * @var string|array|object the application component ID of the database connection, connection object or
@@ -57,8 +56,6 @@ class DbQueryDependency extends Dependency
      * If not set - [[QueryInterface::one()]] will be used.
      */
     public $method;
-
-
     /**
      * Generates the data needed to determine if dependency is changed.
      *
@@ -73,24 +70,20 @@ class DbQueryDependency extends Dependency
         if ($db !== null) {
             $db = Instance::ensure($db);
         }
-
         if (!$this->query instanceof QueryInterface) {
             throw new InvalidConfigException('"' . get_class($this) . '::$query" should be an instance of "yii\db\QueryInterface".');
         }
-
         if (!empty($db->enableQueryCache)) {
             // temporarily disable and re-enable query caching
             $originEnableQueryCache = $db->enableQueryCache;
-            $db->enableQueryCache = false;
+            $db->enableQueryCache = \false;
             $result = $this->executeQuery($this->query, $db);
             $db->enableQueryCache = $originEnableQueryCache;
         } else {
             $result = $this->executeQuery($this->query, $db);
         }
-
         return $result;
     }
-
     /**
      * Executes the query according to [[method]] specification.
      * @param QueryInterface $query query to be executed.
@@ -105,7 +98,6 @@ class DbQueryDependency extends Dependency
         if (is_string($this->method)) {
             return call_user_func([$query, $this->method], $db);
         }
-
         return call_user_func($this->method, $query, $db);
     }
 }

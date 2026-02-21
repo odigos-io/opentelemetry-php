@@ -4,7 +4,6 @@ namespace Http\Client\Exception;
 
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-
 /**
  * Thrown when a response was received but the request itself failed.
  *
@@ -12,28 +11,21 @@ use Psr\Http\Message\ResponseInterface;
  *
  * @author Márk Sági-Kazár <mark.sagikazar@gmail.com>
  */
-class HttpException extends RequestException
+class HttpException extends \Http\Client\Exception\RequestException
 {
     /**
      * @var ResponseInterface
      */
     protected $response;
-
     /**
      * @param string $message
      */
-    public function __construct(
-        $message,
-        RequestInterface $request,
-        ResponseInterface $response,
-        ?\Exception $previous = null
-    ) {
+    public function __construct($message, RequestInterface $request, ResponseInterface $response, ?\Exception $previous = null)
+    {
         parent::__construct($message, $request, $previous);
-
         $this->response = $response;
         $this->code = $response->getStatusCode();
     }
-
     /**
      * Returns the response.
      *
@@ -43,23 +35,12 @@ class HttpException extends RequestException
     {
         return $this->response;
     }
-
     /**
      * Factory method to create a new exception with a normalized error message.
      */
-    public static function create(
-        RequestInterface $request,
-        ResponseInterface $response,
-        ?\Exception $previous = null
-    ) {
-        $message = sprintf(
-            '[url] %s [http method] %s [status code] %s [reason phrase] %s',
-            $request->getRequestTarget(),
-            $request->getMethod(),
-            $response->getStatusCode(),
-            $response->getReasonPhrase()
-        );
-
+    public static function create(RequestInterface $request, ResponseInterface $response, ?\Exception $previous = null)
+    {
+        $message = sprintf('[url] %s [http method] %s [status code] %s [reason phrase] %s', $request->getRequestTarget(), $request->getMethod(), $response->getStatusCode(), $response->getReasonPhrase());
         return new static($message, $request, $response, $previous);
     }
 }

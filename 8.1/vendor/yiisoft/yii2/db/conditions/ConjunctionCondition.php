@@ -1,10 +1,10 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\db\conditions;
 
 /**
@@ -13,22 +13,19 @@ namespace yii\db\conditions;
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  * @since 2.0.14
  */
-abstract class ConjunctionCondition implements ConditionInterface
+abstract class ConjunctionCondition implements \yii\db\conditions\ConditionInterface
 {
     /**
      * @var mixed[]
      */
     protected $expressions;
-
-
     /**
      * @param mixed $expressions
      */
-    public function __construct($expressions) // TODO: use variadic params when PHP>5.6
+    public function __construct($expressions)
     {
         $this->expressions = $expressions;
     }
-
     /**
      * @return mixed[]
      */
@@ -36,13 +33,11 @@ abstract class ConjunctionCondition implements ConditionInterface
     {
         return $this->expressions;
     }
-
     /**
      * Returns the operator that is represented by this condition class, e.g. `AND`, `OR`.
      * @return string
      */
     abstract public function getOperator();
-
     /**
      * {@inheritdoc}
      */

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright 2015-present MongoDB, Inc.
  *
@@ -14,12 +15,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 namespace MongoDB;
 
 use MongoDB\Driver\Exception\LogicException;
 use MongoDB\Driver\WriteResult;
-
 /**
  * Result class for a single-document insert operation.
  */
@@ -28,7 +27,6 @@ class InsertOneResult
     public function __construct(private WriteResult $writeResult, private mixed $insertedId)
     {
     }
-
     /**
      * Return the number of documents that were inserted.
      *
@@ -41,7 +39,6 @@ class InsertOneResult
     {
         return $this->writeResult->getInsertedCount();
     }
-
     /**
      * Return the inserted document's ID.
      *
@@ -53,7 +50,6 @@ class InsertOneResult
     {
         return $this->insertedId;
     }
-
     /**
      * Return whether this insert was acknowledged by the server.
      *

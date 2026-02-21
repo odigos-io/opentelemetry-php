@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /**
  * This file is part of the Carbon package.
  *
@@ -10,12 +9,10 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Odigos\Carbon\Traits;
 
-namespace Carbon\Traits;
-
-use Carbon\FactoryImmutable;
+use Odigos\Carbon\FactoryImmutable;
 use Symfony\Contracts\Translation\TranslatorInterface;
-
 /**
  * Static config for localization.
  */
@@ -30,7 +27,6 @@ trait StaticLocalization
     {
         FactoryImmutable::getDefaultInstance()->setHumanDiffOptions($humanDiffOptions);
     }
-
     /**
      * @deprecated To avoid conflict between different third-party libraries, static setters should not be used.
      *             You should rather use the ->settings() method.
@@ -40,7 +36,6 @@ trait StaticLocalization
     {
         FactoryImmutable::getDefaultInstance()->enableHumanDiffOption($humanDiffOption);
     }
-
     /**
      * @deprecated To avoid conflict between different third-party libraries, static setters should not be used.
      *             You should rather use the ->settings() method.
@@ -50,7 +45,6 @@ trait StaticLocalization
     {
         FactoryImmutable::getDefaultInstance()->disableHumanDiffOption($humanDiffOption);
     }
-
     /**
      * Return default humanDiff() options (merged flags as integer).
      */
@@ -58,7 +52,6 @@ trait StaticLocalization
     {
         return FactoryImmutable::getInstance()->getHumanDiffOptions();
     }
-
     /**
      * Set the default translator instance to use.
      *
@@ -70,7 +63,6 @@ trait StaticLocalization
     {
         FactoryImmutable::getDefaultInstance()->setTranslator($translator);
     }
-
     /**
      * Initialize the default translator instance if necessary.
      */

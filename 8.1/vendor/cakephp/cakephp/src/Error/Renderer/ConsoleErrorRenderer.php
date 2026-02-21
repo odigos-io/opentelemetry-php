@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -19,7 +19,6 @@ namespace Cake\Error\Renderer;
 use Cake\Console\ConsoleOutput;
 use Cake\Error\ErrorRendererInterface;
 use Cake\Error\PhpError;
-
 /**
  * Plain text error rendering with a stack trace.
  *
@@ -31,12 +30,10 @@ class ConsoleErrorRenderer implements ErrorRendererInterface
      * @var \Cake\Console\ConsoleOutput
      */
     protected ConsoleOutput $output;
-
     /**
      * @var bool
      */
-    protected bool $trace = false;
-
+    protected bool $trace = \false;
     /**
      * Constructor.
      *
@@ -50,9 +47,8 @@ class ConsoleErrorRenderer implements ErrorRendererInterface
     public function __construct(array $config)
     {
         $this->output = $config['stderr'] ?? new ConsoleOutput('php://stderr');
-        $this->trace = (bool)($config['trace'] ?? false);
+        $this->trace = (bool) ($config['trace'] ?? \false);
     }
-
     /**
      * @inheritDoc
      */
@@ -60,7 +56,6 @@ class ConsoleErrorRenderer implements ErrorRendererInterface
     {
         $this->output->write($out);
     }
-
     /**
      * @inheritDoc
      */
@@ -70,15 +65,6 @@ class ConsoleErrorRenderer implements ErrorRendererInterface
         if ($this->trace) {
             $trace = "\n<info>Stack Trace:</info>\n\n" . $error->getTraceAsString();
         }
-
-        return sprintf(
-            '<error>%s: %s :: %s</error> on line %s of %s%s',
-            $error->getLabel(),
-            $error->getCode(),
-            $error->getMessage(),
-            $error->getLine() ?? '',
-            $error->getFile() ?? '',
-            $trace,
-        );
+        return sprintf('<error>%s: %s :: %s</error> on line %s of %s%s', $error->getLabel(), $error->getCode(), $error->getMessage(), $error->getLine() ?? '', $error->getFile() ?? '', $trace);
     }
 }

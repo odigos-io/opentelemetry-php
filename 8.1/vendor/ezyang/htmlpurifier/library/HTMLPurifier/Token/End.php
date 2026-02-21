@@ -1,5 +1,7 @@
 <?php
 
+namespace Odigos;
+
 /**
  * Concrete end token class.
  *
@@ -15,10 +17,17 @@ class HTMLPurifier_Token_End extends HTMLPurifier_Token_Tag
      * @type HTMLPurifier_Token
      */
     public $start;
-
-    public function toNode() {
-        throw new Exception("HTMLPurifier_Token_End->toNode not supported!");
+    public function toNode()
+    {
+        throw new \Exception("HTMLPurifier_Token_End->toNode not supported!");
     }
 }
-
+/**
+ * Concrete end token class.
+ *
+ * @warning This class accepts attributes even though end tags cannot. This
+ * is for optimization reasons, as under normal circumstances, the Lexers
+ * do not pass attributes.
+ */
+\class_alias('Odigos\HTMLPurifier_Token_End', 'HTMLPurifier_Token_End', \false);
 // vim: et sw=4 sts=4

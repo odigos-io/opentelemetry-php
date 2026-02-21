@@ -5,77 +5,59 @@ namespace Laravel\Prompts;
 use Closure;
 use Illuminate\Support\Collection;
 use InvalidArgumentException;
-
-class SelectPrompt extends Prompt
+class SelectPrompt extends \Laravel\Prompts\Prompt
 {
-    use Concerns\Scrolling;
-
+    use \Laravel\Prompts\Concerns\Scrolling;
     /**
      * The options for the select prompt.
      *
      * @var array<int|string, string>
      */
     public array $options;
-
     /**
      * Create a new SelectPrompt instance.
      *
      * @param  array<int|string, string>|Collection<int|string, string>  $options
      */
-    public function __construct(
-        public string $label,
-        array|Collection $options,
-        public int|string|null $default = null,
-        public int $scroll = 5,
-        public mixed $validate = null,
-        public string $hint = '',
-        public bool|string $required = true,
-        public ?Closure $transform = null,
-    ) {
-        if ($this->required === false) {
+    public function __construct(public string $label, array|Collection $options, public int|string|null $default = null, public int $scroll = 5, public mixed $validate = null, public string $hint = '', public bool|string $required = \true, public ?Closure $transform = null)
+    {
+        if ($this->required === \false) {
             throw new InvalidArgumentException('Argument [required] must be true or a string.');
         }
-
         $this->options = $options instanceof Collection ? $options->all() : $options;
-
         if ($this->default) {
             if (array_is_list($this->options)) {
                 $this->initializeScrolling(array_search($this->default, $this->options) ?: 0);
             } else {
                 $this->initializeScrolling(array_search($this->default, array_keys($this->options)) ?: 0);
             }
-
             $this->scrollToHighlighted(count($this->options));
         } else {
             $this->initializeScrolling(0);
         }
-
-        $this->on('key', fn ($key) => match ($key) {
-            Key::UP, Key::UP_ARROW, Key::LEFT, Key::LEFT_ARROW, Key::SHIFT_TAB, Key::CTRL_P, Key::CTRL_B, 'k', 'h' => $this->highlightPrevious(count($this->options)),
-            Key::DOWN, Key::DOWN_ARROW, Key::RIGHT, Key::RIGHT_ARROW, Key::TAB, Key::CTRL_N, Key::CTRL_F, 'j', 'l' => $this->highlightNext(count($this->options)),
-            Key::oneOf([Key::HOME, Key::CTRL_A], $key) => $this->highlight(0),
-            Key::oneOf([Key::END, Key::CTRL_E], $key) => $this->highlight(count($this->options) - 1),
-            Key::ENTER => $this->submit(),
+        $this->on('key', fn($key) => match ($key) {
+            \Laravel\Prompts\Key::UP, \Laravel\Prompts\Key::UP_ARROW, \Laravel\Prompts\Key::LEFT, \Laravel\Prompts\Key::LEFT_ARROW, \Laravel\Prompts\Key::SHIFT_TAB, \Laravel\Prompts\Key::CTRL_P, \Laravel\Prompts\Key::CTRL_B, 'k', 'h' => $this->highlightPrevious(count($this->options)),
+            \Laravel\Prompts\Key::DOWN, \Laravel\Prompts\Key::DOWN_ARROW, \Laravel\Prompts\Key::RIGHT, \Laravel\Prompts\Key::RIGHT_ARROW, \Laravel\Prompts\Key::TAB, \Laravel\Prompts\Key::CTRL_N, \Laravel\Prompts\Key::CTRL_F, 'j', 'l' => $this->highlightNext(count($this->options)),
+            \Laravel\Prompts\Key::oneOf([\Laravel\Prompts\Key::HOME, \Laravel\Prompts\Key::CTRL_A], $key) => $this->highlight(0),
+            \Laravel\Prompts\Key::oneOf([\Laravel\Prompts\Key::END, \Laravel\Prompts\Key::CTRL_E], $key) => $this->highlight(count($this->options) - 1),
+            \Laravel\Prompts\Key::ENTER => $this->submit(),
             default => null,
         });
     }
-
     /**
      * Get the selected value.
      */
     public function value(): int|string|null
     {
-        if (static::$interactive === false) {
+        if (static::$interactive === \false) {
             return $this->default;
         }
-
         if (array_is_list($this->options)) {
             return $this->options[$this->highlighted] ?? null;
         } else {
             return array_keys($this->options)[$this->highlighted];
         }
     }
-
     /**
      * Get the selected label.
      */
@@ -87,7 +69,6 @@ class SelectPrompt extends Prompt
             return $this->options[array_keys($this->options)[$this->highlighted]] ?? null;
         }
     }
-
     /**
      * The currently visible options.
      *
@@ -95,9 +76,8 @@ class SelectPrompt extends Prompt
      */
     public function visible(): array
     {
-        return array_slice($this->options, $this->firstVisible, $this->scroll, preserve_keys: true);
+        return array_slice($this->options, $this->firstVisible, $this->scroll, preserve_keys: \true);
     }
-
     /**
      * Determine whether the given value is invalid when the prompt is required.
      */

@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\CssSelector\XPath\Extension;
 
 /**
@@ -31,35 +30,30 @@ interface ExtensionInterface
      * @return callable[]
      */
     public function getNodeTranslators(): array;
-
     /**
      * Returns combination translators.
      *
      * @return callable[]
      */
     public function getCombinationTranslators(): array;
-
     /**
      * Returns function translators.
      *
      * @return callable[]
      */
     public function getFunctionTranslators(): array;
-
     /**
      * Returns pseudo-class translators.
      *
      * @return callable[]
      */
     public function getPseudoClassTranslators(): array;
-
     /**
      * Returns attribute operation translators.
      *
      * @return callable[]
      */
     public function getAttributeMatchingTranslators(): array;
-
     /**
      * Returns extension name.
      */

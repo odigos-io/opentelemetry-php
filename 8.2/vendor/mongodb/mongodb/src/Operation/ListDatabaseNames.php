@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright 2020-present MongoDB, Inc.
  *
@@ -14,7 +15,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 namespace MongoDB\Operation;
 
 use ArrayIterator;
@@ -24,9 +24,7 @@ use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
 use MongoDB\Driver\Server;
 use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\Exception\UnexpectedValueException;
-
 use function array_column;
-
 /**
  * Operation for the ListDatabases command, returning only database names.
  *
@@ -36,7 +34,6 @@ use function array_column;
 final class ListDatabaseNames
 {
     private ListDatabasesCommand $listDatabases;
-
     /**
      * Constructs a listDatabases command.
      *
@@ -63,9 +60,8 @@ final class ListDatabaseNames
      */
     public function __construct(array $options = [])
     {
-        $this->listDatabases = new ListDatabasesCommand(['nameOnly' => true] + $options);
+        $this->listDatabases = new ListDatabasesCommand(['nameOnly' => \true] + $options);
     }
-
     /**
      * Execute the operation.
      *
@@ -76,7 +72,6 @@ final class ListDatabaseNames
     public function execute(Server $server): Iterator
     {
         $result = $this->listDatabases->execute($server);
-
         return new ArrayIterator(array_column($result, 'name'));
     }
 }

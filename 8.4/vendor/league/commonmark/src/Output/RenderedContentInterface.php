@@ -8,20 +8,16 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+declare (strict_types=1);
+namespace Odigos\League\CommonMark\Output;
 
-declare(strict_types=1);
-
-namespace League\CommonMark\Output;
-
-use League\CommonMark\Node\Block\Document;
-
+use Odigos\League\CommonMark\Node\Block\Document;
 interface RenderedContentInterface extends \Stringable
 {
     /**
      * @psalm-mutation-free
      */
     public function getDocument(): Document;
-
     /**
      * @psalm-mutation-free
      */

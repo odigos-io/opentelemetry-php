@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -22,13 +22,12 @@ use Cake\Http\MimeType;
 use Cake\Http\Response;
 use Cake\I18n\DateTime;
 use Cake\Utility\Inflector;
-use Laminas\Diactoros\Stream;
+use Odigos\Laminas\Diactoros\Stream;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use SplFileInfo;
-
 /**
  * Handles serving plugin assets in development mode.
  *
@@ -44,7 +43,6 @@ class AssetMiddleware implements MiddlewareInterface
      * @var string
      */
     protected string $cacheTime = '+1 day';
-
     /**
      * Constructor.
      *
@@ -56,7 +54,6 @@ class AssetMiddleware implements MiddlewareInterface
             $this->cacheTime = $options['cacheTime'];
         }
     }
-
     /**
      * Serve assets if the path matches one.
      *
@@ -70,31 +67,20 @@ class AssetMiddleware implements MiddlewareInterface
         if (str_contains($url, '..') || !str_contains($url, '.')) {
             return $handler->handle($request);
         }
-
         if (str_contains($url, '/.')) {
             return $handler->handle($request);
         }
-
         $assetFile = $this->_getAssetFile($url);
         if ($assetFile === null || !is_file($assetFile)) {
             return $handler->handle($request);
         }
-
         $file = new SplFileInfo($assetFile);
         $modifiedTime = $file->getMTime();
         if ($this->isNotModified($request, $file)) {
-            return (new Response())
-                ->withStringBody('')
-                ->withStatus(304)
-                ->withHeader(
-                    'Last-Modified',
-                    date(DATE_RFC850, $modifiedTime),
-                );
+            return (new Response())->withStringBody('')->withStatus(304)->withHeader('Last-Modified', date(\DATE_RFC850, $modifiedTime));
         }
-
         return $this->deliverAsset($request, $file);
     }
-
     /**
      * Check the not modified header.
      *
@@ -106,12 +92,10 @@ class AssetMiddleware implements MiddlewareInterface
     {
         $modifiedSince = $request->getHeaderLine('If-Modified-Since');
         if (!$modifiedSince) {
-            return false;
+            return \false;
         }
-
         return strtotime($modifiedSince) === $file->getMTime();
     }
-
     /**
      * Builds asset file path based off url
      *
@@ -130,16 +114,13 @@ class AssetMiddleware implements MiddlewareInterface
             $plugin = implode('/', $pluginPart);
             if (Plugin::isLoaded($plugin)) {
                 $parts = array_slice($parts, $i + 1);
-                $fileFragment = implode(DIRECTORY_SEPARATOR, $parts);
-                $pluginWebroot = Plugin::path($plugin) . 'webroot' . DIRECTORY_SEPARATOR;
-
+                $fileFragment = implode(\DIRECTORY_SEPARATOR, $parts);
+                $pluginWebroot = Plugin::path($plugin) . 'webroot' . \DIRECTORY_SEPARATOR;
                 return $pluginWebroot . $fileFragment;
             }
         }
-
         return null;
     }
-
     /**
      * Sends an asset file to the client
      *
@@ -150,28 +131,19 @@ class AssetMiddleware implements MiddlewareInterface
     protected function deliverAsset(ServerRequestInterface $request, SplFileInfo $file): Response
     {
         $resource = fopen($file->getPathname(), 'rb');
-        if ($resource === false) {
+        if ($resource === \false) {
             throw new CakeException(sprintf('Cannot open resource `%s`', $file->getPathname()));
         }
         $stream = new Stream($resource);
-
         $response = new Response(['stream' => $stream]);
-
         $contentType = MimeType::getMimeTypeForFile($file->getRealPath());
         $modified = $file->getMTime();
         $expire = strtotime($this->cacheTime);
-        if ($expire === false) {
+        if ($expire === \false) {
             throw new CakeException(sprintf('Invalid cache time value `%s`', $this->cacheTime));
         }
-
         $now = time();
         $maxAge = $expire - $now;
-
-        return $response
-            ->withHeader('Content-Type', $contentType)
-            ->withHeader('Cache-Control', 'public,max-age=' . $maxAge)
-            ->withHeader('Date', DateTime::parse($now)->toRfc7231String())
-            ->withHeader('Last-Modified', DateTime::parse($modified)->toRfc7231String())
-            ->withHeader('Expires', DateTime::parse($expire)->toRfc7231String());
+        return $response->withHeader('Content-Type', $contentType)->withHeader('Cache-Control', 'public,max-age=' . $maxAge)->withHeader('Date', DateTime::parse($now)->toRfc7231String())->withHeader('Last-Modified', DateTime::parse($modified)->toRfc7231String())->withHeader('Expires', DateTime::parse($expire)->toRfc7231String());
     }
 }

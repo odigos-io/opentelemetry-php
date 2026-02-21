@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -21,7 +21,6 @@ use Cake\Collection\Collection;
 use Cake\Collection\CollectionInterface;
 use CallbackFilterIterator;
 use Iterator;
-
 /**
  * Creates a filtered iterator from another iterator. The filtering is done by
  * passing a callback function to each of the elements and taking them out if
@@ -35,7 +34,6 @@ class FilterIterator extends Collection
      * @var callable
      */
     protected $_callback;
-
     /**
      * Creates a filtered iterator using the callback to determine which items are
      * accepted or rejected.
@@ -52,12 +50,10 @@ class FilterIterator extends Collection
         if (!$items instanceof Iterator) {
             $items = new Collection($items);
         }
-
         $this->_callback = $callback;
         $wrapper = new CallbackFilterIterator($items, $callback);
         parent::__construct($wrapper);
     }
-
     /**
      * @inheritDoc
      */
@@ -66,26 +62,21 @@ class FilterIterator extends Collection
         /** @var \IteratorIterator $filter */
         $filter = $this->getInnerIterator();
         $iterator = $filter->getInnerIterator();
-
         if ($iterator instanceof CollectionInterface) {
             $iterator = $iterator->unwrap();
         }
-
         if ($iterator::class !== ArrayIterator::class) {
             return $filter;
         }
-
         // ArrayIterator can be traversed strictly.
         // Let's do that for performance gains
         $callback = $this->_callback;
         $res = [];
-
         foreach ($iterator as $k => $v) {
             if ($callback($v, $k, $iterator)) {
                 $res[$k] = $v;
             }
         }
-
         return new ArrayIterator($res);
     }
 }

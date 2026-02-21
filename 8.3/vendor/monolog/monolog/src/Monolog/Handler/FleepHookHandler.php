@@ -1,5 +1,6 @@
-<?php declare(strict_types=1);
+<?php
 
+declare (strict_types=1);
 /*
  * This file is part of the Monolog package.
  *
@@ -8,14 +9,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Odigos\Monolog\Handler;
 
-namespace Monolog\Handler;
-
-use Monolog\Formatter\FormatterInterface;
-use Monolog\Formatter\LineFormatter;
-use Monolog\Level;
-use Monolog\LogRecord;
-
+use Odigos\Monolog\Formatter\FormatterInterface;
+use Odigos\Monolog\Formatter\LineFormatter;
+use Odigos\Monolog\Level;
+use Odigos\Monolog\LogRecord;
 /**
  * Sends logs to Fleep.io using Webhook integrations
  *
@@ -27,14 +26,11 @@ use Monolog\LogRecord;
 class FleepHookHandler extends SocketHandler
 {
     protected const FLEEP_HOST = 'fleep.io';
-
     protected const FLEEP_HOOK_URI = '/hook/';
-
     /**
      * @var string Webhook token (specifies the conversation where logs are sent)
      */
     protected string $token;
-
     /**
      * Construct a new Fleep.io Handler.
      *
@@ -44,35 +40,15 @@ class FleepHookHandler extends SocketHandler
      * @param  string                    $token Webhook token
      * @throws MissingExtensionException if OpenSSL is missing
      */
-    public function __construct(
-        string $token,
-        $level = Level::Debug,
-        bool $bubble = true,
-        bool $persistent = false,
-        float $timeout = 0.0,
-        float $writingTimeout = 10.0,
-        ?float $connectionTimeout = null,
-        ?int $chunkSize = null
-    ) {
+    public function __construct(string $token, $level = Level::Debug, bool $bubble = \true, bool $persistent = \false, float $timeout = 0.0, float $writingTimeout = 10.0, ?float $connectionTimeout = null, ?int $chunkSize = null)
+    {
         if (!\extension_loaded('openssl')) {
             throw new MissingExtensionException('The OpenSSL PHP extension is required to use the FleepHookHandler');
         }
-
         $this->token = $token;
-
         $connectionString = 'ssl://' . static::FLEEP_HOST . ':443';
-        parent::__construct(
-            $connectionString,
-            $level,
-            $bubble,
-            $persistent,
-            $timeout,
-            $writingTimeout,
-            $connectionTimeout,
-            $chunkSize
-        );
+        parent::__construct($connectionString, $level, $bubble, $persistent, $timeout, $writingTimeout, $connectionTimeout, $chunkSize);
     }
-
     /**
      * Returns the default formatter to use with this handler
      *
@@ -82,9 +58,8 @@ class FleepHookHandler extends SocketHandler
      */
     protected function getDefaultFormatter(): FormatterInterface
     {
-        return new LineFormatter(null, null, true, true);
+        return new LineFormatter(null, null, \true, \true);
     }
-
     /**
      * Handles a log record
      */
@@ -93,17 +68,14 @@ class FleepHookHandler extends SocketHandler
         parent::write($record);
         $this->closeSocket();
     }
-
     /**
      * @inheritDoc
      */
     protected function generateDataStream(LogRecord $record): string
     {
         $content = $this->buildContent($record);
-
         return $this->buildHeader($content) . $content;
     }
-
     /**
      * Builds the header of the API Call
      */
@@ -114,19 +86,14 @@ class FleepHookHandler extends SocketHandler
         $header .= "Content-Type: application/x-www-form-urlencoded\r\n";
         $header .= "Content-Length: " . \strlen($content) . "\r\n";
         $header .= "\r\n";
-
         return $header;
     }
-
     /**
      * Builds the body of API call
      */
     private function buildContent(LogRecord $record): string
     {
-        $dataArray = [
-            'message' => $record->formatted,
-        ];
-
+        $dataArray = ['message' => $record->formatted];
         return http_build_query($dataArray);
     }
 }

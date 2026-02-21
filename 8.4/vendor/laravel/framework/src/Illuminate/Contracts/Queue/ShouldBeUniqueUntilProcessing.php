@@ -2,7 +2,7 @@
 
 namespace Illuminate\Contracts\Queue;
 
-interface ShouldBeUniqueUntilProcessing extends ShouldBeUnique
+interface ShouldBeUniqueUntilProcessing extends \Illuminate\Contracts\Queue\ShouldBeUnique
 {
     //
 }

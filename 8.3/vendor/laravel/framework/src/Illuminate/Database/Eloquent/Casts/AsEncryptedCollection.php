@@ -8,7 +8,6 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
-
 class AsEncryptedCollection implements Castable
 {
     /**
@@ -25,45 +24,33 @@ class AsEncryptedCollection implements Castable
             {
                 $this->arguments = array_pad(array_values($this->arguments), 2, '');
             }
-
             public function get($model, $key, $value, $attributes)
             {
                 $collectionClass = empty($this->arguments[0]) ? Collection::class : $this->arguments[0];
-
-                if (! is_a($collectionClass, Collection::class, true)) {
-                    throw new InvalidArgumentException('The provided class must extend ['.Collection::class.'].');
+                if (!is_a($collectionClass, Collection::class, \true)) {
+                    throw new InvalidArgumentException('The provided class must extend [' . Collection::class . '].');
                 }
-
-                if (! isset($attributes[$key])) {
+                if (!isset($attributes[$key])) {
                     return null;
                 }
-
-                $instance = new $collectionClass(Json::decode(Crypt::decryptString($attributes[$key])));
-
-                if (! isset($this->arguments[1]) || ! $this->arguments[1]) {
+                $instance = new $collectionClass(\Illuminate\Database\Eloquent\Casts\Json::decode(Crypt::decryptString($attributes[$key])));
+                if (!isset($this->arguments[1]) || !$this->arguments[1]) {
                     return $instance;
                 }
-
                 if (is_string($this->arguments[1])) {
                     $this->arguments[1] = Str::parseCallback($this->arguments[1]);
                 }
-
-                return is_callable($this->arguments[1])
-                    ? $instance->map($this->arguments[1])
-                    : $instance->mapInto($this->arguments[1][0]);
+                return is_callable($this->arguments[1]) ? $instance->map($this->arguments[1]) : $instance->mapInto($this->arguments[1][0]);
             }
-
             public function set($model, $key, $value, $attributes)
             {
-                if (! is_null($value)) {
-                    return [$key => Crypt::encryptString(Json::encode($value))];
+                if (!is_null($value)) {
+                    return [$key => Crypt::encryptString(\Illuminate\Database\Eloquent\Casts\Json::encode($value))];
                 }
-
                 return null;
             }
         };
     }
-
     /**
      * Specify the type of object each item in the collection should be mapped to.
      *
@@ -74,7 +61,6 @@ class AsEncryptedCollection implements Castable
     {
         return static::using('', $map);
     }
-
     /**
      * Specify the collection for the cast.
      *
@@ -85,9 +71,8 @@ class AsEncryptedCollection implements Castable
     public static function using($class, $map = null)
     {
         if (is_array($map) && is_callable($map)) {
-            $map = $map[0].'@'.$map[1];
+            $map = $map[0] . '@' . $map[1];
         }
-
-        return static::class.':'.implode(',', [$class, $map]);
+        return static::class . ':' . implode(',', [$class, $map]);
     }
 }

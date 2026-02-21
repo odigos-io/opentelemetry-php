@@ -5,7 +5,6 @@ namespace Illuminate\Redis\Connections;
 use Redis;
 use RuntimeException;
 use UnexpectedValueException;
-
 trait PacksPhpRedisValues
 {
     /**
@@ -14,21 +13,18 @@ trait PacksPhpRedisValues
      * @var bool|null
      */
     protected $supportsPacking;
-
     /**
      * Indicates if Redis supports LZF compression.
      *
      * @var bool|null
      */
     protected $supportsLzf;
-
     /**
      * Indicates if Redis supports Zstd compression.
      *
      * @var bool|null
      */
     protected $supportsZstd;
-
     /**
      * Prepares the given values to be used with the `eval` command, including serialization and compression.
      *
@@ -40,48 +36,35 @@ trait PacksPhpRedisValues
         if (empty($values)) {
             return $values;
         }
-
         if ($this->supportsPacking()) {
             return array_map([$this->client, '_pack'], $values);
         }
-
         if ($this->compressed()) {
             if ($this->supportsLzf() && $this->lzfCompressed()) {
-                if (! function_exists('lzf_compress')) {
+                if (!function_exists('lzf_compress')) {
                     throw new RuntimeException("'lzf' extension required to call 'lzf_compress'.");
                 }
-
                 $processor = function ($value) {
                     return \lzf_compress($this->client->_serialize($value));
                 };
             } elseif ($this->supportsZstd() && $this->zstdCompressed()) {
-                if (! function_exists('zstd_compress')) {
+                if (!function_exists('zstd_compress')) {
                     throw new RuntimeException("'zstd' extension required to call 'zstd_compress'.");
                 }
-
                 $compressionLevel = $this->client->getOption(Redis::OPT_COMPRESSION_LEVEL);
-
                 $processor = function ($value) use ($compressionLevel) {
-                    return \zstd_compress(
-                        $this->client->_serialize($value),
-                        $compressionLevel === 0 ? Redis::COMPRESSION_ZSTD_DEFAULT : $compressionLevel
-                    );
+                    return \zstd_compress($this->client->_serialize($value), $compressionLevel === 0 ? Redis::COMPRESSION_ZSTD_DEFAULT : $compressionLevel);
                 };
             } else {
-                throw new UnexpectedValueException(sprintf(
-                    'Unsupported phpredis compression in use [%d].',
-                    $this->client->getOption(Redis::OPT_COMPRESSION)
-                ));
+                throw new UnexpectedValueException(sprintf('Unsupported phpredis compression in use [%d].', $this->client->getOption(Redis::OPT_COMPRESSION)));
             }
         } else {
             $processor = function ($value) {
                 return $this->client->_serialize($value);
             };
         }
-
         return array_map($processor, $values);
     }
-
     /**
      * Determine if compression is enabled.
      *
@@ -89,10 +72,8 @@ trait PacksPhpRedisValues
      */
     public function compressed(): bool
     {
-        return defined('Redis::OPT_COMPRESSION') &&
-               $this->client->getOption(Redis::OPT_COMPRESSION) !== Redis::COMPRESSION_NONE;
+        return defined('Redis::OPT_COMPRESSION') && $this->client->getOption(Redis::OPT_COMPRESSION) !== Redis::COMPRESSION_NONE;
     }
-
     /**
      * Determine if LZF compression is enabled.
      *
@@ -100,10 +81,8 @@ trait PacksPhpRedisValues
      */
     public function lzfCompressed(): bool
     {
-        return defined('Redis::COMPRESSION_LZF') &&
-               $this->client->getOption(Redis::OPT_COMPRESSION) === Redis::COMPRESSION_LZF;
+        return defined('Redis::COMPRESSION_LZF') && $this->client->getOption(Redis::OPT_COMPRESSION) === Redis::COMPRESSION_LZF;
     }
-
     /**
      * Determine if ZSTD compression is enabled.
      *
@@ -111,10 +90,8 @@ trait PacksPhpRedisValues
      */
     public function zstdCompressed(): bool
     {
-        return defined('Redis::COMPRESSION_ZSTD') &&
-               $this->client->getOption(Redis::OPT_COMPRESSION) === Redis::COMPRESSION_ZSTD;
+        return defined('Redis::COMPRESSION_ZSTD') && $this->client->getOption(Redis::OPT_COMPRESSION) === Redis::COMPRESSION_ZSTD;
     }
-
     /**
      * Determine if LZ4 compression is enabled.
      *
@@ -122,10 +99,8 @@ trait PacksPhpRedisValues
      */
     public function lz4Compressed(): bool
     {
-        return defined('Redis::COMPRESSION_LZ4') &&
-               $this->client->getOption(Redis::OPT_COMPRESSION) === Redis::COMPRESSION_LZ4;
+        return defined('Redis::COMPRESSION_LZ4') && $this->client->getOption(Redis::OPT_COMPRESSION) === Redis::COMPRESSION_LZ4;
     }
-
     /**
      * Determine if the current PhpRedis extension version supports packing.
      *
@@ -136,10 +111,8 @@ trait PacksPhpRedisValues
         if ($this->supportsPacking === null) {
             $this->supportsPacking = $this->phpRedisVersionAtLeast('5.3.5');
         }
-
         return $this->supportsPacking;
     }
-
     /**
      * Determine if the current PhpRedis extension version supports LZF compression.
      *
@@ -150,10 +123,8 @@ trait PacksPhpRedisValues
         if ($this->supportsLzf === null) {
             $this->supportsLzf = $this->phpRedisVersionAtLeast('4.3.0');
         }
-
         return $this->supportsLzf;
     }
-
     /**
      * Determine if the current PhpRedis extension version supports Zstd compression.
      *
@@ -164,10 +135,8 @@ trait PacksPhpRedisValues
         if ($this->supportsZstd === null) {
             $this->supportsZstd = $this->phpRedisVersionAtLeast('5.1.0');
         }
-
         return $this->supportsZstd;
     }
-
     /**
      * Determine if the PhpRedis extension version is at least the given version.
      *
@@ -177,7 +146,6 @@ trait PacksPhpRedisValues
     protected function phpRedisVersionAtLeast(string $version): bool
     {
         $phpredisVersion = phpversion('redis');
-
-        return $phpredisVersion !== false && version_compare($phpredisVersion, $version, '>=');
+        return $phpredisVersion !== \false && version_compare($phpredisVersion, $version, '>=');
     }
 }

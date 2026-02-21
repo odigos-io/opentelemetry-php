@@ -1,5 +1,6 @@
-<?php declare(strict_types=1);
+<?php
 
+declare (strict_types=1);
 /*
  * This file is part of the Monolog package.
  *
@@ -8,11 +9,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Monolog;
+namespace Odigos\Monolog;
 
 use Psr\Log\LogLevel;
-
 /**
  * Represents the log levels
  *
@@ -29,25 +28,22 @@ use Psr\Log\LogLevel;
  * To get the internal value for filtering, if the includes/isLowerThan/isHigherThan methods are
  * not enough, you can use ->value to get the enum case's integer value.
  */
-enum Level: int
+enum Level : int
 {
     /**
      * Detailed debug information
      */
     case Debug = 100;
-
     /**
      * Interesting events
      *
      * Examples: User logs in, SQL logs.
      */
     case Info = 200;
-
     /**
      * Uncommon events
      */
     case Notice = 250;
-
     /**
      * Exceptional occurrences that are not errors
      *
@@ -55,19 +51,16 @@ enum Level: int
      * undesirable things that are not necessarily wrong.
      */
     case Warning = 300;
-
     /**
      * Runtime errors
      */
     case Error = 400;
-
     /**
      * Critical conditions
      *
      * Example: Application component unavailable, unexpected exception.
      */
     case Critical = 500;
-
     /**
      * Action must be taken immediately
      *
@@ -75,12 +68,10 @@ enum Level: int
      * This should trigger the SMS alerts and wake you up.
      */
     case Alert = 550;
-
     /**
      * Urgent alert.
      */
     case Emergency = 600;
-
     /**
      * @param  value-of<self::NAMES>|LogLevel::*|'Debug'|'Info'|'Notice'|'Warning'|'Error'|'Critical'|'Alert'|'Emergency' $name
      * @return static
@@ -98,7 +89,6 @@ enum Level: int
             'emergency' => self::Emergency,
         };
     }
-
     /**
      * @param  value-of<self::VALUES> $value
      * @return static
@@ -107,7 +97,6 @@ enum Level: int
     {
         return self::from($value);
     }
-
     /**
      * Returns true if the passed $level is higher or equal to $this
      */
@@ -115,17 +104,14 @@ enum Level: int
     {
         return $this->value <= $level->value;
     }
-
     public function isHigherThan(Level $level): bool
     {
         return $this->value > $level->value;
     }
-
     public function isLowerThan(Level $level): bool
     {
         return $this->value < $level->value;
     }
-
     /**
      * Returns the monolog standardized all-capitals name of the level
      *
@@ -146,7 +132,6 @@ enum Level: int
             self::Emergency => 'EMERGENCY',
         };
     }
-
     /**
      * Returns the PSR-3 level matching this instance
      *
@@ -165,7 +150,6 @@ enum Level: int
             self::Emergency => LogLevel::EMERGENCY,
         };
     }
-
     /**
      * Returns the RFC 5424 level matching this instance
      *
@@ -184,26 +168,6 @@ enum Level: int
             self::Emergency => 0,
         };
     }
-
-    public const VALUES = [
-        100,
-        200,
-        250,
-        300,
-        400,
-        500,
-        550,
-        600,
-    ];
-
-    public const NAMES = [
-        'DEBUG',
-        'INFO',
-        'NOTICE',
-        'WARNING',
-        'ERROR',
-        'CRITICAL',
-        'ALERT',
-        'EMERGENCY',
-    ];
+    public const VALUES = [100, 200, 250, 300, 400, 500, 550, 600];
+    public const NAMES = ['DEBUG', 'INFO', 'NOTICE', 'WARNING', 'ERROR', 'CRITICAL', 'ALERT', 'EMERGENCY'];
 }

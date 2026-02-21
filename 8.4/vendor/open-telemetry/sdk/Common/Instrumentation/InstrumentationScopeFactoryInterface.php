@@ -1,15 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\SDK\Common\Instrumentation;
 
 interface InstrumentationScopeFactoryInterface
 {
-    public function create(
-        string $name,
-        ?string $version = null,
-        ?string $schemaUrl = null,
-        iterable $attributes = [],
-    ): InstrumentationScopeInterface;
+    public function create(string $name, ?string $version = null, ?string $schemaUrl = null, iterable $attributes = []): \OpenTelemetry\SDK\Common\Instrumentation\InstrumentationScopeInterface;
 }

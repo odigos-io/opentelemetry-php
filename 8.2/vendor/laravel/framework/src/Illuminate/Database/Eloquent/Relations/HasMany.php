@@ -3,14 +3,13 @@
 namespace Illuminate\Database\Eloquent\Relations;
 
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
-
 /**
  * @template TRelatedModel of \Illuminate\Database\Eloquent\Model
  * @template TDeclaringModel of \Illuminate\Database\Eloquent\Model
  *
  * @extends \Illuminate\Database\Eloquent\Relations\HasOneOrMany<TRelatedModel, TDeclaringModel, \Illuminate\Database\Eloquent\Collection<int, TRelatedModel>>
  */
-class HasMany extends HasOneOrMany
+class HasMany extends \Illuminate\Database\Eloquent\Relations\HasOneOrMany
 {
     /**
      * Convert the relationship to a "has one" relationship.
@@ -19,39 +18,25 @@ class HasMany extends HasOneOrMany
      */
     public function one()
     {
-        return HasOne::noConstraints(fn () => tap(
-            new HasOne(
-                $this->getQuery(),
-                $this->parent,
-                $this->foreignKey,
-                $this->localKey
-            ),
-            function ($hasOne) {
-                if ($inverse = $this->getInverseRelationship()) {
-                    $hasOne->inverse($inverse);
-                }
+        return \Illuminate\Database\Eloquent\Relations\HasOne::noConstraints(fn() => tap(new \Illuminate\Database\Eloquent\Relations\HasOne($this->getQuery(), $this->parent, $this->foreignKey, $this->localKey), function ($hasOne) {
+            if ($inverse = $this->getInverseRelationship()) {
+                $hasOne->inverse($inverse);
             }
-        ));
+        }));
     }
-
     /** @inheritDoc */
     public function getResults()
     {
-        return ! is_null($this->getParentKey())
-            ? $this->query->get()
-            : $this->related->newCollection();
+        return !is_null($this->getParentKey()) ? $this->query->get() : $this->related->newCollection();
     }
-
     /** @inheritDoc */
     public function initRelation(array $models, $relation)
     {
         foreach ($models as $model) {
             $model->setRelation($relation, $this->related->newCollection());
         }
-
         return $models;
     }
-
     /** @inheritDoc */
     public function match(array $models, EloquentCollection $results, $relation)
     {

@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -21,13 +21,12 @@ namespace Cake\View;
  * Currently, only switches the default layout and sets the response type - which just maps to
  * text/html by default.
  */
-class AjaxView extends View
+class AjaxView extends \Cake\View\View
 {
     /**
      * @inheritDoc
      */
     protected string $layout = 'ajax';
-
     /**
      * Get content type for this view.
      *

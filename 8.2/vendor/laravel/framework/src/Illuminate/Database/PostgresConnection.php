@@ -9,8 +9,7 @@ use Illuminate\Database\Schema\Grammars\PostgresGrammar as SchemaGrammar;
 use Illuminate\Database\Schema\PostgresBuilder;
 use Illuminate\Database\Schema\PostgresSchemaState;
 use Illuminate\Filesystem\Filesystem;
-
-class PostgresConnection extends Connection
+class PostgresConnection extends \Illuminate\Database\Connection
 {
     /**
      * {@inheritdoc}
@@ -19,7 +18,6 @@ class PostgresConnection extends Connection
     {
         return 'PostgreSQL';
     }
-
     /**
      * Escape a binary value for safe SQL embedding.
      *
@@ -29,10 +27,8 @@ class PostgresConnection extends Connection
     protected function escapeBinary($value)
     {
         $hex = bin2hex($value);
-
-        return "'\x{$hex}'::bytea";
+        return "'\\x{$hex}'::bytea";
     }
-
     /**
      * Escape a bool value for safe SQL embedding.
      *
@@ -43,7 +39,6 @@ class PostgresConnection extends Connection
     {
         return $value ? 'true' : 'false';
     }
-
     /**
      * Determine if the given database exception was caused by a unique constraint violation.
      *
@@ -54,7 +49,6 @@ class PostgresConnection extends Connection
     {
         return '23505' === $exception->getCode();
     }
-
     /**
      * Get the default query grammar instance.
      *
@@ -64,7 +58,6 @@ class PostgresConnection extends Connection
     {
         return new QueryGrammar($this);
     }
-
     /**
      * Get a schema builder instance for the connection.
      *
@@ -75,10 +68,8 @@ class PostgresConnection extends Connection
         if (is_null($this->schemaGrammar)) {
             $this->useDefaultSchemaGrammar();
         }
-
         return new PostgresBuilder($this);
     }
-
     /**
      * Get the default schema grammar instance.
      *
@@ -88,7 +79,6 @@ class PostgresConnection extends Connection
     {
         return new SchemaGrammar($this);
     }
-
     /**
      * Get the schema state for the connection.
      *
@@ -100,7 +90,6 @@ class PostgresConnection extends Connection
     {
         return new PostgresSchemaState($this, $files, $processFactory);
     }
-
     /**
      * Get the default post processor instance.
      *
@@ -108,6 +97,6 @@ class PostgresConnection extends Connection
      */
     protected function getDefaultPostProcessor()
     {
-        return new PostgresProcessor;
+        return new PostgresProcessor();
     }
 }

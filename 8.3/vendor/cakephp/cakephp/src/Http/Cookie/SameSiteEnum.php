@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
@@ -15,7 +15,7 @@ declare(strict_types=1);
  */
 namespace Cake\Http\Cookie;
 
-enum SameSiteEnum: string
+enum SameSiteEnum : string
 {
     case LAX = 'Lax';
     case STRICT = 'Strict';

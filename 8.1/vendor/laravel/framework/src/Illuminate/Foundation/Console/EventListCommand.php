@@ -8,7 +8,6 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use ReflectionFunction;
 use Symfony\Component\Console\Attribute\AsCommand;
-
 #[AsCommand(name: 'event:list')]
 class EventListCommand extends Command
 {
@@ -18,21 +17,18 @@ class EventListCommand extends Command
      * @var string
      */
     protected $signature = 'event:list {--event= : Filter the events by name}';
-
     /**
      * The console command description.
      *
      * @var string
      */
     protected $description = "List the application's events and listeners";
-
     /**
      * The events dispatcher resolver callback.
      *
      * @var \Closure|null
      */
     protected static $eventsResolver;
-
     /**
      * Execute the console command.
      *
@@ -41,23 +37,17 @@ class EventListCommand extends Command
     public function handle()
     {
         $events = $this->getEvents()->sortKeys();
-
         if ($events->isEmpty()) {
             $this->components->info("Your application doesn't have any events matching the given criteria.");
-
             return;
         }
-
         $this->newLine();
-
         $events->each(function ($listeners, $event) {
             $this->components->twoColumnDetail($this->appendEventInterfaces($event));
             $this->components->bulletList($listeners);
         });
-
         $this->newLine();
     }
-
     /**
      * Get all of the events and listeners configured for the application.
      *
@@ -66,14 +56,11 @@ class EventListCommand extends Command
     protected function getEvents()
     {
         $events = collect($this->getListenersOnDispatcher());
-
         if ($this->filteringByEvent()) {
             $events = $this->filterEvents($events);
         }
-
         return $events;
     }
-
     /**
      * Get the event / listeners from the dispatcher object.
      *
@@ -82,7 +69,6 @@ class EventListCommand extends Command
     protected function getListenersOnDispatcher()
     {
         $events = [];
-
         foreach ($this->getRawListeners() as $event => $rawListeners) {
             foreach ($rawListeners as $rawListener) {
                 if (is_string($rawListener)) {
@@ -93,15 +79,12 @@ class EventListCommand extends Command
                     if (is_object($rawListener[0])) {
                         $rawListener[0] = get_class($rawListener[0]);
                     }
-
                     $events[$event][] = $this->appendListenerInterfaces(implode('@', $rawListener));
                 }
             }
         }
-
         return $events;
     }
-
     /**
      * Add the event implemented interfaces to the output.
      *
@@ -110,19 +93,15 @@ class EventListCommand extends Command
      */
     protected function appendEventInterfaces($event)
     {
-        if (! class_exists($event)) {
+        if (!class_exists($event)) {
             return $event;
         }
-
         $interfaces = class_implements($event);
-
         if (in_array(ShouldBroadcast::class, $interfaces)) {
             $event .= ' <fg=bright-blue>(ShouldBroadcast)</>';
         }
-
         return $event;
     }
-
     /**
      * Add the listener implemented interfaces to the output.
      *
@@ -132,18 +111,13 @@ class EventListCommand extends Command
     protected function appendListenerInterfaces($listener)
     {
         $listener = explode('@', $listener);
-
         $interfaces = class_implements($listener[0]);
-
         $listener = implode('@', $listener);
-
         if (in_array(ShouldQueue::class, $interfaces)) {
             $listener .= ' <fg=bright-blue>(ShouldQueue)</>';
         }
-
         return $listener;
     }
-
     /**
      * Get a displayable string representation of a Closure listener.
      *
@@ -153,12 +127,9 @@ class EventListCommand extends Command
     protected function stringifyClosure(Closure $rawListener)
     {
         $reflection = new ReflectionFunction($rawListener);
-
-        $path = str_replace([base_path(), DIRECTORY_SEPARATOR], ['', '/'], $reflection->getFileName() ?: '');
-
-        return 'Closure at: '.$path.':'.$reflection->getStartLine();
+        $path = str_replace([base_path(), \DIRECTORY_SEPARATOR], ['', '/'], $reflection->getFileName() ?: '');
+        return 'Closure at: ' . $path . ':' . $reflection->getStartLine();
     }
-
     /**
      * Filter the given events using the provided event name filter.
      *
@@ -167,15 +138,11 @@ class EventListCommand extends Command
      */
     protected function filterEvents($events)
     {
-        if (! $eventName = $this->option('event')) {
+        if (!$eventName = $this->option('event')) {
             return $events;
         }
-
-        return $events->filter(
-            fn ($listeners, $event) => str_contains($event, $eventName)
-        );
+        return $events->filter(fn($listeners, $event) => str_contains($event, $eventName));
     }
-
     /**
      * Determine whether the user is filtering by an event name.
      *
@@ -183,9 +150,8 @@ class EventListCommand extends Command
      */
     protected function filteringByEvent()
     {
-        return ! empty($this->option('event'));
+        return !empty($this->option('event'));
     }
-
     /**
      * Gets the raw version of event listeners from the event dispatcher.
      *
@@ -195,7 +161,6 @@ class EventListCommand extends Command
     {
         return $this->getEventsDispatcher()->getRawListeners();
     }
-
     /**
      * Get the event dispatcher.
      *
@@ -203,11 +168,8 @@ class EventListCommand extends Command
      */
     public function getEventsDispatcher()
     {
-        return is_null(self::$eventsResolver)
-            ? $this->getLaravel()->make('events')
-            : call_user_func(self::$eventsResolver);
+        return is_null(self::$eventsResolver) ? $this->getLaravel()->make('events') : call_user_func(self::$eventsResolver);
     }
-
     /**
      * Set a callback that should be used when resolving the events dispatcher.
      *

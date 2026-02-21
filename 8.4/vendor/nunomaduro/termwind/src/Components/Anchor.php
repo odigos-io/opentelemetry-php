@@ -1,7 +1,8 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Odigos\Termwind\Components;
 
-namespace Termwind\Components;
-
-final class Anchor extends Element {}
+final class Anchor extends Element
+{
+}

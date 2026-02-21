@@ -10,14 +10,12 @@ class WorkerStopping
      * @var int
      */
     public $status;
-
     /**
      * The worker options.
      *
      * @var \Illuminate\Queue\WorkerOptions|null
      */
     public $workerOptions;
-
     /**
      * Create a new event instance.
      *

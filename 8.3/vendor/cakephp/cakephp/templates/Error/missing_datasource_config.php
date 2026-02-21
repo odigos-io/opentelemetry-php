@@ -1,4 +1,7 @@
 <?php
+
+namespace Odigos;
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -14,18 +17,26 @@
  * @var string $message
  */
 use function Cake\Core\h;
-
 $this->layout = 'dev_error';
-
 $this->assign('title', 'Missing Datasource Configuration');
 $this->assign('templateName', 'missing_datasource_config.php');
-
 $this->start('subheading');
 ?>
     <strong>Error</strong>
-    <?php if (isset($name)): ?>
-        The datasource configuration <em><?= h($name) ?></em> was not found in config<?= DIRECTORY_SEPARATOR . 'app.php' ?>.
-    <?php else: ?>
-        <?= h($message) ?>
-    <?php endif; ?>
-<?php $this->end() ?>
+    <?php 
+if (isset($name)) {
+    ?>
+        The datasource configuration <em><?php 
+    echo h($name);
+    ?></em> was not found in config<?php 
+    echo \DIRECTORY_SEPARATOR . 'app.php';
+    ?>.
+    <?php 
+} else {
+    ?>
+        <?php 
+    echo h($message);
+    ?>
+    <?php 
+}
+$this->end();

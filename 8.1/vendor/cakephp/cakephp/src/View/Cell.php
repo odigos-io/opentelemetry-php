@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -32,7 +32,6 @@ use Exception;
 use ReflectionException;
 use ReflectionMethod;
 use Stringable;
-
 /**
  * Cell base.
  *
@@ -45,23 +44,20 @@ abstract class Cell implements EventDispatcherInterface, Stringable
      */
     use EventDispatcherTrait;
     use LocatorAwareTrait;
-    use ViewVarsTrait;
-
+    use \Cake\View\ViewVarsTrait;
     /**
      * Constant for folder name containing cell templates.
      *
      * @var string
      */
     public const TEMPLATE_FOLDER = 'cell';
-
     /**
      * Instance of the View created during rendering. Won't be set until after
      * Cell::__toString()/render() is called.
      *
      * @var \Cake\View\View
      */
-    protected View $View;
-
+    protected \Cake\View\View $View;
     /**
      * An instance of a Cake\Http\ServerRequest object that contains information about the current request.
      * This object contains all the information about a request and several methods for reading
@@ -70,28 +66,24 @@ abstract class Cell implements EventDispatcherInterface, Stringable
      * @var \Cake\Http\ServerRequest
      */
     protected ServerRequest $request;
-
     /**
      * An instance of a Response object that contains information about the impending response
      *
      * @var \Cake\Http\Response
      */
     protected Response $response;
-
     /**
      * The cell's action to invoke.
      *
      * @var string
      */
     protected string $action;
-
     /**
      * Arguments to pass to cell's action.
      *
      * @var array
      */
     protected array $args = [];
-
     /**
      * List of valid options (constructor's fourth arguments)
      * Override this property in subclasses to allow
@@ -100,14 +92,12 @@ abstract class Cell implements EventDispatcherInterface, Stringable
      * @var array<string>
      */
     protected array $_validCellOptions = [];
-
     /**
      * Caching setup.
      *
      * @var array|bool
      */
-    protected array|bool $_cache = false;
-
+    protected array|bool $_cache = \false;
     /**
      * Constructor.
      *
@@ -116,18 +106,13 @@ abstract class Cell implements EventDispatcherInterface, Stringable
      * @param \Cake\Event\EventManagerInterface|null $eventManager The eventManager to bind events to.
      * @param array<string, mixed> $cellOptions Cell options to apply.
      */
-    public function __construct(
-        ServerRequest $request,
-        Response $response,
-        ?EventManagerInterface $eventManager = null,
-        array $cellOptions = [],
-    ) {
+    public function __construct(ServerRequest $request, Response $response, ?EventManagerInterface $eventManager = null, array $cellOptions = [])
+    {
         if ($eventManager !== null) {
             $this->setEventManager($eventManager);
         }
         $this->request = $request;
         $this->response = $response;
-
         $this->_validCellOptions = array_merge(['action', 'args'], $this->_validCellOptions);
         foreach ($this->_validCellOptions as $var) {
             if (isset($cellOptions[$var])) {
@@ -137,10 +122,8 @@ abstract class Cell implements EventDispatcherInterface, Stringable
         if (!empty($cellOptions['cache'])) {
             $this->_cache = $cellOptions['cache'];
         }
-
         $this->initialize();
     }
-
     /**
      * Initialization hook method.
      *
@@ -152,7 +135,6 @@ abstract class Cell implements EventDispatcherInterface, Stringable
     public function initialize(): void
     {
     }
-
     /**
      * Render the cell.
      *
@@ -167,7 +149,6 @@ abstract class Cell implements EventDispatcherInterface, Stringable
         if ($this->_cache) {
             $cache = $this->_cacheConfig($this->action, $template);
         }
-
         $render = function () use ($template): string {
             try {
                 $this->dispatchEvent('Cell.beforeAction', [$this, $this->action, $this->args]);
@@ -175,52 +156,33 @@ abstract class Cell implements EventDispatcherInterface, Stringable
                 $reflect->invokeArgs($this, $this->args);
                 $this->dispatchEvent('Cell.afterAction', [$this, $this->action, $this->args]);
             } catch (ReflectionException) {
-                throw new BadMethodCallException(sprintf(
-                    'Class `%s` does not have a `%s` method.',
-                    static::class,
-                    $this->action,
-                ));
+                throw new BadMethodCallException(sprintf('Class `%s` does not have a `%s` method.', static::class, $this->action));
             }
-
             $builder = $this->viewBuilder();
-
             if ($template !== null) {
                 $builder->setTemplate($template);
             }
-
             $className = static::class;
             $namePrefix = '\View\Cell\\';
             $name = substr($className, strpos($className, $namePrefix) + strlen($namePrefix));
             $name = substr($name, 0, -4);
             if (!$builder->getTemplatePath()) {
-                $builder->setTemplatePath(
-                    static::TEMPLATE_FOLDER . DIRECTORY_SEPARATOR . str_replace('\\', DIRECTORY_SEPARATOR, $name),
-                );
+                $builder->setTemplatePath(static::TEMPLATE_FOLDER . \DIRECTORY_SEPARATOR . str_replace('\\', \DIRECTORY_SEPARATOR, $name));
             }
             $template = $builder->getTemplate();
-
             $view = $this->createView();
             try {
-                return $view->render($template, false);
+                return $view->render($template, \false);
             } catch (MissingTemplateException $e) {
                 $attributes = $e->getAttributes();
-                throw new MissingCellTemplateException(
-                    $name,
-                    $attributes['file'],
-                    $attributes['paths'],
-                    null,
-                    $e,
-                );
+                throw new MissingCellTemplateException($name, $attributes['file'], $attributes['paths'], null, $e);
             }
         };
-
         if ($cache) {
             return Cache::remember($cache['key'], $render, $cache['config']);
         }
-
         return $render();
     }
-
     /**
      * Generate the cache key to use for this cell.
      *
@@ -238,17 +200,12 @@ abstract class Cell implements EventDispatcherInterface, Stringable
         $template = $template ?: 'default';
         $key = 'cell_' . Inflector::underscore(static::class) . '_' . $action . '_' . $template;
         $key = str_replace('\\', '_', $key);
-        $default = [
-            'config' => 'default',
-            'key' => $key,
-        ];
-        if ($this->_cache === true) {
+        $default = ['config' => 'default', 'key' => $key];
+        if ($this->_cache === \true) {
             return $default;
         }
-
         return $this->_cache + $default;
     }
-
     /**
      * Magic method.
      *
@@ -265,25 +222,13 @@ abstract class Cell implements EventDispatcherInterface, Stringable
         try {
             return $this->render();
         } catch (Exception $e) {
-            trigger_error(sprintf(
-                'Could not render cell - %s [%s, line %d]',
-                $e->getMessage(),
-                $e->getFile(),
-                $e->getLine(),
-            ), E_USER_WARNING);
-
+            trigger_error(sprintf('Could not render cell - %s [%s, line %d]', $e->getMessage(), $e->getFile(), $e->getLine()), \E_USER_WARNING);
             return '';
-        /** @phpstan-ignore-next-line */
+            /** @phpstan-ignore-next-line */
         } catch (Error $e) {
-            throw new Error(sprintf(
-                'Could not render cell - %s [%s, line %d]',
-                $e->getMessage(),
-                $e->getFile(),
-                $e->getLine(),
-            ), 0, $e);
+            throw new Error(sprintf('Could not render cell - %s [%s, line %d]', $e->getMessage(), $e->getFile(), $e->getLine()), 0, $e);
         }
     }
-
     /**
      * Debug info.
      *
@@ -291,12 +236,6 @@ abstract class Cell implements EventDispatcherInterface, Stringable
      */
     public function __debugInfo(): array
     {
-        return [
-            'action' => $this->action,
-            'args' => $this->args,
-            'request' => $this->request,
-            'response' => $this->response,
-            'viewBuilder' => $this->viewBuilder(),
-        ];
+        return ['action' => $this->action, 'args' => $this->args, 'request' => $this->request, 'response' => $this->response, 'viewBuilder' => $this->viewBuilder()];
     }
 }

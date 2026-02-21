@@ -1,12 +1,10 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\DBAL\Types;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
-
-class FloatType extends Type
+class FloatType extends \Doctrine\DBAL\Types\Type
 {
     /**
      * {@inheritDoc}
@@ -15,7 +13,6 @@ class FloatType extends Type
     {
         return $platform->getFloatDeclarationSQL($column);
     }
-
     /**
      * @param T $value
      *

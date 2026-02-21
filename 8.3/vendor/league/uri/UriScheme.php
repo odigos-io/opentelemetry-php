@@ -8,13 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-declare(strict_types=1);
-
-namespace League\Uri;
+declare (strict_types=1);
+namespace Odigos\League\Uri;
 
 use ValueError;
-
 /*
  *  Supported schemes and corresponding default port.
  *
@@ -22,7 +19,7 @@ use ValueError;
  * @see https://www.iana.org/assignments/uri-schemes/uri-schemes.xhtml
  * @see https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xhtml
  */
-enum UriScheme: string
+enum UriScheme : string
 {
     case About = 'about';
     case Acap = 'acap';
@@ -85,7 +82,6 @@ enum UriScheme: string
     case Vnc = 'vnc';
     case Wais = 'wais';
     case Xmpp = 'xmpp';
-
     public function port(): ?int
     {
         return match ($this) {
@@ -131,51 +127,31 @@ enum UriScheme: string
             default => null,
         };
     }
-
     public function type(): SchemeType
     {
         return match ($this) {
-            self::Urn,
-            self::About,
-            self::Bitcoin,
-            self::Blob,
-            self::Data,
-            self::Geo,
-            self::Javascript,
-            self::Magnet,
-            self::Mailto,
-            self::Pkcs11,
-            self::Sip,
-            self::Sips,
-            self::Tel => SchemeType::Opaque,
+            self::Urn, self::About, self::Bitcoin, self::Blob, self::Data, self::Geo, self::Javascript, self::Magnet, self::Mailto, self::Pkcs11, self::Sip, self::Sips, self::Tel => SchemeType::Opaque,
             self::File => SchemeType::Hierarchical,
             self::News => SchemeType::Unknown,
-            default => match (true) {
+            default => match (\true) {
                 null !== $this->port() => SchemeType::Hierarchical,
                 default => SchemeType::Unknown,
             },
         };
     }
-
     public function isWhatWgSpecial(): bool
     {
         return match ($this) {
-            self::Ftp,
-            self::Http,
-            self::Https,
-            self::Ws,
-            self::Wss => true,
-            default => false,
+            self::Ftp, self::Http, self::Https, self::Ws, self::Wss => \true,
+            default => \false,
         };
     }
-
     /**
      * @return list<self>
      */
     public static function fromPort(?int $port): array
     {
         null === $port || 0 <= $port || throw new ValueError('The submitted port cannot be negative.');
-
         static $reverse = [];
         if ([] === $reverse) {
             foreach (self::cases() as $case) {
@@ -185,13 +161,10 @@ enum UriScheme: string
                 }
                 $reverse[$defaultPort] ??= [];
                 $reverse[$defaultPort][] = $case;
-
             }
         }
-
         return $reverse[$port] ?? [];
     }
-
     public function builder(): Builder
     {
         return new Builder(scheme: $this);

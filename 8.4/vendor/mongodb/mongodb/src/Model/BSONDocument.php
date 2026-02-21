@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright 2016-present MongoDB, Inc.
  *
@@ -14,7 +15,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 namespace MongoDB\Model;
 
 use ArrayIterator;
@@ -23,9 +23,7 @@ use JsonSerializable;
 use MongoDB\BSON\Serializable;
 use MongoDB\BSON\Unserializable;
 use stdClass;
-
 use function MongoDB\recursive_copy;
-
 /**
  * Model class for a BSON document.
  *
@@ -45,7 +43,6 @@ class BSONDocument extends ArrayObject implements JsonSerializable, Serializable
             $this[$key] = recursive_copy($value);
         }
     }
-
     /**
      * This overrides the parent constructor to allow property access of entries
      * by default.
@@ -58,7 +55,6 @@ class BSONDocument extends ArrayObject implements JsonSerializable, Serializable
     {
         parent::__construct($input, $flags, $iteratorClass);
     }
-
     /**
      * Factory method for var_export().
      *
@@ -69,10 +65,8 @@ class BSONDocument extends ArrayObject implements JsonSerializable, Serializable
     {
         $document = new self();
         $document->exchangeArray($properties);
-
         return $document;
     }
-
     /**
      * Serialize the document to BSON.
      *
@@ -82,7 +76,6 @@ class BSONDocument extends ArrayObject implements JsonSerializable, Serializable
     {
         return (object) $this->getArrayCopy();
     }
-
     /**
      * Unserialize the document to BSON.
      *
@@ -93,7 +86,6 @@ class BSONDocument extends ArrayObject implements JsonSerializable, Serializable
     {
         parent::__construct($data, ArrayObject::ARRAY_AS_PROPS);
     }
-
     /**
      * Serialize the array to JSON.
      *

@@ -1,8 +1,7 @@
 <?php
 
-declare(strict_types=1);
-
-namespace League\Container\Argument;
+declare (strict_types=1);
+namespace Odigos\League\Container\Argument;
 
 interface ResolvableArgumentInterface extends ArgumentInterface
 {

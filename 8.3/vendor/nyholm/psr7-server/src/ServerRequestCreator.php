@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Nyholm\Psr7Server;
 
 use Psr\Http\Message\ServerRequestFactoryInterface;
@@ -12,65 +11,47 @@ use Psr\Http\Message\UploadedFileFactoryInterface;
 use Psr\Http\Message\UploadedFileInterface;
 use Psr\Http\Message\UriFactoryInterface;
 use Psr\Http\Message\UriInterface;
-
 /**
  * @author Tobias Nyholm <tobias.nyholm@gmail.com>
  * @author Martijn van der Ven <martijn@vanderven.se>
  */
-final class ServerRequestCreator implements ServerRequestCreatorInterface
+final class ServerRequestCreator implements \Nyholm\Psr7Server\ServerRequestCreatorInterface
 {
     private $serverRequestFactory;
-
     private $uriFactory;
-
     private $uploadedFileFactory;
-
     private $streamFactory;
-
-    public function __construct(
-        ServerRequestFactoryInterface $serverRequestFactory,
-        UriFactoryInterface $uriFactory,
-        UploadedFileFactoryInterface $uploadedFileFactory,
-        StreamFactoryInterface $streamFactory
-    ) {
+    public function __construct(ServerRequestFactoryInterface $serverRequestFactory, UriFactoryInterface $uriFactory, UploadedFileFactoryInterface $uploadedFileFactory, StreamFactoryInterface $streamFactory)
+    {
         $this->serverRequestFactory = $serverRequestFactory;
         $this->uriFactory = $uriFactory;
         $this->uploadedFileFactory = $uploadedFileFactory;
         $this->streamFactory = $streamFactory;
     }
-
     /**
      * {@inheritdoc}
      */
     public function fromGlobals(): ServerRequestInterface
     {
         $server = $_SERVER;
-        if (false === isset($server['REQUEST_METHOD'])) {
+        if (\false === isset($server['REQUEST_METHOD'])) {
             $server['REQUEST_METHOD'] = 'GET';
         }
-
         $headers = \function_exists('getallheaders') ? getallheaders() : static::getHeadersFromServer($_SERVER);
-
         $post = null;
         if ('POST' === $this->getMethodFromEnv($server)) {
             foreach ($headers as $headerName => $headerValue) {
-                if (true === \is_int($headerName) || 'content-type' !== \strtolower($headerName)) {
+                if (\true === \is_int($headerName) || 'content-type' !== \strtolower($headerName)) {
                     continue;
                 }
-                if (\in_array(
-                    \strtolower(\trim(\explode(';', $headerValue, 2)[0])),
-                    ['application/x-www-form-urlencoded', 'multipart/form-data']
-                )) {
+                if (\in_array(\strtolower(\trim(\explode(';', $headerValue, 2)[0])), ['application/x-www-form-urlencoded', 'multipart/form-data'])) {
                     $post = $_POST;
-
                     break;
                 }
             }
         }
-
         return $this->fromArrays($server, $headers, $_COOKIE, $_GET, $post, $_FILES, \fopen('php://input', 'r') ?: null);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -79,7 +60,6 @@ final class ServerRequestCreator implements ServerRequestCreatorInterface
         $method = $this->getMethodFromEnv($server);
         $uri = $this->getUriFromEnvWithHTTP($server);
         $protocol = isset($server['SERVER_PROTOCOL']) ? \str_replace('HTTP/', '', $server['SERVER_PROTOCOL']) : '1.1';
-
         $serverRequest = $this->serverRequestFactory->createServerRequest($method, $uri, $server);
         foreach ($headers as $name => $value) {
             // Because PHP automatically casts array keys set with numeric strings to integers, we have to make sure
@@ -89,18 +69,10 @@ final class ServerRequestCreator implements ServerRequestCreatorInterface
             }
             $serverRequest = $serverRequest->withAddedHeader($name, $value);
         }
-
-        $serverRequest = $serverRequest
-            ->withProtocolVersion($protocol)
-            ->withCookieParams($cookie)
-            ->withQueryParams($get)
-            ->withParsedBody($post)
-            ->withUploadedFiles($this->normalizeFiles($files));
-
+        $serverRequest = $serverRequest->withProtocolVersion($protocol)->withCookieParams($cookie)->withQueryParams($get)->withParsedBody($post)->withUploadedFiles($this->normalizeFiles($files));
         if (null === $body) {
             return $serverRequest;
         }
-
         if (\is_resource($body)) {
             $body = $this->streamFactory->createStreamFromResource($body);
         } elseif (\is_string($body)) {
@@ -108,10 +80,8 @@ final class ServerRequestCreator implements ServerRequestCreatorInterface
         } elseif (!$body instanceof StreamInterface) {
             throw new \InvalidArgumentException('The $body parameter to ServerRequestCreator::fromArrays must be string, resource or StreamInterface');
         }
-
         return $serverRequest->withBody($body);
     }
-
     /**
      * Implementation from Laminas\Diactoros\marshalHeadersFromSapi().
      */
@@ -123,51 +93,40 @@ final class ServerRequestCreator implements ServerRequestCreatorInterface
             // if they are added by rewrite rules
             if (0 === \strpos($key, 'REDIRECT_')) {
                 $key = \substr($key, 9);
-
                 // We will not overwrite existing variables with the
                 // prefixed versions, though
                 if (\array_key_exists($key, $server)) {
                     continue;
                 }
             }
-
             if ($value && 0 === \strpos($key, 'HTTP_')) {
                 $name = \strtr(\strtolower(\substr($key, 5)), '_', '-');
                 $headers[$name] = $value;
-
                 continue;
             }
-
             if ($value && 0 === \strpos($key, 'CONTENT_')) {
-                $name = 'content-'.\strtolower(\substr($key, 8));
+                $name = 'content-' . \strtolower(\substr($key, 8));
                 $headers[$name] = $value;
-
                 continue;
             }
         }
-
         return $headers;
     }
-
     private function getMethodFromEnv(array $environment): string
     {
-        if (false === isset($environment['REQUEST_METHOD'])) {
+        if (\false === isset($environment['REQUEST_METHOD'])) {
             throw new \InvalidArgumentException('Cannot determine HTTP method');
         }
-
         return $environment['REQUEST_METHOD'];
     }
-
     private function getUriFromEnvWithHTTP(array $environment): UriInterface
     {
         $uri = $this->createUriFromArray($environment);
         if (empty($uri->getScheme())) {
             $uri = $uri->withScheme('http');
         }
-
         return $uri;
     }
-
     /**
      * Return an UploadedFile instance array.
      *
@@ -180,7 +139,6 @@ final class ServerRequestCreator implements ServerRequestCreatorInterface
     private function normalizeFiles(array $files): array
     {
         $normalized = [];
-
         foreach ($files as $key => $value) {
             if ($value instanceof UploadedFileInterface) {
                 $normalized[$key] = $value;
@@ -192,10 +150,8 @@ final class ServerRequestCreator implements ServerRequestCreatorInterface
                 throw new \InvalidArgumentException('Invalid value in files specification');
             }
         }
-
         return $normalized;
     }
-
     /**
      * Create and return an UploadedFile instance from a $_FILES specification.
      *
@@ -211,8 +167,7 @@ final class ServerRequestCreator implements ServerRequestCreatorInterface
         if (\is_array($value['tmp_name'])) {
             return $this->normalizeNestedFileSpec($value);
         }
-
-        if (UPLOAD_ERR_OK !== $value['error']) {
+        if (\UPLOAD_ERR_OK !== $value['error']) {
             $stream = $this->streamFactory->createStream();
         } else {
             try {
@@ -221,16 +176,8 @@ final class ServerRequestCreator implements ServerRequestCreatorInterface
                 $stream = $this->streamFactory->createStream();
             }
         }
-
-        return $this->uploadedFileFactory->createUploadedFile(
-            $stream,
-            (int) $value['size'],
-            (int) $value['error'],
-            $value['name'],
-            $value['type']
-        );
+        return $this->uploadedFileFactory->createUploadedFile($stream, (int) $value['size'], (int) $value['error'], $value['name'], $value['type']);
     }
-
     /**
      * Normalize an array of file specifications.
      *
@@ -242,21 +189,12 @@ final class ServerRequestCreator implements ServerRequestCreatorInterface
     private function normalizeNestedFileSpec(array $files = []): array
     {
         $normalizedFiles = [];
-
         foreach (\array_keys($files['tmp_name']) as $key) {
-            $spec = [
-                'tmp_name' => $files['tmp_name'][$key],
-                'size' => $files['size'][$key],
-                'error' => $files['error'][$key],
-                'name' => $files['name'][$key],
-                'type' => $files['type'][$key],
-            ];
+            $spec = ['tmp_name' => $files['tmp_name'][$key], 'size' => $files['size'][$key], 'error' => $files['error'][$key], 'name' => $files['name'][$key], 'type' => $files['type'][$key]];
             $normalizedFiles[$key] = $this->createUploadedFileFromSpec($spec);
         }
-
         return $normalizedFiles;
     }
-
     /**
      * Create a new uri from server variable.
      *
@@ -265,7 +203,6 @@ final class ServerRequestCreator implements ServerRequestCreatorInterface
     private function createUriFromArray(array $server): UriInterface
     {
         $uri = $this->uriFactory->createUri('');
-
         if (isset($server['HTTP_X_FORWARDED_PROTO'])) {
             $uri = $uri->withScheme($server['HTTP_X_FORWARDED_PROTO']);
         } else {
@@ -274,12 +211,10 @@ final class ServerRequestCreator implements ServerRequestCreatorInterface
             } elseif (isset($server['HTTPS'])) {
                 $uri = $uri->withScheme('on' === $server['HTTPS'] ? 'https' : 'http');
             }
-
             if (isset($server['SERVER_PORT'])) {
                 $uri = $uri->withPort($server['SERVER_PORT']);
             }
         }
-
         if (isset($server['HTTP_HOST'])) {
             if (1 === \preg_match('/^(.+)\:(\d+)$/', $server['HTTP_HOST'], $matches)) {
                 $uri = $uri->withHost($matches[1])->withPort($matches[2]);
@@ -289,15 +224,12 @@ final class ServerRequestCreator implements ServerRequestCreatorInterface
         } elseif (isset($server['SERVER_NAME'])) {
             $uri = $uri->withHost($server['SERVER_NAME']);
         }
-
         if (isset($server['REQUEST_URI'])) {
             $uri = $uri->withPath(\current(\explode('?', $server['REQUEST_URI'])));
         }
-
         if (isset($server['QUERY_STRING'])) {
             $uri = $uri->withQuery($server['QUERY_STRING']);
         }
-
         return $uri;
     }
 }

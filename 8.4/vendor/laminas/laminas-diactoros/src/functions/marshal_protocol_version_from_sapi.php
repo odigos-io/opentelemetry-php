@@ -1,11 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Laminas\Diactoros;
+declare (strict_types=1);
+namespace Odigos\Laminas\Diactoros;
 
 use function preg_match;
-
 /**
  * Return HTTP protocol version (X.Y) as discovered within a `$_SERVER` array.
  *
@@ -14,15 +12,11 @@ use function preg_match;
  */
 function marshalProtocolVersionFromSapi(array $server): string
 {
-    if (! isset($server['SERVER_PROTOCOL'])) {
+    if (!isset($server['SERVER_PROTOCOL'])) {
         return '1.1';
     }
-
-    if (! preg_match('#^(HTTP/)?(?P<version>[1-9]\d*(?:\.\d)?)$#', $server['SERVER_PROTOCOL'], $matches)) {
-        throw Exception\UnrecognizedProtocolVersionException::forVersion(
-            (string) $server['SERVER_PROTOCOL']
-        );
+    if (!preg_match('#^(HTTP/)?(?P<version>[1-9]\d*(?:\.\d)?)$#', $server['SERVER_PROTOCOL'], $matches)) {
+        throw Exception\UnrecognizedProtocolVersionException::forVersion((string) $server['SERVER_PROTOCOL']);
     }
-
     return $matches['version'];
 }

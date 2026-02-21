@@ -4,8 +4,7 @@ namespace Illuminate\Queue\Jobs;
 
 use Illuminate\Container\Container;
 use Illuminate\Contracts\Queue\Job as JobContract;
-
-class SyncJob extends Job implements JobContract
+class SyncJob extends \Illuminate\Queue\Jobs\Job implements JobContract
 {
     /**
      * The class name of the job.
@@ -13,14 +12,12 @@ class SyncJob extends Job implements JobContract
      * @var string
      */
     protected $job;
-
     /**
      * The queue message data.
      *
      * @var string
      */
     protected $payload;
-
     /**
      * Create a new job instance.
      *
@@ -36,7 +33,6 @@ class SyncJob extends Job implements JobContract
         $this->container = $container;
         $this->connectionName = $connectionName;
     }
-
     /**
      * Release the job back into the queue after (n) seconds.
      *
@@ -47,7 +43,6 @@ class SyncJob extends Job implements JobContract
     {
         parent::release($delay);
     }
-
     /**
      * Get the number of times the job has been attempted.
      *
@@ -57,7 +52,6 @@ class SyncJob extends Job implements JobContract
     {
         return 1;
     }
-
     /**
      * Get the job identifier.
      *
@@ -67,7 +61,6 @@ class SyncJob extends Job implements JobContract
     {
         return '';
     }
-
     /**
      * Get the raw body string for the job.
      *
@@ -77,7 +70,6 @@ class SyncJob extends Job implements JobContract
     {
         return $this->payload;
     }
-
     /**
      * Get the name of the queue the job belongs to.
      *

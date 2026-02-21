@@ -11,13 +11,9 @@ class JobAttempted
      * @param  \Illuminate\Contracts\Queue\Job  $job  The job instance.
      * @param  bool  $exceptionOccurred  Indicates if an exception occurred while processing the job.
      */
-    public function __construct(
-        public $connectionName,
-        public $job,
-        public $exceptionOccurred = false,
-    ) {
+    public function __construct(public $connectionName, public $job, public $exceptionOccurred = \false)
+    {
     }
-
     /**
      * Determine if the job completed with failing or an unhandled exception occurring.
      *
@@ -25,6 +21,6 @@ class JobAttempted
      */
     public function successful(): bool
     {
-        return ! $this->job->hasFailed() && ! $this->exceptionOccurred;
+        return !$this->job->hasFailed() && !$this->exceptionOccurred;
     }
 }

@@ -1,12 +1,10 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\SDK\Metrics\Stream;
 
 use OpenTelemetry\SDK\Common\Attribute\AttributesInterface;
 use OpenTelemetry\SDK\Metrics\Data\Exemplar;
-
 /**
  * @internal
  *
@@ -19,11 +17,7 @@ final class Metric
      * @param array<T> $summaries
      * @param array<Exemplar> $exemplars
      */
-    public function __construct(
-        public array $attributes,
-        public array $summaries,
-        public int $timestamp,
-        public array $exemplars = [],
-    ) {
+    public function __construct(public array $attributes, public array $summaries, public int $timestamp, public array $exemplars = [])
+    {
     }
 }

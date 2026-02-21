@@ -5,24 +5,19 @@
  *
  * @license https://github.com/slimphp/Slim/blob/4.x/LICENSE.md (MIT License)
  */
-
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Slim\Factory\Psr17;
 
 use Closure;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Interfaces\ServerRequestCreatorInterface;
-
 class ServerRequestCreator implements ServerRequestCreatorInterface
 {
     /**
      * @var object|string
      */
     protected $serverRequestCreator;
-
     protected string $serverRequestCreatorMethod;
-
     /**
      * @param object|string $serverRequestCreator
      */
@@ -31,7 +26,6 @@ class ServerRequestCreator implements ServerRequestCreatorInterface
         $this->serverRequestCreator = $serverRequestCreator;
         $this->serverRequestCreatorMethod = $serverRequestCreatorMethod;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -39,8 +33,7 @@ class ServerRequestCreator implements ServerRequestCreatorInterface
     {
         /** @var callable $callable */
         $callable = [$this->serverRequestCreator, $this->serverRequestCreatorMethod];
-
         /** @var ServerRequestInterface */
-        return (Closure::fromCallable($callable))();
+        return Closure::fromCallable($callable)();
     }
 }

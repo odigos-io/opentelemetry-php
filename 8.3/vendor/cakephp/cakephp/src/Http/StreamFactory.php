@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -16,11 +16,10 @@ declare(strict_types=1);
  */
 namespace Cake\Http;
 
-use Laminas\Diactoros\Stream;
+use Odigos\Laminas\Diactoros\Stream;
 use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Message\StreamInterface;
 use RuntimeException;
-
 /**
  * Factory class for creating stream instances.
  */
@@ -36,13 +35,11 @@ class StreamFactory implements StreamFactoryInterface
     public function createStream(string $content = ''): StreamInterface
     {
         $resource = fopen('php://temp', 'r+');
-        assert($resource !== false, 'Unable to create resource');
+        assert($resource !== \false, 'Unable to create resource');
         fwrite($resource, $content);
         rewind($resource);
-
         return $this->createStreamFromResource($resource);
     }
-
     /**
      * Create a stream from an existing file.
      *
@@ -61,10 +58,8 @@ class StreamFactory implements StreamFactoryInterface
         if (!is_readable($filename)) {
             throw new RuntimeException(sprintf('Cannot read file `%s`', $filename));
         }
-
         return new Stream($filename, $mode);
     }
-
     /**
      * Create a new stream from an existing resource.
      *

@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\Routing\Exception;
 
 /**
@@ -17,11 +16,10 @@ namespace Symfony\Component\Routing\Exception;
  *
  * @author Alexandre Salomé <alexandre.salome@gmail.com>
  */
-class MissingMandatoryParametersException extends \InvalidArgumentException implements ExceptionInterface
+class MissingMandatoryParametersException extends \InvalidArgumentException implements \Symfony\Component\Routing\Exception\ExceptionInterface
 {
     private string $routeName = '';
     private array $missingParameters = [];
-
     /**
      * @param string[] $missingParameters
      * @param int      $code
@@ -38,10 +36,8 @@ class MissingMandatoryParametersException extends \InvalidArgumentException impl
             $previous = $code instanceof \Throwable ? $code : null;
             $code = (int) $missingParameters;
         }
-
         parent::__construct($message, $code, $previous);
     }
-
     /**
      * @return string[]
      */
@@ -49,7 +45,6 @@ class MissingMandatoryParametersException extends \InvalidArgumentException impl
     {
         return $this->missingParameters;
     }
-
     public function getRouteName(): string
     {
         return $this->routeName;

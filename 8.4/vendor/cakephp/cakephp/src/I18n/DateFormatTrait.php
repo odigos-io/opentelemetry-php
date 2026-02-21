@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -21,7 +21,6 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
 use IntlDateFormatter;
-
 /**
  * Trait for date formatting methods shared by both Time & Date.
  *
@@ -35,7 +34,6 @@ trait DateFormatTrait
      * @var array<string, \IntlDateFormatter>
      */
     protected static array $formatters = [];
-
     /**
      * Returns a translated and localized date string.
      * Implements what IntlDateFormatter::formatObject() is in PHP 5.5+
@@ -45,13 +43,9 @@ trait DateFormatTrait
      * @param string|null $locale The locale name in which the date should be displayed.
      * @return string
      */
-    protected function _formatObject(
-        DateTimeInterface $date,
-        array|string $format,
-        ?string $locale,
-    ): string {
+    protected function _formatObject(DateTimeInterface $date, array|string $format, ?string $locale): string
+    {
         $pattern = '';
-
         if (is_array($format)) {
             [$dateFormat, $timeFormat] = $format;
         } else {
@@ -59,52 +53,28 @@ trait DateFormatTrait
             $timeFormat = IntlDateFormatter::FULL;
             $pattern = $format;
         }
-
-        $locale ??= I18n::getLocale();
-
-        if (
-            preg_match(
-                '/@calendar=(japanese|buddhist|chinese|persian|indian|islamic|hebrew|coptic|ethiopic)/',
-                $locale,
-            )
-        ) {
+        $locale ??= \Cake\I18n\I18n::getLocale();
+        if (preg_match('/@calendar=(japanese|buddhist|chinese|persian|indian|islamic|hebrew|coptic|ethiopic)/', $locale)) {
             $calendar = IntlDateFormatter::TRADITIONAL;
         } else {
             $calendar = IntlDateFormatter::GREGORIAN;
         }
-
         $timezone = $date->getTimezone()->getName();
         $key = "{$locale}.{$dateFormat}.{$timeFormat}.{$timezone}.{$calendar}.{$pattern}";
-
         if (!isset(static::$formatters[$key])) {
             if ($timezone === '+00:00' || $timezone === 'Z') {
                 $timezone = 'UTC';
             } elseif (str_starts_with($timezone, '+') || str_starts_with($timezone, '-')) {
                 $timezone = 'GMT' . $timezone;
             }
-
-            $formatter = datefmt_create(
-                $locale,
-                $dateFormat,
-                $timeFormat,
-                $timezone,
-                $calendar,
-                $pattern,
-            );
-
+            $formatter = datefmt_create($locale, $dateFormat, $timeFormat, $timezone, $calendar, $pattern);
             if (!$formatter) {
-                throw new CakeException(
-                    'Your version of icu does not support creating a date formatter for ' .
-                    "`{$key}`. You should try to upgrade libicu and the intl extension.",
-                );
+                throw new CakeException('Your version of icu does not support creating a date formatter for ' . "`{$key}`. You should try to upgrade libicu and the intl extension.");
             }
-
             static::$formatters[$key] = $formatter;
         }
-
-        return (string)static::$formatters[$key]->format($date);
+        return (string) static::$formatters[$key]->format($date);
     }
-
     /**
      * Returns a new Time object after parsing the provided time string based on
      * the passed or configured date time format. This method is locale dependent,
@@ -130,13 +100,9 @@ trait DateFormatTrait
      * @param \DateTimeZone|string|null $tz The timezone for the instance
      * @return static|null
      */
-    protected static function _parseDateTime(
-        string $time,
-        array|string $format,
-        DateTimeZone|string|null $tz = null,
-    ): ?static {
+    protected static function _parseDateTime(string $time, array|string $format, DateTimeZone|string|null $tz = null): ?static
+    {
         $pattern = '';
-
         if (is_array($format)) {
             [$dateFormat, $timeFormat] = $format;
         } else {
@@ -144,33 +110,21 @@ trait DateFormatTrait
             $timeFormat = IntlDateFormatter::FULL;
             $pattern = $format;
         }
-
-        $locale = DateTime::getDefaultLocale() ?? I18n::getLocale();
-        $formatter = datefmt_create(
-            $locale,
-            $dateFormat,
-            $timeFormat,
-            $tz,
-            null,
-            $pattern,
-        );
+        $locale = \Cake\I18n\DateTime::getDefaultLocale() ?? \Cake\I18n\I18n::getLocale();
+        $formatter = datefmt_create($locale, $dateFormat, $timeFormat, $tz, null, $pattern);
         if (!$formatter) {
             throw new CakeException('Unable to create IntlDateFormatter instance');
         }
-        $formatter->setLenient(DateTime::lenientParsingEnabled());
-
+        $formatter->setLenient(\Cake\I18n\DateTime::lenientParsingEnabled());
         $time = $formatter->parse($time);
-        if ($time === false) {
+        if ($time === \false) {
             return null;
         }
-
         $dateTime = new DateTimeImmutable('@' . $time);
-
-        if (!($tz instanceof DateTimeZone)) {
+        if (!$tz instanceof DateTimeZone) {
             $tz = new DateTimeZone($tz ?? date_default_timezone_get());
         }
         $dateTime = $dateTime->setTimezone($tz);
-
         return new static($dateTime);
     }
 }

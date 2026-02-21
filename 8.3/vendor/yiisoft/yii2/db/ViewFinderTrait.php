@@ -1,10 +1,10 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\db;
 
 /**
@@ -20,14 +20,12 @@ trait ViewFinderTrait
      * @var array list of ALL view names in the database
      */
     private $_viewNames = [];
-
     /**
      * Returns all views names in the database.
      * @param string $schema the schema of the views. Defaults to empty string, meaning the current or default schema.
      * @return array all views names in the database. The names have NO schema name prefix.
      */
     abstract protected function findViewNames($schema = '');
-
     /**
      * Returns all view names in the database.
      * @param string $schema the schema of the views. Defaults to empty string, meaning the current or default schema name.
@@ -36,12 +34,11 @@ trait ViewFinderTrait
      * view names fetched previously (if available) will be returned.
      * @return string[] all view names in the database.
      */
-    public function getViewNames($schema = '', $refresh = false)
+    public function getViewNames($schema = '', $refresh = \false)
     {
         if (!isset($this->_viewNames[$schema]) || $refresh) {
             $this->_viewNames[$schema] = $this->findViewNames($schema);
         }
-
         return $this->_viewNames[$schema];
     }
 }

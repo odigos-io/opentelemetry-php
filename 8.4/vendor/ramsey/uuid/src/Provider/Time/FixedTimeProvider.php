@@ -9,15 +9,12 @@
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
  */
+declare (strict_types=1);
+namespace Odigos\Ramsey\Uuid\Provider\Time;
 
-declare(strict_types=1);
-
-namespace Ramsey\Uuid\Provider\Time;
-
-use Ramsey\Uuid\Provider\TimeProviderInterface;
-use Ramsey\Uuid\Type\Integer as IntegerObject;
-use Ramsey\Uuid\Type\Time;
-
+use Odigos\Ramsey\Uuid\Provider\TimeProviderInterface;
+use Odigos\Ramsey\Uuid\Type\Integer as IntegerObject;
+use Odigos\Ramsey\Uuid\Type\Time;
 /**
  * FixedTimeProvider uses a known time to provide the time
  *
@@ -28,7 +25,6 @@ class FixedTimeProvider implements TimeProviderInterface
     public function __construct(private Time $time)
     {
     }
-
     /**
      * Sets the `usec` component of the time
      *
@@ -38,7 +34,6 @@ class FixedTimeProvider implements TimeProviderInterface
     {
         $this->time = new Time($this->time->getSeconds(), $value);
     }
-
     /**
      * Sets the `sec` component of the time
      *
@@ -48,7 +43,6 @@ class FixedTimeProvider implements TimeProviderInterface
     {
         $this->time = new Time($value, $this->time->getMicroseconds());
     }
-
     public function getTime(): Time
     {
         return $this->time;

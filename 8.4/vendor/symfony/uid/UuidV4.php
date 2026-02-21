@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\Uid;
 
 /**
@@ -16,10 +15,9 @@ namespace Symfony\Component\Uid;
  *
  * @author Grégoire Pineau <lyrixx@lyrixx.info>
  */
-class UuidV4 extends Uuid
+class UuidV4 extends \Symfony\Component\Uid\Uuid
 {
     protected const TYPE = 4;
-
     public function __construct(?string $uuid = null)
     {
         if (null === $uuid) {
@@ -37,7 +35,7 @@ class UuidV4 extends Uuid
             $uuid[19] = ['8', '9', 'a', 'b', '8', '9', 'a', 'b', 'c' => '8', 'd' => '9', 'e' => 'a', 'f' => 'b'][$uuid[19]] ?? $uuid[19];
             $this->uid = $uuid;
         } else {
-            parent::__construct($uuid, true);
+            parent::__construct($uuid, \true);
         }
     }
 }

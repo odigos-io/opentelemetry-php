@@ -8,15 +8,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\HttpFoundation\Session;
 
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
-
 /**
  * Interface for session with a flashbag.
  */
-interface FlashBagAwareSessionInterface extends SessionInterface
+interface FlashBagAwareSessionInterface extends \Symfony\Component\HttpFoundation\Session\SessionInterface
 {
     public function getFlashBag(): FlashBagInterface;
 }

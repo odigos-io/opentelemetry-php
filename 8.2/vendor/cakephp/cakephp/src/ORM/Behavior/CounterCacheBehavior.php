@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -24,7 +24,6 @@ use Cake\ORM\Association\BelongsTo;
 use Cake\ORM\Behavior;
 use Cake\ORM\Query\SelectQuery;
 use Closure;
-
 /**
  * CounterCache behavior
  *
@@ -111,7 +110,6 @@ class CounterCacheBehavior extends Behavior
      * @var array<string, array<string, bool>>
      */
     protected array $_ignoreDirty = [];
-
     /**
      * beforeSave callback.
      *
@@ -124,10 +122,9 @@ class CounterCacheBehavior extends Behavior
      */
     public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options): void
     {
-        if (isset($options['ignoreCounterCache']) && $options['ignoreCounterCache'] === true) {
+        if (isset($options['ignoreCounterCache']) && $options['ignoreCounterCache'] === \true) {
             return;
         }
-
         foreach ($this->_config as $assoc => $settings) {
             $assoc = $this->_table->getAssociation($assoc);
             /** @var string|int $field */
@@ -135,24 +132,16 @@ class CounterCacheBehavior extends Behavior
                 if (is_int($field)) {
                     continue;
                 }
-
                 $registryAlias = $assoc->getTarget()->getRegistryAlias();
                 $entityAlias = $assoc->getProperty();
                 /** @var \Cake\Datasource\EntityInterface $assocEntity */
-                $assocEntity = $entity->$entityAlias;
-
-                if (
-                    !is_callable($config) &&
-                    isset($config['ignoreDirty']) &&
-                    $config['ignoreDirty'] === true &&
-                    $assocEntity->isDirty($field)
-                ) {
-                    $this->_ignoreDirty[$registryAlias][$field] = true;
+                $assocEntity = $entity->{$entityAlias};
+                if (!is_callable($config) && isset($config['ignoreDirty']) && $config['ignoreDirty'] === \true && $assocEntity->isDirty($field)) {
+                    $this->_ignoreDirty[$registryAlias][$field] = \true;
                 }
             }
         }
     }
-
     /**
      * afterSave callback.
      *
@@ -165,14 +154,12 @@ class CounterCacheBehavior extends Behavior
      */
     public function afterSave(EventInterface $event, EntityInterface $entity, ArrayObject $options): void
     {
-        if (isset($options['ignoreCounterCache']) && $options['ignoreCounterCache'] === true) {
+        if (isset($options['ignoreCounterCache']) && $options['ignoreCounterCache'] === \true) {
             return;
         }
-
         $this->_processAssociations($event, $entity);
         $this->_ignoreDirty = [];
     }
-
     /**
      * afterDelete callback.
      *
@@ -185,13 +172,11 @@ class CounterCacheBehavior extends Behavior
      */
     public function afterDelete(EventInterface $event, EntityInterface $entity, ArrayObject $options): void
     {
-        if (isset($options['ignoreCounterCache']) && $options['ignoreCounterCache'] === true) {
+        if (isset($options['ignoreCounterCache']) && $options['ignoreCounterCache'] === \true) {
             return;
         }
-
         $this->_processAssociations($event, $entity);
     }
-
     /**
      * Update counter cache for a batch of records.
      *
@@ -211,27 +196,22 @@ class CounterCacheBehavior extends Behavior
         if ($assocName !== null) {
             $config = [$assocName => $config[$assocName]];
         }
-
         foreach ($config as $assoc => $settings) {
             /** @var \Cake\ORM\Association\BelongsTo $belongsTo */
             $belongsTo = $this->_table->getAssociation($assoc);
-
             foreach ($settings as $field => $config) {
                 if ($config instanceof Closure) {
                     // Cannot update counter cache which use a closure
                     return;
                 }
-
                 if (is_int($field)) {
                     $field = $config;
                     $config = [];
                 }
-
                 $this->updateCountForAssociation($belongsTo, $field, $config, $limit, $page);
             }
         }
     }
-
     /**
      * Update counter cache for the given association.
      *
@@ -242,52 +222,34 @@ class CounterCacheBehavior extends Behavior
      * @param int|null $page Page number.
      * @return void
      */
-    protected function updateCountForAssociation(
-        BelongsTo $assoc,
-        string $field,
-        array $config,
-        int $limit = 100,
-        ?int $page = null,
-    ): void {
-        $primaryKeys = (array)$assoc->getBindingKey();
+    protected function updateCountForAssociation(BelongsTo $assoc, string $field, array $config, int $limit = 100, ?int $page = null): void
+    {
+        $primaryKeys = (array) $assoc->getBindingKey();
         /** @var array<string> $foreignKeys */
-        $foreignKeys = (array)$assoc->getForeignKey();
-
-        $query = $assoc->getTarget()->find()
-            ->select($primaryKeys)
-            ->limit($limit);
-
+        $foreignKeys = (array) $assoc->getForeignKey();
+        $query = $assoc->getTarget()->find()->select($primaryKeys)->limit($limit);
         foreach ($primaryKeys as $key) {
             $query->orderByAsc($key);
         }
-
         $singlePage = $page !== null;
         $page ??= 1;
-
         do {
-            $results = $query
-                ->page($page++)
-                ->all();
-
+            $results = $query->page($page++)->all();
             /** @var \Cake\Datasource\EntityInterface $entity */
             foreach ($results as $entity) {
                 $updateConditions = $entity->extract($primaryKeys);
-
                 foreach ($updateConditions as $f => $value) {
                     if ($value === null) {
                         $updateConditions[$f . ' IS'] = $value;
                         unset($updateConditions[$f]);
                     }
                 }
-
                 $countConditions = array_combine($foreignKeys, $updateConditions);
-
                 $count = $this->_getCount($config, $countConditions);
                 $assoc->getTarget()->updateAll([$field => $count], $updateConditions);
             }
         } while (!$singlePage && $results->count() === $limit);
     }
-
     /**
      * Iterate all associations and update counter caches.
      *
@@ -302,7 +264,6 @@ class CounterCacheBehavior extends Behavior
             $this->_processAssociation($event, $entity, $assoc, $settings);
         }
     }
-
     /**
      * Updates counter cache for a single association
      *
@@ -313,69 +274,54 @@ class CounterCacheBehavior extends Behavior
      * @return void
      * @throws \RuntimeException If invalid callable is passed.
      */
-    protected function _processAssociation(
-        EventInterface $event,
-        EntityInterface $entity,
-        Association $assoc,
-        array $settings,
-    ): void {
+    protected function _processAssociation(EventInterface $event, EntityInterface $entity, Association $assoc, array $settings): void
+    {
         /** @var array<string> $foreignKeys */
-        $foreignKeys = (array)$assoc->getForeignKey();
+        $foreignKeys = (array) $assoc->getForeignKey();
         $countConditions = $entity->extract($foreignKeys);
-
         foreach ($countConditions as $field => $value) {
             if ($value === null) {
                 $countConditions[$field . ' IS'] = $value;
                 unset($countConditions[$field]);
             }
         }
-
-        $primaryKeys = (array)$assoc->getBindingKey();
+        $primaryKeys = (array) $assoc->getBindingKey();
         $updateConditions = array_combine($primaryKeys, $countConditions);
-
         $countOriginalConditions = $entity->extractOriginalChanged($foreignKeys);
         $updateOriginalConditions = null;
         if ($countOriginalConditions !== []) {
             $updateOriginalConditions = array_combine($primaryKeys, $countOriginalConditions);
         }
-
         foreach ($settings as $field => $config) {
             if (is_int($field)) {
                 $field = $config;
                 $config = [];
             }
-
-            if (
-                isset($this->_ignoreDirty[$assoc->getTarget()->getRegistryAlias()][$field]) &&
-                $this->_ignoreDirty[$assoc->getTarget()->getRegistryAlias()][$field] === true
-            ) {
+            if (isset($this->_ignoreDirty[$assoc->getTarget()->getRegistryAlias()][$field]) && $this->_ignoreDirty[$assoc->getTarget()->getRegistryAlias()][$field] === \true) {
                 continue;
             }
-
             if ($this->_shouldUpdateCount($updateConditions)) {
                 if ($config instanceof Closure) {
-                    $count = $config($event, $entity, $this->_table, false);
+                    $count = $config($event, $entity, $this->_table, \false);
                 } else {
                     $count = $this->_getCount($config, $countConditions);
                 }
-                if ($count !== false) {
+                if ($count !== \false) {
                     $assoc->getTarget()->updateAll([$field => $count], $updateConditions);
                 }
             }
-
             if ($updateOriginalConditions && $this->_shouldUpdateCount($updateOriginalConditions)) {
                 if ($config instanceof Closure) {
-                    $count = $config($event, $entity, $this->_table, true);
+                    $count = $config($event, $entity, $this->_table, \true);
                 } else {
                     $count = $this->_getCount($config, $countOriginalConditions);
                 }
-                if ($count !== false) {
+                if ($count !== \false) {
                     $assoc->getTarget()->updateAll([$field => $count], $updateOriginalConditions);
                 }
             }
         }
     }
-
     /**
      * Checks if the count should be updated given a set of conditions.
      *
@@ -388,7 +334,6 @@ class CounterCacheBehavior extends Behavior
             return $value !== null;
         }));
     }
-
     /**
      * Fetches and returns the count for a single field in an association
      *
@@ -404,16 +349,11 @@ class CounterCacheBehavior extends Behavior
             $finder = $config['finder'];
             unset($config['finder']);
         }
-
         $config['conditions'] = array_merge($conditions, $config['conditions'] ?? []);
         $query = $this->_table->find($finder, ...$config);
-
-        if (isset($config['useSubQuery']) && $config['useSubQuery'] === false) {
+        if (isset($config['useSubQuery']) && $config['useSubQuery'] === \false) {
             return $query->count();
         }
-
-        return $query
-            ->select(['count' => $query->func()->count('*')], true)
-            ->orderBy([], true);
+        return $query->select(['count' => $query->func()->count('*')], \true)->orderBy([], \true);
     }
 }

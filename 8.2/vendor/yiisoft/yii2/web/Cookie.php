@@ -1,10 +1,10 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\web;
 
 /**
@@ -67,13 +67,13 @@ class Cookie extends \yii\base\BaseObject
     /**
      * @var bool whether cookie should be sent via secure connection
      */
-    public $secure = false;
+    public $secure = \false;
     /**
      * @var bool whether the cookie should be accessible only through the HTTP protocol.
      * By setting this property to true, the cookie will not be accessible by scripting languages,
      * such as JavaScript, which can effectively help to reduce identity theft through XSS attacks.
      */
-    public $httpOnly = true;
+    public $httpOnly = \true;
     /**
      * @var string SameSite prevents the browser from sending this cookie along with cross-site requests.
      *
@@ -82,8 +82,6 @@ class Cookie extends \yii\base\BaseObject
      * @since 2.0.21
      */
     public $sameSite = self::SAME_SITE_LAX;
-
-
     /**
      * Magic method to turn a cookie object into a string without having to explicitly access [[value]].
      *

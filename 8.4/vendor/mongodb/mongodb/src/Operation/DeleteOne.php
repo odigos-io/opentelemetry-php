@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright 2015-present MongoDB, Inc.
  *
@@ -14,7 +15,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 namespace MongoDB\Operation;
 
 use MongoDB\DeleteResult;
@@ -22,17 +22,15 @@ use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
 use MongoDB\Driver\Server;
 use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\Exception\UnsupportedException;
-
 /**
  * Operation for deleting a single document with the delete command.
  *
  * @see \MongoDB\Collection::deleteOne()
  * @see https://mongodb.com/docs/manual/reference/command/delete/
  */
-final class DeleteOne implements Explainable
+final class DeleteOne implements \MongoDB\Operation\Explainable
 {
-    private Delete $delete;
-
+    private \MongoDB\Operation\Delete $delete;
     /**
      * Constructs a delete command.
      *
@@ -68,9 +66,8 @@ final class DeleteOne implements Explainable
      */
     public function __construct(string $databaseName, string $collectionName, array|object $filter, array $options = [])
     {
-        $this->delete = new Delete($databaseName, $collectionName, $filter, 1, $options);
+        $this->delete = new \MongoDB\Operation\Delete($databaseName, $collectionName, $filter, 1, $options);
     }
-
     /**
      * Execute the operation.
      *
@@ -81,7 +78,6 @@ final class DeleteOne implements Explainable
     {
         return $this->delete->execute($server);
     }
-
     /**
      * Returns the command document for this operation.
      *

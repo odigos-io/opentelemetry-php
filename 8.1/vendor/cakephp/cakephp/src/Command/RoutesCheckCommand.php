@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -23,11 +23,10 @@ use Cake\Http\Exception\RedirectException;
 use Cake\Http\ServerRequest;
 use Cake\Routing\Exception\MissingRouteException;
 use Cake\Routing\Router;
-
 /**
  * Provides interactive CLI tool for testing routes.
  */
-class RoutesCheckCommand extends Command
+class RoutesCheckCommand extends \Cake\Command\Command
 {
     /**
      * @inheritDoc
@@ -36,7 +35,6 @@ class RoutesCheckCommand extends Command
     {
         return 'routes check';
     }
-
     /**
      * @inheritDoc
      */
@@ -44,7 +42,6 @@ class RoutesCheckCommand extends Command
     {
         return 'Check a URL string against the routes.';
     }
-
     /**
      * Display all routes in an application
      *
@@ -59,33 +56,22 @@ class RoutesCheckCommand extends Command
         try {
             $parsed = Router::parseRequest(new ServerRequest(['url' => $url]));
             $name = $parsed['_name'] ?? $parsed['_route']->getName();
-
             unset($parsed['_route'], $parsed['_matchedRoute']);
             ksort($parsed);
-
-            $output = [
-                ['Route name', 'URI template', 'Defaults'],
-                [$name, $url, json_encode($parsed, JSON_THROW_ON_ERROR)],
-            ];
+            $output = [['Route name', 'URI template', 'Defaults'], [$name, $url, json_encode($parsed, \JSON_THROW_ON_ERROR)]];
             $io->helper('table')->output($output);
             $io->out();
         } catch (RedirectException $e) {
-            $output = [
-                ['URI template', 'Redirect'],
-                [$url, $e->getMessage()],
-            ];
+            $output = [['URI template', 'Redirect'], [$url, $e->getMessage()]];
             $io->helper('table')->output($output);
             $io->out();
         } catch (MissingRouteException) {
             $io->warning("'{$url}' did not match any routes.");
             $io->out();
-
             return static::CODE_ERROR;
         }
-
         return static::CODE_SUCCESS;
     }
-
     /**
      * Get the option parser.
      *
@@ -94,15 +80,7 @@ class RoutesCheckCommand extends Command
      */
     public function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
     {
-        $parser->setDescription([
-            static::getDescription(),
-            'Will output the routing parameters the route resolves to.',
-        ])
-        ->addArgument('url', [
-            'help' => 'The URL to check.',
-            'required' => true,
-        ]);
-
+        $parser->setDescription([static::getDescription(), 'Will output the routing parameters the route resolves to.'])->addArgument('url', ['help' => 'The URL to check.', 'required' => \true]);
         return $parser;
     }
 }

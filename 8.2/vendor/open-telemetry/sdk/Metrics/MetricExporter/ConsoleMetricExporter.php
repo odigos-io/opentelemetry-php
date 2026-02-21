@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\SDK\Metrics\MetricExporter;
 
 use OpenTelemetry\SDK\Common\Instrumentation\InstrumentationScopeInterface;
@@ -11,7 +10,6 @@ use OpenTelemetry\SDK\Metrics\Data\Temporality;
 use OpenTelemetry\SDK\Metrics\MetricMetadataInterface;
 use OpenTelemetry\SDK\Metrics\PushMetricExporterInterface;
 use OpenTelemetry\SDK\Resource\ResourceInfo;
-
 /**
  * Console metrics exporter.
  * Note that the output is human-readable JSON, not compatible with OTLP.
@@ -29,7 +27,6 @@ class ConsoleMetricExporter implements PushMetricExporterInterface, AggregationT
     {
         return $this->temporality ?? $metric->temporality();
     }
-
     /**
      * @inheritDoc
      */
@@ -49,53 +46,30 @@ class ConsoleMetricExporter implements PushMetricExporterInterface, AggregationT
             }
             $scope['metrics'][] = $this->convertMetric($metric);
         }
-        $output = [
-            'resource' => $resource,
-            'scope' => $scope,
-        ];
-        echo json_encode($output, JSON_PRETTY_PRINT) . PHP_EOL;
-
-        return true;
+        $output = ['resource' => $resource, 'scope' => $scope];
+        echo json_encode($output, \JSON_PRETTY_PRINT) . \PHP_EOL;
+        return \true;
     }
-
     #[\Override]
     public function shutdown(): bool
     {
-        return true;
+        return \true;
     }
-
     #[\Override]
     public function forceFlush(): bool
     {
-        return true;
+        return \true;
     }
-
     private function convertMetric(Metric $metric): array
     {
-        return [
-            'name' => $metric->name,
-            'description' => $metric->description,
-            'unit' => $metric->unit,
-            'data' => $metric->data,
-        ];
+        return ['name' => $metric->name, 'description' => $metric->description, 'unit' => $metric->unit, 'data' => $metric->data];
     }
-
     private function convertResource(ResourceInfo $resource): array
     {
-        return [
-            'attributes' => $resource->getAttributes()->toArray(),
-            'dropped_attributes_count' => $resource->getAttributes()->getDroppedAttributesCount(),
-        ];
+        return ['attributes' => $resource->getAttributes()->toArray(), 'dropped_attributes_count' => $resource->getAttributes()->getDroppedAttributesCount()];
     }
-
     private function convertInstrumentationScope(InstrumentationScopeInterface $scope): array
     {
-        return [
-            'name' => $scope->getName(),
-            'version' => $scope->getVersion(),
-            'attributes' => $scope->getAttributes()->toArray(),
-            'dropped_attributes_count' => $scope->getAttributes()->getDroppedAttributesCount(),
-            'schema_url' => $scope->getSchemaUrl(),
-        ];
+        return ['name' => $scope->getName(), 'version' => $scope->getVersion(), 'attributes' => $scope->getAttributes()->toArray(), 'dropped_attributes_count' => $scope->getAttributes()->getDroppedAttributesCount(), 'schema_url' => $scope->getSchemaUrl()];
     }
 }

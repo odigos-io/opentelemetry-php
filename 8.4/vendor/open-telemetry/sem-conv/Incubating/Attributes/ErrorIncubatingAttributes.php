@@ -1,9 +1,7 @@
 <?php
 
 // DO NOT EDIT, this is an Auto-generated file from script/semantic-conventions
-
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\SemConv\Incubating\Attributes;
 
 /**
@@ -24,7 +22,6 @@ interface ErrorIncubatingAttributes
      * @experimental
      */
     public const ERROR_MESSAGE = 'error.message';
-
     /**
      * Describes a class of error the operation ended with.
      *
@@ -51,12 +48,10 @@ interface ErrorIncubatingAttributes
      * @stable
      */
     public const ERROR_TYPE = 'error.type';
-
     /**
      * A fallback error value to be used when the instrumentation doesn't define a custom value.
      *
      * @stable
      */
     public const ERROR_TYPE_VALUE_OTHER = '_OTHER';
-
 }

@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -18,7 +18,6 @@ namespace Cake\Console;
 
 use Cake\Console\Exception\ConsoleException;
 use Cake\Core\Exception\CakeException;
-
 /**
  * Object wrapper for interacting with stdin
  */
@@ -30,7 +29,6 @@ class ConsoleInput
      * @var resource
      */
     protected $_input;
-
     /**
      * Can this instance use readline?
      * Two conditions must be met:
@@ -41,7 +39,6 @@ class ConsoleInput
      * @var bool
      */
     protected bool $_canReadline;
-
     /**
      * Constructor
      *
@@ -49,15 +46,13 @@ class ConsoleInput
      */
     public function __construct(string $handle = 'php://stdin')
     {
-        $this->_canReadline = (extension_loaded('readline') && $handle === 'php://stdin');
+        $this->_canReadline = extension_loaded('readline') && $handle === 'php://stdin';
         $input = fopen($handle, 'rb');
-        if ($input === false) {
+        if ($input === \false) {
             throw new CakeException(sprintf('Cannot open handle `%s`', $handle));
         }
-
         $this->_input = $input;
     }
-
     /**
      * Destruct and free resources
      */
@@ -69,7 +64,6 @@ class ConsoleInput
         }
         unset($this->_input);
     }
-
     /**
      * Read a value from the stream
      *
@@ -79,21 +73,17 @@ class ConsoleInput
     {
         if ($this->_canReadline) {
             $line = readline('');
-
-            if ($line !== false && $line !== '') {
+            if ($line !== \false && $line !== '') {
                 readline_add_history($line);
             }
         } else {
             $line = fgets($this->_input);
         }
-
-        if ($line === false) {
+        if ($line === \false) {
             return null;
         }
-
         return $line;
     }
-
     /**
      * Check if data is available on stdin
      *
@@ -105,20 +95,17 @@ class ConsoleInput
         $readFds = [$this->_input];
         $writeFds = null;
         $errorFds = null;
-
         /** @var string|null $error */
         $error = null;
         set_error_handler(function (int $code, string $message) use (&$error) {
             $error = "stream_select failed with code={$code} message={$message}.";
-
-            return true;
+            return \true;
         });
         $readyFds = stream_select($readFds, $writeFds, $errorFds, $timeout);
         restore_error_handler();
         if ($error !== null) {
             throw new ConsoleException($error);
         }
-
         return $readyFds > 0;
     }
 }

@@ -3,7 +3,6 @@
 namespace Illuminate\Console\Events;
 
 use Illuminate\Console\Application;
-
 class ArtisanStarting
 {
     /**
@@ -11,8 +10,7 @@ class ArtisanStarting
      *
      * @param  \Illuminate\Console\Application  $artisan  The Artisan application instance.
      */
-    public function __construct(
-        public Application $artisan,
-    ) {
+    public function __construct(public Application $artisan)
+    {
     }
 }

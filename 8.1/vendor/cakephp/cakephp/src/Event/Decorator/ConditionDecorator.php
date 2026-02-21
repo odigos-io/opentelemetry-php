@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -18,14 +18,13 @@ namespace Cake\Event\Decorator;
 
 use Cake\Event\EventInterface;
 use InvalidArgumentException;
-
 /**
  * Event Condition Decorator
  *
  * Use this decorator to allow your event listener to only
  * be invoked if the `if` and/or `unless` conditions pass.
  */
-class ConditionDecorator extends AbstractDecorator
+class ConditionDecorator extends \Cake\Event\Decorator\AbstractDecorator
 {
     /**
      * @inheritDoc
@@ -35,10 +34,8 @@ class ConditionDecorator extends AbstractDecorator
         if (!$this->canTrigger($args[0])) {
             return null;
         }
-
         return $this->_call($args);
     }
-
     /**
      * Checks if the event is triggered for this listener.
      *
@@ -50,10 +47,8 @@ class ConditionDecorator extends AbstractDecorator
     {
         $if = $this->_evaluateCondition('if', $event);
         $unless = $this->_evaluateCondition('unless', $event);
-
         return $if && !$unless;
     }
-
     /**
      * Evaluates the filter conditions
      *
@@ -70,7 +65,6 @@ class ConditionDecorator extends AbstractDecorator
         if (!is_callable($this->_options[$condition])) {
             throw new InvalidArgumentException(self::class . ' the `' . $condition . '` condition is not a callable!');
         }
-
-        return (bool)$this->_options[$condition]($event);
+        return (bool) $this->_options[$condition]($event);
     }
 }

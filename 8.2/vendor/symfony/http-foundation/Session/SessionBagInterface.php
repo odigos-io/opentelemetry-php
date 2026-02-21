@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\HttpFoundation\Session;
 
 /**
@@ -22,17 +21,14 @@ interface SessionBagInterface
      * Gets this bag's name.
      */
     public function getName(): string;
-
     /**
      * Initializes the Bag.
      */
     public function initialize(array &$array): void;
-
     /**
      * Gets the storage key for this bag.
      */
     public function getStorageKey(): string;
-
     /**
      * Clears out data from bag.
      *

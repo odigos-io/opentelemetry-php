@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\Console\Exception;
 
 /**
@@ -16,6 +15,6 @@ namespace Symfony\Component\Console\Exception;
  *
  * @author Pierre du Plessis <pdples@gmail.com>
  */
-class NamespaceNotFoundException extends CommandNotFoundException
+class NamespaceNotFoundException extends \Symfony\Component\Console\Exception\CommandNotFoundException
 {
 }

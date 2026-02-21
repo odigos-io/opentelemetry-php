@@ -21,7 +21,7 @@ namespace Psr\Http\Message;
  * be implemented such that they retain the internal state of the current
  * message and return an instance that contains the changed state.
  */
-interface RequestInterface extends MessageInterface
+interface RequestInterface extends \Psr\Http\Message\MessageInterface
 {
     /**
      * Retrieves the message's request target.
@@ -40,7 +40,6 @@ interface RequestInterface extends MessageInterface
      * @return string
      */
     public function getRequestTarget(): string;
-
     /**
      * Return an instance with the specific request-target.
      *
@@ -58,16 +57,13 @@ interface RequestInterface extends MessageInterface
      * @param string $requestTarget
      * @return static
      */
-    public function withRequestTarget(string $requestTarget): RequestInterface;
-
-
+    public function withRequestTarget(string $requestTarget): \Psr\Http\Message\RequestInterface;
     /**
      * Retrieves the HTTP method of the request.
      *
      * @return string Returns the request method.
      */
     public function getMethod(): string;
-
     /**
      * Return an instance with the provided HTTP method.
      *
@@ -83,8 +79,7 @@ interface RequestInterface extends MessageInterface
      * @return static
      * @throws \InvalidArgumentException for invalid HTTP methods.
      */
-    public function withMethod(string $method): RequestInterface;
-
+    public function withMethod(string $method): \Psr\Http\Message\RequestInterface;
     /**
      * Retrieves the URI instance.
      *
@@ -94,8 +89,7 @@ interface RequestInterface extends MessageInterface
      * @return UriInterface Returns a UriInterface instance
      *     representing the URI of the request.
      */
-    public function getUri(): UriInterface;
-
+    public function getUri(): \Psr\Http\Message\UriInterface;
     /**
      * Returns an instance with the provided URI.
      *
@@ -126,5 +120,5 @@ interface RequestInterface extends MessageInterface
      * @param bool $preserveHost Preserve the original state of the Host header.
      * @return static
      */
-    public function withUri(UriInterface $uri, bool $preserveHost = false): RequestInterface;
+    public function withUri(\Psr\Http\Message\UriInterface $uri, bool $preserveHost = \false): \Psr\Http\Message\RequestInterface;
 }

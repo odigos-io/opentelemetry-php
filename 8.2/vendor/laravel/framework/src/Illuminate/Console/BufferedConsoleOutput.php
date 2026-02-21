@@ -3,7 +3,6 @@
 namespace Illuminate\Console;
 
 use Symfony\Component\Console\Output\ConsoleOutput;
-
 class BufferedConsoleOutput extends ConsoleOutput
 {
     /**
@@ -12,7 +11,6 @@ class BufferedConsoleOutput extends ConsoleOutput
      * @var string
      */
     protected $buffer = '';
-
     /**
      * Empties the buffer and returns its content.
      *
@@ -24,7 +22,6 @@ class BufferedConsoleOutput extends ConsoleOutput
             $this->buffer = '';
         });
     }
-
     /**
      * {@inheritdoc}
      */
@@ -32,11 +29,9 @@ class BufferedConsoleOutput extends ConsoleOutput
     protected function doWrite(string $message, bool $newline): void
     {
         $this->buffer .= $message;
-
         if ($newline) {
             $this->buffer .= \PHP_EOL;
         }
-
         parent::doWrite($message, $newline);
     }
 }

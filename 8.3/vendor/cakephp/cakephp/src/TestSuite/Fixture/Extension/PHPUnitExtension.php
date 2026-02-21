@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -16,11 +16,10 @@ declare(strict_types=1);
  */
 namespace Cake\TestSuite\Fixture\Extension;
 
-use PHPUnit\Runner\Extension\Extension;
-use PHPUnit\Runner\Extension\Facade;
-use PHPUnit\Runner\Extension\ParameterCollection;
-use PHPUnit\TextUI\Configuration\Configuration;
-
+use Odigos\PHPUnit\Runner\Extension\Extension;
+use Odigos\PHPUnit\Runner\Extension\Facade;
+use Odigos\PHPUnit\Runner\Extension\ParameterCollection;
+use Odigos\PHPUnit\TextUI\Configuration\Configuration;
 /**
  * PHPUnit extension to integrate CakePHP's data-only fixtures.
  */
@@ -34,8 +33,6 @@ class PHPUnitExtension implements Extension
      */
     public function bootstrap(Configuration $configuration, Facade $facade, ParameterCollection $parameters): void
     {
-        $facade->registerSubscriber(
-            new PHPUnitStartedSubscriber(),
-        );
+        $facade->registerSubscriber(new \Cake\TestSuite\Fixture\Extension\PHPUnitStartedSubscriber());
     }
 }

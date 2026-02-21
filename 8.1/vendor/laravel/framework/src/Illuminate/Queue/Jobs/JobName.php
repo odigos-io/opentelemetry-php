@@ -3,7 +3,6 @@
 namespace Illuminate\Queue\Jobs;
 
 use Illuminate\Support\Str;
-
 class JobName
 {
     /**
@@ -16,7 +15,6 @@ class JobName
     {
         return Str::parseCallback($job, 'fire');
     }
-
     /**
      * Get the resolved name of the queued job class.
      *
@@ -26,10 +24,9 @@ class JobName
      */
     public static function resolve($name, $payload)
     {
-        if (! empty($payload['displayName'])) {
+        if (!empty($payload['displayName'])) {
             return $payload['displayName'];
         }
-
         return $name;
     }
 }

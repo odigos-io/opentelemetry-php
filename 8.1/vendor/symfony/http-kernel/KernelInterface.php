@@ -8,13 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\HttpKernel;
 
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
-
 /**
  * The Kernel is the heart of the Symfony system.
  *
@@ -22,7 +20,7 @@ use Symfony\Component\HttpKernel\Bundle\BundleInterface;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-interface KernelInterface extends HttpKernelInterface
+interface KernelInterface extends \Symfony\Component\HttpKernel\HttpKernelInterface
 {
     /**
      * Returns an array of bundles to register.
@@ -30,21 +28,18 @@ interface KernelInterface extends HttpKernelInterface
      * @return iterable<mixed, BundleInterface>
      */
     public function registerBundles(): iterable;
-
     /**
      * Loads the container configuration.
      *
      * @return void
      */
     public function registerContainerConfiguration(LoaderInterface $loader);
-
     /**
      * Boots the current kernel.
      *
      * @return void
      */
     public function boot();
-
     /**
      * Shutdowns the kernel.
      *
@@ -53,21 +48,18 @@ interface KernelInterface extends HttpKernelInterface
      * @return void
      */
     public function shutdown();
-
     /**
      * Gets the registered bundle instances.
      *
      * @return array<string, BundleInterface>
      */
     public function getBundles(): array;
-
     /**
      * Returns a bundle.
      *
      * @throws \InvalidArgumentException when the bundle is not enabled
      */
     public function getBundle(string $name): BundleInterface;
-
     /**
      * Returns the file path for a given bundle resource.
      *
@@ -84,32 +76,26 @@ interface KernelInterface extends HttpKernelInterface
      * @throws \RuntimeException         if the name contains invalid/unsafe characters
      */
     public function locateResource(string $name): string;
-
     /**
      * Gets the environment.
      */
     public function getEnvironment(): string;
-
     /**
      * Checks if debug mode is enabled.
      */
     public function isDebug(): bool;
-
     /**
      * Gets the project dir (path of the project's composer file).
      */
     public function getProjectDir(): string;
-
     /**
      * Gets the current container.
      */
     public function getContainer(): ContainerInterface;
-
     /**
      * Gets the request start time (not available if debug is disabled).
      */
     public function getStartTime(): float;
-
     /**
      * Gets the cache directory.
      *
@@ -118,7 +104,6 @@ interface KernelInterface extends HttpKernelInterface
      * use the new "build directory" returned by the {@see getBuildDir()} method.
      */
     public function getCacheDir(): string;
-
     /**
      * Returns the build directory.
      *
@@ -126,12 +111,10 @@ interface KernelInterface extends HttpKernelInterface
      * Caches written at runtime should be stored in the "cache directory" ({@see KernelInterface::getCacheDir()}).
      */
     public function getBuildDir(): string;
-
     /**
      * Gets the log directory.
      */
     public function getLogDir(): string;
-
     /**
      * Gets the charset of the application.
      */

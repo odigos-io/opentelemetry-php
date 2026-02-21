@@ -1,10 +1,10 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\db;
 
 /**
@@ -20,8 +20,6 @@ class Exception extends \yii\base\Exception
      * by [PDO::errorInfo](https://www.php.net/manual/en/pdo.errorinfo.php).
      */
     public $errorInfo = [];
-
-
     /**
      * Constructor.
      * @param string $message PDO error message
@@ -35,7 +33,6 @@ class Exception extends \yii\base\Exception
         $this->errorInfo = $errorInfo;
         $this->code = $code;
     }
-
     /**
      * @return string the user-friendly name of this exception
      */
@@ -43,13 +40,11 @@ class Exception extends \yii\base\Exception
     {
         return 'Database Exception';
     }
-
     /**
      * @return string readable representation of exception
      */
     public function __toString()
     {
-        return parent::__toString() . PHP_EOL
-        . 'Additional Information:' . PHP_EOL . print_r($this->errorInfo, true);
+        return parent::__toString() . \PHP_EOL . 'Additional Information:' . \PHP_EOL . print_r($this->errorInfo, \true);
     }
 }

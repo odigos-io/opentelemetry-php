@@ -3,7 +3,6 @@
 namespace Illuminate\Console\View\Components;
 
 use InvalidArgumentException;
-
 /**
  * @method void alert(string $string, int $verbosity = \Symfony\Component\Console\Output\OutputInterface::VERBOSITY_NORMAL)
  * @method mixed ask(string $question, string $default = null)
@@ -26,7 +25,6 @@ class Factory
      * @var \Illuminate\Console\OutputStyle
      */
     protected $output;
-
     /**
      * Creates a new factory instance.
      *
@@ -37,7 +35,6 @@ class Factory
     {
         $this->output = $output;
     }
-
     /**
      * Dynamically handle calls into the component instance.
      *
@@ -49,12 +46,8 @@ class Factory
      */
     public function __call($method, $parameters)
     {
-        $component = '\Illuminate\Console\View\Components\\'.ucfirst($method);
-
-        throw_unless(class_exists($component), new InvalidArgumentException(sprintf(
-            'Console component [%s] not found.', $method
-        )));
-
+        $component = '\Illuminate\Console\View\Components\\' . ucfirst($method);
+        throw_unless(class_exists($component), new InvalidArgumentException(sprintf('Console component [%s] not found.', $method)));
         return with(new $component($this->output))->render(...$parameters);
     }
 }

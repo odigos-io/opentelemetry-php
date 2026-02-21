@@ -3,7 +3,6 @@
 namespace Illuminate\Broadcasting;
 
 use Illuminate\Support\Facades\Broadcast;
-
 trait InteractsWithSockets
 {
     /**
@@ -12,7 +11,6 @@ trait InteractsWithSockets
      * @var string|null
      */
     public $socket;
-
     /**
      * Exclude the current user from receiving the broadcast.
      *
@@ -21,10 +19,8 @@ trait InteractsWithSockets
     public function dontBroadcastToCurrentUser()
     {
         $this->socket = Broadcast::socket();
-
         return $this;
     }
-
     /**
      * Broadcast the event to everyone.
      *
@@ -33,7 +29,6 @@ trait InteractsWithSockets
     public function broadcastToEveryone()
     {
         $this->socket = null;
-
         return $this;
     }
 }

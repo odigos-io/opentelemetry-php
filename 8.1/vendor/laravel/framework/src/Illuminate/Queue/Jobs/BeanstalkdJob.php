@@ -4,10 +4,9 @@ namespace Illuminate\Queue\Jobs;
 
 use Illuminate\Container\Container;
 use Illuminate\Contracts\Queue\Job as JobContract;
-use Pheanstalk\Job as PheanstalkJob;
-use Pheanstalk\Pheanstalk;
-
-class BeanstalkdJob extends Job implements JobContract
+use Odigos\Pheanstalk\Job as PheanstalkJob;
+use Odigos\Pheanstalk\Pheanstalk;
+class BeanstalkdJob extends \Illuminate\Queue\Jobs\Job implements JobContract
 {
     /**
      * The Pheanstalk instance.
@@ -15,14 +14,12 @@ class BeanstalkdJob extends Job implements JobContract
      * @var \Pheanstalk\Pheanstalk
      */
     protected $pheanstalk;
-
     /**
      * The Pheanstalk job instance.
      *
      * @var \Pheanstalk\Job
      */
     protected $job;
-
     /**
      * Create a new job instance.
      *
@@ -41,7 +38,6 @@ class BeanstalkdJob extends Job implements JobContract
         $this->pheanstalk = $pheanstalk;
         $this->connectionName = $connectionName;
     }
-
     /**
      * Release the job back into the queue after (n) seconds.
      *
@@ -51,12 +47,9 @@ class BeanstalkdJob extends Job implements JobContract
     public function release($delay = 0)
     {
         parent::release($delay);
-
         $priority = Pheanstalk::DEFAULT_PRIORITY;
-
         $this->pheanstalk->release($this->job, $priority, $delay);
     }
-
     /**
      * Bury the job in the queue.
      *
@@ -65,10 +58,8 @@ class BeanstalkdJob extends Job implements JobContract
     public function bury()
     {
         parent::release();
-
         $this->pheanstalk->bury($this->job);
     }
-
     /**
      * Delete the job from the queue.
      *
@@ -77,10 +68,8 @@ class BeanstalkdJob extends Job implements JobContract
     public function delete()
     {
         parent::delete();
-
         $this->pheanstalk->delete($this->job);
     }
-
     /**
      * Get the number of times the job has been attempted.
      *
@@ -89,10 +78,8 @@ class BeanstalkdJob extends Job implements JobContract
     public function attempts()
     {
         $stats = $this->pheanstalk->statsJob($this->job);
-
         return (int) $stats->reserves;
     }
-
     /**
      * Get the job identifier.
      *
@@ -102,7 +89,6 @@ class BeanstalkdJob extends Job implements JobContract
     {
         return $this->job->getId();
     }
-
     /**
      * Get the raw body string for the job.
      *
@@ -112,7 +98,6 @@ class BeanstalkdJob extends Job implements JobContract
     {
         return $this->job->getData();
     }
-
     /**
      * Get the underlying Pheanstalk instance.
      *
@@ -122,7 +107,6 @@ class BeanstalkdJob extends Job implements JobContract
     {
         return $this->pheanstalk;
     }
-
     /**
      * Get the underlying Pheanstalk job.
      *

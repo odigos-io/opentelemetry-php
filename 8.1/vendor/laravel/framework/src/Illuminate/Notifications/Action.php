@@ -10,14 +10,12 @@ class Action
      * @var string
      */
     public $text;
-
     /**
      * The action URL.
      *
      * @var string
      */
     public $url;
-
     /**
      * Create a new action instance.
      *

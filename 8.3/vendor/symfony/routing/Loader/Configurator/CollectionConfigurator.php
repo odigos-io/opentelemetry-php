@@ -8,44 +8,39 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\Routing\Loader\Configurator;
 
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
-
 /**
  * @author Nicolas Grekas <p@tchwork.com>
  */
 class CollectionConfigurator
 {
-    use Traits\AddTrait;
-    use Traits\HostTrait;
-    use Traits\RouteTrait;
-
+    use \Symfony\Component\Routing\Loader\Configurator\Traits\AddTrait;
+    use \Symfony\Component\Routing\Loader\Configurator\Traits\HostTrait;
+    use \Symfony\Component\Routing\Loader\Configurator\Traits\RouteTrait;
     private string|array|null $host = null;
-
     public function __construct(
         private RouteCollection $parent,
         string $name,
-        private ?self $parentConfigurator = null, // for GC control
-        private ?array $parentPrefixes = null,
-    ) {
+        private ?self $parentConfigurator = null,
+        // for GC control
+        private ?array $parentPrefixes = null
+    )
+    {
         $this->name = $name;
         $this->collection = new RouteCollection();
         $this->route = new Route('');
     }
-
     public function __serialize(): array
     {
-        throw new \BadMethodCallException('Cannot serialize '.__CLASS__);
+        throw new \BadMethodCallException('Cannot serialize ' . __CLASS__);
     }
-
     public function __unserialize(array $data): void
     {
-        throw new \BadMethodCallException('Cannot unserialize '.__CLASS__);
+        throw new \BadMethodCallException('Cannot unserialize ' . __CLASS__);
     }
-
     public function __destruct()
     {
         if (null === $this->prefixes) {
@@ -54,18 +49,15 @@ class CollectionConfigurator
         if (null !== $this->host) {
             $this->addHost($this->collection, $this->host);
         }
-
         $this->parent->addCollection($this->collection);
     }
-
     /**
      * Creates a sub-collection.
      */
     final public function collection(string $name = ''): self
     {
-        return new self($this->collection, $this->name.$name, $this, $this->prefixes);
+        return new self($this->collection, $this->name . $name, $this, $this->prefixes);
     }
-
     /**
      * Sets the prefix to add to the path of all child routes.
      *
@@ -85,8 +77,7 @@ class CollectionConfigurator
                     if (!isset($this->parentPrefixes[$locale])) {
                         throw new \LogicException(\sprintf('Collection "%s" with locale "%s" is missing a corresponding prefix in its parent collection.', $this->name, $locale));
                     }
-
-                    $prefix[$locale] = $this->parentPrefixes[$locale].$localePrefix;
+                    $prefix[$locale] = $this->parentPrefixes[$locale] . $localePrefix;
                 }
             }
             $this->prefixes = $prefix;
@@ -95,10 +86,8 @@ class CollectionConfigurator
             $this->prefixes = null;
             $this->route->setPath($prefix);
         }
-
         return $this;
     }
-
     /**
      * Sets the host to use for all child routes.
      *
@@ -109,10 +98,8 @@ class CollectionConfigurator
     final public function host(string|array $host): static
     {
         $this->host = $host;
-
         return $this;
     }
-
     /**
      * This method overrides the one from LocalizedRouteTrait.
      */

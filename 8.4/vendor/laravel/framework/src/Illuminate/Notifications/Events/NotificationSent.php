@@ -4,11 +4,9 @@ namespace Illuminate\Notifications\Events;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
-
 class NotificationSent
 {
     use Queueable, SerializesModels;
-
     /**
      * Create a new event instance.
      *
@@ -17,11 +15,7 @@ class NotificationSent
      * @param  string  $channel  The channel name.
      * @param  mixed  $response  The channel's response.
      */
-    public function __construct(
-        public $notifiable,
-        public $notification,
-        public $channel,
-        public $response = null,
-    ) {
+    public function __construct(public $notifiable, public $notification, public $channel, public $response = null)
+    {
     }
 }

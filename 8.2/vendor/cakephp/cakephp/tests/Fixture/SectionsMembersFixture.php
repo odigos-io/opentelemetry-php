@@ -1,4 +1,5 @@
 <?php
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -15,7 +16,6 @@
 namespace Cake\Test\Fixture;
 
 use Cake\TestSuite\Fixture\TestFixture;
-
 /**
  * SectionsMembersFixture
  */
@@ -26,8 +26,5 @@ class SectionsMembersFixture extends TestFixture
      *
      * @var array
      */
-    public array $records = [
-        ['section_id' => 1, 'member_id' => 1],
-        ['section_id' => 2, 'member_id' => 1],
-    ];
+    public array $records = [['section_id' => 1, 'member_id' => 1], ['section_id' => 2, 'member_id' => 1]];
 }

@@ -10,7 +10,6 @@ class Routing
      * @var \Illuminate\Http\Request
      */
     public $request;
-
     /**
      * Create a new event instance.
      *

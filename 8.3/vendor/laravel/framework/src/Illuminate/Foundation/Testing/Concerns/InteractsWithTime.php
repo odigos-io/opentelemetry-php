@@ -4,7 +4,6 @@ namespace Illuminate\Foundation\Testing\Concerns;
 
 use Illuminate\Foundation\Testing\Wormhole;
 use Illuminate\Support\Carbon;
-
 trait InteractsWithTime
 {
     /**
@@ -16,10 +15,8 @@ trait InteractsWithTime
     public function freezeTime($callback = null)
     {
         $result = $this->travelTo($now = Carbon::now(), $callback);
-
         return is_null($callback) ? $now : $result;
     }
-
     /**
      * Freeze time at the beginning of the current second.
      *
@@ -29,10 +26,8 @@ trait InteractsWithTime
     public function freezeSecond($callback = null)
     {
         $result = $this->travelTo($now = Carbon::now()->startOfSecond(), $callback);
-
         return is_null($callback) ? $now : $result;
     }
-
     /**
      * Begin travelling to another time.
      *
@@ -43,7 +38,6 @@ trait InteractsWithTime
     {
         return new Wormhole($value);
     }
-
     /**
      * Travel to another time.
      *
@@ -54,14 +48,12 @@ trait InteractsWithTime
     public function travelTo($date, $callback = null)
     {
         Carbon::setTestNow($date);
-
         if ($callback) {
             return tap($callback($date), function () {
                 Carbon::setTestNow();
             });
         }
     }
-
     /**
      * Travel back to the current time.
      *

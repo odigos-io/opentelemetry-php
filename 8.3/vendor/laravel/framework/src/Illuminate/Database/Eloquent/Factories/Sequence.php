@@ -3,7 +3,6 @@
 namespace Illuminate\Database\Eloquent\Factories;
 
 use Countable;
-
 class Sequence implements Countable
 {
     /**
@@ -12,21 +11,18 @@ class Sequence implements Countable
      * @var array
      */
     protected $sequence;
-
     /**
      * The count of the sequence items.
      *
      * @var int
      */
     public $count;
-
     /**
      * The current index of the sequence iteration.
      *
      * @var int
      */
     public $index = 0;
-
     /**
      * Create a new sequence instance.
      *
@@ -37,7 +33,6 @@ class Sequence implements Countable
         $this->sequence = $sequence;
         $this->count = count($sequence);
     }
-
     /**
      * Get the current count of the sequence items.
      *
@@ -47,7 +42,6 @@ class Sequence implements Countable
     {
         return $this->count;
     }
-
     /**
      * Get the next value in the sequence.
      *

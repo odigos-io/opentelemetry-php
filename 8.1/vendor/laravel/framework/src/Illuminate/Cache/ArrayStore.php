@@ -5,43 +5,37 @@ namespace Illuminate\Cache;
 use Illuminate\Contracts\Cache\LockProvider;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\InteractsWithTime;
-
-class ArrayStore extends TaggableStore implements LockProvider
+class ArrayStore extends \Illuminate\Cache\TaggableStore implements LockProvider
 {
-    use InteractsWithTime, RetrievesMultipleKeys;
-
+    use InteractsWithTime, \Illuminate\Cache\RetrievesMultipleKeys;
     /**
      * The array of stored values.
      *
      * @var array
      */
     protected $storage = [];
-
     /**
      * The array of locks.
      *
      * @var array
      */
     public $locks = [];
-
     /**
      * Indicates if values are serialized within the store.
      *
      * @var bool
      */
     protected $serializesValues;
-
     /**
      * Create a new Array store.
      *
      * @param  bool  $serializesValues
      * @return void
      */
-    public function __construct($serializesValues = false)
+    public function __construct($serializesValues = \false)
     {
         $this->serializesValues = $serializesValues;
     }
-
     /**
      * Retrieve an item from the cache by key.
      *
@@ -50,23 +44,17 @@ class ArrayStore extends TaggableStore implements LockProvider
      */
     public function get($key)
     {
-        if (! isset($this->storage[$key])) {
+        if (!isset($this->storage[$key])) {
             return;
         }
-
         $item = $this->storage[$key];
-
         $expiresAt = $item['expiresAt'] ?? 0;
-
-        if ($expiresAt !== 0 && (Carbon::now()->getPreciseTimestamp(3) / 1000) >= $expiresAt) {
+        if ($expiresAt !== 0 && Carbon::now()->getPreciseTimestamp(3) / 1000 >= $expiresAt) {
             $this->forget($key);
-
             return;
         }
-
         return $this->serializesValues ? unserialize($item['value']) : $item['value'];
     }
-
     /**
      * Store an item in the cache for a given number of seconds.
      *
@@ -77,14 +65,9 @@ class ArrayStore extends TaggableStore implements LockProvider
      */
     public function put($key, $value, $seconds)
     {
-        $this->storage[$key] = [
-            'value' => $this->serializesValues ? serialize($value) : $value,
-            'expiresAt' => $this->calculateExpiration($seconds),
-        ];
-
-        return true;
+        $this->storage[$key] = ['value' => $this->serializesValues ? serialize($value) : $value, 'expiresAt' => $this->calculateExpiration($seconds)];
+        return \true;
     }
-
     /**
      * Increment the value of an item in the cache.
      *
@@ -94,19 +77,15 @@ class ArrayStore extends TaggableStore implements LockProvider
      */
     public function increment($key, $value = 1)
     {
-        if (! is_null($existing = $this->get($key))) {
-            return tap(((int) $existing) + $value, function ($incremented) use ($key) {
+        if (!is_null($existing = $this->get($key))) {
+            return tap((int) $existing + $value, function ($incremented) use ($key) {
                 $value = $this->serializesValues ? serialize($incremented) : $incremented;
-
                 $this->storage[$key]['value'] = $value;
             });
         }
-
         $this->forever($key, $value);
-
         return $value;
     }
-
     /**
      * Decrement the value of an item in the cache.
      *
@@ -118,7 +97,6 @@ class ArrayStore extends TaggableStore implements LockProvider
     {
         return $this->increment($key, $value * -1);
     }
-
     /**
      * Store an item in the cache indefinitely.
      *
@@ -130,7 +108,6 @@ class ArrayStore extends TaggableStore implements LockProvider
     {
         return $this->put($key, $value, 0);
     }
-
     /**
      * Remove an item from the cache.
      *
@@ -141,13 +118,10 @@ class ArrayStore extends TaggableStore implements LockProvider
     {
         if (array_key_exists($key, $this->storage)) {
             unset($this->storage[$key]);
-
-            return true;
+            return \true;
         }
-
-        return false;
+        return \false;
     }
-
     /**
      * Remove all items from the cache.
      *
@@ -156,10 +130,8 @@ class ArrayStore extends TaggableStore implements LockProvider
     public function flush()
     {
         $this->storage = [];
-
-        return true;
+        return \true;
     }
-
     /**
      * Get the cache key prefix.
      *
@@ -169,7 +141,6 @@ class ArrayStore extends TaggableStore implements LockProvider
     {
         return '';
     }
-
     /**
      * Get the expiration time of the key.
      *
@@ -180,7 +151,6 @@ class ArrayStore extends TaggableStore implements LockProvider
     {
         return $this->toTimestamp($seconds);
     }
-
     /**
      * Get the UNIX timestamp, with milliseconds, for the given number of seconds in the future.
      *
@@ -189,9 +159,8 @@ class ArrayStore extends TaggableStore implements LockProvider
      */
     protected function toTimestamp($seconds)
     {
-        return $seconds > 0 ? (Carbon::now()->getPreciseTimestamp(3) / 1000) + $seconds : 0;
+        return $seconds > 0 ? Carbon::now()->getPreciseTimestamp(3) / 1000 + $seconds : 0;
     }
-
     /**
      * Get a lock instance.
      *
@@ -202,9 +171,8 @@ class ArrayStore extends TaggableStore implements LockProvider
      */
     public function lock($name, $seconds = 0, $owner = null)
     {
-        return new ArrayLock($this, $name, $seconds, $owner);
+        return new \Illuminate\Cache\ArrayLock($this, $name, $seconds, $owner);
     }
-
     /**
      * Restore a lock instance using the owner identifier.
      *

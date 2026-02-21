@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -17,7 +17,6 @@ namespace Cake\Console\Exception;
 
 use Cake\Console\CommandInterface;
 use Cake\Core\Exception\CakeException;
-
 /**
  * Exception class for Console libraries. This exception will be thrown from Console library
  * classes when they encounter an error.

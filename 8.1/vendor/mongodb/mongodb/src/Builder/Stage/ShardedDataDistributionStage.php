@@ -3,15 +3,12 @@
 /**
  * THIS FILE IS AUTO-GENERATED. ANY CHANGES WILL BE LOST!
  */
-
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace MongoDB\Builder\Stage;
 
 use MongoDB\Builder\Type\Encode;
 use MongoDB\Builder\Type\OperatorInterface;
 use MongoDB\Builder\Type\StageInterface;
-
 /**
  * Provides data and size distribution information on sharded collections.
  * New in MongoDB 6.0.3.
@@ -23,7 +20,6 @@ final class ShardedDataDistributionStage implements StageInterface, OperatorInte
 {
     public const ENCODE = Encode::Object;
     public const NAME = '$shardedDataDistribution';
-
     public function __construct()
     {
     }

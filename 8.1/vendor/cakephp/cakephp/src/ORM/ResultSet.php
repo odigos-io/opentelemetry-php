@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -18,7 +18,6 @@ namespace Cake\ORM;
 
 use Cake\Collection\Collection;
 use Cake\Datasource\ResultSetInterface;
-
 /**
  * Represents the results obtained after executing a query for a specific table
  * This object is responsible for correctly nesting result keys reported from
@@ -42,16 +41,12 @@ class ResultSet extends Collection implements ResultSetInterface
     {
         $key = $this->key();
         $items = $this->toArray();
-
         $this->rewind();
         // Move the internal pointer to the previous position otherwise it creates problems with Xdebug
         // https://github.com/cakephp/cakephp/issues/18234
         while ($this->key() !== $key) {
             $this->next();
         }
-
-        return [
-            'items' => $items,
-        ];
+        return ['items' => $items];
     }
 }

@@ -3,7 +3,6 @@
 namespace Illuminate\Database\Eloquent\Concerns;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-
 trait HasUniqueStringIds
 {
     /**
@@ -12,7 +11,6 @@ trait HasUniqueStringIds
      * @return mixed
      */
     abstract public function newUniqueId();
-
     /**
      * Determine if given key is valid.
      *
@@ -20,7 +18,6 @@ trait HasUniqueStringIds
      * @return bool
      */
     abstract protected function isValidUniqueId($value): bool;
-
     /**
      * Initialize the trait.
      *
@@ -28,9 +25,8 @@ trait HasUniqueStringIds
      */
     public function initializeHasUniqueStringIds()
     {
-        $this->usesUniqueIds = true;
+        $this->usesUniqueIds = \true;
     }
-
     /**
      * Get the columns that should receive a unique identifier.
      *
@@ -40,7 +36,6 @@ trait HasUniqueStringIds
     {
         return $this->usesUniqueIds() ? [$this->getKeyName()] : parent::uniqueIds();
     }
-
     /**
      * Retrieve the model for a bound value.
      *
@@ -53,17 +48,14 @@ trait HasUniqueStringIds
      */
     public function resolveRouteBindingQuery($query, $value, $field = null)
     {
-        if ($field && in_array($field, $this->uniqueIds()) && ! $this->isValidUniqueId($value)) {
+        if ($field && in_array($field, $this->uniqueIds()) && !$this->isValidUniqueId($value)) {
             $this->handleInvalidUniqueId($value, $field);
         }
-
-        if (! $field && in_array($this->getRouteKeyName(), $this->uniqueIds()) && ! $this->isValidUniqueId($value)) {
+        if (!$field && in_array($this->getRouteKeyName(), $this->uniqueIds()) && !$this->isValidUniqueId($value)) {
             $this->handleInvalidUniqueId($value, $field);
         }
-
         return parent::resolveRouteBindingQuery($query, $value, $field);
     }
-
     /**
      * Get the auto-incrementing key type.
      *
@@ -74,10 +66,8 @@ trait HasUniqueStringIds
         if (in_array($this->getKeyName(), $this->uniqueIds())) {
             return 'string';
         }
-
         return parent::getKeyType();
     }
-
     /**
      * Get the value indicating whether the IDs are incrementing.
      *
@@ -86,12 +76,10 @@ trait HasUniqueStringIds
     public function getIncrementing()
     {
         if (in_array($this->getKeyName(), $this->uniqueIds())) {
-            return false;
+            return \false;
         }
-
         return parent::getIncrementing();
     }
-
     /**
      * Throw an exception for the given invalid unique ID.
      *
@@ -103,6 +91,6 @@ trait HasUniqueStringIds
      */
     protected function handleInvalidUniqueId($value, $field)
     {
-        throw (new ModelNotFoundException)->setModel(get_class($this), $value);
+        throw (new ModelNotFoundException())->setModel(get_class($this), $value);
     }
 }

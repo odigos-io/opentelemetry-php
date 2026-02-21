@@ -4,8 +4,7 @@ namespace Illuminate\Cache;
 
 use Illuminate\Database\Connection;
 use Illuminate\Database\QueryException;
-
-class DatabaseLock extends Lock
+class DatabaseLock extends \Illuminate\Cache\Lock
 {
     /**
      * The database connection instance.
@@ -13,28 +12,24 @@ class DatabaseLock extends Lock
      * @var \Illuminate\Database\Connection
      */
     protected $connection;
-
     /**
      * The database table name.
      *
      * @var string
      */
     protected $table;
-
     /**
      * The prune probability odds.
      *
      * @var array
      */
     protected $lottery;
-
     /**
      * The default number of seconds that a lock should be held.
      *
      * @var int
      */
     protected $defaultTimeoutInSeconds;
-
     /**
      * Create a new lock instance.
      *
@@ -49,13 +44,11 @@ class DatabaseLock extends Lock
     public function __construct(Connection $connection, $table, $name, $seconds, $owner = null, $lottery = [2, 100], $defaultTimeoutInSeconds = 86400)
     {
         parent::__construct($name, $seconds, $owner);
-
         $this->connection = $connection;
         $this->table = $table;
         $this->lottery = $lottery;
         $this->defaultTimeoutInSeconds = $defaultTimeoutInSeconds;
     }
-
     /**
      * Attempt to acquire the lock.
      *
@@ -64,33 +57,19 @@ class DatabaseLock extends Lock
     public function acquire()
     {
         try {
-            $this->connection->table($this->table)->insert([
-                'key' => $this->name,
-                'owner' => $this->owner,
-                'expiration' => $this->expiresAt(),
-            ]);
-
-            $acquired = true;
+            $this->connection->table($this->table)->insert(['key' => $this->name, 'owner' => $this->owner, 'expiration' => $this->expiresAt()]);
+            $acquired = \true;
         } catch (QueryException) {
-            $updated = $this->connection->table($this->table)
-                ->where('key', $this->name)
-                ->where(function ($query) {
-                    return $query->where('owner', $this->owner)->orWhere('expiration', '<=', time());
-                })->update([
-                    'owner' => $this->owner,
-                    'expiration' => $this->expiresAt(),
-                ]);
-
+            $updated = $this->connection->table($this->table)->where('key', $this->name)->where(function ($query) {
+                return $query->where('owner', $this->owner)->orWhere('expiration', '<=', time());
+            })->update(['owner' => $this->owner, 'expiration' => $this->expiresAt()]);
             $acquired = $updated >= 1;
         }
-
         if (random_int(1, $this->lottery[1]) <= $this->lottery[0]) {
             $this->connection->table($this->table)->where('expiration', '<=', time())->delete();
         }
-
         return $acquired;
     }
-
     /**
      * Get the UNIX timestamp indicating when the lock should expire.
      *
@@ -99,10 +78,8 @@ class DatabaseLock extends Lock
     protected function expiresAt()
     {
         $lockTimeout = $this->seconds > 0 ? $this->seconds : $this->defaultTimeoutInSeconds;
-
         return time() + $lockTimeout;
     }
-
     /**
      * Release the lock.
      *
@@ -111,17 +88,11 @@ class DatabaseLock extends Lock
     public function release()
     {
         if ($this->isOwnedByCurrentProcess()) {
-            $this->connection->table($this->table)
-                        ->where('key', $this->name)
-                        ->where('owner', $this->owner)
-                        ->delete();
-
-            return true;
+            $this->connection->table($this->table)->where('key', $this->name)->where('owner', $this->owner)->delete();
+            return \true;
         }
-
-        return false;
+        return \false;
     }
-
     /**
      * Releases this lock in disregard of ownership.
      *
@@ -129,11 +100,8 @@ class DatabaseLock extends Lock
      */
     public function forceRelease()
     {
-        $this->connection->table($this->table)
-                    ->where('key', $this->name)
-                    ->delete();
+        $this->connection->table($this->table)->where('key', $this->name)->delete();
     }
-
     /**
      * Returns the owner value written into the driver for this lock.
      *
@@ -143,7 +111,6 @@ class DatabaseLock extends Lock
     {
         return optional($this->connection->table($this->table)->where('key', $this->name)->first())->owner;
     }
-
     /**
      * Get the name of the database connection being used to manage the lock.
      *

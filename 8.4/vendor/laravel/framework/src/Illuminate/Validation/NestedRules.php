@@ -3,7 +3,6 @@
 namespace Illuminate\Validation;
 
 use Illuminate\Contracts\Validation\CompilableRules;
-
 class NestedRules implements CompilableRules
 {
     /**
@@ -12,7 +11,6 @@ class NestedRules implements CompilableRules
      * @var callable
      */
     protected $callback;
-
     /**
      * Create a new nested rule instance.
      *
@@ -22,7 +20,6 @@ class NestedRules implements CompilableRules
     {
         $this->callback = $callback;
     }
-
     /**
      * Compile the callback into an array of rules.
      *
@@ -35,7 +32,6 @@ class NestedRules implements CompilableRules
     public function compile($attribute, $value, $data = null, $context = null)
     {
         $rules = call_user_func($this->callback, $value, $attribute, $data, $context);
-
-        return Rule::compile($attribute, $rules, $data);
+        return \Illuminate\Validation\Rule::compile($attribute, $rules, $data);
     }
 }

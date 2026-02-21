@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright 2015-present MongoDB, Inc.
  *
@@ -14,7 +15,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 namespace MongoDB\Operation;
 
 use MongoDB\Driver\Command;
@@ -25,7 +25,6 @@ use MongoDB\Driver\WriteConcern;
 use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\Exception\UnsupportedException;
 use MongoDB\Model\IndexInput;
-
 use function array_is_list;
 use function array_map;
 use function is_array;
@@ -33,7 +32,6 @@ use function is_integer;
 use function is_string;
 use function MongoDB\server_supports_feature;
 use function sprintf;
-
 /**
  * Operation for the createIndexes command.
  *
@@ -44,10 +42,8 @@ use function sprintf;
 final class CreateIndexes
 {
     private const WIRE_VERSION_FOR_COMMIT_QUORUM = 9;
-
     /** @var list<IndexInput> */
     private array $indexes = [];
-
     /**
      * Constructs a createIndexes command.
      *
@@ -79,40 +75,31 @@ final class CreateIndexes
         if (empty($indexes)) {
             throw new InvalidArgumentException('$indexes is empty');
         }
-
-        if (! array_is_list($indexes)) {
+        if (!array_is_list($indexes)) {
             throw new InvalidArgumentException('$indexes is not a list');
         }
-
         foreach ($indexes as $i => $index) {
-            if (! is_array($index)) {
+            if (!is_array($index)) {
                 throw InvalidArgumentException::invalidType(sprintf('$index[%d]', $i), $index, 'array');
             }
-
             $this->indexes[] = new IndexInput($index);
         }
-
-        if (isset($this->options['commitQuorum']) && ! is_string($this->options['commitQuorum']) && ! is_integer($this->options['commitQuorum'])) {
+        if (isset($this->options['commitQuorum']) && !is_string($this->options['commitQuorum']) && !is_integer($this->options['commitQuorum'])) {
             throw InvalidArgumentException::invalidType('"commitQuorum" option', $this->options['commitQuorum'], ['integer', 'string']);
         }
-
-        if (isset($this->options['maxTimeMS']) && ! is_integer($this->options['maxTimeMS'])) {
+        if (isset($this->options['maxTimeMS']) && !is_integer($this->options['maxTimeMS'])) {
             throw InvalidArgumentException::invalidType('"maxTimeMS" option', $this->options['maxTimeMS'], 'integer');
         }
-
-        if (isset($this->options['session']) && ! $this->options['session'] instanceof Session) {
+        if (isset($this->options['session']) && !$this->options['session'] instanceof Session) {
             throw InvalidArgumentException::invalidType('"session" option', $this->options['session'], Session::class);
         }
-
-        if (isset($this->options['writeConcern']) && ! $this->options['writeConcern'] instanceof WriteConcern) {
+        if (isset($this->options['writeConcern']) && !$this->options['writeConcern'] instanceof WriteConcern) {
             throw InvalidArgumentException::invalidType('"writeConcern" option', $this->options['writeConcern'], WriteConcern::class);
         }
-
         if (isset($this->options['writeConcern']) && $this->options['writeConcern']->isDefault()) {
             unset($this->options['writeConcern']);
         }
     }
-
     /**
      * Execute the operation.
      *
@@ -126,15 +113,9 @@ final class CreateIndexes
         if ($inTransaction && isset($this->options['writeConcern'])) {
             throw UnsupportedException::writeConcernNotSupportedInTransaction();
         }
-
         $this->executeCommand($server);
-
-        return array_map(
-            'strval',
-            $this->indexes,
-        );
+        return array_map('strval', $this->indexes);
     }
-
     /**
      * Create options for executing the command.
      *
@@ -143,18 +124,14 @@ final class CreateIndexes
     private function createOptions(): array
     {
         $options = [];
-
         if (isset($this->options['session'])) {
             $options['session'] = $this->options['session'];
         }
-
         if (isset($this->options['writeConcern'])) {
             $options['writeConcern'] = $this->options['writeConcern'];
         }
-
         return $options;
     }
-
     /**
      * Create one or more indexes for the collection using the createIndexes
      * command.
@@ -163,27 +140,20 @@ final class CreateIndexes
      */
     private function executeCommand(Server $server): void
     {
-        $cmd = [
-            'createIndexes' => $this->collectionName,
-            'indexes' => $this->indexes,
-        ];
-
+        $cmd = ['createIndexes' => $this->collectionName, 'indexes' => $this->indexes];
         if (isset($this->options['commitQuorum'])) {
             /* Drivers MUST manually raise an error if this option is specified
              * when creating an index on a pre 4.4 server. */
-            if (! server_supports_feature($server, self::WIRE_VERSION_FOR_COMMIT_QUORUM)) {
+            if (!server_supports_feature($server, self::WIRE_VERSION_FOR_COMMIT_QUORUM)) {
                 throw UnsupportedException::commitQuorumNotSupported();
             }
-
             $cmd['commitQuorum'] = $this->options['commitQuorum'];
         }
-
         foreach (['comment', 'maxTimeMS'] as $option) {
             if (isset($this->options[$option])) {
                 $cmd[$option] = $this->options[$option];
             }
         }
-
         $server->executeWriteCommand($this->databaseName, new Command($cmd), $this->createOptions());
     }
 }

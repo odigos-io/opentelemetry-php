@@ -2,7 +2,7 @@
 
 namespace Illuminate\Http\Client;
 
-class BatchInProgressException extends HttpClientException
+class BatchInProgressException extends \Illuminate\Http\Client\HttpClientException
 {
     public function __construct()
     {

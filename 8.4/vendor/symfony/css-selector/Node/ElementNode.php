@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\CssSelector\Node;
 
 /**
@@ -21,33 +20,26 @@ namespace Symfony\Component\CssSelector\Node;
  *
  * @internal
  */
-class ElementNode extends AbstractNode
+class ElementNode extends \Symfony\Component\CssSelector\Node\AbstractNode
 {
-    public function __construct(
-        private ?string $namespace = null,
-        private ?string $element = null,
-    ) {
+    public function __construct(private ?string $namespace = null, private ?string $element = null)
+    {
     }
-
     public function getNamespace(): ?string
     {
         return $this->namespace;
     }
-
     public function getElement(): ?string
     {
         return $this->element;
     }
-
-    public function getSpecificity(): Specificity
+    public function getSpecificity(): \Symfony\Component\CssSelector\Node\Specificity
     {
-        return new Specificity(0, 0, $this->element ? 1 : 0);
+        return new \Symfony\Component\CssSelector\Node\Specificity(0, 0, $this->element ? 1 : 0);
     }
-
     public function __toString(): string
     {
         $element = $this->element ?: '*';
-
-        return \sprintf('%s[%s]', $this->getNodeName(), $this->namespace ? $this->namespace.'|'.$element : $element);
+        return \sprintf('%s[%s]', $this->getNodeName(), $this->namespace ? $this->namespace . '|' . $element : $element);
     }
 }

@@ -1,16 +1,13 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\SDK\Common\Configuration\Parser;
 
 use InvalidArgumentException;
-
 class BooleanParser
 {
     private const TRUE_VALUE = 'true';
     private const FALSE_VALUE = 'false';
-
     /**
      * @param string|bool $value
      */
@@ -20,15 +17,11 @@ class BooleanParser
             return $value;
         }
         if (strtolower($value) === self::TRUE_VALUE) {
-            return true;
+            return \true;
         }
-
         if (strtolower($value) === self::FALSE_VALUE) {
-            return false;
+            return \false;
         }
-
-        throw new InvalidArgumentException(
-            sprintf('Value "%s" is a non-boolean value', $value)
-        );
+        throw new InvalidArgumentException(sprintf('Value "%s" is a non-boolean value', $value));
     }
 }

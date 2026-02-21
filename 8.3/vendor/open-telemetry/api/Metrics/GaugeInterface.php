@@ -1,11 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\API\Metrics;
 
 use OpenTelemetry\Context\ContextInterface;
-
 /**
  * A synchronous instrument which can be used to record non-additive values.
  *
@@ -13,7 +11,7 @@ use OpenTelemetry\Context\ContextInterface;
  *
  * @experimental
  */
-interface GaugeInterface extends SynchronousInstrument
+interface GaugeInterface extends \OpenTelemetry\API\Metrics\SynchronousInstrument
 {
     /**
      * @param float|int $amount current absolute value

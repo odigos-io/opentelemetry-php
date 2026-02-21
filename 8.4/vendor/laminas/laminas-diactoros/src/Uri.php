@@ -1,14 +1,12 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Laminas\Diactoros;
+declare (strict_types=1);
+namespace Odigos\Laminas\Diactoros;
 
 use Override;
 use Psr\Http\Message\UriInterface;
 use SensitiveParameter;
 use Stringable;
-
 use function array_keys;
 use function assert;
 use function explode;
@@ -26,7 +24,6 @@ use function str_split;
 use function str_starts_with;
 use function strtolower;
 use function substr;
-
 /**
  * Implementation of Psr\Http\UriInterface.
  *
@@ -47,49 +44,33 @@ class Uri implements UriInterface, Stringable
      * @const string
      */
     public const CHAR_SUB_DELIMS = '!\$&\'\(\)\*\+,;=';
-
     /**
      * Unreserved characters used in user info, paths, query strings, and fragments.
      *
      * @const string
      */
     public const CHAR_UNRESERVED = 'a-zA-Z0-9_\-\.~\pL';
-
     /** @var int[] Array indexed by valid scheme names to their corresponding ports. */
-    protected $allowedSchemes = [
-        'http'  => 80,
-        'https' => 443,
-    ];
-
+    protected $allowedSchemes = ['http' => 80, 'https' => 443];
     private string $scheme = '';
-
     private string $userInfo = '';
-
     private string $host = '';
-
     private ?int $port = null;
-
     private string $path = '';
-
     private string $query = '';
-
     private string $fragment = '';
-
     /**
      * generated uri string cache
      */
     private ?string $uriString = null;
-
     public function __construct(string $uri = '')
     {
         if ('' === $uri) {
             return;
         }
-
         /** @psalm-suppress UnusedMethodCall Called method is not mutation free. Psalm has no impure annotation */
         $this->parseUri($uri);
     }
-
     /**
      * Operations to perform on clone.
      *
@@ -100,7 +81,6 @@ class Uri implements UriInterface, Stringable
     {
         $this->uriString = null;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -110,19 +90,17 @@ class Uri implements UriInterface, Stringable
         if (null !== $this->uriString) {
             return $this->uriString;
         }
-
         /** @psalm-suppress ImpureMethodCall, InaccessibleProperty */
         $this->uriString = static::createUriString(
             $this->scheme,
             $this->getAuthority(),
-            $this->path, // Absolute URIs should use a "/" for an empty path
+            $this->path,
+            // Absolute URIs should use a "/" for an empty path
             $this->query,
             $this->fragment
         );
-
         return $this->uriString;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -131,7 +109,6 @@ class Uri implements UriInterface, Stringable
     {
         return $this->scheme;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -141,19 +118,15 @@ class Uri implements UriInterface, Stringable
         if ('' === $this->host) {
             return '';
         }
-
         $authority = $this->host;
         if ('' !== $this->userInfo) {
             $authority = $this->userInfo . '@' . $authority;
         }
-
         if ($this->isNonStandardPort($this->scheme, $this->host, $this->port)) {
             $authority .= ':' . $this->port;
         }
-
         return $authority;
     }
-
     /**
      * Retrieve the user-info part of the URI.
      *
@@ -166,7 +139,6 @@ class Uri implements UriInterface, Stringable
     {
         return $this->userInfo;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -175,18 +147,14 @@ class Uri implements UriInterface, Stringable
     {
         return $this->host;
     }
-
     /**
      * {@inheritdoc}
      */
     #[Override]
     public function getPort(): ?int
     {
-        return $this->isNonStandardPort($this->scheme, $this->host, $this->port)
-            ? $this->port
-            : null;
+        return $this->isNonStandardPort($this->scheme, $this->host, $this->port) ? $this->port : null;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -197,16 +165,13 @@ class Uri implements UriInterface, Stringable
             // No path
             return $this->path;
         }
-
         if ($this->path[0] !== '/') {
             // Relative path
             return $this->path;
         }
-
         // Ensure only one leading slash, to prevent XSS attempts.
         return '/' . ltrim($this->path, '/');
     }
-
     /**
      * {@inheritdoc}
      */
@@ -215,7 +180,6 @@ class Uri implements UriInterface, Stringable
     {
         return $this->query;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -224,7 +188,6 @@ class Uri implements UriInterface, Stringable
     {
         return $this->fragment;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -232,21 +195,16 @@ class Uri implements UriInterface, Stringable
     public function withScheme(string $scheme): UriInterface
     {
         $scheme = $this->filterScheme($scheme);
-
         if ($scheme === $this->scheme) {
             // Do nothing if no change was made.
             return $this;
         }
-
-        $new         = clone $this;
+        $new = clone $this;
         $new->scheme = $scheme;
-
         return $new;
     }
-
     // The following rule is buggy for parameters attributes
     // phpcs:disable SlevomatCodingStandard.TypeHints.ParameterTypeHintSpacing.NoSpaceBetweenTypeHintAndParameter
-
     /**
      * Create and return a new instance containing the provided user credentials.
      *
@@ -256,29 +214,21 @@ class Uri implements UriInterface, Stringable
      * {@inheritdoc}
      */
     #[Override]
-    public function withUserInfo(
-        string $user,
-        #[SensitiveParameter]
-        ?string $password = null
-    ): UriInterface {
+    public function withUserInfo(string $user, #[SensitiveParameter] ?string $password = null): UriInterface
+    {
         $info = $this->filterUserInfoPart($user);
         if (null !== $password) {
             $info .= ':' . $this->filterUserInfoPart($password);
         }
-
         if ($info === $this->userInfo) {
             // Do nothing if no change was made.
             return $this;
         }
-
-        $new           = clone $this;
+        $new = clone $this;
         $new->userInfo = $info;
-
         return $new;
     }
-
     // phpcs:enable SlevomatCodingStandard.TypeHints.ParameterTypeHintSpacing.NoSpaceBetweenTypeHintAndParameter
-
     /**
      * {@inheritdoc}
      */
@@ -289,13 +239,10 @@ class Uri implements UriInterface, Stringable
             // Do nothing if no change was made.
             return $this;
         }
-
-        $new       = clone $this;
+        $new = clone $this;
         $new->host = strtolower($host);
-
         return $new;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -306,20 +253,13 @@ class Uri implements UriInterface, Stringable
             // Do nothing if no change was made.
             return $this;
         }
-
         if ($port !== null && ($port < 1 || $port > 65535)) {
-            throw new Exception\InvalidArgumentException(sprintf(
-                'Invalid port "%d" specified; must be a valid TCP/UDP port',
-                $port
-            ));
+            throw new Exception\InvalidArgumentException(sprintf('Invalid port "%d" specified; must be a valid TCP/UDP port', $port));
         }
-
-        $new       = clone $this;
+        $new = clone $this;
         $new->port = $port;
-
         return $new;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -327,30 +267,20 @@ class Uri implements UriInterface, Stringable
     public function withPath(string $path): UriInterface
     {
         if (str_contains($path, '?')) {
-            throw new Exception\InvalidArgumentException(
-                'Invalid path provided; must not contain a query string'
-            );
+            throw new Exception\InvalidArgumentException('Invalid path provided; must not contain a query string');
         }
-
         if (str_contains($path, '#')) {
-            throw new Exception\InvalidArgumentException(
-                'Invalid path provided; must not contain a URI fragment'
-            );
+            throw new Exception\InvalidArgumentException('Invalid path provided; must not contain a URI fragment');
         }
-
         $path = $this->filterPath($path);
-
         if ($path === $this->path) {
             // Do nothing if no change was made.
             return $this;
         }
-
-        $new       = clone $this;
+        $new = clone $this;
         $new->path = $path;
-
         return $new;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -358,24 +288,17 @@ class Uri implements UriInterface, Stringable
     public function withQuery(string $query): UriInterface
     {
         if (str_contains($query, '#')) {
-            throw new Exception\InvalidArgumentException(
-                'Query string must not include a URI fragment'
-            );
+            throw new Exception\InvalidArgumentException('Query string must not include a URI fragment');
         }
-
         $query = $this->filterQuery($query);
-
         if ($query === $this->query) {
             // Do nothing if no change was made.
             return $this;
         }
-
-        $new        = clone $this;
+        $new = clone $this;
         $new->query = $query;
-
         return $new;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -383,18 +306,14 @@ class Uri implements UriInterface, Stringable
     public function withFragment(string $fragment): UriInterface
     {
         $fragment = $this->filterFragment($fragment);
-
         if ($fragment === $this->fragment) {
             // Do nothing if no change was made.
             return $this;
         }
-
-        $new           = clone $this;
+        $new = clone $this;
         $new->fragment = $fragment;
-
         return $new;
     }
-
     /**
      * Parse a URI into its parts, and set the properties
      *
@@ -404,63 +323,44 @@ class Uri implements UriInterface, Stringable
     private function parseUri(string $uri): void
     {
         $parts = parse_url($uri);
-
-        if (false === $parts) {
-            throw new Exception\InvalidArgumentException(
-                'The source URI string appears to be malformed'
-            );
+        if (\false === $parts) {
+            throw new Exception\InvalidArgumentException('The source URI string appears to be malformed');
         }
-
-        $this->scheme   = isset($parts['scheme']) ? $this->filterScheme($parts['scheme']) : '';
+        $this->scheme = isset($parts['scheme']) ? $this->filterScheme($parts['scheme']) : '';
         $this->userInfo = isset($parts['user']) ? $this->filterUserInfoPart($parts['user']) : '';
-        $this->host     = isset($parts['host']) ? strtolower($parts['host']) : '';
-        $this->port     = $parts['port'] ?? null;
-        $this->path     = isset($parts['path']) ? $this->filterPath($parts['path']) : '';
-        $this->query    = isset($parts['query']) ? $this->filterQuery($parts['query']) : '';
+        $this->host = isset($parts['host']) ? strtolower($parts['host']) : '';
+        $this->port = $parts['port'] ?? null;
+        $this->path = isset($parts['path']) ? $this->filterPath($parts['path']) : '';
+        $this->query = isset($parts['query']) ? $this->filterQuery($parts['query']) : '';
         $this->fragment = isset($parts['fragment']) ? $this->filterFragment($parts['fragment']) : '';
-
         if (isset($parts['pass'])) {
             $this->userInfo .= ':' . $parts['pass'];
         }
     }
-
     /**
      * Create a URI string from its various parts
      */
-    private static function createUriString(
-        string $scheme,
-        string $authority,
-        string $path,
-        string $query,
-        string $fragment
-    ): string {
+    private static function createUriString(string $scheme, string $authority, string $path, string $query, string $fragment): string
+    {
         $uri = '';
-
         if ('' !== $scheme) {
             $uri .= sprintf('%s:', $scheme);
         }
-
         if ('' !== $authority) {
             $uri .= '//' . $authority;
         }
-
-        if ('' !== $path && ! str_starts_with($path, '/')) {
+        if ('' !== $path && !str_starts_with($path, '/')) {
             $path = '/' . $path;
         }
-
         $uri .= $path;
-
         if ('' !== $query) {
             $uri .= sprintf('?%s', $query);
         }
-
         if ('' !== $fragment) {
             $uri .= sprintf('#%s', $fragment);
         }
-
         return $uri;
     }
-
     /**
      * Is a given port non-standard for the current scheme?
      *
@@ -471,14 +371,11 @@ class Uri implements UriInterface, Stringable
         if ('' === $scheme) {
             return '' === $host || null !== $port;
         }
-
         if ('' === $host || null === $port) {
-            return false;
+            return \false;
         }
-
-        return ! isset($this->allowedSchemes[$scheme]) || $port !== $this->allowedSchemes[$scheme];
+        return !isset($this->allowedSchemes[$scheme]) || $port !== $this->allowedSchemes[$scheme];
     }
-
     /**
      * Filters the scheme to ensure it is a valid scheme.
      *
@@ -490,58 +387,38 @@ class Uri implements UriInterface, Stringable
         $scheme = strtolower($scheme);
         $scheme = preg_replace('#:(//)?$#', '', $scheme);
         assert(is_string($scheme));
-
         if ('' === $scheme) {
             return '';
         }
-
-        if (! isset($this->allowedSchemes[$scheme])) {
-            throw new Exception\InvalidArgumentException(sprintf(
-                'Unsupported scheme "%s"; must be any empty string or in the set (%s)',
-                $scheme,
-                implode(', ', array_keys($this->allowedSchemes))
-            ));
+        if (!isset($this->allowedSchemes[$scheme])) {
+            throw new Exception\InvalidArgumentException(sprintf('Unsupported scheme "%s"; must be any empty string or in the set (%s)', $scheme, implode(', ', array_keys($this->allowedSchemes))));
         }
-
         return $scheme;
     }
-
     /**
      * Filters a part of user info in a URI to ensure it is properly encoded.
      */
     private function filterUserInfoPart(string $part): string
     {
         $part = $this->filterInvalidUtf8($part);
-
         /**
          * Note the addition of `%` to initial charset; this allows `|` portion
          * to match and thus prevent double-encoding.
          */
-        $result = preg_replace_callback(
-            '/(?:[^%' . self::CHAR_UNRESERVED . self::CHAR_SUB_DELIMS . ']+|%(?![A-Fa-f0-9]{2}))/u',
-            [$this, 'urlEncodeChar'],
-            $part
-        );
+        $result = preg_replace_callback('/(?:[^%' . self::CHAR_UNRESERVED . self::CHAR_SUB_DELIMS . ']+|%(?![A-Fa-f0-9]{2}))/u', [$this, 'urlEncodeChar'], $part);
         assert($result !== null, 'Always true condition for psalm type safety');
         return $result;
     }
-
     /**
      * Filters the path of a URI to ensure it is properly encoded.
      */
     private function filterPath(string $path): string
     {
         $path = $this->filterInvalidUtf8($path);
-
-        $result = preg_replace_callback(
-            '/(?:[^' . self::CHAR_UNRESERVED . ')(:@&=\+\$,\/;%]+|%(?![A-Fa-f0-9]{2}))/u',
-            [$this, 'urlEncodeChar'],
-            $path
-        );
+        $result = preg_replace_callback('/(?:[^' . self::CHAR_UNRESERVED . ')(:@&=\+\$,\/;%]+|%(?![A-Fa-f0-9]{2}))/u', [$this, 'urlEncodeChar'], $path);
         assert($result !== null, 'Always true condition for psalm type safety');
         return $result;
     }
-
     /**
      * Encode invalid UTF-8 characters in given string. All other characters are unchanged.
      */
@@ -551,17 +428,14 @@ class Uri implements UriInterface, Stringable
         if (preg_match('//u', $string)) {
             return $string;
         }
-
         $letters = str_split($string);
         foreach ($letters as $i => $letter) {
-            if (! preg_match('//u', $letter)) {
+            if (!preg_match('//u', $letter)) {
                 $letters[$i] = $this->urlEncodeChar([$letter]);
             }
         }
-
         return implode('', $letters);
     }
-
     /**
      * Filter a query string to ensure it is propertly encoded.
      *
@@ -572,7 +446,6 @@ class Uri implements UriInterface, Stringable
         if ('' !== $query && str_starts_with($query, '?')) {
             $query = substr($query, 1);
         }
-
         $parts = explode('&', $query);
         foreach ($parts as $index => $part) {
             [$key, $value] = $this->splitQueryValue($part);
@@ -580,16 +453,10 @@ class Uri implements UriInterface, Stringable
                 $parts[$index] = $this->filterQueryOrFragment($key);
                 continue;
             }
-            $parts[$index] = sprintf(
-                '%s=%s',
-                $this->filterQueryOrFragment($key),
-                $this->filterQueryOrFragment($value)
-            );
+            $parts[$index] = sprintf('%s=%s', $this->filterQueryOrFragment($key), $this->filterQueryOrFragment($value));
         }
-
         return implode('&', $parts);
     }
-
     /**
      * Split a query value into a key/value tuple.
      *
@@ -598,12 +465,11 @@ class Uri implements UriInterface, Stringable
     private function splitQueryValue(string $value): array
     {
         $data = explode('=', $value, 2);
-        if (! isset($data[1])) {
+        if (!isset($data[1])) {
             $data[1] = null;
         }
         return $data;
     }
-
     /**
      * Filter a fragment value to ensure it is properly encoded.
      */
@@ -612,26 +478,18 @@ class Uri implements UriInterface, Stringable
         if ('' !== $fragment && str_starts_with($fragment, '#')) {
             $fragment = '%23' . substr($fragment, 1);
         }
-
         return $this->filterQueryOrFragment($fragment);
     }
-
     /**
      * Filter a query string key or value, or a fragment.
      */
     private function filterQueryOrFragment(string $value): string
     {
         $value = $this->filterInvalidUtf8($value);
-
-        $result = preg_replace_callback(
-            '/(?:[^' . self::CHAR_UNRESERVED . self::CHAR_SUB_DELIMS . '%:@\/\?]+|%(?![A-Fa-f0-9]{2}))/u',
-            [$this, 'urlEncodeChar'],
-            $value
-        );
+        $result = preg_replace_callback('/(?:[^' . self::CHAR_UNRESERVED . self::CHAR_SUB_DELIMS . '%:@\/\?]+|%(?![A-Fa-f0-9]{2}))/u', [$this, 'urlEncodeChar'], $value);
         assert($result !== null, 'Always true condition for psalm type safety');
         return $result;
     }
-
     /**
      * URL encode a character returned by a regex.
      *

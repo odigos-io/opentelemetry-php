@@ -1,5 +1,6 @@
-<?php declare(strict_types=1);
+<?php
 
+declare (strict_types=1);
 /*
  * This file is part of the Monolog package.
  *
@@ -8,13 +9,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Odigos\Monolog\Handler;
 
-namespace Monolog\Handler;
-
-use Monolog\Formatter\FormatterInterface;
-use Monolog\Formatter\HtmlFormatter;
-use Monolog\LogRecord;
-
+use Odigos\Monolog\Formatter\FormatterInterface;
+use Odigos\Monolog\Formatter\HtmlFormatter;
+use Odigos\Monolog\LogRecord;
 /**
  * Base class for all mail handlers
  *
@@ -28,21 +27,17 @@ abstract class MailHandler extends AbstractProcessingHandler
     public function handleBatch(array $records): void
     {
         $messages = [];
-
         foreach ($records as $record) {
             if ($record->level->isLowerThan($this->level)) {
                 continue;
             }
-
             $message = $this->processRecord($record);
             $messages[] = $message;
         }
-
         if (\count($messages) > 0) {
             $this->send((string) $this->getFormatter()->formatBatch($messages), $messages);
         }
     }
-
     /**
      * Send a mail with the given content
      *
@@ -52,7 +47,6 @@ abstract class MailHandler extends AbstractProcessingHandler
      * @phpstan-param non-empty-array<LogRecord> $records
      */
     abstract protected function send(string $content, array $records): void;
-
     /**
      * @inheritDoc
      */
@@ -60,7 +54,6 @@ abstract class MailHandler extends AbstractProcessingHandler
     {
         $this->send((string) $record->formatted, [$record]);
     }
-
     /**
      * @phpstan-param non-empty-array<LogRecord> $records
      */
@@ -72,15 +65,12 @@ abstract class MailHandler extends AbstractProcessingHandler
                 $highestRecord = $record;
             }
         }
-
         return $highestRecord;
     }
-
     protected function isHtmlBody(string $body): bool
     {
         return ($body[0] ?? null) === '<';
     }
-
     /**
      * Gets the default formatter.
      */

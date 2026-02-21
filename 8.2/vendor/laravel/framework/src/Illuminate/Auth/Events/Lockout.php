@@ -3,7 +3,6 @@
 namespace Illuminate\Auth\Events;
 
 use Illuminate\Http\Request;
-
 class Lockout
 {
     /**
@@ -12,7 +11,6 @@ class Lockout
      * @var \Illuminate\Http\Request
      */
     public $request;
-
     /**
      * Create a new event instance.
      *

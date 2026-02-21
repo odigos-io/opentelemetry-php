@@ -1,14 +1,13 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\base;
 
-use Yii;
-
+use Odigos\Yii;
 /**
  * Action is the base class for all controller action classes.
  *
@@ -37,7 +36,7 @@ use Yii;
  *
  * @template T of Controller
  */
-class Action extends Component
+class Action extends \yii\base\Component
 {
     /**
      * @var string ID of the action
@@ -50,8 +49,6 @@ class Action extends Component
      * @psalm-var T
      */
     public $controller;
-
-
     /**
      * Constructor.
      *
@@ -71,7 +68,6 @@ class Action extends Component
         $this->controller = $controller;
         parent::__construct($config);
     }
-
     /**
      * Returns the unique ID of this action among the whole application.
      *
@@ -81,7 +77,6 @@ class Action extends Component
     {
         return $this->controller->getUniqueId() . '/' . $this->id;
     }
-
     /**
      * Runs this action with the specified parameters.
      * This method is mainly invoked by the controller.
@@ -93,7 +88,7 @@ class Action extends Component
     public function runWithParams($params)
     {
         if (!method_exists($this, 'run')) {
-            throw new InvalidConfigException(get_class($this) . ' must define a "run()" method.');
+            throw new \yii\base\InvalidConfigException(get_class($this) . ' must define a "run()" method.');
         }
         $args = $this->controller->bindActionParams($this, $params);
         Yii::debug('Running action: ' . get_class($this) . '::run(), invoked by ' . get_class($this->controller), __METHOD__);
@@ -103,13 +98,10 @@ class Action extends Component
         if ($this->beforeRun()) {
             $result = call_user_func_array([$this, 'run'], $args);
             $this->afterRun();
-
             return $result;
         }
-
         return null;
     }
-
     /**
      * This method is called right before `run()` is executed.
      * You may override this method to do preparation work for the action run.
@@ -119,9 +111,8 @@ class Action extends Component
      */
     protected function beforeRun()
     {
-        return true;
+        return \true;
     }
-
     /**
      * This method is called right after `run()` is executed.
      * You may override this method to do post-processing work for the action run.

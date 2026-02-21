@@ -4,7 +4,6 @@ namespace Illuminate\Foundation\Support\Providers;
 
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
-
 class AuthServiceProvider extends ServiceProvider
 {
     /**
@@ -13,7 +12,6 @@ class AuthServiceProvider extends ServiceProvider
      * @var array<class-string, class-string>
      */
     protected $policies = [];
-
     /**
      * Register the application's policies.
      *
@@ -25,7 +23,6 @@ class AuthServiceProvider extends ServiceProvider
             $this->registerPolicies();
         });
     }
-
     /**
      * Register the application's policies.
      *
@@ -37,7 +34,6 @@ class AuthServiceProvider extends ServiceProvider
             Gate::policy($model, $policy);
         }
     }
-
     /**
      * Get the policies defined on the provider.
      *

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright 2015-present MongoDB, Inc.
  *
@@ -14,7 +15,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 namespace MongoDB\Operation;
 
 use EmptyIterator;
@@ -29,9 +29,7 @@ use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\Model\CachingIterator;
 use MongoDB\Model\CallbackIterator;
 use MongoDB\Model\IndexInfo;
-
 use function is_integer;
-
 /**
  * Operation for the listIndexes command.
  *
@@ -42,7 +40,6 @@ final class ListIndexes
 {
     private const ERROR_CODE_DATABASE_NOT_FOUND = 60;
     private const ERROR_CODE_NAMESPACE_NOT_FOUND = 26;
-
     /**
      * Constructs a listIndexes command.
      *
@@ -64,15 +61,13 @@ final class ListIndexes
      */
     public function __construct(private string $databaseName, private string $collectionName, private array $options = [])
     {
-        if (isset($this->options['maxTimeMS']) && ! is_integer($this->options['maxTimeMS'])) {
+        if (isset($this->options['maxTimeMS']) && !is_integer($this->options['maxTimeMS'])) {
             throw InvalidArgumentException::invalidType('"maxTimeMS" option', $this->options['maxTimeMS'], 'integer');
         }
-
-        if (isset($this->options['session']) && ! $this->options['session'] instanceof Session) {
+        if (isset($this->options['session']) && !$this->options['session'] instanceof Session) {
             throw InvalidArgumentException::invalidType('"session" option', $this->options['session'], Session::class);
         }
     }
-
     /**
      * Execute the operation.
      *
@@ -82,13 +77,11 @@ final class ListIndexes
     public function execute(Server $server): Iterator
     {
         $cmd = ['listIndexes' => $this->collectionName];
-
         foreach (['comment', 'maxTimeMS'] as $option) {
             if (isset($this->options[$option])) {
                 $cmd[$option] = $this->options[$option];
             }
         }
-
         try {
             /** @var CursorInterface<array> $cursor */
             $cursor = $server->executeReadCommand($this->databaseName, new Command($cmd), $this->createOptions());
@@ -101,18 +94,10 @@ final class ListIndexes
             if ($e->getCode() === self::ERROR_CODE_NAMESPACE_NOT_FOUND || $e->getCode() === self::ERROR_CODE_DATABASE_NOT_FOUND) {
                 return new EmptyIterator();
             }
-
             throw $e;
         }
-
-        return new CachingIterator(
-            new CallbackIterator(
-                $cursor,
-                fn (array $indexInfo): IndexInfo => new IndexInfo($indexInfo),
-            ),
-        );
+        return new CachingIterator(new CallbackIterator($cursor, fn(array $indexInfo): IndexInfo => new IndexInfo($indexInfo)));
     }
-
     /**
      * Create options for executing the command.
      *
@@ -124,11 +109,9 @@ final class ListIndexes
     private function createOptions(): array
     {
         $options = [];
-
         if (isset($this->options['session'])) {
             $options['session'] = $this->options['session'];
         }
-
         return $options;
     }
 }

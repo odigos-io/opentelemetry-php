@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\DBAL;
 
 use Doctrine\DBAL\Driver\IBMDB2;
@@ -16,10 +15,8 @@ use Doctrine\DBAL\Exception\InvalidDriverClass;
 use Doctrine\DBAL\Exception\InvalidWrapperClass;
 use Doctrine\DBAL\Exception\UnknownDriver;
 use SensitiveParameter;
-
 use function array_keys;
 use function is_a;
-
 /**
  * Factory for creating {@see Connection} instances.
  *
@@ -74,20 +71,7 @@ final class DriverManager
      *
      * To add your own driver use the 'driverClass' parameter to {@see DriverManager::getConnection()}.
      */
-    private const DRIVER_MAP = [
-        'pdo_mysql'  => PDO\MySQL\Driver::class,
-        'pdo_sqlite' => PDO\SQLite\Driver::class,
-        'pdo_pgsql'  => PDO\PgSQL\Driver::class,
-        'pdo_oci'    => PDO\OCI\Driver::class,
-        'oci8'       => OCI8\Driver::class,
-        'ibm_db2'    => IBMDB2\Driver::class,
-        'pdo_sqlsrv' => PDO\SQLSrv\Driver::class,
-        'mysqli'     => Mysqli\Driver::class,
-        'pgsql'      => PgSQL\Driver::class,
-        'sqlsrv'     => SQLSrv\Driver::class,
-        'sqlite3'    => SQLite3\Driver::class,
-    ];
-
+    private const DRIVER_MAP = ['pdo_mysql' => PDO\MySQL\Driver::class, 'pdo_sqlite' => PDO\SQLite\Driver::class, 'pdo_pgsql' => PDO\PgSQL\Driver::class, 'pdo_oci' => PDO\OCI\Driver::class, 'oci8' => OCI8\Driver::class, 'ibm_db2' => IBMDB2\Driver::class, 'pdo_sqlsrv' => PDO\SQLSrv\Driver::class, 'mysqli' => Mysqli\Driver::class, 'pgsql' => PgSQL\Driver::class, 'sqlsrv' => SQLSrv\Driver::class, 'sqlite3' => SQLite3\Driver::class];
     /**
      * Private constructor. This class cannot be instantiated.
      *
@@ -96,7 +80,6 @@ final class DriverManager
     private function __construct()
     {
     }
-
     /**
      * Creates a connection object based on the specified parameters.
      * This method returns a Doctrine\DBAL\Connection which wraps the underlying
@@ -134,27 +117,20 @@ final class DriverManager
      *
      * @template T of Connection
      */
-    public static function getConnection(
-        #[SensitiveParameter]
-        array $params,
-        ?Configuration $config = null,
-    ): Connection {
-        $config ??= new Configuration();
-        $driver   = self::createDriver($params['driver'] ?? null, $params['driverClass'] ?? null);
-
+    public static function getConnection(#[SensitiveParameter] array $params, ?\Doctrine\DBAL\Configuration $config = null): \Doctrine\DBAL\Connection
+    {
+        $config ??= new \Doctrine\DBAL\Configuration();
+        $driver = self::createDriver($params['driver'] ?? null, $params['driverClass'] ?? null);
         foreach ($config->getMiddlewares() as $middleware) {
             $driver = $middleware->wrap($driver);
         }
-
         /** @var class-string<Connection> $wrapperClass */
-        $wrapperClass = $params['wrapperClass'] ?? Connection::class;
-        if (! is_a($wrapperClass, Connection::class, true)) {
+        $wrapperClass = $params['wrapperClass'] ?? \Doctrine\DBAL\Connection::class;
+        if (!is_a($wrapperClass, \Doctrine\DBAL\Connection::class, \true)) {
             throw InvalidWrapperClass::new($wrapperClass);
         }
-
         return new $wrapperClass($params, $driver, $config);
     }
-
     /**
      * Returns the list of supported drivers.
      *
@@ -165,27 +141,23 @@ final class DriverManager
     {
         return array_keys(self::DRIVER_MAP);
     }
-
     /**
      * @param class-string<Driver>|null     $driverClass
      * @param key-of<self::DRIVER_MAP>|null $driver
      */
-    private static function createDriver(?string $driver, ?string $driverClass): Driver
+    private static function createDriver(?string $driver, ?string $driverClass): \Doctrine\DBAL\Driver
     {
         if ($driverClass === null) {
             if ($driver === null) {
                 throw DriverRequired::new();
             }
-
-            if (! isset(self::DRIVER_MAP[$driver])) {
+            if (!isset(self::DRIVER_MAP[$driver])) {
                 throw UnknownDriver::new($driver, array_keys(self::DRIVER_MAP));
             }
-
             $driverClass = self::DRIVER_MAP[$driver];
-        } elseif (! is_a($driverClass, Driver::class, true)) {
+        } elseif (!is_a($driverClass, \Doctrine\DBAL\Driver::class, \true)) {
             throw InvalidDriverClass::new($driverClass);
         }
-
         return new $driverClass();
     }
 }

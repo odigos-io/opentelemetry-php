@@ -2,6 +2,6 @@
 
 namespace Carbon\Doctrine;
 
-class CarbonImmutableType extends DateTimeImmutableType implements CarbonDoctrineType
+class CarbonImmutableType extends \Carbon\Doctrine\DateTimeImmutableType implements \Carbon\Doctrine\CarbonDoctrineType
 {
 }

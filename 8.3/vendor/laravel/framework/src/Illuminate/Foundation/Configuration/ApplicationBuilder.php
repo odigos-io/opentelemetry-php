@@ -19,7 +19,6 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
 use Laravel\Folio\Folio;
-
 class ApplicationBuilder
 {
     /**
@@ -28,28 +27,24 @@ class ApplicationBuilder
      * @var array
      */
     protected array $pendingProviders = [];
-
     /**
      * Any additional routing callbacks that should be invoked while registering routes.
      *
      * @var array
      */
     protected array $additionalRoutingCallbacks = [];
-
     /**
      * The Folio / page middleware that have been defined by the user.
      *
      * @var array
      */
     protected array $pageMiddleware = [];
-
     /**
      * Create a new application builder instance.
      */
     public function __construct(protected Application $app)
     {
     }
-
     /**
      * Register the standard kernel classes for the application.
      *
@@ -57,19 +52,10 @@ class ApplicationBuilder
      */
     public function withKernels()
     {
-        $this->app->singleton(
-            \Illuminate\Contracts\Http\Kernel::class,
-            \Illuminate\Foundation\Http\Kernel::class,
-        );
-
-        $this->app->singleton(
-            \Illuminate\Contracts\Console\Kernel::class,
-            \Illuminate\Foundation\Console\Kernel::class,
-        );
-
+        $this->app->singleton(\Illuminate\Contracts\Http\Kernel::class, \Illuminate\Foundation\Http\Kernel::class);
+        $this->app->singleton(\Illuminate\Contracts\Console\Kernel::class, \Illuminate\Foundation\Console\Kernel::class);
         return $this;
     }
-
     /**
      * Register additional service providers.
      *
@@ -77,45 +63,33 @@ class ApplicationBuilder
      * @param  bool  $withBootstrapProviders
      * @return $this
      */
-    public function withProviders(array $providers = [], bool $withBootstrapProviders = true)
+    public function withProviders(array $providers = [], bool $withBootstrapProviders = \true)
     {
-        RegisterProviders::merge(
-            $providers,
-            $withBootstrapProviders
-                ? $this->app->getBootstrapProvidersPath()
-                : null
-        );
-
+        RegisterProviders::merge($providers, $withBootstrapProviders ? $this->app->getBootstrapProvidersPath() : null);
         return $this;
     }
-
     /**
      * Register the core event service provider for the application.
      *
      * @param  iterable<int, string>|bool  $discover
      * @return $this
      */
-    public function withEvents(iterable|bool $discover = true)
+    public function withEvents(iterable|bool $discover = \true)
     {
         if (is_iterable($discover)) {
             AppEventServiceProvider::setEventDiscoveryPaths($discover);
         }
-
-        if ($discover === false) {
+        if ($discover === \false) {
             AppEventServiceProvider::disableEventDiscovery();
         }
-
-        if (! isset($this->pendingProviders[AppEventServiceProvider::class])) {
+        if (!isset($this->pendingProviders[AppEventServiceProvider::class])) {
             $this->app->booting(function () {
                 $this->app->register(AppEventServiceProvider::class);
             });
         }
-
-        $this->pendingProviders[AppEventServiceProvider::class] = true;
-
+        $this->pendingProviders[AppEventServiceProvider::class] = \true;
         return $this;
     }
-
     /**
      * Register the broadcasting services for the application.
      *
@@ -126,16 +100,13 @@ class ApplicationBuilder
     public function withBroadcasting(string $channels, array $attributes = [])
     {
         $this->app->booted(function () use ($channels, $attributes) {
-            Broadcast::routes(! empty($attributes) ? $attributes : null);
-
+            Broadcast::routes(!empty($attributes) ? $attributes : null);
             if (file_exists($channels)) {
                 require $channels;
             }
         });
-
         return $this;
     }
-
     /**
      * Register the routing services for the application.
      *
@@ -149,41 +120,26 @@ class ApplicationBuilder
      * @param  callable|null  $then
      * @return $this
      */
-    public function withRouting(?Closure $using = null,
-        array|string|null $web = null,
-        array|string|null $api = null,
-        ?string $commands = null,
-        ?string $channels = null,
-        ?string $pages = null,
-        ?string $health = null,
-        string $apiPrefix = 'api',
-        ?callable $then = null)
+    public function withRouting(?Closure $using = null, array|string|null $web = null, array|string|null $api = null, ?string $commands = null, ?string $channels = null, ?string $pages = null, ?string $health = null, string $apiPrefix = 'api', ?callable $then = null)
     {
         if (is_null($using) && (is_string($web) || is_array($web) || is_string($api) || is_array($api) || is_string($pages) || is_string($health)) || is_callable($then)) {
             $using = $this->buildRoutingCallback($web, $api, $pages, $health, $apiPrefix, $then);
-
             if (is_string($health)) {
                 PreventRequestsDuringMaintenance::except($health);
             }
         }
-
         AppRouteServiceProvider::loadRoutesUsing($using);
-
         $this->app->booting(function () {
-            $this->app->register(AppRouteServiceProvider::class, force: true);
+            $this->app->register(AppRouteServiceProvider::class, force: \true);
         });
-
-        if (is_string($commands) && realpath($commands) !== false) {
+        if (is_string($commands) && realpath($commands) !== \false) {
             $this->withCommands([$commands]);
         }
-
-        if (is_string($channels) && realpath($channels) !== false) {
+        if (is_string($channels) && realpath($channels) !== \false) {
             $this->withBroadcasting($channels);
         }
-
         return $this;
     }
-
     /**
      * Create the routing callback for the application.
      *
@@ -195,18 +151,13 @@ class ApplicationBuilder
      * @param  callable|null  $then
      * @return \Closure
      */
-    protected function buildRoutingCallback(array|string|null $web,
-        array|string|null $api,
-        ?string $pages,
-        ?string $health,
-        string $apiPrefix,
-        ?callable $then)
+    protected function buildRoutingCallback(array|string|null $web, array|string|null $api, ?string $pages, ?string $health, string $apiPrefix, ?callable $then)
     {
         return function () use ($web, $api, $pages, $health, $apiPrefix, $then) {
             if (is_string($api) || is_array($api)) {
                 if (is_array($api)) {
                     foreach ($api as $apiRoute) {
-                        if (realpath($apiRoute) !== false) {
+                        if (realpath($apiRoute) !== \false) {
                             Route::middleware('api')->prefix($apiPrefix)->group($apiRoute);
                         }
                     }
@@ -214,33 +165,25 @@ class ApplicationBuilder
                     Route::middleware('api')->prefix($apiPrefix)->group($api);
                 }
             }
-
             if (is_string($health)) {
                 Route::get($health, function () {
                     $exception = null;
-
                     try {
-                        Event::dispatch(new DiagnosingHealth);
+                        Event::dispatch(new DiagnosingHealth());
                     } catch (\Throwable $e) {
                         if (app()->hasDebugModeEnabled()) {
                             throw $e;
                         }
-
                         report($e);
-
                         $exception = $e->getMessage();
                     }
-
-                    return response(View::file(__DIR__.'/../resources/health-up.blade.php', [
-                        'exception' => $exception,
-                    ]), status: $exception ? 500 : 200);
+                    return response(View::file(__DIR__ . '/../resources/health-up.blade.php', ['exception' => $exception]), status: $exception ? 500 : 200);
                 });
             }
-
             if (is_string($web) || is_array($web)) {
                 if (is_array($web)) {
                     foreach ($web as $webRoute) {
-                        if (realpath($webRoute) !== false) {
+                        if (realpath($webRoute) !== \false) {
                             Route::middleware('web')->group($webRoute);
                         }
                     }
@@ -248,23 +191,17 @@ class ApplicationBuilder
                     Route::middleware('web')->group($web);
                 }
             }
-
             foreach ($this->additionalRoutingCallbacks as $callback) {
                 $callback();
             }
-
-            if (is_string($pages) &&
-                realpath($pages) !== false &&
-                class_exists(Folio::class)) {
+            if (is_string($pages) && realpath($pages) !== \false && class_exists(Folio::class)) {
                 Folio::route($pages, middleware: $this->pageMiddleware);
             }
-
             if (is_callable($then)) {
                 $then($this->app);
             }
         };
     }
-
     /**
      * Register the global middleware, middleware groups, and middleware aliases for the application.
      *
@@ -274,38 +211,30 @@ class ApplicationBuilder
     public function withMiddleware(?callable $callback = null)
     {
         $this->app->afterResolving(HttpKernel::class, function ($kernel) use ($callback) {
-            $middleware = (new Middleware)
-                ->redirectGuestsTo(fn () => route('login'));
-
-            if (! is_null($callback)) {
+            $middleware = (new \Illuminate\Foundation\Configuration\Middleware())->redirectGuestsTo(fn() => route('login'));
+            if (!is_null($callback)) {
                 $callback($middleware);
             }
-
             $this->pageMiddleware = $middleware->getPageMiddleware();
             $kernel->setGlobalMiddleware($middleware->getGlobalMiddleware());
             $kernel->setMiddlewareGroups($middleware->getMiddlewareGroups());
             $kernel->setMiddlewareAliases($middleware->getMiddlewareAliases());
-
             if ($priorities = $middleware->getMiddlewarePriority()) {
                 $kernel->setMiddlewarePriority($priorities);
             }
-
             if ($priorityAppends = $middleware->getMiddlewarePriorityAppends()) {
                 foreach ($priorityAppends as $newMiddleware => $after) {
                     $kernel->addToMiddlewarePriorityAfter($after, $newMiddleware);
                 }
             }
-
             if ($priorityPrepends = $middleware->getMiddlewarePriorityPrepends()) {
                 foreach ($priorityPrepends as $newMiddleware => $before) {
                     $kernel->addToMiddlewarePriorityBefore($before, $newMiddleware);
                 }
             }
         });
-
         return $this;
     }
-
     /**
      * Register additional Artisan commands with the application.
      *
@@ -317,21 +246,17 @@ class ApplicationBuilder
         if (empty($commands)) {
             $commands = [$this->app->path('Console/Commands')];
         }
-
         $this->app->afterResolving(ConsoleKernel::class, function ($kernel) use ($commands) {
-            [$commands, $paths] = (new Collection($commands))->partition(fn ($command) => class_exists($command));
-            [$routes, $paths] = $paths->partition(fn ($path) => is_file($path));
-
+            [$commands, $paths] = (new Collection($commands))->partition(fn($command) => class_exists($command));
+            [$routes, $paths] = $paths->partition(fn($path) => is_file($path));
             $this->app->booted(static function () use ($kernel, $commands, $paths, $routes) {
                 $kernel->addCommands($commands->all());
                 $kernel->addCommandPaths($paths->all());
                 $kernel->addCommandRoutePaths($routes->all());
             });
         });
-
         return $this;
     }
-
     /**
      * Register additional Artisan route paths.
      *
@@ -341,12 +266,10 @@ class ApplicationBuilder
     protected function withCommandRouting(array $paths)
     {
         $this->app->afterResolving(ConsoleKernel::class, function ($kernel) use ($paths) {
-            $this->app->booted(fn () => $kernel->addCommandRoutePaths($paths));
+            $this->app->booted(fn() => $kernel->addCommandRoutePaths($paths));
         });
-
         return $this;
     }
-
     /**
      * Register the scheduled tasks for the application.
      *
@@ -355,11 +278,9 @@ class ApplicationBuilder
      */
     public function withSchedule(callable $callback)
     {
-        Artisan::starting(fn () => $callback($this->app->make(Schedule::class)));
-
+        Artisan::starting(fn() => $callback($this->app->make(Schedule::class)));
         return $this;
     }
-
     /**
      * Register and configure the application's exception handler.
      *
@@ -368,21 +289,12 @@ class ApplicationBuilder
      */
     public function withExceptions(?callable $using = null)
     {
-        $this->app->singleton(
-            \Illuminate\Contracts\Debug\ExceptionHandler::class,
-            \Illuminate\Foundation\Exceptions\Handler::class
-        );
-
+        $this->app->singleton(\Illuminate\Contracts\Debug\ExceptionHandler::class, \Illuminate\Foundation\Exceptions\Handler::class);
         if ($using !== null) {
-            $this->app->afterResolving(
-                \Illuminate\Foundation\Exceptions\Handler::class,
-                fn ($handler) => $using(new Exceptions($handler)),
-            );
+            $this->app->afterResolving(\Illuminate\Foundation\Exceptions\Handler::class, fn($handler) => $using(new \Illuminate\Foundation\Configuration\Exceptions($handler)));
         }
-
         return $this;
     }
-
     /**
      * Register an array of container bindings to be bound when the application is booting.
      *
@@ -397,7 +309,6 @@ class ApplicationBuilder
             }
         });
     }
-
     /**
      * Register an array of singleton container bindings to be bound when the application is booting.
      *
@@ -416,7 +327,6 @@ class ApplicationBuilder
             }
         });
     }
-
     /**
      * Register an array of scoped singleton container bindings to be bound when the application is booting.
      *
@@ -435,7 +345,6 @@ class ApplicationBuilder
             }
         });
     }
-
     /**
      * Register a callback to be invoked when the application's service providers are registered.
      *
@@ -445,10 +354,8 @@ class ApplicationBuilder
     public function registered(callable $callback)
     {
         $this->app->registered($callback);
-
         return $this;
     }
-
     /**
      * Register a callback to be invoked when the application is "booting".
      *
@@ -458,10 +365,8 @@ class ApplicationBuilder
     public function booting(callable $callback)
     {
         $this->app->booting($callback);
-
         return $this;
     }
-
     /**
      * Register a callback to be invoked when the application is "booted".
      *
@@ -471,10 +376,8 @@ class ApplicationBuilder
     public function booted(callable $callback)
     {
         $this->app->booted($callback);
-
         return $this;
     }
-
     /**
      * Get the application instance.
      *

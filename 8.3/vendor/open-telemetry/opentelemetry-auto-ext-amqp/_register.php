@@ -1,22 +1,18 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Odigos;
 
-use OpenTelemetry\Contrib\Instrumentation\ExtAmqp\ExtAmqpInstrumentation;
+use Odigos\OpenTelemetry\Contrib\Instrumentation\ExtAmqp\ExtAmqpInstrumentation;
 use OpenTelemetry\SDK\Sdk;
-
-if (class_exists(Sdk::class) && Sdk::isInstrumentationDisabled(ExtAmqpInstrumentation::NAME) === true) {
+if (\class_exists(Sdk::class) && Sdk::isInstrumentationDisabled(ExtAmqpInstrumentation::NAME) === \true) {
     return;
 }
-
-if (extension_loaded('opentelemetry') === false) {
-    trigger_error('The opentelemetry extension must be loaded in order to autoload the OpenTelemetry ext-amqp auto-instrumentation', E_USER_WARNING);
-
+if (\extension_loaded('opentelemetry') === \false) {
+    \trigger_error('The opentelemetry extension must be loaded in order to autoload the OpenTelemetry ext-amqp auto-instrumentation', \E_USER_WARNING);
     return;
 }
-
-if (!extension_loaded('amqp')) {
+if (!\extension_loaded('amqp')) {
     return;
 }
-
 ExtAmqpInstrumentation::register();

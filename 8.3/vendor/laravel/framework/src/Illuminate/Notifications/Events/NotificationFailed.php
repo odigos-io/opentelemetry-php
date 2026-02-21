@@ -4,11 +4,9 @@ namespace Illuminate\Notifications\Events;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
-
 class NotificationFailed
 {
     use Queueable, SerializesModels;
-
     /**
      * Create a new event instance.
      *
@@ -17,11 +15,7 @@ class NotificationFailed
      * @param  string  $channel  The channel name.
      * @param  array  $data  The data needed to process this failure.
      */
-    public function __construct(
-        public $notifiable,
-        public $notification,
-        public $channel,
-        public $data = [],
-    ) {
+    public function __construct(public $notifiable, public $notification, public $channel, public $data = [])
+    {
     }
 }

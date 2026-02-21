@@ -1,5 +1,7 @@
 <?php
 
+namespace Odigos;
+
 /**
  * Sets height/width defaults for <textarea>
  */
@@ -23,5 +25,8 @@ class HTMLPurifier_AttrTransform_Textarea extends HTMLPurifier_AttrTransform
         return $attr;
     }
 }
-
+/**
+ * Sets height/width defaults for <textarea>
+ */
+\class_alias('Odigos\HTMLPurifier_AttrTransform_Textarea', 'HTMLPurifier_AttrTransform_Textarea', \false);
 // vim: et sw=4 sts=4

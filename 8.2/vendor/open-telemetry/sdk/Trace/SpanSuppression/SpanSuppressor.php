@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\SDK\Trace\SpanSuppression;
 
 /**
@@ -12,5 +11,5 @@ interface SpanSuppressor
     /**
      * @param int<0, 4> $spanKind
      */
-    public function resolveSuppression(int $spanKind, array $attributes): SpanSuppression;
+    public function resolveSuppression(int $spanKind, array $attributes): \OpenTelemetry\SDK\Trace\SpanSuppression\SpanSuppression;
 }

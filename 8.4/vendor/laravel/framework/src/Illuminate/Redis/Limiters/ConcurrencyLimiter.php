@@ -6,7 +6,6 @@ use Illuminate\Contracts\Redis\LimiterTimeoutException;
 use Illuminate\Support\Sleep;
 use Illuminate\Support\Str;
 use Throwable;
-
 class ConcurrencyLimiter
 {
     /**
@@ -15,28 +14,24 @@ class ConcurrencyLimiter
      * @var \Illuminate\Redis\Connections\Connection
      */
     protected $redis;
-
     /**
      * The name of the limiter.
      *
      * @var string
      */
     protected $name;
-
     /**
      * The allowed number of concurrent tasks.
      *
      * @var int
      */
     protected $maxLocks;
-
     /**
      * The number of seconds a slot should be maintained.
      *
      * @var int
      */
     protected $releaseAfter;
-
     /**
      * Create a new concurrency limiter instance.
      *
@@ -52,7 +47,6 @@ class ConcurrencyLimiter
         $this->maxLocks = $maxLocks;
         $this->releaseAfter = $releaseAfter;
     }
-
     /**
      * Attempt to acquire the lock for the given number of seconds.
      *
@@ -67,17 +61,13 @@ class ConcurrencyLimiter
     public function block($timeout, $callback = null, $sleep = 250)
     {
         $starting = time();
-
         $id = Str::random(20);
-
-        while (! $slot = $this->acquire($id)) {
+        while (!$slot = $this->acquire($id)) {
             if (time() - $timeout >= $starting) {
-                throw new LimiterTimeoutException;
+                throw new LimiterTimeoutException();
             }
-
             Sleep::usleep($sleep * 1000);
         }
-
         if (is_callable($callback)) {
             try {
                 return tap($callback(), function () use ($slot, $id) {
@@ -85,14 +75,11 @@ class ConcurrencyLimiter
                 });
             } catch (Throwable $exception) {
                 $this->release($slot, $id);
-
                 throw $exception;
             }
         }
-
-        return true;
+        return \true;
     }
-
     /**
      * Attempt to acquire the lock.
      *
@@ -102,15 +89,10 @@ class ConcurrencyLimiter
     protected function acquire($id)
     {
         $slots = array_map(function ($i) {
-            return $this->name.$i;
+            return $this->name . $i;
         }, range(1, $this->maxLocks));
-
-        return $this->redis->eval(...array_merge(
-            [$this->lockScript(), count($slots)],
-            array_merge($slots, [$this->name, $this->releaseAfter, $id])
-        ));
+        return $this->redis->eval(...array_merge([$this->lockScript(), count($slots)], array_merge($slots, [$this->name, $this->releaseAfter, $id])));
     }
-
     /**
      * Get the Lua script for acquiring a lock.
      *
@@ -132,7 +114,6 @@ for index, value in pairs(redis.call('mget', unpack(KEYS))) do
 end
 LUA;
     }
-
     /**
      * Release the lock.
      *
@@ -144,7 +125,6 @@ LUA;
     {
         $this->redis->eval($this->releaseScript(), 1, $key, $id);
     }
-
     /**
      * Get the Lua script to atomically release a lock.
      *

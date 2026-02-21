@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -28,23 +28,19 @@ class Constraint
     /**
      * @var string
      */
-    public const PRIMARY = TableSchema::CONSTRAINT_PRIMARY;
-
+    public const PRIMARY = \Cake\Database\Schema\TableSchema::CONSTRAINT_PRIMARY;
     /**
      * @var string
      */
-    public const UNIQUE = TableSchema::CONSTRAINT_UNIQUE;
-
+    public const UNIQUE = \Cake\Database\Schema\TableSchema::CONSTRAINT_UNIQUE;
     /**
      * @var string
      */
-    public const FOREIGN = TableSchema::CONSTRAINT_FOREIGN;
-
+    public const FOREIGN = \Cake\Database\Schema\TableSchema::CONSTRAINT_FOREIGN;
     /**
      * @var string
      */
-    public const CHECK = TableSchema::CONSTRAINT_CHECK;
-
+    public const CHECK = \Cake\Database\Schema\TableSchema::CONSTRAINT_CHECK;
     /**
      * Constructor
      *
@@ -52,13 +48,9 @@ class Constraint
      * @param array<string> $columns The columns to constraint.
      * @param string $type The type of constraint, e.g. 'unique', 'primary'.
      */
-    public function __construct(
-        protected string $name,
-        protected array $columns,
-        protected string $type,
-    ) {
+    public function __construct(protected string $name, protected array $columns, protected string $type)
+    {
     }
-
     /**
      * Sets the constraint columns.
      *
@@ -67,11 +59,9 @@ class Constraint
      */
     public function setColumns(string|array $columns)
     {
-        $this->columns = (array)$columns;
-
+        $this->columns = (array) $columns;
         return $this;
     }
-
     /**
      * Gets the constraint columns.
      *
@@ -81,7 +71,6 @@ class Constraint
     {
         return $this->columns;
     }
-
     /**
      * Sets the constraint type.
      *
@@ -91,10 +80,8 @@ class Constraint
     public function setType(string $type)
     {
         $this->type = $type;
-
         return $this;
     }
-
     /**
      * Gets the constraint type.
      *
@@ -104,7 +91,6 @@ class Constraint
     {
         return $this->type;
     }
-
     /**
      * Sets the constraint name.
      *
@@ -114,10 +100,8 @@ class Constraint
     public function setName(string $name)
     {
         $this->name = $name;
-
         return $this;
     }
-
     /**
      * Gets the constraint name.
      *
@@ -127,7 +111,6 @@ class Constraint
     {
         return $this->name;
     }
-
     /**
      * Converts a constraint to an array that is compatible
      * with the constructor.
@@ -136,10 +119,6 @@ class Constraint
      */
     public function toArray(): array
     {
-        return [
-            'name' => $this->name,
-            'type' => $this->type,
-            'columns' => $this->columns,
-        ];
+        return ['name' => $this->name, 'type' => $this->type, 'columns' => $this->columns];
     }
 }

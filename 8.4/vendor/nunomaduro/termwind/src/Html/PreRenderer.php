@@ -1,13 +1,11 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Odigos\Termwind\Html;
 
-namespace Termwind\Html;
-
-use Termwind\Components\Element;
-use Termwind\Termwind;
-use Termwind\ValueObjects\Node;
-
+use Odigos\Termwind\Components\Element;
+use Odigos\Termwind\Termwind;
+use Odigos\Termwind\ValueObjects\Node;
 /**
  * @internal
  */
@@ -22,25 +20,12 @@ final class PreRenderer
         if (reset($lines) === '') {
             array_shift($lines);
         }
-
         if (end($lines) === '') {
             array_pop($lines);
         }
-
-        $maxStrLen = array_reduce(
-            $lines,
-            static fn (int $max, string $line) => ($max < strlen($line)) ? strlen($line) : $max,
-            0
-        );
-
+        $maxStrLen = array_reduce($lines, static fn(int $max, string $line) => $max < strlen($line) ? strlen($line) : $max, 0);
         $styles = $node->getClassAttribute();
-        $html = array_map(
-            static fn (string $line) => (string) Termwind::div(str_pad($line, $maxStrLen + 3), $styles),
-            $lines
-        );
-
-        return Termwind::raw(
-            implode('', $html)
-        );
+        $html = array_map(static fn(string $line) => (string) Termwind::div(str_pad($line, $maxStrLen + 3), $styles), $lines);
+        return Termwind::raw(implode('', $html));
     }
 }

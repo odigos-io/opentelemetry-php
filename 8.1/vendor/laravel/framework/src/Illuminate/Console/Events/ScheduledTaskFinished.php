@@ -3,7 +3,6 @@
 namespace Illuminate\Console\Events;
 
 use Illuminate\Console\Scheduling\Event;
-
 class ScheduledTaskFinished
 {
     /**
@@ -12,14 +11,12 @@ class ScheduledTaskFinished
      * @var \Illuminate\Console\Scheduling\Event
      */
     public $task;
-
     /**
      * The runtime of the scheduled event.
      *
      * @var float
      */
     public $runtime;
-
     /**
      * Create a new event instance.
      *

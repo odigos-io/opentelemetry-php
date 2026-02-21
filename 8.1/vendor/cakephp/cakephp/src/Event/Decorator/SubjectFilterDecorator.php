@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -18,7 +18,6 @@ namespace Cake\Event\Decorator;
 
 use Cake\Core\Exception\CakeException;
 use Cake\Event\EventInterface;
-
 /**
  * Event Subject Filter Decorator
  *
@@ -28,7 +27,7 @@ use Cake\Event\EventInterface;
  * The `allowedSubject` option can be a list of class names, if you want
  * to check multiple classes.
  */
-class SubjectFilterDecorator extends AbstractDecorator
+class SubjectFilterDecorator extends \Cake\Event\Decorator\AbstractDecorator
 {
     /**
      * @inheritDoc
@@ -38,10 +37,8 @@ class SubjectFilterDecorator extends AbstractDecorator
         if (!$this->canTrigger($args[0])) {
             return null;
         }
-
         return $this->_call($args);
     }
-
     /**
      * Checks if the event is triggered for this listener.
      *
@@ -57,13 +54,11 @@ class SubjectFilterDecorator extends AbstractDecorator
         if (is_string($this->_options['allowedSubject'])) {
             $this->_options['allowedSubject'] = [$this->_options['allowedSubject']];
         }
-
         try {
             $subject = $event->getSubject();
         } catch (CakeException) {
-            return false;
+            return \false;
         }
-
-        return in_array($subject::class, $this->_options['allowedSubject'], true);
+        return in_array($subject::class, $this->_options['allowedSubject'], \true);
     }
 }

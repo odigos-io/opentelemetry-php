@@ -1,4 +1,7 @@
 <?php
+
+namespace Odigos;
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -16,49 +19,62 @@
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use function Cake\Core\h;
-
 $namespace = Configure::read('App.namespace');
-
 $pluginPath = Configure::read('App.paths.plugins.0');
 $pluginDot = empty($plugin) ? null : $plugin . '.';
-
 if (empty($plugin)) {
-    $filePath = APP_DIR . DIRECTORY_SEPARATOR;
-    $namespace = str_replace('/', '\\', $plugin);
+    $filePath = \APP_DIR . \DIRECTORY_SEPARATOR;
+    $namespace = \str_replace('/', '\\', $plugin);
 }
 if (!empty($plugin) && Plugin::isLoaded($plugin)) {
     $filePath = Plugin::classPath($plugin);
 }
 if (!empty($plugin) && !Plugin::isLoaded($plugin)) {
-    $filePath = $pluginPath . h($plugin) . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR;
+    $filePath = $pluginPath . h($plugin) . \DIRECTORY_SEPARATOR . 'src' . \DIRECTORY_SEPARATOR;
 }
-
 $this->layout = 'dev_error';
 $this->assign('title', 'Missing View');
 $this->assign('templateName', 'missing_view.php');
-
 $this->start('subheading');
 ?>
     <strong>Error</strong>
-    <em><?= h($pluginDot . $class) ?></em> could not be found.
-    <?php if (!empty($plugin) && !Plugin::isLoaded($plugin)): ?>
-    Make sure your plugin <em><?= h($plugin) ?></em> is in the <?= h($pluginPath) ?> directory and was loaded.
-    <?php endif ?>
-    <?= $this->element('plugin_class_error', ['pluginPath' => $pluginPath]) ?>
+    <em><?php 
+echo h($pluginDot . $class);
+?></em> could not be found.
+    <?php 
+if (!empty($plugin) && !Plugin::isLoaded($plugin)) {
+    ?>
+    Make sure your plugin <em><?php 
+    echo h($plugin);
+    ?></em> is in the <?php 
+    echo h($pluginPath);
+    ?> directory and was loaded.
+    <?php 
+}
+?>
+    <?php 
+echo $this->element('plugin_class_error', ['pluginPath' => $pluginPath]);
+?>
 
-<?php $this->end() ?>
+<?php 
+$this->end();
+?>
 
-<?php $this->start('file') ?>
+<?php 
+$this->start('file');
+?>
 <p class="error">
     <strong>Suggestion</strong>
-    <?= sprintf('Create the class <em>%s</em> below in file: %s', h($class), $filePath . 'View' . DIRECTORY_SEPARATOR . h($class) . '.php'); ?>
+    <?php 
+echo \sprintf('Create the class <em>%s</em> below in file: %s', h($class), $filePath . 'View' . \DIRECTORY_SEPARATOR . h($class) . '.php');
+?>
 </p>
-<?php
+<?php 
 $code = <<<PHP
 <?php
-namespace {$namespace}\View;
+namespace {$namespace}\\View;
 
-use Cake\View\View;
+use Cake\\View\\View;
 
 class {$class}View extends View
 {
@@ -66,5 +82,8 @@ class {$class}View extends View
 }
 PHP;
 ?>
-<div class="code-dump"><?php highlight_string($code) ?></div>
-<?php $this->end() ?>
+<div class="code-dump"><?php 
+\highlight_string($code);
+?></div>
+<?php 
+$this->end();

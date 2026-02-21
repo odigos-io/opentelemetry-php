@@ -1,17 +1,13 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Laminas\Diactoros;
+declare (strict_types=1);
+namespace Odigos\Laminas\Diactoros;
 
 use Override;
 use Psr\Http\Message\StreamInterface;
 use Stringable;
-
 use function array_key_exists;
-
 use const SEEK_SET;
-
 /**
  * Implementation of PSR HTTP streams
  */
@@ -19,7 +15,6 @@ class CallbackStream implements StreamInterface, Stringable
 {
     /** @var callable|null */
     protected $callback;
-
     /**
      * @throws Exception\InvalidArgumentException
      */
@@ -27,7 +22,6 @@ class CallbackStream implements StreamInterface, Stringable
     {
         $this->attach($callback);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -36,7 +30,6 @@ class CallbackStream implements StreamInterface, Stringable
     {
         return $this->getContents();
     }
-
     /**
      * {@inheritdoc}
      */
@@ -45,7 +38,6 @@ class CallbackStream implements StreamInterface, Stringable
     {
         $this->callback = null;
     }
-
     /**
      * {@inheritdoc}
      *
@@ -54,11 +46,10 @@ class CallbackStream implements StreamInterface, Stringable
     #[Override]
     public function detach(): ?callable
     {
-        $callback       = $this->callback;
+        $callback = $this->callback;
         $this->callback = null;
         return $callback;
     }
-
     /**
      * Attach a new callback to the instance.
      */
@@ -66,7 +57,6 @@ class CallbackStream implements StreamInterface, Stringable
     {
         $this->callback = $callback;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -75,7 +65,6 @@ class CallbackStream implements StreamInterface, Stringable
     {
         return null;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -84,7 +73,6 @@ class CallbackStream implements StreamInterface, Stringable
     {
         throw Exception\UntellableStreamException::forCallbackStream();
     }
-
     /**
      * {@inheritdoc}
      */
@@ -93,16 +81,14 @@ class CallbackStream implements StreamInterface, Stringable
     {
         return $this->callback === null;
     }
-
     /**
      * {@inheritdoc}
      */
     #[Override]
     public function isSeekable(): bool
     {
-        return false;
+        return \false;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -111,7 +97,6 @@ class CallbackStream implements StreamInterface, Stringable
     {
         throw Exception\UnseekableStreamException::forCallbackStream();
     }
-
     /**
      * {@inheritdoc}
      */
@@ -120,16 +105,14 @@ class CallbackStream implements StreamInterface, Stringable
     {
         throw Exception\UnrewindableStreamException::forCallbackStream();
     }
-
     /**
      * {@inheritdoc}
      */
     #[Override]
     public function isWritable(): bool
     {
-        return false;
+        return \false;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -138,16 +121,14 @@ class CallbackStream implements StreamInterface, Stringable
     {
         throw Exception\UnwritableStreamException::forCallbackStream();
     }
-
     /**
      * {@inheritdoc}
      */
     #[Override]
     public function isReadable(): bool
     {
-        return false;
+        return \false;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -156,7 +137,6 @@ class CallbackStream implements StreamInterface, Stringable
     {
         throw Exception\UnreadableStreamException::forCallbackStream();
     }
-
     /**
      * {@inheritdoc}
      */
@@ -166,27 +146,19 @@ class CallbackStream implements StreamInterface, Stringable
         $callback = $this->detach();
         return $callback !== null ? (string) $callback() : '';
     }
-
     /**
      * {@inheritdoc}
      */
     #[Override]
     public function getMetadata(?string $key = null)
     {
-        $metadata = [
-            'eof'         => $this->eof(),
-            'stream_type' => 'callback',
-            'seekable'    => false,
-        ];
-
+        $metadata = ['eof' => $this->eof(), 'stream_type' => 'callback', 'seekable' => \false];
         if (null === $key) {
             return $metadata;
         }
-
-        if (! array_key_exists($key, $metadata)) {
+        if (!array_key_exists($key, $metadata)) {
             return null;
         }
-
         return $metadata[$key];
     }
 }

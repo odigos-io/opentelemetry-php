@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the league/commonmark package.
  *
@@ -10,12 +9,10 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Odigos\League\CommonMark\Parser\Block;
 
-namespace League\CommonMark\Parser\Block;
-
-use League\CommonMark\Parser\Cursor;
-use League\CommonMark\Parser\MarkdownParserStateInterface;
-
+use Odigos\League\CommonMark\Parser\Cursor;
+use Odigos\League\CommonMark\Parser\MarkdownParserStateInterface;
 /**
  * Interface for a block parser which identifies block starts.
  */

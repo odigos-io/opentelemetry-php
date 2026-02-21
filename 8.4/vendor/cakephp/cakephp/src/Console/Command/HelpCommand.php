@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -29,7 +29,6 @@ use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Utility\Inflector;
 use SimpleXMLElement;
-
 /**
  * Print out command list
  */
@@ -41,7 +40,6 @@ class HelpCommand extends BaseCommand implements CommandCollectionAwareInterface
      * @var \Cake\Console\CommandCollection
      */
     protected CommandCollection $commands;
-
     /**
      * @inheritDoc
      */
@@ -49,7 +47,6 @@ class HelpCommand extends BaseCommand implements CommandCollectionAwareInterface
     {
         $this->commands = $commands;
     }
-
     /**
      * Main function Prints out the list of commands.
      *
@@ -63,25 +60,19 @@ class HelpCommand extends BaseCommand implements CommandCollectionAwareInterface
         if ($commands instanceof ArrayIterator) {
             $commands->ksort();
         }
-
         // Filter by command prefix if provided
         $filter = $args->getArgument('command');
         if ($filter) {
             $commands = $this->filterByPrefix($commands, $filter);
         }
-
         if ($args->getOption('xml')) {
             $this->asXml($io, $commands);
-
             return static::CODE_SUCCESS;
         }
-
         $verbose = $io->level() >= ConsoleIo::VERBOSE;
         $this->asText($io, $commands, $verbose);
-
         return static::CODE_SUCCESS;
     }
-
     /**
      * Filter commands by prefix.
      *
@@ -97,10 +88,8 @@ class HelpCommand extends BaseCommand implements CommandCollectionAwareInterface
                 $filtered[$name] = $class;
             }
         }
-
         return $filtered;
     }
-
     /**
      * Output text.
      *
@@ -109,7 +98,7 @@ class HelpCommand extends BaseCommand implements CommandCollectionAwareInterface
      * @param bool $verbose Whether to show verbose output with descriptions.
      * @return void
      */
-    protected function asText(ConsoleIo $io, iterable $commands, bool $verbose = false): void
+    protected function asText(ConsoleIo $io, iterable $commands, bool $verbose = \false): void
     {
         $invert = [];
         foreach ($commands as $name => $class) {
@@ -123,7 +112,6 @@ class HelpCommand extends BaseCommand implements CommandCollectionAwareInterface
             $invert[$class] ??= [];
             $invert[$class][] = $name;
         }
-
         $commandList = [];
         foreach ($invert as $class => $names) {
             preg_match('/^(.+)\\\\Command\\\\/', $class, $matches);
@@ -135,14 +123,9 @@ class HelpCommand extends BaseCommand implements CommandCollectionAwareInterface
             if (str_contains($shortestName, '.')) {
                 [, $shortestName] = explode('.', $shortestName, 2);
             }
-
-            $commandList[] = [
-                'name' => $shortestName,
-                'description' => is_subclass_of($class, BaseCommand::class) ? $class::getDescription() : '',
-            ];
+            $commandList[] = ['name' => $shortestName, 'description' => is_subclass_of($class, BaseCommand::class) ? $class::getDescription() : ''];
         }
         sort($commandList);
-
         if ($verbose) {
             $version = Configure::version();
             $debug = Configure::read('debug') ? 'true' : 'false';
@@ -153,7 +136,6 @@ class HelpCommand extends BaseCommand implements CommandCollectionAwareInterface
             $this->outputCompactCommands($io, $commandList);
             $io->out('');
         }
-
         $root = $this->getRootName();
         $io->out("To run a command, type <info>`{$root} command_name [args|options]`</info>");
         $io->out("To get help on a specific command, type <info>`{$root} command_name --help`</info>");
@@ -163,7 +145,6 @@ class HelpCommand extends BaseCommand implements CommandCollectionAwareInterface
             $io->out('', 2);
         }
     }
-
     /**
      * Output commands grouped by plugin/namespace (verbose mode).
      *
@@ -186,27 +167,21 @@ class HelpCommand extends BaseCommand implements CommandCollectionAwareInterface
                 $prefix = 'cakephp';
             } elseif (method_exists($class, 'getGroup')) {
                 $prefix = $class::getGroup();
-            } elseif (in_array($namespace, $plugins, true)) {
+            } elseif (in_array($namespace, $plugins, \true)) {
                 $prefix = Inflector::underscore($namespace);
             }
             $shortestName = $this->getShortestName($names);
             if (str_contains($shortestName, '.')) {
                 [, $shortestName] = explode('.', $shortestName, 2);
             }
-
-            $grouped[$prefix][] = [
-                'name' => $shortestName,
-                'description' => is_subclass_of($class, BaseCommand::class) ? $class::getDescription() : '',
-            ];
+            $grouped[$prefix][] = ['name' => $shortestName, 'description' => is_subclass_of($class, BaseCommand::class) ? $class::getDescription() : ''];
         }
         ksort($grouped);
-
         if (isset($grouped['app'])) {
             $app = $grouped['app'];
             unset($grouped['app']);
             $grouped = ['app' => $app] + $grouped;
         }
-
         $io->out('<info>Available Commands:</info>', 2);
         foreach ($grouped as $prefix => $names) {
             $io->out("<info>{$prefix}</info>:");
@@ -214,13 +189,12 @@ class HelpCommand extends BaseCommand implements CommandCollectionAwareInterface
             foreach ($names as $data) {
                 $io->out(' - ' . $data['name']);
                 if ($data['description']) {
-                    $io->info(str_pad(" \u{2514}", 13, "\u{2500}") . ' ' . $data['description']);
+                    $io->info(str_pad(" └", 13, "─") . ' ' . $data['description']);
                 }
             }
             $io->out('');
         }
     }
-
     /**
      * Output commands with inline descriptions, grouped by prefix.
      *
@@ -231,25 +205,18 @@ class HelpCommand extends BaseCommand implements CommandCollectionAwareInterface
     protected function outputCompactCommands(ConsoleIo $io, array $commands): void
     {
         $maxWidth = $this->getTerminalWidth();
-
         // Group commands by their first word (prefix)
         $groups = [];
         foreach ($commands as $data) {
             $parts = explode(' ', $data['name'], 2);
             $prefix = $parts[0];
             $subcommand = $parts[1] ?? null;
-
             $groups[$prefix] ??= [];
-            $groups[$prefix][] = [
-                'subcommand' => $subcommand,
-                'description' => $data['description'],
-            ];
+            $groups[$prefix][] = ['subcommand' => $subcommand, 'description' => $data['description']];
         }
-
         // Separate single commands from grouped commands
         $singleCommands = [];
         $groupedCommands = [];
-
         foreach ($groups as $prefix => $cmds) {
             if (count($cmds) === 1 && $cmds[0]['subcommand'] === null) {
                 $singleCommands[$prefix] = $cmds[0];
@@ -257,22 +224,19 @@ class HelpCommand extends BaseCommand implements CommandCollectionAwareInterface
                 $groupedCommands[$prefix] = $cmds;
             }
         }
-
         // Find the longest full command name for padding
         $maxNameLength = 0;
         foreach ($commands as $data) {
             $maxNameLength = max($maxNameLength, strlen($data['name']));
         }
         $nameColumnWidth = $maxNameLength + 3;
-
         // Output single commands under "Available Commands:" header
-        $isFirst = true;
+        $isFirst = \true;
         if ($singleCommands !== []) {
             $io->out('<info>Available Commands:</info>');
             foreach ($singleCommands as $prefix => $cmd) {
                 $description = $cmd['description'];
                 $linePrefix = '  ' . str_pad($prefix, $nameColumnWidth - 2);
-
                 if ($description !== '') {
                     $description = strtok($description, "\n");
                     $this->outputWrappedLine($io, $linePrefix, $description, $maxWidth);
@@ -280,22 +244,18 @@ class HelpCommand extends BaseCommand implements CommandCollectionAwareInterface
                     $io->out($linePrefix);
                 }
             }
-            $isFirst = false;
+            $isFirst = \false;
         }
-
         // Output grouped commands with headers
         foreach ($groupedCommands as $prefix => $cmds) {
             if (!$isFirst) {
                 $io->out('');
             }
             $io->out("<info>{$prefix}:</info>");
-
             foreach ($cmds as $cmd) {
                 $fullName = $cmd['subcommand'] !== null ? $prefix . ' ' . $cmd['subcommand'] : $prefix;
                 $description = $cmd['description'];
-
                 $linePrefix = '  ' . str_pad($fullName, $nameColumnWidth - 2);
-
                 if ($description !== '') {
                     $description = strtok($description, "\n");
                     $this->outputWrappedLine($io, $linePrefix, $description, $maxWidth);
@@ -303,10 +263,9 @@ class HelpCommand extends BaseCommand implements CommandCollectionAwareInterface
                     $io->out($linePrefix);
                 }
             }
-            $isFirst = false;
+            $isFirst = \false;
         }
     }
-
     /**
      * Output a line with description, wrapping based on terminal width.
      *
@@ -317,57 +276,41 @@ class HelpCommand extends BaseCommand implements CommandCollectionAwareInterface
      * @param int $maxChars Maximum total description characters (0 = unlimited)
      * @return void
      */
-    protected function outputWrappedLine(
-        ConsoleIo $io,
-        string $prefix,
-        string $description,
-        int $maxWidth,
-        int $maxChars = 200,
-    ): void {
+    protected function outputWrappedLine(ConsoleIo $io, string $prefix, string $description, int $maxWidth, int $maxChars = 200): void
+    {
         $availableWidth = $maxWidth - strlen($prefix);
-
         if ($availableWidth <= 10) {
             $io->out($prefix);
-
             return;
         }
-
         // Truncate description to max chars if set
         if ($maxChars > 0 && strlen($description) > $maxChars) {
             $description = substr($description, 0, $maxChars - 3) . '...';
         }
-
         if (strlen($description) <= $availableWidth) {
             $io->out($prefix . $description);
-
             return;
         }
-
         // Wrap description across multiple lines
         $indent = str_repeat(' ', strlen($prefix));
         $remaining = $description;
-        $firstLine = true;
-
+        $firstLine = \true;
         while ($remaining !== '') {
             $linePrefix = $firstLine ? $prefix : $indent;
-            $firstLine = false;
-
+            $firstLine = \false;
             if (strlen($remaining) <= $availableWidth) {
                 $io->out($linePrefix . $remaining);
                 break;
             }
-
             // Find word break point
             $breakPoint = strrpos(substr($remaining, 0, $availableWidth), ' ');
-            if ($breakPoint === false || $breakPoint < $availableWidth / 2) {
+            if ($breakPoint === \false || $breakPoint < $availableWidth / 2) {
                 $breakPoint = $availableWidth;
             }
-
             $io->out($linePrefix . substr($remaining, 0, $breakPoint));
             $remaining = ltrim(substr($remaining, $breakPoint));
         }
     }
-
     /**
      * Get terminal width for line wrapping.
      *
@@ -377,29 +320,25 @@ class HelpCommand extends BaseCommand implements CommandCollectionAwareInterface
     {
         // Check COLUMNS environment variable (commonly set by shells)
         $columns = getenv('COLUMNS');
-        if ($columns !== false && is_numeric($columns) && (int)$columns > 0) {
-            return (int)$columns;
+        if ($columns !== \false && is_numeric($columns) && (int) $columns > 0) {
+            return (int) $columns;
         }
-
         // Try tput cols (Unix/Linux/macOS)
-        if (str_contains(strtolower(PHP_OS), 'win') === false) {
+        if (str_contains(strtolower(\PHP_OS), 'win') === \false) {
             $result = null;
             $output = exec('tput cols 2>/dev/null', result_code: $result);
-            if ($result === 0 && is_numeric($output) && (int)$output > 0) {
-                return (int)$output;
+            if ($result === 0 && is_numeric($output) && (int) $output > 0) {
+                return (int) $output;
             }
-
             // Try stty size (returns "rows cols")
             $output = exec('stty size 2>/dev/null', result_code: $result);
-            if ($result === 0 && $output !== false && preg_match('/^\d+\s+(\d+)$/', $output, $matches)) {
-                return (int)$matches[1];
+            if ($result === 0 && $output !== \false && preg_match('/^\d+\s+(\d+)$/', $output, $matches)) {
+                return (int) $matches[1];
             }
         }
-
         // Default to 120 columns (modern terminals)
         return 120;
     }
-
     /**
      * Output relevant paths if defined
      *
@@ -410,15 +349,15 @@ class HelpCommand extends BaseCommand implements CommandCollectionAwareInterface
     {
         $paths = [];
         if (Configure::check('App.dir')) {
-            $appPath = rtrim(Configure::read('App.dir'), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+            $appPath = rtrim(Configure::read('App.dir'), \DIRECTORY_SEPARATOR) . \DIRECTORY_SEPARATOR;
             // Extra space is to align output
             $paths['app'] = ' ' . $appPath;
         }
         if (defined('ROOT')) {
-            $paths['root'] = rtrim(ROOT, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+            $paths['root'] = rtrim(ROOT, \DIRECTORY_SEPARATOR) . \DIRECTORY_SEPARATOR;
         }
         if (defined('CORE_PATH')) {
-            $paths['core'] = rtrim(CORE_PATH, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+            $paths['core'] = rtrim(CORE_PATH, \DIRECTORY_SEPARATOR) . \DIRECTORY_SEPARATOR;
         }
         if ($paths === []) {
             return;
@@ -429,7 +368,6 @@ class HelpCommand extends BaseCommand implements CommandCollectionAwareInterface
         }
         $io->out('');
     }
-
     /**
      * @param array<string> $names Names
      * @return string
@@ -440,10 +378,8 @@ class HelpCommand extends BaseCommand implements CommandCollectionAwareInterface
         usort($names, function ($a, $b) {
             return strlen($a) - strlen($b);
         });
-
         return array_shift($names);
     }
-
     /**
      * Output as XML
      *
@@ -469,9 +405,8 @@ class HelpCommand extends BaseCommand implements CommandCollectionAwareInterface
             $shell->addAttribute('help', $name . ' -h');
         }
         $io->setOutputAs(ConsoleOutput::RAW);
-        $io->out((string)$shells->saveXML());
+        $io->out((string) $shells->saveXML());
     }
-
     /**
      * Gets the option parser instance and configures it.
      *
@@ -480,15 +415,7 @@ class HelpCommand extends BaseCommand implements CommandCollectionAwareInterface
      */
     protected function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
     {
-        $parser->setDescription(
-            'Get the list of available commands for this application.',
-        )->addArgument('command', [
-            'help' => 'Filter commands by prefix (e.g., "cache" to show only cache commands).',
-        ])->addOption('xml', [
-            'help' => 'Get the listing as XML.',
-            'boolean' => true,
-        ]);
-
+        $parser->setDescription('Get the list of available commands for this application.')->addArgument('command', ['help' => 'Filter commands by prefix (e.g., "cache" to show only cache commands).'])->addOption('xml', ['help' => 'Get the listing as XML.', 'boolean' => \true]);
         return $parser;
     }
 }

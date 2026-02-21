@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\DBAL\Types;
 
 use DateTimeImmutable;
@@ -9,11 +8,10 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Exception\InvalidFormat;
 use Doctrine\DBAL\Types\Exception\InvalidType;
 use Exception;
-
 /**
  * Immutable type of {@see DateTimeType}.
  */
-class DateTimeImmutableType extends Type implements PhpDateTimeMappingType
+class DateTimeImmutableType extends \Doctrine\DBAL\Types\Type implements \Doctrine\DBAL\Types\PhpDateTimeMappingType
 {
     /**
      * {@inheritDoc}
@@ -22,7 +20,6 @@ class DateTimeImmutableType extends Type implements PhpDateTimeMappingType
     {
         return $platform->getDateTimeTypeDeclarationSQL($column);
     }
-
     /**
      * @param T $value
      *
@@ -35,18 +32,11 @@ class DateTimeImmutableType extends Type implements PhpDateTimeMappingType
         if ($value === null) {
             return $value;
         }
-
         if ($value instanceof DateTimeImmutable) {
             return $value->format($platform->getDateTimeFormatString());
         }
-
-        throw InvalidType::new(
-            $value,
-            static::class,
-            ['null', DateTimeImmutable::class],
-        );
+        throw InvalidType::new($value, static::class, ['null', DateTimeImmutable::class]);
     }
-
     /**
      * @param T $value
      *
@@ -59,22 +49,14 @@ class DateTimeImmutableType extends Type implements PhpDateTimeMappingType
         if ($value === null || $value instanceof DateTimeImmutable) {
             return $value;
         }
-
         $dateTime = DateTimeImmutable::createFromFormat($platform->getDateTimeFormatString(), $value);
-
-        if ($dateTime !== false) {
+        if ($dateTime !== \false) {
             return $dateTime;
         }
-
         try {
             return new DateTimeImmutable($value);
         } catch (Exception $e) {
-            throw InvalidFormat::new(
-                $value,
-                static::class,
-                $platform->getDateTimeFormatString(),
-                $e,
-            );
+            throw InvalidFormat::new($value, static::class, $platform->getDateTimeFormatString(), $e);
         }
     }
 }

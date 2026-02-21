@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -22,11 +22,10 @@ use Cake\Console\ConsoleOptionParser;
 use Cake\Core\Plugin;
 use Cake\Core\PluginConfig;
 use function Cake\I18n\__d;
-
 /**
  * Displays all currently available plugins.
  */
-class PluginListCommand extends Command
+class PluginListCommand extends \Cake\Command\Command
 {
     /**
      * @inheritDoc
@@ -35,7 +34,6 @@ class PluginListCommand extends Command
     {
         return 'plugin list';
     }
-
     /**
      * @inheritDoc
      */
@@ -43,7 +41,6 @@ class PluginListCommand extends Command
     {
         return 'Displays all currently available plugins.';
     }
-
     /**
      * Displays all currently available plugins.
      *
@@ -54,39 +51,24 @@ class PluginListCommand extends Command
     public function execute(Arguments $args, ConsoleIo $io): ?int
     {
         $loadedPluginsCollection = Plugin::getCollection();
-        $path = (string)$args->getOption('composer-path');
+        $path = (string) $args->getOption('composer-path');
         $config = PluginConfig::getAppConfig($path ?: null);
-
-        $table = [
-            ['Plugin', 'Is Loaded', 'Only Debug', 'Only CLI', 'Optional', 'Version'],
-        ];
-
+        $table = [['Plugin', 'Is Loaded', 'Only Debug', 'Only CLI', 'Optional', 'Version']];
         if ($config === []) {
             $io->warning(__d('cake', 'No plugins have been found.'));
-
             return static::CODE_ERROR;
         }
-
         foreach ($config as $pluginName => $options) {
             $isLoaded = $loadedPluginsCollection->has($pluginName);
-            $onlyDebug = $options['onlyDebug'] ?? false;
-            $onlyCli = $options['onlyCli'] ?? false;
-            $optional = $options['optional'] ?? false;
+            $onlyDebug = $options['onlyDebug'] ?? \false;
+            $onlyCli = $options['onlyCli'] ?? \false;
+            $optional = $options['optional'] ?? \false;
             $version = $options['version'] ?? '';
-            $table[] = [
-                $pluginName,
-                $isLoaded ? 'X' : '',
-                $onlyDebug ? 'X' : '',
-                $onlyCli ? 'X' : '',
-                $optional ? 'X' : '',
-                $version,
-            ];
+            $table[] = [$pluginName, $isLoaded ? 'X' : '', $onlyDebug ? 'X' : '', $onlyCli ? 'X' : '', $optional ? 'X' : '', $version];
         }
         $io->helper('Table')->output($table);
-
         return static::CODE_SUCCESS;
     }
-
     /**
      * Get the option parser.
      *
@@ -96,10 +78,7 @@ class PluginListCommand extends Command
     public function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
     {
         $parser->setDescription(static::getDescription());
-        $parser->addOption('composer-path', [
-            'help' => 'The absolute path to the composer.lock file to retrieve the versions from',
-        ]);
-
+        $parser->addOption('composer-path', ['help' => 'The absolute path to the composer.lock file to retrieve the versions from']);
         return $parser;
     }
 }

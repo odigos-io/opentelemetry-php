@@ -5,9 +5,7 @@
  *
  * @license https://github.com/slimphp/Slim/blob/4.x/LICENSE.md (MIT License)
  */
-
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Slim;
 
 use Closure;
@@ -16,7 +14,6 @@ use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use RuntimeException;
 use Slim\Interfaces\AdvancedCallableResolverInterface;
-
 use function class_exists;
 use function is_array;
 use function is_callable;
@@ -25,17 +22,14 @@ use function is_string;
 use function json_encode;
 use function preg_match;
 use function sprintf;
-
 /**
  * @template TContainerInterface of (ContainerInterface|null)
  */
 final class CallableResolver implements AdvancedCallableResolverInterface
 {
     public static string $callablePattern = '!^([^\:]+)\:([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)$!';
-
     /** @var TContainerInterface $container */
     private ?ContainerInterface $container;
-
     /**
      * @param TContainerInterface $container
      */
@@ -43,7 +37,6 @@ final class CallableResolver implements AdvancedCallableResolverInterface
     {
         $this->container = $container;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -61,7 +54,6 @@ final class CallableResolver implements AdvancedCallableResolverInterface
         $callable = $this->assertCallable($resolved, $toResolve);
         return $this->bindToContainer($callable);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -69,7 +61,6 @@ final class CallableResolver implements AdvancedCallableResolverInterface
     {
         return $this->resolveByPredicate($toResolve, [$this, 'isRoute'], 'handle');
     }
-
     /**
      * {@inheritdoc}
      */
@@ -77,7 +68,6 @@ final class CallableResolver implements AdvancedCallableResolverInterface
     {
         return $this->resolveByPredicate($toResolve, [$this, 'isMiddleware'], 'process');
     }
-
     /**
      * @param callable|array{class-string, string}|string $toResolve
      *
@@ -103,7 +93,6 @@ final class CallableResolver implements AdvancedCallableResolverInterface
         $callable = $this->assertCallable($resolved, $toResolve);
         return $this->bindToContainer($callable);
     }
-
     /**
      * @param mixed $toResolve
      */
@@ -111,7 +100,6 @@ final class CallableResolver implements AdvancedCallableResolverInterface
     {
         return $toResolve instanceof RequestHandlerInterface;
     }
-
     /**
      * @param mixed $toResolve
      */
@@ -119,7 +107,6 @@ final class CallableResolver implements AdvancedCallableResolverInterface
     {
         return $toResolve instanceof MiddlewareInterface;
     }
-
     /**
      * @throws RuntimeException
      *
@@ -128,9 +115,8 @@ final class CallableResolver implements AdvancedCallableResolverInterface
     private function resolveSlimNotation(string $toResolve): array
     {
         /** @psalm-suppress ArgumentTypeCoercion */
-        preg_match(CallableResolver::$callablePattern, $toResolve, $matches);
+        preg_match(\Slim\CallableResolver::$callablePattern, $toResolve, $matches);
         [$class, $method] = $matches ? [$matches[1], $matches[2]] : [$toResolve, null];
-
         if ($this->container && $this->container->has($class)) {
             $instance = $this->container->get($class);
             if (!is_object($instance)) {
@@ -147,7 +133,6 @@ final class CallableResolver implements AdvancedCallableResolverInterface
         }
         return [$instance, $method];
     }
-
     /**
      * @param mixed $resolved
      * @param mixed $toResolve
@@ -158,7 +143,7 @@ final class CallableResolver implements AdvancedCallableResolverInterface
     {
         if (!is_callable($resolved)) {
             if (is_callable($toResolve) || is_object($toResolve) || is_array($toResolve)) {
-                $formatedToResolve = ($toResolveJson = json_encode($toResolve)) !== false ? $toResolveJson : '';
+                $formatedToResolve = ($toResolveJson = json_encode($toResolve)) !== \false ? $toResolveJson : '';
             } else {
                 $formatedToResolve = is_string($toResolve) ? $toResolve : '';
             }
@@ -166,7 +151,6 @@ final class CallableResolver implements AdvancedCallableResolverInterface
         }
         return $resolved;
     }
-
     private function bindToContainer(callable $callable): callable
     {
         if (is_array($callable) && $callable[0] instanceof Closure) {
@@ -178,7 +162,6 @@ final class CallableResolver implements AdvancedCallableResolverInterface
         }
         return $callable;
     }
-
     /**
      * @param callable|string|array{class-string, string}|mixed $toResolve
      *

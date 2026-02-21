@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -20,7 +20,7 @@ namespace Cake\TestSuite\Constraint\Response;
  *
  * @internal
  */
-class HeaderContains extends HeaderEquals
+class HeaderContains extends \Cake\TestSuite\Constraint\Response\HeaderEquals
 {
     /**
      * Checks assertion
@@ -31,9 +31,8 @@ class HeaderContains extends HeaderEquals
      */
     public function matches($other): bool
     {
-        return mb_strpos($this->response->getHeaderLine($this->headerName), $other) !== false;
+        return mb_strpos($this->response->getHeaderLine($this->headerName), $other) !== \false;
     }
-
     /**
      * Assertion message
      *
@@ -41,10 +40,6 @@ class HeaderContains extends HeaderEquals
      */
     public function toString(): string
     {
-        return sprintf(
-            "is in header '%s' (`%s`)",
-            $this->headerName,
-            $this->response->getHeaderLine($this->headerName),
-        );
+        return sprintf("is in header '%s' (`%s`)", $this->headerName, $this->response->getHeaderLine($this->headerName));
     }
 }

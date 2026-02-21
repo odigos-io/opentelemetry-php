@@ -1,14 +1,13 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\filters\auth;
 
 use yii\base\Component;
-
 /**
  * HttpBearerAuth is an action filter that supports the authentication method based on HTTP Bearer token.
  *
@@ -31,7 +30,7 @@ use yii\base\Component;
  * @template T of Component
  * @extends HttpHeaderAuth<T>
  */
-class HttpBearerAuth extends HttpHeaderAuth
+class HttpBearerAuth extends \yii\filters\auth\HttpHeaderAuth
 {
     /**
      * {@inheritdoc}
@@ -45,8 +44,6 @@ class HttpBearerAuth extends HttpHeaderAuth
      * @var string the HTTP authentication realm
      */
     public $realm = 'api';
-
-
     /**
      * {@inheritdoc}
      */

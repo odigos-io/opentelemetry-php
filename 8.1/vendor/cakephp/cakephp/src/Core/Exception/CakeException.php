@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -16,7 +16,6 @@ namespace Cake\Core\Exception;
 
 use RuntimeException;
 use Throwable;
-
 /**
  * Base class that all CakePHP Exceptions extend.
  */
@@ -29,21 +28,18 @@ class CakeException extends RuntimeException
      * @var array
      */
     protected array $_attributes = [];
-
     /**
      * Template string that has attributes sprintf()'ed into it.
      *
      * @var string
      */
     protected string $_messageTemplate = '';
-
     /**
      * Default exception code
      *
      * @var int
      */
     protected int $_defaultCode = 0;
-
     /**
      * Constructor.
      *
@@ -63,7 +59,6 @@ class CakeException extends RuntimeException
         }
         parent::__construct($message, $code ?? $this->_defaultCode, $previous);
     }
-
     /**
      * Get the passed in attributes
      *

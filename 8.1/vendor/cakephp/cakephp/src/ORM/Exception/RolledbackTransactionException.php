@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -15,7 +15,6 @@ declare(strict_types=1);
 namespace Cake\ORM\Exception;
 
 use Cake\Core\Exception\CakeException;
-
 /**
  * Used when a transaction was rolled back from a callback event.
  */
@@ -24,6 +23,5 @@ class RolledbackTransactionException extends CakeException
     /**
      * @var string
      */
-    protected string $_messageTemplate = 'The afterSave event in `%s` is aborting the transaction'
-        . ' before the save process is done.';
+    protected string $_messageTemplate = 'The afterSave event in `%s` is aborting the transaction' . ' before the save process is done.';
 }

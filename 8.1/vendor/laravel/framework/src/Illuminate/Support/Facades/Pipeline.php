@@ -15,15 +15,14 @@ namespace Illuminate\Support\Facades;
  *
  * @see \Illuminate\Pipeline\Pipeline
  */
-class Pipeline extends Facade
+class Pipeline extends \Illuminate\Support\Facades\Facade
 {
     /**
      * Indicates if the resolved instance should be cached.
      *
      * @var bool
      */
-    protected static $cached = false;
-
+    protected static $cached = \false;
     /**
      * Get the registered name of the component.
      *

@@ -10,9 +10,7 @@ class Looping
      * @param  string  $connectionName  The connection name.
      * @param  string  $queue  The queue name.
      */
-    public function __construct(
-        public $connectionName,
-        public $queue,
-    ) {
+    public function __construct(public $connectionName, public $queue)
+    {
     }
 }

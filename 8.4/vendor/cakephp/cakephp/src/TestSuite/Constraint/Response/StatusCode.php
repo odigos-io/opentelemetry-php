@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -20,7 +20,7 @@ namespace Cake\TestSuite\Constraint\Response;
  *
  * @internal
  */
-class StatusCode extends StatusCodeBase
+class StatusCode extends \Cake\TestSuite\Constraint\Response\StatusCodeBase
 {
     /**
      * Assertion message
@@ -31,7 +31,6 @@ class StatusCode extends StatusCodeBase
     {
         return sprintf('matches response status code `%d`', $this->response->getStatusCode());
     }
-
     /**
      * Failure description
      *

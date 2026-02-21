@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -20,7 +20,6 @@ use Cake\Core\Configure;
 use Cake\Utility\Hash;
 use Cake\Utility\Xml;
 use Cake\View\Exception\SerializationFailureException;
-
 /**
  * A view class that is used for creating XML responses.
  *
@@ -59,7 +58,7 @@ use Cake\View\Exception\SerializationFailureException;
  * If you don't set the `serialize` option, you will need a view. You can use extended
  * views to provide layout like functionality.
  */
-class XmlView extends SerializedView
+class XmlView extends \Cake\View\SerializedView
 {
     /**
      * XML layouts are located in the `layouts/xml/` subdirectory
@@ -67,14 +66,12 @@ class XmlView extends SerializedView
      * @var string
      */
     protected string $layoutPath = 'xml';
-
     /**
      * XML views are located in the 'xml' subdirectory for controllers' views.
      *
      * @var string
      */
     protected string $subDir = 'xml';
-
     /**
      * Default config options.
      *
@@ -90,12 +87,7 @@ class XmlView extends SerializedView
      *
      * @var array<string, mixed>
      */
-    protected array $_defaultConfig = [
-        'serialize' => null,
-        'xmlOptions' => null,
-        'rootNode' => null,
-    ];
-
+    protected array $_defaultConfig = ['serialize' => null, 'xmlOptions' => null, 'rootNode' => null];
     /**
      * Mime-type this view class renders as.
      *
@@ -105,7 +97,6 @@ class XmlView extends SerializedView
     {
         return 'application/xml';
     }
-
     /**
      * @inheritDoc
      */
@@ -113,7 +104,6 @@ class XmlView extends SerializedView
     {
         /** @var string $rootNode */
         $rootNode = $this->getConfig('rootNode', 'response');
-
         if (is_array($serialize)) {
             if (!$serialize) {
                 $serialize = '';
@@ -121,7 +111,6 @@ class XmlView extends SerializedView
                 $serialize = current($serialize);
             }
         }
-
         if (is_array($serialize)) {
             $data = [$rootNode => []];
             foreach ($serialize as $alias => $key) {
@@ -135,30 +124,22 @@ class XmlView extends SerializedView
         } else {
             /** @var array<mixed>|string|int|bool|null $data */
             $data = $this->viewVars[$serialize] ?? [];
-            if (
-                $data !== null &&
-                (!is_array($data) || Hash::numeric(array_keys($data)))
-            ) {
+            if ($data !== null && (!is_array($data) || Hash::numeric(array_keys($data)))) {
                 $data = [$rootNode => [$serialize => $data]];
             }
         }
-
         $options = $this->getConfig('xmlOptions', []);
         if (Configure::read('debug')) {
-            $options['pretty'] = true;
+            $options['pretty'] = \true;
         }
-
         /**
          * @var array<mixed> $data
          * @var string|false $result
          */
         $result = Xml::fromArray($data, $options)->saveXML();
-        if ($result === false) {
-            throw new SerializationFailureException(
-                'XML serialization of View data failed.',
-            );
+        if ($result === \false) {
+            throw new SerializationFailureException('XML serialization of View data failed.');
         }
-
         return $result;
     }
 }

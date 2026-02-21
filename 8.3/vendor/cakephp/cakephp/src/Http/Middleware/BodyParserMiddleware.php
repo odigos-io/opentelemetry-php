@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -24,7 +24,6 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-
 /**
  * Parse encoded request body data.
  *
@@ -39,14 +38,12 @@ class BodyParserMiddleware implements MiddlewareInterface
      * @var array<\Closure>
      */
     protected array $parsers = [];
-
     /**
      * The HTTP methods to parse data on.
      *
      * @var array<string>
      */
     protected array $methods = ['PUT', 'POST', 'PATCH', 'DELETE'];
-
     /**
      * Constructor
      *
@@ -61,24 +58,17 @@ class BodyParserMiddleware implements MiddlewareInterface
      */
     public function __construct(array $options = [])
     {
-        $options += ['json' => true, 'xml' => false, 'methods' => null];
+        $options += ['json' => \true, 'xml' => \false, 'methods' => null];
         if ($options['json']) {
-            $this->addParser(
-                ['application/json', 'text/json'],
-                $this->decodeJson(...),
-            );
+            $this->addParser(['application/json', 'text/json'], $this->decodeJson(...));
         }
         if ($options['xml']) {
-            $this->addParser(
-                ['application/xml', 'text/xml'],
-                $this->decodeXml(...),
-            );
+            $this->addParser(['application/xml', 'text/xml'], $this->decodeXml(...));
         }
         if ($options['methods']) {
             $this->setMethods($options['methods']);
         }
     }
-
     /**
      * Set the HTTP methods to parse request bodies on.
      *
@@ -88,10 +78,8 @@ class BodyParserMiddleware implements MiddlewareInterface
     public function setMethods(array $methods)
     {
         $this->methods = $methods;
-
         return $this;
     }
-
     /**
      * Get the HTTP methods to parse request bodies on.
      *
@@ -101,7 +89,6 @@ class BodyParserMiddleware implements MiddlewareInterface
     {
         return $this->methods;
     }
-
     /**
      * Add a parser.
      *
@@ -128,10 +115,8 @@ class BodyParserMiddleware implements MiddlewareInterface
             $type = strtolower($type);
             $this->parsers[$type] = $parser;
         }
-
         return $this;
     }
-
     /**
      * Get the current parsers
      *
@@ -141,7 +126,6 @@ class BodyParserMiddleware implements MiddlewareInterface
     {
         return $this->parsers;
     }
-
     /**
      * Apply the middleware.
      *
@@ -153,7 +137,7 @@ class BodyParserMiddleware implements MiddlewareInterface
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        if (!in_array($request->getMethod(), $this->methods, true)) {
+        if (!in_array($request->getMethod(), $this->methods, \true)) {
             return $handler->handle($request);
         }
         [$type] = explode(';', $request->getHeaderLine('Content-Type'));
@@ -161,17 +145,14 @@ class BodyParserMiddleware implements MiddlewareInterface
         if (!isset($this->parsers[$type])) {
             return $handler->handle($request);
         }
-
         $parser = $this->parsers[$type];
         $result = $parser($request->getBody()->getContents());
         if (!is_array($result)) {
             throw new BadRequestException();
         }
         $request = $request->withParsedBody($result);
-
         return $handler->handle($request);
     }
-
     /**
      * Decode JSON into an array.
      *
@@ -183,14 +164,12 @@ class BodyParserMiddleware implements MiddlewareInterface
         if ($body === '') {
             return [];
         }
-        $decoded = json_decode($body, true);
-        if (json_last_error() !== JSON_ERROR_NONE) {
+        $decoded = json_decode($body, \true);
+        if (json_last_error() !== \JSON_ERROR_NONE) {
             return null;
         }
-
-        return (array)$decoded;
+        return (array) $decoded;
     }
-
     /**
      * Decode XML into an array.
      *
@@ -200,14 +179,13 @@ class BodyParserMiddleware implements MiddlewareInterface
     protected function decodeXml(string $body): array
     {
         try {
-            $xml = Xml::build($body, ['return' => 'domdocument', 'readFile' => false]);
+            $xml = Xml::build($body, ['return' => 'domdocument', 'readFile' => \false]);
             // We might not get child nodes if there are nested inline entities.
             /** @var \DOMNodeList $domNodeList */
             $domNodeList = $xml->childNodes;
-            if ((int)$domNodeList->length > 0) {
+            if ((int) $domNodeList->length > 0) {
                 return Xml::toArray($xml);
             }
-
             return [];
         } catch (XmlException) {
             return [];

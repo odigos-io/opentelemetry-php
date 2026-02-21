@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\HttpKernel\Fragment;
 
 /**
@@ -16,7 +15,7 @@ namespace Symfony\Component\HttpKernel\Fragment;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class EsiFragmentRenderer extends AbstractSurrogateFragmentRenderer
+class EsiFragmentRenderer extends \Symfony\Component\HttpKernel\Fragment\AbstractSurrogateFragmentRenderer
 {
     public function getName(): string
     {

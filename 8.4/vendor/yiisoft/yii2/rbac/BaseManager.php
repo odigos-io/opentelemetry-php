@@ -1,17 +1,16 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\rbac;
 
 use yii\base\Component;
 use yii\base\InvalidArgumentException;
 use yii\base\InvalidConfigException;
 use yii\base\InvalidValueException;
-
 /**
  * BaseManager is a base class implementing [[ManagerInterface]] for RBAC management.
  *
@@ -24,22 +23,19 @@ use yii\base\InvalidValueException;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-abstract class BaseManager extends Component implements ManagerInterface
+abstract class BaseManager extends Component implements \yii\rbac\ManagerInterface
 {
     /**
      * @var array a list of role names that are assigned to every user automatically without calling [[assign()]].
      * Note that these roles are applied to users, regardless of their state of authentication.
      */
     protected $defaultRoles = [];
-
-
     /**
      * Returns the named auth item.
      * @param string $name the auth item name.
      * @return Item|null the auth item corresponding to the specified name. Null is returned if no such item.
      */
     abstract protected function getItem($name);
-
     /**
      * Returns the items of the specified type.
      * @param int $type the auth item type (either [[Item::TYPE_ROLE]] or [[Item::TYPE_PERMISSION]]
@@ -52,7 +48,6 @@ abstract class BaseManager extends Component implements ManagerInterface
      * @psalm-return ($type is Item::TYPE_ROLE ? Role[] : Permission[])
      */
     abstract protected function getItems($type);
-
     /**
      * Adds an auth item to the RBAC system.
      * @param Item $item the item to add
@@ -60,7 +55,6 @@ abstract class BaseManager extends Component implements ManagerInterface
      * @throws \Exception if data validation or saving fails (such as the name of the role or permission is not unique)
      */
     abstract protected function addItem($item);
-
     /**
      * Adds a rule to the RBAC system.
      * @param Rule $rule the rule to add
@@ -68,7 +62,6 @@ abstract class BaseManager extends Component implements ManagerInterface
      * @throws \Exception if data validation or saving fails (such as the name of the rule is not unique)
      */
     abstract protected function addRule($rule);
-
     /**
      * Removes an auth item from the RBAC system.
      * @param Item $item the item to remove
@@ -76,7 +69,6 @@ abstract class BaseManager extends Component implements ManagerInterface
      * @throws \Exception if data validation or saving fails (such as the name of the role or permission is not unique)
      */
     abstract protected function removeItem($item);
-
     /**
      * Removes a rule from the RBAC system.
      * @param Rule $rule the rule to remove
@@ -84,7 +76,6 @@ abstract class BaseManager extends Component implements ManagerInterface
      * @throws \Exception if data validation or saving fails (such as the name of the rule is not unique)
      */
     abstract protected function removeRule($rule);
-
     /**
      * Updates an auth item in the RBAC system.
      * @param string $name the name of the item being updated
@@ -93,7 +84,6 @@ abstract class BaseManager extends Component implements ManagerInterface
      * @throws \Exception if data validation or saving fails (such as the name of the role or permission is not unique)
      */
     abstract protected function updateItem($name, $item);
-
     /**
      * Updates a rule to the RBAC system.
      * @param string $name the name of the rule being updated
@@ -102,117 +92,101 @@ abstract class BaseManager extends Component implements ManagerInterface
      * @throws \Exception if data validation or saving fails (such as the name of the rule is not unique)
      */
     abstract protected function updateRule($name, $rule);
-
     /**
      * {@inheritdoc}
      */
     public function createRole($name)
     {
-        $role = new Role();
+        $role = new \yii\rbac\Role();
         $role->name = $name;
         return $role;
     }
-
     /**
      * {@inheritdoc}
      */
     public function createPermission($name)
     {
-        $permission = new Permission();
+        $permission = new \yii\rbac\Permission();
         $permission->name = $name;
         return $permission;
     }
-
     /**
      * {@inheritdoc}
      */
     public function add($object)
     {
-        if ($object instanceof Item) {
+        if ($object instanceof \yii\rbac\Item) {
             if ($object->ruleName && $this->getRule($object->ruleName) === null) {
-                $rule = \Yii::createObject($object->ruleName);
+                $rule = \Odigos\Yii::createObject($object->ruleName);
                 $rule->name = $object->ruleName;
                 $this->addRule($rule);
             }
-
             return $this->addItem($object);
-        } elseif ($object instanceof Rule) {
+        } elseif ($object instanceof \yii\rbac\Rule) {
             return $this->addRule($object);
         }
-
         throw new InvalidArgumentException('Adding unsupported object type.');
     }
-
     /**
      * {@inheritdoc}
      */
     public function remove($object)
     {
-        if ($object instanceof Item) {
+        if ($object instanceof \yii\rbac\Item) {
             return $this->removeItem($object);
-        } elseif ($object instanceof Rule) {
+        } elseif ($object instanceof \yii\rbac\Rule) {
             return $this->removeRule($object);
         }
-
         throw new InvalidArgumentException('Removing unsupported object type.');
     }
-
     /**
      * {@inheritdoc}
      */
     public function update($name, $object)
     {
-        if ($object instanceof Item) {
+        if ($object instanceof \yii\rbac\Item) {
             if ($object->ruleName && $this->getRule($object->ruleName) === null) {
-                $rule = \Yii::createObject($object->ruleName);
+                $rule = \Odigos\Yii::createObject($object->ruleName);
                 $rule->name = $object->ruleName;
                 $this->addRule($rule);
             }
-
             return $this->updateItem($name, $object);
-        } elseif ($object instanceof Rule) {
+        } elseif ($object instanceof \yii\rbac\Rule) {
             return $this->updateRule($name, $object);
         }
-
         throw new InvalidArgumentException('Updating unsupported object type.');
     }
-
     /**
      * {@inheritdoc}
      */
     public function getRole($name)
     {
         $item = $this->getItem($name);
-        if ($item instanceof Item && $item->type == Item::TYPE_ROLE) {
+        if ($item instanceof \yii\rbac\Item && $item->type == \yii\rbac\Item::TYPE_ROLE) {
             /** @var Role $item */
             return $item;
         }
-
         return null;
     }
-
     /**
      * {@inheritdoc}
      */
     public function getPermission($name)
     {
         $item = $this->getItem($name);
-        if ($item instanceof Item && $item->type == Item::TYPE_PERMISSION) {
+        if ($item instanceof \yii\rbac\Item && $item->type == \yii\rbac\Item::TYPE_PERMISSION) {
             /** @var Permission $item */
             return $item;
         }
-
         return null;
     }
-
     /**
      * {@inheritdoc}
      */
     public function getRoles()
     {
-        return $this->getItems(Item::TYPE_ROLE);
+        return $this->getItems(\yii\rbac\Item::TYPE_ROLE);
     }
-
     /**
      * Set default roles
      * @param string[]|\Closure $roles either array of roles or a callable returning it
@@ -234,7 +208,6 @@ abstract class BaseManager extends Component implements ManagerInterface
             throw new InvalidArgumentException('Default roles must be either an array or a callable');
         }
     }
-
     /**
      * Get default roles
      * @return string[] default roles
@@ -244,7 +217,6 @@ abstract class BaseManager extends Component implements ManagerInterface
     {
         return $this->defaultRoles;
     }
-
     /**
      * Returns defaultRoles as array of Role objects.
      * @since 2.0.12
@@ -256,18 +228,15 @@ abstract class BaseManager extends Component implements ManagerInterface
         foreach ($this->defaultRoles as $roleName) {
             $result[$roleName] = $this->createRole($roleName);
         }
-
         return $result;
     }
-
     /**
      * {@inheritdoc}
      */
     public function getPermissions()
     {
-        return $this->getItems(Item::TYPE_PERMISSION);
+        return $this->getItems(\yii\rbac\Item::TYPE_PERMISSION);
     }
-
     /**
      * Executes the rule associated with the specified auth item.
      *
@@ -284,16 +253,14 @@ abstract class BaseManager extends Component implements ManagerInterface
     protected function executeRule($user, $item, $params)
     {
         if ($item->ruleName === null) {
-            return true;
+            return \true;
         }
         $rule = $this->getRule($item->ruleName);
-        if ($rule instanceof Rule) {
+        if ($rule instanceof \yii\rbac\Rule) {
             return $rule->execute($user, $item, $params);
         }
-
         throw new InvalidConfigException("Rule not found: {$item->ruleName}");
     }
-
     /**
      * Checks whether array of $assignments is empty and [[defaultRoles]] property is empty as well.
      *

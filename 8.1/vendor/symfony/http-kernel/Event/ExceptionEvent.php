@@ -8,12 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\HttpKernel\Event;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
-
 /**
  * Allows to create a response for a thrown exception.
  *
@@ -27,23 +25,19 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
  *
  * @author Bernhard Schussek <bschussek@gmail.com>
  */
-final class ExceptionEvent extends RequestEvent
+final class ExceptionEvent extends \Symfony\Component\HttpKernel\Event\RequestEvent
 {
     private \Throwable $throwable;
-    private bool $allowCustomResponseCode = false;
-
+    private bool $allowCustomResponseCode = \false;
     public function __construct(HttpKernelInterface $kernel, Request $request, int $requestType, \Throwable $e)
     {
         parent::__construct($kernel, $request, $requestType);
-
         $this->setThrowable($e);
     }
-
     public function getThrowable(): \Throwable
     {
         return $this->throwable;
     }
-
     /**
      * Replaces the thrown exception.
      *
@@ -53,15 +47,13 @@ final class ExceptionEvent extends RequestEvent
     {
         $this->throwable = $exception;
     }
-
     /**
      * Mark the event as allowing a custom response code.
      */
     public function allowCustomResponseCode(): void
     {
-        $this->allowCustomResponseCode = true;
+        $this->allowCustomResponseCode = \true;
     }
-
     /**
      * Returns true if the event allows a custom response code.
      */

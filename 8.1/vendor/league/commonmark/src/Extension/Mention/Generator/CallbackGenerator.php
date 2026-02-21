@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the league/commonmark package.
  *
@@ -10,13 +9,11 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Odigos\League\CommonMark\Extension\Mention\Generator;
 
-namespace League\CommonMark\Extension\Mention\Generator;
-
-use League\CommonMark\Exception\LogicException;
-use League\CommonMark\Extension\Mention\Mention;
-use League\CommonMark\Node\Inline\AbstractInline;
-
+use Odigos\League\CommonMark\Exception\LogicException;
+use Odigos\League\CommonMark\Extension\Mention\Mention;
+use Odigos\League\CommonMark\Node\Inline\AbstractInline;
 final class CallbackGenerator implements MentionGeneratorInterface
 {
     /**
@@ -25,12 +22,10 @@ final class CallbackGenerator implements MentionGeneratorInterface
      * @var callable(Mention): ?AbstractInline
      */
     private $callback;
-
     public function __construct(callable $callback)
     {
         $this->callback = $callback;
     }
-
     /**
      * @throws LogicException
      */
@@ -40,15 +35,12 @@ final class CallbackGenerator implements MentionGeneratorInterface
         if ($result === null) {
             return null;
         }
-
-        if ($result instanceof AbstractInline && ! ($result instanceof Mention)) {
+        if ($result instanceof AbstractInline && !$result instanceof Mention) {
             return $result;
         }
-
         if ($result instanceof Mention && $result->hasUrl()) {
             return $mention;
         }
-
         throw new LogicException('CallbackGenerator callable must set the URL on the passed mention and return the mention, return a new AbstractInline based object or null if the mention is not a match');
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+namespace Odigos;
+
 use Illuminate\Container\Container;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Contracts\Auth\Factory as AuthFactory;
@@ -21,8 +23,7 @@ use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\HtmlString;
 use Symfony\Component\HttpFoundation\Response;
-
-if (! function_exists('abort')) {
+if (!\function_exists('Odigos\abort')) {
     /**
      * Throw an HttpException with the given data.
      *
@@ -41,12 +42,10 @@ if (! function_exists('abort')) {
         } elseif ($code instanceof Responsable) {
             throw new HttpResponseException($code->toResponse(request()));
         }
-
         app()->abort($code, $message, $headers);
     }
 }
-
-if (! function_exists('abort_if')) {
+if (!\function_exists('Odigos\abort_if')) {
     /**
      * Throw an HttpException with the given data if the given condition is true.
      *
@@ -66,8 +65,7 @@ if (! function_exists('abort_if')) {
         }
     }
 }
-
-if (! function_exists('abort_unless')) {
+if (!\function_exists('Odigos\abort_unless')) {
     /**
      * Throw an HttpException with the given data unless the given condition is true.
      *
@@ -82,13 +80,12 @@ if (! function_exists('abort_unless')) {
      */
     function abort_unless($boolean, $code, $message = '', array $headers = [])
     {
-        if (! $boolean) {
+        if (!$boolean) {
             abort($code, $message, $headers);
         }
     }
 }
-
-if (! function_exists('action')) {
+if (!\function_exists('Odigos\action')) {
     /**
      * Generate the URL to a controller action.
      *
@@ -97,13 +94,12 @@ if (! function_exists('action')) {
      * @param  bool  $absolute
      * @return string
      */
-    function action($name, $parameters = [], $absolute = true)
+    function action($name, $parameters = [], $absolute = \true)
     {
         return app('url')->action($name, $parameters, $absolute);
     }
 }
-
-if (! function_exists('app')) {
+if (!\function_exists('Odigos\app')) {
     /**
      * Get the available container instance.
      *
@@ -113,15 +109,13 @@ if (! function_exists('app')) {
      */
     function app($abstract = null, array $parameters = [])
     {
-        if (is_null($abstract)) {
+        if (\is_null($abstract)) {
             return Container::getInstance();
         }
-
         return Container::getInstance()->make($abstract, $parameters);
     }
 }
-
-if (! function_exists('app_path')) {
+if (!\function_exists('Odigos\app_path')) {
     /**
      * Get the path to the application folder.
      *
@@ -133,8 +127,7 @@ if (! function_exists('app_path')) {
         return app()->path($path);
     }
 }
-
-if (! function_exists('asset')) {
+if (!\function_exists('Odigos\asset')) {
     /**
      * Generate an asset path for the application.
      *
@@ -147,8 +140,7 @@ if (! function_exists('asset')) {
         return app('url')->asset($path, $secure);
     }
 }
-
-if (! function_exists('auth')) {
+if (!\function_exists('Odigos\auth')) {
     /**
      * Get the available auth instance.
      *
@@ -157,15 +149,13 @@ if (! function_exists('auth')) {
      */
     function auth($guard = null)
     {
-        if (is_null($guard)) {
+        if (\is_null($guard)) {
             return app(AuthFactory::class);
         }
-
         return app(AuthFactory::class)->guard($guard);
     }
 }
-
-if (! function_exists('back')) {
+if (!\function_exists('Odigos\back')) {
     /**
      * Create a new redirect response to the previous location.
      *
@@ -174,13 +164,12 @@ if (! function_exists('back')) {
      * @param  mixed  $fallback
      * @return \Illuminate\Http\RedirectResponse
      */
-    function back($status = 302, $headers = [], $fallback = false)
+    function back($status = 302, $headers = [], $fallback = \false)
     {
         return app('redirect')->back($status, $headers, $fallback);
     }
 }
-
-if (! function_exists('base_path')) {
+if (!\function_exists('Odigos\base_path')) {
     /**
      * Get the path to the base of the install.
      *
@@ -192,8 +181,7 @@ if (! function_exists('base_path')) {
         return app()->basePath($path);
     }
 }
-
-if (! function_exists('bcrypt')) {
+if (!\function_exists('Odigos\bcrypt')) {
     /**
      * Hash the given value against the bcrypt algorithm.
      *
@@ -206,8 +194,7 @@ if (! function_exists('bcrypt')) {
         return app('hash')->driver('bcrypt')->make($value, $options);
     }
 }
-
-if (! function_exists('broadcast')) {
+if (!\function_exists('Odigos\broadcast')) {
     /**
      * Begin broadcasting an event.
      *
@@ -219,8 +206,7 @@ if (! function_exists('broadcast')) {
         return app(BroadcastFactory::class)->event($event);
     }
 }
-
-if (! function_exists('cache')) {
+if (!\function_exists('Odigos\cache')) {
     /**
      * Get / set the specified cache value.
      *
@@ -236,22 +222,16 @@ if (! function_exists('cache')) {
         if (empty($arguments)) {
             return app('cache');
         }
-
-        if (is_string($arguments[0])) {
+        if (\is_string($arguments[0])) {
             return app('cache')->get(...$arguments);
         }
-
-        if (! is_array($arguments[0])) {
-            throw new InvalidArgumentException(
-                'When setting a value in the cache, you must pass an array of key / value pairs.'
-            );
+        if (!\is_array($arguments[0])) {
+            throw new \InvalidArgumentException('When setting a value in the cache, you must pass an array of key / value pairs.');
         }
-
-        return app('cache')->put(key($arguments[0]), reset($arguments[0]), $arguments[1] ?? null);
+        return app('cache')->put(\key($arguments[0]), \reset($arguments[0]), $arguments[1] ?? null);
     }
 }
-
-if (! function_exists('config')) {
+if (!\function_exists('Odigos\config')) {
     /**
      * Get / set the specified configuration value.
      *
@@ -263,19 +243,16 @@ if (! function_exists('config')) {
      */
     function config($key = null, $default = null)
     {
-        if (is_null($key)) {
+        if (\is_null($key)) {
             return app('config');
         }
-
-        if (is_array($key)) {
+        if (\is_array($key)) {
             return app('config')->set($key);
         }
-
         return app('config')->get($key, $default);
     }
 }
-
-if (! function_exists('config_path')) {
+if (!\function_exists('Odigos\config_path')) {
     /**
      * Get the configuration path.
      *
@@ -287,8 +264,7 @@ if (! function_exists('config_path')) {
         return app()->configPath($path);
     }
 }
-
-if (! function_exists('cookie')) {
+if (!\function_exists('Odigos\cookie')) {
     /**
      * Create a new cookie instance.
      *
@@ -303,19 +279,16 @@ if (! function_exists('cookie')) {
      * @param  string|null  $sameSite
      * @return \Illuminate\Cookie\CookieJar|\Symfony\Component\HttpFoundation\Cookie
      */
-    function cookie($name = null, $value = null, $minutes = 0, $path = null, $domain = null, $secure = null, $httpOnly = true, $raw = false, $sameSite = null)
+    function cookie($name = null, $value = null, $minutes = 0, $path = null, $domain = null, $secure = null, $httpOnly = \true, $raw = \false, $sameSite = null)
     {
         $cookie = app(CookieFactory::class);
-
-        if (is_null($name)) {
+        if (\is_null($name)) {
             return $cookie;
         }
-
         return $cookie->make($name, $value, $minutes, $path, $domain, $secure, $httpOnly, $raw, $sameSite);
     }
 }
-
-if (! function_exists('csrf_field')) {
+if (!\function_exists('Odigos\csrf_field')) {
     /**
      * Generate a CSRF token form field.
      *
@@ -323,11 +296,10 @@ if (! function_exists('csrf_field')) {
      */
     function csrf_field()
     {
-        return new HtmlString('<input type="hidden" name="_token" value="'.csrf_token().'" autocomplete="off">');
+        return new HtmlString('<input type="hidden" name="_token" value="' . csrf_token() . '" autocomplete="off">');
     }
 }
-
-if (! function_exists('csrf_token')) {
+if (!\function_exists('Odigos\csrf_token')) {
     /**
      * Get the CSRF token value.
      *
@@ -338,16 +310,13 @@ if (! function_exists('csrf_token')) {
     function csrf_token()
     {
         $session = app('session');
-
         if (isset($session)) {
             return $session->token();
         }
-
-        throw new RuntimeException('Application session store not set.');
+        throw new \RuntimeException('Application session store not set.');
     }
 }
-
-if (! function_exists('database_path')) {
+if (!\function_exists('Odigos\database_path')) {
     /**
      * Get the database path.
      *
@@ -359,8 +328,7 @@ if (! function_exists('database_path')) {
         return app()->databasePath($path);
     }
 }
-
-if (! function_exists('decrypt')) {
+if (!\function_exists('Odigos\decrypt')) {
     /**
      * Decrypt the given value.
      *
@@ -368,13 +336,12 @@ if (! function_exists('decrypt')) {
      * @param  bool  $unserialize
      * @return mixed
      */
-    function decrypt($value, $unserialize = true)
+    function decrypt($value, $unserialize = \true)
     {
         return app('encrypter')->decrypt($value, $unserialize);
     }
 }
-
-if (! function_exists('dispatch')) {
+if (!\function_exists('Odigos\dispatch')) {
     /**
      * Dispatch a job to its appropriate handler.
      *
@@ -383,13 +350,10 @@ if (! function_exists('dispatch')) {
      */
     function dispatch($job)
     {
-        return $job instanceof Closure
-                ? new PendingClosureDispatch(CallQueuedClosure::create($job))
-                : new PendingDispatch($job);
+        return $job instanceof \Closure ? new PendingClosureDispatch(CallQueuedClosure::create($job)) : new PendingDispatch($job);
     }
 }
-
-if (! function_exists('dispatch_sync')) {
+if (!\function_exists('Odigos\dispatch_sync')) {
     /**
      * Dispatch a command to its appropriate handler in the current process.
      *
@@ -404,8 +368,7 @@ if (! function_exists('dispatch_sync')) {
         return app(Dispatcher::class)->dispatchSync($job, $handler);
     }
 }
-
-if (! function_exists('encrypt')) {
+if (!\function_exists('Odigos\encrypt')) {
     /**
      * Encrypt the given value.
      *
@@ -413,13 +376,12 @@ if (! function_exists('encrypt')) {
      * @param  bool  $serialize
      * @return string
      */
-    function encrypt($value, $serialize = true)
+    function encrypt($value, $serialize = \true)
     {
         return app('encrypter')->encrypt($value, $serialize);
     }
 }
-
-if (! function_exists('event')) {
+if (!\function_exists('Odigos\event')) {
     /**
      * Dispatch an event and call the listeners.
      *
@@ -433,8 +395,7 @@ if (! function_exists('event')) {
         return app('events')->dispatch(...$args);
     }
 }
-
-if (! function_exists('fake') && class_exists(\Faker\Factory::class)) {
+if (!\function_exists('Odigos\fake') && \class_exists(\Odigos\Faker\Factory::class)) {
     /**
      * Get a faker instance.
      *
@@ -446,20 +407,15 @@ if (! function_exists('fake') && class_exists(\Faker\Factory::class)) {
         if (app()->bound('config')) {
             $locale ??= app('config')->get('app.faker_locale');
         }
-
         $locale ??= 'en_US';
-
-        $abstract = \Faker\Generator::class.':'.$locale;
-
-        if (! app()->bound($abstract)) {
-            app()->singleton($abstract, fn () => \Faker\Factory::create($locale));
+        $abstract = \Odigos\Faker\Generator::class . ':' . $locale;
+        if (!app()->bound($abstract)) {
+            app()->singleton($abstract, fn() => \Odigos\Faker\Factory::create($locale));
         }
-
         return app()->make($abstract);
     }
 }
-
-if (! function_exists('info')) {
+if (!\function_exists('Odigos\info')) {
     /**
      * Write some information to the log.
      *
@@ -472,8 +428,7 @@ if (! function_exists('info')) {
         app('log')->info($message, $context);
     }
 }
-
-if (! function_exists('logger')) {
+if (!\function_exists('Odigos\logger')) {
     /**
      * Log a debug message to the logs.
      *
@@ -483,15 +438,13 @@ if (! function_exists('logger')) {
      */
     function logger($message = null, array $context = [])
     {
-        if (is_null($message)) {
+        if (\is_null($message)) {
             return app('log');
         }
-
         return app('log')->debug($message, $context);
     }
 }
-
-if (! function_exists('lang_path')) {
+if (!\function_exists('Odigos\lang_path')) {
     /**
      * Get the path to the language folder.
      *
@@ -503,8 +456,7 @@ if (! function_exists('lang_path')) {
         return app()->langPath($path);
     }
 }
-
-if (! function_exists('logs')) {
+if (!\function_exists('Odigos\logs')) {
     /**
      * Get a log driver instance.
      *
@@ -516,8 +468,7 @@ if (! function_exists('logs')) {
         return $driver ? app('log')->driver($driver) : app('log');
     }
 }
-
-if (! function_exists('method_field')) {
+if (!\function_exists('Odigos\method_field')) {
     /**
      * Generate a form field to spoof the HTTP verb used by forms.
      *
@@ -526,11 +477,10 @@ if (! function_exists('method_field')) {
      */
     function method_field($method)
     {
-        return new HtmlString('<input type="hidden" name="_method" value="'.$method.'">');
+        return new HtmlString('<input type="hidden" name="_method" value="' . $method . '">');
     }
 }
-
-if (! function_exists('mix')) {
+if (!\function_exists('Odigos\mix')) {
     /**
      * Get the path to a versioned Mix file.
      *
@@ -542,11 +492,10 @@ if (! function_exists('mix')) {
      */
     function mix($path, $manifestDirectory = '')
     {
-        return app(Mix::class)(...func_get_args());
+        return app(Mix::class)(...\func_get_args());
     }
 }
-
-if (! function_exists('now')) {
+if (!\function_exists('Odigos\now')) {
     /**
      * Create a new Carbon instance for the current time.
      *
@@ -558,8 +507,7 @@ if (! function_exists('now')) {
         return Date::now($tz);
     }
 }
-
-if (! function_exists('old')) {
+if (!\function_exists('Odigos\old')) {
     /**
      * Retrieve an old input item.
      *
@@ -572,8 +520,7 @@ if (! function_exists('old')) {
         return app('request')->old($key, $default);
     }
 }
-
-if (! function_exists('policy')) {
+if (!\function_exists('Odigos\policy')) {
     /**
      * Get a policy instance for a given class.
      *
@@ -587,8 +534,7 @@ if (! function_exists('policy')) {
         return app(Gate::class)->getPolicyFor($class);
     }
 }
-
-if (! function_exists('precognitive')) {
+if (!\function_exists('Odigos\precognitive')) {
     /**
      * Handle a Precognition controller hook.
      *
@@ -600,24 +546,17 @@ if (! function_exists('precognitive')) {
         $callable ??= function () {
             //
         };
-
         $payload = $callable(function ($default, $precognition = null) {
-            $response = request()->isPrecognitive()
-                ? ($precognition ?? $default)
-                : $default;
-
+            $response = request()->isPrecognitive() ? $precognition ?? $default : $default;
             abort(Router::toResponse(request(), value($response)));
         });
-
         if (request()->isPrecognitive()) {
             abort(204, headers: ['Precognition-Success' => 'true']);
         }
-
         return $payload;
     }
 }
-
-if (! function_exists('public_path')) {
+if (!\function_exists('Odigos\public_path')) {
     /**
      * Get the path to the public folder.
      *
@@ -629,8 +568,7 @@ if (! function_exists('public_path')) {
         return app()->publicPath($path);
     }
 }
-
-if (! function_exists('redirect')) {
+if (!\function_exists('Odigos\redirect')) {
     /**
      * Get an instance of the redirector.
      *
@@ -642,15 +580,13 @@ if (! function_exists('redirect')) {
      */
     function redirect($to = null, $status = 302, $headers = [], $secure = null)
     {
-        if (is_null($to)) {
+        if (\is_null($to)) {
             return app('redirect');
         }
-
         return app('redirect')->to($to, $status, $headers, $secure);
     }
 }
-
-if (! function_exists('report')) {
+if (!\function_exists('Odigos\report')) {
     /**
      * Report an exception.
      *
@@ -659,15 +595,13 @@ if (! function_exists('report')) {
      */
     function report($exception)
     {
-        if (is_string($exception)) {
-            $exception = new Exception($exception);
+        if (\is_string($exception)) {
+            $exception = new \Exception($exception);
         }
-
         app(ExceptionHandler::class)->report($exception);
     }
 }
-
-if (! function_exists('report_if')) {
+if (!\function_exists('Odigos\report_if')) {
     /**
      * Report an exception if the given condition is true.
      *
@@ -682,8 +616,7 @@ if (! function_exists('report_if')) {
         }
     }
 }
-
-if (! function_exists('report_unless')) {
+if (!\function_exists('Odigos\report_unless')) {
     /**
      * Report an exception unless the given condition is true.
      *
@@ -693,13 +626,12 @@ if (! function_exists('report_unless')) {
      */
     function report_unless($boolean, $exception)
     {
-        if (! $boolean) {
+        if (!$boolean) {
             report($exception);
         }
     }
 }
-
-if (! function_exists('request')) {
+if (!\function_exists('Odigos\request')) {
     /**
      * Get an instance of the current request or an input item from the request.
      *
@@ -709,21 +641,17 @@ if (! function_exists('request')) {
      */
     function request($key = null, $default = null)
     {
-        if (is_null($key)) {
+        if (\is_null($key)) {
             return app('request');
         }
-
-        if (is_array($key)) {
+        if (\is_array($key)) {
             return app('request')->only($key);
         }
-
         $value = app('request')->__get($key);
-
-        return is_null($value) ? value($default) : $value;
+        return \is_null($value) ? value($default) : $value;
     }
 }
-
-if (! function_exists('rescue')) {
+if (!\function_exists('Odigos\rescue')) {
     /**
      * Catch a potential exception and return a default value.
      *
@@ -735,21 +663,19 @@ if (! function_exists('rescue')) {
      * @param  bool|callable  $report
      * @return TRescueValue|TRescueFallback
      */
-    function rescue(callable $callback, $rescue = null, $report = true)
+    function rescue(callable $callback, $rescue = null, $report = \true)
     {
         try {
             return $callback();
-        } catch (Throwable $e) {
+        } catch (\Throwable $e) {
             if (value($report, $e)) {
                 report($e);
             }
-
             return value($rescue, $e);
         }
     }
 }
-
-if (! function_exists('resolve')) {
+if (!\function_exists('Odigos\resolve')) {
     /**
      * Resolve a service from the container.
      *
@@ -762,8 +688,7 @@ if (! function_exists('resolve')) {
         return app($name, $parameters);
     }
 }
-
-if (! function_exists('resource_path')) {
+if (!\function_exists('Odigos\resource_path')) {
     /**
      * Get the path to the resources folder.
      *
@@ -775,8 +700,7 @@ if (! function_exists('resource_path')) {
         return app()->resourcePath($path);
     }
 }
-
-if (! function_exists('response')) {
+if (!\function_exists('Odigos\response')) {
     /**
      * Return a new response from the application.
      *
@@ -788,16 +712,13 @@ if (! function_exists('response')) {
     function response($content = '', $status = 200, array $headers = [])
     {
         $factory = app(ResponseFactory::class);
-
-        if (func_num_args() === 0) {
+        if (\func_num_args() === 0) {
             return $factory;
         }
-
         return $factory->make($content, $status, $headers);
     }
 }
-
-if (! function_exists('route')) {
+if (!\function_exists('Odigos\route')) {
     /**
      * Generate the URL to a named route.
      *
@@ -806,13 +727,12 @@ if (! function_exists('route')) {
      * @param  bool  $absolute
      * @return string
      */
-    function route($name, $parameters = [], $absolute = true)
+    function route($name, $parameters = [], $absolute = \true)
     {
         return app('url')->route($name, $parameters, $absolute);
     }
 }
-
-if (! function_exists('secure_asset')) {
+if (!\function_exists('Odigos\secure_asset')) {
     /**
      * Generate an asset path for the application.
      *
@@ -821,11 +741,10 @@ if (! function_exists('secure_asset')) {
      */
     function secure_asset($path)
     {
-        return asset($path, true);
+        return asset($path, \true);
     }
 }
-
-if (! function_exists('secure_url')) {
+if (!\function_exists('Odigos\secure_url')) {
     /**
      * Generate a HTTPS url for the application.
      *
@@ -835,11 +754,10 @@ if (! function_exists('secure_url')) {
      */
     function secure_url($path, $parameters = [])
     {
-        return url($path, $parameters, true);
+        return url($path, $parameters, \true);
     }
 }
-
-if (! function_exists('session')) {
+if (!\function_exists('Odigos\session')) {
     /**
      * Get / set the specified session value.
      *
@@ -851,19 +769,16 @@ if (! function_exists('session')) {
      */
     function session($key = null, $default = null)
     {
-        if (is_null($key)) {
+        if (\is_null($key)) {
             return app('session');
         }
-
-        if (is_array($key)) {
+        if (\is_array($key)) {
             return app('session')->put($key);
         }
-
         return app('session')->get($key, $default);
     }
 }
-
-if (! function_exists('storage_path')) {
+if (!\function_exists('Odigos\storage_path')) {
     /**
      * Get the path to the storage folder.
      *
@@ -875,8 +790,7 @@ if (! function_exists('storage_path')) {
         return app()->storagePath($path);
     }
 }
-
-if (! function_exists('to_route')) {
+if (!\function_exists('Odigos\to_route')) {
     /**
      * Create a new redirect response to a named route.
      *
@@ -891,8 +805,7 @@ if (! function_exists('to_route')) {
         return redirect()->route($route, $parameters, $status, $headers);
     }
 }
-
-if (! function_exists('today')) {
+if (!\function_exists('Odigos\today')) {
     /**
      * Create a new Carbon instance for the current date.
      *
@@ -904,8 +817,7 @@ if (! function_exists('today')) {
         return Date::today($tz);
     }
 }
-
-if (! function_exists('trans')) {
+if (!\function_exists('Odigos\trans')) {
     /**
      * Translate the given message.
      *
@@ -916,15 +828,13 @@ if (! function_exists('trans')) {
      */
     function trans($key = null, $replace = [], $locale = null)
     {
-        if (is_null($key)) {
+        if (\is_null($key)) {
             return app('translator');
         }
-
         return app('translator')->get($key, $replace, $locale);
     }
 }
-
-if (! function_exists('trans_choice')) {
+if (!\function_exists('Odigos\trans_choice')) {
     /**
      * Translates the given message based on a count.
      *
@@ -939,8 +849,7 @@ if (! function_exists('trans_choice')) {
         return app('translator')->choice($key, $number, $replace, $locale);
     }
 }
-
-if (! function_exists('__')) {
+if (!\function_exists('Odigos\__')) {
     /**
      * Translate the given message.
      *
@@ -951,15 +860,13 @@ if (! function_exists('__')) {
      */
     function __($key = null, $replace = [], $locale = null)
     {
-        if (is_null($key)) {
+        if (\is_null($key)) {
             return $key;
         }
-
         return trans($key, $replace, $locale);
     }
 }
-
-if (! function_exists('url')) {
+if (!\function_exists('Odigos\url')) {
     /**
      * Generate a url for the application.
      *
@@ -970,15 +877,13 @@ if (! function_exists('url')) {
      */
     function url($path = null, $parameters = [], $secure = null)
     {
-        if (is_null($path)) {
+        if (\is_null($path)) {
             return app(UrlGenerator::class);
         }
-
         return app(UrlGenerator::class)->to($path, $parameters, $secure);
     }
 }
-
-if (! function_exists('validator')) {
+if (!\function_exists('Odigos\validator')) {
     /**
      * Create a new Validator instance.
      *
@@ -991,16 +896,13 @@ if (! function_exists('validator')) {
     function validator(array $data = [], array $rules = [], array $messages = [], array $attributes = [])
     {
         $factory = app(ValidationFactory::class);
-
-        if (func_num_args() === 0) {
+        if (\func_num_args() === 0) {
             return $factory;
         }
-
         return $factory->make($data, $rules, $messages, $attributes);
     }
 }
-
-if (! function_exists('view')) {
+if (!\function_exists('Odigos\view')) {
     /**
      * Get the evaluated view contents for the given view.
      *
@@ -1012,11 +914,9 @@ if (! function_exists('view')) {
     function view($view = null, $data = [], $mergeData = [])
     {
         $factory = app(ViewFactory::class);
-
-        if (func_num_args() === 0) {
+        if (\func_num_args() === 0) {
             return $factory;
         }
-
         return $factory->make($view, $data, $mergeData);
     }
 }

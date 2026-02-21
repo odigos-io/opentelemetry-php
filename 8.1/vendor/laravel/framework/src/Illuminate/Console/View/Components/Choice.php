@@ -3,8 +3,7 @@
 namespace Illuminate\Console\View\Components;
 
 use Symfony\Component\Console\Question\ChoiceQuestion;
-
-class Choice extends Component
+class Choice extends \Illuminate\Console\View\Components\Component
 {
     /**
      * Renders the component using the given arguments.
@@ -16,14 +15,8 @@ class Choice extends Component
      * @param  bool  $multiple
      * @return mixed
      */
-    public function render($question, $choices, $default = null, $attempts = null, $multiple = false)
+    public function render($question, $choices, $default = null, $attempts = null, $multiple = \false)
     {
-        return $this->usingQuestionHelper(
-            fn () => $this->output->askQuestion(
-                (new ChoiceQuestion($question, $choices, $default))
-                    ->setMaxAttempts($attempts)
-                    ->setMultiselect($multiple)
-            ),
-        );
+        return $this->usingQuestionHelper(fn() => $this->output->askQuestion((new ChoiceQuestion($question, $choices, $default))->setMaxAttempts($attempts)->setMultiselect($multiple)));
     }
 }

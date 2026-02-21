@@ -1,12 +1,10 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Odigos\Dotenv\Repository\Adapter;
 
-namespace Dotenv\Repository\Adapter;
-
-use PhpOption\Option;
-use PhpOption\Some;
-
+use Odigos\PhpOption\Option;
+use Odigos\PhpOption\Some;
 final class ArrayAdapter implements AdapterInterface
 {
     /**
@@ -15,7 +13,6 @@ final class ArrayAdapter implements AdapterInterface
      * @var array<string, string>
      */
     private $variables;
-
     /**
      * Create a new array adapter instance.
      *
@@ -25,7 +22,6 @@ final class ArrayAdapter implements AdapterInterface
     {
         $this->variables = [];
     }
-
     /**
      * Create a new instance of the adapter, if it is available.
      *
@@ -36,7 +32,6 @@ final class ArrayAdapter implements AdapterInterface
         /** @var \PhpOption\Option<AdapterInterface> */
         return Some::create(new self());
     }
-
     /**
      * Read an environment variable, if it exists.
      *
@@ -48,7 +43,6 @@ final class ArrayAdapter implements AdapterInterface
     {
         return Option::fromArraysValue($this->variables, $name);
     }
-
     /**
      * Write to an environment variable, if possible.
      *
@@ -60,10 +54,8 @@ final class ArrayAdapter implements AdapterInterface
     public function write(string $name, string $value)
     {
         $this->variables[$name] = $value;
-
-        return true;
+        return \true;
     }
-
     /**
      * Delete an environment variable, if possible.
      *
@@ -74,7 +66,6 @@ final class ArrayAdapter implements AdapterInterface
     public function delete(string $name)
     {
         unset($this->variables[$name]);
-
-        return true;
+        return \true;
     }
 }

@@ -4,9 +4,7 @@ namespace Illuminate\Validation\Rules;
 
 use Illuminate\Contracts\Support\Arrayable;
 use Stringable;
-
 use function Illuminate\Support\enum_value;
-
 class DoesntContain implements Stringable
 {
     /**
@@ -15,7 +13,6 @@ class DoesntContain implements Stringable
      * @var array
      */
     protected $values;
-
     /**
      * Create a new doesntContain rule instance.
      *
@@ -26,10 +23,8 @@ class DoesntContain implements Stringable
         if ($values instanceof Arrayable) {
             $values = $values->toArray();
         }
-
         $this->values = is_array($values) ? $values : func_get_args();
     }
-
     /**
      * Convert the rule to a validation string.
      *
@@ -39,10 +34,8 @@ class DoesntContain implements Stringable
     {
         $values = array_map(function ($value) {
             $value = enum_value($value);
-
-            return '"'.str_replace('"', '""', $value).'"';
+            return '"' . str_replace('"', '""', $value) . '"';
         }, $this->values);
-
-        return 'doesnt_contain:'.implode(',', $values);
+        return 'doesnt_contain:' . implode(',', $values);
     }
 }

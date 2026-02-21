@@ -1,18 +1,15 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Odigos\Laminas\Diactoros\Response;
 
-namespace Laminas\Diactoros\Response;
-
-use Laminas\Diactoros\Exception;
-use Laminas\Diactoros\Response;
-use Laminas\Diactoros\Stream;
+use Odigos\Laminas\Diactoros\Exception;
+use Odigos\Laminas\Diactoros\Response;
+use Odigos\Laminas\Diactoros\Stream;
 use Psr\Http\Message\StreamInterface;
-
 use function get_debug_type;
 use function is_string;
 use function sprintf;
-
 /**
  * Plain text response.
  *
@@ -23,7 +20,6 @@ use function sprintf;
 class TextResponse extends Response
 {
     use InjectContentTypeTrait;
-
     /**
      * Create a plain text response.
      *
@@ -37,13 +33,8 @@ class TextResponse extends Response
      */
     public function __construct($text, int $status = 200, array $headers = [])
     {
-        parent::__construct(
-            $this->createBody($text),
-            $status,
-            $this->injectContentType('text/plain; charset=utf-8', $headers)
-        );
+        parent::__construct($this->createBody($text), $status, $this->injectContentType('text/plain; charset=utf-8', $headers));
     }
-
     /**
      * Create the message body.
      *
@@ -55,16 +46,10 @@ class TextResponse extends Response
         if ($text instanceof StreamInterface) {
             return $text;
         }
-
         /** @psalm-suppress DocblockTypeContradiction */
-        if (! is_string($text)) {
-            throw new Exception\InvalidArgumentException(sprintf(
-                'Invalid content (%s) provided to %s',
-                get_debug_type($text),
-                self::class
-            ));
+        if (!is_string($text)) {
+            throw new Exception\InvalidArgumentException(sprintf('Invalid content (%s) provided to %s', get_debug_type($text), self::class));
         }
-
         $body = new Stream('php://temp', 'wb+');
         $body->write($text);
         $body->rewind();

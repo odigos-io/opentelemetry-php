@@ -1,12 +1,10 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\DBAL\Types;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
-
-final class EnumType extends Type
+final class EnumType extends \Doctrine\DBAL\Types\Type
 {
     /**
      * {@inheritDoc}

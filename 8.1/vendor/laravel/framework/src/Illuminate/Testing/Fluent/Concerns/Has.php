@@ -4,8 +4,7 @@ namespace Illuminate\Testing\Fluent\Concerns;
 
 use Closure;
 use Illuminate\Support\Arr;
-use PHPUnit\Framework\Assert as PHPUnit;
-
+use Odigos\PHPUnit\Framework\Assert as PHPUnit;
 trait Has
 {
     /**
@@ -19,27 +18,12 @@ trait Has
     {
         if (is_null($length)) {
             $path = $this->dotPath();
-
-            PHPUnit::assertCount(
-                $key,
-                $this->prop(),
-                $path
-                    ? sprintf('Property [%s] does not have the expected size.', $path)
-                    : sprintf('Root level does not have the expected size.')
-            );
-
+            PHPUnit::assertCount($key, $this->prop(), $path ? sprintf('Property [%s] does not have the expected size.', $path) : sprintf('Root level does not have the expected size.'));
             return $this;
         }
-
-        PHPUnit::assertCount(
-            $length,
-            $this->prop($key),
-            sprintf('Property [%s] does not have the expected size.', $this->dotPath($key))
-        );
-
+        PHPUnit::assertCount($length, $this->prop($key), sprintf('Property [%s] does not have the expected size.', $this->dotPath($key)));
         return $this;
     }
-
     /**
      * Ensure that the given prop exists.
      *
@@ -51,42 +35,28 @@ trait Has
     public function has($key, $length = null, ?Closure $callback = null): self
     {
         $prop = $this->prop();
-
         if (is_int($key) && is_null($length)) {
             return $this->count($key);
         }
-
-        PHPUnit::assertTrue(
-            Arr::has($prop, $key),
-            sprintf('Property [%s] does not exist.', $this->dotPath($key))
-        );
-
+        PHPUnit::assertTrue(Arr::has($prop, $key), sprintf('Property [%s] does not exist.', $this->dotPath($key)));
         $this->interactsWith($key);
-
-        if (! is_null($callback)) {
+        if (!is_null($callback)) {
             return $this->has($key, function (self $scope) use ($length, $callback) {
-                return $scope
-                    ->tap(function (self $scope) use ($length) {
-                        if (! is_null($length)) {
-                            $scope->count($length);
-                        }
-                    })
-                    ->first($callback)
-                    ->etc();
+                return $scope->tap(function (self $scope) use ($length) {
+                    if (!is_null($length)) {
+                        $scope->count($length);
+                    }
+                })->first($callback)->etc();
             });
         }
-
         if (is_callable($length)) {
             return $this->scope($key, $length);
         }
-
-        if (! is_null($length)) {
+        if (!is_null($length)) {
             return $this->count($key, $length);
         }
-
         return $this;
     }
-
     /**
      * Assert that all of the given props exist.
      *
@@ -96,7 +66,6 @@ trait Has
     public function hasAll($key): self
     {
         $keys = is_array($key) ? $key : func_get_args();
-
         foreach ($keys as $prop => $count) {
             if (is_int($prop)) {
                 $this->has($count);
@@ -104,10 +73,8 @@ trait Has
                 $this->has($prop, $count);
             }
         }
-
         return $this;
     }
-
     /**
      * Assert that at least one of the given props exists.
      *
@@ -117,19 +84,12 @@ trait Has
     public function hasAny($key): self
     {
         $keys = is_array($key) ? $key : func_get_args();
-
-        PHPUnit::assertTrue(
-            Arr::hasAny($this->prop(), $keys),
-            sprintf('None of properties [%s] exist.', implode(', ', $keys))
-        );
-
+        PHPUnit::assertTrue(Arr::hasAny($this->prop(), $keys), sprintf('None of properties [%s] exist.', implode(', ', $keys)));
         foreach ($keys as $key) {
             $this->interactsWith($key);
         }
-
         return $this;
     }
-
     /**
      * Assert that none of the given props exist.
      *
@@ -139,14 +99,11 @@ trait Has
     public function missingAll($key): self
     {
         $keys = is_array($key) ? $key : func_get_args();
-
         foreach ($keys as $prop) {
             $this->missing($prop);
         }
-
         return $this;
     }
-
     /**
      * Assert that the given prop does not exist.
      *
@@ -155,14 +112,9 @@ trait Has
      */
     public function missing(string $key): self
     {
-        PHPUnit::assertNotTrue(
-            Arr::has($this->prop(), $key),
-            sprintf('Property [%s] was found while it was expected to be missing.', $this->dotPath($key))
-        );
-
+        PHPUnit::assertNotTrue(Arr::has($this->prop(), $key), sprintf('Property [%s] was found while it was expected to be missing.', $this->dotPath($key)));
         return $this;
     }
-
     /**
      * Compose the absolute "dot" path to the given key.
      *
@@ -170,7 +122,6 @@ trait Has
      * @return string
      */
     abstract protected function dotPath(string $key = ''): string;
-
     /**
      * Marks the property as interacted.
      *
@@ -178,7 +129,6 @@ trait Has
      * @return void
      */
     abstract protected function interactsWith(string $key): void;
-
     /**
      * Retrieve a prop within the current scope using "dot" notation.
      *
@@ -186,7 +136,6 @@ trait Has
      * @return mixed
      */
     abstract protected function prop(?string $key = null);
-
     /**
      * Instantiate a new "scope" at the path of the given key.
      *
@@ -195,14 +144,12 @@ trait Has
      * @return $this
      */
     abstract protected function scope(string $key, Closure $callback);
-
     /**
      * Disables the interaction check.
      *
      * @return $this
      */
     abstract public function etc();
-
     /**
      * Instantiate a new "scope" on the first element.
      *

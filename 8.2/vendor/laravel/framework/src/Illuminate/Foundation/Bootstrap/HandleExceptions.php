@@ -8,14 +8,13 @@ use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Log\LogManager;
 use Illuminate\Support\Env;
-use Monolog\Handler\NullHandler;
-use PHPUnit\Framework\TestCase;
-use PHPUnit\Runner\ErrorHandler;
-use PHPUnit\Runner\Version;
+use Odigos\Monolog\Handler\NullHandler;
+use Odigos\PHPUnit\Framework\TestCase;
+use Odigos\PHPUnit\Runner\ErrorHandler;
+use Odigos\PHPUnit\Runner\Version;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\ErrorHandler\Error\FatalError;
 use Throwable;
-
 class HandleExceptions
 {
     /**
@@ -24,14 +23,12 @@ class HandleExceptions
      * @var string|null
      */
     public static $reservedMemory;
-
     /**
      * The application instance.
      *
      * @var \Illuminate\Contracts\Foundation\Application
      */
     protected static $app;
-
     /**
      * Bootstrap the given application.
      *
@@ -41,22 +38,15 @@ class HandleExceptions
     public function bootstrap(Application $app)
     {
         static::$reservedMemory = str_repeat('x', 32768);
-
         static::$app = $app;
-
         error_reporting(-1);
-
         set_error_handler($this->forwardsTo('handleError'));
-
         set_exception_handler($this->forwardsTo('handleException'));
-
         register_shutdown_function($this->forwardsTo('handleShutdown'));
-
-        if (! $app->environment('testing')) {
+        if (!$app->environment('testing')) {
             ini_set('display_errors', 'Off');
         }
     }
-
     /**
      * Report PHP deprecations, or convert PHP errors to ErrorException instances.
      *
@@ -76,7 +66,6 @@ class HandleExceptions
             throw new ErrorException($message, 0, $level, $file, $line);
         }
     }
-
     /**
      * Reports a deprecation to the "deprecations" logger.
      *
@@ -86,33 +75,26 @@ class HandleExceptions
      * @param  int  $level
      * @return void
      */
-    public function handleDeprecationError($message, $file, $line, $level = E_DEPRECATED)
+    public function handleDeprecationError($message, $file, $line, $level = \E_DEPRECATED)
     {
         if ($this->shouldIgnoreDeprecationErrors()) {
             return;
         }
-
         try {
             $logger = static::$app->make(LogManager::class);
         } catch (Exception) {
             return;
         }
-
         $this->ensureDeprecationLoggerIsConfigured();
-
         $options = static::$app['config']->get('logging.deprecations') ?? [];
-
         with($logger->channel('deprecations'), function ($log) use ($message, $file, $line, $level, $options) {
-            if ($options['trace'] ?? false) {
+            if ($options['trace'] ?? \false) {
                 $log->warning((string) new ErrorException($message, 0, $level, $file, $line));
             } else {
-                $log->warning(sprintf('%s in %s on line %s',
-                    $message, $file, $line
-                ));
+                $log->warning(sprintf('%s in %s on line %s', $message, $file, $line));
             }
         });
     }
-
     /**
      * Determine if deprecation errors should be ignored.
      *
@@ -120,11 +102,8 @@ class HandleExceptions
      */
     protected function shouldIgnoreDeprecationErrors()
     {
-        return ! class_exists(LogManager::class)
-            || ! static::$app->hasBeenBootstrapped()
-            || (static::$app->runningUnitTests() && ! Env::get('LOG_DEPRECATIONS_WHILE_TESTING'));
+        return !class_exists(LogManager::class) || !static::$app->hasBeenBootstrapped() || static::$app->runningUnitTests() && !Env::get('LOG_DEPRECATIONS_WHILE_TESTING');
     }
-
     /**
      * Ensure the "deprecations" logger is configured.
      *
@@ -133,22 +112,17 @@ class HandleExceptions
     protected function ensureDeprecationLoggerIsConfigured()
     {
         $config = static::$app['config'];
-
         if ($config->get('logging.channels.deprecations')) {
             return;
         }
-
         $this->ensureNullLogDriverIsConfigured();
-
         if (is_array($options = $config->get('logging.deprecations'))) {
             $driver = $options['channel'] ?? 'null';
         } else {
             $driver = $options ?? 'null';
         }
-
         $config->set('logging.channels.deprecations', $config->get("logging.channels.{$driver}"));
     }
-
     /**
      * Ensure the "null" log driver is configured.
      *
@@ -157,17 +131,11 @@ class HandleExceptions
     protected function ensureNullLogDriverIsConfigured()
     {
         $config = static::$app['config'];
-
         if ($config->get('logging.channels.null')) {
             return;
         }
-
-        $config->set('logging.channels.null', [
-            'driver' => 'monolog',
-            'handler' => NullHandler::class,
-        ]);
+        $config->set('logging.channels.null', ['driver' => 'monolog', 'handler' => NullHandler::class]);
     }
-
     /**
      * Handle an uncaught exception from the application.
      *
@@ -181,24 +149,20 @@ class HandleExceptions
     public function handleException(Throwable $e)
     {
         static::$reservedMemory = null;
-
         try {
             $this->getExceptionHandler()->report($e);
         } catch (Exception) {
-            $exceptionHandlerFailed = true;
+            $exceptionHandlerFailed = \true;
         }
-
         if (static::$app->runningInConsole()) {
             $this->renderForConsole($e);
-
-            if ($exceptionHandlerFailed ?? false) {
+            if ($exceptionHandlerFailed ?? \false) {
                 exit(1);
             }
         } else {
             $this->renderHttpResponse($e);
         }
     }
-
     /**
      * Render an exception to the console.
      *
@@ -207,9 +171,8 @@ class HandleExceptions
      */
     protected function renderForConsole(Throwable $e)
     {
-        $this->getExceptionHandler()->renderForConsole(new ConsoleOutput, $e);
+        $this->getExceptionHandler()->renderForConsole(new ConsoleOutput(), $e);
     }
-
     /**
      * Render an exception as an HTTP response and send it.
      *
@@ -220,7 +183,6 @@ class HandleExceptions
     {
         $this->getExceptionHandler()->render(static::$app['request'], $e)->send();
     }
-
     /**
      * Handle the PHP shutdown event.
      *
@@ -229,12 +191,10 @@ class HandleExceptions
     public function handleShutdown()
     {
         static::$reservedMemory = null;
-
-        if (! is_null($error = error_get_last()) && $this->isFatal($error['type'])) {
+        if (!is_null($error = error_get_last()) && $this->isFatal($error['type'])) {
             $this->handleException($this->fatalErrorFromPhpError($error, 0));
         }
     }
-
     /**
      * Create a new fatal error instance from an error array.
      *
@@ -246,7 +206,6 @@ class HandleExceptions
     {
         return new FatalError($error['message'], 0, $error, $traceOffset);
     }
-
     /**
      * Forward a method call to the given method if an application instance exists.
      *
@@ -254,11 +213,8 @@ class HandleExceptions
      */
     protected function forwardsTo($method)
     {
-        return fn (...$arguments) => static::$app
-            ? $this->{$method}(...$arguments)
-            : false;
+        return fn(...$arguments) => static::$app ? $this->{$method}(...$arguments) : \false;
     }
-
     /**
      * Determine if the error level is a deprecation.
      *
@@ -267,9 +223,8 @@ class HandleExceptions
      */
     protected function isDeprecation($level)
     {
-        return in_array($level, [E_DEPRECATED, E_USER_DEPRECATED]);
+        return in_array($level, [\E_DEPRECATED, \E_USER_DEPRECATED]);
     }
-
     /**
      * Determine if the error type is fatal.
      *
@@ -278,9 +233,8 @@ class HandleExceptions
      */
     protected function isFatal($type)
     {
-        return in_array($type, [E_COMPILE_ERROR, E_CORE_ERROR, E_ERROR, E_PARSE]);
+        return in_array($type, [\E_COMPILE_ERROR, \E_CORE_ERROR, \E_ERROR, \E_PARSE]);
     }
-
     /**
      * Get an instance of the exception handler.
      *
@@ -290,7 +244,6 @@ class HandleExceptions
     {
         return static::$app->make(ExceptionHandler::class);
     }
-
     /**
      * Clear the local application instance from memory.
      *
@@ -302,7 +255,6 @@ class HandleExceptions
     {
         static::$app = null;
     }
-
     /**
      * Flush the bootstrapper's global state.
      *
@@ -314,14 +266,10 @@ class HandleExceptions
         if (is_null(static::$app)) {
             return;
         }
-
         static::flushHandlersState($testCase);
-
         static::$app = null;
-
         static::$reservedMemory = null;
     }
-
     /**
      * Flush the bootstrapper's global handlers state.
      *
@@ -333,17 +281,13 @@ class HandleExceptions
         while (get_exception_handler() !== null) {
             restore_exception_handler();
         }
-
         while (get_error_handler() !== null) {
             restore_error_handler();
         }
-
         if (class_exists(ErrorHandler::class)) {
             $instance = ErrorHandler::instance();
-
-            if ((fn () => $this->enabled ?? false)->call($instance)) {
+            if ((fn() => $this->enabled ?? \false)->call($instance)) {
                 $instance->disable();
-
                 if (version_compare(Version::id(), '12.3.4', '>=')) {
                     $instance->enable($testCase);
                 } else {

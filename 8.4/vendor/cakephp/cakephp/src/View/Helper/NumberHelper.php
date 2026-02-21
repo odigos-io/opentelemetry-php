@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -19,7 +19,6 @@ namespace Cake\View\Helper;
 use Cake\I18n\Number;
 use Cake\View\Helper;
 use function Cake\Core\h;
-
 /**
  * Number helper library.
  *
@@ -43,9 +42,8 @@ class NumberHelper extends Helper
      */
     public function __call(string $method, array $params): mixed
     {
-        return Number::{$method}(...$params);
+        return Number::$method(...$params);
     }
-
     /**
      * Formats a number into the correct locale format
      *
@@ -69,13 +67,10 @@ class NumberHelper extends Helper
         if ($number === null) {
             return $options['default'] ?? '';
         }
-
         $formatted = Number::format($number, $options);
-        $options += ['escape' => true];
-
+        $options += ['escape' => \true];
         return $options['escape'] ? h($formatted) : $formatted;
     }
-
     /**
      * Formats a number into a currency format.
      *
@@ -108,13 +103,10 @@ class NumberHelper extends Helper
         if ($number === null) {
             return $options['default'] ?? '';
         }
-
         $formatted = Number::currency($number, $currency, $options);
-        $options += ['escape' => true];
-
+        $options += ['escape' => \true];
         return $options['escape'] ? h($formatted) : $formatted;
     }
-
     /**
      * Formats a number into the correct locale format to show deltas (signed differences in value).
      *
@@ -134,11 +126,9 @@ class NumberHelper extends Helper
     public function formatDelta(string|float $value, array $options = []): string
     {
         $formatted = Number::formatDelta($value, $options);
-        $options += ['escape' => true];
-
+        $options += ['escape' => \true];
         return $options['escape'] ? h($formatted) : $formatted;
     }
-
     /**
      * Event listeners.
      *

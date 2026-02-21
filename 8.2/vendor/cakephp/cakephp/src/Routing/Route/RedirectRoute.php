@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -24,7 +24,7 @@ namespace Cake\Routing\Route;
  * Redirection is signaled by an exception that halts route matching and
  * defines the redirect URL and status code.
  */
-class RedirectRoute extends Route
+class RedirectRoute extends \Cake\Routing\Route\Route
 {
-    use RedirectTrait;
+    use \Cake\Routing\Route\RedirectTrait;
 }

@@ -4,7 +4,6 @@ namespace Illuminate\Contracts\Container;
 
 use Closure;
 use Psr\Container\ContainerInterface;
-
 interface Container extends ContainerInterface
 {
     /**
@@ -16,7 +15,6 @@ interface Container extends ContainerInterface
      * @return ($id is class-string<TClass> ? TClass : mixed)
      */
     public function get(string $id);
-
     /**
      * Determine if the given abstract type has been bound.
      *
@@ -24,7 +22,6 @@ interface Container extends ContainerInterface
      * @return bool
      */
     public function bound($abstract);
-
     /**
      * Alias a type to a different name.
      *
@@ -35,7 +32,6 @@ interface Container extends ContainerInterface
      * @throws \LogicException
      */
     public function alias($abstract, $alias);
-
     /**
      * Assign a set of tags to a given binding.
      *
@@ -44,7 +40,6 @@ interface Container extends ContainerInterface
      * @return void
      */
     public function tag($abstracts, $tags);
-
     /**
      * Resolve all of the bindings for a given tag.
      *
@@ -52,7 +47,6 @@ interface Container extends ContainerInterface
      * @return iterable
      */
     public function tagged($tag);
-
     /**
      * Register a binding with the container.
      *
@@ -61,8 +55,7 @@ interface Container extends ContainerInterface
      * @param  bool  $shared
      * @return void
      */
-    public function bind($abstract, $concrete = null, $shared = false);
-
+    public function bind($abstract, $concrete = null, $shared = \false);
     /**
      * Bind a callback to resolve with Container::call.
      *
@@ -71,7 +64,6 @@ interface Container extends ContainerInterface
      * @return void
      */
     public function bindMethod($method, $callback);
-
     /**
      * Register a binding if it hasn't already been registered.
      *
@@ -80,8 +72,7 @@ interface Container extends ContainerInterface
      * @param  bool  $shared
      * @return void
      */
-    public function bindIf($abstract, $concrete = null, $shared = false);
-
+    public function bindIf($abstract, $concrete = null, $shared = \false);
     /**
      * Register a shared binding in the container.
      *
@@ -90,7 +81,6 @@ interface Container extends ContainerInterface
      * @return void
      */
     public function singleton($abstract, $concrete = null);
-
     /**
      * Register a shared binding if it hasn't already been registered.
      *
@@ -99,7 +89,6 @@ interface Container extends ContainerInterface
      * @return void
      */
     public function singletonIf($abstract, $concrete = null);
-
     /**
      * Register a scoped binding in the container.
      *
@@ -108,7 +97,6 @@ interface Container extends ContainerInterface
      * @return void
      */
     public function scoped($abstract, $concrete = null);
-
     /**
      * Register a scoped binding if it hasn't already been registered.
      *
@@ -117,7 +105,6 @@ interface Container extends ContainerInterface
      * @return void
      */
     public function scopedIf($abstract, $concrete = null);
-
     /**
      * "Extend" an abstract type in the container.
      *
@@ -128,7 +115,6 @@ interface Container extends ContainerInterface
      * @throws \InvalidArgumentException
      */
     public function extend($abstract, Closure $closure);
-
     /**
      * Register an existing instance as shared in the container.
      *
@@ -139,7 +125,6 @@ interface Container extends ContainerInterface
      * @return TInstance
      */
     public function instance($abstract, $instance);
-
     /**
      * Add a contextual binding to the container.
      *
@@ -149,7 +134,6 @@ interface Container extends ContainerInterface
      * @return void
      */
     public function addContextualBinding($concrete, $abstract, $implementation);
-
     /**
      * Define a contextual binding.
      *
@@ -157,7 +141,6 @@ interface Container extends ContainerInterface
      * @return \Illuminate\Contracts\Container\ContextualBindingBuilder
      */
     public function when($concrete);
-
     /**
      * Get a closure to resolve the given type from the container.
      *
@@ -167,14 +150,12 @@ interface Container extends ContainerInterface
      * @return ($abstract is class-string<TClass> ? \Closure(): TClass : \Closure(): mixed)
      */
     public function factory($abstract);
-
     /**
      * Flush the container of all bindings and resolved instances.
      *
      * @return void
      */
     public function flush();
-
     /**
      * Resolve the given type from the container.
      *
@@ -187,7 +168,6 @@ interface Container extends ContainerInterface
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function make($abstract, array $parameters = []);
-
     /**
      * Call the given Closure / class@method and inject its dependencies.
      *
@@ -197,7 +177,6 @@ interface Container extends ContainerInterface
      * @return mixed
      */
     public function call($callback, array $parameters = [], $defaultMethod = null);
-
     /**
      * Determine if the given abstract type has been resolved.
      *
@@ -205,7 +184,6 @@ interface Container extends ContainerInterface
      * @return bool
      */
     public function resolved($abstract);
-
     /**
      * Register a new before resolving callback.
      *
@@ -214,7 +192,6 @@ interface Container extends ContainerInterface
      * @return void
      */
     public function beforeResolving($abstract, ?Closure $callback = null);
-
     /**
      * Register a new resolving callback.
      *
@@ -223,7 +200,6 @@ interface Container extends ContainerInterface
      * @return void
      */
     public function resolving($abstract, ?Closure $callback = null);
-
     /**
      * Register a new after resolving callback.
      *

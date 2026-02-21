@@ -1,14 +1,13 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\i18n;
 
 use yii\base\Component;
-
 /**
  * GettextFile is the base class for representing a Gettext message file.
  *
@@ -25,7 +24,6 @@ abstract class GettextFile extends Component
      * source message => translated message.
      */
     abstract public function load($filePath, $context);
-
     /**
      * Saves messages to a file.
      * @param string $filePath file path

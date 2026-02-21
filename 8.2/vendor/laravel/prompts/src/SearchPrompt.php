@@ -4,54 +4,39 @@ namespace Laravel\Prompts;
 
 use Closure;
 use InvalidArgumentException;
-
-class SearchPrompt extends Prompt
+class SearchPrompt extends \Laravel\Prompts\Prompt
 {
-    use Concerns\Scrolling;
-    use Concerns\Truncation;
-    use Concerns\TypedValue;
-
+    use \Laravel\Prompts\Concerns\Scrolling;
+    use \Laravel\Prompts\Concerns\Truncation;
+    use \Laravel\Prompts\Concerns\TypedValue;
     /**
      * The cached matches.
      *
      * @var array<int|string, string>|null
      */
     protected ?array $matches = null;
-
     /**
      * Create a new SearchPrompt instance.
      *
      * @param  Closure(string): array<int|string, string>  $options
      */
-    public function __construct(
-        public string $label,
-        public Closure $options,
-        public string $placeholder = '',
-        public int $scroll = 5,
-        public mixed $validate = null,
-        public string $hint = '',
-        public bool|string $required = true,
-        public ?Closure $transform = null,
-    ) {
-        if ($this->required === false) {
+    public function __construct(public string $label, public Closure $options, public string $placeholder = '', public int $scroll = 5, public mixed $validate = null, public string $hint = '', public bool|string $required = \true, public ?Closure $transform = null)
+    {
+        if ($this->required === \false) {
             throw new InvalidArgumentException('Argument [required] must be true or a string.');
         }
-
-        $this->trackTypedValue(submit: false, ignore: fn ($key) => Key::oneOf([Key::HOME, Key::END, Key::CTRL_A, Key::CTRL_E], $key) && $this->highlighted !== null);
-
+        $this->trackTypedValue(submit: \false, ignore: fn($key) => \Laravel\Prompts\Key::oneOf([\Laravel\Prompts\Key::HOME, \Laravel\Prompts\Key::END, \Laravel\Prompts\Key::CTRL_A, \Laravel\Prompts\Key::CTRL_E], $key) && $this->highlighted !== null);
         $this->initializeScrolling(null);
-
-        $this->on('key', fn ($key) => match ($key) {
-            Key::UP, Key::UP_ARROW, Key::SHIFT_TAB, Key::CTRL_P => $this->highlightPrevious(count($this->matches), true),
-            Key::DOWN, Key::DOWN_ARROW, Key::TAB, Key::CTRL_N => $this->highlightNext(count($this->matches), true),
-            Key::oneOf([Key::HOME, Key::CTRL_A], $key) => $this->highlighted !== null ? $this->highlight(0) : null,
-            Key::oneOf([Key::END, Key::CTRL_E], $key) => $this->highlighted !== null ? $this->highlight(count($this->matches()) - 1) : null,
-            Key::ENTER => $this->highlighted !== null ? $this->submit() : $this->search(),
-            Key::oneOf([Key::LEFT, Key::LEFT_ARROW, Key::RIGHT, Key::RIGHT_ARROW, Key::CTRL_B, Key::CTRL_F], $key) => $this->highlighted = null,
+        $this->on('key', fn($key) => match ($key) {
+            \Laravel\Prompts\Key::UP, \Laravel\Prompts\Key::UP_ARROW, \Laravel\Prompts\Key::SHIFT_TAB, \Laravel\Prompts\Key::CTRL_P => $this->highlightPrevious(count($this->matches), \true),
+            \Laravel\Prompts\Key::DOWN, \Laravel\Prompts\Key::DOWN_ARROW, \Laravel\Prompts\Key::TAB, \Laravel\Prompts\Key::CTRL_N => $this->highlightNext(count($this->matches), \true),
+            \Laravel\Prompts\Key::oneOf([\Laravel\Prompts\Key::HOME, \Laravel\Prompts\Key::CTRL_A], $key) => $this->highlighted !== null ? $this->highlight(0) : null,
+            \Laravel\Prompts\Key::oneOf([\Laravel\Prompts\Key::END, \Laravel\Prompts\Key::CTRL_E], $key) => $this->highlighted !== null ? $this->highlight(count($this->matches()) - 1) : null,
+            \Laravel\Prompts\Key::ENTER => $this->highlighted !== null ? $this->submit() : $this->search(),
+            \Laravel\Prompts\Key::oneOf([\Laravel\Prompts\Key::LEFT, \Laravel\Prompts\Key::LEFT_ARROW, \Laravel\Prompts\Key::RIGHT, \Laravel\Prompts\Key::RIGHT_ARROW, \Laravel\Prompts\Key::CTRL_B, \Laravel\Prompts\Key::CTRL_F], $key) => $this->highlighted = null,
             default => $this->search(),
         });
     }
-
     /**
      * Perform the search.
      */
@@ -64,25 +49,19 @@ class SearchPrompt extends Prompt
         $this->firstVisible = 0;
         $this->state = 'active';
     }
-
     /**
      * Get the entered value with a virtual cursor.
      */
     public function valueWithCursor(int $maxWidth): string
     {
         if ($this->highlighted !== null) {
-            return $this->typedValue === ''
-                ? $this->dim($this->truncate($this->placeholder, $maxWidth))
-                : $this->truncate($this->typedValue, $maxWidth);
+            return $this->typedValue === '' ? $this->dim($this->truncate($this->placeholder, $maxWidth)) : $this->truncate($this->typedValue, $maxWidth);
         }
-
         if ($this->typedValue === '') {
             return $this->dim($this->addCursor($this->placeholder, 0, $maxWidth));
         }
-
         return $this->addCursor($this->typedValue, $this->cursorPosition, $maxWidth);
     }
-
     /**
      * Get options that match the input.
      *
@@ -93,10 +72,8 @@ class SearchPrompt extends Prompt
         if (is_array($this->matches)) {
             return $this->matches;
         }
-
         return $this->matches = ($this->options)($this->typedValue);
     }
-
     /**
      * The currently visible matches.
      *
@@ -104,9 +81,8 @@ class SearchPrompt extends Prompt
      */
     public function visible(): array
     {
-        return array_slice($this->matches(), $this->firstVisible, $this->scroll, preserve_keys: true);
+        return array_slice($this->matches(), $this->firstVisible, $this->scroll, preserve_keys: \true);
     }
-
     /**
      * Get the current search query.
      */
@@ -114,7 +90,6 @@ class SearchPrompt extends Prompt
     {
         return $this->typedValue;
     }
-
     /**
      * Get the selected value.
      */
@@ -123,12 +98,8 @@ class SearchPrompt extends Prompt
         if ($this->matches === null || $this->highlighted === null) {
             return null;
         }
-
-        return array_is_list($this->matches)
-            ? $this->matches[$this->highlighted]
-            : array_keys($this->matches)[$this->highlighted];
+        return array_is_list($this->matches) ? $this->matches[$this->highlighted] : array_keys($this->matches)[$this->highlighted];
     }
-
     /**
      * Get the selected label.
      */

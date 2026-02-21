@@ -3,11 +3,9 @@
 namespace Illuminate\Database\Eloquent\Concerns;
 
 use Illuminate\Support\Str;
-
 trait HasVersion4Uuids
 {
-    use HasUuids;
-
+    use \Illuminate\Database\Eloquent\Concerns\HasUuids;
     /**
      * Generate a new UUID (version 4) for the model.
      *

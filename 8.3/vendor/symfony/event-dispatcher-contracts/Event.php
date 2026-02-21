@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Contracts\EventDispatcher;
 
 use Psr\EventDispatcher\StoppableEventInterface;
-
 /**
  * Event is the base class for classes containing event data.
  *
@@ -30,13 +28,11 @@ use Psr\EventDispatcher\StoppableEventInterface;
  */
 class Event implements StoppableEventInterface
 {
-    private bool $propagationStopped = false;
-
+    private bool $propagationStopped = \false;
     public function isPropagationStopped(): bool
     {
         return $this->propagationStopped;
     }
-
     /**
      * Stops the propagation of the event to further event listeners.
      *
@@ -46,6 +42,6 @@ class Event implements StoppableEventInterface
      */
     public function stopPropagation(): void
     {
-        $this->propagationStopped = true;
+        $this->propagationStopped = \true;
     }
 }

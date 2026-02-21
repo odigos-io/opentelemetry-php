@@ -3,21 +3,18 @@
 namespace Illuminate\Mail;
 
 use Illuminate\Support\Traits\ForwardsCalls;
-
 /**
  * @mixin \Illuminate\Mail\Message
  */
 class TextMessage
 {
     use ForwardsCalls;
-
     /**
      * The underlying message instance.
      *
      * @var \Illuminate\Mail\Message
      */
     protected $message;
-
     /**
      * Create a new text message instance.
      *
@@ -28,7 +25,6 @@ class TextMessage
     {
         $this->message = $message;
     }
-
     /**
      * Embed a file in the message and get the CID.
      *
@@ -39,7 +35,6 @@ class TextMessage
     {
         return '';
     }
-
     /**
      * Embed in-memory data in the message and get the CID.
      *
@@ -52,7 +47,6 @@ class TextMessage
     {
         return '';
     }
-
     /**
      * Dynamically pass missing methods to the underlying message instance.
      *

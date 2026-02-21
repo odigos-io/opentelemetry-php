@@ -5,7 +5,6 @@ namespace Illuminate\Http\Client\Promises;
 use Closure;
 use GuzzleHttp\Promise\PromiseInterface;
 use RuntimeException;
-
 class LazyPromise implements PromiseInterface
 {
     /**
@@ -14,14 +13,12 @@ class LazyPromise implements PromiseInterface
      * @var list<callable>
      */
     protected array $pending = [];
-
     /**
      * The promise built by the creator.
      *
      * @var \GuzzleHttp\Promise\PromiseInterface
      */
     protected PromiseInterface $guzzlePromise;
-
     /**
      * Create a new lazy promise instance.
      *
@@ -30,7 +27,6 @@ class LazyPromise implements PromiseInterface
     public function __construct(protected Closure $promiseBuilder)
     {
     }
-
     /**
      * Build the promise from the promise builder.
      *
@@ -40,83 +36,65 @@ class LazyPromise implements PromiseInterface
      */
     public function buildPromise(): PromiseInterface
     {
-        if (! $this->promiseNeedsBuilt()) {
+        if (!$this->promiseNeedsBuilt()) {
             throw new RuntimeException('Promise already built');
         }
-
         $this->guzzlePromise = call_user_func($this->promiseBuilder);
-
         foreach ($this->pending as $pendingCallback) {
             $pendingCallback($this->guzzlePromise);
         }
-
         $this->pending = [];
-
         return $this->guzzlePromise;
     }
-
     #[\Override]
     public function then(?callable $onFulfilled = null, ?callable $onRejected = null): PromiseInterface
     {
         if ($this->promiseNeedsBuilt()) {
-            $this->pending[] = static fn (PromiseInterface $promise) => $promise->then($onFulfilled, $onRejected);
-
+            $this->pending[] = static fn(PromiseInterface $promise) => $promise->then($onFulfilled, $onRejected);
             return $this;
         }
-
         return $this->guzzlePromise->then($onFulfilled, $onRejected);
     }
-
     #[\Override]
     public function otherwise(callable $onRejected): PromiseInterface
     {
         if ($this->promiseNeedsBuilt()) {
-            $this->pending[] = static fn (PromiseInterface $promise) => $promise->otherwise($onRejected);
-
+            $this->pending[] = static fn(PromiseInterface $promise) => $promise->otherwise($onRejected);
             return $this;
         }
-
         return $this->guzzlePromise->otherwise($onRejected);
     }
-
     #[\Override]
     public function getState(): string
     {
         if ($this->promiseNeedsBuilt()) {
             return PromiseInterface::PENDING;
         }
-
         return $this->guzzlePromise->getState();
     }
-
     #[\Override]
     public function resolve($value): void
     {
         throw new \LogicException('Cannot resolve a lazy promise.');
     }
-
     #[\Override]
     public function reject($reason): void
     {
         throw new \LogicException('Cannot reject a lazy promise.');
     }
-
     #[\Override]
     public function cancel(): void
     {
         throw new \LogicException('Cannot cancel a lazy promise.');
     }
-
     #[\Override]
-    public function wait(bool $unwrap = true)
+    public function wait(bool $unwrap = \true)
     {
         if ($this->promiseNeedsBuilt()) {
             $this->buildPromise();
         }
-
         return $this->guzzlePromise->wait($unwrap);
     }
-
     /**
      * Determine if the promise has been created from the promise builder.
      *
@@ -124,6 +102,6 @@ class LazyPromise implements PromiseInterface
      */
     public function promiseNeedsBuilt(): bool
     {
-        return ! isset($this->guzzlePromise);
+        return !isset($this->guzzlePromise);
     }
 }

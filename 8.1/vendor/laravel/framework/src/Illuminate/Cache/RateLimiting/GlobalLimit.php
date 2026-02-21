@@ -2,7 +2,7 @@
 
 namespace Illuminate\Cache\RateLimiting;
 
-class GlobalLimit extends Limit
+class GlobalLimit extends \Illuminate\Cache\RateLimiting\Limit
 {
     /**
      * Create a new limit instance.

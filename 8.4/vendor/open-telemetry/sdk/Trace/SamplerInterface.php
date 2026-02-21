@@ -1,12 +1,10 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\SDK\Trace;
 
 use OpenTelemetry\Context\ContextInterface;
 use OpenTelemetry\SDK\Common\Attribute\AttributesInterface;
-
 /**
  * This interface is used to organize sampling logic.
  *
@@ -28,15 +26,7 @@ interface SamplerInterface
      *                     @see https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/overview.md#links-between-spans
      * @return SamplingResult
      */
-    public function shouldSample(
-        ContextInterface $parentContext,
-        string $traceId,
-        string $spanName,
-        int $spanKind,
-        AttributesInterface $attributes,
-        array $links,
-    ): SamplingResult;
-
+    public function shouldSample(ContextInterface $parentContext, string $traceId, string $spanName, int $spanKind, AttributesInterface $attributes, array $links): \OpenTelemetry\SDK\Trace\SamplingResult;
     /**
      * Returns the sampler name or short description with the configuration.
      * This may be displayed on debug pages or in the logs.

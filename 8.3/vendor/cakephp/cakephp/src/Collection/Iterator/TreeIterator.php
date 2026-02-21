@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -20,7 +20,6 @@ use Cake\Collection\CollectionInterface;
 use Cake\Collection\CollectionTrait;
 use RecursiveIterator;
 use RecursiveIteratorIterator;
-
 /**
  * A Recursive iterator used to flatten nested structures and also exposes
  * all Collection methods
@@ -30,7 +29,6 @@ use RecursiveIteratorIterator;
 class TreeIterator extends RecursiveIteratorIterator implements CollectionInterface
 {
     use CollectionTrait;
-
     /**
      * The iteration mode
      *
@@ -38,7 +36,6 @@ class TreeIterator extends RecursiveIteratorIterator implements CollectionInterf
      * @phpstan-var \RecursiveIteratorIterator::LEAVES_ONLY|\RecursiveIteratorIterator::SELF_FIRST|\RecursiveIteratorIterator::CHILD_FIRST
      */
     protected int $_mode;
-
     /**
      * Constructor
      *
@@ -48,15 +45,11 @@ class TreeIterator extends RecursiveIteratorIterator implements CollectionInterf
      * @phpstan-param \RecursiveIteratorIterator::LEAVES_ONLY|\RecursiveIteratorIterator::SELF_FIRST|\RecursiveIteratorIterator::CHILD_FIRST $mode
      * @phpstan-param \RecursiveIteratorIterator::LEAVES_ONLY|\RecursiveIteratorIterator::CATCH_GET_CHILD $flags
      */
-    public function __construct(
-        RecursiveIterator $items,
-        int $mode = RecursiveIteratorIterator::SELF_FIRST,
-        int $flags = 0,
-    ) {
+    public function __construct(RecursiveIterator $items, int $mode = RecursiveIteratorIterator::SELF_FIRST, int $flags = 0)
+    {
         parent::__construct($items, $mode, $flags);
         $this->_mode = $mode;
     }
-
     /**
      * Returns another iterator which will return the values ready to be displayed
      * to a user. It does so by extracting one property from each of the elements
@@ -95,27 +88,16 @@ class TreeIterator extends RecursiveIteratorIterator implements CollectionInterf
      * their depth in the tree
      * @return \Cake\Collection\Iterator\TreePrinter
      */
-    public function printer(
-        callable|string $valuePath,
-        callable|string|null $keyPath = null,
-        string $spacer = '__',
-    ): TreePrinter {
+    public function printer(callable|string $valuePath, callable|string|null $keyPath = null, string $spacer = '__'): \Cake\Collection\Iterator\TreePrinter
+    {
         if (!$keyPath) {
             $counter = 0;
             $keyPath = function () use (&$counter): int {
                 return $counter++;
             };
         }
-
         /** @var \RecursiveIterator $iterator */
         $iterator = $this->getInnerIterator();
-
-        return new TreePrinter(
-            $iterator,
-            $valuePath,
-            $keyPath,
-            $spacer,
-            $this->_mode,
-        );
+        return new \Cake\Collection\Iterator\TreePrinter($iterator, $valuePath, $keyPath, $spacer, $this->_mode);
     }
 }

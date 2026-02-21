@@ -1,6 +1,6 @@
 <?php
 
-namespace FastRoute\Dispatcher;
+namespace Odigos\FastRoute\Dispatcher;
 
 class MarkBasedTest extends DispatcherTest
 {
@@ -11,14 +11,12 @@ class MarkBasedTest extends DispatcherTest
             $this->markTestSkipped('PHP 5.6 required for MARK support');
         }
     }
-
     protected function getDispatcherClass()
     {
-        return 'FastRoute\\Dispatcher\\MarkBased';
+        return 'Odigos\FastRoute\Dispatcher\MarkBased';
     }
-
     protected function getDataGeneratorClass()
     {
-        return 'FastRoute\\DataGenerator\\MarkBased';
+        return 'Odigos\FastRoute\DataGenerator\MarkBased';
     }
 }

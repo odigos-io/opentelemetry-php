@@ -1,11 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenAI\ValueObjects\Transporter;
 
 use OpenAI\Responses\Meta\MetaInformation;
-
 /**
  * @template-covariant TData of array|string
  *
@@ -18,13 +16,10 @@ final class Response
      *
      * @param  TData  $data
      */
-    private function __construct(
-        private readonly array|string $data,
-        private readonly MetaInformation $meta
-    ) {
+    private function __construct(private readonly array|string $data, private readonly MetaInformation $meta)
+    {
         // ..
     }
-
     /**
      * Creates a new Response value object from the given data and meta information.
      *
@@ -36,10 +31,8 @@ final class Response
     {
         // @phpstan-ignore-next-line
         $meta = MetaInformation::from($headers);
-
         return new self($data, $meta);
     }
-
     /**
      * Returns the response data.
      *
@@ -49,7 +42,6 @@ final class Response
     {
         return $this->data;
     }
-
     /**
      * Returns the meta information.
      */

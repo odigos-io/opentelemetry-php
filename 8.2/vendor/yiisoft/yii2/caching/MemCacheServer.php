@@ -1,10 +1,10 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\caching;
 
 /**
@@ -35,7 +35,7 @@ class MemCacheServer extends \yii\base\BaseObject
     /**
      * @var bool whether to use a persistent connection. This is used by memcache only.
      */
-    public $persistent = true;
+    public $persistent = \true;
     /**
      * @var int timeout in milliseconds which will be used for connecting to the server.
      * This is used by memcache only. For old versions of memcache that only support specifying
@@ -49,7 +49,7 @@ class MemCacheServer extends \yii\base\BaseObject
     /**
      * @var bool if the server should be flagged as online upon a failure. This is used by memcache only.
      */
-    public $status = true;
+    public $status = \true;
     /**
      * @var \Closure this callback function will run upon encountering an error.
      * The callback is run before fail over is attempted. The function takes two parameters,

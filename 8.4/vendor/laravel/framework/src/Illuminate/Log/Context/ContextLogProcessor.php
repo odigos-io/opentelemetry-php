@@ -5,8 +5,7 @@ namespace Illuminate\Log\Context;
 use Illuminate\Container\Container;
 use Illuminate\Contracts\Log\ContextLogProcessor as ContextLogProcessorContract;
 use Illuminate\Log\Context\Repository as ContextRepository;
-use Monolog\LogRecord;
-
+use Odigos\Monolog\LogRecord;
 class ContextLogProcessor implements ContextLogProcessorContract
 {
     /**
@@ -18,14 +17,9 @@ class ContextLogProcessor implements ContextLogProcessorContract
     public function __invoke(LogRecord $record): LogRecord
     {
         $app = Container::getInstance();
-
-        if (! $app->bound(ContextRepository::class)) {
+        if (!$app->bound(ContextRepository::class)) {
             return $record;
         }
-
-        return $record->with(extra: [
-            ...$record->extra,
-            ...$app->get(ContextRepository::class)->all(),
-        ]);
+        return $record->with(extra: [...$record->extra, ...$app->get(ContextRepository::class)->all()]);
     }
 }

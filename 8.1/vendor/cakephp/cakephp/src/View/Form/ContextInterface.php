@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -25,14 +25,12 @@ interface ContextInterface
      * @var array<string>
      */
     public const VALID_ATTRIBUTES = ['length', 'precision', 'comment', 'null', 'default'];
-
     /**
      * Get the fields used in the context as a primary key.
      *
      * @return array<string>
      */
     public function getPrimaryKey(): array;
-
     /**
      * Returns true if the passed field name is part of the primary key for this context
      *
@@ -41,14 +39,12 @@ interface ContextInterface
      * @return bool
      */
     public function isPrimaryKey(string $field): bool;
-
     /**
      * Returns whether this form is for a create operation.
      *
      * @return bool
      */
     public function isCreate(): bool;
-
     /**
      * Get the current value for a given field.
      *
@@ -66,7 +62,6 @@ interface ContextInterface
      * @return mixed
      */
     public function val(string $field, array $options = []): mixed;
-
     /**
      * Check if a given field is 'required'.
      *
@@ -76,7 +71,6 @@ interface ContextInterface
      * @return bool|null
      */
     public function isRequired(string $field): ?bool;
-
     /**
      * Gets the default "required" error message for a field
      *
@@ -84,7 +78,6 @@ interface ContextInterface
      * @return string|null
      */
     public function getRequiredMessage(string $field): ?string;
-
     /**
      * Get maximum length of a field from model validation.
      *
@@ -92,14 +85,12 @@ interface ContextInterface
      * @return int|null
      */
     public function getMaxLength(string $field): ?int;
-
     /**
      * Get the field names of the top level object in this context.
      *
      * @return array<string> A list of the field names in the context.
      */
     public function fieldNames(): array;
-
     /**
      * Get the abstract field type for a given field name.
      *
@@ -108,7 +99,6 @@ interface ContextInterface
      * @see \Cake\Database\TypeFactory
      */
     public function type(string $field): ?string;
-
     /**
      * Get an associative array of other attributes for a field name.
      *
@@ -116,7 +106,6 @@ interface ContextInterface
      * @return array An array of data describing the additional attributes on a field.
      */
     public function attributes(string $field): array;
-
     /**
      * Check whether a field has an error attached to it
      *
@@ -124,7 +113,6 @@ interface ContextInterface
      * @return bool Returns true if the errors for the field are not empty.
      */
     public function hasError(string $field): bool;
-
     /**
      * Get the errors for a given field
      *

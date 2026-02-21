@@ -1,26 +1,22 @@
 <?php
 
-namespace TijsVerkoyen\CssToInlineStyles\Css\Property;
+namespace Odigos\TijsVerkoyen\CssToInlineStyles\Css\Property;
 
 use Symfony\Component\CssSelector\Node\Specificity;
-
 final class Property
 {
     /**
      * @var string
      */
     private $name;
-
     /**
      * @var string
      */
     private $value;
-
     /**
      * @var Specificity|null
      */
     private $originalSpecificity;
-
     /**
      * Property constructor.
      * @param string           $name
@@ -33,7 +29,6 @@ final class Property
         $this->value = $value;
         $this->originalSpecificity = $specificity;
     }
-
     /**
      * Get name
      *
@@ -43,7 +38,6 @@ final class Property
     {
         return $this->name;
     }
-
     /**
      * Get value
      *
@@ -53,7 +47,6 @@ final class Property
     {
         return $this->value;
     }
-
     /**
      * Get originalSpecificity
      *
@@ -63,7 +56,6 @@ final class Property
     {
         return $this->originalSpecificity;
     }
-
     /**
      * Is this property important?
      *
@@ -71,9 +63,8 @@ final class Property
      */
     public function isImportant()
     {
-        return (stripos($this->value, '!important') !== false);
+        return stripos($this->value, '!important') !== \false;
     }
-
     /**
      * Get the textual representation of the property
      *
@@ -81,10 +72,6 @@ final class Property
      */
     public function toString()
     {
-        return sprintf(
-            '%1$s: %2$s;',
-            $this->name,
-            $this->value
-        );
+        return sprintf('%1$s: %2$s;', $this->name, $this->value);
     }
 }

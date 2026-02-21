@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -20,6 +20,6 @@ namespace Cake\Console\Exception;
  *
  * @see \Cake\Command\BaseCommand::abort()
  */
-class StopException extends ConsoleException
+class StopException extends \Cake\Console\Exception\ConsoleException
 {
 }

@@ -3,7 +3,6 @@
 namespace Illuminate\Database\Events;
 
 use Illuminate\Contracts\Database\Events\MigrationEvent;
-
 class MigrationSkipped implements MigrationEvent
 {
     /**
@@ -11,8 +10,7 @@ class MigrationSkipped implements MigrationEvent
      *
      * @param  string  $migrationName  The name of the migration that was skipped.
      */
-    public function __construct(
-        public $migrationName,
-    ) {
+    public function __construct(public $migrationName)
+    {
     }
 }

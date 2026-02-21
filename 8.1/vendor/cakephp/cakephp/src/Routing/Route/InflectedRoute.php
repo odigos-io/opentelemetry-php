@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -17,12 +17,11 @@ declare(strict_types=1);
 namespace Cake\Routing\Route;
 
 use Cake\Utility\Inflector;
-
 /**
  * This route class will transparently inflect the controller and plugin routing
  * parameters, so that requesting `/my_controller` is parsed as `['controller' => 'MyController']`
  */
-class InflectedRoute extends Route
+class InflectedRoute extends \Cake\Routing\Route\Route
 {
     /**
      * Flag for tracking whether the defaults have been inflected.
@@ -33,7 +32,6 @@ class InflectedRoute extends Route
      * @var array|null
      */
     protected ?array $_inflectedDefaults = null;
-
     /**
      * Parses a string URL into an array. If it matches, it will convert the prefix, controller and
      * plugin keys to their camelized form.
@@ -59,10 +57,8 @@ class InflectedRoute extends Route
                 $params['plugin'] = Inflector::camelize($vendor) . '/' . Inflector::camelize($plugin);
             }
         }
-
         return $params;
     }
-
     /**
      * Underscores the prefix, controller and plugin params before passing them on to the
      * parent class
@@ -83,13 +79,11 @@ class InflectedRoute extends Route
         $restore = $this->defaults;
         try {
             $this->defaults = $this->_inflectedDefaults;
-
             return parent::match($url, $context);
         } finally {
             $this->defaults = $restore;
         }
     }
-
     /**
      * Helper method for underscoring keys in a URL array.
      *
@@ -104,7 +98,6 @@ class InflectedRoute extends Route
         if (!empty($url['plugin'])) {
             $url['plugin'] = Inflector::underscore($url['plugin']);
         }
-
         return $url;
     }
 }

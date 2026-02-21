@@ -1,10 +1,10 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\console;
 
 /**
@@ -21,8 +21,6 @@ namespace yii\console;
 class Request extends \yii\base\Request
 {
     private $_params;
-
-
     /**
      * Returns the command line arguments.
      * @return array the command line arguments. It does not include the entry script name.
@@ -37,10 +35,8 @@ class Request extends \yii\base\Request
                 $this->_params = [];
             }
         }
-
         return $this->_params;
     }
-
     /**
      * Sets the command line arguments.
      * @param array $params the command line arguments
@@ -49,7 +45,6 @@ class Request extends \yii\base\Request
     {
         $this->_params = $params;
     }
-
     /**
      * Resolves the current request into a route and the associated parameters.
      * @return array the first element is the route, and the second is the associated parameters.
@@ -58,51 +53,47 @@ class Request extends \yii\base\Request
     public function resolve()
     {
         $rawParams = $this->getParams();
-        $endOfOptionsFound = false;
+        $endOfOptionsFound = \false;
         if (isset($rawParams[0])) {
             $route = array_shift($rawParams);
-
             if ($route === '--') {
-                $endOfOptionsFound = true;
+                $endOfOptionsFound = \true;
                 $route = array_shift($rawParams);
             }
         } else {
             $route = '';
         }
-
         $params = [];
         $prevOption = null;
         foreach ($rawParams as $param) {
             if ($endOfOptionsFound) {
                 $params[] = $param;
             } elseif ($param === '--') {
-                $endOfOptionsFound = true;
+                $endOfOptionsFound = \true;
             } elseif (preg_match('/^--([\w-]+)(?:=(.*))?$/', $param, $matches)) {
                 $name = $matches[1];
                 if (is_numeric(substr($name, 0, 1))) {
-                    throw new Exception('Parameter "' . $name . '" is not valid');
+                    throw new \yii\console\Exception('Parameter "' . $name . '" is not valid');
                 }
-
-                if ($name !== Application::OPTION_APPCONFIG) {
-                    $params[$name] = isset($matches[2]) ? $matches[2] : true;
-                    $prevOption = &$params[$name];
+                if ($name !== \yii\console\Application::OPTION_APPCONFIG) {
+                    $params[$name] = isset($matches[2]) ? $matches[2] : \true;
+                    $prevOption =& $params[$name];
                 }
             } elseif (preg_match('/^-([\w-]+)(?:=(.*))?$/', $param, $matches)) {
                 $name = $matches[1];
                 if (is_numeric($name)) {
                     $params[] = $param;
                 } else {
-                    $params['_aliases'][$name] = isset($matches[2]) ? $matches[2] : true;
-                    $prevOption = &$params['_aliases'][$name];
+                    $params['_aliases'][$name] = isset($matches[2]) ? $matches[2] : \true;
+                    $prevOption =& $params['_aliases'][$name];
                 }
-            } elseif ($prevOption === true) {
+            } elseif ($prevOption === \true) {
                 // `--option value` syntax
                 $prevOption = $param;
             } else {
                 $params[] = $param;
             }
         }
-
         return [$route, $params];
     }
 }

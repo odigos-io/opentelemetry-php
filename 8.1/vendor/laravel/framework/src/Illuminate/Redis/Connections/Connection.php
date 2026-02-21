@@ -8,34 +8,29 @@ use Illuminate\Redis\Events\CommandExecuted;
 use Illuminate\Redis\Limiters\ConcurrencyLimiterBuilder;
 use Illuminate\Redis\Limiters\DurationLimiterBuilder;
 use Illuminate\Support\Traits\Macroable;
-
 abstract class Connection
 {
     use Macroable {
         __call as macroCall;
     }
-
     /**
      * The Redis client.
      *
      * @var \Redis
      */
     protected $client;
-
     /**
      * The Redis connection name.
      *
      * @var string|null
      */
     protected $name;
-
     /**
      * The event dispatcher instance.
      *
      * @var \Illuminate\Contracts\Events\Dispatcher
      */
     protected $events;
-
     /**
      * Subscribe to a set of given channels for messages.
      *
@@ -45,7 +40,6 @@ abstract class Connection
      * @return void
      */
     abstract public function createSubscription($channels, Closure $callback, $method = 'subscribe');
-
     /**
      * Funnel a callback for a maximum number of simultaneous executions.
      *
@@ -56,7 +50,6 @@ abstract class Connection
     {
         return new ConcurrencyLimiterBuilder($this, $name);
     }
-
     /**
      * Throttle a callback for a maximum number of executions over a given duration.
      *
@@ -67,7 +60,6 @@ abstract class Connection
     {
         return new DurationLimiterBuilder($this, $name);
     }
-
     /**
      * Get the underlying Redis client.
      *
@@ -77,7 +69,6 @@ abstract class Connection
     {
         return $this->client;
     }
-
     /**
      * Subscribe to a set of given channels for messages.
      *
@@ -89,7 +80,6 @@ abstract class Connection
     {
         return $this->createSubscription($channels, $callback, __FUNCTION__);
     }
-
     /**
      * Subscribe to a set of given channels with wildcards.
      *
@@ -101,7 +91,6 @@ abstract class Connection
     {
         return $this->createSubscription($channels, $callback, __FUNCTION__);
     }
-
     /**
      * Run a command against the Redis database.
      *
@@ -111,21 +100,14 @@ abstract class Connection
      */
     public function command($method, array $parameters = [])
     {
-        $start = microtime(true);
-
+        $start = microtime(\true);
         $result = $this->client->{$method}(...$parameters);
-
-        $time = round((microtime(true) - $start) * 1000, 2);
-
+        $time = round((microtime(\true) - $start) * 1000, 2);
         if (isset($this->events)) {
-            $this->event(new CommandExecuted(
-                $method, $this->parseParametersForEvent($parameters), $time, $this
-            ));
+            $this->event(new CommandExecuted($method, $this->parseParametersForEvent($parameters), $time, $this));
         }
-
         return $result;
     }
-
     /**
      * Parse the command's parameters for event dispatching.
      *
@@ -136,7 +118,6 @@ abstract class Connection
     {
         return $parameters;
     }
-
     /**
      * Fire the given event if possible.
      *
@@ -147,7 +128,6 @@ abstract class Connection
     {
         $this->events?->dispatch($event);
     }
-
     /**
      * Register a Redis command listener with the connection.
      *
@@ -158,7 +138,6 @@ abstract class Connection
     {
         $this->events?->listen(CommandExecuted::class, $callback);
     }
-
     /**
      * Get the connection name.
      *
@@ -168,7 +147,6 @@ abstract class Connection
     {
         return $this->name;
     }
-
     /**
      * Set the connections name.
      *
@@ -178,10 +156,8 @@ abstract class Connection
     public function setName($name)
     {
         $this->name = $name;
-
         return $this;
     }
-
     /**
      * Get the event dispatcher used by the connection.
      *
@@ -191,7 +167,6 @@ abstract class Connection
     {
         return $this->events;
     }
-
     /**
      * Set the event dispatcher instance on the connection.
      *
@@ -202,7 +177,6 @@ abstract class Connection
     {
         $this->events = $events;
     }
-
     /**
      * Unset the event dispatcher instance on the connection.
      *
@@ -212,7 +186,6 @@ abstract class Connection
     {
         $this->events = null;
     }
-
     /**
      * Pass other method calls down to the underlying client.
      *
@@ -225,7 +198,6 @@ abstract class Connection
         if (static::hasMacro($method)) {
             return $this->macroCall($method, $parameters);
         }
-
         return $this->command($method, $parameters);
     }
 }

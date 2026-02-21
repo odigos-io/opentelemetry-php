@@ -3,11 +3,9 @@
 namespace Illuminate\Cache;
 
 use Illuminate\Contracts\Cache\LockProvider;
-
-class NullStore extends TaggableStore implements LockProvider
+class NullStore extends \Illuminate\Cache\TaggableStore implements LockProvider
 {
-    use RetrievesMultipleKeys;
-
+    use \Illuminate\Cache\RetrievesMultipleKeys;
     /**
      * Retrieve an item from the cache by key.
      *
@@ -18,7 +16,6 @@ class NullStore extends TaggableStore implements LockProvider
     {
         //
     }
-
     /**
      * Store an item in the cache for a given number of seconds.
      *
@@ -29,9 +26,8 @@ class NullStore extends TaggableStore implements LockProvider
      */
     public function put($key, $value, $seconds)
     {
-        return false;
+        return \false;
     }
-
     /**
      * Increment the value of an item in the cache.
      *
@@ -41,9 +37,8 @@ class NullStore extends TaggableStore implements LockProvider
      */
     public function increment($key, $value = 1)
     {
-        return false;
+        return \false;
     }
-
     /**
      * Decrement the value of an item in the cache.
      *
@@ -53,9 +48,8 @@ class NullStore extends TaggableStore implements LockProvider
      */
     public function decrement($key, $value = 1)
     {
-        return false;
+        return \false;
     }
-
     /**
      * Store an item in the cache indefinitely.
      *
@@ -65,9 +59,8 @@ class NullStore extends TaggableStore implements LockProvider
      */
     public function forever($key, $value)
     {
-        return false;
+        return \false;
     }
-
     /**
      * Get a lock instance.
      *
@@ -78,9 +71,8 @@ class NullStore extends TaggableStore implements LockProvider
      */
     public function lock($name, $seconds = 0, $owner = null)
     {
-        return new NoLock($name, $seconds, $owner);
+        return new \Illuminate\Cache\NoLock($name, $seconds, $owner);
     }
-
     /**
      * Restore a lock instance using the owner identifier.
      *
@@ -92,7 +84,6 @@ class NullStore extends TaggableStore implements LockProvider
     {
         return $this->lock($name, 0, $owner);
     }
-
     /**
      * Remove an item from the cache.
      *
@@ -101,9 +92,8 @@ class NullStore extends TaggableStore implements LockProvider
      */
     public function forget($key)
     {
-        return true;
+        return \true;
     }
-
     /**
      * Remove all items from the cache.
      *
@@ -111,9 +101,8 @@ class NullStore extends TaggableStore implements LockProvider
      */
     public function flush()
     {
-        return true;
+        return \true;
     }
-
     /**
      * Get the cache key prefix.
      *

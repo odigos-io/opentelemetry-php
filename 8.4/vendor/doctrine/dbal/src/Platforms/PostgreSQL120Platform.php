@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\DBAL\Platforms;
 
 /**
@@ -9,7 +8,7 @@ namespace Doctrine\DBAL\Platforms;
  *
  * @deprecated This class will be removed once support for Postgres < 12 is dropped.
  */
-class PostgreSQL120Platform extends PostgreSQLPlatform
+class PostgreSQL120Platform extends \Doctrine\DBAL\Platforms\PostgreSQLPlatform
 {
     public function getDefaultColumnValueSQLSnippet(): string
     {
@@ -19,14 +18,14 @@ class PostgreSQL120Platform extends PostgreSQLPlatform
         // so in that case we force it to NULL as DBAL will use that column only for the
         // 'default' value
         return <<<'SQL'
-            SELECT
-                CASE
-                    WHEN a.attgenerated = 's' THEN NULL
-                    ELSE pg_get_expr(adbin, adrelid)
-                END
-             FROM pg_attrdef
-             WHERE c.oid = pg_attrdef.adrelid
-                AND pg_attrdef.adnum=a.attnum
-        SQL;
+    SELECT
+        CASE
+            WHEN a.attgenerated = 's' THEN NULL
+            ELSE pg_get_expr(adbin, adrelid)
+        END
+     FROM pg_attrdef
+     WHERE c.oid = pg_attrdef.adrelid
+        AND pg_attrdef.adnum=a.attnum
+SQL;
     }
 }

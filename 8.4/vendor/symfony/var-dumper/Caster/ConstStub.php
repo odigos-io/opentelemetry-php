@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\VarDumper\Caster;
 
 use Symfony\Component\VarDumper\Cloner\Stub;
-
 /**
  * Represents a PHP constant and its value.
  *
@@ -25,12 +23,10 @@ class ConstStub extends Stub
         $this->class = $name;
         $this->value = 1 < \func_num_args() ? $value : $name;
     }
-
     public function __toString(): string
     {
         return (string) $this->value;
     }
-
     /**
      * @param array<int, string> $values
      */
@@ -42,11 +38,9 @@ class ConstStub extends Stub
                 $names[] = $name;
             }
         }
-
         if (!$names) {
             $names[] = $values[0] ?? 0;
         }
-
         return new self(implode(' | ', $names), $value);
     }
 }

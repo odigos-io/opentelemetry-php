@@ -3,7 +3,6 @@
 namespace Illuminate\Http;
 
 use Illuminate\Support\Str;
-
 trait FileHelpers
 {
     /**
@@ -12,7 +11,6 @@ trait FileHelpers
      * @var string
      */
     protected $hashName = null;
-
     /**
      * Get the fully qualified path to the file.
      *
@@ -22,7 +20,6 @@ trait FileHelpers
     {
         return $this->getRealPath();
     }
-
     /**
      * Get the file's extension.
      *
@@ -32,7 +29,6 @@ trait FileHelpers
     {
         return $this->guessExtension();
     }
-
     /**
      * Get a filename for the file.
      *
@@ -42,18 +38,14 @@ trait FileHelpers
     public function hashName($path = null)
     {
         if ($path) {
-            $path = rtrim($path, '/').'/';
+            $path = rtrim($path, '/') . '/';
         }
-
         $hash = $this->hashName ?: $this->hashName = Str::random(40);
-
         if ($extension = $this->guessExtension()) {
-            $extension = '.'.$extension;
+            $extension = '.' . $extension;
         }
-
-        return $path.$hash.$extension;
+        return $path . $hash . $extension;
     }
-
     /**
      * Get the dimensions of the image (if applicable).
      *

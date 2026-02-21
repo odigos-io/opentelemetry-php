@@ -8,19 +8,17 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\Mime\Encoder;
 
 /**
  * @author Chris Corbyn
  */
-final class Base64MimeHeaderEncoder extends Base64Encoder implements MimeHeaderEncoderInterface
+final class Base64MimeHeaderEncoder extends \Symfony\Component\Mime\Encoder\Base64Encoder implements \Symfony\Component\Mime\Encoder\MimeHeaderEncoderInterface
 {
     public function getName(): string
     {
         return 'B';
     }
-
     /**
      * Takes an unencoded string and produces a Base64 encoded string from it.
      *
@@ -34,10 +32,8 @@ final class Base64MimeHeaderEncoder extends Base64Encoder implements MimeHeaderE
             mb_internal_encoding('utf-8');
             $newstring = mb_encode_mimeheader($string, 'iso-2022-jp', $this->getName(), "\r\n");
             mb_internal_encoding($old);
-
             return $newstring;
         }
-
         return parent::encodeString($string, $charset, $firstLineOffset, $maxLineLength);
     }
 }

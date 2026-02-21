@@ -1,11 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\SDK\Metrics;
 
 use OpenTelemetry\SDK\Metrics\Data\Temporality;
-
 interface AggregationTemporalitySelectorInterface
 {
     /**
@@ -17,5 +15,5 @@ interface AggregationTemporalitySelectorInterface
      * @return string|Temporality|null temporality to use, or null to signal
      *         that the given metric should not be exported by this exporter
      */
-    public function temporality(MetricMetadataInterface $metric);
+    public function temporality(\OpenTelemetry\SDK\Metrics\MetricMetadataInterface $metric);
 }

@@ -1,10 +1,10 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\base;
 
 /**
@@ -13,7 +13,7 @@ namespace yii\base;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class ViewEvent extends Event
+class ViewEvent extends \yii\base\Event
 {
     /**
      * @var string the view file being rendered.
@@ -35,5 +35,5 @@ class ViewEvent extends Event
      * [[View::EVENT_BEFORE_RENDER]] may set this property to decide whether
      * to continue rendering the current view file.
      */
-    public $isValid = true;
+    public $isValid = \true;
 }

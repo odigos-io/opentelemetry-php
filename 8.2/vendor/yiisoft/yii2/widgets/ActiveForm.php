@@ -1,13 +1,13 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\widgets;
 
-use Yii;
+use Odigos\Yii;
 use yii\base\InvalidCallException;
 use yii\base\Model;
 use yii\base\Widget;
@@ -15,7 +15,6 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\helpers\Json;
 use yii\helpers\Url;
-
 /**
  * ActiveForm is a widget that builds an interactive HTML form for one or multiple data models.
  *
@@ -84,7 +83,7 @@ class ActiveForm extends Widget
     /**
      * @var bool whether to perform encoding on the error summary.
      */
-    public $encodeErrorSummary = true;
+    public $encodeErrorSummary = \true;
     /**
      * @var string the default CSS class for the error summary container.
      * @see errorSummary()
@@ -117,12 +116,12 @@ class ActiveForm extends Widget
      * @var bool whether to enable client-side data validation.
      * If [[ActiveField::enableClientValidation]] is set, its value will take precedence for that input field.
      */
-    public $enableClientValidation = true;
+    public $enableClientValidation = \true;
     /**
      * @var bool whether to enable AJAX-based data validation.
      * If [[ActiveField::enableAjaxValidation]] is set, its value will take precedence for that input field.
      */
-    public $enableAjaxValidation = false;
+    public $enableAjaxValidation = \false;
     /**
      * @var bool whether to hook up `yii.activeForm` JavaScript plugin.
      * This property must be set `true` if you want to support client validation and/or AJAX validation, or if you
@@ -130,7 +129,7 @@ class ActiveForm extends Widget
      * any JavaScript.
      * @see registerClientScript
      */
-    public $enableClientScript = true;
+    public $enableClientScript = \true;
     /**
      * @var array|string|null the URL for performing AJAX-based validation. This property will be processed by
      * [[Url::to()]]. Please refer to [[Url::to()]] for more details on how to configure this property.
@@ -140,23 +139,23 @@ class ActiveForm extends Widget
     /**
      * @var bool whether to perform validation when the form is submitted.
      */
-    public $validateOnSubmit = true;
+    public $validateOnSubmit = \true;
     /**
      * @var bool whether to perform validation when the value of an input field is changed.
      * If [[ActiveField::validateOnChange]] is set, its value will take precedence for that input field.
      */
-    public $validateOnChange = true;
+    public $validateOnChange = \true;
     /**
      * @var bool whether to perform validation when an input field loses focus.
      * If [[ActiveField::$validateOnBlur]] is set, its value will take precedence for that input field.
      */
-    public $validateOnBlur = true;
+    public $validateOnBlur = \true;
     /**
      * @var bool whether to perform validation while the user is typing in an input field.
      * If [[ActiveField::validateOnType]] is set, its value will take precedence for that input field.
      * @see validationDelay
      */
-    public $validateOnType = false;
+    public $validateOnType = \false;
     /**
      * @var int number of milliseconds that the validation should be delayed when the user types in the field
      * and [[validateOnType]] is set `true`.
@@ -175,7 +174,7 @@ class ActiveForm extends Widget
      * @var bool whether to scroll to the first error after validation.
      * @since 2.0.6
      */
-    public $scrollToError = true;
+    public $scrollToError = \true;
     /**
      * @var int offset in pixels that should be added when scrolling to the first error.
      * @since 2.0.11
@@ -187,13 +186,10 @@ class ActiveForm extends Widget
      * @internal
      */
     public $attributes = [];
-
     /**
      * @var ActiveField[] the ActiveField objects that are currently active
      */
     private $_fields = [];
-
-
     /**
      * Initializes the widget.
      * This renders the form open tag.
@@ -205,9 +201,8 @@ class ActiveForm extends Widget
             $this->options['id'] = $this->getId();
         }
         ob_start();
-        ob_implicit_flush(false);
+        ob_implicit_flush(\false);
     }
-
     /**
      * Runs the widget.
      * This registers the necessary JavaScript code and renders the form open and close tags.
@@ -218,19 +213,15 @@ class ActiveForm extends Widget
         if (!empty($this->_fields)) {
             throw new InvalidCallException('Each beginField() should have a matching endField() call.');
         }
-
         $content = ob_get_clean();
         $html = Html::beginForm($this->action, $this->method, $this->options);
         $html .= $content;
-
         if ($this->enableClientScript) {
             $this->registerClientScript();
         }
-
         $html .= Html::endForm();
         return $html;
     }
-
     /**
      * This registers the necessary JavaScript code.
      * @since 2.0.12
@@ -241,49 +232,22 @@ class ActiveForm extends Widget
         $options = Json::htmlEncode($this->getClientOptions());
         $attributes = Json::htmlEncode($this->attributes);
         $view = $this->getView();
-        ActiveFormAsset::register($view);
-        $view->registerJs("jQuery('#$id').yiiActiveForm($attributes, $options);");
+        \yii\widgets\ActiveFormAsset::register($view);
+        $view->registerJs("jQuery('#{$id}').yiiActiveForm({$attributes}, {$options});");
     }
-
     /**
      * Returns the options for the form JS widget.
      * @return array the options.
      */
     protected function getClientOptions()
     {
-        $options = [
-            'encodeErrorSummary' => $this->encodeErrorSummary,
-            'errorSummary' => '.' . implode('.', preg_split('/\s+/', $this->errorSummaryCssClass, -1, PREG_SPLIT_NO_EMPTY)),
-            'validateOnSubmit' => $this->validateOnSubmit,
-            'errorCssClass' => $this->errorCssClass,
-            'successCssClass' => $this->successCssClass,
-            'validatingCssClass' => $this->validatingCssClass,
-            'ajaxParam' => $this->ajaxParam,
-            'ajaxDataType' => $this->ajaxDataType,
-            'scrollToError' => $this->scrollToError,
-            'scrollToErrorOffset' => $this->scrollToErrorOffset,
-            'validationStateOn' => $this->validationStateOn,
-        ];
+        $options = ['encodeErrorSummary' => $this->encodeErrorSummary, 'errorSummary' => '.' . implode('.', preg_split('/\s+/', $this->errorSummaryCssClass, -1, \PREG_SPLIT_NO_EMPTY)), 'validateOnSubmit' => $this->validateOnSubmit, 'errorCssClass' => $this->errorCssClass, 'successCssClass' => $this->successCssClass, 'validatingCssClass' => $this->validatingCssClass, 'ajaxParam' => $this->ajaxParam, 'ajaxDataType' => $this->ajaxDataType, 'scrollToError' => $this->scrollToError, 'scrollToErrorOffset' => $this->scrollToErrorOffset, 'validationStateOn' => $this->validationStateOn];
         if ($this->validationUrl !== null) {
             $options['validationUrl'] = Url::to($this->validationUrl);
         }
-
         // only get the options that are different from the default ones (set in yii.activeForm.js)
-        return array_diff_assoc($options, [
-            'encodeErrorSummary' => true,
-            'errorSummary' => '.error-summary',
-            'validateOnSubmit' => true,
-            'errorCssClass' => 'has-error',
-            'successCssClass' => 'has-success',
-            'validatingCssClass' => 'validating',
-            'ajaxParam' => 'ajax',
-            'ajaxDataType' => 'json',
-            'scrollToError' => true,
-            'scrollToErrorOffset' => 0,
-            'validationStateOn' => self::VALIDATION_STATE_ON_CONTAINER,
-        ]);
+        return array_diff_assoc($options, ['encodeErrorSummary' => \true, 'errorSummary' => '.error-summary', 'validateOnSubmit' => \true, 'errorCssClass' => 'has-error', 'successCssClass' => 'has-success', 'validatingCssClass' => 'validating', 'ajaxParam' => 'ajax', 'ajaxDataType' => 'json', 'scrollToError' => \true, 'scrollToErrorOffset' => 0, 'validationStateOn' => self::VALIDATION_STATE_ON_CONTAINER]);
     }
-
     /**
      * Generates a summary of the validation errors.
      * If there is no validation error, an empty error summary markup will still be generated, but it will be hidden.
@@ -304,7 +268,6 @@ class ActiveForm extends Widget
         $options['encode'] = $this->encodeErrorSummary;
         return Html::errorSummary($models, $options);
     }
-
     /**
      * Generates a form field.
      * A form field is associated with a model and an attribute. It contains a label, an input and an error message
@@ -326,14 +289,8 @@ class ActiveForm extends Widget
         if (!isset($config['class'])) {
             $config['class'] = $this->fieldClass;
         }
-
-        return Yii::createObject(ArrayHelper::merge($config, $options, [
-            'model' => $model,
-            'attribute' => $attribute,
-            'form' => $this,
-        ]));
+        return Yii::createObject(ArrayHelper::merge($config, $options, ['model' => $model, 'attribute' => $attribute, 'form' => $this]));
     }
-
     /**
      * Begins a form field.
      * This method will create a new form field and returns its opening tag.
@@ -352,7 +309,6 @@ class ActiveForm extends Widget
         $this->_fields[] = $field;
         return $field->begin();
     }
-
     /**
      * Ends a form field.
      * This method will return the closing tag of an active form field started by [[beginField()]].
@@ -362,13 +318,11 @@ class ActiveForm extends Widget
     public function endField()
     {
         $field = array_pop($this->_fields);
-        if ($field instanceof ActiveField) {
+        if ($field instanceof \yii\widgets\ActiveField) {
             return $field->end();
         }
-
         throw new InvalidCallException('Mismatching endField() call.');
     }
-
     /**
      * Validates one or several models and returns an error message array indexed by the attribute IDs.
      * This is a helper method that simplifies the way of writing AJAX validation code.
@@ -423,10 +377,8 @@ class ActiveForm extends Widget
                 $result[Html::getInputId($model, $attribute)] = $errors;
             }
         }
-
         return $result;
     }
-
     /**
      * Validates an array of model instances and returns an error message array indexed by the attribute IDs.
      * This is a helper method that simplifies the way of writing AJAX validation code for tabular input.
@@ -456,10 +408,9 @@ class ActiveForm extends Widget
         foreach ($models as $i => $model) {
             $model->validate($attributes);
             foreach ($model->getErrors() as $attribute => $errors) {
-                $result[Html::getInputId($model, "[$i]" . $attribute)] = $errors;
+                $result[Html::getInputId($model, "[{$i}]" . $attribute)] = $errors;
             }
         }
-
         return $result;
     }
 }

@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -22,7 +22,6 @@ use Countable;
 use IteratorAggregate;
 use Traversable;
 use function Cake\Core\deprecationWarning;
-
 /**
  * The Event List
  *
@@ -38,7 +37,6 @@ class EventList implements ArrayAccess, Countable, IteratorAggregate
      * @var array<\Cake\Event\EventInterface<Tsubject>>
      */
     protected array $_events = [];
-
     /**
      * Empties the list of dispatched events.
      *
@@ -48,18 +46,16 @@ class EventList implements ArrayAccess, Countable, IteratorAggregate
     {
         $this->_events = [];
     }
-
     /**
      * Adds an event to the list when event listing is enabled.
      *
      * @param \Cake\Event\EventInterface<Tsubject> $event An event to the list of dispatched events.
      * @return void
      */
-    public function add(EventInterface $event): void
+    public function add(\Cake\Event\EventInterface $event): void
     {
         $this->_events[] = $event;
     }
-
     /**
      * Whether a offset exists
      *
@@ -70,14 +66,9 @@ class EventList implements ArrayAccess, Countable, IteratorAggregate
      */
     public function offsetExists(mixed $offset): bool
     {
-        deprecationWarning(
-            '5.3.0',
-            'Array access for `EventList` is deprecated, use `EventList::hasEvent()` instead.',
-        );
-
+        deprecationWarning('5.3.0', 'Array access for `EventList` is deprecated, use `EventList::hasEvent()` instead.');
         return isset($this->_events[$offset]);
     }
-
     /**
      * Offset to retrieve
      *
@@ -86,16 +77,11 @@ class EventList implements ArrayAccess, Countable, IteratorAggregate
      * @param mixed $offset The offset to retrieve.
      * @return \Cake\Event\EventInterface<Tsubject>|null
      */
-    public function offsetGet(mixed $offset): ?EventInterface
+    public function offsetGet(mixed $offset): ?\Cake\Event\EventInterface
     {
-        deprecationWarning(
-            '5.3.0',
-            'Array access for `EventList` is deprecated, you can iterate the instance instead.',
-        );
-
+        deprecationWarning('5.3.0', 'Array access for `EventList` is deprecated, you can iterate the instance instead.');
         return $this->_events[$offset] ?? null;
     }
-
     /**
      * Offset to set
      *
@@ -107,14 +93,9 @@ class EventList implements ArrayAccess, Countable, IteratorAggregate
      */
     public function offsetSet(mixed $offset, mixed $value): void
     {
-        deprecationWarning(
-            '5.3.0',
-            'Array access for `EventList` is deprecated, use `EventList::add() instead.',
-        );
-
+        deprecationWarning('5.3.0', 'Array access for `EventList` is deprecated, use `EventList::add() instead.');
         $this->_events[$offset] = $value;
     }
-
     /**
      * Offset to unset
      *
@@ -126,14 +107,9 @@ class EventList implements ArrayAccess, Countable, IteratorAggregate
      */
     public function offsetUnset(mixed $offset): void
     {
-        deprecationWarning(
-            '5.3.0',
-            'Array access for `EventList` is deprecated.'
-            . ' Individual events cannot be unset anymore, use `EventList::flush()` to clear the list.',
-        );
+        deprecationWarning('5.3.0', 'Array access for `EventList` is deprecated.' . ' Individual events cannot be unset anymore, use `EventList::flush()` to clear the list.');
         unset($this->_events[$offset]);
     }
-
     /**
      * Retrieve an external iterator
      *
@@ -143,7 +119,6 @@ class EventList implements ArrayAccess, Countable, IteratorAggregate
     {
         return new ArrayIterator($this->_events);
     }
-
     /**
      * Count elements of an object
      *
@@ -154,7 +129,6 @@ class EventList implements ArrayAccess, Countable, IteratorAggregate
     {
         return count($this->_events);
     }
-
     /**
      * Checks if an event is in the list.
      *
@@ -165,10 +139,9 @@ class EventList implements ArrayAccess, Countable, IteratorAggregate
     {
         foreach ($this->_events as $event) {
             if ($event->getName() === $name) {
-                return true;
+                return \true;
             }
         }
-
-        return false;
+        return \false;
     }
 }

@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\API;
 
 use function assert;
@@ -18,43 +17,30 @@ use OpenTelemetry\Context\Propagation\ResponsePropagatorInterface;
 use OpenTelemetry\Context\Propagation\TextMapPropagatorInterface;
 use function sprintf;
 use Throwable;
-
 /**
  * Provides access to the globally configured instrumentation instances.
  */
 final class Globals
 {
     use LogsMessagesTrait;
-
     /** @var Closure[] */
     private static array $initializers = [];
     private static ?self $globals = null;
-
-    public function __construct(
-        private readonly TracerProviderInterface $tracerProvider,
-        private readonly MeterProviderInterface $meterProvider,
-        private readonly LoggerProviderInterface $loggerProvider,
-        private readonly EventLoggerProviderInterface $eventLoggerProvider,
-        private readonly TextMapPropagatorInterface $propagator,
-        private readonly ResponsePropagatorInterface $responsePropagator,
-    ) {
+    public function __construct(private readonly TracerProviderInterface $tracerProvider, private readonly MeterProviderInterface $meterProvider, private readonly LoggerProviderInterface $loggerProvider, private readonly EventLoggerProviderInterface $eventLoggerProvider, private readonly TextMapPropagatorInterface $propagator, private readonly ResponsePropagatorInterface $responsePropagator)
+    {
     }
-
     public static function tracerProvider(): TracerProviderInterface
     {
         return Context::getCurrent()->get(ContextKeys::tracerProvider()) ?? self::globals()->tracerProvider;
     }
-
     public static function meterProvider(): MeterProviderInterface
     {
         return Context::getCurrent()->get(ContextKeys::meterProvider()) ?? self::globals()->meterProvider;
     }
-
     public static function propagator(): TextMapPropagatorInterface
     {
         return Context::getCurrent()->get(ContextKeys::propagator()) ?? self::globals()->propagator;
     }
-
     /**
      * @experimental
      */
@@ -62,12 +48,10 @@ final class Globals
     {
         return Context::getCurrent()->get(ContextKeys::responsePropagator()) ?? self::globals()->responsePropagator;
     }
-
     public static function loggerProvider(): LoggerProviderInterface
     {
         return Context::getCurrent()->get(ContextKeys::loggerProvider()) ?? self::globals()->loggerProvider;
     }
-
     /**
      * @deprecated
      * @phan-suppress PhanDeprecatedFunction
@@ -76,7 +60,6 @@ final class Globals
     {
         return Context::getCurrent()->get(ContextKeys::eventLoggerProvider()) ?? self::globals()->eventLoggerProvider;
     }
-
     /**
      * @param Closure(Configurator): Configurator $initializer
      *
@@ -88,7 +71,6 @@ final class Globals
     {
         self::$initializers[] = $initializer;
     }
-
     /**
      * @phan-suppress PhanTypeMismatchReturnNullable,PhanDeprecatedFunction
      */
@@ -97,10 +79,8 @@ final class Globals
         if (self::$globals !== null) {
             return self::$globals;
         }
-
         $configurator = Configurator::createNoop();
         $scope = $configurator->activate();
-
         try {
             foreach (self::$initializers as $initializer) {
                 try {
@@ -112,7 +92,6 @@ final class Globals
         } finally {
             $scope->detach();
         }
-
         $context = $configurator->storeInContext();
         $tracerProvider = $context->get(ContextKeys::tracerProvider());
         $meterProvider = $context->get(ContextKeys::meterProvider());
@@ -120,12 +99,9 @@ final class Globals
         $responsePropagator = $context->get(ContextKeys::responsePropagator());
         $loggerProvider = $context->get(ContextKeys::loggerProvider());
         $eventLoggerProvider = $context->get(ContextKeys::eventLoggerProvider());
-
         assert(isset($tracerProvider, $meterProvider, $loggerProvider, $eventLoggerProvider, $propagator, $responsePropagator));
-
         return self::$globals = new self($tracerProvider, $meterProvider, $loggerProvider, $eventLoggerProvider, $propagator, $responsePropagator);
     }
-
     /**
      * @internal
      */

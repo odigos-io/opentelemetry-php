@@ -1,10 +1,10 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\db\mssql;
 
 /**
@@ -19,8 +19,6 @@ class ColumnSchema extends \yii\db\ColumnSchema
      * @since 2.0.39
      */
     public $isComputed;
-
-
     /**
      * Prepares default value and converts it according to [[phpType]]
      * @param mixed $value default value
@@ -33,7 +31,6 @@ class ColumnSchema extends \yii\db\ColumnSchema
             // convert from MSSQL column_default format, e.g. ('1') -> 1, ('string') -> string
             $value = substr(substr($value, 2), 0, -2);
         }
-
         return parent::phpTypecast($value);
     }
 }

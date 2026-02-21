@@ -1,11 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\SDK\Metrics;
 
 use OpenTelemetry\SDK\Metrics\Data\Metric;
-
 interface MetricSourceInterface
 {
     /**
@@ -14,7 +12,6 @@ interface MetricSourceInterface
      * @return int last collection timestamp
      */
     public function collectionTimestamp(): int;
-
     /**
      * Collects metric data from the underlying provider.
      *

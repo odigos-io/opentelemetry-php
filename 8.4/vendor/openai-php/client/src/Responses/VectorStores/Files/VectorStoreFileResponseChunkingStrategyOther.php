@@ -1,13 +1,11 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenAI\Responses\VectorStores\Files;
 
 use OpenAI\Contracts\ResponseContract;
 use OpenAI\Responses\Concerns\ArrayAccessible;
 use OpenAI\Testing\Responses\Concerns\Fakeable;
-
 /**
  * @implements ResponseContract<array{type: 'other'}>
  */
@@ -17,16 +15,13 @@ final class VectorStoreFileResponseChunkingStrategyOther implements ResponseCont
      * @use ArrayAccessible<array{type: 'other'}>
      */
     use ArrayAccessible;
-
     use Fakeable;
-
     /**
      * @param  'other'  $type
      */
-    private function __construct(
-        public readonly string $type,
-    ) {}
-
+    private function __construct(public readonly string $type)
+    {
+    }
     /**
      * Acts as static factory, and returns a new Response instance.
      *
@@ -34,18 +29,13 @@ final class VectorStoreFileResponseChunkingStrategyOther implements ResponseCont
      */
     public static function from(array $attributes): self
     {
-        return new self(
-            $attributes['type'],
-        );
+        return new self($attributes['type']);
     }
-
     /**
      * {@inheritDoc}
      */
     public function toArray(): array
     {
-        return [
-            'type' => $this->type,
-        ];
+        return ['type' => $this->type];
     }
 }

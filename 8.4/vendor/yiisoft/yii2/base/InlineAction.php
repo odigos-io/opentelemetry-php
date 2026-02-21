@@ -1,14 +1,13 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\base;
 
-use Yii;
-
+use Odigos\Yii;
 /**
  * InlineAction represents an action that is defined as a controller method.
  *
@@ -23,14 +22,12 @@ use Yii;
  * @template T of Controller
  * @extends Action<T>
  */
-class InlineAction extends Action
+class InlineAction extends \yii\base\Action
 {
     /**
      * @var string the controller method that this inline action is associated with
      */
     public $actionMethod;
-
-
     /**
      * @param string $id the ID of this action
      * @param Controller $controller the controller that owns this action
@@ -48,7 +45,6 @@ class InlineAction extends Action
         $this->actionMethod = $actionMethod;
         parent::__construct($id, $controller, $config);
     }
-
     /**
      * Runs this action with the specified parameters.
      * This method is mainly invoked by the controller.
@@ -62,7 +58,6 @@ class InlineAction extends Action
         if (Yii::$app->requestedParams === null) {
             Yii::$app->requestedParams = $args;
         }
-
         return call_user_func_array([$this->controller, $this->actionMethod], $args);
     }
 }

@@ -8,13 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\HttpKernel\Attribute;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Controller\ArgumentResolver\QueryParameterValueResolver;
 use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
-
 /**
  * Can be used to pass a query parameter to a controller argument.
  *
@@ -22,7 +20,7 @@ use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
  * @author Ionut Enache <i.ovidiuenache@yahoo.com>
  */
 #[\Attribute(\Attribute::TARGET_PARAMETER)]
-final class MapQueryParameter extends ValueResolver
+final class MapQueryParameter extends \Symfony\Component\HttpKernel\Attribute\ValueResolver
 {
     /**
      * @see https://php.net/manual/filter.constants for filter, flags and options
@@ -33,14 +31,8 @@ final class MapQueryParameter extends ValueResolver
      * @param array{min_range?: int|float, max_range?: int|float, regexp?: string, ...} $options
      * @param class-string<ValueResolverInterface>|string         $resolver The name of the resolver to use
      */
-    public function __construct(
-        public ?string $name = null,
-        public ?int $filter = null,
-        public int $flags = 0,
-        public array $options = [],
-        string $resolver = QueryParameterValueResolver::class,
-        public int $validationFailedStatusCode = Response::HTTP_NOT_FOUND,
-    ) {
+    public function __construct(public ?string $name = null, public ?int $filter = null, public int $flags = 0, public array $options = [], string $resolver = QueryParameterValueResolver::class, public int $validationFailedStatusCode = Response::HTTP_NOT_FOUND)
+    {
         parent::__construct($resolver);
     }
 }

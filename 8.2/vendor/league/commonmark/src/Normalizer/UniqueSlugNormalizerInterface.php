@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the league/commonmark package.
  *
@@ -10,15 +9,13 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace League\CommonMark\Normalizer;
+namespace Odigos\League\CommonMark\Normalizer;
 
 interface UniqueSlugNormalizerInterface extends TextNormalizerInterface
 {
-    public const DISABLED        = false;
+    public const DISABLED = \false;
     public const PER_ENVIRONMENT = 'environment';
-    public const PER_DOCUMENT    = 'document';
-
+    public const PER_DOCUMENT = 'document';
     /**
      * Called by the Environment whenever the configured scope changes
      *

@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -24,7 +24,6 @@ use Cake\Event\EventInterface;
 use Cake\ORM\PropertyMarshalInterface;
 use Cake\ORM\Query\SelectQuery;
 use Cake\ORM\Table;
-
 /**
  * This interface describes the methods for translate behavior strategies.
  */
@@ -36,7 +35,6 @@ interface TranslateStrategyInterface extends PropertyMarshalInterface
      * @return \Cake\ORM\Table
      */
     public function getTranslationTable(): Table;
-
     /**
      * Sets the locale to be used.
      *
@@ -53,7 +51,6 @@ interface TranslateStrategyInterface extends PropertyMarshalInterface
      * @return $this
      */
     public function setLocale(?string $locale);
-
     /**
      * Returns the current locale.
      *
@@ -63,7 +60,6 @@ interface TranslateStrategyInterface extends PropertyMarshalInterface
      * @return string
      */
     public function getLocale(): string;
-
     /**
      * Returns a fully aliased field name for translated fields.
      *
@@ -75,7 +71,6 @@ interface TranslateStrategyInterface extends PropertyMarshalInterface
      * @return string
      */
     public function translationField(string $field): string;
-
     /**
      * Modifies the results from a table find in order to merge full translation records
      * into each entity under the `_translations` key
@@ -84,7 +79,6 @@ interface TranslateStrategyInterface extends PropertyMarshalInterface
      * @return \Cake\Collection\CollectionInterface
      */
     public function groupTranslations(ResultSetInterface $results): CollectionInterface;
-
     /**
      * Callback method that listens to the `beforeFind` event in the bound
      * table. It modifies the passed query by eager loading the translated fields
@@ -96,7 +90,6 @@ interface TranslateStrategyInterface extends PropertyMarshalInterface
      * @return void
      */
     public function beforeFind(EventInterface $event, SelectQuery $query, ArrayObject $options): void;
-
     /**
      * Modifies the entity before it is saved so that translated fields are persisted
      * in the database too.
@@ -107,7 +100,6 @@ interface TranslateStrategyInterface extends PropertyMarshalInterface
      * @return void
      */
     public function beforeSave(EventInterface $event, EntityInterface $entity, ArrayObject $options): void;
-
     /**
      * Unsets the temporary `_i18n` property after the entity has been saved
      *

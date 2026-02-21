@@ -1,5 +1,7 @@
 <?php
 
+namespace Odigos;
+
 /**
  * Definition that disallows all elements.
  * @warning validateChildren() in this class is actually never called, because
@@ -12,17 +14,14 @@ class HTMLPurifier_ChildDef_Empty extends HTMLPurifier_ChildDef
     /**
      * @type bool
      */
-    public $allow_empty = true;
-
+    public $allow_empty = \true;
     /**
      * @type string
      */
     public $type = 'empty';
-
     public function __construct()
     {
     }
-
     /**
      * @param HTMLPurifier_Node[] $children
      * @param HTMLPurifier_Config $config
@@ -34,5 +33,12 @@ class HTMLPurifier_ChildDef_Empty extends HTMLPurifier_ChildDef
         return array();
     }
 }
-
+/**
+ * Definition that disallows all elements.
+ * @warning validateChildren() in this class is actually never called, because
+ *          empty elements are corrected in HTMLPurifier_Strategy_MakeWellFormed
+ *          before child definitions are parsed in earnest by
+ *          HTMLPurifier_Strategy_FixNesting.
+ */
+\class_alias('Odigos\HTMLPurifier_ChildDef_Empty', 'HTMLPurifier_ChildDef_Empty', \false);
 // vim: et sw=4 sts=4

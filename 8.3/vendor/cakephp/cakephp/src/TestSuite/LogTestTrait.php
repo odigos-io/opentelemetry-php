@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -18,8 +18,7 @@ namespace Cake\TestSuite;
 
 use Cake\Log\Engine\ArrayLog;
 use Cake\Log\Log;
-use PHPUnit\Framework\Attributes\After;
-
+use Odigos\PHPUnit\Framework\Attributes\After;
 /**
  * Make assertions on logs
  */
@@ -35,7 +34,6 @@ trait LogTestTrait
     {
         Log::reset();
     }
-
     /**
      * @param array|string $levels The levels(s) which should receive a log message
      * @return void
@@ -43,15 +41,11 @@ trait LogTestTrait
     public function setupLog(array|string $levels): void
     {
         Log::reset();
-
-        $levels = (array)$levels;
+        $levels = (array) $levels;
         foreach ($levels as $levelName => $levelConfig) {
             if (is_int($levelName) && is_string($levelConfig)) {
                 // string value = level name.
-                Log::setConfig("test-{$levelConfig}", [
-                    'className' => 'Array',
-                    'levels' => [$levelConfig],
-                ]);
+                Log::setConfig("test-{$levelConfig}", ['className' => 'Array', 'levels' => [$levelConfig]]);
             }
             if (is_array($levelConfig)) {
                 $levelConfig['className'] = 'Array';
@@ -61,7 +55,6 @@ trait LogTestTrait
             }
         }
     }
-
     /**
      * Ensure that no log messages of a given level were captured by test loggers.
      *
@@ -82,7 +75,6 @@ trait LogTestTrait
             }
         }
     }
-
     /**
      * @param string $level The level of the expected message
      * @param string $expectedMessage The message which should be inside the log engine
@@ -91,15 +83,10 @@ trait LogTestTrait
      * @param string $failMsg The error message if the message was not in the log engine
      * @return void
      */
-    public function assertLogMessage(
-        string $level,
-        string $expectedMessage,
-        ?string $scope = null,
-        string $failMsg = '',
-    ): void {
+    public function assertLogMessage(string $level, string $expectedMessage, ?string $scope = null, string $failMsg = ''): void
+    {
         $this->_expectLogMessage($level, $expectedMessage, $scope, $failMsg);
     }
-
     /**
      * @param string $level The level which should receive a log message
      * @param string $expectedMessage The message which should be inside the log engine
@@ -108,15 +95,10 @@ trait LogTestTrait
      * @param string $failMsg The error message if the message was not in the log engine
      * @return void
      */
-    public function assertLogMessageContains(
-        string $level,
-        string $expectedMessage,
-        ?string $scope = null,
-        string $failMsg = '',
-    ): void {
-        $this->_expectLogMessage($level, $expectedMessage, $scope, $failMsg, true);
+    public function assertLogMessageContains(string $level, string $expectedMessage, ?string $scope = null, string $failMsg = ''): void
+    {
+        $this->_expectLogMessage($level, $expectedMessage, $scope, $failMsg, \true);
     }
-
     /**
      * @param string $level The level which should receive a log message
      * @param string $expectedMessage The message which should be inside the log engine
@@ -126,14 +108,9 @@ trait LogTestTrait
      * @param bool $contains Flag to decide if the expectedMessage can only be part of the logged message
      * @return void
      */
-    protected function _expectLogMessage(
-        string $level,
-        string $expectedMessage,
-        ?string $scope,
-        string $failMsg = '',
-        bool $contains = false,
-    ): void {
-        $messageFound = false;
+    protected function _expectLogMessage(string $level, string $expectedMessage, ?string $scope, string $failMsg = '', bool $contains = \false): void
+    {
+        $messageFound = \false;
         $expectedMessage = sprintf('%s: %s', $level, $expectedMessage);
         foreach (Log::configured() as $engineName) {
             $engineObj = Log::engine($engineName);
@@ -143,12 +120,12 @@ trait LogTestTrait
             $messages = $engineObj->read();
             $engineScopes = $engineObj->scopes();
             // No overlapping scopes
-            if ($scope !== null && !in_array($scope, $engineScopes, true)) {
+            if ($scope !== null && !in_array($scope, $engineScopes, \true)) {
                 continue;
             }
             foreach ($messages as $message) {
                 if ($contains && str_contains($message, $expectedMessage) || $message === $expectedMessage) {
-                    $messageFound = true;
+                    $messageFound = \true;
                     break;
                 }
             }
@@ -157,6 +134,6 @@ trait LogTestTrait
             $failMsg = "Could not find the message `{$expectedMessage}` in logs. " . $failMsg;
             $this->fail($failMsg);
         }
-        $this->assertTrue(true);
+        $this->assertTrue(\true);
     }
 }

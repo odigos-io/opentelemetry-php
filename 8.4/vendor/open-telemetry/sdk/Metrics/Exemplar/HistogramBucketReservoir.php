@@ -1,30 +1,26 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\SDK\Metrics\Exemplar;
 
 use function count;
 use OpenTelemetry\Context\ContextInterface;
 use OpenTelemetry\SDK\Common\Attribute\AttributesInterface;
-
-final class HistogramBucketReservoir implements ExemplarReservoirInterface
+final class HistogramBucketReservoir implements \OpenTelemetry\SDK\Metrics\Exemplar\ExemplarReservoirInterface
 {
-    private readonly BucketStorage $storage;
+    private readonly \OpenTelemetry\SDK\Metrics\Exemplar\BucketStorage $storage;
     /**
      * @var list<float|int>
      */
     private array $boundaries;
-
     /**
      * @param list<float|int> $boundaries
      */
     public function __construct(array $boundaries)
     {
-        $this->storage = new BucketStorage(count($boundaries) + 1);
+        $this->storage = new \OpenTelemetry\SDK\Metrics\Exemplar\BucketStorage(count($boundaries) + 1);
         $this->boundaries = $boundaries;
     }
-
     #[\Override]
     public function offer($index, $value, AttributesInterface $attributes, ContextInterface $context, int $timestamp): void
     {
@@ -33,7 +29,6 @@ final class HistogramBucketReservoir implements ExemplarReservoirInterface
         }
         $this->storage->store($i, $index, $value, $attributes, $context, $timestamp);
     }
-
     #[\Override]
     public function collect(array $dataPointAttributes): array
     {

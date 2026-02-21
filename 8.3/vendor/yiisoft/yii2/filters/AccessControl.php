@@ -1,20 +1,19 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\filters;
 
-use Yii;
+use Odigos\Yii;
 use yii\base\ActionFilter;
 use yii\base\Component;
 use yii\di\Instance;
 use yii\web\ForbiddenHttpException;
 use yii\web\IdentityInterface;
 use yii\web\User;
-
 /**
  * AccessControl provides simple access control based on a set of rules.
  *
@@ -97,15 +96,13 @@ class AccessControl extends ActionFilter
      * @see ruleConfig
      */
     public $rules = [];
-
-
     /**
      * Initializes the [[rules]] array by instantiating rule objects from configurations.
      */
     public function init()
     {
         parent::init();
-        if ($this->user !== false) {
+        if ($this->user !== \false) {
             $this->user = Instance::ensure($this->user, User::className());
         }
         foreach ($this->rules as $i => $rule) {
@@ -114,7 +111,6 @@ class AccessControl extends ActionFilter
             }
         }
     }
-
     /**
      * {@inheritdoc}
      */
@@ -125,8 +121,8 @@ class AccessControl extends ActionFilter
         /** @var AccessRule $rule */
         foreach ($this->rules as $rule) {
             if ($allow = $rule->allows($action, $user, $request)) {
-                return true;
-            } elseif ($allow === false) {
+                return \true;
+            } elseif ($allow === \false) {
                 if (isset($rule->denyCallback)) {
                     call_user_func($rule->denyCallback, $rule, $action);
                 } elseif ($this->denyCallback !== null) {
@@ -134,8 +130,7 @@ class AccessControl extends ActionFilter
                 } else {
                     $this->denyAccess($user);
                 }
-
-                return false;
+                return \false;
             }
         }
         if ($this->denyCallback !== null) {
@@ -143,10 +138,8 @@ class AccessControl extends ActionFilter
         } else {
             $this->denyAccess($user);
         }
-
-        return false;
+        return \false;
     }
-
     /**
      * Denies the access of the user.
      * The default implementation will redirect the user to the login page if he is a guest;
@@ -159,7 +152,7 @@ class AccessControl extends ActionFilter
      */
     protected function denyAccess($user)
     {
-        if ($user !== false && $user->getIsGuest()) {
+        if ($user !== \false && $user->getIsGuest()) {
             $user->loginRequired();
         } else {
             throw new ForbiddenHttpException(Yii::t('yii', 'You are not allowed to perform this action.'));

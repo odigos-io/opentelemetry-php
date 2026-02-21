@@ -13,5 +13,5 @@ interface Scope
      * @param  TModel  $model
      * @return void
      */
-    public function apply(Builder $builder, Model $model);
+    public function apply(\Illuminate\Database\Eloquent\Builder $builder, \Illuminate\Database\Eloquent\Model $model);
 }

@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\Routing;
 
 interface RequestContextAwareInterface
@@ -16,10 +15,9 @@ interface RequestContextAwareInterface
     /**
      * Sets the request context.
      */
-    public function setContext(RequestContext $context): void;
-
+    public function setContext(\Symfony\Component\Routing\RequestContext $context): void;
     /**
      * Gets the request context.
      */
-    public function getContext(): RequestContext;
+    public function getContext(): \Symfony\Component\Routing\RequestContext;
 }

@@ -1,13 +1,11 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenTelemetry\API\Trace;
 
 use OpenTelemetry\Context\Context;
 use OpenTelemetry\Context\ContextInterface;
 use OpenTelemetry\Context\ContextKeyInterface;
-
 class LocalRootSpan
 {
     /**
@@ -15,27 +13,24 @@ class LocalRootSpan
      * a remote or invalid parent.
      * If there is no active local root span, then an invalid span is returned.
      */
-    public static function current(): SpanInterface
+    public static function current(): \OpenTelemetry\API\Trace\SpanInterface
     {
         return self::fromContext(Context::getCurrent());
     }
-
     /**
      * Retrieve the local root span from a Context.
      */
-    public static function fromContext(ContextInterface $context): SpanInterface
+    public static function fromContext(ContextInterface $context): \OpenTelemetry\API\Trace\SpanInterface
     {
-        return $context->get(self::key()) ?? Span::getInvalid();
+        return $context->get(self::key()) ?? \OpenTelemetry\API\Trace\Span::getInvalid();
     }
-
     /**
      * @internal
      */
-    public static function store(ContextInterface $context, SpanInterface $span): ContextInterface
+    public static function store(ContextInterface $context, \OpenTelemetry\API\Trace\SpanInterface $span): ContextInterface
     {
         return $context->with(self::key(), $span);
     }
-
     /**
      * @internal
      * @return ContextKeyInterface<SpanInterface>
@@ -43,17 +38,14 @@ class LocalRootSpan
     public static function key(): ContextKeyInterface
     {
         static $key;
-
         return $key ??= Context::createKey(self::class);
     }
-
     /**
      * @internal
      */
     public static function isLocalRoot(ContextInterface $parentContext): bool
     {
-        $spanContext = Span::fromContext($parentContext)->getContext();
-
+        $spanContext = \OpenTelemetry\API\Trace\Span::fromContext($parentContext)->getContext();
         return !$spanContext->isValid() || $spanContext->isRemote();
     }
 }

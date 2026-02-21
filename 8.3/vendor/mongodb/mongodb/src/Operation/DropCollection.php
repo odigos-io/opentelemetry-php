@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright 2015-present MongoDB, Inc.
  *
@@ -14,7 +15,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 namespace MongoDB\Operation;
 
 use MongoDB\Driver\Command;
@@ -25,7 +25,6 @@ use MongoDB\Driver\Session;
 use MongoDB\Driver\WriteConcern;
 use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\Exception\UnsupportedException;
-
 /**
  * Operation for the drop command.
  *
@@ -36,7 +35,6 @@ use MongoDB\Exception\UnsupportedException;
 final class DropCollection
 {
     private const ERROR_CODE_NAMESPACE_NOT_FOUND = 26;
-
     /**
      * Constructs a drop command.
      *
@@ -57,19 +55,16 @@ final class DropCollection
      */
     public function __construct(private string $databaseName, private string $collectionName, private array $options = [])
     {
-        if (isset($this->options['session']) && ! $this->options['session'] instanceof Session) {
+        if (isset($this->options['session']) && !$this->options['session'] instanceof Session) {
             throw InvalidArgumentException::invalidType('"session" option', $this->options['session'], Session::class);
         }
-
-        if (isset($this->options['writeConcern']) && ! $this->options['writeConcern'] instanceof WriteConcern) {
+        if (isset($this->options['writeConcern']) && !$this->options['writeConcern'] instanceof WriteConcern) {
             throw InvalidArgumentException::invalidType('"writeConcern" option', $this->options['writeConcern'], WriteConcern::class);
         }
-
         if (isset($this->options['writeConcern']) && $this->options['writeConcern']->isDefault()) {
             unset($this->options['writeConcern']);
         }
     }
-
     /**
      * Execute the operation.
      *
@@ -82,7 +77,6 @@ final class DropCollection
         if ($inTransaction && isset($this->options['writeConcern'])) {
             throw UnsupportedException::writeConcernNotSupportedInTransaction();
         }
-
         try {
             $server->executeWriteCommand($this->databaseName, $this->createCommand(), $this->createOptions());
         } catch (CommandException $e) {
@@ -91,25 +85,20 @@ final class DropCollection
             if ($e->getCode() === self::ERROR_CODE_NAMESPACE_NOT_FOUND) {
                 return;
             }
-
             throw $e;
         }
     }
-
     /**
      * Create the drop command.
      */
     private function createCommand(): Command
     {
         $cmd = ['drop' => $this->collectionName];
-
         if (isset($this->options['comment'])) {
             $cmd['comment'] = $this->options['comment'];
         }
-
         return new Command($cmd);
     }
-
     /**
      * Create options for executing the command.
      *
@@ -118,15 +107,12 @@ final class DropCollection
     private function createOptions(): array
     {
         $options = [];
-
         if (isset($this->options['session'])) {
             $options['session'] = $this->options['session'];
         }
-
         if (isset($this->options['writeConcern'])) {
             $options['writeConcern'] = $this->options['writeConcern'];
         }
-
         return $options;
     }
 }

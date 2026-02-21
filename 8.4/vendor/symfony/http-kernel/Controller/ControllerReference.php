@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\HttpKernel\Controller;
 
 use Symfony\Component\HttpKernel\Fragment\FragmentRendererInterface;
-
 /**
  * Acts as a marker and a data holder for a Controller.
  *
@@ -28,17 +26,13 @@ class ControllerReference
 {
     public array $attributes = [];
     public array $query = [];
-
     /**
      * @param string $controller The controller name
      * @param array  $attributes An array of parameters to add to the Request attributes
      * @param array  $query      An array of parameters to add to the Request query string
      */
-    public function __construct(
-        public string $controller,
-        array $attributes = [],
-        array $query = [],
-    ) {
+    public function __construct(public string $controller, array $attributes = [], array $query = [])
+    {
         $this->attributes = $attributes;
         $this->query = $query;
     }

@@ -1,13 +1,12 @@
 <?php
 
-namespace Egulias\EmailValidator\Validation;
+namespace Odigos\Egulias\EmailValidator\Validation;
 
-use Egulias\EmailValidator\EmailLexer;
-use Egulias\EmailValidator\Result\InvalidEmail;
-use Egulias\EmailValidator\Validation\Exception\EmptyValidationList;
-use Egulias\EmailValidator\Result\MultipleErrors;
-use Egulias\EmailValidator\Warning\Warning;
-
+use Odigos\Egulias\EmailValidator\EmailLexer;
+use Odigos\Egulias\EmailValidator\Result\InvalidEmail;
+use Odigos\Egulias\EmailValidator\Validation\Exception\EmptyValidationList;
+use Odigos\Egulias\EmailValidator\Result\MultipleErrors;
+use Odigos\Egulias\EmailValidator\Warning\Warning;
 class MultipleValidationWithAnd implements EmailValidation
 {
     /**
@@ -15,23 +14,19 @@ class MultipleValidationWithAnd implements EmailValidation
      * This means MultipleErrors will only contain a single error, the first found.
      */
     public const STOP_ON_ERROR = 0;
-
     /**
      * All of validations will be invoked even if one of them got failure.
      * So MultipleErrors will contain all causes.
      */
     public const ALLOW_ALL_ERRORS = 1;
-
     /**
      * @var Warning[]
      */
     private $warnings = [];
-
     /**
      * @var MultipleErrors|null
      */
     private $error;
-
     /**
      * @param EmailValidation[] $validations The validations.
      * @param int               $mode        The validation mode (one of the constants).
@@ -42,13 +37,12 @@ class MultipleValidationWithAnd implements EmailValidation
             throw new EmptyValidationList();
         }
     }
-
     /**
      * {@inheritdoc}
      */
     public function isValid(string $email, EmailLexer $emailLexer): bool
     {
-        $result = true;
+        $result = \true;
         foreach ($this->validations as $validation) {
             $emailLexer->reset();
             $validationResult = $validation->isValid($email, $emailLexer);
@@ -57,22 +51,18 @@ class MultipleValidationWithAnd implements EmailValidation
             if (!$validationResult) {
                 $this->processError($validation);
             }
-
             if ($this->shouldStop($result)) {
                 break;
             }
         }
-
         return $result;
     }
-
     private function initErrorStorage(): void
     {
         if (null === $this->error) {
             $this->error = new MultipleErrors();
         }
     }
-
     private function processError(EmailValidation $validation): void
     {
         if (null !== $validation->getError()) {
@@ -81,12 +71,10 @@ class MultipleValidationWithAnd implements EmailValidation
             $this->error->addReason($validation->getError()->reason());
         }
     }
-
     private function shouldStop(bool $result): bool
     {
         return !$result && $this->mode === self::STOP_ON_ERROR;
     }
-
     /**
      * Returns the validation errors.
      */
@@ -94,7 +82,6 @@ class MultipleValidationWithAnd implements EmailValidation
     {
         return $this->error;
     }
-
     /**
      * @return Warning[]
      */

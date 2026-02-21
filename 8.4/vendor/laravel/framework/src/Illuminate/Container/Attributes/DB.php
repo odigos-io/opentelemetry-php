@@ -3,9 +3,8 @@
 namespace Illuminate\Container\Attributes;
 
 use Attribute;
-
 #[Attribute(Attribute::TARGET_PARAMETER)]
-class DB extends Database
+class DB extends \Illuminate\Container\Attributes\Database
 {
     //
 }

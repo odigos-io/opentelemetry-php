@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -21,7 +21,6 @@ use Cake\Database\Schema\TableSchema;
 use Cake\Datasource\ConnectionManager;
 use Cake\TestSuite\ConnectionHelper;
 use InvalidArgumentException;
-
 /**
  * Create test database schema from one or more SQL dump files.
  *
@@ -44,23 +43,16 @@ class SchemaLoader
      * @param bool $truncateTables Truncate all tables after loading schema files
      * @return void
      */
-    public function loadSqlFiles(
-        array|string $paths,
-        string $connectionName = 'test',
-        bool $dropTables = true,
-        bool $truncateTables = false,
-    ): void {
-        $files = (array)$paths;
-
+    public function loadSqlFiles(array|string $paths, string $connectionName = 'test', bool $dropTables = \true, bool $truncateTables = \false): void
+    {
+        $files = (array) $paths;
         // Don't create schema if we are in a phpunit separate process test method.
         if (isset($GLOBALS['__PHPUNIT_BOOTSTRAP'])) {
             return;
         }
-
         if ($dropTables) {
             ConnectionHelper::dropTables($connectionName);
         }
-
         /** @var \Cake\Database\Connection $connection */
         $connection = ConnectionManager::get($connectionName);
         foreach ($files as $file) {
@@ -68,21 +60,18 @@ class SchemaLoader
                 throw new InvalidArgumentException(sprintf('Unable to load SQL file `%s`.', $file));
             }
             $sql = file_get_contents($file);
-            if ($sql === false) {
+            if ($sql === \false) {
                 throw new CakeException(sprintf('Cannot read file content of `%s`', $file));
             }
-
             // Use the underlying PDO connection so we can avoid prepared statements
             // which don't support multiple queries in postgres.
             $driver = $connection->getDriver();
             $driver->exec($sql);
         }
-
         if ($truncateTables) {
             ConnectionHelper::truncateTables($connectionName);
         }
     }
-
     /**
      * Load and apply CakePHP schema file.
      *
@@ -143,11 +132,8 @@ class SchemaLoader
         if (isset($GLOBALS['__PHPUNIT_BOOTSTRAP'])) {
             return;
         }
-
         ConnectionHelper::dropTables($connectionName);
-
         $tables = include $file;
-
         /**
          * @var \Cake\Database\Connection $connection
          */
@@ -156,10 +142,7 @@ class SchemaLoader
             foreach ($tables as $tableName => $table) {
                 $name = $table['table'] ?? $tableName;
                 if (!is_string($name)) {
-                    throw new InvalidArgumentException(
-                        sprintf('`%s` is not a valid table name. Either use a string key for the table definition'
-                            . "(`'articles' => [...]`) or define the `table` key in the table definition.", $name),
-                    );
+                    throw new InvalidArgumentException(sprintf('`%s` is not a valid table name. Either use a string key for the table definition' . "(`'articles' => [...]`) or define the `table` key in the table definition.", $name));
                 }
                 $schema = new TableSchema($name, $table['columns']);
                 if (isset($table['indexes'])) {
@@ -172,7 +155,6 @@ class SchemaLoader
                         $schema->addConstraint($key, $index);
                     }
                 }
-
                 // Generate SQL for each table.
                 foreach ($schema->createSql($connection) as $sql) {
                     $connection->execute($sql);

@@ -5,8 +5,7 @@ namespace Illuminate\Queue\Failed;
 use DateTimeInterface;
 use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Support\Facades\Date;
-
-class DatabaseFailedJobProvider implements CountableFailedJobProvider, FailedJobProviderInterface, PrunableFailedJobProvider
+class DatabaseFailedJobProvider implements \Illuminate\Queue\Failed\CountableFailedJobProvider, \Illuminate\Queue\Failed\FailedJobProviderInterface, \Illuminate\Queue\Failed\PrunableFailedJobProvider
 {
     /**
      * The connection resolver implementation.
@@ -14,21 +13,18 @@ class DatabaseFailedJobProvider implements CountableFailedJobProvider, FailedJob
      * @var \Illuminate\Database\ConnectionResolverInterface
      */
     protected $resolver;
-
     /**
      * The database connection name.
      *
      * @var string
      */
     protected $database;
-
     /**
      * The database table.
      *
      * @var string
      */
     protected $table;
-
     /**
      * Create a new database failed job provider.
      *
@@ -42,7 +38,6 @@ class DatabaseFailedJobProvider implements CountableFailedJobProvider, FailedJob
         $this->resolver = $resolver;
         $this->database = $database;
     }
-
     /**
      * Log a failed job into storage.
      *
@@ -55,14 +50,9 @@ class DatabaseFailedJobProvider implements CountableFailedJobProvider, FailedJob
     public function log($connection, $queue, $payload, $exception)
     {
         $failed_at = Date::now();
-
         $exception = (string) mb_convert_encoding($exception, 'UTF-8');
-
-        return $this->getTable()->insertGetId(compact(
-            'connection', 'queue', 'payload', 'exception', 'failed_at'
-        ));
+        return $this->getTable()->insertGetId(compact('connection', 'queue', 'payload', 'exception', 'failed_at'));
     }
-
     /**
      * Get the IDs of all of the failed jobs.
      *
@@ -71,13 +61,8 @@ class DatabaseFailedJobProvider implements CountableFailedJobProvider, FailedJob
      */
     public function ids($queue = null)
     {
-        return $this->getTable()
-            ->when(! is_null($queue), fn ($query) => $query->where('queue', $queue))
-            ->orderBy('id', 'desc')
-            ->pluck('id')
-            ->all();
+        return $this->getTable()->when(!is_null($queue), fn($query) => $query->where('queue', $queue))->orderBy('id', 'desc')->pluck('id')->all();
     }
-
     /**
      * Get a list of all of the failed jobs.
      *
@@ -87,7 +72,6 @@ class DatabaseFailedJobProvider implements CountableFailedJobProvider, FailedJob
     {
         return $this->getTable()->orderBy('id', 'desc')->get()->all();
     }
-
     /**
      * Get a single failed job.
      *
@@ -98,7 +82,6 @@ class DatabaseFailedJobProvider implements CountableFailedJobProvider, FailedJob
     {
         return $this->getTable()->find($id);
     }
-
     /**
      * Delete a single failed job from storage.
      *
@@ -109,7 +92,6 @@ class DatabaseFailedJobProvider implements CountableFailedJobProvider, FailedJob
     {
         return $this->getTable()->where('id', $id)->delete() > 0;
     }
-
     /**
      * Flush all of the failed jobs from storage.
      *
@@ -122,7 +104,6 @@ class DatabaseFailedJobProvider implements CountableFailedJobProvider, FailedJob
             $query->where('failed_at', '<=', Date::now()->subHours($hours));
         })->delete();
     }
-
     /**
      * Prune all of the entries older than the given date.
      *
@@ -132,18 +113,13 @@ class DatabaseFailedJobProvider implements CountableFailedJobProvider, FailedJob
     public function prune(DateTimeInterface $before)
     {
         $query = $this->getTable()->where('failed_at', '<', $before);
-
         $totalDeleted = 0;
-
         do {
             $deleted = $query->limit(1000)->delete();
-
             $totalDeleted += $deleted;
         } while ($deleted !== 0);
-
         return $totalDeleted;
     }
-
     /**
      * Count the failed jobs.
      *
@@ -153,12 +129,8 @@ class DatabaseFailedJobProvider implements CountableFailedJobProvider, FailedJob
      */
     public function count($connection = null, $queue = null)
     {
-        return $this->getTable()
-            ->when($connection, fn ($builder) => $builder->whereConnection($connection))
-            ->when($queue, fn ($builder) => $builder->whereQueue($queue))
-            ->count();
+        return $this->getTable()->when($connection, fn($builder) => $builder->whereConnection($connection))->when($queue, fn($builder) => $builder->whereQueue($queue))->count();
     }
-
     /**
      * Get a new query builder instance for the table.
      *

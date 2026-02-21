@@ -1,10 +1,10 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\log;
 
 use yii\base\InvalidConfigException;
@@ -12,7 +12,6 @@ use yii\db\Connection;
 use yii\db\Exception;
 use yii\di\Instance;
 use yii\helpers\VarDumper;
-
 /**
  * DbTarget stores log messages in a database table.
  *
@@ -29,7 +28,7 @@ use yii\helpers\VarDumper;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class DbTarget extends Target
+class DbTarget extends \yii\log\Target
 {
     /**
      * @var Connection|array|string the DB connection object or the application component ID of the DB connection.
@@ -42,8 +41,6 @@ class DbTarget extends Target
      * @var string name of the DB table to store cache content. Defaults to "log".
      */
     public $logTable = '{{%log}}';
-
-
     /**
      * Initializes the DbTarget component.
      * This method will initialize the [[db]] property to make sure it refers to a valid DB connection.
@@ -54,7 +51,6 @@ class DbTarget extends Target
         parent::init();
         $this->db = Instance::ensure($this->db, Connection::className());
     }
-
     /**
      * Stores log messages to DB.
      * Starting from version 2.0.14, this method throws LogRuntimeException in case the log can not be exported.
@@ -68,10 +64,8 @@ class DbTarget extends Target
             // to ensure insert statement is not affected by a rollback
             $this->db = clone $this->db;
         }
-
         $tableName = $this->db->quoteTableName($this->logTable);
-        $sql = "INSERT INTO $tableName ([[level]], [[category]], [[log_time]], [[prefix]], [[message]])
-                VALUES (:level, :category, :log_time, :prefix, :message)";
+        $sql = "INSERT INTO {$tableName} ([[level]], [[category]], [[log_time]], [[prefix]], [[message]])\n                VALUES (:level, :category, :log_time, :prefix, :message)";
         $command = $this->db->createCommand($sql);
         foreach ($this->messages as $message) {
             list($text, $level, $category, $timestamp) = $message;
@@ -83,18 +77,10 @@ class DbTarget extends Target
                     $text = VarDumper::export($text);
                 }
             }
-            if (
-                $command->bindValues([
-                    ':level' => $level,
-                    ':category' => $category,
-                    ':log_time' => $timestamp,
-                    ':prefix' => $this->getMessagePrefix($message),
-                    ':message' => $text,
-                ])->execute() > 0
-            ) {
+            if ($command->bindValues([':level' => $level, ':category' => $category, ':log_time' => $timestamp, ':prefix' => $this->getMessagePrefix($message), ':message' => $text])->execute() > 0) {
                 continue;
             }
-            throw new LogRuntimeException('Unable to export log through database!');
+            throw new \yii\log\LogRuntimeException('Unable to export log through database!');
         }
     }
 }

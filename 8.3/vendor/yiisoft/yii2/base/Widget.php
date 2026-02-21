@@ -1,15 +1,14 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\base;
 
 use ReflectionClass;
-use Yii;
-
+use Odigos\Yii;
 /**
  * Widget is the base class for widgets.
  *
@@ -24,7 +23,7 @@ use Yii;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class Widget extends Component implements ViewContextInterface
+class Widget extends \yii\base\Component implements \yii\base\ViewContextInterface
 {
     /**
      * @event Event an event that is triggered when the widget is initialized via [[init()]].
@@ -58,13 +57,10 @@ class Widget extends Component implements ViewContextInterface
      * @internal
      */
     public static $stack = [];
-
     /**
      * @var string[] used widget classes that have been resolved to their actual class name.
      */
     private static $_resolvedClasses = [];
-
-
     /**
      * Initializes the object.
      * This method is called at the end of the constructor.
@@ -75,7 +71,6 @@ class Widget extends Component implements ViewContextInterface
         parent::init();
         $this->trigger(self::EVENT_INIT);
     }
-
     /**
      * Begins a widget.
      * This method creates an instance of the calling class. It will apply the configuration
@@ -93,10 +88,8 @@ class Widget extends Component implements ViewContextInterface
         $widget = Yii::createObject($config);
         self::$stack[] = $widget;
         self::$_resolvedClasses[get_called_class()] = get_class($widget);
-
         return $widget;
     }
-
     /**
      * Ends a widget.
      * Note that the rendering result of the widget is directly echoed out.
@@ -108,9 +101,7 @@ class Widget extends Component implements ViewContextInterface
     {
         if (!empty(self::$stack)) {
             $widget = array_pop(self::$stack);
-
             $calledClass = self::$_resolvedClasses[get_called_class()] ?? get_called_class();
-
             if (get_class($widget) === $calledClass) {
                 /** @var static $widget */
                 if ($widget->beforeRun()) {
@@ -118,16 +109,12 @@ class Widget extends Component implements ViewContextInterface
                     $result = $widget->afterRun($result);
                     echo $result;
                 }
-
                 return $widget;
             }
-
-            throw new InvalidCallException('Expecting end() of ' . get_class($widget) . ', found ' . get_called_class());
+            throw new \yii\base\InvalidCallException('Expecting end() of ' . get_class($widget) . ', found ' . get_called_class());
         }
-
-        throw new InvalidCallException('Unexpected ' . get_called_class() . '::end() call. A matching begin() is not found.');
+        throw new \yii\base\InvalidCallException('Unexpected ' . get_called_class() . '::end() call. A matching begin() is not found.');
     }
-
     /**
      * Creates a widget instance and runs it.
      * The widget rendering result is returned by this method.
@@ -138,7 +125,7 @@ class Widget extends Component implements ViewContextInterface
     public static function widget($config = [])
     {
         ob_start();
-        ob_implicit_flush(false);
+        ob_implicit_flush(\false);
         try {
             $config['class'] = get_called_class();
             /** @var self $widget */
@@ -161,26 +148,21 @@ class Widget extends Component implements ViewContextInterface
             }
             throw $e;
         }
-
         return ob_get_clean() . $out;
     }
-
     private $_id;
-
     /**
      * Returns the ID of the widget.
      * @param bool $autoGenerate whether to generate an ID if it is not set previously
      * @return string|null ID of the widget.
      */
-    public function getId($autoGenerate = true)
+    public function getId($autoGenerate = \true)
     {
         if ($autoGenerate && $this->_id === null) {
             $this->_id = static::$autoIdPrefix . static::$counter++;
         }
-
         return $this->_id;
     }
-
     /**
      * Sets the ID of the widget.
      * @param string $value id of the widget.
@@ -189,9 +171,7 @@ class Widget extends Component implements ViewContextInterface
     {
         $this->_id = $value;
     }
-
     private $_view;
-
     /**
      * Returns the view object that can be used to render views or view files.
      * The [[render()]] and [[renderFile()]] methods will use
@@ -204,10 +184,8 @@ class Widget extends Component implements ViewContextInterface
         if ($this->_view === null) {
             $this->_view = Yii::$app->getView();
         }
-
         return $this->_view;
     }
-
     /**
      * Sets the view object to be used by this widget.
      * @param View $view the view object that can be used to render views or view files.
@@ -216,7 +194,6 @@ class Widget extends Component implements ViewContextInterface
     {
         $this->_view = $view;
     }
-
     /**
      * Executes the widget.
      *
@@ -225,7 +202,6 @@ class Widget extends Component implements ViewContextInterface
     public function run()
     {
     }
-
     /**
      * Renders a view.
      *
@@ -250,7 +226,6 @@ class Widget extends Component implements ViewContextInterface
     {
         return $this->getView()->render($view, $params, $this);
     }
-
     /**
      * Renders a view file.
      * @param string $file the view file to be rendered. This can be either a file path or a [path alias](guide:concept-aliases).
@@ -262,7 +237,6 @@ class Widget extends Component implements ViewContextInterface
     {
         return $this->getView()->renderFile($file, $params, $this);
     }
-
     /**
      * Returns the directory containing the view files for this widget.
      * The default implementation returns the 'views' subdirectory under the directory containing the widget class file.
@@ -271,10 +245,8 @@ class Widget extends Component implements ViewContextInterface
     public function getViewPath()
     {
         $class = new ReflectionClass($this);
-
-        return dirname($class->getFileName()) . DIRECTORY_SEPARATOR . 'views';
+        return dirname($class->getFileName()) . \DIRECTORY_SEPARATOR . 'views';
     }
-
     /**
      * This method is invoked right before the widget is executed.
      *
@@ -301,11 +273,10 @@ class Widget extends Component implements ViewContextInterface
      */
     public function beforeRun()
     {
-        $event = new WidgetEvent();
+        $event = new \yii\base\WidgetEvent();
         $this->trigger(self::EVENT_BEFORE_RUN, $event);
         return $event->isValid;
     }
-
     /**
      * This method is invoked right after a widget is executed.
      *
@@ -329,7 +300,7 @@ class Widget extends Component implements ViewContextInterface
      */
     public function afterRun($result)
     {
-        $event = new WidgetEvent();
+        $event = new \yii\base\WidgetEvent();
         $event->result = $result;
         $this->trigger(self::EVENT_AFTER_RUN, $event);
         return $event->result;

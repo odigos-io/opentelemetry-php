@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -21,7 +21,6 @@ use Closure;
 use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use Stringable;
-
 /**
  * Logs messages to configured Log adapters. One or more adapters
  * can be configured using Cake Logs's methods. If you don't
@@ -111,91 +110,60 @@ class Log
     use StaticConfigTrait {
         setConfig as protected _setConfig;
     }
-
     /**
      * An array mapping url schemes to fully qualified Log engine class names
      *
      * @var array<string, string>
      * @phpstan-var array<string, class-string>
      */
-    protected static array $_dsnClassMap = [
-        'console' => Engine\ConsoleLog::class,
-        'file' => Engine\FileLog::class,
-        'syslog' => Engine\SyslogLog::class,
-    ];
-
+    protected static array $_dsnClassMap = ['console' => \Cake\Log\Engine\ConsoleLog::class, 'file' => \Cake\Log\Engine\FileLog::class, 'syslog' => \Cake\Log\Engine\SyslogLog::class];
     /**
      * Internal flag for tracking whether configuration has been changed.
      *
      * @var bool
      */
-    protected static bool $_dirtyConfig = false;
-
+    protected static bool $_dirtyConfig = \false;
     /**
      * LogEngineRegistry class
      *
      * @var \Cake\Log\LogEngineRegistry
      */
-    protected static LogEngineRegistry $_registry;
-
+    protected static \Cake\Log\LogEngineRegistry $_registry;
     /**
      * Handled log levels
      *
      * @var array<string>
      */
-    protected static array $_levels = [
-        'emergency',
-        'alert',
-        'critical',
-        'error',
-        'warning',
-        'notice',
-        'info',
-        'debug',
-    ];
-
+    protected static array $_levels = ['emergency', 'alert', 'critical', 'error', 'warning', 'notice', 'info', 'debug'];
     /**
      * Log levels as detailed in RFC 5424
      * https://tools.ietf.org/html/rfc5424
      *
      * @var array<string, int>
      */
-    protected static array $_levelMap = [
-        'emergency' => LOG_EMERG,
-        'alert' => LOG_ALERT,
-        'critical' => LOG_CRIT,
-        'error' => LOG_ERR,
-        'warning' => LOG_WARNING,
-        'notice' => LOG_NOTICE,
-        'info' => LOG_INFO,
-        'debug' => LOG_DEBUG,
-    ];
-
+    protected static array $_levelMap = ['emergency' => \LOG_EMERG, 'alert' => \LOG_ALERT, 'critical' => \LOG_CRIT, 'error' => \LOG_ERR, 'warning' => \LOG_WARNING, 'notice' => \LOG_NOTICE, 'info' => \LOG_INFO, 'debug' => \LOG_DEBUG];
     /**
      * Creates registry if doesn't exist and creates all defined logging
      * adapters if config isn't loaded.
      *
      * @return \Cake\Log\LogEngineRegistry
      */
-    protected static function getRegistry(): LogEngineRegistry
+    protected static function getRegistry(): \Cake\Log\LogEngineRegistry
     {
-        static::$_registry ??= new LogEngineRegistry();
-
+        static::$_registry ??= new \Cake\Log\LogEngineRegistry();
         if (static::$_dirtyConfig) {
             foreach (static::$_config as $name => $properties) {
                 if (isset($properties['engine'])) {
                     $properties['className'] = $properties['engine'];
                 }
-                if (!static::$_registry->has((string)$name)) {
-                    static::$_registry->load((string)$name, $properties);
+                if (!static::$_registry->has((string) $name)) {
+                    static::$_registry->load((string) $name, $properties);
                 }
             }
         }
-        static::$_dirtyConfig = false;
-
+        static::$_dirtyConfig = \false;
         return static::$_registry;
     }
-
     /**
      * Reset all the connected loggers. This is useful to do when changing the logging
      * configuration or during testing when you want to reset the internal state of the
@@ -212,9 +180,8 @@ class Log
             static::$_registry->reset();
         }
         static::$_config = [];
-        static::$_dirtyConfig = true;
+        static::$_dirtyConfig = \true;
     }
-
     /**
      * Gets log levels
      *
@@ -227,7 +194,6 @@ class Log
     {
         return static::$_levels;
     }
-
     /**
      * This method can be used to define logging adapters for an application
      * or read existing configuration.
@@ -271,9 +237,8 @@ class Log
     public static function setConfig(array|string $key, LoggerInterface|Closure|array|null $config = null): void
     {
         static::_setConfig($key, $config);
-        static::$_dirtyConfig = true;
+        static::$_dirtyConfig = \true;
     }
-
     /**
      * Get a logging engine.
      *
@@ -286,10 +251,8 @@ class Log
         if (!$registry->{$name}) {
             return null;
         }
-
         return $registry->{$name};
     }
-
     /**
      * Writes the given message and type to all the configured log adapters.
      * Configured adapters are passed both the $level and $message variables. $level
@@ -346,46 +309,37 @@ class Log
      */
     public static function write(string|int $level, Stringable|string $message, array|string $context = []): bool
     {
-        if (is_int($level) && in_array($level, static::$_levelMap, true)) {
-            $level = array_search($level, static::$_levelMap, true);
+        if (is_int($level) && in_array($level, static::$_levelMap, \true)) {
+            $level = array_search($level, static::$_levelMap, \true);
         }
-
-        if (!in_array($level, static::$_levels, true)) {
+        if (!in_array($level, static::$_levels, \true)) {
             throw new InvalidArgumentException(sprintf('Invalid log level `%s`', $level));
         }
-
-        $logged = false;
-        $context = (array)$context;
+        $logged = \false;
+        $context = (array) $context;
         if (isset($context[0])) {
             $context = ['scope' => $context];
         }
         $context += ['scope' => []];
-
         $registry = static::getRegistry();
         foreach ($registry->loaded() as $streamName) {
             /** @var \Psr\Log\LoggerInterface $logger */
             $logger = $registry->{$streamName};
             $levels = null;
             $scopes = null;
-
             if ($logger instanceof BaseLog) {
                 $levels = $logger->levels();
                 $scopes = $logger->scopes();
             }
-
-            $correctLevel = empty($levels) || in_array($level, $levels, true);
-            $inScope = $scopes === null && empty($context['scope']) || $scopes === [] ||
-                is_array($scopes) && array_intersect((array)$context['scope'], $scopes);
-
+            $correctLevel = empty($levels) || in_array($level, $levels, \true);
+            $inScope = $scopes === null && empty($context['scope']) || $scopes === [] || is_array($scopes) && array_intersect((array) $context['scope'], $scopes);
             if ($correctLevel && $inScope) {
                 $logger->log($level, $message, $context);
-                $logged = true;
+                $logged = \true;
             }
         }
-
         return $logged;
     }
-
     /**
      * Convenience method to log emergency messages
      *
@@ -401,7 +355,6 @@ class Log
     {
         return static::write(__FUNCTION__, $message, $context);
     }
-
     /**
      * Convenience method to log alert messages
      *
@@ -417,7 +370,6 @@ class Log
     {
         return static::write(__FUNCTION__, $message, $context);
     }
-
     /**
      * Convenience method to log critical messages
      *
@@ -433,7 +385,6 @@ class Log
     {
         return static::write(__FUNCTION__, $message, $context);
     }
-
     /**
      * Convenience method to log error messages
      *
@@ -449,7 +400,6 @@ class Log
     {
         return static::write(__FUNCTION__, $message, $context);
     }
-
     /**
      * Convenience method to log warning messages
      *
@@ -465,7 +415,6 @@ class Log
     {
         return static::write(__FUNCTION__, $message, $context);
     }
-
     /**
      * Convenience method to log notice messages
      *
@@ -481,7 +430,6 @@ class Log
     {
         return static::write(__FUNCTION__, $message, $context);
     }
-
     /**
      * Convenience method to log debug messages
      *
@@ -497,7 +445,6 @@ class Log
     {
         return static::write(__FUNCTION__, $message, $context);
     }
-
     /**
      * Convenience method to log info messages
      *

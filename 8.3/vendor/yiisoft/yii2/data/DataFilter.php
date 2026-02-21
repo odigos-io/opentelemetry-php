@@ -1,13 +1,13 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\data;
 
-use Yii;
+use Odigos\Yii;
 use yii\base\InvalidConfigException;
 use yii\base\Model;
 use yii\helpers\ArrayHelper;
@@ -17,7 +17,6 @@ use yii\validators\NumberValidator;
 use yii\validators\StringValidator;
 use yii\validators\DateValidator;
 use yii\validators\Validator;
-
 /**
  * DataFilter is a special [[Model]] for processing query filtering specification.
  * It allows validating and building a filter condition passed via request.
@@ -169,62 +168,23 @@ class DataFilter extends Model
      * > Make sure each specified control keyword is valid for the format. For example, in XML tag name can start
      * > only with a letter character, thus controls like `>`, '=' or `$gt` will break the XML schema.
      */
-    public $filterControls = [
-        'and' => 'AND',
-        'or' => 'OR',
-        'not' => 'NOT',
-        'lt' => '<',
-        'gt' => '>',
-        'lte' => '<=',
-        'gte' => '>=',
-        'eq' => '=',
-        'neq' => '!=',
-        'in' => 'IN',
-        'nin' => 'NOT IN',
-        'like' => 'LIKE',
-    ];
+    public $filterControls = ['and' => 'AND', 'or' => 'OR', 'not' => 'NOT', 'lt' => '<', 'gt' => '>', 'lte' => '<=', 'gte' => '>=', 'eq' => '=', 'neq' => '!=', 'in' => 'IN', 'nin' => 'NOT IN', 'like' => 'LIKE'];
     /**
      * @var array maps filter condition keywords to validation methods.
      * These methods are used by [[validateCondition()]] to validate raw filter conditions.
      */
-    public $conditionValidators = [
-        'AND' => 'validateConjunctionCondition',
-        'OR' => 'validateConjunctionCondition',
-        'NOT' => 'validateBlockCondition',
-        '<' => 'validateOperatorCondition',
-        '>' => 'validateOperatorCondition',
-        '<=' => 'validateOperatorCondition',
-        '>=' => 'validateOperatorCondition',
-        '=' => 'validateOperatorCondition',
-        '!=' => 'validateOperatorCondition',
-        'IN' => 'validateOperatorCondition',
-        'NOT IN' => 'validateOperatorCondition',
-        'LIKE' => 'validateOperatorCondition',
-    ];
+    public $conditionValidators = ['AND' => 'validateConjunctionCondition', 'OR' => 'validateConjunctionCondition', 'NOT' => 'validateBlockCondition', '<' => 'validateOperatorCondition', '>' => 'validateOperatorCondition', '<=' => 'validateOperatorCondition', '>=' => 'validateOperatorCondition', '=' => 'validateOperatorCondition', '!=' => 'validateOperatorCondition', 'IN' => 'validateOperatorCondition', 'NOT IN' => 'validateOperatorCondition', 'LIKE' => 'validateOperatorCondition'];
     /**
      * @var array specifies the list of supported search attribute types per each operator.
      * This field should be in format: 'operatorKeyword' => ['type1', 'type2' ...].
      * Supported types list can be specified as `*`, which indicates that operator supports all types available.
      * Any unspecified keyword will not be considered as a valid operator.
      */
-    public $operatorTypes = [
-        '<' => [self::TYPE_INTEGER, self::TYPE_FLOAT, self::TYPE_DATETIME, self::TYPE_DATE, self::TYPE_TIME],
-        '>' => [self::TYPE_INTEGER, self::TYPE_FLOAT, self::TYPE_DATETIME, self::TYPE_DATE, self::TYPE_TIME],
-        '<=' => [self::TYPE_INTEGER, self::TYPE_FLOAT, self::TYPE_DATETIME, self::TYPE_DATE, self::TYPE_TIME],
-        '>=' => [self::TYPE_INTEGER, self::TYPE_FLOAT, self::TYPE_DATETIME, self::TYPE_DATE, self::TYPE_TIME],
-        '=' => '*',
-        '!=' => '*',
-        'IN' => '*',
-        'NOT IN' => '*',
-        'LIKE' => [self::TYPE_STRING],
-    ];
+    public $operatorTypes = ['<' => [self::TYPE_INTEGER, self::TYPE_FLOAT, self::TYPE_DATETIME, self::TYPE_DATE, self::TYPE_TIME], '>' => [self::TYPE_INTEGER, self::TYPE_FLOAT, self::TYPE_DATETIME, self::TYPE_DATE, self::TYPE_TIME], '<=' => [self::TYPE_INTEGER, self::TYPE_FLOAT, self::TYPE_DATETIME, self::TYPE_DATE, self::TYPE_TIME], '>=' => [self::TYPE_INTEGER, self::TYPE_FLOAT, self::TYPE_DATETIME, self::TYPE_DATE, self::TYPE_TIME], '=' => '*', '!=' => '*', 'IN' => '*', 'NOT IN' => '*', 'LIKE' => [self::TYPE_STRING]];
     /**
      * @var array list of operators keywords, which should accept multiple values.
      */
-    public $multiValueOperators = [
-        'IN',
-        'NOT IN',
-    ];
+    public $multiValueOperators = ['IN', 'NOT IN'];
     /**
      * @var array actual attribute names to be used in searched condition, in format: [filterAttribute => actualAttribute].
      * For example, in case of using table joins in the search query, attribute map may look like the following:
@@ -243,7 +203,6 @@ class DataFilter extends Model
      * @since 2.0.40
      */
     public $nullValue = 'NULL';
-
     /**
      * @var array|\Closure list of error messages responding to invalid filter structure, in format: `[errorKey => message]`.
      */
@@ -260,8 +219,6 @@ class DataFilter extends Model
      * @var array list of search attribute types in format: attributeName => type
      */
     private $_searchAttributeTypes;
-
-
     /**
      * @return mixed raw filter value.
      */
@@ -269,7 +226,6 @@ class DataFilter extends Model
     {
         return $this->_filter;
     }
-
     /**
      * @param mixed $filter raw filter value.
      */
@@ -277,7 +233,6 @@ class DataFilter extends Model
     {
         $this->_filter = $filter;
     }
-
     /**
      * @return Model model instance.
      * @throws InvalidConfigException on invalid configuration.
@@ -293,7 +248,6 @@ class DataFilter extends Model
         }
         return $this->_searchModel;
     }
-
     /**
      * @param Model|array|string|callable $model model instance or its DI compatible configuration.
      * @throws InvalidConfigException on invalid configuration.
@@ -305,7 +259,6 @@ class DataFilter extends Model
         }
         $this->_searchModel = $model;
     }
-
     /**
      * @return array search attribute type map.
      */
@@ -316,7 +269,6 @@ class DataFilter extends Model
         }
         return $this->_searchAttributeTypes;
     }
-
     /**
      * @param array|null $searchAttributeTypes search attribute type map.
      */
@@ -324,7 +276,6 @@ class DataFilter extends Model
     {
         $this->_searchAttributeTypes = $searchAttributeTypes;
     }
-
     /**
      * Composes default value for [[searchAttributeTypes]] from the [[searchModel]] validation rules.
      * @return array attribute type map.
@@ -332,25 +283,20 @@ class DataFilter extends Model
     protected function detectSearchAttributeTypes()
     {
         $model = $this->getSearchModel();
-
         $attributeTypes = [];
         foreach ($model->activeAttributes() as $attribute) {
             $attributeTypes[$attribute] = self::TYPE_STRING;
         }
-
         foreach ($model->getValidators() as $validator) {
             $type = $this->detectSearchAttributeType($validator);
-
             if ($type !== null) {
                 foreach ((array) $validator->attributes as $attribute) {
                     $attributeTypes[$attribute] = $type;
                 }
             }
         }
-
         return $attributeTypes;
     }
-
     /**
      * Detect attribute type from given validator.
      *
@@ -363,33 +309,26 @@ class DataFilter extends Model
         if ($validator instanceof BooleanValidator) {
             return self::TYPE_BOOLEAN;
         }
-
         if ($validator instanceof NumberValidator) {
             return $validator->integerOnly ? self::TYPE_INTEGER : self::TYPE_FLOAT;
         }
-
         if ($validator instanceof StringValidator) {
             return self::TYPE_STRING;
         }
-
         if ($validator instanceof EachValidator) {
             return self::TYPE_ARRAY;
         }
-
         if ($validator instanceof DateValidator) {
             if ($validator->type == DateValidator::TYPE_DATETIME) {
                 return self::TYPE_DATETIME;
             }
-
             if ($validator->type == DateValidator::TYPE_TIME) {
                 return self::TYPE_TIME;
             }
             return self::TYPE_DATE;
         }
-
         return null;
     }
-
     /**
      * @return array error messages in format `[errorKey => message]`.
      */
@@ -399,15 +338,11 @@ class DataFilter extends Model
             if ($this->_errorMessages === null) {
                 $this->_errorMessages = $this->defaultErrorMessages();
             } else {
-                $this->_errorMessages = array_merge(
-                    $this->defaultErrorMessages(),
-                    call_user_func($this->_errorMessages)
-                );
+                $this->_errorMessages = array_merge($this->defaultErrorMessages(), call_user_func($this->_errorMessages));
             }
         }
         return $this->_errorMessages;
     }
-
     /**
      * Sets the list of error messages responding to invalid filter structure, in format: `[errorKey => message]`.
      * Message may contain placeholders that will be populated depending on the message context.
@@ -421,23 +356,14 @@ class DataFilter extends Model
         }
         $this->_errorMessages = $errorMessages;
     }
-
     /**
      * Returns default values for [[errorMessages]].
      * @return array default error messages in `[errorKey => message]` format.
      */
     protected function defaultErrorMessages()
     {
-        return [
-            'invalidFilter' => Yii::t('yii', 'The format of {filter} is invalid.'),
-            'operatorRequireMultipleOperands' => Yii::t('yii', 'Operator "{operator}" requires multiple operands.'),
-            'unknownAttribute' => Yii::t('yii', 'Unknown filter attribute "{attribute}"'),
-            'invalidAttributeValueFormat' => Yii::t('yii', 'Condition for "{attribute}" should be either a value or valid operator specification.'),
-            'operatorRequireAttribute' => Yii::t('yii', 'Operator "{operator}" must be used with a search attribute.'),
-            'unsupportedOperatorType' => Yii::t('yii', '"{attribute}" does not support operator "{operator}".'),
-        ];
+        return ['invalidFilter' => Yii::t('yii', 'The format of {filter} is invalid.'), 'operatorRequireMultipleOperands' => Yii::t('yii', 'Operator "{operator}" requires multiple operands.'), 'unknownAttribute' => Yii::t('yii', 'Unknown filter attribute "{attribute}"'), 'invalidAttributeValueFormat' => Yii::t('yii', 'Condition for "{attribute}" should be either a value or valid operator specification.'), 'operatorRequireAttribute' => Yii::t('yii', 'Operator "{operator}" must be used with a search attribute.'), 'unsupportedOperatorType' => Yii::t('yii', '"{attribute}" does not support operator "{operator}".')];
     }
-
     /**
      * Parses content of the message from [[errorMessages]], specified by message key.
      * @param string $messageKey message key.
@@ -452,29 +378,17 @@ class DataFilter extends Model
         } else {
             $message = Yii::t('yii', 'The format of {filter} is invalid.');
         }
-
-        $params = array_merge(
-            [
-                'filter' => $this->getAttributeLabel($this->filterAttributeName),
-            ],
-            $params
-        );
-
+        $params = array_merge(['filter' => $this->getAttributeLabel($this->filterAttributeName)], $params);
         return Yii::$app->getI18n()->format($message, $params, Yii::$app->language);
     }
-
     // Model specific:
-
     /**
      * {@inheritdoc}
      */
     public function attributes()
     {
-        return [
-            $this->filterAttributeName,
-        ];
+        return [$this->filterAttributeName];
     }
-
     /**
      * {@inheritdoc}
      */
@@ -482,29 +396,21 @@ class DataFilter extends Model
     {
         return '';
     }
-
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
-        return [
-            [$this->filterAttributeName, 'validateFilter', 'skipOnEmpty' => false],
-        ];
+        return [[$this->filterAttributeName, 'validateFilter', 'skipOnEmpty' => \false]];
     }
-
     /**
      * {@inheritdoc}
      */
     public function attributeLabels()
     {
-        return [
-            $this->filterAttributeName => $this->filterAttributeLabel,
-        ];
+        return [$this->filterAttributeName => $this->filterAttributeLabel];
     }
-
     // Validation:
-
     /**
      * Validates filter attribute value to match filer condition specification.
      */
@@ -515,7 +421,6 @@ class DataFilter extends Model
             $this->validateCondition($value);
         }
     }
-
     /**
      * Validates filter condition.
      * @param mixed $condition raw filter condition.
@@ -526,11 +431,9 @@ class DataFilter extends Model
             $this->addError($this->filterAttributeName, $this->parseErrorMessage('invalidFilter'));
             return;
         }
-
         if (empty($condition)) {
             return;
         }
-
         foreach ($condition as $key => $value) {
             $method = 'validateAttributeCondition';
             if (isset($this->filterControls[$key])) {
@@ -539,10 +442,9 @@ class DataFilter extends Model
                     $method = $this->conditionValidators[$controlKey];
                 }
             }
-            $this->$method($key, $value);
+            $this->{$method}($key, $value);
         }
     }
-
     /**
      * Validates conjunction condition that consists of multiple independent ones.
      * This covers such operators as `and` and `or`.
@@ -555,12 +457,10 @@ class DataFilter extends Model
             $this->addError($this->filterAttributeName, $this->parseErrorMessage('operatorRequireMultipleOperands', ['operator' => $operator]));
             return;
         }
-
         foreach ($condition as $part) {
             $this->validateCondition($part);
         }
     }
-
     /**
      * Validates block condition that consists of a single condition.
      * This covers such operators as `not`.
@@ -571,7 +471,6 @@ class DataFilter extends Model
     {
         $this->validateCondition($condition);
     }
-
     /**
      * Validates search condition for a particular attribute.
      * @param string $attribute search attribute name.
@@ -584,7 +483,6 @@ class DataFilter extends Model
             $this->addError($this->filterAttributeName, $this->parseErrorMessage('unknownAttribute', ['attribute' => $attribute]));
             return;
         }
-
         if (is_array($condition)) {
             $operatorCount = 0;
             foreach ($condition as $rawOperator => $value) {
@@ -596,7 +494,6 @@ class DataFilter extends Model
                     }
                 }
             }
-
             if ($operatorCount > 0) {
                 if ($operatorCount < count($condition)) {
                     $this->addError($this->filterAttributeName, $this->parseErrorMessage('invalidAttributeValueFormat', ['attribute' => $attribute]));
@@ -609,7 +506,6 @@ class DataFilter extends Model
             $this->validateAttributeValue($attribute, $condition);
         }
     }
-
     /**
      * Validates operator condition.
      * @param string $operator raw operator control keyword.
@@ -623,21 +519,18 @@ class DataFilter extends Model
             $this->addError($this->filterAttributeName, $this->parseErrorMessage('operatorRequireAttribute', ['operator' => $operator]));
             return;
         }
-
         $internalOperator = $this->filterControls[$operator];
-
         // check operator type :
         $operatorTypes = $this->operatorTypes[$internalOperator];
         if ($operatorTypes !== '*') {
             $attributeTypes = $this->getSearchAttributeTypes();
             $attributeType = $attributeTypes[$attribute];
-            if (!in_array($attributeType, $operatorTypes, true)) {
+            if (!in_array($attributeType, $operatorTypes, \true)) {
                 $this->addError($this->filterAttributeName, $this->parseErrorMessage('unsupportedOperatorType', ['attribute' => $attribute, 'operator' => $operator]));
                 return;
             }
         }
-
-        if (in_array($internalOperator, $this->multiValueOperators, true)) {
+        if (in_array($internalOperator, $this->multiValueOperators, \true)) {
             // multi-value operator:
             if (!is_array($condition)) {
                 $this->addError($this->filterAttributeName, $this->parseErrorMessage('operatorRequireMultipleOperands', ['operator' => $operator]));
@@ -651,7 +544,6 @@ class DataFilter extends Model
             $this->validateAttributeValue($attribute, $condition);
         }
     }
-
     /**
      * Validates attribute value in the scope of [[model]].
      * @param string $attribute attribute name.
@@ -664,14 +556,12 @@ class DataFilter extends Model
             $this->addError($this->filterAttributeName, $this->parseErrorMessage('unknownAttribute', ['attribute' => $attribute]));
             return;
         }
-
         $model->{$attribute} = $value === $this->nullValue ? null : $value;
         if (!$model->validate([$attribute])) {
             $this->addError($this->filterAttributeName, $model->getFirstError($attribute));
             return;
         }
     }
-
     /**
      * Validates attribute value in the scope of [[searchModel]], applying attribute value filters if any.
      * @param string $attribute attribute name.
@@ -690,12 +580,9 @@ class DataFilter extends Model
             $this->addError($this->filterAttributeName, $model->getFirstError($attribute));
             return $value;
         }
-
         return $model->{$attribute};
     }
-
     // Build:
-
     /**
      * Builds actual filter specification form [[filter]] value.
      * @param bool $runValidation whether to perform validation (calling [[validate()]])
@@ -703,14 +590,13 @@ class DataFilter extends Model
      * be built and this method will return `false`.
      * @return mixed|false built actual filter value, or `false` if validation fails.
      */
-    public function build($runValidation = true)
+    public function build($runValidation = \true)
     {
         if ($runValidation && !$this->validate()) {
-            return false;
+            return \false;
         }
         return $this->buildInternal();
     }
-
     /**
      * Performs actual filter build.
      * By default this method returns result of [[normalize()]].
@@ -719,9 +605,8 @@ class DataFilter extends Model
      */
     protected function buildInternal()
     {
-        return $this->normalize(false);
+        return $this->normalize(\false);
     }
-
     /**
      * Normalizes filter value, replacing raw keys according to [[filterControls]] and [[attributeMap]].
      * @param bool $runValidation whether to perform validation (calling [[validate()]])
@@ -729,20 +614,17 @@ class DataFilter extends Model
      * be processed and this method will return `false`.
      * @return array|bool normalized filter value, or `false` if validation fails.
      */
-    public function normalize($runValidation = true)
+    public function normalize($runValidation = \true)
     {
         if ($runValidation && !$this->validate()) {
-            return false;
+            return \false;
         }
-
         $filter = $this->getFilter();
         if (!is_array($filter) || empty($filter)) {
             return [];
         }
-
         return $this->normalizeComplexFilter($filter);
     }
-
     /**
      * Normalizes complex filter recursively.
      * @param array $filter raw filter.
@@ -767,31 +649,27 @@ class DataFilter extends Model
         }
         return $result;
     }
-
     // Property access:
-
     /**
      * {@inheritdoc}
      */
-    public function canGetProperty($name, $checkVars = true, $checkBehaviors = true)
+    public function canGetProperty($name, $checkVars = \true, $checkBehaviors = \true)
     {
         if ($name === $this->filterAttributeName) {
-            return true;
+            return \true;
         }
         return parent::canGetProperty($name, $checkVars, $checkBehaviors);
     }
-
     /**
      * {@inheritdoc}
      */
-    public function canSetProperty($name, $checkVars = true, $checkBehaviors = true)
+    public function canSetProperty($name, $checkVars = \true, $checkBehaviors = \true)
     {
         if ($name === $this->filterAttributeName) {
-            return true;
+            return \true;
         }
         return parent::canSetProperty($name, $checkVars, $checkBehaviors);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -800,10 +678,8 @@ class DataFilter extends Model
         if ($name === $this->filterAttributeName) {
             return $this->getFilter();
         }
-
         return parent::__get($name);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -815,7 +691,6 @@ class DataFilter extends Model
             parent::__set($name, $value);
         }
     }
-
     /**
      * {@inheritdoc}
      */
@@ -824,10 +699,8 @@ class DataFilter extends Model
         if ($name === $this->filterAttributeName) {
             return $this->getFilter() !== null;
         }
-
         return parent::__isset($name);
     }
-
     /**
      * {@inheritdoc}
      */

@@ -1,12 +1,10 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Odigos\Dotenv\Repository\Adapter;
 
-namespace Dotenv\Repository\Adapter;
-
-use PhpOption\Option;
-use PhpOption\Some;
-
+use Odigos\PhpOption\Option;
+use Odigos\PhpOption\Some;
 final class ServerConstAdapter implements AdapterInterface
 {
     /**
@@ -18,7 +16,6 @@ final class ServerConstAdapter implements AdapterInterface
     {
         //
     }
-
     /**
      * Create a new instance of the adapter, if it is available.
      *
@@ -29,7 +26,6 @@ final class ServerConstAdapter implements AdapterInterface
         /** @var \PhpOption\Option<AdapterInterface> */
         return Some::create(new self());
     }
-
     /**
      * Read an environment variable, if it exists.
      *
@@ -40,23 +36,18 @@ final class ServerConstAdapter implements AdapterInterface
     public function read(string $name)
     {
         /** @var \PhpOption\Option<string> */
-        return Option::fromArraysValue($_SERVER, $name)
-            ->filter(static function ($value) {
-                return \is_scalar($value);
-            })
-            ->map(static function ($value) {
-                if ($value === false) {
-                    return 'false';
-                }
-
-                if ($value === true) {
-                    return 'true';
-                }
-
-                return (string) $value;
-            });
+        return Option::fromArraysValue($_SERVER, $name)->filter(static function ($value) {
+            return \is_scalar($value);
+        })->map(static function ($value) {
+            if ($value === \false) {
+                return 'false';
+            }
+            if ($value === \true) {
+                return 'true';
+            }
+            return (string) $value;
+        });
     }
-
     /**
      * Write to an environment variable, if possible.
      *
@@ -68,10 +59,8 @@ final class ServerConstAdapter implements AdapterInterface
     public function write(string $name, string $value)
     {
         $_SERVER[$name] = $value;
-
-        return true;
+        return \true;
     }
-
     /**
      * Delete an environment variable, if possible.
      *
@@ -82,7 +71,6 @@ final class ServerConstAdapter implements AdapterInterface
     public function delete(string $name)
     {
         unset($_SERVER[$name]);
-
-        return true;
+        return \true;
     }
 }

@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\Routing\Matcher\Dumper;
 
 use Symfony\Component\Routing\RouteCollection;
-
 /**
  * MatcherDumperInterface is the interface that all matcher dumper classes must implement.
  *
@@ -25,7 +23,6 @@ interface MatcherDumperInterface
      * that can then be used to match a request against these routes.
      */
     public function dump(array $options = []): string;
-
     /**
      * Gets the routes to dump.
      */

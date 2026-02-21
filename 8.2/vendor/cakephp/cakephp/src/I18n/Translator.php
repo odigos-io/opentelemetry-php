@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -27,35 +27,30 @@ class Translator
      * @var string
      */
     public const PLURAL_PREFIX = 'p:';
-
     /**
      * A fallback translator.
      *
      * @var \Cake\I18n\Translator|null
      */
-    protected ?Translator $fallback = null;
-
+    protected ?\Cake\I18n\Translator $fallback = null;
     /**
      * The formatter to use when translating messages.
      *
      * @var \Cake\I18n\FormatterInterface
      */
-    protected FormatterInterface $formatter;
-
+    protected \Cake\I18n\FormatterInterface $formatter;
     /**
      * The locale being used for translations.
      *
      * @var string
      */
     protected string $locale;
-
     /**
      * The Package containing keys and translations.
      *
      * @var \Cake\I18n\Package
      */
-    protected Package $package;
-
+    protected \Cake\I18n\Package $package;
     /**
      * Constructor
      *
@@ -64,18 +59,13 @@ class Translator
      * @param \Cake\I18n\FormatterInterface $formatter A message formatter.
      * @param \Cake\I18n\Translator|null $fallback A fallback translator.
      */
-    public function __construct(
-        string $locale,
-        Package $package,
-        FormatterInterface $formatter,
-        ?Translator $fallback = null,
-    ) {
+    public function __construct(string $locale, \Cake\I18n\Package $package, \Cake\I18n\FormatterInterface $formatter, ?\Cake\I18n\Translator $fallback = null)
+    {
         $this->locale = $locale;
         $this->package = $package;
         $this->formatter = $formatter;
         $this->fallback = $fallback;
     }
-
     /**
      * Gets the message translation by its key.
      *
@@ -88,19 +78,15 @@ class Translator
         if ($message) {
             return $message;
         }
-
         if ($this->fallback) {
             $message = $this->fallback->getMessage($key);
             if ($message) {
                 $this->package->addMessage($key, $message);
-
                 return $message;
             }
         }
-
-        return false;
+        return \false;
     }
-
     /**
      * Translates the message formatting any placeholders
      *
@@ -122,53 +108,42 @@ class Translator
                 $message = $this->getMessage(static::PLURAL_PREFIX . $key);
             }
         }
-
         if (!$message) {
             // Fallback to the message key
             $message = $key;
         }
-
         // Check for missing/invalid context
         if (is_array($message) && isset($message['_context'])) {
             $message = $this->resolveContext($key, $message, $tokensValues);
             unset($tokensValues['_context']);
         }
-
         if (!$tokensValues) {
             // Fallback for plurals that were using the singular key
             if (is_array($message)) {
                 return array_values($message + [''])[0];
             }
-
             return $message;
         }
-
         // Singular message, but plural call
         if (is_string($message) && isset($tokensValues['_singular'])) {
             $message = [$tokensValues['_singular'], $message];
         }
-
         // Resolve plural form.
         if (is_array($message)) {
             $count = $tokensValues['_count'] ?? 0;
-            $form = PluralRules::calculate($this->locale, (int)$count);
-            $message = $message[$form] ?? (string)end($message);
+            $form = \Cake\I18n\PluralRules::calculate($this->locale, (int) $count);
+            $message = $message[$form] ?? (string) end($message);
         }
-
         if ($message === '') {
             $message = $key;
-
             // If singular haven't been translated, fallback to the key.
             if (isset($tokensValues['_singular']) && $tokensValues['_count'] === 1) {
                 $message = $tokensValues['_singular'];
             }
         }
-
         unset($tokensValues['_count'], $tokensValues['_singular']);
-
         return $this->formatter->format($this->locale, $message, $tokensValues);
     }
-
     /**
      * Resolve a message's context structure.
      *
@@ -180,13 +155,11 @@ class Translator
     protected function resolveContext(string $key, array $message, array $vars): array|string
     {
         $context = $vars['_context'] ?? null;
-
         // No or missing context, fallback to the key/first message
         if ($context === null) {
             if (isset($message['_context'][''])) {
                 return $message['_context'][''] === '' ? $key : $message['_context'][''];
             }
-
             return current($message['_context']);
         }
         if (!isset($message['_context'][$context])) {
@@ -195,16 +168,14 @@ class Translator
         if ($message['_context'][$context] === '') {
             return $key;
         }
-
         return $message['_context'][$context];
     }
-
     /**
      * Returns the translator package
      *
      * @return \Cake\I18n\Package
      */
-    public function getPackage(): Package
+    public function getPackage(): \Cake\I18n\Package
     {
         return $this->package;
     }

@@ -7,7 +7,6 @@ use Illuminate\Foundation\Routing\PrecognitionCallableDispatcher;
 use Illuminate\Foundation\Routing\PrecognitionControllerDispatcher;
 use Illuminate\Routing\Contracts\CallableDispatcher as CallableDispatcherContract;
 use Illuminate\Routing\Contracts\ControllerDispatcher as ControllerDispatcherContract;
-
 class HandlePrecognitiveRequests
 {
     /**
@@ -16,7 +15,6 @@ class HandlePrecognitiveRequests
      * @var \Illuminate\Container\Container
      */
     protected $container;
-
     /**
      * Create a new middleware instance.
      *
@@ -26,7 +24,6 @@ class HandlePrecognitiveRequests
     {
         $this->container = $container;
     }
-
     /**
      * Handle an incoming request.
      *
@@ -36,19 +33,15 @@ class HandlePrecognitiveRequests
      */
     public function handle($request, $next)
     {
-        if (! $request->isAttemptingPrecognition()) {
+        if (!$request->isAttemptingPrecognition()) {
             return $this->appendVaryHeader($request, $next($request));
         }
-
         $this->prepareForPrecognition($request);
-
         return tap($next($request), function ($response) use ($request) {
             $response->headers->set('Precognition', 'true');
-
             $this->appendVaryHeader($request, $response);
         });
     }
-
     /**
      * Prepare to handle a precognitive request.
      *
@@ -57,12 +50,10 @@ class HandlePrecognitiveRequests
      */
     protected function prepareForPrecognition($request)
     {
-        $request->attributes->set('precognitive', true);
-
-        $this->container->bind(CallableDispatcherContract::class, fn ($app) => new PrecognitionCallableDispatcher($app));
-        $this->container->bind(ControllerDispatcherContract::class, fn ($app) => new PrecognitionControllerDispatcher($app));
+        $request->attributes->set('precognitive', \true);
+        $this->container->bind(CallableDispatcherContract::class, fn($app) => new PrecognitionCallableDispatcher($app));
+        $this->container->bind(ControllerDispatcherContract::class, fn($app) => new PrecognitionControllerDispatcher($app));
     }
-
     /**
      * Append the appropriate "Vary" header to the given response.
      *
@@ -72,9 +63,6 @@ class HandlePrecognitiveRequests
      */
     protected function appendVaryHeader($request, $response)
     {
-        return tap($response, fn () => $response->headers->set('Vary', implode(', ', array_filter([
-            $response->headers->get('Vary'),
-            'Precognition',
-        ]))));
+        return tap($response, fn() => $response->headers->set('Vary', implode(', ', array_filter([$response->headers->get('Vary'), 'Precognition']))));
     }
 }

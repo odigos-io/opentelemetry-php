@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is a part of dflydev/dot-access-data.
  *
@@ -10,18 +9,15 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Odigos\Dflydev\DotAccessData;
 
-namespace Dflydev\DotAccessData;
-
-use Dflydev\DotAccessData\Exception\DataException;
-use Dflydev\DotAccessData\Exception\InvalidPathException;
-
+use Odigos\Dflydev\DotAccessData\Exception\DataException;
+use Odigos\Dflydev\DotAccessData\Exception\InvalidPathException;
 interface DataInterface
 {
     public const PRESERVE = 0;
     public const REPLACE = 1;
     public const MERGE = 2;
-
     /**
      * Append a value to a key (assumes key refers to an array value)
      *
@@ -34,7 +30,6 @@ interface DataInterface
      * @throws InvalidPathException if the given key is empty
      */
     public function append(string $key, $value = null): void;
-
     /**
      * Set a value for a key
      *
@@ -47,7 +42,6 @@ interface DataInterface
      * @throws DataException if the given key does not target an array
      */
     public function set(string $key, $value = null): void;
-
     /**
      * Remove a key
      *
@@ -58,7 +52,6 @@ interface DataInterface
      * @throws InvalidPathException if the given key is empty
      */
     public function remove(string $key): void;
-
     /**
      * Get the raw value for a key
      *
@@ -76,7 +69,6 @@ interface DataInterface
      * @psalm-mutation-free
      */
     public function get(string $key, $default = null);
-
     /**
      * Check if the key exists
      *
@@ -89,7 +81,6 @@ interface DataInterface
      * @psalm-mutation-free
      */
     public function has(string $key): bool;
-
     /**
      * Get a data instance for a key
      *
@@ -103,7 +94,6 @@ interface DataInterface
      * @psalm-mutation-free
      */
     public function getData(string $key): DataInterface;
-
     /**
      * Import data into existing data
      *
@@ -111,7 +101,6 @@ interface DataInterface
      * @param self::PRESERVE|self::REPLACE|self::MERGE $mode
      */
     public function import(array $data, int $mode = self::REPLACE): void;
-
     /**
      * Import data from an external data into existing data
      *
@@ -119,7 +108,6 @@ interface DataInterface
      * @param self::PRESERVE|self::REPLACE|self::MERGE $mode
      */
     public function importData(DataInterface $data, int $mode = self::REPLACE): void;
-
     /**
      * Export data as raw data
      *

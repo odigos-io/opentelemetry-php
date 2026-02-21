@@ -1,12 +1,13 @@
 <?php
 
+namespace Odigos;
+
 class HTMLPurifier_HTMLModule_Name extends HTMLPurifier_HTMLModule
 {
     /**
      * @type string
      */
     public $name = 'Name';
-
     /**
      * @param HTMLPurifier_Config $config
      */
@@ -22,5 +23,5 @@ class HTMLPurifier_HTMLModule_Name extends HTMLPurifier_HTMLModule
         }
     }
 }
-
+\class_alias('Odigos\HTMLPurifier_HTMLModule_Name', 'HTMLPurifier_HTMLModule_Name', \false);
 // vim: et sw=4 sts=4

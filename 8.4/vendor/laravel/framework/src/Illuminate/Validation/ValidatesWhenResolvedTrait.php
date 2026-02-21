@@ -3,7 +3,6 @@
 namespace Illuminate\Validation;
 
 use Illuminate\Foundation\Precognition;
-
 /**
  * Provides default implementation of ValidatesWhenResolved contract.
  */
@@ -17,24 +16,18 @@ trait ValidatesWhenResolvedTrait
     public function validateResolved()
     {
         $this->prepareForValidation();
-
-        if (! $this->passesAuthorization()) {
+        if (!$this->passesAuthorization()) {
             $this->failedAuthorization();
         }
-
         $instance = $this->getValidatorInstance();
-
         if ($this->isPrecognitive()) {
             $instance->after(Precognition::afterValidationHook($this));
         }
-
         if ($instance->fails()) {
             $this->failedValidation($instance);
         }
-
         $this->passedValidation();
     }
-
     /**
      * Prepare the data for validation.
      *
@@ -44,7 +37,6 @@ trait ValidatesWhenResolvedTrait
     {
         //
     }
-
     /**
      * Get the validator instance for the request.
      *
@@ -54,7 +46,6 @@ trait ValidatesWhenResolvedTrait
     {
         return $this->validator();
     }
-
     /**
      * Handle a passed validation attempt.
      *
@@ -64,7 +55,6 @@ trait ValidatesWhenResolvedTrait
     {
         //
     }
-
     /**
      * Handle a failed validation attempt.
      *
@@ -73,13 +63,11 @@ trait ValidatesWhenResolvedTrait
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    protected function failedValidation(Validator $validator)
+    protected function failedValidation(\Illuminate\Validation\Validator $validator)
     {
         $exception = $validator->getException();
-
         throw new $exception($validator);
     }
-
     /**
      * Determine if the request passes the authorization check.
      *
@@ -90,10 +78,8 @@ trait ValidatesWhenResolvedTrait
         if (method_exists($this, 'authorize')) {
             return $this->authorize();
         }
-
-        return true;
+        return \true;
     }
-
     /**
      * Handle a failed authorization attempt.
      *
@@ -103,6 +89,6 @@ trait ValidatesWhenResolvedTrait
      */
     protected function failedAuthorization()
     {
-        throw new UnauthorizedException;
+        throw new \Illuminate\Validation\UnauthorizedException();
     }
 }

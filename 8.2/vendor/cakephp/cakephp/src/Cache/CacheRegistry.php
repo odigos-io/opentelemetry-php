@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -20,7 +20,6 @@ use BadMethodCallException;
 use Cake\Core\App;
 use Cake\Core\Exception\CakeException;
 use Cake\Core\ObjectRegistry;
-
 /**
  * An object registry for cache engines.
  *
@@ -43,7 +42,6 @@ class CacheRegistry extends ObjectRegistry
         /** @var class-string<\Cake\Cache\CacheEngine>|null */
         return App::className($class, 'Cache/Engine', 'Engine');
     }
-
     /**
      * Throws an exception when a cache engine is missing.
      *
@@ -58,7 +56,6 @@ class CacheRegistry extends ObjectRegistry
     {
         throw new BadMethodCallException(sprintf('Cache engine `%s` is not available.', $class));
     }
-
     /**
      * Create the cache engine instance.
      *
@@ -70,7 +67,7 @@ class CacheRegistry extends ObjectRegistry
      * @return \Cake\Cache\CacheEngine The constructed CacheEngine class.
      * @throws \Cake\Core\Exception\CakeException When the cache engine cannot be initialized.
      */
-    protected function _create(object|string $class, string $alias, array $config): CacheEngine
+    protected function _create(object|string $class, string $alias, array $config): \Cake\Cache\CacheEngine
     {
         if (is_object($class)) {
             $instance = $class;
@@ -78,21 +75,12 @@ class CacheRegistry extends ObjectRegistry
             $instance = new $class($config);
         }
         unset($config['className']);
-
-        assert($instance instanceof CacheEngine, 'Cache engines must extend `' . CacheEngine::class . '`.');
-
+        assert($instance instanceof \Cake\Cache\CacheEngine, 'Cache engines must extend `' . \Cake\Cache\CacheEngine::class . '`.');
         if (!$instance->init($config)) {
-            throw new CakeException(
-                sprintf(
-                    'Cache engine `%s` is not properly configured. Check error log for additional information.',
-                    $instance::class,
-                ),
-            );
+            throw new CakeException(sprintf('Cache engine `%s` is not properly configured. Check error log for additional information.', $instance::class));
         }
-
         return $instance;
     }
-
     /**
      * Remove a single adapter from the registry.
      *
@@ -102,7 +90,6 @@ class CacheRegistry extends ObjectRegistry
     public function unload(string $name)
     {
         unset($this->_loaded[$name]);
-
         return $this;
     }
 }

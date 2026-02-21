@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -22,13 +22,12 @@ use Cake\I18n\Number;
 use InvalidArgumentException;
 use PDO;
 use Stringable;
-
 /**
  * Decimal type converter.
  *
  * Use to convert decimal data between PHP and the database types.
  */
-class DecimalType extends BaseType implements BatchCastingInterface
+class DecimalType extends \Cake\Database\Type\BaseType implements \Cake\Database\Type\BatchCastingInterface
 {
     /**
      * The class to use for representing number objects
@@ -36,15 +35,13 @@ class DecimalType extends BaseType implements BatchCastingInterface
      * @var class-string<\Cake\I18n\Number>|string
      */
     public static string $numberClass = Number::class;
-
     /**
      * Whether numbers should be parsed using a locale aware parser
      * when marshaling string inputs.
      *
      * @var bool
      */
-    protected bool $_useLocaleParser = false;
-
+    protected bool $_useLocaleParser = \false;
     /**
      * Convert decimal strings into the database format.
      *
@@ -58,26 +55,17 @@ class DecimalType extends BaseType implements BatchCastingInterface
         if ($value === null || $value === '') {
             return null;
         }
-
         if (is_numeric($value)) {
             return $value;
         }
-
         if ($value instanceof Stringable) {
-            $str = (string)$value;
-
+            $str = (string) $value;
             if (is_numeric($str)) {
                 return $str;
             }
         }
-
-        throw new InvalidArgumentException(sprintf(
-            'Cannot convert value `%s` of type `%s` to a decimal',
-            print_r($value, true),
-            get_debug_type($value),
-        ));
+        throw new InvalidArgumentException(sprintf('Cannot convert value `%s` of type `%s` to a decimal', print_r($value, \true), get_debug_type($value)));
     }
-
     /**
      * {@inheritDoc}
      *
@@ -90,10 +78,8 @@ class DecimalType extends BaseType implements BatchCastingInterface
         if ($value === null) {
             return null;
         }
-
-        return (string)$value;
+        return (string) $value;
     }
-
     /**
      * @inheritDoc
      */
@@ -103,13 +89,10 @@ class DecimalType extends BaseType implements BatchCastingInterface
             if (!isset($values[$field])) {
                 continue;
             }
-
-            $values[$field] = (string)$values[$field];
+            $values[$field] = (string) $values[$field];
         }
-
         return $values;
     }
-
     /**
      * @inheritDoc
      */
@@ -117,7 +100,6 @@ class DecimalType extends BaseType implements BatchCastingInterface
     {
         return PDO::PARAM_STR;
     }
-
     /**
      * Marshalls request data into decimal strings.
      *
@@ -133,15 +115,13 @@ class DecimalType extends BaseType implements BatchCastingInterface
             return $this->_parseValue($value);
         }
         if (is_numeric($value)) {
-            return (string)$value;
+            return (string) $value;
         }
         if (is_string($value) && preg_match('/^[0-9,. ]+$/', $value)) {
             return $value;
         }
-
         return null;
     }
-
     /**
      * Sets whether to parse numbers passed to the marshal() function
      * by using a locale aware parser.
@@ -150,26 +130,18 @@ class DecimalType extends BaseType implements BatchCastingInterface
      * @return $this
      * @throws \Cake\Database\Exception\DatabaseException
      */
-    public function useLocaleParser(bool $enable = true)
+    public function useLocaleParser(bool $enable = \true)
     {
-        if ($enable === false) {
+        if ($enable === \false) {
             $this->_useLocaleParser = $enable;
-
             return $this;
         }
-        if (
-            static::$numberClass === Number::class ||
-            is_subclass_of(static::$numberClass, Number::class)
-        ) {
+        if (static::$numberClass === Number::class || is_subclass_of(static::$numberClass, Number::class)) {
             $this->_useLocaleParser = $enable;
-
             return $this;
         }
-        throw new DatabaseException(
-            sprintf('Cannot use locale parsing with the %s class', static::$numberClass),
-        );
+        throw new DatabaseException(sprintf('Cannot use locale parsing with the %s class', static::$numberClass));
     }
-
     /**
      * Converts localized string into a decimal string after parsing it using
      * the locale aware parser.
@@ -180,7 +152,6 @@ class DecimalType extends BaseType implements BatchCastingInterface
     protected function _parseValue(string $value): string
     {
         $class = static::$numberClass;
-
-        return (string)$class::parseFloat($value);
+        return (string) $class::parseFloat($value);
     }
 }

@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -17,7 +17,6 @@ namespace Cake\Http\Client;
 
 use Cake\Utility\Text;
 use Stringable;
-
 /**
  * Contains the data and behavior for a single
  * part in a Multipart FormData request body.
@@ -35,28 +34,24 @@ class FormDataPart implements Stringable
      * @var string|null
      */
     protected ?string $type = null;
-
     /**
      * Filename to send if using files.
      *
      * @var string|null
      */
     protected ?string $filename = null;
-
     /**
      * The encoding used in this part.
      *
      * @var string|null
      */
     protected ?string $transferEncoding = null;
-
     /**
      * The contentId for the part
      *
      * @var string|null
      */
     protected ?string $contentId = null;
-
     /**
      * Constructor
      *
@@ -65,14 +60,9 @@ class FormDataPart implements Stringable
      * @param string $disposition The type of disposition to use, defaults to form-data.
      * @param string|null $charset The charset of the data.
      */
-    public function __construct(
-        protected string $name,
-        protected string $value,
-        protected string $disposition = 'form-data',
-        protected ?string $charset = null,
-    ) {
+    public function __construct(protected string $name, protected string $value, protected string $disposition = 'form-data', protected ?string $charset = null)
+    {
     }
-
     /**
      * Get/set the disposition type
      *
@@ -87,10 +77,8 @@ class FormDataPart implements Stringable
         if ($disposition === null) {
             return $this->disposition;
         }
-
         return $this->disposition = $disposition;
     }
-
     /**
      * Get/set the contentId for a part.
      *
@@ -102,10 +90,8 @@ class FormDataPart implements Stringable
         if ($id === null) {
             return $this->contentId;
         }
-
         return $this->contentId = $id;
     }
-
     /**
      * Get/set the filename.
      *
@@ -120,10 +106,8 @@ class FormDataPart implements Stringable
         if ($filename === null) {
             return $this->filename;
         }
-
         return $this->filename = $filename;
     }
-
     /**
      * Get/set the content type.
      *
@@ -135,10 +119,8 @@ class FormDataPart implements Stringable
         if ($type === null) {
             return $this->type;
         }
-
         return $this->type = $type;
     }
-
     /**
      * Set the transfer-encoding for multipart.
      *
@@ -152,10 +134,8 @@ class FormDataPart implements Stringable
         if ($type === null) {
             return $this->transferEncoding;
         }
-
         return $this->transferEncoding = $type;
     }
-
     /**
      * Get the part name.
      *
@@ -165,7 +145,6 @@ class FormDataPart implements Stringable
     {
         return $this->name;
     }
-
     /**
      * Get the value.
      *
@@ -175,7 +154,6 @@ class FormDataPart implements Stringable
     {
         return $this->value;
     }
-
     /**
      * Convert the part into a string.
      *
@@ -207,10 +185,8 @@ class FormDataPart implements Stringable
         }
         $out .= "\r\n";
         $out .= $this->value;
-
         return $out;
     }
-
     /**
      * Get the string for the header parameter.
      *
@@ -228,7 +204,6 @@ class FormDataPart implements Stringable
         if ($this->charset !== null && $value !== $transliterated) {
             $return .= sprintf("; %s*=%s''%s", $name, strtolower($this->charset), rawurlencode($value));
         }
-
         return $return;
     }
 }

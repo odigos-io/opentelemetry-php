@@ -13,9 +13,8 @@ class CookieValuePrefix
      */
     public static function create($cookieName, $key)
     {
-        return hash_hmac('sha1', $cookieName.'v2', $key).'|';
+        return hash_hmac('sha1', $cookieName . 'v2', $key) . '|';
     }
-
     /**
      * Remove the cookie value prefix.
      *
@@ -26,7 +25,6 @@ class CookieValuePrefix
     {
         return substr($cookieValue, 41);
     }
-
     /**
      * Validate a cookie value contains a valid prefix. If it does, return the cookie value with the prefix removed. Otherwise, return null.
      *
@@ -39,7 +37,6 @@ class CookieValuePrefix
     {
         foreach ($keys as $key) {
             $hasValidPrefix = str_starts_with($cookieValue, static::create($cookieName, $key));
-
             if ($hasValidPrefix) {
                 return static::remove($cookieValue);
             }

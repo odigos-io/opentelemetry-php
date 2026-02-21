@@ -5,7 +5,6 @@ namespace Illuminate\Foundation\Support\Providers;
 use Illuminate\Foundation\Events\DiscoverEvents;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
-
 class EventServiceProvider extends ServiceProvider
 {
     /**
@@ -14,21 +13,18 @@ class EventServiceProvider extends ServiceProvider
      * @var array<string, array<int, string>>
      */
     protected $listen = [];
-
     /**
      * The subscribers to register.
      *
      * @var array
      */
     protected $subscribe = [];
-
     /**
      * The model observers to register.
      *
      * @var array<string, string|object|array<int, string|object>>
      */
     protected $observers = [];
-
     /**
      * Register the application's event listeners.
      *
@@ -38,23 +34,19 @@ class EventServiceProvider extends ServiceProvider
     {
         $this->booting(function () {
             $events = $this->getEvents();
-
             foreach ($events as $event => $listeners) {
-                foreach (array_unique($listeners, SORT_REGULAR) as $listener) {
+                foreach (array_unique($listeners, \SORT_REGULAR) as $listener) {
                     Event::listen($event, $listener);
                 }
             }
-
             foreach ($this->subscribe as $subscriber) {
                 Event::subscribe($subscriber);
             }
-
             foreach ($this->observers as $model => $observers) {
                 $model::observe($observers);
             }
         });
     }
-
     /**
      * Boot any application services.
      *
@@ -64,7 +56,6 @@ class EventServiceProvider extends ServiceProvider
     {
         //
     }
-
     /**
      * Get the events and handlers.
      *
@@ -74,7 +65,6 @@ class EventServiceProvider extends ServiceProvider
     {
         return $this->listen;
     }
-
     /**
      * Get the discovered events and listeners for the application.
      *
@@ -84,16 +74,11 @@ class EventServiceProvider extends ServiceProvider
     {
         if ($this->app->eventsAreCached()) {
             $cache = require $this->app->getCachedEventsPath();
-
             return $cache[get_class($this)] ?? [];
         } else {
-            return array_merge_recursive(
-                $this->discoveredEvents(),
-                $this->listens()
-            );
+            return array_merge_recursive($this->discoveredEvents(), $this->listens());
         }
     }
-
     /**
      * Get the discovered events for the application.
      *
@@ -101,11 +86,8 @@ class EventServiceProvider extends ServiceProvider
      */
     protected function discoveredEvents()
     {
-        return $this->shouldDiscoverEvents()
-                    ? $this->discoverEvents()
-                    : [];
+        return $this->shouldDiscoverEvents() ? $this->discoverEvents() : [];
     }
-
     /**
      * Determine if events and listeners should be automatically discovered.
      *
@@ -113,9 +95,8 @@ class EventServiceProvider extends ServiceProvider
      */
     public function shouldDiscoverEvents()
     {
-        return false;
+        return \false;
     }
-
     /**
      * Discover the events and listeners for the application.
      *
@@ -123,18 +104,12 @@ class EventServiceProvider extends ServiceProvider
      */
     public function discoverEvents()
     {
-        return collect($this->discoverEventsWithin())
-                    ->reject(function ($directory) {
-                        return ! is_dir($directory);
-                    })
-                    ->reduce(function ($discovered, $directory) {
-                        return array_merge_recursive(
-                            $discovered,
-                            DiscoverEvents::within($directory, $this->eventDiscoveryBasePath())
-                        );
-                    }, []);
+        return collect($this->discoverEventsWithin())->reject(function ($directory) {
+            return !is_dir($directory);
+        })->reduce(function ($discovered, $directory) {
+            return array_merge_recursive($discovered, DiscoverEvents::within($directory, $this->eventDiscoveryBasePath()));
+        }, []);
     }
-
     /**
      * Get the listener directories that should be used to discover events.
      *
@@ -142,11 +117,8 @@ class EventServiceProvider extends ServiceProvider
      */
     protected function discoverEventsWithin()
     {
-        return [
-            $this->app->path('Listeners'),
-        ];
+        return [$this->app->path('Listeners')];
     }
-
     /**
      * Get the base path to be used during event discovery.
      *

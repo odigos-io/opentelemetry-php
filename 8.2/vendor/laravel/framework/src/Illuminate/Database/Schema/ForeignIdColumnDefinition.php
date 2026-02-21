@@ -3,8 +3,7 @@
 namespace Illuminate\Database\Schema;
 
 use Illuminate\Support\Stringable;
-
-class ForeignIdColumnDefinition extends ColumnDefinition
+class ForeignIdColumnDefinition extends \Illuminate\Database\Schema\ColumnDefinition
 {
     /**
      * The schema builder blueprint instance.
@@ -12,20 +11,17 @@ class ForeignIdColumnDefinition extends ColumnDefinition
      * @var \Illuminate\Database\Schema\Blueprint
      */
     protected $blueprint;
-
     /**
      * Create a new foreign ID column definition.
      *
      * @param  \Illuminate\Database\Schema\Blueprint  $blueprint
      * @param  array  $attributes
      */
-    public function __construct(Blueprint $blueprint, $attributes = [])
+    public function __construct(\Illuminate\Database\Schema\Blueprint $blueprint, $attributes = [])
     {
         parent::__construct($attributes);
-
         $this->blueprint = $blueprint;
     }
-
     /**
      * Create a foreign key constraint on this column referencing the "id" column of the conventionally related table.
      *
@@ -38,10 +34,8 @@ class ForeignIdColumnDefinition extends ColumnDefinition
     {
         $table ??= $this->table;
         $column ??= $this->referencesModelColumn ?? 'id';
-
-        return $this->references($column, $indexName)->on($table ?? (new Stringable($this->name))->beforeLast('_'.$column)->plural());
+        return $this->references($column, $indexName)->on($table ?? (new Stringable($this->name))->beforeLast('_' . $column)->plural());
     }
-
     /**
      * Specify which column this foreign ID references on another table.
      *

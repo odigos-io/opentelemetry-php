@@ -1,5 +1,6 @@
-<?php declare(strict_types=1);
+<?php
 
+declare (strict_types=1);
 /*
  * This file is part of the Monolog package.
  *
@@ -8,12 +9,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Odigos\Monolog\Handler;
 
-namespace Monolog\Handler;
-
-use Monolog\Level;
-use Monolog\Utils;
-
+use Odigos\Monolog\Level;
+use Odigos\Monolog\Utils;
 /**
  * SendGridHandler uses the SendGrid API v3 function to send Log emails, more information in https://www.twilio.com/docs/sendgrid/for-developers/sending-email/api-getting-started
  *
@@ -31,7 +30,6 @@ class SendGridHandler extends MailHandler
      * @var string[]
      */
     protected array $to;
-
     /**
      * @param string|null $apiUser Unused user as of SendGrid API v3, you can pass null or any string
      * @param list<string>|string $to
@@ -45,20 +43,19 @@ class SendGridHandler extends MailHandler
         array|string $to,
         protected string $subject,
         int|string|Level $level = Level::Error,
-        bool $bubble = true,
+        bool $bubble = \true,
         /** @var non-empty-string */
-        private readonly string $apiHost = 'api.sendgrid.com',
-    ) {
+        private readonly string $apiHost = 'api.sendgrid.com'
+    )
+    {
         if (!\extension_loaded('curl')) {
             throw new MissingExtensionException('The curl extension is needed to use the SendGridHandler');
         }
-
         $this->to = (array) $to;
         // @phpstan-ignore property.deprecated
         $this->apiUser = $apiUser ?? '';
         parent::__construct($level, $bubble);
     }
-
     protected function send(string $content, array $records): void
     {
         $body = [];
@@ -68,28 +65,17 @@ class SendGridHandler extends MailHandler
             $body['personalizations'][]['to'][]['email'] = $recipient;
         }
         $body['subject'] = $this->subject;
-
         if ($this->isHtmlBody($content)) {
-            $body['content'][] = [
-                'type' => 'text/html',
-                'value' => $content,
-            ];
+            $body['content'][] = ['type' => 'text/html', 'value' => $content];
         } else {
-            $body['content'][] = [
-                'type' => 'text/plain',
-                'value' => $content,
-            ];
+            $body['content'][] = ['type' => 'text/plain', 'value' => $content];
         }
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            'Content-Type: application/json',
-            'Authorization: Bearer '.$this->apiKey,
-        ]);
-        curl_setopt($ch, CURLOPT_URL, 'https://'.$this->apiHost.'/v3/mail/send');
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, Utils::jsonEncode($body));
-
+        curl_setopt($ch, \CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . $this->apiKey]);
+        curl_setopt($ch, \CURLOPT_URL, 'https://' . $this->apiHost . '/v3/mail/send');
+        curl_setopt($ch, \CURLOPT_POST, \true);
+        curl_setopt($ch, \CURLOPT_RETURNTRANSFER, \true);
+        curl_setopt($ch, \CURLOPT_POSTFIELDS, Utils::jsonEncode($body));
         Curl\Util::execute($ch, 2);
     }
 }

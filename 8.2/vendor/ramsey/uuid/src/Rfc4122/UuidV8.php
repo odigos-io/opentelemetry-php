@@ -9,18 +9,15 @@
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
  */
+declare (strict_types=1);
+namespace Odigos\Ramsey\Uuid\Rfc4122;
 
-declare(strict_types=1);
-
-namespace Ramsey\Uuid\Rfc4122;
-
-use Ramsey\Uuid\Codec\CodecInterface;
-use Ramsey\Uuid\Converter\NumberConverterInterface;
-use Ramsey\Uuid\Converter\TimeConverterInterface;
-use Ramsey\Uuid\Exception\InvalidArgumentException;
-use Ramsey\Uuid\Rfc4122\FieldsInterface as Rfc4122FieldsInterface;
-use Ramsey\Uuid\Uuid;
-
+use Odigos\Ramsey\Uuid\Codec\CodecInterface;
+use Odigos\Ramsey\Uuid\Converter\NumberConverterInterface;
+use Odigos\Ramsey\Uuid\Converter\TimeConverterInterface;
+use Odigos\Ramsey\Uuid\Exception\InvalidArgumentException;
+use Odigos\Ramsey\Uuid\Rfc4122\FieldsInterface as Rfc4122FieldsInterface;
+use Odigos\Ramsey\Uuid\Uuid;
 /**
  * Custom format, or version 8, UUIDs provide an RFC-compatible format for experimental or vendor-specific uses
  *
@@ -43,18 +40,11 @@ final class UuidV8 extends Uuid implements UuidInterface
      * @param TimeConverterInterface $timeConverter The time converter to use for converting timestamps extracted from a
      *     UUID to unix timestamps
      */
-    public function __construct(
-        Rfc4122FieldsInterface $fields,
-        NumberConverterInterface $numberConverter,
-        CodecInterface $codec,
-        TimeConverterInterface $timeConverter,
-    ) {
+    public function __construct(Rfc4122FieldsInterface $fields, NumberConverterInterface $numberConverter, CodecInterface $codec, TimeConverterInterface $timeConverter)
+    {
         if ($fields->getVersion() !== Uuid::UUID_TYPE_CUSTOM) {
-            throw new InvalidArgumentException(
-                'Fields used to create a UuidV8 must represent a version 8 (custom format) UUID',
-            );
+            throw new InvalidArgumentException('Fields used to create a UuidV8 must represent a version 8 (custom format) UUID');
         }
-
         parent::__construct($fields, $numberConverter, $codec, $timeConverter);
     }
 }

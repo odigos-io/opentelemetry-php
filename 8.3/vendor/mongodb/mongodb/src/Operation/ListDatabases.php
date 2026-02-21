@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright 2015-present MongoDB, Inc.
  *
@@ -14,7 +15,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 namespace MongoDB\Operation;
 
 use ArrayIterator;
@@ -26,7 +26,6 @@ use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\Exception\UnexpectedValueException;
 use MongoDB\Model\CallbackIterator;
 use MongoDB\Model\DatabaseInfo;
-
 /**
  * Operation for the ListDatabases command.
  *
@@ -36,7 +35,6 @@ use MongoDB\Model\DatabaseInfo;
 final class ListDatabases
 {
     private ListDatabasesCommand $listDatabases;
-
     /**
      * Constructs a listDatabases command.
      *
@@ -63,9 +61,8 @@ final class ListDatabases
      */
     public function __construct(array $options = [])
     {
-        $this->listDatabases = new ListDatabasesCommand(['nameOnly' => false] + $options);
+        $this->listDatabases = new ListDatabasesCommand(['nameOnly' => \false] + $options);
     }
-
     /**
      * Execute the operation.
      *
@@ -77,10 +74,6 @@ final class ListDatabases
     {
         /** @var list<array> $databases */
         $databases = $this->listDatabases->execute($server);
-
-        return new CallbackIterator(
-            new ArrayIterator($databases),
-            fn (array $databaseInfo): DatabaseInfo => new DatabaseInfo($databaseInfo),
-        );
+        return new CallbackIterator(new ArrayIterator($databases), fn(array $databaseInfo): DatabaseInfo => new DatabaseInfo($databaseInfo));
     }
 }

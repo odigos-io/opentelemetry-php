@@ -6,18 +6,14 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file or at
 // https://developers.google.com/open-source/licenses/bsd
+namespace Odigos\Google\Protobuf;
 
-namespace Google\Protobuf;
-
-use Google\Protobuf\Internal\GetPublicDescriptorTrait;
-
+use Odigos\Google\Protobuf\Internal\GetPublicDescriptorTrait;
 class OneofDescriptor
 {
     use GetPublicDescriptorTrait;
-
     /** @var  \Google\Protobuf\Internal\OneofDescriptor $internal_desc */
     private $internal_desc;
-
     /**
      * @internal
      */
@@ -25,7 +21,6 @@ class OneofDescriptor
     {
         $this->internal_desc = $internal_desc;
     }
-
     /**
      * @return string The name of the oneof
      */
@@ -33,22 +28,17 @@ class OneofDescriptor
     {
         return $this->internal_desc->getName();
     }
-
     /**
      * @param int $index Must be >= 0 and < getFieldCount()
      * @return FieldDescriptor
      */
     public function getField($index)
     {
-        if (
-            is_null($this->internal_desc->getFields())
-            || !isset($this->internal_desc->getFields()[$index])
-        ) {
+        if (is_null($this->internal_desc->getFields()) || !isset($this->internal_desc->getFields()[$index])) {
             return null;
         }
         return $this->getPublicDescriptor($this->internal_desc->getFields()[$index]);
     }
-
     /**
      * @return int Number of fields in the oneof
      */
@@ -56,7 +46,6 @@ class OneofDescriptor
     {
         return count($this->internal_desc->getFields());
     }
-
     public function isSynthetic()
     {
         return $this->internal_desc->isSynthetic();

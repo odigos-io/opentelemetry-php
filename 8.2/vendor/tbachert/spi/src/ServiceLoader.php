@@ -1,5 +1,7 @@
-<?php declare(strict_types=1);
-namespace Nevay\SPI;
+<?php
+
+declare (strict_types=1);
+namespace Odigos\Nevay\SPI;
 
 use Closure;
 use Iterator;
@@ -9,35 +11,32 @@ use ReflectionClass;
 use function class_exists;
 use function in_array;
 use function interface_exists;
-
 /**
  * Service provider loading facility.
  *
  * @template-covariant S of object service type
  * @implements IteratorAggregate<class-string, S>
  */
-final class ServiceLoader implements IteratorAggregate {
-
+final class ServiceLoader implements IteratorAggregate
+{
     /** @var array<class-string, list<class-string>> */
     private static array $mappings = [];
-    private static bool $skipChecks = false;
-
+    private static bool $skipChecks = \false;
     /** @var class-string<S> */
     private readonly string $service;
     /** @var list<class-string> */
     private array $providers;
     /** @var array<int, S|false> */
     private array $cache = [];
-
     /**
      * @param class-string<S> $service
      * @param list<class-string> $providers
      */
-    private function __construct(string $service, array $providers) {
+    private function __construct(string $service, array $providers)
+    {
         $this->service = $service;
         $this->providers = $providers;
     }
-
     /**
      * Registers a service provider implementation for the given service type.
      *
@@ -59,19 +58,17 @@ final class ServiceLoader implements IteratorAggregate {
      *        zero-argument constructor
      * @return bool whether the provider is available
      */
-    public static function register(string $service, string $provider): bool {
-        if (in_array($provider, self::providers($service), true)) {
-            return true;
+    public static function register(string $service, string $provider): bool
+    {
+        if (in_array($provider, self::providers($service), \true)) {
+            return \true;
         }
         if (!self::$skipChecks && (!self::serviceAvailable($service) || !self::providerAvailable($provider))) {
-            return false;
+            return \false;
         }
-
         self::$mappings[$service][] = $provider;
-
-        return true;
+        return \true;
     }
-
     /**
      * Lazy loads service providers for the given service.
      *
@@ -79,54 +76,50 @@ final class ServiceLoader implements IteratorAggregate {
      * @param class-string<S_> $service service to load
      * @return ServiceLoader<S_> service loader for the given service
      */
-    public static function load(string $service): ServiceLoader {
+    public static function load(string $service): ServiceLoader
+    {
         return new self($service, self::providers($service));
     }
-
-    public function getIterator(): Iterator {
+    public function getIterator(): Iterator
+    {
         return new ServiceLoaderIterator($this->service, $this->providers, $this->cache);
     }
-
     /**
      * Reloads this service loader, clearing all cached instances.
      */
-    public function reload(): void {
+    public function reload(): void
+    {
         unset($this->cache);
         $this->cache = [];
         $this->providers = self::providers($this->service);
     }
-
     /**
      * @param class-string $service
      * @return list<class-string>
      */
-    private static function providers(string $service): array {
+    private static function providers(string $service): array
+    {
         if (($providers = self::$mappings[$service] ?? null) !== null) {
             return $providers;
         }
-
-        $providers = class_exists(GeneratedServiceProviderData::class) && GeneratedServiceProviderData::VERSION === 1
-            ? GeneratedServiceProviderData::providers($service)
-            : [];
-
+        $providers = class_exists(GeneratedServiceProviderData::class) && GeneratedServiceProviderData::VERSION === 1 ? GeneratedServiceProviderData::providers($service) : [];
         return self::$mappings[$service] ??= $providers;
     }
-
     /**
      * @internal
      */
-    public static function serviceAvailable(string $service): bool {
+    public static function serviceAvailable(string $service): bool
+    {
         return interface_exists($service) || class_exists($service);
     }
-
     /**
      * @internal
      */
-    public static function providerAvailable(string $provider, bool $skipRuntimeValidatedRequirements = false): bool {
+    public static function providerAvailable(string $provider, bool $skipRuntimeValidatedRequirements = \false): bool
+    {
         if (!class_exists($provider)) {
-            return false;
+            return \false;
         }
-
         $reflection = new ReflectionClass($provider);
         /** @var ReflectionAttribute<ServiceProviderRequirement> $attribute */
         foreach ($reflection->getAttributes(ServiceProviderRequirement::class, ReflectionAttribute::IS_INSTANCEOF) as $attribute) {
@@ -135,27 +128,24 @@ final class ServiceLoader implements IteratorAggregate {
                 continue;
             }
             if (!$requirement->isSatisfied()) {
-                return false;
+                return \false;
             }
         }
-
-        return true;
+        return \true;
     }
-
     /**
      * @return array<class-string, list<class-string>>
      *
      * @internal
      */
-    public static function collectProviders(Closure $closure, mixed ...$args): array {
+    public static function collectProviders(Closure $closure, mixed ...$args): array
+    {
         $skipChecks = self::$skipChecks;
         $mappings = self::$mappings;
-        self::$skipChecks = true;
+        self::$skipChecks = \true;
         self::$mappings = [];
-
         try {
             $closure(...$args);
-
             return self::$mappings;
         } finally {
             self::$skipChecks = $skipChecks;

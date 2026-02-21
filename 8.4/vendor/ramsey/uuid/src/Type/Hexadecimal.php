@@ -9,18 +9,14 @@
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
  */
+declare (strict_types=1);
+namespace Odigos\Ramsey\Uuid\Type;
 
-declare(strict_types=1);
-
-namespace Ramsey\Uuid\Type;
-
-use Ramsey\Uuid\Exception\InvalidArgumentException;
+use Odigos\Ramsey\Uuid\Exception\InvalidArgumentException;
 use ValueError;
-
 use function preg_match;
 use function sprintf;
 use function substr;
-
 /**
  * A value object representing a hexadecimal number
  *
@@ -35,15 +31,13 @@ final class Hexadecimal implements TypeInterface
      * @var non-empty-string
      */
     private string $value;
-
     /**
      * @param self | string $value The hexadecimal value to store
      */
-    public function __construct(self | string $value)
+    public function __construct(self|string $value)
     {
         $this->value = $value instanceof self ? (string) $value : $this->prepareValue($value);
     }
-
     /**
      * @return non-empty-string
      *
@@ -53,7 +47,6 @@ final class Hexadecimal implements TypeInterface
     {
         return $this->value;
     }
-
     /**
      * @return non-empty-string
      */
@@ -61,7 +54,6 @@ final class Hexadecimal implements TypeInterface
     {
         return $this->toString();
     }
-
     /**
      * @return non-empty-string
      */
@@ -69,7 +61,6 @@ final class Hexadecimal implements TypeInterface
     {
         return $this->toString();
     }
-
     /**
      * @return non-empty-string
      */
@@ -77,7 +68,6 @@ final class Hexadecimal implements TypeInterface
     {
         return $this->toString();
     }
-
     /**
      * @return array{string: string}
      */
@@ -85,7 +75,6 @@ final class Hexadecimal implements TypeInterface
     {
         return ['string' => $this->toString()];
     }
-
     /**
      * Constructs the object from a serialized string representation
      *
@@ -95,7 +84,6 @@ final class Hexadecimal implements TypeInterface
     {
         $this->__construct($data);
     }
-
     /**
      * @param array{string?: string} $data
      */
@@ -106,25 +94,20 @@ final class Hexadecimal implements TypeInterface
             throw new ValueError(sprintf('%s(): Argument #1 ($data) is invalid', __METHOD__));
         }
         // @codeCoverageIgnoreEnd
-
         $this->unserialize($data['string']);
     }
-
     /**
      * @return non-empty-string
      */
     private function prepareValue(string $value): string
     {
         $value = strtolower($value);
-
         if (str_starts_with($value, '0x')) {
             $value = substr($value, 2);
         }
-
         if (!preg_match('/^[A-Fa-f0-9]+$/', $value)) {
             throw new InvalidArgumentException('Value must be a hexadecimal number');
         }
-
         /** @var non-empty-string */
         return $value;
     }

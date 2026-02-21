@@ -3,7 +3,6 @@
 namespace Laravel\Prompts\Concerns;
 
 use Closure;
-
 trait Events
 {
     /**
@@ -12,7 +11,6 @@ trait Events
      * @var array<string, array<int, Closure>>
      */
     protected array $listeners = [];
-
     /**
      * Register an event listener.
      */
@@ -20,7 +18,6 @@ trait Events
     {
         $this->listeners[$event][] = $callback;
     }
-
     /**
      * Emit an event.
      */
@@ -30,7 +27,6 @@ trait Events
             $listener(...$data);
         }
     }
-
     /**
      * Clean the event listeners.
      */

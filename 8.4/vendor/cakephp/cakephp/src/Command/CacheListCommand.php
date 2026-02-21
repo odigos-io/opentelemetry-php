@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -20,11 +20,10 @@ use Cake\Cache\Cache;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
-
 /**
  * CacheList command.
  */
-class CacheListCommand extends Command
+class CacheListCommand extends \Cake\Command\Command
 {
     /**
      * @inheritDoc
@@ -33,7 +32,6 @@ class CacheListCommand extends Command
     {
         return 'cache list';
     }
-
     /**
      * @inheritDoc
      */
@@ -41,7 +39,6 @@ class CacheListCommand extends Command
     {
         return 'Show a list of configured caches.';
     }
-
     /**
      * Hook method for defining this command's option parser.
      *
@@ -53,10 +50,8 @@ class CacheListCommand extends Command
     {
         $parser = parent::buildOptionParser($parser);
         $parser->setDescription(static::getDescription());
-
         return $parser;
     }
-
     /**
      * Get the list of cache prefixes
      *
@@ -69,7 +64,6 @@ class CacheListCommand extends Command
         foreach (Cache::configured() as $engine) {
             $io->out("- {$engine}");
         }
-
         return static::CODE_SUCCESS;
     }
 }

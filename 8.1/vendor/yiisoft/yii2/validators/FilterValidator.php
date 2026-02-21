@@ -1,15 +1,14 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\validators;
 
 use yii\base\InvalidConfigException;
 use yii\helpers\Json;
-
 /**
  * FilterValidator converts the attribute value according to a filter.
  *
@@ -34,7 +33,7 @@ use yii\helpers\Json;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class FilterValidator extends Validator
+class FilterValidator extends \yii\validators\Validator
 {
     /**
      * @var callable the filter. This can be a global function name, anonymous function, etc.
@@ -52,14 +51,12 @@ class FilterValidator extends Validator
      * @var bool whether the filter should be skipped if an array input is given.
      * If true and an array input is given, the filter will not be applied.
      */
-    public $skipOnArray = false;
+    public $skipOnArray = \false;
     /**
      * @var bool this property is overwritten to be false so that this validator will
      * be applied when the value being validated is empty.
      */
-    public $skipOnEmpty = false;
-
-
+    public $skipOnEmpty = \false;
     /**
      * {@inheritdoc}
      */
@@ -70,18 +67,16 @@ class FilterValidator extends Validator
             throw new InvalidConfigException('The "filter" property must be set.');
         }
     }
-
     /**
      * {@inheritdoc}
      */
     public function validateAttribute($model, $attribute)
     {
-        $value = $model->$attribute;
+        $value = $model->{$attribute};
         if (!$this->skipOnArray || !is_array($value)) {
-            $model->$attribute = call_user_func($this->filter, $value);
+            $model->{$attribute} = call_user_func($this->filter, $value);
         }
     }
-
     /**
      * {@inheritdoc}
      */
@@ -90,13 +85,10 @@ class FilterValidator extends Validator
         if ($this->filter !== 'trim') {
             return null;
         }
-
-        ValidationAsset::register($view);
+        \yii\validators\ValidationAsset::register($view);
         $options = $this->getClientOptions($model, $attribute);
-
         return 'value = yii.validation.trim($form, attribute, ' . Json::htmlEncode($options) . ', value);';
     }
-
     /**
      * {@inheritdoc}
      */
@@ -106,7 +98,6 @@ class FilterValidator extends Validator
         if ($this->skipOnEmpty) {
             $options['skipOnEmpty'] = 1;
         }
-
         return $options;
     }
 }

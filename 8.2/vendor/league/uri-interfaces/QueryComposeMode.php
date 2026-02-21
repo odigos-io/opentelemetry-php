@@ -8,10 +8,8 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-declare(strict_types=1);
-
-namespace League\Uri;
+declare (strict_types=1);
+namespace Odigos\League\Uri;
 
 enum QueryComposeMode
 {
@@ -24,7 +22,6 @@ enum QueryComposeMode
      * ie http_build_query behavior before PHP8.4
      */
     case Compatible;
-
     /**
      * PHP 8.4+ enum-compatible lenient mode.
      *
@@ -44,7 +41,6 @@ enum QueryComposeMode
      * result in an exception in {@see QueryComposeMode::EnumCompatible}.
      */
     case EnumLenient;
-
     /**
      * PHP 8.4+ mode.
      *
@@ -56,7 +52,6 @@ enum QueryComposeMode
      * http_build_query behavior in PHP 8.4+.
      */
     case EnumCompatible;
-
     /**
      * Use PHP version http_build_query algorithm.
      *
@@ -64,7 +59,6 @@ enum QueryComposeMode
      * In PHP PHP8.4+ you get the same results as `EnumCompatible`
      */
     case Native;
-
     /**
      * Validation-first mode.
      *

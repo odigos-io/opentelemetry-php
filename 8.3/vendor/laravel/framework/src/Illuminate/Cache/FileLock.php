@@ -2,7 +2,7 @@
 
 namespace Illuminate\Cache;
 
-class FileLock extends CacheLock
+class FileLock extends \Illuminate\Cache\CacheLock
 {
     /**
      * Attempt to acquire the lock.

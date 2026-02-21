@@ -3,7 +3,6 @@
 namespace Illuminate\Session;
 
 use SessionHandlerInterface;
-
 class NullSessionHandler implements SessionHandlerInterface
 {
     /**
@@ -13,9 +12,8 @@ class NullSessionHandler implements SessionHandlerInterface
      */
     public function open($savePath, $sessionName): bool
     {
-        return true;
+        return \true;
     }
-
     /**
      * {@inheritdoc}
      *
@@ -23,9 +21,8 @@ class NullSessionHandler implements SessionHandlerInterface
      */
     public function close(): bool
     {
-        return true;
+        return \true;
     }
-
     /**
      * {@inheritdoc}
      *
@@ -35,7 +32,6 @@ class NullSessionHandler implements SessionHandlerInterface
     {
         return '';
     }
-
     /**
      * {@inheritdoc}
      *
@@ -43,9 +39,8 @@ class NullSessionHandler implements SessionHandlerInterface
      */
     public function write($sessionId, $data): bool
     {
-        return true;
+        return \true;
     }
-
     /**
      * {@inheritdoc}
      *
@@ -53,9 +48,8 @@ class NullSessionHandler implements SessionHandlerInterface
      */
     public function destroy($sessionId): bool
     {
-        return true;
+        return \true;
     }
-
     /**
      * {@inheritdoc}
      *

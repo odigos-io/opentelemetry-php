@@ -5,9 +5,7 @@
  *
  * @license https://github.com/slimphp/Slim/blob/4.x/LICENSE.md (MIT License)
  */
-
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Slim\Routing;
 
 use Psr\Http\Server\MiddlewareInterface;
@@ -16,44 +14,33 @@ use Slim\Interfaces\CallableResolverInterface;
 use Slim\Interfaces\RouteCollectorProxyInterface;
 use Slim\Interfaces\RouteGroupInterface;
 use Slim\MiddlewareDispatcher;
-
 class RouteGroup implements RouteGroupInterface
 {
     /**
      * @var callable|string
      */
     protected $callable;
-
     protected CallableResolverInterface $callableResolver;
-
     /**
      * @var RouteCollectorProxyInterface<\Psr\Container\ContainerInterface|null>
      */
     protected RouteCollectorProxyInterface $routeCollectorProxy;
-
     /**
      * @var MiddlewareInterface[]|string[]|callable[]
      */
     protected array $middleware = [];
-
     protected string $pattern;
-
     /**
      * @param callable|string              $callable
      * @param RouteCollectorProxyInterface<\Psr\Container\ContainerInterface|null> $routeCollectorProxy
      */
-    public function __construct(
-        string $pattern,
-        $callable,
-        CallableResolverInterface $callableResolver,
-        RouteCollectorProxyInterface $routeCollectorProxy
-    ) {
+    public function __construct(string $pattern, $callable, CallableResolverInterface $callableResolver, RouteCollectorProxyInterface $routeCollectorProxy)
+    {
         $this->pattern = $pattern;
         $this->callable = $callable;
         $this->callableResolver = $callableResolver;
         $this->routeCollectorProxy = $routeCollectorProxy;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -67,7 +54,6 @@ class RouteGroup implements RouteGroupInterface
         $callable($this->routeCollectorProxy);
         return $this;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -76,7 +62,6 @@ class RouteGroup implements RouteGroupInterface
         $this->middleware[] = $middleware;
         return $this;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -85,7 +70,6 @@ class RouteGroup implements RouteGroupInterface
         $this->middleware[] = $middleware;
         return $this;
     }
-
     /**
      * {@inheritdoc}
      * @param MiddlewareDispatcher<\Psr\Container\ContainerInterface|null> $dispatcher
@@ -95,10 +79,8 @@ class RouteGroup implements RouteGroupInterface
         foreach ($this->middleware as $middleware) {
             $dispatcher->add($middleware);
         }
-
         return $this;
     }
-
     /**
      * {@inheritdoc}
      */

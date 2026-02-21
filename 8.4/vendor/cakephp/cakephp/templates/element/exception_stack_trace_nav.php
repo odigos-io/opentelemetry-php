@@ -1,4 +1,7 @@
 <?php
+
+namespace Odigos;
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -21,34 +24,73 @@ use function Cake\Core\h;
 <a href="#" class="toggle-link toggle-vendor-frames">Toggle Vendor Stack Frames</a>
 
 <ul>
-<?php foreach ($exceptions as $level => $exc): ?>
-    <?php if ($level > 0): ?>
+<?php 
+foreach ($exceptions as $level => $exc) {
+    ?>
+    <?php 
+    if ($level > 0) {
+        ?>
         <li class="stack-previous">
-            <span class="stack-function">Caused by</span> <?= h($exc::class) ?>
+            <span class="stack-function">Caused by</span> <?php 
+        echo h($exc::class);
+        ?>
         </li>
-    <?php endif; ?>
-    <?php $stackTrace = Debugger::formatTrace($exc->getTrace(), ['format' => 'array']); ?>
-    <?php foreach ($stackTrace as $i => $stack): ?>
-        <?php
-        $class = isset($stack['file']) && str_contains($stack['file'], APP) ? 'vendor-frame' : 'app-frame';
+    <?php 
+    }
+    ?>
+    <?php 
+    $stackTrace = Debugger::formatTrace($exc->getTrace(), ['format' => 'array']);
+    ?>
+    <?php 
+    foreach ($stackTrace as $i => $stack) {
+        ?>
+        <?php 
+        $class = isset($stack['file']) && \str_contains($stack['file'], \APP) ? 'vendor-frame' : 'app-frame';
         $class .= $i == 0 ? ' active' : '';
         ?>
-        <li class="stack-frame <?= $class ?>">
-            <a href="#" data-target="stack-frame-<?= $i ?>">
-                <?php if (isset($stack['class'])): ?>
-                    <span class="stack-function"><?= h($stack['class'] . $stack['type'] . $stack['function']) ?></span>
-                <?php elseif (isset($stack['function'])): ?>
-                    <span class="stack-function"><?= h($stack['function']) ?></span>
-                <?php endif; ?>
+        <li class="stack-frame <?php 
+        echo $class;
+        ?>">
+            <a href="#" data-target="stack-frame-<?php 
+        echo $i;
+        ?>">
+                <?php 
+        if (isset($stack['class'])) {
+            ?>
+                    <span class="stack-function"><?php 
+            echo h($stack['class'] . $stack['type'] . $stack['function']);
+            ?></span>
+                <?php 
+        } elseif (isset($stack['function'])) {
+            ?>
+                    <span class="stack-function"><?php 
+            echo h($stack['function']);
+            ?></span>
+                <?php 
+        }
+        ?>
                 <span class="stack-file">
-                <?php if (isset($stack['file'], $stack['line'])): ?>
-                    <?= h(Debugger::trimPath($stack['file'])) ?>:<?= $stack['line'] ?>
-                <?php else: ?>
+                <?php 
+        if (isset($stack['file'], $stack['line'])) {
+            ?>
+                    <?php 
+            echo h(Debugger::trimPath($stack['file']));
+            ?>:<?php 
+            echo $stack['line'];
+            ?>
+                <?php 
+        } else {
+            ?>
                     [internal function]
-                <?php endif ?>
+                <?php 
+        }
+        ?>
                 </span>
             </a>
         </li>
-    <?php endforeach; ?>
-<?php endforeach; ?>
+    <?php 
+    }
+}
+?>
 </ul>
+<?php 

@@ -1,13 +1,13 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\console\controllers;
 
-use Yii;
+use Odigos\Yii;
 use yii\console\Application;
 use yii\console\Controller;
 use yii\console\Exception;
@@ -16,7 +16,6 @@ use yii\helpers\Console;
 use yii\helpers\FileHelper;
 use yii\helpers\VarDumper;
 use yii\web\AssetBundle;
-
 /**
  * Allows you to combine and compress your JavaScript and CSS files.
  *
@@ -131,15 +130,12 @@ class AssetController extends Controller
      * This option affects only those bundles, which have [[\yii\web\AssetBundle::sourcePath]] is set.
      * @since 2.0.10
      */
-    public $deleteSource = false;
-
+    public $deleteSource = \false;
     /**
      * @var array|\yii\web\AssetManager [[\yii\web\AssetManager]] instance or its array configuration, which will be used
      * for assets processing.
      */
     private $_assetManager = [];
-
-
     /**
      * Returns the asset manager instance.
      * @throws \yii\console\Exception on invalid configuration.
@@ -150,7 +146,7 @@ class AssetController extends Controller
         if (!is_object($this->_assetManager)) {
             $options = $this->_assetManager;
             if (!isset($options['class'])) {
-                $options['class'] = 'yii\\web\\AssetManager';
+                $options['class'] = 'yii\web\AssetManager';
             }
             if (!isset($options['basePath'])) {
                 throw new Exception("Please specify 'basePath' for the 'assetManager' option.");
@@ -158,17 +154,13 @@ class AssetController extends Controller
             if (!isset($options['baseUrl'])) {
                 throw new Exception("Please specify 'baseUrl' for the 'assetManager' option.");
             }
-
             if (!isset($options['forceCopy'])) {
-                $options['forceCopy'] = true;
+                $options['forceCopy'] = \true;
             }
-
             $this->_assetManager = Yii::createObject($options);
         }
-
         return $this->_assetManager;
     }
-
     /**
      * Sets asset manager instance or configuration.
      * @param \yii\web\AssetManager|array $assetManager asset manager instance or its array configuration.
@@ -181,7 +173,6 @@ class AssetController extends Controller
         }
         $this->_assetManager = $assetManager;
     }
-
     /**
      * Combines and compresses the asset files according to the given configuration.
      * During the process new asset bundle configuration file will be created.
@@ -204,15 +195,12 @@ class AssetController extends Controller
             }
             $this->stdout("\n");
         }
-
         $targets = $this->adjustDependency($targets, $bundles);
         $this->saveTargets($targets, $bundleFile);
-
         if ($this->deleteSource) {
             $this->deletePublishedAssets($bundles);
         }
     }
-
     /**
      * Applies configuration from the given file to self instance.
      * @param string $configFile configuration file name.
@@ -224,15 +212,14 @@ class AssetController extends Controller
         $config = require $configFile;
         foreach ($config as $name => $value) {
             if (property_exists($this, $name) || $this->canSetProperty($name)) {
-                $this->$name = $value;
+                $this->{$name} = $value;
             } else {
-                throw new Exception("Unknown configuration option: $name");
+                throw new Exception("Unknown configuration option: {$name}");
             }
         }
-
-        $this->getAssetManager(); // check if asset manager configuration is correct
+        $this->getAssetManager();
+        // check if asset manager configuration is correct
     }
-
     /**
      * Creates full list of source asset bundles.
      * @param string[] $bundles list of asset bundle names
@@ -241,7 +228,6 @@ class AssetController extends Controller
     protected function loadBundles($bundles)
     {
         $this->stdout("Collecting source bundles information...\n");
-
         $am = $this->getAssetManager();
         $result = [];
         foreach ($bundles as $name) {
@@ -250,10 +236,8 @@ class AssetController extends Controller
         foreach ($result as $bundle) {
             $this->loadDependency($bundle, $result);
         }
-
         return $result;
     }
-
     /**
      * Loads asset bundle dependencies recursively.
      * @param \yii\web\AssetBundle $bundle bundle instance
@@ -266,15 +250,14 @@ class AssetController extends Controller
         foreach ($bundle->depends as $name) {
             if (!isset($result[$name])) {
                 $dependencyBundle = $am->getBundle($name);
-                $result[$name] = false;
+                $result[$name] = \false;
                 $this->loadDependency($dependencyBundle, $result);
                 $result[$name] = $dependencyBundle;
-            } elseif ($result[$name] === false) {
+            } elseif ($result[$name] === \false) {
                 throw new Exception("A circular dependency is detected for bundle '{$name}': " . $this->composeCircularDependencyTrace($name, $result) . '.');
             }
         }
     }
-
     /**
      * Creates full list of output asset bundles.
      * @param array $targets output asset bundles configuration.
@@ -290,7 +273,6 @@ class AssetController extends Controller
             $this->registerBundle($bundles, $name, $registered);
         }
         $bundleOrders = array_combine(array_keys($registered), range(0, count($bundles) - 1));
-
         // fill up the target which has empty 'depends'.
         $referenced = [];
         foreach ($targets as $name => $target) {
@@ -298,14 +280,14 @@ class AssetController extends Controller
                 if (!isset($all)) {
                     $all = $name;
                 } else {
-                    throw new Exception("Only one target can have empty 'depends' option. Found two now: $all, $name");
+                    throw new Exception("Only one target can have empty 'depends' option. Found two now: {$all}, {$name}");
                 }
             } else {
                 foreach ($target['depends'] as $bundle) {
                     if (!isset($referenced[$bundle])) {
                         $referenced[$bundle] = $name;
                     } else {
-                        throw new Exception("Target '{$referenced[$bundle]}' and '$name' cannot contain the bundle '$bundle' at the same time.");
+                        throw new Exception("Target '{$referenced[$bundle]}' and '{$name}' cannot contain the bundle '{$bundle}' at the same time.");
                     }
                 }
             }
@@ -313,21 +295,19 @@ class AssetController extends Controller
         if (isset($all)) {
             $targets[$all]['depends'] = array_diff(array_keys($registered), array_keys($referenced));
         }
-
         // adjust the 'depends' order for each target according to the dependency order of bundles
         // create an AssetBundle object for each target
         foreach ($targets as $name => $target) {
             if (!isset($target['basePath'])) {
-                throw new Exception("Please specify 'basePath' for the '$name' target.");
+                throw new Exception("Please specify 'basePath' for the '{$name}' target.");
             }
             if (!isset($target['baseUrl'])) {
-                throw new Exception("Please specify 'baseUrl' for the '$name' target.");
+                throw new Exception("Please specify 'baseUrl' for the '{$name}' target.");
             }
             usort($target['depends'], function ($a, $b) use ($bundleOrders) {
                 if ($bundleOrders[$a] == $bundleOrders[$b]) {
                     return 0;
                 }
-
                 return $bundleOrders[$a] > $bundleOrders[$b] ? 1 : -1;
             });
             if (!isset($target['class'])) {
@@ -335,10 +315,8 @@ class AssetController extends Controller
             }
             $targets[$name] = Yii::createObject($target);
         }
-
         return $targets;
     }
-
     /**
      * Builds output asset bundle.
      * @param \yii\web\AssetBundle $target output asset bundle
@@ -352,7 +330,7 @@ class AssetController extends Controller
         foreach ($target->depends as $name) {
             if (isset($bundles[$name])) {
                 if (!$this->isBundleExternal($bundles[$name])) {
-                    foreach ($bundles[$name]->$type as $file) {
+                    foreach ($bundles[$name]->{$type} as $file) {
                         if (is_array($file)) {
                             $inputFiles[] = $bundles[$name]->basePath . '/' . $file[0];
                         } else {
@@ -364,26 +342,22 @@ class AssetController extends Controller
                 throw new Exception("Unknown bundle: '{$name}'");
             }
         }
-
         if (empty($inputFiles)) {
-            $target->$type = [];
+            $target->{$type} = [];
         } else {
             FileHelper::createDirectory($target->basePath, $this->getAssetManager()->dirMode);
-            $tempFile = $target->basePath . '/' . strtr($target->$type, ['{hash}' => 'temp']);
-
+            $tempFile = $target->basePath . '/' . strtr($target->{$type}, ['{hash}' => 'temp']);
             if ($type === 'js') {
                 $this->compressJsFiles($inputFiles, $tempFile);
             } else {
                 $this->compressCssFiles($inputFiles, $tempFile);
             }
-
-            $targetFile = strtr($target->$type, ['{hash}' => md5_file($tempFile)]);
+            $targetFile = strtr($target->{$type}, ['{hash}' => md5_file($tempFile)]);
             $outputFile = $target->basePath . '/' . $targetFile;
             rename($tempFile, $outputFile);
-            $target->$type = [$targetFile];
+            $target->{$type} = [$targetFile];
         }
     }
-
     /**
      * Adjust dependencies between asset bundles in the way source bundles begin to depend on output ones.
      * @param \yii\web\AssetBundle[] $targets output asset bundles.
@@ -393,31 +367,27 @@ class AssetController extends Controller
     protected function adjustDependency($targets, $bundles)
     {
         $this->stdout("Creating new bundle configuration...\n");
-
         $map = [];
         foreach ($targets as $name => $target) {
             foreach ($target->depends as $bundle) {
                 $map[$bundle] = $name;
             }
         }
-
         foreach ($targets as $name => $target) {
             $depends = [];
             foreach ($target->depends as $bn) {
                 foreach ($bundles[$bn]->depends as $bundle) {
-                    $depends[$map[$bundle]] = true;
+                    $depends[$map[$bundle]] = \true;
                 }
             }
             unset($depends[$name]);
             $target->depends = array_keys($depends);
         }
-
         // detect possible circular dependencies
         foreach ($targets as $name => $target) {
             $registered = [];
             $this->registerBundle($targets, $name, $registered);
         }
-
         foreach ($map as $bundle => $target) {
             $sourceBundle = $bundles[$bundle];
             $depends = $sourceBundle->depends;
@@ -428,10 +398,8 @@ class AssetController extends Controller
             $targetBundle->depends = $depends;
             $targets[$bundle] = $targetBundle;
         }
-
         return $targets;
     }
-
     /**
      * Registers asset bundles including their dependencies.
      * @param \yii\web\AssetBundle[] $bundles asset bundles list.
@@ -442,18 +410,17 @@ class AssetController extends Controller
     protected function registerBundle($bundles, $name, &$registered)
     {
         if (!isset($registered[$name])) {
-            $registered[$name] = false;
+            $registered[$name] = \false;
             $bundle = $bundles[$name];
             foreach ($bundle->depends as $depend) {
                 $this->registerBundle($bundles, $depend, $registered);
             }
             unset($registered[$name]);
             $registered[$name] = $bundle;
-        } elseif ($registered[$name] === false) {
+        } elseif ($registered[$name] === \false) {
             throw new Exception("A circular dependency is detected for target '{$name}': " . $this->composeCircularDependencyTrace($name, $registered) . '.');
         }
     }
-
     /**
      * Saves new asset bundles configuration.
      * @param \yii\web\AssetBundle[] $targets list of asset bundles to be saved.
@@ -465,26 +432,11 @@ class AssetController extends Controller
         $array = [];
         foreach ($targets as $name => $target) {
             if (isset($this->targets[$name])) {
-                $array[$name] = array_merge($this->targets[$name], [
-                    'class' => get_class($target),
-                    'sourcePath' => null,
-                    'basePath' => $this->targets[$name]['basePath'],
-                    'baseUrl' => $this->targets[$name]['baseUrl'],
-                    'js' => $target->js,
-                    'css' => $target->css,
-                    'depends' => [],
-                ]);
+                $array[$name] = array_merge($this->targets[$name], ['class' => get_class($target), 'sourcePath' => null, 'basePath' => $this->targets[$name]['basePath'], 'baseUrl' => $this->targets[$name]['baseUrl'], 'js' => $target->js, 'css' => $target->css, 'depends' => []]);
+            } else if ($this->isBundleExternal($target)) {
+                $array[$name] = $this->composeBundleConfig($target);
             } else {
-                if ($this->isBundleExternal($target)) {
-                    $array[$name] = $this->composeBundleConfig($target);
-                } else {
-                    $array[$name] = [
-                        'sourcePath' => null,
-                        'js' => [],
-                        'css' => [],
-                        'depends' => $target->depends,
-                    ];
-                }
+                $array[$name] = ['sourcePath' => null, 'js' => [], 'css' => [], 'depends' => $target->depends];
             }
         }
         $array = VarDumper::export($array);
@@ -498,12 +450,11 @@ class AssetController extends Controller
  */
 return {$array};
 EOD;
-        if (!file_put_contents($bundleFile, $bundleFileContent, LOCK_EX)) {
+        if (!file_put_contents($bundleFile, $bundleFileContent, \LOCK_EX)) {
             throw new Exception("Unable to write output bundle configuration at '{$bundleFile}'.");
         }
         $this->stdout("Output bundle configuration created at '{$bundleFile}'.\n", Console::FG_GREEN);
     }
-
     /**
      * Compresses given JavaScript files and combines them into the single one.
      * @param array $inputFiles list of source file names.
@@ -519,10 +470,7 @@ EOD;
         if (is_string($this->jsCompressor)) {
             $tmpFile = $outputFile . '.tmp';
             $this->combineJsFiles($inputFiles, $tmpFile);
-            $this->stdout((string)shell_exec(strtr($this->jsCompressor, [
-                '{from}' => escapeshellarg($tmpFile),
-                '{to}' => escapeshellarg($outputFile),
-            ])));
+            $this->stdout((string) shell_exec(strtr($this->jsCompressor, ['{from}' => escapeshellarg($tmpFile), '{to}' => escapeshellarg($outputFile)])));
             @unlink($tmpFile);
         } else {
             call_user_func($this->jsCompressor, $this, $inputFiles, $outputFile);
@@ -532,7 +480,6 @@ EOD;
         }
         $this->stdout("  JavaScript files compressed into '{$outputFile}'.\n");
     }
-
     /**
      * Compresses given CSS files and combines them into the single one.
      * @param array $inputFiles list of source file names.
@@ -548,10 +495,7 @@ EOD;
         if (is_string($this->cssCompressor)) {
             $tmpFile = $outputFile . '.tmp';
             $this->combineCssFiles($inputFiles, $tmpFile);
-            $this->stdout((string)shell_exec(strtr($this->cssCompressor, [
-                '{from}' => escapeshellarg($tmpFile),
-                '{to}' => escapeshellarg($outputFile),
-            ])));
+            $this->stdout((string) shell_exec(strtr($this->cssCompressor, ['{from}' => escapeshellarg($tmpFile), '{to}' => escapeshellarg($outputFile)])));
             @unlink($tmpFile);
         } else {
             call_user_func($this->cssCompressor, $this, $inputFiles, $outputFile);
@@ -561,7 +505,6 @@ EOD;
         }
         $this->stdout("  CSS files compressed into '{$outputFile}'.\n");
     }
-
     /**
      * Combines JavaScript files into a single one.
      * @param array $inputFiles source file names.
@@ -578,15 +521,12 @@ EOD;
             if (substr($fileContent, -1) !== ';') {
                 $fileContent .= "\n;";
             }
-            $content .= "/*** BEGIN FILE: $file ***/\n"
-                . $fileContent . "\n"
-                . "/*** END FILE: $file ***/\n";
+            $content .= "/*** BEGIN FILE: {$file} ***/\n" . $fileContent . "\n" . "/*** END FILE: {$file} ***/\n";
         }
         if (!file_put_contents($outputFile, $content)) {
             throw new Exception("Unable to write output JavaScript file '{$outputFile}'.");
         }
     }
-
     /**
      * Combines CSS files into a single one.
      * @param array $inputFiles source file names.
@@ -598,15 +538,12 @@ EOD;
         $content = '';
         $outputFilePath = dirname($this->findRealPath($outputFile));
         foreach ($inputFiles as $file) {
-            $content .= "/*** BEGIN FILE: $file ***/\n"
-                . $this->adjustCssUrl(file_get_contents($file), dirname($this->findRealPath($file)), $outputFilePath)
-                . "/*** END FILE: $file ***/\n";
+            $content .= "/*** BEGIN FILE: {$file} ***/\n" . $this->adjustCssUrl(file_get_contents($file), dirname($this->findRealPath($file)), $outputFilePath) . "/*** END FILE: {$file} ***/\n";
         }
         if (!file_put_contents($outputFile, $content)) {
             throw new Exception("Unable to write output CSS file '{$outputFile}'.");
         }
     }
-
     /**
      * Adjusts CSS content allowing URL references pointing to the original resources.
      * @param string $cssContent source CSS content.
@@ -618,7 +555,6 @@ EOD;
     {
         $inputFilePath = str_replace('\\', '/', $inputFilePath);
         $outputFilePath = str_replace('\\', '/', $outputFilePath);
-
         $sharedPathParts = [];
         $inputFilePathParts = explode('/', $inputFilePath);
         $inputFilePathPartsCount = count($inputFilePathParts);
@@ -632,7 +568,6 @@ EOD;
             }
         }
         $sharedPath = implode('/', $sharedPathParts);
-
         $inputFileRelativePath = trim(str_replace($sharedPath, '', $inputFilePath), '/');
         $outputFileRelativePath = trim(str_replace($sharedPath, '', $outputFilePath), '/');
         if (empty($inputFileRelativePath)) {
@@ -645,26 +580,22 @@ EOD;
         } else {
             $outputFileRelativePathParts = explode('/', $outputFileRelativePath);
         }
-
         $callback = function ($matches) use ($inputFileRelativePathParts, $outputFileRelativePathParts) {
             $fullMatch = $matches[0];
             $inputUrl = $matches[1];
-
             if (strncmp($inputUrl, '/', 1) === 0 || strncmp($inputUrl, '#', 1) === 0 || preg_match('/^https?:\/\//i', $inputUrl) || preg_match('/^data:/i', $inputUrl)) {
                 return $fullMatch;
             }
             if ($inputFileRelativePathParts === $outputFileRelativePathParts) {
                 return $fullMatch;
             }
-
             if (empty($outputFileRelativePathParts)) {
                 $outputUrlParts = [];
             } else {
                 $outputUrlParts = array_fill(0, count($outputFileRelativePathParts), '..');
             }
             $outputUrlParts = array_merge($outputUrlParts, $inputFileRelativePathParts);
-
-            if (strpos($inputUrl, '/') !== false) {
+            if (strpos($inputUrl, '/') !== \false) {
                 $inputUrlParts = explode('/', $inputUrl);
                 foreach ($inputUrlParts as $key => $inputUrlPart) {
                     if ($inputUrlPart === '..') {
@@ -677,15 +608,11 @@ EOD;
                 $outputUrlParts[] = $inputUrl;
             }
             $outputUrl = implode('/', $outputUrlParts);
-
             return str_replace($inputUrl, $outputUrl, $fullMatch);
         };
-
         $cssContent = preg_replace_callback('/url\(["\']?([^)^"\']*)["\']?\)/i', $callback, $cssContent);
-
         return $cssContent;
     }
-
     /**
      * Creates template of configuration file for [[actionCompress]].
      * @param string $configFile output file name.
@@ -696,7 +623,6 @@ EOD;
     {
         $jsCompressor = VarDumper::export($this->jsCompressor);
         $cssCompressor = VarDumper::export($this->cssCompressor);
-
         $template = <<<EOD
 <?php
 /**
@@ -716,14 +642,14 @@ return [
     'deleteSource' => false,
     // The list of asset bundles to compress:
     'bundles' => [
-        // 'app\assets\AppAsset',
-        // 'yii\web\YiiAsset',
-        // 'yii\web\JqueryAsset',
+        // 'app\\assets\\AppAsset',
+        // 'yii\\web\\YiiAsset',
+        // 'yii\\web\\JqueryAsset',
     ],
     // Asset bundle for compression output:
     'targets' => [
         'all' => [
-            'class' => 'yii\web\AssetBundle',
+            'class' => 'yii\\web\\AssetBundle',
             'basePath' => '@webroot/assets',
             'baseUrl' => '@web/assets',
             'js' => 'js/all-{hash}.js',
@@ -742,14 +668,12 @@ EOD;
                 return ExitCode::OK;
             }
         }
-        if (!file_put_contents($configFile, $template, LOCK_EX)) {
+        if (!file_put_contents($configFile, $template, \LOCK_EX)) {
             throw new Exception("Unable to write template file '{$configFile}'.");
         }
-
         $this->stdout("Configuration file template created at '{$configFile}'.\n\n", Console::FG_GREEN);
         return ExitCode::OK;
     }
-
     /**
      * Returns canonicalized absolute pathname.
      * Unlike regular `realpath()` this method does not expand symlinks and does not check path existence.
@@ -758,9 +682,8 @@ EOD;
      */
     private function findRealPath($path)
     {
-        $path = str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $path);
-        $pathParts = explode(DIRECTORY_SEPARATOR, $path);
-
+        $path = str_replace(['/', '\\'], \DIRECTORY_SEPARATOR, $path);
+        $pathParts = explode(\DIRECTORY_SEPARATOR, $path);
         $realPathParts = [];
         foreach ($pathParts as $pathPart) {
             if ($pathPart === '..') {
@@ -769,10 +692,8 @@ EOD;
                 $realPathParts[] = $pathPart;
             }
         }
-
-        return implode(DIRECTORY_SEPARATOR, $realPathParts);
+        return implode(\DIRECTORY_SEPARATOR, $realPathParts);
     }
-
     /**
      * @param AssetBundle $bundle
      * @return bool whether asset bundle external or not.
@@ -781,7 +702,6 @@ EOD;
     {
         return empty($bundle->sourcePath) && empty($bundle->basePath);
     }
-
     /**
      * @param AssetBundle $bundle asset bundle instance.
      * @return array bundle configuration.
@@ -792,7 +712,6 @@ EOD;
         $config['class'] = get_class($bundle);
         return $config;
     }
-
     /**
      * Composes trace info for bundle circular dependency.
      * @param string $circularDependencyName name of the bundle, which have circular dependency
@@ -802,19 +721,18 @@ EOD;
     private function composeCircularDependencyTrace($circularDependencyName, array $registered)
     {
         $dependencyTrace = [];
-        $startFound = false;
+        $startFound = \false;
         foreach ($registered as $name => $value) {
             if ($name === $circularDependencyName) {
-                $startFound = true;
+                $startFound = \true;
             }
-            if ($startFound && $value === false) {
+            if ($startFound && $value === \false) {
                 $dependencyTrace[] = $name;
             }
         }
         $dependencyTrace[] = $circularDependencyName;
         return implode(' -> ', $dependencyTrace);
     }
-
     /**
      * Deletes bundle asset files, which have been published from `sourcePath`.
      * @param \yii\web\AssetBundle[] $bundles asset bundles to be processed.
@@ -823,23 +741,20 @@ EOD;
     private function deletePublishedAssets($bundles)
     {
         $this->stdout("Deleting source files...\n");
-
         if ($this->getAssetManager()->linkAssets) {
             $this->stdout("`AssetManager::linkAssets` option is enabled. Deleting of source files canceled.\n", Console::FG_YELLOW);
             return;
         }
-
         foreach ($bundles as $bundle) {
             if ($bundle->sourcePath !== null) {
                 foreach ($bundle->js as $jsFile) {
-                    @unlink($bundle->basePath . DIRECTORY_SEPARATOR . $jsFile);
+                    @unlink($bundle->basePath . \DIRECTORY_SEPARATOR . $jsFile);
                 }
                 foreach ($bundle->css as $cssFile) {
-                    @unlink($bundle->basePath . DIRECTORY_SEPARATOR . $cssFile);
+                    @unlink($bundle->basePath . \DIRECTORY_SEPARATOR . $cssFile);
                 }
             }
         }
-
         $this->stdout("Source files deleted.\n", Console::FG_GREEN);
     }
 }

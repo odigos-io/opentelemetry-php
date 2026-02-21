@@ -4,7 +4,6 @@ namespace Illuminate\Testing\Concerns;
 
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\ParallelTesting;
-
 trait TestViews
 {
     /**
@@ -13,7 +12,6 @@ trait TestViews
      * @var string|null
      */
     protected static $originalCompiledViewPath = null;
-
     /**
      * Boot test views for parallel testing.
      *
@@ -26,14 +24,12 @@ trait TestViews
                 File::ensureDirectoryExists($path);
             }
         });
-
         ParallelTesting::setUpTestCase(function () {
             if ($path = $this->parallelSafeCompiledViewPath()) {
                 $this->switchToCompiledViewPath($path);
             }
         });
     }
-
     /**
      * Get the test compiled view path.
      *
@@ -42,16 +38,11 @@ trait TestViews
     protected function parallelSafeCompiledViewPath()
     {
         self::$originalCompiledViewPath ??= $this->app['config']->get('view.compiled', '');
-
-        if (! self::$originalCompiledViewPath) {
+        if (!self::$originalCompiledViewPath) {
             return null;
         }
-
-        return rtrim(self::$originalCompiledViewPath, '\/')
-            .'/test_'
-            .ParallelTesting::token();
+        return rtrim(self::$originalCompiledViewPath, '\/') . '/test_' . ParallelTesting::token();
     }
-
     /**
      * Switch to the given compiled view path.
      *
@@ -61,10 +52,8 @@ trait TestViews
     protected function switchToCompiledViewPath($path)
     {
         $this->app['config']->set('view.compiled', $path);
-
         if ($this->app->resolved('blade.compiler')) {
             $compiler = $this->app['blade.compiler'];
-
             (function () use ($path) {
                 $this->cachePath = $path;
             })->bindTo($compiler, $compiler)();

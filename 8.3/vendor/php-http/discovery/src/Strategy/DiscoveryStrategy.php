@@ -3,7 +3,6 @@
 namespace Http\Discovery\Strategy;
 
 use Http\Discovery\Exception\StrategyUnavailableException;
-
 /**
  * @author Tobias Nyholm <tobias.nyholm@gmail.com>
  */

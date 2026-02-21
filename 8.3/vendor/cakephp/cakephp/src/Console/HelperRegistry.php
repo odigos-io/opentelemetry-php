@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare (strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -19,7 +19,6 @@ namespace Cake\Console;
 use Cake\Console\Exception\MissingHelperException;
 use Cake\Core\App;
 use Cake\Core\ObjectRegistry;
-
 /**
  * Registry for Helpers. Provides features
  * for lazily loading helpers.
@@ -33,19 +32,17 @@ class HelperRegistry extends ObjectRegistry
      *
      * @var \Cake\Console\ConsoleIo
      */
-    protected ConsoleIo $_io;
-
+    protected \Cake\Console\ConsoleIo $_io;
     /**
      * Sets The IO instance that should be passed to the shell helpers
      *
      * @param \Cake\Console\ConsoleIo $io An io instance.
      * @return void
      */
-    public function setIo(ConsoleIo $io): void
+    public function setIo(\Cake\Console\ConsoleIo $io): void
     {
         $this->_io = $io;
     }
-
     /**
      * Resolve a helper classname.
      *
@@ -59,7 +56,6 @@ class HelperRegistry extends ObjectRegistry
         /** @var class-string<\Cake\Console\Helper>|null */
         return App::className($class, 'Command/Helper', 'Helper');
     }
-
     /**
      * Throws an exception when a helper is missing.
      *
@@ -73,12 +69,8 @@ class HelperRegistry extends ObjectRegistry
      */
     protected function _throwMissingClassError(string $class, ?string $plugin): void
     {
-        throw new MissingHelperException([
-            'class' => $class,
-            'plugin' => $plugin,
-        ]);
+        throw new MissingHelperException(['class' => $class, 'plugin' => $plugin]);
     }
-
     /**
      * Create the helper instance.
      *
@@ -89,12 +81,11 @@ class HelperRegistry extends ObjectRegistry
      * @param array<string, mixed> $config An array of settings to use for the helper.
      * @return \Cake\Console\Helper The constructed helper class.
      */
-    protected function _create(object|string $class, string $alias, array $config): Helper
+    protected function _create(object|string $class, string $alias, array $config): \Cake\Console\Helper
     {
         if (is_object($class)) {
             return $class;
         }
-
         return new $class($this->_io, $config);
     }
 }

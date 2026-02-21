@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\HttpKernel\Attribute;
 
 /**
@@ -29,13 +28,11 @@ final class IsSignatureValid
 {
     /** @var string[] */
     public readonly array $methods;
-
     /**
      * @param string[]|string $methods HTTP methods that require signature validation. An empty array means that no method filtering is done
      */
-    public function __construct(
-        array|string $methods = [],
-    ) {
+    public function __construct(array|string $methods = [])
+    {
         $this->methods = (array) $methods;
     }
 }

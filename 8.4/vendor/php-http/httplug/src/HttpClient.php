@@ -3,7 +3,6 @@
 namespace Http\Client;
 
 use Psr\Http\Client\ClientInterface;
-
 /**
  * {@inheritdoc}
  *

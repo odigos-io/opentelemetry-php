@@ -11,3 +11,4 @@
 
     <x-laravel-exceptions-renderer::file-with-line :$frame class="text-xs" />
 </div>
+

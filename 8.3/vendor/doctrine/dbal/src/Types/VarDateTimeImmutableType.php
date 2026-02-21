@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\DBAL\Types;
 
 use DateTimeImmutable;
@@ -9,11 +8,10 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Exception\InvalidType;
 use Doctrine\DBAL\Types\Exception\ValueNotConvertible;
 use Exception;
-
 /**
  * Immutable type of {@see VarDateTimeType}.
  */
-class VarDateTimeImmutableType extends DateTimeImmutableType
+class VarDateTimeImmutableType extends \Doctrine\DBAL\Types\DateTimeImmutableType
 {
     /**
      * @param T $value
@@ -27,18 +25,11 @@ class VarDateTimeImmutableType extends DateTimeImmutableType
         if ($value === null) {
             return $value;
         }
-
         if ($value instanceof DateTimeImmutable) {
             return $value->format($platform->getDateTimeFormatString());
         }
-
-        throw InvalidType::new(
-            $value,
-            static::class,
-            ['null', DateTimeImmutable::class],
-        );
+        throw InvalidType::new($value, static::class, ['null', DateTimeImmutable::class]);
     }
-
     /**
      * @param T $value
      *
@@ -51,13 +42,11 @@ class VarDateTimeImmutableType extends DateTimeImmutableType
         if ($value === null || $value instanceof DateTimeImmutable) {
             return $value;
         }
-
         try {
             $dateTime = new DateTimeImmutable($value);
         } catch (Exception $e) {
             throw ValueNotConvertible::new($value, DateTimeImmutable::class, $e->getMessage(), $e);
         }
-
         return $dateTime;
     }
 }

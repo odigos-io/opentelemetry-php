@@ -1,17 +1,17 @@
 <?php
 
+namespace Odigos;
+
 /**
  * Defines a mutation of an obsolete tag into a valid tag.
  */
 abstract class HTMLPurifier_TagTransform
 {
-
     /**
      * Tag name to transform the tag to.
      * @type string
      */
     public $transform_to;
-
     /**
      * Transforms the obsolete tag into the valid tag.
      * @param HTMLPurifier_Token_Tag $tag Tag to be transformed.
@@ -19,7 +19,6 @@ abstract class HTMLPurifier_TagTransform
      * @param HTMLPurifier_Context $context Mandatory HTMLPurifier_Context object
      */
     abstract public function transform($tag, $config, $context);
-
     /**
      * Prepends CSS properties to the style attribute, creating the
      * attribute if it doesn't exist.
@@ -33,5 +32,8 @@ abstract class HTMLPurifier_TagTransform
         $attr['style'] = $css . $attr['style'];
     }
 }
-
+/**
+ * Defines a mutation of an obsolete tag into a valid tag.
+ */
+\class_alias('Odigos\HTMLPurifier_TagTransform', 'HTMLPurifier_TagTransform', \false);
 // vim: et sw=4 sts=4

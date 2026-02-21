@@ -3,7 +3,6 @@
 namespace Illuminate\Routing;
 
 use Illuminate\Support\Arr;
-
 trait CreatesRegularExpressionRouteConstraints
 {
     /**
@@ -16,7 +15,6 @@ trait CreatesRegularExpressionRouteConstraints
     {
         return $this->assignExpressionToParameters($parameters, '[a-zA-Z]+');
     }
-
     /**
      * Specify that the given route parameters must be alphanumeric.
      *
@@ -27,7 +25,6 @@ trait CreatesRegularExpressionRouteConstraints
     {
         return $this->assignExpressionToParameters($parameters, '[a-zA-Z0-9]+');
     }
-
     /**
      * Specify that the given route parameters must be numeric.
      *
@@ -38,7 +35,6 @@ trait CreatesRegularExpressionRouteConstraints
     {
         return $this->assignExpressionToParameters($parameters, '[0-9]+');
     }
-
     /**
      * Specify that the given route parameters must be ULIDs.
      *
@@ -49,7 +45,6 @@ trait CreatesRegularExpressionRouteConstraints
     {
         return $this->assignExpressionToParameters($parameters, '[0-7][0-9a-hjkmnp-tv-zA-HJKMNP-TV-Z]{25}');
     }
-
     /**
      * Specify that the given route parameters must be UUIDs.
      *
@@ -60,7 +55,6 @@ trait CreatesRegularExpressionRouteConstraints
     {
         return $this->assignExpressionToParameters($parameters, '[\da-fA-F]{8}-[\da-fA-F]{4}-[\da-fA-F]{4}-[\da-fA-F]{4}-[\da-fA-F]{12}');
     }
-
     /**
      * Specify that the given route parameters must be one of the given values.
      *
@@ -72,7 +66,6 @@ trait CreatesRegularExpressionRouteConstraints
     {
         return $this->assignExpressionToParameters($parameters, implode('|', $values));
     }
-
     /**
      * Apply the given regular expression to the given parameters.
      *
@@ -82,8 +75,6 @@ trait CreatesRegularExpressionRouteConstraints
      */
     protected function assignExpressionToParameters($parameters, $expression)
     {
-        return $this->where(collect(Arr::wrap($parameters))
-                    ->mapWithKeys(fn ($parameter) => [$parameter => $expression])
-                    ->all());
+        return $this->where(collect(Arr::wrap($parameters))->mapWithKeys(fn($parameter) => [$parameter => $expression])->all());
     }
 }

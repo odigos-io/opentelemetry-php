@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright 2015-present MongoDB, Inc.
  *
@@ -14,7 +15,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 namespace MongoDB\Operation;
 
 use MongoDB\Driver\BulkWrite as Bulk;
@@ -25,7 +25,6 @@ use MongoDB\Driver\WriteConcern;
 use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\Exception\UnsupportedException;
 use MongoDB\UpdateResult;
-
 use function is_array;
 use function is_bool;
 use function is_string;
@@ -34,7 +33,6 @@ use function MongoDB\is_first_key_operator;
 use function MongoDB\is_pipeline;
 use function MongoDB\is_write_concern_acknowledged;
 use function MongoDB\server_supports_feature;
-
 /**
  * Operation for the update command.
  *
@@ -44,12 +42,10 @@ use function MongoDB\server_supports_feature;
  * @internal
  * @see https://mongodb.com/docs/manual/reference/command/update/
  */
-final class Update implements Explainable
+final class Update implements \MongoDB\Operation\Explainable
 {
     private const WIRE_VERSION_FOR_HINT = 8;
-
     private array $options;
-
     /**
      * Constructs a update command.
      *
@@ -100,74 +96,54 @@ final class Update implements Explainable
      */
     public function __construct(private string $databaseName, private string $collectionName, private array|object $filter, private array|object $update, array $options = [])
     {
-        if (! is_document($filter)) {
+        if (!is_document($filter)) {
             throw InvalidArgumentException::expectedDocumentType('$filter', $filter);
         }
-
-        $options += [
-            'multi' => false,
-            'upsert' => false,
-        ];
-
-        if (isset($options['arrayFilters']) && ! is_array($options['arrayFilters'])) {
+        $options += ['multi' => \false, 'upsert' => \false];
+        if (isset($options['arrayFilters']) && !is_array($options['arrayFilters'])) {
             throw InvalidArgumentException::invalidType('"arrayFilters" option', $options['arrayFilters'], 'array');
         }
-
-        if (isset($options['bypassDocumentValidation']) && ! is_bool($options['bypassDocumentValidation'])) {
+        if (isset($options['bypassDocumentValidation']) && !is_bool($options['bypassDocumentValidation'])) {
             throw InvalidArgumentException::invalidType('"bypassDocumentValidation" option', $options['bypassDocumentValidation'], 'boolean');
         }
-
-        if (isset($options['collation']) && ! is_document($options['collation'])) {
+        if (isset($options['collation']) && !is_document($options['collation'])) {
             throw InvalidArgumentException::expectedDocumentType('"collation" option', $options['collation']);
         }
-
-        if (isset($options['hint']) && ! is_string($options['hint']) && ! is_document($options['hint'])) {
+        if (isset($options['hint']) && !is_string($options['hint']) && !is_document($options['hint'])) {
             throw InvalidArgumentException::expectedDocumentOrStringType('"hint" option', $options['hint']);
         }
-
-        if (! is_bool($options['multi'])) {
+        if (!is_bool($options['multi'])) {
             throw InvalidArgumentException::invalidType('"multi" option', $options['multi'], 'boolean');
         }
-
-        if ($options['multi'] && ! is_first_key_operator($update) && ! is_pipeline($update)) {
+        if ($options['multi'] && !is_first_key_operator($update) && !is_pipeline($update)) {
             throw new InvalidArgumentException('"multi" option cannot be true unless $update has update operator(s) or non-empty pipeline');
         }
-
-        if (isset($options['session']) && ! $options['session'] instanceof Session) {
+        if (isset($options['session']) && !$options['session'] instanceof Session) {
             throw InvalidArgumentException::invalidType('"session" option', $options['session'], Session::class);
         }
-
-        if (! is_bool($options['upsert'])) {
+        if (!is_bool($options['upsert'])) {
             throw InvalidArgumentException::invalidType('"upsert" option', $options['upsert'], 'boolean');
         }
-
-        if (isset($options['writeConcern']) && ! $options['writeConcern'] instanceof WriteConcern) {
+        if (isset($options['writeConcern']) && !$options['writeConcern'] instanceof WriteConcern) {
             throw InvalidArgumentException::invalidType('"writeConcern" option', $options['writeConcern'], WriteConcern::class);
         }
-
-        if (isset($options['let']) && ! is_document($options['let'])) {
+        if (isset($options['let']) && !is_document($options['let'])) {
             throw InvalidArgumentException::expectedDocumentType('"let" option', $options['let']);
         }
-
-        if (isset($options['sort']) && ! is_document($options['sort'])) {
+        if (isset($options['sort']) && !is_document($options['sort'])) {
             throw InvalidArgumentException::expectedDocumentType('"sort" option', $options['sort']);
         }
-
         if (isset($options['sort']) && $options['multi']) {
             throw new InvalidArgumentException('"sort" option cannot be used with multi-document updates');
         }
-
-        if (isset($options['bypassDocumentValidation']) && ! $options['bypassDocumentValidation']) {
+        if (isset($options['bypassDocumentValidation']) && !$options['bypassDocumentValidation']) {
             unset($options['bypassDocumentValidation']);
         }
-
         if (isset($options['writeConcern']) && $options['writeConcern']->isDefault()) {
             unset($options['writeConcern']);
         }
-
         $this->options = $options;
     }
-
     /**
      * Execute the operation.
      *
@@ -178,26 +154,18 @@ final class Update implements Explainable
     {
         /* CRUD spec requires a client-side error when using "hint" with an
          * unacknowledged write concern on an unsupported server. */
-        if (
-            isset($this->options['writeConcern']) && ! is_write_concern_acknowledged($this->options['writeConcern']) &&
-            isset($this->options['hint']) && ! server_supports_feature($server, self::WIRE_VERSION_FOR_HINT)
-        ) {
+        if (isset($this->options['writeConcern']) && !is_write_concern_acknowledged($this->options['writeConcern']) && isset($this->options['hint']) && !server_supports_feature($server, self::WIRE_VERSION_FOR_HINT)) {
             throw UnsupportedException::hintNotSupported();
         }
-
         $inTransaction = isset($this->options['session']) && $this->options['session']->isInTransaction();
         if ($inTransaction && isset($this->options['writeConcern'])) {
             throw UnsupportedException::writeConcernNotSupportedInTransaction();
         }
-
         $bulk = new Bulk($this->createBulkWriteOptions());
         $bulk->update($this->filter, $this->update, $this->createUpdateOptions());
-
         $writeResult = $server->executeBulkWrite($this->databaseName . '.' . $this->collectionName, $bulk, $this->createExecuteOptions());
-
         return new UpdateResult($writeResult);
     }
-
     /**
      * Returns the command document for this operation.
      *
@@ -206,14 +174,11 @@ final class Update implements Explainable
     public function getCommandDocument(): array
     {
         $cmd = ['update' => $this->collectionName, 'updates' => [['q' => $this->filter, 'u' => $this->update] + $this->createUpdateOptions()]];
-
         if (isset($this->options['bypassDocumentValidation'])) {
             $cmd['bypassDocumentValidation'] = $this->options['bypassDocumentValidation'];
         }
-
         return $cmd;
     }
-
     /**
      * Create options for constructing the bulk write.
      *
@@ -222,20 +187,16 @@ final class Update implements Explainable
     private function createBulkWriteOptions(): array
     {
         $options = [];
-
         foreach (['bypassDocumentValidation', 'comment'] as $option) {
             if (isset($this->options[$option])) {
                 $options[$option] = $this->options[$option];
             }
         }
-
         if (isset($this->options['let'])) {
             $options['let'] = (object) $this->options['let'];
         }
-
         return $options;
     }
-
     /**
      * Create options for executing the bulk write.
      *
@@ -244,18 +205,14 @@ final class Update implements Explainable
     private function createExecuteOptions(): array
     {
         $options = [];
-
         if (isset($this->options['session'])) {
             $options['session'] = $this->options['session'];
         }
-
         if (isset($this->options['writeConcern'])) {
             $options['writeConcern'] = $this->options['writeConcern'];
         }
-
         return $options;
     }
-
     /**
      * Create options for the update command.
      *
@@ -264,23 +221,17 @@ final class Update implements Explainable
      */
     private function createUpdateOptions(): array
     {
-        $updateOptions = [
-            'multi' => $this->options['multi'],
-            'upsert' => $this->options['upsert'],
-        ];
-
+        $updateOptions = ['multi' => $this->options['multi'], 'upsert' => $this->options['upsert']];
         foreach (['arrayFilters', 'hint'] as $option) {
             if (isset($this->options[$option])) {
                 $updateOptions[$option] = $this->options[$option];
             }
         }
-
         foreach (['collation', 'sort'] as $option) {
             if (isset($this->options[$option])) {
                 $updateOptions[$option] = (object) $this->options[$option];
             }
         }
-
         return $updateOptions;
     }
 }

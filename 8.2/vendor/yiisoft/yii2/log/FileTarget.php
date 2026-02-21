@@ -1,16 +1,15 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-
 namespace yii\log;
 
-use Yii;
+use Odigos\Yii;
 use yii\base\InvalidConfigException;
 use yii\helpers\FileHelper;
-
 /**
  * FileTarget records log messages in a file.
  *
@@ -26,7 +25,7 @@ use yii\helpers\FileHelper;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class FileTarget extends Target
+class FileTarget extends \yii\log\Target
 {
     /**
      * @var string|null log file path or [path alias](guide:concept-aliases). If not set, it will use the "@runtime/logs/app.log" file.
@@ -39,11 +38,12 @@ class FileTarget extends Target
      * an external tools for log rotation on your server.
      * @since 2.0.3
      */
-    public $enableRotation = true;
+    public $enableRotation = \true;
     /**
      * @var int maximum log file size, in kilo-bytes. Defaults to 10240, meaning 10MB.
      */
-    public $maxFileSize = 10240; // in KB
+    public $maxFileSize = 10240;
+    // in KB
     /**
      * @var int number of log files used for rotation. Defaults to 5.
      */
@@ -75,9 +75,7 @@ class FileTarget extends Target
      * @deprecated since 2.0.46 and setting it to false has no effect anymore
      * since rotating is now always done by copy.
      */
-    public $rotateByCopy = true;
-
-
+    public $rotateByCopy = \true;
     /**
      * Initializes the route.
      * This method is invoked after the route is created by the route manager.
@@ -97,7 +95,6 @@ class FileTarget extends Target
             $this->maxFileSize = 1;
         }
     }
-
     /**
      * Writes log messages to a file.
      * Starting from version 2.0.14, this method throws LogRuntimeException in case the log can not be exported.
@@ -107,20 +104,18 @@ class FileTarget extends Target
     public function export()
     {
         $text = implode("\n", array_map([$this, 'formatMessage'], $this->messages)) . "\n";
-
         if (trim($text) === '') {
-            return; // No messages to export, so we exit the function early
+            return;
+            // No messages to export, so we exit the function early
         }
-
-        if (strpos($this->logFile, '://') === false || strncmp($this->logFile, 'file://', 7) === 0) {
+        if (strpos($this->logFile, '://') === \false || strncmp($this->logFile, 'file://', 7) === 0) {
             $logPath = dirname($this->logFile);
-            FileHelper::createDirectory($logPath, $this->dirMode, true);
+            FileHelper::createDirectory($logPath, $this->dirMode, \true);
         }
-
-        if (($fp = @fopen($this->logFile, 'a')) === false) {
+        if (($fp = @fopen($this->logFile, 'a')) === \false) {
             throw new InvalidConfigException("Unable to append to log file: {$this->logFile}");
         }
-        @flock($fp, LOCK_EX);
+        @flock($fp, \LOCK_EX);
         if ($this->enableRotation) {
             // clear stat cache to ensure getting the real current file size and not a cached one
             // this may result in rotating twice when cached file size is used on subsequent calls
@@ -130,26 +125,24 @@ class FileTarget extends Target
             $this->rotateFiles();
         }
         $writeResult = @fwrite($fp, $text);
-        if ($writeResult === false) {
-            $message = "Unable to export log through file ($this->logFile)!";
+        if ($writeResult === \false) {
+            $message = "Unable to export log through file ({$this->logFile})!";
             if ($error = error_get_last()) {
                 $message .= ": {$error['message']}";
             }
-            throw new LogRuntimeException($message);
+            throw new \yii\log\LogRuntimeException($message);
         }
         $textSize = strlen($text);
         if ($writeResult < $textSize) {
-            throw new LogRuntimeException("Unable to export whole log through file ({$this->logFile})! Wrote $writeResult out of $textSize bytes.");
+            throw new \yii\log\LogRuntimeException("Unable to export whole log through file ({$this->logFile})! Wrote {$writeResult} out of {$textSize} bytes.");
         }
         @fflush($fp);
-        @flock($fp, LOCK_UN);
+        @flock($fp, \LOCK_UN);
         @fclose($fp);
-
         if ($this->fileMode !== null) {
             @chmod($this->logFile, $this->fileMode);
         }
     }
-
     /**
      * Rotates log files.
      */
@@ -173,7 +166,6 @@ class FileTarget extends Target
             }
         }
     }
-
     /***
      * Clear log file without closing any other process open handles
      * @param string $rotateFile
@@ -185,7 +177,6 @@ class FileTarget extends Target
             @fclose($filePointer);
         }
     }
-
     /***
      * Copy rotated file into new file
      * @param string $rotateFile

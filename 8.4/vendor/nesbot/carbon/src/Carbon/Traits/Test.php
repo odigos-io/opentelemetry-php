@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /**
  * This file is part of the Carbon package.
  *
@@ -10,24 +9,21 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Odigos\Carbon\Traits;
 
-namespace Carbon\Traits;
-
-use Carbon\CarbonInterface;
-use Carbon\CarbonTimeZone;
-use Carbon\Factory;
-use Carbon\FactoryImmutable;
+use Odigos\Carbon\CarbonInterface;
+use Odigos\Carbon\CarbonTimeZone;
+use Odigos\Carbon\Factory;
+use Odigos\Carbon\FactoryImmutable;
 use Closure;
 use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
-
 trait Test
 {
     ///////////////////////////////////////////////////////////////////
     ///////////////////////// TESTING AIDS ////////////////////////////
     ///////////////////////////////////////////////////////////////////
-
     /**
      * Set a Carbon instance (real or mock) to be returned when a "now"
      * instance is created.  The provided instance will be returned
@@ -54,7 +50,6 @@ trait Test
     {
         FactoryImmutable::getDefaultInstance()->setTestNow($testNow);
     }
-
     /**
      * Set a Carbon instance (real or mock) to be returned when a "now"
      * instance is created.  The provided instance will be returned
@@ -78,7 +73,6 @@ trait Test
     {
         FactoryImmutable::getDefaultInstance()->setTestNowAndTimezone($testNow, $timezone);
     }
-
     /**
      * Temporarily sets a static date to be used within the callback.
      * Using setTestNow to set the date, executing the callback, then
@@ -97,7 +91,6 @@ trait Test
     {
         return FactoryImmutable::getDefaultInstance()->withTestNow($testNow, $callback);
     }
-
     /**
      * Get the Carbon instance (real or mock) to be returned when a "now"
      * instance is created.
@@ -108,7 +101,6 @@ trait Test
     {
         return FactoryImmutable::getInstance()->getTestNow();
     }
-
     /**
      * Determine if there is a valid test instance set. A valid test instance
      * is anything that is not null.
@@ -119,67 +111,47 @@ trait Test
     {
         return FactoryImmutable::getInstance()->hasTestNow();
     }
-
     /**
      * Get the mocked date passed in setTestNow() and if it's a Closure, execute it.
      */
     protected static function getMockedTestNow(DateTimeZone|string|int|null $timezone): ?CarbonInterface
     {
         $testNow = FactoryImmutable::getInstance()->handleTestNowClosure(static::getTestNow(), $timezone);
-
         if ($testNow === null) {
             return null;
         }
-
         $testNow = $testNow->avoidMutation();
-
         return $timezone ? $testNow->setTimezone($timezone) : $testNow;
     }
-
     private function mockConstructorParameters(&$time, ?CarbonTimeZone $timezone): void
     {
         $clock = $this->clock?->unwrap();
-        $now = $clock instanceof Factory
-            ? $clock->getTestNow()
-            : $this->nowFromClock($timezone);
+        $now = $clock instanceof Factory ? $clock->getTestNow() : $this->nowFromClock($timezone);
         $testInstance = $now ?? self::getMockedTestNowClone($timezone);
-
         if (!$testInstance) {
             return;
         }
-
         if ($testInstance instanceof DateTimeInterface) {
             $testInstance = $testInstance->setTimezone($timezone ?? date_default_timezone_get());
         }
-
         if (static::hasRelativeKeywords($time)) {
             $testInstance = $testInstance->modify($time);
         }
-
         $factory = $this->getClock()?->unwrap();
-
-        if (!($factory instanceof Factory)) {
+        if (!$factory instanceof Factory) {
             $factory = FactoryImmutable::getInstance();
         }
-
         $testInstance = $factory->handleTestNowClosure($testInstance, $timezone);
-
-        $time = $testInstance instanceof self
-            ? $testInstance->rawFormat(static::MOCK_DATETIME_FORMAT)
-            : $testInstance->format(static::MOCK_DATETIME_FORMAT);
+        $time = $testInstance instanceof self ? $testInstance->rawFormat(static::MOCK_DATETIME_FORMAT) : $testInstance->format(static::MOCK_DATETIME_FORMAT);
     }
-
     private static function getMockedTestNowClone($timezone): CarbonInterface|self|null
     {
         $mock = static::getMockedTestNow($timezone);
-
         return $mock ? clone $mock : null;
     }
-
     private function nowFromClock(?CarbonTimeZone $timezone): ?DateTimeImmutable
     {
         $now = $this->clock?->now();
-
         return $now && $timezone ? $now->setTimezone($timezone) : null;
     }
 }

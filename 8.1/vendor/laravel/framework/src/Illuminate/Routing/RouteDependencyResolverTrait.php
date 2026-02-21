@@ -7,5 +7,5 @@ namespace Illuminate\Routing;
  */
 trait RouteDependencyResolverTrait
 {
-    use ResolvesRouteDependencies;
+    use \Illuminate\Routing\ResolvesRouteDependencies;
 }

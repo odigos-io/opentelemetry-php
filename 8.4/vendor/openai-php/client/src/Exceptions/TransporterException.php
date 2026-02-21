@@ -1,12 +1,10 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace OpenAI\Exceptions;
 
 use Exception;
 use Psr\Http\Client\ClientExceptionInterface;
-
 final class TransporterException extends Exception
 {
     /**

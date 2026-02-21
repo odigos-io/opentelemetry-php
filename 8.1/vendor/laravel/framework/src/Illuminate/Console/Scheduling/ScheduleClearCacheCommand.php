@@ -3,7 +3,6 @@
 namespace Illuminate\Console\Scheduling;
 
 use Illuminate\Console\Command;
-
 class ScheduleClearCacheCommand extends Command
 {
     /**
@@ -12,35 +11,29 @@ class ScheduleClearCacheCommand extends Command
      * @var string
      */
     protected $name = 'schedule:clear-cache';
-
     /**
      * The console command description.
      *
      * @var string
      */
     protected $description = 'Delete the cached mutex files created by scheduler';
-
     /**
      * Execute the console command.
      *
      * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
      * @return void
      */
-    public function handle(Schedule $schedule)
+    public function handle(\Illuminate\Console\Scheduling\Schedule $schedule)
     {
-        $mutexCleared = false;
-
+        $mutexCleared = \false;
         foreach ($schedule->events($this->laravel) as $event) {
             if ($event->mutex->exists($event)) {
                 $this->components->info(sprintf('Deleting mutex for [%s]', $event->command));
-
                 $event->mutex->forget($event);
-
-                $mutexCleared = true;
+                $mutexCleared = \true;
             }
         }
-
-        if (! $mutexCleared) {
+        if (!$mutexCleared) {
             $this->components->info('No mutex files were found.');
         }
     }

@@ -5,7 +5,6 @@ namespace Illuminate\Translation;
 use Illuminate\Contracts\Translation\Loader;
 use Illuminate\Filesystem\Filesystem;
 use RuntimeException;
-
 class FileLoader implements Loader
 {
     /**
@@ -14,28 +13,24 @@ class FileLoader implements Loader
      * @var \Illuminate\Filesystem\Filesystem
      */
     protected $files;
-
     /**
      * The default paths for the loader.
      *
      * @var array
      */
     protected $paths;
-
     /**
      * All of the registered paths to JSON translation files.
      *
      * @var array
      */
     protected $jsonPaths = [];
-
     /**
      * All of the namespace hints.
      *
      * @var array
      */
     protected $hints = [];
-
     /**
      * Create a new file loader instance.
      *
@@ -46,10 +41,8 @@ class FileLoader implements Loader
     public function __construct(Filesystem $files, array|string $path)
     {
         $this->files = $files;
-
         $this->paths = is_string($path) ? [$path] : $path;
     }
-
     /**
      * Load the messages for the given locale.
      *
@@ -63,14 +56,11 @@ class FileLoader implements Loader
         if ($group === '*' && $namespace === '*') {
             return $this->loadJsonPaths($locale);
         }
-
         if (is_null($namespace) || $namespace === '*') {
             return $this->loadPaths($this->paths, $locale, $group);
         }
-
         return $this->loadNamespaced($locale, $group, $namespace);
     }
-
     /**
      * Load a namespaced translation group.
      *
@@ -83,13 +73,10 @@ class FileLoader implements Loader
     {
         if (isset($this->hints[$namespace])) {
             $lines = $this->loadPaths([$this->hints[$namespace]], $locale, $group);
-
             return $this->loadNamespaceOverrides($lines, $locale, $group, $namespace);
         }
-
         return [];
     }
-
     /**
      * Load a local namespaced translation group for overrides.
      *
@@ -101,18 +88,14 @@ class FileLoader implements Loader
      */
     protected function loadNamespaceOverrides(array $lines, $locale, $group, $namespace)
     {
-        return collect($this->paths)
-            ->reduce(function ($output, $path) use ($lines, $locale, $group, $namespace) {
-                $file = "{$path}/vendor/{$namespace}/{$locale}/{$group}.php";
-
-                if ($this->files->exists($file)) {
-                    $lines = array_replace_recursive($lines, $this->files->getRequire($file));
-                }
-
-                return $lines;
-            }, []);
+        return collect($this->paths)->reduce(function ($output, $path) use ($lines, $locale, $group, $namespace) {
+            $file = "{$path}/vendor/{$namespace}/{$locale}/{$group}.php";
+            if ($this->files->exists($file)) {
+                $lines = array_replace_recursive($lines, $this->files->getRequire($file));
+            }
+            return $lines;
+        }, []);
     }
-
     /**
      * Load a locale from a given path.
      *
@@ -123,16 +106,13 @@ class FileLoader implements Loader
      */
     protected function loadPaths(array $paths, $locale, $group)
     {
-        return collect($paths)
-            ->reduce(function ($output, $path) use ($locale, $group) {
-                if ($this->files->exists($full = "{$path}/{$locale}/{$group}.php")) {
-                    $output = array_replace_recursive($output, $this->files->getRequire($full));
-                }
-
-                return $output;
-            }, []);
+        return collect($paths)->reduce(function ($output, $path) use ($locale, $group) {
+            if ($this->files->exists($full = "{$path}/{$locale}/{$group}.php")) {
+                $output = array_replace_recursive($output, $this->files->getRequire($full));
+            }
+            return $output;
+        }, []);
     }
-
     /**
      * Load a locale from the given JSON file path.
      *
@@ -143,22 +123,17 @@ class FileLoader implements Loader
      */
     protected function loadJsonPaths($locale)
     {
-        return collect(array_merge($this->jsonPaths, $this->paths))
-            ->reduce(function ($output, $path) use ($locale) {
-                if ($this->files->exists($full = "{$path}/{$locale}.json")) {
-                    $decoded = json_decode($this->files->get($full), true);
-
-                    if (is_null($decoded) || json_last_error() !== JSON_ERROR_NONE) {
-                        throw new RuntimeException("Translation file [{$full}] contains an invalid JSON structure.");
-                    }
-
-                    $output = array_merge($output, $decoded);
+        return collect(array_merge($this->jsonPaths, $this->paths))->reduce(function ($output, $path) use ($locale) {
+            if ($this->files->exists($full = "{$path}/{$locale}.json")) {
+                $decoded = json_decode($this->files->get($full), \true);
+                if (is_null($decoded) || json_last_error() !== \JSON_ERROR_NONE) {
+                    throw new RuntimeException("Translation file [{$full}] contains an invalid JSON structure.");
                 }
-
-                return $output;
-            }, []);
+                $output = array_merge($output, $decoded);
+            }
+            return $output;
+        }, []);
     }
-
     /**
      * Add a new namespace to the loader.
      *
@@ -170,7 +145,6 @@ class FileLoader implements Loader
     {
         $this->hints[$namespace] = $hint;
     }
-
     /**
      * Get an array of all the registered namespaces.
      *
@@ -180,7 +154,6 @@ class FileLoader implements Loader
     {
         return $this->hints;
     }
-
     /**
      * Add a new JSON path to the loader.
      *
@@ -191,7 +164,6 @@ class FileLoader implements Loader
     {
         $this->jsonPaths[] = $path;
     }
-
     /**
      * Get an array of all the registered paths to JSON translation files.
      *

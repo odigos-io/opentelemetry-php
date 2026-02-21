@@ -1,8 +1,7 @@
 <?php
 
-declare(strict_types=1);
-
-namespace League\Container\Inflector;
+declare (strict_types=1);
+namespace Odigos\League\Container\Inflector;
 
 interface InflectorInterface
 {

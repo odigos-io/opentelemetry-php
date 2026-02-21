@@ -8,25 +8,20 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-declare(strict_types=1);
-
-namespace League\Uri\Contracts;
+declare (strict_types=1);
+namespace Odigos\League\Uri\Contracts;
 
 use Stringable;
-
 interface UserInfoInterface extends UriComponentInterface
 {
     /**
      * Returns the user component part.
      */
     public function getUser(): ?string;
-
     /**
      * Returns the pass component part.
      */
     public function getPass(): ?string;
-
     /**
      * Returns an associative array containing all the User Info components.
      *
@@ -37,7 +32,6 @@ interface UserInfoInterface extends UriComponentInterface
      * @return array{user: ?string, pass : ?string}
      */
     public function components(): array;
-
     /**
      * Returns an instance with the specified user and/or pass.
      *
@@ -48,7 +42,6 @@ interface UserInfoInterface extends UriComponentInterface
      * A variable equal to null is equivalent to removing the complete user information.
      */
     public function withUser(Stringable|string|null $username): self;
-
     /**
      * Returns an instance with the specified user and/or pass.
      *

@@ -1,13 +1,11 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Odigos\Dotenv\Loader;
 
-namespace Dotenv\Loader;
-
-use Dotenv\Parser\Entry;
-use Dotenv\Parser\Value;
-use Dotenv\Repository\RepositoryInterface;
-
+use Odigos\Dotenv\Parser\Entry;
+use Odigos\Dotenv\Parser\Value;
+use Odigos\Dotenv\Repository\RepositoryInterface;
 final class Loader implements LoaderInterface
 {
     /**
@@ -26,22 +24,17 @@ final class Loader implements LoaderInterface
         /** @var array<string, string|null> */
         return \array_reduce($entries, static function (array $vars, Entry $entry) use ($repository) {
             $name = $entry->getName();
-
             $value = $entry->getValue()->map(static function (Value $value) use ($repository) {
                 return Resolver::resolve($repository, $value);
             });
-
             if ($value->isDefined()) {
                 $inner = $value->get();
                 if ($repository->set($name, $inner)) {
                     return \array_merge($vars, [$name => $inner]);
                 }
-            } else {
-                if ($repository->clear($name)) {
-                    return \array_merge($vars, [$name => null]);
-                }
+            } else if ($repository->clear($name)) {
+                return \array_merge($vars, [$name => null]);
             }
-
             return $vars;
         }, []);
     }

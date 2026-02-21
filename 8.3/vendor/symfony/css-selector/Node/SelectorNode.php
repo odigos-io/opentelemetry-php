@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\CssSelector\Node;
 
 /**
@@ -21,34 +20,27 @@ namespace Symfony\Component\CssSelector\Node;
  *
  * @internal
  */
-class SelectorNode extends AbstractNode
+class SelectorNode extends \Symfony\Component\CssSelector\Node\AbstractNode
 {
     private ?string $pseudoElement;
-
-    public function __construct(
-        private NodeInterface $tree,
-        ?string $pseudoElement = null,
-    ) {
+    public function __construct(private \Symfony\Component\CssSelector\Node\NodeInterface $tree, ?string $pseudoElement = null)
+    {
         $this->pseudoElement = $pseudoElement ? strtolower($pseudoElement) : null;
     }
-
-    public function getTree(): NodeInterface
+    public function getTree(): \Symfony\Component\CssSelector\Node\NodeInterface
     {
         return $this->tree;
     }
-
     public function getPseudoElement(): ?string
     {
         return $this->pseudoElement;
     }
-
-    public function getSpecificity(): Specificity
+    public function getSpecificity(): \Symfony\Component\CssSelector\Node\Specificity
     {
-        return $this->tree->getSpecificity()->plus(new Specificity(0, 0, $this->pseudoElement ? 1 : 0));
+        return $this->tree->getSpecificity()->plus(new \Symfony\Component\CssSelector\Node\Specificity(0, 0, $this->pseudoElement ? 1 : 0));
     }
-
     public function __toString(): string
     {
-        return \sprintf('%s[%s%s]', $this->getNodeName(), $this->tree, $this->pseudoElement ? '::'.$this->pseudoElement : '');
+        return \sprintf('%s[%s%s]', $this->getNodeName(), $this->tree, $this->pseudoElement ? '::' . $this->pseudoElement : '');
     }
 }
