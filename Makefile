@@ -64,3 +64,23 @@ check-binaries:
 			file ./$$vers/bin/$$arch/opentelemetry.so; \
 		done; \
 	done
+
+##################################################
+# Dev: build release image and deploy to Kind cluster
+##################################################
+
+KIND_NODE ?= kind-control-plane
+ODIGLET_PHP_PATH ?= /var/odigos/php
+DEV_IMAGE = php-community-dev
+
+.PHONY: deploy-dev
+deploy-dev:
+	@echo "📦 Building release image …"
+	@docker build -f release.Dockerfile -t $(DEV_IMAGE) .
+	@echo "📤 Extracting instrumentations from image …"
+	@CID=$$(docker create $(DEV_IMAGE) true); \
+	docker cp $$CID:/instrumentations/php - | \
+		docker exec -i $(KIND_NODE) sh -c 'rm -rf $(ODIGLET_PHP_PATH) && mkdir -p $(ODIGLET_PHP_PATH) && tar xf - -C $(ODIGLET_PHP_PATH) --strip-components=1'; \
+	docker rm $$CID > /dev/null 2>&1
+	@echo "✅ PHP instrumentations deployed to $(KIND_NODE):$(ODIGLET_PHP_PATH)"
+	@docker exec $(KIND_NODE) ls -la $(ODIGLET_PHP_PATH)
