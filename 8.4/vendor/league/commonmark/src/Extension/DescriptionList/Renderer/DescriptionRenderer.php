@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the league/commonmark package.
  *
@@ -10,15 +9,13 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Odigos\League\CommonMark\Extension\DescriptionList\Renderer;
 
-namespace League\CommonMark\Extension\DescriptionList\Renderer;
-
-use League\CommonMark\Extension\DescriptionList\Node\Description;
-use League\CommonMark\Node\Node;
-use League\CommonMark\Renderer\ChildNodeRendererInterface;
-use League\CommonMark\Renderer\NodeRendererInterface;
-use League\CommonMark\Util\HtmlElement;
-
+use Odigos\League\CommonMark\Extension\DescriptionList\Node\Description;
+use Odigos\League\CommonMark\Node\Node;
+use Odigos\League\CommonMark\Renderer\ChildNodeRendererInterface;
+use Odigos\League\CommonMark\Renderer\NodeRendererInterface;
+use Odigos\League\CommonMark\Util\HtmlElement;
 final class DescriptionRenderer implements NodeRendererInterface
 {
     /**
@@ -31,7 +28,6 @@ final class DescriptionRenderer implements NodeRendererInterface
     public function render(Node $node, ChildNodeRendererInterface $childRenderer): \Stringable
     {
         Description::assertInstanceOf($node);
-
         return new HtmlElement('dd', [], $childRenderer->renderNodes($node->children()));
     }
 }

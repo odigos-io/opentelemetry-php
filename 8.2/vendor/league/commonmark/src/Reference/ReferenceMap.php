@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the league/commonmark package.
  *
@@ -13,11 +12,9 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Odigos\League\CommonMark\Reference;
 
-namespace League\CommonMark\Reference;
-
-use League\CommonMark\Normalizer\TextNormalizer;
-
+use Odigos\League\CommonMark\Normalizer\TextNormalizer;
 /**
  * A collection of references, indexed by label
  */
@@ -25,19 +22,16 @@ final class ReferenceMap implements ReferenceMapInterface
 {
     /** @psalm-readonly */
     private TextNormalizer $normalizer;
-
     /**
      * @var array<string, ReferenceInterface>
      *
      * @psalm-readonly-allow-private-mutation
      */
     private array $references = [];
-
     public function __construct()
     {
         $this->normalizer = new TextNormalizer();
     }
-
     public function add(ReferenceInterface $reference): void
     {
         // Normalize the key
@@ -45,29 +39,22 @@ final class ReferenceMap implements ReferenceMapInterface
         // Store the reference
         $this->references[$key] = $reference;
     }
-
     public function contains(string $label): bool
     {
         if ($this->references === []) {
-            return false;
+            return \false;
         }
-
         $label = $this->normalizer->normalize($label);
-
         return isset($this->references[$label]);
     }
-
     public function get(string $label): ?ReferenceInterface
     {
         if ($this->references === []) {
             return null;
         }
-
         $label = $this->normalizer->normalize($label);
-
         return $this->references[$label] ?? null;
     }
-
     /**
      * @return \Traversable<string, ReferenceInterface>
      */
@@ -77,7 +64,6 @@ final class ReferenceMap implements ReferenceMapInterface
             yield $normalizedLabel => $reference;
         }
     }
-
     public function count(): int
     {
         return \count($this->references);

@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the league/commonmark package.
  *
@@ -10,39 +9,24 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Odigos\League\CommonMark\Extension\Mention;
 
-namespace League\CommonMark\Extension\Mention;
-
-use League\CommonMark\Environment\EnvironmentBuilderInterface;
-use League\CommonMark\Extension\ConfigurableExtensionInterface;
-use League\CommonMark\Extension\Mention\Generator\MentionGeneratorInterface;
-use League\Config\ConfigurationBuilderInterface;
-use League\Config\Exception\InvalidConfigurationException;
-use Nette\Schema\Expect;
-
+use Odigos\League\CommonMark\Environment\EnvironmentBuilderInterface;
+use Odigos\League\CommonMark\Extension\ConfigurableExtensionInterface;
+use Odigos\League\CommonMark\Extension\Mention\Generator\MentionGeneratorInterface;
+use Odigos\League\Config\ConfigurationBuilderInterface;
+use Odigos\League\Config\Exception\InvalidConfigurationException;
+use Odigos\Nette\Schema\Expect;
 final class MentionExtension implements ConfigurableExtensionInterface
 {
     public function configureSchema(ConfigurationBuilderInterface $builder): void
     {
         $isAValidPartialRegex = static function (string $regex): bool {
             $regex = '/' . $regex . '/i';
-
-            return @\preg_match($regex, '') !== false;
+            return @\preg_match($regex, '') !== \false;
         };
-
-        $builder->addSchema('mentions', Expect::arrayOf(
-            Expect::structure([
-                'prefix' => Expect::string()->required(),
-                'pattern' => Expect::string()->assert($isAValidPartialRegex, 'Pattern must not include starting/ending delimiters (like "/")')->required(),
-                'generator' => Expect::anyOf(
-                    Expect::type(MentionGeneratorInterface::class),
-                    Expect::string(),
-                    Expect::type('callable')
-                )->required(),
-            ])
-        ));
+        $builder->addSchema('mentions', Expect::arrayOf(Expect::structure(['prefix' => Expect::string()->required(), 'pattern' => Expect::string()->assert($isAValidPartialRegex, 'Pattern must not include starting/ending delimiters (like "/")')->required(), 'generator' => Expect::anyOf(Expect::type(MentionGeneratorInterface::class), Expect::string(), Expect::type('callable'))->required()])));
     }
-
     public function register(EnvironmentBuilderInterface $environment): void
     {
         $mentions = $environment->getConfiguration()->get('mentions');

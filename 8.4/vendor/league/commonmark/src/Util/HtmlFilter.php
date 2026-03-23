@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the league/commonmark package.
  *
@@ -10,11 +9,9 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Odigos\League\CommonMark\Util;
 
-namespace League\CommonMark\Util;
-
-use League\CommonMark\Exception\InvalidArgumentException;
-
+use Odigos\League\CommonMark\Exception\InvalidArgumentException;
 /**
  * @psalm-immutable
  */
@@ -26,7 +23,6 @@ final class HtmlFilter
     public const ESCAPE = 'escape';
     // Return an empty string
     public const STRIP = 'strip';
-
     /**
      * Runs the given HTML through the given filter
      *

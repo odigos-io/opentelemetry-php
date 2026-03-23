@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the league/commonmark package.
  *
@@ -10,14 +9,12 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Odigos\League\CommonMark\Extension\FrontMatter\Data;
 
-namespace League\CommonMark\Extension\FrontMatter\Data;
-
-use League\CommonMark\Exception\MissingDependencyException;
-use League\CommonMark\Extension\FrontMatter\Exception\InvalidFrontMatterException;
+use Odigos\League\CommonMark\Exception\MissingDependencyException;
+use Odigos\League\CommonMark\Extension\FrontMatter\Exception\InvalidFrontMatterException;
 use Symfony\Component\Yaml\Exception\ParseException;
 use Symfony\Component\Yaml\Yaml;
-
 final class SymfonyYamlFrontMatterParser implements FrontMatterDataParserInterface
 {
     /**
@@ -25,10 +22,9 @@ final class SymfonyYamlFrontMatterParser implements FrontMatterDataParserInterfa
      */
     public function parse(string $frontMatter)
     {
-        if (! \class_exists(Yaml::class)) {
+        if (!\class_exists(Yaml::class)) {
             throw new MissingDependencyException('Failed to parse yaml: "symfony/yaml" library is missing');
         }
-
         try {
             /** @psalm-suppress ReservedWord */
             return Yaml::parse($frontMatter);

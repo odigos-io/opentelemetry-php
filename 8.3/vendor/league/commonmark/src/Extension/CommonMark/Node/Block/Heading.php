@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the league/commonmark package.
  *
@@ -13,27 +12,21 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Odigos\League\CommonMark\Extension\CommonMark\Node\Block;
 
-namespace League\CommonMark\Extension\CommonMark\Node\Block;
-
-use League\CommonMark\Node\Block\AbstractBlock;
-
+use Odigos\League\CommonMark\Node\Block\AbstractBlock;
 final class Heading extends AbstractBlock
 {
     private int $level;
-
     public function __construct(int $level)
     {
         parent::__construct();
-
         $this->level = $level;
     }
-
     public function getLevel(): int
     {
         return $this->level;
     }
-
     public function setLevel(int $level): void
     {
         $this->level = $level;

@@ -8,12 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Symfony\Component\Process;
 
 use Symfony\Component\Process\Exception\LogicException;
 use Symfony\Component\Process\Exception\RuntimeException;
-
 /**
  * PhpProcess runs a PHP script in an independent process.
  *
@@ -23,7 +21,7 @@ use Symfony\Component\Process\Exception\RuntimeException;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class PhpProcess extends Process
+class PhpProcess extends \Symfony\Component\Process\Process
 {
     /**
      * @param string      $script  The PHP script to run (as a string)
@@ -35,9 +33,9 @@ class PhpProcess extends Process
     public function __construct(string $script, ?string $cwd = null, ?array $env = null, int $timeout = 60, ?array $php = null)
     {
         if (null === $php) {
-            $executableFinder = new PhpExecutableFinder();
-            $php = $executableFinder->find(false);
-            $php = false === $php ? null : array_merge([$php], $executableFinder->findArguments());
+            $executableFinder = new \Symfony\Component\Process\PhpExecutableFinder();
+            $php = $executableFinder->find(\false);
+            $php = \false === $php ? null : array_merge([$php], $executableFinder->findArguments());
         }
         if ('phpdbg' === \PHP_SAPI) {
             $file = tempnam(sys_get_temp_dir(), 'dbg');
@@ -46,15 +44,12 @@ class PhpProcess extends Process
             $php[] = $file;
             $script = null;
         }
-
         parent::__construct($php, $cwd, $env, $script, $timeout);
     }
-
     public static function fromShellCommandline(string $command, ?string $cwd = null, ?array $env = null, mixed $input = null, ?float $timeout = 60): static
     {
         throw new LogicException(\sprintf('The "%s()" method cannot be called when using "%s".', __METHOD__, self::class));
     }
-
     /**
      * @return void
      */
@@ -63,7 +58,6 @@ class PhpProcess extends Process
         if (null === $this->getCommandLine()) {
             throw new RuntimeException('Unable to find the PHP executable.');
         }
-
         parent::start($callback, $env);
     }
 }

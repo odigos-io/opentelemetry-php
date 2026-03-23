@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the league/commonmark package.
  *
@@ -13,44 +12,35 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Odigos\League\CommonMark\Node\Block;
 
-namespace League\CommonMark\Node\Block;
-
-use League\CommonMark\Parser\Cursor;
-use League\CommonMark\Reference\ReferenceMap;
-use League\CommonMark\Reference\ReferenceMapInterface;
-
+use Odigos\League\CommonMark\Parser\Cursor;
+use Odigos\League\CommonMark\Reference\ReferenceMap;
+use Odigos\League\CommonMark\Reference\ReferenceMapInterface;
 class Document extends AbstractBlock
 {
     /** @psalm-readonly */
     protected ReferenceMapInterface $referenceMap;
-
     public function __construct(?ReferenceMapInterface $referenceMap = null)
     {
         parent::__construct();
-
         $this->setStartLine(1);
-
         $this->referenceMap = $referenceMap ?? new ReferenceMap();
     }
-
     public function getReferenceMap(): ReferenceMapInterface
     {
         return $this->referenceMap;
     }
-
     public function canContain(AbstractBlock $block): bool
     {
-        return true;
+        return \true;
     }
-
     public function isCode(): bool
     {
-        return false;
+        return \false;
     }
-
     public function matchesNextLine(Cursor $cursor): bool
     {
-        return true;
+        return \true;
     }
 }

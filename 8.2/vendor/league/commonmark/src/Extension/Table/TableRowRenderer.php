@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This is part of the league/commonmark package.
  *
@@ -12,15 +11,13 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Odigos\League\CommonMark\Extension\Table;
 
-namespace League\CommonMark\Extension\Table;
-
-use League\CommonMark\Node\Node;
-use League\CommonMark\Renderer\ChildNodeRendererInterface;
-use League\CommonMark\Renderer\NodeRendererInterface;
-use League\CommonMark\Util\HtmlElement;
-use League\CommonMark\Xml\XmlNodeRendererInterface;
-
+use Odigos\League\CommonMark\Node\Node;
+use Odigos\League\CommonMark\Renderer\ChildNodeRendererInterface;
+use Odigos\League\CommonMark\Renderer\NodeRendererInterface;
+use Odigos\League\CommonMark\Util\HtmlElement;
+use Odigos\League\CommonMark\Xml\XmlNodeRendererInterface;
 final class TableRowRenderer implements NodeRendererInterface, XmlNodeRendererInterface
 {
     /**
@@ -33,19 +30,14 @@ final class TableRowRenderer implements NodeRendererInterface, XmlNodeRendererIn
     public function render(Node $node, ChildNodeRendererInterface $childRenderer): \Stringable
     {
         TableRow::assertInstanceOf($node);
-
         $attrs = $node->data->get('attributes');
-
         $separator = $childRenderer->getInnerSeparator();
-
         return new HtmlElement('tr', $attrs, $separator . $childRenderer->renderNodes($node->children()) . $separator);
     }
-
     public function getXmlTagName(Node $node): string
     {
         return 'table_row';
     }
-
     /**
      * {@inheritDoc}
      */

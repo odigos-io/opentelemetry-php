@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the league/commonmark package.
  *
@@ -13,8 +12,7 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace League\CommonMark\Reference;
+namespace Odigos\League\CommonMark\Reference;
 
 /**
  * @psalm-immutable
@@ -23,30 +21,24 @@ final class Reference implements ReferenceInterface
 {
     /** @psalm-readonly */
     private string $label;
-
     /** @psalm-readonly */
     private string $destination;
-
     /** @psalm-readonly */
     private string $title;
-
     public function __construct(string $label, string $destination, string $title)
     {
-        $this->label       = $label;
+        $this->label = $label;
         $this->destination = $destination;
-        $this->title       = $title;
+        $this->title = $title;
     }
-
     public function getLabel(): string
     {
         return $this->label;
     }
-
     public function getDestination(): string
     {
         return $this->destination;
     }
-
     public function getTitle(): string
     {
         return $this->title;

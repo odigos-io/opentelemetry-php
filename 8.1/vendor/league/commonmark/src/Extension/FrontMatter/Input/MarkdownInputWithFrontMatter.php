@@ -8,19 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+declare (strict_types=1);
+namespace Odigos\League\CommonMark\Extension\FrontMatter\Input;
 
-declare(strict_types=1);
-
-namespace League\CommonMark\Extension\FrontMatter\Input;
-
-use League\CommonMark\Extension\FrontMatter\FrontMatterProviderInterface;
-use League\CommonMark\Input\MarkdownInput;
-
+use Odigos\League\CommonMark\Extension\FrontMatter\FrontMatterProviderInterface;
+use Odigos\League\CommonMark\Input\MarkdownInput;
 final class MarkdownInputWithFrontMatter extends MarkdownInput implements FrontMatterProviderInterface
 {
     /** @var mixed|null */
     private $frontMatter;
-
     /**
      * @param string     $content     Markdown content without the raw front matter
      * @param int        $lineOffset  Line offset (based on number of front matter lines removed)
@@ -29,10 +25,8 @@ final class MarkdownInputWithFrontMatter extends MarkdownInput implements FrontM
     public function __construct(string $content, int $lineOffset = 0, $frontMatter = null)
     {
         parent::__construct($content, $lineOffset);
-
         $this->frontMatter = $frontMatter;
     }
-
     /**
      * {@inheritDoc}
      */

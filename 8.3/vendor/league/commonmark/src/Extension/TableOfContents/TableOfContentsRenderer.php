@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the league/commonmark package.
  *
@@ -10,19 +9,16 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Odigos\League\CommonMark\Extension\TableOfContents;
 
-namespace League\CommonMark\Extension\TableOfContents;
-
-use League\CommonMark\Node\Node;
-use League\CommonMark\Renderer\ChildNodeRendererInterface;
-use League\CommonMark\Renderer\NodeRendererInterface;
-use League\CommonMark\Xml\XmlNodeRendererInterface;
-
+use Odigos\League\CommonMark\Node\Node;
+use Odigos\League\CommonMark\Renderer\ChildNodeRendererInterface;
+use Odigos\League\CommonMark\Renderer\NodeRendererInterface;
+use Odigos\League\CommonMark\Xml\XmlNodeRendererInterface;
 final class TableOfContentsRenderer implements NodeRendererInterface, XmlNodeRendererInterface
 {
     /** @var NodeRendererInterface&XmlNodeRendererInterface */
     private $innerRenderer;
-
     /**
      * @psalm-param NodeRendererInterface&XmlNodeRendererInterface $innerRenderer
      *
@@ -32,7 +28,6 @@ final class TableOfContentsRenderer implements NodeRendererInterface, XmlNodeRen
     {
         $this->innerRenderer = $innerRenderer;
     }
-
     /**
      * {@inheritDoc}
      */
@@ -40,12 +35,10 @@ final class TableOfContentsRenderer implements NodeRendererInterface, XmlNodeRen
     {
         return $this->innerRenderer->render($node, $childRenderer);
     }
-
     public function getXmlTagName(Node $node): string
     {
         return 'table_of_contents';
     }
-
     /**
      * @return array<string, scalar>
      */

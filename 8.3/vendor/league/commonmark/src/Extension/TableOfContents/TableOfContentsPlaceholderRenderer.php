@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 /*
  * This file is part of the league/commonmark package.
  *
@@ -10,26 +9,22 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Odigos\League\CommonMark\Extension\TableOfContents;
 
-namespace League\CommonMark\Extension\TableOfContents;
-
-use League\CommonMark\Node\Node;
-use League\CommonMark\Renderer\ChildNodeRendererInterface;
-use League\CommonMark\Renderer\NodeRendererInterface;
-use League\CommonMark\Xml\XmlNodeRendererInterface;
-
+use Odigos\League\CommonMark\Node\Node;
+use Odigos\League\CommonMark\Renderer\ChildNodeRendererInterface;
+use Odigos\League\CommonMark\Renderer\NodeRendererInterface;
+use Odigos\League\CommonMark\Xml\XmlNodeRendererInterface;
 final class TableOfContentsPlaceholderRenderer implements NodeRendererInterface, XmlNodeRendererInterface
 {
     public function render(Node $node, ChildNodeRendererInterface $childRenderer): string
     {
         return '<!-- table of contents -->';
     }
-
     public function getXmlTagName(Node $node): string
     {
         return 'table_of_contents_placeholder';
     }
-
     /**
      * @return array<string, scalar>
      */
