@@ -1,6 +1,7 @@
 <?php
 
-declare (strict_types=1);
+declare(strict_types=1);
+
 /*
  * This file is part of the league/commonmark package.
  *
@@ -9,35 +10,46 @@ declare (strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Odigos\League\CommonMark\Extension\TaskList;
 
-use Odigos\League\CommonMark\Extension\CommonMark\Node\Block\ListItem;
-use Odigos\League\CommonMark\Node\Block\Paragraph;
-use Odigos\League\CommonMark\Parser\Inline\InlineParserInterface;
-use Odigos\League\CommonMark\Parser\Inline\InlineParserMatch;
-use Odigos\League\CommonMark\Parser\InlineParserContext;
+namespace League\CommonMark\Extension\TaskList;
+
+use League\CommonMark\Extension\CommonMark\Node\Block\ListItem;
+use League\CommonMark\Node\Block\Paragraph;
+use League\CommonMark\Parser\Inline\InlineParserInterface;
+use League\CommonMark\Parser\Inline\InlineParserMatch;
+use League\CommonMark\Parser\InlineParserContext;
+
 final class TaskListItemMarkerParser implements InlineParserInterface
 {
     public function getMatchDefinition(): InlineParserMatch
     {
         return InlineParserMatch::oneOf('[ ]', '[x]');
     }
+
     public function parse(InlineParserContext $inlineContext): bool
     {
         $container = $inlineContext->getContainer();
+
         // Checkbox must come at the beginning of the first paragraph of the list item
-        if ($container->hasChildren() || !($container instanceof Paragraph && $container->parent() && $container->parent() instanceof ListItem)) {
-            return \false;
+        if ($container->hasChildren() || ! ($container instanceof Paragraph && $container->parent() && $container->parent() instanceof ListItem)) {
+            return false;
         }
-        $cursor = $inlineContext->getCursor();
+
+        $cursor   = $inlineContext->getCursor();
         $oldState = $cursor->saveState();
+
         $cursor->advanceBy(3);
+
         if ($cursor->getNextNonSpaceCharacter() === null) {
             $cursor->restoreState($oldState);
-            return \false;
+
+            return false;
         }
+
         $isChecked = $inlineContext->getFullMatch() !== '[ ]';
+
         $container->appendChild(new TaskListItemMarker($isChecked));
-        return \true;
+
+        return true;
     }
 }

@@ -1,6 +1,7 @@
 <?php
 
-declare (strict_types=1);
+declare(strict_types=1);
+
 /*
  * This file is part of the league/commonmark package.
  *
@@ -12,7 +13,8 @@ declare (strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Odigos\League\CommonMark\Reference;
+
+namespace League\CommonMark\Reference;
 
 /**
  * Link reference
@@ -20,6 +22,8 @@ namespace Odigos\League\CommonMark\Reference;
 interface ReferenceInterface
 {
     public function getLabel(): string;
+
     public function getDestination(): string;
+
     public function getTitle(): string;
 }

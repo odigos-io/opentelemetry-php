@@ -1,6 +1,7 @@
 <?php
 
-declare (strict_types=1);
+declare(strict_types=1);
+
 /*
  * This file is part of the league/commonmark package.
  *
@@ -12,36 +13,45 @@ declare (strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Odigos\League\CommonMark\Extension\CommonMark\Parser\Inline;
 
-use Odigos\League\CommonMark\Node\Inline\Newline;
-use Odigos\League\CommonMark\Node\Inline\Text;
-use Odigos\League\CommonMark\Parser\Inline\InlineParserInterface;
-use Odigos\League\CommonMark\Parser\Inline\InlineParserMatch;
-use Odigos\League\CommonMark\Parser\InlineParserContext;
-use Odigos\League\CommonMark\Util\RegexHelper;
+namespace League\CommonMark\Extension\CommonMark\Parser\Inline;
+
+use League\CommonMark\Node\Inline\Newline;
+use League\CommonMark\Node\Inline\Text;
+use League\CommonMark\Parser\Inline\InlineParserInterface;
+use League\CommonMark\Parser\Inline\InlineParserMatch;
+use League\CommonMark\Parser\InlineParserContext;
+use League\CommonMark\Util\RegexHelper;
+
 final class EscapableParser implements InlineParserInterface
 {
     public function getMatchDefinition(): InlineParserMatch
     {
         return InlineParserMatch::string('\\');
     }
+
     public function parse(InlineParserContext $inlineContext): bool
     {
-        $cursor = $inlineContext->getCursor();
+        $cursor   = $inlineContext->getCursor();
         $nextChar = $cursor->peek();
+
         if ($nextChar === "\n") {
             $cursor->advanceBy(2);
             $inlineContext->getContainer()->appendChild(new Newline(Newline::HARDBREAK));
-            return \true;
+
+            return true;
         }
+
         if ($nextChar !== null && RegexHelper::isEscapable($nextChar)) {
             $cursor->advanceBy(2);
             $inlineContext->getContainer()->appendChild(new Text($nextChar));
-            return \true;
+
+            return true;
         }
+
         $cursor->advanceBy(1);
         $inlineContext->getContainer()->appendChild(new Text('\\'));
-        return \true;
+
+        return true;
     }
 }

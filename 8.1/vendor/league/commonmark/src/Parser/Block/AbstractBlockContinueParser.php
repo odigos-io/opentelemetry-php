@@ -1,6 +1,7 @@
 <?php
 
-declare (strict_types=1);
+declare(strict_types=1);
+
 /*
  * This file is part of the league/commonmark package.
  *
@@ -9,9 +10,11 @@ declare (strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Odigos\League\CommonMark\Parser\Block;
 
-use Odigos\League\CommonMark\Node\Block\AbstractBlock;
+namespace League\CommonMark\Parser\Block;
+
+use League\CommonMark\Node\Block\AbstractBlock;
+
 /**
  * Base class for a block parser
  *
@@ -21,19 +24,23 @@ abstract class AbstractBlockContinueParser implements BlockContinueParserInterfa
 {
     public function isContainer(): bool
     {
-        return \false;
+        return false;
     }
+
     public function canHaveLazyContinuationLines(): bool
     {
-        return \false;
+        return false;
     }
+
     public function canContain(AbstractBlock $childBlock): bool
     {
-        return \false;
+        return false;
     }
+
     public function addLine(string $line): void
     {
     }
+
     public function closeBlock(): void
     {
     }

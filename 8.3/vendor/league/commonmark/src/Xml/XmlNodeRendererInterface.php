@@ -1,6 +1,7 @@
 <?php
 
-declare (strict_types=1);
+declare(strict_types=1);
+
 /*
  * This file is part of the league/commonmark package.
  *
@@ -9,12 +10,15 @@ declare (strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Odigos\League\CommonMark\Xml;
 
-use Odigos\League\CommonMark\Node\Node;
+namespace League\CommonMark\Xml;
+
+use League\CommonMark\Node\Node;
+
 interface XmlNodeRendererInterface
 {
     public function getXmlTagName(Node $node): string;
+
     /**
      * @return array<string, string|int|float|bool>
      *

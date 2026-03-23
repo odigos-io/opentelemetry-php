@@ -1,6 +1,7 @@
 <?php
 
-declare (strict_types=1);
+declare(strict_types=1);
+
 /*
  * This file is part of the league/commonmark package.
  *
@@ -12,20 +13,23 @@ declare (strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Odigos\League\CommonMark\Extension\CommonMark\Renderer\Inline;
 
-use Odigos\League\CommonMark\Extension\CommonMark\Node\Inline\HtmlInline;
-use Odigos\League\CommonMark\Node\Node;
-use Odigos\League\CommonMark\Renderer\ChildNodeRendererInterface;
-use Odigos\League\CommonMark\Renderer\NodeRendererInterface;
-use Odigos\League\CommonMark\Util\HtmlFilter;
-use Odigos\League\CommonMark\Xml\XmlNodeRendererInterface;
-use Odigos\League\Config\ConfigurationAwareInterface;
-use Odigos\League\Config\ConfigurationInterface;
+namespace League\CommonMark\Extension\CommonMark\Renderer\Inline;
+
+use League\CommonMark\Extension\CommonMark\Node\Inline\HtmlInline;
+use League\CommonMark\Node\Node;
+use League\CommonMark\Renderer\ChildNodeRendererInterface;
+use League\CommonMark\Renderer\NodeRendererInterface;
+use League\CommonMark\Util\HtmlFilter;
+use League\CommonMark\Xml\XmlNodeRendererInterface;
+use League\Config\ConfigurationAwareInterface;
+use League\Config\ConfigurationInterface;
+
 final class HtmlInlineRenderer implements NodeRendererInterface, XmlNodeRendererInterface, ConfigurationAwareInterface
 {
     /** @psalm-readonly-allow-private-mutation */
     private ConfigurationInterface $config;
+
     /**
      * @param HtmlInline $node
      *
@@ -36,17 +40,22 @@ final class HtmlInlineRenderer implements NodeRendererInterface, XmlNodeRenderer
     public function render(Node $node, ChildNodeRendererInterface $childRenderer): string
     {
         HtmlInline::assertInstanceOf($node);
+
         $htmlInput = $this->config->get('html_input');
+
         return HtmlFilter::filter($node->getLiteral(), $htmlInput);
     }
+
     public function setConfiguration(ConfigurationInterface $configuration): void
     {
         $this->config = $configuration;
     }
+
     public function getXmlTagName(Node $node): string
     {
         return 'html_inline';
     }
+
     /**
      * {@inheritDoc}
      */

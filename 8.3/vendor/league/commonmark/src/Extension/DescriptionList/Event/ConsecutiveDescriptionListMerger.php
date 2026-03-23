@@ -1,6 +1,7 @@
 <?php
 
-declare (strict_types=1);
+declare(strict_types=1);
+
 /*
  * This file is part of the league/commonmark package.
  *
@@ -9,26 +10,31 @@ declare (strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Odigos\League\CommonMark\Extension\DescriptionList\Event;
 
-use Odigos\League\CommonMark\Event\DocumentParsedEvent;
-use Odigos\League\CommonMark\Extension\DescriptionList\Node\DescriptionList;
-use Odigos\League\CommonMark\Node\NodeIterator;
+namespace League\CommonMark\Extension\DescriptionList\Event;
+
+use League\CommonMark\Event\DocumentParsedEvent;
+use League\CommonMark\Extension\DescriptionList\Node\DescriptionList;
+use League\CommonMark\Node\NodeIterator;
+
 final class ConsecutiveDescriptionListMerger
 {
     public function __invoke(DocumentParsedEvent $event): void
     {
         foreach ($event->getDocument()->iterator(NodeIterator::FLAG_BLOCKS_ONLY) as $node) {
-            if (!$node instanceof DescriptionList) {
+            if (! $node instanceof DescriptionList) {
                 continue;
             }
-            if (!($prev = $node->previous()) instanceof DescriptionList) {
+
+            if (! ($prev = $node->previous()) instanceof DescriptionList) {
                 continue;
             }
+
             // There's another description list behind this one; merge the current one into that
             foreach ($node->children() as $child) {
                 $prev->appendChild($child);
             }
+
             $node->detach();
         }
     }

@@ -8,8 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-declare (strict_types=1);
-namespace Odigos\League\CommonMark\Normalizer;
+
+declare(strict_types=1);
+
+namespace League\CommonMark\Normalizer;
 
 /***
  * Normalize text input using the steps given by the CommonMark spec to normalize labels
@@ -31,10 +33,12 @@ final class TextNormalizer implements TextNormalizerInterface
         // leading/trailing whitespace
         $text = \preg_replace('/[ \t\r\n]+/', ' ', \trim($text));
         \assert(\is_string($text));
+
         // Is it strictly ASCII? If so, we can use strtolower() instead (faster)
         if (\mb_check_encoding($text, 'ASCII')) {
             return \strtolower($text);
         }
+
         return \mb_convert_case($text, \MB_CASE_FOLD, 'UTF-8');
     }
 }

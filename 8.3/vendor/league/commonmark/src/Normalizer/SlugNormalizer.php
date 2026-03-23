@@ -1,6 +1,7 @@
 <?php
 
-declare (strict_types=1);
+declare(strict_types=1);
+
 /*
  * This file is part of the league/commonmark package.
  *
@@ -9,10 +10,12 @@ declare (strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Odigos\League\CommonMark\Normalizer;
 
-use Odigos\League\Config\ConfigurationAwareInterface;
-use Odigos\League\Config\ConfigurationInterface;
+namespace League\CommonMark\Normalizer;
+
+use League\Config\ConfigurationAwareInterface;
+use League\Config\ConfigurationInterface;
+
 /**
  * Creates URL-friendly strings based on the given string input
  */
@@ -20,10 +23,12 @@ final class SlugNormalizer implements TextNormalizerInterface, ConfigurationAwar
 {
     /** @psalm-allow-private-mutation */
     private int $defaultMaxLength = 255;
+
     public function setConfiguration(ConfigurationInterface $configuration): void
     {
         $this->defaultMaxLength = $configuration->get('slug_normalizer/max_length');
     }
+
     /**
      * {@inheritDoc}
      *
@@ -45,6 +50,7 @@ final class SlugNormalizer implements TextNormalizerInterface, ConfigurationAwar
         if ($length = $context['length'] ?? $this->defaultMaxLength) {
             $slug = \mb_substr($slug, 0, $length, 'UTF-8');
         }
+
         // @phpstan-ignore-next-line Because it thinks mb_substr() returns false on PHP 7.4
         return $slug;
     }

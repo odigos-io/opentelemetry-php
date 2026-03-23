@@ -1,6 +1,7 @@
 <?php
 
-declare (strict_types=1);
+declare(strict_types=1);
+
 /*
  * This file is part of the league/commonmark package.
  *
@@ -9,7 +10,8 @@ declare (strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Odigos\League\CommonMark\Event;
+
+namespace League\CommonMark\Event;
 
 /**
  * @internal
@@ -20,16 +22,19 @@ final class ListenerData
 {
     /** @var class-string */
     private string $event;
+
     /** @var callable */
     private $listener;
+
     /**
      * @param class-string $event
      */
     public function __construct(string $event, callable $listener)
     {
-        $this->event = $event;
+        $this->event    = $event;
         $this->listener = $listener;
     }
+
     /**
      * @return class-string
      */
@@ -37,6 +42,7 @@ final class ListenerData
     {
         return $this->event;
     }
+
     public function getListener(): callable
     {
         return $this->listener;

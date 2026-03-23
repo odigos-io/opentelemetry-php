@@ -1,6 +1,7 @@
 <?php
 
-declare (strict_types=1);
+declare(strict_types=1);
+
 /*
  * This file is part of the league/commonmark package.
  *
@@ -9,14 +10,16 @@ declare (strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Odigos\League\CommonMark\Extension;
 
-use Odigos\League\CommonMark\Environment\EnvironmentBuilderInterface;
-use Odigos\League\CommonMark\Extension\Autolink\AutolinkExtension;
-use Odigos\League\CommonMark\Extension\DisallowedRawHtml\DisallowedRawHtmlExtension;
-use Odigos\League\CommonMark\Extension\Strikethrough\StrikethroughExtension;
-use Odigos\League\CommonMark\Extension\Table\TableExtension;
-use Odigos\League\CommonMark\Extension\TaskList\TaskListExtension;
+namespace League\CommonMark\Extension;
+
+use League\CommonMark\Environment\EnvironmentBuilderInterface;
+use League\CommonMark\Extension\Autolink\AutolinkExtension;
+use League\CommonMark\Extension\DisallowedRawHtml\DisallowedRawHtmlExtension;
+use League\CommonMark\Extension\Strikethrough\StrikethroughExtension;
+use League\CommonMark\Extension\Table\TableExtension;
+use League\CommonMark\Extension\TaskList\TaskListExtension;
+
 final class GithubFlavoredMarkdownExtension implements ExtensionInterface
 {
     public function register(EnvironmentBuilderInterface $environment): void

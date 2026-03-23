@@ -1,6 +1,7 @@
 <?php
 
-declare (strict_types=1);
+declare(strict_types=1);
+
 /*
  * This is part of the league/commonmark package.
  *
@@ -11,13 +12,15 @@ declare (strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Odigos\League\CommonMark\Extension\Table;
 
-use Odigos\League\CommonMark\Node\Node;
-use Odigos\League\CommonMark\Renderer\ChildNodeRendererInterface;
-use Odigos\League\CommonMark\Renderer\NodeRendererInterface;
-use Odigos\League\CommonMark\Util\HtmlElement;
-use Odigos\League\CommonMark\Xml\XmlNodeRendererInterface;
+namespace League\CommonMark\Extension\Table;
+
+use League\CommonMark\Node\Node;
+use League\CommonMark\Renderer\ChildNodeRendererInterface;
+use League\CommonMark\Renderer\NodeRendererInterface;
+use League\CommonMark\Util\HtmlElement;
+use League\CommonMark\Xml\XmlNodeRendererInterface;
+
 final class TableSectionRenderer implements NodeRendererInterface, XmlNodeRendererInterface
 {
     /**
@@ -30,18 +33,25 @@ final class TableSectionRenderer implements NodeRendererInterface, XmlNodeRender
     public function render(Node $node, ChildNodeRendererInterface $childRenderer)
     {
         TableSection::assertInstanceOf($node);
-        if (!$node->hasChildren()) {
+
+        if (! $node->hasChildren()) {
             return '';
         }
+
         $attrs = $node->data->get('attributes');
+
         $separator = $childRenderer->getInnerSeparator();
+
         $tag = $node->getType() === TableSection::TYPE_HEAD ? 'thead' : 'tbody';
+
         return new HtmlElement($tag, $attrs, $separator . $childRenderer->renderNodes($node->children()) . $separator);
     }
+
     public function getXmlTagName(Node $node): string
     {
         return 'table_section';
     }
+
     /**
      * @param TableSection $node
      *
@@ -52,6 +62,9 @@ final class TableSectionRenderer implements NodeRendererInterface, XmlNodeRender
     public function getXmlAttributes(Node $node): array
     {
         TableSection::assertInstanceOf($node);
-        return ['type' => $node->getType()];
+
+        return [
+            'type' => $node->getType(),
+        ];
     }
 }

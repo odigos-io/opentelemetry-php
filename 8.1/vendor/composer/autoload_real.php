@@ -33,34 +33,14 @@ class ComposerAutoloaderInit6d9796760e82074eca05f3abfad9f860
 
         $filesToLoad = \Composer\Autoload\ComposerStaticInit6d9796760e82074eca05f3abfad9f860::$files;
         $requireFile = \Closure::bind(static function ($fileIdentifier, $file) {
-            if (empty($GLOBALS['__odigos_autoload_files'][$fileIdentifier])) {
-                $GLOBALS['__odigos_autoload_files'][$fileIdentifier] = true;
+            if (empty($GLOBALS['__composer_autoload_files'][$fileIdentifier])) {
+                $GLOBALS['__composer_autoload_files'][$fileIdentifier] = true;
 
                 require $file;
             }
         }, null, null);
         foreach ($filesToLoad as $fileIdentifier => $file) {
             $requireFile($fileIdentifier, $file);
-        }
-
-        foreach (array(
-            '8e92226780215d0ec758aa7b73e0ede9' => true,
-            'c7b4a5d8b94d270f0f9a84f81e1dd63d' => true,
-            'b6b991a57620e2fb6b2f66f03fe9ddc2' => true,
-            'a1105708a18b76903365ca1c4aa61b02' => true,
-            '47e1160838b5e5a10346ac4084b58c23' => true,
-            'c720f792236cd163ece8049879166850' => true,
-            '06fc40915d53316d595f94210944bc16' => true,
-            'ede59e3a405fb689cd1cebb7bb1db3fb' => true,
-            '90236b492da7ca2983a2ad6e33e4152e' => true,
-            '2cb76c05856dfb60ada40ef54138d49a' => true,
-            '476ca15b8d69b04665cd879be9cb4c68' => true,
-            'c7a3c339e7e14b60e06a2d7fcce9476b' => true,
-            'f57d353b41eb2e234b26064d63d8c5dd' => true,
-            '3a37ebac017bc098e9a86b35401e7a68' => true,
-            'c695cb998ba36e4bafc3d028efc7d113' => true,
-        ) as $h => $v) {
-            $GLOBALS['__composer_autoload_files'][$h] = $v;
         }
 
         return $loader;

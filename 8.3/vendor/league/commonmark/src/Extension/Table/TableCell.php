@@ -1,6 +1,7 @@
 <?php
 
-declare (strict_types=1);
+declare(strict_types=1);
+
 /*
  * This is part of the league/commonmark package.
  *
@@ -11,16 +12,20 @@ declare (strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Odigos\League\CommonMark\Extension\Table;
 
-use Odigos\League\CommonMark\Node\Block\AbstractBlock;
+namespace League\CommonMark\Extension\Table;
+
+use League\CommonMark\Node\Block\AbstractBlock;
+
 final class TableCell extends AbstractBlock
 {
     public const TYPE_HEADER = 'header';
-    public const TYPE_DATA = 'data';
-    public const ALIGN_LEFT = 'left';
-    public const ALIGN_RIGHT = 'right';
+    public const TYPE_DATA   = 'data';
+
+    public const ALIGN_LEFT   = 'left';
+    public const ALIGN_RIGHT  = 'right';
     public const ALIGN_CENTER = 'center';
+
     /**
      * @psalm-var self::TYPE_*
      * @phpstan-var self::TYPE_*
@@ -28,6 +33,7 @@ final class TableCell extends AbstractBlock
      * @psalm-readonly-allow-private-mutation
      */
     private string $type = self::TYPE_DATA;
+
     /**
      * @psalm-var self::ALIGN_*|null
      * @phpstan-var self::ALIGN_*|null
@@ -35,6 +41,7 @@ final class TableCell extends AbstractBlock
      * @psalm-readonly-allow-private-mutation
      */
     private ?string $align = null;
+
     /**
      * @psalm-param self::TYPE_* $type
      * @psalm-param self::ALIGN_*|null $align
@@ -45,9 +52,11 @@ final class TableCell extends AbstractBlock
     public function __construct(string $type = self::TYPE_DATA, ?string $align = null)
     {
         parent::__construct();
-        $this->type = $type;
+
+        $this->type  = $type;
         $this->align = $align;
     }
+
     /**
      * @psalm-return self::TYPE_*
      *
@@ -57,6 +66,7 @@ final class TableCell extends AbstractBlock
     {
         return $this->type;
     }
+
     /**
      * @psalm-param self::TYPE_* $type
      *
@@ -66,6 +76,7 @@ final class TableCell extends AbstractBlock
     {
         $this->type = $type;
     }
+
     /**
      * @psalm-return self::ALIGN_*|null
      *
@@ -75,6 +86,7 @@ final class TableCell extends AbstractBlock
     {
         return $this->align;
     }
+
     /**
      * @psalm-param self::ALIGN_*|null $align
      *

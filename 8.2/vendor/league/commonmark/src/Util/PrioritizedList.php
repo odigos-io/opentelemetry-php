@@ -1,6 +1,7 @@
 <?php
 
-declare (strict_types=1);
+declare(strict_types=1);
+
 /*
  * This file is part of the league/commonmark package.
  *
@@ -12,7 +13,8 @@ declare (strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Odigos\League\CommonMark\Util;
+
+namespace League\CommonMark\Util;
 
 /**
  * @internal
@@ -27,11 +29,13 @@ final class PrioritizedList implements \IteratorAggregate
      * @phpstan-var array<int, array<T>>
      */
     private array $list = [];
+
     /**
      * @var \Traversable<mixed>|null
      * @phpstan-var \Traversable<T>|null
      */
     private ?\Traversable $optimized = null;
+
     /**
      * @param mixed $item
      *
@@ -40,8 +44,9 @@ final class PrioritizedList implements \IteratorAggregate
     public function add($item, int $priority): void
     {
         $this->list[$priority][] = $item;
-        $this->optimized = null;
+        $this->optimized         = null;
     }
+
     /**
      * @return \Traversable<int, mixed>
      *
@@ -52,14 +57,17 @@ final class PrioritizedList implements \IteratorAggregate
     {
         if ($this->optimized === null) {
             \krsort($this->list);
+
             $sorted = [];
             foreach ($this->list as $group) {
                 foreach ($group as $item) {
                     $sorted[] = $item;
                 }
             }
+
             $this->optimized = new \ArrayIterator($sorted);
         }
+
         return $this->optimized;
     }
 }

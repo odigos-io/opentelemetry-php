@@ -1,6 +1,7 @@
 <?php
 
-declare (strict_types=1);
+declare(strict_types=1);
+
 /*
  * This file is part of the league/commonmark package.
  *
@@ -9,23 +10,29 @@ declare (strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Odigos\League\CommonMark\Extension\TableOfContents\Normalizer;
 
-use Odigos\League\CommonMark\Extension\CommonMark\Node\Block\ListBlock;
-use Odigos\League\CommonMark\Extension\CommonMark\Node\Block\ListItem;
-use Odigos\League\CommonMark\Extension\TableOfContents\Node\TableOfContents;
+namespace League\CommonMark\Extension\TableOfContents\Normalizer;
+
+use League\CommonMark\Extension\CommonMark\Node\Block\ListBlock;
+use League\CommonMark\Extension\CommonMark\Node\Block\ListItem;
+use League\CommonMark\Extension\TableOfContents\Node\TableOfContents;
+
 final class AsIsNormalizerStrategy implements NormalizerStrategyInterface
 {
     /** @psalm-readonly-allow-private-mutation */
     private ListBlock $parentListBlock;
+
     /** @psalm-readonly-allow-private-mutation */
     private int $parentLevel = 1;
+
     /** @psalm-readonly-allow-private-mutation */
     private ?ListItem $lastListItem = null;
+
     public function __construct(TableOfContents $toc)
     {
         $this->parentListBlock = $toc;
     }
+
     public function addItem(int $level, ListItem $listItemToAdd): void
     {
         while ($level > $this->parentLevel) {
@@ -34,14 +41,17 @@ final class AsIsNormalizerStrategy implements NormalizerStrategyInterface
                 $this->lastListItem = new ListItem($this->parentListBlock->getListData());
                 $this->parentListBlock->appendChild($this->lastListItem);
             }
+
             $newListBlock = new ListBlock($this->parentListBlock->getListData());
             $newListBlock->setStartLine($listItemToAdd->getStartLine());
             $newListBlock->setEndLine($listItemToAdd->getEndLine());
             $this->lastListItem->appendChild($newListBlock);
             $this->parentListBlock = $newListBlock;
-            $this->lastListItem = null;
+            $this->lastListItem    = null;
+
             $this->parentLevel++;
         }
+
         while ($level < $this->parentLevel) {
             // Search upwards for the previous parent list block
             $search = $this->parentListBlock;
@@ -51,9 +61,12 @@ final class AsIsNormalizerStrategy implements NormalizerStrategyInterface
                     break;
                 }
             }
+
             $this->parentLevel--;
         }
+
         $this->parentListBlock->appendChild($listItemToAdd);
+
         $this->lastListItem = $listItemToAdd;
     }
 }

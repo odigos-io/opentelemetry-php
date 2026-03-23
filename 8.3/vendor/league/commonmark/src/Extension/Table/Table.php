@@ -1,6 +1,7 @@
 <?php
 
-declare (strict_types=1);
+declare(strict_types=1);
+
 /*
  * This is part of the league/commonmark package.
  *
@@ -11,9 +12,11 @@ declare (strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Odigos\League\CommonMark\Extension\Table;
 
-use Odigos\League\CommonMark\Node\Block\AbstractBlock;
+namespace League\CommonMark\Extension\Table;
+
+use League\CommonMark\Node\Block\AbstractBlock;
+
 final class Table extends AbstractBlock
 {
 }

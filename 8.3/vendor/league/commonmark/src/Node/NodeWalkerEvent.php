@@ -1,6 +1,7 @@
 <?php
 
-declare (strict_types=1);
+declare(strict_types=1);
+
 /*
  * This file is part of the league/commonmark package.
  *
@@ -12,23 +13,28 @@ declare (strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Odigos\League\CommonMark\Node;
+
+namespace League\CommonMark\Node;
 
 final class NodeWalkerEvent
 {
     /** @psalm-readonly */
     private Node $node;
+
     /** @psalm-readonly */
     private bool $isEntering;
-    public function __construct(Node $node, bool $isEntering = \true)
+
+    public function __construct(Node $node, bool $isEntering = true)
     {
-        $this->node = $node;
+        $this->node       = $node;
         $this->isEntering = $isEntering;
     }
+
     public function getNode(): Node
     {
         return $this->node;
     }
+
     public function isEntering(): bool
     {
         return $this->isEntering;

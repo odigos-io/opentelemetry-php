@@ -1,6 +1,7 @@
 <?php
 
-declare (strict_types=1);
+declare(strict_types=1);
+
 /*
  * This file is part of the league/commonmark package.
  *
@@ -12,14 +13,16 @@ declare (strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Odigos\League\CommonMark\Extension\CommonMark\Parser\Inline;
 
-use Odigos\League\CommonMark\Extension\CommonMark\Node\Inline\Code;
-use Odigos\League\CommonMark\Node\Inline\Text;
-use Odigos\League\CommonMark\Parser\Cursor;
-use Odigos\League\CommonMark\Parser\Inline\InlineParserInterface;
-use Odigos\League\CommonMark\Parser\Inline\InlineParserMatch;
-use Odigos\League\CommonMark\Parser\InlineParserContext;
+namespace League\CommonMark\Extension\CommonMark\Parser\Inline;
+
+use League\CommonMark\Extension\CommonMark\Node\Inline\Code;
+use League\CommonMark\Node\Inline\Text;
+use League\CommonMark\Parser\Cursor;
+use League\CommonMark\Parser\Inline\InlineParserInterface;
+use League\CommonMark\Parser\Inline\InlineParserMatch;
+use League\CommonMark\Parser\InlineParserContext;
+
 final class BacktickParser implements InlineParserInterface
 {
     /**
@@ -28,36 +31,54 @@ final class BacktickParser implements InlineParserInterface
      * @see https://github.com/commonmark/cmark/commit/8ed5c9d
      */
     private const MAX_BACKTICKS = 1000;
+
     /** @var \WeakReference<Cursor>|null */
     private ?\WeakReference $lastCursor = null;
-    private bool $lastCursorScanned = \false;
+    private bool $lastCursorScanned     = false;
+
     /** @var array<int, int> backtick count => position of known ender */
     private array $seenBackticks = [];
+
     public function getMatchDefinition(): InlineParserMatch
     {
         return InlineParserMatch::regex('`+');
     }
+
     public function parse(InlineParserContext $inlineContext): bool
     {
-        $ticks = $inlineContext->getFullMatch();
+        $ticks  = $inlineContext->getFullMatch();
         $cursor = $inlineContext->getCursor();
         $cursor->advanceBy($inlineContext->getFullMatchLength());
+
         $currentPosition = $cursor->getPosition();
-        $previousState = $cursor->saveState();
+        $previousState   = $cursor->saveState();
+
         if ($this->findMatchingTicks(\strlen($ticks), $cursor)) {
             $code = $cursor->getSubstring($currentPosition, $cursor->getPosition() - $currentPosition - \strlen($ticks));
+
             $c = \preg_replace('/\n/m', ' ', $code) ?? '';
-            if ($c !== '' && $c[0] === ' ' && \substr($c, -1, 1) === ' ' && \preg_match('/[^ ]/', $c)) {
+
+            if (
+                $c !== '' &&
+                $c[0] === ' ' &&
+                \substr($c, -1, 1) === ' ' &&
+                \preg_match('/[^ ]/', $c)
+            ) {
                 $c = \substr($c, 1, -1);
             }
+
             $inlineContext->getContainer()->appendChild(new Code($c));
-            return \true;
+
+            return true;
         }
+
         // If we got here, we didn't match a closing backtick sequence
         $cursor->restoreState($previousState);
         $inlineContext->getContainer()->appendChild(new Text($ticks));
-        return \true;
+
+        return true;
     }
+
     /**
      * Locates the matching closer for a backtick code span.
      *
@@ -75,30 +96,37 @@ final class BacktickParser implements InlineParserInterface
     {
         // Reset the seenBackticks cache if this is a new cursor
         if ($this->lastCursor === null || $this->lastCursor->get() !== $cursor) {
-            $this->seenBackticks = [];
-            $this->lastCursor = \WeakReference::create($cursor);
-            $this->lastCursorScanned = \false;
+            $this->seenBackticks     = [];
+            $this->lastCursor        = \WeakReference::create($cursor);
+            $this->lastCursorScanned = false;
         }
+
         if ($openTickLength > self::MAX_BACKTICKS) {
-            return \false;
+            return false;
         }
+
         // Return if we already know there's no closer
         if ($this->lastCursorScanned && isset($this->seenBackticks[$openTickLength]) && $this->seenBackticks[$openTickLength] <= $cursor->getPosition()) {
-            return \false;
+            return false;
         }
+
         while ($ticks = $cursor->match('/`{1,' . self::MAX_BACKTICKS . '}/m')) {
             $numTicks = \strlen($ticks);
+
             // Did we find the closer?
             if ($numTicks === $openTickLength) {
-                return \true;
+                return true;
             }
+
             // Store position of closer
             if ($numTicks <= self::MAX_BACKTICKS) {
                 $this->seenBackticks[$numTicks] = $cursor->getPosition() - $numTicks;
             }
         }
+
         // Got through whole input without finding closer
-        $this->lastCursorScanned = \true;
-        return \false;
+        $this->lastCursorScanned = true;
+
+        return false;
     }
 }

@@ -1,6 +1,7 @@
 <?php
 
-declare (strict_types=1);
+declare(strict_types=1);
+
 /*
  * This file is part of the league/commonmark package.
  *
@@ -12,10 +13,12 @@ declare (strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Odigos\League\CommonMark\Extension\CommonMark\Node\Inline;
 
-use Odigos\League\CommonMark\Node\Inline\AbstractStringContainer;
-use Odigos\League\CommonMark\Node\RawMarkupContainerInterface;
+namespace League\CommonMark\Extension\CommonMark\Node\Inline;
+
+use League\CommonMark\Node\Inline\AbstractStringContainer;
+use League\CommonMark\Node\RawMarkupContainerInterface;
+
 final class HtmlInline extends AbstractStringContainer implements RawMarkupContainerInterface
 {
 }

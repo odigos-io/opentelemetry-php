@@ -1,6 +1,7 @@
 <?php
 
-declare (strict_types=1);
+declare(strict_types=1);
+
 /*
  * This file is part of the league/commonmark package.
  *
@@ -12,10 +13,12 @@ declare (strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Odigos\League\CommonMark\Node\Block;
 
-use Odigos\League\CommonMark\Exception\InvalidArgumentException;
-use Odigos\League\CommonMark\Node\Node;
+namespace League\CommonMark\Node\Block;
+
+use League\CommonMark\Exception\InvalidArgumentException;
+use League\CommonMark\Node\Node;
+
 /**
  * Block-level element
  *
@@ -24,14 +27,18 @@ use Odigos\League\CommonMark\Node\Node;
 abstract class AbstractBlock extends Node
 {
     protected ?int $startLine = null;
+
     protected ?int $endLine = null;
+
     protected function setParent(?Node $node = null): void
     {
-        if ($node && !$node instanceof self) {
+        if ($node && ! $node instanceof self) {
             throw new InvalidArgumentException('Parent of block must also be block (cannot be inline)');
         }
+
         parent::setParent($node);
     }
+
     public function setStartLine(?int $startLine): void
     {
         $this->startLine = $startLine;
@@ -39,14 +46,17 @@ abstract class AbstractBlock extends Node
             $this->endLine = $startLine;
         }
     }
+
     public function getStartLine(): ?int
     {
         return $this->startLine;
     }
+
     public function setEndLine(?int $endLine): void
     {
         $this->endLine = $endLine;
     }
+
     public function getEndLine(): ?int
     {
         return $this->endLine;

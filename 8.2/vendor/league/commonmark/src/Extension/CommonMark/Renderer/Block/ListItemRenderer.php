@@ -1,6 +1,7 @@
 <?php
 
-declare (strict_types=1);
+declare(strict_types=1);
+
 /*
  * This file is part of the league/commonmark package.
  *
@@ -12,17 +13,19 @@ declare (strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Odigos\League\CommonMark\Extension\CommonMark\Renderer\Block;
 
-use Odigos\League\CommonMark\Extension\CommonMark\Node\Block\ListItem;
-use Odigos\League\CommonMark\Node\Block\AbstractBlock;
-use Odigos\League\CommonMark\Node\Block\Paragraph;
-use Odigos\League\CommonMark\Node\Block\TightBlockInterface;
-use Odigos\League\CommonMark\Node\Node;
-use Odigos\League\CommonMark\Renderer\ChildNodeRendererInterface;
-use Odigos\League\CommonMark\Renderer\NodeRendererInterface;
-use Odigos\League\CommonMark\Util\HtmlElement;
-use Odigos\League\CommonMark\Xml\XmlNodeRendererInterface;
+namespace League\CommonMark\Extension\CommonMark\Renderer\Block;
+
+use League\CommonMark\Extension\CommonMark\Node\Block\ListItem;
+use League\CommonMark\Node\Block\AbstractBlock;
+use League\CommonMark\Node\Block\Paragraph;
+use League\CommonMark\Node\Block\TightBlockInterface;
+use League\CommonMark\Node\Node;
+use League\CommonMark\Renderer\ChildNodeRendererInterface;
+use League\CommonMark\Renderer\NodeRendererInterface;
+use League\CommonMark\Util\HtmlElement;
+use League\CommonMark\Xml\XmlNodeRendererInterface;
+
 final class ListItemRenderer implements NodeRendererInterface, XmlNodeRendererInterface
 {
     /**
@@ -35,21 +38,29 @@ final class ListItemRenderer implements NodeRendererInterface, XmlNodeRendererIn
     public function render(Node $node, ChildNodeRendererInterface $childRenderer): \Stringable
     {
         ListItem::assertInstanceOf($node);
+
         $contents = $childRenderer->renderNodes($node->children());
+
         $inTightList = ($parent = $node->parent()) && $parent instanceof TightBlockInterface && $parent->isTight();
+
         if ($this->needsBlockSeparator($node->firstChild(), $inTightList)) {
             $contents = "\n" . $contents;
         }
+
         if ($this->needsBlockSeparator($node->lastChild(), $inTightList)) {
             $contents .= "\n";
         }
+
         $attrs = $node->data->get('attributes');
+
         return new HtmlElement('li', $attrs, $contents);
     }
+
     public function getXmlTagName(Node $node): string
     {
         return 'item';
     }
+
     /**
      * {@inheritDoc}
      */
@@ -57,11 +68,13 @@ final class ListItemRenderer implements NodeRendererInterface, XmlNodeRendererIn
     {
         return [];
     }
+
     private function needsBlockSeparator(?Node $child, bool $inTightList): bool
     {
         if ($child instanceof Paragraph && $inTightList) {
-            return \false;
+            return false;
         }
+
         return $child instanceof AbstractBlock;
     }
 }

@@ -1,6 +1,7 @@
 <?php
 
-declare (strict_types=1);
+declare(strict_types=1);
+
 /*
  * This file is part of the league/commonmark package.
  *
@@ -12,25 +13,30 @@ declare (strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Odigos\League\CommonMark\Extension\CommonMark\Parser\Inline;
 
-use Odigos\League\CommonMark\Node\Inline\Text;
-use Odigos\League\CommonMark\Parser\Inline\InlineParserInterface;
-use Odigos\League\CommonMark\Parser\Inline\InlineParserMatch;
-use Odigos\League\CommonMark\Parser\InlineParserContext;
+namespace League\CommonMark\Extension\CommonMark\Parser\Inline;
+
+use League\CommonMark\Node\Inline\Text;
+use League\CommonMark\Parser\Inline\InlineParserInterface;
+use League\CommonMark\Parser\Inline\InlineParserMatch;
+use League\CommonMark\Parser\InlineParserContext;
+
 final class OpenBracketParser implements InlineParserInterface
 {
     public function getMatchDefinition(): InlineParserMatch
     {
         return InlineParserMatch::string('[');
     }
+
     public function parse(InlineParserContext $inlineContext): bool
     {
         $inlineContext->getCursor()->advanceBy(1);
-        $node = new Text('[', ['delim' => \true]);
+        $node = new Text('[', ['delim' => true]);
         $inlineContext->getContainer()->appendChild($node);
+
         // Add entry to stack for this opener
-        $inlineContext->getDelimiterStack()->addBracket($node, $inlineContext->getCursor()->getPosition(), \false);
-        return \true;
+        $inlineContext->getDelimiterStack()->addBracket($node, $inlineContext->getCursor()->getPosition(), false);
+
+        return true;
     }
 }

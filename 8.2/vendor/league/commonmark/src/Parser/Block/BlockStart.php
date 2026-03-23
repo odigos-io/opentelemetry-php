@@ -1,6 +1,7 @@
 <?php
 
-declare (strict_types=1);
+declare(strict_types=1);
+
 /*
  * This file is part of the league/commonmark package.
  *
@@ -9,10 +10,12 @@ declare (strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Odigos\League\CommonMark\Parser\Block;
 
-use Odigos\League\CommonMark\Parser\Cursor;
-use Odigos\League\CommonMark\Parser\CursorState;
+namespace League\CommonMark\Parser\Block;
+
+use League\CommonMark\Parser\Cursor;
+use League\CommonMark\Parser\CursorState;
+
 /**
  * Result object for starting parsing of a block; see static methods for constructors
  */
@@ -24,15 +27,20 @@ final class BlockStart
      * @psalm-readonly
      */
     private array $blockParsers;
+
     /** @psalm-readonly-allow-private-mutation */
     private ?CursorState $cursorState = null;
+
     /** @psalm-readonly-allow-private-mutation */
-    private bool $replaceActiveBlockParser = \false;
-    private bool $isAborting = \false;
+    private bool $replaceActiveBlockParser = false;
+
+    private bool $isAborting = false;
+
     private function __construct(BlockContinueParserInterface ...$blockParsers)
     {
         $this->blockParsers = $blockParsers;
     }
+
     /**
      * @return BlockContinueParserInterface[]
      */
@@ -40,14 +48,17 @@ final class BlockStart
     {
         return $this->blockParsers;
     }
+
     public function getCursorState(): ?CursorState
     {
         return $this->cursorState;
     }
+
     public function isReplaceActiveBlockParser(): bool
     {
         return $this->replaceActiveBlockParser;
     }
+
     /**
      * @internal
      */
@@ -55,6 +66,7 @@ final class BlockStart
     {
         return $this->isAborting;
     }
+
     /**
      * Signal that we want to parse at the given cursor position
      *
@@ -63,8 +75,10 @@ final class BlockStart
     public function at(Cursor $cursor): self
     {
         $this->cursorState = $cursor->saveState();
+
         return $this;
     }
+
     /**
      * Signal that we want to replace the active block parser with this one
      *
@@ -72,9 +86,11 @@ final class BlockStart
      */
     public function replaceActiveBlockParser(): self
     {
-        $this->replaceActiveBlockParser = \true;
+        $this->replaceActiveBlockParser = true;
+
         return $this;
     }
+
     /**
      * Signal that we cannot parse whatever is here
      *
@@ -84,6 +100,7 @@ final class BlockStart
     {
         return null;
     }
+
     /**
      * Signal that we'd like to register the given parser(s) so they can parse the current block
      */
@@ -91,6 +108,7 @@ final class BlockStart
     {
         return new self(...$blockParsers);
     }
+
     /**
      * Signal that the block parsing process should be aborted (no other block starts should be checked)
      *
@@ -98,8 +116,9 @@ final class BlockStart
      */
     public static function abort(): self
     {
-        $ret = new self();
-        $ret->isAborting = \true;
+        $ret             = new self();
+        $ret->isAborting = true;
+
         return $ret;
     }
 }

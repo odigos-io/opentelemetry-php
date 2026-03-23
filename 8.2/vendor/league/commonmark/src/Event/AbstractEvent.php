@@ -1,6 +1,7 @@
 <?php
 
-declare (strict_types=1);
+declare(strict_types=1);
+
 /*
  * This file is part of the league/commonmark package.
  *
@@ -12,9 +13,11 @@ declare (strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Odigos\League\CommonMark\Event;
+
+namespace League\CommonMark\Event;
 
 use Psr\EventDispatcher\StoppableEventInterface;
+
 /**
  * Base class for classes containing event data.
  *
@@ -27,7 +30,8 @@ use Psr\EventDispatcher\StoppableEventInterface;
 abstract class AbstractEvent implements StoppableEventInterface
 {
     /** @psalm-readonly-allow-private-mutation */
-    private bool $propagationStopped = \false;
+    private bool $propagationStopped = false;
+
     /**
      * Returns whether further event listeners should be triggered.
      */
@@ -35,6 +39,7 @@ abstract class AbstractEvent implements StoppableEventInterface
     {
         return $this->propagationStopped;
     }
+
     /**
      * Stops the propagation of the event to further event listeners.
      *
@@ -44,6 +49,6 @@ abstract class AbstractEvent implements StoppableEventInterface
      */
     final public function stopPropagation(): void
     {
-        $this->propagationStopped = \true;
+        $this->propagationStopped = true;
     }
 }

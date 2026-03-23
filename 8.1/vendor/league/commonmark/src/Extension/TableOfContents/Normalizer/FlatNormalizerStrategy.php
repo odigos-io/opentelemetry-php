@@ -1,6 +1,7 @@
 <?php
 
-declare (strict_types=1);
+declare(strict_types=1);
+
 /*
  * This file is part of the league/commonmark package.
  *
@@ -9,18 +10,22 @@ declare (strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Odigos\League\CommonMark\Extension\TableOfContents\Normalizer;
 
-use Odigos\League\CommonMark\Extension\CommonMark\Node\Block\ListItem;
-use Odigos\League\CommonMark\Extension\TableOfContents\Node\TableOfContents;
+namespace League\CommonMark\Extension\TableOfContents\Normalizer;
+
+use League\CommonMark\Extension\CommonMark\Node\Block\ListItem;
+use League\CommonMark\Extension\TableOfContents\Node\TableOfContents;
+
 final class FlatNormalizerStrategy implements NormalizerStrategyInterface
 {
     /** @psalm-readonly */
     private TableOfContents $toc;
+
     public function __construct(TableOfContents $toc)
     {
         $this->toc = $toc;
     }
+
     public function addItem(int $level, ListItem $listItemToAdd): void
     {
         $this->toc->appendChild($listItemToAdd);

@@ -1,6 +1,7 @@
 <?php
 
-declare (strict_types=1);
+declare(strict_types=1);
+
 /*
  * This file is part of the league/commonmark package.
  *
@@ -9,9 +10,11 @@ declare (strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Odigos\League\CommonMark\Renderer;
 
-use Odigos\League\CommonMark\Node\Node;
+namespace League\CommonMark\Renderer;
+
+use League\CommonMark\Node\Node;
+
 /**
  * Renders multiple nodes by delegating to the individual node renderers and adding spacing where needed
  */
@@ -21,6 +24,8 @@ interface ChildNodeRendererInterface
      * @param Node[] $nodes
      */
     public function renderNodes(iterable $nodes): string;
+
     public function getBlockSeparator(): string;
+
     public function getInnerSeparator(): string;
 }

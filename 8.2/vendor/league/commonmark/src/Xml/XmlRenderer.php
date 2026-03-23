@@ -1,63 +1,81 @@
 <?php
 
-declare (strict_types=1);
-namespace Odigos\League\CommonMark\Xml;
+declare(strict_types=1);
 
-use Odigos\League\CommonMark\Environment\EnvironmentInterface;
-use Odigos\League\CommonMark\Event\DocumentPreRenderEvent;
-use Odigos\League\CommonMark\Exception\InvalidArgumentException;
-use Odigos\League\CommonMark\Node\Block\Document;
-use Odigos\League\CommonMark\Node\Node;
-use Odigos\League\CommonMark\Node\StringContainerInterface;
-use Odigos\League\CommonMark\Output\RenderedContent;
-use Odigos\League\CommonMark\Output\RenderedContentInterface;
-use Odigos\League\CommonMark\Renderer\DocumentRendererInterface;
-use Odigos\League\CommonMark\Util\Xml;
+namespace League\CommonMark\Xml;
+
+use League\CommonMark\Environment\EnvironmentInterface;
+use League\CommonMark\Event\DocumentPreRenderEvent;
+use League\CommonMark\Exception\InvalidArgumentException;
+use League\CommonMark\Node\Block\Document;
+use League\CommonMark\Node\Node;
+use League\CommonMark\Node\StringContainerInterface;
+use League\CommonMark\Output\RenderedContent;
+use League\CommonMark\Output\RenderedContentInterface;
+use League\CommonMark\Renderer\DocumentRendererInterface;
+use League\CommonMark\Util\Xml;
+
 final class XmlRenderer implements DocumentRendererInterface
 {
     private const INDENTATION = '    ';
+
     private EnvironmentInterface $environment;
+
     private XmlNodeRendererInterface $fallbackRenderer;
+
     /** @var array<class-string, XmlNodeRendererInterface> */
     private array $rendererCache = [];
+
     public function __construct(EnvironmentInterface $environment)
     {
-        $this->environment = $environment;
+        $this->environment      = $environment;
         $this->fallbackRenderer = new FallbackNodeXmlRenderer();
     }
+
     public function renderDocument(Document $document): RenderedContentInterface
     {
         $this->environment->dispatch(new DocumentPreRenderEvent($document, 'xml'));
+
         $xml = '<?xml version="1.0" encoding="UTF-8"?>';
+
         $indent = 0;
         $walker = $document->walker();
         while ($event = $walker->next()) {
             $node = $event->getNode();
-            $closeImmediately = !$node->hasChildren();
-            $selfClosing = $closeImmediately && !$node instanceof StringContainerInterface;
+
+            $closeImmediately = ! $node->hasChildren();
+            $selfClosing      = $closeImmediately && ! $node instanceof StringContainerInterface;
+
             $renderer = $this->findXmlRenderer($node);
-            $tagName = $renderer->getXmlTagName($node);
+            $tagName  = $renderer->getXmlTagName($node);
+
             if ($event->isEntering()) {
                 $attrs = $renderer->getXmlAttributes($node);
+
                 $xml .= "\n" . \str_repeat(self::INDENTATION, $indent);
                 $xml .= self::tag($tagName, $attrs, $selfClosing);
+
                 if ($node instanceof StringContainerInterface) {
                     $xml .= Xml::escape($node->getLiteral());
                 }
-                if ($closeImmediately && !$selfClosing) {
+
+                if ($closeImmediately && ! $selfClosing) {
                     $xml .= self::tag('/' . $tagName);
                 }
-                if (!$closeImmediately) {
+
+                if (! $closeImmediately) {
                     $indent++;
                 }
-            } elseif (!$closeImmediately) {
+            } elseif (! $closeImmediately) {
                 $indent--;
                 $xml .= "\n" . \str_repeat(self::INDENTATION, $indent);
                 $xml .= self::tag('/' . $tagName);
             }
         }
+
         return new RenderedContent($document, $xml . "\n");
     }
+
     /**
      * @param array<string, string|int|float|bool> $attrs
      */
@@ -67,12 +85,16 @@ final class XmlRenderer implements DocumentRendererInterface
         foreach ($attrs as $key => $value) {
             $result .= \sprintf(' %s="%s"', $key, self::convertAndEscape($value));
         }
+
         if ($selfClosing) {
             $result .= ' /';
         }
+
         $result .= '>';
+
         return $result;
     }
+
     /**
      * @param string|int|float|bool $value
      */
@@ -81,26 +103,33 @@ final class XmlRenderer implements DocumentRendererInterface
         if (\is_string($value)) {
             return Xml::escape($value);
         }
+
         if (\is_int($value) || \is_float($value)) {
             return (string) $value;
         }
+
         if (\is_bool($value)) {
             return $value ? 'true' : 'false';
         }
+
         // @phpstan-ignore-next-line
         throw new InvalidArgumentException('$value must be a string, int, float, or bool');
     }
+
     private function findXmlRenderer(Node $node): XmlNodeRendererInterface
     {
         $class = \get_class($node);
+
         if (\array_key_exists($class, $this->rendererCache)) {
             return $this->rendererCache[$class];
         }
+
         foreach ($this->environment->getRenderersForClass($class) as $renderer) {
             if ($renderer instanceof XmlNodeRendererInterface) {
                 return $this->rendererCache[$class] = $renderer;
             }
         }
+
         return $this->rendererCache[$class] = $this->fallbackRenderer;
     }
 }

@@ -1,6 +1,7 @@
 <?php
 
-declare (strict_types=1);
+declare(strict_types=1);
+
 /*
  * This file is part of the league/commonmark package.
  *
@@ -12,10 +13,12 @@ declare (strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Odigos\League\CommonMark\Parser\Block;
 
-use Odigos\League\CommonMark\Node\Block\AbstractBlock;
-use Odigos\League\CommonMark\Parser\Cursor;
+namespace League\CommonMark\Parser\Block;
+
+use League\CommonMark\Node\Block\AbstractBlock;
+use League\CommonMark\Parser\Cursor;
+
 /**
  * Interface for a block continuation parser
  *
@@ -28,26 +31,32 @@ interface BlockContinueParserInterface
      * Return the current block being parsed by this parser
      */
     public function getBlock(): AbstractBlock;
+
     /**
      * Return whether we are parsing a container block
      */
     public function isContainer(): bool;
+
     /**
      * Return whether we are interested in possibly lazily parsing any subsequent lines
      */
     public function canHaveLazyContinuationLines(): bool;
+
     /**
      * Determine whether the current block being parsed can contain the given child block
      */
     public function canContain(AbstractBlock $childBlock): bool;
+
     /**
      * Attempt to parse the given line
      */
     public function tryContinue(Cursor $cursor, BlockContinueParserInterface $activeBlockParser): ?BlockContinue;
+
     /**
      * Add the given line of text to the current block
      */
     public function addLine(string $line): void;
+
     /**
      * Close and finalize the current block
      */

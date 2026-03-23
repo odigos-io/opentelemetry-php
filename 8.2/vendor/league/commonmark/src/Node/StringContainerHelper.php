@@ -1,6 +1,7 @@
 <?php
 
-declare (strict_types=1);
+declare(strict_types=1);
+
 /*
  * This file is part of the league/commonmark package.
  *
@@ -9,7 +10,8 @@ declare (strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Odigos\League\CommonMark\Node;
+
+namespace League\CommonMark\Node;
 
 final class StringContainerHelper
 {
@@ -24,13 +26,16 @@ final class StringContainerHelper
     public static function getChildText(Node $node, array $excludeTypes = []): string
     {
         $text = '';
+
         foreach ($node->iterator() as $child) {
-            if ($child instanceof StringContainerInterface && !self::isOneOf($child, $excludeTypes)) {
+            if ($child instanceof StringContainerInterface && ! self::isOneOf($child, $excludeTypes)) {
                 $text .= $child->getLiteral();
             }
         }
+
         return $text;
     }
+
     /**
      * @param string[] $classesOrInterfacesToCheck
      *
@@ -40,9 +45,10 @@ final class StringContainerHelper
     {
         foreach ($classesOrInterfacesToCheck as $type) {
             if ($object instanceof $type) {
-                return \true;
+                return true;
             }
         }
-        return \false;
+
+        return false;
     }
 }

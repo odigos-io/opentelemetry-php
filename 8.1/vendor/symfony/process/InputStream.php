@@ -8,9 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace Symfony\Component\Process;
 
 use Symfony\Component\Process\Exception\RuntimeException;
+
 /**
  * Provides a way to continuously write to the input of a Process until the InputStream is closed.
  *
@@ -22,7 +24,8 @@ class InputStream implements \IteratorAggregate
 {
     private ?\Closure $onEmpty = null;
     private array $input = [];
-    private bool $open = \true;
+    private bool $open = true;
+
     /**
      * Sets a callback that is called when the write buffer becomes empty.
      *
@@ -32,6 +35,7 @@ class InputStream implements \IteratorAggregate
     {
         $this->onEmpty = null !== $onEmpty ? $onEmpty(...) : null;
     }
+
     /**
      * Appends an input to the write buffer.
      *
@@ -48,8 +52,9 @@ class InputStream implements \IteratorAggregate
         if ($this->isClosed()) {
             throw new RuntimeException(\sprintf('"%s" is closed.', static::class));
         }
-        $this->input[] = \Symfony\Component\Process\ProcessUtils::validateInput(__METHOD__, $input);
+        $this->input[] = ProcessUtils::validateInput(__METHOD__, $input);
     }
+
     /**
      * Closes the write buffer.
      *
@@ -57,8 +62,9 @@ class InputStream implements \IteratorAggregate
      */
     public function close()
     {
-        $this->open = \false;
+        $this->open = false;
     }
+
     /**
      * Tells whether the write buffer is closed or not.
      *
@@ -68,15 +74,18 @@ class InputStream implements \IteratorAggregate
     {
         return !$this->open;
     }
+
     public function getIterator(): \Traversable
     {
-        $this->open = \true;
+        $this->open = true;
+
         while ($this->open || $this->input) {
             if (!$this->input) {
                 yield '';
                 continue;
             }
             $current = array_shift($this->input);
+
             if ($current instanceof \Iterator) {
                 yield from $current;
             } else {

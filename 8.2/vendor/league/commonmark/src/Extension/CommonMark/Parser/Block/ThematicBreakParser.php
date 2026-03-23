@@ -1,6 +1,7 @@
 <?php
 
-declare (strict_types=1);
+declare(strict_types=1);
+
 /*
  * This file is part of the league/commonmark package.
  *
@@ -9,25 +10,30 @@ declare (strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Odigos\League\CommonMark\Extension\CommonMark\Parser\Block;
 
-use Odigos\League\CommonMark\Extension\CommonMark\Node\Block\ThematicBreak;
-use Odigos\League\CommonMark\Parser\Block\AbstractBlockContinueParser;
-use Odigos\League\CommonMark\Parser\Block\BlockContinue;
-use Odigos\League\CommonMark\Parser\Block\BlockContinueParserInterface;
-use Odigos\League\CommonMark\Parser\Cursor;
+namespace League\CommonMark\Extension\CommonMark\Parser\Block;
+
+use League\CommonMark\Extension\CommonMark\Node\Block\ThematicBreak;
+use League\CommonMark\Parser\Block\AbstractBlockContinueParser;
+use League\CommonMark\Parser\Block\BlockContinue;
+use League\CommonMark\Parser\Block\BlockContinueParserInterface;
+use League\CommonMark\Parser\Cursor;
+
 final class ThematicBreakParser extends AbstractBlockContinueParser
 {
     /** @psalm-readonly */
     private ThematicBreak $block;
+
     public function __construct()
     {
         $this->block = new ThematicBreak();
     }
+
     public function getBlock(): ThematicBreak
     {
         return $this->block;
     }
+
     public function tryContinue(Cursor $cursor, BlockContinueParserInterface $activeBlockParser): ?BlockContinue
     {
         // a horizontal rule can never container > 1 line, so fail to match
