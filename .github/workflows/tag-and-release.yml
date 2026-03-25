@@ -8,7 +8,11 @@ run-name: "Tag and Release · ${{ inputs.bump }} on ${{ inputs.base_branch }}"
 # required reviewers to serve as the confirmation gate.
 #
 # Flow:
-#   calculate → confirm (release-gate) → build (validate) → tag → publish
+#   calculate → build (validate) → confirm (release-gate) → tag → publish
+#
+# The build runs BEFORE the approval gate so that a broken build never
+# produces a tag. After approval the publish job reuses the GHA cache
+# and only pushes — no rebuild.
 
 concurrency:
   group: tag-and-release
@@ -70,18 +74,9 @@ jobs:
             echo "is_prerelease=false" >> "$GITHUB_OUTPUT"
           fi
 
-  # ── 2. Human approval ────────────────────────────────────────────────────
-  confirm:
-    needs: calculate
-    runs-on: ubuntu-latest
-    environment: release-gate
-    steps:
-      - name: Release approved
-        run: echo "Releasing ${{ needs.calculate.outputs.new_version }} from ${{ inputs.base_branch }}"
-
-  # ── 3. Build image (no push) to validate before tagging ──────────────────
+  # ── 2. Build image (no push) to validate before tagging ──────────────────
   build:
-    needs: [calculate, confirm]
+    needs: calculate
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -105,9 +100,18 @@ jobs:
           push: false
           cache-to: type=gha,scope=php-community,mode=max
 
+  # ── 3. Human approval ────────────────────────────────────────────────────
+  confirm:
+    needs: [calculate, build]
+    runs-on: ubuntu-latest
+    environment: release-gate
+    steps:
+      - name: Release approved
+        run: echo "Releasing ${{ needs.calculate.outputs.new_version }} from ${{ inputs.base_branch }}"
+
   # ── 4. Create tag + GitHub release ───────────────────────────────────────
   tag:
-    needs: [calculate, build]
+    needs: [calculate, confirm]
     runs-on: ubuntu-latest
     permissions:
       id-token: write
