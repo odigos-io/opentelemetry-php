@@ -275,9 +275,9 @@
             'dev_requirement' => false,
         ),
         'google/protobuf' => array(
-            'pretty_version' => 'v4.33.4',
-            'version' => '4.33.4.0',
-            'reference' => '22d28025cda0d223a2e48c2e16c5284ecc9f5402',
+            'pretty_version' => 'v4.33.6',
+            'version' => '4.33.6.0',
+            'reference' => '84b008c23915ed94536737eae46f41ba3bccfe67',
             'type' => 'library',
             'install_path' => __DIR__ . '/../google/protobuf',
             'aliases' => array(),
