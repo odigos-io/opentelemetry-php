@@ -19,7 +19,10 @@ final class Driver extends AbstractOracleDriver
     /**
      * {@inheritDoc}
      */
-    public function connect(#[SensitiveParameter] array $params): \Doctrine\DBAL\Driver\OCI8\Connection
+    public function connect(
+        #[SensitiveParameter]
+        array $params
+    ): \Doctrine\DBAL\Driver\OCI8\Connection
     {
         $username = $params['user'] ?? '';
         $password = $params['password'] ?? '';

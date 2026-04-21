@@ -17,7 +17,10 @@ abstract class AbstractDriverMiddleware implements Driver
     /**
      * {@inheritDoc}
      */
-    public function connect(#[SensitiveParameter] array $params): DriverConnection
+    public function connect(
+        #[SensitiveParameter]
+        array $params
+    ): DriverConnection
     {
         return $this->wrappedDriver->connect($params);
     }

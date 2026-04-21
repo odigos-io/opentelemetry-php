@@ -74,7 +74,10 @@ class EsmtpTransport extends \Symfony\Component\Mailer\Transport\Smtp\SmtpTransp
     /**
      * @return $this
      */
-    public function setPassword(#[\SensitiveParameter] string $password): static
+    public function setPassword(
+        #[\SensitiveParameter]
+        string $password
+    ): static
     {
         $this->password = $password;
         return $this;

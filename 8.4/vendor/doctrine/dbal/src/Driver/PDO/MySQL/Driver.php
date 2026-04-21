@@ -18,7 +18,10 @@ final class Driver extends AbstractMySQLDriver
     /**
      * {@inheritDoc}
      */
-    public function connect(#[SensitiveParameter] array $params): Connection
+    public function connect(
+        #[SensitiveParameter]
+        array $params
+    ): Connection
     {
         $driverOptions = $params['driverOptions'] ?? [];
         if (!empty($params['persistent'])) {

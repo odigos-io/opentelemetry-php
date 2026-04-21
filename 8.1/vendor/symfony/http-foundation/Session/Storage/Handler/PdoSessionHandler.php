@@ -134,7 +134,12 @@ class PdoSessionHandler extends \Symfony\Component\HttpFoundation\Session\Storag
      *
      * @throws \InvalidArgumentException When PDO error mode is not PDO::ERRMODE_EXCEPTION
      */
-    public function __construct(#[\SensitiveParameter] \PDO|string|null $pdoOrDsn = null, #[\SensitiveParameter] array $options = [])
+    public function __construct(
+        #[\SensitiveParameter]
+        \PDO|string|null $pdoOrDsn = null,
+        #[\SensitiveParameter]
+        array $options = []
+    )
     {
         if ($pdoOrDsn instanceof \PDO) {
             if (\PDO::ERRMODE_EXCEPTION !== $pdoOrDsn->getAttribute(\PDO::ATTR_ERRMODE)) {
@@ -261,7 +266,10 @@ class PdoSessionHandler extends \Symfony\Component\HttpFoundation\Session\Storag
         }
         return parent::open($savePath, $sessionName);
     }
-    public function read(#[\SensitiveParameter] string $sessionId): string
+    public function read(
+        #[\SensitiveParameter]
+        string $sessionId
+    ): string
     {
         try {
             return parent::read($sessionId);
@@ -277,7 +285,10 @@ class PdoSessionHandler extends \Symfony\Component\HttpFoundation\Session\Storag
         $this->gcCalled = \true;
         return 0;
     }
-    protected function doDestroy(#[\SensitiveParameter] string $sessionId): bool
+    protected function doDestroy(
+        #[\SensitiveParameter]
+        string $sessionId
+    ): bool
     {
         // delete the record associated with this id
         $sql = "DELETE FROM {$this->table} WHERE {$this->idCol} = :id";
@@ -291,7 +302,11 @@ class PdoSessionHandler extends \Symfony\Component\HttpFoundation\Session\Storag
         }
         return \true;
     }
-    protected function doWrite(#[\SensitiveParameter] string $sessionId, string $data): bool
+    protected function doWrite(
+        #[\SensitiveParameter]
+        string $sessionId,
+        string $data
+    ): bool
     {
         $maxlifetime = (int) (($this->ttl instanceof \Closure ? ($this->ttl)() : $this->ttl) ?? \ini_get('session.gc_maxlifetime'));
         try {
@@ -327,7 +342,11 @@ class PdoSessionHandler extends \Symfony\Component\HttpFoundation\Session\Storag
         }
         return \true;
     }
-    public function updateTimestamp(#[\SensitiveParameter] string $sessionId, string $data): bool
+    public function updateTimestamp(
+        #[\SensitiveParameter]
+        string $sessionId,
+        string $data
+    ): bool
     {
         $expiry = time() + (int) (($this->ttl instanceof \Closure ? ($this->ttl)() : $this->ttl) ?? \ini_get('session.gc_maxlifetime'));
         try {
@@ -365,7 +384,10 @@ class PdoSessionHandler extends \Symfony\Component\HttpFoundation\Session\Storag
     /**
      * Lazy-connects to the database.
      */
-    private function connect(#[\SensitiveParameter] string $dsn): void
+    private function connect(
+        #[\SensitiveParameter]
+        string $dsn
+    ): void
     {
         $this->pdo = new \PDO($dsn, $this->username, $this->password, $this->connectionOptions);
         $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
@@ -376,7 +398,10 @@ class PdoSessionHandler extends \Symfony\Component\HttpFoundation\Session\Storag
      *
      * @todo implement missing support for oci DSN (which look totally different from other PDO ones)
      */
-    private function buildDsnFromUrl(#[\SensitiveParameter] string $dsnOrUrl): string
+    private function buildDsnFromUrl(
+        #[\SensitiveParameter]
+        string $dsnOrUrl
+    ): string
     {
         // (pdo_)?sqlite3?:///... => (pdo_)?sqlite3?://localhost/... or else the URL will be invalid
         $url = preg_replace('#^((?:pdo_)?sqlite3?):///#', '$1://localhost/', $dsnOrUrl);
@@ -535,7 +560,10 @@ class PdoSessionHandler extends \Symfony\Component\HttpFoundation\Session\Storag
      * We need to make sure we do not return session data that is already considered garbage according
      * to the session.gc_maxlifetime setting because gc() is called after read() and only sometimes.
      */
-    protected function doRead(#[\SensitiveParameter] string $sessionId): string
+    protected function doRead(
+        #[\SensitiveParameter]
+        string $sessionId
+    ): string
     {
         if (self::LOCK_ADVISORY === $this->lockMode) {
             $this->unlockStatements[] = $this->doAdvisoryLock($sessionId);
@@ -595,7 +623,10 @@ class PdoSessionHandler extends \Symfony\Component\HttpFoundation\Session\Storag
      *       - for oci using DBMS_LOCK.REQUEST
      *       - for sqlsrv using sp_getapplock with LockOwner = Session
      */
-    private function doAdvisoryLock(#[\SensitiveParameter] string $sessionId): \PDOStatement
+    private function doAdvisoryLock(
+        #[\SensitiveParameter]
+        string $sessionId
+    ): \PDOStatement
     {
         switch ($this->driver) {
             case 'mysql':
@@ -680,7 +711,12 @@ class PdoSessionHandler extends \Symfony\Component\HttpFoundation\Session\Storag
     /**
      * Returns an insert statement supported by the database for writing session data.
      */
-    private function getInsertStatement(#[\SensitiveParameter] string $sessionId, string $sessionData, int $maxlifetime): \PDOStatement
+    private function getInsertStatement(
+        #[\SensitiveParameter]
+        string $sessionId,
+        string $sessionData,
+        int $maxlifetime
+    ): \PDOStatement
     {
         switch ($this->driver) {
             case 'oci':
@@ -710,7 +746,12 @@ class PdoSessionHandler extends \Symfony\Component\HttpFoundation\Session\Storag
     /**
      * Returns an update statement supported by the database for writing session data.
      */
-    private function getUpdateStatement(#[\SensitiveParameter] string $sessionId, string $sessionData, int $maxlifetime): \PDOStatement
+    private function getUpdateStatement(
+        #[\SensitiveParameter]
+        string $sessionId,
+        string $sessionData,
+        int $maxlifetime
+    ): \PDOStatement
     {
         switch ($this->driver) {
             case 'oci':
@@ -740,7 +781,12 @@ class PdoSessionHandler extends \Symfony\Component\HttpFoundation\Session\Storag
     /**
      * Returns a merge/upsert (i.e. insert or update) statement when supported by the database for writing session data.
      */
-    private function getMergeStatement(#[\SensitiveParameter] string $sessionId, string $data, int $maxlifetime): ?\PDOStatement
+    private function getMergeStatement(
+        #[\SensitiveParameter]
+        string $sessionId,
+        string $data,
+        int $maxlifetime
+    ): ?\PDOStatement
     {
         switch (\true) {
             case 'mysql' === $this->driver:

@@ -104,7 +104,12 @@ class Connection implements \Doctrine\DBAL\ServerVersionProvider
      * @param Configuration|null   $config The configuration, optional.
      * @phpstan-param Params $params
      */
-    public function __construct(#[SensitiveParameter] array $params, protected \Doctrine\DBAL\Driver $driver, ?\Doctrine\DBAL\Configuration $config = null)
+    public function __construct(
+        #[SensitiveParameter]
+        array $params,
+        protected \Doctrine\DBAL\Driver $driver,
+        ?\Doctrine\DBAL\Configuration $config = null
+    )
     {
         $this->_config = $config ?? new \Doctrine\DBAL\Configuration();
         $this->params = $params;

@@ -243,7 +243,12 @@ class Process implements \IteratorAggregate
      *
      * @return $this
      *
-     * @throws ProcessFailedException if the process didn't terminate successfully
+     * @throws ProcessFailedException   When process didn't terminate successfully
+     * @throws RuntimeException         When process can't be launched
+     * @throws RuntimeException         When process is already running
+     * @throws ProcessTimedOutException When process timed out
+     * @throws ProcessSignaledException When process stopped after receiving signal
+     * @throws LogicException           In case a callback is provided and output has been disabled
      *
      * @final
      */
@@ -306,7 +311,7 @@ class Process implements \IteratorAggregate
         }
         $envPairs = [];
         foreach ($env as $k => $v) {
-            if (\false !== $v && \false === \in_array($k, ['argc', 'argv', 'ARGC', 'ARGV'], \true)) {
+            if (\false !== $v && !\in_array($k = (string) $k, ['', 'argc', 'argv', 'ARGC', 'ARGV'], \true) && !str_contains($k, '=') && !str_contains($k, "\x00")) {
                 $envPairs[] = $k . '=' . $v;
             }
         }
@@ -1415,7 +1420,7 @@ class Process implements \IteratorAggregate
         if (str_contains($argument, "\x00")) {
             $argument = str_replace("\x00", '?', $argument);
         }
-        if (!preg_match('/[()%!^"<>&|\s]/', $argument)) {
+        if (!preg_match('/[()%!^"<>&|\s[\]=;*?\'$]/', $argument)) {
             return $argument;
         }
         $argument = preg_replace('/(\\\\+)$/', '$1$1', $argument);

@@ -117,7 +117,11 @@ final class DriverManager
      *
      * @template T of Connection
      */
-    public static function getConnection(#[SensitiveParameter] array $params, ?\Doctrine\DBAL\Configuration $config = null): \Doctrine\DBAL\Connection
+    public static function getConnection(
+        #[SensitiveParameter]
+        array $params,
+        ?\Doctrine\DBAL\Configuration $config = null
+    ): \Doctrine\DBAL\Connection
     {
         $config ??= new \Doctrine\DBAL\Configuration();
         $driver = self::createDriver($params['driver'] ?? null, $params['driverClass'] ?? null);

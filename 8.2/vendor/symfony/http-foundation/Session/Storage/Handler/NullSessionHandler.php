@@ -21,23 +21,40 @@ class NullSessionHandler extends \Symfony\Component\HttpFoundation\Session\Stora
     {
         return \true;
     }
-    public function validateId(#[\SensitiveParameter] string $sessionId): bool
+    public function validateId(
+        #[\SensitiveParameter]
+        string $sessionId
+    ): bool
     {
         return \true;
     }
-    protected function doRead(#[\SensitiveParameter] string $sessionId): string
+    protected function doRead(
+        #[\SensitiveParameter]
+        string $sessionId
+    ): string
     {
         return '';
     }
-    public function updateTimestamp(#[\SensitiveParameter] string $sessionId, string $data): bool
+    public function updateTimestamp(
+        #[\SensitiveParameter]
+        string $sessionId,
+        string $data
+    ): bool
     {
         return \true;
     }
-    protected function doWrite(#[\SensitiveParameter] string $sessionId, string $data): bool
+    protected function doWrite(
+        #[\SensitiveParameter]
+        string $sessionId,
+        string $data
+    ): bool
     {
         return \true;
     }
-    protected function doDestroy(#[\SensitiveParameter] string $sessionId): bool
+    protected function doDestroy(
+        #[\SensitiveParameter]
+        string $sessionId
+    ): bool
     {
         return \true;
     }

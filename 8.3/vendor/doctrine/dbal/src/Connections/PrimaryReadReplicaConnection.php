@@ -213,7 +213,12 @@ class PrimaryReadReplicaConnection extends Connection
      * @return array<string, mixed>
      * @phpstan-return OverrideParams
      */
-    protected function chooseReplicaConnectionParameters(#[SensitiveParameter] array $primary, #[SensitiveParameter] array $replicas): array
+    protected function chooseReplicaConnectionParameters(
+        #[SensitiveParameter]
+        array $primary,
+        #[SensitiveParameter]
+        array $replicas
+    ): array
     {
         $params = $replicas[array_rand($replicas)];
         if (!isset($params['charset']) && isset($primary['charset'])) {

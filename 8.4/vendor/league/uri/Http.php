@@ -21,8 +21,8 @@ use Odigos\League\Uri\Exceptions\SyntaxError;
 use Odigos\League\Uri\UriTemplate\TemplateCanNotBeExpanded;
 use Psr\Http\Message\UriInterface as Psr7UriInterface;
 use Stringable;
-use Odigos\Uri\Rfc3986\Uri as Rfc3986Uri;
-use Odigos\Uri\WhatWg\Url as WhatWgUrl;
+use Uri\Rfc3986\Uri as Rfc3986Uri;
+use Uri\WhatWg\Url as WhatWgUrl;
 use function is_bool;
 use function ltrim;
 /**

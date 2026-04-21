@@ -35,8 +35,8 @@ use SplFileObject;
 use Stringable;
 use Throwable;
 use TypeError;
-use Odigos\Uri\Rfc3986\Uri as Rfc3986Uri;
-use Odigos\Uri\WhatWg\Url as WhatWgUrl;
+use Uri\Rfc3986\Uri as Rfc3986Uri;
+use Uri\WhatWg\Url as WhatWgUrl;
 use function array_filter;
 use function array_key_last;
 use function array_map;
@@ -164,7 +164,17 @@ final class Uri implements Conditionable, UriInterface, Transformable
     private readonly string $uriAsciiString;
     private readonly string $uriUnicodeString;
     private readonly ?string $origin;
-    private function __construct(?string $scheme, ?string $user, #[SensitiveParameter] ?string $pass, ?string $host, ?int $port, string $path, ?string $query, ?string $fragment)
+    private function __construct(
+        ?string $scheme,
+        ?string $user,
+        #[SensitiveParameter]
+        ?string $pass,
+        ?string $host,
+        ?int $port,
+        string $path,
+        ?string $query,
+        ?string $fragment
+    )
     {
         $this->scheme = $this->formatScheme($scheme);
         $this->user = Encoder::encodeUser($user);
@@ -1120,7 +1130,11 @@ final class Uri implements Conditionable, UriInterface, Transformable
             default => $str,
         };
     }
-    public function withUserInfo(BackedEnum|Stringable|string|null $user, #[SensitiveParameter] BackedEnum|Stringable|string|null $password = null): static
+    public function withUserInfo(
+        BackedEnum|Stringable|string|null $user,
+        #[SensitiveParameter]
+        BackedEnum|Stringable|string|null $password = null
+    ): static
     {
         $user = Encoder::encodeUser($this->filterString($user));
         $pass = Encoder::encodePassword($this->filterString($password));
@@ -1137,7 +1151,10 @@ final class Uri implements Conditionable, UriInterface, Transformable
     {
         return $this->withUserInfo($user, $this->pass);
     }
-    public function withPassword(#[SensitiveParameter] BackedEnum|Stringable|string|null $password): static
+    public function withPassword(
+        #[SensitiveParameter]
+        BackedEnum|Stringable|string|null $password
+    ): static
     {
         return $this->withUserInfo($this->user, $password);
     }

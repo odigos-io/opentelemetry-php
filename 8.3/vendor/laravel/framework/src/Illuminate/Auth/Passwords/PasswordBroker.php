@@ -52,7 +52,14 @@ class PasswordBroker implements PasswordBrokerContract
      * @param  \Illuminate\Support\Timebox|null  $timebox
      * @param  int  $timeboxDuration
      */
-    public function __construct(#[\SensitiveParameter] \Illuminate\Auth\Passwords\TokenRepositoryInterface $tokens, UserProvider $users, ?Dispatcher $dispatcher = null, ?Timebox $timebox = null, int $timeboxDuration = 200000)
+    public function __construct(
+        #[\SensitiveParameter]
+        \Illuminate\Auth\Passwords\TokenRepositoryInterface $tokens,
+        UserProvider $users,
+        ?Dispatcher $dispatcher = null,
+        ?Timebox $timebox = null,
+        int $timeboxDuration = 200000
+    )
     {
         $this->users = $users;
         $this->tokens = $tokens;
@@ -67,7 +74,11 @@ class PasswordBroker implements PasswordBrokerContract
      * @param  \Closure|null  $callback
      * @return string
      */
-    public function sendResetLink(#[\SensitiveParameter] array $credentials, ?Closure $callback = null)
+    public function sendResetLink(
+        #[\SensitiveParameter]
+        array $credentials,
+        ?Closure $callback = null
+    )
     {
         return $this->timebox->call(function () use ($credentials, $callback) {
             // First we will check to see if we found a user at the given credentials and
@@ -99,7 +110,11 @@ class PasswordBroker implements PasswordBrokerContract
      * @param  \Closure  $callback
      * @return string
      */
-    public function reset(#[\SensitiveParameter] array $credentials, Closure $callback)
+    public function reset(
+        #[\SensitiveParameter]
+        array $credentials,
+        Closure $callback
+    )
     {
         return $this->timebox->call(function ($timebox) use ($credentials, $callback) {
             $user = $this->validateReset($credentials);
@@ -125,7 +140,10 @@ class PasswordBroker implements PasswordBrokerContract
      * @param  array  $credentials
      * @return \Illuminate\Contracts\Auth\CanResetPassword|string
      */
-    protected function validateReset(#[\SensitiveParameter] array $credentials)
+    protected function validateReset(
+        #[\SensitiveParameter]
+        array $credentials
+    )
     {
         if (is_null($user = $this->getUser($credentials))) {
             return static::INVALID_USER;
@@ -143,7 +161,10 @@ class PasswordBroker implements PasswordBrokerContract
      *
      * @throws \UnexpectedValueException
      */
-    public function getUser(#[\SensitiveParameter] array $credentials)
+    public function getUser(
+        #[\SensitiveParameter]
+        array $credentials
+    )
     {
         $credentials = Arr::except($credentials, ['token']);
         $user = $this->users->retrieveByCredentials($credentials);
@@ -179,7 +200,11 @@ class PasswordBroker implements PasswordBrokerContract
      * @param  string  $token
      * @return bool
      */
-    public function tokenExists(CanResetPasswordContract $user, #[\SensitiveParameter] $token)
+    public function tokenExists(
+        CanResetPasswordContract $user,
+        #[\SensitiveParameter]
+        $token
+    )
     {
         return $this->tokens->exists($user, $token);
     }

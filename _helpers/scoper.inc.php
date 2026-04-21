@@ -66,6 +66,11 @@ return [
                 $content
             );
         },
+        // `exclude-namespaces` keeps classes inside OpenTelemetry\{SDK,API,Context,SemConv} un-prefixed, but PHP-Scoper still prefixes a bare namespace-alias `use` of the namespace itself (e.g. upstream `use OpenTelemetry\SDK;` → `use Odigos\OpenTelemetry\SDK;`). Later references like `SDK\Resource\ResourceInfo` then resolve to non-existent `Odigos\OpenTelemetry\SDK\...`, causing TypeError at runtime. Strip the prefix back off these specific imports.
+        static function (string $filePath, string $prefix, string $content): string {
+            $pattern = '/^use\s+' . preg_quote($prefix, '/') . '\\\\OpenTelemetry\\\\(SDK|API|Context|SemConv)(\b[^;]*);/m';
+            return preg_replace($pattern, 'use OpenTelemetry\\\\$1$2;', $content);
+        },
         // Protobuf scoping compatibility: the descriptor pool registers classes by the original PHP names derived from .proto files. After scoping, our classes have the Odigos\ prefix.
         // Rather than patching every downstream lookup and type-check, we prefix class names at the source: the Descriptor/EnumDescriptor setClass methods.
         // This makes the entire protobuf runtime (descriptor pool, RepeatedField, GPBUtil type checks) consistently use scoped class names.

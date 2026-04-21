@@ -12,7 +12,10 @@ use function str_contains;
  */
 final class DataSourceName
 {
-    private function __construct(#[SensitiveParameter] private readonly string $string)
+    private function __construct(
+        #[SensitiveParameter]
+        private readonly string $string
+    )
     {
     }
     public function toString(): string
@@ -24,7 +27,10 @@ final class DataSourceName
      *
      * @param array<string,mixed> $params
      */
-    public static function fromArray(#[SensitiveParameter] array $params): self
+    public static function fromArray(
+        #[SensitiveParameter]
+        array $params
+    ): self
     {
         $chunks = [];
         foreach ($params as $key => $value) {
@@ -37,7 +43,10 @@ final class DataSourceName
      *
      * @param array<string,mixed> $params
      */
-    public static function fromConnectionParameters(#[SensitiveParameter] array $params): self
+    public static function fromConnectionParameters(
+        #[SensitiveParameter]
+        array $params
+    ): self
     {
         if (isset($params['dbname']) && str_contains($params['dbname'], '=')) {
             return new self($params['dbname']);

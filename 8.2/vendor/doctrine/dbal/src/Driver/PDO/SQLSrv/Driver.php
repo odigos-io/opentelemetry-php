@@ -21,7 +21,10 @@ final class Driver extends AbstractSQLServerDriver
     /**
      * {@inheritDoc}
      */
-    public function connect(#[SensitiveParameter] array $params): \Doctrine\DBAL\Driver\PDO\SQLSrv\Connection
+    public function connect(
+        #[SensitiveParameter]
+        array $params
+    ): \Doctrine\DBAL\Driver\PDO\SQLSrv\Connection
     {
         $driverOptions = $dsnOptions = [];
         if (isset($params['driverOptions'])) {
