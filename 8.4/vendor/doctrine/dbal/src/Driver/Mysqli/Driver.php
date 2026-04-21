@@ -18,7 +18,10 @@ final class Driver extends AbstractMySQLDriver
     /**
      * {@inheritDoc}
      */
-    public function connect(#[SensitiveParameter] array $params): \Doctrine\DBAL\Driver\Mysqli\Connection
+    public function connect(
+        #[SensitiveParameter]
+        array $params
+    ): \Doctrine\DBAL\Driver\Mysqli\Connection
     {
         if (!empty($params['persistent'])) {
             if (!isset($params['host'])) {
@@ -50,7 +53,10 @@ final class Driver extends AbstractMySQLDriver
      *
      * @return Generator<int, Initializer>
      */
-    private function compilePreInitializers(#[SensitiveParameter] array $params): Generator
+    private function compilePreInitializers(
+        #[SensitiveParameter]
+        array $params
+    ): Generator
     {
         unset($params['driverOptions'][\Doctrine\DBAL\Driver\Mysqli\Connection::OPTION_FLAGS]);
         if (isset($params['driverOptions']) && $params['driverOptions'] !== []) {
@@ -66,7 +72,10 @@ final class Driver extends AbstractMySQLDriver
      *
      * @return Generator<int, Initializer>
      */
-    private function compilePostInitializers(#[SensitiveParameter] array $params): Generator
+    private function compilePostInitializers(
+        #[SensitiveParameter]
+        array $params
+    ): Generator
     {
         if (!isset($params['charset'])) {
             return;

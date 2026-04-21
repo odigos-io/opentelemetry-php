@@ -39,7 +39,11 @@ class CacheTokenRepository implements \Illuminate\Auth\Passwords\TokenRepository
      * @param  string  $token
      * @return bool
      */
-    public function exists(CanResetPasswordContract $user, #[\SensitiveParameter] $token)
+    public function exists(
+        CanResetPasswordContract $user,
+        #[\SensitiveParameter]
+        $token
+    )
     {
         [$record, $createdAt] = $this->cache->get($this->cacheKey($user));
         return $record && !$this->tokenExpired($createdAt) && $this->hasher->check($token, $record);

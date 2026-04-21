@@ -52,7 +52,11 @@ class ArgonHasher extends \Illuminate\Hashing\AbstractHasher implements HasherCo
      *
      * @throws \RuntimeException
      */
-    public function make(#[\SensitiveParameter] $value, array $options = [])
+    public function make(
+        #[\SensitiveParameter]
+        $value,
+        array $options = []
+    )
     {
         try {
             $hash = password_hash($value, $this->algorithm(), ['memory_cost' => $this->memory($options), 'time_cost' => $this->time($options), 'threads' => $this->threads($options)]);
@@ -80,7 +84,12 @@ class ArgonHasher extends \Illuminate\Hashing\AbstractHasher implements HasherCo
      *
      * @throws \RuntimeException
      */
-    public function check(#[\SensitiveParameter] $value, $hashedValue, array $options = [])
+    public function check(
+        #[\SensitiveParameter]
+        $value,
+        $hashedValue,
+        array $options = []
+    )
     {
         if (is_null($hashedValue) || strlen($hashedValue) === 0) {
             return \false;

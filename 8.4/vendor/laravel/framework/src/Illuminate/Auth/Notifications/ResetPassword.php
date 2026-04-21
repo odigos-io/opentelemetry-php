@@ -30,7 +30,10 @@ class ResetPassword extends Notification
      *
      * @param  string  $token
      */
-    public function __construct(#[\SensitiveParameter] $token)
+    public function __construct(
+        #[\SensitiveParameter]
+        $token
+    )
     {
         $this->token = $token;
     }

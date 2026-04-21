@@ -51,16 +51,27 @@ class MemcachedSessionHandler extends \Symfony\Component\HttpFoundation\Session\
     {
         return $this->memcached->quit();
     }
-    protected function doRead(#[\SensitiveParameter] string $sessionId): string
+    protected function doRead(
+        #[\SensitiveParameter]
+        string $sessionId
+    ): string
     {
         return $this->memcached->get($this->prefix . $sessionId) ?: '';
     }
-    public function updateTimestamp(#[\SensitiveParameter] string $sessionId, string $data): bool
+    public function updateTimestamp(
+        #[\SensitiveParameter]
+        string $sessionId,
+        string $data
+    ): bool
     {
         $this->memcached->touch($this->prefix . $sessionId, $this->getCompatibleTtl());
         return \true;
     }
-    protected function doWrite(#[\SensitiveParameter] string $sessionId, string $data): bool
+    protected function doWrite(
+        #[\SensitiveParameter]
+        string $sessionId,
+        string $data
+    ): bool
     {
         return $this->memcached->set($this->prefix . $sessionId, $data, $this->getCompatibleTtl());
     }
@@ -74,7 +85,10 @@ class MemcachedSessionHandler extends \Symfony\Component\HttpFoundation\Session\
         }
         return $ttl;
     }
-    protected function doDestroy(#[\SensitiveParameter] string $sessionId): bool
+    protected function doDestroy(
+        #[\SensitiveParameter]
+        string $sessionId
+    ): bool
     {
         $result = $this->memcached->delete($this->prefix . $sessionId);
         return $result || \Memcached::RES_NOTFOUND == $this->memcached->getResultCode();

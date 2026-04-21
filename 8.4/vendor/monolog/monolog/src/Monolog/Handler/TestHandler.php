@@ -15,7 +15,7 @@ use Odigos\Monolog\Level;
 use Odigos\Monolog\Logger;
 use Psr\Log\LogLevel;
 use Odigos\Monolog\LogRecord;
-use Odigos\NoDiscard;
+use NoDiscard;
 /**
  * Used for testing purposes.
  *

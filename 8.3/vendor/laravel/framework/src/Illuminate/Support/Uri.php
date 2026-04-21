@@ -185,7 +185,11 @@ class Uri implements Htmlable, JsonSerializable, Responsable, Stringable
     /**
      * Specify the user and password for the URI.
      */
-    public function withUser(Stringable|string|null $user, #[SensitiveParameter] Stringable|string|null $password = null): static
+    public function withUser(
+        Stringable|string|null $user,
+        #[SensitiveParameter]
+        Stringable|string|null $password = null
+    ): static
     {
         return new static($this->uri->withUserInfo($user, $password));
     }

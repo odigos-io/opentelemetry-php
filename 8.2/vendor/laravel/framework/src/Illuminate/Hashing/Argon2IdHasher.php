@@ -15,7 +15,12 @@ class Argon2IdHasher extends \Illuminate\Hashing\ArgonHasher
      *
      * @throws \RuntimeException
      */
-    public function check(#[\SensitiveParameter] $value, $hashedValue, array $options = [])
+    public function check(
+        #[\SensitiveParameter]
+        $value,
+        $hashedValue,
+        array $options = []
+    )
     {
         if (is_null($hashedValue) || strlen($hashedValue) === 0) {
             return \false;

@@ -17,7 +17,10 @@ final class Driver extends AbstractSQLServerDriver
     /**
      * {@inheritDoc}
      */
-    public function connect(#[SensitiveParameter] array $params): \Doctrine\DBAL\Driver\SQLSrv\Connection
+    public function connect(
+        #[SensitiveParameter]
+        array $params
+    ): \Doctrine\DBAL\Driver\SQLSrv\Connection
     {
         $serverName = '';
         if (isset($params['host'])) {

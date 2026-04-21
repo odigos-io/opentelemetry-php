@@ -23,7 +23,10 @@ use const PGSQL_CONNECT_FORCE_NEW;
 final class Driver extends AbstractPostgreSQLDriver
 {
     /** {@inheritDoc} */
-    public function connect(#[SensitiveParameter] array $params): \Doctrine\DBAL\Driver\PgSQL\Connection
+    public function connect(
+        #[SensitiveParameter]
+        array $params
+    ): \Doctrine\DBAL\Driver\PgSQL\Connection
     {
         set_error_handler(static function (int $severity, string $message): never {
             throw new ErrorException($message, 0, $severity, ...array_slice(func_get_args(), 2, 2));
@@ -49,7 +52,10 @@ final class Driver extends AbstractPostgreSQLDriver
      *
      * @param array<string, mixed> $params
      */
-    private function constructConnectionString(#[SensitiveParameter] array $params): string
+    private function constructConnectionString(
+        #[SensitiveParameter]
+        array $params
+    ): string
     {
         // pg_connect used by Doctrine DBAL does not support [...] notation,
         // but requires the host address in plain form like `aa:bb:99...`

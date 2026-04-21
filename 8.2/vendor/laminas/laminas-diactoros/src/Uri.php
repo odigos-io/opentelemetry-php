@@ -214,7 +214,11 @@ class Uri implements UriInterface, Stringable
      * {@inheritdoc}
      */
     #[Override]
-    public function withUserInfo(string $user, #[SensitiveParameter] ?string $password = null): UriInterface
+    public function withUserInfo(
+        string $user,
+        #[SensitiveParameter]
+        ?string $password = null
+    ): UriInterface
     {
         $info = $this->filterUserInfoPart($user);
         if (null !== $password) {

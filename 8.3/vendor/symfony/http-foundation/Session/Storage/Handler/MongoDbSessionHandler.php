@@ -78,7 +78,10 @@ class MongoDbSessionHandler extends \Symfony\Component\HttpFoundation\Session\St
     {
         return \true;
     }
-    protected function doDestroy(#[\SensitiveParameter] string $sessionId): bool
+    protected function doDestroy(
+        #[\SensitiveParameter]
+        string $sessionId
+    ): bool
     {
         $write = new BulkWrite();
         $write->delete([$this->options['id_field'] => $sessionId], ['limit' => 1]);
@@ -92,7 +95,11 @@ class MongoDbSessionHandler extends \Symfony\Component\HttpFoundation\Session\St
         $result = $this->manager->executeBulkWrite($this->namespace, $write);
         return $result->getDeletedCount() ?? \false;
     }
-    protected function doWrite(#[\SensitiveParameter] string $sessionId, string $data): bool
+    protected function doWrite(
+        #[\SensitiveParameter]
+        string $sessionId,
+        string $data
+    ): bool
     {
         $ttl = ($this->ttl instanceof \Closure ? ($this->ttl)() : $this->ttl) ?? \ini_get('session.gc_maxlifetime');
         $expiry = $this->getUTCDateTime($ttl);
@@ -102,7 +109,11 @@ class MongoDbSessionHandler extends \Symfony\Component\HttpFoundation\Session\St
         $this->manager->executeBulkWrite($this->namespace, $write);
         return \true;
     }
-    public function updateTimestamp(#[\SensitiveParameter] string $sessionId, string $data): bool
+    public function updateTimestamp(
+        #[\SensitiveParameter]
+        string $sessionId,
+        string $data
+    ): bool
     {
         $ttl = ($this->ttl instanceof \Closure ? ($this->ttl)() : $this->ttl) ?? \ini_get('session.gc_maxlifetime');
         $expiry = $this->getUTCDateTime($ttl);
@@ -111,7 +122,10 @@ class MongoDbSessionHandler extends \Symfony\Component\HttpFoundation\Session\St
         $this->manager->executeBulkWrite($this->namespace, $write);
         return \true;
     }
-    protected function doRead(#[\SensitiveParameter] string $sessionId): string
+    protected function doRead(
+        #[\SensitiveParameter]
+        string $sessionId
+    ): string
     {
         $cursor = $this->manager->executeQuery($this->namespace, new Query([$this->options['id_field'] => $sessionId, $this->options['expiry_field'] => ['$gte' => $this->getUTCDateTime()]], ['projection' => ['_id' => \false, $this->options['data_field'] => \true], 'limit' => 1]));
         foreach ($cursor as $document) {

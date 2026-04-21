@@ -429,7 +429,11 @@ class SessionGuard implements StatefulGuard, SupportsBasicAuth
      * @param  array  $credentials
      * @return void
      */
-    protected function rehashPasswordIfRequired(AuthenticatableContract $user, #[\SensitiveParameter] array $credentials)
+    protected function rehashPasswordIfRequired(
+        AuthenticatableContract $user,
+        #[\SensitiveParameter]
+        array $credentials
+    )
     {
         if ($this->rehashOnLogin) {
             $this->provider->rehashPasswordIfRequired($user, $credentials);

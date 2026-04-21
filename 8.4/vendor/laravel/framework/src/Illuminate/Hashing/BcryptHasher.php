@@ -46,7 +46,11 @@ class BcryptHasher extends \Illuminate\Hashing\AbstractHasher implements HasherC
      *
      * @throws \RuntimeException
      */
-    public function make(#[\SensitiveParameter] $value, array $options = [])
+    public function make(
+        #[\SensitiveParameter]
+        $value,
+        array $options = []
+    )
     {
         try {
             if ($this->limit && strlen($value) > $this->limit) {
@@ -68,7 +72,12 @@ class BcryptHasher extends \Illuminate\Hashing\AbstractHasher implements HasherC
      *
      * @throws \RuntimeException
      */
-    public function check(#[\SensitiveParameter] $value, $hashedValue, array $options = [])
+    public function check(
+        #[\SensitiveParameter]
+        $value,
+        $hashedValue,
+        array $options = []
+    )
     {
         if (is_null($hashedValue) || strlen($hashedValue) === 0) {
             return \false;

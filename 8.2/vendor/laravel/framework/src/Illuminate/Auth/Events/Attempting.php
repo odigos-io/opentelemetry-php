@@ -11,7 +11,12 @@ class Attempting
      * @param  array  $credentials  The credentials for the user.
      * @param  bool  $remember  Indicates if the user should be "remembered".
      */
-    public function __construct(public $guard, #[\SensitiveParameter] public $credentials, public $remember)
+    public function __construct(
+        public $guard,
+        #[\SensitiveParameter]
+        public $credentials,
+        public $remember
+    )
     {
     }
 }

@@ -18,7 +18,11 @@ interface Hasher
      * @param  array  $options
      * @return string
      */
-    public function make(#[\SensitiveParameter] $value, array $options = []);
+    public function make(
+        #[\SensitiveParameter]
+        $value,
+        array $options = []
+    );
     /**
      * Check the given plain value against a hash.
      *
@@ -27,7 +31,12 @@ interface Hasher
      * @param  array  $options
      * @return bool
      */
-    public function check(#[\SensitiveParameter] $value, $hashedValue, array $options = []);
+    public function check(
+        #[\SensitiveParameter]
+        $value,
+        $hashedValue,
+        array $options = []
+    );
     /**
      * Check if the given hash has been hashed using the given options.
      *

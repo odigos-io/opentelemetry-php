@@ -272,7 +272,7 @@ if (!\function_exists('Odigos\cache')) {
         if (!\is_array($key)) {
             throw new \InvalidArgumentException('When setting a value in the cache, you must pass an array of key / value pairs.');
         }
-        return app('cache')->put(\key($key), array_first($key), ttl: $default);
+        return app('cache')->put(\key($key), \array_first($key), ttl: $default);
     }
 }
 if (!\function_exists('Odigos\config')) {

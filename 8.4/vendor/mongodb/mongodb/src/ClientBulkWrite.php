@@ -24,7 +24,7 @@ use MongoDB\Codec\Encoder;
 use MongoDB\Driver\BulkWriteCommand;
 use MongoDB\Driver\Manager;
 use MongoDB\Exception\InvalidArgumentException;
-use Odigos\NoDiscard;
+use NoDiscard;
 use stdClass;
 use function is_array;
 use function is_bool;

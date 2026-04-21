@@ -27,7 +27,10 @@ interface Driver
      *
      * @throws Exception
      */
-    public function connect(#[SensitiveParameter] array $params): DriverConnection;
+    public function connect(
+        #[SensitiveParameter]
+        array $params
+    ): DriverConnection;
     /**
      * Gets the DatabasePlatform instance that provides all the metadata about
      * the platform this driver connects to.

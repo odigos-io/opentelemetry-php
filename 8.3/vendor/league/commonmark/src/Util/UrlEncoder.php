@@ -47,7 +47,7 @@ final class UrlEncoder
                     continue;
                 }
             }
-            if (\ord($code) < 128) {
+            if (\strlen($code) === 1 && \ord($code) < 128) {
                 $result .= self::ENCODE_CACHE[\ord($code)];
                 continue;
             }

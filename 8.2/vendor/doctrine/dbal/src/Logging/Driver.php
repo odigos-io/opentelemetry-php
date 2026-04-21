@@ -17,7 +17,10 @@ final class Driver extends AbstractDriverMiddleware
     /**
      * {@inheritDoc}
      */
-    public function connect(#[SensitiveParameter] array $params): \Doctrine\DBAL\Logging\Connection
+    public function connect(
+        #[SensitiveParameter]
+        array $params
+    ): \Doctrine\DBAL\Logging\Connection
     {
         $this->logger->info('Connecting with parameters {params}', ['params' => $this->maskPassword($params)]);
         return new \Doctrine\DBAL\Logging\Connection(parent::connect($params), $this->logger);
@@ -27,7 +30,10 @@ final class Driver extends AbstractDriverMiddleware
      *
      * @return array<string,mixed>
      */
-    private function maskPassword(#[SensitiveParameter] array $params): array
+    private function maskPassword(
+        #[SensitiveParameter]
+        array $params
+    ): array
     {
         if (isset($params['password'])) {
             $params['password'] = '<redacted>';
