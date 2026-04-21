@@ -21,7 +21,7 @@ use Odigos\Opentelemetry\Proto\Metrics\V1\ResourceMetrics;
 use Odigos\Opentelemetry\Proto\Metrics\V1\ScopeMetrics;
 use Odigos\Opentelemetry\Proto\Metrics\V1\Sum;
 use Odigos\Opentelemetry\Proto\Resource\V1\Resource as Resource_;
-use Odigos\OpenTelemetry\SDK;
+use OpenTelemetry\SDK;
 use function serialize;
 final class MetricConverter
 {
