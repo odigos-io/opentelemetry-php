@@ -36,7 +36,11 @@ class CramMd5Authenticator implements \Symfony\Component\Mailer\Transport\Smtp\A
     /**
      * Generates a CRAM-MD5 response from a server challenge.
      */
-    private function getResponse(#[\SensitiveParameter] string $secret, string $challenge): string
+    private function getResponse(
+        #[\SensitiveParameter]
+        string $secret,
+        string $challenge
+    ): string
     {
         if (!$secret) {
             throw new InvalidArgumentException('A non-empty secret is required.');

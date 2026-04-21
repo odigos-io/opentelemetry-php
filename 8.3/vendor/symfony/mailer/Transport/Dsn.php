@@ -16,10 +16,21 @@ use Symfony\Component\Mailer\Exception\InvalidArgumentException;
  */
 final class Dsn
 {
-    public function __construct(private string $scheme, private string $host, private ?string $user = null, #[\SensitiveParameter] private ?string $password = null, private ?int $port = null, private array $options = [])
+    public function __construct(
+        private string $scheme,
+        private string $host,
+        private ?string $user = null,
+        #[\SensitiveParameter]
+        private ?string $password = null,
+        private ?int $port = null,
+        private array $options = []
+    )
     {
     }
-    public static function fromString(#[\SensitiveParameter] string $dsn): self
+    public static function fromString(
+        #[\SensitiveParameter]
+        string $dsn
+    ): self
     {
         if (\false === $params = parse_url($dsn)) {
             throw new InvalidArgumentException('The mailer DSN is invalid.');

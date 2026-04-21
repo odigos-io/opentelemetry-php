@@ -47,12 +47,24 @@ final class Transport
 {
     private const FACTORY_CLASSES = [BrevoTransportFactory::class, GmailTransportFactory::class, InfobipTransportFactory::class, MailerSendTransportFactory::class, MailgunTransportFactory::class, MailjetTransportFactory::class, MailPaceTransportFactory::class, MandrillTransportFactory::class, OhMySmtpTransportFactory::class, PostmarkTransportFactory::class, ScalewayTransportFactory::class, SendgridTransportFactory::class, SendinblueTransportFactory::class, SesTransportFactory::class];
     private iterable $factories;
-    public static function fromDsn(#[\SensitiveParameter] string $dsn, ?EventDispatcherInterface $dispatcher = null, ?HttpClientInterface $client = null, ?LoggerInterface $logger = null): TransportInterface
+    public static function fromDsn(
+        #[\SensitiveParameter]
+        string $dsn,
+        ?EventDispatcherInterface $dispatcher = null,
+        ?HttpClientInterface $client = null,
+        ?LoggerInterface $logger = null
+    ): TransportInterface
     {
         $factory = new self(iterator_to_array(self::getDefaultFactories($dispatcher, $client, $logger)));
         return $factory->fromString($dsn);
     }
-    public static function fromDsns(#[\SensitiveParameter] array $dsns, ?EventDispatcherInterface $dispatcher = null, ?HttpClientInterface $client = null, ?LoggerInterface $logger = null): TransportInterface
+    public static function fromDsns(
+        #[\SensitiveParameter]
+        array $dsns,
+        ?EventDispatcherInterface $dispatcher = null,
+        ?HttpClientInterface $client = null,
+        ?LoggerInterface $logger = null
+    ): TransportInterface
     {
         $factory = new self(iterator_to_array(self::getDefaultFactories($dispatcher, $client, $logger)));
         return $factory->fromStrings($dsns);
@@ -64,7 +76,10 @@ final class Transport
     {
         $this->factories = $factories;
     }
-    public function fromStrings(#[\SensitiveParameter] array $dsns): Transports
+    public function fromStrings(
+        #[\SensitiveParameter]
+        array $dsns
+    ): Transports
     {
         $transports = [];
         foreach ($dsns as $name => $dsn) {
@@ -72,7 +87,10 @@ final class Transport
         }
         return new Transports($transports);
     }
-    public function fromString(#[\SensitiveParameter] string $dsn): TransportInterface
+    public function fromString(
+        #[\SensitiveParameter]
+        string $dsn
+    ): TransportInterface
     {
         [$transport, $offset] = $this->parseDsn($dsn);
         if ($offset !== \strlen($dsn)) {
@@ -80,7 +98,11 @@ final class Transport
         }
         return $transport;
     }
-    private function parseDsn(#[\SensitiveParameter] string $dsn, int $offset = 0): array
+    private function parseDsn(
+        #[\SensitiveParameter]
+        string $dsn,
+        int $offset = 0
+    ): array
     {
         static $keywords = ['failover' => FailoverTransport::class, 'roundrobin' => RoundRobinTransport::class];
         while (\true) {

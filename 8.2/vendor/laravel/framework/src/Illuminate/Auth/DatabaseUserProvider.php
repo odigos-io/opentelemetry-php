@@ -59,7 +59,11 @@ class DatabaseUserProvider implements UserProvider
      * @param  string  $token
      * @return \Illuminate\Contracts\Auth\Authenticatable|null
      */
-    public function retrieveByToken($identifier, #[\SensitiveParameter] $token)
+    public function retrieveByToken(
+        $identifier,
+        #[\SensitiveParameter]
+        $token
+    )
     {
         $user = $this->getGenericUser($this->connection->table($this->table)->find($identifier));
         return $user && $user->getRememberToken() && hash_equals($user->getRememberToken(), $token) ? $user : null;
@@ -71,7 +75,11 @@ class DatabaseUserProvider implements UserProvider
      * @param  string  $token
      * @return void
      */
-    public function updateRememberToken(UserContract $user, #[\SensitiveParameter] $token)
+    public function updateRememberToken(
+        UserContract $user,
+        #[\SensitiveParameter]
+        $token
+    )
     {
         $this->connection->table($this->table)->where($user->getAuthIdentifierName(), $user->getAuthIdentifier())->update([$user->getRememberTokenName() => $token]);
     }
@@ -81,7 +89,10 @@ class DatabaseUserProvider implements UserProvider
      * @param  array  $credentials
      * @return \Illuminate\Contracts\Auth\Authenticatable|null
      */
-    public function retrieveByCredentials(#[\SensitiveParameter] array $credentials)
+    public function retrieveByCredentials(
+        #[\SensitiveParameter]
+        array $credentials
+    )
     {
         $credentials = array_filter($credentials, fn($key) => !str_contains($key, 'password'), \ARRAY_FILTER_USE_KEY);
         if (empty($credentials)) {
@@ -125,7 +136,11 @@ class DatabaseUserProvider implements UserProvider
      * @param  array  $credentials
      * @return bool
      */
-    public function validateCredentials(UserContract $user, #[\SensitiveParameter] array $credentials)
+    public function validateCredentials(
+        UserContract $user,
+        #[\SensitiveParameter]
+        array $credentials
+    )
     {
         if (is_null($plain = $credentials['password'])) {
             return \false;
@@ -143,7 +158,12 @@ class DatabaseUserProvider implements UserProvider
      * @param  bool  $force
      * @return void
      */
-    public function rehashPasswordIfRequired(UserContract $user, #[\SensitiveParameter] array $credentials, bool $force = \false)
+    public function rehashPasswordIfRequired(
+        UserContract $user,
+        #[\SensitiveParameter]
+        array $credentials,
+        bool $force = \false
+    )
     {
         if (!$this->hasher->needsRehash($user->getAuthPassword()) && !$force) {
             return;

@@ -207,7 +207,7 @@ if (!\function_exists('Odigos\head')) {
      */
     function head($array)
     {
-        return empty($array) ? \false : array_first($array);
+        return empty($array) ? \false : \array_first($array);
     }
 }
 if (!\function_exists('Odigos\last')) {
@@ -219,7 +219,7 @@ if (!\function_exists('Odigos\last')) {
      */
     function last($array)
     {
-        return empty($array) ? \false : array_last($array);
+        return empty($array) ? \false : \array_last($array);
     }
 }
 if (!\function_exists('Odigos\value')) {

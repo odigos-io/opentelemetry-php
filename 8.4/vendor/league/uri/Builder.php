@@ -21,8 +21,8 @@ use SensitiveParameter;
 use Stringable;
 use Throwable;
 use TypeError;
-use Odigos\Uri\Rfc3986\Uri as Rfc3986Uri;
-use Odigos\Uri\WhatWg\Url as WhatWgUrl;
+use Uri\Rfc3986\Uri as Rfc3986Uri;
+use Uri\WhatWg\Url as WhatWgUrl;
 use function is_bool;
 use function str_replace;
 use function strpos;
@@ -36,7 +36,17 @@ final class Builder implements Conditionable, Transformable
     private ?string $path = null;
     private ?string $query = null;
     private ?string $fragment = null;
-    public function __construct(BackedEnum|Stringable|string|null $scheme = null, BackedEnum|Stringable|string|null $username = null, #[SensitiveParameter] BackedEnum|Stringable|string|null $password = null, BackedEnum|Stringable|string|null $host = null, BackedEnum|int|null $port = null, BackedEnum|Stringable|string|null $path = null, BackedEnum|Stringable|string|null $query = null, BackedEnum|Stringable|string|null $fragment = null)
+    public function __construct(
+        BackedEnum|Stringable|string|null $scheme = null,
+        BackedEnum|Stringable|string|null $username = null,
+        #[SensitiveParameter]
+        BackedEnum|Stringable|string|null $password = null,
+        BackedEnum|Stringable|string|null $host = null,
+        BackedEnum|int|null $port = null,
+        BackedEnum|Stringable|string|null $path = null,
+        BackedEnum|Stringable|string|null $query = null,
+        BackedEnum|Stringable|string|null $fragment = null
+    )
     {
         $this->scheme($scheme)->userInfo($username, $password)->host($host)->port($port)->path($path)->query($query)->fragment($fragment);
     }
@@ -55,7 +65,11 @@ final class Builder implements Conditionable, Transformable
     /**
      * @throws SyntaxError
      */
-    public function userInfo(BackedEnum|Stringable|string|null $user, #[SensitiveParameter] BackedEnum|Stringable|string|null $password = null): static
+    public function userInfo(
+        BackedEnum|Stringable|string|null $user,
+        #[SensitiveParameter]
+        BackedEnum|Stringable|string|null $password = null
+    ): static
     {
         $username = Encoder::encodeUser($this->filterString($user));
         $password = Encoder::encodePassword($this->filterString($password));

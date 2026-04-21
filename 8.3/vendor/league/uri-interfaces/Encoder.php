@@ -96,7 +96,10 @@ final class Encoder
     /**
      * Tell whether the password component is correctly encoded.
      */
-    public static function isPasswordEncoded(#[SensitiveParameter] BackedEnum|Stringable|string|null $encoded): bool
+    public static function isPasswordEncoded(
+        #[SensitiveParameter]
+        BackedEnum|Stringable|string|null $encoded
+    ): bool
     {
         static $pattern = '/[^' . self::REGEXP_PART_UNRESERVED . self::REGEXP_PART_SUBDELIM . ':]+|' . self::REGEXP_PART_ENCODED . '/';
         if ($encoded instanceof BackedEnum) {
@@ -109,7 +112,10 @@ final class Encoder
      *
      * Generic delimiters ":" MUST NOT be encoded
      */
-    public static function encodePassword(#[SensitiveParameter] BackedEnum|Stringable|string|null $component): ?string
+    public static function encodePassword(
+        #[SensitiveParameter]
+        BackedEnum|Stringable|string|null $component
+    ): ?string
     {
         static $pattern = '/[^' . self::REGEXP_PART_UNRESERVED . self::REGEXP_PART_SUBDELIM . ':]+|' . self::REGEXP_PART_ENCODED . '/';
         return self::encode($component, $pattern);
@@ -121,14 +127,20 @@ final class Encoder
      * any characters. To determine what characters to encode, please refer to
      * RFC 3986.
      */
-    public static function normalizePassword(#[SensitiveParameter] BackedEnum|Stringable|string|null $password): ?string
+    public static function normalizePassword(
+        #[SensitiveParameter]
+        BackedEnum|Stringable|string|null $password
+    ): ?string
     {
         return self::normalize(self::encodePassword(self::decodeUnreservedCharacters($password)));
     }
     /**
      * Tell whether the userInfo component is correctly encoded.
      */
-    public static function isUserInfoEncoded(#[SensitiveParameter] BackedEnum|Stringable|string|null $userInfo): bool
+    public static function isUserInfoEncoded(
+        #[SensitiveParameter]
+        BackedEnum|Stringable|string|null $userInfo
+    ): bool
     {
         if (null === $userInfo) {
             return \true;
@@ -139,7 +151,10 @@ final class Encoder
         [$user, $password] = explode(':', (string) $userInfo, 2) + [1 => null];
         return self::isUserEncoded($user) && self::isPasswordEncoded($password);
     }
-    public static function encodeUserInfo(#[SensitiveParameter] BackedEnum|Stringable|string|null $userInfo): ?string
+    public static function encodeUserInfo(
+        #[SensitiveParameter]
+        BackedEnum|Stringable|string|null $userInfo
+    ): ?string
     {
         if (null === $userInfo) {
             return null;
@@ -154,7 +169,10 @@ final class Encoder
         }
         return $userInfo . ':' . self::encodePassword($password);
     }
-    public static function normalizeUserInfo(#[SensitiveParameter] BackedEnum|Stringable|string|null $userInfo): ?string
+    public static function normalizeUserInfo(
+        #[SensitiveParameter]
+        BackedEnum|Stringable|string|null $userInfo
+    ): ?string
     {
         if (null === $userInfo) {
             return null;

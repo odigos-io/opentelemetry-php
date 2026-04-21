@@ -9,7 +9,7 @@ use Doctrine\DBAL\Driver\PDO\Exception;
 use Doctrine\DBAL\Driver\PDO\Exception\InvalidConfiguration;
 use Doctrine\DBAL\Driver\PDO\PDOConnect;
 use PDO;
-use Odigos\Pdo\Pgsql;
+use Pdo\Pgsql;
 use PDOException;
 use SensitiveParameter;
 use function is_string;
@@ -20,7 +20,10 @@ final class Driver extends AbstractPostgreSQLDriver
     /**
      * {@inheritDoc}
      */
-    public function connect(#[SensitiveParameter] array $params): Connection
+    public function connect(
+        #[SensitiveParameter]
+        array $params
+    ): Connection
     {
         $driverOptions = $params['driverOptions'] ?? [];
         if (!empty($params['persistent'])) {

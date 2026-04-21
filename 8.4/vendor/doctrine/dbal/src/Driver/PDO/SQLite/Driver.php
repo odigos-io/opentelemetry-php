@@ -18,7 +18,10 @@ final class Driver extends AbstractSQLiteDriver
     /**
      * {@inheritDoc}
      */
-    public function connect(#[SensitiveParameter] array $params): Connection
+    public function connect(
+        #[SensitiveParameter]
+        array $params
+    ): Connection
     {
         foreach (['user', 'password'] as $key) {
             if (isset($params[$key]) && !is_string($params[$key])) {

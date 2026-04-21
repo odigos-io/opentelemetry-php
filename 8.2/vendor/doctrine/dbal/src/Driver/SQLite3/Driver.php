@@ -11,7 +11,10 @@ final class Driver extends AbstractSQLiteDriver
     /**
      * {@inheritDoc}
      */
-    public function connect(#[SensitiveParameter] array $params): \Doctrine\DBAL\Driver\SQLite3\Connection
+    public function connect(
+        #[SensitiveParameter]
+        array $params
+    ): \Doctrine\DBAL\Driver\SQLite3\Connection
     {
         $isMemory = $params['memory'] ?? \false;
         if (isset($params['path'])) {

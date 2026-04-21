@@ -410,7 +410,7 @@ class Response
         }
         if (\function_exists('fastcgi_finish_request')) {
             fastcgi_finish_request();
-        } elseif (\function_exists('Odigos\litespeed_finish_request')) {
+        } elseif (\function_exists('litespeed_finish_request')) {
             litespeed_finish_request();
         } elseif (!\in_array(\PHP_SAPI, ['cli', 'phpdbg', 'embed'], \true)) {
             static::closeOutputBuffers(0, \true);

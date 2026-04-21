@@ -30,7 +30,10 @@ final class DsnParser
      *
      * @throws MalformedDsnException
      */
-    public function parse(#[SensitiveParameter] string $dsn): array
+    public function parse(
+        #[SensitiveParameter]
+        string $dsn
+    ): array
     {
         // (pdo-)?sqlite3?:///... => (pdo-)?sqlite3?://localhost/... or else the URL will be invalid
         $url = preg_replace('#^((?:pdo-)?sqlite3?):///#', '$1://localhost/', $dsn);

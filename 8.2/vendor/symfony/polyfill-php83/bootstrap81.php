@@ -20,7 +20,13 @@ if (!\function_exists('ldap_exop_sync') && !\function_exists('Odigos\ldap_exop_s
     }
 }
 if (!\function_exists('ldap_connect_wallet') && !\function_exists('Odigos\ldap_connect_wallet') && \function_exists('ldap_connect')) {
-    function ldap_connect_wallet(?string $uri, string $wallet, #[\SensitiveParameter] string $password, int $auth_mode = \GSLC_SSL_NO_AUTH): \LDAP\Connection|false
+    function ldap_connect_wallet(
+        ?string $uri,
+        string $wallet,
+        #[\SensitiveParameter]
+        string $password,
+        int $auth_mode = \GSLC_SSL_NO_AUTH
+    ): \LDAP\Connection|false
     {
         return \ldap_connect($uri, $wallet, $password, $auth_mode);
     }

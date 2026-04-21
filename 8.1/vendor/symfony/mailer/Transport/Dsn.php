@@ -22,7 +22,15 @@ final class Dsn
     private ?string $password;
     private ?int $port;
     private array $options;
-    public function __construct(string $scheme, string $host, ?string $user = null, #[\SensitiveParameter] ?string $password = null, ?int $port = null, array $options = [])
+    public function __construct(
+        string $scheme,
+        string $host,
+        ?string $user = null,
+        #[\SensitiveParameter]
+        ?string $password = null,
+        ?int $port = null,
+        array $options = []
+    )
     {
         $this->scheme = $scheme;
         $this->host = $host;
@@ -31,7 +39,10 @@ final class Dsn
         $this->port = $port;
         $this->options = $options;
     }
-    public static function fromString(#[\SensitiveParameter] string $dsn): self
+    public static function fromString(
+        #[\SensitiveParameter]
+        string $dsn
+    ): self
     {
         if (\false === $params = parse_url($dsn)) {
             throw new InvalidArgumentException('The mailer DSN is invalid.');

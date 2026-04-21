@@ -213,7 +213,11 @@ class Repository
      * @param  mixed  $value
      * @return $this
      */
-    public function addHidden($key, #[\SensitiveParameter] $value = null)
+    public function addHidden(
+        $key,
+        #[\SensitiveParameter]
+        $value = null
+    )
     {
         $this->hidden = array_merge($this->hidden, is_array($key) ? $key : [$key => $value]);
         return $this;
@@ -241,7 +245,11 @@ class Repository
      * @param  mixed  $value
      * @return mixed
      */
-    public function rememberHidden($key, #[\SensitiveParameter] $value)
+    public function rememberHidden(
+        $key,
+        #[\SensitiveParameter]
+        $value
+    )
     {
         if ($this->hasHidden($key)) {
             return $this->getHidden($key);
@@ -297,7 +305,11 @@ class Repository
      * @param  mixed  $value
      * @return $this
      */
-    public function addHiddenIf($key, #[\SensitiveParameter] $value)
+    public function addHiddenIf(
+        $key,
+        #[\SensitiveParameter]
+        $value
+    )
     {
         if (!$this->hasHidden($key)) {
             $this->addHidden($key, $value);

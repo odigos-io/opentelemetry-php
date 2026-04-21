@@ -25,7 +25,10 @@ final class Driver extends AbstractDriverMiddleware
      * @throws PlatformException
      * @throws Exception
      */
-    public function connect(#[SensitiveParameter] array $params): ConnectionInterface
+    public function connect(
+        #[SensitiveParameter]
+        array $params
+    ): ConnectionInterface
     {
         $connection = parent::connect($params);
         $portability = (new \Doctrine\DBAL\Portability\OptimizeFlags())($this->getDatabasePlatform($connection), $this->mode);

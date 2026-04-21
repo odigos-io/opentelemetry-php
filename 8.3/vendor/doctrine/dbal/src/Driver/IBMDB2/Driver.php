@@ -13,7 +13,10 @@ final class Driver extends AbstractDB2Driver
     /**
      * {@inheritDoc}
      */
-    public function connect(#[SensitiveParameter] array $params): \Doctrine\DBAL\Driver\IBMDB2\Connection
+    public function connect(
+        #[SensitiveParameter]
+        array $params
+    ): \Doctrine\DBAL\Driver\IBMDB2\Connection
     {
         $dataSourceName = \Doctrine\DBAL\Driver\IBMDB2\DataSourceName::fromConnectionParameters($params)->toString();
         $username = $params['user'] ?? '';
