@@ -258,6 +258,6 @@ jobs:
         uses: odigos-io/ci-core/.github/actions/slack-release-notification@main
         with:
           webhook-url: ${{ secrets.ODIGOS_RELEASE_STATUS_WEBHOOK_URL }}
-          success-description: "Triggered the Odigos instrumentation agents version update (VM Agent)"
-          failure-description: "ERROR: Failed to trigger the Odigos instrumentation agents version update (VM Agent)"
+          success-description: "Triggered the Odigos PHP instrumentation agents version update for OSS, Enterprise and VM Agent"
+          failure-description: "ERROR: Failed to trigger the Odigos PHP instrumentation agents version update for OSS, Enterprise and VM Agent"
           tag: ${{ needs.calculate.outputs.new_version }}
