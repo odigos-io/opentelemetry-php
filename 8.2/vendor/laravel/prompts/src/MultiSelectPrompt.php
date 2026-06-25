@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Support\Collection;
 class MultiSelectPrompt extends \Laravel\Prompts\Prompt
 {
+    use \Laravel\Prompts\Concerns\HasInfo;
     use \Laravel\Prompts\Concerns\Scrolling;
     /**
      * The options for the multi-select prompt.
@@ -31,7 +32,7 @@ class MultiSelectPrompt extends \Laravel\Prompts\Prompt
      * @param  array<int|string, string>|Collection<int|string, string>  $options
      * @param  array<int|string>|Collection<int, int|string>  $default
      */
-    public function __construct(public string $label, array|Collection $options, array|Collection $default = [], public int $scroll = 5, public bool|string $required = \false, public mixed $validate = null, public string $hint = '', public ?Closure $transform = null)
+    public function __construct(public string $label, array|Collection $options, array|Collection $default = [], public int $scroll = 5, public bool|string $required = \false, public mixed $validate = null, public string $hint = '', public ?Closure $transform = null, public string|Closure $info = '')
     {
         $this->options = $options instanceof Collection ? $options->all() : $options;
         $this->default = $default instanceof Collection ? $default->all() : $default;
@@ -47,6 +48,19 @@ class MultiSelectPrompt extends \Laravel\Prompts\Prompt
             \Laravel\Prompts\Key::ENTER => $this->submit(),
             default => null,
         });
+    }
+    /**
+     * Get the value of the highlighted option.
+     */
+    public function highlightedValue(): int|string|null
+    {
+        if ($this->highlighted === null) {
+            return null;
+        }
+        if (array_is_list($this->options)) {
+            return $this->options[$this->highlighted] ?? null;
+        }
+        return array_keys($this->options)[$this->highlighted] ?? null;
     }
     /**
      * Get the selected values.

@@ -37,9 +37,9 @@ class RequestException extends \Illuminate\Http\Client\HttpClientException
      */
     public function __construct(\Illuminate\Http\Client\Response $response, $truncateExceptionsAt = null)
     {
-        parent::__construct($this->prepareMessage($response), $response->status());
         $this->truncateExceptionsAt = $truncateExceptionsAt;
         $this->response = $response;
+        parent::__construct($this->prepareMessage($response), $response->status());
     }
     /**
      * Enable truncation of request exception messages.
@@ -92,7 +92,13 @@ class RequestException extends \Illuminate\Http\Client\HttpClientException
     {
         $message = "HTTP request returned status code {$response->status()}";
         $truncateExceptionsAt = $this->truncateExceptionsAt ?? static::$truncateAt;
-        $summary = is_int($truncateExceptionsAt) ? Message::bodySummary($response->toPsrResponse(), $truncateExceptionsAt) : Message::toString($response->toPsrResponse());
+        $psrResponse = $response->toPsrResponse();
+        $summary = null;
+        if (is_int($truncateExceptionsAt)) {
+            $summary = Message::bodySummary($psrResponse, $truncateExceptionsAt);
+        } elseif (($body = $psrResponse->getBody())->isSeekable() && $body->isReadable()) {
+            $summary = Message::toString($psrResponse);
+        }
         return is_null($summary) ? $message : $message . ":\n{$summary}\n";
     }
 }

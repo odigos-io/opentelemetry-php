@@ -42,7 +42,7 @@ class MailServiceProvider extends ServiceProvider implements DeferrableProvider
         }
         $this->app->singleton(\Illuminate\Mail\Markdown::class, function ($app) {
             $config = $app->make('config');
-            return new \Illuminate\Mail\Markdown($app->make('view'), ['theme' => $config->get('mail.markdown.theme', 'default'), 'paths' => $config->get('mail.markdown.paths', [])]);
+            return new \Illuminate\Mail\Markdown($app->make('view'), ['theme' => $config->get('mail.markdown.theme', 'default'), 'paths' => $config->get('mail.markdown.paths', []), 'extensions' => $config->get('mail.markdown.extensions', [])]);
         });
     }
     /**

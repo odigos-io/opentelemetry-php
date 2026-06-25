@@ -31,8 +31,8 @@ class AttributeDirectoryLoader extends \Symfony\Component\Routing\Loader\Attribu
         }
         $collection = new RouteCollection();
         $collection->addResource(new GlobResource($dir, '/*.php', \true));
-        $files = iterator_to_array(new \RecursiveIteratorIterator(new \RecursiveCallbackFilterIterator(new \RecursiveDirectoryIterator($dir, \FilesystemIterator::SKIP_DOTS | \FilesystemIterator::FOLLOW_SYMLINKS), fn(\SplFileInfo $current) => !str_starts_with($current->getBasename(), '.')), \RecursiveIteratorIterator::LEAVES_ONLY));
-        usort($files, fn(\SplFileInfo $a, \SplFileInfo $b) => (string) $a > (string) $b ? 1 : -1);
+        $files = iterator_to_array(new \RecursiveIteratorIterator(new \RecursiveCallbackFilterIterator(new \RecursiveDirectoryIterator($dir, \FilesystemIterator::SKIP_DOTS | \FilesystemIterator::FOLLOW_SYMLINKS), static fn(\SplFileInfo $current) => !str_starts_with($current->getBasename(), '.')), \RecursiveIteratorIterator::LEAVES_ONLY));
+        usort($files, static fn(\SplFileInfo $a, \SplFileInfo $b) => (string) $a > (string) $b ? 1 : -1);
         foreach ($files as $file) {
             if (!$file->isFile() || !str_ends_with($file->getFilename(), '.php')) {
                 continue;

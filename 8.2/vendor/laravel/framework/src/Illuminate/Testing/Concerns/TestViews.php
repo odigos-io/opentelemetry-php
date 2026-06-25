@@ -29,6 +29,11 @@ trait TestViews
                 $this->switchToCompiledViewPath($path);
             }
         });
+        ParallelTesting::tearDownProcess(function () {
+            if ($path = $this->parallelSafeCompiledViewPath()) {
+                File::deleteDirectory($path);
+            }
+        });
     }
     /**
      * Get the test compiled view path.

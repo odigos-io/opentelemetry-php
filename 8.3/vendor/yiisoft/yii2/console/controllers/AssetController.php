@@ -45,7 +45,7 @@ use yii\web\AssetBundle;
  * @author Paul Klimov <klimov.paul@gmail.com>
  * @since 2.0
  *
- * @template T of Application
+ * @template T of Application = Application
  * @extends Controller<T>
  */
 class AssetController extends Controller

@@ -102,3 +102,4 @@ class RoundRobinTransport implements \Symfony\Component\Mailer\Transport\Transpo
         return ++$cursor >= \count($this->transports) ? 0 : $cursor;
     }
 }
+// @php-cs-fixer-ignore random_api_migration

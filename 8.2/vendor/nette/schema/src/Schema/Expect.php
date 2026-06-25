@@ -1,10 +1,10 @@
 <?php
 
+declare (strict_types=1);
 /**
  * This file is part of the Nette Framework (https://nette.org)
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
-declare (strict_types=1);
 namespace Odigos\Nette\Schema;
 
 use Odigos\Nette;
@@ -28,6 +28,7 @@ use function is_object;
  */
 final class Expect
 {
+    /** @param  list<mixed>  $args */
     public static function __callStatic(string $name, array $args): Type
     {
         $type = new Type($name);
@@ -44,20 +45,19 @@ final class Expect
     {
         return new AnyOf(...$set);
     }
-    /**
-     * @param  Schema[]  $shape
-     */
+    /** @param Schema[]  $shape */
     public static function structure(array $shape): Structure
     {
         return new Structure($shape);
     }
+    /** @param  array<string, Schema>  $items */
     public static function from(object $object, array $items = []): Structure
     {
         $ro = new \ReflectionObject($object);
         $props = $ro->hasMethod('__construct') ? $ro->getMethod('__construct')->getParameters() : $ro->getProperties();
         foreach ($props as $prop) {
-            $item =& $items[$prop->getName()];
-            if (!$item) {
+            $name = $prop->getName();
+            if (!isset($items[$name])) {
                 $type = Helpers::getPropertyType($prop) ?? 'mixed';
                 $item = new Type($type);
                 if ($prop instanceof \ReflectionProperty ? $prop->isInitialized($object) : $prop->isOptional()) {
@@ -72,6 +72,7 @@ final class Expect
                 } else {
                     $item->required();
                 }
+                $items[$name] = $item;
             }
         }
         return (new Structure($items))->castTo($ro->getName());
@@ -81,7 +82,8 @@ final class Expect
      */
     public static function array(?array $shape = []): Structure|Type
     {
-        return Nette\Utils\Arrays::first($shape ?? []) instanceof Schema ? (new Structure($shape))->castTo('array') : (new Type('array'))->default($shape);
+        $shape ??= [];
+        return Nette\Utils\Arrays::first($shape) instanceof Schema ? (new Structure($shape))->castTo('array') : (new Type('array'))->default($shape);
     }
     public static function arrayOf(string|Schema $valueType, string|Schema|null $keyType = null): Type
     {

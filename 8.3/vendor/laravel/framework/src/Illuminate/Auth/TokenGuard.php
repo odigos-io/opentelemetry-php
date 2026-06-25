@@ -77,17 +77,7 @@ class TokenGuard implements Guard
      */
     public function getTokenForRequest()
     {
-        $token = $this->request->query($this->inputKey);
-        if (empty($token)) {
-            $token = $this->request->input($this->inputKey);
-        }
-        if (empty($token)) {
-            $token = $this->request->bearerToken();
-        }
-        if (empty($token)) {
-            $token = $this->request->getPassword();
-        }
-        return $token;
+        return (($this->request->query($this->inputKey) ?: $this->request->input($this->inputKey)) ?: $this->request->bearerToken()) ?: $this->request->getPassword();
     }
     /**
      * Validate a user's credentials.
@@ -101,10 +91,7 @@ class TokenGuard implements Guard
             return \false;
         }
         $credentials = [$this->storageKey => $credentials[$this->inputKey]];
-        if ($this->provider->retrieveByCredentials($credentials)) {
-            return \true;
-        }
-        return \false;
+        return (bool) $this->provider->retrieveByCredentials($credentials);
     }
     /**
      * Set the current request instance.

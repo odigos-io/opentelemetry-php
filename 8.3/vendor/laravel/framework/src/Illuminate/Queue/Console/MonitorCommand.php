@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Queue\Factory;
 use Illuminate\Queue\Events\QueueBusy;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Symfony\Component\Console\Attribute\AsCommand;
 #[AsCommand(name: 'queue:monitor')]
@@ -81,7 +82,7 @@ class MonitorCommand extends Command
                 $queue = $connection;
                 $connection = $this->laravel['config']['queue.default'];
             }
-            return ['connection' => $connection, 'queue' => $queue, 'size' => $size = $this->manager->connection($connection)->size($queue), 'pending' => method_exists($this->manager->connection($connection), 'pendingSize') ? $this->manager->connection($connection)->pendingSize($queue) : null, 'delayed' => method_exists($this->manager->connection($connection), 'delayedSize') ? $this->manager->connection($connection)->delayedSize($queue) : null, 'reserved' => method_exists($this->manager->connection($connection), 'reservedSize') ? $this->manager->connection($connection)->reservedSize($queue) : null, 'oldest_pending' => method_exists($this->manager->connection($connection), 'oldestPending') ? $this->manager->connection($connection)->creationTimeOfOldestPendingJob($queue) : null, 'status' => $size >= $this->option('max') ? '<fg=yellow;options=bold>ALERT</>' : '<fg=green;options=bold>OK</>'];
+            return ['connection' => $connection, 'queue' => $queue, 'size' => $size = $this->manager->connection($connection)->size($queue), 'pending' => method_exists($this->manager->connection($connection), 'pendingSize') ? $this->manager->connection($connection)->pendingSize($queue) : null, 'delayed' => method_exists($this->manager->connection($connection), 'delayedSize') ? $this->manager->connection($connection)->delayedSize($queue) : null, 'reserved' => method_exists($this->manager->connection($connection), 'reservedSize') ? $this->manager->connection($connection)->reservedSize($queue) : null, 'oldest_pending' => method_exists($this->manager->connection($connection), 'creationTimeOfOldestPendingJob') ? $this->manager->connection($connection)->creationTimeOfOldestPendingJob($queue) : null, 'status' => $size >= $this->option('max') ? '<fg=yellow;options=bold>ALERT</>' : '<fg=green;options=bold>OK</>'];
         });
     }
     /**
@@ -101,6 +102,7 @@ class MonitorCommand extends Command
             $this->components->twoColumnDetail('Pending jobs', $queue['pending'] ?? 'N/A');
             $this->components->twoColumnDetail('Delayed jobs', $queue['delayed'] ?? 'N/A');
             $this->components->twoColumnDetail('Reserved jobs', $queue['reserved'] ?? 'N/A');
+            $this->components->twoColumnDetail('Oldest pending job', $queue['oldest_pending'] ? Carbon::createFromTimestamp($queue['oldest_pending'])->diffForHumans() : 'N/A');
             $this->line('');
         });
         $this->newLine();

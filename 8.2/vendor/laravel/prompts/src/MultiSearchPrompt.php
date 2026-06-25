@@ -6,6 +6,7 @@ use Closure;
 use Laravel\Prompts\Support\Utils;
 class MultiSearchPrompt extends \Laravel\Prompts\Prompt
 {
+    use \Laravel\Prompts\Concerns\HasInfo;
     use \Laravel\Prompts\Concerns\Scrolling;
     use \Laravel\Prompts\Concerns\Truncation;
     use \Laravel\Prompts\Concerns\TypedValue;
@@ -30,7 +31,7 @@ class MultiSearchPrompt extends \Laravel\Prompts\Prompt
      *
      * @param  Closure(string): array<int|string, string>  $options
      */
-    public function __construct(public string $label, public Closure $options, public string $placeholder = '', public int $scroll = 5, public bool|string $required = \false, public mixed $validate = null, public string $hint = '', public ?Closure $transform = null)
+    public function __construct(public string $label, public Closure $options, public string $placeholder = '', public int $scroll = 5, public bool|string $required = \false, public mixed $validate = null, public string $hint = '', public ?Closure $transform = null, public string|Closure $info = '')
     {
         $this->trackTypedValue(submit: \false, ignore: fn($key) => \Laravel\Prompts\Key::oneOf([\Laravel\Prompts\Key::SPACE, \Laravel\Prompts\Key::HOME, \Laravel\Prompts\Key::END, \Laravel\Prompts\Key::CTRL_A, \Laravel\Prompts\Key::CTRL_E], $key) && $this->highlighted !== null);
         $this->initializeScrolling(null);
@@ -46,6 +47,19 @@ class MultiSearchPrompt extends \Laravel\Prompts\Prompt
             \Laravel\Prompts\Key::LEFT, \Laravel\Prompts\Key::LEFT_ARROW, \Laravel\Prompts\Key::RIGHT, \Laravel\Prompts\Key::RIGHT_ARROW => $this->highlighted = null,
             default => $this->search(),
         });
+    }
+    /**
+     * Get the value of the highlighted option.
+     */
+    public function highlightedValue(): int|string|null
+    {
+        if ($this->highlighted === null || !is_array($this->matches)) {
+            return null;
+        }
+        if ($this->isList()) {
+            return $this->matches[$this->highlighted] ?? null;
+        }
+        return array_keys($this->matches)[$this->highlighted] ?? null;
     }
     /**
      * Perform the search.

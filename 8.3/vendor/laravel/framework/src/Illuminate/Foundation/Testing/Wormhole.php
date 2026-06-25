@@ -21,20 +21,24 @@ class Wormhole
         $this->value = $value;
     }
     /**
+     * @template TReturn of mixed
+     *
      * Travel forward the given number of microseconds.
      *
-     * @param  callable|null  $callback
-     * @return mixed
+     * @param  (callable(): TReturn)|null  $callback
+     * @return ($callback is null ? void : TReturn)
      */
     public function microsecond($callback = null)
     {
         return $this->microseconds($callback);
     }
     /**
+     * @template TReturn of mixed
+     *
      * Travel forward the given number of microseconds.
      *
-     * @param  callable|null  $callback
-     * @return mixed
+     * @param  (callable(): TReturn)|null  $callback
+     * @return ($callback is null ? void : TReturn)
      */
     public function microseconds($callback = null)
     {
@@ -42,20 +46,24 @@ class Wormhole
         return $this->handleCallback($callback);
     }
     /**
+     * @template TReturn of mixed
+     *
      * Travel forward the given number of milliseconds.
      *
-     * @param  callable|null  $callback
-     * @return mixed
+     * @param  (callable(): TReturn)|null  $callback
+     * @return ($callback is null ? void : TReturn)
      */
     public function millisecond($callback = null)
     {
         return $this->milliseconds($callback);
     }
     /**
+     * @template TReturn of mixed
+     *
      * Travel forward the given number of milliseconds.
      *
-     * @param  callable|null  $callback
-     * @return mixed
+     * @param  (callable(): TReturn)|null  $callback
+     * @return ($callback is null ? void : TReturn)
      */
     public function milliseconds($callback = null)
     {
@@ -63,20 +71,24 @@ class Wormhole
         return $this->handleCallback($callback);
     }
     /**
+     * @template TReturn of mixed
+     *
      * Travel forward the given number of seconds.
      *
-     * @param  callable|null  $callback
-     * @return mixed
+     * @param  (callable(): TReturn)|null  $callback
+     * @return ($callback is null ? void : TReturn)
      */
     public function second($callback = null)
     {
         return $this->seconds($callback);
     }
     /**
+     * @template TReturn of mixed
+     *
      * Travel forward the given number of seconds.
      *
-     * @param  callable|null  $callback
-     * @return mixed
+     * @param  (callable(): TReturn)|null  $callback
+     * @return ($callback is null ? void : TReturn)
      */
     public function seconds($callback = null)
     {
@@ -84,20 +96,24 @@ class Wormhole
         return $this->handleCallback($callback);
     }
     /**
+     * @template TReturn of mixed
+     *
      * Travel forward the given number of minutes.
      *
-     * @param  callable|null  $callback
-     * @return mixed
+     * @param  (callable(): TReturn)|null  $callback
+     * @return ($callback is null ? void : TReturn)
      */
     public function minute($callback = null)
     {
         return $this->minutes($callback);
     }
     /**
+     * @template TReturn of mixed
+     *
      * Travel forward the given number of minutes.
      *
-     * @param  callable|null  $callback
-     * @return mixed
+     * @param  (callable(): TReturn)|null  $callback
+     * @return ($callback is null ? void : TReturn)
      */
     public function minutes($callback = null)
     {
@@ -105,20 +121,24 @@ class Wormhole
         return $this->handleCallback($callback);
     }
     /**
+     * @template TReturn of mixed
+     *
      * Travel forward the given number of hours.
      *
-     * @param  callable|null  $callback
-     * @return mixed
+     * @param  (callable(): TReturn)|null  $callback
+     * @return ($callback is null ? void : TReturn)
      */
     public function hour($callback = null)
     {
         return $this->hours($callback);
     }
     /**
+     * @template TReturn of mixed
+     *
      * Travel forward the given number of hours.
      *
-     * @param  callable|null  $callback
-     * @return mixed
+     * @param  (callable(): TReturn)|null  $callback
+     * @return ($callback is null ? void : TReturn)
      */
     public function hours($callback = null)
     {
@@ -126,20 +146,24 @@ class Wormhole
         return $this->handleCallback($callback);
     }
     /**
+     * @template TReturn of mixed
+     *
      * Travel forward the given number of days.
      *
-     * @param  callable|null  $callback
-     * @return mixed
+     * @param  (callable(): TReturn)|null  $callback
+     * @return ($callback is null ? void : TReturn)
      */
     public function day($callback = null)
     {
         return $this->days($callback);
     }
     /**
+     * @template TReturn of mixed
+     *
      * Travel forward the given number of days.
      *
-     * @param  callable|null  $callback
-     * @return mixed
+     * @param  (callable(): TReturn)|null  $callback
+     * @return ($callback is null ? void : TReturn)
      */
     public function days($callback = null)
     {
@@ -147,20 +171,24 @@ class Wormhole
         return $this->handleCallback($callback);
     }
     /**
+     * @template TReturn of mixed
+     *
      * Travel forward the given number of weeks.
      *
-     * @param  callable|null  $callback
-     * @return mixed
+     * @param  (callable(): TReturn)|null  $callback
+     * @return ($callback is null ? void : TReturn)
      */
     public function week($callback = null)
     {
         return $this->weeks($callback);
     }
     /**
+     * @template TReturn of mixed
+     *
      * Travel forward the given number of weeks.
      *
-     * @param  callable|null  $callback
-     * @return mixed
+     * @param  (callable(): TReturn)|null  $callback
+     * @return ($callback is null ? void : TReturn)
      */
     public function weeks($callback = null)
     {
@@ -168,20 +196,24 @@ class Wormhole
         return $this->handleCallback($callback);
     }
     /**
+     * @template TReturn of mixed
+     *
      * Travel forward the given number of months.
      *
-     * @param  callable|null  $callback
-     * @return mixed
+     * @param  (callable(): TReturn)|null  $callback
+     * @return ($callback is null ? void : TReturn)
      */
     public function month($callback = null)
     {
         return $this->months($callback);
     }
     /**
+     * @template TReturn of mixed
+     *
      * Travel forward the given number of months.
      *
-     * @param  callable|null  $callback
-     * @return mixed
+     * @param  (callable(): TReturn)|null  $callback
+     * @return ($callback is null ? void : TReturn)
      */
     public function months($callback = null)
     {
@@ -189,20 +221,24 @@ class Wormhole
         return $this->handleCallback($callback);
     }
     /**
+     * @template TReturn of mixed
+     *
      * Travel forward the given number of years.
      *
-     * @param  callable|null  $callback
-     * @return mixed
+     * @param  (callable(): TReturn)|null  $callback
+     * @return ($callback is null ? void : TReturn)
      */
     public function year($callback = null)
     {
         return $this->years($callback);
     }
     /**
+     * @template TReturn of mixed
+     *
      * Travel forward the given number of years.
      *
-     * @param  callable|null  $callback
-     * @return mixed
+     * @param  (callable(): TReturn)|null  $callback
+     * @return ($callback is null ? void : TReturn)
      */
     public function years($callback = null)
     {
@@ -220,10 +256,12 @@ class Wormhole
         return Carbon::now();
     }
     /**
+     * @template TReturn of mixed
+     *
      * Handle the given optional execution callback.
      *
-     * @param  callable|null  $callback
-     * @return mixed
+     * @param  (callable(): TReturn)|null  $callback
+     * @return ($callback is null ? void : TReturn)
      */
     protected function handleCallback($callback)
     {

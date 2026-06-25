@@ -10,6 +10,9 @@ use Illuminate\Redis\Limiters\ConcurrencyLimiterBuilder;
 use Illuminate\Redis\Limiters\DurationLimiterBuilder;
 use Illuminate\Support\Traits\Macroable;
 use Throwable;
+/**
+ * @mixin \Redis
+ */
 abstract class Connection
 {
     use Macroable {

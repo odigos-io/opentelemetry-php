@@ -34,6 +34,16 @@ trait InteractsWithContentTypes
         return isset($acceptable[0]) && Str::contains(strtolower($acceptable[0]), ['/json', '+json']);
     }
     /**
+     * Determine if the current request is asking for Markdown.
+     *
+     * @return bool
+     */
+    public function wantsMarkdown()
+    {
+        $acceptable = $this->getAcceptableContentTypes();
+        return isset($acceptable[0]) && str_starts_with(strtolower($acceptable[0]), 'text/markdown');
+    }
+    /**
      * Determines whether the current requests accepts a given content type.
      *
      * @param  string|array  $contentTypes
@@ -111,6 +121,15 @@ trait InteractsWithContentTypes
     public function acceptsJson()
     {
         return $this->accepts('application/json');
+    }
+    /**
+     * Determines whether a request accepts Markdown.
+     *
+     * @return bool
+     */
+    public function acceptsMarkdown()
+    {
+        return $this->accepts('text/markdown');
     }
     /**
      * Determines whether a request accepts HTML.

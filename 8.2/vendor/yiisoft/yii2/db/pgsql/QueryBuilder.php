@@ -160,10 +160,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
      */
     public function checkIntegrity($check = \true, $schema = '', $table = '')
     {
-        /**
-         * @var Schema
-         * @phpstan-var Schema<ColumnSchema>
-         */
+        /** @var Schema $dbSchema */
         $dbSchema = $this->db->getSchema();
         $enable = $check ? 'ENABLE' : 'DISABLE';
         $schema = $schema ?: $dbSchema->defaultSchema;
@@ -311,10 +308,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
             // there are no columns to update
             $updateColumns = \false;
         }
-        /**
-         * @var Schema $schema
-         * @phpstan-var Schema<ColumnSchema>
-         */
+        /** @var Schema $schema */
         $schema = $this->db->getSchema();
         if (!$insertColumns instanceof Query) {
             $tableSchema = $schema->getTableSchema($table);

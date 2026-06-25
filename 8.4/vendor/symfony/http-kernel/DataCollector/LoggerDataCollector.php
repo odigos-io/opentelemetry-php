@@ -216,7 +216,7 @@ class LoggerDataCollector extends \Symfony\Component\HttpKernel\DataCollector\Da
             } else {
                 $count['priorities'][$log['priority']] = ['count' => 1, 'name' => $log['priorityName']];
             }
-            if ('WARNING' === $log['priorityName']) {
+            if ('WARNING' === $log['priorityName'] || 'warning' === $log['priorityName']) {
                 ++$count['warning_count'];
             }
             if ($this->isSilencedOrDeprecationErrorLog($log)) {

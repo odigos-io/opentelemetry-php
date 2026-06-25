@@ -327,7 +327,7 @@ class DbManager extends \yii\rbac\BaseManager
         $query = (new Query())->from($this->itemTable)->where(['type' => $type]);
         $items = [];
         foreach ($query->all($this->db) as $row) {
-            /** @var Role|Permission */
+            /** @var Role|Permission $item */
             $item = $this->populateItem($row);
             $items[$row['name']] = $item;
         }
@@ -364,7 +364,7 @@ class DbManager extends \yii\rbac\BaseManager
         $query = (new Query())->select('b.*')->from(['a' => $this->assignmentTable, 'b' => $this->itemTable])->where('{{a}}.[[item_name]]={{b}}.[[name]]')->andWhere(['a.user_id' => (string) $userId])->andWhere(['b.type' => \yii\rbac\Item::TYPE_ROLE]);
         $roles = $this->getDefaultRoleInstances();
         foreach ($query->all($this->db) as $row) {
-            /** @var Role */
+            /** @var Role $role */
             $role = $this->populateItem($row);
             $roles[$row['name']] = $role;
         }
@@ -404,7 +404,7 @@ class DbManager extends \yii\rbac\BaseManager
         $query = (new Query())->from($this->itemTable)->where(['type' => \yii\rbac\Item::TYPE_PERMISSION, 'name' => array_keys($result)]);
         $permissions = [];
         foreach ($query->all($this->db) as $row) {
-            /** @var Permission */
+            /** @var Permission $permission */
             $permission = $this->populateItem($row);
             $permissions[$row['name']] = $permission;
         }
@@ -433,7 +433,7 @@ class DbManager extends \yii\rbac\BaseManager
         $query = (new Query())->select('b.*')->from(['a' => $this->assignmentTable, 'b' => $this->itemTable])->where('{{a}}.[[item_name]]={{b}}.[[name]]')->andWhere(['a.user_id' => (string) $userId])->andWhere(['b.type' => \yii\rbac\Item::TYPE_PERMISSION]);
         $permissions = [];
         foreach ($query->all($this->db) as $row) {
-            /** @var Permission */
+            /** @var Permission $permission */
             $permission = $this->populateItem($row);
             $permissions[$row['name']] = $permission;
         }
@@ -459,7 +459,7 @@ class DbManager extends \yii\rbac\BaseManager
         $query = (new Query())->from($this->itemTable)->where(['type' => \yii\rbac\Item::TYPE_PERMISSION, 'name' => array_keys($result)]);
         $permissions = [];
         foreach ($query->all($this->db) as $row) {
-            /** @var Permission */
+            /** @var Permission $permission */
             $permission = $this->populateItem($row);
             $permissions[$row['name']] = $permission;
         }

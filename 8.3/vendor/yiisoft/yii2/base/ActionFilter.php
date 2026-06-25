@@ -21,7 +21,7 @@ use yii\helpers\StringHelper;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  *
- * @template T of Component
+ * @template T of Component = Component
  * @extends Behavior<T>
  */
 class ActionFilter extends \yii\base\Behavior
@@ -65,9 +65,6 @@ class ActionFilter extends \yii\base\Behavior
     }
     /**
      * @param ActionEvent $event
-     *
-     * @phpstan-param ActionEvent<Action<Controller<Module>>> $event
-     * @psalm-param ActionEvent<Action<Controller<Module>>> $event
      */
     public function beforeFilter($event)
     {
@@ -85,9 +82,6 @@ class ActionFilter extends \yii\base\Behavior
     }
     /**
      * @param ActionEvent $event
-     *
-     * @phpstan-param ActionEvent<Action<Controller<Module>>> $event
-     * @psalm-param ActionEvent<Action<Controller<Module>>> $event
      */
     public function afterFilter($event)
     {
@@ -99,9 +93,6 @@ class ActionFilter extends \yii\base\Behavior
      * You may override this method to do last-minute preparation for the action.
      * @param Action $action the action to be executed.
      * @return bool whether the action should continue to be executed.
-     *
-     * @phpstan-param Action<Controller<Module>> $action
-     * @psalm-param Action<Controller<Module>> $action
      */
     public function beforeAction($action)
     {
@@ -113,9 +104,6 @@ class ActionFilter extends \yii\base\Behavior
      * @param Action $action the action just executed.
      * @param mixed $result the action execution result
      * @return mixed the processed action result.
-     *
-     * @phpstan-param Action<Controller<Module>> $action
-     * @psalm-param Action<Controller<Module>> $action
      */
     public function afterAction($action, $result)
     {
@@ -126,9 +114,6 @@ class ActionFilter extends \yii\base\Behavior
      * @param Action $action
      * @return string
      * @since 2.0.7
-     *
-     * @phpstan-param Action<Controller<Module>> $action
-     * @psalm-param Action<Controller<Module>> $action
      */
     protected function getActionId($action)
     {
@@ -147,9 +132,6 @@ class ActionFilter extends \yii\base\Behavior
      * Returns a value indicating whether the filter is active for the given action.
      * @param Action $action the action being filtered
      * @return bool whether the filter is active for the given action.
-     *
-     * @phpstan-param Action<Controller<Module>> $action
-     * @psalm-param Action<Controller<Module>> $action
      */
     protected function isActive($action)
     {

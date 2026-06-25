@@ -52,7 +52,7 @@ abstract class MultiFieldSession extends \yii\web\Session
      */
     public $readCallback;
     /**
-     * @var callable a callback that will be called during session data writing.
+     * @var callable|null a callback that will be called during session data writing.
      * The signature of the callback should be as follows:
      *
      * ```

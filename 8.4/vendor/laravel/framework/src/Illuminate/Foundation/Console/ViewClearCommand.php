@@ -52,7 +52,11 @@ class ViewClearCommand extends Command
         }
         $this->laravel['view.engine.resolver']->resolve('blade')->forgetCompiledOrNotExpired();
         foreach ($this->files->glob("{$path}/*") as $view) {
-            $this->files->delete($view);
+            if ($this->files->isDirectory($view)) {
+                $this->files->deleteDirectory($view);
+            } else {
+                $this->files->delete($view);
+            }
         }
         $this->components->info('Compiled views cleared successfully.');
     }

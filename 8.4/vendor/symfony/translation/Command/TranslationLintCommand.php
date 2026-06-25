@@ -32,6 +32,7 @@ class TranslationLintCommand extends Command
     private SymfonyStyle $io;
     public function __construct(private TranslatorInterface&TranslatorBagInterface $translator, private array $enabledLocales = [])
     {
+        $this->enabledLocales = array_filter($enabledLocales);
         parent::__construct();
     }
     public function complete(CompletionInput $input, CompletionSuggestions $suggestions): void

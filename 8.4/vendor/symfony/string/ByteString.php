@@ -208,6 +208,9 @@ class ByteString extends \Symfony\Component\String\AbstractString
         }
         return $str;
     }
+    /**
+     * @param-immediately-invoked-callable $to
+     */
     public function replaceMatches(string $fromRegexp, string|callable $to): static
     {
         if ($this->ignoreCase) {

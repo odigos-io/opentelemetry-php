@@ -1,10 +1,10 @@
 <?php
 
+declare (strict_types=1);
 /**
  * This file is part of the Nette Framework (https://nette.org)
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
-declare (strict_types=1);
 namespace Odigos\Nette\Utils;
 
 use Odigos\Nette;
@@ -15,12 +15,10 @@ use const DIRECTORY_SEPARATOR;
  */
 final class FileInfo extends \SplFileInfo
 {
-    private readonly string $relativePath;
-    public function __construct(string $file, string $relativePath = '')
+    public function __construct(string $file, private readonly string $relativePath = '')
     {
         parent::__construct($file);
-        $this->setInfoClass(static::class);
-        $this->relativePath = $relativePath;
+        $this->setInfoClass(self::class);
     }
     /**
      * Returns the relative directory path.

@@ -87,7 +87,9 @@ class UnicodeString extends \Symfony\Component\String\AbstractUnicodeString
         if ('' === $suffix || \false === $suffix) {
             return \false;
         }
-        $grapheme = grapheme_extract($this->string, \strlen($suffix), \GRAPHEME_EXTR_MAXBYTES, \strlen($this->string) - \strlen($suffix)) ?: '';
+        if (\false === $grapheme = grapheme_extract($this->string, \strlen($suffix), \GRAPHEME_EXTR_MAXBYTES, \strlen($this->string) - \strlen($suffix))) {
+            $grapheme = '';
+        }
         if ($this->ignoreCase) {
             return 0 === mb_stripos($grapheme, $suffix, 0, 'UTF-8');
         }
@@ -277,7 +279,9 @@ class UnicodeString extends \Symfony\Component\String\AbstractUnicodeString
         if ('' === $prefix || \false === $prefix) {
             return \false;
         }
-        $grapheme = grapheme_extract($this->string, \strlen($prefix), \GRAPHEME_EXTR_MAXBYTES) ?: '';
+        if (\false === $grapheme = grapheme_extract($this->string, \strlen($prefix), \GRAPHEME_EXTR_MAXBYTES)) {
+            $grapheme = '';
+        }
         if ($this->ignoreCase) {
             return 0 === mb_stripos($grapheme, $prefix, 0, 'UTF-8');
         }
@@ -315,7 +319,41 @@ class UnicodeString extends \Symfony\Component\String\AbstractUnicodeString
     }
     public function __unserialize(array $data): void
     {
-        $this->string = $data['string'] ?? $data["\x00*\x00string"];
+        if ($wakeup = self::class !== (new \ReflectionMethod($this, '__wakeup'))->class && self::class === (new \ReflectionMethod($this, '__unserialize'))->class) {
+            trigger_deprecation('symfony/string', '7.4', 'Implementing "%s::__wakeup()" is deprecated, use "__unserialize()" instead.', get_debug_type($this));
+        }
+        if (($data['string'] ?? null) instanceof \Stringable || ($data["\x00*\x00string"] ?? null) instanceof \Stringable) {
+            throw new \BadMethodCallException('Cannot unserialize ' . __CLASS__);
+        }
+        try {
+            if (\in_array(array_keys($data), [['string'], ["\x00*\x00string"]], \true)) {
+                $this->string = $data['string'] ?? $data["\x00*\x00string"];
+                if ($wakeup) {
+                    $this->__wakeup();
+                }
+                return;
+            }
+            trigger_deprecation('symfony/string', '7.4', 'Passing more than just key "string" to "%s::__unserialize()" is deprecated, populate properties in "%s::__unserialize()" instead.', self::class, get_debug_type($this));
+            \Closure::bind(function ($data) use ($wakeup) {
+                foreach ($data as $key => $value) {
+                    $this->{"\x00" === $key[0] ?? '' ? substr($key, 1 + strrpos($key, "\x00")) : $key} = $value;
+                }
+                if ($wakeup) {
+                    $this->__wakeup();
+                }
+            }, $this, static::class)($data);
+        } finally {
+            if (!$wakeup) {
+                normalizer_is_normalized($this->string) ?: $this->string = normalizer_normalize($this->string);
+            }
+        }
+    }
+    /**
+     * @deprecated since Symfony 7.4, will be replaced by `__unserialize()` in 8.0
+     */
+    public function __wakeup(): void
+    {
+        trigger_deprecation('symfony/string', '7.4', 'Calling "%s::__wakeup()" is deprecated, use "__unserialize()" instead.', get_debug_type($this));
         if (!\is_string($this->string)) {
             throw new \BadMethodCallException('Cannot unserialize ' . __CLASS__);
         }

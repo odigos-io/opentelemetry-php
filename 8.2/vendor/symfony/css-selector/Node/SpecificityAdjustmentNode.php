@@ -34,7 +34,7 @@ class SpecificityAdjustmentNode extends \Symfony\Component\CssSelector\Node\Abst
     }
     public function __toString(): string
     {
-        $selectorArguments = array_map(fn($n) => ltrim((string) $n, '*'), $this->arguments);
+        $selectorArguments = array_map(static fn($n) => ltrim((string) $n, '*'), $this->arguments);
         return \sprintf('%s[%s:where(%s)]', $this->getNodeName(), $this->selector, implode(', ', $selectorArguments));
     }
 }

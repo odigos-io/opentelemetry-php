@@ -49,6 +49,8 @@ class LocaleSwitcher implements LocaleAwareInterface
      *
      * @template T
      *
+     * @param-immediately-invoked-callable $callback
+     *
      * @param callable(string $locale):T $callback
      *
      * @return T

@@ -34,6 +34,7 @@ class WorkCommand extends Command
                             {--daemon : Run the worker in daemon mode (Deprecated)}
                             {--once : Only process the next job on the queue}
                             {--stop-when-empty : Stop when the queue is empty}
+                            {--stop-when-empty-for=0 : Stop when no jobs have been processed for the given number of seconds}
                             {--delay=0 : The number of seconds to delay failed jobs (Deprecated)}
                             {--backoff=0 : The number of seconds to wait before retrying a job that encountered an uncaught exception}
                             {--max-jobs=0 : The number of jobs to process before stopping}
@@ -129,7 +130,7 @@ class WorkCommand extends Command
      */
     protected function gatherWorkerOptions()
     {
-        return new WorkerOptions($this->option('name'), max($this->option('backoff'), $this->option('delay')), $this->option('memory'), $this->option('timeout'), $this->option('sleep'), $this->option('tries'), $this->option('force'), $this->option('stop-when-empty'), $this->option('max-jobs'), $this->option('max-time'), $this->option('rest'));
+        return new WorkerOptions($this->option('name'), max($this->option('backoff'), $this->option('delay')), $this->option('memory'), $this->option('timeout'), $this->option('sleep'), $this->option('tries'), $this->option('force'), $this->option('stop-when-empty'), $this->option('max-jobs'), $this->option('max-time'), $this->option('rest'), $this->option('stop-when-empty-for'));
     }
     /**
      * Listen for the queue events in order to update the console output.
@@ -161,7 +162,7 @@ class WorkCommand extends Command
      *
      * @param  Job  $job
      * @param  string  $status
-     * @param  Throwable|null  $exception
+     * @param  \Throwable|null  $exception
      * @return void
      */
     protected function writeOutput(Job $job, $status, ?Throwable $exception = null)
@@ -203,7 +204,7 @@ class WorkCommand extends Command
      *
      * @param  \Illuminate\Contracts\Queue\Job  $job
      * @param  string  $status
-     * @param  Throwable|null  $exception
+     * @param  \Throwable|null  $exception
      * @return void
      */
     protected function writeOutputAsJson(Job $job, $status, ?Throwable $exception = null)

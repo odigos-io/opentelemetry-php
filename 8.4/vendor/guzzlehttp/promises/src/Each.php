@@ -22,6 +22,7 @@ final class Each
      */
     public static function of($iterable, ?callable $onFulfilled = null, ?callable $onRejected = null): \GuzzleHttp\Promise\PromiseInterface
     {
+        $iterable = self::prepareIterable($iterable, __FUNCTION__);
         return (new \GuzzleHttp\Promise\EachPromise($iterable, ['fulfilled' => $onFulfilled, 'rejected' => $onRejected]))->promise();
     }
     /**
@@ -37,6 +38,7 @@ final class Each
      */
     public static function ofLimit($iterable, $concurrency, ?callable $onFulfilled = null, ?callable $onRejected = null): \GuzzleHttp\Promise\PromiseInterface
     {
+        $iterable = self::prepareIterable($iterable, __FUNCTION__);
         return (new \GuzzleHttp\Promise\EachPromise($iterable, ['fulfilled' => $onFulfilled, 'rejected' => $onRejected, 'concurrency' => $concurrency]))->promise();
     }
     /**
@@ -49,8 +51,17 @@ final class Each
      */
     public static function ofLimitAll($iterable, $concurrency, ?callable $onFulfilled = null): \GuzzleHttp\Promise\PromiseInterface
     {
+        $iterable = self::prepareIterable($iterable, __FUNCTION__);
         return self::ofLimit($iterable, $concurrency, $onFulfilled, function ($reason, $idx, \GuzzleHttp\Promise\PromiseInterface $aggregate): void {
             $aggregate->reject($reason);
         });
+    }
+    private static function prepareIterable($iterable, string $method): iterable
+    {
+        if (is_iterable($iterable)) {
+            return $iterable;
+        }
+        \Odigos\trigger_deprecation('guzzlehttp/promises', '2.5', 'Passing a non-iterable to %s::%s() is deprecated; guzzlehttp/promises 3.0 will require an iterable.', self::class, $method);
+        return [$iterable];
     }
 }

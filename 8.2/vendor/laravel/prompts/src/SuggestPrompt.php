@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Support\Collection;
 class SuggestPrompt extends \Laravel\Prompts\Prompt
 {
+    use \Laravel\Prompts\Concerns\HasInfo;
     use \Laravel\Prompts\Concerns\Scrolling;
     use \Laravel\Prompts\Concerns\Truncation;
     use \Laravel\Prompts\Concerns\TypedValue;
@@ -26,7 +27,7 @@ class SuggestPrompt extends \Laravel\Prompts\Prompt
      *
      * @param  array<string>|Collection<int, string>|Closure(string): (array<string>|Collection<int, string>)  $options
      */
-    public function __construct(public string $label, array|Collection|Closure $options, public string $placeholder = '', public string $default = '', public int $scroll = 5, public bool|string $required = \false, public mixed $validate = null, public string $hint = '', public ?Closure $transform = null)
+    public function __construct(public string $label, array|Collection|Closure $options, public string $placeholder = '', public string $default = '', public int $scroll = 5, public bool|string $required = \false, public mixed $validate = null, public string $hint = '', public ?Closure $transform = null, public string|Closure $info = '')
     {
         $this->options = $options instanceof Collection ? $options->all() : $options;
         $this->initializeScrolling(null);
@@ -44,6 +45,16 @@ class SuggestPrompt extends \Laravel\Prompts\Prompt
             })(),
         });
         $this->trackTypedValue($default, ignore: fn($key) => \Laravel\Prompts\Key::oneOf([\Laravel\Prompts\Key::HOME, \Laravel\Prompts\Key::END, \Laravel\Prompts\Key::CTRL_A, \Laravel\Prompts\Key::CTRL_E], $key) && $this->highlighted !== null);
+    }
+    /**
+     * Get the value of the highlighted option.
+     */
+    public function highlightedValue(): ?string
+    {
+        if ($this->highlighted === null) {
+            return null;
+        }
+        return $this->matches()[$this->highlighted] ?? null;
     }
     /**
      * Get the entered value with a virtual cursor.

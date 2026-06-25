@@ -30,7 +30,19 @@ class Arr
      * Determine whether the given value is arrayable.
      *
      * @param  mixed  $value
-     * @return bool
+     * @return ($value is array
+     *     ? true
+     *     : ($value is \Illuminate\Contracts\Support\Arrayable
+     *         ? true
+     *         : ($value is \Traversable
+     *             ? true
+     *             : ($value is \Illuminate\Contracts\Support\Jsonable
+     *                 ? true
+     *                 : ($value is \JsonSerializable ? true : false)
+     *             )
+     *         )
+     *     )
+     * )
      */
     public static function arrayable($value)
     {
@@ -98,8 +110,10 @@ class Arr
     /**
      * Cross join the given arrays, returning all possible permutations.
      *
-     * @param  iterable  ...$arrays
-     * @return array
+     * @template TValue
+     *
+     * @param  iterable<TValue>  ...$arrays
+     * @return array<int, array<array-key, TValue>>
      */
     public static function crossJoin(...$arrays)
     {
@@ -119,8 +133,11 @@ class Arr
     /**
      * Divide an array into two arrays. One with keys and the other with values.
      *
-     * @param  array  $array
-     * @return array
+     * @template TKey of array-key
+     * @template TValue
+     *
+     * @param  array<TKey, TValue>  $array
+     * @return array{TKey[], TValue[]}
      */
     public static function divide($array)
     {
@@ -131,22 +148,25 @@ class Arr
      *
      * @param  iterable  $array
      * @param  string  $prepend
+     * @param  int  $depth
      * @return array
      */
-    public static function dot($array, $prepend = '')
+    public static function dot($array, $prepend = '', $depth = \INF)
     {
         $results = [];
-        $flatten = function ($data, $prefix) use (&$results, &$flatten): void {
+        $flatten = function ($data, $prefix, $currentDepth) use (&$results, &$flatten, $depth): void {
             foreach ($data as $key => $value) {
                 $newKey = $prefix . $key;
-                if (is_array($value) && !empty($value)) {
-                    $flatten($value, $newKey . '.');
+                if (is_array($value) && !empty($value) && $currentDepth < $depth) {
+                    $flatten($value, $newKey . '.', $currentDepth + 1);
                 } else {
                     $results[$newKey] = $value;
                 }
             }
         };
-        $flatten($array, $prepend);
+        $flatten($array, $prepend, 0);
+        // Destroy self-referencing closure to avoid memory leak...
+        $flatten = null;
         return $results;
     }
     /**
@@ -514,7 +534,7 @@ class Arr
      * An array is "associative" if it doesn't have sequential numerical keys beginning with zero.
      *
      * @param  array  $array
-     * @return bool
+     * @return ($array is list ? false : true)
      */
     public static function isAssoc(array $array)
     {
@@ -526,7 +546,7 @@ class Arr
      * An array is a "list" if all array keys are sequential integers starting from 0 with no gaps in between.
      *
      * @param  array  $array
-     * @return bool
+     * @return ($array is list ? true : false)
      */
     public static function isList($array)
     {
@@ -656,7 +676,7 @@ class Arr
     /**
      * Explode the "value" and "key" arguments passed to "pluck".
      *
-     * @param  string|array|Closure  $value
+     * @param  Closure|array|string  $value
      * @param  string|array|Closure|null  $key
      * @return array
      */
@@ -884,9 +904,12 @@ class Arr
     /**
      * Sort the array using the given callback or "dot" notation.
      *
-     * @param  iterable  $array
-     * @param  callable|array|string|null  $callback
-     * @return array
+     * @template TKey of array-key
+     * @template TValue
+     *
+     * @param  iterable<TKey, TValue>  $array
+     * @param  callable|string|null|array<int, (callable(TValue, TValue): -1|0|1)|array{string, 'asc'|'desc'}>  $callback
+     * @return array<TKey, TValue>
      */
     public static function sort($array, $callback = null)
     {
@@ -895,9 +918,12 @@ class Arr
     /**
      * Sort the array in descending order using the given callback or "dot" notation.
      *
-     * @param  iterable  $array
-     * @param  callable|array|string|null  $callback
-     * @return array
+     * @template TKey of array-key
+     * @template TValue
+     *
+     * @param  iterable<TKey, TValue>  $array
+     * @param  callable|string|null|array<int, (callable(TValue, TValue): -1|0|1)|array{string, 'asc'|'desc'}>  $callback
+     * @return array<TKey, TValue>
      */
     public static function sortDesc($array, $callback = null)
     {
@@ -906,10 +932,13 @@ class Arr
     /**
      * Recursively sort an array by keys and values.
      *
-     * @param  array  $array
-     * @param  int  $options
+     * @template TKey of array-key
+     * @template TValue
+     *
+     * @param  array<TKey, TValue>  $array
+     * @param  int-mask-of<SORT_REGULAR|SORT_NUMERIC|SORT_STRING|SORT_LOCALE_STRING|SORT_NATURAL|SORT_FLAG_CASE>  $options
      * @param  bool  $descending
-     * @return array
+     * @return array<TKey, TValue>
      */
     public static function sortRecursive($array, $options = \SORT_REGULAR, $descending = \false)
     {
@@ -928,9 +957,12 @@ class Arr
     /**
      * Recursively sort an array by keys and values in descending order.
      *
-     * @param  array  $array
-     * @param  int  $options
-     * @return array
+     * @template TKey of array-key
+     * @template TValue
+     *
+     * @param  array<TKey, TValue>  $array
+     * @param  int-mask-of<SORT_REGULAR|SORT_NUMERIC|SORT_STRING|SORT_LOCALE_STRING|SORT_NATURAL|SORT_FLAG_CASE>  $options
+     * @return array<TKey, TValue>
      */
     public static function sortRecursiveDesc($array, $options = \SORT_REGULAR)
     {
@@ -952,8 +984,8 @@ class Arr
     /**
      * Conditionally compile classes from an array into a CSS class list.
      *
-     * @param  array|string  $array
-     * @return string
+     * @param  array<string, bool>|array<int, string|int>|string  $array
+     * @return ($array is array<string, false> ? '' : ($array is '' ? '' : ($array is array{} ? '' : non-empty-string)))
      */
     public static function toCssClasses($array)
     {
@@ -971,8 +1003,8 @@ class Arr
     /**
      * Conditionally compile styles from an array into a style list.
      *
-     * @param  array|string  $array
-     * @return string
+     * @param  array<string, bool>|array<int, string|int>|string  $array
+     * @return ($array is array<string, false> ? '' : ($array is '' ? '' : ($array is array{} ? '' : non-empty-string)))
      */
     public static function toCssStyles($array)
     {
@@ -990,9 +1022,12 @@ class Arr
     /**
      * Filter the array using the given callback.
      *
-     * @param  array  $array
-     * @param  callable  $callback
-     * @return array
+     * @template TKey of array-key
+     * @template TValue
+     *
+     * @param  array<TKey, TValue>  $array
+     * @param  callable(TValue, TKey): bool  $callback
+     * @return array<TKey, TValue>
      */
     public static function where($array, callable $callback)
     {
@@ -1001,9 +1036,12 @@ class Arr
     /**
      * Filter the array using the negation of the given callback.
      *
-     * @param  array  $array
-     * @param  callable  $callback
-     * @return array
+     * @template TKey of array-key
+     * @template TValue
+     *
+     * @param  array<TKey, TValue>  $array
+     * @param  callable(TValue, TKey): bool  $callback
+     * @return array<TKey, TValue>
      */
     public static function reject($array, callable $callback)
     {
@@ -1045,8 +1083,11 @@ class Arr
     /**
      * If the given value is not an array and not null, wrap it in one.
      *
-     * @param  mixed  $value
-     * @return array
+     * @template TKey of array-key = array-key
+     * @template TValue
+     *
+     * @param  array<TKey, TValue>|TValue|null  $value
+     * @return ($value is null ? array{} : ($value is array ? array<TKey, TValue> : array{TValue}))
      */
     public static function wrap($value)
     {

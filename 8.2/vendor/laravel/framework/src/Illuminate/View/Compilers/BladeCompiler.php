@@ -148,12 +148,12 @@ class BladeCompiler extends \Illuminate\View\Compilers\Compiler implements \Illu
             }
             $this->ensureCompiledDirectoryExists($compiledPath = $this->getCompiledPath($this->getPath()));
             if (!$this->files->exists($compiledPath)) {
-                $this->files->put($compiledPath, $contents);
+                $this->files->replace($compiledPath, $contents);
                 return;
             }
             $compiledHash = $this->files->hash($compiledPath, 'xxh128');
             if ($compiledHash !== hash('xxh128', $contents)) {
-                $this->files->put($compiledPath, $contents);
+                $this->files->replace($compiledPath, $contents);
             }
         }
     }
@@ -769,7 +769,7 @@ class BladeCompiler extends \Illuminate\View\Compilers\Compiler implements \Illu
      * Register a handler for custom directives.
      *
      * @param  string  $name
-     * @param  callable  $handler
+     * @param  ($bind is true ? \Closure : callable)  $handler
      * @param  bool  $bind
      * @return void
      *

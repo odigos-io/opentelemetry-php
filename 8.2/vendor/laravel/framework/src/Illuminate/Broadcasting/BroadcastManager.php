@@ -156,14 +156,12 @@ class BroadcastManager implements FactoryContract
             $dispatch = fn() => $this->app->make(BusDispatcherContract::class)->dispatchNow(new \Illuminate\Broadcasting\BroadcastEvent(clone $event));
             return $event instanceof ShouldRescue ? $this->rescue($dispatch) : $dispatch();
         }
-        $queue = null;
-        if (method_exists($event, 'broadcastQueue')) {
-            $queue = $event->broadcastQueue();
-        } elseif (isset($event->broadcastQueue)) {
-            $queue = $event->broadcastQueue;
-        } elseif (isset($event->queue)) {
-            $queue = $event->queue;
-        }
+        $queue = match (\true) {
+            method_exists($event, 'broadcastQueue') => $event->broadcastQueue(),
+            isset($event->broadcastQueue) => $event->broadcastQueue,
+            isset($event->queue) => $event->queue,
+            default => null,
+        };
         $broadcastEvent = new \Illuminate\Broadcasting\BroadcastEvent(clone $event);
         if ($event instanceof ShouldBeUnique) {
             $broadcastEvent = new \Illuminate\Broadcasting\UniqueBroadcastEvent(clone $event);
@@ -270,7 +268,7 @@ class BroadcastManager implements FactoryContract
      */
     protected function createPusherDriver(array $config)
     {
-        return new PusherBroadcaster($this->pusher($config));
+        return new PusherBroadcaster($this->pusher($config), $config['jsonp'] ?? \false);
     }
     /**
      * Get a Pusher instance for the given configuration.

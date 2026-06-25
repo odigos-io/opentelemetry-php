@@ -17,6 +17,18 @@ if (!\function_exists('grapheme_str_split') && !\function_exists('Odigos\graphem
         return p\Grapheme::grapheme_str_split($string, $length);
     }
 }
+if (!\function_exists('grapheme_levenshtein') && !\function_exists('Odigos\grapheme_levenshtein')) {
+    function grapheme_levenshtein(string $string1, string $string2, int $insertion_cost = 1, int $replacement_cost = 1, int $deletion_cost = 1, string $locale = ''): int|false
+    {
+        return p\Grapheme::grapheme_levenshtein($string1, $string2, $insertion_cost, $replacement_cost, $deletion_cost);
+    }
+}
+if (!\function_exists('Odigos\grapheme_strrev')) {
+    function grapheme_strrev(string $string): string|false
+    {
+        return p\Grapheme::grapheme_strrev($string);
+    }
+}
 if (\extension_loaded('intl')) {
     return;
 }
@@ -34,6 +46,9 @@ if (!\function_exists('grapheme_extract') && !\function_exists('Odigos\grapheme_
     {
         return p\Grapheme::grapheme_extract((string) $haystack, (int) $size, (int) $type, (int) $offset, $next);
     }
+}
+if (\PHP_VERSION_ID >= 80500) {
+    return require __DIR__ . '/bootstrap85.php';
 }
 if (!\function_exists('grapheme_stripos') && !\function_exists('Odigos\grapheme_stripos')) {
     function grapheme_stripos(?string $haystack, ?string $needle, ?int $offset = 0): int|false

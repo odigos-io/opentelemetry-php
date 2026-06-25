@@ -335,6 +335,9 @@ abstract class AbstractString implements \Stringable, \JsonSerializable
         return $str;
     }
     abstract public function replace(string $from, string $to): static;
+    /**
+     * @param-immediately-invoked-callable $to
+     */
     abstract public function replaceMatches(string $fromRegexp, string|callable $to): static;
     abstract public function reverse(): static;
     abstract public function slice(int $start = 0, ?int $length = null): static;

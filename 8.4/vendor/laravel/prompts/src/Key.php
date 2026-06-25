@@ -65,6 +65,7 @@ class Key
      * Negative affirmation
      */
     const CTRL_U = "\x15";
+    const OPTION_BACKSPACE = "\x1b";
     /**
      * Checks for the constant values for the given match and returns the match
      *

@@ -17,6 +17,10 @@ class ArrayType extends \Illuminate\JsonSchema\Types\Type
      */
     protected ?\Illuminate\JsonSchema\Types\Type $items = null;
     /**
+     * Whether the array items must be unique.
+     */
+    protected ?bool $uniqueItems = null;
+    /**
      * Set the minimum number of items (inclusive).
      */
     public function min(int $value): static
@@ -38,6 +42,16 @@ class ArrayType extends \Illuminate\JsonSchema\Types\Type
     public function items(\Illuminate\JsonSchema\Types\Type $type): static
     {
         $this->items = $type;
+        return $this;
+    }
+    /**
+     * Indicate that the array items must be unique.
+     */
+    public function unique(bool $unique = \true): static
+    {
+        if ($unique) {
+            $this->uniqueItems = \true;
+        }
         return $this;
     }
     /**

@@ -147,7 +147,7 @@ class MorphToMany extends \Illuminate\Database\Eloquent\Relations\BelongsToMany
         return $this->morphType;
     }
     /**
-     * Get the fully qualified morph type for the relation.
+     * Get the fully-qualified morph type for the relation.
      *
      * @return string
      */

@@ -10,11 +10,12 @@
  */
 namespace Symfony\Component\CssSelector\XPath\Extension;
 
+use Symfony\Component\CssSelector\XPath\XPathExpr;
 /**
  * XPath expression translator extension interface.
  *
  * This component is a port of the Python cssselect library,
- * which is copyright Ian Bicking, @see https://github.com/SimonSapin/cssselect.
+ * which is copyright Ian Bicking, @see https://github.com/scrapy/cssselect.
  *
  * @author Jean-François Simon <jeanfrancois.simon@sensiolabs.com>
  *
@@ -54,6 +55,12 @@ interface ExtensionInterface
      * @return callable[]
      */
     public function getAttributeMatchingTranslators(): array;
+    /**
+     * Returns combination translators found inside ":has()" relation.
+     *
+     * @return array<string, callable(XPathExpr, XPathExpr): XPathExpr>
+     */
+    public function getRelativeCombinationTranslators(): array;
     /**
      * Returns extension name.
      */

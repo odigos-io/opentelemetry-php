@@ -45,6 +45,7 @@ class BcryptHasher extends \Illuminate\Hashing\AbstractHasher implements HasherC
      * @return string
      *
      * @throws \RuntimeException
+     * @throws \InvalidArgumentException
      */
     public function make(
         #[\SensitiveParameter]

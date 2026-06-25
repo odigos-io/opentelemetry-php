@@ -5,6 +5,7 @@ namespace Illuminate\Mail;
 use Illuminate\Contracts\Mail\Attachable;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Traits\ForwardsCalls;
+use InvalidArgumentException;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Mime\Part\DataPart;
@@ -47,7 +48,7 @@ class Message
      */
     public function from($address, $name = null)
     {
-        is_array($address) ? $this->message->from(...$address) : $this->message->from(new Address($address, (string) $name));
+        is_array($address) ? $this->message->from(...$this->ensureAddressesAreSafe($address)) : $this->message->from($this->createAddress($address, (string) $name));
         return $this;
     }
     /**
@@ -59,7 +60,7 @@ class Message
      */
     public function sender($address, $name = null)
     {
-        is_array($address) ? $this->message->sender(...$address) : $this->message->sender(new Address($address, (string) $name));
+        is_array($address) ? $this->message->sender(...$this->ensureAddressesAreSafe($address)) : $this->message->sender($this->createAddress($address, (string) $name));
         return $this;
     }
     /**
@@ -70,6 +71,7 @@ class Message
      */
     public function returnPath($address)
     {
+        $this->ensureAddressIsSafe($address);
         $this->message->returnPath($address);
         return $this;
     }
@@ -84,7 +86,7 @@ class Message
     public function to($address, $name = null, $override = \false)
     {
         if ($override) {
-            is_array($address) ? $this->message->to(...$address) : $this->message->to(new Address($address, (string) $name));
+            is_array($address) ? $this->message->to(...$this->ensureAddressesAreSafe($address)) : $this->message->to($this->createAddress($address, (string) $name));
             return $this;
         }
         return $this->addAddresses($address, $name, 'To');
@@ -113,7 +115,7 @@ class Message
     public function cc($address, $name = null, $override = \false)
     {
         if ($override) {
-            is_array($address) ? $this->message->cc(...$address) : $this->message->cc(new Address($address, (string) $name));
+            is_array($address) ? $this->message->cc(...$this->ensureAddressesAreSafe($address)) : $this->message->cc($this->createAddress($address, (string) $name));
             return $this;
         }
         return $this->addAddresses($address, $name, 'Cc');
@@ -142,7 +144,7 @@ class Message
     public function bcc($address, $name = null, $override = \false)
     {
         if ($override) {
-            is_array($address) ? $this->message->bcc(...$address) : $this->message->bcc(new Address($address, (string) $name));
+            is_array($address) ? $this->message->bcc(...$this->ensureAddressesAreSafe($address)) : $this->message->bcc($this->createAddress($address, (string) $name));
             return $this;
         }
         return $this->addAddresses($address, $name, 'Bcc');
@@ -185,21 +187,57 @@ class Message
             $type = lcfirst($type);
             $addresses = (new Collection($address))->map(function ($address, $key) {
                 if (is_string($key) && is_string($address)) {
-                    return new Address($key, $address);
+                    return $this->createAddress($key, $address);
                 }
                 if (is_array($address)) {
-                    return new Address($address['email'] ?? $address['address'], $address['name'] ?? null);
+                    return $this->createAddress($address['email'] ?? $address['address'], $address['name'] ?? null);
                 }
                 if (is_null($address)) {
-                    return new Address($key);
+                    return $this->createAddress($key);
                 }
-                return $address;
+                return $this->ensureAddressIsSafe($address);
             })->all();
             $this->message->{"{$type}"}(...$addresses);
         } else {
-            $this->message->{"add{$type}"}(new Address($address, (string) $name));
+            $this->message->{"add{$type}"}($this->createAddress($address, (string) $name));
         }
         return $this;
+    }
+    /**
+     * Create a safe Symfony address instance.
+     *
+     * @param  string  $address
+     * @param  string|null  $name
+     * @return \Symfony\Component\Mime\Address
+     */
+    protected function createAddress($address, $name = null)
+    {
+        $this->ensureAddressIsSafe($address);
+        return new Address($address, (string) $name);
+    }
+    /**
+     * Ensure the given address cannot inject additional headers or commands.
+     *
+     * @param  mixed  $address
+     * @return mixed
+     */
+    protected function ensureAddressIsSafe($address)
+    {
+        $addressString = $address instanceof Address ? $address->getAddress() : $address;
+        if (is_string($addressString) && preg_match('/[\r\n]/', $addressString) > 0) {
+            throw new InvalidArgumentException('Email addresses may not contain line break characters.');
+        }
+        return $address;
+    }
+    /**
+     * Ensure the given addresses cannot inject additional headers or commands.
+     *
+     * @param  array  $addresses
+     * @return array
+     */
+    protected function ensureAddressesAreSafe(array $addresses)
+    {
+        return array_map(fn($address) => $this->ensureAddressIsSafe($address), $addresses);
     }
     /**
      * Add an address debug header for a list of recipients.

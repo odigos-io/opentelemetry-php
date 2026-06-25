@@ -84,6 +84,9 @@ class FilesystemServiceProvider extends ServiceProvider
                 Route::get($uri . '/{path}', function (Request $request, string $path) use ($disk, $config, $isProduction) {
                     return (new \Illuminate\Filesystem\ServeFile($disk, $config, $isProduction))($request, $path);
                 })->where('path', '.*')->name('storage.' . $disk);
+                Route::put($uri . '/{path}', function (Request $request, string $path) use ($disk, $config, $isProduction) {
+                    return (new \Illuminate\Filesystem\ReceiveFile($disk, $config, $isProduction))($request, $path);
+                })->where('path', '.*')->name('storage.' . $disk . '.upload');
             });
         }
     }

@@ -4,11 +4,13 @@ namespace Laravel\Prompts;
 
 use Closure;
 use Laravel\Prompts\Support\Utils;
+use Laravel\Prompts\Themes\Default\Concerns\InteractsWithStrings;
 class TextareaPrompt extends \Laravel\Prompts\Prompt
 {
     use \Laravel\Prompts\Concerns\Scrolling;
-    use \Laravel\Prompts\Concerns\Truncation;
     use \Laravel\Prompts\Concerns\TypedValue;
+    use InteractsWithStrings;
+    protected int $minWidth = 0;
     /**
      * The width of the textarea.
      */

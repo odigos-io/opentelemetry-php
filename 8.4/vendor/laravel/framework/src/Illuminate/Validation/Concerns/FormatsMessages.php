@@ -59,7 +59,7 @@ trait FormatsMessages
     protected function getInlineMessage($attribute, $rule)
     {
         $inlineEntry = $this->getFromLocalArray($attribute, Str::snake($rule));
-        return is_array($inlineEntry) && in_array($rule, $this->sizeRules) ? $inlineEntry[$this->getAttributeType($attribute)] : $inlineEntry;
+        return is_array($inlineEntry) && in_array($rule, $this->sizeRules) ? $inlineEntry[$this->getAttributeType($attribute)] ?? null : $inlineEntry;
     }
     /**
      * Get the inline message for a rule if it exists.
@@ -88,8 +88,8 @@ trait FormatsMessages
                     $pattern = str_replace('\*', '([^.]*)', preg_quote($sourceKey, '#'));
                     if (preg_match('#^' . $pattern . '\z#u', $key) === 1) {
                         $message = $source[$sourceKey];
-                        if (is_array($message) && isset($message[$lowerRule])) {
-                            return $message[$lowerRule];
+                        if (is_array($message)) {
+                            return $message[$lowerRule] ?? null;
                         }
                         return $message;
                     }
@@ -328,6 +328,9 @@ trait FormatsMessages
      */
     protected function replaceIndexOrPositionPlaceholder($message, $attribute, $placeholder, ?Closure $modifier = null)
     {
+        if (!str_contains(strtolower($message), ':' . $placeholder) && !str_contains(strtolower($message), '-' . $placeholder)) {
+            return $message;
+        }
         $segments = explode('.', $attribute);
         $modifier ??= fn($value) => $value;
         $numericIndex = 1;
@@ -361,6 +364,9 @@ trait FormatsMessages
      */
     protected function replaceInputPlaceholder($message, $attribute)
     {
+        if (!str_contains($message, ':input')) {
+            return $message;
+        }
         $actualValue = $this->getValue($attribute);
         if (is_scalar($actualValue) || is_null($actualValue)) {
             $message = str_replace(':input', $this->getDisplayableValue($attribute, $actualValue), $message);

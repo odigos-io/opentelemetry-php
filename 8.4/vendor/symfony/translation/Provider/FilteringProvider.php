@@ -21,6 +21,7 @@ class FilteringProvider implements \Symfony\Component\Translation\Provider\Provi
 {
     public function __construct(private \Symfony\Component\Translation\Provider\ProviderInterface $provider, private array $locales, private array $domains = [])
     {
+        $this->locales = array_filter($locales);
     }
     public function __toString(): string
     {

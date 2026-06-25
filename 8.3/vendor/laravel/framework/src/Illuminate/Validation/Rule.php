@@ -13,6 +13,7 @@ use Illuminate\Validation\Rules\Dimensions;
 use Illuminate\Validation\Rules\Email;
 use Illuminate\Validation\Rules\Enum;
 use Illuminate\Validation\Rules\ExcludeIf;
+use Illuminate\Validation\Rules\ExcludeUnless;
 use Illuminate\Validation\Rules\Exists;
 use Illuminate\Validation\Rules\File;
 use Illuminate\Validation\Rules\ImageFile;
@@ -20,7 +21,10 @@ use Illuminate\Validation\Rules\In;
 use Illuminate\Validation\Rules\NotIn;
 use Illuminate\Validation\Rules\Numeric;
 use Illuminate\Validation\Rules\ProhibitedIf;
+use Illuminate\Validation\Rules\ProhibitedUnless;
 use Illuminate\Validation\Rules\RequiredIf;
+use Illuminate\Validation\Rules\RequiredUnless;
+use Illuminate\Validation\Rules\StringRule;
 use Illuminate\Validation\Rules\Unique;
 class Rule
 {
@@ -105,7 +109,7 @@ class Rule
     /**
      * Get an in rule builder instance.
      *
-     * @param  \Illuminate\Contracts\Support\Arrayable|\BackedEnum|\UnitEnum|array|string  $values
+     * @param  \Illuminate\Contracts\Support\Arrayable|\UnitEnum|array|string  $values
      * @return \Illuminate\Validation\Rules\In
      */
     public static function in($values)
@@ -118,7 +122,7 @@ class Rule
     /**
      * Get a not_in rule builder instance.
      *
-     * @param  \Illuminate\Contracts\Support\Arrayable|\BackedEnum|\UnitEnum|array|string  $values
+     * @param  \Illuminate\Contracts\Support\Arrayable|\UnitEnum|array|string  $values
      * @return \Illuminate\Validation\Rules\NotIn
      */
     public static function notIn($values)
@@ -139,6 +143,16 @@ class Rule
         return new RequiredIf($callback);
     }
     /**
+     * Get a required_unless rule builder instance.
+     *
+     * @param  (\Closure(): bool)|bool  $callback
+     * @return \Illuminate\Validation\Rules\RequiredUnless
+     */
+    public static function requiredUnless($callback)
+    {
+        return new RequiredUnless($callback);
+    }
+    /**
      * Get a exclude_if rule builder instance.
      *
      * @param  (\Closure(): bool)|bool  $callback
@@ -149,6 +163,16 @@ class Rule
         return new ExcludeIf($callback);
     }
     /**
+     * Get a exclude_unless rule builder instance.
+     *
+     * @param  (\Closure(): bool)|bool  $callback
+     * @return \Illuminate\Validation\Rules\ExcludeUnless
+     */
+    public static function excludeUnless($callback)
+    {
+        return new ExcludeUnless($callback);
+    }
+    /**
      * Get a prohibited_if rule builder instance.
      *
      * @param  (\Closure(): bool)|bool  $callback
@@ -157,6 +181,16 @@ class Rule
     public static function prohibitedIf($callback)
     {
         return new ProhibitedIf($callback);
+    }
+    /**
+     * Get a prohibited_unless rule builder instance.
+     *
+     * @param  (\Closure(): bool)|bool  $callback
+     * @return \Illuminate\Validation\Rules\ProhibitedUnless
+     */
+    public static function prohibitedUnless($callback)
+    {
+        return new ProhibitedUnless($callback);
     }
     /**
      * Get a date rule builder instance.
@@ -223,6 +257,15 @@ class Rule
         return new Dimensions($constraints);
     }
     /**
+     * Get a string rule builder instance.
+     *
+     * @return \Illuminate\Validation\Rules\StringRule
+     */
+    public static function string()
+    {
+        return new StringRule();
+    }
+    /**
      * Get a numeric rule builder instance.
      *
      * @return \Illuminate\Validation\Rules\Numeric
@@ -246,7 +289,7 @@ class Rule
     /**
      * Get a contains rule builder instance.
      *
-     * @param  \Illuminate\Contracts\Support\Arrayable|\BackedEnum|\UnitEnum|array|string  $values
+     * @param  \Illuminate\Contracts\Support\Arrayable|\UnitEnum|array|string  $values
      * @return \Illuminate\Validation\Rules\Contains
      */
     public static function contains($values)
@@ -259,7 +302,7 @@ class Rule
     /**
      * Get a "does not contain" rule builder instance.
      *
-     * @param  \Illuminate\Contracts\Support\Arrayable|\BackedEnum|\UnitEnum|array|string  $values
+     * @param  \Illuminate\Contracts\Support\Arrayable|\UnitEnum|array|string  $values
      * @return \Illuminate\Validation\Rules\DoesntContain
      */
     public static function doesntContain($values)

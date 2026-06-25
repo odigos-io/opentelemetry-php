@@ -18,8 +18,8 @@ class SearchPromptRenderer extends \Laravel\Prompts\Themes\Default\Renderer impl
             'submit' => $this->box($this->dim($this->truncate($prompt->label, $prompt->terminal()->cols() - 6)), $this->truncate($prompt->label(), $maxWidth)),
             'cancel' => $this->box($this->dim($this->truncate($prompt->label, $prompt->terminal()->cols() - 6)), $this->strikethrough($this->dim($this->truncate($prompt->searchValue() ?: $prompt->placeholder, $maxWidth))), color: 'red')->error($prompt->cancelMessage),
             'error' => $this->box($this->truncate($prompt->label, $prompt->terminal()->cols() - 6), $prompt->valueWithCursor($maxWidth), $this->renderOptions($prompt), color: 'yellow')->warning($this->truncate($prompt->error, $prompt->terminal()->cols() - 5)),
-            'searching' => $this->box($this->cyan($this->truncate($prompt->label, $prompt->terminal()->cols() - 6)), $this->valueWithCursorAndSearchIcon($prompt, $maxWidth), $this->renderOptions($prompt))->hint($prompt->hint),
-            default => $this->box($this->cyan($this->truncate($prompt->label, $prompt->terminal()->cols() - 6)), $prompt->valueWithCursor($maxWidth), $this->renderOptions($prompt))->when($prompt->hint, fn() => $this->hint($prompt->hint), fn() => $this->newLine())->spaceForDropdown($prompt),
+            'searching' => $this->box($this->cyan($this->truncate($prompt->label, $prompt->terminal()->cols() - 6)), $this->valueWithCursorAndSearchIcon($prompt, $maxWidth), $this->renderOptions($prompt), info: $prompt->infoText())->hint($prompt->hint),
+            default => $this->box($this->cyan($this->truncate($prompt->label, $prompt->terminal()->cols() - 6)), $prompt->valueWithCursor($maxWidth), $this->renderOptions($prompt), info: $prompt->infoText())->when($prompt->hint, fn() => $this->hint($prompt->hint), fn() => $this->newLine())->spaceForDropdown($prompt),
         };
     }
     /**

@@ -16,7 +16,7 @@ class TwoColumnDetail extends \Illuminate\Console\View\Components\Component
     public function render($first, $second = null, $verbosity = OutputInterface::VERBOSITY_NORMAL)
     {
         $first = $this->mutate($first, [\Illuminate\Console\View\Components\Mutators\EnsureDynamicContentIsHighlighted::class, \Illuminate\Console\View\Components\Mutators\EnsureNoPunctuation::class, \Illuminate\Console\View\Components\Mutators\EnsureRelativePaths::class]);
-        $second = $this->mutate($second, [\Illuminate\Console\View\Components\Mutators\EnsureDynamicContentIsHighlighted::class, \Illuminate\Console\View\Components\Mutators\EnsureNoPunctuation::class, \Illuminate\Console\View\Components\Mutators\EnsureRelativePaths::class]);
+        $second = $this->mutate($second, [\Illuminate\Console\View\Components\Mutators\EnsureDynamicContentIsHighlighted::class, \Illuminate\Console\View\Components\Mutators\EnsureRelativePaths::class]);
         $this->renderView('two-column-detail', ['first' => $first, 'second' => $second], $verbosity);
     }
 }

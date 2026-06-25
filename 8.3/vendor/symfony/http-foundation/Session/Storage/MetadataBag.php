@@ -27,10 +27,11 @@ class MetadataBag implements SessionBagInterface
     private string $name = '__metadata';
     private int $lastUsed;
     /**
-     * @param string $storageKey      The key used to store bag in the session
-     * @param int    $updateThreshold The time to wait between two UPDATED updates
+     * @param string   $storageKey      The key used to store bag in the session
+     * @param int      $updateThreshold The time to wait between two UPDATED updates
+     * @param int|null $cookieLifetime  The configured cookie lifetime; null to read from php.ini
      */
-    public function __construct(private string $storageKey = '_sf2_meta', private int $updateThreshold = 0)
+    public function __construct(private string $storageKey = '_sf2_meta', private int $updateThreshold = 0, private ?int $cookieLifetime = null)
     {
     }
     public function initialize(array &$array): void
@@ -107,6 +108,6 @@ class MetadataBag implements SessionBagInterface
     {
         $timeStamp = time();
         $this->meta[self::CREATED] = $this->meta[self::UPDATED] = $this->lastUsed = $timeStamp;
-        $this->meta[self::LIFETIME] = $lifetime ?? (int) \ini_get('session.cookie_lifetime');
+        $this->meta[self::LIFETIME] = $lifetime ?? $this->cookieLifetime ?? (int) \ini_get('session.cookie_lifetime');
     }
 }

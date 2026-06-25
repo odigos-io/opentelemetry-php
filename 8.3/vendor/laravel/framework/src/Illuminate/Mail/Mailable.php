@@ -207,7 +207,9 @@ class Mailable implements MailableContract, Renderable
     {
         $connection = property_exists($this, 'connection') ? $this->connection : null;
         $queueName = property_exists($this, 'queue') ? $this->queue : null;
-        return $queue->connection($connection)->laterOn($queueName ?: null, $delay, $this->newQueuedJob());
+        $job = $this->newQueuedJob();
+        $job->delay($delay);
+        return $queue->connection($connection)->laterOn($queueName ?: null, $delay, $job);
     }
     /**
      * Make the queued mailable job instance.
@@ -217,7 +219,6 @@ class Mailable implements MailableContract, Renderable
     protected function newQueuedJob()
     {
         $messageGroup = $this->messageGroup ?? (method_exists($this, 'messageGroup') ? $this->messageGroup() : null);
-        /** @phpstan-ignore callable.nonNativeMethod (false positive since method_exists guard is used) */
         $deduplicator = $this->deduplicator ?? (method_exists($this, 'deduplicationId') ? $this->deduplicationId(...) : null);
         return Container::getInstance()->make(\Illuminate\Mail\SendQueuedMailable::class, ['mailable' => $this])->onGroup($messageGroup)->withDeduplicator($deduplicator)->through(array_merge(method_exists($this, 'middleware') ? $this->middleware() : [], $this->middleware ?? []));
     }
@@ -1121,7 +1122,7 @@ class Mailable implements MailableContract, Renderable
      */
     public function assertSeeInHtml($string, $escape = \true)
     {
-        $string = $escape ? EncodedHtmlString::convert($string, withQuote: isset($this->markdown)) : $string;
+        $string = $escape ? EncodedHtmlString::convert($string, withQuote: \true) : $string;
         [$html] = $this->renderForAssertions();
         PHPUnit::assertStringContainsString($string, $html, "Did not see expected text [{$string}] within email body.");
         return $this;
@@ -1135,7 +1136,7 @@ class Mailable implements MailableContract, Renderable
      */
     public function assertDontSeeInHtml($string, $escape = \true)
     {
-        $string = $escape ? EncodedHtmlString::convert($string, withQuote: isset($this->markdown)) : $string;
+        $string = $escape ? EncodedHtmlString::convert($string, withQuote: \true) : $string;
         [$html] = $this->renderForAssertions();
         PHPUnit::assertStringNotContainsString($string, $html, "Saw unexpected text [{$string}] within email body.");
         return $this;
@@ -1150,7 +1151,7 @@ class Mailable implements MailableContract, Renderable
     public function assertSeeInOrderInHtml($strings, $escape = \true)
     {
         $strings = $escape ? array_map(function ($string) {
-            return EncodedHtmlString::convert($string, withQuote: isset($this->markdown));
+            return EncodedHtmlString::convert($string, withQuote: \true);
         }, $strings) : $strings;
         [$html] = $this->renderForAssertions();
         PHPUnit::assertThat($strings, new SeeInOrder($html));

@@ -26,7 +26,7 @@ use yii\db\Schema as BaseSchema;
  * @author Carsten Brandt <mail@cebe.cc>
  * @since 2.0
  *
- * @template T of ColumnSchema
+ * @template T of ColumnSchema = ColumnSchema
  * @extends BaseSchema<T>
  */
 class Schema extends BaseSchema implements ConstraintFinderInterface
@@ -213,10 +213,7 @@ class Schema extends BaseSchema implements ConstraintFinderInterface
     /**
      * Loads the column information into a [[ColumnSchema]] object.
      * @param array $info column information
-     * @return ColumnSchema the column schema object
-     *
-     * @phpstan-return T
-     * @psalm-return T
+     * @return T the column schema object
      */
     protected function loadColumnSchema($info)
     {

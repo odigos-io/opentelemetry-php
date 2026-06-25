@@ -81,7 +81,7 @@ class Authorize
         return $request->route($model, null) ?? (preg_match("/^['\"](.*)['\"]\$/", trim($model), $matches) ? $matches[1] : null);
     }
     /**
-     * Checks if the given string looks like a fully qualified class name.
+     * Checks if the given string looks like a fully-qualified class name.
      *
      * @param  string  $value
      * @return bool

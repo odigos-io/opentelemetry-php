@@ -35,7 +35,7 @@ class Ulid extends \Symfony\Component\Uid\AbstractUid implements \Symfony\Compon
             if (self::MAX === $this->uid) {
                 $this->uid = self::MAX;
             } elseif (!self::isValid($ulid)) {
-                throw new InvalidArgumentException(\sprintf('Invalid ULID: "%s".', $ulid));
+                throw new InvalidArgumentException('Invalid ULID.');
             }
         }
     }

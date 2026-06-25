@@ -89,12 +89,21 @@ class DatabaseLock extends \Illuminate\Cache\Lock
      * Release the lock.
      *
      * @return bool
+     *
+     * @throws \Throwable
      */
     public function release()
     {
         if ($this->isOwnedByCurrentProcess()) {
-            $this->connection->table($this->table)->where('key', $this->name)->where('owner', $this->owner)->delete();
-            return \true;
+            try {
+                $this->connection->table($this->table)->where('key', $this->name)->where('owner', $this->owner)->delete();
+                return \true;
+            } catch (Throwable $e) {
+                if ($this->causedByConcurrencyError($e)) {
+                    return \true;
+                }
+                throw $e;
+            }
         }
         return \false;
     }

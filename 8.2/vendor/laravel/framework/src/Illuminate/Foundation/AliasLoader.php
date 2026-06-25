@@ -89,7 +89,13 @@ class AliasLoader
         if (is_file($path = storage_path('framework/cache/facade-' . sha1($alias) . '.php'))) {
             return $path;
         }
-        file_put_contents($path, $this->formatFacadeStub($alias, file_get_contents(__DIR__ . '/stubs/facade.stub')));
+        $stub = $this->formatFacadeStub($alias, file_get_contents(__DIR__ . '/stubs/facade.stub'));
+        // Atomic write to prevent race conditions...
+        $tempPath = tempnam(dirname($path), 'facade-');
+        // Fix permissions of tempPath because `tempnam()` creates it with permissions set to 0600...
+        @chmod($tempPath, 0777 - umask());
+        file_put_contents($tempPath, $stub);
+        rename($tempPath, $path);
         return $path;
     }
     /**

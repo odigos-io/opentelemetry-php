@@ -10,7 +10,7 @@ class FormBuilder
     /**
      * Each step that should be executed.
      *
-     * @var array<int, \Laravel\Prompts\FormStep>
+     * @var array<int, FormStep>
      */
     protected array $steps = [];
     /**
@@ -150,7 +150,7 @@ class FormBuilder
     /**
      * Render a spinner while the given callback is executing.
      *
-     * @param  \Closure(): mixed  $callback
+     * @param  Closure(): mixed  $callback
      */
     public function spin(Closure $callback, string $message = '', ?string $name = null): self
     {

@@ -38,7 +38,7 @@ class ExceptionDataCollector extends \Symfony\Component\HttpKernel\DataCollector
     {
         return $this->data['exception']->getMessage();
     }
-    public function getCode(): int
+    public function getCode(): int|string
     {
         return $this->data['exception']->getCode();
     }

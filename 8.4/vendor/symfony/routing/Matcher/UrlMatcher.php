@@ -71,9 +71,14 @@ class UrlMatcher implements \Symfony\Component\Routing\Matcher\UrlMatcherInterfa
     public function matchRequest(Request $request): array
     {
         $this->request = $request;
-        $ret = $this->match($request->getPathInfo());
-        $this->request = null;
-        return $ret;
+        $originalContext = $this->context;
+        $this->context = (clone $originalContext)->fromRequest($request);
+        try {
+            return $this->match($request->getPathInfo());
+        } finally {
+            $this->context = $originalContext;
+            $this->request = null;
+        }
     }
     public function addExpressionLanguageProvider(ExpressionFunctionProviderInterface $provider): void
     {

@@ -48,9 +48,6 @@ class LoggingTranslator implements TranslatorInterface, \Symfony\Component\Trans
     {
         return $this->translator->getCatalogues();
     }
-    /**
-     * Gets the fallback locales.
-     */
     public function getFallbackLocales(): array
     {
         if ($this->translator instanceof \Symfony\Component\Translation\Translator || method_exists($this->translator, 'getFallbackLocales')) {

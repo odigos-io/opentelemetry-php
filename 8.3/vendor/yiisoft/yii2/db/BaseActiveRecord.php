@@ -357,17 +357,11 @@ abstract class BaseActiveRecord extends Model implements \yii\db\ActiveRecordInt
      *
      * Call methods declared in [[ActiveQuery]] to further customize the relation.
      *
-     * @param string $class the class name of the related record
-     * @param array $link the primary-foreign key constraint. The keys of the array refer to
+     * @param class-string $class the class name of the related record
+     * @param array<string, string> $link the primary-foreign key constraint. The keys of the array refer to
      * the attributes of the record associated with the `$class` model, while the values of the
      * array refer to the corresponding attributes in **this** AR class.
      * @return ActiveQueryInterface the relational query object.
-     *
-     * @phpstan-param class-string $class
-     * @psalm-param class-string $class
-     *
-     * @phpstan-param array<string, string> $link
-     * @psalm-param array<string, string> $link
      */
     public function hasOne($class, $link)
     {
@@ -397,17 +391,11 @@ abstract class BaseActiveRecord extends Model implements \yii\db\ActiveRecordInt
      *
      * Call methods declared in [[ActiveQuery]] to further customize the relation.
      *
-     * @param string $class the class name of the related record
-     * @param array $link the primary-foreign key constraint. The keys of the array refer to
+     * @param class-string $class the class name of the related record
+     * @param array<string, string> $link the primary-foreign key constraint. The keys of the array refer to
      * the attributes of the record associated with the `$class` model, while the values of the
      * array refer to the corresponding attributes in **this** AR class.
      * @return ActiveQueryInterface the relational query object.
-     *
-     * @phpstan-param class-string $class
-     * @psalm-param class-string $class
-     *
-     * @phpstan-param array<string, string> $link
-     * @psalm-param array<string, string> $link
      */
     public function hasMany($class, $link)
     {
@@ -427,9 +415,7 @@ abstract class BaseActiveRecord extends Model implements \yii\db\ActiveRecordInt
     {
         /**
          * @var ActiveRecordInterface $class
-         * @var ActiveQuery $query
-         *
-         * @phpstan-var ActiveQuery<ActiveRecord> $query
+         * @var ActiveQuery<ActiveRecord> $query
          */
         $query = $class::find();
         $query->primaryModel = $this;
@@ -1225,10 +1211,7 @@ abstract class BaseActiveRecord extends Model implements \yii\db\ActiveRecordInt
                 throw new InvalidCallException('Unable to link models: the models being linked cannot be newly created.');
             }
             if (is_array($relation->via)) {
-                /**
-                 * @var ActiveQuery $viaRelation
-                 * @phpstan-var ActiveQuery<ActiveRecord|array<string, mixed>> $viaRelation
-                 */
+                /** @var ActiveQuery $viaRelation */
                 list($viaName, $viaRelation) = $relation->via;
                 $viaClass = $viaRelation->modelClass;
                 // unset $viaName so that it can be reloaded to reflect the change
@@ -1318,10 +1301,7 @@ abstract class BaseActiveRecord extends Model implements \yii\db\ActiveRecordInt
         $relation = $this->getRelation($name);
         if ($relation->via !== null) {
             if (is_array($relation->via)) {
-                /**
-                 * @var ActiveQuery $viaRelation
-                 * @phpstan-var ActiveQuery<ActiveRecord> $viaRelation
-                 */
+                /** @var ActiveQuery<ActiveRecord> $viaRelation */
                 list($viaName, $viaRelation) = $relation->via;
                 $viaClass = $viaRelation->modelClass;
                 unset($this->_related[$viaName]);
@@ -1422,10 +1402,7 @@ abstract class BaseActiveRecord extends Model implements \yii\db\ActiveRecordInt
         $relation = $this->getRelation($name);
         if ($relation->via !== null) {
             if (is_array($relation->via)) {
-                /**
-                 * @var ActiveQuery $viaRelation
-                 * @phpstan-var ActiveQuery<ActiveRecord|array<string, mixed>> $viaRelation
-                 */
+                /** @var ActiveQuery $viaRelation */
                 list($viaName, $viaRelation) = $relation->via;
                 $viaClass = $viaRelation->modelClass;
                 unset($this->_related[$viaName]);
