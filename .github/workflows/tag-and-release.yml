@@ -196,3 +196,21 @@ jobs:
           success-description: "Published a new release of OpenTelemetry PHP Community Agent"
           failure-description: "ERROR: Failed to publish a new release of OpenTelemetry PHP Community Agent"
           tag: ${{ needs.calculate.outputs.new_version }}
+
+  # ── 6. Trigger Odigos version update (OSS, Enterprise, VM Agent) ──────────
+  trigger-odigos-update:
+    needs: [calculate, publish]
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Trigger agents version update in consumer repos
+        uses: odigos-io/ci-core/dispatch-agent-version-update@main
+        with:
+          instrumentation_agent: php
+          version: ${{ needs.calculate.outputs.new_version }}
+          consumers: |
+            odigos
+            odigos-enterprise
+            vm-agent
