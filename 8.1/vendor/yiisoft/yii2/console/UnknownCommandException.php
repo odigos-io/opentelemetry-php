@@ -64,18 +64,12 @@ class UnknownCommandException extends \yii\console\Exception
         if ($help === \false || $this->command === '') {
             return [];
         }
-        /**
-         * @var HelpController $helpController
-         * @phpstan-var HelpController<Application> $helpController
-         */
+        /** @var HelpController<Application> $helpController */
         list($helpController, $actionID) = $help;
         $availableActions = [];
         foreach ($helpController->getCommands() as $command) {
             $result = $this->application->createController($command);
-            /**
-             * @var Controller $controller
-             * @phpstan-var Controller<Application> $controller
-             */
+            /** @var Controller<Application> $controller */
             list($controller, $actionID) = $result;
             if ($controller->createAction($controller->defaultAction) !== null) {
                 // add the command itself (default action)

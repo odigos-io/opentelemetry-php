@@ -12,7 +12,10 @@ use Slim\Error\AbstractErrorRenderer;
 use Throwable;
 use function get_class;
 use function htmlentities;
+use function htmlspecialchars;
 use function sprintf;
+use const ENT_QUOTES;
+use const ENT_SUBSTITUTE;
 /**
  * Default Slim application HTML Error Renderer
  */
@@ -25,7 +28,8 @@ class HtmlErrorRenderer extends AbstractErrorRenderer
             $html .= '<h2>Details</h2>';
             $html .= $this->renderExceptionFragment($exception);
         } else {
-            $html = "<p>{$this->getErrorDescription($exception)}</p>";
+            $description = htmlspecialchars($this->getErrorDescription($exception), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+            $html = "<p>{$description}</p>";
         }
         return $this->renderHtmlBody($this->getErrorTitle($exception), $html);
     }
@@ -43,6 +47,7 @@ class HtmlErrorRenderer extends AbstractErrorRenderer
     }
     public function renderHtmlBody(string $title = '', string $html = ''): string
     {
+        $title = htmlspecialchars($title, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
         return sprintf('<!doctype html>' . '<html lang="en">' . '    <head>' . '        <meta charset="utf-8">' . '        <meta name="viewport" content="width=device-width, initial-scale=1">' . '        <title>%s</title>' . '        <style>' . '            body{margin:0;padding:30px;font:12px/1.5 Helvetica,Arial,Verdana,sans-serif}' . '            h1{margin:0;font-size:48px;font-weight:normal;line-height:48px}' . '            strong{display:inline-block;width:65px}' . '        </style>' . '    </head>' . '    <body>' . '        <h1>%s</h1>' . '        <div>%s</div>' . '        <a href="#" onclick="window.history.go(-1)">Go Back</a>' . '    </body>' . '</html>', $title, $title, $html);
     }
 }

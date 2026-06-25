@@ -35,6 +35,8 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
     private ?\Symfony\Component\HttpKernel\HttpCache\ResponseCacheStrategyInterface $surrogateCacheStrategy = null;
     private array $options = [];
     private array $traces = [];
+    private ?Request $forwardedRequest = null;
+    private ?Request $backendRequest = null;
     /**
      * Constructor.
      *
@@ -163,6 +165,8 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
         // FIXME: catch exceptions and implement a 500 error page here? -> in Varnish, there is a built-in error page mechanism
         if (HttpKernelInterface::MAIN_REQUEST === $type) {
             $this->traces = [];
+            $this->forwardedRequest = null;
+            $this->backendRequest = null;
             // Keep a clone of the original request for surrogates so they can access it.
             // We must clone here to get a separate instance because the application will modify the request during
             // the application flow (we know it always does because we do ourselves by setting REMOTE_ADDR to 127.0.0.1
@@ -192,6 +196,11 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
                 } catch (\Symfony\Component\HttpKernel\HttpCache\CacheWasLockedException) {
                 }
             } while (null === $response);
+        }
+        if (HttpKernelInterface::MAIN_REQUEST === $type) {
+            // Expose the request actually handled by the backend (a sub-request on a cache miss)
+            // to kernel.terminate listeners, as would happen behind a real reverse proxy.
+            $this->backendRequest = $this->forwardedRequest ?? $request;
         }
         $this->restoreResponseBody($request, $response);
         if (HttpKernelInterface::MAIN_REQUEST === $type) {
@@ -224,7 +233,7 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
             return;
         }
         if ($this->getKernel() instanceof TerminableInterface) {
-            $this->getKernel()->terminate($request, $response);
+            $this->getKernel()->terminate($this->backendRequest ?? $request, $response);
         }
     }
     /**
@@ -398,6 +407,7 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
         $this->surrogate?->addSurrogateCapability($request);
         // always a "master" request (as the real master request can be in cache)
         $response = \Symfony\Component\HttpKernel\HttpCache\SubRequestHandler::handle($this->kernel, $request, HttpKernelInterface::MAIN_REQUEST, $catch);
+        $this->forwardedRequest = $request;
         /*
          * Support stale-if-error given on Responses or as a config option.
          * RFC 7234 summarizes in Section 4.2.4 (but also mentions with the individual
@@ -482,12 +492,11 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
         if ($this->waitForLock($request)) {
             throw new \Symfony\Component\HttpKernel\HttpCache\CacheWasLockedException();
             // unwind back to handle(), try again
-        } else {
-            // backend is slow as hell, send a 503 response (to avoid the dog pile effect)
-            $entry->setStatusCode(503);
-            $entry->setContent('503 Service Unavailable');
-            $entry->headers->set('Retry-After', 10);
         }
+        // backend is slow as hell, send a 503 response (to avoid the dog pile effect)
+        $entry->setStatusCode(503);
+        $entry->setContent('503 Service Unavailable');
+        $entry->headers->set('Retry-After', 10);
         return \true;
     }
     /**

@@ -65,15 +65,16 @@ abstract class Kernel implements \Symfony\Component\HttpKernel\KernelInterface, 
     private ?string $warmupDir = null;
     private int $requestStackSize = 0;
     private bool $resetServices = \false;
+    private bool $handlingHttpCache = \false;
     /**
      * @var array<string, bool>
      */
     private static array $freshCache = [];
-    public const VERSION = '6.4.31';
-    public const VERSION_ID = 60431;
+    public const VERSION = '6.4.41';
+    public const VERSION_ID = 60441;
     public const MAJOR_VERSION = 6;
     public const MINOR_VERSION = 4;
-    public const RELEASE_VERSION = 31;
+    public const RELEASE_VERSION = 41;
     public const EXTRA_VERSION = '';
     public const END_OF_MAINTENANCE = '11/2026';
     public const END_OF_LIFE = '11/2027';
@@ -90,13 +91,14 @@ abstract class Kernel implements \Symfony\Component\HttpKernel\KernelInterface, 
         $this->container = null;
         $this->requestStackSize = 0;
         $this->resetServices = \false;
+        $this->handlingHttpCache = \false;
     }
     /**
      * @return void
      */
     public function boot()
     {
-        if (\true === $this->booted) {
+        if ($this->booted) {
             if (!$this->requestStackSize && $this->resetServices) {
                 if ($this->container->has('services_resetter')) {
                     $this->container->get('services_resetter')->reset();
@@ -108,7 +110,7 @@ abstract class Kernel implements \Symfony\Component\HttpKernel\KernelInterface, 
             }
             return;
         }
-        if (null === $this->container) {
+        if (!$this->container) {
             $this->preBoot();
         }
         foreach ($this->getBundles() as $bundle) {
@@ -131,7 +133,7 @@ abstract class Kernel implements \Symfony\Component\HttpKernel\KernelInterface, 
      */
     public function terminate(Request $request, Response $response)
     {
-        if (\false === $this->booted) {
+        if (!$this->booted) {
             return;
         }
         if ($this->getHttpKernel() instanceof \Symfony\Component\HttpKernel\TerminableInterface) {
@@ -143,7 +145,7 @@ abstract class Kernel implements \Symfony\Component\HttpKernel\KernelInterface, 
      */
     public function shutdown()
     {
-        if (\false === $this->booted) {
+        if (!$this->booted) {
             return;
         }
         $this->booted = \false;
@@ -157,15 +159,23 @@ abstract class Kernel implements \Symfony\Component\HttpKernel\KernelInterface, 
     }
     public function handle(Request $request, int $type = \Symfony\Component\HttpKernel\HttpKernelInterface::MAIN_REQUEST, bool $catch = \true): Response
     {
-        if (!$this->booted) {
-            $container = $this->container ?? $this->preBoot();
-            if ($container->has('http_cache')) {
-                return $container->get('http_cache')->handle($request, $type, $catch);
+        if (!$this->container) {
+            $this->preBoot();
+        }
+        if (\Symfony\Component\HttpKernel\HttpKernelInterface::MAIN_REQUEST === $type && !$this->handlingHttpCache && $this->container->has('http_cache')) {
+            $this->handlingHttpCache = \true;
+            try {
+                return $this->container->get('http_cache')->handle($request, $type, $catch);
+            } finally {
+                $this->handlingHttpCache = \false;
+                $this->resetServices = \true;
             }
         }
         $this->boot();
         ++$this->requestStackSize;
-        $this->resetServices = \true;
+        if (!$this->handlingHttpCache) {
+            $this->resetServices = \true;
+        }
         try {
             return $this->getHttpKernel()->handle($request, $type, $catch);
         } finally {
@@ -381,7 +391,7 @@ abstract class Kernel implements \Symfony\Component\HttpKernel\KernelInterface, 
         }
         if ($collectDeprecations = $this->debug && !\defined('PHPUNIT_COMPOSER_INSTALL')) {
             $collectedLogs = [];
-            $previousHandler = set_error_handler(function ($type, $message, $file, $line) use (&$collectedLogs, &$previousHandler) {
+            $previousHandler = set_error_handler(static function ($type, $message, $file, $line) use (&$collectedLogs, &$previousHandler) {
                 if (\E_USER_DEPRECATED !== $type && \E_DEPRECATED !== $type) {
                     return $previousHandler ? $previousHandler($type, $message, $file, $line) : \false;
                 }
@@ -487,7 +497,7 @@ abstract class Kernel implements \Symfony\Component\HttpKernel\KernelInterface, 
     {
         foreach (['cache' => $this->getCacheDir(), 'build' => $this->warmupDir ?: $this->getBuildDir(), 'logs' => $this->getLogDir()] as $name => $dir) {
             if (!is_dir($dir)) {
-                if (\false === @mkdir($dir, 0777, \true) && !is_dir($dir)) {
+                if (!@mkdir($dir, 0777, \true) && !is_dir($dir)) {
                     throw new \RuntimeException(\sprintf('Unable to create the "%s" directory (%s).', $name, $dir));
                 }
             } elseif (!is_writable($dir)) {

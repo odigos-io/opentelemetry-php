@@ -24,7 +24,7 @@ use yii\di\NotInstantiableException;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  *
- * @template T of Module
+ * @template T of Module = Module
  */
 class Controller extends \yii\base\Component implements \yii\base\ViewContextInterface
 {
@@ -42,10 +42,7 @@ class Controller extends \yii\base\Component implements \yii\base\ViewContextInt
      */
     public $id;
     /**
-     * @var Module the module that this controller belongs to.
-     *
-     * @phpstan-var T
-     * @psalm-var T
+     * @var T the module that this controller belongs to.
      */
     public $module;
     /**
@@ -61,11 +58,11 @@ class Controller extends \yii\base\Component implements \yii\base\ViewContextInt
      */
     public $layout;
     /**
-     * @var Action|null the action that is currently being executed. This property will be set
+     * @var Action<covariant static>|null the action that is currently being executed. This property will be set
      * by [[run()]] when it is called by [[Application]] to run an action.
      *
-     * @phpstan-var Action<$this>|null
-     * @psalm-var Action<$this>|null
+     * @phpstan-var Action<covariant static>|null
+     * @psalm-var Action<self>|null
      */
     public $action;
     /**
@@ -88,14 +85,8 @@ class Controller extends \yii\base\Component implements \yii\base\ViewContextInt
     private $_viewPath;
     /**
      * @param string $id the ID of this controller.
-     * @param Module $module the module that this controller belongs to.
-     * @param array $config name-value pairs that will be used to initialize the object properties.
-     *
-     * @phpstan-param T $module
-     * @psalm-param T $module
-     *
-     * @phpstan-param array<string, mixed> $config
-     * @psalm-param array<string, mixed> $config
+     * @param T $module the module that this controller belongs to.
+     * @param array<string, mixed> $config name-value pairs that will be used to initialize the object properties.
      */
     public function __construct($id, $module, $config = [])
     {
@@ -133,10 +124,7 @@ class Controller extends \yii\base\Component implements \yii\base\ViewContextInt
      *
      * [[\Yii::createObject()]] will be used later to create the requested action
      * using the configuration provided here.
-     * @return array
-     *
-     * @phpstan-return array<array-key, class-string|array{class: class-string, ...}>
-     * @psalm-return array<array-key, class-string|array{class: class-string, ...}>
+     * @return array<array-key, class-string|array{class: class-string, ...}>
      */
     public function actions()
     {
@@ -146,13 +134,10 @@ class Controller extends \yii\base\Component implements \yii\base\ViewContextInt
      * Runs an action within this controller with the specified action ID and parameters.
      * If the action ID is empty, the method will use [[defaultAction]].
      * @param string $id the ID of the action to be executed.
-     * @param array $params the parameters (name-value pairs) to be passed to the action.
+     * @param array<array-key, mixed> $params the parameters (name-value pairs) to be passed to the action.
      * @return mixed the result of the action.
      * @throws InvalidRouteException if the requested action ID cannot be resolved into an action successfully.
      * @see createAction()
-     *
-     * @phpstan-param array<array-key, mixed> $params
-     * @psalm-param array<array-key, mixed> $params
      */
     public function runAction($id, $params = [])
     {
@@ -199,12 +184,9 @@ class Controller extends \yii\base\Component implements \yii\base\ViewContextInt
      * of module IDs, controller ID and action ID. If the route starts with a slash '/', the parsing of
      * the route will start from the application; otherwise, it will start from the parent module of this controller.
      * @param string $route the route to be handled, e.g., 'view', 'comment/view', '/admin/comment/view'.
-     * @param array $params the parameters to be passed to the action.
+     * @param array<array-key, mixed> $params the parameters to be passed to the action.
      * @return mixed the result of the action.
      * @see runAction()
-     *
-     * @phpstan-param array<array-key, mixed> $params
-     * @psalm-param array<array-key, mixed> $params
      */
     public function run($route, $params = [])
     {
@@ -219,18 +201,12 @@ class Controller extends \yii\base\Component implements \yii\base\ViewContextInt
     /**
      * Binds the parameters to the action.
      * This method is invoked by [[Action]] when it begins to run with the given parameters.
-     * @param Action $action the action to be bound with parameters.
-     * @param array $params the parameters to be bound to the action.
-     * @return array the valid parameters that the action can run with.
+     * @param Action<static> $action the action to be bound with parameters.
+     * @param array<array-key, mixed> $params the parameters to be bound to the action.
+     * @return mixed[] the valid parameters that the action can run with.
      *
-     * @phpstan-param Action<$this> $action
-     * @psalm-param Action<$this> $action
-     *
-     * @phpstan-param array<array-key, mixed> $params
-     * @psalm-param array<array-key, mixed> $params
-     *
-     * @phpstan-return mixed[]
-     * @psalm-return mixed[]
+     * @phpstan-param Action<static> $action
+     * @psalm-param Action<self> $action
      */
     public function bindActionParams($action, $params)
     {
@@ -244,10 +220,10 @@ class Controller extends \yii\base\Component implements \yii\base\ViewContextInt
      * where `xyz` is the action ID. If found, an [[InlineAction]] representing that
      * method will be created and returned.
      * @param string $id the action ID.
-     * @return Action|null the newly created action instance. Null if the ID doesn't resolve into any action.
+     * @return Action<covariant static>|null the newly created action instance. Null if the ID doesn't resolve into any action.
      *
-     * @phpstan-return Action<$this>|null
-     * @psalm-return Action<$this>|null
+     * @phpstan-return Action<covariant static>|null
+     * @psalm-return Action<self>|null
      */
     public function createAction($id)
     {
@@ -296,11 +272,11 @@ class Controller extends \yii\base\Component implements \yii\base\ViewContextInt
      * }
      * ```
      *
-     * @param Action $action the action to be executed.
+     * @param Action<static> $action the action to be executed.
      * @return bool whether the action should continue to run.
      *
-     * @phpstan-param Action<$this> $action
-     * @psalm-param Action<$this> $action
+     * @phpstan-param Action<static> $action
+     * @psalm-param Action<self> $action
      */
     public function beforeAction($action)
     {
@@ -325,12 +301,12 @@ class Controller extends \yii\base\Component implements \yii\base\ViewContextInt
      * }
      * ```
      *
-     * @param Action $action the action just executed.
+     * @param Action<static> $action the action just executed.
      * @param mixed $result the action return result.
      * @return mixed the processed action result.
      *
-     * @phpstan-param Action<$this> $action
-     * @psalm-param Action<$this> $action
+     * @phpstan-param Action<static> $action
+     * @psalm-param Action<self> $action
      */
     public function afterAction($action, $result)
     {
@@ -405,13 +381,10 @@ class Controller extends \yii\base\Component implements \yii\base\ViewContextInt
      * If the layout name does not contain a file extension, it will use the default one `.php`.
      *
      * @param string $view the view name.
-     * @param array $params the parameters (name-value pairs) that should be made available in the view.
+     * @param array<string, mixed> $params the parameters (name-value pairs) that should be made available in the view.
      * These parameters will not be available in the layout.
      * @return string the rendering result.
      * @throws InvalidArgumentException if the view file or the layout file does not exist.
-     *
-     * @phpstan-param array<string, mixed> $params
-     * @psalm-param array<string, mixed> $params
      */
     public function render($view, $params = [])
     {
@@ -437,12 +410,9 @@ class Controller extends \yii\base\Component implements \yii\base\ViewContextInt
      * Renders a view without applying layout.
      * This method differs from [[render()]] in that it does not apply any layout.
      * @param string $view the view name. Please refer to [[render()]] on how to specify a view name.
-     * @param array $params the parameters (name-value pairs) that should be made available in the view.
+     * @param array<string, mixed> $params the parameters (name-value pairs) that should be made available in the view.
      * @return string the rendering result.
      * @throws InvalidArgumentException if the view file does not exist.
-     *
-     * @phpstan-param array<string, mixed> $params
-     * @psalm-param array<string, mixed> $params
      */
     public function renderPartial($view, $params = [])
     {
@@ -451,12 +421,9 @@ class Controller extends \yii\base\Component implements \yii\base\ViewContextInt
     /**
      * Renders a view file.
      * @param string $file the view file to be rendered. This can be either a file path or a [path alias](guide:concept-aliases).
-     * @param array $params the parameters (name-value pairs) that should be made available in the view.
+     * @param array<string, mixed> $params the parameters (name-value pairs) that should be made available in the view.
      * @return string the rendering result.
      * @throws InvalidArgumentException if the view file does not exist.
-     *
-     * @phpstan-param array<string, mixed> $params
-     * @psalm-param array<string, mixed> $params
      */
     public function renderFile($file, $params = [])
     {

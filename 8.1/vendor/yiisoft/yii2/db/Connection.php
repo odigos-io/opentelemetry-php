@@ -130,9 +130,6 @@ use yii\caching\CacheInterface;
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
- *
- * @phpstan-property-read Schema<ColumnSchema> $schema
- * @psalm-property-read Schema<ColumnSchema> $schema
  */
 class Connection extends Component
 {
@@ -454,8 +451,6 @@ class Connection extends Component
     private $_transaction;
     /**
      * @var Schema|null the database schema
-     *
-     * @phpstan-var Schema<ColumnSchema>|null
      */
     private $_schema;
     /**
@@ -836,9 +831,6 @@ class Connection extends Component
      * Returns the schema information for the database opened by this connection.
      * @return Schema the schema information for the database opened by this connection.
      * @throws NotSupportedException if there is no support for the current driver type
-     *
-     * @phpstan-return Schema<ColumnSchema>
-     * @psalm-return Schema<ColumnSchema>
      */
     public function getSchema()
     {
