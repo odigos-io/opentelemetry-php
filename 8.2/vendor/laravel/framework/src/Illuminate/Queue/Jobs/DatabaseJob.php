@@ -16,7 +16,7 @@ class DatabaseJob extends \Illuminate\Queue\Jobs\Job implements JobContract
     /**
      * The database job payload.
      *
-     * @var \stdClass
+     * @var \Illuminate\Queue\Jobs\DatabaseJobRecord
      */
     protected $job;
     /**
@@ -24,7 +24,7 @@ class DatabaseJob extends \Illuminate\Queue\Jobs\Job implements JobContract
      *
      * @param  \Illuminate\Container\Container  $container
      * @param  \Illuminate\Queue\DatabaseQueue  $database
-     * @param  \stdClass  $job
+     * @param  \Illuminate\Queue\Jobs\DatabaseJobRecord  $job
      * @param  string  $connectionName
      * @param  string  $queue
      */

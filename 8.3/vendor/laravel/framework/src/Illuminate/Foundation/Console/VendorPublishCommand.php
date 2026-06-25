@@ -146,7 +146,7 @@ class VendorPublishCommand extends Command
      * Publishes the assets for a tag.
      *
      * @param  string  $tag
-     * @return mixed
+     * @return void
      */
     protected function publishTag($tag)
     {
@@ -268,7 +268,7 @@ class VendorPublishCommand extends Command
         foreach (ServiceProvider::publishableMigrationPaths() as $path) {
             $path = realpath($path);
             if ($from === $path && preg_match('/\d{4}_(\d{2})_(\d{2})_(\d{6})_/', $to)) {
-                $this->publishedAt->addSecond();
+                $this->publishedAt = $this->publishedAt->addSecond();
                 return preg_replace('/\d{4}_(\d{2})_(\d{2})_(\d{6})_/', $this->publishedAt->format('Y_m_d_His') . '_', $to);
             }
         }

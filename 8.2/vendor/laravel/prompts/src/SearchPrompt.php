@@ -6,6 +6,7 @@ use Closure;
 use InvalidArgumentException;
 class SearchPrompt extends \Laravel\Prompts\Prompt
 {
+    use \Laravel\Prompts\Concerns\HasInfo;
     use \Laravel\Prompts\Concerns\Scrolling;
     use \Laravel\Prompts\Concerns\Truncation;
     use \Laravel\Prompts\Concerns\TypedValue;
@@ -20,7 +21,7 @@ class SearchPrompt extends \Laravel\Prompts\Prompt
      *
      * @param  Closure(string): array<int|string, string>  $options
      */
-    public function __construct(public string $label, public Closure $options, public string $placeholder = '', public int $scroll = 5, public mixed $validate = null, public string $hint = '', public bool|string $required = \true, public ?Closure $transform = null)
+    public function __construct(public string $label, public Closure $options, public string $placeholder = '', public int $scroll = 5, public mixed $validate = null, public string $hint = '', public bool|string $required = \true, public ?Closure $transform = null, public string|Closure $info = '')
     {
         if ($this->required === \false) {
             throw new InvalidArgumentException('Argument [required] must be true or a string.');
@@ -36,6 +37,13 @@ class SearchPrompt extends \Laravel\Prompts\Prompt
             \Laravel\Prompts\Key::oneOf([\Laravel\Prompts\Key::LEFT, \Laravel\Prompts\Key::LEFT_ARROW, \Laravel\Prompts\Key::RIGHT, \Laravel\Prompts\Key::RIGHT_ARROW, \Laravel\Prompts\Key::CTRL_B, \Laravel\Prompts\Key::CTRL_F], $key) => $this->highlighted = null,
             default => $this->search(),
         });
+    }
+    /**
+     * Get the value of the highlighted option.
+     */
+    public function highlightedValue(): int|string|null
+    {
+        return $this->value();
     }
     /**
      * Perform the search.

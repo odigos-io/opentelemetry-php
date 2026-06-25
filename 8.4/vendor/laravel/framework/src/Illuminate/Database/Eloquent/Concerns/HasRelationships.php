@@ -697,7 +697,7 @@ trait HasRelationships
         $caller = Arr::first(debug_backtrace(\DEBUG_BACKTRACE_IGNORE_ARGS), function ($trace) {
             return !in_array($trace['function'], array_merge(static::$manyMethods, ['guessBelongsToManyRelation']));
         });
-        return !is_null($caller) ? $caller['function'] : null;
+        return $caller['function'] ?? null;
     }
     /**
      * Get the joining table name for a many-to-many relation.
@@ -898,6 +898,20 @@ trait HasRelationships
     {
         $model = clone $this;
         return $model->unsetRelations();
+    }
+    /**
+     * Duplicate the instance and unset the given loaded relations.
+     *
+     * @param  array|string  $relations
+     * @return $this
+     */
+    public function withoutRelation($relations)
+    {
+        $model = clone $this;
+        foreach ((array) $relations as $relation) {
+            $model->unsetRelation($relation);
+        }
+        return $model;
     }
     /**
      * Unset all the loaded relations for the instance.

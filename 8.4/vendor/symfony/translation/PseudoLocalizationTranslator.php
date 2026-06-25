@@ -117,7 +117,7 @@ final class PseudoLocalizationTranslator implements TranslatorInterface, \Symfon
         $html = mb_encode_numericentity($originalTrans, [0x80, 0x10ffff, 0, 0x1fffff], mb_detect_encoding($originalTrans, null, \true) ?: 'UTF-8');
         $useInternalErrors = libxml_use_internal_errors(\true);
         $dom = new \DOMDocument();
-        $dom->loadHTML('<trans>' . $html . '</trans>');
+        $dom->loadHTML('<trans>' . $html . '</trans>', \LIBXML_NONET);
         libxml_clear_errors();
         libxml_use_internal_errors($useInternalErrors);
         return $this->parseNode($dom->childNodes->item(1)->childNodes->item(0)->childNodes->item(0));
@@ -220,3 +220,4 @@ final class PseudoLocalizationTranslator implements TranslatorInterface, \Symfon
         return \false === ($encoding = mb_detect_encoding($s, null, \true)) ? \strlen($s) : mb_strlen($s, $encoding);
     }
 }
+// @php-cs-fixer-ignore random_api_migration As logic is coupled with mt_srand() in tests

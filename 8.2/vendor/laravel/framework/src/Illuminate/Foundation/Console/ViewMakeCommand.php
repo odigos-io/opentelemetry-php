@@ -129,7 +129,7 @@ class ViewMakeCommand extends GeneratorCommand
         return Str::of($this->testClassFullyQualifiedName())->afterLast('\\')->append('Test')->value();
     }
     /**
-     * Get the class fully qualified name for the test.
+     * Get the class fully-qualified name for the test.
      *
      * @return string
      */

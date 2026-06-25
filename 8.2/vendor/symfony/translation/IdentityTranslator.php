@@ -21,8 +21,4 @@ use Symfony\Contracts\Translation\TranslatorTrait;
 class IdentityTranslator implements TranslatorInterface, LocaleAwareInterface
 {
     use TranslatorTrait;
-    public function setLocale(string $locale): void
-    {
-        $this->locale = $locale;
-    }
 }

@@ -73,6 +73,18 @@ abstract class AbstractSessionHandler implements \SessionHandlerInterface, \Sess
         $this->newSessionId = '' === $data ? $sessionId : null;
         return $data;
     }
+    public function updateTimestamp(
+        #[\SensitiveParameter]
+        string $sessionId,
+        string $data
+    ): bool
+    {
+        $this->igbinaryEmptyData ??= \function_exists('igbinary_serialize') ? igbinary_serialize([]) : '';
+        if ('' === $data || $this->igbinaryEmptyData === $data) {
+            return $this->destroy($sessionId);
+        }
+        return \true;
+    }
     public function write(
         #[\SensitiveParameter]
         string $sessionId,

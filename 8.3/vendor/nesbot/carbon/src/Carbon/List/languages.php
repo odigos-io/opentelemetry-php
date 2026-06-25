@@ -160,7 +160,7 @@ return [
     'sn' => ['isoName' => 'Shona', 'nativeName' => 'chiShona'],
     'si' => ['isoName' => 'Sinhala, Sinhalese', 'nativeName' => 'සිංහල'],
     'sk' => ['isoName' => 'Slovak', 'nativeName' => 'Slovenčina, Slovenský Jazyk'],
-    'sl' => ['isoName' => 'Slovene', 'nativeName' => 'Slovenski Jezik, Slovenščina'],
+    'sl' => ['isoName' => 'Slovenian', 'nativeName' => 'Slovenski Jezik, Slovenščina'],
     'so' => ['isoName' => 'Somali', 'nativeName' => 'Soomaaliga, af Soomaali'],
     'st' => ['isoName' => 'Southern Sotho', 'nativeName' => 'Sesotho'],
     'es' => ['isoName' => 'Spanish, Castilian', 'nativeName' => 'Español'],

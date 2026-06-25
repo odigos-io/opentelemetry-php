@@ -9,3 +9,4 @@ function empty_options_simple(): \FastRoute\Dispatcher {
 function empty_options_cached(): \FastRoute\Dispatcher {
     return \FastRoute\cachedDispatcher($collector ==> {}, shape());
 }
+

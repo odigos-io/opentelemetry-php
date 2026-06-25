@@ -4,6 +4,7 @@ namespace Laravel\Prompts;
 
 use Closure;
 use Illuminate\Support\Collection;
+use Laravel\Prompts\Elements\ElementContract;
 if (!function_exists('\Laravel\Prompts\text')) {
     /**
      * Prompt the user for text input.
@@ -11,6 +12,26 @@ if (!function_exists('\Laravel\Prompts\text')) {
     function text(string $label, string $placeholder = '', string $default = '', bool|string $required = \false, mixed $validate = null, string $hint = '', ?Closure $transform = null): string
     {
         return (new \Laravel\Prompts\TextPrompt(...get_defined_vars()))->prompt();
+    }
+}
+if (!function_exists('\Laravel\Prompts\autocomplete')) {
+    /**
+     * Prompt the user for text input with auto-completion.
+     *
+     * @param  array<string>|Collection<int, string>|Closure(string): (array<string>|Collection<int, string>)  $options
+     */
+    function autocomplete(string $label, array|Collection|Closure $options = [], string $placeholder = '', string $default = '', bool|string $required = \false, mixed $validate = null, string $hint = '', ?Closure $transform = null): string
+    {
+        return (new \Laravel\Prompts\AutoCompletePrompt(...get_defined_vars()))->prompt();
+    }
+}
+if (!function_exists('\Laravel\Prompts\number')) {
+    /**
+     * Prompt the user for number input.
+     */
+    function number(string $label, string $placeholder = '', string $default = '', bool|string $required = \false, mixed $validate = null, string $hint = '', ?int $min = null, ?int $max = null, ?int $step = null): int|string
+    {
+        return (new \Laravel\Prompts\NumberPrompt(...get_defined_vars()))->prompt();
     }
 }
 if (!function_exists('\Laravel\Prompts\textarea')) {
@@ -38,7 +59,7 @@ if (!function_exists('\Laravel\Prompts\select')) {
      * @param  array<int|string, string>|Collection<int|string, string>  $options
      * @param  true|string  $required
      */
-    function select(string $label, array|Collection $options, int|string|null $default = null, int $scroll = 5, mixed $validate = null, string $hint = '', bool|string $required = \true, ?Closure $transform = null): int|string
+    function select(string $label, array|Collection $options, int|string|null $default = null, int $scroll = 5, mixed $validate = null, string $hint = '', bool|string $required = \true, ?Closure $transform = null, string|Closure $info = ''): int|string
     {
         return (new \Laravel\Prompts\SelectPrompt(...get_defined_vars()))->prompt();
     }
@@ -51,7 +72,7 @@ if (!function_exists('\Laravel\Prompts\multiselect')) {
      * @param  array<int|string>|Collection<int, int|string>  $default
      * @return array<int|string>
      */
-    function multiselect(string $label, array|Collection $options, array|Collection $default = [], int $scroll = 5, bool|string $required = \false, mixed $validate = null, string $hint = 'Use the space bar to select options.', ?Closure $transform = null): array
+    function multiselect(string $label, array|Collection $options, array|Collection $default = [], int $scroll = 5, bool|string $required = \false, mixed $validate = null, string $hint = 'Use the space bar to select options.', ?Closure $transform = null, string|Closure $info = ''): array
     {
         return (new \Laravel\Prompts\MultiSelectPrompt(...get_defined_vars()))->prompt();
     }
@@ -89,7 +110,7 @@ if (!function_exists('\Laravel\Prompts\suggest')) {
      *
      * @param  array<string>|Collection<int, string>|Closure(string): array<string>  $options
      */
-    function suggest(string $label, array|Collection|Closure $options, string $placeholder = '', string $default = '', int $scroll = 5, bool|string $required = \false, mixed $validate = null, string $hint = '', ?Closure $transform = null): string
+    function suggest(string $label, array|Collection|Closure $options, string $placeholder = '', string $default = '', int $scroll = 5, bool|string $required = \false, mixed $validate = null, string $hint = '', ?Closure $transform = null, string|Closure $info = ''): string
     {
         return (new \Laravel\Prompts\SuggestPrompt(...get_defined_vars()))->prompt();
     }
@@ -101,7 +122,7 @@ if (!function_exists('\Laravel\Prompts\search')) {
      * @param  Closure(string): array<int|string, string>  $options
      * @param  true|string  $required
      */
-    function search(string $label, Closure $options, string $placeholder = '', int $scroll = 5, mixed $validate = null, string $hint = '', bool|string $required = \true, ?Closure $transform = null): int|string
+    function search(string $label, Closure $options, string $placeholder = '', int $scroll = 5, mixed $validate = null, string $hint = '', bool|string $required = \true, ?Closure $transform = null, string|Closure $info = ''): int|string
     {
         return (new \Laravel\Prompts\SearchPrompt(...get_defined_vars()))->prompt();
     }
@@ -113,7 +134,7 @@ if (!function_exists('\Laravel\Prompts\multisearch')) {
      * @param  Closure(string): array<int|string, string>  $options
      * @return array<int|string>
      */
-    function multisearch(string $label, Closure $options, string $placeholder = '', int $scroll = 5, bool|string $required = \false, mixed $validate = null, string $hint = 'Use the space bar to select options.', ?Closure $transform = null): array
+    function multisearch(string $label, Closure $options, string $placeholder = '', int $scroll = 5, bool|string $required = \false, mixed $validate = null, string $hint = 'Use the space bar to select options.', ?Closure $transform = null, string|Closure $info = ''): array
     {
         return (new \Laravel\Prompts\MultiSearchPrompt(...get_defined_vars()))->prompt();
     }
@@ -124,7 +145,7 @@ if (!function_exists('\Laravel\Prompts\spin')) {
      *
      * @template TReturn of mixed
      *
-     * @param  \Closure(): TReturn  $callback
+     * @param  Closure(): TReturn  $callback
      * @return TReturn
      */
     function spin(Closure $callback, string $message = ''): mixed
@@ -139,6 +160,17 @@ if (!function_exists('\Laravel\Prompts\note')) {
     function note(string $message, ?string $type = null): void
     {
         (new \Laravel\Prompts\Note($message, $type))->display();
+    }
+}
+if (!function_exists('\Laravel\Prompts\callout')) {
+    /**
+     * Display a callout.
+     *
+     * @param  string|list<string|ElementContract>  $content
+     */
+    function callout(string $label, string|array $content, ?string $type = null, string $info = ''): void
+    {
+        (new \Laravel\Prompts\Callout($label, $content, $type, $info))->display();
     }
 }
 if (!function_exists('\Laravel\Prompts\error')) {
@@ -195,6 +227,21 @@ if (!function_exists('\Laravel\Prompts\outro')) {
         (new \Laravel\Prompts\Note($message, 'outro'))->display();
     }
 }
+if (!function_exists('\Laravel\Prompts\notify')) {
+    /**
+     * Send a notification to the user. (macOS and Linux only)
+     *
+     * The icon option is Linux only. The subtitle and sound options are macOS only.
+     *
+     * @param  string  $subtitle  macOS only
+     * @param  string  $sound  macOS only
+     * @param  string  $icon  Linux only
+     */
+    function notify(string $title, string $body = '', string $subtitle = '', string $sound = '', string $icon = ''): void
+    {
+        (new \Laravel\Prompts\NotifyPrompt(...get_defined_vars()))->display();
+    }
+}
 if (!function_exists('\Laravel\Prompts\table')) {
     /**
      * Display a table.
@@ -242,5 +289,49 @@ if (!function_exists('\Laravel\Prompts\form')) {
     function form(): \Laravel\Prompts\FormBuilder
     {
         return new \Laravel\Prompts\FormBuilder();
+    }
+}
+if (!function_exists('\Laravel\Prompts\title')) {
+    /**
+     * Update the title of the terminal.
+     */
+    function title(string $title): void
+    {
+        (new \Laravel\Prompts\Title($title))->display();
+    }
+}
+if (!function_exists('\Laravel\Prompts\stream')) {
+    /**
+     * Display a stream of text.
+     */
+    function stream(): \Laravel\Prompts\Stream
+    {
+        return new \Laravel\Prompts\Stream();
+    }
+}
+if (!function_exists('\Laravel\Prompts\task')) {
+    /**
+     * Display a task with a spinner and live output.
+     *
+     * @template TReturn of mixed
+     *
+     * @param  Closure(Support\Logger): TReturn  $callback
+     * @return TReturn
+     */
+    function task(string $label, Closure $callback, ?int $limit = null, bool $keepSummary = \false, ?string $subLabel = null): mixed
+    {
+        return (new \Laravel\Prompts\Task($label, $limit ?? 10, $keepSummary, $subLabel))->run($callback);
+    }
+}
+if (!function_exists('\Laravel\Prompts\datatable')) {
+    /**
+     * Display an interactive data table.
+     *
+     * @param  array<int, string|array<int, string>>|Collection<int, string|array<int, string>>  $headers
+     * @param  array<int|string, array<int, string>>|Collection<int|string, array<int, string>>|null  $rows
+     */
+    function datatable(array|Collection $headers = [], array|Collection|null $rows = null, int $scroll = 10, string $label = '', string $hint = '', bool|string $required = \false, mixed $validate = null, ?Closure $transform = null, ?Closure $filter = null): mixed
+    {
+        return (new \Laravel\Prompts\DataTablePrompt(headers: $headers, rows: $rows, scroll: $scroll, label: $label, hint: $hint, required: $required, validate: $validate, transform: $transform, filter: $filter))->prompt();
     }
 }

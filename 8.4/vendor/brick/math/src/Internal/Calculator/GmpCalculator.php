@@ -14,6 +14,7 @@ use function gmp_div_r;
 use function gmp_gcd;
 use function gmp_init;
 use function gmp_invert;
+use function gmp_lcm;
 use function gmp_mul;
 use function gmp_or;
 use function gmp_pow;
@@ -87,6 +88,11 @@ final readonly class GmpCalculator extends Calculator
     public function gcd(string $a, string $b): string
     {
         return gmp_strval(gmp_gcd($a, $b));
+    }
+    #[Override]
+    public function lcm(string $a, string $b): string
+    {
+        return gmp_strval(gmp_lcm($a, $b));
     }
     #[Override]
     public function fromBase(string $number, int $base): string

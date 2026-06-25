@@ -94,9 +94,9 @@ class Numeric implements Stringable
      *
      * @return $this
      */
-    public function integer(): \Illuminate\Validation\Rules\Numeric
+    public function integer(bool $strict = \false): \Illuminate\Validation\Rules\Numeric
     {
-        return $this->addRule('integer');
+        return $this->addRule($strict ? 'integer:strict' : 'integer');
     }
     /**
      * The field under validation must be less than the given field.

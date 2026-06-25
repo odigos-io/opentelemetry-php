@@ -103,7 +103,7 @@ EOH
             touch($debugFile);
         }
         $process = new Process(['tail', '-f', $debugFile], null, null, null, 0);
-        $process->run(function (string $type, string $line) use ($output): void {
+        $process->run(static function (string $type, string $line) use ($output): void {
             $output->write($line);
         });
     }

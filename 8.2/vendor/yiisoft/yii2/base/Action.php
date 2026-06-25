@@ -34,7 +34,7 @@ use Odigos\Yii;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  *
- * @template T of Controller
+ * @template T of Controller = Controller
  */
 class Action extends \yii\base\Component
 {
@@ -43,24 +43,15 @@ class Action extends \yii\base\Component
      */
     public $id;
     /**
-     * @var Controller|\yii\web\Controller|\yii\console\Controller the controller that owns this action
-     *
-     * @phpstan-var T
-     * @psalm-var T
+     * @var T the controller that owns this action
      */
     public $controller;
     /**
      * Constructor.
      *
      * @param string $id the ID of this action
-     * @param Controller $controller the controller that owns this action
-     * @param array $config name-value pairs that will be used to initialize the object properties
-     *
-     * @phpstan-param T $controller
-     * @psalm-param T $controller
-     *
-     * @phpstan-param array<string, mixed> $config
-     * @psalm-param array<string, mixed> $config
+     * @param T $controller the controller that owns this action
+     * @param array<string, mixed> $config name-value pairs that will be used to initialize the object properties
      */
     public function __construct($id, $controller, $config = [])
     {

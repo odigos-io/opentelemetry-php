@@ -113,7 +113,8 @@ trait ResolvesDumpSource
             return;
         }
         $href = is_array($editor) && isset($editor['href']) ? $editor['href'] : $this->editorHrefs[$editor['name'] ?? $editor] ?? sprintf('%s://open?file={file}&line={line}', $editor['name'] ?? $editor);
-        if ($basePath = $editor['base_path'] ?? \false) {
+        $basePath = $editor['base_path'] ?? \false;
+        if ($basePath !== \false) {
             $file = Str::replaceStart($this->basePath, $basePath, $file);
         }
         return str_replace(['{file}', '{line}'], [$file, is_null($line) ? 1 : $line], $href);

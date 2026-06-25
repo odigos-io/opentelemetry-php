@@ -2,12 +2,14 @@
 
 namespace Illuminate\Database\Eloquent\Relations;
 
+use Closure;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Concerns\InteractsWithDictionary;
 use Illuminate\Database\Eloquent\Relations\Concerns\SupportsInverseRelations;
 use Illuminate\Database\UniqueConstraintViolationException;
+use Illuminate\Support\Arr;
 /**
  * @template TRelatedModel of \Illuminate\Database\Eloquent\Model
  * @template TDeclaringModel of \Illuminate\Database\Eloquent\Model
@@ -157,14 +159,25 @@ abstract class HasOneOrMany extends \Illuminate\Database\Eloquent\Relations\Rela
      * Build model dictionary keyed by the relation's foreign key.
      *
      * @param  \Illuminate\Database\Eloquent\Collection<int, TRelatedModel>  $results
-     * @return array<array<int, TRelatedModel>>
+     * @return array<array<array-key, TRelatedModel>>
      */
     protected function buildDictionary(EloquentCollection $results)
     {
         $foreign = $this->getForeignKeyName();
-        return $results->mapToDictionary(function ($result) use ($foreign) {
-            return [$this->getDictionaryKey($result->{$foreign}) => $result];
-        })->all();
+        $dictionary = [];
+        $isAssociative = Arr::isAssoc($results->all());
+        foreach ($results as $key => $item) {
+            $pairKey = $this->getDictionaryKey($item->{$foreign});
+            if ($pairKey === null) {
+                continue;
+            }
+            if ($isAssociative) {
+                $dictionary[$pairKey][$key] = $item;
+            } else {
+                $dictionary[$pairKey][] = $item;
+            }
+        }
+        return $dictionary;
     }
     /**
      * Find a model by its primary key or return a new instance of the related model.
@@ -200,10 +213,10 @@ abstract class HasOneOrMany extends \Illuminate\Database\Eloquent\Relations\Rela
      * Get the first record matching the attributes. If the record is not found, create it.
      *
      * @param  array  $attributes
-     * @param  array  $values
+     * @param  (\Closure(): array)|array  $values
      * @return TRelatedModel
      */
-    public function firstOrCreate(array $attributes = [], array $values = [])
+    public function firstOrCreate(array $attributes = [], Closure|array $values = [])
     {
         if (is_null($instance = (clone $this)->where($attributes)->first())) {
             $instance = $this->createOrFirst($attributes, $values);
@@ -214,13 +227,13 @@ abstract class HasOneOrMany extends \Illuminate\Database\Eloquent\Relations\Rela
      * Attempt to create the record. If a unique constraint violation occurs, attempt to find the matching record.
      *
      * @param  array  $attributes
-     * @param  array  $values
+     * @param  (\Closure(): array)|array  $values
      * @return TRelatedModel
      */
-    public function createOrFirst(array $attributes = [], array $values = [])
+    public function createOrFirst(array $attributes = [], Closure|array $values = [])
     {
         try {
-            return $this->getQuery()->withSavepointIfNeeded(fn() => $this->create(array_merge($attributes, $values)));
+            return $this->getQuery()->withSavepointIfNeeded(fn() => $this->create(array_merge($attributes, value($values))));
         } catch (UniqueConstraintViolationException $e) {
             return $this->useWritePdo()->where($attributes)->first() ?? throw $e;
         }
@@ -482,7 +495,7 @@ abstract class HasOneOrMany extends \Illuminate\Database\Eloquent\Relations\Rela
         return $this->parent->getAttribute($this->localKey);
     }
     /**
-     * Get the fully qualified parent key name.
+     * Get the fully-qualified parent key name.
      *
      * @return string
      */

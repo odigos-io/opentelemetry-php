@@ -31,6 +31,9 @@ trait DrawsBoxes
                 $this->line("{$this->{$color}(' │')} {$this->pad($line, $width)} {$this->{$color}('│')}");
             }
         }
+        if ($info) {
+            $info = $this->truncate($info, $width - 1);
+        }
         $this->line($this->{$color}(' └' . str_repeat('─', $info ? $width - mb_strwidth($this->stripEscapeSequences($info)) : $width + 2) . ($info ? " {$info} " : '') . '┘'));
         return $this;
     }

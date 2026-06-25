@@ -87,7 +87,9 @@ class UnicodeString extends \Symfony\Component\String\AbstractUnicodeString
         if ('' === $suffix || \false === $suffix) {
             return \false;
         }
-        $grapheme = grapheme_extract($this->string, \strlen($suffix), \GRAPHEME_EXTR_MAXBYTES, \strlen($this->string) - \strlen($suffix)) ?: '';
+        if (\false === $grapheme = grapheme_extract($this->string, \strlen($suffix), \GRAPHEME_EXTR_MAXBYTES, \strlen($this->string) - \strlen($suffix))) {
+            $grapheme = '';
+        }
         if ($this->ignoreCase) {
             return 0 === mb_stripos($grapheme, $suffix, 0, 'UTF-8');
         }
@@ -209,6 +211,9 @@ class UnicodeString extends \Symfony\Component\String\AbstractUnicodeString
         }
         return $str;
     }
+    /**
+     * @param-immediately-invoked-callable $to
+     */
     public function replaceMatches(string $fromRegexp, string|callable $to): static
     {
         $str = parent::replaceMatches($fromRegexp, $to);
@@ -277,7 +282,9 @@ class UnicodeString extends \Symfony\Component\String\AbstractUnicodeString
         if ('' === $prefix || \false === $prefix) {
             return \false;
         }
-        $grapheme = grapheme_extract($this->string, \strlen($prefix), \GRAPHEME_EXTR_MAXBYTES) ?: '';
+        if (\false === $grapheme = grapheme_extract($this->string, \strlen($prefix), \GRAPHEME_EXTR_MAXBYTES)) {
+            $grapheme = '';
+        }
         if ($this->ignoreCase) {
             return 0 === mb_stripos($grapheme, $prefix, 0, 'UTF-8');
         }
@@ -315,6 +322,9 @@ class UnicodeString extends \Symfony\Component\String\AbstractUnicodeString
     }
     public function __unserialize(array $data): void
     {
+        if (($data['string'] ?? null) instanceof \Stringable || ($data["\x00*\x00string"] ?? null) instanceof \Stringable) {
+            throw new \BadMethodCallException('Cannot unserialize ' . __CLASS__);
+        }
         $this->string = $data['string'] ?? $data["\x00*\x00string"];
         if (!\is_string($this->string)) {
             throw new \BadMethodCallException('Cannot unserialize ' . __CLASS__);

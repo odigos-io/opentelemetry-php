@@ -1,10 +1,10 @@
 <?php
 
+declare (strict_types=1);
 /**
  * This file is part of the Nette Framework (https://nette.org)
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
-declare (strict_types=1);
 namespace Odigos\Nette\Schema;
 
 use Odigos\Nette;
@@ -13,6 +13,7 @@ use Odigos\Nette;
  */
 final class Processor
 {
+    /** @var list<\Closure(Context): void> */
     public array $onNewContext = [];
     private Context $context;
     private bool $skipDefaults = \false;
@@ -35,6 +36,7 @@ final class Processor
     }
     /**
      * Normalizes and validates and merges multiple data. Result is a clean completed data.
+     * @param  list<mixed>  $dataset
      * @throws ValidationException
      */
     public function processMultiple(Schema $schema, array $dataset): mixed
@@ -52,9 +54,7 @@ final class Processor
         $this->throwsErrors();
         return $data;
     }
-    /**
-     * @return string[]
-     */
+    /** @return list<string> */
     public function getWarnings(): array
     {
         $res = [];

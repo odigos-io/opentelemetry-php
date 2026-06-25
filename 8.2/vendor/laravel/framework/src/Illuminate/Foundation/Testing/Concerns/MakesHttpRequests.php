@@ -519,7 +519,7 @@ trait MakesHttpRequests
         return $this->createTestResponse($response, $request);
     }
     /**
-     * Turn the given URI into a fully qualified URL.
+     * Turn the given URI into a fully-qualified URL.
      *
      * @param  \Illuminate\Support\Uri|string  $uri
      * @return string

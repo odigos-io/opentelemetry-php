@@ -18,7 +18,7 @@ class SelectPromptRenderer extends \Laravel\Prompts\Themes\Default\Renderer impl
             'submit' => $this->box($this->dim($this->truncate($prompt->label, $prompt->terminal()->cols() - 6)), $this->truncate($prompt->label(), $maxWidth)),
             'cancel' => $this->box($this->truncate($prompt->label, $prompt->terminal()->cols() - 6), $this->renderOptions($prompt), color: 'red')->error($prompt->cancelMessage),
             'error' => $this->box($this->truncate($prompt->label, $prompt->terminal()->cols() - 6), $this->renderOptions($prompt), color: 'yellow')->warning($this->truncate($prompt->error, $prompt->terminal()->cols() - 5)),
-            default => $this->box($this->cyan($this->truncate($prompt->label, $prompt->terminal()->cols() - 6)), $this->renderOptions($prompt))->when($prompt->hint, fn() => $this->hint($prompt->hint), fn() => $this->newLine()),
+            default => $this->box($this->cyan($this->truncate($prompt->label, $prompt->terminal()->cols() - 6)), $this->renderOptions($prompt), info: $prompt->infoText())->when($prompt->hint, fn() => $this->hint($prompt->hint), fn() => $this->newLine()),
         };
     }
     /**

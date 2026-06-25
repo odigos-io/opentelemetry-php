@@ -69,7 +69,7 @@ class ScheduleListCommand extends Command
      */
     protected function displayJson(Collection $events, DateTimeZone $timezone)
     {
-        $this->output->writeln($events->map(function ($event) use ($timezone) {
+        $this->output->writeln($events->flatMap(function ($event) use ($timezone) {
             $nextDueDate = $this->getNextDueDateForEvent($event, $timezone);
             $command = $event->command ?? '';
             if (!$this->output->isVerbose()) {
@@ -81,7 +81,7 @@ class ScheduleListCommand extends Command
                     $command = 'Closure at: ' . $this->getClosureLocation($event);
                 }
             }
-            return ['expression' => $event->expression, 'command' => $command, 'description' => $event->description ?? null, 'next_due_date' => $nextDueDate->format('Y-m-d H:i:s P'), 'next_due_date_human' => $nextDueDate->diffForHumans(), 'timezone' => $timezone->getName(), 'has_mutex' => $event->mutex->exists($event), 'repeat_seconds' => $event->isRepeatable() ? $event->repeatSeconds : null, 'environments' => $event->environments];
+            return collect(\Illuminate\Console\Scheduling\CronExpressionTimezoneConverter::forEvent($event, $timezone))->map(fn($expression) => ['expression' => $expression, 'command' => $command, 'description' => $event->description ?? null, 'next_due_date' => $nextDueDate->format('Y-m-d H:i:s P'), 'next_due_date_human' => $nextDueDate->diffForHumans(), 'timezone' => $timezone->getName(), 'has_mutex' => $event->mutex->exists($event), 'repeat_seconds' => $event->isRepeatable() ? $event->repeatSeconds : null, 'environments' => $event->environments]);
         })->values()->toJson());
     }
     /**
@@ -94,10 +94,10 @@ class ScheduleListCommand extends Command
     protected function displayForCli(Collection $events, DateTimeZone $timezone)
     {
         $terminalWidth = self::getTerminalWidth();
-        $expressionSpacing = $this->getCronExpressionSpacing($events);
+        $expressionSpacing = $this->getCronExpressionSpacing($events, $timezone);
         $repeatExpressionSpacing = $this->getRepeatExpressionSpacing($events);
-        $events = $events->map(function ($event) use ($terminalWidth, $expressionSpacing, $repeatExpressionSpacing, $timezone) {
-            return $this->listEvent($event, $terminalWidth, $expressionSpacing, $repeatExpressionSpacing, $timezone);
+        $events = $events->flatMap(function ($event) use ($terminalWidth, $expressionSpacing, $repeatExpressionSpacing, $timezone) {
+            return collect(\Illuminate\Console\Scheduling\CronExpressionTimezoneConverter::forEvent($event, $timezone))->map(fn($expression) => $this->listEvent($event, $terminalWidth, $expressionSpacing, $repeatExpressionSpacing, $timezone, $expression));
         });
         $this->line($events->flatten()->filter()->prepend('')->push('')->toArray());
     }
@@ -107,9 +107,9 @@ class ScheduleListCommand extends Command
      * @param  \Illuminate\Support\Collection  $events
      * @return array<int, int>
      */
-    private function getCronExpressionSpacing($events)
+    private function getCronExpressionSpacing($events, DateTimeZone $timezone)
     {
-        $rows = $events->map(fn($event) => array_map(mb_strlen(...), preg_split("/\\s+/", $event->expression)));
+        $rows = $events->flatMap(fn($event) => collect(\Illuminate\Console\Scheduling\CronExpressionTimezoneConverter::forEvent($event, $timezone))->map(fn($expression) => array_map(mb_strlen(...), preg_split("/\\s+/", $expression))));
         return (new Collection($rows[0] ?? []))->keys()->map(fn($key) => $rows->max($key))->all();
     }
     /**
@@ -130,11 +130,12 @@ class ScheduleListCommand extends Command
      * @param  array  $expressionSpacing
      * @param  int  $repeatExpressionSpacing
      * @param  \DateTimeZone  $timezone
+     * @param  string|null  $convertedExpression
      * @return array
      */
-    private function listEvent($event, $terminalWidth, $expressionSpacing, $repeatExpressionSpacing, $timezone)
+    private function listEvent($event, $terminalWidth, $expressionSpacing, $repeatExpressionSpacing, $timezone, $convertedExpression = null)
     {
-        $expression = $this->formatCronExpression($event->expression, $expressionSpacing);
+        $expression = $this->formatCronExpression($convertedExpression ?? $event->expression, $expressionSpacing);
         $repeatExpression = str_pad($this->getRepeatExpression($event), $repeatExpressionSpacing);
         $command = $event->command ?? '';
         $description = $event->description ?? '';

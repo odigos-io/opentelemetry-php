@@ -55,5 +55,5 @@ return [
     | of the emails. Or, you may simply stick with the Laravel defaults.
     |
     */
-    'markdown' => ['theme' => env('MAIL_MARKDOWN_THEME', 'default'), 'paths' => [resource_path('views/vendor/mail')]],
+    'markdown' => ['theme' => env('MAIL_MARKDOWN_THEME', 'default'), 'paths' => [resource_path('views/vendor/mail')], 'extensions' => []],
 ];

@@ -52,3 +52,4 @@ final class NativeTransportFactory extends \Symfony\Component\Mailer\Transport\A
         return ['native'];
     }
 }
+// @php-cs-fixer-ignore native_function_invocation As we explicitly break it for testability reason, ref https://github.com/symfony/symfony/pull/59195

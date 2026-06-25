@@ -12,6 +12,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Illuminate\Support\Stringable;
 use PDO;
+use Throwable;
 class DatabaseQueue extends \Illuminate\Queue\Queue implements QueueContract, ClearableQueue
 {
     /**
@@ -211,11 +212,24 @@ class DatabaseQueue extends \Illuminate\Queue\Queue implements QueueContract, Cl
     public function pop($queue = null)
     {
         $queue = $this->getQueue($queue);
-        return $this->database->transaction(function () use ($queue) {
-            if ($job = $this->getNextAvailableJob($queue)) {
-                return $this->marshalJob($queue, $job);
+        $jobRecord = null;
+        try {
+            return $this->database->transaction(function () use ($queue, &$jobRecord) {
+                if ($jobRecord = $this->getNextAvailableJob($queue)) {
+                    return $this->marshalJob($queue, $jobRecord);
+                }
+            });
+        } catch (Throwable $e) {
+            // Potentially invalid job that we need to fail (#58978)...
+            if ($jobRecord) {
+                try {
+                    (new DatabaseJob($this->container, $this, $jobRecord, $this->connectionName, $queue))->fail($e);
+                } catch (Throwable) {
+                    // Ignore and throw the original exception...
+                }
             }
-        });
+            throw $e;
+        }
     }
     /**
      * Get the next available job for the queue.

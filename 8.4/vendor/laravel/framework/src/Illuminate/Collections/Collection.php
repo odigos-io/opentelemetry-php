@@ -465,8 +465,7 @@ class Collection implements ArrayAccess, CanBeEscapedWhenCastToString, \Illumina
                 $groupKey = match (\true) {
                     is_bool($groupKey) => (int) $groupKey,
                     $groupKey instanceof \UnitEnum => enum_value($groupKey),
-                    $groupKey instanceof \Stringable => (string) $groupKey,
-                    is_null($groupKey) => (string) $groupKey,
+                    $groupKey instanceof \Stringable, is_null($groupKey) => (string) $groupKey,
                     default => $groupKey,
                 };
                 if (!array_key_exists($groupKey, $results)) {
@@ -620,35 +619,24 @@ class Collection implements ArrayAccess, CanBeEscapedWhenCastToString, \Illumina
      *
      * @param  (callable(TValue, TKey): bool)|null  $callback
      * @return bool
+     *
+     * @deprecated 12.49.0 Use the `hasSole()` method instead.
      */
     public function containsOneItem(?callable $callback = null): bool
     {
-        if ($callback) {
-            return $this->filter($callback)->count() === 1;
-        }
-        return $this->count() === 1;
+        return $this->hasSole($callback);
     }
     /**
-     * Determine if the collection contains multiple items. If a callback is provided, determine if multiple items match the condition.
+     * Determine if the collection contains multiple items.
      *
      * @param  (callable(TValue, TKey): bool)|null  $callback
      * @return bool
+     *
+     * @deprecated 12.50.0 Use the `hasMany()` method instead.
      */
     public function containsManyItems(?callable $callback = null): bool
     {
-        if (!$callback) {
-            return $this->count() > 1;
-        }
-        $count = 0;
-        foreach ($this as $key => $item) {
-            if ($callback($item, $key)) {
-                $count++;
-            }
-            if ($count > 1) {
-                return \true;
-            }
-        }
-        return \false;
+        return $this->hasMany($callback);
     }
     /**
      * Join all items from the collection using a string. The final items can use a separate glue string.
@@ -823,7 +811,7 @@ class Collection implements ArrayAccess, CanBeEscapedWhenCastToString, \Illumina
      *
      * @param  int  $step
      * @param  int  $offset
-     * @return static
+     * @return ($step is positive-int ? static : never)
      *
      * @throws \InvalidArgumentException
      */
@@ -1180,7 +1168,7 @@ class Collection implements ArrayAccess, CanBeEscapedWhenCastToString, \Illumina
      * Split a collection into a certain number of groups.
      *
      * @param  int  $numberOfGroups
-     * @return static<int, static>
+     * @return ($numberOfGroups is positive-int ? static<int, static> : never)
      *
      * @throws \InvalidArgumentException
      */
@@ -1212,7 +1200,7 @@ class Collection implements ArrayAccess, CanBeEscapedWhenCastToString, \Illumina
      * Split a collection into a certain number of groups, and fill the first groups completely.
      *
      * @param  int  $numberOfGroups
-     * @return static<int, static>
+     * @return ($numberOfGroups is positive-int ? static<int, static> : never)
      *
      * @throws \InvalidArgumentException
      */
@@ -1246,6 +1234,19 @@ class Collection implements ArrayAccess, CanBeEscapedWhenCastToString, \Illumina
             throw new \Illuminate\Support\MultipleItemsFoundException($count);
         }
         return $items->first();
+    }
+    /**
+     * Determine if the collection contains a single item, optionally matching the given criteria.
+     *
+     * @param  (callable(TValue, TKey): bool)|string|null  $key
+     * @param  mixed  $operator
+     * @param  mixed  $value
+     * @return bool
+     */
+    public function hasSole($key = null, $operator = null, $value = null): bool
+    {
+        $filter = func_num_args() > 1 ? $this->operatorForWhere(...func_get_args()) : $key;
+        return $this->unless($filter == null)->filter($filter)->count() === 1;
     }
     /**
      * Get the first item in the collection but throw an exception if no matching items exist.
@@ -1514,11 +1515,12 @@ class Collection implements ArrayAccess, CanBeEscapedWhenCastToString, \Illumina
     /**
      * Flatten a multi-dimensional associative array with dots.
      *
+     * @param  int  $depth
      * @return static
      */
-    public function dot()
+    public function dot($depth = \INF)
     {
-        return new static(\Illuminate\Support\Arr::dot($this->all()));
+        return new static(\Illuminate\Support\Arr::dot($this->all(), '', $depth));
     }
     /**
      * Convert a flatten "dot" notation array into an expanded array.

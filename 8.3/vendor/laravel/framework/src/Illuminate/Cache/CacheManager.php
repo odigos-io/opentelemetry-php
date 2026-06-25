@@ -104,6 +104,8 @@ class CacheManager implements FactoryContract
      *
      * @param  array  $config
      * @return \Illuminate\Cache\Repository
+     *
+     * @throws \InvalidArgumentException
      */
     public function build(array $config)
     {
@@ -146,7 +148,7 @@ class CacheManager implements FactoryContract
      */
     protected function createArrayDriver(array $config)
     {
-        return $this->repository(new \Illuminate\Cache\ArrayStore($config['serialize'] ?? \false), $config);
+        return $this->repository(new \Illuminate\Cache\ArrayStore($config['serialize'] ?? \false, $this->getSerializableClasses($config)), $config);
     }
     /**
      * Create an instance of the database cache driver.
@@ -157,7 +159,7 @@ class CacheManager implements FactoryContract
     protected function createDatabaseDriver(array $config)
     {
         $connection = $this->app['db']->connection($config['connection'] ?? null);
-        $store = new \Illuminate\Cache\DatabaseStore($connection, $config['table'], $this->getPrefix($config), $config['lock_table'] ?? 'cache_locks', $config['lock_lottery'] ?? [2, 100], $config['lock_timeout'] ?? 86400);
+        $store = new \Illuminate\Cache\DatabaseStore($connection, $config['table'], $this->getPrefix($config), $config['lock_table'] ?? 'cache_locks', $config['lock_lottery'] ?? [2, 100], $config['lock_timeout'] ?? 86400, $this->getSerializableClasses($config));
         return $this->repository($store->setLockConnection($this->app['db']->connection($config['lock_connection'] ?? $config['connection'] ?? null)), $config);
     }
     /**
@@ -169,7 +171,7 @@ class CacheManager implements FactoryContract
     protected function createDynamodbDriver(array $config)
     {
         $client = $this->newDynamodbClient($config);
-        return $this->repository(new \Illuminate\Cache\DynamoDbStore($client, $config['table'], $config['attributes']['key'] ?? 'key', $config['attributes']['value'] ?? 'value', $config['attributes']['expiration'] ?? 'expires_at', $this->getPrefix($config)), $config);
+        return $this->repository(new \Illuminate\Cache\DynamoDbStore($client, $config['table'], $config['attributes']['key'] ?? 'key', $config['attributes']['value'] ?? 'value', $config['attributes']['expiration'] ?? 'expires_at', $this->getPrefix($config), $this->getSerializableClasses($config)), $config);
     }
     /**
      * Create new DynamoDb Client instance.
@@ -205,7 +207,7 @@ class CacheManager implements FactoryContract
      */
     protected function createFileDriver(array $config)
     {
-        return $this->repository((new \Illuminate\Cache\FileStore($this->app['files'], $config['path'], $config['permission'] ?? null))->setLockDirectory($config['lock_path'] ?? null), $config);
+        return $this->repository((new \Illuminate\Cache\FileStore($this->app['files'], $config['path'], $config['permission'] ?? null, $this->getSerializableClasses($config)))->setLockDirectory($config['lock_path'] ?? null), $config);
     }
     /**
      * Create an instance of the Memcached cache driver.
@@ -238,7 +240,7 @@ class CacheManager implements FactoryContract
     {
         $redis = $this->app['redis'];
         $connection = $config['connection'] ?? 'default';
-        $store = new \Illuminate\Cache\RedisStore($redis, $this->getPrefix($config), $connection);
+        $store = new \Illuminate\Cache\RedisStore($redis, $this->getPrefix($config), $connection, $this->getSerializableClasses($config));
         return $this->repository($store->setLockConnection($config['lock_connection'] ?? $connection), $config);
     }
     /**
@@ -312,6 +314,16 @@ class CacheManager implements FactoryContract
     protected function getPrefix(array $config)
     {
         return $config['prefix'] ?? $this->app['config']['cache.prefix'];
+    }
+    /**
+     * Get the classes that should be allowed during unserialization.
+     *
+     * @param  array  $config
+     * @return array|bool|null
+     */
+    protected function getSerializableClasses(array $config)
+    {
+        return $this->app['config']['cache.serializable_classes'] ?? null;
     }
     /**
      * Get the cache connection configuration.

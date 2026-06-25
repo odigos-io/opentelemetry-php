@@ -48,7 +48,7 @@ class JsonResponse extends BaseJsonResponse
         return $this->setCallback($callback);
     }
     /**
-     * Get the json_decoded data from the response.
+     * Get the decoded JSON data from the response.
      *
      * @param  bool  $assoc
      * @param  int  $depth
@@ -62,6 +62,8 @@ class JsonResponse extends BaseJsonResponse
      * {@inheritdoc}
      *
      * @return static
+     *
+     * @throws \InvalidArgumentException
      */
     #[\Override]
     public function setData($data = []): static

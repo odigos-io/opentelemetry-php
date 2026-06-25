@@ -90,6 +90,9 @@ class SendmailTransport extends \Symfony\Component\Mailer\Transport\AbstractTran
         if (!str_contains($command, ' -i') && !str_contains($command, ' -oi')) {
             $chunks = AbstractStream::replace("\n.", "\n..", $chunks);
         }
+        if ($recipients) {
+            $command .= ' --';
+        }
         foreach ($recipients as $recipient) {
             $command .= ' ' . escapeshellarg($recipient->getEncodedAddress());
         }

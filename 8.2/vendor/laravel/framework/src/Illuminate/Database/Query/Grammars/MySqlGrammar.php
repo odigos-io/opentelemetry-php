@@ -16,6 +16,21 @@ class MySqlGrammar extends \Illuminate\Database\Query\Grammars\Grammar
      */
     protected $operators = ['sounds like'];
     /**
+     * Compile a select query into SQL.
+     *
+     * @param  \Illuminate\Database\Query\Builder  $query
+     * @return string
+     */
+    public function compileSelect(Builder $query)
+    {
+        $sql = parent::compileSelect($query);
+        if ($query->timeout === null) {
+            return $sql;
+        }
+        $milliseconds = $query->timeout * 1000;
+        return preg_replace('/^select\b/i', 'select /*+ MAX_EXECUTION_TIME(' . $milliseconds . ') */', $sql, 1);
+    }
+    /**
      * Compile a "where like" clause.
      *
      * @param  \Illuminate\Database\Query\Builder  $query
@@ -27,6 +42,17 @@ class MySqlGrammar extends \Illuminate\Database\Query\Grammars\Grammar
         $where['operator'] = $where['not'] ? 'not ' : '';
         $where['operator'] .= $where['caseSensitive'] ? 'like binary' : 'like';
         return $this->whereBasic($query, $where);
+    }
+    /**
+     * Compile a "where null safe equals" clause.
+     *
+     * @param  \Illuminate\Database\Query\Builder  $query
+     * @param  array  $where
+     * @return string
+     */
+    protected function whereNullSafeEquals(Builder $query, $where)
+    {
+        return $this->wrap($where['column']) . ' <=> ' . $this->parameter($where['value']);
     }
     /**
      * Add a "where null" clause to the query.
@@ -87,8 +113,11 @@ class MySqlGrammar extends \Illuminate\Database\Query\Grammars\Grammar
     protected function compileIndexHint(Builder $query, $indexHint)
     {
         $index = $indexHint->index;
-        if (!preg_match('/^[a-zA-Z0-9_$]+$/', $index)) {
-            throw new InvalidArgumentException('Index name contains invalid characters.');
+        $indexes = array_map('trim', explode(',', $index));
+        foreach ($indexes as $i) {
+            if (!preg_match('/^[a-zA-Z0-9_$]+$/', $i)) {
+                throw new InvalidArgumentException('Index name contains invalid characters.');
+            }
         }
         return match ($indexHint->type) {
             'hint' => "use index ({$index})",

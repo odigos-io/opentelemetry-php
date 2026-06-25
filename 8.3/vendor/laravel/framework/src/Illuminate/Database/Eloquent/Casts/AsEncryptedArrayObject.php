@@ -20,7 +20,7 @@ class AsEncryptedArrayObject implements Castable
             public function get($model, $key, $value, $attributes)
             {
                 if (isset($attributes[$key])) {
-                    return new \Illuminate\Database\Eloquent\Casts\ArrayObject(\Illuminate\Database\Eloquent\Casts\Json::decode(Crypt::decryptString($attributes[$key])));
+                    return new \Illuminate\Database\Eloquent\Casts\ArrayObject(\Illuminate\Database\Eloquent\Casts\Json::decode(Crypt::decryptString($attributes[$key])), \Illuminate\Database\Eloquent\Casts\ArrayObject::ARRAY_AS_PROPS);
                 }
                 return null;
             }

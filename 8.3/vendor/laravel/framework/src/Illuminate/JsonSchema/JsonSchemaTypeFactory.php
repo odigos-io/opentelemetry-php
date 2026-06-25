@@ -53,4 +53,13 @@ class JsonSchemaTypeFactory extends \Illuminate\JsonSchema\JsonSchema implements
     {
         return new \Illuminate\JsonSchema\Types\BooleanType();
     }
+    /**
+     * Create a new multi-type union instance.
+     *
+     * @param  array<int, string>  $types
+     */
+    public function union(array $types): \Illuminate\JsonSchema\Types\UnionType
+    {
+        return new \Illuminate\JsonSchema\Types\UnionType($types);
+    }
 }

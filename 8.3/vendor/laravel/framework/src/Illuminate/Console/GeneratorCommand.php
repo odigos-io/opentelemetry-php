@@ -8,6 +8,9 @@ use Illuminate\Contracts\Console\PromptsForMissingInput;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use Symfony\Component\Console\Completion\CompletionInput;
+use Symfony\Component\Console\Completion\CompletionSuggestions;
+use Symfony\Component\Console\Completion\Suggestion;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Finder\Finder;
 abstract class GeneratorCommand extends \Illuminate\Console\Command implements PromptsForMissingInput
@@ -33,8 +36,6 @@ abstract class GeneratorCommand extends \Illuminate\Console\Command implements P
     protected $reservedNames = ['__halt_compiler', 'abstract', 'and', 'array', 'as', 'break', 'callable', 'case', 'catch', 'class', 'clone', 'const', 'continue', 'declare', 'default', 'die', 'do', 'echo', 'else', 'elseif', 'empty', 'enddeclare', 'endfor', 'endforeach', 'endif', 'endswitch', 'endwhile', 'enum', 'eval', 'exit', 'extends', 'false', 'final', 'finally', 'fn', 'for', 'foreach', 'function', 'global', 'goto', 'if', 'implements', 'include', 'include_once', 'instanceof', 'insteadof', 'interface', 'isset', 'list', 'match', 'namespace', 'new', 'or', 'parent', 'print', 'private', 'protected', 'public', 'readonly', 'require', 'require_once', 'return', 'self', 'static', 'switch', 'throw', 'trait', 'true', 'try', 'unset', 'use', 'var', 'while', 'xor', 'yield', '__CLASS__', '__DIR__', '__FILE__', '__FUNCTION__', '__LINE__', '__METHOD__', '__NAMESPACE__', '__TRAIT__'];
     /**
      * Create a new generator command instance.
-     *
-     * @param  \Illuminate\Filesystem\Filesystem  $files
      */
     public function __construct(Filesystem $files)
     {
@@ -108,8 +109,7 @@ abstract class GeneratorCommand extends \Illuminate\Console\Command implements P
     /**
      * Qualify the given model class base name.
      *
-     * @param  string  $model
-     * @return string
+     * @return class-string
      */
     protected function qualifyModel(string $model)
     {
@@ -311,7 +311,13 @@ abstract class GeneratorCommand extends \Illuminate\Console\Command implements P
     /**
      * Get the console command arguments.
      *
-     * @return array
+     * @return (InputArgument|array{
+     *    0: non-empty-string,
+     *    1?: InputArgument::REQUIRED|InputArgument::OPTIONAL|InputArgument::IS_ARRAY,
+     *    2?: string,
+     *    3?: mixed,
+     *    4?: list<string|Suggestion>|\Closure(CompletionInput, CompletionSuggestions): list<string|Suggestion>
+     * })[]
      */
     protected function getArguments()
     {
@@ -320,7 +326,7 @@ abstract class GeneratorCommand extends \Illuminate\Console\Command implements P
     /**
      * Prompt for missing input arguments using the returned questions.
      *
-     * @return array
+     * @return array<string, string|array{string, string}|\Closure(): (array<int, string>|string|int|bool)>
      */
     protected function promptForMissingArgumentsUsing()
     {

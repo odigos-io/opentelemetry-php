@@ -1,10 +1,10 @@
 <?php
 
+declare (strict_types=1);
 /**
  * This file is part of the Nette Framework (https://nette.org)
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
-declare (strict_types=1);
 namespace Odigos\Nette\Schema\Elements;
 
 use Odigos\Nette\Schema\Context;
@@ -139,6 +139,7 @@ final class Type implements Schema
         }
         return $value;
     }
+    /** @param  array<mixed>  $value */
     private function validateItems(array &$value, Context $context): void
     {
         if (!$this->itemsValue) {

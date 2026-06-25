@@ -39,13 +39,14 @@ class Translator implements \Symfony\Component\CssSelector\XPath\TranslatorInter
     private array $extensions = [];
     private array $nodeTranslators = [];
     private array $combinationTranslators = [];
+    private array $relativeCombinationTranslators = [];
     private array $functionTranslators = [];
     private array $pseudoClassTranslators = [];
     private array $attributeMatchingTranslators = [];
     public function __construct(?ParserInterface $parser = null)
     {
         $this->mainParser = $parser ?? new Parser();
-        $this->registerExtension(new \Symfony\Component\CssSelector\XPath\Extension\NodeExtension())->registerExtension(new \Symfony\Component\CssSelector\XPath\Extension\CombinationExtension())->registerExtension(new \Symfony\Component\CssSelector\XPath\Extension\FunctionExtension())->registerExtension(new \Symfony\Component\CssSelector\XPath\Extension\PseudoClassExtension())->registerExtension(new \Symfony\Component\CssSelector\XPath\Extension\AttributeMatchingExtension());
+        $this->registerExtension(new \Symfony\Component\CssSelector\XPath\Extension\NodeExtension())->registerExtension(new \Symfony\Component\CssSelector\XPath\Extension\CombinationExtension())->registerExtension(new \Symfony\Component\CssSelector\XPath\Extension\FunctionExtension())->registerExtension(new \Symfony\Component\CssSelector\XPath\Extension\PseudoClassExtension())->registerExtension(new \Symfony\Component\CssSelector\XPath\Extension\AttributeMatchingExtension())->registerExtension(new \Symfony\Component\CssSelector\XPath\Extension\RelationExtension());
     }
     public static function getXpathLiteral(string $element): string
     {
@@ -95,6 +96,7 @@ class Translator implements \Symfony\Component\CssSelector\XPath\TranslatorInter
         $this->functionTranslators = array_merge($this->functionTranslators, $extension->getFunctionTranslators());
         $this->pseudoClassTranslators = array_merge($this->pseudoClassTranslators, $extension->getPseudoClassTranslators());
         $this->attributeMatchingTranslators = array_merge($this->attributeMatchingTranslators, $extension->getAttributeMatchingTranslators());
+        $this->relativeCombinationTranslators = array_merge($this->relativeCombinationTranslators, $extension->getRelativeCombinationTranslators());
         return $this;
     }
     /**
@@ -134,6 +136,16 @@ class Translator implements \Symfony\Component\CssSelector\XPath\TranslatorInter
             throw new ExpressionErrorException(\sprintf('Combiner "%s" not supported.', $combiner));
         }
         return $this->combinationTranslators[$combiner]($this->nodeToXPath($xpath), $this->nodeToXPath($combinedXpath));
+    }
+    /**
+     * @throws ExpressionErrorException
+     */
+    public function addRelativeCombination(string $combiner, NodeInterface $xpath, NodeInterface $combinedXpath): \Symfony\Component\CssSelector\XPath\XPathExpr
+    {
+        if (!isset($this->relativeCombinationTranslators[$combiner])) {
+            throw new ExpressionErrorException(\sprintf('Combiner "%s" not supported.', $combiner));
+        }
+        return $this->relativeCombinationTranslators[$combiner]($this->nodeToXPath($xpath), $this->nodeToXPath($combinedXpath));
     }
     /**
      * @throws ExpressionErrorException

@@ -51,7 +51,7 @@ class PaginatedResourceResponse extends \Illuminate\Http\Resources\Json\Resource
         return ['first' => $paginated['first_page_url'] ?? null, 'last' => $paginated['last_page_url'] ?? null, 'prev' => $paginated['prev_page_url'] ?? null, 'next' => $paginated['next_page_url'] ?? null];
     }
     /**
-     * Gather the meta data for the response.
+     * Gather the metadata for the response.
      *
      * @param  array  $paginated
      * @return array

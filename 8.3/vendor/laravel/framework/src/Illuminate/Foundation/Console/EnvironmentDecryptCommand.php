@@ -64,7 +64,7 @@ class EnvironmentDecryptCommand extends Command
         }
         $cipher = $this->option('cipher') ?: 'AES-256-CBC';
         $key = $this->parseKey($key);
-        $encryptedFile = ($this->option('env') ? Str::finish(dirname($this->laravel->environmentFilePath()), \DIRECTORY_SEPARATOR) . '.env.' . $this->option('env') : $this->laravel->environmentFilePath()) . '.encrypted';
+        $encryptedFile = ($this->option('env') ? Str::finish($this->laravel->environmentPath(), \DIRECTORY_SEPARATOR) . '.env.' . $this->option('env') : $this->laravel->environmentFilePath()) . '.encrypted';
         $outputFile = $this->outputFilePath();
         if (Str::endsWith($outputFile, '.encrypted')) {
             $this->fail('Invalid filename.');
@@ -138,7 +138,7 @@ class EnvironmentDecryptCommand extends Command
      */
     protected function outputFilePath()
     {
-        $path = Str::finish($this->option('path') ?: dirname($this->laravel->environmentFilePath()), \DIRECTORY_SEPARATOR);
+        $path = Str::finish($this->option('path') ?: $this->laravel->environmentPath(), \DIRECTORY_SEPARATOR);
         $outputFile = $this->option('filename') ?: '.env' . ($this->option('env') ? '.' . $this->option('env') : '');
         $outputFile = ltrim($outputFile, \DIRECTORY_SEPARATOR);
         return $path . $outputFile;

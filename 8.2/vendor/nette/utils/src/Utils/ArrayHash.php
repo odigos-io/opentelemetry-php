@@ -1,16 +1,16 @@
 <?php
 
+declare (strict_types=1);
 /**
  * This file is part of the Nette Framework (https://nette.org)
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
-declare (strict_types=1);
 namespace Odigos\Nette\Utils;
 
 use Odigos\Nette;
 use function count, is_array, is_scalar, sprintf;
 /**
- * Provides objects to work as array.
+ * Array-like object with property access.
  * @template T
  * @implements \IteratorAggregate<array-key, T>
  * @implements \ArrayAccess<array-key, T>
@@ -30,7 +30,6 @@ class ArrayHash extends \stdClass implements \ArrayAccess, \Countable, \Iterator
         return $obj;
     }
     /**
-     * Returns an iterator over all items.
      * @return \Iterator<array-key, T>
      */
     public function &getIterator(): \Iterator
@@ -39,9 +38,6 @@ class ArrayHash extends \stdClass implements \ArrayAccess, \Countable, \Iterator
             yield $key => $this->{$key};
         }
     }
-    /**
-     * Returns items count.
-     */
     public function count(): int
     {
         return count((array) $this);

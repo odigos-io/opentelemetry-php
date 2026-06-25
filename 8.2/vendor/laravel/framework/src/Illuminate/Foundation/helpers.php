@@ -560,7 +560,6 @@ if (!\function_exists('Odigos\now')) {
      * Create a new Carbon instance for the current time.
      *
      * @param  \DateTimeZone|\UnitEnum|string|null  $tz
-     * @return \Illuminate\Support\Carbon
      */
     function now($tz = null): CarbonInterface
     {

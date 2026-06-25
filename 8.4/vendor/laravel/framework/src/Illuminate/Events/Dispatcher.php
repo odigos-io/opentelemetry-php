@@ -4,14 +4,18 @@ namespace Illuminate\Events;
 
 use Closure;
 use Exception;
+use Illuminate\Bus\UniqueLock;
 use Illuminate\Container\Container;
 use Illuminate\Contracts\Broadcasting\Factory as BroadcastFactory;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Contracts\Cache\Repository as Cache;
 use Illuminate\Contracts\Container\Container as ContainerContract;
 use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
 use Illuminate\Contracts\Events\ShouldDispatchAfterCommit;
 use Illuminate\Contracts\Events\ShouldHandleEventsAfterCommit;
 use Illuminate\Contracts\Queue\ShouldBeEncrypted;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
+use Illuminate\Contracts\Queue\ShouldBeUniqueUntilProcessing;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Contracts\Queue\ShouldQueueAfterCommit;
 use Illuminate\Support\Arr;
@@ -201,7 +205,7 @@ class Dispatcher implements DispatcherContract
      * Resolve the subscriber instance.
      *
      * @param  object|class-string  $subscriber
-     * @return $subscriber is object ? object : mixed
+     * @return ($subscriber is object ? object : mixed)
      */
     protected function resolveSubscriber($subscriber)
     {
@@ -440,7 +444,7 @@ class Dispatcher implements DispatcherContract
             return $this->createQueuedHandlerCallable($class, $method);
         }
         $listener = $this->container->make($class);
-        return $this->handlerShouldBeDispatchedAfterDatabaseTransactions($listener) ? $this->createCallbackForListenerRunningAfterCommits($listener, $method) : [$listener, $method];
+        return $this->handlerShouldBeDispatchedAfterDatabaseTransactions($listener) && !in_array($method, ['creating', 'updating', 'saving', 'deleting', 'restoring', 'forceDeleting']) ? $this->createCallbackForListenerRunningAfterCommits($listener, $method) : [$listener, $method];
     }
     /**
      * Parse the class listener into class and method.
@@ -458,7 +462,7 @@ class Dispatcher implements DispatcherContract
      * @param  class-string  $class
      * @return bool
      *
-     * @phpstan-assert-if-true \Illuminate\Contracts\Queue\ShouldQueue $class
+     * @phpstan-assert-if-true class-string<\Illuminate\Contracts\Queue\ShouldQueue> $class
      */
     protected function handlerShouldBeQueued($class)
     {
@@ -538,6 +542,9 @@ class Dispatcher implements DispatcherContract
     protected function queueHandler($class, $method, $arguments)
     {
         [$listener, $job] = $this->createListenerAndJob($class, $method, $arguments);
+        if ($job->shouldBeUnique && !(new UniqueLock($this->container->make(Cache::class)))->acquire($job)) {
+            return;
+        }
         $connection = $this->resolveQueue()->connection(method_exists($listener, 'viaConnection') ? isset($arguments[0]) ? $listener->viaConnection($arguments[0]) : $listener->viaConnection() : $listener->connection ?? null);
         $queue = method_exists($listener, 'viaQueue') ? isset($arguments[0]) ? $listener->viaQueue($arguments[0]) : $listener->viaQueue() : $listener->queue ?? null;
         $delay = method_exists($listener, 'withDelay') ? isset($arguments[0]) ? $listener->withDelay($arguments[0]) : $listener->withDelay() : $listener->delay ?? null;
@@ -584,6 +591,12 @@ class Dispatcher implements DispatcherContract
             $job->messageGroup = method_exists($listener, 'messageGroup') ? $listener->messageGroup(...$data) : $listener->messageGroup ?? null;
             $job->withDeduplicator(method_exists($listener, 'deduplicator') ? $listener->deduplicator(...$data) : (method_exists($listener, 'deduplicationId') ? $listener->deduplicationId(...) : null));
             $job->through(array_merge(method_exists($listener, 'middleware') ? $listener->middleware(...$data) : [], $listener->middleware ?? []));
+            $job->shouldBeUnique = $listener instanceof ShouldBeUnique;
+            $job->shouldBeUniqueUntilProcessing = $listener instanceof ShouldBeUniqueUntilProcessing;
+            if ($job->shouldBeUnique) {
+                $job->uniqueId = method_exists($listener, 'uniqueId') ? $listener->uniqueId(...$data) : $listener->uniqueId ?? null;
+                $job->uniqueFor = method_exists($listener, 'uniqueFor') ? $listener->uniqueFor(...$data) : $listener->uniqueFor ?? 0;
+            }
         });
     }
     /**
@@ -650,7 +663,7 @@ class Dispatcher implements DispatcherContract
     /**
      * Set the database transaction manager resolver implementation.
      *
-     * @param  (callable(): \Illuminate\Database\DatabaseTransactionsManager|null)  $resolver
+     * @param  (callable(): (\Illuminate\Database\DatabaseTransactionsManager|null))  $resolver
      * @return $this
      */
     public function setTransactionManagerResolver(callable $resolver)

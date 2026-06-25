@@ -13,6 +13,12 @@ class ChannelManager extends Manager implements DispatcherContract, FactoryContr
 {
     use Macroable;
     /**
+     * The resolved notification sender instance.
+     *
+     * @var \Illuminate\Notifications\NotificationSender|null
+     */
+    protected $notificationSender;
+    /**
      * The default channel used to deliver messages.
      *
      * @var string
@@ -33,7 +39,7 @@ class ChannelManager extends Manager implements DispatcherContract, FactoryContr
      */
     public function send($notifiables, $notification)
     {
-        (new \Illuminate\Notifications\NotificationSender($this, $this->container->make(Bus::class), $this->container->make(Dispatcher::class), $this->locale))->send($notifiables, $notification);
+        $this->resolveNotificationSender()->send($notifiables, $notification);
     }
     /**
      * Send the given notification immediately.
@@ -45,7 +51,7 @@ class ChannelManager extends Manager implements DispatcherContract, FactoryContr
      */
     public function sendNow($notifiables, $notification, ?array $channels = null)
     {
-        (new \Illuminate\Notifications\NotificationSender($this, $this->container->make(Bus::class), $this->container->make(Dispatcher::class), $this->locale))->sendNow($notifiables, $notification, $channels);
+        $this->resolveNotificationSender()->sendNow($notifiables, $notification, $channels);
     }
     /**
      * Get a channel instance.
@@ -102,6 +108,15 @@ class ChannelManager extends Manager implements DispatcherContract, FactoryContr
             }
             throw $e;
         }
+    }
+    /**
+     * Resolve the NotificationSender instance.
+     *
+     * @return \Illuminate\Notifications\NotificationSender
+     */
+    protected function resolveNotificationSender()
+    {
+        return $this->notificationSender ??= new \Illuminate\Notifications\NotificationSender($this, $this->container->make(Bus::class), $this->container->make(Dispatcher::class), $this->locale);
     }
     /**
      * Get the default channel driver name.

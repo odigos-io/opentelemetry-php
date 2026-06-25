@@ -55,7 +55,11 @@ class CompiledUrlGeneratorDumper extends \Symfony\Component\Routing\Generator\Du
                 throw new RouteNotFoundException(\sprintf('Target route "%s" for alias "%s" does not exist.', $currentId, $name));
             }
             $compiledTarget = $target->compile();
-            $compiledAliases[$name] = [$compiledTarget->getVariables(), $target->getDefaults(), $target->getRequirements(), $compiledTarget->getTokens(), $compiledTarget->getHostTokens(), $target->getSchemes(), $deprecations];
+            $defaults = $target->getDefaults();
+            if (isset($defaults['_locale']) && str_ends_with($name, '.' . $defaults['_locale'])) {
+                $defaults['_canonical_route'] = substr($name, 0, -\strlen($defaults['_locale']) - 1);
+            }
+            $compiledAliases[$name] = [$compiledTarget->getVariables(), $defaults, $target->getRequirements(), $compiledTarget->getTokens(), $compiledTarget->getHostTokens(), $target->getSchemes(), $deprecations];
         }
         return $compiledAliases;
     }

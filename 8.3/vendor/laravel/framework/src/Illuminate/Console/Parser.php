@@ -11,7 +11,7 @@ class Parser
      * Parse the given console command definition into an array.
      *
      * @param  string  $expression
-     * @return array
+     * @return array{string, array{}, array{}}|array{string, \Symfony\Component\Console\Input\InputArgument[], \Symfony\Component\Console\Input\InputOption[]}
      *
      * @throws \InvalidArgumentException
      */
@@ -41,8 +41,8 @@ class Parser
     /**
      * Extract all parameters from the tokens.
      *
-     * @param  array  $tokens
-     * @return array
+     * @param  string[]  $tokens
+     * @return array{\Symfony\Component\Console\Input\InputArgument[], \Symfony\Component\Console\Input\InputOption[]}
      */
     protected static function parameters(array $tokens)
     {
@@ -102,7 +102,7 @@ class Parser
      * Parse the token into its token and description segments.
      *
      * @param  string  $token
-     * @return array
+     * @return array{string, string}
      */
     protected static function extractDescription(string $token)
     {

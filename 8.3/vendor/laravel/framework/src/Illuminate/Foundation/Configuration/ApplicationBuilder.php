@@ -233,6 +233,11 @@ class ApplicationBuilder
                 }
             }
         });
+        $this->app->afterResolving(ConsoleKernel::class, function () use ($callback) {
+            if (!is_null($callback)) {
+                $callback(new \Illuminate\Foundation\Configuration\Middleware());
+            }
+        });
         return $this;
     }
     /**

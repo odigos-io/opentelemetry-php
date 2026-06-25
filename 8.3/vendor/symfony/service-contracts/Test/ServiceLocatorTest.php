@@ -10,12 +10,9 @@
  */
 namespace Symfony\Contracts\Service\Test;
 
-class_alias(\Symfony\Contracts\Service\Test\ServiceLocatorTestCase::class, \Symfony\Contracts\Service\Test\ServiceLocatorTest::class);
-if (\false) {
-    /**
-     * @deprecated since PHPUnit 9.6
-     */
-    class ServiceLocatorTest
-    {
-    }
+/**
+ * @deprecated since PHPUnit 9.6
+ */
+class ServiceLocatorTest extends \Symfony\Contracts\Service\Test\ServiceLocatorTestCase
+{
 }

@@ -15,7 +15,7 @@ use Symfony\Component\CssSelector\Parser\Token;
  * ParseException is thrown when a CSS selector syntax is not valid.
  *
  * This component is a port of the Python cssselect library,
- * which is copyright Ian Bicking, @see https://github.com/SimonSapin/cssselect.
+ * which is copyright Ian Bicking, @see https://github.com/scrapy/cssselect.
  *
  * @author Jean-François Simon <jeanfrancois.simon@sensiolabs.com>
  */
@@ -35,7 +35,11 @@ class SyntaxErrorException extends \Symfony\Component\CssSelector\Exception\Pars
     }
     public static function nestedNot(): self
     {
-        return new self('Got nested ::not().');
+        return new self('Got nested :not().');
+    }
+    public static function nestedHas(): self
+    {
+        return new self('Got too deeply nested :has().');
     }
     public static function notAtTheStartOfASelector(string $pseudoElement): self
     {

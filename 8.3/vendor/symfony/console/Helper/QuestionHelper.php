@@ -255,7 +255,7 @@ class QuestionHelper extends \Symfony\Component\Console\Helper\Helper
                         $output->write($remainingCharacters);
                         $fullChoice .= $remainingCharacters;
                         $i = \false === ($encoding = mb_detect_encoding($fullChoice, null, \true)) ? \strlen($fullChoice) : mb_strlen($fullChoice, $encoding);
-                        $matches = array_filter($autocomplete($ret), fn($match) => '' === $ret || str_starts_with($match, $ret));
+                        $matches = array_filter($autocomplete($ret), static fn($match) => '' === $ret || str_starts_with($match, $ret));
                         $numMatches = \count($matches);
                         $ofs = -1;
                     }
@@ -375,6 +375,8 @@ class QuestionHelper extends \Symfony\Component\Console\Helper\Helper
             }
             try {
                 return $question->getValidator()($interviewer());
+            } catch (MissingInputException $e) {
+                throw $error ?? $e;
             } catch (RuntimeException $e) {
                 throw $e;
             } catch (\Exception $error) {

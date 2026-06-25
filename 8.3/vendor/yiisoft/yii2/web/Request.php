@@ -539,6 +539,7 @@ class Request extends \yii\base\Request
     {
         $this->_rawBody = $rawBody;
     }
+    /** @var array|object */
     private $_bodyParams;
     /**
      * Returns the request parameters given in the request body.
@@ -626,9 +627,9 @@ class Request extends \yii\base\Request
     /**
      * Returns POST parameter with a given name. If name isn't specified, returns an array of all POST parameters.
      *
-     * @param string $name the parameter name
+     * @param string|null $name the parameter name
      * @param mixed $defaultValue the default parameter value if the parameter does not exist.
-     * @return array|mixed
+     * @return ($name is null ? array|object : mixed)
      */
     public function post($name = null, $defaultValue = null)
     {
@@ -637,6 +638,7 @@ class Request extends \yii\base\Request
         }
         return $this->getBodyParam($name, $defaultValue);
     }
+    /** @var array */
     private $_queryParams;
     /**
      * Returns the request parameters given in the [[queryString]].
@@ -665,9 +667,9 @@ class Request extends \yii\base\Request
     /**
      * Returns GET parameter with a given name. If name isn't specified, returns an array of all GET parameters.
      *
-     * @param string $name the parameter name
+     * @param string|null $name the parameter name
      * @param mixed $defaultValue the default parameter value if the parameter does not exist.
-     * @return array|mixed
+     * @return ($name is null ? array : mixed)
      */
     public function get($name = null, $defaultValue = null)
     {

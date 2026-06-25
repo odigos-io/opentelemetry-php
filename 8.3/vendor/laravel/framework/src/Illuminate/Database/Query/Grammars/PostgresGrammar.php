@@ -131,7 +131,8 @@ class PostgresGrammar extends \Illuminate\Database\Query\Grammars\Grammar
         if (!in_array($language, $this->validFullTextLanguages())) {
             $language = 'english';
         }
-        $columns = (new Collection($where['columns']))->map(fn($column) => "to_tsvector('{$language}', {$this->wrap($column)})")->implode(' || ');
+        $isVector = $where['options']['vector'] ?? \false;
+        $columns = (new Collection($where['columns']))->map(fn($column) => $isVector ? $this->wrap($column) : "to_tsvector('{$language}', {$this->wrap($column)})")->implode(' || ');
         $mode = 'plainto_tsquery';
         if (($where['options']['mode'] ?? []) === 'phrase') {
             $mode = 'phraseto_tsquery';

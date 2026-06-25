@@ -510,7 +510,7 @@ class Repository
     /**
      * Execute the given callback when context is about to be dehydrated.
      *
-     * @param  callable  $callback
+     * @param  (callable(static): void)  $callback
      * @return $this
      */
     public function dehydrating($callback)
@@ -521,7 +521,7 @@ class Repository
     /**
      * Execute the given callback when context has been hydrated.
      *
-     * @param  callable  $callback
+     * @param  (callable(static): void)  $callback
      * @return $this
      */
     public function hydrated($callback)

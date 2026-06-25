@@ -10,11 +10,11 @@ class RateLimitedWithRedis extends \Illuminate\Queue\Middleware\RateLimited
 {
     use InteractsWithTime;
     /**
-     * The Redis factory implementation.
+     * The name of the Redis connection that should be used.
      *
-     * @var \Illuminate\Contracts\Redis\Factory
+     * @var string|null
      */
-    protected $redis;
+    protected $connectionName = null;
     /**
      * The timestamp of the end of the current duration by key.
      *
@@ -26,10 +26,10 @@ class RateLimitedWithRedis extends \Illuminate\Queue\Middleware\RateLimited
      *
      * @param  string  $limiterName
      */
-    public function __construct($limiterName)
+    public function __construct($limiterName, ?string $connection = null)
     {
         parent::__construct($limiterName);
-        $this->redis = Container::getInstance()->make(Redis::class);
+        $this->connectionName = $connection;
     }
     /**
      * Handle a rate limited job.
@@ -58,7 +58,8 @@ class RateLimitedWithRedis extends \Illuminate\Queue\Middleware\RateLimited
      */
     protected function tooManyAttempts($key, $maxAttempts, $decaySeconds)
     {
-        $limiter = new DurationLimiter($this->redis, $key, $maxAttempts, $decaySeconds);
+        $redis = Container::getInstance()->make(Redis::class)->connection($this->connectionName);
+        $limiter = new DurationLimiter($redis, $key, $maxAttempts, $decaySeconds);
         return tap(!$limiter->acquire(), function () use ($key, $limiter) {
             $this->decaysAt[$key] = $limiter->decaysAt;
         });
@@ -74,6 +75,26 @@ class RateLimitedWithRedis extends \Illuminate\Queue\Middleware\RateLimited
         return $this->decaysAt[$key] - $this->currentTime() + 3;
     }
     /**
+     * Specify the Redis connection that should be used.
+     *
+     * @param  string  $name
+     * @return $this
+     */
+    public function connection(string $name)
+    {
+        $this->connectionName = $name;
+        return $this;
+    }
+    /**
+     * Prepare the object for serialization.
+     *
+     * @return array
+     */
+    public function __sleep()
+    {
+        return array_merge(parent::__sleep(), ['connectionName']);
+    }
+    /**
      * Prepare the object after unserialization.
      *
      * @return void
@@ -81,6 +102,5 @@ class RateLimitedWithRedis extends \Illuminate\Queue\Middleware\RateLimited
     public function __wakeup()
     {
         parent::__wakeup();
-        $this->redis = Container::getInstance()->make(Redis::class);
     }
 }

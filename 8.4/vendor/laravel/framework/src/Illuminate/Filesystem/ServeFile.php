@@ -37,6 +37,6 @@ class ServeFile
      */
     protected function hasValidSignature(Request $request): bool
     {
-        return ($this->config['visibility'] ?? 'private') === 'public' || $request->hasValidRelativeSignature();
+        return !$request->boolean('upload') && (($this->config['visibility'] ?? 'private') === 'public' || $request->hasValidRelativeSignature());
     }
 }

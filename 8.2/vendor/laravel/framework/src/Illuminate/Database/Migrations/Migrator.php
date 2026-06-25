@@ -50,7 +50,7 @@ class Migrator
     /**
      * The custom connection resolver callback.
      *
-     * @var \Closure|null
+     * @var (\Closure(\Illuminate\Database\ConnectionResolverInterface, ?string): \Illuminate\Database\Connection)|null
      */
     protected static $connectionResolverCallback;
     /**
@@ -232,7 +232,7 @@ class Migrator
      * Get the migrations for a rollback operation.
      *
      * @param  array<string, mixed>  $options
-     * @return array
+     * @return array{id: int, migration: string, batch: int}[]
      */
     protected function getMigrationsForRollback(array $options)
     {
@@ -519,8 +519,10 @@ class Migrator
     /**
      * Execute the given callback using the given connection as the default connection.
      *
+     * @template TReturn
+     *
      * @param  string  $name
-     * @param  callable  $callback
+     * @param  (callable(): TReturn)  $callback
      * @return mixed
      */
     public function usingConnection($name, callable $callback)
@@ -564,7 +566,7 @@ class Migrator
     /**
      * Set a connection resolver callback.
      *
-     * @param  \Closure  $callback
+     * @param  \Closure(\Illuminate\Database\ConnectionResolverInterface, ?string): \Illuminate\Database\Connection  $callback
      * @return void
      */
     public static function resolveConnectionsUsing(Closure $callback)

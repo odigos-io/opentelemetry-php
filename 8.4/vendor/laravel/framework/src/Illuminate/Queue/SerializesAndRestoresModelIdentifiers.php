@@ -49,11 +49,12 @@ trait SerializesAndRestoresModelIdentifiers
      */
     protected function restoreCollection($value)
     {
-        if (!$value->class || count($value->id) === 0) {
+        $class = $value->getClass();
+        if (!$class || count($value->id) === 0) {
             return !is_null($value->collectionClass ?? null) ? new $value->collectionClass() : new EloquentCollection();
         }
-        $collection = $this->getQueryForModelRestoration((new $value->class())->setConnection($value->connection), $value->id)->useWritePdo()->get();
-        if (is_a($value->class, Pivot::class, \true) || in_array(AsPivot::class, class_uses($value->class))) {
+        $collection = $this->getQueryForModelRestoration((new $class())->setConnection($value->connection), $value->id)->useWritePdo()->get();
+        if (is_a($class, Pivot::class, \true) || in_array(AsPivot::class, class_uses($class))) {
             return $collection;
         }
         $collection = $collection->keyBy->getKey();
@@ -68,7 +69,7 @@ trait SerializesAndRestoresModelIdentifiers
      */
     public function restoreModel($value)
     {
-        return $this->getQueryForModelRestoration((new $value->class())->setConnection($value->connection), $value->id)->useWritePdo()->firstOrFail()->loadMissing($value->relations ?? []);
+        return $this->getQueryForModelRestoration((new ($value->getClass())())->setConnection($value->connection), $value->id)->useWritePdo()->firstOrFail()->loadMissing($value->relations ?? []);
     }
     /**
      * Get the query for model restoration.

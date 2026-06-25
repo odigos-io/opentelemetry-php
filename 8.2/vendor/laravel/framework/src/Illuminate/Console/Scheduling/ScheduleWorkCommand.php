@@ -45,7 +45,7 @@ class ScheduleWorkCommand extends Command
         while (\true) {
             usleep(100 * 1000);
             if (Carbon::now()->second === 0 && !Carbon::now()->startOfMinute()->equalTo($lastExecutionStartedAt)) {
-                $executions[] = $execution = Process::fromShellCommandline($command);
+                $executions[] = $execution = Process::fromShellCommandline($command, base_path());
                 $execution->start();
                 $lastExecutionStartedAt = Carbon::now()->startOfMinute();
             }

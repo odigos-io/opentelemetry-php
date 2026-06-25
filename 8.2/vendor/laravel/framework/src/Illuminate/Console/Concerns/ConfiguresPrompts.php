@@ -55,10 +55,12 @@ trait ConfiguresPrompts
     /**
      * Prompt the user until the given validation callback passes.
      *
-     * @param  \Closure  $prompt
+     * @template PResult
+     *
+     * @param  \Closure(): PResult  $prompt
      * @param  bool|string  $required
-     * @param  \Closure|null  $validate
-     * @return mixed
+     * @param  (\Closure(PResult): mixed)|null  $validate
+     * @return PResult
      */
     protected function promptUntilValid($prompt, $required, $validate)
     {
@@ -124,7 +126,7 @@ trait ConfiguresPrompts
     /**
      * Get the validation messages that should be used during prompt validation.
      *
-     * @return array
+     * @return array<string, string>
      */
     protected function validationMessages()
     {
@@ -133,7 +135,7 @@ trait ConfiguresPrompts
     /**
      * Get the validation attributes that should be used during prompt validation.
      *
-     * @return array
+     * @return array<string, string>
      */
     protected function validationAttributes()
     {
@@ -152,7 +154,7 @@ trait ConfiguresPrompts
      * Select fallback.
      *
      * @param  string  $label
-     * @param  array  $options
+     * @param  array<array-key, string>  $options
      * @param  string|int|null  $default
      * @return string|int
      */

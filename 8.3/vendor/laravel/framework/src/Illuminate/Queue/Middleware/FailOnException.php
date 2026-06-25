@@ -48,7 +48,7 @@ class FailOnException
      * @param  callable  $next
      * @return mixed
      *
-     * @throws Throwable
+     * @throws \Throwable
      */
     public function handle($job, callable $next)
     {

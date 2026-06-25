@@ -63,7 +63,7 @@ class SerializableClosure
         \Laravel\SerializableClosure\Serializers\Signed::$signer = $secret ? new Hmac($secret) : null;
     }
     /**
-     * Sets the serializable closure secret key.
+     * Sets the transformer that should be used when serializing use variables.
      *
      * @param  \Closure|null  $transformer
      * @return void
@@ -73,7 +73,7 @@ class SerializableClosure
         \Laravel\SerializableClosure\Serializers\Native::$transformUseVariables = $transformer;
     }
     /**
-     * Sets the serializable closure secret key.
+     * Sets the resolver that should be used when unserializing use variables.
      *
      * @param  \Closure|null  $resolver
      * @return void

@@ -11,9 +11,7 @@ namespace Odigos;
  * file that was distributed with this source code.
  */
 if (\PHP_VERSION_ID < 80400) {
-    /**
-     * @author Daniel Scherzer <daniel.e.scherzer@gmail.com>
-     */
+    // @author Daniel Scherzer <daniel.e.scherzer@gmail.com>
     final class ReflectionConstant
     {
         /**
@@ -24,6 +22,7 @@ if (\PHP_VERSION_ID < 80400) {
         public $name;
         private $value;
         private $deprecated;
+        private $persistent;
         private static $persistentConstants = [];
         public function __construct(string $name)
         {
@@ -138,8 +137,6 @@ if (\PHP_VERSION_ID < 80400) {
             throw new \Exception("Unserialization of 'ReflectionConstant' is not allowed");
         }
     }
-    /**
-     * @author Daniel Scherzer <daniel.e.scherzer@gmail.com>
-     */
+    // @author Daniel Scherzer <daniel.e.scherzer@gmail.com>
     \class_alias('Odigos\ReflectionConstant', 'ReflectionConstant', \false);
 }

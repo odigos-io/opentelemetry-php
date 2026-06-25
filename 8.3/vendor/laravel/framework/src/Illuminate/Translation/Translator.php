@@ -371,7 +371,8 @@ class Translator extends NamespacedItemResolver implements TranslatorContract
     protected function localeArray($locale)
     {
         $locales = array_filter([$locale ?: $this->locale, $this->fallback]);
-        return call_user_func($this->determineLocalesUsing ?: fn() => $locales, $locales);
+        $determined = call_user_func($this->determineLocalesUsing ?: fn() => $locales, $locales);
+        return array_values(array_unique($determined));
     }
     /**
      * Specify a callback that should be invoked to determined the applicable locale array.

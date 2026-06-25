@@ -71,33 +71,39 @@ final class CompleteCommand extends \Symfony\Component\Console\Command\Command
             $completionInput = $this->createCompletionInput($input);
             $suggestions = new CompletionSuggestions();
             $this->log(['', '<comment>' . date('Y-m-d H:i:s') . '</>', '<info>Input:</> <comment>("|" indicates the cursor position)</>', '  ' . $completionInput, '<info>Command:</>', '  ' . implode(' ', $_SERVER['argv']), '<info>Messages:</>']);
-            $command = $this->findCommand($completionInput);
+            if ($command = $this->findCommand($completionInput)) {
+                $command->mergeApplicationDefinition();
+                $completionInput->bind($command->getDefinition());
+            }
             if (null === $command) {
                 $this->log('  No command found, completing using the Application class.');
                 $this->getApplication()->complete($completionInput, $suggestions);
-            } elseif ($completionInput->mustSuggestArgumentValuesFor('command') && $command->getName() !== $completionInput->getCompletionValue() && !\in_array($completionInput->getCompletionValue(), $command->getAliases(), \true)) {
-                $this->log('  No command found, completing using the Application class.');
+            } elseif ($completionInput->mustSuggestArgumentValuesFor('command')) {
+                $this->log('  Command found, completing command name.');
                 // expand shortcut names ("cache:cl<TAB>") into their full name ("cache:clear")
-                $suggestions->suggestValues(array_filter(array_merge([$command->getName()], $command->getAliases())));
-            } else {
-                $command->mergeApplicationDefinition();
-                $completionInput->bind($command->getDefinition());
-                if (CompletionInput::TYPE_OPTION_NAME === $completionInput->getCompletionType()) {
-                    $this->log('  Completing option names for the <comment>' . ($command instanceof \Symfony\Component\Console\Command\LazyCommand ? $command->getCommand() : $command)::class . '</> command.');
-                    $suggestions->suggestOptions($command->getDefinition()->getOptions());
-                } else {
-                    $this->log(['  Completing using the <comment>' . ($command instanceof \Symfony\Component\Console\Command\LazyCommand ? $command->getCommand() : $command)::class . '</> class.', '  Completing <comment>' . $completionInput->getCompletionType() . '</> for <comment>' . $completionInput->getCompletionName() . '</>']);
-                    if (null !== $compval = $completionInput->getCompletionValue()) {
-                        $this->log('  Current value: <comment>' . $compval . '</>');
+                $commandNames = array_filter(array_merge([$command->getName()], $command->getAliases()));
+                foreach ($commandNames as $name) {
+                    if (str_starts_with($name, $completionInput->getCompletionValue())) {
+                        $commandNames = [$name];
+                        break;
                     }
-                    $command->complete($completionInput, $suggestions);
                 }
+                $suggestions->suggestValues($commandNames);
+            } else if (CompletionInput::TYPE_OPTION_NAME === $completionInput->getCompletionType()) {
+                $this->log('  Completing option names for the <comment>' . ($command instanceof \Symfony\Component\Console\Command\LazyCommand ? $command->getCommand() : $command)::class . '</> command.');
+                $suggestions->suggestOptions($command->getDefinition()->getOptions());
+            } else {
+                $this->log(['  Completing using the <comment>' . ($command instanceof \Symfony\Component\Console\Command\LazyCommand ? $command->getCommand() : $command)::class . '</> class.', '  Completing <comment>' . $completionInput->getCompletionType() . '</> for <comment>' . $completionInput->getCompletionName() . '</>']);
+                if (null !== $compval = $completionInput->getCompletionValue()) {
+                    $this->log('  Current value: <comment>' . $compval . '</>');
+                }
+                $command->complete($completionInput, $suggestions);
             }
             /** @var CompletionOutputInterface $completionOutput */
             $completionOutput = new $completionOutput();
             $this->log('<info>Suggestions:</>');
             if ($options = $suggestions->getOptionSuggestions()) {
-                $this->log('  --' . implode(' --', array_map(fn($o) => $o->getName(), $options)));
+                $this->log('  --' . implode(' --', array_map(static fn($o) => $o->getName(), $options)));
             } elseif ($values = $suggestions->getValueSuggestions()) {
                 $this->log('  ' . implode(' ', $values));
             } else {

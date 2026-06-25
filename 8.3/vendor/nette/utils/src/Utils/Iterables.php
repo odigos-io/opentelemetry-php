@@ -1,10 +1,10 @@
 <?php
 
+declare (strict_types=1);
 /**
  * This file is part of the Nette Framework (https://nette.org)
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
-declare (strict_types=1);
 namespace Odigos\Nette\Utils;
 
 use Odigos\Nette;
@@ -17,6 +17,7 @@ final class Iterables
     use Nette\StaticClass;
     /**
      * Tests for the presence of value.
+     * @param  iterable<mixed>  $iterable
      */
     public static function contains(iterable $iterable, mixed $value): bool
     {
@@ -29,6 +30,7 @@ final class Iterables
     }
     /**
      * Tests for the presence of key.
+     * @param  iterable<mixed>  $iterable
      */
     public static function containsKey(iterable $iterable, mixed $key): bool
     {
@@ -43,9 +45,11 @@ final class Iterables
      * Returns the first item (matching the specified predicate if given). If there is no such item, it returns result of invoking $else or null.
      * @template K
      * @template V
+     * @template E
      * @param  iterable<K, V>  $iterable
      * @param  ?callable(V, K, iterable<K, V>): bool  $predicate
-     * @return ?V
+     * @param  ?callable(): E  $else
+     * @return ($else is null ? ?V : V|E)
      */
     public static function first(iterable $iterable, ?callable $predicate = null, ?callable $else = null): mixed
     {
@@ -60,9 +64,11 @@ final class Iterables
      * Returns the key of first item (matching the specified predicate if given). If there is no such item, it returns result of invoking $else or null.
      * @template K
      * @template V
+     * @template E
      * @param  iterable<K, V>  $iterable
      * @param  ?callable(V, K, iterable<K, V>): bool  $predicate
-     * @return ?K
+     * @param  ?callable(): E  $else
+     * @return ($else is null ? ?K : K|E)
      */
     public static function firstKey(iterable $iterable, ?callable $predicate = null, ?callable $else = null): mixed
     {
@@ -74,7 +80,7 @@ final class Iterables
         return $else ? $else() : null;
     }
     /**
-     * Tests whether at least one element in the iterator passes the test implemented by the provided function.
+     * Tests whether at least one element in the iterable passes the test implemented by the provided function.
      * @template K
      * @template V
      * @param  iterable<K, V>  $iterable
@@ -90,7 +96,7 @@ final class Iterables
         return \false;
     }
     /**
-     * Tests whether all elements in the iterator pass the test implemented by the provided function.
+     * Tests whether all elements in the iterable pass the test implemented by the provided function.
      * @template K
      * @template V
      * @param  iterable<K, V>  $iterable
@@ -106,7 +112,7 @@ final class Iterables
         return \true;
     }
     /**
-     * Iterator that filters elements according to a given $predicate. Maintains original keys.
+     * Returns a generator that yields only elements matching the given $predicate. Maintains original keys.
      * @template K
      * @template V
      * @param  iterable<K, V>  $iterable
@@ -122,7 +128,7 @@ final class Iterables
         }
     }
     /**
-     * Iterator that transforms values by calling $transformer. Maintains original keys.
+     * Returns a generator that transforms values by calling $transformer. Maintains original keys.
      * @template K
      * @template V
      * @template R
@@ -137,14 +143,14 @@ final class Iterables
         }
     }
     /**
-     * Iterator that transforms keys and values by calling $transformer. If it returns null, the element is skipped.
+     * Returns a generator that transforms keys and values by calling $transformer. If it returns null, the element is skipped.
      * @template K
      * @template V
-     * @template ResV
      * @template ResK
+     * @template ResV
      * @param  iterable<K, V>  $iterable
-     * @param  callable(V, K, iterable<K, V>): ?array{ResV, ResK}  $transformer
-     * @return \Generator<ResV, ResK>
+     * @param  callable(V, K, iterable<K, V>): ?array{ResK, ResV}  $transformer
+     * @return \Generator<ResK, ResV>
      */
     public static function mapWithKeys(iterable $iterable, callable $transformer): \Generator
     {
@@ -165,9 +171,12 @@ final class Iterables
      */
     public static function repeatable(callable $factory): \IteratorAggregate
     {
-        return new class($factory) implements \IteratorAggregate
+        return new class($factory(...)) implements \IteratorAggregate
         {
-            public function __construct(private $factory)
+            public function __construct(
+                /** @var \Closure(): iterable<mixed, mixed> */
+                private \Closure $factory
+            )
             {
             }
             public function getIterator(): \Iterator
@@ -188,7 +197,11 @@ final class Iterables
     {
         return new class(self::toIterator($iterable)) implements \IteratorAggregate
         {
-            public function __construct(private \Iterator $iterator, private array $cache = [])
+            public function __construct(
+                private readonly \Iterator $iterator,
+                /** @var array<array{mixed, mixed}> */
+                private array $cache = []
+            )
             {
             }
             public function getIterator(): \Generator

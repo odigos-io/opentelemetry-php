@@ -27,4 +27,12 @@ class AnonymousResourceCollection extends \Illuminate\Http\Resources\Json\Resour
         $this->collects = $collects;
         parent::__construct($resource);
     }
+    /**
+     * Indicate that the collection keys should be preserved.
+     */
+    public function preserveKeys(bool $value = \true): static
+    {
+        $this->preserveKeys = $value;
+        return $this;
+    }
 }

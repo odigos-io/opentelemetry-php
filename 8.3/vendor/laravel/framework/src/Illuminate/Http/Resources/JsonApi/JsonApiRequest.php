@@ -46,7 +46,7 @@ class JsonApiRequest extends Request
             return array_keys($this->cachedSparseIncluded);
         }
         return transform($this->cachedSparseIncluded[$key] ?? null, function ($value) {
-            return (new Collection(Arr::wrap($value)))->transform(function ($item) {
+            return Collection::wrap($value)->transform(function ($item) {
                 $item = implode('.', Arr::take(explode('.', $item), \Illuminate\Http\Resources\JsonApi\JsonApiResource::$maxRelationshipDepth - 1));
                 return !empty($item) ? $item : null;
             })->filter()->all();

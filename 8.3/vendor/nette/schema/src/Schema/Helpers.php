@@ -1,10 +1,10 @@
 <?php
 
+declare (strict_types=1);
 /**
  * This file is part of the Nette Framework (https://nette.org)
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
-declare (strict_types=1);
 namespace Odigos\Nette\Schema;
 
 use Odigos\Nette;
@@ -55,9 +55,9 @@ final class Helpers
     }
     /**
      * Returns an annotation value.
-     * @param  \ReflectionProperty  $ref
+     * @param  \ReflectionClass<object>|\ReflectionProperty  $ref
      */
-    public static function parseAnnotation(\Reflector $ref, string $name): ?string
+    public static function parseAnnotation(\ReflectionClass|\ReflectionProperty $ref, string $name): ?string
     {
         if (!Reflection::areCommentsAvailable()) {
             throw new Nette\InvalidStateException('You have to enable phpDoc comments in opcode cache.');
@@ -90,10 +90,11 @@ final class Helpers
             $context->addError('The %label% %path% expects to be %expected%, %value% given.', Message::TypeMismatch, ['value' => $value, 'expected' => $expected]);
         }
     }
+    /** @param  array{?float, ?float}  $range */
     public static function validateRange(mixed $value, array $range, Context $context, string $types = ''): void
     {
         if (is_array($value) || is_string($value)) {
-            [$length, $label] = is_array($value) ? [count($value), 'items'] : (in_array('unicode', explode('|', $types), \true) ? [Nette\Utils\Strings::length($value), 'characters'] : [strlen($value), 'bytes']);
+            [$length, $label] = is_array($value) ? [count($value), 'items'] : (in_array('unicode', explode('|', $types), strict: \true) ? [Nette\Utils\Strings::length($value), 'characters'] : [strlen($value), 'bytes']);
             if (!self::isInRange($length, $range)) {
                 $context->addError("The length of %label% %path% expects to be in range %expected%, %length% {$label} given.", Message::LengthOutOfRange, ['value' => $value, 'length' => $length, 'expected' => implode('..', $range)]);
             }
@@ -101,6 +102,7 @@ final class Helpers
             $context->addError('The %label% %path% expects to be in range %expected%, %value% given.', Message::ValueOutOfRange, ['value' => $value, 'expected' => implode('..', $range)]);
         }
     }
+    /** @param  array{?float, ?float}  $range */
     public static function isInRange(mixed $value, array $range): bool
     {
         return ($range[0] === null || $value >= $range[0]) && ($range[1] === null || $value <= $range[1]);
@@ -111,6 +113,7 @@ final class Helpers
             $context->addError("The %label% %path% expects to match pattern '%pattern%', %value% given.", Message::PatternMismatch, ['value' => $value, 'pattern' => $pattern]);
         }
     }
+    /** @return \Closure(mixed): mixed */
     public static function getCastStrategy(string $type): \Closure
     {
         if (Nette\Utils\Validators::isBuiltinType($type)) {

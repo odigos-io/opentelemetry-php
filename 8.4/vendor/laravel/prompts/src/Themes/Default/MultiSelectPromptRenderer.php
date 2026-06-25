@@ -17,7 +17,7 @@ class MultiSelectPromptRenderer extends \Laravel\Prompts\Themes\Default\Renderer
             'submit' => $this->box($this->dim($this->truncate($prompt->label, $prompt->terminal()->cols() - 6)), $this->renderSelectedOptions($prompt)),
             'cancel' => $this->box($this->truncate($prompt->label, $prompt->terminal()->cols() - 6), $this->renderOptions($prompt), color: 'red')->error($prompt->cancelMessage),
             'error' => $this->box($this->truncate($prompt->label, $prompt->terminal()->cols() - 6), $this->renderOptions($prompt), color: 'yellow', info: count($prompt->options) > $prompt->scroll ? count($prompt->value()) . ' selected' : '')->warning($this->truncate($prompt->error, $prompt->terminal()->cols() - 5)),
-            default => $this->box($this->cyan($this->truncate($prompt->label, $prompt->terminal()->cols() - 6)), $this->renderOptions($prompt), info: count($prompt->options) > $prompt->scroll ? count($prompt->value()) . ' selected' : '')->when($prompt->hint, fn() => $this->hint($prompt->hint), fn() => $this->newLine()),
+            default => $this->box($this->cyan($this->truncate($prompt->label, $prompt->terminal()->cols() - 6)), $this->renderOptions($prompt), info: $this->getInfoText($prompt))->when($prompt->hint, fn() => $this->hint($prompt->hint), fn() => $this->newLine()),
         };
     }
     /**
@@ -60,6 +60,14 @@ class MultiSelectPromptRenderer extends \Laravel\Prompts\Themes\Default\Renderer
             return $this->gray('None');
         }
         return implode("\n", array_map(fn($label) => $this->truncate($label, $prompt->terminal()->cols() - 6), $prompt->labels()));
+    }
+    /**
+     * Render the info text.
+     */
+    protected function getInfoText(MultiSelectPrompt $prompt): string
+    {
+        $parts = array_filter([$prompt->infoText(), count($prompt->options) > $prompt->scroll ? count($prompt->value()) . ' selected' : '']);
+        return implode(' · ', $parts);
     }
     /**
      * The number of lines to reserve outside of the scrollable area.

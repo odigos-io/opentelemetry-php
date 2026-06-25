@@ -42,7 +42,7 @@ class Application extends Container implements ApplicationContract, CachesConfig
      *
      * @var string
      */
-    const VERSION = '12.48.1';
+    const VERSION = '12.62.0';
     /**
      * The base path for the Laravel installation.
      *
@@ -613,7 +613,7 @@ class Application extends Container implements ApplicationContract, CachesConfig
         return $this->environmentFile ?: '.env';
     }
     /**
-     * Get the fully qualified path to the environment file.
+     * Get the fully-qualified path to the environment file.
      *
      * @return string
      */

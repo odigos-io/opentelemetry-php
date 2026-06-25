@@ -17,14 +17,14 @@ class ContainerCommandLoader implements CommandLoaderInterface
     /**
      * A map of command names to classes.
      *
-     * @var array
+     * @var array<string, \Illuminate\Console\Command|string>
      */
     protected $commandMap;
     /**
      * Create a new command loader instance.
      *
      * @param  \Psr\Container\ContainerInterface  $container
-     * @param  array  $commandMap
+     * @param  array<string, \Illuminate\Console\Command|string>  $commandMap
      */
     public function __construct(ContainerInterface $container, array $commandMap)
     {

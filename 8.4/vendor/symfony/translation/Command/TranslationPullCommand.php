@@ -33,6 +33,7 @@ final class TranslationPullCommand extends Command
     use \Symfony\Component\Translation\Command\TranslationTrait;
     public function __construct(private TranslationProviderCollection $providerCollection, private TranslationWriterInterface $writer, private TranslationReaderInterface $reader, private string $defaultLocale, private array $transPaths = [], private array $enabledLocales = [])
     {
+        $this->enabledLocales = array_filter($enabledLocales);
         parent::__construct();
     }
     public function complete(CompletionInput $input, CompletionSuggestions $suggestions): void
@@ -75,6 +76,7 @@ Full example:
 This command pulls all translations associated with the <info>messages</> and <info>validators</> domains for the <info>en</> locale.
 Local translations for the specified domains and locale are deleted if they're not present on the provider and overwritten if it's the case.
 Local translations for others domains and locales are ignored.
+
 EOF
 );
     }

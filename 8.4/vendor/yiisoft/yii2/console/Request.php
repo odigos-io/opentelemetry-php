@@ -58,7 +58,7 @@ class Request extends \yii\base\Request
             $route = array_shift($rawParams);
             if ($route === '--') {
                 $endOfOptionsFound = \true;
-                $route = array_shift($rawParams);
+                $route = (string) array_shift($rawParams);
             }
         } else {
             $route = '';

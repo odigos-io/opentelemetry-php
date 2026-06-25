@@ -155,7 +155,7 @@ class Progress extends \Laravel\Prompts\Prompt
     /**
      * Disable prompting for input.
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function prompt(): never
     {

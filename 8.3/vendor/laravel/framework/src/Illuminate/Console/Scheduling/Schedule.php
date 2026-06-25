@@ -233,7 +233,7 @@ class Schedule
     /**
      * Create new schedule group.
      *
-     * @param  \Illuminate\Console\Scheduling\Event  $event
+     * @param  \Closure  $events
      * @return void
      *
      * @throws \RuntimeException
@@ -383,7 +383,7 @@ class Schedule
         if (static::hasMacro($method)) {
             return $this->macroCall($method, $parameters);
         }
-        if (method_exists(\Illuminate\Console\Scheduling\PendingEventAttributes::class, $method)) {
+        if (method_exists(\Illuminate\Console\Scheduling\PendingEventAttributes::class, $method) || \Illuminate\Console\Scheduling\Event::hasMacro($method)) {
             $this->attributes ??= $this->groupStack ? clone array_last($this->groupStack) : new \Illuminate\Console\Scheduling\PendingEventAttributes($this);
             return $this->attributes->{$method}(...$parameters);
         }

@@ -73,7 +73,7 @@ use yii\helpers\Inflector;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  *
- * @template T of Application
+ * @template T of Application = Application
  * @extends BaseMigrateController<T>
  */
 class MigrateController extends \yii\console\controllers\BaseMigrateController
@@ -158,11 +158,11 @@ class MigrateController extends \yii\console\controllers\BaseMigrateController
     /**
      * This method is invoked right before an action is to be executed (after all possible filters.)
      * It checks the existence of the [[migrationPath]].
-     * @param Action $action the action to be executed.
+     * @param Action<static> $action the action to be executed.
      * @return bool whether the action should continue to be executed.
      *
-     * @phpstan-param Action<$this> $action
-     * @psalm-param Action<$this> $action
+     * @phpstan-param Action<static> $action
+     * @psalm-param Action<self> $action
      */
     public function beforeAction($action)
     {

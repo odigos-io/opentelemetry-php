@@ -16,7 +16,7 @@ namespace Symfony\Component\Routing;
  * @author Fabien Potencier <fabien@symfony.com>
  * @author Tobias Schultze <http://tobion.de>
  */
-class Route implements \Serializable
+class Route
 {
     private string $path = '/';
     private string $host = '';
@@ -59,15 +59,11 @@ class Route implements \Serializable
     {
         return ['path' => $this->path, 'host' => $this->host, 'defaults' => $this->defaults, 'requirements' => $this->requirements, 'options' => $this->options, 'schemes' => $this->schemes, 'methods' => $this->methods, 'condition' => $this->condition, 'compiled' => $this->compiled];
     }
-    /**
-     * @internal
-     */
-    final public function serialize(): string
-    {
-        throw new \BadMethodCallException('Cannot serialize ' . __CLASS__);
-    }
     public function __unserialize(array $data): void
     {
+        if (($data['path'] ?? null) instanceof \Stringable || ($data['host'] ?? null) instanceof \Stringable || ($data['condition'] ?? null) instanceof \Stringable) {
+            throw new \BadMethodCallException('Cannot unserialize ' . self::class);
+        }
         $this->path = $data['path'];
         $this->host = $data['host'];
         $this->defaults = $data['defaults'];
@@ -81,13 +77,6 @@ class Route implements \Serializable
         if (isset($data['compiled'])) {
             $this->compiled = $data['compiled'];
         }
-    }
-    /**
-     * @internal
-     */
-    final public function unserialize(string $serialized): void
-    {
-        $this->__unserialize(unserialize($serialized));
     }
     public function getPath(): string
     {

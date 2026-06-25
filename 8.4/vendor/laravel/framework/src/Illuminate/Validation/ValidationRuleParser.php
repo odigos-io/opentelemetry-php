@@ -13,6 +13,7 @@ use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Date;
 use Illuminate\Validation\Rules\Exists;
 use Illuminate\Validation\Rules\Numeric;
+use Illuminate\Validation\Rules\StringRule;
 use Illuminate\Validation\Rules\Unique;
 class ValidationRuleParser
 {
@@ -80,14 +81,14 @@ class ValidationRuleParser
             return explode('|', $rule);
         }
         if (is_object($rule)) {
-            if ($rule instanceof Date || $rule instanceof Numeric) {
+            if ($rule instanceof Date || $rule instanceof Numeric || $rule instanceof StringRule) {
                 return explode('|', (string) $rule);
             }
             return Arr::wrap($this->prepareRule($rule, $attribute));
         }
         $rules = [];
         foreach ($rule as $value) {
-            if ($value instanceof Date || $value instanceof Numeric) {
+            if ($value instanceof Date || $value instanceof Numeric || $value instanceof StringRule) {
                 $rules = array_merge($rules, explode('|', (string) $value));
             } else {
                 $rules[] = $this->prepareRule($value, $attribute);

@@ -312,6 +312,18 @@ abstract class Grammar extends BaseGrammar
         throw new RuntimeException('This database driver does not support the vector type.');
     }
     /**
+     * Create the column definition for a tsvector type.
+     *
+     * @param  \Illuminate\Support\Fluent  $column
+     * @return string
+     *
+     * @throws \RuntimeException
+     */
+    protected function typeTsvector(Fluent $column)
+    {
+        throw new RuntimeException('This database driver does not support the tsvector type.');
+    }
+    /**
      * Create the column definition for a raw column type.
      *
      * @param  \Illuminate\Support\Fluent  $column

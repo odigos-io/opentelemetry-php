@@ -35,9 +35,12 @@ class RequestException extends \GuzzleHttp\Exception\TransferException implement
     }
     /**
      * Wrap non-RequestExceptions with a RequestException
+     *
+     * @deprecated since 7.11. Create a RequestException directly instead.
      */
     public static function wrapException(RequestInterface $request, \Throwable $e): \GuzzleHttp\Exception\RequestException
     {
+        \Odigos\trigger_deprecation('guzzlehttp/guzzle', '7.11', '%s::wrapException() is deprecated and will be removed in 8.0. Create a %s directly instead.', self::class, self::class);
         return $e instanceof \GuzzleHttp\Exception\RequestException ? $e : new \GuzzleHttp\Exception\RequestException($e->getMessage(), $request, null, $e);
     }
     /**

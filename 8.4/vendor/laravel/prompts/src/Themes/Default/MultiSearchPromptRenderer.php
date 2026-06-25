@@ -79,12 +79,13 @@ class MultiSearchPromptRenderer extends \Laravel\Prompts\Themes\Default\Renderer
      */
     protected function getInfoText(MultiSearchPrompt $prompt): string
     {
-        $info = count($prompt->value()) . ' selected';
+        $selected = count($prompt->value()) . ' selected';
         $hiddenCount = count($prompt->value()) - count(array_filter($prompt->matches(), fn($label, $key) => in_array($prompt->isList() ? $label : $key, $prompt->value()), \ARRAY_FILTER_USE_BOTH));
         if ($hiddenCount > 0) {
-            $info .= " ({$hiddenCount} hidden)";
+            $selected .= " ({$hiddenCount} hidden)";
         }
-        return $info;
+        $parts = array_filter([$prompt->infoText(), $selected]);
+        return implode(' · ', $parts);
     }
     /**
      * The number of lines to reserve outside of the scrollable area.

@@ -106,6 +106,8 @@ open-telemetry/opentelemetry-auto-ext-amqp
 open-telemetry/opentelemetry-auto-ext-rdkafka
 ```
 
+Additionally, `open-telemetry/opentelemetry-auto-laravel` is excluded from PHP 8.1. On PHP 8.1 it can only resolve `laravel/framework` 10.x, which has unpatched security advisories (the fixes live in Laravel 12.60+/13.10+, both of which require PHP 8.2+). Laravel auto-instrumentation is therefore only shipped for PHP 8.2+ (matching the CI test matrix).
+
 ### Toxic conflicts
 
 These conflicts are considered "toxic" because they will crash the instrumented pods!

@@ -38,13 +38,13 @@ class ReloadCommand extends Command
         $this->newLine();
     }
     /**
-     * Get the commands that should be run to clear the "optimization" files.
+     * Get the commands that should be reloaded.
      *
      * @return array
      */
     public function getReloadTasks()
     {
-        return ['queue' => 'queue:restart', ...ServiceProvider::$reloadCommands];
+        return ['queue' => 'queue:restart', 'schedule' => 'schedule:interrupt', ...ServiceProvider::$reloadCommands];
     }
     /**
      * Get the console command arguments.

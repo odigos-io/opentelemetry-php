@@ -146,10 +146,7 @@ class ActiveRecord extends \yii\db\BaseActiveRecord
      *
      * @param string $sql the SQL statement to be executed
      * @param array $params parameters to be bound to the SQL statement during execution.
-     * @return ActiveQuery the newly created [[ActiveQuery]] instance
-     *
-     * @phpstan-return ActiveQuery<static>
-     * @psalm-return ActiveQuery<static>
+     * @return ActiveQuery<static> the newly created [[ActiveQuery]] instance
      */
     public static function findBySql($sql, $params = [])
     {
@@ -379,10 +376,7 @@ class ActiveRecord extends \yii\db\BaseActiveRecord
     }
     /**
      * {@inheritdoc}
-     * @return ActiveQuery the newly created [[ActiveQuery]] instance.
-     *
-     * @phpstan-return ActiveQuery<static>
-     * @psalm-return ActiveQuery<static>
+     * @return ActiveQuery<static> the newly created [[ActiveQuery]] instance.
      */
     public static function find()
     {
@@ -552,15 +546,10 @@ class ActiveRecord extends \yii\db\BaseActiveRecord
     /**
      * {@inheritdoc}
      *
-     * @return ActiveQuery
-     *
      * @template T of self
      *
-     * @phpstan-param class-string<T> $class
-     * @psalm-param class-string<T> $class
-     *
-     * @phpstan-return ActiveQuery<T>
-     * @psalm-return ActiveQuery<T>
+     * @param class-string<T> $class the class name of the related record.
+     * @return ActiveQuery<T> the relational query object.
      */
     public function hasMany($class, $link)
     {
@@ -573,11 +562,8 @@ class ActiveRecord extends \yii\db\BaseActiveRecord
      *
      * @template T of self
      *
-     * @phpstan-param class-string<T> $class
-     * @psalm-param class-string<T> $class
-     *
-     * @phpstan-return ActiveQuery<T>
-     * @psalm-return ActiveQuery<T>
+     * @param class-string<T> $class the class name of the related record.
+     * @return ActiveQuery<T> the relational query object.
      */
     public function hasOne($class, $link)
     {

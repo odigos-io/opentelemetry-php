@@ -4,6 +4,7 @@ namespace Illuminate\Queue;
 
 use Exception;
 use Illuminate\Bus\Batchable;
+use Illuminate\Bus\BatchRepository;
 use Illuminate\Bus\UniqueLock;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Contracts\Cache\Factory as CacheFactory;
@@ -14,6 +15,7 @@ use Illuminate\Contracts\Queue\Job;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldBeUniqueUntilProcessing;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Events\CallQueuedListener;
 use Illuminate\Log\Context\Repository as ContextRepository;
 use Illuminate\Pipeline\Pipeline;
 use Illuminate\Queue\Attributes\DeleteWhenMissingModels;
@@ -59,7 +61,7 @@ class CallQueuedHandler
             return $this->handleModelNotFound($job, $e);
         }
         $this->dispatchThroughMiddleware($job, $command);
-        if (!$job->isReleased() && !$command instanceof ShouldBeUniqueUntilProcessing) {
+        if (!$job->isReleased() && !$this->commandShouldBeUniqueUntilProcessing($command)) {
             $this->ensureUniqueJobLockIsReleased($command);
         }
         if (!$job->hasFailed() && !$job->isReleased()) {
@@ -102,11 +104,11 @@ class CallQueuedHandler
         }
         $lockReleased = \false;
         return (new Pipeline($this->container))->send($command)->through(array_merge(method_exists($command, 'middleware') ? $command->middleware() : [], $command->middleware ?? []))->finally(function ($command) use (&$lockReleased) {
-            if (!$lockReleased && $command instanceof ShouldBeUniqueUntilProcessing && !$command->job->isReleased()) {
+            if (!$lockReleased && $this->commandShouldBeUniqueUntilProcessing($command) && !$command->job->isReleased()) {
                 $this->ensureUniqueJobLockIsReleased($command);
             }
         })->then(function ($command) use ($job, &$lockReleased) {
-            if ($command instanceof ShouldBeUniqueUntilProcessing) {
+            if ($this->commandShouldBeUniqueUntilProcessing($command)) {
                 $this->ensureUniqueJobLockIsReleased($command);
                 $lockReleased = \true;
             }
@@ -178,9 +180,23 @@ class CallQueuedHandler
      */
     protected function ensureUniqueJobLockIsReleased($command)
     {
-        if ($command instanceof ShouldBeUnique) {
+        if ($this->commandShouldBeUnique($command)) {
             (new UniqueLock($this->container->make(Cache::class)))->release($command);
         }
+    }
+    /**
+     * Determine if the given command should be unique.
+     */
+    protected function commandShouldBeUnique(mixed $command): bool
+    {
+        return $command instanceof ShouldBeUnique || $command instanceof CallQueuedListener && $command->shouldBeUnique();
+    }
+    /**
+     * Determine if the given command should be unique until processing begins.
+     */
+    protected function commandShouldBeUniqueUntilProcessing(mixed $command): bool
+    {
+        return $command instanceof ShouldBeUniqueUntilProcessing || $command instanceof CallQueuedListener && $command->shouldBeUniqueUntilProcessing();
     }
     /**
      * Handle a model not found exception.
@@ -200,6 +216,7 @@ class CallQueuedHandler
         }
         $this->ensureUniqueJobLockIsReleasedViaContext();
         if ($shouldDelete) {
+            $this->ensureSuccessfulBatchJobIsRecordedForMissingModel($job, $class);
             return $job->delete();
         }
         return $job->fail($e);
@@ -223,6 +240,29 @@ class CallQueuedHandler
         }
     }
     /**
+     * Record a potentially batched job as successful when deleted because models were missing.
+     *
+     * @param  \Illuminate\Contracts\Queue\Job  $job
+     * @param  string  $class
+     * @return void
+     */
+    protected function ensureSuccessfulBatchJobIsRecordedForMissingModel(Job $job, string $class)
+    {
+        if (!in_array(Batchable::class, class_uses_recursive($class), \true)) {
+            return;
+        }
+        if (!$this->container->bound(BatchRepository::class)) {
+            return;
+        }
+        $batchId = $job->payload()['data']['batchId'] ?? null;
+        if (!is_string($batchId) || $batchId === '' || !is_string($job->uuid()) || $job->uuid() === '') {
+            return;
+        }
+        if ($batch = $this->container->make(BatchRepository::class)->find($batchId)) {
+            $batch->recordSuccessfulJob($job->uuid());
+        }
+    }
+    /**
      * Call the failed method on the job instance.
      *
      * The exception that caused the failure will be passed.
@@ -239,7 +279,7 @@ class CallQueuedHandler
         if (!is_null($job)) {
             $command = $this->setJobInstanceIfNecessary($job, $command);
         }
-        if (!$command instanceof ShouldBeUniqueUntilProcessing) {
+        if (!$this->commandShouldBeUniqueUntilProcessing($command)) {
             $this->ensureUniqueJobLockIsReleased($command);
         }
         if ($command instanceof \__PHP_Incomplete_Class) {

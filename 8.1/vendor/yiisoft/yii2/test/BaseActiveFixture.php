@@ -29,10 +29,7 @@ abstract class BaseActiveFixture extends \yii\test\DbFixture implements \Iterato
      */
     public $modelClass;
     /**
-     * @var array the data rows. Each array element represents one row of data (column name => column value).
-     *
-     * @phpstan-var array<string, array<string, mixed>>
-     * @psalm-var array<string, array<string, mixed>>
+     * @var array<string, array<string, mixed>> the data rows. Each array element represents one row of data (column name => column value).
      */
     public $data = [];
     /**
@@ -79,12 +76,9 @@ abstract class BaseActiveFixture extends \yii\test\DbFixture implements \Iterato
     /**
      * Returns the fixture data.
      *
-     * @return array the data to be put into the database
+     * @return array<string, array<string, mixed>> the data to be put into the database
      * @throws InvalidConfigException if the specified data file does not exist.
      * @see loadData()
-     *
-     * @phpstan-return array<string, array<string, mixed>>
-     * @psalm-return array<string, array<string, mixed>>
      */
     protected function getData()
     {

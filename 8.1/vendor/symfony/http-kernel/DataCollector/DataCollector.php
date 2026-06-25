@@ -54,7 +54,7 @@ abstract class DataCollector implements \Symfony\Component\HttpKernel\DataCollec
      */
     protected function getCasters()
     {
-        $casters = ['*' => function ($v, array $a, Stub $s, $isNested) {
+        $casters = ['*' => static function ($v, array $a, Stub $s, $isNested) {
             if (!$v instanceof Stub) {
                 $b = $a;
                 foreach ($a as $k => $v) {

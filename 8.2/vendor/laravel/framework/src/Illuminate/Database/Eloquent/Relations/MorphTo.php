@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Concerns\InteractsWithDictionary;
+use Illuminate\Support\Arr;
 /**
  * @template TRelatedModel of \Illuminate\Database\Eloquent\Model
  * @template TDeclaringModel of \Illuminate\Database\Eloquent\Model
@@ -93,11 +94,19 @@ class MorphTo extends \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     protected function buildDictionary(EloquentCollection $models)
     {
-        foreach ($models as $model) {
+        $isAssociative = Arr::isAssoc($models->all());
+        foreach ($models as $key => $model) {
             if ($model->{$this->morphType}) {
                 $morphTypeKey = $this->getDictionaryKey($model->{$this->morphType});
                 $foreignKeyKey = $this->getDictionaryKey($model->{$this->foreignKey});
-                $this->dictionary[$morphTypeKey][$foreignKeyKey][] = $model;
+                if ($morphTypeKey === null || $foreignKeyKey === null) {
+                    continue;
+                }
+                if ($isAssociative) {
+                    $this->dictionary[$morphTypeKey][$foreignKeyKey][$key] = $model;
+                } else {
+                    $this->dictionary[$morphTypeKey][$foreignKeyKey][] = $model;
+                }
             }
         }
     }
@@ -177,7 +186,7 @@ class MorphTo extends \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         foreach ($results as $result) {
             $ownerKey = !is_null($this->ownerKey) ? $this->getDictionaryKey($result->{$this->ownerKey}) : $result->getKey();
-            if (isset($this->dictionary[$type][$ownerKey])) {
+            if ($ownerKey !== null && isset($this->dictionary[$type][$ownerKey])) {
                 foreach ($this->dictionary[$type][$ownerKey] as $model) {
                     $model->setRelation($this->relationName, $result);
                 }

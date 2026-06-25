@@ -110,7 +110,7 @@ class DataPart extends \Symfony\Component\Mime\Part\TextPart
             $parent = parent::__serialize();
             $headers = $parent['_headers'];
             unset($parent['_headers']);
-            return ['_headers' => $headers, '_parent' => $parent, 'filename' => $this->filename, 'mediaType' => $this->mediaType];
+            return ['_headers' => $headers, '_parent' => $parent, 'filename' => $this->filename, 'mediaType' => $this->mediaType, 'cid' => $this->cid];
         }
         trigger_deprecation('symfony/mime', '7.4', 'Implementing "%s::__sleep()" is deprecated, use "__serialize()" instead.', get_debug_type($this));
         $data = [];
@@ -130,10 +130,11 @@ class DataPart extends \Symfony\Component\Mime\Part\TextPart
         if ($wakeup = self::class !== (new \ReflectionMethod($this, '__wakeup'))->class && self::class === (new \ReflectionMethod($this, '__unserialize'))->class) {
             trigger_deprecation('symfony/mime', '7.4', 'Implementing "%s::__wakeup()" is deprecated, use "__unserialize()" instead.', get_debug_type($this));
         }
-        if (['_headers', '_parent', 'filename', 'mediaType'] === array_keys($data)) {
+        if (['_headers', '_parent', 'filename', 'mediaType'] === array_keys($data) || ['_headers', '_parent', 'filename', 'mediaType', 'cid'] === array_keys($data)) {
             parent::__unserialize(['_headers' => $data['_headers'], ...$data['_parent']]);
             $this->filename = $data['filename'];
             $this->mediaType = $data['mediaType'];
+            $this->cid = $data['cid'] ?? null;
             if ($wakeup) {
                 $this->__wakeup();
             }
@@ -172,7 +173,7 @@ class DataPart extends \Symfony\Component\Mime\Part\TextPart
             $this->_parent[$name] = $r->getValue($this);
         }
         $this->_headers = $this->getHeaders();
-        return ['_headers', '_parent', 'filename', 'mediaType'];
+        return ['_headers', '_parent', 'filename', 'mediaType', 'cid'];
     }
     /**
      * @deprecated since Symfony 7.4, will be replaced by `__unserialize()` in 8.0

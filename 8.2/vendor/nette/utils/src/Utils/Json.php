@@ -1,10 +1,10 @@
 <?php
 
+declare (strict_types=1);
 /**
  * This file is part of the Nette Framework (https://nette.org)
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
-declare (strict_types=1);
 namespace Odigos\Nette\Utils;
 
 use Odigos\Nette;
@@ -23,8 +23,8 @@ final class Json
     /** @deprecated use Json::encode(..., asciiSafe: true) */
     public const ESCAPE_UNICODE = 1 << 19;
     /**
-     * Converts value to JSON format. Use $pretty for easier reading and clarity, $asciiSafe for ASCII output
-     * and $htmlSafe for HTML escaping, $forceObjects enforces the encoding of non-associateve arrays as objects.
+     * Converts value to JSON format. Use $pretty for formatted output, $asciiSafe for ASCII-only output,
+     * $htmlSafe for HTML-safe output, and $forceObjects to encode non-associative arrays as objects.
      * @throws JsonException
      */
     public static function encode(mixed $value, bool|int $pretty = \false, bool $asciiSafe = \false, bool $htmlSafe = \false, bool $forceObjects = \false): string
@@ -44,7 +44,7 @@ final class Json
         return $json;
     }
     /**
-     * Parses JSON to PHP value. The $forceArrays enforces the decoding of objects as arrays.
+     * Decodes a JSON string to a PHP value. Use $forceArrays to decode objects as arrays.
      * @throws JsonException
      */
     public static function decode(string $json, bool|int $forceArrays = \false): mixed

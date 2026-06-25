@@ -50,7 +50,7 @@
     </div>
 
     @if($snippet = $frame->snippet())
-        <x-laravel-exceptions-renderer::frame-code :code="$snippet" :highlightedLine="$frame->line()" x-show="expanded" />
+        <x-laravel-exceptions-renderer::frame-code :code="$snippet" :highlightedLine="$frame->line()" x-show="expanded" :x-cloak="!$frame->isMain()" />
     @endif
 </div>
 

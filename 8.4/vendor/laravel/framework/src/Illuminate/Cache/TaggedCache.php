@@ -83,7 +83,7 @@ class TaggedCache extends \Illuminate\Cache\Repository
         return $this->taggedItemKey($key);
     }
     /**
-     * Get a fully qualified key for a tagged item.
+     * Get a fully-qualified key for a tagged item.
      *
      * @param  string  $key
      * @return string

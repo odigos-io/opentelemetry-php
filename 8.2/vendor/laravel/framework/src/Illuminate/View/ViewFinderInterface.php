@@ -11,7 +11,7 @@ interface ViewFinderInterface
      */
     const HINT_PATH_DELIMITER = '::';
     /**
-     * Get the fully qualified location of the view.
+     * Get the fully-qualified location of the view.
      *
      * @param  string  $view
      * @return string

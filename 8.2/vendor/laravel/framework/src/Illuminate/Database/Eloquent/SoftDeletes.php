@@ -238,7 +238,7 @@ trait SoftDeletes
         return defined(static::class . '::DELETED_AT') ? static::DELETED_AT : 'deleted_at';
     }
     /**
-     * Get the fully qualified "deleted at" column.
+     * Get the fully-qualified "deleted at" column.
      *
      * @return string
      */

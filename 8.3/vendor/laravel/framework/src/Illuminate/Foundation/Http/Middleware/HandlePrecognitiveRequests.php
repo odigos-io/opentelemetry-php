@@ -36,10 +36,14 @@ class HandlePrecognitiveRequests
         if (!$request->isAttemptingPrecognition()) {
             return $this->appendVaryHeader($request, $next($request));
         }
+        $bindings = $this->container->getBindings();
+        $callableBinding = $bindings[CallableDispatcherContract::class] ?? null;
+        $controllerBinding = $bindings[ControllerDispatcherContract::class] ?? null;
         $this->prepareForPrecognition($request);
-        return tap($next($request), function ($response) use ($request) {
+        return tap($next($request), function ($response) use ($request, $callableBinding, $controllerBinding) {
             $response->headers->set('Precognition', 'true');
             $this->appendVaryHeader($request, $response);
+            $this->restoreDispatchers($callableBinding, $controllerBinding);
         });
     }
     /**
@@ -64,5 +68,21 @@ class HandlePrecognitiveRequests
     protected function appendVaryHeader($request, $response)
     {
         return tap($response, fn() => $response->headers->set('Vary', implode(', ', array_filter([$response->headers->get('Vary'), 'Precognition']))));
+    }
+    /**
+     * Restore the original route dispatcher bindings.
+     *
+     * @param  array|null  $callableBinding
+     * @param  array|null  $controllerBinding
+     * @return void
+     */
+    protected function restoreDispatchers($callableBinding, $controllerBinding)
+    {
+        if ($callableBinding) {
+            $this->container->bind(CallableDispatcherContract::class, $callableBinding['concrete'], $callableBinding['shared']);
+        }
+        if ($controllerBinding) {
+            $this->container->bind(ControllerDispatcherContract::class, $controllerBinding['concrete'], $controllerBinding['shared']);
+        }
     }
 }

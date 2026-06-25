@@ -13,6 +13,10 @@ class NumberType extends \Illuminate\JsonSchema\Types\Type
      */
     protected int|float|null $maximum = null;
     /**
+     * The number the value must be a multiple of.
+     */
+    protected int|float|null $multipleOf = null;
+    /**
      * Set the minimum value (inclusive).
      */
     public function min(int|float $value): static
@@ -26,6 +30,14 @@ class NumberType extends \Illuminate\JsonSchema\Types\Type
     public function max(int|float $value): static
     {
         $this->maximum = $value;
+        return $this;
+    }
+    /**
+     * Set the number the value must be a multiple of.
+     */
+    public function multipleOf(int|float $value): static
+    {
+        $this->multipleOf = $value;
         return $this;
     }
     /**

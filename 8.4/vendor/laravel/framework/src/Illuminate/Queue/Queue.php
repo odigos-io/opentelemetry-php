@@ -136,7 +136,7 @@ abstract class Queue
      */
     protected function createObjectPayload($job, $queue)
     {
-        $payload = $this->withCreatePayloadHooks($queue, ['uuid' => (string) Str::uuid(), 'displayName' => $this->getDisplayName($job), 'job' => 'Illuminate\Queue\CallQueuedHandler@call', 'maxTries' => $this->getJobTries($job), 'maxExceptions' => $job->maxExceptions ?? null, 'failOnTimeout' => $job->failOnTimeout ?? \false, 'backoff' => $this->getJobBackoff($job), 'timeout' => $job->timeout ?? null, 'retryUntil' => $this->getJobExpiration($job), 'data' => ['commandName' => $job, 'command' => $job], 'createdAt' => Carbon::now()->getTimestamp()]);
+        $payload = $this->withCreatePayloadHooks($queue, ['uuid' => (string) Str::uuid(), 'displayName' => $this->getDisplayName($job), 'job' => 'Illuminate\Queue\CallQueuedHandler@call', 'maxTries' => $this->getJobTries($job), 'maxExceptions' => $job->maxExceptions ?? null, 'failOnTimeout' => $job->failOnTimeout ?? \false, 'backoff' => $this->getJobBackoff($job), 'timeout' => $job->timeout ?? null, 'retryUntil' => $this->getJobExpiration($job), 'data' => ['commandName' => $job, 'command' => $job, 'batchId' => $job->batchId ?? null], 'createdAt' => Carbon::now()->getTimestamp()]);
         try {
             $command = $this->jobShouldBeEncrypted($job) && $this->container->bound(Encrypter::class) ? $this->container[Encrypter::class]->encrypt(serialize(clone $job)) : serialize(clone $job);
         } catch (Throwable $e) {

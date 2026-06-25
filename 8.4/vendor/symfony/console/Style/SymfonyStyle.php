@@ -77,7 +77,7 @@ class SymfonyStyle extends \Symfony\Component\Console\Style\OutputStyle
     public function listing(array $elements): void
     {
         $this->autoPrependText();
-        $elements = array_map(fn($element) => \sprintf(' * %s', $element), $elements);
+        $elements = array_map(static fn($element) => \sprintf(' * %s', $element), $elements);
         $this->writeln($elements);
         $this->newLine();
     }
@@ -353,7 +353,8 @@ class SymfonyStyle extends \Symfony\Component\Console\Style\OutputStyle
             if ($escape) {
                 $message = OutputFormatter::escape($message);
             }
-            $lines = array_merge($lines, explode(\PHP_EOL, $outputWrapper->wrap($message, $this->lineLength - $prefixLength - $indentLength, \PHP_EOL)));
+            $message = str_replace("\r\n", "\n", $message);
+            $lines = array_merge($lines, explode("\n", $outputWrapper->wrap($message, $this->lineLength - $prefixLength - $indentLength, "\n")));
             if (\count($messages) > 1 && $key < \count($messages) - 1) {
                 $lines[] = '';
             }

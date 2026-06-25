@@ -15,7 +15,7 @@ namespace Symfony\Component\Routing;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class CompiledRoute implements \Serializable
+class CompiledRoute
 {
     /**
      * @param string      $staticPrefix  The static prefix of the compiled route
@@ -34,15 +34,11 @@ class CompiledRoute implements \Serializable
     {
         return ['vars' => $this->variables, 'path_prefix' => $this->staticPrefix, 'path_regex' => $this->regex, 'path_tokens' => $this->tokens, 'path_vars' => $this->pathVariables, 'host_regex' => $this->hostRegex, 'host_tokens' => $this->hostTokens, 'host_vars' => $this->hostVariables];
     }
-    /**
-     * @internal
-     */
-    final public function serialize(): string
-    {
-        throw new \BadMethodCallException('Cannot serialize ' . __CLASS__);
-    }
     public function __unserialize(array $data): void
     {
+        if (($data['path_prefix'] ?? null) instanceof \Stringable || ($data['path_regex'] ?? null) instanceof \Stringable || ($data['host_regex'] ?? null) instanceof \Stringable) {
+            throw new \BadMethodCallException('Cannot unserialize ' . self::class);
+        }
         $this->variables = $data['vars'];
         $this->staticPrefix = $data['path_prefix'];
         $this->regex = $data['path_regex'];
@@ -51,13 +47,6 @@ class CompiledRoute implements \Serializable
         $this->hostRegex = $data['host_regex'];
         $this->hostTokens = $data['host_tokens'];
         $this->hostVariables = $data['host_vars'];
-    }
-    /**
-     * @internal
-     */
-    final public function unserialize(string $serialized): void
-    {
-        $this->__unserialize(unserialize($serialized, ['allowed_classes' => \false]));
     }
     /**
      * Returns the static prefix.

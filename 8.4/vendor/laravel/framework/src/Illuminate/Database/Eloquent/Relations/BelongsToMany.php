@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\Concerns\InteractsWithDictionary;
 use Illuminate\Database\Eloquent\Relations\Concerns\InteractsWithPivotTable;
 use Illuminate\Database\Query\Grammars\MySqlGrammar;
 use Illuminate\Database\UniqueConstraintViolationException;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection as BaseCollection;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
@@ -227,7 +228,7 @@ class BelongsToMany extends \Illuminate\Database\Eloquent\Relations\Relation
         // parent models. Then we should return these hydrated models back out.
         foreach ($models as $model) {
             $key = $this->getDictionaryKey($model->{$this->parentKey});
-            if (isset($dictionary[$key])) {
+            if ($key !== null && isset($dictionary[$key])) {
                 $model->setRelation($relation, $this->related->newCollection($dictionary[$key]));
             }
         }
@@ -237,7 +238,7 @@ class BelongsToMany extends \Illuminate\Database\Eloquent\Relations\Relation
      * Build model dictionary keyed by the relation's foreign key.
      *
      * @param  \Illuminate\Database\Eloquent\Collection<int, TRelatedModel>  $results
-     * @return array<array<string, TRelatedModel>>
+     * @return array<array<array-key, TRelatedModel>>
      */
     protected function buildDictionary(EloquentCollection $results)
     {
@@ -245,9 +246,17 @@ class BelongsToMany extends \Illuminate\Database\Eloquent\Relations\Relation
         // of the relation so that we will easily and quickly match them to the
         // parents without having a possibly slow inner loop for every model.
         $dictionary = [];
-        foreach ($results as $result) {
+        $isAssociative = Arr::isAssoc($results->all());
+        foreach ($results as $key => $result) {
             $value = $this->getDictionaryKey($result->{$this->accessor}->{$this->foreignPivotKey});
-            $dictionary[$value][] = $result;
+            if ($value === null) {
+                continue;
+            }
+            if ($isAssociative) {
+                $dictionary[$value][$key] = $result;
+            } else {
+                $dictionary[$value][] = $result;
+            }
         }
         return $dictionary;
     }
@@ -493,6 +502,16 @@ class BelongsToMany extends \Illuminate\Database\Eloquent\Relations\Relation
         return $this->orderBy($this->qualifyPivotColumn($column), $direction);
     }
     /**
+     * Add an "order by desc" clause for a pivot table column.
+     *
+     * @param  string|\Illuminate\Contracts\Database\Query\Expression  $column
+     * @return $this
+     */
+    public function orderByPivotDesc($column)
+    {
+        return $this->orderBy($this->qualifyPivotColumn($column), 'desc');
+    }
+    /**
      * Find a related model by its primary key or return a new instance of the related model.
      *
      * @param  mixed  $id
@@ -528,12 +547,12 @@ class BelongsToMany extends \Illuminate\Database\Eloquent\Relations\Relation
      * Get the first record matching the attributes. If the record is not found, create it.
      *
      * @param  array  $attributes
-     * @param  array  $values
+     * @param  (\Closure(): array)|array  $values
      * @param  array  $joining
      * @param  bool  $touch
      * @return TRelatedModel&object{pivot: TPivotModel}
      */
-    public function firstOrCreate(array $attributes = [], array $values = [], array $joining = [], $touch = \true)
+    public function firstOrCreate(array $attributes = [], Closure|array $values = [], array $joining = [], $touch = \true)
     {
         if (is_null($instance = (clone $this)->where($attributes)->first())) {
             if (is_null($instance = $this->related->where($attributes)->first())) {
@@ -552,15 +571,15 @@ class BelongsToMany extends \Illuminate\Database\Eloquent\Relations\Relation
      * Attempt to create the record. If a unique constraint violation occurs, attempt to find the matching record.
      *
      * @param  array  $attributes
-     * @param  array  $values
+     * @param  (\Closure(): array)|array  $values
      * @param  array  $joining
      * @param  bool  $touch
      * @return TRelatedModel&object{pivot: TPivotModel}
      */
-    public function createOrFirst(array $attributes = [], array $values = [], array $joining = [], $touch = \true)
+    public function createOrFirst(array $attributes = [], Closure|array $values = [], array $joining = [], $touch = \true)
     {
         try {
-            return $this->getQuery()->withSavepointIfNeeded(fn() => $this->create(array_merge($attributes, $values), $joining, $touch));
+            return $this->getQuery()->withSavepointIfNeeded(fn() => $this->create(array_merge($attributes, value($values)), $joining, $touch));
         } catch (UniqueConstraintViolationException $e) {
             // ...
         }
@@ -1309,7 +1328,7 @@ class BelongsToMany extends \Illuminate\Database\Eloquent\Relations\Relation
         return $this->foreignPivotKey;
     }
     /**
-     * Get the fully qualified foreign key for the relation.
+     * Get the fully-qualified foreign key for the relation.
      *
      * @return string
      */
@@ -1327,7 +1346,7 @@ class BelongsToMany extends \Illuminate\Database\Eloquent\Relations\Relation
         return $this->relatedPivotKey;
     }
     /**
-     * Get the fully qualified "related key" for the relation.
+     * Get the fully-qualified "related key" for the relation.
      *
      * @return string
      */
@@ -1345,7 +1364,7 @@ class BelongsToMany extends \Illuminate\Database\Eloquent\Relations\Relation
         return $this->parentKey;
     }
     /**
-     * Get the fully qualified parent key name for the relation.
+     * Get the fully-qualified parent key name for the relation.
      *
      * @return string
      */
@@ -1363,7 +1382,7 @@ class BelongsToMany extends \Illuminate\Database\Eloquent\Relations\Relation
         return $this->relatedKey;
     }
     /**
-     * Get the fully qualified related key name for the relation.
+     * Get the fully-qualified related key name for the relation.
      *
      * @return string
      */

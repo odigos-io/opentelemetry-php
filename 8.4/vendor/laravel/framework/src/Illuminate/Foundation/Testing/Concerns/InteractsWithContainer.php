@@ -59,9 +59,11 @@ trait InteractsWithContainer
     /**
      * Mock an instance of an object in the container.
      *
-     * @param  string  $abstract
+     * @template TInstance of object
+     *
+     * @param  string|class-string<TInstance>  $abstract
      * @param  \Closure|null  $mock
-     * @return \Mockery\MockInterface
+     * @return ($abstract is class-string<TInstance> ? TInstance&\Mockery\MockInterface : \Mockery\MockInterface)
      */
     protected function mock($abstract, ?Closure $mock = null)
     {
@@ -70,9 +72,11 @@ trait InteractsWithContainer
     /**
      * Mock a partial instance of an object in the container.
      *
-     * @param  string  $abstract
+     * @template TInstance of object
+     *
+     * @param  string|class-string<TInstance>  $abstract
      * @param  \Closure|null  $mock
-     * @return \Mockery\MockInterface
+     * @return ($abstract is class-string<TInstance> ? TInstance&\Mockery\MockInterface : \Mockery\MockInterface)
      */
     protected function partialMock($abstract, ?Closure $mock = null)
     {
@@ -81,9 +85,11 @@ trait InteractsWithContainer
     /**
      * Spy an instance of an object in the container.
      *
-     * @param  string  $abstract
+     * @template TInstance of object
+     *
+     * @param  string|class-string<TInstance>  $abstract
      * @param  \Closure|null  $mock
-     * @return \Mockery\MockInterface
+     * @return ($abstract is class-string<TInstance> ? TInstance&\Mockery\MockInterface : \Mockery\MockInterface)
      */
     protected function spy($abstract, ?Closure $mock = null)
     {

@@ -3,6 +3,7 @@
 namespace Illuminate\Bus;
 
 use Odigos\Aws\DynamoDb\DynamoDbClient;
+use Illuminate\Container\Container;
 use Illuminate\Contracts\Bus\Dispatcher as DispatcherContract;
 use Illuminate\Contracts\Bus\QueueingDispatcher as QueueingDispatcherContract;
 use Illuminate\Contracts\Queue\Factory as QueueFactoryContract;
@@ -19,8 +20,8 @@ class BusServiceProvider extends ServiceProvider implements DeferrableProvider
     public function register()
     {
         $this->app->singleton(\Illuminate\Bus\Dispatcher::class, function ($app) {
-            return new \Illuminate\Bus\Dispatcher($app, function ($connection = null) use ($app) {
-                return $app[QueueFactoryContract::class]->connection($connection);
+            return new \Illuminate\Bus\Dispatcher($app, function ($connection = null) {
+                return Container::getInstance()->make(QueueFactoryContract::class)->connection($connection);
             });
         });
         $this->registerBatchServices();

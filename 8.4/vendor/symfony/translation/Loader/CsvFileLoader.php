@@ -28,7 +28,7 @@ class CsvFileLoader extends \Symfony\Component\Translation\Loader\FileLoader
         } catch (\RuntimeException $e) {
             throw new NotFoundResourceException(\sprintf('Error opening file "%s".', $resource), 0, $e);
         }
-        $file->setFlags(\SplFileObject::READ_CSV | \SplFileObject::SKIP_EMPTY);
+        $file->setFlags(\SplFileObject::READ_CSV | \SplFileObject::SKIP_EMPTY | \SplFileObject::DROP_NEW_LINE);
         $file->setCsvControl($this->delimiter, $this->enclosure, '');
         foreach ($file as $data) {
             if (\false === $data) {

@@ -22,6 +22,12 @@ class DynamoDbStore implements LockProvider, Store
      */
     protected $prefix;
     /**
+     * The classes that should be allowed during unserialization.
+     *
+     * @var array|bool|null
+     */
+    protected $serializableClasses;
+    /**
      * Create a new store instance.
      *
      * @param  \Aws\DynamoDb\DynamoDbClient  $dynamo  The DynamoDB client instance.
@@ -30,10 +36,12 @@ class DynamoDbStore implements LockProvider, Store
      * @param  string  $valueAttribute  The name of the attribute that should hold the value.
      * @param  string  $expirationAttribute  The name of the attribute that should hold the expiration timestamp.
      * @param  string  $prefix
+     * @param  array|bool|null  $serializableClasses
      */
-    public function __construct(protected DynamoDbClient $dynamo, protected $table, protected $keyAttribute = 'key', protected $valueAttribute = 'value', protected $expirationAttribute = 'expires_at', $prefix = '')
+    public function __construct(protected DynamoDbClient $dynamo, protected $table, protected $keyAttribute = 'key', protected $valueAttribute = 'value', protected $expirationAttribute = 'expires_at', $prefix = '', $serializableClasses = null)
     {
         $this->setPrefix($prefix);
+        $this->serializableClasses = $serializableClasses;
     }
     /**
      * Retrieve an item from the cache by key.
@@ -275,6 +283,9 @@ class DynamoDbStore implements LockProvider, Store
         }
         if (is_numeric($value)) {
             return (float) $value;
+        }
+        if ($this->serializableClasses !== null) {
+            return unserialize($value, ['allowed_classes' => $this->serializableClasses]);
         }
         return unserialize($value);
     }

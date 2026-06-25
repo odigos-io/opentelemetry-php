@@ -18,6 +18,6 @@ final class RunCommandFailedException extends \Symfony\Component\Console\Excepti
 {
     public function __construct(\Throwable|string $exception, public readonly RunCommandContext $context)
     {
-        parent::__construct($exception instanceof \Throwable ? $exception->getMessage() : $exception, $exception instanceof \Throwable ? $exception->getCode() : 0, $exception instanceof \Throwable ? $exception : null);
+        parent::__construct($exception instanceof \Throwable ? $exception->getMessage() : $exception, $exception instanceof \Throwable && \is_int($exception->getCode()) ? $exception->getCode() : 0, $exception instanceof \Throwable ? $exception : null);
     }
 }
