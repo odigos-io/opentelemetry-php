@@ -18,7 +18,7 @@ RUN curl -sSL https://github.com/open-telemetry/opentelemetry-php-instrumentatio
 
 RUN cat <<EOF > /opentelemetry.ini
 extension=/var/odigos/php/${PHP_VERSION}/opentelemetry.so
-auto_prepend_file=/var/odigos/php/${PHP_VERSION}/vendor/autoload.php
+auto_prepend_file=/var/odigos/php/${PHP_VERSION}/odigos_autoload.php
 EOF
 
 # TODO: find a way to set the preload_user dynamically, then add to the ini file, and inject the PHP_VERSION into the preload.php file.
@@ -65,3 +65,5 @@ FROM scratch AS output
 COPY --from=vendor    /work/vendor/    ./vendor/
 COPY --from=extension /opentelemetry.so  ./opentelemetry.so
 COPY --from=extension /opentelemetry.ini ./opentelemetry.ini
+COPY _helpers/odigos_autoload.php ./odigos_autoload.php
+COPY _helpers/CustomInstrumentation.php ./CustomInstrumentation.php
