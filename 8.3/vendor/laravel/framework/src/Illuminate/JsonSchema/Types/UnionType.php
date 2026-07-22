@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\JsonSchema\Types;
+namespace Odigos\Illuminate\JsonSchema\Types;
 
 use InvalidArgumentException;
-class UnionType extends \Illuminate\JsonSchema\Types\Type
+class UnionType extends Type
 {
     /**
      * The JSON Schema primitive type names a union may be composed of.

@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Session;
+namespace Odigos\Illuminate\Session;
 
-use Illuminate\Contracts\Cache\Factory as CacheFactory;
-use Illuminate\Session\Middleware\StartSession;
-use Illuminate\Support\ServiceProvider;
+use Odigos\Illuminate\Contracts\Cache\Factory as CacheFactory;
+use Odigos\Illuminate\Session\Middleware\StartSession;
+use Odigos\Illuminate\Support\ServiceProvider;
 class SessionServiceProvider extends ServiceProvider
 {
     /**
@@ -17,7 +17,7 @@ class SessionServiceProvider extends ServiceProvider
         $this->registerSessionManager();
         $this->registerSessionDriver();
         $this->app->singleton(StartSession::class, function ($app) {
-            return new StartSession($app->make(\Illuminate\Session\SessionManager::class), function () use ($app) {
+            return new StartSession($app->make(SessionManager::class), function () use ($app) {
                 return $app->make(CacheFactory::class);
             });
         });
@@ -30,7 +30,7 @@ class SessionServiceProvider extends ServiceProvider
     protected function registerSessionManager()
     {
         $this->app->singleton('session', function ($app) {
-            return new \Illuminate\Session\SessionManager($app);
+            return new SessionManager($app);
         });
     }
     /**

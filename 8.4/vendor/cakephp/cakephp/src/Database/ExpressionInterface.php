@@ -14,7 +14,7 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database;
+namespace Odigos\Cake\Database;
 
 use Closure;
 /**
@@ -28,7 +28,7 @@ interface ExpressionInterface
      * @param \Cake\Database\ValueBinder $binder Parameter binder
      * @return string
      */
-    public function sql(\Cake\Database\ValueBinder $binder): string;
+    public function sql(ValueBinder $binder): string;
     /**
      * Iterates over each part of the expression recursively for every
      * level of the expressions tree and executes the callback,

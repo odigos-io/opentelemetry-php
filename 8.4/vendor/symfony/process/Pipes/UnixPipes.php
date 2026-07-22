@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Process\Pipes;
+namespace Odigos\Symfony\Component\Process\Pipes;
 
-use Symfony\Component\Process\Process;
+use Odigos\Symfony\Component\Process\Process;
 /**
  * UnixPipes implementation uses unix pipes as handles.
  *
@@ -18,7 +18,7 @@ use Symfony\Component\Process\Process;
  *
  * @internal
  */
-class UnixPipes extends \Symfony\Component\Process\Pipes\AbstractPipes
+class UnixPipes extends AbstractPipes
 {
     public function __construct(private ?bool $ttyMode, private bool $ptyMode, mixed $input, private bool $haveReadSupport)
     {

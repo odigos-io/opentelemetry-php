@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace Odigos;
 
-use OpenTelemetry\Contrib\Instrumentation\Symfony\HttpClientInstrumentation;
-use OpenTelemetry\Contrib\Instrumentation\Symfony\MessengerInstrumentation;
-use OpenTelemetry\Contrib\Instrumentation\Symfony\SymfonyInstrumentation;
+use Odigos\OpenTelemetry\Contrib\Instrumentation\Symfony\HttpClientInstrumentation;
+use Odigos\OpenTelemetry\Contrib\Instrumentation\Symfony\MessengerInstrumentation;
+use Odigos\OpenTelemetry\Contrib\Instrumentation\Symfony\SymfonyInstrumentation;
 use OpenTelemetry\SDK\Sdk;
 if (\class_exists(Sdk::class) && Sdk::isInstrumentationDisabled(SymfonyInstrumentation::NAME) === \true) {
     return;

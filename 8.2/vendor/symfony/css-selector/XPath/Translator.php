@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\CssSelector\XPath;
+namespace Odigos\Symfony\Component\CssSelector\XPath;
 
-use Symfony\Component\CssSelector\Exception\ExpressionErrorException;
-use Symfony\Component\CssSelector\Node\FunctionNode;
-use Symfony\Component\CssSelector\Node\NodeInterface;
-use Symfony\Component\CssSelector\Node\SelectorNode;
-use Symfony\Component\CssSelector\Parser\Parser;
-use Symfony\Component\CssSelector\Parser\ParserInterface;
+use Odigos\Symfony\Component\CssSelector\Exception\ExpressionErrorException;
+use Odigos\Symfony\Component\CssSelector\Node\FunctionNode;
+use Odigos\Symfony\Component\CssSelector\Node\NodeInterface;
+use Odigos\Symfony\Component\CssSelector\Node\SelectorNode;
+use Odigos\Symfony\Component\CssSelector\Parser\Parser;
+use Odigos\Symfony\Component\CssSelector\Parser\ParserInterface;
 /**
  * XPath expression translator interface.
  *
@@ -26,7 +26,7 @@ use Symfony\Component\CssSelector\Parser\ParserInterface;
  *
  * @internal
  */
-class Translator implements \Symfony\Component\CssSelector\XPath\TranslatorInterface
+class Translator implements TranslatorInterface
 {
     private ParserInterface $mainParser;
     /**
@@ -45,7 +45,7 @@ class Translator implements \Symfony\Component\CssSelector\XPath\TranslatorInter
     public function __construct(?ParserInterface $parser = null)
     {
         $this->mainParser = $parser ?? new Parser();
-        $this->registerExtension(new \Symfony\Component\CssSelector\XPath\Extension\NodeExtension())->registerExtension(new \Symfony\Component\CssSelector\XPath\Extension\CombinationExtension())->registerExtension(new \Symfony\Component\CssSelector\XPath\Extension\FunctionExtension())->registerExtension(new \Symfony\Component\CssSelector\XPath\Extension\PseudoClassExtension())->registerExtension(new \Symfony\Component\CssSelector\XPath\Extension\AttributeMatchingExtension());
+        $this->registerExtension(new Extension\NodeExtension())->registerExtension(new Extension\CombinationExtension())->registerExtension(new Extension\FunctionExtension())->registerExtension(new Extension\PseudoClassExtension())->registerExtension(new Extension\AttributeMatchingExtension());
     }
     public static function getXpathLiteral(string $element): string
     {
@@ -87,7 +87,7 @@ class Translator implements \Symfony\Component\CssSelector\XPath\TranslatorInter
     /**
      * @return $this
      */
-    public function registerExtension(\Symfony\Component\CssSelector\XPath\Extension\ExtensionInterface $extension): static
+    public function registerExtension(Extension\ExtensionInterface $extension): static
     {
         $this->extensions[$extension->getName()] = $extension;
         $this->nodeTranslators = array_merge($this->nodeTranslators, $extension->getNodeTranslators());
@@ -100,7 +100,7 @@ class Translator implements \Symfony\Component\CssSelector\XPath\TranslatorInter
     /**
      * @throws ExpressionErrorException
      */
-    public function getExtension(string $name): \Symfony\Component\CssSelector\XPath\Extension\ExtensionInterface
+    public function getExtension(string $name): Extension\ExtensionInterface
     {
         if (!isset($this->extensions[$name])) {
             throw new ExpressionErrorException(\sprintf('Extension "%s" not registered.', $name));
@@ -118,7 +118,7 @@ class Translator implements \Symfony\Component\CssSelector\XPath\TranslatorInter
     /**
      * @throws ExpressionErrorException
      */
-    public function nodeToXPath(NodeInterface $node): \Symfony\Component\CssSelector\XPath\XPathExpr
+    public function nodeToXPath(NodeInterface $node): XPathExpr
     {
         if (!isset($this->nodeTranslators[$node->getNodeName()])) {
             throw new ExpressionErrorException(\sprintf('Node "%s" not supported.', $node->getNodeName()));
@@ -128,7 +128,7 @@ class Translator implements \Symfony\Component\CssSelector\XPath\TranslatorInter
     /**
      * @throws ExpressionErrorException
      */
-    public function addCombination(string $combiner, NodeInterface $xpath, NodeInterface $combinedXpath): \Symfony\Component\CssSelector\XPath\XPathExpr
+    public function addCombination(string $combiner, NodeInterface $xpath, NodeInterface $combinedXpath): XPathExpr
     {
         if (!isset($this->combinationTranslators[$combiner])) {
             throw new ExpressionErrorException(\sprintf('Combiner "%s" not supported.', $combiner));
@@ -138,7 +138,7 @@ class Translator implements \Symfony\Component\CssSelector\XPath\TranslatorInter
     /**
      * @throws ExpressionErrorException
      */
-    public function addFunction(\Symfony\Component\CssSelector\XPath\XPathExpr $xpath, FunctionNode $function): \Symfony\Component\CssSelector\XPath\XPathExpr
+    public function addFunction(XPathExpr $xpath, FunctionNode $function): XPathExpr
     {
         if (!isset($this->functionTranslators[$function->getName()])) {
             throw new ExpressionErrorException(\sprintf('Function "%s" not supported.', $function->getName()));
@@ -148,7 +148,7 @@ class Translator implements \Symfony\Component\CssSelector\XPath\TranslatorInter
     /**
      * @throws ExpressionErrorException
      */
-    public function addPseudoClass(\Symfony\Component\CssSelector\XPath\XPathExpr $xpath, string $pseudoClass): \Symfony\Component\CssSelector\XPath\XPathExpr
+    public function addPseudoClass(XPathExpr $xpath, string $pseudoClass): XPathExpr
     {
         if (!isset($this->pseudoClassTranslators[$pseudoClass])) {
             throw new ExpressionErrorException(\sprintf('Pseudo-class "%s" not supported.', $pseudoClass));
@@ -158,7 +158,7 @@ class Translator implements \Symfony\Component\CssSelector\XPath\TranslatorInter
     /**
      * @throws ExpressionErrorException
      */
-    public function addAttributeMatching(\Symfony\Component\CssSelector\XPath\XPathExpr $xpath, string $operator, string $attribute, ?string $value): \Symfony\Component\CssSelector\XPath\XPathExpr
+    public function addAttributeMatching(XPathExpr $xpath, string $operator, string $attribute, ?string $value): XPathExpr
     {
         if (!isset($this->attributeMatchingTranslators[$operator])) {
             throw new ExpressionErrorException(\sprintf('Attribute matcher operator "%s" not supported.', $operator));

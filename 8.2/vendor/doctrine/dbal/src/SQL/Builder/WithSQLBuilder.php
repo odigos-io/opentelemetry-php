@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\SQL\Builder;
+namespace Odigos\Doctrine\DBAL\SQL\Builder;
 
-use Doctrine\DBAL\Query\CommonTableExpression;
+use Odigos\Doctrine\DBAL\Query\CommonTableExpression;
 use function array_merge;
 use function count;
 use function implode;

@@ -14,30 +14,30 @@ declare (strict_types=1);
  * @since         0.10.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\View\Helper;
+namespace Odigos\Cake\View\Helper;
 
 use BackedEnum;
-use Cake\Core\Configure;
-use Cake\Core\Exception\CakeException;
-use Cake\Database\Type\EnumLabelInterface;
-use Cake\Database\Type\EnumType;
-use Cake\Database\TypeFactory;
-use Cake\Form\FormProtector;
-use Cake\Routing\Router;
-use Cake\Utility\Hash;
-use Cake\Utility\Inflector;
-use Cake\View\Form\ContextFactory;
-use Cake\View\Form\ContextInterface;
-use Cake\View\Helper;
-use Cake\View\StringTemplateTrait;
-use Cake\View\View;
-use Cake\View\Widget\WidgetInterface;
-use Cake\View\Widget\WidgetLocator;
+use Odigos\Cake\Core\Configure;
+use Odigos\Cake\Core\Exception\CakeException;
+use Odigos\Cake\Database\Type\EnumLabelInterface;
+use Odigos\Cake\Database\Type\EnumType;
+use Odigos\Cake\Database\TypeFactory;
+use Odigos\Cake\Form\FormProtector;
+use Odigos\Cake\Routing\Router;
+use Odigos\Cake\Utility\Hash;
+use Odigos\Cake\Utility\Inflector;
+use Odigos\Cake\View\Form\ContextFactory;
+use Odigos\Cake\View\Form\ContextInterface;
+use Odigos\Cake\View\Helper;
+use Odigos\Cake\View\StringTemplateTrait;
+use Odigos\Cake\View\View;
+use Odigos\Cake\View\Widget\WidgetInterface;
+use Odigos\Cake\View\Widget\WidgetLocator;
 use InvalidArgumentException;
-use function Cake\Core\deprecationWarning;
-use function Cake\Core\h;
-use function Cake\I18n\__;
-use function Cake\I18n\__d;
+use function Odigos\Cake\Core\deprecationWarning;
+use function Odigos\Cake\Core\h;
+use function Odigos\Cake\I18n\__;
+use function Odigos\Cake\I18n\__d;
 /**
  * Form helper library.
  *
@@ -58,7 +58,7 @@ use function Cake\I18n\__d;
  */
 class FormHelper extends Helper
 {
-    use \Cake\View\Helper\IdGeneratorTrait;
+    use IdGeneratorTrait;
     use StringTemplateTrait;
     /**
      * Other helpers used by FormHelper

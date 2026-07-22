@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Foundation\Routing;
+namespace Odigos\Illuminate\Foundation\Routing;
 
-use Illuminate\Routing\CallableDispatcher;
-use Illuminate\Routing\Route;
+use Odigos\Illuminate\Routing\CallableDispatcher;
+use Odigos\Illuminate\Routing\Route;
 class PrecognitionCallableDispatcher extends CallableDispatcher
 {
     /**

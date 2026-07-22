@@ -14,11 +14,11 @@ declare (strict_types=1);
  * @since         4.0.0
  * @license       https://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Http\Middleware;
+namespace Odigos\Cake\Http\Middleware;
 
-use Cake\Core\Configure;
-use Cake\Http\Exception\BadRequestException;
-use Cake\Http\ServerRequest;
+use Odigos\Cake\Core\Configure;
+use Odigos\Cake\Http\Exception\BadRequestException;
+use Odigos\Cake\Http\ServerRequest;
 use Odigos\Laminas\Diactoros\Response\RedirectResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

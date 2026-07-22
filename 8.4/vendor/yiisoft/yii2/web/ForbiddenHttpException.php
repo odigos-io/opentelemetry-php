@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\web;
+namespace Odigos\yii\web;
 
 /**
  * ForbiddenHttpException represents a "Forbidden" HTTP exception with status code 403.
@@ -19,7 +19,7 @@ namespace yii\web;
  * @author Dan Schmidt <danschmidt5189@gmail.com>
  * @since 2.0
  */
-class ForbiddenHttpException extends \yii\web\HttpException
+class ForbiddenHttpException extends HttpException
 {
     /**
      * Constructor.

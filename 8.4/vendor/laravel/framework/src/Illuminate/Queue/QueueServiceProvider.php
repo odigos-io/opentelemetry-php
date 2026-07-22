@@ -1,32 +1,32 @@
 <?php
 
-namespace Illuminate\Queue;
+namespace Odigos\Illuminate\Queue;
 
 use Odigos\Aws\DynamoDb\DynamoDbClient;
-use Illuminate\Contracts\Debug\ExceptionHandler;
-use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
-use Illuminate\Contracts\Support\DeferrableProvider;
-use Illuminate\Queue\Connectors\BackgroundConnector;
-use Illuminate\Queue\Connectors\BeanstalkdConnector;
-use Illuminate\Queue\Connectors\DatabaseConnector;
-use Illuminate\Queue\Connectors\DeferredConnector;
-use Illuminate\Queue\Connectors\FailoverConnector;
-use Illuminate\Queue\Connectors\NullConnector;
-use Illuminate\Queue\Connectors\RedisConnector;
-use Illuminate\Queue\Connectors\SqsConnector;
-use Illuminate\Queue\Connectors\SyncConnector;
-use Illuminate\Queue\Failed\DatabaseFailedJobProvider;
-use Illuminate\Queue\Failed\DatabaseUuidFailedJobProvider;
-use Illuminate\Queue\Failed\DynamoDbFailedJobProvider;
-use Illuminate\Queue\Failed\FileFailedJobProvider;
-use Illuminate\Queue\Failed\NullFailedJobProvider;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Facade;
-use Illuminate\Support\ServiceProvider;
-use Laravel\SerializableClosure\SerializableClosure;
+use Odigos\Illuminate\Contracts\Debug\ExceptionHandler;
+use Odigos\Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
+use Odigos\Illuminate\Contracts\Support\DeferrableProvider;
+use Odigos\Illuminate\Queue\Connectors\BackgroundConnector;
+use Odigos\Illuminate\Queue\Connectors\BeanstalkdConnector;
+use Odigos\Illuminate\Queue\Connectors\DatabaseConnector;
+use Odigos\Illuminate\Queue\Connectors\DeferredConnector;
+use Odigos\Illuminate\Queue\Connectors\FailoverConnector;
+use Odigos\Illuminate\Queue\Connectors\NullConnector;
+use Odigos\Illuminate\Queue\Connectors\RedisConnector;
+use Odigos\Illuminate\Queue\Connectors\SqsConnector;
+use Odigos\Illuminate\Queue\Connectors\SyncConnector;
+use Odigos\Illuminate\Queue\Failed\DatabaseFailedJobProvider;
+use Odigos\Illuminate\Queue\Failed\DatabaseUuidFailedJobProvider;
+use Odigos\Illuminate\Queue\Failed\DynamoDbFailedJobProvider;
+use Odigos\Illuminate\Queue\Failed\FileFailedJobProvider;
+use Odigos\Illuminate\Queue\Failed\NullFailedJobProvider;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Facades\Facade;
+use Odigos\Illuminate\Support\ServiceProvider;
+use Odigos\Laravel\SerializableClosure\SerializableClosure;
 class QueueServiceProvider extends ServiceProvider implements DeferrableProvider
 {
-    use \Illuminate\Queue\SerializesAndRestoresModelIdentifiers;
+    use SerializesAndRestoresModelIdentifiers;
     /**
      * Register the service provider.
      *
@@ -72,7 +72,7 @@ class QueueServiceProvider extends ServiceProvider implements DeferrableProvider
             // Once we have an instance of the queue manager, we will register the various
             // resolvers for the queue connectors. These connectors are responsible for
             // creating the classes that accept queue configs and instantiate queues.
-            return tap(new \Illuminate\Queue\QueueManager($app), function ($manager) {
+            return tap(new QueueManager($app), function ($manager) {
                 $this->registerConnectors($manager);
             });
         });
@@ -236,7 +236,7 @@ class QueueServiceProvider extends ServiceProvider implements DeferrableProvider
                 Facade::clearResolvedInstances();
                 memory_reset_peak_usage();
             };
-            return new \Illuminate\Queue\Worker($app['queue'], $app['events'], $app[ExceptionHandler::class], $isDownForMaintenance, $resetScope);
+            return new Worker($app['queue'], $app['events'], $app[ExceptionHandler::class], $isDownForMaintenance, $resetScope);
         });
     }
     /**
@@ -247,7 +247,7 @@ class QueueServiceProvider extends ServiceProvider implements DeferrableProvider
     protected function registerListener()
     {
         $this->app->singleton('queue.listener', function ($app) {
-            return new \Illuminate\Queue\Listener($app->basePath());
+            return new Listener($app->basePath());
         });
     }
     /**

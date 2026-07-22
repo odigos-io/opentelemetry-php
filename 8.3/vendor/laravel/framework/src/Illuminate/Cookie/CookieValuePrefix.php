@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Cookie;
+namespace Odigos\Illuminate\Cookie;
 
 class CookieValuePrefix
 {

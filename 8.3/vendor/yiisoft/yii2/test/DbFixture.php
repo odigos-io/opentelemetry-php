@@ -5,11 +5,11 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\test;
+namespace Odigos\yii\test;
 
-use yii\base\BaseObject;
-use yii\db\Connection;
-use yii\di\Instance;
+use Odigos\yii\base\BaseObject;
+use Odigos\yii\db\Connection;
+use Odigos\yii\di\Instance;
 /**
  * DbFixture is the base class for DB-related fixtures.
  *
@@ -20,7 +20,7 @@ use yii\di\Instance;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-abstract class DbFixture extends \yii\test\Fixture
+abstract class DbFixture extends Fixture
 {
     /**
      * @var Connection|array|string the DB connection object or the application component ID of the DB connection.

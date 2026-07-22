@@ -1,13 +1,13 @@
 <?php
 
-namespace Illuminate\Support\Testing\Fakes;
+namespace Odigos\Illuminate\Support\Testing\Fakes;
 
 use Odigos\Carbon\CarbonImmutable;
 use Closure;
-use Illuminate\Bus\BatchRepository;
-use Illuminate\Bus\PendingBatch;
-use Illuminate\Bus\UpdatedBatchJobCounts;
-use Illuminate\Support\Str;
+use Odigos\Illuminate\Bus\BatchRepository;
+use Odigos\Illuminate\Bus\PendingBatch;
+use Odigos\Illuminate\Bus\UpdatedBatchJobCounts;
+use Odigos\Illuminate\Support\Str;
 class BatchRepositoryFake implements BatchRepository
 {
     /**
@@ -46,7 +46,7 @@ class BatchRepositoryFake implements BatchRepository
     public function store(PendingBatch $batch)
     {
         $id = (string) Str::orderedUuid();
-        $this->batches[$id] = new \Illuminate\Support\Testing\Fakes\BatchFake($id, $batch->name, count($batch->jobs), count($batch->jobs), 0, [], $batch->options, CarbonImmutable::now(), null, null);
+        $this->batches[$id] = new BatchFake($id, $batch->name, count($batch->jobs), count($batch->jobs), 0, [], $batch->options, CarbonImmutable::now(), null, null);
         return $this->batches[$id];
     }
     /**

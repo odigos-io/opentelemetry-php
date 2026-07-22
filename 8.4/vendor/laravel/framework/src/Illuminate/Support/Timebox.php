@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Support;
+namespace Odigos\Illuminate\Support;
 
 use Throwable;
 class Timebox
@@ -68,6 +68,6 @@ class Timebox
      */
     protected function usleep(int $microseconds)
     {
-        \Illuminate\Support\Sleep::usleep($microseconds);
+        Sleep::usleep($microseconds);
     }
 }

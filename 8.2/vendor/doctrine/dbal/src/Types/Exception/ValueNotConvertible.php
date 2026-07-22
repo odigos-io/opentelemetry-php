@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Types\Exception;
+namespace Odigos\Doctrine\DBAL\Types\Exception;
 
-use Doctrine\DBAL\Types\ConversionException;
+use Odigos\Doctrine\DBAL\Types\ConversionException;
 use Throwable;
 use function is_string;
 use function sprintf;
@@ -12,7 +12,7 @@ use function substr;
 /**
  * Thrown when a Database to Doctrine Type Conversion fails.
  */
-final class ValueNotConvertible extends ConversionException implements \Doctrine\DBAL\Types\Exception\TypesException
+final class ValueNotConvertible extends ConversionException implements TypesException
 {
     public static function new(mixed $value, string $toType, ?string $message = null, ?Throwable $previous = null): self
     {

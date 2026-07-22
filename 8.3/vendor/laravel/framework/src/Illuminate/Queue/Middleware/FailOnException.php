@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Queue\Middleware;
+namespace Odigos\Illuminate\Queue\Middleware;
 
 use Closure;
 use Throwable;

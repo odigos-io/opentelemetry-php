@@ -8,17 +8,17 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\EventDispatcher;
+namespace Odigos\Symfony\Component\EventDispatcher;
 
 /**
  * A read-only proxy for an event dispatcher.
  *
  * @author Bernhard Schussek <bschussek@gmail.com>
  */
-class ImmutableEventDispatcher implements \Symfony\Component\EventDispatcher\EventDispatcherInterface
+class ImmutableEventDispatcher implements EventDispatcherInterface
 {
-    private \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher;
-    public function __construct(\Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher)
+    private EventDispatcherInterface $dispatcher;
+    public function __construct(EventDispatcherInterface $dispatcher)
     {
         $this->dispatcher = $dispatcher;
     }
@@ -36,7 +36,7 @@ class ImmutableEventDispatcher implements \Symfony\Component\EventDispatcher\Eve
     /**
      * @return never
      */
-    public function addSubscriber(\Symfony\Component\EventDispatcher\EventSubscriberInterface $subscriber)
+    public function addSubscriber(EventSubscriberInterface $subscriber)
     {
         throw new \BadMethodCallException('Unmodifiable event dispatchers must not be modified.');
     }
@@ -50,7 +50,7 @@ class ImmutableEventDispatcher implements \Symfony\Component\EventDispatcher\Eve
     /**
      * @return never
      */
-    public function removeSubscriber(\Symfony\Component\EventDispatcher\EventSubscriberInterface $subscriber)
+    public function removeSubscriber(EventSubscriberInterface $subscriber)
     {
         throw new \BadMethodCallException('Unmodifiable event dispatchers must not be modified.');
     }

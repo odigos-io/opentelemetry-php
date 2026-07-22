@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpKernel\Attribute;
+namespace Odigos\Symfony\Component\HttpKernel\Attribute;
 
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Controller\ArgumentResolver\QueryParameterValueResolver;
-use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
+use Odigos\Symfony\Component\HttpFoundation\Response;
+use Odigos\Symfony\Component\HttpKernel\Controller\ArgumentResolver\QueryParameterValueResolver;
+use Odigos\Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
 /**
  * Can be used to pass a query parameter to a controller argument.
  *
@@ -20,7 +20,7 @@ use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
  * @author Ionut Enache <i.ovidiuenache@yahoo.com>
  */
 #[\Attribute(\Attribute::TARGET_PARAMETER)]
-final class MapQueryParameter extends \Symfony\Component\HttpKernel\Attribute\ValueResolver
+final class MapQueryParameter extends ValueResolver
 {
     /**
      * @see https://php.net/manual/filter.constants for filter, flags and options

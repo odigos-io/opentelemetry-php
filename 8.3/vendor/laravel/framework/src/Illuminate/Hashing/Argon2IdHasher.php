@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Hashing;
+namespace Odigos\Illuminate\Hashing;
 
 use RuntimeException;
-class Argon2IdHasher extends \Illuminate\Hashing\ArgonHasher
+class Argon2IdHasher extends ArgonHasher
 {
     /**
      * Check the given plain value against a hash.

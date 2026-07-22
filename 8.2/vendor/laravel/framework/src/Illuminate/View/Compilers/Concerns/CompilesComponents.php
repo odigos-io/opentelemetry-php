@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\View\Compilers\Concerns;
+namespace Odigos\Illuminate\View\Compilers\Concerns;
 
-use Illuminate\Contracts\Support\CanBeEscapedWhenCastToString;
-use Illuminate\Support\Str;
-use Illuminate\View\AnonymousComponent;
-use Illuminate\View\ComponentAttributeBag;
+use Odigos\Illuminate\Contracts\Support\CanBeEscapedWhenCastToString;
+use Odigos\Illuminate\Support\Str;
+use Odigos\Illuminate\View\AnonymousComponent;
+use Odigos\Illuminate\View\ComponentAttributeBag;
 trait CompilesComponents
 {
     /**

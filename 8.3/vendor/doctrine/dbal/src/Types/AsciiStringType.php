@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Types;
+namespace Odigos\Doctrine\DBAL\Types;
 
-use Doctrine\DBAL\ParameterType;
-use Doctrine\DBAL\Platforms\AbstractPlatform;
-final class AsciiStringType extends \Doctrine\DBAL\Types\StringType
+use Odigos\Doctrine\DBAL\ParameterType;
+use Odigos\Doctrine\DBAL\Platforms\AbstractPlatform;
+final class AsciiStringType extends StringType
 {
     /**
      * {@inheritDoc}

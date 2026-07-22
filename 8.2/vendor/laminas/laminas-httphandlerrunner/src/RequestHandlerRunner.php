@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Laminas\HttpHandlerRunner;
+namespace Odigos\Laminas\HttpHandlerRunner;
 
-use Laminas\HttpHandlerRunner\Emitter\EmitterInterface;
+use Odigos\Laminas\HttpHandlerRunner\Emitter\EmitterInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -19,7 +19,7 @@ use Throwable;
  * then the runner will use the composed error response generator to generate a
  * response, based on the exception or throwable raised.
  */
-final class RequestHandlerRunner implements \Laminas\HttpHandlerRunner\RequestHandlerRunnerInterface
+final class RequestHandlerRunner implements RequestHandlerRunnerInterface
 {
     /**
      * A factory capable of generating an error response in the scenario that

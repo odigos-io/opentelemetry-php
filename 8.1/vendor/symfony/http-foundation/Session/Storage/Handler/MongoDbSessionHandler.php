@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpFoundation\Session\Storage\Handler;
+namespace Odigos\Symfony\Component\HttpFoundation\Session\Storage\Handler;
 
 use MongoDB\BSON\Binary;
 use MongoDB\BSON\UTCDateTime;
-use MongoDB\Client;
+use Odigos\MongoDB\Client;
 use MongoDB\Driver\BulkWrite;
 use MongoDB\Driver\Manager;
 use MongoDB\Driver\Query;
@@ -24,7 +24,7 @@ use MongoDB\Driver\Query;
  *
  * @see https://php.net/mongodb
  */
-class MongoDbSessionHandler extends \Symfony\Component\HttpFoundation\Session\Storage\Handler\AbstractSessionHandler
+class MongoDbSessionHandler extends AbstractSessionHandler
 {
     private Manager $manager;
     private string $namespace;

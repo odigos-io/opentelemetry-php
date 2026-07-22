@@ -13,8 +13,8 @@ namespace Odigos\League\CommonMark\Extension\FrontMatter\Data;
 
 use Odigos\League\CommonMark\Exception\MissingDependencyException;
 use Odigos\League\CommonMark\Extension\FrontMatter\Exception\InvalidFrontMatterException;
-use Symfony\Component\Yaml\Exception\ParseException;
-use Symfony\Component\Yaml\Yaml;
+use Odigos\Symfony\Component\Yaml\Exception\ParseException;
+use Odigos\Symfony\Component\Yaml\Yaml;
 final class SymfonyYamlFrontMatterParser implements FrontMatterDataParserInterface
 {
     /**

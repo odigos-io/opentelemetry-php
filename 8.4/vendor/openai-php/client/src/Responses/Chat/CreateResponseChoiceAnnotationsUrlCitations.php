@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenAI\Responses\Chat;
+namespace Odigos\OpenAI\Responses\Chat;
 
 final class CreateResponseChoiceAnnotationsUrlCitations
 {

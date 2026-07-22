@@ -1,6 +1,6 @@
 <?php
 
-namespace GuzzleHttp\Handler;
+namespace Odigos\GuzzleHttp\Handler;
 
 /**
  * Resolves proxy configuration from the process environment with the same

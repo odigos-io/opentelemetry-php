@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Broadcasting;
+namespace Odigos\Illuminate\Broadcasting;
 
-class PresenceChannel extends \Illuminate\Broadcasting\Channel
+class PresenceChannel extends Channel
 {
     /**
      * Create a new channel instance.

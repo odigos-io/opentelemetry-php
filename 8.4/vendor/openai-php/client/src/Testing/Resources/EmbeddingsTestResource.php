@@ -1,11 +1,11 @@
 <?php
 
-namespace OpenAI\Testing\Resources;
+namespace Odigos\OpenAI\Testing\Resources;
 
-use OpenAI\Contracts\Resources\EmbeddingsContract;
-use OpenAI\Resources\Embeddings;
-use OpenAI\Responses\Embeddings\CreateResponse;
-use OpenAI\Testing\Resources\Concerns\Testable;
+use Odigos\OpenAI\Contracts\Resources\EmbeddingsContract;
+use Odigos\OpenAI\Resources\Embeddings;
+use Odigos\OpenAI\Responses\Embeddings\CreateResponse;
+use Odigos\OpenAI\Testing\Resources\Concerns\Testable;
 final class EmbeddingsTestResource implements EmbeddingsContract
 {
     use Testable;

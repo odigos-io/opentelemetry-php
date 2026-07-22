@@ -1,14 +1,14 @@
 <?php
 
-namespace Laravel\Prompts;
+namespace Odigos\Laravel\Prompts;
 
 use Closure;
-use Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Collection;
 use InvalidArgumentException;
-class SelectPrompt extends \Laravel\Prompts\Prompt
+class SelectPrompt extends Prompt
 {
-    use \Laravel\Prompts\Concerns\HasInfo;
-    use \Laravel\Prompts\Concerns\Scrolling;
+    use Concerns\HasInfo;
+    use Concerns\Scrolling;
     /**
      * The options for the select prompt.
      *
@@ -37,11 +37,11 @@ class SelectPrompt extends \Laravel\Prompts\Prompt
             $this->initializeScrolling(0);
         }
         $this->on('key', fn($key) => match ($key) {
-            \Laravel\Prompts\Key::UP, \Laravel\Prompts\Key::UP_ARROW, \Laravel\Prompts\Key::LEFT, \Laravel\Prompts\Key::LEFT_ARROW, \Laravel\Prompts\Key::SHIFT_TAB, \Laravel\Prompts\Key::CTRL_P, \Laravel\Prompts\Key::CTRL_B, 'k', 'h' => $this->highlightPrevious(count($this->options)),
-            \Laravel\Prompts\Key::DOWN, \Laravel\Prompts\Key::DOWN_ARROW, \Laravel\Prompts\Key::RIGHT, \Laravel\Prompts\Key::RIGHT_ARROW, \Laravel\Prompts\Key::TAB, \Laravel\Prompts\Key::CTRL_N, \Laravel\Prompts\Key::CTRL_F, 'j', 'l' => $this->highlightNext(count($this->options)),
-            \Laravel\Prompts\Key::oneOf([\Laravel\Prompts\Key::HOME, \Laravel\Prompts\Key::CTRL_A], $key) => $this->highlight(0),
-            \Laravel\Prompts\Key::oneOf([\Laravel\Prompts\Key::END, \Laravel\Prompts\Key::CTRL_E], $key) => $this->highlight(count($this->options) - 1),
-            \Laravel\Prompts\Key::ENTER => $this->submit(),
+            Key::UP, Key::UP_ARROW, Key::LEFT, Key::LEFT_ARROW, Key::SHIFT_TAB, Key::CTRL_P, Key::CTRL_B, 'k', 'h' => $this->highlightPrevious(count($this->options)),
+            Key::DOWN, Key::DOWN_ARROW, Key::RIGHT, Key::RIGHT_ARROW, Key::TAB, Key::CTRL_N, Key::CTRL_F, 'j', 'l' => $this->highlightNext(count($this->options)),
+            Key::oneOf([Key::HOME, Key::CTRL_A], $key) => $this->highlight(0),
+            Key::oneOf([Key::END, Key::CTRL_E], $key) => $this->highlight(count($this->options) - 1),
+            Key::ENTER => $this->submit(),
             default => null,
         });
     }

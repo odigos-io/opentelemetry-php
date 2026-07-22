@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Types;
+namespace Odigos\Doctrine\DBAL\Types;
 
-use Doctrine\DBAL\Platforms\AbstractPlatform;
+use Odigos\Doctrine\DBAL\Platforms\AbstractPlatform;
 use function count;
 use function explode;
 use function implode;
@@ -15,7 +15,7 @@ use function stream_get_contents;
  *
  * Only use this type if you are sure that your values cannot contain a ",".
  */
-class SimpleArrayType extends \Doctrine\DBAL\Types\Type
+class SimpleArrayType extends Type
 {
     /**
      * {@inheritDoc}

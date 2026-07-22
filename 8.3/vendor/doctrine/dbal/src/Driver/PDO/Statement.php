@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Driver\PDO;
+namespace Odigos\Doctrine\DBAL\Driver\PDO;
 
-use Doctrine\DBAL\Driver\Exception as ExceptionInterface;
-use Doctrine\DBAL\Driver\Statement as StatementInterface;
-use Doctrine\DBAL\ParameterType;
+use Odigos\Doctrine\DBAL\Driver\Exception as ExceptionInterface;
+use Odigos\Doctrine\DBAL\Driver\Statement as StatementInterface;
+use Odigos\Doctrine\DBAL\ParameterType;
 use PDO;
 use PDOException;
 use PDOStatement;
@@ -21,7 +21,7 @@ final class Statement implements StatementInterface
         try {
             $this->stmt->bindValue($param, $value, $pdoType);
         } catch (PDOException $exception) {
-            throw \Doctrine\DBAL\Driver\PDO\Exception::new($exception);
+            throw Exception::new($exception);
         }
     }
     /**
@@ -35,17 +35,17 @@ final class Statement implements StatementInterface
         try {
             $this->stmt->bindParam($param, $variable, $pdoType, 0, $driverOptions);
         } catch (PDOException $exception) {
-            throw \Doctrine\DBAL\Driver\PDO\Exception::new($exception);
+            throw Exception::new($exception);
         }
     }
-    public function execute(): \Doctrine\DBAL\Driver\PDO\Result
+    public function execute(): Result
     {
         try {
             $this->stmt->execute();
         } catch (PDOException $exception) {
-            throw \Doctrine\DBAL\Driver\PDO\Exception::new($exception);
+            throw Exception::new($exception);
         }
-        return new \Doctrine\DBAL\Driver\PDO\Result($this->stmt);
+        return new Result($this->stmt);
     }
     /**
      * Converts DBAL parameter type to PDO parameter type

@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Database\Console\Seeds;
+namespace Odigos\Illuminate\Database\Console\Seeds;
 
-use Illuminate\Database\Eloquent\Model;
+use Odigos\Illuminate\Database\Eloquent\Model;
 trait WithoutModelEvents
 {
     /**

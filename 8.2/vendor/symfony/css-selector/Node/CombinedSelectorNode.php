@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\CssSelector\Node;
+namespace Odigos\Symfony\Component\CssSelector\Node;
 
 /**
  * Represents a combined node.
@@ -20,12 +20,12 @@ namespace Symfony\Component\CssSelector\Node;
  *
  * @internal
  */
-class CombinedSelectorNode extends \Symfony\Component\CssSelector\Node\AbstractNode
+class CombinedSelectorNode extends AbstractNode
 {
-    public function __construct(private \Symfony\Component\CssSelector\Node\NodeInterface $selector, private string $combinator, private \Symfony\Component\CssSelector\Node\NodeInterface $subSelector)
+    public function __construct(private NodeInterface $selector, private string $combinator, private NodeInterface $subSelector)
     {
     }
-    public function getSelector(): \Symfony\Component\CssSelector\Node\NodeInterface
+    public function getSelector(): NodeInterface
     {
         return $this->selector;
     }
@@ -33,11 +33,11 @@ class CombinedSelectorNode extends \Symfony\Component\CssSelector\Node\AbstractN
     {
         return $this->combinator;
     }
-    public function getSubSelector(): \Symfony\Component\CssSelector\Node\NodeInterface
+    public function getSubSelector(): NodeInterface
     {
         return $this->subSelector;
     }
-    public function getSpecificity(): \Symfony\Component\CssSelector\Node\Specificity
+    public function getSpecificity(): Specificity
     {
         return $this->selector->getSpecificity()->plus($this->subSelector->getSpecificity());
     }

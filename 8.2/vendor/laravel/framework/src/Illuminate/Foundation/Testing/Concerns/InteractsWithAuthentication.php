@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Foundation\Testing\Concerns;
+namespace Odigos\Illuminate\Foundation\Testing\Concerns;
 
-use Illuminate\Contracts\Auth\Authenticatable as UserContract;
+use Odigos\Illuminate\Contracts\Auth\Authenticatable as UserContract;
 trait InteractsWithAuthentication
 {
     /**

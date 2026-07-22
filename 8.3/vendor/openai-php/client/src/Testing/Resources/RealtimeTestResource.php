@@ -1,12 +1,12 @@
 <?php
 
-namespace OpenAI\Testing\Resources;
+namespace Odigos\OpenAI\Testing\Resources;
 
-use OpenAI\Contracts\Resources\RealtimeContract;
-use OpenAI\Resources\Realtime;
-use OpenAI\Responses\Realtime\SessionResponse;
-use OpenAI\Responses\Realtime\TranscriptionSessionResponse;
-use OpenAI\Testing\Resources\Concerns\Testable;
+use Odigos\OpenAI\Contracts\Resources\RealtimeContract;
+use Odigos\OpenAI\Resources\Realtime;
+use Odigos\OpenAI\Responses\Realtime\SessionResponse;
+use Odigos\OpenAI\Responses\Realtime\TranscriptionSessionResponse;
+use Odigos\OpenAI\Testing\Resources\Concerns\Testable;
 final class RealtimeTestResource implements RealtimeContract
 {
     use Testable;

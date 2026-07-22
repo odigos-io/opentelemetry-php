@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Database\Eloquent;
+namespace Odigos\Illuminate\Database\Eloquent;
 
-use Illuminate\Database\Eloquent\Attributes\CollectedBy;
+use Odigos\Illuminate\Database\Eloquent\Attributes\CollectedBy;
 use ReflectionClass;
 /**
  * @template TCollection of \Illuminate\Database\Eloquent\Collection
@@ -25,7 +25,7 @@ trait HasCollection
     {
         static::$resolvedCollectionClasses[static::class] ??= $this->resolveCollectionFromAttribute() ?? static::$collectionClass;
         $collection = new static::$resolvedCollectionClasses[static::class]($models);
-        if (\Illuminate\Database\Eloquent\Model::isAutomaticallyEagerLoadingRelationships()) {
+        if (Model::isAutomaticallyEagerLoadingRelationships()) {
             $collection->withRelationshipAutoloading();
         }
         return $collection;

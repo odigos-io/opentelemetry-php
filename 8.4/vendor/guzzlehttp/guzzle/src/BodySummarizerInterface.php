@@ -1,6 +1,6 @@
 <?php
 
-namespace GuzzleHttp;
+namespace Odigos\GuzzleHttp;
 
 use Psr\Http\Message\MessageInterface;
 interface BodySummarizerInterface

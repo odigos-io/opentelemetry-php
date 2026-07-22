@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Foundation\Testing;
+namespace Odigos\Illuminate\Foundation\Testing;
 
-use Illuminate\Database\DatabaseTransactionsManager as BaseManager;
+use Odigos\Illuminate\Database\DatabaseTransactionsManager as BaseManager;
 class DatabaseTransactionsManager extends BaseManager
 {
     /**

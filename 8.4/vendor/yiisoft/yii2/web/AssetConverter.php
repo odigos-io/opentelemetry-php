@@ -5,11 +5,11 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\web;
+namespace Odigos\yii\web;
 
 use Odigos\Yii;
-use yii\base\Component;
-use yii\base\Exception;
+use Odigos\yii\base\Component;
+use Odigos\yii\base\Exception;
 /**
  * AssetConverter supports conversion of several popular formats into JS or CSS files.
  *
@@ -18,7 +18,7 @@ use yii\base\Exception;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class AssetConverter extends Component implements \yii\web\AssetConverterInterface
+class AssetConverter extends Component implements AssetConverterInterface
 {
     /**
      * @var array the commands that are used to perform the asset conversion.

@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Database\Events;
+namespace Odigos\Illuminate\Database\Events;
 
-use Illuminate\Contracts\Database\Events\MigrationEvent;
+use Odigos\Illuminate\Contracts\Database\Events\MigrationEvent;
 class NoPendingMigrations implements MigrationEvent
 {
     /**

@@ -8,19 +8,19 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Mailer\Transport;
+namespace Odigos\Symfony\Component\Mailer\Transport;
 
-use Symfony\Component\Mailer\Envelope;
-use Symfony\Component\Mailer\Exception\RuntimeException;
-use Symfony\Component\Mailer\SentMessage;
-use Symfony\Component\Mime\Address;
-use Symfony\Component\Mime\Email;
-use Symfony\Component\Mime\MessageConverter;
-use Symfony\Contracts\HttpClient\ResponseInterface;
+use Odigos\Symfony\Component\Mailer\Envelope;
+use Odigos\Symfony\Component\Mailer\Exception\RuntimeException;
+use Odigos\Symfony\Component\Mailer\SentMessage;
+use Odigos\Symfony\Component\Mime\Address;
+use Odigos\Symfony\Component\Mime\Email;
+use Odigos\Symfony\Component\Mime\MessageConverter;
+use Odigos\Symfony\Contracts\HttpClient\ResponseInterface;
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  */
-abstract class AbstractApiTransport extends \Symfony\Component\Mailer\Transport\AbstractHttpTransport
+abstract class AbstractApiTransport extends AbstractHttpTransport
 {
     abstract protected function doSendApi(SentMessage $sentMessage, Email $email, Envelope $envelope): ResponseInterface;
     protected function doSendHttp(SentMessage $message): ResponseInterface

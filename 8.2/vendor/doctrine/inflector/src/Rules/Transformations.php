@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\Inflector\Rules;
+namespace Odigos\Doctrine\Inflector\Rules;
 
-use Doctrine\Inflector\WordInflector;
+use Odigos\Doctrine\Inflector\WordInflector;
 class Transformations implements WordInflector
 {
     /** @var Transformation[] */
     private $transformations;
-    public function __construct(\Doctrine\Inflector\Rules\Transformation ...$transformations)
+    public function __construct(Transformation ...$transformations)
     {
         $this->transformations = $transformations;
     }

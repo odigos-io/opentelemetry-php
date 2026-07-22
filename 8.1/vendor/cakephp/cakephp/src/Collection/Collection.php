@@ -14,7 +14,7 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Collection;
+namespace Odigos\Cake\Collection;
 
 use ArrayIterator;
 use Exception;
@@ -28,9 +28,9 @@ use IteratorIterator;
  * @extends \IteratorIterator<TKey, TValue, \Traversable<TKey, TValue>>
  * @implements \Cake\Collection\CollectionInterface<TKey, TValue>
  */
-class Collection extends IteratorIterator implements \Cake\Collection\CollectionInterface
+class Collection extends IteratorIterator implements CollectionInterface
 {
-    use \Cake\Collection\CollectionTrait;
+    use CollectionTrait;
     /**
      * Constructor. You can provide an array or any traversable object
      *

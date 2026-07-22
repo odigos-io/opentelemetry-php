@@ -4,12 +4,12 @@
  * THIS FILE IS AUTO-GENERATED. ANY CHANGES WILL BE LOST!
  */
 declare (strict_types=1);
-namespace MongoDB\Builder\Expression;
+namespace Odigos\MongoDB\Builder\Expression;
 
-use MongoDB\Builder\Type\Encode;
-use MongoDB\Builder\Type\OperatorInterface;
-use MongoDB\Builder\Type\Optional;
-use MongoDB\Exception\InvalidArgumentException;
+use Odigos\MongoDB\Builder\Type\Encode;
+use Odigos\MongoDB\Builder\Type\OperatorInterface;
+use Odigos\MongoDB\Builder\Type\Optional;
+use Odigos\MongoDB\Exception\InvalidArgumentException;
 use function is_string;
 use function str_starts_with;
 /**
@@ -18,23 +18,23 @@ use function str_starts_with;
  * @see https://www.mongodb.com/docs/manual/reference/operator/aggregation/range/
  * @internal
  */
-final class RangeOperator implements \MongoDB\Builder\Expression\ResolvesToArray, OperatorInterface
+final class RangeOperator implements ResolvesToArray, OperatorInterface
 {
     public const ENCODE = Encode::Array;
     public const NAME = '$range';
     public const PROPERTIES = ['start' => 'start', 'end' => 'end', 'step' => 'step'];
     /** @var ResolvesToInt|int|string $start An integer that specifies the start of the sequence. Can be any valid expression that resolves to an integer. */
-    public readonly \MongoDB\Builder\Expression\ResolvesToInt|int|string $start;
+    public readonly ResolvesToInt|int|string $start;
     /** @var ResolvesToInt|int|string $end An integer that specifies the exclusive upper limit of the sequence. Can be any valid expression that resolves to an integer. */
-    public readonly \MongoDB\Builder\Expression\ResolvesToInt|int|string $end;
+    public readonly ResolvesToInt|int|string $end;
     /** @var Optional|ResolvesToInt|int|string $step An integer that specifies the increment value. Can be any valid expression that resolves to a non-zero integer. Defaults to 1. */
-    public readonly Optional|\MongoDB\Builder\Expression\ResolvesToInt|int|string $step;
+    public readonly Optional|ResolvesToInt|int|string $step;
     /**
      * @param ResolvesToInt|int|string $start An integer that specifies the start of the sequence. Can be any valid expression that resolves to an integer.
      * @param ResolvesToInt|int|string $end An integer that specifies the exclusive upper limit of the sequence. Can be any valid expression that resolves to an integer.
      * @param Optional|ResolvesToInt|int|string $step An integer that specifies the increment value. Can be any valid expression that resolves to a non-zero integer. Defaults to 1.
      */
-    public function __construct(\MongoDB\Builder\Expression\ResolvesToInt|int|string $start, \MongoDB\Builder\Expression\ResolvesToInt|int|string $end, Optional|\MongoDB\Builder\Expression\ResolvesToInt|int|string $step = Optional::Undefined)
+    public function __construct(ResolvesToInt|int|string $start, ResolvesToInt|int|string $end, Optional|ResolvesToInt|int|string $step = Optional::Undefined)
     {
         if (is_string($start) && !str_starts_with($start, '$')) {
             throw new InvalidArgumentException('Argument $start can be an expression, field paths and variable names must be prefixed by "$" or "$$".');

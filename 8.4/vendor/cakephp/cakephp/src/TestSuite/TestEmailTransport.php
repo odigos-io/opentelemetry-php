@@ -14,11 +14,11 @@ declare (strict_types=1);
  * @since         3.7.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\TestSuite;
+namespace Odigos\Cake\TestSuite;
 
-use Cake\Mailer\Message;
-use Cake\Mailer\Transport\DebugTransport;
-use Cake\Mailer\TransportFactory;
+use Odigos\Cake\Mailer\Message;
+use Odigos\Cake\Mailer\Transport\DebugTransport;
+use Odigos\Cake\Mailer\TransportFactory;
 /**
  * TestEmailTransport
  *

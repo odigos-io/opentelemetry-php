@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Console\Descriptor;
+namespace Odigos\Symfony\Component\Console\Descriptor;
 
-use Symfony\Component\Console\Output\OutputInterface;
+use Odigos\Symfony\Component\Console\Output\OutputInterface;
 /**
  * Descriptor interface.
  *

@@ -5,18 +5,18 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\rest;
+namespace Odigos\yii\rest;
 
 use Odigos\Yii;
-use yii\base\Arrayable;
-use yii\base\Component;
-use yii\base\Model;
-use yii\data\DataProviderInterface;
-use yii\data\Pagination;
-use yii\helpers\ArrayHelper;
-use yii\web\Link;
-use yii\web\Request;
-use yii\web\Response;
+use Odigos\yii\base\Arrayable;
+use Odigos\yii\base\Component;
+use Odigos\yii\base\Model;
+use Odigos\yii\data\DataProviderInterface;
+use Odigos\yii\data\Pagination;
+use Odigos\yii\helpers\ArrayHelper;
+use Odigos\yii\web\Link;
+use Odigos\yii\web\Request;
+use Odigos\yii\web\Response;
 /**
  * Serializer converts resource objects and collections into array representation.
  *

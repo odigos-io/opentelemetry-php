@@ -1,14 +1,14 @@
 <?php
 
-namespace Illuminate\Console\Scheduling;
+namespace Odigos\Illuminate\Console\Scheduling;
 
-use Illuminate\Contracts\Container\Container;
-use Illuminate\Support\Reflector;
+use Odigos\Illuminate\Contracts\Container\Container;
+use Odigos\Illuminate\Support\Reflector;
 use InvalidArgumentException;
 use LogicException;
 use RuntimeException;
 use Throwable;
-class CallbackEvent extends \Illuminate\Console\Scheduling\Event
+class CallbackEvent extends Event
 {
     /**
      * The callback to call.
@@ -44,7 +44,7 @@ class CallbackEvent extends \Illuminate\Console\Scheduling\Event
      *
      * @throws \InvalidArgumentException
      */
-    public function __construct(\Illuminate\Console\Scheduling\EventMutex $mutex, $callback, array $parameters = [], $timezone = null)
+    public function __construct(EventMutex $mutex, $callback, array $parameters = [], $timezone = null)
     {
         if (!is_string($callback) && !Reflector::isCallable($callback)) {
             throw new InvalidArgumentException('Invalid scheduled callback event. Must be a string or callable.');

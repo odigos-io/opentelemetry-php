@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Support;
+namespace Odigos\Illuminate\Support;
 
-if (!function_exists('Illuminate\Support\enum_value')) {
+if (!function_exists('Odigos\Illuminate\Support\enum_value')) {
     /**
      * Return a scalar value for the given value that might be an enum.
      *

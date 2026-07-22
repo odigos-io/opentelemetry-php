@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Clock;
+namespace Odigos\Symfony\Component\Clock;
 
 /**
  * A monotonic clock suitable for performance profiling.
  *
  * @author Nicolas Grekas <p@tchwork.com>
  */
-final class MonotonicClock implements \Symfony\Component\Clock\ClockInterface
+final class MonotonicClock implements ClockInterface
 {
     private int $sOffset;
     private int $usOffset;
@@ -33,7 +33,7 @@ final class MonotonicClock implements \Symfony\Component\Clock\ClockInterface
         $this->usOffset = (int) ($time[0] * 1000000) - (int) ($offset[1] / 1000);
         $this->timezone = \is_string($timezone ??= date_default_timezone_get()) ? $this->withTimeZone($timezone)->timezone : $timezone;
     }
-    public function now(): \Symfony\Component\Clock\DatePoint
+    public function now(): DatePoint
     {
         [$s, $us] = hrtime();
         if (1000000 <= $us = (int) ($us / 1000) + $this->usOffset) {
@@ -47,7 +47,7 @@ final class MonotonicClock implements \Symfony\Component\Clock\ClockInterface
             $now = str_pad($now, 6, '0', \STR_PAD_LEFT);
         }
         $now = '@' . ($s + $this->sOffset) . '.' . $now;
-        return \Symfony\Component\Clock\DatePoint::createFromInterface(new \DateTimeImmutable($now, $this->timezone))->setTimezone($this->timezone);
+        return DatePoint::createFromInterface(new \DateTimeImmutable($now, $this->timezone))->setTimezone($this->timezone);
     }
     public function sleep(float|int $seconds): void
     {

@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Translation\Extractor;
+namespace Odigos\Symfony\Component\Translation\Extractor;
 
-use Symfony\Component\Translation\MessageCatalogue;
+use Odigos\Symfony\Component\Translation\MessageCatalogue;
 /**
  * Extracts translation messages from a directory or files to the catalogue.
  * New found messages are injected to the catalogue using the prefix.

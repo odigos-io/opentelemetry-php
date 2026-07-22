@@ -14,19 +14,19 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\View;
+namespace Odigos\Cake\View;
 
 use BadMethodCallException;
-use Cake\Cache\Cache;
-use Cake\Event\EventDispatcherInterface;
-use Cake\Event\EventDispatcherTrait;
-use Cake\Event\EventManagerInterface;
-use Cake\Http\Response;
-use Cake\Http\ServerRequest;
-use Cake\ORM\Locator\LocatorAwareTrait;
-use Cake\Utility\Inflector;
-use Cake\View\Exception\MissingCellTemplateException;
-use Cake\View\Exception\MissingTemplateException;
+use Odigos\Cake\Cache\Cache;
+use Odigos\Cake\Event\EventDispatcherInterface;
+use Odigos\Cake\Event\EventDispatcherTrait;
+use Odigos\Cake\Event\EventManagerInterface;
+use Odigos\Cake\Http\Response;
+use Odigos\Cake\Http\ServerRequest;
+use Odigos\Cake\ORM\Locator\LocatorAwareTrait;
+use Odigos\Cake\Utility\Inflector;
+use Odigos\Cake\View\Exception\MissingCellTemplateException;
+use Odigos\Cake\View\Exception\MissingTemplateException;
 use Error;
 use Exception;
 use ReflectionException;
@@ -45,7 +45,7 @@ abstract class Cell implements EventDispatcherInterface, Stringable
      */
     use EventDispatcherTrait;
     use LocatorAwareTrait;
-    use \Cake\View\ViewVarsTrait;
+    use ViewVarsTrait;
     /**
      * Constant for folder name containing cell templates.
      *
@@ -58,7 +58,7 @@ abstract class Cell implements EventDispatcherInterface, Stringable
      *
      * @var \Cake\View\View
      */
-    protected \Cake\View\View $View;
+    protected View $View;
     /**
      * An instance of a Cake\Http\ServerRequest object that contains information about the current request.
      * This object contains all the information about a request and several methods for reading
@@ -147,10 +147,10 @@ abstract class Cell implements EventDispatcherInterface, Stringable
      *
      * @return \Cake\View\ViewBuilder
      */
-    public function viewBuilder(): \Cake\View\ViewBuilder
+    public function viewBuilder(): ViewBuilder
     {
         if ($this->_viewBuilder === null) {
-            $this->_viewBuilder = new \Cake\View\ViewBuilder();
+            $this->_viewBuilder = new ViewBuilder();
             if ($this->plugin !== null) {
                 $this->_viewBuilder->setPlugin($this->plugin);
             }

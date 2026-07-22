@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Foundation\Http\Middleware;
+namespace Odigos\Illuminate\Foundation\Http\Middleware;
 
-class CheckForMaintenanceMode extends \Illuminate\Foundation\Http\Middleware\PreventRequestsDuringMaintenance
+class CheckForMaintenanceMode extends PreventRequestsDuringMaintenance
 {
     //
 }

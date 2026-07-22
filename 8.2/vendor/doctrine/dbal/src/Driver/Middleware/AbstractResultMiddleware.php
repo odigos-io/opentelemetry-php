@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Driver\Middleware;
+namespace Odigos\Doctrine\DBAL\Driver\Middleware;
 
-use Doctrine\DBAL\Driver\Result;
+use Odigos\Doctrine\DBAL\Driver\Result;
 use LogicException;
 use function get_debug_type;
 use function method_exists;

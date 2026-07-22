@@ -14,7 +14,7 @@ declare (strict_types=1);
  * @since         4.4.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Error;
+namespace Odigos\Cake\Error;
 
 /**
  * Interface for PHP error rendering implementations
@@ -31,7 +31,7 @@ interface ErrorRendererInterface
      * @param bool $debug Whether the application is in debug mode.
      * @return string The output to be echoed.
      */
-    public function render(\Cake\Error\PhpError $error, bool $debug): string;
+    public function render(PhpError $error, bool $debug): string;
     /**
      * Write output to the renderer's output stream
      *

@@ -5,13 +5,13 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\db;
+namespace Odigos\yii\db;
 
 use Odigos\Yii;
-use yii\base\Component;
-use yii\base\InvalidArgumentException;
-use yii\helpers\ArrayHelper;
-use yii\base\InvalidConfigException;
+use Odigos\yii\base\Component;
+use Odigos\yii\base\InvalidArgumentException;
+use Odigos\yii\helpers\ArrayHelper;
+use Odigos\yii\base\InvalidConfigException;
 /**
  * Query represents a SELECT SQL statement in a way that is independent of DBMS.
  *
@@ -47,9 +47,9 @@ use yii\base\InvalidConfigException;
  * @author Carsten Brandt <mail@cebe.cc>
  * @since 2.0
  */
-class Query extends Component implements \yii\db\QueryInterface, \yii\db\ExpressionInterface
+class Query extends Component implements QueryInterface, ExpressionInterface
 {
-    use \yii\db\QueryTrait;
+    use QueryTrait;
     /**
      * @var array|null the columns being selected. For example, `['id', 'name']`.
      * This is used to construct the SELECT clause in a SQL statement. If not set, it means selecting all columns.
@@ -189,7 +189,7 @@ class Query extends Component implements \yii\db\QueryInterface, \yii\db\Express
      */
     public function batch($batchSize = 100, $db = null)
     {
-        return Yii::createObject(['class' => \yii\db\BatchQueryResult::className(), 'query' => $this, 'batchSize' => $batchSize, 'db' => $db, 'each' => \false]);
+        return Yii::createObject(['class' => BatchQueryResult::className(), 'query' => $this, 'batchSize' => $batchSize, 'db' => $db, 'each' => \false]);
     }
     /**
      * Starts a batch query and retrieves data row by row.
@@ -210,7 +210,7 @@ class Query extends Component implements \yii\db\QueryInterface, \yii\db\Express
      */
     public function each($batchSize = 100, $db = null)
     {
-        return Yii::createObject(['class' => \yii\db\BatchQueryResult::className(), 'query' => $this, 'batchSize' => $batchSize, 'db' => $db, 'each' => \true]);
+        return Yii::createObject(['class' => BatchQueryResult::className(), 'query' => $this, 'batchSize' => $batchSize, 'db' => $db, 'each' => \true]);
     }
     /**
      * Executes the query and returns all results as an array.
@@ -460,7 +460,7 @@ class Query extends Component implements \yii\db\QueryInterface, \yii\db\Express
             $tableNames = $this->from;
         } elseif (is_string($this->from)) {
             $tableNames = preg_split('/\s*,\s*/', trim($this->from), -1, \PREG_SPLIT_NO_EMPTY);
-        } elseif ($this->from instanceof \yii\db\Expression) {
+        } elseif ($this->from instanceof Expression) {
             $tableNames = [$this->from];
         } else {
             throw new InvalidConfigException(gettype($this->from) . ' in $from is not supported.');
@@ -518,7 +518,7 @@ PATTERN;
                     }
                 }
             }
-            if ($tableName instanceof \yii\db\Expression) {
+            if ($tableName instanceof Expression) {
                 if (!is_string($alias)) {
                     throw new InvalidArgumentException('To use Expression in from() method, pass it in array format with alias.');
                 }
@@ -607,7 +607,7 @@ PATTERN;
      */
     protected function normalizeSelect($columns)
     {
-        if ($columns instanceof \yii\db\ExpressionInterface) {
+        if ($columns instanceof ExpressionInterface) {
             $columns = [$columns];
         } elseif (!is_array($columns)) {
             $columns = preg_split('/\s*,\s*/', trim((string) $columns), -1, \PREG_SPLIT_NO_EMPTY);
@@ -650,7 +650,7 @@ PATTERN;
         $unaliasedColumns = $this->getUnaliasedColumnsFromSelect();
         $result = [];
         foreach ($columns as $columnAlias => $columnDefinition) {
-            if (!$columnDefinition instanceof \yii\db\Query) {
+            if (!$columnDefinition instanceof Query) {
                 if (is_string($columnAlias)) {
                     $existsInSelect = isset($this->select[$columnAlias]) && $this->select[$columnAlias] === $columnDefinition;
                     if ($existsInSelect) {
@@ -731,7 +731,7 @@ PATTERN;
      */
     public function from($tables)
     {
-        if ($tables instanceof \yii\db\ExpressionInterface) {
+        if ($tables instanceof ExpressionInterface) {
             $tables = [$tables];
         }
         if (is_string($tables)) {
@@ -971,7 +971,7 @@ PATTERN;
      */
     public function groupBy($columns)
     {
-        if ($columns instanceof \yii\db\ExpressionInterface) {
+        if ($columns instanceof ExpressionInterface) {
             $columns = [$columns];
         } elseif (!is_array($columns) && !is_null($columns)) {
             $columns = preg_split('/\s*,\s*/', trim($columns), -1, \PREG_SPLIT_NO_EMPTY);
@@ -997,7 +997,7 @@ PATTERN;
      */
     public function addGroupBy($columns)
     {
-        if ($columns instanceof \yii\db\ExpressionInterface) {
+        if ($columns instanceof ExpressionInterface) {
             $columns = [$columns];
         } elseif (!is_array($columns)) {
             $columns = preg_split('/\s*,\s*/', trim($columns), -1, \PREG_SPLIT_NO_EMPTY);

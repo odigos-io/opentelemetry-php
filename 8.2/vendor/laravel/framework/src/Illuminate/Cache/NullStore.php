@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Cache;
+namespace Odigos\Illuminate\Cache;
 
-use Illuminate\Contracts\Cache\LockProvider;
-class NullStore extends \Illuminate\Cache\TaggableStore implements LockProvider
+use Odigos\Illuminate\Contracts\Cache\LockProvider;
+class NullStore extends TaggableStore implements LockProvider
 {
-    use \Illuminate\Cache\RetrievesMultipleKeys;
+    use RetrievesMultipleKeys;
     /**
      * Retrieve an item from the cache by key.
      *
@@ -71,7 +71,7 @@ class NullStore extends \Illuminate\Cache\TaggableStore implements LockProvider
      */
     public function lock($name, $seconds = 0, $owner = null)
     {
-        return new \Illuminate\Cache\NoLock($name, $seconds, $owner);
+        return new NoLock($name, $seconds, $owner);
     }
     /**
      * Restore a lock instance using the owner identifier.

@@ -1,18 +1,18 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Resources;
+namespace Odigos\OpenAI\Resources;
 
-use OpenAI\Contracts\Resources\ChatContract;
-use OpenAI\Responses\Chat\CreateResponse;
-use OpenAI\Responses\Chat\CreateStreamedResponse;
-use OpenAI\Responses\StreamResponse;
-use OpenAI\ValueObjects\Transporter\Payload;
-use OpenAI\ValueObjects\Transporter\Response;
+use Odigos\OpenAI\Contracts\Resources\ChatContract;
+use Odigos\OpenAI\Responses\Chat\CreateResponse;
+use Odigos\OpenAI\Responses\Chat\CreateStreamedResponse;
+use Odigos\OpenAI\Responses\StreamResponse;
+use Odigos\OpenAI\ValueObjects\Transporter\Payload;
+use Odigos\OpenAI\ValueObjects\Transporter\Response;
 final class Chat implements ChatContract
 {
-    use \OpenAI\Resources\Concerns\Streamable;
-    use \OpenAI\Resources\Concerns\Transportable;
+    use Concerns\Streamable;
+    use Concerns\Transportable;
     /**
      * Creates a completion for the chat message
      *

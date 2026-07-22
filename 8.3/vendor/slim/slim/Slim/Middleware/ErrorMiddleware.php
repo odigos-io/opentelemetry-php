@@ -6,7 +6,7 @@
  * @license https://github.com/slimphp/Slim/blob/4.x/LICENSE.md (MIT License)
  */
 declare (strict_types=1);
-namespace Slim\Middleware;
+namespace Odigos\Slim\Middleware;
 
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -14,10 +14,10 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Log\LoggerInterface;
-use Slim\Exception\HttpException;
-use Slim\Handlers\ErrorHandler;
-use Slim\Interfaces\CallableResolverInterface;
-use Slim\Interfaces\ErrorHandlerInterface;
+use Odigos\Slim\Exception\HttpException;
+use Odigos\Slim\Handlers\ErrorHandler;
+use Odigos\Slim\Interfaces\CallableResolverInterface;
+use Odigos\Slim\Interfaces\ErrorHandlerInterface;
 use Throwable;
 use function get_class;
 use function is_subclass_of;

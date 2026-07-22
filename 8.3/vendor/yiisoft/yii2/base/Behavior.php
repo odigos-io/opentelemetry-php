@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\base;
+namespace Odigos\yii\base;
 
 /**
  * Behavior is the base class for all behavior classes.
@@ -22,7 +22,7 @@ namespace yii\base;
  *
  * @template T of Component = Component
  */
-class Behavior extends \yii\base\BaseObject
+class Behavior extends BaseObject
 {
     /**
      * @var T|null the owner of this behavior

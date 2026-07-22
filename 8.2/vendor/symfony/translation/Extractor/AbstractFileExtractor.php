@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Translation\Extractor;
+namespace Odigos\Symfony\Component\Translation\Extractor;
 
-use Symfony\Component\Translation\Exception\InvalidArgumentException;
+use Odigos\Symfony\Component\Translation\Exception\InvalidArgumentException;
 /**
  * Base class used by classes that extract translation messages from files.
  *

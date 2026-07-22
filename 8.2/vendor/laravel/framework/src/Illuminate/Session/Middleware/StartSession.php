@@ -1,16 +1,16 @@
 <?php
 
-namespace Illuminate\Session\Middleware;
+namespace Odigos\Illuminate\Session\Middleware;
 
 use Closure;
-use Illuminate\Contracts\Session\Session;
-use Illuminate\Http\Request;
-use Illuminate\Routing\Route;
-use Illuminate\Session\SessionManager;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Date;
-use Symfony\Component\HttpFoundation\Cookie;
-use Symfony\Component\HttpFoundation\Response;
+use Odigos\Illuminate\Contracts\Session\Session;
+use Odigos\Illuminate\Http\Request;
+use Odigos\Illuminate\Routing\Route;
+use Odigos\Illuminate\Session\SessionManager;
+use Odigos\Illuminate\Support\Carbon;
+use Odigos\Illuminate\Support\Facades\Date;
+use Odigos\Symfony\Component\HttpFoundation\Cookie;
+use Odigos\Symfony\Component\HttpFoundation\Response;
 class StartSession
 {
     /**

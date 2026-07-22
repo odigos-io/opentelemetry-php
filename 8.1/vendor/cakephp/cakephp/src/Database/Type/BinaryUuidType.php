@@ -14,18 +14,18 @@ declare (strict_types=1);
  * @since         3.6.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database\Type;
+namespace Odigos\Cake\Database\Type;
 
-use Cake\Core\Exception\CakeException;
-use Cake\Database\Driver;
-use Cake\Utility\Text;
+use Odigos\Cake\Core\Exception\CakeException;
+use Odigos\Cake\Database\Driver;
+use Odigos\Cake\Utility\Text;
 use PDO;
 /**
  * Binary UUID type converter.
  *
  * Use to convert binary uuid data between PHP and the database types.
  */
-class BinaryUuidType extends \Cake\Database\Type\BaseType
+class BinaryUuidType extends BaseType
 {
     /**
      * Convert binary uuid data into the database format.

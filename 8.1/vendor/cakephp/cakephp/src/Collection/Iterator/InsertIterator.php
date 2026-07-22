@@ -14,9 +14,9 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Collection\Iterator;
+namespace Odigos\Cake\Collection\Iterator;
 
-use Cake\Collection\Collection;
+use Odigos\Cake\Collection\Collection;
 /**
  * This iterator will insert values into a property of each of the records returned.
  * The values to be inserted come out of another traversal object. This is useful

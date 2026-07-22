@@ -5,12 +5,12 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\rbac;
+namespace Odigos\yii\rbac;
 
-use yii\base\Component;
-use yii\base\InvalidArgumentException;
-use yii\base\InvalidConfigException;
-use yii\base\InvalidValueException;
+use Odigos\yii\base\Component;
+use Odigos\yii\base\InvalidArgumentException;
+use Odigos\yii\base\InvalidConfigException;
+use Odigos\yii\base\InvalidValueException;
 /**
  * BaseManager is a base class implementing [[ManagerInterface]] for RBAC management.
  *
@@ -23,7 +23,7 @@ use yii\base\InvalidValueException;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-abstract class BaseManager extends Component implements \yii\rbac\ManagerInterface
+abstract class BaseManager extends Component implements ManagerInterface
 {
     /**
      * @var array a list of role names that are assigned to every user automatically without calling [[assign()]].
@@ -91,7 +91,7 @@ abstract class BaseManager extends Component implements \yii\rbac\ManagerInterfa
      */
     public function createRole($name)
     {
-        $role = new \yii\rbac\Role();
+        $role = new Role();
         $role->name = $name;
         return $role;
     }
@@ -100,7 +100,7 @@ abstract class BaseManager extends Component implements \yii\rbac\ManagerInterfa
      */
     public function createPermission($name)
     {
-        $permission = new \yii\rbac\Permission();
+        $permission = new Permission();
         $permission->name = $name;
         return $permission;
     }
@@ -109,14 +109,14 @@ abstract class BaseManager extends Component implements \yii\rbac\ManagerInterfa
      */
     public function add($object)
     {
-        if ($object instanceof \yii\rbac\Item) {
+        if ($object instanceof Item) {
             if ($object->ruleName && $this->getRule($object->ruleName) === null) {
                 $rule = \Odigos\Yii::createObject($object->ruleName);
                 $rule->name = $object->ruleName;
                 $this->addRule($rule);
             }
             return $this->addItem($object);
-        } elseif ($object instanceof \yii\rbac\Rule) {
+        } elseif ($object instanceof Rule) {
             return $this->addRule($object);
         }
         throw new InvalidArgumentException('Adding unsupported object type.');
@@ -126,9 +126,9 @@ abstract class BaseManager extends Component implements \yii\rbac\ManagerInterfa
      */
     public function remove($object)
     {
-        if ($object instanceof \yii\rbac\Item) {
+        if ($object instanceof Item) {
             return $this->removeItem($object);
-        } elseif ($object instanceof \yii\rbac\Rule) {
+        } elseif ($object instanceof Rule) {
             return $this->removeRule($object);
         }
         throw new InvalidArgumentException('Removing unsupported object type.');
@@ -138,14 +138,14 @@ abstract class BaseManager extends Component implements \yii\rbac\ManagerInterfa
      */
     public function update($name, $object)
     {
-        if ($object instanceof \yii\rbac\Item) {
+        if ($object instanceof Item) {
             if ($object->ruleName && $this->getRule($object->ruleName) === null) {
                 $rule = \Odigos\Yii::createObject($object->ruleName);
                 $rule->name = $object->ruleName;
                 $this->addRule($rule);
             }
             return $this->updateItem($name, $object);
-        } elseif ($object instanceof \yii\rbac\Rule) {
+        } elseif ($object instanceof Rule) {
             return $this->updateRule($name, $object);
         }
         throw new InvalidArgumentException('Updating unsupported object type.');
@@ -156,7 +156,7 @@ abstract class BaseManager extends Component implements \yii\rbac\ManagerInterfa
     public function getRole($name)
     {
         $item = $this->getItem($name);
-        if ($item instanceof \yii\rbac\Item && $item->type == \yii\rbac\Item::TYPE_ROLE) {
+        if ($item instanceof Item && $item->type == Item::TYPE_ROLE) {
             /** @var Role $item */
             return $item;
         }
@@ -168,7 +168,7 @@ abstract class BaseManager extends Component implements \yii\rbac\ManagerInterfa
     public function getPermission($name)
     {
         $item = $this->getItem($name);
-        if ($item instanceof \yii\rbac\Item && $item->type == \yii\rbac\Item::TYPE_PERMISSION) {
+        if ($item instanceof Item && $item->type == Item::TYPE_PERMISSION) {
             /** @var Permission $item */
             return $item;
         }
@@ -179,7 +179,7 @@ abstract class BaseManager extends Component implements \yii\rbac\ManagerInterfa
      */
     public function getRoles()
     {
-        return $this->getItems(\yii\rbac\Item::TYPE_ROLE);
+        return $this->getItems(Item::TYPE_ROLE);
     }
     /**
      * Set default roles
@@ -229,7 +229,7 @@ abstract class BaseManager extends Component implements \yii\rbac\ManagerInterfa
      */
     public function getPermissions()
     {
-        return $this->getItems(\yii\rbac\Item::TYPE_PERMISSION);
+        return $this->getItems(Item::TYPE_PERMISSION);
     }
     /**
      * Executes the rule associated with the specified auth item.
@@ -250,7 +250,7 @@ abstract class BaseManager extends Component implements \yii\rbac\ManagerInterfa
             return \true;
         }
         $rule = $this->getRule($item->ruleName);
-        if ($rule instanceof \yii\rbac\Rule) {
+        if ($rule instanceof Rule) {
             return $rule->execute($user, $item, $params);
         }
         throw new InvalidConfigException("Rule not found: {$item->ruleName}");

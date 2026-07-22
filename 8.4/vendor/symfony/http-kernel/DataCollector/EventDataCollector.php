@@ -8,15 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpKernel\DataCollector;
+namespace Odigos\Symfony\Component\HttpKernel\DataCollector;
 
-use Symfony\Component\EventDispatcher\Debug\TraceableEventDispatcher;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\VarDumper\Cloner\Data;
-use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
-use Symfony\Contracts\Service\ResetInterface;
+use Odigos\Symfony\Component\EventDispatcher\Debug\TraceableEventDispatcher;
+use Odigos\Symfony\Component\HttpFoundation\Request;
+use Odigos\Symfony\Component\HttpFoundation\RequestStack;
+use Odigos\Symfony\Component\HttpFoundation\Response;
+use Odigos\Symfony\Component\VarDumper\Cloner\Data;
+use Odigos\Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Odigos\Symfony\Contracts\Service\ResetInterface;
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  *
@@ -24,7 +24,7 @@ use Symfony\Contracts\Service\ResetInterface;
  *
  * @final
  */
-class EventDataCollector extends \Symfony\Component\HttpKernel\DataCollector\DataCollector implements \Symfony\Component\HttpKernel\DataCollector\LateDataCollectorInterface
+class EventDataCollector extends DataCollector implements LateDataCollectorInterface
 {
     /** @var iterable<EventDispatcherInterface> */
     private iterable $dispatchers;

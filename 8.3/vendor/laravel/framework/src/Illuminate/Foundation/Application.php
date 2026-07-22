@@ -1,39 +1,39 @@
 <?php
 
-namespace Illuminate\Foundation;
+namespace Odigos\Illuminate\Foundation;
 
 use Closure;
 use Composer\Autoload\ClassLoader;
-use Illuminate\Container\Container;
-use Illuminate\Contracts\Console\Kernel as ConsoleKernelContract;
-use Illuminate\Contracts\Foundation\Application as ApplicationContract;
-use Illuminate\Contracts\Foundation\CachesConfiguration;
-use Illuminate\Contracts\Foundation\CachesRoutes;
-use Illuminate\Contracts\Foundation\MaintenanceMode as MaintenanceModeContract;
-use Illuminate\Contracts\Http\Kernel as HttpKernelContract;
-use Illuminate\Events\EventServiceProvider;
-use Illuminate\Filesystem\Filesystem;
-use Illuminate\Foundation\Bootstrap\LoadEnvironmentVariables;
-use Illuminate\Foundation\Events\LocaleUpdated;
-use Illuminate\Http\Request;
-use Illuminate\Log\Context\ContextServiceProvider;
-use Illuminate\Log\LogServiceProvider;
-use Illuminate\Routing\RoutingServiceProvider;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Env;
-use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Str;
-use Illuminate\Support\Traits\Macroable;
+use Odigos\Illuminate\Container\Container;
+use Odigos\Illuminate\Contracts\Console\Kernel as ConsoleKernelContract;
+use Odigos\Illuminate\Contracts\Foundation\Application as ApplicationContract;
+use Odigos\Illuminate\Contracts\Foundation\CachesConfiguration;
+use Odigos\Illuminate\Contracts\Foundation\CachesRoutes;
+use Odigos\Illuminate\Contracts\Foundation\MaintenanceMode as MaintenanceModeContract;
+use Odigos\Illuminate\Contracts\Http\Kernel as HttpKernelContract;
+use Odigos\Illuminate\Events\EventServiceProvider;
+use Odigos\Illuminate\Filesystem\Filesystem;
+use Odigos\Illuminate\Foundation\Bootstrap\LoadEnvironmentVariables;
+use Odigos\Illuminate\Foundation\Events\LocaleUpdated;
+use Odigos\Illuminate\Http\Request;
+use Odigos\Illuminate\Log\Context\ContextServiceProvider;
+use Odigos\Illuminate\Log\LogServiceProvider;
+use Odigos\Illuminate\Routing\RoutingServiceProvider;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Env;
+use Odigos\Illuminate\Support\ServiceProvider;
+use Odigos\Illuminate\Support\Str;
+use Odigos\Illuminate\Support\Traits\Macroable;
 use RuntimeException;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\ConsoleOutput;
-use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
-use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
-use Symfony\Component\HttpKernel\Exception\HttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
-use function Illuminate\Filesystem\join_paths;
+use Odigos\Symfony\Component\Console\Input\InputInterface;
+use Odigos\Symfony\Component\Console\Output\ConsoleOutput;
+use Odigos\Symfony\Component\HttpFoundation\Request as SymfonyRequest;
+use Odigos\Symfony\Component\HttpFoundation\Response as SymfonyResponse;
+use Odigos\Symfony\Component\HttpKernel\Exception\HttpException;
+use Odigos\Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Odigos\Symfony\Component\HttpKernel\HttpKernelInterface;
+use function Odigos\Illuminate\Filesystem\join_paths;
 class Application extends Container implements ApplicationContract, CachesConfiguration, CachesRoutes, HttpKernelInterface
 {
     use Macroable;
@@ -208,7 +208,7 @@ class Application extends Container implements ApplicationContract, CachesConfig
             is_string($basePath) => $basePath,
             default => static::inferBasePath(),
         };
-        return (new \Illuminate\Foundation\Configuration\ApplicationBuilder(new static($basePath)))->withKernels()->withEvents()->withCommands()->withProviders();
+        return (new Configuration\ApplicationBuilder(new static($basePath)))->withKernels()->withEvents()->withCommands()->withProviders();
     }
     /**
      * Infer the application's base directory from the environment.
@@ -242,8 +242,8 @@ class Application extends Container implements ApplicationContract, CachesConfig
         static::setInstance($this);
         $this->instance('app', $this);
         $this->instance(Container::class, $this);
-        $this->singleton(\Illuminate\Foundation\Mix::class);
-        $this->singleton(\Illuminate\Foundation\PackageManifest::class, fn() => new \Illuminate\Foundation\PackageManifest(new Filesystem(), $this->basePath(), $this->getCachedPackagesPath()));
+        $this->singleton(Mix::class);
+        $this->singleton(PackageManifest::class, fn() => new PackageManifest(new Filesystem(), $this->basePath(), $this->getCachedPackagesPath()));
     }
     /**
      * Register all of the base service providers.
@@ -267,8 +267,8 @@ class Application extends Container implements ApplicationContract, CachesConfig
         if (!laravel_cloud()) {
             return;
         }
-        $this['events']->listen('bootstrapping: *', fn($bootstrapper) => \Illuminate\Foundation\Cloud::bootstrapperBootstrapping($this, Str::after($bootstrapper, 'bootstrapping: ')));
-        $this['events']->listen('bootstrapped: *', fn($bootstrapper) => \Illuminate\Foundation\Cloud::bootstrapperBootstrapped($this, Str::after($bootstrapper, 'bootstrapped: ')));
+        $this['events']->listen('bootstrapping: *', fn($bootstrapper) => Cloud::bootstrapperBootstrapping($this, Str::after($bootstrapper, 'bootstrapping: ')));
+        $this['events']->listen('bootstrapped: *', fn($bootstrapper) => Cloud::bootstrapperBootstrapped($this, Str::after($bootstrapper, 'bootstrapped: ')));
     }
     /**
      * Run the given array of bootstrap classes.
@@ -662,7 +662,7 @@ class Application extends Container implements ApplicationContract, CachesConfig
     public function detectEnvironment(Closure $callback)
     {
         $args = $this->runningInConsole() && isset($_SERVER['argv']) ? $_SERVER['argv'] : null;
-        return $this['env'] = (new \Illuminate\Foundation\EnvironmentDetector())->detect($callback, $args);
+        return $this['env'] = (new EnvironmentDetector())->detect($callback, $args);
     }
     /**
      * Determine if the application is running in the console.
@@ -725,8 +725,8 @@ class Application extends Container implements ApplicationContract, CachesConfig
     public function registerConfiguredProviders()
     {
         $providers = (new Collection($this->make('config')->get('app.providers')))->partition(fn($provider) => str_starts_with($provider, 'Illuminate\\'));
-        $providers->splice(1, 0, [$this->make(\Illuminate\Foundation\PackageManifest::class)->providers()]);
-        (new \Illuminate\Foundation\ProviderRepository($this, new Filesystem(), $this->getCachedServicesPath()))->load($providers->collapse()->toArray());
+        $providers->splice(1, 0, [$this->make(PackageManifest::class)->providers()]);
+        (new ProviderRepository($this, new Filesystem(), $this->getCachedServicesPath()))->load($providers->collapse()->toArray());
         $this->fireAppCallbacks($this->registeredCallbacks);
     }
     /**
@@ -1313,7 +1313,7 @@ class Application extends Container implements ApplicationContract, CachesConfig
      */
     public function provideFacades($namespace)
     {
-        \Illuminate\Foundation\AliasLoader::setFacadeNamespace($namespace);
+        AliasLoader::setFacadeNamespace($namespace);
     }
     /**
      * Get the current application locale.
@@ -1383,7 +1383,7 @@ class Application extends Container implements ApplicationContract, CachesConfig
      */
     public function registerCoreContainerAliases()
     {
-        foreach (['app' => [self::class, \Illuminate\Contracts\Container\Container::class, \Illuminate\Contracts\Foundation\Application::class, \Psr\Container\ContainerInterface::class], 'auth' => [\Illuminate\Auth\AuthManager::class, \Illuminate\Contracts\Auth\Factory::class], 'auth.driver' => [\Illuminate\Contracts\Auth\Guard::class], 'auth.password' => [\Illuminate\Auth\Passwords\PasswordBrokerManager::class, \Illuminate\Contracts\Auth\PasswordBrokerFactory::class], 'auth.password.broker' => [\Illuminate\Auth\Passwords\PasswordBroker::class, \Illuminate\Contracts\Auth\PasswordBroker::class], 'blade.compiler' => [\Illuminate\View\Compilers\BladeCompiler::class], 'cache' => [\Illuminate\Cache\CacheManager::class, \Illuminate\Contracts\Cache\Factory::class], 'cache.store' => [\Illuminate\Cache\Repository::class, \Illuminate\Contracts\Cache\Repository::class, \Psr\SimpleCache\CacheInterface::class], 'cache.psr6' => [\Symfony\Component\Cache\Adapter\Psr16Adapter::class, \Symfony\Component\Cache\Adapter\AdapterInterface::class, \Psr\Cache\CacheItemPoolInterface::class], 'config' => [\Illuminate\Config\Repository::class, \Illuminate\Contracts\Config\Repository::class], 'cookie' => [\Illuminate\Cookie\CookieJar::class, \Illuminate\Contracts\Cookie\Factory::class, \Illuminate\Contracts\Cookie\QueueingFactory::class], 'db' => [\Illuminate\Database\DatabaseManager::class, \Illuminate\Database\ConnectionResolverInterface::class], 'db.connection' => [\Illuminate\Database\Connection::class, \Illuminate\Database\ConnectionInterface::class], 'db.schema' => [\Illuminate\Database\Schema\Builder::class], 'encrypter' => [\Illuminate\Encryption\Encrypter::class, \Illuminate\Contracts\Encryption\Encrypter::class, \Illuminate\Contracts\Encryption\StringEncrypter::class], 'events' => [\Illuminate\Events\Dispatcher::class, \Illuminate\Contracts\Events\Dispatcher::class], 'files' => [\Illuminate\Filesystem\Filesystem::class], 'filesystem' => [\Illuminate\Filesystem\FilesystemManager::class, \Illuminate\Contracts\Filesystem\Factory::class], 'filesystem.disk' => [\Illuminate\Contracts\Filesystem\Filesystem::class], 'filesystem.cloud' => [\Illuminate\Contracts\Filesystem\Cloud::class], 'hash' => [\Illuminate\Hashing\HashManager::class], 'hash.driver' => [\Illuminate\Contracts\Hashing\Hasher::class], 'log' => [\Illuminate\Log\LogManager::class, \Psr\Log\LoggerInterface::class], 'mail.manager' => [\Illuminate\Mail\MailManager::class, \Illuminate\Contracts\Mail\Factory::class], 'mailer' => [\Illuminate\Mail\Mailer::class, \Illuminate\Contracts\Mail\Mailer::class, \Illuminate\Contracts\Mail\MailQueue::class], 'queue' => [\Illuminate\Queue\QueueManager::class, \Illuminate\Contracts\Queue\Factory::class, \Illuminate\Contracts\Queue\Monitor::class], 'queue.connection' => [\Illuminate\Contracts\Queue\Queue::class], 'queue.failer' => [\Illuminate\Queue\Failed\FailedJobProviderInterface::class], 'redirect' => [\Illuminate\Routing\Redirector::class], 'redis' => [\Illuminate\Redis\RedisManager::class, \Illuminate\Contracts\Redis\Factory::class], 'redis.connection' => [\Illuminate\Redis\Connections\Connection::class, \Illuminate\Contracts\Redis\Connection::class], 'request' => [\Illuminate\Http\Request::class, \Symfony\Component\HttpFoundation\Request::class], 'router' => [\Illuminate\Routing\Router::class, \Illuminate\Contracts\Routing\Registrar::class, \Illuminate\Contracts\Routing\BindingRegistrar::class], 'session' => [\Illuminate\Session\SessionManager::class], 'session.store' => [\Illuminate\Session\Store::class, \Illuminate\Contracts\Session\Session::class], 'translator' => [\Illuminate\Translation\Translator::class, \Illuminate\Contracts\Translation\Translator::class], 'url' => [\Illuminate\Routing\UrlGenerator::class, \Illuminate\Contracts\Routing\UrlGenerator::class], 'validator' => [\Illuminate\Validation\Factory::class, \Illuminate\Contracts\Validation\Factory::class], 'view' => [\Illuminate\View\Factory::class, \Illuminate\Contracts\View\Factory::class]] as $key => $aliases) {
+        foreach (['app' => [self::class, \Odigos\Illuminate\Contracts\Container\Container::class, \Odigos\Illuminate\Contracts\Foundation\Application::class, \Psr\Container\ContainerInterface::class], 'auth' => [\Odigos\Illuminate\Auth\AuthManager::class, \Odigos\Illuminate\Contracts\Auth\Factory::class], 'auth.driver' => [\Odigos\Illuminate\Contracts\Auth\Guard::class], 'auth.password' => [\Odigos\Illuminate\Auth\Passwords\PasswordBrokerManager::class, \Odigos\Illuminate\Contracts\Auth\PasswordBrokerFactory::class], 'auth.password.broker' => [\Odigos\Illuminate\Auth\Passwords\PasswordBroker::class, \Odigos\Illuminate\Contracts\Auth\PasswordBroker::class], 'blade.compiler' => [\Odigos\Illuminate\View\Compilers\BladeCompiler::class], 'cache' => [\Odigos\Illuminate\Cache\CacheManager::class, \Odigos\Illuminate\Contracts\Cache\Factory::class], 'cache.store' => [\Odigos\Illuminate\Cache\Repository::class, \Odigos\Illuminate\Contracts\Cache\Repository::class, \Psr\SimpleCache\CacheInterface::class], 'cache.psr6' => [\Odigos\Symfony\Component\Cache\Adapter\Psr16Adapter::class, \Odigos\Symfony\Component\Cache\Adapter\AdapterInterface::class, \Psr\Cache\CacheItemPoolInterface::class], 'config' => [\Odigos\Illuminate\Config\Repository::class, \Odigos\Illuminate\Contracts\Config\Repository::class], 'cookie' => [\Odigos\Illuminate\Cookie\CookieJar::class, \Odigos\Illuminate\Contracts\Cookie\Factory::class, \Odigos\Illuminate\Contracts\Cookie\QueueingFactory::class], 'db' => [\Odigos\Illuminate\Database\DatabaseManager::class, \Odigos\Illuminate\Database\ConnectionResolverInterface::class], 'db.connection' => [\Odigos\Illuminate\Database\Connection::class, \Odigos\Illuminate\Database\ConnectionInterface::class], 'db.schema' => [\Odigos\Illuminate\Database\Schema\Builder::class], 'encrypter' => [\Odigos\Illuminate\Encryption\Encrypter::class, \Odigos\Illuminate\Contracts\Encryption\Encrypter::class, \Odigos\Illuminate\Contracts\Encryption\StringEncrypter::class], 'events' => [\Odigos\Illuminate\Events\Dispatcher::class, \Odigos\Illuminate\Contracts\Events\Dispatcher::class], 'files' => [\Odigos\Illuminate\Filesystem\Filesystem::class], 'filesystem' => [\Odigos\Illuminate\Filesystem\FilesystemManager::class, \Odigos\Illuminate\Contracts\Filesystem\Factory::class], 'filesystem.disk' => [\Odigos\Illuminate\Contracts\Filesystem\Filesystem::class], 'filesystem.cloud' => [\Odigos\Illuminate\Contracts\Filesystem\Cloud::class], 'hash' => [\Odigos\Illuminate\Hashing\HashManager::class], 'hash.driver' => [\Odigos\Illuminate\Contracts\Hashing\Hasher::class], 'log' => [\Odigos\Illuminate\Log\LogManager::class, \Psr\Log\LoggerInterface::class], 'mail.manager' => [\Odigos\Illuminate\Mail\MailManager::class, \Odigos\Illuminate\Contracts\Mail\Factory::class], 'mailer' => [\Odigos\Illuminate\Mail\Mailer::class, \Odigos\Illuminate\Contracts\Mail\Mailer::class, \Odigos\Illuminate\Contracts\Mail\MailQueue::class], 'queue' => [\Odigos\Illuminate\Queue\QueueManager::class, \Odigos\Illuminate\Contracts\Queue\Factory::class, \Odigos\Illuminate\Contracts\Queue\Monitor::class], 'queue.connection' => [\Odigos\Illuminate\Contracts\Queue\Queue::class], 'queue.failer' => [\Odigos\Illuminate\Queue\Failed\FailedJobProviderInterface::class], 'redirect' => [\Odigos\Illuminate\Routing\Redirector::class], 'redis' => [\Odigos\Illuminate\Redis\RedisManager::class, \Odigos\Illuminate\Contracts\Redis\Factory::class], 'redis.connection' => [\Odigos\Illuminate\Redis\Connections\Connection::class, \Odigos\Illuminate\Contracts\Redis\Connection::class], 'request' => [\Odigos\Illuminate\Http\Request::class, \Odigos\Symfony\Component\HttpFoundation\Request::class], 'router' => [\Odigos\Illuminate\Routing\Router::class, \Odigos\Illuminate\Contracts\Routing\Registrar::class, \Odigos\Illuminate\Contracts\Routing\BindingRegistrar::class], 'session' => [\Odigos\Illuminate\Session\SessionManager::class], 'session.store' => [\Odigos\Illuminate\Session\Store::class, \Odigos\Illuminate\Contracts\Session\Session::class], 'translator' => [\Odigos\Illuminate\Translation\Translator::class, \Odigos\Illuminate\Contracts\Translation\Translator::class], 'url' => [\Odigos\Illuminate\Routing\UrlGenerator::class, \Odigos\Illuminate\Contracts\Routing\UrlGenerator::class], 'validator' => [\Odigos\Illuminate\Validation\Factory::class, \Odigos\Illuminate\Contracts\Validation\Factory::class], 'view' => [\Odigos\Illuminate\View\Factory::class, \Odigos\Illuminate\Contracts\View\Factory::class]] as $key => $aliases) {
             foreach ($aliases as $alias) {
                 $this->alias($key, $alias);
             }

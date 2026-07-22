@@ -14,6 +14,8 @@ RUN for v in ${PHP_VERSIONS}; do \
     rm -rf ./$v/bin; \
     mkdir -p /instrumentations/php/$v; \
     mv ./$v/* /instrumentations/php/$v/; \
+    cp ./_helpers/odigos_autoload.php /instrumentations/php/$v/odigos_autoload.php; \
+    cp ./_helpers/CustomInstrumentation.php /instrumentations/php/$v/CustomInstrumentation.php; \
     done
 
 FROM scratch

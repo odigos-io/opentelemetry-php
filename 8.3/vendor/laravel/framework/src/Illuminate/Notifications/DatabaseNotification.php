@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Notifications;
+namespace Odigos\Illuminate\Notifications;
 
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\HasCollection;
-use Illuminate\Database\Eloquent\Model;
+use Odigos\Illuminate\Database\Eloquent\Builder;
+use Odigos\Illuminate\Database\Eloquent\HasCollection;
+use Odigos\Illuminate\Database\Eloquent\Model;
 class DatabaseNotification extends Model
 {
     /** @use HasCollection<DatabaseNotificationCollection> */
@@ -42,7 +42,7 @@ class DatabaseNotification extends Model
     /**
      * The type of collection that should be used for the model.
      */
-    protected static string $collectionClass = \Illuminate\Notifications\DatabaseNotificationCollection::class;
+    protected static string $collectionClass = DatabaseNotificationCollection::class;
     /**
      * Get the notifiable entity that the notification belongs to.
      *

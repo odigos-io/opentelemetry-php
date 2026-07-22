@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\Inflector\Rules\Italian;
+namespace Odigos\Doctrine\Inflector\Rules\Italian;
 
-use Doctrine\Inflector\Rules\Pattern;
+use Odigos\Doctrine\Inflector\Rules\Pattern;
 final class Uninflected
 {
     /** @return iterable<Pattern> */

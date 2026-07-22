@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenAI\Testing\Responses\Fixtures\Embeddings;
+namespace Odigos\OpenAI\Testing\Responses\Fixtures\Embeddings;
 
 final class CreateResponseFixture
 {

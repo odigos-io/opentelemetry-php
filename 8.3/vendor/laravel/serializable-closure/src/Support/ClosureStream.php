@@ -1,6 +1,6 @@
 <?php
 
-namespace Laravel\SerializableClosure\Support;
+namespace Odigos\Laravel\SerializableClosure\Support;
 
 #[\AllowDynamicProperties]
 class ClosureStream

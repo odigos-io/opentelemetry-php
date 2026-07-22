@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Routing;
+namespace Odigos\Symfony\Component\Routing;
 
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Routing\Matcher\UrlMatcherInterface;
+use Odigos\Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Odigos\Symfony\Component\Routing\Matcher\UrlMatcherInterface;
 /**
  * RouterInterface is the interface that all Router classes must implement.
  *
@@ -27,5 +27,5 @@ interface RouterInterface extends UrlMatcherInterface, UrlGeneratorInterface
      * WARNING: This method should never be used at runtime as it is SLOW.
      *          You might use it in a cache warmer though.
      */
-    public function getRouteCollection(): \Symfony\Component\Routing\RouteCollection;
+    public function getRouteCollection(): RouteCollection;
 }

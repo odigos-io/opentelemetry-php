@@ -1,31 +1,31 @@
 <?php
 
-namespace Illuminate\Validation;
+namespace Odigos\Illuminate\Validation;
 
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Traits\Macroable;
-use Illuminate\Validation\Rules\AnyOf;
-use Illuminate\Validation\Rules\ArrayRule;
-use Illuminate\Validation\Rules\Can;
-use Illuminate\Validation\Rules\Date;
-use Illuminate\Validation\Rules\Dimensions;
-use Illuminate\Validation\Rules\Email;
-use Illuminate\Validation\Rules\Enum;
-use Illuminate\Validation\Rules\ExcludeIf;
-use Illuminate\Validation\Rules\ExcludeUnless;
-use Illuminate\Validation\Rules\Exists;
-use Illuminate\Validation\Rules\File;
-use Illuminate\Validation\Rules\ImageFile;
-use Illuminate\Validation\Rules\In;
-use Illuminate\Validation\Rules\NotIn;
-use Illuminate\Validation\Rules\Numeric;
-use Illuminate\Validation\Rules\ProhibitedIf;
-use Illuminate\Validation\Rules\ProhibitedUnless;
-use Illuminate\Validation\Rules\RequiredIf;
-use Illuminate\Validation\Rules\RequiredUnless;
-use Illuminate\Validation\Rules\StringRule;
-use Illuminate\Validation\Rules\Unique;
+use Odigos\Illuminate\Contracts\Support\Arrayable;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Traits\Macroable;
+use Odigos\Illuminate\Validation\Rules\AnyOf;
+use Odigos\Illuminate\Validation\Rules\ArrayRule;
+use Odigos\Illuminate\Validation\Rules\Can;
+use Odigos\Illuminate\Validation\Rules\Date;
+use Odigos\Illuminate\Validation\Rules\Dimensions;
+use Odigos\Illuminate\Validation\Rules\Email;
+use Odigos\Illuminate\Validation\Rules\Enum;
+use Odigos\Illuminate\Validation\Rules\ExcludeIf;
+use Odigos\Illuminate\Validation\Rules\ExcludeUnless;
+use Odigos\Illuminate\Validation\Rules\Exists;
+use Odigos\Illuminate\Validation\Rules\File;
+use Odigos\Illuminate\Validation\Rules\ImageFile;
+use Odigos\Illuminate\Validation\Rules\In;
+use Odigos\Illuminate\Validation\Rules\NotIn;
+use Odigos\Illuminate\Validation\Rules\Numeric;
+use Odigos\Illuminate\Validation\Rules\ProhibitedIf;
+use Odigos\Illuminate\Validation\Rules\ProhibitedUnless;
+use Odigos\Illuminate\Validation\Rules\RequiredIf;
+use Odigos\Illuminate\Validation\Rules\RequiredUnless;
+use Odigos\Illuminate\Validation\Rules\StringRule;
+use Odigos\Illuminate\Validation\Rules\Unique;
 class Rule
 {
     use Macroable;
@@ -50,7 +50,7 @@ class Rule
      */
     public static function when($condition, $rules, $defaultRules = [])
     {
-        return new \Illuminate\Validation\ConditionalRules($condition, $rules, $defaultRules);
+        return new ConditionalRules($condition, $rules, $defaultRules);
     }
     /**
      * Apply the given rules if the given condition is falsy.
@@ -62,7 +62,7 @@ class Rule
      */
     public static function unless($condition, $rules, $defaultRules = [])
     {
-        return new \Illuminate\Validation\ConditionalRules($condition, $defaultRules, $rules);
+        return new ConditionalRules($condition, $defaultRules, $rules);
     }
     /**
      * Get an array rule builder instance.
@@ -82,7 +82,7 @@ class Rule
      */
     public static function forEach($callback)
     {
-        return new \Illuminate\Validation\NestedRules($callback);
+        return new NestedRules($callback);
     }
     /**
      * Get a unique constraint builder instance.
@@ -297,7 +297,7 @@ class Rule
         if ($values instanceof Arrayable) {
             $values = $values->toArray();
         }
-        return new \Illuminate\Validation\Rules\Contains(is_array($values) ? $values : func_get_args());
+        return new Rules\Contains(is_array($values) ? $values : func_get_args());
     }
     /**
      * Get a "does not contain" rule builder instance.
@@ -310,7 +310,7 @@ class Rule
         if ($values instanceof Arrayable) {
             $values = $values->toArray();
         }
-        return new \Illuminate\Validation\Rules\DoesntContain(is_array($values) ? $values : func_get_args());
+        return new Rules\DoesntContain(is_array($values) ? $values : func_get_args());
     }
     /**
      * Compile a set of rules for an attribute.
@@ -322,7 +322,7 @@ class Rule
      */
     public static function compile($attribute, $rules, $data = null)
     {
-        $parser = new \Illuminate\Validation\ValidationRuleParser(Arr::undot(Arr::wrap($data)));
+        $parser = new ValidationRuleParser(Arr::undot(Arr::wrap($data)));
         if (is_array($rules) && !array_is_list($rules)) {
             $nested = [];
             foreach ($rules as $key => $rule) {
@@ -332,6 +332,6 @@ class Rule
         } else {
             $rules = [$attribute => $rules];
         }
-        return $parser->explode(\Illuminate\Validation\ValidationRuleParser::filterConditionalRules($rules, $data));
+        return $parser->explode(ValidationRuleParser::filterConditionalRules($rules, $data));
     }
 }

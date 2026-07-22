@@ -1,14 +1,14 @@
 <?php
 
-namespace Illuminate\Foundation\Console;
+namespace Odigos\Illuminate\Foundation\Console;
 
-use Illuminate\Foundation\Concerns\ResolvesDumpSource;
-use Symfony\Component\Console\Output\ConsoleOutput;
-use Symfony\Component\VarDumper\Caster\ReflectionCaster;
-use Symfony\Component\VarDumper\Cloner\Data;
-use Symfony\Component\VarDumper\Cloner\VarCloner;
-use Symfony\Component\VarDumper\Dumper\CliDumper as BaseCliDumper;
-use Symfony\Component\VarDumper\VarDumper;
+use Odigos\Illuminate\Foundation\Concerns\ResolvesDumpSource;
+use Odigos\Symfony\Component\Console\Output\ConsoleOutput;
+use Odigos\Symfony\Component\VarDumper\Caster\ReflectionCaster;
+use Odigos\Symfony\Component\VarDumper\Cloner\Data;
+use Odigos\Symfony\Component\VarDumper\Cloner\VarCloner;
+use Odigos\Symfony\Component\VarDumper\Dumper\CliDumper as BaseCliDumper;
+use Odigos\Symfony\Component\VarDumper\VarDumper;
 class CliDumper extends BaseCliDumper
 {
     use ResolvesDumpSource;

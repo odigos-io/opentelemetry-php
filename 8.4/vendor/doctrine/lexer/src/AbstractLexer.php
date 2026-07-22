@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\Common\Lexer;
+namespace Odigos\Doctrine\Common\Lexer;
 
 use ReflectionClass;
 use UnitEnum;
@@ -43,13 +43,13 @@ abstract class AbstractLexer
      *
      * @var Token<T, V>|null
      */
-    public \Doctrine\Common\Lexer\Token|null $lookahead;
+    public Token|null $lookahead;
     /**
      * The last matched/seen token.
      *
      * @var Token<T, V>|null
      */
-    public \Doctrine\Common\Lexer\Token|null $token;
+    public Token|null $token;
     /**
      * Composed regex for input parsing.
      *
@@ -221,7 +221,7 @@ abstract class AbstractLexer
             // Must remain before 'value' assignment since it can change content
             $firstMatch = $match[0];
             $type = $this->getType($firstMatch);
-            $this->tokens[] = new \Doctrine\Common\Lexer\Token($firstMatch, $type, $match[1]);
+            $this->tokens[] = new Token($firstMatch, $type, $match[1]);
         }
     }
     /**

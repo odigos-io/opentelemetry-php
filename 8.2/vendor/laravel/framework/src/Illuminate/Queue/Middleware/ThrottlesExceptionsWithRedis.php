@@ -1,14 +1,14 @@
 <?php
 
-namespace Illuminate\Queue\Middleware;
+namespace Odigos\Illuminate\Queue\Middleware;
 
-use Illuminate\Container\Container;
-use Illuminate\Contracts\Redis\Connection;
-use Illuminate\Contracts\Redis\Factory as Redis;
-use Illuminate\Redis\Limiters\DurationLimiter;
-use Illuminate\Support\InteractsWithTime;
+use Odigos\Illuminate\Container\Container;
+use Odigos\Illuminate\Contracts\Redis\Connection;
+use Odigos\Illuminate\Contracts\Redis\Factory as Redis;
+use Odigos\Illuminate\Redis\Limiters\DurationLimiter;
+use Odigos\Illuminate\Support\InteractsWithTime;
 use Throwable;
-class ThrottlesExceptionsWithRedis extends \Illuminate\Queue\Middleware\ThrottlesExceptions
+class ThrottlesExceptionsWithRedis extends ThrottlesExceptions
 {
     use InteractsWithTime;
     /**

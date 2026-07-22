@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Support;
+namespace Odigos\Illuminate\Support;
 
 use Closure;
 use InvalidArgumentException;
@@ -114,7 +114,7 @@ abstract class MultipleInstanceManager
             if (method_exists($this, $createMethod)) {
                 return $this->{$createMethod}($config);
             }
-            $createMethod = 'create' . \Illuminate\Support\Str::studly($driverName) . ucfirst($this->driverKey);
+            $createMethod = 'create' . Str::studly($driverName) . ucfirst($this->driverKey);
             if (method_exists($this, $createMethod)) {
                 return $this->{$createMethod}($config);
             }

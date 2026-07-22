@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Mail;
+namespace Odigos\Illuminate\Mail;
 
-use Illuminate\Support\Traits\ForwardsCalls;
+use Odigos\Illuminate\Support\Traits\ForwardsCalls;
 /**
  * @mixin \Illuminate\Mail\Message
  */

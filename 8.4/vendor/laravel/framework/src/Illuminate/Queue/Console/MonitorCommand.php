@@ -1,14 +1,14 @@
 <?php
 
-namespace Illuminate\Queue\Console;
+namespace Odigos\Illuminate\Queue\Console;
 
-use Illuminate\Console\Command;
-use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Contracts\Queue\Factory;
-use Illuminate\Queue\Events\QueueBusy;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Collection;
-use Symfony\Component\Console\Attribute\AsCommand;
+use Odigos\Illuminate\Console\Command;
+use Odigos\Illuminate\Contracts\Events\Dispatcher;
+use Odigos\Illuminate\Contracts\Queue\Factory;
+use Odigos\Illuminate\Queue\Events\QueueBusy;
+use Odigos\Illuminate\Support\Carbon;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Symfony\Component\Console\Attribute\AsCommand;
 #[AsCommand(name: 'queue:monitor')]
 class MonitorCommand extends Command
 {

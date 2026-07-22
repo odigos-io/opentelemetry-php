@@ -5,14 +5,14 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\web;
+namespace Odigos\yii\web;
 
 use Odigos\Yii;
-use yii\base\Component;
-use yii\base\InvalidConfigException;
-use yii\caching\CacheInterface;
-use yii\di\Instance;
-use yii\helpers\Url;
+use Odigos\yii\base\Component;
+use Odigos\yii\base\InvalidConfigException;
+use Odigos\yii\caching\CacheInterface;
+use Odigos\yii\di\Instance;
+use Odigos\yii\helpers\Url;
 /**
  * UrlManager handles HTTP request parsing and creation of URLs based on a set of rules.
  *
@@ -136,7 +136,7 @@ class UrlManager extends Component
      * @var array the default configuration of URL rules. Individual rule configurations
      * specified via [[rules]] will take precedence when the same property of the rule is configured.
      */
-    public $ruleConfig = ['class' => 'yii\web\UrlRule'];
+    public $ruleConfig = ['class' => 'Odigos\yii\web\UrlRule'];
     /**
      * @var UrlNormalizer|array|string|false the configuration for [[UrlNormalizer]] used by this UrlManager.
      * The default value is `false`, which means normalization will be skipped.
@@ -171,8 +171,8 @@ class UrlManager extends Component
         parent::init();
         if ($this->normalizer !== \false) {
             $this->normalizer = Yii::createObject($this->normalizer);
-            if (!$this->normalizer instanceof \yii\web\UrlNormalizer) {
-                throw new InvalidConfigException('`' . get_class($this) . '::normalizer` should be an instance of `' . \yii\web\UrlNormalizer::className() . '` or its DI compatible configuration.');
+            if (!$this->normalizer instanceof UrlNormalizer) {
+                throw new InvalidConfigException('`' . get_class($this) . '::normalizer` should be an instance of `' . UrlNormalizer::className() . '` or its DI compatible configuration.');
             }
         }
         if (!$this->enablePrettyUrl) {
@@ -234,7 +234,7 @@ class UrlManager extends Component
             if (is_array($rule)) {
                 $rule = Yii::createObject(array_merge($this->ruleConfig, $rule));
             }
-            if (!$rule instanceof \yii\web\UrlRuleInterface) {
+            if (!$rule instanceof UrlRuleInterface) {
                 throw new InvalidConfigException('URL rule class must implement UrlRuleInterface.');
             }
             $builtRules[] = $rule;
@@ -249,7 +249,7 @@ class UrlManager extends Component
     {
         if (!$this->cache instanceof CacheInterface && $this->cache !== \false && $this->cache !== null) {
             try {
-                $this->cache = Instance::ensure($this->cache, 'yii\caching\CacheInterface');
+                $this->cache = Instance::ensure($this->cache, 'Odigos\yii\caching\CacheInterface');
             } catch (InvalidConfigException $e) {
                 Yii::warning('Unable to use cache for URL manager: ' . $e->getMessage());
                 $this->cache = null;
@@ -448,9 +448,9 @@ class UrlManager extends Component
      * @see setRuleToCache()
      * @see UrlRule::getCreateUrlStatus()
      */
-    protected function canBeCached(\yii\web\UrlRuleInterface $rule)
+    protected function canBeCached(UrlRuleInterface $rule)
     {
-        return !method_exists($rule, 'getCreateUrlStatus') || ($status = $rule->getCreateUrlStatus()) === null || $status === \yii\web\UrlRule::CREATE_STATUS_SUCCESS || $status & \yii\web\UrlRule::CREATE_STATUS_PARAMS_MISMATCH;
+        return !method_exists($rule, 'getCreateUrlStatus') || ($status = $rule->getCreateUrlStatus()) === null || $status === UrlRule::CREATE_STATUS_SUCCESS || $status & UrlRule::CREATE_STATUS_PARAMS_MISMATCH;
     }
     /**
      * Get URL from internal cache if exists.
@@ -481,7 +481,7 @@ class UrlManager extends Component
      * @param UrlRuleInterface $rule
      * @since 2.0.8
      */
-    protected function setRuleToCache($cacheKey, \yii\web\UrlRuleInterface $rule)
+    protected function setRuleToCache($cacheKey, UrlRuleInterface $rule)
     {
         $this->_ruleCache[$cacheKey][] = $rule;
     }
@@ -526,7 +526,7 @@ class UrlManager extends Component
     {
         if ($this->_baseUrl === null) {
             $request = Yii::$app->getRequest();
-            if ($request instanceof \yii\web\Request) {
+            if ($request instanceof Request) {
                 $this->_baseUrl = $request->getBaseUrl();
             } else {
                 throw new InvalidConfigException('Please configure UrlManager::baseUrl correctly as you are running a console application.');
@@ -554,7 +554,7 @@ class UrlManager extends Component
     {
         if ($this->_scriptUrl === null) {
             $request = Yii::$app->getRequest();
-            if ($request instanceof \yii\web\Request) {
+            if ($request instanceof Request) {
                 $this->_scriptUrl = $request->getScriptUrl();
             } else {
                 throw new InvalidConfigException('Please configure UrlManager::scriptUrl correctly as you are running a console application.');
@@ -580,7 +580,7 @@ class UrlManager extends Component
     {
         if ($this->_hostInfo === null) {
             $request = Yii::$app->getRequest();
-            if ($request instanceof \yii\web\Request) {
+            if ($request instanceof \Odigos\yii\web\Request) {
                 $this->_hostInfo = $request->getHostInfo();
             } else {
                 throw new InvalidConfigException('Please configure UrlManager::hostInfo correctly as you are running a console application.');

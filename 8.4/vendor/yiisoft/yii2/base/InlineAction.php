@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\base;
+namespace Odigos\yii\base;
 
 use Odigos\Yii;
 /**
@@ -22,7 +22,7 @@ use Odigos\Yii;
  * @template T of Controller = Controller
  * @extends Action<T>
  */
-class InlineAction extends \yii\base\Action
+class InlineAction extends Action
 {
     /**
      * @var string the controller method that this inline action is associated with

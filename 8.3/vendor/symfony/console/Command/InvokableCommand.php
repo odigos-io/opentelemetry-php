@@ -8,22 +8,22 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Console\Command;
+namespace Odigos\Symfony\Component\Console\Command;
 
-use Symfony\Component\Console\Application;
-use Symfony\Component\Console\Attribute\Argument;
-use Symfony\Component\Console\Attribute\Interact;
-use Symfony\Component\Console\Attribute\MapInput;
-use Symfony\Component\Console\Attribute\Option;
-use Symfony\Component\Console\Cursor;
-use Symfony\Component\Console\Exception\LogicException;
-use Symfony\Component\Console\Exception\RuntimeException;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputDefinition;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Interaction\Interaction;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
+use Odigos\Symfony\Component\Console\Application;
+use Odigos\Symfony\Component\Console\Attribute\Argument;
+use Odigos\Symfony\Component\Console\Attribute\Interact;
+use Odigos\Symfony\Component\Console\Attribute\MapInput;
+use Odigos\Symfony\Component\Console\Attribute\Option;
+use Odigos\Symfony\Component\Console\Cursor;
+use Odigos\Symfony\Component\Console\Exception\LogicException;
+use Odigos\Symfony\Component\Console\Exception\RuntimeException;
+use Odigos\Symfony\Component\Console\Input\InputArgument;
+use Odigos\Symfony\Component\Console\Input\InputDefinition;
+use Odigos\Symfony\Component\Console\Input\InputInterface;
+use Odigos\Symfony\Component\Console\Interaction\Interaction;
+use Odigos\Symfony\Component\Console\Output\OutputInterface;
+use Odigos\Symfony\Component\Console\Style\SymfonyStyle;
 /**
  * Represents an invokable command.
  *
@@ -31,9 +31,9 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  *
  * @internal
  */
-class InvokableCommand implements \Symfony\Component\Console\Command\SignalableCommandInterface
+class InvokableCommand implements SignalableCommandInterface
 {
-    private readonly ?\Symfony\Component\Console\Command\SignalableCommandInterface $signalableCommand;
+    private readonly ?SignalableCommandInterface $signalableCommand;
     private readonly \ReflectionFunction $invokable;
     /**
      * @var list<Interaction>|null
@@ -41,10 +41,10 @@ class InvokableCommand implements \Symfony\Component\Console\Command\SignalableC
     private ?array $interactions = null;
     private bool $triggerDeprecations = \false;
     private $code;
-    public function __construct(private readonly \Symfony\Component\Console\Command\Command $command, callable $code)
+    public function __construct(private readonly Command $command, callable $code)
     {
         $this->code = $code;
-        $this->signalableCommand = $code instanceof \Symfony\Component\Console\Command\SignalableCommandInterface ? $code : null;
+        $this->signalableCommand = $code instanceof SignalableCommandInterface ? $code : null;
         $this->invokable = new \ReflectionFunction($this->getClosure($code));
     }
     /**

@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Queue\Jobs;
+namespace Odigos\Illuminate\Queue\Jobs;
 
-use Illuminate\Support\InteractsWithTime;
+use Odigos\Illuminate\Support\InteractsWithTime;
 class DatabaseJobRecord
 {
     use InteractsWithTime;

@@ -14,10 +14,10 @@ declare (strict_types=1);
  * @since         1.3.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Routing\Route;
+namespace Odigos\Cake\Routing\Route;
 
-use Cake\Core\Exception\CakeException;
-use Cake\Http\Exception\BadRequestException;
+use Odigos\Cake\Core\Exception\CakeException;
+use Odigos\Cake\Http\Exception\BadRequestException;
 use InvalidArgumentException;
 use Psr\Http\Message\ServerRequestInterface;
 /**

@@ -14,13 +14,13 @@ declare (strict_types=1);
  * @since         4.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Console;
+namespace Odigos\Cake\Console;
 
-use Cake\Console\Exception\ConsoleException;
-use Cake\Console\Exception\StopException;
-use Cake\Event\EventDispatcherInterface;
-use Cake\Event\EventDispatcherTrait;
-use Cake\Utility\Inflector;
+use Odigos\Cake\Console\Exception\ConsoleException;
+use Odigos\Cake\Console\Exception\StopException;
+use Odigos\Cake\Event\EventDispatcherInterface;
+use Odigos\Cake\Event\EventDispatcherTrait;
+use Odigos\Cake\Utility\Inflector;
 /**
  * Base class for console commands.
  *
@@ -32,7 +32,7 @@ use Cake\Utility\Inflector;
  *
  * @implements \Cake\Event\EventDispatcherInterface<\Cake\Command\Command>
  */
-abstract class BaseCommand implements \Cake\Console\CommandInterface, EventDispatcherInterface
+abstract class BaseCommand implements CommandInterface, EventDispatcherInterface
 {
     /**
      * @use \Cake\Event\EventDispatcherTrait<\Cake\Command\Command>
@@ -44,13 +44,13 @@ abstract class BaseCommand implements \Cake\Console\CommandInterface, EventDispa
      * @var string
      */
     protected string $name = 'cake unknown';
-    protected ?\Cake\Console\CommandFactoryInterface $factory = null;
+    protected ?CommandFactoryInterface $factory = null;
     /**
      * Constructor
      *
      * @param \Cake\Console\CommandFactoryInterface|null $factory Command factory instance.
      */
-    public function __construct(?\Cake\Console\CommandFactoryInterface $factory = null)
+    public function __construct(?CommandFactoryInterface $factory = null)
     {
         $this->factory = $factory;
     }
@@ -114,10 +114,10 @@ abstract class BaseCommand implements \Cake\Console\CommandInterface, EventDispa
      * @return \Cake\Console\ConsoleOptionParser
      * @throws \Cake\Core\Exception\CakeException When the parser is invalid
      */
-    public function getOptionParser(): \Cake\Console\ConsoleOptionParser
+    public function getOptionParser(): ConsoleOptionParser
     {
         [$root, $name] = explode(' ', $this->name, 2);
-        $parser = new \Cake\Console\ConsoleOptionParser($name);
+        $parser = new ConsoleOptionParser($name);
         $parser->setRootName($root);
         $parser->setDescription(static::getDescription());
         return $this->buildOptionParser($parser);
@@ -128,7 +128,7 @@ abstract class BaseCommand implements \Cake\Console\CommandInterface, EventDispa
      * @param \Cake\Console\ConsoleOptionParser $parser The parser to be defined
      * @return \Cake\Console\ConsoleOptionParser The built parser.
      */
-    protected function buildOptionParser(\Cake\Console\ConsoleOptionParser $parser): \Cake\Console\ConsoleOptionParser
+    protected function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
     {
         return $parser;
     }
@@ -147,13 +147,13 @@ abstract class BaseCommand implements \Cake\Console\CommandInterface, EventDispa
     /**
      * @inheritDoc
      */
-    public function run(array $argv, \Cake\Console\ConsoleIo $io): ?int
+    public function run(array $argv, ConsoleIo $io): ?int
     {
         $this->initialize();
         $parser = $this->getOptionParser();
         try {
             [$options, $arguments] = $parser->parse($argv, $io);
-            $args = new \Cake\Console\Arguments($arguments, $options, $parser->argumentNames());
+            $args = new Arguments($arguments, $options, $parser->argumentNames());
         } catch (ConsoleException $e) {
             $io->err('Error: ' . $e->getMessage());
             return static::CODE_ERROR;
@@ -180,12 +180,12 @@ abstract class BaseCommand implements \Cake\Console\CommandInterface, EventDispa
      * @param \Cake\Console\ConsoleIo $io The console io
      * @return void
      */
-    protected function displayHelp(\Cake\Console\ConsoleOptionParser $parser, \Cake\Console\Arguments $args, \Cake\Console\ConsoleIo $io): void
+    protected function displayHelp(ConsoleOptionParser $parser, Arguments $args, ConsoleIo $io): void
     {
         $format = 'text';
         if ($args->getArgumentAt(0) === 'xml') {
             $format = 'xml';
-            $io->setOutputAs(\Cake\Console\ConsoleOutput::RAW);
+            $io->setOutputAs(ConsoleOutput::RAW);
         }
         $io->out($parser->help($format));
     }
@@ -196,16 +196,16 @@ abstract class BaseCommand implements \Cake\Console\CommandInterface, EventDispa
      * @param \Cake\Console\ConsoleIo $io The console io
      * @return void
      */
-    protected function setOutputLevel(\Cake\Console\Arguments $args, \Cake\Console\ConsoleIo $io): void
+    protected function setOutputLevel(Arguments $args, ConsoleIo $io): void
     {
-        $io->setLoggers(\Cake\Console\ConsoleIo::NORMAL);
+        $io->setLoggers(ConsoleIo::NORMAL);
         if ($args->getOption('quiet')) {
-            $io->level(\Cake\Console\ConsoleIo::QUIET);
-            $io->setLoggers(\Cake\Console\ConsoleIo::QUIET);
+            $io->level(ConsoleIo::QUIET);
+            $io->setLoggers(ConsoleIo::QUIET);
         }
         if ($args->getOption('verbose')) {
-            $io->level(\Cake\Console\ConsoleIo::VERBOSE);
-            $io->setLoggers(\Cake\Console\ConsoleIo::VERBOSE);
+            $io->level(ConsoleIo::VERBOSE);
+            $io->setLoggers(ConsoleIo::VERBOSE);
         }
     }
     /**
@@ -215,7 +215,7 @@ abstract class BaseCommand implements \Cake\Console\CommandInterface, EventDispa
      * @param \Cake\Console\ConsoleIo $io The console io
      * @return int|null|void The exit code or null for success
      */
-    abstract public function execute(\Cake\Console\Arguments $args, \Cake\Console\ConsoleIo $io);
+    abstract public function execute(Arguments $args, ConsoleIo $io);
     /**
      * Halt the current process with a StopException.
      *
@@ -239,13 +239,13 @@ abstract class BaseCommand implements \Cake\Console\CommandInterface, EventDispa
      * @param \Cake\Console\ConsoleIo|null $io The ConsoleIo instance to use for the executed command.
      * @return int|null The exit code or null for success of the command.
      */
-    public function executeCommand(\Cake\Console\CommandInterface|string $command, array $args = [], ?\Cake\Console\ConsoleIo $io = null): ?int
+    public function executeCommand(CommandInterface|string $command, array $args = [], ?ConsoleIo $io = null): ?int
     {
         if (is_string($command)) {
-            assert(is_subclass_of($command, \Cake\Console\CommandInterface::class), sprintf('Command `%s` is not a subclass of `%s`.', $command, \Cake\Console\CommandInterface::class));
+            assert(is_subclass_of($command, CommandInterface::class), sprintf('Command `%s` is not a subclass of `%s`.', $command, CommandInterface::class));
             $command = $this->factory?->create($command) ?? new $command();
         }
-        $io = $io ?: new \Cake\Console\ConsoleIo();
+        $io = $io ?: new ConsoleIo();
         try {
             return $command->run($args, $io);
         } catch (StopException $e) {

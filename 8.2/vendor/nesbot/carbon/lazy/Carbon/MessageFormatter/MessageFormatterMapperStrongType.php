@@ -10,7 +10,7 @@
  */
 namespace Odigos\Carbon\MessageFormatter;
 
-use Symfony\Component\Translation\Formatter\MessageFormatterInterface;
+use Odigos\Symfony\Component\Translation\Formatter\MessageFormatterInterface;
 if (!class_exists(LazyMessageFormatter::class, \false)) {
     abstract class LazyMessageFormatter implements MessageFormatterInterface
     {

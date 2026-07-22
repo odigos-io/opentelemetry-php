@@ -16,6 +16,6 @@ namespace Odigos;
  * @since         5.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-use Cake\Datasource\FactoryLocator;
-use Cake\ORM\Locator\TableLocator;
+use Odigos\Cake\Datasource\FactoryLocator;
+use Odigos\Cake\ORM\Locator\TableLocator;
 FactoryLocator::add('Table', new TableLocator());

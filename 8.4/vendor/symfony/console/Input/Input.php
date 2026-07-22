@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Console\Input;
+namespace Odigos\Symfony\Component\Console\Input;
 
-use Symfony\Component\Console\Exception\InvalidArgumentException;
-use Symfony\Component\Console\Exception\RuntimeException;
+use Odigos\Symfony\Component\Console\Exception\InvalidArgumentException;
+use Odigos\Symfony\Component\Console\Exception\RuntimeException;
 /**
  * Input is the base class for all concrete Input classes.
  *
@@ -23,24 +23,24 @@ use Symfony\Component\Console\Exception\RuntimeException;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-abstract class Input implements \Symfony\Component\Console\Input\InputInterface, \Symfony\Component\Console\Input\StreamableInputInterface
+abstract class Input implements InputInterface, StreamableInputInterface
 {
-    protected \Symfony\Component\Console\Input\InputDefinition $definition;
+    protected InputDefinition $definition;
     /** @var resource */
     protected $stream;
     protected array $options = [];
     protected array $arguments = [];
     protected bool $interactive = \true;
-    public function __construct(?\Symfony\Component\Console\Input\InputDefinition $definition = null)
+    public function __construct(?InputDefinition $definition = null)
     {
         if (null === $definition) {
-            $this->definition = new \Symfony\Component\Console\Input\InputDefinition();
+            $this->definition = new InputDefinition();
         } else {
             $this->bind($definition);
             $this->validate();
         }
     }
-    public function bind(\Symfony\Component\Console\Input\InputDefinition $definition): void
+    public function bind(InputDefinition $definition): void
     {
         $this->arguments = [];
         $this->options = [];

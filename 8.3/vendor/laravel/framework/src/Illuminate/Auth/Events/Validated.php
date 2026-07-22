@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Auth\Events;
+namespace Odigos\Illuminate\Auth\Events;
 
-use Illuminate\Queue\SerializesModels;
+use Odigos\Illuminate\Queue\SerializesModels;
 class Validated
 {
     use SerializesModels;

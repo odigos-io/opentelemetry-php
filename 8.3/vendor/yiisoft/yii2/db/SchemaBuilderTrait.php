@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\db;
+namespace Odigos\yii\db;
 
 /**
  * SchemaBuilderTrait contains shortcut methods to create instances of [[ColumnSchemaBuilder]].
@@ -47,7 +47,7 @@ trait SchemaBuilderTrait
      */
     public function primaryKey($length = null)
     {
-        return $this->getDb()->getSchema()->createColumnSchemaBuilder(\yii\db\Schema::TYPE_PK, $length);
+        return $this->getDb()->getSchema()->createColumnSchemaBuilder(Schema::TYPE_PK, $length);
     }
     /**
      * Creates a big primary key column.
@@ -58,7 +58,7 @@ trait SchemaBuilderTrait
      */
     public function bigPrimaryKey($length = null)
     {
-        return $this->getDb()->getSchema()->createColumnSchemaBuilder(\yii\db\Schema::TYPE_BIGPK, $length);
+        return $this->getDb()->getSchema()->createColumnSchemaBuilder(Schema::TYPE_BIGPK, $length);
     }
     /**
      * Creates a char column.
@@ -69,7 +69,7 @@ trait SchemaBuilderTrait
      */
     public function char($length = null)
     {
-        return $this->getDb()->getSchema()->createColumnSchemaBuilder(\yii\db\Schema::TYPE_CHAR, $length);
+        return $this->getDb()->getSchema()->createColumnSchemaBuilder(Schema::TYPE_CHAR, $length);
     }
     /**
      * Creates a string column.
@@ -80,7 +80,7 @@ trait SchemaBuilderTrait
      */
     public function string($length = null)
     {
-        return $this->getDb()->getSchema()->createColumnSchemaBuilder(\yii\db\Schema::TYPE_STRING, $length);
+        return $this->getDb()->getSchema()->createColumnSchemaBuilder(Schema::TYPE_STRING, $length);
     }
     /**
      * Creates a text column.
@@ -89,7 +89,7 @@ trait SchemaBuilderTrait
      */
     public function text()
     {
-        return $this->getDb()->getSchema()->createColumnSchemaBuilder(\yii\db\Schema::TYPE_TEXT);
+        return $this->getDb()->getSchema()->createColumnSchemaBuilder(Schema::TYPE_TEXT);
     }
     /**
      * Creates a tinyint column. If tinyint is not supported by the DBMS, smallint will be used.
@@ -100,7 +100,7 @@ trait SchemaBuilderTrait
      */
     public function tinyInteger($length = null)
     {
-        return $this->getDb()->getSchema()->createColumnSchemaBuilder(\yii\db\Schema::TYPE_TINYINT, $length);
+        return $this->getDb()->getSchema()->createColumnSchemaBuilder(Schema::TYPE_TINYINT, $length);
     }
     /**
      * Creates a smallint column.
@@ -111,7 +111,7 @@ trait SchemaBuilderTrait
      */
     public function smallInteger($length = null)
     {
-        return $this->getDb()->getSchema()->createColumnSchemaBuilder(\yii\db\Schema::TYPE_SMALLINT, $length);
+        return $this->getDb()->getSchema()->createColumnSchemaBuilder(Schema::TYPE_SMALLINT, $length);
     }
     /**
      * Creates an integer column.
@@ -122,7 +122,7 @@ trait SchemaBuilderTrait
      */
     public function integer($length = null)
     {
-        return $this->getDb()->getSchema()->createColumnSchemaBuilder(\yii\db\Schema::TYPE_INTEGER, $length);
+        return $this->getDb()->getSchema()->createColumnSchemaBuilder(Schema::TYPE_INTEGER, $length);
     }
     /**
      * Creates a bigint column.
@@ -133,7 +133,7 @@ trait SchemaBuilderTrait
      */
     public function bigInteger($length = null)
     {
-        return $this->getDb()->getSchema()->createColumnSchemaBuilder(\yii\db\Schema::TYPE_BIGINT, $length);
+        return $this->getDb()->getSchema()->createColumnSchemaBuilder(Schema::TYPE_BIGINT, $length);
     }
     /**
      * Creates a float column.
@@ -144,7 +144,7 @@ trait SchemaBuilderTrait
      */
     public function float($precision = null)
     {
-        return $this->getDb()->getSchema()->createColumnSchemaBuilder(\yii\db\Schema::TYPE_FLOAT, $precision);
+        return $this->getDb()->getSchema()->createColumnSchemaBuilder(Schema::TYPE_FLOAT, $precision);
     }
     /**
      * Creates a double column.
@@ -155,7 +155,7 @@ trait SchemaBuilderTrait
      */
     public function double($precision = null)
     {
-        return $this->getDb()->getSchema()->createColumnSchemaBuilder(\yii\db\Schema::TYPE_DOUBLE, $precision);
+        return $this->getDb()->getSchema()->createColumnSchemaBuilder(Schema::TYPE_DOUBLE, $precision);
     }
     /**
      * Creates a decimal column.
@@ -177,7 +177,7 @@ trait SchemaBuilderTrait
         if ($scale !== null) {
             $length[] = $scale;
         }
-        return $this->getDb()->getSchema()->createColumnSchemaBuilder(\yii\db\Schema::TYPE_DECIMAL, $length);
+        return $this->getDb()->getSchema()->createColumnSchemaBuilder(Schema::TYPE_DECIMAL, $length);
     }
     /**
      * Creates a datetime column.
@@ -188,7 +188,7 @@ trait SchemaBuilderTrait
      */
     public function dateTime($precision = null)
     {
-        return $this->getDb()->getSchema()->createColumnSchemaBuilder(\yii\db\Schema::TYPE_DATETIME, $precision);
+        return $this->getDb()->getSchema()->createColumnSchemaBuilder(Schema::TYPE_DATETIME, $precision);
     }
     /**
      * Creates a timestamp column.
@@ -199,7 +199,7 @@ trait SchemaBuilderTrait
      */
     public function timestamp($precision = null)
     {
-        return $this->getDb()->getSchema()->createColumnSchemaBuilder(\yii\db\Schema::TYPE_TIMESTAMP, $precision);
+        return $this->getDb()->getSchema()->createColumnSchemaBuilder(Schema::TYPE_TIMESTAMP, $precision);
     }
     /**
      * Creates a time column.
@@ -210,7 +210,7 @@ trait SchemaBuilderTrait
      */
     public function time($precision = null)
     {
-        return $this->getDb()->getSchema()->createColumnSchemaBuilder(\yii\db\Schema::TYPE_TIME, $precision);
+        return $this->getDb()->getSchema()->createColumnSchemaBuilder(Schema::TYPE_TIME, $precision);
     }
     /**
      * Creates a date column.
@@ -219,7 +219,7 @@ trait SchemaBuilderTrait
      */
     public function date()
     {
-        return $this->getDb()->getSchema()->createColumnSchemaBuilder(\yii\db\Schema::TYPE_DATE);
+        return $this->getDb()->getSchema()->createColumnSchemaBuilder(Schema::TYPE_DATE);
     }
     /**
      * Creates a binary column.
@@ -230,7 +230,7 @@ trait SchemaBuilderTrait
      */
     public function binary($length = null)
     {
-        return $this->getDb()->getSchema()->createColumnSchemaBuilder(\yii\db\Schema::TYPE_BINARY, $length);
+        return $this->getDb()->getSchema()->createColumnSchemaBuilder(Schema::TYPE_BINARY, $length);
     }
     /**
      * Creates a boolean column.
@@ -239,7 +239,7 @@ trait SchemaBuilderTrait
      */
     public function boolean()
     {
-        return $this->getDb()->getSchema()->createColumnSchemaBuilder(\yii\db\Schema::TYPE_BOOLEAN);
+        return $this->getDb()->getSchema()->createColumnSchemaBuilder(Schema::TYPE_BOOLEAN);
     }
     /**
      * Creates a money column.
@@ -261,7 +261,7 @@ trait SchemaBuilderTrait
         if ($scale !== null) {
             $length[] = $scale;
         }
-        return $this->getDb()->getSchema()->createColumnSchemaBuilder(\yii\db\Schema::TYPE_MONEY, $length);
+        return $this->getDb()->getSchema()->createColumnSchemaBuilder(Schema::TYPE_MONEY, $length);
     }
     /**
      * Creates a JSON column.
@@ -270,6 +270,6 @@ trait SchemaBuilderTrait
      */
     public function json()
     {
-        return $this->getDb()->getSchema()->createColumnSchemaBuilder(\yii\db\Schema::TYPE_JSON);
+        return $this->getDb()->getSchema()->createColumnSchemaBuilder(Schema::TYPE_JSON);
     }
 }

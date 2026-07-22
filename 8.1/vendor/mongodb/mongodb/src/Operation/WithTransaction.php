@@ -1,6 +1,6 @@
 <?php
 
-namespace MongoDB\Operation;
+namespace Odigos\MongoDB\Operation;
 
 use Exception;
 use MongoDB\Driver\Exception\RuntimeException;

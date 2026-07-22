@@ -1,11 +1,11 @@
 <?php
 
-namespace Laravel\Prompts\Themes\Default;
+namespace Odigos\Laravel\Prompts\Themes\Default;
 
-use Laravel\Prompts\NumberPrompt;
-class NumberPromptRenderer extends \Laravel\Prompts\Themes\Default\Renderer
+use Odigos\Laravel\Prompts\NumberPrompt;
+class NumberPromptRenderer extends Renderer
 {
-    use \Laravel\Prompts\Themes\Default\Concerns\DrawsBoxes;
+    use Concerns\DrawsBoxes;
     protected string $upArrow = '▲';
     protected string $downArrow = '▼';
     /**

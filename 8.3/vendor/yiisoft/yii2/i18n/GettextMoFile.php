@@ -5,9 +5,9 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\i18n;
+namespace Odigos\yii\i18n;
 
-use yii\base\Exception;
+use Odigos\yii\base\Exception;
 /**
  * GettextMoFile represents an MO Gettext message file.
  *
@@ -40,7 +40,7 @@ use yii\base\Exception;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class GettextMoFile extends \yii\i18n\GettextFile
+class GettextMoFile extends GettextFile
 {
     /**
      * @var bool whether to use big-endian when reading and writing an integer.

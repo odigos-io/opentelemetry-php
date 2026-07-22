@@ -1,20 +1,20 @@
 <?php
 
-namespace Laravel\Prompts;
+namespace Odigos\Laravel\Prompts;
 
 use Closure;
-use Illuminate\Support\Collection;
-use Laravel\Prompts\Elements\ElementContract;
-if (!function_exists('\Laravel\Prompts\text')) {
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Laravel\Prompts\Elements\ElementContract;
+if (!function_exists('Odigos\Laravel\Prompts\text')) {
     /**
      * Prompt the user for text input.
      */
     function text(string $label, string $placeholder = '', string $default = '', bool|string $required = \false, mixed $validate = null, string $hint = '', ?Closure $transform = null): string
     {
-        return (new \Laravel\Prompts\TextPrompt(...get_defined_vars()))->prompt();
+        return (new TextPrompt(...get_defined_vars()))->prompt();
     }
 }
-if (!function_exists('\Laravel\Prompts\autocomplete')) {
+if (!function_exists('Odigos\Laravel\Prompts\autocomplete')) {
     /**
      * Prompt the user for text input with auto-completion.
      *
@@ -22,37 +22,37 @@ if (!function_exists('\Laravel\Prompts\autocomplete')) {
      */
     function autocomplete(string $label, array|Collection|Closure $options = [], string $placeholder = '', string $default = '', bool|string $required = \false, mixed $validate = null, string $hint = '', ?Closure $transform = null): string
     {
-        return (new \Laravel\Prompts\AutoCompletePrompt(...get_defined_vars()))->prompt();
+        return (new AutoCompletePrompt(...get_defined_vars()))->prompt();
     }
 }
-if (!function_exists('\Laravel\Prompts\number')) {
+if (!function_exists('Odigos\Laravel\Prompts\number')) {
     /**
      * Prompt the user for number input.
      */
     function number(string $label, string $placeholder = '', string $default = '', bool|string $required = \false, mixed $validate = null, string $hint = '', ?int $min = null, ?int $max = null, ?int $step = null): int|string
     {
-        return (new \Laravel\Prompts\NumberPrompt(...get_defined_vars()))->prompt();
+        return (new NumberPrompt(...get_defined_vars()))->prompt();
     }
 }
-if (!function_exists('\Laravel\Prompts\textarea')) {
+if (!function_exists('Odigos\Laravel\Prompts\textarea')) {
     /**
      * Prompt the user for multiline text input.
      */
     function textarea(string $label, string $placeholder = '', string $default = '', bool|string $required = \false, mixed $validate = null, string $hint = '', int $rows = 5, ?Closure $transform = null): string
     {
-        return (new \Laravel\Prompts\TextareaPrompt(...get_defined_vars()))->prompt();
+        return (new TextareaPrompt(...get_defined_vars()))->prompt();
     }
 }
-if (!function_exists('\Laravel\Prompts\password')) {
+if (!function_exists('Odigos\Laravel\Prompts\password')) {
     /**
      * Prompt the user for input, hiding the value.
      */
     function password(string $label, string $placeholder = '', bool|string $required = \false, mixed $validate = null, string $hint = '', ?Closure $transform = null): string
     {
-        return (new \Laravel\Prompts\PasswordPrompt(...get_defined_vars()))->prompt();
+        return (new PasswordPrompt(...get_defined_vars()))->prompt();
     }
 }
-if (!function_exists('\Laravel\Prompts\select')) {
+if (!function_exists('Odigos\Laravel\Prompts\select')) {
     /**
      * Prompt the user to select an option.
      *
@@ -61,10 +61,10 @@ if (!function_exists('\Laravel\Prompts\select')) {
      */
     function select(string $label, array|Collection $options, int|string|null $default = null, int $scroll = 5, mixed $validate = null, string $hint = '', bool|string $required = \true, ?Closure $transform = null, string|Closure $info = ''): int|string
     {
-        return (new \Laravel\Prompts\SelectPrompt(...get_defined_vars()))->prompt();
+        return (new SelectPrompt(...get_defined_vars()))->prompt();
     }
 }
-if (!function_exists('\Laravel\Prompts\multiselect')) {
+if (!function_exists('Odigos\Laravel\Prompts\multiselect')) {
     /**
      * Prompt the user to select multiple options.
      *
@@ -74,37 +74,37 @@ if (!function_exists('\Laravel\Prompts\multiselect')) {
      */
     function multiselect(string $label, array|Collection $options, array|Collection $default = [], int $scroll = 5, bool|string $required = \false, mixed $validate = null, string $hint = 'Use the space bar to select options.', ?Closure $transform = null, string|Closure $info = ''): array
     {
-        return (new \Laravel\Prompts\MultiSelectPrompt(...get_defined_vars()))->prompt();
+        return (new MultiSelectPrompt(...get_defined_vars()))->prompt();
     }
 }
-if (!function_exists('\Laravel\Prompts\confirm')) {
+if (!function_exists('Odigos\Laravel\Prompts\confirm')) {
     /**
      * Prompt the user to confirm an action.
      */
     function confirm(string $label, bool $default = \true, string $yes = 'Yes', string $no = 'No', bool|string $required = \false, mixed $validate = null, string $hint = '', ?Closure $transform = null): bool
     {
-        return (new \Laravel\Prompts\ConfirmPrompt(...get_defined_vars()))->prompt();
+        return (new ConfirmPrompt(...get_defined_vars()))->prompt();
     }
 }
-if (!function_exists('\Laravel\Prompts\pause')) {
+if (!function_exists('Odigos\Laravel\Prompts\pause')) {
     /**
      * Prompt the user to continue or cancel after pausing.
      */
     function pause(string $message = 'Press enter to continue...'): bool
     {
-        return (new \Laravel\Prompts\PausePrompt(...get_defined_vars()))->prompt();
+        return (new PausePrompt(...get_defined_vars()))->prompt();
     }
 }
-if (!function_exists('\Laravel\Prompts\clear')) {
+if (!function_exists('Odigos\Laravel\Prompts\clear')) {
     /**
      * Clear the terminal.
      */
     function clear(): void
     {
-        (new \Laravel\Prompts\Clear())->display();
+        (new Clear())->display();
     }
 }
-if (!function_exists('\Laravel\Prompts\suggest')) {
+if (!function_exists('Odigos\Laravel\Prompts\suggest')) {
     /**
      * Prompt the user for text input with auto-completion.
      *
@@ -112,10 +112,10 @@ if (!function_exists('\Laravel\Prompts\suggest')) {
      */
     function suggest(string $label, array|Collection|Closure $options, string $placeholder = '', string $default = '', int $scroll = 5, bool|string $required = \false, mixed $validate = null, string $hint = '', ?Closure $transform = null, string|Closure $info = ''): string
     {
-        return (new \Laravel\Prompts\SuggestPrompt(...get_defined_vars()))->prompt();
+        return (new SuggestPrompt(...get_defined_vars()))->prompt();
     }
 }
-if (!function_exists('\Laravel\Prompts\search')) {
+if (!function_exists('Odigos\Laravel\Prompts\search')) {
     /**
      * Allow the user to search for an option.
      *
@@ -124,10 +124,10 @@ if (!function_exists('\Laravel\Prompts\search')) {
      */
     function search(string $label, Closure $options, string $placeholder = '', int $scroll = 5, mixed $validate = null, string $hint = '', bool|string $required = \true, ?Closure $transform = null, string|Closure $info = ''): int|string
     {
-        return (new \Laravel\Prompts\SearchPrompt(...get_defined_vars()))->prompt();
+        return (new SearchPrompt(...get_defined_vars()))->prompt();
     }
 }
-if (!function_exists('\Laravel\Prompts\multisearch')) {
+if (!function_exists('Odigos\Laravel\Prompts\multisearch')) {
     /**
      * Allow the user to search for multiple option.
      *
@@ -136,10 +136,10 @@ if (!function_exists('\Laravel\Prompts\multisearch')) {
      */
     function multisearch(string $label, Closure $options, string $placeholder = '', int $scroll = 5, bool|string $required = \false, mixed $validate = null, string $hint = 'Use the space bar to select options.', ?Closure $transform = null, string|Closure $info = ''): array
     {
-        return (new \Laravel\Prompts\MultiSearchPrompt(...get_defined_vars()))->prompt();
+        return (new MultiSearchPrompt(...get_defined_vars()))->prompt();
     }
 }
-if (!function_exists('\Laravel\Prompts\spin')) {
+if (!function_exists('Odigos\Laravel\Prompts\spin')) {
     /**
      * Render a spinner while the given callback is executing.
      *
@@ -150,19 +150,19 @@ if (!function_exists('\Laravel\Prompts\spin')) {
      */
     function spin(Closure $callback, string $message = ''): mixed
     {
-        return (new \Laravel\Prompts\Spinner($message))->spin($callback);
+        return (new Spinner($message))->spin($callback);
     }
 }
-if (!function_exists('\Laravel\Prompts\note')) {
+if (!function_exists('Odigos\Laravel\Prompts\note')) {
     /**
      * Display a note.
      */
     function note(string $message, ?string $type = null): void
     {
-        (new \Laravel\Prompts\Note($message, $type))->display();
+        (new Note($message, $type))->display();
     }
 }
-if (!function_exists('\Laravel\Prompts\callout')) {
+if (!function_exists('Odigos\Laravel\Prompts\callout')) {
     /**
      * Display a callout.
      *
@@ -170,64 +170,64 @@ if (!function_exists('\Laravel\Prompts\callout')) {
      */
     function callout(string $label, string|array $content, ?string $type = null, string $info = ''): void
     {
-        (new \Laravel\Prompts\Callout($label, $content, $type, $info))->display();
+        (new Callout($label, $content, $type, $info))->display();
     }
 }
-if (!function_exists('\Laravel\Prompts\error')) {
+if (!function_exists('Odigos\Laravel\Prompts\error')) {
     /**
      * Display an error.
      */
     function error(string $message): void
     {
-        (new \Laravel\Prompts\Note($message, 'error'))->display();
+        (new Note($message, 'error'))->display();
     }
 }
-if (!function_exists('\Laravel\Prompts\warning')) {
+if (!function_exists('Odigos\Laravel\Prompts\warning')) {
     /**
      * Display a warning.
      */
     function warning(string $message): void
     {
-        (new \Laravel\Prompts\Note($message, 'warning'))->display();
+        (new Note($message, 'warning'))->display();
     }
 }
-if (!function_exists('\Laravel\Prompts\alert')) {
+if (!function_exists('Odigos\Laravel\Prompts\alert')) {
     /**
      * Display an alert.
      */
     function alert(string $message): void
     {
-        (new \Laravel\Prompts\Note($message, 'alert'))->display();
+        (new Note($message, 'alert'))->display();
     }
 }
-if (!function_exists('\Laravel\Prompts\info')) {
+if (!function_exists('Odigos\Laravel\Prompts\info')) {
     /**
      * Display an informational message.
      */
     function info(string $message): void
     {
-        (new \Laravel\Prompts\Note($message, 'info'))->display();
+        (new Note($message, 'info'))->display();
     }
 }
-if (!function_exists('\Laravel\Prompts\intro')) {
+if (!function_exists('Odigos\Laravel\Prompts\intro')) {
     /**
      * Display an introduction.
      */
     function intro(string $message): void
     {
-        (new \Laravel\Prompts\Note($message, 'intro'))->display();
+        (new Note($message, 'intro'))->display();
     }
 }
-if (!function_exists('\Laravel\Prompts\outro')) {
+if (!function_exists('Odigos\Laravel\Prompts\outro')) {
     /**
      * Display a closing message.
      */
     function outro(string $message): void
     {
-        (new \Laravel\Prompts\Note($message, 'outro'))->display();
+        (new Note($message, 'outro'))->display();
     }
 }
-if (!function_exists('\Laravel\Prompts\notify')) {
+if (!function_exists('Odigos\Laravel\Prompts\notify')) {
     /**
      * Send a notification to the user. (macOS and Linux only)
      *
@@ -239,10 +239,10 @@ if (!function_exists('\Laravel\Prompts\notify')) {
      */
     function notify(string $title, string $body = '', string $subtitle = '', string $sound = '', string $icon = ''): void
     {
-        (new \Laravel\Prompts\NotifyPrompt(...get_defined_vars()))->display();
+        (new NotifyPrompt(...get_defined_vars()))->display();
     }
 }
-if (!function_exists('\Laravel\Prompts\table')) {
+if (!function_exists('Odigos\Laravel\Prompts\table')) {
     /**
      * Display a table.
      *
@@ -251,10 +251,10 @@ if (!function_exists('\Laravel\Prompts\table')) {
      */
     function table(array|Collection $headers = [], array|Collection|null $rows = null): void
     {
-        (new \Laravel\Prompts\Table($headers, $rows))->display();
+        (new Table($headers, $rows))->display();
     }
 }
-if (!function_exists('\Laravel\Prompts\grid')) {
+if (!function_exists('Odigos\Laravel\Prompts\grid')) {
     /**
      * Display a grid.
      *
@@ -262,10 +262,10 @@ if (!function_exists('\Laravel\Prompts\grid')) {
      */
     function grid(array|Collection $items = [], ?int $maxWidth = null): void
     {
-        (new \Laravel\Prompts\Grid($items, $maxWidth))->display();
+        (new Grid($items, $maxWidth))->display();
     }
 }
-if (!function_exists('\Laravel\Prompts\progress')) {
+if (!function_exists('Odigos\Laravel\Prompts\progress')) {
     /**
      * Display a progress bar.
      *
@@ -276,40 +276,40 @@ if (!function_exists('\Laravel\Prompts\progress')) {
      * @param  ?Closure((TSteps is int ? int : value-of<TSteps>), Progress<TSteps>): TReturn  $callback
      * @return ($callback is null ? Progress<TSteps> : array<TReturn>)
      */
-    function progress(string $label, iterable|int $steps, ?Closure $callback = null, string $hint = ''): array|\Laravel\Prompts\Progress
+    function progress(string $label, iterable|int $steps, ?Closure $callback = null, string $hint = ''): array|Progress
     {
-        $progress = new \Laravel\Prompts\Progress($label, $steps, $hint);
+        $progress = new Progress($label, $steps, $hint);
         if ($callback !== null) {
             return $progress->map($callback);
         }
         return $progress;
     }
 }
-if (!function_exists('\Laravel\Prompts\form')) {
-    function form(): \Laravel\Prompts\FormBuilder
+if (!function_exists('Odigos\Laravel\Prompts\form')) {
+    function form(): FormBuilder
     {
-        return new \Laravel\Prompts\FormBuilder();
+        return new FormBuilder();
     }
 }
-if (!function_exists('\Laravel\Prompts\title')) {
+if (!function_exists('Odigos\Laravel\Prompts\title')) {
     /**
      * Update the title of the terminal.
      */
     function title(string $title): void
     {
-        (new \Laravel\Prompts\Title($title))->display();
+        (new Title($title))->display();
     }
 }
-if (!function_exists('\Laravel\Prompts\stream')) {
+if (!function_exists('Odigos\Laravel\Prompts\stream')) {
     /**
      * Display a stream of text.
      */
-    function stream(): \Laravel\Prompts\Stream
+    function stream(): Stream
     {
-        return new \Laravel\Prompts\Stream();
+        return new Stream();
     }
 }
-if (!function_exists('\Laravel\Prompts\task')) {
+if (!function_exists('Odigos\Laravel\Prompts\task')) {
     /**
      * Display a task with a spinner and live output.
      *
@@ -320,10 +320,10 @@ if (!function_exists('\Laravel\Prompts\task')) {
      */
     function task(string $label, Closure $callback, ?int $limit = null, bool $keepSummary = \false, ?string $subLabel = null): mixed
     {
-        return (new \Laravel\Prompts\Task($label, $limit ?? 10, $keepSummary, $subLabel))->run($callback);
+        return (new Task($label, $limit ?? 10, $keepSummary, $subLabel))->run($callback);
     }
 }
-if (!function_exists('\Laravel\Prompts\datatable')) {
+if (!function_exists('Odigos\Laravel\Prompts\datatable')) {
     /**
      * Display an interactive data table.
      *
@@ -332,6 +332,6 @@ if (!function_exists('\Laravel\Prompts\datatable')) {
      */
     function datatable(array|Collection $headers = [], array|Collection|null $rows = null, int $scroll = 10, string $label = '', string $hint = '', bool|string $required = \false, mixed $validate = null, ?Closure $transform = null, ?Closure $filter = null): mixed
     {
-        return (new \Laravel\Prompts\DataTablePrompt(headers: $headers, rows: $rows, scroll: $scroll, label: $label, hint: $hint, required: $required, validate: $validate, transform: $transform, filter: $filter))->prompt();
+        return (new DataTablePrompt(headers: $headers, rows: $rows, scroll: $scroll, label: $label, hint: $hint, required: $required, validate: $validate, transform: $transform, filter: $filter))->prompt();
     }
 }

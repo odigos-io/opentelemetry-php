@@ -14,14 +14,14 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database\Statement;
+namespace Odigos\Cake\Database\Statement;
 
 /**
  * Statement class meant to be used by an Sqlite driver
  *
  * @internal
  */
-class SqliteStatement extends \Cake\Database\Statement\Statement
+class SqliteStatement extends Statement
 {
     /**
      * @var int|null

@@ -8,18 +8,18 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Routing\Loader\Configurator;
+namespace Odigos\Symfony\Component\Routing\Loader\Configurator;
 
-use Symfony\Component\Routing\Route;
-use Symfony\Component\Routing\RouteCollection;
+use Odigos\Symfony\Component\Routing\Route;
+use Odigos\Symfony\Component\Routing\RouteCollection;
 /**
  * @author Nicolas Grekas <p@tchwork.com>
  */
 class CollectionConfigurator
 {
-    use \Symfony\Component\Routing\Loader\Configurator\Traits\AddTrait;
-    use \Symfony\Component\Routing\Loader\Configurator\Traits\HostTrait;
-    use \Symfony\Component\Routing\Loader\Configurator\Traits\RouteTrait;
+    use Traits\AddTrait;
+    use Traits\HostTrait;
+    use Traits\RouteTrait;
     private string|array|null $host = null;
     public function __construct(
         private RouteCollection $parent,

@@ -1,15 +1,15 @@
 <?php
 
-namespace Illuminate\Database;
+namespace Odigos\Illuminate\Database;
 
 use Exception;
-use Illuminate\Database\Query\Grammars\PostgresGrammar as QueryGrammar;
-use Illuminate\Database\Query\Processors\PostgresProcessor;
-use Illuminate\Database\Schema\Grammars\PostgresGrammar as SchemaGrammar;
-use Illuminate\Database\Schema\PostgresBuilder;
-use Illuminate\Database\Schema\PostgresSchemaState;
-use Illuminate\Filesystem\Filesystem;
-class PostgresConnection extends \Illuminate\Database\Connection
+use Odigos\Illuminate\Database\Query\Grammars\PostgresGrammar as QueryGrammar;
+use Odigos\Illuminate\Database\Query\Processors\PostgresProcessor;
+use Odigos\Illuminate\Database\Schema\Grammars\PostgresGrammar as SchemaGrammar;
+use Odigos\Illuminate\Database\Schema\PostgresBuilder;
+use Odigos\Illuminate\Database\Schema\PostgresSchemaState;
+use Odigos\Illuminate\Filesystem\Filesystem;
+class PostgresConnection extends Connection
 {
     /**
      * {@inheritdoc}

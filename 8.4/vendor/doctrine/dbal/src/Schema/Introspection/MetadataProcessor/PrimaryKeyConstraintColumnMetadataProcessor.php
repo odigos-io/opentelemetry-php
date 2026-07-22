@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Schema\Introspection\MetadataProcessor;
+namespace Odigos\Doctrine\DBAL\Schema\Introspection\MetadataProcessor;
 
-use Doctrine\DBAL\Schema\Metadata\PrimaryKeyConstraintColumnRow;
-use Doctrine\DBAL\Schema\Name\UnqualifiedName;
-use Doctrine\DBAL\Schema\PrimaryKeyConstraint;
-use Doctrine\DBAL\Schema\PrimaryKeyConstraintEditor;
+use Odigos\Doctrine\DBAL\Schema\Metadata\PrimaryKeyConstraintColumnRow;
+use Odigos\Doctrine\DBAL\Schema\Name\UnqualifiedName;
+use Odigos\Doctrine\DBAL\Schema\PrimaryKeyConstraint;
+use Odigos\Doctrine\DBAL\Schema\PrimaryKeyConstraintEditor;
 /**
  * Combines multiple {@see PrimaryKeyConstraintColumnRow}s into a {@see PrimaryKeyConstraint}.
  *

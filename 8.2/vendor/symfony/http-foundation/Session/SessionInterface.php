@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpFoundation\Session;
+namespace Odigos\Symfony\Component\HttpFoundation\Session;
 
-use Symfony\Component\HttpFoundation\Session\Storage\MetadataBag;
+use Odigos\Symfony\Component\HttpFoundation\Session\Storage\MetadataBag;
 /**
  * Interface for the session.
  *
@@ -108,11 +108,11 @@ interface SessionInterface
     /**
      * Registers a SessionBagInterface with the session.
      */
-    public function registerBag(\Symfony\Component\HttpFoundation\Session\SessionBagInterface $bag): void;
+    public function registerBag(SessionBagInterface $bag): void;
     /**
      * Gets a bag instance by name.
      */
-    public function getBag(string $name): \Symfony\Component\HttpFoundation\Session\SessionBagInterface;
+    public function getBag(string $name): SessionBagInterface;
     /**
      * Gets session meta.
      */

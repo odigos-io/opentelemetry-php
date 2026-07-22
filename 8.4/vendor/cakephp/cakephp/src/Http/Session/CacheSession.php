@@ -16,9 +16,9 @@ declare (strict_types=1);
  * @since         2.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Http\Session;
+namespace Odigos\Cake\Http\Session;
 
-use Cake\Cache\Cache;
+use Odigos\Cake\Cache\Cache;
 use InvalidArgumentException;
 use SessionHandlerInterface;
 /**

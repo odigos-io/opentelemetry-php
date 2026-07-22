@@ -8,16 +8,16 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpKernel\Bundle;
+namespace Odigos\Symfony\Component\HttpKernel\Bundle;
 
-use Symfony\Component\Config\Definition\Configuration;
-use Symfony\Component\Config\Definition\ConfigurationInterface;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Extension\ConfigurableExtensionInterface;
-use Symfony\Component\DependencyInjection\Extension\Extension;
-use Symfony\Component\DependencyInjection\Extension\ExtensionTrait;
-use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Odigos\Symfony\Component\Config\Definition\Configuration;
+use Odigos\Symfony\Component\Config\Definition\ConfigurationInterface;
+use Odigos\Symfony\Component\DependencyInjection\ContainerBuilder;
+use Odigos\Symfony\Component\DependencyInjection\Extension\ConfigurableExtensionInterface;
+use Odigos\Symfony\Component\DependencyInjection\Extension\Extension;
+use Odigos\Symfony\Component\DependencyInjection\Extension\ExtensionTrait;
+use Odigos\Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
+use Odigos\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 /**
  * @author Yonel Ceruto <yonelceruto@gmail.com>
  *

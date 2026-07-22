@@ -1,13 +1,13 @@
 <?php
 
-namespace Illuminate\Foundation\Bootstrap;
+namespace Odigos\Illuminate\Foundation\Bootstrap;
 
 use Odigos\Dotenv\Dotenv;
 use Odigos\Dotenv\Exception\InvalidFileException;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Support\Env;
-use Symfony\Component\Console\Input\ArgvInput;
-use Symfony\Component\Console\Output\ConsoleOutput;
+use Odigos\Illuminate\Contracts\Foundation\Application;
+use Odigos\Illuminate\Support\Env;
+use Odigos\Symfony\Component\Console\Input\ArgvInput;
+use Odigos\Symfony\Component\Console\Output\ConsoleOutput;
 class LoadEnvironmentVariables
 {
     /**

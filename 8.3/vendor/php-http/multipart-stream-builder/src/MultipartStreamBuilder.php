@@ -1,11 +1,11 @@
 <?php
 
-namespace Http\Message\MultipartStream;
+namespace Odigos\Http\Message\MultipartStream;
 
-use Http\Discovery\Exception\NotFoundException;
-use Http\Discovery\Psr17FactoryDiscovery;
-use Http\Discovery\StreamFactoryDiscovery;
-use Http\Message\StreamFactory as HttplugStreamFactory;
+use Odigos\Http\Discovery\Exception\NotFoundException;
+use Odigos\Http\Discovery\Psr17FactoryDiscovery;
+use Odigos\Http\Discovery\StreamFactoryDiscovery;
+use Odigos\Http\Message\StreamFactory as HttplugStreamFactory;
 use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Message\StreamInterface;
 /**
@@ -220,7 +220,7 @@ class MultipartStreamBuilder
     private function getMimetypeHelper()
     {
         if (null === $this->mimetypeHelper) {
-            $this->mimetypeHelper = new \Http\Message\MultipartStream\ApacheMimetypeHelper();
+            $this->mimetypeHelper = new ApacheMimetypeHelper();
         }
         return $this->mimetypeHelper;
     }
@@ -229,7 +229,7 @@ class MultipartStreamBuilder
      *
      * @return MultipartStreamBuilder
      */
-    public function setMimetypeHelper(\Http\Message\MultipartStream\MimetypeHelper $mimetypeHelper)
+    public function setMimetypeHelper(MimetypeHelper $mimetypeHelper)
     {
         $this->mimetypeHelper = $mimetypeHelper;
         return $this;

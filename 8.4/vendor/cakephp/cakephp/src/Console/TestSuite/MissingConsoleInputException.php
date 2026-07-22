@@ -13,7 +13,7 @@ declare (strict_types=1);
  * @link          https://cakephp.org CakePHP Project
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Console\TestSuite;
+namespace Odigos\Cake\Console\TestSuite;
 
 use RuntimeException;
 /**
@@ -33,5 +33,5 @@ class MissingConsoleInputException extends RuntimeException
     }
 }
 // phpcs:disable
-class_alias('Cake\Console\TestSuite\MissingConsoleInputException', 'Cake\TestSuite\Stub\MissingConsoleInputException');
+class_alias('Odigos\Cake\Console\TestSuite\MissingConsoleInputException', 'Odigos\Cake\TestSuite\Stub\MissingConsoleInputException');
 // phpcs:enable

@@ -1,15 +1,15 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Schema;
+namespace Odigos\Doctrine\DBAL\Schema;
 
-use Doctrine\DBAL\Platforms\SQLServerPlatform;
-use Doctrine\DBAL\Schema\Exception\UnknownColumnOption;
-use Doctrine\DBAL\Schema\Name\Parser\UnqualifiedNameParser;
-use Doctrine\DBAL\Schema\Name\Parsers;
-use Doctrine\DBAL\Schema\Name\UnqualifiedName;
-use Doctrine\DBAL\Types\Type;
-use Doctrine\Deprecations\Deprecation;
+use Odigos\Doctrine\DBAL\Platforms\SQLServerPlatform;
+use Odigos\Doctrine\DBAL\Schema\Exception\UnknownColumnOption;
+use Odigos\Doctrine\DBAL\Schema\Name\Parser\UnqualifiedNameParser;
+use Odigos\Doctrine\DBAL\Schema\Name\Parsers;
+use Odigos\Doctrine\DBAL\Schema\Name\UnqualifiedName;
+use Odigos\Doctrine\DBAL\Types\Type;
+use Odigos\Doctrine\Deprecations\Deprecation;
 use function array_merge;
 use function method_exists;
 /**
@@ -36,7 +36,7 @@ use function method_exists;
  *     version?: bool,
  * }
  */
-class Column extends \Doctrine\DBAL\Schema\AbstractNamedObject
+class Column extends AbstractNamedObject
 {
     protected Type $_type;
     protected ?int $_length = null;
@@ -294,11 +294,11 @@ class Column extends \Doctrine\DBAL\Schema\AbstractNamedObject
     {
         return array_merge(['name' => $this->_name, 'type' => $this->_type, 'default' => $this->_default, 'notnull' => $this->_notnull, 'length' => $this->_length, 'precision' => $this->_precision, 'scale' => $this->_scale, 'fixed' => $this->_fixed, 'unsigned' => $this->_unsigned, 'autoincrement' => $this->_autoincrement, 'columnDefinition' => $this->_columnDefinition, 'comment' => $this->_comment, 'values' => $this->_values], $this->_platformOptions);
     }
-    public static function editor(): \Doctrine\DBAL\Schema\ColumnEditor
+    public static function editor(): ColumnEditor
     {
-        return new \Doctrine\DBAL\Schema\ColumnEditor();
+        return new ColumnEditor();
     }
-    public function edit(): \Doctrine\DBAL\Schema\ColumnEditor
+    public function edit(): ColumnEditor
     {
         return self::editor()->setName($this->getObjectName())->setType($this->_type)->setLength($this->_length)->setPrecision($this->_precision)->setScale($this->_scale)->setUnsigned($this->_unsigned)->setFixed($this->_fixed)->setNotNull($this->_notnull)->setDefaultValue($this->_default)->setAutoincrement($this->_autoincrement)->setComment($this->_comment)->setValues($this->_values)->setColumnDefinition($this->_columnDefinition)->setCharset($this->getCharset())->setCollation($this->getCollation())->setMinimumValue($this->getMinimumValue())->setMaximumValue($this->getMaximumValue())->setDefaultConstraintName($this->getDefaultConstraintName());
     }

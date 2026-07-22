@@ -13,57 +13,57 @@ declare (strict_types=1);
  * @since         3.7.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\TestSuite;
+namespace Odigos\Cake\TestSuite;
 
-use Cake\Controller\Controller;
-use Cake\Core\Configure;
-use Cake\Core\HttpApplicationInterface;
-use Cake\Core\PluginApplicationInterface;
-use Cake\Core\TestSuite\ContainerStubTrait;
-use Cake\Database\Exception\DatabaseException;
-use Cake\Error\Renderer\WebExceptionRenderer;
-use Cake\Event\EventInterface;
-use Cake\Event\EventManager;
-use Cake\Form\FormProtector;
-use Cake\Http\Middleware\CsrfProtectionMiddleware;
-use Cake\Http\Session;
-use Cake\Routing\Router;
-use Cake\Routing\RoutingApplicationInterface;
-use Cake\TestSuite\Constraint\Response\BodyContains;
-use Cake\TestSuite\Constraint\Response\BodyEmpty;
-use Cake\TestSuite\Constraint\Response\BodyEquals;
-use Cake\TestSuite\Constraint\Response\BodyNotContains;
-use Cake\TestSuite\Constraint\Response\BodyNotEmpty;
-use Cake\TestSuite\Constraint\Response\BodyNotEquals;
-use Cake\TestSuite\Constraint\Response\BodyNotRegExp;
-use Cake\TestSuite\Constraint\Response\BodyRegExp;
-use Cake\TestSuite\Constraint\Response\ContentType;
-use Cake\TestSuite\Constraint\Response\CookieEncryptedEquals;
-use Cake\TestSuite\Constraint\Response\CookieEquals;
-use Cake\TestSuite\Constraint\Response\CookieNotSet;
-use Cake\TestSuite\Constraint\Response\CookieSet;
-use Cake\TestSuite\Constraint\Response\FileSent;
-use Cake\TestSuite\Constraint\Response\FileSentAs;
-use Cake\TestSuite\Constraint\Response\HeaderContains;
-use Cake\TestSuite\Constraint\Response\HeaderEquals;
-use Cake\TestSuite\Constraint\Response\HeaderNotContains;
-use Cake\TestSuite\Constraint\Response\HeaderNotSet;
-use Cake\TestSuite\Constraint\Response\HeaderSet;
-use Cake\TestSuite\Constraint\Response\StatusCode;
-use Cake\TestSuite\Constraint\Response\StatusError;
-use Cake\TestSuite\Constraint\Response\StatusFailure;
-use Cake\TestSuite\Constraint\Response\StatusOk;
-use Cake\TestSuite\Constraint\Response\StatusSuccess;
-use Cake\TestSuite\Constraint\Session\FlashParamContains;
-use Cake\TestSuite\Constraint\Session\FlashParamEquals;
-use Cake\TestSuite\Constraint\Session\SessionEquals;
-use Cake\TestSuite\Constraint\Session\SessionHasKey;
-use Cake\TestSuite\Constraint\View\LayoutFileEquals;
-use Cake\TestSuite\Constraint\View\TemplateFileEquals;
-use Cake\TestSuite\Stub\TestExceptionRenderer;
-use Cake\Utility\CookieCryptTrait;
-use Cake\Utility\Hash;
-use Cake\Utility\Security;
+use Odigos\Cake\Controller\Controller;
+use Odigos\Cake\Core\Configure;
+use Odigos\Cake\Core\HttpApplicationInterface;
+use Odigos\Cake\Core\PluginApplicationInterface;
+use Odigos\Cake\Core\TestSuite\ContainerStubTrait;
+use Odigos\Cake\Database\Exception\DatabaseException;
+use Odigos\Cake\Error\Renderer\WebExceptionRenderer;
+use Odigos\Cake\Event\EventInterface;
+use Odigos\Cake\Event\EventManager;
+use Odigos\Cake\Form\FormProtector;
+use Odigos\Cake\Http\Middleware\CsrfProtectionMiddleware;
+use Odigos\Cake\Http\Session;
+use Odigos\Cake\Routing\Router;
+use Odigos\Cake\Routing\RoutingApplicationInterface;
+use Odigos\Cake\TestSuite\Constraint\Response\BodyContains;
+use Odigos\Cake\TestSuite\Constraint\Response\BodyEmpty;
+use Odigos\Cake\TestSuite\Constraint\Response\BodyEquals;
+use Odigos\Cake\TestSuite\Constraint\Response\BodyNotContains;
+use Odigos\Cake\TestSuite\Constraint\Response\BodyNotEmpty;
+use Odigos\Cake\TestSuite\Constraint\Response\BodyNotEquals;
+use Odigos\Cake\TestSuite\Constraint\Response\BodyNotRegExp;
+use Odigos\Cake\TestSuite\Constraint\Response\BodyRegExp;
+use Odigos\Cake\TestSuite\Constraint\Response\ContentType;
+use Odigos\Cake\TestSuite\Constraint\Response\CookieEncryptedEquals;
+use Odigos\Cake\TestSuite\Constraint\Response\CookieEquals;
+use Odigos\Cake\TestSuite\Constraint\Response\CookieNotSet;
+use Odigos\Cake\TestSuite\Constraint\Response\CookieSet;
+use Odigos\Cake\TestSuite\Constraint\Response\FileSent;
+use Odigos\Cake\TestSuite\Constraint\Response\FileSentAs;
+use Odigos\Cake\TestSuite\Constraint\Response\HeaderContains;
+use Odigos\Cake\TestSuite\Constraint\Response\HeaderEquals;
+use Odigos\Cake\TestSuite\Constraint\Response\HeaderNotContains;
+use Odigos\Cake\TestSuite\Constraint\Response\HeaderNotSet;
+use Odigos\Cake\TestSuite\Constraint\Response\HeaderSet;
+use Odigos\Cake\TestSuite\Constraint\Response\StatusCode;
+use Odigos\Cake\TestSuite\Constraint\Response\StatusError;
+use Odigos\Cake\TestSuite\Constraint\Response\StatusFailure;
+use Odigos\Cake\TestSuite\Constraint\Response\StatusOk;
+use Odigos\Cake\TestSuite\Constraint\Response\StatusSuccess;
+use Odigos\Cake\TestSuite\Constraint\Session\FlashParamContains;
+use Odigos\Cake\TestSuite\Constraint\Session\FlashParamEquals;
+use Odigos\Cake\TestSuite\Constraint\Session\SessionEquals;
+use Odigos\Cake\TestSuite\Constraint\Session\SessionHasKey;
+use Odigos\Cake\TestSuite\Constraint\View\LayoutFileEquals;
+use Odigos\Cake\TestSuite\Constraint\View\TemplateFileEquals;
+use Odigos\Cake\TestSuite\Stub\TestExceptionRenderer;
+use Odigos\Cake\Utility\CookieCryptTrait;
+use Odigos\Cake\Utility\Hash;
+use Odigos\Cake\Utility\Security;
 use Exception;
 use Odigos\Laminas\Diactoros\Uri;
 use Odigos\PHPUnit\Exception as PHPUnitException;
@@ -525,12 +525,12 @@ trait IntegrationTestTrait
      *
      * @return \Cake\TestSuite\MiddlewareDispatcher A dispatcher instance
      */
-    protected function _makeDispatcher(): \Cake\TestSuite\MiddlewareDispatcher
+    protected function _makeDispatcher(): MiddlewareDispatcher
     {
         EventManager::instance()->on('Controller.initialize', $this->controllerSpy(...));
         $app = $this->createApp();
         assert($app instanceof HttpApplicationInterface);
-        return new \Cake\TestSuite\MiddlewareDispatcher($app);
+        return new MiddlewareDispatcher($app);
     }
     /**
      * Adds additional event spies to the controller/view event manager.
@@ -1427,9 +1427,9 @@ trait IntegrationTestTrait
     /**
      * @return \Cake\TestSuite\TestSession
      */
-    protected function getSession(): \Cake\TestSuite\TestSession
+    protected function getSession(): TestSession
     {
-        return new \Cake\TestSuite\TestSession($_SESSION);
+        return new TestSession($_SESSION);
     }
     /**
      * Checks if debug flag is set.

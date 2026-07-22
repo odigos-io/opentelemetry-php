@@ -8,13 +8,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Routing\Exception;
+namespace Odigos\Symfony\Component\Routing\Exception;
 
 /**
  * Exception thrown when a parameter is not valid.
  *
  * @author Alexandre Salomé <alexandre.salome@gmail.com>
  */
-class InvalidParameterException extends \InvalidArgumentException implements \Symfony\Component\Routing\Exception\ExceptionInterface
+class InvalidParameterException extends \InvalidArgumentException implements ExceptionInterface
 {
 }

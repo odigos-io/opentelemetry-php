@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Query;
+namespace Odigos\Doctrine\DBAL\Query;
 
-use Doctrine\DBAL\Query\ForUpdate\ConflictResolutionMode;
+use Odigos\Doctrine\DBAL\Query\ForUpdate\ConflictResolutionMode;
 /** @internal */
 final readonly class ForUpdate
 {

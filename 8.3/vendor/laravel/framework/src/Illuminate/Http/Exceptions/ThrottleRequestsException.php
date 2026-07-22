@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Http\Exceptions;
+namespace Odigos\Illuminate\Http\Exceptions;
 
-use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
+use Odigos\Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 use Throwable;
 class ThrottleRequestsException extends TooManyRequestsHttpException
 {

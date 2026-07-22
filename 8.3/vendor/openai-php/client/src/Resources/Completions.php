@@ -1,18 +1,18 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Resources;
+namespace Odigos\OpenAI\Resources;
 
-use OpenAI\Contracts\Resources\CompletionsContract;
-use OpenAI\Responses\Completions\CreateResponse;
-use OpenAI\Responses\Completions\CreateStreamedResponse;
-use OpenAI\Responses\StreamResponse;
-use OpenAI\ValueObjects\Transporter\Payload;
-use OpenAI\ValueObjects\Transporter\Response;
+use Odigos\OpenAI\Contracts\Resources\CompletionsContract;
+use Odigos\OpenAI\Responses\Completions\CreateResponse;
+use Odigos\OpenAI\Responses\Completions\CreateStreamedResponse;
+use Odigos\OpenAI\Responses\StreamResponse;
+use Odigos\OpenAI\ValueObjects\Transporter\Payload;
+use Odigos\OpenAI\ValueObjects\Transporter\Response;
 final class Completions implements CompletionsContract
 {
-    use \OpenAI\Resources\Concerns\Streamable;
-    use \OpenAI\Resources\Concerns\Transportable;
+    use Concerns\Streamable;
+    use Concerns\Transportable;
     /**
      * Creates a completion for the provided prompt and parameters
      *

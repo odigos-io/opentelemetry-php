@@ -1,12 +1,12 @@
 <?php
 
-namespace Illuminate\Session;
+namespace Odigos\Illuminate\Session;
 
 use BadMethodCallException;
-use Illuminate\Contracts\Session\Session;
-use Symfony\Component\HttpFoundation\Session\SessionBagInterface;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\HttpFoundation\Session\Storage\MetadataBag;
+use Odigos\Illuminate\Contracts\Session\Session;
+use Odigos\Symfony\Component\HttpFoundation\Session\SessionBagInterface;
+use Odigos\Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Odigos\Symfony\Component\HttpFoundation\Session\Storage\MetadataBag;
 class SymfonySessionDecorator implements SessionInterface
 {
     /**

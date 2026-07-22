@@ -1,16 +1,16 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Schema;
+namespace Odigos\Doctrine\DBAL\Schema;
 
-use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Doctrine\DBAL\Schema\Exception\NotImplemented;
-use Doctrine\DBAL\Schema\Name\GenericName;
-use Doctrine\DBAL\Schema\Name\Identifier;
-use Doctrine\DBAL\Schema\Name\OptionallyQualifiedName;
-use Doctrine\DBAL\Schema\Name\Parser;
-use Doctrine\DBAL\Schema\Name\UnqualifiedName;
-use Doctrine\Deprecations\Deprecation;
+use Odigos\Doctrine\DBAL\Platforms\AbstractPlatform;
+use Odigos\Doctrine\DBAL\Schema\Exception\NotImplemented;
+use Odigos\Doctrine\DBAL\Schema\Name\GenericName;
+use Odigos\Doctrine\DBAL\Schema\Name\Identifier;
+use Odigos\Doctrine\DBAL\Schema\Name\OptionallyQualifiedName;
+use Odigos\Doctrine\DBAL\Schema\Name\Parser;
+use Odigos\Doctrine\DBAL\Schema\Name\UnqualifiedName;
+use Odigos\Doctrine\Deprecations\Deprecation;
 use Throwable;
 use function array_map;
 use function count;
@@ -79,7 +79,7 @@ abstract class AbstractAsset
      *
      * @param ?N $name
      */
-    protected function setName(?\Doctrine\DBAL\Schema\Name $name): void
+    protected function setName(?Name $name): void
     {
         throw NotImplemented::fromMethod(static::class, __FUNCTION__);
     }

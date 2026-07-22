@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Translation\Catalogue;
+namespace Odigos\Symfony\Component\Translation\Catalogue;
 
-use Symfony\Component\Translation\MessageCatalogueInterface;
+use Odigos\Symfony\Component\Translation\MessageCatalogueInterface;
 /**
  * Target operation between two catalogues:
  * intersection = source ∩ target = {x: x ∈ source ∧ x ∈ target}
@@ -21,7 +21,7 @@ use Symfony\Component\Translation\MessageCatalogueInterface;
  *
  * @author Michael Lee <michael.lee@zerustech.com>
  */
-class TargetOperation extends \Symfony\Component\Translation\Catalogue\AbstractOperation
+class TargetOperation extends AbstractOperation
 {
     protected function processDomain(string $domain): void
     {

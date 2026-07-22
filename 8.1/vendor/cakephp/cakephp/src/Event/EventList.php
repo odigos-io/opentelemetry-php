@@ -14,7 +14,7 @@ declare (strict_types=1);
  * @since         3.3.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Event;
+namespace Odigos\Cake\Event;
 
 use ArrayAccess;
 use Countable;
@@ -46,7 +46,7 @@ class EventList implements ArrayAccess, Countable
      * @param \Cake\Event\EventInterface<object> $event An event to the list of dispatched events.
      * @return void
      */
-    public function add(\Cake\Event\EventInterface $event): void
+    public function add(EventInterface $event): void
     {
         $this->_events[] = $event;
     }
@@ -68,7 +68,7 @@ class EventList implements ArrayAccess, Countable
      * @param mixed $offset The offset to retrieve.
      * @return \Cake\Event\EventInterface<object>|null
      */
-    public function offsetGet(mixed $offset): ?\Cake\Event\EventInterface
+    public function offsetGet(mixed $offset): ?EventInterface
     {
         if (!$this->offsetExists($offset)) {
             return null;

@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\CssSelector\Node;
+namespace Odigos\Symfony\Component\CssSelector\Node;
 
 /**
  * Represents a "<selector>:where(<subSelectorList>)" node.
@@ -20,15 +20,15 @@ namespace Symfony\Component\CssSelector\Node;
  *
  * @internal
  */
-class SpecificityAdjustmentNode extends \Symfony\Component\CssSelector\Node\AbstractNode
+class SpecificityAdjustmentNode extends AbstractNode
 {
     /**
      * @param array<NodeInterface> $arguments
      */
-    public function __construct(public readonly \Symfony\Component\CssSelector\Node\NodeInterface $selector, public readonly array $arguments = [])
+    public function __construct(public readonly NodeInterface $selector, public readonly array $arguments = [])
     {
     }
-    public function getSpecificity(): \Symfony\Component\CssSelector\Node\Specificity
+    public function getSpecificity(): Specificity
     {
         return $this->selector->getSpecificity();
     }

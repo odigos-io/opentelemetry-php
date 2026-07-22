@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Database\Eloquent\Relations\Concerns;
+namespace Odigos\Illuminate\Database\Eloquent\Relations\Concerns;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\RelationNotFoundException;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
+use Odigos\Illuminate\Database\Eloquent\Model;
+use Odigos\Illuminate\Database\Eloquent\RelationNotFoundException;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Str;
 trait SupportsInverseRelations
 {
     /**

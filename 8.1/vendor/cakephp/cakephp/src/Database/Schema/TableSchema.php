@@ -14,11 +14,11 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database\Schema;
+namespace Odigos\Cake\Database\Schema;
 
-use Cake\Database\Connection;
-use Cake\Database\Exception\DatabaseException;
-use Cake\Database\TypeFactory;
+use Odigos\Cake\Database\Connection;
+use Odigos\Cake\Database\Exception\DatabaseException;
+use Odigos\Cake\Database\TypeFactory;
 /**
  * Represents a single table in a database schema.
  *
@@ -30,7 +30,7 @@ use Cake\Database\TypeFactory;
  * Schema\Collection objects. They can also be converted into SQL using the
  * createSql(), dropSql() and truncateSql() methods.
  */
-class TableSchema implements \Cake\Database\Schema\TableSchemaInterface, \Cake\Database\Schema\SqlGeneratorInterface
+class TableSchema implements TableSchemaInterface, SqlGeneratorInterface
 {
     /**
      * The name of the table

@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\db;
+namespace Odigos\yii\db;
 
 /**
  * Trait ExpressionBuilderTrait provides common constructor for classes that
@@ -25,7 +25,7 @@ trait ExpressionBuilderTrait
      *
      * @param QueryBuilder $queryBuilder
      */
-    public function __construct(\yii\db\QueryBuilder $queryBuilder)
+    public function __construct(QueryBuilder $queryBuilder)
     {
         $this->queryBuilder = $queryBuilder;
     }

@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Contracts\Validation;
+namespace Odigos\Illuminate\Contracts\Validation;
 
 /**
  * @deprecated see ValidationRule
  */
-interface ImplicitRule extends \Illuminate\Contracts\Validation\Rule
+interface ImplicitRule extends Rule
 {
     //
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenAI\Testing\Responses\Fixtures\Responses;
+namespace Odigos\OpenAI\Testing\Responses\Fixtures\Responses;
 
 final class ResponseObjectFixture
 {

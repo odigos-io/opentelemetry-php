@@ -1,15 +1,15 @@
 <?php
 
-namespace Illuminate\Foundation;
+namespace Odigos\Illuminate\Foundation;
 
-use Illuminate\Database\Migrations\Migrator;
-use Illuminate\Foundation\Bootstrap\BootProviders;
-use Illuminate\Foundation\Bootstrap\HandleExceptions;
-use Illuminate\Foundation\Bootstrap\LoadConfiguration;
-use Illuminate\Foundation\Cloud\Events;
-use Illuminate\Foundation\Cloud\FailedJobProvider;
-use Illuminate\Foundation\Cloud\QueueConnector;
-use Illuminate\Queue\Connectors\SqsConnector;
+use Odigos\Illuminate\Database\Migrations\Migrator;
+use Odigos\Illuminate\Foundation\Bootstrap\BootProviders;
+use Odigos\Illuminate\Foundation\Bootstrap\HandleExceptions;
+use Odigos\Illuminate\Foundation\Bootstrap\LoadConfiguration;
+use Odigos\Illuminate\Foundation\Cloud\Events;
+use Odigos\Illuminate\Foundation\Cloud\FailedJobProvider;
+use Odigos\Illuminate\Foundation\Cloud\QueueConnector;
+use Odigos\Illuminate\Queue\Connectors\SqsConnector;
 use Odigos\Monolog\Handler\SocketHandler;
 use PDO;
 class Cloud
@@ -17,7 +17,7 @@ class Cloud
     /**
      * Handle a bootstrapper that is bootstrapping.
      */
-    public static function bootstrapperBootstrapping(\Illuminate\Foundation\Application $app, string $bootstrapper): void
+    public static function bootstrapperBootstrapping(Application $app, string $bootstrapper): void
     {
         (match ($bootstrapper) {
             BootProviders::class => function () use ($app) {
@@ -29,7 +29,7 @@ class Cloud
     /**
      * Handle a bootstrapper that has bootstrapped.
      */
-    public static function bootstrapperBootstrapped(\Illuminate\Foundation\Application $app, string $bootstrapper): void
+    public static function bootstrapperBootstrapped(Application $app, string $bootstrapper): void
     {
         (match ($bootstrapper) {
             LoadConfiguration::class => function () use ($app) {
@@ -47,7 +47,7 @@ class Cloud
     /**
      * Configure the Laravel Cloud disks if applicable.
      */
-    public static function configureDisks(\Illuminate\Foundation\Application $app): void
+    public static function configureDisks(Application $app): void
     {
         if (!isset($_SERVER['LARAVEL_CLOUD_DISK_CONFIG'])) {
             return;
@@ -63,7 +63,7 @@ class Cloud
     /**
      * Configure the unpooled Laravel Postgres connection if applicable.
      */
-    public static function configureUnpooledPostgresConnection(\Illuminate\Foundation\Application $app): void
+    public static function configureUnpooledPostgresConnection(Application $app): void
     {
         $host = $app['config']->get('database.connections.pgsql.host', '');
         if (str_contains($host, 'pg.laravel.cloud') && str_contains($host, '-pooler')) {
@@ -74,7 +74,7 @@ class Cloud
     /**
      * Ensure that migrations use the unpooled Postgres connection if applicable.
      */
-    public static function ensureMigrationsUseUnpooledConnection(\Illuminate\Foundation\Application $app): void
+    public static function ensureMigrationsUseUnpooledConnection(Application $app): void
     {
         if (!is_array($app['config']->get('database.connections.pgsql-unpooled'))) {
             return;
@@ -87,7 +87,7 @@ class Cloud
     /**
      * Configure managed queues if applicable.
      */
-    public static function configureManagedQueues(\Illuminate\Foundation\Application $app): void
+    public static function configureManagedQueues(Application $app): void
     {
         if (!isset($_SERVER['LARAVEL_CLOUD_MANAGED_QUEUES_CONFIG'])) {
             return;
@@ -100,12 +100,12 @@ class Cloud
     /**
      * Boot managed queues if applicable.
      */
-    public static function bootManagedQueues(\Illuminate\Foundation\Application $app): void
+    public static function bootManagedQueues(Application $app): void
     {
         if ($app['config']->get('queue.connections.cloud.driver') !== 'cloud') {
             return;
         }
-        $app->singleton(Events::class, fn() => new Events(\Illuminate\Foundation\Cloud::socket()));
+        $app->singleton(Events::class, fn() => new Events(Cloud::socket()));
         $app->bind(QueueConnector::class, fn($app) => new QueueConnector(new SqsConnector(), $app));
         $app['queue']->addConnector('cloud', $app->factory(QueueConnector::class));
         $failer = $app['queue.failer'];
@@ -115,10 +115,10 @@ class Cloud
     /**
      * Configure the Laravel Cloud log channels.
      */
-    public static function configureCloudLogging(\Illuminate\Foundation\Application $app): void
+    public static function configureCloudLogging(Application $app): void
     {
         $app['config']->set('logging.channels.stderr.formatter_with', ['includeStacktraces' => \true]);
-        $app['config']->set('logging.channels.laravel-cloud-socket', ['driver' => 'monolog', 'level' => $_ENV['LOG_LEVEL'] ?? $_SERVER['LOG_LEVEL'] ?? 'debug', 'handler' => SocketHandler::class, 'formatter' => \Illuminate\Foundation\LaravelCloudJsonFormatter::class, 'formatter_with' => ['includeStacktraces' => \true], 'with' => ['connectionString' => \Illuminate\Foundation\Cloud::socket(), 'persistent' => \true]]);
+        $app['config']->set('logging.channels.laravel-cloud-socket', ['driver' => 'monolog', 'level' => $_ENV['LOG_LEVEL'] ?? $_SERVER['LOG_LEVEL'] ?? 'debug', 'handler' => SocketHandler::class, 'formatter' => LaravelCloudJsonFormatter::class, 'formatter_with' => ['includeStacktraces' => \true], 'with' => ['connectionString' => Cloud::socket(), 'persistent' => \true]]);
     }
     /**
      * The cloud socket address.

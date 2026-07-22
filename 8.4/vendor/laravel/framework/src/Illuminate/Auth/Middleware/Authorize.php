@@ -1,12 +1,12 @@
 <?php
 
-namespace Illuminate\Auth\Middleware;
+namespace Odigos\Illuminate\Auth\Middleware;
 
 use Closure;
-use Illuminate\Contracts\Auth\Access\Gate;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Collection;
-use function Illuminate\Support\enum_value;
+use Odigos\Illuminate\Contracts\Auth\Access\Gate;
+use Odigos\Illuminate\Database\Eloquent\Model;
+use Odigos\Illuminate\Support\Collection;
+use function Odigos\Illuminate\Support\enum_value;
 class Authorize
 {
     /**

@@ -14,13 +14,13 @@ declare (strict_types=1);
  * @since         5.2.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\ORM;
+namespace Odigos\Cake\ORM;
 
 use ArrayObject;
-use Cake\Datasource\EntityInterface;
-use Cake\Event\EventInterface;
-use Cake\ORM\Query\SelectQuery;
-use Cake\Validation\Validator;
+use Odigos\Cake\Datasource\EntityInterface;
+use Odigos\Cake\Event\EventInterface;
+use Odigos\Cake\ORM\Query\SelectQuery;
+use Odigos\Cake\Validation\Validator;
 /**
  * Provides model callbacks.
  *

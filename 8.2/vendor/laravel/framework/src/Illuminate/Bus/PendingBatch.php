@@ -1,19 +1,19 @@
 <?php
 
-namespace Illuminate\Bus;
+namespace Odigos\Illuminate\Bus;
 
 use Closure;
-use Illuminate\Bus\Events\BatchDispatched;
-use Illuminate\Contracts\Container\Container;
-use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Traits\Conditionable;
-use Laravel\SerializableClosure\SerializableClosure;
+use Odigos\Illuminate\Bus\Events\BatchDispatched;
+use Odigos\Illuminate\Contracts\Container\Container;
+use Odigos\Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Traits\Conditionable;
+use Odigos\Laravel\SerializableClosure\SerializableClosure;
 use RuntimeException;
 use Throwable;
 use UnitEnum;
-use function Illuminate\Support\enum_value;
+use function Odigos\Illuminate\Support\enum_value;
 class PendingBatch
 {
     use Conditionable;
@@ -84,10 +84,10 @@ class PendingBatch
     protected function ensureJobIsBatchable(object|array $job): void
     {
         foreach (Arr::wrap($job) as $job) {
-            if ($job instanceof \Illuminate\Bus\PendingBatch || $job instanceof Closure) {
+            if ($job instanceof PendingBatch || $job instanceof Closure) {
                 return;
             }
-            if (!(static::$batchableClasses[$job::class] ?? \false) && !in_array(\Illuminate\Bus\Batchable::class, class_uses_recursive($job))) {
+            if (!(static::$batchableClasses[$job::class] ?? \false) && !in_array(Batchable::class, class_uses_recursive($job))) {
                 static::$batchableClasses[$job::class] = \false;
                 throw new RuntimeException(sprintf('Attempted to batch job [%s], but it does not use the Batchable trait.', $job::class));
             }
@@ -314,7 +314,7 @@ class PendingBatch
      */
     public function dispatch()
     {
-        $repository = $this->container->make(\Illuminate\Bus\BatchRepository::class);
+        $repository = $this->container->make(BatchRepository::class);
         try {
             $batch = $this->store($repository);
             $batch = $batch->add($this->jobs);
@@ -334,7 +334,7 @@ class PendingBatch
      */
     public function dispatchAfterResponse()
     {
-        $repository = $this->container->make(\Illuminate\Bus\BatchRepository::class);
+        $repository = $this->container->make(BatchRepository::class);
         $batch = $this->store($repository);
         if ($batch) {
             $this->container->terminating(function () use ($batch) {

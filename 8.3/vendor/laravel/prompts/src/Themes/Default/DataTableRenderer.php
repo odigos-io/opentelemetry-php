@@ -1,12 +1,12 @@
 <?php
 
-namespace Laravel\Prompts\Themes\Default;
+namespace Odigos\Laravel\Prompts\Themes\Default;
 
-use Laravel\Prompts\DataTablePrompt;
-use Laravel\Prompts\Themes\Contracts\Scrolling;
-use Laravel\Prompts\Themes\Default\Concerns\DrawsBoxes;
-use Laravel\Prompts\Themes\Default\Concerns\DrawsScrollbars;
-class DataTableRenderer extends \Laravel\Prompts\Themes\Default\Renderer implements Scrolling
+use Odigos\Laravel\Prompts\DataTablePrompt;
+use Odigos\Laravel\Prompts\Themes\Contracts\Scrolling;
+use Odigos\Laravel\Prompts\Themes\Default\Concerns\DrawsBoxes;
+use Odigos\Laravel\Prompts\Themes\Default\Concerns\DrawsScrollbars;
+class DataTableRenderer extends Renderer implements Scrolling
 {
     use DrawsBoxes;
     use DrawsScrollbars;

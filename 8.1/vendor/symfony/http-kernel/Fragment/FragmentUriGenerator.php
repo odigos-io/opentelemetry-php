@@ -8,19 +8,19 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpKernel\Fragment;
+namespace Odigos\Symfony\Component\HttpKernel\Fragment;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\UriSigner;
-use Symfony\Component\HttpKernel\Controller\ControllerReference;
+use Odigos\Symfony\Component\HttpFoundation\Request;
+use Odigos\Symfony\Component\HttpFoundation\RequestStack;
+use Odigos\Symfony\Component\HttpFoundation\UriSigner;
+use Odigos\Symfony\Component\HttpKernel\Controller\ControllerReference;
 /**
  * Generates a fragment URI.
  *
  * @author Kévin Dunglas <kevin@dunglas.fr>
  * @author Fabien Potencier <fabien@symfony.com>
  */
-final class FragmentUriGenerator implements \Symfony\Component\HttpKernel\Fragment\FragmentUriGeneratorInterface
+final class FragmentUriGenerator implements FragmentUriGeneratorInterface
 {
     private string $fragmentPath;
     private ?UriSigner $signer;

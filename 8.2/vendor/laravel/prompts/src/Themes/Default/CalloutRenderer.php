@@ -1,16 +1,16 @@
 <?php
 
-namespace Laravel\Prompts\Themes\Default;
+namespace Odigos\Laravel\Prompts\Themes\Default;
 
-use Laravel\Prompts\Callout;
-use Laravel\Prompts\Elements\BulletedList;
-use Laravel\Prompts\Elements\ElementContract;
-use Laravel\Prompts\Elements\Heading;
-use Laravel\Prompts\Elements\KeyValueList;
-use Laravel\Prompts\Elements\NumberedList;
-class CalloutRenderer extends \Laravel\Prompts\Themes\Default\Renderer
+use Odigos\Laravel\Prompts\Callout;
+use Odigos\Laravel\Prompts\Elements\BulletedList;
+use Odigos\Laravel\Prompts\Elements\ElementContract;
+use Odigos\Laravel\Prompts\Elements\Heading;
+use Odigos\Laravel\Prompts\Elements\KeyValueList;
+use Odigos\Laravel\Prompts\Elements\NumberedList;
+class CalloutRenderer extends Renderer
 {
-    use \Laravel\Prompts\Themes\Default\Concerns\DrawsBoxes;
+    use Concerns\DrawsBoxes;
     /**
      * Render the text prompt.
      */

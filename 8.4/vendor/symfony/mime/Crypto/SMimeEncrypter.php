@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Mime\Crypto;
+namespace Odigos\Symfony\Component\Mime\Crypto;
 
-use Symfony\Component\Mime\Exception\RuntimeException;
-use Symfony\Component\Mime\Message;
+use Odigos\Symfony\Component\Mime\Exception\RuntimeException;
+use Odigos\Symfony\Component\Mime\Message;
 /**
  * @author Sebastiaan Stok <s.stok@rollerscapes.net>
  */
-final class SMimeEncrypter extends \Symfony\Component\Mime\Crypto\SMime
+final class SMimeEncrypter extends SMime
 {
     private string|array $certs;
     private int $cipher;

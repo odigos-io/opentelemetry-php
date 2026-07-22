@@ -1,12 +1,12 @@
 <?php
 
-namespace OpenAI\Contracts\Resources;
+namespace Odigos\OpenAI\Contracts\Resources;
 
-use OpenAI\Responses\FineTunes\ListEventsResponse;
-use OpenAI\Responses\FineTunes\ListResponse;
-use OpenAI\Responses\FineTunes\RetrieveResponse;
-use OpenAI\Responses\FineTunes\RetrieveStreamedResponseEvent;
-use OpenAI\Responses\StreamResponse;
+use Odigos\OpenAI\Responses\FineTunes\ListEventsResponse;
+use Odigos\OpenAI\Responses\FineTunes\ListResponse;
+use Odigos\OpenAI\Responses\FineTunes\RetrieveResponse;
+use Odigos\OpenAI\Responses\FineTunes\RetrieveStreamedResponseEvent;
+use Odigos\OpenAI\Responses\StreamResponse;
 interface FineTunesContract
 {
     /**

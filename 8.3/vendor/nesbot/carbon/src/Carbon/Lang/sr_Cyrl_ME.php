@@ -16,7 +16,7 @@ namespace Odigos;
  * - Milos Sakovic
  */
 use Odigos\Carbon\CarbonInterface;
-use Symfony\Component\Translation\PluralizationRules;
+use Odigos\Symfony\Component\Translation\PluralizationRules;
 // @codeCoverageIgnoreStart
 if (\class_exists(PluralizationRules::class)) {
     PluralizationRules::set(static function ($number) {

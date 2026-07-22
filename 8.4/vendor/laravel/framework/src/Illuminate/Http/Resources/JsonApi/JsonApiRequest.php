@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Http\Resources\JsonApi;
+namespace Odigos\Illuminate\Http\Resources\JsonApi;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
+use Odigos\Illuminate\Http\Request;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Collection;
 class JsonApiRequest extends Request
 {
     /**
@@ -47,7 +47,7 @@ class JsonApiRequest extends Request
         }
         return transform($this->cachedSparseIncluded[$key] ?? null, function ($value) {
             return Collection::wrap($value)->transform(function ($item) {
-                $item = implode('.', Arr::take(explode('.', $item), \Illuminate\Http\Resources\JsonApi\JsonApiResource::$maxRelationshipDepth - 1));
+                $item = implode('.', Arr::take(explode('.', $item), JsonApiResource::$maxRelationshipDepth - 1));
                 return !empty($item) ? $item : null;
             })->filter()->all();
         }) ?? [];

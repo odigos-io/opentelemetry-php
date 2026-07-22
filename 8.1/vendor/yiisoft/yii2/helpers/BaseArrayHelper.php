@@ -5,13 +5,13 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\helpers;
+namespace Odigos\yii\helpers;
 
 use Odigos\Yii;
 use ArrayAccess;
 use Traversable;
-use yii\base\Arrayable;
-use yii\base\InvalidArgumentException;
+use Odigos\yii\base\Arrayable;
+use Odigos\yii\base\InvalidArgumentException;
 /**
  * BaseArrayHelper provides concrete implementation for [[ArrayHelper]].
  *
@@ -118,9 +118,9 @@ class BaseArrayHelper
         $res = array_shift($args);
         while (!empty($args)) {
             foreach (array_shift($args) as $k => $v) {
-                if ($v instanceof \yii\helpers\UnsetArrayValue) {
+                if ($v instanceof UnsetArrayValue) {
                     unset($res[$k]);
-                } elseif ($v instanceof \yii\helpers\ReplaceArrayValue) {
+                } elseif ($v instanceof ReplaceArrayValue) {
                     $res[$k] = $v->value;
                 } elseif (is_int($k)) {
                     if (array_key_exists($k, $res)) {
@@ -470,7 +470,7 @@ class BaseArrayHelper
                 $value = static::getValue($element, $key);
                 if ($value !== null) {
                     if (is_float($value)) {
-                        $value = \yii\helpers\StringHelper::floatToString($value);
+                        $value = StringHelper::floatToString($value);
                     }
                     $lastArray[$value] = $element;
                 }

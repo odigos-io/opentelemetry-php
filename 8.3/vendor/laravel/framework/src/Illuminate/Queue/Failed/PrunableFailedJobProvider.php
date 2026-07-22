@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Queue\Failed;
+namespace Odigos\Illuminate\Queue\Failed;
 
 use DateTimeInterface;
 interface PrunableFailedJobProvider

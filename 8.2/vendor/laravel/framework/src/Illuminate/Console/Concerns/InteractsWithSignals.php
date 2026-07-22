@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Console\Concerns;
+namespace Odigos\Illuminate\Console\Concerns;
 
-use Illuminate\Console\Signals;
-use Illuminate\Support\Collection;
+use Odigos\Illuminate\Console\Signals;
+use Odigos\Illuminate\Support\Collection;
 trait InteractsWithSignals
 {
     /**

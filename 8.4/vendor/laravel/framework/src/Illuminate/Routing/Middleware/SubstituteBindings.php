@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Routing\Middleware;
+namespace Odigos\Illuminate\Routing\Middleware;
 
 use Closure;
-use Illuminate\Contracts\Routing\Registrar;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Odigos\Illuminate\Contracts\Routing\Registrar;
+use Odigos\Illuminate\Database\Eloquent\ModelNotFoundException;
 class SubstituteBindings
 {
     /**

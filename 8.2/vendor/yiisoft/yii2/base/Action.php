@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\base;
+namespace Odigos\yii\base;
 
 use Odigos\Yii;
 /**
@@ -36,7 +36,7 @@ use Odigos\Yii;
  *
  * @template T of Controller = Controller
  */
-class Action extends \yii\base\Component
+class Action extends Component
 {
     /**
      * @var string ID of the action
@@ -79,7 +79,7 @@ class Action extends \yii\base\Component
     public function runWithParams($params)
     {
         if (!method_exists($this, 'run')) {
-            throw new \yii\base\InvalidConfigException(get_class($this) . ' must define a "run()" method.');
+            throw new InvalidConfigException(get_class($this) . ' must define a "run()" method.');
         }
         $args = $this->controller->bindActionParams($this, $params);
         Yii::debug('Running action: ' . get_class($this) . '::run(), invoked by ' . get_class($this->controller), __METHOD__);

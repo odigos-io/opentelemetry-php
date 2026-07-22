@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Driver\Mysqli\Exception;
+namespace Odigos\Doctrine\DBAL\Driver\Mysqli\Exception;
 
-use Doctrine\DBAL\Driver\AbstractException;
+use Odigos\Doctrine\DBAL\Driver\AbstractException;
 use mysqli_sql_exception;
 use mysqli_stmt;
 use ReflectionProperty;

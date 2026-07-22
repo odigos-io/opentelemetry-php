@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\View\Compilers\Concerns;
+namespace Odigos\Illuminate\View\Compilers\Concerns;
 
-use Illuminate\Support\Js;
+use Odigos\Illuminate\Support\Js;
 trait CompilesJs
 {
     /**

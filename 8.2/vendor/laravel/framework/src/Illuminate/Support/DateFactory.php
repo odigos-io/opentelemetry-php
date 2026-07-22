@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Support;
+namespace Odigos\Illuminate\Support;
 
 use Odigos\Carbon\Factory;
 use InvalidArgumentException;
@@ -106,7 +106,7 @@ class DateFactory
      *
      * @var string
      */
-    const DEFAULT_CLASS_NAME = \Illuminate\Support\Carbon::class;
+    const DEFAULT_CLASS_NAME = Carbon::class;
     /**
      * The type (class) of dates that should be created.
      *

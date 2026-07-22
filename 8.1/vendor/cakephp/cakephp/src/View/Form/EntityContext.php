@@ -14,22 +14,22 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\View\Form;
+namespace Odigos\Cake\View\Form;
 
 use ArrayAccess;
-use Cake\Collection\Collection;
-use Cake\Core\Exception\CakeException;
-use Cake\Datasource\EntityInterface;
-use Cake\Datasource\InvalidPropertyInterface;
-use Cake\ORM\Association\BelongsToMany;
-use Cake\ORM\Entity;
-use Cake\ORM\Locator\LocatorAwareTrait;
-use Cake\ORM\Table;
-use Cake\Utility\Inflector;
-use Cake\Validation\Validator;
+use Odigos\Cake\Collection\Collection;
+use Odigos\Cake\Core\Exception\CakeException;
+use Odigos\Cake\Datasource\EntityInterface;
+use Odigos\Cake\Datasource\InvalidPropertyInterface;
+use Odigos\Cake\ORM\Association\BelongsToMany;
+use Odigos\Cake\ORM\Entity;
+use Odigos\Cake\ORM\Locator\LocatorAwareTrait;
+use Odigos\Cake\ORM\Table;
+use Odigos\Cake\Utility\Inflector;
+use Odigos\Cake\Validation\Validator;
 use InvalidArgumentException;
 use Traversable;
-use function Cake\Core\namespaceSplit;
+use function Odigos\Cake\Core\namespaceSplit;
 /**
  * Provides a form context around a single entity and its relations.
  * It also can be used as context around an array or iterator of entities.
@@ -50,7 +50,7 @@ use function Cake\Core\namespaceSplit;
  *   Defaults to 'default'. Can be an array of table alias=>validators when
  *   dealing with associated forms.
  */
-class EntityContext implements \Cake\View\Form\ContextInterface
+class EntityContext implements ContextInterface
 {
     use LocatorAwareTrait;
     /**

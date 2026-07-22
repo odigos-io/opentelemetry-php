@@ -14,12 +14,12 @@ declare (strict_types=1);
  * @since         4.1.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Error\Debug;
+namespace Odigos\Cake\Error\Debug;
 
 /**
  * Dump node for object properties.
  */
-class PropertyNode implements \Cake\Error\Debug\NodeInterface
+class PropertyNode implements NodeInterface
 {
     /**
      * @var string
@@ -32,7 +32,7 @@ class PropertyNode implements \Cake\Error\Debug\NodeInterface
     /**
      * @var \Cake\Error\Debug\NodeInterface
      */
-    private \Cake\Error\Debug\NodeInterface $value;
+    private NodeInterface $value;
     /**
      * Constructor
      *
@@ -40,7 +40,7 @@ class PropertyNode implements \Cake\Error\Debug\NodeInterface
      * @param string|null $visibility The visibility of the property.
      * @param \Cake\Error\Debug\NodeInterface $value The property value node.
      */
-    public function __construct(string $name, ?string $visibility, \Cake\Error\Debug\NodeInterface $value)
+    public function __construct(string $name, ?string $visibility, NodeInterface $value)
     {
         $this->name = $name;
         $this->visibility = $visibility;
@@ -51,7 +51,7 @@ class PropertyNode implements \Cake\Error\Debug\NodeInterface
      *
      * @return \Cake\Error\Debug\NodeInterface
      */
-    public function getValue(): \Cake\Error\Debug\NodeInterface
+    public function getValue(): NodeInterface
     {
         return $this->value;
     }

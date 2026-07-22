@@ -1,18 +1,18 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Resources;
+namespace Odigos\OpenAI\Resources;
 
-use OpenAI\Contracts\Resources\FilesContract;
-use OpenAI\Responses\Files\CreateResponse;
-use OpenAI\Responses\Files\DeleteResponse;
-use OpenAI\Responses\Files\ListResponse;
-use OpenAI\Responses\Files\RetrieveResponse;
-use OpenAI\ValueObjects\Transporter\Payload;
-use OpenAI\ValueObjects\Transporter\Response;
+use Odigos\OpenAI\Contracts\Resources\FilesContract;
+use Odigos\OpenAI\Responses\Files\CreateResponse;
+use Odigos\OpenAI\Responses\Files\DeleteResponse;
+use Odigos\OpenAI\Responses\Files\ListResponse;
+use Odigos\OpenAI\Responses\Files\RetrieveResponse;
+use Odigos\OpenAI\ValueObjects\Transporter\Payload;
+use Odigos\OpenAI\ValueObjects\Transporter\Response;
 final class Files implements FilesContract
 {
-    use \OpenAI\Resources\Concerns\Transportable;
+    use Concerns\Transportable;
     /**
      * Returns a list of files that belong to the user's organization.
      *

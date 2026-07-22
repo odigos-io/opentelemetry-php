@@ -1,16 +1,16 @@
 <?php
 
-namespace Laravel\SerializableClosure\Serializers;
+namespace Odigos\Laravel\SerializableClosure\Serializers;
 
 use Closure;
 use DateTimeInterface;
-use Laravel\SerializableClosure\Contracts\Serializable;
-use Laravel\SerializableClosure\SerializableClosure;
-use Laravel\SerializableClosure\Support\ClosureScope;
-use Laravel\SerializableClosure\Support\ClosureStream;
-use Laravel\SerializableClosure\Support\ReflectionClosure;
-use Laravel\SerializableClosure\Support\SelfReference;
-use Laravel\SerializableClosure\UnsignedSerializableClosure;
+use Odigos\Laravel\SerializableClosure\Contracts\Serializable;
+use Odigos\Laravel\SerializableClosure\SerializableClosure;
+use Odigos\Laravel\SerializableClosure\Support\ClosureScope;
+use Odigos\Laravel\SerializableClosure\Support\ClosureStream;
+use Odigos\Laravel\SerializableClosure\Support\ReflectionClosure;
+use Odigos\Laravel\SerializableClosure\Support\SelfReference;
+use Odigos\Laravel\SerializableClosure\UnsignedSerializableClosure;
 use ReflectionObject;
 use ReflectionProperty;
 use UnitEnum;

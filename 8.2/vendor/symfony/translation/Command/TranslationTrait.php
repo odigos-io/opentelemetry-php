@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Translation\Command;
+namespace Odigos\Symfony\Component\Translation\Command;
 
-use Symfony\Component\Translation\MessageCatalogue;
-use Symfony\Component\Translation\MessageCatalogueInterface;
-use Symfony\Component\Translation\TranslatorBag;
+use Odigos\Symfony\Component\Translation\MessageCatalogue;
+use Odigos\Symfony\Component\Translation\MessageCatalogueInterface;
+use Odigos\Symfony\Component\Translation\TranslatorBag;
 /**
  * @internal
  */

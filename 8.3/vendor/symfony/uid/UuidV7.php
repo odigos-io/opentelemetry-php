@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Uid;
+namespace Odigos\Symfony\Component\Uid;
 
-use Symfony\Component\Uid\Exception\InvalidArgumentException;
+use Odigos\Symfony\Component\Uid\Exception\InvalidArgumentException;
 /**
  * A v7 UUID is lexicographically sortable and contains a 58-bit timestamp and 64 extra unique bits.
  *
@@ -20,7 +20,7 @@ use Symfony\Component\Uid\Exception\InvalidArgumentException;
  *
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class UuidV7 extends \Symfony\Component\Uid\Uuid implements \Symfony\Component\Uid\TimeBasedUidInterface
+class UuidV7 extends Uuid implements TimeBasedUidInterface
 {
     protected const TYPE = 7;
     private static string $time = '';
@@ -40,7 +40,7 @@ class UuidV7 extends \Symfony\Component\Uid\Uuid implements \Symfony\Component\U
     public function getDateTime(): \DateTimeImmutable
     {
         $time = substr($this->uid, 0, 8) . substr($this->uid, 9, 4);
-        $time = \PHP_INT_SIZE >= 8 ? (string) hexdec($time) : \Symfony\Component\Uid\BinaryUtil::toBase(hex2bin($time), \Symfony\Component\Uid\BinaryUtil::BASE10);
+        $time = \PHP_INT_SIZE >= 8 ? (string) hexdec($time) : BinaryUtil::toBase(hex2bin($time), BinaryUtil::BASE10);
         if (4 > \strlen($time)) {
             $time = '000' . $time;
         }
@@ -114,6 +114,6 @@ class UuidV7 extends \Symfony\Component\Uid\Uuid implements \Symfony\Component\U
         if (\PHP_INT_SIZE >= 8) {
             return substr_replace(\sprintf('%012x-%04x-%04x-%04x%08x', $time, 0x7000 | $subMs << 2 | self::$rand[1] >> 30, 0x8000 | self::$rand[1] >> 16 & 0x3fff, self::$rand[1] & 0xffff, self::$rand[2]), '-', 8, 0);
         }
-        return substr_replace(\sprintf('%012s-%04x-%04x-%04x%04x%04x', bin2hex(\Symfony\Component\Uid\BinaryUtil::fromBase($time, \Symfony\Component\Uid\BinaryUtil::BASE10)), 0x7000 | $subMs << 2 | self::$rand[1] >> 14, 0x8000 | self::$rand[1] & 0x3fff, self::$rand[2], self::$rand[3], self::$rand[4]), '-', 8, 0);
+        return substr_replace(\sprintf('%012s-%04x-%04x-%04x%04x%04x', bin2hex(BinaryUtil::fromBase($time, BinaryUtil::BASE10)), 0x7000 | $subMs << 2 | self::$rand[1] >> 14, 0x8000 | self::$rand[1] & 0x3fff, self::$rand[2], self::$rand[3], self::$rand[4]), '-', 8, 0);
     }
 }

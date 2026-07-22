@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Uid\Factory;
+namespace Odigos\Symfony\Component\Uid\Factory;
 
-use Symfony\Component\Uid\TimeBasedUidInterface;
-use Symfony\Component\Uid\Uuid;
+use Odigos\Symfony\Component\Uid\TimeBasedUidInterface;
+use Odigos\Symfony\Component\Uid\Uuid;
 class TimeBasedUuidFactory
 {
     /**

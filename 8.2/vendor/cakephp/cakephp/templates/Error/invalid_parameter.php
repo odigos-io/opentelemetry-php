@@ -18,10 +18,10 @@ namespace Odigos;
  * @var string $controller
  * @var string $class
  */
-use Cake\Core\Configure;
-use Cake\Core\Plugin;
-use Cake\Utility\Inflector;
-use function Cake\Core\h;
+use Odigos\Cake\Core\Configure;
+use Odigos\Cake\Core\Plugin;
+use Odigos\Cake\Utility\Inflector;
+use function Odigos\Cake\Core\h;
 $namespace = Configure::read('App.namespace');
 if (!empty($plugin)) {
     $namespace = \str_replace('/', '\\', $plugin);
@@ -29,7 +29,7 @@ if (!empty($plugin)) {
 $prefixNs = '';
 $prefix ??= '';
 if ($prefix) {
-    $prefix = \array_map('Cake\Utility\Inflector::camelize', \explode('/', $prefix));
+    $prefix = \array_map('Odigos\Cake\Utility\Inflector::camelize', \explode('/', $prefix));
     $prefixNs = '\\' . \implode('\\', $prefix);
     $prefix = \implode(\DIRECTORY_SEPARATOR, $prefix) . \DIRECTORY_SEPARATOR;
 }

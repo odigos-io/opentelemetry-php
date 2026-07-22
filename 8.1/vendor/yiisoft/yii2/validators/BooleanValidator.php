@@ -5,10 +5,10 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\validators;
+namespace Odigos\yii\validators;
 
 use Odigos\Yii;
-use yii\helpers\Json;
+use Odigos\yii\helpers\Json;
 /**
  * BooleanValidator checks if the attribute value is a boolean value.
  *
@@ -18,7 +18,7 @@ use yii\helpers\Json;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class BooleanValidator extends \yii\validators\Validator
+class BooleanValidator extends Validator
 {
     /**
      * @var mixed the value representing true status. Defaults to '1'.
@@ -64,7 +64,7 @@ class BooleanValidator extends \yii\validators\Validator
      */
     public function clientValidateAttribute($model, $attribute, $view)
     {
-        \yii\validators\ValidationAsset::register($view);
+        ValidationAsset::register($view);
         $options = $this->getClientOptions($model, $attribute);
         return 'yii.validation.boolean(value, messages, ' . Json::htmlEncode($options) . ');';
     }

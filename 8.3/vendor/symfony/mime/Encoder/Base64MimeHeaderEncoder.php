@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Mime\Encoder;
+namespace Odigos\Symfony\Component\Mime\Encoder;
 
 /**
  * @author Chris Corbyn
  */
-final class Base64MimeHeaderEncoder extends \Symfony\Component\Mime\Encoder\Base64Encoder implements \Symfony\Component\Mime\Encoder\MimeHeaderEncoderInterface
+final class Base64MimeHeaderEncoder extends Base64Encoder implements MimeHeaderEncoderInterface
 {
     public function getName(): string
     {

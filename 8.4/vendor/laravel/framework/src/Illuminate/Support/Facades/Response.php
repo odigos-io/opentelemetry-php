@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Support\Facades;
+namespace Odigos\Illuminate\Support\Facades;
 
-use Illuminate\Contracts\Routing\ResponseFactory as ResponseFactoryContract;
+use Odigos\Illuminate\Contracts\Routing\ResponseFactory as ResponseFactoryContract;
 /**
  * @method static \Illuminate\Http\Response make(mixed $content = '', int $status = 200, array $headers = [])
  * @method static \Illuminate\Http\Response noContent(int $status = 204, array $headers = [])
@@ -27,7 +27,7 @@ use Illuminate\Contracts\Routing\ResponseFactory as ResponseFactoryContract;
  *
  * @see \Illuminate\Routing\ResponseFactory
  */
-class Response extends \Illuminate\Support\Facades\Facade
+class Response extends Facade
 {
     /**
      * Get the registered name of the component.

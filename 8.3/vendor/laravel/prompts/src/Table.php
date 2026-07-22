@@ -1,9 +1,9 @@
 <?php
 
-namespace Laravel\Prompts;
+namespace Odigos\Laravel\Prompts;
 
-use Illuminate\Support\Collection;
-class Table extends \Laravel\Prompts\Prompt
+use Odigos\Illuminate\Support\Collection;
+class Table extends Prompt
 {
     /**
      * The table headers.

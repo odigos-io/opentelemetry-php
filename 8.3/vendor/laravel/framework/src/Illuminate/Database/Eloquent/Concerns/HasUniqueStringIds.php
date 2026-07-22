@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Database\Eloquent\Concerns;
+namespace Odigos\Illuminate\Database\Eloquent\Concerns;
 
-use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Odigos\Illuminate\Database\Eloquent\ModelNotFoundException;
 trait HasUniqueStringIds
 {
     /**

@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\db;
+namespace Odigos\yii\db;
 
 /**
  * ActiveQueryTrait implements the common methods and properties for active record query classes.
@@ -132,7 +132,7 @@ trait ActiveQueryTrait
             return;
         }
         $primaryModel = reset($models);
-        if (!$primaryModel instanceof \yii\db\ActiveRecordInterface) {
+        if (!$primaryModel instanceof ActiveRecordInterface) {
             /** @var ActiveRecordInterface $modelClass */
             $modelClass = $this->modelClass;
             $primaryModel = $modelClass::instance();

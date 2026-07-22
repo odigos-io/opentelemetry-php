@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Contracts\HttpClient;
+namespace Odigos\Symfony\Contracts\HttpClient;
 
-use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
-use Symfony\Contracts\HttpClient\Test\HttpClientTestCase;
+use Odigos\Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
+use Odigos\Symfony\Contracts\HttpClient\Test\HttpClientTestCase;
 /**
  * Provides flexible methods for requesting HTTP resources synchronously or asynchronously.
  *
@@ -106,14 +106,14 @@ interface HttpClientInterface
      *
      * @throws TransportExceptionInterface When an unsupported option is passed
      */
-    public function request(string $method, string $url, array $options = []): \Symfony\Contracts\HttpClient\ResponseInterface;
+    public function request(string $method, string $url, array $options = []): ResponseInterface;
     /**
      * Yields responses chunk by chunk as they complete.
      *
      * @param ResponseInterface|iterable<array-key, ResponseInterface> $responses One or more responses created by the current HTTP client
      * @param float|null                                               $timeout   The idle timeout before yielding timeout chunks
      */
-    public function stream(\Symfony\Contracts\HttpClient\ResponseInterface|iterable $responses, ?float $timeout = null): \Symfony\Contracts\HttpClient\ResponseStreamInterface;
+    public function stream(ResponseInterface|iterable $responses, ?float $timeout = null): ResponseStreamInterface;
     /**
      * Returns a new instance of the client with new default options.
      */

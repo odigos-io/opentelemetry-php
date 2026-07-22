@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenAI\Testing\Responses\Fixtures\Assistants;
+namespace Odigos\OpenAI\Testing\Responses\Fixtures\Assistants;
 
 final class AssistantDeleteResponseFixture
 {

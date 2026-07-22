@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Database\Schema;
+namespace Odigos\Illuminate\Database\Schema;
 
-class MySqlBuilder extends \Illuminate\Database\Schema\Builder
+class MySqlBuilder extends Builder
 {
     /**
      * Drop all tables from the database.

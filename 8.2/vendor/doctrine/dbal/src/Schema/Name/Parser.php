@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Schema\Name;
+namespace Odigos\Doctrine\DBAL\Schema\Name;
 
-use Doctrine\DBAL\Schema\Name;
-use Doctrine\DBAL\Schema\Name\Parser\Exception;
+use Odigos\Doctrine\DBAL\Schema\Name;
+use Odigos\Doctrine\DBAL\Schema\Name\Parser\Exception;
 /**
  * Parses a database object name.
  *

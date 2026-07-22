@@ -14,15 +14,15 @@ declare (strict_types=1);
  * @since         1.2.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\I18n;
+namespace Odigos\Cake\I18n;
 
-use Cake\Cache\Cache;
-use Cake\Cache\Exception\InvalidArgumentException;
-use Cake\I18n\Exception\I18nException;
-use Cake\I18n\Formatter\IcuFormatter;
-use Cake\I18n\Formatter\SprintfFormatter;
+use Odigos\Cake\Cache\Cache;
+use Odigos\Cake\Cache\Exception\InvalidArgumentException;
+use Odigos\Cake\I18n\Exception\I18nException;
+use Odigos\Cake\I18n\Formatter\IcuFormatter;
+use Odigos\Cake\I18n\Formatter\SprintfFormatter;
 use Locale;
-use function Cake\Core\deprecationWarning;
+use function Odigos\Cake\Core\deprecationWarning;
 /**
  * I18n handles translation of Text and time format strings.
  */
@@ -39,7 +39,7 @@ class I18n
      *
      * @var \Cake\I18n\TranslatorRegistry|null
      */
-    protected static ?\Cake\I18n\TranslatorRegistry $_collection = null;
+    protected static ?TranslatorRegistry $_collection = null;
     /**
      * The environment default locale
      *
@@ -53,12 +53,12 @@ class I18n
      *
      * @return \Cake\I18n\TranslatorRegistry The translator collection.
      */
-    public static function translators(): \Cake\I18n\TranslatorRegistry
+    public static function translators(): TranslatorRegistry
     {
         if (static::$_collection !== null) {
             return static::$_collection;
         }
-        static::$_collection = new \Cake\I18n\TranslatorRegistry(new \Cake\I18n\PackageLocator(), new \Cake\I18n\FormatterLocator(['default' => IcuFormatter::class, 'sprintf' => SprintfFormatter::class]), static::getLocale());
+        static::$_collection = new TranslatorRegistry(new PackageLocator(), new FormatterLocator(['default' => IcuFormatter::class, 'sprintf' => SprintfFormatter::class]), static::getLocale());
         if (class_exists(Cache::class)) {
             try {
                 $pool = Cache::pool('_cake_translations_');
@@ -127,7 +127,7 @@ class I18n
      * @return \Cake\I18n\Translator The configured translator.
      * @throws \Cake\I18n\Exception\I18nException
      */
-    public static function getTranslator(string $name = 'default', ?string $locale = null): \Cake\I18n\Translator
+    public static function getTranslator(string $name = 'default', ?string $locale = null): Translator
     {
         $translators = static::translators();
         $currentLocale = null;

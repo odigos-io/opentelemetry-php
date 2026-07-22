@@ -5,11 +5,11 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\mutex;
+namespace Odigos\yii\mutex;
 
 use Odigos\Yii;
-use yii\base\InvalidConfigException;
-use yii\helpers\FileHelper;
+use Odigos\yii\base\InvalidConfigException;
+use Odigos\yii\helpers\FileHelper;
 /**
  * FileMutex implements mutex "lock" mechanism via local file system files.
  *
@@ -38,9 +38,9 @@ use yii\helpers\FileHelper;
  * @author resurtm <resurtm@gmail.com>
  * @since 2.0
  */
-class FileMutex extends \yii\mutex\Mutex
+class FileMutex extends Mutex
 {
-    use \yii\mutex\RetryAcquireTrait;
+    use RetryAcquireTrait;
     /**
      * @var string the directory to store mutex files. You may use [path alias](guide:concept-aliases) here.
      * Defaults to the "mutex" subdirectory under the application runtime path.

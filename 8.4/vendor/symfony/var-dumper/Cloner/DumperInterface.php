@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\VarDumper\Cloner;
+namespace Odigos\Symfony\Component\VarDumper\Cloner;
 
 /**
  * DumperInterface used by Data objects.
@@ -20,7 +20,7 @@ interface DumperInterface
     /**
      * Dumps a scalar value.
      */
-    public function dumpScalar(\Symfony\Component\VarDumper\Cloner\Cursor $cursor, string $type, string|int|float|bool|null $value): void;
+    public function dumpScalar(Cursor $cursor, string $type, string|int|float|bool|null $value): void;
     /**
      * Dumps a string.
      *
@@ -28,7 +28,7 @@ interface DumperInterface
      * @param bool   $bin Whether $str is UTF-8 or binary encoded
      * @param int    $cut The number of characters $str has been cut by
      */
-    public function dumpString(\Symfony\Component\VarDumper\Cloner\Cursor $cursor, string $str, bool $bin, int $cut): void;
+    public function dumpString(Cursor $cursor, string $str, bool $bin, int $cut): void;
     /**
      * Dumps while entering an hash.
      *
@@ -36,7 +36,7 @@ interface DumperInterface
      * @param string|int|null $class    The object class, resource type or array count
      * @param bool            $hasChild When the dump of the hash has child item
      */
-    public function enterHash(\Symfony\Component\VarDumper\Cloner\Cursor $cursor, int $type, string|int|null $class, bool $hasChild): void;
+    public function enterHash(Cursor $cursor, int $type, string|int|null $class, bool $hasChild): void;
     /**
      * Dumps while leaving an hash.
      *
@@ -45,5 +45,5 @@ interface DumperInterface
      * @param bool            $hasChild When the dump of the hash has child item
      * @param int             $cut      The number of items the hash has been cut by
      */
-    public function leaveHash(\Symfony\Component\VarDumper\Cloner\Cursor $cursor, int $type, string|int|null $class, bool $hasChild, int $cut): void;
+    public function leaveHash(Cursor $cursor, int $type, string|int|null $class, bool $hasChild, int $cut): void;
 }

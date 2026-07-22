@@ -1,12 +1,12 @@
 <?php
 
-namespace Laravel\Prompts;
+namespace Odigos\Laravel\Prompts;
 
 use Closure;
-use Laravel\Prompts\Support\Logger;
-use Laravel\Prompts\Themes\Default\Concerns\InteractsWithStrings;
+use Odigos\Laravel\Prompts\Support\Logger;
+use Odigos\Laravel\Prompts\Themes\Default\Concerns\InteractsWithStrings;
 use RuntimeException;
-class Task extends \Laravel\Prompts\Prompt
+class Task extends Prompt
 {
     use InteractsWithStrings;
     /**

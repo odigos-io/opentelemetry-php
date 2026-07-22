@@ -14,15 +14,15 @@ declare (strict_types=1);
  * @since         2.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Controller;
+namespace Odigos\Cake\Controller;
 
-use Cake\Controller\Exception\MissingComponentException;
-use Cake\Core\App;
-use Cake\Core\ContainerInterface;
-use Cake\Core\Exception\CakeException;
-use Cake\Core\ObjectRegistry;
-use Cake\Event\EventDispatcherInterface;
-use Cake\Event\EventDispatcherTrait;
+use Odigos\Cake\Controller\Exception\MissingComponentException;
+use Odigos\Cake\Core\App;
+use Odigos\Cake\Core\ContainerInterface;
+use Odigos\Cake\Core\Exception\CakeException;
+use Odigos\Cake\Core\ObjectRegistry;
+use Odigos\Cake\Event\EventDispatcherInterface;
+use Odigos\Cake\Event\EventDispatcherTrait;
 use Odigos\League\Container\Argument\ArgumentResolverTrait;
 use Odigos\League\Container\Argument\LiteralArgument;
 use Odigos\League\Container\Argument\ResolvableArgument;
@@ -53,7 +53,7 @@ class ComponentRegistry extends ObjectRegistry implements EventDispatcherInterfa
      *
      * @var \Cake\Controller\Controller|null
      */
-    protected ?\Cake\Controller\Controller $_Controller = null;
+    protected ?Controller $_Controller = null;
     /**
      * @var \Cake\Core\ContainerInterface|null
      */
@@ -64,7 +64,7 @@ class ComponentRegistry extends ObjectRegistry implements EventDispatcherInterfa
      * @param \Cake\Controller\Controller|null $controller Controller instance.
      * @param \Cake\Core\ContainerInterface|null $container Container instance.
      */
-    public function __construct(?\Cake\Controller\Controller $controller = null, ?ContainerInterface $container = null)
+    public function __construct(?Controller $controller = null, ?ContainerInterface $container = null)
     {
         if ($controller !== null) {
             $this->setController($controller);
@@ -77,7 +77,7 @@ class ComponentRegistry extends ObjectRegistry implements EventDispatcherInterfa
      * @param \Cake\Controller\Controller $controller Controller instance.
      * @return $this
      */
-    public function setController(\Cake\Controller\Controller $controller)
+    public function setController(Controller $controller)
     {
         $this->_Controller = $controller;
         $this->setEventManager($controller->getEventManager());
@@ -88,7 +88,7 @@ class ComponentRegistry extends ObjectRegistry implements EventDispatcherInterfa
      *
      * @return \Cake\Controller\Controller Controller instance.
      */
-    public function getController(): \Cake\Controller\Controller
+    public function getController(): Controller
     {
         if ($this->_Controller === null) {
             throw new RuntimeException('Controller must be set first.');
@@ -150,7 +150,7 @@ class ComponentRegistry extends ObjectRegistry implements EventDispatcherInterfa
      * @param array<string, mixed> $config An array of config to use for the component.
      * @return \Cake\Controller\Component The constructed component class.
      */
-    protected function _create(object|string $class, string $alias, array $config): \Cake\Controller\Component
+    protected function _create(object|string $class, string $alias, array $config): Component
     {
         if (is_object($class)) {
             return $class;

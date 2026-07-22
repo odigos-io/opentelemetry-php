@@ -15,59 +15,59 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace MongoDB;
+namespace Odigos\MongoDB;
 
 use Countable;
 use Iterator;
 use MongoDB\BSON\Document;
 use MongoDB\BSON\PackedArray;
-use MongoDB\Builder\BuilderEncoder;
-use MongoDB\Builder\Pipeline;
-use MongoDB\Codec\DocumentCodec;
-use MongoDB\Codec\Encoder;
+use Odigos\MongoDB\Builder\BuilderEncoder;
+use Odigos\MongoDB\Builder\Pipeline;
+use Odigos\MongoDB\Codec\DocumentCodec;
+use Odigos\MongoDB\Codec\Encoder;
 use MongoDB\Driver\CursorInterface;
 use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
 use MongoDB\Driver\Manager;
 use MongoDB\Driver\ReadConcern;
 use MongoDB\Driver\ReadPreference;
 use MongoDB\Driver\WriteConcern;
-use MongoDB\Exception\InvalidArgumentException;
-use MongoDB\Exception\UnexpectedValueException;
-use MongoDB\Exception\UnsupportedException;
-use MongoDB\Model\BSONArray;
-use MongoDB\Model\BSONDocument;
-use MongoDB\Model\IndexInfo;
-use MongoDB\Operation\Aggregate;
-use MongoDB\Operation\BulkWrite;
-use MongoDB\Operation\Count;
-use MongoDB\Operation\CountDocuments;
-use MongoDB\Operation\CreateIndexes;
-use MongoDB\Operation\CreateSearchIndexes;
-use MongoDB\Operation\DeleteMany;
-use MongoDB\Operation\DeleteOne;
-use MongoDB\Operation\Distinct;
-use MongoDB\Operation\DropCollection;
-use MongoDB\Operation\DropEncryptedCollection;
-use MongoDB\Operation\DropIndexes;
-use MongoDB\Operation\DropSearchIndex;
-use MongoDB\Operation\EstimatedDocumentCount;
-use MongoDB\Operation\Explain;
-use MongoDB\Operation\Explainable;
-use MongoDB\Operation\Find;
-use MongoDB\Operation\FindOne;
-use MongoDB\Operation\FindOneAndDelete;
-use MongoDB\Operation\FindOneAndReplace;
-use MongoDB\Operation\FindOneAndUpdate;
-use MongoDB\Operation\InsertMany;
-use MongoDB\Operation\InsertOne;
-use MongoDB\Operation\ListIndexes;
-use MongoDB\Operation\ListSearchIndexes;
-use MongoDB\Operation\RenameCollection;
-use MongoDB\Operation\ReplaceOne;
-use MongoDB\Operation\UpdateMany;
-use MongoDB\Operation\UpdateOne;
-use MongoDB\Operation\UpdateSearchIndex;
-use MongoDB\Operation\Watch;
+use Odigos\MongoDB\Exception\InvalidArgumentException;
+use Odigos\MongoDB\Exception\UnexpectedValueException;
+use Odigos\MongoDB\Exception\UnsupportedException;
+use Odigos\MongoDB\Model\BSONArray;
+use Odigos\MongoDB\Model\BSONDocument;
+use Odigos\MongoDB\Model\IndexInfo;
+use Odigos\MongoDB\Operation\Aggregate;
+use Odigos\MongoDB\Operation\BulkWrite;
+use Odigos\MongoDB\Operation\Count;
+use Odigos\MongoDB\Operation\CountDocuments;
+use Odigos\MongoDB\Operation\CreateIndexes;
+use Odigos\MongoDB\Operation\CreateSearchIndexes;
+use Odigos\MongoDB\Operation\DeleteMany;
+use Odigos\MongoDB\Operation\DeleteOne;
+use Odigos\MongoDB\Operation\Distinct;
+use Odigos\MongoDB\Operation\DropCollection;
+use Odigos\MongoDB\Operation\DropEncryptedCollection;
+use Odigos\MongoDB\Operation\DropIndexes;
+use Odigos\MongoDB\Operation\DropSearchIndex;
+use Odigos\MongoDB\Operation\EstimatedDocumentCount;
+use Odigos\MongoDB\Operation\Explain;
+use Odigos\MongoDB\Operation\Explainable;
+use Odigos\MongoDB\Operation\Find;
+use Odigos\MongoDB\Operation\FindOne;
+use Odigos\MongoDB\Operation\FindOneAndDelete;
+use Odigos\MongoDB\Operation\FindOneAndReplace;
+use Odigos\MongoDB\Operation\FindOneAndUpdate;
+use Odigos\MongoDB\Operation\InsertMany;
+use Odigos\MongoDB\Operation\InsertOne;
+use Odigos\MongoDB\Operation\ListIndexes;
+use Odigos\MongoDB\Operation\ListSearchIndexes;
+use Odigos\MongoDB\Operation\RenameCollection;
+use Odigos\MongoDB\Operation\ReplaceOne;
+use Odigos\MongoDB\Operation\UpdateMany;
+use Odigos\MongoDB\Operation\UpdateOne;
+use Odigos\MongoDB\Operation\UpdateSearchIndex;
+use Odigos\MongoDB\Operation\Watch;
 use stdClass;
 use function array_diff_key;
 use function array_intersect_key;
@@ -219,7 +219,7 @@ class Collection
      * @throws InvalidArgumentException for parameter/option parsing errors
      * @throws DriverRuntimeException for other driver errors (e.g. connection errors)
      */
-    public function bulkWrite(array $operations, array $options = []): \MongoDB\BulkWriteResult
+    public function bulkWrite(array $operations, array $options = []): BulkWriteResult
     {
         $options = $this->inheritBuilderEncoder($options);
         $options = $this->inheritWriteOptions($options);
@@ -382,7 +382,7 @@ class Collection
      * @throws InvalidArgumentException for parameter/option parsing errors
      * @throws DriverRuntimeException for other driver errors (e.g. connection errors)
      */
-    public function deleteMany(array|object $filter, array $options = []): \MongoDB\DeleteResult
+    public function deleteMany(array|object $filter, array $options = []): DeleteResult
     {
         $filter = $this->builderEncoder->encodeIfSupported($filter);
         $options = $this->inheritWriteOptions($options);
@@ -400,7 +400,7 @@ class Collection
      * @throws InvalidArgumentException for parameter/option parsing errors
      * @throws DriverRuntimeException for other driver errors (e.g. connection errors)
      */
-    public function deleteOne(array|object $filter, array $options = []): \MongoDB\DeleteResult
+    public function deleteOne(array|object $filter, array $options = []): DeleteResult
     {
         $filter = $this->builderEncoder->encodeIfSupported($filter);
         $options = $this->inheritWriteOptions($options);
@@ -726,7 +726,7 @@ class Collection
      * @throws InvalidArgumentException for parameter/option parsing errors
      * @throws DriverRuntimeException for other driver errors (e.g. connection errors)
      */
-    public function insertMany(array $documents, array $options = []): \MongoDB\InsertManyResult
+    public function insertMany(array $documents, array $options = []): InsertManyResult
     {
         $options = $this->inheritWriteOptions($options);
         $options = $this->inheritCodec($options);
@@ -743,7 +743,7 @@ class Collection
      * @throws InvalidArgumentException for parameter/option parsing errors
      * @throws DriverRuntimeException for other driver errors (e.g. connection errors)
      */
-    public function insertOne(array|object $document, array $options = []): \MongoDB\InsertOneResult
+    public function insertOne(array|object $document, array $options = []): InsertOneResult
     {
         $options = $this->inheritWriteOptions($options);
         $options = $this->inheritCodec($options);
@@ -812,7 +812,7 @@ class Collection
      * @throws InvalidArgumentException for parameter/option parsing errors
      * @throws DriverRuntimeException for other driver errors (e.g. connection errors)
      */
-    public function replaceOne(array|object $filter, array|object $replacement, array $options = []): \MongoDB\UpdateResult
+    public function replaceOne(array|object $filter, array|object $replacement, array $options = []): UpdateResult
     {
         $filter = $this->builderEncoder->encodeIfSupported($filter);
         $options = $this->inheritWriteOptions($options);
@@ -832,7 +832,7 @@ class Collection
      * @throws InvalidArgumentException for parameter/option parsing errors
      * @throws DriverRuntimeException for other driver errors (e.g. connection errors)
      */
-    public function updateMany(array|object $filter, array|object $update, array $options = []): \MongoDB\UpdateResult
+    public function updateMany(array|object $filter, array|object $update, array $options = []): UpdateResult
     {
         $filter = $this->builderEncoder->encodeIfSupported($filter);
         $update = $this->builderEncoder->encodeIfSupported($update);
@@ -852,7 +852,7 @@ class Collection
      * @throws InvalidArgumentException for parameter/option parsing errors
      * @throws DriverRuntimeException for other driver errors (e.g. connection errors)
      */
-    public function updateOne(array|object $filter, array|object $update, array $options = []): \MongoDB\UpdateResult
+    public function updateOne(array|object $filter, array|object $update, array $options = []): UpdateResult
     {
         $filter = $this->builderEncoder->encodeIfSupported($filter);
         $update = $this->builderEncoder->encodeIfSupported($update);
@@ -885,7 +885,7 @@ class Collection
      * @param array          $options  Command options
      * @throws InvalidArgumentException for parameter/option parsing errors
      */
-    public function watch(array|Pipeline $pipeline = [], array $options = []): \MongoDB\ChangeStream
+    public function watch(array|Pipeline $pipeline = [], array $options = []): ChangeStream
     {
         if (is_array($pipeline) && is_builder_pipeline($pipeline)) {
             $pipeline = new Pipeline(...$pipeline);
@@ -903,10 +903,10 @@ class Collection
      * @param array $options Collection constructor options
      * @throws InvalidArgumentException for parameter/option parsing errors
      */
-    public function withOptions(array $options = []): \MongoDB\Collection
+    public function withOptions(array $options = []): Collection
     {
         $options += ['autoEncryptionEnabled' => $this->autoEncryptionEnabled, 'builderEncoder' => $this->builderEncoder, 'codec' => $this->codec, 'readConcern' => $this->readConcern, 'readPreference' => $this->readPreference, 'typeMap' => $this->typeMap, 'writeConcern' => $this->writeConcern];
-        return new \MongoDB\Collection($this->manager, $this->databaseName, $this->collectionName, $options);
+        return new Collection($this->manager, $this->databaseName, $this->collectionName, $options);
     }
     private function inheritBuilderEncoder(array $options): array
     {

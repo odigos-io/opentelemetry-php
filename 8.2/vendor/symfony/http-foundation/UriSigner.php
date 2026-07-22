@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpFoundation;
+namespace Odigos\Symfony\Component\HttpFoundation;
 
 use Psr\Clock\ClockInterface;
-use Symfony\Component\HttpFoundation\Exception\ExpiredSignedUriException;
-use Symfony\Component\HttpFoundation\Exception\LogicException;
-use Symfony\Component\HttpFoundation\Exception\SignedUriException;
-use Symfony\Component\HttpFoundation\Exception\UnsignedUriException;
-use Symfony\Component\HttpFoundation\Exception\UnverifiedSignedUriException;
+use Odigos\Symfony\Component\HttpFoundation\Exception\ExpiredSignedUriException;
+use Odigos\Symfony\Component\HttpFoundation\Exception\LogicException;
+use Odigos\Symfony\Component\HttpFoundation\Exception\SignedUriException;
+use Odigos\Symfony\Component\HttpFoundation\Exception\UnsignedUriException;
+use Odigos\Symfony\Component\HttpFoundation\Exception\UnverifiedSignedUriException;
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  */
@@ -90,7 +90,7 @@ class UriSigner
     {
         return self::STATUS_VALID === $this->doVerify($uri);
     }
-    public function checkRequest(\Symfony\Component\HttpFoundation\Request $request): bool
+    public function checkRequest(Request $request): bool
     {
         return self::STATUS_VALID === $this->doVerify(self::normalize($request));
     }
@@ -102,7 +102,7 @@ class UriSigner
      * @throws ExpiredSignedUriException    If the URI has expired
      * @throws SignedUriException
      */
-    public function verify(\Symfony\Component\HttpFoundation\Request|string $uri): void
+    public function verify(Request|string $uri): void
     {
         $uri = self::normalize($uri);
         $status = $this->doVerify($uri);
@@ -172,9 +172,9 @@ class UriSigner
         }
         return self::STATUS_EXPIRED;
     }
-    private static function normalize(\Symfony\Component\HttpFoundation\Request|string $uri): string
+    private static function normalize(Request|string $uri): string
     {
-        if ($uri instanceof \Symfony\Component\HttpFoundation\Request) {
+        if ($uri instanceof Request) {
             $qs = ($qs = $uri->server->get('QUERY_STRING')) ? '?' . $qs : '';
             $uri = $uri->getSchemeAndHttpHost() . $uri->getBaseUrl() . $uri->getPathInfo() . $qs;
         }

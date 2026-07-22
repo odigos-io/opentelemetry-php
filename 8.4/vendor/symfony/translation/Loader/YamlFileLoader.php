@@ -8,19 +8,19 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Translation\Loader;
+namespace Odigos\Symfony\Component\Translation\Loader;
 
-use Symfony\Component\Translation\Exception\InvalidResourceException;
-use Symfony\Component\Translation\Exception\LogicException;
-use Symfony\Component\Yaml\Exception\ParseException;
-use Symfony\Component\Yaml\Parser as YamlParser;
-use Symfony\Component\Yaml\Yaml;
+use Odigos\Symfony\Component\Translation\Exception\InvalidResourceException;
+use Odigos\Symfony\Component\Translation\Exception\LogicException;
+use Odigos\Symfony\Component\Yaml\Exception\ParseException;
+use Odigos\Symfony\Component\Yaml\Parser as YamlParser;
+use Odigos\Symfony\Component\Yaml\Yaml;
 /**
  * YamlFileLoader loads translations from Yaml files.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class YamlFileLoader extends \Symfony\Component\Translation\Loader\FileLoader
+class YamlFileLoader extends FileLoader
 {
     private YamlParser $yamlParser;
     protected function loadResource(string $resource): array

@@ -14,12 +14,12 @@ declare (strict_types=1);
  * @since         4.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\ORM\Rule;
+namespace Odigos\Cake\ORM\Rule;
 
-use Cake\Database\Exception\DatabaseException;
-use Cake\Datasource\EntityInterface;
-use Cake\ORM\Association;
-use Cake\ORM\Table;
+use Odigos\Cake\Database\Exception\DatabaseException;
+use Odigos\Cake\Datasource\EntityInterface;
+use Odigos\Cake\ORM\Association;
+use Odigos\Cake\ORM\Table;
 use InvalidArgumentException;
 /**
  * Checks whether links to a given association exist / do not exist.

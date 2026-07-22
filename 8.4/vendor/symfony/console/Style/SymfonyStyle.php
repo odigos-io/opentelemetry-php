@@ -8,36 +8,36 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Console\Style;
+namespace Odigos\Symfony\Component\Console\Style;
 
-use Symfony\Component\Console\Exception\InvalidArgumentException;
-use Symfony\Component\Console\Exception\RuntimeException;
-use Symfony\Component\Console\Formatter\OutputFormatter;
-use Symfony\Component\Console\Helper\Helper;
-use Symfony\Component\Console\Helper\OutputWrapper;
-use Symfony\Component\Console\Helper\ProgressBar;
-use Symfony\Component\Console\Helper\SymfonyQuestionHelper;
-use Symfony\Component\Console\Helper\Table;
-use Symfony\Component\Console\Helper\TableCell;
-use Symfony\Component\Console\Helper\TableSeparator;
-use Symfony\Component\Console\Helper\TreeHelper;
-use Symfony\Component\Console\Helper\TreeNode;
-use Symfony\Component\Console\Helper\TreeStyle;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\ConsoleOutputInterface;
-use Symfony\Component\Console\Output\ConsoleSectionOutput;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Output\TrimmedBufferOutput;
-use Symfony\Component\Console\Question\ChoiceQuestion;
-use Symfony\Component\Console\Question\ConfirmationQuestion;
-use Symfony\Component\Console\Question\Question;
-use Symfony\Component\Console\Terminal;
+use Odigos\Symfony\Component\Console\Exception\InvalidArgumentException;
+use Odigos\Symfony\Component\Console\Exception\RuntimeException;
+use Odigos\Symfony\Component\Console\Formatter\OutputFormatter;
+use Odigos\Symfony\Component\Console\Helper\Helper;
+use Odigos\Symfony\Component\Console\Helper\OutputWrapper;
+use Odigos\Symfony\Component\Console\Helper\ProgressBar;
+use Odigos\Symfony\Component\Console\Helper\SymfonyQuestionHelper;
+use Odigos\Symfony\Component\Console\Helper\Table;
+use Odigos\Symfony\Component\Console\Helper\TableCell;
+use Odigos\Symfony\Component\Console\Helper\TableSeparator;
+use Odigos\Symfony\Component\Console\Helper\TreeHelper;
+use Odigos\Symfony\Component\Console\Helper\TreeNode;
+use Odigos\Symfony\Component\Console\Helper\TreeStyle;
+use Odigos\Symfony\Component\Console\Input\InputInterface;
+use Odigos\Symfony\Component\Console\Output\ConsoleOutputInterface;
+use Odigos\Symfony\Component\Console\Output\ConsoleSectionOutput;
+use Odigos\Symfony\Component\Console\Output\OutputInterface;
+use Odigos\Symfony\Component\Console\Output\TrimmedBufferOutput;
+use Odigos\Symfony\Component\Console\Question\ChoiceQuestion;
+use Odigos\Symfony\Component\Console\Question\ConfirmationQuestion;
+use Odigos\Symfony\Component\Console\Question\Question;
+use Odigos\Symfony\Component\Console\Terminal;
 /**
  * Output decorator helpers for the Symfony Style Guide.
  *
  * @author Kevin Bond <kevinbond@gmail.com>
  */
-class SymfonyStyle extends \Symfony\Component\Console\Style\OutputStyle
+class SymfonyStyle extends OutputStyle
 {
     public const MAX_LINE_LENGTH = 120;
     private SymfonyQuestionHelper $questionHelper;

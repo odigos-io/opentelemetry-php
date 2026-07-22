@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Database;
+namespace Odigos\Illuminate\Database;
 
-class ConnectionResolver implements \Illuminate\Database\ConnectionResolverInterface
+class ConnectionResolver implements ConnectionResolverInterface
 {
     /**
      * All of the registered connections.
@@ -47,7 +47,7 @@ class ConnectionResolver implements \Illuminate\Database\ConnectionResolverInter
      * @param  \Illuminate\Database\ConnectionInterface  $connection
      * @return void
      */
-    public function addConnection($name, \Illuminate\Database\ConnectionInterface $connection)
+    public function addConnection($name, ConnectionInterface $connection)
     {
         $this->connections[$name] = $connection;
     }

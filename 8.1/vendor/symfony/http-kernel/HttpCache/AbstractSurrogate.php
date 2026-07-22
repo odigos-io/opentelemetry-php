@@ -8,18 +8,18 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpKernel\HttpCache;
+namespace Odigos\Symfony\Component\HttpKernel\HttpCache;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Odigos\Symfony\Component\HttpFoundation\Request;
+use Odigos\Symfony\Component\HttpFoundation\Response;
+use Odigos\Symfony\Component\HttpKernel\HttpKernelInterface;
 /**
  * Abstract class implementing Surrogate capabilities to Request and Response instances.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  * @author Robin Chalas <robin.chalas@gmail.com>
  */
-abstract class AbstractSurrogate implements \Symfony\Component\HttpKernel\HttpCache\SurrogateInterface
+abstract class AbstractSurrogate implements SurrogateInterface
 {
     protected $contentTypes;
     /**
@@ -37,9 +37,9 @@ abstract class AbstractSurrogate implements \Symfony\Component\HttpKernel\HttpCa
     /**
      * Returns a new cache strategy instance.
      */
-    public function createCacheStrategy(): \Symfony\Component\HttpKernel\HttpCache\ResponseCacheStrategyInterface
+    public function createCacheStrategy(): ResponseCacheStrategyInterface
     {
-        return new \Symfony\Component\HttpKernel\HttpCache\ResponseCacheStrategy();
+        return new ResponseCacheStrategy();
     }
     public function hasSurrogateCapability(Request $request): bool
     {
@@ -65,7 +65,7 @@ abstract class AbstractSurrogate implements \Symfony\Component\HttpKernel\HttpCa
         $pattern = \sprintf('#content="[^"]*%s/1.0[^"]*"#', strtoupper($this->getName()));
         return (bool) preg_match($pattern, $control);
     }
-    public function handle(\Symfony\Component\HttpKernel\HttpCache\HttpCache $cache, string $uri, string $alt, bool $ignoreErrors): string
+    public function handle(HttpCache $cache, string $uri, string $alt, bool $ignoreErrors): string
     {
         $subRequest = Request::create($uri, Request::METHOD_GET, [], $cache->getRequest()->cookies->all(), [], $cache->getRequest()->server->all());
         try {
@@ -109,7 +109,7 @@ abstract class AbstractSurrogate implements \Symfony\Component\HttpKernel\HttpCa
         static $cookie;
         $cookie = hash('xxh128', $cookie ?? $cookie = random_bytes(16), \true);
         $boundary = base64_encode($cookie);
-        \assert(\Symfony\Component\HttpKernel\HttpCache\HttpCache::BODY_EVAL_BOUNDARY_LENGTH === \strlen($boundary));
+        \assert(HttpCache::BODY_EVAL_BOUNDARY_LENGTH === \strlen($boundary));
         return $boundary;
     }
 }

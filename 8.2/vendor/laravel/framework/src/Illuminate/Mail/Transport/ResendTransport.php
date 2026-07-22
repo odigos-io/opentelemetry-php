@@ -1,17 +1,17 @@
 <?php
 
-namespace Illuminate\Mail\Transport;
+namespace Odigos\Illuminate\Mail\Transport;
 
 use Exception;
 use Odigos\Resend\Contracts\Client;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mailer\Envelope;
-use Symfony\Component\Mailer\Exception\TransportException;
-use Symfony\Component\Mailer\SentMessage;
-use Symfony\Component\Mailer\Transport\AbstractTransport;
-use Symfony\Component\Mime\Address;
-use Symfony\Component\Mime\Email;
-use Symfony\Component\Mime\MessageConverter;
+use Odigos\Symfony\Component\HttpFoundation\Response;
+use Odigos\Symfony\Component\Mailer\Envelope;
+use Odigos\Symfony\Component\Mailer\Exception\TransportException;
+use Odigos\Symfony\Component\Mailer\SentMessage;
+use Odigos\Symfony\Component\Mailer\Transport\AbstractTransport;
+use Odigos\Symfony\Component\Mime\Address;
+use Odigos\Symfony\Component\Mime\Email;
+use Odigos\Symfony\Component\Mime\MessageConverter;
 /*
 MIT License
 

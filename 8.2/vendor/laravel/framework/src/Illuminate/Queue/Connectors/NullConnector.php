@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Queue\Connectors;
+namespace Odigos\Illuminate\Queue\Connectors;
 
-use Illuminate\Queue\NullQueue;
-class NullConnector implements \Illuminate\Queue\Connectors\ConnectorInterface
+use Odigos\Illuminate\Queue\NullQueue;
+class NullConnector implements ConnectorInterface
 {
     /**
      * Establish a queue connection.

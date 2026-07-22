@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Redis\Limiters;
+namespace Odigos\Illuminate\Redis\Limiters;
 
-use Illuminate\Contracts\Redis\LimiterTimeoutException;
-use Illuminate\Support\InteractsWithTime;
+use Odigos\Illuminate\Contracts\Redis\LimiterTimeoutException;
+use Odigos\Illuminate\Support\InteractsWithTime;
 class DurationLimiterBuilder
 {
     use InteractsWithTime;
@@ -110,7 +110,7 @@ class DurationLimiterBuilder
     public function then(callable $callback, ?callable $failure = null)
     {
         try {
-            return (new \Illuminate\Redis\Limiters\DurationLimiter($this->connection, $this->name, $this->maxLocks, $this->decay))->block($this->timeout, $callback, $this->sleep);
+            return (new DurationLimiter($this->connection, $this->name, $this->maxLocks, $this->decay))->block($this->timeout, $callback, $this->sleep);
         } catch (LimiterTimeoutException $e) {
             if ($failure) {
                 return $failure($e);

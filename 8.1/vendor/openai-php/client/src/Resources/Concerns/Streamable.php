@@ -1,8 +1,8 @@
 <?php
 
-namespace OpenAI\Resources\Concerns;
+namespace Odigos\OpenAI\Resources\Concerns;
 
-use OpenAI\Exceptions\InvalidArgumentException;
+use Odigos\OpenAI\Exceptions\InvalidArgumentException;
 trait Streamable
 {
     /**

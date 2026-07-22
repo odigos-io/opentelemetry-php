@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Finder\Comparator;
+namespace Odigos\Symfony\Component\Finder\Comparator;
 
 /**
  * DateCompare compiles date comparisons.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class DateComparator extends \Symfony\Component\Finder\Comparator\Comparator
+class DateComparator extends Comparator
 {
     /**
      * @param string $test A comparison string

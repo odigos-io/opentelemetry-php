@@ -6,7 +6,7 @@
  * @license https://github.com/slimphp/Slim/blob/4.x/LICENSE.md (MIT License)
  */
 declare (strict_types=1);
-namespace Slim;
+namespace Odigos\Slim;
 
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
@@ -15,17 +15,17 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Log\LoggerInterface;
-use Slim\Factory\ServerRequestCreatorFactory;
-use Slim\Interfaces\CallableResolverInterface;
-use Slim\Interfaces\MiddlewareDispatcherInterface;
-use Slim\Interfaces\RouteCollectorInterface;
-use Slim\Interfaces\RouteResolverInterface;
-use Slim\Middleware\BodyParsingMiddleware;
-use Slim\Middleware\ErrorMiddleware;
-use Slim\Middleware\RoutingMiddleware;
-use Slim\Routing\RouteCollectorProxy;
-use Slim\Routing\RouteResolver;
-use Slim\Routing\RouteRunner;
+use Odigos\Slim\Factory\ServerRequestCreatorFactory;
+use Odigos\Slim\Interfaces\CallableResolverInterface;
+use Odigos\Slim\Interfaces\MiddlewareDispatcherInterface;
+use Odigos\Slim\Interfaces\RouteCollectorInterface;
+use Odigos\Slim\Interfaces\RouteResolverInterface;
+use Odigos\Slim\Middleware\BodyParsingMiddleware;
+use Odigos\Slim\Middleware\ErrorMiddleware;
+use Odigos\Slim\Middleware\RoutingMiddleware;
+use Odigos\Slim\Routing\RouteCollectorProxy;
+use Odigos\Slim\Routing\RouteResolver;
+use Odigos\Slim\Routing\RouteRunner;
 use function strtoupper;
 /**
  * @api
@@ -47,11 +47,11 @@ class App extends RouteCollectorProxy implements RequestHandlerInterface
      */
     public function __construct(ResponseFactoryInterface $responseFactory, ?ContainerInterface $container = null, ?CallableResolverInterface $callableResolver = null, ?RouteCollectorInterface $routeCollector = null, ?RouteResolverInterface $routeResolver = null, ?MiddlewareDispatcherInterface $middlewareDispatcher = null)
     {
-        parent::__construct($responseFactory, $callableResolver ?? new \Slim\CallableResolver($container), $container, $routeCollector);
+        parent::__construct($responseFactory, $callableResolver ?? new CallableResolver($container), $container, $routeCollector);
         $this->routeResolver = $routeResolver ?? new RouteResolver($this->routeCollector);
         $routeRunner = new RouteRunner($this->routeResolver, $this->routeCollector->getRouteParser(), $this);
         if (!$middlewareDispatcher) {
-            $middlewareDispatcher = new \Slim\MiddlewareDispatcher($routeRunner, $this->callableResolver, $container);
+            $middlewareDispatcher = new MiddlewareDispatcher($routeRunner, $this->callableResolver, $container);
         } else {
             $middlewareDispatcher->seedMiddlewareStack($routeRunner);
         }
@@ -147,7 +147,7 @@ class App extends RouteCollectorProxy implements RequestHandlerInterface
             $request = $serverRequestCreator->createServerRequestFromGlobals();
         }
         $response = $this->handle($request);
-        $responseEmitter = new \Slim\ResponseEmitter();
+        $responseEmitter = new ResponseEmitter();
         $responseEmitter->emit($response);
     }
     /**

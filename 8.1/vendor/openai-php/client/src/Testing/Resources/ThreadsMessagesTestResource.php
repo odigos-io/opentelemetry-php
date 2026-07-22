@@ -1,13 +1,13 @@
 <?php
 
-namespace OpenAI\Testing\Resources;
+namespace Odigos\OpenAI\Testing\Resources;
 
-use OpenAI\Contracts\Resources\ThreadsMessagesContract;
-use OpenAI\Resources\ThreadsMessages;
-use OpenAI\Responses\Threads\Messages\ThreadMessageDeleteResponse;
-use OpenAI\Responses\Threads\Messages\ThreadMessageListResponse;
-use OpenAI\Responses\Threads\Messages\ThreadMessageResponse;
-use OpenAI\Testing\Resources\Concerns\Testable;
+use Odigos\OpenAI\Contracts\Resources\ThreadsMessagesContract;
+use Odigos\OpenAI\Resources\ThreadsMessages;
+use Odigos\OpenAI\Responses\Threads\Messages\ThreadMessageDeleteResponse;
+use Odigos\OpenAI\Responses\Threads\Messages\ThreadMessageListResponse;
+use Odigos\OpenAI\Responses\Threads\Messages\ThreadMessageResponse;
+use Odigos\OpenAI\Testing\Resources\Concerns\Testable;
 final class ThreadsMessagesTestResource implements ThreadsMessagesContract
 {
     use Testable;

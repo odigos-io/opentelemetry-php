@@ -5,11 +5,11 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\db;
+namespace Odigos\yii\db;
 
 use Odigos\Yii;
-use yii\base\InvalidConfigException;
-use yii\base\NotSupportedException;
+use Odigos\yii\base\InvalidConfigException;
+use Odigos\yii\base\NotSupportedException;
 /**
  * Transaction represents a DB transaction.
  *
@@ -48,7 +48,7 @@ use yii\base\NotSupportedException;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class Transaction extends \yii\base\BaseObject
+class Transaction extends \Odigos\yii\base\BaseObject
 {
     /**
      * A constant representing the transaction isolation level `READ UNCOMMITTED`.
@@ -121,7 +121,7 @@ class Transaction extends \yii\base\BaseObject
                 $this->db->getSchema()->setTransactionIsolationLevel($isolationLevel);
             }
             Yii::debug('Begin transaction' . ($isolationLevel ? ' with isolation level ' . $isolationLevel : ''), __METHOD__);
-            $this->db->trigger(\yii\db\Connection::EVENT_BEGIN_TRANSACTION);
+            $this->db->trigger(Connection::EVENT_BEGIN_TRANSACTION);
             $this->db->pdo->beginTransaction();
             $this->_level = 1;
             return;
@@ -146,7 +146,7 @@ class Transaction extends \yii\base\BaseObject
     public function commit()
     {
         if (!$this->getIsActive()) {
-            throw new \yii\db\Exception('Failed to commit transaction: transaction was inactive.');
+            throw new Exception('Failed to commit transaction: transaction was inactive.');
         }
         $this->_level--;
         if ($this->_level === 0) {
@@ -155,7 +155,7 @@ class Transaction extends \yii\base\BaseObject
             if ($this->db->pdo->inTransaction()) {
                 $this->db->pdo->commit();
             }
-            $this->db->trigger(\yii\db\Connection::EVENT_COMMIT_TRANSACTION);
+            $this->db->trigger(Connection::EVENT_COMMIT_TRANSACTION);
             return;
         }
         $schema = $this->db->getSchema();
@@ -186,7 +186,7 @@ class Transaction extends \yii\base\BaseObject
             if ($this->db->pdo->inTransaction()) {
                 $this->db->pdo->rollBack();
             }
-            $this->db->trigger(\yii\db\Connection::EVENT_ROLLBACK_TRANSACTION);
+            $this->db->trigger(Connection::EVENT_ROLLBACK_TRANSACTION);
             return;
         }
         $schema = $this->db->getSchema();
@@ -215,7 +215,7 @@ class Transaction extends \yii\base\BaseObject
     public function setIsolationLevel($level)
     {
         if (!$this->getIsActive()) {
-            throw new \yii\db\Exception('Failed to set isolation level: transaction was inactive.');
+            throw new Exception('Failed to set isolation level: transaction was inactive.');
         }
         Yii::debug('Setting transaction isolation level to ' . $level, __METHOD__);
         $this->db->getSchema()->setTransactionIsolationLevel($level);

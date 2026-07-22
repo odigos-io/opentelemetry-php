@@ -1,24 +1,24 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Schema\Name;
+namespace Odigos\Doctrine\DBAL\Schema\Name;
 
-use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Doctrine\DBAL\Schema\Exception\IncomparableNames;
-use Doctrine\DBAL\Schema\Name;
+use Odigos\Doctrine\DBAL\Platforms\AbstractPlatform;
+use Odigos\Doctrine\DBAL\Schema\Exception\IncomparableNames;
+use Odigos\Doctrine\DBAL\Schema\Name;
 /**
  * An optionally qualified {@see Name} consisting of an unqualified name and an optional unqualified qualifier.
  */
 final readonly class OptionallyQualifiedName implements Name
 {
-    public function __construct(private \Doctrine\DBAL\Schema\Name\Identifier $unqualifiedName, private ?\Doctrine\DBAL\Schema\Name\Identifier $qualifier)
+    public function __construct(private Identifier $unqualifiedName, private ?Identifier $qualifier)
     {
     }
-    public function getUnqualifiedName(): \Doctrine\DBAL\Schema\Name\Identifier
+    public function getUnqualifiedName(): Identifier
     {
         return $this->unqualifiedName;
     }
-    public function getQualifier(): ?\Doctrine\DBAL\Schema\Name\Identifier
+    public function getQualifier(): ?Identifier
     {
         return $this->qualifier;
     }
@@ -43,7 +43,7 @@ final readonly class OptionallyQualifiedName implements Name
      *
      * To be comparable, both names must either have a qualifier or have no qualifier.
      */
-    public function equals(self $other, \Doctrine\DBAL\Schema\Name\UnquotedIdentifierFolding $folding): bool
+    public function equals(self $other, UnquotedIdentifierFolding $folding): bool
     {
         if ($this === $other) {
             return \true;
@@ -64,7 +64,7 @@ final readonly class OptionallyQualifiedName implements Name
      */
     public static function quoted(string $unqualifiedName, ?string $qualifier = null): self
     {
-        return new self(\Doctrine\DBAL\Schema\Name\Identifier::quoted($unqualifiedName), $qualifier !== null ? \Doctrine\DBAL\Schema\Name\Identifier::quoted($qualifier) : null);
+        return new self(Identifier::quoted($unqualifiedName), $qualifier !== null ? Identifier::quoted($qualifier) : null);
     }
     /**
      * Creates an optionally qualified name with all identifiers unquoted.
@@ -74,6 +74,6 @@ final readonly class OptionallyQualifiedName implements Name
      */
     public static function unquoted(string $unqualifiedName, ?string $qualifier = null): self
     {
-        return new self(\Doctrine\DBAL\Schema\Name\Identifier::unquoted($unqualifiedName), $qualifier !== null ? \Doctrine\DBAL\Schema\Name\Identifier::unquoted($qualifier) : null);
+        return new self(Identifier::unquoted($unqualifiedName), $qualifier !== null ? Identifier::unquoted($qualifier) : null);
     }
 }

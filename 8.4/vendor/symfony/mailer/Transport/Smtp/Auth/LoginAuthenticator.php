@@ -8,15 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Mailer\Transport\Smtp\Auth;
+namespace Odigos\Symfony\Component\Mailer\Transport\Smtp\Auth;
 
-use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransport;
+use Odigos\Symfony\Component\Mailer\Transport\Smtp\EsmtpTransport;
 /**
  * Handles LOGIN authentication.
  *
  * @author Chris Corbyn
  */
-class LoginAuthenticator implements \Symfony\Component\Mailer\Transport\Smtp\Auth\AuthenticatorInterface
+class LoginAuthenticator implements AuthenticatorInterface
 {
     public function getAuthKeyword(): string
     {

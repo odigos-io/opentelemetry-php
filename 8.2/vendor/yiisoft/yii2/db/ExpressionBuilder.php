@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\db;
+namespace Odigos\yii\db;
 
 /**
  * Class ExpressionBuilder builds objects of [[yii\db\Expression]] class.
@@ -13,14 +13,14 @@ namespace yii\db;
  * @author Dmitry Naumenko <d.naumenko.a@gmail.com>
  * @since 2.0.14
  */
-class ExpressionBuilder implements \yii\db\ExpressionBuilderInterface
+class ExpressionBuilder implements ExpressionBuilderInterface
 {
-    use \yii\db\ExpressionBuilderTrait;
+    use ExpressionBuilderTrait;
     /**
      * {@inheritdoc}
      * @param Expression|ExpressionInterface $expression the expression to be built
      */
-    public function build(\yii\db\ExpressionInterface $expression, array &$params = [])
+    public function build(ExpressionInterface $expression, array &$params = [])
     {
         $params = array_merge($params, $expression->params);
         return $expression->__toString();

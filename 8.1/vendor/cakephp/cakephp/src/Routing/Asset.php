@@ -14,12 +14,12 @@ declare (strict_types=1);
  * @since         4.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Routing;
+namespace Odigos\Cake\Routing;
 
-use Cake\Core\Configure;
-use Cake\Core\Plugin;
-use Cake\Utility\Inflector;
-use function Cake\Core\pluginSplit;
+use Odigos\Cake\Core\Configure;
+use Odigos\Cake\Core\Plugin;
+use Odigos\Cake\Utility\Inflector;
+use function Odigos\Cake\Core\pluginSplit;
 /**
  * Class for generating asset URLs.
  */
@@ -141,7 +141,7 @@ class Asset
             return $path;
         }
         if (str_contains($path, '://') || preg_match('/^[a-z]+:/i', $path)) {
-            return ltrim(\Cake\Routing\Router::url($path), '/');
+            return ltrim(Router::url($path), '/');
         }
         $plugin = null;
         if (!array_key_exists('plugin', $options) || $options['plugin'] !== \false) {
@@ -162,7 +162,7 @@ class Asset
         }
         // Check again if path has protocol as `pathPrefix` could be for CDNs.
         if (preg_match('|^([a-z0-9]+:)?//|', $path)) {
-            return \Cake\Routing\Router::url($path);
+            return Router::url($path);
         }
         if ($plugin !== null) {
             $path = static::inflectString($plugin) . '/' . $path;
@@ -174,7 +174,7 @@ class Asset
         $webPath = static::assetTimestamp(static::webroot($path, $options), $optionTimestamp);
         $path = static::encodeUrl($webPath);
         if (!empty($options['fullBase'])) {
-            $fullBaseUrl = is_string($options['fullBase']) ? $options['fullBase'] : \Cake\Routing\Router::fullBaseUrl();
+            $fullBaseUrl = is_string($options['fullBase']) ? $options['fullBase'] : Router::fullBaseUrl();
             $path = rtrim($fullBaseUrl, '/') . '/' . ltrim($path, '/');
         }
         return $path;
@@ -293,7 +293,7 @@ class Asset
      */
     protected static function requestWebroot(): string
     {
-        $request = \Cake\Routing\Router::getRequest();
+        $request = Router::getRequest();
         if ($request === null) {
             return '/';
         }

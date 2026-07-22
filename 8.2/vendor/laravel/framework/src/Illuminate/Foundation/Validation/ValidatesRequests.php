@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Foundation\Validation;
+namespace Odigos\Illuminate\Foundation\Validation;
 
-use Illuminate\Contracts\Validation\Factory;
-use Illuminate\Foundation\Precognition;
-use Illuminate\Http\Request;
-use Illuminate\Validation\ValidationException;
+use Odigos\Illuminate\Contracts\Validation\Factory;
+use Odigos\Illuminate\Foundation\Precognition;
+use Odigos\Illuminate\Http\Request;
+use Odigos\Illuminate\Validation\ValidationException;
 trait ValidatesRequests
 {
     /**

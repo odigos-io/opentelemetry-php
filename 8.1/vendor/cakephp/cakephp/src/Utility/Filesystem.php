@@ -14,9 +14,9 @@ declare (strict_types=1);
  * @since         4.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Utility;
+namespace Odigos\Cake\Utility;
 
-use Cake\Core\Exception\CakeException;
+use Odigos\Cake\Core\Exception\CakeException;
 use CallbackFilterIterator;
 use Closure;
 use FilesystemIterator;

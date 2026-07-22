@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Schema\Name;
+namespace Odigos\Doctrine\DBAL\Schema\Name;
 
-use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Doctrine\DBAL\Schema\Exception\InvalidIdentifier;
+use Odigos\Doctrine\DBAL\Platforms\AbstractPlatform;
+use Odigos\Doctrine\DBAL\Schema\Exception\InvalidIdentifier;
 use function sprintf;
 use function str_replace;
 use function strlen;
@@ -32,7 +32,7 @@ final readonly class Identifier
     /**
      * Returns whether this identifier is equal to the other.
      */
-    public function equals(self $other, \Doctrine\DBAL\Schema\Name\UnquotedIdentifierFolding $folding): bool
+    public function equals(self $other, UnquotedIdentifierFolding $folding): bool
     {
         if ($this === $other) {
             return \true;
@@ -50,7 +50,7 @@ final readonly class Identifier
      *
      * @return non-empty-string
      */
-    public function toNormalizedValue(\Doctrine\DBAL\Schema\Name\UnquotedIdentifierFolding $folding): string
+    public function toNormalizedValue(UnquotedIdentifierFolding $folding): string
     {
         if (!$this->isQuoted) {
             return $folding->foldUnquotedIdentifier($this->value);

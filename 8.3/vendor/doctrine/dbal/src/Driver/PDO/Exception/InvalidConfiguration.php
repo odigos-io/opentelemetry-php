@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Driver\PDO\Exception;
+namespace Odigos\Doctrine\DBAL\Driver\PDO\Exception;
 
-use Doctrine\DBAL\Driver\AbstractException;
+use Odigos\Doctrine\DBAL\Driver\AbstractException;
 use function get_debug_type;
 use function sprintf;
 final class InvalidConfiguration extends AbstractException

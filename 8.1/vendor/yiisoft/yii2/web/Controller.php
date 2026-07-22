@@ -5,15 +5,15 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\web;
+namespace Odigos\yii\web;
 
 use Odigos\Yii;
-use yii\base\Exception;
-use yii\base\InlineAction;
-use yii\helpers\Url;
-use yii\base\Action;
-use yii\base\Controller as BaseController;
-use yii\base\Module;
+use Odigos\yii\base\Exception;
+use Odigos\yii\base\InlineAction;
+use Odigos\yii\helpers\Url;
+use Odigos\yii\base\Action;
+use Odigos\yii\base\Controller as BaseController;
+use Odigos\yii\base\Module;
 /**
  * Controller is the base class of web controllers.
  *
@@ -79,7 +79,7 @@ class Controller extends BaseController
      */
     public function asJson($data)
     {
-        $this->response->format = \yii\web\Response::FORMAT_JSON;
+        $this->response->format = Response::FORMAT_JSON;
         $this->response->data = $data;
         return $this->response;
     }
@@ -104,7 +104,7 @@ class Controller extends BaseController
      */
     public function asXml($data)
     {
-        $this->response->format = \yii\web\Response::FORMAT_XML;
+        $this->response->format = Response::FORMAT_XML;
         $this->response->data = $data;
         return $this->response;
     }
@@ -146,17 +146,17 @@ class Controller extends BaseController
                     $params[$name] = $result;
                 }
                 if (!$isValid) {
-                    throw new \yii\web\BadRequestHttpException(Yii::t('yii', 'Invalid data received for parameter "{param}".', ['param' => $name]));
+                    throw new BadRequestHttpException(Yii::t('yii', 'Invalid data received for parameter "{param}".', ['param' => $name]));
                 }
                 $args[] = $actionParams[$name] = $params[$name];
                 unset($params[$name]);
             } elseif (\PHP_VERSION_ID >= 70100 && ($type = $param->getType()) !== null && $type instanceof \ReflectionNamedType && !$type->isBuiltin()) {
                 try {
                     $this->bindInjectedParams($type, $name, $args, $requestedParams);
-                } catch (\yii\web\HttpException $e) {
+                } catch (HttpException $e) {
                     throw $e;
                 } catch (Exception $e) {
-                    throw new \yii\web\ServerErrorHttpException($e->getMessage(), 0, $e);
+                    throw new ServerErrorHttpException($e->getMessage(), 0, $e);
                 }
             } elseif ($param->isDefaultValueAvailable()) {
                 $args[] = $actionParams[$name] = $param->getDefaultValue();
@@ -165,7 +165,7 @@ class Controller extends BaseController
             }
         }
         if (!empty($missing)) {
-            throw new \yii\web\BadRequestHttpException(Yii::t('yii', 'Missing required parameters: {params}', ['params' => implode(', ', $missing)]));
+            throw new BadRequestHttpException(Yii::t('yii', 'Missing required parameters: {params}', ['params' => implode(', ', $missing)]));
         }
         $this->actionParams = $actionParams;
         // We use a different array here, specifically one that doesn't contain service instances but descriptions instead.
@@ -291,7 +291,7 @@ class Controller extends BaseController
     {
         if (parent::beforeAction($action)) {
             if ($this->enableCsrfValidation && Yii::$app->getErrorHandler()->exception === null && !$this->request->validateCsrfToken()) {
-                throw new \yii\web\BadRequestHttpException(Yii::t('yii', 'Unable to verify your data submission.'));
+                throw new BadRequestHttpException(Yii::t('yii', 'Unable to verify your data submission.'));
             }
             return \true;
         }

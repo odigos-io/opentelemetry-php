@@ -1,15 +1,15 @@
 <?php
 
-namespace Illuminate\Bus;
+namespace Odigos\Illuminate\Bus;
 
 use Closure;
-use Illuminate\Queue\CallQueuedClosure;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
-use Laravel\SerializableClosure\SerializableClosure;
+use Odigos\Illuminate\Queue\CallQueuedClosure;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Laravel\SerializableClosure\SerializableClosure;
 use Odigos\PHPUnit\Framework\Assert as PHPUnit;
 use RuntimeException;
-use function Illuminate\Support\enum_value;
+use function Odigos\Illuminate\Support\enum_value;
 trait Queueable
 {
     /**
@@ -212,7 +212,7 @@ trait Queueable
      */
     public function chain($chain)
     {
-        $this->chained = \Illuminate\Bus\ChainedBatch::prepareNestedBatches(new Collection($chain))->map(fn($job) => $this->serializeJob($job))->all();
+        $this->chained = ChainedBatch::prepareNestedBatches(new Collection($chain))->map(fn($job) => $this->serializeJob($job))->all();
         return $this;
     }
     /**
@@ -223,7 +223,7 @@ trait Queueable
      */
     public function prependToChain($job)
     {
-        $jobs = \Illuminate\Bus\ChainedBatch::prepareNestedBatches(Collection::wrap($job));
+        $jobs = ChainedBatch::prepareNestedBatches(Collection::wrap($job));
         foreach ($jobs->reverse() as $job) {
             $this->chained = Arr::prepend($this->chained, $this->serializeJob($job));
         }
@@ -237,7 +237,7 @@ trait Queueable
      */
     public function appendToChain($job)
     {
-        $jobs = \Illuminate\Bus\ChainedBatch::prepareNestedBatches(Collection::wrap($job));
+        $jobs = ChainedBatch::prepareNestedBatches(Collection::wrap($job));
         foreach ($jobs as $job) {
             $this->chained = array_merge($this->chained, [$this->serializeJob($job)]);
         }

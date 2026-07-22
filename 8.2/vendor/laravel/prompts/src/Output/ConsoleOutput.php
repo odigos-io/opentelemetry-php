@@ -1,8 +1,8 @@
 <?php
 
-namespace Laravel\Prompts\Output;
+namespace Odigos\Laravel\Prompts\Output;
 
-use Symfony\Component\Console\Output\ConsoleOutput as SymfonyConsoleOutput;
+use Odigos\Symfony\Component\Console\Output\ConsoleOutput as SymfonyConsoleOutput;
 class ConsoleOutput extends SymfonyConsoleOutput
 {
     /**

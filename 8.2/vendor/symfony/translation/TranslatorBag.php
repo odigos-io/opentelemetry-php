@@ -8,31 +8,31 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Translation;
+namespace Odigos\Symfony\Component\Translation;
 
-use Symfony\Component\Translation\Catalogue\AbstractOperation;
-use Symfony\Component\Translation\Catalogue\TargetOperation;
-final class TranslatorBag implements \Symfony\Component\Translation\TranslatorBagInterface
+use Odigos\Symfony\Component\Translation\Catalogue\AbstractOperation;
+use Odigos\Symfony\Component\Translation\Catalogue\TargetOperation;
+final class TranslatorBag implements TranslatorBagInterface
 {
     /** @var MessageCatalogue[] */
     private array $catalogues = [];
-    public function addCatalogue(\Symfony\Component\Translation\MessageCatalogue $catalogue): void
+    public function addCatalogue(MessageCatalogue $catalogue): void
     {
         if (null !== $existingCatalogue = $this->getCatalogue($catalogue->getLocale())) {
             $catalogue->addCatalogue($existingCatalogue);
         }
         $this->catalogues[$catalogue->getLocale()] = $catalogue;
     }
-    public function addBag(\Symfony\Component\Translation\TranslatorBagInterface $bag): void
+    public function addBag(TranslatorBagInterface $bag): void
     {
         foreach ($bag->getCatalogues() as $catalogue) {
             $this->addCatalogue($catalogue);
         }
     }
-    public function getCatalogue(?string $locale = null): \Symfony\Component\Translation\MessageCatalogueInterface
+    public function getCatalogue(?string $locale = null): MessageCatalogueInterface
     {
         if (null === $locale || !isset($this->catalogues[$locale])) {
-            $this->catalogues[$locale] = new \Symfony\Component\Translation\MessageCatalogue($locale);
+            $this->catalogues[$locale] = new MessageCatalogue($locale);
         }
         return $this->catalogues[$locale];
     }
@@ -40,7 +40,7 @@ final class TranslatorBag implements \Symfony\Component\Translation\TranslatorBa
     {
         return array_values($this->catalogues);
     }
-    public function diff(\Symfony\Component\Translation\TranslatorBagInterface $diffBag): self
+    public function diff(TranslatorBagInterface $diffBag): self
     {
         $diff = new self();
         foreach ($this->catalogues as $locale => $catalogue) {
@@ -50,7 +50,7 @@ final class TranslatorBag implements \Symfony\Component\Translation\TranslatorBa
             }
             $operation = new TargetOperation($diffCatalogue, $catalogue);
             $operation->moveMessagesToIntlDomainsIfPossible(AbstractOperation::NEW_BATCH);
-            $newCatalogue = new \Symfony\Component\Translation\MessageCatalogue($locale);
+            $newCatalogue = new MessageCatalogue($locale);
             foreach ($catalogue->getDomains() as $domain) {
                 $newCatalogue->add($operation->getNewMessages($domain), $domain);
             }
@@ -58,7 +58,7 @@ final class TranslatorBag implements \Symfony\Component\Translation\TranslatorBa
         }
         return $diff;
     }
-    public function intersect(\Symfony\Component\Translation\TranslatorBagInterface $intersectBag): self
+    public function intersect(TranslatorBagInterface $intersectBag): self
     {
         $diff = new self();
         foreach ($this->catalogues as $locale => $catalogue) {
@@ -67,7 +67,7 @@ final class TranslatorBag implements \Symfony\Component\Translation\TranslatorBa
             }
             $operation = new TargetOperation($catalogue, $intersectCatalogue);
             $operation->moveMessagesToIntlDomainsIfPossible(AbstractOperation::OBSOLETE_BATCH);
-            $obsoleteCatalogue = new \Symfony\Component\Translation\MessageCatalogue($locale);
+            $obsoleteCatalogue = new MessageCatalogue($locale);
             foreach ($operation->getDomains() as $domain) {
                 $obsoleteCatalogue->add(array_diff($operation->getMessages($domain), $operation->getNewMessages($domain)), $domain);
             }

@@ -1,13 +1,13 @@
 <?php
 
-namespace Illuminate\Queue\Connectors;
+namespace Odigos\Illuminate\Queue\Connectors;
 
 use Odigos\Aws\Credentials\CredentialProvider;
 use Odigos\Aws\Sqs\SqsClient;
-use Illuminate\Queue\SqsQueue;
-use Illuminate\Support\Arr;
+use Odigos\Illuminate\Queue\SqsQueue;
+use Odigos\Illuminate\Support\Arr;
 use InvalidArgumentException;
-class SqsConnector implements \Illuminate\Queue\Connectors\ConnectorInterface
+class SqsConnector implements ConnectorInterface
 {
     /**
      * Establish a queue connection.

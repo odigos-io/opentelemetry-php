@@ -1,13 +1,13 @@
 <?php
 
-namespace Illuminate\Routing;
+namespace Odigos\Illuminate\Routing;
 
-use Illuminate\Container\Container;
-use Illuminate\Routing\Contracts\ControllerDispatcher as ControllerDispatcherContract;
-use Illuminate\Support\Collection;
+use Odigos\Illuminate\Container\Container;
+use Odigos\Illuminate\Routing\Contracts\ControllerDispatcher as ControllerDispatcherContract;
+use Odigos\Illuminate\Support\Collection;
 class ControllerDispatcher implements ControllerDispatcherContract
 {
-    use \Illuminate\Routing\FiltersControllerMiddleware, \Illuminate\Routing\ResolvesRouteDependencies;
+    use FiltersControllerMiddleware, ResolvesRouteDependencies;
     /**
      * The container instance.
      *
@@ -31,7 +31,7 @@ class ControllerDispatcher implements ControllerDispatcherContract
      * @param  string  $method
      * @return mixed
      */
-    public function dispatch(\Illuminate\Routing\Route $route, $controller, $method)
+    public function dispatch(Route $route, $controller, $method)
     {
         $parameters = $this->resolveParameters($route, $controller, $method);
         if (method_exists($controller, 'callAction')) {
@@ -47,7 +47,7 @@ class ControllerDispatcher implements ControllerDispatcherContract
      * @param  string  $method
      * @return array
      */
-    protected function resolveParameters(\Illuminate\Routing\Route $route, $controller, $method)
+    protected function resolveParameters(Route $route, $controller, $method)
     {
         return $this->resolveClassMethodDependencies($route->parametersWithoutNulls(), $controller, $method);
     }

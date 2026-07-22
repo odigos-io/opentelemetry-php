@@ -1,17 +1,17 @@
 <?php
 
-namespace Illuminate\Routing\Console;
+namespace Odigos\Illuminate\Routing\Console;
 
-use Illuminate\Console\Concerns\CreatesMatchingTest;
-use Illuminate\Console\GeneratorCommand;
+use Odigos\Illuminate\Console\Concerns\CreatesMatchingTest;
+use Odigos\Illuminate\Console\GeneratorCommand;
 use InvalidArgumentException;
-use Symfony\Component\Console\Attribute\AsCommand;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\OutputInterface;
-use function Laravel\Prompts\confirm;
-use function Laravel\Prompts\select;
-use function Laravel\Prompts\suggest;
+use Odigos\Symfony\Component\Console\Attribute\AsCommand;
+use Odigos\Symfony\Component\Console\Input\InputInterface;
+use Odigos\Symfony\Component\Console\Input\InputOption;
+use Odigos\Symfony\Component\Console\Output\OutputInterface;
+use function Odigos\Laravel\Prompts\confirm;
+use function Odigos\Laravel\Prompts\select;
+use function Odigos\Laravel\Prompts\suggest;
 #[AsCommand(name: 'make:controller')]
 class ControllerMakeCommand extends GeneratorCommand
 {
@@ -166,9 +166,9 @@ class ControllerMakeCommand extends GeneratorCommand
      */
     protected function buildFormRequestReplacements(array $replace, $modelClass)
     {
-        [$namespace, $storeRequestClass, $updateRequestClass] = ['Illuminate\Http', 'Request', 'Request'];
+        [$namespace, $storeRequestClass, $updateRequestClass] = ['Odigos\Illuminate\Http', 'Request', 'Request'];
         if ($this->option('requests')) {
-            $namespace = 'App\Http\Requests';
+            $namespace = 'Odigos\App\Http\Requests';
             [$storeRequestClass, $updateRequestClass] = $this->generateFormRequests($modelClass, $storeRequestClass, $updateRequestClass);
         }
         $namespacedRequests = $namespace . '\\' . $storeRequestClass . ';';

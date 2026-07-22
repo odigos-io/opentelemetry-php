@@ -1,12 +1,12 @@
 <?php
 
-namespace Illuminate\Database\Eloquent\Relations\Concerns;
+namespace Odigos\Illuminate\Database\Eloquent\Relations\Concerns;
 
 use BackedEnum;
-use Illuminate\Database\Eloquent\Collection as EloquentCollection;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\Pivot;
-use Illuminate\Support\Collection as BaseCollection;
+use Odigos\Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Odigos\Illuminate\Database\Eloquent\Model;
+use Odigos\Illuminate\Database\Eloquent\Relations\Pivot;
+use Odigos\Illuminate\Support\Collection as BaseCollection;
 trait InteractsWithPivotTable
 {
     /**

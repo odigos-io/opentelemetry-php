@@ -1,18 +1,18 @@
 <?php
 
-namespace Illuminate\Redis\Connections;
+namespace Odigos\Illuminate\Redis\Connections;
 
 use Closure;
-use Illuminate\Contracts\Redis\Connection as ConnectionContract;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
+use Odigos\Illuminate\Contracts\Redis\Connection as ConnectionContract;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Str;
 use RedisException;
 /**
  * @mixin \Redis
  */
-class PhpRedisConnection extends \Illuminate\Redis\Connections\Connection implements ConnectionContract
+class PhpRedisConnection extends Connection implements ConnectionContract
 {
-    use \Illuminate\Redis\Connections\PacksPhpRedisValues;
+    use PacksPhpRedisValues;
     /**
      * The connection creation callback.
      *

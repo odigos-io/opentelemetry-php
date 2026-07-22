@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Database\Events;
+namespace Odigos\Illuminate\Database\Events;
 
-use Illuminate\Database\Connection;
+use Odigos\Illuminate\Database\Connection;
 class MigrationsPruned
 {
     /**

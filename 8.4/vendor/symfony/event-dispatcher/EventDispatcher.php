@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\EventDispatcher;
+namespace Odigos\Symfony\Component\EventDispatcher;
 
 use Psr\EventDispatcher\StoppableEventInterface;
-use Symfony\Component\EventDispatcher\Debug\WrappedListener;
+use Odigos\Symfony\Component\EventDispatcher\Debug\WrappedListener;
 /**
  * The EventDispatcherInterface is the central point of Symfony's event listener system.
  *
@@ -27,7 +27,7 @@ use Symfony\Component\EventDispatcher\Debug\WrappedListener;
  * @author Jordan Alliot <jordan.alliot@gmail.com>
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class EventDispatcher implements \Symfony\Component\EventDispatcher\EventDispatcherInterface
+class EventDispatcher implements EventDispatcherInterface
 {
     private array $listeners = [];
     private array $sorted = [];
@@ -132,7 +132,7 @@ class EventDispatcher implements \Symfony\Component\EventDispatcher\EventDispatc
             }
         }
     }
-    public function addSubscriber(\Symfony\Component\EventDispatcher\EventSubscriberInterface $subscriber): void
+    public function addSubscriber(EventSubscriberInterface $subscriber): void
     {
         foreach ($subscriber->getSubscribedEvents() as $eventName => $params) {
             if (\is_string($params)) {
@@ -146,7 +146,7 @@ class EventDispatcher implements \Symfony\Component\EventDispatcher\EventDispatc
             }
         }
     }
-    public function removeSubscriber(\Symfony\Component\EventDispatcher\EventSubscriberInterface $subscriber): void
+    public function removeSubscriber(EventSubscriberInterface $subscriber): void
     {
         foreach ($subscriber->getSubscribedEvents() as $eventName => $params) {
             if (\is_array($params) && \is_array($params[0])) {

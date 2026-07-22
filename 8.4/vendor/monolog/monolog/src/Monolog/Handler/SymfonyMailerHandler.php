@@ -17,9 +17,9 @@ use Odigos\Monolog\LogRecord;
 use Odigos\Monolog\Utils;
 use Odigos\Monolog\Formatter\FormatterInterface;
 use Odigos\Monolog\Formatter\LineFormatter;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mailer\Transport\TransportInterface;
-use Symfony\Component\Mime\Email;
+use Odigos\Symfony\Component\Mailer\MailerInterface;
+use Odigos\Symfony\Component\Mailer\Transport\TransportInterface;
+use Odigos\Symfony\Component\Mime\Email;
 /**
  * SymfonyMailerHandler uses Symfony's Mailer component to send the emails
  *

@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Platforms\Exception;
+namespace Odigos\Doctrine\DBAL\Platforms\Exception;
 
-use Doctrine\DBAL\Exception;
+use Odigos\Doctrine\DBAL\Exception;
 interface PlatformException extends Exception
 {
 }

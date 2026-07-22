@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Driver\Mysqli\Initializer;
+namespace Odigos\Doctrine\DBAL\Driver\Mysqli\Initializer;
 
-use Doctrine\DBAL\Driver\Mysqli\Initializer;
+use Odigos\Doctrine\DBAL\Driver\Mysqli\Initializer;
 use mysqli;
 use SensitiveParameter;
 final class Secure implements Initializer

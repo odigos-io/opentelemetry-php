@@ -5,16 +5,16 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\widgets;
+namespace Odigos\yii\widgets;
 
 use Odigos\Yii;
-use yii\base\InvalidCallException;
-use yii\base\Model;
-use yii\base\Widget;
-use yii\helpers\ArrayHelper;
-use yii\helpers\Html;
-use yii\helpers\Json;
-use yii\helpers\Url;
+use Odigos\yii\base\InvalidCallException;
+use Odigos\yii\base\Model;
+use Odigos\yii\base\Widget;
+use Odigos\yii\helpers\ArrayHelper;
+use Odigos\yii\helpers\Html;
+use Odigos\yii\helpers\Json;
+use Odigos\yii\helpers\Url;
 /**
  * ActiveForm is a widget that builds an interactive HTML form for one or multiple data models.
  *
@@ -65,7 +65,7 @@ class ActiveForm extends Widget
      * @var string the default field class name when calling [[field()]] to create a new field.
      * @see fieldConfig
      */
-    public $fieldClass = 'yii\widgets\ActiveField';
+    public $fieldClass = 'Odigos\yii\widgets\ActiveField';
     /**
      * @var array|\Closure the default configuration used by [[field()]] when creating a new field object.
      * This can be either a configuration array or an anonymous function returning a configuration array.
@@ -232,7 +232,7 @@ class ActiveForm extends Widget
         $options = Json::htmlEncode($this->getClientOptions());
         $attributes = Json::htmlEncode($this->attributes);
         $view = $this->getView();
-        \yii\widgets\ActiveFormAsset::register($view);
+        ActiveFormAsset::register($view);
         $view->registerJs("jQuery('#{$id}').yiiActiveForm({$attributes}, {$options});");
     }
     /**
@@ -318,7 +318,7 @@ class ActiveForm extends Widget
     public function endField()
     {
         $field = array_pop($this->_fields);
-        if ($field instanceof \yii\widgets\ActiveField) {
+        if ($field instanceof ActiveField) {
             return $field->end();
         }
         throw new InvalidCallException('Mismatching endField() call.');

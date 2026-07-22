@@ -1,13 +1,13 @@
 <?php
 
-namespace Illuminate\Auth\Passwords;
+namespace Odigos\Illuminate\Auth\Passwords;
 
-use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
-use Illuminate\Contracts\Hashing\Hasher as HasherContract;
-use Illuminate\Database\ConnectionInterface;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Str;
-class DatabaseTokenRepository implements \Illuminate\Auth\Passwords\TokenRepositoryInterface
+use Odigos\Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+use Odigos\Illuminate\Contracts\Hashing\Hasher as HasherContract;
+use Odigos\Illuminate\Database\ConnectionInterface;
+use Odigos\Illuminate\Support\Carbon;
+use Odigos\Illuminate\Support\Str;
+class DatabaseTokenRepository implements TokenRepositoryInterface
 {
     /**
      * Create a new token repository instance.

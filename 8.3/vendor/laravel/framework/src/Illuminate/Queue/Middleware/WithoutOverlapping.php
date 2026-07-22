@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Queue\Middleware;
+namespace Odigos\Illuminate\Queue\Middleware;
 
-use Illuminate\Container\Container;
-use Illuminate\Contracts\Cache\Repository as Cache;
-use Illuminate\Support\InteractsWithTime;
+use Odigos\Illuminate\Container\Container;
+use Odigos\Illuminate\Contracts\Cache\Repository as Cache;
+use Odigos\Illuminate\Support\InteractsWithTime;
 class WithoutOverlapping
 {
     use InteractsWithTime;

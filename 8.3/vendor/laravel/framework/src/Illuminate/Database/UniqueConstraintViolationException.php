@@ -1,7 +1,7 @@
 <?php
 
-namespace Illuminate\Database;
+namespace Odigos\Illuminate\Database;
 
-class UniqueConstraintViolationException extends \Illuminate\Database\QueryException
+class UniqueConstraintViolationException extends QueryException
 {
 }

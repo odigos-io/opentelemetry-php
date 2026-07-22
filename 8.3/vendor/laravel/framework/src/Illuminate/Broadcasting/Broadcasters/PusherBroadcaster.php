@@ -1,16 +1,16 @@
 <?php
 
-namespace Illuminate\Broadcasting\Broadcasters;
+namespace Odigos\Illuminate\Broadcasting\Broadcasters;
 
-use Illuminate\Broadcasting\BroadcastException;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
+use Odigos\Illuminate\Broadcasting\BroadcastException;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Collection;
 use Odigos\Pusher\ApiErrorException;
 use Odigos\Pusher\Pusher;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-class PusherBroadcaster extends \Illuminate\Broadcasting\Broadcasters\Broadcaster
+use Odigos\Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+class PusherBroadcaster extends Broadcaster
 {
-    use \Illuminate\Broadcasting\Broadcasters\UsePusherChannelConventions;
+    use UsePusherChannelConventions;
     /**
      * The Pusher SDK instance.
      *

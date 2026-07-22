@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Responses\Batches;
+namespace Odigos\OpenAI\Responses\Batches;
 
-use OpenAI\Contracts\ResponseContract;
-use OpenAI\Responses\Concerns\ArrayAccessible;
+use Odigos\OpenAI\Contracts\ResponseContract;
+use Odigos\OpenAI\Responses\Concerns\ArrayAccessible;
 /**
  * @implements ResponseContract<array{code: string, message: string, param: ?string, line: ?int}>
  */

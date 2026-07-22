@@ -1,9 +1,9 @@
 <?php
 
-namespace OpenAI\Contracts\Resources;
+namespace Odigos\OpenAI\Contracts\Resources;
 
-use OpenAI\Responses\VectorStores\FileBatches\VectorStoreFileBatchResponse;
-use OpenAI\Responses\VectorStores\Files\VectorStoreFileListResponse;
+use Odigos\OpenAI\Responses\VectorStores\FileBatches\VectorStoreFileBatchResponse;
+use Odigos\OpenAI\Responses\VectorStores\Files\VectorStoreFileListResponse;
 interface VectorStoresFileBatchesContract
 {
     /**

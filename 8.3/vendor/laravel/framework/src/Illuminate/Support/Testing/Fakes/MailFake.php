@@ -1,21 +1,21 @@
 <?php
 
-namespace Illuminate\Support\Testing\Fakes;
+namespace Odigos\Illuminate\Support\Testing\Fakes;
 
 use Closure;
-use Illuminate\Contracts\Mail\Factory;
-use Illuminate\Contracts\Mail\Mailable;
-use Illuminate\Contracts\Mail\Mailer;
-use Illuminate\Contracts\Mail\MailQueue;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Mail\MailManager;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
-use Illuminate\Support\Traits\ForwardsCalls;
-use Illuminate\Support\Traits\ReflectsClosures;
+use Odigos\Illuminate\Contracts\Mail\Factory;
+use Odigos\Illuminate\Contracts\Mail\Mailable;
+use Odigos\Illuminate\Contracts\Mail\Mailer;
+use Odigos\Illuminate\Contracts\Mail\MailQueue;
+use Odigos\Illuminate\Contracts\Queue\ShouldQueue;
+use Odigos\Illuminate\Mail\MailManager;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Str;
+use Odigos\Illuminate\Support\Traits\ForwardsCalls;
+use Odigos\Illuminate\Support\Traits\ReflectsClosures;
 use Odigos\PHPUnit\Framework\Assert as PHPUnit;
-class MailFake implements Factory, \Illuminate\Support\Testing\Fakes\Fake, Mailer, MailQueue
+class MailFake implements Factory, Fake, Mailer, MailQueue
 {
     use ForwardsCalls, ReflectsClosures;
     /**
@@ -325,7 +325,7 @@ class MailFake implements Factory, \Illuminate\Support\Testing\Fakes\Fake, Maile
      */
     public function to($users)
     {
-        return (new \Illuminate\Support\Testing\Fakes\PendingMailFake($this))->to($users);
+        return (new PendingMailFake($this))->to($users);
     }
     /**
      * Begin the process of mailing a mailable class instance.
@@ -335,7 +335,7 @@ class MailFake implements Factory, \Illuminate\Support\Testing\Fakes\Fake, Maile
      */
     public function cc($users)
     {
-        return (new \Illuminate\Support\Testing\Fakes\PendingMailFake($this))->cc($users);
+        return (new PendingMailFake($this))->cc($users);
     }
     /**
      * Begin the process of mailing a mailable class instance.
@@ -345,7 +345,7 @@ class MailFake implements Factory, \Illuminate\Support\Testing\Fakes\Fake, Maile
      */
     public function bcc($users)
     {
-        return (new \Illuminate\Support\Testing\Fakes\PendingMailFake($this))->bcc($users);
+        return (new PendingMailFake($this))->bcc($users);
     }
     /**
      * Send a new message with only a raw text part.

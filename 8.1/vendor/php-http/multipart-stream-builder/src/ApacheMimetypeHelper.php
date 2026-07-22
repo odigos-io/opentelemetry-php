@@ -1,6 +1,6 @@
 <?php
 
-namespace Http\Message\MultipartStream;
+namespace Odigos\Http\Message\MultipartStream;
 
 /**
  * This class helps to find the proper mime types. The source of this file is taken
@@ -9,7 +9,7 @@ namespace Http\Message\MultipartStream;
  * @author Michael Dowling and contributors to guzzlehttp/psr7
  * @author Tobias Nyholm <tobias.nyholm@gmail.com>
  */
-class ApacheMimetypeHelper implements \Http\Message\MultipartStream\MimetypeHelper
+class ApacheMimetypeHelper implements MimetypeHelper
 {
     /**
      * {@inheritdoc}

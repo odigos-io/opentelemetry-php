@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Process\Exceptions;
+namespace Odigos\Illuminate\Process\Exceptions;
 
-use Illuminate\Contracts\Process\ProcessResult;
-use Symfony\Component\Process\Exception\ProcessTimedOutException as SymfonyTimeoutException;
-use Symfony\Component\Process\Exception\RuntimeException;
+use Odigos\Illuminate\Contracts\Process\ProcessResult;
+use Odigos\Symfony\Component\Process\Exception\ProcessTimedOutException as SymfonyTimeoutException;
+use Odigos\Symfony\Component\Process\Exception\RuntimeException;
 class ProcessTimedOutException extends RuntimeException
 {
     /**

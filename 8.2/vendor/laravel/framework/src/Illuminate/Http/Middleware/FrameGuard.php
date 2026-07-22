@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Http\Middleware;
+namespace Odigos\Illuminate\Http\Middleware;
 
 use Closure;
 class FrameGuard

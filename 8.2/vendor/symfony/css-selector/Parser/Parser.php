@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\CssSelector\Parser;
+namespace Odigos\Symfony\Component\CssSelector\Parser;
 
-use Symfony\Component\CssSelector\Exception\SyntaxErrorException;
-use Symfony\Component\CssSelector\Node;
-use Symfony\Component\CssSelector\Parser\Tokenizer\Tokenizer;
+use Odigos\Symfony\Component\CssSelector\Exception\SyntaxErrorException;
+use Odigos\Symfony\Component\CssSelector\Node;
+use Odigos\Symfony\Component\CssSelector\Parser\Tokenizer\Tokenizer;
 /**
  * CSS selector parser.
  *
@@ -23,7 +23,7 @@ use Symfony\Component\CssSelector\Parser\Tokenizer\Tokenizer;
  *
  * @internal
  */
-class Parser implements \Symfony\Component\CssSelector\Parser\ParserInterface
+class Parser implements ParserInterface
 {
     private Tokenizer $tokenizer;
     public function __construct(?Tokenizer $tokenizer = null)
@@ -32,7 +32,7 @@ class Parser implements \Symfony\Component\CssSelector\Parser\ParserInterface
     }
     public function parse(string $source): array
     {
-        $reader = new \Symfony\Component\CssSelector\Parser\Reader($source);
+        $reader = new Reader($source);
         $stream = $this->tokenizer->tokenize($reader);
         return $this->parseSelectorList($stream);
     }
@@ -50,7 +50,7 @@ class Parser implements \Symfony\Component\CssSelector\Parser\ParserInterface
                 throw SyntaxErrorException::stringAsFunctionArgument();
             }
         }
-        $joined = trim(implode('', array_map(static fn(\Symfony\Component\CssSelector\Parser\Token $token) => $token->getValue(), $tokens)));
+        $joined = trim(implode('', array_map(static fn(Token $token) => $token->getValue(), $tokens)));
         $int = static function ($string) {
             if (!is_numeric($string)) {
                 throw SyntaxErrorException::stringAsFunctionArgument();
@@ -71,7 +71,7 @@ class Parser implements \Symfony\Component\CssSelector\Parser\ParserInterface
         $first = $split[0] ?? null;
         return [$first ? '-' === $first || '+' === $first ? $int($first . '1') : $int($first) : 1, isset($split[1]) && $split[1] ? $int($split[1]) : 0];
     }
-    private function parseSelectorList(\Symfony\Component\CssSelector\Parser\TokenStream $stream, bool $isArgument = \false): array
+    private function parseSelectorList(TokenStream $stream, bool $isArgument = \false): array
     {
         $stream->skipWhitespace();
         $selectors = [];
@@ -89,7 +89,7 @@ class Parser implements \Symfony\Component\CssSelector\Parser\ParserInterface
         }
         return $selectors;
     }
-    private function parserSelectorNode(\Symfony\Component\CssSelector\Parser\TokenStream $stream, bool $isArgument = \false): Node\SelectorNode
+    private function parserSelectorNode(TokenStream $stream, bool $isArgument = \false): Node\SelectorNode
     {
         [$result, $pseudoElement] = $this->parseSimpleSelector($stream, \false, $isArgument);
         while (\true) {
@@ -117,7 +117,7 @@ class Parser implements \Symfony\Component\CssSelector\Parser\ParserInterface
      *
      * @throws SyntaxErrorException
      */
-    private function parseSimpleSelector(\Symfony\Component\CssSelector\Parser\TokenStream $stream, bool $insideNegation = \false, bool $isArgument = \false): array
+    private function parseSimpleSelector(TokenStream $stream, bool $insideNegation = \false, bool $isArgument = \false): array
     {
         $stream->skipWhitespace();
         $selectorStart = \count($stream->getUsed());
@@ -220,7 +220,7 @@ class Parser implements \Symfony\Component\CssSelector\Parser\ParserInterface
         }
         return [$result, $pseudoElement];
     }
-    private function parseElementNode(\Symfony\Component\CssSelector\Parser\TokenStream $stream): Node\ElementNode
+    private function parseElementNode(TokenStream $stream): Node\ElementNode
     {
         $peek = $stream->getPeek();
         if ($peek->isIdentifier() || $peek->isDelimiter(['*'])) {
@@ -242,7 +242,7 @@ class Parser implements \Symfony\Component\CssSelector\Parser\ParserInterface
         }
         return new Node\ElementNode($namespace, $element);
     }
-    private function parseAttributeNode(Node\NodeInterface $selector, \Symfony\Component\CssSelector\Parser\TokenStream $stream): Node\AttributeNode
+    private function parseAttributeNode(Node\NodeInterface $selector, TokenStream $stream): Node\AttributeNode
     {
         $stream->skipWhitespace();
         $attribute = $stream->getNextIdentifierOrStar();
@@ -281,7 +281,7 @@ class Parser implements \Symfony\Component\CssSelector\Parser\ParserInterface
         $value = $stream->getNext();
         if ($value->isNumber()) {
             // if the value is a number, it's casted into a string
-            $value = new \Symfony\Component\CssSelector\Parser\Token(\Symfony\Component\CssSelector\Parser\Token::TYPE_STRING, (string) $value->getValue(), $value->getPosition());
+            $value = new Token(Token::TYPE_STRING, (string) $value->getValue(), $value->getPosition());
         }
         if (!($value->isIdentifier() || $value->isString())) {
             throw SyntaxErrorException::unexpectedToken('string or identifier', $value);

@@ -14,20 +14,20 @@ declare (strict_types=1);
  * @since         3.6.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Console\Command;
+namespace Odigos\Cake\Console\Command;
 
 use ArrayIterator;
-use Cake\Console\Arguments;
-use Cake\Console\BaseCommand;
-use Cake\Console\CommandCollection;
-use Cake\Console\CommandCollectionAwareInterface;
-use Cake\Console\CommandHiddenInterface;
-use Cake\Console\ConsoleIo;
-use Cake\Console\ConsoleOptionParser;
-use Cake\Console\ConsoleOutput;
-use Cake\Core\Configure;
-use Cake\Core\Plugin;
-use Cake\Utility\Inflector;
+use Odigos\Cake\Console\Arguments;
+use Odigos\Cake\Console\BaseCommand;
+use Odigos\Cake\Console\CommandCollection;
+use Odigos\Cake\Console\CommandCollectionAwareInterface;
+use Odigos\Cake\Console\CommandHiddenInterface;
+use Odigos\Cake\Console\ConsoleIo;
+use Odigos\Cake\Console\ConsoleOptionParser;
+use Odigos\Cake\Console\ConsoleOutput;
+use Odigos\Cake\Core\Configure;
+use Odigos\Cake\Core\Plugin;
+use Odigos\Cake\Utility\Inflector;
 use SimpleXMLElement;
 /**
  * Print out command list

@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Database\Console\Seeds;
+namespace Odigos\Illuminate\Database\Console\Seeds;
 
-use Illuminate\Console\GeneratorCommand;
-use Illuminate\Support\Str;
-use Symfony\Component\Console\Attribute\AsCommand;
+use Odigos\Illuminate\Console\GeneratorCommand;
+use Odigos\Illuminate\Support\Str;
+use Odigos\Symfony\Component\Console\Attribute\AsCommand;
 #[AsCommand(name: 'make:seeder')]
 class SeederMakeCommand extends GeneratorCommand
 {

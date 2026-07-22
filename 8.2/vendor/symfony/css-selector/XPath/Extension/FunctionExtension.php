@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\CssSelector\XPath\Extension;
+namespace Odigos\Symfony\Component\CssSelector\XPath\Extension;
 
-use Symfony\Component\CssSelector\Exception\ExpressionErrorException;
-use Symfony\Component\CssSelector\Exception\SyntaxErrorException;
-use Symfony\Component\CssSelector\Node\FunctionNode;
-use Symfony\Component\CssSelector\Parser\Parser;
-use Symfony\Component\CssSelector\XPath\Translator;
-use Symfony\Component\CssSelector\XPath\XPathExpr;
+use Odigos\Symfony\Component\CssSelector\Exception\ExpressionErrorException;
+use Odigos\Symfony\Component\CssSelector\Exception\SyntaxErrorException;
+use Odigos\Symfony\Component\CssSelector\Node\FunctionNode;
+use Odigos\Symfony\Component\CssSelector\Parser\Parser;
+use Odigos\Symfony\Component\CssSelector\XPath\Translator;
+use Odigos\Symfony\Component\CssSelector\XPath\XPathExpr;
 /**
  * XPath expression translator function extension.
  *
@@ -26,7 +26,7 @@ use Symfony\Component\CssSelector\XPath\XPathExpr;
  *
  * @internal
  */
-class FunctionExtension extends \Symfony\Component\CssSelector\XPath\Extension\AbstractExtension
+class FunctionExtension extends AbstractExtension
 {
     public function getFunctionTranslators(): array
     {

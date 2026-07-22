@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Routing\Matching;
+namespace Odigos\Illuminate\Routing\Matching;
 
-use Illuminate\Http\Request;
-use Illuminate\Routing\Route;
-class UriValidator implements \Illuminate\Routing\Matching\ValidatorInterface
+use Odigos\Illuminate\Http\Request;
+use Odigos\Illuminate\Routing\Route;
+class UriValidator implements ValidatorInterface
 {
     /**
      * Validate a given rule against a route and request.

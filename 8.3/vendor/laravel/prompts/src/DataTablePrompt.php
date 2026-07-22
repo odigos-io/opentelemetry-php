@@ -1,13 +1,13 @@
 <?php
 
-namespace Laravel\Prompts;
+namespace Odigos\Laravel\Prompts;
 
 use Closure;
-use Illuminate\Support\Collection;
-class DataTablePrompt extends \Laravel\Prompts\Prompt
+use Odigos\Illuminate\Support\Collection;
+class DataTablePrompt extends Prompt
 {
-    use \Laravel\Prompts\Concerns\Scrolling;
-    use \Laravel\Prompts\Concerns\TypedValue;
+    use Concerns\Scrolling;
+    use Concerns\TypedValue;
     /**
      * The table headers.
      *
@@ -60,13 +60,13 @@ class DataTablePrompt extends \Laravel\Prompts\Prompt
     {
         $total = count($this->filteredRows());
         match ($key) {
-            \Laravel\Prompts\Key::UP, \Laravel\Prompts\Key::UP_ARROW, \Laravel\Prompts\Key::CTRL_P => $this->highlightPrevious($total),
-            \Laravel\Prompts\Key::DOWN, \Laravel\Prompts\Key::DOWN_ARROW, \Laravel\Prompts\Key::CTRL_N => $this->highlightNext($total),
-            \Laravel\Prompts\Key::PAGE_UP => $this->highlight(max(0, $this->highlighted - $this->scroll)),
-            \Laravel\Prompts\Key::PAGE_DOWN => $this->highlight(min($total - 1, $this->highlighted + $this->scroll)),
-            \Laravel\Prompts\Key::oneOf([\Laravel\Prompts\Key::HOME, \Laravel\Prompts\Key::CTRL_A], $key) => $this->highlight(0),
-            \Laravel\Prompts\Key::oneOf([\Laravel\Prompts\Key::END, \Laravel\Prompts\Key::CTRL_E], $key) => $this->highlight(max(0, $total - 1)),
-            \Laravel\Prompts\Key::ENTER => $total > 0 ? $this->submit() : null,
+            Key::UP, Key::UP_ARROW, Key::CTRL_P => $this->highlightPrevious($total),
+            Key::DOWN, Key::DOWN_ARROW, Key::CTRL_N => $this->highlightNext($total),
+            Key::PAGE_UP => $this->highlight(max(0, $this->highlighted - $this->scroll)),
+            Key::PAGE_DOWN => $this->highlight(min($total - 1, $this->highlighted + $this->scroll)),
+            Key::oneOf([Key::HOME, Key::CTRL_A], $key) => $this->highlight(0),
+            Key::oneOf([Key::END, Key::CTRL_E], $key) => $this->highlight(max(0, $total - 1)),
+            Key::ENTER => $total > 0 ? $this->submit() : null,
             '/' => $this->enterSearch(),
             default => null,
         };
@@ -77,8 +77,8 @@ class DataTablePrompt extends \Laravel\Prompts\Prompt
     protected function handleSearchKey(string $key): void
     {
         match ($key) {
-            \Laravel\Prompts\Key::ENTER => $this->exitSearch(),
-            \Laravel\Prompts\Key::ESCAPE => $this->cancelSearch(),
+            Key::ENTER => $this->exitSearch(),
+            Key::ESCAPE => $this->cancelSearch(),
             default => $this->search(),
         };
     }

@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Driver\SQLite3;
+namespace Odigos\Doctrine\DBAL\Driver\SQLite3;
 
-use Doctrine\DBAL\Driver\AbstractException;
+use Odigos\Doctrine\DBAL\Driver\AbstractException;
 /** @internal */
 final class Exception extends AbstractException
 {

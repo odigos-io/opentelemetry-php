@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Testing;
+namespace Odigos\Illuminate\Testing;
 
 use ArrayAccess;
-use Illuminate\Testing\Constraints\ArraySubset;
-use Illuminate\Testing\Exceptions\InvalidArgumentException;
+use Odigos\Illuminate\Testing\Constraints\ArraySubset;
+use Odigos\Illuminate\Testing\Exceptions\InvalidArgumentException;
 use Odigos\PHPUnit\Framework\Assert as PHPUnit;
 /**
  * @internal This class is not meant to be used or overwritten outside the framework itself.

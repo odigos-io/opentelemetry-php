@@ -14,13 +14,13 @@ declare (strict_types=1);
  * @since         4.3.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database\Expression;
+namespace Odigos\Cake\Database\Expression;
 
-use Cake\Chronos\ChronosDate;
-use Cake\Database\ExpressionInterface;
-use Cake\Database\Query;
-use Cake\Database\TypedResultInterface;
-use Cake\Database\ValueBinder;
+use Odigos\Cake\Chronos\ChronosDate;
+use Odigos\Cake\Database\ExpressionInterface;
+use Odigos\Cake\Database\Query;
+use Odigos\Cake\Database\TypedResultInterface;
+use Odigos\Cake\Database\ValueBinder;
 use DateTimeInterface;
 use Stringable;
 /**
@@ -53,7 +53,7 @@ trait CaseExpressionTrait
             $type = 'datetime';
         } elseif ($value instanceof Stringable) {
             $type = 'string';
-        } elseif ($this->_typeMap !== null && $value instanceof \Cake\Database\Expression\IdentifierExpression) {
+        } elseif ($this->_typeMap !== null && $value instanceof IdentifierExpression) {
             $type = $this->_typeMap->type($value->getIdentifier());
         } elseif ($value instanceof TypedResultInterface) {
             $type = $value->getReturnType();

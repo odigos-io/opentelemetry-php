@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace Laminas\HttpHandlerRunner\Emitter;
+namespace Odigos\Laminas\HttpHandlerRunner\Emitter;
 
 use Psr\Http\Message\ResponseInterface;
 /** @final */
-class SapiEmitter implements \Laminas\HttpHandlerRunner\Emitter\EmitterInterface
+class SapiEmitter implements EmitterInterface
 {
-    use \Laminas\HttpHandlerRunner\Emitter\SapiEmitterTrait;
+    use SapiEmitterTrait;
     /**
      * Emits a response for a PHP SAPI environment.
      *

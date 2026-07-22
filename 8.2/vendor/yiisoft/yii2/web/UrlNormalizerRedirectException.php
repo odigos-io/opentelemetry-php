@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\web;
+namespace Odigos\yii\web;
 
 /**
  * UrlNormalizerRedirectException represents an information for redirection which should be
@@ -14,7 +14,7 @@ namespace yii\web;
  * @author Robert Korulczyk <robert@korulczyk.pl>
  * @since 2.0.10
  */
-class UrlNormalizerRedirectException extends \yii\base\Exception
+class UrlNormalizerRedirectException extends \Odigos\yii\base\Exception
 {
     /**
      * @var array|string the parameter to be used to generate a valid URL for redirection

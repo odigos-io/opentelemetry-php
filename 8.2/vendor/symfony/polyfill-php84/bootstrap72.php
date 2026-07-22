@@ -10,7 +10,7 @@ namespace Odigos;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-use Symfony\Polyfill\Php84 as p;
+use Odigos\Symfony\Polyfill\Php84 as p;
 if (\extension_loaded('mbstring')) {
     if (!\function_exists('mb_ucfirst') && !\function_exists('Odigos\mb_ucfirst')) {
         /** @return string|false */

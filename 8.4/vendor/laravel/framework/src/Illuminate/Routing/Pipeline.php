@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Routing;
+namespace Odigos\Illuminate\Routing;
 
-use Illuminate\Contracts\Debug\ExceptionHandler;
-use Illuminate\Contracts\Support\Responsable;
-use Illuminate\Http\Request;
-use Illuminate\Pipeline\Pipeline as BasePipeline;
+use Odigos\Illuminate\Contracts\Debug\ExceptionHandler;
+use Odigos\Illuminate\Contracts\Support\Responsable;
+use Odigos\Illuminate\Http\Request;
+use Odigos\Illuminate\Pipeline\Pipeline as BasePipeline;
 use Throwable;
 /**
  * This extended pipeline catches any exceptions that occur during each slice.

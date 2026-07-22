@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Auth\Middleware;
+namespace Odigos\Illuminate\Auth\Middleware;
 
 use Closure;
-use Illuminate\Contracts\Auth\Factory as AuthFactory;
+use Odigos\Illuminate\Contracts\Auth\Factory as AuthFactory;
 class AuthenticateWithBasicAuth
 {
     /**

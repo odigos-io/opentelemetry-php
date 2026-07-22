@@ -1,6 +1,6 @@
 <?php
 
-namespace Laravel\SerializableClosure\Support;
+namespace Odigos\Laravel\SerializableClosure\Support;
 
 use SplObjectStorage;
 class ClosureScope extends SplObjectStorage

@@ -17,7 +17,7 @@ namespace Odigos;
  * @var string $file
  * @var array<string> $paths
  */
-use function Cake\Core\h;
+use function Odigos\Cake\Core\h;
 $this->layout = 'dev_error';
 $this->assign('title', 'Missing Layout');
 $this->assign('templateName', 'missing_layout.php');

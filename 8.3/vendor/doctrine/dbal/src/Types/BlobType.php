@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Types;
+namespace Odigos\Doctrine\DBAL\Types;
 
-use Doctrine\DBAL\ParameterType;
-use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Doctrine\DBAL\Types\Exception\ValueNotConvertible;
+use Odigos\Doctrine\DBAL\ParameterType;
+use Odigos\Doctrine\DBAL\Platforms\AbstractPlatform;
+use Odigos\Doctrine\DBAL\Types\Exception\ValueNotConvertible;
 use function assert;
 use function fopen;
 use function fseek;
@@ -15,7 +15,7 @@ use function is_string;
 /**
  * Type that maps an SQL BLOB to a PHP resource stream.
  */
-class BlobType extends \Doctrine\DBAL\Types\Type
+class BlobType extends Type
 {
     /**
      * {@inheritDoc}
@@ -37,7 +37,7 @@ class BlobType extends \Doctrine\DBAL\Types\Type
             $value = $fp;
         }
         if (!is_resource($value)) {
-            throw ValueNotConvertible::new($value, \Doctrine\DBAL\Types\Types::BLOB);
+            throw ValueNotConvertible::new($value, Types::BLOB);
         }
         return $value;
     }

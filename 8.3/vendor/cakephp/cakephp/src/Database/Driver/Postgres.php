@@ -14,19 +14,19 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database\Driver;
+namespace Odigos\Cake\Database\Driver;
 
-use Cake\Database\Driver;
-use Cake\Database\DriverFeatureEnum;
-use Cake\Database\Expression\FunctionExpression;
-use Cake\Database\Expression\IdentifierExpression;
-use Cake\Database\Expression\StringExpression;
-use Cake\Database\PostgresCompiler;
-use Cake\Database\Query\InsertQuery;
-use Cake\Database\Query\SelectQuery;
-use Cake\Database\QueryCompiler;
-use Cake\Database\Schema\PostgresSchemaDialect;
-use Cake\Database\Schema\SchemaDialect;
+use Odigos\Cake\Database\Driver;
+use Odigos\Cake\Database\DriverFeatureEnum;
+use Odigos\Cake\Database\Expression\FunctionExpression;
+use Odigos\Cake\Database\Expression\IdentifierExpression;
+use Odigos\Cake\Database\Expression\StringExpression;
+use Odigos\Cake\Database\PostgresCompiler;
+use Odigos\Cake\Database\Query\InsertQuery;
+use Odigos\Cake\Database\Query\SelectQuery;
+use Odigos\Cake\Database\QueryCompiler;
+use Odigos\Cake\Database\Schema\PostgresSchemaDialect;
+use Odigos\Cake\Database\Schema\SchemaDialect;
 use PDO;
 /**
  * Class Postgres

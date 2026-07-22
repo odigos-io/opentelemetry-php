@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\caching;
+namespace Odigos\yii\caching;
 
 /**
  * WinCache provides Windows Cache caching in terms of an application component.
@@ -20,7 +20,7 @@ namespace yii\caching;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class WinCache extends \yii\caching\Cache
+class WinCache extends Cache
 {
     /**
      * Checks whether a specified key exists in the cache.

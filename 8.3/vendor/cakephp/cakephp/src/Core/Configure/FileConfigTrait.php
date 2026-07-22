@@ -14,11 +14,11 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Core\Configure;
+namespace Odigos\Cake\Core\Configure;
 
-use Cake\Core\Exception\CakeException;
-use Cake\Core\Plugin;
-use function Cake\Core\pluginSplit;
+use Odigos\Cake\Core\Exception\CakeException;
+use Odigos\Cake\Core\Plugin;
+use function Odigos\Cake\Core\pluginSplit;
 /**
  * Trait providing utility methods for file based config engines.
  */

@@ -5,15 +5,15 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\validators;
+namespace Odigos\yii\validators;
 
 use DateTime;
 use DateTimeZone;
 use Exception;
 use IntlDateFormatter;
 use Odigos\Yii;
-use yii\base\InvalidConfigException;
-use yii\helpers\FormatConverter;
+use Odigos\yii\base\InvalidConfigException;
+use Odigos\yii\helpers\FormatConverter;
 /**
  * DateValidator verifies if the attribute represents a date, time or datetime in a proper [[format]].
  *
@@ -33,7 +33,7 @@ use yii\helpers\FormatConverter;
  * @author Carsten Brandt <mail@cebe.cc>
  * @since 2.0
  */
-class DateValidator extends \yii\validators\Validator
+class DateValidator extends Validator
 {
     /**
      * Constant for specifying the validation [[type]] as a date value, used for validation with intl short format.

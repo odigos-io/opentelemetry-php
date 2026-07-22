@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Console;
+namespace Odigos\Illuminate\Console;
 
 use InvalidArgumentException;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputOption;
+use Odigos\Symfony\Component\Console\Input\InputArgument;
+use Odigos\Symfony\Component\Console\Input\InputOption;
 class Parser
 {
     /**

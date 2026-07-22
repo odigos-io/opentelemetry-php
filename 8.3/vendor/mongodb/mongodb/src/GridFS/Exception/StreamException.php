@@ -1,9 +1,9 @@
 <?php
 
-namespace MongoDB\GridFS\Exception;
+namespace Odigos\MongoDB\GridFS\Exception;
 
 use MongoDB\BSON\Document;
-use MongoDB\Exception\RuntimeException;
+use Odigos\MongoDB\Exception\RuntimeException;
 use function sprintf;
 use function stream_get_meta_data;
 class StreamException extends RuntimeException

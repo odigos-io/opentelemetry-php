@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Queue\Console;
+namespace Odigos\Illuminate\Queue\Console;
 
-use Illuminate\Console\Command;
-use Illuminate\Queue\Failed\PrunableFailedJobProvider;
-use Illuminate\Support\Carbon;
-use Symfony\Component\Console\Attribute\AsCommand;
+use Odigos\Illuminate\Console\Command;
+use Odigos\Illuminate\Queue\Failed\PrunableFailedJobProvider;
+use Odigos\Illuminate\Support\Carbon;
+use Odigos\Symfony\Component\Console\Attribute\AsCommand;
 #[AsCommand(name: 'queue:prune-failed')]
 class PruneFailedJobsCommand extends Command
 {

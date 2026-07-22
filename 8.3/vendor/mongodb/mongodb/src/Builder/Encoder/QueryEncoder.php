@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace MongoDB\Builder\Encoder;
+namespace Odigos\MongoDB\Builder\Encoder;
 
 use LogicException;
-use MongoDB\Builder\Type\QueryInterface;
-use MongoDB\Builder\Type\QueryObject;
-use MongoDB\Codec\EncodeIfSupported;
-use MongoDB\Codec\Encoder;
-use MongoDB\Exception\UnsupportedValueException;
+use Odigos\MongoDB\Builder\Type\QueryInterface;
+use Odigos\MongoDB\Builder\Type\QueryObject;
+use Odigos\MongoDB\Codec\EncodeIfSupported;
+use Odigos\MongoDB\Codec\Encoder;
+use Odigos\MongoDB\Exception\UnsupportedValueException;
 use stdClass;
 use function get_object_vars;
 use function property_exists;
@@ -21,7 +21,7 @@ final class QueryEncoder implements Encoder
 {
     /** @template-use EncodeIfSupported<stdClass, QueryObject> */
     use EncodeIfSupported;
-    use \MongoDB\Builder\Encoder\RecursiveEncode;
+    use RecursiveEncode;
     public function canEncode(mixed $value): bool
     {
         return $value instanceof QueryObject;

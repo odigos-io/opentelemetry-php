@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Auth\Events;
+namespace Odigos\Illuminate\Auth\Events;
 
 class Failed
 {

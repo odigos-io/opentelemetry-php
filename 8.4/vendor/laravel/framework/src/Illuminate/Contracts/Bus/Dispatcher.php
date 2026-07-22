@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Contracts\Bus;
+namespace Odigos\Illuminate\Contracts\Bus;
 
 interface Dispatcher
 {

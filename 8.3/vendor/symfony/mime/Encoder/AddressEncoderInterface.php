@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Mime\Encoder;
+namespace Odigos\Symfony\Component\Mime\Encoder;
 
-use Symfony\Component\Mime\Exception\AddressEncoderException;
+use Odigos\Symfony\Component\Mime\Exception\AddressEncoderException;
 /**
  * @author Christian Schmidt
  */

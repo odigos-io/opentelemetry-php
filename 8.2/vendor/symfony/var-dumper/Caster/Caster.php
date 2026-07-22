@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\VarDumper\Caster;
+namespace Odigos\Symfony\Component\VarDumper\Caster;
 
-use Symfony\Component\VarDumper\Cloner\Stub;
+use Odigos\Symfony\Component\VarDumper\Cloner\Stub;
 /**
  * Helper for filtering out properties in casters.
  *
@@ -117,7 +117,7 @@ class Caster
                 $type |= self::EXCLUDE_EMPTY & $filter;
             } elseif (\false === $v || '' === $v || '0' === $v || 0 === $v || 0.0 === $v || [] === $v) {
                 $type |= self::EXCLUDE_EMPTY & $filter;
-            } elseif ($v instanceof \Symfony\Component\VarDumper\Caster\UninitializedStub) {
+            } elseif ($v instanceof UninitializedStub) {
                 $type |= self::EXCLUDE_UNINITIALIZED & $filter;
             }
             if (self::EXCLUDE_NOT_IMPORTANT & $filter && !\in_array($k, $listedProperties, \true)) {
@@ -170,7 +170,7 @@ class Caster
                 $p->isPublic() => $p->name,
                 $p->isProtected() => self::PREFIX_PROTECTED . $p->name,
                 default => "\x00" . $className . "\x00" . $p->name,
-            }] = \PHP_VERSION_ID >= 80400 && $p->isVirtual() ? new \Symfony\Component\VarDumper\Caster\VirtualStub($p) : new \Symfony\Component\VarDumper\Caster\UninitializedStub($p);
+            }] = \PHP_VERSION_ID >= 80400 && $p->isVirtual() ? new VirtualStub($p) : new UninitializedStub($p);
         }
         return $classProperties;
     }

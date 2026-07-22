@@ -1,10 +1,10 @@
 <?php
 
-namespace OpenAI\Contracts\Resources;
+namespace Odigos\OpenAI\Contracts\Resources;
 
-use OpenAI\Responses\VectorStores\VectorStoreDeleteResponse;
-use OpenAI\Responses\VectorStores\VectorStoreListResponse;
-use OpenAI\Responses\VectorStores\VectorStoreResponse;
+use Odigos\OpenAI\Responses\VectorStores\VectorStoreDeleteResponse;
+use Odigos\OpenAI\Responses\VectorStores\VectorStoreListResponse;
+use Odigos\OpenAI\Responses\VectorStores\VectorStoreResponse;
 interface VectorStoresContract
 {
     /**
@@ -48,11 +48,11 @@ interface VectorStoresContract
      *
      * @see https://platform.openai.com/docs/api-reference/vector-stores-files
      */
-    public function files(): \OpenAI\Contracts\Resources\VectorStoresFilesContract;
+    public function files(): VectorStoresFilesContract;
     /**
      * Manage the file batches related to the vector store
      *
      * @see https://platform.openai.com/docs/api-reference/vector-stores-file-batches
      */
-    public function batches(): \OpenAI\Contracts\Resources\VectorStoresFileBatchesContract;
+    public function batches(): VectorStoresFileBatchesContract;
 }

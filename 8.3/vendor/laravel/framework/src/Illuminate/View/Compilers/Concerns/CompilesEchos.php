@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\View\Compilers\Concerns;
+namespace Odigos\Illuminate\View\Compilers\Concerns;
 
 use Closure;
-use Illuminate\Support\Stringable;
+use Odigos\Illuminate\Support\Stringable;
 trait CompilesEchos
 {
     /**

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\Inflector\Rules;
+namespace Odigos\Doctrine\Inflector\Rules;
 
 use function array_map;
 use function implode;
@@ -10,9 +10,9 @@ class Patterns
 {
     /** @var string */
     private $regex;
-    public function __construct(\Doctrine\Inflector\Rules\Pattern ...$patterns)
+    public function __construct(Pattern ...$patterns)
     {
-        $patterns = array_map(static function (\Doctrine\Inflector\Rules\Pattern $pattern): string {
+        $patterns = array_map(static function (Pattern $pattern): string {
             return $pattern->getPattern();
         }, $patterns);
         $this->regex = '/^(?:' . implode('|', $patterns) . ')$/i';

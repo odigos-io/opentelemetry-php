@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Foundation\Console;
+namespace Odigos\Illuminate\Foundation\Console;
 
-use Illuminate\Console\Command;
-use Illuminate\Filesystem\Filesystem;
-use Illuminate\Foundation\Events\PublishingStubs;
-use Symfony\Component\Console\Attribute\AsCommand;
+use Odigos\Illuminate\Console\Command;
+use Odigos\Illuminate\Filesystem\Filesystem;
+use Odigos\Illuminate\Foundation\Events\PublishingStubs;
+use Odigos\Symfony\Component\Console\Attribute\AsCommand;
 #[AsCommand(name: 'stub:publish')]
 class StubPublishCommand extends Command
 {

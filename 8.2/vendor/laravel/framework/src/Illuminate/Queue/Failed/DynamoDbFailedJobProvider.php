@@ -1,14 +1,14 @@
 <?php
 
-namespace Illuminate\Queue\Failed;
+namespace Odigos\Illuminate\Queue\Failed;
 
 use Odigos\Aws\DynamoDb\DynamoDbClient;
 use DateTimeInterface;
 use Exception;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Date;
-class DynamoDbFailedJobProvider implements \Illuminate\Queue\Failed\FailedJobProviderInterface
+use Odigos\Illuminate\Support\Carbon;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Facades\Date;
+class DynamoDbFailedJobProvider implements FailedJobProviderInterface
 {
     /**
      * The DynamoDB client instance.

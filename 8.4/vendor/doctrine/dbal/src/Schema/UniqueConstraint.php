@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Schema;
+namespace Odigos\Doctrine\DBAL\Schema;
 
-use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Doctrine\DBAL\Schema\Exception\InvalidState;
-use Doctrine\DBAL\Schema\Name\Parser\UnqualifiedNameParser;
-use Doctrine\DBAL\Schema\Name\Parsers;
-use Doctrine\DBAL\Schema\Name\UnqualifiedName;
-use Doctrine\Deprecations\Deprecation;
+use Odigos\Doctrine\DBAL\Platforms\AbstractPlatform;
+use Odigos\Doctrine\DBAL\Schema\Exception\InvalidState;
+use Odigos\Doctrine\DBAL\Schema\Name\Parser\UnqualifiedNameParser;
+use Odigos\Doctrine\DBAL\Schema\Name\Parsers;
+use Odigos\Doctrine\DBAL\Schema\Name\UnqualifiedName;
+use Odigos\Doctrine\Deprecations\Deprecation;
 use Throwable;
 use function array_keys;
 use function array_map;
@@ -20,7 +20,7 @@ use function strtolower;
  * @extends AbstractOptionallyNamedObject<UnqualifiedName>
  * @final This class will be made final in DBAL 5.0.
  */
-class UniqueConstraint extends \Doctrine\DBAL\Schema\AbstractOptionallyNamedObject
+class UniqueConstraint extends AbstractOptionallyNamedObject
 {
     /**
      * Asset identifier instances of the column names the unique constraint is associated with.
@@ -211,7 +211,7 @@ class UniqueConstraint extends \Doctrine\DBAL\Schema\AbstractOptionallyNamedObje
     protected function addColumn(string $column): void
     {
         Deprecation::triggerIfCalledFromOutside('doctrine/dbal', 'https://github.com/doctrine/dbal/pull/6685', '%s is deprecated.', __METHOD__);
-        $this->columns[$column] = new \Doctrine\DBAL\Schema\Identifier($column);
+        $this->columns[$column] = new Identifier($column);
         $parser = Parsers::getUnqualifiedNameParser();
         try {
             $this->columnNames[] = $parser->parse($column);
@@ -223,14 +223,14 @@ class UniqueConstraint extends \Doctrine\DBAL\Schema\AbstractOptionallyNamedObje
     /**
      * Instantiates a new unique constraint editor.
      */
-    public static function editor(): \Doctrine\DBAL\Schema\UniqueConstraintEditor
+    public static function editor(): UniqueConstraintEditor
     {
-        return new \Doctrine\DBAL\Schema\UniqueConstraintEditor();
+        return new UniqueConstraintEditor();
     }
     /**
      * Instantiates a new unique constraint editor and initializes it with the constraint's properties.
      */
-    public function edit(): \Doctrine\DBAL\Schema\UniqueConstraintEditor
+    public function edit(): UniqueConstraintEditor
     {
         return self::editor()->setName($this->getObjectName())->setColumnNames(...$this->getColumnNames())->setIsClustered($this->isClustered());
     }

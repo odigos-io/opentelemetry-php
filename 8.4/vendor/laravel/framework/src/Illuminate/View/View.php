@@ -1,20 +1,20 @@
 <?php
 
-namespace Illuminate\View;
+namespace Odigos\Illuminate\View;
 
 use ArrayAccess;
 use BadMethodCallException;
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Contracts\Support\Htmlable;
-use Illuminate\Contracts\Support\MessageProvider;
-use Illuminate\Contracts\Support\Renderable;
-use Illuminate\Contracts\View\Engine;
-use Illuminate\Contracts\View\View as ViewContract;
-use Illuminate\Support\Collection;
-use Illuminate\Support\MessageBag;
-use Illuminate\Support\Str;
-use Illuminate\Support\Traits\Macroable;
-use Illuminate\Support\ViewErrorBag;
+use Odigos\Illuminate\Contracts\Support\Arrayable;
+use Odigos\Illuminate\Contracts\Support\Htmlable;
+use Odigos\Illuminate\Contracts\Support\MessageProvider;
+use Odigos\Illuminate\Contracts\Support\Renderable;
+use Odigos\Illuminate\Contracts\View\Engine;
+use Odigos\Illuminate\Contracts\View\View as ViewContract;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\MessageBag;
+use Odigos\Illuminate\Support\Str;
+use Odigos\Illuminate\Support\Traits\Macroable;
+use Odigos\Illuminate\Support\ViewErrorBag;
 use Stringable;
 use Throwable;
 class View implements ArrayAccess, Htmlable, Stringable, ViewContract
@@ -61,7 +61,7 @@ class View implements ArrayAccess, Htmlable, Stringable, ViewContract
      * @param  string  $path
      * @param  mixed  $data
      */
-    public function __construct(\Illuminate\View\Factory $factory, Engine $engine, $view, $path, $data = [])
+    public function __construct(Factory $factory, Engine $engine, $view, $path, $data = [])
     {
         $this->view = $view;
         $this->path = $path;

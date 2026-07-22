@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\helpers;
+namespace Odigos\yii\helpers;
 
 /**
  * FormatConverter provides functionality to convert between different formatting pattern formats.
@@ -16,6 +16,6 @@ namespace yii\helpers;
  * @author Enrica Ruedin <e.ruedin@guggach.com>
  * @since 2.0
  */
-class FormatConverter extends \yii\helpers\BaseFormatConverter
+class FormatConverter extends BaseFormatConverter
 {
 }

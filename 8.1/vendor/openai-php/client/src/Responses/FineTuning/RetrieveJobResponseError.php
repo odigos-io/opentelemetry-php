@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Responses\FineTuning;
+namespace Odigos\OpenAI\Responses\FineTuning;
 
-use OpenAI\Contracts\ResponseContract;
-use OpenAI\Responses\Concerns\ArrayAccessible;
+use Odigos\OpenAI\Contracts\ResponseContract;
+use Odigos\OpenAI\Responses\Concerns\ArrayAccessible;
 /**
  * @implements ResponseContract<array{code: string, param: ?string, message: string}>
  */

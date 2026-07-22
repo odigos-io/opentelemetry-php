@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Mime\Part;
+namespace Odigos\Symfony\Component\Mime\Part;
 
-use Symfony\Component\Mime\Exception\InvalidArgumentException;
-use Symfony\Component\Mime\Header\Headers;
+use Odigos\Symfony\Component\Mime\Exception\InvalidArgumentException;
+use Odigos\Symfony\Component\Mime\Header\Headers;
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class DataPart extends \Symfony\Component\Mime\Part\TextPart
+class DataPart extends TextPart
 {
     /** @internal, to be removed in 8.0 */
     protected array $_parent;
@@ -27,10 +27,10 @@ class DataPart extends \Symfony\Component\Mime\Part\TextPart
      */
     public function __construct($body, ?string $filename = null, ?string $contentType = null, ?string $encoding = null)
     {
-        if ($body instanceof \Symfony\Component\Mime\Part\File && !$filename) {
+        if ($body instanceof File && !$filename) {
             $filename = $body->getFilename();
         }
-        $contentType ??= $body instanceof \Symfony\Component\Mime\Part\File ? $body->getContentType() : 'application/octet-stream';
+        $contentType ??= $body instanceof File ? $body->getContentType() : 'application/octet-stream';
         [$this->mediaType, $subtype] = explode('/', $contentType);
         parent::__construct($body, null, $subtype, $encoding);
         if (null !== $filename) {
@@ -41,7 +41,7 @@ class DataPart extends \Symfony\Component\Mime\Part\TextPart
     }
     public static function fromPath(string $path, ?string $name = null, ?string $contentType = null): self
     {
-        return new self(new \Symfony\Component\Mime\Part\File($path), $name, $contentType);
+        return new self(new File($path), $name, $contentType);
     }
     /**
      * @return $this
@@ -169,7 +169,7 @@ class DataPart extends \Symfony\Component\Mime\Part\TextPart
         parent::__sleep();
         $this->_parent = [];
         foreach (['body', 'charset', 'subtype', 'disposition', 'name', 'encoding'] as $name) {
-            $r = new \ReflectionProperty(\Symfony\Component\Mime\Part\TextPart::class, $name);
+            $r = new \ReflectionProperty(TextPart::class, $name);
             $this->_parent[$name] = $r->getValue($this);
         }
         $this->_headers = $this->getHeaders();
@@ -180,17 +180,17 @@ class DataPart extends \Symfony\Component\Mime\Part\TextPart
      */
     public function __wakeup(): void
     {
-        $r = new \ReflectionProperty(\Symfony\Component\Mime\Part\AbstractPart::class, 'headers');
+        $r = new \ReflectionProperty(AbstractPart::class, 'headers');
         $r->setValue($this, $this->_headers);
         unset($this->_headers);
         if (!\is_array($this->_parent)) {
             throw new \BadMethodCallException('Cannot unserialize ' . __CLASS__);
         }
         foreach (['body', 'charset', 'subtype', 'disposition', 'name', 'encoding'] as $name) {
-            if (null !== $this->_parent[$name] && !\is_string($this->_parent[$name]) && !$this->_parent[$name] instanceof \Symfony\Component\Mime\Part\File) {
+            if (null !== $this->_parent[$name] && !\is_string($this->_parent[$name]) && !$this->_parent[$name] instanceof File) {
                 throw new \BadMethodCallException('Cannot unserialize ' . __CLASS__);
             }
-            $r = new \ReflectionProperty(\Symfony\Component\Mime\Part\TextPart::class, $name);
+            $r = new \ReflectionProperty(TextPart::class, $name);
             $r->setValue($this, $this->_parent[$name]);
         }
         unset($this->_parent);

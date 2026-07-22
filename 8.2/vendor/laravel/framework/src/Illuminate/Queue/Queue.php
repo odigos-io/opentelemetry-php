@@ -1,22 +1,22 @@
 <?php
 
-namespace Illuminate\Queue;
+namespace Odigos\Illuminate\Queue;
 
 use Odigos\Carbon\Carbon;
 use Closure;
 use DateTimeInterface;
-use Illuminate\Bus\UniqueLock;
-use Illuminate\Container\Container;
-use Illuminate\Contracts\Cache\Repository as Cache;
-use Illuminate\Contracts\Encryption\Encrypter;
-use Illuminate\Contracts\Queue\ShouldBeEncrypted;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
-use Illuminate\Contracts\Queue\ShouldQueueAfterCommit;
-use Illuminate\Queue\Events\JobQueued;
-use Illuminate\Queue\Events\JobQueueing;
-use Illuminate\Support\Collection;
-use Illuminate\Support\InteractsWithTime;
-use Illuminate\Support\Str;
+use Odigos\Illuminate\Bus\UniqueLock;
+use Odigos\Illuminate\Container\Container;
+use Odigos\Illuminate\Contracts\Cache\Repository as Cache;
+use Odigos\Illuminate\Contracts\Encryption\Encrypter;
+use Odigos\Illuminate\Contracts\Queue\ShouldBeEncrypted;
+use Odigos\Illuminate\Contracts\Queue\ShouldBeUnique;
+use Odigos\Illuminate\Contracts\Queue\ShouldQueueAfterCommit;
+use Odigos\Illuminate\Queue\Events\JobQueued;
+use Odigos\Illuminate\Queue\Events\JobQueueing;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\InteractsWithTime;
+use Odigos\Illuminate\Support\Str;
 use RuntimeException;
 use Throwable;
 abstract class Queue
@@ -105,13 +105,13 @@ abstract class Queue
     protected function createPayload($job, $queue, $data = '', $delay = null)
     {
         if ($job instanceof Closure) {
-            $job = \Illuminate\Queue\CallQueuedClosure::create($job);
+            $job = CallQueuedClosure::create($job);
         }
         $value = $this->createPayloadArray($job, $queue, $data);
         $value['delay'] = isset($delay) ? $this->secondsUntil($delay) : null;
         $payload = json_encode($value, \JSON_UNESCAPED_UNICODE);
         if (json_last_error() !== \JSON_ERROR_NONE) {
-            throw new \Illuminate\Queue\InvalidPayloadException('Unable to JSON encode payload. Error (' . json_last_error() . '): ' . json_last_error_msg(), $value);
+            throw new InvalidPayloadException('Unable to JSON encode payload. Error (' . json_last_error() . '): ' . json_last_error_msg(), $value);
         }
         return $payload;
     }

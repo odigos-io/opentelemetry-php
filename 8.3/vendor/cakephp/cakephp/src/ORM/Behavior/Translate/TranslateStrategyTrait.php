@@ -14,13 +14,13 @@ declare (strict_types=1);
  * @since         4.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\ORM\Behavior\Translate;
+namespace Odigos\Cake\ORM\Behavior\Translate;
 
-use Cake\Datasource\EntityInterface;
-use Cake\Event\EventInterface;
-use Cake\I18n\I18n;
-use Cake\ORM\Marshaller;
-use Cake\ORM\Table;
+use Odigos\Cake\Datasource\EntityInterface;
+use Odigos\Cake\Event\EventInterface;
+use Odigos\Cake\I18n\I18n;
+use Odigos\Cake\ORM\Marshaller;
+use Odigos\Cake\ORM\Table;
 /**
  * Contains common code needed by TranslateBehavior strategy classes.
  */

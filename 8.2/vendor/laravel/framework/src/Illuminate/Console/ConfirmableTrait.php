@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Console;
+namespace Odigos\Illuminate\Console;
 
-use function Laravel\Prompts\confirm;
+use function Odigos\Laravel\Prompts\confirm;
 trait ConfirmableTrait
 {
     /**

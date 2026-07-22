@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Responses\Responses\Output\ComputerAction;
+namespace Odigos\OpenAI\Responses\Responses\Output\ComputerAction;
 
-use OpenAI\Contracts\ResponseContract;
-use OpenAI\Responses\Concerns\ArrayAccessible;
-use OpenAI\Testing\Responses\Concerns\Fakeable;
+use Odigos\OpenAI\Contracts\ResponseContract;
+use Odigos\OpenAI\Responses\Concerns\ArrayAccessible;
+use Odigos\OpenAI\Testing\Responses\Concerns\Fakeable;
 /**
  * @phpstan-import-type DragPathType from OutputComputerDragPath
  *
@@ -32,7 +32,7 @@ final class OutputComputerActionDrag implements ResponseContract
      */
     public static function from(array $attributes): self
     {
-        $paths = array_map(static fn(array $path): \OpenAI\Responses\Responses\Output\ComputerAction\OutputComputerDragPath => \OpenAI\Responses\Responses\Output\ComputerAction\OutputComputerDragPath::from($path), $attributes['path']);
+        $paths = array_map(static fn(array $path): OutputComputerDragPath => OutputComputerDragPath::from($path), $attributes['path']);
         return new self(path: $paths, type: $attributes['type']);
     }
     /**
@@ -40,6 +40,6 @@ final class OutputComputerActionDrag implements ResponseContract
      */
     public function toArray(): array
     {
-        return ['path' => array_map(static fn(\OpenAI\Responses\Responses\Output\ComputerAction\OutputComputerDragPath $path): array => $path->toArray(), $this->path), 'type' => $this->type];
+        return ['path' => array_map(static fn(OutputComputerDragPath $path): array => $path->toArray(), $this->path), 'type' => $this->type];
     }
 }

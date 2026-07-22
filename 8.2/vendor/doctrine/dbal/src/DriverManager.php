@@ -1,19 +1,19 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL;
+namespace Odigos\Doctrine\DBAL;
 
-use Doctrine\DBAL\Driver\IBMDB2;
-use Doctrine\DBAL\Driver\Mysqli;
-use Doctrine\DBAL\Driver\OCI8;
-use Doctrine\DBAL\Driver\PDO;
-use Doctrine\DBAL\Driver\PgSQL;
-use Doctrine\DBAL\Driver\SQLite3;
-use Doctrine\DBAL\Driver\SQLSrv;
-use Doctrine\DBAL\Exception\DriverRequired;
-use Doctrine\DBAL\Exception\InvalidDriverClass;
-use Doctrine\DBAL\Exception\InvalidWrapperClass;
-use Doctrine\DBAL\Exception\UnknownDriver;
+use Odigos\Doctrine\DBAL\Driver\IBMDB2;
+use Odigos\Doctrine\DBAL\Driver\Mysqli;
+use Odigos\Doctrine\DBAL\Driver\OCI8;
+use Odigos\Doctrine\DBAL\Driver\PDO;
+use Odigos\Doctrine\DBAL\Driver\PgSQL;
+use Odigos\Doctrine\DBAL\Driver\SQLite3;
+use Odigos\Doctrine\DBAL\Driver\SQLSrv;
+use Odigos\Doctrine\DBAL\Exception\DriverRequired;
+use Odigos\Doctrine\DBAL\Exception\InvalidDriverClass;
+use Odigos\Doctrine\DBAL\Exception\InvalidWrapperClass;
+use Odigos\Doctrine\DBAL\Exception\UnknownDriver;
 use SensitiveParameter;
 use function array_keys;
 use function is_a;
@@ -120,17 +120,17 @@ final class DriverManager
     public static function getConnection(
         #[SensitiveParameter]
         array $params,
-        ?\Doctrine\DBAL\Configuration $config = null
-    ): \Doctrine\DBAL\Connection
+        ?Configuration $config = null
+    ): Connection
     {
-        $config ??= new \Doctrine\DBAL\Configuration();
+        $config ??= new Configuration();
         $driver = self::createDriver($params['driver'] ?? null, $params['driverClass'] ?? null);
         foreach ($config->getMiddlewares() as $middleware) {
             $driver = $middleware->wrap($driver);
         }
         /** @var class-string<Connection> $wrapperClass */
-        $wrapperClass = $params['wrapperClass'] ?? \Doctrine\DBAL\Connection::class;
-        if (!is_a($wrapperClass, \Doctrine\DBAL\Connection::class, \true)) {
+        $wrapperClass = $params['wrapperClass'] ?? Connection::class;
+        if (!is_a($wrapperClass, Connection::class, \true)) {
             throw InvalidWrapperClass::new($wrapperClass);
         }
         return new $wrapperClass($params, $driver, $config);
@@ -149,7 +149,7 @@ final class DriverManager
      * @param class-string<Driver>|null     $driverClass
      * @param key-of<self::DRIVER_MAP>|null $driver
      */
-    private static function createDriver(?string $driver, ?string $driverClass): \Doctrine\DBAL\Driver
+    private static function createDriver(?string $driver, ?string $driverClass): Driver
     {
         if ($driverClass === null) {
             if ($driver === null) {
@@ -159,7 +159,7 @@ final class DriverManager
                 throw UnknownDriver::new($driver, array_keys(self::DRIVER_MAP));
             }
             $driverClass = self::DRIVER_MAP[$driver];
-        } elseif (!is_a($driverClass, \Doctrine\DBAL\Driver::class, \true)) {
+        } elseif (!is_a($driverClass, Driver::class, \true)) {
             throw InvalidDriverClass::new($driverClass);
         }
         return new $driverClass();

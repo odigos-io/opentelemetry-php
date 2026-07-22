@@ -5,11 +5,11 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\db;
+namespace Odigos\yii\db;
 
-use yii\base\Component;
-use yii\di\Instance;
-use yii\helpers\StringHelper;
+use Odigos\yii\base\Component;
+use Odigos\yii\di\Instance;
+use Odigos\yii\helpers\StringHelper;
 /**
  * Migration is the base class for representing a database migration.
  *
@@ -42,9 +42,9 @@ use yii\helpers\StringHelper;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class Migration extends Component implements \yii\db\MigrationInterface
+class Migration extends Component implements MigrationInterface
 {
-    use \yii\db\SchemaBuilderTrait;
+    use SchemaBuilderTrait;
     /**
      * @var Connection|array|string the DB connection object or the application component ID of the DB connection
      * that this migration should work with. Starting from version 2.0.2, this can also be a configuration array
@@ -83,7 +83,7 @@ class Migration extends Component implements \yii\db\MigrationInterface
     public function init()
     {
         parent::init();
-        $this->db = Instance::ensure($this->db, \yii\db\Connection::className());
+        $this->db = Instance::ensure($this->db, Connection::className());
         $this->db->getSchema()->refresh();
         $this->db->enableSlaves = \false;
     }
@@ -313,7 +313,7 @@ class Migration extends Component implements \yii\db\MigrationInterface
         $time = $this->beginCommand("create table {$table}");
         $this->db->createCommand()->createTable($table, $columns, $options)->execute();
         foreach ($columns as $column => $type) {
-            if ($type instanceof \yii\db\ColumnSchemaBuilder && $type->comment !== null) {
+            if ($type instanceof ColumnSchemaBuilder && $type->comment !== null) {
                 $this->db->createCommand()->addCommentOnColumn($table, $column, $type->comment)->execute();
             }
         }
@@ -362,7 +362,7 @@ class Migration extends Component implements \yii\db\MigrationInterface
     {
         $time = $this->beginCommand("add column {$column} {$type} to table {$table}");
         $this->db->createCommand()->addColumn($table, $column, $type)->execute();
-        if ($type instanceof \yii\db\ColumnSchemaBuilder && $type->comment !== null) {
+        if ($type instanceof ColumnSchemaBuilder && $type->comment !== null) {
             $this->db->createCommand()->addCommentOnColumn($table, $column, $type->comment)->execute();
         }
         $this->endCommand($time);
@@ -402,7 +402,7 @@ class Migration extends Component implements \yii\db\MigrationInterface
     {
         $time = $this->beginCommand("alter column {$column} in table {$table} to {$type}");
         $this->db->createCommand()->alterColumn($table, $column, $type)->execute();
-        if ($type instanceof \yii\db\ColumnSchemaBuilder && $type->comment !== null) {
+        if ($type instanceof ColumnSchemaBuilder && $type->comment !== null) {
             $this->db->createCommand()->addCommentOnColumn($table, $column, $type->comment)->execute();
         }
         $this->endCommand($time);

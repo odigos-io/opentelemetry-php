@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Cake\Http;
+namespace Odigos\Cake\Http;
 
 /**
  * Provides helper methods related to HTTP headers

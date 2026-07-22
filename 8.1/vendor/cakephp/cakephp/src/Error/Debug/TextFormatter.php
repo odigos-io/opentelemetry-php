@@ -14,7 +14,7 @@ declare (strict_types=1);
  * @since         4.1.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Error\Debug;
+namespace Odigos\Cake\Error\Debug;
 
 use InvalidArgumentException;
 /**
@@ -25,7 +25,7 @@ use InvalidArgumentException;
  *
  * @internal
  */
-class TextFormatter implements \Cake\Error\Debug\FormatterInterface
+class TextFormatter implements FormatterInterface
 {
     /**
      * @inheritDoc
@@ -51,7 +51,7 @@ TEXT;
      * @param \Cake\Error\Debug\NodeInterface $node The node tree to dump.
      * @return string
      */
-    public function dump(\Cake\Error\Debug\NodeInterface $node): string
+    public function dump(NodeInterface $node): string
     {
         $indent = 0;
         return $this->export($node, $indent);
@@ -63,9 +63,9 @@ TEXT;
      * @param int $indent The current indentation level.
      * @return string
      */
-    protected function export(\Cake\Error\Debug\NodeInterface $var, int $indent): string
+    protected function export(NodeInterface $var, int $indent): string
     {
-        if ($var instanceof \Cake\Error\Debug\ScalarNode) {
+        if ($var instanceof ScalarNode) {
             return match ($var->getType()) {
                 'bool' => $var->getValue() ? 'true' : 'false',
                 'null' => 'null',
@@ -73,13 +73,13 @@ TEXT;
                 default => "({$var->getType()}) {$var->getValue()}",
             };
         }
-        if ($var instanceof \Cake\Error\Debug\ArrayNode) {
+        if ($var instanceof ArrayNode) {
             return $this->exportArray($var, $indent + 1);
         }
-        if ($var instanceof \Cake\Error\Debug\ClassNode || $var instanceof \Cake\Error\Debug\ReferenceNode) {
+        if ($var instanceof ClassNode || $var instanceof ReferenceNode) {
             return $this->exportObject($var, $indent + 1);
         }
-        if ($var instanceof \Cake\Error\Debug\SpecialNode) {
+        if ($var instanceof SpecialNode) {
             return $var->getValue();
         }
         throw new InvalidArgumentException('Unknown node received ' . $var::class);
@@ -91,7 +91,7 @@ TEXT;
      * @param int $indent The current indentation level.
      * @return string Exported array.
      */
-    protected function exportArray(\Cake\Error\Debug\ArrayNode $var, int $indent): string
+    protected function exportArray(ArrayNode $var, int $indent): string
     {
         $out = '[';
         $break = "\n" . str_repeat('  ', $indent);
@@ -114,11 +114,11 @@ TEXT;
      * @return string
      * @see \Cake\Error\Debugger::exportVar()
      */
-    protected function exportObject(\Cake\Error\Debug\ClassNode|\Cake\Error\Debug\ReferenceNode $var, int $indent): string
+    protected function exportObject(ClassNode|ReferenceNode $var, int $indent): string
     {
         $out = '';
         $props = [];
-        if ($var instanceof \Cake\Error\Debug\ReferenceNode) {
+        if ($var instanceof ReferenceNode) {
             return "object({$var->getValue()}) id:{$var->getId()} {}";
         }
         $out .= "object({$var->getValue()}) id:{$var->getId()} {";

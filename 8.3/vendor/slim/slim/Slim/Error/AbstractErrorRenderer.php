@@ -6,10 +6,10 @@
  * @license https://github.com/slimphp/Slim/blob/4.x/LICENSE.md (MIT License)
  */
 declare (strict_types=1);
-namespace Slim\Error;
+namespace Odigos\Slim\Error;
 
-use Slim\Exception\HttpException;
-use Slim\Interfaces\ErrorRendererInterface;
+use Odigos\Slim\Exception\HttpException;
+use Odigos\Slim\Interfaces\ErrorRendererInterface;
 use Throwable;
 /**
  * Abstract Slim application error renderer

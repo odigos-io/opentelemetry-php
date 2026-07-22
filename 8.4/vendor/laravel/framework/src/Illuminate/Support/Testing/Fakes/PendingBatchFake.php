@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Support\Testing\Fakes;
+namespace Odigos\Illuminate\Support\Testing\Fakes;
 
 use Closure;
-use Illuminate\Bus\PendingBatch;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Traits\ReflectsClosures;
+use Odigos\Illuminate\Bus\PendingBatch;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Traits\ReflectsClosures;
 class PendingBatchFake extends PendingBatch
 {
     use ReflectsClosures;
@@ -21,7 +21,7 @@ class PendingBatchFake extends PendingBatch
      * @param  \Illuminate\Support\Testing\Fakes\BusFake  $bus
      * @param  \Illuminate\Support\Collection  $jobs
      */
-    public function __construct(\Illuminate\Support\Testing\Fakes\BusFake $bus, Collection $jobs)
+    public function __construct(BusFake $bus, Collection $jobs)
     {
         $this->bus = $bus;
         $this->jobs = $jobs->filter()->values();

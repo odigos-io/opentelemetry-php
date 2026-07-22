@@ -5,8 +5,8 @@ namespace OpenTelemetry\SDK\Common\Export\Http;
 
 use const FILTER_VALIDATE_URL;
 use function filter_var;
-use Http\Discovery\Psr17FactoryDiscovery;
-use Http\Discovery\Psr18ClientDiscovery;
+use Odigos\Http\Discovery\Psr17FactoryDiscovery;
+use Odigos\Http\Discovery\Psr18ClientDiscovery;
 use InvalidArgumentException;
 use OpenTelemetry\SDK\Common\Export\TransportFactoryInterface;
 use OpenTelemetry\SDK\Common\Export\TransportInterface;

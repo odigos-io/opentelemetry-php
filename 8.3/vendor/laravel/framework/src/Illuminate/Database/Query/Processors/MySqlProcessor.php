@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Database\Query\Processors;
+namespace Odigos\Illuminate\Database\Query\Processors;
 
-use Illuminate\Database\Query\Builder;
-class MySqlProcessor extends \Illuminate\Database\Query\Processors\Processor
+use Odigos\Illuminate\Database\Query\Builder;
+class MySqlProcessor extends Processor
 {
     /**
      * Process the results of a column listing query.

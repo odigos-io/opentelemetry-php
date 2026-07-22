@@ -22,7 +22,7 @@ require __DIR__ . '/BaseYii.php';
  * @template TUserIdentity of \yii\web\IdentityInterface
  * @extends \yii\BaseYii<TUserIdentity>
  */
-class Yii extends \yii\BaseYii
+class Yii extends \Odigos\yii\BaseYii
 {
 }
 /**
@@ -42,4 +42,4 @@ class Yii extends \yii\BaseYii
 \class_alias('Odigos\Yii', 'Yii', \false);
 \spl_autoload_register(['Odigos\Yii', 'autoload'], \true, \true);
 Yii::$classMap = require __DIR__ . '/classes.php';
-Yii::$container = new \yii\di\Container();
+Yii::$container = new yii\di\Container();

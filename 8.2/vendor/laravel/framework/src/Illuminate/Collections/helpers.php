@@ -2,8 +2,8 @@
 
 namespace Odigos;
 
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Collection;
 if (!\function_exists('Odigos\collect')) {
     /**
      * Create a collection from the given value.

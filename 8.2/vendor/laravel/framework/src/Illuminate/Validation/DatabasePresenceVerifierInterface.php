@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Validation;
+namespace Odigos\Illuminate\Validation;
 
-interface DatabasePresenceVerifierInterface extends \Illuminate\Validation\PresenceVerifierInterface
+interface DatabasePresenceVerifierInterface extends PresenceVerifierInterface
 {
     /**
      * Set the connection to be used.

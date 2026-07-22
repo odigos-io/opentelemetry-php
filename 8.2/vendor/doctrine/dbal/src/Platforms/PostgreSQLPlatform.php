@@ -1,23 +1,23 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Platforms;
+namespace Odigos\Doctrine\DBAL\Platforms;
 
-use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Platforms\Keywords\KeywordList;
-use Doctrine\DBAL\Platforms\Keywords\PostgreSQLKeywords;
-use Doctrine\DBAL\Platforms\PostgreSQL\PostgreSQLMetadataProvider;
-use Doctrine\DBAL\Schema\Column;
-use Doctrine\DBAL\Schema\ForeignKeyConstraint;
-use Doctrine\DBAL\Schema\Identifier;
-use Doctrine\DBAL\Schema\Index;
-use Doctrine\DBAL\Schema\Name\UnquotedIdentifierFolding;
-use Doctrine\DBAL\Schema\PostgreSQLSchemaManager;
-use Doctrine\DBAL\Schema\Sequence;
-use Doctrine\DBAL\Schema\TableDiff;
-use Doctrine\DBAL\TransactionIsolationLevel;
-use Doctrine\DBAL\Types\Types;
-use Doctrine\Deprecations\Deprecation;
+use Odigos\Doctrine\DBAL\Connection;
+use Odigos\Doctrine\DBAL\Platforms\Keywords\KeywordList;
+use Odigos\Doctrine\DBAL\Platforms\Keywords\PostgreSQLKeywords;
+use Odigos\Doctrine\DBAL\Platforms\PostgreSQL\PostgreSQLMetadataProvider;
+use Odigos\Doctrine\DBAL\Schema\Column;
+use Odigos\Doctrine\DBAL\Schema\ForeignKeyConstraint;
+use Odigos\Doctrine\DBAL\Schema\Identifier;
+use Odigos\Doctrine\DBAL\Schema\Index;
+use Odigos\Doctrine\DBAL\Schema\Name\UnquotedIdentifierFolding;
+use Odigos\Doctrine\DBAL\Schema\PostgreSQLSchemaManager;
+use Odigos\Doctrine\DBAL\Schema\Sequence;
+use Odigos\Doctrine\DBAL\Schema\TableDiff;
+use Odigos\Doctrine\DBAL\TransactionIsolationLevel;
+use Odigos\Doctrine\DBAL\Types\Types;
+use Odigos\Doctrine\Deprecations\Deprecation;
 use UnexpectedValueException;
 use function array_merge;
 use function array_unique;
@@ -39,7 +39,7 @@ use function trim;
  * Provides the behavior, features and SQL dialect of the PostgreSQL database platform
  * of the oldest supported version.
  */
-class PostgreSQLPlatform extends \Doctrine\DBAL\Platforms\AbstractPlatform
+class PostgreSQLPlatform extends AbstractPlatform
 {
     private bool $useBooleanTrueFalseStrings = \true;
     /** @var string[][] PostgreSQL booleans literals */
@@ -70,11 +70,11 @@ class PostgreSQLPlatform extends \Doctrine\DBAL\Platforms\AbstractPlatform
         }
         return sprintf('POSITION(%s IN %s)', $substring, $string);
     }
-    protected function getDateArithmeticIntervalExpression(string $date, string $operator, string $interval, \Doctrine\DBAL\Platforms\DateIntervalUnit $unit): string
+    protected function getDateArithmeticIntervalExpression(string $date, string $operator, string $interval, DateIntervalUnit $unit): string
     {
-        if ($unit === \Doctrine\DBAL\Platforms\DateIntervalUnit::QUARTER) {
+        if ($unit === DateIntervalUnit::QUARTER) {
             $interval = $this->multiplyInterval($interval, 3);
-            $unit = \Doctrine\DBAL\Platforms\DateIntervalUnit::MONTH;
+            $unit = DateIntervalUnit::MONTH;
         }
         return '(' . $date . ' ' . $operator . ' (' . $interval . " || ' " . $unit->value . "')::interval)";
     }

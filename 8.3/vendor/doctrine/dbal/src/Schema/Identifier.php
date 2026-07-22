@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Schema;
+namespace Odigos\Doctrine\DBAL\Schema;
 
-use Doctrine\DBAL\Schema\Name\GenericName;
-use Doctrine\DBAL\Schema\Name\Parser\GenericNameParser;
-use Doctrine\DBAL\Schema\Name\Parsers;
+use Odigos\Doctrine\DBAL\Schema\Name\GenericName;
+use Odigos\Doctrine\DBAL\Schema\Name\Parser\GenericNameParser;
+use Odigos\Doctrine\DBAL\Schema\Name\Parsers;
 /**
  * An abstraction class for an asset identifier.
  *
@@ -16,7 +16,7 @@ use Doctrine\DBAL\Schema\Name\Parsers;
  *
  * @extends AbstractNamedObject<GenericName>
  */
-class Identifier extends \Doctrine\DBAL\Schema\AbstractNamedObject
+class Identifier extends AbstractNamedObject
 {
     /**
      * @param string $identifier Identifier name to wrap.

@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Foundation\Configuration;
+namespace Odigos\Illuminate\Foundation\Configuration;
 
 use Closure;
-use Illuminate\Foundation\Exceptions\Handler;
-use Illuminate\Http\Client\RequestException;
-use Illuminate\Support\Arr;
+use Odigos\Illuminate\Foundation\Exceptions\Handler;
+use Odigos\Illuminate\Http\Client\RequestException;
+use Odigos\Illuminate\Support\Arr;
 class Exceptions
 {
     /**

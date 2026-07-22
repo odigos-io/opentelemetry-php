@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Contracts;
+namespace Odigos\OpenAI\Contracts;
 
-use OpenAI\Responses\Meta\MetaInformation;
+use Odigos\OpenAI\Responses\Meta\MetaInformation;
 interface ResponseHasMetaInformationContract
 {
     public function meta(): MetaInformation;

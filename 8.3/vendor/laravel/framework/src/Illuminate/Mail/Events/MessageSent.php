@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Mail\Events;
+namespace Odigos\Illuminate\Mail\Events;
 
 use Exception;
-use Illuminate\Mail\SentMessage;
-use Illuminate\Support\Collection;
+use Odigos\Illuminate\Mail\SentMessage;
+use Odigos\Illuminate\Support\Collection;
 /**
  * @property \Symfony\Component\Mime\Email $message
  */

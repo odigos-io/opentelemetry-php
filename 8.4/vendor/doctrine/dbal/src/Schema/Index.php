@@ -1,16 +1,16 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Schema;
+namespace Odigos\Doctrine\DBAL\Schema;
 
-use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Doctrine\DBAL\Schema\Exception\InvalidState;
-use Doctrine\DBAL\Schema\Index\IndexedColumn;
-use Doctrine\DBAL\Schema\Index\IndexType;
-use Doctrine\DBAL\Schema\Name\Parser\UnqualifiedNameParser;
-use Doctrine\DBAL\Schema\Name\Parsers;
-use Doctrine\DBAL\Schema\Name\UnqualifiedName;
-use Doctrine\Deprecations\Deprecation;
+use Odigos\Doctrine\DBAL\Platforms\AbstractPlatform;
+use Odigos\Doctrine\DBAL\Schema\Exception\InvalidState;
+use Odigos\Doctrine\DBAL\Schema\Index\IndexedColumn;
+use Odigos\Doctrine\DBAL\Schema\Index\IndexType;
+use Odigos\Doctrine\DBAL\Schema\Name\Parser\UnqualifiedNameParser;
+use Odigos\Doctrine\DBAL\Schema\Name\Parsers;
+use Odigos\Doctrine\DBAL\Schema\Name\UnqualifiedName;
+use Odigos\Doctrine\Deprecations\Deprecation;
 use Throwable;
 use function array_filter;
 use function array_keys;
@@ -28,7 +28,7 @@ use function strtolower;
  * @final
  * @extends AbstractNamedObject<UnqualifiedName>
  */
-class Index extends \Doctrine\DBAL\Schema\AbstractNamedObject
+class Index extends AbstractNamedObject
 {
     /**
      * Asset identifier instances of the column names the index is associated with.
@@ -149,7 +149,7 @@ class Index extends \Doctrine\DBAL\Schema\AbstractNamedObject
     }
     protected function _addColumn(string $column): void
     {
-        $this->_columns[$column] = new \Doctrine\DBAL\Schema\Identifier($column);
+        $this->_columns[$column] = new Identifier($column);
     }
     /**
      * Returns the names of the referencing table columns the constraint is associated with.
@@ -255,7 +255,7 @@ class Index extends \Doctrine\DBAL\Schema\AbstractNamedObject
     /**
      * Checks if the other index already fulfills all the indexing and constraint needs of the current one.
      */
-    public function isFulfilledBy(\Doctrine\DBAL\Schema\Index $other): bool
+    public function isFulfilledBy(Index $other): bool
     {
         // allow the other index to be equally large only. It being larger is an option
         // but it creates a problem with scenarios of the kind PRIMARY KEY(foo,bar) UNIQUE(foo)
@@ -290,7 +290,7 @@ class Index extends \Doctrine\DBAL\Schema\AbstractNamedObject
      *
      * @deprecated
      */
-    public function overrules(\Doctrine\DBAL\Schema\Index $other): bool
+    public function overrules(Index $other): bool
     {
         Deprecation::trigger('doctrine/dbal', 'https://github.com/doctrine/dbal/pull/6886', '%s is deprecated.', __METHOD__);
         if ($other->isPrimary()) {
@@ -446,7 +446,7 @@ class Index extends \Doctrine\DBAL\Schema\AbstractNamedObject
     /**
      * Return whether the two indexes have the same partial index
      */
-    private function samePartialIndex(\Doctrine\DBAL\Schema\Index $other): bool
+    private function samePartialIndex(Index $other): bool
     {
         if ($this->hasOption('where') && $other->hasOption('where') && $this->getOption('where') === $other->getOption('where')) {
             return \true;
@@ -466,14 +466,14 @@ class Index extends \Doctrine\DBAL\Schema\AbstractNamedObject
     /**
      * Instantiates a new index editor.
      */
-    public static function editor(): \Doctrine\DBAL\Schema\IndexEditor
+    public static function editor(): IndexEditor
     {
-        return new \Doctrine\DBAL\Schema\IndexEditor();
+        return new IndexEditor();
     }
     /**
      * Instantiates a new index editor and initializes it with the properties of the current index.
      */
-    public function edit(): \Doctrine\DBAL\Schema\IndexEditor
+    public function edit(): IndexEditor
     {
         return self::editor()->setName($this->getObjectName())->setType($this->getType())->setColumns(...$this->getIndexedColumns())->setIsClustered($this->isClustered())->setPredicate($this->getPredicate());
     }

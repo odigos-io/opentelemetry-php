@@ -1,6 +1,6 @@
 <?php
 
-namespace Laravel\Prompts\Support;
+namespace Odigos\Laravel\Prompts\Support;
 
 use Closure;
 /**

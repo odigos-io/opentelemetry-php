@@ -14,17 +14,17 @@ declare (strict_types=1);
  * @since         4.5.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\ORM\Query;
+namespace Odigos\Cake\ORM\Query;
 
-use Cake\Database\Query\InsertQuery as DbInsertQuery;
-use Cake\Database\ValueBinder;
-use Cake\ORM\Table;
+use Odigos\Cake\Database\Query\InsertQuery as DbInsertQuery;
+use Odigos\Cake\Database\ValueBinder;
+use Odigos\Cake\ORM\Table;
 /**
  * @inheritDoc
  */
 class InsertQuery extends DbInsertQuery
 {
-    use \Cake\ORM\Query\CommonQueryTrait;
+    use CommonQueryTrait;
     /**
      * Constructor
      *

@@ -10,7 +10,7 @@ namespace Odigos;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-use Symfony\Polyfill\Mbstring as p;
+use Odigos\Symfony\Polyfill\Mbstring as p;
 if (!\function_exists('mb_convert_encoding') && !\function_exists('Odigos\mb_convert_encoding')) {
     function mb_convert_encoding(array|string|null $string, ?string $to_encoding, array|string|null $from_encoding = null): array|string|false
     {

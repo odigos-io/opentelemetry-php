@@ -14,7 +14,7 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Collection\Iterator;
+namespace Odigos\Cake\Collection\Iterator;
 
 use IteratorIterator;
 use RecursiveIterator;
@@ -79,6 +79,6 @@ class UnfoldIterator extends IteratorIterator implements RecursiveIterator
         $current = $this->current();
         $key = $this->key();
         $unfolder = $this->_unfolder;
-        return new \Cake\Collection\Iterator\NoChildrenIterator($unfolder($current, $key, $this->_innerIterator));
+        return new NoChildrenIterator($unfolder($current, $key, $this->_innerIterator));
     }
 }

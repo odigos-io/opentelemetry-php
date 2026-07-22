@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpFoundation;
+namespace Odigos\Symfony\Component\HttpFoundation;
 
 /**
  * HeaderBag is a container for HTTP headers.
@@ -236,14 +236,14 @@ class HeaderBag implements \IteratorAggregate, \Countable, \Stringable
     protected function getCacheControlHeader()
     {
         ksort($this->cacheControl);
-        return \Symfony\Component\HttpFoundation\HeaderUtils::toString($this->cacheControl, ',');
+        return HeaderUtils::toString($this->cacheControl, ',');
     }
     /**
      * Parses a Cache-Control HTTP header.
      */
     protected function parseCacheControl(string $header): array
     {
-        $parts = \Symfony\Component\HttpFoundation\HeaderUtils::split($header, ',=');
-        return \Symfony\Component\HttpFoundation\HeaderUtils::combine($parts);
+        $parts = HeaderUtils::split($header, ',=');
+        return HeaderUtils::combine($parts);
     }
 }

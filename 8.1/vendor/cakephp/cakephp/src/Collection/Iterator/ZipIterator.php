@@ -14,11 +14,11 @@ declare (strict_types=1);
  * @since         3.0.5
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Collection\Iterator;
+namespace Odigos\Cake\Collection\Iterator;
 
-use Cake\Collection\Collection;
-use Cake\Collection\CollectionInterface;
-use Cake\Collection\CollectionTrait;
+use Odigos\Cake\Collection\Collection;
+use Odigos\Cake\Collection\CollectionInterface;
+use Odigos\Cake\Collection\CollectionTrait;
 use MultipleIterator;
 /**
  * Creates an iterator that returns elements grouped in pairs

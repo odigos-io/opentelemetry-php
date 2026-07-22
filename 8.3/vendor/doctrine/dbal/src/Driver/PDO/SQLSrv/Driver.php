@@ -1,15 +1,15 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Driver\PDO\SQLSrv;
+namespace Odigos\Doctrine\DBAL\Driver\PDO\SQLSrv;
 
-use Doctrine\DBAL\Driver\AbstractSQLServerDriver;
-use Doctrine\DBAL\Driver\AbstractSQLServerDriver\Exception\PortWithoutHost;
-use Doctrine\DBAL\Driver\Exception;
-use Doctrine\DBAL\Driver\PDO\Connection as PDOConnection;
-use Doctrine\DBAL\Driver\PDO\Exception as PDOException;
-use Doctrine\DBAL\Driver\PDO\Exception\InvalidConfiguration;
-use Doctrine\DBAL\Driver\PDO\PDOConnect;
+use Odigos\Doctrine\DBAL\Driver\AbstractSQLServerDriver;
+use Odigos\Doctrine\DBAL\Driver\AbstractSQLServerDriver\Exception\PortWithoutHost;
+use Odigos\Doctrine\DBAL\Driver\Exception;
+use Odigos\Doctrine\DBAL\Driver\PDO\Connection as PDOConnection;
+use Odigos\Doctrine\DBAL\Driver\PDO\Exception as PDOException;
+use Odigos\Doctrine\DBAL\Driver\PDO\Exception\InvalidConfiguration;
+use Odigos\Doctrine\DBAL\Driver\PDO\PDOConnect;
 use PDO;
 use SensitiveParameter;
 use function is_int;
@@ -24,7 +24,7 @@ final class Driver extends AbstractSQLServerDriver
     public function connect(
         #[SensitiveParameter]
         array $params
-    ): \Doctrine\DBAL\Driver\PDO\SQLSrv\Connection
+    ): Connection
     {
         $driverOptions = $dsnOptions = [];
         if (isset($params['driverOptions'])) {
@@ -51,7 +51,7 @@ final class Driver extends AbstractSQLServerDriver
         } catch (\PDOException $exception) {
             throw PDOException::new($exception);
         }
-        return new \Doctrine\DBAL\Driver\PDO\SQLSrv\Connection(new PDOConnection($pdo));
+        return new Connection(new PDOConnection($pdo));
     }
     /**
      * Constructs the Sqlsrv PDO DSN.

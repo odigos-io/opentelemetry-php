@@ -5,11 +5,11 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\widgets;
+namespace Odigos\yii\widgets;
 
 use Closure;
-use yii\helpers\ArrayHelper;
-use yii\helpers\Html;
+use Odigos\yii\helpers\ArrayHelper;
+use Odigos\yii\helpers\Html;
 /**
  * The ListView widget is used to display data from data
  * provider. Each data model is rendered using the view
@@ -20,7 +20,7 @@ use yii\helpers\Html;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class ListView extends \yii\widgets\BaseListView
+class ListView extends BaseListView
 {
     /**
      * @var array|Closure the HTML attributes for the container of the rendering result of each data model.

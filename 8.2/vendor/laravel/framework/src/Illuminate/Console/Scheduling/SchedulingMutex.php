@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Console\Scheduling;
+namespace Odigos\Illuminate\Console\Scheduling;
 
 use DateTimeInterface;
 interface SchedulingMutex
@@ -12,7 +12,7 @@ interface SchedulingMutex
      * @param  \DateTimeInterface  $time
      * @return bool
      */
-    public function create(\Illuminate\Console\Scheduling\Event $event, DateTimeInterface $time);
+    public function create(Event $event, DateTimeInterface $time);
     /**
      * Determine if a scheduling mutex exists for the given event.
      *
@@ -20,5 +20,5 @@ interface SchedulingMutex
      * @param  \DateTimeInterface  $time
      * @return bool
      */
-    public function exists(\Illuminate\Console\Scheduling\Event $event, DateTimeInterface $time);
+    public function exists(Event $event, DateTimeInterface $time);
 }

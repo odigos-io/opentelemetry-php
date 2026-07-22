@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Notifications\Messages;
+namespace Odigos\Illuminate\Notifications\Messages;
 
-use Illuminate\Bus\Queueable;
+use Odigos\Illuminate\Bus\Queueable;
 class BroadcastMessage
 {
     use Queueable;

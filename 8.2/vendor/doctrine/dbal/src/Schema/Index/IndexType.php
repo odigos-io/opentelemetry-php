@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Schema\Index;
+namespace Odigos\Doctrine\DBAL\Schema\Index;
 
 enum IndexType
 {

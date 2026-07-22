@@ -8,23 +8,23 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Translation\Loader;
+namespace Odigos\Symfony\Component\Translation\Loader;
 
-use Symfony\Component\Config\Resource\FileResource;
-use Symfony\Component\Config\Util\Exception\InvalidXmlException;
-use Symfony\Component\Config\Util\Exception\XmlParsingException;
-use Symfony\Component\Config\Util\XmlUtils;
-use Symfony\Component\Translation\Exception\InvalidResourceException;
-use Symfony\Component\Translation\Exception\NotFoundResourceException;
-use Symfony\Component\Translation\Exception\RuntimeException;
-use Symfony\Component\Translation\MessageCatalogue;
-use Symfony\Component\Translation\Util\XliffUtils;
+use Odigos\Symfony\Component\Config\Resource\FileResource;
+use Odigos\Symfony\Component\Config\Util\Exception\InvalidXmlException;
+use Odigos\Symfony\Component\Config\Util\Exception\XmlParsingException;
+use Odigos\Symfony\Component\Config\Util\XmlUtils;
+use Odigos\Symfony\Component\Translation\Exception\InvalidResourceException;
+use Odigos\Symfony\Component\Translation\Exception\NotFoundResourceException;
+use Odigos\Symfony\Component\Translation\Exception\RuntimeException;
+use Odigos\Symfony\Component\Translation\MessageCatalogue;
+use Odigos\Symfony\Component\Translation\Util\XliffUtils;
 /**
  * XliffFileLoader loads translations from XLIFF files.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class XliffFileLoader implements \Symfony\Component\Translation\Loader\LoaderInterface
+class XliffFileLoader implements LoaderInterface
 {
     public function load(mixed $resource, string $locale, string $domain = 'messages'): MessageCatalogue
     {

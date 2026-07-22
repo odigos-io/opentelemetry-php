@@ -1,8 +1,8 @@
 <?php
 
-namespace Http\Discovery\Strategy;
+namespace Odigos\Http\Discovery\Strategy;
 
-use Http\Discovery\Exception\StrategyUnavailableException;
+use Odigos\Http\Discovery\Exception\StrategyUnavailableException;
 /**
  * @author Tobias Nyholm <tobias.nyholm@gmail.com>
  */

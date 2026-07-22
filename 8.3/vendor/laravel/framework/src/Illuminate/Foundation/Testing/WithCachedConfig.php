@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Foundation\Testing;
+namespace Odigos\Illuminate\Foundation\Testing;
 
-use Illuminate\Foundation\Application;
-use Illuminate\Foundation\Bootstrap\LoadConfiguration;
+use Odigos\Illuminate\Foundation\Application;
+use Odigos\Illuminate\Foundation\Bootstrap\LoadConfiguration;
 trait WithCachedConfig
 {
     /**
@@ -11,8 +11,8 @@ trait WithCachedConfig
      */
     protected function setUpWithCachedConfig(): void
     {
-        if ((\Illuminate\Foundation\Testing\CachedState::$cachedConfig ?? null) === null) {
-            \Illuminate\Foundation\Testing\CachedState::$cachedConfig = $this->app->make('config')->all();
+        if ((CachedState::$cachedConfig ?? null) === null) {
+            CachedState::$cachedConfig = $this->app->make('config')->all();
         }
         $this->markConfigCached($this->app);
     }
@@ -31,6 +31,6 @@ trait WithCachedConfig
     protected function markConfigCached(Application $app): void
     {
         $app->instance('config_loaded_from_cache', \true);
-        LoadConfiguration::alwaysUse(static fn() => \Illuminate\Foundation\Testing\CachedState::$cachedConfig);
+        LoadConfiguration::alwaysUse(static fn() => CachedState::$cachedConfig);
     }
 }

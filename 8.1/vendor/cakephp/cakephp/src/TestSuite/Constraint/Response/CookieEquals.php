@@ -13,16 +13,16 @@ declare (strict_types=1);
  * @since         3.7.0
  * @license       https://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\TestSuite\Constraint\Response;
+namespace Odigos\Cake\TestSuite\Constraint\Response;
 
-use Cake\Http\Response;
+use Odigos\Cake\Http\Response;
 use Psr\Http\Message\ResponseInterface;
 /**
  * CookieEquals
  *
  * @internal
  */
-class CookieEquals extends \Cake\TestSuite\Constraint\Response\ResponseBase
+class CookieEquals extends ResponseBase
 {
     /**
      * @var \Cake\Http\Response

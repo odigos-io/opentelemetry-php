@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Console\View\Components;
+namespace Odigos\Illuminate\Console\View\Components;
 
-class Confirm extends \Illuminate\Console\View\Components\Component
+class Confirm extends Component
 {
     /**
      * Renders the component using the given arguments.

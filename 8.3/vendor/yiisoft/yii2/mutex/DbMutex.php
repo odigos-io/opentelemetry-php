@@ -5,11 +5,11 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\mutex;
+namespace Odigos\yii\mutex;
 
-use yii\base\InvalidConfigException;
-use yii\db\Connection;
-use yii\di\Instance;
+use Odigos\yii\base\InvalidConfigException;
+use Odigos\yii\db\Connection;
+use Odigos\yii\di\Instance;
 /**
  * DbMutex is the base class for classes, which relies on database while implementing mutex "lock" mechanism.
  *
@@ -18,7 +18,7 @@ use yii\di\Instance;
  * @author resurtm <resurtm@gmail.com>
  * @since 2.0
  */
-abstract class DbMutex extends \yii\mutex\Mutex
+abstract class DbMutex extends Mutex
 {
     /**
      * @var Connection|array|string the DB connection object or the application component ID of the DB connection.

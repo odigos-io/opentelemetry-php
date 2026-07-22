@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Support\Facades;
+namespace Odigos\Illuminate\Support\Facades;
 
-use Illuminate\Contracts\Console\Kernel as ConsoleKernelContract;
+use Odigos\Illuminate\Contracts\Console\Kernel as ConsoleKernelContract;
 /**
  * @method static int handle(\Symfony\Component\Console\Input\InputInterface $input, \Symfony\Component\Console\Output\OutputInterface|null $output = null)
  * @method static void terminate(\Symfony\Component\Console\Input\InputInterface $input, int $status)
@@ -24,7 +24,7 @@ use Illuminate\Contracts\Console\Kernel as ConsoleKernelContract;
  *
  * @see \Illuminate\Foundation\Console\Kernel
  */
-class Artisan extends \Illuminate\Support\Facades\Facade
+class Artisan extends Facade
 {
     /**
      * Get the registered name of the component.

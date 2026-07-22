@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Driver\PgSQL;
+namespace Odigos\Doctrine\DBAL\Driver\PgSQL;
 
-use Doctrine\DBAL\Driver\PgSQL\Exception\UnknownParameter;
-use Doctrine\DBAL\Driver\Statement as StatementInterface;
-use Doctrine\DBAL\ParameterType;
+use Odigos\Doctrine\DBAL\Driver\PgSQL\Exception\UnknownParameter;
+use Odigos\Doctrine\DBAL\Driver\Statement as StatementInterface;
+use Odigos\Doctrine\DBAL\ParameterType;
 use PgSql\Connection as PgSqlConnection;
 use function assert;
 use function is_resource;
@@ -54,7 +54,7 @@ final class Statement implements StatementInterface
         }
     }
     /** {@inheritDoc} */
-    public function execute(): \Doctrine\DBAL\Driver\PgSQL\Result
+    public function execute(): Result
     {
         ksort($this->parameters);
         $escapedParameters = [];
@@ -65,13 +65,13 @@ final class Statement implements StatementInterface
             };
         }
         if (@pg_send_execute($this->connection, $this->name, $escapedParameters) !== \true) {
-            throw new \Doctrine\DBAL\Driver\PgSQL\Exception(pg_last_error($this->connection));
+            throw new Exception(pg_last_error($this->connection));
         }
         $result = @pg_get_result($this->connection);
         assert($result !== \false);
         if ((bool) pg_result_error($result)) {
-            throw \Doctrine\DBAL\Driver\PgSQL\Exception::fromResult($result);
+            throw Exception::fromResult($result);
         }
-        return new \Doctrine\DBAL\Driver\PgSQL\Result($result);
+        return new Result($result);
     }
 }

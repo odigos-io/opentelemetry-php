@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\View\Compilers\Concerns;
+namespace Odigos\Illuminate\View\Compilers\Concerns;
 
-use Illuminate\Foundation\Vite;
+use Odigos\Illuminate\Foundation\Vite;
 trait CompilesHelpers
 {
     /**

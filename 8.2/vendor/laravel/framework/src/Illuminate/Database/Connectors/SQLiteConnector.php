@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Database\Connectors;
+namespace Odigos\Illuminate\Database\Connectors;
 
-use Illuminate\Database\SQLiteDatabaseDoesNotExistException;
-class SQLiteConnector extends \Illuminate\Database\Connectors\Connector implements \Illuminate\Database\Connectors\ConnectorInterface
+use Odigos\Illuminate\Database\SQLiteDatabaseDoesNotExistException;
+class SQLiteConnector extends Connector implements ConnectorInterface
 {
     /**
      * Establish a database connection.

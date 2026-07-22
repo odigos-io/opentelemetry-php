@@ -5,15 +5,15 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\validators;
+namespace Odigos\yii\validators;
 
 use Odigos\Yii;
-use yii\base\Model;
-use yii\db\ActiveQuery;
-use yii\db\ActiveQueryInterface;
-use yii\db\ActiveRecord;
-use yii\db\ActiveRecordInterface;
-use yii\helpers\Inflector;
+use Odigos\yii\base\Model;
+use Odigos\yii\db\ActiveQuery;
+use Odigos\yii\db\ActiveQueryInterface;
+use Odigos\yii\db\ActiveRecord;
+use Odigos\yii\db\ActiveRecordInterface;
+use Odigos\yii\helpers\Inflector;
 /**
  * UniqueValidator validates that the attribute value is unique in the specified database table.
  *
@@ -38,7 +38,7 @@ use yii\helpers\Inflector;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class UniqueValidator extends \yii\validators\Validator
+class UniqueValidator extends Validator
 {
     /**
      * @var string|null the name of the ActiveRecord class that should be used to validate the uniqueness
@@ -182,7 +182,7 @@ class UniqueValidator extends \yii\validators\Validator
             $exists = $query->exists();
         } else {
             // if current $model is in the database already we can't use exists()
-            if ($query instanceof \yii\db\ActiveQuery) {
+            if ($query instanceof \Odigos\yii\db\ActiveQuery) {
                 // only select primary key to optimize query
                 $columnsCondition = array_flip($targetClass::primaryKey());
                 $query->select(array_flip($this->applyTableAlias($query, $columnsCondition)));
@@ -260,7 +260,7 @@ class UniqueValidator extends \yii\validators\Validator
             $conditions = [$targetAttribute => $model->{$attribute}];
         }
         $targetModelClass = $this->getTargetClass($model);
-        if (!is_subclass_of($targetModelClass, 'yii\db\ActiveRecord')) {
+        if (!is_subclass_of($targetModelClass, 'Odigos\yii\db\ActiveRecord')) {
             return $conditions;
         }
         /** @var ActiveRecord $targetModelClass */

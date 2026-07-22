@@ -6,7 +6,7 @@
  * @license https://github.com/slimphp/Slim/blob/4.x/LICENSE.md (MIT License)
  */
 declare (strict_types=1);
-namespace Slim\Interfaces;
+namespace Odigos\Slim\Interfaces;
 
 use InvalidArgumentException;
 use RuntimeException;
@@ -16,15 +16,15 @@ interface RouteCollectorInterface
     /**
      * Get the route parser
      */
-    public function getRouteParser(): \Slim\Interfaces\RouteParserInterface;
+    public function getRouteParser(): RouteParserInterface;
     /**
      * Get default route invocation strategy
      */
-    public function getDefaultInvocationStrategy(): \Slim\Interfaces\InvocationStrategyInterface;
+    public function getDefaultInvocationStrategy(): InvocationStrategyInterface;
     /**
      * Set default route invocation strategy
      */
-    public function setDefaultInvocationStrategy(\Slim\Interfaces\InvocationStrategyInterface $strategy): \Slim\Interfaces\RouteCollectorInterface;
+    public function setDefaultInvocationStrategy(InvocationStrategyInterface $strategy): RouteCollectorInterface;
     /**
      * Get path to FastRoute cache file
      */
@@ -35,7 +35,7 @@ interface RouteCollectorInterface
      * @throws InvalidArgumentException
      * @throws RuntimeException
      */
-    public function setCacheFile(string $cacheFile): \Slim\Interfaces\RouteCollectorInterface;
+    public function setCacheFile(string $cacheFile): RouteCollectorInterface;
     /**
      * Get the base path used in pathFor()
      */
@@ -43,7 +43,7 @@ interface RouteCollectorInterface
     /**
      * Set the base path used in pathFor()
      */
-    public function setBasePath(string $basePath): \Slim\Interfaces\RouteCollectorInterface;
+    public function setBasePath(string $basePath): RouteCollectorInterface;
     /**
      * Get route objects
      *
@@ -57,7 +57,7 @@ interface RouteCollectorInterface
      *
      * @throws RuntimeException   If named route does not exist
      */
-    public function getNamedRoute(string $name): \Slim\Interfaces\RouteInterface;
+    public function getNamedRoute(string $name): RouteInterface;
     /**
      * Remove named route
      *
@@ -65,18 +65,18 @@ interface RouteCollectorInterface
      *
      * @throws RuntimeException   If named route does not exist
      */
-    public function removeNamedRoute(string $name): \Slim\Interfaces\RouteCollectorInterface;
+    public function removeNamedRoute(string $name): RouteCollectorInterface;
     /**
      * Lookup a route via the route's unique identifier
      *
      * @throws RuntimeException   If route of identifier does not exist
      */
-    public function lookupRoute(string $identifier): \Slim\Interfaces\RouteInterface;
+    public function lookupRoute(string $identifier): RouteInterface;
     /**
      * Add route group
      * @param string|callable $callable
      */
-    public function group(string $pattern, $callable): \Slim\Interfaces\RouteGroupInterface;
+    public function group(string $pattern, $callable): RouteGroupInterface;
     /**
      * Add route
      *
@@ -84,5 +84,5 @@ interface RouteCollectorInterface
      * @param string $pattern The route pattern
      * @param callable|array{class-string, string}|string $handler The route callable
      */
-    public function map(array $methods, string $pattern, $handler): \Slim\Interfaces\RouteInterface;
+    public function map(array $methods, string $pattern, $handler): RouteInterface;
 }

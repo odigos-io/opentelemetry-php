@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\View;
+namespace Odigos\Illuminate\View;
 
-use Illuminate\Filesystem\Filesystem;
+use Odigos\Illuminate\Filesystem\Filesystem;
 use InvalidArgumentException;
-class FileViewFinder implements \Illuminate\View\ViewFinderInterface
+class FileViewFinder implements ViewFinderInterface
 {
     /**
      * The filesystem instance.

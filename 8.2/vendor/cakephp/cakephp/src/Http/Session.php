@@ -14,15 +14,15 @@ declare (strict_types=1);
  * @since         0.10.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Http;
+namespace Odigos\Cake\Http;
 
-use Cake\Core\App;
-use Cake\Core\Exception\CakeException;
-use Cake\Error\Debugger;
-use Cake\Utility\Hash;
+use Odigos\Cake\Core\App;
+use Odigos\Cake\Core\Exception\CakeException;
+use Odigos\Cake\Error\Debugger;
+use Odigos\Cake\Utility\Hash;
 use InvalidArgumentException;
 use SessionHandlerInterface;
-use function Cake\Core\env;
+use function Odigos\Cake\Core\env;
 use const PHP_SESSION_ACTIVE;
 /**
  * This class is a wrapper for the native PHP session functions. It provides

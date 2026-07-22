@@ -12,12 +12,12 @@ declare (strict_types=1);
  * @since         3.1.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Console\Exception;
+namespace Odigos\Cake\Console\Exception;
 
 /**
  * Used when a Helper cannot be found.
  */
-class MissingHelperException extends \Cake\Console\Exception\ConsoleException
+class MissingHelperException extends ConsoleException
 {
     /**
      * @var string

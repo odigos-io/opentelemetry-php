@@ -1,18 +1,18 @@
 <?php
 
-namespace GuzzleHttp\Handler;
+namespace Odigos\GuzzleHttp\Handler;
 
-use GuzzleHttp\Exception\ConnectException;
-use GuzzleHttp\Exception\RequestException;
-use GuzzleHttp\Promise as P;
-use GuzzleHttp\Promise\FulfilledPromise;
-use GuzzleHttp\Promise\PromiseInterface;
-use GuzzleHttp\Psr7;
-use GuzzleHttp\Psr7\LazyOpenStream;
-use GuzzleHttp\Psr7\Uri;
-use GuzzleHttp\TransferStats;
-use GuzzleHttp\TransportSharing;
-use GuzzleHttp\Utils;
+use Odigos\GuzzleHttp\Exception\ConnectException;
+use Odigos\GuzzleHttp\Exception\RequestException;
+use Odigos\GuzzleHttp\Promise as P;
+use Odigos\GuzzleHttp\Promise\FulfilledPromise;
+use Odigos\GuzzleHttp\Promise\PromiseInterface;
+use Odigos\GuzzleHttp\Psr7;
+use Odigos\GuzzleHttp\Psr7\LazyOpenStream;
+use Odigos\GuzzleHttp\Psr7\Uri;
+use Odigos\GuzzleHttp\TransferStats;
+use Odigos\GuzzleHttp\TransportSharing;
+use Odigos\GuzzleHttp\Utils;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\UriInterface;
 /**
@@ -20,7 +20,7 @@ use Psr\Http\Message\UriInterface;
  *
  * @final
  */
-class CurlFactory implements \GuzzleHttp\Handler\CurlFactoryInterface
+class CurlFactory implements CurlFactoryInterface
 {
     public const CURL_VERSION_STR = 'curl_version';
     /**
@@ -50,7 +50,7 @@ class CurlFactory implements \GuzzleHttp\Handler\CurlFactoryInterface
     public function __construct(int $maxHandles, string $shareMode = TransportSharing::NONE, $shareHandle = null)
     {
         $this->maxHandles = $maxHandles;
-        $this->shareMode = \GuzzleHttp\Handler\CurlShareHandleState::normalizeMode($shareMode, 'transport_sharing');
+        $this->shareMode = CurlShareHandleState::normalizeMode($shareMode, 'transport_sharing');
         if ($this->shareMode === TransportSharing::NONE && $shareHandle !== null) {
             throw new \InvalidArgumentException('A cURL share handle cannot be provided when transport sharing is disabled.');
         }
@@ -72,7 +72,7 @@ class CurlFactory implements \GuzzleHttp\Handler\CurlFactoryInterface
         }
         return $value instanceof \CurlShareHandle;
     }
-    public function create(RequestInterface $request, array $options): \GuzzleHttp\Handler\EasyHandle
+    public function create(RequestInterface $request, array $options): EasyHandle
     {
         $protocolVersion = $request->getProtocolVersion();
         if ('' === $protocolVersion) {
@@ -81,7 +81,7 @@ class CurlFactory implements \GuzzleHttp\Handler\CurlFactoryInterface
             $request = Psr7\Utils::modifyRequest($request, ['version' => $protocolVersion]);
         }
         if ('2' === $protocolVersion || '2.0' === $protocolVersion) {
-            if (!\GuzzleHttp\Handler\CurlVersion::supportsHttp2()) {
+            if (!CurlVersion::supportsHttp2()) {
                 throw new ConnectException('HTTP/2 is supported by the cURL handler, however libcurl is built without HTTP/2 support.', $request);
             }
         } elseif ('1.0' !== $protocolVersion && '1.1' !== $protocolVersion) {
@@ -95,7 +95,7 @@ class CurlFactory implements \GuzzleHttp\Handler\CurlFactoryInterface
         $this->rejectRequestLevelShareConflict($options);
         self::triggerUnsupportedCurlOptionDeprecations($options);
         self::triggerConflictingCurlOptionDeprecations($options);
-        $easy = new \GuzzleHttp\Handler\EasyHandle();
+        $easy = new EasyHandle();
         $easy->request = $request;
         $easy->options = $options;
         $conf = $this->getDefaultConf($easy);
@@ -385,7 +385,7 @@ class CurlFactory implements \GuzzleHttp\Handler\CurlFactoryInterface
             $options[$value] = $replacement;
         }
     }
-    public function release(\GuzzleHttp\Handler\EasyHandle $easy): void
+    public function release(EasyHandle $easy): void
     {
         $resource = $easy->handle;
         unset($easy->handle);
@@ -413,7 +413,7 @@ class CurlFactory implements \GuzzleHttp\Handler\CurlFactoryInterface
      * @param callable(RequestInterface, array): PromiseInterface $handler
      * @param CurlFactoryInterface                                $factory Dictates how the handle is released
      */
-    public static function finish(callable $handler, \GuzzleHttp\Handler\EasyHandle $easy, \GuzzleHttp\Handler\CurlFactoryInterface $factory): PromiseInterface
+    public static function finish(callable $handler, EasyHandle $easy, CurlFactoryInterface $factory): PromiseInterface
     {
         if (isset($easy->options['on_stats'])) {
             self::invokeStats($easy);
@@ -430,7 +430,7 @@ class CurlFactory implements \GuzzleHttp\Handler\CurlFactoryInterface
         }
         return new FulfilledPromise($easy->response);
     }
-    private static function invokeStats(\GuzzleHttp\Handler\EasyHandle $easy): void
+    private static function invokeStats(EasyHandle $easy): void
     {
         $curlStats = \curl_getinfo($easy->handle);
         $curlStats['appconnect_time'] = \curl_getinfo($easy->handle, \CURLINFO_APPCONNECT_TIME);
@@ -440,11 +440,11 @@ class CurlFactory implements \GuzzleHttp\Handler\CurlFactoryInterface
     /**
      * @param callable(RequestInterface, array): PromiseInterface $handler
      */
-    private static function finishError(callable $handler, \GuzzleHttp\Handler\EasyHandle $easy, \GuzzleHttp\Handler\CurlFactoryInterface $factory): PromiseInterface
+    private static function finishError(callable $handler, EasyHandle $easy, CurlFactoryInterface $factory): PromiseInterface
     {
         // Get error information and release the handle to the factory.
         $ctx = ['errno' => $easy->errno, 'error' => \curl_error($easy->handle), 'appconnect_time' => \curl_getinfo($easy->handle, \CURLINFO_APPCONNECT_TIME)] + \curl_getinfo($easy->handle);
-        $ctx[self::CURL_VERSION_STR] = \GuzzleHttp\Handler\CurlVersion::getVersion() ?? '';
+        $ctx[self::CURL_VERSION_STR] = CurlVersion::getVersion() ?? '';
         $factory->release($easy);
         // Retry when nothing is present or when curl failed to rewind.
         if (empty($easy->options['_err_message']) && (!$easy->errno || $easy->errno == 65)) {
@@ -452,7 +452,7 @@ class CurlFactory implements \GuzzleHttp\Handler\CurlFactoryInterface
         }
         return self::createRejection($easy, $ctx);
     }
-    private static function createRejection(\GuzzleHttp\Handler\EasyHandle $easy, array $ctx): PromiseInterface
+    private static function createRejection(EasyHandle $easy, array $ctx): PromiseInterface
     {
         static $connectionErrors = [\CURLE_OPERATION_TIMEOUTED => \true, \CURLE_COULDNT_RESOLVE_HOST => \true, \CURLE_COULDNT_CONNECT => \true, \CURLE_SSL_CONNECT_ERROR => \true, \CURLE_GOT_NOTHING => \true];
         if ($easy->createResponseException) {
@@ -553,7 +553,7 @@ class CurlFactory implements \GuzzleHttp\Handler\CurlFactoryInterface
     /**
      * @return array<int|string, mixed>
      */
-    private function getDefaultConf(\GuzzleHttp\Handler\EasyHandle $easy): array
+    private function getDefaultConf(EasyHandle $easy): array
     {
         $conf = ['_headers' => $easy->request->getHeaders(), \CURLOPT_CUSTOMREQUEST => $easy->request->getMethod(), \CURLOPT_URL => (string) $easy->request->getUri()->withFragment(''), \CURLOPT_RETURNTRANSFER => \false, \CURLOPT_HEADER => \false, \CURLOPT_CONNECTTIMEOUT => 300];
         $protocols = Utils::normalizeProtocols($easy->options['protocols'] ?? ['http', 'https']);
@@ -602,7 +602,7 @@ class CurlFactory implements \GuzzleHttp\Handler\CurlFactoryInterface
     {
         return $type !== 'ENG' && $type !== 'PROV';
     }
-    private function applyMethod(\GuzzleHttp\Handler\EasyHandle $easy, array &$conf): void
+    private function applyMethod(EasyHandle $easy, array &$conf): void
     {
         $body = $easy->request->getBody();
         $size = $body->getSize();
@@ -654,7 +654,7 @@ class CurlFactory implements \GuzzleHttp\Handler\CurlFactoryInterface
             $conf[\CURLOPT_HTTPHEADER][] = 'Content-Type:';
         }
     }
-    private function applyHeaders(\GuzzleHttp\Handler\EasyHandle $easy, array &$conf): void
+    private function applyHeaders(EasyHandle $easy, array &$conf): void
     {
         foreach ($conf['_headers'] as $name => $values) {
             foreach ($values as $value) {
@@ -688,7 +688,7 @@ class CurlFactory implements \GuzzleHttp\Handler\CurlFactoryInterface
             }
         }
     }
-    private function applyHandlerOptions(\GuzzleHttp\Handler\EasyHandle $easy, array &$conf): void
+    private function applyHandlerOptions(EasyHandle $easy, array &$conf): void
     {
         $options = $easy->options;
         if (isset($options['verify'])) {
@@ -788,10 +788,10 @@ class CurlFactory implements \GuzzleHttp\Handler\CurlFactoryInterface
             }
         }
         if ($proxyConf === null) {
-            $proxyConf = \GuzzleHttp\Handler\ProxyEnvironment::getProxyForScheme($easy->request->getUri()->getScheme());
+            $proxyConf = ProxyEnvironment::getProxyForScheme($easy->request->getUri()->getScheme());
             if ($proxyConf === null) {
                 $proxyConf = '';
-            } elseif (($noProxy = \GuzzleHttp\Handler\ProxyEnvironment::getNoProxy()) !== null && Utils::isUriInNoProxy($easy->request->getUri(), \GuzzleHttp\Handler\ProxyEnvironment::splitNoProxy($noProxy))) {
+            } elseif (($noProxy = ProxyEnvironment::getNoProxy()) !== null && Utils::isUriInNoProxy($easy->request->getUri(), ProxyEnvironment::splitNoProxy($noProxy))) {
                 // The environment no_proxy list is tokenized the way libcurl
                 // tokenizes it and matched here with the same rules as the
                 // proxy option's "no" list, so behavior does not depend on
@@ -810,7 +810,7 @@ class CurlFactory implements \GuzzleHttp\Handler\CurlFactoryInterface
                 // wire.
                 throw new RequestException('The proxy URL is malformed.', $easy->request);
             }
-            if ($scheme === 'https' && !\GuzzleHttp\Handler\CurlVersion::supportsHttpsProxy()) {
+            if ($scheme === 'https' && !CurlVersion::supportsHttpsProxy()) {
                 // libcurl before 7.50.2 silently downgrades an https:// proxy
                 // to a plaintext HTTP proxy; 7.50.2 through 7.51, and builds
                 // without HTTPS-proxy support, fail at connect time. Fail
@@ -829,7 +829,7 @@ class CurlFactory implements \GuzzleHttp\Handler\CurlFactoryInterface
                 if (\STREAM_CRYPTO_METHOD_TLSv1_0_CLIENT === $options['crypto_method'] || \STREAM_CRYPTO_METHOD_TLSv1_1_CLIENT === $options['crypto_method'] || \STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT === $options['crypto_method']) {
                     $conf[\CURLOPT_SSLVERSION] = \CURL_SSLVERSION_TLSv1_2;
                 } elseif (defined('STREAM_CRYPTO_METHOD_TLSv1_3_CLIENT') && \STREAM_CRYPTO_METHOD_TLSv1_3_CLIENT === $options['crypto_method']) {
-                    if (!\GuzzleHttp\Handler\CurlVersion::supportsTls13()) {
+                    if (!CurlVersion::supportsTls13()) {
                         throw new \InvalidArgumentException('Invalid crypto_method request option: TLS 1.3 not supported by your version of cURL');
                     }
                     $conf[\CURLOPT_SSLVERSION] = \CURL_SSLVERSION_TLSv1_3;
@@ -841,12 +841,12 @@ class CurlFactory implements \GuzzleHttp\Handler\CurlFactoryInterface
             } elseif (\STREAM_CRYPTO_METHOD_TLSv1_1_CLIENT === $options['crypto_method']) {
                 $conf[\CURLOPT_SSLVERSION] = \CURL_SSLVERSION_TLSv1_1;
             } elseif (\STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT === $options['crypto_method']) {
-                if (!\GuzzleHttp\Handler\CurlVersion::supportsTls12()) {
+                if (!CurlVersion::supportsTls12()) {
                     throw new \InvalidArgumentException('Invalid crypto_method request option: TLS 1.2 not supported by your version of cURL');
                 }
                 $conf[\CURLOPT_SSLVERSION] = \CURL_SSLVERSION_TLSv1_2;
             } elseif (defined('STREAM_CRYPTO_METHOD_TLSv1_3_CLIENT') && \STREAM_CRYPTO_METHOD_TLSv1_3_CLIENT === $options['crypto_method']) {
-                if (!\GuzzleHttp\Handler\CurlVersion::supportsTls13()) {
+                if (!CurlVersion::supportsTls13()) {
                     throw new \InvalidArgumentException('Invalid crypto_method request option: TLS 1.3 not supported by your version of cURL');
                 }
                 $conf[\CURLOPT_SSLVERSION] = \CURL_SSLVERSION_TLSv1_3;
@@ -940,7 +940,7 @@ class CurlFactory implements \GuzzleHttp\Handler\CurlFactoryInterface
      *
      * @param callable(RequestInterface, array): PromiseInterface $handler
      */
-    private static function retryFailedRewind(callable $handler, \GuzzleHttp\Handler\EasyHandle $easy, array $ctx): PromiseInterface
+    private static function retryFailedRewind(callable $handler, EasyHandle $easy, array $ctx): PromiseInterface
     {
         try {
             // Only rewind if the body has been read from.
@@ -963,7 +963,7 @@ class CurlFactory implements \GuzzleHttp\Handler\CurlFactoryInterface
         }
         return $handler($easy->request, $easy->options);
     }
-    private function createHeaderFn(\GuzzleHttp\Handler\EasyHandle $easy): callable
+    private function createHeaderFn(EasyHandle $easy): callable
     {
         if (isset($easy->options['on_headers'])) {
             $onHeaders = $easy->options['on_headers'];

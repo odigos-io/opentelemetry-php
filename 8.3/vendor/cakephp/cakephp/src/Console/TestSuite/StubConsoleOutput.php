@@ -13,9 +13,9 @@ declare (strict_types=1);
  * @link          https://cakephp.org CakePHP Project
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Console\TestSuite;
+namespace Odigos\Cake\Console\TestSuite;
 
-use Cake\Console\ConsoleOutput;
+use Odigos\Cake\Console\ConsoleOutput;
 /**
  * StubOutput makes testing shell commands/shell helpers easier.
  *
@@ -95,5 +95,5 @@ class StubConsoleOutput extends ConsoleOutput
     }
 }
 // phpcs:disable
-class_alias('Cake\Console\TestSuite\StubConsoleOutput', 'Cake\TestSuite\Stub\ConsoleOutput');
+class_alias('Odigos\Cake\Console\TestSuite\StubConsoleOutput', 'Odigos\Cake\TestSuite\Stub\ConsoleOutput');
 // phpcs:enable

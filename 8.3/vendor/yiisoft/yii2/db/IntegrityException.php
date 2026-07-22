@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\db;
+namespace Odigos\yii\db;
 
 /**
  * Exception represents an exception that is caused by violation of DB constraints.
@@ -13,7 +13,7 @@ namespace yii\db;
  * @author Alexander Makarov <sam@rmcreative.ru>
  * @since 2.0
  */
-class IntegrityException extends \yii\db\Exception
+class IntegrityException extends Exception
 {
     /**
      * @return string the user-friendly name of this exception

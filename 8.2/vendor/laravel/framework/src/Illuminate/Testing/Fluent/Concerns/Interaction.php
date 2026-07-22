@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Testing\Fluent\Concerns;
+namespace Odigos\Illuminate\Testing\Fluent\Concerns;
 
-use Illuminate\Support\Str;
+use Odigos\Illuminate\Support\Str;
 use Odigos\PHPUnit\Framework\Assert as PHPUnit;
 trait Interaction
 {

@@ -14,9 +14,9 @@ declare (strict_types=1);
  * @since         5.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\I18n;
+namespace Odigos\Cake\I18n;
 
-use Cake\Chronos\ChronosTime;
+use Odigos\Cake\Chronos\ChronosTime;
 use Closure;
 use IntlDateFormatter;
 use InvalidArgumentException;
@@ -31,7 +31,7 @@ use Stringable;
  */
 class Time extends ChronosTime implements JsonSerializable, Stringable
 {
-    use \Cake\I18n\DateFormatTrait;
+    use DateFormatTrait;
     /**
      * The format to use when formatting a time using `Cake\I18n\Time::i18nFormat()`
      * and `__toString`.
@@ -180,12 +180,12 @@ class Time extends ChronosTime implements JsonSerializable, Stringable
      */
     public function i18nFormat(string|int|null $format = null, ?string $locale = null): string|int
     {
-        if ($format === \Cake\I18n\DateTime::UNIX_TIMESTAMP_FORMAT) {
+        if ($format === DateTime::UNIX_TIMESTAMP_FORMAT) {
             throw new InvalidArgumentException('UNIT_TIMESTAMP_FORMAT is not supported for Time.');
         }
         $format ??= static::$_toStringFormat;
         $format = is_int($format) ? [IntlDateFormatter::NONE, $format] : $format;
-        $locale = $locale ?: \Cake\I18n\DateTime::getDefaultLocale();
+        $locale = $locale ?: DateTime::getDefaultLocale();
         return $this->_formatObject($this->toNative(), $format, $locale);
     }
     /**

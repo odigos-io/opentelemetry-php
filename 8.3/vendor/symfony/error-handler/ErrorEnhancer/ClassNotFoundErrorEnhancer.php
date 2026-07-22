@@ -8,16 +8,16 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\ErrorHandler\ErrorEnhancer;
+namespace Odigos\Symfony\Component\ErrorHandler\ErrorEnhancer;
 
 use Composer\Autoload\ClassLoader;
-use Symfony\Component\ErrorHandler\DebugClassLoader;
-use Symfony\Component\ErrorHandler\Error\ClassNotFoundError;
-use Symfony\Component\ErrorHandler\Error\FatalError;
+use Odigos\Symfony\Component\ErrorHandler\DebugClassLoader;
+use Odigos\Symfony\Component\ErrorHandler\Error\ClassNotFoundError;
+use Odigos\Symfony\Component\ErrorHandler\Error\FatalError;
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class ClassNotFoundErrorEnhancer implements \Symfony\Component\ErrorHandler\ErrorEnhancer\ErrorEnhancerInterface
+class ClassNotFoundErrorEnhancer implements ErrorEnhancerInterface
 {
     public function enhance(\Throwable $error): ?\Throwable
     {

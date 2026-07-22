@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Queue\Failed;
+namespace Odigos\Illuminate\Queue\Failed;
 
-class NullFailedJobProvider implements \Illuminate\Queue\Failed\CountableFailedJobProvider, \Illuminate\Queue\Failed\FailedJobProviderInterface
+class NullFailedJobProvider implements CountableFailedJobProvider, FailedJobProviderInterface
 {
     /**
      * Log a failed job into storage.

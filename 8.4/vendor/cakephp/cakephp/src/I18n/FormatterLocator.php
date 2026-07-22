@@ -15,9 +15,9 @@ declare (strict_types=1);
  * @since         4.2.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\I18n;
+namespace Odigos\Cake\I18n;
 
-use Cake\I18n\Exception\I18nException;
+use Odigos\Cake\I18n\Exception\I18nException;
 /**
  * A ServiceLocator implementation for loading and retaining formatter objects.
  *
@@ -69,7 +69,7 @@ class FormatterLocator
      * @return \Cake\I18n\FormatterInterface A formatter object.
      * @throws \Cake\I18n\Exception\I18nException
      */
-    public function get(string $name): \Cake\I18n\FormatterInterface
+    public function get(string $name): FormatterInterface
     {
         if (!isset($this->registry[$name])) {
             throw new I18nException(sprintf('Formatter named `%s` has not been registered.', $name));

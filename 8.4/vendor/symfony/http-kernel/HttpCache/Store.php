@@ -11,16 +11,16 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpKernel\HttpCache;
+namespace Odigos\Symfony\Component\HttpKernel\HttpCache;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Odigos\Symfony\Component\HttpFoundation\Request;
+use Odigos\Symfony\Component\HttpFoundation\Response;
 /**
  * Store implements all the logic for storing cache metadata (Request and Response headers).
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class Store implements \Symfony\Component\HttpKernel\HttpCache\StoreInterface
+class Store implements StoreInterface
 {
     /** @var \SplObjectStorage<Request, string> */
     private \SplObjectStorage $keyCache;
@@ -401,7 +401,7 @@ class Store implements \Symfony\Component\HttpKernel\HttpCache\StoreInterface
             unset($headers['x-body-file']);
             if ($headers['X-Body-Eval'] ?? $headers['x-body-eval'] ?? \false) {
                 $content = file_get_contents($path);
-                \assert(\Symfony\Component\HttpKernel\HttpCache\HttpCache::BODY_EVAL_BOUNDARY_LENGTH === 24);
+                \assert(HttpCache::BODY_EVAL_BOUNDARY_LENGTH === 24);
                 if (48 > \strlen($content) || substr($content, -24) !== substr($content, 0, 24)) {
                     return null;
                 }

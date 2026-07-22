@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Translation;
+namespace Odigos\Symfony\Component\Translation;
 
-use Symfony\Component\Translation\Exception\LogicException;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use Odigos\Symfony\Component\Translation\Exception\LogicException;
+use Odigos\Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * This translator should only be used in a development environment.
  */
-final class PseudoLocalizationTranslator implements TranslatorInterface, \Symfony\Component\Translation\TranslatorBagInterface
+final class PseudoLocalizationTranslator implements TranslatorInterface, TranslatorBagInterface
 {
     private const EXPANSION_CHARACTER = '~';
     private bool $accents;
@@ -95,17 +95,17 @@ final class PseudoLocalizationTranslator implements TranslatorInterface, \Symfon
     {
         return $this->translator->getLocale();
     }
-    public function getCatalogue(?string $locale = null): \Symfony\Component\Translation\MessageCatalogueInterface
+    public function getCatalogue(?string $locale = null): MessageCatalogueInterface
     {
-        if (!$this->translator instanceof \Symfony\Component\Translation\TranslatorBagInterface) {
-            throw new LogicException(\sprintf('The "%s()" method cannot be called as the wrapped translator class "%s" does not implement the "%s".', __METHOD__, $this->translator::class, \Symfony\Component\Translation\TranslatorBagInterface::class));
+        if (!$this->translator instanceof TranslatorBagInterface) {
+            throw new LogicException(\sprintf('The "%s()" method cannot be called as the wrapped translator class "%s" does not implement the "%s".', __METHOD__, $this->translator::class, TranslatorBagInterface::class));
         }
         return $this->translator->getCatalogue($locale);
     }
     public function getCatalogues(): array
     {
-        if (!$this->translator instanceof \Symfony\Component\Translation\TranslatorBagInterface) {
-            throw new LogicException(\sprintf('The "%s()" method cannot be called as the wrapped translator class "%s" does not implement the "%s".', __METHOD__, $this->translator::class, \Symfony\Component\Translation\TranslatorBagInterface::class));
+        if (!$this->translator instanceof TranslatorBagInterface) {
+            throw new LogicException(\sprintf('The "%s()" method cannot be called as the wrapped translator class "%s" does not implement the "%s".', __METHOD__, $this->translator::class, TranslatorBagInterface::class));
         }
         return $this->translator->getCatalogues();
     }

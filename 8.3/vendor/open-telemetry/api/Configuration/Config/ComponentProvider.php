@@ -5,8 +5,8 @@ namespace OpenTelemetry\API\Configuration\Config;
 
 use function class_alias;
 use OpenTelemetry\API\Configuration\Context;
-use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
-use Symfony\Component\Config\Definition\Builder\NodeBuilder;
+use Odigos\Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
+use Odigos\Symfony\Component\Config\Definition\Builder\NodeBuilder;
 /**
  * A component provider is responsible for interpreting configuration and returning an
  * implementation of a particular type.

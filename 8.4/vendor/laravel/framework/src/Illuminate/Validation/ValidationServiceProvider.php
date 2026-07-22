@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Validation;
+namespace Odigos\Illuminate\Validation;
 
-use Illuminate\Contracts\Support\DeferrableProvider;
-use Illuminate\Contracts\Validation\UncompromisedVerifier;
-use Illuminate\Http\Client\Factory as HttpFactory;
-use Illuminate\Support\ServiceProvider;
+use Odigos\Illuminate\Contracts\Support\DeferrableProvider;
+use Odigos\Illuminate\Contracts\Validation\UncompromisedVerifier;
+use Odigos\Illuminate\Http\Client\Factory as HttpFactory;
+use Odigos\Illuminate\Support\ServiceProvider;
 class ValidationServiceProvider extends ServiceProvider implements DeferrableProvider
 {
     /**
@@ -27,7 +27,7 @@ class ValidationServiceProvider extends ServiceProvider implements DeferrablePro
     protected function registerValidationFactory()
     {
         $this->app->singleton('validator', function ($app) {
-            $validator = new \Illuminate\Validation\Factory($app['translator'], $app);
+            $validator = new Factory($app['translator'], $app);
             // The validation presence verifier is responsible for determining the existence of
             // values in a given data collection which is typically a relational database or
             // other persistent data stores. It is used to check for "uniqueness" as well.
@@ -45,7 +45,7 @@ class ValidationServiceProvider extends ServiceProvider implements DeferrablePro
     protected function registerPresenceVerifier()
     {
         $this->app->singleton('validation.presence', function ($app) {
-            return new \Illuminate\Validation\DatabasePresenceVerifier($app['db']);
+            return new DatabasePresenceVerifier($app['db']);
         });
     }
     /**
@@ -56,7 +56,7 @@ class ValidationServiceProvider extends ServiceProvider implements DeferrablePro
     protected function registerUncompromisedVerifier()
     {
         $this->app->singleton(UncompromisedVerifier::class, function ($app) {
-            return new \Illuminate\Validation\NotPwnedVerifier($app[HttpFactory::class]);
+            return new NotPwnedVerifier($app[HttpFactory::class]);
         });
     }
     /**

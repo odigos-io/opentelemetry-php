@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Database\Eloquent\Relations;
+namespace Odigos\Illuminate\Database\Eloquent\Relations;
 
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
+use Odigos\Illuminate\Database\Eloquent\Builder;
+use Odigos\Illuminate\Database\Eloquent\Model;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Collection;
 /**
  * @template TRelatedModel of \Illuminate\Database\Eloquent\Model
  * @template TDeclaringModel of \Illuminate\Database\Eloquent\Model
@@ -14,7 +14,7 @@ use Illuminate\Support\Collection;
  *
  * @extends \Illuminate\Database\Eloquent\Relations\BelongsToMany<TRelatedModel, TDeclaringModel, TPivotModel, TAccessor>
  */
-class MorphToMany extends \Illuminate\Database\Eloquent\Relations\BelongsToMany
+class MorphToMany extends BelongsToMany
 {
     /**
      * The type of the polymorphic relation.
@@ -99,7 +99,7 @@ class MorphToMany extends \Illuminate\Database\Eloquent\Relations\BelongsToMany
     protected function getCurrentlyAttachedPivotsForIds($ids = null)
     {
         return parent::getCurrentlyAttachedPivotsForIds($ids)->map(function ($record) {
-            return $record instanceof \Illuminate\Database\Eloquent\Relations\MorphPivot ? $record->setMorphType($this->morphType)->setMorphClass($this->morphClass) : $record;
+            return $record instanceof MorphPivot ? $record->setMorphType($this->morphType)->setMorphClass($this->morphClass) : $record;
         });
     }
     /**
@@ -122,7 +122,7 @@ class MorphToMany extends \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         $using = $this->using;
         $attributes = array_merge([$this->morphType => $this->morphClass], $attributes);
-        $pivot = $using ? $using::fromRawAttributes($this->parent, $attributes, $this->table, $exists) : \Illuminate\Database\Eloquent\Relations\MorphPivot::fromAttributes($this->parent, $attributes, $this->table, $exists);
+        $pivot = $using ? $using::fromRawAttributes($this->parent, $attributes, $this->table, $exists) : MorphPivot::fromAttributes($this->parent, $attributes, $this->table, $exists);
         $pivot->setPivotKeys($this->foreignPivotKey, $this->relatedPivotKey)->setRelatedModel($this->related)->setMorphType($this->morphType)->setMorphClass($this->morphClass);
         return $pivot;
     }

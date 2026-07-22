@@ -5,9 +5,9 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\test;
+namespace Odigos\yii\test;
 
-use yii\base\Component;
+use Odigos\yii\base\Component;
 /**
  * Fixture represents a fixed state of a test environment.
  *

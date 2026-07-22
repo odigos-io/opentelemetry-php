@@ -1,15 +1,15 @@
 <?php
 
-namespace Illuminate\Foundation\Console;
+namespace Odigos\Illuminate\Foundation\Console;
 
-use Illuminate\Console\Concerns\CreatesMatchingTest;
-use Illuminate\Console\GeneratorCommand;
-use Illuminate\Foundation\Inspiring;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Str;
-use Illuminate\Support\Stringable;
-use Symfony\Component\Console\Attribute\AsCommand;
-use Symfony\Component\Console\Input\InputOption;
+use Odigos\Illuminate\Console\Concerns\CreatesMatchingTest;
+use Odigos\Illuminate\Console\GeneratorCommand;
+use Odigos\Illuminate\Foundation\Inspiring;
+use Odigos\Illuminate\Support\Facades\File;
+use Odigos\Illuminate\Support\Str;
+use Odigos\Illuminate\Support\Stringable;
+use Odigos\Symfony\Component\Console\Attribute\AsCommand;
+use Odigos\Symfony\Component\Console\Input\InputOption;
 #[AsCommand(name: 'make:view')]
 class ViewMakeCommand extends GeneratorCommand
 {

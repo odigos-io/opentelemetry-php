@@ -5,14 +5,14 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\db\pgsql;
+namespace Odigos\yii\db\pgsql;
 
-use yii\db\ArrayExpression;
-use yii\db\ExpressionBuilderInterface;
-use yii\db\ExpressionBuilderTrait;
-use yii\db\ExpressionInterface;
-use yii\db\JsonExpression;
-use yii\db\Query;
+use Odigos\yii\db\ArrayExpression;
+use Odigos\yii\db\ExpressionBuilderInterface;
+use Odigos\yii\db\ExpressionBuilderTrait;
+use Odigos\yii\db\ExpressionInterface;
+use Odigos\yii\db\JsonExpression;
+use Odigos\yii\db\Query;
 /**
  * Class ArrayExpressionBuilder builds [[ArrayExpression]] for PostgreSQL DBMS.
  *
@@ -119,7 +119,7 @@ class ArrayExpressionBuilder implements ExpressionBuilderInterface
         if ($value instanceof ExpressionInterface) {
             return $value;
         }
-        if (in_array($expression->getType(), [\yii\db\pgsql\Schema::TYPE_JSON, \yii\db\pgsql\Schema::TYPE_JSONB], \true)) {
+        if (in_array($expression->getType(), [Schema::TYPE_JSON, Schema::TYPE_JSONB], \true)) {
             return new JsonExpression($value);
         }
         return $value;

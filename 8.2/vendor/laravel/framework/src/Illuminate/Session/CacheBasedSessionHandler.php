@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Session;
+namespace Odigos\Illuminate\Session;
 
-use Illuminate\Contracts\Cache\Repository as CacheContract;
+use Odigos\Illuminate\Contracts\Cache\Repository as CacheContract;
 use SessionHandlerInterface;
 class CacheBasedSessionHandler implements SessionHandlerInterface
 {

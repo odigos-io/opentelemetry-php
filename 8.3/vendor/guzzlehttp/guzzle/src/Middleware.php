@@ -1,11 +1,11 @@
 <?php
 
-namespace GuzzleHttp;
+namespace Odigos\GuzzleHttp;
 
-use GuzzleHttp\Cookie\CookieJarInterface;
-use GuzzleHttp\Exception\RequestException;
-use GuzzleHttp\Promise as P;
-use GuzzleHttp\Promise\PromiseInterface;
+use Odigos\GuzzleHttp\Cookie\CookieJarInterface;
+use Odigos\GuzzleHttp\Exception\RequestException;
+use Odigos\GuzzleHttp\Promise as P;
+use Odigos\GuzzleHttp\Promise\PromiseInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
@@ -48,7 +48,7 @@ final class Middleware
      *
      * @return callable(callable): callable Returns a function that accepts the next handler.
      */
-    public static function httpErrors(?\GuzzleHttp\BodySummarizerInterface $bodySummarizer = null): callable
+    public static function httpErrors(?BodySummarizerInterface $bodySummarizer = null): callable
     {
         return static function (callable $handler) use ($bodySummarizer): callable {
             return static function ($request, array $options) use ($handler, $bodySummarizer) {
@@ -126,8 +126,8 @@ final class Middleware
      */
     public static function redirect(): callable
     {
-        return static function (callable $handler): \GuzzleHttp\RedirectMiddleware {
-            return new \GuzzleHttp\RedirectMiddleware($handler);
+        return static function (callable $handler): RedirectMiddleware {
+            return new RedirectMiddleware($handler);
         };
     }
     /**
@@ -147,8 +147,8 @@ final class Middleware
      */
     public static function retry(callable $decider, ?callable $delay = null): callable
     {
-        return static function (callable $handler) use ($decider, $delay): \GuzzleHttp\RetryMiddleware {
-            return new \GuzzleHttp\RetryMiddleware($decider, $handler, $delay);
+        return static function (callable $handler) use ($decider, $delay): RetryMiddleware {
+            return new RetryMiddleware($decider, $handler, $delay);
         };
     }
     /**
@@ -166,8 +166,8 @@ final class Middleware
     public static function log(LoggerInterface $logger, $formatter, string $logLevel = 'info'): callable
     {
         // To be compatible with Guzzle 7.1.x we need to allow users to pass a MessageFormatter
-        if (!$formatter instanceof \GuzzleHttp\MessageFormatter && !$formatter instanceof \GuzzleHttp\MessageFormatterInterface) {
-            throw new \LogicException(sprintf('Argument 2 to %s::log() must be of type %s', self::class, \GuzzleHttp\MessageFormatterInterface::class));
+        if (!$formatter instanceof MessageFormatter && !$formatter instanceof MessageFormatterInterface) {
+            throw new \LogicException(sprintf('Argument 2 to %s::log() must be of type %s', self::class, MessageFormatterInterface::class));
         }
         return static function (callable $handler) use ($logger, $formatter, $logLevel): callable {
             return static function (RequestInterface $request, array $options = []) use ($handler, $logger, $formatter, $logLevel) {
@@ -190,8 +190,8 @@ final class Middleware
      */
     public static function prepareBody(): callable
     {
-        return static function (callable $handler): \GuzzleHttp\PrepareBodyMiddleware {
-            return new \GuzzleHttp\PrepareBodyMiddleware($handler);
+        return static function (callable $handler): PrepareBodyMiddleware {
+            return new PrepareBodyMiddleware($handler);
         };
     }
     /**

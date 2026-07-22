@@ -14,11 +14,11 @@ declare (strict_types=1);
  * @since         5.3.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Command\Helper;
+namespace Odigos\Cake\Command\Helper;
 
 use BackedEnum;
-use Cake\Console\Helper;
-use Cake\Database\Type\EnumLabelInterface;
+use Odigos\Cake\Console\Helper;
+use Odigos\Cake\Database\Type\EnumLabelInterface;
 use Closure;
 use UnitEnum;
 /**

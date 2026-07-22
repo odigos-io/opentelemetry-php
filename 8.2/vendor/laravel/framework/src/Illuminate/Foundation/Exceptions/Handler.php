@@ -1,55 +1,55 @@
 <?php
 
-namespace Illuminate\Foundation\Exceptions;
+namespace Odigos\Illuminate\Foundation\Exceptions;
 
 use Closure;
 use Exception;
-use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Auth\AuthenticationException;
-use Illuminate\Cache\RateLimiter;
-use Illuminate\Cache\RateLimiting\Limit;
-use Illuminate\Cache\RateLimiting\Unlimited;
-use Illuminate\Console\View\Components\BulletList;
-use Illuminate\Console\View\Components\Error;
-use Illuminate\Contracts\Container\Container;
-use Illuminate\Contracts\Debug\ExceptionHandler as ExceptionHandlerContract;
-use Illuminate\Contracts\Debug\ShouldntReport;
-use Illuminate\Contracts\Foundation\ExceptionRenderer;
-use Illuminate\Contracts\Support\Responsable;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Database\MultipleRecordsFoundException;
-use Illuminate\Database\RecordNotFoundException;
-use Illuminate\Database\RecordsNotFoundException;
-use Illuminate\Foundation\Exceptions\Renderer\Renderer;
-use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Response;
-use Illuminate\Routing\Exceptions\BackedEnumCaseNotFoundException;
-use Illuminate\Routing\Router;
-use Illuminate\Session\TokenMismatchException;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Lottery;
-use Illuminate\Support\Reflector;
-use Illuminate\Support\Str;
-use Illuminate\Support\Traits\ReflectsClosures;
-use Illuminate\Support\ViewErrorBag;
-use Illuminate\Validation\ValidationException;
+use Odigos\Illuminate\Auth\Access\AuthorizationException;
+use Odigos\Illuminate\Auth\AuthenticationException;
+use Odigos\Illuminate\Cache\RateLimiter;
+use Odigos\Illuminate\Cache\RateLimiting\Limit;
+use Odigos\Illuminate\Cache\RateLimiting\Unlimited;
+use Odigos\Illuminate\Console\View\Components\BulletList;
+use Odigos\Illuminate\Console\View\Components\Error;
+use Odigos\Illuminate\Contracts\Container\Container;
+use Odigos\Illuminate\Contracts\Debug\ExceptionHandler as ExceptionHandlerContract;
+use Odigos\Illuminate\Contracts\Debug\ShouldntReport;
+use Odigos\Illuminate\Contracts\Foundation\ExceptionRenderer;
+use Odigos\Illuminate\Contracts\Support\Responsable;
+use Odigos\Illuminate\Database\Eloquent\ModelNotFoundException;
+use Odigos\Illuminate\Database\MultipleRecordsFoundException;
+use Odigos\Illuminate\Database\RecordNotFoundException;
+use Odigos\Illuminate\Database\RecordsNotFoundException;
+use Odigos\Illuminate\Foundation\Exceptions\Renderer\Renderer;
+use Odigos\Illuminate\Http\Exceptions\HttpResponseException;
+use Odigos\Illuminate\Http\RedirectResponse;
+use Odigos\Illuminate\Http\Response;
+use Odigos\Illuminate\Routing\Exceptions\BackedEnumCaseNotFoundException;
+use Odigos\Illuminate\Routing\Router;
+use Odigos\Illuminate\Session\TokenMismatchException;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Facades\Auth;
+use Odigos\Illuminate\Support\Lottery;
+use Odigos\Illuminate\Support\Reflector;
+use Odigos\Illuminate\Support\Str;
+use Odigos\Illuminate\Support\Traits\ReflectsClosures;
+use Odigos\Illuminate\Support\ViewErrorBag;
+use Odigos\Illuminate\Validation\ValidationException;
 use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
-use Symfony\Component\Console\Application as ConsoleApplication;
-use Symfony\Component\Console\Exception\CommandNotFoundException;
-use Symfony\Component\ErrorHandler\ErrorRenderer\HtmlErrorRenderer;
-use Symfony\Component\HttpFoundation\Exception\RequestExceptionInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse as SymfonyRedirectResponse;
-use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\HttpKernel\Exception\HttpException;
-use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Odigos\Symfony\Component\Console\Application as ConsoleApplication;
+use Odigos\Symfony\Component\Console\Exception\CommandNotFoundException;
+use Odigos\Symfony\Component\ErrorHandler\ErrorRenderer\HtmlErrorRenderer;
+use Odigos\Symfony\Component\HttpFoundation\Exception\RequestExceptionInterface;
+use Odigos\Symfony\Component\HttpFoundation\RedirectResponse as SymfonyRedirectResponse;
+use Odigos\Symfony\Component\HttpFoundation\Response as SymfonyResponse;
+use Odigos\Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Odigos\Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Odigos\Symfony\Component\HttpKernel\Exception\HttpException;
+use Odigos\Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
+use Odigos\Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 use WeakMap;
 class Handler implements ExceptionHandlerContract
@@ -182,7 +182,7 @@ class Handler implements ExceptionHandlerContract
         if (!$reportUsing instanceof Closure) {
             $reportUsing = Closure::fromCallable($reportUsing);
         }
-        return tap(new \Illuminate\Foundation\Exceptions\ReportableHandler($reportUsing), function ($callback) {
+        return tap(new ReportableHandler($reportUsing), function ($callback) {
             $this->reportCallbacks[] = $callback;
         });
     }
@@ -757,7 +757,7 @@ class Handler implements ExceptionHandlerContract
      */
     protected function registerErrorViewPaths()
     {
-        (new \Illuminate\Foundation\Exceptions\RegisterErrorViewPaths())();
+        (new RegisterErrorViewPaths())();
     }
     /**
      * Get the view used to render HTTP exceptions.

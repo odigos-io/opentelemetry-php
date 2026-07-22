@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Queue\Console;
+namespace Odigos\Illuminate\Queue\Console;
 
-use Illuminate\Console\MigrationGeneratorCommand;
-use Symfony\Component\Console\Attribute\AsCommand;
-use function Illuminate\Filesystem\join_paths;
+use Odigos\Illuminate\Console\MigrationGeneratorCommand;
+use Odigos\Symfony\Component\Console\Attribute\AsCommand;
+use function Odigos\Illuminate\Filesystem\join_paths;
 #[AsCommand(name: 'make:queue-table', aliases: ['queue:table'])]
 class TableCommand extends MigrationGeneratorCommand
 {

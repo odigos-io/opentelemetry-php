@@ -5,17 +5,17 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\db\mssql\conditions;
+namespace Odigos\yii\db\mssql\conditions;
 
-use yii\base\NotSupportedException;
-use yii\db\Expression;
+use Odigos\yii\base\NotSupportedException;
+use Odigos\yii\db\Expression;
 /**
  * {@inheritdoc}
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  * @since 2.0.14
  */
-class InConditionBuilder extends \yii\db\conditions\InConditionBuilder
+class InConditionBuilder extends \Odigos\yii\db\conditions\InConditionBuilder
 {
     /**
      * {@inheritdoc}

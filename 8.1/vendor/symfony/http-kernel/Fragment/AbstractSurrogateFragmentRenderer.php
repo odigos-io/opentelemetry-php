@@ -8,22 +8,22 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpKernel\Fragment;
+namespace Odigos\Symfony\Component\HttpKernel\Fragment;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\UriSigner;
-use Symfony\Component\HttpKernel\Controller\ControllerReference;
-use Symfony\Component\HttpKernel\HttpCache\SurrogateInterface;
+use Odigos\Symfony\Component\HttpFoundation\Request;
+use Odigos\Symfony\Component\HttpFoundation\Response;
+use Odigos\Symfony\Component\HttpFoundation\UriSigner;
+use Odigos\Symfony\Component\HttpKernel\Controller\ControllerReference;
+use Odigos\Symfony\Component\HttpKernel\HttpCache\SurrogateInterface;
 /**
  * Implements Surrogate rendering strategy.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-abstract class AbstractSurrogateFragmentRenderer extends \Symfony\Component\HttpKernel\Fragment\RoutableFragmentRenderer
+abstract class AbstractSurrogateFragmentRenderer extends RoutableFragmentRenderer
 {
     private ?SurrogateInterface $surrogate;
-    private \Symfony\Component\HttpKernel\Fragment\FragmentRendererInterface $inlineStrategy;
+    private FragmentRendererInterface $inlineStrategy;
     private ?UriSigner $signer;
     /**
      * The "fallback" strategy when surrogate is not available should always be an
@@ -31,7 +31,7 @@ abstract class AbstractSurrogateFragmentRenderer extends \Symfony\Component\Http
      *
      * @param FragmentRendererInterface $inlineStrategy The inline strategy to use when the surrogate is not supported
      */
-    public function __construct(?SurrogateInterface $surrogate, \Symfony\Component\HttpKernel\Fragment\FragmentRendererInterface $inlineStrategy, ?UriSigner $signer = null)
+    public function __construct(?SurrogateInterface $surrogate, FragmentRendererInterface $inlineStrategy, ?UriSigner $signer = null)
     {
         $this->surrogate = $surrogate;
         $this->inlineStrategy = $inlineStrategy;
@@ -75,7 +75,7 @@ abstract class AbstractSurrogateFragmentRenderer extends \Symfony\Component\Http
     }
     private function generateSignedFragmentUri(ControllerReference $uri, Request $request, bool $absolute): string
     {
-        return (new \Symfony\Component\HttpKernel\Fragment\FragmentUriGenerator($this->fragmentPath, $this->signer))->generate($uri, $request, $absolute);
+        return (new FragmentUriGenerator($this->fragmentPath, $this->signer))->generate($uri, $request, $absolute);
     }
     private function containsNonScalars(array $values): bool
     {

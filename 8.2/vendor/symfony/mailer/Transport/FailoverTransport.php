@@ -8,17 +8,17 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Mailer\Transport;
+namespace Odigos\Symfony\Component\Mailer\Transport;
 
 /**
  * Uses several Transports using a failover algorithm.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class FailoverTransport extends \Symfony\Component\Mailer\Transport\RoundRobinTransport
+class FailoverTransport extends RoundRobinTransport
 {
-    private ?\Symfony\Component\Mailer\Transport\TransportInterface $currentTransport = null;
-    protected function getNextTransport(): ?\Symfony\Component\Mailer\Transport\TransportInterface
+    private ?TransportInterface $currentTransport = null;
+    protected function getNextTransport(): ?TransportInterface
     {
         if (null === $this->currentTransport || $this->isTransportDead($this->currentTransport)) {
             $this->currentTransport = parent::getNextTransport();

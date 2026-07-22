@@ -4,20 +4,20 @@
  * THIS FILE IS AUTO-GENERATED. ANY CHANGES WILL BE LOST!
  */
 declare (strict_types=1);
-namespace MongoDB\Builder\Stage;
+namespace Odigos\MongoDB\Builder\Stage;
 
 use MongoDB\BSON\Decimal128;
 use MongoDB\BSON\Document;
 use MongoDB\BSON\Int64;
 use MongoDB\BSON\Serializable;
-use MongoDB\Builder\Expression\ResolvesToObject;
-use MongoDB\Builder\Type\Encode;
-use MongoDB\Builder\Type\OperatorInterface;
-use MongoDB\Builder\Type\Optional;
-use MongoDB\Builder\Type\QueryInterface;
-use MongoDB\Builder\Type\QueryObject;
-use MongoDB\Builder\Type\StageInterface;
-use MongoDB\Exception\InvalidArgumentException;
+use Odigos\MongoDB\Builder\Expression\ResolvesToObject;
+use Odigos\MongoDB\Builder\Type\Encode;
+use Odigos\MongoDB\Builder\Type\OperatorInterface;
+use Odigos\MongoDB\Builder\Type\Optional;
+use Odigos\MongoDB\Builder\Type\QueryInterface;
+use Odigos\MongoDB\Builder\Type\QueryObject;
+use Odigos\MongoDB\Builder\Type\StageInterface;
+use Odigos\MongoDB\Exception\InvalidArgumentException;
 use stdClass;
 use function is_array;
 use function is_string;

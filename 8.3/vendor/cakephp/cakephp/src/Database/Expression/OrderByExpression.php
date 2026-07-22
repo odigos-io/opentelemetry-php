@@ -14,16 +14,16 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database\Expression;
+namespace Odigos\Cake\Database\Expression;
 
-use Cake\Database\ExpressionInterface;
-use Cake\Database\TypeMap;
-use Cake\Database\ValueBinder;
+use Odigos\Cake\Database\ExpressionInterface;
+use Odigos\Cake\Database\TypeMap;
+use Odigos\Cake\Database\ValueBinder;
 use InvalidArgumentException;
 /**
  * An expression object for ORDER BY clauses
  */
-class OrderByExpression extends \Cake\Database\Expression\QueryExpression
+class OrderByExpression extends QueryExpression
 {
     /**
      * Constructor

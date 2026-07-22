@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Cache\Events;
+namespace Odigos\Illuminate\Cache\Events;
 
-class KeyWriteFailed extends \Illuminate\Cache\Events\CacheEvent
+class KeyWriteFailed extends CacheEvent
 {
     /**
      * The value that would have been written.

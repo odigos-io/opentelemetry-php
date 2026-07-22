@@ -14,9 +14,9 @@ declare (strict_types=1);
  * @since         5.3.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\ORM;
+namespace Odigos\Cake\ORM;
 
-use Cake\ORM\Attribute\CollectionOf;
+use Odigos\Cake\ORM\Attribute\CollectionOf;
 use ReflectionClass;
 use ReflectionNamedType;
 use ReflectionParameter;

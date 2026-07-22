@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Filesystem;
+namespace Odigos\Illuminate\Filesystem;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+use Odigos\Illuminate\Http\Request;
+use Odigos\Illuminate\Support\Facades\Storage;
 use Odigos\League\Flysystem\PathTraversalDetected;
 class ServeFile
 {

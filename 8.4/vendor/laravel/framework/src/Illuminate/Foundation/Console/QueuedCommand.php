@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Foundation\Console;
+namespace Odigos\Illuminate\Foundation\Console;
 
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Console\Kernel as KernelContract;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
+use Odigos\Illuminate\Bus\Queueable;
+use Odigos\Illuminate\Contracts\Console\Kernel as KernelContract;
+use Odigos\Illuminate\Contracts\Queue\ShouldQueue;
+use Odigos\Illuminate\Foundation\Bus\Dispatchable;
 class QueuedCommand implements ShouldQueue
 {
     use Dispatchable, Queueable;

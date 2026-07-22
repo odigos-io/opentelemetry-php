@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Support\Facades;
+namespace Odigos\Illuminate\Support\Facades;
 
 /**
  * @method static array preloadedAssets()
@@ -35,7 +35,7 @@ namespace Illuminate\Support\Facades;
  *
  * @see \Illuminate\Foundation\Vite
  */
-class Vite extends \Illuminate\Support\Facades\Facade
+class Vite extends Facade
 {
     /**
      * Get the registered name of the component.
@@ -44,6 +44,6 @@ class Vite extends \Illuminate\Support\Facades\Facade
      */
     protected static function getFacadeAccessor()
     {
-        return \Illuminate\Foundation\Vite::class;
+        return \Odigos\Illuminate\Foundation\Vite::class;
     }
 }

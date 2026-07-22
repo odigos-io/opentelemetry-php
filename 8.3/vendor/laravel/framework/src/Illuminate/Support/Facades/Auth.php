@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Support\Facades;
+namespace Odigos\Illuminate\Support\Facades;
 
-use Laravel\Ui\UiServiceProvider;
+use Odigos\Laravel\Ui\UiServiceProvider;
 use RuntimeException;
 /**
  * @method static \Illuminate\Contracts\Auth\Guard|\Illuminate\Contracts\Auth\StatefulGuard guard(string|null $name = null)
@@ -67,7 +67,7 @@ use RuntimeException;
  * @see \Illuminate\Auth\AuthManager
  * @see \Illuminate\Auth\SessionGuard
  */
-class Auth extends \Illuminate\Support\Facades\Facade
+class Auth extends Facade
 {
     /**
      * Get the registered name of the component.

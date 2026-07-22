@@ -1,21 +1,21 @@
 <?php
 
-namespace Illuminate\Database\Concerns;
+namespace Odigos\Illuminate\Database\Concerns;
 
-use Illuminate\Container\Container;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\MultipleRecordsFoundException;
-use Illuminate\Database\Query\Expression;
-use Illuminate\Database\RecordNotFoundException;
-use Illuminate\Database\RecordsNotFoundException;
-use Illuminate\Pagination\Cursor;
-use Illuminate\Pagination\CursorPaginator;
-use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Pagination\Paginator;
-use Illuminate\Support\Collection;
-use Illuminate\Support\LazyCollection;
-use Illuminate\Support\Str;
-use Illuminate\Support\Traits\Conditionable;
+use Odigos\Illuminate\Container\Container;
+use Odigos\Illuminate\Database\Eloquent\Builder;
+use Odigos\Illuminate\Database\MultipleRecordsFoundException;
+use Odigos\Illuminate\Database\Query\Expression;
+use Odigos\Illuminate\Database\RecordNotFoundException;
+use Odigos\Illuminate\Database\RecordsNotFoundException;
+use Odigos\Illuminate\Pagination\Cursor;
+use Odigos\Illuminate\Pagination\CursorPaginator;
+use Odigos\Illuminate\Pagination\LengthAwarePaginator;
+use Odigos\Illuminate\Pagination\Paginator;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\LazyCollection;
+use Odigos\Illuminate\Support\Str;
+use Odigos\Illuminate\Support\Traits\Conditionable;
 use InvalidArgumentException;
 use RuntimeException;
 /**

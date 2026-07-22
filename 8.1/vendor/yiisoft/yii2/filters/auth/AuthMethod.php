@@ -5,17 +5,17 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\filters\auth;
+namespace Odigos\yii\filters\auth;
 
 use Odigos\Yii;
-use yii\base\Action;
-use yii\base\ActionFilter;
-use yii\base\Component;
-use yii\helpers\StringHelper;
-use yii\web\Request;
-use yii\web\Response;
-use yii\web\UnauthorizedHttpException;
-use yii\web\User;
+use Odigos\yii\base\Action;
+use Odigos\yii\base\ActionFilter;
+use Odigos\yii\base\Component;
+use Odigos\yii\helpers\StringHelper;
+use Odigos\yii\web\Request;
+use Odigos\yii\web\Response;
+use Odigos\yii\web\UnauthorizedHttpException;
+use Odigos\yii\web\User;
 /**
  * AuthMethod is a base class implementing the [[AuthInterface]] interface.
  *
@@ -25,7 +25,7 @@ use yii\web\User;
  * @template T of Component = Component
  * @extends ActionFilter<T>
  */
-abstract class AuthMethod extends ActionFilter implements \yii\filters\auth\AuthInterface
+abstract class AuthMethod extends ActionFilter implements AuthInterface
 {
     /**
      * @var User|null the user object representing the user authentication status. If not set, the `user` application component will be used.

@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Database\Concerns;
+namespace Odigos\Illuminate\Database\Concerns;
 
 use Odigos\Carbon\Carbon;
-use Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Arr;
 trait BuildsWhereDateClauses
 {
     /**

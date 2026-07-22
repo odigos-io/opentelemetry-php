@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Support;
+namespace Odigos\Illuminate\Support;
 
 use RuntimeException;
 class MultipleItemsFoundException extends RuntimeException

@@ -1,22 +1,22 @@
 <?php
 
-namespace Illuminate\Database\Eloquent\Concerns;
+namespace Odigos\Illuminate\Database\Eloquent\Concerns;
 
 use BadMethodCallException;
 use Closure;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection as EloquentCollection;
-use Illuminate\Database\Eloquent\RelationNotFoundException;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\MorphTo;
-use Illuminate\Database\Eloquent\Relations\Relation;
-use Illuminate\Database\Query\Builder as QueryBuilder;
-use Illuminate\Database\Query\Expression;
-use Illuminate\Support\Collection as BaseCollection;
-use Illuminate\Support\Str;
+use Odigos\Illuminate\Database\Eloquent\Builder;
+use Odigos\Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Odigos\Illuminate\Database\Eloquent\RelationNotFoundException;
+use Odigos\Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Odigos\Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Odigos\Illuminate\Database\Eloquent\Relations\MorphTo;
+use Odigos\Illuminate\Database\Eloquent\Relations\Relation;
+use Odigos\Illuminate\Database\Query\Builder as QueryBuilder;
+use Odigos\Illuminate\Database\Query\Expression;
+use Odigos\Illuminate\Support\Collection as BaseCollection;
+use Odigos\Illuminate\Support\Str;
 use InvalidArgumentException;
-use function Illuminate\Support\enum_value;
+use function Odigos\Illuminate\Support\enum_value;
 /** @mixin \Illuminate\Database\Eloquent\Builder */
 trait QueriesRelationships
 {

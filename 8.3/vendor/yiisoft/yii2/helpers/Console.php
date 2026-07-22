@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\helpers;
+namespace Odigos\yii\helpers;
 
 /**
  * Console helper provides useful methods for command line related tasks such as getting input or formatting and coloring
@@ -14,6 +14,6 @@ namespace yii\helpers;
  * @author Carsten Brandt <mail@cebe.cc>
  * @since 2.0
  */
-class Console extends \yii\helpers\BaseConsole
+class Console extends BaseConsole
 {
 }

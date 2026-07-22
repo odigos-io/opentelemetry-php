@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Mime\Encoder;
+namespace Odigos\Symfony\Component\Mime\Encoder;
 
 /**
  * @author Lars Strojny
  */
-final class QpContentEncoder implements \Symfony\Component\Mime\Encoder\ContentEncoderInterface
+final class QpContentEncoder implements ContentEncoderInterface
 {
     public function encodeByteStream($stream, int $maxLineLength = 0): iterable
     {

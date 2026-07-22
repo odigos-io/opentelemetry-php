@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Schema;
+namespace Odigos\Doctrine\DBAL\Schema;
 
 use function array_filter;
 use function count;
@@ -30,7 +30,7 @@ class SchemaDiff
      */
     public function __construct(private readonly array $createdSchemas, private readonly array $droppedSchemas, private readonly array $createdTables, array $alteredTables, private readonly array $droppedTables, private readonly array $createdSequences, private readonly array $alteredSequences, private readonly array $droppedSequences)
     {
-        $this->alteredTables = array_filter($alteredTables, static function (\Doctrine\DBAL\Schema\TableDiff $diff): bool {
+        $this->alteredTables = array_filter($alteredTables, static function (TableDiff $diff): bool {
             return !$diff->isEmpty();
         });
     }

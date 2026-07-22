@@ -8,15 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Console\Question;
+namespace Odigos\Symfony\Component\Console\Question;
 
-use Symfony\Component\Console\Exception\InvalidArgumentException;
+use Odigos\Symfony\Component\Console\Exception\InvalidArgumentException;
 /**
  * Represents a choice question.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class ChoiceQuestion extends \Symfony\Component\Console\Question\Question
+class ChoiceQuestion extends Question
 {
     private bool $multiselect = \false;
     private string $prompt = ' > ';

@@ -14,7 +14,7 @@ declare (strict_types=1);
  * @since         3.1
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Datasource;
+namespace Odigos\Cake\Datasource;
 
 use Closure;
 /**
@@ -75,7 +75,7 @@ interface QueryInterface
      * @template T of mixed
      * @return \Cake\Datasource\ResultSetInterface<T>
      */
-    public function all(): \Cake\Datasource\ResultSetInterface;
+    public function all(): ResultSetInterface;
     /**
      * Populates or adds parts to current query clauses using an array.
      * This is handy for passing all query clauses at once. The option array accepts:
@@ -318,14 +318,14 @@ interface QueryInterface
      * @param \Cake\Datasource\RepositoryInterface $repository The default repository object to use
      * @return $this
      */
-    public function setRepository(\Cake\Datasource\RepositoryInterface $repository);
+    public function setRepository(RepositoryInterface $repository);
     /**
      * Returns the default repository object that will be used by this query,
      * that is, the repository that will appear in the "from" clause.
      *
      * @return \Cake\Datasource\RepositoryInterface|null $repository The default repository object to use
      */
-    public function getRepository(): ?\Cake\Datasource\RepositoryInterface;
+    public function getRepository(): ?RepositoryInterface;
     /**
      * Adds a condition or set of conditions to be used in the WHERE clause for this
      * query. Conditions can be expressed as an array of fields as keys with

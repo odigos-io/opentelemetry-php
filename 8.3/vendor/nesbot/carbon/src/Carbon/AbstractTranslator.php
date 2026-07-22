@@ -16,9 +16,9 @@ use Closure;
 use ReflectionException;
 use ReflectionFunction;
 use ReflectionProperty;
-use Symfony\Component\Translation\Formatter\MessageFormatterInterface;
-use Symfony\Component\Translation\Loader\ArrayLoader;
-use Symfony\Component\Translation\Translator as SymfonyTranslator;
+use Odigos\Symfony\Component\Translation\Formatter\MessageFormatterInterface;
+use Odigos\Symfony\Component\Translation\Loader\ArrayLoader;
+use Odigos\Symfony\Component\Translation\Translator as SymfonyTranslator;
 use Throwable;
 abstract class AbstractTranslator extends SymfonyTranslator
 {

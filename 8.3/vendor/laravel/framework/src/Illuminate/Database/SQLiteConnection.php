@@ -1,15 +1,15 @@
 <?php
 
-namespace Illuminate\Database;
+namespace Odigos\Illuminate\Database;
 
 use Exception;
-use Illuminate\Database\Query\Grammars\SQLiteGrammar as QueryGrammar;
-use Illuminate\Database\Query\Processors\SQLiteProcessor;
-use Illuminate\Database\Schema\Grammars\SQLiteGrammar as SchemaGrammar;
-use Illuminate\Database\Schema\SQLiteBuilder;
-use Illuminate\Database\Schema\SqliteSchemaState;
-use Illuminate\Filesystem\Filesystem;
-class SQLiteConnection extends \Illuminate\Database\Connection
+use Odigos\Illuminate\Database\Query\Grammars\SQLiteGrammar as QueryGrammar;
+use Odigos\Illuminate\Database\Query\Processors\SQLiteProcessor;
+use Odigos\Illuminate\Database\Schema\Grammars\SQLiteGrammar as SchemaGrammar;
+use Odigos\Illuminate\Database\Schema\SQLiteBuilder;
+use Odigos\Illuminate\Database\Schema\SqliteSchemaState;
+use Odigos\Illuminate\Filesystem\Filesystem;
+class SQLiteConnection extends Connection
 {
     /**
      * {@inheritdoc}

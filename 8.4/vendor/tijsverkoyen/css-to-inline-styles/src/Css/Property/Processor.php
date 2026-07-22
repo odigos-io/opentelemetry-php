@@ -2,7 +2,7 @@
 
 namespace Odigos\TijsVerkoyen\CssToInlineStyles\Css\Property;
 
-use Symfony\Component\CssSelector\Node\Specificity;
+use Odigos\Symfony\Component\CssSelector\Node\Specificity;
 class Processor
 {
     /**

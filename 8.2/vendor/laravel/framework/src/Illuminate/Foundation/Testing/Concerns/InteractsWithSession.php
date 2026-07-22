@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Foundation\Testing\Concerns;
+namespace Odigos\Illuminate\Foundation\Testing\Concerns;
 
 trait InteractsWithSession
 {

@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\CssSelector\XPath\Extension;
+namespace Odigos\Symfony\Component\CssSelector\XPath\Extension;
 
-use Symfony\Component\CssSelector\Exception\ExpressionErrorException;
-use Symfony\Component\CssSelector\Node\FunctionNode;
-use Symfony\Component\CssSelector\XPath\Translator;
-use Symfony\Component\CssSelector\XPath\XPathExpr;
+use Odigos\Symfony\Component\CssSelector\Exception\ExpressionErrorException;
+use Odigos\Symfony\Component\CssSelector\Node\FunctionNode;
+use Odigos\Symfony\Component\CssSelector\XPath\Translator;
+use Odigos\Symfony\Component\CssSelector\XPath\XPathExpr;
 /**
  * XPath expression translator HTML extension.
  *
@@ -24,11 +24,11 @@ use Symfony\Component\CssSelector\XPath\XPathExpr;
  *
  * @internal
  */
-class HtmlExtension extends \Symfony\Component\CssSelector\XPath\Extension\AbstractExtension
+class HtmlExtension extends AbstractExtension
 {
     public function __construct(Translator $translator)
     {
-        $translator->getExtension('node')->setFlag(\Symfony\Component\CssSelector\XPath\Extension\NodeExtension::ELEMENT_NAME_IN_LOWER_CASE, \true)->setFlag(\Symfony\Component\CssSelector\XPath\Extension\NodeExtension::ATTRIBUTE_NAME_IN_LOWER_CASE, \true);
+        $translator->getExtension('node')->setFlag(NodeExtension::ELEMENT_NAME_IN_LOWER_CASE, \true)->setFlag(NodeExtension::ATTRIBUTE_NAME_IN_LOWER_CASE, \true);
     }
     public function getPseudoClassTranslators(): array
     {

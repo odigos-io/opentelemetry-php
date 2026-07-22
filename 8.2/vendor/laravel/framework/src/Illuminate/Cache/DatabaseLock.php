@@ -1,12 +1,12 @@
 <?php
 
-namespace Illuminate\Cache;
+namespace Odigos\Illuminate\Cache;
 
-use Illuminate\Database\Connection;
-use Illuminate\Database\DetectsConcurrencyErrors;
-use Illuminate\Database\QueryException;
+use Odigos\Illuminate\Database\Connection;
+use Odigos\Illuminate\Database\DetectsConcurrencyErrors;
+use Odigos\Illuminate\Database\QueryException;
 use Throwable;
-class DatabaseLock extends \Illuminate\Cache\Lock
+class DatabaseLock extends Lock
 {
     use DetectsConcurrencyErrors;
     /**

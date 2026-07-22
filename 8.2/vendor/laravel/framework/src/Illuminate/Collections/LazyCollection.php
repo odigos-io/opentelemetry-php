@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Support;
+namespace Odigos\Illuminate\Support;
 
 use ArrayIterator;
 use Closure;
@@ -8,9 +8,9 @@ use DateInterval;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Generator;
-use Illuminate\Contracts\Support\CanBeEscapedWhenCastToString;
-use Illuminate\Support\Traits\EnumeratesValues;
-use Illuminate\Support\Traits\Macroable;
+use Odigos\Illuminate\Contracts\Support\CanBeEscapedWhenCastToString;
+use Odigos\Illuminate\Support\Traits\EnumeratesValues;
+use Odigos\Illuminate\Support\Traits\Macroable;
 use InvalidArgumentException;
 use IteratorAggregate;
 use stdClass;
@@ -22,7 +22,7 @@ use Traversable;
  *
  * @implements \Illuminate\Support\Enumerable<TKey, TValue>
  */
-class LazyCollection implements CanBeEscapedWhenCastToString, \Illuminate\Support\Enumerable
+class LazyCollection implements CanBeEscapedWhenCastToString, Enumerable
 {
     /**
      * @use \Illuminate\Support\Traits\EnumeratesValues<TKey, TValue>
@@ -169,7 +169,7 @@ class LazyCollection implements CanBeEscapedWhenCastToString, \Illuminate\Suppor
     {
         return new static(function () {
             foreach ($this as $values) {
-                if (is_array($values) || $values instanceof \Illuminate\Support\Enumerable) {
+                if (is_array($values) || $values instanceof Enumerable) {
                     foreach ($values as $value) {
                         yield $value;
                     }
@@ -186,7 +186,7 @@ class LazyCollection implements CanBeEscapedWhenCastToString, \Illuminate\Suppor
     {
         return new static(function () {
             foreach ($this as $values) {
-                if (is_array($values) || $values instanceof \Illuminate\Support\Enumerable) {
+                if (is_array($values) || $values instanceof Enumerable) {
                     foreach ($values as $key => $value) {
                         yield $key => $value;
                     }
@@ -421,7 +421,7 @@ class LazyCollection implements CanBeEscapedWhenCastToString, \Illuminate\Suppor
     {
         $instance = new static(function () use ($depth) {
             foreach ($this as $item) {
-                if (!is_array($item) && !$item instanceof \Illuminate\Support\Enumerable) {
+                if (!is_array($item) && !$item instanceof Enumerable) {
                     yield $item;
                 } elseif ($depth === 1) {
                     yield from $item;
@@ -824,7 +824,7 @@ class LazyCollection implements CanBeEscapedWhenCastToString, \Illuminate\Suppor
      */
     public function only($keys)
     {
-        if ($keys instanceof \Illuminate\Support\Enumerable) {
+        if ($keys instanceof Enumerable) {
             $keys = $keys->all();
         } elseif (!is_null($keys)) {
             $keys = is_array($keys) ? $keys : func_get_args();
@@ -854,7 +854,7 @@ class LazyCollection implements CanBeEscapedWhenCastToString, \Illuminate\Suppor
      */
     public function select($keys)
     {
-        if ($keys instanceof \Illuminate\Support\Enumerable) {
+        if ($keys instanceof Enumerable) {
             $keys = $keys->all();
         } elseif (!is_null($keys)) {
             $keys = is_array($keys) ? $keys : func_get_args();
@@ -866,7 +866,7 @@ class LazyCollection implements CanBeEscapedWhenCastToString, \Illuminate\Suppor
                 foreach ($this as $item) {
                     $result = [];
                     foreach ($keys as $key) {
-                        if (\Illuminate\Support\Arr::accessible($item) && \Illuminate\Support\Arr::exists($item, $key)) {
+                        if (Arr::accessible($item) && Arr::exists($item, $key)) {
                             $result[$key] = $item[$key];
                         } elseif (is_object($item) && isset($item->{$key})) {
                             $result[$key] = $item->{$key};
@@ -1239,7 +1239,7 @@ class LazyCollection implements CanBeEscapedWhenCastToString, \Illuminate\Suppor
     {
         return new static(function () use ($callback) {
             $iterator = $this->getIterator();
-            $chunk = new \Illuminate\Support\Collection();
+            $chunk = new Collection();
             if ($iterator->valid()) {
                 $chunk[$iterator->key()] = $iterator->current();
                 $iterator->next();
@@ -1247,7 +1247,7 @@ class LazyCollection implements CanBeEscapedWhenCastToString, \Illuminate\Suppor
             while ($iterator->valid()) {
                 if (!$callback($iterator->current(), $iterator->key(), $chunk)) {
                     yield new static($chunk);
-                    $chunk = new \Illuminate\Support\Collection();
+                    $chunk = new Collection();
                 }
                 $chunk[$iterator->key()] = $iterator->current();
                 $iterator->next();
@@ -1534,7 +1534,7 @@ class LazyCollection implements CanBeEscapedWhenCastToString, \Illuminate\Suppor
     {
         $iterables = func_get_args();
         return new static(function () use ($iterables) {
-            $iterators = (new \Illuminate\Support\Collection($iterables))->map(fn($iterable) => $this->makeIterator($iterable))->prepend($this->getIterator());
+            $iterators = (new Collection($iterables))->map(fn($iterable) => $this->makeIterator($iterable))->prepend($this->getIterator());
             while ($iterators->contains->valid()) {
                 yield new static($iterators->map->current());
                 $iterators->each->next();
@@ -1601,7 +1601,7 @@ class LazyCollection implements CanBeEscapedWhenCastToString, \Illuminate\Suppor
         }
         if (is_callable($source)) {
             $maybeTraversable = $source();
-            return $maybeTraversable instanceof Traversable ? $maybeTraversable : new ArrayIterator(\Illuminate\Support\Arr::wrap($maybeTraversable));
+            return $maybeTraversable instanceof Traversable ? $maybeTraversable : new ArrayIterator(Arr::wrap($maybeTraversable));
         }
         return new ArrayIterator((array) $source);
     }
@@ -1638,7 +1638,7 @@ class LazyCollection implements CanBeEscapedWhenCastToString, \Illuminate\Suppor
      */
     protected function now()
     {
-        return class_exists(\Illuminate\Support\Carbon::class) ? \Illuminate\Support\Carbon::now()->timestamp : time();
+        return class_exists(Carbon::class) ? Carbon::now()->timestamp : time();
     }
     /**
      * Get the precise current time.
@@ -1647,7 +1647,7 @@ class LazyCollection implements CanBeEscapedWhenCastToString, \Illuminate\Suppor
      */
     protected function preciseNow()
     {
-        return class_exists(\Illuminate\Support\Carbon::class) ? \Illuminate\Support\Carbon::now()->getPreciseTimestamp() : microtime(\true) * 1000000;
+        return class_exists(Carbon::class) ? Carbon::now()->getPreciseTimestamp() : microtime(\true) * 1000000;
     }
     /**
      * Sleep for the given amount of microseconds.
@@ -1659,6 +1659,6 @@ class LazyCollection implements CanBeEscapedWhenCastToString, \Illuminate\Suppor
         if ($microseconds <= 0) {
             return;
         }
-        class_exists(\Illuminate\Support\Sleep::class) ? \Illuminate\Support\Sleep::usleep($microseconds) : usleep($microseconds);
+        class_exists(Sleep::class) ? Sleep::usleep($microseconds) : usleep($microseconds);
     }
 }

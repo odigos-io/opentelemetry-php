@@ -13,23 +13,23 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Http;
+namespace Odigos\Cake\Http;
 
-use Cake\Core\App;
-use Cake\Core\Exception\CakeException;
-use Cake\Core\InstanceConfigTrait;
-use Cake\Event\EventDispatcherInterface;
-use Cake\Event\EventDispatcherTrait;
-use Cake\Http\Client\Adapter\Curl;
-use Cake\Http\Client\Adapter\Mock as MockAdapter;
-use Cake\Http\Client\Adapter\Stream;
-use Cake\Http\Client\AdapterInterface;
-use Cake\Http\Client\ClientEvent;
-use Cake\Http\Client\Request;
-use Cake\Http\Client\Response;
-use Cake\Http\Cookie\CookieCollection;
-use Cake\Http\Cookie\CookieInterface;
-use Cake\Utility\Hash;
+use Odigos\Cake\Core\App;
+use Odigos\Cake\Core\Exception\CakeException;
+use Odigos\Cake\Core\InstanceConfigTrait;
+use Odigos\Cake\Event\EventDispatcherInterface;
+use Odigos\Cake\Event\EventDispatcherTrait;
+use Odigos\Cake\Http\Client\Adapter\Curl;
+use Odigos\Cake\Http\Client\Adapter\Mock as MockAdapter;
+use Odigos\Cake\Http\Client\Adapter\Stream;
+use Odigos\Cake\Http\Client\AdapterInterface;
+use Odigos\Cake\Http\Client\ClientEvent;
+use Odigos\Cake\Http\Client\Request;
+use Odigos\Cake\Http\Client\Response;
+use Odigos\Cake\Http\Cookie\CookieCollection;
+use Odigos\Cake\Http\Cookie\CookieInterface;
+use Odigos\Cake\Utility\Hash;
 use InvalidArgumentException;
 use Odigos\Laminas\Diactoros\Uri;
 use Psr\Http\Client\ClientInterface;

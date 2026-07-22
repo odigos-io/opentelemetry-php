@@ -15,20 +15,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace MongoDB\Operation;
+namespace Odigos\MongoDB\Operation;
 
 use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
 use MongoDB\Driver\Server;
-use MongoDB\Exception\InvalidArgumentException;
-use MongoDB\Exception\UnexpectedValueException;
-use MongoDB\Exception\UnsupportedException;
+use Odigos\MongoDB\Exception\InvalidArgumentException;
+use Odigos\MongoDB\Exception\UnexpectedValueException;
+use Odigos\MongoDB\Exception\UnsupportedException;
 use function array_intersect_key;
 use function count;
 use function current;
 use function is_float;
 use function is_integer;
 use function is_object;
-use function MongoDB\is_document;
+use function Odigos\MongoDB\is_document;
 /**
  * Operation for obtaining an exact count of documents in a collection
  *
@@ -39,7 +39,7 @@ final class CountDocuments
 {
     private array $aggregateOptions;
     private array $countOptions;
-    private \MongoDB\Operation\Aggregate $aggregate;
+    private Aggregate $aggregate;
     /**
      * Constructs an aggregate command for counting documents
      *
@@ -112,7 +112,7 @@ final class CountDocuments
         }
         return (int) $result->n;
     }
-    private function createAggregate(): \MongoDB\Operation\Aggregate
+    private function createAggregate(): Aggregate
     {
         $pipeline = [['$match' => (object) $this->filter]];
         if (isset($this->countOptions['skip'])) {
@@ -122,6 +122,6 @@ final class CountDocuments
             $pipeline[] = ['$limit' => $this->countOptions['limit']];
         }
         $pipeline[] = ['$group' => ['_id' => 1, 'n' => ['$sum' => 1]]];
-        return new \MongoDB\Operation\Aggregate($this->databaseName, $this->collectionName, $pipeline, $this->aggregateOptions);
+        return new Aggregate($this->databaseName, $this->collectionName, $pipeline, $this->aggregateOptions);
     }
 }

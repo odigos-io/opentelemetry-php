@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\helpers;
+namespace Odigos\yii\helpers;
 
 /**
  * StringHelper.
@@ -14,6 +14,6 @@ namespace yii\helpers;
  * @author Alex Makarov <sam@rmcreative.ru>
  * @since 2.0
  */
-class StringHelper extends \yii\helpers\BaseStringHelper
+class StringHelper extends BaseStringHelper
 {
 }

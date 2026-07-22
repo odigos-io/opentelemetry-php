@@ -5,10 +5,10 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\db\conditions;
+namespace Odigos\yii\db\conditions;
 
-use yii\base\InvalidArgumentException;
-use yii\db\Query;
+use Odigos\yii\base\InvalidArgumentException;
+use Odigos\yii\db\Query;
 /**
  * Condition that represents `EXISTS` operator.
  *
@@ -16,7 +16,7 @@ use yii\db\Query;
  * @since 2.0.14
  * @phpcs:disable Squiz.NamingConventions.ValidVariableName.PrivateNoUnderscore
  */
-class ExistsCondition implements \yii\db\conditions\ConditionInterface
+class ExistsCondition implements ConditionInterface
 {
     /**
      * @var string $operator the operator to use (e.g. `EXISTS` or `NOT EXISTS`)

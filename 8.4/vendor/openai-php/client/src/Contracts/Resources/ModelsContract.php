@@ -1,10 +1,10 @@
 <?php
 
-namespace OpenAI\Contracts\Resources;
+namespace Odigos\OpenAI\Contracts\Resources;
 
-use OpenAI\Responses\Models\DeleteResponse;
-use OpenAI\Responses\Models\ListResponse;
-use OpenAI\Responses\Models\RetrieveResponse;
+use Odigos\OpenAI\Responses\Models\DeleteResponse;
+use Odigos\OpenAI\Responses\Models\ListResponse;
+use Odigos\OpenAI\Responses\Models\RetrieveResponse;
 interface ModelsContract
 {
     /**

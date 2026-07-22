@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Database\Eloquent\Attributes;
+namespace Odigos\Illuminate\Database\Eloquent\Attributes;
 
 use Attribute;
 #[Attribute(Attribute::TARGET_METHOD)]

@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Driver\IBMDB2;
+namespace Odigos\Doctrine\DBAL\Driver\IBMDB2;
 
-use Doctrine\DBAL\Driver\Exception;
-use Doctrine\DBAL\Driver\IBMDB2\Exception\CannotCopyStreamToStream;
-use Doctrine\DBAL\Driver\IBMDB2\Exception\CannotCreateTemporaryFile;
-use Doctrine\DBAL\Driver\IBMDB2\Exception\StatementError;
-use Doctrine\DBAL\Driver\Statement as StatementInterface;
-use Doctrine\DBAL\ParameterType;
+use Odigos\Doctrine\DBAL\Driver\Exception;
+use Odigos\Doctrine\DBAL\Driver\IBMDB2\Exception\CannotCopyStreamToStream;
+use Odigos\Doctrine\DBAL\Driver\IBMDB2\Exception\CannotCreateTemporaryFile;
+use Odigos\Doctrine\DBAL\Driver\IBMDB2\Exception\StatementError;
+use Odigos\Doctrine\DBAL\Driver\Statement as StatementInterface;
+use Odigos\Doctrine\DBAL\ParameterType;
 use function assert;
 use function db2_bind_param;
 use function db2_execute;
@@ -66,7 +66,7 @@ final class Statement implements StatementInterface
             throw StatementError::new($this->stmt);
         }
     }
-    public function execute(): \Doctrine\DBAL\Driver\IBMDB2\Result
+    public function execute(): Result
     {
         $handles = $this->bindLobs();
         $result = @db2_execute($this->stmt, $this->parameters);
@@ -77,7 +77,7 @@ final class Statement implements StatementInterface
         if ($result === \false) {
             throw StatementError::new($this->stmt);
         }
-        return new \Doctrine\DBAL\Driver\IBMDB2\Result($this->stmt);
+        return new Result($this->stmt);
     }
     /**
      * @return list<resource>

@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Auth;
+namespace Odigos\Illuminate\Auth;
 
 use Closure;
-use Illuminate\Contracts\Auth\Factory as FactoryContract;
+use Odigos\Illuminate\Contracts\Auth\Factory as FactoryContract;
 use InvalidArgumentException;
 /**
  * @mixin \Illuminate\Contracts\Auth\Guard
@@ -11,7 +11,7 @@ use InvalidArgumentException;
  */
 class AuthManager implements FactoryContract
 {
-    use \Illuminate\Auth\CreatesUserProviders;
+    use CreatesUserProviders;
     /**
      * The application instance.
      *
@@ -102,7 +102,7 @@ class AuthManager implements FactoryContract
      */
     public function createSessionDriver($name, $config)
     {
-        $guard = new \Illuminate\Auth\SessionGuard($name, $this->createUserProvider($config['provider'] ?? null), $this->app['session.store'], rehashOnLogin: $this->app['config']->get('hashing.rehash_on_login', \true), timeboxDuration: $this->app['config']->get('auth.timebox_duration', 200000), hashKey: $this->app['config']->get('app.key'));
+        $guard = new SessionGuard($name, $this->createUserProvider($config['provider'] ?? null), $this->app['session.store'], rehashOnLogin: $this->app['config']->get('hashing.rehash_on_login', \true), timeboxDuration: $this->app['config']->get('auth.timebox_duration', 200000), hashKey: $this->app['config']->get('app.key'));
         // When using the remember me functionality of the authentication services we
         // will need to be set the encryption instance of the guard, which allows
         // secure, encrypted cookie values to get generated for those cookies.
@@ -126,7 +126,7 @@ class AuthManager implements FactoryContract
         // The token guard implements a basic API token based guard implementation
         // that takes an API token field from the request and matches it to the
         // user in the database or another persistence layer where users are.
-        $guard = new \Illuminate\Auth\TokenGuard($this->createUserProvider($config['provider'] ?? null), $this->app['request'], $config['input_key'] ?? 'api_token', $config['storage_key'] ?? 'api_token', $config['hash'] ?? \false);
+        $guard = new TokenGuard($this->createUserProvider($config['provider'] ?? null), $this->app['request'], $config['input_key'] ?? 'api_token', $config['storage_key'] ?? 'api_token', $config['hash'] ?? \false);
         $this->app->refresh('request', $guard, 'setRequest');
         return $guard;
     }
@@ -181,7 +181,7 @@ class AuthManager implements FactoryContract
     public function viaRequest($driver, callable $callback)
     {
         return $this->extend($driver, function () use ($callback) {
-            $guard = new \Illuminate\Auth\RequestGuard($callback, $this->app['request'], $this->createUserProvider());
+            $guard = new RequestGuard($callback, $this->app['request'], $this->createUserProvider());
             $this->app->refresh('request', $guard, 'setRequest');
             return $guard;
         });

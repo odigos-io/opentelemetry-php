@@ -1,13 +1,13 @@
 <?php
 
-namespace Illuminate\Database\Capsule;
+namespace Odigos\Illuminate\Database\Capsule;
 
-use Illuminate\Container\Container;
-use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Database\Connectors\ConnectionFactory;
-use Illuminate\Database\DatabaseManager;
-use Illuminate\Database\Eloquent\Model as Eloquent;
-use Illuminate\Support\Traits\CapsuleManagerTrait;
+use Odigos\Illuminate\Container\Container;
+use Odigos\Illuminate\Contracts\Events\Dispatcher;
+use Odigos\Illuminate\Database\Connectors\ConnectionFactory;
+use Odigos\Illuminate\Database\DatabaseManager;
+use Odigos\Illuminate\Database\Eloquent\Model as Eloquent;
+use Odigos\Illuminate\Support\Traits\CapsuleManagerTrait;
 use PDO;
 class Manager
 {

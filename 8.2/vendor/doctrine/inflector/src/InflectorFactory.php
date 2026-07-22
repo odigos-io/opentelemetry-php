@@ -1,42 +1,42 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\Inflector;
+namespace Odigos\Doctrine\Inflector;
 
-use Doctrine\Inflector\Rules\English;
-use Doctrine\Inflector\Rules\Esperanto;
-use Doctrine\Inflector\Rules\French;
-use Doctrine\Inflector\Rules\Italian;
-use Doctrine\Inflector\Rules\NorwegianBokmal;
-use Doctrine\Inflector\Rules\Portuguese;
-use Doctrine\Inflector\Rules\Spanish;
-use Doctrine\Inflector\Rules\Turkish;
+use Odigos\Doctrine\Inflector\Rules\English;
+use Odigos\Doctrine\Inflector\Rules\Esperanto;
+use Odigos\Doctrine\Inflector\Rules\French;
+use Odigos\Doctrine\Inflector\Rules\Italian;
+use Odigos\Doctrine\Inflector\Rules\NorwegianBokmal;
+use Odigos\Doctrine\Inflector\Rules\Portuguese;
+use Odigos\Doctrine\Inflector\Rules\Spanish;
+use Odigos\Doctrine\Inflector\Rules\Turkish;
 use InvalidArgumentException;
 use function sprintf;
 final class InflectorFactory
 {
-    public static function create(): \Doctrine\Inflector\LanguageInflectorFactory
+    public static function create(): LanguageInflectorFactory
     {
-        return self::createForLanguage(\Doctrine\Inflector\Language::ENGLISH);
+        return self::createForLanguage(Language::ENGLISH);
     }
-    public static function createForLanguage(string $language): \Doctrine\Inflector\LanguageInflectorFactory
+    public static function createForLanguage(string $language): LanguageInflectorFactory
     {
         switch ($language) {
-            case \Doctrine\Inflector\Language::ENGLISH:
+            case Language::ENGLISH:
                 return new English\InflectorFactory();
-            case \Doctrine\Inflector\Language::ESPERANTO:
+            case Language::ESPERANTO:
                 return new Esperanto\InflectorFactory();
-            case \Doctrine\Inflector\Language::FRENCH:
+            case Language::FRENCH:
                 return new French\InflectorFactory();
-            case \Doctrine\Inflector\Language::ITALIAN:
+            case Language::ITALIAN:
                 return new Italian\InflectorFactory();
-            case \Doctrine\Inflector\Language::NORWEGIAN_BOKMAL:
+            case Language::NORWEGIAN_BOKMAL:
                 return new NorwegianBokmal\InflectorFactory();
-            case \Doctrine\Inflector\Language::PORTUGUESE:
+            case Language::PORTUGUESE:
                 return new Portuguese\InflectorFactory();
-            case \Doctrine\Inflector\Language::SPANISH:
+            case Language::SPANISH:
                 return new Spanish\InflectorFactory();
-            case \Doctrine\Inflector\Language::TURKISH:
+            case Language::TURKISH:
                 return new Turkish\InflectorFactory();
             default:
                 throw new InvalidArgumentException(sprintf('Language "%s" is not supported.', $language));

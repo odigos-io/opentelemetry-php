@@ -1,22 +1,22 @@
 <?php
 
-namespace Illuminate\Foundation\Console;
+namespace Odigos\Illuminate\Foundation\Console;
 
 use Closure;
-use Illuminate\Console\Command;
-use Illuminate\Contracts\Routing\UrlGenerator;
-use Illuminate\Routing\Route;
-use Illuminate\Routing\Router;
-use Illuminate\Routing\ViewController;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
-use Illuminate\Support\Stringable;
+use Odigos\Illuminate\Console\Command;
+use Odigos\Illuminate\Contracts\Routing\UrlGenerator;
+use Odigos\Illuminate\Routing\Route;
+use Odigos\Illuminate\Routing\Router;
+use Odigos\Illuminate\Routing\ViewController;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Str;
+use Odigos\Illuminate\Support\Stringable;
 use ReflectionClass;
 use ReflectionFunction;
-use Symfony\Component\Console\Attribute\AsCommand;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Terminal;
+use Odigos\Symfony\Component\Console\Attribute\AsCommand;
+use Odigos\Symfony\Component\Console\Input\InputOption;
+use Odigos\Symfony\Component\Console\Terminal;
 #[AsCommand(name: 'route:list')]
 class RouteListCommand extends Command
 {

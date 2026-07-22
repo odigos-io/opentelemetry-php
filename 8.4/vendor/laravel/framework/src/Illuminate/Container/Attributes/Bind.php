@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Container\Attributes;
+namespace Odigos\Illuminate\Container\Attributes;
 
 use Attribute;
 use InvalidArgumentException;
 use UnitEnum;
-use function Illuminate\Support\enum_value;
+use function Odigos\Illuminate\Support\enum_value;
 #[Attribute(Attribute::TARGET_CLASS | Attribute::IS_REPEATABLE)]
 class Bind
 {

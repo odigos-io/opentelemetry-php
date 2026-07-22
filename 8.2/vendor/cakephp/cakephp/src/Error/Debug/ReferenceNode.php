@@ -14,7 +14,7 @@ declare (strict_types=1);
  * @since         4.1.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Error\Debug;
+namespace Odigos\Cake\Error\Debug;
 
 /**
  * Dump node for class references.
@@ -23,7 +23,7 @@ namespace Cake\Error\Debug;
  * a reference node can be used after an object has been seen the
  * first time.
  */
-class ReferenceNode implements \Cake\Error\Debug\NodeInterface
+class ReferenceNode implements NodeInterface
 {
     /**
      * @var string

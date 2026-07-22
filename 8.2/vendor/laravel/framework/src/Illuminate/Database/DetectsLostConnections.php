@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Database;
+namespace Odigos\Illuminate\Database;
 
-use Illuminate\Container\Container;
-use Illuminate\Contracts\Database\LostConnectionDetector as LostConnectionDetectorContract;
+use Odigos\Illuminate\Container\Container;
+use Odigos\Illuminate\Contracts\Database\LostConnectionDetector as LostConnectionDetectorContract;
 use Throwable;
 trait DetectsLostConnections
 {
@@ -16,7 +16,7 @@ trait DetectsLostConnections
     protected function causedByLostConnection(Throwable $e)
     {
         $container = Container::getInstance();
-        $detector = $container->bound(LostConnectionDetectorContract::class) ? $container[LostConnectionDetectorContract::class] : new \Illuminate\Database\LostConnectionDetector();
+        $detector = $container->bound(LostConnectionDetectorContract::class) ? $container[LostConnectionDetectorContract::class] : new LostConnectionDetector();
         return $detector->causedByLostConnection($e);
     }
 }

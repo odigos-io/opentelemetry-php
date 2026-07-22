@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Routing\Generator\Dumper;
+namespace Odigos\Symfony\Component\Routing\Generator\Dumper;
 
-use Symfony\Component\Routing\RouteCollection;
+use Odigos\Symfony\Component\Routing\RouteCollection;
 /**
  * GeneratorDumperInterface is the interface that all generator dumper classes must implement.
  *

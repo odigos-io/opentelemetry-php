@@ -16,7 +16,7 @@ declare (strict_types=1);
  * @since         5.3.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database\Schema;
+namespace Odigos\Cake\Database\Schema;
 
 /**
  * Constraint base class object
@@ -28,19 +28,19 @@ class Constraint
     /**
      * @var string
      */
-    public const PRIMARY = \Cake\Database\Schema\TableSchema::CONSTRAINT_PRIMARY;
+    public const PRIMARY = TableSchema::CONSTRAINT_PRIMARY;
     /**
      * @var string
      */
-    public const UNIQUE = \Cake\Database\Schema\TableSchema::CONSTRAINT_UNIQUE;
+    public const UNIQUE = TableSchema::CONSTRAINT_UNIQUE;
     /**
      * @var string
      */
-    public const FOREIGN = \Cake\Database\Schema\TableSchema::CONSTRAINT_FOREIGN;
+    public const FOREIGN = TableSchema::CONSTRAINT_FOREIGN;
     /**
      * @var string
      */
-    public const CHECK = \Cake\Database\Schema\TableSchema::CONSTRAINT_CHECK;
+    public const CHECK = TableSchema::CONSTRAINT_CHECK;
     /**
      * Constructor
      *

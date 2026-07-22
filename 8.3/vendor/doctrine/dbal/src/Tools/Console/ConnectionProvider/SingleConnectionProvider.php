@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Tools\Console\ConnectionProvider;
+namespace Odigos\Doctrine\DBAL\Tools\Console\ConnectionProvider;
 
-use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Tools\Console\ConnectionNotFound;
-use Doctrine\DBAL\Tools\Console\ConnectionProvider;
+use Odigos\Doctrine\DBAL\Connection;
+use Odigos\Doctrine\DBAL\Tools\Console\ConnectionNotFound;
+use Odigos\Doctrine\DBAL\Tools\Console\ConnectionProvider;
 use function sprintf;
 class SingleConnectionProvider implements ConnectionProvider
 {

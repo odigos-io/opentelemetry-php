@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Database\Connectors;
+namespace Odigos\Illuminate\Database\Connectors;
 
 use Exception;
-use Illuminate\Database\DetectsLostConnections;
+use Odigos\Illuminate\Database\DetectsLostConnections;
 use PDO;
 use Throwable;
 class Connector

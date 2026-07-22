@@ -12,7 +12,7 @@ declare (strict_types=1);
  * @link          https://cakephp.org CakePHP(tm) Project
  * @license       https://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Console;
+namespace Odigos\Cake\Console;
 
 /**
  * An interface for abstracting creation of command and shell instances.
@@ -25,5 +25,5 @@ interface CommandFactoryInterface
      * @param string $className Command class name.
      * @return \Cake\Console\CommandInterface
      */
-    public function create(string $className): \Cake\Console\CommandInterface;
+    public function create(string $className): CommandInterface;
 }

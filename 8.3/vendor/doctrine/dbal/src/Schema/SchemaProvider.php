@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Schema;
+namespace Odigos\Doctrine\DBAL\Schema;
 
-use Doctrine\DBAL\Exception;
-use Doctrine\DBAL\Schema\Name\OptionallyQualifiedName;
-use Doctrine\DBAL\Schema\Name\UnqualifiedName;
+use Odigos\Doctrine\DBAL\Exception;
+use Odigos\Doctrine\DBAL\Schema\Name\OptionallyQualifiedName;
+use Odigos\Doctrine\DBAL\Schema\Name\UnqualifiedName;
 /**
  * Provides access to the database schema.
  *
@@ -94,7 +94,7 @@ interface SchemaProvider
      *
      * @throws Exception
      */
-    public function getPrimaryKeyConstraintForTable(?string $schemaName, string $tableName): ?\Doctrine\DBAL\Schema\PrimaryKeyConstraint;
+    public function getPrimaryKeyConstraintForTable(?string $schemaName, string $tableName): ?PrimaryKeyConstraint;
     /**
      * Returns the foreign key constraints in the given table.
      *

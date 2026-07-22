@@ -14,12 +14,12 @@ declare (strict_types=1);
  * @since         4.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database\Type;
+namespace Odigos\Cake\Database\Type;
 
 /**
  * Extends DateTimeType with support for fractional seconds up to microseconds.
  */
-class DateTimeFractionalType extends \Cake\Database\Type\DateTimeType
+class DateTimeFractionalType extends DateTimeType
 {
     /**
      * @inheritDoc

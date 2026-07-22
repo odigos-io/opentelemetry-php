@@ -1,19 +1,19 @@
 <?php
 
-namespace Illuminate\Notifications;
+namespace Odigos\Illuminate\Notifications;
 
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Contracts\Translation\HasLocalePreference;
-use Illuminate\Database\Eloquent\Collection as EloquentCollection;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Notifications\Events\NotificationFailed;
-use Illuminate\Notifications\Events\NotificationSending;
-use Illuminate\Notifications\Events\NotificationSent;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
-use Illuminate\Support\Traits\Localizable;
-use Symfony\Component\Mailer\Exception\HttpTransportException;
-use Symfony\Component\Mailer\Exception\TransportException;
+use Odigos\Illuminate\Contracts\Queue\ShouldQueue;
+use Odigos\Illuminate\Contracts\Translation\HasLocalePreference;
+use Odigos\Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Odigos\Illuminate\Database\Eloquent\Model;
+use Odigos\Illuminate\Notifications\Events\NotificationFailed;
+use Odigos\Illuminate\Notifications\Events\NotificationSending;
+use Odigos\Illuminate\Notifications\Events\NotificationSent;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Str;
+use Odigos\Illuminate\Support\Traits\Localizable;
+use Odigos\Symfony\Component\Mailer\Exception\HttpTransportException;
+use Odigos\Symfony\Component\Mailer\Exception\TransportException;
 use Throwable;
 class NotificationSender
 {
@@ -97,7 +97,7 @@ class NotificationSender
             $this->withLocale($this->preferredLocale($notifiable, $original), function () use ($viaChannels, $notifiable, $original) {
                 $notificationId = (string) Str::uuid();
                 foreach ((array) $viaChannels as $channel) {
-                    if (!($notifiable instanceof \Illuminate\Notifications\AnonymousNotifiable && $channel === 'database')) {
+                    if (!($notifiable instanceof AnonymousNotifiable && $channel === 'database')) {
                         $this->sendToNotifiable($notifiable, $notificationId, clone $original, $channel);
                     }
                 }
@@ -215,7 +215,7 @@ class NotificationSender
                 if (method_exists($notification, 'middleware')) {
                     $middleware = array_merge($notification->middleware($notifiable, $channel), $middleware);
                 }
-                $this->bus->dispatch($this->manager->getContainer()->make(\Illuminate\Notifications\SendQueuedNotifications::class, ['notifiables' => $notifiable, 'notification' => $notification, 'channels' => [$channel]])->onConnection($connection)->onQueue($queue)->delay(is_array($delay) ? $delay[$channel] ?? null : $delay)->onGroup(is_array($messageGroup) ? $messageGroup[$channel] ?? null : $messageGroup)->withDeduplicator(is_array($deduplicator) ? $deduplicator[$channel] ?? null : $deduplicator)->through($middleware));
+                $this->bus->dispatch($this->manager->getContainer()->make(SendQueuedNotifications::class, ['notifiables' => $notifiable, 'notification' => $notification, 'channels' => [$channel]])->onConnection($connection)->onQueue($queue)->delay(is_array($delay) ? $delay[$channel] ?? null : $delay)->onGroup(is_array($messageGroup) ? $messageGroup[$channel] ?? null : $messageGroup)->withDeduplicator(is_array($deduplicator) ? $deduplicator[$channel] ?? null : $deduplicator)->through($middleware));
             }
         }
     }

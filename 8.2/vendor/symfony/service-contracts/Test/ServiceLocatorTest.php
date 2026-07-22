@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Contracts\Service\Test;
+namespace Odigos\Symfony\Contracts\Service\Test;
 
 /**
  * @deprecated since PHPUnit 9.6
  */
-class ServiceLocatorTest extends \Symfony\Contracts\Service\Test\ServiceLocatorTestCase
+class ServiceLocatorTest extends ServiceLocatorTestCase
 {
 }

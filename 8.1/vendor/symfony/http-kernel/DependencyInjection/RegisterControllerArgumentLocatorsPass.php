@@ -8,23 +8,23 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpKernel\DependencyInjection;
+namespace Odigos\Symfony\Component\HttpKernel\DependencyInjection;
 
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
-use Symfony\Component\DependencyInjection\Attribute\AutowireCallable;
-use Symfony\Component\DependencyInjection\Attribute\Target;
-use Symfony\Component\DependencyInjection\ChildDefinition;
-use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use Symfony\Component\DependencyInjection\Compiler\ServiceLocatorTagPass;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
-use Symfony\Component\DependencyInjection\Reference;
-use Symfony\Component\DependencyInjection\TypedReference;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\VarExporter\ProxyHelper;
+use Odigos\Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Odigos\Symfony\Component\DependencyInjection\Attribute\AutowireCallable;
+use Odigos\Symfony\Component\DependencyInjection\Attribute\Target;
+use Odigos\Symfony\Component\DependencyInjection\ChildDefinition;
+use Odigos\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use Odigos\Symfony\Component\DependencyInjection\Compiler\ServiceLocatorTagPass;
+use Odigos\Symfony\Component\DependencyInjection\ContainerBuilder;
+use Odigos\Symfony\Component\DependencyInjection\ContainerInterface;
+use Odigos\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
+use Odigos\Symfony\Component\DependencyInjection\Reference;
+use Odigos\Symfony\Component\DependencyInjection\TypedReference;
+use Odigos\Symfony\Component\HttpFoundation\Request;
+use Odigos\Symfony\Component\HttpFoundation\Response;
+use Odigos\Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Odigos\Symfony\Component\VarExporter\ProxyHelper;
 /**
  * Creates the service-locators required by ServiceValueResolver.
  *

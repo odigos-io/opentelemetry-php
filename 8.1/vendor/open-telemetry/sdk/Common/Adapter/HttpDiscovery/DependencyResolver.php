@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace OpenTelemetry\SDK\Common\Adapter\HttpDiscovery;
 
-use Http\Client\HttpAsyncClient;
+use Odigos\Http\Client\HttpAsyncClient;
 use OpenTelemetry\SDK\Common\Http\DependencyResolverInterface;
 use OpenTelemetry\SDK\Common\Http\HttpPlug\Client\ResolverInterface as HttpPlugClientResolverInterface;
 use OpenTelemetry\SDK\Common\Http\Psr\Client\ResolverInterface as PsrClientResolverInterface;

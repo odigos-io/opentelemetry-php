@@ -8,26 +8,26 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpFoundation\Session;
+namespace Odigos\Symfony\Component\HttpFoundation\Session;
 
 /**
  * @author Nicolas Grekas <p@tchwork.com>
  *
  * @internal
  */
-final class SessionBagProxy implements \Symfony\Component\HttpFoundation\Session\SessionBagInterface
+final class SessionBagProxy implements SessionBagInterface
 {
     private array $data;
     private ?int $usageIndex;
     private ?\Closure $usageReporter;
-    public function __construct(private \Symfony\Component\HttpFoundation\Session\SessionBagInterface $bag, array &$data, ?int &$usageIndex, ?callable $usageReporter)
+    public function __construct(private SessionBagInterface $bag, array &$data, ?int &$usageIndex, ?callable $usageReporter)
     {
         $this->bag = $bag;
         $this->data =& $data;
         $this->usageIndex =& $usageIndex;
         $this->usageReporter = null === $usageReporter ? null : $usageReporter(...);
     }
-    public function getBag(): \Symfony\Component\HttpFoundation\Session\SessionBagInterface
+    public function getBag(): SessionBagInterface
     {
         ++$this->usageIndex;
         if ($this->usageReporter && 0 <= $this->usageIndex) {

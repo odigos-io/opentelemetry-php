@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Cache;
+namespace Odigos\Illuminate\Cache;
 
-class CacheLock extends \Illuminate\Cache\Lock
+class CacheLock extends Lock
 {
     /**
      * The cache store implementation.

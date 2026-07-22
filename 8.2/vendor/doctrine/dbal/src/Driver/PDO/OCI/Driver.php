@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Driver\PDO\OCI;
+namespace Odigos\Doctrine\DBAL\Driver\PDO\OCI;
 
-use Doctrine\DBAL\Driver\AbstractOracleDriver;
-use Doctrine\DBAL\Driver\PDO\Connection;
-use Doctrine\DBAL\Driver\PDO\Exception;
-use Doctrine\DBAL\Driver\PDO\Exception\InvalidConfiguration;
-use Doctrine\DBAL\Driver\PDO\PDOConnect;
+use Odigos\Doctrine\DBAL\Driver\AbstractOracleDriver;
+use Odigos\Doctrine\DBAL\Driver\PDO\Connection;
+use Odigos\Doctrine\DBAL\Driver\PDO\Exception;
+use Odigos\Doctrine\DBAL\Driver\PDO\Exception\InvalidConfiguration;
+use Odigos\Doctrine\DBAL\Driver\PDO\PDOConnect;
 use PDO;
 use PDOException;
 use SensitiveParameter;

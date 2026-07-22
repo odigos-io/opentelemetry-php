@@ -14,9 +14,9 @@ declare (strict_types=1);
  * @since         3.2.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\I18n;
+namespace Odigos\Cake\I18n;
 
-use Cake\Core\Exception\CakeException;
+use Odigos\Cake\Core\Exception\CakeException;
 use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
@@ -53,7 +53,7 @@ trait DateFormatTrait
             $timeFormat = IntlDateFormatter::FULL;
             $pattern = $format;
         }
-        $locale ??= \Cake\I18n\I18n::getLocale();
+        $locale ??= I18n::getLocale();
         if (preg_match('/@calendar=(japanese|buddhist|chinese|persian|indian|islamic|hebrew|coptic|ethiopic)/', $locale)) {
             $calendar = IntlDateFormatter::TRADITIONAL;
         } else {
@@ -110,12 +110,12 @@ trait DateFormatTrait
             $timeFormat = IntlDateFormatter::FULL;
             $pattern = $format;
         }
-        $locale = \Cake\I18n\DateTime::getDefaultLocale() ?? \Cake\I18n\I18n::getLocale();
+        $locale = DateTime::getDefaultLocale() ?? I18n::getLocale();
         $formatter = datefmt_create($locale, $dateFormat, $timeFormat, $tz, null, $pattern);
         if (!$formatter) {
             throw new CakeException('Unable to create IntlDateFormatter instance');
         }
-        $formatter->setLenient(\Cake\I18n\DateTime::lenientParsingEnabled());
+        $formatter->setLenient(DateTime::lenientParsingEnabled());
         $time = $formatter->parse($time);
         if ($time === \false) {
             return null;

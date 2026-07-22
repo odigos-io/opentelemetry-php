@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Database\Query;
+namespace Odigos\Illuminate\Database\Query;
 
 class IndexHint
 {

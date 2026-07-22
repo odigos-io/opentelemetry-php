@@ -1,16 +1,16 @@
 <?php
 
-namespace Illuminate\Http;
+namespace Odigos\Illuminate\Http;
 
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Contracts\Support\Jsonable;
-use Illuminate\Support\Traits\Macroable;
+use Odigos\Illuminate\Contracts\Support\Arrayable;
+use Odigos\Illuminate\Contracts\Support\Jsonable;
+use Odigos\Illuminate\Support\Traits\Macroable;
 use InvalidArgumentException;
 use JsonSerializable;
-use Symfony\Component\HttpFoundation\JsonResponse as BaseJsonResponse;
+use Odigos\Symfony\Component\HttpFoundation\JsonResponse as BaseJsonResponse;
 class JsonResponse extends BaseJsonResponse
 {
-    use \Illuminate\Http\ResponseTrait, Macroable {
+    use ResponseTrait, Macroable {
         Macroable::__call as macroCall;
     }
     /**

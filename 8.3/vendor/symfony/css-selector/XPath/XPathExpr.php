@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\CssSelector\XPath;
+namespace Odigos\Symfony\Component\CssSelector\XPath;
 
 /**
  * XPath expression translator interface.
@@ -50,7 +50,7 @@ class XPathExpr
     public function addNameTest(): static
     {
         if ('*' !== $this->element) {
-            $this->addCondition('name() = ' . \Symfony\Component\CssSelector\XPath\Translator::getXpathLiteral($this->element));
+            $this->addCondition('name() = ' . Translator::getXpathLiteral($this->element));
             $this->element = '*';
         }
         return $this;

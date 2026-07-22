@@ -14,7 +14,7 @@ declare (strict_types=1);
  * @since         4.2.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Core;
+namespace Odigos\Cake\Core;
 
 /**
  * Read-only wrapper for configuration data
@@ -34,7 +34,7 @@ class ServiceConfig
      */
     public function get(string $path, mixed $default = null): mixed
     {
-        return \Cake\Core\Configure::read($path, $default);
+        return Configure::read($path, $default);
     }
     /**
      * Check if $path exists and has a non-null value.
@@ -44,6 +44,6 @@ class ServiceConfig
      */
     public function has(string $path): bool
     {
-        return \Cake\Core\Configure::check($path);
+        return Configure::check($path);
     }
 }

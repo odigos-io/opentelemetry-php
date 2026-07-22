@@ -1,15 +1,15 @@
 <?php
 
-namespace Illuminate\Validation\Rules;
+namespace Odigos\Illuminate\Validation\Rules;
 
-use Illuminate\Contracts\Validation\DataAwareRule;
-use Illuminate\Contracts\Validation\Rule;
-use Illuminate\Contracts\Validation\ValidatorAwareRule;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
-use Illuminate\Support\Traits\Conditionable;
-use Illuminate\Support\Traits\Macroable;
+use Odigos\Illuminate\Contracts\Validation\DataAwareRule;
+use Odigos\Illuminate\Contracts\Validation\Rule;
+use Odigos\Illuminate\Contracts\Validation\ValidatorAwareRule;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Facades\Validator;
+use Odigos\Illuminate\Support\Str;
+use Odigos\Illuminate\Support\Traits\Conditionable;
+use Odigos\Illuminate\Support\Traits\Macroable;
 use InvalidArgumentException;
 class File implements Rule, DataAwareRule, ValidatorAwareRule
 {
@@ -112,7 +112,7 @@ class File implements Rule, DataAwareRule, ValidatorAwareRule
      */
     public static function image($allowSvg = \false)
     {
-        return new \Illuminate\Validation\Rules\ImageFile($allowSvg);
+        return new ImageFile($allowSvg);
     }
     /**
      * Limit the uploaded file to the given MIME types or file extensions.

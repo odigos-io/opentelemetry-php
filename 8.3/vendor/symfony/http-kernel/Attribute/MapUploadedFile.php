@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpKernel\Attribute;
+namespace Odigos\Symfony\Component\HttpKernel\Attribute;
 
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Controller\ArgumentResolver\RequestPayloadValueResolver;
-use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
-use Symfony\Component\Validator\Constraint;
+use Odigos\Symfony\Component\HttpFoundation\Response;
+use Odigos\Symfony\Component\HttpKernel\Controller\ArgumentResolver\RequestPayloadValueResolver;
+use Odigos\Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
+use Odigos\Symfony\Component\Validator\Constraint;
 #[\Attribute(\Attribute::TARGET_PARAMETER)]
-class MapUploadedFile extends \Symfony\Component\HttpKernel\Attribute\ValueResolver
+class MapUploadedFile extends ValueResolver
 {
     public ArgumentMetadata $metadata;
     public function __construct(

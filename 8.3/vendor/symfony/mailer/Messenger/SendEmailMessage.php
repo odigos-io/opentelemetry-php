@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Mailer\Messenger;
+namespace Odigos\Symfony\Component\Mailer\Messenger;
 
-use Symfony\Component\Mailer\Envelope;
-use Symfony\Component\Mime\RawMessage;
+use Odigos\Symfony\Component\Mailer\Envelope;
+use Odigos\Symfony\Component\Mime\RawMessage;
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  */

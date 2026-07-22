@@ -15,20 +15,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace MongoDB\Operation;
+namespace Odigos\MongoDB\Operation;
 
-use MongoDB\DeleteResult;
+use Odigos\MongoDB\DeleteResult;
 use MongoDB\Driver\BulkWrite as Bulk;
 use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
 use MongoDB\Driver\Server;
 use MongoDB\Driver\Session;
 use MongoDB\Driver\WriteConcern;
-use MongoDB\Exception\InvalidArgumentException;
-use MongoDB\Exception\UnsupportedException;
+use Odigos\MongoDB\Exception\InvalidArgumentException;
+use Odigos\MongoDB\Exception\UnsupportedException;
 use function is_string;
-use function MongoDB\is_document;
-use function MongoDB\is_write_concern_acknowledged;
-use function MongoDB\server_supports_feature;
+use function Odigos\MongoDB\is_document;
+use function Odigos\MongoDB\is_write_concern_acknowledged;
+use function Odigos\MongoDB\server_supports_feature;
 /**
  * Operation for the delete command.
  *
@@ -38,7 +38,7 @@ use function MongoDB\server_supports_feature;
  * @internal
  * @see https://mongodb.com/docs/manual/reference/command/delete/
  */
-final class Delete implements \MongoDB\Operation\Explainable
+final class Delete implements Explainable
 {
     private const WIRE_VERSION_FOR_HINT = 9;
     /**

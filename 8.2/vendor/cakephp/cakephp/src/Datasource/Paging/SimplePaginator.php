@@ -14,10 +14,10 @@ declare (strict_types=1);
  * @since         3.9.0
  * @license       https://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Datasource\Paging;
+namespace Odigos\Cake\Datasource\Paging;
 
-use Cake\Datasource\QueryInterface;
-use Cake\Datasource\ResultSetInterface;
+use Odigos\Cake\Datasource\QueryInterface;
+use Odigos\Cake\Datasource\ResultSetInterface;
 /**
  * Simplified paginator which avoids potentially expensive queries
  * to get the total count of records.
@@ -25,7 +25,7 @@ use Cake\Datasource\ResultSetInterface;
  * When using a simple paginator you will not be able to generate page numbers.
  * Instead use only the prev/next pagination controls.
  */
-class SimplePaginator extends \Cake\Datasource\Paging\NumericPaginator
+class SimplePaginator extends NumericPaginator
 {
     /**
      * Get paginated items.
@@ -64,12 +64,12 @@ class SimplePaginator extends \Cake\Datasource\Paging\NumericPaginator
      * @param array $pagingParams
      * @return \Cake\Datasource\Paging\PaginatedInterface
      */
-    protected function buildPaginated(ResultSetInterface $items, array $pagingParams): \Cake\Datasource\Paging\PaginatedInterface
+    protected function buildPaginated(ResultSetInterface $items, array $pagingParams): PaginatedInterface
     {
         if (count($items) > $this->pagingParams['perPage']) {
             $items = $items->take($this->pagingParams['perPage']);
         }
-        return new \Cake\Datasource\Paging\PaginatedResultSet($items, $pagingParams);
+        return new PaginatedResultSet($items, $pagingParams);
     }
     /**
      * Simple pagination does not perform any count query, so this method returns `null`.

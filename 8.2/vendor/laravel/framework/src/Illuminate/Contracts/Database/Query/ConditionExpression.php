@@ -1,7 +1,7 @@
 <?php
 
-namespace Illuminate\Contracts\Database\Query;
+namespace Odigos\Illuminate\Contracts\Database\Query;
 
-interface ConditionExpression extends \Illuminate\Contracts\Database\Query\Expression
+interface ConditionExpression extends Expression
 {
 }

@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Cache;
+namespace Odigos\Illuminate\Cache;
 
-class FileLock extends \Illuminate\Cache\CacheLock
+class FileLock extends CacheLock
 {
     /**
      * Attempt to acquire the lock.

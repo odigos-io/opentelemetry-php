@@ -5,10 +5,10 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\db\conditions;
+namespace Odigos\yii\db\conditions;
 
-use yii\base\InvalidParamException;
-use yii\db\ExpressionInterface;
+use Odigos\yii\base\InvalidParamException;
+use Odigos\yii\db\ExpressionInterface;
 /**
  * Interface ConditionInterface should be implemented by classes that represent a condition
  * in DBAL of framework.

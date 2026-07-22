@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\CssSelector\Parser\Handler;
+namespace Odigos\Symfony\Component\CssSelector\Parser\Handler;
 
-use Symfony\Component\CssSelector\Parser\Reader;
-use Symfony\Component\CssSelector\Parser\TokenStream;
+use Odigos\Symfony\Component\CssSelector\Parser\Reader;
+use Odigos\Symfony\Component\CssSelector\Parser\TokenStream;
 /**
  * CSS selector comment handler.
  *
@@ -22,7 +22,7 @@ use Symfony\Component\CssSelector\Parser\TokenStream;
  *
  * @internal
  */
-class CommentHandler implements \Symfony\Component\CssSelector\Parser\Handler\HandlerInterface
+class CommentHandler implements HandlerInterface
 {
     public function handle(Reader $reader, TokenStream $stream): bool
     {

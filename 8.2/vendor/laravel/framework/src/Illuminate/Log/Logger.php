@@ -1,13 +1,13 @@
 <?php
 
-namespace Illuminate\Log;
+namespace Odigos\Illuminate\Log;
 
 use Closure;
-use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Contracts\Support\Jsonable;
-use Illuminate\Log\Events\MessageLogged;
-use Illuminate\Support\Traits\Conditionable;
+use Odigos\Illuminate\Contracts\Events\Dispatcher;
+use Odigos\Illuminate\Contracts\Support\Arrayable;
+use Odigos\Illuminate\Contracts\Support\Jsonable;
+use Odigos\Illuminate\Log\Events\MessageLogged;
+use Odigos\Illuminate\Support\Traits\Conditionable;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 class Logger implements LoggerInterface
@@ -222,7 +222,7 @@ class Logger implements LoggerInterface
     protected function fireLogEvent($level, $message, array $context = [])
     {
         // Avoid dispatching the event multiple times if our logger instance is the LogManager...
-        if ($this->logger instanceof \Illuminate\Log\LogManager && $this->logger->getEventDispatcher() !== null) {
+        if ($this->logger instanceof LogManager && $this->logger->getEventDispatcher() !== null) {
             return;
         }
         // If the event dispatcher is set, we will pass along the parameters to the

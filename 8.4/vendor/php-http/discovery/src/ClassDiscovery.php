@@ -1,12 +1,12 @@
 <?php
 
-namespace Http\Discovery;
+namespace Odigos\Http\Discovery;
 
-use Http\Discovery\Exception\ClassInstantiationFailedException;
-use Http\Discovery\Exception\DiscoveryFailedException;
-use Http\Discovery\Exception\NoCandidateFoundException;
-use Http\Discovery\Exception\StrategyUnavailableException;
-use Http\Discovery\Strategy\DiscoveryStrategy;
+use Odigos\Http\Discovery\Exception\ClassInstantiationFailedException;
+use Odigos\Http\Discovery\Exception\DiscoveryFailedException;
+use Odigos\Http\Discovery\Exception\NoCandidateFoundException;
+use Odigos\Http\Discovery\Exception\StrategyUnavailableException;
+use Odigos\Http\Discovery\Strategy\DiscoveryStrategy;
 /**
  * Registry that based find results on class existence.
  *
@@ -21,8 +21,8 @@ abstract class ClassDiscovery
      *
      * @var DiscoveryStrategy[]
      */
-    private static $strategies = [\Http\Discovery\Strategy\GeneratedDiscoveryStrategy::class, \Http\Discovery\Strategy\CommonClassesStrategy::class, \Http\Discovery\Strategy\CommonPsr17ClassesStrategy::class, \Http\Discovery\Strategy\PuliBetaStrategy::class];
-    private static $deprecatedStrategies = [\Http\Discovery\Strategy\PuliBetaStrategy::class => \true];
+    private static $strategies = [Strategy\GeneratedDiscoveryStrategy::class, Strategy\CommonClassesStrategy::class, Strategy\CommonPsr17ClassesStrategy::class, Strategy\PuliBetaStrategy::class];
+    private static $deprecatedStrategies = [Strategy\PuliBetaStrategy::class => \true];
     /**
      * Discovery cache to make the second time we use discovery faster.
      *
@@ -45,7 +45,7 @@ abstract class ClassDiscovery
             return $class;
         }
         static $skipStrategy;
-        $skipStrategy ?? $skipStrategy = self::safeClassExists(\Http\Discovery\Strategy\GeneratedDiscoveryStrategy::class) ? \false : \Http\Discovery\Strategy\GeneratedDiscoveryStrategy::class;
+        $skipStrategy ?? $skipStrategy = self::safeClassExists(Strategy\GeneratedDiscoveryStrategy::class) ? \false : Strategy\GeneratedDiscoveryStrategy::class;
         $exceptions = [];
         foreach (self::$strategies as $strategy) {
             if ($skipStrategy === $strategy) {

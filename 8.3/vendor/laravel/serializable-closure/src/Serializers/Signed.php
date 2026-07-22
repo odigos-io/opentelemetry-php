@@ -1,10 +1,10 @@
 <?php
 
-namespace Laravel\SerializableClosure\Serializers;
+namespace Odigos\Laravel\SerializableClosure\Serializers;
 
-use Laravel\SerializableClosure\Contracts\Serializable;
-use Laravel\SerializableClosure\Exceptions\InvalidSignatureException;
-use Laravel\SerializableClosure\Exceptions\MissingSecretKeyException;
+use Odigos\Laravel\SerializableClosure\Contracts\Serializable;
+use Odigos\Laravel\SerializableClosure\Exceptions\InvalidSignatureException;
+use Odigos\Laravel\SerializableClosure\Exceptions\MissingSecretKeyException;
 class Signed implements Serializable
 {
     /**
@@ -57,7 +57,7 @@ class Signed implements Serializable
         if (!static::$signer) {
             throw new MissingSecretKeyException();
         }
-        return static::$signer->sign(serialize(new \Laravel\SerializableClosure\Serializers\Native($this->closure)));
+        return static::$signer->sign(serialize(new Native($this->closure)));
     }
     /**
      * Restore the closure after serialization.

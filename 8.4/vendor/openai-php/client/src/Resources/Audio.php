@@ -1,20 +1,20 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Resources;
+namespace Odigos\OpenAI\Resources;
 
-use OpenAI\Contracts\Resources\AudioContract;
-use OpenAI\Responses\Audio\SpeechStreamResponse;
-use OpenAI\Responses\Audio\TranscriptionResponse;
-use OpenAI\Responses\Audio\TranscriptionStreamResponse;
-use OpenAI\Responses\Audio\TranslationResponse;
-use OpenAI\Responses\StreamResponse;
-use OpenAI\ValueObjects\Transporter\Payload;
-use OpenAI\ValueObjects\Transporter\Response;
+use Odigos\OpenAI\Contracts\Resources\AudioContract;
+use Odigos\OpenAI\Responses\Audio\SpeechStreamResponse;
+use Odigos\OpenAI\Responses\Audio\TranscriptionResponse;
+use Odigos\OpenAI\Responses\Audio\TranscriptionStreamResponse;
+use Odigos\OpenAI\Responses\Audio\TranslationResponse;
+use Odigos\OpenAI\Responses\StreamResponse;
+use Odigos\OpenAI\ValueObjects\Transporter\Payload;
+use Odigos\OpenAI\ValueObjects\Transporter\Response;
 final class Audio implements AudioContract
 {
-    use \OpenAI\Resources\Concerns\Streamable;
-    use \OpenAI\Resources\Concerns\Transportable;
+    use Concerns\Streamable;
+    use Concerns\Transportable;
     /**
      * Generates audio from the input text.
      *

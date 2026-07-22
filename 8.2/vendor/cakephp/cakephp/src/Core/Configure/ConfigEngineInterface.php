@@ -14,7 +14,7 @@ declare (strict_types=1);
  * @since         1.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Core\Configure;
+namespace Odigos\Cake\Core\Configure;
 
 /**
  * An interface for creating objects compatible with Configure::load()

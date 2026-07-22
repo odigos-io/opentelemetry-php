@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Http\Resources\JsonApi;
+namespace Odigos\Illuminate\Http\Resources\JsonApi;
 
 use Closure;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
+use Odigos\Illuminate\Database\Eloquent\Collection;
+use Odigos\Illuminate\Database\Eloquent\Model;
 /**
  * @internal
  */

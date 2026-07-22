@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Responses\Images;
+namespace Odigos\OpenAI\Responses\Images;
 
-use OpenAI\Contracts\ResponseContract;
-use OpenAI\Contracts\ResponseHasMetaInformationContract;
-use OpenAI\Responses\Concerns\ArrayAccessible;
-use OpenAI\Responses\Concerns\HasMetaInformation;
-use OpenAI\Responses\Meta\MetaInformation;
-use OpenAI\Testing\Responses\Concerns\Fakeable;
+use Odigos\OpenAI\Contracts\ResponseContract;
+use Odigos\OpenAI\Contracts\ResponseHasMetaInformationContract;
+use Odigos\OpenAI\Responses\Concerns\ArrayAccessible;
+use Odigos\OpenAI\Responses\Concerns\HasMetaInformation;
+use Odigos\OpenAI\Responses\Meta\MetaInformation;
+use Odigos\OpenAI\Testing\Responses\Concerns\Fakeable;
 /**
  * @implements ResponseContract<array{created: int, data: array<int, array{url?: string, b64_json?: string}>}>
  */
@@ -33,7 +33,7 @@ final class VariationResponse implements ResponseContract, ResponseHasMetaInform
      */
     public static function from(array $attributes, MetaInformation $meta): self
     {
-        $results = array_map(fn(array $result): \OpenAI\Responses\Images\VariationResponseData => \OpenAI\Responses\Images\VariationResponseData::from($result), $attributes['data']);
+        $results = array_map(fn(array $result): VariationResponseData => VariationResponseData::from($result), $attributes['data']);
         return new self($attributes['created'], $results, $meta);
     }
     /**
@@ -41,6 +41,6 @@ final class VariationResponse implements ResponseContract, ResponseHasMetaInform
      */
     public function toArray(): array
     {
-        return ['created' => $this->created, 'data' => array_map(static fn(\OpenAI\Responses\Images\VariationResponseData $result): array => $result->toArray(), $this->data)];
+        return ['created' => $this->created, 'data' => array_map(static fn(VariationResponseData $result): array => $result->toArray(), $this->data)];
     }
 }

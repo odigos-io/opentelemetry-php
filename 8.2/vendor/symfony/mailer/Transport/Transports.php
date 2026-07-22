@@ -8,24 +8,24 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Mailer\Transport;
+namespace Odigos\Symfony\Component\Mailer\Transport;
 
-use Symfony\Component\Mailer\Envelope;
-use Symfony\Component\Mailer\Exception\InvalidArgumentException;
-use Symfony\Component\Mailer\Exception\LogicException;
-use Symfony\Component\Mailer\SentMessage;
-use Symfony\Component\Mime\Message;
-use Symfony\Component\Mime\RawMessage;
+use Odigos\Symfony\Component\Mailer\Envelope;
+use Odigos\Symfony\Component\Mailer\Exception\InvalidArgumentException;
+use Odigos\Symfony\Component\Mailer\Exception\LogicException;
+use Odigos\Symfony\Component\Mailer\SentMessage;
+use Odigos\Symfony\Component\Mime\Message;
+use Odigos\Symfony\Component\Mime\RawMessage;
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  */
-final class Transports implements \Symfony\Component\Mailer\Transport\TransportInterface
+final class Transports implements TransportInterface
 {
     /**
      * @var array<string, TransportInterface>
      */
     private array $transports = [];
-    private \Symfony\Component\Mailer\Transport\TransportInterface $default;
+    private TransportInterface $default;
     /**
      * @param iterable<string, TransportInterface> $transports
      */

@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Console\EventListener;
+namespace Odigos\Symfony\Component\Console\EventListener;
 
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Console\ConsoleEvents;
-use Symfony\Component\Console\Event\ConsoleErrorEvent;
-use Symfony\Component\Console\Event\ConsoleEvent;
-use Symfony\Component\Console\Event\ConsoleTerminateEvent;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Odigos\Symfony\Component\Console\ConsoleEvents;
+use Odigos\Symfony\Component\Console\Event\ConsoleErrorEvent;
+use Odigos\Symfony\Component\Console\Event\ConsoleEvent;
+use Odigos\Symfony\Component\Console\Event\ConsoleTerminateEvent;
+use Odigos\Symfony\Component\EventDispatcher\EventSubscriberInterface;
 /**
  * @author James Halsall <james.t.halsall@googlemail.com>
  * @author Robin Chalas <robin.chalas@gmail.com>

@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Contracts\Container;
+namespace Odigos\Illuminate\Contracts\Container;
 
 interface ContextualAttribute
 {

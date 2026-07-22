@@ -14,7 +14,7 @@ declare (strict_types=1);
  * @since         4.2.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Core;
+namespace Odigos\Cake\Core;
 
 /**
  * Interface for applications that configure and use a dependency injection container.
@@ -31,7 +31,7 @@ interface ContainerApplicationInterface
      * @param \Cake\Core\ContainerInterface $container The container to add services to
      * @return void
      */
-    public function services(\Cake\Core\ContainerInterface $container): void;
+    public function services(ContainerInterface $container): void;
     /**
      * Create a new container and register services.
      *
@@ -40,5 +40,5 @@ interface ContainerApplicationInterface
      *
      * @return \Cake\Core\ContainerInterface A populated container
      */
-    public function getContainer(): \Cake\Core\ContainerInterface;
+    public function getContainer(): ContainerInterface;
 }

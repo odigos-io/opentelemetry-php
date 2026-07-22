@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Support\Traits;
+namespace Odigos\Illuminate\Support\Traits;
 
-use Illuminate\Contracts\Container\Container;
-use Illuminate\Support\Fluent;
+use Odigos\Illuminate\Contracts\Container\Container;
+use Odigos\Illuminate\Support\Fluent;
 trait CapsuleManagerTrait
 {
     /**

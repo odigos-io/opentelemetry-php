@@ -1,23 +1,23 @@
 <?php
 
-namespace Illuminate\Foundation\Console;
+namespace Odigos\Illuminate\Foundation\Console;
 
 use Composer\InstalledVersions;
-use Illuminate\Console\Command;
-use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Env;
-use Illuminate\Support\Facades\Process;
-use Symfony\Component\Console\Attribute\AsCommand;
-use function Illuminate\Support\artisan_binary;
-use function Illuminate\Support\php_binary;
-use function Laravel\Prompts\confirm;
-use function Laravel\Prompts\password;
-use function Laravel\Prompts\select;
-use function Laravel\Prompts\text;
+use Odigos\Illuminate\Console\Command;
+use Odigos\Illuminate\Filesystem\Filesystem;
+use Odigos\Illuminate\Support\Env;
+use Odigos\Illuminate\Support\Facades\Process;
+use Odigos\Symfony\Component\Console\Attribute\AsCommand;
+use function Odigos\Illuminate\Support\artisan_binary;
+use function Odigos\Illuminate\Support\php_binary;
+use function Odigos\Laravel\Prompts\confirm;
+use function Odigos\Laravel\Prompts\password;
+use function Odigos\Laravel\Prompts\select;
+use function Odigos\Laravel\Prompts\text;
 #[AsCommand(name: 'install:broadcasting')]
 class BroadcastingInstallCommand extends Command
 {
-    use \Illuminate\Foundation\Console\InteractsWithComposerPackages;
+    use InteractsWithComposerPackages;
     /**
      * The name and signature of the console command.
      *

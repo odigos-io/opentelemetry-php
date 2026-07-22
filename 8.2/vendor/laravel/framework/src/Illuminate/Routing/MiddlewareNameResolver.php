@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Routing;
+namespace Odigos\Illuminate\Routing;
 
 use Closure;
 use LogicException;

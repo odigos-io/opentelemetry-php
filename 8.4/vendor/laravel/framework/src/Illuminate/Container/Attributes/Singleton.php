@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Container\Attributes;
+namespace Odigos\Illuminate\Container\Attributes;
 
 use Attribute;
 #[Attribute(Attribute::TARGET_CLASS)]

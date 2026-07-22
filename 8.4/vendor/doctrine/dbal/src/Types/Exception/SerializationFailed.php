@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Types\Exception;
+namespace Odigos\Doctrine\DBAL\Types\Exception;
 
-use Doctrine\DBAL\Types\ConversionException;
+use Odigos\Doctrine\DBAL\Types\ConversionException;
 use Throwable;
 use function get_debug_type;
 use function sprintf;
-final class SerializationFailed extends ConversionException implements \Doctrine\DBAL\Types\Exception\TypesException
+final class SerializationFailed extends ConversionException implements TypesException
 {
     public static function new(mixed $value, string $format, string $error, ?Throwable $previous = null): self
     {

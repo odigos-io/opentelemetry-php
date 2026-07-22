@@ -14,10 +14,10 @@ declare (strict_types=1);
  * @since         2.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Console;
+namespace Odigos\Cake\Console;
 
-use Cake\Console\Exception\ConsoleException;
-use Cake\Core\Exception\CakeException;
+use Odigos\Cake\Console\Exception\ConsoleException;
+use Odigos\Cake\Core\Exception\CakeException;
 use SimpleXMLElement;
 /**
  * An object to represent a single argument used in the command line.
@@ -108,7 +108,7 @@ class ConsoleInputArgument
      * @param \Cake\Console\ConsoleInputArgument $argument ConsoleInputArgument to compare to.
      * @return bool
      */
-    public function isEqualTo(\Cake\Console\ConsoleInputArgument $argument): bool
+    public function isEqualTo(ConsoleInputArgument $argument): bool
     {
         return $this->name() === $argument->name() && $this->usage() === $argument->usage();
     }

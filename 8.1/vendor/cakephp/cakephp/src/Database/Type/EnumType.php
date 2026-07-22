@@ -14,13 +14,13 @@ declare (strict_types=1);
  * @since         5.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database\Type;
+namespace Odigos\Cake\Database\Type;
 
 use BackedEnum;
-use Cake\Database\Driver;
-use Cake\Database\Exception\DatabaseException;
-use Cake\Database\TypeFactory;
-use Cake\Utility\Text;
+use Odigos\Cake\Database\Driver;
+use Odigos\Cake\Database\Exception\DatabaseException;
+use Odigos\Cake\Database\TypeFactory;
+use Odigos\Cake\Utility\Text;
 use InvalidArgumentException;
 use PDO;
 use ReflectionEnum;
@@ -30,7 +30,7 @@ use ReflectionException;
  *
  * Use to convert string data between PHP and the database types.
  */
-class EnumType extends \Cake\Database\Type\BaseType
+class EnumType extends BaseType
 {
     /**
      * The type of the enum which is either string or int
@@ -172,7 +172,7 @@ class EnumType extends \Cake\Database\Type\BaseType
     public static function from(string $enumClassName): string
     {
         $typeName = 'enum-' . strtolower(Text::slug($enumClassName));
-        $instance = new \Cake\Database\Type\EnumType($typeName, $enumClassName);
+        $instance = new EnumType($typeName, $enumClassName);
         TypeFactory::set($typeName, $instance);
         return $typeName;
     }

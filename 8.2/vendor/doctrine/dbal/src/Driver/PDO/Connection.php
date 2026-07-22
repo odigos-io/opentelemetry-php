@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Driver\PDO;
+namespace Odigos\Doctrine\DBAL\Driver\PDO;
 
-use Doctrine\DBAL\Driver\Connection as ConnectionInterface;
-use Doctrine\DBAL\Driver\Exception\IdentityColumnsNotSupported;
-use Doctrine\DBAL\Driver\Exception\NoIdentityValue;
+use Odigos\Doctrine\DBAL\Driver\Connection as ConnectionInterface;
+use Odigos\Doctrine\DBAL\Driver\Exception\IdentityColumnsNotSupported;
+use Odigos\Doctrine\DBAL\Driver\Exception\NoIdentityValue;
 use PDO;
 use PDOException;
 use PDOStatement;
@@ -24,31 +24,31 @@ final class Connection implements ConnectionInterface
             assert($result !== \false);
             return $result;
         } catch (PDOException $exception) {
-            throw \Doctrine\DBAL\Driver\PDO\Exception::new($exception);
+            throw Exception::new($exception);
         }
     }
     public function getServerVersion(): string
     {
         return $this->connection->getAttribute(PDO::ATTR_SERVER_VERSION);
     }
-    public function prepare(string $sql): \Doctrine\DBAL\Driver\PDO\Statement
+    public function prepare(string $sql): Statement
     {
         try {
             $stmt = $this->connection->prepare($sql);
             assert($stmt instanceof PDOStatement);
-            return new \Doctrine\DBAL\Driver\PDO\Statement($stmt);
+            return new Statement($stmt);
         } catch (PDOException $exception) {
-            throw \Doctrine\DBAL\Driver\PDO\Exception::new($exception);
+            throw Exception::new($exception);
         }
     }
-    public function query(string $sql): \Doctrine\DBAL\Driver\PDO\Result
+    public function query(string $sql): Result
     {
         try {
             $stmt = $this->connection->query($sql);
             assert($stmt instanceof PDOStatement);
-            return new \Doctrine\DBAL\Driver\PDO\Result($stmt);
+            return new Result($stmt);
         } catch (PDOException $exception) {
-            throw \Doctrine\DBAL\Driver\PDO\Exception::new($exception);
+            throw Exception::new($exception);
         }
     }
     public function quote(string $value): string
@@ -72,7 +72,7 @@ final class Connection implements ConnectionInterface
             if ($sqlState === '55000' && $this->connection->getAttribute(PDO::ATTR_DRIVER_NAME) === 'pgsql') {
                 throw NoIdentityValue::new($exception);
             }
-            throw \Doctrine\DBAL\Driver\PDO\Exception::new($exception);
+            throw Exception::new($exception);
         }
         // pdo_mysql & pdo_sqlite return '0', pdo_sqlsrv returns '' or false depending on the PHP version
         if ($value === '0' || $value === '' || $value === \false) {
@@ -85,7 +85,7 @@ final class Connection implements ConnectionInterface
         try {
             $this->connection->beginTransaction();
         } catch (PDOException $exception) {
-            throw \Doctrine\DBAL\Driver\PDO\Exception::new($exception);
+            throw Exception::new($exception);
         }
     }
     public function commit(): void
@@ -93,7 +93,7 @@ final class Connection implements ConnectionInterface
         try {
             $this->connection->commit();
         } catch (PDOException $exception) {
-            throw \Doctrine\DBAL\Driver\PDO\Exception::new($exception);
+            throw Exception::new($exception);
         }
     }
     public function rollBack(): void
@@ -101,7 +101,7 @@ final class Connection implements ConnectionInterface
         try {
             $this->connection->rollBack();
         } catch (PDOException $exception) {
-            throw \Doctrine\DBAL\Driver\PDO\Exception::new($exception);
+            throw Exception::new($exception);
         }
     }
     public function getNativeConnection(): PDO

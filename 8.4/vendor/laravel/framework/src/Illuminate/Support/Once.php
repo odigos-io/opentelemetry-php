@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Support;
+namespace Odigos\Illuminate\Support;
 
 use WeakMap;
 class Once
@@ -41,7 +41,7 @@ class Once
      * @param  Onceable  $onceable
      * @return mixed
      */
-    public function value(\Illuminate\Support\Onceable $onceable)
+    public function value(Onceable $onceable)
     {
         if (!static::$enabled) {
             return call_user_func($onceable->callable);

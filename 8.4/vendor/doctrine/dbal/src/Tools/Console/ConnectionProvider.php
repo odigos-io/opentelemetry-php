@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Tools\Console;
+namespace Odigos\Doctrine\DBAL\Tools\Console;
 
-use Doctrine\DBAL\Connection;
+use Odigos\Doctrine\DBAL\Connection;
 interface ConnectionProvider
 {
     public function getDefaultConnection(): Connection;

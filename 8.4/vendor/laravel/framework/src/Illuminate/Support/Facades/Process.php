@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Support\Facades;
+namespace Odigos\Illuminate\Support\Facades;
 
 use Closure;
-use Illuminate\Process\Factory;
+use Odigos\Illuminate\Process\Factory;
 /**
  * @method static \Illuminate\Process\PendingProcess command(array|string $command)
  * @method static \Illuminate\Process\PendingProcess path(string $path)
@@ -47,7 +47,7 @@ use Illuminate\Process\Factory;
  * @see \Illuminate\Process\PendingProcess
  * @see \Illuminate\Process\Factory
  */
-class Process extends \Illuminate\Support\Facades\Facade
+class Process extends Facade
 {
     /**
      * Get the registered name of the component.

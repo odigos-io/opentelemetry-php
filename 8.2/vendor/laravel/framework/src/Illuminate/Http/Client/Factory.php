@@ -1,18 +1,18 @@
 <?php
 
-namespace Illuminate\Http\Client;
+namespace Odigos\Illuminate\Http\Client;
 
 use Closure;
-use GuzzleHttp\Exception\ConnectException;
-use GuzzleHttp\Middleware;
-use GuzzleHttp\Promise\Create;
-use GuzzleHttp\Promise\PromiseInterface;
-use GuzzleHttp\Psr7\Response as Psr7Response;
-use GuzzleHttp\TransferStats;
-use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
-use Illuminate\Support\Traits\Macroable;
+use Odigos\GuzzleHttp\Exception\ConnectException;
+use Odigos\GuzzleHttp\Middleware;
+use Odigos\GuzzleHttp\Promise\Create;
+use Odigos\GuzzleHttp\Promise\PromiseInterface;
+use Odigos\GuzzleHttp\Psr7\Response as Psr7Response;
+use Odigos\GuzzleHttp\TransferStats;
+use Odigos\Illuminate\Contracts\Events\Dispatcher;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Str;
+use Odigos\Illuminate\Support\Traits\Macroable;
 use Odigos\PHPUnit\Framework\Assert as PHPUnit;
 /**
  * @mixin \Illuminate\Http\Client\PendingRequest
@@ -168,7 +168,7 @@ class Factory
      */
     public static function failedRequest($body = null, $status = 200, $headers = [])
     {
-        return new \Illuminate\Http\Client\RequestException(new \Illuminate\Http\Client\Response(static::psr7Response($body, $status, $headers)));
+        return new RequestException(new Response(static::psr7Response($body, $status, $headers)));
     }
     /**
      * Create a new connection exception for use during stubbing.
@@ -190,7 +190,7 @@ class Factory
      */
     public function sequence(array $responses = [])
     {
-        return $this->responseSequences[] = new \Illuminate\Http\Client\ResponseSequence($responses);
+        return $this->responseSequences[] = new ResponseSequence($responses);
     }
     /**
      * Register a stub callable that will intercept requests and be able to return stub responses.
@@ -256,7 +256,7 @@ class Factory
             if (is_int($callback) || is_string($callback)) {
                 return static::response($callback);
             }
-            if ($callback instanceof Closure || $callback instanceof \Illuminate\Http\Client\ResponseSequence) {
+            if ($callback instanceof Closure || $callback instanceof ResponseSequence) {
                 return $callback($request, $options);
             }
             return $callback;
@@ -422,7 +422,7 @@ class Factory
      */
     protected function newPendingRequest()
     {
-        return (new \Illuminate\Http\Client\PendingRequest($this, $this->globalMiddleware))->withOptions(value($this->globalOptions));
+        return (new PendingRequest($this, $this->globalMiddleware))->withOptions(value($this->globalOptions));
     }
     /**
      * Get the current event dispatcher implementation.

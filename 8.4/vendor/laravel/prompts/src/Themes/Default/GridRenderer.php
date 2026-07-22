@@ -1,15 +1,15 @@
 <?php
 
-namespace Laravel\Prompts\Themes\Default;
+namespace Odigos\Laravel\Prompts\Themes\Default;
 
-use Laravel\Prompts\Grid;
-use Laravel\Prompts\Output\BufferedConsoleOutput;
-use Symfony\Component\Console\Helper\Table as SymfonyTable;
-use Symfony\Component\Console\Helper\TableSeparator;
-use Symfony\Component\Console\Helper\TableStyle;
-class GridRenderer extends \Laravel\Prompts\Themes\Default\Renderer
+use Odigos\Laravel\Prompts\Grid;
+use Odigos\Laravel\Prompts\Output\BufferedConsoleOutput;
+use Odigos\Symfony\Component\Console\Helper\Table as SymfonyTable;
+use Odigos\Symfony\Component\Console\Helper\TableSeparator;
+use Odigos\Symfony\Component\Console\Helper\TableStyle;
+class GridRenderer extends Renderer
 {
-    use \Laravel\Prompts\Themes\Default\Concerns\InteractsWithStrings;
+    use Concerns\InteractsWithStrings;
     protected int $minWidth = 60;
     /**
      * Render the grid.

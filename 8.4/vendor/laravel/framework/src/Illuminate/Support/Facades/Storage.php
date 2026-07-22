@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Support\Facades;
+namespace Odigos\Illuminate\Support\Facades;
 
-use Illuminate\Filesystem\Filesystem;
-use function Illuminate\Support\enum_value;
+use Odigos\Illuminate\Filesystem\Filesystem;
+use function Odigos\Illuminate\Support\enum_value;
 /**
  * @method static \Illuminate\Contracts\Filesystem\Filesystem drive(string|null $name = null)
  * @method static \Illuminate\Contracts\Filesystem\Filesystem disk(\UnitEnum|string|null $name = null)
@@ -87,7 +87,7 @@ use function Illuminate\Support\enum_value;
  *
  * @see \Illuminate\Filesystem\FilesystemManager
  */
-class Storage extends \Illuminate\Support\Facades\Facade
+class Storage extends Facade
 {
     /**
      * Replace the given disk with a local testing disk.
@@ -99,17 +99,17 @@ class Storage extends \Illuminate\Support\Facades\Facade
     public static function fake($disk = null, array $config = [])
     {
         $root = self::getRootPath($disk = enum_value($disk) ?: static::$app['config']->get('filesystems.default'));
-        if ($token = \Illuminate\Support\Facades\ParallelTesting::token()) {
+        if ($token = ParallelTesting::token()) {
             $root = "{$root}_test_{$token}";
         }
         (new Filesystem())->cleanDirectory($root);
         static::set($disk, $fake = static::createLocalDriver(self::buildDiskConfiguration($disk, $config, root: $root)));
         return tap($fake, function ($fake) {
             $fake->buildTemporaryUrlsUsing(function ($path, $expiration) {
-                return \Illuminate\Support\Facades\URL::to($path . '?expiration=' . $expiration->getTimestamp());
+                return URL::to($path . '?expiration=' . $expiration->getTimestamp());
             });
             $fake->buildTemporaryUploadUrlsUsing(function ($path, $expiration) {
-                return ['url' => \Illuminate\Support\Facades\URL::to($path . '?expiration=' . $expiration->getTimestamp()), 'headers' => []];
+                return ['url' => URL::to($path . '?expiration=' . $expiration->getTimestamp()), 'headers' => []];
             });
         });
     }

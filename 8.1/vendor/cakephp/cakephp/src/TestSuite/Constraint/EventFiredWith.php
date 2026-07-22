@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Cake\TestSuite\Constraint;
+namespace Odigos\Cake\TestSuite\Constraint;
 
-use Cake\Collection\Collection;
-use Cake\Event\EventInterface;
-use Cake\Event\EventManager;
+use Odigos\Cake\Collection\Collection;
+use Odigos\Cake\Event\EventInterface;
+use Odigos\Cake\Event\EventManager;
 use Odigos\PHPUnit\Framework\AssertionFailedError;
 use Odigos\PHPUnit\Framework\Constraint\Constraint;
 /**

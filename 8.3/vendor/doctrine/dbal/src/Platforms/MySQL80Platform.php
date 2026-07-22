@@ -1,19 +1,19 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Platforms;
+namespace Odigos\Doctrine\DBAL\Platforms;
 
-use Doctrine\DBAL\Platforms\Keywords\KeywordList;
-use Doctrine\DBAL\Platforms\Keywords\MySQL80Keywords;
-use Doctrine\DBAL\SQL\Builder\SelectSQLBuilder;
-use Doctrine\DBAL\SQL\Builder\WithSQLBuilder;
-use Doctrine\Deprecations\Deprecation;
+use Odigos\Doctrine\DBAL\Platforms\Keywords\KeywordList;
+use Odigos\Doctrine\DBAL\Platforms\Keywords\MySQL80Keywords;
+use Odigos\Doctrine\DBAL\SQL\Builder\SelectSQLBuilder;
+use Odigos\Doctrine\DBAL\SQL\Builder\WithSQLBuilder;
+use Odigos\Doctrine\Deprecations\Deprecation;
 /**
  * Provides the behavior, features and SQL dialect of the MySQL 8.0 database platform.
  *
  * @deprecated This class will be removed once support for MySQL 5.7 is dropped.
  */
-class MySQL80Platform extends \Doctrine\DBAL\Platforms\MySQLPlatform
+class MySQL80Platform extends MySQLPlatform
 {
     protected function createReservedKeywordsList(): KeywordList
     {
@@ -22,10 +22,10 @@ class MySQL80Platform extends \Doctrine\DBAL\Platforms\MySQLPlatform
     }
     public function createSelectSQLBuilder(): SelectSQLBuilder
     {
-        return \Doctrine\DBAL\Platforms\AbstractPlatform::createSelectSQLBuilder();
+        return AbstractPlatform::createSelectSQLBuilder();
     }
     public function createWithSQLBuilder(): WithSQLBuilder
     {
-        return \Doctrine\DBAL\Platforms\AbstractPlatform::createWithSQLBuilder();
+        return AbstractPlatform::createWithSQLBuilder();
     }
 }

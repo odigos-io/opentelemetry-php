@@ -1,14 +1,14 @@
 <?php
 
-namespace Illuminate\Auth;
+namespace Odigos\Illuminate\Auth;
 
-use Illuminate\Auth\Access\Gate;
-use Illuminate\Auth\Middleware\RequirePassword;
-use Illuminate\Contracts\Auth\Access\Gate as GateContract;
-use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
-use Illuminate\Contracts\Routing\ResponseFactory;
-use Illuminate\Contracts\Routing\UrlGenerator;
-use Illuminate\Support\ServiceProvider;
+use Odigos\Illuminate\Auth\Access\Gate;
+use Odigos\Illuminate\Auth\Middleware\RequirePassword;
+use Odigos\Illuminate\Contracts\Auth\Access\Gate as GateContract;
+use Odigos\Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Odigos\Illuminate\Contracts\Routing\ResponseFactory;
+use Odigos\Illuminate\Contracts\Routing\UrlGenerator;
+use Odigos\Illuminate\Support\ServiceProvider;
 class AuthServiceProvider extends ServiceProvider
 {
     /**
@@ -32,7 +32,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected function registerAuthenticator()
     {
-        $this->app->singleton('auth', fn($app) => new \Illuminate\Auth\AuthManager($app));
+        $this->app->singleton('auth', fn($app) => new AuthManager($app));
         $this->app->singleton('auth.driver', fn($app) => $app['auth']->guard());
     }
     /**

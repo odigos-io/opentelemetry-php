@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Support\Facades;
+namespace Odigos\Illuminate\Support\Facades;
 
 /**
  * @method static \Psr\Log\LoggerInterface build(array $config)
@@ -37,7 +37,7 @@ namespace Illuminate\Support\Facades;
  *
  * @see \Illuminate\Log\LogManager
  */
-class Log extends \Illuminate\Support\Facades\Facade
+class Log extends Facade
 {
     /**
      * Get the registered name of the component.

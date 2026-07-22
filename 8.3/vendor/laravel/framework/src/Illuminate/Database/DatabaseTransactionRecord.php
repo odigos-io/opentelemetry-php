@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Database;
+namespace Odigos\Illuminate\Database;
 
 class DatabaseTransactionRecord
 {
@@ -41,7 +41,7 @@ class DatabaseTransactionRecord
      * @param  int  $level
      * @param  \Illuminate\Database\DatabaseTransactionRecord|null  $parent
      */
-    public function __construct($connection, $level, ?\Illuminate\Database\DatabaseTransactionRecord $parent = null)
+    public function __construct($connection, $level, ?DatabaseTransactionRecord $parent = null)
     {
         $this->connection = $connection;
         $this->level = $level;

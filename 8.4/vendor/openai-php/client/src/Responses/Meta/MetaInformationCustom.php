@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenAI\Responses\Meta;
+namespace Odigos\OpenAI\Responses\Meta;
 
 final readonly class MetaInformationCustom
 {

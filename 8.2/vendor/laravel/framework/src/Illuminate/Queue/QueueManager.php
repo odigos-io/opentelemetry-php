@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Queue;
+namespace Odigos\Illuminate\Queue;
 
 use Closure;
-use Illuminate\Contracts\Queue\Factory as FactoryContract;
-use Illuminate\Contracts\Queue\Monitor as MonitorContract;
+use Odigos\Illuminate\Contracts\Queue\Factory as FactoryContract;
+use Odigos\Illuminate\Contracts\Queue\Monitor as MonitorContract;
 use InvalidArgumentException;
 /**
  * @mixin \Illuminate\Contracts\Queue\Queue
@@ -46,7 +46,7 @@ class QueueManager implements FactoryContract, MonitorContract
      */
     public function before($callback)
     {
-        $this->app['events']->listen(\Illuminate\Queue\Events\JobProcessing::class, $callback);
+        $this->app['events']->listen(Events\JobProcessing::class, $callback);
     }
     /**
      * Register an event listener for the after job event.
@@ -56,7 +56,7 @@ class QueueManager implements FactoryContract, MonitorContract
      */
     public function after($callback)
     {
-        $this->app['events']->listen(\Illuminate\Queue\Events\JobProcessed::class, $callback);
+        $this->app['events']->listen(Events\JobProcessed::class, $callback);
     }
     /**
      * Register an event listener for the exception occurred job event.
@@ -66,7 +66,7 @@ class QueueManager implements FactoryContract, MonitorContract
      */
     public function exceptionOccurred($callback)
     {
-        $this->app['events']->listen(\Illuminate\Queue\Events\JobExceptionOccurred::class, $callback);
+        $this->app['events']->listen(Events\JobExceptionOccurred::class, $callback);
     }
     /**
      * Register an event listener for the daemon queue loop.
@@ -76,7 +76,7 @@ class QueueManager implements FactoryContract, MonitorContract
      */
     public function looping($callback)
     {
-        $this->app['events']->listen(\Illuminate\Queue\Events\Looping::class, $callback);
+        $this->app['events']->listen(Events\Looping::class, $callback);
     }
     /**
      * Register an event listener for the failed job event.
@@ -86,7 +86,7 @@ class QueueManager implements FactoryContract, MonitorContract
      */
     public function failing($callback)
     {
-        $this->app['events']->listen(\Illuminate\Queue\Events\JobFailed::class, $callback);
+        $this->app['events']->listen(Events\JobFailed::class, $callback);
     }
     /**
      * Register an event listener for the daemon queue starting.
@@ -96,7 +96,7 @@ class QueueManager implements FactoryContract, MonitorContract
      */
     public function starting($callback)
     {
-        $this->app['events']->listen(\Illuminate\Queue\Events\WorkerStarting::class, $callback);
+        $this->app['events']->listen(Events\WorkerStarting::class, $callback);
     }
     /**
      * Register an event listener for the daemon queue stopping.
@@ -106,7 +106,7 @@ class QueueManager implements FactoryContract, MonitorContract
      */
     public function stopping($callback)
     {
-        $this->app['events']->listen(\Illuminate\Queue\Events\WorkerStopping::class, $callback);
+        $this->app['events']->listen(Events\WorkerStopping::class, $callback);
     }
     /**
      * Determine if the driver is connected.
@@ -181,7 +181,7 @@ class QueueManager implements FactoryContract, MonitorContract
     public function pause($connection, $queue)
     {
         $this->app['cache']->store()->forever("illuminate:queue:paused:{$connection}:{$queue}", \true);
-        $this->app['events']->dispatch(new \Illuminate\Queue\Events\QueuePaused($connection, $queue));
+        $this->app['events']->dispatch(new Events\QueuePaused($connection, $queue));
     }
     /**
      * Pause a queue by its connection and name for a given amount of time.
@@ -194,7 +194,7 @@ class QueueManager implements FactoryContract, MonitorContract
     public function pauseFor($connection, $queue, $ttl)
     {
         $this->app['cache']->store()->put("illuminate:queue:paused:{$connection}:{$queue}", \true, $ttl);
-        $this->app['events']->dispatch(new \Illuminate\Queue\Events\QueuePaused($connection, $queue, $ttl));
+        $this->app['events']->dispatch(new Events\QueuePaused($connection, $queue, $ttl));
     }
     /**
      * Resume a paused queue by its connection and name.
@@ -206,7 +206,7 @@ class QueueManager implements FactoryContract, MonitorContract
     public function resume($connection, $queue)
     {
         $this->app['cache']->store()->forget("illuminate:queue:paused:{$connection}:{$queue}");
-        $this->app['events']->dispatch(new \Illuminate\Queue\Events\QueueResumed($connection, $queue));
+        $this->app['events']->dispatch(new Events\QueueResumed($connection, $queue));
     }
     /**
      * Determine if a queue is paused.
@@ -228,8 +228,8 @@ class QueueManager implements FactoryContract, MonitorContract
      */
     public function withoutInterruptionPolling()
     {
-        \Illuminate\Queue\Worker::$restartable = \false;
-        \Illuminate\Queue\Worker::$pausable = \false;
+        Worker::$restartable = \false;
+        Worker::$pausable = \false;
     }
     /**
      * Add a queue connection resolver.

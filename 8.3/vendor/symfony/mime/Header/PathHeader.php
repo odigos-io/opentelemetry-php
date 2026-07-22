@@ -8,16 +8,16 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Mime\Header;
+namespace Odigos\Symfony\Component\Mime\Header;
 
-use Symfony\Component\Mime\Address;
-use Symfony\Component\Mime\Exception\RfcComplianceException;
+use Odigos\Symfony\Component\Mime\Address;
+use Odigos\Symfony\Component\Mime\Exception\RfcComplianceException;
 /**
  * A Path Header, such a Return-Path (one address).
  *
  * @author Chris Corbyn
  */
-final class PathHeader extends \Symfony\Component\Mime\Header\AbstractHeader
+final class PathHeader extends AbstractHeader
 {
     private Address $address;
     public function __construct(string $name, Address $address)

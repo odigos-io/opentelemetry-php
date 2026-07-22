@@ -6,7 +6,7 @@
  * @license https://github.com/slimphp/Slim/blob/4.x/LICENSE.md (MIT License)
  */
 declare (strict_types=1);
-namespace Slim\Interfaces;
+namespace Odigos\Slim\Interfaces;
 
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
@@ -24,7 +24,7 @@ interface Psr17FactoryInterface
     /**
      * @throws RuntimeException when the factory could not be instantiated
      */
-    public static function getServerRequestCreator(): \Slim\Interfaces\ServerRequestCreatorInterface;
+    public static function getServerRequestCreator(): ServerRequestCreatorInterface;
     /**
      * Is the PSR-17 ResponseFactory available
      */

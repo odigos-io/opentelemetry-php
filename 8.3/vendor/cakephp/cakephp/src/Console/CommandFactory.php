@@ -12,16 +12,16 @@ declare (strict_types=1);
  * @link          https://cakephp.org CakePHP(tm) Project
  * @license       https://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Console;
+namespace Odigos\Cake\Console;
 
-use Cake\Core\ContainerInterface;
+use Odigos\Cake\Core\ContainerInterface;
 /**
  * This is a factory for creating Command instances.
  *
  * This factory can be replaced or extended if you need to customize building
  * your command objects.
  */
-class CommandFactory implements \Cake\Console\CommandFactoryInterface
+class CommandFactory implements CommandFactoryInterface
 {
     /**
      * @var \Cake\Core\ContainerInterface|null
@@ -39,7 +39,7 @@ class CommandFactory implements \Cake\Console\CommandFactoryInterface
     /**
      * @inheritDoc
      */
-    public function create(string $className): \Cake\Console\CommandInterface
+    public function create(string $className): CommandInterface
     {
         if ($this->container?->has($className)) {
             return $this->container->get($className);

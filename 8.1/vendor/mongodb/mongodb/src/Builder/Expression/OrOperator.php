@@ -4,14 +4,14 @@
  * THIS FILE IS AUTO-GENERATED. ANY CHANGES WILL BE LOST!
  */
 declare (strict_types=1);
-namespace MongoDB\Builder\Expression;
+namespace Odigos\MongoDB\Builder\Expression;
 
 use DateTimeInterface;
 use MongoDB\BSON\Type;
-use MongoDB\Builder\Type\Encode;
-use MongoDB\Builder\Type\ExpressionInterface;
-use MongoDB\Builder\Type\OperatorInterface;
-use MongoDB\Exception\InvalidArgumentException;
+use Odigos\MongoDB\Builder\Type\Encode;
+use Odigos\MongoDB\Builder\Type\ExpressionInterface;
+use Odigos\MongoDB\Builder\Type\OperatorInterface;
+use Odigos\MongoDB\Exception\InvalidArgumentException;
 use stdClass;
 use function array_is_list;
 /**
@@ -20,7 +20,7 @@ use function array_is_list;
  * @see https://www.mongodb.com/docs/manual/reference/operator/aggregation/or/
  * @internal
  */
-final class OrOperator implements \MongoDB\Builder\Expression\ResolvesToBool, OperatorInterface
+final class OrOperator implements ResolvesToBool, OperatorInterface
 {
     public const ENCODE = Encode::Single;
     public const NAME = '$or';
@@ -31,7 +31,7 @@ final class OrOperator implements \MongoDB\Builder\Expression\ResolvesToBool, Op
      * @param DateTimeInterface|ExpressionInterface|ResolvesToBool|Type|array|bool|float|int|null|stdClass|string ...$expression
      * @no-named-arguments
      */
-    public function __construct(DateTimeInterface|Type|\MongoDB\Builder\Expression\ResolvesToBool|ExpressionInterface|stdClass|array|bool|float|int|null|string ...$expression)
+    public function __construct(DateTimeInterface|Type|ResolvesToBool|ExpressionInterface|stdClass|array|bool|float|int|null|string ...$expression)
     {
         if (\count($expression) < 1) {
             throw new InvalidArgumentException(\sprintf('Expected at least %d values for $expression, got %d.', 1, \count($expression)));

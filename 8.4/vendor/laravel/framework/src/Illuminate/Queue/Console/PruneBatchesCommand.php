@@ -1,13 +1,13 @@
 <?php
 
-namespace Illuminate\Queue\Console;
+namespace Odigos\Illuminate\Queue\Console;
 
-use Illuminate\Bus\BatchRepository;
-use Illuminate\Bus\DatabaseBatchRepository;
-use Illuminate\Bus\PrunableBatchRepository;
-use Illuminate\Console\Command;
-use Illuminate\Support\Carbon;
-use Symfony\Component\Console\Attribute\AsCommand;
+use Odigos\Illuminate\Bus\BatchRepository;
+use Odigos\Illuminate\Bus\DatabaseBatchRepository;
+use Odigos\Illuminate\Bus\PrunableBatchRepository;
+use Odigos\Illuminate\Console\Command;
+use Odigos\Illuminate\Support\Carbon;
+use Odigos\Symfony\Component\Console\Attribute\AsCommand;
 #[AsCommand(name: 'queue:prune-batches')]
 class PruneBatchesCommand extends Command
 {

@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Console\Scheduling;
+namespace Odigos\Illuminate\Console\Scheduling;
 
-use Illuminate\Support\Carbon;
+use Odigos\Illuminate\Support\Carbon;
 use InvalidArgumentException;
-use function Illuminate\Support\enum_value;
+use function Odigos\Illuminate\Support\enum_value;
 trait ManagesFrequencies
 {
     /**
@@ -356,7 +356,7 @@ trait ManagesFrequencies
      */
     public function weekdays()
     {
-        return $this->days(\Illuminate\Console\Scheduling\Schedule::MONDAY . '-' . \Illuminate\Console\Scheduling\Schedule::FRIDAY);
+        return $this->days(Schedule::MONDAY . '-' . Schedule::FRIDAY);
     }
     /**
      * Schedule the event to run only on weekends.
@@ -365,7 +365,7 @@ trait ManagesFrequencies
      */
     public function weekends()
     {
-        return $this->days(\Illuminate\Console\Scheduling\Schedule::SATURDAY . ',' . \Illuminate\Console\Scheduling\Schedule::SUNDAY);
+        return $this->days(Schedule::SATURDAY . ',' . Schedule::SUNDAY);
     }
     /**
      * Schedule the event to run only on Mondays.
@@ -374,7 +374,7 @@ trait ManagesFrequencies
      */
     public function mondays()
     {
-        return $this->days(\Illuminate\Console\Scheduling\Schedule::MONDAY);
+        return $this->days(Schedule::MONDAY);
     }
     /**
      * Schedule the event to run only on Tuesdays.
@@ -383,7 +383,7 @@ trait ManagesFrequencies
      */
     public function tuesdays()
     {
-        return $this->days(\Illuminate\Console\Scheduling\Schedule::TUESDAY);
+        return $this->days(Schedule::TUESDAY);
     }
     /**
      * Schedule the event to run only on Wednesdays.
@@ -392,7 +392,7 @@ trait ManagesFrequencies
      */
     public function wednesdays()
     {
-        return $this->days(\Illuminate\Console\Scheduling\Schedule::WEDNESDAY);
+        return $this->days(Schedule::WEDNESDAY);
     }
     /**
      * Schedule the event to run only on Thursdays.
@@ -401,7 +401,7 @@ trait ManagesFrequencies
      */
     public function thursdays()
     {
-        return $this->days(\Illuminate\Console\Scheduling\Schedule::THURSDAY);
+        return $this->days(Schedule::THURSDAY);
     }
     /**
      * Schedule the event to run only on Fridays.
@@ -410,7 +410,7 @@ trait ManagesFrequencies
      */
     public function fridays()
     {
-        return $this->days(\Illuminate\Console\Scheduling\Schedule::FRIDAY);
+        return $this->days(Schedule::FRIDAY);
     }
     /**
      * Schedule the event to run only on Saturdays.
@@ -419,7 +419,7 @@ trait ManagesFrequencies
      */
     public function saturdays()
     {
-        return $this->days(\Illuminate\Console\Scheduling\Schedule::SATURDAY);
+        return $this->days(Schedule::SATURDAY);
     }
     /**
      * Schedule the event to run only on Sundays.
@@ -428,7 +428,7 @@ trait ManagesFrequencies
      */
     public function sundays()
     {
-        return $this->days(\Illuminate\Console\Scheduling\Schedule::SUNDAY);
+        return $this->days(Schedule::SUNDAY);
     }
     /**
      * Schedule the event to run weekly.

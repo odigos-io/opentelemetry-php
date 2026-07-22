@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Database\Eloquent\Factories;
+namespace Odigos\Illuminate\Database\Eloquent\Factories;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Collection;
+use Odigos\Illuminate\Database\Eloquent\Model;
+use Odigos\Illuminate\Support\Collection;
 class BelongsToManyRelationship
 {
     /**
@@ -45,7 +45,7 @@ class BelongsToManyRelationship
      */
     public function createFor(Model $model)
     {
-        $factoryInstance = $this->factory instanceof \Illuminate\Database\Eloquent\Factories\Factory;
+        $factoryInstance = $this->factory instanceof Factory;
         if ($factoryInstance) {
             $relationship = $model->{$this->relationship}();
         }
@@ -61,7 +61,7 @@ class BelongsToManyRelationship
      */
     public function recycle($recycle)
     {
-        if ($this->factory instanceof \Illuminate\Database\Eloquent\Factories\Factory) {
+        if ($this->factory instanceof Factory) {
             $this->factory = $this->factory->recycle($recycle);
         }
         return $this;

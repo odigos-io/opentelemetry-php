@@ -1,16 +1,16 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Connections;
+namespace Odigos\Doctrine\DBAL\Connections;
 
-use Doctrine\DBAL\Configuration;
-use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Driver;
-use Doctrine\DBAL\Driver\Connection as DriverConnection;
-use Doctrine\DBAL\Driver\Exception as DriverException;
-use Doctrine\DBAL\DriverManager;
-use Doctrine\DBAL\Exception;
-use Doctrine\DBAL\Statement;
+use Odigos\Doctrine\DBAL\Configuration;
+use Odigos\Doctrine\DBAL\Connection;
+use Odigos\Doctrine\DBAL\Driver;
+use Odigos\Doctrine\DBAL\Driver\Connection as DriverConnection;
+use Odigos\Doctrine\DBAL\Driver\Exception as DriverException;
+use Odigos\Doctrine\DBAL\DriverManager;
+use Odigos\Doctrine\DBAL\Exception;
+use Odigos\Doctrine\DBAL\Statement;
 use InvalidArgumentException;
 use SensitiveParameter;
 use function array_rand;

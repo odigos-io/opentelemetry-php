@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace OpenTelemetry\SDK\Common\Adapter\HttpDiscovery;
 
-use Http\Client\HttpAsyncClient;
-use Http\Discovery\HttpAsyncClientDiscovery;
+use Odigos\Http\Client\HttpAsyncClient;
+use Odigos\Http\Discovery\HttpAsyncClientDiscovery;
 use OpenTelemetry\SDK\Common\Http\HttpPlug\Client\ResolverInterface;
 final class HttpPlugClientResolver implements ResolverInterface
 {

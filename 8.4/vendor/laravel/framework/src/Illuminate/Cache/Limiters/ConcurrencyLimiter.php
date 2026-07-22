@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Cache\Limiters;
+namespace Odigos\Illuminate\Cache\Limiters;
 
-use Illuminate\Support\Sleep;
-use Illuminate\Support\Str;
+use Odigos\Illuminate\Support\Sleep;
+use Odigos\Illuminate\Support\Str;
 use Throwable;
 class ConcurrencyLimiter
 {
@@ -63,7 +63,7 @@ class ConcurrencyLimiter
         $id = Str::random(20);
         while (!$slot = $this->acquire($id)) {
             if (time() - $timeout >= $starting) {
-                throw new \Illuminate\Cache\Limiters\LimiterTimeoutException();
+                throw new LimiterTimeoutException();
             }
             Sleep::usleep($sleep * 1000);
         }

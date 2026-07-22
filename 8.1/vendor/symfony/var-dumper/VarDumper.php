@@ -8,20 +8,20 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\VarDumper;
+namespace Odigos\Symfony\Component\VarDumper;
 
-use Symfony\Component\ErrorHandler\ErrorRenderer\FileLinkFormatter;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\VarDumper\Caster\ReflectionCaster;
-use Symfony\Component\VarDumper\Cloner\VarCloner;
-use Symfony\Component\VarDumper\Dumper\CliDumper;
-use Symfony\Component\VarDumper\Dumper\ContextProvider\CliContextProvider;
-use Symfony\Component\VarDumper\Dumper\ContextProvider\RequestContextProvider;
-use Symfony\Component\VarDumper\Dumper\ContextProvider\SourceContextProvider;
-use Symfony\Component\VarDumper\Dumper\ContextualizedDumper;
-use Symfony\Component\VarDumper\Dumper\HtmlDumper;
-use Symfony\Component\VarDumper\Dumper\ServerDumper;
+use Odigos\Symfony\Component\ErrorHandler\ErrorRenderer\FileLinkFormatter;
+use Odigos\Symfony\Component\HttpFoundation\Request;
+use Odigos\Symfony\Component\HttpFoundation\RequestStack;
+use Odigos\Symfony\Component\VarDumper\Caster\ReflectionCaster;
+use Odigos\Symfony\Component\VarDumper\Cloner\VarCloner;
+use Odigos\Symfony\Component\VarDumper\Dumper\CliDumper;
+use Odigos\Symfony\Component\VarDumper\Dumper\ContextProvider\CliContextProvider;
+use Odigos\Symfony\Component\VarDumper\Dumper\ContextProvider\RequestContextProvider;
+use Odigos\Symfony\Component\VarDumper\Dumper\ContextProvider\SourceContextProvider;
+use Odigos\Symfony\Component\VarDumper\Dumper\ContextualizedDumper;
+use Odigos\Symfony\Component\VarDumper\Dumper\HtmlDumper;
+use Odigos\Symfony\Component\VarDumper\Dumper\ServerDumper;
 // Load the global dump() function
 require_once __DIR__ . '/Resources/functions/dump.php';
 /**

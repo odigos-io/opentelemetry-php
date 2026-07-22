@@ -14,7 +14,7 @@ declare (strict_types=1);
  * @since         3.2.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Datasource;
+namespace Odigos\Cake\Datasource;
 
 /**
  * Describes the methods that any class representing a data storage should

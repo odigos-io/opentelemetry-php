@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\SQL\Builder;
+namespace Odigos\Doctrine\DBAL\SQL\Builder;
 
-use Doctrine\DBAL\Exception;
-use Doctrine\DBAL\Query\UnionQuery;
+use Odigos\Doctrine\DBAL\Exception;
+use Odigos\Doctrine\DBAL\Query\UnionQuery;
 interface UnionSQLBuilder
 {
     /** @throws Exception */

@@ -1,17 +1,17 @@
 <?php
 
-namespace Illuminate\Support\Facades;
+namespace Odigos\Illuminate\Support\Facades;
 
 use Closure;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Benchmark;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Js;
-use Illuminate\Support\Number;
-use Illuminate\Support\Str;
-use Illuminate\Support\Testing\Fakes\Fake;
-use Illuminate\Support\Uri;
+use Odigos\Illuminate\Database\Eloquent\Model;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Benchmark;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Js;
+use Odigos\Illuminate\Support\Number;
+use Odigos\Illuminate\Support\Str;
+use Odigos\Illuminate\Support\Testing\Fakes\Fake;
+use Odigos\Illuminate\Support\Uri;
 use Odigos\Mockery;
 use Odigos\Mockery\LegacyMockInterface;
 use RuntimeException;
@@ -228,7 +228,7 @@ abstract class Facade
      */
     public static function defaultAliases()
     {
-        return new Collection(['App' => \Illuminate\Support\Facades\App::class, 'Arr' => Arr::class, 'Artisan' => \Illuminate\Support\Facades\Artisan::class, 'Auth' => \Illuminate\Support\Facades\Auth::class, 'Benchmark' => Benchmark::class, 'Blade' => \Illuminate\Support\Facades\Blade::class, 'Broadcast' => \Illuminate\Support\Facades\Broadcast::class, 'Bus' => \Illuminate\Support\Facades\Bus::class, 'Cache' => \Illuminate\Support\Facades\Cache::class, 'Concurrency' => \Illuminate\Support\Facades\Concurrency::class, 'Config' => \Illuminate\Support\Facades\Config::class, 'Context' => \Illuminate\Support\Facades\Context::class, 'Cookie' => \Illuminate\Support\Facades\Cookie::class, 'Crypt' => \Illuminate\Support\Facades\Crypt::class, 'Date' => \Illuminate\Support\Facades\Date::class, 'DB' => \Illuminate\Support\Facades\DB::class, 'Eloquent' => Model::class, 'Event' => \Illuminate\Support\Facades\Event::class, 'File' => \Illuminate\Support\Facades\File::class, 'Gate' => \Illuminate\Support\Facades\Gate::class, 'Hash' => \Illuminate\Support\Facades\Hash::class, 'Http' => \Illuminate\Support\Facades\Http::class, 'Js' => Js::class, 'Lang' => \Illuminate\Support\Facades\Lang::class, 'Log' => \Illuminate\Support\Facades\Log::class, 'Mail' => \Illuminate\Support\Facades\Mail::class, 'Notification' => \Illuminate\Support\Facades\Notification::class, 'Number' => Number::class, 'Password' => \Illuminate\Support\Facades\Password::class, 'Process' => \Illuminate\Support\Facades\Process::class, 'Queue' => \Illuminate\Support\Facades\Queue::class, 'RateLimiter' => \Illuminate\Support\Facades\RateLimiter::class, 'Redirect' => \Illuminate\Support\Facades\Redirect::class, 'Request' => \Illuminate\Support\Facades\Request::class, 'Response' => \Illuminate\Support\Facades\Response::class, 'Route' => \Illuminate\Support\Facades\Route::class, 'Schedule' => \Illuminate\Support\Facades\Schedule::class, 'Schema' => \Illuminate\Support\Facades\Schema::class, 'Session' => \Illuminate\Support\Facades\Session::class, 'Storage' => \Illuminate\Support\Facades\Storage::class, 'Str' => Str::class, 'Uri' => Uri::class, 'URL' => \Illuminate\Support\Facades\URL::class, 'Validator' => \Illuminate\Support\Facades\Validator::class, 'View' => \Illuminate\Support\Facades\View::class, 'Vite' => \Illuminate\Support\Facades\Vite::class]);
+        return new Collection(['App' => App::class, 'Arr' => Arr::class, 'Artisan' => Artisan::class, 'Auth' => Auth::class, 'Benchmark' => Benchmark::class, 'Blade' => Blade::class, 'Broadcast' => Broadcast::class, 'Bus' => Bus::class, 'Cache' => Cache::class, 'Concurrency' => Concurrency::class, 'Config' => Config::class, 'Context' => Context::class, 'Cookie' => Cookie::class, 'Crypt' => Crypt::class, 'Date' => Date::class, 'DB' => DB::class, 'Eloquent' => Model::class, 'Event' => Event::class, 'File' => File::class, 'Gate' => Gate::class, 'Hash' => Hash::class, 'Http' => Http::class, 'Js' => Js::class, 'Lang' => Lang::class, 'Log' => Log::class, 'Mail' => Mail::class, 'Notification' => Notification::class, 'Number' => Number::class, 'Password' => Password::class, 'Process' => Process::class, 'Queue' => Queue::class, 'RateLimiter' => RateLimiter::class, 'Redirect' => Redirect::class, 'Request' => Request::class, 'Response' => Response::class, 'Route' => Route::class, 'Schedule' => Schedule::class, 'Schema' => Schema::class, 'Session' => Session::class, 'Storage' => Storage::class, 'Str' => Str::class, 'Uri' => Uri::class, 'URL' => URL::class, 'Validator' => Validator::class, 'View' => View::class, 'Vite' => Vite::class]);
     }
     /**
      * Get the application instance behind the facade.

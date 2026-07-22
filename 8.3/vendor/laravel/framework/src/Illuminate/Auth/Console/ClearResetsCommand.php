@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Auth\Console;
+namespace Odigos\Illuminate\Auth\Console;
 
-use Illuminate\Console\Command;
-use Symfony\Component\Console\Attribute\AsCommand;
+use Odigos\Illuminate\Console\Command;
+use Odigos\Symfony\Component\Console\Attribute\AsCommand;
 #[AsCommand(name: 'auth:clear-resets')]
 class ClearResetsCommand extends Command
 {

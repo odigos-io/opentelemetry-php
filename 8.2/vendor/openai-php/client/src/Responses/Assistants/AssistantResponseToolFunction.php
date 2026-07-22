@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Responses\Assistants;
+namespace Odigos\OpenAI\Responses\Assistants;
 
-use OpenAI\Contracts\ResponseContract;
-use OpenAI\Responses\Concerns\ArrayAccessible;
-use OpenAI\Testing\Responses\Concerns\Fakeable;
+use Odigos\OpenAI\Contracts\ResponseContract;
+use Odigos\OpenAI\Responses\Concerns\ArrayAccessible;
+use Odigos\OpenAI\Testing\Responses\Concerns\Fakeable;
 /**
  * @implements ResponseContract<array{type: string, function: array{description: ?string, name: string, parameters: array<string, mixed>}}>
  */
@@ -16,7 +16,7 @@ final class AssistantResponseToolFunction implements ResponseContract
      */
     use ArrayAccessible;
     use Fakeable;
-    private function __construct(public string $type, public \OpenAI\Responses\Assistants\AssistantResponseToolFunctionFunction $function)
+    private function __construct(public string $type, public AssistantResponseToolFunctionFunction $function)
     {
     }
     /**
@@ -26,7 +26,7 @@ final class AssistantResponseToolFunction implements ResponseContract
      */
     public static function from(array $attributes): self
     {
-        return new self($attributes['type'], \OpenAI\Responses\Assistants\AssistantResponseToolFunctionFunction::from($attributes['function']));
+        return new self($attributes['type'], AssistantResponseToolFunctionFunction::from($attributes['function']));
     }
     /**
      * {@inheritDoc}

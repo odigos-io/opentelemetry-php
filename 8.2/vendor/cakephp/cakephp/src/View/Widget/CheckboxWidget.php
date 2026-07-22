@@ -14,16 +14,16 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\View\Widget;
+namespace Odigos\Cake\View\Widget;
 
-use Cake\View\Form\ContextInterface;
+use Odigos\Cake\View\Form\ContextInterface;
 /**
  * Input widget for creating checkbox widgets.
  *
  * This class is usually used internally by `Cake\View\Helper\FormHelper`,
  * it but can be used to generate standalone checkboxes.
  */
-class CheckboxWidget extends \Cake\View\Widget\BasicWidget
+class CheckboxWidget extends BasicWidget
 {
     /**
      * Data defaults.

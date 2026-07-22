@@ -8,15 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Translation\Test;
+namespace Odigos\Symfony\Component\Translation\Test;
 
 use Odigos\PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\HttpClient\MockHttpClient;
-use Symfony\Component\Translation\Dumper\XliffFileDumper;
-use Symfony\Component\Translation\Loader\LoaderInterface;
-use Symfony\Component\Translation\TranslatorBagInterface;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Odigos\Symfony\Component\HttpClient\MockHttpClient;
+use Odigos\Symfony\Component\Translation\Dumper\XliffFileDumper;
+use Odigos\Symfony\Component\Translation\Loader\LoaderInterface;
+use Odigos\Symfony\Component\Translation\TranslatorBagInterface;
+use Odigos\Symfony\Contracts\HttpClient\HttpClientInterface;
 /**
  * A test case to ease testing a translation provider factory.
  *
@@ -24,9 +24,9 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
  *
  * @deprecated since Symfony 7.2, use AbstractProviderFactoryTestCase instead
  */
-abstract class ProviderFactoryTestCase extends \Symfony\Component\Translation\Test\AbstractProviderFactoryTestCase
+abstract class ProviderFactoryTestCase extends AbstractProviderFactoryTestCase
 {
-    use \Symfony\Component\Translation\Test\IncompleteDsnTestTrait;
+    use IncompleteDsnTestTrait;
     protected HttpClientInterface $client;
     protected LoggerInterface|MockObject $logger;
     protected string $defaultLocale;

@@ -14,16 +14,16 @@ declare (strict_types=1);
  * @since         3.3.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Http;
+namespace Odigos\Cake\Http;
 
-use Cake\Core\ContainerApplicationInterface;
-use Cake\Core\HttpApplicationInterface;
-use Cake\Core\PluginApplicationInterface;
-use Cake\Event\EventDispatcherInterface;
-use Cake\Event\EventDispatcherTrait;
-use Cake\Event\EventManager;
-use Cake\Event\EventManagerInterface;
-use Cake\Routing\Router;
+use Odigos\Cake\Core\ContainerApplicationInterface;
+use Odigos\Cake\Core\HttpApplicationInterface;
+use Odigos\Cake\Core\PluginApplicationInterface;
+use Odigos\Cake\Event\EventDispatcherInterface;
+use Odigos\Cake\Event\EventDispatcherTrait;
+use Odigos\Cake\Event\EventManager;
+use Odigos\Cake\Event\EventManagerInterface;
+use Odigos\Cake\Routing\Router;
 use InvalidArgumentException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -48,7 +48,7 @@ class Server implements EventDispatcherInterface
      * @param \Cake\Core\HttpApplicationInterface $app The application to use.
      * @param \Cake\Http\Runner $runner Application runner.
      */
-    public function __construct(HttpApplicationInterface $app, protected \Cake\Http\Runner $runner = new \Cake\Http\Runner())
+    public function __construct(HttpApplicationInterface $app, protected Runner $runner = new Runner())
     {
         $this->app = $app;
     }
@@ -68,15 +68,15 @@ class Server implements EventDispatcherInterface
      * @return \Psr\Http\Message\ResponseInterface
      * @throws \RuntimeException When the application does not make a response.
      */
-    public function run(?ServerRequestInterface $request = null, ?\Cake\Http\MiddlewareQueue $middlewareQueue = null): ResponseInterface
+    public function run(?ServerRequestInterface $request = null, ?MiddlewareQueue $middlewareQueue = null): ResponseInterface
     {
         $this->bootstrap();
-        $request = $request ?: \Cake\Http\ServerRequestFactory::fromGlobals();
+        $request = $request ?: ServerRequestFactory::fromGlobals();
         if ($middlewareQueue === null) {
             if ($this->app instanceof ContainerApplicationInterface) {
-                $middlewareQueue = new \Cake\Http\MiddlewareQueue([], $this->app->getContainer());
+                $middlewareQueue = new MiddlewareQueue([], $this->app->getContainer());
             } else {
-                $middlewareQueue = new \Cake\Http\MiddlewareQueue();
+                $middlewareQueue = new MiddlewareQueue();
             }
         }
         $middleware = $this->app->middleware($middlewareQueue);
@@ -85,7 +85,7 @@ class Server implements EventDispatcherInterface
         }
         $this->dispatchEvent('Server.buildMiddleware', ['middleware' => $middleware]);
         $response = $this->runner->run($middleware, $request, $this->app);
-        if ($request instanceof \Cake\Http\ServerRequest) {
+        if ($request instanceof ServerRequest) {
             $request->getSession()->close();
         }
         return $response;
@@ -121,15 +121,15 @@ class Server implements EventDispatcherInterface
      *   When null, a SAPI Stream Emitter will be used.
      * @return void
      */
-    public function emit(ResponseInterface $response, ?\Cake\Http\ResponseEmitter $emitter = null): void
+    public function emit(ResponseInterface $response, ?ResponseEmitter $emitter = null): void
     {
-        $emitter ??= new \Cake\Http\ResponseEmitter();
+        $emitter ??= new ResponseEmitter();
         $emitter->emit($response);
         $request = null;
         if ($this->app instanceof ContainerApplicationInterface) {
             $container = $this->app->getContainer();
-            if ($container->has(\Cake\Http\ServerRequest::class)) {
-                $request = $container->get(\Cake\Http\ServerRequest::class);
+            if ($container->has(ServerRequest::class)) {
+                $request = $container->get(ServerRequest::class);
             }
         }
         if (!$request) {

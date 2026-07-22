@@ -8,15 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Console\Formatter;
+namespace Odigos\Symfony\Component\Console\Formatter;
 
-use Symfony\Component\Console\Color;
+use Odigos\Symfony\Component\Console\Color;
 /**
  * Formatter style class for defining styles.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class OutputFormatterStyle implements \Symfony\Component\Console\Formatter\OutputFormatterStyleInterface
+class OutputFormatterStyle implements OutputFormatterStyleInterface
 {
     private Color $color;
     private string $foreground;

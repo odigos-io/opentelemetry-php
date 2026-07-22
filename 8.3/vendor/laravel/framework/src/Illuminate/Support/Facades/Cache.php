@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Support\Facades;
+namespace Odigos\Illuminate\Support\Facades;
 
 use Odigos\Mockery;
 /**
@@ -68,7 +68,7 @@ use Odigos\Mockery;
  * @see \Illuminate\Cache\CacheManager
  * @see \Illuminate\Cache\Repository
  */
-class Cache extends \Illuminate\Support\Facades\Facade
+class Cache extends Facade
 {
     /**
      * Get the registered name of the component.

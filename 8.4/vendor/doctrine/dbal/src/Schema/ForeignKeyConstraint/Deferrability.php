@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Schema\ForeignKeyConstraint;
+namespace Odigos\Doctrine\DBAL\Schema\ForeignKeyConstraint;
 
 /**
  * Represents the information about whether the constraint is or can be deferred.

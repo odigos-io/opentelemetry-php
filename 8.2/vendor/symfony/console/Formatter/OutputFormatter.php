@@ -8,21 +8,21 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Console\Formatter;
+namespace Odigos\Symfony\Component\Console\Formatter;
 
-use Symfony\Component\Console\Exception\InvalidArgumentException;
-use Symfony\Component\Console\Helper\Helper;
-use function Symfony\Component\String\b;
+use Odigos\Symfony\Component\Console\Exception\InvalidArgumentException;
+use Odigos\Symfony\Component\Console\Helper\Helper;
+use function Odigos\Symfony\Component\String\b;
 /**
  * Formatter class for console output.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  * @author Roland Franssen <franssen.roland@gmail.com>
  */
-class OutputFormatter implements \Symfony\Component\Console\Formatter\WrappableOutputFormatterInterface
+class OutputFormatter implements WrappableOutputFormatterInterface
 {
     private array $styles = [];
-    private \Symfony\Component\Console\Formatter\OutputFormatterStyleStack $styleStack;
+    private OutputFormatterStyleStack $styleStack;
     public function __clone()
     {
         $this->styleStack = clone $this->styleStack;
@@ -60,14 +60,14 @@ class OutputFormatter implements \Symfony\Component\Console\Formatter\WrappableO
      */
     public function __construct(private bool $decorated = \false, array $styles = [])
     {
-        $this->setStyle('error', new \Symfony\Component\Console\Formatter\OutputFormatterStyle('white', 'red'));
-        $this->setStyle('info', new \Symfony\Component\Console\Formatter\OutputFormatterStyle('green'));
-        $this->setStyle('comment', new \Symfony\Component\Console\Formatter\OutputFormatterStyle('yellow'));
-        $this->setStyle('question', new \Symfony\Component\Console\Formatter\OutputFormatterStyle('black', 'cyan'));
+        $this->setStyle('error', new OutputFormatterStyle('white', 'red'));
+        $this->setStyle('info', new OutputFormatterStyle('green'));
+        $this->setStyle('comment', new OutputFormatterStyle('yellow'));
+        $this->setStyle('question', new OutputFormatterStyle('black', 'cyan'));
         foreach ($styles as $name => $style) {
             $this->setStyle($name, $style);
         }
-        $this->styleStack = new \Symfony\Component\Console\Formatter\OutputFormatterStyleStack();
+        $this->styleStack = new OutputFormatterStyleStack();
     }
     public function setDecorated(bool $decorated): void
     {
@@ -77,7 +77,7 @@ class OutputFormatter implements \Symfony\Component\Console\Formatter\WrappableO
     {
         return $this->decorated;
     }
-    public function setStyle(string $name, \Symfony\Component\Console\Formatter\OutputFormatterStyleInterface $style): void
+    public function setStyle(string $name, OutputFormatterStyleInterface $style): void
     {
         $this->styles[strtolower($name)] = $style;
     }
@@ -85,7 +85,7 @@ class OutputFormatter implements \Symfony\Component\Console\Formatter\WrappableO
     {
         return isset($this->styles[strtolower($name)]);
     }
-    public function getStyle(string $name): \Symfony\Component\Console\Formatter\OutputFormatterStyleInterface
+    public function getStyle(string $name): OutputFormatterStyleInterface
     {
         if (!$this->hasStyle($name)) {
             throw new InvalidArgumentException(\sprintf('Undefined style: "%s".', $name));
@@ -147,14 +147,14 @@ class OutputFormatter implements \Symfony\Component\Console\Formatter\WrappableO
         $output .= $this->applyCurrentStyle($isAscii ? substr($message, $offset) : Helper::substr($message, $offset), $output, $width, $currentLineLength);
         return strtr($output, ["\x00" => '\\', '\<' => '<', '\>' => '>']);
     }
-    public function getStyleStack(): \Symfony\Component\Console\Formatter\OutputFormatterStyleStack
+    public function getStyleStack(): OutputFormatterStyleStack
     {
         return $this->styleStack;
     }
     /**
      * Tries to create new style instance from string.
      */
-    private function createStyleFromString(string $string): ?\Symfony\Component\Console\Formatter\OutputFormatterStyleInterface
+    private function createStyleFromString(string $string): ?OutputFormatterStyleInterface
     {
         if (isset($this->styles[$string])) {
             return $this->styles[$string];
@@ -162,7 +162,7 @@ class OutputFormatter implements \Symfony\Component\Console\Formatter\WrappableO
         if (!preg_match_all('/([^=]+)=([^;]+)(;|$)/', $string, $matches, \PREG_SET_ORDER)) {
             return null;
         }
-        $style = new \Symfony\Component\Console\Formatter\OutputFormatterStyle();
+        $style = new OutputFormatterStyle();
         foreach ($matches as $match) {
             array_shift($match);
             $match[0] = strtolower($match[0]);

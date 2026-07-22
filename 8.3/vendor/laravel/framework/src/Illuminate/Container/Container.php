@@ -1,19 +1,19 @@
 <?php
 
-namespace Illuminate\Container;
+namespace Odigos\Illuminate\Container;
 
 use ArrayAccess;
 use Closure;
 use Exception;
-use Illuminate\Container\Attributes\Bind;
-use Illuminate\Container\Attributes\Scoped;
-use Illuminate\Container\Attributes\Singleton;
-use Illuminate\Contracts\Container\BindingResolutionException;
-use Illuminate\Contracts\Container\CircularDependencyException;
-use Illuminate\Contracts\Container\Container as ContainerContract;
-use Illuminate\Contracts\Container\ContextualAttribute;
-use Illuminate\Contracts\Container\SelfBuilding;
-use Illuminate\Support\Traits\ReflectsClosures;
+use Odigos\Illuminate\Container\Attributes\Bind;
+use Odigos\Illuminate\Container\Attributes\Scoped;
+use Odigos\Illuminate\Container\Attributes\Singleton;
+use Odigos\Illuminate\Contracts\Container\BindingResolutionException;
+use Odigos\Illuminate\Contracts\Container\CircularDependencyException;
+use Odigos\Illuminate\Contracts\Container\Container as ContainerContract;
+use Odigos\Illuminate\Contracts\Container\ContextualAttribute;
+use Odigos\Illuminate\Contracts\Container\SelfBuilding;
+use Odigos\Illuminate\Support\Traits\ReflectsClosures;
 use LogicException;
 use ReflectionAttribute;
 use ReflectionClass;
@@ -183,10 +183,10 @@ class Container implements ArrayAccess, ContainerContract
     public function when($concrete)
     {
         $aliases = [];
-        foreach (\Illuminate\Container\Util::arrayWrap($concrete) as $c) {
+        foreach (Util::arrayWrap($concrete) as $c) {
             $aliases[] = $this->getAlias($c);
         }
-        return new \Illuminate\Container\ContextualBindingBuilder($this, $aliases);
+        return new ContextualBindingBuilder($this, $aliases);
     }
     /**
      * Define a contextual binding based on an attribute.
@@ -574,7 +574,7 @@ class Container implements ArrayAccess, ContainerContract
         if (!isset($this->tags[$tag])) {
             return [];
         }
-        return new \Illuminate\Container\RewindableGenerator(function () use ($tag) {
+        return new RewindableGenerator(function () use ($tag) {
             foreach ($this->tags[$tag] as $abstract) {
                 yield $this->make($abstract);
             }
@@ -677,7 +677,7 @@ class Container implements ArrayAccess, ContainerContract
             $this->buildStack[] = $className;
             $pushedToBuildStack = \true;
         }
-        $result = \Illuminate\Container\BoundMethod::call($this, $callback, $parameters, $defaultMethod);
+        $result = BoundMethod::call($this, $callback, $parameters, $defaultMethod);
         if ($pushedToBuildStack) {
             array_pop($this->buildStack);
         }
@@ -752,7 +752,7 @@ class Container implements ArrayAccess, ContainerContract
             if ($this->has($id) || $e instanceof CircularDependencyException) {
                 throw $e;
             }
-            throw new \Illuminate\Container\EntryNotFoundException($id, is_int($e->getCode()) ? $e->getCode() : 0, $e);
+            throw new EntryNotFoundException($id, is_int($e->getCode()) ? $e->getCode() : 0, $e);
         }
     }
     /**
@@ -1025,13 +1025,13 @@ class Container implements ArrayAccess, ContainerContract
                 continue;
             }
             $result = null;
-            if (!is_null($attribute = \Illuminate\Container\Util::getContextualAttributeFromDependency($dependency))) {
+            if (!is_null($attribute = Util::getContextualAttributeFromDependency($dependency))) {
                 $result = $this->resolveFromAttribute($attribute);
             }
             // If the class is null, it means the dependency is a string or some other
             // primitive type which we can not resolve since it is not a class and
             // we will just bomb out with an error since we have no-where to go.
-            $result ??= is_null($className = \Illuminate\Container\Util::getParameterClassName($dependency)) ? $this->resolvePrimitive($dependency) : $this->resolveClass($dependency, $className);
+            $result ??= is_null($className = Util::getParameterClassName($dependency)) ? $this->resolvePrimitive($dependency) : $this->resolveClass($dependency, $className);
             $this->fireAfterResolvingAttributeCallbacks($dependency->getAttributes(), $result);
             if ($dependency->isVariadic()) {
                 $results = array_merge($results, $result);
@@ -1080,7 +1080,7 @@ class Container implements ArrayAccess, ContainerContract
     protected function resolvePrimitive(ReflectionParameter $parameter)
     {
         if (!is_null($concrete = $this->getContextualConcrete('$' . $parameter->getName()))) {
-            return \Illuminate\Container\Util::unwrapIfClosure($concrete, $this);
+            return Util::unwrapIfClosure($concrete, $this);
         }
         if ($parameter->isDefaultValueAvailable()) {
             return $parameter->getDefaultValue();
@@ -1102,7 +1102,7 @@ class Container implements ArrayAccess, ContainerContract
      */
     protected function resolveClass(ReflectionParameter $parameter, ?string $className = null)
     {
-        $className ??= \Illuminate\Container\Util::getParameterClassName($parameter);
+        $className ??= Util::getParameterClassName($parameter);
         // First we will check if a default value has been defined for the parameter.
         // If it has, and no explicit binding exists, we should return it to avoid
         // overriding any of the developer specified defaults for the parameters.
@@ -1126,7 +1126,7 @@ class Container implements ArrayAccess, ContainerContract
      */
     protected function resolveVariadicClass(ReflectionParameter $parameter)
     {
-        $className = \Illuminate\Container\Util::getParameterClassName($parameter);
+        $className = Util::getParameterClassName($parameter);
         $abstract = $this->getAlias($className);
         if (!is_array($concrete = $this->getContextualConcrete($abstract))) {
             return $this->make($className);

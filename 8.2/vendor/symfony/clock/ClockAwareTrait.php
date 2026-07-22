@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Clock;
+namespace Odigos\Symfony\Component\Clock;
 
 use Psr\Clock\ClockInterface;
-use Symfony\Contracts\Service\Attribute\Required;
+use Odigos\Symfony\Contracts\Service\Attribute\Required;
 /**
  * A trait to help write time-sensitive classes.
  *
@@ -25,9 +25,9 @@ trait ClockAwareTrait
     {
         $this->clock = $clock;
     }
-    protected function now(): \Symfony\Component\Clock\DatePoint
+    protected function now(): DatePoint
     {
-        $now = ($this->clock ??= new \Symfony\Component\Clock\Clock())->now();
-        return $now instanceof \Symfony\Component\Clock\DatePoint ? $now : \Symfony\Component\Clock\DatePoint::createFromInterface($now);
+        $now = ($this->clock ??= new Clock())->now();
+        return $now instanceof DatePoint ? $now : DatePoint::createFromInterface($now);
     }
 }

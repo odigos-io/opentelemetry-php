@@ -13,14 +13,14 @@ declare (strict_types=1);
  * @since         3.7.0
  * @license       https://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\TestSuite\Constraint\Response;
+namespace Odigos\Cake\TestSuite\Constraint\Response;
 
 /**
  * StatusCodeBase
  *
  * @internal
  */
-abstract class StatusCodeBase extends \Cake\TestSuite\Constraint\Response\ResponseBase
+abstract class StatusCodeBase extends ResponseBase
 {
     /**
      * @var array<int, int>|int

@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Contracts\Filesystem;
+namespace Odigos\Illuminate\Contracts\Filesystem;
 
 interface Filesystem
 {

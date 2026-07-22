@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\JsonSchema\Types;
+namespace Odigos\Illuminate\JsonSchema\Types;
 
-class ObjectType extends \Illuminate\JsonSchema\Types\Type
+class ObjectType extends Type
 {
     /**
      * Whether additional properties are allowed.

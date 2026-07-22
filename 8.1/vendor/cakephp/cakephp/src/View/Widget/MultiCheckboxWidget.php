@@ -14,19 +14,19 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\View\Widget;
+namespace Odigos\Cake\View\Widget;
 
-use Cake\View\Form\ContextInterface;
-use Cake\View\Helper\IdGeneratorTrait;
-use Cake\View\StringTemplate;
-use function Cake\Core\h;
+use Odigos\Cake\View\Form\ContextInterface;
+use Odigos\Cake\View\Helper\IdGeneratorTrait;
+use Odigos\Cake\View\StringTemplate;
+use function Odigos\Cake\Core\h;
 /**
  * Input widget class for generating multiple checkboxes.
  *
  * This class is usually used internally by `Cake\View\Helper\FormHelper`,
  * it but can be used to generate standalone multiple checkboxes.
  */
-class MultiCheckboxWidget extends \Cake\View\Widget\BasicWidget
+class MultiCheckboxWidget extends BasicWidget
 {
     use IdGeneratorTrait;
     /**
@@ -40,7 +40,7 @@ class MultiCheckboxWidget extends \Cake\View\Widget\BasicWidget
      *
      * @var \Cake\View\Widget\LabelWidget
      */
-    protected \Cake\View\Widget\LabelWidget $_label;
+    protected LabelWidget $_label;
     /**
      * Render multi-checkbox widget.
      *
@@ -57,7 +57,7 @@ class MultiCheckboxWidget extends \Cake\View\Widget\BasicWidget
      * @param \Cake\View\StringTemplate $templates Templates list.
      * @param \Cake\View\Widget\LabelWidget $label Label widget instance.
      */
-    public function __construct(StringTemplate $templates, \Cake\View\Widget\LabelWidget $label)
+    public function __construct(StringTemplate $templates, LabelWidget $label)
     {
         parent::__construct($templates);
         $this->_label = $label;

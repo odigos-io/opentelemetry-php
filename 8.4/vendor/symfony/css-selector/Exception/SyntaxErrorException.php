@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\CssSelector\Exception;
+namespace Odigos\Symfony\Component\CssSelector\Exception;
 
-use Symfony\Component\CssSelector\Parser\Token;
+use Odigos\Symfony\Component\CssSelector\Parser\Token;
 /**
  * ParseException is thrown when a CSS selector syntax is not valid.
  *
@@ -19,7 +19,7 @@ use Symfony\Component\CssSelector\Parser\Token;
  *
  * @author Jean-François Simon <jeanfrancois.simon@sensiolabs.com>
  */
-class SyntaxErrorException extends \Symfony\Component\CssSelector\Exception\ParseException
+class SyntaxErrorException extends ParseException
 {
     public static function unexpectedToken(string $expectedValue, Token $foundToken): self
     {

@@ -1,14 +1,14 @@
 <?php
 
-namespace Illuminate\Redis\Connections;
+namespace Odigos\Illuminate\Redis\Connections;
 
 use Closure;
-use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Redis\Events\CommandExecuted;
-use Illuminate\Redis\Events\CommandFailed;
-use Illuminate\Redis\Limiters\ConcurrencyLimiterBuilder;
-use Illuminate\Redis\Limiters\DurationLimiterBuilder;
-use Illuminate\Support\Traits\Macroable;
+use Odigos\Illuminate\Contracts\Events\Dispatcher;
+use Odigos\Illuminate\Redis\Events\CommandExecuted;
+use Odigos\Illuminate\Redis\Events\CommandFailed;
+use Odigos\Illuminate\Redis\Limiters\ConcurrencyLimiterBuilder;
+use Odigos\Illuminate\Redis\Limiters\DurationLimiterBuilder;
+use Odigos\Illuminate\Support\Traits\Macroable;
 use Throwable;
 /**
  * @mixin \Redis

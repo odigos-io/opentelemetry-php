@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\base;
+namespace Odigos\yii\base;
 
 /**
  * UserException is the base class for exceptions that are meant to be shown to end users.
@@ -14,6 +14,6 @@ namespace yii\base;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class UserException extends \yii\base\Exception
+class UserException extends Exception
 {
 }

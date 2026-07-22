@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Validation;
+namespace Odigos\Illuminate\Validation;
 
 use Exception;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Validator as ValidatorFacade;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Facades\Validator as ValidatorFacade;
 class ValidationException extends Exception
 {
     /**

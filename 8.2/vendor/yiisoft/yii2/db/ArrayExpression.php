@@ -5,10 +5,10 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\db;
+namespace Odigos\yii\db;
 
 use Traversable;
-use yii\base\InvalidConfigException;
+use Odigos\yii\base\InvalidConfigException;
 /**
  * Class ArrayExpression represents an array SQL expression.
  *
@@ -28,7 +28,7 @@ use yii\base\InvalidConfigException;
  * @implements \ArrayAccess<array-key, mixed>
  * @implements \IteratorAggregate<array-key, mixed>
  */
-class ArrayExpression implements \yii\db\ExpressionInterface, \ArrayAccess, \Countable, \IteratorAggregate
+class ArrayExpression implements ExpressionInterface, \ArrayAccess, \Countable, \IteratorAggregate
 {
     /**
      * @var string|null the type of the array elements. Defaults to `null` which means the type is
@@ -181,7 +181,7 @@ class ArrayExpression implements \yii\db\ExpressionInterface, \ArrayAccess, \Cou
     public function getIterator()
     {
         $value = $this->getValue();
-        if ($value instanceof \yii\db\QueryInterface) {
+        if ($value instanceof QueryInterface) {
             throw new InvalidConfigException('The ArrayExpression class can not be iterated when the value is a QueryInterface object');
         }
         if ($value === null) {

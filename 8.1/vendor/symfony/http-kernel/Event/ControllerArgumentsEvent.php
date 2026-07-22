@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpKernel\Event;
+namespace Odigos\Symfony\Component\HttpKernel\Event;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Odigos\Symfony\Component\HttpFoundation\Request;
+use Odigos\Symfony\Component\HttpKernel\HttpKernelInterface;
 /**
  * Allows filtering of controller arguments.
  *
@@ -24,16 +24,16 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
  *
  * @author Christophe Coevoet <stof@notk.org>
  */
-final class ControllerArgumentsEvent extends \Symfony\Component\HttpKernel\Event\KernelEvent
+final class ControllerArgumentsEvent extends KernelEvent
 {
-    private \Symfony\Component\HttpKernel\Event\ControllerEvent $controllerEvent;
+    private ControllerEvent $controllerEvent;
     private array $arguments;
     private array $namedArguments;
-    public function __construct(HttpKernelInterface $kernel, callable|\Symfony\Component\HttpKernel\Event\ControllerEvent $controller, array $arguments, Request $request, ?int $requestType)
+    public function __construct(HttpKernelInterface $kernel, callable|ControllerEvent $controller, array $arguments, Request $request, ?int $requestType)
     {
         parent::__construct($kernel, $request, $requestType);
-        if (!$controller instanceof \Symfony\Component\HttpKernel\Event\ControllerEvent) {
-            $controller = new \Symfony\Component\HttpKernel\Event\ControllerEvent($kernel, $controller, $request, $requestType);
+        if (!$controller instanceof ControllerEvent) {
+            $controller = new ControllerEvent($kernel, $controller, $request, $requestType);
         }
         $this->controllerEvent = $controller;
         $this->arguments = $arguments;

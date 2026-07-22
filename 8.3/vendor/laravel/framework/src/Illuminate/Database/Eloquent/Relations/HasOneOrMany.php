@@ -1,15 +1,15 @@
 <?php
 
-namespace Illuminate\Database\Eloquent\Relations;
+namespace Odigos\Illuminate\Database\Eloquent\Relations;
 
 use Closure;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection as EloquentCollection;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\Concerns\InteractsWithDictionary;
-use Illuminate\Database\Eloquent\Relations\Concerns\SupportsInverseRelations;
-use Illuminate\Database\UniqueConstraintViolationException;
-use Illuminate\Support\Arr;
+use Odigos\Illuminate\Database\Eloquent\Builder;
+use Odigos\Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Odigos\Illuminate\Database\Eloquent\Model;
+use Odigos\Illuminate\Database\Eloquent\Relations\Concerns\InteractsWithDictionary;
+use Odigos\Illuminate\Database\Eloquent\Relations\Concerns\SupportsInverseRelations;
+use Odigos\Illuminate\Database\UniqueConstraintViolationException;
+use Odigos\Illuminate\Support\Arr;
 /**
  * @template TRelatedModel of \Illuminate\Database\Eloquent\Model
  * @template TDeclaringModel of \Illuminate\Database\Eloquent\Model
@@ -17,7 +17,7 @@ use Illuminate\Support\Arr;
  *
  * @extends \Illuminate\Database\Eloquent\Relations\Relation<TRelatedModel, TDeclaringModel, TResult>
  */
-abstract class HasOneOrMany extends \Illuminate\Database\Eloquent\Relations\Relation
+abstract class HasOneOrMany extends Relation
 {
     use InteractsWithDictionary, SupportsInverseRelations;
     /**

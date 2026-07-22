@@ -1,25 +1,25 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Platforms;
+namespace Odigos\Doctrine\DBAL\Platforms;
 
-use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Platforms\Db2\Db2MetadataProvider;
-use Doctrine\DBAL\Platforms\Exception\NotSupported;
-use Doctrine\DBAL\Platforms\Keywords\DB2Keywords;
-use Doctrine\DBAL\Platforms\Keywords\KeywordList;
-use Doctrine\DBAL\Schema\ColumnDiff;
-use Doctrine\DBAL\Schema\DB2SchemaManager;
-use Doctrine\DBAL\Schema\Identifier;
-use Doctrine\DBAL\Schema\Index;
-use Doctrine\DBAL\Schema\Name\UnquotedIdentifierFolding;
-use Doctrine\DBAL\Schema\TableDiff;
-use Doctrine\DBAL\SQL\Builder\DefaultSelectSQLBuilder;
-use Doctrine\DBAL\SQL\Builder\SelectSQLBuilder;
-use Doctrine\DBAL\TransactionIsolationLevel;
-use Doctrine\DBAL\Types\DateTimeType;
-use Doctrine\DBAL\Types\Types;
-use Doctrine\Deprecations\Deprecation;
+use Odigos\Doctrine\DBAL\Connection;
+use Odigos\Doctrine\DBAL\Platforms\Db2\Db2MetadataProvider;
+use Odigos\Doctrine\DBAL\Platforms\Exception\NotSupported;
+use Odigos\Doctrine\DBAL\Platforms\Keywords\DB2Keywords;
+use Odigos\Doctrine\DBAL\Platforms\Keywords\KeywordList;
+use Odigos\Doctrine\DBAL\Schema\ColumnDiff;
+use Odigos\Doctrine\DBAL\Schema\DB2SchemaManager;
+use Odigos\Doctrine\DBAL\Schema\Identifier;
+use Odigos\Doctrine\DBAL\Schema\Index;
+use Odigos\Doctrine\DBAL\Schema\Name\UnquotedIdentifierFolding;
+use Odigos\Doctrine\DBAL\Schema\TableDiff;
+use Odigos\Doctrine\DBAL\SQL\Builder\DefaultSelectSQLBuilder;
+use Odigos\Doctrine\DBAL\SQL\Builder\SelectSQLBuilder;
+use Odigos\Doctrine\DBAL\TransactionIsolationLevel;
+use Odigos\Doctrine\DBAL\Types\DateTimeType;
+use Odigos\Doctrine\DBAL\Types\Types;
+use Odigos\Doctrine\Deprecations\Deprecation;
 use function array_merge;
 use function count;
 use function current;
@@ -30,7 +30,7 @@ use function str_contains;
 /**
  * Provides the behavior, features and SQL dialect of the Db2 database platform of the oldest supported version.
  */
-class DB2Platform extends \Doctrine\DBAL\Platforms\AbstractPlatform
+class DB2Platform extends AbstractPlatform
 {
     public function __construct()
     {
@@ -110,16 +110,16 @@ class DB2Platform extends \Doctrine\DBAL\Platforms\AbstractPlatform
     {
         return 'BITOR(' . $value1 . ', ' . $value2 . ')';
     }
-    protected function getDateArithmeticIntervalExpression(string $date, string $operator, string $interval, \Doctrine\DBAL\Platforms\DateIntervalUnit $unit): string
+    protected function getDateArithmeticIntervalExpression(string $date, string $operator, string $interval, DateIntervalUnit $unit): string
     {
         switch ($unit) {
-            case \Doctrine\DBAL\Platforms\DateIntervalUnit::WEEK:
+            case DateIntervalUnit::WEEK:
                 $interval = $this->multiplyInterval($interval, 7);
-                $unit = \Doctrine\DBAL\Platforms\DateIntervalUnit::DAY;
+                $unit = DateIntervalUnit::DAY;
                 break;
-            case \Doctrine\DBAL\Platforms\DateIntervalUnit::QUARTER:
+            case DateIntervalUnit::QUARTER:
                 $interval = $this->multiplyInterval($interval, 3);
-                $unit = \Doctrine\DBAL\Platforms\DateIntervalUnit::MONTH;
+                $unit = DateIntervalUnit::MONTH;
                 break;
         }
         return $date . ' ' . $operator . ' ' . $interval . ' ' . $unit->value;

@@ -14,10 +14,10 @@ declare (strict_types=1);
  * @since         4.4.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Error\Renderer;
+namespace Odigos\Cake\Error\Renderer;
 
-use Cake\Error\ErrorRendererInterface;
-use Cake\Error\PhpError;
+use Odigos\Cake\Error\ErrorRendererInterface;
+use Odigos\Cake\Error\PhpError;
 /**
  * Plain text error rendering with a stack trace.
  *

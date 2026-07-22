@@ -15,10 +15,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace MongoDB\Codec;
+namespace Odigos\MongoDB\Codec;
 
 use MongoDB\BSON\Document;
-use MongoDB\Exception\UnsupportedValueException;
+use Odigos\MongoDB\Exception\UnsupportedValueException;
 /**
  * The DocumentCodec interface allows decoding BSON document data to native PHP
  * objects and back to BSON documents.
@@ -26,7 +26,7 @@ use MongoDB\Exception\UnsupportedValueException;
  * @psalm-template ObjectType of object
  * @template-extends Codec<Document, ObjectType>
  */
-interface DocumentCodec extends \MongoDB\Codec\Codec
+interface DocumentCodec extends Codec
 {
     /**
      * @psalm-param Document $value

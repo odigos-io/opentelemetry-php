@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Foundation;
+namespace Odigos\Illuminate\Foundation;
 
-use Illuminate\Support\Manager;
+use Odigos\Illuminate\Support\Manager;
 class MaintenanceModeManager extends Manager
 {
     /**
@@ -10,9 +10,9 @@ class MaintenanceModeManager extends Manager
      *
      * @return \Illuminate\Foundation\FileBasedMaintenanceMode
      */
-    protected function createFileDriver(): \Illuminate\Foundation\FileBasedMaintenanceMode
+    protected function createFileDriver(): FileBasedMaintenanceMode
     {
-        return new \Illuminate\Foundation\FileBasedMaintenanceMode();
+        return new FileBasedMaintenanceMode();
     }
     /**
      * Create an instance of the cache based maintenance driver.
@@ -21,9 +21,9 @@ class MaintenanceModeManager extends Manager
      *
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
-    protected function createCacheDriver(): \Illuminate\Foundation\CacheBasedMaintenanceMode
+    protected function createCacheDriver(): CacheBasedMaintenanceMode
     {
-        return new \Illuminate\Foundation\CacheBasedMaintenanceMode($this->container->make('cache'), $this->config->get('app.maintenance.store') ?: $this->config->get('cache.default'), 'illuminate:foundation:down');
+        return new CacheBasedMaintenanceMode($this->container->make('cache'), $this->config->get('app.maintenance.store') ?: $this->config->get('cache.default'), 'illuminate:foundation:down');
     }
     /**
      * Get the default driver name.

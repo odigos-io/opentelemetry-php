@@ -12,10 +12,10 @@ declare (strict_types=1);
  * @since         4.3.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Controller\Exception;
+namespace Odigos\Cake\Controller\Exception;
 
-use Cake\Core\Exception\CakeException;
-use Cake\Core\Exception\HttpErrorCodeInterface;
+use Odigos\Cake\Core\Exception\CakeException;
+use Odigos\Cake\Core\Exception\HttpErrorCodeInterface;
 use Throwable;
 /**
  * Used when a passed parameter or action parameter type declaration is missing or invalid.

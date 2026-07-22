@@ -1,43 +1,43 @@
 <?php
 
-namespace Http\Discovery\Strategy;
+namespace Odigos\Http\Discovery\Strategy;
 
-use GuzzleHttp\Client as GuzzleHttp;
-use GuzzleHttp\Promise\Promise;
-use GuzzleHttp\Psr7\Request as GuzzleRequest;
-use Http\Adapter\Artax\Client as Artax;
-use Http\Adapter\Buzz\Client as Buzz;
-use Http\Adapter\Cake\Client as Cake;
-use Http\Adapter\Guzzle5\Client as Guzzle5;
-use Http\Adapter\Guzzle6\Client as Guzzle6;
-use Http\Adapter\Guzzle7\Client as Guzzle7;
-use Http\Adapter\React\Client as React;
-use Http\Client\Curl\Client as Curl;
-use Http\Client\HttpAsyncClient;
-use Http\Client\HttpClient;
-use Http\Client\Socket\Client as Socket;
-use Http\Discovery\ClassDiscovery;
-use Http\Discovery\Exception\NotFoundException;
-use Http\Discovery\Psr17FactoryDiscovery;
-use Http\Message\MessageFactory;
-use Http\Message\MessageFactory\DiactorosMessageFactory;
-use Http\Message\MessageFactory\GuzzleMessageFactory;
-use Http\Message\MessageFactory\SlimMessageFactory;
-use Http\Message\StreamFactory;
-use Http\Message\StreamFactory\DiactorosStreamFactory;
-use Http\Message\StreamFactory\GuzzleStreamFactory;
-use Http\Message\StreamFactory\SlimStreamFactory;
-use Http\Message\UriFactory;
-use Http\Message\UriFactory\DiactorosUriFactory;
-use Http\Message\UriFactory\GuzzleUriFactory;
-use Http\Message\UriFactory\SlimUriFactory;
+use Odigos\GuzzleHttp\Client as GuzzleHttp;
+use Odigos\GuzzleHttp\Promise\Promise;
+use Odigos\GuzzleHttp\Psr7\Request as GuzzleRequest;
+use Odigos\Http\Adapter\Artax\Client as Artax;
+use Odigos\Http\Adapter\Buzz\Client as Buzz;
+use Odigos\Http\Adapter\Cake\Client as Cake;
+use Odigos\Http\Adapter\Guzzle5\Client as Guzzle5;
+use Odigos\Http\Adapter\Guzzle6\Client as Guzzle6;
+use Odigos\Http\Adapter\Guzzle7\Client as Guzzle7;
+use Odigos\Http\Adapter\React\Client as React;
+use Odigos\Http\Client\Curl\Client as Curl;
+use Odigos\Http\Client\HttpAsyncClient;
+use Odigos\Http\Client\HttpClient;
+use Odigos\Http\Client\Socket\Client as Socket;
+use Odigos\Http\Discovery\ClassDiscovery;
+use Odigos\Http\Discovery\Exception\NotFoundException;
+use Odigos\Http\Discovery\Psr17FactoryDiscovery;
+use Odigos\Http\Message\MessageFactory;
+use Odigos\Http\Message\MessageFactory\DiactorosMessageFactory;
+use Odigos\Http\Message\MessageFactory\GuzzleMessageFactory;
+use Odigos\Http\Message\MessageFactory\SlimMessageFactory;
+use Odigos\Http\Message\StreamFactory;
+use Odigos\Http\Message\StreamFactory\DiactorosStreamFactory;
+use Odigos\Http\Message\StreamFactory\GuzzleStreamFactory;
+use Odigos\Http\Message\StreamFactory\SlimStreamFactory;
+use Odigos\Http\Message\UriFactory;
+use Odigos\Http\Message\UriFactory\DiactorosUriFactory;
+use Odigos\Http\Message\UriFactory\GuzzleUriFactory;
+use Odigos\Http\Message\UriFactory\SlimUriFactory;
 use Odigos\Laminas\Diactoros\Request as DiactorosRequest;
-use Nyholm\Psr7\Factory\HttplugFactory as NyholmHttplugFactory;
+use Odigos\Nyholm\Psr7\Factory\HttplugFactory as NyholmHttplugFactory;
 use Psr\Http\Client\ClientInterface as Psr18Client;
 use Psr\Http\Message\RequestFactoryInterface as Psr17RequestFactory;
-use Slim\Http\Request as SlimRequest;
-use Symfony\Component\HttpClient\HttplugClient as SymfonyHttplug;
-use Symfony\Component\HttpClient\Psr18Client as SymfonyPsr18;
+use Odigos\Slim\Http\Request as SlimRequest;
+use Odigos\Symfony\Component\HttpClient\HttplugClient as SymfonyHttplug;
+use Odigos\Symfony\Component\HttpClient\Psr18Client as SymfonyPsr18;
 /**
  * @internal
  *
@@ -45,7 +45,7 @@ use Symfony\Component\HttpClient\Psr18Client as SymfonyPsr18;
  *
  * Don't miss updating src/Composer/Plugin.php when adding a new supported class.
  */
-final class CommonClassesStrategy implements \Http\Discovery\Strategy\DiscoveryStrategy
+final class CommonClassesStrategy implements DiscoveryStrategy
 {
     /**
      * @var array
@@ -90,7 +90,7 @@ final class CommonClassesStrategy implements \Http\Discovery\Strategy\DiscoveryS
     }
     public static function isGuzzleImplementingPsr18()
     {
-        return defined('GuzzleHttp\ClientInterface::MAJOR_VERSION');
+        return defined('Odigos\GuzzleHttp\ClientInterface::MAJOR_VERSION');
     }
     public static function isSymfonyImplementingHttpClient()
     {

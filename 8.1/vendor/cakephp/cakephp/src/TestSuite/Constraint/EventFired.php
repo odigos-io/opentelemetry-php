@@ -13,9 +13,9 @@ declare (strict_types=1);
  * @since         3.2.0
  * @license       https://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\TestSuite\Constraint;
+namespace Odigos\Cake\TestSuite\Constraint;
 
-use Cake\Event\EventManager;
+use Odigos\Cake\Event\EventManager;
 use Odigos\PHPUnit\Framework\AssertionFailedError;
 use Odigos\PHPUnit\Framework\Constraint\Constraint;
 /**

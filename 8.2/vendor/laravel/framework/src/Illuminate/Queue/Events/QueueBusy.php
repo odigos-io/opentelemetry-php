@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Queue\Events;
+namespace Odigos\Illuminate\Queue\Events;
 
 class QueueBusy
 {

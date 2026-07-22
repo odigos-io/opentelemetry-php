@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Schema\Introspection\MetadataProcessor;
+namespace Odigos\Doctrine\DBAL\Schema\Introspection\MetadataProcessor;
 
-use Doctrine\DBAL\Schema\Metadata\ViewMetadataRow;
-use Doctrine\DBAL\Schema\View;
+use Odigos\Doctrine\DBAL\Schema\Metadata\ViewMetadataRow;
+use Odigos\Doctrine\DBAL\Schema\View;
 /**
  * Converts {@see ViewMetadataRow} into a {@see View}.
  *

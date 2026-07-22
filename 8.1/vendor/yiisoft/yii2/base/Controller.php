@@ -5,11 +5,11 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\base;
+namespace Odigos\yii\base;
 
 use Odigos\Yii;
-use yii\di\Instance;
-use yii\di\NotInstantiableException;
+use Odigos\yii\di\Instance;
+use Odigos\yii\di\NotInstantiableException;
 /**
  * Controller is the base class for classes containing controller logic.
  *
@@ -26,7 +26,7 @@ use yii\di\NotInstantiableException;
  *
  * @template T of Module = Module
  */
-class Controller extends \yii\base\Component implements \yii\base\ViewContextInterface
+class Controller extends Component implements ViewContextInterface
 {
     /**
      * @event ActionEvent an event raised right before executing a controller action.
@@ -101,8 +101,8 @@ class Controller extends \yii\base\Component implements \yii\base\ViewContextInt
     public function init()
     {
         parent::init();
-        $this->request = Instance::ensure($this->request, \yii\base\Request::className());
-        $this->response = Instance::ensure($this->response, \yii\base\Response::className());
+        $this->request = Instance::ensure($this->request, Request::className());
+        $this->response = Instance::ensure($this->response, Response::className());
     }
     /**
      * Declares external actions for the controller.
@@ -143,7 +143,7 @@ class Controller extends \yii\base\Component implements \yii\base\ViewContextInt
     {
         $action = $this->createAction($id);
         if ($action === null) {
-            throw new \yii\base\InvalidRouteException('Unable to resolve the request: ' . $this->getUniqueId() . '/' . $id);
+            throw new InvalidRouteException('Unable to resolve the request: ' . $this->getUniqueId() . '/' . $id);
         }
         Yii::debug('Route to run: ' . $action->getUniqueId(), __METHOD__);
         if (Yii::$app->requestedAction === null) {
@@ -239,7 +239,7 @@ class Controller extends \yii\base\Component implements \yii\base\ViewContextInt
             if (method_exists($this, $methodName)) {
                 $method = new \ReflectionMethod($this, $methodName);
                 if ($method->isPublic() && $method->getName() === $methodName) {
-                    return new \yii\base\InlineAction($id, $this, $methodName);
+                    return new InlineAction($id, $this, $methodName);
                 }
             }
         }
@@ -280,7 +280,7 @@ class Controller extends \yii\base\Component implements \yii\base\ViewContextInt
      */
     public function beforeAction($action)
     {
-        $event = new \yii\base\ActionEvent($action);
+        $event = new ActionEvent($action);
         $this->trigger(self::EVENT_BEFORE_ACTION, $event);
         return $event->isValid;
     }
@@ -310,7 +310,7 @@ class Controller extends \yii\base\Component implements \yii\base\ViewContextInt
      */
     public function afterAction($action, $result)
     {
-        $event = new \yii\base\ActionEvent($action);
+        $event = new ActionEvent($action);
         $event->result = $result;
         $this->trigger(self::EVENT_AFTER_ACTION, $event);
         return $event->result;
@@ -337,7 +337,7 @@ class Controller extends \yii\base\Component implements \yii\base\ViewContextInt
      */
     public function getUniqueId()
     {
-        return $this->module instanceof \yii\base\Application ? $this->id : $this->module->getUniqueId() . '/' . $this->id;
+        return $this->module instanceof Application ? $this->id : $this->module->getUniqueId() . '/' . $this->id;
     }
     /**
      * Returns the route of the current request.
@@ -543,7 +543,7 @@ class Controller extends \yii\base\Component implements \yii\base\ViewContextInt
             $args[] = null;
             $requestedParams[$name] = "Unavailable service: {$name}";
         } else {
-            throw new \yii\base\Exception('Could not load required service: ' . $name);
+            throw new Exception('Could not load required service: ' . $name);
         }
     }
 }

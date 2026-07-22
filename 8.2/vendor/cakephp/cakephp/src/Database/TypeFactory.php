@@ -14,7 +14,7 @@ declare (strict_types=1);
  * @since         4.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database;
+namespace Odigos\Cake\Database;
 
 /**
  * Factory for building database type classes.
@@ -29,7 +29,7 @@ class TypeFactory
      * @var array<string, string>
      * @phpstan-var array<string, class-string<\Cake\Database\TypeInterface>>
      */
-    protected static array $_types = ['biginteger' => \Cake\Database\Type\IntegerType::class, 'binary' => \Cake\Database\Type\BinaryType::class, 'binaryuuid' => \Cake\Database\Type\BinaryUuidType::class, 'boolean' => \Cake\Database\Type\BoolType::class, 'char' => \Cake\Database\Type\StringType::class, 'cidr' => \Cake\Database\Type\StringType::class, 'citext' => \Cake\Database\Type\StringType::class, 'date' => \Cake\Database\Type\DateType::class, 'datetime' => \Cake\Database\Type\DateTimeType::class, 'datetimefractional' => \Cake\Database\Type\DateTimeFractionalType::class, 'decimal' => \Cake\Database\Type\DecimalType::class, 'float' => \Cake\Database\Type\FloatType::class, 'geometry' => \Cake\Database\Type\StringType::class, 'integer' => \Cake\Database\Type\IntegerType::class, 'inet' => \Cake\Database\Type\StringType::class, 'json' => \Cake\Database\Type\JsonType::class, 'linestring' => \Cake\Database\Type\StringType::class, 'macaddr' => \Cake\Database\Type\StringType::class, 'nativeuuid' => \Cake\Database\Type\UuidType::class, 'point' => \Cake\Database\Type\StringType::class, 'polygon' => \Cake\Database\Type\StringType::class, 'smallinteger' => \Cake\Database\Type\IntegerType::class, 'string' => \Cake\Database\Type\StringType::class, 'text' => \Cake\Database\Type\StringType::class, 'time' => \Cake\Database\Type\TimeType::class, 'timestamp' => \Cake\Database\Type\DateTimeType::class, 'timestampfractional' => \Cake\Database\Type\DateTimeFractionalType::class, 'timestamptimezone' => \Cake\Database\Type\DateTimeTimezoneType::class, 'tinyinteger' => \Cake\Database\Type\IntegerType::class, 'uuid' => \Cake\Database\Type\UuidType::class, 'year' => \Cake\Database\Type\IntegerType::class];
+    protected static array $_types = ['biginteger' => Type\IntegerType::class, 'binary' => Type\BinaryType::class, 'binaryuuid' => Type\BinaryUuidType::class, 'boolean' => Type\BoolType::class, 'char' => Type\StringType::class, 'cidr' => Type\StringType::class, 'citext' => Type\StringType::class, 'date' => Type\DateType::class, 'datetime' => Type\DateTimeType::class, 'datetimefractional' => Type\DateTimeFractionalType::class, 'decimal' => Type\DecimalType::class, 'float' => Type\FloatType::class, 'geometry' => Type\StringType::class, 'integer' => Type\IntegerType::class, 'inet' => Type\StringType::class, 'json' => Type\JsonType::class, 'linestring' => Type\StringType::class, 'macaddr' => Type\StringType::class, 'nativeuuid' => Type\UuidType::class, 'point' => Type\StringType::class, 'polygon' => Type\StringType::class, 'smallinteger' => Type\IntegerType::class, 'string' => Type\StringType::class, 'text' => Type\StringType::class, 'time' => Type\TimeType::class, 'timestamp' => Type\DateTimeType::class, 'timestampfractional' => Type\DateTimeFractionalType::class, 'timestamptimezone' => Type\DateTimeTimezoneType::class, 'tinyinteger' => Type\IntegerType::class, 'uuid' => Type\UuidType::class, 'year' => Type\IntegerType::class];
     /**
      * Contains a map of type object instances to be reused if needed.
      *
@@ -42,7 +42,7 @@ class TypeFactory
      * @param string $name type identifier
      * @return \Cake\Database\TypeInterface
      */
-    public static function build(string $name): \Cake\Database\TypeInterface
+    public static function build(string $name): TypeInterface
     {
         if (isset(static::$_builtTypes[$name])) {
             return static::$_builtTypes[$name];
@@ -71,7 +71,7 @@ class TypeFactory
      * @param \Cake\Database\TypeInterface $instance The type instance you want to set.
      * @return void
      */
-    public static function set(string $name, \Cake\Database\TypeInterface $instance): void
+    public static function set(string $name, TypeInterface $instance): void
     {
         static::$_builtTypes[$name] = $instance;
     }

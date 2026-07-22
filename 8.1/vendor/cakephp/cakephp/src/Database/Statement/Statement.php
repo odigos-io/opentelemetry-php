@@ -14,12 +14,12 @@ declare (strict_types=1);
  * @since         5.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database\Statement;
+namespace Odigos\Cake\Database\Statement;
 
-use Cake\Database\Driver;
-use Cake\Database\StatementInterface;
-use Cake\Database\TypeFactory;
-use Cake\Database\TypeInterface;
+use Odigos\Cake\Database\Driver;
+use Odigos\Cake\Database\StatementInterface;
+use Odigos\Cake\Database\TypeFactory;
+use Odigos\Cake\Database\TypeInterface;
 use Generator;
 use InvalidArgumentException;
 use PDO;

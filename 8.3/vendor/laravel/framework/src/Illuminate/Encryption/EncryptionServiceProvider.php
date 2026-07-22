@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Encryption;
+namespace Odigos\Illuminate\Encryption;
 
-use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Str;
-use Laravel\SerializableClosure\SerializableClosure;
+use Odigos\Illuminate\Support\ServiceProvider;
+use Odigos\Illuminate\Support\Str;
+use Odigos\Laravel\SerializableClosure\SerializableClosure;
 class EncryptionServiceProvider extends ServiceProvider
 {
     /**
@@ -26,7 +26,7 @@ class EncryptionServiceProvider extends ServiceProvider
     {
         $this->app->singleton('encrypter', function ($app) {
             $config = $app->make('config')->get('app');
-            return (new \Illuminate\Encryption\Encrypter($this->parseKey($config), $config['cipher']))->previousKeys(array_map(fn($key) => $this->parseKey(['key' => $key]), $config['previous_keys'] ?? []));
+            return (new Encrypter($this->parseKey($config), $config['cipher']))->previousKeys(array_map(fn($key) => $this->parseKey(['key' => $key]), $config['previous_keys'] ?? []));
         });
     }
     /**
@@ -67,7 +67,7 @@ class EncryptionServiceProvider extends ServiceProvider
     {
         return tap($config['key'], function ($key) {
             if (empty($key)) {
-                throw new \Illuminate\Encryption\MissingAppKeyException();
+                throw new MissingAppKeyException();
             }
         });
     }

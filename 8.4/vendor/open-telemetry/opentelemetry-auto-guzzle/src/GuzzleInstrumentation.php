@@ -4,10 +4,10 @@ declare (strict_types=1);
 namespace Odigos\OpenTelemetry\Contrib\Instrumentation\Guzzle;
 
 use function get_cfg_var;
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\BadResponseException;
-use GuzzleHttp\Promise\Is;
-use GuzzleHttp\Promise\PromiseInterface;
+use Odigos\GuzzleHttp\Client;
+use Odigos\GuzzleHttp\Exception\BadResponseException;
+use Odigos\GuzzleHttp\Promise\Is;
+use Odigos\GuzzleHttp\Promise\PromiseInterface;
 use OpenTelemetry\API\Globals;
 use OpenTelemetry\API\Instrumentation\CachedInstrumentation;
 use OpenTelemetry\API\Trace\Span;
@@ -30,7 +30,7 @@ class GuzzleInstrumentation
     {
         $instrumentation = new CachedInstrumentation('io.opentelemetry.contrib.php.guzzle', null, 'https://opentelemetry.io/schemas/1.32.0');
         /** @psalm-suppress UnusedFunctionCall */
-        hook(Client::class, 'transfer', pre: static function (Client $client, array $params, string $class, string $function, ?string $filename, ?int $lineno) use ($instrumentation): array {
+        hook('GuzzleHttp\\Client', 'transfer', pre: static function (object $client, array $params, string $class, string $function, ?string $filename, ?int $lineno) use ($instrumentation): array {
             $request = $params[0];
             assert($request instanceof RequestInterface);
             $propagator = Globals::propagator();
@@ -50,7 +50,7 @@ class GuzzleInstrumentation
             $propagator->inject($request, HeadersPropagator::instance(), $context);
             Context::storage()->attach($context);
             return [$request];
-        }, post: static function (Client $client, array $params, PromiseInterface $promise, ?Throwable $exception): void {
+        }, post: static function (object $client, array $params, object $promise, ?Throwable $exception): void {
             $scope = Context::storage()->scope();
             $scope?->detach();
             if (!$scope || $scope->context() === Context::getCurrent()) {
@@ -77,7 +77,7 @@ class GuzzleInstrumentation
                 }
                 $span->end();
             }, onRejected: function (\Throwable $t) use ($span) {
-                if ($t instanceof BadResponseException && $t->hasResponse()) {
+                if (is_a($t, 'GuzzleHttp\\Exception\\BadResponseException') && $t->hasResponse()) {
                     $response = $t->getResponse();
                     $span->setAttribute(TraceAttributes::HTTP_RESPONSE_STATUS_CODE, $response->getStatusCode());
                     $span->setAttribute(TraceAttributes::NETWORK_PROTOCOL_VERSION, $response->getProtocolVersion());
@@ -88,7 +88,7 @@ class GuzzleInstrumentation
                 $span->end();
             });
             //if the original promise is already settled, force our additional promise to execute immediately
-            if (Is::settled($promise)) {
+            if (($promise->getState() !== 'pending')) {
                 $p->wait();
             }
         });

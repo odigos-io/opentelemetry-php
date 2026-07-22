@@ -1,9 +1,9 @@
 <?php
 
-namespace Laravel\Prompts\Concerns;
+namespace Odigos\Laravel\Prompts\Concerns;
 
-use Laravel\Prompts\Output\BufferedConsoleOutput;
-use Laravel\Prompts\Terminal;
+use Odigos\Laravel\Prompts\Output\BufferedConsoleOutput;
+use Odigos\Laravel\Prompts\Terminal;
 use Odigos\PHPUnit\Framework\Assert;
 use RuntimeException;
 trait FakesInputOutput

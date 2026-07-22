@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\VarDumper\Caster;
+namespace Odigos\Symfony\Component\VarDumper\Caster;
 
-use Symfony\Component\ErrorHandler\Exception\FlattenException;
-use Symfony\Component\ErrorHandler\Exception\SilencedErrorContext;
-use Symfony\Component\VarDumper\Cloner\Stub;
-use Symfony\Component\VarDumper\Exception\ThrowingCasterException;
+use Odigos\Symfony\Component\ErrorHandler\Exception\FlattenException;
+use Odigos\Symfony\Component\ErrorHandler\Exception\SilencedErrorContext;
+use Odigos\Symfony\Component\VarDumper\Cloner\Stub;
+use Odigos\Symfony\Component\VarDumper\Exception\ThrowingCasterException;
 /**
  * Casts common Exception classes to array representation.
  *
@@ -46,8 +46,8 @@ class ExceptionCaster
      */
     public static function castErrorException(\ErrorException $e, array $a, Stub $stub, bool $isNested)
     {
-        if (isset($a[$s = \Symfony\Component\VarDumper\Caster\Caster::PREFIX_PROTECTED . 'severity'], self::$errorTypes[$a[$s]])) {
-            $a[$s] = new \Symfony\Component\VarDumper\Caster\ConstStub(self::$errorTypes[$a[$s]], $a[$s]);
+        if (isset($a[$s = Caster::PREFIX_PROTECTED . 'severity'], self::$errorTypes[$a[$s]])) {
+            $a[$s] = new ConstStub(self::$errorTypes[$a[$s]], $a[$s]);
         }
         return $a;
     }
@@ -56,14 +56,14 @@ class ExceptionCaster
      */
     public static function castThrowingCasterException(ThrowingCasterException $e, array $a, Stub $stub, bool $isNested)
     {
-        $trace = \Symfony\Component\VarDumper\Caster\Caster::PREFIX_VIRTUAL . 'trace';
-        $prefix = \Symfony\Component\VarDumper\Caster\Caster::PREFIX_PROTECTED;
+        $trace = Caster::PREFIX_VIRTUAL . 'trace';
+        $prefix = Caster::PREFIX_PROTECTED;
         $xPrefix = "\x00Exception\x00";
         if (isset($a[$xPrefix . 'previous'], $a[$trace]) && $a[$xPrefix . 'previous'] instanceof \Exception) {
             $b = (array) $a[$xPrefix . 'previous'];
             $class = get_debug_type($a[$xPrefix . 'previous']);
             self::traceUnshift($b[$xPrefix . 'trace'], $class, $b[$prefix . 'file'], $b[$prefix . 'line']);
-            $a[$trace] = new \Symfony\Component\VarDumper\Caster\TraceStub($b[$xPrefix . 'trace'], \false, 0, -\count($a[$trace]->value));
+            $a[$trace] = new TraceStub($b[$xPrefix . 'trace'], \false, 0, -\count($a[$trace]->value));
         }
         unset($a[$xPrefix . 'previous'], $a[$prefix . 'code'], $a[$prefix . 'file'], $a[$prefix . 'line']);
         return $a;
@@ -78,20 +78,20 @@ class ExceptionCaster
             return $a;
         }
         if (isset(self::$errorTypes[$a[$s]])) {
-            $a[$s] = new \Symfony\Component\VarDumper\Caster\ConstStub(self::$errorTypes[$a[$s]], $a[$s]);
+            $a[$s] = new ConstStub(self::$errorTypes[$a[$s]], $a[$s]);
         }
         $trace = [['file' => $a[$sPrefix . 'file'], 'line' => $a[$sPrefix . 'line']]];
         if (isset($a[$sPrefix . 'trace'])) {
             $trace = array_merge($trace, $a[$sPrefix . 'trace']);
         }
         unset($a[$sPrefix . 'file'], $a[$sPrefix . 'line'], $a[$sPrefix . 'trace']);
-        $a[\Symfony\Component\VarDumper\Caster\Caster::PREFIX_VIRTUAL . 'trace'] = new \Symfony\Component\VarDumper\Caster\TraceStub($trace, self::$traceArgs);
+        $a[Caster::PREFIX_VIRTUAL . 'trace'] = new TraceStub($trace, self::$traceArgs);
         return $a;
     }
     /**
      * @return array
      */
-    public static function castTraceStub(\Symfony\Component\VarDumper\Caster\TraceStub $trace, array $a, Stub $stub, bool $isNested)
+    public static function castTraceStub(TraceStub $trace, array $a, Stub $stub, bool $isNested)
     {
         if (!$isNested) {
             return $a;
@@ -99,7 +99,7 @@ class ExceptionCaster
         $stub->class = '';
         $stub->handle = 0;
         $frames = $trace->value;
-        $prefix = \Symfony\Component\VarDumper\Caster\Caster::PREFIX_VIRTUAL;
+        $prefix = Caster::PREFIX_VIRTUAL;
         $a = [];
         $j = \count($frames);
         if (0 > $i = $trace->sliceOffset) {
@@ -114,7 +114,7 @@ class ExceptionCaster
         for ($j += $trace->numberingOffset - $i++; isset($frames[$i]); ++$i, --$j) {
             $f = $frames[$i];
             $call = isset($f['function']) ? (isset($f['class']) ? $f['class'] . $f['type'] : '') . $f['function'] : '???';
-            $frame = new \Symfony\Component\VarDumper\Caster\FrameStub(['object' => $f['object'] ?? null, 'class' => $f['class'] ?? null, 'type' => $f['type'] ?? null, 'function' => $f['function'] ?? null] + $frames[$i - 1], \false, \true);
+            $frame = new FrameStub(['object' => $f['object'] ?? null, 'class' => $f['class'] ?? null, 'type' => $f['type'] ?? null, 'function' => $f['function'] ?? null] + $frames[$i - 1], \false, \true);
             $f = self::castFrameStub($frame, [], $frame, \true);
             if (isset($f[$prefix . 'src'])) {
                 foreach ($f[$prefix . 'src']->value as $label => $frame) {
@@ -128,11 +128,11 @@ class ExceptionCaster
                     $label = substr_replace($label, "title=Stack level {$j}.&", 2, 0);
                 }
                 $f = $frames[$i - 1];
-                if ($trace->keepArgs && !empty($f['args']) && $frame instanceof \Symfony\Component\VarDumper\Caster\EnumStub) {
-                    $frame->value['arguments'] = new \Symfony\Component\VarDumper\Caster\ArgsStub($f['args'], $f['function'] ?? null, $f['class'] ?? null);
+                if ($trace->keepArgs && !empty($f['args']) && $frame instanceof EnumStub) {
+                    $frame->value['arguments'] = new ArgsStub($f['args'], $f['function'] ?? null, $f['class'] ?? null);
                 }
             } elseif ('???' !== $lastCall) {
-                $label = new \Symfony\Component\VarDumper\Caster\ClassStub($lastCall);
+                $label = new ClassStub($lastCall);
                 if (isset($label->attr['ellipsis'])) {
                     $label->attr['ellipsis'] += 2;
                     $label = substr_replace($prefix, "ellipsis-type=class&ellipsis={$label->attr['ellipsis']}&ellipsis-tail=1&title=Stack level {$j}.", 2, 0) . $label->value . '()';
@@ -142,7 +142,7 @@ class ExceptionCaster
             } else {
                 $label = substr_replace($prefix, "title=Stack level {$j}.", 2, 0) . $lastCall;
             }
-            $a[substr_replace($label, \sprintf('separator=%s&', $frame instanceof \Symfony\Component\VarDumper\Caster\EnumStub ? ' ' : ':'), 2, 0)] = $frame;
+            $a[substr_replace($label, \sprintf('separator=%s&', $frame instanceof EnumStub ? ' ' : ':'), 2, 0)] = $frame;
             $lastCall = $call;
         }
         if (null !== $trace->sliceLength) {
@@ -153,13 +153,13 @@ class ExceptionCaster
     /**
      * @return array
      */
-    public static function castFrameStub(\Symfony\Component\VarDumper\Caster\FrameStub $frame, array $a, Stub $stub, bool $isNested)
+    public static function castFrameStub(FrameStub $frame, array $a, Stub $stub, bool $isNested)
     {
         if (!$isNested) {
             return $a;
         }
         $f = $frame->value;
-        $prefix = \Symfony\Component\VarDumper\Caster\Caster::PREFIX_VIRTUAL;
+        $prefix = Caster::PREFIX_VIRTUAL;
         if (isset($f['file'], $f['line'])) {
             $cacheKey = $f;
             unset($cacheKey['object'], $cacheKey['args']);
@@ -174,7 +174,7 @@ class ExceptionCaster
                 }
                 $src = $f['line'];
                 $srcKey = $f['file'];
-                $ellipsis = new \Symfony\Component\VarDumper\Caster\LinkStub($srcKey, 0);
+                $ellipsis = new LinkStub($srcKey, 0);
                 $srcAttr = 'collapse=' . (int) $ellipsis->inVendor;
                 $ellipsisTail = $ellipsis->attr['ellipsis-tail'] ?? 0;
                 $ellipsis = $ellipsis->attr['ellipsis'] ?? 0;
@@ -213,7 +213,7 @@ class ExceptionCaster
                     $srcAttr .= '&separator=:';
                 }
                 $srcAttr .= $ellipsis ? '&ellipsis-type=path&ellipsis=' . $ellipsis . '&ellipsis-tail=' . $ellipsisTail : '';
-                self::$framesCache[$cacheKey] = $a[$prefix . 'src'] = new \Symfony\Component\VarDumper\Caster\EnumStub(["\x00~{$srcAttr}\x00{$srcKey}" => $src]);
+                self::$framesCache[$cacheKey] = $a[$prefix . 'src'] = new EnumStub(["\x00~{$srcAttr}\x00{$srcKey}" => $src]);
             }
         }
         unset($a[$prefix . 'args'], $a[$prefix . 'line'], $a[$prefix . 'file']);
@@ -226,7 +226,7 @@ class ExceptionCaster
             }
         }
         if ($frame->keepArgs && !empty($f['args'])) {
-            $a[$prefix . 'arguments'] = new \Symfony\Component\VarDumper\Caster\ArgsStub($f['args'], $f['function'], $f['class']);
+            $a[$prefix . 'arguments'] = new ArgsStub($f['args'], $f['function'], $f['class']);
         }
         return $a;
     }
@@ -236,8 +236,8 @@ class ExceptionCaster
     public static function castFlattenException(FlattenException $e, array $a, Stub $stub, bool $isNested)
     {
         if ($isNested) {
-            $k = \sprintf(\Symfony\Component\VarDumper\Caster\Caster::PATTERN_PRIVATE, FlattenException::class, 'traceAsString');
-            $a[$k] = new \Symfony\Component\VarDumper\Caster\CutStub($a[$k]);
+            $k = \sprintf(Caster::PATTERN_PRIVATE, FlattenException::class, 'traceAsString');
+            $a[$k] = new CutStub($a[$k]);
         }
         return $a;
     }
@@ -250,21 +250,21 @@ class ExceptionCaster
         } else {
             $trace = [];
         }
-        if (!($filter & \Symfony\Component\VarDumper\Caster\Caster::EXCLUDE_VERBOSE) && $trace) {
-            if (isset($a[\Symfony\Component\VarDumper\Caster\Caster::PREFIX_PROTECTED . 'file'], $a[\Symfony\Component\VarDumper\Caster\Caster::PREFIX_PROTECTED . 'line'])) {
-                self::traceUnshift($trace, $xClass, $a[\Symfony\Component\VarDumper\Caster\Caster::PREFIX_PROTECTED . 'file'], $a[\Symfony\Component\VarDumper\Caster\Caster::PREFIX_PROTECTED . 'line']);
+        if (!($filter & Caster::EXCLUDE_VERBOSE) && $trace) {
+            if (isset($a[Caster::PREFIX_PROTECTED . 'file'], $a[Caster::PREFIX_PROTECTED . 'line'])) {
+                self::traceUnshift($trace, $xClass, $a[Caster::PREFIX_PROTECTED . 'file'], $a[Caster::PREFIX_PROTECTED . 'line']);
             }
-            $a[\Symfony\Component\VarDumper\Caster\Caster::PREFIX_VIRTUAL . 'trace'] = new \Symfony\Component\VarDumper\Caster\TraceStub($trace, self::$traceArgs);
+            $a[Caster::PREFIX_VIRTUAL . 'trace'] = new TraceStub($trace, self::$traceArgs);
         }
         if (empty($a[$xPrefix . 'previous'])) {
             unset($a[$xPrefix . 'previous']);
         }
-        unset($a[$xPrefix . 'string'], $a[\Symfony\Component\VarDumper\Caster\Caster::PREFIX_DYNAMIC . 'xdebug_message']);
-        if (isset($a[\Symfony\Component\VarDumper\Caster\Caster::PREFIX_PROTECTED . 'message']) && str_contains($a[\Symfony\Component\VarDumper\Caster\Caster::PREFIX_PROTECTED . 'message'], "@anonymous\x00")) {
-            $a[\Symfony\Component\VarDumper\Caster\Caster::PREFIX_PROTECTED . 'message'] = preg_replace_callback('/[a-zA-Z_\x7f-\xff][\\\\a-zA-Z0-9_\x7f-\xff]*+@anonymous\x00.*?\.php(?:0x?|:[0-9]++\$)?[0-9a-fA-F]++/', fn($m) => class_exists($m[0], \false) ? ((get_parent_class($m[0]) ?: key(class_implements($m[0]))) ?: 'class') . '@anonymous' : $m[0], $a[\Symfony\Component\VarDumper\Caster\Caster::PREFIX_PROTECTED . 'message']);
+        unset($a[$xPrefix . 'string'], $a[Caster::PREFIX_DYNAMIC . 'xdebug_message']);
+        if (isset($a[Caster::PREFIX_PROTECTED . 'message']) && str_contains($a[Caster::PREFIX_PROTECTED . 'message'], "@anonymous\x00")) {
+            $a[Caster::PREFIX_PROTECTED . 'message'] = preg_replace_callback('/[a-zA-Z_\x7f-\xff][\\\\a-zA-Z0-9_\x7f-\xff]*+@anonymous\x00.*?\.php(?:0x?|:[0-9]++\$)?[0-9a-fA-F]++/', fn($m) => class_exists($m[0], \false) ? ((get_parent_class($m[0]) ?: key(class_implements($m[0]))) ?: 'class') . '@anonymous' : $m[0], $a[Caster::PREFIX_PROTECTED . 'message']);
         }
-        if (isset($a[\Symfony\Component\VarDumper\Caster\Caster::PREFIX_PROTECTED . 'file'], $a[\Symfony\Component\VarDumper\Caster\Caster::PREFIX_PROTECTED . 'line'])) {
-            $a[\Symfony\Component\VarDumper\Caster\Caster::PREFIX_PROTECTED . 'file'] = new \Symfony\Component\VarDumper\Caster\LinkStub($a[\Symfony\Component\VarDumper\Caster\Caster::PREFIX_PROTECTED . 'file'], $a[\Symfony\Component\VarDumper\Caster\Caster::PREFIX_PROTECTED . 'line']);
+        if (isset($a[Caster::PREFIX_PROTECTED . 'file'], $a[Caster::PREFIX_PROTECTED . 'line'])) {
+            $a[Caster::PREFIX_PROTECTED . 'file'] = new LinkStub($a[Caster::PREFIX_PROTECTED . 'file'], $a[Caster::PREFIX_PROTECTED . 'line']);
         }
         return $a;
     }
@@ -275,7 +275,7 @@ class ExceptionCaster
         }
         array_unshift($trace, ['function' => $class ? 'new ' . $class : null, 'file' => $file, 'line' => $line]);
     }
-    private static function extractSource(string $srcLines, int $line, int $srcContext, string $lang, ?string $file, array $frame): \Symfony\Component\VarDumper\Caster\EnumStub
+    private static function extractSource(string $srcLines, int $line, int $srcContext, string $lang, ?string $file, array $frame): EnumStub
     {
         $srcLines = explode("\n", $srcLines);
         $src = [];
@@ -283,7 +283,7 @@ class ExceptionCaster
             $src[] = ($srcLines[$i] ?? '') . "\n";
         }
         if ($frame['function'] ?? \false) {
-            $stub = new \Symfony\Component\VarDumper\Caster\CutStub(new \stdClass());
+            $stub = new CutStub(new \stdClass());
             $stub->class = (isset($frame['class']) ? $frame['class'] . $frame['type'] : '') . $frame['function'];
             $stub->type = Stub::TYPE_OBJECT;
             $stub->attr['cut_hash'] = \true;
@@ -291,7 +291,7 @@ class ExceptionCaster
             $stub->attr['line'] = $frame['line'];
             try {
                 $caller = isset($frame['class']) ? new \ReflectionMethod($frame['class'], $frame['function']) : new \ReflectionFunction($frame['function']);
-                $stub->class .= \Symfony\Component\VarDumper\Caster\ReflectionCaster::getSignature(\Symfony\Component\VarDumper\Caster\ReflectionCaster::castFunctionAbstract($caller, [], $stub, \true, \Symfony\Component\VarDumper\Caster\Caster::EXCLUDE_VERBOSE));
+                $stub->class .= ReflectionCaster::getSignature(ReflectionCaster::castFunctionAbstract($caller, [], $stub, \true, Caster::EXCLUDE_VERBOSE));
                 if ($f = $caller->getFileName()) {
                     $stub->attr['file'] = $f;
                     $stub->attr['line'] = $caller->getStartLine();
@@ -324,9 +324,9 @@ class ExceptionCaster
             }
             $c = substr($c, 0, -1);
             if ($i !== $srcContext) {
-                $c = new \Symfony\Component\VarDumper\Caster\ConstStub('default', $c);
+                $c = new ConstStub('default', $c);
             } else {
-                $c = new \Symfony\Component\VarDumper\Caster\ConstStub($c, $stub ? 'in ' . $stub->class : '');
+                $c = new ConstStub($c, $stub ? 'in ' . $stub->class : '');
                 if (null !== $file) {
                     $c->attr['file'] = $file;
                     $c->attr['line'] = $line;
@@ -335,6 +335,6 @@ class ExceptionCaster
             $c->attr['lang'] = $lang;
             $srcLines[\sprintf("\x00~separator=› &%d\x00", $i + $line - $srcContext)] = $c;
         }
-        return new \Symfony\Component\VarDumper\Caster\EnumStub($srcLines);
+        return new EnumStub($srcLines);
     }
 }

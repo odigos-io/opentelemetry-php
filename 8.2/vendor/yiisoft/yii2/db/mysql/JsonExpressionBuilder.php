@@ -5,14 +5,14 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\db\mysql;
+namespace Odigos\yii\db\mysql;
 
-use yii\db\ExpressionBuilderInterface;
-use yii\db\ExpressionBuilderTrait;
-use yii\db\ExpressionInterface;
-use yii\db\JsonExpression;
-use yii\db\Query;
-use yii\helpers\Json;
+use Odigos\yii\db\ExpressionBuilderInterface;
+use Odigos\yii\db\ExpressionBuilderTrait;
+use Odigos\yii\db\ExpressionInterface;
+use Odigos\yii\db\JsonExpression;
+use Odigos\yii\db\Query;
+use Odigos\yii\helpers\Json;
 /**
  * Class JsonExpressionBuilder builds [[JsonExpression]] for MySQL DBMS.
  *

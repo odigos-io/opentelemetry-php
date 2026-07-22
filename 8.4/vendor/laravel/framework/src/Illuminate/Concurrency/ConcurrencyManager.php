@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Concurrency;
+namespace Odigos\Illuminate\Concurrency;
 
-use Illuminate\Process\Factory as ProcessFactory;
-use Illuminate\Support\MultipleInstanceManager;
+use Odigos\Illuminate\Process\Factory as ProcessFactory;
+use Odigos\Illuminate\Support\MultipleInstanceManager;
 use RuntimeException;
 use Odigos\Spatie\Fork\Fork;
 /**
@@ -28,7 +28,7 @@ class ConcurrencyManager extends MultipleInstanceManager
      */
     public function createProcessDriver()
     {
-        return new \Illuminate\Concurrency\ProcessDriver($this->app->make(ProcessFactory::class));
+        return new ProcessDriver($this->app->make(ProcessFactory::class));
     }
     /**
      * Create an instance of the fork concurrency driver.
@@ -45,7 +45,7 @@ class ConcurrencyManager extends MultipleInstanceManager
         if (!class_exists(Fork::class)) {
             throw new RuntimeException('Please install the "spatie/fork" Composer package in order to utilize the "fork" driver.');
         }
-        return new \Illuminate\Concurrency\ForkDriver();
+        return new ForkDriver();
     }
     /**
      * Create an instance of the sync concurrency driver.
@@ -54,7 +54,7 @@ class ConcurrencyManager extends MultipleInstanceManager
      */
     public function createSyncDriver()
     {
-        return new \Illuminate\Concurrency\SyncDriver();
+        return new SyncDriver();
     }
     /**
      * Get the default instance name.

@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpFoundation;
+namespace Odigos\Symfony\Component\HttpFoundation;
 
 // Help opcache.preload discover always-needed symbols
-class_exists(\Symfony\Component\HttpFoundation\AcceptHeaderItem::class);
+class_exists(AcceptHeaderItem::class);
 /**
  * Represents an Accept-* header.
  *
@@ -42,9 +42,9 @@ class AcceptHeader
     public static function fromString(?string $headerValue): self
     {
         $items = [];
-        foreach (\Symfony\Component\HttpFoundation\HeaderUtils::split($headerValue ?? '', ',;=') as $i => $parts) {
+        foreach (HeaderUtils::split($headerValue ?? '', ',;=') as $i => $parts) {
             $part = array_shift($parts);
-            $item = new \Symfony\Component\HttpFoundation\AcceptHeaderItem($part[0], \Symfony\Component\HttpFoundation\HeaderUtils::combine($parts));
+            $item = new AcceptHeaderItem($part[0], HeaderUtils::combine($parts));
             $items[] = $item->setIndex($i);
         }
         return new self($items);
@@ -61,21 +61,21 @@ class AcceptHeader
      */
     public function has(string $value): bool
     {
-        $canonicalKey = $this->getCanonicalKey(\Symfony\Component\HttpFoundation\AcceptHeaderItem::fromString($value));
+        $canonicalKey = $this->getCanonicalKey(AcceptHeaderItem::fromString($value));
         return isset($this->items[$canonicalKey]);
     }
     /**
      * Returns given value's item, if exists.
      */
-    public function get(string $value): ?\Symfony\Component\HttpFoundation\AcceptHeaderItem
+    public function get(string $value): ?AcceptHeaderItem
     {
-        $queryItem = \Symfony\Component\HttpFoundation\AcceptHeaderItem::fromString($value . ';q=1');
+        $queryItem = AcceptHeaderItem::fromString($value . ';q=1');
         $canonicalKey = $this->getCanonicalKey($queryItem);
         if (isset($this->items[$canonicalKey])) {
             return $this->items[$canonicalKey];
         }
         // Collect and filter matching candidates
-        if (!$candidates = array_filter($this->items, fn(\Symfony\Component\HttpFoundation\AcceptHeaderItem $item) => $this->matches($item, $queryItem))) {
+        if (!$candidates = array_filter($this->items, fn(AcceptHeaderItem $item) => $this->matches($item, $queryItem))) {
             return null;
         }
         usort($candidates, fn($a, $b) => ($this->getSpecificity($b, $queryItem) <=> $this->getSpecificity($a, $queryItem) ?: $b->getQuality() <=> $a->getQuality()) ?: $a->getIndex() <=> $b->getIndex());
@@ -86,7 +86,7 @@ class AcceptHeader
      *
      * @return $this
      */
-    public function add(\Symfony\Component\HttpFoundation\AcceptHeaderItem $item): static
+    public function add(AcceptHeaderItem $item): static
     {
         $this->items[$this->getCanonicalKey($item)] = $item;
         $this->sorted = \false;
@@ -112,7 +112,7 @@ class AcceptHeader
     /**
      * Returns first item.
      */
-    public function first(): ?\Symfony\Component\HttpFoundation\AcceptHeaderItem
+    public function first(): ?AcceptHeaderItem
     {
         $this->sort();
         return $this->items ? reset($this->items) : null;
@@ -130,7 +130,7 @@ class AcceptHeader
     /**
      * Generates the canonical key for storing/retrieving an item.
      */
-    private function getCanonicalKey(\Symfony\Component\HttpFoundation\AcceptHeaderItem $item): string
+    private function getCanonicalKey(AcceptHeaderItem $item): string
     {
         $parts = [];
         // Normalize and sort attributes for consistent key generation
@@ -155,7 +155,7 @@ class AcceptHeader
      * @param AcceptHeaderItem $rangeItem The item from the Accept header (e.g., text/*;format=flowed)
      * @param AcceptHeaderItem $queryItem The item being queried (e.g., text/plain;format=flowed;charset=utf-8)
      */
-    private function matches(\Symfony\Component\HttpFoundation\AcceptHeaderItem $rangeItem, \Symfony\Component\HttpFoundation\AcceptHeaderItem $queryItem): bool
+    private function matches(AcceptHeaderItem $rangeItem, AcceptHeaderItem $queryItem): bool
     {
         $rangeValue = strtolower($rangeItem->getValue());
         $queryValue = strtolower($queryItem->getValue());
@@ -194,7 +194,7 @@ class AcceptHeader
      *
      * Parameters are case-insensitive; range params must be a subset of query params.
      */
-    private function rangeParametersMatch(\Symfony\Component\HttpFoundation\AcceptHeaderItem $rangeItem, \Symfony\Component\HttpFoundation\AcceptHeaderItem $queryItem): bool
+    private function rangeParametersMatch(AcceptHeaderItem $rangeItem, AcceptHeaderItem $queryItem): bool
     {
         $queryAttributes = $this->getMediaParams($queryItem);
         $rangeAttributes = $this->getMediaParams($rangeItem);
@@ -217,7 +217,7 @@ class AcceptHeader
     /**
      * Calculates a specificity score for sorting: media precision + param count.
      */
-    private function getSpecificity(\Symfony\Component\HttpFoundation\AcceptHeaderItem $item, \Symfony\Component\HttpFoundation\AcceptHeaderItem $queryItem): int
+    private function getSpecificity(AcceptHeaderItem $item, AcceptHeaderItem $queryItem): int
     {
         $rangeValue = strtolower($item->getValue());
         $queryValue = strtolower($queryItem->getValue());
@@ -240,7 +240,7 @@ class AcceptHeader
     /**
      * Returns normalized attributes: keys lowercased, excluding 'q'.
      */
-    private function getMediaParams(\Symfony\Component\HttpFoundation\AcceptHeaderItem $item): array
+    private function getMediaParams(AcceptHeaderItem $item): array
     {
         $attributes = array_change_key_case($item->getAttributes(), \CASE_LOWER);
         unset($attributes['q']);

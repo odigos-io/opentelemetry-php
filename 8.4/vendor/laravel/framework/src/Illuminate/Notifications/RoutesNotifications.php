@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Notifications;
+namespace Odigos\Illuminate\Notifications;
 
-use Illuminate\Contracts\Notifications\Dispatcher;
-use Illuminate\Support\Str;
+use Odigos\Illuminate\Contracts\Notifications\Dispatcher;
+use Odigos\Illuminate\Support\Str;
 trait RoutesNotifications
 {
     /**

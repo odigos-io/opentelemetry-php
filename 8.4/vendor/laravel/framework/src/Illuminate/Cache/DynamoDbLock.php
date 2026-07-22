@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Cache;
+namespace Odigos\Illuminate\Cache;
 
-class DynamoDbLock extends \Illuminate\Cache\Lock
+class DynamoDbLock extends Lock
 {
     /**
      * The DynamoDB client instance.
@@ -18,7 +18,7 @@ class DynamoDbLock extends \Illuminate\Cache\Lock
      * @param  int  $seconds
      * @param  string|null  $owner
      */
-    public function __construct(\Illuminate\Cache\DynamoDbStore $dynamo, $name, $seconds, $owner = null)
+    public function __construct(DynamoDbStore $dynamo, $name, $seconds, $owner = null)
     {
         parent::__construct($name, $seconds, $owner);
         $this->dynamo = $dynamo;

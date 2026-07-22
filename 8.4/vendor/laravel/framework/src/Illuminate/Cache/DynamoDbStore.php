@@ -1,16 +1,16 @@
 <?php
 
-namespace Illuminate\Cache;
+namespace Odigos\Illuminate\Cache;
 
 use Odigos\Aws\DynamoDb\DynamoDbClient;
 use Odigos\Aws\DynamoDb\Exception\DynamoDbException;
-use Illuminate\Contracts\Cache\LockProvider;
-use Illuminate\Contracts\Cache\Store;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Collection;
-use Illuminate\Support\InteractsWithTime;
-use Illuminate\Support\Str;
+use Odigos\Illuminate\Contracts\Cache\LockProvider;
+use Odigos\Illuminate\Contracts\Cache\Store;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Carbon;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\InteractsWithTime;
+use Odigos\Illuminate\Support\Str;
 use RuntimeException;
 class DynamoDbStore implements LockProvider, Store
 {
@@ -215,7 +215,7 @@ class DynamoDbStore implements LockProvider, Store
      */
     public function lock($name, $seconds = 0, $owner = null)
     {
-        return new \Illuminate\Cache\DynamoDbLock($this, $name, $seconds, $owner);
+        return new DynamoDbLock($this, $name, $seconds, $owner);
     }
     /**
      * Restore a lock instance using the owner identifier.

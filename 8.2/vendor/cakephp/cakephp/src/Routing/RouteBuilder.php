@@ -14,15 +14,15 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Routing;
+namespace Odigos\Cake\Routing;
 
 use BadMethodCallException;
-use Cake\Core\App;
-use Cake\Core\Exception\MissingPluginException;
-use Cake\Core\Plugin;
-use Cake\Routing\Route\RedirectRoute;
-use Cake\Routing\Route\Route;
-use Cake\Utility\Inflector;
+use Odigos\Cake\Core\App;
+use Odigos\Cake\Core\Exception\MissingPluginException;
+use Odigos\Cake\Core\Plugin;
+use Odigos\Cake\Routing\Route\RedirectRoute;
+use Odigos\Cake\Routing\Route\Route;
+use Odigos\Cake\Utility\Inflector;
 use Closure;
 use InvalidArgumentException;
 use Psr\Http\Server\MiddlewareInterface;
@@ -84,7 +84,7 @@ class RouteBuilder
      *
      * @var \Cake\Routing\RouteCollection
      */
-    protected \Cake\Routing\RouteCollection $_collection;
+    protected RouteCollection $_collection;
     /**
      * The list of middleware that routes in this builder get
      * added during construction.
@@ -113,7 +113,7 @@ class RouteBuilder
      * @param array $params The scope's routing parameters.
      * @param array<string, mixed> $options Options list.
      */
-    public function __construct(\Cake\Routing\RouteCollection $collection, string $path, array $params = [], array $options = [])
+    public function __construct(RouteCollection $collection, string $path, array $params = [], array $options = [])
     {
         $this->_collection = $collection;
         $this->_path = $path;
@@ -649,7 +649,7 @@ class RouteBuilder
     protected function parseDefaults(array|string $defaults): array
     {
         if (is_string($defaults)) {
-            return \Cake\Routing\Router::parseRoutePath($defaults);
+            return Router::parseRoutePath($defaults);
         }
         return $defaults;
     }

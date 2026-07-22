@@ -1,15 +1,15 @@
 <?php
 
-namespace Illuminate\Auth\Passwords;
+namespace Odigos\Illuminate\Auth\Passwords;
 
 use Closure;
-use Illuminate\Auth\Events\PasswordResetLinkSent;
-use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
-use Illuminate\Contracts\Auth\PasswordBroker as PasswordBrokerContract;
-use Illuminate\Contracts\Auth\UserProvider;
-use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Timebox;
+use Odigos\Illuminate\Auth\Events\PasswordResetLinkSent;
+use Odigos\Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+use Odigos\Illuminate\Contracts\Auth\PasswordBroker as PasswordBrokerContract;
+use Odigos\Illuminate\Contracts\Auth\UserProvider;
+use Odigos\Illuminate\Contracts\Events\Dispatcher;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Timebox;
 use UnexpectedValueException;
 class PasswordBroker implements PasswordBrokerContract
 {
@@ -54,7 +54,7 @@ class PasswordBroker implements PasswordBrokerContract
      */
     public function __construct(
         #[\SensitiveParameter]
-        \Illuminate\Auth\Passwords\TokenRepositoryInterface $tokens,
+        TokenRepositoryInterface $tokens,
         UserProvider $users,
         ?Dispatcher $dispatcher = null,
         ?Timebox $timebox = null,

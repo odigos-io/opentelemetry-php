@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenTelemetry\Contrib\Instrumentation\Psr14;
+namespace Odigos\OpenTelemetry\Contrib\Instrumentation\Psr14;
 
 use Composer\InstalledVersions;
 use OpenTelemetry\API\Instrumentation\CachedInstrumentation;

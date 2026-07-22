@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Database\Schema;
+namespace Odigos\Illuminate\Database\Schema;
 
-use Illuminate\Database\Connection;
-use Illuminate\Filesystem\Filesystem;
-use Symfony\Component\Process\Process;
+use Odigos\Illuminate\Database\Connection;
+use Odigos\Illuminate\Filesystem\Filesystem;
+use Odigos\Symfony\Component\Process\Process;
 abstract class SchemaState
 {
     /**

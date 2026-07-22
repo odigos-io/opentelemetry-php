@@ -1,14 +1,14 @@
 <?php
 
-namespace Illuminate\Foundation\Console;
+namespace Odigos\Illuminate\Foundation\Console;
 
-use Illuminate\Console\GeneratorCommand;
-use Illuminate\Support\Str;
-use Symfony\Component\Console\Attribute\AsCommand;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\OutputInterface;
-use function Laravel\Prompts\select;
+use Odigos\Illuminate\Console\GeneratorCommand;
+use Odigos\Illuminate\Support\Str;
+use Odigos\Symfony\Component\Console\Attribute\AsCommand;
+use Odigos\Symfony\Component\Console\Input\InputInterface;
+use Odigos\Symfony\Component\Console\Input\InputOption;
+use Odigos\Symfony\Component\Console\Output\OutputInterface;
+use function Odigos\Laravel\Prompts\select;
 #[AsCommand(name: 'make:test')]
 class TestMakeCommand extends GeneratorCommand
 {

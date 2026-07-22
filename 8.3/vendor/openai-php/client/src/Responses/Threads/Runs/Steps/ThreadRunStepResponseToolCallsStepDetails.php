@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Responses\Threads\Runs\Steps;
+namespace Odigos\OpenAI\Responses\Threads\Runs\Steps;
 
-use OpenAI\Contracts\ResponseContract;
-use OpenAI\Responses\Concerns\ArrayAccessible;
-use OpenAI\Testing\Responses\Concerns\Fakeable;
+use Odigos\OpenAI\Contracts\ResponseContract;
+use Odigos\OpenAI\Responses\Concerns\ArrayAccessible;
+use Odigos\OpenAI\Testing\Responses\Concerns\Fakeable;
 /**
  * @implements ResponseContract<array{type: 'tool_calls', tool_calls: array<int, array{id: ?string, type: 'code_interpreter', code_interpreter: array{input?: string, outputs?: array<int, array{type: 'image', image: array{file_id: string}}|array{type: 'logs', logs: string}>}}|array{id: string, type: 'file_search', file_search: array<string, string>}|array{id: ?string, type: 'function', function: array{name: ?string, arguments: string, output: ?string}}>}>
  */
@@ -30,10 +30,10 @@ final class ThreadRunStepResponseToolCallsStepDetails implements ResponseContrac
      */
     public static function from(array $attributes): self
     {
-        $toolCalls = array_map(fn(array $toolCall): \OpenAI\Responses\Threads\Runs\Steps\ThreadRunStepResponseCodeToolCall|\OpenAI\Responses\Threads\Runs\Steps\ThreadRunStepResponseFileSearchToolCall|\OpenAI\Responses\Threads\Runs\Steps\ThreadRunStepResponseFunctionToolCall => match ($toolCall['type']) {
-            'code_interpreter' => \OpenAI\Responses\Threads\Runs\Steps\ThreadRunStepResponseCodeToolCall::from($toolCall),
-            'file_search' => \OpenAI\Responses\Threads\Runs\Steps\ThreadRunStepResponseFileSearchToolCall::from($toolCall),
-            'function' => \OpenAI\Responses\Threads\Runs\Steps\ThreadRunStepResponseFunctionToolCall::from($toolCall),
+        $toolCalls = array_map(fn(array $toolCall): ThreadRunStepResponseCodeToolCall|ThreadRunStepResponseFileSearchToolCall|ThreadRunStepResponseFunctionToolCall => match ($toolCall['type']) {
+            'code_interpreter' => ThreadRunStepResponseCodeToolCall::from($toolCall),
+            'file_search' => ThreadRunStepResponseFileSearchToolCall::from($toolCall),
+            'function' => ThreadRunStepResponseFunctionToolCall::from($toolCall),
         }, $attributes['tool_calls']);
         return new self($attributes['type'], $toolCalls);
     }
@@ -42,6 +42,6 @@ final class ThreadRunStepResponseToolCallsStepDetails implements ResponseContrac
      */
     public function toArray(): array
     {
-        return ['type' => $this->type, 'tool_calls' => array_map(fn(\OpenAI\Responses\Threads\Runs\Steps\ThreadRunStepResponseCodeToolCall|\OpenAI\Responses\Threads\Runs\Steps\ThreadRunStepResponseFileSearchToolCall|\OpenAI\Responses\Threads\Runs\Steps\ThreadRunStepResponseFunctionToolCall $toolCall): array => $toolCall->toArray(), $this->toolCalls)];
+        return ['type' => $this->type, 'tool_calls' => array_map(fn(ThreadRunStepResponseCodeToolCall|ThreadRunStepResponseFileSearchToolCall|ThreadRunStepResponseFunctionToolCall $toolCall): array => $toolCall->toArray(), $this->toolCalls)];
     }
 }

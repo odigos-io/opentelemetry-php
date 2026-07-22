@@ -5,11 +5,11 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\i18n;
+namespace Odigos\yii\i18n;
 
 use Odigos\Yii;
-use yii\base\Component;
-use yii\base\NotSupportedException;
+use Odigos\yii\base\Component;
+use Odigos\yii\base\NotSupportedException;
 /**
  * MessageFormatter allows formatting messages via [ICU message format](https://unicode-org.github.io/icu/userguide/format_parse/messages/).
  *

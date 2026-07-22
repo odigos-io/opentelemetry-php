@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Driver;
+namespace Odigos\Doctrine\DBAL\Driver;
 
-use Doctrine\DBAL\ServerVersionProvider;
+use Odigos\Doctrine\DBAL\ServerVersionProvider;
 /**
  * Connection interface.
  * Driver connections must implement this interface.
@@ -15,13 +15,13 @@ interface Connection extends ServerVersionProvider
      *
      * @throws Exception
      */
-    public function prepare(string $sql): \Doctrine\DBAL\Driver\Statement;
+    public function prepare(string $sql): Statement;
     /**
      * Executes an SQL statement, returning a result set as a Statement object.
      *
      * @throws Exception
      */
-    public function query(string $sql): \Doctrine\DBAL\Driver\Result;
+    public function query(string $sql): Result;
     /**
      * Quotes a string for use in a query.
      *

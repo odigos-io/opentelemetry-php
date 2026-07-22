@@ -1,14 +1,14 @@
 <?php
 
-namespace Illuminate\Foundation\Console;
+namespace Odigos\Illuminate\Foundation\Console;
 
 use Closure;
-use Illuminate\Console\Command;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Composer;
-use Illuminate\Support\Str;
-use Illuminate\Support\Stringable;
-use Symfony\Component\Console\Attribute\AsCommand;
+use Odigos\Illuminate\Console\Command;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Composer;
+use Odigos\Illuminate\Support\Str;
+use Odigos\Illuminate\Support\Stringable;
+use Odigos\Symfony\Component\Console\Attribute\AsCommand;
 #[AsCommand(name: 'about')]
 class AboutCommand extends Command
 {

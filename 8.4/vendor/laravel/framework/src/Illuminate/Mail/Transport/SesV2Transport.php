@@ -1,16 +1,16 @@
 <?php
 
-namespace Illuminate\Mail\Transport;
+namespace Odigos\Illuminate\Mail\Transport;
 
 use Odigos\Aws\Exception\AwsException;
 use Odigos\Aws\SesV2\SesV2Client;
-use Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Collection;
 use Stringable;
-use Symfony\Component\Mailer\Exception\TransportException;
-use Symfony\Component\Mailer\Header\MetadataHeader;
-use Symfony\Component\Mailer\SentMessage;
-use Symfony\Component\Mailer\Transport\AbstractTransport;
-use Symfony\Component\Mime\Message;
+use Odigos\Symfony\Component\Mailer\Exception\TransportException;
+use Odigos\Symfony\Component\Mailer\Header\MetadataHeader;
+use Odigos\Symfony\Component\Mailer\SentMessage;
+use Odigos\Symfony\Component\Mailer\Transport\AbstractTransport;
+use Odigos\Symfony\Component\Mime\Message;
 class SesV2Transport extends AbstractTransport implements Stringable
 {
     /**

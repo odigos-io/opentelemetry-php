@@ -4,16 +4,16 @@
  * THIS FILE IS AUTO-GENERATED. ANY CHANGES WILL BE LOST!
  */
 declare (strict_types=1);
-namespace MongoDB\Builder\Accumulator;
+namespace Odigos\MongoDB\Builder\Accumulator;
 
 use MongoDB\BSON\Decimal128;
 use MongoDB\BSON\Int64;
-use MongoDB\Builder\Expression\ResolvesToNumber;
-use MongoDB\Builder\Type\AccumulatorInterface;
-use MongoDB\Builder\Type\Encode;
-use MongoDB\Builder\Type\OperatorInterface;
-use MongoDB\Builder\Type\WindowInterface;
-use MongoDB\Exception\InvalidArgumentException;
+use Odigos\MongoDB\Builder\Expression\ResolvesToNumber;
+use Odigos\MongoDB\Builder\Type\AccumulatorInterface;
+use Odigos\MongoDB\Builder\Type\Encode;
+use Odigos\MongoDB\Builder\Type\OperatorInterface;
+use Odigos\MongoDB\Builder\Type\WindowInterface;
+use Odigos\MongoDB\Exception\InvalidArgumentException;
 use function is_string;
 use function str_starts_with;
 /**

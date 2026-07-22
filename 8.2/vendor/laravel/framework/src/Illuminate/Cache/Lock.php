@@ -1,12 +1,12 @@
 <?php
 
-namespace Illuminate\Cache;
+namespace Odigos\Illuminate\Cache;
 
-use Illuminate\Contracts\Cache\Lock as LockContract;
-use Illuminate\Contracts\Cache\LockTimeoutException;
-use Illuminate\Support\InteractsWithTime;
-use Illuminate\Support\Sleep;
-use Illuminate\Support\Str;
+use Odigos\Illuminate\Contracts\Cache\Lock as LockContract;
+use Odigos\Illuminate\Contracts\Cache\LockTimeoutException;
+use Odigos\Illuminate\Support\InteractsWithTime;
+use Odigos\Illuminate\Support\Sleep;
+use Odigos\Illuminate\Support\Str;
 abstract class Lock implements LockContract
 {
     use InteractsWithTime;

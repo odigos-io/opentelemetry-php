@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Contracts\Http;
+namespace Odigos\Illuminate\Contracts\Http;
 
 interface Kernel
 {

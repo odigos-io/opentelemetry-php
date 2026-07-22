@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Cache;
+namespace Odigos\Illuminate\Cache;
 
-use Illuminate\Contracts\Cache\Store;
+use Odigos\Illuminate\Contracts\Cache\Store;
 class TagSet
 {
     /**

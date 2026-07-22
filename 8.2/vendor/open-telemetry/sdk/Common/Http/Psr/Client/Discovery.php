@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace OpenTelemetry\SDK\Common\Http\Psr\Client;
 
 use Generator;
-use Http\Discovery\Psr18ClientDiscovery;
+use Odigos\Http\Discovery\Psr18ClientDiscovery;
 use OpenTelemetry\SDK\Common\Http\Psr\Client\Discovery\Buzz;
 use OpenTelemetry\SDK\Common\Http\Psr\Client\Discovery\CurlClient;
 use OpenTelemetry\SDK\Common\Http\Psr\Client\Discovery\DiscoveryInterface;

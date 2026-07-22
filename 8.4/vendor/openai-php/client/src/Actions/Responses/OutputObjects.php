@@ -1,21 +1,21 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Actions\Responses;
+namespace Odigos\OpenAI\Actions\Responses;
 
-use OpenAI\Responses\Responses\Output\OutputCodeInterpreterToolCall;
-use OpenAI\Responses\Responses\Output\OutputComputerToolCall;
-use OpenAI\Responses\Responses\Output\OutputCustomToolCall;
-use OpenAI\Responses\Responses\Output\OutputFileSearchToolCall;
-use OpenAI\Responses\Responses\Output\OutputFunctionToolCall;
-use OpenAI\Responses\Responses\Output\OutputImageGenerationToolCall;
-use OpenAI\Responses\Responses\Output\OutputLocalShellCall;
-use OpenAI\Responses\Responses\Output\OutputMcpApprovalRequest;
-use OpenAI\Responses\Responses\Output\OutputMcpCall;
-use OpenAI\Responses\Responses\Output\OutputMcpListTools;
-use OpenAI\Responses\Responses\Output\OutputMessage;
-use OpenAI\Responses\Responses\Output\OutputReasoning;
-use OpenAI\Responses\Responses\Output\OutputWebSearchToolCall;
+use Odigos\OpenAI\Responses\Responses\Output\OutputCodeInterpreterToolCall;
+use Odigos\OpenAI\Responses\Responses\Output\OutputComputerToolCall;
+use Odigos\OpenAI\Responses\Responses\Output\OutputCustomToolCall;
+use Odigos\OpenAI\Responses\Responses\Output\OutputFileSearchToolCall;
+use Odigos\OpenAI\Responses\Responses\Output\OutputFunctionToolCall;
+use Odigos\OpenAI\Responses\Responses\Output\OutputImageGenerationToolCall;
+use Odigos\OpenAI\Responses\Responses\Output\OutputLocalShellCall;
+use Odigos\OpenAI\Responses\Responses\Output\OutputMcpApprovalRequest;
+use Odigos\OpenAI\Responses\Responses\Output\OutputMcpCall;
+use Odigos\OpenAI\Responses\Responses\Output\OutputMcpListTools;
+use Odigos\OpenAI\Responses\Responses\Output\OutputMessage;
+use Odigos\OpenAI\Responses\Responses\Output\OutputReasoning;
+use Odigos\OpenAI\Responses\Responses\Output\OutputWebSearchToolCall;
 /**
  * @phpstan-import-type OutputComputerToolCallType from OutputComputerToolCall
  * @phpstan-import-type OutputFileSearchToolCallType from OutputFileSearchToolCall

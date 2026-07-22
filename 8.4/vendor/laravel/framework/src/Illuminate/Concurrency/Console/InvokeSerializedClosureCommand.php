@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Concurrency\Console;
+namespace Odigos\Illuminate\Concurrency\Console;
 
-use Illuminate\Console\Command;
+use Odigos\Illuminate\Console\Command;
 use ReflectionClass;
-use Symfony\Component\Console\Attribute\AsCommand;
+use Odigos\Symfony\Component\Console\Attribute\AsCommand;
 use Throwable;
 #[AsCommand(name: 'invoke-serialized-closure')]
 class InvokeSerializedClosureCommand extends Command

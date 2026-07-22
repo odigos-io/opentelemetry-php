@@ -14,12 +14,12 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\View;
+namespace Odigos\Cake\View;
 
-use Cake\Core\App;
-use Cake\Utility\Inflector;
-use Cake\View\Exception\MissingCellException;
-use function Cake\Core\pluginSplit;
+use Odigos\Cake\Core\App;
+use Odigos\Cake\Utility\Inflector;
+use Odigos\Cake\View\Exception\MissingCellException;
+use function Odigos\Cake\Core\pluginSplit;
 /**
  * Provides cell() method for usage in Controller and View classes.
  */
@@ -55,7 +55,7 @@ trait CellTrait
      * @return \Cake\View\Cell The cell instance
      * @throws \Cake\View\Exception\MissingCellException If Cell class was not found.
      */
-    protected function cell(string $cell, array $data = [], array $options = []): \Cake\View\Cell
+    protected function cell(string $cell, array $data = [], array $options = []): Cell
     {
         $parts = explode('::', $cell);
         if (count($parts) === 2) {
@@ -80,7 +80,7 @@ trait CellTrait
      * @param array<string, mixed> $options The constructor options for the cell.
      * @return \Cake\View\Cell
      */
-    protected function _createCell(string $className, string $action, ?string $plugin, array $options): \Cake\View\Cell
+    protected function _createCell(string $className, string $action, ?string $plugin, array $options): Cell
     {
         /** @var \Cake\View\Cell $instance */
         $instance = new $className($this->request, $this->response, $this->getEventManager(), $options);
@@ -89,7 +89,7 @@ trait CellTrait
         if ($plugin) {
             $builder->setPlugin($plugin);
         }
-        if ($this instanceof \Cake\View\View) {
+        if ($this instanceof View) {
             $builder->addHelpers($this->helpers);
             if ($this->theme) {
                 $builder->setTheme($this->theme);

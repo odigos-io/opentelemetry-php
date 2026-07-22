@@ -5,14 +5,14 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\web;
+namespace Odigos\yii\web;
 
 use Odigos\Yii;
-use yii\base\Component;
-use yii\base\InvalidConfigException;
-use yii\base\InvalidValueException;
-use yii\di\Instance;
-use yii\rbac\CheckAccessInterface;
+use Odigos\yii\base\Component;
+use Odigos\yii\base\InvalidConfigException;
+use Odigos\yii\base\InvalidValueException;
+use Odigos\yii\di\Instance;
+use Odigos\yii\rbac\CheckAccessInterface;
 /**
  * User is the class for the `user` application component that manages the user authentication status.
  *
@@ -169,7 +169,7 @@ class User extends Component
             throw new InvalidConfigException('User::identityCookie must contain the "name" element.');
         }
         if ($this->accessChecker !== null) {
-            $this->accessChecker = Instance::ensure($this->accessChecker, '\yii\rbac\CheckAccessInterface');
+            $this->accessChecker = Instance::ensure($this->accessChecker, 'Odigos\yii\rbac\CheckAccessInterface');
         }
     }
     private $_identity = \false;
@@ -216,7 +216,7 @@ class User extends Component
      */
     public function setIdentity($identity)
     {
-        if ($identity instanceof \yii\web\IdentityInterface) {
+        if ($identity instanceof IdentityInterface) {
             $this->_identity = $identity;
         } elseif ($identity === null) {
             $this->_identity = null;
@@ -244,7 +244,7 @@ class User extends Component
      * @param int $duration number of seconds that the user can remain in logged-in status, defaults to `0`
      * @return bool whether the user is logged in
      */
-    public function login(\yii\web\IdentityInterface $identity, $duration = 0)
+    public function login(IdentityInterface $identity, $duration = 0)
     {
         if ($this->beforeLogin($identity, \false, $duration)) {
             $this->switchIdentity($identity, $duration);
@@ -427,7 +427,7 @@ class User extends Component
                 return Yii::$app->getResponse()->redirect($this->loginUrl);
             }
         }
-        throw new \yii\web\ForbiddenHttpException(Yii::t('yii', 'Login Required'));
+        throw new ForbiddenHttpException(Yii::t('yii', 'Login Required'));
     }
     /**
      * This method is called before logging in a user.
@@ -442,7 +442,7 @@ class User extends Component
      */
     protected function beforeLogin($identity, $cookieBased, $duration)
     {
-        $event = new \yii\web\UserEvent(['identity' => $identity, 'cookieBased' => $cookieBased, 'duration' => $duration]);
+        $event = new UserEvent(['identity' => $identity, 'cookieBased' => $cookieBased, 'duration' => $duration]);
         $this->trigger(self::EVENT_BEFORE_LOGIN, $event);
         return $event->isValid;
     }
@@ -458,7 +458,7 @@ class User extends Component
      */
     protected function afterLogin($identity, $cookieBased, $duration)
     {
-        $this->trigger(self::EVENT_AFTER_LOGIN, new \yii\web\UserEvent(['identity' => $identity, 'cookieBased' => $cookieBased, 'duration' => $duration]));
+        $this->trigger(self::EVENT_AFTER_LOGIN, new UserEvent(['identity' => $identity, 'cookieBased' => $cookieBased, 'duration' => $duration]));
     }
     /**
      * This method is invoked when calling [[logout()]] to log out a user.
@@ -470,7 +470,7 @@ class User extends Component
      */
     protected function beforeLogout($identity)
     {
-        $event = new \yii\web\UserEvent(['identity' => $identity]);
+        $event = new UserEvent(['identity' => $identity]);
         $this->trigger(self::EVENT_BEFORE_LOGOUT, $event);
         return $event->isValid;
     }
@@ -483,7 +483,7 @@ class User extends Component
      */
     protected function afterLogout($identity)
     {
-        $this->trigger(self::EVENT_AFTER_LOGOUT, new \yii\web\UserEvent(['identity' => $identity]));
+        $this->trigger(self::EVENT_AFTER_LOGOUT, new UserEvent(['identity' => $identity]));
     }
     /**
      * Renews the identity cookie.
@@ -536,7 +536,7 @@ class User extends Component
             $class = $this->identityClass;
             $identity = $class::findIdentity($id);
             if ($identity !== null) {
-                if (!$identity instanceof \yii\web\IdentityInterface) {
+                if (!$identity instanceof IdentityInterface) {
                     throw new InvalidValueException("{$class}::findIdentity() must return an object implementing IdentityInterface.");
                 } elseif (!$identity->validateAuthKey($authKey)) {
                     $ip = Yii::$app->getRequest()->getUserIP();

@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Queue\Connectors;
+namespace Odigos\Illuminate\Queue\Connectors;
 
-use Illuminate\Contracts\Redis\Factory as Redis;
-use Illuminate\Queue\RedisQueue;
-class RedisConnector implements \Illuminate\Queue\Connectors\ConnectorInterface
+use Odigos\Illuminate\Contracts\Redis\Factory as Redis;
+use Odigos\Illuminate\Queue\RedisQueue;
+class RedisConnector implements ConnectorInterface
 {
     /**
      * The Redis database instance.

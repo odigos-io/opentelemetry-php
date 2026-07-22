@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Bus;
+namespace Odigos\Illuminate\Bus;
 
 use DateTimeInterface;
-interface PrunableBatchRepository extends \Illuminate\Bus\BatchRepository
+interface PrunableBatchRepository extends BatchRepository
 {
     /**
      * Prune all of the entries older than the given date.

@@ -1,12 +1,12 @@
 <?php
 
-namespace Illuminate\Broadcasting;
+namespace Odigos\Illuminate\Broadcasting;
 
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Broadcasting\Factory as BroadcastingFactory;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Support\Arr;
+use Odigos\Illuminate\Bus\Queueable;
+use Odigos\Illuminate\Contracts\Broadcasting\Factory as BroadcastingFactory;
+use Odigos\Illuminate\Contracts\Queue\ShouldQueue;
+use Odigos\Illuminate\Contracts\Support\Arrayable;
+use Odigos\Illuminate\Support\Arr;
 use ReflectionClass;
 use ReflectionProperty;
 use Throwable;

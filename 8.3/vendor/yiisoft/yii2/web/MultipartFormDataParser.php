@@ -5,11 +5,11 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\web;
+namespace Odigos\yii\web;
 
-use yii\base\BaseObject;
-use yii\helpers\ArrayHelper;
-use yii\helpers\StringHelper;
+use Odigos\yii\base\BaseObject;
+use Odigos\yii\helpers\ArrayHelper;
+use Odigos\yii\helpers\StringHelper;
 /**
  * MultipartFormDataParser parses content encoded as 'multipart/form-data'.
  * This parser provides the fallback for the 'multipart/form-data' processing on non POST requests,
@@ -61,7 +61,7 @@ use yii\helpers\StringHelper;
  * @author Paul Klimov <klimov.paul@gmail.com>
  * @since 2.0.10
  */
-class MultipartFormDataParser extends BaseObject implements \yii\web\RequestParserInterface
+class MultipartFormDataParser extends BaseObject implements RequestParserInterface
 {
     /**
      * @var bool whether to parse raw body even for 'POST' request and `$_FILES` already populated.

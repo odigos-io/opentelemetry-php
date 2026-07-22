@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Database\Eloquent\Concerns;
+namespace Odigos\Illuminate\Database\Eloquent\Concerns;
 
-use Illuminate\Support\Arr;
-use Illuminate\Support\Onceable;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Onceable;
 use WeakMap;
 trait PreventsCircularRecursion
 {

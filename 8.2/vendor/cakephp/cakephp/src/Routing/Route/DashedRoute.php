@@ -14,15 +14,15 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Routing\Route;
+namespace Odigos\Cake\Routing\Route;
 
-use Cake\Utility\Inflector;
+use Odigos\Cake\Utility\Inflector;
 /**
  * This route class will transparently inflect the controller, action and plugin
  * routing parameters, so that requesting `/my-plugin/my-controller/my-action`
  * is parsed as `['plugin' => 'MyPlugin', 'controller' => 'MyController', 'action' => 'myAction']`
  */
-class DashedRoute extends \Cake\Routing\Route\Route
+class DashedRoute extends Route
 {
     /**
      * Flag for tracking whether the defaults have been inflected.

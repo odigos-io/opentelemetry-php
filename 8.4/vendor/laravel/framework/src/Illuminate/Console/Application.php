@@ -1,25 +1,25 @@
 <?php
 
-namespace Illuminate\Console;
+namespace Odigos\Illuminate\Console;
 
 use Closure;
-use Illuminate\Console\Events\ArtisanStarting;
-use Illuminate\Contracts\Console\Application as ApplicationContract;
-use Illuminate\Contracts\Container\Container;
-use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Support\ProcessUtils;
+use Odigos\Illuminate\Console\Events\ArtisanStarting;
+use Odigos\Illuminate\Contracts\Console\Application as ApplicationContract;
+use Odigos\Illuminate\Contracts\Container\Container;
+use Odigos\Illuminate\Contracts\Events\Dispatcher;
+use Odigos\Illuminate\Support\ProcessUtils;
 use ReflectionClass;
-use Symfony\Component\Console\Application as SymfonyApplication;
-use Symfony\Component\Console\Attribute\AsCommand;
-use Symfony\Component\Console\Command\Command as SymfonyCommand;
-use Symfony\Component\Console\Exception\CommandNotFoundException;
-use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Input\InputDefinition;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\StringInput;
-use Symfony\Component\Console\Output\BufferedOutput;
-use function Illuminate\Support\artisan_binary;
-use function Illuminate\Support\php_binary;
+use Odigos\Symfony\Component\Console\Application as SymfonyApplication;
+use Odigos\Symfony\Component\Console\Attribute\AsCommand;
+use Odigos\Symfony\Component\Console\Command\Command as SymfonyCommand;
+use Odigos\Symfony\Component\Console\Exception\CommandNotFoundException;
+use Odigos\Symfony\Component\Console\Input\ArrayInput;
+use Odigos\Symfony\Component\Console\Input\InputDefinition;
+use Odigos\Symfony\Component\Console\Input\InputOption;
+use Odigos\Symfony\Component\Console\Input\StringInput;
+use Odigos\Symfony\Component\Console\Output\BufferedOutput;
+use function Odigos\Illuminate\Support\artisan_binary;
+use function Odigos\Illuminate\Support\php_binary;
 class Application extends SymfonyApplication implements ApplicationContract
 {
     /**
@@ -210,7 +210,7 @@ class Application extends SymfonyApplication implements ApplicationContract
      */
     public function addCommand(SymfonyCommand|callable $command): ?SymfonyCommand
     {
-        if ($command instanceof \Illuminate\Console\Command) {
+        if ($command instanceof Command) {
             $command->setLaravel($this->laravel);
         }
         return $this->addToParent($command);
@@ -246,7 +246,7 @@ class Application extends SymfonyApplication implements ApplicationContract
                 return null;
             }
         }
-        if ($command instanceof \Illuminate\Console\Command) {
+        if ($command instanceof Command) {
             return $this->add($command);
         }
         return $this->add($this->laravel->make($command));
@@ -272,7 +272,7 @@ class Application extends SymfonyApplication implements ApplicationContract
      */
     public function setContainerCommandLoader()
     {
-        $this->setCommandLoader(new \Illuminate\Console\ContainerCommandLoader($this->laravel, $this->commandMap));
+        $this->setCommandLoader(new ContainerCommandLoader($this->laravel, $this->commandMap));
         return $this;
     }
     /**

@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Auth\Passwords;
+namespace Odigos\Illuminate\Auth\Passwords;
 
-use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+use Odigos\Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 interface TokenRepositoryInterface
 {
     /**

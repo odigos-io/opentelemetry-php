@@ -17,19 +17,19 @@ namespace Odigos;
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
 // phpcs:disable PSR1.Files.SideEffects
-use function Cake\Core\deprecationWarning as cakeDeprecationWarning;
-use function Cake\Core\env as cakeEnv;
-use function Cake\Core\h as cakeH;
-use function Cake\Core\namespaceSplit as cakeNamespaceSplit;
-use function Cake\Core\pathCombine as cakePathCombine;
-use function Cake\Core\pj as cakePj;
-use function Cake\Core\pluginSplit as cakePluginSplit;
-use function Cake\Core\pr as cakePr;
-use function Cake\Core\toBool as cakeToBool;
-use function Cake\Core\toFloat as cakeToFloat;
-use function Cake\Core\toInt as cakeToInt;
-use function Cake\Core\toString as cakeToString;
-use function Cake\Core\triggerWarning as cakeTriggerWarning;
+use function Odigos\Cake\Core\deprecationWarning as cakeDeprecationWarning;
+use function Odigos\Cake\Core\env as cakeEnv;
+use function Odigos\Cake\Core\h as cakeH;
+use function Odigos\Cake\Core\namespaceSplit as cakeNamespaceSplit;
+use function Odigos\Cake\Core\pathCombine as cakePathCombine;
+use function Odigos\Cake\Core\pj as cakePj;
+use function Odigos\Cake\Core\pluginSplit as cakePluginSplit;
+use function Odigos\Cake\Core\pr as cakePr;
+use function Odigos\Cake\Core\toBool as cakeToBool;
+use function Odigos\Cake\Core\toFloat as cakeToFloat;
+use function Odigos\Cake\Core\toInt as cakeToInt;
+use function Odigos\Cake\Core\toString as cakeToString;
+use function Odigos\Cake\Core\triggerWarning as cakeTriggerWarning;
 if (!\function_exists('Odigos\pathCombine')) {
     /**
      * Combines parts with a forward-slash `/`.

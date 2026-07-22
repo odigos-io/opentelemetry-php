@@ -1,17 +1,17 @@
 <?php
 
 declare (strict_types=1);
-namespace MongoDB\Builder;
+namespace Odigos\MongoDB\Builder;
 
 use DateTimeInterface;
 use MongoDB\BSON\Type;
-use MongoDB\Builder\Stage\MatchStage;
-use MongoDB\Builder\Type\FieldQueryInterface;
-use MongoDB\Builder\Type\QueryInterface;
+use Odigos\MongoDB\Builder\Stage\MatchStage;
+use Odigos\MongoDB\Builder\Type\FieldQueryInterface;
+use Odigos\MongoDB\Builder\Type\QueryInterface;
 use stdClass;
 final class Stage
 {
-    use \MongoDB\Builder\Stage\FactoryTrait {
+    use Stage\FactoryTrait {
         match as private generatedMatch;
     }
     /**

@@ -1,14 +1,14 @@
 <?php
 
-namespace Illuminate\Foundation\Console;
+namespace Odigos\Illuminate\Foundation\Console;
 
 use Closure;
-use Illuminate\Console\Command;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Support\Collection;
+use Odigos\Illuminate\Console\Command;
+use Odigos\Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Odigos\Illuminate\Contracts\Queue\ShouldQueue;
+use Odigos\Illuminate\Support\Collection;
 use ReflectionFunction;
-use Symfony\Component\Console\Attribute\AsCommand;
+use Odigos\Symfony\Component\Console\Attribute\AsCommand;
 #[AsCommand(name: 'event:list')]
 class EventListCommand extends Command
 {

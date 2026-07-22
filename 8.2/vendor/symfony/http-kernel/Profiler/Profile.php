@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpKernel\Profiler;
+namespace Odigos\Symfony\Component\HttpKernel\Profiler;
 
-use Symfony\Component\HttpKernel\DataCollector\DataCollectorInterface;
+use Odigos\Symfony\Component\HttpKernel\DataCollector\DataCollectorInterface;
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  *

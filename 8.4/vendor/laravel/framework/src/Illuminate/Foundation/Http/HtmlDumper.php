@@ -1,13 +1,13 @@
 <?php
 
-namespace Illuminate\Foundation\Http;
+namespace Odigos\Illuminate\Foundation\Http;
 
-use Illuminate\Foundation\Concerns\ResolvesDumpSource;
-use Symfony\Component\VarDumper\Caster\ReflectionCaster;
-use Symfony\Component\VarDumper\Cloner\Data;
-use Symfony\Component\VarDumper\Cloner\VarCloner;
-use Symfony\Component\VarDumper\Dumper\HtmlDumper as BaseHtmlDumper;
-use Symfony\Component\VarDumper\VarDumper;
+use Odigos\Illuminate\Foundation\Concerns\ResolvesDumpSource;
+use Odigos\Symfony\Component\VarDumper\Caster\ReflectionCaster;
+use Odigos\Symfony\Component\VarDumper\Cloner\Data;
+use Odigos\Symfony\Component\VarDumper\Cloner\VarCloner;
+use Odigos\Symfony\Component\VarDumper\Dumper\HtmlDumper as BaseHtmlDumper;
+use Odigos\Symfony\Component\VarDumper\VarDumper;
 class HtmlDumper extends BaseHtmlDumper
 {
     use ResolvesDumpSource;

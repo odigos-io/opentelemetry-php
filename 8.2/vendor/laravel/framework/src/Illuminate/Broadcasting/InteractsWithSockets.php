@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Broadcasting;
+namespace Odigos\Illuminate\Broadcasting;
 
-use Illuminate\Support\Facades\Broadcast;
+use Odigos\Illuminate\Support\Facades\Broadcast;
 trait InteractsWithSockets
 {
     /**

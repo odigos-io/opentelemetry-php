@@ -8,27 +8,27 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpKernel\Controller;
+namespace Odigos\Symfony\Component\HttpKernel\Controller;
 
 use Psr\Container\ContainerInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Attribute\ValueResolver;
-use Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver;
-use Symfony\Component\HttpKernel\Controller\ArgumentResolver\RequestAttributeValueResolver;
-use Symfony\Component\HttpKernel\Controller\ArgumentResolver\RequestValueResolver;
-use Symfony\Component\HttpKernel\Controller\ArgumentResolver\SessionValueResolver;
-use Symfony\Component\HttpKernel\Controller\ArgumentResolver\TraceableValueResolver;
-use Symfony\Component\HttpKernel\Controller\ArgumentResolver\VariadicValueResolver;
-use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadataFactory;
-use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadataFactoryInterface;
-use Symfony\Component\HttpKernel\Exception\ResolverNotFoundException;
-use Symfony\Contracts\Service\ServiceProviderInterface;
+use Odigos\Symfony\Component\HttpFoundation\Request;
+use Odigos\Symfony\Component\HttpKernel\Attribute\ValueResolver;
+use Odigos\Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver;
+use Odigos\Symfony\Component\HttpKernel\Controller\ArgumentResolver\RequestAttributeValueResolver;
+use Odigos\Symfony\Component\HttpKernel\Controller\ArgumentResolver\RequestValueResolver;
+use Odigos\Symfony\Component\HttpKernel\Controller\ArgumentResolver\SessionValueResolver;
+use Odigos\Symfony\Component\HttpKernel\Controller\ArgumentResolver\TraceableValueResolver;
+use Odigos\Symfony\Component\HttpKernel\Controller\ArgumentResolver\VariadicValueResolver;
+use Odigos\Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadataFactory;
+use Odigos\Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadataFactoryInterface;
+use Odigos\Symfony\Component\HttpKernel\Exception\ResolverNotFoundException;
+use Odigos\Symfony\Contracts\Service\ServiceProviderInterface;
 /**
  * Responsible for resolving the arguments passed to an action.
  *
  * @author Iltar van der Berg <kjarli@gmail.com>
  */
-final class ArgumentResolver implements \Symfony\Component\HttpKernel\Controller\ArgumentResolverInterface
+final class ArgumentResolver implements ArgumentResolverInterface
 {
     private ArgumentMetadataFactoryInterface $argumentMetadataFactory;
     private iterable $argumentValueResolvers;
@@ -67,7 +67,7 @@ final class ArgumentResolver implements \Symfony\Component\HttpKernel\Controller
                 }
             }
             foreach ($argumentValueResolvers as $name => $resolver) {
-                if ((!$resolver instanceof \Symfony\Component\HttpKernel\Controller\ValueResolverInterface || $resolver instanceof TraceableValueResolver) && !$resolver->supports($request, $metadata)) {
+                if ((!$resolver instanceof ValueResolverInterface || $resolver instanceof TraceableValueResolver) && !$resolver->supports($request, $metadata)) {
                     continue;
                 }
                 if (isset($disabledResolvers[\is_int($name) ? $resolver::class : $name])) {
@@ -85,7 +85,7 @@ final class ArgumentResolver implements \Symfony\Component\HttpKernel\Controller
                     // continue to the next controller argument
                     continue 2;
                 }
-                if (!$resolver instanceof \Symfony\Component\HttpKernel\Controller\ValueResolverInterface) {
+                if (!$resolver instanceof ValueResolverInterface) {
                     throw new \InvalidArgumentException(\sprintf('"%s::resolve()" must yield at least one value.', get_debug_type($resolver)));
                 }
             }

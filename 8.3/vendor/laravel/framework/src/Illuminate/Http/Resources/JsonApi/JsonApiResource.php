@@ -1,15 +1,15 @@
 <?php
 
-namespace Illuminate\Http\Resources\JsonApi;
+namespace Odigos\Illuminate\Http\Resources\JsonApi;
 
 use BadMethodCallException;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Arr;
+use Odigos\Illuminate\Http\JsonResponse;
+use Odigos\Illuminate\Http\Request;
+use Odigos\Illuminate\Http\Resources\Json\JsonResource;
+use Odigos\Illuminate\Support\Arr;
 class JsonApiResource extends JsonResource
 {
-    use \Illuminate\Http\Resources\JsonApi\Concerns\ResolvesJsonApiElements, \Illuminate\Http\Resources\JsonApi\Concerns\ResolvesJsonApiRequest;
+    use Concerns\ResolvesJsonApiElements, Concerns\ResolvesJsonApiRequest;
     /**
      * The "data" wrapper that should be applied.
      *
@@ -173,7 +173,7 @@ class JsonApiResource extends JsonResource
     #[\Override]
     protected static function newCollection($resource)
     {
-        return new \Illuminate\Http\Resources\JsonApi\AnonymousResourceCollection($resource, static::class);
+        return new AnonymousResourceCollection($resource, static::class);
     }
     /**
      * Set the string that should wrap the outer-most resource array.

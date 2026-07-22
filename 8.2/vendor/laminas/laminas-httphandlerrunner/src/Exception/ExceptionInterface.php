@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Laminas\HttpHandlerRunner\Exception;
+namespace Odigos\Laminas\HttpHandlerRunner\Exception;
 
 use Throwable;
 /**

@@ -12,7 +12,7 @@ declare (strict_types=1);
 namespace Odigos\Carbon\Traits;
 
 use Odigos\Carbon\FactoryImmutable;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use Odigos\Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * Static config for localization.
  */

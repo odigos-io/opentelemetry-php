@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Mail;
+namespace Odigos\Illuminate\Mail;
 
-use Illuminate\Contracts\Mail\Mailable as MailableContract;
-use Illuminate\Contracts\Mail\Mailer as MailerContract;
-use Illuminate\Contracts\Translation\HasLocalePreference;
-use Illuminate\Support\Traits\Conditionable;
+use Odigos\Illuminate\Contracts\Mail\Mailable as MailableContract;
+use Odigos\Illuminate\Contracts\Mail\Mailer as MailerContract;
+use Odigos\Illuminate\Contracts\Translation\HasLocalePreference;
+use Odigos\Illuminate\Support\Traits\Conditionable;
 class PendingMail
 {
     use Conditionable;

@@ -14,7 +14,7 @@ declare (strict_types=1);
  * @since         4.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Routing;
+namespace Odigos\Cake\Routing;
 
 /**
  * Interface for applications that use routing.
@@ -29,5 +29,5 @@ interface RoutingApplicationInterface
      * @param \Cake\Routing\RouteBuilder $routes A route builder to add routes into.
      * @return void
      */
-    public function routes(\Cake\Routing\RouteBuilder $routes): void;
+    public function routes(RouteBuilder $routes): void;
 }

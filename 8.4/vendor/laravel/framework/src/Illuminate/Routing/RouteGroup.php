@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Routing;
+namespace Odigos\Illuminate\Routing;
 
-use Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Arr;
 class RouteGroup
 {
     /**

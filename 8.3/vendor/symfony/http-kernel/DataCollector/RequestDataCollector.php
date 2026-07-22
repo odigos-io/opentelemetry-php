@@ -8,26 +8,26 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpKernel\DataCollector;
+namespace Odigos\Symfony\Component\HttpKernel\DataCollector;
 
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpFoundation\Cookie;
-use Symfony\Component\HttpFoundation\ParameterBag;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\SessionBagInterface;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\HttpKernel\Event\ControllerEvent;
-use Symfony\Component\HttpKernel\Event\ResponseEvent;
-use Symfony\Component\HttpKernel\KernelEvents;
-use Symfony\Component\VarDumper\Cloner\Data;
+use Odigos\Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Odigos\Symfony\Component\HttpFoundation\Cookie;
+use Odigos\Symfony\Component\HttpFoundation\ParameterBag;
+use Odigos\Symfony\Component\HttpFoundation\Request;
+use Odigos\Symfony\Component\HttpFoundation\RequestStack;
+use Odigos\Symfony\Component\HttpFoundation\Response;
+use Odigos\Symfony\Component\HttpFoundation\Session\SessionBagInterface;
+use Odigos\Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Odigos\Symfony\Component\HttpKernel\Event\ControllerEvent;
+use Odigos\Symfony\Component\HttpKernel\Event\ResponseEvent;
+use Odigos\Symfony\Component\HttpKernel\KernelEvents;
+use Odigos\Symfony\Component\VarDumper\Cloner\Data;
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  *
  * @final
  */
-class RequestDataCollector extends \Symfony\Component\HttpKernel\DataCollector\DataCollector implements EventSubscriberInterface, \Symfony\Component\HttpKernel\DataCollector\LateDataCollectorInterface
+class RequestDataCollector extends DataCollector implements EventSubscriberInterface, LateDataCollectorInterface
 {
     /**
      * @var \SplObjectStorage<Request, callable>

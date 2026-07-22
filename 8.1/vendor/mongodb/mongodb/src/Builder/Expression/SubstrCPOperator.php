@@ -4,11 +4,11 @@
  * THIS FILE IS AUTO-GENERATED. ANY CHANGES WILL BE LOST!
  */
 declare (strict_types=1);
-namespace MongoDB\Builder\Expression;
+namespace Odigos\MongoDB\Builder\Expression;
 
-use MongoDB\Builder\Type\Encode;
-use MongoDB\Builder\Type\OperatorInterface;
-use MongoDB\Exception\InvalidArgumentException;
+use Odigos\MongoDB\Builder\Type\Encode;
+use Odigos\MongoDB\Builder\Type\OperatorInterface;
+use Odigos\MongoDB\Exception\InvalidArgumentException;
 use function is_string;
 use function str_starts_with;
 /**
@@ -17,23 +17,23 @@ use function str_starts_with;
  * @see https://www.mongodb.com/docs/manual/reference/operator/aggregation/substrCP/
  * @internal
  */
-final class SubstrCPOperator implements \MongoDB\Builder\Expression\ResolvesToString, OperatorInterface
+final class SubstrCPOperator implements ResolvesToString, OperatorInterface
 {
     public const ENCODE = Encode::Array;
     public const NAME = '$substrCP';
     public const PROPERTIES = ['string' => 'string', 'start' => 'start', 'length' => 'length'];
     /** @var ResolvesToString|string $string */
-    public readonly \MongoDB\Builder\Expression\ResolvesToString|string $string;
+    public readonly ResolvesToString|string $string;
     /** @var ResolvesToInt|int|string $start If start is a negative number, $substr returns an empty string "". */
-    public readonly \MongoDB\Builder\Expression\ResolvesToInt|int|string $start;
+    public readonly ResolvesToInt|int|string $start;
     /** @var ResolvesToInt|int|string $length If length is a negative number, $substr returns a substring that starts at the specified index and includes the rest of the string. */
-    public readonly \MongoDB\Builder\Expression\ResolvesToInt|int|string $length;
+    public readonly ResolvesToInt|int|string $length;
     /**
      * @param ResolvesToString|string $string
      * @param ResolvesToInt|int|string $start If start is a negative number, $substr returns an empty string "".
      * @param ResolvesToInt|int|string $length If length is a negative number, $substr returns a substring that starts at the specified index and includes the rest of the string.
      */
-    public function __construct(\MongoDB\Builder\Expression\ResolvesToString|string $string, \MongoDB\Builder\Expression\ResolvesToInt|int|string $start, \MongoDB\Builder\Expression\ResolvesToInt|int|string $length)
+    public function __construct(ResolvesToString|string $string, ResolvesToInt|int|string $start, ResolvesToInt|int|string $length)
     {
         $this->string = $string;
         if (is_string($start) && !str_starts_with($start, '$')) {

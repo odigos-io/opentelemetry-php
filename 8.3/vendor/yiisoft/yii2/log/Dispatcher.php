@@ -5,11 +5,11 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\log;
+namespace Odigos\yii\log;
 
 use Odigos\Yii;
-use yii\base\Component;
-use yii\base\ErrorHandler;
+use Odigos\yii\base\Component;
+use Odigos\yii\base\ErrorHandler;
 /**
  * Dispatcher manages a set of [[Target|log targets]].
  *
@@ -91,7 +91,7 @@ class Dispatcher extends Component
     {
         parent::init();
         foreach ($this->targets as $name => $target) {
-            if (!$target instanceof \yii\log\Target) {
+            if (!$target instanceof Target) {
                 $this->targets[$name] = Yii::createObject($target);
             }
         }
@@ -198,6 +198,6 @@ class Dispatcher extends Component
      */
     protected function generateTargetFailErrorMessage($target, $throwable, $method)
     {
-        return ['Unable to send log via ' . get_class($target) . ': ' . ErrorHandler::convertExceptionToVerboseString($throwable), \yii\log\Logger::LEVEL_WARNING, $method, microtime(\true), []];
+        return ['Unable to send log via ' . get_class($target) . ': ' . ErrorHandler::convertExceptionToVerboseString($throwable), Logger::LEVEL_WARNING, $method, microtime(\true), []];
     }
 }

@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\mail;
+namespace Odigos\yii\mail;
 
 /**
  * MailerInterface is the interface that should be implemented by mailer classes.

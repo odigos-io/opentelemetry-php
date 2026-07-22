@@ -1,18 +1,18 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenTelemetry\Contrib\Instrumentation\Laravel\Hooks;
+namespace Odigos\OpenTelemetry\Contrib\Instrumentation\Laravel\Hooks;
 
 use OpenTelemetry\API\Instrumentation\CachedInstrumentation;
 trait LaravelHookTrait
 {
-    private static \OpenTelemetry\Contrib\Instrumentation\Laravel\Hooks\LaravelHook $instance;
+    private static LaravelHook $instance;
     protected function __construct(protected CachedInstrumentation $instrumentation)
     {
     }
     abstract public function instrument(): void;
     /** @psalm-suppress PossiblyUnusedReturnValue */
-    public static function hook(CachedInstrumentation $instrumentation): \OpenTelemetry\Contrib\Instrumentation\Laravel\Hooks\LaravelHook
+    public static function hook(CachedInstrumentation $instrumentation): LaravelHook
     {
         /** @psalm-suppress RedundantPropertyInitializationCheck */
         if (!isset(self::$instance)) {

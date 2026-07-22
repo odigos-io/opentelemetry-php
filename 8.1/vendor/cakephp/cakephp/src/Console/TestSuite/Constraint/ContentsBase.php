@@ -13,7 +13,7 @@ declare (strict_types=1);
  * @since         3.7.0
  * @license       https://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Console\TestSuite\Constraint;
+namespace Odigos\Cake\Console\TestSuite\Constraint;
 
 use Odigos\PHPUnit\Framework\Constraint\Constraint;
 /**
@@ -44,5 +44,5 @@ abstract class ContentsBase extends Constraint
     }
 }
 // phpcs:disable
-class_alias('Cake\Console\TestSuite\Constraint\ContentsBase', 'Cake\TestSuite\Constraint\Console\ContentsBase');
+class_alias('Odigos\Cake\Console\TestSuite\Constraint\ContentsBase', 'Odigos\Cake\TestSuite\Constraint\Console\ContentsBase');
 // phpcs:enable

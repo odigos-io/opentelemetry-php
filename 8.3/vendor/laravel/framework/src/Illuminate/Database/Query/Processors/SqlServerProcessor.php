@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Database\Query\Processors;
+namespace Odigos\Illuminate\Database\Query\Processors;
 
 use Exception;
-use Illuminate\Database\Connection;
-use Illuminate\Database\Query\Builder;
-class SqlServerProcessor extends \Illuminate\Database\Query\Processors\Processor
+use Odigos\Illuminate\Database\Connection;
+use Odigos\Illuminate\Database\Query\Builder;
+class SqlServerProcessor extends Processor
 {
     /**
      * Process an "insert get ID" query.

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace GuzzleHttp\Psr7;
+namespace Odigos\GuzzleHttp\Psr7;
 
 final class Header
 {

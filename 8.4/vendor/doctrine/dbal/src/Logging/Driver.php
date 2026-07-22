@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Logging;
+namespace Odigos\Doctrine\DBAL\Logging;
 
-use Doctrine\DBAL\Driver as DriverInterface;
-use Doctrine\DBAL\Driver\Middleware\AbstractDriverMiddleware;
+use Odigos\Doctrine\DBAL\Driver as DriverInterface;
+use Odigos\Doctrine\DBAL\Driver\Middleware\AbstractDriverMiddleware;
 use Psr\Log\LoggerInterface;
 use SensitiveParameter;
 final class Driver extends AbstractDriverMiddleware
@@ -20,10 +20,10 @@ final class Driver extends AbstractDriverMiddleware
     public function connect(
         #[SensitiveParameter]
         array $params
-    ): \Doctrine\DBAL\Logging\Connection
+    ): Connection
     {
         $this->logger->info('Connecting with parameters {params}', ['params' => $this->maskPassword($params)]);
-        return new \Doctrine\DBAL\Logging\Connection(parent::connect($params), $this->logger);
+        return new Connection(parent::connect($params), $this->logger);
     }
     /**
      * @param array<string,mixed> $params Connection parameters

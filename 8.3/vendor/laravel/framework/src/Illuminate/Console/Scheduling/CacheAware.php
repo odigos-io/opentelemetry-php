@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Console\Scheduling;
+namespace Odigos\Illuminate\Console\Scheduling;
 
 interface CacheAware
 {

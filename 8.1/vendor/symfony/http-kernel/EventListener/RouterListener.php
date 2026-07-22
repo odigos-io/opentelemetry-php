@@ -8,27 +8,27 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpKernel\EventListener;
+namespace Odigos\Symfony\Component\HttpKernel\EventListener;
 
 use Psr\Log\LoggerInterface;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Event\ExceptionEvent;
-use Symfony\Component\HttpKernel\Event\RequestEvent;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\HttpKernel\Kernel;
-use Symfony\Component\HttpKernel\KernelEvents;
-use Symfony\Component\Routing\Exception\MethodNotAllowedException;
-use Symfony\Component\Routing\Exception\NoConfigurationException;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
-use Symfony\Component\Routing\Matcher\UrlMatcherInterface;
-use Symfony\Component\Routing\RequestContext;
-use Symfony\Component\Routing\RequestContextAwareInterface;
+use Odigos\Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Odigos\Symfony\Component\HttpFoundation\Request;
+use Odigos\Symfony\Component\HttpFoundation\RequestStack;
+use Odigos\Symfony\Component\HttpFoundation\Response;
+use Odigos\Symfony\Component\HttpKernel\Event\ExceptionEvent;
+use Odigos\Symfony\Component\HttpKernel\Event\RequestEvent;
+use Odigos\Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Odigos\Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use Odigos\Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Odigos\Symfony\Component\HttpKernel\Kernel;
+use Odigos\Symfony\Component\HttpKernel\KernelEvents;
+use Odigos\Symfony\Component\Routing\Exception\MethodNotAllowedException;
+use Odigos\Symfony\Component\Routing\Exception\NoConfigurationException;
+use Odigos\Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Odigos\Symfony\Component\Routing\Matcher\RequestMatcherInterface;
+use Odigos\Symfony\Component\Routing\Matcher\UrlMatcherInterface;
+use Odigos\Symfony\Component\Routing\RequestContext;
+use Odigos\Symfony\Component\Routing\RequestContextAwareInterface;
 /**
  * Initializes the context from the request and sets request attributes based on a matching route.
  *

@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Mime\Test\Constraint;
+namespace Odigos\Symfony\Component\Mime\Test\Constraint;
 
 use Odigos\PHPUnit\Framework\Constraint\Constraint;
-use Symfony\Component\Mime\Email;
+use Odigos\Symfony\Component\Mime\Email;
 final class EmailSubjectContains extends Constraint
 {
     public function __construct(private readonly string $expectedSubjectValue)

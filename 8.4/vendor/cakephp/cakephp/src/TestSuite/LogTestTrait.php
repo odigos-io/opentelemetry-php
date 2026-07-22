@@ -14,10 +14,10 @@ declare (strict_types=1);
  * @since         5.1.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\TestSuite;
+namespace Odigos\Cake\TestSuite;
 
-use Cake\Log\Engine\ArrayLog;
-use Cake\Log\Log;
+use Odigos\Cake\Log\Engine\ArrayLog;
+use Odigos\Cake\Log\Log;
 use Odigos\PHPUnit\Framework\Attributes\After;
 /**
  * Make assertions on logs

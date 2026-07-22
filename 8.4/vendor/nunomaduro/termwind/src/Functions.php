@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Odigos\Termwind;
 
 use Closure;
-use Symfony\Component\Console\Output\OutputInterface;
+use Odigos\Symfony\Component\Console\Output\OutputInterface;
 use Odigos\Termwind\Repositories\Styles as StyleRepository;
 use Odigos\Termwind\ValueObjects\Style;
 use Odigos\Termwind\ValueObjects\Styles;

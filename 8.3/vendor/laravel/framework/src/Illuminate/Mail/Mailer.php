@@ -1,25 +1,25 @@
 <?php
 
-namespace Illuminate\Mail;
+namespace Odigos\Illuminate\Mail;
 
 use Closure;
-use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Contracts\Mail\Mailable as MailableContract;
-use Illuminate\Contracts\Mail\Mailer as MailerContract;
-use Illuminate\Contracts\Mail\MailQueue as MailQueueContract;
-use Illuminate\Contracts\Queue\Factory as QueueContract;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Contracts\Support\Htmlable;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Mail\Events\MessageSending;
-use Illuminate\Mail\Events\MessageSent;
-use Illuminate\Mail\Mailables\Address;
-use Illuminate\Support\HtmlString;
-use Illuminate\Support\Traits\Macroable;
+use Odigos\Illuminate\Contracts\Events\Dispatcher;
+use Odigos\Illuminate\Contracts\Mail\Mailable as MailableContract;
+use Odigos\Illuminate\Contracts\Mail\Mailer as MailerContract;
+use Odigos\Illuminate\Contracts\Mail\MailQueue as MailQueueContract;
+use Odigos\Illuminate\Contracts\Queue\Factory as QueueContract;
+use Odigos\Illuminate\Contracts\Queue\ShouldQueue;
+use Odigos\Illuminate\Contracts\Support\Htmlable;
+use Odigos\Illuminate\Contracts\View\Factory;
+use Odigos\Illuminate\Mail\Events\MessageSending;
+use Odigos\Illuminate\Mail\Events\MessageSent;
+use Odigos\Illuminate\Mail\Mailables\Address;
+use Odigos\Illuminate\Support\HtmlString;
+use Odigos\Illuminate\Support\Traits\Macroable;
 use InvalidArgumentException;
-use Symfony\Component\Mailer\Envelope;
-use Symfony\Component\Mailer\Transport\TransportInterface;
-use Symfony\Component\Mime\Email;
+use Odigos\Symfony\Component\Mailer\Envelope;
+use Odigos\Symfony\Component\Mailer\Transport\TransportInterface;
+use Odigos\Symfony\Component\Mime\Email;
 class Mailer implements MailerContract, MailQueueContract
 {
     use Macroable;
@@ -147,7 +147,7 @@ class Mailer implements MailerContract, MailQueueContract
         if (!is_null($name) && is_string($users)) {
             $users = new Address($users, $name);
         }
-        return (new \Illuminate\Mail\PendingMail($this))->to($users);
+        return (new PendingMail($this))->to($users);
     }
     /**
      * Begin the process of mailing a mailable class instance.
@@ -161,7 +161,7 @@ class Mailer implements MailerContract, MailQueueContract
         if (!is_null($name) && is_string($users)) {
             $users = new Address($users, $name);
         }
-        return (new \Illuminate\Mail\PendingMail($this))->cc($users);
+        return (new PendingMail($this))->cc($users);
     }
     /**
      * Begin the process of mailing a mailable class instance.
@@ -175,7 +175,7 @@ class Mailer implements MailerContract, MailQueueContract
         if (!is_null($name) && is_string($users)) {
             $users = new Address($users, $name);
         }
-        return (new \Illuminate\Mail\PendingMail($this))->bcc($users);
+        return (new PendingMail($this))->bcc($users);
     }
     /**
      * Send a new message with only an HTML part.
@@ -284,7 +284,7 @@ class Mailer implements MailerContract, MailQueueContract
         if ($this->shouldSendMessage($symfonyMessage, $data)) {
             $symfonySentMessage = $this->sendSymfonyMessage($symfonyMessage);
             if ($symfonySentMessage) {
-                $sentMessage = new \Illuminate\Mail\SentMessage($symfonySentMessage);
+                $sentMessage = new SentMessage($symfonySentMessage);
                 $this->dispatchSentEvent($sentMessage, $data);
                 return $sentMessage;
             }
@@ -465,7 +465,7 @@ class Mailer implements MailerContract, MailQueueContract
      */
     protected function createMessage()
     {
-        $message = new \Illuminate\Mail\Message(new Email());
+        $message = new Message(new Email());
         // If a global from address has been specified we will set it on every message
         // instance so the developer does not have to repeat themselves every time
         // they create a new message. We'll just go ahead and push this address.

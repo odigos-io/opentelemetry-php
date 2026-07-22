@@ -14,13 +14,13 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Error;
+namespace Odigos\Cake\Error;
 
-use Cake\Core\Configure;
-use Cake\Core\Exception\CakeException;
-use Cake\Core\InstanceConfigTrait;
-use Cake\Http\ServerRequest;
-use Cake\Log\Log;
+use Odigos\Cake\Core\Configure;
+use Odigos\Cake\Core\Exception\CakeException;
+use Odigos\Cake\Core\InstanceConfigTrait;
+use Odigos\Cake\Http\ServerRequest;
+use Odigos\Cake\Log\Log;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerTrait;
 use Stringable;
@@ -28,7 +28,7 @@ use Throwable;
 /**
  * Log errors and unhandled exceptions to `Cake\Log\Log`
  */
-class ErrorLogger implements \Cake\Error\ErrorLoggerInterface
+class ErrorLogger implements ErrorLoggerInterface
 {
     use InstanceConfigTrait;
     use LoggerTrait;
@@ -59,7 +59,7 @@ class ErrorLogger implements \Cake\Error\ErrorLoggerInterface
     /**
      * @inheritDoc
      */
-    public function logError(\Cake\Error\PhpError $error, ?ServerRequestInterface $request = null, bool $includeTrace = \false): void
+    public function logError(PhpError $error, ?ServerRequestInterface $request = null, bool $includeTrace = \false): void
     {
         $message = $this->getErrorMessage($error, $includeTrace);
         if ($request instanceof ServerRequestInterface) {
@@ -80,7 +80,7 @@ class ErrorLogger implements \Cake\Error\ErrorLoggerInterface
      * @param bool $includeTrace Whether to include a stack trace.
      * @return string Error message
      */
-    protected function getErrorMessage(\Cake\Error\PhpError $error, bool $includeTrace = \false): string
+    protected function getErrorMessage(PhpError $error, bool $includeTrace = \false): string
     {
         $message = sprintf('%s in %s on line %s', $error->getMessage(), $error->getFile(), $error->getLine());
         if (!$includeTrace) {
@@ -119,7 +119,7 @@ class ErrorLogger implements \Cake\Error\ErrorLoggerInterface
             }
         }
         if ($includeTrace) {
-            $trace = \Cake\Error\Debugger::formatTrace($exception, ['format' => Configure::read('Error.traceFormat', 'shortPoints')]);
+            $trace = Debugger::formatTrace($exception, ['format' => Configure::read('Error.traceFormat', 'shortPoints')]);
             assert(is_array($trace));
             $message .= "\nStack Trace:\n";
             foreach ($trace as $line) {

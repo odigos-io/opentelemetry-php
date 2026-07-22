@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Platforms\Keywords;
+namespace Odigos\Doctrine\DBAL\Platforms\Keywords;
 
 use function array_diff;
 use function array_merge;
@@ -10,7 +10,7 @@ use function array_merge;
  *
  * @deprecated
  */
-class MySQL84Keywords extends \Doctrine\DBAL\Platforms\Keywords\MySQL80Keywords
+class MySQL84Keywords extends MySQL80Keywords
 {
     /**
      * {@inheritDoc}

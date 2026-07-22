@@ -14,9 +14,9 @@ declare (strict_types=1);
  * @since         3.0.3
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Validation;
+namespace Odigos\Cake\Validation;
 
-use Cake\Event\EventDispatcherInterface;
+use Odigos\Cake\Event\EventDispatcherInterface;
 use InvalidArgumentException;
 /**
  * A trait that provides methods for building and
@@ -44,7 +44,7 @@ trait ValidatorAwareTrait
      *
      * @var string
      */
-    protected string $_validatorClass = \Cake\Validation\Validator::class;
+    protected string $_validatorClass = Validator::class;
     /**
      * A list of validation objects indexed by name
      *
@@ -85,7 +85,7 @@ trait ValidatorAwareTrait
      * @param string|null $name The name of the validation set to return.
      * @return \Cake\Validation\Validator
      */
-    public function getValidator(?string $name = null): \Cake\Validation\Validator
+    public function getValidator(?string $name = null): Validator
     {
         $name = $name ?: static::DEFAULT_VALIDATOR;
         if (!isset($this->_validators[$name])) {
@@ -104,7 +104,7 @@ trait ValidatorAwareTrait
      * @return \Cake\Validation\Validator
      * @throws \InvalidArgumentException
      */
-    protected function createValidator(string $name): \Cake\Validation\Validator
+    protected function createValidator(string $name): Validator
     {
         $method = 'validation' . ucfirst($name);
         if (!$this->validationMethodExists($method)) {
@@ -117,7 +117,7 @@ trait ValidatorAwareTrait
             $event = defined(static::class . '::BUILD_VALIDATOR_EVENT') ? static::BUILD_VALIDATOR_EVENT : 'Model.buildValidator';
             $this->dispatchEvent($event, compact('validator', 'name'));
         }
-        assert($validator instanceof \Cake\Validation\Validator, sprintf('The `%s::%s()` validation method must return an instance of `%s`.', static::class, $method, \Cake\Validation\Validator::class));
+        assert($validator instanceof Validator, sprintf('The `%s::%s()` validation method must return an instance of `%s`.', static::class, $method, Validator::class));
         return $validator;
     }
     /**
@@ -138,7 +138,7 @@ trait ValidatorAwareTrait
      * @param \Cake\Validation\Validator $validator Validator object to be set.
      * @return $this
      */
-    public function setValidator(string $name, \Cake\Validation\Validator $validator)
+    public function setValidator(string $name, Validator $validator)
     {
         $validator->setProvider(static::VALIDATOR_PROVIDER_NAME, $this);
         $this->_validators[$name] = $validator;
@@ -176,7 +176,7 @@ trait ValidatorAwareTrait
      * add some rules to it.
      * @return \Cake\Validation\Validator
      */
-    public function validationDefault(\Cake\Validation\Validator $validator): \Cake\Validation\Validator
+    public function validationDefault(Validator $validator): Validator
     {
         return $validator;
     }

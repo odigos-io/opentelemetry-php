@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Cache;
+namespace Odigos\Illuminate\Cache;
 
-class MemcachedLock extends \Illuminate\Cache\Lock
+class MemcachedLock extends Lock
 {
     /**
      * The Memcached instance.

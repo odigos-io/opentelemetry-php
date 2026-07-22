@@ -14,7 +14,7 @@ declare (strict_types=1);
  * @since         5.3.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Http\RateLimit;
+namespace Odigos\Cake\Http\RateLimit;
 
 /**
  * Rate limiter interface

@@ -14,17 +14,17 @@ declare (strict_types=1);
  * @since         4.5.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Command;
+namespace Odigos\Cake\Command;
 
-use Cake\Cache\Cache;
-use Cake\Cache\Exception\InvalidArgumentException;
-use Cake\Console\Arguments;
-use Cake\Console\ConsoleIo;
-use Cake\Console\ConsoleOptionParser;
+use Odigos\Cake\Cache\Cache;
+use Odigos\Cake\Cache\Exception\InvalidArgumentException;
+use Odigos\Cake\Console\Arguments;
+use Odigos\Cake\Console\ConsoleIo;
+use Odigos\Cake\Console\ConsoleOptionParser;
 /**
  * Cache Clear Group command.
  */
-class CacheClearGroupCommand extends \Cake\Command\Command
+class CacheClearGroupCommand extends Command
 {
     /**
      * Get the command name.

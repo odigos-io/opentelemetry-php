@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpFoundation\File;
+namespace Odigos\Symfony\Component\HttpFoundation\File;
 
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
-use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
-use Symfony\Component\Mime\MimeTypes;
+use Odigos\Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Odigos\Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
+use Odigos\Symfony\Component\Mime\MimeTypes;
 /**
  * A file in the file system.
  *

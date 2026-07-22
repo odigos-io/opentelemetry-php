@@ -1,10 +1,10 @@
 <?php
 
-namespace Laravel\Prompts;
+namespace Odigos\Laravel\Prompts;
 
 use Closure;
 use RuntimeException;
-class Spinner extends \Laravel\Prompts\Prompt
+class Spinner extends Prompt
 {
     /**
      * How long to wait between rendering each frame.

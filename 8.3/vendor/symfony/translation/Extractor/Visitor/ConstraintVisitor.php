@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Translation\Extractor\Visitor;
+namespace Odigos\Symfony\Component\Translation\Extractor\Visitor;
 
 use Odigos\PhpParser\Node;
 use Odigos\PhpParser\NodeVisitor;
@@ -17,7 +17,7 @@ use Odigos\PhpParser\NodeVisitor;
  *
  * Code mostly comes from https://github.com/php-translation/extractor/blob/master/src/Visitor/Php/Symfony/Constraint.php
  */
-final class ConstraintVisitor extends \Symfony\Component\Translation\Extractor\Visitor\AbstractVisitor implements NodeVisitor
+final class ConstraintVisitor extends AbstractVisitor implements NodeVisitor
 {
     public function __construct(private readonly array $constraintClassNames = [])
     {

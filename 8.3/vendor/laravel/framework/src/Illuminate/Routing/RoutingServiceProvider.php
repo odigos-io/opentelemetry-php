@@ -1,18 +1,18 @@
 <?php
 
-namespace Illuminate\Routing;
+namespace Odigos\Illuminate\Routing;
 
-use Illuminate\Contracts\Container\BindingResolutionException;
-use Illuminate\Contracts\Routing\ResponseFactory as ResponseFactoryContract;
-use Illuminate\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
-use Illuminate\Contracts\View\Factory as ViewFactoryContract;
-use Illuminate\Routing\Contracts\CallableDispatcher as CallableDispatcherContract;
-use Illuminate\Routing\Contracts\ControllerDispatcher as ControllerDispatcherContract;
-use Illuminate\Support\ServiceProvider;
+use Odigos\Illuminate\Contracts\Container\BindingResolutionException;
+use Odigos\Illuminate\Contracts\Routing\ResponseFactory as ResponseFactoryContract;
+use Odigos\Illuminate\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
+use Odigos\Illuminate\Contracts\View\Factory as ViewFactoryContract;
+use Odigos\Illuminate\Routing\Contracts\CallableDispatcher as CallableDispatcherContract;
+use Odigos\Illuminate\Routing\Contracts\ControllerDispatcher as ControllerDispatcherContract;
+use Odigos\Illuminate\Support\ServiceProvider;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
-use Symfony\Component\HttpFoundation\Response;
+use Odigos\Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
+use Odigos\Symfony\Component\HttpFoundation\Response;
 class RoutingServiceProvider extends ServiceProvider
 {
     /**
@@ -39,7 +39,7 @@ class RoutingServiceProvider extends ServiceProvider
     protected function registerRouter()
     {
         $this->app->singleton('router', function ($app) {
-            return new \Illuminate\Routing\Router($app['events'], $app);
+            return new Router($app['events'], $app);
         });
     }
     /**
@@ -55,7 +55,7 @@ class RoutingServiceProvider extends ServiceProvider
             // Keep in mind this is an object, so we're passing by references here
             // and all the registered routes will be available to the generator.
             $app->instance('routes', $routes);
-            return new \Illuminate\Routing\UrlGenerator($routes, $app->rebinding('request', $this->requestRebinder()), $app['config']['app.asset_url']);
+            return new UrlGenerator($routes, $app->rebinding('request', $this->requestRebinder()), $app['config']['app.asset_url']);
         });
         $this->app->extend('url', function (UrlGeneratorContract $url, $app) {
             // Next we will set a few service resolvers on the URL generator so it can
@@ -96,7 +96,7 @@ class RoutingServiceProvider extends ServiceProvider
     protected function registerRedirector()
     {
         $this->app->singleton('redirect', function ($app) {
-            $redirector = new \Illuminate\Routing\Redirector($app['url']);
+            $redirector = new Redirector($app['url']);
             // If the session is set on the application instance, we'll inject it into
             // the redirector instance. This allows the redirect responses to allow
             // for the quite convenient "with" methods that flash to the session.
@@ -147,7 +147,7 @@ class RoutingServiceProvider extends ServiceProvider
     protected function registerResponseFactory()
     {
         $this->app->singleton(ResponseFactoryContract::class, function ($app) {
-            return new \Illuminate\Routing\ResponseFactory($app[ViewFactoryContract::class], $app['redirect']);
+            return new ResponseFactory($app[ViewFactoryContract::class], $app['redirect']);
         });
     }
     /**
@@ -158,7 +158,7 @@ class RoutingServiceProvider extends ServiceProvider
     protected function registerCallableDispatcher()
     {
         $this->app->singleton(CallableDispatcherContract::class, function ($app) {
-            return new \Illuminate\Routing\CallableDispatcher($app);
+            return new CallableDispatcher($app);
         });
     }
     /**
@@ -169,7 +169,7 @@ class RoutingServiceProvider extends ServiceProvider
     protected function registerControllerDispatcher()
     {
         $this->app->singleton(ControllerDispatcherContract::class, function ($app) {
-            return new \Illuminate\Routing\ControllerDispatcher($app);
+            return new ControllerDispatcher($app);
         });
     }
 }

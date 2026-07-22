@@ -1,13 +1,13 @@
 <?php
 
-namespace Illuminate\Auth\Notifications;
+namespace Odigos\Illuminate\Auth\Notifications;
 
-use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Notifications\Notification;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Lang;
-use Illuminate\Support\Facades\URL;
+use Odigos\Illuminate\Notifications\Messages\MailMessage;
+use Odigos\Illuminate\Notifications\Notification;
+use Odigos\Illuminate\Support\Carbon;
+use Odigos\Illuminate\Support\Facades\Config;
+use Odigos\Illuminate\Support\Facades\Lang;
+use Odigos\Illuminate\Support\Facades\URL;
 class VerifyEmail extends Notification
 {
     /**

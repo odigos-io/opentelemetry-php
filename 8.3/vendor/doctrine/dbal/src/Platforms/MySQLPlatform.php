@@ -1,21 +1,21 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Platforms;
+namespace Odigos\Doctrine\DBAL\Platforms;
 
-use Doctrine\DBAL\Platforms\Exception\NotSupported;
-use Doctrine\DBAL\Platforms\Keywords\KeywordList;
-use Doctrine\DBAL\Platforms\Keywords\MySQLKeywords;
-use Doctrine\DBAL\Schema\Index;
-use Doctrine\DBAL\SQL\Builder\WithSQLBuilder;
-use Doctrine\DBAL\Types\BlobType;
-use Doctrine\DBAL\Types\TextType;
-use Doctrine\Deprecations\Deprecation;
+use Odigos\Doctrine\DBAL\Platforms\Exception\NotSupported;
+use Odigos\Doctrine\DBAL\Platforms\Keywords\KeywordList;
+use Odigos\Doctrine\DBAL\Platforms\Keywords\MySQLKeywords;
+use Odigos\Doctrine\DBAL\Schema\Index;
+use Odigos\Doctrine\DBAL\SQL\Builder\WithSQLBuilder;
+use Odigos\Doctrine\DBAL\Types\BlobType;
+use Odigos\Doctrine\DBAL\Types\TextType;
+use Odigos\Doctrine\Deprecations\Deprecation;
 /**
  * Provides the behavior, features and SQL dialect of the Oracle MySQL database platform
  * of the oldest supported version.
  */
-class MySQLPlatform extends \Doctrine\DBAL\Platforms\AbstractMySQLPlatform
+class MySQLPlatform extends AbstractMySQLPlatform
 {
     /**
      * {@inheritDoc}

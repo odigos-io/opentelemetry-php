@@ -5,27 +5,27 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\db\sqlite;
+namespace Odigos\yii\db\sqlite;
 
-use yii\base\InvalidArgumentException;
-use yii\base\NotSupportedException;
-use yii\db\Connection;
-use yii\db\Expression;
-use yii\db\ExpressionInterface;
-use yii\db\Query;
-use yii\helpers\StringHelper;
+use Odigos\yii\base\InvalidArgumentException;
+use Odigos\yii\base\NotSupportedException;
+use Odigos\yii\db\Connection;
+use Odigos\yii\db\Expression;
+use Odigos\yii\db\ExpressionInterface;
+use Odigos\yii\db\Query;
+use Odigos\yii\helpers\StringHelper;
 /**
  * QueryBuilder is the query builder for SQLite databases.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class QueryBuilder extends \yii\db\QueryBuilder
+class QueryBuilder extends \Odigos\yii\db\QueryBuilder
 {
     /**
      * @var array mapping from abstract column types (keys) to physical column types (values).
      */
-    public $typeMap = [\yii\db\sqlite\Schema::TYPE_PK => 'integer PRIMARY KEY AUTOINCREMENT NOT NULL', \yii\db\sqlite\Schema::TYPE_UPK => 'integer PRIMARY KEY AUTOINCREMENT NOT NULL', \yii\db\sqlite\Schema::TYPE_BIGPK => 'integer PRIMARY KEY AUTOINCREMENT NOT NULL', \yii\db\sqlite\Schema::TYPE_UBIGPK => 'integer PRIMARY KEY AUTOINCREMENT NOT NULL', \yii\db\sqlite\Schema::TYPE_CHAR => 'char(1)', \yii\db\sqlite\Schema::TYPE_STRING => 'varchar(255)', \yii\db\sqlite\Schema::TYPE_TEXT => 'text', \yii\db\sqlite\Schema::TYPE_TINYINT => 'tinyint', \yii\db\sqlite\Schema::TYPE_SMALLINT => 'smallint', \yii\db\sqlite\Schema::TYPE_INTEGER => 'integer', \yii\db\sqlite\Schema::TYPE_BIGINT => 'bigint', \yii\db\sqlite\Schema::TYPE_FLOAT => 'float', \yii\db\sqlite\Schema::TYPE_DOUBLE => 'double', \yii\db\sqlite\Schema::TYPE_DECIMAL => 'decimal(10,0)', \yii\db\sqlite\Schema::TYPE_DATETIME => 'datetime', \yii\db\sqlite\Schema::TYPE_TIMESTAMP => 'timestamp', \yii\db\sqlite\Schema::TYPE_TIME => 'time', \yii\db\sqlite\Schema::TYPE_DATE => 'date', \yii\db\sqlite\Schema::TYPE_BINARY => 'blob', \yii\db\sqlite\Schema::TYPE_BOOLEAN => 'boolean', \yii\db\sqlite\Schema::TYPE_MONEY => 'decimal(19,4)'];
+    public $typeMap = [Schema::TYPE_PK => 'integer PRIMARY KEY AUTOINCREMENT NOT NULL', Schema::TYPE_UPK => 'integer PRIMARY KEY AUTOINCREMENT NOT NULL', Schema::TYPE_BIGPK => 'integer PRIMARY KEY AUTOINCREMENT NOT NULL', Schema::TYPE_UBIGPK => 'integer PRIMARY KEY AUTOINCREMENT NOT NULL', Schema::TYPE_CHAR => 'char(1)', Schema::TYPE_STRING => 'varchar(255)', Schema::TYPE_TEXT => 'text', Schema::TYPE_TINYINT => 'tinyint', Schema::TYPE_SMALLINT => 'smallint', Schema::TYPE_INTEGER => 'integer', Schema::TYPE_BIGINT => 'bigint', Schema::TYPE_FLOAT => 'float', Schema::TYPE_DOUBLE => 'double', Schema::TYPE_DECIMAL => 'decimal(10,0)', Schema::TYPE_DATETIME => 'datetime', Schema::TYPE_TIMESTAMP => 'timestamp', Schema::TYPE_TIME => 'time', Schema::TYPE_DATE => 'date', Schema::TYPE_BINARY => 'blob', Schema::TYPE_BOOLEAN => 'boolean', Schema::TYPE_MONEY => 'decimal(19,4)'];
     /**
      * {@inheritdoc}
      */

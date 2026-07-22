@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Foundation\Queue;
+namespace Odigos\Illuminate\Foundation\Queue;
 
-use Illuminate\Bus\UniqueLock;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
-use Illuminate\Support\Facades\Context;
+use Odigos\Illuminate\Bus\UniqueLock;
+use Odigos\Illuminate\Contracts\Queue\ShouldBeUnique;
+use Odigos\Illuminate\Support\Facades\Context;
 trait InteractsWithUniqueJobs
 {
     /**

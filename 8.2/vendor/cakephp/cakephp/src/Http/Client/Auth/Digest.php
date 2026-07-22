@@ -13,12 +13,12 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Http\Client\Auth;
+namespace Odigos\Cake\Http\Client\Auth;
 
-use Cake\Http\Client;
-use Cake\Http\Client\Request;
-use Cake\Http\HeaderUtility;
-use Cake\Utility\Hash;
+use Odigos\Cake\Http\Client;
+use Odigos\Cake\Http\Client\Request;
+use Odigos\Cake\Http\HeaderUtility;
+use Odigos\Cake\Utility\Hash;
 use InvalidArgumentException;
 /**
  * Digest authentication adapter for Cake\Http\Client

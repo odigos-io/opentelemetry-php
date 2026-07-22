@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Container;
+namespace Odigos\Illuminate\Container;
 
 use Closure;
-use Illuminate\Contracts\Container\ContextualAttribute;
+use Odigos\Illuminate\Contracts\Container\ContextualAttribute;
 use ReflectionAttribute;
 use ReflectionNamedType;
 /**

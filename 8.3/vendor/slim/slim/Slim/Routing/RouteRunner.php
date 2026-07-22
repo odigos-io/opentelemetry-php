@@ -6,17 +6,17 @@
  * @license https://github.com/slimphp/Slim/blob/4.x/LICENSE.md (MIT License)
  */
 declare (strict_types=1);
-namespace Slim\Routing;
+namespace Odigos\Slim\Routing;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Slim\Exception\HttpMethodNotAllowedException;
-use Slim\Exception\HttpNotFoundException;
-use Slim\Interfaces\RouteCollectorProxyInterface;
-use Slim\Interfaces\RouteParserInterface;
-use Slim\Interfaces\RouteResolverInterface;
-use Slim\Middleware\RoutingMiddleware;
+use Odigos\Slim\Exception\HttpMethodNotAllowedException;
+use Odigos\Slim\Exception\HttpNotFoundException;
+use Odigos\Slim\Interfaces\RouteCollectorProxyInterface;
+use Odigos\Slim\Interfaces\RouteParserInterface;
+use Odigos\Slim\Interfaces\RouteResolverInterface;
+use Odigos\Slim\Middleware\RoutingMiddleware;
 class RouteRunner implements RequestHandlerInterface
 {
     private RouteResolverInterface $routeResolver;
@@ -47,15 +47,15 @@ class RouteRunner implements RequestHandlerInterface
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         // If routing hasn't been done, then do it now so we can dispatch
-        if ($request->getAttribute(\Slim\Routing\RouteContext::ROUTING_RESULTS) === null) {
+        if ($request->getAttribute(RouteContext::ROUTING_RESULTS) === null) {
             $routingMiddleware = new RoutingMiddleware($this->routeResolver, $this->routeParser);
             $request = $routingMiddleware->performRouting($request);
         }
         if ($this->routeCollectorProxy !== null) {
-            $request = $request->withAttribute(\Slim\Routing\RouteContext::BASE_PATH, $this->routeCollectorProxy->getBasePath());
+            $request = $request->withAttribute(RouteContext::BASE_PATH, $this->routeCollectorProxy->getBasePath());
         }
         /** @var Route<\Psr\Container\ContainerInterface|null> $route */
-        $route = $request->getAttribute(\Slim\Routing\RouteContext::ROUTE);
+        $route = $request->getAttribute(RouteContext::ROUTE);
         return $route->run($request);
     }
 }

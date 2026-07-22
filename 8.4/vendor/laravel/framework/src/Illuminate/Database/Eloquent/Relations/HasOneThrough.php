@@ -1,16 +1,16 @@
 <?php
 
-namespace Illuminate\Database\Eloquent\Relations;
+namespace Odigos\Illuminate\Database\Eloquent\Relations;
 
-use Illuminate\Contracts\Database\Eloquent\SupportsPartialRelations;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection as EloquentCollection;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\Concerns\CanBeOneOfMany;
-use Illuminate\Database\Eloquent\Relations\Concerns\ComparesRelatedModels;
-use Illuminate\Database\Eloquent\Relations\Concerns\InteractsWithDictionary;
-use Illuminate\Database\Eloquent\Relations\Concerns\SupportsDefaultModels;
-use Illuminate\Database\Query\JoinClause;
+use Odigos\Illuminate\Contracts\Database\Eloquent\SupportsPartialRelations;
+use Odigos\Illuminate\Database\Eloquent\Builder;
+use Odigos\Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Odigos\Illuminate\Database\Eloquent\Model;
+use Odigos\Illuminate\Database\Eloquent\Relations\Concerns\CanBeOneOfMany;
+use Odigos\Illuminate\Database\Eloquent\Relations\Concerns\ComparesRelatedModels;
+use Odigos\Illuminate\Database\Eloquent\Relations\Concerns\InteractsWithDictionary;
+use Odigos\Illuminate\Database\Eloquent\Relations\Concerns\SupportsDefaultModels;
+use Odigos\Illuminate\Database\Query\JoinClause;
 /**
  * @template TRelatedModel of \Illuminate\Database\Eloquent\Model
  * @template TIntermediateModel of \Illuminate\Database\Eloquent\Model
@@ -18,7 +18,7 @@ use Illuminate\Database\Query\JoinClause;
  *
  * @extends \Illuminate\Database\Eloquent\Relations\HasOneOrManyThrough<TRelatedModel, TIntermediateModel, TDeclaringModel, ?TRelatedModel>
  */
-class HasOneThrough extends \Illuminate\Database\Eloquent\Relations\HasOneOrManyThrough implements SupportsPartialRelations
+class HasOneThrough extends HasOneOrManyThrough implements SupportsPartialRelations
 {
     use ComparesRelatedModels, CanBeOneOfMany, InteractsWithDictionary, SupportsDefaultModels;
     /** @inheritDoc */

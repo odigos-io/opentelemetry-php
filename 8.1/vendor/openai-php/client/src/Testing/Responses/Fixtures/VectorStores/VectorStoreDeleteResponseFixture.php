@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenAI\Testing\Responses\Fixtures\VectorStores;
+namespace Odigos\OpenAI\Testing\Responses\Fixtures\VectorStores;
 
 final class VectorStoreDeleteResponseFixture
 {

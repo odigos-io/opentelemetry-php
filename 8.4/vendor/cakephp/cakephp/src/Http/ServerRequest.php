@@ -14,14 +14,14 @@ declare (strict_types=1);
  * @since         2.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Http;
+namespace Odigos\Cake\Http;
 
 use BadMethodCallException;
-use Cake\Core\Configure;
-use Cake\Core\Exception\CakeException;
-use Cake\Http\Cookie\CookieCollection;
-use Cake\Http\Exception\MethodNotAllowedException;
-use Cake\Utility\Hash;
+use Odigos\Cake\Core\Configure;
+use Odigos\Cake\Core\Exception\CakeException;
+use Odigos\Cake\Http\Cookie\CookieCollection;
+use Odigos\Cake\Http\Exception\MethodNotAllowedException;
+use Odigos\Cake\Utility\Hash;
 use Closure;
 use InvalidArgumentException;
 use Odigos\Laminas\Diactoros\Stream;
@@ -30,8 +30,8 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UploadedFileInterface;
 use Psr\Http\Message\UriInterface;
-use function Cake\Core\deprecationWarning;
-use function Cake\Core\env;
+use function Odigos\Cake\Core\deprecationWarning;
+use function Odigos\Cake\Core\env;
 /**
  * A class that helps wrap Request information and particulars about a single request.
  * Provides methods commonly used to introspect on the request headers and request body.
@@ -128,13 +128,13 @@ class ServerRequest implements ServerRequestInterface
      *
      * @var \Cake\Http\Session
      */
-    protected \Cake\Http\Session $session;
+    protected Session $session;
     /**
      * Instance of a FlashMessage object relative to this request
      *
      * @var \Cake\Http\FlashMessage
      */
-    protected \Cake\Http\FlashMessage $flash;
+    protected FlashMessage $flash;
     /**
      * Store the additional attributes attached to the request.
      *
@@ -201,7 +201,7 @@ class ServerRequest implements ServerRequestInterface
     protected function _setConfig(array $config): void
     {
         if (empty($config['session'])) {
-            $config['session'] = new \Cake\Http\Session(['cookiePath' => $config['base']]);
+            $config['session'] = new Session(['cookiePath' => $config['base']]);
         }
         if (empty($config['environment']['REQUEST_METHOD'])) {
             $config['environment']['REQUEST_METHOD'] = 'GET';
@@ -216,7 +216,7 @@ class ServerRequest implements ServerRequestInterface
             if ($config['url'] !== '') {
                 $config = $this->processUrlOption($config);
             }
-            ['uri' => $uri] = \Cake\Http\UriFactory::marshalUriAndBaseFromSapi($config['environment']);
+            ['uri' => $uri] = UriFactory::marshalUriAndBaseFromSapi($config['environment']);
         }
         $this->_environment = $config['environment'];
         $this->uri = $uri;
@@ -239,7 +239,7 @@ class ServerRequest implements ServerRequestInterface
         $this->query = $config['query'];
         $this->params = $config['params'];
         $this->session = $config['session'];
-        $this->flash = new \Cake\Http\FlashMessage($this->session);
+        $this->flash = new FlashMessage($this->session);
     }
     /**
      * Set environment vars based on `url` option to facilitate UriInterface instance generation.
@@ -276,7 +276,7 @@ class ServerRequest implements ServerRequestInterface
      *
      * @return \Cake\Http\Session
      */
-    public function getSession(): \Cake\Http\Session
+    public function getSession(): Session
     {
         return $this->session;
     }
@@ -285,7 +285,7 @@ class ServerRequest implements ServerRequestInterface
      *
      * @return \Cake\Http\FlashMessage
      */
-    public function getFlash(): \Cake\Http\FlashMessage
+    public function getFlash(): FlashMessage
     {
         return $this->flash;
     }
@@ -462,7 +462,7 @@ class ServerRequest implements ServerRequestInterface
      */
     protected function _acceptHeaderDetector(array $detect): bool
     {
-        $content = new \Cake\Http\ContentTypeNegotiation();
+        $content = new ContentTypeNegotiation();
         $options = $detect['accept'];
         // Some detectors overlap with the default browser Accept header
         // For these types we use an exclude list to refine our content type
@@ -981,7 +981,7 @@ class ServerRequest implements ServerRequestInterface
      */
     public function accepts(?string $type = null): array|bool
     {
-        $content = new \Cake\Http\ContentTypeNegotiation();
+        $content = new ContentTypeNegotiation();
         if ($type) {
             return $content->preferredType($this, [$type]) !== null;
         }
@@ -1007,7 +1007,7 @@ class ServerRequest implements ServerRequestInterface
      */
     public function acceptLanguage(?string $language = null): array|bool
     {
-        $content = new \Cake\Http\ContentTypeNegotiation();
+        $content = new ContentTypeNegotiation();
         if ($language !== null) {
             return $content->acceptLanguage($this, $language);
         }

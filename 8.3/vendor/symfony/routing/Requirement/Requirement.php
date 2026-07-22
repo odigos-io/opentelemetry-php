@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Routing\Requirement;
+namespace Odigos\Symfony\Component\Routing\Requirement;
 
 /*
  * A collection of universal regular-expression constants to use as route parameter requirements.

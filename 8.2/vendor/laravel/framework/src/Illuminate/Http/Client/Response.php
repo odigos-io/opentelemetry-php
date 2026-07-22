@@ -1,13 +1,13 @@
 <?php
 
-namespace Illuminate\Http\Client;
+namespace Odigos\Illuminate\Http\Client;
 
 use ArrayAccess;
-use GuzzleHttp\Psr7\StreamWrapper;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Fluent;
-use Illuminate\Support\Traits\Macroable;
-use Illuminate\Support\Traits\Tappable;
+use Odigos\GuzzleHttp\Psr7\StreamWrapper;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Fluent;
+use Odigos\Illuminate\Support\Traits\Macroable;
+use Odigos\Illuminate\Support\Traits\Tappable;
 use LogicException;
 use Stringable;
 /**
@@ -15,7 +15,7 @@ use Stringable;
  */
 class Response implements ArrayAccess, Stringable
 {
-    use \Illuminate\Http\Client\Concerns\DeterminesStatusCode, Tappable, Macroable {
+    use Concerns\DeterminesStatusCode, Tappable, Macroable {
         __call as macroCall;
     }
     /**
@@ -290,7 +290,7 @@ class Response implements ArrayAccess, Stringable
     public function toException()
     {
         if ($this->failed()) {
-            return new \Illuminate\Http\Client\RequestException($this, $this->truncateExceptionsAt);
+            return new RequestException($this, $this->truncateExceptionsAt);
         }
     }
     /**
@@ -347,9 +347,9 @@ class Response implements ArrayAccess, Stringable
     public function throwIfStatus($statusCode)
     {
         if (is_callable($statusCode) && $statusCode($this->status(), $this)) {
-            throw new \Illuminate\Http\Client\RequestException($this, $this->truncateExceptionsAt);
+            throw new RequestException($this, $this->truncateExceptionsAt);
         }
-        return $this->status() === $statusCode ? throw new \Illuminate\Http\Client\RequestException($this, $this->truncateExceptionsAt) : $this;
+        return $this->status() === $statusCode ? throw new RequestException($this, $this->truncateExceptionsAt) : $this;
     }
     /**
      * Throw an exception unless the response status code matches the given code.
@@ -362,9 +362,9 @@ class Response implements ArrayAccess, Stringable
     public function throwUnlessStatus($statusCode)
     {
         if (is_callable($statusCode)) {
-            return $statusCode($this->status(), $this) ? $this : throw new \Illuminate\Http\Client\RequestException($this, $this->truncateExceptionsAt);
+            return $statusCode($this->status(), $this) ? $this : throw new RequestException($this, $this->truncateExceptionsAt);
         }
-        return $this->status() === $statusCode ? $this : throw new \Illuminate\Http\Client\RequestException($this, $this->truncateExceptionsAt);
+        return $this->status() === $statusCode ? $this : throw new RequestException($this, $this->truncateExceptionsAt);
     }
     /**
      * Throw an exception if the response status code is a 4xx level code.

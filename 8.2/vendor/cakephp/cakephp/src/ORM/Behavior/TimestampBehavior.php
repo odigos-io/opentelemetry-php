@@ -14,14 +14,14 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\ORM\Behavior;
+namespace Odigos\Cake\ORM\Behavior;
 
-use Cake\Database\Type\DateTimeType;
-use Cake\Database\TypeFactory;
-use Cake\Datasource\EntityInterface;
-use Cake\Event\EventInterface;
-use Cake\I18n\DateTime;
-use Cake\ORM\Behavior;
+use Odigos\Cake\Database\Type\DateTimeType;
+use Odigos\Cake\Database\TypeFactory;
+use Odigos\Cake\Datasource\EntityInterface;
+use Odigos\Cake\Event\EventInterface;
+use Odigos\Cake\I18n\DateTime;
+use Odigos\Cake\ORM\Behavior;
 use DateTimeInterface;
 use UnexpectedValueException;
 /**

@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Contracts\Notifications;
+namespace Odigos\Illuminate\Contracts\Notifications;
 
 interface Factory
 {

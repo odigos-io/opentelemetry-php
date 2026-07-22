@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Auth\Passwords;
+namespace Odigos\Illuminate\Auth\Passwords;
 
-use Illuminate\Auth\Notifications\ResetPassword as ResetPasswordNotification;
+use Odigos\Illuminate\Auth\Notifications\ResetPassword as ResetPasswordNotification;
 trait CanResetPassword
 {
     /**

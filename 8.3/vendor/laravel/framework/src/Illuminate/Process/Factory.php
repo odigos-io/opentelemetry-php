@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Process;
+namespace Odigos\Illuminate\Process;
 
 use Closure;
-use Illuminate\Contracts\Process\ProcessResult as ProcessResultContract;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Traits\Macroable;
+use Odigos\Illuminate\Contracts\Process\ProcessResult as ProcessResultContract;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Traits\Macroable;
 use Odigos\PHPUnit\Framework\Assert as PHPUnit;
 class Factory
 {
@@ -46,7 +46,7 @@ class Factory
      */
     public function result(array|string $output = '', array|string $errorOutput = '', int $exitCode = 0)
     {
-        return new \Illuminate\Process\FakeProcessResult(output: $output, errorOutput: $errorOutput, exitCode: $exitCode);
+        return new FakeProcessResult(output: $output, errorOutput: $errorOutput, exitCode: $exitCode);
     }
     /**
      * Begin describing a fake process lifecycle.
@@ -55,7 +55,7 @@ class Factory
      */
     public function describe()
     {
-        return new \Illuminate\Process\FakeProcessDescription();
+        return new FakeProcessDescription();
     }
     /**
      * Begin describing a fake process sequence.
@@ -65,7 +65,7 @@ class Factory
      */
     public function sequence(array $processes = [])
     {
-        return new \Illuminate\Process\FakeProcessSequence($processes);
+        return new FakeProcessSequence($processes);
     }
     /**
      * Indicate that the process factory should fake processes.
@@ -77,7 +77,7 @@ class Factory
     {
         $this->recording = \true;
         if (is_null($callback)) {
-            $this->fakeHandlers = ['*' => fn() => new \Illuminate\Process\FakeProcessResult()];
+            $this->fakeHandlers = ['*' => fn() => new FakeProcessResult()];
             return $this;
         }
         if ($callback instanceof Closure) {
@@ -105,7 +105,7 @@ class Factory
      * @param  \Illuminate\Contracts\Process\ProcessResult  $result
      * @return $this
      */
-    public function recordIfRecording(\Illuminate\Process\PendingProcess $process, ProcessResultContract $result)
+    public function recordIfRecording(PendingProcess $process, ProcessResultContract $result)
     {
         if ($this->isRecording()) {
             $this->record($process, $result);
@@ -119,7 +119,7 @@ class Factory
      * @param  \Illuminate\Contracts\Process\ProcessResult  $result
      * @return $this
      */
-    public function record(\Illuminate\Process\PendingProcess $process, ProcessResultContract $result)
+    public function record(PendingProcess $process, ProcessResultContract $result)
     {
         $this->recorded[] = [$process, $result];
         return $this;
@@ -214,7 +214,7 @@ class Factory
      */
     public function pool(callable $callback)
     {
-        return new \Illuminate\Process\Pool($this, $callback);
+        return new Pool($this, $callback);
     }
     /**
      * Start defining a series of piped processes.
@@ -224,7 +224,7 @@ class Factory
      */
     public function pipe(callable|array $callback, ?callable $output = null)
     {
-        return is_array($callback) ? (new \Illuminate\Process\Pipe($this, fn($pipe) => (new Collection($callback))->each(fn($command) => $pipe->command($command))))->run(output: $output) : (new \Illuminate\Process\Pipe($this, $callback))->run(output: $output);
+        return is_array($callback) ? (new Pipe($this, fn($pipe) => (new Collection($callback))->each(fn($command) => $pipe->command($command))))->run(output: $output) : (new Pipe($this, $callback))->run(output: $output);
     }
     /**
      * Run a pool of processes and wait for them to finish executing.
@@ -235,7 +235,7 @@ class Factory
      */
     public function concurrently(callable $callback, ?callable $output = null)
     {
-        return (new \Illuminate\Process\Pool($this, $callback))->start($output)->wait();
+        return (new Pool($this, $callback))->start($output)->wait();
     }
     /**
      * Create a new pending process associated with this factory.
@@ -244,7 +244,7 @@ class Factory
      */
     public function newPendingProcess()
     {
-        return (new \Illuminate\Process\PendingProcess($this))->withFakeHandlers($this->fakeHandlers);
+        return (new PendingProcess($this))->withFakeHandlers($this->fakeHandlers);
     }
     /**
      * Dynamically proxy methods to a new pending process instance.

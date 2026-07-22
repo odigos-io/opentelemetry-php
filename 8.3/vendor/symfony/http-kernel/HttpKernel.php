@@ -8,29 +8,29 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpKernel;
+namespace Odigos\Symfony\Component\HttpKernel;
 
-use Symfony\Component\HttpFoundation\Exception\RequestExceptionInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\StreamedResponse;
-use Symfony\Component\HttpKernel\Controller\ArgumentResolver;
-use Symfony\Component\HttpKernel\Controller\ArgumentResolverInterface;
-use Symfony\Component\HttpKernel\Controller\ControllerResolverInterface;
-use Symfony\Component\HttpKernel\Event\ControllerArgumentsEvent;
-use Symfony\Component\HttpKernel\Event\ControllerEvent;
-use Symfony\Component\HttpKernel\Event\ExceptionEvent;
-use Symfony\Component\HttpKernel\Event\FinishRequestEvent;
-use Symfony\Component\HttpKernel\Event\RequestEvent;
-use Symfony\Component\HttpKernel\Event\ResponseEvent;
-use Symfony\Component\HttpKernel\Event\TerminateEvent;
-use Symfony\Component\HttpKernel\Event\ViewEvent;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\HttpKernel\Exception\ControllerDoesNotReturnResponseException;
-use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Odigos\Symfony\Component\HttpFoundation\Exception\RequestExceptionInterface;
+use Odigos\Symfony\Component\HttpFoundation\Request;
+use Odigos\Symfony\Component\HttpFoundation\RequestStack;
+use Odigos\Symfony\Component\HttpFoundation\Response;
+use Odigos\Symfony\Component\HttpFoundation\StreamedResponse;
+use Odigos\Symfony\Component\HttpKernel\Controller\ArgumentResolver;
+use Odigos\Symfony\Component\HttpKernel\Controller\ArgumentResolverInterface;
+use Odigos\Symfony\Component\HttpKernel\Controller\ControllerResolverInterface;
+use Odigos\Symfony\Component\HttpKernel\Event\ControllerArgumentsEvent;
+use Odigos\Symfony\Component\HttpKernel\Event\ControllerEvent;
+use Odigos\Symfony\Component\HttpKernel\Event\ExceptionEvent;
+use Odigos\Symfony\Component\HttpKernel\Event\FinishRequestEvent;
+use Odigos\Symfony\Component\HttpKernel\Event\RequestEvent;
+use Odigos\Symfony\Component\HttpKernel\Event\ResponseEvent;
+use Odigos\Symfony\Component\HttpKernel\Event\TerminateEvent;
+use Odigos\Symfony\Component\HttpKernel\Event\ViewEvent;
+use Odigos\Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Odigos\Symfony\Component\HttpKernel\Exception\ControllerDoesNotReturnResponseException;
+use Odigos\Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
+use Odigos\Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Odigos\Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 // Help opcache.preload discover always-needed symbols
 class_exists(ControllerArgumentsEvent::class);
 class_exists(ControllerEvent::class);
@@ -40,13 +40,13 @@ class_exists(RequestEvent::class);
 class_exists(ResponseEvent::class);
 class_exists(TerminateEvent::class);
 class_exists(ViewEvent::class);
-class_exists(\Symfony\Component\HttpKernel\KernelEvents::class);
+class_exists(KernelEvents::class);
 /**
  * HttpKernel notifies events to convert a Request object to a Response one.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class HttpKernel implements \Symfony\Component\HttpKernel\HttpKernelInterface, \Symfony\Component\HttpKernel\TerminableInterface
+class HttpKernel implements HttpKernelInterface, TerminableInterface
 {
     protected RequestStack $requestStack;
     private ArgumentResolverInterface $argumentResolver;
@@ -56,7 +56,7 @@ class HttpKernel implements \Symfony\Component\HttpKernel\HttpKernelInterface, \
         $this->requestStack = $requestStack ?? new RequestStack();
         $this->argumentResolver = $argumentResolver ?? new ArgumentResolver();
     }
-    public function handle(Request $request, int $type = \Symfony\Component\HttpKernel\HttpKernelInterface::MAIN_REQUEST, bool $catch = \true): Response
+    public function handle(Request $request, int $type = HttpKernelInterface::MAIN_REQUEST, bool $catch = \true): Response
     {
         $request->headers->set('X-Php-Ob-Level', (string) ob_get_level());
         $this->requestStack->push($request);
@@ -94,7 +94,7 @@ class HttpKernel implements \Symfony\Component\HttpKernel\HttpKernelInterface, \
     {
         try {
             $this->terminating = \true;
-            $this->dispatcher->dispatch(new TerminateEvent($this, $request, $response), \Symfony\Component\HttpKernel\KernelEvents::TERMINATE);
+            $this->dispatcher->dispatch(new TerminateEvent($this, $request, $response), KernelEvents::TERMINATE);
         } finally {
             $this->terminating = \false;
         }
@@ -133,7 +133,7 @@ class HttpKernel implements \Symfony\Component\HttpKernel\HttpKernelInterface, \
     {
         // request
         $event = new RequestEvent($this, $request, $type);
-        $this->dispatcher->dispatch($event, \Symfony\Component\HttpKernel\KernelEvents::REQUEST);
+        $this->dispatcher->dispatch($event, KernelEvents::REQUEST);
         if ($event->hasResponse()) {
             return $this->filterResponse($event->getResponse(), $request, $type);
         }
@@ -142,12 +142,12 @@ class HttpKernel implements \Symfony\Component\HttpKernel\HttpKernelInterface, \
             throw new NotFoundHttpException(\sprintf('Unable to find the controller for path "%s". The route is wrongly configured.', $request->getPathInfo()));
         }
         $event = new ControllerEvent($this, $controller, $request, $type);
-        $this->dispatcher->dispatch($event, \Symfony\Component\HttpKernel\KernelEvents::CONTROLLER);
+        $this->dispatcher->dispatch($event, KernelEvents::CONTROLLER);
         $controller = $event->getController();
         // controller arguments
         $arguments = $this->argumentResolver->getArguments($request, $controller, $event->getControllerReflector());
         $event = new ControllerArgumentsEvent($this, $event, $arguments, $request, $type);
-        $this->dispatcher->dispatch($event, \Symfony\Component\HttpKernel\KernelEvents::CONTROLLER_ARGUMENTS);
+        $this->dispatcher->dispatch($event, KernelEvents::CONTROLLER_ARGUMENTS);
         $controller = $event->getController();
         $arguments = $event->getArguments();
         // call controller
@@ -155,7 +155,7 @@ class HttpKernel implements \Symfony\Component\HttpKernel\HttpKernelInterface, \
         // view
         if (!$response instanceof Response) {
             $event = new ViewEvent($this, $request, $type, $response, $event);
-            $this->dispatcher->dispatch($event, \Symfony\Component\HttpKernel\KernelEvents::VIEW);
+            $this->dispatcher->dispatch($event, KernelEvents::VIEW);
             if ($event->hasResponse()) {
                 $response = $event->getResponse();
             } else {
@@ -177,7 +177,7 @@ class HttpKernel implements \Symfony\Component\HttpKernel\HttpKernelInterface, \
     private function filterResponse(Response $response, Request $request, int $type): Response
     {
         $event = new ResponseEvent($this, $request, $type, $response);
-        $this->dispatcher->dispatch($event, \Symfony\Component\HttpKernel\KernelEvents::RESPONSE);
+        $this->dispatcher->dispatch($event, KernelEvents::RESPONSE);
         $this->finishRequest($request, $type);
         return $event->getResponse();
     }
@@ -190,7 +190,7 @@ class HttpKernel implements \Symfony\Component\HttpKernel\HttpKernelInterface, \
      */
     private function finishRequest(Request $request, int $type): void
     {
-        $this->dispatcher->dispatch(new FinishRequestEvent($this, $request, $type), \Symfony\Component\HttpKernel\KernelEvents::FINISH_REQUEST);
+        $this->dispatcher->dispatch(new FinishRequestEvent($this, $request, $type), KernelEvents::FINISH_REQUEST);
     }
     /**
      * Handles a throwable by trying to convert it to a Response.
@@ -198,7 +198,7 @@ class HttpKernel implements \Symfony\Component\HttpKernel\HttpKernelInterface, \
     private function handleThrowable(\Throwable $e, Request $request, int $type): Response
     {
         $event = new ExceptionEvent($this, $request, $type, $e, isKernelTerminating: $this->terminating);
-        $this->dispatcher->dispatch($event, \Symfony\Component\HttpKernel\KernelEvents::EXCEPTION);
+        $this->dispatcher->dispatch($event, KernelEvents::EXCEPTION);
         // a listener might have replaced the exception
         $e = $event->getThrowable();
         if (!$event->hasResponse()) {

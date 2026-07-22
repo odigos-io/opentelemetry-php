@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Support\Facades;
+namespace Odigos\Illuminate\Support\Facades;
 
-use Illuminate\Bus\BatchRepository;
-use Illuminate\Contracts\Bus\Dispatcher as BusDispatcherContract;
-use Illuminate\Foundation\Bus\PendingChain;
-use Illuminate\Support\Testing\Fakes\BusFake;
+use Odigos\Illuminate\Bus\BatchRepository;
+use Odigos\Illuminate\Contracts\Bus\Dispatcher as BusDispatcherContract;
+use Odigos\Illuminate\Foundation\Bus\PendingChain;
+use Odigos\Illuminate\Support\Testing\Fakes\BusFake;
 /**
  * @method static mixed dispatch(mixed $command)
  * @method static mixed dispatchSync(mixed $command, mixed $handler = null)
@@ -56,7 +56,7 @@ use Illuminate\Support\Testing\Fakes\BusFake;
  * @see \Illuminate\Bus\Dispatcher
  * @see \Illuminate\Support\Testing\Fakes\BusFake
  */
-class Bus extends \Illuminate\Support\Facades\Facade
+class Bus extends Facade
 {
     /**
      * Replace the bound instance with a fake.

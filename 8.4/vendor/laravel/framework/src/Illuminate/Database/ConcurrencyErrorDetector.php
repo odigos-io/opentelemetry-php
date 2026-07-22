@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Database;
+namespace Odigos\Illuminate\Database;
 
-use Illuminate\Contracts\Database\ConcurrencyErrorDetector as ConcurrencyErrorDetectorContract;
-use Illuminate\Support\Str;
+use Odigos\Illuminate\Contracts\Database\ConcurrencyErrorDetector as ConcurrencyErrorDetectorContract;
+use Odigos\Illuminate\Support\Str;
 use PDOException;
 use Throwable;
 class ConcurrencyErrorDetector implements ConcurrencyErrorDetectorContract

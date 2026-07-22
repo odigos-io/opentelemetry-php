@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Driver\IBMDB2;
+namespace Odigos\Doctrine\DBAL\Driver\IBMDB2;
 
-use Doctrine\DBAL\Driver\Connection as ConnectionInterface;
-use Doctrine\DBAL\Driver\Exception\NoIdentityValue;
-use Doctrine\DBAL\Driver\IBMDB2\Exception\ConnectionError;
-use Doctrine\DBAL\Driver\IBMDB2\Exception\PrepareFailed;
-use Doctrine\DBAL\Driver\IBMDB2\Exception\StatementError;
+use Odigos\Doctrine\DBAL\Driver\Connection as ConnectionInterface;
+use Odigos\Doctrine\DBAL\Driver\Exception\NoIdentityValue;
+use Odigos\Doctrine\DBAL\Driver\IBMDB2\Exception\ConnectionError;
+use Odigos\Doctrine\DBAL\Driver\IBMDB2\Exception\PrepareFailed;
+use Odigos\Doctrine\DBAL\Driver\IBMDB2\Exception\StatementError;
 use stdClass;
 use function assert;
 use function db2_autocommit;
@@ -38,15 +38,15 @@ final class Connection implements ConnectionInterface
         assert($serverInfo instanceof stdClass);
         return $serverInfo->DBMS_VER;
     }
-    public function prepare(string $sql): \Doctrine\DBAL\Driver\IBMDB2\Statement
+    public function prepare(string $sql): Statement
     {
         $stmt = @db2_prepare($this->connection, $sql);
         if ($stmt === \false) {
             throw PrepareFailed::new(error_get_last());
         }
-        return new \Doctrine\DBAL\Driver\IBMDB2\Statement($stmt);
+        return new Statement($stmt);
     }
-    public function query(string $sql): \Doctrine\DBAL\Driver\IBMDB2\Result
+    public function query(string $sql): Result
     {
         return $this->prepare($sql)->execute();
     }

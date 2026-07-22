@@ -1,18 +1,18 @@
 <?php
 
-namespace Illuminate\Routing\Middleware;
+namespace Odigos\Illuminate\Routing\Middleware;
 
 use Closure;
-use Illuminate\Cache\RateLimiter;
-use Illuminate\Cache\RateLimiting\Unlimited;
-use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Http\Exceptions\ThrottleRequestsException;
-use Illuminate\Routing\Exceptions\MissingRateLimiterException;
-use Illuminate\Support\Collection;
-use Illuminate\Support\InteractsWithTime;
+use Odigos\Illuminate\Cache\RateLimiter;
+use Odigos\Illuminate\Cache\RateLimiting\Unlimited;
+use Odigos\Illuminate\Http\Exceptions\HttpResponseException;
+use Odigos\Illuminate\Http\Exceptions\ThrottleRequestsException;
+use Odigos\Illuminate\Routing\Exceptions\MissingRateLimiterException;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\InteractsWithTime;
 use RuntimeException;
-use Symfony\Component\HttpFoundation\Response;
-use function Illuminate\Support\enum_value;
+use Odigos\Symfony\Component\HttpFoundation\Response;
+use function Odigos\Illuminate\Support\enum_value;
 class ThrottleRequests
 {
     use InteractsWithTime;

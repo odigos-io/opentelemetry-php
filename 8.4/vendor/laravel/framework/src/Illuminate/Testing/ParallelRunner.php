@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Testing;
+namespace Odigos\Illuminate\Testing;
 
-use Illuminate\Testing\Concerns\RunsInParallel;
+use Odigos\Illuminate\Testing\Concerns\RunsInParallel;
 if (interface_exists(\Odigos\ParaTest\RunnerInterface::class)) {
     class ParallelRunner implements \Odigos\ParaTest\RunnerInterface
     {

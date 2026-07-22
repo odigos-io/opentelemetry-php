@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Foundation;
+namespace Odigos\Illuminate\Foundation;
 
-use Illuminate\Contracts\Foundation\MaintenanceMode as MaintenanceModeContract;
+use Odigos\Illuminate\Contracts\Foundation\MaintenanceMode as MaintenanceModeContract;
 class FileBasedMaintenanceMode implements MaintenanceModeContract
 {
     /**

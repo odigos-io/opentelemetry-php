@@ -1,15 +1,15 @@
 <?php
 
-namespace OpenAI\Testing\Resources;
+namespace Odigos\OpenAI\Testing\Resources;
 
-use OpenAI\Contracts\Resources\ResponsesContract;
-use OpenAI\Resources\Responses;
-use OpenAI\Responses\Responses\CreateResponse;
-use OpenAI\Responses\Responses\DeleteResponse;
-use OpenAI\Responses\Responses\ListInputItems;
-use OpenAI\Responses\Responses\RetrieveResponse;
-use OpenAI\Responses\StreamResponse;
-use OpenAI\Testing\Resources\Concerns\Testable;
+use Odigos\OpenAI\Contracts\Resources\ResponsesContract;
+use Odigos\OpenAI\Resources\Responses;
+use Odigos\OpenAI\Responses\Responses\CreateResponse;
+use Odigos\OpenAI\Responses\Responses\DeleteResponse;
+use Odigos\OpenAI\Responses\Responses\ListInputItems;
+use Odigos\OpenAI\Responses\Responses\RetrieveResponse;
+use Odigos\OpenAI\Responses\StreamResponse;
+use Odigos\OpenAI\Testing\Resources\Concerns\Testable;
 final class ResponsesTestResource implements ResponsesContract
 {
     use Testable;
@@ -17,9 +17,9 @@ final class ResponsesTestResource implements ResponsesContract
     {
         return Responses::class;
     }
-    public function conversations(): \OpenAI\Testing\Resources\ConversationsTestResource
+    public function conversations(): ConversationsTestResource
     {
-        return new \OpenAI\Testing\Resources\ConversationsTestResource($this->fake);
+        return new ConversationsTestResource($this->fake);
     }
     public function create(array $parameters): CreateResponse
     {

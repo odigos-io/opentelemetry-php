@@ -14,11 +14,11 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\ORM;
+namespace Odigos\Cake\ORM;
 
-use Cake\Datasource\EntityInterface;
-use Cake\Datasource\EntityTrait;
-use Cake\Datasource\InvalidPropertyInterface;
+use Odigos\Cake\Datasource\EntityInterface;
+use Odigos\Cake\Datasource\EntityTrait;
+use Odigos\Cake\Datasource\InvalidPropertyInterface;
 /**
  * An entity represents a single result row from a repository. It exposes the
  * methods for retrieving and storing properties associated in this row.

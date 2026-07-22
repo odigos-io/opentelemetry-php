@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Console;
+namespace Odigos\Illuminate\Console;
 
-use Symfony\Component\Console\Output\ConsoleOutput;
+use Odigos\Symfony\Component\Console\Output\ConsoleOutput;
 class BufferedConsoleOutput extends ConsoleOutput
 {
     /**

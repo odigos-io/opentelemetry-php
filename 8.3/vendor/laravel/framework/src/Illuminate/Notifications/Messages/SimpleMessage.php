@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Notifications\Messages;
+namespace Odigos\Illuminate\Notifications\Messages;
 
-use Illuminate\Contracts\Support\Htmlable;
-use Illuminate\Notifications\Action;
+use Odigos\Illuminate\Contracts\Support\Htmlable;
+use Odigos\Illuminate\Notifications\Action;
 class SimpleMessage
 {
     /**

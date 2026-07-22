@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\CssSelector\Node;
+namespace Odigos\Symfony\Component\CssSelector\Node;
 
 /**
  * Abstract base node class.
@@ -20,7 +20,7 @@ namespace Symfony\Component\CssSelector\Node;
  *
  * @internal
  */
-abstract class AbstractNode implements \Symfony\Component\CssSelector\Node\NodeInterface
+abstract class AbstractNode implements NodeInterface
 {
     private string $nodeName;
     public function getNodeName(): string

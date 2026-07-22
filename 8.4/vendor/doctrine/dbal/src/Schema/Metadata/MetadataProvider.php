@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Schema\Metadata;
+namespace Odigos\Doctrine\DBAL\Schema\Metadata;
 
-use Doctrine\DBAL\Exception;
+use Odigos\Doctrine\DBAL\Exception;
 /**
  * Provides low-level metadata that describes the underlying database schema.
  *

@@ -14,10 +14,10 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Validation;
+namespace Odigos\Cake\Validation;
 
 use ReflectionClass;
-use function Cake\Core\deprecationWarning;
+use function Odigos\Cake\Core\deprecationWarning;
 /**
  * A Proxy class used to remove any extra arguments when the user intended to call
  * a method in another class that is not aware of validation providers signature
@@ -47,7 +47,7 @@ class RulesProvider
      * @throws \ReflectionException
      * @phpstan-param object|class-string $class
      */
-    public function __construct(object|string $class = \Cake\Validation\Validation::class)
+    public function __construct(object|string $class = Validation::class)
     {
         deprecationWarning('5.2.0', sprintf('The class Cake\Validation\RulesProvider is deprecated. ' . 'Directly set %s as a validation provider.', is_string($class) ? $class : get_class($class)));
         $this->_class = $class;

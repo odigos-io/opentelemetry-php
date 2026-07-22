@@ -1,15 +1,15 @@
 <?php
 
-namespace Illuminate\Foundation\Bus;
+namespace Odigos\Illuminate\Foundation\Bus;
 
 use Closure;
-use Illuminate\Bus\ChainedBatch;
-use Illuminate\Contracts\Bus\Dispatcher;
-use Illuminate\Queue\CallQueuedClosure;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Traits\Conditionable;
-use Laravel\SerializableClosure\SerializableClosure;
-use function Illuminate\Support\enum_value;
+use Odigos\Illuminate\Bus\ChainedBatch;
+use Odigos\Illuminate\Contracts\Bus\Dispatcher;
+use Odigos\Illuminate\Queue\CallQueuedClosure;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Traits\Conditionable;
+use Odigos\Laravel\SerializableClosure\SerializableClosure;
+use function Odigos\Illuminate\Support\enum_value;
 class PendingChain
 {
     use Conditionable;

@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Driver\Middleware;
+namespace Odigos\Doctrine\DBAL\Driver\Middleware;
 
-use Doctrine\DBAL\Driver\Result;
-use Doctrine\DBAL\Driver\Statement;
-use Doctrine\DBAL\ParameterType;
+use Odigos\Doctrine\DBAL\Driver\Result;
+use Odigos\Doctrine\DBAL\Driver\Statement;
+use Odigos\Doctrine\DBAL\ParameterType;
 abstract class AbstractStatementMiddleware implements Statement
 {
     public function __construct(private readonly Statement $wrappedStatement)

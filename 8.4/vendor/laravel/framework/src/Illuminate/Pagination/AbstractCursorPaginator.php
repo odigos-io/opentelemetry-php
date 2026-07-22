@@ -1,20 +1,20 @@
 <?php
 
-namespace Illuminate\Pagination;
+namespace Odigos\Illuminate\Pagination;
 
 use ArrayAccess;
 use Closure;
 use Exception;
-use Illuminate\Contracts\Support\Htmlable;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\Pivot;
-use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
-use Illuminate\Support\Traits\ForwardsCalls;
-use Illuminate\Support\Traits\Tappable;
-use Illuminate\Support\Traits\TransformsToResourceCollection;
+use Odigos\Illuminate\Contracts\Support\Htmlable;
+use Odigos\Illuminate\Database\Eloquent\Model;
+use Odigos\Illuminate\Database\Eloquent\Relations\Pivot;
+use Odigos\Illuminate\Http\Resources\Json\JsonResource;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Str;
+use Odigos\Illuminate\Support\Traits\ForwardsCalls;
+use Odigos\Illuminate\Support\Traits\Tappable;
+use Odigos\Illuminate\Support\Traits\TransformsToResourceCollection;
 use Stringable;
 use Traversable;
 /**
@@ -167,7 +167,7 @@ abstract class AbstractCursorPaginator implements Htmlable, Stringable
      */
     public function getCursorForItem($item, $isNext = \true)
     {
-        return new \Illuminate\Pagination\Cursor($this->getParametersForItem($item), $isNext);
+        return new Cursor($this->getParametersForItem($item), $isNext);
     }
     /**
      * Get the cursor parameters for a given object.
@@ -272,7 +272,7 @@ abstract class AbstractCursorPaginator implements Htmlable, Stringable
      */
     public function withQueryString()
     {
-        if (!is_null($query = \Illuminate\Pagination\Paginator::resolveQueryString())) {
+        if (!is_null($query = Paginator::resolveQueryString())) {
             return $this->appends($query);
         }
         return $this;
@@ -447,7 +447,7 @@ abstract class AbstractCursorPaginator implements Htmlable, Stringable
      */
     public static function viewFactory()
     {
-        return \Illuminate\Pagination\Paginator::viewFactory();
+        return Paginator::viewFactory();
     }
     /**
      * Get an iterator for the items.

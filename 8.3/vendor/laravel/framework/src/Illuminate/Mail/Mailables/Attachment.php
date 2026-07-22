@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Mail\Mailables;
+namespace Odigos\Illuminate\Mail\Mailables;
 
-use Illuminate\Mail\Attachment as BaseAttachment;
+use Odigos\Illuminate\Mail\Attachment as BaseAttachment;
 class Attachment extends BaseAttachment
 {
     // Here for namespace consistency...

@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Database\Eloquent\Concerns;
+namespace Odigos\Illuminate\Database\Eloquent\Concerns;
 
 use BackedEnum;
 use Odigos\Brick\Math\BigDecimal;
@@ -10,31 +10,31 @@ use Odigos\Carbon\CarbonImmutable;
 use Odigos\Carbon\CarbonInterface;
 use DateTimeImmutable;
 use DateTimeInterface;
-use Illuminate\Contracts\Database\Eloquent\Castable;
-use Illuminate\Contracts\Database\Eloquent\CastsInboundAttributes;
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Database\Eloquent\Casts\AsArrayObject;
-use Illuminate\Database\Eloquent\Casts\AsCollection;
-use Illuminate\Database\Eloquent\Casts\AsEncryptedArrayObject;
-use Illuminate\Database\Eloquent\Casts\AsEncryptedCollection;
-use Illuminate\Database\Eloquent\Casts\AsEnumArrayObject;
-use Illuminate\Database\Eloquent\Casts\AsEnumCollection;
-use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\Casts\Json;
-use Illuminate\Database\Eloquent\InvalidCastException;
-use Illuminate\Database\Eloquent\JsonEncodingException;
-use Illuminate\Database\Eloquent\MissingAttributeException;
-use Illuminate\Database\Eloquent\Relations\Relation;
-use Illuminate\Database\LazyLoadingViolationException;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Collection as BaseCollection;
-use Illuminate\Support\Exceptions\MathException;
-use Illuminate\Support\Facades\Crypt;
-use Illuminate\Support\Facades\Date;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
+use Odigos\Illuminate\Contracts\Database\Eloquent\Castable;
+use Odigos\Illuminate\Contracts\Database\Eloquent\CastsInboundAttributes;
+use Odigos\Illuminate\Contracts\Support\Arrayable;
+use Odigos\Illuminate\Database\Eloquent\Casts\AsArrayObject;
+use Odigos\Illuminate\Database\Eloquent\Casts\AsCollection;
+use Odigos\Illuminate\Database\Eloquent\Casts\AsEncryptedArrayObject;
+use Odigos\Illuminate\Database\Eloquent\Casts\AsEncryptedCollection;
+use Odigos\Illuminate\Database\Eloquent\Casts\AsEnumArrayObject;
+use Odigos\Illuminate\Database\Eloquent\Casts\AsEnumCollection;
+use Odigos\Illuminate\Database\Eloquent\Casts\Attribute;
+use Odigos\Illuminate\Database\Eloquent\Casts\Json;
+use Odigos\Illuminate\Database\Eloquent\InvalidCastException;
+use Odigos\Illuminate\Database\Eloquent\JsonEncodingException;
+use Odigos\Illuminate\Database\Eloquent\MissingAttributeException;
+use Odigos\Illuminate\Database\Eloquent\Relations\Relation;
+use Odigos\Illuminate\Database\LazyLoadingViolationException;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Carbon;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Collection as BaseCollection;
+use Odigos\Illuminate\Support\Exceptions\MathException;
+use Odigos\Illuminate\Support\Facades\Crypt;
+use Odigos\Illuminate\Support\Facades\Date;
+use Odigos\Illuminate\Support\Facades\Hash;
+use Odigos\Illuminate\Support\Str;
 use InvalidArgumentException;
 use LogicException;
 use ReflectionClass;
@@ -43,7 +43,7 @@ use ReflectionNamedType;
 use RuntimeException;
 use Stringable;
 use ValueError;
-use function Illuminate\Support\enum_value;
+use function Odigos\Illuminate\Support\enum_value;
 trait HasAttributes
 {
     /**

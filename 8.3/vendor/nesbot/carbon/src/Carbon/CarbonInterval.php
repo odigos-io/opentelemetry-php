@@ -40,7 +40,7 @@ use InvalidArgumentException;
 use ReflectionException;
 use ReturnTypeWillChange;
 use RuntimeException;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use Odigos\Symfony\Contracts\Translation\TranslatorInterface;
 use Throwable;
 /**
  * A simple API extension for DateInterval.

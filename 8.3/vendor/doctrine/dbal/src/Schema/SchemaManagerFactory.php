@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Schema;
+namespace Odigos\Doctrine\DBAL\Schema;
 
-use Doctrine\DBAL\Connection;
+use Odigos\Doctrine\DBAL\Connection;
 /**
  * Creates a schema manager for the given connection.
  *
@@ -11,5 +11,5 @@ use Doctrine\DBAL\Connection;
  */
 interface SchemaManagerFactory
 {
-    public function createSchemaManager(Connection $connection): \Doctrine\DBAL\Schema\AbstractSchemaManager;
+    public function createSchemaManager(Connection $connection): AbstractSchemaManager;
 }

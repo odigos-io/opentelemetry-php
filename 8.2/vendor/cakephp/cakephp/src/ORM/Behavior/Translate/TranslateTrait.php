@@ -14,9 +14,9 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\ORM\Behavior\Translate;
+namespace Odigos\Cake\ORM\Behavior\Translate;
 
-use Cake\Datasource\EntityInterface;
+use Odigos\Cake\Datasource\EntityInterface;
 /**
  * Contains a translation method aimed to help managing multiple translations
  * for an entity.

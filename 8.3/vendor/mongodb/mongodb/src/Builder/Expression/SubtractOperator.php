@@ -4,15 +4,15 @@
  * THIS FILE IS AUTO-GENERATED. ANY CHANGES WILL BE LOST!
  */
 declare (strict_types=1);
-namespace MongoDB\Builder\Expression;
+namespace Odigos\MongoDB\Builder\Expression;
 
 use DateTimeInterface;
 use MongoDB\BSON\Decimal128;
 use MongoDB\BSON\Int64;
 use MongoDB\BSON\UTCDateTime;
-use MongoDB\Builder\Type\Encode;
-use MongoDB\Builder\Type\OperatorInterface;
-use MongoDB\Exception\InvalidArgumentException;
+use Odigos\MongoDB\Builder\Type\Encode;
+use Odigos\MongoDB\Builder\Type\OperatorInterface;
+use Odigos\MongoDB\Exception\InvalidArgumentException;
 use function is_string;
 use function str_starts_with;
 /**
@@ -21,20 +21,20 @@ use function str_starts_with;
  * @see https://www.mongodb.com/docs/manual/reference/operator/aggregation/subtract/
  * @internal
  */
-final class SubtractOperator implements \MongoDB\Builder\Expression\ResolvesToInt, \MongoDB\Builder\Expression\ResolvesToLong, \MongoDB\Builder\Expression\ResolvesToDouble, \MongoDB\Builder\Expression\ResolvesToDecimal, \MongoDB\Builder\Expression\ResolvesToDate, OperatorInterface
+final class SubtractOperator implements ResolvesToInt, ResolvesToLong, ResolvesToDouble, ResolvesToDecimal, ResolvesToDate, OperatorInterface
 {
     public const ENCODE = Encode::Array;
     public const NAME = '$subtract';
     public const PROPERTIES = ['expression1' => 'expression1', 'expression2' => 'expression2'];
     /** @var DateTimeInterface|Decimal128|Int64|ResolvesToDate|ResolvesToNumber|UTCDateTime|float|int|string $expression1 */
-    public readonly DateTimeInterface|Decimal128|Int64|UTCDateTime|\MongoDB\Builder\Expression\ResolvesToDate|\MongoDB\Builder\Expression\ResolvesToNumber|float|int|string $expression1;
+    public readonly DateTimeInterface|Decimal128|Int64|UTCDateTime|ResolvesToDate|ResolvesToNumber|float|int|string $expression1;
     /** @var DateTimeInterface|Decimal128|Int64|ResolvesToDate|ResolvesToNumber|UTCDateTime|float|int|string $expression2 */
-    public readonly DateTimeInterface|Decimal128|Int64|UTCDateTime|\MongoDB\Builder\Expression\ResolvesToDate|\MongoDB\Builder\Expression\ResolvesToNumber|float|int|string $expression2;
+    public readonly DateTimeInterface|Decimal128|Int64|UTCDateTime|ResolvesToDate|ResolvesToNumber|float|int|string $expression2;
     /**
      * @param DateTimeInterface|Decimal128|Int64|ResolvesToDate|ResolvesToNumber|UTCDateTime|float|int|string $expression1
      * @param DateTimeInterface|Decimal128|Int64|ResolvesToDate|ResolvesToNumber|UTCDateTime|float|int|string $expression2
      */
-    public function __construct(DateTimeInterface|Decimal128|Int64|UTCDateTime|\MongoDB\Builder\Expression\ResolvesToDate|\MongoDB\Builder\Expression\ResolvesToNumber|float|int|string $expression1, DateTimeInterface|Decimal128|Int64|UTCDateTime|\MongoDB\Builder\Expression\ResolvesToDate|\MongoDB\Builder\Expression\ResolvesToNumber|float|int|string $expression2)
+    public function __construct(DateTimeInterface|Decimal128|Int64|UTCDateTime|ResolvesToDate|ResolvesToNumber|float|int|string $expression1, DateTimeInterface|Decimal128|Int64|UTCDateTime|ResolvesToDate|ResolvesToNumber|float|int|string $expression2)
     {
         if (is_string($expression1) && !str_starts_with($expression1, '$')) {
             throw new InvalidArgumentException('Argument $expression1 can be an expression, field paths and variable names must be prefixed by "$" or "$$".');

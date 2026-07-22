@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpFoundation\Session\Storage\Handler;
+namespace Odigos\Symfony\Component\HttpFoundation\Session\Storage\Handler;
 
-use Symfony\Component\HttpFoundation\Session\SessionUtils;
+use Odigos\Symfony\Component\HttpFoundation\Session\SessionUtils;
 /**
  * This abstract session handler provides a generic implementation
  * of the PHP 7.0 SessionUpdateTimestampHandlerInterface,

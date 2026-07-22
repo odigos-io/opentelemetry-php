@@ -5,10 +5,10 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\base;
+namespace Odigos\yii\base;
 
 use Odigos\Yii;
-use yii\helpers\FileHelper;
+use Odigos\yii\helpers\FileHelper;
 /**
  * Theme represents an application theme.
  *
@@ -70,7 +70,7 @@ use yii\helpers\FileHelper;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class Theme extends \yii\base\Component
+class Theme extends Component
 {
     /**
      * @var array|null the mapping between view directories and their corresponding themed versions.
@@ -126,7 +126,7 @@ class Theme extends \yii\base\Component
         $pathMap = $this->pathMap;
         if (empty($pathMap)) {
             if (($basePath = $this->getBasePath()) === null) {
-                throw new \yii\base\InvalidConfigException('The "basePath" property must be set.');
+                throw new InvalidConfigException('The "basePath" property must be set.');
             }
             $pathMap = [Yii::$app->getBasePath() => [$basePath]];
         }
@@ -157,7 +157,7 @@ class Theme extends \yii\base\Component
         if (($baseUrl = $this->getBaseUrl()) !== null) {
             return $baseUrl . '/' . ltrim($url, '/');
         }
-        throw new \yii\base\InvalidConfigException('The "baseUrl" property must be set.');
+        throw new InvalidConfigException('The "baseUrl" property must be set.');
     }
     /**
      * Converts a relative file path into an absolute one using [[basePath]].
@@ -170,6 +170,6 @@ class Theme extends \yii\base\Component
         if (($basePath = $this->getBasePath()) !== null) {
             return $basePath . \DIRECTORY_SEPARATOR . ltrim($path, '/\\');
         }
-        throw new \yii\base\InvalidConfigException('The "basePath" property must be set.');
+        throw new InvalidConfigException('The "basePath" property must be set.');
     }
 }

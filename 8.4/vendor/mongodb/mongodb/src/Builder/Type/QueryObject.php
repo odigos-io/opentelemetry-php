@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace MongoDB\Builder\Type;
+namespace Odigos\MongoDB\Builder\Type;
 
 use DateTimeInterface;
 use MongoDB\BSON\Type;
-use MongoDB\Exception\InvalidArgumentException;
+use Odigos\MongoDB\Exception\InvalidArgumentException;
 use stdClass;
 use function array_is_list;
 use function array_key_first;
@@ -19,14 +19,14 @@ use function str_starts_with;
  * Queries are a mix of query operators ($or, $and, $nor, $jsonSchema...) and field query operators ($eq, $gt, $in...)
  * associated to a field path.
  */
-final class QueryObject implements \MongoDB\Builder\Type\QueryInterface
+final class QueryObject implements QueryInterface
 {
     public readonly array $queries;
     /** @param array<DateTimeInterface|QueryInterface|FieldQueryInterface|Type|stdClass|array|bool|float|int|string|null> $queries */
-    public static function create(array $queries): \MongoDB\Builder\Type\QueryInterface
+    public static function create(array $queries): QueryInterface
     {
         // We don't wrap a single query in a QueryObject
-        if (count($queries) === 1 && isset($queries[0]) && $queries[0] instanceof \MongoDB\Builder\Type\QueryInterface) {
+        if (count($queries) === 1 && isset($queries[0]) && $queries[0] instanceof QueryInterface) {
             return $queries[0];
         }
         return new self($queries);
@@ -41,8 +41,8 @@ final class QueryObject implements \MongoDB\Builder\Type\QueryInterface
         $seenQueryOperators = [];
         $queries = [];
         foreach ($queriesOrArrayOfQueries as $fieldPath => $query) {
-            if ($query instanceof \MongoDB\Builder\Type\QueryInterface) {
-                if ($query instanceof \MongoDB\Builder\Type\OperatorInterface) {
+            if ($query instanceof QueryInterface) {
+                if ($query instanceof OperatorInterface) {
                     if (isset($seenQueryOperators[$query::NAME])) {
                         throw new InvalidArgumentException(sprintf('Query operator "%s" cannot be used multiple times in the same query.', $query::NAME));
                     }
@@ -56,7 +56,7 @@ final class QueryObject implements \MongoDB\Builder\Type\QueryInterface
                 if (count($query) === 1) {
                     $query = $query[0];
                 } else {
-                    $query = new \MongoDB\Builder\Type\CombinedFieldQuery($query);
+                    $query = new CombinedFieldQuery($query);
                 }
             }
             $queries[$fieldPath] = $query;
@@ -71,7 +71,7 @@ final class QueryObject implements \MongoDB\Builder\Type\QueryInterface
         }
         /** @var mixed $value */
         foreach ($values as $value) {
-            if ($value instanceof \MongoDB\Builder\Type\FieldQueryInterface) {
+            if ($value instanceof FieldQueryInterface) {
                 return \true;
             }
         }

@@ -1,12 +1,12 @@
 <?php
 
-namespace OpenAI\Responses\Audio;
+namespace Odigos\OpenAI\Responses\Audio;
 
 use Generator;
-use Http\Discovery\Psr17Factory;
-use OpenAI\Contracts\ResponseHasMetaInformationContract;
-use OpenAI\Contracts\ResponseStreamContract;
-use OpenAI\Responses\Meta\MetaInformation;
+use Odigos\Http\Discovery\Psr17Factory;
+use Odigos\OpenAI\Contracts\ResponseHasMetaInformationContract;
+use Odigos\OpenAI\Contracts\ResponseStreamContract;
+use Odigos\OpenAI\Responses\Meta\MetaInformation;
 use Psr\Http\Message\ResponseInterface;
 /**
  * @implements ResponseStreamContract<string>
@@ -34,7 +34,7 @@ final class SpeechStreamResponse implements ResponseHasMetaInformationContract, 
     {
         $psr17Factory = new Psr17Factory();
         $response = $psr17Factory->createResponse()->withBody($psr17Factory->createStream($content ?? (string) file_get_contents(__DIR__ . '/../../Testing/Responses/Fixtures/Audio/speech-streamed.mp3')));
-        if ($meta instanceof \OpenAI\Responses\Meta\MetaInformation) {
+        if ($meta instanceof \Odigos\OpenAI\Responses\Meta\MetaInformation) {
             foreach ($meta->toArray() as $key => $value) {
                 if (is_scalar($value)) {
                     $response = $response->withHeader($key, (string) $value);

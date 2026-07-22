@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Responses\FineTuning;
+namespace Odigos\OpenAI\Responses\FineTuning;
 
-use OpenAI\Contracts\ResponseContract;
-use OpenAI\Contracts\ResponseHasMetaInformationContract;
-use OpenAI\Responses\Concerns\ArrayAccessible;
-use OpenAI\Responses\Concerns\HasMetaInformation;
-use OpenAI\Responses\Meta\MetaInformation;
-use OpenAI\Testing\Responses\Concerns\Fakeable;
+use Odigos\OpenAI\Contracts\ResponseContract;
+use Odigos\OpenAI\Contracts\ResponseHasMetaInformationContract;
+use Odigos\OpenAI\Responses\Concerns\ArrayAccessible;
+use Odigos\OpenAI\Responses\Concerns\HasMetaInformation;
+use Odigos\OpenAI\Responses\Meta\MetaInformation;
+use Odigos\OpenAI\Testing\Responses\Concerns\Fakeable;
 /**
  * @implements ResponseContract<array{object: string, data: array<int, array{id: string, object: string, model: string, created_at: int, finished_at: ?int, fine_tuned_model: ?string, hyperparameters: array{n_epochs: int|string, batch_size: int|string|null, learning_rate_multiplier: float|string|null}, organization_id: string, result_files: array<int, string>, status: string, validation_file: ?string, training_file: string, trained_tokens: ?int, error: ?array{code: string, param: ?string, message: string}}>, has_more: bool}>
  */
@@ -33,7 +33,7 @@ final class ListJobsResponse implements ResponseContract, ResponseHasMetaInforma
      */
     public static function from(array $attributes, MetaInformation $meta): self
     {
-        $data = array_map(fn(array $result): \OpenAI\Responses\FineTuning\RetrieveJobResponse => \OpenAI\Responses\FineTuning\RetrieveJobResponse::from($result, $meta), $attributes['data']);
+        $data = array_map(fn(array $result): RetrieveJobResponse => RetrieveJobResponse::from($result, $meta), $attributes['data']);
         return new self($attributes['object'], $data, $attributes['has_more'], $meta);
     }
     /**
@@ -41,6 +41,6 @@ final class ListJobsResponse implements ResponseContract, ResponseHasMetaInforma
      */
     public function toArray(): array
     {
-        return ['object' => $this->object, 'data' => array_map(static fn(\OpenAI\Responses\FineTuning\RetrieveJobResponse $response): array => $response->toArray(), $this->data), 'has_more' => $this->hasMore];
+        return ['object' => $this->object, 'data' => array_map(static fn(RetrieveJobResponse $response): array => $response->toArray(), $this->data), 'has_more' => $this->hasMore];
     }
 }

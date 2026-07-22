@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Mime;
+namespace Odigos\Symfony\Component\Mime;
 
-use Symfony\Component\Mime\Header\Headers;
-use Symfony\Component\Mime\Part\AbstractPart;
+use Odigos\Symfony\Component\Mime\Header\Headers;
+use Odigos\Symfony\Component\Mime\Part\AbstractPart;
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
  */
-class DraftEmail extends \Symfony\Component\Mime\Email
+class DraftEmail extends Email
 {
     public function __construct(?Headers $headers = null, ?AbstractPart $body = null)
     {

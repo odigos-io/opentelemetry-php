@@ -5,12 +5,12 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\rest;
+namespace Odigos\yii\rest;
 
-use yii\base\InvalidConfigException;
-use yii\db\ActiveRecordInterface;
-use yii\web\NotFoundHttpException;
-use yii\base\Action as BaseAction;
+use Odigos\yii\base\InvalidConfigException;
+use Odigos\yii\db\ActiveRecordInterface;
+use Odigos\yii\web\NotFoundHttpException;
+use Odigos\yii\base\Action as BaseAction;
 /**
  * Action is the base class for action classes that implement RESTful API.
  *

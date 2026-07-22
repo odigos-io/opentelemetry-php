@@ -1,17 +1,17 @@
 <?php
 
-namespace Illuminate\Http\Resources\Json;
+namespace Odigos\Illuminate\Http\Resources\Json;
 
 use ArrayAccess;
-use Illuminate\Container\Container;
-use Illuminate\Contracts\Routing\UrlRoutable;
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Contracts\Support\Responsable;
-use Illuminate\Database\Eloquent\JsonEncodingException;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Illuminate\Http\Resources\ConditionallyLoadsAttributes;
-use Illuminate\Http\Resources\DelegatesToResource;
+use Odigos\Illuminate\Container\Container;
+use Odigos\Illuminate\Contracts\Routing\UrlRoutable;
+use Odigos\Illuminate\Contracts\Support\Arrayable;
+use Odigos\Illuminate\Contracts\Support\Responsable;
+use Odigos\Illuminate\Database\Eloquent\JsonEncodingException;
+use Odigos\Illuminate\Http\JsonResponse;
+use Odigos\Illuminate\Http\Request;
+use Odigos\Illuminate\Http\Resources\ConditionallyLoadsAttributes;
+use Odigos\Illuminate\Http\Resources\DelegatesToResource;
 use JsonException;
 use JsonSerializable;
 class JsonResource implements ArrayAccess, JsonSerializable, Responsable, UrlRoutable
@@ -90,7 +90,7 @@ class JsonResource implements ArrayAccess, JsonSerializable, Responsable, UrlRou
      */
     protected static function newCollection($resource)
     {
-        return new \Illuminate\Http\Resources\Json\AnonymousResourceCollection($resource, static::class);
+        return new AnonymousResourceCollection($resource, static::class);
     }
     /**
      * Resolve the resource to an array.
@@ -260,7 +260,7 @@ class JsonResource implements ArrayAccess, JsonSerializable, Responsable, UrlRou
      */
     public function toResponse($request)
     {
-        return (new \Illuminate\Http\Resources\Json\ResourceResponse($this))->toResponse($request);
+        return (new ResourceResponse($this))->toResponse($request);
     }
     /**
      * Prepare the resource for JSON serialization.

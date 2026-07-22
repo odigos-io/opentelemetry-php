@@ -1,18 +1,18 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\Inflector\Rules\Turkish;
+namespace Odigos\Doctrine\Inflector\Rules\Turkish;
 
-use Doctrine\Inflector\GenericLanguageInflectorFactory;
-use Doctrine\Inflector\Rules\Ruleset;
+use Odigos\Doctrine\Inflector\GenericLanguageInflectorFactory;
+use Odigos\Doctrine\Inflector\Rules\Ruleset;
 final class InflectorFactory extends GenericLanguageInflectorFactory
 {
     protected function getSingularRuleset(): Ruleset
     {
-        return \Doctrine\Inflector\Rules\Turkish\Rules::getSingularRuleset();
+        return Rules::getSingularRuleset();
     }
     protected function getPluralRuleset(): Ruleset
     {
-        return \Doctrine\Inflector\Rules\Turkish\Rules::getPluralRuleset();
+        return Rules::getPluralRuleset();
     }
 }

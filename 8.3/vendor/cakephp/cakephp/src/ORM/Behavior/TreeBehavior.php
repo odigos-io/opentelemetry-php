@@ -14,20 +14,20 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\ORM\Behavior;
+namespace Odigos\Cake\ORM\Behavior;
 
-use Cake\Collection\CollectionInterface;
-use Cake\Collection\Iterator\TreeIterator;
-use Cake\Database\Exception\DatabaseException;
-use Cake\Database\Expression\IdentifierExpression;
-use Cake\Database\Expression\QueryExpression;
-use Cake\Datasource\EntityInterface;
-use Cake\Datasource\Exception\RecordNotFoundException;
-use Cake\Event\EventInterface;
-use Cake\ORM\Behavior;
-use Cake\ORM\Query\DeleteQuery;
-use Cake\ORM\Query\SelectQuery;
-use Cake\ORM\Query\UpdateQuery;
+use Odigos\Cake\Collection\CollectionInterface;
+use Odigos\Cake\Collection\Iterator\TreeIterator;
+use Odigos\Cake\Database\Exception\DatabaseException;
+use Odigos\Cake\Database\Expression\IdentifierExpression;
+use Odigos\Cake\Database\Expression\QueryExpression;
+use Odigos\Cake\Datasource\EntityInterface;
+use Odigos\Cake\Datasource\Exception\RecordNotFoundException;
+use Odigos\Cake\Event\EventInterface;
+use Odigos\Cake\ORM\Behavior;
+use Odigos\Cake\ORM\Query\DeleteQuery;
+use Odigos\Cake\ORM\Query\SelectQuery;
+use Odigos\Cake\ORM\Query\UpdateQuery;
 use Closure;
 /**
  * Makes the table to which this is attached to behave like a nested set and

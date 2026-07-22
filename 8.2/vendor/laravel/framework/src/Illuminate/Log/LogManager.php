@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Log;
+namespace Odigos\Illuminate\Log;
 
 use Closure;
-use Illuminate\Contracts\Log\ContextLogProcessor;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
+use Odigos\Illuminate\Contracts\Log\ContextLogProcessor;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Str;
 use InvalidArgumentException;
 use Odigos\Monolog\Formatter\LineFormatter;
 use Odigos\Monolog\Handler\ErrorLogHandler;
@@ -27,7 +27,7 @@ use Throwable;
  */
 class LogManager implements LoggerInterface
 {
-    use \Illuminate\Log\ParsesLogConfiguration;
+    use ParsesLogConfiguration;
     /**
      * The application instance.
      *
@@ -87,7 +87,7 @@ class LogManager implements LoggerInterface
      */
     public function stack(array $channels, $channel = null)
     {
-        return (new \Illuminate\Log\Logger($this->createStackDriver(compact('channels', 'channel')), $this->app['events']))->withContext($this->sharedContext);
+        return (new Logger($this->createStackDriver(compact('channels', 'channel')), $this->app['events']))->withContext($this->sharedContext);
     }
     /**
      * Get a log channel instance.
@@ -120,7 +120,7 @@ class LogManager implements LoggerInterface
     {
         try {
             return $this->channels[$name] ?? with($this->resolve($name, $config), function ($logger) use ($name) {
-                $loggerWithContext = $this->tap($name, new \Illuminate\Log\Logger($logger, $this->app['events']))->withContext($this->sharedContext);
+                $loggerWithContext = $this->tap($name, new Logger($logger, $this->app['events']))->withContext($this->sharedContext);
                 if (method_exists($loggerWithContext->getLogger(), 'pushProcessor')) {
                     $loggerWithContext->pushProcessor($this->app->make(ContextLogProcessor::class));
                 }
@@ -139,7 +139,7 @@ class LogManager implements LoggerInterface
      * @param  \Illuminate\Log\Logger  $logger
      * @return \Illuminate\Log\Logger
      */
-    protected function tap($name, \Illuminate\Log\Logger $logger)
+    protected function tap($name, Logger $logger)
     {
         foreach ($this->configurationFor($name)['tap'] ?? [] as $tap) {
             [$class, $arguments] = $this->parseTap($tap);
@@ -166,7 +166,7 @@ class LogManager implements LoggerInterface
     {
         $config = $this->configurationFor('emergency');
         $handler = new StreamHandler($config['path'] ?? $this->app->storagePath() . '/logs/laravel.log', $this->level(['level' => 'debug']));
-        return new \Illuminate\Log\Logger(new Monolog('laravel', $this->prepareHandlers([$handler])), $this->app['events']);
+        return new Logger(new Monolog('laravel', $this->prepareHandlers([$handler])), $this->app['events']);
     }
     /**
      * Resolve the given log instance by name.

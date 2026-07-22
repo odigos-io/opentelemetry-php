@@ -5,9 +5,9 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\widgets;
+namespace Odigos\yii\widgets;
 
-use yii\base\Widget;
+use Odigos\yii\base\Widget;
 /**
  * Spaceless widget removes whitespace characters between HTML tags. Whitespaces within HTML tags
  * or in a plain text are always left untouched.

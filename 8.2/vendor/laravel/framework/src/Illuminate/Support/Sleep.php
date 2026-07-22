@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Support;
+namespace Odigos\Illuminate\Support;
 
 use Odigos\Carbon\CarbonInterval;
 use Closure;
 use DateInterval;
-use Illuminate\Support\Traits\Macroable;
+use Odigos\Illuminate\Support\Traits\Macroable;
 use Odigos\PHPUnit\Framework\Assert as PHPUnit;
 use RuntimeException;
 class Sleep
@@ -93,9 +93,9 @@ class Sleep
     public static function until($timestamp)
     {
         if (is_numeric($timestamp)) {
-            $timestamp = \Illuminate\Support\Carbon::createFromTimestamp($timestamp, date_default_timezone_get());
+            $timestamp = Carbon::createFromTimestamp($timestamp, date_default_timezone_get());
         }
-        return new static(\Illuminate\Support\Carbon::now()->diff($timestamp));
+        return new static(Carbon::now()->diff($timestamp));
     }
     /**
      * Sleep for the given number of microseconds.
@@ -273,7 +273,7 @@ class Sleep
         if (static::$fake) {
             static::$sequence[] = $this->duration;
             if (static::$syncWithCarbon) {
-                \Illuminate\Support\Carbon::setTestNow(\Illuminate\Support\Carbon::now()->add($this->duration));
+                Carbon::setTestNow(Carbon::now()->add($this->duration));
             }
             foreach (static::$fakeSleepCallbacks as $callback) {
                 $callback($this->duration);
@@ -338,7 +338,7 @@ class Sleep
      */
     public static function assertSlept($expected, $times = 1)
     {
-        $count = (new \Illuminate\Support\Collection(static::$sequence))->filter($expected)->count();
+        $count = (new Collection(static::$sequence))->filter($expected)->count();
         PHPUnit::assertSame($times, $count, "The expected sleep was found [{$count}] times instead of [{$times}].");
     }
     /**
@@ -361,7 +361,7 @@ class Sleep
     {
         try {
             static::assertSleptTimes(count($sequence));
-            (new \Illuminate\Support\Collection($sequence))->zip(static::$sequence)->eachSpread(function (?\Illuminate\Support\Sleep $expected, CarbonInterval $actual) {
+            (new Collection($sequence))->zip(static::$sequence)->eachSpread(function (?Sleep $expected, CarbonInterval $actual) {
                 if ($expected === null) {
                     return;
                 }

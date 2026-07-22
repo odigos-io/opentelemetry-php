@@ -8,15 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Mime;
+namespace Odigos\Symfony\Component\Mime;
 
 use Odigos\Egulias\EmailValidator\EmailValidator;
 use Odigos\Egulias\EmailValidator\Validation\MessageIDValidation;
 use Odigos\Egulias\EmailValidator\Validation\RFCValidation;
-use Symfony\Component\Mime\Encoder\IdnAddressEncoder;
-use Symfony\Component\Mime\Exception\InvalidArgumentException;
-use Symfony\Component\Mime\Exception\LogicException;
-use Symfony\Component\Mime\Exception\RfcComplianceException;
+use Odigos\Symfony\Component\Mime\Encoder\IdnAddressEncoder;
+use Odigos\Symfony\Component\Mime\Exception\InvalidArgumentException;
+use Odigos\Symfony\Component\Mime\Exception\LogicException;
+use Odigos\Symfony\Component\Mime\Exception\RfcComplianceException;
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  */

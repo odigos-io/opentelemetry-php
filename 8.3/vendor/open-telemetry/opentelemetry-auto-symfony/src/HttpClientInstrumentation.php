@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenTelemetry\Contrib\Instrumentation\Symfony;
+namespace Odigos\OpenTelemetry\Contrib\Instrumentation\Symfony;
 
 use OpenTelemetry\API\Globals;
 use OpenTelemetry\API\Instrumentation\CachedInstrumentation;
@@ -13,8 +13,8 @@ use OpenTelemetry\Context\Propagation\ArrayAccessGetterSetter;
 use function OpenTelemetry\Instrumentation\hook;
 use OpenTelemetry\SemConv\TraceAttributes;
 use OpenTelemetry\SemConv\Version;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
-use Symfony\Contracts\HttpClient\ResponseInterface;
+use Odigos\Symfony\Contracts\HttpClient\HttpClientInterface;
+use Odigos\Symfony\Contracts\HttpClient\ResponseInterface;
 /**
  * @phan-file-suppress PhanTypeInvalidCallableArraySize
  * @psalm-suppress UnusedClass
@@ -27,7 +27,7 @@ final class HttpClientInstrumentation
      */
     const SYNCHRONOUS_CLIENTS = [
         /** @psalm-suppress UndefinedClass */
-        'ApiPlatform\Symfony\Bundle\Test\Client',
+        'Odigos\ApiPlatform\Symfony\Bundle\Test\Client',
     ];
     public static function supportsProgress(string $class): bool
     {
@@ -37,7 +37,7 @@ final class HttpClientInstrumentation
     {
         $instrumentation = new CachedInstrumentation('io.opentelemetry.contrib.php.symfony_http', null, Version::VERSION_1_32_0->url());
         /** @psalm-suppress UnusedFunctionCall */
-        hook(HttpClientInterface::class, 'request', pre: static function (HttpClientInterface $client, array $params, string $class, string $function, ?string $filename, ?int $lineno) use ($instrumentation): array {
+        hook('Symfony\\Contracts\\HttpClient\\HttpClientInterface', 'request', pre: static function (object $client, array $params, string $class, string $function, ?string $filename, ?int $lineno) use ($instrumentation): array {
             /** @psalm-suppress ArgumentTypeCoercion */
             $builder = $instrumentation->tracer()->spanBuilder(\sprintf('%s', $params[0]))->setSpanKind(SpanKind::KIND_CLIENT)->setAttribute(TraceAttributes::PEER_SERVICE, parse_url((string) $params[1])['host'] ?? null)->setAttribute(TraceAttributes::URL_FULL, (string) $params[1])->setAttribute(TraceAttributes::HTTP_REQUEST_METHOD, $params[0])->setAttribute(TraceAttributes::CODE_FUNCTION_NAME, sprintf('%s::%s', $class, $function))->setAttribute(TraceAttributes::CODE_FILE_PATH, $filename)->setAttribute(TraceAttributes::CODE_LINE_NUMBER, $lineno);
             $propagator = Globals::propagator();
@@ -74,7 +74,7 @@ final class HttpClientInstrumentation
             Context::storage()->attach($context);
             $params[2] = $requestOptions;
             return $params;
-        }, post: static function (HttpClientInterface $client, array $params, ?ResponseInterface $response, ?\Throwable $exception): void {
+        }, post: static function (object $client, array $params, ?object $response, ?\Throwable $exception): void {
             $scope = Context::storage()->scope();
             if (null === $scope) {
                 return;

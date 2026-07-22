@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Routing;
+namespace Odigos\Symfony\Component\Routing;
 
 /**
  * A Route describes a route and its parameters.
@@ -26,7 +26,7 @@ class Route
     private array $requirements = [];
     private array $options = [];
     private string $condition = '';
-    private ?\Symfony\Component\Routing\CompiledRoute $compiled = null;
+    private ?CompiledRoute $compiled = null;
     /**
      * Constructor.
      *
@@ -171,7 +171,7 @@ class Route
      */
     public function setOptions(array $options): static
     {
-        $this->options = ['compiler_class' => \Symfony\Component\Routing\RouteCompiler::class];
+        $this->options = ['compiler_class' => RouteCompiler::class];
         return $this->addOptions($options);
     }
     /**
@@ -320,7 +320,7 @@ class Route
      *
      * @see RouteCompiler which is responsible for the compilation process
      */
-    public function compile(): \Symfony\Component\Routing\CompiledRoute
+    public function compile(): CompiledRoute
     {
         if (null !== $this->compiled) {
             return $this->compiled;

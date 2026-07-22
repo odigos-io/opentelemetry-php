@@ -14,19 +14,19 @@ declare (strict_types=1);
  * @since         3.6.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Command;
+namespace Odigos\Cake\Command;
 
-use Cake\Console\Arguments;
-use Cake\Console\ConsoleIo;
-use Cake\Console\ConsoleOptionParser;
-use Cake\Database\Connection;
-use Cake\Database\SchemaCache;
-use Cake\Datasource\ConnectionManager;
+use Odigos\Cake\Console\Arguments;
+use Odigos\Cake\Console\ConsoleIo;
+use Odigos\Cake\Console\ConsoleOptionParser;
+use Odigos\Cake\Database\Connection;
+use Odigos\Cake\Database\SchemaCache;
+use Odigos\Cake\Datasource\ConnectionManager;
 use RuntimeException;
 /**
  * Provides CLI tool for updating schema cache.
  */
-class SchemacacheBuildCommand extends \Cake\Command\Command
+class SchemacacheBuildCommand extends Command
 {
     /**
      * Get the command name.

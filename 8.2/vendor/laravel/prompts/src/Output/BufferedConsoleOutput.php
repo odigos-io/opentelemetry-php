@@ -1,8 +1,8 @@
 <?php
 
-namespace Laravel\Prompts\Output;
+namespace Odigos\Laravel\Prompts\Output;
 
-class BufferedConsoleOutput extends \Laravel\Prompts\Output\ConsoleOutput
+class BufferedConsoleOutput extends ConsoleOutput
 {
     /**
      * The output buffer.

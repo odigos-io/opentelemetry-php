@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Contracts\Resources;
+namespace Odigos\OpenAI\Contracts\Resources;
 
-use OpenAI\Responses\Conversations\ConversationDeletedResponse;
-use OpenAI\Responses\Conversations\ConversationResponse;
+use Odigos\OpenAI\Responses\Conversations\ConversationDeletedResponse;
+use Odigos\OpenAI\Responses\Conversations\ConversationResponse;
 interface ConversationsContract
 {
     /**
@@ -40,5 +40,5 @@ interface ConversationsContract
      *
      * @see https://platform.openai.com/docs/api-reference/conversations/list-items
      */
-    public function items(): \OpenAI\Contracts\Resources\ConversationsItemsContract;
+    public function items(): ConversationsItemsContract;
 }

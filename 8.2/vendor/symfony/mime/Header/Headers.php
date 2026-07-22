@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Mime\Header;
+namespace Odigos\Symfony\Component\Mime\Header;
 
-use Symfony\Component\Mime\Address;
-use Symfony\Component\Mime\Exception\LogicException;
+use Odigos\Symfony\Component\Mime\Address;
+use Odigos\Symfony\Component\Mime\Exception\LogicException;
 /**
  * A collection of headers.
  *
@@ -21,26 +21,26 @@ final class Headers
 {
     private const UNIQUE_HEADERS = ['date', 'from', 'sender', 'reply-to', 'to', 'cc', 'bcc', 'message-id', 'in-reply-to', 'references', 'subject'];
     private const HEADER_CLASS_MAP = [
-        'date' => \Symfony\Component\Mime\Header\DateHeader::class,
-        'from' => \Symfony\Component\Mime\Header\MailboxListHeader::class,
-        'sender' => \Symfony\Component\Mime\Header\MailboxHeader::class,
-        'reply-to' => \Symfony\Component\Mime\Header\MailboxListHeader::class,
-        'to' => \Symfony\Component\Mime\Header\MailboxListHeader::class,
-        'cc' => \Symfony\Component\Mime\Header\MailboxListHeader::class,
-        'bcc' => \Symfony\Component\Mime\Header\MailboxListHeader::class,
-        'message-id' => \Symfony\Component\Mime\Header\IdentificationHeader::class,
-        'in-reply-to' => [\Symfony\Component\Mime\Header\UnstructuredHeader::class, \Symfony\Component\Mime\Header\IdentificationHeader::class],
+        'date' => DateHeader::class,
+        'from' => MailboxListHeader::class,
+        'sender' => MailboxHeader::class,
+        'reply-to' => MailboxListHeader::class,
+        'to' => MailboxListHeader::class,
+        'cc' => MailboxListHeader::class,
+        'bcc' => MailboxListHeader::class,
+        'message-id' => IdentificationHeader::class,
+        'in-reply-to' => [UnstructuredHeader::class, IdentificationHeader::class],
         // `In-Reply-To` and `References` are less strict than RFC 2822 (3.6.4) to allow users entering the original email's ...
-        'references' => [\Symfony\Component\Mime\Header\UnstructuredHeader::class, \Symfony\Component\Mime\Header\IdentificationHeader::class],
+        'references' => [UnstructuredHeader::class, IdentificationHeader::class],
         // ... `Message-ID`, even if that is no valid `msg-id`
-        'return-path' => \Symfony\Component\Mime\Header\PathHeader::class,
+        'return-path' => PathHeader::class,
     ];
     /**
      * @var HeaderInterface[][]
      */
     private array $headers = [];
     private int $lineLength = 76;
-    public function __construct(\Symfony\Component\Mime\Header\HeaderInterface ...$headers)
+    public function __construct(HeaderInterface ...$headers)
     {
         foreach ($headers as $header) {
             $this->add($header);
@@ -72,56 +72,56 @@ final class Headers
      */
     public function addMailboxListHeader(string $name, array $addresses): static
     {
-        return $this->add(new \Symfony\Component\Mime\Header\MailboxListHeader($name, Address::createArray($addresses)));
+        return $this->add(new MailboxListHeader($name, Address::createArray($addresses)));
     }
     /**
      * @return $this
      */
     public function addMailboxHeader(string $name, Address|string $address): static
     {
-        return $this->add(new \Symfony\Component\Mime\Header\MailboxHeader($name, Address::create($address)));
+        return $this->add(new MailboxHeader($name, Address::create($address)));
     }
     /**
      * @return $this
      */
     public function addIdHeader(string $name, string|array $ids): static
     {
-        return $this->add(new \Symfony\Component\Mime\Header\IdentificationHeader($name, $ids));
+        return $this->add(new IdentificationHeader($name, $ids));
     }
     /**
      * @return $this
      */
     public function addPathHeader(string $name, Address|string $path): static
     {
-        return $this->add(new \Symfony\Component\Mime\Header\PathHeader($name, $path instanceof Address ? $path : new Address($path)));
+        return $this->add(new PathHeader($name, $path instanceof Address ? $path : new Address($path)));
     }
     /**
      * @return $this
      */
     public function addDateHeader(string $name, \DateTimeInterface $dateTime): static
     {
-        return $this->add(new \Symfony\Component\Mime\Header\DateHeader($name, $dateTime));
+        return $this->add(new DateHeader($name, $dateTime));
     }
     /**
      * @return $this
      */
     public function addTextHeader(string $name, string $value): static
     {
-        return $this->add(new \Symfony\Component\Mime\Header\UnstructuredHeader($name, $value));
+        return $this->add(new UnstructuredHeader($name, $value));
     }
     /**
      * @return $this
      */
     public function addParameterizedHeader(string $name, string $value, array $params = []): static
     {
-        return $this->add(new \Symfony\Component\Mime\Header\ParameterizedHeader($name, $value, $params));
+        return $this->add(new ParameterizedHeader($name, $value, $params));
     }
     /**
      * @return $this
      */
     public function addHeader(string $name, mixed $argument, array $more = []): static
     {
-        $headerClass = self::HEADER_CLASS_MAP[strtolower($name)] ?? \Symfony\Component\Mime\Header\UnstructuredHeader::class;
+        $headerClass = self::HEADER_CLASS_MAP[strtolower($name)] ?? UnstructuredHeader::class;
         if (\is_array($headerClass)) {
             $headerClass = $headerClass[0];
         }
@@ -143,7 +143,7 @@ final class Headers
     /**
      * @return $this
      */
-    public function add(\Symfony\Component\Mime\Header\HeaderInterface $header): static
+    public function add(HeaderInterface $header): static
     {
         self::checkHeaderClass($header);
         $header->setMaxLineLength($this->lineLength);
@@ -154,7 +154,7 @@ final class Headers
         $this->headers[$name][] = $header;
         return $this;
     }
-    public function get(string $name): ?\Symfony\Component\Mime\Header\HeaderInterface
+    public function get(string $name): ?HeaderInterface
     {
         $name = strtolower($name);
         if (!isset($this->headers[$name])) {
@@ -192,7 +192,7 @@ final class Headers
     /**
      * @throws LogicException if the header name and class are not compatible
      */
-    public static function checkHeaderClass(\Symfony\Component\Mime\Header\HeaderInterface $header): void
+    public static function checkHeaderClass(HeaderInterface $header): void
     {
         $name = strtolower($header->getName());
         $headerClasses = self::HEADER_CLASS_MAP[$name] ?? [];
@@ -248,8 +248,8 @@ final class Headers
             return null;
         }
         $header = $this->get($name);
-        if (!$header instanceof \Symfony\Component\Mime\Header\ParameterizedHeader) {
-            throw new LogicException(\sprintf('Unable to get parameter "%s" on header "%s" as the header is not of class "%s".', $parameter, $name, \Symfony\Component\Mime\Header\ParameterizedHeader::class));
+        if (!$header instanceof ParameterizedHeader) {
+            throw new LogicException(\sprintf('Unable to get parameter "%s" on header "%s" as the header is not of class "%s".', $parameter, $name, ParameterizedHeader::class));
         }
         return $header->getParameter($parameter);
     }
@@ -262,8 +262,8 @@ final class Headers
             throw new LogicException(\sprintf('Unable to set parameter "%s" on header "%s" as the header is not defined.', $parameter, $name));
         }
         $header = $this->get($name);
-        if (!$header instanceof \Symfony\Component\Mime\Header\ParameterizedHeader) {
-            throw new LogicException(\sprintf('Unable to set parameter "%s" on header "%s" as the header is not of class "%s".', $parameter, $name, \Symfony\Component\Mime\Header\ParameterizedHeader::class));
+        if (!$header instanceof ParameterizedHeader) {
+            throw new LogicException(\sprintf('Unable to set parameter "%s" on header "%s" as the header is not of class "%s".', $parameter, $name, ParameterizedHeader::class));
         }
         $header->setParameter($parameter, $value);
     }

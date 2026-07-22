@@ -1,14 +1,14 @@
 <?php
 
-namespace Illuminate\Notifications\Events;
+namespace Odigos\Illuminate\Notifications\Events;
 
-use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
-use Illuminate\Notifications\AnonymousNotifiable;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
+use Odigos\Illuminate\Broadcasting\PrivateChannel;
+use Odigos\Illuminate\Bus\Queueable;
+use Odigos\Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Odigos\Illuminate\Notifications\AnonymousNotifiable;
+use Odigos\Illuminate\Queue\SerializesModels;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Collection;
 class BroadcastNotificationCreated implements ShouldBroadcast
 {
     use Queueable, SerializesModels;

@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Database\Console;
+namespace Odigos\Illuminate\Database\Console;
 
-use Illuminate\Console\Command;
-use Illuminate\Database\ConnectionInterface;
-use Illuminate\Support\Arr;
+use Odigos\Illuminate\Console\Command;
+use Odigos\Illuminate\Database\ConnectionInterface;
+use Odigos\Illuminate\Support\Arr;
 abstract class DatabaseInspectionCommand extends Command
 {
     /**

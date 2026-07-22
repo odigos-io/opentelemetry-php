@@ -1,19 +1,19 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Resources;
+namespace Odigos\OpenAI\Resources;
 
-use OpenAI\Contracts\Resources\VectorStoresContract;
-use OpenAI\Contracts\Resources\VectorStoresFileBatchesContract;
-use OpenAI\Contracts\Resources\VectorStoresFilesContract;
-use OpenAI\Responses\VectorStores\VectorStoreDeleteResponse;
-use OpenAI\Responses\VectorStores\VectorStoreListResponse;
-use OpenAI\Responses\VectorStores\VectorStoreResponse;
-use OpenAI\ValueObjects\Transporter\Payload;
-use OpenAI\ValueObjects\Transporter\Response;
+use Odigos\OpenAI\Contracts\Resources\VectorStoresContract;
+use Odigos\OpenAI\Contracts\Resources\VectorStoresFileBatchesContract;
+use Odigos\OpenAI\Contracts\Resources\VectorStoresFilesContract;
+use Odigos\OpenAI\Responses\VectorStores\VectorStoreDeleteResponse;
+use Odigos\OpenAI\Responses\VectorStores\VectorStoreListResponse;
+use Odigos\OpenAI\Responses\VectorStores\VectorStoreResponse;
+use Odigos\OpenAI\ValueObjects\Transporter\Payload;
+use Odigos\OpenAI\ValueObjects\Transporter\Response;
 final class VectorStores implements VectorStoresContract
 {
-    use \OpenAI\Resources\Concerns\Transportable;
+    use Concerns\Transportable;
     /**
      * Create a vector store
      *
@@ -87,7 +87,7 @@ final class VectorStores implements VectorStoresContract
      */
     public function files(): VectorStoresFilesContract
     {
-        return new \OpenAI\Resources\VectorStoresFiles($this->transporter);
+        return new VectorStoresFiles($this->transporter);
     }
     /**
      * Manage the file batches related to the vector store
@@ -96,6 +96,6 @@ final class VectorStores implements VectorStoresContract
      */
     public function batches(): VectorStoresFileBatchesContract
     {
-        return new \OpenAI\Resources\VectorStoresFileBatches($this->transporter);
+        return new VectorStoresFileBatches($this->transporter);
     }
 }

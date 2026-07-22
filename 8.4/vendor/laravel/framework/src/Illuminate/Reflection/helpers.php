@@ -2,7 +2,7 @@
 
 namespace Odigos;
 
-use Illuminate\Support\Traits\ReflectsClosures;
+use Odigos\Illuminate\Support\Traits\ReflectsClosures;
 if (!\function_exists('Odigos\lazy')) {
     /**
      * Create a lazy instance.

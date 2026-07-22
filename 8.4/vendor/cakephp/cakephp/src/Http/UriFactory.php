@@ -14,9 +14,9 @@ declare (strict_types=1);
  * @since         5.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Http;
+namespace Odigos\Cake\Http;
 
-use Cake\Core\Configure;
+use Odigos\Cake\Core\Configure;
 use Odigos\Laminas\Diactoros\Uri;
 use Odigos\Laminas\Diactoros\UriFactory as DiactorosUriFactory;
 use Psr\Http\Message\UriFactoryInterface;

@@ -1,10 +1,10 @@
 <?php
 
-namespace OpenAI\Contracts\Resources;
+namespace Odigos\OpenAI\Contracts\Resources;
 
-use OpenAI\Responses\Assistants\AssistantDeleteResponse;
-use OpenAI\Responses\Assistants\AssistantListResponse;
-use OpenAI\Responses\Assistants\AssistantResponse;
+use Odigos\OpenAI\Responses\Assistants\AssistantDeleteResponse;
+use Odigos\OpenAI\Responses\Assistants\AssistantListResponse;
+use Odigos\OpenAI\Responses\Assistants\AssistantResponse;
 interface AssistantsContract
 {
     /**

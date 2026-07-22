@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Console;
+namespace Odigos\Illuminate\Console;
 
 interface CommandMutex
 {

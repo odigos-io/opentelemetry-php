@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Odigos\Termwind;
 
-use Symfony\Component\Console\Terminal as ConsoleTerminal;
+use Odigos\Symfony\Component\Console\Terminal as ConsoleTerminal;
 /**
  * @internal
  */

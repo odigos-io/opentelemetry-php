@@ -6,16 +6,16 @@
  * @license https://github.com/slimphp/Slim/blob/4.x/LICENSE.md (MIT License)
  */
 declare (strict_types=1);
-namespace Slim\Factory\Psr17;
+namespace Odigos\Slim\Factory\Psr17;
 
 use Psr\Http\Message\ServerRequestInterface;
 use RuntimeException;
-use Slim\Interfaces\ServerRequestCreatorInterface;
+use Odigos\Slim\Interfaces\ServerRequestCreatorInterface;
 use function class_exists;
 class SlimHttpServerRequestCreator implements ServerRequestCreatorInterface
 {
     protected ServerRequestCreatorInterface $serverRequestCreator;
-    protected static string $serverRequestDecoratorClass = 'Slim\Http\ServerRequest';
+    protected static string $serverRequestDecoratorClass = 'Odigos\Slim\Http\ServerRequest';
     public function __construct(ServerRequestCreatorInterface $serverRequestCreator)
     {
         $this->serverRequestCreator = $serverRequestCreator;

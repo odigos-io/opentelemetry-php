@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Queue;
+namespace Odigos\Illuminate\Queue;
 
-class ListenerOptions extends \Illuminate\Queue\WorkerOptions
+class ListenerOptions extends WorkerOptions
 {
     /**
      * The environment the worker should run in.

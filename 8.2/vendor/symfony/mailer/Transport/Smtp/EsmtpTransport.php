@@ -8,23 +8,23 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Mailer\Transport\Smtp;
+namespace Odigos\Symfony\Component\Mailer\Transport\Smtp;
 
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Mailer\Exception\TransportException;
-use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
-use Symfony\Component\Mailer\Exception\UnexpectedResponseException;
-use Symfony\Component\Mailer\Transport\Smtp\Auth\AuthenticatorInterface;
-use Symfony\Component\Mailer\Transport\Smtp\Stream\AbstractStream;
-use Symfony\Component\Mailer\Transport\Smtp\Stream\SocketStream;
+use Odigos\Symfony\Component\Mailer\Exception\TransportException;
+use Odigos\Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Odigos\Symfony\Component\Mailer\Exception\UnexpectedResponseException;
+use Odigos\Symfony\Component\Mailer\Transport\Smtp\Auth\AuthenticatorInterface;
+use Odigos\Symfony\Component\Mailer\Transport\Smtp\Stream\AbstractStream;
+use Odigos\Symfony\Component\Mailer\Transport\Smtp\Stream\SocketStream;
 /**
  * Sends Emails over SMTP with ESMTP support.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  * @author Chris Corbyn
  */
-class EsmtpTransport extends \Symfony\Component\Mailer\Transport\Smtp\SmtpTransport
+class EsmtpTransport extends SmtpTransport
 {
     private array $authenticators = [];
     private string $username = '';
@@ -38,7 +38,7 @@ class EsmtpTransport extends \Symfony\Component\Mailer\Transport\Smtp\SmtpTransp
         if (null === $authenticators) {
             // fallback to default authenticators
             // order is important here (roughly most secure and popular first)
-            $authenticators = [new \Symfony\Component\Mailer\Transport\Smtp\Auth\CramMd5Authenticator(), new \Symfony\Component\Mailer\Transport\Smtp\Auth\LoginAuthenticator(), new \Symfony\Component\Mailer\Transport\Smtp\Auth\PlainAuthenticator(), new \Symfony\Component\Mailer\Transport\Smtp\Auth\XOAuth2Authenticator()];
+            $authenticators = [new Auth\CramMd5Authenticator(), new Auth\LoginAuthenticator(), new Auth\PlainAuthenticator(), new Auth\XOAuth2Authenticator()];
         }
         $this->setAuthenticators($authenticators);
         /** @var SocketStream $stream */

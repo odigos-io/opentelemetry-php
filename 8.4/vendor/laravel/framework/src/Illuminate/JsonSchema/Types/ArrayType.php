@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\JsonSchema\Types;
+namespace Odigos\Illuminate\JsonSchema\Types;
 
-class ArrayType extends \Illuminate\JsonSchema\Types\Type
+class ArrayType extends Type
 {
     /**
      * The minimum number of items (inclusive).
@@ -15,7 +15,7 @@ class ArrayType extends \Illuminate\JsonSchema\Types\Type
     /**
      * The schema of the items contained in the array.
      */
-    protected ?\Illuminate\JsonSchema\Types\Type $items = null;
+    protected ?Type $items = null;
     /**
      * Whether the array items must be unique.
      */
@@ -39,7 +39,7 @@ class ArrayType extends \Illuminate\JsonSchema\Types\Type
     /**
      * Set the schema for array items.
      */
-    public function items(\Illuminate\JsonSchema\Types\Type $type): static
+    public function items(Type $type): static
     {
         $this->items = $type;
         return $this;

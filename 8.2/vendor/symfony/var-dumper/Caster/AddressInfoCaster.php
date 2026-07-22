@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\VarDumper\Caster;
+namespace Odigos\Symfony\Component\VarDumper\Caster;
 
-use Symfony\Component\VarDumper\Cloner\Stub;
+use Odigos\Symfony\Component\VarDumper\Cloner\Stub;
 /**
  * @author Nicolas Grekas <p@tchwork.com>
  *
@@ -34,9 +34,9 @@ final class AddressInfoCaster
             }
         }
         foreach (socket_addrinfo_explain($h) as $k => $v) {
-            $a[\Symfony\Component\VarDumper\Caster\Caster::PREFIX_VIRTUAL . $k] = match (\true) {
-                'ai_flags' === $k => \Symfony\Component\VarDumper\Caster\ConstStub::fromBitfield($v, $resolvedMaps[$k]),
-                isset($resolvedMaps[$k][$v]) => new \Symfony\Component\VarDumper\Caster\ConstStub($resolvedMaps[$k][$v], $v),
+            $a[Caster::PREFIX_VIRTUAL . $k] = match (\true) {
+                'ai_flags' === $k => ConstStub::fromBitfield($v, $resolvedMaps[$k]),
+                isset($resolvedMaps[$k][$v]) => new ConstStub($resolvedMaps[$k][$v], $v),
                 default => $v,
             };
         }

@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Validation\Concerns;
+namespace Odigos\Illuminate\Validation\Concerns;
 
-use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Str;
 trait ReplacesAttributes
 {
     /**

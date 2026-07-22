@@ -1,14 +1,14 @@
 <?php
 
-namespace Laravel\Prompts;
+namespace Odigos\Laravel\Prompts;
 
 use Closure;
-use Laravel\Prompts\Support\Utils;
-use Laravel\Prompts\Themes\Default\Concerns\InteractsWithStrings;
-class TextareaPrompt extends \Laravel\Prompts\Prompt
+use Odigos\Laravel\Prompts\Support\Utils;
+use Odigos\Laravel\Prompts\Themes\Default\Concerns\InteractsWithStrings;
+class TextareaPrompt extends Prompt
 {
-    use \Laravel\Prompts\Concerns\Scrolling;
-    use \Laravel\Prompts\Concerns\TypedValue;
+    use Concerns\Scrolling;
+    use Concerns\TypedValue;
     use InteractsWithStrings;
     protected int $minWidth = 0;
     /**
@@ -26,15 +26,15 @@ class TextareaPrompt extends \Laravel\Prompts\Prompt
         $this->on('key', function ($key) {
             if ($key[0] === "\x1b") {
                 match ($key) {
-                    \Laravel\Prompts\Key::UP, \Laravel\Prompts\Key::UP_ARROW, \Laravel\Prompts\Key::CTRL_P => $this->handleUpKey(),
-                    \Laravel\Prompts\Key::DOWN, \Laravel\Prompts\Key::DOWN_ARROW, \Laravel\Prompts\Key::CTRL_N => $this->handleDownKey(),
+                    Key::UP, Key::UP_ARROW, Key::CTRL_P => $this->handleUpKey(),
+                    Key::DOWN, Key::DOWN_ARROW, Key::CTRL_N => $this->handleDownKey(),
                     default => null,
                 };
                 return;
             }
             // Keys may be buffered.
             foreach (mb_str_split($key) as $key) {
-                if ($key === \Laravel\Prompts\Key::CTRL_D) {
+                if ($key === Key::CTRL_D) {
                     $this->submit();
                     return;
                 }

@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Routing\Loader;
+namespace Odigos\Symfony\Component\Routing\Loader;
 
-use Symfony\Component\Config\Loader\Loader;
-use Symfony\Component\Routing\RouteCollection;
+use Odigos\Symfony\Component\Config\Loader\Loader;
+use Odigos\Symfony\Component\Routing\RouteCollection;
 /**
  * Loads routes from a list of tagged classes by delegating to the attribute class loader.
  *

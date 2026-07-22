@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Process;
+namespace Odigos\Illuminate\Process;
 
-use Illuminate\Contracts\Process\InvokedProcess as InvokedProcessContract;
-use Illuminate\Process\Exceptions\ProcessTimedOutException;
-use Symfony\Component\Process\Exception\ProcessTimedOutException as SymfonyTimeoutException;
-use Symfony\Component\Process\Process;
+use Odigos\Illuminate\Contracts\Process\InvokedProcess as InvokedProcessContract;
+use Odigos\Illuminate\Process\Exceptions\ProcessTimedOutException;
+use Odigos\Symfony\Component\Process\Exception\ProcessTimedOutException as SymfonyTimeoutException;
+use Odigos\Symfony\Component\Process\Process;
 class InvokedProcess implements InvokedProcessContract
 {
     /**
@@ -120,7 +120,7 @@ class InvokedProcess implements InvokedProcessContract
         try {
             $this->process->checkTimeout();
         } catch (SymfonyTimeoutException $e) {
-            throw new ProcessTimedOutException($e, new \Illuminate\Process\ProcessResult($this->process));
+            throw new ProcessTimedOutException($e, new ProcessResult($this->process));
         }
     }
     /**
@@ -135,9 +135,9 @@ class InvokedProcess implements InvokedProcessContract
     {
         try {
             $this->process->wait($output);
-            return new \Illuminate\Process\ProcessResult($this->process);
+            return new ProcessResult($this->process);
         } catch (SymfonyTimeoutException $e) {
-            throw new ProcessTimedOutException($e, new \Illuminate\Process\ProcessResult($this->process));
+            throw new ProcessTimedOutException($e, new ProcessResult($this->process));
         }
     }
     /**
@@ -152,9 +152,9 @@ class InvokedProcess implements InvokedProcessContract
     {
         try {
             $this->process->waitUntil($output);
-            return new \Illuminate\Process\ProcessResult($this->process);
+            return new ProcessResult($this->process);
         } catch (SymfonyTimeoutException $e) {
-            throw new ProcessTimedOutException($e, new \Illuminate\Process\ProcessResult($this->process));
+            throw new ProcessTimedOutException($e, new ProcessResult($this->process));
         }
     }
 }

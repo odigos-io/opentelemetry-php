@@ -14,9 +14,9 @@ declare (strict_types=1);
  * @since         4.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Http;
+namespace Odigos\Cake\Http;
 
-use Cake\Core\HttpApplicationInterface;
+use Odigos\Cake\Core\HttpApplicationInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 /**
@@ -38,7 +38,7 @@ abstract class MiddlewareApplication implements HttpApplicationInterface
     /**
      * @inheritDoc
      */
-    abstract public function middleware(\Cake\Http\MiddlewareQueue $middlewareQueue): \Cake\Http\MiddlewareQueue;
+    abstract public function middleware(MiddlewareQueue $middlewareQueue): MiddlewareQueue;
     /**
      * Generate a 404 response as no middleware handled the request.
      *
@@ -47,6 +47,6 @@ abstract class MiddlewareApplication implements HttpApplicationInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        return new \Cake\Http\Response(['body' => 'Not found', 'status' => 404]);
+        return new Response(['body' => 'Not found', 'status' => 404]);
     }
 }

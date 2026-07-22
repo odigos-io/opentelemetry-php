@@ -5,14 +5,14 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\rest;
+namespace Odigos\yii\rest;
 
 use Odigos\Yii;
-use yii\data\ActiveDataProvider;
-use yii\data\DataFilter;
-use yii\data\Pagination;
-use yii\data\Sort;
-use yii\helpers\ArrayHelper;
+use Odigos\yii\data\ActiveDataProvider;
+use Odigos\yii\data\DataFilter;
+use Odigos\yii\data\Pagination;
+use Odigos\yii\data\Sort;
+use Odigos\yii\helpers\ArrayHelper;
 /**
  * IndexAction implements the API endpoint for listing multiple models.
  *
@@ -24,7 +24,7 @@ use yii\helpers\ArrayHelper;
  * @template T of Controller = Controller
  * @extends Action<T>
  */
-class IndexAction extends \yii\rest\Action
+class IndexAction extends Action
 {
     /**
      * @var callable|null a PHP callable that will be called to prepare a data provider that

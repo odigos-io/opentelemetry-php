@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Auth\Access\Events;
+namespace Odigos\Illuminate\Auth\Access\Events;
 
 class GateEvaluated
 {

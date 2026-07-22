@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Routing;
+namespace Odigos\Illuminate\Routing;
 
-use Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Collection;
 class SortedMiddleware extends Collection
 {
     /**
@@ -49,7 +49,7 @@ class SortedMiddleware extends Collection
                 $lastPriorityIndex = $priorityIndex;
             }
         }
-        return \Illuminate\Routing\Router::uniqueMiddleware($middlewares);
+        return Router::uniqueMiddleware($middlewares);
     }
     /**
      * Calculate the priority map index of the middleware.

@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Process;
+namespace Odigos\Symfony\Component\Process;
 
-use Symfony\Component\Process\Exception\LogicException;
-use Symfony\Component\Process\Exception\RuntimeException;
+use Odigos\Symfony\Component\Process\Exception\LogicException;
+use Odigos\Symfony\Component\Process\Exception\RuntimeException;
 /**
  * PhpProcess runs a PHP script in an independent process.
  *
@@ -21,7 +21,7 @@ use Symfony\Component\Process\Exception\RuntimeException;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class PhpProcess extends \Symfony\Component\Process\Process
+class PhpProcess extends Process
 {
     /**
      * @param string      $script  The PHP script to run (as a string)
@@ -33,7 +33,7 @@ class PhpProcess extends \Symfony\Component\Process\Process
     public function __construct(string $script, ?string $cwd = null, ?array $env = null, int $timeout = 60, ?array $php = null)
     {
         if (null === $php) {
-            $executableFinder = new \Symfony\Component\Process\PhpExecutableFinder();
+            $executableFinder = new PhpExecutableFinder();
             $php = $executableFinder->find(\false);
             $php = \false === $php ? null : array_merge([$php], $executableFinder->findArguments());
         }

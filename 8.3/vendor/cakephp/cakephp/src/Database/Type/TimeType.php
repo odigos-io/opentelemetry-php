@@ -14,12 +14,12 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database\Type;
+namespace Odigos\Cake\Database\Type;
 
-use Cake\Chronos\ChronosTime;
-use Cake\Core\Exception\CakeException;
-use Cake\Database\Driver;
-use Cake\I18n\Time;
+use Odigos\Cake\Chronos\ChronosTime;
+use Odigos\Cake\Core\Exception\CakeException;
+use Odigos\Cake\Database\Driver;
+use Odigos\Cake\I18n\Time;
 use DateTimeInterface;
 use InvalidArgumentException;
 /**
@@ -27,7 +27,7 @@ use InvalidArgumentException;
  *
  * Use to convert time instances to strings and back.
  */
-class TimeType extends \Cake\Database\Type\BaseType implements \Cake\Database\Type\BatchCastingInterface
+class TimeType extends BaseType implements BatchCastingInterface
 {
     /**
      * The PHP Time format used when converting to string.

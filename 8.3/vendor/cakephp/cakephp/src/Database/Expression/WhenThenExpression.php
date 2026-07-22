@@ -14,13 +14,13 @@ declare (strict_types=1);
  * @since         4.3.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database\Expression;
+namespace Odigos\Cake\Database\Expression;
 
-use Cake\Database\ExpressionInterface;
-use Cake\Database\Query;
-use Cake\Database\Type\ExpressionTypeCasterTrait;
-use Cake\Database\TypeMap;
-use Cake\Database\ValueBinder;
+use Odigos\Cake\Database\ExpressionInterface;
+use Odigos\Cake\Database\Query;
+use Odigos\Cake\Database\Type\ExpressionTypeCasterTrait;
+use Odigos\Cake\Database\TypeMap;
+use Odigos\Cake\Database\ValueBinder;
 use Closure;
 use InvalidArgumentException;
 use LogicException;
@@ -29,7 +29,7 @@ use LogicException;
  */
 class WhenThenExpression implements ExpressionInterface
 {
-    use \Cake\Database\Expression\CaseExpressionTrait;
+    use CaseExpressionTrait;
     use ExpressionTypeCasterTrait;
     /**
      * The names of the clauses that are valid for use with the
@@ -119,7 +119,7 @@ class WhenThenExpression implements ExpressionInterface
             if (is_array($type) && $type !== []) {
                 $typeMap = $typeMap->setTypes($type);
             }
-            $when = new \Cake\Database\Expression\QueryExpression($when, $typeMap);
+            $when = new QueryExpression($when, $typeMap);
         } else {
             if ($type !== null && !is_string($type)) {
                 throw new InvalidArgumentException(sprintf('When using a non-array value for the `$when` argument, the `$type` argument must ' . 'be a string, `%s` given.', get_debug_type($type)));

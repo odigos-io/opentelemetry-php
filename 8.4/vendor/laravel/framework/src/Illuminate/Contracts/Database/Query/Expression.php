@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Contracts\Database\Query;
+namespace Odigos\Illuminate\Contracts\Database\Query;
 
-use Illuminate\Database\Grammar;
+use Odigos\Illuminate\Database\Grammar;
 interface Expression
 {
     /**

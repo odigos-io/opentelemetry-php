@@ -4,7 +4,7 @@
  * THIS FILE IS AUTO-GENERATED. ANY CHANGES WILL BE LOST!
  */
 declare (strict_types=1);
-namespace MongoDB\Builder\Accumulator;
+namespace Odigos\MongoDB\Builder\Accumulator;
 
 use DateTimeInterface;
 use MongoDB\BSON\Decimal128;
@@ -15,16 +15,16 @@ use MongoDB\BSON\PackedArray;
 use MongoDB\BSON\Serializable;
 use MongoDB\BSON\Type;
 use MongoDB\BSON\UTCDateTime;
-use MongoDB\Builder\Expression\ResolvesToArray;
-use MongoDB\Builder\Expression\ResolvesToDate;
-use MongoDB\Builder\Expression\ResolvesToInt;
-use MongoDB\Builder\Expression\ResolvesToNumber;
-use MongoDB\Builder\Expression\ResolvesToObject;
-use MongoDB\Builder\Expression\ResolvesToString;
-use MongoDB\Builder\Type\ExpressionInterface;
-use MongoDB\Builder\Type\Optional;
-use MongoDB\Builder\Type\TimeUnit;
-use MongoDB\Model\BSONArray;
+use Odigos\MongoDB\Builder\Expression\ResolvesToArray;
+use Odigos\MongoDB\Builder\Expression\ResolvesToDate;
+use Odigos\MongoDB\Builder\Expression\ResolvesToInt;
+use Odigos\MongoDB\Builder\Expression\ResolvesToNumber;
+use Odigos\MongoDB\Builder\Expression\ResolvesToObject;
+use Odigos\MongoDB\Builder\Expression\ResolvesToString;
+use Odigos\MongoDB\Builder\Type\ExpressionInterface;
+use Odigos\MongoDB\Builder\Type\Optional;
+use Odigos\MongoDB\Builder\Type\TimeUnit;
+use Odigos\MongoDB\Model\BSONArray;
 use stdClass;
 /**
  * @internal
@@ -44,9 +44,9 @@ trait FactoryTrait
      * @param Optional|BSONArray|PackedArray|ResolvesToArray|array|string $initArgs Arguments passed to the init function.
      * @param Optional|Javascript|string $finalize Function used to update the result of the accumulation.
      */
-    public static function accumulator(Javascript|string $init, Javascript|string $accumulate, PackedArray|ResolvesToArray|BSONArray|array|string $accumulateArgs, Javascript|string $merge, string $lang, Optional|PackedArray|ResolvesToArray|BSONArray|array|string $initArgs = Optional::Undefined, Optional|Javascript|string $finalize = Optional::Undefined): \MongoDB\Builder\Accumulator\AccumulatorAccumulator
+    public static function accumulator(Javascript|string $init, Javascript|string $accumulate, PackedArray|ResolvesToArray|BSONArray|array|string $accumulateArgs, Javascript|string $merge, string $lang, Optional|PackedArray|ResolvesToArray|BSONArray|array|string $initArgs = Optional::Undefined, Optional|Javascript|string $finalize = Optional::Undefined): AccumulatorAccumulator
     {
-        return new \MongoDB\Builder\Accumulator\AccumulatorAccumulator($init, $accumulate, $accumulateArgs, $merge, $lang, $initArgs, $finalize);
+        return new AccumulatorAccumulator($init, $accumulate, $accumulateArgs, $merge, $lang, $initArgs, $finalize);
     }
     /**
      * Returns an array of unique expression values for each group. Order of the array elements is undefined.
@@ -55,9 +55,9 @@ trait FactoryTrait
      * @see https://www.mongodb.com/docs/manual/reference/operator/aggregation/addToSet/
      * @param DateTimeInterface|ExpressionInterface|Type|array|bool|float|int|null|stdClass|string $expression
      */
-    public static function addToSet(DateTimeInterface|Type|ExpressionInterface|stdClass|array|bool|float|int|null|string $expression): \MongoDB\Builder\Accumulator\AddToSetAccumulator
+    public static function addToSet(DateTimeInterface|Type|ExpressionInterface|stdClass|array|bool|float|int|null|string $expression): AddToSetAccumulator
     {
-        return new \MongoDB\Builder\Accumulator\AddToSetAccumulator($expression);
+        return new AddToSetAccumulator($expression);
     }
     /**
      * Returns an average of numerical values. Ignores non-numeric values.
@@ -66,9 +66,9 @@ trait FactoryTrait
      * @see https://www.mongodb.com/docs/manual/reference/operator/aggregation/avg/
      * @param Decimal128|Int64|ResolvesToNumber|float|int|string $expression
      */
-    public static function avg(Decimal128|Int64|ResolvesToNumber|float|int|string $expression): \MongoDB\Builder\Accumulator\AvgAccumulator
+    public static function avg(Decimal128|Int64|ResolvesToNumber|float|int|string $expression): AvgAccumulator
     {
-        return new \MongoDB\Builder\Accumulator\AvgAccumulator($expression);
+        return new AvgAccumulator($expression);
     }
     /**
      * Returns the bottom element within a group according to the specified sort order.
@@ -78,9 +78,9 @@ trait FactoryTrait
      * @param Document|Serializable|array|stdClass $sortBy Specifies the order of results, with syntax similar to $sort.
      * @param DateTimeInterface|ExpressionInterface|Type|array|bool|float|int|null|stdClass|string $output Represents the output for each element in the group and can be any expression.
      */
-    public static function bottom(Document|Serializable|stdClass|array $sortBy, DateTimeInterface|Type|ExpressionInterface|stdClass|array|bool|float|int|null|string $output): \MongoDB\Builder\Accumulator\BottomAccumulator
+    public static function bottom(Document|Serializable|stdClass|array $sortBy, DateTimeInterface|Type|ExpressionInterface|stdClass|array|bool|float|int|null|string $output): BottomAccumulator
     {
-        return new \MongoDB\Builder\Accumulator\BottomAccumulator($sortBy, $output);
+        return new BottomAccumulator($sortBy, $output);
     }
     /**
      * Returns an aggregation of the bottom n elements within a group, according to the specified sort order. If the group contains fewer than n elements, $bottomN returns all elements in the group.
@@ -92,9 +92,9 @@ trait FactoryTrait
      * @param Document|Serializable|array|stdClass $sortBy Specifies the order of results, with syntax similar to $sort.
      * @param DateTimeInterface|ExpressionInterface|Type|array|bool|float|int|null|stdClass|string $output Represents the output for each element in the group and can be any expression.
      */
-    public static function bottomN(ResolvesToInt|int|string $n, Document|Serializable|stdClass|array $sortBy, DateTimeInterface|Type|ExpressionInterface|stdClass|array|bool|float|int|null|string $output): \MongoDB\Builder\Accumulator\BottomNAccumulator
+    public static function bottomN(ResolvesToInt|int|string $n, Document|Serializable|stdClass|array $sortBy, DateTimeInterface|Type|ExpressionInterface|stdClass|array|bool|float|int|null|string $output): BottomNAccumulator
     {
-        return new \MongoDB\Builder\Accumulator\BottomNAccumulator($n, $sortBy, $output);
+        return new BottomNAccumulator($n, $sortBy, $output);
     }
     /**
      * Returns the number of documents in the group or window.
@@ -103,9 +103,9 @@ trait FactoryTrait
      *
      * @see https://www.mongodb.com/docs/manual/reference/operator/aggregation/count-accumulator/
      */
-    public static function count(): \MongoDB\Builder\Accumulator\CountAccumulator
+    public static function count(): CountAccumulator
     {
-        return new \MongoDB\Builder\Accumulator\CountAccumulator();
+        return new CountAccumulator();
     }
     /**
      * Returns the population covariance of two numeric expressions.
@@ -115,9 +115,9 @@ trait FactoryTrait
      * @param Decimal128|Int64|ResolvesToNumber|float|int|string $expression1
      * @param Decimal128|Int64|ResolvesToNumber|float|int|string $expression2
      */
-    public static function covariancePop(Decimal128|Int64|ResolvesToNumber|float|int|string $expression1, Decimal128|Int64|ResolvesToNumber|float|int|string $expression2): \MongoDB\Builder\Accumulator\CovariancePopAccumulator
+    public static function covariancePop(Decimal128|Int64|ResolvesToNumber|float|int|string $expression1, Decimal128|Int64|ResolvesToNumber|float|int|string $expression2): CovariancePopAccumulator
     {
-        return new \MongoDB\Builder\Accumulator\CovariancePopAccumulator($expression1, $expression2);
+        return new CovariancePopAccumulator($expression1, $expression2);
     }
     /**
      * Returns the sample covariance of two numeric expressions.
@@ -127,9 +127,9 @@ trait FactoryTrait
      * @param Decimal128|Int64|ResolvesToNumber|float|int|string $expression1
      * @param Decimal128|Int64|ResolvesToNumber|float|int|string $expression2
      */
-    public static function covarianceSamp(Decimal128|Int64|ResolvesToNumber|float|int|string $expression1, Decimal128|Int64|ResolvesToNumber|float|int|string $expression2): \MongoDB\Builder\Accumulator\CovarianceSampAccumulator
+    public static function covarianceSamp(Decimal128|Int64|ResolvesToNumber|float|int|string $expression1, Decimal128|Int64|ResolvesToNumber|float|int|string $expression2): CovarianceSampAccumulator
     {
-        return new \MongoDB\Builder\Accumulator\CovarianceSampAccumulator($expression1, $expression2);
+        return new CovarianceSampAccumulator($expression1, $expression2);
     }
     /**
      * Returns the document position (known as the rank) relative to other documents in the $setWindowFields stage partition. There are no gaps in the ranks. Ties receive the same rank.
@@ -137,9 +137,9 @@ trait FactoryTrait
      *
      * @see https://www.mongodb.com/docs/manual/reference/operator/aggregation/denseRank/
      */
-    public static function denseRank(): \MongoDB\Builder\Accumulator\DenseRankAccumulator
+    public static function denseRank(): DenseRankAccumulator
     {
-        return new \MongoDB\Builder\Accumulator\DenseRankAccumulator();
+        return new DenseRankAccumulator();
     }
     /**
      * Returns the average rate of change within the specified window.
@@ -150,9 +150,9 @@ trait FactoryTrait
      * @param Optional|ResolvesToString|TimeUnit|string $unit A string that specifies the time unit. Use one of these strings: "week", "day","hour", "minute", "second", "millisecond".
      * If the sortBy field is not a date, you must omit a unit. If you specify a unit, you must specify a date in the sortBy field.
      */
-    public static function derivative(DateTimeInterface|Decimal128|Int64|UTCDateTime|ResolvesToDate|ResolvesToNumber|float|int|string $input, Optional|ResolvesToString|TimeUnit|string $unit = Optional::Undefined): \MongoDB\Builder\Accumulator\DerivativeAccumulator
+    public static function derivative(DateTimeInterface|Decimal128|Int64|UTCDateTime|ResolvesToDate|ResolvesToNumber|float|int|string $input, Optional|ResolvesToString|TimeUnit|string $unit = Optional::Undefined): DerivativeAccumulator
     {
-        return new \MongoDB\Builder\Accumulator\DerivativeAccumulator($input, $unit);
+        return new DerivativeAccumulator($input, $unit);
     }
     /**
      * Returns the position of a document (known as the document number) in the $setWindowFields stage partition. Ties result in different adjacent document numbers.
@@ -160,9 +160,9 @@ trait FactoryTrait
      *
      * @see https://www.mongodb.com/docs/manual/reference/operator/aggregation/documentNumber/
      */
-    public static function documentNumber(): \MongoDB\Builder\Accumulator\DocumentNumberAccumulator
+    public static function documentNumber(): DocumentNumberAccumulator
     {
-        return new \MongoDB\Builder\Accumulator\DocumentNumberAccumulator();
+        return new DocumentNumberAccumulator();
     }
     /**
      * Returns the exponential moving average for the numeric expression.
@@ -176,9 +176,9 @@ trait FactoryTrait
      * @param Optional|Int64|float|int $alpha A double that specifies the exponential decay value to use in the exponential moving average calculation. A higher alpha value assigns a lower mathematical significance to previous results from the calculation.
      * You must specify either N or alpha. You cannot specify both.
      */
-    public static function expMovingAvg(Decimal128|Int64|ResolvesToNumber|float|int|string $input, Optional|int $N = Optional::Undefined, Optional|Int64|float|int $alpha = Optional::Undefined): \MongoDB\Builder\Accumulator\ExpMovingAvgAccumulator
+    public static function expMovingAvg(Decimal128|Int64|ResolvesToNumber|float|int|string $input, Optional|int $N = Optional::Undefined, Optional|Int64|float|int $alpha = Optional::Undefined): ExpMovingAvgAccumulator
     {
-        return new \MongoDB\Builder\Accumulator\ExpMovingAvgAccumulator($input, $N, $alpha);
+        return new ExpMovingAvgAccumulator($input, $N, $alpha);
     }
     /**
      * Returns the result of an expression for the first document in a group or window.
@@ -187,9 +187,9 @@ trait FactoryTrait
      * @see https://www.mongodb.com/docs/manual/reference/operator/aggregation/first/
      * @param DateTimeInterface|ExpressionInterface|Type|array|bool|float|int|null|stdClass|string $expression
      */
-    public static function first(DateTimeInterface|Type|ExpressionInterface|stdClass|array|bool|float|int|null|string $expression): \MongoDB\Builder\Accumulator\FirstAccumulator
+    public static function first(DateTimeInterface|Type|ExpressionInterface|stdClass|array|bool|float|int|null|string $expression): FirstAccumulator
     {
-        return new \MongoDB\Builder\Accumulator\FirstAccumulator($expression);
+        return new FirstAccumulator($expression);
     }
     /**
      * Returns an aggregation of the first n elements within a group.
@@ -200,9 +200,9 @@ trait FactoryTrait
      * @param DateTimeInterface|ExpressionInterface|Type|array|bool|float|int|null|stdClass|string $input An expression that resolves to the array from which to return n elements.
      * @param ResolvesToInt|int|string $n A positive integral expression that is either a constant or depends on the _id value for $group.
      */
-    public static function firstN(DateTimeInterface|Type|ExpressionInterface|stdClass|array|bool|float|int|null|string $input, ResolvesToInt|int|string $n): \MongoDB\Builder\Accumulator\FirstNAccumulator
+    public static function firstN(DateTimeInterface|Type|ExpressionInterface|stdClass|array|bool|float|int|null|string $input, ResolvesToInt|int|string $n): FirstNAccumulator
     {
-        return new \MongoDB\Builder\Accumulator\FirstNAccumulator($input, $n);
+        return new FirstNAccumulator($input, $n);
     }
     /**
      * Returns the approximation of the area under a curve.
@@ -213,9 +213,9 @@ trait FactoryTrait
      * @param Optional|ResolvesToString|TimeUnit|string $unit A string that specifies the time unit. Use one of these strings: "week", "day","hour", "minute", "second", "millisecond".
      * If the sortBy field is not a date, you must omit a unit. If you specify a unit, you must specify a date in the sortBy field.
      */
-    public static function integral(DateTimeInterface|Decimal128|Int64|UTCDateTime|ResolvesToDate|ResolvesToNumber|float|int|string $input, Optional|ResolvesToString|TimeUnit|string $unit = Optional::Undefined): \MongoDB\Builder\Accumulator\IntegralAccumulator
+    public static function integral(DateTimeInterface|Decimal128|Int64|UTCDateTime|ResolvesToDate|ResolvesToNumber|float|int|string $input, Optional|ResolvesToString|TimeUnit|string $unit = Optional::Undefined): IntegralAccumulator
     {
-        return new \MongoDB\Builder\Accumulator\IntegralAccumulator($input, $unit);
+        return new IntegralAccumulator($input, $unit);
     }
     /**
      * Returns the result of an expression for the last document in a group or window.
@@ -224,9 +224,9 @@ trait FactoryTrait
      * @see https://www.mongodb.com/docs/manual/reference/operator/aggregation/last/
      * @param DateTimeInterface|ExpressionInterface|Type|array|bool|float|int|null|stdClass|string $expression
      */
-    public static function last(DateTimeInterface|Type|ExpressionInterface|stdClass|array|bool|float|int|null|string $expression): \MongoDB\Builder\Accumulator\LastAccumulator
+    public static function last(DateTimeInterface|Type|ExpressionInterface|stdClass|array|bool|float|int|null|string $expression): LastAccumulator
     {
-        return new \MongoDB\Builder\Accumulator\LastAccumulator($expression);
+        return new LastAccumulator($expression);
     }
     /**
      * Returns an aggregation of the last n elements within a group.
@@ -237,9 +237,9 @@ trait FactoryTrait
      * @param BSONArray|PackedArray|ResolvesToArray|array|string $input An expression that resolves to the array from which to return n elements.
      * @param ResolvesToInt|int|string $n An expression that resolves to a positive integer. The integer specifies the number of array elements that $firstN returns.
      */
-    public static function lastN(PackedArray|ResolvesToArray|BSONArray|array|string $input, ResolvesToInt|int|string $n): \MongoDB\Builder\Accumulator\LastNAccumulator
+    public static function lastN(PackedArray|ResolvesToArray|BSONArray|array|string $input, ResolvesToInt|int|string $n): LastNAccumulator
     {
-        return new \MongoDB\Builder\Accumulator\LastNAccumulator($input, $n);
+        return new LastNAccumulator($input, $n);
     }
     /**
      * Fills null and missing fields in a window using linear interpolation based on surrounding field values.
@@ -249,9 +249,9 @@ trait FactoryTrait
      * @see https://www.mongodb.com/docs/manual/reference/operator/aggregation/linearFill/
      * @param Decimal128|Int64|ResolvesToNumber|float|int|string $expression
      */
-    public static function linearFill(Decimal128|Int64|ResolvesToNumber|float|int|string $expression): \MongoDB\Builder\Accumulator\LinearFillAccumulator
+    public static function linearFill(Decimal128|Int64|ResolvesToNumber|float|int|string $expression): LinearFillAccumulator
     {
-        return new \MongoDB\Builder\Accumulator\LinearFillAccumulator($expression);
+        return new LinearFillAccumulator($expression);
     }
     /**
      * Last observation carried forward. Sets values for null and missing fields in a window to the last non-null value for the field.
@@ -261,9 +261,9 @@ trait FactoryTrait
      * @see https://www.mongodb.com/docs/manual/reference/operator/aggregation/locf/
      * @param DateTimeInterface|ExpressionInterface|Type|array|bool|float|int|null|stdClass|string $expression
      */
-    public static function locf(DateTimeInterface|Type|ExpressionInterface|stdClass|array|bool|float|int|null|string $expression): \MongoDB\Builder\Accumulator\LocfAccumulator
+    public static function locf(DateTimeInterface|Type|ExpressionInterface|stdClass|array|bool|float|int|null|string $expression): LocfAccumulator
     {
-        return new \MongoDB\Builder\Accumulator\LocfAccumulator($expression);
+        return new LocfAccumulator($expression);
     }
     /**
      * Returns the maximum value that results from applying an expression to each document.
@@ -272,9 +272,9 @@ trait FactoryTrait
      * @see https://www.mongodb.com/docs/manual/reference/operator/aggregation/max/
      * @param DateTimeInterface|ExpressionInterface|Type|array|bool|float|int|null|stdClass|string $expression
      */
-    public static function max(DateTimeInterface|Type|ExpressionInterface|stdClass|array|bool|float|int|null|string $expression): \MongoDB\Builder\Accumulator\MaxAccumulator
+    public static function max(DateTimeInterface|Type|ExpressionInterface|stdClass|array|bool|float|int|null|string $expression): MaxAccumulator
     {
-        return new \MongoDB\Builder\Accumulator\MaxAccumulator($expression);
+        return new MaxAccumulator($expression);
     }
     /**
      * Returns the n largest values in an array. Distinct from the $maxN accumulator.
@@ -283,9 +283,9 @@ trait FactoryTrait
      * @param BSONArray|PackedArray|ResolvesToArray|array|string $input An expression that resolves to the array from which to return the maximal n elements.
      * @param ResolvesToInt|int|string $n An expression that resolves to a positive integer. The integer specifies the number of array elements that $maxN returns.
      */
-    public static function maxN(PackedArray|ResolvesToArray|BSONArray|array|string $input, ResolvesToInt|int|string $n): \MongoDB\Builder\Accumulator\MaxNAccumulator
+    public static function maxN(PackedArray|ResolvesToArray|BSONArray|array|string $input, ResolvesToInt|int|string $n): MaxNAccumulator
     {
-        return new \MongoDB\Builder\Accumulator\MaxNAccumulator($input, $n);
+        return new MaxNAccumulator($input, $n);
     }
     /**
      * Returns an approximation of the median, the 50th percentile, as a scalar value.
@@ -299,9 +299,9 @@ trait FactoryTrait
      * @param Decimal128|Int64|ResolvesToNumber|float|int|string $input $median calculates the 50th percentile value of this data. input must be a field name or an expression that evaluates to a numeric type. If the expression cannot be converted to a numeric type, the $median calculation ignores it.
      * @param string $method The method that mongod uses to calculate the 50th percentile value. The method must be 'approximate'.
      */
-    public static function median(Decimal128|Int64|ResolvesToNumber|float|int|string $input, string $method): \MongoDB\Builder\Accumulator\MedianAccumulator
+    public static function median(Decimal128|Int64|ResolvesToNumber|float|int|string $input, string $method): MedianAccumulator
     {
-        return new \MongoDB\Builder\Accumulator\MedianAccumulator($input, $method);
+        return new MedianAccumulator($input, $method);
     }
     /**
      * Combines multiple documents into a single document.
@@ -309,9 +309,9 @@ trait FactoryTrait
      * @see https://www.mongodb.com/docs/manual/reference/operator/aggregation/mergeObjects/
      * @param Document|ResolvesToObject|Serializable|array|stdClass|string $document Any valid expression that resolves to a document.
      */
-    public static function mergeObjects(Document|Serializable|ResolvesToObject|stdClass|array|string $document): \MongoDB\Builder\Accumulator\MergeObjectsAccumulator
+    public static function mergeObjects(Document|Serializable|ResolvesToObject|stdClass|array|string $document): MergeObjectsAccumulator
     {
-        return new \MongoDB\Builder\Accumulator\MergeObjectsAccumulator($document);
+        return new MergeObjectsAccumulator($document);
     }
     /**
      * Returns the minimum value that results from applying an expression to each document.
@@ -320,9 +320,9 @@ trait FactoryTrait
      * @see https://www.mongodb.com/docs/manual/reference/operator/aggregation/min/
      * @param DateTimeInterface|ExpressionInterface|Type|array|bool|float|int|null|stdClass|string $expression
      */
-    public static function min(DateTimeInterface|Type|ExpressionInterface|stdClass|array|bool|float|int|null|string $expression): \MongoDB\Builder\Accumulator\MinAccumulator
+    public static function min(DateTimeInterface|Type|ExpressionInterface|stdClass|array|bool|float|int|null|string $expression): MinAccumulator
     {
-        return new \MongoDB\Builder\Accumulator\MinAccumulator($expression);
+        return new MinAccumulator($expression);
     }
     /**
      * Returns the n smallest values in an array. Distinct from the $minN accumulator.
@@ -331,9 +331,9 @@ trait FactoryTrait
      * @param BSONArray|PackedArray|ResolvesToArray|array|string $input An expression that resolves to the array from which to return the maximal n elements.
      * @param ResolvesToInt|int|string $n An expression that resolves to a positive integer. The integer specifies the number of array elements that $maxN returns.
      */
-    public static function minN(PackedArray|ResolvesToArray|BSONArray|array|string $input, ResolvesToInt|int|string $n): \MongoDB\Builder\Accumulator\MinNAccumulator
+    public static function minN(PackedArray|ResolvesToArray|BSONArray|array|string $input, ResolvesToInt|int|string $n): MinNAccumulator
     {
-        return new \MongoDB\Builder\Accumulator\MinNAccumulator($input, $n);
+        return new MinNAccumulator($input, $n);
     }
     /**
      * Returns an array of scalar values that correspond to specified percentile values.
@@ -352,9 +352,9 @@ trait FactoryTrait
      * $percentile returns results in the same order as the elements in p.
      * @param string $method The method that mongod uses to calculate the percentile value. The method must be 'approximate'.
      */
-    public static function percentile(Decimal128|Int64|ResolvesToNumber|float|int|string $input, PackedArray|ResolvesToArray|BSONArray|array|string $p, string $method): \MongoDB\Builder\Accumulator\PercentileAccumulator
+    public static function percentile(Decimal128|Int64|ResolvesToNumber|float|int|string $input, PackedArray|ResolvesToArray|BSONArray|array|string $p, string $method): PercentileAccumulator
     {
-        return new \MongoDB\Builder\Accumulator\PercentileAccumulator($input, $p, $method);
+        return new PercentileAccumulator($input, $p, $method);
     }
     /**
      * Returns an array of values that result from applying an expression to each document.
@@ -363,9 +363,9 @@ trait FactoryTrait
      * @see https://www.mongodb.com/docs/manual/reference/operator/aggregation/push/
      * @param DateTimeInterface|ExpressionInterface|Type|array|bool|float|int|null|stdClass|string $expression
      */
-    public static function push(DateTimeInterface|Type|ExpressionInterface|stdClass|array|bool|float|int|null|string $expression): \MongoDB\Builder\Accumulator\PushAccumulator
+    public static function push(DateTimeInterface|Type|ExpressionInterface|stdClass|array|bool|float|int|null|string $expression): PushAccumulator
     {
-        return new \MongoDB\Builder\Accumulator\PushAccumulator($expression);
+        return new PushAccumulator($expression);
     }
     /**
      * Returns the document position (known as the rank) relative to other documents in the $setWindowFields stage partition.
@@ -373,9 +373,9 @@ trait FactoryTrait
      *
      * @see https://www.mongodb.com/docs/manual/reference/operator/aggregation/rank/
      */
-    public static function rank(): \MongoDB\Builder\Accumulator\RankAccumulator
+    public static function rank(): RankAccumulator
     {
-        return new \MongoDB\Builder\Accumulator\RankAccumulator();
+        return new RankAccumulator();
     }
     /**
      * Returns the value from an expression applied to a document in a specified position relative to the current document in the $setWindowFields stage partition.
@@ -392,9 +392,9 @@ trait FactoryTrait
      * The default expression must evaluate to a constant value.
      * If you do not specify a default expression, $shift returns null for documents whose positions are outside of the implicit $setWindowFields stage window.
      */
-    public static function shift(DateTimeInterface|Type|ExpressionInterface|stdClass|array|bool|float|int|null|string $output, int $by, DateTimeInterface|Type|ExpressionInterface|stdClass|array|bool|float|int|null|string $default): \MongoDB\Builder\Accumulator\ShiftAccumulator
+    public static function shift(DateTimeInterface|Type|ExpressionInterface|stdClass|array|bool|float|int|null|string $output, int $by, DateTimeInterface|Type|ExpressionInterface|stdClass|array|bool|float|int|null|string $default): ShiftAccumulator
     {
-        return new \MongoDB\Builder\Accumulator\ShiftAccumulator($output, $by, $default);
+        return new ShiftAccumulator($output, $by, $default);
     }
     /**
      * Calculates the population standard deviation of the input values. Use if the values encompass the entire population of data you want to represent and do not wish to generalize about a larger population. $stdDevPop ignores non-numeric values.
@@ -404,9 +404,9 @@ trait FactoryTrait
      * @see https://www.mongodb.com/docs/manual/reference/operator/aggregation/stdDevPop/
      * @param Decimal128|Int64|ResolvesToNumber|float|int|string $expression
      */
-    public static function stdDevPop(Decimal128|Int64|ResolvesToNumber|float|int|string $expression): \MongoDB\Builder\Accumulator\StdDevPopAccumulator
+    public static function stdDevPop(Decimal128|Int64|ResolvesToNumber|float|int|string $expression): StdDevPopAccumulator
     {
-        return new \MongoDB\Builder\Accumulator\StdDevPopAccumulator($expression);
+        return new StdDevPopAccumulator($expression);
     }
     /**
      * Calculates the sample standard deviation of the input values. Use if the values encompass a sample of a population of data from which to generalize about the population. $stdDevSamp ignores non-numeric values.
@@ -416,9 +416,9 @@ trait FactoryTrait
      * @see https://www.mongodb.com/docs/manual/reference/operator/aggregation/stdDevSamp/
      * @param Decimal128|Int64|ResolvesToNumber|float|int|string $expression
      */
-    public static function stdDevSamp(Decimal128|Int64|ResolvesToNumber|float|int|string $expression): \MongoDB\Builder\Accumulator\StdDevSampAccumulator
+    public static function stdDevSamp(Decimal128|Int64|ResolvesToNumber|float|int|string $expression): StdDevSampAccumulator
     {
-        return new \MongoDB\Builder\Accumulator\StdDevSampAccumulator($expression);
+        return new StdDevSampAccumulator($expression);
     }
     /**
      * Returns a sum of numerical values. Ignores non-numeric values.
@@ -427,9 +427,9 @@ trait FactoryTrait
      * @see https://www.mongodb.com/docs/manual/reference/operator/aggregation/sum/
      * @param Decimal128|Int64|ResolvesToNumber|float|int|string $expression
      */
-    public static function sum(Decimal128|Int64|ResolvesToNumber|float|int|string $expression): \MongoDB\Builder\Accumulator\SumAccumulator
+    public static function sum(Decimal128|Int64|ResolvesToNumber|float|int|string $expression): SumAccumulator
     {
-        return new \MongoDB\Builder\Accumulator\SumAccumulator($expression);
+        return new SumAccumulator($expression);
     }
     /**
      * Returns the top element within a group according to the specified sort order.
@@ -441,9 +441,9 @@ trait FactoryTrait
      * @param Document|Serializable|array|stdClass $sortBy Specifies the order of results, with syntax similar to $sort.
      * @param DateTimeInterface|ExpressionInterface|Type|array|bool|float|int|null|stdClass|string $output Represents the output for each element in the group and can be any expression.
      */
-    public static function top(Document|Serializable|stdClass|array $sortBy, DateTimeInterface|Type|ExpressionInterface|stdClass|array|bool|float|int|null|string $output): \MongoDB\Builder\Accumulator\TopAccumulator
+    public static function top(Document|Serializable|stdClass|array $sortBy, DateTimeInterface|Type|ExpressionInterface|stdClass|array|bool|float|int|null|string $output): TopAccumulator
     {
-        return new \MongoDB\Builder\Accumulator\TopAccumulator($sortBy, $output);
+        return new TopAccumulator($sortBy, $output);
     }
     /**
      * Returns an aggregation of the top n fields within a group, according to the specified sort order.
@@ -456,8 +456,8 @@ trait FactoryTrait
      * @param Document|Serializable|array|stdClass $sortBy Specifies the order of results, with syntax similar to $sort.
      * @param DateTimeInterface|ExpressionInterface|Type|array|bool|float|int|null|stdClass|string $output Represents the output for each element in the group and can be any expression.
      */
-    public static function topN(ResolvesToInt|int|string $n, Document|Serializable|stdClass|array $sortBy, DateTimeInterface|Type|ExpressionInterface|stdClass|array|bool|float|int|null|string $output): \MongoDB\Builder\Accumulator\TopNAccumulator
+    public static function topN(ResolvesToInt|int|string $n, Document|Serializable|stdClass|array $sortBy, DateTimeInterface|Type|ExpressionInterface|stdClass|array|bool|float|int|null|string $output): TopNAccumulator
     {
-        return new \MongoDB\Builder\Accumulator\TopNAccumulator($n, $sortBy, $output);
+        return new TopNAccumulator($n, $sortBy, $output);
     }
 }

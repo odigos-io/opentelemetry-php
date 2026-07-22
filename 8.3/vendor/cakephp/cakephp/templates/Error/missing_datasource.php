@@ -16,7 +16,7 @@ namespace Odigos;
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  * @var string $class
  */
-use function Cake\Core\h;
+use function Odigos\Cake\Core\h;
 $pluginDot = empty($plugin) ? null : $plugin . '.';
 $this->layout = 'dev_error';
 $this->assign('title', 'Missing Datasource');

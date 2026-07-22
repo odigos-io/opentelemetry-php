@@ -1,17 +1,17 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Resources;
+namespace Odigos\OpenAI\Resources;
 
-use OpenAI\Contracts\Resources\ResponsesContract;
-use OpenAI\Responses\Responses\CreateResponse;
-use OpenAI\Responses\Responses\CreateStreamedResponse;
-use OpenAI\Responses\Responses\DeleteResponse;
-use OpenAI\Responses\Responses\ListInputItems;
-use OpenAI\Responses\Responses\RetrieveResponse;
-use OpenAI\Responses\StreamResponse;
-use OpenAI\ValueObjects\Transporter\Payload;
-use OpenAI\ValueObjects\Transporter\Response;
+use Odigos\OpenAI\Contracts\Resources\ResponsesContract;
+use Odigos\OpenAI\Responses\Responses\CreateResponse;
+use Odigos\OpenAI\Responses\Responses\CreateStreamedResponse;
+use Odigos\OpenAI\Responses\Responses\DeleteResponse;
+use Odigos\OpenAI\Responses\Responses\ListInputItems;
+use Odigos\OpenAI\Responses\Responses\RetrieveResponse;
+use Odigos\OpenAI\Responses\StreamResponse;
+use Odigos\OpenAI\ValueObjects\Transporter\Payload;
+use Odigos\OpenAI\ValueObjects\Transporter\Response;
 /**
  * @phpstan-import-type CreateResponseType from CreateResponse
  * @phpstan-import-type RetrieveResponseType from RetrieveResponse
@@ -19,8 +19,8 @@ use OpenAI\ValueObjects\Transporter\Response;
  */
 final class Responses implements ResponsesContract
 {
-    use \OpenAI\Resources\Concerns\Streamable;
-    use \OpenAI\Resources\Concerns\Transportable;
+    use Concerns\Streamable;
+    use Concerns\Transportable;
     /**
      * Creates a model response. Provide text or image inputs to generate text or JSON outputs.
      * Have the model call your own custom code or use built-in tools like web search or file search
@@ -107,8 +107,8 @@ final class Responses implements ResponsesContract
     /**
      * Manage conversations to store and retrieve conversation state across Response API calls.
      */
-    public function conversations(): \OpenAI\Resources\Conversations
+    public function conversations(): Conversations
     {
-        return new \OpenAI\Resources\Conversations($this->transporter);
+        return new Conversations($this->transporter);
     }
 }

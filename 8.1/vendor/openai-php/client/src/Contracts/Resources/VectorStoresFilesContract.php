@@ -1,10 +1,10 @@
 <?php
 
-namespace OpenAI\Contracts\Resources;
+namespace Odigos\OpenAI\Contracts\Resources;
 
-use OpenAI\Responses\VectorStores\Files\VectorStoreFileDeleteResponse;
-use OpenAI\Responses\VectorStores\Files\VectorStoreFileListResponse;
-use OpenAI\Responses\VectorStores\Files\VectorStoreFileResponse;
+use Odigos\OpenAI\Responses\VectorStores\Files\VectorStoreFileDeleteResponse;
+use Odigos\OpenAI\Responses\VectorStores\Files\VectorStoreFileListResponse;
+use Odigos\OpenAI\Responses\VectorStores\Files\VectorStoreFileResponse;
 interface VectorStoresFilesContract
 {
     /**

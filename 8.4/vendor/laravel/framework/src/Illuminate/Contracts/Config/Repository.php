@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Contracts\Config;
+namespace Odigos\Illuminate\Contracts\Config;
 
 interface Repository
 {

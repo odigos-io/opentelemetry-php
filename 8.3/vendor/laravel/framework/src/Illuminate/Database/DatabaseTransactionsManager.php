@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Database;
+namespace Odigos\Illuminate\Database;
 
-use Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Collection;
 class DatabaseTransactionsManager
 {
     /**
@@ -40,7 +40,7 @@ class DatabaseTransactionsManager
      */
     public function begin($connection, $level)
     {
-        $this->pendingTransactions->push($newTransaction = new \Illuminate\Database\DatabaseTransactionRecord($connection, $level, $this->currentTransaction[$connection] ?? null));
+        $this->pendingTransactions->push($newTransaction = new DatabaseTransactionRecord($connection, $level, $this->currentTransaction[$connection] ?? null));
         $this->currentTransaction[$connection] = $newTransaction;
     }
     /**
@@ -126,7 +126,7 @@ class DatabaseTransactionsManager
      * @param  \Illuminate\Database\DatabaseTransactionRecord  $transaction
      * @return void
      */
-    protected function removeCommittedTransactionsThatAreChildrenOf(\Illuminate\Database\DatabaseTransactionRecord $transaction)
+    protected function removeCommittedTransactionsThatAreChildrenOf(DatabaseTransactionRecord $transaction)
     {
         [$removedTransactions, $this->committedTransactions] = $this->committedTransactions->partition(fn($committed) => $committed->connection == $transaction->connection && $committed->parent === $transaction);
         // There may be multiple deeply nested transactions that have already committed that we

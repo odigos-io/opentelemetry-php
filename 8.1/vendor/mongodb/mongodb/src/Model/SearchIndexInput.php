@@ -15,13 +15,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace MongoDB\Model;
+namespace Odigos\MongoDB\Model;
 
 use MongoDB\BSON\Serializable;
-use MongoDB\Exception\InvalidArgumentException;
+use Odigos\MongoDB\Exception\InvalidArgumentException;
 use stdClass;
 use function is_string;
-use function MongoDB\is_document;
+use function Odigos\MongoDB\is_document;
 /**
  * Search index input model class.
  *

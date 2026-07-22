@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Queue;
+namespace Odigos\Illuminate\Queue;
 
 enum WorkerStopReason : string
 {

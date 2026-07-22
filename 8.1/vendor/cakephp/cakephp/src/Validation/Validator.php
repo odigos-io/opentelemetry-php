@@ -14,7 +14,7 @@ declare (strict_types=1);
  * @since         2.2.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Validation;
+namespace Odigos\Cake\Validation;
 
 use ArrayAccess;
 use ArrayIterator;
@@ -25,7 +25,7 @@ use InvalidArgumentException;
 use IteratorAggregate;
 use Psr\Http\Message\UploadedFileInterface;
 use Traversable;
-use function Cake\I18n\__d;
+use function Odigos\Cake\I18n\__d;
 /**
  * Validator object encapsulates all methods related to data validations for a model
  * It also provides an API to dynamically change validation rules for each model field.
@@ -171,9 +171,9 @@ class Validator implements ArrayAccess, IteratorAggregate, Countable
      */
     public function __construct()
     {
-        $this->_useI18n ??= function_exists('\Cake\I18n\__d');
+        $this->_useI18n ??= function_exists('Odigos\Cake\I18n\__d');
         $this->_providers = self::$_defaultProviders;
-        $this->_providers['default'] ??= \Cake\Validation\Validation::class;
+        $this->_providers['default'] ??= Validation::class;
     }
     /**
      * Whether to stop validation rule evaluation on the first failed rule.
@@ -244,10 +244,10 @@ class Validator implements ArrayAccess, IteratorAggregate, Countable
      * @param \Cake\Validation\ValidationSet|null $set The set of rules for field
      * @return \Cake\Validation\ValidationSet
      */
-    public function field(string $name, ?\Cake\Validation\ValidationSet $set = null): \Cake\Validation\ValidationSet
+    public function field(string $name, ?ValidationSet $set = null): ValidationSet
     {
         if (empty($this->_fields[$name])) {
-            $set = $set ?: new \Cake\Validation\ValidationSet();
+            $set = $set ?: new ValidationSet();
             $this->_fields[$name] = $set;
         }
         return $this->_fields[$name];
@@ -344,7 +344,7 @@ class Validator implements ArrayAccess, IteratorAggregate, Countable
      * @param string|int $field name of the field to check
      * @return \Cake\Validation\ValidationSet
      */
-    public function offsetGet(mixed $field): \Cake\Validation\ValidationSet
+    public function offsetGet(mixed $field): ValidationSet
     {
         return $this->field((string) $field);
     }
@@ -357,8 +357,8 @@ class Validator implements ArrayAccess, IteratorAggregate, Countable
      */
     public function offsetSet(mixed $offset, mixed $value): void
     {
-        if (!$value instanceof \Cake\Validation\ValidationSet) {
-            $set = new \Cake\Validation\ValidationSet();
+        if (!$value instanceof ValidationSet) {
+            $set = new ValidationSet();
             foreach ($value as $name => $rule) {
                 $set->add($name, $rule);
             }
@@ -418,7 +418,7 @@ class Validator implements ArrayAccess, IteratorAggregate, Countable
      * @throws \InvalidArgumentException If numeric index cannot be resolved to a string one
      * @return $this
      */
-    public function add(string $field, array|string $name, \Cake\Validation\ValidationRule|array $rule = [])
+    public function add(string $field, array|string $name, ValidationRule|array $rule = [])
     {
         $validationSet = $this->field($field);
         if (!is_array($name)) {
@@ -457,7 +457,7 @@ class Validator implements ArrayAccess, IteratorAggregate, Countable
      *   true when the validation rule should be applied.
      * @return $this
      */
-    public function addNested(string $field, \Cake\Validation\Validator $validator, ?string $message = null, Closure|string|null $when = null)
+    public function addNested(string $field, Validator $validator, ?string $message = null, Closure|string|null $when = null)
     {
         $extra = array_filter(['message' => $message, 'on' => $when]);
         $validationSet = $this->field($field);
@@ -496,7 +496,7 @@ class Validator implements ArrayAccess, IteratorAggregate, Countable
      *   true when the validation rule should be applied.
      * @return $this
      */
-    public function addNestedMany(string $field, \Cake\Validation\Validator $validator, ?string $message = null, Closure|string|null $when = null)
+    public function addNestedMany(string $field, Validator $validator, ?string $message = null, Closure|string|null $when = null)
     {
         $extra = array_filter(['message' => $message, 'on' => $when]);
         $validationSet = $this->field($field);
@@ -1129,7 +1129,7 @@ class Validator implements ArrayAccess, IteratorAggregate, Countable
             }
         }
         $extra = array_filter(['on' => $when, 'message' => $message]);
-        return $this->add($field, 'greaterThan', $extra + ['rule' => ['comparison', \Cake\Validation\Validation::COMPARE_GREATER, $value]]);
+        return $this->add($field, 'greaterThan', $extra + ['rule' => ['comparison', Validation::COMPARE_GREATER, $value]]);
     }
     /**
      * Add a greater than or equal to comparison rule to a field.
@@ -1152,7 +1152,7 @@ class Validator implements ArrayAccess, IteratorAggregate, Countable
             }
         }
         $extra = array_filter(['on' => $when, 'message' => $message]);
-        return $this->add($field, 'greaterThanOrEqual', $extra + ['rule' => ['comparison', \Cake\Validation\Validation::COMPARE_GREATER_OR_EQUAL, $value]]);
+        return $this->add($field, 'greaterThanOrEqual', $extra + ['rule' => ['comparison', Validation::COMPARE_GREATER_OR_EQUAL, $value]]);
     }
     /**
      * Add a less than comparison rule to a field.
@@ -1175,7 +1175,7 @@ class Validator implements ArrayAccess, IteratorAggregate, Countable
             }
         }
         $extra = array_filter(['on' => $when, 'message' => $message]);
-        return $this->add($field, 'lessThan', $extra + ['rule' => ['comparison', \Cake\Validation\Validation::COMPARE_LESS, $value]]);
+        return $this->add($field, 'lessThan', $extra + ['rule' => ['comparison', Validation::COMPARE_LESS, $value]]);
     }
     /**
      * Add a less than or equal comparison rule to a field.
@@ -1198,7 +1198,7 @@ class Validator implements ArrayAccess, IteratorAggregate, Countable
             }
         }
         $extra = array_filter(['on' => $when, 'message' => $message]);
-        return $this->add($field, 'lessThanOrEqual', $extra + ['rule' => ['comparison', \Cake\Validation\Validation::COMPARE_LESS_OR_EQUAL, $value]]);
+        return $this->add($field, 'lessThanOrEqual', $extra + ['rule' => ['comparison', Validation::COMPARE_LESS_OR_EQUAL, $value]]);
     }
     /**
      * Add a equal to comparison rule to a field.
@@ -1221,7 +1221,7 @@ class Validator implements ArrayAccess, IteratorAggregate, Countable
             }
         }
         $extra = array_filter(['on' => $when, 'message' => $message]);
-        return $this->add($field, 'equals', $extra + ['rule' => ['comparison', \Cake\Validation\Validation::COMPARE_EQUAL, $value]]);
+        return $this->add($field, 'equals', $extra + ['rule' => ['comparison', Validation::COMPARE_EQUAL, $value]]);
     }
     /**
      * Add a not equal to comparison rule to a field.
@@ -1244,7 +1244,7 @@ class Validator implements ArrayAccess, IteratorAggregate, Countable
             }
         }
         $extra = array_filter(['on' => $when, 'message' => $message]);
-        return $this->add($field, 'notEquals', $extra + ['rule' => ['comparison', \Cake\Validation\Validation::COMPARE_NOT_EQUAL, $value]]);
+        return $this->add($field, 'notEquals', $extra + ['rule' => ['comparison', Validation::COMPARE_NOT_EQUAL, $value]]);
     }
     /**
      * Add a rule to compare two fields to each other.
@@ -1269,7 +1269,7 @@ class Validator implements ArrayAccess, IteratorAggregate, Countable
             }
         }
         $extra = array_filter(['on' => $when, 'message' => $message]);
-        return $this->add($field, 'sameAs', $extra + ['rule' => ['compareFields', $secondField, \Cake\Validation\Validation::COMPARE_SAME]]);
+        return $this->add($field, 'sameAs', $extra + ['rule' => ['compareFields', $secondField, Validation::COMPARE_SAME]]);
     }
     /**
      * Add a rule to compare that two fields have different values.
@@ -1293,7 +1293,7 @@ class Validator implements ArrayAccess, IteratorAggregate, Countable
             }
         }
         $extra = array_filter(['on' => $when, 'message' => $message]);
-        return $this->add($field, 'notSameAs', $extra + ['rule' => ['compareFields', $secondField, \Cake\Validation\Validation::COMPARE_NOT_SAME]]);
+        return $this->add($field, 'notSameAs', $extra + ['rule' => ['compareFields', $secondField, Validation::COMPARE_NOT_SAME]]);
     }
     /**
      * Add a rule to compare one field is equal to another.
@@ -1317,7 +1317,7 @@ class Validator implements ArrayAccess, IteratorAggregate, Countable
             }
         }
         $extra = array_filter(['on' => $when, 'message' => $message]);
-        return $this->add($field, 'equalToField', $extra + ['rule' => ['compareFields', $secondField, \Cake\Validation\Validation::COMPARE_EQUAL]]);
+        return $this->add($field, 'equalToField', $extra + ['rule' => ['compareFields', $secondField, Validation::COMPARE_EQUAL]]);
     }
     /**
      * Add a rule to compare one field is not equal to another.
@@ -1341,7 +1341,7 @@ class Validator implements ArrayAccess, IteratorAggregate, Countable
             }
         }
         $extra = array_filter(['on' => $when, 'message' => $message]);
-        return $this->add($field, 'notEqualToField', $extra + ['rule' => ['compareFields', $secondField, \Cake\Validation\Validation::COMPARE_NOT_EQUAL]]);
+        return $this->add($field, 'notEqualToField', $extra + ['rule' => ['compareFields', $secondField, Validation::COMPARE_NOT_EQUAL]]);
     }
     /**
      * Add a rule to compare one field is greater than another.
@@ -1365,7 +1365,7 @@ class Validator implements ArrayAccess, IteratorAggregate, Countable
             }
         }
         $extra = array_filter(['on' => $when, 'message' => $message]);
-        return $this->add($field, 'greaterThanField', $extra + ['rule' => ['compareFields', $secondField, \Cake\Validation\Validation::COMPARE_GREATER]]);
+        return $this->add($field, 'greaterThanField', $extra + ['rule' => ['compareFields', $secondField, Validation::COMPARE_GREATER]]);
     }
     /**
      * Add a rule to compare one field is greater than or equal to another.
@@ -1389,7 +1389,7 @@ class Validator implements ArrayAccess, IteratorAggregate, Countable
             }
         }
         $extra = array_filter(['on' => $when, 'message' => $message]);
-        return $this->add($field, 'greaterThanOrEqualToField', $extra + ['rule' => ['compareFields', $secondField, \Cake\Validation\Validation::COMPARE_GREATER_OR_EQUAL]]);
+        return $this->add($field, 'greaterThanOrEqualToField', $extra + ['rule' => ['compareFields', $secondField, Validation::COMPARE_GREATER_OR_EQUAL]]);
     }
     /**
      * Add a rule to compare one field is less than another.
@@ -1413,7 +1413,7 @@ class Validator implements ArrayAccess, IteratorAggregate, Countable
             }
         }
         $extra = array_filter(['on' => $when, 'message' => $message]);
-        return $this->add($field, 'lessThanField', $extra + ['rule' => ['compareFields', $secondField, \Cake\Validation\Validation::COMPARE_LESS]]);
+        return $this->add($field, 'lessThanField', $extra + ['rule' => ['compareFields', $secondField, Validation::COMPARE_LESS]]);
     }
     /**
      * Add a rule to compare one field is less than or equal to another.
@@ -1437,7 +1437,7 @@ class Validator implements ArrayAccess, IteratorAggregate, Countable
             }
         }
         $extra = array_filter(['on' => $when, 'message' => $message]);
-        return $this->add($field, 'lessThanOrEqualToField', $extra + ['rule' => ['compareFields', $secondField, \Cake\Validation\Validation::COMPARE_LESS_OR_EQUAL]]);
+        return $this->add($field, 'lessThanOrEqualToField', $extra + ['rule' => ['compareFields', $secondField, Validation::COMPARE_LESS_OR_EQUAL]]);
     }
     /**
      * Add a date format validation rule to a field.
@@ -2315,7 +2315,7 @@ class Validator implements ArrayAccess, IteratorAggregate, Countable
             if (is_array($value) && isset($value['_ids'])) {
                 $value = $value['_ids'];
             }
-            return \Cake\Validation\Validation::numElements($value, \Cake\Validation\Validation::COMPARE_GREATER_OR_EQUAL, $count);
+            return Validation::numElements($value, Validation::COMPARE_GREATER_OR_EQUAL, $count);
         }]);
     }
     /**
@@ -2344,7 +2344,7 @@ class Validator implements ArrayAccess, IteratorAggregate, Countable
             if (is_array($value) && isset($value['_ids'])) {
                 $value = $value['_ids'];
             }
-            return \Cake\Validation\Validation::numElements($value, \Cake\Validation\Validation::COMPARE_LESS_OR_EQUAL, $count);
+            return Validation::numElements($value, Validation::COMPARE_LESS_OR_EQUAL, $count);
         }]);
     }
     /**
@@ -2450,7 +2450,7 @@ class Validator implements ArrayAccess, IteratorAggregate, Countable
      * @param array<string, mixed> $context A key value list of data containing the validation context.
      * @return bool
      */
-    protected function _checkPresence(\Cake\Validation\ValidationSet $field, array $context): bool
+    protected function _checkPresence(ValidationSet $field, array $context): bool
     {
         $required = $field->isPresenceRequired();
         if ($required instanceof Closure) {
@@ -2469,7 +2469,7 @@ class Validator implements ArrayAccess, IteratorAggregate, Countable
      * @param array<string, mixed> $context a key value list of data containing the validation context.
      * @return bool
      */
-    protected function _canBeEmpty(\Cake\Validation\ValidationSet $field, array $context): bool
+    protected function _canBeEmpty(ValidationSet $field, array $context): bool
     {
         $allowed = $field->isEmptyAllowed();
         if ($allowed instanceof Closure) {
@@ -2532,7 +2532,7 @@ class Validator implements ArrayAccess, IteratorAggregate, Countable
      * @param bool $newRecord whether is it a new record or an existing one
      * @return array<string, mixed>
      */
-    protected function _processRules(string $field, \Cake\Validation\ValidationSet $rules, array $data, bool $newRecord): array
+    protected function _processRules(string $field, ValidationSet $rules, array $data, bool $newRecord): array
     {
         $errors = [];
         if (!$this->_useI18n) {

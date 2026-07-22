@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Finder\Iterator;
+namespace Odigos\Symfony\Component\Finder\Iterator;
 
-use Symfony\Component\Finder\Exception\AccessDeniedException;
-use Symfony\Component\Finder\SplFileInfo;
+use Odigos\Symfony\Component\Finder\Exception\AccessDeniedException;
+use Odigos\Symfony\Component\Finder\SplFileInfo;
 /**
  * Extends the \RecursiveDirectoryIterator to support relative paths.
  *

@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace Cake\Error;
+namespace Odigos\Cake\Error;
 
-use Cake\Core\Configure;
-use Cake\Core\InstanceConfigTrait;
-use Cake\Error\Renderer\ConsoleErrorRenderer;
-use Cake\Error\Renderer\HtmlErrorRenderer;
-use Cake\Event\EventDispatcherTrait;
-use Cake\Routing\Router;
+use Odigos\Cake\Core\Configure;
+use Odigos\Cake\Core\InstanceConfigTrait;
+use Odigos\Cake\Error\Renderer\ConsoleErrorRenderer;
+use Odigos\Cake\Error\Renderer\HtmlErrorRenderer;
+use Odigos\Cake\Event\EventDispatcherTrait;
+use Odigos\Cake\Routing\Router;
 use Exception;
 /**
  * Entry point to CakePHP's error handling.
@@ -39,7 +39,7 @@ class ErrorTrap
      *
      * @var array<string, mixed>
      */
-    protected array $_defaultConfig = ['errorLevel' => \E_ALL, 'errorRenderer' => null, 'log' => \true, 'logger' => \Cake\Error\ErrorLogger::class, 'trace' => \false];
+    protected array $_defaultConfig = ['errorLevel' => \E_ALL, 'errorRenderer' => null, 'log' => \true, 'logger' => ErrorLogger::class, 'trace' => \false];
     /**
      * Constructor
      *
@@ -101,10 +101,10 @@ class ErrorTrap
             return \false;
         }
         if ($code === \E_USER_ERROR || $code === \E_ERROR || $code === \E_PARSE) {
-            throw new \Cake\Error\FatalErrorException($description, $code, $file, $line);
+            throw new FatalErrorException($description, $code, $file, $line);
         }
-        $trace = (array) \Cake\Error\Debugger::trace(['start' => 0, 'format' => 'points']);
-        $error = new \Cake\Error\PhpError($code, $description, $file, $line, $trace);
+        $trace = (array) Debugger::trace(['start' => 0, 'format' => 'points']);
+        $error = new PhpError($code, $description, $file, $line, $trace);
         $ignoredPaths = (array) Configure::read('Error.ignoredDeprecationPaths');
         if ($code === \E_USER_DEPRECATED && $ignoredPaths) {
             $relativePath = str_replace(\DIRECTORY_SEPARATOR, '/', substr((string) $file, strlen(ROOT) + 1));
@@ -138,7 +138,7 @@ class ErrorTrap
      * @param \Cake\Error\PhpError $error The error object to log.
      * @return void
      */
-    protected function logError(\Cake\Error\PhpError $error): void
+    protected function logError(PhpError $error): void
     {
         if (!$this->_config['log']) {
             return;
@@ -150,7 +150,7 @@ class ErrorTrap
      *
      * @return \Cake\Error\ErrorRendererInterface
      */
-    public function renderer(): \Cake\Error\ErrorRendererInterface
+    public function renderer(): ErrorRendererInterface
     {
         /** @var class-string<\Cake\Error\ErrorRendererInterface> $class */
         $class = $this->getConfig('errorRenderer') ?: $this->chooseErrorRenderer();
@@ -161,7 +161,7 @@ class ErrorTrap
      *
      * @return \Cake\Error\ErrorLoggerInterface
      */
-    public function logger(): \Cake\Error\ErrorLoggerInterface
+    public function logger(): ErrorLoggerInterface
     {
         /** @var class-string<\Cake\Error\ErrorLoggerInterface> $class */
         $class = $this->getConfig('logger', $this->_defaultConfig['logger']);

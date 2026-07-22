@@ -14,15 +14,15 @@ declare (strict_types=1);
  * @since         5.3.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Http\Middleware;
+namespace Odigos\Cake\Http\Middleware;
 
 use Odigos\Authentication\IdentityInterface;
-use Cake\Cache\Cache;
-use Cake\Http\Exception\TooManyRequestsException;
-use Cake\Http\RateLimit\FixedWindowRateLimiter;
-use Cake\Http\RateLimit\RateLimiterInterface;
-use Cake\Http\RateLimit\SlidingWindowRateLimiter;
-use Cake\Http\RateLimit\TokenBucketRateLimiter;
+use Odigos\Cake\Cache\Cache;
+use Odigos\Cake\Http\Exception\TooManyRequestsException;
+use Odigos\Cake\Http\RateLimit\FixedWindowRateLimiter;
+use Odigos\Cake\Http\RateLimit\RateLimiterInterface;
+use Odigos\Cake\Http\RateLimit\SlidingWindowRateLimiter;
+use Odigos\Cake\Http\RateLimit\TokenBucketRateLimiter;
 use Closure;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

@@ -8,18 +8,18 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpFoundation\File;
+namespace Odigos\Symfony\Component\HttpFoundation\File;
 
-use Symfony\Component\HttpFoundation\File\Exception\CannotWriteFileException;
-use Symfony\Component\HttpFoundation\File\Exception\ExtensionFileException;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
-use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
-use Symfony\Component\HttpFoundation\File\Exception\FormSizeFileException;
-use Symfony\Component\HttpFoundation\File\Exception\IniSizeFileException;
-use Symfony\Component\HttpFoundation\File\Exception\NoFileException;
-use Symfony\Component\HttpFoundation\File\Exception\NoTmpDirFileException;
-use Symfony\Component\HttpFoundation\File\Exception\PartialFileException;
-use Symfony\Component\Mime\MimeTypes;
+use Odigos\Symfony\Component\HttpFoundation\File\Exception\CannotWriteFileException;
+use Odigos\Symfony\Component\HttpFoundation\File\Exception\ExtensionFileException;
+use Odigos\Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Odigos\Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
+use Odigos\Symfony\Component\HttpFoundation\File\Exception\FormSizeFileException;
+use Odigos\Symfony\Component\HttpFoundation\File\Exception\IniSizeFileException;
+use Odigos\Symfony\Component\HttpFoundation\File\Exception\NoFileException;
+use Odigos\Symfony\Component\HttpFoundation\File\Exception\NoTmpDirFileException;
+use Odigos\Symfony\Component\HttpFoundation\File\Exception\PartialFileException;
+use Odigos\Symfony\Component\Mime\MimeTypes;
 /**
  * A file uploaded through a form.
  *
@@ -27,7 +27,7 @@ use Symfony\Component\Mime\MimeTypes;
  * @author Florian Eckerstorfer <florian@eckerstorfer.org>
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class UploadedFile extends \Symfony\Component\HttpFoundation\File\File
+class UploadedFile extends File
 {
     private bool $test;
     private string $originalName;
@@ -145,7 +145,7 @@ class UploadedFile extends \Symfony\Component\HttpFoundation\File\File
      *
      * @throws FileException if, for any reason, the file could not have been moved
      */
-    public function move(string $directory, ?string $name = null): \Symfony\Component\HttpFoundation\File\File
+    public function move(string $directory, ?string $name = null): File
     {
         if ($this->isValid()) {
             if ($this->test) {

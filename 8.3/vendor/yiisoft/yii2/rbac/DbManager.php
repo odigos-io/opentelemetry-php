@@ -5,16 +5,16 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\rbac;
+namespace Odigos\yii\rbac;
 
 use Odigos\Yii;
-use yii\base\InvalidArgumentException;
-use yii\base\InvalidCallException;
-use yii\caching\CacheInterface;
-use yii\db\Connection;
-use yii\db\Expression;
-use yii\db\Query;
-use yii\di\Instance;
+use Odigos\yii\base\InvalidArgumentException;
+use Odigos\yii\base\InvalidCallException;
+use Odigos\yii\caching\CacheInterface;
+use Odigos\yii\db\Connection;
+use Odigos\yii\db\Expression;
+use Odigos\yii\db\Query;
+use Odigos\yii\di\Instance;
 /**
  * DbManager represents an authorization manager that stores authorization information in database.
  *
@@ -35,7 +35,7 @@ use yii\di\Instance;
  * @author Alexander Kochetov <creocoder@gmail.com>
  * @since 2.0
  */
-class DbManager extends \yii\rbac\BaseManager
+class DbManager extends BaseManager
 {
     /**
      * @var Connection|array|string the DB connection object or the application component ID of the DB connection.
@@ -117,7 +117,7 @@ class DbManager extends \yii\rbac\BaseManager
         parent::init();
         $this->db = Instance::ensure($this->db, Connection::className());
         if ($this->cache !== null) {
-            $this->cache = Instance::ensure($this->cache, 'yii\caching\CacheInterface');
+            $this->cache = Instance::ensure($this->cache, 'Odigos\yii\caching\CacheInterface');
         }
     }
     /**
@@ -159,7 +159,7 @@ class DbManager extends \yii\rbac\BaseManager
             return \false;
         }
         $item = $this->items[$itemName];
-        Yii::debug($item instanceof \yii\rbac\Role ? "Checking role: {$itemName}" : "Checking permission: {$itemName}", __METHOD__);
+        Yii::debug($item instanceof Role ? "Checking role: {$itemName}" : "Checking permission: {$itemName}", __METHOD__);
         if (!$this->executeRule($user, $item, $params)) {
             return \false;
         }
@@ -192,7 +192,7 @@ class DbManager extends \yii\rbac\BaseManager
         if (($item = $this->getItem($itemName)) === null) {
             return \false;
         }
-        Yii::debug($item instanceof \yii\rbac\Role ? "Checking role: {$itemName}" : "Checking permission: {$itemName}", __METHOD__);
+        Yii::debug($item instanceof Role ? "Checking role: {$itemName}" : "Checking permission: {$itemName}", __METHOD__);
         if (!$this->executeRule($user, $item, $params)) {
             return \false;
         }
@@ -340,7 +340,7 @@ class DbManager extends \yii\rbac\BaseManager
      */
     protected function populateItem($row)
     {
-        $class = $row['type'] == \yii\rbac\Item::TYPE_PERMISSION ? \yii\rbac\Permission::className() : \yii\rbac\Role::className();
+        $class = $row['type'] == Item::TYPE_PERMISSION ? Permission::className() : Role::className();
         if (!isset($row['data']) || ($data = @unserialize(is_resource($row['data']) ? stream_get_contents($row['data']) : $row['data'])) === \false) {
             $data = null;
         }
@@ -361,7 +361,7 @@ class DbManager extends \yii\rbac\BaseManager
                 return $data;
             }
         }
-        $query = (new Query())->select('b.*')->from(['a' => $this->assignmentTable, 'b' => $this->itemTable])->where('{{a}}.[[item_name]]={{b}}.[[name]]')->andWhere(['a.user_id' => (string) $userId])->andWhere(['b.type' => \yii\rbac\Item::TYPE_ROLE]);
+        $query = (new Query())->select('b.*')->from(['a' => $this->assignmentTable, 'b' => $this->itemTable])->where('{{a}}.[[item_name]]={{b}}.[[name]]')->andWhere(['a.user_id' => (string) $userId])->andWhere(['b.type' => Item::TYPE_ROLE]);
         $roles = $this->getDefaultRoleInstances();
         foreach ($query->all($this->db) as $row) {
             /** @var Role $role */
@@ -385,7 +385,7 @@ class DbManager extends \yii\rbac\BaseManager
         $result = [];
         $this->getChildrenRecursive($roleName, $this->getChildrenList(), $result);
         $roles = [$roleName => $role];
-        $roles += array_filter($this->getRoles(), function (\yii\rbac\Role $roleItem) use ($result) {
+        $roles += array_filter($this->getRoles(), function (Role $roleItem) use ($result) {
             return array_key_exists($roleItem->name, $result);
         });
         return $roles;
@@ -401,7 +401,7 @@ class DbManager extends \yii\rbac\BaseManager
         if (empty($result)) {
             return [];
         }
-        $query = (new Query())->from($this->itemTable)->where(['type' => \yii\rbac\Item::TYPE_PERMISSION, 'name' => array_keys($result)]);
+        $query = (new Query())->from($this->itemTable)->where(['type' => Item::TYPE_PERMISSION, 'name' => array_keys($result)]);
         $permissions = [];
         foreach ($query->all($this->db) as $row) {
             /** @var Permission $permission */
@@ -430,7 +430,7 @@ class DbManager extends \yii\rbac\BaseManager
      */
     protected function getDirectPermissionsByUser($userId)
     {
-        $query = (new Query())->select('b.*')->from(['a' => $this->assignmentTable, 'b' => $this->itemTable])->where('{{a}}.[[item_name]]={{b}}.[[name]]')->andWhere(['a.user_id' => (string) $userId])->andWhere(['b.type' => \yii\rbac\Item::TYPE_PERMISSION]);
+        $query = (new Query())->select('b.*')->from(['a' => $this->assignmentTable, 'b' => $this->itemTable])->where('{{a}}.[[item_name]]={{b}}.[[name]]')->andWhere(['a.user_id' => (string) $userId])->andWhere(['b.type' => Item::TYPE_PERMISSION]);
         $permissions = [];
         foreach ($query->all($this->db) as $row) {
             /** @var Permission $permission */
@@ -456,7 +456,7 @@ class DbManager extends \yii\rbac\BaseManager
         if (empty($result)) {
             return [];
         }
-        $query = (new Query())->from($this->itemTable)->where(['type' => \yii\rbac\Item::TYPE_PERMISSION, 'name' => array_keys($result)]);
+        $query = (new Query())->from($this->itemTable)->where(['type' => Item::TYPE_PERMISSION, 'name' => array_keys($result)]);
         $permissions = [];
         foreach ($query->all($this->db) as $row) {
             /** @var Permission $permission */
@@ -548,7 +548,7 @@ class DbManager extends \yii\rbac\BaseManager
         if ($row === \false) {
             return null;
         }
-        return new \yii\rbac\Assignment(['userId' => $row['user_id'], 'roleName' => $row['item_name'], 'createdAt' => $row['created_at']]);
+        return new Assignment(['userId' => $row['user_id'], 'roleName' => $row['item_name'], 'createdAt' => $row['created_at']]);
     }
     /**
      * {@inheritdoc}
@@ -561,7 +561,7 @@ class DbManager extends \yii\rbac\BaseManager
         $query = (new Query())->from($this->assignmentTable)->where(['user_id' => (string) $userId]);
         $assignments = [];
         foreach ($query->all($this->db) as $row) {
-            $assignments[$row['item_name']] = new \yii\rbac\Assignment(['userId' => $row['user_id'], 'roleName' => $row['item_name'], 'createdAt' => $row['created_at']]);
+            $assignments[$row['item_name']] = new Assignment(['userId' => $row['user_id'], 'roleName' => $row['item_name'], 'createdAt' => $row['created_at']]);
         }
         return $assignments;
     }
@@ -581,7 +581,7 @@ class DbManager extends \yii\rbac\BaseManager
         if ($parent->name === $child->name) {
             throw new InvalidArgumentException("Cannot add '{$parent->name}' as a child of itself.");
         }
-        if ($parent instanceof \yii\rbac\Permission && $child instanceof \yii\rbac\Role) {
+        if ($parent instanceof Permission && $child instanceof Role) {
             throw new InvalidArgumentException('Cannot add a role as a child of a permission.');
         }
         if ($this->detectLoop($parent, $child)) {
@@ -651,7 +651,7 @@ class DbManager extends \yii\rbac\BaseManager
      */
     public function assign($role, $userId)
     {
-        $assignment = new \yii\rbac\Assignment(['userId' => $userId, 'roleName' => $role->name, 'createdAt' => time()]);
+        $assignment = new Assignment(['userId' => $userId, 'roleName' => $role->name, 'createdAt' => time()]);
         $this->db->createCommand()->insert($this->assignmentTable, ['user_id' => $assignment->userId, 'item_name' => $assignment->roleName, 'created_at' => $assignment->createdAt])->execute();
         unset($this->checkAccessAssignments[(string) $userId]);
         $this->invalidateCache();
@@ -699,14 +699,14 @@ class DbManager extends \yii\rbac\BaseManager
      */
     public function removeAllPermissions()
     {
-        $this->removeAllItems(\yii\rbac\Item::TYPE_PERMISSION);
+        $this->removeAllItems(Item::TYPE_PERMISSION);
     }
     /**
      * {@inheritdoc}
      */
     public function removeAllRoles()
     {
-        $this->removeAllItems(\yii\rbac\Item::TYPE_ROLE);
+        $this->removeAllItems(Item::TYPE_ROLE);
     }
     /**
      * Removes all auth items of the specified type.
@@ -719,7 +719,7 @@ class DbManager extends \yii\rbac\BaseManager
             if (empty($names)) {
                 return;
             }
-            $key = $type == \yii\rbac\Item::TYPE_PERMISSION ? 'child' : 'parent';
+            $key = $type == Item::TYPE_PERMISSION ? 'child' : 'parent';
             $this->db->createCommand()->delete($this->itemChildTable, [$key => $names])->execute();
             $this->db->createCommand()->delete($this->assignmentTable, ['item_name' => $names])->execute();
         }

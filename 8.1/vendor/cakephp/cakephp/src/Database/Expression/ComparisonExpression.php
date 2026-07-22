@@ -14,22 +14,22 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database\Expression;
+namespace Odigos\Cake\Database\Expression;
 
-use Cake\Database\Exception\DatabaseException;
-use Cake\Database\ExpressionInterface;
-use Cake\Database\Type\ExpressionTypeCasterTrait;
-use Cake\Database\ValueBinder;
+use Odigos\Cake\Database\Exception\DatabaseException;
+use Odigos\Cake\Database\ExpressionInterface;
+use Odigos\Cake\Database\Type\ExpressionTypeCasterTrait;
+use Odigos\Cake\Database\ValueBinder;
 use Closure;
 /**
  * A Comparison is a type of query expression that represents an operation
  * involving a field an operator and a value. In its most common form the
  * string representation of a comparison is `field = value`
  */
-class ComparisonExpression implements ExpressionInterface, \Cake\Database\Expression\FieldInterface
+class ComparisonExpression implements ExpressionInterface, FieldInterface
 {
     use ExpressionTypeCasterTrait;
-    use \Cake\Database\Expression\FieldTrait;
+    use FieldTrait;
     /**
      * The value to be used in the right hand side of the operation
      *
@@ -129,7 +129,7 @@ class ComparisonExpression implements ExpressionInterface, \Cake\Database\Expres
         if ($field instanceof ExpressionInterface) {
             $field = $field->sql($binder);
         }
-        if ($this->_value instanceof \Cake\Database\Expression\IdentifierExpression) {
+        if ($this->_value instanceof IdentifierExpression) {
             $template = '%s %s %s';
             $value = $this->_value->sql($binder);
         } elseif ($this->_value instanceof ExpressionInterface) {
@@ -185,7 +185,7 @@ class ComparisonExpression implements ExpressionInterface, \Cake\Database\Expres
     protected function _stringExpression(ValueBinder $binder): array
     {
         $template = '%s ';
-        if ($this->_field instanceof ExpressionInterface && !$this->_field instanceof \Cake\Database\Expression\IdentifierExpression) {
+        if ($this->_field instanceof ExpressionInterface && !$this->_field instanceof IdentifierExpression) {
             $template = '(%s) ';
         }
         if ($this->_isMultiple) {

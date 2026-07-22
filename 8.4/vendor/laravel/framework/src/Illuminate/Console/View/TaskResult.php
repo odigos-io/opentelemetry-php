@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Console\View;
+namespace Odigos\Illuminate\Console\View;
 
 enum TaskResult : int
 {

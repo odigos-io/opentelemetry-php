@@ -8,13 +8,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\VarDumper\Caster;
+namespace Odigos\Symfony\Component\VarDumper\Caster;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Uid\Ulid;
-use Symfony\Component\Uid\Uuid;
-use Symfony\Component\VarDumper\Cloner\Stub;
-use Symfony\Component\VarExporter\Internal\LazyObjectState;
+use Odigos\Symfony\Component\HttpFoundation\Request;
+use Odigos\Symfony\Component\Uid\Ulid;
+use Odigos\Symfony\Component\Uid\Uuid;
+use Odigos\Symfony\Component\VarDumper\Cloner\Stub;
+use Odigos\Symfony\Component\VarExporter\Internal\LazyObjectState;
 /**
  * @final
  *
@@ -27,10 +27,10 @@ class SymfonyCaster
     {
         $clone = null;
         foreach (self::REQUEST_GETTERS as $prop => $getter) {
-            $key = \Symfony\Component\VarDumper\Caster\Caster::PREFIX_PROTECTED . $prop;
+            $key = Caster::PREFIX_PROTECTED . $prop;
             if (\array_key_exists($key, $a) && null === $a[$key]) {
                 $clone ??= clone $request;
-                $a[\Symfony\Component\VarDumper\Caster\Caster::PREFIX_VIRTUAL . $prop] = $clone->{$getter}();
+                $a[Caster::PREFIX_VIRTUAL . $prop] = $clone->{$getter}();
             }
         }
         return $a;
@@ -39,7 +39,7 @@ class SymfonyCaster
     {
         $multiKey = \sprintf("\x00%s\x00multi", $client::class);
         if (isset($a[$multiKey]) && !$a[$multiKey] instanceof Stub) {
-            $a[$multiKey] = new \Symfony\Component\VarDumper\Caster\CutStub($a[$multiKey]);
+            $a[$multiKey] = new CutStub($a[$multiKey]);
         }
         return $a;
     }
@@ -48,7 +48,7 @@ class SymfonyCaster
         $stub->cut += \count($a);
         $a = [];
         foreach ($response->getInfo() as $k => $v) {
-            $a[\Symfony\Component\VarDumper\Caster\Caster::PREFIX_VIRTUAL . $k] = $v;
+            $a[Caster::PREFIX_VIRTUAL . $k] = $v;
         }
         return $a;
     }
@@ -61,7 +61,7 @@ class SymfonyCaster
         $instance = $a['realInstance'] ?? null;
         if (isset($a['status'])) {
             // forward-compat with Symfony 8
-            $a = ['status' => new \Symfony\Component\VarDumper\Caster\ConstStub(match ($a['status']) {
+            $a = ['status' => new ConstStub(match ($a['status']) {
                 LazyObjectState::STATUS_INITIALIZED_FULL => 'INITIALIZED_FULL',
                 LazyObjectState::STATUS_INITIALIZED_PARTIAL => 'INITIALIZED_PARTIAL',
                 LazyObjectState::STATUS_UNINITIALIZED_FULL => 'UNINITIALIZED_FULL',
@@ -76,21 +76,21 @@ class SymfonyCaster
     }
     public static function castUuid(Uuid $uuid, array $a, Stub $stub, bool $isNested): array
     {
-        $a[\Symfony\Component\VarDumper\Caster\Caster::PREFIX_VIRTUAL . 'toBase58'] = $uuid->toBase58();
-        $a[\Symfony\Component\VarDumper\Caster\Caster::PREFIX_VIRTUAL . 'toBase32'] = $uuid->toBase32();
+        $a[Caster::PREFIX_VIRTUAL . 'toBase58'] = $uuid->toBase58();
+        $a[Caster::PREFIX_VIRTUAL . 'toBase32'] = $uuid->toBase32();
         // symfony/uid >= 5.3
         if (method_exists($uuid, 'getDateTime')) {
-            $a[\Symfony\Component\VarDumper\Caster\Caster::PREFIX_VIRTUAL . 'time'] = $uuid->getDateTime()->format('Y-m-d H:i:s.u \U\T\C');
+            $a[Caster::PREFIX_VIRTUAL . 'time'] = $uuid->getDateTime()->format('Y-m-d H:i:s.u \U\T\C');
         }
         return $a;
     }
     public static function castUlid(Ulid $ulid, array $a, Stub $stub, bool $isNested): array
     {
-        $a[\Symfony\Component\VarDumper\Caster\Caster::PREFIX_VIRTUAL . 'toBase58'] = $ulid->toBase58();
-        $a[\Symfony\Component\VarDumper\Caster\Caster::PREFIX_VIRTUAL . 'toRfc4122'] = $ulid->toRfc4122();
+        $a[Caster::PREFIX_VIRTUAL . 'toBase58'] = $ulid->toBase58();
+        $a[Caster::PREFIX_VIRTUAL . 'toRfc4122'] = $ulid->toRfc4122();
         // symfony/uid >= 5.3
         if (method_exists($ulid, 'getDateTime')) {
-            $a[\Symfony\Component\VarDumper\Caster\Caster::PREFIX_VIRTUAL . 'time'] = $ulid->getDateTime()->format('Y-m-d H:i:s.v \U\T\C');
+            $a[Caster::PREFIX_VIRTUAL . 'time'] = $ulid->getDateTime()->format('Y-m-d H:i:s.v \U\T\C');
         }
         return $a;
     }

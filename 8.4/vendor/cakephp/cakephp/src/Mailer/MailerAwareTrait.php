@@ -14,10 +14,10 @@ declare (strict_types=1);
  * @since         3.1.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Mailer;
+namespace Odigos\Cake\Mailer;
 
-use Cake\Core\App;
-use Cake\Mailer\Exception\MissingMailerException;
+use Odigos\Cake\Core\App;
+use Odigos\Cake\Mailer\Exception\MissingMailerException;
 /**
  * Provides functionality for loading mailer classes
  * onto properties of the host object.
@@ -35,7 +35,7 @@ trait MailerAwareTrait
      * @return \Cake\Mailer\Mailer
      * @throws \Cake\Mailer\Exception\MissingMailerException if undefined mailer class.
      */
-    protected function getMailer(string $name, array|string|null $config = null): \Cake\Mailer\Mailer
+    protected function getMailer(string $name, array|string|null $config = null): Mailer
     {
         $className = App::className($name, 'Mailer', 'Mailer');
         if ($className === null) {

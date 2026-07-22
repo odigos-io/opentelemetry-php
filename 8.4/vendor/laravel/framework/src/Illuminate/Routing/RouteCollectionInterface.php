@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Routing;
+namespace Odigos\Illuminate\Routing;
 
-use Illuminate\Http\Request;
+use Odigos\Illuminate\Http\Request;
 interface RouteCollectionInterface
 {
     /**
@@ -11,7 +11,7 @@ interface RouteCollectionInterface
      * @param  \Illuminate\Routing\Route  $route
      * @return \Illuminate\Routing\Route
      */
-    public function add(\Illuminate\Routing\Route $route);
+    public function add(Route $route);
     /**
      * Refresh the name look-up table.
      *

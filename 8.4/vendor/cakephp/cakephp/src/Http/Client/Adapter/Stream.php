@@ -13,13 +13,13 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Http\Client\Adapter;
+namespace Odigos\Cake\Http\Client\Adapter;
 
-use Cake\Http\Client\AdapterInterface;
-use Cake\Http\Client\Exception\ClientException;
-use Cake\Http\Client\Exception\NetworkException;
-use Cake\Http\Client\Exception\RequestException;
-use Cake\Http\Client\Response;
+use Odigos\Cake\Http\Client\AdapterInterface;
+use Odigos\Cake\Http\Client\Exception\ClientException;
+use Odigos\Cake\Http\Client\Exception\NetworkException;
+use Odigos\Cake\Http\Client\Exception\RequestException;
+use Odigos\Cake\Http\Client\Response;
 use Composer\CaBundle\CaBundle;
 use Psr\Http\Message\RequestInterface;
 /**

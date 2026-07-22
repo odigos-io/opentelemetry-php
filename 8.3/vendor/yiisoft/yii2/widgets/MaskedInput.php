@@ -5,12 +5,12 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\widgets;
+namespace Odigos\yii\widgets;
 
-use yii\base\InvalidConfigException;
-use yii\helpers\Json;
-use yii\web\JsExpression;
-use yii\web\View;
+use Odigos\yii\base\InvalidConfigException;
+use Odigos\yii\helpers\Json;
+use Odigos\yii\web\JsExpression;
+use Odigos\yii\web\View;
 /**
  * MaskedInput generates a masked text input.
  *
@@ -42,7 +42,7 @@ use yii\web\View;
  * @author Kartik Visweswaran <kartikv2@gmail.com>
  * @since 2.0
  */
-class MaskedInput extends \yii\widgets\InputWidget
+class MaskedInput extends InputWidget
 {
     /**
      * The name of the jQuery plugin to use for this widget.
@@ -191,7 +191,7 @@ class MaskedInput extends \yii\widgets\InputWidget
         }
         $id = $this->options['id'];
         $js .= 'jQuery("#' . $id . '").' . self::PLUGIN_NAME . '(' . $this->_hashVar . ');';
-        \yii\widgets\MaskedInputAsset::register($view);
+        MaskedInputAsset::register($view);
         $view->registerJs($js);
     }
 }

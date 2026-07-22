@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace MongoDB\Builder\Type;
+namespace Odigos\MongoDB\Builder\Type;
 
 /**
  * Sort order can be used with $sort stage and sortBy properties

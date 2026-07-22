@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Translation;
+namespace Odigos\Illuminate\Translation;
 
-use Illuminate\Contracts\Support\DeferrableProvider;
-use Illuminate\Support\ServiceProvider;
+use Odigos\Illuminate\Contracts\Support\DeferrableProvider;
+use Odigos\Illuminate\Support\ServiceProvider;
 class TranslationServiceProvider extends ServiceProvider implements DeferrableProvider
 {
     /**
@@ -20,7 +20,7 @@ class TranslationServiceProvider extends ServiceProvider implements DeferrablePr
             // locale as well as the fallback locale. So, we'll grab the application
             // configuration so we can easily get both of these values from there.
             $locale = $app->getLocale();
-            $trans = new \Illuminate\Translation\Translator($loader, $locale);
+            $trans = new Translator($loader, $locale);
             $trans->setFallback($app->getFallbackLocale());
             return $trans;
         });
@@ -33,7 +33,7 @@ class TranslationServiceProvider extends ServiceProvider implements DeferrablePr
     protected function registerLoader()
     {
         $this->app->singleton('translation.loader', function ($app) {
-            return new \Illuminate\Translation\FileLoader($app['files'], [__DIR__ . '/lang', $app['path.lang']]);
+            return new FileLoader($app['files'], [__DIR__ . '/lang', $app['path.lang']]);
         });
     }
     /**

@@ -15,16 +15,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace MongoDB\Operation;
+namespace Odigos\MongoDB\Operation;
 
 use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
 use MongoDB\Driver\ReadConcern;
 use MongoDB\Driver\ReadPreference;
 use MongoDB\Driver\Server;
 use MongoDB\Driver\Session;
-use MongoDB\Exception\InvalidArgumentException;
-use MongoDB\Exception\UnexpectedValueException;
-use MongoDB\Exception\UnsupportedException;
+use Odigos\MongoDB\Exception\InvalidArgumentException;
+use Odigos\MongoDB\Exception\UnexpectedValueException;
+use Odigos\MongoDB\Exception\UnsupportedException;
 use function array_intersect_key;
 use function is_integer;
 /**
@@ -33,7 +33,7 @@ use function is_integer;
  * @see \MongoDB\Collection::estimatedDocumentCount()
  * @see https://mongodb.com/docs/manual/reference/command/count/
  */
-final class EstimatedDocumentCount implements \MongoDB\Operation\Explainable
+final class EstimatedDocumentCount implements Explainable
 {
     private array $options;
     /**
@@ -96,8 +96,8 @@ final class EstimatedDocumentCount implements \MongoDB\Operation\Explainable
     {
         return $this->createCount()->getCommandDocument();
     }
-    private function createCount(): \MongoDB\Operation\Count
+    private function createCount(): Count
     {
-        return new \MongoDB\Operation\Count($this->databaseName, $this->collectionName, [], $this->options);
+        return new Count($this->databaseName, $this->collectionName, [], $this->options);
     }
 }

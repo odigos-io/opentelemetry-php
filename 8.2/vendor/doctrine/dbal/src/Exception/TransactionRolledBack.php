@@ -1,8 +1,8 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Exception;
+namespace Odigos\Doctrine\DBAL\Exception;
 
-class TransactionRolledBack extends \Doctrine\DBAL\Exception\DriverException
+class TransactionRolledBack extends DriverException
 {
 }

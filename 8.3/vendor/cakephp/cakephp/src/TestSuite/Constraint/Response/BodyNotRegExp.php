@@ -13,14 +13,14 @@ declare (strict_types=1);
  * @since         3.7.0
  * @license       https://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\TestSuite\Constraint\Response;
+namespace Odigos\Cake\TestSuite\Constraint\Response;
 
 /**
  * BodyNotRegExp
  *
  * @internal
  */
-class BodyNotRegExp extends \Cake\TestSuite\Constraint\Response\BodyRegExp
+class BodyNotRegExp extends BodyRegExp
 {
     /**
      * Checks assertion

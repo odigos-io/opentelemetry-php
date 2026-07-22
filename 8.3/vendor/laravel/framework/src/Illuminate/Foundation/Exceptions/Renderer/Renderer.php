@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Foundation\Exceptions\Renderer;
+namespace Odigos\Illuminate\Foundation\Exceptions\Renderer;
 
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Foundation\Exceptions\Renderer\Mappers\BladeMapper;
-use Illuminate\Http\Request;
-use Symfony\Component\ErrorHandler\ErrorRenderer\HtmlErrorRenderer;
+use Odigos\Illuminate\Contracts\View\Factory;
+use Odigos\Illuminate\Foundation\Exceptions\Renderer\Mappers\BladeMapper;
+use Odigos\Illuminate\Http\Request;
+use Odigos\Symfony\Component\ErrorHandler\ErrorRenderer\HtmlErrorRenderer;
 use Throwable;
 class Renderer
 {
@@ -54,7 +54,7 @@ class Renderer
      * @param  \Illuminate\Foundation\Exceptions\Renderer\Mappers\BladeMapper  $bladeMapper
      * @param  string  $basePath
      */
-    public function __construct(Factory $viewFactory, \Illuminate\Foundation\Exceptions\Renderer\Listener $listener, HtmlErrorRenderer $htmlErrorRenderer, BladeMapper $bladeMapper, string $basePath)
+    public function __construct(Factory $viewFactory, Listener $listener, HtmlErrorRenderer $htmlErrorRenderer, BladeMapper $bladeMapper, string $basePath)
     {
         $this->viewFactory = $viewFactory;
         $this->listener = $listener;
@@ -72,7 +72,7 @@ class Renderer
     public function render(Request $request, Throwable $throwable)
     {
         $flattenException = $this->bladeMapper->map($this->htmlErrorRenderer->render($throwable));
-        $exception = new \Illuminate\Foundation\Exceptions\Renderer\Exception($flattenException, $request, $this->listener, $this->basePath);
+        $exception = new Exception($flattenException, $request, $this->listener, $this->basePath);
         $exceptionAsMarkdown = $this->viewFactory->make('laravel-exceptions-renderer::markdown', ['exception' => $exception])->render();
         return $this->viewFactory->make('laravel-exceptions-renderer::show', ['exception' => $exception, 'exceptionAsMarkdown' => $exceptionAsMarkdown])->render();
     }
@@ -93,7 +93,7 @@ class Renderer
     public static function js()
     {
         $viteJsAutoRefresh = '';
-        $vite = app(\Illuminate\Foundation\Vite::class);
+        $vite = app(\Odigos\Illuminate\Foundation\Vite::class);
         if (is_file($vite->hotFile())) {
             $viteJsAutoRefresh = $vite->__invoke([]);
         }

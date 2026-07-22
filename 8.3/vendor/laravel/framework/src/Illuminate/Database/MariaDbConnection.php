@@ -1,15 +1,15 @@
 <?php
 
-namespace Illuminate\Database;
+namespace Odigos\Illuminate\Database;
 
-use Illuminate\Database\Query\Grammars\MariaDbGrammar as QueryGrammar;
-use Illuminate\Database\Query\Processors\MariaDbProcessor;
-use Illuminate\Database\Schema\Grammars\MariaDbGrammar as SchemaGrammar;
-use Illuminate\Database\Schema\MariaDbBuilder;
-use Illuminate\Database\Schema\MariaDbSchemaState;
-use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Str;
-class MariaDbConnection extends \Illuminate\Database\MySqlConnection
+use Odigos\Illuminate\Database\Query\Grammars\MariaDbGrammar as QueryGrammar;
+use Odigos\Illuminate\Database\Query\Processors\MariaDbProcessor;
+use Odigos\Illuminate\Database\Schema\Grammars\MariaDbGrammar as SchemaGrammar;
+use Odigos\Illuminate\Database\Schema\MariaDbBuilder;
+use Odigos\Illuminate\Database\Schema\MariaDbSchemaState;
+use Odigos\Illuminate\Filesystem\Filesystem;
+use Odigos\Illuminate\Support\Str;
+class MariaDbConnection extends MySqlConnection
 {
     /**
      * {@inheritdoc}

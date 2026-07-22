@@ -13,16 +13,16 @@ declare (strict_types=1);
  * @since         3.3.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\TestSuite;
+namespace Odigos\Cake\TestSuite;
 
-use Cake\Core\HttpApplicationInterface;
-use Cake\Core\PluginApplicationInterface;
-use Cake\Http\FlashMessage;
-use Cake\Http\Server;
-use Cake\Http\ServerRequest;
-use Cake\Http\ServerRequestFactory;
-use Cake\Routing\Router;
-use Cake\Routing\RoutingApplicationInterface;
+use Odigos\Cake\Core\HttpApplicationInterface;
+use Odigos\Cake\Core\PluginApplicationInterface;
+use Odigos\Cake\Http\FlashMessage;
+use Odigos\Cake\Http\Server;
+use Odigos\Cake\Http\ServerRequest;
+use Odigos\Cake\Http\ServerRequestFactory;
+use Odigos\Cake\Routing\Router;
+use Odigos\Cake\Routing\RoutingApplicationInterface;
 use Psr\Http\Message\ResponseInterface;
 /**
  * Dispatches a request capturing the response for integration

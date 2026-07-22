@@ -5,9 +5,9 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\data;
+namespace Odigos\yii\data;
 
-use yii\helpers\ArrayHelper;
+use Odigos\yii\helpers\ArrayHelper;
 /**
  * ArrayDataProvider implements a data provider based on a data array.
  *
@@ -49,7 +49,7 @@ use yii\helpers\ArrayHelper;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class ArrayDataProvider extends \yii\data\BaseDataProvider
+class ArrayDataProvider extends BaseDataProvider
 {
     /**
      * @var string|array|callable|null the column that is used as the key of the data models.

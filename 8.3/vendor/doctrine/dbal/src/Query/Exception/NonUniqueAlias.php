@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Query\Exception;
+namespace Odigos\Doctrine\DBAL\Query\Exception;
 
-use Doctrine\DBAL\Query\QueryException;
+use Odigos\Doctrine\DBAL\Query\QueryException;
 use function implode;
 use function sprintf;
 final class NonUniqueAlias extends QueryException

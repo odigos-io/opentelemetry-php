@@ -1,21 +1,21 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Responses\Responses\Output;
+namespace Odigos\OpenAI\Responses\Responses\Output;
 
-use OpenAI\Contracts\ResponseContract;
-use OpenAI\Responses\Concerns\ArrayAccessible;
-use OpenAI\Responses\Responses\Output\ComputerAction\OutputComputerActionClick as Click;
-use OpenAI\Responses\Responses\Output\ComputerAction\OutputComputerActionDoubleClick as DoubleClick;
-use OpenAI\Responses\Responses\Output\ComputerAction\OutputComputerActionDrag as Drag;
-use OpenAI\Responses\Responses\Output\ComputerAction\OutputComputerActionKeyPress as KeyPress;
-use OpenAI\Responses\Responses\Output\ComputerAction\OutputComputerActionMove as Move;
-use OpenAI\Responses\Responses\Output\ComputerAction\OutputComputerActionScreenshot as Screenshot;
-use OpenAI\Responses\Responses\Output\ComputerAction\OutputComputerActionScroll as Scroll;
-use OpenAI\Responses\Responses\Output\ComputerAction\OutputComputerActionType as Type;
-use OpenAI\Responses\Responses\Output\ComputerAction\OutputComputerActionWait as Wait;
-use OpenAI\Responses\Responses\Output\ComputerAction\OutputComputerPendingSafetyCheck;
-use OpenAI\Testing\Responses\Concerns\Fakeable;
+use Odigos\OpenAI\Contracts\ResponseContract;
+use Odigos\OpenAI\Responses\Concerns\ArrayAccessible;
+use Odigos\OpenAI\Responses\Responses\Output\ComputerAction\OutputComputerActionClick as Click;
+use Odigos\OpenAI\Responses\Responses\Output\ComputerAction\OutputComputerActionDoubleClick as DoubleClick;
+use Odigos\OpenAI\Responses\Responses\Output\ComputerAction\OutputComputerActionDrag as Drag;
+use Odigos\OpenAI\Responses\Responses\Output\ComputerAction\OutputComputerActionKeyPress as KeyPress;
+use Odigos\OpenAI\Responses\Responses\Output\ComputerAction\OutputComputerActionMove as Move;
+use Odigos\OpenAI\Responses\Responses\Output\ComputerAction\OutputComputerActionScreenshot as Screenshot;
+use Odigos\OpenAI\Responses\Responses\Output\ComputerAction\OutputComputerActionScroll as Scroll;
+use Odigos\OpenAI\Responses\Responses\Output\ComputerAction\OutputComputerActionType as Type;
+use Odigos\OpenAI\Responses\Responses\Output\ComputerAction\OutputComputerActionWait as Wait;
+use Odigos\OpenAI\Responses\Responses\Output\ComputerAction\OutputComputerPendingSafetyCheck;
+use Odigos\OpenAI\Testing\Responses\Concerns\Fakeable;
 /**
  * @phpstan-import-type ClickType from Click
  * @phpstan-import-type DoubleClickType from DoubleClick

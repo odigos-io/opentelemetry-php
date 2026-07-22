@@ -5,12 +5,12 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\db\conditions;
+namespace Odigos\yii\db\conditions;
 
-use yii\base\InvalidArgumentException;
-use yii\db\ExpressionBuilderInterface;
-use yii\db\ExpressionBuilderTrait;
-use yii\db\ExpressionInterface;
+use Odigos\yii\base\InvalidArgumentException;
+use Odigos\yii\db\ExpressionBuilderInterface;
+use Odigos\yii\db\ExpressionBuilderTrait;
+use Odigos\yii\db\ExpressionInterface;
 /**
  * Class LikeConditionBuilder builds objects of [[LikeCondition]]
  *

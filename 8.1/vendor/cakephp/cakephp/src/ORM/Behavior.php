@@ -14,11 +14,11 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\ORM;
+namespace Odigos\Cake\ORM;
 
-use Cake\Core\Exception\CakeException;
-use Cake\Core\InstanceConfigTrait;
-use Cake\Event\EventListenerInterface;
+use Odigos\Cake\Core\Exception\CakeException;
+use Odigos\Cake\Core\InstanceConfigTrait;
+use Odigos\Cake\Event\EventListenerInterface;
 use ReflectionClass;
 use ReflectionMethod;
 /**
@@ -119,7 +119,7 @@ class Behavior implements EventListenerInterface
      *
      * @var \Cake\ORM\Table
      */
-    protected \Cake\ORM\Table $_table;
+    protected Table $_table;
     /**
      * Reflection method cache for behaviors.
      *
@@ -145,7 +145,7 @@ class Behavior implements EventListenerInterface
      * @param \Cake\ORM\Table $table The table this behavior is attached to.
      * @param array<string, mixed> $config The config for this behavior.
      */
-    public function __construct(\Cake\ORM\Table $table, array $config = [])
+    public function __construct(Table $table, array $config = [])
     {
         $config = $this->_resolveMethodAliases('implementedFinders', $this->_defaultConfig, $config);
         $config = $this->_resolveMethodAliases('implementedMethods', $this->_defaultConfig, $config);
@@ -170,7 +170,7 @@ class Behavior implements EventListenerInterface
      *
      * @return \Cake\ORM\Table The bound table instance.
      */
-    public function table(): \Cake\ORM\Table
+    public function table(): Table
     {
         return $this->_table;
     }

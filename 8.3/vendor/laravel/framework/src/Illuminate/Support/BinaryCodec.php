@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Support;
+namespace Odigos\Illuminate\Support;
 
 use InvalidArgumentException;
 use Odigos\Ramsey\Uuid\Uuid;
 use Odigos\Ramsey\Uuid\UuidInterface;
-use Symfony\Component\Uid\Ulid;
+use Odigos\Symfony\Component\Uid\Ulid;
 class BinaryCodec
 {
     /** @var array<string, array{encode: callable(UuidInterface|Ulid|string|null): ?string, decode: callable(?string): ?string}> */

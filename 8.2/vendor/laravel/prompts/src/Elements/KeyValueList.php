@@ -1,8 +1,8 @@
 <?php
 
-namespace Laravel\Prompts\Elements;
+namespace Odigos\Laravel\Prompts\Elements;
 
-class KeyValueList implements \Laravel\Prompts\Elements\ElementContract
+class KeyValueList implements ElementContract
 {
     /**
      * @param  array<string, string>  $items

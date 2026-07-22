@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Exception;
+namespace Odigos\Doctrine\DBAL\Exception;
 
-use Doctrine\DBAL\Connection;
+use Odigos\Doctrine\DBAL\Connection;
 use function sprintf;
-final class InvalidWrapperClass extends \Doctrine\DBAL\Exception\InvalidArgumentException
+final class InvalidWrapperClass extends InvalidArgumentException
 {
     public static function new(string $wrapperClass): self
     {

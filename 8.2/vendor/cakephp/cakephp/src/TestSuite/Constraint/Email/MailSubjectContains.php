@@ -14,7 +14,7 @@ declare (strict_types=1);
  * @since         4.2.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\TestSuite\Constraint\Email;
+namespace Odigos\Cake\TestSuite\Constraint\Email;
 
 use InvalidArgumentException;
 /**
@@ -22,7 +22,7 @@ use InvalidArgumentException;
  *
  * @internal
  */
-class MailSubjectContains extends \Cake\TestSuite\Constraint\Email\MailConstraintBase
+class MailSubjectContains extends MailConstraintBase
 {
     /**
      * Checks constraint

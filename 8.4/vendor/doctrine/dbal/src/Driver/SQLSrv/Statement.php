@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Driver\SQLSrv;
+namespace Odigos\Doctrine\DBAL\Driver\SQLSrv;
 
-use Doctrine\DBAL\Driver\Exception;
-use Doctrine\DBAL\Driver\SQLSrv\Exception\Error;
-use Doctrine\DBAL\Driver\Statement as StatementInterface;
-use Doctrine\DBAL\ParameterType;
+use Odigos\Doctrine\DBAL\Driver\Exception;
+use Odigos\Doctrine\DBAL\Driver\SQLSrv\Exception\Error;
+use Odigos\Doctrine\DBAL\Driver\Statement as StatementInterface;
+use Odigos\Doctrine\DBAL\ParameterType;
 use function assert;
 use function is_int;
 use function sqlsrv_execute;
@@ -60,13 +60,13 @@ final class Statement implements StatementInterface
         $this->variables[$param] = $value;
         $this->types[$param] = $type;
     }
-    public function execute(): \Doctrine\DBAL\Driver\SQLSrv\Result
+    public function execute(): Result
     {
         $this->stmt ??= $this->prepare();
         if (!sqlsrv_execute($this->stmt)) {
             throw Error::new();
         }
-        return new \Doctrine\DBAL\Driver\SQLSrv\Result($this->stmt);
+        return new Result($this->stmt);
     }
     /**
      * Prepares SQL Server statement resource

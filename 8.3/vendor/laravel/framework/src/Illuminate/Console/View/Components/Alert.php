@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Console\View\Components;
+namespace Odigos\Illuminate\Console\View\Components;
 
-use Symfony\Component\Console\Output\OutputInterface;
-class Alert extends \Illuminate\Console\View\Components\Component
+use Odigos\Symfony\Component\Console\Output\OutputInterface;
+class Alert extends Component
 {
     /**
      * Renders the component using the given arguments.
@@ -14,7 +14,7 @@ class Alert extends \Illuminate\Console\View\Components\Component
      */
     public function render($string, $verbosity = OutputInterface::VERBOSITY_NORMAL)
     {
-        $string = $this->mutate($string, [\Illuminate\Console\View\Components\Mutators\EnsureDynamicContentIsHighlighted::class, \Illuminate\Console\View\Components\Mutators\EnsurePunctuation::class, \Illuminate\Console\View\Components\Mutators\EnsureRelativePaths::class]);
+        $string = $this->mutate($string, [Mutators\EnsureDynamicContentIsHighlighted::class, Mutators\EnsurePunctuation::class, Mutators\EnsureRelativePaths::class]);
         $this->renderView('alert', ['content' => $string], $verbosity);
     }
 }

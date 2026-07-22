@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Notifications;
+namespace Odigos\Illuminate\Notifications;
 
-use Illuminate\Contracts\Notifications\Dispatcher;
+use Odigos\Illuminate\Contracts\Notifications\Dispatcher;
 use InvalidArgumentException;
 class AnonymousNotifiable
 {

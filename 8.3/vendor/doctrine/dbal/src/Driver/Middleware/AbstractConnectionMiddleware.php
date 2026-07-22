@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Driver\Middleware;
+namespace Odigos\Doctrine\DBAL\Driver\Middleware;
 
-use Doctrine\DBAL\Driver\Connection;
-use Doctrine\DBAL\Driver\Result;
-use Doctrine\DBAL\Driver\Statement;
+use Odigos\Doctrine\DBAL\Driver\Connection;
+use Odigos\Doctrine\DBAL\Driver\Result;
+use Odigos\Doctrine\DBAL\Driver\Statement;
 abstract class AbstractConnectionMiddleware implements Connection
 {
     public function __construct(private readonly Connection $wrappedConnection)

@@ -18,8 +18,8 @@ namespace Odigos;
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  * @var array $trace
  */
-use Cake\Error\Debugger;
-use function Cake\Core\h;
+use Odigos\Cake\Error\Debugger;
+use function Odigos\Cake\Core\h;
 foreach ($exceptions as $exc) {
     $stackTrace = Debugger::formatTrace($exc->getTrace(), ['format' => 'array', 'args' => \true]);
     foreach ($stackTrace as $i => $stack) {

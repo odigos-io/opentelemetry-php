@@ -5,11 +5,11 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\web;
+namespace Odigos\yii\web;
 
 use Odigos\Yii;
-use yii\base\BaseObject;
-use yii\base\InvalidConfigException;
+use Odigos\yii\base\BaseObject;
+use Odigos\yii\base\InvalidConfigException;
 /**
  * UrlRule represents a rule used by [[UrlManager]] for parsing and generating URLs.
  *
@@ -29,7 +29,7 @@ use yii\base\InvalidConfigException;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class UrlRule extends BaseObject implements \yii\web\UrlRuleInterface
+class UrlRule extends BaseObject implements UrlRuleInterface
 {
     /**
      * Set [[mode]] with this value to mark that this rule is for URL parsing only.
@@ -188,10 +188,10 @@ class UrlRule extends BaseObject implements \yii\web\UrlRuleInterface
             throw new InvalidConfigException('UrlRule::route must be set.');
         }
         if (is_array($this->normalizer)) {
-            $normalizerConfig = array_merge(['class' => \yii\web\UrlNormalizer::className()], $this->normalizer);
+            $normalizerConfig = array_merge(['class' => UrlNormalizer::className()], $this->normalizer);
             $this->normalizer = Yii::createObject($normalizerConfig);
         }
-        if ($this->normalizer !== null && $this->normalizer !== \false && !$this->normalizer instanceof \yii\web\UrlNormalizer) {
+        if ($this->normalizer !== null && $this->normalizer !== \false && !$this->normalizer instanceof UrlNormalizer) {
             throw new InvalidConfigException('Invalid config for UrlRule::normalizer.');
         }
         if ($this->verb !== null) {
@@ -325,7 +325,7 @@ class UrlRule extends BaseObject implements \yii\web\UrlRuleInterface
      */
     protected function hasNormalizer($manager)
     {
-        return $this->getNormalizer($manager) instanceof \yii\web\UrlNormalizer;
+        return $this->getNormalizer($manager) instanceof UrlNormalizer;
     }
     /**
      * Parses the given request and returns the corresponding route and parameters.

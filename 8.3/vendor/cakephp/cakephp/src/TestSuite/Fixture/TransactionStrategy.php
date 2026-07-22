@@ -14,22 +14,22 @@ declare (strict_types=1);
  * @since         4.3.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\TestSuite\Fixture;
+namespace Odigos\Cake\TestSuite\Fixture;
 
-use Cake\Database\Connection;
-use Cake\Database\Exception\DatabaseException;
+use Odigos\Cake\Database\Connection;
+use Odigos\Cake\Database\Exception\DatabaseException;
 /**
  * Fixture strategy that wraps fixtures in a transaction that is rolled back
  * after each test.
  *
  * Any test that calls Connection::rollback(true) will break this strategy.
  */
-class TransactionStrategy implements \Cake\TestSuite\Fixture\FixtureStrategyInterface
+class TransactionStrategy implements FixtureStrategyInterface
 {
     /**
      * @var \Cake\TestSuite\Fixture\FixtureHelper
      */
-    protected \Cake\TestSuite\Fixture\FixtureHelper $helper;
+    protected FixtureHelper $helper;
     /**
      * @var array<\Cake\Datasource\FixtureInterface>
      */
@@ -39,7 +39,7 @@ class TransactionStrategy implements \Cake\TestSuite\Fixture\FixtureStrategyInte
      */
     public function __construct()
     {
-        $this->helper = new \Cake\TestSuite\Fixture\FixtureHelper();
+        $this->helper = new FixtureHelper();
     }
     /**
      * @inheritDoc

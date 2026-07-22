@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Schema;
+namespace Odigos\Doctrine\DBAL\Schema;
 
-use Doctrine\DBAL\Schema\Name\OptionallyQualifiedName;
-use Doctrine\DBAL\Schema\Name\Parser\OptionallyQualifiedNameParser;
-use Doctrine\DBAL\Schema\Name\Parsers;
-use Doctrine\Deprecations\Deprecation;
+use Odigos\Doctrine\DBAL\Schema\Name\OptionallyQualifiedName;
+use Odigos\Doctrine\DBAL\Schema\Name\Parser\OptionallyQualifiedNameParser;
+use Odigos\Doctrine\DBAL\Schema\Name\Parsers;
+use Odigos\Doctrine\Deprecations\Deprecation;
 use function count;
 use function sprintf;
 /**
@@ -15,7 +15,7 @@ use function sprintf;
  * @final
  * @extends AbstractNamedObject<OptionallyQualifiedName>
  */
-class Sequence extends \Doctrine\DBAL\Schema\AbstractNamedObject
+class Sequence extends AbstractNamedObject
 {
     protected int $allocationSize = 1;
     protected int $initialValue = 1;
@@ -94,7 +94,7 @@ class Sequence extends \Doctrine\DBAL\Schema\AbstractNamedObject
      *
      * @deprecated
      */
-    public function isAutoIncrementsFor(\Doctrine\DBAL\Schema\Table $table): bool
+    public function isAutoIncrementsFor(Table $table): bool
     {
         Deprecation::triggerIfCalledFromOutside('doctrine/dbal', 'https://github.com/doctrine/dbal/pull/6654', '%s is deprecated and will be removed in 5.0.', __METHOD__);
         $primaryKey = $table->getPrimaryKey();
@@ -117,14 +117,14 @@ class Sequence extends \Doctrine\DBAL\Schema\AbstractNamedObject
     /**
      * Instantiates a new sequence editor.
      */
-    public static function editor(): \Doctrine\DBAL\Schema\SequenceEditor
+    public static function editor(): SequenceEditor
     {
-        return new \Doctrine\DBAL\Schema\SequenceEditor();
+        return new SequenceEditor();
     }
     /**
      * Instantiates a new sequence editor and initializes it with the sequence's properties.
      */
-    public function edit(): \Doctrine\DBAL\Schema\SequenceEditor
+    public function edit(): SequenceEditor
     {
         return self::editor()->setName($this->getObjectName())->setAllocationSize($this->getAllocationSize())->setInitialValue($this->getInitialValue())->setCacheSize($this->getCacheSize());
     }

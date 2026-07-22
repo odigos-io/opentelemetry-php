@@ -18,7 +18,7 @@ namespace Odigos;
  * @var string $file
  * @var array<string> $paths
  */
-use function Cake\Core\h;
+use function Odigos\Cake\Core\h;
 $this->layout = 'dev_error';
 $this->assign('templateName', 'missing_cell_view.php');
 $this->assign('title', 'Missing Cell View');

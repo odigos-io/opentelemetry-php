@@ -14,15 +14,15 @@ declare (strict_types=1);
  * @since         1.2.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Command;
+namespace Odigos\Cake\Command;
 
-use Cake\Console\Arguments;
-use Cake\Console\ConsoleIo;
-use Cake\Console\ConsoleOptionParser;
+use Odigos\Cake\Console\Arguments;
+use Odigos\Cake\Console\ConsoleIo;
+use Odigos\Cake\Console\ConsoleOptionParser;
 /**
  * Command for interactive I18N management.
  */
-class I18nCommand extends \Cake\Command\Command
+class I18nCommand extends Command
 {
     /**
      * @inheritDoc
@@ -51,10 +51,10 @@ class I18nCommand extends \Cake\Command\Command
             $code = null;
             switch ($choice) {
                 case 'e':
-                    $code = $this->executeCommand(\Cake\Command\I18nExtractCommand::class, [], $io);
+                    $code = $this->executeCommand(I18nExtractCommand::class, [], $io);
                     break;
                 case 'i':
-                    $code = $this->executeCommand(\Cake\Command\I18nInitCommand::class, [], $io);
+                    $code = $this->executeCommand(I18nInitCommand::class, [], $io);
                     break;
                 case 'h':
                     $io->out($this->getOptionParser()->help());

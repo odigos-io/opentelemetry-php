@@ -1,13 +1,13 @@
 <?php
 
-namespace OpenAI\Testing\Resources;
+namespace Odigos\OpenAI\Testing\Resources;
 
-use OpenAI\Contracts\Resources\AudioContract;
-use OpenAI\Resources\Audio;
-use OpenAI\Responses\Audio\SpeechStreamResponse;
-use OpenAI\Responses\Audio\TranscriptionResponse;
-use OpenAI\Responses\Audio\TranslationResponse;
-use OpenAI\Testing\Resources\Concerns\Testable;
+use Odigos\OpenAI\Contracts\Resources\AudioContract;
+use Odigos\OpenAI\Resources\Audio;
+use Odigos\OpenAI\Responses\Audio\SpeechStreamResponse;
+use Odigos\OpenAI\Responses\Audio\TranscriptionResponse;
+use Odigos\OpenAI\Responses\Audio\TranslationResponse;
+use Odigos\OpenAI\Testing\Resources\Concerns\Testable;
 final class AudioTestResource implements AudioContract
 {
     use Testable;

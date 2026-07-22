@@ -8,16 +8,16 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpKernel\EventListener;
+namespace Odigos\Symfony\Component\HttpKernel\EventListener;
 
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Console\ConsoleEvents;
-use Symfony\Component\Console\Event\ConsoleEvent;
-use Symfony\Component\Console\Output\ConsoleOutputInterface;
-use Symfony\Component\ErrorHandler\ErrorHandler;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpKernel\Event\KernelEvent;
-use Symfony\Component\HttpKernel\KernelEvents;
+use Odigos\Symfony\Component\Console\ConsoleEvents;
+use Odigos\Symfony\Component\Console\Event\ConsoleEvent;
+use Odigos\Symfony\Component\Console\Output\ConsoleOutputInterface;
+use Odigos\Symfony\Component\ErrorHandler\ErrorHandler;
+use Odigos\Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Odigos\Symfony\Component\HttpKernel\Event\KernelEvent;
+use Odigos\Symfony\Component\HttpKernel\KernelEvents;
 /**
  * Sets an exception handler.
  *
@@ -113,7 +113,7 @@ class DebugHandlersListener implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         $events = [KernelEvents::REQUEST => ['configure', 2048]];
-        if (\defined('Symfony\Component\Console\ConsoleEvents::COMMAND')) {
+        if (\defined('Odigos\Symfony\Component\Console\ConsoleEvents::COMMAND')) {
             $events[ConsoleEvents::COMMAND] = ['configure', 2048];
         }
         return $events;

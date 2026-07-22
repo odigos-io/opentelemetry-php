@@ -1,20 +1,20 @@
 <?php
 
-namespace Illuminate\Validation;
+namespace Odigos\Illuminate\Validation;
 
 use Closure;
-use Illuminate\Contracts\Validation\CompilableRules;
-use Illuminate\Contracts\Validation\InvokableRule;
-use Illuminate\Contracts\Validation\Rule as RuleContract;
-use Illuminate\Contracts\Validation\ValidationRule;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
-use Illuminate\Validation\Rules\Date;
-use Illuminate\Validation\Rules\Exists;
-use Illuminate\Validation\Rules\Numeric;
-use Illuminate\Validation\Rules\StringRule;
-use Illuminate\Validation\Rules\Unique;
+use Odigos\Illuminate\Contracts\Validation\CompilableRules;
+use Odigos\Illuminate\Contracts\Validation\InvokableRule;
+use Odigos\Illuminate\Contracts\Validation\Rule as RuleContract;
+use Odigos\Illuminate\Contracts\Validation\ValidationRule;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Str;
+use Odigos\Illuminate\Validation\Rules\Date;
+use Odigos\Illuminate\Validation\Rules\Exists;
+use Odigos\Illuminate\Validation\Rules\Numeric;
+use Odigos\Illuminate\Validation\Rules\StringRule;
+use Odigos\Illuminate\Validation\Rules\Unique;
 class ValidationRuleParser
 {
     /**
@@ -106,10 +106,10 @@ class ValidationRuleParser
     protected function prepareRule($rule, $attribute)
     {
         if ($rule instanceof Closure) {
-            $rule = new \Illuminate\Validation\ClosureValidationRule($rule);
+            $rule = new ClosureValidationRule($rule);
         }
         if ($rule instanceof InvokableRule || $rule instanceof ValidationRule) {
-            $rule = \Illuminate\Validation\InvokableValidationRule::make($rule);
+            $rule = InvokableValidationRule::make($rule);
         }
         if (!is_object($rule) || $rule instanceof RuleContract || $rule instanceof Exists && $rule->queryCallbacks() || $rule instanceof Unique && $rule->queryCallbacks()) {
             return $rule;
@@ -130,7 +130,7 @@ class ValidationRuleParser
     protected function explodeWildcardRules($results, $attribute, $rules)
     {
         $pattern = str_replace('\*', '[^\.]*', preg_quote($attribute, '/'));
-        $data = \Illuminate\Validation\ValidationData::initializeAndGatherData($attribute, $this->data);
+        $data = ValidationData::initializeAndGatherData($attribute, $this->data);
         foreach ($data as $key => $value) {
             if (Str::startsWith($key, $attribute) || (bool) preg_match('/^' . $pattern . '\z/', $key)) {
                 foreach ((array) $rules as $rule) {
@@ -272,14 +272,14 @@ class ValidationRuleParser
     public static function filterConditionalRules($rules, array $data = [])
     {
         return (new Collection($rules))->mapWithKeys(function ($attributeRules, $attribute) use ($data) {
-            if (!is_array($attributeRules) && !$attributeRules instanceof \Illuminate\Validation\ConditionalRules) {
+            if (!is_array($attributeRules) && !$attributeRules instanceof ConditionalRules) {
                 return [$attribute => $attributeRules];
             }
-            if ($attributeRules instanceof \Illuminate\Validation\ConditionalRules) {
+            if ($attributeRules instanceof ConditionalRules) {
                 return [$attribute => $attributeRules->passes($data) ? array_filter($attributeRules->rules($data)) : array_filter($attributeRules->defaultRules($data))];
             }
             return [$attribute => (new Collection($attributeRules))->map(function ($rule) use ($data) {
-                if (!$rule instanceof \Illuminate\Validation\ConditionalRules) {
+                if (!$rule instanceof ConditionalRules) {
                     return [$rule];
                 }
                 return $rule->passes($data) ? $rule->rules($data) : $rule->defaultRules($data);

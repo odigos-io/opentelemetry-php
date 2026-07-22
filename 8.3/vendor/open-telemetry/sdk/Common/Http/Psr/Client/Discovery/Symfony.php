@@ -4,8 +4,8 @@ declare (strict_types=1);
 namespace OpenTelemetry\SDK\Common\Http\Psr\Client\Discovery;
 
 use Psr\Http\Client\ClientInterface;
-use Symfony\Component\HttpClient\HttpClient;
-use Symfony\Component\HttpClient\Psr18Client;
+use Odigos\Symfony\Component\HttpClient\HttpClient;
+use Odigos\Symfony\Component\HttpClient\Psr18Client;
 class Symfony implements \OpenTelemetry\SDK\Common\Http\Psr\Client\Discovery\DiscoveryInterface
 {
     /**

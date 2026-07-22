@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Contracts\Auth;
+namespace Odigos\Illuminate\Contracts\Auth;
 
 interface MustVerifyEmail
 {

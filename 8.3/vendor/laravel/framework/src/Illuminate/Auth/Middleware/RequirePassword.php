@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Auth\Middleware;
+namespace Odigos\Illuminate\Auth\Middleware;
 
 use Closure;
-use Illuminate\Contracts\Routing\ResponseFactory;
-use Illuminate\Contracts\Routing\UrlGenerator;
-use Illuminate\Support\Facades\Date;
+use Odigos\Illuminate\Contracts\Routing\ResponseFactory;
+use Odigos\Illuminate\Contracts\Routing\UrlGenerator;
+use Odigos\Illuminate\Support\Facades\Date;
 class RequirePassword
 {
     /**

@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Mime\Header;
+namespace Odigos\Symfony\Component\Mime\Header;
 
 /**
  * A Date MIME Header.
  *
  * @author Chris Corbyn
  */
-final class DateHeader extends \Symfony\Component\Mime\Header\AbstractHeader
+final class DateHeader extends AbstractHeader
 {
     private \DateTimeImmutable $dateTime;
     public function __construct(string $name, \DateTimeInterface $date)

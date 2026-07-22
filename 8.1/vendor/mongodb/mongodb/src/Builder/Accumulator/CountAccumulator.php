@@ -4,12 +4,12 @@
  * THIS FILE IS AUTO-GENERATED. ANY CHANGES WILL BE LOST!
  */
 declare (strict_types=1);
-namespace MongoDB\Builder\Accumulator;
+namespace Odigos\MongoDB\Builder\Accumulator;
 
-use MongoDB\Builder\Type\AccumulatorInterface;
-use MongoDB\Builder\Type\Encode;
-use MongoDB\Builder\Type\OperatorInterface;
-use MongoDB\Builder\Type\WindowInterface;
+use Odigos\MongoDB\Builder\Type\AccumulatorInterface;
+use Odigos\MongoDB\Builder\Type\Encode;
+use Odigos\MongoDB\Builder\Type\OperatorInterface;
+use Odigos\MongoDB\Builder\Type\WindowInterface;
 /**
  * Returns the number of documents in the group or window.
  * Distinct from the $count pipeline stage.

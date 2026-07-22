@@ -14,9 +14,9 @@ declare (strict_types=1);
  * @since         5.3.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\TestSuite;
+namespace Odigos\Cake\TestSuite;
 
-use Cake\Core\Configure;
+use Odigos\Cake\Core\Configure;
 use RuntimeException;
 /**
  * Helper function to load plugin configuration for tests.

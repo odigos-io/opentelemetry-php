@@ -1,18 +1,18 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Platforms;
+namespace Odigos\Doctrine\DBAL\Platforms;
 
-use Doctrine\DBAL\SQL\Builder\SelectSQLBuilder;
+use Odigos\Doctrine\DBAL\SQL\Builder\SelectSQLBuilder;
 use function implode;
 /**
  * Provides the behavior, features and SQL dialect of the MariaDB 10.10 database platform.
  */
-class MariaDB1010Platform extends \Doctrine\DBAL\Platforms\MariaDB1060Platform
+class MariaDB1010Platform extends MariaDB1060Platform
 {
     public function createSelectSQLBuilder(): SelectSQLBuilder
     {
-        return \Doctrine\DBAL\Platforms\AbstractPlatform::createSelectSQLBuilder();
+        return AbstractPlatform::createSelectSQLBuilder();
     }
     /** @internal The method should be only used from within the {@see MySQLSchemaManager} class hierarchy. */
     public function fetchTableOptionsByTable(bool $includeTableName): string

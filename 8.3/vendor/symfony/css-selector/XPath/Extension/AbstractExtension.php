@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\CssSelector\XPath\Extension;
+namespace Odigos\Symfony\Component\CssSelector\XPath\Extension;
 
 /**
  * XPath expression translator abstract extension.
@@ -20,7 +20,7 @@ namespace Symfony\Component\CssSelector\XPath\Extension;
  *
  * @internal
  */
-abstract class AbstractExtension implements \Symfony\Component\CssSelector\XPath\Extension\ExtensionInterface
+abstract class AbstractExtension implements ExtensionInterface
 {
     public function getNodeTranslators(): array
     {

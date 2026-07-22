@@ -1,6 +1,6 @@
 <?php
 
-namespace Http\Client\Exception;
+namespace Odigos\Http\Client\Exception;
 
 use Psr\Http\Message\RequestInterface;
 trait RequestAwareTrait

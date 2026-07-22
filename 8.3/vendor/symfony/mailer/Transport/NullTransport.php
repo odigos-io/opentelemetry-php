@@ -8,15 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Mailer\Transport;
+namespace Odigos\Symfony\Component\Mailer\Transport;
 
-use Symfony\Component\Mailer\SentMessage;
+use Odigos\Symfony\Component\Mailer\SentMessage;
 /**
  * Pretends messages have been sent, but just ignores them.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-final class NullTransport extends \Symfony\Component\Mailer\Transport\AbstractTransport
+final class NullTransport extends AbstractTransport
 {
     protected function doSend(SentMessage $message): void
     {

@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Driver\Mysqli;
+namespace Odigos\Doctrine\DBAL\Driver\Mysqli;
 
-use Doctrine\DBAL\Driver\AbstractMySQLDriver;
-use Doctrine\DBAL\Driver\Mysqli\Exception\ConnectionFailed;
-use Doctrine\DBAL\Driver\Mysqli\Exception\HostRequired;
-use Doctrine\DBAL\Driver\Mysqli\Initializer\Charset;
-use Doctrine\DBAL\Driver\Mysqli\Initializer\Options;
-use Doctrine\DBAL\Driver\Mysqli\Initializer\Secure;
+use Odigos\Doctrine\DBAL\Driver\AbstractMySQLDriver;
+use Odigos\Doctrine\DBAL\Driver\Mysqli\Exception\ConnectionFailed;
+use Odigos\Doctrine\DBAL\Driver\Mysqli\Exception\HostRequired;
+use Odigos\Doctrine\DBAL\Driver\Mysqli\Initializer\Charset;
+use Odigos\Doctrine\DBAL\Driver\Mysqli\Initializer\Options;
+use Odigos\Doctrine\DBAL\Driver\Mysqli\Initializer\Secure;
 use Generator;
 use mysqli;
 use mysqli_sql_exception;
@@ -21,7 +21,7 @@ final class Driver extends AbstractMySQLDriver
     public function connect(
         #[SensitiveParameter]
         array $params
-    ): \Doctrine\DBAL\Driver\Mysqli\Connection
+    ): Connection
     {
         if (!empty($params['persistent'])) {
             if (!isset($params['host'])) {
@@ -36,7 +36,7 @@ final class Driver extends AbstractMySQLDriver
             $initializer->initialize($connection);
         }
         try {
-            $success = @$connection->real_connect($host, $params['user'] ?? '', $params['password'] ?? '', $params['dbname'] ?? '', $params['port'] ?? 0, $params['unix_socket'] ?? '', $params['driverOptions'][\Doctrine\DBAL\Driver\Mysqli\Connection::OPTION_FLAGS] ?? 0);
+            $success = @$connection->real_connect($host, $params['user'] ?? '', $params['password'] ?? '', $params['dbname'] ?? '', $params['port'] ?? 0, $params['unix_socket'] ?? '', $params['driverOptions'][Connection::OPTION_FLAGS] ?? 0);
         } catch (mysqli_sql_exception $e) {
             throw ConnectionFailed::upcast($e);
         }
@@ -46,7 +46,7 @@ final class Driver extends AbstractMySQLDriver
         foreach ($this->compilePostInitializers($params) as $initializer) {
             $initializer->initialize($connection);
         }
-        return new \Doctrine\DBAL\Driver\Mysqli\Connection($connection);
+        return new Connection($connection);
     }
     /**
      * @param array<string, mixed> $params
@@ -58,7 +58,7 @@ final class Driver extends AbstractMySQLDriver
         array $params
     ): Generator
     {
-        unset($params['driverOptions'][\Doctrine\DBAL\Driver\Mysqli\Connection::OPTION_FLAGS]);
+        unset($params['driverOptions'][Connection::OPTION_FLAGS]);
         if (isset($params['driverOptions']) && $params['driverOptions'] !== []) {
             yield new Options($params['driverOptions']);
         }

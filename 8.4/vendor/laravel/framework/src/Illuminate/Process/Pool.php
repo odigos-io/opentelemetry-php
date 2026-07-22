@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Process;
+namespace Odigos\Illuminate\Process;
 
-use Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Collection;
 use InvalidArgumentException;
 /**
  * @mixin \Illuminate\Process\Factory
@@ -34,7 +34,7 @@ class Pool
      * @param  \Illuminate\Process\Factory  $factory
      * @param  callable  $callback
      */
-    public function __construct(\Illuminate\Process\Factory $factory, callable $callback)
+    public function __construct(Factory $factory, callable $callback)
     {
         $this->factory = $factory;
         $this->callback = $callback;
@@ -62,8 +62,8 @@ class Pool
     public function start(?callable $output = null)
     {
         call_user_func($this->callback, $this);
-        return new \Illuminate\Process\InvokedProcessPool((new Collection($this->pendingProcesses))->each(function ($pendingProcess) {
-            if (!$pendingProcess instanceof \Illuminate\Process\PendingProcess) {
+        return new InvokedProcessPool((new Collection($this->pendingProcesses))->each(function ($pendingProcess) {
+            if (!$pendingProcess instanceof PendingProcess) {
                 throw new InvalidArgumentException('Process pool must only contain pending processes.');
             }
         })->mapWithKeys(function ($pendingProcess, $key) use ($output) {

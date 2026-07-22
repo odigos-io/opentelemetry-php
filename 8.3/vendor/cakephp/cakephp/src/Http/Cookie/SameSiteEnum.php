@@ -13,7 +13,7 @@ declare (strict_types=1);
  * @since         5.0.0
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Http\Cookie;
+namespace Odigos\Cake\Http\Cookie;
 
 enum SameSiteEnum : string
 {

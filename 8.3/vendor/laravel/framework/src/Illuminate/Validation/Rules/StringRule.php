@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Validation\Rules;
+namespace Odigos\Illuminate\Validation\Rules;
 
-use Illuminate\Support\Arr;
-use Illuminate\Support\Traits\Conditionable;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Traits\Conditionable;
 use Stringable;
 class StringRule implements Stringable
 {

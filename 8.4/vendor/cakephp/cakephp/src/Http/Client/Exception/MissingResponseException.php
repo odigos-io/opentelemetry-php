@@ -13,9 +13,9 @@ declare (strict_types=1);
  * @since         4.3.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Http\Client\Exception;
+namespace Odigos\Cake\Http\Client\Exception;
 
-use Cake\Core\Exception\CakeException;
+use Odigos\Cake\Core\Exception\CakeException;
 /**
  * Used to indicate that a request did not have a matching mock response.
  */

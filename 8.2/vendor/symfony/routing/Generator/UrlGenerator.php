@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Routing\Generator;
+namespace Odigos\Symfony\Component\Routing\Generator;
 
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Routing\Exception\InvalidParameterException;
-use Symfony\Component\Routing\Exception\MissingMandatoryParametersException;
-use Symfony\Component\Routing\Exception\RouteNotFoundException;
-use Symfony\Component\Routing\RequestContext;
-use Symfony\Component\Routing\RouteCollection;
+use Odigos\Symfony\Component\Routing\Exception\InvalidParameterException;
+use Odigos\Symfony\Component\Routing\Exception\MissingMandatoryParametersException;
+use Odigos\Symfony\Component\Routing\Exception\RouteNotFoundException;
+use Odigos\Symfony\Component\Routing\RequestContext;
+use Odigos\Symfony\Component\Routing\RouteCollection;
 /**
  * UrlGenerator can generate a URL or a path for any route in the RouteCollection
  * based on the passed parameters.
@@ -23,7 +23,7 @@ use Symfony\Component\Routing\RouteCollection;
  * @author Fabien Potencier <fabien@symfony.com>
  * @author Tobias Schultze <http://tobion.de>
  */
-class UrlGenerator implements \Symfony\Component\Routing\Generator\UrlGeneratorInterface, \Symfony\Component\Routing\Generator\ConfigurableRequirementsInterface
+class UrlGenerator implements UrlGeneratorInterface, ConfigurableRequirementsInterface
 {
     private const QUERY_FRAGMENT_DECODED = [
         // RFC 3986 explicitly allows those in the query/fragment to reference other URIs unencoded

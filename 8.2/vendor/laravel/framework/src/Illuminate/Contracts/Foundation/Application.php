@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Contracts\Foundation;
+namespace Odigos\Illuminate\Contracts\Foundation;
 
-use Illuminate\Contracts\Container\Container;
+use Odigos\Illuminate\Contracts\Container\Container;
 interface Application extends Container
 {
     /**

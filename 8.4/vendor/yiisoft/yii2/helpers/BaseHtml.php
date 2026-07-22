@@ -5,14 +5,14 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\helpers;
+namespace Odigos\yii\helpers;
 
 use Odigos\Yii;
-use yii\base\InvalidArgumentException;
-use yii\base\Model;
-use yii\db\ActiveRecordInterface;
-use yii\validators\StringValidator;
-use yii\web\Request;
+use Odigos\yii\base\InvalidArgumentException;
+use Odigos\yii\base\Model;
+use Odigos\yii\db\ActiveRecordInterface;
+use Odigos\yii\validators\StringValidator;
+use Odigos\yii\web\Request;
 /**
  * BaseHtml provides concrete implementation for [[Html]].
  *
@@ -148,7 +148,7 @@ class BaseHtml
     public static function style($content, $options = [])
     {
         $view = Yii::$app->getView();
-        if ($view instanceof \yii\web\View && !empty($view->styleOptions)) {
+        if ($view instanceof \Odigos\yii\web\View && !empty($view->styleOptions)) {
             $options = array_merge($view->styleOptions, $options);
         }
         return static::tag('style', $content, $options);
@@ -165,7 +165,7 @@ class BaseHtml
     public static function script($content, $options = [])
     {
         $view = Yii::$app->getView();
-        if ($view instanceof \yii\web\View && !empty($view->scriptOptions)) {
+        if ($view instanceof \Odigos\yii\web\View && !empty($view->scriptOptions)) {
             $options = array_merge($view->scriptOptions, $options);
         }
         return static::tag('script', $content, $options);
@@ -191,7 +191,7 @@ class BaseHtml
         if (!isset($options['rel'])) {
             $options['rel'] = 'stylesheet';
         }
-        $options['href'] = \yii\helpers\Url::to($url);
+        $options['href'] = Url::to($url);
         if (isset($options['condition'])) {
             $condition = $options['condition'];
             unset($options['condition']);
@@ -219,7 +219,7 @@ class BaseHtml
      */
     public static function jsFile($url, $options = [])
     {
-        $options['src'] = \yii\helpers\Url::to($url);
+        $options['src'] = Url::to($url);
         if (isset($options['condition'])) {
             $condition = $options['condition'];
             unset($options['condition']);
@@ -274,7 +274,7 @@ class BaseHtml
      */
     public static function beginForm($action = '', $method = 'post', $options = [])
     {
-        $action = \yii\helpers\Url::to($action);
+        $action = Url::to($action);
         $hiddenInputs = [];
         $request = Yii::$app->getRequest();
         if ($request instanceof Request) {
@@ -283,7 +283,7 @@ class BaseHtml
                 $hiddenInputs[] = static::hiddenInput($request->methodParam, $method);
                 $method = 'post';
             }
-            $csrf = \yii\helpers\ArrayHelper::remove($options, 'csrf', \true);
+            $csrf = ArrayHelper::remove($options, 'csrf', \true);
             if ($csrf && $request->enableCsrfValidation && strcasecmp($method, 'post') === 0) {
                 $hiddenInputs[] = static::hiddenInput($request->csrfParam, $request->getCsrfToken());
             }
@@ -343,7 +343,7 @@ class BaseHtml
     public static function a($text, $url = null, $options = [])
     {
         if ($url !== null) {
-            $options['href'] = \yii\helpers\Url::to($url);
+            $options['href'] = Url::to($url);
         }
         return static::tag('a', $text, $options);
     }
@@ -379,11 +379,11 @@ class BaseHtml
      */
     public static function img($src, $options = [])
     {
-        $options['src'] = \yii\helpers\Url::to($src);
+        $options['src'] = Url::to($src);
         if (isset($options['srcset']) && is_array($options['srcset'])) {
             $srcset = [];
             foreach ($options['srcset'] as $descriptor => $url) {
-                $srcset[] = \yii\helpers\Url::to($url) . ' ' . $descriptor;
+                $srcset[] = Url::to($url) . ' ' . $descriptor;
             }
             $options['srcset'] = implode(',', $srcset);
         }
@@ -609,7 +609,7 @@ class BaseHtml
     public static function textarea($name, $value = '', $options = [])
     {
         $options['name'] = $name;
-        $doubleEncode = \yii\helpers\ArrayHelper::remove($options, 'doubleEncode', \true);
+        $doubleEncode = ArrayHelper::remove($options, 'doubleEncode', \true);
         return static::tag('textarea', static::encode($value, $doubleEncode), $options);
     }
     /**
@@ -868,19 +868,19 @@ class BaseHtml
         if (substr($name, -2) !== '[]') {
             $name .= '[]';
         }
-        if (\yii\helpers\ArrayHelper::isTraversable($selection)) {
-            $selection = array_map('strval', \yii\helpers\ArrayHelper::toArray($selection));
+        if (ArrayHelper::isTraversable($selection)) {
+            $selection = array_map('strval', ArrayHelper::toArray($selection));
         }
-        $formatter = \yii\helpers\ArrayHelper::remove($options, 'item');
-        $itemOptions = \yii\helpers\ArrayHelper::remove($options, 'itemOptions', []);
-        $encode = \yii\helpers\ArrayHelper::remove($options, 'encode', \true);
-        $separator = \yii\helpers\ArrayHelper::remove($options, 'separator', "\n");
-        $tag = \yii\helpers\ArrayHelper::remove($options, 'tag', 'div');
-        $strict = \yii\helpers\ArrayHelper::remove($options, 'strict', \false);
+        $formatter = ArrayHelper::remove($options, 'item');
+        $itemOptions = ArrayHelper::remove($options, 'itemOptions', []);
+        $encode = ArrayHelper::remove($options, 'encode', \true);
+        $separator = ArrayHelper::remove($options, 'separator', "\n");
+        $tag = ArrayHelper::remove($options, 'tag', 'div');
+        $strict = ArrayHelper::remove($options, 'strict', \false);
         $lines = [];
         $index = 0;
         foreach ($items as $value => $label) {
-            $checked = $selection !== null && (!\yii\helpers\ArrayHelper::isTraversable($selection) && !strcmp($value, $selection) || \yii\helpers\ArrayHelper::isTraversable($selection) && \yii\helpers\ArrayHelper::isIn((string) $value, $selection, $strict));
+            $checked = $selection !== null && (!ArrayHelper::isTraversable($selection) && !strcmp($value, $selection) || ArrayHelper::isTraversable($selection) && ArrayHelper::isIn((string) $value, $selection, $strict));
             if ($formatter !== null) {
                 $lines[] = call_user_func($formatter, $index, $label, $name, $checked, $value);
             } else {
@@ -946,15 +946,15 @@ class BaseHtml
      */
     public static function radioList($name, $selection = null, $items = [], $options = [])
     {
-        if (\yii\helpers\ArrayHelper::isTraversable($selection)) {
-            $selection = array_map('strval', \yii\helpers\ArrayHelper::toArray($selection));
+        if (ArrayHelper::isTraversable($selection)) {
+            $selection = array_map('strval', ArrayHelper::toArray($selection));
         }
-        $formatter = \yii\helpers\ArrayHelper::remove($options, 'item');
-        $itemOptions = \yii\helpers\ArrayHelper::remove($options, 'itemOptions', []);
-        $encode = \yii\helpers\ArrayHelper::remove($options, 'encode', \true);
-        $separator = \yii\helpers\ArrayHelper::remove($options, 'separator', "\n");
-        $tag = \yii\helpers\ArrayHelper::remove($options, 'tag', 'div');
-        $strict = \yii\helpers\ArrayHelper::remove($options, 'strict', \false);
+        $formatter = ArrayHelper::remove($options, 'item');
+        $itemOptions = ArrayHelper::remove($options, 'itemOptions', []);
+        $encode = ArrayHelper::remove($options, 'encode', \true);
+        $separator = ArrayHelper::remove($options, 'separator', "\n");
+        $tag = ArrayHelper::remove($options, 'tag', 'div');
+        $strict = ArrayHelper::remove($options, 'strict', \false);
         $hidden = '';
         if (isset($options['unselect'])) {
             // add a hidden field so that if the list box has no option being selected, it still submits a value
@@ -969,7 +969,7 @@ class BaseHtml
         $lines = [];
         $index = 0;
         foreach ($items as $value => $label) {
-            $checked = $selection !== null && (!\yii\helpers\ArrayHelper::isTraversable($selection) && !strcmp($value, $selection) || \yii\helpers\ArrayHelper::isTraversable($selection) && \yii\helpers\ArrayHelper::isIn((string) $value, $selection, $strict));
+            $checked = $selection !== null && (!ArrayHelper::isTraversable($selection) && !strcmp($value, $selection) || ArrayHelper::isTraversable($selection) && ArrayHelper::isIn((string) $value, $selection, $strict));
             if ($formatter !== null) {
                 $lines[] = call_user_func($formatter, $index, $label, $name, $checked, $value);
             } else {
@@ -1010,11 +1010,11 @@ class BaseHtml
      */
     public static function ul($items, $options = [])
     {
-        $tag = \yii\helpers\ArrayHelper::remove($options, 'tag', 'ul');
-        $encode = \yii\helpers\ArrayHelper::remove($options, 'encode', \true);
-        $formatter = \yii\helpers\ArrayHelper::remove($options, 'item');
-        $separator = \yii\helpers\ArrayHelper::remove($options, 'separator', "\n");
-        $itemOptions = \yii\helpers\ArrayHelper::remove($options, 'itemOptions', []);
+        $tag = ArrayHelper::remove($options, 'tag', 'ul');
+        $encode = ArrayHelper::remove($options, 'encode', \true);
+        $formatter = ArrayHelper::remove($options, 'item');
+        $separator = ArrayHelper::remove($options, 'separator', "\n");
+        $itemOptions = ArrayHelper::remove($options, 'itemOptions', []);
         if (empty($items)) {
             return static::tag($tag, '', $options);
         }
@@ -1077,9 +1077,9 @@ class BaseHtml
      */
     public static function activeLabel($model, $attribute, $options = [])
     {
-        $for = \yii\helpers\ArrayHelper::remove($options, 'for', static::getInputId($model, $attribute));
+        $for = ArrayHelper::remove($options, 'for', static::getInputId($model, $attribute));
         $attribute = static::getAttributeName($attribute);
-        $label = \yii\helpers\ArrayHelper::remove($options, 'label', static::encode($model->getAttributeLabel($attribute)));
+        $label = ArrayHelper::remove($options, 'label', static::encode($model->getAttributeLabel($attribute)));
         return static::label($label, $for, $options);
     }
     /**
@@ -1110,7 +1110,7 @@ class BaseHtml
         if (empty($hint)) {
             return '';
         }
-        $tag = \yii\helpers\ArrayHelper::remove($options, 'tag', 'div');
+        $tag = ArrayHelper::remove($options, 'tag', 'div');
         unset($options['hint']);
         return static::tag($tag, $hint, $options);
     }
@@ -1135,10 +1135,10 @@ class BaseHtml
     public static function errorSummary($models, $options = [])
     {
         $header = isset($options['header']) ? $options['header'] : '<p>' . Yii::t('yii', 'Please fix the following errors:') . '</p>';
-        $footer = \yii\helpers\ArrayHelper::remove($options, 'footer', '');
-        $encode = \yii\helpers\ArrayHelper::remove($options, 'encode', \true);
-        $showAllErrors = \yii\helpers\ArrayHelper::remove($options, 'showAllErrors', \false);
-        $emptyClass = \yii\helpers\ArrayHelper::remove($options, 'emptyClass', null);
+        $footer = ArrayHelper::remove($options, 'footer', '');
+        $encode = ArrayHelper::remove($options, 'encode', \true);
+        $showAllErrors = ArrayHelper::remove($options, 'showAllErrors', \false);
+        $emptyClass = ArrayHelper::remove($options, 'emptyClass', null);
         unset($options['header']);
         $lines = self::collectErrors($models, $encode, $showAllErrors);
         if (empty($lines)) {
@@ -1152,7 +1152,7 @@ class BaseHtml
         } else {
             $content = '<ul><li>' . implode("</li>\n<li>", $lines) . '</li></ul>';
         }
-        return \yii\helpers\Html::tag('div', $header . $content . $footer, $options);
+        return Html::tag('div', $header . $content . $footer, $options);
     }
     /**
      * Return array of the validation errors
@@ -1177,7 +1177,7 @@ class BaseHtml
         $lines = array_values($lines);
         if ($encode) {
             foreach ($lines as &$line) {
-                $line = \yii\helpers\Html::encode($line);
+                $line = Html::encode($line);
             }
         }
         return $lines;
@@ -1207,15 +1207,15 @@ class BaseHtml
     public static function error($model, $attribute, $options = [])
     {
         $attribute = static::getAttributeName($attribute);
-        $errorSource = \yii\helpers\ArrayHelper::remove($options, 'errorSource');
+        $errorSource = ArrayHelper::remove($options, 'errorSource');
         if ($errorSource !== null) {
             $error = call_user_func($errorSource, $model, $attribute);
         } else {
             $error = $model->getFirstError($attribute);
         }
-        $tag = \yii\helpers\ArrayHelper::remove($options, 'tag', 'div');
-        $encode = \yii\helpers\ArrayHelper::remove($options, 'encode', \true);
-        return \yii\helpers\Html::tag($tag, $encode ? \yii\helpers\Html::encode($error) : $error, $options);
+        $tag = ArrayHelper::remove($options, 'tag', 'div');
+        $encode = ArrayHelper::remove($options, 'encode', \true);
+        return Html::tag($tag, $encode ? Html::encode($error) : $error, $options);
     }
     /**
      * Generates an input tag for the given model attribute.
@@ -1371,7 +1371,7 @@ class BaseHtml
         if (!empty($options['disabled'])) {
             $hiddenOptions['disabled'] = $options['disabled'];
         }
-        $hiddenOptions = \yii\helpers\ArrayHelper::merge($hiddenOptions, \yii\helpers\ArrayHelper::remove($options, 'hiddenOptions', []));
+        $hiddenOptions = ArrayHelper::merge($hiddenOptions, ArrayHelper::remove($options, 'hiddenOptions', []));
         // Add a hidden field so that if a model only has a file field, we can
         // still use isset($_POST[$modelClass]) to detect if the input is submitted.
         // The hidden input will be assigned its own set of html options via `$hiddenOptions`.
@@ -1682,8 +1682,8 @@ class BaseHtml
      */
     protected static function activeListInput($type, $model, $attribute, $items, $options = [])
     {
-        $name = \yii\helpers\ArrayHelper::remove($options, 'name', static::getInputName($model, $attribute));
-        $selection = \yii\helpers\ArrayHelper::remove($options, 'value', static::getAttributeValue($model, $attribute));
+        $name = ArrayHelper::remove($options, 'name', static::getInputName($model, $attribute));
+        $selection = ArrayHelper::remove($options, 'value', static::getAttributeValue($model, $attribute));
         if (!array_key_exists('unselect', $options)) {
             $options['unselect'] = '';
         }
@@ -1712,9 +1712,9 @@ class BaseHtml
      */
     public static function renderSelectOptions($selection, $items, &$tagOptions = [])
     {
-        if (\yii\helpers\ArrayHelper::isTraversable($selection)) {
+        if (ArrayHelper::isTraversable($selection)) {
             $normalizedSelection = [];
-            foreach (\yii\helpers\ArrayHelper::toArray($selection) as $selectionItem) {
+            foreach (ArrayHelper::toArray($selection) as $selectionItem) {
                 if (is_bool($selectionItem)) {
                     $normalizedSelection[] = $selectionItem ? '1' : '0';
                 } else {
@@ -1726,9 +1726,9 @@ class BaseHtml
             $selection = $selection ? '1' : '0';
         }
         $lines = [];
-        $encodeSpaces = \yii\helpers\ArrayHelper::remove($tagOptions, 'encodeSpaces', \false);
-        $encode = \yii\helpers\ArrayHelper::remove($tagOptions, 'encode', \true);
-        $strict = \yii\helpers\ArrayHelper::remove($tagOptions, 'strict', \false);
+        $encodeSpaces = ArrayHelper::remove($tagOptions, 'encodeSpaces', \false);
+        $encode = ArrayHelper::remove($tagOptions, 'encode', \true);
+        $strict = ArrayHelper::remove($tagOptions, 'strict', \false);
         if (isset($tagOptions['prompt'])) {
             $promptOptions = ['value' => ''];
             if (is_string($tagOptions['prompt'])) {
@@ -1746,8 +1746,8 @@ class BaseHtml
         $options = isset($tagOptions['options']) ? $tagOptions['options'] : [];
         $groups = isset($tagOptions['groups']) ? $tagOptions['groups'] : [];
         unset($tagOptions['prompt'], $tagOptions['options'], $tagOptions['groups']);
-        $options['encodeSpaces'] = \yii\helpers\ArrayHelper::getValue($options, 'encodeSpaces', $encodeSpaces);
-        $options['encode'] = \yii\helpers\ArrayHelper::getValue($options, 'encode', $encode);
+        $options['encodeSpaces'] = ArrayHelper::getValue($options, 'encodeSpaces', $encodeSpaces);
+        $options['encode'] = ArrayHelper::getValue($options, 'encode', $encode);
         foreach ($items as $key => $value) {
             if (is_array($value)) {
                 $groupAttrs = isset($groups[$key]) ? $groups[$key] : [];
@@ -1763,8 +1763,8 @@ class BaseHtml
                 if (!array_key_exists('selected', $attrs)) {
                     $selected = \false;
                     if ($selection !== null) {
-                        if (\yii\helpers\ArrayHelper::isTraversable($selection)) {
-                            $selected = \yii\helpers\ArrayHelper::isIn((string) $key, $selection, $strict);
+                        if (ArrayHelper::isTraversable($selection)) {
+                            $selected = ArrayHelper::isIn((string) $key, $selection, $strict);
                         } elseif ($key === '' || $selection === '') {
                             $selected = $selection === $key;
                         } elseif ($strict) {
@@ -1830,7 +1830,7 @@ class BaseHtml
                 if (in_array($name, static::$dataAttributes)) {
                     foreach ($value as $n => $v) {
                         if (is_array($v)) {
-                            $html .= " {$name}-{$n}='" . \yii\helpers\Json::htmlEncode($v) . "'";
+                            $html .= " {$name}-{$n}='" . Json::htmlEncode($v) . "'";
                         } elseif (is_bool($v)) {
                             if ($v) {
                                 $html .= " {$name}-{$n}";
@@ -1855,7 +1855,7 @@ class BaseHtml
                     }
                     $html .= " {$name}=\"" . static::encode(static::cssStyleFromArray($value)) . '"';
                 } else {
-                    $html .= " {$name}='" . \yii\helpers\Json::htmlEncode($value) . "'";
+                    $html .= " {$name}='" . Json::htmlEncode($value) . "'";
                 }
             } elseif ($value !== null) {
                 $html .= " {$name}=\"" . static::encode($value) . '"';

@@ -14,10 +14,10 @@ declare (strict_types=1);
  * @since         3.5.0
  * @license       https://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\ORM\Association;
+namespace Odigos\Cake\ORM\Association;
 
-use Cake\Datasource\EntityInterface;
-use Cake\ORM\Association;
+use Odigos\Cake\Datasource\EntityInterface;
+use Odigos\Cake\ORM\Association;
 /**
  * Helper class for cascading deletes in associations.
  *

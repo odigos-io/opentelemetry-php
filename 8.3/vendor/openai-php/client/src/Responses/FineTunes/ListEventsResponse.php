@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Responses\FineTunes;
+namespace Odigos\OpenAI\Responses\FineTunes;
 
-use OpenAI\Contracts\ResponseContract;
-use OpenAI\Contracts\ResponseHasMetaInformationContract;
-use OpenAI\Responses\Concerns\ArrayAccessible;
-use OpenAI\Responses\Concerns\HasMetaInformation;
-use OpenAI\Responses\Meta\MetaInformation;
-use OpenAI\Testing\Responses\Concerns\Fakeable;
+use Odigos\OpenAI\Contracts\ResponseContract;
+use Odigos\OpenAI\Contracts\ResponseHasMetaInformationContract;
+use Odigos\OpenAI\Responses\Concerns\ArrayAccessible;
+use Odigos\OpenAI\Responses\Concerns\HasMetaInformation;
+use Odigos\OpenAI\Responses\Meta\MetaInformation;
+use Odigos\OpenAI\Testing\Responses\Concerns\Fakeable;
 /**
  * @implements ResponseContract<array{object: string, data: array<int, array{object: string, created_at: int, level: string, message: string}>}>
  */
@@ -33,7 +33,7 @@ final class ListEventsResponse implements ResponseContract, ResponseHasMetaInfor
      */
     public static function from(array $attributes, MetaInformation $meta): self
     {
-        $data = array_map(fn(array $result): \OpenAI\Responses\FineTunes\RetrieveResponseEvent => \OpenAI\Responses\FineTunes\RetrieveResponseEvent::from($result), $attributes['data']);
+        $data = array_map(fn(array $result): RetrieveResponseEvent => RetrieveResponseEvent::from($result), $attributes['data']);
         return new self($attributes['object'], $data, $meta);
     }
     /**
@@ -41,6 +41,6 @@ final class ListEventsResponse implements ResponseContract, ResponseHasMetaInfor
      */
     public function toArray(): array
     {
-        return ['object' => $this->object, 'data' => array_map(static fn(\OpenAI\Responses\FineTunes\RetrieveResponseEvent $response): array => $response->toArray(), $this->data)];
+        return ['object' => $this->object, 'data' => array_map(static fn(RetrieveResponseEvent $response): array => $response->toArray(), $this->data)];
     }
 }

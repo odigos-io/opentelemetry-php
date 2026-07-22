@@ -6,14 +6,14 @@
  * @license https://github.com/slimphp/Slim/blob/4.x/LICENSE.md (MIT License)
  */
 declare (strict_types=1);
-namespace Slim;
+namespace Odigos\Slim;
 
 use Closure;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use RuntimeException;
-use Slim\Interfaces\AdvancedCallableResolverInterface;
+use Odigos\Slim\Interfaces\AdvancedCallableResolverInterface;
 use function class_exists;
 use function is_array;
 use function is_callable;
@@ -115,7 +115,7 @@ final class CallableResolver implements AdvancedCallableResolverInterface
     private function resolveSlimNotation(string $toResolve): array
     {
         /** @psalm-suppress ArgumentTypeCoercion */
-        preg_match(\Slim\CallableResolver::$callablePattern, $toResolve, $matches);
+        preg_match(CallableResolver::$callablePattern, $toResolve, $matches);
         [$class, $method] = $matches ? [$matches[1], $matches[2]] : [$toResolve, null];
         if ($this->container && $this->container->has($class)) {
             $instance = $this->container->get($class);

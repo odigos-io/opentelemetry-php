@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Contracts\Pagination;
+namespace Odigos\Illuminate\Contracts\Pagination;
 
 /**
  * @template TKey of array-key

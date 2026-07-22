@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Support\Facades;
+namespace Odigos\Illuminate\Support\Facades;
 
 /**
  * @method static \Illuminate\Redis\Connections\Connection connection(\UnitEnum|string|null $name = null)
@@ -306,7 +306,7 @@ namespace Illuminate\Support\Facades;
  *
  * @see \Illuminate\Redis\RedisManager
  */
-class Redis extends \Illuminate\Support\Facades\Facade
+class Redis extends Facade
 {
     /**
      * Get the registered name of the component.

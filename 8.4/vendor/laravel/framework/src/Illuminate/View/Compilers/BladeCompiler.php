@@ -1,22 +1,22 @@
 <?php
 
-namespace Illuminate\View\Compilers;
+namespace Odigos\Illuminate\View\Compilers;
 
-use Illuminate\Container\Container;
-use Illuminate\Contracts\Support\Htmlable;
-use Illuminate\Contracts\View\Factory as ViewFactory;
-use Illuminate\Contracts\View\View;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
-use Illuminate\Support\Stringable;
-use Illuminate\Support\Traits\ReflectsClosures;
-use Illuminate\View\Component;
+use Odigos\Illuminate\Container\Container;
+use Odigos\Illuminate\Contracts\Support\Htmlable;
+use Odigos\Illuminate\Contracts\View\Factory as ViewFactory;
+use Odigos\Illuminate\Contracts\View\View;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Str;
+use Odigos\Illuminate\Support\Stringable;
+use Odigos\Illuminate\Support\Traits\ReflectsClosures;
+use Odigos\Illuminate\View\Component;
 use InvalidArgumentException;
 use ParseError;
-class BladeCompiler extends \Illuminate\View\Compilers\Compiler implements \Illuminate\View\Compilers\CompilerInterface
+class BladeCompiler extends Compiler implements CompilerInterface
 {
-    use \Illuminate\View\Compilers\Concerns\CompilesAuthorizations, \Illuminate\View\Compilers\Concerns\CompilesClasses, \Illuminate\View\Compilers\Concerns\CompilesComments, \Illuminate\View\Compilers\Concerns\CompilesComponents, \Illuminate\View\Compilers\Concerns\CompilesConditionals, \Illuminate\View\Compilers\Concerns\CompilesContexts, \Illuminate\View\Compilers\Concerns\CompilesEchos, \Illuminate\View\Compilers\Concerns\CompilesErrors, \Illuminate\View\Compilers\Concerns\CompilesFragments, \Illuminate\View\Compilers\Concerns\CompilesHelpers, \Illuminate\View\Compilers\Concerns\CompilesIncludes, \Illuminate\View\Compilers\Concerns\CompilesInjections, \Illuminate\View\Compilers\Concerns\CompilesJson, \Illuminate\View\Compilers\Concerns\CompilesJs, \Illuminate\View\Compilers\Concerns\CompilesLayouts, \Illuminate\View\Compilers\Concerns\CompilesLoops, \Illuminate\View\Compilers\Concerns\CompilesRawPhp, \Illuminate\View\Compilers\Concerns\CompilesSessions, \Illuminate\View\Compilers\Concerns\CompilesStacks, \Illuminate\View\Compilers\Concerns\CompilesStyles, \Illuminate\View\Compilers\Concerns\CompilesTranslations, \Illuminate\View\Compilers\Concerns\CompilesUseStatements, ReflectsClosures;
+    use Concerns\CompilesAuthorizations, Concerns\CompilesClasses, Concerns\CompilesComments, Concerns\CompilesComponents, Concerns\CompilesConditionals, Concerns\CompilesContexts, Concerns\CompilesEchos, Concerns\CompilesErrors, Concerns\CompilesFragments, Concerns\CompilesHelpers, Concerns\CompilesIncludes, Concerns\CompilesInjections, Concerns\CompilesJson, Concerns\CompilesJs, Concerns\CompilesLayouts, Concerns\CompilesLoops, Concerns\CompilesRawPhp, Concerns\CompilesSessions, Concerns\CompilesStacks, Concerns\CompilesStyles, Concerns\CompilesTranslations, Concerns\CompilesUseStatements, ReflectsClosures;
     /**
      * All of the registered extensions.
      *
@@ -354,7 +354,7 @@ class BladeCompiler extends \Illuminate\View\Compilers\Compiler implements \Illu
         if (!$this->compilesComponentTags) {
             return $value;
         }
-        return (new \Illuminate\View\Compilers\ComponentTagCompiler($this->classComponentAliases, $this->classComponentNamespaces, $this))->compile($value);
+        return (new ComponentTagCompiler($this->classComponentAliases, $this->classComponentNamespaces, $this))->compile($value);
     }
     /**
      * Replace the raw placeholders with the original code stored in the raw blocks.
@@ -780,7 +780,7 @@ class BladeCompiler extends \Illuminate\View\Compilers\Compiler implements \Illu
         if (!preg_match('/^\w+(?:::\w+)?$/x', $name)) {
             throw new InvalidArgumentException("The directive name [{$name}] is not valid. Directive names must only contain alphanumeric characters and underscores.");
         }
-        $this->customDirectives[$name] = $bind ? $handler->bindTo($this, \Illuminate\View\Compilers\BladeCompiler::class) : $handler;
+        $this->customDirectives[$name] = $bind ? $handler->bindTo($this, BladeCompiler::class) : $handler;
     }
     /**
      * Get the list of custom directives.

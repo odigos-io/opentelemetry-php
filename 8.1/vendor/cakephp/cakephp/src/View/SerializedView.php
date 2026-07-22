@@ -14,15 +14,15 @@ declare (strict_types=1);
  * @since         3.1.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\View;
+namespace Odigos\Cake\View;
 
-use Cake\View\Exception\SerializationFailureException;
+use Odigos\Cake\View\Exception\SerializationFailureException;
 use Exception;
 use TypeError;
 /**
  * Parent class for view classes generating serialized outputs like JsonView and XmlView.
  */
-abstract class SerializedView extends \Cake\View\View
+abstract class SerializedView extends View
 {
     /**
      * Default config options.

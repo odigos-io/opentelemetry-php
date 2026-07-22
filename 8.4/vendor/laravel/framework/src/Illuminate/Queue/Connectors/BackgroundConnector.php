@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Queue\Connectors;
+namespace Odigos\Illuminate\Queue\Connectors;
 
-use Illuminate\Queue\BackgroundQueue;
-class BackgroundConnector implements \Illuminate\Queue\Connectors\ConnectorInterface
+use Odigos\Illuminate\Queue\BackgroundQueue;
+class BackgroundConnector implements ConnectorInterface
 {
     /**
      * Establish a queue connection.

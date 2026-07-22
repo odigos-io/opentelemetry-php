@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\db\conditions;
+namespace Odigos\yii\db\conditions;
 
 /**
  * Condition based on column-value pairs.
@@ -14,7 +14,7 @@ namespace yii\db\conditions;
  * @since 2.0.14
  * @phpcs:disable Squiz.NamingConventions.ValidVariableName.PrivateNoUnderscore
  */
-class HashCondition implements \yii\db\conditions\ConditionInterface
+class HashCondition implements ConditionInterface
 {
     /**
      * @var array|null the condition specification.

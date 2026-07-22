@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Responses\Audio;
+namespace Odigos\OpenAI\Responses\Audio;
 
-use OpenAI\Contracts\ResponseContract;
-use OpenAI\Exceptions\UnknownEventException;
-use OpenAI\Responses\Audio\Streaming\TranscriptTextDelta;
-use OpenAI\Responses\Audio\Streaming\TranscriptTextDone;
-use OpenAI\Responses\Concerns\ArrayAccessible;
-use OpenAI\Testing\Responses\Concerns\FakeableForStreamedResponse;
+use Odigos\OpenAI\Contracts\ResponseContract;
+use Odigos\OpenAI\Exceptions\UnknownEventException;
+use Odigos\OpenAI\Responses\Audio\Streaming\TranscriptTextDelta;
+use Odigos\OpenAI\Responses\Audio\Streaming\TranscriptTextDone;
+use Odigos\OpenAI\Responses\Concerns\ArrayAccessible;
+use Odigos\OpenAI\Testing\Responses\Concerns\FakeableForStreamedResponse;
 /**
  * @phpstan-type CreateStreamedResponseType array{event: string, data: array<string, mixed>}
  *

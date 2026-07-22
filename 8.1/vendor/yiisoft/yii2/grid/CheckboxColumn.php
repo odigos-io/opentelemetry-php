@@ -5,12 +5,12 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\grid;
+namespace Odigos\yii\grid;
 
 use Closure;
-use yii\base\InvalidConfigException;
-use yii\helpers\Html;
-use yii\helpers\Json;
+use Odigos\yii\base\InvalidConfigException;
+use Odigos\yii\helpers\Html;
+use Odigos\yii\helpers\Json;
 /**
  * CheckboxColumn displays a column of checkboxes in a grid view.
  *
@@ -39,7 +39,7 @@ use yii\helpers\Json;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class CheckboxColumn extends \yii\grid\Column
+class CheckboxColumn extends Column
 {
     /**
      * @var string the name of the input checkbox input fields. This will be appended with `[]` to ensure it is an array.

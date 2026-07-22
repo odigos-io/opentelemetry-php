@@ -8,16 +8,16 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Console\DataCollector;
+namespace Odigos\Symfony\Component\Console\DataCollector;
 
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Debug\CliRequest;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\SignalRegistry\SignalMap;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\DataCollector\DataCollector;
-use Symfony\Component\VarDumper\Cloner\Data;
+use Odigos\Symfony\Component\Console\Command\Command;
+use Odigos\Symfony\Component\Console\Debug\CliRequest;
+use Odigos\Symfony\Component\Console\Output\OutputInterface;
+use Odigos\Symfony\Component\Console\SignalRegistry\SignalMap;
+use Odigos\Symfony\Component\HttpFoundation\Request;
+use Odigos\Symfony\Component\HttpFoundation\Response;
+use Odigos\Symfony\Component\HttpKernel\DataCollector\DataCollector;
+use Odigos\Symfony\Component\VarDumper\Cloner\Data;
 /**
  * @internal
  *

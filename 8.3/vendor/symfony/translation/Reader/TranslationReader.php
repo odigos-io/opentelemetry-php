@@ -8,17 +8,17 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Translation\Reader;
+namespace Odigos\Symfony\Component\Translation\Reader;
 
-use Symfony\Component\Finder\Finder;
-use Symfony\Component\Translation\Loader\LoaderInterface;
-use Symfony\Component\Translation\MessageCatalogue;
+use Odigos\Symfony\Component\Finder\Finder;
+use Odigos\Symfony\Component\Translation\Loader\LoaderInterface;
+use Odigos\Symfony\Component\Translation\MessageCatalogue;
 /**
  * TranslationReader reads translation messages from translation files.
  *
  * @author Michel Salib <michelsalib@hotmail.com>
  */
-class TranslationReader implements \Symfony\Component\Translation\Reader\TranslationReaderInterface
+class TranslationReader implements TranslationReaderInterface
 {
     /**
      * Loaders used for import.

@@ -5,12 +5,12 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\web;
+namespace Odigos\yii\web;
 
 use Odigos\Yii;
-use yii\base\Component;
-use yii\base\InvalidArgumentException;
-use yii\base\InvalidConfigException;
+use Odigos\yii\base\Component;
+use Odigos\yii\base\InvalidArgumentException;
+use Odigos\yii\base\InvalidConfigException;
 /**
  * Session provides session data management and the related configurations.
  *
@@ -167,7 +167,7 @@ class Session extends Component implements \IteratorAggregate, \ArrayAccess, \Co
             static::$_originalSessionModule = $sessionModuleName;
         }
         if ($this->handler === null && $this->getUseCustomStorage()) {
-            $this->handler = Yii::createObject(['__class' => \yii\web\SessionHandler::class, '__construct()' => [$this]]);
+            $this->handler = Yii::createObject(['__class' => SessionHandler::class, '__construct()' => [$this]]);
         }
         if ($this->handler !== null) {
             if (is_array($this->handler)) {
@@ -611,7 +611,7 @@ class Session extends Component implements \IteratorAggregate, \ArrayAccess, \Co
     public function getIterator()
     {
         $this->open();
-        return new \yii\web\SessionIterator();
+        return new SessionIterator();
     }
     /**
      * Returns the number of items in the session.

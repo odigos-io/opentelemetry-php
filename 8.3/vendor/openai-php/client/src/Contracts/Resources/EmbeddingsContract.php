@@ -1,8 +1,8 @@
 <?php
 
-namespace OpenAI\Contracts\Resources;
+namespace Odigos\OpenAI\Contracts\Resources;
 
-use OpenAI\Responses\Embeddings\CreateResponse;
+use Odigos\OpenAI\Responses\Embeddings\CreateResponse;
 interface EmbeddingsContract
 {
     /**

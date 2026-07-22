@@ -14,15 +14,15 @@ declare (strict_types=1);
  * @since         3.6.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Command;
+namespace Odigos\Cake\Command;
 
-use Cake\Console\Arguments;
-use Cake\Console\ConsoleIo;
-use Cake\Core\Configure;
+use Odigos\Cake\Console\Arguments;
+use Odigos\Cake\Console\ConsoleIo;
+use Odigos\Cake\Core\Configure;
 /**
  * Print out the version of CakePHP in use.
  */
-class VersionCommand extends \Cake\Command\Command
+class VersionCommand extends Command
 {
     /**
      * @inheritDoc

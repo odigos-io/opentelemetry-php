@@ -8,18 +8,18 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Translation\Loader;
+namespace Odigos\Symfony\Component\Translation\Loader;
 
-use Symfony\Component\Config\Resource\DirectoryResource;
-use Symfony\Component\Translation\Exception\InvalidResourceException;
-use Symfony\Component\Translation\Exception\NotFoundResourceException;
-use Symfony\Component\Translation\MessageCatalogue;
+use Odigos\Symfony\Component\Config\Resource\DirectoryResource;
+use Odigos\Symfony\Component\Translation\Exception\InvalidResourceException;
+use Odigos\Symfony\Component\Translation\Exception\NotFoundResourceException;
+use Odigos\Symfony\Component\Translation\MessageCatalogue;
 /**
  * IcuResFileLoader loads translations from a resource bundle.
  *
  * @author stealth35
  */
-class IcuResFileLoader implements \Symfony\Component\Translation\Loader\LoaderInterface
+class IcuResFileLoader implements LoaderInterface
 {
     public function load(mixed $resource, string $locale, string $domain = 'messages'): MessageCatalogue
     {

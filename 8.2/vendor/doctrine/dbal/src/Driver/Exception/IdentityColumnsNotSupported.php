@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Driver\Exception;
+namespace Odigos\Doctrine\DBAL\Driver\Exception;
 
-use Doctrine\DBAL\Driver\AbstractException;
+use Odigos\Doctrine\DBAL\Driver\AbstractException;
 use Throwable;
 /** @internal */
 final class IdentityColumnsNotSupported extends AbstractException

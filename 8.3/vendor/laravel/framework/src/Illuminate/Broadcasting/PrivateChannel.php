@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Broadcasting;
+namespace Odigos\Illuminate\Broadcasting;
 
-use Illuminate\Contracts\Broadcasting\HasBroadcastChannel;
-class PrivateChannel extends \Illuminate\Broadcasting\Channel
+use Odigos\Illuminate\Contracts\Broadcasting\HasBroadcastChannel;
+class PrivateChannel extends Channel
 {
     /**
      * Create a new channel instance.

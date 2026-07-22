@@ -5,9 +5,9 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\log;
+namespace Odigos\yii\log;
 
-use yii\base\Component;
+use Odigos\yii\base\Component;
 /**
  * Logger records logged messages in memory and sends them to different targets if [[dispatcher]] is set.
  *
@@ -111,7 +111,7 @@ class Logger extends Component
      * @var array of event names used to get statistical results of DB queries.
      * @since 2.0.41
      */
-    public $dbEventNames = ['yii\db\Command::query', 'yii\db\Command::execute'];
+    public $dbEventNames = ['Odigos\yii\db\Command::query', 'Odigos\yii\db\Command::execute'];
     /**
      * @var bool whether the profiling-aware mode should be switched on.
      * If on, [[flush()]] makes sure that profiling blocks are flushed in pairs. In case that any dangling messages are
@@ -211,7 +211,7 @@ class Logger extends Component
             $messages = $this->messages;
             $this->messages = [];
         }
-        if ($this->dispatcher instanceof \yii\log\Dispatcher) {
+        if ($this->dispatcher instanceof Dispatcher) {
             $this->dispatcher->dispatch($messages, $final);
         }
     }

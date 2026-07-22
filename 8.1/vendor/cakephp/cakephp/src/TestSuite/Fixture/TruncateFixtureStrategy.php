@@ -14,16 +14,16 @@ declare (strict_types=1);
  * @since         5.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\TestSuite\Fixture;
+namespace Odigos\Cake\TestSuite\Fixture;
 
-use function Cake\Core\deprecationWarning;
+use function Odigos\Cake\Core\deprecationWarning;
 /**
  * Fixture strategy that truncates all fixture tables at the end of test.
  *
  * @deprecated 5.2.10 Use {@link \Cake\TestSuite\Fixture\TruncateStrategy} instead.
  *   Will be removed in 5.3.0.
  */
-class TruncateFixtureStrategy extends \Cake\TestSuite\Fixture\TruncateStrategy
+class TruncateFixtureStrategy extends TruncateStrategy
 {
     /**
      * Initialize strategy.

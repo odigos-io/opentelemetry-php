@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Driver\Mysqli;
+namespace Odigos\Doctrine\DBAL\Driver\Mysqli;
 
-use Doctrine\DBAL\Driver\Exception;
-use Doctrine\DBAL\Driver\Mysqli\Exception\FailedReadingStreamOffset;
-use Doctrine\DBAL\Driver\Mysqli\Exception\NonStreamResourceUsedAsLargeObject;
-use Doctrine\DBAL\Driver\Mysqli\Exception\StatementError;
-use Doctrine\DBAL\Driver\Statement as StatementInterface;
-use Doctrine\DBAL\ParameterType;
+use Odigos\Doctrine\DBAL\Driver\Exception;
+use Odigos\Doctrine\DBAL\Driver\Mysqli\Exception\FailedReadingStreamOffset;
+use Odigos\Doctrine\DBAL\Driver\Mysqli\Exception\NonStreamResourceUsedAsLargeObject;
+use Odigos\Doctrine\DBAL\Driver\Mysqli\Exception\StatementError;
+use Odigos\Doctrine\DBAL\Driver\Statement as StatementInterface;
+use Odigos\Doctrine\DBAL\ParameterType;
 use mysqli_sql_exception;
 use mysqli_stmt;
 use function array_fill;
@@ -52,7 +52,7 @@ final class Statement implements StatementInterface
         $this->values[$param] = $value;
         $this->boundValues[$param] =& $this->values[$param];
     }
-    public function execute(): \Doctrine\DBAL\Driver\Mysqli\Result
+    public function execute(): Result
     {
         if (count($this->boundValues) > 0) {
             $this->bindParameters();
@@ -64,7 +64,7 @@ final class Statement implements StatementInterface
         } catch (mysqli_sql_exception $e) {
             throw StatementError::upcast($e);
         }
-        return new \Doctrine\DBAL\Driver\Mysqli\Result($this->stmt, $this);
+        return new Result($this->stmt, $this);
     }
     /**
      * Binds parameters with known types previously bound to the statement

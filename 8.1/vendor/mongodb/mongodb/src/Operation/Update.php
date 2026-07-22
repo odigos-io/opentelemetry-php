@@ -15,24 +15,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace MongoDB\Operation;
+namespace Odigos\MongoDB\Operation;
 
 use MongoDB\Driver\BulkWrite as Bulk;
 use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
 use MongoDB\Driver\Server;
 use MongoDB\Driver\Session;
 use MongoDB\Driver\WriteConcern;
-use MongoDB\Exception\InvalidArgumentException;
-use MongoDB\Exception\UnsupportedException;
-use MongoDB\UpdateResult;
+use Odigos\MongoDB\Exception\InvalidArgumentException;
+use Odigos\MongoDB\Exception\UnsupportedException;
+use Odigos\MongoDB\UpdateResult;
 use function is_array;
 use function is_bool;
 use function is_string;
-use function MongoDB\is_document;
-use function MongoDB\is_first_key_operator;
-use function MongoDB\is_pipeline;
-use function MongoDB\is_write_concern_acknowledged;
-use function MongoDB\server_supports_feature;
+use function Odigos\MongoDB\is_document;
+use function Odigos\MongoDB\is_first_key_operator;
+use function Odigos\MongoDB\is_pipeline;
+use function Odigos\MongoDB\is_write_concern_acknowledged;
+use function Odigos\MongoDB\server_supports_feature;
 /**
  * Operation for the update command.
  *
@@ -42,7 +42,7 @@ use function MongoDB\server_supports_feature;
  * @internal
  * @see https://mongodb.com/docs/manual/reference/command/update/
  */
-final class Update implements \MongoDB\Operation\Explainable
+final class Update implements Explainable
 {
     private const WIRE_VERSION_FOR_HINT = 8;
     private array $options;

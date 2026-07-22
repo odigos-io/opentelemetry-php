@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Console\Contracts;
+namespace Odigos\Illuminate\Console\Contracts;
 
 interface NewLineAware
 {

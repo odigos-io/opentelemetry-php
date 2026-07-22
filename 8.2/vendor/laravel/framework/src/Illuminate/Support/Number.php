@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Support;
+namespace Odigos\Illuminate\Support;
 
-use Illuminate\Support\Traits\Macroable;
+use Odigos\Illuminate\Support\Traits\Macroable;
 use NumberFormatter;
 use RuntimeException;
 class Number

@@ -14,17 +14,17 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\ORM;
+namespace Odigos\Cake\ORM;
 
 use BadMethodCallException;
-use Cake\Core\App;
-use Cake\Core\ObjectRegistry;
-use Cake\Event\EventDispatcherInterface;
-use Cake\Event\EventDispatcherTrait;
-use Cake\ORM\Exception\MissingBehaviorException;
-use Cake\ORM\Query\SelectQuery;
+use Odigos\Cake\Core\App;
+use Odigos\Cake\Core\ObjectRegistry;
+use Odigos\Cake\Event\EventDispatcherInterface;
+use Odigos\Cake\Event\EventDispatcherTrait;
+use Odigos\Cake\ORM\Exception\MissingBehaviorException;
+use Odigos\Cake\ORM\Query\SelectQuery;
 use LogicException;
-use function Cake\Core\deprecationWarning;
+use function Odigos\Cake\Core\deprecationWarning;
 /**
  * BehaviorRegistry is used as a registry for loaded behaviors and handles loading
  * and constructing behavior objects.
@@ -45,7 +45,7 @@ class BehaviorRegistry extends ObjectRegistry implements EventDispatcherInterfac
      *
      * @var \Cake\ORM\Table
      */
-    protected \Cake\ORM\Table $_table;
+    protected Table $_table;
     /**
      * Method mappings.
      *
@@ -63,7 +63,7 @@ class BehaviorRegistry extends ObjectRegistry implements EventDispatcherInterfac
      *
      * @param \Cake\ORM\Table|null $table The table this registry is attached to.
      */
-    public function __construct(?\Cake\ORM\Table $table = null)
+    public function __construct(?Table $table = null)
     {
         if ($table !== null) {
             $this->setTable($table);
@@ -75,7 +75,7 @@ class BehaviorRegistry extends ObjectRegistry implements EventDispatcherInterfac
      * @param \Cake\ORM\Table $table The table this registry is attached to.
      * @return void
      */
-    public function setTable(\Cake\ORM\Table $table): void
+    public function setTable(Table $table): void
     {
         $this->_table = $table;
         $this->setEventManager($table->getEventManager());
@@ -130,7 +130,7 @@ class BehaviorRegistry extends ObjectRegistry implements EventDispatcherInterfac
      * @param array<string, mixed> $config An array of config to use for the behavior.
      * @return \Cake\ORM\Behavior The constructed behavior class.
      */
-    protected function _create(object|string $class, string $alias, array $config): \Cake\ORM\Behavior
+    protected function _create(object|string $class, string $alias, array $config): Behavior
     {
         if (is_object($class)) {
             return $class;
@@ -158,7 +158,7 @@ class BehaviorRegistry extends ObjectRegistry implements EventDispatcherInterfac
      * @return array A list of implemented finders and methods.
      * @throws \LogicException when duplicate methods are connected.
      */
-    protected function _getMethods(\Cake\ORM\Behavior $instance, string $class, string $alias): array
+    protected function _getMethods(Behavior $instance, string $class, string $alias): array
     {
         $finders = array_change_key_case($instance->implementedFinders());
         $methods = array_change_key_case($instance->implementedMethods());

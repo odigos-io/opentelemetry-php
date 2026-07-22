@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Platforms\SQLite;
+namespace Odigos\Doctrine\DBAL\Platforms\SQLite;
 
-use Doctrine\DBAL\Platforms\SQLitePlatform;
-use Doctrine\DBAL\Schema\Comparator as BaseComparator;
-use Doctrine\DBAL\Schema\ComparatorConfig;
-use Doctrine\DBAL\Schema\Table;
-use Doctrine\DBAL\Schema\TableDiff;
+use Odigos\Doctrine\DBAL\Platforms\SQLitePlatform;
+use Odigos\Doctrine\DBAL\Schema\Comparator as BaseComparator;
+use Odigos\Doctrine\DBAL\Schema\ComparatorConfig;
+use Odigos\Doctrine\DBAL\Schema\Table;
+use Odigos\Doctrine\DBAL\Schema\TableDiff;
 use function strcasecmp;
 /**
  * Compares schemas in the context of SQLite platform.

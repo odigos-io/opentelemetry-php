@@ -8,13 +8,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpKernel\DependencyInjection;
+namespace Odigos\Symfony\Component\HttpKernel\DependencyInjection;
 
 use Composer\Autoload\ClassLoader;
-use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\ErrorHandler\DebugClassLoader;
-use Symfony\Component\HttpKernel\Kernel;
+use Odigos\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use Odigos\Symfony\Component\DependencyInjection\ContainerBuilder;
+use Odigos\Symfony\Component\ErrorHandler\DebugClassLoader;
+use Odigos\Symfony\Component\HttpKernel\Kernel;
 /**
  * Sets the classes to compile in the cache for the container.
  *
@@ -34,7 +34,7 @@ class AddAnnotatedClassesToCachePass implements CompilerPassInterface
     {
         $annotatedClasses = [];
         foreach ($container->getExtensions() as $extension) {
-            if ($extension instanceof \Symfony\Component\HttpKernel\DependencyInjection\Extension) {
+            if ($extension instanceof Extension) {
                 $annotatedClasses[] = $extension->getAnnotatedClassesToCompile();
             }
         }

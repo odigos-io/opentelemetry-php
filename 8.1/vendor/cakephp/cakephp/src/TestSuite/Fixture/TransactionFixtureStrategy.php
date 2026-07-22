@@ -14,9 +14,9 @@ declare (strict_types=1);
  * @since         5.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\TestSuite\Fixture;
+namespace Odigos\Cake\TestSuite\Fixture;
 
-use function Cake\Core\deprecationWarning;
+use function Odigos\Cake\Core\deprecationWarning;
 /**
  * Fixture strategy that wraps fixtures in a transaction that is rolled back
  * after each test.
@@ -26,7 +26,7 @@ use function Cake\Core\deprecationWarning;
  * @deprecated 5.2.10 Use {@link \Cake\TestSuite\Fixture\TransactionStrategy} instead.
  *   Will be removed in 5.3.0.
  */
-class TransactionFixtureStrategy extends \Cake\TestSuite\Fixture\TransactionStrategy
+class TransactionFixtureStrategy extends TransactionStrategy
 {
     /**
      * Initialize strategy.

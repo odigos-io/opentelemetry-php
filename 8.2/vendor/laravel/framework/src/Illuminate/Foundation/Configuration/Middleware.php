@@ -1,22 +1,22 @@
 <?php
 
-namespace Illuminate\Foundation\Configuration;
+namespace Odigos\Illuminate\Foundation\Configuration;
 
 use Closure;
-use Illuminate\Auth\AuthenticationException;
-use Illuminate\Auth\Middleware\Authenticate;
-use Illuminate\Auth\Middleware\RedirectIfAuthenticated;
-use Illuminate\Cookie\Middleware\EncryptCookies;
-use Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull;
-use Illuminate\Foundation\Http\Middleware\PreventRequestsDuringMaintenance;
-use Illuminate\Foundation\Http\Middleware\TrimStrings;
-use Illuminate\Foundation\Http\Middleware\ValidateCsrfToken;
-use Illuminate\Http\Middleware\TrustHosts;
-use Illuminate\Http\Middleware\TrustProxies;
-use Illuminate\Routing\Middleware\ValidateSignature;
-use Illuminate\Session\Middleware\AuthenticateSession;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
+use Odigos\Illuminate\Auth\AuthenticationException;
+use Odigos\Illuminate\Auth\Middleware\Authenticate;
+use Odigos\Illuminate\Auth\Middleware\RedirectIfAuthenticated;
+use Odigos\Illuminate\Cookie\Middleware\EncryptCookies;
+use Odigos\Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull;
+use Odigos\Illuminate\Foundation\Http\Middleware\PreventRequestsDuringMaintenance;
+use Odigos\Illuminate\Foundation\Http\Middleware\TrimStrings;
+use Odigos\Illuminate\Foundation\Http\Middleware\ValidateCsrfToken;
+use Odigos\Illuminate\Http\Middleware\TrustHosts;
+use Odigos\Illuminate\Http\Middleware\TrustProxies;
+use Odigos\Illuminate\Routing\Middleware\ValidateSignature;
+use Odigos\Illuminate\Session\Middleware\AuthenticateSession;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Collection;
 class Middleware
 {
     /**
@@ -374,7 +374,7 @@ class Middleware
      */
     public function getGlobalMiddleware()
     {
-        $middleware = $this->global ?: array_values(array_filter([\Illuminate\Http\Middleware\ValidatePathEncoding::class, \Illuminate\Foundation\Http\Middleware\InvokeDeferredCallbacks::class, $this->trustHosts ? \Illuminate\Http\Middleware\TrustHosts::class : null, \Illuminate\Http\Middleware\TrustProxies::class, \Illuminate\Http\Middleware\HandleCors::class, \Illuminate\Foundation\Http\Middleware\PreventRequestsDuringMaintenance::class, \Illuminate\Http\Middleware\ValidatePostSize::class, \Illuminate\Foundation\Http\Middleware\TrimStrings::class, \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class]));
+        $middleware = $this->global ?: array_values(array_filter([\Odigos\Illuminate\Http\Middleware\ValidatePathEncoding::class, \Odigos\Illuminate\Foundation\Http\Middleware\InvokeDeferredCallbacks::class, $this->trustHosts ? \Odigos\Illuminate\Http\Middleware\TrustHosts::class : null, \Odigos\Illuminate\Http\Middleware\TrustProxies::class, \Odigos\Illuminate\Http\Middleware\HandleCors::class, \Odigos\Illuminate\Foundation\Http\Middleware\PreventRequestsDuringMaintenance::class, \Odigos\Illuminate\Http\Middleware\ValidatePostSize::class, \Odigos\Illuminate\Foundation\Http\Middleware\TrimStrings::class, \Odigos\Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class]));
         $middleware = array_map(function ($middleware) {
             return $this->replacements[$middleware] ?? $middleware;
         }, $middleware);
@@ -387,7 +387,7 @@ class Middleware
      */
     public function getMiddlewareGroups()
     {
-        $middleware = ['web' => array_values(array_filter([\Illuminate\Cookie\Middleware\EncryptCookies::class, \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class, \Illuminate\Session\Middleware\StartSession::class, \Illuminate\View\Middleware\ShareErrorsFromSession::class, \Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class, \Illuminate\Routing\Middleware\SubstituteBindings::class, $this->authenticatedSessions ? 'auth.session' : null])), 'api' => array_values(array_filter([$this->statefulApi ? \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class : null, $this->apiLimiter ? 'throttle:' . $this->apiLimiter : null, \Illuminate\Routing\Middleware\SubstituteBindings::class]))];
+        $middleware = ['web' => array_values(array_filter([\Odigos\Illuminate\Cookie\Middleware\EncryptCookies::class, \Odigos\Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class, \Odigos\Illuminate\Session\Middleware\StartSession::class, \Odigos\Illuminate\View\Middleware\ShareErrorsFromSession::class, \Odigos\Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class, \Odigos\Illuminate\Routing\Middleware\SubstituteBindings::class, $this->authenticatedSessions ? 'auth.session' : null])), 'api' => array_values(array_filter([$this->statefulApi ? \Odigos\Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class : null, $this->apiLimiter ? 'throttle:' . $this->apiLimiter : null, \Odigos\Illuminate\Routing\Middleware\SubstituteBindings::class]))];
         $middleware = array_merge($middleware, $this->groups);
         foreach ($middleware as $group => $groupedMiddleware) {
             foreach ($groupedMiddleware as $index => $groupMiddleware) {
@@ -618,9 +618,9 @@ class Middleware
      */
     protected function defaultAliases()
     {
-        $aliases = ['auth' => \Illuminate\Auth\Middleware\Authenticate::class, 'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class, 'auth.session' => \Illuminate\Session\Middleware\AuthenticateSession::class, 'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class, 'can' => \Illuminate\Auth\Middleware\Authorize::class, 'guest' => \Illuminate\Auth\Middleware\RedirectIfAuthenticated::class, 'password.confirm' => \Illuminate\Auth\Middleware\RequirePassword::class, 'precognitive' => \Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests::class, 'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class, 'throttle' => $this->throttleWithRedis ? \Illuminate\Routing\Middleware\ThrottleRequestsWithRedis::class : \Illuminate\Routing\Middleware\ThrottleRequests::class, 'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class];
-        if (class_exists(\Spark\Http\Middleware\VerifyBillableIsSubscribed::class)) {
-            $aliases['subscribed'] = \Spark\Http\Middleware\VerifyBillableIsSubscribed::class;
+        $aliases = ['auth' => \Odigos\Illuminate\Auth\Middleware\Authenticate::class, 'auth.basic' => \Odigos\Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class, 'auth.session' => \Odigos\Illuminate\Session\Middleware\AuthenticateSession::class, 'cache.headers' => \Odigos\Illuminate\Http\Middleware\SetCacheHeaders::class, 'can' => \Odigos\Illuminate\Auth\Middleware\Authorize::class, 'guest' => \Odigos\Illuminate\Auth\Middleware\RedirectIfAuthenticated::class, 'password.confirm' => \Odigos\Illuminate\Auth\Middleware\RequirePassword::class, 'precognitive' => \Odigos\Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests::class, 'signed' => \Odigos\Illuminate\Routing\Middleware\ValidateSignature::class, 'throttle' => $this->throttleWithRedis ? \Odigos\Illuminate\Routing\Middleware\ThrottleRequestsWithRedis::class : \Odigos\Illuminate\Routing\Middleware\ThrottleRequests::class, 'verified' => \Odigos\Illuminate\Auth\Middleware\EnsureEmailIsVerified::class];
+        if (class_exists(\Odigos\Spark\Http\Middleware\VerifyBillableIsSubscribed::class)) {
+            $aliases['subscribed'] = \Odigos\Spark\Http\Middleware\VerifyBillableIsSubscribed::class;
         }
         return $aliases;
     }

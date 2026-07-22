@@ -5,13 +5,13 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\filters\auth;
+namespace Odigos\yii\filters\auth;
 
-use yii\web\IdentityInterface;
-use yii\web\Request;
-use yii\web\Response;
-use yii\web\UnauthorizedHttpException;
-use yii\web\User;
+use Odigos\yii\web\IdentityInterface;
+use Odigos\yii\web\Request;
+use Odigos\yii\web\Response;
+use Odigos\yii\web\UnauthorizedHttpException;
+use Odigos\yii\web\User;
 /**
  * AuthInterface is the interface that should be implemented by auth method classes.
  *

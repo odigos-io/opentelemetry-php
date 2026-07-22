@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Redis\Connections;
+namespace Odigos\Illuminate\Redis\Connections;
 
 use InvalidArgumentException;
-class PhpRedisClusterConnection extends \Illuminate\Redis\Connections\PhpRedisConnection
+class PhpRedisClusterConnection extends PhpRedisConnection
 {
     /**
      * The RedisCluster client.

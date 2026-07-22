@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace MongoDB\Builder\Type;
+namespace Odigos\MongoDB\Builder\Type;
 
 /**
  * Values for "unit" property of stages like $derivative and $integral, and operators like $dateAdd and $dateDiff

@@ -14,12 +14,12 @@ declare (strict_types=1);
  * @since         2.1.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\View;
+namespace Odigos\Cake\View;
 
-use Cake\Core\Configure;
-use Cake\Utility\Hash;
-use Cake\Utility\Xml;
-use Cake\View\Exception\SerializationFailureException;
+use Odigos\Cake\Core\Configure;
+use Odigos\Cake\Utility\Hash;
+use Odigos\Cake\Utility\Xml;
+use Odigos\Cake\View\Exception\SerializationFailureException;
 /**
  * A view class that is used for creating XML responses.
  *
@@ -58,7 +58,7 @@ use Cake\View\Exception\SerializationFailureException;
  * If you don't set the `serialize` option, you will need a view. You can use extended
  * views to provide layout like functionality.
  */
-class XmlView extends \Cake\View\SerializedView
+class XmlView extends SerializedView
 {
     /**
      * XML layouts are located in the `layouts/xml/` subdirectory

@@ -14,13 +14,13 @@ declare (strict_types=1);
  * @since         0.2.9
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Routing;
+namespace Odigos\Cake\Routing;
 
-use Cake\Core\Configure;
-use Cake\Core\Exception\CakeException;
-use Cake\Http\ServerRequest;
-use Cake\Routing\Exception\MissingRouteException;
-use Cake\Routing\Route\Route;
+use Odigos\Cake\Core\Configure;
+use Odigos\Cake\Core\Exception\CakeException;
+use Odigos\Cake\Http\ServerRequest;
+use Odigos\Cake\Routing\Exception\MissingRouteException;
+use Odigos\Cake\Routing\Route\Route;
 use Closure;
 use InvalidArgumentException;
 use Psr\Http\Message\UriInterface;
@@ -88,7 +88,7 @@ class Router
      *
      * @var \Cake\Routing\RouteCollection
      */
-    protected static \Cake\Routing\RouteCollection $_collection;
+    protected static RouteCollection $_collection;
     /**
      * A hash of request context data.
      *
@@ -100,7 +100,7 @@ class Router
      *
      * @var array<string, string>
      */
-    protected static array $_namedExpressions = ['Action' => \Cake\Routing\Router::ACTION, 'Year' => \Cake\Routing\Router::YEAR, 'Month' => \Cake\Routing\Router::MONTH, 'Day' => \Cake\Routing\Router::DAY, 'ID' => \Cake\Routing\Router::ID, 'UUID' => \Cake\Routing\Router::UUID];
+    protected static array $_namedExpressions = ['Action' => Router::ACTION, 'Year' => Router::YEAR, 'Month' => Router::MONTH, 'Day' => Router::DAY, 'ID' => Router::ID, 'UUID' => Router::UUID];
     /**
      * Maintains the request object reference.
      *
@@ -203,7 +203,7 @@ class Router
     public static function reload(): void
     {
         if (static::$_initialState === []) {
-            static::$_collection = new \Cake\Routing\RouteCollection();
+            static::$_collection = new RouteCollection();
             static::$_initialState = get_class_vars(static::class);
             return;
         }
@@ -212,7 +212,7 @@ class Router
                 static::${$key} = $val;
             }
         }
-        static::$_collection = new \Cake\Routing\RouteCollection();
+        static::$_collection = new RouteCollection();
         static::$_routePaths = [];
     }
     /**
@@ -234,7 +234,7 @@ class Router
      */
     public static function resetRoutes(): void
     {
-        static::$_collection = new \Cake\Routing\RouteCollection();
+        static::$_collection = new RouteCollection();
         static::$_urlFilters = [];
     }
     /**
@@ -614,11 +614,11 @@ class Router
      * @param array<string, mixed> $options The options for the builder
      * @return \Cake\Routing\RouteBuilder
      */
-    public static function createRouteBuilder(string $path, array $options = []): \Cake\Routing\RouteBuilder
+    public static function createRouteBuilder(string $path, array $options = []): RouteBuilder
     {
         $defaults = ['routeClass' => static::defaultRouteClass(), 'extensions' => static::$_defaultExtensions];
         $options += $defaults;
-        return new \Cake\Routing\RouteBuilder(static::$_collection, $path, [], ['routeClass' => $options['routeClass'], 'extensions' => $options['extensions']]);
+        return new RouteBuilder(static::$_collection, $path, [], ['routeClass' => $options['routeClass'], 'extensions' => $options['extensions']]);
     }
     /**
      * Get the route scopes and their connected routes.
@@ -634,7 +634,7 @@ class Router
      *
      * @return \Cake\Routing\RouteCollection
      */
-    public static function getRouteCollection(): \Cake\Routing\RouteCollection
+    public static function getRouteCollection(): RouteCollection
     {
         return static::$_collection;
     }
@@ -644,7 +644,7 @@ class Router
      * @param \Cake\Routing\RouteCollection $routeCollection route collection
      * @return void
      */
-    public static function setRouteCollection(\Cake\Routing\RouteCollection $routeCollection): void
+    public static function setRouteCollection(RouteCollection $routeCollection): void
     {
         static::$_collection = $routeCollection;
     }

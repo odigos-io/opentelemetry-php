@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Driver\PgSQL;
+namespace Odigos\Doctrine\DBAL\Driver\PgSQL;
 
-use Doctrine\DBAL\SQL\Parser\Visitor;
+use Odigos\Doctrine\DBAL\SQL\Parser\Visitor;
 use function count;
 use function implode;
 final class ConvertParameters implements Visitor

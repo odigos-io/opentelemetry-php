@@ -15,11 +15,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace MongoDB\Exception;
+namespace Odigos\MongoDB\Exception;
 
 use function get_debug_type;
 use function sprintf;
-class ResumeTokenException extends \MongoDB\Exception\RuntimeException
+class ResumeTokenException extends RuntimeException
 {
     /**
      * Thrown when a resume token has an invalid type.

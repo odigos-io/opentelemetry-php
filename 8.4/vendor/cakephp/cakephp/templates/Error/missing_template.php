@@ -17,8 +17,8 @@ namespace Odigos;
  * @var string $file
  * @var array<string> $paths
  */
-use Cake\Utility\Inflector;
-use function Cake\Core\h;
+use Odigos\Cake\Utility\Inflector;
+use function Odigos\Cake\Core\h;
 $this->layout = 'dev_error';
 $this->assign('title', 'Missing Template');
 $this->assign('templateName', 'missing_template.php');

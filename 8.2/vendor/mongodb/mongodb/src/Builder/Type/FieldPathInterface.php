@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace MongoDB\Builder\Type;
+namespace Odigos\MongoDB\Builder\Type;
 
 /**
  * Aggregation expressions use field path to access fields in the input documents.
  *
  * @see https://www.mongodb.com/docs/manual/meta/aggregation-quick-reference/#field-paths
  */
-interface FieldPathInterface extends \MongoDB\Builder\Type\ExpressionInterface
+interface FieldPathInterface extends ExpressionInterface
 {
 }

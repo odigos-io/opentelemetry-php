@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Console\View\Components;
+namespace Odigos\Illuminate\Console\View\Components;
 
 use InvalidArgumentException;
 /**

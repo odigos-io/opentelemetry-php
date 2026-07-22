@@ -14,7 +14,7 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\View\Widget;
+namespace Odigos\Cake\View\Widget;
 
 /**
  * Form 'widget' for creating labels that contain their input.
@@ -22,7 +22,7 @@ namespace Cake\View\Widget;
  * Generally this element is used by other widgets,
  * and FormHelper itself.
  */
-class NestingLabelWidget extends \Cake\View\Widget\LabelWidget
+class NestingLabelWidget extends LabelWidget
 {
     /**
      * The template to use.

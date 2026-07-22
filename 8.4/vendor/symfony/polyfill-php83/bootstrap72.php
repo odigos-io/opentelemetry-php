@@ -10,7 +10,7 @@ namespace Odigos;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-use Symfony\Polyfill\Php83 as p;
+use Odigos\Symfony\Polyfill\Php83 as p;
 if (\extension_loaded('mbstring')) {
     if (!\function_exists('mb_str_pad') && !\function_exists('Odigos\mb_str_pad')) {
         /** @return string|false */

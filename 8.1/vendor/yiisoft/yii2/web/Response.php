@@ -5,16 +5,16 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\web;
+namespace Odigos\yii\web;
 
 use Odigos\Yii;
-use yii\base\InvalidArgumentException;
-use yii\base\InvalidConfigException;
-use yii\base\InvalidRouteException;
-use yii\helpers\FileHelper;
-use yii\helpers\Inflector;
-use yii\helpers\StringHelper;
-use yii\helpers\Url;
+use Odigos\yii\base\InvalidArgumentException;
+use Odigos\yii\base\InvalidConfigException;
+use Odigos\yii\base\InvalidRouteException;
+use Odigos\yii\helpers\FileHelper;
+use Odigos\yii\helpers\Inflector;
+use Odigos\yii\helpers\StringHelper;
+use Odigos\yii\helpers\Url;
 /**
  * The web Response class represents an HTTP response.
  *
@@ -58,7 +58,7 @@ use yii\helpers\Url;
  * @author Carsten Brandt <mail@cebe.cc>
  * @since 2.0
  */
-class Response extends \yii\base\Response
+class Response extends \Odigos\yii\base\Response
 {
     /**
      * @event \yii\base\Event an event that is triggered at the beginning of [[send()]].
@@ -228,7 +228,7 @@ class Response extends \yii\base\Response
      */
     public function setStatusCodeByException($e)
     {
-        if ($e instanceof \yii\web\HttpException) {
+        if ($e instanceof HttpException) {
             $this->setStatusCode($e->statusCode);
         } else {
             $this->setStatusCode(500);
@@ -243,7 +243,7 @@ class Response extends \yii\base\Response
     public function getHeaders()
     {
         if ($this->_headers === null) {
-            $this->_headers = new \yii\web\HeaderCollection();
+            $this->_headers = new HeaderCollection();
         }
         return $this->_headers;
     }
@@ -283,7 +283,7 @@ class Response extends \yii\base\Response
     protected function sendHeaders()
     {
         if (headers_sent($file, $line)) {
-            throw new \yii\web\HeadersAlreadySentException($file, $line);
+            throw new HeadersAlreadySentException($file, $line);
         }
         if ($this->_headers) {
             foreach ($this->getHeaders() as $name => $values) {
@@ -467,7 +467,7 @@ class Response extends \yii\base\Response
         $range = $this->getHttpRange($contentLength);
         if ($range === \false) {
             $headers->set('Content-Range', "bytes */{$contentLength}");
-            throw new \yii\web\RangeNotSatisfiableHttpException();
+            throw new RangeNotSatisfiableHttpException();
         }
         list($begin, $end) = $range;
         if ($begin != 0 || $end != $contentLength - 1) {
@@ -518,7 +518,7 @@ class Response extends \yii\base\Response
         $range = $this->getHttpRange($fileSize);
         if ($range === \false) {
             $headers->set('Content-Range', "bytes */{$fileSize}");
-            throw new \yii\web\RangeNotSatisfiableHttpException();
+            throw new RangeNotSatisfiableHttpException();
         }
         list($begin, $end) = $range;
         if ($begin != 0 || $end != $fileSize - 1) {
@@ -832,7 +832,7 @@ class Response extends \yii\base\Response
     public function getCookies()
     {
         if ($this->_cookies === null) {
-            $this->_cookies = new \yii\web\CookieCollection();
+            $this->_cookies = new CookieCollection();
         }
         return $this->_cookies;
     }
@@ -911,7 +911,7 @@ class Response extends \yii\base\Response
      */
     protected function defaultFormatters()
     {
-        return [self::FORMAT_HTML => ['class' => 'yii\web\HtmlResponseFormatter'], self::FORMAT_XML => ['class' => 'yii\web\XmlResponseFormatter'], self::FORMAT_JSON => ['class' => 'yii\web\JsonResponseFormatter'], self::FORMAT_JSONP => ['class' => 'yii\web\JsonResponseFormatter', 'useJsonp' => \true]];
+        return [self::FORMAT_HTML => ['class' => 'Odigos\yii\web\HtmlResponseFormatter'], self::FORMAT_XML => ['class' => 'Odigos\yii\web\XmlResponseFormatter'], self::FORMAT_JSON => ['class' => 'Odigos\yii\web\JsonResponseFormatter'], self::FORMAT_JSONP => ['class' => 'Odigos\yii\web\JsonResponseFormatter', 'useJsonp' => \true]];
     }
     /**
      * Prepares for sending the response.
@@ -937,7 +937,7 @@ class Response extends \yii\base\Response
             if (!is_object($formatter)) {
                 $this->formatters[$this->format] = $formatter = Yii::createObject($formatter);
             }
-            if ($formatter instanceof \yii\web\ResponseFormatterInterface) {
+            if ($formatter instanceof ResponseFormatterInterface) {
                 $formatter->format($this);
             } else {
                 throw new InvalidConfigException("The '{$this->format}' response formatter is invalid. It must implement the ResponseFormatterInterface.");

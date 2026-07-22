@@ -14,17 +14,17 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Form;
+namespace Odigos\Cake\Form;
 
-use Cake\Event\EventDispatcherInterface;
-use Cake\Event\EventDispatcherTrait;
-use Cake\Event\EventListenerInterface;
-use Cake\Event\EventManager;
-use Cake\Utility\Hash;
-use Cake\Validation\ValidatorAwareInterface;
-use Cake\Validation\ValidatorAwareTrait;
+use Odigos\Cake\Event\EventDispatcherInterface;
+use Odigos\Cake\Event\EventDispatcherTrait;
+use Odigos\Cake\Event\EventListenerInterface;
+use Odigos\Cake\Event\EventManager;
+use Odigos\Cake\Utility\Hash;
+use Odigos\Cake\Validation\ValidatorAwareInterface;
+use Odigos\Cake\Validation\ValidatorAwareTrait;
 use ReflectionMethod;
-use function Cake\Core\deprecationWarning;
+use function Odigos\Cake\Core\deprecationWarning;
 /**
  * Form abstraction used to create forms not tied to ORM backed models,
  * or to other permanent datastores. Ideal for implementing forms on top of
@@ -72,13 +72,13 @@ class Form implements EventListenerInterface, EventDispatcherInterface, Validato
      * @var string
      * @phpstan-var class-string<\Cake\Form\Schema>
      */
-    protected string $_schemaClass = \Cake\Form\Schema::class;
+    protected string $_schemaClass = Schema::class;
     /**
      * The schema used by this form.
      *
      * @var \Cake\Form\Schema|null
      */
-    protected ?\Cake\Form\Schema $_schema = null;
+    protected ?Schema $_schema = null;
     /**
      * The errors if any
      *
@@ -127,7 +127,7 @@ class Form implements EventListenerInterface, EventDispatcherInterface, Validato
      * @param \Cake\Form\Schema $schema The schema to set
      * @return $this
      */
-    public function setSchema(\Cake\Form\Schema $schema)
+    public function setSchema(Schema $schema)
     {
         $this->_schema = $schema;
         return $this;
@@ -142,7 +142,7 @@ class Form implements EventListenerInterface, EventDispatcherInterface, Validato
      * @since 4.1.0
      * @return \Cake\Form\Schema the schema instance.
      */
-    public function getSchema(): \Cake\Form\Schema
+    public function getSchema(): Schema
     {
         $this->_schema ??= $this->_buildSchema(new $this->_schemaClass());
         return $this->_schema;
@@ -157,7 +157,7 @@ class Form implements EventListenerInterface, EventDispatcherInterface, Validato
      * @param \Cake\Form\Schema $schema The schema to customize.
      * @return \Cake\Form\Schema The schema to use.
      */
-    protected function _buildSchema(\Cake\Form\Schema $schema): \Cake\Form\Schema
+    protected function _buildSchema(Schema $schema): Schema
     {
         return $schema;
     }

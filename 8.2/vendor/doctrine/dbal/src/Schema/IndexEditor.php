@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Schema;
+namespace Odigos\Doctrine\DBAL\Schema;
 
-use Doctrine\DBAL\Schema\Exception\InvalidIndexDefinition;
-use Doctrine\DBAL\Schema\Index\IndexedColumn;
-use Doctrine\DBAL\Schema\Index\IndexType;
-use Doctrine\DBAL\Schema\Name\UnqualifiedName;
+use Odigos\Doctrine\DBAL\Schema\Exception\InvalidIndexDefinition;
+use Odigos\Doctrine\DBAL\Schema\Index\IndexedColumn;
+use Odigos\Doctrine\DBAL\Schema\Index\IndexType;
+use Odigos\Doctrine\DBAL\Schema\Name\UnqualifiedName;
 use function array_map;
 use function array_values;
 use function count;
@@ -89,7 +89,7 @@ final class IndexEditor
         $this->predicate = $predicate;
         return $this;
     }
-    public function create(): \Doctrine\DBAL\Schema\Index
+    public function create(): Index
     {
         if ($this->name === null) {
             throw InvalidIndexDefinition::nameNotSet();
@@ -120,6 +120,6 @@ final class IndexEditor
         if ($this->predicate !== null) {
             $options['where'] = $this->predicate;
         }
-        return new \Doctrine\DBAL\Schema\Index($this->name->toString(), $columnNames, $this->type === IndexType::UNIQUE, \false, $flags, $options);
+        return new Index($this->name->toString(), $columnNames, $this->type === IndexType::UNIQUE, \false, $flags, $options);
     }
 }

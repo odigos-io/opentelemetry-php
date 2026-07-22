@@ -6,10 +6,10 @@
  * @license https://github.com/slimphp/Slim/blob/4.x/LICENSE.md (MIT License)
  */
 declare (strict_types=1);
-namespace Slim\Exception;
+namespace Odigos\Slim\Exception;
 
 /** @api */
-class HttpTooManyRequestsException extends \Slim\Exception\HttpSpecializedException
+class HttpTooManyRequestsException extends HttpSpecializedException
 {
     /**
      * @var int

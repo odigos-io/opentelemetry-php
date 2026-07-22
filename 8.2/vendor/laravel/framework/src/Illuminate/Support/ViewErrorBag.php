@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Support;
+namespace Odigos\Illuminate\Support;
 
 use Countable;
-use Illuminate\Contracts\Support\MessageBag as MessageBagContract;
+use Odigos\Illuminate\Contracts\Support\MessageBag as MessageBagContract;
 use Stringable;
 /**
  * @mixin \Illuminate\Contracts\Support\MessageBag
@@ -34,7 +34,7 @@ class ViewErrorBag implements Countable, Stringable
      */
     public function getBag($key)
     {
-        return \Illuminate\Support\Arr::get($this->bags, $key) ?: new \Illuminate\Support\MessageBag();
+        return Arr::get($this->bags, $key) ?: new MessageBag();
     }
     /**
      * Get all the bags.

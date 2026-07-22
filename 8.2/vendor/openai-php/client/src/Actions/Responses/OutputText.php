@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Actions\Responses;
+namespace Odigos\OpenAI\Actions\Responses;
 
-use OpenAI\Responses\Responses\Output\OutputMessage;
-use OpenAI\Responses\Responses\Output\OutputMessageContentOutputText;
+use Odigos\OpenAI\Responses\Responses\Output\OutputMessage;
+use Odigos\OpenAI\Responses\Responses\Output\OutputMessageContentOutputText;
 /**
  * An SDK-only property (output_text) that concatenates all text content from output messages.
  *

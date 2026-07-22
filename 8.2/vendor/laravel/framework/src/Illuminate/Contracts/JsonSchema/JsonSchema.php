@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Contracts\JsonSchema;
+namespace Odigos\Illuminate\Contracts\JsonSchema;
 
 use Closure;
 interface JsonSchema

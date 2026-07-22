@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Foundation\Testing;
+namespace Odigos\Illuminate\Foundation\Testing;
 
 use Odigos\Faker\Factory;
 use Odigos\Faker\Generator;

@@ -14,10 +14,10 @@ declare (strict_types=1);
  * @since         0.10.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Utility;
+namespace Odigos\Cake\Utility;
 
-use Cake\Core\Exception\CakeException;
-use Cake\Utility\Crypto\OpenSsl;
+use Odigos\Cake\Core\Exception\CakeException;
+use Odigos\Cake\Utility\Crypto\OpenSsl;
 use InvalidArgumentException;
 /**
  * Security Library contains utility methods related to security
@@ -110,7 +110,7 @@ class Security
      */
     public static function randomString(int $length = 64): string
     {
-        return substr(bin2hex(\Cake\Utility\Security::randomBytes((int) ceil($length / 2))), 0, $length);
+        return substr(bin2hex(Security::randomBytes((int) ceil($length / 2))), 0, $length);
     }
     /**
      * Like randomBytes() above, but not cryptographically secure.
@@ -125,7 +125,7 @@ class Security
         $bytes = '';
         $byteLength = 0;
         while ($byteLength < $length) {
-            $bytes .= static::hash(\Cake\Utility\Text::uuid() . uniqid((string) mt_rand(), \true), 'sha512', \true);
+            $bytes .= static::hash(Text::uuid() . uniqid((string) mt_rand(), \true), 'sha512', \true);
             $byteLength = strlen($bytes);
         }
         $bytes = substr($bytes, 0, $length);

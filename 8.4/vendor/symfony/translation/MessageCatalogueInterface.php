@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Translation;
+namespace Odigos\Symfony\Component\Translation;
 
-use Symfony\Component\Config\Resource\ResourceInterface;
+use Odigos\Symfony\Component\Config\Resource\ResourceInterface;
 /**
  * MessageCatalogueInterface.
  *

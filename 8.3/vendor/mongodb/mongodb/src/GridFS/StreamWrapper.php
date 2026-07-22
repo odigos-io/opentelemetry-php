@@ -15,12 +15,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace MongoDB\GridFS;
+namespace Odigos\MongoDB\GridFS;
 
 use Closure;
 use MongoDB\BSON\UTCDateTime;
-use MongoDB\GridFS\Exception\FileNotFoundException;
-use MongoDB\GridFS\Exception\LogicException;
+use Odigos\MongoDB\GridFS\Exception\FileNotFoundException;
+use Odigos\MongoDB\GridFS\Exception\LogicException;
 use function array_slice;
 use function assert;
 use function explode;
@@ -50,7 +50,7 @@ final class StreamWrapper
 {
     /** @var resource|null Stream context (set by PHP) */
     public $context;
-    private \MongoDB\GridFS\ReadableStream|\MongoDB\GridFS\WritableStream|null $stream = null;
+    private ReadableStream|WritableStream|null $stream = null;
     /** @var array<string, Closure(string, string, array): ContextOptions> */
     private static array $contextResolvers = [];
     public function __destruct()
@@ -134,7 +134,7 @@ final class StreamWrapper
      */
     public function stream_eof(): bool
     {
-        if (!$this->stream instanceof \MongoDB\GridFS\ReadableStream) {
+        if (!$this->stream instanceof ReadableStream) {
             return \false;
         }
         return $this->stream->isEOF();
@@ -169,7 +169,7 @@ final class StreamWrapper
      */
     public function stream_read(int $length): string
     {
-        if (!$this->stream instanceof \MongoDB\GridFS\ReadableStream) {
+        if (!$this->stream instanceof ReadableStream) {
             return '';
         }
         return $this->stream->readBytes($length);
@@ -193,7 +193,7 @@ final class StreamWrapper
             $offset += $size;
         }
         // WritableStreams are always positioned at the end of the stream
-        if ($this->stream instanceof \MongoDB\GridFS\WritableStream) {
+        if ($this->stream instanceof WritableStream) {
             return $offset === $size;
         }
         if ($offset < 0 || $offset > $size) {
@@ -211,7 +211,7 @@ final class StreamWrapper
     {
         assert($this->stream !== null);
         $stat = $this->getStatTemplate();
-        $stat[2] = $stat['mode'] = $this->stream instanceof \MongoDB\GridFS\ReadableStream ? 0100444 : 0100222;
+        $stat[2] = $stat['mode'] = $this->stream instanceof ReadableStream ? 0100444 : 0100222;
         // S_IFREG & S_IWUSR & S_IWGRP & S_IWOTH
         $stat[7] = $stat['size'] = $this->stream->getSize();
         $file = $this->stream->getFile();
@@ -245,7 +245,7 @@ final class StreamWrapper
      */
     public function stream_write(string $data): int
     {
-        if (!$this->stream instanceof \MongoDB\GridFS\WritableStream) {
+        if (!$this->stream instanceof WritableStream) {
             return 0;
         }
         return $this->stream->writeBytes($data);
@@ -302,7 +302,7 @@ final class StreamWrapper
             /** @see Bucket::resolveStreamContext() */
             $context = self::$contextResolvers[$bucketAlias]($path, $mode, $context);
         }
-        if (!$context['collectionWrapper'] instanceof \MongoDB\GridFS\CollectionWrapper) {
+        if (!$context['collectionWrapper'] instanceof CollectionWrapper) {
             throw LogicException::invalidContextCollectionWrapper($context['collectionWrapper']);
         }
         return $context;
@@ -349,7 +349,7 @@ final class StreamWrapper
      */
     private function initReadableStream(array $contextOptions): bool
     {
-        $this->stream = new \MongoDB\GridFS\ReadableStream($contextOptions['collectionWrapper'], $contextOptions['file']);
+        $this->stream = new ReadableStream($contextOptions['collectionWrapper'], $contextOptions['file']);
         return \true;
     }
     /**
@@ -359,7 +359,7 @@ final class StreamWrapper
      */
     private function initWritableStream(array $contextOptions): bool
     {
-        $this->stream = new \MongoDB\GridFS\WritableStream($contextOptions['collectionWrapper'], $contextOptions['filename'], $contextOptions['options']);
+        $this->stream = new WritableStream($contextOptions['collectionWrapper'], $contextOptions['filename'], $contextOptions['options']);
         return \true;
     }
 }

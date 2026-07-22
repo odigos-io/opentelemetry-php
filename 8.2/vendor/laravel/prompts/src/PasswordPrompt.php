@@ -1,11 +1,11 @@
 <?php
 
-namespace Laravel\Prompts;
+namespace Odigos\Laravel\Prompts;
 
 use Closure;
-class PasswordPrompt extends \Laravel\Prompts\Prompt
+class PasswordPrompt extends Prompt
 {
-    use \Laravel\Prompts\Concerns\TypedValue;
+    use Concerns\TypedValue;
     /**
      * Create a new PasswordPrompt instance.
      */

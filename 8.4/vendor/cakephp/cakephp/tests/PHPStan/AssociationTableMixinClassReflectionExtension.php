@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Cake\PHPStan;
+namespace Odigos\Cake\PHPStan;
 
-use Cake\ORM\Association;
-use Cake\ORM\Table;
+use Odigos\Cake\ORM\Association;
+use Odigos\Cake\ORM\Table;
 use Odigos\PHPStan\Reflection\ClassReflection;
 use Odigos\PHPStan\Reflection\MethodReflection;
 use Odigos\PHPStan\Reflection\MethodsClassReflectionExtension;
@@ -48,7 +48,7 @@ class AssociationTableMixinClassReflectionExtension implements PropertiesClassRe
     {
         // magic findBy* method
         if ($classReflection->isSubclassOf(Table::class) && preg_match('/^find(?:\w+)?By/', $methodName) > 0) {
-            return new \Cake\PHPStan\TableFindByPropertyMethodReflection($methodName, $classReflection);
+            return new TableFindByPropertyMethodReflection($methodName, $classReflection);
         }
         return $this->getTableReflection()->getNativeMethod($methodName);
     }

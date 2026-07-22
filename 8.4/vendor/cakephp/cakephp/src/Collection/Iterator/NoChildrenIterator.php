@@ -14,9 +14,9 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Collection\Iterator;
+namespace Odigos\Cake\Collection\Iterator;
 
-use Cake\Collection\Collection;
+use Odigos\Cake\Collection\Collection;
 use RecursiveIterator;
 /**
  * An iterator that can be used as an argument for other iterators that require

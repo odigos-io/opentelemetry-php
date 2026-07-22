@@ -4,7 +4,7 @@
  * THIS FILE IS AUTO-GENERATED. ANY CHANGES WILL BE LOST!
  */
 declare (strict_types=1);
-namespace MongoDB\Builder\Stage;
+namespace Odigos\MongoDB\Builder\Stage;
 
 use DateTimeInterface;
 use MongoDB\BSON\Decimal128;
@@ -14,21 +14,21 @@ use MongoDB\BSON\PackedArray;
 use MongoDB\BSON\Serializable;
 use MongoDB\BSON\Timestamp;
 use MongoDB\BSON\Type;
-use MongoDB\Builder\Expression\ArrayFieldPath;
-use MongoDB\Builder\Expression\FieldPath;
-use MongoDB\Builder\Expression\ResolvesToArray;
-use MongoDB\Builder\Expression\ResolvesToObject;
-use MongoDB\Builder\Pipeline;
-use MongoDB\Builder\Stage;
-use MongoDB\Builder\Type\AccumulatorInterface;
-use MongoDB\Builder\Type\ExpressionInterface;
-use MongoDB\Builder\Type\FieldQueryInterface;
-use MongoDB\Builder\Type\Optional;
-use MongoDB\Builder\Type\QueryInterface;
-use MongoDB\Builder\Type\SearchOperatorInterface;
-use MongoDB\Builder\Type\Sort;
-use MongoDB\Builder\Type\StageInterface;
-use MongoDB\Model\BSONArray;
+use Odigos\MongoDB\Builder\Expression\ArrayFieldPath;
+use Odigos\MongoDB\Builder\Expression\FieldPath;
+use Odigos\MongoDB\Builder\Expression\ResolvesToArray;
+use Odigos\MongoDB\Builder\Expression\ResolvesToObject;
+use Odigos\MongoDB\Builder\Pipeline;
+use Odigos\MongoDB\Builder\Stage;
+use Odigos\MongoDB\Builder\Type\AccumulatorInterface;
+use Odigos\MongoDB\Builder\Type\ExpressionInterface;
+use Odigos\MongoDB\Builder\Type\FieldQueryInterface;
+use Odigos\MongoDB\Builder\Type\Optional;
+use Odigos\MongoDB\Builder\Type\QueryInterface;
+use Odigos\MongoDB\Builder\Type\SearchOperatorInterface;
+use Odigos\MongoDB\Builder\Type\Sort;
+use Odigos\MongoDB\Builder\Type\StageInterface;
+use Odigos\MongoDB\Model\BSONArray;
 use stdClass;
 trait FluentFactoryTrait
 {

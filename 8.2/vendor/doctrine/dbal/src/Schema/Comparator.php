@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Schema;
+namespace Odigos\Doctrine\DBAL\Schema;
 
-use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Doctrine\Deprecations\Deprecation;
+use Odigos\Doctrine\DBAL\Platforms\AbstractPlatform;
+use Odigos\Doctrine\Deprecations\Deprecation;
 use function array_map;
 use function assert;
 use function count;
@@ -15,13 +15,13 @@ use function strtolower;
 class Comparator
 {
     /** @internal The comparator can be only instantiated by a schema manager. */
-    public function __construct(private readonly AbstractPlatform $platform, private readonly \Doctrine\DBAL\Schema\ComparatorConfig $config = new \Doctrine\DBAL\Schema\ComparatorConfig())
+    public function __construct(private readonly AbstractPlatform $platform, private readonly ComparatorConfig $config = new ComparatorConfig())
     {
     }
     /**
      * Returns the differences between the schemas.
      */
-    public function compareSchemas(\Doctrine\DBAL\Schema\Schema $oldSchema, \Doctrine\DBAL\Schema\Schema $newSchema): \Doctrine\DBAL\Schema\SchemaDiff
+    public function compareSchemas(Schema $oldSchema, Schema $newSchema): SchemaDiff
     {
         $createdSchemas = [];
         $droppedSchemas = [];
@@ -83,9 +83,9 @@ class Comparator
             }
             $droppedSequences[] = $oldSequence;
         }
-        return new \Doctrine\DBAL\Schema\SchemaDiff($createdSchemas, $droppedSchemas, $createdTables, $alteredTables, $droppedTables, $createdSequences, $alteredSequences, $droppedSequences);
+        return new SchemaDiff($createdSchemas, $droppedSchemas, $createdTables, $alteredTables, $droppedTables, $createdSequences, $alteredSequences, $droppedSequences);
     }
-    private function isAutoIncrementSequenceInSchema(\Doctrine\DBAL\Schema\Schema $schema, \Doctrine\DBAL\Schema\Sequence $sequence): bool
+    private function isAutoIncrementSequenceInSchema(Schema $schema, Sequence $sequence): bool
     {
         foreach ($schema->getTables() as $table) {
             if ($sequence->isAutoIncrementsFor($table)) {
@@ -94,7 +94,7 @@ class Comparator
         }
         return \false;
     }
-    public function diffSequence(\Doctrine\DBAL\Schema\Sequence $sequence1, \Doctrine\DBAL\Schema\Sequence $sequence2): bool
+    public function diffSequence(Sequence $sequence1, Sequence $sequence2): bool
     {
         if ($sequence1->getAllocationSize() !== $sequence2->getAllocationSize()) {
             return \true;
@@ -104,7 +104,7 @@ class Comparator
     /**
      * Compares the tables and returns the difference between them.
      */
-    public function compareTables(\Doctrine\DBAL\Schema\Table $oldTable, \Doctrine\DBAL\Schema\Table $newTable): \Doctrine\DBAL\Schema\TableDiff
+    public function compareTables(Table $oldTable, Table $newTable): TableDiff
     {
         $shouldReportModifiedIndexes = $this->config->getReportModifiedIndexes();
         if ($shouldReportModifiedIndexes) {
@@ -141,7 +141,7 @@ class Comparator
             if ($this->columnsEqual($oldColumn, $newColumn)) {
                 continue;
             }
-            $modifiedColumns[$oldColumnName] = new \Doctrine\DBAL\Schema\ColumnDiff($oldColumn, $newColumn);
+            $modifiedColumns[$oldColumnName] = new ColumnDiff($oldColumn, $newColumn);
         }
         $renamedColumnNames = $newTable->getRenamedColumns();
         foreach ($addedColumns as $addedColumnName => $addedColumn) {
@@ -150,7 +150,7 @@ class Comparator
             }
             $removedColumnName = strtolower($renamedColumnNames[$addedColumn->getName()]);
             // Explicitly renamed columns need to be diffed, because their types can also have changed
-            $modifiedColumns[$removedColumnName] = new \Doctrine\DBAL\Schema\ColumnDiff($droppedColumns[$removedColumnName], $addedColumn);
+            $modifiedColumns[$removedColumnName] = new ColumnDiff($droppedColumns[$removedColumnName], $addedColumn);
             unset($addedColumns[$addedColumnName], $droppedColumns[$removedColumnName]);
         }
         if ($this->config->getDetectRenamedColumns()) {
@@ -176,7 +176,7 @@ class Comparator
             }
             // See if index has changed in the new table.
             $newIndex = $oldIndex->isPrimary() ? $newTable->getPrimaryKey() : $newTable->getIndex($oldIndexName);
-            assert($newIndex instanceof \Doctrine\DBAL\Schema\Index);
+            assert($newIndex instanceof Index);
             if (!$this->diffIndex($oldIndex, $newIndex)) {
                 continue;
             }
@@ -209,7 +209,7 @@ class Comparator
         foreach ($newForeignKeys as $newForeignKey) {
             $addedForeignKeys[] = $newForeignKey;
         }
-        return new \Doctrine\DBAL\Schema\TableDiff($oldTable, addedColumns: $addedColumns, changedColumns: $modifiedColumns, droppedColumns: $droppedColumns, addedIndexes: $addedIndexes, modifiedIndexes: $modifiedIndexes, droppedIndexes: $droppedIndexes, renamedIndexes: $renamedIndexes, addedForeignKeys: $addedForeignKeys, droppedForeignKeys: $droppedForeignKeys);
+        return new TableDiff($oldTable, addedColumns: $addedColumns, changedColumns: $modifiedColumns, droppedColumns: $droppedColumns, addedIndexes: $addedIndexes, modifiedIndexes: $modifiedIndexes, droppedIndexes: $droppedIndexes, renamedIndexes: $renamedIndexes, addedForeignKeys: $addedForeignKeys, droppedForeignKeys: $droppedForeignKeys);
     }
     /**
      * Try to find columns that only changed their name, rename operations maybe cheaper than add/drop
@@ -240,7 +240,7 @@ class Comparator
             if (isset($modifiedColumns[$oldColumnName])) {
                 continue;
             }
-            $modifiedColumns[$oldColumnName] = new \Doctrine\DBAL\Schema\ColumnDiff($oldColumn, $newColumn);
+            $modifiedColumns[$oldColumnName] = new ColumnDiff($oldColumn, $newColumn);
             unset($addedColumns[$addedColumnName], $removedColumns[$oldColumnName]);
         }
     }
@@ -286,7 +286,7 @@ class Comparator
         }
         return $renamedIndexes;
     }
-    protected function diffForeignKey(\Doctrine\DBAL\Schema\ForeignKeyConstraint $key1, \Doctrine\DBAL\Schema\ForeignKeyConstraint $key2): bool
+    protected function diffForeignKey(ForeignKeyConstraint $key1, ForeignKeyConstraint $key2): bool
     {
         if (array_map('strtolower', $key1->getUnquotedLocalColumns()) !== array_map('strtolower', $key2->getUnquotedLocalColumns())) {
             return \true;
@@ -305,7 +305,7 @@ class Comparator
     /**
      * Compares the definitions of the given columns
      */
-    protected function columnsEqual(\Doctrine\DBAL\Schema\Column $column1, \Doctrine\DBAL\Schema\Column $column2): bool
+    protected function columnsEqual(Column $column1, Column $column2): bool
     {
         return $this->platform->columnsEqual($column1, $column2);
     }
@@ -315,7 +315,7 @@ class Comparator
      * Compares $index1 with $index2 and returns true if there are any
      * differences or false in case there are no differences.
      */
-    protected function diffIndex(\Doctrine\DBAL\Schema\Index $index1, \Doctrine\DBAL\Schema\Index $index2): bool
+    protected function diffIndex(Index $index1, Index $index2): bool
     {
         return !($index1->isFulfilledBy($index2) && $index2->isFulfilledBy($index1));
     }

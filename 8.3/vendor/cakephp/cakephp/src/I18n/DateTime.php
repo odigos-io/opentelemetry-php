@@ -14,10 +14,10 @@ declare (strict_types=1);
  * @since         3.2.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\I18n;
+namespace Odigos\Cake\I18n;
 
-use Cake\Chronos\Chronos;
-use Cake\Chronos\DifferenceFormatterInterface;
+use Odigos\Cake\Chronos\Chronos;
+use Odigos\Cake\Chronos\DifferenceFormatterInterface;
 use Closure;
 use DateTimeZone;
 use IntlDateFormatter;
@@ -32,7 +32,7 @@ use Stringable;
  */
 class DateTime extends Chronos implements JsonSerializable, Stringable
 {
-    use \Cake\I18n\DateFormatTrait;
+    use DateFormatTrait;
     /**
      * The default locale to be used for displaying formatted date strings.
      *
@@ -320,16 +320,16 @@ class DateTime extends Chronos implements JsonSerializable, Stringable
      * @param \Cake\Chronos\DifferenceFormatterInterface|null $formatter Difference formatter
      * @return \Cake\I18n\RelativeTimeFormatter
      */
-    public static function diffFormatter(?DifferenceFormatterInterface $formatter = null): \Cake\I18n\RelativeTimeFormatter
+    public static function diffFormatter(?DifferenceFormatterInterface $formatter = null): RelativeTimeFormatter
     {
         if ($formatter) {
-            if (!$formatter instanceof \Cake\I18n\RelativeTimeFormatter) {
+            if (!$formatter instanceof RelativeTimeFormatter) {
                 throw new InvalidArgumentException('Formatter for I18n must extend RelativeTimeFormatter.');
             }
             return static::$diffFormatter = $formatter;
         }
         /** @var \Cake\I18n\RelativeTimeFormatter $formatter */
-        $formatter = static::$diffFormatter ??= new \Cake\I18n\RelativeTimeFormatter();
+        $formatter = static::$diffFormatter ??= new RelativeTimeFormatter();
         return $formatter;
     }
     /**
@@ -387,7 +387,7 @@ class DateTime extends Chronos implements JsonSerializable, Stringable
      */
     public function i18nFormat(array|string|int|null $format = null, DateTimeZone|string|null $timezone = null, ?string $locale = null): string|int
     {
-        if ($format === \Cake\I18n\DateTime::UNIX_TIMESTAMP_FORMAT) {
+        if ($format === DateTime::UNIX_TIMESTAMP_FORMAT) {
             return $this->getTimestamp();
         }
         $time = $this;
@@ -396,7 +396,7 @@ class DateTime extends Chronos implements JsonSerializable, Stringable
         }
         $format ??= static::$_toStringFormat;
         $format = is_int($format) ? [$format, $format] : $format;
-        $locale = $locale ?: \Cake\I18n\DateTime::getDefaultLocale();
+        $locale = $locale ?: DateTime::getDefaultLocale();
         return $this->_formatObject($time, $format, $locale);
     }
     /**
@@ -568,5 +568,5 @@ class DateTime extends Chronos implements JsonSerializable, Stringable
     }
 }
 // phpcs:disable
-class_alias('Cake\I18n\DateTime', 'Cake\I18n\FrozenTime');
+class_alias('Odigos\Cake\I18n\DateTime', 'Odigos\Cake\I18n\FrozenTime');
 // phpcs:enable

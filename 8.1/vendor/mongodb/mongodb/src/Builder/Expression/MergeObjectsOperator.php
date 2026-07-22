@@ -4,13 +4,13 @@
  * THIS FILE IS AUTO-GENERATED. ANY CHANGES WILL BE LOST!
  */
 declare (strict_types=1);
-namespace MongoDB\Builder\Expression;
+namespace Odigos\MongoDB\Builder\Expression;
 
 use MongoDB\BSON\Document;
 use MongoDB\BSON\Serializable;
-use MongoDB\Builder\Type\Encode;
-use MongoDB\Builder\Type\OperatorInterface;
-use MongoDB\Exception\InvalidArgumentException;
+use Odigos\MongoDB\Builder\Type\Encode;
+use Odigos\MongoDB\Builder\Type\OperatorInterface;
+use Odigos\MongoDB\Exception\InvalidArgumentException;
 use stdClass;
 use function array_is_list;
 /**
@@ -19,7 +19,7 @@ use function array_is_list;
  * @see https://www.mongodb.com/docs/manual/reference/operator/aggregation/mergeObjects/
  * @internal
  */
-final class MergeObjectsOperator implements \MongoDB\Builder\Expression\ResolvesToObject, OperatorInterface
+final class MergeObjectsOperator implements ResolvesToObject, OperatorInterface
 {
     public const ENCODE = Encode::Single;
     public const NAME = '$mergeObjects';
@@ -30,7 +30,7 @@ final class MergeObjectsOperator implements \MongoDB\Builder\Expression\Resolves
      * @param Document|ResolvesToObject|Serializable|array|stdClass|string ...$document Any valid expression that resolves to a document.
      * @no-named-arguments
      */
-    public function __construct(Document|Serializable|\MongoDB\Builder\Expression\ResolvesToObject|stdClass|array|string ...$document)
+    public function __construct(Document|Serializable|ResolvesToObject|stdClass|array|string ...$document)
     {
         if (\count($document) < 1) {
             throw new InvalidArgumentException(\sprintf('Expected at least %d values for $document, got %d.', 1, \count($document)));

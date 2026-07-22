@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Mailer\Exception;
+namespace Odigos\Symfony\Component\Mailer\Exception;
 
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class TransportException extends \Symfony\Component\Mailer\Exception\RuntimeException implements \Symfony\Component\Mailer\Exception\TransportExceptionInterface
+class TransportException extends RuntimeException implements TransportExceptionInterface
 {
     private string $debug = '';
     public function getDebug(): string

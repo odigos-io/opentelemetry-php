@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\Inflector\Rules\Spanish;
+namespace Odigos\Doctrine\Inflector\Rules\Spanish;
 
-use Doctrine\Inflector\Rules\Pattern;
-use Doctrine\Inflector\Rules\Substitution;
-use Doctrine\Inflector\Rules\Transformation;
-use Doctrine\Inflector\Rules\Word;
+use Odigos\Doctrine\Inflector\Rules\Pattern;
+use Odigos\Doctrine\Inflector\Rules\Substitution;
+use Odigos\Doctrine\Inflector\Rules\Transformation;
+use Odigos\Doctrine\Inflector\Rules\Word;
 class Inflectible
 {
     /** @return Transformation[] */

@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Testing\Constraints;
+namespace Odigos\Illuminate\Testing\Constraints;
 
-use Illuminate\Contracts\Database\Query\Expression;
-use Illuminate\Database\Connection;
+use Odigos\Illuminate\Contracts\Database\Query\Expression;
+use Odigos\Illuminate\Database\Connection;
 use Odigos\PHPUnit\Framework\Constraint\Constraint;
 class HasInDatabase extends Constraint
 {

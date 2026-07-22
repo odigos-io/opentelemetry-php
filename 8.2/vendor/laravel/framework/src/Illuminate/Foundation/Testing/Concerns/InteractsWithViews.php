@@ -1,13 +1,13 @@
 <?php
 
-namespace Illuminate\Foundation\Testing\Concerns;
+namespace Odigos\Illuminate\Foundation\Testing\Concerns;
 
-use Illuminate\Support\Facades\View as ViewFacade;
-use Illuminate\Support\MessageBag;
-use Illuminate\Support\ViewErrorBag;
-use Illuminate\Testing\TestComponent;
-use Illuminate\Testing\TestView;
-use Illuminate\View\View;
+use Odigos\Illuminate\Support\Facades\View as ViewFacade;
+use Odigos\Illuminate\Support\MessageBag;
+use Odigos\Illuminate\Support\ViewErrorBag;
+use Odigos\Illuminate\Testing\TestComponent;
+use Odigos\Illuminate\Testing\TestView;
+use Odigos\Illuminate\View\View;
 trait InteractsWithViews
 {
     /**

@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Database\Concerns;
+namespace Odigos\Illuminate\Database\Concerns;
 
-use Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Collection;
 trait ExplainsQueries
 {
     /**

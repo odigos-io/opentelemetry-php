@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Cache;
+namespace Odigos\Illuminate\Cache;
 
-class RedisLock extends \Illuminate\Cache\Lock
+class RedisLock extends Lock
 {
     /**
      * The Redis factory implementation.
@@ -42,7 +42,7 @@ class RedisLock extends \Illuminate\Cache\Lock
      */
     public function release()
     {
-        return (bool) $this->redis->eval(\Illuminate\Cache\LuaScripts::releaseLock(), 1, $this->name, $this->owner);
+        return (bool) $this->redis->eval(LuaScripts::releaseLock(), 1, $this->name, $this->owner);
     }
     /**
      * Releases this lock in disregard of ownership.

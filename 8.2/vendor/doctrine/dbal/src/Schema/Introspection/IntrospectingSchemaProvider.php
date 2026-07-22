@@ -1,27 +1,27 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Schema\Introspection;
+namespace Odigos\Doctrine\DBAL\Schema\Introspection;
 
-use Doctrine\DBAL\Exception;
-use Doctrine\DBAL\Schema\Column;
-use Doctrine\DBAL\Schema\ForeignKeyConstraint;
-use Doctrine\DBAL\Schema\ForeignKeyConstraintEditor;
-use Doctrine\DBAL\Schema\Index;
-use Doctrine\DBAL\Schema\IndexEditor;
-use Doctrine\DBAL\Schema\Introspection\MetadataProcessor\ForeignKeyConstraintColumnMetadataProcessor;
-use Doctrine\DBAL\Schema\Introspection\MetadataProcessor\IndexColumnMetadataProcessor;
-use Doctrine\DBAL\Schema\Introspection\MetadataProcessor\PrimaryKeyConstraintColumnMetadataProcessor;
-use Doctrine\DBAL\Schema\Introspection\MetadataProcessor\SequenceMetadataProcessor;
-use Doctrine\DBAL\Schema\Introspection\MetadataProcessor\ViewMetadataProcessor;
-use Doctrine\DBAL\Schema\Metadata\MetadataProvider;
-use Doctrine\DBAL\Schema\Name\OptionallyQualifiedName;
-use Doctrine\DBAL\Schema\Name\UnqualifiedName;
-use Doctrine\DBAL\Schema\PrimaryKeyConstraint;
-use Doctrine\DBAL\Schema\PrimaryKeyConstraintEditor;
-use Doctrine\DBAL\Schema\SchemaProvider;
-use Doctrine\DBAL\Schema\Table;
-use Doctrine\DBAL\Schema\TableConfiguration;
+use Odigos\Doctrine\DBAL\Exception;
+use Odigos\Doctrine\DBAL\Schema\Column;
+use Odigos\Doctrine\DBAL\Schema\ForeignKeyConstraint;
+use Odigos\Doctrine\DBAL\Schema\ForeignKeyConstraintEditor;
+use Odigos\Doctrine\DBAL\Schema\Index;
+use Odigos\Doctrine\DBAL\Schema\IndexEditor;
+use Odigos\Doctrine\DBAL\Schema\Introspection\MetadataProcessor\ForeignKeyConstraintColumnMetadataProcessor;
+use Odigos\Doctrine\DBAL\Schema\Introspection\MetadataProcessor\IndexColumnMetadataProcessor;
+use Odigos\Doctrine\DBAL\Schema\Introspection\MetadataProcessor\PrimaryKeyConstraintColumnMetadataProcessor;
+use Odigos\Doctrine\DBAL\Schema\Introspection\MetadataProcessor\SequenceMetadataProcessor;
+use Odigos\Doctrine\DBAL\Schema\Introspection\MetadataProcessor\ViewMetadataProcessor;
+use Odigos\Doctrine\DBAL\Schema\Metadata\MetadataProvider;
+use Odigos\Doctrine\DBAL\Schema\Name\OptionallyQualifiedName;
+use Odigos\Doctrine\DBAL\Schema\Name\UnqualifiedName;
+use Odigos\Doctrine\DBAL\Schema\PrimaryKeyConstraint;
+use Odigos\Doctrine\DBAL\Schema\PrimaryKeyConstraintEditor;
+use Odigos\Doctrine\DBAL\Schema\SchemaProvider;
+use Odigos\Doctrine\DBAL\Schema\Table;
+use Odigos\Doctrine\DBAL\Schema\TableConfiguration;
 use function array_map;
 use function array_values;
 /**

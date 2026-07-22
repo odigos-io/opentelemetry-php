@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Driver\Mysqli\Initializer;
+namespace Odigos\Doctrine\DBAL\Driver\Mysqli\Initializer;
 
-use Doctrine\DBAL\Driver\Mysqli\Exception\InvalidOption;
-use Doctrine\DBAL\Driver\Mysqli\Initializer;
+use Odigos\Doctrine\DBAL\Driver\Mysqli\Exception\InvalidOption;
+use Odigos\Doctrine\DBAL\Driver\Mysqli\Initializer;
 use mysqli;
 use function mysqli_options;
 final class Options implements Initializer

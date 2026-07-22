@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Driver\PgSQL;
+namespace Odigos\Doctrine\DBAL\Driver\PgSQL;
 
-use Doctrine\DBAL\Driver\AbstractPostgreSQLDriver;
+use Odigos\Doctrine\DBAL\Driver\AbstractPostgreSQLDriver;
 use ErrorException;
 use SensitiveParameter;
 use function addslashes;
@@ -26,7 +26,7 @@ final class Driver extends AbstractPostgreSQLDriver
     public function connect(
         #[SensitiveParameter]
         array $params
-    ): \Doctrine\DBAL\Driver\PgSQL\Connection
+    ): Connection
     {
         set_error_handler(static function (int $severity, string $message): never {
             throw new ErrorException($message, 0, $severity, ...array_slice(func_get_args(), 2, 2));
@@ -34,14 +34,14 @@ final class Driver extends AbstractPostgreSQLDriver
         try {
             $connection = pg_connect($this->constructConnectionString($params), PGSQL_CONNECT_FORCE_NEW);
         } catch (ErrorException $e) {
-            throw new \Doctrine\DBAL\Driver\PgSQL\Exception($e->getMessage(), '08006', 0, $e);
+            throw new Exception($e->getMessage(), '08006', 0, $e);
         } finally {
             restore_error_handler();
         }
         if ($connection === \false) {
-            throw new \Doctrine\DBAL\Driver\PgSQL\Exception('Unable to connect to Postgres server.');
+            throw new Exception('Unable to connect to Postgres server.');
         }
-        $driverConnection = new \Doctrine\DBAL\Driver\PgSQL\Connection($connection);
+        $driverConnection = new Connection($connection);
         if (isset($params['application_name'])) {
             $driverConnection->exec('SET application_name = ' . $driverConnection->quote($params['application_name']));
         }

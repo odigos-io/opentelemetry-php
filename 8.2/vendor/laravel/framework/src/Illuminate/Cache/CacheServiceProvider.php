@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Cache;
+namespace Odigos\Illuminate\Cache;
 
-use Illuminate\Contracts\Support\DeferrableProvider;
-use Illuminate\Support\ServiceProvider;
-use Symfony\Component\Cache\Adapter\Psr16Adapter;
+use Odigos\Illuminate\Contracts\Support\DeferrableProvider;
+use Odigos\Illuminate\Support\ServiceProvider;
+use Odigos\Symfony\Component\Cache\Adapter\Psr16Adapter;
 class CacheServiceProvider extends ServiceProvider implements DeferrableProvider
 {
     /**
@@ -15,7 +15,7 @@ class CacheServiceProvider extends ServiceProvider implements DeferrableProvider
     public function register()
     {
         $this->app->singleton('cache', function ($app) {
-            return new \Illuminate\Cache\CacheManager($app);
+            return new CacheManager($app);
         });
         $this->app->singleton('cache.store', function ($app) {
             return $app['cache']->driver();
@@ -24,10 +24,10 @@ class CacheServiceProvider extends ServiceProvider implements DeferrableProvider
             return new Psr16Adapter($app['cache.store']);
         });
         $this->app->singleton('memcached.connector', function () {
-            return new \Illuminate\Cache\MemcachedConnector();
+            return new MemcachedConnector();
         });
-        $this->app->singleton(\Illuminate\Cache\RateLimiter::class, function ($app) {
-            return new \Illuminate\Cache\RateLimiter($app->make('cache')->driver($app['config']->get('cache.limiter')));
+        $this->app->singleton(RateLimiter::class, function ($app) {
+            return new RateLimiter($app->make('cache')->driver($app['config']->get('cache.limiter')));
         });
     }
     /**
@@ -37,6 +37,6 @@ class CacheServiceProvider extends ServiceProvider implements DeferrableProvider
      */
     public function provides()
     {
-        return ['cache', 'cache.store', 'cache.psr6', 'memcached.connector', \Illuminate\Cache\RateLimiter::class];
+        return ['cache', 'cache.store', 'cache.psr6', 'memcached.connector', RateLimiter::class];
     }
 }

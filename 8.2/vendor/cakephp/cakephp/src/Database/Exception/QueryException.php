@@ -14,9 +14,9 @@ declare (strict_types=1);
  * @since         5.1.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database\Exception;
+namespace Odigos\Cake\Database\Exception;
 
-use Cake\Database\Log\LoggedQuery;
+use Odigos\Cake\Database\Log\LoggedQuery;
 use PDOException;
 class QueryException extends PDOException
 {

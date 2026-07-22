@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Cache\RateLimiting;
+namespace Odigos\Illuminate\Cache\RateLimiting;
 
 class Limit
 {
@@ -109,7 +109,7 @@ class Limit
      */
     public static function none()
     {
-        return new \Illuminate\Cache\RateLimiting\Unlimited();
+        return new Unlimited();
     }
     /**
      * Set the key of the rate limit.

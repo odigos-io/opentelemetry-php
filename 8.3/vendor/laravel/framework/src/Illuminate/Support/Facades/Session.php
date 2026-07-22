@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Support\Facades;
+namespace Odigos\Illuminate\Support\Facades;
 
 /**
  * @method static bool shouldBlock()
@@ -76,7 +76,7 @@ namespace Illuminate\Support\Facades;
  *
  * @see \Illuminate\Session\SessionManager
  */
-class Session extends \Illuminate\Support\Facades\Facade
+class Session extends Facade
 {
     /**
      * Get the registered name of the component.

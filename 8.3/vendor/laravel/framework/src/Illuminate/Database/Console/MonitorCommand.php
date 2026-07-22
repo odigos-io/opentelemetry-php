@@ -1,14 +1,14 @@
 <?php
 
-namespace Illuminate\Database\Console;
+namespace Odigos\Illuminate\Database\Console;
 
-use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Database\ConnectionResolverInterface;
-use Illuminate\Database\Events\DatabaseBusy;
-use Illuminate\Support\Collection;
-use Symfony\Component\Console\Attribute\AsCommand;
+use Odigos\Illuminate\Contracts\Events\Dispatcher;
+use Odigos\Illuminate\Database\ConnectionResolverInterface;
+use Odigos\Illuminate\Database\Events\DatabaseBusy;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Symfony\Component\Console\Attribute\AsCommand;
 #[AsCommand(name: 'db:monitor')]
-class MonitorCommand extends \Illuminate\Database\Console\DatabaseInspectionCommand
+class MonitorCommand extends DatabaseInspectionCommand
 {
     /**
      * The name and signature of the console command.

@@ -1,21 +1,21 @@
 <?php
 
-namespace Illuminate\Routing;
+namespace Odigos\Illuminate\Routing;
 
 use Closure;
-use Illuminate\Contracts\Routing\ResponseFactory as FactoryContract;
-use Illuminate\Contracts\View\Factory as ViewFactory;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Response;
-use Illuminate\Http\StreamedEvent;
-use Illuminate\Routing\Exceptions\StreamedResponseException;
-use Illuminate\Support\Js;
-use Illuminate\Support\Str;
-use Illuminate\Support\Traits\Macroable;
+use Odigos\Illuminate\Contracts\Routing\ResponseFactory as FactoryContract;
+use Odigos\Illuminate\Contracts\View\Factory as ViewFactory;
+use Odigos\Illuminate\Http\JsonResponse;
+use Odigos\Illuminate\Http\Response;
+use Odigos\Illuminate\Http\StreamedEvent;
+use Odigos\Illuminate\Routing\Exceptions\StreamedResponseException;
+use Odigos\Illuminate\Support\Js;
+use Odigos\Illuminate\Support\Str;
+use Odigos\Illuminate\Support\Traits\Macroable;
 use ReflectionFunction;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
-use Symfony\Component\HttpFoundation\StreamedJsonResponse;
-use Symfony\Component\HttpFoundation\StreamedResponse;
+use Odigos\Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Odigos\Symfony\Component\HttpFoundation\StreamedJsonResponse;
+use Odigos\Symfony\Component\HttpFoundation\StreamedResponse;
 use Throwable;
 class ResponseFactory implements FactoryContract
 {
@@ -38,7 +38,7 @@ class ResponseFactory implements FactoryContract
      * @param  \Illuminate\Contracts\View\Factory  $view
      * @param  \Illuminate\Routing\Redirector  $redirector
      */
-    public function __construct(ViewFactory $view, \Illuminate\Routing\Redirector $redirector)
+    public function __construct(ViewFactory $view, Redirector $redirector)
     {
         $this->view = $view;
         $this->redirector = $redirector;

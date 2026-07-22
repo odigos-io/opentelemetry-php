@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Encryption;
+namespace Odigos\Illuminate\Encryption;
 
 use RuntimeException;
 class MissingAppKeyException extends RuntimeException

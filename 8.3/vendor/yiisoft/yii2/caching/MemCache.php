@@ -5,10 +5,10 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\caching;
+namespace Odigos\yii\caching;
 
 use Odigos\Yii;
-use yii\base\InvalidConfigException;
+use Odigos\yii\base\InvalidConfigException;
 /**
  * MemCache implements a cache application component based on [memcache](https://pecl.php.net/package/memcache)
  * and [memcached](https://pecl.php.net/package/memcached).
@@ -62,7 +62,7 @@ use yii\base\InvalidConfigException;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class MemCache extends \yii\caching\Cache
+class MemCache extends Cache
 {
     /**
      * @var bool whether to use memcached or memcache as the underlying caching extension.
@@ -121,7 +121,7 @@ class MemCache extends \yii\caching\Cache
     protected function addServers($cache, $servers)
     {
         if (empty($servers)) {
-            $servers = [new \yii\caching\MemCacheServer(['host' => '127.0.0.1', 'port' => 11211])];
+            $servers = [new MemCacheServer(['host' => '127.0.0.1', 'port' => 11211])];
         } else {
             foreach ($servers as $server) {
                 if ($server->host === null) {
@@ -221,7 +221,7 @@ class MemCache extends \yii\caching\Cache
     public function setServers($config)
     {
         foreach ($config as $c) {
-            $this->_servers[] = new \yii\caching\MemCacheServer($c);
+            $this->_servers[] = new MemCacheServer($c);
         }
     }
     /**

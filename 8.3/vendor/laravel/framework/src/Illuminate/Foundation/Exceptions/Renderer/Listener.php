@@ -1,15 +1,15 @@
 <?php
 
-namespace Illuminate\Foundation\Exceptions\Renderer;
+namespace Odigos\Illuminate\Foundation\Exceptions\Renderer;
 
-use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Database\Events\QueryExecuted;
-use Illuminate\Queue\Events\JobProcessed;
-use Illuminate\Queue\Events\JobProcessing;
-use Laravel\Octane\Events\RequestReceived;
-use Laravel\Octane\Events\RequestTerminated;
-use Laravel\Octane\Events\TaskReceived;
-use Laravel\Octane\Events\TickReceived;
+use Odigos\Illuminate\Contracts\Events\Dispatcher;
+use Odigos\Illuminate\Database\Events\QueryExecuted;
+use Odigos\Illuminate\Queue\Events\JobProcessed;
+use Odigos\Illuminate\Queue\Events\JobProcessing;
+use Odigos\Laravel\Octane\Events\RequestReceived;
+use Odigos\Laravel\Octane\Events\RequestTerminated;
+use Odigos\Laravel\Octane\Events\TaskReceived;
+use Odigos\Laravel\Octane\Events\TickReceived;
 class Listener
 {
     /**

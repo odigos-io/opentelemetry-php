@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenTelemetry\Contrib\Instrumentation\Psr3;
+namespace Odigos\OpenTelemetry\Contrib\Instrumentation\Psr3;
 
 use OpenTelemetry\API\Instrumentation\CachedInstrumentation;
 use OpenTelemetry\API\Instrumentation\ConfigurationResolver;
@@ -61,7 +61,7 @@ class Psr3Instrumentation
                         $context = $params[1] ?? [];
                     }
                     $record = (new API\LogRecord($body))->setSeverityNumber(API\Severity::fromPsr3($level));
-                    foreach (\OpenTelemetry\Contrib\Instrumentation\Psr3\Formatter::format($context) as $key => $value) {
+                    foreach (Formatter::format($context) as $key => $value) {
                         $record->setAttribute((string) $key, $value);
                     }
                     $instrumentation->logger()->emit($record);

@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Contracts\Service;
+namespace Odigos\Symfony\Contracts\Service;
 
 use Psr\Container\ContainerInterface;
-use Symfony\Contracts\Service\Attribute\Required;
-use Symfony\Contracts\Service\Attribute\SubscribedService;
-trigger_deprecation('symfony/contracts', 'v3.5', '"%s" is deprecated, use "ServiceMethodsSubscriberTrait" instead.', \Symfony\Contracts\Service\ServiceSubscriberTrait::class);
+use Odigos\Symfony\Contracts\Service\Attribute\Required;
+use Odigos\Symfony\Contracts\Service\Attribute\SubscribedService;
+trigger_deprecation('symfony/contracts', 'v3.5', '"%s" is deprecated, use "ServiceMethodsSubscriberTrait" instead.', ServiceSubscriberTrait::class);
 /**
  * Implementation of ServiceSubscriberInterface that determines subscribed services
  * from methods that have the #[SubscribedService] attribute.

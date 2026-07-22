@@ -14,7 +14,7 @@ declare (strict_types=1);
  * @since         3.2.14
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database;
+namespace Odigos\Cake\Database;
 
 /**
  * Encapsulates all conversion functions for values coming from a database into PHP and
@@ -29,7 +29,7 @@ interface TypeInterface
      * @param \Cake\Database\Driver $driver Object from which database preferences and configuration will be extracted.
      * @return mixed Given PHP type casted to one acceptable by a database.
      */
-    public function toDatabase(mixed $value, \Cake\Database\Driver $driver): mixed;
+    public function toDatabase(mixed $value, Driver $driver): mixed;
     /**
      * Casts given value from a database type to a PHP equivalent.
      *
@@ -37,7 +37,7 @@ interface TypeInterface
      * @param \Cake\Database\Driver $driver Object from which database preferences and configuration will be extracted
      * @return mixed Given value casted from a database to a PHP equivalent.
      */
-    public function toPHP(mixed $value, \Cake\Database\Driver $driver): mixed;
+    public function toPHP(mixed $value, Driver $driver): mixed;
     /**
      * Get the binding type to use in a PDO statement.
      *
@@ -45,7 +45,7 @@ interface TypeInterface
      * @param \Cake\Database\Driver $driver Object from which database preferences and configuration will be extracted.
      * @return int One of PDO::PARAM_* constants.
      */
-    public function toStatement(mixed $value, \Cake\Database\Driver $driver): int;
+    public function toStatement(mixed $value, Driver $driver): int;
     /**
      * Marshals flat data into PHP objects.
      *

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\ArrayParameters;
+namespace Odigos\Doctrine\DBAL\ArrayParameters;
 
 use Throwable;
 /** @internal */

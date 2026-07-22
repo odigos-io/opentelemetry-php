@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Support\Facades;
+namespace Odigos\Illuminate\Support\Facades;
 
-use Illuminate\Console\Scheduling\Schedule as ConsoleSchedule;
+use Odigos\Illuminate\Console\Scheduling\Schedule as ConsoleSchedule;
 /**
  * @method static \Illuminate\Console\Scheduling\CallbackEvent call(string|callable $callback, array $parameters = [])
  * @method static \Illuminate\Console\Scheduling\Event command(\Symfony\Component\Console\Command\Command|string $command, array $parameters = [])
@@ -85,7 +85,7 @@ use Illuminate\Console\Scheduling\Schedule as ConsoleSchedule;
  *
  * @see \Illuminate\Console\Scheduling\Schedule
  */
-class Schedule extends \Illuminate\Support\Facades\Facade
+class Schedule extends Facade
 {
     /**
      * Get the registered name of the component.

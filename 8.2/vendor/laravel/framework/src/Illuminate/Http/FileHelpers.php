@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Http;
+namespace Odigos\Illuminate\Http;
 
-use Illuminate\Support\Str;
+use Odigos\Illuminate\Support\Str;
 trait FileHelpers
 {
     /**

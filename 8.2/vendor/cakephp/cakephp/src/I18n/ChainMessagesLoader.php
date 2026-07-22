@@ -14,9 +14,9 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\I18n;
+namespace Odigos\Cake\I18n;
 
-use Cake\Core\Exception\CakeException;
+use Odigos\Cake\Core\Exception\CakeException;
 /**
  * Wraps multiple message loaders calling them one after another until
  * one of them returns a non-empty package.
@@ -46,7 +46,7 @@ class ChainMessagesLoader
      * @return \Cake\I18n\Package
      * @throws \Cake\Core\Exception\CakeException if any of the loaders in the chain is not a valid callable
      */
-    public function __invoke(): \Cake\I18n\Package
+    public function __invoke(): Package
     {
         foreach ($this->_loaders as $k => $loader) {
             if (!is_callable($loader)) {
@@ -56,11 +56,11 @@ class ChainMessagesLoader
             if (!$package) {
                 continue;
             }
-            if (!$package instanceof \Cake\I18n\Package) {
+            if (!$package instanceof Package) {
                 throw new CakeException(sprintf('Loader `%s` in the chain did not return a valid Package object.', $k));
             }
             return $package;
         }
-        return new \Cake\I18n\Package();
+        return new Package();
     }
 }

@@ -5,9 +5,9 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\db;
+namespace Odigos\yii\db;
 
-use yii\base\NotSupportedException;
+use Odigos\yii\base\NotSupportedException;
 /**
  * The BaseQuery trait represents the minimum method set of a database Query.
  *
@@ -337,7 +337,7 @@ trait QueryTrait
     {
         if (empty($columns)) {
             return [];
-        } elseif ($columns instanceof \yii\db\ExpressionInterface) {
+        } elseif ($columns instanceof ExpressionInterface) {
             return [$columns];
         } elseif (is_array($columns)) {
             return $columns;

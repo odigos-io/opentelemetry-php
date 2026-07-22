@@ -14,18 +14,18 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\View\Widget;
+namespace Odigos\Cake\View\Widget;
 
-use Cake\View\Form\ContextInterface;
-use Cake\View\StringTemplate;
-use function Cake\Core\h;
+use Odigos\Cake\View\Form\ContextInterface;
+use Odigos\Cake\View\StringTemplate;
+use function Odigos\Cake\Core\h;
 /**
  * Form 'widget' for creating labels.
  *
  * Generally this element is used by other widgets,
  * and FormHelper itself.
  */
-class LabelWidget implements \Cake\View\Widget\WidgetInterface
+class LabelWidget implements WidgetInterface
 {
     /**
      * Templates

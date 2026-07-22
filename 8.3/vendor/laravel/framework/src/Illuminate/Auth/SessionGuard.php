@@ -1,34 +1,34 @@
 <?php
 
-namespace Illuminate\Auth;
+namespace Odigos\Illuminate\Auth;
 
-use Illuminate\Auth\Events\Attempting;
-use Illuminate\Auth\Events\Authenticated;
-use Illuminate\Auth\Events\CurrentDeviceLogout;
-use Illuminate\Auth\Events\Failed;
-use Illuminate\Auth\Events\Login;
-use Illuminate\Auth\Events\Logout;
-use Illuminate\Auth\Events\OtherDeviceLogout;
-use Illuminate\Auth\Events\Validated;
-use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
-use Illuminate\Contracts\Auth\StatefulGuard;
-use Illuminate\Contracts\Auth\SupportsBasicAuth;
-use Illuminate\Contracts\Auth\UserProvider;
-use Illuminate\Contracts\Cookie\QueueingFactory as CookieJar;
-use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Contracts\Session\Session;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
-use Illuminate\Support\Timebox;
-use Illuminate\Support\Traits\Macroable;
+use Odigos\Illuminate\Auth\Events\Attempting;
+use Odigos\Illuminate\Auth\Events\Authenticated;
+use Odigos\Illuminate\Auth\Events\CurrentDeviceLogout;
+use Odigos\Illuminate\Auth\Events\Failed;
+use Odigos\Illuminate\Auth\Events\Login;
+use Odigos\Illuminate\Auth\Events\Logout;
+use Odigos\Illuminate\Auth\Events\OtherDeviceLogout;
+use Odigos\Illuminate\Auth\Events\Validated;
+use Odigos\Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Odigos\Illuminate\Contracts\Auth\StatefulGuard;
+use Odigos\Illuminate\Contracts\Auth\SupportsBasicAuth;
+use Odigos\Illuminate\Contracts\Auth\UserProvider;
+use Odigos\Illuminate\Contracts\Cookie\QueueingFactory as CookieJar;
+use Odigos\Illuminate\Contracts\Events\Dispatcher;
+use Odigos\Illuminate\Contracts\Session\Session;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Facades\Hash;
+use Odigos\Illuminate\Support\Str;
+use Odigos\Illuminate\Support\Timebox;
+use Odigos\Illuminate\Support\Traits\Macroable;
 use InvalidArgumentException;
 use RuntimeException;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
+use Odigos\Symfony\Component\HttpFoundation\Request;
+use Odigos\Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 class SessionGuard implements StatefulGuard, SupportsBasicAuth
 {
-    use \Illuminate\Auth\GuardHelpers, Macroable;
+    use GuardHelpers, Macroable;
     /**
      * The name of the guard. Typically "web".
      *
@@ -202,7 +202,7 @@ class SessionGuard implements StatefulGuard, SupportsBasicAuth
             return;
         }
         if ($recaller = $this->request->cookies->get($this->getRecallerName())) {
-            return new \Illuminate\Auth\Recaller($recaller);
+            return new Recaller($recaller);
         }
     }
     /**
@@ -646,7 +646,7 @@ class SessionGuard implements StatefulGuard, SupportsBasicAuth
      */
     public function attempting($callback)
     {
-        $this->events?->listen(\Illuminate\Auth\Events\Attempting::class, $callback);
+        $this->events?->listen(Events\Attempting::class, $callback);
     }
     /**
      * Fire the attempt event with the arguments.

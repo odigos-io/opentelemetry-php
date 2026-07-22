@@ -1,23 +1,23 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Driver;
+namespace Odigos\Doctrine\DBAL\Driver;
 
-use Doctrine\DBAL\Driver;
-use Doctrine\DBAL\Driver\API\ExceptionConverter as ExceptionConverterInterface;
-use Doctrine\DBAL\Driver\API\MySQL\ExceptionConverter;
-use Doctrine\DBAL\Platforms\AbstractMySQLPlatform;
-use Doctrine\DBAL\Platforms\Exception\InvalidPlatformVersion;
-use Doctrine\DBAL\Platforms\MariaDB1010Platform;
-use Doctrine\DBAL\Platforms\MariaDB1052Platform;
-use Doctrine\DBAL\Platforms\MariaDB1060Platform;
-use Doctrine\DBAL\Platforms\MariaDB110700Platform;
-use Doctrine\DBAL\Platforms\MariaDBPlatform;
-use Doctrine\DBAL\Platforms\MySQL80Platform;
-use Doctrine\DBAL\Platforms\MySQL84Platform;
-use Doctrine\DBAL\Platforms\MySQLPlatform;
-use Doctrine\DBAL\ServerVersionProvider;
-use Doctrine\Deprecations\Deprecation;
+use Odigos\Doctrine\DBAL\Driver;
+use Odigos\Doctrine\DBAL\Driver\API\ExceptionConverter as ExceptionConverterInterface;
+use Odigos\Doctrine\DBAL\Driver\API\MySQL\ExceptionConverter;
+use Odigos\Doctrine\DBAL\Platforms\AbstractMySQLPlatform;
+use Odigos\Doctrine\DBAL\Platforms\Exception\InvalidPlatformVersion;
+use Odigos\Doctrine\DBAL\Platforms\MariaDB1010Platform;
+use Odigos\Doctrine\DBAL\Platforms\MariaDB1052Platform;
+use Odigos\Doctrine\DBAL\Platforms\MariaDB1060Platform;
+use Odigos\Doctrine\DBAL\Platforms\MariaDB110700Platform;
+use Odigos\Doctrine\DBAL\Platforms\MariaDBPlatform;
+use Odigos\Doctrine\DBAL\Platforms\MySQL80Platform;
+use Odigos\Doctrine\DBAL\Platforms\MySQL84Platform;
+use Odigos\Doctrine\DBAL\Platforms\MySQLPlatform;
+use Odigos\Doctrine\DBAL\ServerVersionProvider;
+use Odigos\Doctrine\Deprecations\Deprecation;
 use function preg_match;
 use function stripos;
 use function version_compare;

@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Queue;
+namespace Odigos\Illuminate\Queue;
 
 use Closure;
-use Symfony\Component\Process\Process;
-use function Illuminate\Support\artisan_binary;
-use function Illuminate\Support\php_binary;
+use Odigos\Symfony\Component\Process\Process;
+use function Odigos\Illuminate\Support\artisan_binary;
+use function Odigos\Illuminate\Support\php_binary;
 class Listener
 {
     /**
@@ -73,7 +73,7 @@ class Listener
      * @param  \Illuminate\Queue\ListenerOptions  $options
      * @return void
      */
-    public function listen($connection, $queue, \Illuminate\Queue\ListenerOptions $options)
+    public function listen($connection, $queue, ListenerOptions $options)
     {
         $process = $this->makeProcess($connection, $queue, $options);
         while (\true) {
@@ -91,7 +91,7 @@ class Listener
      * @param  \Illuminate\Queue\ListenerOptions  $options
      * @return \Symfony\Component\Process\Process
      */
-    public function makeProcess($connection, $queue, \Illuminate\Queue\ListenerOptions $options)
+    public function makeProcess($connection, $queue, ListenerOptions $options)
     {
         $command = $this->createCommand($connection, $queue, $options);
         // If the environment is set, we will append it to the command array so the
@@ -109,7 +109,7 @@ class Listener
      * @param  \Illuminate\Queue\ListenerOptions  $options
      * @return array
      */
-    protected function addEnvironment($command, \Illuminate\Queue\ListenerOptions $options)
+    protected function addEnvironment($command, ListenerOptions $options)
     {
         return array_merge($command, ["--env={$options->environment}"]);
     }
@@ -121,7 +121,7 @@ class Listener
      * @param  \Illuminate\Queue\ListenerOptions  $options
      * @return array
      */
-    protected function createCommand($connection, $queue, \Illuminate\Queue\ListenerOptions $options)
+    protected function createCommand($connection, $queue, ListenerOptions $options)
     {
         return array_filter([$this->phpBinary(), $this->artisanBinary(), 'queue:work', $connection, '--once', "--name={$options->name}", "--queue={$queue}", "--backoff={$options->backoff}", "--memory={$options->memory}", "--sleep={$options->sleep}", "--tries={$options->maxTries}", $options->force ? '--force' : null], function ($value) {
             return !is_null($value);

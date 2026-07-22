@@ -14,7 +14,7 @@ declare (strict_types=1);
  * @since         3.3.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Event\Decorator;
+namespace Odigos\Cake\Event\Decorator;
 
 /**
  * Common base class for event decorator subclasses.

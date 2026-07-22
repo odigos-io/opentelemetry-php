@@ -1,12 +1,12 @@
 <?php
 
-namespace Illuminate\Hashing;
+namespace Odigos\Illuminate\Hashing;
 
 use Error;
-use Illuminate\Contracts\Hashing\Hasher as HasherContract;
+use Odigos\Illuminate\Contracts\Hashing\Hasher as HasherContract;
 use InvalidArgumentException;
 use RuntimeException;
-class BcryptHasher extends \Illuminate\Hashing\AbstractHasher implements HasherContract
+class BcryptHasher extends AbstractHasher implements HasherContract
 {
     /**
      * The default cost factor.

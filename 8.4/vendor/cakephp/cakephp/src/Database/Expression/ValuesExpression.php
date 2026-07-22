@@ -14,15 +14,15 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database\Expression;
+namespace Odigos\Cake\Database\Expression;
 
-use Cake\Database\Exception\DatabaseException;
-use Cake\Database\ExpressionInterface;
-use Cake\Database\Query;
-use Cake\Database\Type\ExpressionTypeCasterTrait;
-use Cake\Database\TypeMap;
-use Cake\Database\TypeMapTrait;
-use Cake\Database\ValueBinder;
+use Odigos\Cake\Database\Exception\DatabaseException;
+use Odigos\Cake\Database\ExpressionInterface;
+use Odigos\Cake\Database\Query;
+use Odigos\Cake\Database\Type\ExpressionTypeCasterTrait;
+use Odigos\Cake\Database\TypeMap;
+use Odigos\Cake\Database\TypeMapTrait;
+use Odigos\Cake\Database\ValueBinder;
 use Closure;
 /**
  * An expression object to contain values being inserted.

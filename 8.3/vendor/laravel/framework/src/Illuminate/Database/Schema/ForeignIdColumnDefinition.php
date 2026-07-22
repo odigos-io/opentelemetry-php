@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Database\Schema;
+namespace Odigos\Illuminate\Database\Schema;
 
-use Illuminate\Support\Stringable;
-class ForeignIdColumnDefinition extends \Illuminate\Database\Schema\ColumnDefinition
+use Odigos\Illuminate\Support\Stringable;
+class ForeignIdColumnDefinition extends ColumnDefinition
 {
     /**
      * The schema builder blueprint instance.
@@ -17,7 +17,7 @@ class ForeignIdColumnDefinition extends \Illuminate\Database\Schema\ColumnDefini
      * @param  \Illuminate\Database\Schema\Blueprint  $blueprint
      * @param  array  $attributes
      */
-    public function __construct(\Illuminate\Database\Schema\Blueprint $blueprint, $attributes = [])
+    public function __construct(Blueprint $blueprint, $attributes = [])
     {
         parent::__construct($attributes);
         $this->blueprint = $blueprint;

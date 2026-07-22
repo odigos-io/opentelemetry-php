@@ -1,12 +1,12 @@
 <?php
 
-namespace Illuminate\Console\Scheduling;
+namespace Odigos\Illuminate\Console\Scheduling;
 
-use Illuminate\Console\Command;
-use Illuminate\Console\Events\ScheduledBackgroundTaskFinished;
-use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Support\Collection;
-use Symfony\Component\Console\Attribute\AsCommand;
+use Odigos\Illuminate\Console\Command;
+use Odigos\Illuminate\Console\Events\ScheduledBackgroundTaskFinished;
+use Odigos\Illuminate\Contracts\Events\Dispatcher;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Symfony\Component\Console\Attribute\AsCommand;
 #[AsCommand(name: 'schedule:finish')]
 class ScheduleFinishCommand extends Command
 {
@@ -34,7 +34,7 @@ class ScheduleFinishCommand extends Command
      * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
      * @return void
      */
-    public function handle(\Illuminate\Console\Scheduling\Schedule $schedule)
+    public function handle(Schedule $schedule)
     {
         (new Collection($schedule->events()))->filter(fn($value) => $value->mutexName() == $this->argument('id'))->each(function ($event) {
             $event->finish($this->laravel, $this->argument('code'));

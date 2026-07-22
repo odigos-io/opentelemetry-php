@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Database;
+namespace Odigos\Illuminate\Database;
 
-use Illuminate\Container\Container;
-use Illuminate\Contracts\Database\ConcurrencyErrorDetector as ConcurrencyErrorDetectorContract;
+use Odigos\Illuminate\Container\Container;
+use Odigos\Illuminate\Contracts\Database\ConcurrencyErrorDetector as ConcurrencyErrorDetectorContract;
 use Throwable;
 trait DetectsConcurrencyErrors
 {
@@ -16,7 +16,7 @@ trait DetectsConcurrencyErrors
     protected function causedByConcurrencyError(Throwable $e)
     {
         $container = Container::getInstance();
-        $detector = $container->bound(ConcurrencyErrorDetectorContract::class) ? $container[ConcurrencyErrorDetectorContract::class] : new \Illuminate\Database\ConcurrencyErrorDetector();
+        $detector = $container->bound(ConcurrencyErrorDetectorContract::class) ? $container[ConcurrencyErrorDetectorContract::class] : new ConcurrencyErrorDetector();
         return $detector->causedByConcurrencyError($e);
     }
 }

@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\db;
+namespace Odigos\yii\db;
 
 /**
  * Exception represents an exception that is caused by some DB-related operations.
@@ -13,7 +13,7 @@ namespace yii\db;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class Exception extends \yii\base\Exception
+class Exception extends \Odigos\yii\base\Exception
 {
     /**
      * @var array the error info provided by a PDO exception. This is the same as returned

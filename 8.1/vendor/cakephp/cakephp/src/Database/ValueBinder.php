@@ -14,7 +14,7 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database;
+namespace Odigos\Cake\Database;
 
 /**
  * Value binder class manages list of values bound to conditions.
@@ -121,7 +121,7 @@ class ValueBinder
      * @param \Cake\Database\StatementInterface $statement The statement to add parameters to.
      * @return void
      */
-    public function attachTo(\Cake\Database\StatementInterface $statement): void
+    public function attachTo(StatementInterface $statement): void
     {
         $bindings = $this->bindings();
         if (!$bindings) {

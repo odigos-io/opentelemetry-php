@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace GuzzleHttp\Psr7;
+namespace Odigos\GuzzleHttp\Psr7;
 
 use InvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
@@ -12,7 +12,7 @@ use Psr\Http\Message\UriInterface;
  */
 class Request implements RequestInterface
 {
-    use \GuzzleHttp\Psr7\MessageTrait;
+    use MessageTrait;
     /** @var string */
     private $method;
     /** @var string|null */
@@ -31,7 +31,7 @@ class Request implements RequestInterface
         $this->assertMethod($method);
         $this->assertProtocolVersion($version);
         if (!$uri instanceof UriInterface) {
-            $uri = new \GuzzleHttp\Psr7\Uri($uri);
+            $uri = new Uri($uri);
         }
         self::warnOnMethodCasingChange($method);
         $this->method = strtoupper($method);
@@ -42,7 +42,7 @@ class Request implements RequestInterface
             $this->updateHostFromUri();
         }
         if ($body !== '' && $body !== null) {
-            $this->stream = \GuzzleHttp\Psr7\Utils::streamFor($body);
+            $this->stream = Utils::streamFor($body);
         }
     }
     public function getRequestTarget(): string
@@ -109,7 +109,7 @@ class Request implements RequestInterface
         if ($host == '') {
             return;
         }
-        \GuzzleHttp\Psr7\Uri::assertValidHost($host);
+        Uri::assertValidHost($host);
         if (($port = $this->uri->getPort()) !== null) {
             $host .= ':' . $port;
         }

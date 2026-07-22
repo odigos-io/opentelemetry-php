@@ -5,13 +5,13 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\widgets;
+namespace Odigos\yii\widgets;
 
-use yii\base\InvalidConfigException;
-use yii\base\Widget;
-use yii\data\Pagination;
-use yii\helpers\ArrayHelper;
-use yii\helpers\Html;
+use Odigos\yii\base\InvalidConfigException;
+use Odigos\yii\base\Widget;
+use Odigos\yii\data\Pagination;
+use Odigos\yii\helpers\ArrayHelper;
+use Odigos\yii\helpers\Html;
 /**
  * LinkPager displays a list of hyperlinks that lead to different pages of target.
  *

@@ -5,9 +5,9 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\widgets;
+namespace Odigos\yii\widgets;
 
-use yii\web\AssetBundle;
+use Odigos\yii\web\AssetBundle;
 /**
  * The asset bundle for the [[MaskedInput]] widget.
  *
@@ -20,5 +20,5 @@ class MaskedInputAsset extends AssetBundle
 {
     public $sourcePath = '@bower/inputmask/dist';
     public $js = ['jquery.inputmask.js'];
-    public $depends = ['yii\web\YiiAsset'];
+    public $depends = ['Odigos\yii\web\YiiAsset'];
 }

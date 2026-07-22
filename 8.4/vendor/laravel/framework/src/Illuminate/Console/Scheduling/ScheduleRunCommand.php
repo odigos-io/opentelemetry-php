@@ -1,21 +1,21 @@
 <?php
 
-namespace Illuminate\Console\Scheduling;
+namespace Odigos\Illuminate\Console\Scheduling;
 
 use Exception;
-use Illuminate\Console\Application;
-use Illuminate\Console\Command;
-use Illuminate\Console\Events\ScheduledTaskFailed;
-use Illuminate\Console\Events\ScheduledTaskFinished;
-use Illuminate\Console\Events\ScheduledTaskSkipped;
-use Illuminate\Console\Events\ScheduledTaskStarting;
-use Illuminate\Contracts\Cache\Repository as Cache;
-use Illuminate\Contracts\Debug\ExceptionHandler;
-use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Date;
-use Illuminate\Support\Sleep;
-use Symfony\Component\Console\Attribute\AsCommand;
+use Odigos\Illuminate\Console\Application;
+use Odigos\Illuminate\Console\Command;
+use Odigos\Illuminate\Console\Events\ScheduledTaskFailed;
+use Odigos\Illuminate\Console\Events\ScheduledTaskFinished;
+use Odigos\Illuminate\Console\Events\ScheduledTaskSkipped;
+use Odigos\Illuminate\Console\Events\ScheduledTaskStarting;
+use Odigos\Illuminate\Contracts\Cache\Repository as Cache;
+use Odigos\Illuminate\Contracts\Debug\ExceptionHandler;
+use Odigos\Illuminate\Contracts\Events\Dispatcher;
+use Odigos\Illuminate\Support\Carbon;
+use Odigos\Illuminate\Support\Facades\Date;
+use Odigos\Illuminate\Support\Sleep;
+use Odigos\Symfony\Component\Console\Attribute\AsCommand;
 use Throwable;
 #[AsCommand(name: 'schedule:run')]
 class ScheduleRunCommand extends Command
@@ -91,7 +91,7 @@ class ScheduleRunCommand extends Command
      * @param  \Illuminate\Contracts\Debug\ExceptionHandler  $handler
      * @return void
      */
-    public function handle(\Illuminate\Console\Scheduling\Schedule $schedule, Dispatcher $dispatcher, Cache $cache, ExceptionHandler $handler)
+    public function handle(Schedule $schedule, Dispatcher $dispatcher, Cache $cache, ExceptionHandler $handler)
     {
         $this->schedule = $schedule;
         $this->dispatcher = $dispatcher;
@@ -151,7 +151,7 @@ class ScheduleRunCommand extends Command
     protected function runEvent($event)
     {
         $summary = $event->getSummaryForDisplay();
-        $command = $event instanceof \Illuminate\Console\Scheduling\CallbackEvent ? $summary : trim(str_replace($this->phpBinary, '', $event->command));
+        $command = $event instanceof CallbackEvent ? $summary : trim(str_replace($this->phpBinary, '', $event->command));
         $description = sprintf('<fg=gray>%s</> Running [%s]%s', Carbon::now()->format('Y-m-d H:i:s'), $command, $event->runInBackground ? ' in background' : '');
         $this->components->task($description, function () use ($event) {
             $this->dispatcher->dispatch(new ScheduledTaskStarting($event));
@@ -169,7 +169,7 @@ class ScheduleRunCommand extends Command
             }
             return $event->exitCode == 0;
         });
-        if (!$event instanceof \Illuminate\Console\Scheduling\CallbackEvent) {
+        if (!$event instanceof CallbackEvent) {
             $this->components->bulletList([$event->getSummaryForDisplay()]);
         }
     }

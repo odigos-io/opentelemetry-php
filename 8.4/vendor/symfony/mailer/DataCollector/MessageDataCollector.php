@@ -8,13 +8,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Mailer\DataCollector;
+namespace Odigos\Symfony\Component\Mailer\DataCollector;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\DataCollector\DataCollector;
-use Symfony\Component\Mailer\Event\MessageEvents;
-use Symfony\Component\Mailer\EventListener\MessageLoggerListener;
+use Odigos\Symfony\Component\HttpFoundation\Request;
+use Odigos\Symfony\Component\HttpFoundation\Response;
+use Odigos\Symfony\Component\HttpKernel\DataCollector\DataCollector;
+use Odigos\Symfony\Component\Mailer\Event\MessageEvents;
+use Odigos\Symfony\Component\Mailer\EventListener\MessageLoggerListener;
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  */

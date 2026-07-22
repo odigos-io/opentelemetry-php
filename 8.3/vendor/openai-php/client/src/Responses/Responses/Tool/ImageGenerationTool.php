@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Responses\Responses\Tool;
+namespace Odigos\OpenAI\Responses\Responses\Tool;
 
-use OpenAI\Contracts\ResponseContract;
-use OpenAI\Responses\Concerns\ArrayAccessible;
-use OpenAI\Testing\Responses\Concerns\Fakeable;
+use Odigos\OpenAI\Contracts\ResponseContract;
+use Odigos\OpenAI\Responses\Concerns\ArrayAccessible;
+use Odigos\OpenAI\Testing\Responses\Concerns\Fakeable;
 /**
  * @phpstan-import-type InputImageMaskType from ImageGenerationInputImageMask
  *
@@ -27,7 +27,7 @@ final class ImageGenerationTool implements ResponseContract
      * @param  'low'|'medium'|'high'|'auto'  $quality
      * @param  "1024x1024"|"1024x1536"|"1536x1024"|'auto'  $size
      */
-    private function __construct(public readonly string $type, public readonly string $background, public readonly ?\OpenAI\Responses\Responses\Tool\ImageGenerationInputImageMask $inputImageMask, public readonly ?string $model, public readonly string $moderation, public readonly int $outputCompression, public readonly string $outputFormat, public readonly int $partialImages, public readonly string $quality, public readonly string $size)
+    private function __construct(public readonly string $type, public readonly string $background, public readonly ?ImageGenerationInputImageMask $inputImageMask, public readonly ?string $model, public readonly string $moderation, public readonly int $outputCompression, public readonly string $outputFormat, public readonly int $partialImages, public readonly string $quality, public readonly string $size)
     {
     }
     /**
@@ -35,7 +35,7 @@ final class ImageGenerationTool implements ResponseContract
      */
     public static function from(array $attributes): self
     {
-        return new self(type: $attributes['type'], background: $attributes['background'], inputImageMask: isset($attributes['input_image_mask']) ? \OpenAI\Responses\Responses\Tool\ImageGenerationInputImageMask::from($attributes['input_image_mask']) : null, model: $attributes['model'] ?? null, moderation: $attributes['moderation'], outputCompression: $attributes['output_compression'], outputFormat: $attributes['output_format'], partialImages: $attributes['partial_images'] ?? 0, quality: $attributes['quality'], size: $attributes['size']);
+        return new self(type: $attributes['type'], background: $attributes['background'], inputImageMask: isset($attributes['input_image_mask']) ? ImageGenerationInputImageMask::from($attributes['input_image_mask']) : null, model: $attributes['model'] ?? null, moderation: $attributes['moderation'], outputCompression: $attributes['output_compression'], outputFormat: $attributes['output_format'], partialImages: $attributes['partial_images'] ?? 0, quality: $attributes['quality'], size: $attributes['size']);
     }
     /**
      * {@inheritDoc}

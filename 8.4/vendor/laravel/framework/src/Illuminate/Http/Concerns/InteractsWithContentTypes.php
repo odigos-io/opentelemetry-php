@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Http\Concerns;
+namespace Odigos\Illuminate\Http\Concerns;
 
-use Illuminate\Support\Str;
+use Odigos\Illuminate\Support\Str;
 trait InteractsWithContentTypes
 {
     /**

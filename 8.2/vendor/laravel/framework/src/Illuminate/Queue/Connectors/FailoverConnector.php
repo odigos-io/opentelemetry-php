@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Queue\Connectors;
+namespace Odigos\Illuminate\Queue\Connectors;
 
-use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Queue\FailoverQueue;
-use Illuminate\Queue\QueueManager;
-class FailoverConnector implements \Illuminate\Queue\Connectors\ConnectorInterface
+use Odigos\Illuminate\Contracts\Events\Dispatcher;
+use Odigos\Illuminate\Queue\FailoverQueue;
+use Odigos\Illuminate\Queue\QueueManager;
+class FailoverConnector implements ConnectorInterface
 {
     /**
      * Create a new connector instance.

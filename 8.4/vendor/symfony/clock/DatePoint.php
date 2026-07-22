@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Clock;
+namespace Odigos\Symfony\Component\Clock;
 
 /**
  * An immmutable DateTime with stricter error handling and return types than the native one.
@@ -22,7 +22,7 @@ final class DatePoint extends \DateTimeImmutable
      */
     public function __construct(string $datetime = 'now', ?\DateTimeZone $timezone = null, ?parent $reference = null)
     {
-        $now = $reference ?? \Symfony\Component\Clock\Clock::get()->now();
+        $now = $reference ?? Clock::get()->now();
         if ('now' !== $datetime) {
             if (!$now instanceof static) {
                 $now = static::createFromInterface($now);

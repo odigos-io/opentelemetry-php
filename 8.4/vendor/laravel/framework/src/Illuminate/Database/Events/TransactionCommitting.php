@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Database\Events;
+namespace Odigos\Illuminate\Database\Events;
 
-class TransactionCommitting extends \Illuminate\Database\Events\ConnectionEvent
+class TransactionCommitting extends ConnectionEvent
 {
     //
 }

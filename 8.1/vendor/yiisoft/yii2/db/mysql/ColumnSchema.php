@@ -5,17 +5,17 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\db\mysql;
+namespace Odigos\yii\db\mysql;
 
-use yii\db\ExpressionInterface;
-use yii\db\JsonExpression;
+use Odigos\yii\db\ExpressionInterface;
+use Odigos\yii\db\JsonExpression;
 /**
  * Class ColumnSchema for MySQL database
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  * @since 2.0.14.1
  */
-class ColumnSchema extends \yii\db\ColumnSchema
+class ColumnSchema extends \Odigos\yii\db\ColumnSchema
 {
     /**
      * @var bool whether the column schema should OMIT using JSON support feature.
@@ -37,7 +37,7 @@ class ColumnSchema extends \yii\db\ColumnSchema
         if ($value instanceof ExpressionInterface) {
             return $value;
         }
-        if (!$this->disableJsonSupport && $this->dbType === \yii\db\mysql\Schema::TYPE_JSON) {
+        if (!$this->disableJsonSupport && $this->dbType === Schema::TYPE_JSON) {
             return new JsonExpression($value, $this->type);
         }
         return $this->typecast($value);
@@ -50,7 +50,7 @@ class ColumnSchema extends \yii\db\ColumnSchema
         if ($value === null) {
             return null;
         }
-        if (!$this->disableJsonSupport && $this->type === \yii\db\mysql\Schema::TYPE_JSON) {
+        if (!$this->disableJsonSupport && $this->type === Schema::TYPE_JSON) {
             return json_decode($value, \true);
         }
         return parent::phpTypecast($value);

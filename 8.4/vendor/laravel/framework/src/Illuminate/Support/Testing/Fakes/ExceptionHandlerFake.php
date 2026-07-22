@@ -1,21 +1,21 @@
 <?php
 
-namespace Illuminate\Support\Testing\Fakes;
+namespace Odigos\Illuminate\Support\Testing\Fakes;
 
 use Closure;
-use Illuminate\Contracts\Debug\ExceptionHandler;
-use Illuminate\Foundation\Testing\Concerns\WithoutExceptionHandlingHandler;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Traits\ForwardsCalls;
-use Illuminate\Support\Traits\ReflectsClosures;
-use Illuminate\Testing\Assert;
+use Odigos\Illuminate\Contracts\Debug\ExceptionHandler;
+use Odigos\Illuminate\Foundation\Testing\Concerns\WithoutExceptionHandlingHandler;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Traits\ForwardsCalls;
+use Odigos\Illuminate\Support\Traits\ReflectsClosures;
+use Odigos\Illuminate\Testing\Assert;
 use Odigos\PHPUnit\Framework\Assert as PHPUnit;
 use Odigos\PHPUnit\Framework\ExpectationFailedException;
 use Throwable;
 /**
  * @mixin \Illuminate\Foundation\Exceptions\Handler
  */
-class ExceptionHandlerFake implements ExceptionHandler, \Illuminate\Support\Testing\Fakes\Fake
+class ExceptionHandlerFake implements ExceptionHandler, Fake
 {
     use ForwardsCalls, ReflectsClosures;
     /**

@@ -10,7 +10,7 @@ namespace Odigos;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-use Symfony\Polyfill\Uuid as p;
+use Odigos\Symfony\Polyfill\Uuid as p;
 if (!\defined('UUID_VARIANT_NCS')) {
     \define('UUID_VARIANT_NCS', 0);
 }

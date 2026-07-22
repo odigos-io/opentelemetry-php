@@ -17,18 +17,18 @@ namespace Odigos;
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
 // phpcs:disable PSR1.Files.SideEffects
-use Cake\I18n\Date;
-use Cake\I18n\DateTime;
-use function Cake\I18n\__ as cake__;
-use function Cake\I18n\__d as cake__d;
-use function Cake\I18n\__dn as cake__dn;
-use function Cake\I18n\__dx as cake__dx;
-use function Cake\I18n\__dxn as cake__dxn;
-use function Cake\I18n\__n as cake__n;
-use function Cake\I18n\__x as cake__x;
-use function Cake\I18n\__xn as cake__xn;
-use function Cake\I18n\toDate as cakeToDate;
-use function Cake\I18n\toDateTime as cakeToDateTime;
+use Odigos\Cake\I18n\Date;
+use Odigos\Cake\I18n\DateTime;
+use function Odigos\Cake\I18n\__ as cake__;
+use function Odigos\Cake\I18n\__d as cake__d;
+use function Odigos\Cake\I18n\__dn as cake__dn;
+use function Odigos\Cake\I18n\__dx as cake__dx;
+use function Odigos\Cake\I18n\__dxn as cake__dxn;
+use function Odigos\Cake\I18n\__n as cake__n;
+use function Odigos\Cake\I18n\__x as cake__x;
+use function Odigos\Cake\I18n\__xn as cake__xn;
+use function Odigos\Cake\I18n\toDate as cakeToDate;
+use function Odigos\Cake\I18n\toDateTime as cakeToDateTime;
 if (!\function_exists('Odigos\__')) {
     /**
      * Returns a translated string if one is found; Otherwise, the submitted message.

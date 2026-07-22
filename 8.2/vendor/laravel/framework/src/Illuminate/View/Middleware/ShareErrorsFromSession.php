@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\View\Middleware;
+namespace Odigos\Illuminate\View\Middleware;
 
 use Closure;
-use Illuminate\Contracts\View\Factory as ViewFactory;
-use Illuminate\Support\ViewErrorBag;
+use Odigos\Illuminate\Contracts\View\Factory as ViewFactory;
+use Odigos\Illuminate\Support\ViewErrorBag;
 class ShareErrorsFromSession
 {
     /**

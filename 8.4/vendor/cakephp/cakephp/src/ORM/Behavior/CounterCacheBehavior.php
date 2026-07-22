@@ -14,15 +14,15 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\ORM\Behavior;
+namespace Odigos\Cake\ORM\Behavior;
 
 use ArrayObject;
-use Cake\Datasource\EntityInterface;
-use Cake\Event\EventInterface;
-use Cake\ORM\Association;
-use Cake\ORM\Association\BelongsTo;
-use Cake\ORM\Behavior;
-use Cake\ORM\Query\SelectQuery;
+use Odigos\Cake\Datasource\EntityInterface;
+use Odigos\Cake\Event\EventInterface;
+use Odigos\Cake\ORM\Association;
+use Odigos\Cake\ORM\Association\BelongsTo;
+use Odigos\Cake\ORM\Behavior;
+use Odigos\Cake\ORM\Query\SelectQuery;
 use Closure;
 /**
  * CounterCache behavior

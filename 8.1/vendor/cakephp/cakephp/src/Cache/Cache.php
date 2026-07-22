@@ -14,12 +14,12 @@ declare (strict_types=1);
  * @since         1.2.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Cache;
+namespace Odigos\Cake\Cache;
 
-use Cake\Cache\Engine\NullEngine;
-use Cake\Cache\Exception\CacheWriteException;
-use Cake\Cache\Exception\InvalidArgumentException;
-use Cake\Core\StaticConfigTrait;
+use Odigos\Cake\Cache\Engine\NullEngine;
+use Odigos\Cake\Cache\Exception\CacheWriteException;
+use Odigos\Cake\Cache\Exception\InvalidArgumentException;
+use Odigos\Cake\Core\StaticConfigTrait;
 use Closure;
 use Psr\SimpleCache\CacheInterface;
 use RuntimeException;
@@ -74,7 +74,7 @@ class Cache
      * @var array<string, string>
      * @phpstan-var array<string, class-string>
      */
-    protected static array $_dsnClassMap = ['array' => \Cake\Cache\Engine\ArrayEngine::class, 'apcu' => \Cake\Cache\Engine\ApcuEngine::class, 'file' => \Cake\Cache\Engine\FileEngine::class, 'memcached' => \Cake\Cache\Engine\MemcachedEngine::class, 'null' => \Cake\Cache\Engine\NullEngine::class, 'redis' => \Cake\Cache\Engine\RedisEngine::class];
+    protected static array $_dsnClassMap = ['array' => Engine\ArrayEngine::class, 'apcu' => Engine\ApcuEngine::class, 'file' => Engine\FileEngine::class, 'memcached' => Engine\MemcachedEngine::class, 'null' => Engine\NullEngine::class, 'redis' => Engine\RedisEngine::class];
     /**
      * Flag for tracking whether caching is enabled.
      *
@@ -92,15 +92,15 @@ class Cache
      *
      * @var \Cake\Cache\CacheRegistry
      */
-    protected static \Cake\Cache\CacheRegistry $_registry;
+    protected static CacheRegistry $_registry;
     /**
      * Returns the Cache Registry instance used for creating and using cache adapters.
      *
      * @return \Cake\Cache\CacheRegistry
      */
-    public static function getRegistry(): \Cake\Cache\CacheRegistry
+    public static function getRegistry(): CacheRegistry
     {
-        return static::$_registry ??= new \Cake\Cache\CacheRegistry();
+        return static::$_registry ??= new CacheRegistry();
     }
     /**
      * Sets the Cache Registry instance used for creating and using cache adapters.
@@ -110,7 +110,7 @@ class Cache
      * @param \Cake\Cache\CacheRegistry $registry Injectable registry object.
      * @return void
      */
-    public static function setRegistry(\Cake\Cache\CacheRegistry $registry): void
+    public static function setRegistry(CacheRegistry $registry): void
     {
         static::$_registry = $registry;
     }
@@ -144,7 +144,7 @@ class Cache
                 throw new InvalidArgumentException(sprintf('`%s` cache configuration cannot fallback to itself.', $name), 0, $e);
             }
             $fallbackEngine = clone static::pool($config['fallback']);
-            assert($fallbackEngine instanceof \Cake\Cache\CacheEngine);
+            assert($fallbackEngine instanceof CacheEngine);
             $newConfig = $config + ['groups' => [], 'prefix' => null];
             $fallbackEngine->setConfig('groups', $newConfig['groups'], \false);
             if ($newConfig['prefix']) {
@@ -152,7 +152,7 @@ class Cache
             }
             $registry->set($name, $fallbackEngine);
         }
-        if ($config['className'] instanceof \Cake\Cache\CacheEngine) {
+        if ($config['className'] instanceof CacheEngine) {
             $config = $config['className']->getConfig();
         }
         if (!empty($config['groups'])) {
@@ -170,7 +170,7 @@ class Cache
      * @param string $config The name of the configured cache backend.
      * @return \Psr\SimpleCache\CacheInterface&\Cake\Cache\CacheEngineInterface
      */
-    public static function pool(string $config): CacheInterface&\Cake\Cache\CacheEngineInterface
+    public static function pool(string $config): CacheInterface&CacheEngineInterface
     {
         if (!static::$_enabled) {
             return new NullEngine();

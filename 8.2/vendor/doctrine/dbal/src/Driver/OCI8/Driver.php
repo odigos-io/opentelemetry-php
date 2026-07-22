@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Driver\OCI8;
+namespace Odigos\Doctrine\DBAL\Driver\OCI8;
 
-use Doctrine\DBAL\Driver\AbstractOracleDriver;
-use Doctrine\DBAL\Driver\OCI8\Exception\ConnectionFailed;
-use Doctrine\DBAL\Driver\OCI8\Exception\InvalidConfiguration;
+use Odigos\Doctrine\DBAL\Driver\AbstractOracleDriver;
+use Odigos\Doctrine\DBAL\Driver\OCI8\Exception\ConnectionFailed;
+use Odigos\Doctrine\DBAL\Driver\OCI8\Exception\InvalidConfiguration;
 use SensitiveParameter;
 use function oci_connect;
 use function oci_new_connect;
@@ -22,7 +22,7 @@ final class Driver extends AbstractOracleDriver
     public function connect(
         #[SensitiveParameter]
         array $params
-    ): \Doctrine\DBAL\Driver\OCI8\Connection
+    ): Connection
     {
         $username = $params['user'] ?? '';
         $password = $params['password'] ?? '';
@@ -44,6 +44,6 @@ final class Driver extends AbstractOracleDriver
         if ($connection === \false) {
             throw ConnectionFailed::new();
         }
-        return new \Doctrine\DBAL\Driver\OCI8\Connection($connection);
+        return new Connection($connection);
     }
 }

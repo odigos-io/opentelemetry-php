@@ -1,15 +1,15 @@
 <?php
 
-namespace Illuminate\Redis\Connections;
+namespace Odigos\Illuminate\Redis\Connections;
 
 use Closure;
-use Illuminate\Contracts\Redis\Connection as ConnectionContract;
-use Illuminate\Support\Collection;
+use Odigos\Illuminate\Contracts\Redis\Connection as ConnectionContract;
+use Odigos\Illuminate\Support\Collection;
 use Odigos\Predis\Command\Argument\ArrayableArgument;
 /**
  * @mixin \Predis\Client
  */
-class PredisConnection extends \Illuminate\Redis\Connections\Connection implements ConnectionContract
+class PredisConnection extends Connection implements ConnectionContract
 {
     /**
      * The Predis client.

@@ -1,9 +1,9 @@
 <?php
 
-namespace Http\Discovery\Strategy;
+namespace Odigos\Http\Discovery\Strategy;
 
-use Http\Discovery\ClassDiscovery;
-use Http\Discovery\Exception\PuliUnavailableException;
+use Odigos\Http\Discovery\ClassDiscovery;
+use Odigos\Http\Discovery\Exception\PuliUnavailableException;
 use Odigos\Puli\Discovery\Api\Discovery;
 use Odigos\Puli\GeneratedPuliFactory;
 /**
@@ -16,7 +16,7 @@ use Odigos\Puli\GeneratedPuliFactory;
  * @author David de Boer <david@ddeboer.nl>
  * @author Márk Sági-Kazár <mark.sagikazar@gmail.com>
  */
-class PuliBetaStrategy implements \Http\Discovery\Strategy\DiscoveryStrategy
+class PuliBetaStrategy implements DiscoveryStrategy
 {
     /**
      * @var GeneratedPuliFactory

@@ -1,13 +1,13 @@
 <?php
 
-namespace Illuminate\Console;
+namespace Odigos\Illuminate\Console;
 
 use Odigos\Carbon\CarbonInterval;
-use Illuminate\Cache\DynamoDbStore;
-use Illuminate\Contracts\Cache\Factory as Cache;
-use Illuminate\Contracts\Cache\LockProvider;
-use Illuminate\Support\InteractsWithTime;
-class CacheCommandMutex implements \Illuminate\Console\CommandMutex
+use Odigos\Illuminate\Cache\DynamoDbStore;
+use Odigos\Illuminate\Contracts\Cache\Factory as Cache;
+use Odigos\Illuminate\Contracts\Cache\LockProvider;
+use Odigos\Illuminate\Support\InteractsWithTime;
+class CacheCommandMutex implements CommandMutex
 {
     use InteractsWithTime;
     /**

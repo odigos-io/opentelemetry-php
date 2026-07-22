@@ -12,10 +12,10 @@ declare (strict_types=1);
  * @since         3.5.0
  * @license       https://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Datasource\Paging\Exception;
+namespace Odigos\Cake\Datasource\Paging\Exception;
 
-use Cake\Core\Exception\CakeException;
-use Cake\Core\Exception\HttpErrorCodeInterface;
+use Odigos\Cake\Core\Exception\CakeException;
+use Odigos\Cake\Core\Exception\HttpErrorCodeInterface;
 /**
  * Exception raised when requested page number does not exist.
  */

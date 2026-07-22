@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Contracts\Translation;
+namespace Odigos\Illuminate\Contracts\Translation;
 
 interface Loader
 {

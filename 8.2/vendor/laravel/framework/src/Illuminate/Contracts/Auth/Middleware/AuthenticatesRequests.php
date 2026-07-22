@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Contracts\Auth\Middleware;
+namespace Odigos\Illuminate\Contracts\Auth\Middleware;
 
 interface AuthenticatesRequests
 {

@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Foundation\Exceptions;
+namespace Odigos\Illuminate\Foundation\Exceptions;
 
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\View;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Facades\View;
 class RegisterErrorViewPaths
 {
     /**

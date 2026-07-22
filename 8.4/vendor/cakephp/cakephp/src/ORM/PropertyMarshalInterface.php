@@ -14,7 +14,7 @@ declare (strict_types=1);
  * @since         3.4.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\ORM;
+namespace Odigos\Cake\ORM;
 
 /**
  * Behaviors implementing this interface can participate in entity marshaling.
@@ -32,5 +32,5 @@ interface PropertyMarshalInterface
      * @param array<string, mixed> $options The options array used in the marshaling call.
      * @return array<string, callable> A map of `[property => callable]` of additional properties to marshal.
      */
-    public function buildMarshalMap(\Cake\ORM\Marshaller $marshaller, array $map, array $options): array;
+    public function buildMarshalMap(Marshaller $marshaller, array $map, array $options): array;
 }

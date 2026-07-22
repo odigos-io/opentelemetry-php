@@ -1,30 +1,30 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Responses\Conversations;
+namespace Odigos\OpenAI\Responses\Conversations;
 
-use OpenAI\Actions\Conversations\ItemObjects;
-use OpenAI\Contracts\ResponseContract;
-use OpenAI\Responses\Concerns\ArrayAccessible;
-use OpenAI\Responses\Conversations\Objects\Message;
-use OpenAI\Responses\Responses\Input\ComputerToolCallOutput;
-use OpenAI\Responses\Responses\Input\CustomToolCallOutput;
-use OpenAI\Responses\Responses\Input\FunctionToolCallOutput;
-use OpenAI\Responses\Responses\Input\LocalShellCallOutput;
-use OpenAI\Responses\Responses\Input\McpApprovalResponse;
-use OpenAI\Responses\Responses\Output\OutputCodeInterpreterToolCall;
-use OpenAI\Responses\Responses\Output\OutputComputerToolCall;
-use OpenAI\Responses\Responses\Output\OutputCustomToolCall;
-use OpenAI\Responses\Responses\Output\OutputFileSearchToolCall;
-use OpenAI\Responses\Responses\Output\OutputFunctionToolCall;
-use OpenAI\Responses\Responses\Output\OutputImageGenerationToolCall;
-use OpenAI\Responses\Responses\Output\OutputLocalShellCall;
-use OpenAI\Responses\Responses\Output\OutputMcpApprovalRequest;
-use OpenAI\Responses\Responses\Output\OutputMcpCall;
-use OpenAI\Responses\Responses\Output\OutputMcpListTools;
-use OpenAI\Responses\Responses\Output\OutputReasoning;
-use OpenAI\Responses\Responses\Output\OutputWebSearchToolCall;
-use OpenAI\Testing\Responses\Concerns\Fakeable;
+use Odigos\OpenAI\Actions\Conversations\ItemObjects;
+use Odigos\OpenAI\Contracts\ResponseContract;
+use Odigos\OpenAI\Responses\Concerns\ArrayAccessible;
+use Odigos\OpenAI\Responses\Conversations\Objects\Message;
+use Odigos\OpenAI\Responses\Responses\Input\ComputerToolCallOutput;
+use Odigos\OpenAI\Responses\Responses\Input\CustomToolCallOutput;
+use Odigos\OpenAI\Responses\Responses\Input\FunctionToolCallOutput;
+use Odigos\OpenAI\Responses\Responses\Input\LocalShellCallOutput;
+use Odigos\OpenAI\Responses\Responses\Input\McpApprovalResponse;
+use Odigos\OpenAI\Responses\Responses\Output\OutputCodeInterpreterToolCall;
+use Odigos\OpenAI\Responses\Responses\Output\OutputComputerToolCall;
+use Odigos\OpenAI\Responses\Responses\Output\OutputCustomToolCall;
+use Odigos\OpenAI\Responses\Responses\Output\OutputFileSearchToolCall;
+use Odigos\OpenAI\Responses\Responses\Output\OutputFunctionToolCall;
+use Odigos\OpenAI\Responses\Responses\Output\OutputImageGenerationToolCall;
+use Odigos\OpenAI\Responses\Responses\Output\OutputLocalShellCall;
+use Odigos\OpenAI\Responses\Responses\Output\OutputMcpApprovalRequest;
+use Odigos\OpenAI\Responses\Responses\Output\OutputMcpCall;
+use Odigos\OpenAI\Responses\Responses\Output\OutputMcpListTools;
+use Odigos\OpenAI\Responses\Responses\Output\OutputReasoning;
+use Odigos\OpenAI\Responses\Responses\Output\OutputWebSearchToolCall;
+use Odigos\OpenAI\Testing\Responses\Concerns\Fakeable;
 /**
  * @phpstan-import-type ItemObjectTypes from ItemObjects
  *

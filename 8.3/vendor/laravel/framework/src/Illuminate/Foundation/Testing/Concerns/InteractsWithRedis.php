@@ -1,12 +1,12 @@
 <?php
 
-namespace Illuminate\Foundation\Testing\Concerns;
+namespace Odigos\Illuminate\Foundation\Testing\Concerns;
 
 use Exception;
-use Illuminate\Contracts\Redis\Factory as Redis;
-use Illuminate\Foundation\Application;
-use Illuminate\Redis\RedisManager;
-use Illuminate\Support\Env;
+use Odigos\Illuminate\Contracts\Redis\Factory as Redis;
+use Odigos\Illuminate\Foundation\Application;
+use Odigos\Illuminate\Redis\RedisManager;
+use Odigos\Illuminate\Support\Env;
 trait InteractsWithRedis
 {
     /**

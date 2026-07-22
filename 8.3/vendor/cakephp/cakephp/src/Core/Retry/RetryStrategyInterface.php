@@ -14,7 +14,7 @@ declare (strict_types=1);
  * @since         3.6.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Core\Retry;
+namespace Odigos\Cake\Core\Retry;
 
 use Exception;
 /**

@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Redis\Events;
+namespace Odigos\Illuminate\Redis\Events;
 
 use Throwable;
 class CommandFailed

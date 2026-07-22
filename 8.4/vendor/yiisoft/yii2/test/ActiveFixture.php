@@ -5,11 +5,11 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\test;
+namespace Odigos\yii\test;
 
-use yii\base\InvalidConfigException;
-use yii\db\ActiveRecord;
-use yii\db\TableSchema;
+use Odigos\yii\base\InvalidConfigException;
+use Odigos\yii\db\ActiveRecord;
+use Odigos\yii\db\TableSchema;
 /**
  * ActiveFixture represents a fixture backed up by a [[modelClass|ActiveRecord class]] or a [[tableName|database table]].
  *
@@ -30,7 +30,7 @@ use yii\db\TableSchema;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class ActiveFixture extends \yii\test\BaseActiveFixture
+class ActiveFixture extends BaseActiveFixture
 {
     /**
      * @var string|null the name of the database table that this fixture is about. If this property is not set,

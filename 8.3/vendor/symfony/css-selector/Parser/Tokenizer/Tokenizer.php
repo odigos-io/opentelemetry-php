@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\CssSelector\Parser\Tokenizer;
+namespace Odigos\Symfony\Component\CssSelector\Parser\Tokenizer;
 
-use Symfony\Component\CssSelector\Parser\Handler;
-use Symfony\Component\CssSelector\Parser\Reader;
-use Symfony\Component\CssSelector\Parser\Token;
-use Symfony\Component\CssSelector\Parser\TokenStream;
+use Odigos\Symfony\Component\CssSelector\Parser\Handler;
+use Odigos\Symfony\Component\CssSelector\Parser\Reader;
+use Odigos\Symfony\Component\CssSelector\Parser\Token;
+use Odigos\Symfony\Component\CssSelector\Parser\TokenStream;
 /**
  * CSS selector tokenizer.
  *
@@ -32,8 +32,8 @@ class Tokenizer
     private array $handlers;
     public function __construct()
     {
-        $patterns = new \Symfony\Component\CssSelector\Parser\Tokenizer\TokenizerPatterns();
-        $escaping = new \Symfony\Component\CssSelector\Parser\Tokenizer\TokenizerEscaping($patterns);
+        $patterns = new TokenizerPatterns();
+        $escaping = new TokenizerEscaping($patterns);
         $this->handlers = [new Handler\WhitespaceHandler(), new Handler\IdentifierHandler($patterns, $escaping), new Handler\HashHandler($patterns, $escaping), new Handler\StringHandler($patterns, $escaping), new Handler\NumberHandler($patterns), new Handler\CommentHandler()];
     }
     /**

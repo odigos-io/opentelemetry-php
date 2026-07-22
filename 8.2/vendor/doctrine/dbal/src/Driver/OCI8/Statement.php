@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Driver\OCI8;
+namespace Odigos\Doctrine\DBAL\Driver\OCI8;
 
-use Doctrine\DBAL\Driver\OCI8\Exception\Error;
-use Doctrine\DBAL\Driver\OCI8\Exception\UnknownParameterIndex;
-use Doctrine\DBAL\Driver\Statement as StatementInterface;
-use Doctrine\DBAL\ParameterType;
+use Odigos\Doctrine\DBAL\Driver\OCI8\Exception\Error;
+use Odigos\Doctrine\DBAL\Driver\OCI8\Exception\UnknownParameterIndex;
+use Odigos\Doctrine\DBAL\Driver\Statement as StatementInterface;
+use Odigos\Doctrine\DBAL\ParameterType;
 use function is_int;
 use function oci_bind_by_name;
 use function oci_execute;
@@ -27,7 +27,7 @@ final class Statement implements StatementInterface
      * @param resource          $statement
      * @param array<int,string> $parameterMap
      */
-    public function __construct(private readonly mixed $connection, private readonly mixed $statement, private readonly array $parameterMap, private readonly \Doctrine\DBAL\Driver\OCI8\ExecutionMode $executionMode)
+    public function __construct(private readonly mixed $connection, private readonly mixed $statement, private readonly array $parameterMap, private readonly ExecutionMode $executionMode)
     {
     }
     public function bindValue(int|string $param, mixed $value, ParameterType $type): void
@@ -62,7 +62,7 @@ final class Statement implements StatementInterface
             default => SQLT_CHR,
         };
     }
-    public function execute(): \Doctrine\DBAL\Driver\OCI8\Result
+    public function execute(): Result
     {
         if ($this->executionMode->isAutoCommitEnabled()) {
             $mode = OCI_COMMIT_ON_SUCCESS;
@@ -73,6 +73,6 @@ final class Statement implements StatementInterface
         if (!$ret) {
             throw Error::new($this->statement);
         }
-        return new \Doctrine\DBAL\Driver\OCI8\Result($this->statement);
+        return new Result($this->statement);
     }
 }

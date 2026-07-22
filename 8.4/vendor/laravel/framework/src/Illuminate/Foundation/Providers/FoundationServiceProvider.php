@@ -1,40 +1,40 @@
 <?php
 
-namespace Illuminate\Foundation\Providers;
+namespace Odigos\Illuminate\Foundation\Providers;
 
-use Illuminate\Console\Events\CommandFinished;
-use Illuminate\Console\Scheduling\Schedule;
-use Illuminate\Contracts\Console\Kernel as ConsoleKernel;
-use Illuminate\Contracts\Container\Container;
-use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\Foundation\ExceptionRenderer;
-use Illuminate\Contracts\Foundation\MaintenanceMode as MaintenanceModeContract;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Database\ConnectionInterface;
-use Illuminate\Database\Grammar;
-use Illuminate\Foundation\Console\CliDumper;
-use Illuminate\Foundation\Exceptions\Renderer\Listener;
-use Illuminate\Foundation\Exceptions\Renderer\Mappers\BladeMapper;
-use Illuminate\Foundation\Exceptions\Renderer\Renderer;
-use Illuminate\Foundation\Http\HtmlDumper;
-use Illuminate\Foundation\MaintenanceModeManager;
-use Illuminate\Foundation\Precognition;
-use Illuminate\Foundation\Vite;
-use Illuminate\Http\Client\Factory as HttpFactory;
-use Illuminate\Http\Request;
-use Illuminate\Log\Events\MessageLogged;
-use Illuminate\Queue\Events\JobAttempted;
-use Illuminate\Support\AggregateServiceProvider;
-use Illuminate\Support\Defer\DeferredCallbackCollection;
-use Illuminate\Support\Facades\URL;
-use Illuminate\Support\Uri;
-use Illuminate\Testing\LoggedExceptionCollection;
-use Illuminate\Testing\ParallelTestingServiceProvider;
-use Illuminate\Validation\ValidationException;
-use Symfony\Component\ErrorHandler\ErrorRenderer\HtmlErrorRenderer;
-use Symfony\Component\VarDumper\Caster\StubCaster;
-use Symfony\Component\VarDumper\Cloner\AbstractCloner;
+use Odigos\Illuminate\Console\Events\CommandFinished;
+use Odigos\Illuminate\Console\Scheduling\Schedule;
+use Odigos\Illuminate\Contracts\Console\Kernel as ConsoleKernel;
+use Odigos\Illuminate\Contracts\Container\Container;
+use Odigos\Illuminate\Contracts\Events\Dispatcher;
+use Odigos\Illuminate\Contracts\Foundation\Application;
+use Odigos\Illuminate\Contracts\Foundation\ExceptionRenderer;
+use Odigos\Illuminate\Contracts\Foundation\MaintenanceMode as MaintenanceModeContract;
+use Odigos\Illuminate\Contracts\View\Factory;
+use Odigos\Illuminate\Database\ConnectionInterface;
+use Odigos\Illuminate\Database\Grammar;
+use Odigos\Illuminate\Foundation\Console\CliDumper;
+use Odigos\Illuminate\Foundation\Exceptions\Renderer\Listener;
+use Odigos\Illuminate\Foundation\Exceptions\Renderer\Mappers\BladeMapper;
+use Odigos\Illuminate\Foundation\Exceptions\Renderer\Renderer;
+use Odigos\Illuminate\Foundation\Http\HtmlDumper;
+use Odigos\Illuminate\Foundation\MaintenanceModeManager;
+use Odigos\Illuminate\Foundation\Precognition;
+use Odigos\Illuminate\Foundation\Vite;
+use Odigos\Illuminate\Http\Client\Factory as HttpFactory;
+use Odigos\Illuminate\Http\Request;
+use Odigos\Illuminate\Log\Events\MessageLogged;
+use Odigos\Illuminate\Queue\Events\JobAttempted;
+use Odigos\Illuminate\Support\AggregateServiceProvider;
+use Odigos\Illuminate\Support\Defer\DeferredCallbackCollection;
+use Odigos\Illuminate\Support\Facades\URL;
+use Odigos\Illuminate\Support\Uri;
+use Odigos\Illuminate\Testing\LoggedExceptionCollection;
+use Odigos\Illuminate\Testing\ParallelTestingServiceProvider;
+use Odigos\Illuminate\Validation\ValidationException;
+use Odigos\Symfony\Component\ErrorHandler\ErrorRenderer\HtmlErrorRenderer;
+use Odigos\Symfony\Component\VarDumper\Caster\StubCaster;
+use Odigos\Symfony\Component\VarDumper\Cloner\AbstractCloner;
 class FoundationServiceProvider extends AggregateServiceProvider
 {
     /**
@@ -42,7 +42,7 @@ class FoundationServiceProvider extends AggregateServiceProvider
      *
      * @var string[]
      */
-    protected $providers = [\Illuminate\Foundation\Providers\FormRequestServiceProvider::class, ParallelTestingServiceProvider::class];
+    protected $providers = [FormRequestServiceProvider::class, ParallelTestingServiceProvider::class];
     /**
      * The singletons to register into the container.
      *

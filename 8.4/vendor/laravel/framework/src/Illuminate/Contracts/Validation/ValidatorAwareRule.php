@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Contracts\Validation;
+namespace Odigos\Illuminate\Contracts\Validation;
 
-use Illuminate\Validation\Validator;
+use Odigos\Illuminate\Validation\Validator;
 interface ValidatorAwareRule
 {
     /**

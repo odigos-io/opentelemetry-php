@@ -14,7 +14,7 @@ declare (strict_types=1);
  * @since         3.7.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Cache;
+namespace Odigos\Cake\Cache;
 
 /**
  * Interface for cache engines that defines methods

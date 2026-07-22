@@ -5,10 +5,10 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\widgets;
+namespace Odigos\yii\widgets;
 
-use yii\base\InvalidConfigException;
-use yii\base\Widget;
+use Odigos\yii\base\InvalidConfigException;
+use Odigos\yii\base\Widget;
 /**
  * ContentDecorator records all output between [[begin()]] and [[end()]] calls, passes it to the given view file
  * as `$content` and then echoes rendering result.

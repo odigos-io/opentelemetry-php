@@ -14,14 +14,14 @@ declare (strict_types=1);
  * @since         1.2.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Utility;
+namespace Odigos\Cake\Utility;
 
-use Cake\Core\Configure;
-use Cake\Core\Exception\CakeException;
+use Odigos\Cake\Core\Configure;
+use Odigos\Cake\Core\Exception\CakeException;
 use Closure;
 use InvalidArgumentException;
 use Transliterator;
-use function Cake\I18n\__d;
+use function Odigos\Cake\I18n\__d;
 /**
  * Text handling methods.
  */
@@ -753,7 +753,7 @@ class Text
      */
     public static function toList(array $list, ?string $and = null, string $separator = ', '): string
     {
-        static::$useI18n ??= function_exists('Cake\I18n\__d');
+        static::$useI18n ??= function_exists('Odigos\Cake\I18n\__d');
         $and ??= static::$useI18n ? __d('cake', 'and') : 'and';
         if (count($list) > 1) {
             return implode($separator, array_slice($list, 0, -1)) . ' ' . $and . ' ' . array_pop($list);

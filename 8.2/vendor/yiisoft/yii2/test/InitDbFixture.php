@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\test;
+namespace Odigos\yii\test;
 
 use Odigos\Yii;
 /**
@@ -25,7 +25,7 @@ use Odigos\Yii;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class InitDbFixture extends \yii\test\DbFixture
+class InitDbFixture extends DbFixture
 {
     /**
      * @var string the init script file that should be executed when loading this fixture.
@@ -84,7 +84,7 @@ class InitDbFixture extends \yii\test\DbFixture
      */
     public function checkIntegrity($check)
     {
-        if (!$this->db instanceof \yii\db\Connection) {
+        if (!$this->db instanceof \Odigos\yii\db\Connection) {
             return;
         }
         if ($this->db->getDriverName() === 'oci') {

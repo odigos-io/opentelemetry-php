@@ -1,15 +1,15 @@
 <?php
 
-namespace Illuminate\Console\Concerns;
+namespace Odigos\Illuminate\Console\Concerns;
 
 use Closure;
-use Illuminate\Contracts\Console\PromptsForMissingInput as PromptsForMissingInputContract;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use function Laravel\Prompts\text;
+use Odigos\Illuminate\Contracts\Console\PromptsForMissingInput as PromptsForMissingInputContract;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Symfony\Component\Console\Input\InputArgument;
+use Odigos\Symfony\Component\Console\Input\InputInterface;
+use Odigos\Symfony\Component\Console\Output\OutputInterface;
+use function Odigos\Laravel\Prompts\text;
 trait PromptsForMissingInput
 {
     /**

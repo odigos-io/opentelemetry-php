@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Broadcasting;
+namespace Odigos\Illuminate\Broadcasting;
 
-use Illuminate\Contracts\Broadcasting\HasBroadcastChannel;
+use Odigos\Illuminate\Contracts\Broadcasting\HasBroadcastChannel;
 use Stringable;
 class Channel implements Stringable
 {

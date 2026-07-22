@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Mailer;
+namespace Odigos\Symfony\Component\Mailer;
 
-use Symfony\Component\Mailer\Exception\InvalidArgumentException;
-use Symfony\Component\Mailer\Exception\LogicException;
-use Symfony\Component\Mime\Address;
-use Symfony\Component\Mime\RawMessage;
+use Odigos\Symfony\Component\Mailer\Exception\InvalidArgumentException;
+use Odigos\Symfony\Component\Mailer\Exception\LogicException;
+use Odigos\Symfony\Component\Mime\Address;
+use Odigos\Symfony\Component\Mime\RawMessage;
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  */
@@ -34,7 +34,7 @@ class Envelope
         if (RawMessage::class === $message::class) {
             throw new LogicException('Cannot send a RawMessage instance without an explicit Envelope.');
         }
-        return new \Symfony\Component\Mailer\DelayedEnvelope($message);
+        return new DelayedEnvelope($message);
     }
     public function setSender(Address $sender): void
     {

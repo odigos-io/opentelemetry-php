@@ -1,8 +1,8 @@
 <?php
 
-namespace Laravel\Prompts\Concerns;
+namespace Odigos\Laravel\Prompts\Concerns;
 
-use Laravel\Prompts\Output\BufferedConsoleOutput;
+use Odigos\Laravel\Prompts\Output\BufferedConsoleOutput;
 use function Odigos\Termwind\render;
 use function Odigos\Termwind\renderUsing;
 trait Termwind

@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Console\Tester;
+namespace Odigos\Symfony\Component\Console\Tester;
 
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\ArrayInput;
+use Odigos\Symfony\Component\Console\Command\Command;
+use Odigos\Symfony\Component\Console\Input\ArrayInput;
 /**
  * Eases the testing of console commands.
  *
@@ -20,7 +20,7 @@ use Symfony\Component\Console\Input\ArrayInput;
  */
 class CommandTester
 {
-    use \Symfony\Component\Console\Tester\TesterTrait;
+    use TesterTrait;
     private Command $command;
     public function __construct(callable|Command $command)
     {

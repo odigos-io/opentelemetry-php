@@ -5,11 +5,11 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\i18n;
+namespace Odigos\yii\i18n;
 
 use Odigos\Yii;
-use yii\base\Component;
-use yii\base\InvalidConfigException;
+use Odigos\yii\base\Component;
+use Odigos\yii\base\InvalidConfigException;
 /**
  * I18N provides features related with internationalization (I18N) and localization (L10N).
  *
@@ -53,10 +53,10 @@ class I18N extends Component
     {
         parent::init();
         if (!isset($this->translations['yii']) && !isset($this->translations['yii*'])) {
-            $this->translations['yii'] = ['class' => 'yii\i18n\PhpMessageSource', 'sourceLanguage' => 'en-US', 'basePath' => '@yii/messages'];
+            $this->translations['yii'] = ['class' => 'Odigos\yii\i18n\PhpMessageSource', 'sourceLanguage' => 'en-US', 'basePath' => '@yii/messages'];
         }
         if (!isset($this->translations['app']) && !isset($this->translations['app*'])) {
-            $this->translations['app'] = ['class' => 'yii\i18n\PhpMessageSource', 'sourceLanguage' => Yii::$app->sourceLanguage, 'basePath' => '@app/messages'];
+            $this->translations['app'] = ['class' => 'Odigos\yii\i18n\PhpMessageSource', 'sourceLanguage' => Yii::$app->sourceLanguage, 'basePath' => '@app/messages'];
         }
     }
     /**
@@ -121,7 +121,7 @@ class I18N extends Component
     public function getMessageFormatter()
     {
         if ($this->_messageFormatter === null) {
-            $this->_messageFormatter = new \yii\i18n\MessageFormatter();
+            $this->_messageFormatter = new MessageFormatter();
         } elseif (is_array($this->_messageFormatter) || is_string($this->_messageFormatter)) {
             $this->_messageFormatter = Yii::createObject($this->_messageFormatter);
         }
@@ -146,7 +146,7 @@ class I18N extends Component
     {
         if (isset($this->translations[$category])) {
             $source = $this->translations[$category];
-            if ($source instanceof \yii\i18n\MessageSource) {
+            if ($source instanceof MessageSource) {
                 return $source;
             }
             return $this->translations[$category] = Yii::createObject($source);
@@ -154,7 +154,7 @@ class I18N extends Component
         // try wildcard matching
         foreach ($this->translations as $pattern => $source) {
             if (strpos($pattern, '*') > 0 && strpos($category, rtrim($pattern, '*')) === 0) {
-                if ($source instanceof \yii\i18n\MessageSource) {
+                if ($source instanceof MessageSource) {
                     return $source;
                 }
                 return $this->translations[$category] = $this->translations[$pattern] = Yii::createObject($source);
@@ -163,7 +163,7 @@ class I18N extends Component
         // match '*' in the last
         if (isset($this->translations['*'])) {
             $source = $this->translations['*'];
-            if ($source instanceof \yii\i18n\MessageSource) {
+            if ($source instanceof MessageSource) {
                 return $source;
             }
             return $this->translations[$category] = $this->translations['*'] = Yii::createObject($source);

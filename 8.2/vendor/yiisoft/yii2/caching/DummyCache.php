@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\caching;
+namespace Odigos\yii\caching;
 
 /**
  * DummyCache is a placeholder cache component.
@@ -20,7 +20,7 @@ namespace yii\caching;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class DummyCache extends \yii\caching\Cache
+class DummyCache extends Cache
 {
     /**
      * Retrieves a value from cache with a specified key.

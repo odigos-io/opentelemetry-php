@@ -1,12 +1,12 @@
 <?php
 
-namespace Illuminate\Auth;
+namespace Odigos\Illuminate\Auth;
 
 use Closure;
-use Illuminate\Contracts\Auth\Authenticatable as UserContract;
-use Illuminate\Contracts\Auth\UserProvider;
-use Illuminate\Contracts\Hashing\Hasher as HasherContract;
-use Illuminate\Contracts\Support\Arrayable;
+use Odigos\Illuminate\Contracts\Auth\Authenticatable as UserContract;
+use Odigos\Illuminate\Contracts\Auth\UserProvider;
+use Odigos\Illuminate\Contracts\Hashing\Hasher as HasherContract;
+use Odigos\Illuminate\Contracts\Support\Arrayable;
 class EloquentUserProvider implements UserProvider
 {
     /**

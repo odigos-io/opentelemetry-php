@@ -15,9 +15,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace MongoDB\Exception;
+namespace Odigos\MongoDB\Exception;
 
-class UnsupportedException extends \MongoDB\Exception\RuntimeException
+class UnsupportedException extends RuntimeException
 {
     /**
      * Thrown when the commitQuorum option for createIndexes is not supported

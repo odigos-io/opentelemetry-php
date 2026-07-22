@@ -1,12 +1,12 @@
 <?php
 
-namespace Illuminate\Database\Eloquent\Casts;
+namespace Odigos\Illuminate\Database\Eloquent\Casts;
 
 use BackedEnum;
-use Illuminate\Contracts\Database\Eloquent\Castable;
-use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
-use Illuminate\Support\Collection;
-use function Illuminate\Support\enum_value;
+use Odigos\Illuminate\Contracts\Database\Eloquent\Castable;
+use Odigos\Illuminate\Contracts\Database\Eloquent\CastsAttributes;
+use Odigos\Illuminate\Support\Collection;
+use function Odigos\Illuminate\Support\enum_value;
 class AsEnumCollection implements Castable
 {
     /**
@@ -31,7 +31,7 @@ class AsEnumCollection implements Castable
                 if (!isset($attributes[$key])) {
                     return;
                 }
-                $data = \Illuminate\Database\Eloquent\Casts\Json::decode($attributes[$key]);
+                $data = Json::decode($attributes[$key]);
                 if (!is_array($data)) {
                     return;
                 }
@@ -42,7 +42,7 @@ class AsEnumCollection implements Castable
             }
             public function set($model, $key, $value, $attributes)
             {
-                $value = $value !== null ? \Illuminate\Database\Eloquent\Casts\Json::encode((new Collection($value))->map(function ($enum) {
+                $value = $value !== null ? Json::encode((new Collection($value))->map(function ($enum) {
                     return $this->getStorableEnumValue($enum);
                 })->jsonSerialize()) : null;
                 return [$key => $value];

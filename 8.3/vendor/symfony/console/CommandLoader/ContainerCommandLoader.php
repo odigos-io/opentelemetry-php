@@ -8,17 +8,17 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Console\CommandLoader;
+namespace Odigos\Symfony\Component\Console\CommandLoader;
 
 use Psr\Container\ContainerInterface;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Exception\CommandNotFoundException;
+use Odigos\Symfony\Component\Console\Command\Command;
+use Odigos\Symfony\Component\Console\Exception\CommandNotFoundException;
 /**
  * Loads commands from a PSR-11 container.
  *
  * @author Robin Chalas <robin.chalas@gmail.com>
  */
-class ContainerCommandLoader implements \Symfony\Component\Console\CommandLoader\CommandLoaderInterface
+class ContainerCommandLoader implements CommandLoaderInterface
 {
     /**
      * @param array $commandMap An array with command names as keys and service ids as values

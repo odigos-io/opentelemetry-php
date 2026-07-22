@@ -5,21 +5,21 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\db\cubrid;
+namespace Odigos\yii\db\cubrid;
 
 use Odigos\Yii;
-use yii\base\NotSupportedException;
-use yii\db\ColumnSchema;
-use yii\db\Constraint;
-use yii\db\ConstraintFinderInterface;
-use yii\db\ConstraintFinderTrait;
-use yii\db\Expression;
-use yii\db\ForeignKeyConstraint;
-use yii\db\IndexConstraint;
-use yii\db\TableSchema;
-use yii\db\Transaction;
-use yii\helpers\ArrayHelper;
-use yii\db\Schema as BaseSchema;
+use Odigos\yii\base\NotSupportedException;
+use Odigos\yii\db\ColumnSchema;
+use Odigos\yii\db\Constraint;
+use Odigos\yii\db\ConstraintFinderInterface;
+use Odigos\yii\db\ConstraintFinderTrait;
+use Odigos\yii\db\Expression;
+use Odigos\yii\db\ForeignKeyConstraint;
+use Odigos\yii\db\IndexConstraint;
+use Odigos\yii\db\TableSchema;
+use Odigos\yii\db\Transaction;
+use Odigos\yii\helpers\ArrayHelper;
+use Odigos\yii\db\Schema as BaseSchema;
 /**
  * Schema is the class for retrieving metadata from a CUBRID database (version 9.3.x and higher).
  *
@@ -80,7 +80,7 @@ class Schema extends BaseSchema implements ConstraintFinderInterface
      * @var array map of DB errors and corresponding exceptions
      * If left part is found in DB error message exception class from the right part is used.
      */
-    public $exceptionMap = ['Operation would have caused one or more unique constraint violations' => 'yii\db\IntegrityException'];
+    public $exceptionMap = ['Operation would have caused one or more unique constraint violations' => 'Odigos\yii\db\IntegrityException'];
     /**
      * {@inheritdoc}
      */
@@ -208,7 +208,7 @@ class Schema extends BaseSchema implements ConstraintFinderInterface
      */
     public function createQueryBuilder()
     {
-        return Yii::createObject(\yii\db\cubrid\QueryBuilder::className(), [$this->db]);
+        return Yii::createObject(QueryBuilder::className(), [$this->db]);
     }
     /**
      * Loads the column information into a [[ColumnSchema]] object.
@@ -322,7 +322,7 @@ class Schema extends BaseSchema implements ConstraintFinderInterface
      */
     public function createColumnSchemaBuilder($type, $length = null)
     {
-        return new \yii\db\cubrid\ColumnSchemaBuilder($type, $length, $this->db);
+        return new ColumnSchemaBuilder($type, $length, $this->db);
     }
     /**
      * Loads multiple types of constraints and returns the specified ones.

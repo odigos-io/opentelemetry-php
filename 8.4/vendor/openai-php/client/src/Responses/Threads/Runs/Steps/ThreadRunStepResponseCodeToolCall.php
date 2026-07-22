@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Responses\Threads\Runs\Steps;
+namespace Odigos\OpenAI\Responses\Threads\Runs\Steps;
 
-use OpenAI\Contracts\ResponseContract;
-use OpenAI\Responses\Concerns\ArrayAccessible;
-use OpenAI\Testing\Responses\Concerns\Fakeable;
+use Odigos\OpenAI\Contracts\ResponseContract;
+use Odigos\OpenAI\Responses\Concerns\ArrayAccessible;
+use Odigos\OpenAI\Testing\Responses\Concerns\Fakeable;
 /**
  * @implements ResponseContract<array{id: ?string, type: 'code_interpreter', code_interpreter: array{input?: string, outputs?: array<int, array{type: 'image', image: array{file_id: string}}|array{type: 'logs', logs: string}>}}>
  */
@@ -19,7 +19,7 @@ final class ThreadRunStepResponseCodeToolCall implements ResponseContract
     /**
      * @param  'code_interpreter'  $type
      */
-    private function __construct(public ?string $id, public string $type, public \OpenAI\Responses\Threads\Runs\Steps\ThreadRunStepResponseCodeInterpreter $codeInterpreter)
+    private function __construct(public ?string $id, public string $type, public ThreadRunStepResponseCodeInterpreter $codeInterpreter)
     {
     }
     /**
@@ -29,7 +29,7 @@ final class ThreadRunStepResponseCodeToolCall implements ResponseContract
      */
     public static function from(array $attributes): self
     {
-        return new self($attributes['id'] ?? null, $attributes['type'], \OpenAI\Responses\Threads\Runs\Steps\ThreadRunStepResponseCodeInterpreter::from($attributes['code_interpreter']));
+        return new self($attributes['id'] ?? null, $attributes['type'], ThreadRunStepResponseCodeInterpreter::from($attributes['code_interpreter']));
     }
     /**
      * {@inheritDoc}

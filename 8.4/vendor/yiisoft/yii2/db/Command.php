@@ -5,11 +5,11 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\db;
+namespace Odigos\yii\db;
 
 use Odigos\Yii;
-use yii\base\Component;
-use yii\base\NotSupportedException;
+use Odigos\yii\base\Component;
+use Odigos\yii\base\NotSupportedException;
 /**
  * Command represents a SQL statement to be executed against a database.
  *
@@ -195,7 +195,7 @@ class Command extends Component
             if (is_string($name) && strncmp(':', $name, 1)) {
                 $name = ':' . $name;
             }
-            if (is_string($value) || $value instanceof \yii\db\Expression) {
+            if (is_string($value) || $value instanceof Expression) {
                 $params[$name] = $this->db->quoteValue((string) $value);
             } elseif (is_bool($value)) {
                 $params[$name] = $value ? 'TRUE' : 'FALSE';
@@ -252,10 +252,10 @@ class Command extends Component
         } catch (\Exception $e) {
             $message = $e->getMessage() . "\nFailed to prepare SQL: {$sql}";
             $errorInfo = $e instanceof \PDOException ? $e->errorInfo : null;
-            throw new \yii\db\Exception($message, $errorInfo, $e->getCode(), $e);
+            throw new Exception($message, $errorInfo, $e->getCode(), $e);
         } catch (\Throwable $e) {
             $message = $e->getMessage() . "\nFailed to prepare SQL: {$sql}";
-            throw new \yii\db\Exception($message, null, $e->getCode(), $e);
+            throw new Exception($message, null, $e->getCode(), $e);
         }
     }
     /**
@@ -348,7 +348,7 @@ class Command extends Component
                 // TODO: Drop in Yii 2.1
                 $this->pendingParams[$name] = $value;
                 $this->params[$name] = $value[0];
-            } elseif ($value instanceof \yii\db\PdoValue) {
+            } elseif ($value instanceof PdoValue) {
                 $this->pendingParams[$name] = [$value->getValue(), $value->getType()];
                 $this->params[$name] = $value->getValue();
             } else {
@@ -1016,7 +1016,7 @@ class Command extends Component
             $profile and Yii::endProfile($rawSql, __METHOD__);
             $this->refreshTableSchema();
             return $n;
-        } catch (\yii\db\Exception $e) {
+        } catch (Exception $e) {
             $profile and Yii::endProfile($rawSql, __METHOD__);
             throw $e;
         }
@@ -1050,7 +1050,7 @@ class Command extends Component
      */
     protected function queryInternal($method, $fetchMode = null)
     {
-        list($profile, $rawSql) = $this->logQuery('yii\db\Command::query');
+        list($profile, $rawSql) = $this->logQuery('Odigos\yii\db\Command::query');
         if ($method !== '') {
             $info = $this->db->getQueryCacheInfo($this->queryCacheDuration, $this->queryCacheDependency);
             if (is_array($info)) {
@@ -1059,17 +1059,17 @@ class Command extends Component
                 $cacheKey = $this->getCacheKey($method, $fetchMode, '');
                 $result = $cache->get($cacheKey);
                 if (is_array($result) && array_key_exists(0, $result)) {
-                    Yii::debug('Query result served from cache', 'yii\db\Command::query');
+                    Yii::debug('Query result served from cache', 'Odigos\yii\db\Command::query');
                     return $result[0];
                 }
             }
         }
         $this->prepare(\true);
         try {
-            $profile and Yii::beginProfile($rawSql, 'yii\db\Command::query');
+            $profile and Yii::beginProfile($rawSql, 'Odigos\yii\db\Command::query');
             $this->internalExecute($rawSql);
             if ($method === '') {
-                $result = new \yii\db\DataReader($this);
+                $result = new DataReader($this);
             } else {
                 if ($fetchMode === null) {
                     $fetchMode = $this->fetchMode;
@@ -1077,14 +1077,14 @@ class Command extends Component
                 $result = call_user_func_array([$this->pdoStatement, $method], (array) $fetchMode);
                 $this->pdoStatement->closeCursor();
             }
-            $profile and Yii::endProfile($rawSql, 'yii\db\Command::query');
-        } catch (\yii\db\Exception $e) {
-            $profile and Yii::endProfile($rawSql, 'yii\db\Command::query');
+            $profile and Yii::endProfile($rawSql, 'Odigos\yii\db\Command::query');
+        } catch (Exception $e) {
+            $profile and Yii::endProfile($rawSql, 'Odigos\yii\db\Command::query');
             throw $e;
         }
         if (isset($cache, $cacheKey, $info)) {
             $cache->set($cacheKey, [$result], $info[1], $info[2]);
-            Yii::debug('Saved query result in cache', 'yii\db\Command::query');
+            Yii::debug('Saved query result in cache', 'Odigos\yii\db\Command::query');
         }
         return $result;
     }

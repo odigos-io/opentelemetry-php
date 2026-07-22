@@ -1,19 +1,19 @@
 <?php
 
-namespace Illuminate\Http;
+namespace Odigos\Illuminate\Http;
 
 use ArrayObject;
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Contracts\Support\Jsonable;
-use Illuminate\Contracts\Support\Renderable;
-use Illuminate\Support\Traits\Macroable;
+use Odigos\Illuminate\Contracts\Support\Arrayable;
+use Odigos\Illuminate\Contracts\Support\Jsonable;
+use Odigos\Illuminate\Contracts\Support\Renderable;
+use Odigos\Illuminate\Support\Traits\Macroable;
 use InvalidArgumentException;
 use JsonSerializable;
-use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
-use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Odigos\Symfony\Component\HttpFoundation\Response as SymfonyResponse;
+use Odigos\Symfony\Component\HttpFoundation\ResponseHeaderBag;
 class Response extends SymfonyResponse
 {
-    use \Illuminate\Http\ResponseTrait, Macroable {
+    use ResponseTrait, Macroable {
         Macroable::__call as macroCall;
     }
     /**

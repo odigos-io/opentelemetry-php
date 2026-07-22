@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\EventDispatcher;
+namespace Odigos\Symfony\Component\EventDispatcher;
 
-use Symfony\Contracts\EventDispatcher\Event;
+use Odigos\Symfony\Contracts\EventDispatcher\Event;
 /**
  * Event encapsulation class.
  *

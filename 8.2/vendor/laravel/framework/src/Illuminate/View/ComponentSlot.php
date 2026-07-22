@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\View;
+namespace Odigos\Illuminate\View;
 
-use Illuminate\Contracts\Support\Htmlable;
+use Odigos\Illuminate\Contracts\Support\Htmlable;
 use InvalidArgumentException;
 use Stringable;
 class ComponentSlot implements Htmlable, Stringable
@@ -38,7 +38,7 @@ class ComponentSlot implements Htmlable, Stringable
      */
     public function withAttributes(array $attributes)
     {
-        $this->attributes = new \Illuminate\View\ComponentAttributeBag($attributes);
+        $this->attributes = new ComponentAttributeBag($attributes);
         return $this;
     }
     /**

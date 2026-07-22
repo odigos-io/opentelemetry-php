@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\VarDumper\Caster;
+namespace Odigos\Symfony\Component\VarDumper\Caster;
 
-use Symfony\Component\VarDumper\Cloner\Stub;
+use Odigos\Symfony\Component\VarDumper\Cloner\Stub;
 /**
  * Casts PDO related classes to array representation.
  *
@@ -37,19 +37,19 @@ class PdoCaster
             try {
                 $attr[$k] = 'ERRMODE' === $k ? $errmode : $c->getAttribute(\constant('PDO::ATTR_' . $k));
                 if ($v && isset($v[$attr[$k]])) {
-                    $attr[$k] = new \Symfony\Component\VarDumper\Caster\ConstStub($v[$attr[$k]], $attr[$k]);
+                    $attr[$k] = new ConstStub($v[$attr[$k]], $attr[$k]);
                 }
             } catch (\Exception) {
             }
         }
         if (isset($attr[$k = 'STATEMENT_CLASS'][1])) {
             if ($attr[$k][1]) {
-                $attr[$k][1] = new \Symfony\Component\VarDumper\Caster\ArgsStub($attr[$k][1], '__construct', $attr[$k][0]);
+                $attr[$k][1] = new ArgsStub($attr[$k][1], '__construct', $attr[$k][0]);
             }
-            $attr[$k][0] = new \Symfony\Component\VarDumper\Caster\ClassStub($attr[$k][0]);
+            $attr[$k][0] = new ClassStub($attr[$k][0]);
         }
-        $prefix = \Symfony\Component\VarDumper\Caster\Caster::PREFIX_VIRTUAL;
-        $a += [$prefix . 'inTransaction' => method_exists($c, 'inTransaction'), $prefix . 'errorInfo' => $c->errorInfo(), $prefix . 'attributes' => new \Symfony\Component\VarDumper\Caster\EnumStub($attr)];
+        $prefix = Caster::PREFIX_VIRTUAL;
+        $a += [$prefix . 'inTransaction' => method_exists($c, 'inTransaction'), $prefix . 'errorInfo' => $c->errorInfo(), $prefix . 'attributes' => new EnumStub($attr)];
         if ($a[$prefix . 'inTransaction']) {
             $a[$prefix . 'inTransaction'] = $c->inTransaction();
         } else {
@@ -66,7 +66,7 @@ class PdoCaster
      */
     public static function castPdoStatement(\PDOStatement $c, array $a, Stub $stub, bool $isNested)
     {
-        $prefix = \Symfony\Component\VarDumper\Caster\Caster::PREFIX_VIRTUAL;
+        $prefix = Caster::PREFIX_VIRTUAL;
         $a[$prefix . 'errorInfo'] = $c->errorInfo();
         if (!isset($a[$prefix . 'errorInfo'][1], $a[$prefix . 'errorInfo'][2])) {
             unset($a[$prefix . 'errorInfo']);

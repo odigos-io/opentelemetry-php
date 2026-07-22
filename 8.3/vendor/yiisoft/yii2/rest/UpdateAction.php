@@ -5,12 +5,12 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\rest;
+namespace Odigos\yii\rest;
 
 use Odigos\Yii;
-use yii\base\Model;
-use yii\db\ActiveRecord;
-use yii\web\ServerErrorHttpException;
+use Odigos\yii\base\Model;
+use Odigos\yii\db\ActiveRecord;
+use Odigos\yii\web\ServerErrorHttpException;
 /**
  * UpdateAction implements the API endpoint for updating a model.
  *
@@ -22,7 +22,7 @@ use yii\web\ServerErrorHttpException;
  * @template T of Controller = Controller
  * @extends Action<T>
  */
-class UpdateAction extends \yii\rest\Action
+class UpdateAction extends Action
 {
     /**
      * @var string the scenario to be assigned to the model before it is validated and updated.

@@ -1,8 +1,8 @@
 <?php
 
-namespace GuzzleHttp\Handler;
+namespace Odigos\GuzzleHttp\Handler;
 
-use GuzzleHttp\Utils;
+use Odigos\GuzzleHttp\Utils;
 /**
  * @internal
  */

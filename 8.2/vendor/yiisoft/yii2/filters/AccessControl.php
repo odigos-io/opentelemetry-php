@@ -5,14 +5,14 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\filters;
+namespace Odigos\yii\filters;
 
 use Odigos\Yii;
-use yii\base\ActionFilter;
-use yii\base\Component;
-use yii\di\Instance;
-use yii\web\ForbiddenHttpException;
-use yii\web\User;
+use Odigos\yii\base\ActionFilter;
+use Odigos\yii\base\Component;
+use Odigos\yii\di\Instance;
+use Odigos\yii\web\ForbiddenHttpException;
+use Odigos\yii\web\User;
 /**
  * AccessControl provides simple access control based on a set of rules.
  *
@@ -84,7 +84,7 @@ class AccessControl extends ActionFilter
      * @var array the default configuration of access rules. Individual rule configurations
      * specified via [[rules]] will take precedence when the same property of the rule is configured.
      */
-    public $ruleConfig = ['class' => 'yii\filters\AccessRule'];
+    public $ruleConfig = ['class' => 'Odigos\yii\filters\AccessRule'];
     /**
      * @var array a list of access rule objects or configuration arrays for creating the rule objects.
      * If a rule is specified via a configuration array, it will be merged with [[ruleConfig]] first

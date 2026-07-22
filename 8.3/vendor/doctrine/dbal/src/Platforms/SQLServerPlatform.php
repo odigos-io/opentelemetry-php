@@ -1,27 +1,27 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Platforms;
+namespace Odigos\Doctrine\DBAL\Platforms;
 
-use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Exception\InvalidColumnType\ColumnLengthRequired;
-use Doctrine\DBAL\LockMode;
-use Doctrine\DBAL\Platforms\Keywords\KeywordList;
-use Doctrine\DBAL\Platforms\Keywords\SQLServerKeywords;
-use Doctrine\DBAL\Platforms\SQLServer\SQL\Builder\SQLServerSelectSQLBuilder;
-use Doctrine\DBAL\Platforms\SQLServer\SQLServerMetadataProvider;
-use Doctrine\DBAL\Schema\Column;
-use Doctrine\DBAL\Schema\ColumnDiff;
-use Doctrine\DBAL\Schema\Identifier;
-use Doctrine\DBAL\Schema\Index;
-use Doctrine\DBAL\Schema\Name\UnquotedIdentifierFolding;
-use Doctrine\DBAL\Schema\Sequence;
-use Doctrine\DBAL\Schema\SQLServerSchemaManager;
-use Doctrine\DBAL\Schema\TableDiff;
-use Doctrine\DBAL\SQL\Builder\SelectSQLBuilder;
-use Doctrine\DBAL\TransactionIsolationLevel;
-use Doctrine\DBAL\Types\Types;
-use Doctrine\Deprecations\Deprecation;
+use Odigos\Doctrine\DBAL\Connection;
+use Odigos\Doctrine\DBAL\Exception\InvalidColumnType\ColumnLengthRequired;
+use Odigos\Doctrine\DBAL\LockMode;
+use Odigos\Doctrine\DBAL\Platforms\Keywords\KeywordList;
+use Odigos\Doctrine\DBAL\Platforms\Keywords\SQLServerKeywords;
+use Odigos\Doctrine\DBAL\Platforms\SQLServer\SQL\Builder\SQLServerSelectSQLBuilder;
+use Odigos\Doctrine\DBAL\Platforms\SQLServer\SQLServerMetadataProvider;
+use Odigos\Doctrine\DBAL\Schema\Column;
+use Odigos\Doctrine\DBAL\Schema\ColumnDiff;
+use Odigos\Doctrine\DBAL\Schema\Identifier;
+use Odigos\Doctrine\DBAL\Schema\Index;
+use Odigos\Doctrine\DBAL\Schema\Name\UnquotedIdentifierFolding;
+use Odigos\Doctrine\DBAL\Schema\Sequence;
+use Odigos\Doctrine\DBAL\Schema\SQLServerSchemaManager;
+use Odigos\Doctrine\DBAL\Schema\TableDiff;
+use Odigos\Doctrine\DBAL\SQL\Builder\SelectSQLBuilder;
+use Odigos\Doctrine\DBAL\TransactionIsolationLevel;
+use Odigos\Doctrine\DBAL\Types\Types;
+use Odigos\Doctrine\Deprecations\Deprecation;
 use InvalidArgumentException;
 use function array_map;
 use function array_merge;
@@ -47,7 +47,7 @@ use const PREG_OFFSET_CAPTURE;
  * Provides the behavior, features and SQL dialect of the Microsoft SQL Server database platform
  * of the oldest supported version.
  */
-class SQLServerPlatform extends \Doctrine\DBAL\Platforms\AbstractPlatform
+class SQLServerPlatform extends AbstractPlatform
 {
     /** @internal Should be used only from within the {@see AbstractSchemaManager} class hierarchy. */
     public const OPTION_DEFAULT_CONSTRAINT_NAME = 'default_constraint_name';
@@ -77,7 +77,7 @@ class SQLServerPlatform extends \Doctrine\DBAL\Platforms\AbstractPlatform
     {
         return sprintf('CONVERT(%s, %s)', $dataType, $expression);
     }
-    protected function getDateArithmeticIntervalExpression(string $date, string $operator, string $interval, \Doctrine\DBAL\Platforms\DateIntervalUnit $unit): string
+    protected function getDateArithmeticIntervalExpression(string $date, string $operator, string $interval, DateIntervalUnit $unit): string
     {
         $factorClause = '';
         if ($operator === '-') {
@@ -608,20 +608,20 @@ class SQLServerPlatform extends \Doctrine\DBAL\Platforms\AbstractPlatform
     {
         return $dividend . ' % ' . $divisor;
     }
-    public function getTrimExpression(string $str, \Doctrine\DBAL\Platforms\TrimMode $mode = \Doctrine\DBAL\Platforms\TrimMode::UNSPECIFIED, ?string $char = null): string
+    public function getTrimExpression(string $str, TrimMode $mode = TrimMode::UNSPECIFIED, ?string $char = null): string
     {
         if ($char === null) {
             return match ($mode) {
-                \Doctrine\DBAL\Platforms\TrimMode::LEADING => 'LTRIM(' . $str . ')',
-                \Doctrine\DBAL\Platforms\TrimMode::TRAILING => 'RTRIM(' . $str . ')',
+                TrimMode::LEADING => 'LTRIM(' . $str . ')',
+                TrimMode::TRAILING => 'RTRIM(' . $str . ')',
                 default => 'LTRIM(RTRIM(' . $str . '))',
             };
         }
         $pattern = "'%[^' + " . $char . " + ']%'";
-        if ($mode === \Doctrine\DBAL\Platforms\TrimMode::LEADING) {
+        if ($mode === TrimMode::LEADING) {
             return 'stuff(' . $str . ', 1, patindex(' . $pattern . ', ' . $str . ') - 1, null)';
         }
-        if ($mode === \Doctrine\DBAL\Platforms\TrimMode::TRAILING) {
+        if ($mode === TrimMode::TRAILING) {
             return 'reverse(stuff(reverse(' . $str . '), 1, ' . 'patindex(' . $pattern . ', reverse(' . $str . ')) - 1, null))';
         }
         return 'reverse(stuff(reverse(stuff(' . $str . ', 1, patindex(' . $pattern . ', ' . $str . ') - 1, null)), 1, ' . 'patindex(' . $pattern . ', reverse(stuff(' . $str . ', 1, patindex(' . $pattern . ', ' . $str . ') - 1, null))) - 1, null))';

@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\View;
+namespace Odigos\Illuminate\View;
 
 use ErrorException;
-use Illuminate\Container\Container;
-use Illuminate\Support\Reflector;
+use Odigos\Illuminate\Container\Container;
+use Odigos\Illuminate\Support\Reflector;
 class ViewException extends ErrorException
 {
     /**

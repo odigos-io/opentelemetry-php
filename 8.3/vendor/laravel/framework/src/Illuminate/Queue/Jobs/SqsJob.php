@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Queue\Jobs;
+namespace Odigos\Illuminate\Queue\Jobs;
 
 use Odigos\Aws\Sqs\SqsClient;
-use Illuminate\Container\Container;
-use Illuminate\Contracts\Queue\Job as JobContract;
-class SqsJob extends \Illuminate\Queue\Jobs\Job implements JobContract
+use Odigos\Illuminate\Container\Container;
+use Odigos\Illuminate\Contracts\Queue\Job as JobContract;
+class SqsJob extends Job implements JobContract
 {
     /**
      * The Amazon SQS client instance.

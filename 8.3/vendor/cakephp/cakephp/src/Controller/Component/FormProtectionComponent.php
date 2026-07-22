@@ -14,15 +14,15 @@ declare (strict_types=1);
  * @since         4.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Controller\Component;
+namespace Odigos\Cake\Controller\Component;
 
-use Cake\Controller\Component;
-use Cake\Controller\Exception\FormProtectionException;
-use Cake\Core\Configure;
-use Cake\Event\EventInterface;
-use Cake\Form\FormProtector;
-use Cake\Http\Response;
-use Cake\Routing\Router;
+use Odigos\Cake\Controller\Component;
+use Odigos\Cake\Controller\Exception\FormProtectionException;
+use Odigos\Cake\Core\Configure;
+use Odigos\Cake\Event\EventInterface;
+use Odigos\Cake\Form\FormProtector;
+use Odigos\Cake\Http\Response;
+use Odigos\Cake\Routing\Router;
 use Closure;
 /**
  * Protects against form tampering. It ensures that:

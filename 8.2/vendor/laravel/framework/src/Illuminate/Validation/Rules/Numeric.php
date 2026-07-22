@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Validation\Rules;
+namespace Odigos\Illuminate\Validation\Rules;
 
-use Illuminate\Support\Arr;
-use Illuminate\Support\Traits\Conditionable;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Traits\Conditionable;
 use Stringable;
 class Numeric implements Stringable
 {
@@ -19,7 +19,7 @@ class Numeric implements Stringable
      * @param  int|float  $max
      * @return $this
      */
-    public function between(int|float $min, int|float $max): \Illuminate\Validation\Rules\Numeric
+    public function between(int|float $min, int|float $max): Numeric
     {
         return $this->addRule('between:' . $min . ',' . $max);
     }
@@ -30,7 +30,7 @@ class Numeric implements Stringable
      * @param  int|null  $max
      * @return $this
      */
-    public function decimal(int $min, ?int $max = null): \Illuminate\Validation\Rules\Numeric
+    public function decimal(int $min, ?int $max = null): Numeric
     {
         $rule = 'decimal:' . $min;
         if ($max !== null) {
@@ -44,7 +44,7 @@ class Numeric implements Stringable
      * @param  string  $field
      * @return $this
      */
-    public function different(string $field): \Illuminate\Validation\Rules\Numeric
+    public function different(string $field): Numeric
     {
         return $this->addRule('different:' . $field);
     }
@@ -54,7 +54,7 @@ class Numeric implements Stringable
      * @param  int  $length
      * @return $this
      */
-    public function digits(int $length): \Illuminate\Validation\Rules\Numeric
+    public function digits(int $length): Numeric
     {
         return $this->integer()->addRule('digits:' . $length);
     }
@@ -65,7 +65,7 @@ class Numeric implements Stringable
      * @param  int  $max
      * @return $this
      */
-    public function digitsBetween(int $min, int $max): \Illuminate\Validation\Rules\Numeric
+    public function digitsBetween(int $min, int $max): Numeric
     {
         return $this->integer()->addRule('digits_between:' . $min . ',' . $max);
     }
@@ -75,7 +75,7 @@ class Numeric implements Stringable
      * @param  string  $field
      * @return $this
      */
-    public function greaterThan(string $field): \Illuminate\Validation\Rules\Numeric
+    public function greaterThan(string $field): Numeric
     {
         return $this->addRule('gt:' . $field);
     }
@@ -85,7 +85,7 @@ class Numeric implements Stringable
      * @param  string  $field
      * @return $this
      */
-    public function greaterThanOrEqualTo(string $field): \Illuminate\Validation\Rules\Numeric
+    public function greaterThanOrEqualTo(string $field): Numeric
     {
         return $this->addRule('gte:' . $field);
     }
@@ -94,7 +94,7 @@ class Numeric implements Stringable
      *
      * @return $this
      */
-    public function integer(bool $strict = \false): \Illuminate\Validation\Rules\Numeric
+    public function integer(bool $strict = \false): Numeric
     {
         return $this->addRule($strict ? 'integer:strict' : 'integer');
     }
@@ -104,7 +104,7 @@ class Numeric implements Stringable
      * @param  string  $field
      * @return $this
      */
-    public function lessThan(string $field): \Illuminate\Validation\Rules\Numeric
+    public function lessThan(string $field): Numeric
     {
         return $this->addRule('lt:' . $field);
     }
@@ -114,7 +114,7 @@ class Numeric implements Stringable
      * @param  string  $field
      * @return $this
      */
-    public function lessThanOrEqualTo(string $field): \Illuminate\Validation\Rules\Numeric
+    public function lessThanOrEqualTo(string $field): Numeric
     {
         return $this->addRule('lte:' . $field);
     }
@@ -124,7 +124,7 @@ class Numeric implements Stringable
      * @param  int|float  $value
      * @return $this
      */
-    public function max(int|float $value): \Illuminate\Validation\Rules\Numeric
+    public function max(int|float $value): Numeric
     {
         return $this->addRule('max:' . $value);
     }
@@ -134,7 +134,7 @@ class Numeric implements Stringable
      * @param  int  $value
      * @return $this
      */
-    public function maxDigits(int $value): \Illuminate\Validation\Rules\Numeric
+    public function maxDigits(int $value): Numeric
     {
         return $this->addRule('max_digits:' . $value);
     }
@@ -144,7 +144,7 @@ class Numeric implements Stringable
      * @param  int|float  $value
      * @return $this
      */
-    public function min(int|float $value): \Illuminate\Validation\Rules\Numeric
+    public function min(int|float $value): Numeric
     {
         return $this->addRule('min:' . $value);
     }
@@ -154,7 +154,7 @@ class Numeric implements Stringable
      * @param  int  $value
      * @return $this
      */
-    public function minDigits(int $value): \Illuminate\Validation\Rules\Numeric
+    public function minDigits(int $value): Numeric
     {
         return $this->addRule('min_digits:' . $value);
     }
@@ -164,7 +164,7 @@ class Numeric implements Stringable
      * @param  int|float  $value
      * @return $this
      */
-    public function multipleOf(int|float $value): \Illuminate\Validation\Rules\Numeric
+    public function multipleOf(int|float $value): Numeric
     {
         return $this->addRule('multiple_of:' . $value);
     }
@@ -174,7 +174,7 @@ class Numeric implements Stringable
      * @param  string  $field
      * @return $this
      */
-    public function same(string $field): \Illuminate\Validation\Rules\Numeric
+    public function same(string $field): Numeric
     {
         return $this->addRule('same:' . $field);
     }
@@ -184,7 +184,7 @@ class Numeric implements Stringable
      * @param  int  $value
      * @return $this
      */
-    public function exactly(int $value): \Illuminate\Validation\Rules\Numeric
+    public function exactly(int $value): Numeric
     {
         return $this->integer()->addRule('size:' . $value);
     }
@@ -198,7 +198,7 @@ class Numeric implements Stringable
     /**
      * Add custom rules to the validation rules array.
      */
-    protected function addRule(array|string $rules): \Illuminate\Validation\Rules\Numeric
+    protected function addRule(array|string $rules): Numeric
     {
         $this->constraints = array_merge($this->constraints, Arr::wrap($rules));
         return $this;

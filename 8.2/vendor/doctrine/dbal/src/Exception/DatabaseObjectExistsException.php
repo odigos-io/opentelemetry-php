@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Exception;
+namespace Odigos\Doctrine\DBAL\Exception;
 
 /**
  * Base class for all already existing database object related errors detected in the driver.
@@ -10,6 +10,6 @@ namespace Doctrine\DBAL\Exception;
  * such as schemas, tables, views, sequences, triggers,  constraints, indexes,
  * functions, stored procedures etc.
  */
-class DatabaseObjectExistsException extends \Doctrine\DBAL\Exception\ServerException
+class DatabaseObjectExistsException extends ServerException
 {
 }

@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Foundation\Exceptions;
+namespace Odigos\Illuminate\Foundation\Exceptions;
 
-use Illuminate\Support\Traits\ReflectsClosures;
+use Odigos\Illuminate\Support\Traits\ReflectsClosures;
 use Throwable;
 class ReportableHandler
 {

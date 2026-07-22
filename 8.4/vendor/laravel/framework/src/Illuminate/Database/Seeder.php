@@ -1,12 +1,12 @@
 <?php
 
-namespace Illuminate\Database;
+namespace Odigos\Illuminate\Database;
 
-use Illuminate\Console\Command;
-use Illuminate\Console\View\Components\TwoColumnDetail;
-use Illuminate\Contracts\Container\Container;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Support\Arr;
+use Odigos\Illuminate\Console\Command;
+use Odigos\Illuminate\Console\View\Components\TwoColumnDetail;
+use Odigos\Illuminate\Contracts\Container\Container;
+use Odigos\Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Odigos\Illuminate\Support\Arr;
 use InvalidArgumentException;
 abstract class Seeder
 {

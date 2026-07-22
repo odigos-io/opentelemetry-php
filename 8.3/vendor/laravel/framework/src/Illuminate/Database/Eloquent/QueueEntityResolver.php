@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Database\Eloquent;
+namespace Odigos\Illuminate\Database\Eloquent;
 
-use Illuminate\Contracts\Queue\EntityNotFoundException;
-use Illuminate\Contracts\Queue\EntityResolver as EntityResolverContract;
+use Odigos\Illuminate\Contracts\Queue\EntityNotFoundException;
+use Odigos\Illuminate\Contracts\Queue\EntityResolver as EntityResolverContract;
 class QueueEntityResolver implements EntityResolverContract
 {
     /**

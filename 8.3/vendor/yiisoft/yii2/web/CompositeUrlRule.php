@@ -5,10 +5,10 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\web;
+namespace Odigos\yii\web;
 
 use Odigos\Yii;
-use yii\base\BaseObject;
+use Odigos\yii\base\BaseObject;
 /**
  * CompositeUrlRule is the base class for URL rule classes that consist of multiple simpler rules.
  *
@@ -18,7 +18,7 @@ use yii\base\BaseObject;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-abstract class CompositeUrlRule extends BaseObject implements \yii\web\UrlRuleInterface
+abstract class CompositeUrlRule extends BaseObject implements UrlRuleInterface
 {
     /**
      * @var UrlRuleInterface[]|UrlRuleInterface[][]|array[]|string[] the URL rules contained in this composite rule.
@@ -65,14 +65,14 @@ abstract class CompositeUrlRule extends BaseObject implements \yii\web\UrlRuleIn
      */
     public function createUrl($manager, $route, $params)
     {
-        $this->createStatus = \yii\web\UrlRule::CREATE_STATUS_SUCCESS;
+        $this->createStatus = UrlRule::CREATE_STATUS_SUCCESS;
         $url = $this->iterateRules($this->rules, $manager, $route, $params);
         if ($url !== \false) {
             return $url;
         }
-        if ($this->createStatus === \yii\web\UrlRule::CREATE_STATUS_SUCCESS) {
+        if ($this->createStatus === UrlRule::CREATE_STATUS_SUCCESS) {
             // create status was not changed - there is no rules configured
-            $this->createStatus = \yii\web\UrlRule::CREATE_STATUS_PARSING_ONLY;
+            $this->createStatus = UrlRule::CREATE_STATUS_PARSING_ONLY;
         }
         return \false;
     }
@@ -93,7 +93,7 @@ abstract class CompositeUrlRule extends BaseObject implements \yii\web\UrlRuleIn
         foreach ($rules as $rule) {
             $url = $rule->createUrl($manager, $route, $params);
             if ($url !== \false) {
-                $this->createStatus = \yii\web\UrlRule::CREATE_STATUS_SUCCESS;
+                $this->createStatus = UrlRule::CREATE_STATUS_SUCCESS;
                 return $url;
             }
             if ($this->createStatus === null || !method_exists($rule, 'getCreateUrlStatus') || $rule->getCreateUrlStatus() === null) {

@@ -1,16 +1,16 @@
 <?php
 
-namespace Illuminate\Foundation\Events;
+namespace Odigos\Illuminate\Foundation\Events;
 
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Reflector;
-use Illuminate\Support\Str;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Reflector;
+use Odigos\Illuminate\Support\Str;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;
 use SplFileInfo;
-use Symfony\Component\Finder\Finder;
+use Odigos\Symfony\Component\Finder\Finder;
 class DiscoverEvents
 {
     /**

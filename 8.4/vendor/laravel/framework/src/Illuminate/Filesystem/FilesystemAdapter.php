@@ -1,19 +1,19 @@
 <?php
 
-namespace Illuminate\Filesystem;
+namespace Odigos\Illuminate\Filesystem;
 
 use Closure;
-use Illuminate\Container\Container;
-use Illuminate\Contracts\Debug\ExceptionHandler;
-use Illuminate\Contracts\Filesystem\Cloud as CloudFilesystemContract;
-use Illuminate\Contracts\Filesystem\Filesystem as FilesystemContract;
-use Illuminate\Http\File;
-use Illuminate\Http\Request;
-use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
-use Illuminate\Support\Traits\Conditionable;
-use Illuminate\Support\Traits\Macroable;
+use Odigos\Illuminate\Container\Container;
+use Odigos\Illuminate\Contracts\Debug\ExceptionHandler;
+use Odigos\Illuminate\Contracts\Filesystem\Cloud as CloudFilesystemContract;
+use Odigos\Illuminate\Contracts\Filesystem\Filesystem as FilesystemContract;
+use Odigos\Illuminate\Http\File;
+use Odigos\Illuminate\Http\Request;
+use Odigos\Illuminate\Http\UploadedFile;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Str;
+use Odigos\Illuminate\Support\Traits\Conditionable;
+use Odigos\Illuminate\Support\Traits\Macroable;
 use InvalidArgumentException;
 use Odigos\League\Flysystem\FilesystemAdapter as FlysystemAdapter;
 use Odigos\League\Flysystem\FilesystemOperator;
@@ -36,7 +36,7 @@ use Odigos\League\Flysystem\Visibility;
 use Odigos\PHPUnit\Framework\Assert as PHPUnit;
 use Psr\Http\Message\StreamInterface;
 use RuntimeException;
-use Symfony\Component\HttpFoundation\StreamedResponse;
+use Odigos\Symfony\Component\HttpFoundation\StreamedResponse;
 /**
  * @mixin \League\Flysystem\FilesystemOperator
  */

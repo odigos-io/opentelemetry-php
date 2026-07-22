@@ -5,26 +5,26 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\db\mysql;
+namespace Odigos\yii\db\mysql;
 
-use yii\base\InvalidArgumentException;
-use yii\caching\CacheInterface;
-use yii\caching\DbCache;
-use yii\db\Exception;
-use yii\db\Expression;
-use yii\db\Query;
+use Odigos\yii\base\InvalidArgumentException;
+use Odigos\yii\caching\CacheInterface;
+use Odigos\yii\caching\DbCache;
+use Odigos\yii\db\Exception;
+use Odigos\yii\db\Expression;
+use Odigos\yii\db\Query;
 /**
  * QueryBuilder is the query builder for MySQL databases.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class QueryBuilder extends \yii\db\QueryBuilder
+class QueryBuilder extends \Odigos\yii\db\QueryBuilder
 {
     /**
      * @var array mapping from abstract column types (keys) to physical column types (values).
      */
-    public $typeMap = [\yii\db\mysql\Schema::TYPE_PK => 'int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY', \yii\db\mysql\Schema::TYPE_UPK => 'int(10) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY', \yii\db\mysql\Schema::TYPE_BIGPK => 'bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY', \yii\db\mysql\Schema::TYPE_UBIGPK => 'bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY', \yii\db\mysql\Schema::TYPE_CHAR => 'char(1)', \yii\db\mysql\Schema::TYPE_STRING => 'varchar(255)', \yii\db\mysql\Schema::TYPE_TEXT => 'text', \yii\db\mysql\Schema::TYPE_TINYINT => 'tinyint(3)', \yii\db\mysql\Schema::TYPE_SMALLINT => 'smallint(6)', \yii\db\mysql\Schema::TYPE_INTEGER => 'int(11)', \yii\db\mysql\Schema::TYPE_BIGINT => 'bigint(20)', \yii\db\mysql\Schema::TYPE_FLOAT => 'float', \yii\db\mysql\Schema::TYPE_DOUBLE => 'double', \yii\db\mysql\Schema::TYPE_DECIMAL => 'decimal(10,0)', \yii\db\mysql\Schema::TYPE_DATE => 'date', \yii\db\mysql\Schema::TYPE_BINARY => 'blob', \yii\db\mysql\Schema::TYPE_BOOLEAN => 'tinyint(1)', \yii\db\mysql\Schema::TYPE_MONEY => 'decimal(19,4)', \yii\db\mysql\Schema::TYPE_JSON => 'json'];
+    public $typeMap = [Schema::TYPE_PK => 'int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY', Schema::TYPE_UPK => 'int(10) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY', Schema::TYPE_BIGPK => 'bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY', Schema::TYPE_UBIGPK => 'bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY', Schema::TYPE_CHAR => 'char(1)', Schema::TYPE_STRING => 'varchar(255)', Schema::TYPE_TEXT => 'text', Schema::TYPE_TINYINT => 'tinyint(3)', Schema::TYPE_SMALLINT => 'smallint(6)', Schema::TYPE_INTEGER => 'int(11)', Schema::TYPE_BIGINT => 'bigint(20)', Schema::TYPE_FLOAT => 'float', Schema::TYPE_DOUBLE => 'double', Schema::TYPE_DECIMAL => 'decimal(10,0)', Schema::TYPE_DATE => 'date', Schema::TYPE_BINARY => 'blob', Schema::TYPE_BOOLEAN => 'tinyint(1)', Schema::TYPE_MONEY => 'decimal(19,4)', Schema::TYPE_JSON => 'json'];
     /**
      * {@inheritdoc}
      */
@@ -348,9 +348,9 @@ class QueryBuilder extends \yii\db\QueryBuilder
      */
     private function defaultTimeTypeMap()
     {
-        $map = [\yii\db\mysql\Schema::TYPE_DATETIME => 'datetime', \yii\db\mysql\Schema::TYPE_TIMESTAMP => 'timestamp', \yii\db\mysql\Schema::TYPE_TIME => 'time'];
+        $map = [Schema::TYPE_DATETIME => 'datetime', Schema::TYPE_TIMESTAMP => 'timestamp', Schema::TYPE_TIME => 'time'];
         if ($this->supportsFractionalSeconds()) {
-            $map = [\yii\db\mysql\Schema::TYPE_DATETIME => 'datetime(0)', \yii\db\mysql\Schema::TYPE_TIMESTAMP => 'timestamp(0)', \yii\db\mysql\Schema::TYPE_TIME => 'time(0)'];
+            $map = [Schema::TYPE_DATETIME => 'datetime(0)', Schema::TYPE_TIMESTAMP => 'timestamp(0)', Schema::TYPE_TIME => 'time(0)'];
         }
         return $map;
     }

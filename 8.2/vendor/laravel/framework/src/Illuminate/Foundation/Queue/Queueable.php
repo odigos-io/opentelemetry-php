@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Foundation\Queue;
+namespace Odigos\Illuminate\Foundation\Queue;
 
-use Illuminate\Bus\Queueable as QueueableByBus;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
+use Odigos\Illuminate\Bus\Queueable as QueueableByBus;
+use Odigos\Illuminate\Foundation\Bus\Dispatchable;
+use Odigos\Illuminate\Queue\InteractsWithQueue;
+use Odigos\Illuminate\Queue\SerializesModels;
 trait Queueable
 {
     use Dispatchable, InteractsWithQueue, QueueableByBus, SerializesModels;

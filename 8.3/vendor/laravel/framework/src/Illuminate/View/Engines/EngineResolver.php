@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\View\Engines;
+namespace Odigos\Illuminate\View\Engines;
 
 use Closure;
 use InvalidArgumentException;

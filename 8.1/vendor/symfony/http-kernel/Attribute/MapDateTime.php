@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpKernel\Attribute;
+namespace Odigos\Symfony\Component\HttpKernel\Attribute;
 
-use Symfony\Component\HttpKernel\Controller\ArgumentResolver\DateTimeValueResolver;
+use Odigos\Symfony\Component\HttpKernel\Controller\ArgumentResolver\DateTimeValueResolver;
 /**
  * Controller parameter tag to configure DateTime arguments.
  */
 #[\Attribute(\Attribute::TARGET_PARAMETER)]
-class MapDateTime extends \Symfony\Component\HttpKernel\Attribute\ValueResolver
+class MapDateTime extends ValueResolver
 {
     public function __construct(public readonly ?string $format = null, bool $disabled = \false, string $resolver = DateTimeValueResolver::class)
     {

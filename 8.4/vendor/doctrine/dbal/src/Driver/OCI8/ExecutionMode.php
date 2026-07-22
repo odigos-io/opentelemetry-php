@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Driver\OCI8;
+namespace Odigos\Doctrine\DBAL\Driver\OCI8;
 
 /**
  * Encapsulates the execution mode that is shared between the connection and its statements.

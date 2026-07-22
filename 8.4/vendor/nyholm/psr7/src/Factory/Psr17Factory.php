@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace Nyholm\Psr7\Factory;
+namespace Odigos\Nyholm\Psr7\Factory;
 
-use Nyholm\Psr7\Request;
-use Nyholm\Psr7\Response;
-use Nyholm\Psr7\ServerRequest;
-use Nyholm\Psr7\Stream;
-use Nyholm\Psr7\UploadedFile;
-use Nyholm\Psr7\Uri;
+use Odigos\Nyholm\Psr7\Request;
+use Odigos\Nyholm\Psr7\Response;
+use Odigos\Nyholm\Psr7\ServerRequest;
+use Odigos\Nyholm\Psr7\Stream;
+use Odigos\Nyholm\Psr7\UploadedFile;
+use Odigos\Nyholm\Psr7\Uri;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseFactoryInterface;

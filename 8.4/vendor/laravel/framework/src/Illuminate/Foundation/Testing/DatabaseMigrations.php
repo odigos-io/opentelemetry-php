@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Foundation\Testing;
+namespace Odigos\Illuminate\Foundation\Testing;
 
-use Illuminate\Contracts\Console\Kernel;
-use Illuminate\Foundation\Testing\Traits\CanConfigureMigrationCommands;
+use Odigos\Illuminate\Contracts\Console\Kernel;
+use Odigos\Illuminate\Foundation\Testing\Traits\CanConfigureMigrationCommands;
 trait DatabaseMigrations
 {
     use CanConfigureMigrationCommands;
@@ -19,7 +19,7 @@ trait DatabaseMigrations
         $this->afterRefreshingDatabase();
         $this->beforeApplicationDestroyed(function () {
             $this->artisan('migrate:rollback');
-            \Illuminate\Foundation\Testing\RefreshDatabaseState::$migrated = \false;
+            RefreshDatabaseState::$migrated = \false;
         });
     }
     /**

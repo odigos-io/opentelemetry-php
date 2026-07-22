@@ -8,13 +8,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpFoundation\Session\Storage\Proxy;
+namespace Odigos\Symfony\Component\HttpFoundation\Session\Storage\Proxy;
 
-use Symfony\Component\HttpFoundation\Session\Storage\Handler\StrictSessionHandler;
+use Odigos\Symfony\Component\HttpFoundation\Session\Storage\Handler\StrictSessionHandler;
 /**
  * @author Drak <drak@zikula.org>
  */
-class SessionHandlerProxy extends \Symfony\Component\HttpFoundation\Session\Storage\Proxy\AbstractProxy implements \SessionHandlerInterface, \SessionUpdateTimestampHandlerInterface
+class SessionHandlerProxy extends AbstractProxy implements \SessionHandlerInterface, \SessionUpdateTimestampHandlerInterface
 {
     protected $handler;
     public function __construct(\SessionHandlerInterface $handler)

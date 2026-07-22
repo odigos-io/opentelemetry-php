@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Cache;
+namespace Odigos\Doctrine\DBAL\Cache;
 
-use Doctrine\DBAL\Cache\Exception\NoCacheKey;
-use Doctrine\DBAL\Connection;
+use Odigos\Doctrine\DBAL\Cache\Exception\NoCacheKey;
+use Odigos\Doctrine\DBAL\Connection;
 use Psr\Cache\CacheItemPoolInterface;
 use function hash;
 use function serialize;
@@ -57,16 +57,16 @@ class QueryCacheProfile
         $cacheKey = $this->cacheKey ?? sha1($realCacheKey);
         return [$cacheKey, $realCacheKey];
     }
-    public function setResultCache(CacheItemPoolInterface $cache): \Doctrine\DBAL\Cache\QueryCacheProfile
+    public function setResultCache(CacheItemPoolInterface $cache): QueryCacheProfile
     {
-        return new \Doctrine\DBAL\Cache\QueryCacheProfile($this->lifetime, $this->cacheKey, $cache);
+        return new QueryCacheProfile($this->lifetime, $this->cacheKey, $cache);
     }
     public function setCacheKey(?string $cacheKey): self
     {
-        return new \Doctrine\DBAL\Cache\QueryCacheProfile($this->lifetime, $cacheKey, $this->resultCache);
+        return new QueryCacheProfile($this->lifetime, $cacheKey, $this->resultCache);
     }
     public function setLifetime(int $lifetime): self
     {
-        return new \Doctrine\DBAL\Cache\QueryCacheProfile($lifetime, $this->cacheKey, $this->resultCache);
+        return new QueryCacheProfile($lifetime, $this->cacheKey, $this->resultCache);
     }
 }

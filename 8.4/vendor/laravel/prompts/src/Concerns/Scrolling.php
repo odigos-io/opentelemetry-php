@@ -1,8 +1,8 @@
 <?php
 
-namespace Laravel\Prompts\Concerns;
+namespace Odigos\Laravel\Prompts\Concerns;
 
-use Laravel\Prompts\Themes\Contracts\Scrolling as ScrollingRenderer;
+use Odigos\Laravel\Prompts\Themes\Contracts\Scrolling as ScrollingRenderer;
 trait Scrolling
 {
     /**

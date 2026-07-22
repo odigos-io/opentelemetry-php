@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Termwind\Laravel;
+namespace Odigos\Termwind\Laravel;
 
-use Illuminate\Console\OutputStyle;
-use Illuminate\Support\ServiceProvider;
+use Odigos\Illuminate\Console\OutputStyle;
+use Odigos\Illuminate\Support\ServiceProvider;
 use Odigos\Termwind\Termwind;
 final class TermwindServiceProvider extends ServiceProvider
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Foundation\Testing;
+namespace Odigos\Illuminate\Foundation\Testing;
 
-use Illuminate\Contracts\Console\Kernel as ConsoleKernel;
+use Odigos\Illuminate\Contracts\Console\Kernel as ConsoleKernel;
 trait WithConsoleEvents
 {
     /**

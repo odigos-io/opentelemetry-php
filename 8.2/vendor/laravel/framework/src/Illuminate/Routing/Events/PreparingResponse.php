@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Routing\Events;
+namespace Odigos\Illuminate\Routing\Events;
 
 class PreparingResponse
 {

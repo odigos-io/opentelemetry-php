@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Translation\Catalogue;
+namespace Odigos\Symfony\Component\Translation\Catalogue;
 
-use Symfony\Component\Translation\Exception\InvalidArgumentException;
-use Symfony\Component\Translation\Exception\LogicException;
-use Symfony\Component\Translation\MessageCatalogue;
-use Symfony\Component\Translation\MessageCatalogueInterface;
+use Odigos\Symfony\Component\Translation\Exception\InvalidArgumentException;
+use Odigos\Symfony\Component\Translation\Exception\LogicException;
+use Odigos\Symfony\Component\Translation\MessageCatalogue;
+use Odigos\Symfony\Component\Translation\MessageCatalogueInterface;
 /**
  * Base catalogues binary operation class.
  *
@@ -22,7 +22,7 @@ use Symfony\Component\Translation\MessageCatalogueInterface;
  *
  * @author Jean-François Simon <contact@jfsimon.fr>
  */
-abstract class AbstractOperation implements \Symfony\Component\Translation\Catalogue\OperationInterface
+abstract class AbstractOperation implements OperationInterface
 {
     public const OBSOLETE_BATCH = 'obsolete';
     public const NEW_BATCH = 'new';

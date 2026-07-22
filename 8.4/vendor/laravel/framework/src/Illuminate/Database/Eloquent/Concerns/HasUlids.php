@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Database\Eloquent\Concerns;
+namespace Odigos\Illuminate\Database\Eloquent\Concerns;
 
-use Illuminate\Support\Str;
+use Odigos\Illuminate\Support\Str;
 trait HasUlids
 {
-    use \Illuminate\Database\Eloquent\Concerns\HasUniqueStringIds;
+    use HasUniqueStringIds;
     /**
      * Generate a new unique key for the model.
      *

@@ -1,10 +1,10 @@
 <?php
 
-namespace Laravel\Prompts\Themes\Default;
+namespace Odigos\Laravel\Prompts\Themes\Default;
 
-use Laravel\Prompts\Concerns\HasSpinner;
-use Laravel\Prompts\Task;
-class TaskRenderer extends \Laravel\Prompts\Themes\Default\Renderer
+use Odigos\Laravel\Prompts\Concerns\HasSpinner;
+use Odigos\Laravel\Prompts\Task;
+class TaskRenderer extends Renderer
 {
     use HasSpinner;
     /**

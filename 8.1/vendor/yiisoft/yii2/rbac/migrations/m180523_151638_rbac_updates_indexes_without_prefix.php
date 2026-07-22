@@ -7,9 +7,9 @@ namespace Odigos;
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-use yii\base\InvalidConfigException;
-use yii\db\Migration;
-use yii\rbac\DbManager;
+use Odigos\yii\base\InvalidConfigException;
+use Odigos\yii\db\Migration;
+use Odigos\yii\rbac\DbManager;
 /**
  * Updates indexes without a prefix.
  *

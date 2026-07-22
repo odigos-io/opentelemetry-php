@@ -14,16 +14,16 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database\Schema;
+namespace Odigos\Cake\Database\Schema;
 
-use Cake\Database\Driver;
-use Cake\Database\Exception\DatabaseException;
-use Cake\Database\Exception\QueryException;
-use Cake\Database\Type\ColumnSchemaAwareInterface;
-use Cake\Database\TypeFactory;
+use Odigos\Cake\Database\Driver;
+use Odigos\Cake\Database\Exception\DatabaseException;
+use Odigos\Cake\Database\Exception\QueryException;
+use Odigos\Cake\Database\Type\ColumnSchemaAwareInterface;
+use Odigos\Cake\Database\TypeFactory;
 use InvalidArgumentException;
 use PDOException;
-use function Cake\Core\deprecationWarning;
+use function Odigos\Cake\Core\deprecationWarning;
 /**
  * Base class for schema implementations.
  *
@@ -66,19 +66,19 @@ abstract class SchemaDialect
      */
     protected function _foreignOnClause(string $on): string
     {
-        if ($on === \Cake\Database\Schema\TableSchema::ACTION_SET_NULL) {
+        if ($on === TableSchema::ACTION_SET_NULL) {
             return 'SET NULL';
         }
-        if ($on === \Cake\Database\Schema\TableSchema::ACTION_SET_DEFAULT) {
+        if ($on === TableSchema::ACTION_SET_DEFAULT) {
             return 'SET DEFAULT';
         }
-        if ($on === \Cake\Database\Schema\TableSchema::ACTION_CASCADE) {
+        if ($on === TableSchema::ACTION_CASCADE) {
             return 'CASCADE';
         }
-        if ($on === \Cake\Database\Schema\TableSchema::ACTION_RESTRICT) {
+        if ($on === TableSchema::ACTION_RESTRICT) {
             return 'RESTRICT';
         }
-        if ($on === \Cake\Database\Schema\TableSchema::ACTION_NO_ACTION) {
+        if ($on === TableSchema::ACTION_NO_ACTION) {
             return 'NO ACTION';
         }
         throw new InvalidArgumentException('Invalid value for "on": ' . $on);
@@ -95,9 +95,9 @@ abstract class SchemaDialect
             return strtolower($clause);
         }
         if ($clause === 'NO ACTION') {
-            return \Cake\Database\Schema\TableSchema::ACTION_NO_ACTION;
+            return TableSchema::ACTION_NO_ACTION;
         }
-        return \Cake\Database\Schema\TableSchema::ACTION_SET_NULL;
+        return TableSchema::ACTION_SET_NULL;
     }
     /**
      * Convert foreign key constraints references to a valid
@@ -123,7 +123,7 @@ abstract class SchemaDialect
      * @return string|null An SQL fragment, or `null` in case no corresponding type was found or the type didn't provide
      *  custom column SQL.
      */
-    protected function _getTypeSpecificColumnSql(string $columnType, \Cake\Database\Schema\TableSchemaInterface $schema, string $column): ?string
+    protected function _getTypeSpecificColumnSql(string $columnType, TableSchemaInterface $schema, string $column): ?string
     {
         if (!TypeFactory::getMapped($columnType)) {
             return null;
@@ -160,7 +160,7 @@ abstract class SchemaDialect
      * @param \Cake\Database\Schema\TableSchema $schema Schema instance
      * @return array SQL statements to drop a table.
      */
-    public function dropTableSql(\Cake\Database\Schema\TableSchema $schema): array
+    public function dropTableSql(TableSchema $schema): array
     {
         $sql = sprintf('DROP TABLE %s', $this->_driver->quoteIdentifier($schema->name()));
         return [$sql];
@@ -221,7 +221,7 @@ abstract class SchemaDialect
      * @return void
      * @deprecated 5.2.0 Use `describeColumns()` instead.
      */
-    abstract public function convertColumnDescription(\Cake\Database\Schema\TableSchema $schema, array $row): void;
+    abstract public function convertColumnDescription(TableSchema $schema, array $row): void;
     /**
      * Convert an index description results into abstract schema indexes or constraints.
      *
@@ -231,7 +231,7 @@ abstract class SchemaDialect
      * @return void
      * @deprecated 5.2.0 Use `describeIndexes()` instead.
      */
-    abstract public function convertIndexDescription(\Cake\Database\Schema\TableSchema $schema, array $row): void;
+    abstract public function convertIndexDescription(TableSchema $schema, array $row): void;
     /**
      * Convert a foreign key description into constraints on the Table object.
      *
@@ -241,7 +241,7 @@ abstract class SchemaDialect
      * @return void
      * @deprecated 5.2.0 Use `describeForeignKeys()` instead.
      */
-    abstract public function convertForeignKeyDescription(\Cake\Database\Schema\TableSchema $schema, array $row): void;
+    abstract public function convertForeignKeyDescription(TableSchema $schema, array $row): void;
     /**
      * Convert options data into table options.
      *
@@ -250,7 +250,7 @@ abstract class SchemaDialect
      * @return void
      * @deprecated 5.2.0 Use `describeOptions()` instead.
      */
-    public function convertOptionsDescription(\Cake\Database\Schema\TableSchema $schema, array $row): void
+    public function convertOptionsDescription(TableSchema $schema, array $row): void
     {
     }
     /**
@@ -262,7 +262,7 @@ abstract class SchemaDialect
      * @param array<string> $indexes The indexes for the table.
      * @return array<string> SQL statements to create a table.
      */
-    abstract public function createTableSql(\Cake\Database\Schema\TableSchema $schema, array $columns, array $constraints, array $indexes): array;
+    abstract public function createTableSql(TableSchema $schema, array $columns, array $constraints, array $indexes): array;
     /**
      * Generate the SQL fragment for a single column in a table.
      *
@@ -270,21 +270,21 @@ abstract class SchemaDialect
      * @param string $name The name of the column.
      * @return string SQL fragment.
      */
-    abstract public function columnSql(\Cake\Database\Schema\TableSchema $schema, string $name): string;
+    abstract public function columnSql(TableSchema $schema, string $name): string;
     /**
      * Generate the SQL queries needed to add foreign key constraints to the table
      *
      * @param \Cake\Database\Schema\TableSchema $schema The table instance the foreign key constraints are.
      * @return array SQL fragment.
      */
-    abstract public function addConstraintSql(\Cake\Database\Schema\TableSchema $schema): array;
+    abstract public function addConstraintSql(TableSchema $schema): array;
     /**
      * Generate the SQL queries needed to drop foreign key constraints from the table
      *
      * @param \Cake\Database\Schema\TableSchema $schema The table instance the foreign key constraints are.
      * @return array SQL fragment.
      */
-    abstract public function dropConstraintSql(\Cake\Database\Schema\TableSchema $schema): array;
+    abstract public function dropConstraintSql(TableSchema $schema): array;
     /**
      * Generate the SQL fragments for defining table constraints.
      *
@@ -292,7 +292,7 @@ abstract class SchemaDialect
      * @param string $name The name of the column.
      * @return string SQL fragment.
      */
-    abstract public function constraintSql(\Cake\Database\Schema\TableSchema $schema, string $name): string;
+    abstract public function constraintSql(TableSchema $schema, string $name): string;
     /**
      * Generate the SQL fragment for a single index in a table.
      *
@@ -300,14 +300,14 @@ abstract class SchemaDialect
      * @param string $name The name of the column.
      * @return string SQL fragment.
      */
-    abstract public function indexSql(\Cake\Database\Schema\TableSchema $schema, string $name): string;
+    abstract public function indexSql(TableSchema $schema, string $name): string;
     /**
      * Generate the SQL to truncate a table.
      *
      * @param \Cake\Database\Schema\TableSchema $schema Table instance.
      * @return array SQL statements to truncate a table.
      */
-    abstract public function truncateTableSql(\Cake\Database\Schema\TableSchema $schema): array;
+    abstract public function truncateTableSql(TableSchema $schema): array;
     /**
      * Create a SQL snippet for a column based on the array shape
      * that `describeColumns()` creates.
@@ -318,7 +318,7 @@ abstract class SchemaDialect
     public function columnDefinitionSql(array $column): string
     {
         deprecationWarning('5.2.0', 'SchemaDialect subclasses need to implement `columnDefinitionSql` before 6.0.0');
-        $table = new \Cake\Database\Schema\TableSchema('placeholder');
+        $table = new TableSchema('placeholder');
         $table->addColumn($column['name'], $column);
         return $this->columnSql($table, $column['name']);
     }
@@ -368,7 +368,7 @@ abstract class SchemaDialect
      * @return \Cake\Database\Schema\TableSchemaInterface Object with column metadata.
      * @throws \Cake\Database\Exception\DatabaseException when table cannot be described.
      */
-    public function describe(string $name): \Cake\Database\Schema\TableSchemaInterface
+    public function describe(string $name): TableSchemaInterface
     {
         $tableName = $name;
         if (str_contains($name, '.')) {
@@ -379,7 +379,7 @@ abstract class SchemaDialect
             $table->addColumn($column['name'], $column);
         }
         foreach ($this->describeIndexes($name) as $index) {
-            if (in_array($index['type'], [\Cake\Database\Schema\TableSchema::CONSTRAINT_UNIQUE, \Cake\Database\Schema\TableSchema::CONSTRAINT_PRIMARY])) {
+            if (in_array($index['type'], [TableSchema::CONSTRAINT_UNIQUE, TableSchema::CONSTRAINT_PRIMARY])) {
                 $table->addConstraint($index['name'], $index);
             } else {
                 $table->addIndex($index['name'], $index);

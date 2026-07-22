@@ -8,19 +8,19 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\String\Slugger;
+namespace Odigos\Symfony\Component\String\Slugger;
 
-use Symfony\Component\Emoji\EmojiTransliterator;
-use Symfony\Component\String\AbstractUnicodeString;
-use Symfony\Component\String\UnicodeString;
-use Symfony\Contracts\Translation\LocaleAwareInterface;
+use Odigos\Symfony\Component\Emoji\EmojiTransliterator;
+use Odigos\Symfony\Component\String\AbstractUnicodeString;
+use Odigos\Symfony\Component\String\UnicodeString;
+use Odigos\Symfony\Contracts\Translation\LocaleAwareInterface;
 if (!interface_exists(LocaleAwareInterface::class)) {
     throw new \LogicException('You cannot use the "Symfony\Component\String\Slugger\AsciiSlugger" as the "symfony/translation-contracts" package is not installed. Try running "composer require symfony/translation-contracts".');
 }
 /**
  * @author Titouan Galopin <galopintitouan@gmail.com>
  */
-class AsciiSlugger implements \Symfony\Component\String\Slugger\SluggerInterface, LocaleAwareInterface
+class AsciiSlugger implements SluggerInterface, LocaleAwareInterface
 {
     private const LOCALE_TO_TRANSLITERATOR_ID = ['am' => 'Amharic-Latin', 'ar' => 'Arabic-Latin', 'az' => 'Azerbaijani-Latin', 'be' => 'Belarusian-Latin', 'bg' => 'Bulgarian-Latin', 'bn' => 'Bengali-Latin', 'de' => 'de-ASCII', 'el' => 'Greek-Latin', 'fa' => 'Persian-Latin', 'he' => 'Hebrew-Latin', 'hy' => 'Armenian-Latin', 'ka' => 'Georgian-Latin', 'kk' => 'Kazakh-Latin', 'ky' => 'Kirghiz-Latin', 'ko' => 'Korean-Latin', 'mk' => 'Macedonian-Latin', 'mn' => 'Mongolian-Latin', 'or' => 'Oriya-Latin', 'ps' => 'Pashto-Latin', 'ru' => 'Russian-Latin', 'sr' => 'Serbian-Latin', 'sr_Cyrl' => 'Serbian-Latin', 'th' => 'Thai-Latin', 'tk' => 'Turkmen-Latin', 'uk' => 'Ukrainian-Latin', 'uz' => 'Uzbek-Latin', 'zh' => 'Han-Latin'];
     private \Closure|array $symbolsMap = ['en' => ['@' => 'at', '&' => 'and']];

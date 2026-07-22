@@ -14,7 +14,7 @@ declare (strict_types=1);
  * @since         3.5.0
  * @license       https://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Validation;
+namespace Odigos\Cake\Validation;
 
 /**
  * Provides methods for managing multiple validators.
@@ -31,7 +31,7 @@ interface ValidatorAwareInterface
      * @param string|null $name The name of the validation set to return.
      * @return \Cake\Validation\Validator
      */
-    public function getValidator(?string $name = null): \Cake\Validation\Validator;
+    public function getValidator(?string $name = null): Validator;
     /**
      * This method stores a custom validator under the given name.
      *
@@ -39,7 +39,7 @@ interface ValidatorAwareInterface
      * @param \Cake\Validation\Validator $validator Validator object to be set.
      * @return $this
      */
-    public function setValidator(string $name, \Cake\Validation\Validator $validator);
+    public function setValidator(string $name, Validator $validator);
     /**
      * Checks whether a validator has been set.
      *

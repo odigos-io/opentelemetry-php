@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Schema\Name;
+namespace Odigos\Doctrine\DBAL\Schema\Name;
 
-use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Doctrine\DBAL\Schema\Name;
+use Odigos\Doctrine\DBAL\Platforms\AbstractPlatform;
+use Odigos\Doctrine\DBAL\Schema\Name;
 use function array_map;
 use function array_merge;
 use function array_values;
@@ -18,7 +18,7 @@ final readonly class GenericName implements Name
 {
     /** @var non-empty-list<Identifier> $identifiers */
     private array $identifiers;
-    public function __construct(\Doctrine\DBAL\Schema\Name\Identifier $firstIdentifier, \Doctrine\DBAL\Schema\Name\Identifier ...$otherIdentifiers)
+    public function __construct(Identifier $firstIdentifier, Identifier ...$otherIdentifiers)
     {
         $this->identifiers = array_merge([$firstIdentifier], array_values($otherIdentifiers));
     }
@@ -29,11 +29,11 @@ final readonly class GenericName implements Name
     }
     public function toSQL(AbstractPlatform $platform): string
     {
-        return $this->joinIdentifiers(static fn(\Doctrine\DBAL\Schema\Name\Identifier $identifier): string => $identifier->toSQL($platform));
+        return $this->joinIdentifiers(static fn(Identifier $identifier): string => $identifier->toSQL($platform));
     }
     public function toString(): string
     {
-        return $this->joinIdentifiers(static fn(\Doctrine\DBAL\Schema\Name\Identifier $identifier): string => $identifier->toString());
+        return $this->joinIdentifiers(static fn(Identifier $identifier): string => $identifier->toString());
     }
     /** @param callable(Identifier): string $mapper */
     private function joinIdentifiers(callable $mapper): string

@@ -1,15 +1,15 @@
 <?php
 
-namespace Illuminate\Database\Console\Migrations;
+namespace Odigos\Illuminate\Database\Console\Migrations;
 
-use Illuminate\Console\Command;
-use Illuminate\Console\ConfirmableTrait;
-use Illuminate\Console\Prohibitable;
-use Illuminate\Database\Migrations\Migrator;
-use Symfony\Component\Console\Attribute\AsCommand;
-use Symfony\Component\Console\Input\InputOption;
+use Odigos\Illuminate\Console\Command;
+use Odigos\Illuminate\Console\ConfirmableTrait;
+use Odigos\Illuminate\Console\Prohibitable;
+use Odigos\Illuminate\Database\Migrations\Migrator;
+use Odigos\Symfony\Component\Console\Attribute\AsCommand;
+use Odigos\Symfony\Component\Console\Input\InputOption;
 #[AsCommand(name: 'migrate:reset')]
-class ResetCommand extends \Illuminate\Database\Console\Migrations\BaseCommand
+class ResetCommand extends BaseCommand
 {
     use ConfirmableTrait, Prohibitable;
     /**

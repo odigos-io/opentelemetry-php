@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpFoundation\Session\Storage;
+namespace Odigos\Symfony\Component\HttpFoundation\Session\Storage;
 
-use Symfony\Component\HttpFoundation\Session\SessionBagInterface;
-use Symfony\Component\HttpFoundation\Session\Storage\Handler\StrictSessionHandler;
-use Symfony\Component\HttpFoundation\Session\Storage\Proxy\AbstractProxy;
-use Symfony\Component\HttpFoundation\Session\Storage\Proxy\SessionHandlerProxy;
+use Odigos\Symfony\Component\HttpFoundation\Session\SessionBagInterface;
+use Odigos\Symfony\Component\HttpFoundation\Session\Storage\Handler\StrictSessionHandler;
+use Odigos\Symfony\Component\HttpFoundation\Session\Storage\Proxy\AbstractProxy;
+use Odigos\Symfony\Component\HttpFoundation\Session\Storage\Proxy\SessionHandlerProxy;
 // Help opcache.preload discover always-needed symbols
-class_exists(\Symfony\Component\HttpFoundation\Session\Storage\MetadataBag::class);
+class_exists(MetadataBag::class);
 class_exists(StrictSessionHandler::class);
 class_exists(SessionHandlerProxy::class);
 /**
@@ -23,7 +23,7 @@ class_exists(SessionHandlerProxy::class);
  *
  * @author Drak <drak@zikula.org>
  */
-class NativeSessionStorage implements \Symfony\Component\HttpFoundation\Session\Storage\SessionStorageInterface
+class NativeSessionStorage implements SessionStorageInterface
 {
     /**
      * @var SessionBagInterface[]
@@ -81,7 +81,7 @@ class NativeSessionStorage implements \Symfony\Component\HttpFoundation\Session\
      * trans_sid_hosts, $_SERVER['HTTP_HOST']
      * trans_sid_tags, "a=href,area=href,frame=src,form="
      */
-    public function __construct(array $options = [], AbstractProxy|\SessionHandlerInterface|null $handler = null, ?\Symfony\Component\HttpFoundation\Session\Storage\MetadataBag $metaBag = null)
+    public function __construct(array $options = [], AbstractProxy|\SessionHandlerInterface|null $handler = null, ?MetadataBag $metaBag = null)
     {
         if (!\extension_loaded('session')) {
             throw new \LogicException('PHP extension "session" is required.');
@@ -267,17 +267,17 @@ class NativeSessionStorage implements \Symfony\Component\HttpFoundation\Session\
     /**
      * @return void
      */
-    public function setMetadataBag(?\Symfony\Component\HttpFoundation\Session\Storage\MetadataBag $metaBag = null)
+    public function setMetadataBag(?MetadataBag $metaBag = null)
     {
         if (1 > \func_num_args()) {
             trigger_deprecation('symfony/http-foundation', '6.2', 'Calling "%s()" without any arguments is deprecated, pass null explicitly instead.', __METHOD__);
         }
-        $this->metadataBag = $metaBag ?? new \Symfony\Component\HttpFoundation\Session\Storage\MetadataBag();
+        $this->metadataBag = $metaBag ?? new MetadataBag();
     }
     /**
      * Gets the MetadataBag.
      */
-    public function getMetadataBag(): \Symfony\Component\HttpFoundation\Session\Storage\MetadataBag
+    public function getMetadataBag(): MetadataBag
     {
         return $this->metadataBag;
     }

@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Exception;
+namespace Odigos\Doctrine\DBAL\Exception;
 
-use Doctrine\DBAL\Driver;
-use Doctrine\DBAL\Exception;
-use Doctrine\DBAL\Query;
+use Odigos\Doctrine\DBAL\Driver;
+use Odigos\Doctrine\DBAL\Exception;
+use Odigos\Doctrine\DBAL\Query;
 use function assert;
 /**
  * Base class for all errors detected in the driver.

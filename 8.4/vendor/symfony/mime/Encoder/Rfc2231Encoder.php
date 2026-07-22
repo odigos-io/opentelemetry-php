@@ -8,13 +8,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Mime\Encoder;
+namespace Odigos\Symfony\Component\Mime\Encoder;
 
-use Symfony\Component\Mime\CharacterStream;
+use Odigos\Symfony\Component\Mime\CharacterStream;
 /**
  * @author Chris Corbyn
  */
-final class Rfc2231Encoder implements \Symfony\Component\Mime\Encoder\EncoderInterface
+final class Rfc2231Encoder implements EncoderInterface
 {
     /**
      * Takes an unencoded string and produces a string encoded according to RFC 2231 from it.

@@ -1,6 +1,6 @@
 <?php
 
-namespace Http\Client;
+namespace Odigos\Http\Client;
 
 use Psr\Http\Client\ClientExceptionInterface as PsrClientException;
 /**

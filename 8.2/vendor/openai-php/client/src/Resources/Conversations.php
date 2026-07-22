@@ -1,21 +1,21 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Resources;
+namespace Odigos\OpenAI\Resources;
 
-use OpenAI\Contracts\Resources\ConversationsContract;
-use OpenAI\Contracts\Resources\ConversationsItemsContract;
-use OpenAI\Responses\Conversations\ConversationDeletedResponse;
-use OpenAI\Responses\Conversations\ConversationResponse;
-use OpenAI\ValueObjects\Transporter\Payload;
-use OpenAI\ValueObjects\Transporter\Response;
+use Odigos\OpenAI\Contracts\Resources\ConversationsContract;
+use Odigos\OpenAI\Contracts\Resources\ConversationsItemsContract;
+use Odigos\OpenAI\Responses\Conversations\ConversationDeletedResponse;
+use Odigos\OpenAI\Responses\Conversations\ConversationResponse;
+use Odigos\OpenAI\ValueObjects\Transporter\Payload;
+use Odigos\OpenAI\ValueObjects\Transporter\Response;
 /**
  * @phpstan-import-type ConversationType from ConversationResponse
  * @phpstan-import-type ConversationDeletedType from ConversationDeletedResponse
  */
 final class Conversations implements ConversationsContract
 {
-    use \OpenAI\Resources\Concerns\Transportable;
+    use Concerns\Transportable;
     /**
      * {@inheritdoc}
      */
@@ -61,6 +61,6 @@ final class Conversations implements ConversationsContract
      */
     public function items(): ConversationsItemsContract
     {
-        return new \OpenAI\Resources\ConversationsItems($this->transporter);
+        return new ConversationsItems($this->transporter);
     }
 }

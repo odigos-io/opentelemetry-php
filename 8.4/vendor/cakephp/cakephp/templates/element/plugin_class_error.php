@@ -15,7 +15,7 @@ namespace Odigos;
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-use Cake\Core\Plugin;
+use Odigos\Cake\Core\Plugin;
 if (empty($plugin)) {
     return;
 }

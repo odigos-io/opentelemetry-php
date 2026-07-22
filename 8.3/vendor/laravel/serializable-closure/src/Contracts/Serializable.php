@@ -1,6 +1,6 @@
 <?php
 
-namespace Laravel\SerializableClosure\Contracts;
+namespace Odigos\Laravel\SerializableClosure\Contracts;
 
 interface Serializable
 {

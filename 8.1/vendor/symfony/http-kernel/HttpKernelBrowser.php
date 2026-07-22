@@ -8,16 +8,16 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpKernel;
+namespace Odigos\Symfony\Component\HttpKernel;
 
-use Symfony\Component\BrowserKit\AbstractBrowser;
-use Symfony\Component\BrowserKit\CookieJar;
-use Symfony\Component\BrowserKit\History;
-use Symfony\Component\BrowserKit\Request as DomRequest;
-use Symfony\Component\BrowserKit\Response as DomResponse;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Odigos\Symfony\Component\BrowserKit\AbstractBrowser;
+use Odigos\Symfony\Component\BrowserKit\CookieJar;
+use Odigos\Symfony\Component\BrowserKit\History;
+use Odigos\Symfony\Component\BrowserKit\Request as DomRequest;
+use Odigos\Symfony\Component\BrowserKit\Response as DomResponse;
+use Odigos\Symfony\Component\HttpFoundation\File\UploadedFile;
+use Odigos\Symfony\Component\HttpFoundation\Request;
+use Odigos\Symfony\Component\HttpFoundation\Response;
 /**
  * Simulates a browser and makes requests to an HttpKernel instance.
  *
@@ -33,7 +33,7 @@ class HttpKernelBrowser extends AbstractBrowser
     /**
      * @param array $server The server parameters (equivalent of $_SERVER)
      */
-    public function __construct(\Symfony\Component\HttpKernel\HttpKernelInterface $kernel, array $server = [], ?History $history = null, ?CookieJar $cookieJar = null)
+    public function __construct(HttpKernelInterface $kernel, array $server = [], ?History $history = null, ?CookieJar $cookieJar = null)
     {
         // These class properties must be set before calling the parent constructor, as it may depend on it.
         $this->kernel = $kernel;
@@ -56,8 +56,8 @@ class HttpKernelBrowser extends AbstractBrowser
      */
     protected function doRequest(object $request)
     {
-        $response = $this->kernel->handle($request, \Symfony\Component\HttpKernel\HttpKernelInterface::MAIN_REQUEST, $this->catchExceptions);
-        if ($this->kernel instanceof \Symfony\Component\HttpKernel\TerminableInterface) {
+        $response = $this->kernel->handle($request, HttpKernelInterface::MAIN_REQUEST, $this->catchExceptions);
+        if ($this->kernel instanceof TerminableInterface) {
             $this->kernel->terminate($request, $response);
         }
         return $response;

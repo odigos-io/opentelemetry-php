@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Tools;
+namespace Odigos\Doctrine\DBAL\Tools;
 
-use Doctrine\DBAL\Driver;
-use Doctrine\DBAL\DriverManager;
-use Doctrine\DBAL\Exception\MalformedDsnException;
+use Odigos\Doctrine\DBAL\Driver;
+use Odigos\Doctrine\DBAL\DriverManager;
+use Odigos\Doctrine\DBAL\Exception\MalformedDsnException;
 use SensitiveParameter;
 use function array_merge;
 use function assert;

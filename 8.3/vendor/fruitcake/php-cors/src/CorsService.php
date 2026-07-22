@@ -9,11 +9,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Fruitcake\Cors;
+namespace Odigos\Fruitcake\Cors;
 
-use Fruitcake\Cors\Exceptions\InvalidOptionException;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Odigos\Fruitcake\Cors\Exceptions\InvalidOptionException;
+use Odigos\Symfony\Component\HttpFoundation\Request;
+use Odigos\Symfony\Component\HttpFoundation\Response;
 /**
  * @phpstan-type CorsInputOptions array{
  *  'allowedOrigins'?: string[],

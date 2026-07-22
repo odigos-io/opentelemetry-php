@@ -5,10 +5,10 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\test;
+namespace Odigos\yii\test;
 
-use yii\base\ArrayAccessTrait;
-use yii\base\InvalidConfigException;
+use Odigos\yii\base\ArrayAccessTrait;
+use Odigos\yii\base\InvalidConfigException;
 /**
  * ArrayFixture represents arbitrary fixture that can be loaded from PHP files.
  *
@@ -20,10 +20,10 @@ use yii\base\InvalidConfigException;
  * @implements \IteratorAggregate<string, array<string, mixed>>
  * @implements \ArrayAccess<string, array<string, mixed>|null>
  */
-class ArrayFixture extends \yii\test\Fixture implements \IteratorAggregate, \ArrayAccess, \Countable
+class ArrayFixture extends Fixture implements \IteratorAggregate, \ArrayAccess, \Countable
 {
     use ArrayAccessTrait;
-    use \yii\test\FileFixtureTrait;
+    use FileFixtureTrait;
     /**
      * @var array<string, array<string, mixed>> the data rows. Each array element represents one row of data (column name => column value).
      */

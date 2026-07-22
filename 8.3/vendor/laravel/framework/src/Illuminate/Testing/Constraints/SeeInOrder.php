@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Testing\Constraints;
+namespace Odigos\Illuminate\Testing\Constraints;
 
 use Odigos\PHPUnit\Framework\Constraint\Constraint;
 use ReflectionClass;

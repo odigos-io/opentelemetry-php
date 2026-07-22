@@ -1,18 +1,18 @@
 <?php
 
-namespace Illuminate\Console;
+namespace Odigos\Illuminate\Console;
 
-use Illuminate\Console\View\Components\Factory;
-use Illuminate\Contracts\Console\Isolatable;
-use Illuminate\Support\Traits\Macroable;
-use Symfony\Component\Console\Command\Command as SymfonyCommand;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\OutputInterface;
+use Odigos\Illuminate\Console\View\Components\Factory;
+use Odigos\Illuminate\Contracts\Console\Isolatable;
+use Odigos\Illuminate\Support\Traits\Macroable;
+use Odigos\Symfony\Component\Console\Command\Command as SymfonyCommand;
+use Odigos\Symfony\Component\Console\Input\InputInterface;
+use Odigos\Symfony\Component\Console\Input\InputOption;
+use Odigos\Symfony\Component\Console\Output\OutputInterface;
 use Throwable;
 class Command extends SymfonyCommand
 {
-    use \Illuminate\Console\Concerns\CallsCommands, \Illuminate\Console\Concerns\ConfiguresPrompts, \Illuminate\Console\Concerns\HasParameters, \Illuminate\Console\Concerns\InteractsWithIO, \Illuminate\Console\Concerns\InteractsWithSignals, \Illuminate\Console\Concerns\PromptsForMissingInput, Macroable;
+    use Concerns\CallsCommands, Concerns\ConfiguresPrompts, Concerns\HasParameters, Concerns\InteractsWithIO, Concerns\InteractsWithSignals, Concerns\PromptsForMissingInput, Macroable;
     /**
      * The Laravel application instance.
      *
@@ -107,7 +107,7 @@ class Command extends SymfonyCommand
      */
     protected function configureUsingFluentDefinition()
     {
-        [$name, $arguments, $options] = \Illuminate\Console\Parser::parse($this->signature);
+        [$name, $arguments, $options] = Parser::parse($this->signature);
         parent::__construct($this->name = $name);
         // After parsing the signature we will spin through the arguments and options
         // and set them on this command. These will already be changed into proper
@@ -134,7 +134,7 @@ class Command extends SymfonyCommand
     #[\Override]
     public function run(InputInterface $input, OutputInterface $output): int
     {
-        $this->output = $output instanceof \Illuminate\Console\OutputStyle ? $output : $this->laravel->make(\Illuminate\Console\OutputStyle::class, ['input' => $input, 'output' => $output]);
+        $this->output = $output instanceof OutputStyle ? $output : $this->laravel->make(OutputStyle::class, ['input' => $input, 'output' => $output]);
         $this->components = $this->laravel->make(Factory::class, ['output' => $this->output]);
         $this->configurePrompts($input);
         try {
@@ -159,7 +159,7 @@ class Command extends SymfonyCommand
         $method = method_exists($this, 'handle') ? 'handle' : '__invoke';
         try {
             return (int) $this->laravel->call([$this, $method]);
-        } catch (\Illuminate\Console\ManuallyFailedException $e) {
+        } catch (ManuallyFailedException $e) {
             $this->components->error($e->getMessage());
             return static::FAILURE;
         } finally {
@@ -175,7 +175,7 @@ class Command extends SymfonyCommand
      */
     protected function commandIsolationMutex()
     {
-        return $this->laravel->bound(\Illuminate\Console\CommandMutex::class) ? $this->laravel->make(\Illuminate\Console\CommandMutex::class) : $this->laravel->make(\Illuminate\Console\CacheCommandMutex::class);
+        return $this->laravel->bound(CommandMutex::class) ? $this->laravel->make(CommandMutex::class) : $this->laravel->make(CacheCommandMutex::class);
     }
     /**
      * Resolve the console command instance for the given command.
@@ -213,7 +213,7 @@ class Command extends SymfonyCommand
             $exception = 'Command failed manually.';
         }
         if (is_string($exception)) {
-            $exception = new \Illuminate\Console\ManuallyFailedException($exception);
+            $exception = new ManuallyFailedException($exception);
         }
         throw $exception;
     }

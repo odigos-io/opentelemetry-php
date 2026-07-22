@@ -14,10 +14,10 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Collection\Iterator;
+namespace Odigos\Cake\Collection\Iterator;
 
-use Cake\Collection\CollectionInterface;
-use Cake\Collection\CollectionTrait;
+use Odigos\Cake\Collection\CollectionInterface;
+use Odigos\Cake\Collection\CollectionTrait;
 use RecursiveIterator;
 use RecursiveIteratorIterator;
 /**
@@ -88,7 +88,7 @@ class TreeIterator extends RecursiveIteratorIterator implements CollectionInterf
      * their depth in the tree
      * @return \Cake\Collection\Iterator\TreePrinter
      */
-    public function printer(callable|string $valuePath, callable|string|null $keyPath = null, string $spacer = '__'): \Cake\Collection\Iterator\TreePrinter
+    public function printer(callable|string $valuePath, callable|string|null $keyPath = null, string $spacer = '__'): TreePrinter
     {
         if (!$keyPath) {
             $counter = 0;
@@ -98,6 +98,6 @@ class TreeIterator extends RecursiveIteratorIterator implements CollectionInterf
         }
         /** @var \RecursiveIterator $iterator */
         $iterator = $this->getInnerIterator();
-        return new \Cake\Collection\Iterator\TreePrinter($iterator, $valuePath, $keyPath, $spacer, $this->_mode);
+        return new TreePrinter($iterator, $valuePath, $keyPath, $spacer, $this->_mode);
     }
 }

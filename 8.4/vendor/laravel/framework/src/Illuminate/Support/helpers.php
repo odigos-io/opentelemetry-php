@@ -3,19 +3,19 @@
 namespace Odigos;
 
 use Odigos\Carbon\CarbonInterval;
-use Illuminate\Contracts\Support\DeferringDisplayableValue;
-use Illuminate\Contracts\Support\Htmlable;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Env;
-use Illuminate\Support\Fluent;
-use Illuminate\Support\HigherOrderTapProxy;
-use Illuminate\Support\Once;
-use Illuminate\Support\Onceable;
-use Illuminate\Support\Optional;
-use Illuminate\Support\Sleep;
-use Illuminate\Support\Str;
-use Illuminate\Support\Stringable as SupportStringable;
+use Odigos\Illuminate\Contracts\Support\DeferringDisplayableValue;
+use Odigos\Illuminate\Contracts\Support\Htmlable;
+use Odigos\Illuminate\Database\Eloquent\Model;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Env;
+use Odigos\Illuminate\Support\Fluent;
+use Odigos\Illuminate\Support\HigherOrderTapProxy;
+use Odigos\Illuminate\Support\Once;
+use Odigos\Illuminate\Support\Onceable;
+use Odigos\Illuminate\Support\Optional;
+use Odigos\Illuminate\Support\Sleep;
+use Odigos\Illuminate\Support\Str;
+use Odigos\Illuminate\Support\Stringable as SupportStringable;
 if (!\function_exists('Odigos\append_config')) {
     /**
      * Assign high numeric IDs to a config item to force appending.

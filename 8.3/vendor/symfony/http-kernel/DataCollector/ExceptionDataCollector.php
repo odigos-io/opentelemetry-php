@@ -8,17 +8,17 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpKernel\DataCollector;
+namespace Odigos\Symfony\Component\HttpKernel\DataCollector;
 
-use Symfony\Component\ErrorHandler\Exception\FlattenException;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Odigos\Symfony\Component\ErrorHandler\Exception\FlattenException;
+use Odigos\Symfony\Component\HttpFoundation\Request;
+use Odigos\Symfony\Component\HttpFoundation\Response;
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  *
  * @final
  */
-class ExceptionDataCollector extends \Symfony\Component\HttpKernel\DataCollector\DataCollector
+class ExceptionDataCollector extends DataCollector
 {
     public function collect(Request $request, Response $response, ?\Throwable $exception = null): void
     {

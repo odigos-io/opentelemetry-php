@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Cookie\Middleware;
+namespace Odigos\Illuminate\Cookie\Middleware;
 
 use Closure;
-use Illuminate\Contracts\Cookie\QueueingFactory as CookieJar;
+use Odigos\Illuminate\Contracts\Cookie\QueueingFactory as CookieJar;
 class AddQueuedCookiesToResponse
 {
     /**

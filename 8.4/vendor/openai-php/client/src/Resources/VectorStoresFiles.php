@@ -1,17 +1,17 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Resources;
+namespace Odigos\OpenAI\Resources;
 
-use OpenAI\Contracts\Resources\VectorStoresFilesContract;
-use OpenAI\Responses\VectorStores\Files\VectorStoreFileDeleteResponse;
-use OpenAI\Responses\VectorStores\Files\VectorStoreFileListResponse;
-use OpenAI\Responses\VectorStores\Files\VectorStoreFileResponse;
-use OpenAI\ValueObjects\Transporter\Payload;
-use OpenAI\ValueObjects\Transporter\Response;
+use Odigos\OpenAI\Contracts\Resources\VectorStoresFilesContract;
+use Odigos\OpenAI\Responses\VectorStores\Files\VectorStoreFileDeleteResponse;
+use Odigos\OpenAI\Responses\VectorStores\Files\VectorStoreFileListResponse;
+use Odigos\OpenAI\Responses\VectorStores\Files\VectorStoreFileResponse;
+use Odigos\OpenAI\ValueObjects\Transporter\Payload;
+use Odigos\OpenAI\ValueObjects\Transporter\Response;
 final class VectorStoresFiles implements VectorStoresFilesContract
 {
-    use \OpenAI\Resources\Concerns\Transportable;
+    use Concerns\Transportable;
     /**
      * Create a file on a vector store
      *

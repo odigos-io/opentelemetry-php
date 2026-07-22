@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\base;
+namespace Odigos\yii\base;
 
 /**
  * ViewNotFoundException represents an exception caused by view file not found.
@@ -13,7 +13,7 @@ namespace yii\base;
  * @author Alexander Makarov
  * @since 2.0.10
  */
-class ViewNotFoundException extends \yii\base\InvalidArgumentException
+class ViewNotFoundException extends InvalidArgumentException
 {
     /**
      * @return string the user-friendly name of this exception

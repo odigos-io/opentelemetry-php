@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Foundation\Http\Middleware;
+namespace Odigos\Illuminate\Foundation\Http\Middleware;
 
 use Closure;
-use Symfony\Component\HttpFoundation\ParameterBag;
+use Odigos\Symfony\Component\HttpFoundation\ParameterBag;
 class TransformsRequest
 {
     /**

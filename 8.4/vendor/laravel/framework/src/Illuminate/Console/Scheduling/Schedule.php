@@ -1,25 +1,25 @@
 <?php
 
-namespace Illuminate\Console\Scheduling;
+namespace Odigos\Illuminate\Console\Scheduling;
 
 use BadMethodCallException;
 use Closure;
 use DateTimeInterface;
-use Illuminate\Bus\UniqueLock;
-use Illuminate\Console\Application;
-use Illuminate\Container\Container;
-use Illuminate\Contracts\Bus\Dispatcher;
-use Illuminate\Contracts\Cache\Repository as Cache;
-use Illuminate\Contracts\Container\BindingResolutionException;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\CallQueuedClosure;
-use Illuminate\Support\Collection;
-use Illuminate\Support\ProcessUtils;
-use Illuminate\Support\Traits\Macroable;
+use Odigos\Illuminate\Bus\UniqueLock;
+use Odigos\Illuminate\Console\Application;
+use Odigos\Illuminate\Container\Container;
+use Odigos\Illuminate\Contracts\Bus\Dispatcher;
+use Odigos\Illuminate\Contracts\Cache\Repository as Cache;
+use Odigos\Illuminate\Contracts\Container\BindingResolutionException;
+use Odigos\Illuminate\Contracts\Queue\ShouldBeUnique;
+use Odigos\Illuminate\Contracts\Queue\ShouldQueue;
+use Odigos\Illuminate\Queue\CallQueuedClosure;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\ProcessUtils;
+use Odigos\Illuminate\Support\Traits\Macroable;
 use RuntimeException;
-use Symfony\Component\Console\Command\Command as SymfonyCommand;
-use function Illuminate\Support\enum_value;
+use Odigos\Symfony\Component\Console\Command\Command as SymfonyCommand;
+use function Odigos\Illuminate\Support\enum_value;
 /**
  * @mixin \Illuminate\Console\Scheduling\PendingEventAttributes
  */
@@ -97,8 +97,8 @@ class Schedule
             throw new RuntimeException('A container implementation is required to use the scheduler. Please install the illuminate/container package.');
         }
         $container = Container::getInstance();
-        $this->eventMutex = $container->bound(\Illuminate\Console\Scheduling\EventMutex::class) ? $container->make(\Illuminate\Console\Scheduling\EventMutex::class) : $container->make(\Illuminate\Console\Scheduling\CacheEventMutex::class);
-        $this->schedulingMutex = $container->bound(\Illuminate\Console\Scheduling\SchedulingMutex::class) ? $container->make(\Illuminate\Console\Scheduling\SchedulingMutex::class) : $container->make(\Illuminate\Console\Scheduling\CacheSchedulingMutex::class);
+        $this->eventMutex = $container->bound(EventMutex::class) ? $container->make(EventMutex::class) : $container->make(CacheEventMutex::class);
+        $this->schedulingMutex = $container->bound(SchedulingMutex::class) ? $container->make(SchedulingMutex::class) : $container->make(CacheSchedulingMutex::class);
     }
     /**
      * Add a new callback event to the schedule.
@@ -109,7 +109,7 @@ class Schedule
      */
     public function call($callback, array $parameters = [])
     {
-        $this->events[] = $event = new \Illuminate\Console\Scheduling\CallbackEvent($this->eventMutex, $callback, $parameters, $this->timezone);
+        $this->events[] = $event = new CallbackEvent($this->eventMutex, $callback, $parameters, $this->timezone);
         $this->mergePendingAttributes($event);
         return $event;
     }
@@ -149,7 +149,7 @@ class Schedule
         if (!is_string($job)) {
             $jobName = method_exists($job, 'displayName') ? $job->displayName() : $job::class;
         }
-        $this->events[] = $event = new \Illuminate\Console\Scheduling\CallbackEvent($this->eventMutex, function () use ($job, $queue, $connection) {
+        $this->events[] = $event = new CallbackEvent($this->eventMutex, function () use ($job, $queue, $connection) {
             $job = is_string($job) ? Container::getInstance()->make($job) : $job;
             if ($job instanceof ShouldQueue) {
                 $this->dispatchToQueue($job, $queue ?? $job->queue, $connection ?? $job->connection);
@@ -226,7 +226,7 @@ class Schedule
         if (count($parameters)) {
             $command .= ' ' . $this->compileParameters($parameters);
         }
-        $this->events[] = $event = new \Illuminate\Console\Scheduling\Event($this->eventMutex, $command, $this->timezone);
+        $this->events[] = $event = new Event($this->eventMutex, $command, $this->timezone);
         $this->mergePendingAttributes($event);
         return $event;
     }
@@ -254,7 +254,7 @@ class Schedule
      * @param  \Illuminate\Console\Scheduling\Event  $event
      * @return void
      */
-    protected function mergePendingAttributes(\Illuminate\Console\Scheduling\Event $event)
+    protected function mergePendingAttributes(Event $event)
     {
         if (!empty($this->groupStack)) {
             $group = array_last($this->groupStack);
@@ -313,7 +313,7 @@ class Schedule
      * @param  \DateTimeInterface  $time
      * @return bool
      */
-    public function serverShouldRun(\Illuminate\Console\Scheduling\Event $event, DateTimeInterface $time)
+    public function serverShouldRun(Event $event, DateTimeInterface $time)
     {
         return $this->mutexCache[$event->mutexName()] ??= $this->schedulingMutex->create($event, $time);
     }
@@ -345,10 +345,10 @@ class Schedule
     public function useCache($store)
     {
         $store = enum_value($store);
-        if ($this->eventMutex instanceof \Illuminate\Console\Scheduling\CacheAware) {
+        if ($this->eventMutex instanceof CacheAware) {
             $this->eventMutex->useStore($store);
         }
-        if ($this->schedulingMutex instanceof \Illuminate\Console\Scheduling\CacheAware) {
+        if ($this->schedulingMutex instanceof CacheAware) {
             $this->schedulingMutex->useStore($store);
         }
         return $this;
@@ -383,8 +383,8 @@ class Schedule
         if (static::hasMacro($method)) {
             return $this->macroCall($method, $parameters);
         }
-        if (method_exists(\Illuminate\Console\Scheduling\PendingEventAttributes::class, $method) || \Illuminate\Console\Scheduling\Event::hasMacro($method)) {
-            $this->attributes ??= $this->groupStack ? clone array_last($this->groupStack) : new \Illuminate\Console\Scheduling\PendingEventAttributes($this);
+        if (method_exists(PendingEventAttributes::class, $method) || Event::hasMacro($method)) {
+            $this->attributes ??= $this->groupStack ? clone array_last($this->groupStack) : new PendingEventAttributes($this);
             return $this->attributes->{$method}(...$parameters);
         }
         throw new BadMethodCallException(sprintf('Method %s::%s does not exist.', static::class, $method));

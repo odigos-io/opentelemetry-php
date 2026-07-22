@@ -5,19 +5,19 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\db\mssql;
+namespace Odigos\yii\db\mssql;
 
 use Odigos\Yii;
-use yii\db\CheckConstraint;
-use yii\db\Constraint;
-use yii\db\ConstraintFinderInterface;
-use yii\db\ConstraintFinderTrait;
-use yii\db\DefaultValueConstraint;
-use yii\db\ForeignKeyConstraint;
-use yii\db\IndexConstraint;
-use yii\db\ViewFinderTrait;
-use yii\helpers\ArrayHelper;
-use yii\db\Schema as BaseSchema;
+use Odigos\yii\db\CheckConstraint;
+use Odigos\yii\db\Constraint;
+use Odigos\yii\db\ConstraintFinderInterface;
+use Odigos\yii\db\ConstraintFinderTrait;
+use Odigos\yii\db\DefaultValueConstraint;
+use Odigos\yii\db\ForeignKeyConstraint;
+use Odigos\yii\db\IndexConstraint;
+use Odigos\yii\db\ViewFinderTrait;
+use Odigos\yii\helpers\ArrayHelper;
+use Odigos\yii\db\Schema as BaseSchema;
 /**
  * Schema is the class for retrieving metadata from MS SQL Server databases (version 2008 and above).
  *
@@ -34,7 +34,7 @@ class Schema extends BaseSchema implements ConstraintFinderInterface
     /**
      * {@inheritdoc}
      */
-    public $columnSchemaClass = 'yii\db\mssql\ColumnSchema';
+    public $columnSchemaClass = 'Odigos\yii\db\mssql\ColumnSchema';
     /**
      * @var string the default schema used for the current session.
      */
@@ -100,7 +100,7 @@ class Schema extends BaseSchema implements ConstraintFinderInterface
      */
     protected function resolveTableName($name)
     {
-        $resolvedName = new \yii\db\mssql\TableSchema();
+        $resolvedName = new TableSchema();
         $parts = $this->getTableNameParts($name);
         $partCount = count($parts);
         if ($partCount === 4) {
@@ -179,7 +179,7 @@ SQL;
      */
     protected function loadTableSchema($name)
     {
-        $table = new \yii\db\mssql\TableSchema();
+        $table = new TableSchema();
         $this->resolveTableNames($table, $name);
         $this->findPrimaryKeys($table);
         if ($this->findColumns($table)) {
@@ -300,7 +300,7 @@ SQL;
      */
     public function createQueryBuilder()
     {
-        return Yii::createObject(\yii\db\mssql\QueryBuilder::className(), [$this->db]);
+        return Yii::createObject(QueryBuilder::className(), [$this->db]);
     }
     /**
      * Resolves the table name and schema name (if any).
@@ -715,6 +715,6 @@ SQL;
      */
     public function createColumnSchemaBuilder($type, $length = null)
     {
-        return Yii::createObject(\yii\db\mssql\ColumnSchemaBuilder::className(), [$type, $length, $this->db]);
+        return Yii::createObject(ColumnSchemaBuilder::className(), [$type, $length, $this->db]);
     }
 }

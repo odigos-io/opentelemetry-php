@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Http\Client\Promises;
+namespace Odigos\Illuminate\Http\Client\Promises;
 
-use GuzzleHttp\Promise\PromiseInterface;
-use Illuminate\Support\Traits\ForwardsCalls;
+use Odigos\GuzzleHttp\Promise\PromiseInterface;
+use Odigos\Illuminate\Support\Traits\ForwardsCalls;
 /**
  * A decorated Promise which allows for chaining callbacks.
  */

@@ -5,11 +5,11 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\mail;
+namespace Odigos\yii\mail;
 
 use Odigos\Yii;
-use yii\base\BaseObject;
-use yii\base\ErrorHandler;
+use Odigos\yii\base\BaseObject;
+use Odigos\yii\base\ErrorHandler;
 /**
  * BaseMessage serves as a base class that implements the [[send()]] method required by [[MessageInterface]].
  *
@@ -21,7 +21,7 @@ use yii\base\ErrorHandler;
  * @author Paul Klimov <klimov.paul@gmail.com>
  * @since 2.0
  */
-abstract class BaseMessage extends BaseObject implements \yii\mail\MessageInterface
+abstract class BaseMessage extends BaseObject implements MessageInterface
 {
     /**
      * @var MailerInterface|null the mailer instance that created this message.
@@ -35,7 +35,7 @@ abstract class BaseMessage extends BaseObject implements \yii\mail\MessageInterf
      * the "mailer" application component will be used instead.
      * @return bool whether this message is sent successfully.
      */
-    public function send(?\yii\mail\MailerInterface $mailer = null)
+    public function send(?MailerInterface $mailer = null)
     {
         if ($mailer === null && $this->mailer === null) {
             $mailer = Yii::$app->getMailer();

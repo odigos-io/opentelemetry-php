@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\caching;
+namespace Odigos\yii\caching;
 
 /**
  * TagDependency associates a cached data item with one or multiple [[tags]].
@@ -26,7 +26,7 @@ namespace yii\caching;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class TagDependency extends \yii\caching\Dependency
+class TagDependency extends Dependency
 {
     /**
      * @var string|array a list of tag names for this dependency. For a single tag, you may specify it as a string.

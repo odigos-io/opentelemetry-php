@@ -1,13 +1,13 @@
 <?php
 
-namespace OpenAI\Testing\Resources;
+namespace Odigos\OpenAI\Testing\Resources;
 
-use OpenAI\Contracts\Resources\ImagesContract;
-use OpenAI\Resources\Images;
-use OpenAI\Responses\Images\CreateResponse;
-use OpenAI\Responses\Images\EditResponse;
-use OpenAI\Responses\Images\VariationResponse;
-use OpenAI\Testing\Resources\Concerns\Testable;
+use Odigos\OpenAI\Contracts\Resources\ImagesContract;
+use Odigos\OpenAI\Resources\Images;
+use Odigos\OpenAI\Responses\Images\CreateResponse;
+use Odigos\OpenAI\Responses\Images\EditResponse;
+use Odigos\OpenAI\Responses\Images\VariationResponse;
+use Odigos\OpenAI\Testing\Resources\Concerns\Testable;
 final class ImagesTestResource implements ImagesContract
 {
     use Testable;

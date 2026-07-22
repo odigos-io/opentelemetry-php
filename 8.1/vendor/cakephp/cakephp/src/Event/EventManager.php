@@ -14,20 +14,20 @@ declare (strict_types=1);
  * @since         2.1.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Event;
+namespace Odigos\Cake\Event;
 
-use Cake\Core\Exception\CakeException;
+use Odigos\Cake\Core\Exception\CakeException;
 use Closure;
 use InvalidArgumentException;
 use ReflectionFunction;
-use function Cake\Core\deprecationWarning;
+use function Odigos\Cake\Core\deprecationWarning;
 /**
  * The event manager is responsible for keeping track of event listeners, passing the correct
  * data to them, and firing them in the correct order, when associated events are triggered. You
  * can create multiple instances of this object to manage local events or keep a single instance
  * and pass it around to manage all events in your app.
  */
-class EventManager implements \Cake\Event\EventManagerInterface
+class EventManager implements EventManagerInterface
 {
     /**
      * The default priority queue value for new, attached listeners
@@ -40,7 +40,7 @@ class EventManager implements \Cake\Event\EventManagerInterface
      *
      * @var \Cake\Event\EventManager|null
      */
-    protected static ?\Cake\Event\EventManager $_generalManager = null;
+    protected static ?EventManager $_generalManager = null;
     /**
      * List of listener callbacks associated to
      *
@@ -58,7 +58,7 @@ class EventManager implements \Cake\Event\EventManagerInterface
      *
      * @var \Cake\Event\EventList|null
      */
-    protected ?\Cake\Event\EventList $_eventList = null;
+    protected ?EventList $_eventList = null;
     /**
      * Enables automatic adding of events to the event list object if it is present.
      *
@@ -76,12 +76,12 @@ class EventManager implements \Cake\Event\EventManagerInterface
      * @param \Cake\Event\EventManager|null $manager Event manager instance.
      * @return \Cake\Event\EventManager The global event manager
      */
-    public static function instance(?\Cake\Event\EventManager $manager = null): \Cake\Event\EventManager
+    public static function instance(?EventManager $manager = null): EventManager
     {
         if ($manager === null && static::$_generalManager) {
             return static::$_generalManager;
         }
-        if ($manager instanceof \Cake\Event\EventManager) {
+        if ($manager instanceof EventManager) {
             static::$_generalManager = $manager;
         }
         static::$_generalManager ??= new static();
@@ -91,9 +91,9 @@ class EventManager implements \Cake\Event\EventManagerInterface
     /**
      * @inheritDoc
      */
-    public function on(\Cake\Event\EventListenerInterface|string $eventKey, callable|array $options = [], ?callable $callable = null)
+    public function on(EventListenerInterface|string $eventKey, callable|array $options = [], ?callable $callable = null)
     {
-        if ($eventKey instanceof \Cake\Event\EventListenerInterface) {
+        if ($eventKey instanceof EventListenerInterface) {
             $this->_attachSubscriber($eventKey);
             return $this;
         }
@@ -117,7 +117,7 @@ class EventManager implements \Cake\Event\EventManagerInterface
      * @param \Cake\Event\EventListenerInterface $subscriber Event listener.
      * @return void
      */
-    protected function _attachSubscriber(\Cake\Event\EventListenerInterface $subscriber): void
+    protected function _attachSubscriber(EventListenerInterface $subscriber): void
     {
         foreach ($subscriber->implementedEvents() as $eventKey => $handlers) {
             foreach ($this->normalizeHandlers($subscriber, $handlers) as $handler) {
@@ -128,9 +128,9 @@ class EventManager implements \Cake\Event\EventManagerInterface
     /**
      * @inheritDoc
      */
-    public function off(\Cake\Event\EventListenerInterface|callable|string $eventKey, \Cake\Event\EventListenerInterface|callable|null $callable = null)
+    public function off(EventListenerInterface|callable|string $eventKey, EventListenerInterface|callable|null $callable = null)
     {
-        if ($eventKey instanceof \Cake\Event\EventListenerInterface) {
+        if ($eventKey instanceof EventListenerInterface) {
             $this->_detachSubscriber($eventKey);
             return $this;
         }
@@ -140,7 +140,7 @@ class EventManager implements \Cake\Event\EventManagerInterface
             }
             return $this;
         }
-        if ($callable instanceof \Cake\Event\EventListenerInterface) {
+        if ($callable instanceof EventListenerInterface) {
             $this->_detachSubscriber($callable, $eventKey);
             return $this;
         }
@@ -169,7 +169,7 @@ class EventManager implements \Cake\Event\EventManagerInterface
      * @param string|null $eventKey optional event key name to unsubscribe the listener from
      * @return void
      */
-    protected function _detachSubscriber(\Cake\Event\EventListenerInterface $subscriber, ?string $eventKey = null): void
+    protected function _detachSubscriber(EventListenerInterface $subscriber, ?string $eventKey = null): void
     {
         $events = $subscriber->implementedEvents();
         if ($eventKey && empty($events[$eventKey])) {
@@ -196,7 +196,7 @@ class EventManager implements \Cake\Event\EventManagerInterface
      * @param callable|array|string $handlers Event handlers
      * @return array
      */
-    protected function normalizeHandlers(\Cake\Event\EventListenerInterface $subscriber, callable|array|string $handlers): array
+    protected function normalizeHandlers(EventListenerInterface $subscriber, callable|array|string $handlers): array
     {
         // Check if an array of handlers not single handler config array
         if (is_array($handlers) && !isset($handlers['callable'])) {
@@ -219,7 +219,7 @@ class EventManager implements \Cake\Event\EventManagerInterface
      * @param callable|array|string $handler Event handler
      * @return array
      */
-    protected function normalizeHandler(\Cake\Event\EventListenerInterface $subscriber, callable|array|string $handler): array
+    protected function normalizeHandler(EventListenerInterface $subscriber, callable|array|string $handler): array
     {
         $callable = $handler;
         $settings = [];
@@ -236,10 +236,10 @@ class EventManager implements \Cake\Event\EventManagerInterface
     /**
      * @inheritDoc
      */
-    public function dispatch(\Cake\Event\EventInterface|string $event): \Cake\Event\EventInterface
+    public function dispatch(EventInterface|string $event): EventInterface
     {
         if (is_string($event)) {
-            $event = new \Cake\Event\Event($event);
+            $event = new Event($event);
         }
         $listeners = $this->listeners($event->getName());
         if ($this->_trackEvents) {
@@ -267,7 +267,7 @@ class EventManager implements \Cake\Event\EventManagerInterface
      * @param \Cake\Event\EventInterface<TSubject> $event Event instance.
      * @return void
      */
-    protected function _callListener(callable $listener, \Cake\Event\EventInterface $event): void
+    protected function _callListener(callable $listener, EventInterface $event): void
     {
         $result = $listener($event, ...array_values($event->getData()));
         if ($result !== null) {
@@ -344,7 +344,7 @@ class EventManager implements \Cake\Event\EventManagerInterface
      *
      * @return \Cake\Event\EventList|null
      */
-    public function getEventList(): ?\Cake\Event\EventList
+    public function getEventList(): ?EventList
     {
         return $this->_eventList;
     }
@@ -355,7 +355,7 @@ class EventManager implements \Cake\Event\EventManagerInterface
      * @param \Cake\Event\EventInterface<TSubject> $event An event to add to the list.
      * @return $this
      */
-    public function addEventToList(\Cake\Event\EventInterface $event)
+    public function addEventToList(EventInterface $event)
     {
         $this->_eventList?->add($event);
         return $this;
@@ -386,7 +386,7 @@ class EventManager implements \Cake\Event\EventManagerInterface
      * @param \Cake\Event\EventList $eventList The event list object to use.
      * @return $this
      */
-    public function setEventList(\Cake\Event\EventList $eventList)
+    public function setEventList(EventList $eventList)
     {
         $this->_eventList = $eventList;
         $this->_trackEvents = \true;

@@ -1,19 +1,19 @@
 <?php
 
-namespace Illuminate\Foundation\Http;
+namespace Odigos\Illuminate\Foundation\Http;
 
 use Odigos\Carbon\CarbonInterval;
 use DateTimeInterface;
-use Illuminate\Contracts\Debug\ExceptionHandler;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\Http\Kernel as KernelContract;
-use Illuminate\Foundation\Events\Terminating;
-use Illuminate\Foundation\Http\Events\RequestHandled;
-use Illuminate\Routing\Pipeline;
-use Illuminate\Routing\Router;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Request;
-use Illuminate\Support\InteractsWithTime;
+use Odigos\Illuminate\Contracts\Debug\ExceptionHandler;
+use Odigos\Illuminate\Contracts\Foundation\Application;
+use Odigos\Illuminate\Contracts\Http\Kernel as KernelContract;
+use Odigos\Illuminate\Foundation\Events\Terminating;
+use Odigos\Illuminate\Foundation\Http\Events\RequestHandled;
+use Odigos\Illuminate\Routing\Pipeline;
+use Odigos\Illuminate\Routing\Router;
+use Odigos\Illuminate\Support\Carbon;
+use Odigos\Illuminate\Support\Facades\Request;
+use Odigos\Illuminate\Support\InteractsWithTime;
 use InvalidArgumentException;
 use Throwable;
 class Kernel implements KernelContract
@@ -36,7 +36,7 @@ class Kernel implements KernelContract
      *
      * @var string[]
      */
-    protected $bootstrappers = [\Illuminate\Foundation\Bootstrap\LoadEnvironmentVariables::class, \Illuminate\Foundation\Bootstrap\LoadConfiguration::class, \Illuminate\Foundation\Bootstrap\HandleExceptions::class, \Illuminate\Foundation\Bootstrap\RegisterFacades::class, \Illuminate\Foundation\Bootstrap\RegisterProviders::class, \Illuminate\Foundation\Bootstrap\BootProviders::class];
+    protected $bootstrappers = [\Odigos\Illuminate\Foundation\Bootstrap\LoadEnvironmentVariables::class, \Odigos\Illuminate\Foundation\Bootstrap\LoadConfiguration::class, \Odigos\Illuminate\Foundation\Bootstrap\HandleExceptions::class, \Odigos\Illuminate\Foundation\Bootstrap\RegisterFacades::class, \Odigos\Illuminate\Foundation\Bootstrap\RegisterProviders::class, \Odigos\Illuminate\Foundation\Bootstrap\BootProviders::class];
     /**
      * The application's middleware stack.
      *
@@ -82,7 +82,7 @@ class Kernel implements KernelContract
      *
      * @var string[]
      */
-    protected $middlewarePriority = [\Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests::class, \Illuminate\Cookie\Middleware\EncryptCookies::class, \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class, \Illuminate\Session\Middleware\StartSession::class, \Illuminate\View\Middleware\ShareErrorsFromSession::class, \Illuminate\Contracts\Auth\Middleware\AuthenticatesRequests::class, \Illuminate\Routing\Middleware\ThrottleRequests::class, \Illuminate\Routing\Middleware\ThrottleRequestsWithRedis::class, \Illuminate\Contracts\Session\Middleware\AuthenticatesSessions::class, \Illuminate\Routing\Middleware\SubstituteBindings::class, \Illuminate\Auth\Middleware\Authorize::class];
+    protected $middlewarePriority = [\Odigos\Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests::class, \Odigos\Illuminate\Cookie\Middleware\EncryptCookies::class, \Odigos\Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class, \Odigos\Illuminate\Session\Middleware\StartSession::class, \Odigos\Illuminate\View\Middleware\ShareErrorsFromSession::class, \Odigos\Illuminate\Contracts\Auth\Middleware\AuthenticatesRequests::class, \Odigos\Illuminate\Routing\Middleware\ThrottleRequests::class, \Odigos\Illuminate\Routing\Middleware\ThrottleRequestsWithRedis::class, \Odigos\Illuminate\Contracts\Session\Middleware\AuthenticatesSessions::class, \Odigos\Illuminate\Routing\Middleware\SubstituteBindings::class, \Odigos\Illuminate\Auth\Middleware\Authorize::class];
     /**
      * Create a new HTTP kernel instance.
      *

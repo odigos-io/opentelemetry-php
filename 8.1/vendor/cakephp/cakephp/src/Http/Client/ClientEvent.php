@@ -14,10 +14,10 @@ declare (strict_types=1);
  * @since         5.1.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Http\Client;
+namespace Odigos\Cake\Http\Client;
 
-use Cake\Event\Event;
-use Cake\Http\Client;
+use Odigos\Cake\Event\Event;
+use Odigos\Cake\Http\Client;
 use InvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
 /**
@@ -48,7 +48,7 @@ class ClientEvent extends Event
      *
      * @return \Cake\Http\Client\Response|null
      */
-    public function getResult(): ?\Cake\Http\Client\Response
+    public function getResult(): ?Response
     {
         return $this->result;
     }
@@ -60,7 +60,7 @@ class ClientEvent extends Event
      */
     public function setResult(mixed $value = null)
     {
-        if ($value !== null && !$value instanceof \Cake\Http\Client\Response) {
+        if ($value !== null && !$value instanceof Response) {
             throw new InvalidArgumentException('The result for Http Client events must be a `Cake\Http\Client\Response` instance.');
         }
         return parent::setResult($value);

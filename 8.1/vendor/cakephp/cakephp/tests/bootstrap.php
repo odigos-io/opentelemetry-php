@@ -14,18 +14,18 @@ namespace Odigos;
  * @link          https://cakephp.org CakePHP(tm) Project
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-use Cake\Cache\Cache;
-use Cake\Chronos\Chronos;
-use Cake\Core\Configure;
-use Cake\Datasource\ConnectionManager;
-use Cake\Datasource\FactoryLocator;
-use Cake\Error\Debug\TextFormatter;
-use Cake\Log\Engine\FileLog;
-use Cake\Log\Log;
-use Cake\ORM\Locator\TableLocator;
-use Cake\TestSuite\Fixture\SchemaLoader;
-use Cake\Utility\Security;
-use function Cake\Core\env;
+use Odigos\Cake\Cache\Cache;
+use Odigos\Cake\Chronos\Chronos;
+use Odigos\Cake\Core\Configure;
+use Odigos\Cake\Datasource\ConnectionManager;
+use Odigos\Cake\Datasource\FactoryLocator;
+use Odigos\Cake\Error\Debug\TextFormatter;
+use Odigos\Cake\Log\Engine\FileLog;
+use Odigos\Cake\Log\Log;
+use Odigos\Cake\ORM\Locator\TableLocator;
+use Odigos\Cake\TestSuite\Fixture\SchemaLoader;
+use Odigos\Cake\Utility\Security;
+use function Odigos\Cake\Core\env;
 if (\is_file('vendor/autoload.php')) {
     require_once 'vendor/autoload.php';
 } else {

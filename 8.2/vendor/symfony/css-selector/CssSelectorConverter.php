@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\CssSelector;
+namespace Odigos\Symfony\Component\CssSelector;
 
-use Symfony\Component\CssSelector\Parser\Shortcut\ClassParser;
-use Symfony\Component\CssSelector\Parser\Shortcut\ElementParser;
-use Symfony\Component\CssSelector\Parser\Shortcut\EmptyStringParser;
-use Symfony\Component\CssSelector\Parser\Shortcut\HashParser;
-use Symfony\Component\CssSelector\XPath\Extension\HtmlExtension;
-use Symfony\Component\CssSelector\XPath\Translator;
+use Odigos\Symfony\Component\CssSelector\Parser\Shortcut\ClassParser;
+use Odigos\Symfony\Component\CssSelector\Parser\Shortcut\ElementParser;
+use Odigos\Symfony\Component\CssSelector\Parser\Shortcut\EmptyStringParser;
+use Odigos\Symfony\Component\CssSelector\Parser\Shortcut\HashParser;
+use Odigos\Symfony\Component\CssSelector\XPath\Extension\HtmlExtension;
+use Odigos\Symfony\Component\CssSelector\XPath\Translator;
 /**
  * CssSelectorConverter is the main entry point of the component and can convert CSS
  * selectors to XPath expressions.

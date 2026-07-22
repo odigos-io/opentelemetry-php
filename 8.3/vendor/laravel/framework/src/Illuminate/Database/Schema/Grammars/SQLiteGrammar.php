@@ -1,15 +1,15 @@
 <?php
 
-namespace Illuminate\Database\Schema\Grammars;
+namespace Odigos\Illuminate\Database\Schema\Grammars;
 
-use Illuminate\Database\Query\Expression;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Schema\IndexDefinition;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Fluent;
+use Odigos\Illuminate\Database\Query\Expression;
+use Odigos\Illuminate\Database\Schema\Blueprint;
+use Odigos\Illuminate\Database\Schema\IndexDefinition;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Fluent;
 use RuntimeException;
-class SQLiteGrammar extends \Illuminate\Database\Schema\Grammars\Grammar
+class SQLiteGrammar extends Grammar
 {
     /**
      * The possible column modifiers.

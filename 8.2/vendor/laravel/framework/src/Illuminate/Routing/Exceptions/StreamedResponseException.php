@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Routing\Exceptions;
+namespace Odigos\Illuminate\Routing\Exceptions;
 
-use Illuminate\Http\Response;
+use Odigos\Illuminate\Http\Response;
 use RuntimeException;
 use Throwable;
 class StreamedResponseException extends RuntimeException

@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace GuzzleHttp\Psr7;
+namespace Odigos\GuzzleHttp\Psr7;
 
-use GuzzleHttp\Psr7\Exception\MalformedUriException;
+use Odigos\GuzzleHttp\Psr7\Exception\MalformedUriException;
 use Psr\Http\Message\UriInterface;
 /**
  * PSR-7 URI implementation.
@@ -247,7 +247,7 @@ class Uri implements UriInterface, \JsonSerializable
     public static function isSameDocumentReference(UriInterface $uri, ?UriInterface $base = null): bool
     {
         if ($base !== null) {
-            $uri = \GuzzleHttp\Psr7\UriResolver::resolve($base, $uri);
+            $uri = UriResolver::resolve($base, $uri);
             return $uri->getScheme() === $base->getScheme() && $uri->getAuthority() === $base->getAuthority() && $uri->getPath() === $base->getPath() && $uri->getQuery() === $base->getQuery();
         }
         return $uri->getScheme() === '' && $uri->getAuthority() === '' && $uri->getPath() === '' && $uri->getQuery() === '';
@@ -539,7 +539,7 @@ class Uri implements UriInterface, \JsonSerializable
         if (!is_string($component)) {
             throw new \InvalidArgumentException('User info must be a string');
         }
-        return $this->filterComponent('/(?:[^%' . \GuzzleHttp\Psr7\Rfc3986::CHAR_UNRESERVED . \GuzzleHttp\Psr7\Rfc3986::CHAR_SUB_DELIMS . ']+|%(?![A-Fa-f0-9]{2}))/', $component, 'Unable to filter URI user info');
+        return $this->filterComponent('/(?:[^%' . Rfc3986::CHAR_UNRESERVED . Rfc3986::CHAR_SUB_DELIMS . ']+|%(?![A-Fa-f0-9]{2}))/', $component, 'Unable to filter URI user info');
     }
     /**
      * @param mixed $host
@@ -619,7 +619,7 @@ class Uri implements UriInterface, \JsonSerializable
         if (!is_string($path)) {
             throw new \InvalidArgumentException('Path must be a string');
         }
-        return $this->filterComponent('/(?:[^' . \GuzzleHttp\Psr7\Rfc3986::CHAR_UNRESERVED . \GuzzleHttp\Psr7\Rfc3986::CHAR_SUB_DELIMS . '%:@\/]++|%(?![A-Fa-f0-9]{2}))/', $path, 'Unable to filter URI path');
+        return $this->filterComponent('/(?:[^' . Rfc3986::CHAR_UNRESERVED . Rfc3986::CHAR_SUB_DELIMS . '%:@\/]++|%(?![A-Fa-f0-9]{2}))/', $path, 'Unable to filter URI path');
     }
     /**
      * Filters the query string or fragment of a URI.
@@ -633,7 +633,7 @@ class Uri implements UriInterface, \JsonSerializable
         if (!is_string($str)) {
             throw new \InvalidArgumentException('Query and fragment must be a string');
         }
-        return $this->filterComponent('/(?:[^' . \GuzzleHttp\Psr7\Rfc3986::CHAR_UNRESERVED . \GuzzleHttp\Psr7\Rfc3986::CHAR_SUB_DELIMS . '%:@\/\?]++|%(?![A-Fa-f0-9]{2}))/', $str, 'Unable to filter URI query or fragment');
+        return $this->filterComponent('/(?:[^' . Rfc3986::CHAR_UNRESERVED . Rfc3986::CHAR_SUB_DELIMS . '%:@\/\?]++|%(?![A-Fa-f0-9]{2}))/', $str, 'Unable to filter URI query or fragment');
     }
     private function filterComponent(string $pattern, string $component, string $context): string
     {

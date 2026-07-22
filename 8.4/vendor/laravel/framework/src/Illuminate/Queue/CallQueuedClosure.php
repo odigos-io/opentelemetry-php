@@ -1,18 +1,18 @@
 <?php
 
-namespace Illuminate\Queue;
+namespace Odigos\Illuminate\Queue;
 
 use Closure;
-use Illuminate\Bus\Batchable;
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Container\Container;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Laravel\SerializableClosure\SerializableClosure;
+use Odigos\Illuminate\Bus\Batchable;
+use Odigos\Illuminate\Bus\Queueable;
+use Odigos\Illuminate\Contracts\Container\Container;
+use Odigos\Illuminate\Contracts\Queue\ShouldQueue;
+use Odigos\Illuminate\Foundation\Bus\Dispatchable;
+use Odigos\Laravel\SerializableClosure\SerializableClosure;
 use ReflectionFunction;
 class CallQueuedClosure implements ShouldQueue
 {
-    use Batchable, Dispatchable, \Illuminate\Queue\InteractsWithQueue, Queueable, \Illuminate\Queue\SerializesModels;
+    use Batchable, Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
     /**
      * The serializable Closure instance.
      *

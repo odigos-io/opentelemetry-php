@@ -1,22 +1,22 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Resources;
+namespace Odigos\OpenAI\Resources;
 
-use OpenAI\Contracts\Resources\ThreadsContract;
-use OpenAI\Contracts\Resources\ThreadsMessagesContract;
-use OpenAI\Contracts\Resources\ThreadsRunsContract;
-use OpenAI\Responses\StreamResponse;
-use OpenAI\Responses\Threads\Runs\ThreadRunResponse;
-use OpenAI\Responses\Threads\Runs\ThreadRunStreamResponse;
-use OpenAI\Responses\Threads\ThreadDeleteResponse;
-use OpenAI\Responses\Threads\ThreadResponse;
-use OpenAI\ValueObjects\Transporter\Payload;
-use OpenAI\ValueObjects\Transporter\Response;
+use Odigos\OpenAI\Contracts\Resources\ThreadsContract;
+use Odigos\OpenAI\Contracts\Resources\ThreadsMessagesContract;
+use Odigos\OpenAI\Contracts\Resources\ThreadsRunsContract;
+use Odigos\OpenAI\Responses\StreamResponse;
+use Odigos\OpenAI\Responses\Threads\Runs\ThreadRunResponse;
+use Odigos\OpenAI\Responses\Threads\Runs\ThreadRunStreamResponse;
+use Odigos\OpenAI\Responses\Threads\ThreadDeleteResponse;
+use Odigos\OpenAI\Responses\Threads\ThreadResponse;
+use Odigos\OpenAI\ValueObjects\Transporter\Payload;
+use Odigos\OpenAI\ValueObjects\Transporter\Response;
 final class Threads implements ThreadsContract
 {
-    use \OpenAI\Resources\Concerns\Streamable;
-    use \OpenAI\Resources\Concerns\Transportable;
+    use Concerns\Streamable;
+    use Concerns\Transportable;
     /**
      * Create a thread.
      *
@@ -105,7 +105,7 @@ final class Threads implements ThreadsContract
      */
     public function messages(): ThreadsMessagesContract
     {
-        return new \OpenAI\Resources\ThreadsMessages($this->transporter);
+        return new ThreadsMessages($this->transporter);
     }
     /**
      * Represents an execution run on a thread.
@@ -114,6 +114,6 @@ final class Threads implements ThreadsContract
      */
     public function runs(): ThreadsRunsContract
     {
-        return new \OpenAI\Resources\ThreadsRuns($this->transporter);
+        return new ThreadsRuns($this->transporter);
     }
 }

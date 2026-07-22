@@ -1,32 +1,32 @@
 <?php
 
-namespace Illuminate\Testing;
+namespace Odigos\Illuminate\Testing;
 
 use ArrayAccess;
 use Closure;
-use Illuminate\Contracts\Support\MessageBag;
-use Illuminate\Contracts\View\View;
-use Illuminate\Cookie\CookieValuePrefix;
-use Illuminate\Database\Eloquent\Collection as EloquentCollection;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
-use Illuminate\Support\Traits\Conditionable;
-use Illuminate\Support\Traits\Dumpable;
-use Illuminate\Support\Traits\Macroable;
-use Illuminate\Support\Traits\Tappable;
-use Illuminate\Support\ViewErrorBag;
-use Illuminate\Testing\Constraints\SeeInOrder;
-use Illuminate\Testing\Fluent\AssertableJson;
-use Illuminate\Testing\TestResponseAssert as PHPUnit;
+use Odigos\Illuminate\Contracts\Support\MessageBag;
+use Odigos\Illuminate\Contracts\View\View;
+use Odigos\Illuminate\Cookie\CookieValuePrefix;
+use Odigos\Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Odigos\Illuminate\Database\Eloquent\Model;
+use Odigos\Illuminate\Http\Request;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Carbon;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Str;
+use Odigos\Illuminate\Support\Traits\Conditionable;
+use Odigos\Illuminate\Support\Traits\Dumpable;
+use Odigos\Illuminate\Support\Traits\Macroable;
+use Odigos\Illuminate\Support\Traits\Tappable;
+use Odigos\Illuminate\Support\ViewErrorBag;
+use Odigos\Illuminate\Testing\Constraints\SeeInOrder;
+use Odigos\Illuminate\Testing\Fluent\AssertableJson;
+use Odigos\Illuminate\Testing\TestResponseAssert as PHPUnit;
 use LogicException;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
-use Symfony\Component\HttpFoundation\Cookie;
-use Symfony\Component\HttpFoundation\StreamedJsonResponse;
-use Symfony\Component\HttpFoundation\StreamedResponse;
+use Odigos\Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Odigos\Symfony\Component\HttpFoundation\Cookie;
+use Odigos\Symfony\Component\HttpFoundation\StreamedJsonResponse;
+use Odigos\Symfony\Component\HttpFoundation\StreamedResponse;
 /**
  * @template TResponse of \Symfony\Component\HttpFoundation\Response
  *
@@ -34,7 +34,7 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
  */
 class TestResponse implements ArrayAccess
 {
-    use \Illuminate\Testing\Concerns\AssertsStatusCodes, Conditionable, Dumpable, Tappable, Macroable {
+    use Concerns\AssertsStatusCodes, Conditionable, Dumpable, Tappable, Macroable {
         __call as macroCall;
     }
     /**
@@ -893,9 +893,9 @@ class TestResponse implements ArrayAccess
     public function decodeResponseJson()
     {
         if ($this->baseResponse instanceof StreamedResponse || $this->baseResponse instanceof StreamedJsonResponse) {
-            $testJson = new \Illuminate\Testing\AssertableJsonString($this->streamedContent());
+            $testJson = new AssertableJsonString($this->streamedContent());
         } else {
-            $testJson = new \Illuminate\Testing\AssertableJsonString($this->getContent());
+            $testJson = new AssertableJsonString($this->getContent());
         }
         $decodedResponse = $testJson->json();
         if (is_null($decodedResponse) || $decodedResponse === \false) {

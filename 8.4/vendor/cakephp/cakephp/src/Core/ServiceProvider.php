@@ -14,7 +14,7 @@ declare (strict_types=1);
  * @since         4.2.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Core;
+namespace Odigos\Cake\Core;
 
 use Odigos\League\Container\DefinitionContainerInterface;
 use Odigos\League\Container\ServiceProvider\AbstractServiceProvider;
@@ -45,7 +45,7 @@ abstract class ServiceProvider extends AbstractServiceProvider implements Bootab
     public function getContainer(): DefinitionContainerInterface
     {
         $container = parent::getContainer();
-        assert($container instanceof \Cake\Core\ContainerInterface, sprintf('Unexpected container type. Expected `%s` got `%s` instead.', \Cake\Core\ContainerInterface::class, get_debug_type($container)));
+        assert($container instanceof ContainerInterface, sprintf('Unexpected container type. Expected `%s` got `%s` instead.', ContainerInterface::class, get_debug_type($container)));
         return $container;
     }
     /**
@@ -71,7 +71,7 @@ abstract class ServiceProvider extends AbstractServiceProvider implements Bootab
      * @param \Cake\Core\ContainerInterface $container The container to add services to.
      * @return void
      */
-    public function bootstrap(\Cake\Core\ContainerInterface $container): void
+    public function bootstrap(ContainerInterface $container): void
     {
     }
     /**
@@ -112,5 +112,5 @@ abstract class ServiceProvider extends AbstractServiceProvider implements Bootab
      * @param \Cake\Core\ContainerInterface $container The container to add services to.
      * @return void
      */
-    abstract public function services(\Cake\Core\ContainerInterface $container): void;
+    abstract public function services(ContainerInterface $container): void;
 }

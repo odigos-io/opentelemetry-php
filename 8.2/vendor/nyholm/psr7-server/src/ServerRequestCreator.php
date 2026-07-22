@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Nyholm\Psr7Server;
+namespace Odigos\Nyholm\Psr7Server;
 
 use Psr\Http\Message\ServerRequestFactoryInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -15,7 +15,7 @@ use Psr\Http\Message\UriInterface;
  * @author Tobias Nyholm <tobias.nyholm@gmail.com>
  * @author Martijn van der Ven <martijn@vanderven.se>
  */
-final class ServerRequestCreator implements \Nyholm\Psr7Server\ServerRequestCreatorInterface
+final class ServerRequestCreator implements ServerRequestCreatorInterface
 {
     private $serverRequestFactory;
     private $uriFactory;

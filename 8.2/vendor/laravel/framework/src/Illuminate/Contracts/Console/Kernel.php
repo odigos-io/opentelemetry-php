@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Contracts\Console;
+namespace Odigos\Illuminate\Contracts\Console;
 
 interface Kernel
 {

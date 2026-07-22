@@ -15,11 +15,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace MongoDB\GridFS\Exception;
+namespace Odigos\MongoDB\GridFS\Exception;
 
 use LogicException as BaseLogicException;
-use MongoDB\Exception\Exception;
-use MongoDB\GridFS\CollectionWrapper;
+use Odigos\MongoDB\Exception\Exception;
+use Odigos\MongoDB\GridFS\CollectionWrapper;
 use function get_debug_type;
 use function sprintf;
 class LogicException extends BaseLogicException implements Exception

@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Routing;
+namespace Odigos\Illuminate\Routing;
 
-use Illuminate\Container\Container;
-use Illuminate\Http\Request;
-class RouteCollection extends \Illuminate\Routing\AbstractRouteCollection
+use Odigos\Illuminate\Container\Container;
+use Odigos\Illuminate\Http\Request;
+class RouteCollection extends AbstractRouteCollection
 {
     /**
      * An array of the routes keyed by method.
@@ -36,7 +36,7 @@ class RouteCollection extends \Illuminate\Routing\AbstractRouteCollection
      * @param  \Illuminate\Routing\Route  $route
      * @return \Illuminate\Routing\Route
      */
-    public function add(\Illuminate\Routing\Route $route)
+    public function add(Route $route)
     {
         $this->addToCollections($route);
         $this->addLookups($route);
@@ -245,9 +245,9 @@ class RouteCollection extends \Illuminate\Routing\AbstractRouteCollection
      * @param  \Illuminate\Container\Container  $container
      * @return \Illuminate\Routing\CompiledRouteCollection
      */
-    public function toCompiledRouteCollection(\Illuminate\Routing\Router $router, Container $container)
+    public function toCompiledRouteCollection(Router $router, Container $container)
     {
         ['compiled' => $compiled, 'attributes' => $attributes] = $this->compile();
-        return (new \Illuminate\Routing\CompiledRouteCollection($compiled, $attributes))->setRouter($router)->setContainer($container);
+        return (new CompiledRouteCollection($compiled, $attributes))->setRouter($router)->setContainer($container);
     }
 }

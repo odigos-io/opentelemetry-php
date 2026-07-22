@@ -6,21 +6,21 @@
  * @license https://github.com/slimphp/Slim/blob/4.x/LICENSE.md (MIT License)
  */
 declare (strict_types=1);
-namespace Slim\Factory;
+namespace Odigos\Slim\Factory;
 
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use RuntimeException;
-use Slim\App;
-use Slim\Factory\Psr17\Psr17Factory;
-use Slim\Factory\Psr17\Psr17FactoryProvider;
-use Slim\Factory\Psr17\SlimHttpPsr17Factory;
-use Slim\Interfaces\CallableResolverInterface;
-use Slim\Interfaces\MiddlewareDispatcherInterface;
-use Slim\Interfaces\Psr17FactoryProviderInterface;
-use Slim\Interfaces\RouteCollectorInterface;
-use Slim\Interfaces\RouteResolverInterface;
+use Odigos\Slim\App;
+use Odigos\Slim\Factory\Psr17\Psr17Factory;
+use Odigos\Slim\Factory\Psr17\Psr17FactoryProvider;
+use Odigos\Slim\Factory\Psr17\SlimHttpPsr17Factory;
+use Odigos\Slim\Interfaces\CallableResolverInterface;
+use Odigos\Slim\Interfaces\MiddlewareDispatcherInterface;
+use Odigos\Slim\Interfaces\Psr17FactoryProviderInterface;
+use Odigos\Slim\Interfaces\RouteCollectorInterface;
+use Odigos\Slim\Interfaces\RouteResolverInterface;
 /** @api */
 class AppFactory
 {

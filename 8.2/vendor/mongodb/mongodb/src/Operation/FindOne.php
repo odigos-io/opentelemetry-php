@@ -15,12 +15,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace MongoDB\Operation;
+namespace Odigos\MongoDB\Operation;
 
 use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
 use MongoDB\Driver\Server;
-use MongoDB\Exception\InvalidArgumentException;
-use MongoDB\Exception\UnsupportedException;
+use Odigos\MongoDB\Exception\InvalidArgumentException;
+use Odigos\MongoDB\Exception\UnsupportedException;
 use function current;
 /**
  * Operation for finding a single document with the find command.
@@ -29,9 +29,9 @@ use function current;
  * @see https://mongodb.com/docs/manual/tutorial/query-documents/
  * @see https://mongodb.com/docs/manual/reference/operator/query-modifier/
  */
-final class FindOne implements \MongoDB\Operation\Explainable
+final class FindOne implements Explainable
 {
-    private \MongoDB\Operation\Find $find;
+    private Find $find;
     /**
      * Constructs a find command for finding a single document.
      *
@@ -92,7 +92,7 @@ final class FindOne implements \MongoDB\Operation\Explainable
      */
     public function __construct(string $databaseName, string $collectionName, array|object $filter, array $options = [])
     {
-        $this->find = new \MongoDB\Operation\Find($databaseName, $collectionName, $filter, ['limit' => 1] + $options);
+        $this->find = new Find($databaseName, $collectionName, $filter, ['limit' => 1] + $options);
     }
     /**
      * Execute the operation.

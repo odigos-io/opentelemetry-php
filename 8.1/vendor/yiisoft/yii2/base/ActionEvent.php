@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\base;
+namespace Odigos\yii\base;
 
 /**
  * ActionEvent represents the event parameter used for an action event.
@@ -17,7 +17,7 @@ namespace yii\base;
  *
  * @template T of Action = Action
  */
-class ActionEvent extends \yii\base\Event
+class ActionEvent extends Event
 {
     /**
      * @var T the action currently being executed

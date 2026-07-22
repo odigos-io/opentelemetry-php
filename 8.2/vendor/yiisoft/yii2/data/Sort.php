@@ -5,14 +5,14 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\data;
+namespace Odigos\yii\data;
 
 use Odigos\Yii;
-use yii\base\BaseObject;
-use yii\base\InvalidConfigException;
-use yii\helpers\Html;
-use yii\helpers\Inflector;
-use yii\web\Request;
+use Odigos\yii\base\BaseObject;
+use Odigos\yii\base\InvalidConfigException;
+use Odigos\yii\helpers\Html;
+use Odigos\yii\helpers\Inflector;
+use Odigos\yii\web\Request;
 /**
  * Sort represents information relevant to sorting.
  *

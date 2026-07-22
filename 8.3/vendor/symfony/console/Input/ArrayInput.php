@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Console\Input;
+namespace Odigos\Symfony\Component\Console\Input;
 
-use Symfony\Component\Console\Exception\InvalidArgumentException;
-use Symfony\Component\Console\Exception\InvalidOptionException;
+use Odigos\Symfony\Component\Console\Exception\InvalidArgumentException;
+use Odigos\Symfony\Component\Console\Exception\InvalidOptionException;
 /**
  * ArrayInput represents an input provided as an array.
  *
@@ -21,9 +21,9 @@ use Symfony\Component\Console\Exception\InvalidOptionException;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class ArrayInput extends \Symfony\Component\Console\Input\Input
+class ArrayInput extends Input
 {
-    public function __construct(private array $parameters, ?\Symfony\Component\Console\Input\InputDefinition $definition = null)
+    public function __construct(private array $parameters, ?InputDefinition $definition = null)
     {
         parent::__construct($definition);
     }

@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Platforms\MySQL;
+namespace Odigos\Doctrine\DBAL\Platforms\MySQL;
 
-use Doctrine\DBAL\Platforms\AbstractMySQLPlatform;
-use Doctrine\DBAL\Schema\Column;
-use Doctrine\DBAL\Schema\Comparator as BaseComparator;
-use Doctrine\DBAL\Schema\ComparatorConfig;
-use Doctrine\DBAL\Schema\Table;
-use Doctrine\DBAL\Schema\TableDiff;
+use Odigos\Doctrine\DBAL\Platforms\AbstractMySQLPlatform;
+use Odigos\Doctrine\DBAL\Schema\Column;
+use Odigos\Doctrine\DBAL\Schema\Comparator as BaseComparator;
+use Odigos\Doctrine\DBAL\Schema\ComparatorConfig;
+use Odigos\Doctrine\DBAL\Schema\Table;
+use Odigos\Doctrine\DBAL\Schema\TableDiff;
 use function array_diff_assoc;
 /**
  * Compares schemas in the context of MySQL platform.
@@ -22,7 +22,7 @@ use function array_diff_assoc;
 class Comparator extends BaseComparator
 {
     /** @internal The comparator can be only instantiated by a schema manager. */
-    public function __construct(AbstractMySQLPlatform $platform, private readonly \Doctrine\DBAL\Platforms\MySQL\CharsetMetadataProvider $charsetMetadataProvider, private readonly \Doctrine\DBAL\Platforms\MySQL\CollationMetadataProvider $collationMetadataProvider, private readonly \Doctrine\DBAL\Platforms\MySQL\DefaultTableOptions $defaultTableOptions, ComparatorConfig $config = new ComparatorConfig())
+    public function __construct(AbstractMySQLPlatform $platform, private readonly CharsetMetadataProvider $charsetMetadataProvider, private readonly CollationMetadataProvider $collationMetadataProvider, private readonly DefaultTableOptions $defaultTableOptions, ComparatorConfig $config = new ComparatorConfig())
     {
         parent::__construct($platform, $config);
     }

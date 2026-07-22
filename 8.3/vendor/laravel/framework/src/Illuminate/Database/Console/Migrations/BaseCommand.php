@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Database\Console\Migrations;
+namespace Odigos\Illuminate\Database\Console\Migrations;
 
-use Illuminate\Console\Command;
-use Illuminate\Support\Collection;
+use Odigos\Illuminate\Console\Command;
+use Odigos\Illuminate\Support\Collection;
 class BaseCommand extends Command
 {
     /**

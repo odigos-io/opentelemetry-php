@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenAI\Testing\Responses\Fixtures\Containers\Files;
+namespace Odigos\OpenAI\Testing\Responses\Fixtures\Containers\Files;
 
 final class ContainerFileListResponseFixture
 {

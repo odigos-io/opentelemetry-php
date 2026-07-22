@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Types\Exception;
+namespace Odigos\Doctrine\DBAL\Types\Exception;
 
-use Doctrine\DBAL\Types\ConversionException;
+use Odigos\Doctrine\DBAL\Types\ConversionException;
 use Throwable;
 use function sprintf;
 use function strlen;
@@ -12,7 +12,7 @@ use function substr;
  * Thrown when a Database to Doctrine Type Conversion fails and we can make a statement
  * about the expected format.
  */
-final class InvalidFormat extends ConversionException implements \Doctrine\DBAL\Types\Exception\TypesException
+final class InvalidFormat extends ConversionException implements TypesException
 {
     public static function new(string $value, string $toType, ?string $expectedFormat, ?Throwable $previous = null): self
     {

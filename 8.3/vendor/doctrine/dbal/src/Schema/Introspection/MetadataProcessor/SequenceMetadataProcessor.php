@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Schema\Introspection\MetadataProcessor;
+namespace Odigos\Doctrine\DBAL\Schema\Introspection\MetadataProcessor;
 
-use Doctrine\DBAL\Schema\Metadata\SequenceMetadataRow;
-use Doctrine\DBAL\Schema\Sequence;
+use Odigos\Doctrine\DBAL\Schema\Metadata\SequenceMetadataRow;
+use Odigos\Doctrine\DBAL\Schema\Sequence;
 /**
  * Converts {@see SequenceMetadataRow} into a {@see Sequence}.
  *

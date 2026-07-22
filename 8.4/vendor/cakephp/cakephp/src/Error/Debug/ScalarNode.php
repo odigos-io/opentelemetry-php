@@ -14,12 +14,12 @@ declare (strict_types=1);
  * @since         4.1.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Error\Debug;
+namespace Odigos\Cake\Error\Debug;
 
 /**
  * Dump node for scalar values.
  */
-class ScalarNode implements \Cake\Error\Debug\NodeInterface
+class ScalarNode implements NodeInterface
 {
     /**
      * @var string

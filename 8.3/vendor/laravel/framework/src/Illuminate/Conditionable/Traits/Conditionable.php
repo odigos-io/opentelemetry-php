@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Support\Traits;
+namespace Odigos\Illuminate\Support\Traits;
 
 use Closure;
-use Illuminate\Support\HigherOrderWhenProxy;
+use Odigos\Illuminate\Support\HigherOrderWhenProxy;
 trait Conditionable
 {
     /**

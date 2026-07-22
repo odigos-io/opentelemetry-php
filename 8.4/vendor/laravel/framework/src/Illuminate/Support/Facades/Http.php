@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Support\Facades;
+namespace Odigos\Illuminate\Support\Facades;
 
-use Illuminate\Http\Client\Factory;
+use Odigos\Illuminate\Http\Client\Factory;
 /**
  * @method static \Illuminate\Http\Client\Factory globalMiddleware(callable $middleware)
  * @method static \Illuminate\Http\Client\Factory globalRequestMiddleware(callable $middleware)
@@ -104,7 +104,7 @@ use Illuminate\Http\Client\Factory;
  *
  * @see \Illuminate\Http\Client\Factory
  */
-class Http extends \Illuminate\Support\Facades\Facade
+class Http extends Facade
 {
     /**
      * Get the registered name of the component.

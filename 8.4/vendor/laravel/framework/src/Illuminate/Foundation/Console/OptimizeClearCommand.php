@@ -1,12 +1,12 @@
 <?php
 
-namespace Illuminate\Foundation\Console;
+namespace Odigos\Illuminate\Foundation\Console;
 
-use Illuminate\Console\Command;
-use Illuminate\Support\Collection;
-use Illuminate\Support\ServiceProvider;
-use Symfony\Component\Console\Attribute\AsCommand;
-use Symfony\Component\Console\Input\InputOption;
+use Odigos\Illuminate\Console\Command;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\ServiceProvider;
+use Odigos\Symfony\Component\Console\Attribute\AsCommand;
+use Odigos\Symfony\Component\Console\Input\InputOption;
 #[AsCommand(name: 'optimize:clear')]
 class OptimizeClearCommand extends Command
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Support;
+namespace Odigos\Illuminate\Support;
 
 class DefaultProviders
 {
@@ -15,7 +15,7 @@ class DefaultProviders
      */
     public function __construct(?array $providers = null)
     {
-        $this->providers = $providers ?: [\Illuminate\Auth\AuthServiceProvider::class, \Illuminate\Broadcasting\BroadcastServiceProvider::class, \Illuminate\Bus\BusServiceProvider::class, \Illuminate\Cache\CacheServiceProvider::class, \Illuminate\Foundation\Providers\ConsoleSupportServiceProvider::class, \Illuminate\Concurrency\ConcurrencyServiceProvider::class, \Illuminate\Cookie\CookieServiceProvider::class, \Illuminate\Database\DatabaseServiceProvider::class, \Illuminate\Encryption\EncryptionServiceProvider::class, \Illuminate\Filesystem\FilesystemServiceProvider::class, \Illuminate\Foundation\Providers\FoundationServiceProvider::class, \Illuminate\Hashing\HashServiceProvider::class, \Illuminate\Mail\MailServiceProvider::class, \Illuminate\Notifications\NotificationServiceProvider::class, \Illuminate\Pagination\PaginationServiceProvider::class, \Illuminate\Auth\Passwords\PasswordResetServiceProvider::class, \Illuminate\Pipeline\PipelineServiceProvider::class, \Illuminate\Queue\QueueServiceProvider::class, \Illuminate\Redis\RedisServiceProvider::class, \Illuminate\Session\SessionServiceProvider::class, \Illuminate\Translation\TranslationServiceProvider::class, \Illuminate\Validation\ValidationServiceProvider::class, \Illuminate\View\ViewServiceProvider::class];
+        $this->providers = $providers ?: [\Odigos\Illuminate\Auth\AuthServiceProvider::class, \Odigos\Illuminate\Broadcasting\BroadcastServiceProvider::class, \Odigos\Illuminate\Bus\BusServiceProvider::class, \Odigos\Illuminate\Cache\CacheServiceProvider::class, \Odigos\Illuminate\Foundation\Providers\ConsoleSupportServiceProvider::class, \Odigos\Illuminate\Concurrency\ConcurrencyServiceProvider::class, \Odigos\Illuminate\Cookie\CookieServiceProvider::class, \Odigos\Illuminate\Database\DatabaseServiceProvider::class, \Odigos\Illuminate\Encryption\EncryptionServiceProvider::class, \Odigos\Illuminate\Filesystem\FilesystemServiceProvider::class, \Odigos\Illuminate\Foundation\Providers\FoundationServiceProvider::class, \Odigos\Illuminate\Hashing\HashServiceProvider::class, \Odigos\Illuminate\Mail\MailServiceProvider::class, \Odigos\Illuminate\Notifications\NotificationServiceProvider::class, \Odigos\Illuminate\Pagination\PaginationServiceProvider::class, \Odigos\Illuminate\Auth\Passwords\PasswordResetServiceProvider::class, \Odigos\Illuminate\Pipeline\PipelineServiceProvider::class, \Odigos\Illuminate\Queue\QueueServiceProvider::class, \Odigos\Illuminate\Redis\RedisServiceProvider::class, \Odigos\Illuminate\Session\SessionServiceProvider::class, \Odigos\Illuminate\Translation\TranslationServiceProvider::class, \Odigos\Illuminate\Validation\ValidationServiceProvider::class, \Odigos\Illuminate\View\ViewServiceProvider::class];
     }
     /**
      * Merge the given providers into the provider collection.
@@ -36,7 +36,7 @@ class DefaultProviders
      */
     public function replace(array $replacements)
     {
-        $current = new \Illuminate\Support\Collection($this->providers);
+        $current = new Collection($this->providers);
         foreach ($replacements as $from => $to) {
             $key = $current->search($from);
             $current = is_int($key) ? $current->replace([$key => $to]) : $current;
@@ -51,7 +51,7 @@ class DefaultProviders
      */
     public function except(array $providers)
     {
-        return new static((new \Illuminate\Support\Collection($this->providers))->reject(fn($p) => in_array($p, $providers))->values()->toArray());
+        return new static((new Collection($this->providers))->reject(fn($p) => in_array($p, $providers))->values()->toArray());
     }
     /**
      * Convert the provider collection to an array.

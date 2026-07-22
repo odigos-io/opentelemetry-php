@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Routing;
+namespace Odigos\Symfony\Component\Routing;
 
-use Symfony\Component\Config\Resource\ResourceInterface;
-use Symfony\Component\Routing\Exception\InvalidArgumentException;
-use Symfony\Component\Routing\Exception\RouteCircularReferenceException;
+use Odigos\Symfony\Component\Config\Resource\ResourceInterface;
+use Odigos\Symfony\Component\Routing\Exception\InvalidArgumentException;
+use Odigos\Symfony\Component\Routing\Exception\RouteCircularReferenceException;
 /**
  * A RouteCollection represents a set of Route instances.
  *
@@ -72,7 +72,7 @@ class RouteCollection implements \IteratorAggregate, \Countable
     {
         return \count($this->routes);
     }
-    public function add(string $name, \Symfony\Component\Routing\Route $route, int $priority = 0): void
+    public function add(string $name, Route $route, int $priority = 0): void
     {
         unset($this->routes[$name], $this->priorities[$name], $this->aliases[$name]);
         $this->routes[$name] = $route;
@@ -97,7 +97,7 @@ class RouteCollection implements \IteratorAggregate, \Countable
     /**
      * Gets a route by name.
      */
-    public function get(string $name): ?\Symfony\Component\Routing\Route
+    public function get(string $name): ?Route
     {
         $visited = [];
         while (null !== $alias = $this->aliases[$name] ?? null) {
@@ -314,13 +314,13 @@ class RouteCollection implements \IteratorAggregate, \Countable
      *
      * @throws InvalidArgumentException if the alias is for itself
      */
-    public function addAlias(string $name, string $alias): \Symfony\Component\Routing\Alias
+    public function addAlias(string $name, string $alias): Alias
     {
         if ($name === $alias) {
             throw new InvalidArgumentException(\sprintf('Route alias "%s" can not reference itself.', $name));
         }
         unset($this->routes[$name], $this->priorities[$name]);
-        return $this->aliases[$name] = new \Symfony\Component\Routing\Alias($alias);
+        return $this->aliases[$name] = new Alias($alias);
     }
     /**
      * @return array<string, Alias>
@@ -329,7 +329,7 @@ class RouteCollection implements \IteratorAggregate, \Countable
     {
         return $this->aliases;
     }
-    public function getAlias(string $name): ?\Symfony\Component\Routing\Alias
+    public function getAlias(string $name): ?Alias
     {
         return $this->aliases[$name] ?? null;
     }

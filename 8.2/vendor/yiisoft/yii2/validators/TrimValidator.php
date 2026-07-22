@@ -5,15 +5,15 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\validators;
+namespace Odigos\yii\validators;
 
-use yii\helpers\Json;
+use Odigos\yii\helpers\Json;
 /**
  * This class converts the attribute value(s) to string(s) and strip characters.
  *
  * @since 2.0.46
  */
-class TrimValidator extends \yii\validators\Validator
+class TrimValidator extends Validator
 {
     /**
      * @var string The list of characters to strip, with `..` can specify a range of characters.
@@ -57,7 +57,7 @@ class TrimValidator extends \yii\validators\Validator
         if ($this->skipOnArray && is_array($model->{$attribute})) {
             return null;
         }
-        \yii\validators\ValidationAsset::register($view);
+        ValidationAsset::register($view);
         $options = $this->getClientOptions($model, $attribute);
         return 'value = yii.validation.trim($form, attribute, ' . Json::htmlEncode($options) . ', value);';
     }

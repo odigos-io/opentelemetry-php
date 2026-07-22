@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Process;
+namespace Odigos\Illuminate\Process;
 
-use Illuminate\Contracts\Process\ProcessResult as ProcessResultContract;
-use Illuminate\Process\Exceptions\ProcessFailedException;
-use Symfony\Component\Process\Process;
+use Odigos\Illuminate\Contracts\Process\ProcessResult as ProcessResultContract;
+use Odigos\Illuminate\Process\Exceptions\ProcessFailedException;
+use Odigos\Symfony\Component\Process\Process;
 class ProcessResult implements ProcessResultContract
 {
     /**

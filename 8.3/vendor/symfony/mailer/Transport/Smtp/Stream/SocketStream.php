@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Mailer\Transport\Smtp\Stream;
+namespace Odigos\Symfony\Component\Mailer\Transport\Smtp\Stream;
 
-use Symfony\Component\Mailer\Exception\TransportException;
+use Odigos\Symfony\Component\Mailer\Exception\TransportException;
 /**
  * A stream supporting remote sockets.
  *
@@ -19,7 +19,7 @@ use Symfony\Component\Mailer\Exception\TransportException;
  *
  * @internal
  */
-final class SocketStream extends \Symfony\Component\Mailer\Transport\Smtp\Stream\AbstractStream
+final class SocketStream extends AbstractStream
 {
     private string $url;
     private string $host = 'localhost';

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Nyholm\Psr7;
+namespace Odigos\Nyholm\Psr7;
 
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UploadedFileInterface;
@@ -60,7 +60,7 @@ class UploadedFile implements UploadedFileInterface
             if (\is_string($streamOrFile) && '' !== $streamOrFile) {
                 $this->file = $streamOrFile;
             } elseif (\is_resource($streamOrFile)) {
-                $this->stream = \Nyholm\Psr7\Stream::create($streamOrFile);
+                $this->stream = Stream::create($streamOrFile);
             } elseif ($streamOrFile instanceof StreamInterface) {
                 $this->stream = $streamOrFile;
             } else {
@@ -89,7 +89,7 @@ class UploadedFile implements UploadedFileInterface
         if (\false === $resource = @\fopen($this->file, 'r')) {
             throw new \RuntimeException(\sprintf('The file "%s" cannot be opened: %s', $this->file, \error_get_last()['message'] ?? ''));
         }
-        return \Nyholm\Psr7\Stream::create($resource);
+        return Stream::create($resource);
     }
     public function moveTo($targetPath): void
     {
@@ -110,7 +110,7 @@ class UploadedFile implements UploadedFileInterface
             if (\false === $resource = @\fopen($targetPath, 'w')) {
                 throw new \RuntimeException(\sprintf('The file "%s" cannot be opened: %s', $targetPath, \error_get_last()['message'] ?? ''));
             }
-            $dest = \Nyholm\Psr7\Stream::create($resource);
+            $dest = Stream::create($resource);
             while (!$stream->eof()) {
                 if (!$dest->write($stream->read(1048576))) {
                     break;

@@ -5,19 +5,19 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\filters;
+namespace Odigos\yii\filters;
 
 use Closure;
 use Odigos\Yii;
-use yii\base\Action;
-use yii\base\ActionFilter;
-use yii\base\Component;
-use yii\base\Controller;
-use yii\base\Module;
-use yii\web\IdentityInterface;
-use yii\web\Request;
-use yii\web\Response;
-use yii\web\TooManyRequestsHttpException;
+use Odigos\yii\base\Action;
+use Odigos\yii\base\ActionFilter;
+use Odigos\yii\base\Component;
+use Odigos\yii\base\Controller;
+use Odigos\yii\base\Module;
+use Odigos\yii\web\IdentityInterface;
+use Odigos\yii\web\Request;
+use Odigos\yii\web\Response;
+use Odigos\yii\web\TooManyRequestsHttpException;
 /**
  * RateLimiter implements a rate limiting algorithm based on the [leaky bucket algorithm](https://en.wikipedia.org/wiki/Leaky_bucket).
  *
@@ -97,7 +97,7 @@ class RateLimiter extends ActionFilter
         if ($this->user instanceof Closure) {
             $this->user = call_user_func($this->user, $action);
         }
-        if ($this->user instanceof \yii\filters\RateLimitInterface) {
+        if ($this->user instanceof RateLimitInterface) {
             Yii::debug('Check rate limit', __METHOD__);
             $this->checkRateLimit($this->user, $this->request, $this->response, $action);
         } elseif ($this->user) {

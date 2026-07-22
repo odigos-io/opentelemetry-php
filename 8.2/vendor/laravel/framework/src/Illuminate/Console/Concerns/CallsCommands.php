@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Console\Concerns;
+namespace Odigos\Illuminate\Console\Concerns;
 
-use Illuminate\Support\Collection;
-use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Output\NullOutput;
-use Symfony\Component\Console\Output\OutputInterface;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Symfony\Component\Console\Input\ArrayInput;
+use Odigos\Symfony\Component\Console\Output\NullOutput;
+use Odigos\Symfony\Component\Console\Output\OutputInterface;
 trait CallsCommands
 {
     /**

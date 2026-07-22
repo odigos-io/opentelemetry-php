@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\CssSelector\Node;
+namespace Odigos\Symfony\Component\CssSelector\Node;
 
-use Symfony\Component\CssSelector\Parser\Token;
+use Odigos\Symfony\Component\CssSelector\Parser\Token;
 /**
  * Represents a "<selector>:<name>(<arguments>)" node.
  *
@@ -21,17 +21,17 @@ use Symfony\Component\CssSelector\Parser\Token;
  *
  * @internal
  */
-class FunctionNode extends \Symfony\Component\CssSelector\Node\AbstractNode
+class FunctionNode extends AbstractNode
 {
     private string $name;
     /**
      * @param Token[] $arguments
      */
-    public function __construct(private \Symfony\Component\CssSelector\Node\NodeInterface $selector, string $name, private array $arguments = [])
+    public function __construct(private NodeInterface $selector, string $name, private array $arguments = [])
     {
         $this->name = strtolower($name);
     }
-    public function getSelector(): \Symfony\Component\CssSelector\Node\NodeInterface
+    public function getSelector(): NodeInterface
     {
         return $this->selector;
     }
@@ -46,9 +46,9 @@ class FunctionNode extends \Symfony\Component\CssSelector\Node\AbstractNode
     {
         return $this->arguments;
     }
-    public function getSpecificity(): \Symfony\Component\CssSelector\Node\Specificity
+    public function getSpecificity(): Specificity
     {
-        return $this->selector->getSpecificity()->plus(new \Symfony\Component\CssSelector\Node\Specificity(0, 1, 0));
+        return $this->selector->getSpecificity()->plus(new Specificity(0, 1, 0));
     }
     public function __toString(): string
     {

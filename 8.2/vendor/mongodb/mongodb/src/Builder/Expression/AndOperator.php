@@ -4,16 +4,16 @@
  * THIS FILE IS AUTO-GENERATED. ANY CHANGES WILL BE LOST!
  */
 declare (strict_types=1);
-namespace MongoDB\Builder\Expression;
+namespace Odigos\MongoDB\Builder\Expression;
 
 use DateTimeInterface;
 use MongoDB\BSON\Decimal128;
 use MongoDB\BSON\Int64;
 use MongoDB\BSON\Type;
-use MongoDB\Builder\Type\Encode;
-use MongoDB\Builder\Type\ExpressionInterface;
-use MongoDB\Builder\Type\OperatorInterface;
-use MongoDB\Exception\InvalidArgumentException;
+use Odigos\MongoDB\Builder\Type\Encode;
+use Odigos\MongoDB\Builder\Type\ExpressionInterface;
+use Odigos\MongoDB\Builder\Type\OperatorInterface;
+use Odigos\MongoDB\Exception\InvalidArgumentException;
 use stdClass;
 use function array_is_list;
 /**
@@ -22,7 +22,7 @@ use function array_is_list;
  * @see https://www.mongodb.com/docs/manual/reference/operator/aggregation/and/
  * @internal
  */
-final class AndOperator implements \MongoDB\Builder\Expression\ResolvesToBool, OperatorInterface
+final class AndOperator implements ResolvesToBool, OperatorInterface
 {
     public const ENCODE = Encode::Single;
     public const NAME = '$and';
@@ -33,7 +33,7 @@ final class AndOperator implements \MongoDB\Builder\Expression\ResolvesToBool, O
      * @param DateTimeInterface|Decimal128|ExpressionInterface|Int64|ResolvesToBool|ResolvesToNull|ResolvesToNumber|ResolvesToString|Type|array|bool|float|int|null|stdClass|string ...$expression
      * @no-named-arguments
      */
-    public function __construct(DateTimeInterface|Decimal128|Int64|Type|\MongoDB\Builder\Expression\ResolvesToBool|\MongoDB\Builder\Expression\ResolvesToNull|\MongoDB\Builder\Expression\ResolvesToNumber|\MongoDB\Builder\Expression\ResolvesToString|ExpressionInterface|stdClass|array|bool|float|int|null|string ...$expression)
+    public function __construct(DateTimeInterface|Decimal128|Int64|Type|ResolvesToBool|ResolvesToNull|ResolvesToNumber|ResolvesToString|ExpressionInterface|stdClass|array|bool|float|int|null|string ...$expression)
     {
         if (\count($expression) < 1) {
             throw new InvalidArgumentException(\sprintf('Expected at least %d values for $expression, got %d.', 1, \count($expression)));

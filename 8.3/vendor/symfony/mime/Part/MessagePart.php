@@ -8,16 +8,16 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Mime\Part;
+namespace Odigos\Symfony\Component\Mime\Part;
 
-use Symfony\Component\Mime\Message;
-use Symfony\Component\Mime\RawMessage;
+use Odigos\Symfony\Component\Mime\Message;
+use Odigos\Symfony\Component\Mime\RawMessage;
 /**
  * @final
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class MessagePart extends \Symfony\Component\Mime\Part\DataPart
+class MessagePart extends DataPart
 {
     public function __construct(private RawMessage $message)
     {

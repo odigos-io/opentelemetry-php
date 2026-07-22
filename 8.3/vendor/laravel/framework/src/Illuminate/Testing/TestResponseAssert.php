@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Testing;
+namespace Odigos\Illuminate\Testing;
 
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Arr;
+use Odigos\Illuminate\Http\RedirectResponse;
+use Odigos\Illuminate\Support\Arr;
 use Odigos\PHPUnit\Framework\ExpectationFailedException;
 use ReflectionProperty;
 /**
@@ -16,14 +16,14 @@ class TestResponseAssert
     /**
      * Create a new TestResponse assertion helper.
      */
-    private function __construct(protected \Illuminate\Testing\TestResponse $response)
+    private function __construct(protected TestResponse $response)
     {
         //
     }
     /**
      * Create a new TestResponse assertion helper.
      */
-    public static function withResponse(\Illuminate\Testing\TestResponse $response): static
+    public static function withResponse(TestResponse $response): static
     {
         return new static($response);
     }
@@ -39,7 +39,7 @@ class TestResponseAssert
     public function __call($name, $arguments)
     {
         try {
-            \Illuminate\Testing\Assert::$name(...$arguments);
+            Assert::$name(...$arguments);
         } catch (ExpectationFailedException $e) {
             throw $this->injectResponseContext($e);
         }
@@ -55,7 +55,7 @@ class TestResponseAssert
      */
     public static function __callStatic($name, $arguments)
     {
-        \Illuminate\Testing\Assert::$name(...$arguments);
+        Assert::$name(...$arguments);
     }
     /**
      * Inject additional context from the response into the exception message.
@@ -75,7 +75,7 @@ class TestResponseAssert
             }
         }
         if ($this->response->baseResponse->headers->get('Content-Type') === 'application/json') {
-            $testJson = new \Illuminate\Testing\AssertableJsonString($this->response->getContent());
+            $testJson = new AssertableJsonString($this->response->getContent());
             if (isset($testJson['errors'])) {
                 return $this->appendErrorsToException($testJson->json(), $exception, \true);
             }

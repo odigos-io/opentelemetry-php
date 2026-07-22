@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Mime\Encoder;
+namespace Odigos\Symfony\Component\Mime\Encoder;
 
 /**
  * @author Chris Corbyn
  */
-final class QpMimeHeaderEncoder extends \Symfony\Component\Mime\Encoder\QpEncoder implements \Symfony\Component\Mime\Encoder\MimeHeaderEncoderInterface
+final class QpMimeHeaderEncoder extends QpEncoder implements MimeHeaderEncoderInterface
 {
     protected function initSafeMap(): void
     {

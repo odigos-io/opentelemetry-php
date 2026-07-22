@@ -8,26 +8,26 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Mailer\Transport;
+namespace Odigos\Symfony\Component\Mailer\Transport;
 
-use Symfony\Component\Mailer\Exception\TransportException;
-use Symfony\Component\Mailer\Exception\UnsupportedSchemeException;
-use Symfony\Component\Mailer\Transport\Smtp\SmtpTransport;
-use Symfony\Component\Mailer\Transport\Smtp\Stream\SocketStream;
+use Odigos\Symfony\Component\Mailer\Exception\TransportException;
+use Odigos\Symfony\Component\Mailer\Exception\UnsupportedSchemeException;
+use Odigos\Symfony\Component\Mailer\Transport\Smtp\SmtpTransport;
+use Odigos\Symfony\Component\Mailer\Transport\Smtp\Stream\SocketStream;
 /**
  * Factory that configures a transport (sendmail or SMTP) based on php.ini settings.
  *
  * @author Laurent VOULLEMIER <laurent.voullemier@gmail.com>
  */
-final class NativeTransportFactory extends \Symfony\Component\Mailer\Transport\AbstractTransportFactory
+final class NativeTransportFactory extends AbstractTransportFactory
 {
-    public function create(\Symfony\Component\Mailer\Transport\Dsn $dsn): \Symfony\Component\Mailer\Transport\TransportInterface
+    public function create(Dsn $dsn): TransportInterface
     {
         if (!\in_array($dsn->getScheme(), $this->getSupportedSchemes(), \true)) {
             throw new UnsupportedSchemeException($dsn, 'native', $this->getSupportedSchemes());
         }
         if ($sendMailPath = ini_get('sendmail_path')) {
-            return new \Symfony\Component\Mailer\Transport\SendmailTransport($sendMailPath, $this->dispatcher, $this->logger);
+            return new SendmailTransport($sendMailPath, $this->dispatcher, $this->logger);
         }
         if ('\\' !== \DIRECTORY_SEPARATOR) {
             throw new TransportException('sendmail_path is not configured in php.ini.');

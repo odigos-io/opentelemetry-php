@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Http\Middleware;
+namespace Odigos\Illuminate\Http\Middleware;
 
 use Closure;
-use Illuminate\Http\Request;
+use Odigos\Illuminate\Http\Request;
 class TrustProxies
 {
     /**

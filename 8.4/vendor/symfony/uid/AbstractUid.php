@@ -8,13 +8,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Uid;
+namespace Odigos\Symfony\Component\Uid;
 
-use Symfony\Component\Uid\Exception\InvalidArgumentException;
+use Odigos\Symfony\Component\Uid\Exception\InvalidArgumentException;
 /**
  * @author Nicolas Grekas <p@tchwork.com>
  */
-abstract class AbstractUid implements \JsonSerializable, \Stringable, \Symfony\Component\Uid\HashableInterface
+abstract class AbstractUid implements \JsonSerializable, \Stringable, HashableInterface
 {
     /**
      * The identifier in its canonic representation.
@@ -87,7 +87,7 @@ abstract class AbstractUid implements \JsonSerializable, \Stringable, \Symfony\C
      */
     public function toBase58(): string
     {
-        return strtr(\sprintf('%022s', \Symfony\Component\Uid\BinaryUtil::toBase($this->toBinary(), \Symfony\Component\Uid\BinaryUtil::BASE58)), '0', '1');
+        return strtr(\sprintf('%022s', BinaryUtil::toBase($this->toBinary(), BinaryUtil::BASE58)), '0', '1');
     }
     /**
      * Returns the identifier as a base32 case-insensitive string.

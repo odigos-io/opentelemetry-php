@@ -14,12 +14,12 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Controller\Component;
+namespace Odigos\Cake\Controller\Component;
 
-use Cake\Controller\Component;
-use Cake\Http\Exception\InternalErrorException;
-use Cake\Http\FlashMessage;
-use Cake\Utility\Inflector;
+use Odigos\Cake\Controller\Component;
+use Odigos\Cake\Http\Exception\InternalErrorException;
+use Odigos\Cake\Http\FlashMessage;
+use Odigos\Cake\Utility\Inflector;
 use Throwable;
 /**
  * The CakePHP FlashComponent provides a way for you to write a flash variable

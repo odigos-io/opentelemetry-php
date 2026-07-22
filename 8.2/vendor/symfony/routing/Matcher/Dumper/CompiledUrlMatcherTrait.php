@@ -8,13 +8,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Routing\Matcher\Dumper;
+namespace Odigos\Symfony\Component\Routing\Matcher\Dumper;
 
-use Symfony\Component\Routing\Exception\MethodNotAllowedException;
-use Symfony\Component\Routing\Exception\NoConfigurationException;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use Symfony\Component\Routing\Matcher\RedirectableUrlMatcherInterface;
-use Symfony\Component\Routing\RequestContext;
+use Odigos\Symfony\Component\Routing\Exception\MethodNotAllowedException;
+use Odigos\Symfony\Component\Routing\Exception\NoConfigurationException;
+use Odigos\Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Odigos\Symfony\Component\Routing\Matcher\RedirectableUrlMatcherInterface;
+use Odigos\Symfony\Component\Routing\RequestContext;
 /**
  * @author Nicolas Grekas <p@tchwork.com>
  *

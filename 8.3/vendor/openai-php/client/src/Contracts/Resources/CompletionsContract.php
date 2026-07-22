@@ -1,10 +1,10 @@
 <?php
 
-namespace OpenAI\Contracts\Resources;
+namespace Odigos\OpenAI\Contracts\Resources;
 
-use OpenAI\Responses\Completions\CreateResponse;
-use OpenAI\Responses\Completions\CreateStreamedResponse;
-use OpenAI\Responses\StreamResponse;
+use Odigos\OpenAI\Responses\Completions\CreateResponse;
+use Odigos\OpenAI\Responses\Completions\CreateStreamedResponse;
+use Odigos\OpenAI\Responses\StreamResponse;
 interface CompletionsContract
 {
     /**

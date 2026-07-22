@@ -14,12 +14,12 @@ declare (strict_types=1);
  * @since         2.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Core\Configure\Engine;
+namespace Odigos\Cake\Core\Configure\Engine;
 
-use Cake\Core\Configure\ConfigEngineInterface;
-use Cake\Core\Configure\FileConfigTrait;
-use Cake\Core\Exception\CakeException;
-use Cake\Utility\Hash;
+use Odigos\Cake\Core\Configure\ConfigEngineInterface;
+use Odigos\Cake\Core\Configure\FileConfigTrait;
+use Odigos\Cake\Core\Exception\CakeException;
+use Odigos\Cake\Utility\Hash;
 /**
  * Ini file configuration engine.
  *

@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Session;
+namespace Odigos\Illuminate\Session;
 
-use Illuminate\Contracts\Cookie\QueueingFactory as CookieJar;
-use Illuminate\Support\InteractsWithTime;
+use Odigos\Illuminate\Contracts\Cookie\QueueingFactory as CookieJar;
+use Odigos\Illuminate\Support\InteractsWithTime;
 use SessionHandlerInterface;
-use Symfony\Component\HttpFoundation\Request;
+use Odigos\Symfony\Component\HttpFoundation\Request;
 class CookieSessionHandler implements SessionHandlerInterface
 {
     use InteractsWithTime;

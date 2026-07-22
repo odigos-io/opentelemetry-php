@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Driver\PDO\SQLite;
+namespace Odigos\Doctrine\DBAL\Driver\PDO\SQLite;
 
-use Doctrine\DBAL\Driver\AbstractSQLiteDriver;
-use Doctrine\DBAL\Driver\PDO\Connection;
-use Doctrine\DBAL\Driver\PDO\Exception;
-use Doctrine\DBAL\Driver\PDO\Exception\InvalidConfiguration;
-use Doctrine\DBAL\Driver\PDO\PDOConnect;
+use Odigos\Doctrine\DBAL\Driver\AbstractSQLiteDriver;
+use Odigos\Doctrine\DBAL\Driver\PDO\Connection;
+use Odigos\Doctrine\DBAL\Driver\PDO\Exception;
+use Odigos\Doctrine\DBAL\Driver\PDO\Exception\InvalidConfiguration;
+use Odigos\Doctrine\DBAL\Driver\PDO\PDOConnect;
 use PDOException;
 use SensitiveParameter;
 use function array_intersect_key;

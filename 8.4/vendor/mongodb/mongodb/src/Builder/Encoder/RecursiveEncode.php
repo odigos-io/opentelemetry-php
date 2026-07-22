@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace MongoDB\Builder\Encoder;
+namespace Odigos\MongoDB\Builder\Encoder;
 
-use MongoDB\Codec\Encoder;
+use Odigos\MongoDB\Codec\Encoder;
 use stdClass;
 use WeakReference;
 use function get_object_vars;

@@ -14,11 +14,11 @@ declare (strict_types=1);
  * @since         1.2.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Controller;
+namespace Odigos\Cake\Controller;
 
-use Cake\Core\InstanceConfigTrait;
-use Cake\Event\EventListenerInterface;
-use Cake\Log\LogTrait;
+use Odigos\Cake\Core\InstanceConfigTrait;
+use Odigos\Cake\Event\EventListenerInterface;
+use Odigos\Cake\Log\LogTrait;
 /**
  * Base class for an individual Component. Components provide reusable bits of
  * controller logic that can be composed into a controller. Components also
@@ -66,7 +66,7 @@ class Component implements EventListenerInterface
      *
      * @var \Cake\Controller\ComponentRegistry
      */
-    protected \Cake\Controller\ComponentRegistry $_registry;
+    protected ComponentRegistry $_registry;
     /**
      * Other Components this component uses.
      *
@@ -94,7 +94,7 @@ class Component implements EventListenerInterface
      *  this component can use to lazy load its components.
      * @param array<string, mixed> $config Array of configuration settings.
      */
-    public function __construct(\Cake\Controller\ComponentRegistry $registry, array $config = [])
+    public function __construct(ComponentRegistry $registry, array $config = [])
     {
         $this->_registry = $registry;
         $this->setConfig($config);
@@ -108,7 +108,7 @@ class Component implements EventListenerInterface
      *
      * @return \Cake\Controller\Controller The bound controller.
      */
-    public function getController(): \Cake\Controller\Controller
+    public function getController(): Controller
     {
         return $this->_registry->getController();
     }
@@ -130,7 +130,7 @@ class Component implements EventListenerInterface
      * @param string $name Name of component to get.
      * @return \Cake\Controller\Component|null A Component object or null.
      */
-    public function __get(string $name): ?\Cake\Controller\Component
+    public function __get(string $name): ?Component
     {
         if (isset($this->componentInstances[$name])) {
             return $this->componentInstances[$name];

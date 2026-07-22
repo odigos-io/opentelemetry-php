@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Console\Helper;
+namespace Odigos\Symfony\Component\Console\Helper;
 
-use Symfony\Component\Console\Cursor;
-use Symfony\Component\Console\Exception\LogicException;
-use Symfony\Component\Console\Output\ConsoleOutputInterface;
-use Symfony\Component\Console\Output\ConsoleSectionOutput;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Terminal;
+use Odigos\Symfony\Component\Console\Cursor;
+use Odigos\Symfony\Component\Console\Exception\LogicException;
+use Odigos\Symfony\Component\Console\Output\ConsoleOutputInterface;
+use Odigos\Symfony\Component\Console\Output\ConsoleSectionOutput;
+use Odigos\Symfony\Component\Console\Output\OutputInterface;
+use Odigos\Symfony\Component\Console\Terminal;
 /**
  * The ProgressBar provides helpers to display progress output.
  *
@@ -361,7 +361,7 @@ final class ProgressBar
             $this->stepWidth = 4;
         } else {
             $this->max = max(0, $max);
-            $this->stepWidth = \Symfony\Component\Console\Helper\Helper::width((string) $this->max);
+            $this->stepWidth = Helper::width((string) $this->max);
         }
     }
     /**
@@ -433,13 +433,13 @@ final class ProgressBar
                 if ($this->output instanceof ConsoleSectionOutput) {
                     $messageLines = explode("\n", $this->previousMessage);
                     $lineCount = \count($messageLines);
-                    $lastLineWithoutDecoration = \Symfony\Component\Console\Helper\Helper::removeDecoration($this->output->getFormatter(), end($messageLines) ?? '');
+                    $lastLineWithoutDecoration = Helper::removeDecoration($this->output->getFormatter(), end($messageLines) ?? '');
                     // When the last previous line is empty (without formatting) it is already cleared by the section output, so we don't need to clear it again
                     if ('' === $lastLineWithoutDecoration) {
                         --$lineCount;
                     }
                     foreach ($messageLines as $messageLine) {
-                        $messageLineLength = \Symfony\Component\Console\Helper\Helper::width(\Symfony\Component\Console\Helper\Helper::removeDecoration($this->output->getFormatter(), $messageLine));
+                        $messageLineLength = Helper::width(Helper::removeDecoration($this->output->getFormatter(), $messageLine));
                         if ($messageLineLength > $this->terminal->getWidth()) {
                             $lineCount += floor($messageLineLength / $this->terminal->getWidth());
                         }
@@ -480,21 +480,21 @@ final class ProgressBar
             $completeBars = $bar->getBarOffset();
             $display = str_repeat($bar->getBarCharacter(), $completeBars);
             if ($completeBars < $bar->getBarWidth()) {
-                $emptyBars = $bar->getBarWidth() - $completeBars - \Symfony\Component\Console\Helper\Helper::length(\Symfony\Component\Console\Helper\Helper::removeDecoration($output->getFormatter(), $bar->getProgressCharacter()));
+                $emptyBars = $bar->getBarWidth() - $completeBars - Helper::length(Helper::removeDecoration($output->getFormatter(), $bar->getProgressCharacter()));
                 $display .= $bar->getProgressCharacter() . str_repeat($bar->getEmptyBarCharacter(), $emptyBars);
             }
             return $display;
-        }, 'elapsed' => static fn(self $bar) => \Symfony\Component\Console\Helper\Helper::formatTime(time() - $bar->getStartTime(), 2), 'remaining' => static function (self $bar) {
+        }, 'elapsed' => static fn(self $bar) => Helper::formatTime(time() - $bar->getStartTime(), 2), 'remaining' => static function (self $bar) {
             if (null === $bar->max) {
                 throw new LogicException('Unable to display the remaining time if the maximum number of steps is not set.');
             }
-            return \Symfony\Component\Console\Helper\Helper::formatTime($bar->getRemaining(), 2);
+            return Helper::formatTime($bar->getRemaining(), 2);
         }, 'estimated' => static function (self $bar) {
             if (null === $bar->max) {
                 throw new LogicException('Unable to display the estimated time if the maximum number of steps is not set.');
             }
-            return \Symfony\Component\Console\Helper\Helper::formatTime($bar->getEstimated(), 2);
-        }, 'memory' => static fn(self $bar) => \Symfony\Component\Console\Helper\Helper::formatMemory(memory_get_usage(\true)), 'current' => static fn(self $bar) => str_pad($bar->getProgress(), $bar->getStepWidth(), ' ', \STR_PAD_LEFT), 'max' => static fn(self $bar) => $bar->getMaxSteps(), 'percent' => static fn(self $bar) => floor($bar->getProgressPercent() * 100)];
+            return Helper::formatTime($bar->getEstimated(), 2);
+        }, 'memory' => static fn(self $bar) => Helper::formatMemory(memory_get_usage(\true)), 'current' => static fn(self $bar) => str_pad($bar->getProgress(), $bar->getStepWidth(), ' ', \STR_PAD_LEFT), 'max' => static fn(self $bar) => $bar->getMaxSteps(), 'percent' => static fn(self $bar) => floor($bar->getProgressPercent() * 100)];
     }
     private static function initFormats(): array
     {
@@ -519,7 +519,7 @@ final class ProgressBar
         };
         $line = preg_replace_callback($regex, $callback, $this->format);
         // gets string length for each sub line with multiline format
-        $linesLength = array_map(fn($subLine) => \Symfony\Component\Console\Helper\Helper::width(\Symfony\Component\Console\Helper\Helper::removeDecoration($this->output->getFormatter(), rtrim($subLine, "\r"))), explode("\n", $line));
+        $linesLength = array_map(fn($subLine) => Helper::width(Helper::removeDecoration($this->output->getFormatter(), rtrim($subLine, "\r"))), explode("\n", $line));
         $linesWidth = max($linesLength);
         $terminalWidth = $this->terminal->getWidth();
         if ($linesWidth <= $terminalWidth) {

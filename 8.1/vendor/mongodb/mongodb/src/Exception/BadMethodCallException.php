@@ -15,11 +15,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace MongoDB\Exception;
+namespace Odigos\MongoDB\Exception;
 
 use BadMethodCallException as BaseBadMethodCallException;
 use function sprintf;
-class BadMethodCallException extends BaseBadMethodCallException implements \MongoDB\Exception\Exception
+class BadMethodCallException extends BaseBadMethodCallException implements Exception
 {
     /**
      * Thrown when a mutable method is invoked on an immutable object.

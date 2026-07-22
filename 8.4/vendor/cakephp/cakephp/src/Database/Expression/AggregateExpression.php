@@ -14,28 +14,28 @@ declare (strict_types=1);
  * @since         4.1.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database\Expression;
+namespace Odigos\Cake\Database\Expression;
 
-use Cake\Database\ExpressionInterface;
-use Cake\Database\ValueBinder;
+use Odigos\Cake\Database\ExpressionInterface;
+use Odigos\Cake\Database\ValueBinder;
 use Closure;
-use function Cake\Core\deprecationWarning;
+use function Odigos\Cake\Core\deprecationWarning;
 /**
  * This represents an SQL aggregate function expression in an SQL statement.
  * Calls can be constructed by passing the name of the function and a list of params.
  * For security reasons, all params passed are quoted by default unless
  * explicitly told otherwise.
  */
-class AggregateExpression extends \Cake\Database\Expression\FunctionExpression implements \Cake\Database\Expression\WindowInterface
+class AggregateExpression extends FunctionExpression implements WindowInterface
 {
     /**
      * @var \Cake\Database\Expression\QueryExpression|null
      */
-    protected ?\Cake\Database\Expression\QueryExpression $filter = null;
+    protected ?QueryExpression $filter = null;
     /**
      * @var \Cake\Database\Expression\WindowExpression|null
      */
-    protected ?\Cake\Database\Expression\WindowExpression $window = null;
+    protected ?WindowExpression $window = null;
     /**
      * Adds conditions to the FILTER clause. The conditions are the same format as
      * `Query::where()`.
@@ -47,9 +47,9 @@ class AggregateExpression extends \Cake\Database\Expression\FunctionExpression i
      */
     public function filter(ExpressionInterface|Closure|array|string $conditions, array $types = [])
     {
-        $this->filter ??= new \Cake\Database\Expression\QueryExpression();
+        $this->filter ??= new QueryExpression();
         if ($conditions instanceof Closure) {
-            $conditions = $conditions(new \Cake\Database\Expression\QueryExpression());
+            $conditions = $conditions(new QueryExpression());
         }
         $this->filter->add($conditions, $types);
         return $this;
@@ -154,9 +154,9 @@ class AggregateExpression extends \Cake\Database\Expression\FunctionExpression i
      *
      * @return \Cake\Database\Expression\WindowExpression
      */
-    protected function getWindow(): \Cake\Database\Expression\WindowExpression
+    protected function getWindow(): WindowExpression
     {
-        return $this->window ??= new \Cake\Database\Expression\WindowExpression();
+        return $this->window ??= new WindowExpression();
     }
     /**
      * @inheritDoc

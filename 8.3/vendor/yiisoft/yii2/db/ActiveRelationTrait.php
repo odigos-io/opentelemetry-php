@@ -5,10 +5,10 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\db;
+namespace Odigos\yii\db;
 
-use yii\base\InvalidArgumentException;
-use yii\base\InvalidConfigException;
+use Odigos\yii\base\InvalidArgumentException;
+use Odigos\yii\base\InvalidConfigException;
 /**
  * ActiveRelationTrait implements the common methods and properties for active record relational queries.
  *
@@ -189,7 +189,7 @@ trait ActiveRelationTrait
             return;
         }
         foreach ($result as $i => $relatedModel) {
-            if ($relatedModel instanceof \yii\db\ActiveRecordInterface) {
+            if ($relatedModel instanceof ActiveRecordInterface) {
                 if (!isset($inverseRelation)) {
                     $inverseRelation = $relatedModel->getRelation($this->inverseOf);
                 }
@@ -239,7 +239,7 @@ trait ActiveRelationTrait
         if (!$this->multiple && count($primaryModels) === 1) {
             $model = $this->one();
             $primaryModel = reset($primaryModels);
-            if ($primaryModel instanceof \yii\db\ActiveRecordInterface) {
+            if ($primaryModel instanceof ActiveRecordInterface) {
                 $primaryModel->populateRelation($name, $model);
             } else {
                 $primaryModels[key($primaryModels)][$name] = $model;
@@ -296,7 +296,7 @@ trait ActiveRelationTrait
                 $key = $this->getModelKey($primaryModel, $link);
                 $value = isset($buckets[$key]) ? $buckets[$key] : ($this->multiple ? [] : null);
             }
-            if ($primaryModel instanceof \yii\db\ActiveRecordInterface) {
+            if ($primaryModel instanceof ActiveRecordInterface) {
                 $primaryModel->populateRelation($name, $value);
             } else {
                 $primaryModels[$i][$name] = $value;
@@ -319,7 +319,7 @@ trait ActiveRelationTrait
             return;
         }
         $model = reset($models);
-        if ($model instanceof \yii\db\ActiveRecordInterface) {
+        if ($model instanceof ActiveRecordInterface) {
             $relation = $model->getRelation($name);
         } else {
             /** @var ActiveRecordInterface $modelClass */
@@ -329,7 +329,7 @@ trait ActiveRelationTrait
         /** @var ActiveQueryInterface|ActiveQuery $relation */
         if ($relation->multiple) {
             $buckets = $this->buildBuckets($primaryModels, $relation->link, null, null, \false);
-            if ($model instanceof \yii\db\ActiveRecordInterface) {
+            if ($model instanceof ActiveRecordInterface) {
                 foreach ($models as $model) {
                     $key = $this->getModelKey($model, $relation->link);
                     $model->populateRelation($name, isset($buckets[$key]) ? $buckets[$key] : []);
@@ -350,7 +350,7 @@ trait ActiveRelationTrait
         } elseif ($this->multiple) {
             foreach ($primaryModels as $i => $primaryModel) {
                 foreach ($primaryModel[$primaryName] as $j => $m) {
-                    if ($m instanceof \yii\db\ActiveRecordInterface) {
+                    if ($m instanceof ActiveRecordInterface) {
                         $m->populateRelation($name, $primaryModel);
                     } else {
                         $primaryModels[$i][$primaryName][$j][$name] = $primaryModel;
@@ -359,7 +359,7 @@ trait ActiveRelationTrait
             }
         } else {
             foreach ($primaryModels as $i => $primaryModel) {
-                if ($primaryModels[$i][$primaryName] instanceof \yii\db\ActiveRecordInterface) {
+                if ($primaryModels[$i][$primaryName] instanceof ActiveRecordInterface) {
                     $primaryModels[$i][$primaryName]->populateRelation($name, $primaryModel);
                 } elseif (!empty($primaryModels[$i][$primaryName])) {
                     $primaryModels[$i][$primaryName][$name] = $primaryModel;
@@ -461,7 +461,7 @@ trait ActiveRelationTrait
      */
     private function prefixKeyColumns($attributes)
     {
-        if ($this instanceof \yii\db\ActiveQuery && (!empty($this->join) || !empty($this->joinWith))) {
+        if ($this instanceof ActiveQuery && (!empty($this->join) || !empty($this->joinWith))) {
             if (empty($this->from)) {
                 /** @var ActiveRecord $modelClass */
                 $modelClass = $this->modelClass;
@@ -498,7 +498,7 @@ trait ActiveRelationTrait
                 if ($value !== null) {
                     if (is_array($value)) {
                         $values = array_merge($values, $value);
-                    } elseif ($value instanceof \yii\db\ArrayExpression && $value->getDimension() === 1) {
+                    } elseif ($value instanceof ArrayExpression && $value->getDimension() === 1) {
                         $values = array_merge($values, $value->getValue());
                     } else {
                         $values[] = $value;
@@ -583,7 +583,7 @@ trait ActiveRelationTrait
         $this->filterByModels($primaryModels);
         /** @var ActiveRecord $primaryModel */
         $primaryModel = reset($primaryModels);
-        if (!$primaryModel instanceof \yii\db\ActiveRecordInterface) {
+        if (!$primaryModel instanceof ActiveRecordInterface) {
             // when primaryModels are array of arrays (asArray case)
             $primaryModel = $this->modelClass;
         }

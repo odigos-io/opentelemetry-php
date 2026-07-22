@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Support\Facades;
+namespace Odigos\Illuminate\Support\Facades;
 
-use Illuminate\Contracts\Auth\PasswordBroker;
+use Odigos\Illuminate\Contracts\Auth\PasswordBroker;
 /**
  * @method static \Illuminate\Contracts\Auth\PasswordBroker broker(string|null $name = null)
  * @method static string getDefaultDriver()
@@ -19,7 +19,7 @@ use Illuminate\Contracts\Auth\PasswordBroker;
  * @see \Illuminate\Auth\Passwords\PasswordBrokerManager
  * @see \Illuminate\Auth\Passwords\PasswordBroker
  */
-class Password extends \Illuminate\Support\Facades\Facade
+class Password extends Facade
 {
     /**
      * Constant representing a successfully sent password reset email.

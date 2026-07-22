@@ -5,10 +5,10 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\web;
+namespace Odigos\yii\web;
 
-use yii\base\InvalidArgumentException;
-use yii\helpers\Json;
+use Odigos\yii\base\InvalidArgumentException;
+use Odigos\yii\helpers\Json;
 /**
  * Parses a raw HTTP request using [[\yii\helpers\Json::decode()]].
  *
@@ -25,7 +25,7 @@ use yii\helpers\Json;
  * @author Dan Schmidt <danschmidt5189@gmail.com>
  * @since 2.0
  */
-class JsonParser implements \yii\web\RequestParserInterface
+class JsonParser implements RequestParserInterface
 {
     /**
      * @var bool whether to return objects in terms of associative arrays.
@@ -53,7 +53,7 @@ class JsonParser implements \yii\web\RequestParserInterface
             return $parameters === null ? [] : $parameters;
         } catch (InvalidArgumentException $e) {
             if ($this->throwException) {
-                throw new \yii\web\BadRequestHttpException('Invalid JSON data in request body: ' . $e->getMessage());
+                throw new BadRequestHttpException('Invalid JSON data in request body: ' . $e->getMessage());
             }
             return [];
         }

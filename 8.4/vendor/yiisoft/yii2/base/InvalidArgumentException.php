@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\base;
+namespace Odigos\yii\base;
 
 /**
  * InvalidArgumentException represents an exception caused by invalid arguments passed to a method.
@@ -13,7 +13,7 @@ namespace yii\base;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0.14
  */
-class InvalidArgumentException extends \yii\base\InvalidParamException
+class InvalidArgumentException extends InvalidParamException
 {
     /**
      * @return string the user-friendly name of this exception

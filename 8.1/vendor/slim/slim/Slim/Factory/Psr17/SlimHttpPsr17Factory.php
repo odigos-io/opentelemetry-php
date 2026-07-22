@@ -6,14 +6,14 @@
  * @license https://github.com/slimphp/Slim/blob/4.x/LICENSE.md (MIT License)
  */
 declare (strict_types=1);
-namespace Slim\Factory\Psr17;
+namespace Odigos\Slim\Factory\Psr17;
 
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use RuntimeException;
-class SlimHttpPsr17Factory extends \Slim\Factory\Psr17\Psr17Factory
+class SlimHttpPsr17Factory extends Psr17Factory
 {
-    protected static string $responseFactoryClass = 'Slim\Http\Factory\DecoratedResponseFactory';
+    protected static string $responseFactoryClass = 'Odigos\Slim\Http\Factory\DecoratedResponseFactory';
     /**
      * @throws RuntimeException when the factory could not be instantiated
      */

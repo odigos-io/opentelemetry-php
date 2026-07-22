@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Contracts\Queue;
+namespace Odigos\Illuminate\Contracts\Queue;
 
-interface ShouldBeUniqueUntilProcessing extends \Illuminate\Contracts\Queue\ShouldBeUnique
+interface ShouldBeUniqueUntilProcessing extends ShouldBeUnique
 {
     //
 }

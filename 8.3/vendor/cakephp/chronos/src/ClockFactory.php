@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Cake\Chronos;
+namespace Odigos\Cake\Chronos;
 
 /**
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -38,6 +38,6 @@ class ClockFactory implements ClockInterface
      */
     public function now(): DateTimeImmutable
     {
-        return \Cake\Chronos\Chronos::now($this->timezone);
+        return Chronos::now($this->timezone);
     }
 }

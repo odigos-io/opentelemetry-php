@@ -14,10 +14,10 @@ declare (strict_types=1);
  * @since         3.1.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\ORM\Locator;
+namespace Odigos\Cake\ORM\Locator;
 
-use Cake\Datasource\FactoryLocator;
-use Cake\ORM\Table;
+use Odigos\Cake\Datasource\FactoryLocator;
+use Odigos\Cake\ORM\Table;
 use UnexpectedValueException;
 /**
  * Contains method for setting and accessing LocatorInterface instance
@@ -35,14 +35,14 @@ trait LocatorAwareTrait
      *
      * @var \Cake\ORM\Locator\LocatorInterface|null
      */
-    protected ?\Cake\ORM\Locator\LocatorInterface $_tableLocator = null;
+    protected ?LocatorInterface $_tableLocator = null;
     /**
      * Sets the table locator.
      *
      * @param \Cake\ORM\Locator\LocatorInterface $tableLocator LocatorInterface instance.
      * @return $this
      */
-    public function setTableLocator(\Cake\ORM\Locator\LocatorInterface $tableLocator)
+    public function setTableLocator(LocatorInterface $tableLocator)
     {
         $this->_tableLocator = $tableLocator;
         return $this;
@@ -52,13 +52,13 @@ trait LocatorAwareTrait
      *
      * @return \Cake\ORM\Locator\LocatorInterface
      */
-    public function getTableLocator(): \Cake\ORM\Locator\LocatorInterface
+    public function getTableLocator(): LocatorInterface
     {
         if ($this->_tableLocator !== null) {
             return $this->_tableLocator;
         }
         $locator = FactoryLocator::get('Table');
-        assert($locator instanceof \Cake\ORM\Locator\LocatorInterface, '`FactoryLocator` must return an instance of Cake\ORM\LocatorInterface for type `Table`.');
+        assert($locator instanceof LocatorInterface, '`FactoryLocator` must return an instance of Cake\ORM\LocatorInterface for type `Table`.');
         return $this->_tableLocator = $locator;
     }
     /**

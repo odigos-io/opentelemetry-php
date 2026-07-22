@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Platforms\Keywords;
+namespace Odigos\Doctrine\DBAL\Platforms\Keywords;
 
 /**
  * Oracle Keywordlist.
  *
  * @deprecated
  */
-class OracleKeywords extends \Doctrine\DBAL\Platforms\Keywords\KeywordList
+class OracleKeywords extends KeywordList
 {
     /**
      * {@inheritDoc}

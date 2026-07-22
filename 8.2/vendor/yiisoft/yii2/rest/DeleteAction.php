@@ -5,10 +5,10 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\rest;
+namespace Odigos\yii\rest;
 
 use Odigos\Yii;
-use yii\web\ServerErrorHttpException;
+use Odigos\yii\web\ServerErrorHttpException;
 /**
  * DeleteAction implements the API endpoint for deleting a model.
  *
@@ -20,7 +20,7 @@ use yii\web\ServerErrorHttpException;
  * @template T of Controller = Controller
  * @extends Action<T>
  */
-class DeleteAction extends \yii\rest\Action
+class DeleteAction extends Action
 {
     /**
      * Deletes a model.

@@ -5,13 +5,13 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\web;
+namespace Odigos\yii\web;
 
 use Odigos\Yii;
-use yii\base\ErrorException;
-use yii\base\Exception;
-use yii\base\UserException;
-use yii\helpers\VarDumper;
+use Odigos\yii\base\ErrorException;
+use Odigos\yii\base\Exception;
+use Odigos\yii\base\UserException;
+use Odigos\yii\helpers\VarDumper;
 /**
  * ErrorHandler handles uncaught PHP errors and exceptions.
  *
@@ -27,7 +27,7 @@ use yii\helpers\VarDumper;
  * @author Timur Ruziev <resurtm@gmail.com>
  * @since 2.0
  */
-class ErrorHandler extends \yii\base\ErrorHandler
+class ErrorHandler extends \Odigos\yii\base\ErrorHandler
 {
     /**
      * @var int maximum number of source code lines to be displayed. Defaults to 19.
@@ -94,21 +94,21 @@ class ErrorHandler extends \yii\base\ErrorHandler
             $response->data = null;
             $response->content = null;
         } else {
-            $response = new \yii\web\Response();
+            $response = new Response();
         }
         $response->setStatusCodeByException($exception);
-        $useErrorView = $response->format === \yii\web\Response::FORMAT_HTML && (!YII_DEBUG || $exception instanceof UserException);
+        $useErrorView = $response->format === Response::FORMAT_HTML && (!YII_DEBUG || $exception instanceof UserException);
         if ($useErrorView && $this->errorAction !== null) {
             /** @var View $view */
             $view = Yii::$app->view;
             $view->clear();
             $result = Yii::$app->runAction($this->errorAction);
-            if ($result instanceof \yii\web\Response) {
+            if ($result instanceof Response) {
                 $response = $result;
             } else {
                 $response->data = $result;
             }
-        } elseif ($response->format === \yii\web\Response::FORMAT_HTML) {
+        } elseif ($response->format === Response::FORMAT_HTML) {
             if ($this->shouldRenderSimpleHtml()) {
                 // AJAX request
                 $response->data = '<pre>' . $this->htmlEncode(static::convertExceptionToString($exception)) . '</pre>';
@@ -121,7 +121,7 @@ class ErrorHandler extends \yii\base\ErrorHandler
                 $file = $useErrorView ? $this->errorView : $this->exceptionView;
                 $response->data = $this->renderFile($file, ['exception' => $exception]);
             }
-        } elseif ($response->format === \yii\web\Response::FORMAT_RAW) {
+        } elseif ($response->format === Response::FORMAT_RAW) {
             $response->data = static::convertExceptionToString($exception);
         } else {
             $response->data = $this->convertExceptionToArray($exception);
@@ -135,11 +135,11 @@ class ErrorHandler extends \yii\base\ErrorHandler
      */
     protected function convertExceptionToArray($exception)
     {
-        if (!YII_DEBUG && !$exception instanceof UserException && !$exception instanceof \yii\web\HttpException) {
-            $exception = new \yii\web\HttpException(500, Yii::t('yii', 'An internal server error occurred.'));
+        if (!YII_DEBUG && !$exception instanceof UserException && !$exception instanceof HttpException) {
+            $exception = new HttpException(500, Yii::t('yii', 'An internal server error occurred.'));
         }
         $array = ['name' => $exception instanceof Exception || $exception instanceof ErrorException ? $exception->getName() : 'Exception', 'message' => $exception->getMessage(), 'code' => $exception->getCode()];
-        if ($exception instanceof \yii\web\HttpException) {
+        if ($exception instanceof HttpException) {
             $array['status'] = $exception->statusCode;
         }
         if (YII_DEBUG) {
@@ -148,7 +148,7 @@ class ErrorHandler extends \yii\base\ErrorHandler
                 $array['file'] = $exception->getFile();
                 $array['line'] = $exception->getLine();
                 $array['stack-trace'] = explode("\n", $exception->getTraceAsString());
-                if ($exception instanceof \yii\db\Exception) {
+                if ($exception instanceof \Odigos\yii\db\Exception) {
                     $array['error-info'] = $exception->errorInfo;
                 }
             }
@@ -428,7 +428,7 @@ class ErrorHandler extends \yii\base\ErrorHandler
      */
     public function getExceptionName($exception)
     {
-        if ($exception instanceof \yii\base\Exception || $exception instanceof \yii\base\InvalidCallException || $exception instanceof \yii\base\InvalidParamException || $exception instanceof \yii\base\UnknownMethodException) {
+        if ($exception instanceof \Odigos\yii\base\Exception || $exception instanceof \Odigos\yii\base\InvalidCallException || $exception instanceof \Odigos\yii\base\InvalidParamException || $exception instanceof \Odigos\yii\base\UnknownMethodException) {
             return $exception->getName();
         }
         return null;

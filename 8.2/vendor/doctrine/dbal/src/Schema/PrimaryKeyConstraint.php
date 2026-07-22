@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Schema;
+namespace Odigos\Doctrine\DBAL\Schema;
 
-use Doctrine\DBAL\Schema\Exception\InvalidPrimaryKeyConstraintDefinition;
-use Doctrine\DBAL\Schema\Name\UnqualifiedName;
+use Odigos\Doctrine\DBAL\Schema\Exception\InvalidPrimaryKeyConstraintDefinition;
+use Odigos\Doctrine\DBAL\Schema\Name\UnqualifiedName;
 use function count;
 /** @implements OptionallyNamedObject<UnqualifiedName> */
-final readonly class PrimaryKeyConstraint implements \Doctrine\DBAL\Schema\OptionallyNamedObject
+final readonly class PrimaryKeyConstraint implements OptionallyNamedObject
 {
     /**
      * @internal Use {@link PrimaryKeyConstraint::editor()} to instantiate an editor and
@@ -48,14 +48,14 @@ final readonly class PrimaryKeyConstraint implements \Doctrine\DBAL\Schema\Optio
     /**
      * Instantiates a new primary key constraint editor.
      */
-    public static function editor(): \Doctrine\DBAL\Schema\PrimaryKeyConstraintEditor
+    public static function editor(): PrimaryKeyConstraintEditor
     {
-        return new \Doctrine\DBAL\Schema\PrimaryKeyConstraintEditor();
+        return new PrimaryKeyConstraintEditor();
     }
     /**
      * Instantiates a new foreign key constraint editor and initializes it with the constraint's properties.
      */
-    public function edit(): \Doctrine\DBAL\Schema\PrimaryKeyConstraintEditor
+    public function edit(): PrimaryKeyConstraintEditor
     {
         return self::editor()->setName($this->name)->setColumnNames(...$this->columnNames)->setIsClustered($this->isClustered);
     }

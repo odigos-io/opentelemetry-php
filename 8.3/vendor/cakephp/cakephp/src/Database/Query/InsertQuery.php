@@ -14,11 +14,11 @@ declare (strict_types=1);
  * @since         4.5.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database\Query;
+namespace Odigos\Cake\Database\Query;
 
-use Cake\Database\Exception\DatabaseException;
-use Cake\Database\Expression\ValuesExpression;
-use Cake\Database\Query;
+use Odigos\Cake\Database\Exception\DatabaseException;
+use Odigos\Cake\Database\Expression\ValuesExpression;
+use Odigos\Cake\Database\Query;
 use InvalidArgumentException;
 /**
  * This class is used to generate INSERT queries for the relational database.

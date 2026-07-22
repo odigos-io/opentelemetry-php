@@ -1,22 +1,22 @@
 <?php
 
-namespace Illuminate\Http;
+namespace Odigos\Illuminate\Http;
 
 use ArrayAccess;
 use Closure;
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Session\SymfonySessionDecorator;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
-use Illuminate\Support\Traits\Conditionable;
-use Illuminate\Support\Traits\Macroable;
-use Illuminate\Support\Uri;
+use Odigos\Illuminate\Contracts\Support\Arrayable;
+use Odigos\Illuminate\Session\SymfonySessionDecorator;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Str;
+use Odigos\Illuminate\Support\Traits\Conditionable;
+use Odigos\Illuminate\Support\Traits\Macroable;
+use Odigos\Illuminate\Support\Uri;
 use RuntimeException;
-use Symfony\Component\HttpFoundation\Exception\SessionNotFoundException;
-use Symfony\Component\HttpFoundation\InputBag;
-use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Odigos\Symfony\Component\HttpFoundation\Exception\SessionNotFoundException;
+use Odigos\Symfony\Component\HttpFoundation\InputBag;
+use Odigos\Symfony\Component\HttpFoundation\Request as SymfonyRequest;
+use Odigos\Symfony\Component\HttpFoundation\Session\SessionInterface;
 /**
  * @method array validate(array $rules, ...$params)
  * @method array validateWithBag(string $errorBag, array $rules, ...$params)
@@ -27,7 +27,7 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
  */
 class Request extends SymfonyRequest implements Arrayable, ArrayAccess
 {
-    use \Illuminate\Http\Concerns\CanBePrecognitive, \Illuminate\Http\Concerns\InteractsWithContentTypes, \Illuminate\Http\Concerns\InteractsWithFlashData, \Illuminate\Http\Concerns\InteractsWithInput, Conditionable, Macroable;
+    use Concerns\CanBePrecognitive, Concerns\InteractsWithContentTypes, Concerns\InteractsWithFlashData, Concerns\InteractsWithInput, Conditionable, Macroable;
     /**
      * The decoded JSON content for the request.
      *
@@ -331,7 +331,7 @@ class Request extends SymfonyRequest implements Arrayable, ArrayAccess
      */
     public function merge(array $input)
     {
-        return tap($this, function (\Illuminate\Http\Request $request) use ($input) {
+        return tap($this, function (Request $request) use ($input) {
             $request->getInputSource()->replace((new Collection($input))->reduce(fn($requestInput, $value, $key) => data_set($requestInput, $key, $value), $this->getInputSource()->all()));
         });
     }

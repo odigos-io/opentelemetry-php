@@ -14,7 +14,7 @@ declare (strict_types=1);
  * @since         2.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Routing\Route;
+namespace Odigos\Cake\Routing\Route;
 
 /**
  * Redirect route will perform an immediate redirect. Redirect routes
@@ -24,7 +24,7 @@ namespace Cake\Routing\Route;
  * Redirection is signaled by an exception that halts route matching and
  * defines the redirect URL and status code.
  */
-class RedirectRoute extends \Cake\Routing\Route\Route
+class RedirectRoute extends Route
 {
-    use \Cake\Routing\Route\RedirectTrait;
+    use RedirectTrait;
 }

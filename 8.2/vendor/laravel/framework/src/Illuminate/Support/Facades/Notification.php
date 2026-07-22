@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Support\Facades;
+namespace Odigos\Illuminate\Support\Facades;
 
-use Illuminate\Notifications\AnonymousNotifiable;
-use Illuminate\Notifications\ChannelManager;
-use Illuminate\Support\Testing\Fakes\NotificationFake;
+use Odigos\Illuminate\Notifications\AnonymousNotifiable;
+use Odigos\Illuminate\Notifications\ChannelManager;
+use Odigos\Illuminate\Support\Testing\Fakes\NotificationFake;
 /**
  * @method static void send(\Illuminate\Support\Collection|mixed $notifiables, mixed $notification)
  * @method static void sendNow(\Illuminate\Support\Collection|mixed $notifiables, mixed $notification, array|null $channels = null)
@@ -40,7 +40,7 @@ use Illuminate\Support\Testing\Fakes\NotificationFake;
  * @see \Illuminate\Notifications\ChannelManager
  * @see \Illuminate\Support\Testing\Fakes\NotificationFake
  */
-class Notification extends \Illuminate\Support\Facades\Facade
+class Notification extends Facade
 {
     /**
      * Replace the bound instance with a fake.

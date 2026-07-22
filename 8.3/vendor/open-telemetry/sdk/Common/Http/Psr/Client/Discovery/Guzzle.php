@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace OpenTelemetry\SDK\Common\Http\Psr\Client\Discovery;
 
-use GuzzleHttp\Client;
+use Odigos\GuzzleHttp\Client;
 use Psr\Http\Client\ClientInterface;
 class Guzzle implements \OpenTelemetry\SDK\Common\Http\Psr\Client\Discovery\DiscoveryInterface
 {

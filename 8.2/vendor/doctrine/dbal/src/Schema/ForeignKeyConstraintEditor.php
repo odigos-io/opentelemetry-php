@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Schema;
+namespace Odigos\Doctrine\DBAL\Schema;
 
-use Doctrine\DBAL\Schema\Exception\InvalidForeignKeyConstraintDefinition;
-use Doctrine\DBAL\Schema\ForeignKeyConstraint\Deferrability;
-use Doctrine\DBAL\Schema\ForeignKeyConstraint\MatchType;
-use Doctrine\DBAL\Schema\ForeignKeyConstraint\ReferentialAction;
-use Doctrine\DBAL\Schema\Name\OptionallyQualifiedName;
-use Doctrine\DBAL\Schema\Name\UnqualifiedName;
+use Odigos\Doctrine\DBAL\Schema\Exception\InvalidForeignKeyConstraintDefinition;
+use Odigos\Doctrine\DBAL\Schema\ForeignKeyConstraint\Deferrability;
+use Odigos\Doctrine\DBAL\Schema\ForeignKeyConstraint\MatchType;
+use Odigos\Doctrine\DBAL\Schema\ForeignKeyConstraint\ReferentialAction;
+use Odigos\Doctrine\DBAL\Schema\Name\OptionallyQualifiedName;
+use Odigos\Doctrine\DBAL\Schema\Name\UnqualifiedName;
 use function array_map;
 use function array_merge;
 use function array_values;
@@ -148,7 +148,7 @@ final class ForeignKeyConstraintEditor
         $this->deferrability = $deferrability;
         return $this;
     }
-    public function create(): \Doctrine\DBAL\Schema\ForeignKeyConstraint
+    public function create(): ForeignKeyConstraint
     {
         if (count($this->referencingColumnNames) < 1) {
             throw InvalidForeignKeyConstraintDefinition::referencingColumnNamesNotSet($this->name);
@@ -169,7 +169,7 @@ final class ForeignKeyConstraintEditor
         if ($this->onDeleteAction !== ReferentialAction::NO_ACTION) {
             $options['onDelete'] = $this->onDeleteAction->value;
         }
-        return new \Doctrine\DBAL\Schema\ForeignKeyConstraint(array_map(static fn(UnqualifiedName $columnName) => $columnName->toString(), $this->referencingColumnNames), $this->referencedTableName->toString(), array_map(static fn(UnqualifiedName $columnName) => $columnName->toString(), $this->referencedColumnNames), $this->name?->toString() ?? '', array_merge($options, match ($this->deferrability) {
+        return new ForeignKeyConstraint(array_map(static fn(UnqualifiedName $columnName) => $columnName->toString(), $this->referencingColumnNames), $this->referencedTableName->toString(), array_map(static fn(UnqualifiedName $columnName) => $columnName->toString(), $this->referencedColumnNames), $this->name?->toString() ?? '', array_merge($options, match ($this->deferrability) {
             Deferrability::NOT_DEFERRABLE => [],
             Deferrability::DEFERRABLE => ['deferrable' => \true],
             Deferrability::DEFERRED => ['deferrable' => \true, 'deferred' => \true],

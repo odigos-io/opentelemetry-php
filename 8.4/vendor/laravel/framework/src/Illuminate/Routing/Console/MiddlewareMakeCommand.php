@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Routing\Console;
+namespace Odigos\Illuminate\Routing\Console;
 
-use Illuminate\Console\Concerns\CreatesMatchingTest;
-use Illuminate\Console\GeneratorCommand;
-use Symfony\Component\Console\Attribute\AsCommand;
+use Odigos\Illuminate\Console\Concerns\CreatesMatchingTest;
+use Odigos\Illuminate\Console\GeneratorCommand;
+use Odigos\Symfony\Component\Console\Attribute\AsCommand;
 #[AsCommand(name: 'make:middleware')]
 class MiddlewareMakeCommand extends GeneratorCommand
 {

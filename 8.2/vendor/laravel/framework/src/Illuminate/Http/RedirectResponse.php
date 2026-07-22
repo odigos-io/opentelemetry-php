@@ -1,20 +1,20 @@
 <?php
 
-namespace Illuminate\Http;
+namespace Odigos\Illuminate\Http;
 
-use Illuminate\Contracts\Support\MessageProvider;
-use Illuminate\Session\Store as SessionStore;
-use Illuminate\Support\MessageBag;
-use Illuminate\Support\Str;
-use Illuminate\Support\Traits\ForwardsCalls;
-use Illuminate\Support\Traits\Macroable;
-use Illuminate\Support\Uri;
-use Illuminate\Support\ViewErrorBag;
-use Symfony\Component\HttpFoundation\File\UploadedFile as SymfonyUploadedFile;
-use Symfony\Component\HttpFoundation\RedirectResponse as BaseRedirectResponse;
+use Odigos\Illuminate\Contracts\Support\MessageProvider;
+use Odigos\Illuminate\Session\Store as SessionStore;
+use Odigos\Illuminate\Support\MessageBag;
+use Odigos\Illuminate\Support\Str;
+use Odigos\Illuminate\Support\Traits\ForwardsCalls;
+use Odigos\Illuminate\Support\Traits\Macroable;
+use Odigos\Illuminate\Support\Uri;
+use Odigos\Illuminate\Support\ViewErrorBag;
+use Odigos\Symfony\Component\HttpFoundation\File\UploadedFile as SymfonyUploadedFile;
+use Odigos\Symfony\Component\HttpFoundation\RedirectResponse as BaseRedirectResponse;
 class RedirectResponse extends BaseRedirectResponse
 {
-    use ForwardsCalls, \Illuminate\Http\ResponseTrait, Macroable {
+    use ForwardsCalls, ResponseTrait, Macroable {
         Macroable::__call as macroCall;
     }
     /**
@@ -189,7 +189,7 @@ class RedirectResponse extends BaseRedirectResponse
      * @param  \Illuminate\Http\Request  $request
      * @return $this
      */
-    public function setRequest(\Illuminate\Http\Request $request)
+    public function setRequest(Request $request)
     {
         $this->request = $request;
         return $this;

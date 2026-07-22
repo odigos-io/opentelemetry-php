@@ -8,19 +8,19 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\VarDumper\Dumper;
+namespace Odigos\Symfony\Component\VarDumper\Dumper;
 
-use Symfony\Component\VarDumper\Cloner\Data;
-use Symfony\Component\VarDumper\Dumper\ContextProvider\ContextProviderInterface;
+use Odigos\Symfony\Component\VarDumper\Cloner\Data;
+use Odigos\Symfony\Component\VarDumper\Dumper\ContextProvider\ContextProviderInterface;
 /**
  * @author Kévin Thérage <therage.kevin@gmail.com>
  */
-class ContextualizedDumper implements \Symfony\Component\VarDumper\Dumper\DataDumperInterface
+class ContextualizedDumper implements DataDumperInterface
 {
     /**
      * @param ContextProviderInterface[] $contextProviders
      */
-    public function __construct(private \Symfony\Component\VarDumper\Dumper\DataDumperInterface $wrappedDumper, private array $contextProviders)
+    public function __construct(private DataDumperInterface $wrappedDumper, private array $contextProviders)
     {
     }
     public function dump(Data $data): ?string

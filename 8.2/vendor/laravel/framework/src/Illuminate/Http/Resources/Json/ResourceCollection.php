@@ -1,14 +1,14 @@
 <?php
 
-namespace Illuminate\Http\Resources\Json;
+namespace Odigos\Illuminate\Http\Resources\Json;
 
 use Countable;
-use Illuminate\Http\Request;
-use Illuminate\Http\Resources\CollectsResources;
-use Illuminate\Pagination\AbstractCursorPaginator;
-use Illuminate\Pagination\AbstractPaginator;
+use Odigos\Illuminate\Http\Request;
+use Odigos\Illuminate\Http\Resources\CollectsResources;
+use Odigos\Illuminate\Pagination\AbstractCursorPaginator;
+use Odigos\Illuminate\Pagination\AbstractPaginator;
 use IteratorAggregate;
-class ResourceCollection extends \Illuminate\Http\Resources\Json\JsonResource implements Countable, IteratorAggregate
+class ResourceCollection extends JsonResource implements Countable, IteratorAggregate
 {
     use CollectsResources;
     /**
@@ -85,7 +85,7 @@ class ResourceCollection extends \Illuminate\Http\Resources\Json\JsonResource im
     #[\Override]
     public function toArray(Request $request)
     {
-        if ($this->collection->first() instanceof \Illuminate\Http\Resources\Json\JsonResource) {
+        if ($this->collection->first() instanceof JsonResource) {
             return $this->collection->map->resolve($request)->all();
         }
         return $this->collection->map->toArray($request)->all();
@@ -116,6 +116,6 @@ class ResourceCollection extends \Illuminate\Http\Resources\Json\JsonResource im
         } elseif (!is_null($this->queryParameters)) {
             $this->resource->appends($this->queryParameters);
         }
-        return (new \Illuminate\Http\Resources\Json\PaginatedResourceResponse($this))->toResponse($request);
+        return (new PaginatedResourceResponse($this))->toResponse($request);
     }
 }

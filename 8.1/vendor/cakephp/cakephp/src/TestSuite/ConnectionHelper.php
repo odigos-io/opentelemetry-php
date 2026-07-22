@@ -13,12 +13,12 @@ declare (strict_types=1);
  * @since         4.3.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\TestSuite;
+namespace Odigos\Cake\TestSuite;
 
-use Cake\Database\Connection;
-use Cake\Database\DriverFeatureEnum;
-use Cake\Database\Log\QueryLogger;
-use Cake\Datasource\ConnectionManager;
+use Odigos\Cake\Database\Connection;
+use Odigos\Cake\Database\DriverFeatureEnum;
+use Odigos\Cake\Database\Log\QueryLogger;
+use Odigos\Cake\Datasource\ConnectionManager;
 use Closure;
 /**
  * Helper for managing test connections

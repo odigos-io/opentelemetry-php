@@ -5,10 +5,10 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\validators;
+namespace Odigos\yii\validators;
 
 use Odigos\Yii;
-use yii\helpers\Json;
+use Odigos\yii\helpers\Json;
 /**
  * StringValidator validates that the attribute value is of certain length.
  *
@@ -17,7 +17,7 @@ use yii\helpers\Json;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class StringValidator extends \yii\validators\Validator
+class StringValidator extends Validator
 {
     /**
      * @var int|array|null specifies the length limit of the value to be validated.
@@ -153,7 +153,7 @@ class StringValidator extends \yii\validators\Validator
      */
     public function clientValidateAttribute($model, $attribute, $view)
     {
-        \yii\validators\ValidationAsset::register($view);
+        ValidationAsset::register($view);
         $options = $this->getClientOptions($model, $attribute);
         return 'yii.validation.string(value, messages, ' . Json::htmlEncode($options) . ');';
     }

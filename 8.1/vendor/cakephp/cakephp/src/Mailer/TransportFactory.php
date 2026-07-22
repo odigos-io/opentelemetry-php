@@ -14,9 +14,9 @@ declare (strict_types=1);
  * @since         3.7.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Mailer;
+namespace Odigos\Cake\Mailer;
 
-use Cake\Core\StaticConfigTrait;
+use Odigos\Cake\Core\StaticConfigTrait;
 use InvalidArgumentException;
 /**
  * Factory class for generating email transport instances.
@@ -29,22 +29,22 @@ class TransportFactory
      *
      * @var \Cake\Mailer\TransportRegistry
      */
-    protected static \Cake\Mailer\TransportRegistry $_registry;
+    protected static TransportRegistry $_registry;
     /**
      * An array mapping url schemes to fully qualified Transport class names
      *
      * @var array<string, string>
      * @phpstan-var array<string, class-string>
      */
-    protected static array $_dsnClassMap = ['debug' => \Cake\Mailer\Transport\DebugTransport::class, 'mail' => \Cake\Mailer\Transport\MailTransport::class, 'smtp' => \Cake\Mailer\Transport\SmtpTransport::class];
+    protected static array $_dsnClassMap = ['debug' => Transport\DebugTransport::class, 'mail' => Transport\MailTransport::class, 'smtp' => Transport\SmtpTransport::class];
     /**
      * Returns the Transport Registry used for creating and using transport instances.
      *
      * @return \Cake\Mailer\TransportRegistry
      */
-    public static function getRegistry(): \Cake\Mailer\TransportRegistry
+    public static function getRegistry(): TransportRegistry
     {
-        return static::$_registry ??= new \Cake\Mailer\TransportRegistry();
+        return static::$_registry ??= new TransportRegistry();
     }
     /**
      * Sets the Transport Registry instance used for creating and using transport instances.
@@ -54,7 +54,7 @@ class TransportFactory
      * @param \Cake\Mailer\TransportRegistry $registry Injectable registry object.
      * @return void
      */
-    public static function setRegistry(\Cake\Mailer\TransportRegistry $registry): void
+    public static function setRegistry(TransportRegistry $registry): void
     {
         static::$_registry = $registry;
     }
@@ -81,7 +81,7 @@ class TransportFactory
      * @param string $name Config name.
      * @return \Cake\Mailer\AbstractTransport
      */
-    public static function get(string $name): \Cake\Mailer\AbstractTransport
+    public static function get(string $name): AbstractTransport
     {
         $registry = static::getRegistry();
         if (isset($registry->{$name})) {

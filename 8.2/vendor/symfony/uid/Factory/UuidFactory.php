@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Uid\Factory;
+namespace Odigos\Symfony\Component\Uid\Factory;
 
-use Symfony\Component\Uid\Exception\LogicException;
-use Symfony\Component\Uid\Uuid;
-use Symfony\Component\Uid\UuidV1;
-use Symfony\Component\Uid\UuidV4;
-use Symfony\Component\Uid\UuidV5;
-use Symfony\Component\Uid\UuidV7;
+use Odigos\Symfony\Component\Uid\Exception\LogicException;
+use Odigos\Symfony\Component\Uid\Uuid;
+use Odigos\Symfony\Component\Uid\UuidV1;
+use Odigos\Symfony\Component\Uid\UuidV4;
+use Odigos\Symfony\Component\Uid\UuidV5;
+use Odigos\Symfony\Component\Uid\UuidV7;
 class UuidFactory
 {
     private string $defaultClass;
@@ -44,28 +44,28 @@ class UuidFactory
         $class = $this->defaultClass;
         return new $class();
     }
-    public function randomBased(): \Symfony\Component\Uid\Factory\RandomBasedUuidFactory
+    public function randomBased(): RandomBasedUuidFactory
     {
-        return new \Symfony\Component\Uid\Factory\RandomBasedUuidFactory($this->randomBasedClass);
+        return new RandomBasedUuidFactory($this->randomBasedClass);
     }
-    public function timeBased(Uuid|string|null $node = null): \Symfony\Component\Uid\Factory\TimeBasedUuidFactory
+    public function timeBased(Uuid|string|null $node = null): TimeBasedUuidFactory
     {
         $node ??= $this->timeBasedNode;
         if (null !== $node && !$node instanceof Uuid) {
             $node = Uuid::fromString($node);
         }
-        return new \Symfony\Component\Uid\Factory\TimeBasedUuidFactory($this->timeBasedClass, $node);
+        return new TimeBasedUuidFactory($this->timeBasedClass, $node);
     }
     /**
      * @throws LogicException When no namespace is defined
      */
-    public function nameBased(Uuid|string|null $namespace = null): \Symfony\Component\Uid\Factory\NameBasedUuidFactory
+    public function nameBased(Uuid|string|null $namespace = null): NameBasedUuidFactory
     {
         $namespace ??= $this->nameBasedNamespace;
         if (null === $namespace) {
             throw new LogicException(\sprintf('A namespace should be defined when using "%s()".', __METHOD__));
         }
-        return new \Symfony\Component\Uid\Factory\NameBasedUuidFactory($this->nameBasedClass, $this->getNamespace($namespace));
+        return new NameBasedUuidFactory($this->nameBasedClass, $this->getNamespace($namespace));
     }
     private function getNamespace(Uuid|string $namespace): Uuid
     {

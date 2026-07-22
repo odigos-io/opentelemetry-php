@@ -1,16 +1,16 @@
 <?php
 
-namespace Illuminate\Database;
+namespace Odigos\Illuminate\Database;
 
 use Odigos\Faker\Factory as FakerFactory;
 use Odigos\Faker\Generator as FakerGenerator;
-use Illuminate\Contracts\Database\ConcurrencyErrorDetector as ConcurrencyErrorDetectorContract;
-use Illuminate\Contracts\Database\LostConnectionDetector as LostConnectionDetectorContract;
-use Illuminate\Contracts\Queue\EntityResolver;
-use Illuminate\Database\Connectors\ConnectionFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\QueueEntityResolver;
-use Illuminate\Support\ServiceProvider;
+use Odigos\Illuminate\Contracts\Database\ConcurrencyErrorDetector as ConcurrencyErrorDetectorContract;
+use Odigos\Illuminate\Contracts\Database\LostConnectionDetector as LostConnectionDetectorContract;
+use Odigos\Illuminate\Contracts\Queue\EntityResolver;
+use Odigos\Illuminate\Database\Connectors\ConnectionFactory;
+use Odigos\Illuminate\Database\Eloquent\Model;
+use Odigos\Illuminate\Database\Eloquent\QueueEntityResolver;
+use Odigos\Illuminate\Support\ServiceProvider;
 class DatabaseServiceProvider extends ServiceProvider
 {
     /**
@@ -58,7 +58,7 @@ class DatabaseServiceProvider extends ServiceProvider
         // connections might be managed. It also implements the connection resolver
         // interface which may be used by other components requiring connections.
         $this->app->singleton('db', function ($app) {
-            return new \Illuminate\Database\DatabaseManager($app, $app['db.factory']);
+            return new DatabaseManager($app, $app['db.factory']);
         });
         $this->app->bind('db.connection', function ($app) {
             return $app['db']->connection();
@@ -67,13 +67,13 @@ class DatabaseServiceProvider extends ServiceProvider
             return $app['db']->connection()->getSchemaBuilder();
         });
         $this->app->singleton('db.transactions', function () {
-            return new \Illuminate\Database\DatabaseTransactionsManager();
+            return new DatabaseTransactionsManager();
         });
         $this->app->singleton(ConcurrencyErrorDetectorContract::class, function () {
-            return new \Illuminate\Database\ConcurrencyErrorDetector();
+            return new ConcurrencyErrorDetector();
         });
         $this->app->singleton(LostConnectionDetectorContract::class, function () {
-            return new \Illuminate\Database\LostConnectionDetector();
+            return new LostConnectionDetector();
         });
     }
     /**

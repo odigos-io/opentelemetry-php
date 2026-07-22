@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Events;
+namespace Odigos\Illuminate\Events;
 
 use Closure;
-use Illuminate\Support\Collection;
-use Laravel\SerializableClosure\SerializableClosure;
-use function Illuminate\Support\enum_value;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Laravel\SerializableClosure\SerializableClosure;
+use function Odigos\Illuminate\Support\enum_value;
 class QueuedClosure
 {
     /**
@@ -137,7 +137,7 @@ class QueuedClosure
     public function resolve()
     {
         return function (...$arguments) {
-            dispatch(new \Illuminate\Events\CallQueuedListener(\Illuminate\Events\InvokeQueuedClosure::class, 'handle', ['closure' => new SerializableClosure($this->closure), 'arguments' => $arguments, 'catch' => (new Collection($this->catchCallbacks))->map(fn($callback) => new SerializableClosure($callback))->all()]))->onConnection($this->connection)->onQueue($this->queue)->delay($this->delay)->onGroup($this->messageGroup)->withDeduplicator($this->deduplicator);
+            dispatch(new CallQueuedListener(InvokeQueuedClosure::class, 'handle', ['closure' => new SerializableClosure($this->closure), 'arguments' => $arguments, 'catch' => (new Collection($this->catchCallbacks))->map(fn($callback) => new SerializableClosure($callback))->all()]))->onConnection($this->connection)->onQueue($this->queue)->delay($this->delay)->onGroup($this->messageGroup)->withDeduplicator($this->deduplicator);
         };
     }
 }

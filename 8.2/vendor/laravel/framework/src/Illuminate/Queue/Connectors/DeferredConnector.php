@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Queue\Connectors;
+namespace Odigos\Illuminate\Queue\Connectors;
 
-use Illuminate\Queue\DeferredQueue;
-class DeferredConnector implements \Illuminate\Queue\Connectors\ConnectorInterface
+use Odigos\Illuminate\Queue\DeferredQueue;
+class DeferredConnector implements ConnectorInterface
 {
     /**
      * Establish a queue connection.

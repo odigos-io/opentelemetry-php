@@ -1,13 +1,13 @@
 <?php
 
-namespace GuzzleHttp\Handler;
+namespace Odigos\GuzzleHttp\Handler;
 
 use Closure;
-use GuzzleHttp\Promise as P;
-use GuzzleHttp\Promise\Promise;
-use GuzzleHttp\Promise\PromiseInterface;
-use GuzzleHttp\TransportSharing;
-use GuzzleHttp\Utils;
+use Odigos\GuzzleHttp\Promise as P;
+use Odigos\GuzzleHttp\Promise\Promise;
+use Odigos\GuzzleHttp\Promise\PromiseInterface;
+use Odigos\GuzzleHttp\TransportSharing;
+use Odigos\GuzzleHttp\Utils;
 use Psr\Http\Message\RequestInterface;
 /**
  * Returns an asynchronous response using curl_multi_* functions.
@@ -74,15 +74,15 @@ class CurlMultiHandler
      */
     public function __construct(array $options = [])
     {
-        \GuzzleHttp\Handler\CurlShareHandleState::assertNoRequiredSharingCustomFactoryConflict($options, 'CurlMultiHandler');
+        CurlShareHandleState::assertNoRequiredSharingCustomFactoryConflict($options, 'CurlMultiHandler');
         $transportSharing = $options['transport_sharing'] ?? null;
-        $sharingMode = \GuzzleHttp\Handler\CurlShareHandleState::normalizeMode($transportSharing, 'transport_sharing');
+        $sharingMode = CurlShareHandleState::normalizeMode($transportSharing, 'transport_sharing');
         if (\array_key_exists('handle_factory', $options) && $options['handle_factory'] !== null) {
             $this->shareHandleState = null;
             $this->factory = $options['handle_factory'];
         } else {
-            $this->shareHandleState = $sharingMode !== TransportSharing::NONE ? \GuzzleHttp\Handler\CurlShareHandleState::fromOption($transportSharing) : null;
-            $this->factory = $this->shareHandleState !== null ? new \GuzzleHttp\Handler\CurlFactory(50, $this->shareHandleState->mode, $this->shareHandleState->handle) : new \GuzzleHttp\Handler\CurlFactory(50);
+            $this->shareHandleState = $sharingMode !== TransportSharing::NONE ? CurlShareHandleState::fromOption($transportSharing) : null;
+            $this->factory = $this->shareHandleState !== null ? new CurlFactory(50, $this->shareHandleState->mode, $this->shareHandleState->handle) : new CurlFactory(50);
         }
         if (isset($options['select_timeout'])) {
             $this->selectTimeout = $options['select_timeout'];
@@ -260,7 +260,7 @@ class CurlMultiHandler
             $this->cleanupCancelledHandle($easy);
         }
     }
-    private function cleanupCancelledHandle(\GuzzleHttp\Handler\EasyHandle $easy): void
+    private function cleanupCancelledHandle(EasyHandle $easy): void
     {
         $handle = $easy->handle;
         \curl_multi_remove_handle($this->_mh, $handle);
@@ -291,7 +291,7 @@ class CurlMultiHandler
             unset($this->handles[$id], $this->delays[$id]);
             $entry['easy']->errno = $done['result'];
             try {
-                $result = \GuzzleHttp\Handler\CurlFactory::finish($this, $entry['easy'], $this->factory);
+                $result = CurlFactory::finish($this, $entry['easy'], $this->factory);
             } catch (\Throwable $e) {
                 $entry['deferred']->reject($e);
                 continue;

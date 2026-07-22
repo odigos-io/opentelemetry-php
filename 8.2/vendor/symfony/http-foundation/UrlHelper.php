@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpFoundation;
+namespace Odigos\Symfony\Component\HttpFoundation;
 
-use Symfony\Component\Routing\RequestContext;
-use Symfony\Component\Routing\RequestContextAwareInterface;
+use Odigos\Symfony\Component\Routing\RequestContext;
+use Odigos\Symfony\Component\Routing\RequestContextAwareInterface;
 /**
  * A helper service for manipulating URLs within and outside the request scope.
  *
@@ -19,7 +19,7 @@ use Symfony\Component\Routing\RequestContextAwareInterface;
  */
 final class UrlHelper
 {
-    public function __construct(private \Symfony\Component\HttpFoundation\RequestStack $requestStack, private RequestContextAwareInterface|RequestContext|null $requestContext = null)
+    public function __construct(private RequestStack $requestStack, private RequestContextAwareInterface|RequestContext|null $requestContext = null)
     {
     }
     public function getAbsoluteUrl(string $path): string

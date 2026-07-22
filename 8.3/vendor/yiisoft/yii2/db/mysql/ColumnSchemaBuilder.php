@@ -5,9 +5,9 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\db\mysql;
+namespace Odigos\yii\db\mysql;
 
-use yii\db\ColumnSchemaBuilder as AbstractColumnSchemaBuilder;
+use Odigos\yii\db\ColumnSchemaBuilder as AbstractColumnSchemaBuilder;
 /**
  * ColumnSchemaBuilder is the schema builder for MySQL databases.
  *

@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Routing\Loader;
+namespace Odigos\Symfony\Component\Routing\Loader;
 
-use Symfony\Component\Config\Loader\FileLoader;
-use Symfony\Component\Config\Resource\DirectoryResource;
-use Symfony\Component\Routing\RouteCollection;
+use Odigos\Symfony\Component\Config\Loader\FileLoader;
+use Odigos\Symfony\Component\Config\Resource\DirectoryResource;
+use Odigos\Symfony\Component\Routing\RouteCollection;
 class DirectoryLoader extends FileLoader
 {
     public function load(mixed $file, ?string $type = null): mixed

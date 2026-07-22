@@ -14,18 +14,18 @@ declare (strict_types=1);
  * @since         3.7.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\TestSuite;
+namespace Odigos\Cake\TestSuite;
 
-use Cake\TestSuite\Constraint\Email\MailContains;
-use Cake\TestSuite\Constraint\Email\MailContainsAttachment;
-use Cake\TestSuite\Constraint\Email\MailContainsHtml;
-use Cake\TestSuite\Constraint\Email\MailContainsText;
-use Cake\TestSuite\Constraint\Email\MailCount;
-use Cake\TestSuite\Constraint\Email\MailSentFrom;
-use Cake\TestSuite\Constraint\Email\MailSentTo;
-use Cake\TestSuite\Constraint\Email\MailSentWith;
-use Cake\TestSuite\Constraint\Email\MailSubjectContains;
-use Cake\TestSuite\Constraint\Email\NoMailSent;
+use Odigos\Cake\TestSuite\Constraint\Email\MailContains;
+use Odigos\Cake\TestSuite\Constraint\Email\MailContainsAttachment;
+use Odigos\Cake\TestSuite\Constraint\Email\MailContainsHtml;
+use Odigos\Cake\TestSuite\Constraint\Email\MailContainsText;
+use Odigos\Cake\TestSuite\Constraint\Email\MailCount;
+use Odigos\Cake\TestSuite\Constraint\Email\MailSentFrom;
+use Odigos\Cake\TestSuite\Constraint\Email\MailSentTo;
+use Odigos\Cake\TestSuite\Constraint\Email\MailSentWith;
+use Odigos\Cake\TestSuite\Constraint\Email\MailSubjectContains;
+use Odigos\Cake\TestSuite\Constraint\Email\NoMailSent;
 use Odigos\PHPUnit\Framework\Attributes\After;
 use Odigos\PHPUnit\Framework\Attributes\Before;
 /**
@@ -45,7 +45,7 @@ trait EmailTrait
     #[Before]
     public function setupTransports(): void
     {
-        \Cake\TestSuite\TestEmailTransport::replaceAllTransports();
+        TestEmailTransport::replaceAllTransports();
     }
     /**
      * Resets transport state
@@ -55,7 +55,7 @@ trait EmailTrait
     #[After]
     public function cleanupEmailTrait(): void
     {
-        \Cake\TestSuite\TestEmailTransport::clearMessages();
+        TestEmailTransport::clearMessages();
     }
     /**
      * Asserts an expected number of emails were sent

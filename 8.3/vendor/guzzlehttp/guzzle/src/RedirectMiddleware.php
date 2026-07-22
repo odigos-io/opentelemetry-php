@@ -1,10 +1,10 @@
 <?php
 
-namespace GuzzleHttp;
+namespace Odigos\GuzzleHttp;
 
-use GuzzleHttp\Exception\BadResponseException;
-use GuzzleHttp\Exception\TooManyRedirectsException;
-use GuzzleHttp\Promise\PromiseInterface;
+use Odigos\GuzzleHttp\Exception\BadResponseException;
+use Odigos\GuzzleHttp\Exception\TooManyRedirectsException;
+use Odigos\GuzzleHttp\Promise\PromiseInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UriInterface;
@@ -67,7 +67,7 @@ class RedirectMiddleware
         $this->guardMax($request, $response, $options);
         $nextRequest = $this->modifyRequest($request, $options, $response);
         // If authorization is handled by curl, unset it if URI is cross-origin.
-        if (\GuzzleHttp\Psr7\UriComparator::isCrossOrigin($request->getUri(), $nextRequest->getUri()) && defined('\CURLOPT_HTTPAUTH')) {
+        if (Psr7\UriComparator::isCrossOrigin($request->getUri(), $nextRequest->getUri()) && defined('\CURLOPT_HTTPAUTH')) {
             unset($options['curl'][\CURLOPT_HTTPAUTH], $options['curl'][\CURLOPT_USERPWD]);
         }
         if (isset($options['allow_redirects']['on_redirect'])) {
@@ -126,12 +126,12 @@ class RedirectMiddleware
             $modify['body'] = '';
         }
         $uri = self::redirectUri($request, $response, $protocols);
-        $idnOptions = \GuzzleHttp\Utils::normalizeIdnConversionOption($options['idn_conversion'] ?? null);
+        $idnOptions = Utils::normalizeIdnConversionOption($options['idn_conversion'] ?? null);
         if ($idnOptions !== null) {
-            $uri = \GuzzleHttp\Utils::idnUriConvert($uri, $idnOptions);
+            $uri = Utils::idnUriConvert($uri, $idnOptions);
         }
         $modify['uri'] = $uri;
-        \GuzzleHttp\Psr7\Message::rewindBody($request);
+        Psr7\Message::rewindBody($request);
         // Add the Referer header if it is told to do so and only
         // add the header if we are not redirecting from https to http.
         if ($options['allow_redirects']['referer'] && $modify['uri']->getScheme() === $request->getUri()->getScheme()) {
@@ -141,18 +141,18 @@ class RedirectMiddleware
             $modify['remove_headers'][] = 'Referer';
         }
         // Remove Authorization and Cookie headers if URI is cross-origin.
-        if (\GuzzleHttp\Psr7\UriComparator::isCrossOrigin($request->getUri(), $modify['uri'])) {
+        if (Psr7\UriComparator::isCrossOrigin($request->getUri(), $modify['uri'])) {
             $modify['remove_headers'][] = 'Authorization';
             $modify['remove_headers'][] = 'Cookie';
         }
-        return \GuzzleHttp\Psr7\Utils::modifyRequest($request, $modify);
+        return Psr7\Utils::modifyRequest($request, $modify);
     }
     /**
      * Set the appropriate URL on the request based on the location header.
      */
     private static function redirectUri(RequestInterface $request, ResponseInterface $response, array $protocols): UriInterface
     {
-        $location = \GuzzleHttp\Psr7\UriResolver::resolve($request->getUri(), new \GuzzleHttp\Psr7\Uri($response->getHeaderLine('Location')));
+        $location = Psr7\UriResolver::resolve($request->getUri(), new Psr7\Uri($response->getHeaderLine('Location')));
         // Ensure that the redirect URI is allowed based on the protocols.
         if (!\in_array($location->getScheme(), $protocols)) {
             throw new BadResponseException(\sprintf('Redirect URI, %s, does not use one of the allowed redirect protocols: %s', $location, \implode(', ', $protocols)), $request, $response);

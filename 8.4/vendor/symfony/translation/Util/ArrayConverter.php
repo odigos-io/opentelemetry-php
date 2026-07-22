@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Translation\Util;
+namespace Odigos\Symfony\Component\Translation\Util;
 
 /**
  * ArrayConverter generates tree like structure from a message catalogue.

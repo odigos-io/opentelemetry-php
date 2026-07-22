@@ -13,19 +13,19 @@ declare (strict_types=1);
  * @since         1.2.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\TestSuite\Fixture;
+namespace Odigos\Cake\TestSuite\Fixture;
 
-use Cake\Core\Exception\CakeException;
-use Cake\Database\Connection;
-use Cake\Database\Schema\SqlGeneratorInterface;
-use Cake\Database\Schema\TableSchema;
-use Cake\Database\Schema\TableSchemaInterface;
-use Cake\Datasource\ConnectionInterface;
-use Cake\Datasource\ConnectionManager;
-use Cake\Datasource\FixtureInterface;
-use Cake\ORM\Locator\LocatorAwareTrait;
-use Cake\Utility\Inflector;
-use function Cake\Core\namespaceSplit;
+use Odigos\Cake\Core\Exception\CakeException;
+use Odigos\Cake\Database\Connection;
+use Odigos\Cake\Database\Schema\SqlGeneratorInterface;
+use Odigos\Cake\Database\Schema\TableSchema;
+use Odigos\Cake\Database\Schema\TableSchemaInterface;
+use Odigos\Cake\Datasource\ConnectionInterface;
+use Odigos\Cake\Datasource\ConnectionManager;
+use Odigos\Cake\Datasource\FixtureInterface;
+use Odigos\Cake\ORM\Locator\LocatorAwareTrait;
+use Odigos\Cake\Utility\Inflector;
+use function Odigos\Cake\Core\namespaceSplit;
 /**
  * Cake TestFixture is responsible for building and destroying tables to be used
  * during testing.

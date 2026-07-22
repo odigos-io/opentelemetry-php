@@ -8,13 +8,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Translation\Loader;
+namespace Odigos\Symfony\Component\Translation\Loader;
 
 /**
  * @copyright Copyright (c) 2010, Union of RAD https://github.com/UnionOfRAD/lithium
  * @copyright Copyright (c) 2012, Clemens Tolboom
  */
-class PoFileLoader extends \Symfony\Component\Translation\Loader\FileLoader
+class PoFileLoader extends FileLoader
 {
     /**
      * Parses portable object (PO) format.

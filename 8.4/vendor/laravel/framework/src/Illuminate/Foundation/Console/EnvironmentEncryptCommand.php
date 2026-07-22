@@ -1,16 +1,16 @@
 <?php
 
-namespace Illuminate\Foundation\Console;
+namespace Odigos\Illuminate\Foundation\Console;
 
 use Odigos\Dotenv\Parser\Lines;
 use Exception;
-use Illuminate\Console\Command;
-use Illuminate\Encryption\Encrypter;
-use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Str;
-use Symfony\Component\Console\Attribute\AsCommand;
-use function Laravel\Prompts\password;
-use function Laravel\Prompts\select;
+use Odigos\Illuminate\Console\Command;
+use Odigos\Illuminate\Encryption\Encrypter;
+use Odigos\Illuminate\Filesystem\Filesystem;
+use Odigos\Illuminate\Support\Str;
+use Odigos\Symfony\Component\Console\Attribute\AsCommand;
+use function Odigos\Laravel\Prompts\password;
+use function Odigos\Laravel\Prompts\select;
 #[AsCommand(name: 'env:encrypt')]
 class EnvironmentEncryptCommand extends Command
 {

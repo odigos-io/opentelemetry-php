@@ -1,33 +1,33 @@
 <?php
 
-namespace Illuminate\Mail;
+namespace Odigos\Illuminate\Mail;
 
-use Illuminate\Config\Repository as ConfigRepository;
-use Illuminate\Container\Container;
-use Illuminate\Contracts\Filesystem\Factory as FilesystemFactory;
-use Illuminate\Contracts\Mail\Attachable;
-use Illuminate\Contracts\Mail\Factory as MailFactory;
-use Illuminate\Contracts\Mail\Mailable as MailableContract;
-use Illuminate\Contracts\Queue\Factory as Queue;
-use Illuminate\Contracts\Support\Htmlable;
-use Illuminate\Contracts\Support\Renderable;
-use Illuminate\Contracts\Translation\HasLocalePreference;
-use Illuminate\Support\Collection;
-use Illuminate\Support\EncodedHtmlString;
-use Illuminate\Support\HtmlString;
-use Illuminate\Support\Str;
-use Illuminate\Support\Traits\Conditionable;
-use Illuminate\Support\Traits\ForwardsCalls;
-use Illuminate\Support\Traits\Localizable;
-use Illuminate\Support\Traits\Macroable;
-use Illuminate\Support\Traits\Tappable;
-use Illuminate\Testing\Constraints\SeeInOrder;
+use Odigos\Illuminate\Config\Repository as ConfigRepository;
+use Odigos\Illuminate\Container\Container;
+use Odigos\Illuminate\Contracts\Filesystem\Factory as FilesystemFactory;
+use Odigos\Illuminate\Contracts\Mail\Attachable;
+use Odigos\Illuminate\Contracts\Mail\Factory as MailFactory;
+use Odigos\Illuminate\Contracts\Mail\Mailable as MailableContract;
+use Odigos\Illuminate\Contracts\Queue\Factory as Queue;
+use Odigos\Illuminate\Contracts\Support\Htmlable;
+use Odigos\Illuminate\Contracts\Support\Renderable;
+use Odigos\Illuminate\Contracts\Translation\HasLocalePreference;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\EncodedHtmlString;
+use Odigos\Illuminate\Support\HtmlString;
+use Odigos\Illuminate\Support\Str;
+use Odigos\Illuminate\Support\Traits\Conditionable;
+use Odigos\Illuminate\Support\Traits\ForwardsCalls;
+use Odigos\Illuminate\Support\Traits\Localizable;
+use Odigos\Illuminate\Support\Traits\Macroable;
+use Odigos\Illuminate\Support\Traits\Tappable;
+use Odigos\Illuminate\Testing\Constraints\SeeInOrder;
 use Odigos\PHPUnit\Framework\Assert as PHPUnit;
 use ReflectionClass;
 use ReflectionProperty;
-use Symfony\Component\Mailer\Header\MetadataHeader;
-use Symfony\Component\Mailer\Header\TagHeader;
-use Symfony\Component\Mime\Address;
+use Odigos\Symfony\Component\Mailer\Header\MetadataHeader;
+use Odigos\Symfony\Component\Mailer\Header\TagHeader;
+use Odigos\Symfony\Component\Mime\Address;
 class Mailable implements MailableContract, Renderable
 {
     use Conditionable, ForwardsCalls, Localizable, Tappable, Macroable {
@@ -220,7 +220,7 @@ class Mailable implements MailableContract, Renderable
     {
         $messageGroup = $this->messageGroup ?? (method_exists($this, 'messageGroup') ? $this->messageGroup() : null);
         $deduplicator = $this->deduplicator ?? (method_exists($this, 'deduplicationId') ? $this->deduplicationId(...) : null);
-        return Container::getInstance()->make(\Illuminate\Mail\SendQueuedMailable::class, ['mailable' => $this])->onGroup($messageGroup)->withDeduplicator($deduplicator)->through(array_merge(method_exists($this, 'middleware') ? $this->middleware() : [], $this->middleware ?? []));
+        return Container::getInstance()->make(SendQueuedMailable::class, ['mailable' => $this])->onGroup($messageGroup)->withDeduplicator($deduplicator)->through(array_merge(method_exists($this, 'middleware') ? $this->middleware() : [], $this->middleware ?? []));
     }
     /**
      * Render the mailable into a view.
@@ -319,7 +319,7 @@ class Mailable implements MailableContract, Renderable
     {
         return function ($data) use ($viewData) {
             if (isset($data['message'])) {
-                $data = array_merge($data, ['message' => new \Illuminate\Mail\TextMessage($data['message'])]);
+                $data = array_merge($data, ['message' => new TextMessage($data['message'])]);
             }
             return $this->textView ?? $this->markdownRenderer()->renderText($this->markdown, array_merge($data, $viewData));
         };
@@ -331,7 +331,7 @@ class Mailable implements MailableContract, Renderable
      */
     protected function markdownRenderer()
     {
-        return tap(Container::getInstance()->make(\Illuminate\Mail\Markdown::class), function ($markdown) {
+        return tap(Container::getInstance()->make(Markdown::class), function ($markdown) {
             $markdown->theme($this->theme ?: Container::getInstance()->get(ConfigRepository::class)->get('mail.markdown.theme', 'default'));
         });
     }
@@ -645,7 +645,7 @@ class Mailable implements MailableContract, Renderable
             return (object) ['email' => $recipient];
         } elseif ($recipient instanceof Address) {
             return (object) ['email' => $recipient->getAddress(), 'name' => $recipient->getName()];
-        } elseif ($recipient instanceof \Illuminate\Mail\Mailables\Address) {
+        } elseif ($recipient instanceof Mailables\Address) {
             return (object) ['email' => $recipient->address, 'name' => $recipient->name];
         }
         return $recipient;
@@ -792,7 +792,7 @@ class Mailable implements MailableContract, Renderable
         if ($file instanceof Attachable) {
             $file = $file->toMailAttachment();
         }
-        if ($file instanceof \Illuminate\Mail\Attachment) {
+        if ($file instanceof Attachment) {
             return $file->attachTo($this, $options);
         }
         $this->attachments = (new Collection($this->attachments))->push(compact('file', 'options'))->unique('file')->all();
@@ -827,10 +827,10 @@ class Mailable implements MailableContract, Renderable
         if ($file instanceof Attachable) {
             $file = $file->toMailAttachment();
         }
-        if ($file instanceof \Illuminate\Mail\Attachment && $this->hasEnvelopeAttachment($file, $options)) {
+        if ($file instanceof Attachment && $this->hasEnvelopeAttachment($file, $options)) {
             return \true;
         }
-        if ($file instanceof \Illuminate\Mail\Attachment) {
+        if ($file instanceof Attachment) {
             $parts = $file->attachWith(fn($path) => [$path, ['as' => $options['as'] ?? $file->as, 'mime' => $options['mime'] ?? $file->mime]], fn($data) => $this->hasAttachedData($data(), $options['as'] ?? $file->as, ['mime' => $options['mime'] ?? $file->mime]));
             if ($parts === \true) {
                 return \true;

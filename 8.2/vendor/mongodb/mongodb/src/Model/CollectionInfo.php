@@ -15,10 +15,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace MongoDB\Model;
+namespace Odigos\MongoDB\Model;
 
 use ArrayAccess;
-use MongoDB\Exception\BadMethodCallException;
+use Odigos\MongoDB\Exception\BadMethodCallException;
 use function array_key_exists;
 /**
  * Collection information model class.

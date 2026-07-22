@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpKernel\Profiler;
+namespace Odigos\Symfony\Component\HttpKernel\Profiler;
 
 /**
  * Storage for profiler using files.
  *
  * @author Alexandre Salomé <alexandre.salome@gmail.com>
  */
-class FileProfilerStorage implements \Symfony\Component\HttpKernel\Profiler\ProfilerStorageInterface
+class FileProfilerStorage implements ProfilerStorageInterface
 {
     /**
      * Folder where profiler data are stored.
@@ -97,14 +97,14 @@ class FileProfilerStorage implements \Symfony\Component\HttpKernel\Profiler\Prof
             }
         }
     }
-    public function read(string $token): ?\Symfony\Component\HttpKernel\Profiler\Profile
+    public function read(string $token): ?Profile
     {
         return $this->doRead($token);
     }
     /**
      * @throws \RuntimeException
      */
-    public function write(\Symfony\Component\HttpKernel\Profiler\Profile $profile): bool
+    public function write(Profile $profile): bool
     {
         $file = $this->getFilename($profile->getToken());
         $profileIndexed = is_file($file);
@@ -119,7 +119,7 @@ class FileProfilerStorage implements \Symfony\Component\HttpKernel\Profiler\Prof
         // when there are errors in sub-requests, the parent and/or children tokens
         // may equal the profile token, resulting in infinite loops
         $parentToken = $profile->getParentToken() !== $profileToken ? $profile->getParentToken() : null;
-        $childrenToken = array_filter(array_map(static fn(\Symfony\Component\HttpKernel\Profiler\Profile $p) => $profileToken !== $p->getToken() ? $p->getToken() : null, $profile->getChildren()));
+        $childrenToken = array_filter(array_map(static fn(Profile $p) => $profileToken !== $p->getToken() ? $p->getToken() : null, $profile->getChildren()));
         // Store profile
         $data = ['token' => $profileToken, 'parent' => $parentToken, 'children' => $childrenToken, 'data' => $profile->getCollectors(), 'ip' => $profile->getIp(), 'method' => $profile->getMethod(), 'url' => $profile->getUrl(), 'time' => $profile->getTime(), 'status_code' => $profile->getStatusCode(), 'virtual_type' => $profile->getVirtualType() ?? 'request'];
         $data = serialize($data);
@@ -198,9 +198,9 @@ class FileProfilerStorage implements \Symfony\Component\HttpKernel\Profiler\Prof
     /**
      * @return Profile
      */
-    protected function createProfileFromData(string $token, array $data, ?\Symfony\Component\HttpKernel\Profiler\Profile $parent = null)
+    protected function createProfileFromData(string $token, array $data, ?Profile $parent = null)
     {
-        $profile = new \Symfony\Component\HttpKernel\Profiler\Profile($token);
+        $profile = new Profile($token);
         $profile->setIp($data['ip']);
         $profile->setMethod($data['method']);
         $profile->setUrl($data['url']);
@@ -221,7 +221,7 @@ class FileProfilerStorage implements \Symfony\Component\HttpKernel\Profiler\Prof
         }
         return $profile;
     }
-    private function doRead($token, ?\Symfony\Component\HttpKernel\Profiler\Profile $profile = null): ?\Symfony\Component\HttpKernel\Profiler\Profile
+    private function doRead($token, ?Profile $profile = null): ?Profile
     {
         if (!$token || !file_exists($file = $this->getFilename($token))) {
             return null;

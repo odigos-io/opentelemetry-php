@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Schema;
+namespace Odigos\Doctrine\DBAL\Schema;
 
-use Doctrine\DBAL\Schema\Exception\InvalidName;
-use Doctrine\DBAL\Schema\Exception\InvalidState;
+use Odigos\Doctrine\DBAL\Schema\Exception\InvalidName;
+use Odigos\Doctrine\DBAL\Schema\Exception\InvalidState;
 /**
  * An abstract {@see NamedObject}.
  *
@@ -12,7 +12,7 @@ use Doctrine\DBAL\Schema\Exception\InvalidState;
  * @extends AbstractAsset<N>
  * @implements NamedObject<N>
  */
-abstract class AbstractNamedObject extends \Doctrine\DBAL\Schema\AbstractAsset implements \Doctrine\DBAL\Schema\NamedObject
+abstract class AbstractNamedObject extends AbstractAsset implements NamedObject
 {
     /**
      * The name of the database object.
@@ -22,7 +22,7 @@ abstract class AbstractNamedObject extends \Doctrine\DBAL\Schema\AbstractAsset i
      *
      * @var N
      */
-    protected \Doctrine\DBAL\Schema\Name $name;
+    protected Name $name;
     public function __construct(string $name)
     {
         parent::__construct($name);
@@ -34,14 +34,14 @@ abstract class AbstractNamedObject extends \Doctrine\DBAL\Schema\AbstractAsset i
      *
      * @throws InvalidState
      */
-    public function getObjectName(): \Doctrine\DBAL\Schema\Name
+    public function getObjectName(): Name
     {
         if (!$this->isNameInitialized) {
             throw InvalidState::objectNameNotInitialized();
         }
         return $this->name;
     }
-    protected function setName(?\Doctrine\DBAL\Schema\Name $name): void
+    protected function setName(?Name $name): void
     {
         if ($name === null) {
             throw InvalidName::fromEmpty();

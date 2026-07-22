@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Log;
+namespace Odigos\Illuminate\Log;
 
 use InvalidArgumentException;
 use Odigos\Monolog\Level;

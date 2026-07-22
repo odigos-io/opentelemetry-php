@@ -1,16 +1,16 @@
 <?php
 
-namespace Illuminate\Session;
+namespace Odigos\Illuminate\Session;
 
-use Illuminate\Contracts\Auth\Guard;
-use Illuminate\Contracts\Container\Container;
-use Illuminate\Database\ConnectionInterface;
-use Illuminate\Database\QueryException;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\InteractsWithTime;
+use Odigos\Illuminate\Contracts\Auth\Guard;
+use Odigos\Illuminate\Contracts\Container\Container;
+use Odigos\Illuminate\Database\ConnectionInterface;
+use Odigos\Illuminate\Database\QueryException;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Carbon;
+use Odigos\Illuminate\Support\InteractsWithTime;
 use SessionHandlerInterface;
-class DatabaseSessionHandler implements \Illuminate\Session\ExistenceAwareInterface, SessionHandlerInterface
+class DatabaseSessionHandler implements ExistenceAwareInterface, SessionHandlerInterface
 {
     use InteractsWithTime;
     /**

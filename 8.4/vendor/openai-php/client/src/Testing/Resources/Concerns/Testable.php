@@ -1,11 +1,11 @@
 <?php
 
-namespace OpenAI\Testing\Resources\Concerns;
+namespace Odigos\OpenAI\Testing\Resources\Concerns;
 
-use OpenAI\Contracts\ResponseContract;
-use OpenAI\Contracts\ResponseStreamContract;
-use OpenAI\Testing\ClientFake;
-use OpenAI\Testing\Requests\TestRequest;
+use Odigos\OpenAI\Contracts\ResponseContract;
+use Odigos\OpenAI\Contracts\ResponseStreamContract;
+use Odigos\OpenAI\Testing\ClientFake;
+use Odigos\OpenAI\Testing\Requests\TestRequest;
 trait Testable
 {
     public function __construct(protected ClientFake $fake)

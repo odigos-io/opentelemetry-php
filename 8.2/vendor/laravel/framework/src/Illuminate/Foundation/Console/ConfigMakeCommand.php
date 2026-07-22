@@ -1,12 +1,12 @@
 <?php
 
-namespace Illuminate\Foundation\Console;
+namespace Odigos\Illuminate\Foundation\Console;
 
-use Illuminate\Console\GeneratorCommand;
-use Illuminate\Support\Str;
-use Symfony\Component\Console\Attribute\AsCommand;
-use Symfony\Component\Console\Input\InputOption;
-use function Illuminate\Filesystem\join_paths;
+use Odigos\Illuminate\Console\GeneratorCommand;
+use Odigos\Illuminate\Support\Str;
+use Odigos\Symfony\Component\Console\Attribute\AsCommand;
+use Odigos\Symfony\Component\Console\Input\InputOption;
+use function Odigos\Illuminate\Filesystem\join_paths;
 #[AsCommand(name: 'make:config', aliases: ['config:make'])]
 class ConfigMakeCommand extends GeneratorCommand
 {

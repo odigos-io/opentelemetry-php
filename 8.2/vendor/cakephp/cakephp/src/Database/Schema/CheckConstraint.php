@@ -14,7 +14,7 @@ declare (strict_types=1);
  * @since         5.3.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database\Schema;
+namespace Odigos\Cake\Database\Schema;
 
 use InvalidArgumentException;
 /**
@@ -22,7 +22,7 @@ use InvalidArgumentException;
  *
  * Models a check constraint.
  */
-class CheckConstraint extends \Cake\Database\Schema\Constraint
+class CheckConstraint extends Constraint
 {
     protected string $type = self::CHECK;
     /**

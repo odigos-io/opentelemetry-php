@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Routing\Matcher;
+namespace Odigos\Symfony\Component\Routing\Matcher;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Exception\MethodNotAllowedException;
-use Symfony\Component\Routing\Exception\NoConfigurationException;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Odigos\Symfony\Component\HttpFoundation\Request;
+use Odigos\Symfony\Component\Routing\Exception\MethodNotAllowedException;
+use Odigos\Symfony\Component\Routing\Exception\NoConfigurationException;
+use Odigos\Symfony\Component\Routing\Exception\ResourceNotFoundException;
 /**
  * RequestMatcherInterface is the interface that all request matcher classes must implement.
  *

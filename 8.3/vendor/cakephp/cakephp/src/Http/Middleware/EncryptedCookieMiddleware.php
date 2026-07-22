@@ -14,11 +14,11 @@ declare (strict_types=1);
  * @since         3.5.0
  * @license       https://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Http\Middleware;
+namespace Odigos\Cake\Http\Middleware;
 
-use Cake\Http\Cookie\CookieCollection;
-use Cake\Http\Response;
-use Cake\Utility\CookieCryptTrait;
+use Odigos\Cake\Http\Cookie\CookieCollection;
+use Odigos\Cake\Http\Response;
+use Odigos\Cake\Utility\CookieCryptTrait;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;

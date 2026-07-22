@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Contracts\Database\Eloquent;
+namespace Odigos\Illuminate\Contracts\Database\Eloquent;
 
-use Illuminate\Database\Eloquent\Model;
+use Odigos\Illuminate\Database\Eloquent\Model;
 /**
  * @template TGet
  * @template TSet

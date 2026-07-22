@@ -13,7 +13,7 @@ declare (strict_types=1);
  * @since         3.7.0
  * @license       https://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Console\TestSuite\Constraint;
+namespace Odigos\Cake\Console\TestSuite\Constraint;
 
 use Odigos\SebastianBergmann\Exporter\Exporter;
 /**
@@ -21,7 +21,7 @@ use Odigos\SebastianBergmann\Exporter\Exporter;
  *
  * @internal
  */
-class ContentsContainRow extends \Cake\Console\TestSuite\Constraint\ContentsRegExp
+class ContentsContainRow extends ContentsRegExp
 {
     /**
      * Checks if contents contain expected
@@ -57,5 +57,5 @@ class ContentsContainRow extends \Cake\Console\TestSuite\Constraint\ContentsRegE
     }
 }
 // phpcs:disable
-class_alias('Cake\Console\TestSuite\Constraint\ContentsContainRow', 'Cake\TestSuite\Constraint\Console\ContentsContainRow');
+class_alias('Odigos\Cake\Console\TestSuite\Constraint\ContentsContainRow', 'Odigos\Cake\TestSuite\Constraint\Console\ContentsContainRow');
 // phpcs:enable

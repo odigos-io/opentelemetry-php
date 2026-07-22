@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Types\Exception;
+namespace Odigos\Doctrine\DBAL\Types\Exception;
 
 use Exception;
 use function sprintf;
-final class TypesAlreadyExists extends Exception implements \Doctrine\DBAL\Types\Exception\TypesException
+final class TypesAlreadyExists extends Exception implements TypesException
 {
     public static function new(string $name): self
     {

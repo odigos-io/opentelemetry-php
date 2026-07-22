@@ -1,13 +1,13 @@
 <?php
 
-namespace Illuminate\Queue;
+namespace Odigos\Illuminate\Queue;
 
-use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
-use Illuminate\Contracts\Queue\Queue as QueueContract;
-use Illuminate\Queue\Events\QueueFailedOver;
+use Odigos\Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
+use Odigos\Illuminate\Contracts\Queue\Queue as QueueContract;
+use Odigos\Illuminate\Queue\Events\QueueFailedOver;
 use RuntimeException;
 use Throwable;
-class FailoverQueue extends \Illuminate\Queue\Queue implements QueueContract
+class FailoverQueue extends Queue implements QueueContract
 {
     /**
      * The queues which failed on the last action.
@@ -18,7 +18,7 @@ class FailoverQueue extends \Illuminate\Queue\Queue implements QueueContract
     /**
      * Create a new failover queue instance.
      */
-    public function __construct(public \Illuminate\Queue\QueueManager $manager, public EventDispatcher $events, public array $connections)
+    public function __construct(public QueueManager $manager, public EventDispatcher $events, public array $connections)
     {
     }
     /**

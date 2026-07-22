@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Cache\Events;
+namespace Odigos\Illuminate\Cache\Events;
 
-class WritingManyKeys extends \Illuminate\Cache\Events\CacheEvent
+class WritingManyKeys extends CacheEvent
 {
     /**
      * The keys that are being written.

@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Support;
+namespace Odigos\Illuminate\Support;
 
 use BackedEnum;
-use Illuminate\Contracts\Support\DeferringDisplayableValue;
-use Illuminate\Contracts\Support\Htmlable;
-class EncodedHtmlString extends \Illuminate\Support\HtmlString
+use Odigos\Illuminate\Contracts\Support\DeferringDisplayableValue;
+use Odigos\Illuminate\Contracts\Support\Htmlable;
+class EncodedHtmlString extends HtmlString
 {
     /**
      * The HTML string.

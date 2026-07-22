@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Foundation\Http\Middleware;
+namespace Odigos\Illuminate\Foundation\Http\Middleware;
 
 use Closure;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
-class TrimStrings extends \Illuminate\Foundation\Http\Middleware\TransformsRequest
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Str;
+class TrimStrings extends TransformsRequest
 {
     /**
      * The attributes that should not be trimmed.

@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Platforms\Keywords;
+namespace Odigos\Doctrine\DBAL\Platforms\Keywords;
 
 /**
  * Db2 Keywords.
  *
  * @deprecated
  */
-class DB2Keywords extends \Doctrine\DBAL\Platforms\Keywords\KeywordList
+class DB2Keywords extends KeywordList
 {
     /**
      * {@inheritDoc}

@@ -8,27 +8,27 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpKernel\Controller;
+namespace Odigos\Symfony\Component\HttpKernel\Controller;
 
 use Psr\Container\ContainerInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Attribute\ValueResolver;
-use Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver;
-use Symfony\Component\HttpKernel\Controller\ArgumentResolver\RequestAttributeValueResolver;
-use Symfony\Component\HttpKernel\Controller\ArgumentResolver\RequestValueResolver;
-use Symfony\Component\HttpKernel\Controller\ArgumentResolver\SessionValueResolver;
-use Symfony\Component\HttpKernel\Controller\ArgumentResolver\VariadicValueResolver;
-use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadataFactory;
-use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadataFactoryInterface;
-use Symfony\Component\HttpKernel\Exception\NearMissValueResolverException;
-use Symfony\Component\HttpKernel\Exception\ResolverNotFoundException;
-use Symfony\Contracts\Service\ServiceProviderInterface;
+use Odigos\Symfony\Component\HttpFoundation\Request;
+use Odigos\Symfony\Component\HttpKernel\Attribute\ValueResolver;
+use Odigos\Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver;
+use Odigos\Symfony\Component\HttpKernel\Controller\ArgumentResolver\RequestAttributeValueResolver;
+use Odigos\Symfony\Component\HttpKernel\Controller\ArgumentResolver\RequestValueResolver;
+use Odigos\Symfony\Component\HttpKernel\Controller\ArgumentResolver\SessionValueResolver;
+use Odigos\Symfony\Component\HttpKernel\Controller\ArgumentResolver\VariadicValueResolver;
+use Odigos\Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadataFactory;
+use Odigos\Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadataFactoryInterface;
+use Odigos\Symfony\Component\HttpKernel\Exception\NearMissValueResolverException;
+use Odigos\Symfony\Component\HttpKernel\Exception\ResolverNotFoundException;
+use Odigos\Symfony\Contracts\Service\ServiceProviderInterface;
 /**
  * Responsible for resolving the arguments passed to an action.
  *
  * @author Iltar van der Berg <kjarli@gmail.com>
  */
-final class ArgumentResolver implements \Symfony\Component\HttpKernel\Controller\ArgumentResolverInterface
+final class ArgumentResolver implements ArgumentResolverInterface
 {
     private ArgumentMetadataFactoryInterface $argumentMetadataFactory;
     private iterable $argumentValueResolvers;

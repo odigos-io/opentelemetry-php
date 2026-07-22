@@ -1,13 +1,13 @@
 <?php
 
-namespace Illuminate\Routing;
+namespace Odigos\Illuminate\Routing;
 
 use BackedEnum;
 use BadMethodCallException;
 use Closure;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Reflector;
-use Illuminate\Support\Traits\Macroable;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Reflector;
+use Odigos\Illuminate\Support\Traits\Macroable;
 use InvalidArgumentException;
 /**
  * @method \Illuminate\Routing\Route any(string $uri, \Closure|array|string|null $action = null)
@@ -33,7 +33,7 @@ use InvalidArgumentException;
  */
 class RouteRegistrar
 {
-    use \Illuminate\Routing\CreatesRegularExpressionRouteConstraints;
+    use CreatesRegularExpressionRouteConstraints;
     use Macroable {
         __call as macroCall;
     }
@@ -72,7 +72,7 @@ class RouteRegistrar
      *
      * @param  \Illuminate\Routing\Router  $router
      */
-    public function __construct(\Illuminate\Routing\Router $router)
+    public function __construct(Router $router)
     {
         $this->router = $router;
     }

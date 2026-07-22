@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\grid;
+namespace Odigos\yii\grid;
 
 /**
  * SerialColumn displays a column of row numbers (1-based).
@@ -27,7 +27,7 @@ namespace yii\grid;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class SerialColumn extends \yii\grid\Column
+class SerialColumn extends Column
 {
     /**
      * {@inheritdoc}

@@ -5,9 +5,9 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\base;
+namespace Odigos\yii\base;
 
-use yii\helpers\StringHelper;
+use Odigos\yii\helpers\StringHelper;
 /**
  * Security provides a set of methods to handle common security-related tasks.
  *
@@ -28,7 +28,7 @@ use yii\helpers\StringHelper;
  * @author Klimov Paul <klimov.paul@gmail.com>
  * @since 2.0
  */
-class Security extends \yii\base\Component
+class Security extends Component
 {
     /**
      * @var string The cipher to use for encryption and decryption.
@@ -182,10 +182,10 @@ class Security extends \yii\base\Component
     protected function encrypt($data, $passwordBased, $secret, $info)
     {
         if (!extension_loaded('openssl')) {
-            throw new \yii\base\InvalidConfigException('Encryption requires the OpenSSL PHP extension');
+            throw new InvalidConfigException('Encryption requires the OpenSSL PHP extension');
         }
         if (!isset($this->allowedCiphers[$this->cipher][0], $this->allowedCiphers[$this->cipher][1])) {
-            throw new \yii\base\InvalidConfigException($this->cipher . ' is not an allowed cipher');
+            throw new InvalidConfigException($this->cipher . ' is not an allowed cipher');
         }
         list($blockSize, $keySize) = $this->allowedCiphers[$this->cipher];
         $keySalt = $this->generateRandomKey($keySize);
@@ -197,7 +197,7 @@ class Security extends \yii\base\Component
         $iv = $this->generateRandomKey($blockSize);
         $encrypted = openssl_encrypt($data, $this->cipher, $key, \OPENSSL_RAW_DATA, $iv);
         if ($encrypted === \false) {
-            throw new \yii\base\Exception('OpenSSL failure on encryption: ' . openssl_error_string());
+            throw new \Odigos\yii\base\Exception('OpenSSL failure on encryption: ' . openssl_error_string());
         }
         $authKey = $this->hkdf($this->kdfHash, $key, null, $this->authKeyInfo, $keySize);
         $hashed = $this->hashData($iv . $encrypted, $authKey);
@@ -225,10 +225,10 @@ class Security extends \yii\base\Component
     protected function decrypt($data, $passwordBased, $secret, $info)
     {
         if (!extension_loaded('openssl')) {
-            throw new \yii\base\InvalidConfigException('Encryption requires the OpenSSL PHP extension');
+            throw new InvalidConfigException('Encryption requires the OpenSSL PHP extension');
         }
         if (!isset($this->allowedCiphers[$this->cipher][0], $this->allowedCiphers[$this->cipher][1])) {
-            throw new \yii\base\InvalidConfigException($this->cipher . ' is not an allowed cipher');
+            throw new InvalidConfigException($this->cipher . ' is not an allowed cipher');
         }
         list($blockSize, $keySize) = $this->allowedCiphers[$this->cipher];
         $keySalt = StringHelper::byteSubstr($data, 0, $keySize);
@@ -246,7 +246,7 @@ class Security extends \yii\base\Component
         $encrypted = StringHelper::byteSubstr($data, $blockSize, null);
         $decrypted = openssl_decrypt($encrypted, $this->cipher, $key, \OPENSSL_RAW_DATA, $iv);
         if ($decrypted === \false) {
-            throw new \yii\base\Exception('OpenSSL failure on decryption: ' . openssl_error_string());
+            throw new \Odigos\yii\base\Exception('OpenSSL failure on decryption: ' . openssl_error_string());
         }
         return $decrypted;
     }
@@ -269,7 +269,7 @@ class Security extends \yii\base\Component
     {
         $outputKey = hash_hkdf((string) $algo, (string) $inputKey, $length, (string) $info, (string) $salt);
         if ($outputKey === \false) {
-            throw new \yii\base\InvalidArgumentException('Invalid parameters to hash_hkdf()');
+            throw new InvalidArgumentException('Invalid parameters to hash_hkdf()');
         }
         return $outputKey;
     }
@@ -291,7 +291,7 @@ class Security extends \yii\base\Component
     {
         $outputKey = hash_pbkdf2($algo, $password, $salt, $iterations, $length, \true);
         if ($outputKey === \false) {
-            throw new \yii\base\InvalidArgumentException('Invalid parameters to hash_pbkdf2()');
+            throw new InvalidArgumentException('Invalid parameters to hash_pbkdf2()');
         }
         return $outputKey;
     }
@@ -315,7 +315,7 @@ class Security extends \yii\base\Component
     {
         $hash = hash_hmac($this->macHash, $data, $key, $rawHash);
         if (!$hash) {
-            throw new \yii\base\InvalidConfigException('Failed to generate HMAC with hash algorithm: ' . $this->macHash);
+            throw new InvalidConfigException('Failed to generate HMAC with hash algorithm: ' . $this->macHash);
         }
         return $hash . $data;
     }
@@ -338,7 +338,7 @@ class Security extends \yii\base\Component
     {
         $test = @hash_hmac($this->macHash, '', '', $rawHash);
         if (!$test) {
-            throw new \yii\base\InvalidConfigException('Failed to generate HMAC with hash algorithm: ' . $this->macHash);
+            throw new InvalidConfigException('Failed to generate HMAC with hash algorithm: ' . $this->macHash);
         }
         $hashLength = StringHelper::byteLength($test);
         if (StringHelper::byteLength($data) >= $hashLength) {
@@ -364,10 +364,10 @@ class Security extends \yii\base\Component
     public function generateRandomKey($length = 32)
     {
         if (!is_int($length)) {
-            throw new \yii\base\InvalidArgumentException('First parameter ($length) must be an integer');
+            throw new InvalidArgumentException('First parameter ($length) must be an integer');
         }
         if ($length < 1) {
-            throw new \yii\base\InvalidArgumentException('First parameter ($length) must be greater than 0');
+            throw new InvalidArgumentException('First parameter ($length) must be greater than 0');
         }
         return random_bytes($length);
     }
@@ -382,10 +382,10 @@ class Security extends \yii\base\Component
     public function generateRandomString($length = 32)
     {
         if (!is_int($length)) {
-            throw new \yii\base\InvalidArgumentException('First parameter ($length) must be an integer');
+            throw new InvalidArgumentException('First parameter ($length) must be an integer');
         }
         if ($length < 1) {
-            throw new \yii\base\InvalidArgumentException('First parameter ($length) must be greater than 0');
+            throw new InvalidArgumentException('First parameter ($length) must be greater than 0');
         }
         $bytes = $this->generateRandomKey($length);
         return substr(StringHelper::base64UrlEncode($bytes), 0, $length);
@@ -440,10 +440,10 @@ class Security extends \yii\base\Component
     public function validatePassword($password, $hash)
     {
         if (!is_string($password) || $password === '') {
-            throw new \yii\base\InvalidArgumentException('Password must be a string and cannot be empty.');
+            throw new InvalidArgumentException('Password must be a string and cannot be empty.');
         }
         if (!preg_match('/^\$2[axy]\$(\d\d)\$[\.\/0-9A-Za-z]{22}/', $hash, $matches) || $matches[1] < 4 || $matches[1] > 30) {
-            throw new \yii\base\InvalidArgumentException('Hash is invalid.');
+            throw new InvalidArgumentException('Hash is invalid.');
         }
         return password_verify($password, $hash);
     }
@@ -465,7 +465,7 @@ class Security extends \yii\base\Component
     {
         $cost = (int) $cost;
         if ($cost < 4 || $cost > 31) {
-            throw new \yii\base\InvalidArgumentException('Cost must be between 4 and 31.');
+            throw new InvalidArgumentException('Cost must be between 4 and 31.');
         }
         // Get a 20-byte random string
         $rand = $this->generateRandomKey(20);
@@ -485,10 +485,10 @@ class Security extends \yii\base\Component
     public function compareString($expected, $actual)
     {
         if (!is_string($expected)) {
-            throw new \yii\base\InvalidArgumentException('Expected expected value to be a string, ' . gettype($expected) . ' given.');
+            throw new InvalidArgumentException('Expected expected value to be a string, ' . gettype($expected) . ' given.');
         }
         if (!is_string($actual)) {
-            throw new \yii\base\InvalidArgumentException('Expected actual value to be a string, ' . gettype($actual) . ' given.');
+            throw new InvalidArgumentException('Expected actual value to be a string, ' . gettype($actual) . ' given.');
         }
         return hash_equals($expected, $actual);
     }

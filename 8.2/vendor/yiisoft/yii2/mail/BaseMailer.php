@@ -5,13 +5,13 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\mail;
+namespace Odigos\yii\mail;
 
 use Odigos\Yii;
-use yii\base\Component;
-use yii\base\InvalidConfigException;
-use yii\base\ViewContextInterface;
-use yii\web\View;
+use Odigos\yii\base\Component;
+use Odigos\yii\base\InvalidConfigException;
+use Odigos\yii\base\ViewContextInterface;
+use Odigos\yii\web\View;
 /**
  * BaseMailer serves as a base class that implements the basic functions required by [[MailerInterface]].
  *
@@ -29,7 +29,7 @@ use yii\web\View;
  * @author Paul Klimov <klimov.paul@gmail.com>
  * @since 2.0
  */
-abstract class BaseMailer extends Component implements \yii\mail\MailerInterface, ViewContextInterface
+abstract class BaseMailer extends Component implements MailerInterface, ViewContextInterface
 {
     /**
      * @event MailEvent an event raised right before send.
@@ -73,7 +73,7 @@ abstract class BaseMailer extends Component implements \yii\mail\MailerInterface
     /**
      * @var string the default class name of the new message instances created by [[createMessage()]]
      */
-    public $messageClass = 'yii\mail\BaseMessage';
+    public $messageClass = 'Odigos\yii\mail\BaseMessage';
     /**
      * @var bool whether to save email messages as files under [[fileTransportPath]] instead of sending them
      * to the actual recipients. This is usually used during development for debugging purpose.
@@ -342,7 +342,7 @@ abstract class BaseMailer extends Component implements \yii\mail\MailerInterface
      */
     public function beforeSend($message)
     {
-        $event = new \yii\mail\MailEvent(['message' => $message]);
+        $event = new MailEvent(['message' => $message]);
         $this->trigger(self::EVENT_BEFORE_SEND, $event);
         return $event->isValid;
     }
@@ -355,7 +355,7 @@ abstract class BaseMailer extends Component implements \yii\mail\MailerInterface
      */
     public function afterSend($message, $isSuccessful)
     {
-        $event = new \yii\mail\MailEvent(['message' => $message, 'isSuccessful' => $isSuccessful]);
+        $event = new MailEvent(['message' => $message, 'isSuccessful' => $isSuccessful]);
         $this->trigger(self::EVENT_AFTER_SEND, $event);
     }
 }

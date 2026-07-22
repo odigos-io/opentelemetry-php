@@ -1,12 +1,12 @@
 <?php
 
-namespace Illuminate\Database\Console;
+namespace Odigos\Illuminate\Database\Console;
 
-use Illuminate\Console\Command;
-use Illuminate\Console\ConfirmableTrait;
-use Illuminate\Console\Prohibitable;
-use Symfony\Component\Console\Attribute\AsCommand;
-use Symfony\Component\Console\Input\InputOption;
+use Odigos\Illuminate\Console\Command;
+use Odigos\Illuminate\Console\ConfirmableTrait;
+use Odigos\Illuminate\Console\Prohibitable;
+use Odigos\Symfony\Component\Console\Attribute\AsCommand;
+use Odigos\Symfony\Component\Console\Input\InputOption;
 #[AsCommand(name: 'db:wipe')]
 class WipeCommand extends Command
 {

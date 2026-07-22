@@ -1,13 +1,13 @@
 <?php
 
-namespace Illuminate\Foundation\Console;
+namespace Odigos\Illuminate\Foundation\Console;
 
-use Illuminate\Console\Command;
-use Illuminate\Contracts\Console\Kernel as ConsoleKernelContract;
-use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Arr;
+use Odigos\Illuminate\Console\Command;
+use Odigos\Illuminate\Contracts\Console\Kernel as ConsoleKernelContract;
+use Odigos\Illuminate\Filesystem\Filesystem;
+use Odigos\Illuminate\Support\Arr;
 use LogicException;
-use Symfony\Component\Console\Attribute\AsCommand;
+use Odigos\Symfony\Component\Console\Attribute\AsCommand;
 use Throwable;
 #[AsCommand(name: 'config:cache')]
 class ConfigCacheCommand extends Command

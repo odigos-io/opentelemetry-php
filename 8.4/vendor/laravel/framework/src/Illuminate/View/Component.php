@@ -1,13 +1,13 @@
 <?php
 
-namespace Illuminate\View;
+namespace Odigos\Illuminate\View;
 
 use Closure;
-use Illuminate\Container\Container;
-use Illuminate\Contracts\Support\Htmlable;
-use Illuminate\Contracts\View\View as ViewContract;
-use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Collection;
+use Odigos\Illuminate\Container\Container;
+use Odigos\Illuminate\Contracts\Support\Htmlable;
+use Odigos\Illuminate\Contracts\View\View as ViewContract;
+use Odigos\Illuminate\Filesystem\Filesystem;
+use Odigos\Illuminate\Support\Collection;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionProperty;
@@ -238,7 +238,7 @@ abstract class Component
      */
     protected function createInvokableVariable(string $method)
     {
-        return new \Illuminate\View\InvokableComponentVariable(function () use ($method) {
+        return new InvokableComponentVariable(function () use ($method) {
             return $this->{$method}();
         });
     }
@@ -292,7 +292,7 @@ abstract class Component
      */
     protected function newAttributeBag(array $attributes = [])
     {
-        return new \Illuminate\View\ComponentAttributeBag($attributes);
+        return new ComponentAttributeBag($attributes);
     }
     /**
      * Determine if the component should be rendered.

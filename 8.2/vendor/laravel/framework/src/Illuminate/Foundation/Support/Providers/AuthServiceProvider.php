@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Foundation\Support\Providers;
+namespace Odigos\Illuminate\Foundation\Support\Providers;
 
-use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\ServiceProvider;
+use Odigos\Illuminate\Support\Facades\Gate;
+use Odigos\Illuminate\Support\ServiceProvider;
 class AuthServiceProvider extends ServiceProvider
 {
     /**

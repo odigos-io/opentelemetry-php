@@ -1,28 +1,28 @@
 <?php
 
-namespace OpenAI\Testing;
+namespace Odigos\OpenAI\Testing;
 
-use OpenAI\Contracts\ClientContract;
-use OpenAI\Contracts\Resources\VectorStoresContract;
-use OpenAI\Contracts\ResponseContract;
-use OpenAI\Contracts\ResponseStreamContract;
-use OpenAI\Responses\StreamResponse;
-use OpenAI\Testing\Requests\TestRequest;
-use OpenAI\Testing\Resources\AssistantsTestResource;
-use OpenAI\Testing\Resources\AudioTestResource;
-use OpenAI\Testing\Resources\BatchesTestResource;
-use OpenAI\Testing\Resources\ChatTestResource;
-use OpenAI\Testing\Resources\CompletionsTestResource;
-use OpenAI\Testing\Resources\EditsTestResource;
-use OpenAI\Testing\Resources\EmbeddingsTestResource;
-use OpenAI\Testing\Resources\FilesTestResource;
-use OpenAI\Testing\Resources\FineTunesTestResource;
-use OpenAI\Testing\Resources\FineTuningTestResource;
-use OpenAI\Testing\Resources\ImagesTestResource;
-use OpenAI\Testing\Resources\ModelsTestResource;
-use OpenAI\Testing\Resources\ModerationsTestResource;
-use OpenAI\Testing\Resources\ThreadsTestResource;
-use OpenAI\Testing\Resources\VectorStoresTestResource;
+use Odigos\OpenAI\Contracts\ClientContract;
+use Odigos\OpenAI\Contracts\Resources\VectorStoresContract;
+use Odigos\OpenAI\Contracts\ResponseContract;
+use Odigos\OpenAI\Contracts\ResponseStreamContract;
+use Odigos\OpenAI\Responses\StreamResponse;
+use Odigos\OpenAI\Testing\Requests\TestRequest;
+use Odigos\OpenAI\Testing\Resources\AssistantsTestResource;
+use Odigos\OpenAI\Testing\Resources\AudioTestResource;
+use Odigos\OpenAI\Testing\Resources\BatchesTestResource;
+use Odigos\OpenAI\Testing\Resources\ChatTestResource;
+use Odigos\OpenAI\Testing\Resources\CompletionsTestResource;
+use Odigos\OpenAI\Testing\Resources\EditsTestResource;
+use Odigos\OpenAI\Testing\Resources\EmbeddingsTestResource;
+use Odigos\OpenAI\Testing\Resources\FilesTestResource;
+use Odigos\OpenAI\Testing\Resources\FineTunesTestResource;
+use Odigos\OpenAI\Testing\Resources\FineTuningTestResource;
+use Odigos\OpenAI\Testing\Resources\ImagesTestResource;
+use Odigos\OpenAI\Testing\Resources\ModelsTestResource;
+use Odigos\OpenAI\Testing\Resources\ModerationsTestResource;
+use Odigos\OpenAI\Testing\Resources\ThreadsTestResource;
+use Odigos\OpenAI\Testing\Resources\VectorStoresTestResource;
 use Odigos\PHPUnit\Framework\Assert as PHPUnit;
 use Throwable;
 class ClientFake implements ClientContract

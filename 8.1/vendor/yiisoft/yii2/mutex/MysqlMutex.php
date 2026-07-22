@@ -5,10 +5,10 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\mutex;
+namespace Odigos\yii\mutex;
 
-use yii\base\InvalidConfigException;
-use yii\db\Expression;
+use Odigos\yii\base\InvalidConfigException;
+use Odigos\yii\db\Expression;
 /**
  * MysqlMutex implements mutex "lock" mechanism via MySQL locks.
  *
@@ -33,7 +33,7 @@ use yii\db\Expression;
  * @author resurtm <resurtm@gmail.com>
  * @since 2.0
  */
-class MysqlMutex extends \yii\mutex\DbMutex
+class MysqlMutex extends DbMutex
 {
     /**
      * @var Expression|string|null prefix value. If null (by default) then connection's current database name is used.

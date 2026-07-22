@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Testing\Responses\Concerns;
+namespace Odigos\OpenAI\Testing\Responses\Concerns;
 
-use Http\Discovery\Psr17FactoryDiscovery;
-use OpenAI\Responses\StreamResponse;
+use Odigos\Http\Discovery\Psr17FactoryDiscovery;
+use Odigos\OpenAI\Responses\StreamResponse;
 trait FakeableForStreamedResponse
 {
     /**

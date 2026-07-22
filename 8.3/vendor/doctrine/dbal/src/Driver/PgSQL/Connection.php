@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Driver\PgSQL;
+namespace Odigos\Doctrine\DBAL\Driver\PgSQL;
 
-use Doctrine\DBAL\Driver\Connection as ConnectionInterface;
-use Doctrine\DBAL\Driver\Exception\NoIdentityValue;
-use Doctrine\DBAL\SQL\Parser;
+use Odigos\Doctrine\DBAL\Driver\Connection as ConnectionInterface;
+use Odigos\Doctrine\DBAL\Driver\Exception\NoIdentityValue;
+use Odigos\Doctrine\DBAL\SQL\Parser;
 use PgSql\Connection as PgSqlConnection;
 use function assert;
 use function pg_close;
@@ -32,33 +32,33 @@ final class Connection implements ConnectionInterface
         }
         @pg_close($this->connection);
     }
-    public function prepare(string $sql): \Doctrine\DBAL\Driver\PgSQL\Statement
+    public function prepare(string $sql): Statement
     {
-        $visitor = new \Doctrine\DBAL\Driver\PgSQL\ConvertParameters();
+        $visitor = new ConvertParameters();
         /** @phpstan-ignore missingType.checkedException */
         $this->parser->parse($sql, $visitor);
         $statementName = uniqid('dbal', \true);
         if (@pg_send_prepare($this->connection, $statementName, $visitor->getSQL()) !== \true) {
-            throw new \Doctrine\DBAL\Driver\PgSQL\Exception(pg_last_error($this->connection));
+            throw new Exception(pg_last_error($this->connection));
         }
         $result = @pg_get_result($this->connection);
         assert($result !== \false);
         if ((bool) pg_result_error($result)) {
-            throw \Doctrine\DBAL\Driver\PgSQL\Exception::fromResult($result);
+            throw Exception::fromResult($result);
         }
-        return new \Doctrine\DBAL\Driver\PgSQL\Statement($this->connection, $statementName, $visitor->getParameterMap());
+        return new Statement($this->connection, $statementName, $visitor->getParameterMap());
     }
-    public function query(string $sql): \Doctrine\DBAL\Driver\PgSQL\Result
+    public function query(string $sql): Result
     {
         if (@pg_send_query($this->connection, $sql) !== \true) {
-            throw new \Doctrine\DBAL\Driver\PgSQL\Exception(pg_last_error($this->connection));
+            throw new Exception(pg_last_error($this->connection));
         }
         $result = @pg_get_result($this->connection);
         assert($result !== \false);
         if ((bool) pg_result_error($result)) {
-            throw \Doctrine\DBAL\Driver\PgSQL\Exception::fromResult($result);
+            throw Exception::fromResult($result);
         }
-        return new \Doctrine\DBAL\Driver\PgSQL\Result($result);
+        return new Result($result);
     }
     /** {@inheritDoc} */
     public function quote(string $value): string
@@ -76,7 +76,7 @@ final class Connection implements ConnectionInterface
     {
         try {
             return $this->query('SELECT LASTVAL()')->fetchOne();
-        } catch (\Doctrine\DBAL\Driver\PgSQL\Exception $exception) {
+        } catch (Exception $exception) {
             if ($exception->getSQLState() === '55000') {
                 throw NoIdentityValue::new($exception);
             }

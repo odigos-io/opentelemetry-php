@@ -1,6 +1,6 @@
 <?php
 
-namespace Http\Message\MultipartStream;
+namespace Odigos\Http\Message\MultipartStream;
 
 /**
  * @author Tobias Nyholm <tobias.nyholm@gmail.com>

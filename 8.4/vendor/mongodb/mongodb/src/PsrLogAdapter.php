@@ -15,10 +15,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace MongoDB;
+namespace Odigos\MongoDB;
 
 use MongoDB\Driver\Monitoring\LogSubscriber;
-use MongoDB\Exception\UnexpectedValueException;
+use Odigos\MongoDB\Exception\UnexpectedValueException;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use SplObjectStorage;

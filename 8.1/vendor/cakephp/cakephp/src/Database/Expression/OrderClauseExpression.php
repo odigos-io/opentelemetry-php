@@ -14,18 +14,18 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database\Expression;
+namespace Odigos\Cake\Database\Expression;
 
-use Cake\Database\ExpressionInterface;
-use Cake\Database\Query;
-use Cake\Database\ValueBinder;
+use Odigos\Cake\Database\ExpressionInterface;
+use Odigos\Cake\Database\Query;
+use Odigos\Cake\Database\ValueBinder;
 use Closure;
 /**
  * An expression object for complex ORDER BY clauses
  */
-class OrderClauseExpression implements ExpressionInterface, \Cake\Database\Expression\FieldInterface
+class OrderClauseExpression implements ExpressionInterface, FieldInterface
 {
-    use \Cake\Database\Expression\FieldTrait;
+    use FieldTrait;
     /**
      * The direction of sorting.
      *

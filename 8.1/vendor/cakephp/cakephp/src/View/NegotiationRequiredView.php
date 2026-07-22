@@ -14,7 +14,7 @@ declare (strict_types=1);
  * @since         4.4.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\View;
+namespace Odigos\Cake\View;
 
 /**
  * A view class that responds to any content-type and can be used to create
@@ -25,7 +25,7 @@ namespace Cake\View;
  * to require clients to pick an available content-type and that you have no
  * default type.
  */
-class NegotiationRequiredView extends \Cake\View\View
+class NegotiationRequiredView extends View
 {
     /**
      * Get the content-type

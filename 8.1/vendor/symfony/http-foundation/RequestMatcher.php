@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpFoundation;
+namespace Odigos\Symfony\Component\HttpFoundation;
 
-trigger_deprecation('symfony/http-foundation', '6.2', 'The "%s" class is deprecated, use "%s" instead.', \Symfony\Component\HttpFoundation\RequestMatcher::class, \Symfony\Component\HttpFoundation\ChainRequestMatcher::class);
+trigger_deprecation('symfony/http-foundation', '6.2', 'The "%s" class is deprecated, use "%s" instead.', RequestMatcher::class, ChainRequestMatcher::class);
 /**
  * RequestMatcher compares a pre-defined set of checks against a Request instance.
  *
@@ -18,7 +18,7 @@ trigger_deprecation('symfony/http-foundation', '6.2', 'The "%s" class is depreca
  *
  * @deprecated since Symfony 6.2, use ChainRequestMatcher instead
  */
-class RequestMatcher implements \Symfony\Component\HttpFoundation\RequestMatcherInterface
+class RequestMatcher implements RequestMatcherInterface
 {
     private ?string $path = null;
     private ?string $host = null;
@@ -139,7 +139,7 @@ class RequestMatcher implements \Symfony\Component\HttpFoundation\RequestMatcher
     {
         $this->attributes[$key] = $regexp;
     }
-    public function matches(\Symfony\Component\HttpFoundation\Request $request): bool
+    public function matches(Request $request): bool
     {
         if ($this->schemes && !\in_array($request->getScheme(), $this->schemes, \true)) {
             return \false;
@@ -165,7 +165,7 @@ class RequestMatcher implements \Symfony\Component\HttpFoundation\RequestMatcher
         if (null !== $this->port && 0 < $this->port && $request->getPort() !== $this->port) {
             return \false;
         }
-        if (\Symfony\Component\HttpFoundation\IpUtils::checkIp($request->getClientIp() ?? '', $this->ips)) {
+        if (IpUtils::checkIp($request->getClientIp() ?? '', $this->ips)) {
             return \true;
         }
         // Note to future implementors: add additional checks above the

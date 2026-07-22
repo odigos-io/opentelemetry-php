@@ -14,7 +14,7 @@ declare (strict_types=1);
  * @since         2.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Core;
+namespace Odigos\Cake\Core;
 
 /**
  * Plugin is used to load and locate plugins.
@@ -30,7 +30,7 @@ class Plugin
      *
      * @var \Cake\Core\PluginCollection|null
      */
-    protected static ?\Cake\Core\PluginCollection $plugins = null;
+    protected static ?PluginCollection $plugins = null;
     /**
      * Returns the filesystem path for a plugin
      *
@@ -113,9 +113,9 @@ class Plugin
      *
      * @return \Cake\Core\PluginCollection
      */
-    public static function getCollection(): \Cake\Core\PluginCollection
+    public static function getCollection(): PluginCollection
     {
-        return static::$plugins ??= new \Cake\Core\PluginCollection();
+        return static::$plugins ??= new PluginCollection();
     }
     /**
      * Set the shared plugin collection.
@@ -123,7 +123,7 @@ class Plugin
      * @param \Cake\Core\PluginCollection $collection
      * @return void
      */
-    public static function setCollection(\Cake\Core\PluginCollection $collection): void
+    public static function setCollection(PluginCollection $collection): void
     {
         static::$plugins = $collection;
     }

@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Contracts\Validation;
+namespace Odigos\Illuminate\Contracts\Validation;
 
-use Illuminate\Contracts\Support\MessageProvider;
+use Odigos\Illuminate\Contracts\Support\MessageProvider;
 interface Validator extends MessageProvider
 {
     /**

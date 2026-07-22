@@ -14,9 +14,9 @@ declare (strict_types=1);
  * @since         4.5.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database\Query;
+namespace Odigos\Cake\Database\Query;
 
-use Cake\Database\Query;
+use Odigos\Cake\Database\Query;
 /**
  * This class is used to generate DELETE queries for the relational database.
  */

@@ -14,12 +14,12 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Datasource;
+namespace Odigos\Cake\Datasource;
 
-use Cake\Datasource\Exception\MissingModelException;
-use Cake\Datasource\Locator\LocatorInterface;
+use Odigos\Cake\Datasource\Exception\MissingModelException;
+use Odigos\Cake\Datasource\Locator\LocatorInterface;
 use UnexpectedValueException;
-use function Cake\Core\pluginSplit;
+use function Odigos\Cake\Core\pluginSplit;
 /**
  * Provides functionality for loading table classes
  * and other repositories onto properties of the host object.
@@ -86,7 +86,7 @@ trait ModelAwareTrait
      * @throws \UnexpectedValueException If $modelClass argument is not provided
      *   and ModelAwareTrait::$modelClass property value is empty.
      */
-    public function fetchModel(?string $modelClass = null, ?string $modelType = null): \Cake\Datasource\RepositoryInterface
+    public function fetchModel(?string $modelClass = null, ?string $modelType = null): RepositoryInterface
     {
         $modelClass ??= $this->modelClass;
         if (!$modelClass) {
@@ -101,7 +101,7 @@ trait ModelAwareTrait
             $alias = substr($modelClass, strrpos($modelClass, '\\') + 1, -strlen($modelType));
             $modelClass = $alias;
         }
-        $factory = $this->_modelFactories[$modelType] ?? \Cake\Datasource\FactoryLocator::get($modelType);
+        $factory = $this->_modelFactories[$modelType] ?? FactoryLocator::get($modelType);
         if ($factory instanceof LocatorInterface) {
             $instance = $factory->get($modelClass, $options);
         } else {

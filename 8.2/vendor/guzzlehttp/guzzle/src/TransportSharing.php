@@ -1,6 +1,6 @@
 <?php
 
-namespace GuzzleHttp;
+namespace Odigos\GuzzleHttp;
 
 final class TransportSharing
 {

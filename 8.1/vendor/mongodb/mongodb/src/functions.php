@@ -15,23 +15,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace MongoDB;
+namespace Odigos\MongoDB;
 
 use Exception;
 use MongoDB\BSON\Document;
 use MongoDB\BSON\PackedArray;
 use MongoDB\BSON\Serializable;
-use MongoDB\Builder\Type\StageInterface;
+use Odigos\MongoDB\Builder\Type\StageInterface;
 use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
 use MongoDB\Driver\Manager;
 use MongoDB\Driver\ReadPreference;
 use MongoDB\Driver\Server;
 use MongoDB\Driver\Session;
 use MongoDB\Driver\WriteConcern;
-use MongoDB\Exception\InvalidArgumentException;
-use MongoDB\Exception\RuntimeException;
-use MongoDB\Operation\ListCollections;
-use MongoDB\Operation\WithTransaction;
+use Odigos\MongoDB\Exception\InvalidArgumentException;
+use Odigos\MongoDB\Exception\RuntimeException;
+use Odigos\MongoDB\Operation\ListCollections;
+use Odigos\MongoDB\Operation\WithTransaction;
 use Psr\Log\LoggerInterface;
 use ReflectionClass;
 use ReflectionException;
@@ -54,7 +54,7 @@ use function substr;
  */
 function add_logger(LoggerInterface $logger): void
 {
-    \MongoDB\PsrLogAdapter::addLogger($logger);
+    PsrLogAdapter::addLogger($logger);
 }
 /**
  * Unregisters a PSR-3 logger.
@@ -64,7 +64,7 @@ function add_logger(LoggerInterface $logger): void
  */
 function remove_logger(LoggerInterface $logger): void
 {
-    \MongoDB\PsrLogAdapter::removeLogger($logger);
+    PsrLogAdapter::removeLogger($logger);
 }
 /**
  * Create a new stdClass instance with the provided properties.

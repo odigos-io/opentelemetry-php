@@ -1,12 +1,12 @@
 <?php
 
-namespace GuzzleHttp\Cookie;
+namespace Odigos\GuzzleHttp\Cookie;
 
-use GuzzleHttp\Utils;
+use Odigos\GuzzleHttp\Utils;
 /**
  * Persists non-session cookies using a JSON formatted file
  */
-class FileCookieJar extends \GuzzleHttp\Cookie\CookieJar
+class FileCookieJar extends CookieJar
 {
     /**
      * @var string filename
@@ -53,7 +53,7 @@ class FileCookieJar extends \GuzzleHttp\Cookie\CookieJar
         $json = [];
         /** @var SetCookie $cookie */
         foreach ($this as $cookie) {
-            if (\GuzzleHttp\Cookie\CookieJar::shouldPersist($cookie, $this->storeSessionCookies)) {
+            if (CookieJar::shouldPersist($cookie, $this->storeSessionCookies)) {
                 $json[] = $cookie->toArray();
             }
         }
@@ -83,7 +83,7 @@ class FileCookieJar extends \GuzzleHttp\Cookie\CookieJar
         $data = Utils::jsonDecode($json, \true);
         if (\is_array($data)) {
             foreach ($data as $cookie) {
-                $this->setCookie(new \GuzzleHttp\Cookie\SetCookie($cookie));
+                $this->setCookie(new SetCookie($cookie));
             }
         } elseif (\is_scalar($data) && !empty($data)) {
             throw new \RuntimeException("Invalid cookie file: {$filename}");

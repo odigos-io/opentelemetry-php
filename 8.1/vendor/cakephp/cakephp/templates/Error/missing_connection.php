@@ -16,7 +16,7 @@ namespace Odigos;
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  * @var string $message
  */
-use function Cake\Core\h;
+use function Odigos\Cake\Core\h;
 $this->layout = 'dev_error';
 $this->assign('templateName', 'missing_connection.php');
 $this->assign('title', 'Missing Database Connection');

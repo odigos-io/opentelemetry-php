@@ -1,15 +1,15 @@
 <?php
 
-namespace Laravel\Prompts;
+namespace Odigos\Laravel\Prompts;
 
 use Closure;
 use InvalidArgumentException;
-class SearchPrompt extends \Laravel\Prompts\Prompt
+class SearchPrompt extends Prompt
 {
-    use \Laravel\Prompts\Concerns\HasInfo;
-    use \Laravel\Prompts\Concerns\Scrolling;
-    use \Laravel\Prompts\Concerns\Truncation;
-    use \Laravel\Prompts\Concerns\TypedValue;
+    use Concerns\HasInfo;
+    use Concerns\Scrolling;
+    use Concerns\Truncation;
+    use Concerns\TypedValue;
     /**
      * The cached matches.
      *
@@ -26,15 +26,15 @@ class SearchPrompt extends \Laravel\Prompts\Prompt
         if ($this->required === \false) {
             throw new InvalidArgumentException('Argument [required] must be true or a string.');
         }
-        $this->trackTypedValue(submit: \false, ignore: fn($key) => \Laravel\Prompts\Key::oneOf([\Laravel\Prompts\Key::HOME, \Laravel\Prompts\Key::END, \Laravel\Prompts\Key::CTRL_A, \Laravel\Prompts\Key::CTRL_E], $key) && $this->highlighted !== null);
+        $this->trackTypedValue(submit: \false, ignore: fn($key) => Key::oneOf([Key::HOME, Key::END, Key::CTRL_A, Key::CTRL_E], $key) && $this->highlighted !== null);
         $this->initializeScrolling(null);
         $this->on('key', fn($key) => match ($key) {
-            \Laravel\Prompts\Key::UP, \Laravel\Prompts\Key::UP_ARROW, \Laravel\Prompts\Key::SHIFT_TAB, \Laravel\Prompts\Key::CTRL_P => $this->highlightPrevious(count($this->matches), \true),
-            \Laravel\Prompts\Key::DOWN, \Laravel\Prompts\Key::DOWN_ARROW, \Laravel\Prompts\Key::TAB, \Laravel\Prompts\Key::CTRL_N => $this->highlightNext(count($this->matches), \true),
-            \Laravel\Prompts\Key::oneOf([\Laravel\Prompts\Key::HOME, \Laravel\Prompts\Key::CTRL_A], $key) => $this->highlighted !== null ? $this->highlight(0) : null,
-            \Laravel\Prompts\Key::oneOf([\Laravel\Prompts\Key::END, \Laravel\Prompts\Key::CTRL_E], $key) => $this->highlighted !== null ? $this->highlight(count($this->matches()) - 1) : null,
-            \Laravel\Prompts\Key::ENTER => $this->highlighted !== null ? $this->submit() : $this->search(),
-            \Laravel\Prompts\Key::oneOf([\Laravel\Prompts\Key::LEFT, \Laravel\Prompts\Key::LEFT_ARROW, \Laravel\Prompts\Key::RIGHT, \Laravel\Prompts\Key::RIGHT_ARROW, \Laravel\Prompts\Key::CTRL_B, \Laravel\Prompts\Key::CTRL_F], $key) => $this->highlighted = null,
+            Key::UP, Key::UP_ARROW, Key::SHIFT_TAB, Key::CTRL_P => $this->highlightPrevious(count($this->matches), \true),
+            Key::DOWN, Key::DOWN_ARROW, Key::TAB, Key::CTRL_N => $this->highlightNext(count($this->matches), \true),
+            Key::oneOf([Key::HOME, Key::CTRL_A], $key) => $this->highlighted !== null ? $this->highlight(0) : null,
+            Key::oneOf([Key::END, Key::CTRL_E], $key) => $this->highlighted !== null ? $this->highlight(count($this->matches()) - 1) : null,
+            Key::ENTER => $this->highlighted !== null ? $this->submit() : $this->search(),
+            Key::oneOf([Key::LEFT, Key::LEFT_ARROW, Key::RIGHT, Key::RIGHT_ARROW, Key::CTRL_B, Key::CTRL_F], $key) => $this->highlighted = null,
             default => $this->search(),
         });
     }

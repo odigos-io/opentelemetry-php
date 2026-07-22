@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Portability;
+namespace Odigos\Doctrine\DBAL\Portability;
 
-use Doctrine\DBAL\Driver\Middleware\AbstractResultMiddleware;
-use Doctrine\DBAL\Driver\Result as ResultInterface;
+use Odigos\Doctrine\DBAL\Driver\Middleware\AbstractResultMiddleware;
+use Odigos\Doctrine\DBAL\Driver\Result as ResultInterface;
 final class Result extends AbstractResultMiddleware
 {
     /** @internal The result can be only instantiated by the portability connection or statement. */
-    public function __construct(ResultInterface $result, private readonly \Doctrine\DBAL\Portability\Converter $converter)
+    public function __construct(ResultInterface $result, private readonly Converter $converter)
     {
         parent::__construct($result);
     }

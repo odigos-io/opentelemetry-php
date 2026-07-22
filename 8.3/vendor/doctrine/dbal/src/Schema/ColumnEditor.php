@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Schema;
+namespace Odigos\Doctrine\DBAL\Schema;
 
-use Doctrine\DBAL\Platforms\SQLServerPlatform;
-use Doctrine\DBAL\Schema\Exception\InvalidColumnDefinition;
-use Doctrine\DBAL\Schema\Name\UnqualifiedName;
-use Doctrine\DBAL\Types\Exception\TypesException;
-use Doctrine\DBAL\Types\Type;
+use Odigos\Doctrine\DBAL\Platforms\SQLServerPlatform;
+use Odigos\Doctrine\DBAL\Schema\Exception\InvalidColumnDefinition;
+use Odigos\Doctrine\DBAL\Schema\Name\UnqualifiedName;
+use Odigos\Doctrine\DBAL\Types\Exception\TypesException;
+use Odigos\Doctrine\DBAL\Types\Type;
 final class ColumnEditor
 {
     private ?UnqualifiedName $name = null;
@@ -154,7 +154,7 @@ final class ColumnEditor
         $this->columnDefinition = $columnDefinition;
         return $this;
     }
-    public function create(): \Doctrine\DBAL\Schema\Column
+    public function create(): Column
     {
         if ($this->name === null) {
             throw InvalidColumnDefinition::nameNotSpecified();
@@ -178,6 +178,6 @@ final class ColumnEditor
         if ($this->defaultConstraintName !== null) {
             $platformOptions[SQLServerPlatform::OPTION_DEFAULT_CONSTRAINT_NAME] = $this->defaultConstraintName;
         }
-        return new \Doctrine\DBAL\Schema\Column($this->name->toString(), $this->type, ['length' => $this->length, 'precision' => $this->precision, 'scale' => $this->scale, 'unsigned' => $this->unsigned, 'fixed' => $this->fixed, 'notnull' => $this->notNull, 'default' => $this->defaultValue, 'autoincrement' => $this->autoincrement, 'comment' => $this->comment, 'values' => $this->values, 'platformOptions' => $platformOptions, 'columnDefinition' => $this->columnDefinition]);
+        return new Column($this->name->toString(), $this->type, ['length' => $this->length, 'precision' => $this->precision, 'scale' => $this->scale, 'unsigned' => $this->unsigned, 'fixed' => $this->fixed, 'notnull' => $this->notNull, 'default' => $this->defaultValue, 'autoincrement' => $this->autoincrement, 'comment' => $this->comment, 'values' => $this->values, 'platformOptions' => $platformOptions, 'columnDefinition' => $this->columnDefinition]);
     }
 }

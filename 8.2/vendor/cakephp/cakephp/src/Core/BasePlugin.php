@@ -13,12 +13,12 @@ declare (strict_types=1);
  * @since         3.6.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Core;
+namespace Odigos\Cake\Core;
 
-use Cake\Console\CommandCollection;
-use Cake\Event\EventManagerInterface;
-use Cake\Http\MiddlewareQueue;
-use Cake\Routing\RouteBuilder;
+use Odigos\Cake\Console\CommandCollection;
+use Odigos\Cake\Event\EventManagerInterface;
+use Odigos\Cake\Http\MiddlewareQueue;
+use Odigos\Cake\Routing\RouteBuilder;
 use Closure;
 use InvalidArgumentException;
 use ReflectionClass;
@@ -28,7 +28,7 @@ use ReflectionClass;
  * Every plugin should extend from this class or implement the interfaces and
  * include a plugin class in its src root folder.
  */
-class BasePlugin implements \Cake\Core\PluginInterface
+class BasePlugin implements PluginInterface
 {
     /**
      * Do bootstrapping or not
@@ -239,7 +239,7 @@ class BasePlugin implements \Cake\Core\PluginInterface
     /**
      * @inheritDoc
      */
-    public function bootstrap(\Cake\Core\PluginApplicationInterface $app): void
+    public function bootstrap(PluginApplicationInterface $app): void
     {
         $bootstrap = $this->getConfigPath() . 'bootstrap.php';
         if (is_file($bootstrap)) {
@@ -266,7 +266,7 @@ class BasePlugin implements \Cake\Core\PluginInterface
      * @param \Cake\Core\ContainerInterface $container The container to add services to.
      * @return void
      */
-    public function services(\Cake\Core\ContainerInterface $container): void
+    public function services(ContainerInterface $container): void
     {
     }
     /**

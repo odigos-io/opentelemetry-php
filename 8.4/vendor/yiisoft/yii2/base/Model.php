@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\base;
+namespace Odigos\yii\base;
 
 use ArrayAccess;
 use ArrayIterator;
@@ -13,9 +13,9 @@ use ArrayObject;
 use IteratorAggregate;
 use ReflectionClass;
 use Odigos\Yii;
-use yii\helpers\Inflector;
-use yii\validators\RequiredValidator;
-use yii\validators\Validator;
+use Odigos\yii\helpers\Inflector;
+use Odigos\yii\validators\RequiredValidator;
+use Odigos\yii\validators\Validator;
 /**
  * Model is the base class for data models.
  *
@@ -69,10 +69,10 @@ use yii\validators\Validator;
  * @implements IteratorAggregate<string, mixed>
  * @implements ArrayAccess<string, mixed>
  */
-class Model extends \yii\base\Component implements \yii\base\StaticInstanceInterface, IteratorAggregate, ArrayAccess, \yii\base\Arrayable
+class Model extends Component implements StaticInstanceInterface, IteratorAggregate, ArrayAccess, Arrayable
 {
-    use \yii\base\ArrayableTrait;
-    use \yii\base\StaticInstanceTrait;
+    use ArrayableTrait;
+    use StaticInstanceTrait;
     /**
      * The name of the default scenario.
      */
@@ -259,7 +259,7 @@ class Model extends \yii\base\Component implements \yii\base\StaticInstanceInter
     {
         $reflector = new ReflectionClass($this);
         if (\PHP_VERSION_ID >= 70000 && $reflector->isAnonymous()) {
-            throw new \yii\base\InvalidConfigException('The "formName()" method should be explicitly defined for anonymous models');
+            throw new InvalidConfigException('The "formName()" method should be explicitly defined for anonymous models');
         }
         return $reflector->getShortName();
     }
@@ -355,7 +355,7 @@ class Model extends \yii\base\Component implements \yii\base\StaticInstanceInter
         $scenarios = $this->scenarios();
         $scenario = $this->getScenario();
         if (!isset($scenarios[$scenario])) {
-            throw new \yii\base\InvalidArgumentException("Unknown scenario: {$scenario}");
+            throw new InvalidArgumentException("Unknown scenario: {$scenario}");
         }
         if ($attributeNames === null) {
             $attributeNames = $this->activeAttributes();
@@ -377,7 +377,7 @@ class Model extends \yii\base\Component implements \yii\base\StaticInstanceInter
      */
     public function beforeValidate()
     {
-        $event = new \yii\base\ModelEvent();
+        $event = new ModelEvent();
         $this->trigger(self::EVENT_BEFORE_VALIDATE, $event);
         return $event->isValid;
     }
@@ -458,7 +458,7 @@ class Model extends \yii\base\Component implements \yii\base\StaticInstanceInter
                 $validator = Validator::createValidator($rule[1], $this, (array) $rule[0], array_slice($rule, 2));
                 $validators->append($validator);
             } else {
-                throw new \yii\base\InvalidConfigException('Invalid validation rule: a rule must specify both attribute names and validator type.');
+                throw new InvalidConfigException('Invalid validation rule: a rule must specify both attribute names and validator type.');
             }
         }
         return $validators;

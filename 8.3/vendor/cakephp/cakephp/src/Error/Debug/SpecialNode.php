@@ -14,12 +14,12 @@ declare (strict_types=1);
  * @since         4.1.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Error\Debug;
+namespace Odigos\Cake\Error\Debug;
 
 /**
  * Debug node for special messages like errors or recursion warnings.
  */
-class SpecialNode implements \Cake\Error\Debug\NodeInterface
+class SpecialNode implements NodeInterface
 {
     /**
      * @var string

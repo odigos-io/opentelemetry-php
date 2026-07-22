@@ -13,13 +13,13 @@ declare (strict_types=1);
  * @since         4.3.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\TestSuite\Fixture;
+namespace Odigos\Cake\TestSuite\Fixture;
 
-use Cake\Core\Exception\CakeException;
-use Cake\Database\Connection;
-use Cake\Database\Schema\TableSchema;
-use Cake\Datasource\ConnectionManager;
-use Cake\TestSuite\ConnectionHelper;
+use Odigos\Cake\Core\Exception\CakeException;
+use Odigos\Cake\Database\Connection;
+use Odigos\Cake\Database\Schema\TableSchema;
+use Odigos\Cake\Datasource\ConnectionManager;
+use Odigos\Cake\TestSuite\ConnectionHelper;
 use InvalidArgumentException;
 /**
  * Create test database schema from one or more SQL dump files.

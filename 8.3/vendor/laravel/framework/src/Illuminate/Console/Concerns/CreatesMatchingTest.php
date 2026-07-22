@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Console\Concerns;
+namespace Odigos\Illuminate\Console\Concerns;
 
-use Illuminate\Support\Stringable;
-use Symfony\Component\Console\Input\InputOption;
+use Odigos\Illuminate\Support\Stringable;
+use Odigos\Symfony\Component\Console\Input\InputOption;
 trait CreatesMatchingTest
 {
     /**

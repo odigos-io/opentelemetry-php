@@ -14,14 +14,14 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\I18n;
+namespace Odigos\Cake\I18n;
 
-use Cake\Core\App;
-use Cake\Core\Exception\CakeException;
-use Cake\Core\Plugin;
-use Cake\Utility\Inflector;
+use Odigos\Cake\Core\App;
+use Odigos\Cake\Core\Exception\CakeException;
+use Odigos\Cake\Core\Plugin;
+use Odigos\Cake\Utility\Inflector;
 use Locale;
-use function Cake\Core\pluginSplit;
+use function Odigos\Cake\Core\pluginSplit;
 /**
  * A generic translations package factory that will load translations files
  * based on the file extension and the package name.
@@ -116,7 +116,7 @@ class MessagesFileLoader
      * @throws \Cake\Core\Exception\CakeException if no file parser class could be found for the specified
      * file extension.
      */
-    public function __invoke(): \Cake\I18n\Package|false
+    public function __invoke(): Package|false
     {
         $folders = $this->translationsFolders();
         $file = $this->translationFile($folders, $this->_name, $this->_extension);
@@ -131,7 +131,7 @@ class MessagesFileLoader
         /** @var \Cake\I18n\Parser\MoFileParser|\Cake\I18n\Parser\PoFileParser $object */
         $object = new $class();
         $messages = $object->parse($file);
-        $package = new \Cake\I18n\Package('default');
+        $package = new Package('default');
         $package->setMessages($messages);
         return $package;
     }

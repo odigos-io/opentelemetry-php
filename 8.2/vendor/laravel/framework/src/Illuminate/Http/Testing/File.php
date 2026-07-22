@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Http\Testing;
+namespace Odigos\Illuminate\Http\Testing;
 
-use Illuminate\Http\UploadedFile;
+use Odigos\Illuminate\Http\UploadedFile;
 class File extends UploadedFile
 {
     /**
@@ -50,7 +50,7 @@ class File extends UploadedFile
      */
     public static function create($name, $kilobytes = 0)
     {
-        return (new \Illuminate\Http\Testing\FileFactory())->create($name, $kilobytes);
+        return (new FileFactory())->create($name, $kilobytes);
     }
     /**
      * Create a new fake file with content.
@@ -61,7 +61,7 @@ class File extends UploadedFile
      */
     public static function createWithContent($name, $content)
     {
-        return (new \Illuminate\Http\Testing\FileFactory())->createWithContent($name, $content);
+        return (new FileFactory())->createWithContent($name, $content);
     }
     /**
      * Create a new fake image.
@@ -73,7 +73,7 @@ class File extends UploadedFile
      */
     public static function image($name, $width = 10, $height = 10)
     {
-        return (new \Illuminate\Http\Testing\FileFactory())->image($name, $width, $height);
+        return (new FileFactory())->image($name, $width, $height);
     }
     /**
      * Set the "size" of the file in kilobytes.
@@ -113,7 +113,7 @@ class File extends UploadedFile
      */
     public function getMimeType(): string
     {
-        return $this->mimeTypeToReport ?: \Illuminate\Http\Testing\MimeType::from($this->name);
+        return $this->mimeTypeToReport ?: MimeType::from($this->name);
     }
     /**
      * Get the path to the temporary file.

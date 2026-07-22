@@ -5,13 +5,13 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\widgets;
+namespace Odigos\yii\widgets;
 
 use Odigos\Yii;
-use yii\base\InvalidConfigException;
-use yii\base\Widget;
-use yii\helpers\ArrayHelper;
-use yii\helpers\Html;
+use Odigos\yii\base\InvalidConfigException;
+use Odigos\yii\base\Widget;
+use Odigos\yii\helpers\ArrayHelper;
+use Odigos\yii\helpers\Html;
 /**
  * BaseListView is a base class for widgets displaying data from data provider
  * such as ListView and GridView.
@@ -219,7 +219,7 @@ abstract class BaseListView extends Widget
         }
         $pager = $this->pager;
         /** @var LinkPager $class */
-        $class = ArrayHelper::remove($pager, 'class', \yii\widgets\LinkPager::className());
+        $class = ArrayHelper::remove($pager, 'class', LinkPager::className());
         $pager['pagination'] = $pagination;
         $pager['view'] = $this->getView();
         return $class::widget($pager);
@@ -236,7 +236,7 @@ abstract class BaseListView extends Widget
         }
         $sorter = $this->sorter;
         /** @var LinkSorter $class */
-        $class = ArrayHelper::remove($sorter, 'class', \yii\widgets\LinkSorter::className());
+        $class = ArrayHelper::remove($sorter, 'class', LinkSorter::className());
         $sorter['sort'] = $sort;
         $sorter['view'] = $this->getView();
         return $class::widget($sorter);

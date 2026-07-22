@@ -1,15 +1,15 @@
 <?php
 
-namespace Illuminate\Mail;
+namespace Odigos\Illuminate\Mail;
 
-use Illuminate\Contracts\Mail\Attachable;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Traits\ForwardsCalls;
+use Odigos\Illuminate\Contracts\Mail\Attachable;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Traits\ForwardsCalls;
 use InvalidArgumentException;
-use Symfony\Component\Mime\Address;
-use Symfony\Component\Mime\Email;
-use Symfony\Component\Mime\Part\DataPart;
-use Symfony\Component\Mime\Part\File;
+use Odigos\Symfony\Component\Mime\Address;
+use Odigos\Symfony\Component\Mime\Email;
+use Odigos\Symfony\Component\Mime\Part\DataPart;
+use Odigos\Symfony\Component\Mime\Part\File;
 /**
  * @mixin \Symfony\Component\Mime\Email
  */
@@ -285,7 +285,7 @@ class Message
         if ($file instanceof Attachable) {
             $file = $file->toMailAttachment();
         }
-        if ($file instanceof \Illuminate\Mail\Attachment) {
+        if ($file instanceof Attachment) {
             return $file->attachTo($this);
         }
         $this->message->attachFromPath($file, $options['as'] ?? null, $options['mime'] ?? null);
@@ -315,7 +315,7 @@ class Message
         if ($file instanceof Attachable) {
             $file = $file->toMailAttachment();
         }
-        if ($file instanceof \Illuminate\Mail\Attachment) {
+        if ($file instanceof Attachment) {
             return $file->attachWith(function ($path) use ($file) {
                 $part = (new DataPart(new File($path), $file->as, $file->mime))->asInline();
                 $this->message->addPart($part);

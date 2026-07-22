@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Http\Resources;
+namespace Odigos\Illuminate\Http\Resources;
 
 interface PotentiallyMissing
 {

@@ -1,14 +1,14 @@
 <?php
 
-namespace Illuminate\Database\Console\Migrations;
+namespace Odigos\Illuminate\Database\Console\Migrations;
 
-use Illuminate\Console\Command;
-use Illuminate\Console\ConfirmableTrait;
-use Illuminate\Console\Prohibitable;
-use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Database\Events\DatabaseRefreshed;
-use Symfony\Component\Console\Attribute\AsCommand;
-use Symfony\Component\Console\Input\InputOption;
+use Odigos\Illuminate\Console\Command;
+use Odigos\Illuminate\Console\ConfirmableTrait;
+use Odigos\Illuminate\Console\Prohibitable;
+use Odigos\Illuminate\Contracts\Events\Dispatcher;
+use Odigos\Illuminate\Database\Events\DatabaseRefreshed;
+use Odigos\Symfony\Component\Console\Attribute\AsCommand;
+use Odigos\Symfony\Component\Console\Input\InputOption;
 #[AsCommand(name: 'migrate:refresh')]
 class RefreshCommand extends Command
 {

@@ -14,16 +14,16 @@ declare (strict_types=1);
  * @since         4.1.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Error\Debug;
+namespace Odigos\Cake\Error\Debug;
 
 use InvalidArgumentException;
-use function Cake\Core\h;
+use function Odigos\Cake\Core\h;
 /**
  * A Debugger formatter for generating interactive styled HTML output.
  *
  * @internal
  */
-class HtmlFormatter implements \Cake\Error\Debug\FormatterInterface
+class HtmlFormatter implements FormatterInterface
 {
     /**
      * @var bool
@@ -85,7 +85,7 @@ class HtmlFormatter implements \Cake\Error\Debug\FormatterInterface
      * @param \Cake\Error\Debug\NodeInterface $node The node tree to dump.
      * @return string
      */
-    public function dump(\Cake\Error\Debug\NodeInterface $node): string
+    public function dump(NodeInterface $node): string
     {
         $html = $this->export($node, 0);
         $head = '';
@@ -102,9 +102,9 @@ class HtmlFormatter implements \Cake\Error\Debug\FormatterInterface
      * @param int $indent The current indentation level.
      * @return string
      */
-    protected function export(\Cake\Error\Debug\NodeInterface $var, int $indent): string
+    protected function export(NodeInterface $var, int $indent): string
     {
-        if ($var instanceof \Cake\Error\Debug\ScalarNode) {
+        if ($var instanceof ScalarNode) {
             return match ($var->getType()) {
                 'bool' => $this->style('const', $var->getValue() ? 'true' : 'false'),
                 'null' => $this->style('const', 'null'),
@@ -113,13 +113,13 @@ class HtmlFormatter implements \Cake\Error\Debug\FormatterInterface
                 default => "({$var->getType()}) {$var->getValue()}",
             };
         }
-        if ($var instanceof \Cake\Error\Debug\ArrayNode) {
+        if ($var instanceof ArrayNode) {
             return $this->exportArray($var, $indent + 1);
         }
-        if ($var instanceof \Cake\Error\Debug\ClassNode || $var instanceof \Cake\Error\Debug\ReferenceNode) {
+        if ($var instanceof ClassNode || $var instanceof ReferenceNode) {
             return $this->exportObject($var, $indent + 1);
         }
-        if ($var instanceof \Cake\Error\Debug\SpecialNode) {
+        if ($var instanceof SpecialNode) {
             return $this->style('special', $var->getValue());
         }
         throw new InvalidArgumentException('Unknown node received ' . $var::class);
@@ -131,7 +131,7 @@ class HtmlFormatter implements \Cake\Error\Debug\FormatterInterface
      * @param int $indent The current indentation level.
      * @return string Exported array.
      */
-    protected function exportArray(\Cake\Error\Debug\ArrayNode $var, int $indent): string
+    protected function exportArray(ArrayNode $var, int $indent): string
     {
         $open = '<span class="cake-debug-array">' . $this->style('punct', '[') . '<samp class="cake-debug-array-items">';
         $vars = [];
@@ -153,13 +153,13 @@ class HtmlFormatter implements \Cake\Error\Debug\FormatterInterface
      * @return string
      * @see \Cake\Error\Debugger::exportVar()
      */
-    protected function exportObject(\Cake\Error\Debug\ClassNode|\Cake\Error\Debug\ReferenceNode $var, int $indent): string
+    protected function exportObject(ClassNode|ReferenceNode $var, int $indent): string
     {
         $objectId = "cake-db-object-{$this->id}-{$var->getId()}";
         $out = sprintf('<span class="cake-debug-object" id="%s">', $objectId);
         $break = "\n" . str_repeat('  ', $indent);
         $endBreak = "\n" . str_repeat('  ', $indent - 1);
-        if ($var instanceof \Cake\Error\Debug\ReferenceNode) {
+        if ($var instanceof ReferenceNode) {
             $link = sprintf('<a class="cake-debug-ref" href="#%s">id: %s</a>', $objectId, $var->getId());
             return '<span class="cake-debug-ref">' . $this->style('punct', 'object(') . $this->style('class', $var->getValue()) . $this->style('punct', ') ') . $link . $this->style('punct', ' {}') . '</span>';
         }

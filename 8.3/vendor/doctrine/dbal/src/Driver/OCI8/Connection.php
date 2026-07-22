@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Driver\OCI8;
+namespace Odigos\Doctrine\DBAL\Driver\OCI8;
 
-use Doctrine\DBAL\Driver\Connection as ConnectionInterface;
-use Doctrine\DBAL\Driver\Exception;
-use Doctrine\DBAL\Driver\Exception\IdentityColumnsNotSupported;
-use Doctrine\DBAL\Driver\OCI8\Exception\Error;
-use Doctrine\DBAL\SQL\Parser;
+use Odigos\Doctrine\DBAL\Driver\Connection as ConnectionInterface;
+use Odigos\Doctrine\DBAL\Driver\Exception;
+use Odigos\Doctrine\DBAL\Driver\Exception\IdentityColumnsNotSupported;
+use Odigos\Doctrine\DBAL\Driver\OCI8\Exception\Error;
+use Odigos\Doctrine\DBAL\SQL\Parser;
 use function addcslashes;
 use function assert;
 use function is_resource;
@@ -20,7 +20,7 @@ use function str_replace;
 final class Connection implements ConnectionInterface
 {
     private readonly Parser $parser;
-    private readonly \Doctrine\DBAL\Driver\OCI8\ExecutionMode $executionMode;
+    private readonly ExecutionMode $executionMode;
     /**
      * @internal The connection can be only instantiated by its driver.
      *
@@ -29,7 +29,7 @@ final class Connection implements ConnectionInterface
     public function __construct(private readonly mixed $connection)
     {
         $this->parser = new Parser(\false);
-        $this->executionMode = new \Doctrine\DBAL\Driver\OCI8\ExecutionMode();
+        $this->executionMode = new ExecutionMode();
     }
     public function getServerVersion(): string
     {
@@ -43,21 +43,21 @@ final class Connection implements ConnectionInterface
      * @throws Parser\Exception
      * @throws Error
      */
-    public function prepare(string $sql): \Doctrine\DBAL\Driver\OCI8\Statement
+    public function prepare(string $sql): Statement
     {
-        $visitor = new \Doctrine\DBAL\Driver\OCI8\ConvertPositionalToNamedPlaceholders();
+        $visitor = new ConvertPositionalToNamedPlaceholders();
         $this->parser->parse($sql, $visitor);
         $statement = @oci_parse($this->connection, $visitor->getSQL());
         if (!is_resource($statement)) {
             throw Error::new($this->connection);
         }
-        return new \Doctrine\DBAL\Driver\OCI8\Statement($this->connection, $statement, $visitor->getParameterMap(), $this->executionMode);
+        return new Statement($this->connection, $statement, $visitor->getParameterMap(), $this->executionMode);
     }
     /**
      * @throws Exception
      * @throws Parser\Exception
      */
-    public function query(string $sql): \Doctrine\DBAL\Driver\OCI8\Result
+    public function query(string $sql): Result
     {
         return $this->prepare($sql)->execute();
     }

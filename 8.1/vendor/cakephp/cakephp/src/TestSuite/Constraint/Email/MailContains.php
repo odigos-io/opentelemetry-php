@@ -14,14 +14,14 @@ declare (strict_types=1);
  * @since         3.7.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\TestSuite\Constraint\Email;
+namespace Odigos\Cake\TestSuite\Constraint\Email;
 
 /**
  * MailContains
  *
  * @internal
  */
-class MailContains extends \Cake\TestSuite\Constraint\Email\MailConstraintBase
+class MailContains extends MailConstraintBase
 {
     /**
      * Mail type to check contents of

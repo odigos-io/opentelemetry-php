@@ -5,10 +5,10 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\base;
+namespace Odigos\yii\base;
 
 use Odigos\Yii;
-use yii\di\ServiceLocator;
+use Odigos\yii\di\ServiceLocator;
 /**
  * Module is the base class for module and application classes.
  *
@@ -232,7 +232,7 @@ class Module extends ServiceLocator
         if (is_string($p) && is_dir($p)) {
             $this->_basePath = $p;
         } else {
-            throw new \yii\base\InvalidArgumentException("The directory does not exist: {$path}");
+            throw new InvalidArgumentException("The directory does not exist: {$path}");
         }
     }
     /**
@@ -510,7 +510,7 @@ class Module extends ServiceLocator
             return $result;
         }
         $id = $this->getUniqueId();
-        throw new \yii\base\InvalidRouteException('Unable to resolve the request "' . ($id === '' ? $route : $id . '/' . $route) . '".');
+        throw new InvalidRouteException('Unable to resolve the request "' . ($id === '' ? $route : $id . '/' . $route) . '".');
     }
     /**
      * Creates a controller instance based on the given route.
@@ -609,11 +609,11 @@ class Module extends ServiceLocator
         if (strpos($className, '-') !== \false || !class_exists($className)) {
             return null;
         }
-        if (is_subclass_of($className, 'yii\base\Controller')) {
+        if (is_subclass_of($className, 'Odigos\yii\base\Controller')) {
             $controller = Yii::createObject($className, [$id, $this]);
             return get_class($controller) === $className ? $controller : null;
         } elseif (YII_DEBUG) {
-            throw new \yii\base\InvalidConfigException('Controller class must extend from \yii\base\Controller.');
+            throw new InvalidConfigException('Controller class must extend from \yii\base\Controller.');
         }
         return null;
     }
@@ -666,7 +666,7 @@ class Module extends ServiceLocator
      */
     public function beforeAction($action)
     {
-        $event = new \yii\base\ActionEvent($action);
+        $event = new ActionEvent($action);
         $this->trigger(self::EVENT_BEFORE_ACTION, $event);
         return $event->isValid;
     }
@@ -696,7 +696,7 @@ class Module extends ServiceLocator
      */
     public function afterAction($action, $result)
     {
-        $event = new \yii\base\ActionEvent($action);
+        $event = new ActionEvent($action);
         $event->result = $result;
         $this->trigger(self::EVENT_AFTER_ACTION, $event);
         return $event->result;

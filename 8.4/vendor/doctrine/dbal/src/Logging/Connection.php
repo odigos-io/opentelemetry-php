@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Logging;
+namespace Odigos\Doctrine\DBAL\Logging;
 
-use Doctrine\DBAL\Driver\Connection as ConnectionInterface;
-use Doctrine\DBAL\Driver\Middleware\AbstractConnectionMiddleware;
-use Doctrine\DBAL\Driver\Result;
-use Doctrine\DBAL\Driver\Statement as DriverStatement;
+use Odigos\Doctrine\DBAL\Driver\Connection as ConnectionInterface;
+use Odigos\Doctrine\DBAL\Driver\Middleware\AbstractConnectionMiddleware;
+use Odigos\Doctrine\DBAL\Driver\Result;
+use Odigos\Doctrine\DBAL\Driver\Statement as DriverStatement;
 use Psr\Log\LoggerInterface;
 final class Connection extends AbstractConnectionMiddleware
 {
@@ -21,7 +21,7 @@ final class Connection extends AbstractConnectionMiddleware
     }
     public function prepare(string $sql): DriverStatement
     {
-        return new \Doctrine\DBAL\Logging\Statement(parent::prepare($sql), $this->logger, $sql);
+        return new Statement(parent::prepare($sql), $this->logger, $sql);
     }
     public function query(string $sql): Result
     {

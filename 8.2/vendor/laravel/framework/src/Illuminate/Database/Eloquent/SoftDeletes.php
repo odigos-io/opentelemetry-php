@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Database\Eloquent;
+namespace Odigos\Illuminate\Database\Eloquent;
 
-use Illuminate\Database\Eloquent\Collection as EloquentCollection;
-use Illuminate\Support\Collection as BaseCollection;
+use Odigos\Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Odigos\Illuminate\Support\Collection as BaseCollection;
 /**
  * @method static \Illuminate\Database\Eloquent\Builder<static> withTrashed(bool $withTrashed = true)
  * @method static \Illuminate\Database\Eloquent\Builder<static> onlyTrashed()
@@ -26,7 +26,7 @@ trait SoftDeletes
      */
     public static function bootSoftDeletes()
     {
-        static::addGlobalScope(new \Illuminate\Database\Eloquent\SoftDeletingScope());
+        static::addGlobalScope(new SoftDeletingScope());
     }
     /**
      * Initialize the soft deleting trait for an instance.

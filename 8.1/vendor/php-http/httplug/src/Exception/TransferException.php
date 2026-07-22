@@ -1,8 +1,8 @@
 <?php
 
-namespace Http\Client\Exception;
+namespace Odigos\Http\Client\Exception;
 
-use Http\Client\Exception;
+use Odigos\Http\Client\Exception;
 /**
  * Base exception for transfer related exceptions.
  *

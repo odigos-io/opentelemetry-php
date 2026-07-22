@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Notifications;
+namespace Odigos\Illuminate\Notifications;
 
-use Illuminate\Contracts\Notifications\Dispatcher as DispatcherContract;
-use Illuminate\Contracts\Notifications\Factory as FactoryContract;
-use Illuminate\Support\ServiceProvider;
+use Odigos\Illuminate\Contracts\Notifications\Dispatcher as DispatcherContract;
+use Odigos\Illuminate\Contracts\Notifications\Factory as FactoryContract;
+use Odigos\Illuminate\Support\ServiceProvider;
 class NotificationServiceProvider extends ServiceProvider
 {
     /**
@@ -26,8 +26,8 @@ class NotificationServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton(\Illuminate\Notifications\ChannelManager::class, fn($app) => new \Illuminate\Notifications\ChannelManager($app));
-        $this->app->alias(\Illuminate\Notifications\ChannelManager::class, DispatcherContract::class);
-        $this->app->alias(\Illuminate\Notifications\ChannelManager::class, FactoryContract::class);
+        $this->app->singleton(ChannelManager::class, fn($app) => new ChannelManager($app));
+        $this->app->alias(ChannelManager::class, DispatcherContract::class);
+        $this->app->alias(ChannelManager::class, FactoryContract::class);
     }
 }

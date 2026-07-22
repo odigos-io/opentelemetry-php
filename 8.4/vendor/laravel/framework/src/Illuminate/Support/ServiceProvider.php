@@ -1,14 +1,14 @@
 <?php
 
-namespace Illuminate\Support;
+namespace Odigos\Illuminate\Support;
 
 use Closure;
-use Illuminate\Console\Application as Artisan;
-use Illuminate\Contracts\Foundation\CachesConfiguration;
-use Illuminate\Contracts\Foundation\CachesRoutes;
-use Illuminate\Contracts\Support\DeferrableProvider;
-use Illuminate\Database\Eloquent\Factory as ModelFactory;
-use Illuminate\View\Compilers\BladeCompiler;
+use Odigos\Illuminate\Console\Application as Artisan;
+use Odigos\Illuminate\Contracts\Foundation\CachesConfiguration;
+use Odigos\Illuminate\Contracts\Foundation\CachesRoutes;
+use Odigos\Illuminate\Contracts\Support\DeferrableProvider;
+use Odigos\Illuminate\Database\Eloquent\Factory as ModelFactory;
+use Odigos\Illuminate\View\Compilers\BladeCompiler;
 /**
  * @property array<string, string> $bindings All of the container bindings that should be registered.
  * @property array<array-key, string> $singletons All of the singletons that should be registered.
@@ -342,7 +342,7 @@ abstract class ServiceProvider
         if (!is_null($paths = static::pathsForProviderOrGroup($provider, $group))) {
             return $paths;
         }
-        return (new \Illuminate\Support\Collection(static::$publishes))->reduce(function ($paths, $p) {
+        return (new Collection(static::$publishes))->reduce(function ($paths, $p) {
             return array_merge($paths, $p);
         }, []);
     }
@@ -457,7 +457,7 @@ abstract class ServiceProvider
      */
     protected function getProviderKey(?string $key = null): string
     {
-        $key ??= (string) \Illuminate\Support\Str::of(get_class($this))->classBasename()->before('ServiceProvider')->kebab()->lower()->trim();
+        $key ??= (string) Str::of(get_class($this))->classBasename()->before('ServiceProvider')->kebab()->lower()->trim();
         if (empty($key)) {
             $key = class_basename(get_class($this));
         }
@@ -497,7 +497,7 @@ abstract class ServiceProvider
      */
     public static function defaultProviders()
     {
-        return new \Illuminate\Support\DefaultProviders();
+        return new DefaultProviders();
     }
     /**
      * Add the given provider to the application's provider bootstrap file.
@@ -515,7 +515,7 @@ abstract class ServiceProvider
         if (function_exists('opcache_invalidate')) {
             opcache_invalidate($path, \true);
         }
-        $providers = (new \Illuminate\Support\Collection(require $path))->merge([$provider])->unique()->sort()->values()->map(fn($p) => '    ' . $p . '::class,')->implode(\PHP_EOL);
+        $providers = (new Collection(require $path))->merge([$provider])->unique()->sort()->values()->map(fn($p) => '    ' . $p . '::class,')->implode(\PHP_EOL);
         $content = '<?php
 
 return [
@@ -541,8 +541,8 @@ return [
         if (function_exists('opcache_invalidate')) {
             opcache_invalidate($path, \true);
         }
-        $providersToRemove = \Illuminate\Support\Arr::wrap($providersToRemove);
-        $providers = (new \Illuminate\Support\Collection(require $path))->unique()->sort()->values()->when($strict, static fn(\Illuminate\Support\Collection $providerCollection) => $providerCollection->reject(fn(string $p) => in_array($p, $providersToRemove, \true)), static fn(\Illuminate\Support\Collection $providerCollection) => $providerCollection->reject(fn(string $p) => \Illuminate\Support\Str::contains($p, $providersToRemove)))->map(fn($p) => '    ' . $p . '::class,')->implode(\PHP_EOL);
+        $providersToRemove = Arr::wrap($providersToRemove);
+        $providers = (new Collection(require $path))->unique()->sort()->values()->when($strict, static fn(Collection $providerCollection) => $providerCollection->reject(fn(string $p) => in_array($p, $providersToRemove, \true)), static fn(Collection $providerCollection) => $providerCollection->reject(fn(string $p) => Str::contains($p, $providersToRemove)))->map(fn($p) => '    ' . $p . '::class,')->implode(\PHP_EOL);
         $content = '<?php
 
 return [

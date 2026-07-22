@@ -14,7 +14,7 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Datasource;
+namespace Odigos\Cake\Datasource;
 
 use Closure;
 use Psr\SimpleCache\CacheInterface;
@@ -74,7 +74,7 @@ interface RepositoryInterface
      * @param mixed ...$args Arguments that match up to finder-specific parameters
      * @return \Cake\Datasource\QueryInterface
      */
-    public function find(string $type = 'all', mixed ...$args): \Cake\Datasource\QueryInterface;
+    public function find(string $type = 'all', mixed ...$args): QueryInterface;
     /**
      * Returns a single record after finding it by its primary key, if no record is
      * found this method throws an exception.
@@ -99,13 +99,13 @@ interface RepositoryInterface
      * @return \Cake\Datasource\EntityInterface
      * @see \Cake\Datasource\RepositoryInterface::find()
      */
-    public function get(mixed $primaryKey, array|string $finder = 'all', CacheInterface|string|null $cache = null, Closure|string|null $cacheKey = null, mixed ...$args): \Cake\Datasource\EntityInterface;
+    public function get(mixed $primaryKey, array|string $finder = 'all', CacheInterface|string|null $cache = null, Closure|string|null $cacheKey = null, mixed ...$args): EntityInterface;
     /**
      * Creates a new Query instance for this repository
      *
      * @return \Cake\Datasource\QueryInterface
      */
-    public function query(): \Cake\Datasource\QueryInterface;
+    public function query(): QueryInterface;
     /**
      * Update all matching records.
      *
@@ -152,7 +152,7 @@ interface RepositoryInterface
      * @param array<string, mixed> $options The options to use when saving.
      * @return \Cake\Datasource\EntityInterface|false
      */
-    public function save(\Cake\Datasource\EntityInterface $entity, array $options = []): \Cake\Datasource\EntityInterface|false;
+    public function save(EntityInterface $entity, array $options = []): EntityInterface|false;
     /**
      * Delete a single entity.
      *
@@ -163,7 +163,7 @@ interface RepositoryInterface
      * @param array<string, mixed> $options The options for the delete.
      * @return bool success
      */
-    public function delete(\Cake\Datasource\EntityInterface $entity, array $options = []): bool;
+    public function delete(EntityInterface $entity, array $options = []): bool;
     /**
      * This creates a new entity object.
      *
@@ -173,7 +173,7 @@ interface RepositoryInterface
      *
      * @return \Cake\Datasource\EntityInterface
      */
-    public function newEmptyEntity(): \Cake\Datasource\EntityInterface;
+    public function newEmptyEntity(): EntityInterface;
     /**
      * Create a new entity + associated entities from an array.
      *
@@ -192,7 +192,7 @@ interface RepositoryInterface
      * @param array<string, mixed> $options A list of options for the object hydration.
      * @return \Cake\Datasource\EntityInterface
      */
-    public function newEntity(array $data, array $options = []): \Cake\Datasource\EntityInterface;
+    public function newEntity(array $data, array $options = []): EntityInterface;
     /**
      * Create a list of entities + associated entities from an array.
      *
@@ -227,7 +227,7 @@ interface RepositoryInterface
      * @param array<string, mixed> $options A list of options for the object hydration.
      * @return \Cake\Datasource\EntityInterface
      */
-    public function patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = []): \Cake\Datasource\EntityInterface;
+    public function patchEntity(EntityInterface $entity, array $data, array $options = []): EntityInterface;
     /**
      * Merges each of the elements passed in `$data` into the entities
      * found in `$entities` respecting the accessible fields configured on the entities.

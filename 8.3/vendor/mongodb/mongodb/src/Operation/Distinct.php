@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace MongoDB\Operation;
+namespace Odigos\MongoDB\Operation;
 
 use MongoDB\Driver\Command;
 use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
@@ -23,23 +23,23 @@ use MongoDB\Driver\ReadConcern;
 use MongoDB\Driver\ReadPreference;
 use MongoDB\Driver\Server;
 use MongoDB\Driver\Session;
-use MongoDB\Exception\InvalidArgumentException;
-use MongoDB\Exception\UnexpectedValueException;
-use MongoDB\Exception\UnsupportedException;
+use Odigos\MongoDB\Exception\InvalidArgumentException;
+use Odigos\MongoDB\Exception\UnexpectedValueException;
+use Odigos\MongoDB\Exception\UnsupportedException;
 use function current;
 use function is_array;
 use function is_integer;
 use function is_object;
 use function is_string;
-use function MongoDB\create_field_path_type_map;
-use function MongoDB\is_document;
+use function Odigos\MongoDB\create_field_path_type_map;
+use function Odigos\MongoDB\is_document;
 /**
  * Operation for the distinct command.
  *
  * @see \MongoDB\Collection::distinct()
  * @see https://mongodb.com/docs/manual/reference/command/distinct/
  */
-final class Distinct implements \MongoDB\Operation\Explainable
+final class Distinct implements Explainable
 {
     /**
      * Constructs a distinct command.

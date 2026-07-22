@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Validation\Rules;
+namespace Odigos\Illuminate\Validation\Rules;
 
-class ImageFile extends \Illuminate\Validation\Rules\File
+class ImageFile extends File
 {
     /**
      * Create a new image file rule instance.

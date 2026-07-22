@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL;
+namespace Odigos\Doctrine\DBAL;
 
 enum ArrayParameterType
 {
@@ -22,13 +22,13 @@ enum ArrayParameterType
      */
     case BINARY;
     /** @internal */
-    public static function toElementParameterType(self $type): \Doctrine\DBAL\ParameterType
+    public static function toElementParameterType(self $type): ParameterType
     {
         return match ($type) {
-            self::INTEGER => \Doctrine\DBAL\ParameterType::INTEGER,
-            self::STRING => \Doctrine\DBAL\ParameterType::STRING,
-            self::ASCII => \Doctrine\DBAL\ParameterType::ASCII,
-            self::BINARY => \Doctrine\DBAL\ParameterType::BINARY,
+            self::INTEGER => ParameterType::INTEGER,
+            self::STRING => ParameterType::STRING,
+            self::ASCII => ParameterType::ASCII,
+            self::BINARY => ParameterType::BINARY,
         };
     }
 }

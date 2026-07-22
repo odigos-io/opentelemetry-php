@@ -4,13 +4,13 @@
  * THIS FILE IS AUTO-GENERATED. ANY CHANGES WILL BE LOST!
  */
 declare (strict_types=1);
-namespace MongoDB\Builder\Expression;
+namespace Odigos\MongoDB\Builder\Expression;
 
 use MongoDB\BSON\PackedArray;
-use MongoDB\Builder\Type\Encode;
-use MongoDB\Builder\Type\OperatorInterface;
-use MongoDB\Exception\InvalidArgumentException;
-use MongoDB\Model\BSONArray;
+use Odigos\MongoDB\Builder\Type\Encode;
+use Odigos\MongoDB\Builder\Type\OperatorInterface;
+use Odigos\MongoDB\Exception\InvalidArgumentException;
+use Odigos\MongoDB\Model\BSONArray;
 use function array_is_list;
 /**
  * Concatenates arrays to return the concatenated array.
@@ -18,7 +18,7 @@ use function array_is_list;
  * @see https://www.mongodb.com/docs/manual/reference/operator/aggregation/concatArrays/
  * @internal
  */
-final class ConcatArraysOperator implements \MongoDB\Builder\Expression\ResolvesToArray, OperatorInterface
+final class ConcatArraysOperator implements ResolvesToArray, OperatorInterface
 {
     public const ENCODE = Encode::Single;
     public const NAME = '$concatArrays';
@@ -29,7 +29,7 @@ final class ConcatArraysOperator implements \MongoDB\Builder\Expression\Resolves
      * @param BSONArray|PackedArray|ResolvesToArray|array|string ...$array
      * @no-named-arguments
      */
-    public function __construct(PackedArray|\MongoDB\Builder\Expression\ResolvesToArray|BSONArray|array|string ...$array)
+    public function __construct(PackedArray|ResolvesToArray|BSONArray|array|string ...$array)
     {
         if (\count($array) < 1) {
             throw new InvalidArgumentException(\sprintf('Expected at least %d values for $array, got %d.', 1, \count($array)));

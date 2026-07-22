@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Filesystem;
+namespace Odigos\Illuminate\Filesystem;
 
-use Illuminate\Contracts\Foundation\CachesRoutes;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\ServiceProvider;
+use Odigos\Illuminate\Contracts\Foundation\CachesRoutes;
+use Odigos\Illuminate\Http\Request;
+use Odigos\Illuminate\Support\Facades\Route;
+use Odigos\Illuminate\Support\ServiceProvider;
 class FilesystemServiceProvider extends ServiceProvider
 {
     /**
@@ -35,7 +35,7 @@ class FilesystemServiceProvider extends ServiceProvider
     protected function registerNativeFilesystem()
     {
         $this->app->singleton('files', function () {
-            return new \Illuminate\Filesystem\Filesystem();
+            return new Filesystem();
         });
     }
     /**
@@ -61,7 +61,7 @@ class FilesystemServiceProvider extends ServiceProvider
     protected function registerManager()
     {
         $this->app->singleton('filesystem', function ($app) {
-            return new \Illuminate\Filesystem\FilesystemManager($app);
+            return new FilesystemManager($app);
         });
     }
     /**
@@ -82,10 +82,10 @@ class FilesystemServiceProvider extends ServiceProvider
                 $uri = isset($config['url']) ? rtrim(parse_url($config['url'])['path'], '/') : '/storage';
                 $isProduction = $app->isProduction();
                 Route::get($uri . '/{path}', function (Request $request, string $path) use ($disk, $config, $isProduction) {
-                    return (new \Illuminate\Filesystem\ServeFile($disk, $config, $isProduction))($request, $path);
+                    return (new ServeFile($disk, $config, $isProduction))($request, $path);
                 })->where('path', '.*')->name('storage.' . $disk);
                 Route::put($uri . '/{path}', function (Request $request, string $path) use ($disk, $config, $isProduction) {
-                    return (new \Illuminate\Filesystem\ReceiveFile($disk, $config, $isProduction))($request, $path);
+                    return (new ReceiveFile($disk, $config, $isProduction))($request, $path);
                 })->where('path', '.*')->name('storage.' . $disk . '.upload');
             });
         }

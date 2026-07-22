@@ -12,9 +12,9 @@ declare (strict_types=1);
  * @since         3.1.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Mailer\Exception;
+namespace Odigos\Cake\Mailer\Exception;
 
-use Cake\Core\Exception\CakeException;
+use Odigos\Cake\Core\Exception\CakeException;
 /**
  * Missing Action exception - used when a mailer action cannot be found.
  */

@@ -8,26 +8,26 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpFoundation\Session;
+namespace Odigos\Symfony\Component\HttpFoundation\Session;
 
-use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBag;
-use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBagInterface;
-use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
-use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
-use Symfony\Component\HttpFoundation\Session\Storage\MetadataBag;
-use Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage;
-use Symfony\Component\HttpFoundation\Session\Storage\SessionStorageInterface;
+use Odigos\Symfony\Component\HttpFoundation\Session\Attribute\AttributeBag;
+use Odigos\Symfony\Component\HttpFoundation\Session\Attribute\AttributeBagInterface;
+use Odigos\Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
+use Odigos\Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
+use Odigos\Symfony\Component\HttpFoundation\Session\Storage\MetadataBag;
+use Odigos\Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage;
+use Odigos\Symfony\Component\HttpFoundation\Session\Storage\SessionStorageInterface;
 // Help opcache.preload discover always-needed symbols
 class_exists(AttributeBag::class);
 class_exists(FlashBag::class);
-class_exists(\Symfony\Component\HttpFoundation\Session\SessionBagProxy::class);
+class_exists(SessionBagProxy::class);
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  * @author Drak <drak@zikula.org>
  *
  * @implements \IteratorAggregate<string, mixed>
  */
-class Session implements \Symfony\Component\HttpFoundation\Session\FlashBagAwareSessionInterface, \IteratorAggregate, \Countable
+class Session implements FlashBagAwareSessionInterface, \IteratorAggregate, \Countable
 {
     protected SessionStorageInterface $storage;
     private string $flashName;
@@ -159,11 +159,11 @@ class Session implements \Symfony\Component\HttpFoundation\Session\FlashBagAware
         }
         return $this->storage->getMetadataBag();
     }
-    public function registerBag(\Symfony\Component\HttpFoundation\Session\SessionBagInterface $bag): void
+    public function registerBag(SessionBagInterface $bag): void
     {
-        $this->storage->registerBag(new \Symfony\Component\HttpFoundation\Session\SessionBagProxy($bag, $this->data, $this->usageIndex, $this->usageReporter));
+        $this->storage->registerBag(new SessionBagProxy($bag, $this->data, $this->usageIndex, $this->usageReporter));
     }
-    public function getBag(string $name): \Symfony\Component\HttpFoundation\Session\SessionBagInterface
+    public function getBag(string $name): SessionBagInterface
     {
         $bag = $this->storage->getBag($name);
         return method_exists($bag, 'getBag') ? $bag->getBag() : $bag;

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Enums\Moderations;
+namespace Odigos\OpenAI\Enums\Moderations;
 
 enum CategoryAppliedInputType : string
 {

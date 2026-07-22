@@ -14,10 +14,10 @@ declare (strict_types=1);
  * @since         3.3.6
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\View\Helper;
+namespace Odigos\Cake\View\Helper;
 
-use Cake\View\Helper;
-use Cake\View\StringTemplateTrait;
+use Odigos\Cake\View\Helper;
+use Odigos\Cake\View\StringTemplateTrait;
 use LogicException;
 /**
  * BreadcrumbsHelper to register and display a breadcrumb trail for your views

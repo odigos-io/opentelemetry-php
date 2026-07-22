@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Contracts\Database\Eloquent;
+namespace Odigos\Illuminate\Contracts\Database\Eloquent;
 
 interface SupportsPartialRelations
 {

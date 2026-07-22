@@ -8,16 +8,16 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Mailer\Transport;
+namespace Odigos\Symfony\Component\Mailer\Transport;
 
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Mailer\Envelope;
-use Symfony\Component\Mailer\SentMessage;
-use Symfony\Component\Mailer\Transport\Smtp\SmtpTransport;
-use Symfony\Component\Mailer\Transport\Smtp\Stream\AbstractStream;
-use Symfony\Component\Mailer\Transport\Smtp\Stream\ProcessStream;
-use Symfony\Component\Mime\RawMessage;
+use Odigos\Symfony\Component\Mailer\Envelope;
+use Odigos\Symfony\Component\Mailer\SentMessage;
+use Odigos\Symfony\Component\Mailer\Transport\Smtp\SmtpTransport;
+use Odigos\Symfony\Component\Mailer\Transport\Smtp\Stream\AbstractStream;
+use Odigos\Symfony\Component\Mailer\Transport\Smtp\Stream\ProcessStream;
+use Odigos\Symfony\Component\Mime\RawMessage;
 /**
  * SendmailTransport for sending mail through a Sendmail/Postfix (etc..) binary.
  *
@@ -29,7 +29,7 @@ use Symfony\Component\Mime\RawMessage;
  * @author Fabien Potencier <fabien@symfony.com>
  * @author Chris Corbyn
  */
-class SendmailTransport extends \Symfony\Component\Mailer\Transport\AbstractTransport
+class SendmailTransport extends AbstractTransport
 {
     private string $command = '/usr/sbin/sendmail -bs';
     private ProcessStream $stream;

@@ -14,11 +14,11 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Datasource;
+namespace Odigos\Cake\Datasource;
 
-use Cake\Core\App;
-use Cake\Core\ObjectRegistry;
-use Cake\Datasource\Exception\MissingDatasourceException;
+use Odigos\Cake\Core\App;
+use Odigos\Cake\Core\ObjectRegistry;
+use Odigos\Cake\Datasource\Exception\MissingDatasourceException;
 use Closure;
 /**
  * A registry object for connection instances.
@@ -68,7 +68,7 @@ class ConnectionRegistry extends ObjectRegistry
      * @param array<string, mixed> $config An array of settings to use for the datasource.
      * @return \Cake\Datasource\ConnectionInterface A connection with the correct settings.
      */
-    protected function _create(object|string $class, string $alias, array $config): \Cake\Datasource\ConnectionInterface
+    protected function _create(object|string $class, string $alias, array $config): ConnectionInterface
     {
         if (is_string($class)) {
             unset($config['className']);

@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Console\Scheduling;
+namespace Odigos\Illuminate\Console\Scheduling;
 
-use Illuminate\Console\Application;
-use Illuminate\Console\Command;
-use Symfony\Component\Console\Attribute\AsCommand;
-use function Laravel\Prompts\select;
+use Odigos\Illuminate\Console\Application;
+use Odigos\Illuminate\Console\Command;
+use Odigos\Symfony\Component\Console\Attribute\AsCommand;
+use function Odigos\Laravel\Prompts\select;
 #[AsCommand(name: 'schedule:test')]
 class ScheduleTestCommand extends Command
 {
@@ -27,7 +27,7 @@ class ScheduleTestCommand extends Command
      * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
      * @return void
      */
-    public function handle(\Illuminate\Console\Scheduling\Schedule $schedule)
+    public function handle(Schedule $schedule)
     {
         $phpBinary = Application::phpBinary();
         $commands = $schedule->events();
@@ -53,11 +53,11 @@ class ScheduleTestCommand extends Command
         }
         $event = $commands[$index];
         $summary = $event->getSummaryForDisplay();
-        $command = $event instanceof \Illuminate\Console\Scheduling\CallbackEvent ? $summary : trim(str_replace($phpBinary, '', $event->command));
+        $command = $event instanceof CallbackEvent ? $summary : trim(str_replace($phpBinary, '', $event->command));
         $description = sprintf('Running [%s]%s', $command, $event->runInBackground ? ' normally in background' : '');
         $event->runInBackground = \false;
         $this->components->task($description, fn() => $event->run($this->laravel));
-        if (!$event instanceof \Illuminate\Console\Scheduling\CallbackEvent) {
+        if (!$event instanceof CallbackEvent) {
             $this->components->bulletList([$event->getSummaryForDisplay()]);
         }
         $this->newLine();

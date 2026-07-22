@@ -14,10 +14,10 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database\Log;
+namespace Odigos\Cake\Database\Log;
 
-use Cake\Log\Engine\BaseLog;
-use Cake\Log\Log;
+use Odigos\Cake\Log\Engine\BaseLog;
+use Odigos\Cake\Log\Log;
 use Stringable;
 /**
  * This class is a bridge used to write LoggedQuery objects into a real log.
@@ -44,7 +44,7 @@ class QueryLogger extends BaseLog
     public function log($level, string|Stringable $message, array $context = []): void
     {
         $context += ['scope' => $this->scopes() ?: ['queriesLog', 'cake.database.queries'], 'connection' => $this->getConfig('connection'), 'query' => null];
-        if ($context['query'] instanceof \Cake\Database\Log\LoggedQuery) {
+        if ($context['query'] instanceof LoggedQuery) {
             $context = $context['query']->getContext() + $context;
             $message = 'connection={connection} role={role} duration={took} rows={numRows} ' . $message;
         }

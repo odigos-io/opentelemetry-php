@@ -14,10 +14,10 @@ declare (strict_types=1);
  * @since         4.3.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Http\TestSuite;
+namespace Odigos\Cake\Http\TestSuite;
 
-use Cake\Http\Client;
-use Cake\Http\Client\Response;
+use Odigos\Cake\Http\Client;
+use Odigos\Cake\Http\Client\Response;
 use Odigos\PHPUnit\Framework\Attributes\After;
 /**
  * Define mock responses and have mocks automatically cleared.
@@ -109,5 +109,5 @@ trait HttpClientTrait
     }
 }
 // phpcs:disable
-class_alias('Cake\Http\TestSuite\HttpClientTrait', 'Cake\TestSuite\HttpClientTrait');
+class_alias('Odigos\Cake\Http\TestSuite\HttpClientTrait', 'Odigos\Cake\TestSuite\HttpClientTrait');
 // phpcs:enable

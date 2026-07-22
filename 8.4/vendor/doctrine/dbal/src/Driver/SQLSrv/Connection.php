@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Driver\SQLSrv;
+namespace Odigos\Doctrine\DBAL\Driver\SQLSrv;
 
-use Doctrine\DBAL\Driver\Connection as ConnectionInterface;
-use Doctrine\DBAL\Driver\Exception\NoIdentityValue;
-use Doctrine\DBAL\Driver\SQLSrv\Exception\Error;
+use Odigos\Doctrine\DBAL\Driver\Connection as ConnectionInterface;
+use Odigos\Doctrine\DBAL\Driver\Exception\NoIdentityValue;
+use Odigos\Doctrine\DBAL\Driver\SQLSrv\Exception\Error;
 use function sqlsrv_begin_transaction;
 use function sqlsrv_commit;
 use function sqlsrv_query;
@@ -28,11 +28,11 @@ final class Connection implements ConnectionInterface
         $serverInfo = sqlsrv_server_info($this->connection);
         return $serverInfo['SQLServerVersion'];
     }
-    public function prepare(string $sql): \Doctrine\DBAL\Driver\SQLSrv\Statement
+    public function prepare(string $sql): Statement
     {
-        return new \Doctrine\DBAL\Driver\SQLSrv\Statement($this->connection, $sql);
+        return new Statement($this->connection, $sql);
     }
-    public function query(string $sql): \Doctrine\DBAL\Driver\SQLSrv\Result
+    public function query(string $sql): Result
     {
         return $this->prepare($sql)->execute();
     }

@@ -14,13 +14,13 @@ declare (strict_types=1);
  * @since         4.4.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Error\Renderer;
+namespace Odigos\Cake\Error\Renderer;
 
-use Cake\Console\ConsoleOutput;
-use Cake\Core\Configure;
-use Cake\Core\Exception\CakeException;
-use Cake\Error\Debugger;
-use Cake\Error\ExceptionRendererInterface;
+use Odigos\Cake\Console\ConsoleOutput;
+use Odigos\Cake\Core\Configure;
+use Odigos\Cake\Core\Exception\CakeException;
+use Odigos\Cake\Error\Debugger;
+use Odigos\Cake\Error\ExceptionRendererInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Throwable;

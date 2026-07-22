@@ -5,18 +5,18 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\filters;
+namespace Odigos\yii\filters;
 
 use Closure;
 use Odigos\Yii;
-use yii\base\ActionFilter;
-use yii\base\Component;
-use yii\base\DynamicContentAwareInterface;
-use yii\base\DynamicContentAwareTrait;
-use yii\caching\CacheInterface;
-use yii\caching\Dependency;
-use yii\di\Instance;
-use yii\web\Response;
+use Odigos\yii\base\ActionFilter;
+use Odigos\yii\base\Component;
+use Odigos\yii\base\DynamicContentAwareInterface;
+use Odigos\yii\base\DynamicContentAwareTrait;
+use Odigos\yii\caching\CacheInterface;
+use Odigos\yii\caching\Dependency;
+use Odigos\yii\di\Instance;
+use Odigos\yii\web\Response;
 /**
  * PageCache implements server-side caching of whole pages.
  *
@@ -167,7 +167,7 @@ class PageCache extends ActionFilter implements DynamicContentAwareInterface
         if (!$this->enabled) {
             return \true;
         }
-        $this->cache = Instance::ensure($this->cache, 'yii\caching\CacheInterface');
+        $this->cache = Instance::ensure($this->cache, 'Odigos\yii\caching\CacheInterface');
         if (is_array($this->dependency)) {
             $this->dependency = Yii::createObject($this->dependency);
         }

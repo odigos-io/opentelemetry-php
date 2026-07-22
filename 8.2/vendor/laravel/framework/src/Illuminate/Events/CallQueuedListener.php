@@ -1,13 +1,13 @@
 <?php
 
-namespace Illuminate\Events;
+namespace Odigos\Illuminate\Events;
 
-use Illuminate\Bus\Queueable;
-use Illuminate\Container\Container;
-use Illuminate\Contracts\Cache\Repository as Cache;
-use Illuminate\Contracts\Queue\Job;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
+use Odigos\Illuminate\Bus\Queueable;
+use Odigos\Illuminate\Container\Container;
+use Odigos\Illuminate\Contracts\Cache\Repository as Cache;
+use Odigos\Illuminate\Contracts\Queue\Job;
+use Odigos\Illuminate\Contracts\Queue\ShouldQueue;
+use Odigos\Illuminate\Queue\InteractsWithQueue;
 class CallQueuedListener implements ShouldQueue
 {
     use InteractsWithQueue, Queueable;

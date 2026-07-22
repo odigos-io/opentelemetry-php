@@ -1,21 +1,21 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Schema;
+namespace Odigos\Doctrine\DBAL\Schema;
 
-use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Exception;
-use Doctrine\DBAL\Exception\DatabaseRequired;
-use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Doctrine\DBAL\Platforms\Exception\NotSupported;
-use Doctrine\DBAL\Result;
-use Doctrine\DBAL\Schema\Exception\TableDoesNotExist;
-use Doctrine\DBAL\Schema\Introspection\IntrospectingSchemaProvider;
-use Doctrine\DBAL\Schema\Name\OptionallyQualifiedName;
-use Doctrine\DBAL\Schema\Name\Parsers;
-use Doctrine\DBAL\Schema\Name\UnqualifiedName;
-use Doctrine\DBAL\Types\Exception\TypesException;
-use Doctrine\Deprecations\Deprecation;
+use Odigos\Doctrine\DBAL\Connection;
+use Odigos\Doctrine\DBAL\Exception;
+use Odigos\Doctrine\DBAL\Exception\DatabaseRequired;
+use Odigos\Doctrine\DBAL\Platforms\AbstractPlatform;
+use Odigos\Doctrine\DBAL\Platforms\Exception\NotSupported;
+use Odigos\Doctrine\DBAL\Result;
+use Odigos\Doctrine\DBAL\Schema\Exception\TableDoesNotExist;
+use Odigos\Doctrine\DBAL\Schema\Introspection\IntrospectingSchemaProvider;
+use Odigos\Doctrine\DBAL\Schema\Name\OptionallyQualifiedName;
+use Odigos\Doctrine\DBAL\Schema\Name\Parsers;
+use Odigos\Doctrine\DBAL\Schema\Name\UnqualifiedName;
+use Odigos\Doctrine\DBAL\Types\Exception\TypesException;
+use Odigos\Doctrine\Deprecations\Deprecation;
 use Throwable;
 use function array_filter;
 use function array_intersect;
@@ -94,7 +94,7 @@ abstract class AbstractSchemaManager
      */
     public function listSequences(): array
     {
-        return $this->filterAssetNames(array_map(function (array $row): \Doctrine\DBAL\Schema\Sequence {
+        return $this->filterAssetNames(array_map(function (array $row): Sequence {
             return $this->_getPortableSequenceDefinition($row);
         }, $this->connection->fetchAllAssociative($this->platform->getListSequencesSQL($this->getDatabase(__METHOD__)))));
     }
@@ -210,7 +210,7 @@ abstract class AbstractSchemaManager
             if (!$filter($tableName)) {
                 continue;
             }
-            $tables[] = new \Doctrine\DBAL\Schema\Table($tableName, $this->_getPortableTableColumnList($tableName, $database, $tableColumns), $this->_getPortableTableIndexesList($indexColumnsByTable[$tableName] ?? [], $tableName), [], $this->_getPortableTableForeignKeysList($foreignKeyColumnsByTable[$tableName] ?? []), $tableOptionsByTable[$tableName] ?? [], $configuration);
+            $tables[] = new Table($tableName, $this->_getPortableTableColumnList($tableName, $database, $tableColumns), $this->_getPortableTableIndexesList($indexColumnsByTable[$tableName] ?? [], $tableName), [], $this->_getPortableTableForeignKeysList($foreignKeyColumnsByTable[$tableName] ?? []), $tableOptionsByTable[$tableName] ?? [], $configuration);
         }
         return $tables;
     }
@@ -257,7 +257,7 @@ abstract class AbstractSchemaManager
      */
     protected function normalizeName(string $name): string
     {
-        $identifier = new \Doctrine\DBAL\Schema\Identifier($name);
+        $identifier = new Identifier($name);
         return $identifier->getName();
     }
     private function validateTableName(string $input, string $methodName): void
@@ -388,13 +388,13 @@ abstract class AbstractSchemaManager
      *
      * @throws Exception
      */
-    public function introspectTable(string $name): \Doctrine\DBAL\Schema\Table
+    public function introspectTable(string $name): Table
     {
         $columns = $this->listTableColumns($name);
         if ($columns === []) {
             throw TableDoesNotExist::new($name);
         }
-        return new \Doctrine\DBAL\Schema\Table($name, $columns, $this->listTableIndexes($name), [], $this->listTableForeignKeys($name), $this->getTableOptions($name));
+        return new Table($name, $columns, $this->listTableIndexes($name), [], $this->listTableForeignKeys($name), $this->getTableOptions($name));
     }
     /**
      * Lists the views this connection has.
@@ -407,7 +407,7 @@ abstract class AbstractSchemaManager
      */
     public function listViews(): array
     {
-        return array_map(function (array $row): \Doctrine\DBAL\Schema\View {
+        return array_map(function (array $row): View {
             return $this->_getPortableViewDefinition($row);
         }, $this->connection->fetchAllAssociative($this->platform->getListViewsSQL($this->getDatabase(__METHOD__))));
     }
@@ -520,7 +520,7 @@ abstract class AbstractSchemaManager
      *
      * @throws Exception
      */
-    private function introspectTable0(OptionallyQualifiedName $tableName): \Doctrine\DBAL\Schema\Table
+    private function introspectTable0(OptionallyQualifiedName $tableName): Table
     {
         $columns = $this->introspectTableColumns($tableName);
         if ($columns === []) {
@@ -528,7 +528,7 @@ abstract class AbstractSchemaManager
         }
         $options = $this->introspectTableOptions($tableName);
         assert($options !== null);
-        return \Doctrine\DBAL\Schema\Table::editor()->setName($tableName)->setColumns(...$columns)->setPrimaryKeyConstraint($this->introspectTablePrimaryKeyConstraint($tableName))->setIndexes(...$this->introspectTableIndexes($tableName))->setForeignKeyConstraints(...$this->introspectTableForeignKeyConstraints($tableName))->setOptions($options)->create();
+        return Table::editor()->setName($tableName)->setColumns(...$columns)->setPrimaryKeyConstraint($this->introspectTablePrimaryKeyConstraint($tableName))->setIndexes(...$this->introspectTableIndexes($tableName))->setForeignKeyConstraints(...$this->introspectTableForeignKeyConstraints($tableName))->setOptions($options)->create();
     }
     /**
      * Introspects the table with the given unquoted name and schema name and returns its definition. If the schema name
@@ -539,7 +539,7 @@ abstract class AbstractSchemaManager
      *
      * @throws Exception
      */
-    public function introspectTableByUnquotedName(string $tableName, ?string $schemaName = null): \Doctrine\DBAL\Schema\Table
+    public function introspectTableByUnquotedName(string $tableName, ?string $schemaName = null): Table
     {
         return $this->introspectTable0(OptionallyQualifiedName::unquoted($tableName, $schemaName));
     }
@@ -552,7 +552,7 @@ abstract class AbstractSchemaManager
      *
      * @throws Exception
      */
-    public function introspectTableByQuotedName(string $tableName, ?string $schemaName = null): \Doctrine\DBAL\Schema\Table
+    public function introspectTableByQuotedName(string $tableName, ?string $schemaName = null): Table
     {
         return $this->introspectTable0(OptionallyQualifiedName::quoted($tableName, $schemaName));
     }
@@ -568,7 +568,7 @@ abstract class AbstractSchemaManager
      */
     public function introspectTableColumns(OptionallyQualifiedName $tableName): array
     {
-        return $this->introspectTableObjects($tableName, static function (\Doctrine\DBAL\Schema\SchemaProvider $schemaProvider, ?string $schemaName, string $tableName): array {
+        return $this->introspectTableObjects($tableName, static function (SchemaProvider $schemaProvider, ?string $schemaName, string $tableName): array {
             return $schemaProvider->getColumnsForTable($schemaName, $tableName);
         });
     }
@@ -618,7 +618,7 @@ abstract class AbstractSchemaManager
      */
     public function introspectTableIndexes(OptionallyQualifiedName $tableName): array
     {
-        return $this->introspectTableObjects($tableName, static function (\Doctrine\DBAL\Schema\SchemaProvider $schemaProvider, ?string $schemaName, string $tableName): array {
+        return $this->introspectTableObjects($tableName, static function (SchemaProvider $schemaProvider, ?string $schemaName, string $tableName): array {
             return $schemaProvider->getIndexesForTable($schemaName, $tableName);
         });
     }
@@ -664,9 +664,9 @@ abstract class AbstractSchemaManager
      *
      * @throws Exception
      */
-    public function introspectTablePrimaryKeyConstraint(OptionallyQualifiedName $tableName): ?\Doctrine\DBAL\Schema\PrimaryKeyConstraint
+    public function introspectTablePrimaryKeyConstraint(OptionallyQualifiedName $tableName): ?PrimaryKeyConstraint
     {
-        return $this->introspectTableObjects($tableName, static function (\Doctrine\DBAL\Schema\SchemaProvider $schemaProvider, ?string $schemaName, string $tableName): ?\Doctrine\DBAL\Schema\PrimaryKeyConstraint {
+        return $this->introspectTableObjects($tableName, static function (SchemaProvider $schemaProvider, ?string $schemaName, string $tableName): ?PrimaryKeyConstraint {
             return $schemaProvider->getPrimaryKeyConstraintForTable($schemaName, $tableName);
         });
     }
@@ -682,7 +682,7 @@ abstract class AbstractSchemaManager
      */
     public function introspectTableForeignKeyConstraints(OptionallyQualifiedName $tableName): array
     {
-        return $this->introspectTableObjects($tableName, static function (\Doctrine\DBAL\Schema\SchemaProvider $schemaProvider, ?string $schemaName, string $tableName): array {
+        return $this->introspectTableObjects($tableName, static function (SchemaProvider $schemaProvider, ?string $schemaName, string $tableName): array {
             return $schemaProvider->getForeignKeyConstraintsForTable($schemaName, $tableName);
         });
     }
@@ -862,7 +862,7 @@ abstract class AbstractSchemaManager
     }
     /* create*() Methods */
     /** @throws Exception */
-    public function createSchemaObjects(\Doctrine\DBAL\Schema\Schema $schema): void
+    public function createSchemaObjects(Schema $schema): void
     {
         $this->executeStatements($schema->toSql($this->platform));
     }
@@ -880,7 +880,7 @@ abstract class AbstractSchemaManager
      *
      * @throws Exception
      */
-    public function createTable(\Doctrine\DBAL\Schema\Table $table): void
+    public function createTable(Table $table): void
     {
         $this->executeStatements($this->platform->getCreateTableSQL($table));
     }
@@ -889,7 +889,7 @@ abstract class AbstractSchemaManager
      *
      * @throws Exception
      */
-    public function createSequence(\Doctrine\DBAL\Schema\Sequence $sequence): void
+    public function createSequence(Sequence $sequence): void
     {
         $this->connection->executeStatement($this->platform->getCreateSequenceSQL($sequence));
     }
@@ -900,7 +900,7 @@ abstract class AbstractSchemaManager
      *
      * @throws Exception
      */
-    public function createIndex(\Doctrine\DBAL\Schema\Index $index, string $table): void
+    public function createIndex(Index $index, string $table): void
     {
         $this->connection->executeStatement($this->platform->getCreateIndexSQL($index, $table));
     }
@@ -912,7 +912,7 @@ abstract class AbstractSchemaManager
      *
      * @throws Exception
      */
-    public function createForeignKey(\Doctrine\DBAL\Schema\ForeignKeyConstraint $foreignKey, string $table): void
+    public function createForeignKey(ForeignKeyConstraint $foreignKey, string $table): void
     {
         $this->connection->executeStatement($this->platform->getCreateForeignKeySQL($foreignKey, $table));
     }
@@ -921,7 +921,7 @@ abstract class AbstractSchemaManager
      *
      * @throws Exception
      */
-    public function createUniqueConstraint(\Doctrine\DBAL\Schema\UniqueConstraint $uniqueConstraint, string $tableName): void
+    public function createUniqueConstraint(UniqueConstraint $uniqueConstraint, string $tableName): void
     {
         $this->connection->executeStatement($this->platform->getCreateUniqueConstraintSQL($uniqueConstraint, $tableName));
     }
@@ -930,12 +930,12 @@ abstract class AbstractSchemaManager
      *
      * @throws Exception
      */
-    public function createView(\Doctrine\DBAL\Schema\View $view): void
+    public function createView(View $view): void
     {
         $this->connection->executeStatement($this->platform->getCreateViewSQL($view->getQuotedName($this->platform), $view->getSql()));
     }
     /** @throws Exception */
-    public function dropSchemaObjects(\Doctrine\DBAL\Schema\Schema $schema): void
+    public function dropSchemaObjects(Schema $schema): void
     {
         $this->executeStatements($schema->toDropSql($this->platform));
     }
@@ -944,7 +944,7 @@ abstract class AbstractSchemaManager
      *
      * @throws Exception
      */
-    public function alterSchema(\Doctrine\DBAL\Schema\SchemaDiff $schemaDiff): void
+    public function alterSchema(SchemaDiff $schemaDiff): void
     {
         $this->executeStatements($this->platform->getAlterSchemaSQL($schemaDiff));
     }
@@ -953,7 +953,7 @@ abstract class AbstractSchemaManager
      *
      * @throws Exception
      */
-    public function migrateSchema(\Doctrine\DBAL\Schema\Schema $newSchema): void
+    public function migrateSchema(Schema $newSchema): void
     {
         $schemaDiff = $this->createComparator()->compareSchemas($this->introspectSchema(), $newSchema);
         $this->alterSchema($schemaDiff);
@@ -964,7 +964,7 @@ abstract class AbstractSchemaManager
      *
      * @throws Exception
      */
-    public function alterTable(\Doctrine\DBAL\Schema\TableDiff $tableDiff): void
+    public function alterTable(TableDiff $tableDiff): void
     {
         $this->executeStatements($this->platform->getAlterTableSQL($tableDiff));
     }
@@ -987,7 +987,7 @@ abstract class AbstractSchemaManager
         throw NotSupported::new(__METHOD__);
     }
     /** @param array<string, mixed> $sequence */
-    protected function _getPortableSequenceDefinition(array $sequence): \Doctrine\DBAL\Schema\Sequence
+    protected function _getPortableSequenceDefinition(array $sequence): Sequence
     {
         throw NotSupported::new(__METHOD__);
     }
@@ -1019,7 +1019,7 @@ abstract class AbstractSchemaManager
      *
      * @throws TypesException
      */
-    abstract protected function _getPortableTableColumnDefinition(array $tableColumn): \Doctrine\DBAL\Schema\Column;
+    abstract protected function _getPortableTableColumnDefinition(array $tableColumn): Column;
     /**
      * Aggregates and groups the index results according to the required data result.
      *
@@ -1048,7 +1048,7 @@ abstract class AbstractSchemaManager
         }
         $indexes = [];
         foreach ($result as $indexKey => $data) {
-            $indexes[$indexKey] = new \Doctrine\DBAL\Schema\Index($data['name'], $data['columns'], $data['unique'], $data['primary'], $data['flags'], $data['options']);
+            $indexes[$indexKey] = new Index($data['name'], $data['columns'], $data['unique'], $data['primary'], $data['flags'], $data['options']);
         }
         return $indexes;
     }
@@ -1061,7 +1061,7 @@ abstract class AbstractSchemaManager
      */
     abstract protected function _getPortableTableDefinition(array $table): string;
     /** @param array<string, mixed> $view */
-    abstract protected function _getPortableViewDefinition(array $view): \Doctrine\DBAL\Schema\View;
+    abstract protected function _getPortableViewDefinition(array $view): View;
     /**
      * @param array<array<string, mixed>> $rows
      *
@@ -1076,7 +1076,7 @@ abstract class AbstractSchemaManager
         return $list;
     }
     /** @param array<string, mixed> $tableForeignKey */
-    abstract protected function _getPortableTableForeignKeyDefinition(array $tableForeignKey): \Doctrine\DBAL\Schema\ForeignKeyConstraint;
+    abstract protected function _getPortableTableForeignKeyDefinition(array $tableForeignKey): ForeignKeyConstraint;
     /**
      * @param array<int, string> $sql
      *
@@ -1093,7 +1093,7 @@ abstract class AbstractSchemaManager
      *
      * @throws Exception
      */
-    public function introspectSchema(): \Doctrine\DBAL\Schema\Schema
+    public function introspectSchema(): Schema
     {
         $schemaNames = [];
         if ($this->platform->supportsSchemas()) {
@@ -1104,16 +1104,16 @@ abstract class AbstractSchemaManager
             $sequences = $this->listSequences();
         }
         $tables = $this->listTables();
-        return new \Doctrine\DBAL\Schema\Schema($tables, $sequences, $this->createSchemaConfig(), $schemaNames);
+        return new Schema($tables, $sequences, $this->createSchemaConfig(), $schemaNames);
     }
     /**
      * Creates the configuration for this schema.
      *
      * @throws Exception
      */
-    public function createSchemaConfig(): \Doctrine\DBAL\Schema\SchemaConfig
+    public function createSchemaConfig(): SchemaConfig
     {
-        $schemaConfig = new \Doctrine\DBAL\Schema\SchemaConfig();
+        $schemaConfig = new SchemaConfig();
         $schemaConfig->setMaxIdentifierLength($this->platform->getMaxIdentifierLength());
         $schemaConfig->setName($this->getCurrentSchemaName());
         $params = $this->connection->getParams();
@@ -1139,9 +1139,9 @@ abstract class AbstractSchemaManager
         }
         return $database;
     }
-    public function createComparator(): \Doctrine\DBAL\Schema\Comparator
+    public function createComparator(): Comparator
     {
-        return new \Doctrine\DBAL\Schema\Comparator($this->platform, func_num_args() > 0 ? func_get_arg(0) : new \Doctrine\DBAL\Schema\ComparatorConfig());
+        return new Comparator($this->platform, func_num_args() > 0 ? func_get_arg(0) : new ComparatorConfig());
     }
     /**
      * Groups the rows representing database object elements by table they belong to.

@@ -6,7 +6,7 @@
  * @license https://github.com/slimphp/Slim/blob/4.x/LICENSE.md (MIT License)
  */
 declare (strict_types=1);
-namespace Slim;
+namespace Odigos\Slim;
 
 use Psr\Http\Message\ResponseInterface;
 use function connection_status;

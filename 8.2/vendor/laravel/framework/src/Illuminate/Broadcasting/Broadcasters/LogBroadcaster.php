@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Broadcasting\Broadcasters;
+namespace Odigos\Illuminate\Broadcasting\Broadcasters;
 
 use Psr\Log\LoggerInterface;
-class LogBroadcaster extends \Illuminate\Broadcasting\Broadcasters\Broadcaster
+class LogBroadcaster extends Broadcaster
 {
     /**
      * The logger implementation.

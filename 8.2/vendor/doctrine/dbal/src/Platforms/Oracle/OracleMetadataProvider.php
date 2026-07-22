@@ -1,27 +1,27 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Platforms\Oracle;
+namespace Odigos\Doctrine\DBAL\Platforms\Oracle;
 
-use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Exception;
-use Doctrine\DBAL\Platforms\Exception\NotSupported;
-use Doctrine\DBAL\Platforms\OraclePlatform;
-use Doctrine\DBAL\Schema\Column;
-use Doctrine\DBAL\Schema\Exception\UnsupportedName;
-use Doctrine\DBAL\Schema\ForeignKeyConstraint\MatchType;
-use Doctrine\DBAL\Schema\ForeignKeyConstraint\ReferentialAction;
-use Doctrine\DBAL\Schema\Index\IndexType;
-use Doctrine\DBAL\Schema\Metadata\DatabaseMetadataRow;
-use Doctrine\DBAL\Schema\Metadata\ForeignKeyConstraintColumnMetadataRow;
-use Doctrine\DBAL\Schema\Metadata\IndexColumnMetadataRow;
-use Doctrine\DBAL\Schema\Metadata\MetadataProvider;
-use Doctrine\DBAL\Schema\Metadata\PrimaryKeyConstraintColumnRow;
-use Doctrine\DBAL\Schema\Metadata\SequenceMetadataRow;
-use Doctrine\DBAL\Schema\Metadata\TableColumnMetadataRow;
-use Doctrine\DBAL\Schema\Metadata\TableMetadataRow;
-use Doctrine\DBAL\Schema\Metadata\ViewMetadataRow;
-use Doctrine\DBAL\Types\Exception\TypesException;
+use Odigos\Doctrine\DBAL\Connection;
+use Odigos\Doctrine\DBAL\Exception;
+use Odigos\Doctrine\DBAL\Platforms\Exception\NotSupported;
+use Odigos\Doctrine\DBAL\Platforms\OraclePlatform;
+use Odigos\Doctrine\DBAL\Schema\Column;
+use Odigos\Doctrine\DBAL\Schema\Exception\UnsupportedName;
+use Odigos\Doctrine\DBAL\Schema\ForeignKeyConstraint\MatchType;
+use Odigos\Doctrine\DBAL\Schema\ForeignKeyConstraint\ReferentialAction;
+use Odigos\Doctrine\DBAL\Schema\Index\IndexType;
+use Odigos\Doctrine\DBAL\Schema\Metadata\DatabaseMetadataRow;
+use Odigos\Doctrine\DBAL\Schema\Metadata\ForeignKeyConstraintColumnMetadataRow;
+use Odigos\Doctrine\DBAL\Schema\Metadata\IndexColumnMetadataRow;
+use Odigos\Doctrine\DBAL\Schema\Metadata\MetadataProvider;
+use Odigos\Doctrine\DBAL\Schema\Metadata\PrimaryKeyConstraintColumnRow;
+use Odigos\Doctrine\DBAL\Schema\Metadata\SequenceMetadataRow;
+use Odigos\Doctrine\DBAL\Schema\Metadata\TableColumnMetadataRow;
+use Odigos\Doctrine\DBAL\Schema\Metadata\TableMetadataRow;
+use Odigos\Doctrine\DBAL\Schema\Metadata\ViewMetadataRow;
+use Odigos\Doctrine\DBAL\Types\Exception\TypesException;
 use function assert;
 use function implode;
 use function is_string;

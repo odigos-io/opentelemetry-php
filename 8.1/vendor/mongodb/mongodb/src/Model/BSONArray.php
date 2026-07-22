@@ -15,14 +15,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace MongoDB\Model;
+namespace Odigos\MongoDB\Model;
 
 use ArrayObject;
 use JsonSerializable;
 use MongoDB\BSON\Serializable;
 use MongoDB\BSON\Unserializable;
 use function array_values;
-use function MongoDB\recursive_copy;
+use function Odigos\MongoDB\recursive_copy;
 /**
  * Model class for a BSON array.
  *

@@ -1,43 +1,43 @@
 <?php
 
-namespace Illuminate\Database\Eloquent;
+namespace Odigos\Illuminate\Database\Eloquent;
 
 use ArrayAccess;
 use Closure;
-use Illuminate\Contracts\Broadcasting\HasBroadcastChannel;
-use Illuminate\Contracts\Queue\QueueableCollection;
-use Illuminate\Contracts\Queue\QueueableEntity;
-use Illuminate\Contracts\Routing\UrlRoutable;
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Contracts\Support\CanBeEscapedWhenCastToString;
-use Illuminate\Contracts\Support\Jsonable;
-use Illuminate\Database\ConnectionResolverInterface as Resolver;
-use Illuminate\Database\Eloquent\Attributes\Boot;
-use Illuminate\Database\Eloquent\Attributes\Initialize;
-use Illuminate\Database\Eloquent\Attributes\Scope as LocalScope;
-use Illuminate\Database\Eloquent\Attributes\UseEloquentBuilder;
-use Illuminate\Database\Eloquent\Collection as EloquentCollection;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\Concerns\AsPivot;
-use Illuminate\Database\Eloquent\Relations\HasManyThrough;
-use Illuminate\Database\Eloquent\Relations\Pivot;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection as BaseCollection;
-use Illuminate\Support\Str;
-use Illuminate\Support\Stringable as SupportStringable;
-use Illuminate\Support\Traits\ForwardsCalls;
+use Odigos\Illuminate\Contracts\Broadcasting\HasBroadcastChannel;
+use Odigos\Illuminate\Contracts\Queue\QueueableCollection;
+use Odigos\Illuminate\Contracts\Queue\QueueableEntity;
+use Odigos\Illuminate\Contracts\Routing\UrlRoutable;
+use Odigos\Illuminate\Contracts\Support\Arrayable;
+use Odigos\Illuminate\Contracts\Support\CanBeEscapedWhenCastToString;
+use Odigos\Illuminate\Contracts\Support\Jsonable;
+use Odigos\Illuminate\Database\ConnectionResolverInterface as Resolver;
+use Odigos\Illuminate\Database\Eloquent\Attributes\Boot;
+use Odigos\Illuminate\Database\Eloquent\Attributes\Initialize;
+use Odigos\Illuminate\Database\Eloquent\Attributes\Scope as LocalScope;
+use Odigos\Illuminate\Database\Eloquent\Attributes\UseEloquentBuilder;
+use Odigos\Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Odigos\Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Odigos\Illuminate\Database\Eloquent\Relations\Concerns\AsPivot;
+use Odigos\Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Odigos\Illuminate\Database\Eloquent\Relations\Pivot;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Collection as BaseCollection;
+use Odigos\Illuminate\Support\Str;
+use Odigos\Illuminate\Support\Stringable as SupportStringable;
+use Odigos\Illuminate\Support\Traits\ForwardsCalls;
 use JsonException;
 use JsonSerializable;
 use LogicException;
 use ReflectionClass;
 use ReflectionMethod;
 use Stringable;
-use function Illuminate\Support\enum_value;
+use function Odigos\Illuminate\Support\enum_value;
 abstract class Model implements Arrayable, ArrayAccess, CanBeEscapedWhenCastToString, HasBroadcastChannel, Jsonable, JsonSerializable, QueueableEntity, Stringable, UrlRoutable
 {
-    use \Illuminate\Database\Eloquent\Concerns\HasAttributes, \Illuminate\Database\Eloquent\Concerns\HasEvents, \Illuminate\Database\Eloquent\Concerns\HasGlobalScopes, \Illuminate\Database\Eloquent\Concerns\HasRelationships, \Illuminate\Database\Eloquent\Concerns\HasTimestamps, \Illuminate\Database\Eloquent\Concerns\HasUniqueIds, \Illuminate\Database\Eloquent\Concerns\HidesAttributes, \Illuminate\Database\Eloquent\Concerns\GuardsAttributes, \Illuminate\Database\Eloquent\Concerns\PreventsCircularRecursion, \Illuminate\Database\Eloquent\Concerns\TransformsToResource, ForwardsCalls;
+    use Concerns\HasAttributes, Concerns\HasEvents, Concerns\HasGlobalScopes, Concerns\HasRelationships, Concerns\HasTimestamps, Concerns\HasUniqueIds, Concerns\HidesAttributes, Concerns\GuardsAttributes, Concerns\PreventsCircularRecursion, Concerns\TransformsToResource, ForwardsCalls;
     /** @use HasCollection<\Illuminate\Database\Eloquent\Collection<array-key, static & self>> */
-    use \Illuminate\Database\Eloquent\HasCollection;
+    use HasCollection;
     /**
      * The connection name for the model.
      *
@@ -205,13 +205,13 @@ abstract class Model implements Arrayable, ArrayAccess, CanBeEscapedWhenCastToSt
      *
      * @var class-string<\Illuminate\Database\Eloquent\Builder<*>>
      */
-    protected static string $builder = \Illuminate\Database\Eloquent\Builder::class;
+    protected static string $builder = Builder::class;
     /**
      * The Eloquent collection class to use for the model.
      *
      * @var class-string<\Illuminate\Database\Eloquent\Collection<*, *>>
      */
-    protected static string $collectionClass = \Illuminate\Database\Eloquent\Collection::class;
+    protected static string $collectionClass = Collection::class;
     /**
      * Cache of soft deletable models.
      *
@@ -523,7 +523,7 @@ abstract class Model implements Arrayable, ArrayAccess, CanBeEscapedWhenCastToSt
                 if (isset(static::$discardedAttributeViolationCallback)) {
                     call_user_func(static::$discardedAttributeViolationCallback, $this, [$key]);
                 } else {
-                    throw new \Illuminate\Database\Eloquent\MassAssignmentException(sprintf('Add [%s] to fillable property to allow mass assignment on [%s].', $key, get_class($this)));
+                    throw new MassAssignmentException(sprintf('Add [%s] to fillable property to allow mass assignment on [%s].', $key, get_class($this)));
                 }
             }
         }
@@ -532,7 +532,7 @@ abstract class Model implements Arrayable, ArrayAccess, CanBeEscapedWhenCastToSt
             if (isset(static::$discardedAttributeViolationCallback)) {
                 call_user_func(static::$discardedAttributeViolationCallback, $this, $keys);
             } else {
-                throw new \Illuminate\Database\Eloquent\MassAssignmentException(sprintf('Add fillable property [%s] to allow mass assignment on [%s].', implode(', ', $keys), get_class($this)));
+                throw new MassAssignmentException(sprintf('Add fillable property [%s] to allow mass assignment on [%s].', implode(', ', $keys), get_class($this)));
             }
         }
         return $this;
@@ -977,7 +977,7 @@ abstract class Model implements Arrayable, ArrayAccess, CanBeEscapedWhenCastToSt
             // the relationships and save each model via this "push" method, which allows
             // us to recurse into all of these nested relations for the model instance.
             foreach ($this->relations as $models) {
-                $models = $models instanceof \Illuminate\Database\Eloquent\Collection ? $models->all() : [$models];
+                $models = $models instanceof Collection ? $models->all() : [$models];
                 foreach (array_filter($models) as $model) {
                     if (!$model->push()) {
                         return \false;
@@ -1073,7 +1073,7 @@ abstract class Model implements Arrayable, ArrayAccess, CanBeEscapedWhenCastToSt
      * @param  \Illuminate\Database\Eloquent\Builder<static>  $query
      * @return bool
      */
-    protected function performUpdate(\Illuminate\Database\Eloquent\Builder $query)
+    protected function performUpdate(Builder $query)
     {
         // If the updating event returns false, we will cancel the update operation so
         // developers can hook Validation systems into their models and cancel this
@@ -1144,7 +1144,7 @@ abstract class Model implements Arrayable, ArrayAccess, CanBeEscapedWhenCastToSt
      * @param  \Illuminate\Database\Eloquent\Builder<static>  $query
      * @return bool
      */
-    protected function performInsert(\Illuminate\Database\Eloquent\Builder $query)
+    protected function performInsert(Builder $query)
     {
         if ($this->usesUniqueIds()) {
             $this->setUniqueIds();
@@ -1185,7 +1185,7 @@ abstract class Model implements Arrayable, ArrayAccess, CanBeEscapedWhenCastToSt
      * @param  array<string, mixed>  $attributes
      * @return void
      */
-    protected function insertAndSetId(\Illuminate\Database\Eloquent\Builder $query, $attributes)
+    protected function insertAndSetId(Builder $query, $attributes)
     {
         $id = $query->insertGetId($attributes, $keyName = $this->getKeyName());
         $this->setAttribute($keyName, $id);
@@ -1396,7 +1396,7 @@ abstract class Model implements Arrayable, ArrayAccess, CanBeEscapedWhenCastToSt
     public function newEloquentBuilder($query)
     {
         $builderClass = $this->resolveCustomBuilderClass();
-        if ($builderClass && is_subclass_of($builderClass, \Illuminate\Database\Eloquent\Builder::class)) {
+        if ($builderClass && is_subclass_of($builderClass, Builder::class)) {
             return new $builderClass($query);
         }
         return new static::$builder($query);
@@ -1494,7 +1494,7 @@ abstract class Model implements Arrayable, ArrayAccess, CanBeEscapedWhenCastToSt
         try {
             $json = json_encode($this->jsonSerialize(), $options | \JSON_THROW_ON_ERROR);
         } catch (JsonException $e) {
-            throw \Illuminate\Database\Eloquent\JsonEncodingException::forModel($this, $e->getMessage());
+            throw JsonEncodingException::forModel($this, $e->getMessage());
         }
         return $json;
     }
@@ -1883,7 +1883,7 @@ abstract class Model implements Arrayable, ArrayAccess, CanBeEscapedWhenCastToSt
         if ($relationship instanceof HasManyThrough || $relationship instanceof BelongsToMany) {
             $field = $relationship->getRelated()->qualifyColumn($field);
         }
-        return $relationship instanceof \Illuminate\Database\Eloquent\Model ? $relationship->resolveRouteBindingQuery($relationship, $value, $field) : $relationship->getRelated()->resolveRouteBindingQuery($relationship, $value, $field);
+        return $relationship instanceof Model ? $relationship->resolveRouteBindingQuery($relationship, $value, $field) : $relationship->getRelated()->resolveRouteBindingQuery($relationship, $value, $field);
     }
     /**
      * Retrieve the child route model binding relationship name for the given child type.
@@ -1941,21 +1941,21 @@ abstract class Model implements Arrayable, ArrayAccess, CanBeEscapedWhenCastToSt
      */
     public static function isSoftDeletable(): bool
     {
-        return static::$isSoftDeletable[static::class] ??= in_array(\Illuminate\Database\Eloquent\SoftDeletes::class, class_uses_recursive(static::class));
+        return static::$isSoftDeletable[static::class] ??= in_array(SoftDeletes::class, class_uses_recursive(static::class));
     }
     /**
      * Determine if the model is prunable.
      */
     protected function isPrunable(): bool
     {
-        return self::$isPrunable[static::class] ??= in_array(\Illuminate\Database\Eloquent\Prunable::class, class_uses_recursive(static::class)) || static::isMassPrunable();
+        return self::$isPrunable[static::class] ??= in_array(Prunable::class, class_uses_recursive(static::class)) || static::isMassPrunable();
     }
     /**
      * Determine if the model is mass prunable.
      */
     protected function isMassPrunable(): bool
     {
-        return self::$isMassPrunable[static::class] ??= in_array(\Illuminate\Database\Eloquent\MassPrunable::class, class_uses_recursive(static::class));
+        return self::$isMassPrunable[static::class] ??= in_array(MassPrunable::class, class_uses_recursive(static::class));
     }
     /**
      * Determine if lazy loading is disabled.

@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Schema\Name\Parser\Exception;
+namespace Odigos\Doctrine\DBAL\Schema\Name\Parser\Exception;
 
-use Doctrine\DBAL\Schema\Name\Parser\Exception;
+use Odigos\Doctrine\DBAL\Schema\Name\Parser\Exception;
 use LogicException;
 /** @internal */
 class ExpectedNextIdentifier extends LogicException implements Exception

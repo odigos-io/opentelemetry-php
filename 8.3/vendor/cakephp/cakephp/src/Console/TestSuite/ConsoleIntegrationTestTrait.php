@@ -13,22 +13,22 @@ declare (strict_types=1);
  * @since         3.7.0
  * @license       https://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Console\TestSuite;
+namespace Odigos\Cake\Console\TestSuite;
 
-use Cake\Console\CommandInterface;
-use Cake\Console\CommandRunner;
-use Cake\Console\ConsoleIo;
-use Cake\Console\ConsoleOutput;
-use Cake\Console\Exception\StopException;
-use Cake\Console\TestSuite\Constraint\ContentsContain;
-use Cake\Console\TestSuite\Constraint\ContentsContainRow;
-use Cake\Console\TestSuite\Constraint\ContentsEmpty;
-use Cake\Console\TestSuite\Constraint\ContentsNotContain;
-use Cake\Console\TestSuite\Constraint\ContentsRegExp;
-use Cake\Console\TestSuite\Constraint\ExitCode;
-use Cake\Core\ConsoleApplicationInterface;
-use Cake\Core\TestSuite\ContainerStubTrait;
-use Cake\Error\Debugger;
+use Odigos\Cake\Console\CommandInterface;
+use Odigos\Cake\Console\CommandRunner;
+use Odigos\Cake\Console\ConsoleIo;
+use Odigos\Cake\Console\ConsoleOutput;
+use Odigos\Cake\Console\Exception\StopException;
+use Odigos\Cake\Console\TestSuite\Constraint\ContentsContain;
+use Odigos\Cake\Console\TestSuite\Constraint\ContentsContainRow;
+use Odigos\Cake\Console\TestSuite\Constraint\ContentsEmpty;
+use Odigos\Cake\Console\TestSuite\Constraint\ContentsNotContain;
+use Odigos\Cake\Console\TestSuite\Constraint\ContentsRegExp;
+use Odigos\Cake\Console\TestSuite\Constraint\ExitCode;
+use Odigos\Cake\Core\ConsoleApplicationInterface;
+use Odigos\Cake\Core\TestSuite\ContainerStubTrait;
+use Odigos\Cake\Error\Debugger;
 use Odigos\PHPUnit\Framework\Attributes\After;
 /**
  * A bundle of methods that makes testing commands
@@ -51,19 +51,19 @@ trait ConsoleIntegrationTestTrait
      *
      * @var \Cake\Console\TestSuite\StubConsoleOutput|null
      */
-    protected ?\Cake\Console\TestSuite\StubConsoleOutput $_out = null;
+    protected ?StubConsoleOutput $_out = null;
     /**
      * Console error output stub
      *
      * @var \Cake\Console\TestSuite\StubConsoleOutput|null
      */
-    protected ?\Cake\Console\TestSuite\StubConsoleOutput $_err = null;
+    protected ?StubConsoleOutput $_err = null;
     /**
      * Console input mock
      *
      * @var \Cake\Console\TestSuite\StubConsoleInput|null
      */
-    protected ?\Cake\Console\TestSuite\StubConsoleInput $_in = null;
+    protected ?StubConsoleInput $_in = null;
     /**
      * Runs CLI integration test
      *
@@ -76,10 +76,10 @@ trait ConsoleIntegrationTestTrait
     public function exec(string $command, array $input = []): void
     {
         $runner = $this->makeRunner();
-        $this->_out ??= new \Cake\Console\TestSuite\StubConsoleOutput();
-        $this->_err ??= new \Cake\Console\TestSuite\StubConsoleOutput();
+        $this->_out ??= new StubConsoleOutput();
+        $this->_err ??= new StubConsoleOutput();
         if ($this->_in === null || $input) {
-            $this->_in = new \Cake\Console\TestSuite\StubConsoleInput($input);
+            $this->_in = new StubConsoleInput($input);
         }
         $this->_out->clear();
         $this->_err->clear();
@@ -87,7 +87,7 @@ trait ConsoleIntegrationTestTrait
         $io = new ConsoleIo($this->_out, $this->_err, $this->_in);
         try {
             $this->_exitCode = $runner->run($args, $io);
-        } catch (\Cake\Console\TestSuite\MissingConsoleInputException $e) {
+        } catch (MissingConsoleInputException $e) {
             $messages = $this->_out->messages();
             if ($messages !== []) {
                 $e->setQuestion($messages[count($messages) - 1]);
@@ -314,5 +314,5 @@ trait ConsoleIntegrationTestTrait
     }
 }
 // phpcs:disable
-class_alias('Cake\Console\TestSuite\ConsoleIntegrationTestTrait', 'Cake\TestSuite\ConsoleIntegrationTestTrait');
+class_alias('Odigos\Cake\Console\TestSuite\ConsoleIntegrationTestTrait', 'Odigos\Cake\TestSuite\ConsoleIntegrationTestTrait');
 // phpcs:enable

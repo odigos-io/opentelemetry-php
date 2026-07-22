@@ -5,11 +5,11 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\grid;
+namespace Odigos\yii\grid;
 
 use Closure;
-use yii\base\InvalidConfigException;
-use yii\helpers\Html;
+use Odigos\yii\base\InvalidConfigException;
+use Odigos\yii\helpers\Html;
 /**
  * RadioButtonColumn displays a column of radio buttons in a grid view.
  *
@@ -33,7 +33,7 @@ use yii\helpers\Html;
  * @author Kirk Hansen <hanski07@luther.edu>
  * @since 2.0.11
  */
-class RadioButtonColumn extends \yii\grid\Column
+class RadioButtonColumn extends Column
 {
     /**
      * @var string the name of the input radio button input fields.

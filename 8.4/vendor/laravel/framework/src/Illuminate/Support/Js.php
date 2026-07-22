@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Support;
+namespace Odigos\Illuminate\Support;
 
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Contracts\Support\Htmlable;
-use Illuminate\Contracts\Support\Jsonable;
+use Odigos\Illuminate\Contracts\Support\Arrayable;
+use Odigos\Illuminate\Contracts\Support\Htmlable;
+use Odigos\Illuminate\Contracts\Support\Jsonable;
 use JsonSerializable;
 use Stringable;
 use UnitEnum;
@@ -112,7 +112,7 @@ class Js implements Htmlable, Stringable
         if ($json === '[]' || $json === '{}') {
             return $json;
         }
-        if (\Illuminate\Support\Str::startsWith($json, ['"', '{', '['])) {
+        if (Str::startsWith($json, ['"', '{', '['])) {
             return "JSON.parse('" . substr(json_encode($json, $flags | static::REQUIRED_FLAGS), 1, -1) . "')";
         }
         return $json;

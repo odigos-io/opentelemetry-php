@@ -17,7 +17,7 @@ use DateTimeInterface;
 use DateTimeZone;
 use Psr\Clock\ClockInterface as PsrClockInterface;
 use RuntimeException;
-use Symfony\Component\Clock\ClockInterface;
+use Odigos\Symfony\Component\Clock\ClockInterface;
 final class WrapperClock implements ClockInterface
 {
     public function __construct(private PsrClockInterface|Factory|DateTimeInterface $currentClock)

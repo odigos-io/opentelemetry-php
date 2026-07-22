@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Mail\Mailables;
+namespace Odigos\Illuminate\Mail\Mailables;
 
 use Closure;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Traits\Conditionable;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Traits\Conditionable;
 class Envelope
 {
     use Conditionable;
@@ -78,9 +78,9 @@ class Envelope
      *
      * @named-arguments-supported
      */
-    public function __construct(\Illuminate\Mail\Mailables\Address|string|null $from = null, $to = [], $cc = [], $bcc = [], $replyTo = [], ?string $subject = null, array $tags = [], array $metadata = [], Closure|array $using = [])
+    public function __construct(Address|string|null $from = null, $to = [], $cc = [], $bcc = [], $replyTo = [], ?string $subject = null, array $tags = [], array $metadata = [], Closure|array $using = [])
     {
-        $this->from = is_string($from) ? new \Illuminate\Mail\Mailables\Address($from) : $from;
+        $this->from = is_string($from) ? new Address($from) : $from;
         $this->to = $this->normalizeAddresses($to);
         $this->cc = $this->normalizeAddresses($cc);
         $this->bcc = $this->normalizeAddresses($bcc);
@@ -98,7 +98,7 @@ class Envelope
      */
     protected function normalizeAddresses($addresses)
     {
-        return (new Collection($addresses))->map(fn($address) => is_string($address) ? new \Illuminate\Mail\Mailables\Address($address) : $address)->all();
+        return (new Collection($addresses))->map(fn($address) => is_string($address) ? new Address($address) : $address)->all();
     }
     /**
      * Specify who the message will be "from".
@@ -107,9 +107,9 @@ class Envelope
      * @param  string|null  $name
      * @return $this
      */
-    public function from(\Illuminate\Mail\Mailables\Address|string $address, $name = null)
+    public function from(Address|string $address, $name = null)
     {
-        $this->from = is_string($address) ? new \Illuminate\Mail\Mailables\Address($address, $name) : $address;
+        $this->from = is_string($address) ? new Address($address, $name) : $address;
         return $this;
     }
     /**
@@ -119,9 +119,9 @@ class Envelope
      * @param  string|null  $name
      * @return $this
      */
-    public function to(\Illuminate\Mail\Mailables\Address|array|string $address, $name = null)
+    public function to(Address|array|string $address, $name = null)
     {
-        $this->to = array_merge($this->to, $this->normalizeAddresses(is_string($name) ? [new \Illuminate\Mail\Mailables\Address($address, $name)] : Arr::wrap($address)));
+        $this->to = array_merge($this->to, $this->normalizeAddresses(is_string($name) ? [new Address($address, $name)] : Arr::wrap($address)));
         return $this;
     }
     /**
@@ -131,9 +131,9 @@ class Envelope
      * @param  string|null  $name
      * @return $this
      */
-    public function cc(\Illuminate\Mail\Mailables\Address|array|string $address, $name = null)
+    public function cc(Address|array|string $address, $name = null)
     {
-        $this->cc = array_merge($this->cc, $this->normalizeAddresses(is_string($name) ? [new \Illuminate\Mail\Mailables\Address($address, $name)] : Arr::wrap($address)));
+        $this->cc = array_merge($this->cc, $this->normalizeAddresses(is_string($name) ? [new Address($address, $name)] : Arr::wrap($address)));
         return $this;
     }
     /**
@@ -143,9 +143,9 @@ class Envelope
      * @param  string|null  $name
      * @return $this
      */
-    public function bcc(\Illuminate\Mail\Mailables\Address|array|string $address, $name = null)
+    public function bcc(Address|array|string $address, $name = null)
     {
-        $this->bcc = array_merge($this->bcc, $this->normalizeAddresses(is_string($name) ? [new \Illuminate\Mail\Mailables\Address($address, $name)] : Arr::wrap($address)));
+        $this->bcc = array_merge($this->bcc, $this->normalizeAddresses(is_string($name) ? [new Address($address, $name)] : Arr::wrap($address)));
         return $this;
     }
     /**
@@ -155,9 +155,9 @@ class Envelope
      * @param  string|null  $name
      * @return $this
      */
-    public function replyTo(\Illuminate\Mail\Mailables\Address|array|string $address, $name = null)
+    public function replyTo(Address|array|string $address, $name = null)
     {
-        $this->replyTo = array_merge($this->replyTo, $this->normalizeAddresses(is_string($name) ? [new \Illuminate\Mail\Mailables\Address($address, $name)] : Arr::wrap($address)));
+        $this->replyTo = array_merge($this->replyTo, $this->normalizeAddresses(is_string($name) ? [new Address($address, $name)] : Arr::wrap($address)));
         return $this;
     }
     /**

@@ -1,14 +1,14 @@
 <?php
 
-namespace Illuminate\Database\Console\Migrations;
+namespace Odigos\Illuminate\Database\Console\Migrations;
 
-use Illuminate\Contracts\Console\PromptsForMissingInput;
-use Illuminate\Database\Migrations\MigrationCreator;
-use Illuminate\Support\Composer;
-use Illuminate\Support\Str;
-use Symfony\Component\Console\Attribute\AsCommand;
+use Odigos\Illuminate\Contracts\Console\PromptsForMissingInput;
+use Odigos\Illuminate\Database\Migrations\MigrationCreator;
+use Odigos\Illuminate\Support\Composer;
+use Odigos\Illuminate\Support\Str;
+use Odigos\Symfony\Component\Console\Attribute\AsCommand;
 #[AsCommand(name: 'make:migration')]
-class MigrateMakeCommand extends \Illuminate\Database\Console\Migrations\BaseCommand implements PromptsForMissingInput
+class MigrateMakeCommand extends BaseCommand implements PromptsForMissingInput
 {
     /**
      * The console command signature.
@@ -77,7 +77,7 @@ class MigrateMakeCommand extends \Illuminate\Database\Console\Migrations\BaseCom
         // "create" in the name. This will allow us to provide a convenient way
         // of creating migrations that create new tables for the application.
         if (!$table) {
-            [$table, $create] = \Illuminate\Database\Console\Migrations\TableGuesser::guess($name);
+            [$table, $create] = TableGuesser::guess($name);
         }
         // Now we are ready to write the migration out to disk. Once we've written
         // the migration out, we will dump-autoload for the entire framework to

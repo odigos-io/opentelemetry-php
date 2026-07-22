@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Cake\Http;
+namespace Odigos\Cake\Http;
 
 use Psr\Http\Message\RequestInterface;
 /**
@@ -46,7 +46,7 @@ class ContentTypeNegotiation
      */
     protected function parseQualifiers(string $header): array
     {
-        return \Cake\Http\HeaderUtility::parseAccept($header);
+        return HeaderUtility::parseAccept($header);
     }
     /**
      * Get the most preferred content type from a request.

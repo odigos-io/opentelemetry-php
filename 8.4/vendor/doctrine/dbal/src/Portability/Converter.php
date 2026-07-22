@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Portability;
+namespace Odigos\Doctrine\DBAL\Portability;
 
 use Closure;
 use function array_change_key_case;

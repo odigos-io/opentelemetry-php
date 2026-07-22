@@ -5,12 +5,12 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\rest;
+namespace Odigos\yii\rest;
 
-use yii\base\InvalidConfigException;
-use yii\base\Model;
-use yii\base\Module;
-use yii\web\ForbiddenHttpException;
+use Odigos\yii\base\InvalidConfigException;
+use Odigos\yii\base\Model;
+use Odigos\yii\base\Module;
+use Odigos\yii\web\ForbiddenHttpException;
 /**
  * ActiveController implements a common set of actions for supporting RESTful access to ActiveRecord.
  *
@@ -40,7 +40,7 @@ use yii\web\ForbiddenHttpException;
  * @template T of Module = Module
  * @extends Controller<T>
  */
-class ActiveController extends \yii\rest\Controller
+class ActiveController extends Controller
 {
     /**
      * @var string the model class name. This property must be set.
@@ -71,7 +71,7 @@ class ActiveController extends \yii\rest\Controller
      */
     public function actions()
     {
-        return ['index' => ['class' => 'yii\rest\IndexAction', 'modelClass' => $this->modelClass, 'checkAccess' => [$this, 'checkAccess']], 'view' => ['class' => 'yii\rest\ViewAction', 'modelClass' => $this->modelClass, 'checkAccess' => [$this, 'checkAccess']], 'create' => ['class' => 'yii\rest\CreateAction', 'modelClass' => $this->modelClass, 'checkAccess' => [$this, 'checkAccess'], 'scenario' => $this->createScenario], 'update' => ['class' => 'yii\rest\UpdateAction', 'modelClass' => $this->modelClass, 'checkAccess' => [$this, 'checkAccess'], 'scenario' => $this->updateScenario], 'delete' => ['class' => 'yii\rest\DeleteAction', 'modelClass' => $this->modelClass, 'checkAccess' => [$this, 'checkAccess']], 'options' => ['class' => 'yii\rest\OptionsAction']];
+        return ['index' => ['class' => 'Odigos\yii\rest\IndexAction', 'modelClass' => $this->modelClass, 'checkAccess' => [$this, 'checkAccess']], 'view' => ['class' => 'Odigos\yii\rest\ViewAction', 'modelClass' => $this->modelClass, 'checkAccess' => [$this, 'checkAccess']], 'create' => ['class' => 'Odigos\yii\rest\CreateAction', 'modelClass' => $this->modelClass, 'checkAccess' => [$this, 'checkAccess'], 'scenario' => $this->createScenario], 'update' => ['class' => 'Odigos\yii\rest\UpdateAction', 'modelClass' => $this->modelClass, 'checkAccess' => [$this, 'checkAccess'], 'scenario' => $this->updateScenario], 'delete' => ['class' => 'Odigos\yii\rest\DeleteAction', 'modelClass' => $this->modelClass, 'checkAccess' => [$this, 'checkAccess']], 'options' => ['class' => 'Odigos\yii\rest\OptionsAction']];
     }
     /**
      * {@inheritdoc}

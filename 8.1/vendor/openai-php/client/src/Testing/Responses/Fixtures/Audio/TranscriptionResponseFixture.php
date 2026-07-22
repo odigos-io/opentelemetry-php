@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenAI\Testing\Responses\Fixtures\Audio;
+namespace Odigos\OpenAI\Testing\Responses\Fixtures\Audio;
 
 final class TranscriptionResponseFixture
 {

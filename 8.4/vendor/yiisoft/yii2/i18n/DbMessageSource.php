@@ -5,15 +5,15 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\i18n;
+namespace Odigos\yii\i18n;
 
-use yii\base\InvalidConfigException;
-use yii\caching\CacheInterface;
-use yii\db\Connection;
-use yii\db\Expression;
-use yii\db\Query;
-use yii\di\Instance;
-use yii\helpers\ArrayHelper;
+use Odigos\yii\base\InvalidConfigException;
+use Odigos\yii\caching\CacheInterface;
+use Odigos\yii\db\Connection;
+use Odigos\yii\db\Expression;
+use Odigos\yii\db\Query;
+use Odigos\yii\di\Instance;
+use Odigos\yii\helpers\ArrayHelper;
 /**
  * DbMessageSource extends [[MessageSource]] and represents a message source that stores translated
  * messages in database.
@@ -35,7 +35,7 @@ use yii\helpers\ArrayHelper;
  * @author resurtm <resurtm@gmail.com>
  * @since 2.0
  */
-class DbMessageSource extends \yii\i18n\MessageSource
+class DbMessageSource extends MessageSource
 {
     /**
      * Prefix which would be used when generating cache key.
@@ -93,7 +93,7 @@ class DbMessageSource extends \yii\i18n\MessageSource
         parent::init();
         $this->db = Instance::ensure($this->db, Connection::className());
         if ($this->enableCaching) {
-            $this->cache = Instance::ensure($this->cache, 'yii\caching\CacheInterface');
+            $this->cache = Instance::ensure($this->cache, 'Odigos\yii\caching\CacheInterface');
         }
     }
     /**

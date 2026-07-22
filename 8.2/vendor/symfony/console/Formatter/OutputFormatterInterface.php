@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Console\Formatter;
+namespace Odigos\Symfony\Component\Console\Formatter;
 
 /**
  * Formatter interface for console output.
@@ -28,7 +28,7 @@ interface OutputFormatterInterface
     /**
      * Sets a new style.
      */
-    public function setStyle(string $name, \Symfony\Component\Console\Formatter\OutputFormatterStyleInterface $style): void;
+    public function setStyle(string $name, OutputFormatterStyleInterface $style): void;
     /**
      * Checks if output formatter has style with specified name.
      */
@@ -38,7 +38,7 @@ interface OutputFormatterInterface
      *
      * @throws \InvalidArgumentException When style isn't defined
      */
-    public function getStyle(string $name): \Symfony\Component\Console\Formatter\OutputFormatterStyleInterface;
+    public function getStyle(string $name): OutputFormatterStyleInterface;
     /**
      * Formats a message according to the given styles.
      */

@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Uid;
+namespace Odigos\Symfony\Component\Uid;
 
-use Symfony\Component\Uid\Exception\InvalidArgumentException;
+use Odigos\Symfony\Component\Uid\Exception\InvalidArgumentException;
 /**
  * A ULID is lexicographically sortable and contains a 48-bit timestamp and 80-bit of crypto-random entropy.
  *
@@ -18,7 +18,7 @@ use Symfony\Component\Uid\Exception\InvalidArgumentException;
  *
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class Ulid extends \Symfony\Component\Uid\AbstractUid implements \Symfony\Component\Uid\TimeBasedUidInterface
+class Ulid extends AbstractUid implements TimeBasedUidInterface
 {
     protected const NIL = '00000000000000000000000000';
     protected const MAX = '7ZZZZZZZZZZZZZZZZZZZZZZZZZ';
@@ -53,23 +53,23 @@ class Ulid extends \Symfony\Component\Uid\AbstractUid implements \Symfony\Compon
     {
         if (36 === \strlen($ulid) && preg_match('{^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$}Di', $ulid)) {
             $ulid = hex2bin(str_replace('-', '', $ulid));
-        } elseif (22 === \strlen($ulid) && 22 === strspn($ulid, \Symfony\Component\Uid\BinaryUtil::BASE58[''])) {
-            $ulid = str_pad(\Symfony\Component\Uid\BinaryUtil::fromBase($ulid, \Symfony\Component\Uid\BinaryUtil::BASE58), 16, "\x00", \STR_PAD_LEFT);
+        } elseif (22 === \strlen($ulid) && 22 === strspn($ulid, BinaryUtil::BASE58[''])) {
+            $ulid = str_pad(BinaryUtil::fromBase($ulid, BinaryUtil::BASE58), 16, "\x00", \STR_PAD_LEFT);
         }
         if (16 !== \strlen($ulid)) {
             return match (strtr($ulid, 'z', 'Z')) {
-                self::NIL => new \Symfony\Component\Uid\NilUlid(),
-                self::MAX => new \Symfony\Component\Uid\MaxUlid(),
+                self::NIL => new NilUlid(),
+                self::MAX => new MaxUlid(),
                 default => new static($ulid),
             };
         }
         $ulid = bin2hex($ulid);
         $ulid = \sprintf('%02s%04s%04s%04s%04s%04s%04s', base_convert(substr($ulid, 0, 2), 16, 32), base_convert(substr($ulid, 2, 5), 16, 32), base_convert(substr($ulid, 7, 5), 16, 32), base_convert(substr($ulid, 12, 5), 16, 32), base_convert(substr($ulid, 17, 5), 16, 32), base_convert(substr($ulid, 22, 5), 16, 32), base_convert(substr($ulid, 27, 5), 16, 32));
         if (self::NIL === $ulid) {
-            return new \Symfony\Component\Uid\NilUlid();
+            return new NilUlid();
         }
         if (self::MAX === $ulid = strtr($ulid, 'abcdefghijklmnopqrstuv', 'ABCDEFGHJKMNPQRSTVWXYZ')) {
-            return new \Symfony\Component\Uid\MaxUlid();
+            return new MaxUlid();
         }
         $u = new static(self::NIL);
         $u->uid = $ulid;
@@ -99,7 +99,7 @@ class Ulid extends \Symfony\Component\Uid\AbstractUid implements \Symfony\Compon
             $time = (string) hexdec(base_convert($time, 32, 16));
         } else {
             $time = \sprintf('%02s%05s%05s', base_convert(substr($time, 0, 2), 32, 16), base_convert(substr($time, 2, 4), 32, 16), base_convert(substr($time, 6, 4), 32, 16));
-            $time = \Symfony\Component\Uid\BinaryUtil::toBase(hex2bin($time), \Symfony\Component\Uid\BinaryUtil::BASE10);
+            $time = BinaryUtil::toBase(hex2bin($time), BinaryUtil::BASE10);
         }
         if (4 > \strlen($time)) {
             $time = '000' . $time;
@@ -143,7 +143,7 @@ class Ulid extends \Symfony\Component\Uid\AbstractUid implements \Symfony\Compon
         if (\PHP_INT_SIZE >= 8) {
             $time = base_convert($time, 10, 32);
         } else {
-            $time = str_pad(bin2hex(\Symfony\Component\Uid\BinaryUtil::fromBase($time, \Symfony\Component\Uid\BinaryUtil::BASE10)), 12, '0', \STR_PAD_LEFT);
+            $time = str_pad(bin2hex(BinaryUtil::fromBase($time, BinaryUtil::BASE10)), 12, '0', \STR_PAD_LEFT);
             $time = \sprintf('%s%04s%04s', base_convert(substr($time, 0, 2), 16, 32), base_convert(substr($time, 2, 5), 16, 32), base_convert(substr($time, 7, 5), 16, 32));
         }
         return strtr(\sprintf('%010s%04s%04s%04s%04s', $time, base_convert(self::$rand[1], 10, 32), base_convert(self::$rand[2], 10, 32), base_convert(self::$rand[3], 10, 32), base_convert(self::$rand[4], 10, 32)), 'abcdefghijklmnopqrstuv', 'ABCDEFGHJKMNPQRSTVWXYZ');

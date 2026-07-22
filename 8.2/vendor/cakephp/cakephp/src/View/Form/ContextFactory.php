@@ -14,13 +14,13 @@ declare (strict_types=1);
  * @since         3.5.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\View\Form;
+namespace Odigos\Cake\View\Form;
 
-use Cake\Collection\Collection;
-use Cake\Core\Exception\CakeException;
-use Cake\Datasource\EntityInterface;
-use Cake\Form\Form;
-use Cake\Http\ServerRequest;
+use Odigos\Cake\Collection\Collection;
+use Odigos\Cake\Core\Exception\CakeException;
+use Odigos\Cake\Datasource\EntityInterface;
+use Odigos\Cake\Form\Form;
+use Odigos\Cake\Http\ServerRequest;
 /**
  * Factory for getting form context instance based on provided data.
  */
@@ -55,29 +55,29 @@ class ContextFactory
     {
         $providers = [['type' => 'orm', 'callable' => function ($request, $data) {
             if ($data['entity'] instanceof EntityInterface) {
-                return new \Cake\View\Form\EntityContext($data);
+                return new EntityContext($data);
             }
             if (isset($data['table'])) {
-                return new \Cake\View\Form\EntityContext($data);
+                return new EntityContext($data);
             }
             if (is_iterable($data['entity'])) {
                 $pass = (new Collection($data['entity']))->first() !== null;
                 if ($pass) {
-                    return new \Cake\View\Form\EntityContext($data);
+                    return new EntityContext($data);
                 }
-                return new \Cake\View\Form\NullContext($data);
+                return new NullContext($data);
             }
         }], ['type' => 'form', 'callable' => function ($request, $data) {
             if ($data['entity'] instanceof Form) {
-                return new \Cake\View\Form\FormContext($data);
+                return new FormContext($data);
             }
         }], ['type' => 'array', 'callable' => function ($request, $data) {
             if (is_array($data['entity']) && isset($data['entity']['schema'])) {
-                return new \Cake\View\Form\ArrayContext($data['entity']);
+                return new ArrayContext($data['entity']);
             }
         }], ['type' => 'null', 'callable' => function ($request, $data) {
             if ($data['entity'] === null) {
-                return new \Cake\View\Form\NullContext($data);
+                return new NullContext($data);
             }
         }]] + $providers;
         return new static($providers);
@@ -112,7 +112,7 @@ class ContextFactory
      * @return \Cake\View\Form\ContextInterface Context provider.
      * @throws \Cake\Core\Exception\CakeException When a context instance cannot be generated for given entity.
      */
-    public function get(ServerRequest $request, array $data = []): \Cake\View\Form\ContextInterface
+    public function get(ServerRequest $request, array $data = []): ContextInterface
     {
         $data += ['entity' => null];
         $context = null;

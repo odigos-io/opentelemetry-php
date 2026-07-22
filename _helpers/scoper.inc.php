@@ -2,6 +2,8 @@
 
 use Isolated\Symfony\Component\Finder\Finder;
 
+$hookTargetPatcher = require __DIR__ . '/scoper-hook-patcher.php';
+
 return [
     'prefix' => 'Odigos',
 
@@ -15,37 +17,35 @@ return [
             ->in('vendor'),
     ],
 
-    // Scope ALL vendor namespaces to prevent version conflicts with customer applications, EXCEPT namespaces that must remain unscoped because:
-    //  1. The C extension provides functions in the OpenTelemetry\Instrumentation namespace
-    //  2. Auto-instrumentation registers hooks by class name — the class string must match the customer's actual runtime class
-    //  3. PSR interfaces bridge customer code and instrumentation
+    // Scope ALL vendor namespaces to prevent version conflicts with customer applications.
     //
-    // NOTE: We exclude specific OpenTelemetry\* sub-namespaces rather than the root "OpenTelemetry" because PHP namespaces are case-insensitive and PHP-Scoper follows suit. Excluding "OpenTelemetry" would also exclude "Opentelemetry\Proto" (the generated protobuf code, lowercase 't'), which MUST be scoped to prevent version conflicts with customer apps.
-    // The protobuf descriptor pool lookup is fixed via a patcher below.
+    // Exceptions (must remain unscoped):
+    //  1. OpenTelemetry\{API,SDK,Context,SemConv} — shared with the C extension / agent runtime
+    //  2. Psr — interfaces bridge customer objects and instrumentation callbacks
+    //  3. Composer — autoloader internals
+    //  4. MongoDB\Driver — PHP extension APIs (subscriber interfaces / monitoring functions)
+    //
+    // Hook-target libraries (GuzzleHttp, Slim, Illuminate, Symfony, …) ARE scoped. A patcher
+    // rewrites auto-instrumentation to use string-literal FQCNs and relaxed typehints so hooks
+    // still attach to the customer's unscoped classes without the agent providing those classes.
+    //
+    // NOTE: We exclude specific OpenTelemetry\* sub-namespaces rather than the root "OpenTelemetry"
+    // because PHP namespaces are case-insensitive and PHP-Scoper follows suit. Excluding
+    // "OpenTelemetry" would also exclude "Opentelemetry\Proto" (generated protobuf, lowercase 't'),
+    // which MUST be scoped. The protobuf descriptor pool lookup is fixed via a patcher below.
     'exclude-namespaces' => [
-        // OTel SDK, API, auto-instrumentation, C extension hooks
         'OpenTelemetry\API',
         'OpenTelemetry\SDK',
         'OpenTelemetry\Context',
         'OpenTelemetry\SemConv',
 
-        // Framework namespaces targeted by auto-instrumentation hooks
-        'Illuminate',
-        'Laravel',
-        'Symfony',
-        'Cake',
-        'yii',
-        'Slim',
-        'GuzzleHttp',
-        'Doctrine',
-        'MongoDB',
-        'OpenAI',
+        // PSR interfaces (bridge between customer code and instrumentation).
+        // Use a regex anchored to the Psr\ root — a bare 'Psr' string exclusion also
+        // matches GuzzleHttp\Psr7 (segment prefix), which breaks scoped Guzzle OTLP export.
+        '/^Psr\\\\/',
 
-        // PSR interfaces (bridge between customer code and instrumentation)
-        'Psr',
-
-        // php-http (Http\Client\HttpAsyncClient is a hook target)
-        'Http',
+        // PHP mongodb extension APIs only (userland MongoDB\ library is scoped)
+        'MongoDB\Driver',
 
         // Composer autoloader internals
         'Composer',
@@ -57,6 +57,9 @@ return [
     ],
     'exclude-constants' => [],
     'patchers' => [
+        // Convert hook(::class) + relax typehints/instanceof for scoped hook-target libraries.
+        $hookTargetPatcher,
+
         // PHP-Scoper generates self-referencing class_alias() calls when a global-scope class has the same name as an excluded namespace (e.g. class OpenAI in global ns vs excluded OpenAI\ namespace).
         // A self-alias is always an error at runtime, so strip them.
         static function (string $filePath, string $prefix, string $content): string {
@@ -64,12 +67,12 @@ return [
                 '/^\\\\class_alias\(\'([^\']+)\',\s*\'\\1\',\s*\\\\false\);\s*$/m',
                 '',
                 $content
-            );
+            ) ?? $content;
         },
         // `exclude-namespaces` keeps classes inside OpenTelemetry\{SDK,API,Context,SemConv} un-prefixed, but PHP-Scoper still prefixes a bare namespace-alias `use` of the namespace itself (e.g. upstream `use OpenTelemetry\SDK;` → `use Odigos\OpenTelemetry\SDK;`). Later references like `SDK\Resource\ResourceInfo` then resolve to non-existent `Odigos\OpenTelemetry\SDK\...`, causing TypeError at runtime. Strip the prefix back off these specific imports.
         static function (string $filePath, string $prefix, string $content): string {
             $pattern = '/^use\s+' . preg_quote($prefix, '/') . '\\\\OpenTelemetry\\\\(SDK|API|Context|SemConv)(\b[^;]*);/m';
-            return preg_replace($pattern, 'use OpenTelemetry\\\\$1$2;', $content);
+            return preg_replace($pattern, 'use OpenTelemetry\\\\$1$2;', $content) ?? $content;
         },
         // Protobuf scoping compatibility: the descriptor pool registers classes by the original PHP names derived from .proto files. After scoping, our classes have the Odigos\ prefix.
         // Rather than patching every downstream lookup and type-check, we prefix class names at the source: the Descriptor/EnumDescriptor setClass methods.

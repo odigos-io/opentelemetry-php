@@ -8,17 +8,17 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\VarDumper\Dumper;
+namespace Odigos\Symfony\Component\VarDumper\Dumper;
 
-use Symfony\Component\ErrorHandler\ErrorRenderer\FileLinkFormatter;
-use Symfony\Component\VarDumper\Cloner\Cursor;
-use Symfony\Component\VarDumper\Cloner\Stub;
+use Odigos\Symfony\Component\ErrorHandler\ErrorRenderer\FileLinkFormatter;
+use Odigos\Symfony\Component\VarDumper\Cloner\Cursor;
+use Odigos\Symfony\Component\VarDumper\Cloner\Stub;
 /**
  * CliDumper dumps variables for command line output.
  *
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class CliDumper extends \Symfony\Component\VarDumper\Dumper\AbstractDumper
+class CliDumper extends AbstractDumper
 {
     public static bool $defaultColors;
     /** @var callable|resource|string|null */

@@ -1,15 +1,15 @@
 <?php
 
-namespace Illuminate\Foundation\Testing\Concerns;
+namespace Odigos\Illuminate\Foundation\Testing\Concerns;
 
 use Closure;
-use Illuminate\Contracts\Debug\ExceptionHandler;
-use Illuminate\Support\Testing\Fakes\ExceptionHandlerFake;
-use Illuminate\Support\Traits\ReflectsClosures;
-use Illuminate\Testing\Assert;
-use Illuminate\Validation\ValidationException;
-use Symfony\Component\Console\Application as ConsoleApplication;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Odigos\Illuminate\Contracts\Debug\ExceptionHandler;
+use Odigos\Illuminate\Support\Testing\Fakes\ExceptionHandlerFake;
+use Odigos\Illuminate\Support\Traits\ReflectsClosures;
+use Odigos\Illuminate\Testing\Assert;
+use Odigos\Illuminate\Validation\ValidationException;
+use Odigos\Symfony\Component\Console\Application as ConsoleApplication;
+use Odigos\Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 trait InteractsWithExceptionHandling
 {
@@ -64,7 +64,7 @@ trait InteractsWithExceptionHandling
             $currentExceptionHandler = app(ExceptionHandler::class);
             $this->originalExceptionHandler = $currentExceptionHandler instanceof ExceptionHandlerFake ? $currentExceptionHandler->handler() : $currentExceptionHandler;
         }
-        $exceptionHandler = new class($this->originalExceptionHandler, $except) implements ExceptionHandler, \Illuminate\Foundation\Testing\Concerns\WithoutExceptionHandlingHandler
+        $exceptionHandler = new class($this->originalExceptionHandler, $except) implements ExceptionHandler, WithoutExceptionHandlingHandler
         {
             protected $except;
             protected $originalHandler;

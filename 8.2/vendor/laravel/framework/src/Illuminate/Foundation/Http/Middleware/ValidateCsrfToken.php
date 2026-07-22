@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Foundation\Http\Middleware;
+namespace Odigos\Illuminate\Foundation\Http\Middleware;
 
 /**
  * Alias of VerifyCsrfToken for consistency.
  */
-class ValidateCsrfToken extends \Illuminate\Foundation\Http\Middleware\VerifyCsrfToken
+class ValidateCsrfToken extends VerifyCsrfToken
 {
     //
 }

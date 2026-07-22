@@ -14,20 +14,20 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Command;
+namespace Odigos\Cake\Command;
 
 use Odigos\Brick\VarExporter\VarExporter;
-use Cake\Console\Arguments;
-use Cake\Console\ConsoleIo;
-use Cake\Console\ConsoleOptionParser;
-use Cake\Core\Exception\MissingPluginException;
-use Cake\Core\Plugin;
-use Cake\Core\PluginInterface;
-use Cake\Utility\Hash;
+use Odigos\Cake\Console\Arguments;
+use Odigos\Cake\Console\ConsoleIo;
+use Odigos\Cake\Console\ConsoleOptionParser;
+use Odigos\Cake\Core\Exception\MissingPluginException;
+use Odigos\Cake\Core\Plugin;
+use Odigos\Cake\Core\PluginInterface;
+use Odigos\Cake\Utility\Hash;
 /**
  * Command for loading plugins.
  */
-class PluginLoadCommand extends \Cake\Command\Command
+class PluginLoadCommand extends Command
 {
     /**
      * Config file

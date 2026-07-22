@@ -5,9 +5,9 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\mutex;
+namespace Odigos\yii\mutex;
 
-use yii\base\InvalidConfigException;
+use Odigos\yii\base\InvalidConfigException;
 /**
  * PgsqlMutex implements mutex "lock" mechanism via PgSQL locks.
  *
@@ -32,9 +32,9 @@ use yii\base\InvalidConfigException;
  * @author nineinchnick <janek.jan@gmail.com>
  * @since 2.0.8
  */
-class PgsqlMutex extends \yii\mutex\DbMutex
+class PgsqlMutex extends DbMutex
 {
-    use \yii\mutex\RetryAcquireTrait;
+    use RetryAcquireTrait;
     /**
      * Initializes PgSQL specific mutex component implementation.
      * @throws InvalidConfigException if [[db]] is not PgSQL connection.

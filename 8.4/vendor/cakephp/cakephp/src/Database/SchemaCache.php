@@ -14,9 +14,9 @@ declare (strict_types=1);
  * @since         3.6.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database;
+namespace Odigos\Cake\Database;
 
-use Cake\Database\Schema\CachedCollection;
+use Odigos\Cake\Database\Schema\CachedCollection;
 /**
  * Schema Cache.
  *
@@ -40,7 +40,7 @@ class SchemaCache
      *
      * @param \Cake\Database\Connection $connection Connection name to get the schema for or a connection instance
      */
-    public function __construct(\Cake\Database\Connection $connection)
+    public function __construct(Connection $connection)
     {
         $this->_schema = $this->getSchema($connection);
     }
@@ -89,7 +89,7 @@ class SchemaCache
      * @return \Cake\Database\Schema\CachedCollection
      * @throws \RuntimeException If given connection object is not compatible with schema caching
      */
-    public function getSchema(\Cake\Database\Connection $connection): CachedCollection
+    public function getSchema(Connection $connection): CachedCollection
     {
         $config = $connection->config();
         if (empty($config['cacheMetadata'])) {

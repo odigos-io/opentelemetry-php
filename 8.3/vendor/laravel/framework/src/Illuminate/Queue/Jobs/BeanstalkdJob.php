@@ -1,12 +1,12 @@
 <?php
 
-namespace Illuminate\Queue\Jobs;
+namespace Odigos\Illuminate\Queue\Jobs;
 
-use Illuminate\Container\Container;
-use Illuminate\Contracts\Queue\Job as JobContract;
+use Odigos\Illuminate\Container\Container;
+use Odigos\Illuminate\Contracts\Queue\Job as JobContract;
 use Odigos\Pheanstalk\Contract\JobIdInterface;
 use Odigos\Pheanstalk\Pheanstalk;
-class BeanstalkdJob extends \Illuminate\Queue\Jobs\Job implements JobContract
+class BeanstalkdJob extends Job implements JobContract
 {
     /**
      * The Pheanstalk instance.

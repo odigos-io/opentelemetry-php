@@ -5,18 +5,18 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\db;
+namespace Odigos\yii\db;
 
 use Odigos\Yii;
-use yii\base\InvalidArgumentException;
-use yii\base\InvalidCallException;
-use yii\base\InvalidConfigException;
-use yii\base\InvalidParamException;
-use yii\base\Model;
-use yii\base\ModelEvent;
-use yii\base\NotSupportedException;
-use yii\base\UnknownMethodException;
-use yii\helpers\ArrayHelper;
+use Odigos\yii\base\InvalidArgumentException;
+use Odigos\yii\base\InvalidCallException;
+use Odigos\yii\base\InvalidConfigException;
+use Odigos\yii\base\InvalidParamException;
+use Odigos\yii\base\Model;
+use Odigos\yii\base\ModelEvent;
+use Odigos\yii\base\NotSupportedException;
+use Odigos\yii\base\UnknownMethodException;
+use Odigos\yii\helpers\ArrayHelper;
 /**
  * ActiveRecord is the base class for classes representing relational data in terms of objects.
  *
@@ -38,7 +38,7 @@ use yii\helpers\ArrayHelper;
  * @author Carsten Brandt <mail@cebe.cc>
  * @since 2.0
  */
-abstract class BaseActiveRecord extends Model implements \yii\db\ActiveRecordInterface
+abstract class BaseActiveRecord extends Model implements ActiveRecordInterface
 {
     /**
      * @event Event an event that is triggered when the record is initialized via [[init()]].
@@ -124,7 +124,7 @@ abstract class BaseActiveRecord extends Model implements \yii\db\ActiveRecordInt
     protected static function findByCondition($condition)
     {
         $query = static::find();
-        if (!ArrayHelper::isAssociative($condition) && !$condition instanceof \yii\db\ExpressionInterface) {
+        if (!ArrayHelper::isAssociative($condition) && !$condition instanceof ExpressionInterface) {
             // query by primary key
             $primaryKey = static::primaryKey();
             if (isset($primaryKey[0])) {
@@ -275,7 +275,7 @@ abstract class BaseActiveRecord extends Model implements \yii\db\ActiveRecordInt
             return $this->_related[$name];
         }
         $value = parent::__get($name);
-        if ($value instanceof \yii\db\ActiveQueryInterface) {
+        if ($value instanceof ActiveQueryInterface) {
             $this->setRelationDependencies($name, $value);
             return $this->_related[$name] = $value->findFor($name, $this);
         }
@@ -765,7 +765,7 @@ abstract class BaseActiveRecord extends Model implements \yii\db\ActiveRecordInt
         // that the UPDATE statement doesn't change anything and thus returns 0.
         $rows = static::updateAll($values, $condition);
         if ($lock !== null && !$rows) {
-            throw new \yii\db\StaleObjectException('The object being updated is outdated.');
+            throw new StaleObjectException('The object being updated is outdated.');
         }
         // using null as an array offset is deprecated in PHP `8.5`
         if ($lock !== null && isset($values[$lock])) {
@@ -843,7 +843,7 @@ abstract class BaseActiveRecord extends Model implements \yii\db\ActiveRecordInt
             }
             $result = static::deleteAll($condition);
             if ($lock !== null && !$result) {
-                throw new \yii\db\StaleObjectException('The object being deleted is outdated.');
+                throw new StaleObjectException('The object being deleted is outdated.');
             }
             $this->_oldAttributes = null;
             $this->afterDelete();
@@ -937,7 +937,7 @@ abstract class BaseActiveRecord extends Model implements \yii\db\ActiveRecordInt
      */
     public function afterSave($insert, $changedAttributes)
     {
-        $this->trigger($insert ? self::EVENT_AFTER_INSERT : self::EVENT_AFTER_UPDATE, new \yii\db\AfterSaveEvent(['changedAttributes' => $changedAttributes]));
+        $this->trigger($insert ? self::EVENT_AFTER_INSERT : self::EVENT_AFTER_UPDATE, new AfterSaveEvent(['changedAttributes' => $changedAttributes]));
     }
     /**
      * This method is invoked before deleting a record.
@@ -1074,7 +1074,7 @@ abstract class BaseActiveRecord extends Model implements \yii\db\ActiveRecordInt
     {
         $keys = static::primaryKey();
         if (empty($keys)) {
-            throw new \yii\db\Exception(get_class($this) . ' does not have a primary key. You should either define a primary key for the corresponding table or override the primaryKey() method.');
+            throw new Exception(get_class($this) . ' does not have a primary key. You should either define a primary key for the corresponding table or override the primaryKey() method.');
         }
         if (!$asArray && count($keys) === 1) {
             return isset($this->_oldAttributes[$keys[0]]) ? $this->_oldAttributes[$keys[0]] : null;
@@ -1163,7 +1163,7 @@ abstract class BaseActiveRecord extends Model implements \yii\db\ActiveRecordInt
             }
             return null;
         }
-        if (!$relation instanceof \yii\db\ActiveQueryInterface) {
+        if (!$relation instanceof ActiveQueryInterface) {
             if ($throwException) {
                 throw new InvalidArgumentException(get_class($this) . ' has no relation named "' . $name . '".');
             }
@@ -1644,7 +1644,7 @@ abstract class BaseActiveRecord extends Model implements \yii\db\ActiveRecordInt
                     $this->_relationsDependencies[$attribute][] = $viaRelationName;
                 }
             }
-        } elseif ($relation->via instanceof \yii\db\ActiveQueryInterface) {
+        } elseif ($relation->via instanceof ActiveQueryInterface) {
             $this->setRelationDependencies($name, $relation->via);
         } elseif (is_array($relation->via)) {
             list($viaRelationName, $viaQuery) = $relation->via;

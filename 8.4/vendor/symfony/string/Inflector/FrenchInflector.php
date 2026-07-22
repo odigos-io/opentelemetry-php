@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\String\Inflector;
+namespace Odigos\Symfony\Component\String\Inflector;
 
 /**
  * French inflector.
  *
  * This class does only inflect nouns; not adjectives nor composed words like "soixante-dix".
  */
-final class FrenchInflector implements \Symfony\Component\String\Inflector\InflectorInterface
+final class FrenchInflector implements InflectorInterface
 {
     /**
      * A list of all rules for pluralise.

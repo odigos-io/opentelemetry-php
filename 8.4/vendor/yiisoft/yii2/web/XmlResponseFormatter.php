@@ -5,14 +5,14 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\web;
+namespace Odigos\yii\web;
 
 use DOMDocument;
 use DOMElement;
 use DOMException;
-use yii\base\Arrayable;
-use yii\base\Component;
-use yii\helpers\StringHelper;
+use Odigos\yii\base\Arrayable;
+use Odigos\yii\base\Component;
+use Odigos\yii\helpers\StringHelper;
 /**
  * XmlResponseFormatter formats the given data into an XML response content.
  *
@@ -21,7 +21,7 @@ use yii\helpers\StringHelper;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class XmlResponseFormatter extends Component implements \yii\web\ResponseFormatterInterface
+class XmlResponseFormatter extends Component implements ResponseFormatterInterface
 {
     /**
      * @var string the Content-Type header for the response

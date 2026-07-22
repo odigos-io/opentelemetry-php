@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Console\Output;
+namespace Odigos\Symfony\Component\Console\Output;
 
-use Symfony\Component\Console\Formatter\OutputFormatterInterface;
+use Odigos\Symfony\Component\Console\Formatter\OutputFormatterInterface;
 /**
  * ConsoleOutput is the default class for all CLI output. It uses STDOUT and STDERR.
  *
@@ -25,9 +25,9 @@ use Symfony\Component\Console\Formatter\OutputFormatterInterface;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class ConsoleOutput extends \Symfony\Component\Console\Output\StreamOutput implements \Symfony\Component\Console\Output\ConsoleOutputInterface
+class ConsoleOutput extends StreamOutput implements ConsoleOutputInterface
 {
-    private \Symfony\Component\Console\Output\OutputInterface $stderr;
+    private OutputInterface $stderr;
     private array $consoleSectionOutputs = [];
     /**
      * @param int                           $verbosity The verbosity level (one of the VERBOSITY constants in OutputInterface)
@@ -39,11 +39,11 @@ class ConsoleOutput extends \Symfony\Component\Console\Output\StreamOutput imple
         parent::__construct($this->openOutputStream(), $verbosity, $decorated, $formatter);
         if (null === $formatter) {
             // for BC reasons, stdErr has it own Formatter only when user don't inject a specific formatter.
-            $this->stderr = new \Symfony\Component\Console\Output\StreamOutput($this->openErrorStream(), $verbosity, $decorated);
+            $this->stderr = new StreamOutput($this->openErrorStream(), $verbosity, $decorated);
             return;
         }
         $actualDecorated = $this->isDecorated();
-        $this->stderr = new \Symfony\Component\Console\Output\StreamOutput($this->openErrorStream(), $verbosity, $decorated, $this->getFormatter());
+        $this->stderr = new StreamOutput($this->openErrorStream(), $verbosity, $decorated, $this->getFormatter());
         if (null === $decorated) {
             $this->setDecorated($actualDecorated && $this->stderr->isDecorated());
         }
@@ -51,9 +51,9 @@ class ConsoleOutput extends \Symfony\Component\Console\Output\StreamOutput imple
     /**
      * Creates a new output section.
      */
-    public function section(): \Symfony\Component\Console\Output\ConsoleSectionOutput
+    public function section(): ConsoleSectionOutput
     {
-        return new \Symfony\Component\Console\Output\ConsoleSectionOutput($this->getStream(), $this->consoleSectionOutputs, $this->getVerbosity(), $this->isDecorated(), $this->getFormatter());
+        return new ConsoleSectionOutput($this->getStream(), $this->consoleSectionOutputs, $this->getVerbosity(), $this->isDecorated(), $this->getFormatter());
     }
     public function setDecorated(bool $decorated): void
     {
@@ -70,11 +70,11 @@ class ConsoleOutput extends \Symfony\Component\Console\Output\StreamOutput imple
         parent::setVerbosity($level);
         $this->stderr->setVerbosity($level);
     }
-    public function getErrorOutput(): \Symfony\Component\Console\Output\OutputInterface
+    public function getErrorOutput(): OutputInterface
     {
         return $this->stderr;
     }
-    public function setErrorOutput(\Symfony\Component\Console\Output\OutputInterface $error): void
+    public function setErrorOutput(OutputInterface $error): void
     {
         $this->stderr = $error;
     }

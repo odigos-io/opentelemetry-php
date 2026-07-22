@@ -1,14 +1,14 @@
 <?php
 
-namespace OpenAI\Testing\Resources;
+namespace Odigos\OpenAI\Testing\Resources;
 
-use OpenAI\Contracts\Resources\FilesContract;
-use OpenAI\Resources\Files;
-use OpenAI\Responses\Files\CreateResponse;
-use OpenAI\Responses\Files\DeleteResponse;
-use OpenAI\Responses\Files\ListResponse;
-use OpenAI\Responses\Files\RetrieveResponse;
-use OpenAI\Testing\Resources\Concerns\Testable;
+use Odigos\OpenAI\Contracts\Resources\FilesContract;
+use Odigos\OpenAI\Resources\Files;
+use Odigos\OpenAI\Responses\Files\CreateResponse;
+use Odigos\OpenAI\Responses\Files\DeleteResponse;
+use Odigos\OpenAI\Responses\Files\ListResponse;
+use Odigos\OpenAI\Responses\Files\RetrieveResponse;
+use Odigos\OpenAI\Testing\Resources\Concerns\Testable;
 final class FilesTestResource implements FilesContract
 {
     use Testable;

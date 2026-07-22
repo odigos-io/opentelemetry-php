@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\View\Concerns;
+namespace Odigos\Illuminate\View\Concerns;
 
-use Illuminate\Contracts\View\View;
-use Illuminate\Support\Str;
+use Odigos\Illuminate\Contracts\View\View;
+use Odigos\Illuminate\Support\Str;
 use InvalidArgumentException;
 trait ManagesLayouts
 {

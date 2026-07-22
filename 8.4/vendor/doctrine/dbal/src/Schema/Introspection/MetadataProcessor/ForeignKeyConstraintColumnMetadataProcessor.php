@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Schema\Introspection\MetadataProcessor;
+namespace Odigos\Doctrine\DBAL\Schema\Introspection\MetadataProcessor;
 
-use Doctrine\DBAL\Schema\ForeignKeyConstraint;
-use Doctrine\DBAL\Schema\ForeignKeyConstraint\Deferrability;
-use Doctrine\DBAL\Schema\ForeignKeyConstraintEditor;
-use Doctrine\DBAL\Schema\Metadata\ForeignKeyConstraintColumnMetadataRow;
-use Doctrine\DBAL\Schema\Name\OptionallyQualifiedName;
-use Doctrine\DBAL\Schema\Name\UnqualifiedName;
+use Odigos\Doctrine\DBAL\Schema\ForeignKeyConstraint;
+use Odigos\Doctrine\DBAL\Schema\ForeignKeyConstraint\Deferrability;
+use Odigos\Doctrine\DBAL\Schema\ForeignKeyConstraintEditor;
+use Odigos\Doctrine\DBAL\Schema\Metadata\ForeignKeyConstraintColumnMetadataRow;
+use Odigos\Doctrine\DBAL\Schema\Name\OptionallyQualifiedName;
+use Odigos\Doctrine\DBAL\Schema\Name\UnqualifiedName;
 /**
  * Combines multiple {@see ForeignKeyConstraintColumnMetadataRow}s into a {@see ForeignKeyConstraint}.
  *

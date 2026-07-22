@@ -15,7 +15,7 @@ declare (strict_types=1);
  * @since         2.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Collection;
+namespace Odigos\Cake\Collection;
 
 /**
  * Returns a new {@link \Cake\Collection\Collection} object wrapping the passed argument.
@@ -23,7 +23,7 @@ namespace Cake\Collection;
  * @param iterable $items The items from which the collection will be built.
  * @return \Cake\Collection\Collection
  */
-function collection(iterable $items): \Cake\Collection\CollectionInterface
+function collection(iterable $items): CollectionInterface
 {
-    return new \Cake\Collection\Collection($items);
+    return new Collection($items);
 }

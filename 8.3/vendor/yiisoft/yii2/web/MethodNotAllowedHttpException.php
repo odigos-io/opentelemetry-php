@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\web;
+namespace Odigos\yii\web;
 
 /**
  * MethodNotAllowedHttpException represents a "Method Not Allowed" HTTP exception with status code 405.
@@ -14,7 +14,7 @@ namespace yii\web;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class MethodNotAllowedHttpException extends \yii\web\HttpException
+class MethodNotAllowedHttpException extends HttpException
 {
     /**
      * Constructor.

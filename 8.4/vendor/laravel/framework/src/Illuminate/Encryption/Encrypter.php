@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Encryption;
+namespace Odigos\Illuminate\Encryption;
 
-use Illuminate\Contracts\Encryption\DecryptException;
-use Illuminate\Contracts\Encryption\Encrypter as EncrypterContract;
-use Illuminate\Contracts\Encryption\EncryptException;
-use Illuminate\Contracts\Encryption\StringEncrypter;
+use Odigos\Illuminate\Contracts\Encryption\DecryptException;
+use Odigos\Illuminate\Contracts\Encryption\Encrypter as EncrypterContract;
+use Odigos\Illuminate\Contracts\Encryption\EncryptException;
+use Odigos\Illuminate\Contracts\Encryption\StringEncrypter;
 use RuntimeException;
 class Encrypter implements EncrypterContract, StringEncrypter
 {

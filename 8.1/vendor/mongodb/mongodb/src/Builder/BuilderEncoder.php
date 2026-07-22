@@ -1,32 +1,32 @@
 <?php
 
 declare (strict_types=1);
-namespace MongoDB\Builder;
+namespace Odigos\MongoDB\Builder;
 
 use DateTimeInterface;
 use MongoDB\BSON\Type;
-use MongoDB\Builder\Encoder\CombinedFieldQueryEncoder;
-use MongoDB\Builder\Encoder\DateTimeEncoder;
-use MongoDB\Builder\Encoder\DictionaryEncoder;
-use MongoDB\Builder\Encoder\FieldPathEncoder;
-use MongoDB\Builder\Encoder\OperatorEncoder;
-use MongoDB\Builder\Encoder\OutputWindowEncoder;
-use MongoDB\Builder\Encoder\PipelineEncoder;
-use MongoDB\Builder\Encoder\QueryEncoder;
-use MongoDB\Builder\Encoder\VariableEncoder;
-use MongoDB\Builder\Expression\Variable;
-use MongoDB\Builder\Type\CombinedFieldQuery;
-use MongoDB\Builder\Type\DictionaryInterface;
-use MongoDB\Builder\Type\ExpressionInterface;
-use MongoDB\Builder\Type\FieldPathInterface;
-use MongoDB\Builder\Type\OperatorInterface;
-use MongoDB\Builder\Type\OutputWindow;
-use MongoDB\Builder\Type\QueryInterface;
-use MongoDB\Builder\Type\QueryObject;
-use MongoDB\Builder\Type\StageInterface;
-use MongoDB\Codec\EncodeIfSupported;
-use MongoDB\Codec\Encoder;
-use MongoDB\Exception\UnsupportedValueException;
+use Odigos\MongoDB\Builder\Encoder\CombinedFieldQueryEncoder;
+use Odigos\MongoDB\Builder\Encoder\DateTimeEncoder;
+use Odigos\MongoDB\Builder\Encoder\DictionaryEncoder;
+use Odigos\MongoDB\Builder\Encoder\FieldPathEncoder;
+use Odigos\MongoDB\Builder\Encoder\OperatorEncoder;
+use Odigos\MongoDB\Builder\Encoder\OutputWindowEncoder;
+use Odigos\MongoDB\Builder\Encoder\PipelineEncoder;
+use Odigos\MongoDB\Builder\Encoder\QueryEncoder;
+use Odigos\MongoDB\Builder\Encoder\VariableEncoder;
+use Odigos\MongoDB\Builder\Expression\Variable;
+use Odigos\MongoDB\Builder\Type\CombinedFieldQuery;
+use Odigos\MongoDB\Builder\Type\DictionaryInterface;
+use Odigos\MongoDB\Builder\Type\ExpressionInterface;
+use Odigos\MongoDB\Builder\Type\FieldPathInterface;
+use Odigos\MongoDB\Builder\Type\OperatorInterface;
+use Odigos\MongoDB\Builder\Type\OutputWindow;
+use Odigos\MongoDB\Builder\Type\QueryInterface;
+use Odigos\MongoDB\Builder\Type\QueryObject;
+use Odigos\MongoDB\Builder\Type\StageInterface;
+use Odigos\MongoDB\Codec\EncodeIfSupported;
+use Odigos\MongoDB\Codec\Encoder;
+use Odigos\MongoDB\Exception\UnsupportedValueException;
 use stdClass;
 use WeakReference;
 use function array_key_exists;
@@ -44,7 +44,7 @@ final class BuilderEncoder implements Encoder
     public function __construct(array $encoders = [])
     {
         $self = WeakReference::create($this);
-        $this->encoders = $encoders + [\MongoDB\Builder\Pipeline::class => new PipelineEncoder($self), Variable::class => new VariableEncoder(), DictionaryInterface::class => new DictionaryEncoder(), FieldPathInterface::class => new FieldPathEncoder(), CombinedFieldQuery::class => new CombinedFieldQueryEncoder($self), QueryObject::class => new QueryEncoder($self), OutputWindow::class => new OutputWindowEncoder($self), OperatorInterface::class => new OperatorEncoder($self), DateTimeInterface::class => new DateTimeEncoder()];
+        $this->encoders = $encoders + [Pipeline::class => new PipelineEncoder($self), Variable::class => new VariableEncoder(), DictionaryInterface::class => new DictionaryEncoder(), FieldPathInterface::class => new FieldPathEncoder(), CombinedFieldQuery::class => new CombinedFieldQueryEncoder($self), QueryObject::class => new QueryEncoder($self), OutputWindow::class => new OutputWindowEncoder($self), OperatorInterface::class => new OperatorEncoder($self), DateTimeInterface::class => new DateTimeEncoder()];
     }
     /** @psalm-assert-if-true object $value */
     public function canEncode(mixed $value): bool

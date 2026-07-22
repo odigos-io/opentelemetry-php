@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Routing\Exception;
+namespace Odigos\Symfony\Component\Routing\Exception;
 
 /**
  * The resource was found but the request method is not allowed.
@@ -17,7 +17,7 @@ namespace Symfony\Component\Routing\Exception;
  *
  * @author Kris Wallsmith <kris@symfony.com>
  */
-class MethodNotAllowedException extends \RuntimeException implements \Symfony\Component\Routing\Exception\ExceptionInterface
+class MethodNotAllowedException extends \RuntimeException implements ExceptionInterface
 {
     protected array $allowedMethods = [];
     /**

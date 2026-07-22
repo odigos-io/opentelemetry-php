@@ -1,25 +1,25 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenTelemetry\Contrib\Instrumentation\Laravel\Watchers;
+namespace Odigos\OpenTelemetry\Contrib\Instrumentation\Laravel\Watchers;
 
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Log\Events\MessageLogged;
-use Illuminate\Log\LogManager;
+use Odigos\Illuminate\Contracts\Foundation\Application;
+use Odigos\Illuminate\Log\Events\MessageLogged;
+use Odigos\Illuminate\Log\LogManager;
 use OpenTelemetry\API\Instrumentation\CachedInstrumentation;
 use OpenTelemetry\API\Logs\LogRecord;
 use OpenTelemetry\API\Logs\Severity;
 use OpenTelemetry\SDK\Common\Exception\StackTraceFormatter;
 use Throwable;
 use TypeError;
-class LogWatcher extends \OpenTelemetry\Contrib\Instrumentation\Laravel\Watchers\Watcher
+class LogWatcher extends Watcher
 {
-    private LogManager $logger;
+    private object $logger;
     public function __construct(private CachedInstrumentation $instrumentation)
     {
     }
     /** @psalm-suppress UndefinedInterfaceMethod */
-    public function register(Application $app): void
+    public function register(object $app): void
     {
         /** @phan-suppress-next-line PhanTypeArraySuspicious */
         $app['events']->listen(MessageLogged::class, [$this, 'recordLog']);
@@ -31,7 +31,7 @@ class LogWatcher extends \OpenTelemetry\Contrib\Instrumentation\Laravel\Watchers
      * @phan-suppress PhanDeprecatedFunction
      * @psalm-suppress PossiblyUnusedMethod
      */
-    public function recordLog(MessageLogged $log): void
+    public function recordLog(object $log): void
     {
         $underlyingLogger = $this->logger->getLogger();
         /**

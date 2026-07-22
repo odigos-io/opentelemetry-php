@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Auth;
+namespace Odigos\Illuminate\Auth;
 
-use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
-use Illuminate\Contracts\Auth\UserProvider;
+use Odigos\Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Odigos\Illuminate\Contracts\Auth\UserProvider;
 /**
  * These methods are typically the same across all guards.
  */
@@ -30,7 +30,7 @@ trait GuardHelpers
      */
     public function authenticate()
     {
-        return $this->user() ?? throw new \Illuminate\Auth\AuthenticationException();
+        return $this->user() ?? throw new AuthenticationException();
     }
     /**
      * Determine if the guard has a user instance.

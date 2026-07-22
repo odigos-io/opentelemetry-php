@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Exception;
+namespace Odigos\Doctrine\DBAL\Exception;
 
 use function implode;
 use function sprintf;
-final class UnknownDriver extends \Doctrine\DBAL\Exception\InvalidArgumentException
+final class UnknownDriver extends InvalidArgumentException
 {
     /** @param string[] $knownDrivers */
     public static function new(string $unknownDriverName, array $knownDrivers): self

@@ -5,13 +5,13 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\behaviors;
+namespace Odigos\yii\behaviors;
 
 use Odigos\Yii;
-use yii\db\BaseActiveRecord;
-use yii\base\InvalidCallException;
-use yii\validators\NumberValidator;
-use yii\helpers\ArrayHelper;
+use Odigos\yii\db\BaseActiveRecord;
+use Odigos\yii\base\InvalidCallException;
+use Odigos\yii\validators\NumberValidator;
+use Odigos\yii\helpers\ArrayHelper;
 /**
  * OptimisticLockBehavior automatically upgrades a model's lock version using the column name
  * returned by [[\yii\db\BaseActiveRecord::optimisticLock()|optimisticLock()]].
@@ -64,7 +64,7 @@ use yii\helpers\ArrayHelper;
  * @template T of BaseActiveRecord = BaseActiveRecord
  * @extends AttributeBehavior<T>
  */
-class OptimisticLockBehavior extends \yii\behaviors\AttributeBehavior
+class OptimisticLockBehavior extends AttributeBehavior
 {
     /**
      * {@inheritdoc}
@@ -96,7 +96,7 @@ class OptimisticLockBehavior extends \yii\behaviors\AttributeBehavior
      */
     public function events()
     {
-        return Yii::$app->request instanceof \yii\web\Request ? [BaseActiveRecord::EVENT_BEFORE_INSERT => 'evaluateAttributes', BaseActiveRecord::EVENT_BEFORE_UPDATE => 'evaluateAttributes', BaseActiveRecord::EVENT_BEFORE_DELETE => 'evaluateAttributes'] : [];
+        return Yii::$app->request instanceof \Odigos\yii\web\Request ? [BaseActiveRecord::EVENT_BEFORE_INSERT => 'evaluateAttributes', BaseActiveRecord::EVENT_BEFORE_UPDATE => 'evaluateAttributes', BaseActiveRecord::EVENT_BEFORE_DELETE => 'evaluateAttributes'] : [];
     }
     /**
      * Returns the column name to hold the version value as defined in [[\yii\db\BaseActiveRecord::optimisticLock()|optimisticLock()]].

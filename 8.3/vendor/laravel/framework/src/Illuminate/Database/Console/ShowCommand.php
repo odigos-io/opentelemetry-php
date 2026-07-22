@@ -1,16 +1,16 @@
 <?php
 
-namespace Illuminate\Database\Console;
+namespace Odigos\Illuminate\Database\Console;
 
-use Illuminate\Database\ConnectionInterface;
-use Illuminate\Database\ConnectionResolverInterface;
-use Illuminate\Database\Schema\Builder;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Number;
-use Symfony\Component\Console\Attribute\AsCommand;
+use Odigos\Illuminate\Database\ConnectionInterface;
+use Odigos\Illuminate\Database\ConnectionResolverInterface;
+use Odigos\Illuminate\Database\Schema\Builder;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Number;
+use Odigos\Symfony\Component\Console\Attribute\AsCommand;
 #[AsCommand(name: 'db:show')]
-class ShowCommand extends \Illuminate\Database\Console\DatabaseInspectionCommand
+class ShowCommand extends DatabaseInspectionCommand
 {
     /**
      * The name and signature of the console command.

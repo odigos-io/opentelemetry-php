@@ -6,23 +6,23 @@
  * @license https://github.com/slimphp/Slim/blob/4.x/LICENSE.md (MIT License)
  */
 declare (strict_types=1);
-namespace Slim\Handlers;
+namespace Odigos\Slim\Handlers;
 
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
-use Slim\Error\Renderers\HtmlErrorRenderer;
-use Slim\Error\Renderers\JsonErrorRenderer;
-use Slim\Error\Renderers\PlainTextErrorRenderer;
-use Slim\Error\Renderers\XmlErrorRenderer;
-use Slim\Exception\HttpException;
-use Slim\Exception\HttpMethodNotAllowedException;
-use Slim\Interfaces\CallableResolverInterface;
-use Slim\Interfaces\ErrorHandlerInterface;
-use Slim\Interfaces\ErrorRendererInterface;
-use Slim\Logger;
+use Odigos\Slim\Error\Renderers\HtmlErrorRenderer;
+use Odigos\Slim\Error\Renderers\JsonErrorRenderer;
+use Odigos\Slim\Error\Renderers\PlainTextErrorRenderer;
+use Odigos\Slim\Error\Renderers\XmlErrorRenderer;
+use Odigos\Slim\Exception\HttpException;
+use Odigos\Slim\Exception\HttpMethodNotAllowedException;
+use Odigos\Slim\Interfaces\CallableResolverInterface;
+use Odigos\Slim\Interfaces\ErrorHandlerInterface;
+use Odigos\Slim\Interfaces\ErrorRendererInterface;
+use Odigos\Slim\Logger;
 use Throwable;
 use function array_intersect;
 use function array_key_exists;

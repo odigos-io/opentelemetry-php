@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Contracts\Support;
+namespace Odigos\Illuminate\Contracts\Support;
 
 use Countable;
-interface MessageBag extends \Illuminate\Contracts\Support\Arrayable, Countable
+interface MessageBag extends Arrayable, Countable
 {
     /**
      * Get the keys present in the message bag.

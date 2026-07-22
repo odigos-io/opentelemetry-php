@@ -1,17 +1,17 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Types;
+namespace Odigos\Doctrine\DBAL\Types;
 
 use DateTimeImmutable;
-use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Doctrine\DBAL\Types\Exception\InvalidType;
-use Doctrine\DBAL\Types\Exception\ValueNotConvertible;
+use Odigos\Doctrine\DBAL\Platforms\AbstractPlatform;
+use Odigos\Doctrine\DBAL\Types\Exception\InvalidType;
+use Odigos\Doctrine\DBAL\Types\Exception\ValueNotConvertible;
 use Exception;
 /**
  * Immutable type of {@see VarDateTimeType}.
  */
-class VarDateTimeImmutableType extends \Doctrine\DBAL\Types\DateTimeImmutableType
+class VarDateTimeImmutableType extends DateTimeImmutableType
 {
     /**
      * @param T $value

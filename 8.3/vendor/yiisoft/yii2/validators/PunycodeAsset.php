@@ -5,9 +5,9 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\validators;
+namespace Odigos\yii\validators;
 
-use yii\web\AssetBundle;
+use Odigos\yii\web\AssetBundle;
 /**
  * This asset bundle provides the javascript files needed for the [[EmailValidator]]s client validation.
  *

@@ -14,23 +14,23 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\ORM;
+namespace Odigos\Cake\ORM;
 
-use Cake\Collection\CollectionInterface;
-use Cake\Core\App;
-use Cake\Core\ConventionsTrait;
-use Cake\Database\Exception\DatabaseException;
-use Cake\Database\Expression\IdentifierExpression;
-use Cake\Database\Expression\QueryExpression;
-use Cake\Database\ExpressionInterface;
-use Cake\Datasource\EntityInterface;
-use Cake\Datasource\ResultSetInterface;
-use Cake\ORM\Locator\LocatorAwareTrait;
-use Cake\ORM\Query\SelectQuery;
-use Cake\Utility\Inflector;
+use Odigos\Cake\Collection\CollectionInterface;
+use Odigos\Cake\Core\App;
+use Odigos\Cake\Core\ConventionsTrait;
+use Odigos\Cake\Database\Exception\DatabaseException;
+use Odigos\Cake\Database\Expression\IdentifierExpression;
+use Odigos\Cake\Database\Expression\QueryExpression;
+use Odigos\Cake\Database\ExpressionInterface;
+use Odigos\Cake\Datasource\EntityInterface;
+use Odigos\Cake\Datasource\ResultSetInterface;
+use Odigos\Cake\ORM\Locator\LocatorAwareTrait;
+use Odigos\Cake\ORM\Query\SelectQuery;
+use Odigos\Cake\Utility\Inflector;
 use Closure;
 use InvalidArgumentException;
-use function Cake\Core\pluginSplit;
+use function Odigos\Cake\Core\pluginSplit;
 /**
  * An Association is a relationship established between two tables and is used
  * to configure and customize the way interconnected records are retrieved.
@@ -134,13 +134,13 @@ abstract class Association
      *
      * @var \Cake\ORM\Table
      */
-    protected \Cake\ORM\Table $_sourceTable;
+    protected Table $_sourceTable;
     /**
      * Target table instance
      *
      * @var \Cake\ORM\Table
      */
-    protected \Cake\ORM\Table $_targetTable;
+    protected Table $_targetTable;
     /**
      * The type of join to be used when adding the association to a query
      *
@@ -261,7 +261,7 @@ abstract class Association
      * @param \Cake\ORM\Table $table the instance to be assigned as source side
      * @return $this
      */
-    public function setSource(\Cake\ORM\Table $table)
+    public function setSource(Table $table)
     {
         $this->_sourceTable = $table;
         return $this;
@@ -271,7 +271,7 @@ abstract class Association
      *
      * @return \Cake\ORM\Table
      */
-    public function getSource(): \Cake\ORM\Table
+    public function getSource(): Table
     {
         return $this->_sourceTable;
     }
@@ -281,7 +281,7 @@ abstract class Association
      * @param \Cake\ORM\Table $table the instance to be assigned as target side
      * @return $this
      */
-    public function setTarget(\Cake\ORM\Table $table)
+    public function setTarget(Table $table)
     {
         $this->_targetTable = $table;
         return $this;
@@ -291,7 +291,7 @@ abstract class Association
      *
      * @return \Cake\ORM\Table
      */
-    public function getTarget(): \Cake\ORM\Table
+    public function getTarget(): Table
     {
         if (!isset($this->_targetTable)) {
             if (str_contains($this->_className, '.')) {
@@ -308,7 +308,7 @@ abstract class Association
             }
             $this->_targetTable = $tableLocator->get($registryAlias, $config);
             if ($exists) {
-                $className = App::className($this->_className, 'Model/Table', 'Table') ?: \Cake\ORM\Table::class;
+                $className = App::className($this->_className, 'Model/Table', 'Table') ?: Table::class;
                 if (!$this->_targetTable instanceof $className) {
                     $msg = "`%s` association `%s` of type `%s` to `%s` doesn't match the expected class `%s`. ";
                     $msg .= "You can't have an association of the same name with a different target ";
@@ -952,7 +952,7 @@ abstract class Association
      * @return self
      * @throws \RuntimeException if no association with such a name exists
      */
-    public function __get(string $property): \Cake\ORM\Association
+    public function __get(string $property): Association
     {
         return $this->getTarget()->{$property};
     }
@@ -1035,7 +1035,7 @@ abstract class Association
      * @param \Cake\ORM\Table $side The potential Table with ownership
      * @return bool
      */
-    abstract public function isOwningSide(\Cake\ORM\Table $side): bool;
+    abstract public function isOwningSide(Table $side): bool;
     /**
      * Extract the target's association data our from the passed entity and proxies
      * the saving operation to the target table.

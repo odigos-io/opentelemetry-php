@@ -15,15 +15,19 @@ To deploy an agent & auto-instrument PHP with OpenTelemetry, we need a few thing
 - PHP extension (`opentelemetry.so`)
 - Composer dependencies (`vendor/`)
 - Composer autoload file (`vendor/autoload.php`)
-- Configuration file with pointers to the extension & autoload file (`opentelemetry.ini`)
+- Odigos bootstrap (`odigos_autoload.php`) which loads Composer autoload and custom instrumentation
+- Custom instrumentation registrar (`CustomInstrumentation.php`)
+- Configuration file with pointers to the extension & bootstrap file (`opentelemetry.ini`)
 
 **WARNING: It is important to note that the `opentelemetry.so` binaries are compiled per PHP version, which is why every PHP version has it's own agent!**
 
-1. We need to copy the agent folder into our cluster under a pre-defined path (such as `/var/odigos/php/${PHP_VERSION}/vendor/autoload.php`), these paths are defined and must be changed accordingly in each `index.php` script.
+1. We need to copy the agent folder into our cluster under a pre-defined path (such as `/var/odigos/php/${PHP_VERSION}/odigos_autoload.php`), these paths are defined and must be changed accordingly in each version's `opentelemetry.ini`.
 
 2. We need to tell the instrumented app to load the OTel files, to do that we need to give the container an env called `OTEL_PHP_AUTOLOAD_ENABLED`, it should equal `true`.
 
 3. We need to tell the instrumented app where to find our script and binaries, to do that we need to give the container an env called `PHP_INI_SCAN_DIR`, it should point at the dir that contains the agent files (e.g `:/var/odigos/php/8.2`).
+
+4. Optional: to enable Custom Instrumentation Rule probes, Odigos injects `ODIGOS_AGENT_CUSTOM_INSTRUMENTATIONS` with a JSON payload of PHP class/function probes. Changes require a pod restart.
 
 NOTE: for step 3 we used a colon at the start of the appointed dir, that is required by the env itself, here's why:
 

@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Bus;
+namespace Odigos\Illuminate\Bus;
 
-use Illuminate\Contracts\Cache\Repository as Cache;
+use Odigos\Illuminate\Contracts\Cache\Repository as Cache;
 class UniqueLock
 {
     /**

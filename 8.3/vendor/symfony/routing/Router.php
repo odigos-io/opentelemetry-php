@@ -8,37 +8,37 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Routing;
+namespace Odigos\Symfony\Component\Routing;
 
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Config\ConfigCacheFactory;
-use Symfony\Component\Config\ConfigCacheFactoryInterface;
-use Symfony\Component\Config\ConfigCacheInterface;
-use Symfony\Component\Config\Loader\LoaderInterface;
-use Symfony\Component\ExpressionLanguage\ExpressionFunctionProviderInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Generator\CompiledUrlGenerator;
-use Symfony\Component\Routing\Generator\ConfigurableRequirementsInterface;
-use Symfony\Component\Routing\Generator\Dumper\CompiledUrlGeneratorDumper;
-use Symfony\Component\Routing\Generator\Dumper\GeneratorDumperInterface;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Routing\Matcher\CompiledUrlMatcher;
-use Symfony\Component\Routing\Matcher\Dumper\CompiledUrlMatcherDumper;
-use Symfony\Component\Routing\Matcher\Dumper\MatcherDumperInterface;
-use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
-use Symfony\Component\Routing\Matcher\UrlMatcherInterface;
+use Odigos\Symfony\Component\Config\ConfigCacheFactory;
+use Odigos\Symfony\Component\Config\ConfigCacheFactoryInterface;
+use Odigos\Symfony\Component\Config\ConfigCacheInterface;
+use Odigos\Symfony\Component\Config\Loader\LoaderInterface;
+use Odigos\Symfony\Component\ExpressionLanguage\ExpressionFunctionProviderInterface;
+use Odigos\Symfony\Component\HttpFoundation\Request;
+use Odigos\Symfony\Component\Routing\Generator\CompiledUrlGenerator;
+use Odigos\Symfony\Component\Routing\Generator\ConfigurableRequirementsInterface;
+use Odigos\Symfony\Component\Routing\Generator\Dumper\CompiledUrlGeneratorDumper;
+use Odigos\Symfony\Component\Routing\Generator\Dumper\GeneratorDumperInterface;
+use Odigos\Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Odigos\Symfony\Component\Routing\Matcher\CompiledUrlMatcher;
+use Odigos\Symfony\Component\Routing\Matcher\Dumper\CompiledUrlMatcherDumper;
+use Odigos\Symfony\Component\Routing\Matcher\Dumper\MatcherDumperInterface;
+use Odigos\Symfony\Component\Routing\Matcher\RequestMatcherInterface;
+use Odigos\Symfony\Component\Routing\Matcher\UrlMatcherInterface;
 /**
  * The Router class is an example of the integration of all pieces of the
  * routing system for easier use.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class Router implements \Symfony\Component\Routing\RouterInterface, RequestMatcherInterface
+class Router implements RouterInterface, RequestMatcherInterface
 {
     protected UrlMatcherInterface|RequestMatcherInterface $matcher;
     protected UrlGeneratorInterface $generator;
-    protected \Symfony\Component\Routing\RequestContext $context;
-    protected \Symfony\Component\Routing\RouteCollection $collection;
+    protected RequestContext $context;
+    protected RouteCollection $collection;
     protected array $options = [];
     private ConfigCacheFactoryInterface $configCacheFactory;
     /**
@@ -46,9 +46,9 @@ class Router implements \Symfony\Component\Routing\RouterInterface, RequestMatch
      */
     private array $expressionLanguageProviders = [];
     private static ?array $cache = [];
-    public function __construct(protected LoaderInterface $loader, protected mixed $resource, array $options = [], ?\Symfony\Component\Routing\RequestContext $context = null, protected ?LoggerInterface $logger = null, protected ?string $defaultLocale = null)
+    public function __construct(protected LoaderInterface $loader, protected mixed $resource, array $options = [], ?RequestContext $context = null, protected ?LoggerInterface $logger = null, protected ?string $defaultLocale = null)
     {
-        $this->context = $context ?? new \Symfony\Component\Routing\RequestContext();
+        $this->context = $context ?? new RequestContext();
         $this->setOptions($options);
     }
     /**
@@ -108,11 +108,11 @@ class Router implements \Symfony\Component\Routing\RouterInterface, RequestMatch
         }
         return $this->options[$key];
     }
-    public function getRouteCollection(): \Symfony\Component\Routing\RouteCollection
+    public function getRouteCollection(): RouteCollection
     {
         return $this->collection ??= $this->loader->load($this->resource, $this->options['resource_type']);
     }
-    public function setContext(\Symfony\Component\Routing\RequestContext $context): void
+    public function setContext(RequestContext $context): void
     {
         $this->context = $context;
         if (isset($this->matcher)) {
@@ -122,7 +122,7 @@ class Router implements \Symfony\Component\Routing\RouterInterface, RequestMatch
             $this->getGenerator()->setContext($context);
         }
     }
-    public function getContext(): \Symfony\Component\Routing\RequestContext
+    public function getContext(): RequestContext
     {
         return $this->context;
     }

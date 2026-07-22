@@ -1,16 +1,16 @@
 <?php
 
 declare (strict_types=1);
-namespace Carbon\Doctrine;
+namespace Odigos\Carbon\Doctrine;
 
 use Odigos\Carbon\CarbonImmutable;
 use DateTimeImmutable;
-use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Doctrine\DBAL\Types\VarDateTimeImmutableType;
-class DateTimeImmutableType extends VarDateTimeImmutableType implements \Carbon\Doctrine\CarbonDoctrineType
+use Odigos\Doctrine\DBAL\Platforms\AbstractPlatform;
+use Odigos\Doctrine\DBAL\Types\VarDateTimeImmutableType;
+class DateTimeImmutableType extends VarDateTimeImmutableType implements CarbonDoctrineType
 {
     /** @use CarbonTypeConverter<CarbonImmutable> */
-    use \Carbon\Doctrine\CarbonTypeConverter;
+    use CarbonTypeConverter;
     /**
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */

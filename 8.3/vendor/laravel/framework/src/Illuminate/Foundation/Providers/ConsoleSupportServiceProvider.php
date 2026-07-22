@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Foundation\Providers;
+namespace Odigos\Illuminate\Foundation\Providers;
 
-use Illuminate\Contracts\Support\DeferrableProvider;
-use Illuminate\Database\MigrationServiceProvider;
-use Illuminate\Support\AggregateServiceProvider;
+use Odigos\Illuminate\Contracts\Support\DeferrableProvider;
+use Odigos\Illuminate\Database\MigrationServiceProvider;
+use Odigos\Illuminate\Support\AggregateServiceProvider;
 class ConsoleSupportServiceProvider extends AggregateServiceProvider implements DeferrableProvider
 {
     /**
@@ -12,5 +12,5 @@ class ConsoleSupportServiceProvider extends AggregateServiceProvider implements 
      *
      * @var string[]
      */
-    protected $providers = [\Illuminate\Foundation\Providers\ArtisanServiceProvider::class, MigrationServiceProvider::class, \Illuminate\Foundation\Providers\ComposerServiceProvider::class];
+    protected $providers = [ArtisanServiceProvider::class, MigrationServiceProvider::class, ComposerServiceProvider::class];
 }

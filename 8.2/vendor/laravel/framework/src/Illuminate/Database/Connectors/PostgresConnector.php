@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Database\Connectors;
+namespace Odigos\Illuminate\Database\Connectors;
 
-use Illuminate\Database\Concerns\ParsesSearchPath;
+use Odigos\Illuminate\Database\Concerns\ParsesSearchPath;
 use PDO;
-class PostgresConnector extends \Illuminate\Database\Connectors\Connector implements \Illuminate\Database\Connectors\ConnectorInterface
+class PostgresConnector extends Connector implements ConnectorInterface
 {
     use ParsesSearchPath;
     /**

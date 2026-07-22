@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Foundation\Concerns;
+namespace Odigos\Illuminate\Foundation\Concerns;
 
-use Illuminate\Support\Str;
+use Odigos\Illuminate\Support\Str;
 use Throwable;
 trait ResolvesDumpSource
 {

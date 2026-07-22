@@ -1,12 +1,12 @@
 <?php
 
-namespace OpenAI\Testing\Resources;
+namespace Odigos\OpenAI\Testing\Resources;
 
-use OpenAI\Contracts\Resources\VectorStoresFileBatchesContract;
-use OpenAI\Resources\VectorStoresFileBatches;
-use OpenAI\Responses\VectorStores\FileBatches\VectorStoreFileBatchResponse;
-use OpenAI\Responses\VectorStores\Files\VectorStoreFileListResponse;
-use OpenAI\Testing\Resources\Concerns\Testable;
+use Odigos\OpenAI\Contracts\Resources\VectorStoresFileBatchesContract;
+use Odigos\OpenAI\Resources\VectorStoresFileBatches;
+use Odigos\OpenAI\Responses\VectorStores\FileBatches\VectorStoreFileBatchResponse;
+use Odigos\OpenAI\Responses\VectorStores\Files\VectorStoreFileListResponse;
+use Odigos\OpenAI\Testing\Resources\Concerns\Testable;
 final class VectorStoresFileBatchesTestResource implements VectorStoresFileBatchesContract
 {
     use Testable;

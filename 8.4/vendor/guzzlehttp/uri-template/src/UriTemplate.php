@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace GuzzleHttp\UriTemplate;
+namespace Odigos\GuzzleHttp\UriTemplate;
 
 /**
  * Expands URI templates. Userland implementation of PECL uri_template.

@@ -1,12 +1,12 @@
 <?php
 
-namespace Illuminate\Auth\Middleware;
+namespace Odigos\Illuminate\Auth\Middleware;
 
 use Closure;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Route;
-use Symfony\Component\HttpFoundation\Response;
+use Odigos\Illuminate\Http\Request;
+use Odigos\Illuminate\Support\Facades\Auth;
+use Odigos\Illuminate\Support\Facades\Route;
+use Odigos\Symfony\Component\HttpFoundation\Response;
 class RedirectIfAuthenticated
 {
     /**

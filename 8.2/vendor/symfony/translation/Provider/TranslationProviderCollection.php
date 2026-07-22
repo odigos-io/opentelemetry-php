@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Translation\Provider;
+namespace Odigos\Symfony\Component\Translation\Provider;
 
-use Symfony\Component\Translation\Exception\InvalidArgumentException;
+use Odigos\Symfony\Component\Translation\Exception\InvalidArgumentException;
 /**
  * @author Mathieu Santostefano <msantostefano@protonmail.com>
  */
@@ -35,7 +35,7 @@ final class TranslationProviderCollection
     {
         return isset($this->providers[$name]);
     }
-    public function get(string $name): \Symfony\Component\Translation\Provider\ProviderInterface
+    public function get(string $name): ProviderInterface
     {
         if (!$this->has($name)) {
             throw new InvalidArgumentException(\sprintf('Provider "%s" not found. Available: "%s".', $name, (string) $this));

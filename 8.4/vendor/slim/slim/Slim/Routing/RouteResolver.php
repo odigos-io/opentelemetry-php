@@ -6,13 +6,13 @@
  * @license https://github.com/slimphp/Slim/blob/4.x/LICENSE.md (MIT License)
  */
 declare (strict_types=1);
-namespace Slim\Routing;
+namespace Odigos\Slim\Routing;
 
 use RuntimeException;
-use Slim\Interfaces\DispatcherInterface;
-use Slim\Interfaces\RouteCollectorInterface;
-use Slim\Interfaces\RouteInterface;
-use Slim\Interfaces\RouteResolverInterface;
+use Odigos\Slim\Interfaces\DispatcherInterface;
+use Odigos\Slim\Interfaces\RouteCollectorInterface;
+use Odigos\Slim\Interfaces\RouteInterface;
+use Odigos\Slim\Interfaces\RouteResolverInterface;
 use function rawurldecode;
 /**
  * RouteResolver instantiates the FastRoute dispatcher
@@ -25,12 +25,12 @@ class RouteResolver implements RouteResolverInterface
     public function __construct(RouteCollectorInterface $routeCollector, ?DispatcherInterface $dispatcher = null)
     {
         $this->routeCollector = $routeCollector;
-        $this->dispatcher = $dispatcher ?? new \Slim\Routing\Dispatcher($routeCollector);
+        $this->dispatcher = $dispatcher ?? new Dispatcher($routeCollector);
     }
     /**
      * @param string $uri Should be $request->getUri()->getPath()
      */
-    public function computeRoutingResults(string $uri, string $method): \Slim\Routing\RoutingResults
+    public function computeRoutingResults(string $uri, string $method): RoutingResults
     {
         $uri = rawurldecode($uri);
         if ($uri === '' || $uri[0] !== '/') {

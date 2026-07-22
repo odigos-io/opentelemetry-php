@@ -1,17 +1,17 @@
 <?php
 
-namespace Illuminate\Concurrency;
+namespace Odigos\Illuminate\Concurrency;
 
 use Closure;
 use Exception;
-use Illuminate\Console\Application;
-use Illuminate\Contracts\Concurrency\Driver;
-use Illuminate\Process\Factory as ProcessFactory;
-use Illuminate\Process\Pool;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Defer\DeferredCallback;
-use Laravel\SerializableClosure\SerializableClosure;
-use function Illuminate\Support\defer;
+use Odigos\Illuminate\Console\Application;
+use Odigos\Illuminate\Contracts\Concurrency\Driver;
+use Odigos\Illuminate\Process\Factory as ProcessFactory;
+use Odigos\Illuminate\Process\Pool;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Defer\DeferredCallback;
+use Odigos\Laravel\SerializableClosure\SerializableClosure;
+use function Odigos\Illuminate\Support\defer;
 class ProcessDriver implements Driver
 {
     /**

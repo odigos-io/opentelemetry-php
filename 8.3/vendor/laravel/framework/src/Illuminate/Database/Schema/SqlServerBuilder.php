@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Database\Schema;
+namespace Odigos\Illuminate\Database\Schema;
 
-use Illuminate\Support\Arr;
-class SqlServerBuilder extends \Illuminate\Database\Schema\Builder
+use Odigos\Illuminate\Support\Arr;
+class SqlServerBuilder extends Builder
 {
     /**
      * Drop all tables from the database.

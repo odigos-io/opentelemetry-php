@@ -13,10 +13,10 @@
  * @since         1.2.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Test\Fixture;
+namespace Odigos\Cake\Test\Fixture;
 
-use Cake\Datasource\ConnectionInterface;
-use Cake\Datasource\FixtureInterface;
+use Odigos\Cake\Datasource\ConnectionInterface;
+use Odigos\Cake\Datasource\FixtureInterface;
 /**
  * A fixture attached to the non-default connection
  * that implements the interface with none of the safe-guards

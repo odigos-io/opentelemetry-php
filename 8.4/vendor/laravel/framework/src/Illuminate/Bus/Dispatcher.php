@@ -1,17 +1,17 @@
 <?php
 
-namespace Illuminate\Bus;
+namespace Odigos\Illuminate\Bus;
 
 use Closure;
-use Illuminate\Contracts\Bus\QueueingDispatcher;
-use Illuminate\Contracts\Container\Container;
-use Illuminate\Contracts\Queue\Queue;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\PendingChain;
-use Illuminate\Pipeline\Pipeline;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\Jobs\SyncJob;
-use Illuminate\Support\Collection;
+use Odigos\Illuminate\Contracts\Bus\QueueingDispatcher;
+use Odigos\Illuminate\Contracts\Container\Container;
+use Odigos\Illuminate\Contracts\Queue\Queue;
+use Odigos\Illuminate\Contracts\Queue\ShouldQueue;
+use Odigos\Illuminate\Foundation\Bus\PendingChain;
+use Odigos\Illuminate\Pipeline\Pipeline;
+use Odigos\Illuminate\Queue\InteractsWithQueue;
+use Odigos\Illuminate\Queue\Jobs\SyncJob;
+use Odigos\Illuminate\Support\Collection;
 use RuntimeException;
 class Dispatcher implements QueueingDispatcher
 {
@@ -96,7 +96,7 @@ class Dispatcher implements QueueingDispatcher
     public function dispatchNow($command, $handler = null)
     {
         $uses = class_uses_recursive($command);
-        if (isset($uses[InteractsWithQueue::class], $uses[\Illuminate\Bus\Queueable::class]) && !$command->job) {
+        if (isset($uses[InteractsWithQueue::class], $uses[Queueable::class]) && !$command->job) {
             $command->setJob(new SyncJob($this->container, json_encode([]), 'sync', 'sync'));
         }
         if ($handler || $handler = $this->getCommandHandler($command)) {
@@ -119,7 +119,7 @@ class Dispatcher implements QueueingDispatcher
      */
     public function findBatch(string $batchId)
     {
-        return $this->container->make(\Illuminate\Bus\BatchRepository::class)->find($batchId);
+        return $this->container->make(BatchRepository::class)->find($batchId);
     }
     /**
      * Create a new batch of queueable jobs.
@@ -129,7 +129,7 @@ class Dispatcher implements QueueingDispatcher
      */
     public function batch($jobs)
     {
-        return new \Illuminate\Bus\PendingBatch($this->container, Collection::wrap($jobs));
+        return new PendingBatch($this->container, Collection::wrap($jobs));
     }
     /**
      * Create a new chain of queueable jobs.
@@ -140,7 +140,7 @@ class Dispatcher implements QueueingDispatcher
     public function chain($jobs = null)
     {
         $jobs = Collection::wrap($jobs);
-        $jobs = \Illuminate\Bus\ChainedBatch::prepareNestedBatches($jobs);
+        $jobs = ChainedBatch::prepareNestedBatches($jobs);
         return new PendingChain($jobs->shift(), $jobs->toArray());
     }
     /**

@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Queue\Jobs;
+namespace Odigos\Illuminate\Queue\Jobs;
 
-use Illuminate\Container\Container;
-use Illuminate\Contracts\Queue\Job as JobContract;
-class SyncJob extends \Illuminate\Queue\Jobs\Job implements JobContract
+use Odigos\Illuminate\Container\Container;
+use Odigos\Illuminate\Contracts\Queue\Job as JobContract;
+class SyncJob extends Job implements JobContract
 {
     /**
      * The class name of the job.

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenTelemetry\Contrib\Instrumentation\Psr18;
+namespace Odigos\OpenTelemetry\Contrib\Instrumentation\Psr18;
 
 use function get_cfg_var;
 use OpenTelemetry\API\Globals;
@@ -49,7 +49,7 @@ class Psr18Instrumentation
             }
             $span = $spanBuilder->startSpan();
             $context = $span->storeInContext($parentContext);
-            $propagator->inject($request, \OpenTelemetry\Contrib\Instrumentation\Psr18\HeadersPropagator::instance(), $context);
+            $propagator->inject($request, HeadersPropagator::instance(), $context);
             Context::storage()->attach($context);
             return [$request];
         }, post: static function (ClientInterface $client, array $params, ?ResponseInterface $response, ?Throwable $exception): void {

@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Schema\Introspection\MetadataProcessor;
+namespace Odigos\Doctrine\DBAL\Schema\Introspection\MetadataProcessor;
 
-use Doctrine\DBAL\Schema\Index;
-use Doctrine\DBAL\Schema\Index\IndexedColumn;
-use Doctrine\DBAL\Schema\IndexEditor;
-use Doctrine\DBAL\Schema\Metadata\IndexColumnMetadataRow;
-use Doctrine\DBAL\Schema\Name\UnqualifiedName;
+use Odigos\Doctrine\DBAL\Schema\Index;
+use Odigos\Doctrine\DBAL\Schema\Index\IndexedColumn;
+use Odigos\Doctrine\DBAL\Schema\IndexEditor;
+use Odigos\Doctrine\DBAL\Schema\Metadata\IndexColumnMetadataRow;
+use Odigos\Doctrine\DBAL\Schema\Name\UnqualifiedName;
 /**
  * Combines multiple {@see IndexColumnMetadataRow}s into an {@see Index}.
  *

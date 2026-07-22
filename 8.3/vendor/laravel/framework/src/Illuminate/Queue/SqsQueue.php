@@ -1,13 +1,13 @@
 <?php
 
-namespace Illuminate\Queue;
+namespace Odigos\Illuminate\Queue;
 
 use Odigos\Aws\Sqs\SqsClient;
-use Illuminate\Contracts\Queue\ClearableQueue;
-use Illuminate\Contracts\Queue\Queue as QueueContract;
-use Illuminate\Queue\Jobs\SqsJob;
-use Illuminate\Support\Str;
-class SqsQueue extends \Illuminate\Queue\Queue implements QueueContract, ClearableQueue
+use Odigos\Illuminate\Contracts\Queue\ClearableQueue;
+use Odigos\Illuminate\Contracts\Queue\Queue as QueueContract;
+use Odigos\Illuminate\Queue\Jobs\SqsJob;
+use Odigos\Illuminate\Support\Str;
+class SqsQueue extends Queue implements QueueContract, ClearableQueue
 {
     /**
      * The Amazon SQS instance.

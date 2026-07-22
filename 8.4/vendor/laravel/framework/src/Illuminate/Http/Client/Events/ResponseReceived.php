@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Http\Client\Events;
+namespace Odigos\Illuminate\Http\Client\Events;
 
-use Illuminate\Http\Client\Request;
-use Illuminate\Http\Client\Response;
+use Odigos\Illuminate\Http\Client\Request;
+use Odigos\Illuminate\Http\Client\Response;
 class ResponseReceived
 {
     /**

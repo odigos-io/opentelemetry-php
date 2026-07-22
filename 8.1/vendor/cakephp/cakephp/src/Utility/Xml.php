@@ -14,11 +14,11 @@ declare (strict_types=1);
  * @since         0.10.3
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Utility;
+namespace Odigos\Cake\Utility;
 
 use BackedEnum;
-use Cake\Core\Exception\CakeException;
-use Cake\Utility\Exception\XmlException;
+use Odigos\Cake\Core\Exception\CakeException;
+use Odigos\Cake\Utility\Exception\XmlException;
 use Closure;
 use DOMDocument;
 use DOMElement;

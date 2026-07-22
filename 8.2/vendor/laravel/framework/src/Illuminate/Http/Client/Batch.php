@@ -1,15 +1,15 @@
 <?php
 
-namespace Illuminate\Http\Client;
+namespace Odigos\Illuminate\Http\Client;
 
 use Odigos\Carbon\CarbonImmutable;
 use Closure;
-use GuzzleHttp\Exception\RequestException;
-use GuzzleHttp\Promise\EachPromise;
-use GuzzleHttp\Utils;
-use Illuminate\Http\Client\Promises\LazyPromise;
-use Illuminate\Support\Defer\DeferredCallback;
-use function Illuminate\Support\defer;
+use Odigos\GuzzleHttp\Exception\RequestException;
+use Odigos\GuzzleHttp\Promise\EachPromise;
+use Odigos\GuzzleHttp\Utils;
+use Odigos\Illuminate\Http\Client\Promises\LazyPromise;
+use Odigos\Illuminate\Support\Defer\DeferredCallback;
+use function Odigos\Illuminate\Support\defer;
 /**
  * @mixin \Illuminate\Http\Client\Factory
  */
@@ -108,9 +108,9 @@ class Batch
     /**
      * Create a new request batch instance.
      */
-    public function __construct(?\Illuminate\Http\Client\Factory $factory = null)
+    public function __construct(?Factory $factory = null)
     {
-        $this->factory = $factory ?: new \Illuminate\Http\Client\Factory();
+        $this->factory = $factory ?: new Factory();
         $this->handler = Utils::chooseHandler();
         $this->createdAt = new CarbonImmutable();
     }
@@ -125,7 +125,7 @@ class Batch
     public function as(string $key)
     {
         if ($this->inProgress) {
-            throw new \Illuminate\Http\Client\BatchInProgressException();
+            throw new BatchInProgressException();
         }
         $this->incrementPendingRequests();
         return $this->requests[$key] = $this->asyncRequest();
@@ -140,7 +140,7 @@ class Batch
     public function newRequest()
     {
         if ($this->inProgress) {
-            throw new \Illuminate\Http\Client\BatchInProgressException();
+            throw new BatchInProgressException();
         }
         $this->incrementPendingRequests();
         return $this->requests[] = $this->asyncRequest();
@@ -236,13 +236,13 @@ class Batch
             $eachPromiseOptions = ['fulfilled' => function ($result, $key) use (&$results) {
                 $results[$key] = $result;
                 $this->decrementPendingRequests();
-                if ($result instanceof \Illuminate\Http\Client\Response && $result->successful()) {
+                if ($result instanceof Response && $result->successful()) {
                     if ($this->progressCallback !== null) {
                         call_user_func($this->progressCallback, $this, $key, $result);
                     }
                     return $result;
                 }
-                if ($result instanceof \Illuminate\Http\Client\Response && $result->failed() || $result instanceof RequestException || $result instanceof \Illuminate\Http\Client\ConnectionException) {
+                if ($result instanceof Response && $result->failed() || $result instanceof RequestException || $result instanceof ConnectionException) {
                     $this->incrementFailedRequests();
                     if ($this->catchCallback !== null) {
                         call_user_func($this->catchCallback, $this, $key, $result);
@@ -251,7 +251,7 @@ class Batch
                 return $result;
             }, 'rejected' => function ($reason, $key) {
                 $this->decrementPendingRequests();
-                if ($reason instanceof RequestException || $reason instanceof \Illuminate\Http\Client\ConnectionException) {
+                if ($reason instanceof RequestException || $reason instanceof ConnectionException) {
                     $this->incrementFailedRequests();
                     if ($this->catchCallback !== null) {
                         call_user_func($this->catchCallback, $this, $key, $reason);
@@ -264,7 +264,7 @@ class Batch
             }
             $promiseGenerator = function () {
                 foreach ($this->requests as $key => $item) {
-                    $promise = $item instanceof \Illuminate\Http\Client\PendingRequest ? $item->getPromise() : $item;
+                    $promise = $item instanceof PendingRequest ? $item->getPromise() : $item;
                     yield $key => $promise instanceof LazyPromise ? $promise->buildPromise() : $promise;
                 }
             };

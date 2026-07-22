@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Contracts\Database\Events;
+namespace Odigos\Illuminate\Contracts\Database\Events;
 
 interface MigrationEvent
 {

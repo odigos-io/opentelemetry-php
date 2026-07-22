@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Support;
+namespace Odigos\Illuminate\Support;
 
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Support\Traits\InteractsWithData;
+use Odigos\Illuminate\Contracts\Support\Arrayable;
+use Odigos\Illuminate\Support\Traits\InteractsWithData;
 use Odigos\League\Uri\QueryString;
 use Stringable;
 class UriQueryString implements Arrayable, Stringable
@@ -12,7 +12,7 @@ class UriQueryString implements Arrayable, Stringable
     /**
      * Create a new URI query string instance.
      */
-    public function __construct(protected \Illuminate\Support\Uri $uri)
+    public function __construct(protected Uri $uri)
     {
         //
     }
@@ -30,7 +30,7 @@ class UriQueryString implements Arrayable, Stringable
         }
         $results = [];
         foreach (is_array($keys) ? $keys : func_get_args() as $key) {
-            \Illuminate\Support\Arr::set($results, $key, \Illuminate\Support\Arr::get($query, $key));
+            Arr::set($results, $key, Arr::get($query, $key));
         }
         return $results;
     }

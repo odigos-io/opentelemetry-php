@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Schema\Collections;
+namespace Odigos\Doctrine\DBAL\Schema\Collections;
 
-use Doctrine\DBAL\Schema\Collections\Exception\ObjectAlreadyExists;
-use Doctrine\DBAL\Schema\Collections\Exception\ObjectDoesNotExist;
-use Doctrine\DBAL\Schema\Name\UnqualifiedName;
+use Odigos\Doctrine\DBAL\Schema\Collections\Exception\ObjectAlreadyExists;
+use Odigos\Doctrine\DBAL\Schema\Collections\Exception\ObjectDoesNotExist;
+use Odigos\Doctrine\DBAL\Schema\Name\UnqualifiedName;
 use IteratorAggregate;
 /**
  * A set of objects where each object is uniquely identified by its {@link UnqualifiedName}.

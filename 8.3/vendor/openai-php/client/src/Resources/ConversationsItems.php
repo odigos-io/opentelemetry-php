@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Resources;
+namespace Odigos\OpenAI\Resources;
 
-use OpenAI\Contracts\Resources\ConversationsItemsContract;
-use OpenAI\Responses\Conversations\ConversationItem;
-use OpenAI\Responses\Conversations\ConversationItemList;
-use OpenAI\Responses\Conversations\ConversationResponse;
-use OpenAI\ValueObjects\Transporter\Payload;
-use OpenAI\ValueObjects\Transporter\Response;
+use Odigos\OpenAI\Contracts\Resources\ConversationsItemsContract;
+use Odigos\OpenAI\Responses\Conversations\ConversationItem;
+use Odigos\OpenAI\Responses\Conversations\ConversationItemList;
+use Odigos\OpenAI\Responses\Conversations\ConversationResponse;
+use Odigos\OpenAI\ValueObjects\Transporter\Payload;
+use Odigos\OpenAI\ValueObjects\Transporter\Response;
 /**
  * @phpstan-import-type ConversationItemType from ConversationItem
  * @phpstan-import-type ConversationItemListType from ConversationItemList
@@ -16,7 +16,7 @@ use OpenAI\ValueObjects\Transporter\Response;
  */
 final class ConversationsItems implements ConversationsItemsContract
 {
-    use \OpenAI\Resources\Concerns\Transportable;
+    use Concerns\Transportable;
     /**
      * {@inheritdoc}
      */

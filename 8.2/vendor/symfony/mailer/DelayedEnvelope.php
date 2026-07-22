@@ -8,18 +8,18 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Mailer;
+namespace Odigos\Symfony\Component\Mailer;
 
-use Symfony\Component\Mailer\Exception\LogicException;
-use Symfony\Component\Mime\Address;
-use Symfony\Component\Mime\Header\Headers;
-use Symfony\Component\Mime\Message;
+use Odigos\Symfony\Component\Mailer\Exception\LogicException;
+use Odigos\Symfony\Component\Mime\Address;
+use Odigos\Symfony\Component\Mime\Header\Headers;
+use Odigos\Symfony\Component\Mime\Message;
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  *
  * @internal
  */
-final class DelayedEnvelope extends \Symfony\Component\Mailer\Envelope
+final class DelayedEnvelope extends Envelope
 {
     private bool $senderSet = \false;
     private bool $recipientsSet = \false;

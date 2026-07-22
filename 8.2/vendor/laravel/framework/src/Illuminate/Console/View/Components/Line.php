@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Console\View\Components;
+namespace Odigos\Illuminate\Console\View\Components;
 
-use Illuminate\Console\Contracts\NewLineAware;
-use Symfony\Component\Console\Output\OutputInterface;
-class Line extends \Illuminate\Console\View\Components\Component
+use Odigos\Illuminate\Console\Contracts\NewLineAware;
+use Odigos\Symfony\Component\Console\Output\OutputInterface;
+class Line extends Component
 {
     /**
      * The possible line styles.
@@ -22,7 +22,7 @@ class Line extends \Illuminate\Console\View\Components\Component
      */
     public function render($style, $string, $verbosity = OutputInterface::VERBOSITY_NORMAL)
     {
-        $string = $this->mutate($string, [\Illuminate\Console\View\Components\Mutators\EnsureDynamicContentIsHighlighted::class, \Illuminate\Console\View\Components\Mutators\EnsurePunctuation::class, \Illuminate\Console\View\Components\Mutators\EnsureRelativePaths::class]);
+        $string = $this->mutate($string, [Mutators\EnsureDynamicContentIsHighlighted::class, Mutators\EnsurePunctuation::class, Mutators\EnsureRelativePaths::class]);
         $this->renderView('line', array_merge(static::$styles[$style], ['marginTop' => $this->output instanceof NewLineAware ? max(0, 2 - $this->output->newLinesWritten()) : 1, 'content' => $string]), $verbosity);
     }
 }

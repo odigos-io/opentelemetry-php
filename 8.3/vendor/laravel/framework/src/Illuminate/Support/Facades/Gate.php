@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Support\Facades;
+namespace Odigos\Illuminate\Support\Facades;
 
-use Illuminate\Contracts\Auth\Access\Gate as GateContract;
+use Odigos\Illuminate\Contracts\Auth\Access\Gate as GateContract;
 /**
  * @method static bool has(\UnitEnum|array|string $ability)
  * @method static \Illuminate\Auth\Access\Response allowIf(\Illuminate\Auth\Access\Response|\Closure|bool $condition, string|null $message = null, string|null $code = null)
@@ -33,7 +33,7 @@ use Illuminate\Contracts\Auth\Access\Gate as GateContract;
  *
  * @see \Illuminate\Auth\Access\Gate
  */
-class Gate extends \Illuminate\Support\Facades\Facade
+class Gate extends Facade
 {
     /**
      * Get the registered name of the component.

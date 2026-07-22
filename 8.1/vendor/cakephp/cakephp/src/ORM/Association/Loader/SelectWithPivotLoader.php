@@ -14,19 +14,19 @@ declare (strict_types=1);
  * @since         3.4.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\ORM\Association\Loader;
+namespace Odigos\Cake\ORM\Association\Loader;
 
-use Cake\Database\Exception\DatabaseException;
-use Cake\Database\ExpressionInterface;
-use Cake\ORM\Association\HasMany;
-use Cake\ORM\Query\SelectQuery;
+use Odigos\Cake\Database\Exception\DatabaseException;
+use Odigos\Cake\Database\ExpressionInterface;
+use Odigos\Cake\ORM\Association\HasMany;
+use Odigos\Cake\ORM\Query\SelectQuery;
 use Closure;
 /**
  * Implements the logic for loading an association using a SELECT query and a pivot table
  *
  * @internal
  */
-class SelectWithPivotLoader extends \Cake\ORM\Association\Loader\SelectLoader
+class SelectWithPivotLoader extends SelectLoader
 {
     /**
      * The name of the junction association

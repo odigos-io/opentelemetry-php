@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Routing\Contracts;
+namespace Odigos\Illuminate\Routing\Contracts;
 
-use Illuminate\Routing\Route;
+use Odigos\Illuminate\Routing\Route;
 interface CallableDispatcher
 {
     /**

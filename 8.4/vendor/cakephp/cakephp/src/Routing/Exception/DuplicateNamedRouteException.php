@@ -12,9 +12,9 @@ declare (strict_types=1);
  * @since         3.3.1
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Routing\Exception;
+namespace Odigos\Cake\Routing\Exception;
 
-use Cake\Core\Exception\CakeException;
+use Odigos\Cake\Core\Exception\CakeException;
 use Throwable;
 /**
  * Exception raised when a route names used twice.

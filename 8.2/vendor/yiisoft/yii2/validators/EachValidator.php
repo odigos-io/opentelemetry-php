@@ -5,12 +5,12 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\validators;
+namespace Odigos\yii\validators;
 
 use Odigos\Yii;
-use yii\base\DynamicModel;
-use yii\base\InvalidConfigException;
-use yii\base\Model;
+use Odigos\yii\base\DynamicModel;
+use Odigos\yii\base\InvalidConfigException;
+use Odigos\yii\base\Model;
 /**
  * EachValidator validates an array by checking each of its elements against an embedded validation rule.
  *
@@ -38,7 +38,7 @@ use yii\base\Model;
  * @author Paul Klimov <klimov.paul@gmail.com>
  * @since 2.0.4
  */
-class EachValidator extends \yii\validators\Validator
+class EachValidator extends Validator
 {
     /**
      * @var array|Validator definition of the validation rule, which should be used on array values.
@@ -89,7 +89,7 @@ class EachValidator extends \yii\validators\Validator
     private function createEmbeddedValidator($model = null, $current = null)
     {
         $rule = $this->rule;
-        if ($rule instanceof \yii\validators\Validator) {
+        if ($rule instanceof Validator) {
             return $rule;
         }
         if (is_array($rule) && isset($rule[0])) {
@@ -100,7 +100,7 @@ class EachValidator extends \yii\validators\Validator
             }
             $params = array_slice($rule, 1);
             $params['current'] = $current;
-            return \yii\validators\Validator::createValidator($rule[0], $model, $this->attributes, $params);
+            return Validator::createValidator($rule[0], $model, $this->attributes, $params);
         }
         throw new InvalidConfigException('Invalid validation rule: a rule must be an array specifying validator type.');
     }

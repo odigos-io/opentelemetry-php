@@ -5,17 +5,17 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\db\pgsql;
+namespace Odigos\yii\db\pgsql;
 
-use yii\db\ArrayExpression;
-use yii\db\ExpressionInterface;
-use yii\db\JsonExpression;
+use Odigos\yii\db\ArrayExpression;
+use Odigos\yii\db\ExpressionInterface;
+use Odigos\yii\db\JsonExpression;
 /**
  * Class ColumnSchema for PostgreSQL database.
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
-class ColumnSchema extends \yii\db\ColumnSchema
+class ColumnSchema extends \Odigos\yii\db\ColumnSchema
 {
     /**
      * @var int the dimension of array. Defaults to 0, means this column is not an array.
@@ -67,7 +67,7 @@ class ColumnSchema extends \yii\db\ColumnSchema
         if ($this->dimension > 0) {
             return $this->disableArraySupport ? (string) $value : new ArrayExpression($value, $this->dbType, $this->dimension);
         }
-        if (!$this->disableJsonSupport && in_array($this->dbType, [\yii\db\pgsql\Schema::TYPE_JSON, \yii\db\pgsql\Schema::TYPE_JSONB], \true)) {
+        if (!$this->disableJsonSupport && in_array($this->dbType, [Schema::TYPE_JSON, Schema::TYPE_JSONB], \true)) {
             return new JsonExpression($value, $this->dbType);
         }
         return $this->typecast($value);
@@ -107,7 +107,7 @@ class ColumnSchema extends \yii\db\ColumnSchema
             return null;
         }
         switch ($this->type) {
-            case \yii\db\pgsql\Schema::TYPE_BOOLEAN:
+            case Schema::TYPE_BOOLEAN:
                 switch (strtolower($value)) {
                     case 't':
                     case 'true':
@@ -117,7 +117,7 @@ class ColumnSchema extends \yii\db\ColumnSchema
                         return \false;
                 }
                 return (bool) $value;
-            case \yii\db\pgsql\Schema::TYPE_JSON:
+            case Schema::TYPE_JSON:
                 return $this->disableJsonSupport ? $value : json_decode($value, \true);
         }
         return parent::phpTypecast($value);
@@ -131,7 +131,7 @@ class ColumnSchema extends \yii\db\ColumnSchema
     {
         static $parser = null;
         if ($parser === null) {
-            $parser = new \yii\db\pgsql\ArrayParser();
+            $parser = new ArrayParser();
         }
         return $parser;
     }

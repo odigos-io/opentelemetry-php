@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Database\Schema;
+namespace Odigos\Illuminate\Database\Schema;
 
-class MariaDbBuilder extends \Illuminate\Database\Schema\MySqlBuilder
+class MariaDbBuilder extends MySqlBuilder
 {
     //
 }

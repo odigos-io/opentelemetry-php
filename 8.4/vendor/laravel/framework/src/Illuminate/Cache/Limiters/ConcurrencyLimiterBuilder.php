@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Cache\Limiters;
+namespace Odigos\Illuminate\Cache\Limiters;
 
-use Illuminate\Support\InteractsWithTime;
+use Odigos\Illuminate\Support\InteractsWithTime;
 class ConcurrencyLimiterBuilder
 {
     use InteractsWithTime;
@@ -110,7 +110,7 @@ class ConcurrencyLimiterBuilder
     {
         try {
             return $this->createLimiter()->block($this->timeout, $callback, $this->sleep);
-        } catch (\Illuminate\Cache\Limiters\LimiterTimeoutException $e) {
+        } catch (LimiterTimeoutException $e) {
             if ($failure) {
                 return $failure($e);
             }
@@ -124,6 +124,6 @@ class ConcurrencyLimiterBuilder
      */
     protected function createLimiter()
     {
-        return new \Illuminate\Cache\Limiters\ConcurrencyLimiter($this->connection->getStore(), $this->name, $this->maxLocks, $this->releaseAfter);
+        return new ConcurrencyLimiter($this->connection->getStore(), $this->name, $this->maxLocks, $this->releaseAfter);
     }
 }

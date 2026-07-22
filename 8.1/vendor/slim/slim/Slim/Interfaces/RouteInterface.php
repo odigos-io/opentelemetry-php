@@ -6,7 +6,7 @@
  * @license https://github.com/slimphp/Slim/blob/4.x/LICENSE.md (MIT License)
  */
 declare (strict_types=1);
-namespace Slim\Interfaces;
+namespace Odigos\Slim\Interfaces;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -17,11 +17,11 @@ interface RouteInterface
     /**
      * Get route invocation strategy
      */
-    public function getInvocationStrategy(): \Slim\Interfaces\InvocationStrategyInterface;
+    public function getInvocationStrategy(): InvocationStrategyInterface;
     /**
      * Set route invocation strategy
      */
-    public function setInvocationStrategy(\Slim\Interfaces\InvocationStrategyInterface $invocationStrategy): \Slim\Interfaces\RouteInterface;
+    public function setInvocationStrategy(InvocationStrategyInterface $invocationStrategy): RouteInterface;
     /**
      * Get route methods
      *
@@ -35,7 +35,7 @@ interface RouteInterface
     /**
      * Set route pattern
      */
-    public function setPattern(string $pattern): \Slim\Interfaces\RouteInterface;
+    public function setPattern(string $pattern): RouteInterface;
     /**
      * Get route callable
      *
@@ -47,7 +47,7 @@ interface RouteInterface
      *
      * @param callable|array{class-string, string}|string $callable
      */
-    public function setCallable($callable): \Slim\Interfaces\RouteInterface;
+    public function setCallable($callable): RouteInterface;
     /**
      * Get route name
      */
@@ -57,7 +57,7 @@ interface RouteInterface
      *
      * @return static
      */
-    public function setName(string $name): \Slim\Interfaces\RouteInterface;
+    public function setName(string $name): RouteInterface;
     /**
      * Get the route's unique identifier
      */
@@ -77,7 +77,7 @@ interface RouteInterface
      *
      * @deprecated 4.14.1 Use a middleware for custom route arguments now.
      */
-    public function setArgument(string $name, string $value): \Slim\Interfaces\RouteInterface;
+    public function setArgument(string $name, string $value): RouteInterface;
     /**
      * Replace route arguments
      *

@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Foundation\Bus;
+namespace Odigos\Illuminate\Foundation\Bus;
 
 use Closure;
-use Illuminate\Contracts\Bus\Dispatcher;
-use Illuminate\Support\Fluent;
+use Odigos\Illuminate\Contracts\Bus\Dispatcher;
+use Odigos\Illuminate\Support\Fluent;
 trait Dispatchable
 {
     /**
@@ -77,7 +77,7 @@ trait Dispatchable
      */
     public static function withChain($chain)
     {
-        return new \Illuminate\Foundation\Bus\PendingChain(static::class, $chain);
+        return new PendingChain(static::class, $chain);
     }
     /**
      * Create a new pending job dispatch instance.
@@ -87,6 +87,6 @@ trait Dispatchable
      */
     protected static function newPendingDispatch($job)
     {
-        return new \Illuminate\Foundation\Bus\PendingDispatch($job);
+        return new PendingDispatch($job);
     }
 }

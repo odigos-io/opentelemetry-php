@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\base;
+namespace Odigos\yii\base;
 
 /**
  * Response represents the response of an [[Application]] to a [[Request]].
@@ -15,7 +15,7 @@ namespace yii\base;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class Response extends \yii\base\Component
+class Response extends Component
 {
     /**
      * @var int the exit status. Exit statuses should be in the range 0 to 254.

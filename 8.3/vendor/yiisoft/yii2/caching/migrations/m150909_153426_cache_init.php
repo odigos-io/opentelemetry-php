@@ -7,9 +7,9 @@ namespace Odigos;
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-use yii\base\InvalidConfigException;
-use yii\caching\DbCache;
-use yii\db\Migration;
+use Odigos\yii\base\InvalidConfigException;
+use Odigos\yii\caching\DbCache;
+use Odigos\yii\db\Migration;
 /**
  * Initializes Cache tables.
  *

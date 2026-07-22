@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Contracts\HttpClient\Test;
+namespace Odigos\Symfony\Contracts\HttpClient\Test;
 
-use Symfony\Component\Process\PhpExecutableFinder;
-use Symfony\Component\Process\Process;
+use Odigos\Symfony\Component\Process\PhpExecutableFinder;
+use Odigos\Symfony\Component\Process\Process;
 class TestHttpServer
 {
     private static array $process = [];

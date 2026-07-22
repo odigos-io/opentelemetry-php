@@ -14,15 +14,15 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database\Driver;
+namespace Odigos\Cake\Database\Driver;
 
-use Cake\Database\Driver;
-use Cake\Database\DriverFeatureEnum;
-use Cake\Database\Query;
-use Cake\Database\Query\SelectQuery;
-use Cake\Database\Schema\MysqlSchemaDialect;
-use Cake\Database\Schema\SchemaDialect;
-use Cake\Database\StatementInterface;
+use Odigos\Cake\Database\Driver;
+use Odigos\Cake\Database\DriverFeatureEnum;
+use Odigos\Cake\Database\Query;
+use Odigos\Cake\Database\Query\SelectQuery;
+use Odigos\Cake\Database\Schema\MysqlSchemaDialect;
+use Odigos\Cake\Database\Schema\SchemaDialect;
+use Odigos\Cake\Database\StatementInterface;
 use PDO;
 use Pdo\Mysql as PdoMysql;
 /**

@@ -8,16 +8,16 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Translation\Loader;
+namespace Odigos\Symfony\Component\Translation\Loader;
 
-use Symfony\Component\Config\Resource\FileResource;
-use Symfony\Component\Translation\Exception\InvalidResourceException;
-use Symfony\Component\Translation\Exception\NotFoundResourceException;
-use Symfony\Component\Translation\MessageCatalogue;
+use Odigos\Symfony\Component\Config\Resource\FileResource;
+use Odigos\Symfony\Component\Translation\Exception\InvalidResourceException;
+use Odigos\Symfony\Component\Translation\Exception\NotFoundResourceException;
+use Odigos\Symfony\Component\Translation\MessageCatalogue;
 /**
  * @author Abdellatif Ait boudad <a.aitboudad@gmail.com>
  */
-abstract class FileLoader extends \Symfony\Component\Translation\Loader\ArrayLoader
+abstract class FileLoader extends ArrayLoader
 {
     public function load(mixed $resource, string $locale, string $domain = 'messages'): MessageCatalogue
     {

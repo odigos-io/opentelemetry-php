@@ -5,9 +5,9 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\validators;
+namespace Odigos\yii\validators;
 
-use yii\web\AssetBundle;
+use Odigos\yii\web\AssetBundle;
 /**
  * This asset bundle provides the javascript files for client validation.
  *
@@ -18,5 +18,5 @@ class ValidationAsset extends AssetBundle
 {
     public $sourcePath = '@yii/assets';
     public $js = ['yii.validation.js'];
-    public $depends = ['yii\web\YiiAsset'];
+    public $depends = ['Odigos\yii\web\YiiAsset'];
 }

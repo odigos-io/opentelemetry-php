@@ -1,37 +1,37 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL;
+namespace Odigos\Doctrine\DBAL;
 
 use Closure;
-use Doctrine\DBAL\Cache\ArrayResult;
-use Doctrine\DBAL\Cache\CacheException;
-use Doctrine\DBAL\Cache\Exception\NoResultDriverConfigured;
-use Doctrine\DBAL\Cache\QueryCacheProfile;
-use Doctrine\DBAL\Connection\StaticServerVersionProvider;
-use Doctrine\DBAL\Driver\API\ExceptionConverter;
-use Doctrine\DBAL\Driver\Connection as DriverConnection;
-use Doctrine\DBAL\Driver\Exception as TheDriverException;
-use Doctrine\DBAL\Driver\Statement as DriverStatement;
-use Doctrine\DBAL\Exception\CommitFailedRollbackOnly;
-use Doctrine\DBAL\Exception\ConnectionLost;
-use Doctrine\DBAL\Exception\DeadlockException;
-use Doctrine\DBAL\Exception\DriverException;
-use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
-use Doctrine\DBAL\Exception\NoActiveTransaction;
-use Doctrine\DBAL\Exception\ParseError;
-use Doctrine\DBAL\Exception\SavepointsNotSupported;
-use Doctrine\DBAL\Exception\TransactionRolledBack;
-use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
-use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Doctrine\DBAL\Query\Expression\ExpressionBuilder;
-use Doctrine\DBAL\Query\QueryBuilder;
-use Doctrine\DBAL\Schema\AbstractSchemaManager;
-use Doctrine\DBAL\Schema\DefaultSchemaManagerFactory;
-use Doctrine\DBAL\Schema\SchemaManagerFactory;
-use Doctrine\DBAL\SQL\Parser;
-use Doctrine\DBAL\Types\Type;
-use Doctrine\Deprecations\Deprecation;
+use Odigos\Doctrine\DBAL\Cache\ArrayResult;
+use Odigos\Doctrine\DBAL\Cache\CacheException;
+use Odigos\Doctrine\DBAL\Cache\Exception\NoResultDriverConfigured;
+use Odigos\Doctrine\DBAL\Cache\QueryCacheProfile;
+use Odigos\Doctrine\DBAL\Connection\StaticServerVersionProvider;
+use Odigos\Doctrine\DBAL\Driver\API\ExceptionConverter;
+use Odigos\Doctrine\DBAL\Driver\Connection as DriverConnection;
+use Odigos\Doctrine\DBAL\Driver\Exception as TheDriverException;
+use Odigos\Doctrine\DBAL\Driver\Statement as DriverStatement;
+use Odigos\Doctrine\DBAL\Exception\CommitFailedRollbackOnly;
+use Odigos\Doctrine\DBAL\Exception\ConnectionLost;
+use Odigos\Doctrine\DBAL\Exception\DeadlockException;
+use Odigos\Doctrine\DBAL\Exception\DriverException;
+use Odigos\Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
+use Odigos\Doctrine\DBAL\Exception\NoActiveTransaction;
+use Odigos\Doctrine\DBAL\Exception\ParseError;
+use Odigos\Doctrine\DBAL\Exception\SavepointsNotSupported;
+use Odigos\Doctrine\DBAL\Exception\TransactionRolledBack;
+use Odigos\Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+use Odigos\Doctrine\DBAL\Platforms\AbstractPlatform;
+use Odigos\Doctrine\DBAL\Query\Expression\ExpressionBuilder;
+use Odigos\Doctrine\DBAL\Query\QueryBuilder;
+use Odigos\Doctrine\DBAL\Schema\AbstractSchemaManager;
+use Odigos\Doctrine\DBAL\Schema\DefaultSchemaManagerFactory;
+use Odigos\Doctrine\DBAL\Schema\SchemaManagerFactory;
+use Odigos\Doctrine\DBAL\SQL\Parser;
+use Odigos\Doctrine\DBAL\Types\Type;
+use Odigos\Doctrine\Deprecations\Deprecation;
 use InvalidArgumentException;
 use SensitiveParameter;
 use Throwable;
@@ -57,13 +57,13 @@ use function sprintf;
  *  >
  * @phpstan-consistent-constructor
  */
-class Connection implements \Doctrine\DBAL\ServerVersionProvider
+class Connection implements ServerVersionProvider
 {
     /**
      * The wrapped driver connection.
      */
     protected ?DriverConnection $_conn = null;
-    protected \Doctrine\DBAL\Configuration $_config;
+    protected Configuration $_config;
     /**
      * The current auto-commit mode of this connection.
      */
@@ -75,7 +75,7 @@ class Connection implements \Doctrine\DBAL\ServerVersionProvider
     /**
      * The currently active transaction isolation level or NULL before it has been determined.
      */
-    private ?\Doctrine\DBAL\TransactionIsolationLevel $transactionIsolationLevel = null;
+    private ?TransactionIsolationLevel $transactionIsolationLevel = null;
     /**
      * The parameters used during creation of the Connection instance.
      *
@@ -107,11 +107,11 @@ class Connection implements \Doctrine\DBAL\ServerVersionProvider
     public function __construct(
         #[SensitiveParameter]
         array $params,
-        protected \Doctrine\DBAL\Driver $driver,
-        ?\Doctrine\DBAL\Configuration $config = null
+        protected Driver $driver,
+        ?Configuration $config = null
     )
     {
-        $this->_config = $config ?? new \Doctrine\DBAL\Configuration();
+        $this->_config = $config ?? new Configuration();
         $this->params = $params;
         $this->autoCommit = $this->_config->getAutoCommit();
         $this->schemaManagerFactory = $this->_config->getSchemaManagerFactory() ?? new DefaultSchemaManagerFactory();
@@ -146,14 +146,14 @@ class Connection implements \Doctrine\DBAL\ServerVersionProvider
     /**
      * Gets the DBAL driver instance.
      */
-    public function getDriver(): \Doctrine\DBAL\Driver
+    public function getDriver(): Driver
     {
         return $this->driver;
     }
     /**
      * Gets the Configuration used by the Connection.
      */
-    public function getConfiguration(): \Doctrine\DBAL\Configuration
+    public function getConfiguration(): Configuration
     {
         return $this->_config;
     }
@@ -194,7 +194,7 @@ class Connection implements \Doctrine\DBAL\ServerVersionProvider
         }
         try {
             $connection = $this->_conn = $this->driver->connect($this->params);
-        } catch (\Doctrine\DBAL\Driver\Exception $e) {
+        } catch (Driver\Exception $e) {
             throw $this->convertException($e);
         }
         if ($this->autoCommit === \false) {
@@ -369,7 +369,7 @@ class Connection implements \Doctrine\DBAL\ServerVersionProvider
      *
      * @throws Exception
      */
-    public function setTransactionIsolation(\Doctrine\DBAL\TransactionIsolationLevel $level): void
+    public function setTransactionIsolation(TransactionIsolationLevel $level): void
     {
         $this->transactionIsolationLevel = $level;
         $this->executeStatement($this->getDatabasePlatform()->getSetTransactionIsolationSQL($level));
@@ -381,7 +381,7 @@ class Connection implements \Doctrine\DBAL\ServerVersionProvider
      *
      * @throws Exception
      */
-    public function getTransactionIsolation(): \Doctrine\DBAL\TransactionIsolationLevel
+    public function getTransactionIsolation(): TransactionIsolationLevel
     {
         return $this->transactionIsolationLevel ??= $this->getDatabasePlatform()->getDefaultTransactionIsolationLevel();
     }
@@ -458,7 +458,7 @@ class Connection implements \Doctrine\DBAL\ServerVersionProvider
     {
         $typeValues = [];
         foreach ($columns as $columnName) {
-            $typeValues[] = $types[$columnName] ?? \Doctrine\DBAL\ParameterType::STRING;
+            $typeValues[] = $types[$columnName] ?? ParameterType::STRING;
         }
         return $typeValues;
     }
@@ -662,15 +662,15 @@ DEPRECATION
      *
      * @throws Exception
      */
-    public function prepare(string $sql): \Doctrine\DBAL\Statement
+    public function prepare(string $sql): Statement
     {
         $connection = $this->connect();
         try {
             $statement = $connection->prepare($sql);
-        } catch (\Doctrine\DBAL\Driver\Exception $e) {
+        } catch (Driver\Exception $e) {
             throw $this->convertExceptionDuringQuery($e, $sql);
         }
-        return new \Doctrine\DBAL\Statement($this, $statement, $sql);
+        return new Statement($this, $statement, $sql);
     }
     /**
      * Executes an, optionally parameterized, SQL query.
@@ -682,7 +682,7 @@ DEPRECATION
      *
      * @throws Exception
      */
-    public function executeQuery(string $sql, array $params = [], array $types = [], ?QueryCacheProfile $qcp = null): \Doctrine\DBAL\Result
+    public function executeQuery(string $sql, array $params = [], array $types = [], ?QueryCacheProfile $qcp = null): Result
     {
         if ($qcp !== null) {
             return $this->executeCacheQuery($sql, $params, $types, $qcp);
@@ -697,8 +697,8 @@ DEPRECATION
             } else {
                 $result = $connection->query($sql);
             }
-            return new \Doctrine\DBAL\Result($result, $this);
-        } catch (\Doctrine\DBAL\Driver\Exception $e) {
+            return new Result($result, $this);
+        } catch (Driver\Exception $e) {
             throw $this->convertExceptionDuringQuery($e, $sql, $params, $types);
         }
     }
@@ -711,7 +711,7 @@ DEPRECATION
      * @throws CacheException
      * @throws Exception
      */
-    public function executeCacheQuery(string $sql, array $params, array $types, QueryCacheProfile $qcp): \Doctrine\DBAL\Result
+    public function executeCacheQuery(string $sql, array $params, array $types, QueryCacheProfile $qcp): Result
     {
         $resultCache = $qcp->getResultCache() ?? $this->_config->getResultCache();
         if ($resultCache === null) {
@@ -728,7 +728,7 @@ DEPRECATION
                 $value = [];
             }
             if (isset($value[$realKey]) && $value[$realKey] instanceof ArrayResult) {
-                return new \Doctrine\DBAL\Result(clone $value[$realKey], $this);
+                return new Result(clone $value[$realKey], $this);
             }
         } else {
             $value = [];
@@ -746,7 +746,7 @@ DEPRECATION
             $item->expiresAfter($lifetime);
         }
         $resultCache->save($item);
-        return new \Doctrine\DBAL\Result(clone $value[$realKey], $this);
+        return new Result(clone $value[$realKey], $this);
     }
     /**
      * Executes an SQL statement with the given parameters and returns the number of affected rows.
@@ -778,7 +778,7 @@ DEPRECATION
                 return $stmt->execute()->rowCount();
             }
             return $connection->exec($sql);
-        } catch (\Doctrine\DBAL\Driver\Exception $e) {
+        } catch (Driver\Exception $e) {
             throw $this->convertExceptionDuringQuery($e, $sql, $params, $types);
         }
     }
@@ -802,7 +802,7 @@ DEPRECATION
     {
         try {
             return $this->connect()->lastInsertId();
-        } catch (\Doctrine\DBAL\Driver\Exception $e) {
+        } catch (Driver\Exception $e) {
             throw $this->convertException($e);
         }
     }
@@ -890,7 +890,7 @@ DEPRECATION
         if ($this->transactionNestingLevel === 1) {
             try {
                 $connection->beginTransaction();
-            } catch (\Doctrine\DBAL\Driver\Exception $e) {
+            } catch (Driver\Exception $e) {
                 throw $this->convertException($e);
             }
         } else {
@@ -911,7 +911,7 @@ DEPRECATION
             if ($this->transactionNestingLevel === 1) {
                 try {
                     $connection->commit();
-                } catch (\Doctrine\DBAL\Driver\Exception $e) {
+                } catch (Driver\Exception $e) {
                     throw $this->convertException($e);
                 }
             } else {
@@ -960,7 +960,7 @@ DEPRECATION
             $this->transactionNestingLevel = 0;
             try {
                 $connection->rollBack();
-            } catch (\Doctrine\DBAL\Driver\Exception $e) {
+            } catch (Driver\Exception $e) {
                 throw $this->convertException($e);
             } finally {
                 $this->isRollbackOnly = \false;
@@ -1116,11 +1116,11 @@ DEPRECATION
                     $type = $types[$key];
                     [$value, $bindingType] = $this->getBindingInfo($value, $type);
                 } else {
-                    $bindingType = \Doctrine\DBAL\ParameterType::STRING;
+                    $bindingType = ParameterType::STRING;
                 }
                 try {
                     $stmt->bindValue($bindIndex, $value, $bindingType);
-                } catch (\Doctrine\DBAL\Driver\Exception $e) {
+                } catch (Driver\Exception $e) {
                     throw $this->convertException($e);
                 }
                 ++$bindIndex;
@@ -1132,11 +1132,11 @@ DEPRECATION
                     $type = $types[$name];
                     [$value, $bindingType] = $this->getBindingInfo($value, $type);
                 } else {
-                    $bindingType = \Doctrine\DBAL\ParameterType::STRING;
+                    $bindingType = ParameterType::STRING;
                 }
                 try {
                     $stmt->bindValue($name, $value, $bindingType);
-                } catch (\Doctrine\DBAL\Driver\Exception $e) {
+                } catch (Driver\Exception $e) {
                     throw $this->convertException($e);
                 }
             }
@@ -1152,7 +1152,7 @@ DEPRECATION
      *
      * @throws Exception
      */
-    private function getBindingInfo(mixed $value, string|\Doctrine\DBAL\ParameterType|Type $type): array
+    private function getBindingInfo(mixed $value, string|ParameterType|Type $type): array
     {
         if (is_string($type)) {
             $type = Type::getType($type);
@@ -1170,7 +1170,7 @@ DEPRECATION
      */
     public function createQueryBuilder(): QueryBuilder
     {
-        return new \Doctrine\DBAL\Query\QueryBuilder($this);
+        return new Query\QueryBuilder($this);
     }
     /**
      * @internal
@@ -1178,12 +1178,12 @@ DEPRECATION
      * @param list<mixed>|array<string,mixed> $params
      * @phpstan-param WrapperParameterTypeArray $types
      */
-    final public function convertExceptionDuringQuery(\Doctrine\DBAL\Driver\Exception $e, string $sql, array $params = [], array $types = []): DriverException
+    final public function convertExceptionDuringQuery(Driver\Exception $e, string $sql, array $params = [], array $types = []): DriverException
     {
-        return $this->handleDriverException($e, new \Doctrine\DBAL\Query($sql, $params, $types));
+        return $this->handleDriverException($e, new Query($sql, $params, $types));
     }
     /** @internal */
-    final public function convertException(\Doctrine\DBAL\Driver\Exception $e): DriverException
+    final public function convertException(Driver\Exception $e): DriverException
     {
         return $this->handleDriverException($e, null);
     }
@@ -1207,7 +1207,7 @@ DEPRECATION
             $needsConversion = \true;
         } else {
             foreach ($types as $key => $type) {
-                if ($type instanceof \Doctrine\DBAL\ArrayParameterType) {
+                if ($type instanceof ArrayParameterType) {
                     $needsConversion = \true;
                     break;
                 }
@@ -1218,7 +1218,7 @@ DEPRECATION
             return [$sql, $params, $nonArrayTypes];
         }
         $this->parser ??= $this->getDatabasePlatform()->createSQLParser();
-        $visitor = new \Doctrine\DBAL\ExpandArrayParameters($params, $types);
+        $visitor = new ExpandArrayParameters($params, $types);
         try {
             $this->parser->parse($sql, $visitor);
         } catch (Parser\Exception $e) {
@@ -1226,7 +1226,7 @@ DEPRECATION
         }
         return [$visitor->getSQL(), $visitor->getParameters(), $visitor->getTypes()];
     }
-    private function handleDriverException(\Doctrine\DBAL\Driver\Exception $driverException, ?\Doctrine\DBAL\Query $query): DriverException
+    private function handleDriverException(Driver\Exception $driverException, ?Query $query): DriverException
     {
         $this->exceptionConverter ??= $this->driver->getExceptionConverter();
         $exception = $this->exceptionConverter->convert($driverException, $query);

@@ -14,11 +14,11 @@ declare (strict_types=1);
  * @since         4.1.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database\Expression;
+namespace Odigos\Cake\Database\Expression;
 
-use Cake\Database\Exception\DatabaseException;
-use Cake\Database\ExpressionInterface;
-use Cake\Database\ValueBinder;
+use Odigos\Cake\Database\Exception\DatabaseException;
+use Odigos\Cake\Database\ExpressionInterface;
+use Odigos\Cake\Database\ValueBinder;
 use Closure;
 /**
  * An expression that represents a common table expression definition.
@@ -30,7 +30,7 @@ class CommonTableExpression implements ExpressionInterface
      *
      * @var \Cake\Database\Expression\IdentifierExpression
      */
-    protected \Cake\Database\Expression\IdentifierExpression $name;
+    protected IdentifierExpression $name;
     /**
      * The field names to use for the CTE.
      *
@@ -63,7 +63,7 @@ class CommonTableExpression implements ExpressionInterface
      */
     public function __construct(string $name = '', ExpressionInterface|Closure|null $query = null)
     {
-        $this->name = new \Cake\Database\Expression\IdentifierExpression($name);
+        $this->name = new IdentifierExpression($name);
         if ($query) {
             $this->query($query);
         }
@@ -79,7 +79,7 @@ class CommonTableExpression implements ExpressionInterface
      */
     public function name(string $name)
     {
-        $this->name = new \Cake\Database\Expression\IdentifierExpression($name);
+        $this->name = new IdentifierExpression($name);
         return $this;
     }
     /**
@@ -105,13 +105,13 @@ class CommonTableExpression implements ExpressionInterface
      * @param \Cake\Database\Expression\IdentifierExpression|array<string>|array<\Cake\Database\Expression\IdentifierExpression>|string $fields Field names
      * @return $this
      */
-    public function field(\Cake\Database\Expression\IdentifierExpression|array|string $fields)
+    public function field(IdentifierExpression|array|string $fields)
     {
         $fields = (array) $fields;
         /** @var array<string|\Cake\Database\Expression\IdentifierExpression> $fields */
         foreach ($fields as &$field) {
-            if (!$field instanceof \Cake\Database\Expression\IdentifierExpression) {
-                $field = new \Cake\Database\Expression\IdentifierExpression($field);
+            if (!$field instanceof IdentifierExpression) {
+                $field = new IdentifierExpression($field);
             }
         }
         /** @var array<\Cake\Database\Expression\IdentifierExpression> $mergedFields */
@@ -165,7 +165,7 @@ class CommonTableExpression implements ExpressionInterface
     {
         $fields = '';
         if ($this->fields) {
-            $expressions = array_map(fn(\Cake\Database\Expression\IdentifierExpression $e) => $e->sql($binder), $this->fields);
+            $expressions = array_map(fn(IdentifierExpression $e) => $e->sql($binder), $this->fields);
             $fields = sprintf('(%s)', implode(', ', $expressions));
         }
         $suffix = $this->materialized ? $this->materialized . ' ' : '';

@@ -1,16 +1,16 @@
 <?php
 
-namespace Illuminate\Support;
+namespace Odigos\Illuminate\Support;
 
 use Closure;
-use Illuminate\Contracts\Routing\UrlRoutable;
-use Illuminate\Contracts\Support\Htmlable;
-use Illuminate\Contracts\Support\Responsable;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Traits\Conditionable;
-use Illuminate\Support\Traits\Dumpable;
-use Illuminate\Support\Traits\Macroable;
-use Illuminate\Support\Traits\Tappable;
+use Odigos\Illuminate\Contracts\Routing\UrlRoutable;
+use Odigos\Illuminate\Contracts\Support\Htmlable;
+use Odigos\Illuminate\Contracts\Support\Responsable;
+use Odigos\Illuminate\Http\RedirectResponse;
+use Odigos\Illuminate\Support\Traits\Conditionable;
+use Odigos\Illuminate\Support\Traits\Dumpable;
+use Odigos\Illuminate\Support\Traits\Macroable;
+use Odigos\Illuminate\Support\Traits\Tappable;
 use JsonSerializable;
 use Odigos\League\Uri\Contracts\UriInterface;
 use Odigos\League\Uri\Uri as LeagueUri;
@@ -163,17 +163,17 @@ class Uri implements Htmlable, JsonSerializable, Responsable, Stringable
      *
      * Empty or missing paths are returned as an empty collection.
      */
-    public function pathSegments(): \Illuminate\Support\Collection
+    public function pathSegments(): Collection
     {
         $path = $this->path();
-        return $path === '/' ? new \Illuminate\Support\Collection() : new \Illuminate\Support\Collection(explode('/', $path));
+        return $path === '/' ? new Collection() : new Collection(explode('/', $path));
     }
     /**
      * Get the URI's query string.
      */
-    public function query(): \Illuminate\Support\UriQueryString
+    public function query(): UriQueryString
     {
-        return new \Illuminate\Support\UriQueryString($this);
+        return new UriQueryString($this);
     }
     /**
      * Get the URI's fragment.
@@ -219,7 +219,7 @@ class Uri implements Htmlable, JsonSerializable, Responsable, Stringable
      */
     public function withPath(Stringable|string $path): static
     {
-        return new static($this->uri->withPath(\Illuminate\Support\Str::start((string) $path, '/')));
+        return new static($this->uri->withPath(Str::start((string) $path, '/')));
     }
     /**
      * Merge new query parameters into the URI.
@@ -243,7 +243,7 @@ class Uri implements Htmlable, JsonSerializable, Responsable, Stringable
                 data_set($newQuery, $key, $value);
             }
         }
-        return new static($this->uri->withQuery(\Illuminate\Support\Arr::query($newQuery) ?: null));
+        return new static($this->uri->withQuery(Arr::query($newQuery) ?: null));
     }
     /**
      * Merge new query parameters into the URI if they are not already in the query string.
@@ -253,7 +253,7 @@ class Uri implements Htmlable, JsonSerializable, Responsable, Stringable
         $currentQuery = $this->query();
         foreach ($query as $key => $value) {
             if (!$currentQuery->missing($key)) {
-                \Illuminate\Support\Arr::forget($query, $key);
+                Arr::forget($query, $key);
             }
         }
         return $this->withQuery($query);
@@ -264,7 +264,7 @@ class Uri implements Htmlable, JsonSerializable, Responsable, Stringable
     public function pushOntoQuery(string $key, mixed $value): static
     {
         $currentValue = data_get($this->query()->all(), $key);
-        $values = \Illuminate\Support\Arr::wrap($value);
+        $values = Arr::wrap($value);
         return $this->withQuery([$key => match (\true) {
             is_array($currentValue) && array_is_list($currentValue) => array_values(array_unique([...$currentValue, ...$values])),
             is_array($currentValue) => [...$currentValue, ...$values],
@@ -277,7 +277,7 @@ class Uri implements Htmlable, JsonSerializable, Responsable, Stringable
      */
     public function withoutQuery(array|string $keys): static
     {
-        return $this->replaceQuery(\Illuminate\Support\Arr::except($this->query()->all(), $keys));
+        return $this->replaceQuery(Arr::except($this->query()->all(), $keys));
     }
     /**
      * Specify new query parameters for the URI.
@@ -307,7 +307,7 @@ class Uri implements Htmlable, JsonSerializable, Responsable, Stringable
      */
     public function toStringable()
     {
-        return \Illuminate\Support\Str::of($this->value());
+        return Str::of($this->value());
     }
     /**
      * Create an HTTP response that represents the URI object.
@@ -336,7 +336,7 @@ class Uri implements Htmlable, JsonSerializable, Responsable, Stringable
         if (empty($this->query()->toArray())) {
             return $this->value();
         }
-        return \Illuminate\Support\Str::replace(\Illuminate\Support\Str::after($this->value(), '?'), $this->query()->decode(), $this->value());
+        return Str::replace(Str::after($this->value(), '?'), $this->query()->decode(), $this->value());
     }
     /**
      * Get the string representation of the URI.

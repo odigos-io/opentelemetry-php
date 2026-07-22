@@ -1,12 +1,12 @@
 <?php
 
-namespace Illuminate\Foundation\Http\Middleware;
+namespace Odigos\Illuminate\Foundation\Http\Middleware;
 
-use Illuminate\Container\Container;
-use Illuminate\Foundation\Routing\PrecognitionCallableDispatcher;
-use Illuminate\Foundation\Routing\PrecognitionControllerDispatcher;
-use Illuminate\Routing\Contracts\CallableDispatcher as CallableDispatcherContract;
-use Illuminate\Routing\Contracts\ControllerDispatcher as ControllerDispatcherContract;
+use Odigos\Illuminate\Container\Container;
+use Odigos\Illuminate\Foundation\Routing\PrecognitionCallableDispatcher;
+use Odigos\Illuminate\Foundation\Routing\PrecognitionControllerDispatcher;
+use Odigos\Illuminate\Routing\Contracts\CallableDispatcher as CallableDispatcherContract;
+use Odigos\Illuminate\Routing\Contracts\ControllerDispatcher as ControllerDispatcherContract;
 class HandlePrecognitiveRequests
 {
     /**

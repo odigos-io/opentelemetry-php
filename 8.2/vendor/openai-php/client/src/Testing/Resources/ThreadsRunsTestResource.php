@@ -1,13 +1,13 @@
 <?php
 
-namespace OpenAI\Testing\Resources;
+namespace Odigos\OpenAI\Testing\Resources;
 
-use OpenAI\Contracts\Resources\ThreadsRunsContract;
-use OpenAI\Resources\ThreadsRuns;
-use OpenAI\Responses\StreamResponse;
-use OpenAI\Responses\Threads\Runs\ThreadRunListResponse;
-use OpenAI\Responses\Threads\Runs\ThreadRunResponse;
-use OpenAI\Testing\Resources\Concerns\Testable;
+use Odigos\OpenAI\Contracts\Resources\ThreadsRunsContract;
+use Odigos\OpenAI\Resources\ThreadsRuns;
+use Odigos\OpenAI\Responses\StreamResponse;
+use Odigos\OpenAI\Responses\Threads\Runs\ThreadRunListResponse;
+use Odigos\OpenAI\Responses\Threads\Runs\ThreadRunResponse;
+use Odigos\OpenAI\Testing\Resources\Concerns\Testable;
 final class ThreadsRunsTestResource implements ThreadsRunsContract
 {
     use Testable;
@@ -47,8 +47,8 @@ final class ThreadsRunsTestResource implements ThreadsRunsContract
     {
         return $this->record(__FUNCTION__, func_get_args());
     }
-    public function steps(): \OpenAI\Testing\Resources\ThreadsRunsStepsTestResource
+    public function steps(): ThreadsRunsStepsTestResource
     {
-        return new \OpenAI\Testing\Resources\ThreadsRunsStepsTestResource($this->fake);
+        return new ThreadsRunsStepsTestResource($this->fake);
     }
 }

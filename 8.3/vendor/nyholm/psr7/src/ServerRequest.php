@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Nyholm\Psr7;
+namespace Odigos\Nyholm\Psr7;
 
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamInterface;
@@ -16,8 +16,8 @@ use Psr\Http\Message\UriInterface;
  */
 class ServerRequest implements ServerRequestInterface
 {
-    use \Nyholm\Psr7\MessageTrait;
-    use \Nyholm\Psr7\RequestTrait;
+    use MessageTrait;
+    use RequestTrait;
     /** @var array */
     private $attributes = [];
     /** @var array */
@@ -42,7 +42,7 @@ class ServerRequest implements ServerRequestInterface
     {
         $this->serverParams = $serverParams;
         if (!$uri instanceof UriInterface) {
-            $uri = new \Nyholm\Psr7\Uri($uri);
+            $uri = new Uri($uri);
         }
         $this->method = $method;
         $this->uri = $uri;
@@ -54,7 +54,7 @@ class ServerRequest implements ServerRequestInterface
         }
         // If we got no body, defer initialization of the stream until ServerRequest::getBody()
         if ('' !== $body && null !== $body) {
-            $this->stream = \Nyholm\Psr7\Stream::create($body);
+            $this->stream = Stream::create($body);
         }
     }
     public function getServerParams(): array

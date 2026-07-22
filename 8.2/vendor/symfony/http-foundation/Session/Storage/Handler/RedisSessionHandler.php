@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpFoundation\Session\Storage\Handler;
+namespace Odigos\Symfony\Component\HttpFoundation\Session\Storage\Handler;
 
 use Odigos\Predis\Response\ErrorInterface;
 use Relay\Relay;
@@ -18,7 +18,7 @@ use Relay\Relay;
  *
  * @author Dalibor Karlović <dalibor@flexolabs.io>
  */
-class RedisSessionHandler extends \Symfony\Component\HttpFoundation\Session\Storage\Handler\AbstractSessionHandler
+class RedisSessionHandler extends AbstractSessionHandler
 {
     /**
      * Key prefix for shared environments.

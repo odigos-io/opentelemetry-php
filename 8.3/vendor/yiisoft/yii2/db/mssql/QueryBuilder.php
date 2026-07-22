@@ -5,25 +5,25 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\db\mssql;
+namespace Odigos\yii\db\mssql;
 
-use yii\base\InvalidArgumentException;
-use yii\base\NotSupportedException;
-use yii\db\Expression;
-use yii\db\Query;
-use yii\db\TableSchema;
+use Odigos\yii\base\InvalidArgumentException;
+use Odigos\yii\base\NotSupportedException;
+use Odigos\yii\db\Expression;
+use Odigos\yii\db\Query;
+use Odigos\yii\db\TableSchema;
 /**
  * QueryBuilder is the query builder for MS SQL Server databases (version 2008 and above).
  *
  * @author Timur Ruziev <resurtm@gmail.com>
  * @since 2.0
  */
-class QueryBuilder extends \yii\db\QueryBuilder
+class QueryBuilder extends \Odigos\yii\db\QueryBuilder
 {
     /**
      * @var array mapping from abstract column types (keys) to physical column types (values).
      */
-    public $typeMap = [\yii\db\mssql\Schema::TYPE_PK => 'int IDENTITY PRIMARY KEY', \yii\db\mssql\Schema::TYPE_UPK => 'int IDENTITY PRIMARY KEY', \yii\db\mssql\Schema::TYPE_BIGPK => 'bigint IDENTITY PRIMARY KEY', \yii\db\mssql\Schema::TYPE_UBIGPK => 'bigint IDENTITY PRIMARY KEY', \yii\db\mssql\Schema::TYPE_CHAR => 'nchar(1)', \yii\db\mssql\Schema::TYPE_STRING => 'nvarchar(255)', \yii\db\mssql\Schema::TYPE_TEXT => 'nvarchar(max)', \yii\db\mssql\Schema::TYPE_TINYINT => 'tinyint', \yii\db\mssql\Schema::TYPE_SMALLINT => 'smallint', \yii\db\mssql\Schema::TYPE_INTEGER => 'int', \yii\db\mssql\Schema::TYPE_BIGINT => 'bigint', \yii\db\mssql\Schema::TYPE_FLOAT => 'float', \yii\db\mssql\Schema::TYPE_DOUBLE => 'float', \yii\db\mssql\Schema::TYPE_DECIMAL => 'decimal(18,0)', \yii\db\mssql\Schema::TYPE_DATETIME => 'datetime', \yii\db\mssql\Schema::TYPE_TIMESTAMP => 'datetime', \yii\db\mssql\Schema::TYPE_TIME => 'time', \yii\db\mssql\Schema::TYPE_DATE => 'date', \yii\db\mssql\Schema::TYPE_BINARY => 'varbinary(max)', \yii\db\mssql\Schema::TYPE_BOOLEAN => 'bit', \yii\db\mssql\Schema::TYPE_MONEY => 'decimal(19,4)'];
+    public $typeMap = [Schema::TYPE_PK => 'int IDENTITY PRIMARY KEY', Schema::TYPE_UPK => 'int IDENTITY PRIMARY KEY', Schema::TYPE_BIGPK => 'bigint IDENTITY PRIMARY KEY', Schema::TYPE_UBIGPK => 'bigint IDENTITY PRIMARY KEY', Schema::TYPE_CHAR => 'nchar(1)', Schema::TYPE_STRING => 'nvarchar(255)', Schema::TYPE_TEXT => 'nvarchar(max)', Schema::TYPE_TINYINT => 'tinyint', Schema::TYPE_SMALLINT => 'smallint', Schema::TYPE_INTEGER => 'int', Schema::TYPE_BIGINT => 'bigint', Schema::TYPE_FLOAT => 'float', Schema::TYPE_DOUBLE => 'float', Schema::TYPE_DECIMAL => 'decimal(18,0)', Schema::TYPE_DATETIME => 'datetime', Schema::TYPE_TIMESTAMP => 'datetime', Schema::TYPE_TIME => 'time', Schema::TYPE_DATE => 'date', Schema::TYPE_BINARY => 'varbinary(max)', Schema::TYPE_BOOLEAN => 'bit', Schema::TYPE_MONEY => 'decimal(19,4)'];
     /**
      * {@inheritdoc}
      */
@@ -138,7 +138,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
         $columnName = $this->db->quoteColumnName($column);
         $tableName = $this->db->quoteTableName($table);
         $constraintBase = preg_replace('/[^a-z0-9_]/i', '', $table . '_' . $column);
-        if ($type instanceof \yii\db\mssql\ColumnSchemaBuilder) {
+        if ($type instanceof \Odigos\yii\db\mssql\ColumnSchemaBuilder) {
             $type->setAlterColumnFormat();
             $defaultValue = $type->getDefaultValue();
             if ($defaultValue !== null) {
@@ -346,7 +346,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
             $columnSchemas = $tableSchema->columns;
             foreach ($columns as $name => $value) {
                 // @see https://github.com/yiisoft/yii2/issues/12599
-                if (isset($columnSchemas[$name]) && $columnSchemas[$name]->type === \yii\db\mssql\Schema::TYPE_BINARY && $columnSchemas[$name]->dbType === 'varbinary' && is_string($value)) {
+                if (isset($columnSchemas[$name]) && $columnSchemas[$name]->type === Schema::TYPE_BINARY && $columnSchemas[$name]->dbType === 'varbinary' && is_string($value)) {
                     // @see https://github.com/yiisoft/yii2/issues/12599
                     $columns[$name] = new Expression('CONVERT(VARBINARY(MAX), ' . ('0x' . bin2hex($value)) . ')');
                 }
@@ -380,7 +380,7 @@ class QueryBuilder extends \yii\db\QueryBuilder
                 } elseif (in_array($dbType, ['char', 'nchar'])) {
                     $dbType .= "({$column->size})";
                 }
-                if ($column->dbType === \yii\db\mssql\Schema::TYPE_TIMESTAMP) {
+                if ($column->dbType === Schema::TYPE_TIMESTAMP) {
                     $dbType = $column->allowNull ? 'varbinary(8)' : 'binary(8)';
                 }
                 $quoteColumnName = $this->db->quoteColumnName($column->name);

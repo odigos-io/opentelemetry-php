@@ -1,13 +1,13 @@
 <?php
 
-namespace Illuminate\Foundation\Testing;
+namespace Odigos\Illuminate\Foundation\Testing;
 
-use Illuminate\Contracts\Console\Kernel;
-use Illuminate\Foundation\Application;
+use Odigos\Illuminate\Contracts\Console\Kernel;
+use Odigos\Illuminate\Foundation\Application;
 use Odigos\PHPUnit\Framework\TestCase as BaseTestCase;
 abstract class TestCase extends BaseTestCase
 {
-    use \Illuminate\Foundation\Testing\Concerns\InteractsWithContainer, \Illuminate\Foundation\Testing\Concerns\MakesHttpRequests, \Illuminate\Foundation\Testing\Concerns\InteractsWithAuthentication, \Illuminate\Foundation\Testing\Concerns\InteractsWithConsole, \Illuminate\Foundation\Testing\Concerns\InteractsWithDatabase, \Illuminate\Foundation\Testing\Concerns\InteractsWithDeprecationHandling, \Illuminate\Foundation\Testing\Concerns\InteractsWithExceptionHandling, \Illuminate\Foundation\Testing\Concerns\InteractsWithSession, \Illuminate\Foundation\Testing\Concerns\InteractsWithTime, \Illuminate\Foundation\Testing\Concerns\InteractsWithTestCaseLifecycle, \Illuminate\Foundation\Testing\Concerns\InteractsWithViews;
+    use Concerns\InteractsWithContainer, Concerns\MakesHttpRequests, Concerns\InteractsWithAuthentication, Concerns\InteractsWithConsole, Concerns\InteractsWithDatabase, Concerns\InteractsWithDeprecationHandling, Concerns\InteractsWithExceptionHandling, Concerns\InteractsWithSession, Concerns\InteractsWithTime, Concerns\InteractsWithTestCaseLifecycle, Concerns\InteractsWithViews;
     /**
      * The list of trait that this test uses, fetched recursively.
      *
@@ -23,10 +23,10 @@ abstract class TestCase extends BaseTestCase
     {
         $app = require Application::inferBasePath() . '/bootstrap/app.php';
         $this->traitsUsedByTest = array_flip(class_uses_recursive(static::class));
-        if (isset(\Illuminate\Foundation\Testing\CachedState::$cachedConfig) && isset($this->traitsUsedByTest[\Illuminate\Foundation\Testing\WithCachedConfig::class])) {
+        if (isset(CachedState::$cachedConfig) && isset($this->traitsUsedByTest[WithCachedConfig::class])) {
             $this->markConfigCached($app);
         }
-        if (isset(\Illuminate\Foundation\Testing\CachedState::$cachedRoutes) && isset($this->traitsUsedByTest[\Illuminate\Foundation\Testing\WithCachedRoutes::class])) {
+        if (isset(CachedState::$cachedRoutes) && isset($this->traitsUsedByTest[WithCachedRoutes::class])) {
             $app->booting(fn() => $this->markRoutesCached($app));
         }
         $app->make(Kernel::class)->bootstrap();

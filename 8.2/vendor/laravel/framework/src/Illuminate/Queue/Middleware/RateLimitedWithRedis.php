@@ -1,12 +1,12 @@
 <?php
 
-namespace Illuminate\Queue\Middleware;
+namespace Odigos\Illuminate\Queue\Middleware;
 
-use Illuminate\Container\Container;
-use Illuminate\Contracts\Redis\Factory as Redis;
-use Illuminate\Redis\Limiters\DurationLimiter;
-use Illuminate\Support\InteractsWithTime;
-class RateLimitedWithRedis extends \Illuminate\Queue\Middleware\RateLimited
+use Odigos\Illuminate\Container\Container;
+use Odigos\Illuminate\Contracts\Redis\Factory as Redis;
+use Odigos\Illuminate\Redis\Limiters\DurationLimiter;
+use Odigos\Illuminate\Support\InteractsWithTime;
+class RateLimitedWithRedis extends RateLimited
 {
     use InteractsWithTime;
     /**

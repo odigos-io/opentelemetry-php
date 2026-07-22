@@ -1,12 +1,12 @@
 <?php
 
-namespace Illuminate\Foundation\Cloud;
+namespace Odigos\Illuminate\Foundation\Cloud;
 
 use Odigos\Carbon\CarbonImmutable;
-use Illuminate\Contracts\Queue\ClearableQueue;
-use Illuminate\Contracts\Queue\Queue as QueueContract;
-use Illuminate\Support\Str;
-use Illuminate\Support\Traits\ForwardsCalls;
+use Odigos\Illuminate\Contracts\Queue\ClearableQueue;
+use Odigos\Illuminate\Contracts\Queue\Queue as QueueContract;
+use Odigos\Illuminate\Support\Str;
+use Odigos\Illuminate\Support\Traits\ForwardsCalls;
 class Queue implements QueueContract, ClearableQueue
 {
     use ForwardsCalls;
@@ -31,7 +31,7 @@ class Queue implements QueueContract, ClearableQueue
     /**
      * Create a new Queue instance.
      */
-    public function __construct(protected QueueContract $queue, protected \Illuminate\Foundation\Cloud\Events $events, protected array $config)
+    public function __construct(protected QueueContract $queue, protected Events $events, protected array $config)
     {
         //
     }

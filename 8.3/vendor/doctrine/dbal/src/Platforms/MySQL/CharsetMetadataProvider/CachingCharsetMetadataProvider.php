@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Platforms\MySQL\CharsetMetadataProvider;
+namespace Odigos\Doctrine\DBAL\Platforms\MySQL\CharsetMetadataProvider;
 
-use Doctrine\DBAL\Platforms\MySQL\CharsetMetadataProvider;
+use Odigos\Doctrine\DBAL\Platforms\MySQL\CharsetMetadataProvider;
 use function array_key_exists;
 /** @internal */
 final class CachingCharsetMetadataProvider implements CharsetMetadataProvider

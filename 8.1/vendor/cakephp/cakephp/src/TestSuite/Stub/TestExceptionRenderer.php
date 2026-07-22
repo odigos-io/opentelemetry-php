@@ -14,9 +14,9 @@ declare (strict_types=1);
  * @since         3.5.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\TestSuite\Stub;
+namespace Odigos\Cake\TestSuite\Stub;
 
-use Cake\Error\ExceptionRendererInterface;
+use Odigos\Cake\Error\ExceptionRendererInterface;
 use LogicException;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;

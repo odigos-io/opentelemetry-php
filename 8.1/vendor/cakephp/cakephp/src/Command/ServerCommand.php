@@ -14,17 +14,17 @@ declare (strict_types=1);
  * @since         2.3.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Command;
+namespace Odigos\Cake\Command;
 
-use Cake\Console\Arguments;
-use Cake\Console\ConsoleIo;
-use Cake\Console\ConsoleOptionParser;
-use Cake\Core\Configure;
-use function Cake\Core\env;
+use Odigos\Cake\Console\Arguments;
+use Odigos\Cake\Console\ConsoleIo;
+use Odigos\Cake\Console\ConsoleOptionParser;
+use Odigos\Cake\Core\Configure;
+use function Odigos\Cake\Core\env;
 /**
  * built-in Server command
  */
-class ServerCommand extends \Cake\Command\Command
+class ServerCommand extends Command
 {
     /**
      * Default ServerHost

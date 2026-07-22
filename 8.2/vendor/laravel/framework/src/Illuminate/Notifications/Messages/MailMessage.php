@@ -1,16 +1,16 @@
 <?php
 
-namespace Illuminate\Notifications\Messages;
+namespace Odigos\Illuminate\Notifications\Messages;
 
-use Illuminate\Container\Container;
-use Illuminate\Contracts\Mail\Attachable;
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Contracts\Support\Renderable;
-use Illuminate\Mail\Attachment;
-use Illuminate\Mail\Markdown;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Traits\Conditionable;
-class MailMessage extends \Illuminate\Notifications\Messages\SimpleMessage implements Renderable
+use Odigos\Illuminate\Container\Container;
+use Odigos\Illuminate\Contracts\Mail\Attachable;
+use Odigos\Illuminate\Contracts\Support\Arrayable;
+use Odigos\Illuminate\Contracts\Support\Renderable;
+use Odigos\Illuminate\Mail\Attachment;
+use Odigos\Illuminate\Mail\Markdown;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Traits\Conditionable;
+class MailMessage extends SimpleMessage implements Renderable
 {
     use Conditionable;
     /**

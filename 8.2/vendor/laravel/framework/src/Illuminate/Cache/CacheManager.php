@@ -1,13 +1,13 @@
 <?php
 
-namespace Illuminate\Cache;
+namespace Odigos\Illuminate\Cache;
 
 use Odigos\Aws\DynamoDb\DynamoDbClient;
 use Closure;
-use Illuminate\Contracts\Cache\Factory as FactoryContract;
-use Illuminate\Contracts\Cache\Store;
-use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
-use Illuminate\Support\Arr;
+use Odigos\Illuminate\Contracts\Cache\Factory as FactoryContract;
+use Odigos\Illuminate\Contracts\Cache\Store;
+use Odigos\Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
+use Odigos\Illuminate\Support\Arr;
 use InvalidArgumentException;
 use Odigos\Mockery;
 use Odigos\Mockery\LegacyMockInterface;
@@ -77,7 +77,7 @@ class CacheManager implements FactoryContract
         $bindingKey = "cache.__memoized:{$driver}";
         $isSpy = isset($this->app['cache']) && $this->app['cache'] instanceof LegacyMockInterface;
         $this->app->scopedIf($bindingKey, function () use ($driver, $isSpy) {
-            $repository = $this->repository(new \Illuminate\Cache\MemoizedStore($driver, $this->store($driver)), ['events' => \false]);
+            $repository = $this->repository(new MemoizedStore($driver, $this->store($driver)), ['events' => \false]);
             return $isSpy ? Mockery::spy($repository) : $repository;
         });
         return $this->app->make($bindingKey);
@@ -138,7 +138,7 @@ class CacheManager implements FactoryContract
     protected function createApcDriver(array $config)
     {
         $prefix = $this->getPrefix($config);
-        return $this->repository(new \Illuminate\Cache\ApcStore(new \Illuminate\Cache\ApcWrapper(), $prefix), $config);
+        return $this->repository(new ApcStore(new ApcWrapper(), $prefix), $config);
     }
     /**
      * Create an instance of the array cache driver.
@@ -148,7 +148,7 @@ class CacheManager implements FactoryContract
      */
     protected function createArrayDriver(array $config)
     {
-        return $this->repository(new \Illuminate\Cache\ArrayStore($config['serialize'] ?? \false, $this->getSerializableClasses($config)), $config);
+        return $this->repository(new ArrayStore($config['serialize'] ?? \false, $this->getSerializableClasses($config)), $config);
     }
     /**
      * Create an instance of the database cache driver.
@@ -159,7 +159,7 @@ class CacheManager implements FactoryContract
     protected function createDatabaseDriver(array $config)
     {
         $connection = $this->app['db']->connection($config['connection'] ?? null);
-        $store = new \Illuminate\Cache\DatabaseStore($connection, $config['table'], $this->getPrefix($config), $config['lock_table'] ?? 'cache_locks', $config['lock_lottery'] ?? [2, 100], $config['lock_timeout'] ?? 86400, $this->getSerializableClasses($config));
+        $store = new DatabaseStore($connection, $config['table'], $this->getPrefix($config), $config['lock_table'] ?? 'cache_locks', $config['lock_lottery'] ?? [2, 100], $config['lock_timeout'] ?? 86400, $this->getSerializableClasses($config));
         return $this->repository($store->setLockConnection($this->app['db']->connection($config['lock_connection'] ?? $config['connection'] ?? null)), $config);
     }
     /**
@@ -171,7 +171,7 @@ class CacheManager implements FactoryContract
     protected function createDynamodbDriver(array $config)
     {
         $client = $this->newDynamodbClient($config);
-        return $this->repository(new \Illuminate\Cache\DynamoDbStore($client, $config['table'], $config['attributes']['key'] ?? 'key', $config['attributes']['value'] ?? 'value', $config['attributes']['expiration'] ?? 'expires_at', $this->getPrefix($config), $this->getSerializableClasses($config)), $config);
+        return $this->repository(new DynamoDbStore($client, $config['table'], $config['attributes']['key'] ?? 'key', $config['attributes']['value'] ?? 'value', $config['attributes']['expiration'] ?? 'expires_at', $this->getPrefix($config), $this->getSerializableClasses($config)), $config);
     }
     /**
      * Create new DynamoDb Client instance.
@@ -197,7 +197,7 @@ class CacheManager implements FactoryContract
      */
     protected function createFailoverDriver(array $config)
     {
-        return $this->repository(new \Illuminate\Cache\FailoverStore($this, $this->app->make(DispatcherContract::class), $config['stores']), ['events' => \false, ...$config]);
+        return $this->repository(new FailoverStore($this, $this->app->make(DispatcherContract::class), $config['stores']), ['events' => \false, ...$config]);
     }
     /**
      * Create an instance of the file cache driver.
@@ -207,7 +207,7 @@ class CacheManager implements FactoryContract
      */
     protected function createFileDriver(array $config)
     {
-        return $this->repository((new \Illuminate\Cache\FileStore($this->app['files'], $config['path'], $config['permission'] ?? null, $this->getSerializableClasses($config)))->setLockDirectory($config['lock_path'] ?? null), $config);
+        return $this->repository((new FileStore($this->app['files'], $config['path'], $config['permission'] ?? null, $this->getSerializableClasses($config)))->setLockDirectory($config['lock_path'] ?? null), $config);
     }
     /**
      * Create an instance of the Memcached cache driver.
@@ -219,7 +219,7 @@ class CacheManager implements FactoryContract
     {
         $prefix = $this->getPrefix($config);
         $memcached = $this->app['memcached.connector']->connect($config['servers'], $config['persistent_id'] ?? null, $config['options'] ?? [], array_filter($config['sasl'] ?? []));
-        return $this->repository(new \Illuminate\Cache\MemcachedStore($memcached, $prefix), $config);
+        return $this->repository(new MemcachedStore($memcached, $prefix), $config);
     }
     /**
      * Create an instance of the Null cache driver.
@@ -228,7 +228,7 @@ class CacheManager implements FactoryContract
      */
     protected function createNullDriver()
     {
-        return $this->repository(new \Illuminate\Cache\NullStore(), []);
+        return $this->repository(new NullStore(), []);
     }
     /**
      * Create an instance of the Redis cache driver.
@@ -240,7 +240,7 @@ class CacheManager implements FactoryContract
     {
         $redis = $this->app['redis'];
         $connection = $config['connection'] ?? 'default';
-        $store = new \Illuminate\Cache\RedisStore($redis, $this->getPrefix($config), $connection, $this->getSerializableClasses($config));
+        $store = new RedisStore($redis, $this->getPrefix($config), $connection, $this->getSerializableClasses($config));
         return $this->repository($store->setLockConnection($config['lock_connection'] ?? $connection), $config);
     }
     /**
@@ -251,7 +251,7 @@ class CacheManager implements FactoryContract
      */
     protected function createSessionDriver(array $config)
     {
-        return $this->repository(new \Illuminate\Cache\SessionStore($this->getSession(), $config['key'] ?? '_cache'), $config);
+        return $this->repository(new SessionStore($this->getSession(), $config['key'] ?? '_cache'), $config);
     }
     /**
      * Get the session store implementation.
@@ -277,7 +277,7 @@ class CacheManager implements FactoryContract
      */
     public function repository(Store $store, array $config = [])
     {
-        return tap(new \Illuminate\Cache\Repository($store, Arr::only($config, ['store'])), function ($repository) use ($config) {
+        return tap(new Repository($store, Arr::only($config, ['store'])), function ($repository) use ($config) {
             if ($config['events'] ?? \true) {
                 $this->setEventDispatcher($repository);
             }
@@ -289,7 +289,7 @@ class CacheManager implements FactoryContract
      * @param  \Illuminate\Cache\Repository  $repository
      * @return void
      */
-    protected function setEventDispatcher(\Illuminate\Cache\Repository $repository)
+    protected function setEventDispatcher(Repository $repository)
     {
         if (!$this->app->bound(DispatcherContract::class)) {
             return;

@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Odigos;
 
-use OpenTelemetry\Contrib\Instrumentation\Slim\SlimInstrumentation;
+use Odigos\OpenTelemetry\Contrib\Instrumentation\Slim\SlimInstrumentation;
 use OpenTelemetry\SDK\Sdk;
 if (\class_exists(Sdk::class) && Sdk::isInstrumentationDisabled(SlimInstrumentation::NAME) === \true) {
     return;

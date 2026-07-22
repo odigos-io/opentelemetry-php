@@ -13,9 +13,9 @@
  * @since         4.3.7
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Test\Fixture;
+namespace Odigos\Cake\Test\Fixture;
 
-use Cake\TestSuite\Fixture\TestFixture;
+use Odigos\Cake\TestSuite\Fixture\TestFixture;
 /**
  * Fixture for testing bindingKey in belongstomany associations.
  */

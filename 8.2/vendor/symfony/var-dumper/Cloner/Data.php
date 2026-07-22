@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\VarDumper\Cloner;
+namespace Odigos\Symfony\Component\VarDumper\Cloner;
 
-use Symfony\Component\VarDumper\Caster\Caster;
-use Symfony\Component\VarDumper\Dumper\ContextProvider\SourceContextProvider;
+use Odigos\Symfony\Component\VarDumper\Caster\Caster;
+use Odigos\Symfony\Component\VarDumper\Dumper\ContextProvider\SourceContextProvider;
 /**
  * @author Nicolas Grekas <p@tchwork.com>
  */
@@ -34,22 +34,22 @@ class Data implements \ArrayAccess, \Countable, \IteratorAggregate, \Stringable
     public function getType(): ?string
     {
         $item = $this->data[$this->position][$this->key];
-        if ($item instanceof \Symfony\Component\VarDumper\Cloner\Stub && \Symfony\Component\VarDumper\Cloner\Stub::TYPE_REF === $item->type && !$item->position) {
+        if ($item instanceof Stub && Stub::TYPE_REF === $item->type && !$item->position) {
             $item = $item->value;
         }
-        if (!$item instanceof \Symfony\Component\VarDumper\Cloner\Stub) {
+        if (!$item instanceof Stub) {
             return \gettype($item);
         }
-        if (\Symfony\Component\VarDumper\Cloner\Stub::TYPE_STRING === $item->type) {
+        if (Stub::TYPE_STRING === $item->type) {
             return 'string';
         }
-        if (\Symfony\Component\VarDumper\Cloner\Stub::TYPE_ARRAY === $item->type) {
+        if (Stub::TYPE_ARRAY === $item->type) {
             return 'array';
         }
-        if (\Symfony\Component\VarDumper\Cloner\Stub::TYPE_OBJECT === $item->type) {
+        if (Stub::TYPE_OBJECT === $item->type) {
             return $item->class;
         }
-        if (\Symfony\Component\VarDumper\Cloner\Stub::TYPE_RESOURCE === $item->type) {
+        if (Stub::TYPE_RESOURCE === $item->type) {
             return $item->class . ' resource';
         }
         return null;
@@ -64,25 +64,25 @@ class Data implements \ArrayAccess, \Countable, \IteratorAggregate, \Stringable
     public function getValue(array|bool $recursive = \false): string|int|float|bool|array|null
     {
         $item = $this->data[$this->position][$this->key];
-        if ($item instanceof \Symfony\Component\VarDumper\Cloner\Stub && \Symfony\Component\VarDumper\Cloner\Stub::TYPE_REF === $item->type && !$item->position) {
+        if ($item instanceof Stub && Stub::TYPE_REF === $item->type && !$item->position) {
             $item = $item->value;
         }
-        if (!($item = $this->getStub($item)) instanceof \Symfony\Component\VarDumper\Cloner\Stub) {
+        if (!($item = $this->getStub($item)) instanceof Stub) {
             return $item;
         }
-        if (\Symfony\Component\VarDumper\Cloner\Stub::TYPE_STRING === $item->type) {
+        if (Stub::TYPE_STRING === $item->type) {
             return $item->value;
         }
         $children = $item->position ? $this->data[$item->position] : [];
         foreach ($children as $k => $v) {
-            if ($recursive && !($v = $this->getStub($v)) instanceof \Symfony\Component\VarDumper\Cloner\Stub) {
+            if ($recursive && !($v = $this->getStub($v)) instanceof Stub) {
                 continue;
             }
             $children[$k] = clone $this;
             $children[$k]->key = $k;
             $children[$k]->position = $item->position;
             if ($recursive) {
-                if (\Symfony\Component\VarDumper\Cloner\Stub::TYPE_REF === $v->type && ($v = $this->getStub($v->value)) instanceof \Symfony\Component\VarDumper\Cloner\Stub) {
+                if (Stub::TYPE_REF === $v->type && ($v = $this->getStub($v->value)) instanceof Stub) {
                     $recursive = (array) $recursive;
                     if (isset($recursive[$v->position])) {
                         continue;
@@ -109,7 +109,7 @@ class Data implements \ArrayAccess, \Countable, \IteratorAggregate, \Stringable
     {
         if (null !== $data = $this->seek($key)) {
             $item = $this->getStub($data->data[$data->position][$data->key]);
-            return $item instanceof \Symfony\Component\VarDumper\Cloner\Stub || [] === $item ? $data : $item;
+            return $item instanceof Stub || [] === $item ? $data : $item;
         }
         return null;
     }
@@ -186,22 +186,22 @@ class Data implements \ArrayAccess, \Countable, \IteratorAggregate, \Stringable
     public function seek(string|int $key): ?static
     {
         $item = $this->data[$this->position][$this->key];
-        if ($item instanceof \Symfony\Component\VarDumper\Cloner\Stub && \Symfony\Component\VarDumper\Cloner\Stub::TYPE_REF === $item->type && !$item->position) {
+        if ($item instanceof Stub && Stub::TYPE_REF === $item->type && !$item->position) {
             $item = $item->value;
         }
-        if (!($item = $this->getStub($item)) instanceof \Symfony\Component\VarDumper\Cloner\Stub || !$item->position) {
+        if (!($item = $this->getStub($item)) instanceof Stub || !$item->position) {
             return null;
         }
         $keys = [$key];
         switch ($item->type) {
-            case \Symfony\Component\VarDumper\Cloner\Stub::TYPE_OBJECT:
+            case Stub::TYPE_OBJECT:
                 $keys[] = Caster::PREFIX_DYNAMIC . $key;
                 $keys[] = Caster::PREFIX_PROTECTED . $key;
                 $keys[] = Caster::PREFIX_VIRTUAL . $key;
                 $keys[] = "\x00{$item->class}\x00{$key}";
             // no break
-            case \Symfony\Component\VarDumper\Cloner\Stub::TYPE_ARRAY:
-            case \Symfony\Component\VarDumper\Cloner\Stub::TYPE_RESOURCE:
+            case Stub::TYPE_ARRAY:
+            case Stub::TYPE_RESOURCE:
                 break;
             default:
                 return null;
@@ -221,10 +221,10 @@ class Data implements \ArrayAccess, \Countable, \IteratorAggregate, \Stringable
     /**
      * Dumps data with a DumperInterface dumper.
      */
-    public function dump(\Symfony\Component\VarDumper\Cloner\DumperInterface $dumper): void
+    public function dump(DumperInterface $dumper): void
     {
         $refs = [0];
-        $cursor = new \Symfony\Component\VarDumper\Cloner\Cursor();
+        $cursor = new Cursor();
         $cursor->hashType = -1;
         $cursor->attr = $this->context[SourceContextProvider::class] ?? [];
         $label = $this->context['label'] ?? '';
@@ -239,19 +239,19 @@ class Data implements \ArrayAccess, \Countable, \IteratorAggregate, \Stringable
      *
      * @param mixed $item A Stub object or the original value being dumped
      */
-    private function dumpItem(\Symfony\Component\VarDumper\Cloner\DumperInterface $dumper, \Symfony\Component\VarDumper\Cloner\Cursor $cursor, array &$refs, mixed $item): void
+    private function dumpItem(DumperInterface $dumper, Cursor $cursor, array &$refs, mixed $item): void
     {
         $cursor->refIndex = 0;
         $cursor->softRefTo = $cursor->softRefHandle = $cursor->softRefCount = 0;
         $cursor->hardRefTo = $cursor->hardRefHandle = $cursor->hardRefCount = 0;
         $firstSeen = \true;
-        if (!$item instanceof \Symfony\Component\VarDumper\Cloner\Stub) {
+        if (!$item instanceof Stub) {
             $cursor->attr = [];
             $type = \gettype($item);
             if ('array' === $type && $item) {
                 $item = $this->getStub($item);
             }
-        } elseif (\Symfony\Component\VarDumper\Cloner\Stub::TYPE_REF === $item->type) {
+        } elseif (Stub::TYPE_REF === $item->type) {
             if ($item->handle) {
                 if (!isset($refs[$r = $item->handle - (\PHP_INT_MAX >> 1)])) {
                     $cursor->refIndex = $refs[$r] = $cursor->refIndex ?: ++$refs[0];
@@ -266,7 +266,7 @@ class Data implements \ArrayAccess, \Countable, \IteratorAggregate, \Stringable
             $type = $item->class ?: \gettype($item->value);
             $item = $this->getStub($item->value);
         }
-        if ($item instanceof \Symfony\Component\VarDumper\Cloner\Stub) {
+        if ($item instanceof Stub) {
             if ($item->refCount) {
                 if (!isset($refs[$r = $item->handle])) {
                     $cursor->refIndex = $refs[$r] = $cursor->refIndex ?: ++$refs[0];
@@ -291,16 +291,16 @@ class Data implements \ArrayAccess, \Countable, \IteratorAggregate, \Stringable
                 $children = [];
             }
             switch ($item->type) {
-                case \Symfony\Component\VarDumper\Cloner\Stub::TYPE_STRING:
-                    $dumper->dumpString($cursor, $item->value, \Symfony\Component\VarDumper\Cloner\Stub::STRING_BINARY === $item->class, $cut);
+                case Stub::TYPE_STRING:
+                    $dumper->dumpString($cursor, $item->value, Stub::STRING_BINARY === $item->class, $cut);
                     break;
-                case \Symfony\Component\VarDumper\Cloner\Stub::TYPE_ARRAY:
+                case Stub::TYPE_ARRAY:
                     $item = clone $item;
                     $item->type = $item->class;
                     $item->class = $item->value;
                 // no break
-                case \Symfony\Component\VarDumper\Cloner\Stub::TYPE_OBJECT:
-                case \Symfony\Component\VarDumper\Cloner\Stub::TYPE_RESOURCE:
+                case Stub::TYPE_OBJECT:
+                case Stub::TYPE_RESOURCE:
                     $withChildren = $children && $cursor->depth !== $this->maxDepth && $this->maxItemsPerDepth;
                     $dumper->enterHash($cursor, $item->type, $item->class, $withChildren);
                     if ($withChildren) {
@@ -316,15 +316,15 @@ class Data implements \ArrayAccess, \Countable, \IteratorAggregate, \Stringable
                     $cursor->skipChildren = \false;
                     $dumper->leaveHash($cursor, $item->type, $item->class, $withChildren, $cut);
                     break;
-                case \Symfony\Component\VarDumper\Cloner\Stub::TYPE_SCALAR:
+                case Stub::TYPE_SCALAR:
                     $dumper->dumpScalar($cursor, 'default', $item->attr['value']);
                     break;
                 default:
                     throw new \RuntimeException(\sprintf('Unexpected Stub type: "%s".', $item->type));
             }
         } elseif ('array' === $type) {
-            $dumper->enterHash($cursor, \Symfony\Component\VarDumper\Cloner\Cursor::HASH_INDEXED, 0, \false);
-            $dumper->leaveHash($cursor, \Symfony\Component\VarDumper\Cloner\Cursor::HASH_INDEXED, 0, \false, 0);
+            $dumper->enterHash($cursor, Cursor::HASH_INDEXED, 0, \false);
+            $dumper->leaveHash($cursor, Cursor::HASH_INDEXED, 0, \false, 0);
         } elseif ('string' === $type) {
             $dumper->dumpString($cursor, $item, \false, 0);
         } else {
@@ -336,7 +336,7 @@ class Data implements \ArrayAccess, \Countable, \IteratorAggregate, \Stringable
      *
      * @return int The final number of removed items
      */
-    private function dumpChildren(\Symfony\Component\VarDumper\Cloner\DumperInterface $dumper, \Symfony\Component\VarDumper\Cloner\Cursor $parentCursor, array &$refs, array $children, int $hashCut, int $hashType, bool $dumpKeys): int
+    private function dumpChildren(DumperInterface $dumper, Cursor $parentCursor, array &$refs, array $children, int $hashCut, int $hashType, bool $dumpKeys): int
     {
         $cursor = clone $parentCursor;
         ++$cursor->depth;
@@ -360,8 +360,8 @@ class Data implements \ArrayAccess, \Countable, \IteratorAggregate, \Stringable
         if (!$item || !\is_array($item)) {
             return $item;
         }
-        $stub = new \Symfony\Component\VarDumper\Cloner\Stub();
-        $stub->type = \Symfony\Component\VarDumper\Cloner\Stub::TYPE_ARRAY;
+        $stub = new Stub();
+        $stub->type = Stub::TYPE_ARRAY;
         foreach ($item as $stub->class => $stub->position) {
         }
         if (isset($item[0])) {

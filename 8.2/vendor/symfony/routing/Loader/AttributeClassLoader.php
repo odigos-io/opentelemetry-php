@@ -8,17 +8,17 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Routing\Loader;
+namespace Odigos\Symfony\Component\Routing\Loader;
 
-use Symfony\Component\Config\Loader\LoaderInterface;
-use Symfony\Component\Config\Loader\LoaderResolverInterface;
-use Symfony\Component\Config\Resource\ReflectionClassResource;
-use Symfony\Component\Routing\Attribute\DeprecatedAlias;
-use Symfony\Component\Routing\Attribute\Route as RouteAttribute;
-use Symfony\Component\Routing\Exception\InvalidArgumentException;
-use Symfony\Component\Routing\Exception\LogicException;
-use Symfony\Component\Routing\Route;
-use Symfony\Component\Routing\RouteCollection;
+use Odigos\Symfony\Component\Config\Loader\LoaderInterface;
+use Odigos\Symfony\Component\Config\Loader\LoaderResolverInterface;
+use Odigos\Symfony\Component\Config\Resource\ReflectionClassResource;
+use Odigos\Symfony\Component\Routing\Attribute\DeprecatedAlias;
+use Odigos\Symfony\Component\Routing\Attribute\Route as RouteAttribute;
+use Odigos\Symfony\Component\Routing\Exception\InvalidArgumentException;
+use Odigos\Symfony\Component\Routing\Exception\LogicException;
+use Odigos\Symfony\Component\Routing\Route;
+use Odigos\Symfony\Component\Routing\RouteCollection;
 /**
  * AttributeClassLoader loads routing information from a PHP class and its methods.
  *

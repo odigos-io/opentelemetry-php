@@ -5,10 +5,10 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\i18n;
+namespace Odigos\yii\i18n;
 
 use Odigos\Yii;
-use yii\base\InvalidArgumentException;
+use Odigos\yii\base\InvalidArgumentException;
 /**
  * GettextMessageSource represents a message source that is based on GNU Gettext.
  *
@@ -26,7 +26,7 @@ use yii\base\InvalidArgumentException;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class GettextMessageSource extends \yii\i18n\MessageSource
+class GettextMessageSource extends MessageSource
 {
     public const MO_FILE_EXT = '.mo';
     public const PO_FILE_EXT = '.po';
@@ -137,9 +137,9 @@ class GettextMessageSource extends \yii\i18n\MessageSource
     {
         if (is_file($messageFile)) {
             if ($this->useMoFile) {
-                $gettextFile = new \yii\i18n\GettextMoFile(['useBigEndian' => $this->useBigEndian]);
+                $gettextFile = new GettextMoFile(['useBigEndian' => $this->useBigEndian]);
             } else {
-                $gettextFile = new \yii\i18n\GettextPoFile();
+                $gettextFile = new GettextPoFile();
             }
             $messages = $gettextFile->load($messageFile, $category);
             if (!is_array($messages)) {

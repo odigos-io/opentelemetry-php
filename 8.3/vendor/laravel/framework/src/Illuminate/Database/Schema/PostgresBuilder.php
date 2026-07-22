@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Database\Schema;
+namespace Odigos\Illuminate\Database\Schema;
 
-use Illuminate\Database\Concerns\ParsesSearchPath;
-class PostgresBuilder extends \Illuminate\Database\Schema\Builder
+use Odigos\Illuminate\Database\Concerns\ParsesSearchPath;
+class PostgresBuilder extends Builder
 {
     use ParsesSearchPath;
     /**

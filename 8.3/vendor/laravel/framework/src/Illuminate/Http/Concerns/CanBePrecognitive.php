@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Http\Concerns;
+namespace Odigos\Illuminate\Http\Concerns;
 
-use Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Collection;
 trait CanBePrecognitive
 {
     /**

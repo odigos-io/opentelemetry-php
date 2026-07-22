@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Queue;
+namespace Odigos\Illuminate\Queue;
 
-class TimeoutExceededException extends \Illuminate\Queue\MaxAttemptsExceededException
+class TimeoutExceededException extends MaxAttemptsExceededException
 {
     /**
      * Create a new instance for the job.

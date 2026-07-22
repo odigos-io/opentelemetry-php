@@ -14,9 +14,9 @@ declare (strict_types=1);
  * @since         3.7.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Cache\Engine;
+namespace Odigos\Cake\Cache\Engine;
 
-use Cake\Cache\CacheEngine;
+use Odigos\Cake\Cache\CacheEngine;
 use DateInterval;
 /**
  * Array storage engine for cache.

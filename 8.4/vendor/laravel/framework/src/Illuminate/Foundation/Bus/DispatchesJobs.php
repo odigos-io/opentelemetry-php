@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Foundation\Bus;
+namespace Odigos\Illuminate\Foundation\Bus;
 
 trait DispatchesJobs
 {

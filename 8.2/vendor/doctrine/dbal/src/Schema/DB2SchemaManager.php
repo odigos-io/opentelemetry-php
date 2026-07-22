@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Schema;
+namespace Odigos\Doctrine\DBAL\Schema;
 
-use Doctrine\DBAL\Platforms\DB2Platform;
-use Doctrine\DBAL\Result;
-use Doctrine\DBAL\Types\Type;
-use Doctrine\DBAL\Types\Types;
+use Odigos\Doctrine\DBAL\Platforms\DB2Platform;
+use Odigos\Doctrine\DBAL\Result;
+use Odigos\Doctrine\DBAL\Types\Type;
+use Odigos\Doctrine\DBAL\Types\Types;
 use function array_change_key_case;
 use function implode;
 use function preg_match;
@@ -24,12 +24,12 @@ use const CASE_LOWER;
  *
  * @extends AbstractSchemaManager<DB2Platform>
  */
-class DB2SchemaManager extends \Doctrine\DBAL\Schema\AbstractSchemaManager
+class DB2SchemaManager extends AbstractSchemaManager
 {
     /**
      * {@inheritDoc}
      */
-    protected function _getPortableTableColumnDefinition(array $tableColumn): \Doctrine\DBAL\Schema\Column
+    protected function _getPortableTableColumnDefinition(array $tableColumn): Column
     {
         $tableColumn = array_change_key_case($tableColumn, CASE_LOWER);
         $length = $precision = $default = null;
@@ -74,7 +74,7 @@ class DB2SchemaManager extends \Doctrine\DBAL\Schema\AbstractSchemaManager
             $options['scale'] = $scale;
             $options['precision'] = $precision;
         }
-        return new \Doctrine\DBAL\Schema\Column($tableColumn['colname'], Type::getType($type), $options);
+        return new Column($tableColumn['colname'], Type::getType($type), $options);
     }
     /**
      * @deprecated Use the schema name and the unqualified table name separately instead.
@@ -100,9 +100,9 @@ class DB2SchemaManager extends \Doctrine\DBAL\Schema\AbstractSchemaManager
     /**
      * {@inheritDoc}
      */
-    protected function _getPortableTableForeignKeyDefinition(array $tableForeignKey): \Doctrine\DBAL\Schema\ForeignKeyConstraint
+    protected function _getPortableTableForeignKeyDefinition(array $tableForeignKey): ForeignKeyConstraint
     {
-        return new \Doctrine\DBAL\Schema\ForeignKeyConstraint($tableForeignKey['local_columns'], $tableForeignKey['foreign_table'], $tableForeignKey['foreign_columns'], $tableForeignKey['name'], $tableForeignKey['options']);
+        return new ForeignKeyConstraint($tableForeignKey['local_columns'], $tableForeignKey['foreign_table'], $tableForeignKey['foreign_columns'], $tableForeignKey['name'], $tableForeignKey['options']);
     }
     /**
      * {@inheritDoc}
@@ -124,7 +124,7 @@ class DB2SchemaManager extends \Doctrine\DBAL\Schema\AbstractSchemaManager
     /**
      * {@inheritDoc}
      */
-    protected function _getPortableViewDefinition(array $view): \Doctrine\DBAL\Schema\View
+    protected function _getPortableViewDefinition(array $view): View
     {
         $view = array_change_key_case($view, CASE_LOWER);
         $sql = '';
@@ -132,12 +132,12 @@ class DB2SchemaManager extends \Doctrine\DBAL\Schema\AbstractSchemaManager
         if ($pos !== \false) {
             $sql = substr($view['text'], $pos + 4);
         }
-        return new \Doctrine\DBAL\Schema\View($view['name'], $sql);
+        return new View($view['name'], $sql);
     }
     /** @deprecated Use {@see Identifier::toNormalizedValue()} instead. */
     protected function normalizeName(string $name): string
     {
-        $identifier = new \Doctrine\DBAL\Schema\Identifier($name);
+        $identifier = new Identifier($name);
         return $identifier->isQuoted() ? $identifier->getName() : strtoupper($name);
     }
     protected function selectTableNames(string $databaseName): Result

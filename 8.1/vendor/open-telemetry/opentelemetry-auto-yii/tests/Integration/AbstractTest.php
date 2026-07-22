@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenTelemetry\Tests\Instrumentation\Yii\tests\Integration;
+namespace Odigos\OpenTelemetry\Tests\Instrumentation\Yii\tests\Integration;
 
 use ArrayObject;
 use OpenTelemetry\API\Instrumentation\Configurator;

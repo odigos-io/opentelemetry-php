@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Mailer\Event;
+namespace Odigos\Symfony\Component\Mailer\Event;
 
-use Symfony\Component\Mime\RawMessage;
+use Odigos\Symfony\Component\Mime\RawMessage;
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  */
@@ -24,7 +24,7 @@ class MessageEvents
      * @var array<string, bool>
      */
     private array $transports = [];
-    public function add(\Symfony\Component\Mailer\Event\MessageEvent $event): void
+    public function add(MessageEvent $event): void
     {
         $this->events[] = $event;
         $this->transports[$event->getTransport()] = \true;

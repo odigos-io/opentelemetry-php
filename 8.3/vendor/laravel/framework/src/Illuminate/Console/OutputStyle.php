@@ -1,12 +1,12 @@
 <?php
 
-namespace Illuminate\Console;
+namespace Odigos\Illuminate\Console;
 
-use Illuminate\Console\Contracts\NewLineAware;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\Question;
-use Symfony\Component\Console\Style\SymfonyStyle;
+use Odigos\Illuminate\Console\Contracts\NewLineAware;
+use Odigos\Symfony\Component\Console\Input\InputInterface;
+use Odigos\Symfony\Component\Console\Output\OutputInterface;
+use Odigos\Symfony\Component\Console\Question\Question;
+use Odigos\Symfony\Component\Console\Style\SymfonyStyle;
 class OutputStyle extends SymfonyStyle implements NewLineAware
 {
     /**

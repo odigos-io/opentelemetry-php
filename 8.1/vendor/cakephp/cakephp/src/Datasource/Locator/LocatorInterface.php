@@ -14,9 +14,9 @@ declare (strict_types=1);
  * @since         4.1.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Datasource\Locator;
+namespace Odigos\Cake\Datasource\Locator;
 
-use Cake\Datasource\RepositoryInterface;
+use Odigos\Cake\Datasource\RepositoryInterface;
 /**
  * Registries for repository objects should implement this interface.
  */

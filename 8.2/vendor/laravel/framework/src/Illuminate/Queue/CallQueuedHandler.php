@@ -1,24 +1,24 @@
 <?php
 
-namespace Illuminate\Queue;
+namespace Odigos\Illuminate\Queue;
 
 use Exception;
-use Illuminate\Bus\Batchable;
-use Illuminate\Bus\BatchRepository;
-use Illuminate\Bus\UniqueLock;
-use Illuminate\Contracts\Bus\Dispatcher;
-use Illuminate\Contracts\Cache\Factory as CacheFactory;
-use Illuminate\Contracts\Cache\Repository as Cache;
-use Illuminate\Contracts\Container\Container;
-use Illuminate\Contracts\Encryption\Encrypter;
-use Illuminate\Contracts\Queue\Job;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
-use Illuminate\Contracts\Queue\ShouldBeUniqueUntilProcessing;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Events\CallQueuedListener;
-use Illuminate\Log\Context\Repository as ContextRepository;
-use Illuminate\Pipeline\Pipeline;
-use Illuminate\Queue\Attributes\DeleteWhenMissingModels;
+use Odigos\Illuminate\Bus\Batchable;
+use Odigos\Illuminate\Bus\BatchRepository;
+use Odigos\Illuminate\Bus\UniqueLock;
+use Odigos\Illuminate\Contracts\Bus\Dispatcher;
+use Odigos\Illuminate\Contracts\Cache\Factory as CacheFactory;
+use Odigos\Illuminate\Contracts\Cache\Repository as Cache;
+use Odigos\Illuminate\Contracts\Container\Container;
+use Odigos\Illuminate\Contracts\Encryption\Encrypter;
+use Odigos\Illuminate\Contracts\Queue\Job;
+use Odigos\Illuminate\Contracts\Queue\ShouldBeUnique;
+use Odigos\Illuminate\Contracts\Queue\ShouldBeUniqueUntilProcessing;
+use Odigos\Illuminate\Database\Eloquent\ModelNotFoundException;
+use Odigos\Illuminate\Events\CallQueuedListener;
+use Odigos\Illuminate\Log\Context\Repository as ContextRepository;
+use Odigos\Illuminate\Pipeline\Pipeline;
+use Odigos\Illuminate\Queue\Attributes\DeleteWhenMissingModels;
 use ReflectionClass;
 use RuntimeException;
 class CallQueuedHandler
@@ -139,7 +139,7 @@ class CallQueuedHandler
      */
     protected function setJobInstanceIfNecessary(Job $job, $instance)
     {
-        if (in_array(\Illuminate\Queue\InteractsWithQueue::class, class_uses_recursive($instance))) {
+        if (in_array(InteractsWithQueue::class, class_uses_recursive($instance))) {
             $instance->setJob($job);
         }
         return $instance;
@@ -165,7 +165,7 @@ class CallQueuedHandler
     protected function ensureSuccessfulBatchJobIsRecorded($command)
     {
         $uses = class_uses_recursive($command);
-        if (!in_array(Batchable::class, $uses) || !in_array(\Illuminate\Queue\InteractsWithQueue::class, $uses)) {
+        if (!in_array(Batchable::class, $uses) || !in_array(InteractsWithQueue::class, $uses)) {
             return;
         }
         if ($batch = $command->batch()) {

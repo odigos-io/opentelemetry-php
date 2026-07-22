@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Odigos\Termwind\Components;
 
-use Symfony\Component\Console\Output\OutputInterface;
+use Odigos\Symfony\Component\Console\Output\OutputInterface;
 use Odigos\Termwind\Actions\StyleToMethod;
 use Odigos\Termwind\Html\InheritStyles;
 use Odigos\Termwind\ValueObjects\Styles;

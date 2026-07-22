@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Validation\Rules;
+namespace Odigos\Illuminate\Validation\Rules;
 
-use Illuminate\Contracts\Validation\Rule;
-use Illuminate\Contracts\Validation\ValidatorAwareRule;
-use Illuminate\Support\Facades\Gate;
+use Odigos\Illuminate\Contracts\Validation\Rule;
+use Odigos\Illuminate\Contracts\Validation\ValidatorAwareRule;
+use Odigos\Illuminate\Support\Facades\Gate;
 class Can implements Rule, ValidatorAwareRule
 {
     /**

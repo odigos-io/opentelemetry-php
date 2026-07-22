@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\View\Compilers\Concerns;
+namespace Odigos\Illuminate\View\Compilers\Concerns;
 
-use Illuminate\Contracts\View\ViewCompilationException;
+use Odigos\Illuminate\Contracts\View\ViewCompilationException;
 trait CompilesLoops
 {
     /**

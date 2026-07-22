@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace OpenTelemetry\SDK\Common\Adapter\HttpDiscovery;
 
-use Http\Discovery\Psr18ClientDiscovery;
+use Odigos\Http\Discovery\Psr18ClientDiscovery;
 use OpenTelemetry\SDK\Common\Http\Psr\Client\ResolverInterface;
 use Psr\Http\Client\ClientInterface;
 final class PsrClientResolver implements ResolverInterface

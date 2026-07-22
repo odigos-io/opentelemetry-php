@@ -46,12 +46,6 @@ class ComposerAutoloaderInit4eca79defe88f9b152b4a4a2cd987b1c
         foreach (array(
             '8e92226780215d0ec758aa7b73e0ede9' => true,
             'c7b4a5d8b94d270f0f9a84f81e1dd63d' => true,
-            'c720f792236cd163ece8049879166850' => true,
-            '06fc40915d53316d595f94210944bc16' => true,
-            'ede59e3a405fb689cd1cebb7bb1db3fb' => true,
-            '90236b492da7ca2983a2ad6e33e4152e' => true,
-            '2cb76c05856dfb60ada40ef54138d49a' => true,
-            '3a37ebac017bc098e9a86b35401e7a68' => true,
             'c695cb998ba36e4bafc3d028efc7d113' => true,
         ) as $h => $v) {
             $GLOBALS['__composer_autoload_files'][$h] = $v;

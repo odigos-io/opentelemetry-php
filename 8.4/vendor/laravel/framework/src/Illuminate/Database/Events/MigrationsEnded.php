@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Database\Events;
+namespace Odigos\Illuminate\Database\Events;
 
-class MigrationsEnded extends \Illuminate\Database\Events\MigrationsEvent
+class MigrationsEnded extends MigrationsEvent
 {
     //
 }

@@ -14,14 +14,14 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database\Type;
+namespace Odigos\Cake\Database\Type;
 
-use Cake\Database\Driver;
-use Cake\Utility\Text;
+use Odigos\Cake\Database\Driver;
+use Odigos\Cake\Utility\Text;
 /**
  * Provides behavior for the UUID type
  */
-class UuidType extends \Cake\Database\Type\StringType
+class UuidType extends StringType
 {
     /**
      * Casts given value from a PHP type to one acceptable by database

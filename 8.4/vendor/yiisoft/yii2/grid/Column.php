@@ -5,11 +5,11 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\grid;
+namespace Odigos\yii\grid;
 
 use Closure;
-use yii\base\BaseObject;
-use yii\helpers\Html;
+use Odigos\yii\base\BaseObject;
+use Odigos\yii\helpers\Html;
 /**
  * Column is the base class of all [[GridView]] column classes.
  *

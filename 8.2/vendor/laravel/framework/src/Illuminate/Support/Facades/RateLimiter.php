@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Support\Facades;
+namespace Odigos\Illuminate\Support\Facades;
 
 /**
  * @method static \Illuminate\Cache\RateLimiter for(\UnitEnum|string $name, \Closure $callback)
@@ -20,7 +20,7 @@ namespace Illuminate\Support\Facades;
  *
  * @see \Illuminate\Cache\RateLimiter
  */
-class RateLimiter extends \Illuminate\Support\Facades\Facade
+class RateLimiter extends Facade
 {
     /**
      * Get the registered name of the component.
@@ -29,6 +29,6 @@ class RateLimiter extends \Illuminate\Support\Facades\Facade
      */
     protected static function getFacadeAccessor()
     {
-        return \Illuminate\Cache\RateLimiter::class;
+        return \Odigos\Illuminate\Cache\RateLimiter::class;
     }
 }

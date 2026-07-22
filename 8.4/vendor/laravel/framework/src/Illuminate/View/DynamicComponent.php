@@ -1,14 +1,14 @@
 <?php
 
-namespace Illuminate\View;
+namespace Odigos\Illuminate\View;
 
 use BackedEnum;
-use Illuminate\Container\Container;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
-use Illuminate\View\Compilers\ComponentTagCompiler;
-use function Illuminate\Support\enum_value;
-class DynamicComponent extends \Illuminate\View\Component
+use Odigos\Illuminate\Container\Container;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Str;
+use Odigos\Illuminate\View\Compilers\ComponentTagCompiler;
+use function Odigos\Illuminate\Support\enum_value;
+class DynamicComponent extends Component
 {
     /**
      * The name of the component.
@@ -49,8 +49,8 @@ class DynamicComponent extends \Illuminate\View\Component
 
 namespace Odigos;
 
-\extract((new \Illuminate\Support\Collection($attributes->getAttributes()))->mapWithKeys(function ($value, $key) {
-    return [\Illuminate\Support\Str::camel(\str_replace([':', '.'], ' ', $key)) => $value];
+\extract((new \Odigos\Illuminate\Support\Collection($attributes->getAttributes()))->mapWithKeys(function ($value, $key) {
+    return [Illuminate\Support\Str::camel(\str_replace([':', '.'], ' ', $key)) => $value];
 })->all(), \EXTR_SKIP);
 ?>
 {{ props }}

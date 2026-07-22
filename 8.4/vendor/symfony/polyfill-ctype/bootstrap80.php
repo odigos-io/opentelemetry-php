@@ -10,7 +10,7 @@ namespace Odigos;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-use Symfony\Polyfill\Ctype as p;
+use Odigos\Symfony\Polyfill\Ctype as p;
 if (!\function_exists('ctype_alnum') && !\function_exists('Odigos\ctype_alnum')) {
     function ctype_alnum(mixed $text): bool
     {

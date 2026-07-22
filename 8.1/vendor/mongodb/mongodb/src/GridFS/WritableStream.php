@@ -15,16 +15,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace MongoDB\GridFS;
+namespace Odigos\MongoDB\GridFS;
 
 use MongoDB\BSON\Binary;
 use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;
 use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
-use MongoDB\Exception\InvalidArgumentException;
+use Odigos\MongoDB\Exception\InvalidArgumentException;
 use function array_intersect_key;
 use function is_integer;
-use function MongoDB\is_document;
+use function Odigos\MongoDB\is_document;
 use function sprintf;
 use function strlen;
 use function substr;
@@ -60,7 +60,7 @@ final class WritableStream
      * @param array             $options           Upload options
      * @throws InvalidArgumentException
      */
-    public function __construct(private \MongoDB\GridFS\CollectionWrapper $collectionWrapper, string $filename, array $options = [])
+    public function __construct(private CollectionWrapper $collectionWrapper, string $filename, array $options = [])
     {
         $options += ['_id' => new ObjectId(), 'chunkSizeBytes' => self::DEFAULT_CHUNK_SIZE_BYTES];
         if (!is_integer($options['chunkSizeBytes'])) {

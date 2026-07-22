@@ -1,17 +1,17 @@
 <?php
 
-namespace Illuminate\Console\Scheduling;
+namespace Odigos\Illuminate\Console\Scheduling;
 
 use Closure;
 use Odigos\Cron\CronExpression;
 use DateTimeZone;
-use Illuminate\Console\Command;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Collection;
+use Odigos\Illuminate\Console\Command;
+use Odigos\Illuminate\Support\Carbon;
+use Odigos\Illuminate\Support\Collection;
 use ReflectionClass;
 use ReflectionFunction;
-use Symfony\Component\Console\Attribute\AsCommand;
-use Symfony\Component\Console\Terminal;
+use Odigos\Symfony\Component\Console\Attribute\AsCommand;
+use Odigos\Symfony\Component\Console\Terminal;
 #[AsCommand(name: 'schedule:list')]
 class ScheduleListCommand extends Command
 {
@@ -45,7 +45,7 @@ class ScheduleListCommand extends Command
      *
      * @throws \Exception
      */
-    public function handle(\Illuminate\Console\Scheduling\Schedule $schedule)
+    public function handle(Schedule $schedule)
     {
         $events = new Collection($schedule->events());
         if ($events->isEmpty()) {
@@ -75,13 +75,13 @@ class ScheduleListCommand extends Command
             if (!$this->output->isVerbose()) {
                 $command = $event->normalizeCommand($command);
             }
-            if ($event instanceof \Illuminate\Console\Scheduling\CallbackEvent) {
+            if ($event instanceof CallbackEvent) {
                 $command = $event->getSummaryForDisplay();
                 if (in_array($command, ['Closure', 'Callback'])) {
                     $command = 'Closure at: ' . $this->getClosureLocation($event);
                 }
             }
-            return collect(\Illuminate\Console\Scheduling\CronExpressionTimezoneConverter::forEvent($event, $timezone))->map(fn($expression) => ['expression' => $expression, 'command' => $command, 'description' => $event->description ?? null, 'next_due_date' => $nextDueDate->format('Y-m-d H:i:s P'), 'next_due_date_human' => $nextDueDate->diffForHumans(), 'timezone' => $timezone->getName(), 'has_mutex' => $event->mutex->exists($event), 'repeat_seconds' => $event->isRepeatable() ? $event->repeatSeconds : null, 'environments' => $event->environments]);
+            return collect(CronExpressionTimezoneConverter::forEvent($event, $timezone))->map(fn($expression) => ['expression' => $expression, 'command' => $command, 'description' => $event->description ?? null, 'next_due_date' => $nextDueDate->format('Y-m-d H:i:s P'), 'next_due_date_human' => $nextDueDate->diffForHumans(), 'timezone' => $timezone->getName(), 'has_mutex' => $event->mutex->exists($event), 'repeat_seconds' => $event->isRepeatable() ? $event->repeatSeconds : null, 'environments' => $event->environments]);
         })->values()->toJson());
     }
     /**
@@ -97,7 +97,7 @@ class ScheduleListCommand extends Command
         $expressionSpacing = $this->getCronExpressionSpacing($events, $timezone);
         $repeatExpressionSpacing = $this->getRepeatExpressionSpacing($events);
         $events = $events->flatMap(function ($event) use ($terminalWidth, $expressionSpacing, $repeatExpressionSpacing, $timezone) {
-            return collect(\Illuminate\Console\Scheduling\CronExpressionTimezoneConverter::forEvent($event, $timezone))->map(fn($expression) => $this->listEvent($event, $terminalWidth, $expressionSpacing, $repeatExpressionSpacing, $timezone, $expression));
+            return collect(CronExpressionTimezoneConverter::forEvent($event, $timezone))->map(fn($expression) => $this->listEvent($event, $terminalWidth, $expressionSpacing, $repeatExpressionSpacing, $timezone, $expression));
         });
         $this->line($events->flatten()->filter()->prepend('')->push('')->toArray());
     }
@@ -109,7 +109,7 @@ class ScheduleListCommand extends Command
      */
     private function getCronExpressionSpacing($events, DateTimeZone $timezone)
     {
-        $rows = $events->flatMap(fn($event) => collect(\Illuminate\Console\Scheduling\CronExpressionTimezoneConverter::forEvent($event, $timezone))->map(fn($expression) => array_map(mb_strlen(...), preg_split("/\\s+/", $expression))));
+        $rows = $events->flatMap(fn($event) => collect(CronExpressionTimezoneConverter::forEvent($event, $timezone))->map(fn($expression) => array_map(mb_strlen(...), preg_split("/\\s+/", $expression))));
         return (new Collection($rows[0] ?? []))->keys()->map(fn($key) => $rows->max($key))->all();
     }
     /**
@@ -142,7 +142,7 @@ class ScheduleListCommand extends Command
         if (!$this->output->isVerbose()) {
             $command = $event->normalizeCommand($command);
         }
-        if ($event instanceof \Illuminate\Console\Scheduling\CallbackEvent) {
+        if ($event instanceof CallbackEvent) {
             $command = $event->getSummaryForDisplay();
             if (in_array($command, ['Closure', 'Callback'])) {
                 $command = 'Closure at: ' . $this->getClosureLocation($event);
@@ -175,7 +175,7 @@ class ScheduleListCommand extends Command
      * @param  \DateTimeZone  $timezone
      * @return \Illuminate\Support\Collection
      */
-    private function sortEvents(\Illuminate\Support\Collection $events, DateTimeZone $timezone)
+    private function sortEvents(\Odigos\Illuminate\Support\Collection $events, DateTimeZone $timezone)
     {
         return $this->option('next') ? $events->sortBy(fn($event) => $this->getNextDueDateForEvent($event, $timezone)) : $events;
     }
@@ -228,7 +228,7 @@ class ScheduleListCommand extends Command
      * @param  \Illuminate\Console\Scheduling\CallbackEvent  $event
      * @return string
      */
-    private function getClosureLocation(\Illuminate\Console\Scheduling\CallbackEvent $event)
+    private function getClosureLocation(CallbackEvent $event)
     {
         $callback = (new ReflectionClass($event))->getProperty('callback')->getValue($event);
         if ($callback instanceof Closure) {

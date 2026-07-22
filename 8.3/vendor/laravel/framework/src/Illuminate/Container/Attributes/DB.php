@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Container\Attributes;
+namespace Odigos\Illuminate\Container\Attributes;
 
 use Attribute;
 #[Attribute(Attribute::TARGET_PARAMETER)]
-class DB extends \Illuminate\Container\Attributes\Database
+class DB extends Database
 {
     //
 }

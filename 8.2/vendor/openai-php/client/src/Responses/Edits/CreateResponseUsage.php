@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Responses\Edits;
+namespace Odigos\OpenAI\Responses\Edits;
 
 final class CreateResponseUsage
 {

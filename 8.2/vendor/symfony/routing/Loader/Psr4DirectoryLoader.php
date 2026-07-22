@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Routing\Loader;
+namespace Odigos\Symfony\Component\Routing\Loader;
 
-use Symfony\Component\Config\FileLocatorInterface;
-use Symfony\Component\Config\Loader\DirectoryAwareLoaderInterface;
-use Symfony\Component\Config\Loader\Loader;
-use Symfony\Component\Config\Resource\DirectoryResource;
-use Symfony\Component\Routing\Exception\InvalidArgumentException;
-use Symfony\Component\Routing\RouteCollection;
+use Odigos\Symfony\Component\Config\FileLocatorInterface;
+use Odigos\Symfony\Component\Config\Loader\DirectoryAwareLoaderInterface;
+use Odigos\Symfony\Component\Config\Loader\Loader;
+use Odigos\Symfony\Component\Config\Resource\DirectoryResource;
+use Odigos\Symfony\Component\Routing\Exception\InvalidArgumentException;
+use Odigos\Symfony\Component\Routing\RouteCollection;
 /**
  * A loader that discovers controller classes in a directory that follows PSR-4.
  *

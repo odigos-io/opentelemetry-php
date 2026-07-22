@@ -14,11 +14,11 @@ declare (strict_types=1);
  * @since         5.3.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Cache\Event;
+namespace Odigos\Cake\Cache\Event;
 
-use Cake\Cache\CacheEngine;
-use Cake\Cache\Exception\InvalidArgumentException;
-use Cake\Event\Event;
+use Odigos\Cake\Cache\CacheEngine;
+use Odigos\Cake\Cache\Exception\InvalidArgumentException;
+use Odigos\Cake\Event\Event;
 /**
  * Class Cache AfterDecrement Event
  *

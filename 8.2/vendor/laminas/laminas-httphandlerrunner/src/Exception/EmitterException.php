@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace Laminas\HttpHandlerRunner\Exception;
+namespace Odigos\Laminas\HttpHandlerRunner\Exception;
 
 use RuntimeException;
 use function sprintf;
 /** @final */
-class EmitterException extends RuntimeException implements \Laminas\HttpHandlerRunner\Exception\ExceptionInterface
+class EmitterException extends RuntimeException implements ExceptionInterface
 {
     public static function forHeadersSent(string $filename, int $line): self
     {

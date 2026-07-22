@@ -1,13 +1,13 @@
 <?php
 
-namespace Illuminate\Support;
+namespace Odigos\Illuminate\Support;
 
 use ArgumentCountError;
 use ArrayAccess;
 use Closure;
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Contracts\Support\Jsonable;
-use Illuminate\Support\Traits\Macroable;
+use Odigos\Illuminate\Contracts\Support\Arrayable;
+use Odigos\Illuminate\Contracts\Support\Jsonable;
+use Odigos\Illuminate\Support\Traits\Macroable;
 use InvalidArgumentException;
 use JsonSerializable;
 use Random\Randomizer;
@@ -70,7 +70,7 @@ class Arr
      */
     public static function array(ArrayAccess|array $array, string|int|null $key, ?array $default = null): array
     {
-        $value = \Illuminate\Support\Arr::get($array, $key, $default);
+        $value = Arr::get($array, $key, $default);
         if (!is_array($value)) {
             throw new InvalidArgumentException(sprintf('Array value for key [%s] must be an array, %s found.', $key, gettype($value)));
         }
@@ -83,7 +83,7 @@ class Arr
      */
     public static function boolean(ArrayAccess|array $array, string|int|null $key, ?bool $default = null): bool
     {
-        $value = \Illuminate\Support\Arr::get($array, $key, $default);
+        $value = Arr::get($array, $key, $default);
         if (!is_bool($value)) {
             throw new InvalidArgumentException(sprintf('Array value for key [%s] must be a boolean, %s found.', $key, gettype($value)));
         }
@@ -99,7 +99,7 @@ class Arr
     {
         $results = [];
         foreach ($array as $values) {
-            if ($values instanceof \Illuminate\Support\Collection) {
+            if ($values instanceof Collection) {
                 $results[] = $values->all();
             } elseif (is_array($values)) {
                 $results[] = $values;
@@ -219,7 +219,7 @@ class Arr
      */
     public static function exists($array, $key)
     {
-        if ($array instanceof \Illuminate\Support\Enumerable) {
+        if ($array instanceof Enumerable) {
             return $array->has($key);
         }
         if ($array instanceof ArrayAccess) {
@@ -304,7 +304,7 @@ class Arr
     {
         $result = [];
         foreach ($array as $item) {
-            $item = $item instanceof \Illuminate\Support\Collection ? $item->all() : $item;
+            $item = $item instanceof Collection ? $item->all() : $item;
             if (!is_array($item)) {
                 $result[] = $item;
             } else {
@@ -323,7 +323,7 @@ class Arr
      */
     public static function float(ArrayAccess|array $array, string|int|null $key, ?float $default = null): float
     {
-        $value = \Illuminate\Support\Arr::get($array, $key, $default);
+        $value = Arr::get($array, $key, $default);
         if (!is_float($value)) {
             throw new InvalidArgumentException(sprintf('Array value for key [%s] must be a float, %s found.', $key, gettype($value)));
         }
@@ -378,7 +378,7 @@ class Arr
     {
         return match (\true) {
             is_array($items) => $items,
-            $items instanceof \Illuminate\Support\Enumerable => $items->all(),
+            $items instanceof Enumerable => $items->all(),
             $items instanceof Arrayable => $items->toArray(),
             $items instanceof WeakMap => iterator_to_array($items, \false),
             $items instanceof Traversable => iterator_to_array($items),
@@ -522,7 +522,7 @@ class Arr
      */
     public static function integer(ArrayAccess|array $array, string|int|null $key, ?int $default = null): int
     {
-        $value = \Illuminate\Support\Arr::get($array, $key, $default);
+        $value = Arr::get($array, $key, $default);
         if (!is_int($value)) {
             throw new InvalidArgumentException(sprintf('Array value for key [%s] must be an integer, %s found.', $key, gettype($value)));
         }
@@ -583,7 +583,7 @@ class Arr
      */
     public static function keyBy($array, $keyBy)
     {
-        return (new \Illuminate\Support\Collection($array))->keyBy($keyBy)->all();
+        return (new Collection($array))->keyBy($keyBy)->all();
     }
     /**
      * Prepend the key names of an associative array.
@@ -635,7 +635,7 @@ class Arr
         return static::map($array, function ($item) use ($keys) {
             $result = [];
             foreach ($keys as $key) {
-                if (\Illuminate\Support\Arr::accessible($item) && \Illuminate\Support\Arr::exists($item, $key)) {
+                if (Arr::accessible($item) && Arr::exists($item, $key)) {
                     $result[$key] = $item[$key];
                 } elseif (is_object($item) && isset($item->{$key})) {
                     $result[$key] = $item->{$key};
@@ -894,10 +894,10 @@ class Arr
         }
         $count = count($array);
         if ($count === 0) {
-            throw new \Illuminate\Support\ItemNotFoundException();
+            throw new ItemNotFoundException();
         }
         if ($count > 1) {
-            throw new \Illuminate\Support\MultipleItemsFoundException($count);
+            throw new MultipleItemsFoundException($count);
         }
         return static::first($array);
     }
@@ -913,7 +913,7 @@ class Arr
      */
     public static function sort($array, $callback = null)
     {
-        return (new \Illuminate\Support\Collection($array))->sortBy($callback)->all();
+        return (new Collection($array))->sortBy($callback)->all();
     }
     /**
      * Sort the array in descending order using the given callback or "dot" notation.
@@ -927,7 +927,7 @@ class Arr
      */
     public static function sortDesc($array, $callback = null)
     {
-        return (new \Illuminate\Support\Collection($array))->sortByDesc($callback)->all();
+        return (new Collection($array))->sortByDesc($callback)->all();
     }
     /**
      * Recursively sort an array by keys and values.
@@ -975,7 +975,7 @@ class Arr
      */
     public static function string(ArrayAccess|array $array, string|int|null $key, ?string $default = null): string
     {
-        $value = \Illuminate\Support\Arr::get($array, $key, $default);
+        $value = Arr::get($array, $key, $default);
         if (!is_string($value)) {
             throw new InvalidArgumentException(sprintf('Array value for key [%s] must be a string, %s found.', $key, gettype($value)));
         }
@@ -1012,9 +1012,9 @@ class Arr
         $styles = [];
         foreach ($styleList as $class => $constraint) {
             if (is_numeric($class)) {
-                $styles[] = \Illuminate\Support\Str::finish($constraint, ';');
+                $styles[] = Str::finish($constraint, ';');
             } elseif ($constraint) {
-                $styles[] = \Illuminate\Support\Str::finish($class, ';');
+                $styles[] = Str::finish($class, ';');
             }
         }
         return implode(' ', $styles);

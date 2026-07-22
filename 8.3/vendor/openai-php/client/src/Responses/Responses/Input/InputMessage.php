@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Responses\Responses\Input;
+namespace Odigos\OpenAI\Responses\Responses\Input;
 
-use OpenAI\Contracts\ResponseContract;
-use OpenAI\Responses\Concerns\ArrayAccessible;
-use OpenAI\Testing\Responses\Concerns\Fakeable;
+use Odigos\OpenAI\Contracts\ResponseContract;
+use Odigos\OpenAI\Responses\Concerns\ArrayAccessible;
+use Odigos\OpenAI\Testing\Responses\Concerns\Fakeable;
 /**
  * @phpstan-import-type ContentInputTextType from InputMessageContentInputText
  * @phpstan-import-type ContentInputImageType from InputMessageContentInputImage
@@ -36,10 +36,10 @@ final class InputMessage implements ResponseContract
      */
     public static function from(array $attributes): self
     {
-        $content = array_map(fn(array $item): \OpenAI\Responses\Responses\Input\InputMessageContentInputText|\OpenAI\Responses\Responses\Input\InputMessageContentInputImage|\OpenAI\Responses\Responses\Input\InputMessageContentInputFile => match ($item['type']) {
-            'input_text' => \OpenAI\Responses\Responses\Input\InputMessageContentInputText::from($item),
-            'input_image' => \OpenAI\Responses\Responses\Input\InputMessageContentInputImage::from($item),
-            'input_file' => \OpenAI\Responses\Responses\Input\InputMessageContentInputFile::from($item),
+        $content = array_map(fn(array $item): InputMessageContentInputText|InputMessageContentInputImage|InputMessageContentInputFile => match ($item['type']) {
+            'input_text' => InputMessageContentInputText::from($item),
+            'input_image' => InputMessageContentInputImage::from($item),
+            'input_file' => InputMessageContentInputFile::from($item),
         }, $attributes['content']);
         return new self(content: $content, id: $attributes['id'], role: $attributes['role'], status: $attributes['status'], type: $attributes['type']);
     }
@@ -48,6 +48,6 @@ final class InputMessage implements ResponseContract
      */
     public function toArray(): array
     {
-        return ['content' => array_map(fn(\OpenAI\Responses\Responses\Input\InputMessageContentInputText|\OpenAI\Responses\Responses\Input\InputMessageContentInputImage|\OpenAI\Responses\Responses\Input\InputMessageContentInputFile $item): array => $item->toArray(), $this->content), 'id' => $this->id, 'role' => $this->role, 'status' => $this->status, 'type' => $this->type];
+        return ['content' => array_map(fn(InputMessageContentInputText|InputMessageContentInputImage|InputMessageContentInputFile $item): array => $item->toArray(), $this->content), 'id' => $this->id, 'role' => $this->role, 'status' => $this->status, 'type' => $this->type];
     }
 }

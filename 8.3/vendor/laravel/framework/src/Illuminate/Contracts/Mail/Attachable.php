@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Contracts\Mail;
+namespace Odigos\Illuminate\Contracts\Mail;
 
 interface Attachable
 {

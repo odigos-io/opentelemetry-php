@@ -8,17 +8,17 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Mime\Part;
+namespace Odigos\Symfony\Component\Mime\Part;
 
-use Symfony\Component\Mime\Header\Headers;
+use Odigos\Symfony\Component\Mime\Header\Headers;
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  */
-abstract class AbstractMultipartPart extends \Symfony\Component\Mime\Part\AbstractPart
+abstract class AbstractMultipartPart extends AbstractPart
 {
     private ?string $boundary = null;
     private array $parts = [];
-    public function __construct(\Symfony\Component\Mime\Part\AbstractPart ...$parts)
+    public function __construct(AbstractPart ...$parts)
     {
         parent::__construct();
         foreach ($parts as $part) {

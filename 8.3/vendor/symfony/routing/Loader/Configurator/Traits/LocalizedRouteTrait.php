@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Routing\Loader\Configurator\Traits;
+namespace Odigos\Symfony\Component\Routing\Loader\Configurator\Traits;
 
-use Symfony\Component\Routing\Route;
-use Symfony\Component\Routing\RouteCollection;
+use Odigos\Symfony\Component\Routing\Route;
+use Odigos\Symfony\Component\Routing\RouteCollection;
 /**
  * @internal
  *

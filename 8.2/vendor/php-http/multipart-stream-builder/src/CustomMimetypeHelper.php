@@ -1,13 +1,13 @@
 <?php
 
-namespace Http\Message\MultipartStream;
+namespace Odigos\Http\Message\MultipartStream;
 
 /**
  * Let you add your own mimetypes. The mimetype lookup will fallback on the ApacheMimeTypeHelper.
  *
  * @author Tobias Nyholm <tobias.nyholm@gmail.com>
  */
-class CustomMimetypeHelper extends \Http\Message\MultipartStream\ApacheMimetypeHelper
+class CustomMimetypeHelper extends ApacheMimetypeHelper
 {
     /**
      * @var array

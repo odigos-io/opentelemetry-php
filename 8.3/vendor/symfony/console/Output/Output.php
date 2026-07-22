@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Console\Output;
+namespace Odigos\Symfony\Component\Console\Output;
 
-use Symfony\Component\Console\Formatter\OutputFormatter;
-use Symfony\Component\Console\Formatter\OutputFormatterInterface;
+use Odigos\Symfony\Component\Console\Formatter\OutputFormatter;
+use Odigos\Symfony\Component\Console\Formatter\OutputFormatterInterface;
 /**
  * Base class for output classes.
  *
@@ -26,7 +26,7 @@ use Symfony\Component\Console\Formatter\OutputFormatterInterface;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-abstract class Output implements \Symfony\Component\Console\Output\OutputInterface
+abstract class Output implements OutputInterface
 {
     private int $verbosity;
     private OutputFormatterInterface $formatter;
@@ -103,12 +103,12 @@ abstract class Output implements \Symfony\Component\Console\Output\OutputInterfa
         }
         foreach ($messages as $message) {
             switch ($type) {
-                case \Symfony\Component\Console\Output\OutputInterface::OUTPUT_NORMAL:
+                case OutputInterface::OUTPUT_NORMAL:
                     $message = $this->formatter->format($message);
                     break;
-                case \Symfony\Component\Console\Output\OutputInterface::OUTPUT_RAW:
+                case OutputInterface::OUTPUT_RAW:
                     break;
-                case \Symfony\Component\Console\Output\OutputInterface::OUTPUT_PLAIN:
+                case OutputInterface::OUTPUT_PLAIN:
                     $message = strip_tags($this->formatter->format($message));
                     break;
             }

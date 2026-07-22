@@ -14,10 +14,10 @@ declare (strict_types=1);
  * @since         2.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Mailer;
+namespace Odigos\Cake\Mailer;
 
-use Cake\Core\Exception\CakeException;
-use Cake\Core\InstanceConfigTrait;
+use Odigos\Cake\Core\Exception\CakeException;
+use Odigos\Cake\Core\InstanceConfigTrait;
 /**
  * Abstract transport for sending email
  */
@@ -37,7 +37,7 @@ abstract class AbstractTransport
      * @return array<string, mixed> Contains 'headers' and 'message' keys. Additional keys allowed.
      * @phpstan-return array{headers: string, message: string, ...}
      */
-    abstract public function send(\Cake\Mailer\Message $message): array;
+    abstract public function send(Message $message): array;
     /**
      * Constructor
      *
@@ -54,7 +54,7 @@ abstract class AbstractTransport
      * @return void
      * @throws \Cake\Core\Exception\CakeException If at least one of to, cc or bcc is not specified.
      */
-    protected function checkRecipient(\Cake\Mailer\Message $message): void
+    protected function checkRecipient(Message $message): void
     {
         if ($message->getTo() === [] && $message->getCc() === [] && $message->getBcc() === []) {
             throw new CakeException('You must specify at least one recipient.' . ' Use one of `setTo`, `setCc` or `setBcc` to define a recipient.');

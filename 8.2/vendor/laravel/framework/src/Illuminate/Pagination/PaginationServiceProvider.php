@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Pagination;
+namespace Odigos\Illuminate\Pagination;
 
-use Illuminate\Support\ServiceProvider;
+use Odigos\Illuminate\Support\ServiceProvider;
 class PaginationServiceProvider extends ServiceProvider
 {
     /**
@@ -24,6 +24,6 @@ class PaginationServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        \Illuminate\Pagination\PaginationState::resolveUsing($this->app);
+        PaginationState::resolveUsing($this->app);
     }
 }

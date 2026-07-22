@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Database\Eloquent\Factories;
+namespace Odigos\Illuminate\Database\Eloquent\Factories;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Odigos\Illuminate\Database\Eloquent\Model;
+use Odigos\Illuminate\Database\Eloquent\Relations\MorphTo;
 class BelongsToRelationship
 {
     /**
@@ -44,7 +44,7 @@ class BelongsToRelationship
     public function attributesFor(Model $model)
     {
         $relationship = $model->{$this->relationship}();
-        return $relationship instanceof MorphTo ? [$relationship->getMorphType() => $this->factory instanceof \Illuminate\Database\Eloquent\Factories\Factory ? $this->factory->newModel()->getMorphClass() : $this->factory->getMorphClass(), $relationship->getForeignKeyName() => $this->resolver($relationship->getOwnerKeyName())] : [$relationship->getForeignKeyName() => $this->resolver($relationship->getOwnerKeyName())];
+        return $relationship instanceof MorphTo ? [$relationship->getMorphType() => $this->factory instanceof Factory ? $this->factory->newModel()->getMorphClass() : $this->factory->getMorphClass(), $relationship->getForeignKeyName() => $this->resolver($relationship->getOwnerKeyName())] : [$relationship->getForeignKeyName() => $this->resolver($relationship->getOwnerKeyName())];
     }
     /**
      * Get the deferred resolver for this relationship's parent ID.
@@ -56,7 +56,7 @@ class BelongsToRelationship
     {
         return function () use ($key) {
             if (!$this->resolved) {
-                $instance = $this->factory instanceof \Illuminate\Database\Eloquent\Factories\Factory ? $this->factory->getRandomRecycledModel($this->factory->modelName()) ?? $this->factory->create() : $this->factory;
+                $instance = $this->factory instanceof Factory ? $this->factory->getRandomRecycledModel($this->factory->modelName()) ?? $this->factory->create() : $this->factory;
                 return $this->resolved = $key ? $instance->{$key} : $instance->getKey();
             }
             return $this->resolved;
@@ -70,7 +70,7 @@ class BelongsToRelationship
      */
     public function recycle($recycle)
     {
-        if ($this->factory instanceof \Illuminate\Database\Eloquent\Factories\Factory) {
+        if ($this->factory instanceof Factory) {
             $this->factory = $this->factory->recycle($recycle);
         }
         return $this;

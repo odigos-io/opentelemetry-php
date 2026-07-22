@@ -1,13 +1,13 @@
 <?php
 
-namespace OpenAI\Testing\Resources;
+namespace Odigos\OpenAI\Testing\Resources;
 
-use OpenAI\Contracts\Resources\ModelsContract;
-use OpenAI\Resources\Models;
-use OpenAI\Responses\Models\DeleteResponse;
-use OpenAI\Responses\Models\ListResponse;
-use OpenAI\Responses\Models\RetrieveResponse;
-use OpenAI\Testing\Resources\Concerns\Testable;
+use Odigos\OpenAI\Contracts\Resources\ModelsContract;
+use Odigos\OpenAI\Resources\Models;
+use Odigos\OpenAI\Responses\Models\DeleteResponse;
+use Odigos\OpenAI\Responses\Models\ListResponse;
+use Odigos\OpenAI\Responses\Models\RetrieveResponse;
+use Odigos\OpenAI\Testing\Resources\Concerns\Testable;
 final class ModelsTestResource implements ModelsContract
 {
     use Testable;

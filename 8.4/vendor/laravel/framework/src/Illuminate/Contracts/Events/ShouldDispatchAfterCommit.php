@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Contracts\Events;
+namespace Odigos\Illuminate\Contracts\Events;
 
 interface ShouldDispatchAfterCommit
 {

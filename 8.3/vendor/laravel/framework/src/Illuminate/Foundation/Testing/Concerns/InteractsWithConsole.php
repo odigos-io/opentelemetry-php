@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Foundation\Testing\Concerns;
+namespace Odigos\Illuminate\Foundation\Testing\Concerns;
 
-use Illuminate\Console\OutputStyle;
-use Illuminate\Contracts\Console\Kernel;
-use Illuminate\Testing\PendingCommand;
+use Odigos\Illuminate\Console\OutputStyle;
+use Odigos\Illuminate\Contracts\Console\Kernel;
+use Odigos\Illuminate\Testing\PendingCommand;
 trait InteractsWithConsole
 {
     /**

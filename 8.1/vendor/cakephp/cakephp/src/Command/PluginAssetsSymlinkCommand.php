@@ -14,17 +14,17 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Command;
+namespace Odigos\Cake\Command;
 
-use Cake\Console\Arguments;
-use Cake\Console\ConsoleIo;
-use Cake\Console\ConsoleOptionParser;
+use Odigos\Cake\Console\Arguments;
+use Odigos\Cake\Console\ConsoleIo;
+use Odigos\Cake\Console\ConsoleOptionParser;
 /**
  * Command for symlinking / copying plugin assets to app's webroot.
  */
-class PluginAssetsSymlinkCommand extends \Cake\Command\Command
+class PluginAssetsSymlinkCommand extends Command
 {
-    use \Cake\Command\PluginAssetsTrait;
+    use PluginAssetsTrait;
     /**
      * @inheritDoc
      */

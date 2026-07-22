@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\caching;
+namespace Odigos\yii\caching;
 
 /**
  * Dependency is the base class for cache dependency classes.
@@ -18,7 +18,7 @@ namespace yii\caching;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-abstract class Dependency extends \yii\base\BaseObject
+abstract class Dependency extends \Odigos\yii\base\BaseObject
 {
     /**
      * @var mixed the dependency data that is saved in cache and later is compared with the

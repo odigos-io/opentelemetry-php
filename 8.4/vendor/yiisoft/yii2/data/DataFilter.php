@@ -5,18 +5,18 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\data;
+namespace Odigos\yii\data;
 
 use Odigos\Yii;
-use yii\base\InvalidConfigException;
-use yii\base\Model;
-use yii\helpers\ArrayHelper;
-use yii\validators\BooleanValidator;
-use yii\validators\EachValidator;
-use yii\validators\NumberValidator;
-use yii\validators\StringValidator;
-use yii\validators\DateValidator;
-use yii\validators\Validator;
+use Odigos\yii\base\InvalidConfigException;
+use Odigos\yii\base\Model;
+use Odigos\yii\helpers\ArrayHelper;
+use Odigos\yii\validators\BooleanValidator;
+use Odigos\yii\validators\EachValidator;
+use Odigos\yii\validators\NumberValidator;
+use Odigos\yii\validators\StringValidator;
+use Odigos\yii\validators\DateValidator;
+use Odigos\yii\validators\Validator;
 /**
  * DataFilter is a special [[Model]] for processing query filtering specification.
  * It allows validating and building a filter condition passed via request.

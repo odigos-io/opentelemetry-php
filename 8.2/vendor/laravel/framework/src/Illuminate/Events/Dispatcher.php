@@ -1,30 +1,30 @@
 <?php
 
-namespace Illuminate\Events;
+namespace Odigos\Illuminate\Events;
 
 use Closure;
 use Exception;
-use Illuminate\Bus\UniqueLock;
-use Illuminate\Container\Container;
-use Illuminate\Contracts\Broadcasting\Factory as BroadcastFactory;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
-use Illuminate\Contracts\Cache\Repository as Cache;
-use Illuminate\Contracts\Container\Container as ContainerContract;
-use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
-use Illuminate\Contracts\Events\ShouldDispatchAfterCommit;
-use Illuminate\Contracts\Events\ShouldHandleEventsAfterCommit;
-use Illuminate\Contracts\Queue\ShouldBeEncrypted;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
-use Illuminate\Contracts\Queue\ShouldBeUniqueUntilProcessing;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Contracts\Queue\ShouldQueueAfterCommit;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
-use Illuminate\Support\Traits\Macroable;
-use Illuminate\Support\Traits\ReflectsClosures;
+use Odigos\Illuminate\Bus\UniqueLock;
+use Odigos\Illuminate\Container\Container;
+use Odigos\Illuminate\Contracts\Broadcasting\Factory as BroadcastFactory;
+use Odigos\Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Odigos\Illuminate\Contracts\Cache\Repository as Cache;
+use Odigos\Illuminate\Contracts\Container\Container as ContainerContract;
+use Odigos\Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
+use Odigos\Illuminate\Contracts\Events\ShouldDispatchAfterCommit;
+use Odigos\Illuminate\Contracts\Events\ShouldHandleEventsAfterCommit;
+use Odigos\Illuminate\Contracts\Queue\ShouldBeEncrypted;
+use Odigos\Illuminate\Contracts\Queue\ShouldBeUnique;
+use Odigos\Illuminate\Contracts\Queue\ShouldBeUniqueUntilProcessing;
+use Odigos\Illuminate\Contracts\Queue\ShouldQueue;
+use Odigos\Illuminate\Contracts\Queue\ShouldQueueAfterCommit;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Str;
+use Odigos\Illuminate\Support\Traits\Macroable;
+use Odigos\Illuminate\Support\Traits\ReflectsClosures;
 use ReflectionClass;
-use function Illuminate\Support\enum_value;
+use function Odigos\Illuminate\Support\enum_value;
 class Dispatcher implements DispatcherContract
 {
     use Macroable, ReflectsClosures;
@@ -104,11 +104,11 @@ class Dispatcher implements DispatcherContract
             return (new Collection($this->firstClosureParameterTypes($events)))->each(function ($event) use ($events) {
                 $this->listen($event, $events);
             });
-        } elseif ($events instanceof \Illuminate\Events\QueuedClosure) {
+        } elseif ($events instanceof QueuedClosure) {
             return (new Collection($this->firstClosureParameterTypes($events->closure)))->each(function ($event) use ($events) {
                 $this->listen($event, $events->resolve());
             });
-        } elseif ($listener instanceof \Illuminate\Events\QueuedClosure) {
+        } elseif ($listener instanceof QueuedClosure) {
             $listener = $listener->resolve();
         }
         foreach ((array) $events as $event) {
@@ -563,7 +563,7 @@ class Dispatcher implements DispatcherContract
     protected function createListenerAndJob($class, $method, $arguments)
     {
         $listener = (new ReflectionClass($class))->newInstanceWithoutConstructor();
-        return [$listener, $this->propagateListenerOptions($listener, new \Illuminate\Events\CallQueuedListener($class, $method, $arguments))];
+        return [$listener, $this->propagateListenerOptions($listener, new CallQueuedListener($class, $method, $arguments))];
     }
     /**
      * Propagate listener options to the job.

@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpFoundation;
+namespace Odigos\Symfony\Component\HttpFoundation;
 
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
-use Symfony\Component\HttpFoundation\File\File;
+use Odigos\Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Odigos\Symfony\Component\HttpFoundation\File\File;
 /**
  * BinaryFileResponse represents an HTTP response delivering a file.
  *
@@ -21,7 +21,7 @@ use Symfony\Component\HttpFoundation\File\File;
  * @author Jordan Alliot <jordan.alliot@gmail.com>
  * @author Sergey Linnik <linniksa@gmail.com>
  */
-class BinaryFileResponse extends \Symfony\Component\HttpFoundation\Response
+class BinaryFileResponse extends Response
 {
     protected static bool $trustXSendfileTypeHeader = \false;
     protected File $file;
@@ -149,7 +149,7 @@ class BinaryFileResponse extends \Symfony\Component\HttpFoundation\Response
         $this->headers->set('Content-Disposition', $dispositionHeader);
         return $this;
     }
-    public function prepare(\Symfony\Component\HttpFoundation\Request $request): static
+    public function prepare(Request $request): static
     {
         if ($this->isInformational() || $this->isEmpty()) {
             parent::prepare($request);
@@ -192,7 +192,7 @@ class BinaryFileResponse extends \Symfony\Component\HttpFoundation\Response
                 if (!$request->headers->has('X-Accel-Mapping')) {
                     throw new \LogicException('The "X-Accel-Mapping" header must be set when "X-Sendfile-Type" is set to "X-Accel-Redirect".');
                 }
-                $parts = \Symfony\Component\HttpFoundation\HeaderUtils::split($request->headers->get('X-Accel-Mapping'), ',=');
+                $parts = HeaderUtils::split($request->headers->get('X-Accel-Mapping'), ',=');
                 foreach ($parts as $part) {
                     [$pathPrefix, $location] = $part;
                     if (str_starts_with($path, $pathPrefix)) {

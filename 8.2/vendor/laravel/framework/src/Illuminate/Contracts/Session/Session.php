@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Contracts\Session;
+namespace Odigos\Illuminate\Contracts\Session;
 
 interface Session
 {

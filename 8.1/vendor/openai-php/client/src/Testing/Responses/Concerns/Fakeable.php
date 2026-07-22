@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Testing\Responses\Concerns;
+namespace Odigos\OpenAI\Testing\Responses\Concerns;
 
-use OpenAI\Responses\Meta\MetaInformation;
+use Odigos\OpenAI\Responses\Meta\MetaInformation;
 trait Fakeable
 {
     /**

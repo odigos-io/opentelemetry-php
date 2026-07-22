@@ -14,10 +14,10 @@ declare (strict_types=1);
  * @since         3.6.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Routing\Route;
+namespace Odigos\Cake\Routing\Route;
 
 use ArrayAccess;
-use Cake\Core\Exception\CakeException;
+use Odigos\Cake\Core\Exception\CakeException;
 /**
  * Matches entities to routes
  *
@@ -25,7 +25,7 @@ use Cake\Core\Exception\CakeException;
  * comparing the field names with the template vars. This makes it easy and
  * convenient to change routes globally.
  */
-class EntityRoute extends \Cake\Routing\Route\Route
+class EntityRoute extends Route
 {
     /**
      * Match by entity and map its fields to the URL pattern by comparing the

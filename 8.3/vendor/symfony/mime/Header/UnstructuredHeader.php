@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Mime\Header;
+namespace Odigos\Symfony\Component\Mime\Header;
 
 /**
  * A Simple MIME Header.
  *
  * @author Chris Corbyn
  */
-class UnstructuredHeader extends \Symfony\Component\Mime\Header\AbstractHeader
+class UnstructuredHeader extends AbstractHeader
 {
     private string $value;
     public function __construct(string $name, string $value)

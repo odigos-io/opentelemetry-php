@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Support;
+namespace Odigos\Illuminate\Support;
 
 use Odigos\Carbon\CarbonInterval;
 use DateInterval;
@@ -27,7 +27,7 @@ trait InteractsWithTime
     protected function availableAt($delay = 0)
     {
         $delay = $this->parseDateInterval($delay);
-        return $delay instanceof DateTimeInterface ? $delay->getTimestamp() : \Illuminate\Support\Carbon::now()->addSeconds($delay)->getTimestamp();
+        return $delay instanceof DateTimeInterface ? $delay->getTimestamp() : Carbon::now()->addSeconds($delay)->getTimestamp();
     }
     /**
      * If the given value is an interval, convert it to a DateTime instance.
@@ -38,7 +38,7 @@ trait InteractsWithTime
     protected function parseDateInterval($delay)
     {
         if ($delay instanceof DateInterval) {
-            $delay = \Illuminate\Support\Carbon::now()->add($delay);
+            $delay = Carbon::now()->add($delay);
         }
         return $delay;
     }
@@ -49,7 +49,7 @@ trait InteractsWithTime
      */
     protected function currentTime()
     {
-        return \Illuminate\Support\Carbon::now()->getTimestamp();
+        return Carbon::now()->getTimestamp();
     }
     /**
      * Given a start time, format the total run time for human readability.

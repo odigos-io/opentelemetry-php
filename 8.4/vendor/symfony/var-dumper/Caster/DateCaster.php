@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\VarDumper\Caster;
+namespace Odigos\Symfony\Component\VarDumper\Caster;
 
-use Symfony\Component\VarDumper\Cloner\Stub;
+use Odigos\Symfony\Component\VarDumper\Cloner\Stub;
 /**
  * Casts DateTimeInterface related classes to array representation.
  *
@@ -25,12 +25,12 @@ class DateCaster
     private const PERIOD_LIMIT = 3;
     public static function castDateTime(\DateTimeInterface $d, array $a, Stub $stub, bool $isNested, int $filter): array
     {
-        $prefix = \Symfony\Component\VarDumper\Caster\Caster::PREFIX_VIRTUAL;
+        $prefix = Caster::PREFIX_VIRTUAL;
         $location = $d->getTimezone() ? $d->getTimezone()->getLocation() : null;
         $fromNow = (new \DateTimeImmutable())->diff($d);
         $title = $d->format('l, F j, Y') . "\n" . self::formatInterval($fromNow) . ' from now' . ($location ? $d->format('I') ? "\nDST On" : "\nDST Off" : '');
-        unset($a[\Symfony\Component\VarDumper\Caster\Caster::PREFIX_DYNAMIC . 'date'], $a[\Symfony\Component\VarDumper\Caster\Caster::PREFIX_DYNAMIC . 'timezone'], $a[\Symfony\Component\VarDumper\Caster\Caster::PREFIX_DYNAMIC . 'timezone_type']);
-        $a[$prefix . 'date'] = new \Symfony\Component\VarDumper\Caster\ConstStub(self::formatDateTime($d, $location ? ' e (P)' : ' P'), $title);
+        unset($a[Caster::PREFIX_DYNAMIC . 'date'], $a[Caster::PREFIX_DYNAMIC . 'timezone'], $a[Caster::PREFIX_DYNAMIC . 'timezone_type']);
+        $a[$prefix . 'date'] = new ConstStub(self::formatDateTime($d, $location ? ' e (P)' : ' P'), $title);
         $stub->class .= $d->format(' @U');
         return $a;
     }
@@ -39,8 +39,8 @@ class DateCaster
         $now = new \DateTimeImmutable('@0', new \DateTimeZone('UTC'));
         $numberOfSeconds = $now->add($interval)->getTimestamp() - $now->getTimestamp();
         $title = number_format($numberOfSeconds, 0, '.', ' ') . 's';
-        $i = [\Symfony\Component\VarDumper\Caster\Caster::PREFIX_VIRTUAL . 'interval' => new \Symfony\Component\VarDumper\Caster\ConstStub(self::formatInterval($interval), $title)];
-        return $filter & \Symfony\Component\VarDumper\Caster\Caster::EXCLUDE_VERBOSE ? $i : $i + $a;
+        $i = [Caster::PREFIX_VIRTUAL . 'interval' => new ConstStub(self::formatInterval($interval), $title)];
+        return $filter & Caster::EXCLUDE_VERBOSE ? $i : $i + $a;
     }
     private static function formatInterval(\DateInterval $i): string
     {
@@ -62,8 +62,8 @@ class DateCaster
         $location = $timeZone->getLocation();
         $formatted = (new \DateTimeImmutable('now', $timeZone))->format($location ? 'e (P)' : 'P');
         $title = $location && \extension_loaded('intl') ? \Locale::getDisplayRegion('-' . $location['country_code']) : '';
-        $z = [\Symfony\Component\VarDumper\Caster\Caster::PREFIX_VIRTUAL . 'timezone' => new \Symfony\Component\VarDumper\Caster\ConstStub($formatted, $title)];
-        return $filter & \Symfony\Component\VarDumper\Caster\Caster::EXCLUDE_VERBOSE ? $z : $z + $a;
+        $z = [Caster::PREFIX_VIRTUAL . 'timezone' => new ConstStub($formatted, $title)];
+        return $filter & Caster::EXCLUDE_VERBOSE ? $z : $z + $a;
     }
     public static function castPeriod(\DatePeriod $p, array $a, Stub $stub, bool $isNested, int $filter): array
     {
@@ -77,8 +77,8 @@ class DateCaster
             $dates[] = \sprintf('%s) %s', $i + 1, self::formatDateTime($d));
         }
         $period = \sprintf('every %s, from %s%s %s', self::formatInterval($p->getDateInterval()), $p->include_start_date ? '[' : ']', self::formatDateTime($p->getStartDate()), ($end = $p->getEndDate()) ? 'to ' . self::formatDateTime($end) . ($p->include_end_date ? ']' : '[') : 'recurring ' . $p->recurrences . ' time/s');
-        $p = [\Symfony\Component\VarDumper\Caster\Caster::PREFIX_VIRTUAL . 'period' => new \Symfony\Component\VarDumper\Caster\ConstStub($period, implode("\n", $dates))];
-        return $filter & \Symfony\Component\VarDumper\Caster\Caster::EXCLUDE_VERBOSE ? $p : $p + $a;
+        $p = [Caster::PREFIX_VIRTUAL . 'period' => new ConstStub($period, implode("\n", $dates))];
+        return $filter & Caster::EXCLUDE_VERBOSE ? $p : $p + $a;
     }
     private static function formatDateTime(\DateTimeInterface $d, string $extra = ''): string
     {

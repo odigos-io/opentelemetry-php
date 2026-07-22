@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Console\Scheduling;
+namespace Odigos\Illuminate\Console\Scheduling;
 
-use Illuminate\Support\Reflector;
+use Odigos\Illuminate\Support\Reflector;
 trait ManagesAttributes
 {
     /**

@@ -1,12 +1,12 @@
 <?php
 
-namespace Illuminate\Console\Scheduling;
+namespace Odigos\Illuminate\Console\Scheduling;
 
 use DateTimeInterface;
-use Illuminate\Cache\DynamoDbStore;
-use Illuminate\Contracts\Cache\Factory as Cache;
-use Illuminate\Contracts\Cache\LockProvider;
-class CacheSchedulingMutex implements \Illuminate\Console\Scheduling\SchedulingMutex, \Illuminate\Console\Scheduling\CacheAware
+use Odigos\Illuminate\Cache\DynamoDbStore;
+use Odigos\Illuminate\Contracts\Cache\Factory as Cache;
+use Odigos\Illuminate\Contracts\Cache\LockProvider;
+class CacheSchedulingMutex implements SchedulingMutex, CacheAware
 {
     /**
      * The cache factory implementation.
@@ -36,7 +36,7 @@ class CacheSchedulingMutex implements \Illuminate\Console\Scheduling\SchedulingM
      * @param  \DateTimeInterface  $time
      * @return bool
      */
-    public function create(\Illuminate\Console\Scheduling\Event $event, DateTimeInterface $time)
+    public function create(Event $event, DateTimeInterface $time)
     {
         $mutexName = $event->mutexName() . $time->format('Hi');
         if ($this->shouldUseLocks($this->cache->store($this->store)->getStore())) {
@@ -51,7 +51,7 @@ class CacheSchedulingMutex implements \Illuminate\Console\Scheduling\SchedulingM
      * @param  \DateTimeInterface  $time
      * @return bool
      */
-    public function exists(\Illuminate\Console\Scheduling\Event $event, DateTimeInterface $time)
+    public function exists(Event $event, DateTimeInterface $time)
     {
         $mutexName = $event->mutexName() . $time->format('Hi');
         if ($this->shouldUseLocks($this->cache->store($this->store)->getStore())) {

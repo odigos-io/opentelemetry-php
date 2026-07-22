@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Translation;
+namespace Odigos\Illuminate\Translation;
 
-use Illuminate\Contracts\Translation\Loader;
-use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Collection;
+use Odigos\Illuminate\Contracts\Translation\Loader;
+use Odigos\Illuminate\Filesystem\Filesystem;
+use Odigos\Illuminate\Support\Collection;
 use RuntimeException;
 class FileLoader implements Loader
 {

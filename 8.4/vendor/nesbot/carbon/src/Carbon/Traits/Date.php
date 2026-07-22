@@ -40,7 +40,7 @@ use DateTimeZone;
 use Generator;
 use InvalidArgumentException;
 use ReflectionException;
-use Symfony\Component\Clock\NativeClock;
+use Odigos\Symfony\Component\Clock\NativeClock;
 use Throwable;
 /**
  * A simple API extension for DateTime.

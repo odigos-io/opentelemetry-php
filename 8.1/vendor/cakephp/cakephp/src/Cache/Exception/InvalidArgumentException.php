@@ -14,9 +14,9 @@ declare (strict_types=1);
  * @since         3.7.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Cache\Exception;
+namespace Odigos\Cake\Cache\Exception;
 
-use Cake\Core\Exception\CakeException;
+use Odigos\Cake\Core\Exception\CakeException;
 use Psr\SimpleCache\InvalidArgumentException as InvalidArgumentInterface;
 /**
  * Exception raised when cache keys are invalid.

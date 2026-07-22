@@ -1,15 +1,15 @@
 <?php
 
-namespace Illuminate\Testing;
+namespace Odigos\Illuminate\Testing;
 
 use Closure;
-use Illuminate\Database\Eloquent\Collection as EloquentCollection;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Traits\Macroable;
-use Illuminate\Testing\Assert as PHPUnit;
-use Illuminate\Testing\Constraints\SeeInOrder;
-use Illuminate\View\View;
+use Odigos\Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Odigos\Illuminate\Database\Eloquent\Model;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Traits\Macroable;
+use Odigos\Illuminate\Testing\Assert as PHPUnit;
+use Odigos\Illuminate\Testing\Constraints\SeeInOrder;
+use Odigos\Illuminate\View\View;
 use Stringable;
 class TestView implements Stringable
 {

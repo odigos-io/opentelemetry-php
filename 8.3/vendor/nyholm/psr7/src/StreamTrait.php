@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Nyholm\Psr7;
+namespace Odigos\Nyholm\Psr7;
 
 use Psr\Http\Message\StreamInterface;
-use Symfony\Component\Debug\ErrorHandler as SymfonyLegacyErrorHandler;
-use Symfony\Component\ErrorHandler\ErrorHandler as SymfonyErrorHandler;
+use Odigos\Symfony\Component\Debug\ErrorHandler as SymfonyLegacyErrorHandler;
+use Odigos\Symfony\Component\ErrorHandler\ErrorHandler as SymfonyErrorHandler;
 if (\PHP_VERSION_ID >= 70400 || (new \ReflectionMethod(StreamInterface::class, '__toString'))->hasReturnType()) {
     /**
      * @internal

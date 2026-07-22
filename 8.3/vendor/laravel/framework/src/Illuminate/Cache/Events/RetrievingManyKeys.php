@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Cache\Events;
+namespace Odigos\Illuminate\Cache\Events;
 
-class RetrievingManyKeys extends \Illuminate\Cache\Events\CacheEvent
+class RetrievingManyKeys extends CacheEvent
 {
     /**
      * The keys that are being retrieved.

@@ -5,10 +5,10 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\caching;
+namespace Odigos\yii\caching;
 
 use Odigos\Yii;
-use yii\helpers\FileHelper;
+use Odigos\yii\helpers\FileHelper;
 /**
  * FileCache implements a cache component using files.
  *
@@ -23,7 +23,7 @@ use yii\helpers\FileHelper;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class FileCache extends \yii\caching\Cache
+class FileCache extends Cache
 {
     /**
      * @var string a string prefixed to every cache key. This is needed when you store

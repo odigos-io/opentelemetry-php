@@ -1,13 +1,13 @@
 <?php
 
-namespace Illuminate\Cache;
+namespace Odigos\Illuminate\Cache;
 
 use Closure;
-use Illuminate\Contracts\Cache\Repository as Cache;
-use Illuminate\Redis\Connections\PhpRedisConnection;
-use Illuminate\Support\Collection;
-use Illuminate\Support\InteractsWithTime;
-use function Illuminate\Support\enum_value;
+use Odigos\Illuminate\Contracts\Cache\Repository as Cache;
+use Odigos\Illuminate\Redis\Connections\PhpRedisConnection;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\InteractsWithTime;
+use function Odigos\Illuminate\Support\enum_value;
 class RateLimiter
 {
     use InteractsWithTime;
@@ -243,7 +243,7 @@ class RateLimiter
     protected function withoutSerializationOrCompression(callable $callback)
     {
         $store = $this->cache->getStore();
-        if (!$store instanceof \Illuminate\Cache\RedisStore) {
+        if (!$store instanceof RedisStore) {
             return $callback();
         }
         $connection = $store->connection();

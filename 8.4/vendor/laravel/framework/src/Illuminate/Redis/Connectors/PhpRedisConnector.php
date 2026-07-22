@@ -1,13 +1,13 @@
 <?php
 
-namespace Illuminate\Redis\Connectors;
+namespace Odigos\Illuminate\Redis\Connectors;
 
-use Illuminate\Contracts\Redis\Connector;
-use Illuminate\Redis\Connections\PhpRedisClusterConnection;
-use Illuminate\Redis\Connections\PhpRedisConnection;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Redis as RedisFacade;
-use Illuminate\Support\Str;
+use Odigos\Illuminate\Contracts\Redis\Connector;
+use Odigos\Illuminate\Redis\Connections\PhpRedisClusterConnection;
+use Odigos\Illuminate\Redis\Connections\PhpRedisConnection;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Facades\Redis as RedisFacade;
+use Odigos\Illuminate\Support\Str;
 use InvalidArgumentException;
 use LogicException;
 use Redis;

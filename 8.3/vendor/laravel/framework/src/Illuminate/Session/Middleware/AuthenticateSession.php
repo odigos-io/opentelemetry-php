@@ -1,13 +1,13 @@
 <?php
 
-namespace Illuminate\Session\Middleware;
+namespace Odigos\Illuminate\Session\Middleware;
 
 use BadMethodCallException;
 use Closure;
-use Illuminate\Auth\AuthenticationException;
-use Illuminate\Contracts\Auth\Factory as AuthFactory;
-use Illuminate\Contracts\Session\Middleware\AuthenticatesSessions;
-use Illuminate\Http\Request;
+use Odigos\Illuminate\Auth\AuthenticationException;
+use Odigos\Illuminate\Contracts\Auth\Factory as AuthFactory;
+use Odigos\Illuminate\Contracts\Session\Middleware\AuthenticatesSessions;
+use Odigos\Illuminate\Http\Request;
 class AuthenticateSession implements AuthenticatesSessions
 {
     /**

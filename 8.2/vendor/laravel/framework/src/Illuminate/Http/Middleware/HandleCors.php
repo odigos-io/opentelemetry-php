@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Http\Middleware;
+namespace Odigos\Illuminate\Http\Middleware;
 
 use Closure;
-use Fruitcake\Cors\CorsService;
-use Illuminate\Contracts\Container\Container;
-use Illuminate\Http\Request;
+use Odigos\Fruitcake\Cors\CorsService;
+use Odigos\Illuminate\Contracts\Container\Container;
+use Odigos\Illuminate\Http\Request;
 class HandleCors
 {
     /**

@@ -5,9 +5,9 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\filters\auth;
+namespace Odigos\yii\filters\auth;
 
-use yii\base\Component;
+use Odigos\yii\base\Component;
 /**
  * HttpBearerAuth is an action filter that supports the authentication method based on HTTP Bearer token.
  *
@@ -30,7 +30,7 @@ use yii\base\Component;
  * @template T of Component = Component
  * @extends HttpHeaderAuth<T>
  */
-class HttpBearerAuth extends \yii\filters\auth\HttpHeaderAuth
+class HttpBearerAuth extends HttpHeaderAuth
 {
     /**
      * {@inheritdoc}

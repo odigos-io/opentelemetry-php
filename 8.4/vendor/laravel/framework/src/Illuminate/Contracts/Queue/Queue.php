@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Contracts\Queue;
+namespace Odigos\Illuminate\Contracts\Queue;
 
 /**
  * @method int pendingSize(string|null $queue = null)

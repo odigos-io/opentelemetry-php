@@ -1,20 +1,20 @@
 <?php
 
-namespace Illuminate\Broadcasting\Broadcasters;
+namespace Odigos\Illuminate\Broadcasting\Broadcasters;
 
-use Illuminate\Broadcasting\BroadcastException;
-use Illuminate\Contracts\Redis\Factory as Redis;
-use Illuminate\Redis\Connections\PhpRedisClusterConnection;
-use Illuminate\Redis\Connections\PredisClusterConnection;
-use Illuminate\Redis\Connections\PredisConnection;
-use Illuminate\Support\Arr;
+use Odigos\Illuminate\Broadcasting\BroadcastException;
+use Odigos\Illuminate\Contracts\Redis\Factory as Redis;
+use Odigos\Illuminate\Redis\Connections\PhpRedisClusterConnection;
+use Odigos\Illuminate\Redis\Connections\PredisClusterConnection;
+use Odigos\Illuminate\Redis\Connections\PredisConnection;
+use Odigos\Illuminate\Support\Arr;
 use Odigos\Predis\Connection\Cluster\RedisCluster;
 use Odigos\Predis\Connection\ConnectionException;
 use RedisException;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-class RedisBroadcaster extends \Illuminate\Broadcasting\Broadcasters\Broadcaster
+use Odigos\Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+class RedisBroadcaster extends Broadcaster
 {
-    use \Illuminate\Broadcasting\Broadcasters\UsePusherChannelConventions;
+    use UsePusherChannelConventions;
     /**
      * The Redis instance.
      *

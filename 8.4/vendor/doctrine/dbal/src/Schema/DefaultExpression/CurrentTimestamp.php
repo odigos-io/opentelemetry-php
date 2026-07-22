@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Schema\DefaultExpression;
+namespace Odigos\Doctrine\DBAL\Schema\DefaultExpression;
 
-use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Doctrine\DBAL\Schema\DefaultExpression;
+use Odigos\Doctrine\DBAL\Platforms\AbstractPlatform;
+use Odigos\Doctrine\DBAL\Schema\DefaultExpression;
 /**
  * Represents the "current timestamp" default expression.
  */

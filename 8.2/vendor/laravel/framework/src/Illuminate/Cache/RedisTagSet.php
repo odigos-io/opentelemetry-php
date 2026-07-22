@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Cache;
+namespace Odigos\Illuminate\Cache;
 
-use Illuminate\Redis\Connections\PhpRedisConnection;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\LazyCollection;
-class RedisTagSet extends \Illuminate\Cache\TagSet
+use Odigos\Illuminate\Redis\Connections\PhpRedisConnection;
+use Odigos\Illuminate\Support\Carbon;
+use Odigos\Illuminate\Support\LazyCollection;
+class RedisTagSet extends TagSet
 {
     /**
      * Add a reference entry to the tag set's underlying sorted set.

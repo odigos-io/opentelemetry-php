@@ -13,28 +13,28 @@ declare (strict_types=1);
  * @since         1.2.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\TestSuite;
+namespace Odigos\Cake\TestSuite;
 
-use Cake\Core\App;
-use Cake\Core\Configure;
-use Cake\Core\Plugin;
-use Cake\Datasource\ConnectionManager;
-use Cake\Error\Debugger;
-use Cake\Error\PhpError;
-use Cake\Event\EventManager;
-use Cake\Http\BaseApplication;
-use Cake\Http\MiddlewareQueue;
-use Cake\ORM\Entity;
-use Cake\ORM\Exception\MissingTableClassException;
-use Cake\ORM\Locator\LocatorAwareTrait;
-use Cake\ORM\Table;
-use Cake\Routing\Router;
-use Cake\Routing\RoutingApplicationInterface;
-use Cake\TestSuite\Constraint\EventFired;
-use Cake\TestSuite\Constraint\EventFiredWith;
-use Cake\TestSuite\Fixture\FixtureStrategyInterface;
-use Cake\TestSuite\Fixture\TruncateStrategy;
-use Cake\Utility\Inflector;
+use Odigos\Cake\Core\App;
+use Odigos\Cake\Core\Configure;
+use Odigos\Cake\Core\Plugin;
+use Odigos\Cake\Datasource\ConnectionManager;
+use Odigos\Cake\Error\Debugger;
+use Odigos\Cake\Error\PhpError;
+use Odigos\Cake\Event\EventManager;
+use Odigos\Cake\Http\BaseApplication;
+use Odigos\Cake\Http\MiddlewareQueue;
+use Odigos\Cake\ORM\Entity;
+use Odigos\Cake\ORM\Exception\MissingTableClassException;
+use Odigos\Cake\ORM\Locator\LocatorAwareTrait;
+use Odigos\Cake\ORM\Table;
+use Odigos\Cake\Routing\Router;
+use Odigos\Cake\Routing\RoutingApplicationInterface;
+use Odigos\Cake\TestSuite\Constraint\EventFired;
+use Odigos\Cake\TestSuite\Constraint\EventFiredWith;
+use Odigos\Cake\TestSuite\Fixture\FixtureStrategyInterface;
+use Odigos\Cake\TestSuite\Fixture\TruncateStrategy;
+use Odigos\Cake\Utility\Inflector;
 use Closure;
 use Exception;
 use LogicException;
@@ -43,14 +43,14 @@ use Odigos\PHPUnit\Framework\MockObject\MockObject;
 use Odigos\PHPUnit\Framework\TestCase as BaseTestCase;
 use ReflectionClass;
 use ReflectionException;
-use function Cake\Core\pluginSplit;
+use function Odigos\Cake\Core\pluginSplit;
 /**
  * Cake TestCase class
  */
 abstract class TestCase extends BaseTestCase
 {
     use LocatorAwareTrait;
-    use \Cake\TestSuite\PHPUnitConsecutiveTrait;
+    use PHPUnitConsecutiveTrait;
     /**
      * Fixtures used by this test case.
      *

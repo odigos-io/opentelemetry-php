@@ -8,13 +8,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpFoundation\Session\Storage\Handler;
+namespace Odigos\Symfony\Component\HttpFoundation\Session\Storage\Handler;
 
-use Doctrine\DBAL\Schema\Name\Identifier;
-use Doctrine\DBAL\Schema\Name\UnqualifiedName;
-use Doctrine\DBAL\Schema\PrimaryKeyConstraint;
-use Doctrine\DBAL\Schema\Schema;
-use Doctrine\DBAL\Types\Types;
+use Odigos\Doctrine\DBAL\Schema\Name\Identifier;
+use Odigos\Doctrine\DBAL\Schema\Name\UnqualifiedName;
+use Odigos\Doctrine\DBAL\Schema\PrimaryKeyConstraint;
+use Odigos\Doctrine\DBAL\Schema\Schema;
+use Odigos\Doctrine\DBAL\Types\Types;
 /**
  * Session handler using a PDO connection to read and write data.
  *
@@ -42,7 +42,7 @@ use Doctrine\DBAL\Types\Types;
  * @author Michael Williams <michael.williams@funsational.com>
  * @author Tobias Schultze <http://tobion.de>
  */
-class PdoSessionHandler extends \Symfony\Component\HttpFoundation\Session\Storage\Handler\AbstractSessionHandler
+class PdoSessionHandler extends AbstractSessionHandler
 {
     /**
      * No locking is done. This means sessions are prone to loss of data due to

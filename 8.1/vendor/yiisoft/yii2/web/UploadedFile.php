@@ -5,12 +5,12 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\web;
+namespace Odigos\yii\web;
 
 use Odigos\Yii;
-use yii\base\BaseObject;
-use yii\helpers\ArrayHelper;
-use yii\helpers\Html;
+use Odigos\yii\base\BaseObject;
+use Odigos\yii\helpers\ArrayHelper;
+use Odigos\yii\helpers\Html;
 /**
  * UploadedFile represents the information for an uploaded file.
  *

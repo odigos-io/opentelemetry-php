@@ -14,11 +14,11 @@ declare (strict_types=1);
  * @since         3.5.4
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Cache\Engine;
+namespace Odigos\Cake\Cache\Engine;
 
 use APCUIterator;
-use Cake\Cache\CacheEngine;
-use Cake\Core\Exception\CakeException;
+use Odigos\Cake\Cache\CacheEngine;
+use Odigos\Cake\Core\Exception\CakeException;
 use DateInterval;
 /**
  * APCu storage engine for cache

@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenAI\Testing\Responses\Fixtures\Batches;
+namespace Odigos\OpenAI\Testing\Responses\Fixtures\Batches;
 
 final class BatchResponseFixture
 {

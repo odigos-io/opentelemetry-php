@@ -14,10 +14,10 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\View\Form;
+namespace Odigos\Cake\View\Form;
 
-use Cake\Utility\Hash;
-use function Cake\I18n\__d;
+use Odigos\Cake\Utility\Hash;
+use function Odigos\Cake\I18n\__d;
 /**
  * Provides a basic array based context provider for FormHelper.
  *
@@ -68,7 +68,7 @@ use function Cake\I18n\__d;
  *  ];
  *  ```
  */
-class ArrayContext implements \Cake\View\Form\ContextInterface
+class ArrayContext implements ContextInterface
 {
     /**
      * Context data for this object.

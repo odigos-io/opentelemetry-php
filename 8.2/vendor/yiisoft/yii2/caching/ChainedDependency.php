@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\caching;
+namespace Odigos\yii\caching;
 
 /**
  * ChainedDependency represents a dependency which is composed of a list of other dependencies.
@@ -19,7 +19,7 @@ namespace yii\caching;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class ChainedDependency extends \yii\caching\Dependency
+class ChainedDependency extends Dependency
 {
     /**
      * @var Dependency[] list of dependencies that this dependency is composed of.

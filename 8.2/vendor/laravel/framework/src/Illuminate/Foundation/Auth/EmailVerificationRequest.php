@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Foundation\Auth;
+namespace Odigos\Illuminate\Foundation\Auth;
 
-use Illuminate\Auth\Events\Verified;
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Validator;
+use Odigos\Illuminate\Auth\Events\Verified;
+use Odigos\Illuminate\Foundation\Http\FormRequest;
+use Odigos\Illuminate\Validation\Validator;
 class EmailVerificationRequest extends FormRequest
 {
     /**

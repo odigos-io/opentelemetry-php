@@ -5,12 +5,12 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\widgets;
+namespace Odigos\yii\widgets;
 
-use yii\base\InvalidConfigException;
-use yii\base\Model;
-use yii\base\Widget;
-use yii\helpers\Html;
+use Odigos\yii\base\InvalidConfigException;
+use Odigos\yii\base\Model;
+use Odigos\yii\base\Widget;
+use Odigos\yii\helpers\Html;
 /**
  * InputWidget is the base class for widgets that collect user inputs.
  *

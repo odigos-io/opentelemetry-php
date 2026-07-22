@@ -1,19 +1,19 @@
 <?php
 
-namespace Illuminate\Support\Testing\Fakes;
+namespace Odigos\Illuminate\Support\Testing\Fakes;
 
 use Closure;
-use Illuminate\Container\Container;
-use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Contracts\Events\ShouldDispatchAfterCommit;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
-use Illuminate\Support\Traits\ForwardsCalls;
-use Illuminate\Support\Traits\ReflectsClosures;
+use Odigos\Illuminate\Container\Container;
+use Odigos\Illuminate\Contracts\Events\Dispatcher;
+use Odigos\Illuminate\Contracts\Events\ShouldDispatchAfterCommit;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Str;
+use Odigos\Illuminate\Support\Traits\ForwardsCalls;
+use Odigos\Illuminate\Support\Traits\ReflectsClosures;
 use Odigos\PHPUnit\Framework\Assert as PHPUnit;
 use ReflectionFunction;
-class EventFake implements Dispatcher, \Illuminate\Support\Testing\Fakes\Fake
+class EventFake implements Dispatcher, Fake
 {
     use ForwardsCalls, ReflectsClosures;
     /**

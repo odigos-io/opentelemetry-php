@@ -14,13 +14,13 @@ declare (strict_types=1);
  * @since         2.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\View;
+namespace Odigos\Cake\View;
 
-use Cake\Core\App;
-use Cake\Core\ObjectRegistry;
-use Cake\Event\EventDispatcherInterface;
-use Cake\Event\EventDispatcherTrait;
-use Cake\View\Exception\MissingHelperException;
+use Odigos\Cake\Core\App;
+use Odigos\Cake\Core\ObjectRegistry;
+use Odigos\Cake\Event\EventDispatcherInterface;
+use Odigos\Cake\Event\EventDispatcherTrait;
+use Odigos\Cake\View\Exception\MissingHelperException;
 /**
  * HelperRegistry is used as a registry for loaded helpers and handles loading
  * and constructing helper class objects.
@@ -39,13 +39,13 @@ class HelperRegistry extends ObjectRegistry implements EventDispatcherInterface
      *
      * @var \Cake\View\View
      */
-    protected \Cake\View\View $_View;
+    protected View $_View;
     /**
      * Constructor
      *
      * @param \Cake\View\View $view View object.
      */
-    public function __construct(\Cake\View\View $view)
+    public function __construct(View $view)
     {
         $this->_View = $view;
         $this->setEventManager($view->getEventManager());
@@ -85,7 +85,7 @@ class HelperRegistry extends ObjectRegistry implements EventDispatcherInterface
      * @param string $name Name of property to read
      * @return \Cake\View\Helper|null
      */
-    public function __get(string $name): ?\Cake\View\Helper
+    public function __get(string $name): ?Helper
     {
         // This calls __isset() and loading the named helper if it isn't already loaded.
         if (isset($this->{$name})) {
@@ -132,7 +132,7 @@ class HelperRegistry extends ObjectRegistry implements EventDispatcherInterface
      * @param array<string, mixed> $config An array of settings to use for the helper.
      * @return \Cake\View\Helper The constructed helper class.
      */
-    protected function _create(object|string $class, string $alias, array $config): \Cake\View\Helper
+    protected function _create(object|string $class, string $alias, array $config): Helper
     {
         if (is_object($class)) {
             return $class;

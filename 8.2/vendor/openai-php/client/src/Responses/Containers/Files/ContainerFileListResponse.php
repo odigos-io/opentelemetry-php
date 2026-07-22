@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Responses\Containers\Files;
+namespace Odigos\OpenAI\Responses\Containers\Files;
 
-use OpenAI\Contracts\ResponseContract;
-use OpenAI\Contracts\ResponseHasMetaInformationContract;
-use OpenAI\Responses\Concerns\ArrayAccessible;
-use OpenAI\Responses\Concerns\HasMetaInformation;
-use OpenAI\Responses\Meta\MetaInformation;
-use OpenAI\Testing\Responses\Concerns\Fakeable;
+use Odigos\OpenAI\Contracts\ResponseContract;
+use Odigos\OpenAI\Contracts\ResponseHasMetaInformationContract;
+use Odigos\OpenAI\Responses\Concerns\ArrayAccessible;
+use Odigos\OpenAI\Responses\Concerns\HasMetaInformation;
+use Odigos\OpenAI\Responses\Meta\MetaInformation;
+use Odigos\OpenAI\Testing\Responses\Concerns\Fakeable;
 /**
  * @phpstan-import-type ContainerFileType from ContainerFileResponse
  *
@@ -38,7 +38,7 @@ final class ContainerFileListResponse implements ResponseContract, ResponseHasMe
      */
     public static function from(array $attributes, MetaInformation $meta): self
     {
-        $data = array_map(fn(array $result): \OpenAI\Responses\Containers\Files\ContainerFileResponse => \OpenAI\Responses\Containers\Files\ContainerFileResponse::from($result, $meta), $attributes['data']);
+        $data = array_map(fn(array $result): ContainerFileResponse => ContainerFileResponse::from($result, $meta), $attributes['data']);
         return new self(object: $attributes['object'], data: $data, firstId: $attributes['first_id'] ?? null, lastId: $attributes['last_id'] ?? null, hasMore: $attributes['has_more'], meta: $meta);
     }
     /**
@@ -46,6 +46,6 @@ final class ContainerFileListResponse implements ResponseContract, ResponseHasMe
      */
     public function toArray(): array
     {
-        return ['object' => $this->object, 'data' => array_map(static fn(\OpenAI\Responses\Containers\Files\ContainerFileResponse $response): array => $response->toArray(), $this->data), 'first_id' => $this->firstId, 'last_id' => $this->lastId, 'has_more' => $this->hasMore];
+        return ['object' => $this->object, 'data' => array_map(static fn(ContainerFileResponse $response): array => $response->toArray(), $this->data), 'first_id' => $this->firstId, 'last_id' => $this->lastId, 'has_more' => $this->hasMore];
     }
 }

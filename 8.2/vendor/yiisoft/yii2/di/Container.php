@@ -5,16 +5,16 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\di;
+namespace Odigos\yii\di;
 
 use ReflectionClass;
 use ReflectionException;
 use ReflectionNamedType;
 use ReflectionParameter;
 use Odigos\Yii;
-use yii\base\Component;
-use yii\base\InvalidConfigException;
-use yii\helpers\ArrayHelper;
+use Odigos\yii\base\Component;
+use Odigos\yii\base\InvalidConfigException;
+use Odigos\yii\helpers\ArrayHelper;
 /**
  * Container implements a [dependency injection](https://en.wikipedia.org/wiki/Dependency_injection) container.
  *
@@ -161,7 +161,7 @@ class Container extends Component
      */
     public function get($class, $params = [], $config = [])
     {
-        if ($class instanceof \yii\di\Instance) {
+        if ($class instanceof Instance) {
             $class = $class->id;
         }
         if (isset($this->_singletons[$class])) {
@@ -326,7 +326,7 @@ class Container extends Component
             return ['class' => $class];
         } elseif (is_string($definition)) {
             return ['class' => $definition];
-        } elseif ($definition instanceof \yii\di\Instance) {
+        } elseif ($definition instanceof Instance) {
             return ['class' => $definition->id];
         } elseif (is_callable($definition, \true) || is_object($definition)) {
             return $definition;
@@ -389,13 +389,13 @@ class Container extends Component
         }
         $dependencies = $this->resolveDependencies($dependencies, $reflection);
         if (!$reflection->isInstantiable()) {
-            throw new \yii\di\NotInstantiableException($reflection->name);
+            throw new NotInstantiableException($reflection->name);
         }
         if (empty($config)) {
             return $reflection->newInstanceArgs($dependencies);
         }
         $config = $this->resolveDependencies($config);
-        if (!empty($dependencies) && $reflection->implementsInterface('yii\base\Configurable')) {
+        if (!empty($dependencies) && $reflection->implementsInterface('Odigos\yii\base\Configurable')) {
             // set $config as the last parameter (existing one will be overwritten)
             $dependencies[count($dependencies) - 1] = $config;
             return $reflection->newInstanceArgs($dependencies);
@@ -480,7 +480,7 @@ class Container extends Component
         try {
             $reflection = new ReflectionClass($class);
         } catch (\ReflectionException $e) {
-            throw new \yii\di\NotInstantiableException($class, 'Failed to instantiate component or class "' . $class . '".', 0, $e);
+            throw new NotInstantiableException($class, 'Failed to instantiate component or class "' . $class . '".', 0, $e);
         }
         $constructor = $reflection->getConstructor();
         if ($constructor !== null) {
@@ -506,7 +506,7 @@ class Container extends Component
                                     $notInstantiableClass = $type->getName();
                                 }
                             }
-                            throw new \yii\di\NotInstantiableException($notInstantiableClass, $notInstantiableClass === null ? 'Can not instantiate unknown class.' : null);
+                            throw new NotInstantiableException($notInstantiableClass, $notInstantiableClass === null ? 'Can not instantiate unknown class.' : null);
                         } else {
                             $c = null;
                         }
@@ -515,7 +515,7 @@ class Container extends Component
                 }
                 $className = $isClass ? $c->getName() : null;
                 if ($className !== null) {
-                    $dependencies[$param->getName()] = \yii\di\Instance::of($className, $this->isNulledParam($param));
+                    $dependencies[$param->getName()] = Instance::of($className, $this->isNulledParam($param));
                 } else {
                     $dependencies[$param->getName()] = $param->isDefaultValueAvailable() ? $param->getDefaultValue() : null;
                 }
@@ -543,7 +543,7 @@ class Container extends Component
     protected function resolveDependencies($dependencies, $reflection = null)
     {
         foreach ($dependencies as $index => $dependency) {
-            if ($dependency instanceof \yii\di\Instance) {
+            if ($dependency instanceof Instance) {
                 if ($dependency->id !== null) {
                     $dependencies[$index] = $dependency->get($this);
                 } elseif ($reflection !== null) {
@@ -650,7 +650,7 @@ class Container extends Component
                     // If the argument is optional we catch not instantiable exceptions
                     try {
                         $args[] = $this->get($className);
-                    } catch (\yii\di\NotInstantiableException $e) {
+                    } catch (NotInstantiableException $e) {
                         if ($param->isDefaultValueAvailable()) {
                             $args[] = $param->getDefaultValue();
                         } else {

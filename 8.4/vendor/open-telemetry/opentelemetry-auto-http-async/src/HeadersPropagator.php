@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenTelemetry\Contrib\Instrumentation\HttpAsyncClient;
+namespace Odigos\OpenTelemetry\Contrib\Instrumentation\HttpAsyncClient;
 
 use function assert;
 use OpenTelemetry\Context\Propagation\PropagationSetterInterface;

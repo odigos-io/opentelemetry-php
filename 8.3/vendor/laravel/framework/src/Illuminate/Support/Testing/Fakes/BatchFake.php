@@ -1,12 +1,12 @@
 <?php
 
-namespace Illuminate\Support\Testing\Fakes;
+namespace Odigos\Illuminate\Support\Testing\Fakes;
 
 use Odigos\Carbon\CarbonImmutable;
-use Illuminate\Bus\Batch;
-use Illuminate\Bus\UpdatedBatchJobCounts;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Collection;
+use Odigos\Illuminate\Bus\Batch;
+use Odigos\Illuminate\Bus\UpdatedBatchJobCounts;
+use Odigos\Illuminate\Support\Carbon;
+use Odigos\Illuminate\Support\Collection;
 class BatchFake extends Batch
 {
     /**

@@ -14,10 +14,10 @@ declare (strict_types=1);
  * @since         2.1.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\View;
+namespace Odigos\Cake\View;
 
-use Cake\Core\Configure;
-use function Cake\Core\h;
+use Odigos\Cake\Core\Configure;
+use function Odigos\Cake\Core\h;
 /**
  * A view class that is used for JSON responses.
  *
@@ -55,7 +55,7 @@ use function Cake\Core\h;
  * string to specify custom query string parameter name which will contain the
  * callback function name.
  */
-class JsonView extends \Cake\View\SerializedView
+class JsonView extends SerializedView
 {
     /**
      * JSON layouts are located in the JSON subdirectory of `Layouts/`

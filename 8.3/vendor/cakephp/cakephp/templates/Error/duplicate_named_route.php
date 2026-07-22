@@ -16,8 +16,8 @@ namespace Odigos;
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  * @var \Cake\Core\Exception\CakeException $error
  */
-use Cake\Error\Debugger;
-use function Cake\Core\h;
+use Odigos\Cake\Error\Debugger;
+use function Odigos\Cake\Core\h;
 $this->layout = 'dev_error';
 $this->assign('title', 'Duplicate Named Route');
 $this->assign('templateName', 'duplicate_named_route.php');

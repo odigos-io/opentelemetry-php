@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Auth;
+namespace Odigos\Illuminate\Auth;
 
 class Recaller
 {

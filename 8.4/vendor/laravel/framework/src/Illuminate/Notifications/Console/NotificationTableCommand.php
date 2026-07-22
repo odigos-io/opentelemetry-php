@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Notifications\Console;
+namespace Odigos\Illuminate\Notifications\Console;
 
-use Illuminate\Console\MigrationGeneratorCommand;
-use Symfony\Component\Console\Attribute\AsCommand;
+use Odigos\Illuminate\Console\MigrationGeneratorCommand;
+use Odigos\Symfony\Component\Console\Attribute\AsCommand;
 #[AsCommand(name: 'make:notifications-table', aliases: ['notifications:table'])]
 class NotificationTableCommand extends MigrationGeneratorCommand
 {

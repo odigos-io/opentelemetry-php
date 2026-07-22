@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Foundation\Exceptions\Whoops;
+namespace Odigos\Illuminate\Foundation\Exceptions\Whoops;
 
-use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Arr;
+use Odigos\Illuminate\Filesystem\Filesystem;
+use Odigos\Illuminate\Support\Arr;
 use Odigos\Whoops\Handler\PrettyPageHandler;
 class WhoopsHandler
 {

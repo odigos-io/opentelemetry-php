@@ -14,9 +14,9 @@ declare (strict_types=1);
  * @since         2.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Console;
+namespace Odigos\Cake\Console;
 
-use Cake\Utility\Text;
+use Odigos\Cake\Utility\Text;
 use SimpleXMLElement;
 /**
  * HelpFormatter formats help for console shells. Can format to either
@@ -46,7 +46,7 @@ class HelpFormatter
      *
      * @var \Cake\Console\ConsoleOptionParser
      */
-    protected \Cake\Console\ConsoleOptionParser $_parser;
+    protected ConsoleOptionParser $_parser;
     /**
      * Alias to display in the output.
      *
@@ -58,7 +58,7 @@ class HelpFormatter
      *
      * @param \Cake\Console\ConsoleOptionParser $parser The option parser help is being generated for.
      */
-    public function __construct(\Cake\Console\ConsoleOptionParser $parser)
+    public function __construct(ConsoleOptionParser $parser)
     {
         $this->_parser = $parser;
     }

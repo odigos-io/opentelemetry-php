@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Console\View\Components\Mutators;
+namespace Odigos\Illuminate\Console\View\Components\Mutators;
 
-use Illuminate\Support\Stringable;
+use Odigos\Illuminate\Support\Stringable;
 class EnsurePunctuation
 {
     /**

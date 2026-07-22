@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\validators;
+namespace Odigos\yii\validators;
 
 /**
  * DefaultValueValidator sets the attribute to be the specified default value.
@@ -16,7 +16,7 @@ namespace yii\validators;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class DefaultValueValidator extends \yii\validators\Validator
+class DefaultValueValidator extends Validator
 {
     /**
      * @var mixed the default value or an anonymous function that returns the default value which will

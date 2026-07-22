@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Broadcasting;
+namespace Odigos\Illuminate\Broadcasting;
 
-use Illuminate\Contracts\Events\Dispatcher;
-use function Illuminate\Support\enum_value;
+use Odigos\Illuminate\Contracts\Events\Dispatcher;
+use function Odigos\Illuminate\Support\enum_value;
 class PendingBroadcast
 {
     /**

@@ -4,11 +4,11 @@
  * THIS FILE IS AUTO-GENERATED. ANY CHANGES WILL BE LOST!
  */
 declare (strict_types=1);
-namespace MongoDB\Builder\Expression;
+namespace Odigos\MongoDB\Builder\Expression;
 
-use MongoDB\Builder\Type\Encode;
-use MongoDB\Builder\Type\OperatorInterface;
-use MongoDB\Exception\InvalidArgumentException;
+use Odigos\MongoDB\Builder\Type\Encode;
+use Odigos\MongoDB\Builder\Type\OperatorInterface;
+use Odigos\MongoDB\Exception\InvalidArgumentException;
 use function array_is_list;
 /**
  * Concatenates any number of strings.
@@ -16,7 +16,7 @@ use function array_is_list;
  * @see https://www.mongodb.com/docs/manual/reference/operator/aggregation/concat/
  * @internal
  */
-final class ConcatOperator implements \MongoDB\Builder\Expression\ResolvesToString, OperatorInterface
+final class ConcatOperator implements ResolvesToString, OperatorInterface
 {
     public const ENCODE = Encode::Single;
     public const NAME = '$concat';
@@ -27,7 +27,7 @@ final class ConcatOperator implements \MongoDB\Builder\Expression\ResolvesToStri
      * @param ResolvesToString|string ...$expression
      * @no-named-arguments
      */
-    public function __construct(\MongoDB\Builder\Expression\ResolvesToString|string ...$expression)
+    public function __construct(ResolvesToString|string ...$expression)
     {
         if (\count($expression) < 1) {
             throw new InvalidArgumentException(\sprintf('Expected at least %d values for $expression, got %d.', 1, \count($expression)));

@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Cake\Test\Fixture;
+namespace Odigos\Cake\Test\Fixture;
 
-use Cake\TestSuite\Fixture\TestFixture;
+use Odigos\Cake\TestSuite\Fixture\TestFixture;
 use Odigos\TestApp\Database\ColumnSchemaAwareTypeValueObject;
 class ColumnSchemaAwareTypeValuesFixture extends TestFixture
 {

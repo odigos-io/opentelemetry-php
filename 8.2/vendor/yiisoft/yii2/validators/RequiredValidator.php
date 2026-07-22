@@ -5,17 +5,17 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\validators;
+namespace Odigos\yii\validators;
 
 use Odigos\Yii;
-use yii\helpers\Json;
+use Odigos\yii\helpers\Json;
 /**
  * RequiredValidator validates that the specified attribute does not have null or empty value.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class RequiredValidator extends \yii\validators\Validator
+class RequiredValidator extends Validator
 {
     /**
      * @var bool whether to skip this validator if the value being validated is empty.
@@ -82,7 +82,7 @@ class RequiredValidator extends \yii\validators\Validator
      */
     public function clientValidateAttribute($model, $attribute, $view)
     {
-        \yii\validators\ValidationAsset::register($view);
+        ValidationAsset::register($view);
         $options = $this->getClientOptions($model, $attribute);
         return 'yii.validation.required(value, messages, ' . Json::htmlEncode($options) . ');';
     }

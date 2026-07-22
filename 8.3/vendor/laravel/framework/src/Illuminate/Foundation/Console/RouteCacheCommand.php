@@ -1,12 +1,12 @@
 <?php
 
-namespace Illuminate\Foundation\Console;
+namespace Odigos\Illuminate\Foundation\Console;
 
-use Illuminate\Console\Command;
-use Illuminate\Contracts\Console\Kernel as ConsoleKernelContract;
-use Illuminate\Filesystem\Filesystem;
-use Illuminate\Routing\RouteCollection;
-use Symfony\Component\Console\Attribute\AsCommand;
+use Odigos\Illuminate\Console\Command;
+use Odigos\Illuminate\Contracts\Console\Kernel as ConsoleKernelContract;
+use Odigos\Illuminate\Filesystem\Filesystem;
+use Odigos\Illuminate\Routing\RouteCollection;
+use Odigos\Symfony\Component\Console\Attribute\AsCommand;
 #[AsCommand(name: 'route:cache')]
 class RouteCacheCommand extends Command
 {

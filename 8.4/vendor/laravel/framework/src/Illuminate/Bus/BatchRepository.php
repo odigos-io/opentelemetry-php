@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Bus;
+namespace Odigos\Illuminate\Bus;
 
 use Closure;
 interface BatchRepository
@@ -26,7 +26,7 @@ interface BatchRepository
      * @param  \Illuminate\Bus\PendingBatch  $batch
      * @return \Illuminate\Bus\Batch
      */
-    public function store(\Illuminate\Bus\PendingBatch $batch);
+    public function store(PendingBatch $batch);
     /**
      * Increment the total number of jobs within the batch.
      *

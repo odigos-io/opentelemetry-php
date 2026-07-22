@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\ErrorHandler;
+namespace Odigos\Symfony\Component\ErrorHandler;
 
-use Symfony\Component\ErrorHandler\Exception\SilencedErrorContext;
+use Odigos\Symfony\Component\ErrorHandler\Exception\SilencedErrorContext;
 /**
  * @internal
  */

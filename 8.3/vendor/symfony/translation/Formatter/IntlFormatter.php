@@ -8,15 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Translation\Formatter;
+namespace Odigos\Symfony\Component\Translation\Formatter;
 
-use Symfony\Component\Translation\Exception\InvalidArgumentException;
-use Symfony\Component\Translation\Exception\LogicException;
+use Odigos\Symfony\Component\Translation\Exception\InvalidArgumentException;
+use Odigos\Symfony\Component\Translation\Exception\LogicException;
 /**
  * @author Guilherme Blanco <guilhermeblanco@hotmail.com>
  * @author Abdellatif Ait boudad <a.aitboudad@gmail.com>
  */
-class IntlFormatter implements \Symfony\Component\Translation\Formatter\IntlFormatterInterface
+class IntlFormatter implements IntlFormatterInterface
 {
     private bool $hasMessageFormatter;
     private array $cache = [];

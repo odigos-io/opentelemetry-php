@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Routing\Matcher;
+namespace Odigos\Symfony\Component\Routing\Matcher;
 
-use Symfony\Component\ExpressionLanguage\ExpressionFunction;
-use Symfony\Component\ExpressionLanguage\ExpressionFunctionProviderInterface;
-use Symfony\Contracts\Service\ServiceProviderInterface;
+use Odigos\Symfony\Component\ExpressionLanguage\ExpressionFunction;
+use Odigos\Symfony\Component\ExpressionLanguage\ExpressionFunctionProviderInterface;
+use Odigos\Symfony\Contracts\Service\ServiceProviderInterface;
 /**
  * Exposes functions defined in the request context to route conditions.
  *

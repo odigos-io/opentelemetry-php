@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Http\Resources\Json;
+namespace Odigos\Illuminate\Http\Resources\Json;
 
-use Illuminate\Contracts\Support\Responsable;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Collection;
+use Odigos\Illuminate\Contracts\Support\Responsable;
+use Odigos\Illuminate\Database\Eloquent\Model;
+use Odigos\Illuminate\Support\Collection;
 class ResourceResponse implements Responsable
 {
     /**
@@ -63,7 +63,7 @@ class ResourceResponse implements Responsable
      */
     protected function haveDefaultWrapperAndDataIsUnwrapped($data)
     {
-        if ($this->resource instanceof \Illuminate\Http\Resources\Json\JsonResource && $this->resource::$forceWrapping) {
+        if ($this->resource instanceof JsonResource && $this->resource::$forceWrapping) {
             return $this->wrapper() !== null;
         }
         return $this->wrapper() && !array_key_exists($this->wrapper(), $data);

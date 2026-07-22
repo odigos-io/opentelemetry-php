@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace MongoDB\Operation;
+namespace Odigos\MongoDB\Operation;
 
 use EmptyIterator;
 use Iterator;
@@ -25,10 +25,10 @@ use MongoDB\Driver\Exception\CommandException;
 use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
 use MongoDB\Driver\Server;
 use MongoDB\Driver\Session;
-use MongoDB\Exception\InvalidArgumentException;
-use MongoDB\Model\CachingIterator;
-use MongoDB\Model\CallbackIterator;
-use MongoDB\Model\IndexInfo;
+use Odigos\MongoDB\Exception\InvalidArgumentException;
+use Odigos\MongoDB\Model\CachingIterator;
+use Odigos\MongoDB\Model\CallbackIterator;
+use Odigos\MongoDB\Model\IndexInfo;
 use function is_integer;
 /**
  * Operation for the listIndexes command.

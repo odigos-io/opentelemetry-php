@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpFoundation;
+namespace Odigos\Symfony\Component\HttpFoundation;
 
-use Symfony\Component\ExpressionLanguage\Expression;
-use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
-use Symfony\Component\HttpFoundation\RequestMatcher\ExpressionRequestMatcher as NewExpressionRequestMatcher;
-trigger_deprecation('symfony/http-foundation', '6.2', 'The "%s" class is deprecated, use "%s" instead.', \Symfony\Component\HttpFoundation\ExpressionRequestMatcher::class, NewExpressionRequestMatcher::class);
+use Odigos\Symfony\Component\ExpressionLanguage\Expression;
+use Odigos\Symfony\Component\ExpressionLanguage\ExpressionLanguage;
+use Odigos\Symfony\Component\HttpFoundation\RequestMatcher\ExpressionRequestMatcher as NewExpressionRequestMatcher;
+trigger_deprecation('symfony/http-foundation', '6.2', 'The "%s" class is deprecated, use "%s" instead.', ExpressionRequestMatcher::class, NewExpressionRequestMatcher::class);
 /**
  * ExpressionRequestMatcher uses an expression to match a Request.
  *
@@ -21,7 +21,7 @@ trigger_deprecation('symfony/http-foundation', '6.2', 'The "%s" class is depreca
  *
  * @deprecated since Symfony 6.2, use "Symfony\Component\HttpFoundation\RequestMatcher\ExpressionRequestMatcher" instead
  */
-class ExpressionRequestMatcher extends \Symfony\Component\HttpFoundation\RequestMatcher
+class ExpressionRequestMatcher extends RequestMatcher
 {
     private ExpressionLanguage $language;
     private Expression|string $expression;
@@ -33,7 +33,7 @@ class ExpressionRequestMatcher extends \Symfony\Component\HttpFoundation\Request
         $this->language = $language;
         $this->expression = $expression;
     }
-    public function matches(\Symfony\Component\HttpFoundation\Request $request): bool
+    public function matches(Request $request): bool
     {
         if (!isset($this->language)) {
             throw new \LogicException('Unable to match the request as the expression language is not available. Try running "composer require symfony/expression-language".');

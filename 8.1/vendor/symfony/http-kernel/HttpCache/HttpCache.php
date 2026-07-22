@@ -13,13 +13,13 @@
  * which is released under the MIT license.
  * (based on commit 02d2b48d75bcb63cf1c0c7149c077ad256542801)
  */
-namespace Symfony\Component\HttpKernel\HttpCache;
+namespace Odigos\Symfony\Component\HttpKernel\HttpCache;
 
-use Symfony\Component\HttpFoundation\Exception\SuspiciousOperationException;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
-use Symfony\Component\HttpKernel\TerminableInterface;
+use Odigos\Symfony\Component\HttpFoundation\Exception\SuspiciousOperationException;
+use Odigos\Symfony\Component\HttpFoundation\Request;
+use Odigos\Symfony\Component\HttpFoundation\Response;
+use Odigos\Symfony\Component\HttpKernel\HttpKernelInterface;
+use Odigos\Symfony\Component\HttpKernel\TerminableInterface;
 /**
  * Cache provides HTTP caching.
  *
@@ -29,10 +29,10 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
 {
     public const BODY_EVAL_BOUNDARY_LENGTH = 24;
     private HttpKernelInterface $kernel;
-    private \Symfony\Component\HttpKernel\HttpCache\StoreInterface $store;
+    private StoreInterface $store;
     private Request $request;
-    private ?\Symfony\Component\HttpKernel\HttpCache\SurrogateInterface $surrogate;
-    private ?\Symfony\Component\HttpKernel\HttpCache\ResponseCacheStrategyInterface $surrogateCacheStrategy = null;
+    private ?SurrogateInterface $surrogate;
+    private ?ResponseCacheStrategyInterface $surrogateCacheStrategy = null;
     private array $options = [];
     private array $traces = [];
     private ?Request $forwardedRequest = null;
@@ -87,7 +87,7 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
      *                            Unless your application needs to process events on cache hits, it is recommended
      *                            to set this to false to avoid having to bootstrap the Symfony framework on a cache hit.
      */
-    public function __construct(HttpKernelInterface $kernel, \Symfony\Component\HttpKernel\HttpCache\StoreInterface $store, ?\Symfony\Component\HttpKernel\HttpCache\SurrogateInterface $surrogate = null, array $options = [])
+    public function __construct(HttpKernelInterface $kernel, StoreInterface $store, ?SurrogateInterface $surrogate = null, array $options = [])
     {
         $this->store = $store;
         $this->kernel = $kernel;
@@ -102,7 +102,7 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
     /**
      * Gets the current store.
      */
-    public function getStore(): \Symfony\Component\HttpKernel\HttpCache\StoreInterface
+    public function getStore(): StoreInterface
     {
         return $this->store;
     }
@@ -156,7 +156,7 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
      *
      * @throws \LogicException
      */
-    public function getSurrogate(): \Symfony\Component\HttpKernel\HttpCache\SurrogateInterface
+    public function getSurrogate(): SurrogateInterface
     {
         return $this->surrogate;
     }
@@ -193,7 +193,7 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
             do {
                 try {
                     $response = $this->lookup($request, $catch);
-                } catch (\Symfony\Component\HttpKernel\HttpCache\CacheWasLockedException) {
+                } catch (CacheWasLockedException) {
                 }
             } while (null === $response);
         }
@@ -406,7 +406,7 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
     {
         $this->surrogate?->addSurrogateCapability($request);
         // always a "master" request (as the real master request can be in cache)
-        $response = \Symfony\Component\HttpKernel\HttpCache\SubRequestHandler::handle($this->kernel, $request, HttpKernelInterface::MAIN_REQUEST, $catch);
+        $response = SubRequestHandler::handle($this->kernel, $request, HttpKernelInterface::MAIN_REQUEST, $catch);
         $this->forwardedRequest = $request;
         /*
          * Support stale-if-error given on Responses or as a config option.
@@ -490,7 +490,7 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
         }
         // wait for the lock to be released
         if ($this->waitForLock($request)) {
-            throw new \Symfony\Component\HttpKernel\HttpCache\CacheWasLockedException();
+            throw new CacheWasLockedException();
             // unwind back to handle(), try again
         }
         // backend is slow as hell, send a 503 response (to avoid the dog pile effect)

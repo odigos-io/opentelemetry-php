@@ -8,22 +8,22 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Translation;
+namespace Odigos\Symfony\Component\Translation;
 
-use Symfony\Component\HttpKernel\CacheWarmer\WarmableInterface;
-use Symfony\Contracts\Service\ResetInterface;
-use Symfony\Contracts\Translation\LocaleAwareInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use Odigos\Symfony\Component\HttpKernel\CacheWarmer\WarmableInterface;
+use Odigos\Symfony\Contracts\Service\ResetInterface;
+use Odigos\Symfony\Contracts\Translation\LocaleAwareInterface;
+use Odigos\Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * @author Abdellatif Ait boudad <a.aitboudad@gmail.com>
  */
-final class DataCollectorTranslator implements TranslatorInterface, \Symfony\Component\Translation\TranslatorBagInterface, LocaleAwareInterface, WarmableInterface, ResetInterface
+final class DataCollectorTranslator implements TranslatorInterface, TranslatorBagInterface, LocaleAwareInterface, WarmableInterface, ResetInterface
 {
     public const MESSAGE_DEFINED = 0;
     public const MESSAGE_MISSING = 1;
     public const MESSAGE_EQUALS_FALLBACK = 2;
     private array $messages = [];
-    public function __construct(private TranslatorInterface&\Symfony\Component\Translation\TranslatorBagInterface&LocaleAwareInterface $translator)
+    public function __construct(private TranslatorInterface&TranslatorBagInterface&LocaleAwareInterface $translator)
     {
     }
     public function reset(): void
@@ -44,7 +44,7 @@ final class DataCollectorTranslator implements TranslatorInterface, \Symfony\Com
     {
         return $this->translator->getLocale();
     }
-    public function getCatalogue(?string $locale = null): \Symfony\Component\Translation\MessageCatalogueInterface
+    public function getCatalogue(?string $locale = null): MessageCatalogueInterface
     {
         return $this->translator->getCatalogue($locale);
     }
@@ -61,14 +61,14 @@ final class DataCollectorTranslator implements TranslatorInterface, \Symfony\Com
     }
     public function getFallbackLocales(): array
     {
-        if ($this->translator instanceof \Symfony\Component\Translation\Translator || method_exists($this->translator, 'getFallbackLocales')) {
+        if ($this->translator instanceof Translator || method_exists($this->translator, 'getFallbackLocales')) {
             return $this->translator->getFallbackLocales();
         }
         return [];
     }
     public function getGlobalParameters(): array
     {
-        if ($this->translator instanceof \Symfony\Component\Translation\Translator || method_exists($this->translator, 'getGlobalParameters')) {
+        if ($this->translator instanceof Translator || method_exists($this->translator, 'getGlobalParameters')) {
             return $this->translator->getGlobalParameters();
         }
         return [];

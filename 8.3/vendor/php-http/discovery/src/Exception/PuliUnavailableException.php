@@ -1,12 +1,12 @@
 <?php
 
-namespace Http\Discovery\Exception;
+namespace Odigos\Http\Discovery\Exception;
 
 /**
  * Thrown when we can't use Puli for discovery.
  *
  * @author Tobias Nyholm <tobias.nyholm@gmail.com>
  */
-final class PuliUnavailableException extends \Http\Discovery\Exception\StrategyUnavailableException
+final class PuliUnavailableException extends StrategyUnavailableException
 {
 }

@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Database\Query\Grammars;
+namespace Odigos\Illuminate\Database\Query\Grammars;
 
-use Illuminate\Database\Query\Builder;
-use Illuminate\Database\Query\JoinLateralClause;
+use Odigos\Illuminate\Database\Query\Builder;
+use Odigos\Illuminate\Database\Query\JoinLateralClause;
 use RuntimeException;
-class MariaDbGrammar extends \Illuminate\Database\Query\Grammars\MySqlGrammar
+class MariaDbGrammar extends MySqlGrammar
 {
     /**
      * Compile a "lateral join" clause.

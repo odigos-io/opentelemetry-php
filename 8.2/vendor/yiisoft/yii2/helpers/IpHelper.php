@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\helpers;
+namespace Odigos\yii\helpers;
 
 /**
  * Class IpHelper provides a set of IP-related static methods.
@@ -16,6 +16,6 @@ namespace yii\helpers;
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  * @since 2.0.14
  */
-class IpHelper extends \yii\helpers\BaseIpHelper
+class IpHelper extends BaseIpHelper
 {
 }

@@ -14,13 +14,13 @@ declare (strict_types=1);
  * @since         3.1.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\ORM;
+namespace Odigos\Cake\ORM;
 
-use Cake\Database\Expression\QueryExpression;
-use Cake\Database\Expression\TupleComparison;
-use Cake\Datasource\EntityInterface;
-use Cake\ORM\Query\SelectQuery;
-use Cake\Utility\Hash;
+use Odigos\Cake\Database\Expression\QueryExpression;
+use Odigos\Cake\Database\Expression\TupleComparison;
+use Odigos\Cake\Datasource\EntityInterface;
+use Odigos\Cake\ORM\Query\SelectQuery;
+use Odigos\Cake\Utility\Hash;
 /**
  * Contains methods that are capable of injecting eagerly loaded associations into
  * entities or lists of entities by using the same syntax as the EagerLoader.
@@ -42,7 +42,7 @@ class LazyEagerLoader
      * @param \Cake\ORM\Table $source The table to use for fetching the top level entities
      * @return \Cake\Datasource\EntityInterface|array<\Cake\Datasource\EntityInterface>
      */
-    public function loadInto(EntityInterface|array $entities, array $contain, \Cake\ORM\Table $source): EntityInterface|array
+    public function loadInto(EntityInterface|array $entities, array $contain, Table $source): EntityInterface|array
     {
         $returnSingle = \false;
         if ($entities instanceof EntityInterface) {
@@ -64,7 +64,7 @@ class LazyEagerLoader
      * @param \Cake\ORM\Table $source The table to use for fetching the top level entities
      * @return \Cake\ORM\Query\SelectQuery
      */
-    protected function _getQuery(array $entities, array $contain, \Cake\ORM\Table $source): SelectQuery
+    protected function _getQuery(array $entities, array $contain, Table $source): SelectQuery
     {
         $primaryKey = $source->getPrimaryKey();
         $method = is_string($primaryKey) ? 'get' : 'extract';
@@ -95,7 +95,7 @@ class LazyEagerLoader
      * @param array<string> $associations The name of the top level associations
      * @return array<string, string>
      */
-    protected function _getPropertyMap(\Cake\ORM\Table $source, array $associations): array
+    protected function _getPropertyMap(Table $source, array $associations): array
     {
         $map = [];
         $container = $source->associations();
@@ -116,7 +116,7 @@ class LazyEagerLoader
      * @param \Cake\ORM\Table $source The table where the entities came from
      * @return array<\Cake\Datasource\EntityInterface>
      */
-    protected function _injectResults(array $entities, SelectQuery $query, array $associations, \Cake\ORM\Table $source): array
+    protected function _injectResults(array $entities, SelectQuery $query, array $associations, Table $source): array
     {
         $injected = [];
         $properties = $this->_getPropertyMap($source, $associations);

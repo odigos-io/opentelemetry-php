@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Responses\FineTuning;
+namespace Odigos\OpenAI\Responses\FineTuning;
 
-use OpenAI\Contracts\ResponseContract;
-use OpenAI\Enums\FineTuning\FineTuningEventLevel;
-use OpenAI\Responses\Concerns\ArrayAccessible;
+use Odigos\OpenAI\Contracts\ResponseContract;
+use Odigos\OpenAI\Enums\FineTuning\FineTuningEventLevel;
+use Odigos\OpenAI\Responses\Concerns\ArrayAccessible;
 /**
  * @implements ResponseContract<array{object: string, id: string, created_at: int, level: string, message: string, data: array{step: int, train_loss: float, train_mean_token_accuracy: float}|null, type: string}>
  */
@@ -15,7 +15,7 @@ final class ListJobEventsResponseEvent implements ResponseContract
      * @use ArrayAccessible<array{object: string, id: string, created_at: int, level: string, message: string, data: array{step: int, train_loss: float, train_mean_token_accuracy: float}|null, type: string}>
      */
     use ArrayAccessible;
-    private function __construct(public readonly string $object, public readonly string $id, public readonly int $createdAt, public readonly FineTuningEventLevel $level, public readonly string $message, public readonly ?\OpenAI\Responses\FineTuning\ListJobEventsResponseEventData $data, public readonly string $type)
+    private function __construct(public readonly string $object, public readonly string $id, public readonly int $createdAt, public readonly FineTuningEventLevel $level, public readonly string $message, public readonly ?ListJobEventsResponseEventData $data, public readonly string $type)
     {
     }
     /**
@@ -25,7 +25,7 @@ final class ListJobEventsResponseEvent implements ResponseContract
      */
     public static function from(array $attributes): self
     {
-        return new self($attributes['object'], $attributes['id'], $attributes['created_at'], FineTuningEventLevel::from($attributes['level']), $attributes['message'], $attributes['data'] ? \OpenAI\Responses\FineTuning\ListJobEventsResponseEventData::from($attributes['data']) : null, $attributes['type']);
+        return new self($attributes['object'], $attributes['id'], $attributes['created_at'], FineTuningEventLevel::from($attributes['level']), $attributes['message'], $attributes['data'] ? ListJobEventsResponseEventData::from($attributes['data']) : null, $attributes['type']);
     }
     /**
      * {@inheritDoc}

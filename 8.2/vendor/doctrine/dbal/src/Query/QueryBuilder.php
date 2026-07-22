@@ -1,21 +1,21 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Query;
+namespace Odigos\Doctrine\DBAL\Query;
 
-use Doctrine\DBAL\ArrayParameterType;
-use Doctrine\DBAL\Cache\QueryCacheProfile;
-use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Exception;
-use Doctrine\DBAL\ParameterType;
-use Doctrine\DBAL\Query\Exception\NonUniqueAlias;
-use Doctrine\DBAL\Query\Exception\UnknownAlias;
-use Doctrine\DBAL\Query\Expression\CompositeExpression;
-use Doctrine\DBAL\Query\Expression\ExpressionBuilder;
-use Doctrine\DBAL\Query\ForUpdate\ConflictResolutionMode;
-use Doctrine\DBAL\Result;
-use Doctrine\DBAL\Statement;
-use Doctrine\DBAL\Types\Type;
+use Odigos\Doctrine\DBAL\ArrayParameterType;
+use Odigos\Doctrine\DBAL\Cache\QueryCacheProfile;
+use Odigos\Doctrine\DBAL\Connection;
+use Odigos\Doctrine\DBAL\Exception;
+use Odigos\Doctrine\DBAL\ParameterType;
+use Odigos\Doctrine\DBAL\Query\Exception\NonUniqueAlias;
+use Odigos\Doctrine\DBAL\Query\Exception\UnknownAlias;
+use Odigos\Doctrine\DBAL\Query\Expression\CompositeExpression;
+use Odigos\Doctrine\DBAL\Query\Expression\ExpressionBuilder;
+use Odigos\Doctrine\DBAL\Query\ForUpdate\ConflictResolutionMode;
+use Odigos\Doctrine\DBAL\Result;
+use Odigos\Doctrine\DBAL\Statement;
+use Odigos\Doctrine\DBAL\Types\Type;
 use function array_filter;
 use function array_intersect;
 use function array_key_exists;
@@ -60,7 +60,7 @@ class QueryBuilder
     /**
      * The type of query this is. Can be select, update or delete.
      */
-    private \Doctrine\DBAL\Query\QueryType $type = \Doctrine\DBAL\Query\QueryType::SELECT;
+    private QueryType $type = QueryType::SELECT;
     /**
      * The index of the first result to retrieve.
      */
@@ -127,7 +127,7 @@ class QueryBuilder
      * @var string[]
      */
     private array $orderBy = [];
-    private ?\Doctrine\DBAL\Query\ForUpdate $forUpdate = null;
+    private ?ForUpdate $forUpdate = null;
     /**
      * The values of an INSERT query.
      *
@@ -316,11 +316,11 @@ class QueryBuilder
     public function getSQL(): string
     {
         return $this->sql ??= match ($this->type) {
-            \Doctrine\DBAL\Query\QueryType::INSERT => $this->getSQLForInsert(),
-            \Doctrine\DBAL\Query\QueryType::DELETE => $this->getSQLForDelete(),
-            \Doctrine\DBAL\Query\QueryType::UPDATE => $this->getSQLForUpdate(),
-            \Doctrine\DBAL\Query\QueryType::SELECT => $this->getSQLForSelect(),
-            \Doctrine\DBAL\Query\QueryType::UNION => $this->getSQLForUnion(),
+            QueryType::INSERT => $this->getSQLForInsert(),
+            QueryType::DELETE => $this->getSQLForDelete(),
+            QueryType::UPDATE => $this->getSQLForUpdate(),
+            QueryType::SELECT => $this->getSQLForSelect(),
+            QueryType::UNION => $this->getSQLForUnion(),
         };
     }
     /**
@@ -459,7 +459,7 @@ class QueryBuilder
      */
     public function forUpdate(ConflictResolutionMode $conflictResolutionMode = ConflictResolutionMode::ORDINARY): self
     {
-        $this->forUpdate = new \Doctrine\DBAL\Query\ForUpdate($conflictResolutionMode);
+        $this->forUpdate = new ForUpdate($conflictResolutionMode);
         $this->sql = null;
         return $this;
     }
@@ -476,10 +476,10 @@ class QueryBuilder
      *
      * @return $this
      */
-    public function union(string|\Doctrine\DBAL\Query\QueryBuilder $part): self
+    public function union(string|QueryBuilder $part): self
     {
-        $this->type = \Doctrine\DBAL\Query\QueryType::UNION;
-        $this->unionParts = [new \Doctrine\DBAL\Query\Union($part)];
+        $this->type = QueryType::UNION;
+        $this->unionParts = [new Union($part)];
         $this->sql = null;
         return $this;
     }
@@ -497,13 +497,13 @@ class QueryBuilder
      *
      * @throws QueryException
      */
-    public function addUnion(string|\Doctrine\DBAL\Query\QueryBuilder $part, \Doctrine\DBAL\Query\UnionType $type = \Doctrine\DBAL\Query\UnionType::DISTINCT): self
+    public function addUnion(string|QueryBuilder $part, UnionType $type = UnionType::DISTINCT): self
     {
-        $this->type = \Doctrine\DBAL\Query\QueryType::UNION;
+        $this->type = QueryType::UNION;
         if (count($this->unionParts) === 0) {
-            throw new \Doctrine\DBAL\Query\QueryException('No initial UNION part set, use union() to set one first.');
+            throw new QueryException('No initial UNION part set, use union() to set one first.');
         }
-        $this->unionParts[] = new \Doctrine\DBAL\Query\Union($part, $type);
+        $this->unionParts[] = new Union($part, $type);
         $this->sql = null;
         return $this;
     }
@@ -528,9 +528,9 @@ class QueryBuilder
      *
      * @throws QueryException Setting an empty array as columns is not allowed.
      */
-    public function with(string $name, string|\Doctrine\DBAL\Query\QueryBuilder $part, ?array $columns = null): self
+    public function with(string $name, string|QueryBuilder $part, ?array $columns = null): self
     {
-        $this->commonTableExpressions[] = new \Doctrine\DBAL\Query\CommonTableExpression($name, $part, $columns);
+        $this->commonTableExpressions[] = new CommonTableExpression($name, $part, $columns);
         $this->sql = null;
         return $this;
     }
@@ -551,7 +551,7 @@ class QueryBuilder
      */
     public function select(string ...$expressions): self
     {
-        $this->type = \Doctrine\DBAL\Query\QueryType::SELECT;
+        $this->type = QueryType::SELECT;
         $this->select = $expressions;
         $this->sql = null;
         return $this;
@@ -592,7 +592,7 @@ class QueryBuilder
      */
     public function addSelect(string $expression, string ...$expressions): self
     {
-        $this->type = \Doctrine\DBAL\Query\QueryType::SELECT;
+        $this->type = QueryType::SELECT;
         $this->select = array_merge($this->select, [$expression], $expressions);
         $this->sql = null;
         return $this;
@@ -614,7 +614,7 @@ class QueryBuilder
      */
     public function delete(string $table): self
     {
-        $this->type = \Doctrine\DBAL\Query\QueryType::DELETE;
+        $this->type = QueryType::DELETE;
         $this->table = $table;
         $this->sql = null;
         return $this;
@@ -636,7 +636,7 @@ class QueryBuilder
      */
     public function update(string $table): self
     {
-        $this->type = \Doctrine\DBAL\Query\QueryType::UPDATE;
+        $this->type = QueryType::UPDATE;
         $this->table = $table;
         $this->sql = null;
         return $this;
@@ -662,7 +662,7 @@ class QueryBuilder
      */
     public function insert(string $table): self
     {
-        $this->type = \Doctrine\DBAL\Query\QueryType::INSERT;
+        $this->type = QueryType::INSERT;
         $this->table = $table;
         $this->sql = null;
         return $this;
@@ -684,7 +684,7 @@ class QueryBuilder
      */
     public function from(string $table, ?string $alias = null): self
     {
-        $this->from[] = new \Doctrine\DBAL\Query\From($table, $alias);
+        $this->from[] = new From($table, $alias);
         $this->sql = null;
         return $this;
     }
@@ -728,7 +728,7 @@ class QueryBuilder
      */
     public function innerJoin(string $fromAlias, string $join, string $alias, ?string $condition = null): self
     {
-        $this->join[$fromAlias][] = \Doctrine\DBAL\Query\Join::inner($join, $alias, $condition);
+        $this->join[$fromAlias][] = Join::inner($join, $alias, $condition);
         $this->sql = null;
         return $this;
     }
@@ -751,7 +751,7 @@ class QueryBuilder
      */
     public function leftJoin(string $fromAlias, string $join, string $alias, ?string $condition = null): self
     {
-        $this->join[$fromAlias][] = \Doctrine\DBAL\Query\Join::left($join, $alias, $condition);
+        $this->join[$fromAlias][] = Join::left($join, $alias, $condition);
         $this->sql = null;
         return $this;
     }
@@ -774,7 +774,7 @@ class QueryBuilder
      */
     public function rightJoin(string $fromAlias, string $join, string $alias, ?string $condition = null): self
     {
-        $this->join[$fromAlias][] = \Doctrine\DBAL\Query\Join::right($join, $alias, $condition);
+        $this->join[$fromAlias][] = Join::right($join, $alias, $condition);
         $this->sql = null;
         return $this;
     }
@@ -1130,14 +1130,14 @@ class QueryBuilder
     private function getSQLForSelect(): string
     {
         if (count($this->select) === 0) {
-            throw new \Doctrine\DBAL\Query\QueryException('No SELECT expressions given. Please use select() or addSelect().');
+            throw new QueryException('No SELECT expressions given. Please use select() or addSelect().');
         }
         $databasePlatform = $this->connection->getDatabasePlatform();
         $selectParts = [];
         if (count($this->commonTableExpressions) > 0) {
             $selectParts[] = $databasePlatform->createWithSQLBuilder()->buildSQL(...$this->commonTableExpressions);
         }
-        $selectParts[] = $databasePlatform->createSelectSQLBuilder()->buildSQL(new \Doctrine\DBAL\Query\SelectQuery($this->distinct, $this->select, $this->getFromClauses(), $this->where !== null ? (string) $this->where : null, $this->groupBy, $this->having !== null ? (string) $this->having : null, $this->orderBy, new \Doctrine\DBAL\Query\Limit($this->maxResults, $this->firstResult), $this->forUpdate));
+        $selectParts[] = $databasePlatform->createSelectSQLBuilder()->buildSQL(new SelectQuery($this->distinct, $this->select, $this->getFromClauses(), $this->where !== null ? (string) $this->where : null, $this->groupBy, $this->having !== null ? (string) $this->having : null, $this->orderBy, new Limit($this->maxResults, $this->firstResult), $this->forUpdate));
         return implode(' ', $selectParts);
     }
     /**
@@ -1214,9 +1214,9 @@ class QueryBuilder
     {
         $countUnions = count($this->unionParts);
         if ($countUnions < 2) {
-            throw new \Doctrine\DBAL\Query\QueryException('Insufficient UNION parts give, need at least 2.' . ' Please use union() and addUnion() to set enough UNION parts.');
+            throw new QueryException('Insufficient UNION parts give, need at least 2.' . ' Please use union() and addUnion() to set enough UNION parts.');
         }
-        return $this->connection->getDatabasePlatform()->createUnionSQLBuilder()->buildSQL(new \Doctrine\DBAL\Query\UnionQuery($this->unionParts, $this->orderBy, new \Doctrine\DBAL\Query\Limit($this->maxResults, $this->firstResult)));
+        return $this->connection->getDatabasePlatform()->createUnionSQLBuilder()->buildSQL(new UnionQuery($this->unionParts, $this->orderBy, new Limit($this->maxResults, $this->firstResult)));
     }
     /**
      * Gets a string representation of this QueryBuilder which corresponds to

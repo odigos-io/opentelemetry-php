@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Support;
+namespace Odigos\Illuminate\Support;
 
 use Closure;
-use Illuminate\Support\Traits\Macroable;
+use Odigos\Illuminate\Support\Traits\Macroable;
 use Odigos\League\CommonMark\Environment\Environment;
 use Odigos\League\CommonMark\Extension\GithubFlavoredMarkdownExtension;
 use Odigos\League\CommonMark\Extension\InlinesOnly\InlinesOnlyExtension;
@@ -15,7 +15,7 @@ use Odigos\Ramsey\Uuid\Generator\CombGenerator;
 use Odigos\Ramsey\Uuid\Rfc4122\FieldsInterface;
 use Odigos\Ramsey\Uuid\Uuid;
 use Odigos\Ramsey\Uuid\UuidFactory;
-use Symfony\Component\Uid\Ulid;
+use Odigos\Symfony\Component\Uid\Ulid;
 use Throwable;
 use Traversable;
 use Odigos\voku\helper\ASCII;
@@ -72,7 +72,7 @@ class Str
      */
     public static function of($string)
     {
-        return new \Illuminate\Support\Stringable($string);
+        return new Stringable($string);
     }
     /**
      * Return the remainder of a string after the first occurrence of a given value.
@@ -383,9 +383,9 @@ class Str
             return null;
         }
         $start = ltrim($matches[1]);
-        $start = \Illuminate\Support\Str::of(mb_substr($start, max(mb_strlen($start, 'UTF-8') - $radius, 0), $radius, 'UTF-8'))->ltrim()->unless(fn($startWithRadius) => $startWithRadius->exactly($start), fn($startWithRadius) => $startWithRadius->prepend($omission));
+        $start = Str::of(mb_substr($start, max(mb_strlen($start, 'UTF-8') - $radius, 0), $radius, 'UTF-8'))->ltrim()->unless(fn($startWithRadius) => $startWithRadius->exactly($start), fn($startWithRadius) => $startWithRadius->prepend($omission));
         $end = rtrim($matches[3]);
-        $end = \Illuminate\Support\Str::of(mb_substr($end, 0, $radius, 'UTF-8'))->rtrim()->unless(fn($endWithRadius) => $endWithRadius->exactly($end), fn($endWithRadius) => $endWithRadius->append($omission));
+        $end = Str::of(mb_substr($end, 0, $radius, 'UTF-8'))->rtrim()->unless(fn($endWithRadius) => $endWithRadius->exactly($end), fn($endWithRadius) => $endWithRadius->append($omission));
         return $start->append($matches[2], $end)->toString();
     }
     /**
@@ -774,9 +774,9 @@ class Str
     {
         preg_match_all($pattern, $subject, $matches);
         if (empty($matches[0])) {
-            return new \Illuminate\Support\Collection();
+            return new Collection();
         }
-        return new \Illuminate\Support\Collection($matches[1] ?? $matches[0]);
+        return new Collection($matches[1] ?? $matches[0]);
     }
     /**
      * Remove all non-numeric characters from a string.
@@ -854,7 +854,7 @@ class Str
         if (is_countable($count)) {
             $count = count($count);
         }
-        return ($prependCount ? \Illuminate\Support\Number::format($count) . ' ' : '') . \Illuminate\Support\Pluralizer::plural($value, $count);
+        return ($prependCount ? Number::format($count) . ' ' : '') . Pluralizer::plural($value, $count);
     }
     /**
      * Pluralize the last word of an English, studly caps case string.
@@ -892,10 +892,10 @@ class Str
      */
     public static function password($length = 32, $letters = \true, $numbers = \true, $symbols = \true, $spaces = \false)
     {
-        $password = new \Illuminate\Support\Collection();
-        $options = (new \Illuminate\Support\Collection(['letters' => $letters === \true ? ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'] : null, 'numbers' => $numbers === \true ? ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'] : null, 'symbols' => $symbols === \true ? ['~', '!', '#', '$', '%', '^', '&', '*', '(', ')', '-', '_', '.', ',', '<', '>', '?', '/', '\\', '{', '}', '[', ']', '|', ':', ';'] : null, 'spaces' => $spaces === \true ? [' '] : null]))->filter()->each(fn($c) => $password->push($c[random_int(0, count($c) - 1)]))->flatten();
+        $password = new Collection();
+        $options = (new Collection(['letters' => $letters === \true ? ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'] : null, 'numbers' => $numbers === \true ? ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'] : null, 'symbols' => $symbols === \true ? ['~', '!', '#', '$', '%', '^', '&', '*', '(', ')', '-', '_', '.', ',', '<', '>', '?', '/', '\\', '{', '}', '[', ']', '|', ':', ';'] : null, 'spaces' => $spaces === \true ? [' '] : null]))->filter()->each(fn($c) => $password->push($c[random_int(0, count($c) - 1)]))->flatten();
         $length = $length - $password->count();
-        return $password->merge($options->pipe(fn($c) => \Illuminate\Support\Collection::times($length, fn() => $c[random_int(0, $c->count() - 1)])))->shuffle()->implode('');
+        return $password->merge($options->pipe(fn($c) => Collection::times($length, fn() => $c[random_int(0, $c->count() - 1)])))->shuffle()->implode('');
     }
     /**
      * Find the multi-byte safe position of the first occurrence of a given substring in a string.
@@ -995,7 +995,7 @@ class Str
     public static function replaceArray($search, $replace, $subject)
     {
         if ($replace instanceof Traversable) {
-            $replace = \Illuminate\Support\Arr::from($replace);
+            $replace = Arr::from($replace);
         }
         $segments = explode($search, $subject);
         $result = array_shift($segments);
@@ -1031,13 +1031,13 @@ class Str
     public static function replace($search, $replace, $subject, $caseSensitive = \true)
     {
         if ($search instanceof Traversable) {
-            $search = \Illuminate\Support\Arr::from($search);
+            $search = Arr::from($search);
         }
         if ($replace instanceof Traversable) {
-            $replace = \Illuminate\Support\Arr::from($replace);
+            $replace = Arr::from($replace);
         }
         if ($subject instanceof Traversable) {
-            $subject = \Illuminate\Support\Arr::from($subject);
+            $subject = Arr::from($subject);
         }
         return $caseSensitive ? str_replace($search, $replace, $subject) : str_ireplace($search, $replace, $subject);
     }
@@ -1146,7 +1146,7 @@ class Str
     public static function remove($search, $subject, $caseSensitive = \true)
     {
         if ($search instanceof Traversable) {
-            $search = \Illuminate\Support\Arr::from($search);
+            $search = Arr::from($search);
         }
         return $caseSensitive ? str_replace($search, '', $subject) : str_ireplace($search, '', $subject);
     }
@@ -1260,7 +1260,7 @@ class Str
      */
     public static function singular($value)
     {
-        return \Illuminate\Support\Pluralizer::singular($value);
+        return Pluralizer::singular($value);
     }
     /**
      * Generate a URL friendly "slug" from a given string.
@@ -1661,13 +1661,13 @@ class Str
      */
     public static function freezeUuids(?Closure $callback = null)
     {
-        $uuid = \Illuminate\Support\Str::uuid();
-        \Illuminate\Support\Str::createUuidsUsing(fn() => $uuid);
+        $uuid = Str::uuid();
+        Str::createUuidsUsing(fn() => $uuid);
         if ($callback !== null) {
             try {
                 $callback($uuid);
             } finally {
-                \Illuminate\Support\Str::createUuidsNormally();
+                Str::createUuidsNormally();
             }
         }
         return $uuid;
@@ -1749,13 +1749,13 @@ class Str
      */
     public static function freezeUlids(?Closure $callback = null)
     {
-        $ulid = \Illuminate\Support\Str::ulid();
-        \Illuminate\Support\Str::createUlidsUsing(fn() => $ulid);
+        $ulid = Str::ulid();
+        Str::createUlidsUsing(fn() => $ulid);
         if ($callback !== null) {
             try {
                 $callback($ulid);
             } finally {
-                \Illuminate\Support\Str::createUlidsNormally();
+                Str::createUlidsNormally();
             }
         }
         return $ulid;

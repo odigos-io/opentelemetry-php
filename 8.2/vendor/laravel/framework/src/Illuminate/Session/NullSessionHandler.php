@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Session;
+namespace Odigos\Illuminate\Session;
 
 use SessionHandlerInterface;
 class NullSessionHandler implements SessionHandlerInterface

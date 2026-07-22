@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Exception;
+namespace Odigos\Doctrine\DBAL\Exception;
 
 use function sprintf;
-final class DriverRequired extends \Doctrine\DBAL\Exception\InvalidArgumentException
+final class DriverRequired extends InvalidArgumentException
 {
     /** @param string|null $url The URL that was provided in the connection parameters (if any). */
     public static function new(?string $url = null): self

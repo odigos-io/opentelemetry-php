@@ -14,22 +14,22 @@ declare (strict_types=1);
  * @since         3.5.0
  * @license       https://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Http\Middleware;
+namespace Odigos\Cake\Http\Middleware;
 
 use ArrayAccess;
-use Cake\Core\Exception\CakeException;
-use Cake\Http\Cookie\Cookie;
-use Cake\Http\Cookie\CookieInterface;
-use Cake\Http\Exception\InvalidCsrfTokenException;
-use Cake\Http\Response;
-use Cake\Utility\Hash;
-use Cake\Utility\Security;
+use Odigos\Cake\Core\Exception\CakeException;
+use Odigos\Cake\Http\Cookie\Cookie;
+use Odigos\Cake\Http\Cookie\CookieInterface;
+use Odigos\Cake\Http\Exception\InvalidCsrfTokenException;
+use Odigos\Cake\Http\Response;
+use Odigos\Cake\Utility\Hash;
+use Odigos\Cake\Utility\Security;
 use InvalidArgumentException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use function Cake\I18n\__d;
+use function Odigos\Cake\I18n\__d;
 /**
  * Provides CSRF protection & validation.
  *

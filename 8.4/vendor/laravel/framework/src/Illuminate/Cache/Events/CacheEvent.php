@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Cache\Events;
+namespace Odigos\Illuminate\Cache\Events;
 
 abstract class CacheEvent
 {

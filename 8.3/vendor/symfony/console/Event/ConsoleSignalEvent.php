@@ -8,15 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Console\Event;
+namespace Odigos\Symfony\Component\Console\Event;
 
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
+use Odigos\Symfony\Component\Console\Command\Command;
+use Odigos\Symfony\Component\Console\Input\InputInterface;
+use Odigos\Symfony\Component\Console\Output\OutputInterface;
 /**
  * @author marie <marie@users.noreply.github.com>
  */
-final class ConsoleSignalEvent extends \Symfony\Component\Console\Event\ConsoleEvent
+final class ConsoleSignalEvent extends ConsoleEvent
 {
     public function __construct(Command $command, InputInterface $input, OutputInterface $output, private int $handlingSignal, private int|false $exitCode = 0)
     {

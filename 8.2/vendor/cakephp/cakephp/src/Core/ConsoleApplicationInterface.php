@@ -13,9 +13,9 @@ declare (strict_types=1);
  * @since         3.5.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Core;
+namespace Odigos\Cake\Core;
 
-use Cake\Console\CommandCollection;
+use Odigos\Cake\Console\CommandCollection;
 /**
  * An interface defining the methods that the
  * console runner depend on.

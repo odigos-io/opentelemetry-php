@@ -14,9 +14,9 @@ declare (strict_types=1);
  * @since         3.0.7
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Datasource;
+namespace Odigos\Cake\Datasource;
 
-use Cake\Core\Exception\CakeException;
+use Odigos\Cake\Core\Exception\CakeException;
 use InvalidArgumentException;
 /**
  * Contains logic for storing and checking rules on entities
@@ -103,7 +103,7 @@ class RulesChecker
     public function __construct(array $options = [])
     {
         $this->_options = $options;
-        $this->_useI18n = function_exists('\Cake\I18n\__d');
+        $this->_useI18n = function_exists('Odigos\Cake\I18n\__d');
     }
     /**
      * Adds a rule that will be applied to the entity on create, update and delete
@@ -281,7 +281,7 @@ class RulesChecker
      * @return bool
      * @throws \InvalidArgumentException if an invalid mode is passed.
      */
-    public function check(\Cake\Datasource\EntityInterface $entity, string $mode, array $options = []): bool
+    public function check(EntityInterface $entity, string $mode, array $options = []): bool
     {
         return match ($mode) {
             self::CREATE => $this->checkCreate($entity, $options),
@@ -298,7 +298,7 @@ class RulesChecker
      * @param array<string, mixed> $options Extra options to pass to checker functions.
      * @return bool
      */
-    public function checkCreate(\Cake\Datasource\EntityInterface $entity, array $options = []): bool
+    public function checkCreate(EntityInterface $entity, array $options = []): bool
     {
         return $this->_checkRules($entity, $options, array_merge(array_values($this->_rules), array_values($this->_createRules)));
     }
@@ -310,7 +310,7 @@ class RulesChecker
      * @param array<string, mixed> $options Extra options to pass to checker functions.
      * @return bool
      */
-    public function checkUpdate(\Cake\Datasource\EntityInterface $entity, array $options = []): bool
+    public function checkUpdate(EntityInterface $entity, array $options = []): bool
     {
         return $this->_checkRules($entity, $options, array_merge(array_values($this->_rules), array_values($this->_updateRules)));
     }
@@ -322,7 +322,7 @@ class RulesChecker
      * @param array<string, mixed> $options Extra options to pass to checker functions.
      * @return bool
      */
-    public function checkDelete(\Cake\Datasource\EntityInterface $entity, array $options = []): bool
+    public function checkDelete(EntityInterface $entity, array $options = []): bool
     {
         return $this->_checkRules($entity, $options, $this->_deleteRules);
     }
@@ -335,7 +335,7 @@ class RulesChecker
      * @param array<\Cake\Datasource\RuleInvoker> $rules The list of rules that must be checked.
      * @return bool
      */
-    protected function _checkRules(\Cake\Datasource\EntityInterface $entity, array $options = [], array $rules = []): bool
+    protected function _checkRules(EntityInterface $entity, array $options = [], array $rules = []): bool
     {
         $success = \true;
         $options += $this->_options;
@@ -353,14 +353,14 @@ class RulesChecker
      * @param array<string, mixed> $options The options containing the error message and field.
      * @return \Cake\Datasource\RuleInvoker
      */
-    protected function _addError(callable $rule, array|string|null $name = null, array $options = []): \Cake\Datasource\RuleInvoker
+    protected function _addError(callable $rule, array|string|null $name = null, array $options = []): RuleInvoker
     {
         if (is_array($name)) {
             $options = $name;
             $name = null;
         }
-        if (!$rule instanceof \Cake\Datasource\RuleInvoker) {
-            $rule = new \Cake\Datasource\RuleInvoker($rule, $name, $options);
+        if (!$rule instanceof RuleInvoker) {
+            $rule = new RuleInvoker($rule, $name, $options);
         } else {
             $rule->setOptions($options)->setName($name);
         }

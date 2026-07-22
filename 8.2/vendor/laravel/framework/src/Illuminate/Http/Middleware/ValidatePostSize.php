@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Http\Middleware;
+namespace Odigos\Illuminate\Http\Middleware;
 
 use Closure;
-use Illuminate\Http\Exceptions\PostTooLargeException;
+use Odigos\Illuminate\Http\Exceptions\PostTooLargeException;
 class ValidatePostSize
 {
     /**

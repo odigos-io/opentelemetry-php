@@ -14,7 +14,7 @@ declare (strict_types=1);
  * @since         3.0.7
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Event;
+namespace Odigos\Cake\Event;
 
 /**
  * Objects implementing this interface can emit events.
@@ -41,7 +41,7 @@ interface EventDispatcherInterface
      * ($this by default).
      * @return \Cake\Event\EventInterface<TSubject>
      */
-    public function dispatchEvent(string $name, array $data = [], ?object $subject = null): \Cake\Event\EventInterface;
+    public function dispatchEvent(string $name, array $data = [], ?object $subject = null): EventInterface;
     /**
      * Sets the Cake\Event\EventManager manager instance for this object.
      *
@@ -51,11 +51,11 @@ interface EventDispatcherInterface
      * @param \Cake\Event\EventManagerInterface $eventManager the eventManager to set
      * @return $this
      */
-    public function setEventManager(\Cake\Event\EventManagerInterface $eventManager);
+    public function setEventManager(EventManagerInterface $eventManager);
     /**
      * Returns the Cake\Event\EventManager manager instance for this object.
      *
      * @return \Cake\Event\EventManagerInterface
      */
-    public function getEventManager(): \Cake\Event\EventManagerInterface;
+    public function getEventManager(): EventManagerInterface;
 }

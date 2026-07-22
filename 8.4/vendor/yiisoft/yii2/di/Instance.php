@@ -5,10 +5,10 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\di;
+namespace Odigos\yii\di;
 
 use Odigos\Yii;
-use yii\base\InvalidConfigException;
+use Odigos\yii\base\InvalidConfigException;
 /**
  * Instance represents a reference to a named object in a dependency injection (DI) container or a service locator.
  *
@@ -115,7 +115,7 @@ class Instance
     public static function ensure($reference, $type = null, $container = null)
     {
         if (is_array($reference)) {
-            if (!$container instanceof \yii\di\Container) {
+            if (!$container instanceof Container) {
                 $container = Yii::$container;
             }
             if (isset($reference['__class'])) {

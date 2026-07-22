@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Exception;
+namespace Odigos\Doctrine\DBAL\Exception;
 
 /**
  * Exception for an unknown table referenced in a statement detected in the driver.
  */
-class TableNotFoundException extends \Doctrine\DBAL\Exception\DatabaseObjectNotFoundException
+class TableNotFoundException extends DatabaseObjectNotFoundException
 {
 }

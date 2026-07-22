@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Queue\Capsule;
+namespace Odigos\Illuminate\Queue\Capsule;
 
-use Illuminate\Container\Container;
-use Illuminate\Queue\QueueManager;
-use Illuminate\Queue\QueueServiceProvider;
-use Illuminate\Support\Traits\CapsuleManagerTrait;
+use Odigos\Illuminate\Container\Container;
+use Odigos\Illuminate\Queue\QueueManager;
+use Odigos\Illuminate\Queue\QueueServiceProvider;
+use Odigos\Illuminate\Support\Traits\CapsuleManagerTrait;
 /**
  * @mixin \Illuminate\Queue\QueueManager
  * @mixin \Illuminate\Contracts\Queue\Queue

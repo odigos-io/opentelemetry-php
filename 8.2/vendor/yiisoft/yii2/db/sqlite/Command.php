@@ -5,10 +5,10 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\db\sqlite;
+namespace Odigos\yii\db\sqlite;
 
-use yii\db\SqlToken;
-use yii\helpers\StringHelper;
+use Odigos\yii\db\SqlToken;
+use Odigos\yii\helpers\StringHelper;
 /**
  * Command represents an SQLite's SQL statement to be executed against a database.
  *
@@ -17,7 +17,7 @@ use yii\helpers\StringHelper;
  * @author Sergey Makinen <sergey@makinen.ru>
  * @since 2.0.14
  */
-class Command extends \yii\db\Command
+class Command extends \Odigos\yii\db\Command
 {
     /**
      * {@inheritdoc}
@@ -74,7 +74,7 @@ class Command extends \yii\db\Command
         if ($semicolonIndex === \false || $semicolonIndex === StringHelper::byteLength($sql) - 1) {
             return \false;
         }
-        $tokenizer = new \yii\db\sqlite\SqlTokenizer($sql);
+        $tokenizer = new SqlTokenizer($sql);
         $codeToken = $tokenizer->tokenize();
         if (count($codeToken->getChildren()) === 1) {
             return \false;

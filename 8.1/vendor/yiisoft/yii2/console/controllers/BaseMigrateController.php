@@ -5,21 +5,21 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\console\controllers;
+namespace Odigos\yii\console\controllers;
 
 use Odigos\Yii;
-use yii\base\Action;
-use yii\base\BaseObject;
-use yii\base\InvalidConfigException;
-use yii\base\NotSupportedException;
-use yii\console\Application;
-use yii\console\Controller;
-use yii\console\Exception;
-use yii\console\ExitCode;
-use yii\db\MigrationInterface;
-use yii\helpers\Console;
-use yii\helpers\FileHelper;
-use yii\helpers\Inflector;
+use Odigos\yii\base\Action;
+use Odigos\yii\base\BaseObject;
+use Odigos\yii\base\InvalidConfigException;
+use Odigos\yii\base\NotSupportedException;
+use Odigos\yii\console\Application;
+use Odigos\yii\console\Controller;
+use Odigos\yii\console\Exception;
+use Odigos\yii\console\ExitCode;
+use Odigos\yii\db\MigrationInterface;
+use Odigos\yii\helpers\Console;
+use Odigos\yii\helpers\FileHelper;
+use Odigos\yii\helpers\Inflector;
 /**
  * BaseMigrateController is the base class for migrate controllers.
  *

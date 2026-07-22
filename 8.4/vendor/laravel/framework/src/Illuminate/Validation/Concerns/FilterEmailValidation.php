@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Validation\Concerns;
+namespace Odigos\Illuminate\Validation\Concerns;
 
 use Odigos\Egulias\EmailValidator\EmailLexer;
 use Odigos\Egulias\EmailValidator\Result\InvalidEmail;

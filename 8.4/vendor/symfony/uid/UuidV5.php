@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Uid;
+namespace Odigos\Symfony\Component\Uid;
 
 /**
  * A v5 UUID contains a SHA1 hash of another UUID and a name.
@@ -17,7 +17,7 @@ namespace Symfony\Component\Uid;
  *
  * @author Grégoire Pineau <lyrixx@lyrixx.info>
  */
-class UuidV5 extends \Symfony\Component\Uid\Uuid
+class UuidV5 extends Uuid
 {
     protected const TYPE = 5;
     public function __construct(string $uuid)

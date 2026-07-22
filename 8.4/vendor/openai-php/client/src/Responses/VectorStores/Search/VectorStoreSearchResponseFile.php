@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Responses\VectorStores\Search;
+namespace Odigos\OpenAI\Responses\VectorStores\Search;
 
-use OpenAI\Contracts\ResponseContract;
-use OpenAI\Responses\Concerns\ArrayAccessible;
-use OpenAI\Testing\Responses\Concerns\Fakeable;
+use Odigos\OpenAI\Contracts\ResponseContract;
+use Odigos\OpenAI\Responses\Concerns\ArrayAccessible;
+use Odigos\OpenAI\Testing\Responses\Concerns\Fakeable;
 /**
  * @implements ResponseContract<array{file_id: string, filename: string, score: float, attributes: array<string, mixed>, content: array<int, array{type: string, text: string}>}>
  */
@@ -30,7 +30,7 @@ final class VectorStoreSearchResponseFile implements ResponseContract
      */
     public static function from(array $attributes): self
     {
-        $content = array_map(static fn(array $content): \OpenAI\Responses\VectorStores\Search\VectorStoreSearchResponseContent => \OpenAI\Responses\VectorStores\Search\VectorStoreSearchResponseContent::from($content), $attributes['content']);
+        $content = array_map(static fn(array $content): VectorStoreSearchResponseContent => VectorStoreSearchResponseContent::from($content), $attributes['content']);
         return new self($attributes['file_id'], $attributes['filename'], $attributes['score'], $attributes['attributes'], $content);
     }
     /**
@@ -38,6 +38,6 @@ final class VectorStoreSearchResponseFile implements ResponseContract
      */
     public function toArray(): array
     {
-        return ['file_id' => $this->fileId, 'filename' => $this->filename, 'score' => $this->score, 'attributes' => $this->attributes, 'content' => array_map(static fn(\OpenAI\Responses\VectorStores\Search\VectorStoreSearchResponseContent $content): array => $content->toArray(), $this->content)];
+        return ['file_id' => $this->fileId, 'filename' => $this->filename, 'score' => $this->score, 'attributes' => $this->attributes, 'content' => array_map(static fn(VectorStoreSearchResponseContent $content): array => $content->toArray(), $this->content)];
     }
 }

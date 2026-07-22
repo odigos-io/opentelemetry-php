@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Log\Context\Events;
+namespace Odigos\Illuminate\Log\Context\Events;
 
 class ContextHydrated
 {

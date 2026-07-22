@@ -8,15 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Uid;
+namespace Odigos\Symfony\Component\Uid;
 
-use Symfony\Component\Uid\Exception\InvalidArgumentException;
+use Odigos\Symfony\Component\Uid\Exception\InvalidArgumentException;
 /**
  * @author Grégoire Pineau <lyrixx@lyrixx.info>
  *
  * @see https://datatracker.ietf.org/doc/html/rfc9562/#section-6.6 for details about namespaces
  */
-class Uuid extends \Symfony\Component\Uid\AbstractUid
+class Uuid extends AbstractUid
 {
     public const NAMESPACE_DNS = '6ba7b810-9dad-11d1-80b4-00c04fd430c8';
     public const NAMESPACE_URL = '6ba7b811-9dad-11d1-80b4-00c04fd430c8';
@@ -49,56 +49,56 @@ class Uuid extends \Symfony\Component\Uid\AbstractUid
             return new static($uuid);
         }
         if (self::NIL === $uuid) {
-            return new \Symfony\Component\Uid\NilUuid();
+            return new NilUuid();
         }
         if (self::MAX === $uuid = strtr($uuid, 'F', 'f')) {
-            return new \Symfony\Component\Uid\MaxUuid();
+            return new MaxUuid();
         }
         if (!\in_array($uuid[19], ['8', '9', 'a', 'b', 'A', 'B'], \true)) {
             return new self($uuid);
         }
         return match ((int) $uuid[14]) {
-            \Symfony\Component\Uid\UuidV1::TYPE => new \Symfony\Component\Uid\UuidV1($uuid),
-            \Symfony\Component\Uid\UuidV3::TYPE => new \Symfony\Component\Uid\UuidV3($uuid),
-            \Symfony\Component\Uid\UuidV4::TYPE => new \Symfony\Component\Uid\UuidV4($uuid),
-            \Symfony\Component\Uid\UuidV5::TYPE => new \Symfony\Component\Uid\UuidV5($uuid),
-            \Symfony\Component\Uid\UuidV6::TYPE => new \Symfony\Component\Uid\UuidV6($uuid),
-            \Symfony\Component\Uid\UuidV7::TYPE => new \Symfony\Component\Uid\UuidV7($uuid),
-            \Symfony\Component\Uid\UuidV8::TYPE => new \Symfony\Component\Uid\UuidV8($uuid),
+            UuidV1::TYPE => new UuidV1($uuid),
+            UuidV3::TYPE => new UuidV3($uuid),
+            UuidV4::TYPE => new UuidV4($uuid),
+            UuidV5::TYPE => new UuidV5($uuid),
+            UuidV6::TYPE => new UuidV6($uuid),
+            UuidV7::TYPE => new UuidV7($uuid),
+            UuidV8::TYPE => new UuidV8($uuid),
             default => new self($uuid),
         };
     }
-    final public static function v1(): \Symfony\Component\Uid\UuidV1
+    final public static function v1(): UuidV1
     {
-        return new \Symfony\Component\Uid\UuidV1();
+        return new UuidV1();
     }
-    final public static function v3(self $namespace, string $name): \Symfony\Component\Uid\UuidV3
+    final public static function v3(self $namespace, string $name): UuidV3
     {
         // don't use uuid_generate_md5(), some versions are buggy
         $uuid = md5(hex2bin(str_replace('-', '', $namespace->uid)) . $name, \true);
-        return new \Symfony\Component\Uid\UuidV3(self::format($uuid, '-3'));
+        return new UuidV3(self::format($uuid, '-3'));
     }
-    final public static function v4(): \Symfony\Component\Uid\UuidV4
+    final public static function v4(): UuidV4
     {
-        return new \Symfony\Component\Uid\UuidV4();
+        return new UuidV4();
     }
-    final public static function v5(self $namespace, string $name): \Symfony\Component\Uid\UuidV5
+    final public static function v5(self $namespace, string $name): UuidV5
     {
         // don't use uuid_generate_sha1(), some versions are buggy
         $uuid = substr(sha1(hex2bin(str_replace('-', '', $namespace->uid)) . $name, \true), 0, 16);
-        return new \Symfony\Component\Uid\UuidV5(self::format($uuid, '-5'));
+        return new UuidV5(self::format($uuid, '-5'));
     }
-    final public static function v6(): \Symfony\Component\Uid\UuidV6
+    final public static function v6(): UuidV6
     {
-        return new \Symfony\Component\Uid\UuidV6();
+        return new UuidV6();
     }
-    final public static function v7(): \Symfony\Component\Uid\UuidV7
+    final public static function v7(): UuidV7
     {
-        return new \Symfony\Component\Uid\UuidV7();
+        return new UuidV7();
     }
-    final public static function v8(string $uuid): \Symfony\Component\Uid\UuidV8
+    final public static function v8(string $uuid): UuidV8
     {
-        return new \Symfony\Component\Uid\UuidV8($uuid);
+        return new UuidV8($uuid);
     }
     /**
      * @param int-mask-of<Uuid::FORMAT_*> $format
@@ -112,10 +112,10 @@ class Uuid extends \Symfony\Component\Uid\AbstractUid
         if (\false === $uuid = self::transformToRfc9562($uuid, $format)) {
             return \false;
         }
-        if (self::NIL === $uuid && \in_array(static::class, [__CLASS__, \Symfony\Component\Uid\NilUuid::class], \true)) {
+        if (self::NIL === $uuid && \in_array(static::class, [__CLASS__, NilUuid::class], \true)) {
             return \true;
         }
-        if (self::MAX === strtr($uuid, 'F', 'f') && \in_array(static::class, [__CLASS__, \Symfony\Component\Uid\MaxUuid::class], \true)) {
+        if (self::MAX === strtr($uuid, 'F', 'f') && \in_array(static::class, [__CLASS__, MaxUuid::class], \true)) {
             return \true;
         }
         if (!preg_match('{^[0-9a-f]{8}(?:-[0-9a-f]{4}){2}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$}Di', $uuid)) {
@@ -138,7 +138,7 @@ class Uuid extends \Symfony\Component\Uid\AbstractUid
     {
         return $this->uid;
     }
-    public function compare(\Symfony\Component\Uid\AbstractUid $other): int
+    public function compare(AbstractUid $other): int
     {
         if (\false !== $cmp = uuid_compare($this->uid, $other->uid)) {
             return $cmp;
@@ -164,8 +164,8 @@ class Uuid extends \Symfony\Component\Uid\AbstractUid
     {
         $inputUuid = $uuid;
         $fromBase58 = \false;
-        if (22 === \strlen($uuid) && 22 === strspn($uuid, \Symfony\Component\Uid\BinaryUtil::BASE58['']) && $format & self::FORMAT_BASE_58) {
-            $uuid = str_pad(\Symfony\Component\Uid\BinaryUtil::fromBase($uuid, \Symfony\Component\Uid\BinaryUtil::BASE58), 16, "\x00", \STR_PAD_LEFT);
+        if (22 === \strlen($uuid) && 22 === strspn($uuid, BinaryUtil::BASE58['']) && $format & self::FORMAT_BASE_58) {
+            $uuid = str_pad(BinaryUtil::fromBase($uuid, BinaryUtil::BASE58), 16, "\x00", \STR_PAD_LEFT);
             $fromBase58 = \true;
         }
         // base-58 are always transformed to binary string, but they must only be valid when the format is FORMAT_BASE_58
@@ -176,8 +176,8 @@ class Uuid extends \Symfony\Component\Uid\AbstractUid
             $uuid = substr_replace($uuid, '-', 13, 0);
             $uuid = substr_replace($uuid, '-', 18, 0);
             $uuid = substr_replace($uuid, '-', 23, 0);
-        } elseif (26 === \strlen($uuid) && \Symfony\Component\Uid\Ulid::isValid($uuid) && $format & self::FORMAT_BASE_32) {
-            $ulid = new \Symfony\Component\Uid\NilUlid();
+        } elseif (26 === \strlen($uuid) && Ulid::isValid($uuid) && $format & self::FORMAT_BASE_32) {
+            $ulid = new NilUlid();
             $ulid->uid = strtoupper($uuid);
             $uuid = $ulid->toRfc4122();
         }

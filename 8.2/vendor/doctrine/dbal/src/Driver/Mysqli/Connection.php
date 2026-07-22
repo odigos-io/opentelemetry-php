@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Driver\Mysqli;
+namespace Odigos\Doctrine\DBAL\Driver\Mysqli;
 
-use Doctrine\DBAL\Driver\Connection as ConnectionInterface;
-use Doctrine\DBAL\Driver\Exception;
-use Doctrine\DBAL\Driver\Mysqli\Exception\ConnectionError;
+use Odigos\Doctrine\DBAL\Driver\Connection as ConnectionInterface;
+use Odigos\Doctrine\DBAL\Driver\Exception;
+use Odigos\Doctrine\DBAL\Driver\Mysqli\Exception\ConnectionError;
 use mysqli;
 use mysqli_sql_exception;
 final class Connection implements ConnectionInterface
@@ -22,7 +22,7 @@ final class Connection implements ConnectionInterface
     {
         return $this->connection->get_server_info();
     }
-    public function prepare(string $sql): \Doctrine\DBAL\Driver\Mysqli\Statement
+    public function prepare(string $sql): Statement
     {
         try {
             $stmt = $this->connection->prepare($sql);
@@ -32,9 +32,9 @@ final class Connection implements ConnectionInterface
         if ($stmt === \false) {
             throw ConnectionError::new($this->connection);
         }
-        return new \Doctrine\DBAL\Driver\Mysqli\Statement($stmt);
+        return new Statement($stmt);
     }
-    public function query(string $sql): \Doctrine\DBAL\Driver\Mysqli\Result
+    public function query(string $sql): Result
     {
         return $this->prepare($sql)->execute();
     }

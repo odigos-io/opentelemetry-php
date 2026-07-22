@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Queue\Connectors;
+namespace Odigos\Illuminate\Queue\Connectors;
 
-use Illuminate\Database\ConnectionResolverInterface;
-use Illuminate\Queue\DatabaseQueue;
-class DatabaseConnector implements \Illuminate\Queue\Connectors\ConnectorInterface
+use Odigos\Illuminate\Database\ConnectionResolverInterface;
+use Odigos\Illuminate\Queue\DatabaseQueue;
+class DatabaseConnector implements ConnectorInterface
 {
     /**
      * Database connections.

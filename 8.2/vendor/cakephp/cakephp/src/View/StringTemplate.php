@@ -14,15 +14,15 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\View;
+namespace Odigos\Cake\View;
 
-use Cake\Core\Configure\Engine\PhpConfig;
-use Cake\Core\Exception\CakeException;
-use Cake\Core\InstanceConfigTrait;
-use Cake\Utility\Hash;
+use Odigos\Cake\Core\Configure\Engine\PhpConfig;
+use Odigos\Cake\Core\Exception\CakeException;
+use Odigos\Cake\Core\InstanceConfigTrait;
+use Odigos\Cake\Utility\Hash;
 use InvalidArgumentException;
-use function Cake\Core\deprecationWarning;
-use function Cake\Core\h;
+use function Odigos\Cake\Core\deprecationWarning;
+use function Odigos\Cake\Core\h;
 /**
  * Provides an interface for registering and inserting
  * content into simple logic-less string templates.

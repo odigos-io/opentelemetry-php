@@ -1,12 +1,12 @@
 <?php
 
-namespace Illuminate\Concurrency;
+namespace Odigos\Illuminate\Concurrency;
 
 use Closure;
-use Illuminate\Contracts\Concurrency\Driver;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Defer\DeferredCallback;
-use function Illuminate\Support\defer;
+use Odigos\Illuminate\Contracts\Concurrency\Driver;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Defer\DeferredCallback;
+use function Odigos\Illuminate\Support\defer;
 class SyncDriver implements Driver
 {
     /**

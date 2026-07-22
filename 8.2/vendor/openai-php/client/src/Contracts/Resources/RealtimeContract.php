@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Contracts\Resources;
+namespace Odigos\OpenAI\Contracts\Resources;
 
-use OpenAI\Responses\Realtime\SessionResponse;
-use OpenAI\Responses\Realtime\TranscriptionSessionResponse;
+use Odigos\OpenAI\Responses\Realtime\SessionResponse;
+use Odigos\OpenAI\Responses\Realtime\TranscriptionSessionResponse;
 interface RealtimeContract
 {
     /**

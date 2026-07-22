@@ -4,83 +4,83 @@
  * THIS FILE IS AUTO-GENERATED. ANY CHANGES WILL BE LOST!
  */
 declare (strict_types=1);
-namespace MongoDB\Builder\Expression;
+namespace Odigos\MongoDB\Builder\Expression;
 
 /**
  * @internal
  */
 trait ExpressionFactoryTrait
 {
-    public static function arrayFieldPath(string $name): \MongoDB\Builder\Expression\ArrayFieldPath
+    public static function arrayFieldPath(string $name): ArrayFieldPath
     {
-        return new \MongoDB\Builder\Expression\ArrayFieldPath($name);
+        return new ArrayFieldPath($name);
     }
-    public static function binDataFieldPath(string $name): \MongoDB\Builder\Expression\BinDataFieldPath
+    public static function binDataFieldPath(string $name): BinDataFieldPath
     {
-        return new \MongoDB\Builder\Expression\BinDataFieldPath($name);
+        return new BinDataFieldPath($name);
     }
-    public static function boolFieldPath(string $name): \MongoDB\Builder\Expression\BoolFieldPath
+    public static function boolFieldPath(string $name): BoolFieldPath
     {
-        return new \MongoDB\Builder\Expression\BoolFieldPath($name);
+        return new BoolFieldPath($name);
     }
-    public static function dateFieldPath(string $name): \MongoDB\Builder\Expression\DateFieldPath
+    public static function dateFieldPath(string $name): DateFieldPath
     {
-        return new \MongoDB\Builder\Expression\DateFieldPath($name);
+        return new DateFieldPath($name);
     }
-    public static function decimalFieldPath(string $name): \MongoDB\Builder\Expression\DecimalFieldPath
+    public static function decimalFieldPath(string $name): DecimalFieldPath
     {
-        return new \MongoDB\Builder\Expression\DecimalFieldPath($name);
+        return new DecimalFieldPath($name);
     }
-    public static function doubleFieldPath(string $name): \MongoDB\Builder\Expression\DoubleFieldPath
+    public static function doubleFieldPath(string $name): DoubleFieldPath
     {
-        return new \MongoDB\Builder\Expression\DoubleFieldPath($name);
+        return new DoubleFieldPath($name);
     }
-    public static function fieldPath(string $name): \MongoDB\Builder\Expression\FieldPath
+    public static function fieldPath(string $name): FieldPath
     {
-        return new \MongoDB\Builder\Expression\FieldPath($name);
+        return new FieldPath($name);
     }
-    public static function intFieldPath(string $name): \MongoDB\Builder\Expression\IntFieldPath
+    public static function intFieldPath(string $name): IntFieldPath
     {
-        return new \MongoDB\Builder\Expression\IntFieldPath($name);
+        return new IntFieldPath($name);
     }
-    public static function javascriptFieldPath(string $name): \MongoDB\Builder\Expression\JavascriptFieldPath
+    public static function javascriptFieldPath(string $name): JavascriptFieldPath
     {
-        return new \MongoDB\Builder\Expression\JavascriptFieldPath($name);
+        return new JavascriptFieldPath($name);
     }
-    public static function longFieldPath(string $name): \MongoDB\Builder\Expression\LongFieldPath
+    public static function longFieldPath(string $name): LongFieldPath
     {
-        return new \MongoDB\Builder\Expression\LongFieldPath($name);
+        return new LongFieldPath($name);
     }
-    public static function nullFieldPath(string $name): \MongoDB\Builder\Expression\NullFieldPath
+    public static function nullFieldPath(string $name): NullFieldPath
     {
-        return new \MongoDB\Builder\Expression\NullFieldPath($name);
+        return new NullFieldPath($name);
     }
-    public static function numberFieldPath(string $name): \MongoDB\Builder\Expression\NumberFieldPath
+    public static function numberFieldPath(string $name): NumberFieldPath
     {
-        return new \MongoDB\Builder\Expression\NumberFieldPath($name);
+        return new NumberFieldPath($name);
     }
-    public static function objectFieldPath(string $name): \MongoDB\Builder\Expression\ObjectFieldPath
+    public static function objectFieldPath(string $name): ObjectFieldPath
     {
-        return new \MongoDB\Builder\Expression\ObjectFieldPath($name);
+        return new ObjectFieldPath($name);
     }
-    public static function objectIdFieldPath(string $name): \MongoDB\Builder\Expression\ObjectIdFieldPath
+    public static function objectIdFieldPath(string $name): ObjectIdFieldPath
     {
-        return new \MongoDB\Builder\Expression\ObjectIdFieldPath($name);
+        return new ObjectIdFieldPath($name);
     }
-    public static function regexFieldPath(string $name): \MongoDB\Builder\Expression\RegexFieldPath
+    public static function regexFieldPath(string $name): RegexFieldPath
     {
-        return new \MongoDB\Builder\Expression\RegexFieldPath($name);
+        return new RegexFieldPath($name);
     }
-    public static function stringFieldPath(string $name): \MongoDB\Builder\Expression\StringFieldPath
+    public static function stringFieldPath(string $name): StringFieldPath
     {
-        return new \MongoDB\Builder\Expression\StringFieldPath($name);
+        return new StringFieldPath($name);
     }
-    public static function timestampFieldPath(string $name): \MongoDB\Builder\Expression\TimestampFieldPath
+    public static function timestampFieldPath(string $name): TimestampFieldPath
     {
-        return new \MongoDB\Builder\Expression\TimestampFieldPath($name);
+        return new TimestampFieldPath($name);
     }
-    public static function variable(string $name): \MongoDB\Builder\Expression\Variable
+    public static function variable(string $name): Variable
     {
-        return new \MongoDB\Builder\Expression\Variable($name);
+        return new Variable($name);
     }
 }

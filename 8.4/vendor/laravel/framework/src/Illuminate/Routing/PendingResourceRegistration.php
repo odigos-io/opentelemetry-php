@@ -1,12 +1,12 @@
 <?php
 
-namespace Illuminate\Routing;
+namespace Odigos\Illuminate\Routing;
 
-use Illuminate\Support\Arr;
-use Illuminate\Support\Traits\Macroable;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Traits\Macroable;
 class PendingResourceRegistration
 {
-    use \Illuminate\Routing\CreatesRegularExpressionRouteConstraints, Macroable;
+    use CreatesRegularExpressionRouteConstraints, Macroable;
     /**
      * The resource registrar.
      *
@@ -45,7 +45,7 @@ class PendingResourceRegistration
      * @param  string  $controller
      * @param  array  $options
      */
-    public function __construct(\Illuminate\Routing\ResourceRegistrar $registrar, $name, $controller, array $options)
+    public function __construct(ResourceRegistrar $registrar, $name, $controller, array $options)
     {
         $this->name = $name;
         $this->options = $options;
@@ -135,7 +135,7 @@ class PendingResourceRegistration
         $this->options['middleware'] = $middleware;
         if (isset($this->options['middleware_for'])) {
             foreach ($this->options['middleware_for'] as $method => $value) {
-                $this->options['middleware_for'][$method] = \Illuminate\Routing\Router::uniqueMiddleware(array_merge(Arr::wrap($value), $middleware));
+                $this->options['middleware_for'][$method] = Router::uniqueMiddleware(array_merge(Arr::wrap($value), $middleware));
             }
         }
         return $this;
@@ -152,7 +152,7 @@ class PendingResourceRegistration
         $methods = Arr::wrap($methods);
         $middleware = Arr::wrap($middleware);
         if (isset($this->options['middleware'])) {
-            $middleware = \Illuminate\Routing\Router::uniqueMiddleware(array_merge($this->options['middleware'], $middleware));
+            $middleware = Router::uniqueMiddleware(array_merge($this->options['middleware'], $middleware));
         }
         foreach ($methods as $method) {
             $this->options['middleware_for'][$method] = $middleware;

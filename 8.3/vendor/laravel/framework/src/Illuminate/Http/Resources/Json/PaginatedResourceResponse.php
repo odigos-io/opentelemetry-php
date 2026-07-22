@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Http\Resources\Json;
+namespace Odigos\Illuminate\Http\Resources\Json;
 
-use Illuminate\Support\Arr;
-class PaginatedResourceResponse extends \Illuminate\Http\Resources\Json\ResourceResponse
+use Odigos\Illuminate\Support\Arr;
+class PaginatedResourceResponse extends ResourceResponse
 {
     /**
      * Create an HTTP response that represents the object.

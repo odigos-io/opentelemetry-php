@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Query;
+namespace Odigos\Doctrine\DBAL\Query;
 
 final class UnionQuery
 {
@@ -11,7 +11,7 @@ final class UnionQuery
      * @param Union[]  $unionParts
      * @param string[] $orderBy
      */
-    public function __construct(private readonly array $unionParts, private readonly array $orderBy, private readonly \Doctrine\DBAL\Query\Limit $limit)
+    public function __construct(private readonly array $unionParts, private readonly array $orderBy, private readonly Limit $limit)
     {
     }
     /** @return Union[] */
@@ -24,7 +24,7 @@ final class UnionQuery
     {
         return $this->orderBy;
     }
-    public function getLimit(): \Doctrine\DBAL\Query\Limit
+    public function getLimit(): Limit
     {
         return $this->limit;
     }

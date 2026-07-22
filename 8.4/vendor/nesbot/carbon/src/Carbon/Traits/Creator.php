@@ -29,7 +29,7 @@ use DateTimeInterface;
 use DateTimeZone;
 use Exception;
 use ReturnTypeWillChange;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use Odigos\Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * Trait Creator.
  *

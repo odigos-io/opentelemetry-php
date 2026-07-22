@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Validation\Rules;
+namespace Odigos\Illuminate\Validation\Rules;
 
-use Illuminate\Contracts\Support\Arrayable;
+use Odigos\Illuminate\Contracts\Support\Arrayable;
 use Stringable;
-use function Illuminate\Support\enum_value;
+use function Odigos\Illuminate\Support\enum_value;
 class ArrayRule implements Stringable
 {
     /**

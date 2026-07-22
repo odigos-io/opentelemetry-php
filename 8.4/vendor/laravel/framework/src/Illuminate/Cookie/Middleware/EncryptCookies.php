@@ -1,15 +1,15 @@
 <?php
 
-namespace Illuminate\Cookie\Middleware;
+namespace Odigos\Illuminate\Cookie\Middleware;
 
 use Closure;
-use Illuminate\Contracts\Encryption\DecryptException;
-use Illuminate\Contracts\Encryption\Encrypter as EncrypterContract;
-use Illuminate\Cookie\CookieValuePrefix;
-use Illuminate\Support\Arr;
-use Symfony\Component\HttpFoundation\Cookie;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Odigos\Illuminate\Contracts\Encryption\DecryptException;
+use Odigos\Illuminate\Contracts\Encryption\Encrypter as EncrypterContract;
+use Odigos\Illuminate\Cookie\CookieValuePrefix;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Symfony\Component\HttpFoundation\Cookie;
+use Odigos\Symfony\Component\HttpFoundation\Request;
+use Odigos\Symfony\Component\HttpFoundation\Response;
 class EncryptCookies
 {
     /**

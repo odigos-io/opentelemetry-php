@@ -14,20 +14,20 @@ declare (strict_types=1);
  * @since         4.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Mailer;
+namespace Odigos\Cake\Mailer;
 
-use Cake\Core\Configure;
-use Cake\Http\Client\FormDataPart;
-use Cake\Utility\Hash;
-use Cake\Utility\Security;
-use Cake\Utility\Text;
+use Odigos\Cake\Core\Configure;
+use Odigos\Cake\Http\Client\FormDataPart;
+use Odigos\Cake\Utility\Hash;
+use Odigos\Cake\Utility\Security;
+use Odigos\Cake\Utility\Text;
 use Closure;
 use InvalidArgumentException;
 use JsonSerializable;
 use Psr\Http\Message\UploadedFileInterface;
 use RuntimeException;
 use SimpleXMLElement;
-use function Cake\Core\env;
+use function Odigos\Cake\Core\env;
 /**
  * Email message class.
  *

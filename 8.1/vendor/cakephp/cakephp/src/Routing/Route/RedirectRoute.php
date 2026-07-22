@@ -14,10 +14,10 @@ declare (strict_types=1);
  * @since         2.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Routing\Route;
+namespace Odigos\Cake\Routing\Route;
 
-use Cake\Http\Exception\RedirectException;
-use Cake\Routing\Router;
+use Odigos\Cake\Http\Exception\RedirectException;
+use Odigos\Cake\Routing\Router;
 /**
  * Redirect route will perform an immediate redirect. Redirect routes
  * are useful when you want to have Routing layer redirects occur in your
@@ -26,7 +26,7 @@ use Cake\Routing\Router;
  * Redirection is signaled by an exception that halts route matching and
  * defines the redirect URL and status code.
  */
-class RedirectRoute extends \Cake\Routing\Route\Route
+class RedirectRoute extends Route
 {
     /**
      * The location to redirect to.

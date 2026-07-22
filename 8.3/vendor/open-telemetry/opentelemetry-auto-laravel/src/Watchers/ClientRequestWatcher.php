@@ -1,21 +1,21 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenTelemetry\Contrib\Instrumentation\Laravel\Watchers;
+namespace Odigos\OpenTelemetry\Contrib\Instrumentation\Laravel\Watchers;
 
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Http\Client\Events\ConnectionFailed;
-use Illuminate\Http\Client\Events\RequestSending;
-use Illuminate\Http\Client\Events\ResponseReceived;
-use Illuminate\Http\Client\Request;
-use Illuminate\Http\Client\Response;
+use Odigos\Illuminate\Contracts\Foundation\Application;
+use Odigos\Illuminate\Http\Client\Events\ConnectionFailed;
+use Odigos\Illuminate\Http\Client\Events\RequestSending;
+use Odigos\Illuminate\Http\Client\Events\ResponseReceived;
+use Odigos\Illuminate\Http\Client\Request;
+use Odigos\Illuminate\Http\Client\Response;
 use OpenTelemetry\API\Instrumentation\CachedInstrumentation;
 use OpenTelemetry\API\Trace\SpanInterface;
 use OpenTelemetry\API\Trace\SpanKind;
 use OpenTelemetry\API\Trace\StatusCode;
 use OpenTelemetry\SemConv\TraceAttributes;
-use Symfony\Component\HttpFoundation\Response as HttpResponse;
-class ClientRequestWatcher extends \OpenTelemetry\Contrib\Instrumentation\Laravel\Watchers\Watcher
+use Odigos\Symfony\Component\HttpFoundation\Response as HttpResponse;
+class ClientRequestWatcher extends Watcher
 {
     /**
      * @var array<string, SpanInterface>
@@ -28,7 +28,7 @@ class ClientRequestWatcher extends \OpenTelemetry\Contrib\Instrumentation\Larave
      * @psalm-suppress UndefinedInterfaceMethod
      * @suppress PhanTypeArraySuspicious
      */
-    public function register(Application $app): void
+    public function register(object $app): void
     {
         $app['events']->listen(RequestSending::class, [$this, 'recordRequest']);
         $app['events']->listen(ConnectionFailed::class, [$this, 'recordConnectionFailed']);
@@ -39,7 +39,7 @@ class ClientRequestWatcher extends \OpenTelemetry\Contrib\Instrumentation\Larave
      * @psalm-suppress PossiblyUnusedMethod
      * @suppress PhanEmptyFQSENInCallable,PhanUndeclaredFunctionInCallable
      */
-    public function recordRequest(RequestSending $request): void
+    public function recordRequest(object $request): void
     {
         $parsedUrl = collect(parse_url($request->request->url()) ?: []);
         $processedUrl = $parsedUrl->get('scheme', 'http') . '://' . $parsedUrl->get('host') . $parsedUrl->get('path', '');
@@ -50,7 +50,7 @@ class ClientRequestWatcher extends \OpenTelemetry\Contrib\Instrumentation\Larave
         $this->spans[$this->createRequestComparisonHash($request->request)] = $span;
     }
     /** @psalm-suppress PossiblyUnusedMethod */
-    public function recordConnectionFailed(ConnectionFailed $request): void
+    public function recordConnectionFailed(object $request): void
     {
         $requestHash = $this->createRequestComparisonHash($request->request);
         $span = $this->spans[$requestHash] ?? null;
@@ -62,7 +62,7 @@ class ClientRequestWatcher extends \OpenTelemetry\Contrib\Instrumentation\Larave
         unset($this->spans[$requestHash]);
     }
     /** @psalm-suppress PossiblyUnusedMethod */
-    public function recordResponse(ResponseReceived $request): void
+    public function recordResponse(object $request): void
     {
         $requestHash = $this->createRequestComparisonHash($request->request);
         $span = $this->spans[$requestHash] ?? null;
@@ -74,11 +74,11 @@ class ClientRequestWatcher extends \OpenTelemetry\Contrib\Instrumentation\Larave
         $span->end();
         unset($this->spans[$requestHash]);
     }
-    private function createRequestComparisonHash(Request $request): string
+    private function createRequestComparisonHash(object $request): string
     {
         return sha1($request->method() . '|' . $request->url() . '|' . $request->body());
     }
-    private function maybeRecordError(SpanInterface $span, Response $response): void
+    private function maybeRecordError(SpanInterface $span, object $response): void
     {
         if ($response->successful()) {
             return;

@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Routing;
+namespace Odigos\Symfony\Component\Routing;
 
-use Symfony\Component\HttpFoundation\Request;
+use Odigos\Symfony\Component\HttpFoundation\Request;
 /**
  * Holds information about the current request.
  *

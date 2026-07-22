@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Driver\PDO\PgSQL;
+namespace Odigos\Doctrine\DBAL\Driver\PDO\PgSQL;
 
-use Doctrine\DBAL\Driver\AbstractPostgreSQLDriver;
-use Doctrine\DBAL\Driver\PDO\Connection;
-use Doctrine\DBAL\Driver\PDO\Exception;
-use Doctrine\DBAL\Driver\PDO\Exception\InvalidConfiguration;
-use Doctrine\DBAL\Driver\PDO\PDOConnect;
+use Odigos\Doctrine\DBAL\Driver\AbstractPostgreSQLDriver;
+use Odigos\Doctrine\DBAL\Driver\PDO\Connection;
+use Odigos\Doctrine\DBAL\Driver\PDO\Exception;
+use Odigos\Doctrine\DBAL\Driver\PDO\Exception\InvalidConfiguration;
+use Odigos\Doctrine\DBAL\Driver\PDO\PDOConnect;
 use PDO;
 use Pdo\Pgsql;
 use PDOException;

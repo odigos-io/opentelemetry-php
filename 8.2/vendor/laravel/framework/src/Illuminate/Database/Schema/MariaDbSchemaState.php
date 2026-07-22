@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Database\Schema;
+namespace Odigos\Illuminate\Database\Schema;
 
-class MariaDbSchemaState extends \Illuminate\Database\Schema\MySqlSchemaState
+class MariaDbSchemaState extends MySqlSchemaState
 {
     /**
      * Load the given schema file into the database.

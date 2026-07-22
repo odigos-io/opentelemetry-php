@@ -1,8 +1,8 @@
 <?php
 
-namespace Laravel\Prompts;
+namespace Odigos\Laravel\Prompts;
 
-class PausePrompt extends \Laravel\Prompts\Prompt
+class PausePrompt extends Prompt
 {
     /**
      * Create a new PausePrompt instance.
@@ -12,7 +12,7 @@ class PausePrompt extends \Laravel\Prompts\Prompt
         $this->required = \false;
         $this->validate = null;
         $this->on('key', fn($key) => match ($key) {
-            \Laravel\Prompts\Key::ENTER => $this->submit(),
+            Key::ENTER => $this->submit(),
             default => null,
         });
     }

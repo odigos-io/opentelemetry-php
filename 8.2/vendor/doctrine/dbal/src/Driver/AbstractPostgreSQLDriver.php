@@ -1,16 +1,16 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Driver;
+namespace Odigos\Doctrine\DBAL\Driver;
 
-use Doctrine\DBAL\Driver;
-use Doctrine\DBAL\Driver\API\ExceptionConverter as ExceptionConverterInterface;
-use Doctrine\DBAL\Driver\API\PostgreSQL\ExceptionConverter;
-use Doctrine\DBAL\Platforms\Exception\InvalidPlatformVersion;
-use Doctrine\DBAL\Platforms\PostgreSQL120Platform;
-use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
-use Doctrine\DBAL\ServerVersionProvider;
-use Doctrine\Deprecations\Deprecation;
+use Odigos\Doctrine\DBAL\Driver;
+use Odigos\Doctrine\DBAL\Driver\API\ExceptionConverter as ExceptionConverterInterface;
+use Odigos\Doctrine\DBAL\Driver\API\PostgreSQL\ExceptionConverter;
+use Odigos\Doctrine\DBAL\Platforms\Exception\InvalidPlatformVersion;
+use Odigos\Doctrine\DBAL\Platforms\PostgreSQL120Platform;
+use Odigos\Doctrine\DBAL\Platforms\PostgreSQLPlatform;
+use Odigos\Doctrine\DBAL\ServerVersionProvider;
+use Odigos\Doctrine\Deprecations\Deprecation;
 use function preg_match;
 use function version_compare;
 /**

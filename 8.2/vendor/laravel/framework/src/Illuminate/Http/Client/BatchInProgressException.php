@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Http\Client;
+namespace Odigos\Illuminate\Http\Client;
 
-class BatchInProgressException extends \Illuminate\Http\Client\HttpClientException
+class BatchInProgressException extends HttpClientException
 {
     public function __construct()
     {

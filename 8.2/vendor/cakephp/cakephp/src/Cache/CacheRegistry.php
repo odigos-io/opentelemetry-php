@@ -14,12 +14,12 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Cache;
+namespace Odigos\Cake\Cache;
 
 use BadMethodCallException;
-use Cake\Core\App;
-use Cake\Core\Exception\CakeException;
-use Cake\Core\ObjectRegistry;
+use Odigos\Cake\Core\App;
+use Odigos\Cake\Core\Exception\CakeException;
+use Odigos\Cake\Core\ObjectRegistry;
 /**
  * An object registry for cache engines.
  *
@@ -67,7 +67,7 @@ class CacheRegistry extends ObjectRegistry
      * @return \Cake\Cache\CacheEngine The constructed CacheEngine class.
      * @throws \Cake\Core\Exception\CakeException When the cache engine cannot be initialized.
      */
-    protected function _create(object|string $class, string $alias, array $config): \Cake\Cache\CacheEngine
+    protected function _create(object|string $class, string $alias, array $config): CacheEngine
     {
         if (is_object($class)) {
             $instance = $class;
@@ -75,7 +75,7 @@ class CacheRegistry extends ObjectRegistry
             $instance = new $class($config);
         }
         unset($config['className']);
-        assert($instance instanceof \Cake\Cache\CacheEngine, 'Cache engines must extend `' . \Cake\Cache\CacheEngine::class . '`.');
+        assert($instance instanceof CacheEngine, 'Cache engines must extend `' . CacheEngine::class . '`.');
         if (!$instance->init($config)) {
             throw new CakeException(sprintf('Cache engine `%s` is not properly configured. Check error log for additional information.', $instance::class));
         }

@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Routing;
+namespace Odigos\Illuminate\Routing;
 
-use Illuminate\Container\Util;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Reflector;
+use Odigos\Illuminate\Container\Util;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Reflector;
 use ReflectionClass;
 use ReflectionFunctionAbstract;
 use ReflectionMethod;

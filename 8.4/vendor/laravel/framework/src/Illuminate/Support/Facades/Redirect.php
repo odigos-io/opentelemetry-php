@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Support\Facades;
+namespace Odigos\Illuminate\Support\Facades;
 
 /**
  * @method static \Illuminate\Http\RedirectResponse back(int $status = 302, array $headers = [], mixed $fallback = false)
@@ -25,7 +25,7 @@ namespace Illuminate\Support\Facades;
  *
  * @see \Illuminate\Routing\Redirector
  */
-class Redirect extends \Illuminate\Support\Facades\Facade
+class Redirect extends Facade
 {
     /**
      * Get the registered name of the component.

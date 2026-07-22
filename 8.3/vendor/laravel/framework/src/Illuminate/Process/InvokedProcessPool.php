@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Process;
+namespace Odigos\Illuminate\Process;
 
 use Countable;
-use Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Collection;
 class InvokedProcessPool implements Countable
 {
     /**
@@ -58,7 +58,7 @@ class InvokedProcessPool implements Countable
      */
     public function wait()
     {
-        return new \Illuminate\Process\ProcessPoolResults((new Collection($this->invokedProcesses))->map->wait()->all());
+        return new ProcessPoolResults((new Collection($this->invokedProcesses))->map->wait()->all());
     }
     /**
      * Get the total number of processes.

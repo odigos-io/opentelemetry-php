@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Odigos;
 
-use OpenTelemetry\Contrib\Instrumentation\Doctrine\DoctrineInstrumentation;
+use Odigos\OpenTelemetry\Contrib\Instrumentation\Doctrine\DoctrineInstrumentation;
 use OpenTelemetry\SDK\Sdk;
 if (\class_exists(Sdk::class) && Sdk::isInstrumentationDisabled(DoctrineInstrumentation::NAME) === \true) {
     return;

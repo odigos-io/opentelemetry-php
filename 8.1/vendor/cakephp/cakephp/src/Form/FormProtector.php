@@ -14,11 +14,11 @@ declare (strict_types=1);
  * @since         4.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Form;
+namespace Odigos\Cake\Form;
 
-use Cake\Core\Configure;
-use Cake\Utility\Hash;
-use Cake\Utility\Security;
+use Odigos\Cake\Core\Configure;
+use Odigos\Cake\Utility\Hash;
+use Odigos\Cake\Utility\Security;
 /**
  * Protects against form tampering. It ensures that:
  *

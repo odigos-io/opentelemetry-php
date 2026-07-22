@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Queue\Jobs;
+namespace Odigos\Illuminate\Queue\Jobs;
 
-use Illuminate\Container\Container;
-use Illuminate\Contracts\Queue\Job as JobContract;
-use Illuminate\Queue\RedisQueue;
-class RedisJob extends \Illuminate\Queue\Jobs\Job implements JobContract
+use Odigos\Illuminate\Container\Container;
+use Odigos\Illuminate\Contracts\Queue\Job as JobContract;
+use Odigos\Illuminate\Queue\RedisQueue;
+class RedisJob extends Job implements JobContract
 {
     /**
      * The Redis queue instance.

@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Broadcasting\Broadcasters;
+namespace Odigos\Illuminate\Broadcasting\Broadcasters;
 
-use Illuminate\Support\Str;
+use Odigos\Illuminate\Support\Str;
 trait UsePusherChannelConventions
 {
     /**

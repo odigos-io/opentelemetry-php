@@ -1,15 +1,15 @@
 <?php
 
-namespace Illuminate\Queue\Console;
+namespace Odigos\Illuminate\Queue\Console;
 
 use DateTimeInterface;
-use Illuminate\Console\Command;
-use Illuminate\Contracts\Encryption\Encrypter;
-use Illuminate\Queue\Events\JobRetryRequested;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
+use Odigos\Illuminate\Console\Command;
+use Odigos\Illuminate\Contracts\Encryption\Encrypter;
+use Odigos\Illuminate\Queue\Events\JobRetryRequested;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Collection;
 use RuntimeException;
-use Symfony\Component\Console\Attribute\AsCommand;
+use Odigos\Symfony\Component\Console\Attribute\AsCommand;
 #[AsCommand(name: 'queue:retry')]
 class RetryCommand extends Command
 {

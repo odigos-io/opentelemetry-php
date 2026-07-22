@@ -1,7 +1,7 @@
 <?php
 
-namespace GuzzleHttp\Exception;
+namespace Odigos\GuzzleHttp\Exception;
 
-final class InvalidArgumentException extends \InvalidArgumentException implements \GuzzleHttp\Exception\GuzzleException
+final class InvalidArgumentException extends \InvalidArgumentException implements GuzzleException
 {
 }

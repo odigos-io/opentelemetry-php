@@ -14,16 +14,16 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\View\Widget;
+namespace Odigos\Cake\View\Widget;
 
-use Cake\View\Form\ContextInterface;
+use Odigos\Cake\View\Form\ContextInterface;
 /**
  * Input widget class for generating a file upload control.
  *
  * This class is usually used internally by `Cake\View\Helper\FormHelper`,
  * it but can be used to generate standalone file upload controls.
  */
-class FileWidget extends \Cake\View\Widget\BasicWidget
+class FileWidget extends BasicWidget
 {
     /**
      * Data defaults.

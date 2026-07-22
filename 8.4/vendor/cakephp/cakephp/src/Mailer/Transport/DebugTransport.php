@@ -16,10 +16,10 @@ declare (strict_types=1);
  * @since         2.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Mailer\Transport;
+namespace Odigos\Cake\Mailer\Transport;
 
-use Cake\Mailer\AbstractTransport;
-use Cake\Mailer\Message;
+use Odigos\Cake\Mailer\AbstractTransport;
+use Odigos\Cake\Mailer\Message;
 /**
  * Debug Transport class, useful for emulating the email sending process and inspecting
  * the resultant email message before actually sending it during development

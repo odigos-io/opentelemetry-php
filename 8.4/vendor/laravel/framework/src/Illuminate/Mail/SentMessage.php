@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Mail;
+namespace Odigos\Illuminate\Mail;
 
-use Illuminate\Support\Collection;
-use Illuminate\Support\Traits\ForwardsCalls;
-use Symfony\Component\Mailer\SentMessage as SymfonySentMessage;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Traits\ForwardsCalls;
+use Odigos\Symfony\Component\Mailer\SentMessage as SymfonySentMessage;
 /**
  * @mixin \Symfony\Component\Mailer\SentMessage
  */

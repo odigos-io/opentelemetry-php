@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Database\Eloquent\Relations\Concerns;
+namespace Odigos\Illuminate\Database\Eloquent\Relations\Concerns;
 
-use Illuminate\Contracts\Database\Eloquent\SupportsPartialRelations;
-use Illuminate\Database\Eloquent\Model;
+use Odigos\Illuminate\Contracts\Database\Eloquent\SupportsPartialRelations;
+use Odigos\Illuminate\Database\Eloquent\Model;
 trait ComparesRelatedModels
 {
     /**

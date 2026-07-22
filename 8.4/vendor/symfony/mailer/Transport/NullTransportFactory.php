@@ -8,18 +8,18 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Mailer\Transport;
+namespace Odigos\Symfony\Component\Mailer\Transport;
 
-use Symfony\Component\Mailer\Exception\UnsupportedSchemeException;
+use Odigos\Symfony\Component\Mailer\Exception\UnsupportedSchemeException;
 /**
  * @author Konstantin Myakshin <molodchick@gmail.com>
  */
-final class NullTransportFactory extends \Symfony\Component\Mailer\Transport\AbstractTransportFactory
+final class NullTransportFactory extends AbstractTransportFactory
 {
-    public function create(\Symfony\Component\Mailer\Transport\Dsn $dsn): \Symfony\Component\Mailer\Transport\TransportInterface
+    public function create(Dsn $dsn): TransportInterface
     {
         if ('null' === $dsn->getScheme()) {
-            return new \Symfony\Component\Mailer\Transport\NullTransport($this->dispatcher, $this->logger);
+            return new NullTransport($this->dispatcher, $this->logger);
         }
         throw new UnsupportedSchemeException($dsn, 'null', $this->getSupportedSchemes());
     }

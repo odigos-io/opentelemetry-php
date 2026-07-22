@@ -5,9 +5,9 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\db;
+namespace Odigos\yii\db;
 
-use yii\base\BaseObject;
+use Odigos\yii\base\BaseObject;
 /**
  * SqlToken represents SQL tokens produced by [[SqlTokenizer]] or its child classes.
  *
@@ -198,7 +198,7 @@ class SqlToken extends BaseObject implements \ArrayAccess
      * @param int|null $lastMatchIndex token children offset where a successful match ends.
      * @return bool whether this token matches the pattern SQL code.
      */
-    public function matches(\yii\db\SqlToken $patternToken, $offset = 0, &$firstMatchIndex = null, &$lastMatchIndex = null)
+    public function matches(SqlToken $patternToken, $offset = 0, &$firstMatchIndex = null, &$lastMatchIndex = null)
     {
         if (!$patternToken->getHasChildren()) {
             return \false;
@@ -215,7 +215,7 @@ class SqlToken extends BaseObject implements \ArrayAccess
      * @param int|null $lastMatchIndex
      * @return bool
      */
-    private function tokensMatch(\yii\db\SqlToken $patternToken, \yii\db\SqlToken $token, $offset = 0, &$firstMatchIndex = null, &$lastMatchIndex = null)
+    private function tokensMatch(SqlToken $patternToken, SqlToken $token, $offset = 0, &$firstMatchIndex = null, &$lastMatchIndex = null)
     {
         if ($patternToken->getIsCollection() !== $token->getIsCollection() || !$patternToken->getIsCollection() && $patternToken->content !== $token->content) {
             return \false;

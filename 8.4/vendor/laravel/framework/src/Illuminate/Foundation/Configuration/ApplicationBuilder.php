@@ -1,24 +1,24 @@
 <?php
 
-namespace Illuminate\Foundation\Configuration;
+namespace Odigos\Illuminate\Foundation\Configuration;
 
 use Closure;
-use Illuminate\Console\Application as Artisan;
-use Illuminate\Console\Scheduling\Schedule;
-use Illuminate\Contracts\Console\Kernel as ConsoleKernel;
-use Illuminate\Contracts\Http\Kernel as HttpKernel;
-use Illuminate\Foundation\Application;
-use Illuminate\Foundation\Bootstrap\RegisterProviders;
-use Illuminate\Foundation\Events\DiagnosingHealth;
-use Illuminate\Foundation\Http\Middleware\PreventRequestsDuringMaintenance;
-use Illuminate\Foundation\Support\Providers\EventServiceProvider as AppEventServiceProvider;
-use Illuminate\Foundation\Support\Providers\RouteServiceProvider as AppRouteServiceProvider;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Broadcast;
-use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\View;
-use Laravel\Folio\Folio;
+use Odigos\Illuminate\Console\Application as Artisan;
+use Odigos\Illuminate\Console\Scheduling\Schedule;
+use Odigos\Illuminate\Contracts\Console\Kernel as ConsoleKernel;
+use Odigos\Illuminate\Contracts\Http\Kernel as HttpKernel;
+use Odigos\Illuminate\Foundation\Application;
+use Odigos\Illuminate\Foundation\Bootstrap\RegisterProviders;
+use Odigos\Illuminate\Foundation\Events\DiagnosingHealth;
+use Odigos\Illuminate\Foundation\Http\Middleware\PreventRequestsDuringMaintenance;
+use Odigos\Illuminate\Foundation\Support\Providers\EventServiceProvider as AppEventServiceProvider;
+use Odigos\Illuminate\Foundation\Support\Providers\RouteServiceProvider as AppRouteServiceProvider;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Facades\Broadcast;
+use Odigos\Illuminate\Support\Facades\Event;
+use Odigos\Illuminate\Support\Facades\Route;
+use Odigos\Illuminate\Support\Facades\View;
+use Odigos\Laravel\Folio\Folio;
 class ApplicationBuilder
 {
     /**
@@ -52,8 +52,8 @@ class ApplicationBuilder
      */
     public function withKernels()
     {
-        $this->app->singleton(\Illuminate\Contracts\Http\Kernel::class, \Illuminate\Foundation\Http\Kernel::class);
-        $this->app->singleton(\Illuminate\Contracts\Console\Kernel::class, \Illuminate\Foundation\Console\Kernel::class);
+        $this->app->singleton(\Odigos\Illuminate\Contracts\Http\Kernel::class, \Odigos\Illuminate\Foundation\Http\Kernel::class);
+        $this->app->singleton(\Odigos\Illuminate\Contracts\Console\Kernel::class, \Odigos\Illuminate\Foundation\Console\Kernel::class);
         return $this;
     }
     /**
@@ -211,7 +211,7 @@ class ApplicationBuilder
     public function withMiddleware(?callable $callback = null)
     {
         $this->app->afterResolving(HttpKernel::class, function ($kernel) use ($callback) {
-            $middleware = (new \Illuminate\Foundation\Configuration\Middleware())->redirectGuestsTo(fn() => route('login'));
+            $middleware = (new Middleware())->redirectGuestsTo(fn() => route('login'));
             if (!is_null($callback)) {
                 $callback($middleware);
             }
@@ -235,7 +235,7 @@ class ApplicationBuilder
         });
         $this->app->afterResolving(ConsoleKernel::class, function () use ($callback) {
             if (!is_null($callback)) {
-                $callback(new \Illuminate\Foundation\Configuration\Middleware());
+                $callback(new Middleware());
             }
         });
         return $this;
@@ -294,9 +294,9 @@ class ApplicationBuilder
      */
     public function withExceptions(?callable $using = null)
     {
-        $this->app->singleton(\Illuminate\Contracts\Debug\ExceptionHandler::class, \Illuminate\Foundation\Exceptions\Handler::class);
+        $this->app->singleton(\Odigos\Illuminate\Contracts\Debug\ExceptionHandler::class, \Odigos\Illuminate\Foundation\Exceptions\Handler::class);
         if ($using !== null) {
-            $this->app->afterResolving(\Illuminate\Foundation\Exceptions\Handler::class, fn($handler) => $using(new \Illuminate\Foundation\Configuration\Exceptions($handler)));
+            $this->app->afterResolving(\Odigos\Illuminate\Foundation\Exceptions\Handler::class, fn($handler) => $using(new Exceptions($handler)));
         }
         return $this;
     }

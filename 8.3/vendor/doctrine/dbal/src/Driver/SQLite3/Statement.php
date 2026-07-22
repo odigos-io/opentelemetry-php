@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Driver\SQLite3;
+namespace Odigos\Doctrine\DBAL\Driver\SQLite3;
 
-use Doctrine\DBAL\Driver\Statement as StatementInterface;
-use Doctrine\DBAL\ParameterType;
+use Odigos\Doctrine\DBAL\Driver\Statement as StatementInterface;
+use Odigos\Doctrine\DBAL\ParameterType;
 use SQLite3;
 use SQLite3Stmt;
 use function assert;
@@ -26,15 +26,15 @@ final class Statement implements StatementInterface
     {
         $this->statement->bindValue($param, $value, $this->convertParamType($type));
     }
-    public function execute(): \Doctrine\DBAL\Driver\SQLite3\Result
+    public function execute(): Result
     {
         try {
             $result = $this->statement->execute();
         } catch (\Exception $e) {
-            throw \Doctrine\DBAL\Driver\SQLite3\Exception::new($e);
+            throw Exception::new($e);
         }
         assert($result !== \false);
-        return new \Doctrine\DBAL\Driver\SQLite3\Result($result, $this->connection->changes());
+        return new Result($result, $this->connection->changes());
     }
     /** @phpstan-return self::TYPE_* */
     private function convertParamType(ParameterType $type): int

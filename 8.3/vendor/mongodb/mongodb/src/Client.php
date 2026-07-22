@@ -15,15 +15,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace MongoDB;
+namespace Odigos\MongoDB;
 
 use Composer\InstalledVersions;
 use Iterator;
 use MongoDB\BSON\Document;
 use MongoDB\BSON\PackedArray;
-use MongoDB\Builder\BuilderEncoder;
-use MongoDB\Builder\Pipeline;
-use MongoDB\Codec\Encoder;
+use Odigos\MongoDB\Builder\BuilderEncoder;
+use Odigos\MongoDB\Builder\Pipeline;
+use Odigos\MongoDB\Codec\Encoder;
 use MongoDB\Driver\BulkWriteCommand;
 use MongoDB\Driver\BulkWriteCommandResult;
 use MongoDB\Driver\ClientEncryption;
@@ -35,17 +35,17 @@ use MongoDB\Driver\ReadConcern;
 use MongoDB\Driver\ReadPreference;
 use MongoDB\Driver\Session;
 use MongoDB\Driver\WriteConcern;
-use MongoDB\Exception\InvalidArgumentException;
-use MongoDB\Exception\UnexpectedValueException;
-use MongoDB\Exception\UnsupportedException;
-use MongoDB\Model\BSONArray;
-use MongoDB\Model\BSONDocument;
-use MongoDB\Model\DatabaseInfo;
-use MongoDB\Operation\ClientBulkWriteCommand;
-use MongoDB\Operation\DropDatabase;
-use MongoDB\Operation\ListDatabaseNames;
-use MongoDB\Operation\ListDatabases;
-use MongoDB\Operation\Watch;
+use Odigos\MongoDB\Exception\InvalidArgumentException;
+use Odigos\MongoDB\Exception\UnexpectedValueException;
+use Odigos\MongoDB\Exception\UnsupportedException;
+use Odigos\MongoDB\Model\BSONArray;
+use Odigos\MongoDB\Model\BSONDocument;
+use Odigos\MongoDB\Model\DatabaseInfo;
+use Odigos\MongoDB\Operation\ClientBulkWriteCommand;
+use Odigos\MongoDB\Operation\DropDatabase;
+use Odigos\MongoDB\Operation\ListDatabaseNames;
+use Odigos\MongoDB\Operation\ListDatabases;
+use Odigos\MongoDB\Operation\Watch;
 use stdClass;
 use Throwable;
 use function array_diff_key;
@@ -138,7 +138,7 @@ class Client
      * @see https://php.net/types.string#language.types.string.parsing.complex
      * @param string $databaseName Name of the database to select
      */
-    public function __get(string $databaseName): \MongoDB\Database
+    public function __get(string $databaseName): Database
     {
         return $this->getDatabase($databaseName);
     }
@@ -168,12 +168,12 @@ class Client
      * @throws DriverRuntimeException for other driver errors (e.g. connection errors)
      * @see ClientBulkWriteCommand::__construct() for supported options
      */
-    public function bulkWrite(BulkWriteCommand|\MongoDB\ClientBulkWrite $bulk, array $options = []): BulkWriteCommandResult
+    public function bulkWrite(BulkWriteCommand|ClientBulkWrite $bulk, array $options = []): BulkWriteCommandResult
     {
         if (!isset($options['writeConcern']) && !is_in_transaction($options)) {
             $options['writeConcern'] = $this->writeConcern;
         }
-        if ($bulk instanceof \MongoDB\ClientBulkWrite) {
+        if ($bulk instanceof ClientBulkWrite) {
             $bulk = $bulk->bulkWriteCommand;
         }
         $operation = new ClientBulkWriteCommand($bulk, $options);
@@ -218,10 +218,10 @@ class Client
      * @see Collection::__construct() for supported options
      * @throws InvalidArgumentException for parameter/option parsing errors
      */
-    public function getCollection(string $databaseName, string $collectionName, array $options = []): \MongoDB\Collection
+    public function getCollection(string $databaseName, string $collectionName, array $options = []): Collection
     {
         $options += ['typeMap' => $this->typeMap, 'builderEncoder' => $this->builderEncoder, 'autoEncryptionEnabled' => $this->autoEncryptionEnabled];
-        return new \MongoDB\Collection($this->manager, $databaseName, $collectionName, $options);
+        return new Collection($this->manager, $databaseName, $collectionName, $options);
     }
     /**
      * Returns a database instance.
@@ -231,10 +231,10 @@ class Client
      *
      * @see Database::__construct() for supported options
      */
-    public function getDatabase(string $databaseName, array $options = []): \MongoDB\Database
+    public function getDatabase(string $databaseName, array $options = []): Database
     {
         $options += ['typeMap' => $this->typeMap, 'builderEncoder' => $this->builderEncoder, 'autoEncryptionEnabled' => $this->autoEncryptionEnabled];
-        return new \MongoDB\Database($this->manager, $databaseName, $options);
+        return new Database($this->manager, $databaseName, $options);
     }
     /**
      * Return the Manager.
@@ -323,7 +323,7 @@ class Client
      * @param array  $options        Collection constructor options
      * @throws InvalidArgumentException for parameter/option parsing errors
      */
-    public function selectCollection(string $databaseName, string $collectionName, array $options = []): \MongoDB\Collection
+    public function selectCollection(string $databaseName, string $collectionName, array $options = []): Collection
     {
         return $this->getCollection($databaseName, $collectionName, $options);
     }
@@ -335,7 +335,7 @@ class Client
      * @param array  $options      Database constructor options
      * @throws InvalidArgumentException for parameter/option parsing errors
      */
-    public function selectDatabase(string $databaseName, array $options = []): \MongoDB\Database
+    public function selectDatabase(string $databaseName, array $options = []): Database
     {
         return $this->getDatabase($databaseName, $options);
     }
@@ -357,7 +357,7 @@ class Client
      * @param array $options  Command options
      * @throws InvalidArgumentException for parameter/option parsing errors
      */
-    public function watch(array $pipeline = [], array $options = []): \MongoDB\ChangeStream
+    public function watch(array $pipeline = [], array $options = []): ChangeStream
     {
         if (is_builder_pipeline($pipeline)) {
             $pipeline = new Pipeline(...$pipeline);

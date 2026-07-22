@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Foundation\Exceptions\Whoops;
+namespace Odigos\Illuminate\Foundation\Exceptions\Whoops;
 
-use Illuminate\Contracts\Foundation\ExceptionRenderer;
+use Odigos\Illuminate\Contracts\Foundation\ExceptionRenderer;
 use Odigos\Whoops\Run as Whoops;
 use function Odigos\tap;
 class WhoopsExceptionRenderer implements ExceptionRenderer
@@ -28,6 +28,6 @@ class WhoopsExceptionRenderer implements ExceptionRenderer
      */
     protected function whoopsHandler()
     {
-        return (new \Illuminate\Foundation\Exceptions\Whoops\WhoopsHandler())->forDebug();
+        return (new WhoopsHandler())->forDebug();
     }
 }

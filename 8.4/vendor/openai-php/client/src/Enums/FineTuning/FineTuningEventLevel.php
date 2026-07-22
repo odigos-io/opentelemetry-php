@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenAI\Enums\FineTuning;
+namespace Odigos\OpenAI\Enums\FineTuning;
 
 enum FineTuningEventLevel : string
 {

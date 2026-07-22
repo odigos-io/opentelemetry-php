@@ -12,12 +12,12 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Core\Exception;
+namespace Odigos\Cake\Core\Exception;
 
 /**
  * Exception raised when a plugin could not be found
  */
-class MissingPluginException extends \Cake\Core\Exception\CakeException
+class MissingPluginException extends CakeException
 {
     /**
      * @inheritDoc

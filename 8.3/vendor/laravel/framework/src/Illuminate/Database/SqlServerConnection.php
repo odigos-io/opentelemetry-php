@@ -1,17 +1,17 @@
 <?php
 
-namespace Illuminate\Database;
+namespace Odigos\Illuminate\Database;
 
 use Closure;
 use Exception;
-use Illuminate\Database\Query\Grammars\SqlServerGrammar as QueryGrammar;
-use Illuminate\Database\Query\Processors\SqlServerProcessor;
-use Illuminate\Database\Schema\Grammars\SqlServerGrammar as SchemaGrammar;
-use Illuminate\Database\Schema\SqlServerBuilder;
-use Illuminate\Filesystem\Filesystem;
+use Odigos\Illuminate\Database\Query\Grammars\SqlServerGrammar as QueryGrammar;
+use Odigos\Illuminate\Database\Query\Processors\SqlServerProcessor;
+use Odigos\Illuminate\Database\Schema\Grammars\SqlServerGrammar as SchemaGrammar;
+use Odigos\Illuminate\Database\Schema\SqlServerBuilder;
+use Odigos\Illuminate\Filesystem\Filesystem;
 use RuntimeException;
 use Throwable;
-class SqlServerConnection extends \Illuminate\Database\Connection
+class SqlServerConnection extends Connection
 {
     /**
      * {@inheritdoc}

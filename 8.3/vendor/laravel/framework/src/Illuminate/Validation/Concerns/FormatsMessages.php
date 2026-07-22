@@ -1,16 +1,16 @@
 <?php
 
-namespace Illuminate\Validation\Concerns;
+namespace Odigos\Illuminate\Validation\Concerns;
 
 use Closure;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Number;
-use Illuminate\Support\Str;
-use Symfony\Component\HttpFoundation\File\File;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Number;
+use Odigos\Illuminate\Support\Str;
+use Odigos\Symfony\Component\HttpFoundation\File\File;
+use Odigos\Symfony\Component\HttpFoundation\File\UploadedFile;
 trait FormatsMessages
 {
-    use \Illuminate\Validation\Concerns\ReplacesAttributes;
+    use ReplacesAttributes;
     /**
      * Get the validation message for an attribute and rule.
      *

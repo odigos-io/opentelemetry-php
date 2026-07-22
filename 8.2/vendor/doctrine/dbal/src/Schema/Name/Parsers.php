@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Schema\Name;
+namespace Odigos\Doctrine\DBAL\Schema\Name;
 
-use Doctrine\DBAL\Schema\Name\Parser\GenericNameParser;
-use Doctrine\DBAL\Schema\Name\Parser\OptionallyQualifiedNameParser;
-use Doctrine\DBAL\Schema\Name\Parser\UnqualifiedNameParser;
+use Odigos\Doctrine\DBAL\Schema\Name\Parser\GenericNameParser;
+use Odigos\Doctrine\DBAL\Schema\Name\Parser\OptionallyQualifiedNameParser;
+use Odigos\Doctrine\DBAL\Schema\Name\Parser\UnqualifiedNameParser;
 /**
  * A static registry for name parsers.
  *

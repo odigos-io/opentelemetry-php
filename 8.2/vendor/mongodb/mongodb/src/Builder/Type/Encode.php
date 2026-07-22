@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace MongoDB\Builder\Type;
+namespace Odigos\MongoDB\Builder\Type;
 
-use MongoDB\Builder\BuilderEncoder;
+use Odigos\MongoDB\Builder\BuilderEncoder;
 /**
  * Defines how to encode a stage or an operator into BSON.
  *

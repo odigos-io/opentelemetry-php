@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\VarDumper\Caster;
+namespace Odigos\Symfony\Component\VarDumper\Caster;
 
-class VirtualStub extends \Symfony\Component\VarDumper\Caster\ConstStub
+class VirtualStub extends ConstStub
 {
     public function __construct(\ReflectionProperty $property)
     {

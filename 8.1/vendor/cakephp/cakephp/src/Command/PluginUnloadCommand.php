@@ -14,17 +14,17 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Command;
+namespace Odigos\Cake\Command;
 
 use Odigos\Brick\VarExporter\VarExporter;
-use Cake\Console\Arguments;
-use Cake\Console\ConsoleIo;
-use Cake\Console\ConsoleOptionParser;
-use Cake\Utility\Hash;
+use Odigos\Cake\Console\Arguments;
+use Odigos\Cake\Console\ConsoleIo;
+use Odigos\Cake\Console\ConsoleOptionParser;
+use Odigos\Cake\Utility\Hash;
 /**
  * Command for unloading plugins.
  */
-class PluginUnloadCommand extends \Cake\Command\Command
+class PluginUnloadCommand extends Command
 {
     /**
      * Config file

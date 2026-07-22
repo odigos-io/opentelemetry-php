@@ -5,10 +5,10 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\db\conditions;
+namespace Odigos\yii\db\conditions;
 
-use yii\base\InvalidArgumentException;
-use yii\db\ExpressionInterface;
+use Odigos\yii\base\InvalidArgumentException;
+use Odigos\yii\db\ExpressionInterface;
 /**
  * Class InCondition represents `IN` condition.
  *
@@ -16,7 +16,7 @@ use yii\db\ExpressionInterface;
  * @since 2.0.14
  * @phpcs:disable Squiz.NamingConventions.ValidVariableName.PrivateNoUnderscore
  */
-class InCondition implements \yii\db\conditions\ConditionInterface
+class InCondition implements ConditionInterface
 {
     /**
      * @var string $operator the operator to use (e.g. `IN` or `NOT IN`)

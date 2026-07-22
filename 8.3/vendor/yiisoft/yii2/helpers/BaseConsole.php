@@ -5,11 +5,11 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\helpers;
+namespace Odigos\yii\helpers;
 
 use Odigos\Yii;
-use yii\console\Markdown as ConsoleMarkdown;
-use yii\base\Model;
+use Odigos\yii\console\Markdown as ConsoleMarkdown;
+use Odigos\yii\base\Model;
 /**
  * BaseConsole provides concrete implementation for [[Console]].
  *
@@ -346,7 +346,7 @@ class BaseConsole
         $inRange = \false;
         foreach ($textItems as $k => $textItem) {
             $color = $colors[$k];
-            if ($curPos <= $start && $start < $curPos + \yii\helpers\Console::ansiStrwidth($textItem)) {
+            if ($curPos <= $start && $start < $curPos + Console::ansiStrwidth($textItem)) {
                 $text = mb_substr($textItem, $start - $curPos, null, Yii::$app->charset);
                 $inRange = \true;
             } else {
@@ -354,7 +354,7 @@ class BaseConsole
             }
             if ($inRange) {
                 $result .= $color . $text;
-                $diff = $length - \yii\helpers\Console::ansiStrwidth($result);
+                $diff = $length - Console::ansiStrwidth($result);
                 if ($diff <= 0) {
                     if ($diff < 0) {
                         $result = mb_substr($result, 0, $diff, Yii::$app->charset);
@@ -442,7 +442,7 @@ class BaseConsole
             }
             $currentStyle = [];
             foreach ($style as $content) {
-                $currentStyle = \yii\helpers\ArrayHelper::merge($currentStyle, $content);
+                $currentStyle = ArrayHelper::merge($currentStyle, $content);
             }
             // if negative is set, invert background and foreground
             if ($negative) {
@@ -784,7 +784,7 @@ class BaseConsole
      */
     public static function prompt($text, $options = [])
     {
-        $options = \yii\helpers\ArrayHelper::merge(['required' => \false, 'default' => null, 'pattern' => null, 'validator' => null, 'error' => 'Invalid input.'], $options);
+        $options = ArrayHelper::merge(['required' => \false, 'default' => null, 'pattern' => null, 'validator' => null, 'error' => 'Invalid input.'], $options);
         $error = null;
         top:
         $input = $options['default'] ? static::input("{$text} [" . $options['default'] . '] ') : static::input("{$text} ");
@@ -1058,7 +1058,7 @@ class BaseConsole
      */
     public static function errorSummary($models, $options = [])
     {
-        $showAllErrors = \yii\helpers\ArrayHelper::remove($options, 'showAllErrors', \false);
+        $showAllErrors = ArrayHelper::remove($options, 'showAllErrors', \false);
         $lines = self::collectErrors($models, $showAllErrors);
         return implode(\PHP_EOL, $lines);
     }

@@ -1,12 +1,12 @@
 <?php
 
-namespace Illuminate\Cache;
+namespace Odigos\Illuminate\Cache;
 
-use Illuminate\Contracts\Cache\LockProvider;
-use Illuminate\Support\InteractsWithTime;
+use Odigos\Illuminate\Contracts\Cache\LockProvider;
+use Odigos\Illuminate\Support\InteractsWithTime;
 use Memcached;
 use ReflectionMethod;
-class MemcachedStore extends \Illuminate\Cache\TaggableStore implements LockProvider
+class MemcachedStore extends TaggableStore implements LockProvider
 {
     use InteractsWithTime;
     /**
@@ -158,7 +158,7 @@ class MemcachedStore extends \Illuminate\Cache\TaggableStore implements LockProv
      */
     public function lock($name, $seconds = 0, $owner = null)
     {
-        return new \Illuminate\Cache\MemcachedLock($this->memcached, $this->prefix . $name, $seconds, $owner);
+        return new MemcachedLock($this->memcached, $this->prefix . $name, $seconds, $owner);
     }
     /**
      * Restore a lock instance using the owner identifier.

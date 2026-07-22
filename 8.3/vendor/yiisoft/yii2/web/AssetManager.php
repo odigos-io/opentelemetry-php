@@ -5,14 +5,14 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\web;
+namespace Odigos\yii\web;
 
 use Odigos\Yii;
-use yii\base\Component;
-use yii\base\InvalidArgumentException;
-use yii\base\InvalidConfigException;
-use yii\helpers\FileHelper;
-use yii\helpers\Url;
+use Odigos\yii\base\Component;
+use Odigos\yii\base\InvalidArgumentException;
+use Odigos\yii\base\InvalidConfigException;
+use Odigos\yii\helpers\FileHelper;
+use Odigos\yii\helpers\Url;
 /**
  * AssetManager manages asset bundle configuration and loading.
  *
@@ -261,7 +261,7 @@ class AssetManager extends Component
             return $this->loadDummyBundle($name);
         } elseif (!isset($this->bundles[$name])) {
             return $this->bundles[$name] = $this->loadBundle($name, [], $publish);
-        } elseif ($this->bundles[$name] instanceof \yii\web\AssetBundle) {
+        } elseif ($this->bundles[$name] instanceof AssetBundle) {
             return $this->bundles[$name];
         } elseif (is_array($this->bundles[$name])) {
             return $this->bundles[$name] = $this->loadBundle($name, $this->bundles[$name], $publish);
@@ -375,10 +375,10 @@ class AssetManager extends Component
     public function getConverter()
     {
         if ($this->_converter === null) {
-            $this->_converter = Yii::createObject(\yii\web\AssetConverter::className());
+            $this->_converter = Yii::createObject(AssetConverter::className());
         } elseif (is_array($this->_converter) || is_string($this->_converter)) {
             if (is_array($this->_converter) && !isset($this->_converter['class'])) {
-                $this->_converter['class'] = \yii\web\AssetConverter::className();
+                $this->_converter['class'] = AssetConverter::className();
             }
             $this->_converter = Yii::createObject($this->_converter);
         }

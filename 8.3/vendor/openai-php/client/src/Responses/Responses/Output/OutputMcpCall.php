@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Responses\Responses\Output;
+namespace Odigos\OpenAI\Responses\Responses\Output;
 
-use OpenAI\Contracts\ResponseContract;
-use OpenAI\Responses\Concerns\ArrayAccessible;
-use OpenAI\Responses\Responses\GenericResponseError;
-use OpenAI\Responses\Responses\McpGenericResponseError;
-use OpenAI\Testing\Responses\Concerns\Fakeable;
+use Odigos\OpenAI\Contracts\ResponseContract;
+use Odigos\OpenAI\Responses\Concerns\ArrayAccessible;
+use Odigos\OpenAI\Responses\Responses\GenericResponseError;
+use Odigos\OpenAI\Responses\Responses\McpGenericResponseError;
+use Odigos\OpenAI\Testing\Responses\Concerns\Fakeable;
 /**
  * @phpstan-import-type ErrorType from GenericResponseError
  * @phpstan-import-type McpErrorType from McpGenericResponseError

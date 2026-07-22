@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Http\Resources\JsonApi\Concerns;
+namespace Odigos\Illuminate\Http\Resources\JsonApi\Concerns;
 
-use Illuminate\Http\Request;
-use Illuminate\Http\Resources\JsonApi\JsonApiRequest;
+use Odigos\Illuminate\Http\Request;
+use Odigos\Illuminate\Http\Resources\JsonApi\JsonApiRequest;
 trait ResolvesJsonApiRequest
 {
     /**

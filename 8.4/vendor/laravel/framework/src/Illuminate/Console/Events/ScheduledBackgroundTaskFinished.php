@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Console\Events;
+namespace Odigos\Illuminate\Console\Events;
 
-use Illuminate\Console\Scheduling\Event;
+use Odigos\Illuminate\Console\Scheduling\Event;
 class ScheduledBackgroundTaskFinished
 {
     /**

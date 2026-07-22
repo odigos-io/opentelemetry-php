@@ -14,16 +14,16 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database;
+namespace Odigos\Cake\Database;
 
-use Cake\Database\Exception\DatabaseException;
-use Cake\Database\Expression\FieldInterface;
-use Cake\Database\Expression\IdentifierExpression;
-use Cake\Database\Expression\OrderByExpression;
-use Cake\Database\Query\DeleteQuery;
-use Cake\Database\Query\InsertQuery;
-use Cake\Database\Query\SelectQuery;
-use Cake\Database\Query\UpdateQuery;
+use Odigos\Cake\Database\Exception\DatabaseException;
+use Odigos\Cake\Database\Expression\FieldInterface;
+use Odigos\Cake\Database\Expression\IdentifierExpression;
+use Odigos\Cake\Database\Expression\OrderByExpression;
+use Odigos\Cake\Database\Query\DeleteQuery;
+use Odigos\Cake\Database\Query\InsertQuery;
+use Odigos\Cake\Database\Query\SelectQuery;
+use Odigos\Cake\Database\Query\UpdateQuery;
 /**
  * Contains all the logic related to quoting identifiers in a Query object
  *
@@ -92,7 +92,7 @@ class IdentifierQuoter
      * @param \Cake\Database\Query $query The query to have its identifiers quoted
      * @return \Cake\Database\Query
      */
-    public function quote(\Cake\Database\Query $query): \Cake\Database\Query
+    public function quote(Query $query): Query
     {
         $binder = $query->getValueBinder();
         $query->setValueBinder(null);
@@ -112,7 +112,7 @@ class IdentifierQuoter
      * @param \Cake\Database\ExpressionInterface $expression The expression object to walk and quote.
      * @return void
      */
-    public function quoteExpression(\Cake\Database\ExpressionInterface $expression): void
+    public function quoteExpression(ExpressionInterface $expression): void
     {
         match (\true) {
             $expression instanceof FieldInterface => $this->_quoteComparison($expression),
@@ -128,7 +128,7 @@ class IdentifierQuoter
      * @param array<string> $parts Query clauses.
      * @return void
      */
-    protected function _quoteParts(\Cake\Database\Query $query, array $parts): void
+    protected function _quoteParts(Query $query, array $parts): void
     {
         foreach ($parts as $part) {
             $contents = $query->clause($part);

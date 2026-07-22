@@ -1,13 +1,13 @@
 <?php
 
-namespace OpenAI\Testing\Resources;
+namespace Odigos\OpenAI\Testing\Resources;
 
-use OpenAI\Contracts\Resources\ConversationsContract;
-use OpenAI\Contracts\Resources\ConversationsItemsContract;
-use OpenAI\Resources\Conversations;
-use OpenAI\Responses\Conversations\ConversationDeletedResponse;
-use OpenAI\Responses\Conversations\ConversationResponse;
-use OpenAI\Testing\Resources\Concerns\Testable;
+use Odigos\OpenAI\Contracts\Resources\ConversationsContract;
+use Odigos\OpenAI\Contracts\Resources\ConversationsItemsContract;
+use Odigos\OpenAI\Resources\Conversations;
+use Odigos\OpenAI\Responses\Conversations\ConversationDeletedResponse;
+use Odigos\OpenAI\Responses\Conversations\ConversationResponse;
+use Odigos\OpenAI\Testing\Resources\Concerns\Testable;
 final class ConversationsTestResource implements ConversationsContract
 {
     use Testable;
@@ -33,6 +33,6 @@ final class ConversationsTestResource implements ConversationsContract
     }
     public function items(): ConversationsItemsContract
     {
-        return new \OpenAI\Testing\Resources\ConversationsItemsTestResource($this->fake);
+        return new ConversationsItemsTestResource($this->fake);
     }
 }

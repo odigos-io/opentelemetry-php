@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Schema;
+namespace Odigos\Doctrine\DBAL\Schema;
 
 /**
  * A database object that optionally has a {@see Name}.
@@ -17,5 +17,5 @@ interface OptionallyNamedObject
      *
      * @return ?N
      */
-    public function getObjectName(): ?\Doctrine\DBAL\Schema\Name;
+    public function getObjectName(): ?Name;
 }

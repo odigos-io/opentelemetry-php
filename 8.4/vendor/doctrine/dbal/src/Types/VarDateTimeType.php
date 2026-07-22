@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Types;
+namespace Odigos\Doctrine\DBAL\Types;
 
 use DateTime;
-use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Doctrine\DBAL\Types\Exception\ValueNotConvertible;
+use Odigos\Doctrine\DBAL\Platforms\AbstractPlatform;
+use Odigos\Doctrine\DBAL\Types\Exception\ValueNotConvertible;
 use Exception;
 /**
  * Variable DateTime Type using DateTime::__construct() instead of DateTime::createFromFormat().
@@ -14,7 +14,7 @@ use Exception;
  * {@see DateTimeType}, however in certain PostgreSQL configurations with
  * TIMESTAMP(n) columns where n > 0 it is necessary to use this type.
  */
-class VarDateTimeType extends \Doctrine\DBAL\Types\DateTimeType
+class VarDateTimeType extends DateTimeType
 {
     /**
      * @param T $value

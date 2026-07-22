@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Console\Output;
+namespace Odigos\Symfony\Component\Console\Output;
 
-use Symfony\Component\Console\Formatter\NullOutputFormatter;
-use Symfony\Component\Console\Formatter\OutputFormatterInterface;
+use Odigos\Symfony\Component\Console\Formatter\NullOutputFormatter;
+use Odigos\Symfony\Component\Console\Formatter\OutputFormatterInterface;
 /**
  * NullOutput suppresses all output.
  *
@@ -20,7 +20,7 @@ use Symfony\Component\Console\Formatter\OutputFormatterInterface;
  * @author Fabien Potencier <fabien@symfony.com>
  * @author Tobias Schultze <http://tobion.de>
  */
-class NullOutput implements \Symfony\Component\Console\Output\OutputInterface
+class NullOutput implements OutputInterface
 {
     private NullOutputFormatter $formatter;
     public function setFormatter(OutputFormatterInterface $formatter): void

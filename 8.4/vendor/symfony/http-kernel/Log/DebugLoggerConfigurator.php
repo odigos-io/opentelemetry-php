@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpKernel\Log;
+namespace Odigos\Symfony\Component\HttpKernel\Log;
 
 use Odigos\Monolog\Logger;
 /**
@@ -29,16 +29,16 @@ class DebugLoggerConfigurator
             $logger->pushProcessor($this->processor);
         }
     }
-    public static function getDebugLogger(mixed $logger): ?\Symfony\Component\HttpKernel\Log\DebugLoggerInterface
+    public static function getDebugLogger(mixed $logger): ?DebugLoggerInterface
     {
-        if ($logger instanceof \Symfony\Component\HttpKernel\Log\DebugLoggerInterface) {
+        if ($logger instanceof DebugLoggerInterface) {
             return $logger;
         }
         if (!$logger instanceof Logger) {
             return null;
         }
         foreach ($logger->getProcessors() as $processor) {
-            if ($processor instanceof \Symfony\Component\HttpKernel\Log\DebugLoggerInterface) {
+            if ($processor instanceof DebugLoggerInterface) {
                 return $processor;
             }
         }

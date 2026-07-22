@@ -14,12 +14,12 @@ declare (strict_types=1);
  * @since         3.6.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Core;
+namespace Odigos\Cake\Core;
 
-use Cake\Console\CommandCollection;
-use Cake\Event\EventDispatcherInterface;
-use Cake\Http\MiddlewareQueue;
-use Cake\Routing\RouteBuilder;
+use Odigos\Cake\Console\CommandCollection;
+use Odigos\Cake\Event\EventDispatcherInterface;
+use Odigos\Cake\Http\MiddlewareQueue;
+use Odigos\Cake\Routing\RouteBuilder;
 /**
  * Interface for Applications that leverage plugins & events.
  *
@@ -42,7 +42,7 @@ interface PluginApplicationInterface extends EventDispatcherInterface
      * @param array<string, mixed> $config The configuration data for the plugin if using a string for $name
      * @return $this
      */
-    public function addPlugin(\Cake\Core\PluginInterface|string $name, array $config = []);
+    public function addPlugin(PluginInterface|string $name, array $config = []);
     /**
      * Run bootstrap logic for loaded plugins.
      *

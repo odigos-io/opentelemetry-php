@@ -1,21 +1,21 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Driver\API\IBMDB2;
+namespace Odigos\Doctrine\DBAL\Driver\API\IBMDB2;
 
-use Doctrine\DBAL\Driver\API\ExceptionConverter as ExceptionConverterInterface;
-use Doctrine\DBAL\Driver\Exception;
-use Doctrine\DBAL\Exception\ConnectionException;
-use Doctrine\DBAL\Exception\DriverException;
-use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
-use Doctrine\DBAL\Exception\InvalidFieldNameException;
-use Doctrine\DBAL\Exception\NonUniqueFieldNameException;
-use Doctrine\DBAL\Exception\NotNullConstraintViolationException;
-use Doctrine\DBAL\Exception\SyntaxErrorException;
-use Doctrine\DBAL\Exception\TableExistsException;
-use Doctrine\DBAL\Exception\TableNotFoundException;
-use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
-use Doctrine\DBAL\Query;
+use Odigos\Doctrine\DBAL\Driver\API\ExceptionConverter as ExceptionConverterInterface;
+use Odigos\Doctrine\DBAL\Driver\Exception;
+use Odigos\Doctrine\DBAL\Exception\ConnectionException;
+use Odigos\Doctrine\DBAL\Exception\DriverException;
+use Odigos\Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
+use Odigos\Doctrine\DBAL\Exception\InvalidFieldNameException;
+use Odigos\Doctrine\DBAL\Exception\NonUniqueFieldNameException;
+use Odigos\Doctrine\DBAL\Exception\NotNullConstraintViolationException;
+use Odigos\Doctrine\DBAL\Exception\SyntaxErrorException;
+use Odigos\Doctrine\DBAL\Exception\TableExistsException;
+use Odigos\Doctrine\DBAL\Exception\TableNotFoundException;
+use Odigos\Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+use Odigos\Doctrine\DBAL\Query;
 /**
  * @internal
  *

@@ -14,10 +14,10 @@ declare (strict_types=1);
  * @since         5.3.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Routing\Route;
+namespace Odigos\Cake\Routing\Route;
 
-use Cake\Http\Exception\RedirectException;
-use Cake\Routing\Router;
+use Odigos\Cake\Http\Exception\RedirectException;
+use Odigos\Cake\Routing\Router;
 /**
  * Trait to implement redirect route functionality.
  *

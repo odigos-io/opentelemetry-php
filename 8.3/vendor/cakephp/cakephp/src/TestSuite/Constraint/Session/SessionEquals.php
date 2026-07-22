@@ -13,9 +13,9 @@ declare (strict_types=1);
  * @since         3.7.0
  * @license       https://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\TestSuite\Constraint\Session;
+namespace Odigos\Cake\TestSuite\Constraint\Session;
 
-use Cake\Utility\Hash;
+use Odigos\Cake\Utility\Hash;
 use Odigos\PHPUnit\Framework\Constraint\Constraint;
 /**
  * SessionEquals

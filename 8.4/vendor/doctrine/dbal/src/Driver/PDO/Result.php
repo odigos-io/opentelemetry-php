@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Driver\PDO;
+namespace Odigos\Doctrine\DBAL\Driver\PDO;
 
-use Doctrine\DBAL\Driver\Result as ResultInterface;
-use Doctrine\DBAL\Exception\InvalidColumnIndex;
+use Odigos\Doctrine\DBAL\Driver\Result as ResultInterface;
+use Odigos\Doctrine\DBAL\Exception\InvalidColumnIndex;
 use PDO;
 use PDOException;
 use PDOStatement;
@@ -53,7 +53,7 @@ final class Result implements ResultInterface
         try {
             return $this->statement->rowCount();
         } catch (PDOException $exception) {
-            throw \Doctrine\DBAL\Driver\PDO\Exception::new($exception);
+            throw Exception::new($exception);
         }
     }
     public function columnCount(): int
@@ -61,7 +61,7 @@ final class Result implements ResultInterface
         try {
             return $this->statement->columnCount();
         } catch (PDOException $exception) {
-            throw \Doctrine\DBAL\Driver\PDO\Exception::new($exception);
+            throw Exception::new($exception);
         }
     }
     /** @throws Exception */
@@ -72,7 +72,7 @@ final class Result implements ResultInterface
         } catch (ValueError $exception) {
             throw InvalidColumnIndex::new($index, $exception);
         } catch (PDOException $exception) {
-            throw \Doctrine\DBAL\Driver\PDO\Exception::new($exception);
+            throw Exception::new($exception);
         }
         if ($meta === \false) {
             throw InvalidColumnIndex::new($index);
@@ -93,7 +93,7 @@ final class Result implements ResultInterface
         try {
             return $this->statement->fetch($mode);
         } catch (PDOException $exception) {
-            throw \Doctrine\DBAL\Driver\PDO\Exception::new($exception);
+            throw Exception::new($exception);
         }
     }
     /**
@@ -108,7 +108,7 @@ final class Result implements ResultInterface
         try {
             return $this->statement->fetchAll($mode);
         } catch (PDOException $exception) {
-            throw \Doctrine\DBAL\Driver\PDO\Exception::new($exception);
+            throw Exception::new($exception);
         }
     }
 }

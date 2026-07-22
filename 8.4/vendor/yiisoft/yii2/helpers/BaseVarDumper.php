@@ -5,10 +5,10 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\helpers;
+namespace Odigos\yii\helpers;
 
-use yii\base\Arrayable;
-use yii\base\InvalidValueException;
+use Odigos\yii\base\Arrayable;
+use Odigos\yii\base\InvalidValueException;
 /**
  * BaseVarDumper provides concrete implementation for [[VarDumper]].
  *

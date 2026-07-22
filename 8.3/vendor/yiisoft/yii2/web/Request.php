@@ -5,11 +5,11 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\web;
+namespace Odigos\yii\web;
 
 use Odigos\Yii;
-use yii\base\InvalidConfigException;
-use yii\validators\IpValidator;
+use Odigos\yii\base\InvalidConfigException;
+use Odigos\yii\validators\IpValidator;
 /**
  * The web Request class represents an HTTP request.
  *
@@ -87,7 +87,7 @@ use yii\validators\IpValidator;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class Request extends \yii\base\Request
+class Request extends \Odigos\yii\base\Request
 {
     /**
      * Default name of the HTTP header for sending CSRF token.
@@ -316,14 +316,14 @@ class Request extends \yii\base\Request
             }
             return [$route, $this->getQueryParams()];
         }
-        throw new \yii\web\NotFoundHttpException(Yii::t('yii', 'Page not found.'));
+        throw new NotFoundHttpException(Yii::t('yii', 'Page not found.'));
     }
     /**
      * Filters headers according to the [[trustedHosts]].
      * @param HeaderCollection $headerCollection
      * @since 2.0.13
      */
-    protected function filterHeaders(\yii\web\HeaderCollection $headerCollection)
+    protected function filterHeaders(HeaderCollection $headerCollection)
     {
         $trustedHeaders = $this->getTrustedHeaders();
         // remove all secure headers unless they are trusted
@@ -379,7 +379,7 @@ class Request extends \yii\base\Request
     public function getHeaders()
     {
         if ($this->_headers === null) {
-            $this->_headers = new \yii\web\HeaderCollection();
+            $this->_headers = new HeaderCollection();
             if (function_exists('getallheaders')) {
                 $headers = getallheaders();
                 foreach ($headers as $name => $value) {
@@ -570,13 +570,13 @@ class Request extends \yii\base\Request
             }
             if (isset($this->parsers[$contentType])) {
                 $parser = Yii::createObject($this->parsers[$contentType]);
-                if (!$parser instanceof \yii\web\RequestParserInterface) {
+                if (!$parser instanceof RequestParserInterface) {
                     throw new InvalidConfigException("The '{$contentType}' request parser is invalid. It must implement the yii\\web\\RequestParserInterface.");
                 }
                 $this->_bodyParams = $parser->parse($this->getRawBody(), $rawContentType);
             } elseif (isset($this->parsers['*'])) {
                 $parser = Yii::createObject($this->parsers['*']);
-                if (!$parser instanceof \yii\web\RequestParserInterface) {
+                if (!$parser instanceof RequestParserInterface) {
                     throw new InvalidConfigException('The fallback request parser is invalid. It must implement the yii\web\RequestParserInterface.');
                 }
                 $this->_bodyParams = $parser->parse($this->getRawBody(), $rawContentType);
@@ -1570,7 +1570,7 @@ class Request extends \yii\base\Request
     public function getCookies()
     {
         if ($this->_cookies === null) {
-            $this->_cookies = new \yii\web\CookieCollection($this->loadCookies(), ['readOnly' => \true]);
+            $this->_cookies = new CookieCollection($this->loadCookies(), ['readOnly' => \true]);
         }
         return $this->_cookies;
     }
@@ -1600,12 +1600,12 @@ class Request extends \yii\base\Request
                     $data = @unserialize($data);
                 }
                 if (is_array($data) && isset($data[0], $data[1]) && $data[0] === $name) {
-                    $cookies[$name] = Yii::createObject(['class' => 'yii\web\Cookie', 'name' => $name, 'value' => $data[1], 'expire' => null]);
+                    $cookies[$name] = Yii::createObject(['class' => 'Odigos\yii\web\Cookie', 'name' => $name, 'value' => $data[1], 'expire' => null]);
                 }
             }
         } else {
             foreach ($_COOKIE as $name => $value) {
-                $cookies[$name] = Yii::createObject(['class' => 'yii\web\Cookie', 'name' => $name, 'value' => $value, 'expire' => null]);
+                $cookies[$name] = Yii::createObject(['class' => 'Odigos\yii\web\Cookie', 'name' => $name, 'value' => $value, 'expire' => null]);
             }
         }
         return $cookies;

@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Foundation\Bus;
+namespace Odigos\Illuminate\Foundation\Bus;
 
 use Closure;
-class PendingClosureDispatch extends \Illuminate\Foundation\Bus\PendingDispatch
+class PendingClosureDispatch extends PendingDispatch
 {
     /**
      * Add a callback to be executed if the job fails.

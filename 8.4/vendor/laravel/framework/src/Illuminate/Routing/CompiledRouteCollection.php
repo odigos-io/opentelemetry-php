@@ -1,17 +1,17 @@
 <?php
 
-namespace Illuminate\Routing;
+namespace Odigos\Illuminate\Routing;
 
-use Illuminate\Container\Container;
-use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
-use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Routing\Exception\MethodNotAllowedException;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use Symfony\Component\Routing\Matcher\CompiledUrlMatcher;
-use Symfony\Component\Routing\RequestContext;
-class CompiledRouteCollection extends \Illuminate\Routing\AbstractRouteCollection
+use Odigos\Illuminate\Container\Container;
+use Odigos\Illuminate\Http\Request;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use Odigos\Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Odigos\Symfony\Component\Routing\Exception\MethodNotAllowedException;
+use Odigos\Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Odigos\Symfony\Component\Routing\Matcher\CompiledUrlMatcher;
+use Odigos\Symfony\Component\Routing\RequestContext;
+class CompiledRouteCollection extends AbstractRouteCollection
 {
     /**
      * The compiled routes collection.
@@ -59,7 +59,7 @@ class CompiledRouteCollection extends \Illuminate\Routing\AbstractRouteCollectio
     {
         $this->compiled = $compiled;
         $this->attributes = $attributes;
-        $this->routes = new \Illuminate\Routing\RouteCollection();
+        $this->routes = new RouteCollection();
     }
     /**
      * Add a Route instance to the collection.
@@ -67,7 +67,7 @@ class CompiledRouteCollection extends \Illuminate\Routing\AbstractRouteCollectio
      * @param  \Illuminate\Routing\Route  $route
      * @return \Illuminate\Routing\Route
      */
-    public function add(\Illuminate\Routing\Route $route)
+    public function add(Route $route)
     {
         return $this->routes->add($route);
     }
@@ -215,10 +215,10 @@ class CompiledRouteCollection extends \Illuminate\Routing\AbstractRouteCollectio
      */
     public function getRoutesByMethod()
     {
-        return (new Collection($this->getRoutes()))->groupBy(function (\Illuminate\Routing\Route $route) {
+        return (new Collection($this->getRoutes()))->groupBy(function (Route $route) {
             return $route->methods();
         })->map(function (Collection $routes) {
-            return $routes->mapWithKeys(function (\Illuminate\Routing\Route $route) {
+            return $routes->mapWithKeys(function (Route $route) {
                 return [$route->getDomain() . $route->uri => $route];
             })->all();
         })->all();
@@ -230,7 +230,7 @@ class CompiledRouteCollection extends \Illuminate\Routing\AbstractRouteCollectio
      */
     public function getRoutesByName()
     {
-        return (new Collection($this->getRoutes()))->keyBy(function (\Illuminate\Routing\Route $route) {
+        return (new Collection($this->getRoutes()))->keyBy(function (Route $route) {
             return $route->getName();
         })->all();
     }
@@ -256,7 +256,7 @@ class CompiledRouteCollection extends \Illuminate\Routing\AbstractRouteCollectio
      * @param  \Illuminate\Routing\Router  $router
      * @return $this
      */
-    public function setRouter(\Illuminate\Routing\Router $router)
+    public function setRouter(Router $router)
     {
         $this->router = $router;
         return $this;

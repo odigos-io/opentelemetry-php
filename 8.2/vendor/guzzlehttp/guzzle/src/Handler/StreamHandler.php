@@ -1,16 +1,16 @@
 <?php
 
-namespace GuzzleHttp\Handler;
+namespace Odigos\GuzzleHttp\Handler;
 
-use GuzzleHttp\Exception\ConnectException;
-use GuzzleHttp\Exception\RequestException;
-use GuzzleHttp\Promise as P;
-use GuzzleHttp\Promise\FulfilledPromise;
-use GuzzleHttp\Promise\PromiseInterface;
-use GuzzleHttp\Psr7;
-use GuzzleHttp\TransferStats;
-use GuzzleHttp\TransportSharing;
-use GuzzleHttp\Utils;
+use Odigos\GuzzleHttp\Exception\ConnectException;
+use Odigos\GuzzleHttp\Exception\RequestException;
+use Odigos\GuzzleHttp\Promise as P;
+use Odigos\GuzzleHttp\Promise\FulfilledPromise;
+use Odigos\GuzzleHttp\Promise\PromiseInterface;
+use Odigos\GuzzleHttp\Psr7;
+use Odigos\GuzzleHttp\TransferStats;
+use Odigos\GuzzleHttp\TransportSharing;
+use Odigos\GuzzleHttp\Utils;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
@@ -57,7 +57,7 @@ class StreamHandler
      */
     public function __construct(array $options = [])
     {
-        $this->transportSharingMode = \GuzzleHttp\Handler\CurlShareHandleState::normalizeMode($options['transport_sharing'] ?? null, 'transport_sharing');
+        $this->transportSharingMode = CurlShareHandleState::normalizeMode($options['transport_sharing'] ?? null, 'transport_sharing');
     }
     /**
      * Sends an HTTP request.
@@ -129,7 +129,7 @@ class StreamHandler
         $hdrs = $this->lastHeaders;
         $this->lastHeaders = [];
         try {
-            [$ver, $status, $reason, $headers] = \GuzzleHttp\Handler\HeaderProcessor::parseHeaders($hdrs);
+            [$ver, $status, $reason, $headers] = HeaderProcessor::parseHeaders($hdrs);
         } catch (\Throwable $e) {
             return $this->rejectResponseCreation($options, $request, $startTime, $e);
         }

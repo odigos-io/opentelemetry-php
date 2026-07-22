@@ -1,6 +1,6 @@
 <?php
 
-namespace Http\Promise;
+namespace Odigos\Http\Promise;
 
 /**
  * Promise represents a value that may not be available yet, but will be resolved at some point in future.

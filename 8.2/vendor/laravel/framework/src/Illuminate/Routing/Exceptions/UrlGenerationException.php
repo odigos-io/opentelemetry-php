@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Routing\Exceptions;
+namespace Odigos\Illuminate\Routing\Exceptions;
 
 use Exception;
-use Illuminate\Routing\Route;
-use Illuminate\Support\Str;
+use Odigos\Illuminate\Routing\Route;
+use Odigos\Illuminate\Support\Str;
 class UrlGenerationException extends Exception
 {
     /**

@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\caching;
+namespace Odigos\yii\caching;
 
 /**
  * CallbackDependency represents a dependency based on the result of a callback function.
@@ -17,7 +17,7 @@ namespace yii\caching;
  * @author Vlad Varlamov <vlad@varlamov.dev>
  * @since 2.0.50
  */
-class CallbackDependency extends \yii\caching\Dependency
+class CallbackDependency extends Dependency
 {
     /**
      * @var callable the PHP callback that will be called to determine if the dependency has been changed.

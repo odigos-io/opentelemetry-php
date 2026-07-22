@@ -14,14 +14,14 @@ declare (strict_types=1);
  * @since         1.2.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Validation;
+namespace Odigos\Cake\Validation;
 
 use BackedEnum;
-use Cake\Chronos\ChronosDate;
-use Cake\Chronos\ChronosTime;
-use Cake\Core\Exception\CakeException;
-use Cake\I18n\DateTime;
-use Cake\Utility\Text;
+use Odigos\Cake\Chronos\ChronosDate;
+use Odigos\Cake\Chronos\ChronosTime;
+use Odigos\Cake\Core\Exception\CakeException;
+use Odigos\Cake\I18n\DateTime;
+use Odigos\Cake\Utility\Text;
 use Countable;
 use DateTimeInterface;
 use InvalidArgumentException;

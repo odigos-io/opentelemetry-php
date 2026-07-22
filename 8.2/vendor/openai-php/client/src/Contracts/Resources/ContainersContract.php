@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Contracts\Resources;
+namespace Odigos\OpenAI\Contracts\Resources;
 
-use OpenAI\Responses\Containers\CreateContainer;
-use OpenAI\Responses\Containers\DeleteContainer;
-use OpenAI\Responses\Containers\ListContainers;
-use OpenAI\Responses\Containers\RetrieveContainer;
+use Odigos\OpenAI\Responses\Containers\CreateContainer;
+use Odigos\OpenAI\Responses\Containers\DeleteContainer;
+use Odigos\OpenAI\Responses\Containers\ListContainers;
+use Odigos\OpenAI\Responses\Containers\RetrieveContainer;
 interface ContainersContract
 {
     /**
@@ -42,5 +42,5 @@ interface ContainersContract
      *
      * @see https://platform.openai.com/docs/api-reference/container-files
      */
-    public function files(): \OpenAI\Contracts\Resources\ContainerFileContract;
+    public function files(): ContainerFileContract;
 }

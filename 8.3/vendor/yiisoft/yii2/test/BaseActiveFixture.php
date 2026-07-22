@@ -5,10 +5,10 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\test;
+namespace Odigos\yii\test;
 
-use yii\base\ArrayAccessTrait;
-use yii\base\InvalidConfigException;
+use Odigos\yii\base\ArrayAccessTrait;
+use Odigos\yii\base\InvalidConfigException;
 /**
  * BaseActiveFixture is the base class for fixture classes that support accessing fixture data as ActiveRecord objects.
  *
@@ -20,10 +20,10 @@ use yii\base\InvalidConfigException;
  * @implements \IteratorAggregate<string, array<string, mixed>>
  * @implements \ArrayAccess<string, array<string, mixed>|null>
  */
-abstract class BaseActiveFixture extends \yii\test\DbFixture implements \IteratorAggregate, \ArrayAccess, \Countable
+abstract class BaseActiveFixture extends DbFixture implements \IteratorAggregate, \ArrayAccess, \Countable
 {
     use ArrayAccessTrait;
-    use \yii\test\FileFixtureTrait;
+    use FileFixtureTrait;
     /**
      * @var string the AR model class associated with this fixture.
      */

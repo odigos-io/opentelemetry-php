@@ -18,10 +18,10 @@ declare (strict_types=1);
  * @copyright Copyright (c) 2015-2016 Zend Technologies USA Inc. (https://www.zend.com/)
  * @license   https://github.com/zendframework/zend-diactoros/blob/master/LICENSE.md New BSD License
  */
-namespace Cake\Http;
+namespace Odigos\Cake\Http;
 
-use Cake\Http\Cookie\Cookie;
-use Cake\Http\Cookie\CookieInterface;
+use Odigos\Cake\Http\Cookie\Cookie;
+use Odigos\Cake\Http\Cookie\CookieInterface;
 use Odigos\Laminas\Diactoros\RelativeStream;
 use Psr\Http\Message\ResponseInterface;
 /**
@@ -154,7 +154,7 @@ class ResponseEmitter
     protected function emitHeaders(ResponseInterface $response): void
     {
         $cookies = [];
-        if ($response instanceof \Cake\Http\Response) {
+        if ($response instanceof Response) {
             $cookies = iterator_to_array($response->getCookieCollection());
         }
         foreach ($response->getHeaders() as $name => $values) {

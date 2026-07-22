@@ -15,7 +15,7 @@ namespace Odigos;
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-use Cake\ORM\TableRegistry;
+use Odigos\Cake\ORM\TableRegistry;
 $autoTables = TableRegistry::getTableLocator()->genericInstances();
 if (!$autoTables) {
     return;

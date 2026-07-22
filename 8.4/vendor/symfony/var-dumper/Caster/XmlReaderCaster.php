@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\VarDumper\Caster;
+namespace Odigos\Symfony\Component\VarDumper\Caster;
 
-use Symfony\Component\VarDumper\Cloner\Stub;
+use Odigos\Symfony\Component\VarDumper\Cloner\Stub;
 /**
  * Casts XmlReader class to array representation.
  *
@@ -30,14 +30,14 @@ class XmlReaderCaster
         } catch (\Error) {
             $properties = ['LOADDTD' => \false, 'DEFAULTATTRS' => \false, 'VALIDATE' => \false, 'SUBST_ENTITIES' => \false];
         }
-        $props = \Symfony\Component\VarDumper\Caster\Caster::PREFIX_VIRTUAL . 'parserProperties';
-        $info = ['localName' => $reader->localName, 'prefix' => $reader->prefix, 'nodeType' => new \Symfony\Component\VarDumper\Caster\ConstStub(self::NODE_TYPES[$reader->nodeType], $reader->nodeType), 'depth' => $reader->depth, 'isDefault' => $reader->isDefault, 'isEmptyElement' => \XMLReader::NONE === $reader->nodeType ? null : $reader->isEmptyElement, 'xmlLang' => $reader->xmlLang, 'attributeCount' => $reader->attributeCount, 'value' => $reader->value, 'namespaceURI' => $reader->namespaceURI, 'baseURI' => $reader->baseURI ? new \Symfony\Component\VarDumper\Caster\LinkStub($reader->baseURI) : $reader->baseURI, $props => $properties];
-        if ($info[$props] = \Symfony\Component\VarDumper\Caster\Caster::filter($info[$props], \Symfony\Component\VarDumper\Caster\Caster::EXCLUDE_EMPTY, [], $count)) {
-            $info[$props] = new \Symfony\Component\VarDumper\Caster\EnumStub($info[$props]);
+        $props = Caster::PREFIX_VIRTUAL . 'parserProperties';
+        $info = ['localName' => $reader->localName, 'prefix' => $reader->prefix, 'nodeType' => new ConstStub(self::NODE_TYPES[$reader->nodeType], $reader->nodeType), 'depth' => $reader->depth, 'isDefault' => $reader->isDefault, 'isEmptyElement' => \XMLReader::NONE === $reader->nodeType ? null : $reader->isEmptyElement, 'xmlLang' => $reader->xmlLang, 'attributeCount' => $reader->attributeCount, 'value' => $reader->value, 'namespaceURI' => $reader->namespaceURI, 'baseURI' => $reader->baseURI ? new LinkStub($reader->baseURI) : $reader->baseURI, $props => $properties];
+        if ($info[$props] = Caster::filter($info[$props], Caster::EXCLUDE_EMPTY, [], $count)) {
+            $info[$props] = new EnumStub($info[$props]);
             $info[$props]->cut = $count;
         }
-        $a = \Symfony\Component\VarDumper\Caster\Caster::filter($a, \Symfony\Component\VarDumper\Caster\Caster::EXCLUDE_UNINITIALIZED, [], $count);
-        $info = \Symfony\Component\VarDumper\Caster\Caster::filter($info, \Symfony\Component\VarDumper\Caster\Caster::EXCLUDE_EMPTY, [], $count);
+        $a = Caster::filter($a, Caster::EXCLUDE_UNINITIALIZED, [], $count);
+        $info = Caster::filter($info, Caster::EXCLUDE_EMPTY, [], $count);
         // +2 because hasValue and hasAttributes are always filtered
         $stub->cut += $count + 2;
         return $a + $info;

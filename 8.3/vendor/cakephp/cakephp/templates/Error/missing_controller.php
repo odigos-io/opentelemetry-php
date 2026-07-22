@@ -16,10 +16,10 @@ namespace Odigos;
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  * @var string $controller
  */
-use Cake\Core\Configure;
-use Cake\Core\Plugin;
-use Cake\Utility\Inflector;
-use function Cake\Core\h;
+use Odigos\Cake\Core\Configure;
+use Odigos\Cake\Core\Plugin;
+use Odigos\Cake\Utility\Inflector;
+use function Odigos\Cake\Core\h;
 $pluginDot = empty($plugin) ? null : $plugin . '.';
 $namespace = Configure::read('App.namespace');
 $prefixNs = '';
@@ -29,7 +29,7 @@ $incompleteInflection = \str_contains($controller, '_') || \str_contains($contro
 $originalClass = $controller;
 $class = Inflector::camelize($controller);
 if (!empty($prefix)) {
-    $prefix = \array_map('Cake\Utility\Inflector::camelize', \explode('/', $prefix));
+    $prefix = \array_map('Odigos\Cake\Utility\Inflector::camelize', \explode('/', $prefix));
     $prefixNs = '\\' . \implode('\\', $prefix);
     $prefixPath = \implode(\DIRECTORY_SEPARATOR, $prefix) . \DIRECTORY_SEPARATOR;
 }

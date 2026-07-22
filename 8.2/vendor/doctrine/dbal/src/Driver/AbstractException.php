@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Driver;
+namespace Odigos\Doctrine\DBAL\Driver;
 
 use Exception as BaseException;
 use Throwable;
 /**
  * Abstract base implementation of the {@see DriverException} interface.
  */
-abstract class AbstractException extends BaseException implements \Doctrine\DBAL\Driver\Exception
+abstract class AbstractException extends BaseException implements Exception
 {
     /**
      * @param string         $message  The driver error message.

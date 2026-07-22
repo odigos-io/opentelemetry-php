@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\HttpKernel\Profiler;
+namespace Odigos\Symfony\Component\HttpKernel\Profiler;
 
 /**
  * ProfilerStorageInterface.
@@ -40,11 +40,11 @@ interface ProfilerStorageInterface
      *
      * The method returns false if the token does not exist in the storage.
      */
-    public function read(string $token): ?\Symfony\Component\HttpKernel\Profiler\Profile;
+    public function read(string $token): ?Profile;
     /**
      * Saves a Profile.
      */
-    public function write(\Symfony\Component\HttpKernel\Profiler\Profile $profile): bool;
+    public function write(Profile $profile): bool;
     /**
      * Purges all data from the database.
      *

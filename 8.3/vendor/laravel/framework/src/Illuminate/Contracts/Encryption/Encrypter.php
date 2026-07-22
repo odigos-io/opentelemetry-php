@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Contracts\Encryption;
+namespace Odigos\Illuminate\Contracts\Encryption;
 
 interface Encrypter
 {

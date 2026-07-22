@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Console;
+namespace Odigos\Symfony\Component\Console;
 
-use Symfony\Component\Console\Exception\InvalidArgumentException;
+use Odigos\Symfony\Component\Console\Exception\InvalidArgumentException;
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  */
@@ -77,7 +77,7 @@ final class Color
             return '';
         }
         if ('#' === $color[0]) {
-            return ($background ? '4' : '3') . \Symfony\Component\Console\Terminal::getColorMode()->convertFromHexToAnsiColorCode($color);
+            return ($background ? '4' : '3') . Terminal::getColorMode()->convertFromHexToAnsiColorCode($color);
         }
         if (isset(self::COLORS[$color])) {
             return ($background ? '4' : '3') . self::COLORS[$color];

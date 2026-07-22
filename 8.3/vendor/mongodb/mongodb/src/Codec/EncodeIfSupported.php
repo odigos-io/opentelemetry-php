@@ -15,9 +15,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace MongoDB\Codec;
+namespace Odigos\MongoDB\Codec;
 
-use MongoDB\Exception\UnsupportedValueException;
+use Odigos\MongoDB\Exception\UnsupportedValueException;
 /**
  * @psalm-template BSONType
  * @psalm-template NativeType

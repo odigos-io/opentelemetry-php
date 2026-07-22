@@ -14,10 +14,10 @@ declare (strict_types=1);
  * @since         3.3.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Http;
+namespace Odigos\Cake\Http;
 
-use Cake\Routing\Router;
-use Cake\Routing\RoutingApplicationInterface;
+use Odigos\Cake\Routing\Router;
+use Odigos\Cake\Routing\RoutingApplicationInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -32,7 +32,7 @@ class Runner implements RequestHandlerInterface
      *
      * @var \Cake\Http\MiddlewareQueue
      */
-    protected \Cake\Http\MiddlewareQueue $queue;
+    protected MiddlewareQueue $queue;
     /**
      * Fallback handler to use if middleware queue does not generate response.
      *
@@ -45,7 +45,7 @@ class Runner implements RequestHandlerInterface
      * @param \Psr\Http\Server\RequestHandlerInterface|null $fallbackHandler Fallback request handler.
      * @return \Psr\Http\Message\ResponseInterface A response object
      */
-    public function run(\Cake\Http\MiddlewareQueue $queue, ServerRequestInterface $request, ?RequestHandlerInterface $fallbackHandler = null): ResponseInterface
+    public function run(MiddlewareQueue $queue, ServerRequestInterface $request, ?RequestHandlerInterface $fallbackHandler = null): ResponseInterface
     {
         $this->queue = $queue;
         $this->queue->rewind();
@@ -60,7 +60,7 @@ class Runner implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        if ($this->fallbackHandler instanceof RoutingApplicationInterface && $request instanceof \Cake\Http\ServerRequest) {
+        if ($this->fallbackHandler instanceof RoutingApplicationInterface && $request instanceof ServerRequest) {
             Router::setRequest($request);
         }
         if ($this->queue->valid()) {
@@ -71,6 +71,6 @@ class Runner implements RequestHandlerInterface
         if ($this->fallbackHandler) {
             return $this->fallbackHandler->handle($request);
         }
-        return new \Cake\Http\Response(['body' => 'Middleware queue was exhausted without returning a response ' . 'and no fallback request handler was set for Runner', 'status' => 500]);
+        return new Response(['body' => 'Middleware queue was exhausted without returning a response ' . 'and no fallback request handler was set for Runner', 'status' => 500]);
     }
 }

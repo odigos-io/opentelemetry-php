@@ -14,9 +14,9 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Database;
+namespace Odigos\Cake\Database;
 
-use Cake\Database\Exception\DatabaseException;
+use Odigos\Cake\Database\Exception\DatabaseException;
 use Closure;
 use Countable;
 /**
@@ -72,7 +72,7 @@ class QueryCompiler
      * @param \Cake\Database\ValueBinder $binder Value binder used to generate parameter placeholders
      * @return string
      */
-    public function compile(\Cake\Database\Query $query, \Cake\Database\ValueBinder $binder): string
+    public function compile(Query $query, ValueBinder $binder): string
     {
         $sql = '';
         $type = $query->type();
@@ -100,13 +100,13 @@ class QueryCompiler
      * @param \Cake\Database\ValueBinder $binder Value binder used to generate parameter placeholder
      * @return \Closure
      */
-    protected function _sqlCompiler(string &$sql, \Cake\Database\Query $query, \Cake\Database\ValueBinder $binder): Closure
+    protected function _sqlCompiler(string &$sql, Query $query, ValueBinder $binder): Closure
     {
         return function ($part, $partName) use (&$sql, $query, $binder): void {
             if ($part === null || $part === [] || $part instanceof Countable && count($part) === 0) {
                 return;
             }
-            if ($part instanceof \Cake\Database\ExpressionInterface) {
+            if ($part instanceof ExpressionInterface) {
                 $part = [$part->sql($binder)];
             }
             if (isset($this->_templates[$partName])) {
@@ -127,7 +127,7 @@ class QueryCompiler
      * @param \Cake\Database\ValueBinder $binder Value binder used to generate parameter placeholder
      * @return string
      */
-    protected function _buildWithPart(array $parts, \Cake\Database\Query $query, \Cake\Database\ValueBinder $binder): string
+    protected function _buildWithPart(array $parts, Query $query, ValueBinder $binder): string
     {
         $recursive = \false;
         $expressions = [];
@@ -149,11 +149,11 @@ class QueryCompiler
      * @param \Cake\Database\ValueBinder $binder Value binder used to generate parameter placeholder
      * @return string
      */
-    protected function _buildSelectPart(array $parts, \Cake\Database\Query $query, \Cake\Database\ValueBinder $binder): string
+    protected function _buildSelectPart(array $parts, Query $query, ValueBinder $binder): string
     {
         $driver = $query->getDriver();
         $select = 'SELECT%s%s %s%s';
-        if (($query->clause('union') || $query->clause('intersect')) && $driver->supports(\Cake\Database\DriverFeatureEnum::SET_OPERATIONS_ORDER_BY)) {
+        if (($query->clause('union') || $query->clause('intersect')) && $driver->supports(DriverFeatureEnum::SET_OPERATIONS_ORDER_BY)) {
             $select = '(SELECT%s%s %s%s';
         }
         $hint = $this->_buildOptimizerHintPart($query->clause('optimizerHint'), $query, $binder);
@@ -191,7 +191,7 @@ class QueryCompiler
      * @param \Cake\Database\ValueBinder $binder Value binder used to generate parameter placeholder
      * @return string
      */
-    protected function _buildFromPart(array $parts, \Cake\Database\Query $query, \Cake\Database\ValueBinder $binder): string
+    protected function _buildFromPart(array $parts, Query $query, ValueBinder $binder): string
     {
         $select = ' FROM %s';
         $normalized = [];
@@ -215,19 +215,19 @@ class QueryCompiler
      * @param \Cake\Database\ValueBinder $binder Value binder used to generate parameter placeholder
      * @return string
      */
-    protected function _buildJoinPart(array $parts, \Cake\Database\Query $query, \Cake\Database\ValueBinder $binder): string
+    protected function _buildJoinPart(array $parts, Query $query, ValueBinder $binder): string
     {
         $joins = '';
         foreach ($parts as $join) {
             if (!isset($join['table'])) {
                 throw new DatabaseException(sprintf('Could not compile join clause for alias `%s`. No table was specified. ' . 'Use the `table` key to define a table.', $join['alias']));
             }
-            if ($join['table'] instanceof \Cake\Database\ExpressionInterface) {
+            if ($join['table'] instanceof ExpressionInterface) {
                 $join['table'] = '(' . $join['table']->sql($binder) . ')';
             }
             $joins .= sprintf(' %s JOIN %s %s', $join['type'], $join['table'], $join['alias']);
             $condition = '';
-            if (isset($join['conditions']) && $join['conditions'] instanceof \Cake\Database\ExpressionInterface) {
+            if (isset($join['conditions']) && $join['conditions'] instanceof ExpressionInterface) {
                 $condition = $join['conditions']->sql($binder);
             }
             if ($condition === '') {
@@ -246,7 +246,7 @@ class QueryCompiler
      * @param \Cake\Database\ValueBinder $binder Value binder used to generate parameter placeholder
      * @return string
      */
-    protected function _buildWindowPart(array $parts, \Cake\Database\Query $query, \Cake\Database\ValueBinder $binder): string
+    protected function _buildWindowPart(array $parts, Query $query, ValueBinder $binder): string
     {
         $windows = [];
         foreach ($parts as $window) {
@@ -266,11 +266,11 @@ class QueryCompiler
      * @param \Cake\Database\ValueBinder $binder Value binder used to generate parameter placeholder
      * @return string
      */
-    protected function _buildSetPart(array $parts, \Cake\Database\Query $query, \Cake\Database\ValueBinder $binder): string
+    protected function _buildSetPart(array $parts, Query $query, ValueBinder $binder): string
     {
         $set = [];
         foreach ($parts as $part) {
-            if ($part instanceof \Cake\Database\ExpressionInterface) {
+            if ($part instanceof ExpressionInterface) {
                 $part = $part->sql($binder);
             }
             if (str_starts_with($part, '(')) {
@@ -291,9 +291,9 @@ class QueryCompiler
      * @param \Cake\Database\ValueBinder $binder
      * @return string
      */
-    protected function _buildSetOperationPart(string $operation, array $parts, \Cake\Database\Query $query, \Cake\Database\ValueBinder $binder): string
+    protected function _buildSetOperationPart(string $operation, array $parts, Query $query, ValueBinder $binder): string
     {
-        $setOperationsOrderBy = $query->getConnection()->getDriver($query->getConnectionRole())->supports(\Cake\Database\DriverFeatureEnum::SET_OPERATIONS_ORDER_BY);
+        $setOperationsOrderBy = $query->getConnection()->getDriver($query->getConnectionRole())->supports(DriverFeatureEnum::SET_OPERATIONS_ORDER_BY);
         $parts = array_map(function (array $p) use ($binder, $setOperationsOrderBy) {
             /** @var \Cake\Database\Expression\IdentifierExpression $expr */
             $expr = $p['query'];
@@ -320,7 +320,7 @@ class QueryCompiler
      * @param \Cake\Database\ValueBinder $binder Value binder used to generate parameter placeholder
      * @return string
      */
-    protected function _buildIntersectPart(array $parts, \Cake\Database\Query $query, \Cake\Database\ValueBinder $binder): string
+    protected function _buildIntersectPart(array $parts, Query $query, ValueBinder $binder): string
     {
         return $this->_buildSetOperationPart('INTERSECT', $parts, $query, $binder);
     }
@@ -334,7 +334,7 @@ class QueryCompiler
      * @param \Cake\Database\ValueBinder $binder Value binder used to generate parameter placeholder
      * @return string
      */
-    protected function _buildUnionPart(array $parts, \Cake\Database\Query $query, \Cake\Database\ValueBinder $binder): string
+    protected function _buildUnionPart(array $parts, Query $query, ValueBinder $binder): string
     {
         return $this->_buildSetOperationPart('UNION', $parts, $query, $binder);
     }
@@ -346,7 +346,7 @@ class QueryCompiler
      * @param \Cake\Database\ValueBinder $binder Value binder used to generate parameter placeholder
      * @return string SQL fragment.
      */
-    protected function _buildInsertPart(array $parts, \Cake\Database\Query $query, \Cake\Database\ValueBinder $binder): string
+    protected function _buildInsertPart(array $parts, Query $query, ValueBinder $binder): string
     {
         if (!isset($parts[0])) {
             throw new DatabaseException('Could not compile insert query. No table was specified. ' . 'Use `into()` to define a table.');
@@ -365,7 +365,7 @@ class QueryCompiler
      * @param \Cake\Database\ValueBinder $binder Value binder used to generate parameter placeholder
      * @return string SQL fragment.
      */
-    protected function _buildValuesPart(array $parts, \Cake\Database\Query $query, \Cake\Database\ValueBinder $binder): string
+    protected function _buildValuesPart(array $parts, Query $query, ValueBinder $binder): string
     {
         return implode('', $this->_stringifyExpressions($parts, $binder));
     }
@@ -377,7 +377,7 @@ class QueryCompiler
      * @param \Cake\Database\ValueBinder $binder Value binder used to generate parameter placeholder
      * @return string SQL fragment.
      */
-    protected function _buildUpdatePart(array $parts, \Cake\Database\Query $query, \Cake\Database\ValueBinder $binder): string
+    protected function _buildUpdatePart(array $parts, Query $query, ValueBinder $binder): string
     {
         $table = $this->_stringifyExpressions($parts, $binder);
         $hint = $this->_buildOptimizerHintPart($query->clause('optimizerHint'), $query, $binder);
@@ -392,9 +392,9 @@ class QueryCompiler
      * @param \Cake\Database\ValueBinder $binder Value binder used to generate parameter placeholder
      * @return string Optimizer hint comment
      */
-    protected function _buildOptimizerHintPart(array $parts, \Cake\Database\Query $query, \Cake\Database\ValueBinder $binder): string
+    protected function _buildOptimizerHintPart(array $parts, Query $query, ValueBinder $binder): string
     {
-        if ($parts === [] || !$query->getDriver()->supports(\Cake\Database\DriverFeatureEnum::OPTIMIZER_HINT_COMMENT)) {
+        if ($parts === [] || !$query->getDriver()->supports(DriverFeatureEnum::OPTIMIZER_HINT_COMMENT)) {
             return '';
         }
         return sprintf(' /*+ %s */', implode(' ', $parts));
@@ -407,7 +407,7 @@ class QueryCompiler
      * @param \Cake\Database\ValueBinder $binder Value binder used to generate parameter placeholder
      * @return string SQL fragment.
      */
-    protected function _buildModifierPart(array $parts, \Cake\Database\Query $query, \Cake\Database\ValueBinder $binder): string
+    protected function _buildModifierPart(array $parts, Query $query, ValueBinder $binder): string
     {
         if ($parts === []) {
             return '';
@@ -423,11 +423,11 @@ class QueryCompiler
      * @param bool $wrap Whether to wrap each expression object with parenthesis
      * @return array
      */
-    protected function _stringifyExpressions(array $expressions, \Cake\Database\ValueBinder $binder, bool $wrap = \true): array
+    protected function _stringifyExpressions(array $expressions, ValueBinder $binder, bool $wrap = \true): array
     {
         $result = [];
         foreach ($expressions as $k => $expression) {
-            if ($expression instanceof \Cake\Database\ExpressionInterface) {
+            if ($expression instanceof ExpressionInterface) {
                 $value = $expression->sql($binder);
                 $expression = $wrap ? '(' . $value . ')' : $value;
             }

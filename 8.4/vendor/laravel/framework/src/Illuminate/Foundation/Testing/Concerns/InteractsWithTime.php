@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Foundation\Testing\Concerns;
+namespace Odigos\Illuminate\Foundation\Testing\Concerns;
 
-use Illuminate\Foundation\Testing\Wormhole;
-use Illuminate\Support\Carbon;
+use Odigos\Illuminate\Foundation\Testing\Wormhole;
+use Odigos\Illuminate\Support\Carbon;
 trait InteractsWithTime
 {
     /**

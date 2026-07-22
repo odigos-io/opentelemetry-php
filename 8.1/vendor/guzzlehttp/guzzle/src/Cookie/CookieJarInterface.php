@@ -1,6 +1,6 @@
 <?php
 
-namespace GuzzleHttp\Cookie;
+namespace Odigos\GuzzleHttp\Cookie;
 
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -43,7 +43,7 @@ interface CookieJarInterface extends \Countable, \IteratorAggregate
      *
      * @return bool Returns true on success or false on failure
      */
-    public function setCookie(\GuzzleHttp\Cookie\SetCookie $cookie): bool;
+    public function setCookie(SetCookie $cookie): bool;
     /**
      * Remove cookies currently held in the cookie jar.
      *

@@ -14,13 +14,13 @@ declare (strict_types=1);
  * @since         3.0.0
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\View\Widget;
+namespace Odigos\Cake\View\Widget;
 
-use Cake\Chronos\ChronosDate;
-use Cake\Chronos\ChronosTime;
-use Cake\Database\Schema\TableSchemaInterface;
-use Cake\View\Form\ContextInterface;
-use Cake\View\StringTemplate;
+use Odigos\Cake\Chronos\ChronosDate;
+use Odigos\Cake\Chronos\ChronosTime;
+use Odigos\Cake\Database\Schema\TableSchemaInterface;
+use Odigos\Cake\View\Form\ContextInterface;
+use Odigos\Cake\View\StringTemplate;
 use DateTime;
 use DateTimeImmutable;
 use DateTimeInterface;
@@ -33,7 +33,7 @@ use InvalidArgumentException;
  * This class is usually used internally by `Cake\View\Helper\FormHelper`,
  * it but can be used to generate standalone date time inputs.
  */
-class DateTimeWidget extends \Cake\View\Widget\BasicWidget
+class DateTimeWidget extends BasicWidget
 {
     /**
      * Template instance.

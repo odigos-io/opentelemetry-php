@@ -5,12 +5,12 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\db\cubrid\conditions;
+namespace Odigos\yii\db\cubrid\conditions;
 
 /**
  * {@inheritdoc}
  */
-class LikeConditionBuilder extends \yii\db\conditions\LikeConditionBuilder
+class LikeConditionBuilder extends \Odigos\yii\db\conditions\LikeConditionBuilder
 {
     /**
      * {@inheritdoc}

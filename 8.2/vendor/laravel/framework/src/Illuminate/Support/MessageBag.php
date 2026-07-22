@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Support;
+namespace Odigos\Illuminate\Support;
 
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Contracts\Support\Jsonable;
-use Illuminate\Contracts\Support\MessageBag as MessageBagContract;
-use Illuminate\Contracts\Support\MessageProvider;
+use Odigos\Illuminate\Contracts\Support\Arrayable;
+use Odigos\Illuminate\Contracts\Support\Jsonable;
+use Odigos\Illuminate\Contracts\Support\MessageBag as MessageBagContract;
+use Odigos\Illuminate\Contracts\Support\MessageProvider;
 use JsonSerializable;
 use Stringable;
 class MessageBag implements Jsonable, JsonSerializable, MessageBagContract, MessageProvider, Stringable
@@ -157,8 +157,8 @@ class MessageBag implements Jsonable, JsonSerializable, MessageBagContract, Mess
     public function first($key = null, $format = null)
     {
         $messages = is_null($key) ? $this->all($format) : $this->get($key, $format);
-        $firstMessage = \Illuminate\Support\Arr::first($messages, null, '');
-        return is_array($firstMessage) ? \Illuminate\Support\Arr::first($firstMessage) : $firstMessage;
+        $firstMessage = Arr::first($messages, null, '');
+        return is_array($firstMessage) ? Arr::first($firstMessage) : $firstMessage;
     }
     /**
      * Get all of the messages from the message bag for a given key.
@@ -189,7 +189,7 @@ class MessageBag implements Jsonable, JsonSerializable, MessageBagContract, Mess
      */
     protected function getMessagesForWildcardKey($key, $format)
     {
-        return (new \Illuminate\Support\Collection($this->messages))->filter(fn($messages, $messageKey) => \Illuminate\Support\Str::is($key, $messageKey))->map(function ($messages, $messageKey) use ($format) {
+        return (new Collection($this->messages))->filter(fn($messages, $messageKey) => Str::is($key, $messageKey))->map(function ($messages, $messageKey) use ($format) {
             return $this->transform($messages, $this->checkFormat($format), $messageKey);
         })->all();
     }
@@ -242,7 +242,7 @@ class MessageBag implements Jsonable, JsonSerializable, MessageBagContract, Mess
         if ($format == ':message') {
             return (array) $messages;
         }
-        return (new \Illuminate\Support\Collection((array) $messages))->map(function ($message) use ($format, $messageKey) {
+        return (new Collection((array) $messages))->map(function ($message) use ($format, $messageKey) {
             // We will simply spin through the given messages and transform each one
             // replacing the :message place holder with the real message allowing
             // the messages to be easily formatted to each developer's desires.

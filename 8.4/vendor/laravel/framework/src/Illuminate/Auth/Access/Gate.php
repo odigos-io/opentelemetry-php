@@ -1,24 +1,24 @@
 <?php
 
-namespace Illuminate\Auth\Access;
+namespace Odigos\Illuminate\Auth\Access;
 
 use Closure;
 use Exception;
-use Illuminate\Auth\Access\Events\GateEvaluated;
-use Illuminate\Contracts\Auth\Access\Gate as GateContract;
-use Illuminate\Contracts\Container\Container;
-use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Database\Eloquent\Attributes\UsePolicy;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
+use Odigos\Illuminate\Auth\Access\Events\GateEvaluated;
+use Odigos\Illuminate\Contracts\Auth\Access\Gate as GateContract;
+use Odigos\Illuminate\Contracts\Container\Container;
+use Odigos\Illuminate\Contracts\Events\Dispatcher;
+use Odigos\Illuminate\Database\Eloquent\Attributes\UsePolicy;
+use Odigos\Illuminate\Support\Arr;
+use Odigos\Illuminate\Support\Collection;
+use Odigos\Illuminate\Support\Str;
 use InvalidArgumentException;
 use ReflectionClass;
 use ReflectionFunction;
-use function Illuminate\Support\enum_value;
+use function Odigos\Illuminate\Support\enum_value;
 class Gate implements GateContract
 {
-    use \Illuminate\Auth\Access\HandlesAuthorization;
+    use HandlesAuthorization;
     /**
      * The container instance.
      *
@@ -153,11 +153,11 @@ class Gate implements GateContract
     {
         $user = $this->resolveUser();
         if ($condition instanceof Closure) {
-            $response = $this->canBeCalledWithUser($user, $condition) ? $condition($user) : new \Illuminate\Auth\Access\Response(\false, $message, $code);
+            $response = $this->canBeCalledWithUser($user, $condition) ? $condition($user) : new Response(\false, $message, $code);
         } else {
             $response = $condition;
         }
-        return ($response instanceof \Illuminate\Auth\Access\Response ? $response : new \Illuminate\Auth\Access\Response((bool) $response === $allowWhenResponseIs, $message, $code))->authorize();
+        return ($response instanceof Response ? $response : new Response((bool) $response === $allowWhenResponseIs, $message, $code))->authorize();
     }
     /**
      * Define a new ability.
@@ -338,11 +338,11 @@ class Gate implements GateContract
     {
         try {
             $result = $this->raw(enum_value($ability), $arguments);
-            if ($result instanceof \Illuminate\Auth\Access\Response) {
+            if ($result instanceof Response) {
                 return $result;
             }
-            return $result ? \Illuminate\Auth\Access\Response::allow() : $this->defaultDenialResponse ?? \Illuminate\Auth\Access\Response::deny();
-        } catch (\Illuminate\Auth\Access\AuthorizationException $e) {
+            return $result ? Response::allow() : $this->defaultDenialResponse ?? Response::deny();
+        } catch (AuthorizationException $e) {
             return $e->toResponse();
         }
     }
@@ -747,7 +747,7 @@ class Gate implements GateContract
      * @param  \Illuminate\Auth\Access\Response  $response
      * @return $this
      */
-    public function defaultDenialResponse(\Illuminate\Auth\Access\Response $response)
+    public function defaultDenialResponse(Response $response)
     {
         $this->defaultDenialResponse = $response;
         return $this;

@@ -8,25 +8,25 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Mailer\Transport;
+namespace Odigos\Symfony\Component\Mailer\Transport;
 
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
-use Symfony\Component\Mailer\Envelope;
-use Symfony\Component\Mailer\Event\FailedMessageEvent;
-use Symfony\Component\Mailer\Event\MessageEvent;
-use Symfony\Component\Mailer\Event\SentMessageEvent;
-use Symfony\Component\Mailer\Exception\LogicException;
-use Symfony\Component\Mailer\SentMessage;
-use Symfony\Component\Mime\Address;
-use Symfony\Component\Mime\BodyRendererInterface;
-use Symfony\Component\Mime\RawMessage;
+use Odigos\Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Odigos\Symfony\Component\Mailer\Envelope;
+use Odigos\Symfony\Component\Mailer\Event\FailedMessageEvent;
+use Odigos\Symfony\Component\Mailer\Event\MessageEvent;
+use Odigos\Symfony\Component\Mailer\Event\SentMessageEvent;
+use Odigos\Symfony\Component\Mailer\Exception\LogicException;
+use Odigos\Symfony\Component\Mailer\SentMessage;
+use Odigos\Symfony\Component\Mime\Address;
+use Odigos\Symfony\Component\Mime\BodyRendererInterface;
+use Odigos\Symfony\Component\Mime\RawMessage;
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  */
-abstract class AbstractTransport implements \Symfony\Component\Mailer\Transport\TransportInterface
+abstract class AbstractTransport implements TransportInterface
 {
     private LoggerInterface $logger;
     private float $rate = 0;

@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Symfony\Component\Process;
+namespace Odigos\Symfony\Component\Process;
 
-use Symfony\Component\Process\Exception\LogicException;
-use Symfony\Component\Process\Exception\RuntimeException;
+use Odigos\Symfony\Component\Process\Exception\LogicException;
+use Odigos\Symfony\Component\Process\Exception\RuntimeException;
 /**
  * PhpSubprocess runs a PHP command as a subprocess while keeping the original php.ini settings.
  *
@@ -39,7 +39,7 @@ use Symfony\Component\Process\Exception\RuntimeException;
  * @author Yanick Witschi <yanick.witschi@terminal42.ch>
  * @author Partially copied and heavily inspired from composer/xdebug-handler by John Stevenson <john-stevenson@blueyonder.co.uk>
  */
-class PhpSubprocess extends \Symfony\Component\Process\Process
+class PhpSubprocess extends Process
 {
     /**
      * @param array       $command The command to run and its arguments listed as separate entries. They will automatically
@@ -52,7 +52,7 @@ class PhpSubprocess extends \Symfony\Component\Process\Process
     public function __construct(array $command, ?string $cwd = null, ?array $env = null, int $timeout = 60, ?array $php = null)
     {
         if (null === $php) {
-            $executableFinder = new \Symfony\Component\Process\PhpExecutableFinder();
+            $executableFinder = new PhpExecutableFinder();
             $php = $executableFinder->find(\false);
             $php = \false === $php ? null : array_merge([$php], $executableFinder->findArguments());
         }

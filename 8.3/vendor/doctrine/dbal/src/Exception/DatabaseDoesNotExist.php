@@ -1,8 +1,8 @@
 <?php
 
 declare (strict_types=1);
-namespace Doctrine\DBAL\Exception;
+namespace Odigos\Doctrine\DBAL\Exception;
 
-class DatabaseDoesNotExist extends \Doctrine\DBAL\Exception\DatabaseObjectNotFoundException
+class DatabaseDoesNotExist extends DatabaseObjectNotFoundException
 {
 }

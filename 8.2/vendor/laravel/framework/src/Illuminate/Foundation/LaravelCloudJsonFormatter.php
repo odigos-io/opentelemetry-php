@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Foundation;
+namespace Odigos\Illuminate\Foundation;
 
-use Illuminate\Container\Container;
+use Odigos\Illuminate\Container\Container;
 use Odigos\Monolog\Formatter\JsonFormatter;
 use Odigos\Monolog\LogRecord;
 class LaravelCloudJsonFormatter extends JsonFormatter

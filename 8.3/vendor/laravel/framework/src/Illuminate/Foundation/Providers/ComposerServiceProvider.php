@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Foundation\Providers;
+namespace Odigos\Illuminate\Foundation\Providers;
 
-use Illuminate\Contracts\Support\DeferrableProvider;
-use Illuminate\Support\Composer;
-use Illuminate\Support\ServiceProvider;
+use Odigos\Illuminate\Contracts\Support\DeferrableProvider;
+use Odigos\Illuminate\Support\Composer;
+use Odigos\Illuminate\Support\ServiceProvider;
 class ComposerServiceProvider extends ServiceProvider implements DeferrableProvider
 {
     /**

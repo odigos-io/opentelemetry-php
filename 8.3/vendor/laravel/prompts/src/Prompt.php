@@ -1,24 +1,24 @@
 <?php
 
-namespace Laravel\Prompts;
+namespace Odigos\Laravel\Prompts;
 
 use Closure;
-use Laravel\Prompts\Exceptions\FormRevertedException;
-use Laravel\Prompts\Output\ConsoleOutput;
-use Laravel\Prompts\Support\Result;
+use Odigos\Laravel\Prompts\Exceptions\FormRevertedException;
+use Odigos\Laravel\Prompts\Output\ConsoleOutput;
+use Odigos\Laravel\Prompts\Support\Result;
 use RuntimeException;
-use Symfony\Component\Console\Output\OutputInterface;
+use Odigos\Symfony\Component\Console\Output\OutputInterface;
 use Throwable;
 abstract class Prompt
 {
-    use \Laravel\Prompts\Concerns\Colors;
-    use \Laravel\Prompts\Concerns\Cursor;
-    use \Laravel\Prompts\Concerns\Erase;
-    use \Laravel\Prompts\Concerns\Events;
-    use \Laravel\Prompts\Concerns\FakesInputOutput;
-    use \Laravel\Prompts\Concerns\Fallback;
-    use \Laravel\Prompts\Concerns\Interactivity;
-    use \Laravel\Prompts\Concerns\Themes;
+    use Concerns\Colors;
+    use Concerns\Cursor;
+    use Concerns\Erase;
+    use Concerns\Events;
+    use Concerns\FakesInputOutput;
+    use Concerns\Fallback;
+    use Concerns\Interactivity;
+    use Concerns\Themes;
     /**
      * The current state of the prompt.
      */
@@ -74,7 +74,7 @@ abstract class Prompt
     /**
      * The terminal instance.
      */
-    protected static \Laravel\Prompts\Terminal $terminal;
+    protected static Terminal $terminal;
     /**
      * Get the value of the prompt.
      */
@@ -106,15 +106,15 @@ abstract class Prompt
             $result = $this->runLoop(function (string $key): ?Result {
                 $continue = $this->handleKeyPress($key);
                 $this->render();
-                if ($continue === \false || $key === \Laravel\Prompts\Key::CTRL_C) {
-                    if ($key === \Laravel\Prompts\Key::CTRL_C) {
+                if ($continue === \false || $key === Key::CTRL_C) {
+                    if ($key === Key::CTRL_C) {
                         if (isset(static::$cancelUsing)) {
                             return Result::from((static::$cancelUsing)());
                         } else {
                             static::terminal()->exit();
                         }
                     }
-                    if ($key === \Laravel\Prompts\Key::CTRL_U && self::$revertUsing) {
+                    if ($key === Key::CTRL_U && self::$revertUsing) {
                         throw new FormRevertedException();
                     }
                     return Result::from($this->transformedValue());
@@ -198,9 +198,9 @@ abstract class Prompt
     /**
      * Get the terminal instance.
      */
-    public static function terminal(): \Laravel\Prompts\Terminal
+    public static function terminal(): Terminal
     {
-        return static::$terminal ??= new \Laravel\Prompts\Terminal();
+        return static::$terminal ??= new Terminal();
     }
     /**
      * Set the custom validation callback.
@@ -274,7 +274,7 @@ abstract class Prompt
         if ($this->state === 'submit') {
             return \false;
         }
-        if ($key === \Laravel\Prompts\Key::CTRL_U) {
+        if ($key === Key::CTRL_U) {
             if (!self::$revertUsing) {
                 $this->state = 'error';
                 $this->error = 'This cannot be reverted.';
@@ -285,7 +285,7 @@ abstract class Prompt
             call_user_func(self::$revertUsing);
             return \false;
         }
-        if ($key === \Laravel\Prompts\Key::CTRL_C) {
+        if ($key === Key::CTRL_C) {
             $this->state = 'cancel';
             return \false;
         }

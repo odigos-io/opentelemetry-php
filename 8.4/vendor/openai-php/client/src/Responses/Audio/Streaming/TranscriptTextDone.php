@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace OpenAI\Responses\Audio\Streaming;
+namespace Odigos\OpenAI\Responses\Audio\Streaming;
 
-use OpenAI\Contracts\ResponseContract;
-use OpenAI\Contracts\ResponseHasMetaInformationContract;
-use OpenAI\Responses\Concerns\ArrayAccessible;
-use OpenAI\Responses\Concerns\HasMetaInformation;
-use OpenAI\Responses\Meta\MetaInformation;
-use OpenAI\Testing\Responses\Concerns\Fakeable;
+use Odigos\OpenAI\Contracts\ResponseContract;
+use Odigos\OpenAI\Contracts\ResponseHasMetaInformationContract;
+use Odigos\OpenAI\Responses\Concerns\ArrayAccessible;
+use Odigos\OpenAI\Responses\Concerns\HasMetaInformation;
+use Odigos\OpenAI\Responses\Meta\MetaInformation;
+use Odigos\OpenAI\Testing\Responses\Concerns\Fakeable;
 /**
  * @phpstan-import-type LogprobsType from Logprobs
  *
@@ -36,7 +36,7 @@ final class TranscriptTextDone implements ResponseContract, ResponseHasMetaInfor
     public static function from(array $attributes, MetaInformation $meta): self
     {
         if (isset($attributes['logprobs'])) {
-            $logprobs = array_map(fn(array $logprob): \OpenAI\Responses\Audio\Streaming\Logprobs => \OpenAI\Responses\Audio\Streaming\Logprobs::from($logprob, $meta), $attributes['logprobs']);
+            $logprobs = array_map(fn(array $logprob): Logprobs => Logprobs::from($logprob, $meta), $attributes['logprobs']);
         }
         return new self(logprobs: $logprobs ?? null, text: $attributes['text'], meta: $meta);
     }
@@ -45,6 +45,6 @@ final class TranscriptTextDone implements ResponseContract, ResponseHasMetaInfor
      */
     public function toArray(): array
     {
-        return ['logprobs' => $this->logprobs ? array_map(fn(\OpenAI\Responses\Audio\Streaming\Logprobs $logprob): array => $logprob->toArray(), $this->logprobs) : null, 'text' => $this->text];
+        return ['logprobs' => $this->logprobs ? array_map(fn(Logprobs $logprob): array => $logprob->toArray(), $this->logprobs) : null, 'text' => $this->text];
     }
 }

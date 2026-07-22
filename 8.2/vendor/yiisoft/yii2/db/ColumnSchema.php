@@ -5,10 +5,10 @@
  * @copyright Copyright (c) 2008 Yii Software LLC
  * @license https://www.yiiframework.com/license/
  */
-namespace yii\db;
+namespace Odigos\yii\db;
 
-use yii\base\BaseObject;
-use yii\helpers\StringHelper;
+use Odigos\yii\base\BaseObject;
+use Odigos\yii\helpers\StringHelper;
 /**
  * ColumnSchema class describes the metadata of a column in a database table.
  *
@@ -109,14 +109,14 @@ class ColumnSchema extends BaseObject
      */
     protected function typecast($value)
     {
-        if ($value === '' && !in_array($this->type, [\yii\db\Schema::TYPE_TEXT, \yii\db\Schema::TYPE_STRING, \yii\db\Schema::TYPE_BINARY, \yii\db\Schema::TYPE_CHAR], \true)) {
+        if ($value === '' && !in_array($this->type, [Schema::TYPE_TEXT, Schema::TYPE_STRING, Schema::TYPE_BINARY, Schema::TYPE_CHAR], \true)) {
             return null;
         }
-        if ($value === null || gettype($value) === $this->phpType || $value instanceof \yii\db\ExpressionInterface || $value instanceof \yii\db\Query) {
+        if ($value === null || gettype($value) === $this->phpType || $value instanceof ExpressionInterface || $value instanceof Query) {
             return $value;
         }
         if (is_array($value) && count($value) === 2 && isset($value[1]) && in_array($value[1], $this->getPdoParamTypes(), \true)) {
-            return new \yii\db\PdoValue($value[0], $value[1]);
+            return new PdoValue($value[0], $value[1]);
         }
         switch ($this->phpType) {
             case 'resource':
@@ -128,7 +128,7 @@ class ColumnSchema extends BaseObject
                     // ensure type cast always has . as decimal separator in all locales
                     return StringHelper::floatToString($value);
                 }
-                if (is_numeric($value) && \yii\db\ColumnSchemaBuilder::CATEGORY_NUMERIC === \yii\db\ColumnSchemaBuilder::$typeCategoryMap[$this->type]) {
+                if (is_numeric($value) && ColumnSchemaBuilder::CATEGORY_NUMERIC === ColumnSchemaBuilder::$typeCategoryMap[$this->type]) {
                     // https://github.com/yiisoft/yii2/issues/14663
                     return $value;
                 }

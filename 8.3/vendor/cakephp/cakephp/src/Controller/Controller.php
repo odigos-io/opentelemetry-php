@@ -14,30 +14,30 @@ declare (strict_types=1);
  * @since         0.2.9
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Controller;
+namespace Odigos\Cake\Controller;
 
-use Cake\Controller\Exception\MissingActionException;
-use Cake\Core\App;
-use Cake\Datasource\Paging\Exception\PageOutOfBoundsException;
-use Cake\Datasource\Paging\NumericPaginator;
-use Cake\Datasource\Paging\PaginatedInterface;
-use Cake\Datasource\QueryInterface;
-use Cake\Datasource\RepositoryInterface;
-use Cake\Event\EventDispatcherInterface;
-use Cake\Event\EventDispatcherTrait;
-use Cake\Event\EventInterface;
-use Cake\Event\EventListenerInterface;
-use Cake\Event\EventManagerInterface;
-use Cake\Http\ContentTypeNegotiation;
-use Cake\Http\Exception\NotFoundException;
-use Cake\Http\MimeType;
-use Cake\Http\Response;
-use Cake\Http\ServerRequest;
-use Cake\Log\LogTrait;
-use Cake\ORM\Locator\LocatorAwareTrait;
-use Cake\Routing\Router;
-use Cake\View\View;
-use Cake\View\ViewVarsTrait;
+use Odigos\Cake\Controller\Exception\MissingActionException;
+use Odigos\Cake\Core\App;
+use Odigos\Cake\Datasource\Paging\Exception\PageOutOfBoundsException;
+use Odigos\Cake\Datasource\Paging\NumericPaginator;
+use Odigos\Cake\Datasource\Paging\PaginatedInterface;
+use Odigos\Cake\Datasource\QueryInterface;
+use Odigos\Cake\Datasource\RepositoryInterface;
+use Odigos\Cake\Event\EventDispatcherInterface;
+use Odigos\Cake\Event\EventDispatcherTrait;
+use Odigos\Cake\Event\EventInterface;
+use Odigos\Cake\Event\EventListenerInterface;
+use Odigos\Cake\Event\EventManagerInterface;
+use Odigos\Cake\Http\ContentTypeNegotiation;
+use Odigos\Cake\Http\Exception\NotFoundException;
+use Odigos\Cake\Http\MimeType;
+use Odigos\Cake\Http\Response;
+use Odigos\Cake\Http\ServerRequest;
+use Odigos\Cake\Log\LogTrait;
+use Odigos\Cake\ORM\Locator\LocatorAwareTrait;
+use Odigos\Cake\Routing\Router;
+use Odigos\Cake\View\View;
+use Odigos\Cake\View\ViewVarsTrait;
 use Closure;
 use InvalidArgumentException;
 use Psr\Http\Message\ResponseInterface;
@@ -45,8 +45,8 @@ use Psr\Http\Message\UriInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use ReflectionException;
 use ReflectionMethod;
-use function Cake\Core\namespaceSplit;
-use function Cake\Core\pluginSplit;
+use function Odigos\Cake\Core\namespaceSplit;
+use function Odigos\Cake\Core\pluginSplit;
 /**
  * Application controller class for organization of business logic.
  * Provides basic functionality, such as rendering views inside layouts,
@@ -156,7 +156,7 @@ class Controller implements EventListenerInterface, EventDispatcherInterface
      *
      * @var \Cake\Controller\ComponentRegistry|null
      */
-    protected ?\Cake\Controller\ComponentRegistry $_components = null;
+    protected ?ComponentRegistry $_components = null;
     /**
      * Automatically set to the name of a plugin.
      *
@@ -188,7 +188,7 @@ class Controller implements EventListenerInterface, EventDispatcherInterface
      * @param \Cake\Event\EventManagerInterface|null $eventManager The event manager. Defaults to a new instance.
      * @param \Cake\Controller\ComponentRegistry|null $components ComponentRegistry to use. Defaults to a new instance.
      */
-    public function __construct(ServerRequest $request, ?string $name = null, ?EventManagerInterface $eventManager = null, ?\Cake\Controller\ComponentRegistry $components = null)
+    public function __construct(ServerRequest $request, ?string $name = null, ?EventManagerInterface $eventManager = null, ?ComponentRegistry $components = null)
     {
         if ($name !== null) {
             $this->name = $name;
@@ -235,9 +235,9 @@ class Controller implements EventListenerInterface, EventDispatcherInterface
      *
      * @return \Cake\Controller\ComponentRegistry
      */
-    public function components(): \Cake\Controller\ComponentRegistry
+    public function components(): ComponentRegistry
     {
-        return $this->_components ??= new \Cake\Controller\ComponentRegistry($this);
+        return $this->_components ??= new ComponentRegistry($this);
     }
     /**
      * Add a component to the controller's registry.
@@ -256,7 +256,7 @@ class Controller implements EventListenerInterface, EventDispatcherInterface
      * @return \Cake\Controller\Component
      * @throws \Exception
      */
-    public function loadComponent(string $name, array $config = []): \Cake\Controller\Component
+    public function loadComponent(string $name, array $config = []): Component
     {
         return $this->components()->load($name, $config);
     }
@@ -684,7 +684,7 @@ class Controller implements EventListenerInterface, EventDispatcherInterface
     {
         $templatePath = $this->name;
         if ($this->request->getParam('prefix')) {
-            $prefixes = array_map('Cake\Utility\Inflector::camelize', explode('/', $this->request->getParam('prefix')));
+            $prefixes = array_map('Odigos\Cake\Utility\Inflector::camelize', explode('/', $this->request->getParam('prefix')));
             $templatePath = implode(\DIRECTORY_SEPARATOR, $prefixes) . \DIRECTORY_SEPARATOR . $templatePath;
         }
         return $templatePath;
